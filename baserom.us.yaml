@@ -153,7 +153,7 @@ segments:
       - [0x1E336D0, c, memory]
       - [0x1E33860, c, 1E33860]
       - [0x1E33CF0, c, 1E33CF0]
-      - [0x1E33E20, c, 1E33E20]
+      - [0x1E33E20, hasm, 1E33E20]
       - [0x1E34E70, c, 1E34E70]
       - [0x1E34F80, c, 1E34F80]
       - [0x1E357D0, hasm]
