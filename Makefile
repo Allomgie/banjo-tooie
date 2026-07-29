@@ -52,14 +52,27 @@ ULTRALIB_BOOT := $(BUILD_ROOT)/libultra_rom_boot.a
 ALL_OBJS     := $(C_OBJS) $(S_OBJS) $(HS_OBJS) $(BIN_OBJS)
 BUILD_DIRS   := $(sort $(C_BUILD_DIRS) $(S_BUILD_DIRS) $(HS_BUILD_DIRS) $(BIN_BUILD_DIRS))
 
+# The core1 audio block was not built with the project default of IDO 5.3 and
+# -O2, but with IDO 7.1 and -g. Rare split its build per directory in DK64 in
+# the same way. These objects therefore use their own compiler and opt level;
+# every other flag is unchanged.
+IDO71_SRCS := $(addprefix src/core1/,1E36640.c 1E38970.c 1E389F0.c 1E38AA0.c \
+    1E39740.c 1E39CE0.c 1E3C9C0.c 1E3CA10.c 1E3D9B0.c 1E3DAA0.c 1E3DBE0.c \
+    1E3DC30.c 1E3DE60.c 1E3DEF0.c 1E3E710.c 1E3E7E0.c 1E3E910.c 1E3ECA0.c \
+    1E3ED50.c 1E3EDE0.c 1E41100.c 1E411A0.c 1E42660.c 1E42810.c 1E43D60.c \
+    1E440D0.c 1E440F0.c 1E44B60.c 1E44F80.c)
+IDO71_OBJS := $(addprefix $(BUILD_ROOT)/,$(IDO71_SRCS:.c=.c.o))
+
 CC       := tools/ido/cc
+CC_IDO71 := tools/ido71/cc
 AS       := mips-linux-gnu-gcc
 OBJCOPY  := mips-linux-gnu-objcopy
 LD       := mips-linux-gnu-ld
 ASM_PROC := $(PYTHON3_BIN) tools/asm-processor/asm_processor.py
 
 OPT_LEVEL := -O2
-CFLAGS    := -c -Wab,-r4300_mul -non_shared -G 0 -Xcpluscomm $(OPT_LEVEL) -mips2 -woff 807
+# Deferred, so that a target-specific OPT_LEVEL reaches CFLAGS.
+CFLAGS     = -c -Wab,-r4300_mul -non_shared -G 0 -Xcpluscomm $(OPT_LEVEL) -mips2 -woff 807
 CPPFLAGS  := -I include -I $(ULTRALIB_DIR)/include -I src -DBUILD_VERSION=VERSION_$(ULTRALIB_VERSION) -D_FINALROM -DF3DEX_GBI_2
 ASFLAGS   := -march=vr4300 -mabi=32 -mgp32 -mfp32 -mips3 -mno-abicalls -G0 -fno-pic -gdwarf -c -x assembler-with-cpp -D_LANGUAGE_ASSEMBLY
 LDFLAGS   := -nostdlib -T undefined_syms.us.txt --build-id=none --emit-relocs --whole-archive --no-warn-mismatch
@@ -89,6 +102,9 @@ $(ASM_PROC_C_OBJS): $(BUILD_ROOT)/%.c.o: %.c | $(C_BUILD_DIRS)
 	$(ASM_PROC) $(OPT_LEVEL) $< > $(BUILD_ROOT)/$<
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $(BUILD_ROOT)/$< -o $@
 	$(ASM_PROC) $(OPT_LEVEL) $< --post-process $@ --assembler "$(AS) $(ASFLAGS) $(CPPFLAGS)" --asm-prelude include/prelude.inc
+
+$(IDO71_OBJS): CC        := $(CC_IDO71)
+$(IDO71_OBJS): OPT_LEVEL := -g
 
 $(PURE_C_OBJS): $(BUILD_ROOT)/%.c.o: %.c | $(C_BUILD_DIRS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@

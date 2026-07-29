@@ -1,6 +1,8 @@
 # IDO
 IDO_DIR   := ido
 IDO       := $(IDO_DIR)/cc
+IDO71_DIR := ido71
+IDO71     := $(IDO71_DIR)/cc
 RAREZIP_DIR := rarezip/gzip
 RAREZIP     := $(RAREZIP_DIR)/librarezip.a
 TOML_DIR      := toml11
@@ -21,7 +23,7 @@ FMT_OBJ := $(notdir $(FMT_SRC:.cc=.o))
 
 PROGRAMS := rom_decompressor syscall_builder overlay_processor rom_compressor n64crc
 
-all: $(PROGRAMS) $(IDO)
+all: $(PROGRAMS) $(IDO) $(IDO71)
 
 rom_decompressor: rom_decompressor.cpp $(UTILS_OBJ) $(FMT_OBJ) $(UTILS_H)
 	g++ -std=c++20 -O2 $< $(UTILS_OBJ) $(FMT_OBJ) -I $(FMT_INC_DIR) -o $@ -Wall -Wextra -Wpedantic -lz -lfmt
@@ -49,7 +51,16 @@ $(IDO): | $(IDO_DIR)
 	tar xf ido-5.3-recomp-linux.tar.gz -C $(IDO_DIR)
 	$(RM) ido-5.3-recomp-linux.tar.gz
 
+# The core1 audio block needs IDO 7.1; same source as 5.3 above.
+$(IDO71): | $(IDO71_DIR)
+	wget https://github.com/decompals/ido-static-recomp/releases/download/v1.1/ido-7.1-recomp-linux.tar.gz
+	tar xf ido-7.1-recomp-linux.tar.gz -C $(IDO71_DIR)
+	$(RM) ido-7.1-recomp-linux.tar.gz
+
 $(IDO_DIR):
+	mkdir $@
+
+$(IDO71_DIR):
 	mkdir $@
 
 $(RAREZIP):

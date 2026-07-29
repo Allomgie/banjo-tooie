@@ -4,4 +4,5 @@ overlay_processor
 rom_compressor
 n64crc
 ido/
+ido71/
 *.o
