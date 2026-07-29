@@ -5,24 +5,6 @@
 .section .bss
 
 
-dlabel D_8007AE80
-/* 1E929B0 8007AE80 */ .space 0x20
-
-dlabel D_8007AEA0
-/* 1E929D0 8007AEA0 */ .space 0x18
-
-dlabel D_8007AEB8
-/* 1E929E8 8007AEB8 */ .space 0x18
-
-dlabel D_8007AED0
-/* 1E92A00 8007AED0 */ .space 0x18
-
-dlabel D_8007AEE8
-/* 1E92A18 8007AEE8 */ .space 0x01
-
-dlabel D_8007AEE9
-/* 1E92A19 8007AEE9 */ .space 0x07
-
 dlabel D_8007AEF0
 /* 1E92A20 8007AEF0 */ .space 0x18
 
