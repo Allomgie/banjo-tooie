@@ -428,5 +428,3 @@ s16 *func_80017810(s32 param_0)
   return (s16 *)((char *)((s16 *) D_80079FA0) + param_0 * 628 + 480);
 }
 
-void func_80017840(void) {
-}

@@ -3,17 +3,18 @@
 #define MIN(a, b) ((b) < (a) ? (b) : (a))
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
 
-/* bss of this file, in address order (0x8007AE80..0x8007AEF0). */
 u8 D_8007AE80[0x20];
-s32 D_8007AEA0[6];
-s32 D_8007AEB8[6];
-u32 D_8007AED0[6];
-u8 D_8007AEE8[8];
+u8 _ido_bss_gap_AEA0_AEE8[0x48];
+u8 D_8007AEE8[6];
+u8 _ido_bss_gap_AEF0_B4E0[0x5F0];
 typedef struct { u32 unk0; u32 count; } Header178C4;
 typedef struct { Header178C4 *header; } Wrapper178C4;
 typedef struct { u8 pad0[0x18]; Wrapper178C4 *wrapper; u8 pad1C[0x44]; u8 *channels; } Obj178C4;
 extern f32 D_80041720;
+extern u32 D_8007AED0[];
+extern s32 D_8007AEA0[];
 typedef struct { u8 pad0[0x18]; s32 unk18; } Struct17810;
+extern s32 D_8007AEB8[];
 extern s32 func_800260B0(Struct17810 *);
 extern s16 *func_80017810();
 extern u32 func_80017778(s32 param_0);
@@ -47,6 +48,8 @@ extern void func_800C9EAC(f32, void *, s32, s32, s32, s32);
 
 /* Forward declarations for this translation unit. */
 void func_800187B4(s32 param_0, f32 param_1, f32 param_2, f32 param_3);
+
+#pragma GLOBAL_ASM("src/core1/1E2F380_head.inc")
 
 void func_80017850(s32 param_0)
 {
@@ -291,12 +294,68 @@ void func_80018108(s32 param_0) {
     }
 }
 
-s32 func_8001817C(OSMesg);
+s32 func_8001817C(OSMesg param_0)
+{
+  static s32 D_8007B4E0;
+  s32 local_0;
+  Struct8001817C *local_1;
+  s32 local_2;
+  f32 local_3;
+  int new_var3;
+  s32 local_4;
+  while (1)
+  {
+    new_var3 = 4;
+    osRecvMesg(&D_8007AEF0, 0, 1);
+    D_8007B4E0++;
+    if ((D_8007B4E0 & 0xF) == 0)
+    {
+      func_80018108((D_8007B4E0 >> new_var3) & 3);
+    }
+    for (local_0 = 0; local_0 < new_var3; local_0++)
+    {
+      local_1 = &D_8007B2D0[local_0].local_1817C;
+      if ((&D_8007B2D0[local_0].local_1817C)->unk0 != 0)
+      {
+        if (((&D_8007B2D0[local_0].local_1817C)->unk4 == 0) && ((D_8007B4E0 % 60) == 0))
+        {
+          func_80018090(local_0);
+        }
+        local_2 = local_1->unk8;
+        if ((&D_8007B2D0[local_0].local_1817C)->unk10 != (&D_8007B2D0[local_0].local_1817C)->unkC)
+        {
+          local_3 = func_800F10B4(local_1->unk10, 0.0f, local_1->unkC, local_1->unk14, local_1->unk18);
+          local_4 = (s32) (((1.0f - local_3) * 8.0f) + 1.f);
+          if (local_4 < 2)
+          {
+            (&D_8007B2D0[local_0].local_1817C)->unk8 = (local_4 != 0) || (0.0f < local_3);
+          }
+          else
+          {
+            (&D_8007B2D0[local_0].local_1817C)->unk8 = (D_8007B4E0 % local_4) == 0;
+          }
+        }
+        else
+        {
+          local_1->unk8 = 0;
+        }
+        if ((local_2 != local_1->unk8) && (func_800A9CAC() == 0))
+        {
+          if (local_1->unk8 != 0)
+          {
+            func_80017FC0(local_0);
+          }
+          else
+          {
+            func_80018028(local_0);
+          }
+        }
+      }
+    }
 
-/* Left as assembly: IDO aligns this function's unreachable epilogue
- * relative to the start of the .text section, which in the original
- * build began 0x10 before func_80017850. */
-#pragma GLOBAL_ASM("asm/nonmatchings/core1/1E2F380/func_8001817C.s")
+  }
+
+}
 
 void func_800183D4(s32 param_0, s32 param_1, s32 param_2, s32 param_3) {
     f32 local_0;
