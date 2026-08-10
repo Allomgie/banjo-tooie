@@ -1,5 +1,13 @@
 #include "overlays/bs/kaz/hatch.h"
 
+extern s16 func_8009E6EC(PlayerState *);
+extern void func_8009E830(PlayerState *, s32);
+extern void func_80099B94(PlayerState *);
+extern void baphysics_set_type(PlayerState *, BaPhysicsType);
+extern void func_800FC660(s32);
+extern s32 func_8010114C(s32, s32, s32);
+extern s32 func_80099A4C(PlayerState *);
+
 void func_80800000_bskazhatch(PlayerState *self, s32 arg1) {
     switch (arg1) {
         case 0:
@@ -29,7 +37,36 @@ void func_808000D4_bskazhatch(PlayerState *self) {
     func_80800000_bskazhatch(self, 1);
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/kaz/hatch/func_80800108_bskazhatch.s")
+void func_80800108_bskazhatch(PlayerState *param_0)
+{
+    s32 local_0;
+    s32 local_1;
+
+    local_0 = func_8009E6EC(param_0);
+    switch (local_0) {
+    case 0x15: ;
+    case 0x1C:
+    case 0x1D: ;
+    case 0x1E:
+    case 0x25:
+        func_8009E830(param_0, 1);
+        return;
+    case 0x53:
+        if (param_0->unk160.word == 0) {
+            local_1 = func_80099A4C(param_0);
+            param_0->unk160.word = local_1;
+            if (func_8010114C(local_1, 0xA0, 0) <= 0) {
+                func_800FC660(0xE);
+            }
+            baphysics_set_type(param_0, 7);
+        }
+        func_8009E830(param_0, 2);
+        return;
+    default:
+        func_80099B94(param_0);
+        return;
+    }
+}
 
 BanjoStateId func_808001E4_bskazhatch(PlayerState *self) {
     if (func_8008E124(self) != 0) {

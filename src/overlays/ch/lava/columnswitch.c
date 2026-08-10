@@ -1,6 +1,16 @@
 #include "ch/lavacolumnswitch.h"
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/lava/columnswitch/func_80800000_chlavacolumnswitch.s")
+extern int D_80800080_chlavacolumnswitch;
+
+s32 func_80800000_chlavacolumnswitch(void *this, s32 param_1)
+{
+  if (param_1 == 7)
+  {
+    _glcutDll_entrypoint_6(0x127, 0x4e);
+    return 1 ^ 0;
+  }
+  return _chswitch_entrypoint_10(this, param_1);
+}
 
 void func_8080003C_chlavacolumnswitch(s32 arg0)
 {
@@ -8,4 +18,7 @@ void func_8080003C_chlavacolumnswitch(s32 arg0)
     _chswitch_entrypoint_9(arg0);
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/lava/columnswitch/chlavacolumnswitch_entrypoint_0.s")
+int chlavacolumnswitch_entrypoint_0()
+{
+  return &D_80800080_chlavacolumnswitch;
+}

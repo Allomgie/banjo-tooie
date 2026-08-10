@@ -1,9 +1,26 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/fx/genlist/fxgenlist_entrypoint_0.s")
+extern int D_80800030_fxgenlist;
+extern int D_8080005C_fxgenlist;
+extern int D_808000A0_fxgenlist;
+extern s32 D_808000D0_fxgenlist[];
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/fx/genlist/fxgenlist_entrypoint_1.s")
+int fxgenlist_entrypoint_0()
+{
+  return (int)&D_80800030_fxgenlist;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/fx/genlist/fxgenlist_entrypoint_2.s")
+int fxgenlist_entrypoint_1()
+{
+  return (int)&D_8080005C_fxgenlist;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/fx/genlist/fxgenlist_entrypoint_3.s")
+int fxgenlist_entrypoint_2()
+{
+    return (int)&D_808000A0_fxgenlist;
+}
+
+int fxgenlist_entrypoint_3()
+{
+    return (int)D_808000D0_fxgenlist;
+}

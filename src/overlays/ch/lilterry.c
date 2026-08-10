@@ -1,5 +1,14 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/lilterry/chlilterry_entrypoint_0.s")
+extern int D_808000C8_chlilterry;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/lilterry/func_8080000C_chlilterry.s")
+int chlilterry_entrypoint_0()
+{
+  return (int)&D_808000C8_chlilterry;
+}
+
+int func_8080000C_chlilterry(Actor *param_0)
+{
+  _sucoasterfly_entrypoint_1(param_0, 0);
+  func_8010A3E8(param_0, 0x3F000000);
+}
