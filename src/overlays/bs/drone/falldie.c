@@ -33,7 +33,46 @@ int bsdronefalldie_entrypoint_0(Actor *param_0)
   func_80092880(param_0, 1);
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/drone/falldie/bsdronefalldie_entrypoint_1.s")
+void bsdronefalldie_entrypoint_1(Actor *param_0)
+{
+  f32 sp3C;
+  f32 sp38;
+  f32 sp34;
+  s32 sp30;
+  s32 sp2C;
+  void *temp_s0;
+
+  _basudie_entrypoint_1(param_0);
+  temp_s0 = baanim_getAnimCtrlPtr(param_0);
+  _badata_entrypoint_6(param_0, &sp2C, &sp30, &sp34, &sp38);
+  if (sp34 == sp38)
+  {
+    anctrl_reset(temp_s0);
+    anctrl_setIndex(temp_s0, sp2C);
+    anctrl_setDuration(temp_s0, sp30);
+    anctrl_setStart(temp_s0, sp34);
+    anctrl_setSubrange(temp_s0, sp34, sp38);
+    anctrl_setPlaybackType(temp_s0, 1);
+    anctrl_start(temp_s0);
+  }
+  else
+  {
+    anctrl_reset(temp_s0);
+    anctrl_setIndex(temp_s0, sp2C);
+    anctrl_setDuration(temp_s0, sp30);
+    anctrl_setSubrange(temp_s0, sp34, sp38);
+    anctrl_setPlaybackType(temp_s0, 4);
+    anctrl_start(temp_s0);
+  }
+  func_8009FFD8(param_0, 1, 1, 3, 2);
+  func_800961AC(param_0, 6);
+  func_800A0180(param_0);
+  func_800A4DFC(param_0, 5);
+  func_80098B4C(param_0, 0);
+  func_80092880(param_0, 0);
+  *(s32 *)((char *)(param_0) + 0x190) = 0;
+  func_80800000_bsdronefalldie(param_0, 1);
+}
 
 int bsdronefalldie_entrypoint_2(Actor *param_0)
 {
