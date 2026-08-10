@@ -1,6 +1,11 @@
 #include "types.h"
 #include "overlays.h"
 
+extern u32 table_addr_ROM_START;
+extern u32 heap_get_allocation_size(u32);
+extern s32 overlay_syscalls[];
+extern s32 overlay_syscalls_end[];
+
 extern s32 D_80126CB8;
 extern u32 D_80126730;
 extern struct Overlay* D_80126738[];
@@ -16,18 +21,74 @@ void* heap_alloc(s32 size);
 s32 D_80117C60 = 0;
 s32 D_80117C64 = 0;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/overlays/func_800815C0.s")
+int func_800815C0(s32 param_0)
+{
+  D_80126CB8 = param_0;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/overlays/func_800815CC.s")
+void func_800815CC()
+{
+  rom_read_word(&table_addr_ROM_START, &D_80126730);
+  D_80117C60 = 0;
+  D_80117C64 = 0;
+  D_80126CB8 = 0;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/overlays/func_8008160C.s")
+void func_8008160C(s32 param_0)
+{
+  s32 var_s0;
+  u32 *var_s1;
+  s16 temp_v0;
+  s32 temp_s3;
+  u32 *temp_a0;
+
+  temp_s3 = func_800A9F30();
+  var_s0 = 0;
+  if (D_80117C60 > 0)
+  {
+    var_s1 = D_80126738;
+    do
+    {
+      temp_a0 = *var_s1;
+      if (param_0 == 2)
+      {
+        if ((((*((s16 *) ((char *)temp_a0 + 0x32))) >= 3) && ((*((u8 *) ((char *)temp_a0 + 0xF))) & 2)) && (ovl_unload(temp_a0, 0) != 0))
+        {
+          var_s0 -= 1;
+          var_s1 -= 1;
+        }
+      }
+      else
+      {
+        *(s16 *)((char *)temp_a0 + 0x32) = (s16) ((*(s16 *)((char *)temp_a0 + 0x32)) + 1);
+        temp_v0 = *(s16 *)((char *)temp_a0 + 0x32);
+        if (((temp_v0 >= 0x1F) && (((temp_s3 == 0) && (temp_v0 >= 6)) || (temp_v0 >= 0x1F))) && (ovl_unload(temp_a0, 0) != 0))
+        {
+          var_s0 -= 1;
+          var_s1 -= 1;
+        }
+      }
+      var_s0 += 1;
+      var_s1 += 1;
+    }
+    while (var_s0 < D_80117C60);
+  }
+}
+
+void func_80081744();
 
 void func_80081724()
 {
     func_80081744();
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/overlays/func_80081744.s")
+void func_80081744()
+{
+  while (((int) D_80117C60) != 0)
+  {
+    ovl_unload((*((void * *) D_80126738)), 1);
+  }
+}
 
 struct Overlay* ovl_load(s32 overlay_index, s32 arg1, s32 arg2) {
     s32 overlay_size;
@@ -162,11 +223,64 @@ s32 ovl_unload(struct Overlay* ovl, s32 arg1) {
     return 1;
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/overlays/func_80081A90.s")
+u8 *func_80081A90(u8 *param_0)
+{
+  int new_var;
+  u8 *new_var2;
+ new_var = 0x38; new_var2 = (param_0 + ((*((s16 *) (param_0 + 8))) * 4)) + ((0, new_var)); return new_var2;
+  if (param_0)
+  {
+  }
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/overlays/func_80081AA4.s")
+struct Overlay* func_80081AA4(void* param_0)
+{
+  u32 *local_0;
+  u32 local_2;
+  s32 local_3;
+  u32 *local_4;
+  u32 local_5;
+  local_2 = (u32) (((u32 *) overlay_syscalls));
+  if ((((u32) param_0) >= ((u32) (((u32 *) overlay_syscalls)))) && (((u32) param_0) < ((u32) (((u32 *) overlay_syscalls_end)))))
+  {
+    local_0 = (u32 *) (((((u32) param_0) - local_2) & (~7)) + ((u32) (((u32 *) overlay_syscalls))));
+    if (((*local_0) & 0xFC00003F) == 0xC)
+    {
+      return NULL;
+    }
+    local_2 = *local_0;
+    return (struct Overlay*) (((((local_2 & 0x03FFFFFF) << 1) << 1) | 0x80000000) - 0x10);
+  }
+  local_4 = (u32 *) D_80126738;
+  local_3 = 0;
+  if (((s32) ((u32) D_80117C60)) > 0)
+  {
+    loop_6:
+    local_2 = *local_4;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/overlays/func_80081BC0.s")
+    local_5 = heap_get_allocation_size(local_2) + local_2;
+    if ((((u32) param_0) >= local_2) && (local_5 >= ((u32) param_0)))
+    {
+      return (struct Overlay*) local_2;
+    }
+    local_3 += 1;
+    local_4 += 1;
+ ;
+    if (local_3 < ((s32) ((u32) D_80117C60)))
+    {
+      goto loop_6;
+    }
+  }
+  return 0U;
+}
+
+func_80081BC0(s32 *param_0){
+    if((*param_0 & 0xFC00003F) == 0xC){
+        return 0;
+    }else{
+        return 1;
+    }
+}
 
 void defragment_overlays(void) {
     s32 i;
@@ -207,6 +321,45 @@ s32 func_80081D28()
     return D_80126CBC;
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/overlays/func_80081D34.s")
+s32 func_80081D34(s32 param_0)
+{
+    s32 temp_t6;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/overlays/func_80081D80.s")
+    temp_t6 = (param_0 - (s32)&overlay_syscalls) >> 3;
+    if (temp_t6 < 0) {
+        return 0;
+    }
+    if (((s32)&overlay_syscalls_end - (s32)&overlay_syscalls) >> 3 < temp_t6) {
+        return 0;
+    }
+    return temp_t6;
+}
+
+s32 func_80081D80(s32 param_0)
+{
+  s32 temp_v0;
+  s32 shifted;
+  s32 addr;
+  s16 *ptr;
+  temp_v0 = *((s32 *) (((u8 *) (&overlay_syscalls)) + (param_0 * 8)));
+  if ((temp_v0 & 0xFC00003F) == 0xC)
+  {
+    if (((temp_v0 << 2) << 4) >= 0)
+    {
+      return 0;
+    }
+    return 1;
+  }
+  shifted = temp_v0 << 6;
+  shifted >>= 6;
+  addr = (shifted * 4) | 0x80000000;
+  addr -= 0x10;
+  temp_v0 = 0;
+  ptr = (s16 *) (((char *) addr) + 0x32);
+  if ((*ptr) >= 2)
+  {
+    return 2;
+    if (temp_v0) { }
+  }
+  return 3;
+}
