@@ -27,12 +27,7 @@ s32 func_80115EA0()
 
 #pragma GLOBAL_ASM("asm/nonmatchings/core2/1EEF790/func_801163A0.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/1EEF790/func_801163B0.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/1EEF790/func_8011649C.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/1EEF790/func_801164E0.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/1EEF790/func_80116568.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/1EEF790/func_80116684.s")
