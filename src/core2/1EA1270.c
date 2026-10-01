@@ -10,7 +10,7 @@ void func_800C7A58(void) {
 void func_800C7A60(void) {
 }
 
-void func_800C7A68(Unk800C7A68* arg0, f32 arg1, s32 arg2) {
+void func_800C7A68(Unk800C7A68* arg0, f32 arg1, f32 *arg2) {
     if (arg1 < 0.0f) {
         arg1 = 0.0f;
     } else if (arg1 > 1.0f) {

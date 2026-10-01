@@ -8,9 +8,9 @@
 s32 func_800CF87C();
 s32 func_800CFA90();
 void func_800CFBC8(Actor*, u32, s32, s32);
-u32 func_800CFC8C(s16, s32);
-s32 func_800D0018(s16, s32);
-s32 func_800D035C(s16 a0);
+u32 func_800CFC8C(s32, s32);
+s32 func_800D0018(s32, s32);
+s32 func_800D035C(s32 a0);
 void func_800D053C(u32, u32);
 void func_800D0594(s32, s32, s32);
 void func_800D05E4(s32, s32, s32);
@@ -28,7 +28,7 @@ s32 func_800D0908(s32, s32);
 s32 func_800D0A80(s32, s32);
 //Is Item Spawned
 s32 func_800D0A9C(u32, u32);
-void func_800D0B38(s16, s16);
+void func_800D0B38(s32, s32);
 //Is Item Collected
 s32 func_800D0B68(u32, u32);
 void func_800D0BD4(s32, u32);

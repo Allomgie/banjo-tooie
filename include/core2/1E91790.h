@@ -19,7 +19,7 @@ extern s8 D_801282C1;
 extern s8 D_801282C2; 
 extern s8 D_801282C3; //Transparency
 extern s8 D_801282C4; //Shakiness
-extern s8 D_801282C6; //Font
+extern u8 D_801282C6; //Font
 extern s8 D_801282C7;
 
 extern s8 D_801282C9; //Pattern

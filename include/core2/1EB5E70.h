@@ -10,6 +10,6 @@ void func_800DF41C(s32);
 void func_800DF5D8(u32, u32, u32, s32);
 void func_800DF744(s32, s32);
 
-void func_800DF944(u32 a0, f32* coords, f32 a2, f32 a3, u8 a4, u8 a5, ImageStruct *a6);
+ImageStruct *func_800DF944(u32 a0, f32* coords, f32 a2, f32 a3, f32 *a4, s32 a5, ImageStruct *a6);
 
 #endif // __CORE2_1EB5E60_H__

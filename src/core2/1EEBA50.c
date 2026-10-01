@@ -30,7 +30,7 @@ void func_801121B8(PlayerState* arg0, f32* arg1)
 
 #pragma GLOBAL_ASM("asm/nonmatchings/core2/1EEBA50/func_80112524.s")
 
-void func_80112550(PlayerState* arg0, f32* arg1)
+f32 func_80112550(PlayerState* arg0, f32* arg1)
 {
     func_80112168(arg0,arg1);
 }

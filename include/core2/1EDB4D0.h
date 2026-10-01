@@ -16,6 +16,6 @@ s32 func_8010262C(Unk80132ED0*, u32);
 typedef struct Vec3s32 {
     s32 x, y, z;
 } Vec3s32;
-void func_801026CC(Actor*, Vec3s32, f32);
+void func_801026CC(Actor*, Vec3f, f32);
 
 #endif

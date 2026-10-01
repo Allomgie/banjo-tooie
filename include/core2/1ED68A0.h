@@ -5,7 +5,7 @@
 #include "core2/1EB3750.h"
 
 u32 func_800FDC28(u32);
-void func_800FE4E4(void);
+int func_800FE4E4(void);
 void func_800FE734(u32);
 void func_800FE844(u32);
 void func_800FEC60(u32);
