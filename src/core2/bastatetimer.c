@@ -4,6 +4,8 @@
 
 #include "core2/1EB2840.h"
 
+typedef struct { f32 unk0; f32 unk4; s8 unk8; } BaStateTimerX;
+
 s32 bastatetimerList_getSize(void) {
     return sizeof(BaStateTimerList);
 }
@@ -32,7 +34,16 @@ int bastatetimer_isAt(PlayerState *self, BaStateTimerId id, f32 arg2) {
 void bastatetimerlist_free(PlayerState *self) {}
 
 #ifndef NONMATCHING
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/bastatetimer/bastatetimerlist_init.s")
+void bastatetimerlist_init(PlayerState *param_0)
+{
+  s32 i;
+  for (i = 0; i < 10; i++)
+  {
+    (*(BaStateTimerX **)((u8 *)param_0 + 0x3C))[i].unk0 = 0.0f;
+    (*(BaStateTimerX **)((u8 *)param_0 + 0x3C))[i].unk4 = 0.0f;
+    (*(BaStateTimerX **)((u8 *)param_0 + 0x3C))[i].unk8 = (i == 2) || (i == 3);
+  }
+}
 #else
 void bastatetimerlist_init(PlayerState *self) {
     int i;
