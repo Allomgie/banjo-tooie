@@ -689,7 +689,7 @@ segments:
       - [0x1EFF7F0, .rodata, 1ECD170]
       - [0x1EFF960, rodata]
       - [0x1EFFA30, .rodata, 1ED4440]
-      - [0x1EFFA40, rodata]
+      - [0x1EFFA40, .rodata, 1ED4E30]
       - [0x1EFFA50, .rodata, 1ED68A0]
       - [0x1EFFD20, .rodata, 1EDAEA0]
       - [0x1EFFD30, .rodata, 1EDDC40]
