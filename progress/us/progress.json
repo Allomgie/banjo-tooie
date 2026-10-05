@@ -1,7 +1,7 @@
 {
   "all": {
-    "decompiled": 486652,
-    "percent": 16.7532,
+    "decompiled": 994572,
+    "percent": 34.2385,
     "total": 2904832
   },
   "boot": {
@@ -15,8 +15,8 @@
     "total": 153680
   },
   "core2": {
-    "decompiled": 108176,
-    "percent": 17.5583,
+    "decompiled": 616096,
+    "percent": 100.0,
     "total": 616096
   },
   "overlays": {
