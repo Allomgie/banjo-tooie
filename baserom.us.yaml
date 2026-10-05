@@ -650,7 +650,7 @@ segments:
       - [0x1EFEF90, .rodata, 1E91790]
       - [0x1EFEFB0, .rodata, 1E93440]
       - [0x1EFF0A0, .rodata, 1E97EF0]
-      - [0x1EFF0B0, rodata]
+      - [0x1EFF0B0, .rodata, 1E9A960]
       - [0x1EFF180, .rodata, 1E9E480]
       - [0x1EFF190, .rodata, 1E9F060]
       - [0x1EFF1A0, .rodata, 1EA0690]
