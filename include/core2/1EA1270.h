@@ -11,7 +11,7 @@ typedef struct Unk800C7A68 {
 } Unk800C7A68;
 
 void (*func_800C79EC(Unk800C7A68 *))(f32, u8, s32*, s32);
-void func_800C7A68(Unk800C7A68*, f32, s32);
+void func_800C7A68(Unk800C7A68*, f32, f32 *);
 f32 func_800C7B7C(Unk800C7A68 *, f32, f32, f32);
 
 #endif

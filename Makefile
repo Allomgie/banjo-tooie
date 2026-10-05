@@ -106,6 +106,13 @@ $(ASM_PROC_C_OBJS): $(BUILD_ROOT)/%.c.o: %.c | $(C_BUILD_DIRS)
 $(IDO71_OBJS): CC        := $(CC_IDO71)
 $(IDO71_OBJS): OPT_LEVEL := -g
 
+# 1E99980 wird nur mit SGIs ANSI-Praeprozessor bytegleich. In func_800C0BC0
+# ist die Zeilenform der GBI-Makroaufrufe tragend -- der Assembler plant bei
+# Gleichstand nach Zeilennummer, und acpp erhaelt die Umbrueche innerhalb der
+# Makroargumente, die der eingebaute Praeprozessor einebnet. -Wp,-+ laesst
+# acpp die //-Kommentare der Ultra-Header durch.
+$(BUILD_ROOT)/src/core2/1E99980.c.o: CFLAGS += -acpp -Wp,-+
+
 $(PURE_C_OBJS): $(BUILD_ROOT)/%.c.o: %.c | $(C_BUILD_DIRS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 

@@ -10,7 +10,7 @@ extern u32 D_80801448_chglowbo;
 extern u32 D_80801454_chglowbo;
 extern s32 D_80801460_chglowbo[3];
 extern f32 D_8080146C_chglowbo[18];
-extern Vec3s32 D_808014B4_chglowbo;
+extern Vec3f D_808014B4_chglowbo;
 extern u32 D_808014C0_chglowbo;
 extern u32 D_80801508_chglowbo;
 extern u32 D_80801540_chglowbo;

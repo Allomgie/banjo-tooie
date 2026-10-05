@@ -10,6 +10,11 @@
 #include "core2/1ECE0B0.h"
 #include "core2/1EB5E70.h"
 
+#define BAANIM_DEBUG_LOG() do { } while (0)
+extern f32 func_800A8258(void);
+extern void func_80098218(PlayerState *, s32);
+extern void __baanim_oscillateScale(f32 dst[3], f32 x, f32 min, f32 osc_size);
+
 extern f32 func_80013970(f32);
 
 #define BAANIM_BIGHEAD 0x4
@@ -77,7 +82,68 @@ void __baanim_oscillateScale(f32 dst[3], f32 x, f32 min, f32 osc_size) {
 }
 
 #ifndef NONMATCHING
-#pragma GLOBAL_ASM("asm/nonmatchings/core2/baanim/__baanim_applyBottlesBonus.s")
+void __baanim_applyBottlesBonus(s32 arg0, s32 arg1) {
+    f32 sp2C[3];
+    f32 sp28;
+    PlayerState *self;
+    static s32 D_80126CD0;
+
+    self = func_800F53D0(arg1);
+    
+    func_80098218(self, arg0);
+    func_800DFC20(arg0, self->anim->unkE, self->anim->unk10);
+    if (self->anim->unkC) {
+        func_800EFD24(sp2C);
+        func_800DFFA0(arg0, self->anim->unkE, sp2C);
+    }
+    sp28 = func_800A8258();
+
+    if (D_80126CD0 & 1) {
+        BAANIM_DEBUG_LOG();
+        __baanim_oscillateScale(sp2C, sp28, 2.0f, 1.0f);
+        func_800DFF64(arg0, 0x6, sp2C);
+        func_800DFF64(arg0, 0x14, sp2C);
+    }
+    if (D_80126CD0 & 2) {
+        BAANIM_DEBUG_LOG();
+        __baanim_oscillateScale(sp2C, sp28, 2.0f, 1.0f);
+        func_800DFF64(arg0, 0x10, sp2C);
+        func_800DFF64(arg0, 0x1E, sp2C);
+    }
+    if (D_80126CD0 & BAANIM_BIGHEAD) {
+        BAANIM_DEBUG_LOG();
+        __baanim_oscillateScale(sp2C, sp28, 2.0f, 1.0f);
+        func_800DFF64(arg0, 0x12, sp2C);
+    }
+    if (D_80126CD0 & BAANIM_SMALLHEAD) {
+        BAANIM_DEBUG_LOG();
+        __baanim_oscillateScale(sp2C, sp28, 0.2f, 0.5f);
+        func_800DFF64(arg0, 0x12, sp2C);
+    }
+    if (D_80126CD0 & BAANIM_LONGBODY) {
+        BAANIM_DEBUG_LOG();
+        func_800DFFA0(arg0, 1, D_80117C70);
+    }
+    if (D_80126CD0 & BAANIM_BIGKAZOOIEHEAD) {
+        BAANIM_DEBUG_LOG();
+        __baanim_oscillateScale(sp2C, sp28, 2.0f, 1.0f);
+        func_800DFF64(arg0, 0x6C, sp2C);
+    }
+    if (D_80126CD0 & BAANIM_BIGWINGS) {
+        BAANIM_DEBUG_LOG();
+        __baanim_oscillateScale(sp2C, sp28, 2.0f, 1.0f);
+        func_800DFF64(arg0, 0x64, sp2C);
+        func_800DFF64(arg0, 0x67, sp2C);
+    }
+    if (func_8010FFD8(func_800A4C88(self))) {
+        __baanim_oscillateScale(sp2C, sp28, 0.9f, 0.2f);
+        func_800DFF64(arg0, self->anim->unkE, sp2C);
+    }
+    if (self->anim->unk4 != NULL) {
+        self->anim->unk4(arg0, arg1);
+    }
+
+}
 #else
 void __baanim_applyBottlesBonus(s32 arg0, s32 arg1) {
     PlayerState *self = func_800F53D0(arg1);

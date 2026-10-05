@@ -11,7 +11,7 @@ void func_80092864(PlayerState *, f32);
 void func_80092880(PlayerState *, s32);
 Unkfunc_800E0960_1 *func_80092AD8(PlayerState *);
 f32 func_80092BE8(PlayerState *);
-void func_80092BF4(PlayerState *);
+f32 func_80092BF4(PlayerState *);
 void func_80092C00(PlayerState *, f32[3]);
 void func_80092C24(PlayerState *, f32[3]);
 void func_80092C48(PlayerState *, f32[3]);
