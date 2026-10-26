@@ -1,8 +1,14 @@
 #include "overlays/bs/ledge.h"
+#include "overlays/ba/playerstate.h"
+
+extern void func_800A0D14(PlayerState *, s32, f32);
+extern void baanim_playForDuration_onceSmooth(PlayerState *, AssetId, f32);
 
 #ifndef NONMATCHINGS
 // Unmatched as the compiler wants to use a0 and then move a0 into v0 instead of using t registers
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/ledge/func_80800000_bsledge.s")
+int func_80800000_bsledge(u8 *param_0) {
+    return func_8008E23C(param_0) == 0 && bakey_pressed(param_0, 9) != 0;
+}
 #else
 // Probably a check whether kazooie should (or can?) attack
 s32 func_80800000_bsledge(PlayerState *self) {
@@ -110,7 +116,9 @@ void func_80800334_bsledge(PlayerState *self) {
 }
 
 #ifndef NONMATCHINGS
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/ledge/func_808003D0_bsledge.s")
+int func_808003D0_bsledge(u8 *param_0) {
+    return bakey_pressed(param_0, 8) && func_80097530(param_0);
+}
 #else
 // Probably a check whether banjo can pull himself up a ledge
 s32 func_808003D0_bsledge(PlayerState *self) {
@@ -121,7 +129,9 @@ s32 func_808003D0_bsledge(PlayerState *self) {
 #endif
 
 #ifndef NONMATCHINGS
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/ledge/func_80800410_bsledge.s")
+int func_80800410_bsledge(u8 *param_0) {
+    return func_80096388(param_0) == 7 && func_80097524(param_0) != 4;
+}
 #else
 s32 func_80800410_bsledge(PlayerState *self) {
     if (((func_80096388(self) ^ 7) == 0) != 0) {
@@ -369,7 +379,43 @@ s32 func_80800D24_bsledge(PlayerState *self) {
 }
 
 #ifndef NONMATCHINGS
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/ledge/func_80800D78_bsledge.s")
+void func_80800D78_bsledge(PlayerState *param_0, s32 param_1)
+{
+    switch (param_0->unk160.word) {
+    case 1:
+        if (!func_8008E0E8(param_0)) _bapackctrl_entrypoint_5(param_0, 1);
+        break;
+    case 2:
+        break;
+    case 3:
+        func_800A0D14(param_0, 0, 0.2f);
+        break;
+    case 4:
+        func_800A0D14(param_0, 0, 0.2f);
+        break;
+    }
+    param_0->unk160.word = param_1;
+    switch (param_1) {
+    case 0:
+        break;
+    case 1:
+        func_800A0CF4(param_0, 0);
+        baanim_playForDuration_onceSmooth(param_0, 0x52, 1.8f);
+        if (!func_8008E0E8(param_0)) _bapackctrl_entrypoint_5(param_0, 5);
+        break;
+    case 2:
+        baanim_playForDuration_onceSmooth(param_0, 0x55, 4.5f);
+        break;
+    case 3:
+        func_800A0CF4(param_0, 1);
+        baanim_playForDuration_onceSmooth(param_0, 0x56, 5.0f);
+        break;
+    case 4:
+        func_800A0CF4(param_0, 1);
+        baanim_playForDuration_onceSmooth(param_0, 0x52, 2.0f);
+        break;
+    }
+}
 #else
 // decomp failure
 #endif

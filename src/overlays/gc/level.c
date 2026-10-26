@@ -1,5 +1,10 @@
 #include "gc/level.h"
 
+typedef struct { s16 local_0; u16 local_1; s16 local_2; s8 local_3; s8 local_4; } LevelRule1322;
+typedef struct { s16 unk0; s16 unk2; s32 unk4; } GcLevelEntry;
+extern GcLevelEntry D_808003D0_gclevel[10];
+GcLevelEntry *func_80800314_gclevel();
+
 extern u8 D_8012762C;
 extern s8 D_8012762D;
 extern u8 D_808003C0_gclevel[];
@@ -50,9 +55,64 @@ s32 gclevel_entrypoint_2(s32 arg0)
     return D_8012762C = _gcsectionDll_entrypoint_4(arg0);
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gc/level/gclevel_entrypoint_3.s")
+u32 gclevel_entrypoint_3(u32 param_0)
+{
+    void *local_0;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gc/level/func_8080016C_gclevel.s")
+    local_0 = func_80800314_gclevel(param_0);
+    if (local_0 == NULL) {
+        return 1;
+    }
+    return func_800DA298(*(u16 *)((u8 *)local_0 + 2));
+}
+
+void func_8080016C_gclevel(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+{
+  s16 local_0;
+  s16 local_1;
+  if ((param_0 != param_1) && ((func_8009E958() == 1) || (func_800D395C() != 0)))
+  {
+    if (param_1 != 0xD)
+    {
+      if (param_1 != 0x19)
+      {
+        if (param_1 == 0x1A)
+        {
+          param_2 = 0x142;
+          param_3 = 3;
+        }
+        goto block_8;
+      }
+      if (param_0 != 0xD)
+      {
+        block_8:
+        func_8009EB8C((s16) param_2, (s16) param_3);
+
+        goto block_9;
+      }
+    }
+  }
+  else
+  {
+    block_9:
+    if (func_8009EC7C() == 0)
+    {
+      local_0 = (s16) param_2;
+      if (param_2 == 0x194)
+      {
+        param_3 = 1;
+        local_0 = 0x15D;
+        local_1 = 1;
+      }
+      else
+      {
+        ;
+      }
+      func_8009EB8C(local_0, (s16) param_3);
+    }
+
+  }
+}
 
 s32 gclevel_entrypoint_4(s32 arg0)
 {
@@ -63,6 +123,35 @@ s32 gclevel_entrypoint_4(s32 arg0)
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gc/level/func_80800270_gclevel.s")
+s32 func_80800270_gclevel(s32 param_0, s32 param_1, s32 param_2)
+{
+    LevelRule1322 *local_0;
+    s32 local_1;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gc/level/func_80800314_gclevel.s")
+    local_0 = func_80800314_gclevel(param_2);
+    if (!local_0) {
+        return 1;
+    }
+    local_1 = local_0->local_2;
+    if (local_1 == -1) {
+        func_800DA544(local_0->local_1);
+    } else if (param_0 == local_1 &&
+               (param_1 == local_0->local_3 || param_1 == local_0->local_4)) {
+        func_800DA544(local_0->local_1);
+    } else {
+        return func_800DA298(local_0->local_1);
+    }
+    return 1;
+}
+
+GcLevelEntry *func_80800314_gclevel(param_0) s32 param_0;
+{
+    s32 i;
+
+    for (i = 0; i < 10; i++) {
+        if (param_0 == D_808003D0_gclevel[i].unk0) {
+            return &D_808003D0_gclevel[i];
+        }
+    }
+    return NULL;
+}

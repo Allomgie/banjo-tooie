@@ -1,5 +1,13 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bigfoot/chbigfoot_entrypoint_0.s")
+extern int D_808000C8_chbigfoot;
+extern void _sucoaster_entrypoint_0(s32, s32);
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bigfoot/func_8080000C_chbigfoot.s")
+int chbigfoot_entrypoint_0()
+{
+  return (int)&D_808000C8_chbigfoot;
+}
+
+void func_8080000C_chbigfoot(s32 param_0) {
+    _sucoaster_entrypoint_0(param_0, 0);
+}

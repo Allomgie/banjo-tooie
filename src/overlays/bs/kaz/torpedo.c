@@ -1,6 +1,10 @@
 #include "common.h"
 
 #include "overlays/bs/kaz/torpedo.h"
+#include "overlays/ba/playerstate.h"
+
+extern void func_80800AF0_bskaztorpedo(), func_80800B34_bskaztorpedo(), func_80800BA0_bskaztorpedo();
+extern void func_8080123C_bskaztorpedo(), func_80801268_bskaztorpedo(), func_808012DC_bskaztorpedo();
 
 extern s32 D_80801730_bskaztorpedo[];
 extern s32 D_80801740_bskaztorpedo[];
@@ -212,9 +216,62 @@ void func_8080088C_bskaztorpedo(PlayerState *self, s32 arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/kaz/torpedo/func_808008D4_bskaztorpedo.s")
+void func_808008D4_bskaztorpedo(PlayerState *param_0)
+{
+    s32 local_1 = func_8009E6EC(param_0);
+    f32 local_0[3];
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/kaz/torpedo/func_80800A34_bskaztorpedo.s")
+    switch (local_1) {
+        case 0x50:
+            func_800F7B9C(_plsu_entrypoint_1(0xA), 0x71);
+            func_80099A7C(param_0, local_0);
+            func_800F452C(param_0, local_0);
+            bs_setState(param_0, 0x158);
+            func_8009E830(param_0, 2);
+            break;
+        case 0x6F:
+            func_8009E830(param_0, 1);
+            break;
+        case 0x21:
+            func_8080088C_bskaztorpedo(param_0, 0);
+            break;
+        case 0x1F: case 0x20: case 0x24: case 0x2D: case 0x2E:
+        case 0x4E: case 0x51: case 0x52:
+            func_8080088C_bskaztorpedo(param_0, 1);
+            break;
+        case 0x88:
+            *(s32 *)((u8 *)param_0 + 0x15C) = 1;
+            func_8009E830(param_0, 2);
+            break;
+        default:
+            func_80099B94(param_0);
+            break;
+    }
+}
+
+void func_80800A34_bskaztorpedo(PlayerState *param_0)
+{
+    if (baflag_isFalse(param_0, 0x35)) {
+        func_808008D4_bskaztorpedo(param_0);
+    }
+    
+    switch (func_8009E6EC(param_0)) {
+    case 0x1F:
+    case 0x20:
+    case 0x21:
+    case 0x24:
+    case 0x2D:
+    case 0x2E:
+    case 0x4E:
+    case 0x51:
+    case 0x52:
+        func_8009E830(param_0, 2);
+        break;
+    default:
+        func_808008D4_bskaztorpedo(param_0);
+        break;
+    }
+}
 
 void func_80800AF0_bskaztorpedo(PlayerState *self) {
     _batranslate_entrypoint_3(self, 1);
@@ -530,3 +587,18 @@ void func_80801614_bskaztorpedo(PlayerState *self) {
 s32 bskaztorpedo_entrypoint_7(s32 idx) {
     return D_808018A4_bskaztorpedo[idx];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/torpedo.data.s) is defined here in C --
+ * tables holding function pointers must be in the same unit, otherwise IDO's assembler schedules those functions differently. */
+extern void func_80099AA8();
+s32 D_80801730_bskaztorpedo[4] = { (u32)func_80800AF0_bskaztorpedo, (u32)func_80800B34_bskaztorpedo, (u32)func_80800BA0_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
+s32 D_80801740_bskaztorpedo[4] = { (u32)func_80800BF8_bskaztorpedo, (u32)func_80800C20_bskaztorpedo, (u32)func_80800CAC_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
+s32 D_80801750_bskaztorpedo[4] = { (u32)func_80800D48_bskaztorpedo, (u32)func_80800D70_bskaztorpedo, (u32)func_80800DA4_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
+s32 D_80801760_bskaztorpedo[4] = { (u32)func_80800E04_bskaztorpedo, (u32)func_80800E2C_bskaztorpedo, (u32)func_80800E54_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
+s32 D_80801770_bskaztorpedo[29] = { 0xC0023, 0x2B0200, 0x280002D, 0x140028, 0x220014, 0x1E0023, 0x30061A, 0xC002D, 0x2B0180, 0x200002D, 0x320046, 0x220021, 0x26002E, 0x3A081A, 0xC0037, 0x2B0100, 0x180002D, 0x460050, 0x220028, 0x350040, 0x4C081A, 0xC003C, 0x2D0050, 0x5A002B, 0x800100, 0x22003D, 0x40004A, 0x59021A, 0x0 };
+s32 D_808017E4_bskaztorpedo[4] = { (u32)func_80800EE8_bskaztorpedo, (u32)func_80800F08_bskaztorpedo, (u32)func_80800FB4_bskaztorpedo, (u32)func_80099AA8 };
+s32 D_808017F4_bskaztorpedo[12] = { 0x1D09E4, 0xE0005, 0xA0015, 0x190080, 0x220021, 0x23000C, 0xC0027, 0x1900190, 0x3200320, 0x2B0080, 0x99031A, 0x0 };
+s32 D_80801824_bskaztorpedo[12] = { 0x1D09E4, 0xE000F, 0x190015, 0x99, 0x220019, 0x1E000C, 0xC0027, 0x1900190, 0x3200320, 0x2B004C, 0x66061A, 0x0 };
+s32 D_80801854_bskaztorpedo[12] = { 0x1D09E4, 0xE001E, 0x280015, 0x99, 0x22000C, 0xF0007, 0x70027, 0x1900190, 0x3200320, 0x2B0019, 0x4C0E1A, 0x0 };
+s32 D_80801884_bskaztorpedo[4] = { (u32)func_8080123C_bskaztorpedo, (u32)func_80801268_bskaztorpedo, (u32)func_808012DC_bskaztorpedo, (u32)func_80800A34_bskaztorpedo };
+s32 D_80801894_bskaztorpedo[4] = { (u32)func_80801380_bskaztorpedo, (u32)func_808013B4_bskaztorpedo, (u32)func_80801400_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
+s32 D_808018A4_bskaztorpedo[7] = { (u32)func_80801484_bskaztorpedo, (u32)func_808014F8_bskaztorpedo, (u32)func_80801614_bskaztorpedo, (u32)func_808008D4_bskaztorpedo, 0x0, 0x0, 0x0 };

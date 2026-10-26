@@ -1,4 +1,7 @@
 #include "overlays/ba/wandglow.h"
+#include "wandglow.h"
+
+extern void func_8008EEC4(PlayerState *, f32 *, s32, s32);
 
 s32 bawandglow_entrypoint_0(void) {
     return sizeof(BaWandGlow);
@@ -20,7 +23,14 @@ void bawandglow_entrypoint_2(s32 arg0) {
 }
 
 #ifndef NONMATCHING
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/wandglow/bawandglow_entrypoint_3.s")
+void bawandglow_entrypoint_3(PlayerState *param_0, s32 param_1)
+{
+    void *p = param_0->wandglow->unkC;
+    if (p != NULL) {
+        func_8008F880(p);
+    }
+    func_8008EEC4(param_0, param_0->wandglow->unk0, (*(s32 *)&param_1), 0x27D);
+}
 #else
 void bawandglow_entrypoint_3(PlayerState *self, s32 arg1) {
     if (self->wandglow->unkC != NULL) {
