@@ -2,6 +2,9 @@
 
 #include "overlays/bs/kaz/crouch.h"
 
+extern f32 mlAbsF(f32);
+void func_808000B4_bskazcrouch(AnimCtrl *, f32);
+
 extern s32 D_808007C0_bskazcrouch[];
 
 void func_80800000_bskazcrouch(PlayerState *self) {
@@ -98,7 +101,94 @@ void bskazcrouch_entrypoint_1(PlayerState *self) {
 }
 
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/kaz/crouch/bskazcrouch_entrypoint_2.s")
+void bskazcrouch_entrypoint_2(PlayerState *param_0)
+{
+    s32 local_0 = 0;
+    f32 local_1;
+    AnimCtrl *local_2;
+    f32 local_3;
+    f32 local_5;
+    f32 local_4;
+
+    local_2 = baanim_getAnimCtrlPtr(param_0);
+    _batimer_decrement(param_0, 0);
+    _batimer_decrement(param_0, 1);
+    local_1 = func_800F10B4(_batimer_get(param_0, 0), 0.0f, 0.3f, 0.0f, param_0->unk16C);
+    baphysics_set_target_horizontal_velocity(param_0, local_1);
+    if (local_1 > 220.0f) {
+        _badust_entrypoint_9(param_0);
+    }
+    if (local_1 > 160.0f) {
+        func_8009D658(param_0);
+    }
+    if (bastick_distance(param_0) == 0.0f) {
+        yaw_setIdeal(param_0, yaw_get(param_0));
+    }
+    local_4 = yaw_getIdeal(param_0);
+    local_5 = yaw_get(param_0);
+    local_3 = mlAbsF(func_800F1DCC(local_4, local_5));
+    switch (param_0->unk15C.word) {
+    case 0:
+        if (local_1 == 0.0f) {
+            _batimer_set(param_0, 2, 2.0f);
+            param_0->unk15C.word = 1;
+        }
+        break;
+    case 1:
+        if (local_3 != 0.0f) {
+            func_80800000_bskazcrouch(param_0);
+        } else {
+            _batimer_decrement(param_0, 2);
+            if (_batimer_isZero(param_0, 2)) {
+                func_80800034_bskazcrouch(param_0);
+            }
+        }
+        break;
+    case 2:
+        if (local_3 != 0.0f) {
+            func_80800000_bskazcrouch(param_0);
+        } else if (anctrl_isStopped(local_2)) {
+            func_80800068_bskazcrouch(param_0);
+        }
+        break;
+    case 4:
+        func_808000B4_bskazcrouch(local_2, local_3);
+        func_808000FC_bskazcrouch(param_0, (s32)local_2);
+        if (local_3 == 0.0f) {
+            if (anctrl_getAnimTimer(local_2) <= 0.5f) {
+                anctrl_setSubrange(local_2, 0.0f, 0.5f);
+            } else {
+                anctrl_setSubrange(local_2, 0.0f, 1.0f);
+            }
+            anctrl_setPlaybackType(local_2, 1);
+            param_0->unk15C.word = 3;
+        }
+        break;
+    case 3:
+        func_808000B4_bskazcrouch(local_2, local_3);
+        func_808000FC_bskazcrouch(param_0, (s32)local_2);
+        if (local_3 != 0.0f) {
+            anctrl_setSubrange(local_2, 0.0f, 1.0f);
+            anctrl_setPlaybackType(local_2, 2);
+            param_0->unk15C.word = 4;
+        } else if (anctrl_isStopped(local_2)) {
+            yaw_setIdeal(param_0, yaw_get(param_0));
+            func_80800068_bskazcrouch(param_0);
+        }
+        break;
+    }
+    if (func_8008DF18(param_0)) {
+        local_0 = _badrone_entrypoint_25(param_0);
+    }
+    local_0 = bskazcrouch_entrypoint_0(param_0, local_0);
+    if (local_0 == 0xBB && _batimer_isNonzero(param_0, 1)) {
+        local_0 = 0;
+    }
+    if (player_inWater(param_0)) {
+        local_0 = 0x15D;
+    }
+    bs_setState(param_0, local_0);
+}
 
 void bskazcrouch_entrypoint_3(PlayerState *self) {
     _bskaz_entrypoint_2(self);

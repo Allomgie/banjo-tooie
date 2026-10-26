@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "overlays/bs/kaz/still.h"
+#include "overlays/ba/playerstate.h"
 
 extern u8 D_808008A0_bskazstill[];
 extern s32 D_808008A4_bskazstill[];
@@ -15,7 +16,36 @@ u8 func_80800000_bskazstill(PlayerState *self) {
     return D_808008A0_bskazstill[self->unk160.word++];
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/kaz/still/func_80800030_bskazstill.s")
+void func_80800030_bskazstill(PlayerState *param_0, s32 param_1)
+{
+    s32 local_0;
+
+    if (*(s32 *)((u8 *)param_0 + 0x15C) == 0) {
+        *(s32 *)((u8 *)param_0 + 0x160) = 0;
+        *(s32 *)((u8 *)param_0 + 0x164) = 0;
+        func_8009FFD8(param_0, 1, 1, 1, 2);
+        baphysics_set_target_horizontal_velocity(param_0, 0.0f);
+        func_800909CC(param_0);
+        bastick_func_8009F258(param_0);
+    }
+    *(s32 *)((u8 *)param_0 + 0x15C) = param_1;
+    switch (param_1) {
+    case 0: break;
+    case 1: baanim_playForDuration_onceSmooth(param_0, 0xA4, 6.5f); break;
+    case 2: baanim_playForDuration_onceSmooth(param_0, 0xA5, 6.5f); break;
+    case 3: baanim_playForDuration_onceSmooth(param_0, 0xAC, 5.7f); break;
+    case 4: baanim_playForDuration_onceSmooth(param_0, 0xAD, 5.3f); break;
+    case 5:
+        local_0 = _bashoes_entrypoint_1(param_0);
+        *(s32 *)((u8 *)param_0 + 0x168) = local_0;
+        switch (local_0) {
+        case 3: baanim_playForDuration_loopSmooth(param_0, 0xA4, 6.5f); break;
+        case 4: baanim_playForDuration_loopSmooth(param_0, 0x24E, 1.4f); break;
+        case 5: baanim_playForDuration_loopSmooth(param_0, 0x24B, 1.4f); break;
+        }
+        break;
+    }
+}
 
 BanjoStateId func_808001A4_bskazstill(PlayerState *self, BanjoStateId nextState) {
     s32 sp24;

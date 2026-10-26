@@ -1,3 +1,7 @@
+/* Keep symbols that are assigned a symbol-relative expression relative to that symbol's section
+ * (GNU ld treats such top-level assignments as absolute otherwise). Plain numbers stay absolute. */
+LD_FEATURE("SANE_EXPR")
+
 /* These get replaced during compression */
 core1_compressed_ROM_START = 0x1E29B60;
 core1_compressed_ROM_END = 0x1E42550;
@@ -95,3 +99,19 @@ D_801359B1 = 0x801359B1;
 D_8012AAD4 = 0x8012AAD4;
 D_8012AAD8 = 0x8012AAD8;
 D_8012AADC = 0x8012AADC;
+D_801275D0 = 0x801275D0;
+D_80127600 = 0x80127600;
+D_80127618 = 0x80127618;
+D_8012B400 = 0x8012B400;
+D_80135470 = 0x80135470;
+D_80135480 = 0x80135480;
+D_80135550 = 0x80135550;
+D_801275C0 = 0x801275C0;
+
+/* Labels inside overlay objects. They are defined relative to the object that contains them so that they stay
+ * in the overlay's section: the overlay header only lists relocations against symbols of the overlay itself,
+ * and these references are relocated in the original ROM. This needs LD_FEATURE("SANE_EXPR") at the top. */
+D_80801456_chjollyroger = D_80801448_chjollyroger + 0xE;
+D_8080111A_chmineprospector = D_8080110C_chmineprospector + 0xE;
+D_80800FD6_chfactoryworkerdirty = D_80800FD4_chfactoryworkerdirty + 0x2;
+func_80800D68_chalienkids = func_80800D58_chalienkids + 0x10;

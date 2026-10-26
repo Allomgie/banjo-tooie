@@ -926,7 +926,7 @@ segments:
     subsegments: 
       - [0x01F06E30, c, bbarge]
       - [0x01F07430, .rodata, bbarge]
-      - [0x01F07460, data, bbarge]
+      - [0x01F07460, .data, bbarge]
       - [0x01F07470, bss, bbarge]
   - name: bsbbilldrill_header
     dir: overlays/bsbbilldrill
@@ -1238,7 +1238,7 @@ segments:
     subsegments: 
       - [0x01F14F50, c, btrot]
       - [0x01F17D30, .rodata, btrot]
-      - [0x01F17DA0, data, btrot]
+      - [0x01F17DA0, .data, btrot]
       - [0x01F17E80, bss, btrot]
   - name: bsbwhirl_header
     dir: overlays/bsbwhirl
@@ -2055,7 +2055,7 @@ segments:
     subsegments: 
       - [0x01F2C460, c, torpedo]
       - [0x01F2DB00, .rodata, torpedo]
-      - [0x01F2DB90, data, torpedo]
+      - [0x01F2DB90, .data, torpedo]
       - [0x01F2DD20, bss, torpedo]
   - name: bskazwingwhack_header
     dir: overlays/bskazwingwhack
@@ -2752,7 +2752,7 @@ segments:
     subsegments: 
       - [0x01F57640, c, washer]
       - [0x01F59330, .rodata, washer]
-      - [0x01F593A0, data, washer]
+      - [0x01F593A0, .data, washer]
       - [0x01F59530, bss, washer]
   - name: baalarm_header
     dir: overlays/baalarm
@@ -4244,7 +4244,7 @@ segments:
     subsegments: 
       - [0x01F7FB60, c, nastycavemen]
       - [0x01F80BC0, .rodata, nastycavemen]
-      - [0x01F80C10, data, nastycavemen]
+      - [0x01F80C10, .data, nastycavemen]
       - [0x01F80D90, bss, nastycavemen]
   - name: chcamwaypoint_header
     dir: overlays/chcamwaypoint
@@ -4852,7 +4852,7 @@ segments:
     subsegments: 
       - [0x01FA1890, c, mrsboggy]
       - [0x01FA2250, .rodata, mrsboggy]
-      - [0x01FA22B0, data, mrsboggy]
+      - [0x01FA22B0, .data, mrsboggy]
       - [0x01FA23D0, bss, mrsboggy]
   - name: chmineprospector_header
     dir: overlays/chmineprospector
@@ -4871,7 +4871,7 @@ segments:
     subsegments: 
       - [0x01FA2560, c, prospector]
       - [0x01FA33A0, .rodata, prospector]
-      - [0x01FA3480, data, prospector]
+      - [0x01FA3480, .data, prospector]
       - [0x01FA3720, bss, prospector]
   - name: chonearmbandit_header
     dir: overlays/chonearmbandit
@@ -5441,7 +5441,7 @@ segments:
     subsegments: 
       - [0x01FB8290, c, pawnbroker]
       - [0x01FB9140, .rodata, pawnbroker]
-      - [0x01FB9160, data, pawnbroker]
+      - [0x01FB9160, .data, pawnbroker]
       - [0x01FB93F0, bss, pawnbroker]
   - name: chhoopswoop_header
     dir: overlays/chhoopswoop
@@ -5479,7 +5479,7 @@ segments:
     subsegments: 
       - [0x01FBB610, c, tiptup]
       - [0x01FBC950, .rodata, tiptup]
-      - [0x01FBC970, data, tiptup]
+      - [0x01FBC970, .data, tiptup]
       - [0x01FBCCD0, bss, tiptup]
   - name: chseaweedbaddy_header
     dir: overlays/chseaweedbaddy
@@ -5555,7 +5555,7 @@ segments:
     subsegments: 
       - [0x01FBF320, c, jollyroger]
       - [0x01FC04F0, .rodata, jollyroger]
-      - [0x01FC0520, data, jollyroger]
+      - [0x01FC0520, .data, jollyroger]
       - [0x01FC07D0, bss, jollyroger]
   - name: chdinofoot_header
     dir: overlays/chdinofoot
@@ -5669,7 +5669,7 @@ segments:
     subsegments: 
       - [0x01FC3A80, c, boss]
       - [0x01FC6360, .rodata, boss]
-      - [0x01FC64A0, data, boss]
+      - [0x01FC64A0, .data, boss]
       - [0x01FC6740, bss, boss]
   - name: chphlegm_header
     dir: overlays/chphlegm
@@ -5859,7 +5859,7 @@ segments:
     subsegments: 
       - [0x01FCE600, c, light]
       - [0x01FCF150, .rodata, light]
-      - [0x01FCF190, data, light]
+      - [0x01FCF190, .data, light]
       - [0x01FCF1E0, bss, light]
   - name: chfirefx_header
     dir: overlays/chfirefx
@@ -6524,7 +6524,7 @@ segments:
     subsegments: 
       - [0x01FE8580, c, klungo]
       - [0x01FEBB10, .rodata, klungo]
-      - [0x01FEBE20, data, klungo]
+      - [0x01FEBE20, .data, klungo]
       - [0x01FEC2D0, bss, klungo]
   - name: chklungophial_header
     dir: overlays/chklungophial
@@ -6676,7 +6676,7 @@ segments:
     subsegments: 
       - [0x01FF0370, c, nicecavemenguard]
       - [0x01FF0BB0, .rodata, nicecavemenguard]
-      - [0x01FF0C30, data, nicecavemenguard]
+      - [0x01FF0C30, .data, nicecavemenguard]
       - [0x01FF0D80, bss, nicecavemenguard]
   - name: chscorepoints_header
     dir: overlays/chscorepoints
@@ -6866,7 +6866,7 @@ segments:
     subsegments: 
       - [0x01FF98E0, c, statueboss]
       - [0x01FFBCE0, .rodata, statueboss]
-      - [0x01FFBEA0, data, statueboss]
+      - [0x01FFBEA0, .data, statueboss]
       - [0x01FFC180, bss, statueboss]
   - name: chproplighter_header
     dir: overlays/chproplighter
@@ -7018,7 +7018,7 @@ segments:
     subsegments: 
       - [0x020051C0, c, zubba]
       - [0x02005280, .rodata, zubba]
-      - [0x020052B0, data, zubba]
+      - [0x020052B0, .data, zubba]
       - [0x020053A0, bss, zubba]
   - name: chfireimp_header
     dir: overlays/chfireimp
@@ -7113,7 +7113,7 @@ segments:
     subsegments: 
       - [0x0200B550, c, aliendad]
       - [0x0200D9D0, .rodata, aliendad]
-      - [0x0200DB10, data, aliendad]
+      - [0x0200DB10, .data, aliendad]
       - [0x0200DDA0, bss, aliendad]
   - name: chalienbeam_header
     dir: overlays/chalienbeam
@@ -7911,7 +7911,7 @@ segments:
     subsegments: 
       - [0x02027FC0, c, boy]
       - [0x02028AD0, .rodata, boy]
-      - [0x02028BC0, data, boy]
+      - [0x02028BC0, .data, boy]
       - [0x02028CF0, bss, boy]
   - name: chboggygirl_header
     dir: overlays/chboggygirl
@@ -7930,7 +7930,7 @@ segments:
     subsegments: 
       - [0x02028DE0, c, girl]
       - [0x02029990, .rodata, girl]
-      - [0x02029A30, data, girl]
+      - [0x02029A30, .data, girl]
       - [0x02029B50, bss, girl]
   - name: chboggyfatboy_header
     dir: overlays/chboggyfatboy
@@ -7949,7 +7949,7 @@ segments:
     subsegments: 
       - [0x02029CA0, c, fatboy]
       - [0x0202ACD0, .rodata, fatboy]
-      - [0x0202ADC0, data, fatboy]
+      - [0x0202ADC0, .data, fatboy]
       - [0x0202AFA0, bss, fatboy]
   - name: chdoormake_header
     dir: overlays/chdoormake
@@ -8025,7 +8025,7 @@ segments:
     subsegments: 
       - [0x0202C310, c, y]
       - [0x0202CD10, .rodata, y]
-      - [0x0202CDA0, data, y]
+      - [0x0202CDA0, .data, y]
       - [0x0202CF70, bss, y]
   - name: chmolehill_header
     dir: overlays/chmolehill
@@ -8158,7 +8158,7 @@ segments:
     subsegments: 
       - [0x02034420, c, newmumbo]
       - [0x02035CA0, .rodata, newmumbo]
-      - [0x02035DB0, data, newmumbo]
+      - [0x02035DB0, .data, newmumbo]
       - [0x02035F80, bss, newmumbo]
   - name: chfiregen_header
     dir: overlays/chfiregen
@@ -8595,7 +8595,7 @@ segments:
     subsegments: 
       - [0x02050D30, c, evilmumbo]
       - [0x02054A30, .rodata, evilmumbo]
-      - [0x02054DC0, data, evilmumbo]
+      - [0x02054DC0, .data, evilmumbo]
       - [0x02055310, bss, evilmumbo]
   - name: chmole_witchy_header
     dir: overlays/chmole_witchy
@@ -8690,7 +8690,7 @@ segments:
     subsegments: 
       - [0x0205CE60, c, flysaucercrate]
       - [0x0205DA80, .rodata, flysaucercrate]
-      - [0x0205DB50, data, flysaucercrate]
+      - [0x0205DB50, .data, flysaucercrate]
       - [0x0205DCB0, bss, flysaucercrate]
   - name: chchuffy_header
     dir: overlays/chchuffy
@@ -8804,7 +8804,7 @@ segments:
     subsegments: 
       - [0x02062460, c, pad]
       - [0x020632B0, .rodata, pad]
-      - [0x020634C0, data, pad]
+      - [0x020634C0, .data, pad]
       - [0x020635C0, bss, pad]
   - name: chhoneycarrier_header
     dir: overlays/chhoneycarrier
@@ -8937,7 +8937,7 @@ segments:
     subsegments: 
       - [0x0206AD00, c, lakemonster]
       - [0x0206CC50, .rodata, lakemonster]
-      - [0x0206CCF0, data, lakemonster]
+      - [0x0206CCF0, .data, lakemonster]
       - [0x0206D070, bss, lakemonster]
   - name: chdodgemcontrol_header
     dir: overlays/chdodgemcontrol
@@ -9070,7 +9070,7 @@ segments:
     subsegments: 
       - [0x02074760, c, toothyfish]
       - [0x02075D80, .rodata, toothyfish]
-      - [0x02075EC0, data, toothyfish]
+      - [0x02075EC0, .data, toothyfish]
       - [0x020760C0, bss, toothyfish]
   - name: chmole_lagoon_header
     dir: overlays/chmole_lagoon
@@ -9374,7 +9374,7 @@ segments:
     subsegments: 
       - [0x02082840, c, collballcontrol]
       - [0x02087350, .rodata, collballcontrol]
-      - [0x02087490, data, collballcontrol]
+      - [0x02087490, .data, collballcontrol]
       - [0x02087960, bss, collballcontrol]
   - name: chcolldoors_header
     dir: overlays/chcolldoors
@@ -9659,7 +9659,7 @@ segments:
     subsegments: 
       - [0x020949B0, c, amazonstadiumguard]
       - [0x02095030, .rodata, amazonstadiumguard]
-      - [0x02095060, data, amazonstadiumguard]
+      - [0x02095060, .data, amazonstadiumguard]
       - [0x02095190, bss, amazonstadiumguard]
   - name: chlavatraindoorswitch_header
     dir: overlays/chlavatraindoorswitch
@@ -9811,7 +9811,7 @@ segments:
     subsegments: 
       - [0x02096C00, c, prisonbits]
       - [0x02097AF0, .rodata, prisonbits]
-      - [0x02097B20, data, prisonbits]
+      - [0x02097B20, .data, prisonbits]
       - [0x02097D50, bss, prisonbits]
   - name: chwaterfallgrillswitch_header
     dir: overlays/chwaterfallgrillswitch
@@ -10932,7 +10932,7 @@ segments:
     subsegments: 
       - [0x020A6160, c, workerdirty]
       - [0x020A6F50, .rodata, workerdirty]
-      - [0x020A7030, data, workerdirty]
+      - [0x020A7030, .data, workerdirty]
       - [0x020A71B0, bss, workerdirty]
   - name: chfactoryworkerwear_header
     dir: overlays/chfactoryworkerwear
@@ -11046,7 +11046,7 @@ segments:
     subsegments: 
       - [0x020A8B70, c, lobbydoor]
       - [0x020A8F00, .rodata, lobbydoor]
-      - [0x020A8F10, data, lobbydoor]
+      - [0x020A8F10, .data, lobbydoor]
       - [0x020A8F80, bss, lobbydoor]
   - name: chminelobbydoor_header
     dir: overlays/chminelobbydoor
@@ -11065,7 +11065,7 @@ segments:
     subsegments: 
       - [0x020A8FF0, c, lobbydoor]
       - [0x020A91E0, .rodata, lobbydoor]
-      - [0x020A91E0, data, lobbydoor]
+      - [0x020A91E0, .data, lobbydoor]
       - [0x020A9250, bss, lobbydoor]
   - name: chtransparencypot_header
     dir: overlays/chtransparencypot
@@ -11122,7 +11122,7 @@ segments:
     subsegments: 
       - [0x020AC150, c, clinker]
       - [0x020AD440, .rodata, clinker]
-      - [0x020AD540, data, clinker]
+      - [0x020AD540, .data, clinker]
       - [0x020AD730, bss, clinker]
   - name: chfactorylobbydoor_header
     dir: overlays/chfactorylobbydoor
@@ -11331,7 +11331,7 @@ segments:
     subsegments: 
       - [0x020B6640, c, drums]
       - [0x020B75B0, .rodata, drums]
-      - [0x020B7620, data, drums]
+      - [0x020B7620, .data, drums]
       - [0x020B78F0, bss, drums]
   - name: chdoubloon_header
     dir: overlays/chdoubloon
@@ -11578,7 +11578,7 @@ segments:
     subsegments: 
       - [0x020C2EF0, c, empspell]
       - [0x020C4F30, .rodata, empspell]
-      - [0x020C5060, data, empspell]
+      - [0x020C5060, .data, empspell]
       - [0x020C5350, bss, empspell]
   - name: chtoxicroombits_header
     dir: overlays/chtoxicroombits
@@ -11977,7 +11977,7 @@ segments:
     subsegments: 
       - [0x020D8810, c, athlete]
       - [0x020DB600, .rodata, athlete]
-      - [0x020DB840, data, athlete]
+      - [0x020DB840, .data, athlete]
       - [0x020DBA10, bss, athlete]
   - name: chfantasycannon_header
     dir: overlays/chfantasycannon
@@ -12129,7 +12129,7 @@ segments:
     subsegments: 
       - [0x020E3B70, c, familymother]
       - [0x020E4DE0, .rodata, familymother]
-      - [0x020E4EB0, data, familymother]
+      - [0x020E4EB0, .data, familymother]
       - [0x020E5030, bss, familymother]
   - name: chmumbohealspell_header
     dir: overlays/chmumbohealspell
@@ -13668,7 +13668,7 @@ segments:
     subsegments: 
       - [0x0211DEC0, c, hittableDll]
       - [0x0211E3F0, .rodata, hittableDll]
-      - [0x0211E3F0, data, hittableDll]
+      - [0x0211E3F0, .data, hittableDll]
       - [0x02120DA0, bss, hittableDll]
   - name: glid_header
     dir: overlays/glid

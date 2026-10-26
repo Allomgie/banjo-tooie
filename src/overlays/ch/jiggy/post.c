@@ -29,7 +29,33 @@ void func_80800014_chjiggypost(Actor* arg0, s32 arg1)
     func_80101FDC(arg0, 2);
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/jiggy/post/func_80800068_chjiggypost.s")
+void func_80800068_chjiggypost(Actor *param_0)
+{
+    s32 local_2;
+    s32 local_1;
+    s32 local_0;
+
+    if (!func_800C0638()) {
+        func_800D2498(0x10E, func_800D035C(1), 0);
+        if ((s32)(param_0->unk74_7 - 0x33) >= _sujiggy_entrypoint_0()) {
+            local_0 = _sujiggy_entrypoint_2(param_0->unk74_7 - 0x33);
+            local_1 = local_0 - func_800D035C(1);
+            if (local_1 > 0) func_800D2498(0x106, local_1, 0);
+        }
+    }
+    if (param_0->unk70_10 == 1) {
+        if (!func_800DA298(0x4E8)) {
+            func_80800014_chjiggypost(param_0, 0x1512);
+            return;
+        }
+        if (_subaddiedialog_entrypoint_5(param_0->position, 250, 60, 0)) {
+            if ((s32)(param_0->unk74_7 - 0x33) < _sujiggy_entrypoint_0()) local_2 = 0x1517;
+            else if (func_800D3E40(11)) local_2 = 0x155A;
+            else local_2 = _sujiggy_entrypoint_2(param_0->unk74_7 - 0x33) == 1 ? 0x1513 : 0x1514;
+            func_80800014_chjiggypost(param_0, local_2);
+        }
+    }
+}
 
 void func_808001C4_chjiggypost(Actor* arg0, s32 arg1, s32 arg2)
 {

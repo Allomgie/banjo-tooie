@@ -198,14 +198,14 @@ void func_808036D8_chgameselect()
     _glsavegame_entrypoint_1();
 }
 
-void func_808036F8_chgameselect()
+s32 func_808036F8_chgameselect(s32 param_0)
 {
-    _glsavegame_entrypoint_2();
+    return _glsavegame_entrypoint_2(param_0);
 }
 
-void func_80803718_chgameselect()
+s32 func_80803718_chgameselect()
 {
-    _glsavegame_entrypoint_3();
+    return _glsavegame_entrypoint_3();
 }
 
 #pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/gameselect/func_80803738_chgameselect.s")
@@ -417,9 +417,9 @@ void func_80806A88_chgameselect()
 
 #pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/gameselect/func_80806AA8_chgameselect.s")
 
-void func_80806AD4_chgameselect()
+s32 func_80806AD4_chgameselect()
 {
-    _gcstatusDll_entrypoint_10();
+    return _gcstatusDll_entrypoint_10();
 }
 
 #pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/gameselect/func_80806AF4_chgameselect.s")

@@ -113,6 +113,10 @@ $(IDO71_OBJS): OPT_LEVEL := -g
 # acpp die //-Kommentare der Ultra-Header durch.
 $(BUILD_ROOT)/src/core2/1E99980.c.o: CFLAGS += -acpp -Wp,-+
 
+# func_80800020_inantab is larger than uopt's default size threshold; without
+# -Olimit uopt skips optimizing it, which the original build evidently did not.
+$(BUILD_ROOT)/src/overlays/in/antab.c.o: OPT_LEVEL := -O2 -Olimit 2000
+
 $(PURE_C_OBJS): $(BUILD_ROOT)/%.c.o: %.c | $(C_BUILD_DIRS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 

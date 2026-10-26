@@ -30,6 +30,18 @@
 #include "gc/level.h"
 #include "gc/audiolist.h"
 
+s32 func_80801718_gcnewpause(s32, s32);
+void func_800E8A68(void);
+void func_800FCA90(u32);
+void func_800FCAE0(u32, u32, u32);
+void func_800C0438(void);
+void func_800D2574(void);
+s32 func_80015FA0(s32);
+void func_80016068(s32, f32 *);
+s32 func_80016B30(s32, s32);
+u8 func_800D9078(f32 *);
+u32 _gcaudiolist_entrypoint_1(u32 a0, u32 a1);
+
 
 extern PauseOption D_80802070_gcnewpause[];
 extern void* D_808021CC_gcnewpause;
@@ -84,7 +96,134 @@ void gcnewpause_entrypoint_1(PauseState* a0)
 }
 
 #ifndef NON_MATCHING
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gc/newpause/gcnewpause_entrypoint_2.s")
+u32 gcnewpause_entrypoint_2(PauseState *param_0)
+{
+  s32 local_3;
+  s32 local_4;
+  char *local_5;
+  f32 local_0;
+  local_5 = (char *) param_0;
+  func_800D2574();
+  func_800C0438();
+  func_800E8A68();
+  switch (*((u8 *) local_5))
+  {
+    case 1:
+      func_80800534_gcnewpause(param_0, 2);
+      break;
+
+    case 2:
+      if (func_80015FA0(*((u8 *) (local_5 + 0xC))) == 1)
+    {
+      if (_gcnewoption_entrypoint_37((OptionState *) (local_5 + 0x30), 1))
+      {
+        *((u8 *) (local_5 + 3)) = 0;
+      }
+    }
+      if ((*((u8 *) (local_5 + 0xE))) != 0)
+    {
+      if (func_800D9078(local_5 + 8))
+      {
+        func_80801E08_gcnewpause(param_0, local_5 + 0x30);
+      }
+    }
+      func_80800E10_gcnewpause(param_0, *((s8 *) (local_5 + 3)));
+      _gcnewoption_entrypoint_0((OptionState *) (local_5 + 0x30));
+      break;
+
+    case 3:
+      func_80016068(*((u8 *) (local_5 + 0xC)), &local_0);
+      func_800D9078(local_5 + 8);
+      if ((*((u8 *) (local_5 + 0xF))) != 0)
+    {
+      if ((--(*((u8 *) (local_5 + 0xF)))) == 0)
+      {
+        _gcaudiolist_entrypoint_1(2, 0x4650);
+      }
+    }
+      if (((*((s8 *) (local_5 + 7))) == 0) && ((*((s8 *) (local_5 + 3))) == 1))
+    {
+      if (func_80015FA0(*((u8 *) (local_5 + 0xC))) == 1)
+      {
+        func_808015F8_gcnewpause(param_0, 1);
+      }
+      else
+        if (func_80016B30(*((u8 *) (local_5 + 0xC)), 1) == 1)
+      {
+        func_808015F8_gcnewpause(param_0, 0);
+      }
+      else
+        if ((((*((u8 *) (local_5 + 0x1E))) != 0) && (local_0 < (-0.75f))) && ((*((f32 *) (local_5 + 8))) == 0.0f))
+      {
+        func_8080162C_gcnewpause(param_0, -1);
+      }
+      else
+        if ((((*((u8 *) (local_5 + 0x1F))) != 0) && (0.75f < local_0)) && ((*((f32 *) (local_5 + 8))) == 0.0f))
+      {
+        func_8080162C_gcnewpause(param_0, 1);
+      }
+    }
+      local_3 = func_80801330_gcnewpause(param_0, *((u8 *) (local_5 + 1)), (((*((s8 *) (local_5 + 7))) == 0) && ((*((s8 *) (local_5 + 3))) == (-1))) ? (1) : (*((s8 *) (local_5 + 3))));
+      func_80801580_gcnewpause(param_0);
+      local_4 = func_80800F2C_gcnewpause(param_0, *((u8 *) (local_5 + 1)), *((s8 *) (local_5 + 3)));
+      if ((((*((s8 *) (local_5 + 7))) == 0) && ((*((s8 *) (local_5 + 3))) == (-1))) && (local_4 == 0))
+    {
+      *((u8 *) (local_5 + 0x1F)) = (*((u8 *) (local_5 + 3)) = 0);
+      *((u8 *) (local_5 + 0x1E)) = 0;
+      local_4 = 1;
+      _gcaudiolist_entrypoint_1(5, 0x4650);
+    }
+      if ((local_4 != 0) || (local_3 != 0))
+    {
+      break;
+    }
+      if ((*((s8 *) (local_5 + 7))) != 0)
+    {
+      local_4 = func_80801718_gcnewpause(*((u8 *) (local_5 + 1)), *((s8 *) (local_5 + 7)));
+      func_808017C8_gcnewpause(param_0, local_4);
+      *((u8 *) (local_5 + 7)) = 0;
+      *((u8 *) (local_5 + 3)) = 1;
+      *((f32 *) (local_5 + 8)) = 0.2f;
+      _gcaudiolist_entrypoint_1(2, 0x4650);
+    }
+    else
+    {
+      if ((*((u8 *) (local_5 + 4))) != 0)
+      {
+        *((u8 *) (local_5 + 2)) = 1;
+        break;
+      }
+      func_80800534_gcnewpause(param_0, 2);
+    }
+      break;
+
+    case 4:
+      break;
+
+    case 5:
+      func_80801CDC_gcnewpause(param_0);
+      if (func_800D9078(local_5 + 8))
+    {
+      *((s16 *) (local_5 + 0x2C)) = 0;
+      func_800FCAE0(0x12, 0, 0xC8);
+      func_800FCA90(0x12);
+      func_800A7AD4(1, 0);
+      *((u8 *) (local_5 + 2)) = 2;
+      _gcfrontend_entrypoint_13();
+    }
+      break;
+
+    default:
+      if (func_80015FA0(*((u8 *) (local_5 + 0xC))) == 1)
+    {
+      *((u8 *) (local_5 + 2)) = 1;
+    }
+      break;
+
+  }
+
+  return (*((u8 *) (local_5 + 2))) == 1;
+}
 #else
 //Functionality update
 u32 gcnewpause_entrypoint_2(PauseState* pauseMenu) {

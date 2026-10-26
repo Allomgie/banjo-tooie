@@ -1,17 +1,54 @@
 #include "common.h"
 
 #include "overlays/ba/boost.h"
+#include "playerstate.h"
+#include "boost.h"
 
 s32 baboost_entrypoint_0(void) {
     return sizeof(BaBoost);
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/boost/baboost_entrypoint_1.s")
+s32 baboost_entrypoint_1(PlayerState *param_0)
+{
+    s32 local_0;
+    s32 local_1 = 0;
+    for (local_0 = 0; local_0 < 5; local_0++) {
+        if (param_0->boost->unk8[local_0] != 0.0f) local_1++;
+    }
+    return local_1;
+}
 
 s32 baboost_entrypoint_2(PlayerState *self, f32 arg1);
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/boost/baboost_entrypoint_2.s")
+s32 baboost_entrypoint_2(PlayerState *param_0, f32 param_1)
+{
+    s32 local_0;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/boost/baboost_entrypoint_3.s")
+    for (local_0 = 0; local_0 < 5; local_0++) {
+        if (param_1 - 0.25f < param_0->boost->unk8[local_0]) {
+            param_0->boost->unk4 = param_1;
+            return 0;
+        }
+    }
+    for (local_0 = 0; local_0 < 5; local_0++) {
+        if (param_0->boost->unk8[local_0] == 0.0f) {
+            param_0->boost->unk8[local_0] = param_1;
+            return 1;
+        }
+    }
+    param_0->boost->unk4 = param_1;
+    return 0;
+}
+
+void baboost_entrypoint_3(PlayerState *param_0)
+{
+    s32 local_0;
+
+    for (local_0 = 0; local_0 < 5; local_0++) {
+        param_0->boost->unk8[local_0] = param_0->boost->unk8[local_0] = 0.0f;
+    }
+    param_0->boost->unk4 = 0;
+    param_0->boost->unk0 = (u32)param_0->boost->unk4;
+}
 
 void baboost_entrypoint_4(PlayerState *self, s32 arg1) {
     self->boost->unk0 = arg1;

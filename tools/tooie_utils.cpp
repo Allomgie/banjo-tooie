@@ -219,6 +219,20 @@ void ElfHandler::get_tooie_relocs(const Segment& segment, std::vector<uint16_t>&
             elf_context_->symbol_accessor.get_symbol(symbol, sym_name, sym_value, sym_size, sym_bind, sym_type, sym_section_index, sym_other);
             // fmt::print("  Reloc at 0x{:04X} type {} for {} in {}\n", (uint16_t)offset, type, sym_name, sym_section_index);
             if (sym_section_index == segment.section->get_index() || (segment.bss_section && sym_section_index == segment.bss_section->get_index())) {
+                // A data word whose linked value points outside the overlay is not an overlay pointer and is never
+                // relocated. Rare's tools redirected data references to exported overlay functions to their core2
+                // stubs this way (see bsbtrot_entrypoint_13 in src/overlays/bs/btrot.c).
+                if (static_cast<RelocType>(type) == RelocType::R_MIPS_32) {
+                    ELFIO::Elf64_Addr section_start = segment.section->get_address();
+                    uint32_t word = byteswap32(*reinterpret_cast<const uint32_t*>(segment.section->get_data() + (offset - section_start)));
+                    bool in_section = word >= section_start && word <= section_start + segment.section->get_size();
+                    bool in_bss = segment.bss_section && word >= segment.bss_section->get_address() &&
+                        word <= segment.bss_section->get_address() + segment.bss_section->get_size();
+                    if (!in_section && !in_bss) {
+                        continue;
+                    }
+                }
+
                 uint16_t reloc_value = (uint16_t)offset;
 
                 auto reloc_it = reloc_mapping.find(static_cast<RelocType>(type));

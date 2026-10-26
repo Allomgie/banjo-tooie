@@ -8,11 +8,12 @@
 
 #pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/stoneballcontrol/func_8080009C_chstoneballcontrol.s")
 
+f32 func_808000C8_chstoneballcontrol(Actor *);
 #pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/stoneballcontrol/func_808000C8_chstoneballcontrol.s")
 
-void func_808000F4_chstoneballcontrol()
+f32 func_808000F4_chstoneballcontrol(Actor *param_0)
 {
-    func_808000C8_chstoneballcontrol();
+    return func_808000C8_chstoneballcontrol(param_0);
 }
 
 #pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/stoneballcontrol/func_80800114_chstoneballcontrol.s")

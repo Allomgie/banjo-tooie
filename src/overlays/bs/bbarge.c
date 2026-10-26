@@ -96,7 +96,99 @@ void bsbbarge_init(PlayerState *self) {
 }
 
 #ifndef NONMATCHING
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/bs/bbarge/bsbbarge_update.s")
+void bsbbarge_update(PlayerState *param_0)
+{
+  BanjoStateId local_0;
+  AnimCtrl *local_1;
+  local_0 = 0;
+  local_1 = baanim_getAnimCtrlPtr(param_0);
+  if (bakey_released(param_0, 9))
+  {
+    baflag_set(param_0, 0xA);
+  }
+  switch (param_0->unk160.word)
+  {
+    case 1:
+      if (anctrl_isAt(local_1, 0.139200002f) != 0)
+    {
+      func_8009D874(param_0);
+    }
+      if (anctrl_isStopped(local_1) != 0)
+    {
+      bsbbarge_setSubstate(param_0, 2);
+    }
+      break;
+
+    case 2:
+      _batimer_decrement(param_0, 1);
+      if ((baflag_isFalse(param_0, 0xB) != 0) && (_batimer_isLessThan(param_0, 1, 0.100000001f) != 0))
+    {
+      if (baflag_isTrue(param_0, 0xC) != 0)
+      {
+        func_8009DF94(param_0, 0x4400, 1.0f, 0x7530);
+      }
+      else
+      {
+        func_8009DF94(param_0, 0x442D, 1.0f, 0x7530);
+      }
+      baflag_set(param_0, 0xB);
+    }
+      if (_batimer_isZero(param_0, 1) != 0)
+    {
+      bsbbarge_setSubstate(param_0, 3);
+    }
+      break;
+
+    case 3:
+      baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
+      if (anctrl_isStopped(local_1) != 0)
+    {
+      bsbbarge_setSubstate(param_0, 4);
+    }
+      break;
+
+    case 4:
+      _batimer_decrement(param_0, 0);
+      if ((baflag_isFalse(param_0, 0xC) != 0) || (_batimer_isZero(param_0, 0) != 0))
+    {
+      param_0->unk16C = (param_0->unk16C) - 80.0f;
+    }
+      baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
+      if ((param_0->unk16C) < 200.0f)
+    {
+      bsbbarge_setSubstate(param_0, 5);
+    }
+      break;
+
+    case 5:
+      if (player_isStable(param_0) == 0)
+    {
+      local_0 = 0x2F;
+    }
+      if (anctrl_isAt(local_1, 0.699999988f) != 0)
+    {
+      param_0->unk16C = 0.0f;
+      baflag_clear(param_0, 0x20);
+    }
+      baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
+      if (anctrl_isAt(local_1, 0.91930002f) != 0)
+    {
+      local_0 = 0x20;
+    }
+      break;
+
+  }
+
+  if (baflag_isTrue(param_0, 0x20) != 0)
+  {
+    func_8008EE88(param_0, 50.0f);
+  }
+  if (player_inWater(param_0) != 0)
+  {
+    local_0 = 0x4C;
+  }
+  bs_setState(param_0, local_0);
+}
 #else
 void bsbbarge_update(PlayerState *self) {
     BanjoStateId next_state = BS_STATE_0_INVALID;
@@ -183,3 +275,7 @@ void bsbbarge_update(PlayerState *self) {
 BsScript bsbbarge_entrypoint_0(BsScriptType type) {
     return D_80800630_bsbbarge[type];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/bbarge.data.s) is defined here in C --
+ * tables holding function pointers must be in the same unit, otherwise IDO's assembler schedules those functions differently. */
+extern void func_80099B94();
+BsScript D_80800630_bsbbarge[4] = { (void *)bsbbarge_end, (void *)bsbbarge_init, (void *)bsbbarge_update, (void *)func_80099B94 };
