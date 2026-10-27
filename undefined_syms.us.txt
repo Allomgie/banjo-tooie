@@ -115,3 +115,6 @@ D_80801456_chjollyroger = D_80801448_chjollyroger + 0xE;
 D_8080111A_chmineprospector = D_8080110C_chmineprospector + 0xE;
 D_80800FD6_chfactoryworkerdirty = D_80800FD4_chfactoryworkerdirty + 0x2;
 func_80800D68_chalienkids = func_80800D58_chalienkids + 0x10;
+func_808002E4_chfaircoinbox = func_808002CC_chfaircoinbox + 0x18;
+func_808003E4_chfaircoinbox = func_808003C4_chfaircoinbox + 0x20;
+func_80800424_chfaircoinbox = func_808003C4_chfaircoinbox + 0x60;
