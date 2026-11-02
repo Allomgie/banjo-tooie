@@ -1,51 +1,433 @@
 #include "common.h"
+#include "playerstate.h"
+extern struct D_80801038_basnowball D_80801038_basnowball[];
+
+#define SB (*(SnowballRoll **)((u8 *)this + 0x110))
+extern float D_80801020_basnowball[];
+struct D_80801038_basnowball { f32 unk0; f32 unk4; };
+extern f32 D_80801068_basnowball[][2];
+extern void func_800959C8(PlayerState *, f32, f32);
+extern void func_8009590C(PlayerState *, f32);
+extern void func_800A4D6C(PlayerState *, f32, f32);
+extern f32 func_800F0E00(f32, f32);
+typedef struct { u8 unused[0xC]; f32 size; f32 saved; u8 state; } SnowballStateView;
+extern void func_80093230(PlayerState *, f32);
+extern void func_8009E55C(PlayerState *, s32, f32);
+typedef struct { f32 unk0; f32 unk4; f32 unk8; f32 unkC; f32 unk10; u8 unk14; u8 pad15[3]; f32 unk18; f32 unk1C; f32 unk20; f32 unk24; u8 unk28; u8 pad29[3]; u8 unk2C; u8 unk2D; } SnowData;
+typedef struct { u8 pad0[0x110]; SnowData *unk110; u8 pad114[0x70]; s32 unk184; } SnowPlayer;
+extern f32 func_800D8FF8(void);
+extern s32 func_800EA068(s32);
+extern s32 func_8009E674(SnowPlayer *, s32);
+extern void _basnowball_entrypoint_11();
+extern void func_8009919C(SnowPlayer *, void *, s32);
+extern void func_800A17A8(SnowPlayer *, s32);
+extern s32 func_8008DE50(SnowPlayer *);
+extern s32 player_isStable(SnowPlayer *);
+extern s32 func_800A1760(SnowPlayer *);
+extern void func_80096394(SnowPlayer *, f32 *);
+extern f32 func_800EEF94(f32 *);
+extern void func_800FC660(s32);
+extern s32 func_800958A4(SnowPlayer *, s32, s32);
+extern f32 func_800F10B4(f32, f32, f32, f32, f32);
+extern s32 func_800D9078(f32 *);
+extern f32 func_800136E4(f32);
+extern f32 func_800F13F0(f32, f32);
+extern s32 func_80092AD8(SnowPlayer *);
+extern void func_800E0AF0(s32, f32);
+extern void func_800E0AFC(s32, s32, f32, f32, f32, f32);
+extern void _bawobble_entrypoint_8(SnowPlayer *);
+typedef struct { f32 unk0; f32 unk4; u8 pad8[0x10]; f32 unk18; f32 unk1C; f32 unk20; f32 unk24; u8 unk28; } SnowballRoll;
+extern s32 func_800A1718();
+extern void _bawobble_entrypoint_7(PlayerState *);
+extern void _bawobble_entrypoint_1(PlayerState *);
+extern void _bawobble_entrypoint_4(PlayerState *, f32, f32);
+extern void _bawobble_entrypoint_5(PlayerState *, f32, f32);
+extern void func_8009DB04(PlayerState *, s32, f32, s32);
+extern void _bawobble_entrypoint_6(PlayerState *);
+extern s32 D_80801098_basnowball[];
+extern f32 D_808010C0_basnowball[][3];
+extern f32 D_808010F0_basnowball[][3];
+extern void func_800BA7C4(s32, f32, f32);
+extern void func_800BA7FC(s32, f32, f32);
+extern void func_800BA8F8(s32, f32, f32);
+extern f32 yaw_get(PlayerState *);
+extern f32 func_800DC178(f32, f32);
+extern void func_800EF214(void *, f32, f32, f32);
+extern s32 func_800BABB8(s32, f32 *, f32 *, f32, void *);
+extern u8 D_8080110C_basnowball[];
+extern s32 func_800B5BE4(s32);
+extern void func_8009C128(PlayerState *, f32 *);
+extern void func_800BA730(s32, s16, s16, s32, s32);
+extern void func_800BA930(s32, s16, s16, s16, s32, s32, s32);
+extern void func_800BA77C(s32, s16, s16, s16);
+void func_808001B8_basnowball();
+void func_808007CC_basnowball();
+void func_8080099C_basnowball();
 
 s32 basnowball_entrypoint_0() 
 {
     return 0x30;
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/func_80800008_basnowball.s")
+void func_80800008_basnowball(u8 *param_0, s32 param_1) {
+    u8 *var_v0;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/func_80800084_basnowball.s")
+    var_v0 = (*(u8 **)((s8 *)(param_0) + (0x110)));
+    if ((*(u8 *)((s8 *)(var_v0) + (0x2D))) == 2) {
+        baflag_clear(param_0, 0x3C);
+        func_800FC74C(0x1C);
+        var_v0 = (*(u8 **)((s8 *)(param_0) + (0x110)));
+    }
+    (*(s8 *)((s8 *)(var_v0) + (0x2D))) = (s8) param_1;
+    if (param_1 == 2) {
+        baflag_set(param_0, 0x3C);
+        func_800FC660(0x1C);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/func_80800098_basnowball.s")
+float func_80800084_basnowball(s32 param_0)
+{
+  return D_80801020_basnowball[param_0];
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/func_808000C0_basnowball.s")
+void func_80800098_basnowball(s32 param_0, u32 param_1, f32 *param_2, f32 *param_3){
+    *param_2 = D_80801038_basnowball[param_1].unk0;
+    *param_3 = D_80801038_basnowball[param_1].unk4;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/func_80800110_basnowball.s")
+int func_808000C0_basnowball(Actor *param_0)
+{
+  f32 local_0;
+  f32 local_1;
+  s32 local_2;
+  local_2 = func_800A1718();
+  func_80800098_basnowball(param_0, local_2, &local_0, &local_1);
+  func_800959C8(param_0, local_0, local_1);
+  func_8009590C(param_0, local_0);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/func_80800150_basnowball.s")
+s32 func_80800110_basnowball(s32 param_0)
+{
+  f32 *local_0;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/func_808001B8_basnowball.s")
+  local_0 = D_80801068_basnowball[func_800A1718()];
+  func_800A4D6C(param_0, local_0[0], local_0[1]);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_1.s")
+void func_80800150_basnowball(PlayerState *param_0, s32 param_1)
+{
+    if (param_1 != (*(SnowballStateView **)((u8 *)param_0 + 0x110))->state) {
+        switch (param_1) {
+        case 1:
+            break;
+        case 2:
+            (*(SnowballStateView **)((u8 *)param_0 + 0x110))->saved =
+                func_800F0E00((*(SnowballStateView **)((u8 *)param_0 + 0x110))->size, 300.0f);
+            break;
+        }
+        (*(SnowballStateView **)((u8 *)param_0 + 0x110))->state = param_1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_2.s")
+void func_808001B8_basnowball(this, state) PlayerState *this; s32 state;
+{
+    f32 pitch;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_3.s")
+    switch (SB->unk28) {
+    case 0:
+        SB->unk24 = func_80800084_basnowball(func_800A1718(this));
+        break;
+    case 2:
+        _bawobble_entrypoint_7(this);
+        func_8009E55C(this, 0, SB->unk1C * 50.0f);
+        SB->unk0 = 0.0f;
+        SB->unk4 = 7.5f;
+        break;
+    }
+    SB->unk28 = state;
+    switch (state) {
+    case 1:
+        SB->unk1C = SB->unk24;
+        break;
+    case 2:
+        SB->unk18 = 1.0f;
+        SB->unk20 = SB->unk1C;
+        SB->unk24 = func_80800084_basnowball(func_800A1718(this));
+        _bawobble_entrypoint_1(this);
+        _bawobble_entrypoint_4(this, 0.2f, 0.2f);
+        pitch = func_800F10B4(SB->unk24, 1.0, 3.0f, 0.0f, -0.5f) + 1.2f;
+        if (SB->unk20 < SB->unk24) {
+            _bawobble_entrypoint_5(this, 1.0, 1.2);
+            func_8009DB04(this, 0x65A, pitch, 14000);
+        } else {
+            _bawobble_entrypoint_5(this, 1.0, 0.8f);
+            func_8009DB04(this, 0x65B, pitch, 14000);
+        }
+        _bawobble_entrypoint_6(this);
+        func_808000C0_basnowball(this);
+        func_80800110_basnowball(this);
+        break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_4.s")
+void basnowball_entrypoint_1(PlayerState *param_0)
+{
+    func_80800008_basnowball(param_0, 0);
+    func_8009E474(param_0);
+    baflag_clear(param_0, 0x3C);
+    func_80093230(param_0, 1.0f);
+    func_80095A40(param_0);
+    func_8009590C(param_0, 0.0f);
+    _bawobble_entrypoint_2(param_0);
+    func_800A4D6C(param_0, 1.0f, 1.0f);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_5.s")
+void basnowball_entrypoint_2(PlayerState *param_0)
+{
+    _bawobble_entrypoint_3(param_0);
+    *(f32 *)(*(u8 **)((u8 *)param_0 + 0x110)) = 0.0f;
+    *(f32 *)(*(u8 **)((u8 *)param_0 + 0x110) + 4) = 7.5f;
+    (*(u8 **)((u8 *)param_0 + 0x110))[0x2D] = 0;
+    (*(u8 **)((u8 *)param_0 + 0x110))[0x2C] = 0;
+    func_80800008_basnowball(param_0, 1);
+    *(f32 *)(*(u8 **)((u8 *)param_0 + 0x110) + 0xC) = 0.0f;
+    *(f32 *)(*(u8 **)((u8 *)param_0 + 0x110) + 8) = 0.0f;
+    (*(u8 **)((u8 *)param_0 + 0x110))[0x14] = 0;
+    func_80800150_basnowball(param_0, 2);
+    (*(u8 **)((u8 *)param_0 + 0x110))[0x28] = 0;
+    func_808001B8_basnowball(param_0, 1);
+    func_80093230(param_0, *(f32 *)(*(u8 **)((u8 *)param_0 + 0x110) + 0x1C));
+    func_8009E4AC(param_0);
+    func_8009E55C(param_0, 0, *(f32 *)(*(u8 **)((u8 *)param_0 + 0x110) + 0x1C) * 50.0f);
+    func_8009E55C(param_0, 1, 0.0f);
+    func_808000C0_basnowball(param_0);
+    func_80800110_basnowball(param_0);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_6.s")
+f32 basnowball_entrypoint_3(u8 *param_0) {
+    return (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x110)))) + (8)));
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_7.s")
+float basnowball_entrypoint_4(void *param_0)
+{
+  return ((float*)((int*)param_0)[68])[7];
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_8.s")
+void basnowball_entrypoint_5(void) {
+    func_800F10B4(func_800A1718(), 1.0f, 5.0f, 0.0f, 1.0f);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_9.s")
+int basnowball_entrypoint_6()
+{
+  return func_800A1718() >= 5;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_10.s")
+void basnowball_entrypoint_7(s32 param_0)
+{
+  int new_var;
+  s32 t7;
+  t7 = *((s32 *) (param_0 + 0x110));
+  new_var = 1;
+  *((u8 *) ((*((s32 *) (param_0 + 0x110))) + 0x2C)) = new_var;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/func_808007CC_basnowball.s")
+int basnowball_entrypoint_8(Actor *param_0, s32 param_1)
+{
+  if (param_1 != 0)
+  {
+    func_80800150_basnowball(param_0, 2);
+  }
+  else
+  {
+    func_80800150_basnowball(param_0, 1);
+  }
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/func_8080099C_basnowball.s")
+int basnowball_entrypoint_9(s32 param_0, f32 param_1)
+{
+  int new_var;
+  new_var = 0x110;
+  *((f32 *) ((*((s32 *) (param_0 + 0x110))) + (new_var = 0xC))) = param_1;
+}
+
+void basnowball_entrypoint_10(PlayerState *param_0)
+{
+    s32 local_6;
+    s32 local_7; /* unbenutzt, rahmentragend */
+    f32 local_2;
+    s32 local_3;
+    f32 local_0[3];
+    f32 local_1[3];
+    s32 local_4;
+    f32 (*local_5)[3]; /* unused, but it carries the stack frame (without it the frame is 8 bytes smaller) */
+
+    local_3 = func_800B5BE4(7);
+    local_2 = *(f32 *)((u8 *)*(void **)((u8 *)param_0 + 0x110) + 0x1C);
+    func_8009C128(param_0, local_0);
+    local_0[1] += 50.0f * local_2;
+    local_4 = func_800BABB8(local_3, local_0, NULL, 1.0f, D_80801098_basnowball);
+    func_800BA7C4(local_4, 0.5f * local_2, 0.5f * local_2);
+    func_800BA7FC(local_4, 1.1f * local_2, 1.1f * local_2);
+    func_800BA8F8(local_4, 0.175f * local_2 + 0.6f, 0.175f * local_2 + 0.6f);
+    for (local_6 = 0; local_6 < 4; local_6++) {
+        func_800EE7F8(local_1, local_0);
+        local_1[0] += D_808010C0_basnowball[local_6][0] * local_2;
+        local_1[2] += D_808010C0_basnowball[local_6][1] * local_2;
+        func_800BA75C(local_4, local_1);
+        func_800BA77C(local_4, 0, 0, (s16)(s32)D_808010C0_basnowball[local_6][2]);
+        func_800BA22C(local_4, 1);
+    }
+}
+
+void func_808007CC_basnowball(param_0) PlayerState *param_0;
+{
+    f32 local_4;
+    f32 local_0;
+    f32 local_5;
+    f32 local_1;
+    f32 local_6;
+    f32 local_3[3];
+    f32 local_2[3];
+    s32 local_7;
+    s32 local_8;
+    local_7 = func_800B5BE4(9);
+    func_8009C128(param_0, local_2);
+    local_1 = *(f32 *)((u8 *)(*(void **)((u8 *)param_0 + 0x110)) + 0x1C) * 58.0f;
+    local_2[1] += local_1;
+    local_4 = *(f32 *)((u8 *)(*(void **)((u8 *)param_0 + 0x110)) + 0x1C) * 0.15f + 0.3f;
+    func_800BA7C4(local_7, local_4, local_4);
+    local_0 = yaw_get(param_0) + 90.0f;
+    local_5 = func_800A1718(param_0) + 1;
+    for (local_8 = 0; local_8 < local_5; local_8++) {
+        func_800EE7F8(local_3, local_2);
+        local_6 = func_800DC178(0, 90);
+        func_800EF214(local_3, local_6, func_800136E4(func_800DC178(0, 180) + local_0), local_1);
+        func_800BABB8(local_7, local_3, 0, 1.0f, ((s32 *) D_808010F0_basnowball));
+    }
+}
+
+void func_8080099C_basnowball(PlayerState *param_0)
+{
+    s32 local_0;
+    f32 local_1;
+    f32 local_2;
+    f32 local_3;
+    f32 local_4[3];
+
+    local_0 = func_800B5BE4(7);
+    func_8009C128(param_0, local_4);
+    local_1 = (*(f32 *)(*(u8 **)((u8 *)param_0 + 0x110) + 0x1C)) * 30.0f + 5.0f;
+    local_3 = (*(f32 *)(*(u8 **)((u8 *)param_0 + 0x110) + 0x1C)) * 100.0f + 200.0f;
+    local_2 = (*(f32 *)(*(u8 **)((u8 *)param_0 + 0x110) + 0x1C)) * 0.5f + 0.6f;
+    func_800BA730(local_0, local_1, local_1 + 10.0f, 0x41, 0x3C);
+    func_800BA930(local_0, -10, local_3, -10, 10, local_3 + 50.0f, 10);
+    func_800BA7FC(local_0, local_2, local_2);
+    func_800BA77C(local_0, 0, 0, func_800DC178(0.0f, 359.0f));
+    func_800BABB8(local_0, local_4, NULL, 1.0f, D_8080110C_basnowball);
+}
 
 void basnowball_entrypoint_11(s32 arg0)
 {
     func_800F796C(arg0,0x3);
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ba/snowll/basnowball_entrypoint_12.s")
+void basnowball_entrypoint_12(SnowPlayer *param_0)
+{
+    f32 local_0;
+    s32 local_1;
+    s32 local_2;
+    f32 local_3[3];
+    f32 local_4;
+    s32 local_5;
+    s32 local_6;
+    s32 local_7;
+    s32 local_8;
+
+    local_0 = func_800D8FF8();
+    if (func_800EA068(1) && !func_8009E674(param_0, 0x10)) {
+        local_2 = func_800A1718(param_0);
+        if (local_2 > 0 && param_0->unk110->unk28 == 1) {
+            param_0->unk110->unk4 -= local_0;
+            if (param_0->unk110->unk4 < 0.0f) {
+                if (local_2 == 1) {
+                    func_8009919C(param_0, _basnowball_entrypoint_11, param_0->unk184);
+                } else {
+                    param_0->unk110->unk4 = 7.5f;
+                    func_800A17A8(param_0, -1);
+                }
+            }
+        }
+    } else if (func_8008DE50(param_0) && player_isStable(param_0) && 100.0f < param_0->unk110->unkC) {
+        func_8080099C_basnowball(param_0);
+        if (func_800A1718(param_0) < func_800A1760(param_0) && param_0->unk110->unk28 == 1) {
+            func_80096394(param_0, local_3);
+            param_0->unk110->unk0 += func_800EEF94(local_3);
+            if (1000.0f < param_0->unk110->unk0) {
+                param_0->unk110->unk0 = 0.0f;
+                func_800A17A8(param_0, 1);
+                func_800FC660(8);
+            }
+        }
+    }
+    switch (param_0->unk110->unk28) {
+    case 1:
+        local_5 = func_800A1718(param_0);
+        local_4 = func_80800084_basnowball(local_5);
+        if (local_4 != param_0->unk110->unk1C) {
+            func_80800098_basnowball(param_0, local_5, &local_6, &local_7);
+            local_8 = 0;
+            if (local_4 < param_0->unk110->unk1C) {
+                local_8 = 1;
+            } else if (!func_800958A4(param_0, local_6, local_7)) {
+                local_8 = 1;
+            }
+            if (local_8) {
+                func_808001B8_basnowball(param_0, 2);
+            }
+        }
+        break;
+    case 2:
+        param_0->unk110->unk1C = func_800F10B4(param_0->unk110->unk18, 0.0f, 1.0f, param_0->unk110->unk24, param_0->unk110->unk20);
+        func_8009E55C(param_0, 0, param_0->unk110->unk1C * 50.0f);
+        if (func_800D9078(&param_0->unk110->unk18)) {
+            func_808001B8_basnowball(param_0, 1);
+        }
+        break;
+    }
+    switch (param_0->unk110->unk14) {
+    case 1:
+        param_0->unk110->unk8 = func_800136E4(param_0->unk110->unk8 + param_0->unk110->unkC / param_0->unk110->unk1C * local_0);
+        break;
+    case 2: {
+        f32 local_9;
+        f32 local_10;
+        f32 local_11;
+        local_9 = param_0->unk110->unk8;
+        if (param_0->unk110->unk8 != 0.0f) {
+            local_10 = func_800F13F0(param_0->unk110->unk10 / param_0->unk110->unk1C, (360.0f - local_9) * 7.0f);
+            local_11 = func_800F0E00(local_10 * local_0, 1.5f);
+            param_0->unk110->unk8 = func_800136E4(local_11 + param_0->unk110->unk8);
+            if (param_0->unk110->unk8 < local_9) {
+                param_0->unk110->unk8 = 0.0f;
+            }
+        }
+        break;
+    }
+    }
+    local_1 = func_80092AD8(param_0);
+    func_800E0AF0(local_1, 1.0f);
+    func_800E0AFC(local_1, 0x43, 1.0f, param_0->unk110->unk8, 0.0f, 0.0f);
+    func_80093230(param_0, param_0->unk110->unk1C);
+    _bawobble_entrypoint_8(param_0);
+    if (param_0->unk110->unk2D == 2) {
+        if (!param_0->unk110->unk2C) {
+            func_80800008_basnowball(param_0, 1);
+            return;
+        }
+        func_808007CC_basnowball(param_0);
+        param_0->unk110->unk2C = 0;
+    } else if (param_0->unk110->unk2C) {
+        func_80800008_basnowball(param_0, 2);
+        param_0->unk110->unk2C = 0;
+    }
+}

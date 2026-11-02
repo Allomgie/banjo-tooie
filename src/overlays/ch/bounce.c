@@ -1,32 +1,423 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_0.s")
+typedef struct Unk80127188 { f32 unk0; f32 unk4; f32 unk8; } Unk80127188;
+extern Unk80127188 D_80127188;
+extern f32 D_8012716C[];
+typedef struct { u16 flags; s16 s2; s16 s4; s16 s6; f32 f8; s16 sC; s16 sE; s16 s10; s16 s12; s16 s14; s16 s16; s16 s18; u8 pad1A[6]; f32 f20; } BE;
+typedef struct { f32 f00; f32 f04; f32 f08; f32 v0C[3]; f32 f18; f32 f1C; f32 f20; u8 x : 1; u8 a : 7; u8 y : 1; u8 b : 7; u16 state : 3; u16 rest : 13; s16 s28; s16 s2A; f32 f2C; s16 s30; u16 w32; } BB;
+extern f32 D_808014A8_chbounce;
+extern f32 func_800DC178(f32, f32);
+extern void func_800EF934(f32 *, f32 *, f32);
+extern void func_800EEB9C(f32 *, f32, f32);
+extern void func_800EE7F8(void *, void *);
+extern u8 *func_80108474(s32, s32, s32);
+extern u8 *func_80106790(s32);
+extern void func_80100074();
+typedef struct { u8 pad[0x7B]; u8 hi : 4; u8 f8 : 1; u8 lo : 3; } AX;
+typedef struct { f32 a; u8 pad[0x20]; } BounceEntry_chbounce_entrypoint_5;
+extern BounceEntry_chbounce_entrypoint_5 D_80801000_chbounce[];
+extern f32 func_800DC0C0(void);
+typedef struct { s16 type; u8 pad2[34]; } BounceRecord32;
+extern BounceRecord32 D_80800FE2_chbounce[];
+extern void *func_80100094(Actor *, u32);
+extern f32 func_800EC708(Unk80132ED0 *);
+extern s32 func_800BF0E0(f32 *, f32 *, f32, f32 *, s32, u32);
+extern s32 func_800C6B78(f32 *, f32 *, f32, f32 *, s32, u32);
+typedef struct { u8 pad[0x72]; u16 pa : 6; u16 f : 6; u16 pb : 4; } F72;
+typedef struct BounceEntry_chbounce_entrypoint_8 { u16 flags; /* 0x00 */ u8 pad02[0x10]; s16 s12; /* 0x12 */ s16 s14; /* 0x14 */ u8 pad16[0x06]; f32 s1C; /* 0x1C */ u8 pad20[0x04]; } BounceEntry_chbounce_entrypoint_8;
+typedef struct BounceLocal { f32 f00; f32 f04; f32 f08; f32 vec0C[3]; f32 f18; f32 f1C; f32 f20; u8 flag80 : 1; u8 index : 7; u8 pad25; u16 state : 3; u16 rest : 13; s16 s28; s16 s2A; f32 f2C; s16 s30; u16 w32; } BounceLocal;
+extern BounceEntry_chbounce_entrypoint_8 D_80800FE0_chbounce[];
+extern u8 D_808014AC_chbounce[];
+extern f32 func_800D8FF8(void);
+extern void func_80104580(void);
+extern void func_800EFA20(void *, void *, f32);
+extern void func_800EF04C(void *, void *);
+extern void func_800EF334(void *, f32);
+extern f32 func_800EEAA4(void *, void *);
+extern void func_800EFB24(void *, void *, void *);
+extern void func_800EFA4C(void *, f32, f32, f32);
+extern f32 func_800EEF94(void *);
+extern void func_800EF368(void *, f32);
+extern void func_8010D930(s32, s32, void *, void *);
+extern f32 func_800F10B4(f32, f32, f32, f32, f32);
+extern void func_800C4B64(f32);
+extern void func_800C4B70();
+extern void func_800C4B7C(s32);
+extern void func_8010A63C(void *);
+extern u8 *func_80105494(void *);
+extern f32 mlAbsF(f32);
+extern f32 func_800BECCC(void);
+extern s32 func_8010108C(void *, s32, s32);
+extern void func_800FFAB0(void *);
+void chbounce_entrypoint_6();
+int func_80800078_chbounce();
+
+void func_80800F74_chbounce(u8 *param_0);
+void chbounce_entrypoint_0(void)
+{
+    D_80127188.unk0 = 0.0f;
+    D_80127188.unk4 = 1.0f;
+    D_80127188.unk8 = 0.00f;
+}
 
 void chbounce_entrypoint_1(void) {
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_2.s")
+void chbounce_entrypoint_2(f32 param_0) {
+    D_8012716C[7] = param_0;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_3.s")
+void chbounce_entrypoint_3(f32 param_0)
+{
+  (*(f32 *)((u8 *)((u8 *) D_8012716C) + 0x24)) = param_0;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_4.s")
+s32 chbounce_entrypoint_4(Actor *this) {
+    f32 local_0[3];
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/func_80800078_chbounce.s")
+    func_800EE84C(local_0);
+    chbounce_entrypoint_6(this, local_0);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/func_80800190_chbounce.s")
+int func_80800078_chbounce()
+{
+    f32 local_0;
+    s32 local_1;
+    s32 local_2;
+    local_0 = func_800DC0C0();
+    local_1 = _gclevel_entrypoint_3(0x10);
+    local_2 = _gclevel_entrypoint_3(0x12);
+    if (func_800D3E40(9)) return 0x229;
+    if (func_800EA068(0x8000)) return 0x229;
+    if (!local_1 && !local_2) return 0x229;
+    if (local_1) {
+        if (!func_800DA9E4(0x31, 1)) return 0x197;
+        if (local_0 < 0.04998779296875f) return 0x197;
+    }
+    if (local_2) {
+        if (!func_800DA9E4(0x30, 1)) return 0x196;
+        if (local_0 < 0.04998779296875f) return 0x196;
+    }
+    return 0x229;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_5.s")
+u8 *func_80800190_chbounce(s32 param_0, s32 param_1, s32 *param_2)
+{
+    BE *tbl2;
+    u8 *actor;
+    BE *tbl;
+    f32 f20;
+    f32 *vec;
+    s32 i;
+    s32 first;
+    BB *b;
+    u8 *q;
+    f32 argp_13;
+    f32 fx;
+    f32 t;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_6.s")
+    tbl = &((BE *) D_80800FE0_chbounce)[param_0];
+    tbl2 = tbl;
+    actor = 0;
+    if (param_2 != 0) {
+        first = *param_2;
+    } else {
+        first = 0;
+    }
+    i = 0;
+    if (tbl->s4 > 0) {
+        do {
+            ((f32 *) &D_80127188)[0] = 360.0f / (f32)tbl->s4 + ((f32 *) &D_80127188)[0];
+            while (360.0f <= ((f32 *) &D_80127188)[0]) {
+                ((f32 *) &D_80127188)[0] = ((f32 *) &D_80127188)[0] - 360.0f;
+            }
+            if (i == 0 && first != 0) {
+                actor = func_80106790(first);
+            } else if (tbl->s2 != 0x229) {
+                actor = func_80108474(tbl->s2, param_1, 0);
+            } else {
+                actor = func_80108474(func_80800078_chbounce(tbl->s2), param_1, 0);
+                if (first) {}   /* SONDE: leerer Test, tragend (Blockstruktur/Vergabe) */
+                if (param_1) {} /* SONDE: leerer Test, tragend */
+            }
+            if (actor != 0) {
+                func_80100074(actor, 2, 0x34);
+                b = (BB *)func_80100094(actor, 2);
+                ((AX *)actor)->f8 = 1;
+                b->a = param_0;
+                b->state = 1;
+                b->b = 1;
+                b->s28 = tbl->s6;
+                b->f2C = tbl->f8;
+                b->s2A = tbl->sC;
+                func_800EE7F8(b, actor + 4);
+                func_800EE7F8(actor + 4, b);
+                if (((f32 *) &D_80127188)[1] != 1.0f) {
+                    vec = b->v0C;
+                    func_800EFA4C(vec, ((f32 *) &D_80127188)[1] * (f32)*(s16 *)((u8 *)tbl + 0xE),
+                                  func_800DC178(0.0f, (f32)tbl->s14) + (f32)tbl->s12,
+                                  ((f32 *) &D_80127188)[1] * (f32)*(s16 *)((u8 *)tbl + 0x16));
+                    ((f32 *) &D_80127188)[1] = 1.0f;
+                } else {
+                    vec = b->v0C;
+                    fx = func_800DC178(0.0f, (f32)tbl->s10);
+                    f20 = func_800DC178(0.0f, (f32)tbl->s14);
+                    func_800EFA4C(vec, (f32)fx + tbl->sE, (f32)f20 + tbl->s12,
+                                  func_800DC178(0.0f, (f32)tbl->s18) + (f32)tbl->s16);
+                }
+                if (tbl->flags & 0x400) {
+                    argp_13 = func_800DC178(0.0f, (f32)tbl->s10) + (f32)tbl->sE;
+                    func_800EEB9C(vec, ((f32 *) &D_80127188)[2], argp_13);
+                    b->v0C[1] = func_800DC178(0.0f, (f32)tbl->s14) + (f32)tbl->s12;
+                } else {
+                    t = D_808014A8_chbounce;
+                    t = t * (-1.0f);
+                    b->f1C = t;
+                    D_808014A8_chbounce = t;
+                    if (tbl->flags & 0x20) {
+                        f20 = tbl->f20;
+                    } else {
+                        f20 = func_800DC178(0.0f, 360.0f);
+                    }
+                    b->f18 = f20;
+                    *(f32 *)(actor + 0x48) = f20;
+                    func_800EF934(vec, vec, ((f32 *) &D_80127188)[0] + *(f32 *)(actor + 0x48));
+                }
+                b->f20 = 0.0f;
+                b->x = 0;
+                b->y = 1;
+                b->w32 = tbl->flags;
+                if (tbl->flags & 0x200) {
+                    q = func_80105494(actor);
+                    if (q != 0) {
+                        *(f32 *)(q + 0x1C) = b->f04;
+                    }
+                }
+            }
+            i += 1;
+        } while (i < tbl2->s4);
+    }
+    return actor;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_7.s")
+void chbounce_entrypoint_5(s32 param_0, u8 *param_1) {
+    D_80801000_chbounce[param_0].a = *(f32 *)(param_1 + 0x48);
+    func_80800190_chbounce(param_0, param_1 + 4, param_1);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/func_808007B8_chbounce.s")
+void chbounce_entrypoint_6(p0, p1) s32 p0; s32 p1;
+{
+  func_80800190_chbounce(p0, p1, 0);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_8.s")
+s32 chbounce_entrypoint_7(s32 param_0, s32 param_1, s32 param_2)
+{
+    s32 local_0;
+    u8 *local_1;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_9.s")
+    D_80800FE2_chbounce[param_0].type = param_2;
+    local_0 = func_80800190_chbounce(param_0, param_1, 0);
+    local_1 = (u8 *)func_80100094(local_0, 2);
+    switch (param_2) {
+        case 0x1C9:
+        case 0x1CA:
+        case 0x1CB:
+        case 0x1CC:
+        case 0x1F4:
+            *(s16 *)(local_1 + 0x28) = 0x404;
+            *(f32 *)(local_1 + 0x2C) = 1.8f;
+            *(s16 *)(local_1 + 0x2A) = 20000;
+            break;
+        case 0x136:
+        case 0x3C6:
+            *(s16 *)(local_1 + 0x28) = 0x404;
+            *(f32 *)(local_1 + 0x2C) = 1.8f;
+            *(s16 *)(local_1 + 0x2A) = 20000;
+            break;
+        case 0x513:
+            *(s16 *)(local_1 + 0x28) = 0x3E9;
+            *(s16 *)(local_1 + 0x2A) = 16000;
+            *(f32 *)(local_1 + 0x2C) = 1.0f;
+            break;
+        case 0x517:
+            *(s16 *)(local_1 + 0x28) = 0x53D;
+            *(f32 *)(local_1 + 0x2C) = 1.6f;
+            *(s16 *)(local_1 + 0x2A) = 16000;
+            break;
+        case 0x21F:
+            break;
+    }
+    return local_0;
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/chbounce_entrypoint_10.s")
+s32 func_808007B8_chbounce(Actor *param_0, f32 *param_1, f32 *param_2, f32 *param_3, s32 param_4)
+{
+    s32 local_0;
+    f32 local_1;
+    u32 local_3;
+    u32 local_4;
+    s32 local_2;
+    s32 local_5;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/bounce/func_80800F74_chbounce.s")
+    if (*(u16 *)((u8 *)func_80100094(param_0, 2) + 0x32) & 0x80) {
+        local_3 = *(u32 *)((u8 *)param_0 + 0x70);
+        local_4 = local_3 >> 25;
+        if (local_4 != 0) {
+            local_5 = func_800CC338(param_2, local_4 - 1, ((local_3 << 22) >> 26) - 1);
+            if (local_5 == -1) {
+                func_800EFB24(param_3, param_2, param_1);
+                func_800EF2A0(param_3);
+                func_800EE7F8(param_2, param_1);
+                return 1;
+            }
+            ((F72 *)param_0)->f = local_5 + 1;
+        }
+    }
+    local_1 = func_800EC708(param_0->unk0) * 0.6666667f;
+    param_1[1] += local_1;
+    param_2[1] += local_1;
+    if (param_4) {
+        local_0 = func_800BF0E0(param_1, param_2, local_1, param_3, 3, param_0->unk14);
+        if (!local_0) {
+            local_0 = func_800BEF00(param_1, param_2, param_3, param_0->unk14);
+            if (local_0) {
+                func_800EF04C(param_2, param_3);
+            }
+        }
+    } else {
+        local_2 = func_8010A698(param_0);
+        func_8010A654(param_0, 0);
+        local_0 = func_800C6B78(param_1, param_2, local_1, param_3, 3, param_0->unk14);
+        func_8010A654(param_0, local_2);
+        if (!local_0) {
+            local_0 = func_800C6A7C(param_1, param_2, param_3, param_0->unk14);
+            if (local_0) {
+                func_800EF04C(param_2, param_3);
+            }
+        }
+    }
+    param_1[1] -= local_1;
+    param_2[1] -= local_1;
+    return local_0;
+}
+
+void chbounce_entrypoint_8(u8 *param_0)
+{
+    f32 tick;
+    BounceLocal *b;
+    BounceEntry_chbounce_entrypoint_8 *tbl;
+    f32 prev[3];
+    f32 sp54[3];
+    f32 sp48[3];
+    f32 *vel;
+    f32 speed;
+    f32 vol;
+    u8 *q;
+
+    func_80104580();
+    tick = func_800D8FF8();
+    b = func_80100094(param_0, 2);
+    tbl = &D_80800FE0_chbounce[b->index];
+
+    switch (b->state) {
+        case 1:
+            b->f20 = b->f20 + tick;
+            func_800EE7F8(prev, b);
+            vel = b->vec0C;
+            func_800EFA20(sp54, vel, tick);
+            func_800EF04C(b, sp54);
+            if (1.2f < b->f20) {
+                b->flag80 = 1;
+            }
+            if (!((tbl->flags & 0x40) && (b->f20 < 1.2f))
+                && (func_808007B8_chbounce(param_0, prev, b, sp48, tbl->flags & 8)
+                    || ((tbl->flags & 0x200) && (b->vec0C[1] < -((tbl->s14 / 2) + tbl->s12))))) {
+                if (tbl->flags & 0x204) {
+                    func_800EFA4C(sp48, 0.0f, 1.0f, 0.0f);
+                }
+                func_800EF334(vel, -1.0f);
+                speed = func_800EEAA4(vel, sp48);
+                func_800EF334(sp48, speed + speed);
+                func_800EFB24(vel, sp48, vel);
+                b->s30 += 1;
+                if (b->s28 != 0) {
+                    vol = (b->w32 & 0x2000) ? func_800F10B4((f32)b->s30, 1.0f, 4.0f, 1, 0.65f) : 1.0f;
+                    func_800C4B64(b->f2C * vol);
+                    func_800C4B70((s32)((f32)b->s2A * vol));
+                    func_800C4B7C(b->s28);
+                    func_8010D930(3, *(s32 *)(param_0 + 0x70) & 1, b, D_808014AC_chbounce);
+                }
+                func_800EF334(vel, tbl->s1C);
+                speed = func_800EEF94(vel);
+                if (800.0f < speed) {
+                    speed = 800.0f;
+                    func_800EF368(vel, speed);
+                }
+                if ((speed < 200.0f && sp48[1] > 0.75f) || speed < 10.0f) {
+                    b->state = 2;
+                    b->flag80 = 1;
+                    if (tbl->flags & 0x10) {
+                        func_8010A63C(param_0);
+                    }
+                }
+                if (tbl->flags & 0x200) {
+                    q = func_80105494(param_0);
+                    if (q != 0) {
+                        b->f04 = *(f32 *)(q + 0x1C);
+                    }
+                }
+            } else {
+                if (tbl->flags & 0x100) {
+                    b->vec0C[1] -= 4000.0f * tick;
+                } else if (tbl->flags & 0x800) {
+                    b->vec0C[1] -= 750.0f * tick;
+                } else {
+                    b->vec0C[1] -= 1500.0f * tick;
+                }
+            }
+            func_800EE7F8(param_0 + 4, b);
+            break;
+
+        case 2:
+            if (tbl->flags & 2) {
+                b->f18 += b->f1C * tick;
+                while (b->f18 >= 360.0f) {
+                    b->f18 -= 360.0f;
+                }
+                while (b->f18 < 0.0f) {
+                    b->f18 += 360.0f;
+                }
+                *(f32 *)(param_0 + 0x48) = b->f18;
+            }
+            if (mlAbsF(b->f1C) < 0.1f || !(tbl->flags & 2)) {
+                func_80800F74_chbounce(param_0);
+            }
+            break;
+    }
+    if (*(f32 *)(param_0 + 8) < func_800BECCC() - 1000.0f) {
+        if (func_8010108C(param_0, 0x4D, 0) > 0) {
+            func_80800F74_chbounce(param_0);
+        } else {
+            func_800FFAB0(param_0);
+        }
+    }
+}
+
+int chbounce_entrypoint_9(s32 param_0)
+{
+  return (u8 *)func_80100094(param_0, 2) + 0xC;
+}
+
+s32 chbounce_entrypoint_10(s32 param_0) {
+    return ((u32) (*(u32 *)((s8 *)(func_80100094(param_0, 2)) + (0x24))) >> 0x1F) == 0;
+}
+
+void func_80800F74_chbounce(u8 *param_0)
+{
+  u8 temp_t6;
+  u8 *new_var;
+  temp_t6 = *((u8 *) (param_0 + 0x7B));
+  new_var = param_0;
+  *((u8 *) (new_var + 0x7B)) = (*((u8 *) (param_0 + 0x7B))) & 0xFFF7;
+  func_80100074(new_var, 2, 0);
+}

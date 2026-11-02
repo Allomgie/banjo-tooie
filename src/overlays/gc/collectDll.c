@@ -1,6 +1,13 @@
 #include "gc/collectDLL.h"
 
-extern s16 D_80800BE0_gccollectDll[0x16];
+extern s16 D_80800BE2_gccollectDll;
+extern s16 D_80800BE4_gccollectDll;
+extern s16 D_80800BE6_gccollectDll;
+extern s16 D_80800BE8_gccollectDll;
+extern s16 D_80800BEA_gccollectDll;
+extern s32 D_80800BEC_gccollectDll;
+
+extern s16 D_80800BE0_gccollectDll[];
 
 extern s32 D_80800C0C_gccollectDll[3];
 extern u32 D_80800C18_gccollectDll[10];
@@ -126,9 +133,92 @@ void gccollectDll_entrypoint_5(void)
     }
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gc/collectDll/func_808002C4_gccollectDll.s")
+s32 func_808002C4_gccollectDll(s32 param_0, s32 param_1)
+{
+  s8 *local_0;
+  int new_var;
+  if ((param_0 == D_80800BE0_gccollectDll[0]) && (param_1 == D_80800BE2_gccollectDll))
+  {
+    return 1;
+  }
+  if ((param_0 == D_80800BE4_gccollectDll) && (param_1 == D_80800BE6_gccollectDll))
+  {
+    return 1;
+  }
+  local_0 = &D_80800BEC_gccollectDll;
+  if ((param_0 == D_80800BE8_gccollectDll) && (param_1 == D_80800BEA_gccollectDll))
+  {
+    return 1;
+  }
+  new_var = 1;
+  loop_10:
+  if ((param_0 == (*((s16 *) (((s8 *) local_0) + 0)))) && (param_1 == (*((s16 *) (((s8 *) local_0) + 2)))))
+  {
+    return 1;
+  }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gc/collectDll/func_808003E0_gccollectDll.s")
+  if ((param_0 == (*((s16 *) (((s8 *) local_0) + 4)))) && (param_1 == (*((s16 *) (((s8 *) local_0) + 6)))))
+  {
+    return 1;
+  }
+  if ((param_0 == (*((s16 *) (((s8 *) local_0) + 8)))) && (param_1 == (*((s16 *) (((s8 *) local_0) + 0xA)))))
+  {
+    return 1;
+  }
+  if ((param_0 == (*((s16 *) (((s8 *) local_0) + 0xC)))) && (param_1 == (*((s16 *) (((s8 *) local_0) + 0xE)))))
+  {
+    return new_var;
+  }
+  local_0 += 0x10;
+  if (local_0 == (s8 *)&D_80800C0C_gccollectDll)
+  {
+    return (param_0 == (*((s16 *) (((s8 *) local_0) + 0)))) * 0;
+  }
+  goto loop_10;
+}
+
+s32 func_808003E0_gccollectDll(void *param_0, void *param_1)
+{
+    s32 local_0;
+    s32 local_1;
+    void *local_6;
+    s32 local_2;
+    s32 local_3;
+    s32 local_4;
+    s32 local_9;
+    s32 local_11;
+    f32 local_8[3];
+    u8 *local_7;
+    s32 local_12;
+
+    local_4 = 0;
+    local_0 = func_800CF87C();
+    for (local_1 = local_0; local_1 < local_0 + 10; local_1++) {
+        if (!func_800D0B68(local_1, 1) && (local_2 = func_800D0908(local_1, 1))) {
+            local_3 = func_800D0684(local_1, 1);
+            if (func_800EA05C() == local_3 && !func_808002C4_gccollectDll(local_1, 1) && func_800DA298(local_2)) local_4++;
+        }
+    }
+    local_12 = local_4 * 8 + 2; local_4 *= 1; /* probe: reassigning local_4 blocks the propagation of local_12, so the size is its own live range in v0 and the +2 is not reassociated */
+    local_6 = heap_realloc(param_0, *(s32 *)param_1 + local_12);
+    local_7 = (u8 *)local_6 + *(s32 *)param_1 * 4;
+    *(s16 *)local_7 = local_4;
+    local_7 += 4;
+    for (local_11 = local_0, local_4 = 0; local_11 < local_0 + 10; local_11++, local_4++) {
+        if (!func_800D0B68(local_11, 1) && (local_9 = func_800D0908(local_11, 1))) {
+            local_3 = func_800D0684(local_11, 1);
+            if (func_800EA05C() == local_3 && !func_808002C4_gccollectDll(local_11, 1) && func_800DA298(local_9)) {
+                *(s16 *)local_7 = local_4;
+                local_7 += 2;
+                func_800D07CC(local_11, 1, local_8);
+                func_800EE940(local_7, local_8);
+                local_7 += 6;
+            }
+        }
+    }
+    *(s32 *)param_1 = (local_7 - (u8 *)local_6) >> 2;
+    return (s32)local_6;
+}
 
 void func_808005BC_gccollectDll(u32 arg0, Prop* arg1)
 {
@@ -148,7 +238,28 @@ void func_808005BC_gccollectDll(u32 arg0, Prop* arg1)
     }
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gc/collectDll/func_80800660_gccollectDll.s")
+s32 func_80800660_gccollectDll(void *param_0, void *param_1)
+{
+    s16 *local_0;
+    s32 local_1;
+    s32 local_2;
+    s32 local_3;
+    s32 local_4;
+
+    local_0 = (s16 *)((s32 *)param_0 + *(s32 *)param_1);
+    local_1 = *local_0;
+    local_0 += 2;
+    for (local_2 = 0; local_2 < local_1; local_2++) {
+        local_3 = *local_0++;
+        local_4 = func_800CF87C() + local_3;
+        if (func_800D0A9C(local_4, 1) && !func_800D0B68(local_4, 1)) {
+            func_808005BC_gccollectDll(local_4, local_0);
+        }
+        local_0 += 3;
+    }
+    *(s32 *)param_1 = (s32 *)local_0 - (s32 *)param_0;
+    return (s32)param_0;
+}
 
 s32 gccollectDll_entrypoint_6(void* arg0, void* arg1)
 {
