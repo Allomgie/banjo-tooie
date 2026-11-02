@@ -107,6 +107,7 @@ D_80135470 = 0x80135470;
 D_80135480 = 0x80135480;
 D_80135550 = 0x80135550;
 D_801275C0 = 0x801275C0;
+D_80127198 = 0x80127198;
 
 /* Labels inside overlay objects. They are defined relative to the object that contains them so that they stay
  * in the overlay's section: the overlay header only lists relocations against symbols of the overlay itself,
@@ -118,3 +119,5 @@ func_80800D68_chalienkids = func_80800D58_chalienkids + 0x10;
 func_808002E4_chfaircoinbox = func_808002CC_chfaircoinbox + 0x18;
 func_808003E4_chfaircoinbox = func_808003C4_chfaircoinbox + 0x20;
 func_80800424_chfaircoinbox = func_808003C4_chfaircoinbox + 0x60;
+D_808007A4_chintrotext = D_808007A0_chintrotext + 0x4;
+D_808007A8_chintrotext = D_808007A0_chintrotext + 0x8;
