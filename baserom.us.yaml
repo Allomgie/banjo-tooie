@@ -4149,7 +4149,7 @@ segments:
     subsegments: 
       - [0x01F79C10, c, fishshootgame]
       - [0x01F7B3C0, .rodata, fishshootgame]
-      - [0x01F7B450, data, fishshootgame]
+      - [0x01F7B450, .data, fishshootgame]
       - [0x01F7B6E0, bss, fishshootgame]
   - name: chlagoonufoext_header
     dir: overlays/chlagoonufoext
@@ -4301,7 +4301,7 @@ segments:
     subsegments: 
       - [0x01F82BA0, c, gamenew]
       - [0x01F86540, .rodata, gamenew]
-      - [0x01F86680, data, gamenew]
+      - [0x01F86680, .data, gamenew]
       - [0x01F86AD0, bss, gamenew]
   - name: chwaspnestgame_header
     dir: overlays/chwaspnestgame
@@ -4586,7 +4586,7 @@ segments:
     subsegments: 
       - [0x01F986D0, c, inflatableboss]
       - [0x01F9B210, .rodata, inflatableboss]
-      - [0x01F9B450, data, inflatableboss]
+      - [0x01F9B450, .data, inflatableboss]
       - [0x01F9B6F0, bss, inflatableboss]
   - name: chballoonbomb_header
     dir: overlays/chballoonbomb
@@ -5061,7 +5061,7 @@ segments:
     subsegments: 
       - [0x01FA9960, c, boss]
       - [0x01FAC1F0, .rodata, boss]
-      - [0x01FAC400, data, boss]
+      - [0x01FAC400, .data, boss]
       - [0x01FAC8D0, bss, boss]
   - name: chburgerstand_header
     dir: overlays/chburgerstand
@@ -5460,7 +5460,7 @@ segments:
     subsegments: 
       - [0x01FB94E0, c, hoopswoop]
       - [0x01FBB340, .rodata, hoopswoop]
-      - [0x01FBB3A0, data, hoopswoop]
+      - [0x01FBB3A0, .data, hoopswoop]
       - [0x01FBB4E0, bss, hoopswoop]
   - name: chtiptup_header
     dir: overlays/chtiptup
@@ -6904,7 +6904,7 @@ segments:
     subsegments: 
       - [0x01FFC5A0, c, monsterinterior]
       - [0x01FFE270, .rodata, monsterinterior]
-      - [0x01FFE3F0, data, monsterinterior]
+      - [0x01FFE3F0, .data, monsterinterior]
       - [0x01FFE640, bss, monsterinterior]
   - name: chalienkids_header
     dir: overlays/chalienkids
@@ -6961,7 +6961,7 @@ segments:
     subsegments: 
       - [0x02001380, c, anglerboss]
       - [0x02003E90, .rodata, anglerboss]
-      - [0x02004120, data, anglerboss]
+      - [0x02004120, .data, anglerboss]
       - [0x02004430, bss, anglerboss]
   - name: changlerbossflare_header
     dir: overlays/changlerbossflare
@@ -7094,7 +7094,7 @@ segments:
     subsegments: 
       - [0x02006880, c, weldarboss]
       - [0x0200AB00, .rodata, weldarboss]
-      - [0x0200AE70, data, weldarboss]
+      - [0x0200AE70, .data, weldarboss]
       - [0x0200B360, bss, weldarboss]
   - name: chaliendad_header
     dir: overlays/chaliendad
@@ -8956,7 +8956,7 @@ segments:
     subsegments: 
       - [0x0206D490, c, dodgemcontrol]
       - [0x02071E40, .rodata, dodgemcontrol]
-      - [0x02072190, data, dodgemcontrol]
+      - [0x02072190, .data, dodgemcontrol]
       - [0x02072490, bss, dodgemcontrol]
   - name: chdodgemdoors_header
     dir: overlays/chdodgemdoors

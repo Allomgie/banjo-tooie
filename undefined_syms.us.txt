@@ -107,6 +107,7 @@ D_80135470 = 0x80135470;
 D_80135480 = 0x80135480;
 D_80135550 = 0x80135550;
 D_801275C0 = 0x801275C0;
+D_80127188 = 0x80127188;
 D_80127198 = 0x80127198;
 
 /* Labels inside overlay objects. They are defined relative to the object that contains them so that they stay
@@ -121,3 +122,15 @@ func_808003E4_chfaircoinbox = func_808003C4_chfaircoinbox + 0x20;
 func_80800424_chfaircoinbox = func_808003C4_chfaircoinbox + 0x60;
 D_808007A4_chintrotext = D_808007A0_chintrotext + 0x4;
 D_808007A8_chintrotext = D_808007A0_chintrotext + 0x8;
+D_80802F0E_chinflatableboss = D_80802F08_chinflatableboss + 0x6;
+D_80803DE5_chjiggygamenew = D_80803DE4_chjiggygamenew + 0x1;
+D_80803DE6_chjiggygamenew = D_80803DE4_chjiggygamenew + 0x2;
+D_80803DE7_chjiggygamenew = D_80803DE4_chjiggygamenew + 0x3;
+D_80803DF9_chjiggygamenew = D_80803DF8_chjiggygamenew + 0x1;
+D_80803DFA_chjiggygamenew = D_80803DF8_chjiggygamenew + 0x2;
+D_80803DFB_chjiggygamenew = D_80803DF8_chjiggygamenew + 0x3;
+D_80803DFD_chjiggygamenew = D_80803DFC_chjiggygamenew + 0x1;
+func_80804158_chintrochar = func_80804054_chintrochar + 0x104;
+func_80804160_chintrochar = func_80804054_chintrochar + 0x10C;
+func_80804168_chintrochar = func_80804054_chintrochar + 0x114;
+func_8080416C_chintrochar = func_80804054_chintrochar + 0x118;
