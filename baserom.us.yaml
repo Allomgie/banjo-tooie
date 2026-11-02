@@ -5422,7 +5422,7 @@ segments:
     subsegments: 
       - [0x01FB6350, c, balloonburst]
       - [0x01FB7F30, .rodata, balloonburst]
-      - [0x01FB7F90, data, balloonburst]
+      - [0x01FB7F90, .data, balloonburst]
       - [0x01FB8170, bss, balloonburst]
   - name: chpawnbroker_header
     dir: overlays/chpawnbroker
@@ -5954,7 +5954,7 @@ segments:
     subsegments: 
       - [0x01FD2BB0, c, text]
       - [0x01FD3330, .rodata, text]
-      - [0x01FD3350, data, text]
+      - [0x01FD3350, .data, text]
       - [0x01FD33D0, bss, text]
   - name: chfactoryprop_header
     dir: overlays/chfactoryprop
@@ -8272,7 +8272,7 @@ segments:
     subsegments: 
       - [0x02039F40, c, stoneballcontrol]
       - [0x0203ED40, .rodata, stoneballcontrol]
-      - [0x0203EF00, data, stoneballcontrol]
+      - [0x0203EF00, .data, stoneballcontrol]
       - [0x0203F3C0, bss, stoneballcontrol]
   - name: chmayafarmer_header
     dir: overlays/chmayafarmer
@@ -11559,7 +11559,7 @@ segments:
     subsegments: 
       - [0x020C1700, c, toxiccloud]
       - [0x020C2AE0, .rodata, toxiccloud]
-      - [0x020C2B20, data, toxiccloud]
+      - [0x020C2B20, .data, toxiccloud]
       - [0x020C2CB0, bss, toxiccloud]
   - name: chfactoryempspell_header
     dir: overlays/chfactoryempspell
