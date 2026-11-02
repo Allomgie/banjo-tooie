@@ -1,5 +1,7 @@
 #include "su/mole.h"
 
+void *D_exp_sumole_entrypoint_2[] = { (void *)sumole_entrypoint_2 };
+
 #define MOLE_DATA(arg0) ((MoleActorData*)(arg0->actorData))
 
 extern u32 D_80802510_sumole;
@@ -133,7 +135,90 @@ void func_80800408_sumole(Actor* arg0)
     }
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/su/mole/sumole_entrypoint_2.s")
+void sumole_entrypoint_13();
+
+void sumole_entrypoint_9();
+
+void sumole_entrypoint_2(Actor *param_0, s32 param_1)
+{
+    for (;;) {
+    switch (param_0->unk70_10) {
+    case 1:
+        if (param_1 != 12) func_800C78CC(1);
+        break;
+    case 7:
+    case 22:
+        func_800DA544(0x9F1);
+        func_808002E0_sumole(param_0, 2, 1, 2);
+        break;
+    case 3:
+        func_808002E0_sumole(param_0, 2, 0, 2);
+        break;
+    case 8:
+        sumole_entrypoint_19(param_0, 3);
+        break;
+    }
+    param_0->unk70_10 = param_1;
+    switch (param_0->unk70_10) {
+    case 13:
+        _chmolehill_entrypoint_1(func_80106790(param_0->unk3C), 7);
+        break;
+    case 3:
+        func_808002E0_sumole(param_0, 2, 1, 3);
+        sumole_entrypoint_7(param_0);
+        sumole_entrypoint_19(param_0, 3);
+        break;
+    case 14:
+        func_808002E0_sumole(param_0, 2, 1, 0);
+        sumole_entrypoint_9(param_0);
+        sumole_entrypoint_19(param_0, 3);
+        break;
+    case 7:
+        if ((s32)param_0->unk58 == 0) return;
+        break;
+    case 11:
+        func_808002E0_sumole(param_0, 2, 1, 1);
+        sumole_entrypoint_13(param_0);
+        break;
+    case 17:
+        param_0 = (Actor *)((s32)param_0 * 1); param_0 = (Actor *)((s32)param_0 * 1); param_0 = (Actor *)((s32)param_0 * 1); param_0 = (Actor *)((s32)param_0 * 1); param_0 = (Actor *)((s32)param_0 * 1); param_0 = (Actor *)((s32)param_0 * 1); /* probe: 6 reassignments in the loop (+20 priority each) rank param_0 (15.0) above param_1 (13.75), giving s0/s1 as in the target */
+        param_1 = func_8008FC28();
+        if (func_8008FC00() < param_1) {
+            if (!func_800DA9E4(0x422, 1)) return;
+            param_1 = 20;
+            continue;
+        }
+        if (_chmolehill_entrypoint_3(func_80106790(param_0->unk3C))) {
+            param_1 = 9;
+        } else {
+            param_1 = 18;
+            func_800C0850();
+        }
+        continue;
+    case 20:
+        param_1 = func_8008FC00();
+        if (param_1 >= func_8008FC28()) {
+            if (_chmolehill_entrypoint_3(func_80106790(param_0->unk3C))) {
+                param_1 = 9;
+            } else {
+                param_1 = 18;
+                func_800C0850();
+            }
+            continue;
+        }
+        ((f32 *)param_0->actorData)[6] = 0.2f;
+        break;
+    case 1:
+        func_800C78CC(0);
+        func_800DA524(0x9F1);
+        func_80800408_sumole(param_0);
+        sumole_entrypoint_19(param_0, 0);
+        param_0->unk54 = (s32)param_0->unk74_7;
+        break;
+    }
+    return;
+    }
+}
 
 typedef union {
     s32 i;
