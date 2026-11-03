@@ -9,7 +9,7 @@ extern Actor *func_80106790(Unk80132ED0 *);
 extern s32 func_800F7D38(s32, s32, f32 *, f32);
 extern void _sudeflect_entrypoint_1(f32 *, f32, f32, f32, s32);
 extern void *D_80800500_chpodiumbankaz;
-extern int D_80800548_chpodiumbankaz;
+extern int D_80800548_chpodiumbankaz[];
 
 s32 func_80800000_chpodiumbankaz(s32 param_0) {
     if (func_800C6E38(0x1C)) {
@@ -158,3 +158,15 @@ int chpodiumbankaz_entrypoint_1()
 {
     return &D_80800548_chpodiumbankaz;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/podiumbankaz.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800548_chpodiumbankaz -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+void *D_80800500_chpodiumbankaz = (void *)0x02690157;
+static u32 D_80800500_chpodiumbankaz_rest[17] = { 0x7E20001, 0x0, (u32)func_808000B8_chpodiumbankaz, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x40000814, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chpodiumbankaz, (u32)func_80107C2C, 0x80082412, (u32)func_808003EC_chpodiumbankaz, 0x0 };
+int D_80800548_chpodiumbankaz[18] = { 0x2680156, 0x7E10001, 0x0, (u32)func_80800170_chpodiumbankaz, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x40000814, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chpodiumbankaz, (u32)func_80107C2C, -0x7FF7DBEE, (u32)func_80800464_chpodiumbankaz, 0x0 };

@@ -167,3 +167,7 @@ void plcamera_entrypoint_14(void *param_0, s32 param_1, s32 param_2)
 {
     func_80110848(func_80110014(func_800F5EF8(param_0)), param_1, param_2);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/pl/camera.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80800510_plcamera[16] = { 0x0, 0x0, 0x4, 0xC8, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

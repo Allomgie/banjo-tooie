@@ -210,3 +210,7 @@ s32 glsplinenode_entrypoint_1(SplineNodeContext *param_0, SplineActorArg param_1
     }
     return local_1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/spline/node.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s16 D_808009B0_glsplinenode[8] = { 0x0, 0x5, 0x6, 0x7, 0x0, 0x0, 0x0, 0x0 };

@@ -3,7 +3,7 @@
 void _sudeflect_entrypoint_1(s32, f32, f32, f32, s32);
 f32 func_80103EF4(void);
 f32 func_80103EAC(s32);
-extern int D_808000C0_chbobpanel;
+extern int D_808000C0_chbobpanel[];
 
 void func_80800000_chbobpanel(s32 param_0)
 {
@@ -31,3 +31,13 @@ int chbobpanel_entrypoint_0()
 {
     return (int)&D_808000C0_chbobpanel;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bobpanel.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808000C0_chbobpanel -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_808000C0_chbobpanel[20] = { 0x1580532, 0x8C80001, 0x0, (u32)func_80800000_chbobpanel, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x1000, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_8080004C_chbobpanel, 0x0, 0x0, 0x0 };

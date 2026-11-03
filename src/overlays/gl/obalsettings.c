@@ -204,3 +204,7 @@ void glglobalsettings_entrypoint_8(param_0) s32 param_0;
     func_80012F34(1, D_80800560_glglobalsettings[param_0][1]);
     func_800DA7A8(0xBC6, param_0, 2);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/obalsettings.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s16 D_80800560_glglobalsettings[4][2] = { 0x1, 0x4, 0x2, 0x4, 0x3, 0x4, 0x4, 0x4 };

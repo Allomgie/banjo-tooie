@@ -103,3 +103,6 @@ void ncfixposrot_entrypoint_14(Actor *param_0)
     func_800C52F4(0, 0);
     *(s16 *)((char *)param_0 + 0x18) = 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/fixposrot.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -692,3 +692,55 @@ int bsstonehead_entrypoint_43(s32 param_0)
 {
   return D_808016D0_bsstonehead[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/stonehead.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsstonehead_entrypoint_0();
+extern void _bsstonehead_entrypoint_1();
+extern void _bsstonehead_entrypoint_2();
+extern void func_80099B94();
+extern void _bsstonehead_entrypoint_6();
+extern void _bsstonehead_entrypoint_4();
+extern void _bsstonehead_entrypoint_5();
+extern void _basudie_entrypoint_11();
+extern void _bsstonehead_entrypoint_10();
+extern void _bsstonehead_entrypoint_8();
+extern void _bsstonehead_entrypoint_9();
+extern void _bsdrone_entrypoint_3();
+extern void _bsstonehead_entrypoint_12();
+extern void _bsstonehead_entrypoint_13();
+extern void _bsstonehead_entrypoint_14();
+extern void _bsstonehead_entrypoint_16();
+extern void _bsstonehead_entrypoint_17();
+extern void _bsstonehead_entrypoint_18();
+extern void _bsstonehead_entrypoint_22();
+extern void _bsstonehead_entrypoint_20();
+extern void _bsstonehead_entrypoint_21();
+extern void _bsstonehead_entrypoint_24();
+extern void _bsstonehead_entrypoint_25();
+extern void _bsstonehead_entrypoint_26();
+extern void func_80099AA8();
+extern void _bsstonehead_entrypoint_28();
+extern void _bsstonehead_entrypoint_29();
+extern void _bsstonehead_entrypoint_30();
+extern void _bsstonehead_entrypoint_32();
+extern void _bsstonehead_entrypoint_33();
+extern void _bsstonehead_entrypoint_34();
+extern void _bsstonehead_entrypoint_36();
+extern void _bsstonehead_entrypoint_37();
+extern void _bsstonehead_entrypoint_38();
+extern void _bsstonehead_entrypoint_40();
+extern void _bsstonehead_entrypoint_41();
+extern void _bsstonehead_entrypoint_42();
+s32 D_80801630_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_0, (u32)_bsstonehead_entrypoint_1, (u32)_bsstonehead_entrypoint_2, (u32)func_80099B94 };
+s32 D_80801640_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_6, (u32)_bsstonehead_entrypoint_4, (u32)_bsstonehead_entrypoint_5, (u32)_basudie_entrypoint_11 };
+s32 D_80801650_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_10, (u32)_bsstonehead_entrypoint_8, (u32)_bsstonehead_entrypoint_9, (u32)_bsdrone_entrypoint_3 };
+s32 D_80801660_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_12, (u32)_bsstonehead_entrypoint_13, (u32)_bsstonehead_entrypoint_14, (u32)func_80099B94 };
+s32 D_80801670_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_16, (u32)_bsstonehead_entrypoint_17, (u32)_bsstonehead_entrypoint_18, (u32)func_80099B94 };
+s32 D_80801680_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_22, (u32)_bsstonehead_entrypoint_20, (u32)_bsstonehead_entrypoint_21, (u32)func_80099B94 };
+s32 D_80801690_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_24, (u32)_bsstonehead_entrypoint_25, (u32)_bsstonehead_entrypoint_26, (u32)func_80099AA8 };
+s32 D_808016A0_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_28, (u32)_bsstonehead_entrypoint_29, (u32)_bsstonehead_entrypoint_30, (u32)func_80099B94 };
+s32 D_808016B0_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_32, (u32)_bsstonehead_entrypoint_33, (u32)_bsstonehead_entrypoint_34, (u32)func_80099B94 };
+s32 D_808016C0_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_36, (u32)_bsstonehead_entrypoint_37, (u32)_bsstonehead_entrypoint_38, (u32)func_80099B94 };
+s32 D_808016D0_bsstonehead[4] = { (u32)_bsstonehead_entrypoint_40, (u32)_bsstonehead_entrypoint_41, (u32)_bsstonehead_entrypoint_42, (u32)func_80099B94 };

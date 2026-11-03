@@ -1,6 +1,6 @@
 #include "overlays/bs/kaz/eggass.h"
 
-s32 D_808002C0_bskazeggass[];
+extern s32 D_808002C0_bskazeggass[];
 
 void bskazeggass_entrypoint_0(PlayerState *self) {
     _bskaz_entrypoint_1(self);
@@ -65,3 +65,7 @@ void bskazeggass_entrypoint_2(PlayerState *self) {
 s32 bskazeggass_entrypoint_3(s32 idx) {
     return D_808002C0_bskazeggass[idx];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/eggass.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_808002C0_bskazeggass[4] = { (u32)_bskazeggass_entrypoint_2, (u32)_bskazeggass_entrypoint_0, (u32)_bskazeggass_entrypoint_1, (u32)func_80099B94 };

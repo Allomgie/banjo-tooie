@@ -1,7 +1,7 @@
 #include "ch/cauldronentrydoor.h"
 
 extern void *func_80100094(Actor *, s32);
-extern int D_80800550_chcauldronentrydoor;
+extern int D_80800550_chcauldronentrydoor[];
 extern u8 D_80800520_chcauldronentrydoor[];
 extern s32 func_800D9078(f32 *);
 extern s32 func_800DC298(f32);
@@ -149,6 +149,20 @@ int chcauldronentrydoor_entrypoint_1()
 
 int chcauldronentrydoor_entrypoint_2(void)
 {
-    extern int D_80800598_chcauldronentrydoor;
+    extern int D_80800598_chcauldronentrydoor[];
     return &D_80800598_chcauldronentrydoor;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/cauldronentrydoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800550_chcauldronentrydoor -> int[], D_80800598_chcauldronentrydoor -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_80800520_chcauldronentrydoor[20] = { 0x0, 0x13, 0x5, 0xB7, 0x0, 0xE, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x19, 0x0, 0x16, 0x7F, 0xBC, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800534_chcauldronentrydoor[12] = { 0x0, 0x13, 0x4, 0xC7, 0x0, 0x18, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800540_chcauldronentrydoor[16] = { 0x0, 0x13, 0x5, 0x7, 0x0, 0x18, 0x0, 0x2, 0x0, 0xA, 0x0, 0x8C, 0x0, 0x0, 0x0, 0x0 };
+int D_80800550_chcauldronentrydoor[18] = { 0x3310395, 0x8ED0001, 0x0, (u32)func_808000C8_chcauldronentrydoor, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x58E0000, 0x1C00, (u32)func_80800370_chcauldronentrydoor, (u32)func_80108ED0, 0x18, (u32)func_80800000_chcauldronentrydoor, (u32)func_80107C2C, -0x7FFFFC00, (u32)func_80800168_chcauldronentrydoor, 0x0 };
+int D_80800598_chcauldronentrydoor[18] = { 0xAC049F, 0x8EE0001, 0x0, (u32)func_80800398_chcauldronentrydoor, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, (u32)func_80800370_chcauldronentrydoor, 0x0, 0x0, (u32)func_808001FC_chcauldronentrydoor, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800274_chcauldronentrydoor, 0x0 };

@@ -525,3 +525,6 @@ loop_6:
 block_9:
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/store.data.s) is defined here in C.
+ * Values are taken from the ROM. */

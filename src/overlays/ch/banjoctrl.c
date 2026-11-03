@@ -1,13 +1,13 @@
 #include "common.h"
 
 #define BOX ((f32 *)this->actorData)
-extern int D_80801270_chbanjoctrl;
+extern int D_80801270_chbanjoctrl[];
 extern s32 _chbanjoctrl_entrypoint_1(s32);
 extern s32 _chbanjoctrl_entrypoint_2(s32);
 extern void func_800F69E8(void);
 extern void func_800F6968(void);
 extern f32 func_800F2094(f32, f32);
-extern s32 D_808012B8_chbanjoctrl;
+extern s32 D_808012B8_chbanjoctrl[];
 extern int func_8010CB0C(void *, s32, s32, s32);
 extern int func_800F6C5C(s32);
 extern int func_800F6478(s32);
@@ -529,3 +529,17 @@ void func_808010FC_chbanjoctrl(param_0) Actor *param_0;
 s32 func_808011F4_chbanjoctrl(void){
     func_8080102C_chbanjoctrl();
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/banjoctrl.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801270_chbanjoctrl -> int[], D_808012B8_chbanjoctrl -> s32[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+int D_80801270_chbanjoctrl[18] = { 0xB2014D, 0xE, 0x0, (u32)func_80800160_chbanjoctrl, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, (u32)func_8080012C_chbanjoctrl, 0x0, 0x0, (u32)func_8080000C_chbanjoctrl, (u32)func_80107C2C, -0x7FFFF9FE, 0x0, 0x0 };
+s32 D_808012B8_chbanjoctrl[3] = { 0x0, 0x0, 0x0 };
+u8 D_808012C4_chbanjoctrl[16] = { 0x0, 0x13, 0x5, 0x93, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x14, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808012D4_chbanjoctrl[16] = { 0x0, 0x13, 0x5, 0x10, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x14, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808012E4_chbanjoctrl[16] = { 0x0, 0x13, 0x4, 0x94, 0x0, 0x18, 0x0, 0xD, 0x1, 0x2E, 0x1, 0x38, 0x0, 0x14, 0x0, 0x0 };
+u8 D_808012F4_chbanjoctrl[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

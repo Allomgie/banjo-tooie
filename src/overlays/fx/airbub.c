@@ -20,3 +20,7 @@ void fxairbub_entrypoint_1(f32 param_0[3], f32 param_1, f32 param_2, f32 param_3
     func_800BA544(local_0, _fxairbub_entrypoint_0);
     func_800BABB8(local_0, param_0, NULL, param_3, D_80800100_fxairbub);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/airbub.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s32 D_80800100_fxairbub[20] = { 0x1D09D9, 0x161004, 0x1B0096, 0x960007, 0x10015, 0xCC, 0x2B0300, 0x300002C, 0x0, 0x0, 0x0, 0x20FFFF, -0x100FFDE, 0xC0017, 0xC0017, 0x2F0040, 0x400000, 0x19, 0x33, 0x0 };

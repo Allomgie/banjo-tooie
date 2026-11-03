@@ -142,3 +142,10 @@ int chlighthalo_entrypoint_0()
 {
   return &D_808006A8_chlighthalo;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/light/halo.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+Mass46HaloRange D_808006A0_chlighthalo = { 2.5e+02f, 4e+02f };
+void *D_808006A8_chlighthalo = (void *)0x0158050A;
+static u32 D_808006A8_chlighthalo_rest[17] = { 0x9C70001, 0x0, (u32)func_80800000_chlighthalo, (u32)func_80105834, (u32)func_80800068_chlighthalo, 0x0, 0x0, 0x0, 0x20000, (u32)func_80800030_chlighthalo, 0x0, 0x0, (u32)func_80800630_chlighthalo, (u32)func_80107C2C, 0x80000402, (u32)func_80800448_chlighthalo, 0x0 };

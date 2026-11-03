@@ -1,7 +1,7 @@
 #include "common.h"
 extern void func_800EF214(f32 *, f32, f32, f32);
 
-extern s32 D_80800990_chworlddoors;
+extern s32 D_80800990_chworlddoors[];
 extern s32 _sujiggy_entrypoint_22(s32);
 extern s32 _gccubesearch_entrypoint_9(s32, s32 *, s32);
 extern s32 _gspropctrl_entrypoint_8(s32);
@@ -11,7 +11,7 @@ extern s32 _gspropctrl_entrypoint_13(s32);
 extern void func_800F18FC(f32 *, f32 *, f32 *);
 extern void func_800EEBF0(f32 *, f32 *, f32);
 extern void func_800EF04C(f32 *, f32 *);
-extern int D_80800A04_chworlddoors;
+extern int D_80800A04_chworlddoors[];
 extern u8 D_808009D8_chworlddoors[];
 extern u8 D_808009E8_chworlddoors[];
 extern f32 _capod_entrypoint_18(void);
@@ -255,3 +255,16 @@ int chworlddoors_entrypoint_0()
 {
   return &D_80800A04_chworlddoors;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/worlddoors.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800990_chworlddoors -> s32[], D_80800A04_chworlddoors -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+s32 D_80800990_chworlddoors[18] = { 0x1D09E5, 0x1BFCE0, -0x257FFD3, 0x32003E8, 0xE0000, 0x280016, 0x10020022, 0x33004C, 0x9900E6, 0x150000, 0xCC002B, 0xC00180, 0x4004C, 0x70002, 0x0, -0x3CCB0000, -0x3CF00000, -0x3CF50000 };
+u8 D_808009D8_chworlddoors[16] = { 0x0, 0x13, 0x6, 0x73, 0x0, 0x20, 0x0, 0x2, 0x0, 0xA, 0x0, 0xD9, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808009E8_chworlddoors[16] = { 0x0, 0x13, 0x4, 0xA9, 0x0, 0x2, 0x0, 0x1E, 0x0, 0xA, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808009F8_chworlddoors[12] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF };
+int D_80800A04_chworlddoors[19] = { 0x158051B, 0x9660001, 0x0, (u32)func_80800388_chworlddoors, (u32)func_80105834, (u32)func_80800798_chworlddoors, 0x0, 0x0, 0x0, 0x21000, (u32)func_80800750_chworlddoors, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FBFFBFE, (u32)func_808006A8_chworlddoors, 0x0, 0x0 };

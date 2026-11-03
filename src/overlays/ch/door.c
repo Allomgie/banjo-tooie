@@ -547,3 +547,7 @@ s32 func_808013C0_chdoor(param_0, param_1) Actor *param_0; s32 param_1;
     func_808009F4_chdoor(param_0);
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/door.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_808015B0_chdoor[16] = { 0x0, 0x21, 0x0, 0x1D, 0x0, 0x1E, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

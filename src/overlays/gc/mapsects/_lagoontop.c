@@ -119,3 +119,15 @@ void gcmapsects_lagoontop_entrypoint_1(LagoonCtx *param_0)
         ((BitS164 *)param_0->obj)->b6 = 1;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/mapsects/_lagoontop.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080063C_gcmapsects_lagoontop = D_80800630_gcmapsects_lagoontop + 0xC, D_80800648_gcmapsects_lagoontop = D_80800630_gcmapsects_lagoontop + 0x18 */
+LagoonSector1180 D_80800630_gcmapsects_lagoontop[5] = { -9e+03f, 9e+03f, -8e+03f, -17203.0f, 5.2e+03f, -1.43e+04f, 2632.0f, 1.195e+04f, 361.0f, -0x1, 0x727, 0x0, 0x0, -9e+03f, 9e+03f, -9.2e+03f, -12523.0f, 8.6e+03f, -1.25e+04f, -5.4e+03f, 1.05e+04f, -5.9e+03f, -0x1, 0x734, 0x0, 0x0, -9e+03f, 2e+03f, -3.2e+03f, -12654.0f, -5.4e+02f, -5457.0f, -6872.0f, 5.2e+03f, -134.0f, 0x1D4C, 0x728, 0x0, 0x0, -5.5e+03f, 1.2e+03f, -7.1e+03f, -7229.0f, 895.0f, -8981.0f, -3359.0f, 1694.0f, -5101.0f, 0x1D4C, 0x72B, 0x0, 0x0, -5.4e+03f, -1.2e+03f, 1.2e+03f, -7253.0f, -1.84e+03f, -517.0f, -4243.0f, -115.0f, 3.7e+03f, 0x1D4C, 0x72C, 0x0, 0x0 };
+s16 D_8080070C_gcmapsects_lagoontop[4][2] = { 0x1, 0x0, 0x0, 0x2, 0x2, 0x4, 0x2, 0x3 };
+s16 D_8080071C_gcmapsects_lagoontop[2] = { 0x3, 0x4 };
+f32 D_80800720_gcmapsects_lagoontop[1] = { -9044.0f };
+u32 D_80800724_gcmapsects_lagoontop[2] = { 0x459DD000, 0xC54C9000 };
+f32 D_8080072C_gcmapsects_lagoontop[3] = { -9044.0f, 5.15e+03f, -3273.0f };
+f32 D_80800738_gcmapsects_lagoontop[3] = { -6767.0f, -5.2e+02f, -103.0f };
+f32 D_80800744_gcmapsects_lagoontop[3] = { -9044.0f, 5982.0f, -3273.0f };

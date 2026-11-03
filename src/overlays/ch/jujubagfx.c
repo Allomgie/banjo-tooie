@@ -133,3 +133,13 @@ void chjujubagfx_entrypoint_2(void)
 {
   _chbaddiesetup_entrypoint_0(&_chjujubagfx_entrypoint_1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jujubagfx.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80107C2C();
+void *D_80800470_chjujubagfx = (void *)0x02BE02F9;
+static u32 D_80800470_chjujubagfx_rest[17] = { 0x63F0001, 0x0, (u32)func_808001A8_chjujubagfx, (u32)func_80105834, (u32)func_808003D4_chjujubagfx, 0x13880000, 0x0, 0x0, 0x4, (u32)func_80800174_chjujubagfx, 0x0, 0x0, (u32)func_80800100_chjujubagfx, (u32)func_80107C2C, 0x80000002, 0x0, 0x0 };
+Vec3f D_808004B8_chjujubagfx = { 0.0f, 0.0f, 0.0f };
+Vec3f D_808004C4_chjujubagfx = { 0.0f, -14.0f, 0.0f };

@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800A80_chkingjinjobits;
+extern int D_80800A80_chkingjinjobits[];
 typedef union { s32 local_0; u8 local_1[4]; } KingJinjoEvent;
 extern s32 _chkingjinjobits_entrypoint_1;
 extern void func_8010D5DC(void);
@@ -271,3 +271,13 @@ void chkingjinjobits_entrypoint_1(s32 arg0, Vtx *src, Vtx *dst, s32 count, Unk80
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/kingjinjobits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800A80_chkingjinjobits -> int[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+int D_80800A80_chkingjinjobits[18] = { 0x15804EB, 0x1, 0x0, (u32)func_80800014_chkingjinjobits, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_8080000C_chkingjinjobits, (u32)func_80107C2C, -0x7FFFD9FE, (u32)func_8080029C_chkingjinjobits, 0x0 };
+f32 D_80800AC8_chkingjinjobits[6] = { 0.0f, 1.8e+03f, 0.0f, 0.0f, 0.0f, 0.0f };

@@ -147,3 +147,6 @@ int suautobaddies_entrypoint_3()
     }
   }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/autobaddies.data.s) is defined here in C.
+ * Values are taken from the ROM. */

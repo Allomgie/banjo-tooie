@@ -4,7 +4,7 @@ extern f32 func_800D8FF8(void);
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 typedef struct { u16 model; s16 state; } JamjarsDummyRecord;
 extern JamjarsDummyRecord D_8080032C_chjamjarsdummy[];
-extern int D_80800338_chjamjarsdummy;
+extern int D_80800338_chjamjarsdummy[];
 
 void func_80800000_chjamjarsdummy(Actor *param_0, s32 param_1)
 {
@@ -80,3 +80,15 @@ int chjamjarsdummy_entrypoint_0()
 {
     return (int)&D_80800338_chjamjarsdummy;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jamjarsdummy.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080032E_chjamjarsdummy = D_8080032C_chjamjarsdummy + 0x2
+ * extern declarations adjusted to the object (same addresses): D_80800338_chjamjarsdummy -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+u32 D_80800300_chjamjarsdummy[3] = { 0x40A00000, 0x40A00000, 0x40A00000 };
+u32 D_8080030C_chjamjarsdummy[8] = { 0x0, 0x0, 0x0, 0x0, 0x3FE66666, 0x2990001, 0x3F4CCCCD, 0x2140001 };
+JamjarsDummyRecord D_8080032C_chjamjarsdummy[3] = { 0x7AA, 0x2, 0x832, 0x3, 0x6FB, 0x1 };
+int D_80800338_chjamjarsdummy[18] = { 0x15800B7, 0x7D10001, (u32)&D_8080030C_chjamjarsdummy, (u32)func_808000E0_chjamjarsdummy, (u32)func_80105834, (u32)func_808002AC_chjamjarsdummy, 0x0, 0x0, 0x0, 0x4, (u32)func_80800238_chjamjarsdummy, 0x0, 0x0, (u32)func_80800240_chjamjarsdummy, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };

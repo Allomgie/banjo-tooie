@@ -263,3 +263,6 @@ void fxrain_entrypoint_9(u8 *param_0)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/rain.data.s) is defined here in C.
+ * Values are taken from the ROM. */

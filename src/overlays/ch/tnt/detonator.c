@@ -11,7 +11,7 @@ extern void func_800E1610(s32, f32, f32, f32 *);
 extern void func_80018820(s32, f32, f32);
 extern void func_800BBCB8(s32, s32, s32, s32, void *);
 extern u8 D_80800704_chtntdetonator[];
-extern int D_80800754_chtntdetonator;
+extern int D_80800754_chtntdetonator[];
 extern s16 D_80800790_chtntdetonator[];
 extern Actor *_subaddiefind_entrypoint_2(s32, s32);
 extern void _capod_entrypoint_13(Unk80132ED0 *, Unk80132ED0 *, s32, s32);
@@ -20,7 +20,7 @@ extern void _subaddieDll_entrypoint_4(Actor *, s32);
 extern s32 func_800EEEA8(f32 *);
 extern void func_80101010(f32 *, f32 *);
 typedef struct { u8 pad[0x5F]; u8 f5F; u8 pad60[0x12]; u16 f72:6; u16 rest:10; } TntS;
-extern s32 D_80800798_chtntdetonator;
+extern s32 D_80800798_chtntdetonator[];
 extern void _subaddieaudioloop_entrypoint_4();
 extern void *func_800D674C(s32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
@@ -215,3 +215,18 @@ s32 chtntdetonator_entrypoint_1(Actor *param_0, s32 param_1)
   }
   return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/tnt/detonator.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800754_chtntdetonator -> int[], D_80800798_chtntdetonator -> s32[] */
+extern void func_80105834();
+extern void func_80107C2C();
+u32 D_80800690_chtntdetonator[6] = { 0x0, 0x0, 0x3F800000, 0x9B0044, 0x3F800000, 0x9B0002 };
+void *D_808006A8_chtntdetonator = (void *)0x01580149;
+static u32 D_808006A8_chtntdetonator_rest[17] = { 0x6A10001, (u32)&D_80800690_chtntdetonator, (u32)func_80800054_chtntdetonator, (u32)func_80105834, (u32)func_80800148_chtntdetonator, 0x3200000, 0x0, 0x0, 0x6, 0x0, 0x0, 0x0, (u32)func_8080000C_chtntdetonator, (u32)func_80107C2C, 0x80182402, (u32)func_80800400_chtntdetonator, 0x0 };
+u8 D_808006F0_chtntdetonator[20] = { 0x0, 0x13, 0x4, 0x13, 0x0, 0xA, 0x0, 0xE6, 0x0, 0x18, 0x0, 0x1, 0x4, 0xE2, 0x9, 0xC4, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800704_chtntdetonator[80] = { 0x0, 0x1D, 0x6, 0xA3, 0x0, 0x2C, 0xFC, 0x18, 0x1, 0x90, 0xFC, 0x18, 0x3, 0xE8, 0x2, 0x8A, 0x3, 0xE8, 0x0, 0xA, 0xFF, 0xEC, 0x0, 0x0, 0xFF, 0xEC, 0x0, 0x14, 0x0, 0x4B, 0x0, 0x14, 0x0, 0x1B, 0xFC, 0xE0, 0xFC, 0x18, 0x0, 0x4, 0x0, 0x99, 0x0, 0x7, 0x0, 0x2, 0x0, 0x2B, 0x1, 0x80, 0x2, 0x0, 0x0, 0x15, 0x0, 0x26, 0x0, 0xCC, 0x0, 0x27, 0x0, 0xC8, 0x0, 0xC8, 0x1, 0x90, 0x1, 0x90, 0x0, 0x22, 0x0, 0x99, 0x0, 0xB3, 0x0, 0x66, 0x0, 0x80, 0x0, 0x0 };
+int D_80800754_chtntdetonator[15] = { 0x1D09E2, 0x161000, 0x40099, 0x70004, 0x150000, 0xCC002B, 0x1800200, 0x22004C, 0x590026, 0x33002C, -0xF9FE70, -0xF9FF06, 0x25800FA, 0x1BF830, -0x4B00000 };
+s16 D_80800790_chtntdetonator[4] = { 0xA, 0xC, 0x6, 0xE };
+s32 D_80800798_chtntdetonator[6] = { 0x1304E2, 0x166D60, 0x0, 0x0, 0x0, 0x0 };

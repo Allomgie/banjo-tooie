@@ -3,7 +3,7 @@
 extern void func_80103140();
 extern s32 _chdoor_entrypoint_1(Actor *, s32, s32);
 
-extern u32 D_808001F0_chwitchyentrygates;
+extern u32 D_808001F0_chwitchyentrygates[];
 
 void func_80800000_chwitchyentrygates(Actor* arg0)
 {
@@ -67,3 +67,12 @@ s32 func_80800168_chwitchyentrygates(Actor *param_0, s32 param_1, s32 param_2)
 void* chwitchyentrygates_entrypoint_0(void) {
     return &D_808001F0_chwitchyentrygates;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/witchy/entrygates.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808001F0_chwitchyentrygates -> u32[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+u32 D_808001F0_chwitchyentrygates[20] = { 0xAC0489, 0x96C0001, 0x0, (u32)func_808000B8_chwitchyentrygates, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x20C00, 0x0, 0x0, 0x0, (u32)func_80800000_chwitchyentrygates, (u32)func_80107C2C, 0x80082402, (u32)func_80800168_chwitchyentrygates, 0x0, 0x0, 0x0 };

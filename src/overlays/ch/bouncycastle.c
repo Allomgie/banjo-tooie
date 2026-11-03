@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_80800930_chbouncycastle;
-extern int D_80800978_chbouncycastle;
-extern int D_808009C0_chbouncycastle;
+extern int D_80800930_chbouncycastle[];
+extern int D_80800978_chbouncycastle[];
+extern int D_808009C0_chbouncycastle[];
 extern s32 D_80800A08_chbouncycastle[];
 typedef struct { u8 pad_0[0x70]; u32 pad_5 : 7; u32 active : 1; u32 pad_6 : 2; u32 triggered : 1; u32 pad_7 : 21; u32 pad_8; u32 pad_1 : 8; u32 kind : 4; u32 pad_2 : 20; u32 pad_3 : 19; u32 done : 1; u32 pad_4 : 12; } BounceCastleFlags29;
 extern void *func_801039E4(Unk80132ED0 *);
@@ -269,3 +269,20 @@ s32 func_80800830_chbouncycastle(Actor *param_0, s32 param_1, s32 param_2)
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bouncycastle.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800930_chbouncycastle -> int[], D_80800978_chbouncycastle -> int[], D_808009C0_chbouncycastle -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+extern void func_80101870();
+extern void func_80102EC0();
+extern void func_8010A73C();
+u32 D_80800910_chbouncycastle[8] = { 0x0, 0x0, 0x40E00000, 0x1120044, 0x40E00000, 0x112000A, 0x40E00000, 0x1120084 };
+int D_80800930_chbouncycastle[18] = { 0x2AE034C, 0x6BD0001, (u32)&D_80800910_chbouncycastle, (u32)func_80800254_chbouncycastle, (u32)func_80105834, (u32)func_80800198_chbouncycastle, 0x0, 0x0, 0x0, 0x1C08, 0x0, 0x0, 0x1C0000, (u32)func_8080045C_chbouncycastle, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_80800308_chbouncycastle, 0x0 };
+int D_80800978_chbouncycastle[18] = { 0x2B30351, 0x1, 0x0, (u32)func_808006C4_chbouncycastle, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_80800670_chbouncycastle, (u32)func_80107C2C, -0x7FFFF9FE, (u32)func_80800774_chbouncycastle, 0x0 };
+int D_808009C0_chbouncycastle[18] = { 0xAC03C7, 0x7A00001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_8010A73C, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800828_chbouncycastle, (u32)func_80107C2C, -0x7FFFF3FE, (u32)func_80800830_chbouncycastle, 0x0 };
+s32 D_80800A08_chbouncycastle[18] = { 0xAC03C8, 0x7A00001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_8010A73C, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800828_chbouncycastle, (u32)func_80107C2C, -0x7FFFF3FE, (u32)func_80800830_chbouncycastle, 0x0 };
+u8 D_80800A50_chbouncycastle[12] = { 0x0, 0x13, 0x4, 0xFA, 0x0, 0x18, 0x0, 0x2, 0x0, 0x11, 0x0, 0x0 };
+s32 D_80800A5C_chbouncycastle[5] = { 0x3E5D1746, 0x3ECCCCCD, 0x3F266666, 0x3F6147AE, 0x0 };

@@ -252,3 +252,40 @@ void idworldmake_entrypoint_7(s32 param_0, s32 param_1, s32 param_2)
         local_1++;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/worldmake.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _idlight_entrypoint_2();
+extern void _idlight_entrypoint_1();
+extern void _idscroll_entrypoint_2();
+extern void _idscroll_entrypoint_1();
+extern void func_800EDB20();
+extern void func_800EDAF4();
+extern void _idwater_entrypoint_3();
+extern void _idwater_entrypoint_2();
+extern void _idglow_entrypoint_2();
+extern void _idglow_entrypoint_1();
+extern void _idwave_entrypoint_2();
+extern void _idwave_entrypoint_1();
+extern void _idglowa_entrypoint_3();
+extern void _idglowa_entrypoint_2();
+extern void _idflash_entrypoint_2();
+extern void _idflash_entrypoint_1();
+extern void _idflasha_entrypoint_3();
+extern void _idflasha_entrypoint_2();
+extern void func_800EC898();
+extern void func_800EC890();
+extern void _idwibble_entrypoint_2();
+extern void _idwibble_entrypoint_1();
+extern void _idbounce_entrypoint_4();
+extern void _idbounce_entrypoint_3();
+extern void _idtwinkle_entrypoint_4();
+extern void _idtwinkle_entrypoint_3();
+extern void _idflame_entrypoint_3();
+extern void _idflame_entrypoint_2();
+extern void _idtwinklea_entrypoint_0();
+extern void _idtwinklea_entrypoint_1();
+extern void _idtwinklecolour_entrypoint_4();
+extern void _idtwinklecolour_entrypoint_3();
+WorldMakeCallbacks D_80800AB0_idworldmake[16] = { (void *)_idlight_entrypoint_2, (void *)_idlight_entrypoint_1, (void *)_idscroll_entrypoint_2, (void *)_idscroll_entrypoint_1, (void *)func_800EDB20, (void *)func_800EDAF4, (void *)_idwater_entrypoint_3, (void *)_idwater_entrypoint_2, (void *)_idglow_entrypoint_2, (void *)_idglow_entrypoint_1, (void *)_idwave_entrypoint_2, (void *)_idwave_entrypoint_1, (void *)_idglowa_entrypoint_3, (void *)_idglowa_entrypoint_2, (void *)_idflash_entrypoint_2, (void *)_idflash_entrypoint_1, (void *)_idflasha_entrypoint_3, (void *)_idflasha_entrypoint_2, (void *)func_800EC898, (void *)func_800EC890, (void *)_idwibble_entrypoint_2, (void *)_idwibble_entrypoint_1, (void *)_idbounce_entrypoint_4, (void *)_idbounce_entrypoint_3, (void *)_idtwinkle_entrypoint_4, (void *)_idtwinkle_entrypoint_3, (void *)_idflame_entrypoint_3, (void *)_idflame_entrypoint_2, (void *)_idtwinklea_entrypoint_0, (void *)_idtwinklea_entrypoint_1, (void *)_idtwinklecolour_entrypoint_4, (void *)_idtwinklecolour_entrypoint_3 };

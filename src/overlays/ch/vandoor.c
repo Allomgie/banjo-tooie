@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void *D_80800640_chvandoor;
-extern s32 D_80800688_chvandoor;
+extern s32 D_80800688_chvandoor[];
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800EFE50(f32 *, f32 *, f32 *, f32);
 extern void func_800F5A00(s32, f32 *);
@@ -157,3 +157,14 @@ s32 func_8080044C_chvandoor(param_0) u8 *param_0;
     }
     return func_800EEB40((f32 *)(B_80800690_chvandoor[0] + 4), local_0) > 2250000.0f;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/vandoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800688_chvandoor -> s32[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+void *D_80800640_chvandoor = (void *)0x00AC03CC;
+static u32 D_80800640_chvandoor_rest[17] = { 0x7A50001, 0x0, (u32)func_80800104_chvandoor, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000800, 0x0, 0x0, 0x0, (u32)func_8080000C_chvandoor, (u32)func_80107C2C, 0x80002C12, (u32)func_80800280_chvandoor, 0x0 };
+s32 D_80800688_chvandoor[2] = { 0x130507, 0x0 };

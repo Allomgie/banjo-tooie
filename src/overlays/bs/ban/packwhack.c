@@ -15,7 +15,7 @@
 #include "core2/1E93440.h"
 #include "core2/1ECA640.h"
 
-extern s32 D_808004D0_bsbanpackwhack;
+extern s32 D_808004D0_bsbanpackwhack[];
 extern BsScript D_8080050C_bsbanpackwhack[4];
 
 extern void _babackpack_entrypoint_5(PlayerState *);
@@ -131,3 +131,15 @@ void bsbanpackwhack_entrypoint_2(PlayerState *self) {
 BsScript bsbanpackwhack_entrypoint_3(BsScriptType type) {
     return D_8080050C_bsbanpackwhack[type];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ban/packwhack.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808004D0_bsbanpackwhack -> s32[] */
+extern void _bsbanpackwhack_entrypoint_0();
+extern void _bsbanpackwhack_entrypoint_1();
+extern void _bsbanpackwhack_entrypoint_2();
+extern void func_80099B94();
+s32 D_808004D0_bsbanpackwhack[15] = { 0x1D0622, 0x7802002C, 0x14, 0x0, 0x140000, 0x150000, 0x20026, 0x190, 0x0, 0x1900000, 0x220200, 0x2000100, 0x100002B, 0x330033, 0x0 };
+BsScript D_8080050C_bsbanpackwhack[4] = { (void *)_bsbanpackwhack_entrypoint_0, (void *)_bsbanpackwhack_entrypoint_1, (void *)_bsbanpackwhack_entrypoint_2, (void *)func_80099B94 };
+static u32 D_8080050C_bsbanpackwhack_rest[1] = { 0x0 };

@@ -95,3 +95,6 @@ void baflamethrower_entrypoint_5(u8 *param_0) {
     }
     _baflameline_entrypoint_7(param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/flamethrower.data.s) is defined here in C.
+ * Values are taken from the ROM. */

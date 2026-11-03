@@ -451,3 +451,11 @@ void sukickball_entrypoint_19(Actor *param_0, s32 param_1, s32 param_2)
     }
     local_0->local_2 = 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/kickball.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+Vec3f D_80801200_sukickball = { 0.0f, 0.0f, 0.0f };
+Vec3f D_8080120C_sukickball = { 0.0f, 0.0f, 0.0f };
+s32 D_80801218_sukickball[4] = { 0x4, 0x2, 0x1, 0x3 };
+u8 D_80801228_sukickball[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+f32 D_80801234_sukickball[7] = { 2.7e+02f, 9e+01f, 1.8e+02f, 0.0f, 0.0f, 0.0f, 0.0f };

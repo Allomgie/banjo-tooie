@@ -140,3 +140,6 @@ int basudie_entrypoint_12(Actor *param_0)
     baphysics_reset_terminal_velocity();
   }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/sudie.data.s) is defined here in C.
+ * Values are taken from the ROM. */

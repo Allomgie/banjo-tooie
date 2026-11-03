@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800420_ch1pfreeze;
+extern int D_80800420_ch1pfreeze[];
 typedef struct { u8 pad[0x72]; u16 f72:6; u16 pad72:10; } FreezeState;
 extern int func_800F7B9C();
 extern s32 *func_80100094(FreezeState *, s32);
@@ -142,3 +142,12 @@ Unk80132ED0 *ch1pfreeze_entrypoint_1(u32 param_0)
     func_808002D0_ch1pfreeze(local_0, 2);
     return local_0->unk0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/1pfreeze.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800420_ch1pfreeze -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_80800420_ch1pfreeze[20] = { 0x15802C5, 0x75D0001, 0x0, (u32)func_80800054_ch1pfreeze, (u32)func_80105834, (u32)func_8080014C_ch1pfreeze, 0x0, 0x0, 0x0, 0x20000, (u32)func_80800014_ch1pfreeze, (u32)func_80108ED0, 0x240000, (u32)func_8080000C_ch1pfreeze, (u32)func_80107C2C, -0x7FFFDBEE, (u32)func_80800294_ch1pfreeze, 0x0, 0x0, 0x0 };

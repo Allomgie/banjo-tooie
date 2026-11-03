@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_80800300_chicywind;
-extern s32 D_80800348_chicywind;
-extern s32 D_80800358_chicywind;
+extern int D_80800300_chicywind[];
+extern s32 D_80800348_chicywind[];
+extern s32 D_80800358_chicywind[];
 extern f32 func_800DC178(f32, f32);
 extern void func_800EF1B8(f32 *, f32, f32);
 extern void func_800BBCB8(f32 *, f32 *, f32, s32, void *);
@@ -86,3 +86,14 @@ void func_808001AC_chicywind(param_0) Actor *param_0;
     func_800EEB9C(local_0, func_800F1DF4(param_0->position, local_1), local_2);
     func_800F48BC(local_4, local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/icywind.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800300_chicywind -> int[], D_80800348_chicywind -> s32[], D_80800358_chicywind -> s32[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+int D_80800300_chicywind[18] = { 0x33E03AF, 0x1, 0x0, (u32)func_80800044_chicywind, (u32)func_80105834, (u32)func_8010A730, 0x7D00000, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_8080000C_chicywind, (u32)func_80107C2C, -0x7FFFF9FE, 0x0, 0x0 };
+s32 D_80800348_chicywind[4] = { 0x1304A3, 0xE0166, 0x1CC0033, 0x180000 };
+s32 D_80800358_chicywind[14] = { 0x1D09DD, 0x2D0640, 0x708000E, 0xF0014, 0x220133, 0x1660400, 0x5000015, 0x99, 0x2B0100, 0x1800027, -0xC700C8, 0xC800C8, 0x320000, 0x0 };

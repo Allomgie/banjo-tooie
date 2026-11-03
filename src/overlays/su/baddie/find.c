@@ -276,3 +276,6 @@ Actor **subaddiefind_entrypoint_13(f32 *param_0)
     local_3[local_1] = NULL;
     return local_3;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/find.data.s) is defined here in C.
+ * Values are taken from the ROM. */

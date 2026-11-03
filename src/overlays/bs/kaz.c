@@ -47,3 +47,6 @@ BanjoStateId bskaz_entrypoint_4(PlayerState *self) {
 
     return BS_STATE_C2;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz.data.s) is defined here in C.
+ * Values are taken from the ROM. */

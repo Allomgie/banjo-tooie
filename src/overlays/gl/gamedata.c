@@ -186,3 +186,24 @@ int glgamedata_entrypoint_6(param_0) u8 *param_0;
   }
 
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/gamedata.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808004F4_glgamedata = D_808004F0_glgamedata + 0x4 */
+extern void _glsavegame_entrypoint_5();
+extern void _glsavegame_entrypoint_6();
+extern void func_800DAFC4();
+extern void func_800DB67C();
+extern void func_800DAFCC();
+extern void func_800D1C70();
+extern void func_800D1C78();
+extern void func_800D1DFC();
+extern void func_800D2140();
+extern void func_800D2148();
+extern void func_800D2188();
+extern void func_800DAC08();
+extern void func_800DAC10();
+extern void func_800DAC50();
+GameDataLength1446 D_808004F0_glgamedata[7] = { 0, 0, 0, (void *)func_80800000_glgamedata, 0, (void *)func_80800008_glgamedata, (void *)_glsavegame_entrypoint_5, 0, (void *)_glsavegame_entrypoint_6, (void *)func_800DAFC4, (void *)func_800DB67C, (void *)func_800DAFCC, (void *)func_800D1C70, (void *)func_800D1C78, (void *)func_800D1DFC, (void *)func_800D2140, (void *)func_800D2148, (void *)func_800D2188, (void *)func_800DAC08, (void *)func_800DAC10, (void *)func_800DAC50 };
+GameDataLength1446 D_80800544_glgamedata[1] = { 0, 0, 0 };

@@ -284,7 +284,7 @@ void vplight_entrypoint_4(Vtx *param_0, s32 param_1)
             func_808004B0_vplight(local_7, local_3);
             func_80800518_vplight(local_7, local_2);
             func_800C8900(local_7, local_1);
-            if (1) {} /* SONDE: leerer Block, ohne ihn Metrik 21 (Registerfaerbung) */
+            if (1) {} /* PROBE: empty block; without it 21 words differ (register allocation) */
             local_8 = local_3[0] - param_0->v.ob[0];
             local_9 = local_3[1] - param_0->v.ob[1];
             dz = local_3[2] - param_0->v.ob[2];
@@ -315,3 +315,6 @@ void vplight_entrypoint_4(Vtx *param_0, s32 param_1)
         param_0->v.cn[2] = local_6;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/vp/light.data.s) is defined here in C.
+ * Values are taken from the ROM. */

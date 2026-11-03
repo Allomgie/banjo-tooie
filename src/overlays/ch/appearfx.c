@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800990_chappearfx;
+extern int D_80800990_chappearfx[];
 typedef struct { s32 a; s32 b; } AfxPair;
 extern AfxPair D_80800970_chappearfx[];
 extern void func_800EF1B8(f32 *, f32, f32);
@@ -223,3 +223,12 @@ void chappearfx_entrypoint_3(s32 param_0, s32 param_1, s32 param_2, f32 param_3)
     if (param_1 & 8) _subaddielink_entrypoint_1(local_2->local_11, local_0->unk0);
     if (param_1 & 0x20) _subaddiefade_entrypoint_2(local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/appearfx.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800974_chappearfx = D_80800970_chappearfx + 0x4
+ * extern declarations adjusted to the object (same addresses): D_80800990_chappearfx -> int[] */
+AfxPair D_80800970_chappearfx[4] = { 0x9E3, 0x3E99999A, 0x9E1, 0x3E99999A, 0x9E4, 0x3E99999A, 0x9E9, 0x3E99999A };
+int D_80800990_chappearfx[18] = { 0xA003D9, -0xFFFF, 0x0, (u32)func_80800014_chappearfx, (u32)func_80105834, (u32)func_808003A0_chappearfx, 0x0, 0x0, 0x0, 0x20000, (u32)func_8080031C_chappearfx, 0x0, 0x0, (u32)func_8080000C_chappearfx, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800360_chappearfx, 0x0 };
+u8 D_808009D8_chappearfx[24] = { 0x0, 0x13, 0x4, 0x80, 0x0, 0x18, 0x0, 0xD, 0x0, 0xE6, 0x1, 0x19, 0x0, 0x2, 0x0, 0x1B, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

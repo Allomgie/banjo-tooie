@@ -136,3 +136,14 @@ void glintrosyncDll_entrypoint_6(s32 param_0)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/introsyncDll.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808004A8_glintrosyncDll = D_808004A4_glintrosyncDll + 0x4 */
+s32 D_808004A0_glintrosyncDll = 0xA8;
+f32 D_808004A4_glintrosyncDll[1][2] = { 64.6f, 2.27e-43f };
+static u32 D_808004A4_glintrosyncDll_rest[1] = { 0x42EC0000 };
+s32 D_808004B0_glintrosyncDll = 0xA9;
+static u32 D_808004B0_glintrosyncDll_rest[1] = { 0x43180000 };
+s32 D_808004B8_glintrosyncDll[16] = { 0xA3, 0x43344000, 0xAA, 0x437C0000, 0xA4, 0x43921333, 0xAB, 0x43D9A000, 0xA5, 0x43E60000, 0xAC, 0x43ECC000, 0xA6, 0x43FE0000, 0xA7, 0x440D8000 };
+IntroKey90 D_808004F8_glintrosyncDll[27] = { 0xA1, 1.02f, 0xA8, 0.94f, 0xA2, 0.98f, 0xA9, 0.98f, 0xA3, 0.88f, 0xAA, 0.9f, 0xA4, 0.92f, 0xAB, 1.0f, 0xA5, 0.95f, 0xAC, 1.0f, 0xA6, 0.89f, 0xA7, 0.97f, 0x18E, 1.0f, 0x18C, 1.0f, 0x18F, 0.95f, 0x190, 0.8f, 0x17E, 0.95f, 0x18D, 0.95f, 0x194, 0.95f, 0x197, 0.95f, 0x198, 0.95f, 0x199, 0.95f, 0x195, 0.95f, 0x193, 0.9f, 0x192, 0.94f, 0x191, 1.0f, 0x196, 1.0f };

@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800400_chklungoforcefield;
+extern int D_80800400_chklungoforcefield[];
 extern u8 D_80800460_chklungoforcefield[];
 extern u8 D_80800448_chklungoforcefield[];
 extern s32 func_800DC298(f32);
@@ -104,3 +104,15 @@ void func_80800288_chklungoforcefield(Actor *param_0, s32 param_1)
     func_800DE448(param_0->position, local_0, param_0->scale, local_3, local_4);
     *((u8 *)param_0 + 0x9B) = local_2;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/klungo/forcefield.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800400_chklungoforcefield -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_80800400_chklungoforcefield[18] = { 0xB40421, 0x8220001, 0x0, (u32)func_808000F0_chklungoforcefield, (u32)func_80105834, (u32)func_80800288_chklungoforcefield, 0x0, 0x0, 0x0, 0x100404, (u32)func_808001D4_chklungoforcefield, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chklungoforcefield, (u32)func_80107C2C, -0x7FFFE000, (u32)func_80800228_chklungoforcefield, 0x0 };
+u8 D_80800448_chklungoforcefield[24] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3F, 0x0, 0x0, 0x0, 0x3F, 0x80, 0x0, 0x0, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800460_chklungoforcefield[12] = { 0x0, 0x0, 0x0, 0x20, 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0xFF };
+f32 D_8080046C_chklungoforcefield[5] = { 1.746925e-39f, 1.286037e-39f, 2.571401e-38f, 2.031591e-39f, 0.0f };

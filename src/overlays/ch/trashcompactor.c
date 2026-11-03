@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_80800918_chtrashcompactor;
-extern int D_80800960_chtrashcompactor;
-extern int D_808009A8_chtrashcompactor;
+extern int D_80800918_chtrashcompactor[];
+extern int D_80800960_chtrashcompactor[];
+extern int D_808009A8_chtrashcompactor[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern void func_800C87DC(f32 *);
 extern void func_80101180(s32, s32, s32);
@@ -28,7 +28,7 @@ extern void func_80104004(Actor *, f32 *, f32 *);
 
 int chtrashcompactor_entrypoint_0(void)
 {
-    extern int D_808008D0_chtrashcompactor;
+    extern int D_808008D0_chtrashcompactor[];
     return (int)&D_808008D0_chtrashcompactor;
 }
 
@@ -265,3 +265,23 @@ void func_8080081C_chtrashcompactor(Actor *param_0)
     func_800C87DC(local_0);
     _subaddiefade_entrypoint_11(param_0, local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/trashcompactor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808008D0_chtrashcompactor -> int[], D_80800918_chtrashcompactor -> int[], D_80800960_chtrashcompactor -> int[], D_808009A8_chtrashcompactor -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void func_80102EC0();
+extern u8 D_8011A270[];
+extern void _chswitch_entrypoint_6();
+extern void _chdoor_entrypoint_0();
+extern void _chdoor_entrypoint_1();
+int D_808008D0_chtrashcompactor[18] = { 0x31903B4, 0x7460001, 0x0, (u32)func_808000BC_chtrashcompactor, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x400, 0x0, 0x0, 0x0, (u32)func_80800030_chtrashcompactor, (u32)func_80107C2C, -0x7FF7FBEE, (u32)func_80800684_chtrashcompactor, 0x0 };
+int D_80800918_chtrashcompactor[18] = { 0x31A03B5, 0x7470001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x404, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FF7F7EE, 0x0, 0x0 };
+int D_80800960_chtrashcompactor[18] = { 0x34303B6, 0x7B80001, (u32)&D_8011A270, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x0, (u32)func_808007A4_chtrashcompactor, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_808007DC_chtrashcompactor, 0x0 };
+int D_808009A8_chtrashcompactor[18] = { 0xAC03B7, 0x7A30001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x20800, 0x0, 0x0, 0x0, (u32)func_8080081C_chtrashcompactor, (u32)func_80107C2C, -0x7FF7DBEE, (u32)_chdoor_entrypoint_1, 0x0 };
+u8 D_808009F0_chtrashcompactor[12] = { 0x0, 0x0, 0x0, 0x0, 0x44, 0x7A, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808009FC_chtrashcompactor[16] = { 0x0, 0x13, 0x4, 0xCE, 0x0, 0xD, 0x0, 0xC0, 0x0, 0xD9, 0x0, 0x18, 0x0, 0x2, 0x0, 0x0 };
+u8 D_80800A0C_chtrashcompactor[36] = { 0x0, 0x13, 0x4, 0xDC, 0x0, 0xC, 0x0, 0x0, 0x0, 0xD9, 0x1, 0x4C, 0x1, 0x19, 0x0, 0x15, 0x0, 0x0, 0x0, 0xD9, 0x0, 0x33, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

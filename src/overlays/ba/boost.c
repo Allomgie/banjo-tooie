@@ -71,3 +71,6 @@ void baboost_entrypoint_5(PlayerState *self) {
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/boost.data.s) is defined here in C.
+ * Values are taken from the ROM. */

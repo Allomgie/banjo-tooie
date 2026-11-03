@@ -3,7 +3,7 @@
 extern Unk80132ED0 *func_80101080(void);
 extern Actor *func_80106790(Unk80132ED0 *);
 extern void _chexploder_entrypoint_6(Actor *, f32, f32);
-extern int D_808001B8_chexplodingchainlinks;
+extern int D_808001B8_chexplodingchainlinks[];
 void func_8080010C_chexplodingchainlinks();
 
 int chexplodingchainlinks_entrypoint_0()
@@ -53,3 +53,13 @@ void func_8080010C_chexplodingchainlinks(param_0, param_1) s32 param_0; f32 *par
     sp24[1] = param_1[1];
     func_800BBCB8(sp24, sp24, 0x3F4CCCCD, 4, &D_808001B8_chexplodingchainlinks);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/explodingainlinks.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808001B8_chexplodingchainlinks -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+void *D_80800170_chexplodingchainlinks = (void *)0x01580473;
+static u32 D_80800170_chexplodingchainlinks_rest[17] = { 0x7BC0001, 0x0, (u32)func_80800014_chexplodingchainlinks, (u32)func_80105834, (u32)func_80800034_chexplodingchainlinks, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_8080000C_chexplodingchainlinks, (u32)func_80107C2C, 0x80000002, (u32)func_80800070_chexplodingchainlinks, 0x0 };
+int D_808001B8_chexplodingchainlinks[14] = { 0x1D09E2, 0x220026, 0x260019, 0x190027, 0xC8, 0xF0, 0x150000, 0xCC002B, 0x14C01B3, 0x2D00FA, 0x190000E, 0xA0014, 0x1BFC18, -0x3200000 };

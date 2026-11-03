@@ -182,3 +182,16 @@ int bsjig_entrypoint_11(s32 param_0)
 {
   return D_808005C0_bsjig[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/jig.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsjig_entrypoint_5();
+extern void _bsjig_entrypoint_1();
+extern void _bsjig_entrypoint_3();
+extern void _bsjig_entrypoint_7();
+extern void _bsjig_entrypoint_8();
+extern void _bsjig_entrypoint_9();
+extern void _bsjig_entrypoint_10();
+s32 D_808005B0_bsjig[4] = { (u32)_bsjig_entrypoint_5, (u32)_bsjig_entrypoint_1, (u32)_bsjig_entrypoint_3, (u32)_bsjig_entrypoint_7 };
+s32 D_808005C0_bsjig[4] = { (u32)_bsjig_entrypoint_8, (u32)_bsjig_entrypoint_9, (u32)_bsjig_entrypoint_10, (u32)_bsjig_entrypoint_7 };

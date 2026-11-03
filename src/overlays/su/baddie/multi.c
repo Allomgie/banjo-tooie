@@ -117,3 +117,6 @@ void subaddiemulti_entrypoint_6(f32 *param_0, f32 param_1)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/multi.data.s) is defined here in C.
+ * Values are taken from the ROM. */

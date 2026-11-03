@@ -45,3 +45,6 @@ s32 sufade_entrypoint_2(void){
         D_80127EF4 = 0;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/fade.data.s) is defined here in C.
+ * Values are taken from the ROM. */

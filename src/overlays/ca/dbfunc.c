@@ -733,3 +733,6 @@ int cadbfunc_entrypoint_35(s32 param_0)
     *ptr = param_0;
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ca/dbfunc.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -39,3 +39,6 @@ void dbvpl_entrypoint_1(s32 param_0, DbVplVertex *param_1, s32 param_2, s32 *par
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/vpl.data.s) is defined here in C.
+ * Values are taken from the ROM. */

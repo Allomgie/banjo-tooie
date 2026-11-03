@@ -360,3 +360,6 @@ void bafly_entrypoint_21(PlayerState *param_0)
     local_1 = func_800F10B4(local_0, 0.1f, 1.0f, local_0 * local_0, 1.0f);
     func_8009BFE4(param_0, 1000.0f * local_1, 2.2f);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/fly.data.s) is defined here in C.
+ * Values are taken from the ROM. */

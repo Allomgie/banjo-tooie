@@ -23,3 +23,6 @@ s32 ncstart_entrypoint_0(s32 param_0, f32 param_1[3], f32 param_2[3])
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/start.data.s) is defined here in C.
+ * Values are taken from the ROM. */

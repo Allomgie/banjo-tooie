@@ -60,3 +60,6 @@ void ncbadive_entrypoint_4(int param_0)
 {
     func_800EF410(*(int *)(param_0 + 0x18));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/dive.data.s) is defined here in C.
+ * Values are taken from the ROM. */

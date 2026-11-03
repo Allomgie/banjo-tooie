@@ -178,3 +178,6 @@ void glid_entrypoint_6(void *param_0, s32 param_1)
   new_var2 = 6;
  new_var4 = new_var2; ((s32 *) param_0)[new_var4] = param_1; if (new_var2 ^ 0) { if (new_var2) { } }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/id.data.s) is defined here in C.
+ * Values are taken from the ROM. */

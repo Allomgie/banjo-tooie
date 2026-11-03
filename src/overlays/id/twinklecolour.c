@@ -163,3 +163,7 @@ void idtwinklecolour_entrypoint_5(u8 *param_0, s32 param_1, s32 param_2)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/twinklecolour.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80800970_idtwinklecolour[5][3] = { 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

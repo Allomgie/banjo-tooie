@@ -521,3 +521,29 @@ void bswalk_entrypoint_22(PlayerState *param_0, f32 param_1)
         func_8009FF44(param_0, 12, 225.0f, 500.0f, 0.54f, 0.44f);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/walk.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bswalk_entrypoint_2();
+extern void _bswalk_entrypoint_3();
+extern void _bswalk_entrypoint_4();
+extern void func_8009AB78();
+extern void _bswalk_entrypoint_8();
+extern void _bswalk_entrypoint_6();
+extern void _bswalk_entrypoint_7();
+extern void _bswalk_entrypoint_12();
+extern void _bswalk_entrypoint_10();
+extern void _bswalk_entrypoint_11();
+extern void _bswalk_entrypoint_16();
+extern void _bswalk_entrypoint_14();
+extern void _bswalk_entrypoint_15();
+extern void _bswalk_entrypoint_18();
+extern void _bswalk_entrypoint_19();
+extern void _bswalk_entrypoint_20();
+extern void func_80099B94();
+s32 D_80801520_bswalk[4] = { (u32)_bswalk_entrypoint_2, (u32)_bswalk_entrypoint_3, (u32)_bswalk_entrypoint_4, (u32)func_8009AB78 };
+s32 D_80801530_bswalk[4] = { (u32)_bswalk_entrypoint_8, (u32)_bswalk_entrypoint_6, (u32)_bswalk_entrypoint_7, (u32)func_8009AB78 };
+s32 D_80801540_bswalk[4] = { (u32)_bswalk_entrypoint_12, (u32)_bswalk_entrypoint_10, (u32)_bswalk_entrypoint_11, (u32)func_8009AB78 };
+s32 D_80801550_bswalk[4] = { (u32)_bswalk_entrypoint_16, (u32)_bswalk_entrypoint_14, (u32)_bswalk_entrypoint_15, (u32)func_8009AB78 };
+s32 D_80801560_bswalk[4] = { (u32)_bswalk_entrypoint_18, (u32)_bswalk_entrypoint_19, (u32)_bswalk_entrypoint_20, (u32)func_80099B94 };

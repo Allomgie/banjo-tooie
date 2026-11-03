@@ -69,3 +69,6 @@ int subaddiebounce_entrypoint_2(Actor *param_0)
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/bounce.data.s) is defined here in C.
+ * Values are taken from the ROM. */

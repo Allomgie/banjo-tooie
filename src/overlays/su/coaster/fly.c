@@ -1,7 +1,7 @@
 #include "su/coasterfly.h"
 
 #define OD(n) (((f32 *)param_0->actorData)[n])
-extern int D_80802280_sucoasterfly;
+extern int D_80802280_sucoasterfly[];
 typedef struct { u8 pad_0[0xC]; f32 local_0; u8 pad_1; u8 local_1 : 4; u8 pad_2 : 4; u8 pad_3[6]; s16 local_2; } CoasterFlightRoute;
 extern void *func_80100074(Actor *, u32, u32);
 typedef struct { u32 pad74_4 : 28; u32 unk74_0 : 4; } ActorFlags74;
@@ -1194,3 +1194,12 @@ void sucoasterfly_entrypoint_6()
     func_80101870();
 }
 
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/coaster/fly.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80802280_sucoasterfly -> int[] */
+int D_80802280_sucoasterfly[5] = { 0x0, (u32)func_80800F44_sucoasterfly, (u32)func_80800FA8_sucoasterfly, (u32)func_80801108_sucoasterfly, 0x0 };
+u8 D_80802294_sucoasterfly[24] = { 0x0, 0x13, 0x4, 0x17, 0x0, 0xD, 0x1, 0xC, 0x1, 0x26, 0x0, 0x16, 0x65, 0x90, 0x0, 0x1, 0x3, 0x20, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808022AC_sucoasterfly[16] = { 0x0, 0x13, 0x4, 0x1F, 0x0, 0xD, 0x0, 0xC0, 0x0, 0xD9, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x0 };
+u8 D_808022BC_sucoasterfly[20] = { 0x0, 0x21, 0x0, 0x1D, 0x0, 0x1E, 0x0, 0x1, 0x5, 0xDC, 0xB, 0xB8, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

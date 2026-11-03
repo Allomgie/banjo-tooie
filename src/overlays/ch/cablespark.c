@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800B88_chcablespark;
+extern int D_80800B88_chcablespark[];
 extern f32 func_800DC178(f32, f32);
 typedef union { s32 word; f32 value; } CableEvent30;
 extern void func_800EEB9C(f32 *, f32, f32);
@@ -35,7 +35,7 @@ s32 func_808007B8_chcablespark();
 
 int chcablespark_entrypoint_0()
 {
-  return (int)&D_80800B88_chcablespark;
+  return (int)D_80800B88_chcablespark;
 }
 
 s32 func_80800970_chcablespark();
@@ -290,3 +290,17 @@ void func_80800A48_chcablespark(param_0) Actor *param_0;
         param_0->unk64_24 = 0;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/cablespark.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800B88_chcablespark -> int[] (uses written as NAME[0]) */
+extern void func_80105834();
+extern void func_80107C2C();
+extern u8 boot_thread_stack[];
+u32 D_80800B70_chcablespark[3] = { 0xC0, 0xC0, 0xFF };
+static u32 D_80800B70_chcablespark_rest[3] = { 0x80, 0x80, 0xA0 };
+int D_80800B88_chcablespark[18] = { 0x2A4033D, 0x6B90001, 0x0, (u32)func_8080000C_chcablespark, (u32)func_80105834, (u32)func_8080040C_chcablespark, 0x7080000, 0x0, 0x0, 0x0, (u32)func_808002BC_chcablespark, 0x0, 0x0, (u32)func_8080024C_chcablespark, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0x1F23), (u32)func_808002E8_chcablespark, 0x0 };
+u8 D_80800BD0_chcablespark[12] = { 0x0, 0x13, 0x5, 0xC, 0x0, 0xD, 0x1, 0xC, 0x1, 0x19, 0x0, 0x0 };
+CableSparkRange26 D_80800BDC_chcablespark = { 2.5e+02f, 4e+02f };
+static u32 D_80800BDC_chcablespark_rest[3] = { 0x0, 0x0, 0x0 };

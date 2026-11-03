@@ -3,7 +3,7 @@
 extern f32 func_800EFC7C();
 extern u8 D_80800270_chfoodwarn[];
 extern u8 D_8080028C_chfoodwarn[];
-extern int D_808002A8_chfoodwarn;
+extern int D_808002A8_chfoodwarn[];
 
 int func_80800000_chfoodwarn(s32 param_0, s32 param_1, s32 param_2)
 {
@@ -66,3 +66,14 @@ int *chfoodwarn_entrypoint_0()
 {
     return &D_808002A8_chfoodwarn;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/foodwarn.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808002A8_chfoodwarn -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+u8 D_80800270_chfoodwarn[28] = { 0x0, 0x0, 0x5, 0xDC, 0x10, 0xE9, 0x10, 0xEA, 0x0, 0x0, 0x0, 0x1, 0x10, 0xEA, 0x0, 0x0, 0x0, 0x22, 0x0, 0x0, 0x0, 0xC, 0x1, 0xFA, 0x0, 0x0, 0x0, 0x0 };
+u8 D_8080028C_chfoodwarn[28] = { 0x0, 0x0, 0x5, 0xDC, 0x0, 0x0, 0x10, 0xEA, 0x0, 0x0, 0x0, 0x1, 0x10, 0xEA, 0x0, 0x0, 0x0, 0x22, 0x0, 0x0, 0x0, 0xC, 0x0, 0xFA, 0x0, 0x0, 0x0, 0x0 };
+int D_808002A8_chfoodwarn[18] = { 0x15804BF, 0x8DC0001, 0x0, (u32)func_808000D4_chfoodwarn, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0x801, 0x0, 0x0, 0x0, (u32)func_8080003C_chfoodwarn, (u32)func_80107C2C, -0x7FFFDBEE, (u32)func_808001F4_chfoodwarn, 0x0 };

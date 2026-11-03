@@ -1,8 +1,8 @@
 #include "common.h"
 
 typedef struct StadiumDoorState { u8 pad_0[0x72]; u8 local_0 : 6; u8 pad_1 : 2; } StadiumDoorState;
-extern s32 D_80800270_chstadiumdoors;
-extern int D_80800280_chstadiumdoors;
+extern s32 D_80800270_chstadiumdoors[];
+extern int D_80800280_chstadiumdoors[];
 
 void func_80800000_chstadiumdoors(Actor *param_0)
 {
@@ -88,3 +88,13 @@ int *chstadiumdoors_entrypoint_0()
 {
     return &D_80800280_chstadiumdoors;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/stadiumdoors.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800270_chstadiumdoors -> s32[], D_80800280_chstadiumdoors -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+s32 D_80800270_chstadiumdoors[4] = { 0x1304AD, 0x1661A8, 0x100FA, 0xA8C0000 };
+int D_80800280_chstadiumdoors[20] = { 0x2550172, 0x65D0001, 0x0, (u32)func_808000FC_chstadiumdoors, (u32)func_80105834, (u32)func_80101870, 0x13880000, 0x0, 0x0, 0x80804, 0x0, 0x0, 0x0, (u32)func_80800000_chstadiumdoors, (u32)func_80107C2C, -0x7FF7FFFE, 0x0, 0x0, 0x0, 0x0 };

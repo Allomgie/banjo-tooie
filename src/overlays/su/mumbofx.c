@@ -512,3 +512,9 @@ int sumumbofx_entrypoint_28(s32 param_0, s32 param_1, f32 param_2, f32 param_3)
   (*(f32 *)((char *)(param_0) + 0x34)) = param_2 * param_2;
   (*(f32 *)((char *)(param_0) + 0x38)) = param_3 * param_3;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/mumbofx.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_808014D0_sumumbofx[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+Vec3f D_808014DC_sumumbofx = { 0.0f, 0.0f, 0.0f };
+static u32 D_808014DC_sumumbofx_rest[2] = { 0x0, 0x0 };

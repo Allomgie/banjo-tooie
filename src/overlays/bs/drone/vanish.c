@@ -127,3 +127,10 @@ s32 bsdronevanish_entrypoint_2(Actor *this){
     func_80092778(this);
     _bastatemem_entrypoint_1(this);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/drone/vanish.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s32 D_80800560_bsdronevanish[3] = { 0x1B02BC, 0x4B0011A, 0x0 };
+s32 D_8080056C_bsdronevanish[3] = { 0x1BFD44, -0x4AFFEE6, 0x0 };
+void *D_80800578_bsdronevanish = (void *)0x00290015;
+static u32 D_80800578_bsdronevanish_rest[9] = { 0x4C00CC, 0xAFFD3, 0xFFD3, 0x2D0000, 0x2D0022, 0x260038, 0x7000C, 0x2B008C, 0x8C0000 };

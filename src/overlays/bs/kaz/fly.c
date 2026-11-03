@@ -729,3 +729,18 @@ void func_80801BB4_bskazfly(PlayerState *self) {
 s32 bskazfly_entrypoint_9(s32 idx) {
     return D_80801CC8_bskazfly[idx];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/fly.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099AA8();
+s32 D_80801C10_bskazfly[10] = { 0x1D09E4, 0x150019, 0x990022, 0x660059, 0x190019, 0x270190, 0x1900320, 0x320002B, 0x800080, 0x0 };
+s32 D_80801C38_bskazfly[4] = { (u32)func_808003E0_bskazfly, (u32)func_80800248_bskazfly, (u32)func_80800320_bskazfly, (u32)func_80801AF0_bskazfly };
+s32 D_80801C48_bskazfly[4] = { (u32)func_808008A8_bskazfly, (u32)func_8080042C_bskazfly, (u32)func_80800540_bskazfly, (u32)func_80801AF0_bskazfly };
+s32 D_80801C58_bskazfly[4] = { (u32)func_808010DC_bskazfly, (u32)func_80800CF4_bskazfly, (u32)func_80800EB4_bskazfly, (u32)func_80801AF0_bskazfly };
+s32 D_80801C68_bskazfly[4] = { (u32)func_80801320_bskazfly, (u32)func_8080111C_bskazfly, (u32)func_80801248_bskazfly, (u32)func_80801AF0_bskazfly };
+s32 D_80801C78_bskazfly[4] = { (u32)func_808017B0_bskazfly, (u32)func_80801448_bskazfly, (u32)func_80801640_bskazfly, (u32)func_80099AA8 };
+s32 D_80801C88_bskazfly[4] = { (u32)func_8080185C_bskazfly, (u32)func_80801800_bskazfly, (u32)func_80801838_bskazfly, (u32)func_80801AF0_bskazfly };
+s32 D_80801C98_bskazfly[4] = { (u32)func_808018F4_bskazfly, (u32)func_80801898_bskazfly, (u32)func_808018D0_bskazfly, (u32)func_80801AF0_bskazfly };
+s32 D_80801CA8_bskazfly[4] = { (u32)func_8080198C_bskazfly, (u32)func_80801930_bskazfly, (u32)func_80801964_bskazfly, (u32)func_80099B94 };
+s32 D_80801CB8_bskazfly[4] = { (u32)func_80801ABC_bskazfly, (u32)func_808019C8_bskazfly, (u32)func_80801A38_bskazfly, (u32)func_80099B94 };
+s32 D_80801CC8_bskazfly[6] = { (u32)func_80801BB4_bskazfly, (u32)func_80801B50_bskazfly, (u32)func_80801B94_bskazfly, (u32)_bsdrone_entrypoint_3, 0x0, 0x0 };

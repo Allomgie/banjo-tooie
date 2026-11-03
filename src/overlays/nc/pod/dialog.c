@@ -957,3 +957,7 @@ s32 ncpoddialog_entrypoint_11(param_0, param_1, param_2) s32 param_0; s32 param_
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/pod/dialog.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+PodDialogEntry D_80802A40_ncpoddialog[8] = { 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, -5.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, -5.0f, 0.0f, 0.0f, 0.0f, -2e+01f, 0.0f, 0.0f, 2e+01f, 0.0f, 0.0f, 0.0f };

@@ -59,3 +59,6 @@ int glrecord_entrypoint_4()
     ((s32 *) &D_8012D5B0)[1] = 0;
   }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/record.data.s) is defined here in C.
+ * Values are taken from the ROM. */

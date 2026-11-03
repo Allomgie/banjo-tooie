@@ -48,3 +48,9 @@ void func_8080019C_bsmumsplat(PlayerState *self) {
 s32 bsmumsplat_entrypoint_0(s32 idx) {
     return D_808001E0_bsmumsplat[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/mum/splat.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099AA8();
+s32 D_808001E0_bsmumsplat[4] = { (u32)func_8080019C_bsmumsplat, (u32)func_80800000_bsmumsplat, (u32)func_808000A0_bsmumsplat, (u32)func_80099AA8 };

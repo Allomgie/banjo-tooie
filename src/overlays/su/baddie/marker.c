@@ -40,3 +40,6 @@ s32 subaddiemarker_entrypoint_1(s32 param_0, f32 *param_1, s32 param_2, MarkerSe
     }
     return local_1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/marker.data.s) is defined here in C.
+ * Values are taken from the ROM. */

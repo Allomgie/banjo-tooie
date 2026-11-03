@@ -154,3 +154,6 @@ void idtwinkle_entrypoint_6(u8 *param_0, s32 *param_1, s32 *param_2)
   *param_1 = *((s32 *) (((s8 *) param_0) + 0x2C));
   *param_2 = ((*((s16 *) (((s8 *) param_0) + 0x28))) * 0x10) + (*((s32 *) (((s8 *) param_0) + 0x2C)));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/twinkle.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -67,3 +67,6 @@ void fxdialog_entrypoint_4(s32 param_0, s32 param_1, s32 param_2, f32 param_3, f
     local_0[1] = ((s32 *) &B_80800290_fxdialog)[3] + param_4 * 4.0f * local_2;
     func_800E30E0(param_0, func_800D674C(param_1), param_2, local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/dialog.data.s) is defined here in C.
+ * Values are taken from the ROM. */

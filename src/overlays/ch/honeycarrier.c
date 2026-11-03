@@ -2,7 +2,7 @@
 
 extern u32 D_808003E0_chhoneycarrier[3];
 extern f32 D_808003EC_chhoneycarrier[2];
-extern u32 D_808003F4_chhoneycarrier;
+extern u32 D_808003F4_chhoneycarrier[];
 
 //Called when the object is touched
 void func_80800000_chhoneycarrier(Actor* arg0, unkStructHoneyCarrier* arg1)
@@ -105,3 +105,13 @@ u32* chhoneycarrier_entrypoint_0(void)
 {
     return &D_808003F4_chhoneycarrier;
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/honeycarrier.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808003F4_chhoneycarrier -> u32[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_808003E0_chhoneycarrier[3] = { 0xFF, 0xFF, 0xC0 };
+f32 D_808003EC_chhoneycarrier[2] = { 2.5e+02f, 3.5e+02f };
+u32 D_808003F4_chhoneycarrier[19] = { 0x530220, 0x6120001, 0x0, (u32)func_80800260_chhoneycarrier, (u32)func_80105834, (u32)func_80800380_chhoneycarrier, 0x0, 0x3F4CCCCD, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800210_chhoneycarrier, (u32)func_80107C2C, 0x88003000, (u32)func_808000C4_chhoneycarrier, 0x0, 0x0 };

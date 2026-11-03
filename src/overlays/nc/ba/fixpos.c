@@ -75,3 +75,6 @@ void ncbafixpos_entrypoint_4(u8 *param_0, s32 param_1) {
     (*(s8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x20)))) + (0x1A))) = 0;
     func_80112570(param_0, (*(u8 **)((s8 *)(param_0) + (0x20))) + 0xC, 0x42C80000);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/fixpos.data.s) is defined here in C.
+ * Values are taken from the ROM. */

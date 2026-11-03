@@ -489,3 +489,29 @@ int bsjump_entrypoint_20(s32 param_0)
 {
   return D_80801150_bsjump[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/jump.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsjump_entrypoint_2();
+extern void _bsjump_entrypoint_0();
+extern void _bsjump_entrypoint_1();
+extern void func_80099B94();
+extern void _bsjump_entrypoint_6();
+extern void _bsjump_entrypoint_4();
+extern void _bsjump_entrypoint_5();
+extern void _bsjump_entrypoint_10();
+extern void _bsjump_entrypoint_8();
+extern void _bsjump_entrypoint_9();
+extern void _bsjump_entrypoint_14();
+extern void _bsjump_entrypoint_12();
+extern void _bsjump_entrypoint_13();
+extern void func_80099AA8();
+extern void _bsjump_entrypoint_19();
+extern void _bsjump_entrypoint_17();
+extern void _bsjump_entrypoint_18();
+s32 D_80801110_bsjump[4] = { (u32)_bsjump_entrypoint_2, (u32)_bsjump_entrypoint_0, (u32)_bsjump_entrypoint_1, (u32)func_80099B94 };
+s32 D_80801120_bsjump[4] = { (u32)_bsjump_entrypoint_6, (u32)_bsjump_entrypoint_4, (u32)_bsjump_entrypoint_5, (u32)func_80099B94 };
+s32 D_80801130_bsjump[4] = { (u32)_bsjump_entrypoint_10, (u32)_bsjump_entrypoint_8, (u32)_bsjump_entrypoint_9, (u32)func_80099B94 };
+s32 D_80801140_bsjump[4] = { (u32)_bsjump_entrypoint_14, (u32)_bsjump_entrypoint_12, (u32)_bsjump_entrypoint_13, (u32)func_80099AA8 };
+s32 D_80801150_bsjump[4] = { (u32)_bsjump_entrypoint_19, (u32)_bsjump_entrypoint_17, (u32)_bsjump_entrypoint_18, (u32)func_80099B94 };

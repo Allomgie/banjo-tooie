@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern int D_80800A50_chfactorycrusher;
-extern int D_80800A98_chfactorycrusher;
+extern int D_80800A50_chfactorycrusher[];
+extern int D_80800A98_chfactorycrusher[];
 extern void *func_80100094(Actor *, u32);
 extern void func_800EF1B8(f32 *, f32, f32);
 extern void func_800EF934(f32 *, f32 *, f32);
@@ -285,3 +285,16 @@ int func_808009BC_chfactorycrusher(s32 param_0[4], unsigned int param_1)
   }
   _chswitch_entrypoint_10(param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/crusher.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800A50_chfactorycrusher -> int[], D_80800A98_chfactorycrusher -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+extern u8 D_8011A270[];
+extern void _chswitch_entrypoint_6();
+extern int func_80101870();
+int D_80800A50_chfactorycrusher[18] = { 0x31F03BA, 0x74A0001, 0x0, (u32)func_80800150_chfactorycrusher, (u32)func_80105834, (u32)func_8080067C_chfactorycrusher, 0x0, 0x0, 0x0, 0x20000400, 0x0, 0x0, 0x1C0000, (u32)func_80800018_chfactorycrusher, (u32)func_80107C2C, -0x7FF7FBFE, (u32)func_80800580_chfactorycrusher, 0x0 };
+int D_80800A98_chfactorycrusher[18] = { 0x34303BB, 0x9420001, (u32)&D_8011A270, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x0, (u32)func_80800984_chfactorycrusher, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_808009BC_chfactorycrusher, 0x0 };
+u8 D_80800AE0_chfactorycrusher[32] = { 0x0, 0x13, 0x4, 0xCE, 0x0, 0xD, 0x0, 0xC0, 0x0, 0xD9, 0x0, 0x18, 0x0, 0x1, 0x7, 0xD0, 0x1F, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

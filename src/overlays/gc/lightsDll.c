@@ -148,3 +148,12 @@ s32 gclightsDll_entrypoint_5(param_0) s32 param_0;
 {
   func_800EE830(func_800C911C() + 0x10, param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/lightsDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+void *D_80800560_gclightsDll = 0;
+static u32 D_80800560_gclightsDll_rest[2] = { 0x0, 0x0 };
+void *D_8080056C_gclightsDll = (void *)0x000000FF;
+static u32 D_8080056C_gclightsDll_rest[2] = { 0xFF, 0xFF };
+void *D_80800578_gclightsDll = 0;
+static u32 D_80800578_gclightsDll_rest[5] = { 0x3F800000, 0x0, 0x0, 0x0, 0x0 };

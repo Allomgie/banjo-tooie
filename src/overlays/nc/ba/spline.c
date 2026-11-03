@@ -263,3 +263,6 @@ void ncbaspline_entrypoint_7(param_0, param_1) u8 *param_0; s32 param_1;
 int ncbaspline_entrypoint_8(void *param_0) {
     return (*(int **)((char *)param_0 + 0x44))[0x28 / 4] < 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/spline.data.s) is defined here in C.
+ * Values are taken from the ROM. */

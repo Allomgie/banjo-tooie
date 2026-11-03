@@ -24,3 +24,8 @@ void fxspgold_entrypoint_2(s32 param_0)
   local_0 = func_800B56D0(*local_1);
   func_800BABB8(local_0 | 0, param_0, 0, 1.0f, &D_80800090_fxspgold);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/spgold.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+void *D_80800090_fxspgold = (void *)0x001BFF06;
+static u32 D_80800090_fxspgold_rest[11] = { 0xFF060015, 0x6600CC, 0x220038, 0x380007, 0x70027, 0xC8, 0xF0, 0x2B00B3, 0xB30016, 0x10000000, 0x0 };

@@ -1,16 +1,16 @@
 #include "common.h"
 
-extern int D_80800E00_chfloaty;
+extern int D_80800E00_chfloaty[];
 extern void _chbaddiesetup_entrypoint_6(void *, void *, s32, s32, s32, s32, s32);
 extern void _subaddietaxi_entrypoint_16(void);
 extern s32 *_chfloaty_entrypoint_0(void);
 extern Actor *func_80108528(s32, f32 *, s32, Actor **);
 extern void func_801015D0(Actor *);
-extern s32 D_80800EA8_chfloaty;
+extern s32 D_80800EA8_chfloaty[];
 typedef struct { u8 pad[0x64]; u32 pad64:12; u32 flag:1; u32 rest:19; } FloatyS;
 extern void func_800FCAE0(s32, s32, s32);
 extern void func_800FCA90(s32);
-extern int D_80800EF0_chfloaty;
+extern int D_80800EF0_chfloaty[];
 extern s32 _plsu_entrypoint_3(Unk80132ED0 *);
 extern void func_800F7BC8(s32, s32, Unk80132ED0 *);
 extern s32 func_80101E14(Actor *, f32);
@@ -37,7 +37,7 @@ extern void _subaddieDll_entrypoint_4(Actor *, s32);
 extern void _subaddietaxi_entrypoint_5(Actor *, s32);
 extern f32 func_800F12D4(f32, f32, f32, f32, f32);
 extern void func_800EFE50(f32 *, f32 *, f32 *, f32);
-extern s32 D_80800E84_chfloaty;
+extern s32 D_80800E84_chfloaty[];
 extern f32 func_800C6920(f32 *, f32, f32, s32);
 extern void func_800F7C0C(s32, s32, f32);
 extern void func_800EEB9C(f32 *, f32, f32);
@@ -331,3 +331,17 @@ int chfloaty_entrypoint_1()
 {
     return (int)&D_80800EF0_chfloaty;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/floaty.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800E00_chfloaty -> int[], D_80800E84_chfloaty -> s32[], D_80800EA8_chfloaty -> s32[], D_80800EF0_chfloaty -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_80800E00_chfloaty[2] = { (u32)func_8080000C_chfloaty, (u32)func_80800020_chfloaty };
+u32 D_80800E08_chfloaty[31] = { 0x0, 0x0, 0x40B00000, 0x1D40009, 0x3F75C28F, 0x1D5004A, 0x3FE66666, 0x4260009, 0x3FE66666, 0x4260009, 0x3FE66666, 0x4260009, 0x3FE66666, 0x4260009, 0x1D09E6, 0x1B00C8, 0x15E0016, 0x1000002C, 0x0, 0x0, 0x640000, 0xE0000, 0x460027, 0x64, 0xC8, 0x220080, 0x190066, 0x990015, 0xF00CC, 0x2B0100, 0x1000000 };
+s32 D_80800E84_chfloaty[9] = { 0x43E10000, 0x444F0000, -0x3BC48000, -0x3A6B9000, 0x45AD1000, -0x3AB62000, 0x456D8000, 0x45DAC000, 0x450C0000 };
+s32 D_80800EA8_chfloaty[18] = { 0x1D09E6, 0x1BFD44, 0x12C002D, 0x6400C8, 0xD001E, 0x161002, 0x270000, 0x640000, 0xC80022, 0x0, 0x4C0099, 0x150033, 0xB3002B, 0xC00100, 0x40099, 0x70003, 0x31FFF6, -0xA0000 };
+int D_80800EF0_chfloaty[20] = { 0x1580486, 0x9240001, (u32)&D_80800E08_chfloaty, (u32)func_80800118_chfloaty, (u32)func_80105834, (u32)func_801018A4, 0x7D00000, 0x3F800000, 0x0, 0x800124, (u32)func_80800C4C_chfloaty, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x79FFC000, (u32)func_8080090C_chfloaty, 0x0, 0x0, 0x0 };

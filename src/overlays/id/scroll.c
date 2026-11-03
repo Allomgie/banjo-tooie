@@ -39,3 +39,6 @@ void idscroll_entrypoint_3(ScrollState *param_0, void *param_1, void *param_2)
     param_0->wrapped = (s32)param_0->offset;
     _glid_entrypoint_0(param_1, param_2, _idscroll_entrypoint_0, param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/scroll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

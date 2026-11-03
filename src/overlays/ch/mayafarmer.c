@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern s32 D_8080124C_chmayafarmer;
+extern s32 D_8080124C_chmayafarmer[];
 extern u8 unk6E[];
 extern u8 unk6C[];
 typedef struct { s32 f0; s32 f4; u8 pad[0x6C]; u8 pad74:1; u8 flag:1; u8 rest:6; } FarmerState;
@@ -14,9 +14,9 @@ extern void func_800EEC30(f32 *, f32, f32, f32);
 extern void func_800EF04C(f32 *, f32 *);
 extern s32 func_80102CF4(Actor *, f32);
 extern void func_80102B2C(Actor *, f32);
-extern s32 D_808012E8_chmayafarmer;
+extern s32 D_808012E8_chmayafarmer[];
 extern void _subaddieaudioloop_entrypoint_4();
-extern int D_808012FC_chmayafarmer;
+extern int D_808012FC_chmayafarmer[];
 typedef union { s32 local_0; s16 local_1[2]; } MayaFarmerEvent;
 extern u8 D_8080125C_chmayafarmer[];
 extern Vec3f D_8080126C_chmayafarmer;
@@ -457,3 +457,25 @@ int *chmayafarmer_entrypoint_1()
 {
     return &D_808012FC_chmayafarmer;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/mayafarmer.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_8080124C_chmayafarmer -> s32[], D_808012E8_chmayafarmer -> s32[], D_808012FC_chmayafarmer -> int[] */
+extern void func_80101870();
+extern void func_80107C2C();
+extern void func_80105834();
+extern void func_80108ED0();
+u32 D_808011E0_chmayafarmer[12] = { 0x0, 0x0, 0x3F400000, 0x1970001, 0x3F400000, 0x1970001, 0x40DCCCCD, 0x19D0002, 0x3F666666, 0x1980001, 0x3F666666, 0x1980001 };
+u8 D_80801210_chmayafarmer[16] = { 0x0, 0x13, 0x3, 0xFF, 0x0, 0xD, 0x0, 0xCC, 0x1, 0x66, 0x0, 0x16, 0x55, 0xF0, 0x0, 0x0 };
+u8 D_80801220_chmayafarmer[16] = { 0x0, 0x13, 0x4, 0x2, 0x0, 0xA, 0x1, 0x99, 0x0, 0x16, 0x3E, 0x80, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80801230_chmayafarmer[12] = { 0x0, 0x13, 0x4, 0xB3, 0x0, 0x16, 0x55, 0xF0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_8080123C_chmayafarmer[16] = { 0x0, 0x13, 0x4, 0x1F, 0x0, 0xA, 0x1, 0x66, 0x0, 0x16, 0x55, 0xF0, 0x0, 0x0, 0x0, 0x0 };
+s32 D_8080124C_chmayafarmer[4] = { 0x441C4000, 0x43BB8000, 0x437A0000, 0x43AF0000 };
+u8 D_8080125C_chmayafarmer[16] = { 0x44, 0x3B, 0x80, 0x0, 0x43, 0xBB, 0x80, 0x0, 0x43, 0x7A, 0x0, 0x0, 0x43, 0x7A, 0x0, 0x0 };
+Vec3f D_8080126C_chmayafarmer = { 3369.0f, 3e+03f, -5688.0f };
+void *D_80801278_chmayafarmer = (void *)0x0230019B;
+static u32 D_80801278_chmayafarmer_rest[17] = { 0x6600001, (u32)&D_808011E0_chmayafarmer, (u32)func_80800540_chmayafarmer, 0x0, (u32)func_80101870, 0xDAC0000, 0x40AAAAAB, 0x0, 0x800160, (u32)func_80800520_chmayafarmer, 0x0, 0x0, (u32)func_8080085C_chmayafarmer, (u32)func_80107C2C, 0x86006482, (u32)func_80800228_chmayafarmer, 0x0 };
+u32 D_808012C0_chmayafarmer[10] = { 0x0, 0x0, 0x3F400000, 0x19E0001, 0x3F400000, 0x19E0001, 0x3ECCCCCD, 0x19F0041, 0x3F666666, 0x1A00042 };
+s32 D_808012E8_chmayafarmer[5] = { 0x13049B, 0x161388, 0xE00E6, 0x1190180, 0x0 };
+int D_808012FC_chmayafarmer[21] = { 0x2BD02F8, 0x6620001, (u32)&D_808012C0_chmayafarmer, (u32)func_808009A0_chmayafarmer, (u32)func_80105834, (u32)func_80101870, 0xBB80000, 0x0, 0x0, 0x20000D, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800B9C_chmayafarmer, (u32)func_80107C2C, -0x7DDFBF80, (u32)func_808008F8_chmayafarmer, 0x0, 0x0, 0x0, 0x0 };

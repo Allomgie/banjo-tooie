@@ -2,8 +2,8 @@
 #include <types.h>
 
 #define EGGBIT(p) (((EggBit75 *)(p))->f1)
-extern int D_80801328_chterryegg;
-extern int D_80801370_chterryegg;
+extern int D_80801328_chterryegg[];
+extern int D_80801370_chterryegg[];
 extern s32 D_808013B8_chterryegg[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern void func_800EF1B8(f32 *, f32, f32);
@@ -23,15 +23,15 @@ extern u8 _subaddietaxi_entrypoint_16[];
 extern Prop *B_80801460_chterryegg[];
 typedef struct { u8 local_0[0x74]; u32 : 11; u32 local_1 : 1; u32 : 20; } TerryEggFlags36;
 typedef struct { float unk4; float unk58; } ChTerryEgg;
-extern ChTerryEgg D_80801410_chterryegg;
+extern ChTerryEgg D_80801410_chterryegg[];
 int func_800D9078(int param_0);
 void _subaddieaudioquick_entrypoint_2(ChTerryEgg *param_0, float *param_1, ChTerryEgg *param_2);
 float func_800DC178(float param_0, float param_1);
-extern s32 D_80801424_chterryegg;
-extern s32 D_8080126C_chterryegg;
-extern s32 D_80801438_chterryegg;
+extern s32 D_80801424_chterryegg[];
+extern s32 D_8080126C_chterryegg[];
+extern s32 D_80801438_chterryegg[];
 extern void _subaddieaudioquick_entrypoint_4(s32, s32, s32 *, s32 *);
-extern s32 D_80801450_chterryegg;
+extern s32 D_80801450_chterryegg[];
 extern void _subaddieaudioquick_entrypoint_3(u8 *, u8 *, void *, f32);
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern s32 func_80101E14(Actor *, f32);
@@ -533,3 +533,23 @@ f32 func_80801188_chterryegg(param_0, param_1) Actor *param_0; s32 param_1;
         return func_80801138_chterryegg(param_0) ? 4.0f : 2.0f;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/terryegg.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_8080126C_chterryegg -> s32[], D_80801328_chterryegg -> int[], D_80801370_chterryegg -> int[], D_80801410_chterryegg -> ChTerryEgg[], D_80801424_chterryegg -> s32[], D_80801438_chterryegg -> s32[], D_80801450_chterryegg -> s32[] */
+extern int func_80105834();
+extern void func_801018A4();
+void *D_80801260_chterryegg[3] = { (void *)func_80800E0C_chterryegg, (void *)func_80800D20_chterryegg, (void *)0x14100D4E };
+s32 D_8080126C_chterryegg[5] = { 0x130562, 0xD00F3, 0x10C0001, 0x19005DC, 0x0 };
+u32 D_80801280_chterryegg[16] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x40B00000, 0x1D40001, 0x40B00000, 0x1D40001, 0x3F75C28F, 0x1D50002, 0x0, 0x0 };
+u8 D_808012C0_chterryegg[104] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3F, 0xC0, 0x0, 0x0, 0x1, 0xF9, 0x0, 0x2, 0x40, 0x7B, 0x85, 0x1F, 0x1, 0xFB, 0x0, 0x1, 0x41, 0x9, 0x99, 0x9A, 0x1, 0xFA, 0x0, 0x1, 0x3E, 0xCC, 0xCC, 0xCD, 0x1, 0x68, 0x0, 0x1, 0x41, 0x9, 0x99, 0x9A, 0x1, 0xFA, 0x0, 0x1, 0x41, 0x9, 0x99, 0x9A, 0x1, 0xFA, 0x0, 0x1, 0x41, 0x9, 0x99, 0x9A, 0x1, 0xFA, 0x0, 0x1, 0x40, 0x7B, 0x85, 0x1F, 0x1, 0xFB, 0x0, 0x1, 0x41, 0x9, 0x99, 0x9A, 0x1, 0xFA, 0x0, 0x1, 0x40, 0x7B, 0x85, 0x1F, 0x1, 0xFB, 0x0, 0x1, 0x41, 0x9, 0x99, 0x9A, 0x1, 0xFA, 0x0, 0x1 };
+int D_80801328_chterryegg[18] = { 0x31203AA, 0x7020001, (u32)&D_80801280_chterryegg, (u32)func_808000A8_chterryegg, (u32)func_80105834, (u32)func_801018A4, 0x3E80000, 0x3F4CCCCD, 0x7BD, 0x40000808, 0x0, 0x0, 0x810, (u32)func_80800030_chterryegg, (u32)func_80107C2C, -0x7DFEDBFE, (u32)func_8080023C_chterryegg, 0x0 };
+int D_80801370_chterryegg[18] = { 0x9E03D6, 0x7030001, (u32)&D_808012C0_chterryegg, (u32)func_808005C4_chterryegg, (u32)func_808009B4_chterryegg, (u32)func_80101870, 0x7D00000, 0x3ECCCCCD, 0x0, 0x40040104, 0x0, (u32)func_80108ED0, 0x40000, (u32)func_8080057C_chterryegg, (u32)func_80107C2C, -0x7FFFFFF0, (u32)func_80800A2C_chterryegg, 0x0 };
+s32 D_808013B8_chterryegg[18] = { 0x9E03D7, 0x703000B, (u32)&D_808012C0_chterryegg, (u32)func_80800C48_chterryegg, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x3ECCCCCD, 0x0, 0x50802100, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7DFFDBEE, (u32)func_80800C70_chterryegg, 0x0 };
+u8 D_80801400_chterryegg[16] = { 0x0, 0x13, 0x3, 0xFF, 0x0, 0xD, 0x1, 0x26, 0x1, 0x40, 0x0, 0x16, 0x2E, 0xE0, 0x0, 0x0 };
+ChTerryEgg D_80801410_chterryegg[2] = { 1.746807e-39f, 1.194202e-39f, 2.5713942e-38f, 5.2905654e-38f };
+static u32 D_80801410_chterryegg_rest[1] = { 0x5A050000 };
+s32 D_80801424_chterryegg[5] = { 0x130563, 0xD00F3, 0x10C0001, 0x19005DC, 0x0 };
+s32 D_80801438_chterryegg[6] = { 0x3DCCCCCD, 0x3E19999A, 0x3E570A3D, 0x3F19999A, 0x3F75C28F, -0x40800000 };
+s32 D_80801450_chterryegg[4] = { 0x130561, 0x20018, 0x0, 0x0 };

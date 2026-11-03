@@ -342,3 +342,24 @@ void bskazjump_entrypoint_14(PlayerState *self) {
 s32 bskazjump_entrypoint_15(s32 idx) {
     return D_80800C70_bskazjump[idx];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/jump.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bskazjump_entrypoint_2();
+extern void _bskazjump_entrypoint_0();
+extern void _bskazjump_entrypoint_1();
+extern void _bskazshoessuckspline_entrypoint_0();
+extern void _bskazjump_entrypoint_4();
+extern void _bskazjump_entrypoint_5();
+extern void _bskazjump_entrypoint_6();
+extern void _bskazjump_entrypoint_10();
+extern void _bskazjump_entrypoint_8();
+extern void _bskazjump_entrypoint_9();
+extern void func_80099B94();
+extern void _bskazjump_entrypoint_12();
+extern void _bskazjump_entrypoint_13();
+extern void _bskazjump_entrypoint_14();
+s32 D_80800C40_bskazjump[4] = { (u32)_bskazjump_entrypoint_2, (u32)_bskazjump_entrypoint_0, (u32)_bskazjump_entrypoint_1, (u32)_bskazshoessuckspline_entrypoint_0 };
+s32 D_80800C50_bskazjump[4] = { (u32)_bskazjump_entrypoint_4, (u32)_bskazjump_entrypoint_5, (u32)_bskazjump_entrypoint_6, (u32)_bskazshoessuckspline_entrypoint_0 };
+s32 D_80800C60_bskazjump[4] = { (u32)_bskazjump_entrypoint_10, (u32)_bskazjump_entrypoint_8, (u32)_bskazjump_entrypoint_9, (u32)func_80099B94 };
+s32 D_80800C70_bskazjump[4] = { (u32)_bskazjump_entrypoint_12, (u32)_bskazjump_entrypoint_13, (u32)_bskazjump_entrypoint_14, (u32)func_80099B94 };

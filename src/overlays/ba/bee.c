@@ -13,8 +13,8 @@
 #include "core2/1ECE0B0.h"
 #include "core2/1ECD170.h"
 
-extern s32 D_80800390_babee;
-extern s32 D_808003BC_babee;
+extern s32 D_80800390_babee[];
+extern s32 D_808003BC_babee[];
 
 s32 babee_entrypoint_0(void) {
     return sizeof(BaBee);
@@ -102,3 +102,9 @@ void babee_entrypoint_8(PlayerState *self) {
         bee->cooldown -= func_800D8FF8();
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/bee.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800390_babee -> s32[], D_808003BC_babee -> s32[] */
+s32 D_80800390_babee[11] = { 0x1D09E2, 0x150019, 0x4C0016, 0x10000022, 0xCC00CC, 0x70007, 0x270000, 0x1F40000, 0x384002B, 0x260026, 0x0 };
+s32 D_808003BC_babee[5] = { 0x13061B, 0x164E20, 0xD0100, 0x1190011, 0x0 };

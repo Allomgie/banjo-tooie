@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_80800290_charea51gate;
+extern int D_80800290_charea51gate[];
 extern void func_800EC398(void *, f32 *);
-extern int D_808002D8_charea51gate;
+extern int D_808002D8_charea51gate[];
 typedef struct { u8 pad[0x7C]; u32 pad7C:19; u32 flag:1; u32 rest:12; } GateState;
 extern void _chelectricfence_entrypoint_2();
 extern int func_800DC298(f32);
@@ -66,3 +66,14 @@ void func_80800228_charea51gate(param_0) s32 param_0;
     func_800FFAB0(param_0);
     func_800DA544(0xA7);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/area51gate.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800290_charea51gate -> int[], D_808002D8_charea51gate -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_80800290_charea51gate[18] = { 0x2A70342, 0x7800001, 0x0, (u32)func_80800054_charea51gate, (u32)func_80105834, (u32)func_80101870, 0x17700000, 0x0, 0xA70000, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_charea51gate, (u32)func_80107C2C, -0x7FFFDC00, (u32)func_808000A0_charea51gate, 0x0 };
+int D_808002D8_charea51gate[6] = { 0x1304C8, 0xA00E6, 0x180000, 0x0, 0x0, 0x0 };

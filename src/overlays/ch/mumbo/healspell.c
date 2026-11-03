@@ -6,7 +6,7 @@ extern HealingParticleColor D_808008E8_chmumbohealspell;
 extern HealingParticleColor D_808008F4_chmumbohealspell;
 extern void *func_80100094(Actor *, u32);
 extern void _sumumbofx_entrypoint_6(void *, f32, f32, s32, s32, HealingParticleColor *, HealingParticleColor *, HealingParticleColor *);
-extern int D_80800900_chmumbohealspell;
+extern int D_80800900_chmumbohealspell[];
 extern Actor *_subaddiefind_entrypoint_2(s32, s32);
 extern f32 func_80103EAC(Actor *);
 extern void _sumumbofx_entrypoint_14(void *);
@@ -218,3 +218,16 @@ int chmumbohealspell_entrypoint_0()
 {
     return (int)&D_80800900_chmumbohealspell;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/mumbo/healspell.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800900_chmumbohealspell -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_808008D0_chmumbohealspell[3] = { 0x0, 0x0, 0x0 };
+HealingParticleColor D_808008DC_chmumbohealspell = { 0x42B40000, 0x43870000, 0x0 };
+HealingParticleColor D_808008E8_chmumbohealspell = { 0x0, 0x0, 0x0 };
+HealingParticleColor D_808008F4_chmumbohealspell = { 0x447A0000, 0x43FA0000, -0x3B790000 };
+int D_80800900_chmumbohealspell[20] = { 0x15804D8, -0xFFFF, 0x0, (u32)func_80800074_chmumbohealspell, (u32)func_80105834, (u32)func_80800800_chmumbohealspell, 0x0, 0x40000000, 0x0, 0x400, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chmumbohealspell, (u32)func_80107C2C, -0x7FFFFC00, (u32)func_808003A8_chmumbohealspell, 0x0, 0x0, 0x0 };

@@ -163,3 +163,6 @@ void chbaddiesetup_entrypoint_10(ArgS param_0, f32 param_1) {
     _chbounce_entrypoint_2(param_1);
     _chbounce_entrypoint_6(param_0.a, local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bad/diesetup.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -21,3 +21,6 @@ void bastatemem_entrypoint_3(void *param_0)
 {
     *(s32 *)((char *)param_0 + 392) = 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/statemem.data.s) is defined here in C.
+ * Values are taken from the ROM. */

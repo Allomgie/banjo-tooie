@@ -24,3 +24,5 @@ void suinv_entrypoint_0(s32* arg0, s32 failure, s32 success, s32 itemType, s32 a
         }
     }
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/inv.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -381,3 +381,6 @@ s32 func_80800ECC_sudeflect(f32 *param_0, f32 *param_1, f32 *param_2, f32 param_
     if (local_3 >= 0.0f || local_4 <= 0.0f) return 0;
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/deflect.data.s) is defined here in C.
+ * Values are taken from the ROM. */

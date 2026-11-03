@@ -281,3 +281,14 @@ int bsvanswim_entrypoint_4(s32 param_0)
 {
   return D_808009C0_bsvanswim[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/vanswim.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsvan_entrypoint_8();
+extern void _bsvan_entrypoint_9();
+s32 D_80800980_bsvanswim[4] = { (u32)func_808001CC_bsvanswim, (u32)func_80800200_bsvanswim, (u32)func_808002D0_bsvanswim, (u32)_bsvan_entrypoint_8 };
+s32 D_80800990_bsvanswim[4] = { (u32)func_808005E8_bsvanswim, (u32)func_8080042C_bsvanswim, (u32)func_8080049C_bsvanswim, (u32)_bsvan_entrypoint_8 };
+s32 D_808009A0_bsvanswim[4] = { (u32)func_80800808_bsvanswim, (u32)func_8080061C_bsvanswim, (u32)func_808006D0_bsvanswim, (u32)_bsvan_entrypoint_8 };
+s32 D_808009B0_bsvanswim[4] = { (u32)func_8080083C_bsvanswim, (u32)func_80800864_bsvanswim, (u32)func_8080088C_bsvanswim, (u32)_bsvan_entrypoint_8 };
+s32 D_808009C0_bsvanswim[4] = { (u32)func_80800934_bsvanswim, (u32)func_808008E4_bsvanswim, (u32)func_8080090C_bsvanswim, (u32)_bsvan_entrypoint_9 };

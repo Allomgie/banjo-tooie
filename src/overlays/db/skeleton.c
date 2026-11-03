@@ -47,3 +47,6 @@ s16 dbskeleton_entrypoint_4(u8 *param_0, int param_1)
 {
   return *(s16 *)((u8 *)param_0 + (param_1 << 4) + 20);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/skeleton.data.s) is defined here in C.
+ * Values are taken from the ROM. */

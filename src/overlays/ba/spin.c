@@ -92,3 +92,6 @@ s32 baspin_entrypoint_3(PlayerState *param_0)
     if (_batimer_get(param_0, 11) == 0.0f && baanim_isStopped(param_0)) return 2;
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/spin.data.s) is defined here in C.
+ * Values are taken from the ROM. */

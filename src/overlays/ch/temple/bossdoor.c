@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808001C0_chtemplebossdoor;
+extern int D_808001C0_chtemplebossdoor[];
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 
@@ -48,3 +48,13 @@ s32 func_808000E8_chtemplebossdoor(Actor *param_0, s32 param_1, s32 param_2)
     }
     return _chdoor_entrypoint_1(param_0, param_1, param_2);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/temple/bossdoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808001C0_chtemplebossdoor -> int[] */
+extern void _chdoor_entrypoint_0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_808001C0_chtemplebossdoor[20] = { 0xAC02B4, 0x83F0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_8080000C_chtemplebossdoor, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_808000E8_chtemplebossdoor, 0x0, 0x0, 0x0 };

@@ -117,3 +117,6 @@ int bapackctrl_entrypoint_5(param_0, param_1) u8 *param_0; u32 param_1;
         (*(PackState48 **)(param_0 + 0xD8))->local_3);
     func_800984CC(param_0, (*(PackState48 **)(param_0 + 0xD8))->local_4);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/packctrl.data.s) is defined here in C.
+ * Values are taken from the ROM. */

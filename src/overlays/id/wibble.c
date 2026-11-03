@@ -159,3 +159,9 @@ void idwibble_entrypoint_4(f32 *param_0, s32 param_1, s32 param_2) {
 void idwibble_entrypoint_5(param_0, param_1) s32 param_0; s16 param_1; {
     *(s16 *)(param_0 + 0x34) = param_1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/wibble.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080077E_idwibble = D_80800770_idwibble + 0xE, D_8080078E_idwibble = D_80800780_idwibble + 0xE */
+WibbleRecord D_80800770_idwibble[1] = { 0x43, 0xC8, 0x0, 0x0, 0x41, 0xA0, 0x0, 0x0, 0x41, 0xA0, 0x0, 0x0, 0xA, 0x1, 0x0 };
+u32 D_80800780_idwibble[20] = { 0x43C80000, 0x41A00000, 0x40800000, 0x32080064, 0x43C80000, 0x41A00000, 0x40800000, 0x320000C8, 0x43C80000, 0x41A00000, 0x40800000, 0x8012C, 0x43C80000, 0x0, 0x40800000, 0x32080190, 0x43C80000, 0xC3480000, 0xC2200000, 0x32000384 };

@@ -174,3 +174,6 @@ int subaddieDll_entrypoint_12(s16 param_0[3], s16 *param_1)
   param_1[0] = func_800DC128(param_0[0], param_0[2]);
   param_1[1] = func_800DC128(param_0[1], param_0[3]);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/Dll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

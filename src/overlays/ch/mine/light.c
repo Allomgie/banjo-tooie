@@ -5,7 +5,7 @@ extern void *_idworld_entrypoint_3(s32);
 extern void *func_800BEA88(s32);
 extern void func_800EDDDC(void *, f32 *, f32 *, f32);
 extern s32 D_80800688_chminelight[];
-extern s32 D_808006AC_chminelight;
+extern s32 D_808006AC_chminelight[];
 typedef struct { u8 pad_0[0x72]; u16 st : 6; u16 rest : 10; } MineLightState;
 extern u8 D_80800660_chminelight[];
 extern u8 D_80800674_chminelight[];
@@ -151,3 +151,15 @@ int *chminelight_entrypoint_0()
 {
     return ((int *) &D_808006AC_chminelight);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/mine/light.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808006AC_chminelight -> s32[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+u8 D_80800660_chminelight[20] = { 0x0, 0x13, 0x4, 0xFC, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x16, 0x2E, 0xE0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800674_chminelight[20] = { 0x0, 0x13, 0x4, 0xFC, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x16, 0x17, 0x70, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80800688_chminelight[9] = { 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xA, 0xB };
+s32 D_808006AC_chminelight[21] = { 0x2C80303, 0x4, 0x0, (u32)func_8080011C_chminelight, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_808004CC_chminelight, 0x0, 0x1B0000, (u32)func_808004D4_chminelight, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_80800000_chminelight, 0x0, 0x0, 0x0, 0x0 };

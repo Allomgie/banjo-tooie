@@ -1,15 +1,15 @@
 #include "common.h"
 
 extern Actor *func_80106790();
-extern s32 D_80800920_chfantasylakebits;
-extern s32 D_80800928_chfantasylakebits;
-extern s32 D_80800934_chfantasylakebits;
-extern s32 D_80800940_chfantasylakebits;
-extern s32 D_80800980_chfantasylakebits;
-extern s32 D_808009B8_chfantasylakebits;
-extern s32 D_808009C4_chfantasylakebits;
-extern s32 D_808009D0_chfantasylakebits;
-extern s32 D_808009DC_chfantasylakebits;
+extern s32 D_80800920_chfantasylakebits[];
+extern s32 D_80800928_chfantasylakebits[];
+extern s32 D_80800934_chfantasylakebits[];
+extern s32 D_80800940_chfantasylakebits[];
+extern s32 D_80800980_chfantasylakebits[];
+extern s32 D_808009B8_chfantasylakebits[];
+extern s32 D_808009C4_chfantasylakebits[];
+extern s32 D_808009D0_chfantasylakebits[];
+extern s32 D_808009DC_chfantasylakebits[];
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800EFE50(f32 *, void *, void *, f32);
 extern s32 func_800BBCB8(f32 *, s32, f32, s32, s32 *);
@@ -19,12 +19,12 @@ extern void _subaddieaudioloop_entrypoint_0(Actor *, f32);
 extern void _subaddieaudioloop_entrypoint_4(Actor *, void *, s32, void *);
 extern f32 func_800F1DF4(f32 *, f32 *);
 extern void func_800DF500(f32, f32, f32);
-extern int D_80800A30_chfantasylakebits;
-extern s32 D_80800A78_chfantasylakebits;
-extern s32 D_80800AB4_chfantasylakebits;
-extern s32 D_80800ADC_chfantasylakebits;
+extern int D_80800A30_chfantasylakebits[];
+extern s32 D_80800A78_chfantasylakebits[];
+extern s32 D_80800AB4_chfantasylakebits[];
+extern s32 D_80800ADC_chfantasylakebits[];
 extern s32 _fxairbub_entrypoint_1(f32 *, f32, f32, f32);
-extern int D_80800AF0_chfantasylakebits;
+extern int D_80800AF0_chfantasylakebits[];
 extern f32 func_800F5628(void *);
 extern void _chfantasylakebits_entrypoint_0(void);
 void func_80800300_chfantasylakebits();
@@ -240,3 +240,26 @@ int chfantasylakebits_entrypoint_2()
 {
     return (int)&D_80800AF0_chfantasylakebits;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fantasy/lakebits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800920_chfantasylakebits -> s32[], D_80800928_chfantasylakebits -> s32[], D_80800934_chfantasylakebits -> s32[], D_80800940_chfantasylakebits -> s32[], D_80800980_chfantasylakebits -> s32[], D_808009B8_chfantasylakebits -> s32[], D_808009C4_chfantasylakebits -> s32[], D_808009D0_chfantasylakebits -> s32[], D_808009DC_chfantasylakebits -> s32[], D_80800A30_chfantasylakebits -> int[], D_80800A78_chfantasylakebits -> s32[], D_80800AB4_chfantasylakebits -> s32[], D_80800ADC_chfantasylakebits -> s32[], D_80800AF0_chfantasylakebits -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+s32 D_80800920_chfantasylakebits[2] = { 0x20013, 0x56A0000 };
+s32 D_80800928_chfantasylakebits[3] = { 0x20013, 0x3EC0016, 0x7D000000 };
+s32 D_80800934_chfantasylakebits[3] = { -0x39BCB000, -0x3A860000, 0x45BB8000 };
+s32 D_80800940_chfantasylakebits[16] = { 0x1D09CB, 0x161210, 0x1B012C, 0x258002C, -0x960000, -0x95FF6A, 0x96, 0xE0064, 0x640022, 0x190033, 0x26004C, 0x1500B3, 0xE6002B, 0x330066, 0x70001, 0x0 };
+s32 D_80800980_chfantasylakebits[14] = { 0x1D09F3, 0x20FFFF, -0x14BFFDE, 0x660080, 0x33004C, 0x1BF254, -0xDABFFF9, 0x1002B, 0xA000A00, 0x160200, 0xE004B, 0x4B001E, 0xC800C8, 0x0 };
+s32 D_808009B8_chfantasylakebits[3] = { -0x39BC6000, -0x3A736000, 0x45BE0000 };
+s32 D_808009C4_chfantasylakebits[3] = { -0x39BC6000, -0x3AC48000, 0x45BE0000 };
+s32 D_808009D0_chfantasylakebits[3] = { -0x39BC6000, -0x3A63C000, 0x45BE0000 };
+s32 D_808009DC_chfantasylakebits[21] = { 0x1D09DD, 0x161210, 0x180000, 0x70F00, 0x1E00001B, -0x2570190, 0x2CFF6A, 0xFF6A, 0x960000, 0x96000E, 0x640064, 0x220080, 0x800180, 0x3000015, 0x330080, 0x2B00CC, 0x133002F, 0x350066, 0x350000, 0x0, 0xCC0000 };
+int D_80800A30_chfantasylakebits[18] = { 0x1580415, 0x1, 0x0, (u32)func_8080007C_chfantasylakebits, (u32)func_80105834, (u32)func_801018A4, 0x3A98, 0x0, 0x0, 0x1000, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_80800570_chfantasylakebits, 0x0 };
+s32 D_80800A78_chfantasylakebits[15] = { 0x1D09DD, 0x2B0800, 0xA000022, 0x1800200, 0x4800600, 0x150000, 0x260019, 0x7, 0x2D0032, 0x640020, -0x21588E40, 0xAFF9C, 0x19FF9C, 0x64004B, 0x640000 };
+s32 D_80800AB4_chfantasylakebits[10] = { 0x1D092F, 0x14002D, 0x1900258, 0x1BFCE0, -0x257FFDE, 0xB300CC, 0xB300B3, 0x1E0032, 0x32000D, 0x4B0000 };
+s32 D_80800ADC_chfantasylakebits[5] = { 0x130413, 0xA00E6, 0x166D60, 0x2001B, 0x0 };
+int D_80800AF0_chfantasylakebits[20] = { 0x10B0414, 0x92A0001, 0x0, 0x0, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808006F4_chfantasylakebits, (u32)func_80107C2C, -0x7FFFD400, (u32)func_8080073C_chfantasylakebits, 0x0, 0x0, 0x0 };

@@ -8,7 +8,7 @@ extern void func_80102B2C(void *arg0, float arg1);
 extern u8 D_808003C8_chstoneballcoach[];
 extern f32 func_800DC0C0(void);
 extern void func_80101EE4(s32, f32);
-extern int D_808003D4_chstoneballcoach;
+extern int D_808003D4_chstoneballcoach[];
 
 s32 func_80800000_chstoneballcoach(Actor *param_0, s32 param_1, s32 param_2)
 {
@@ -105,3 +105,15 @@ int *chstoneballcoach_entrypoint_0()
 {
     return &D_808003D4_chstoneballcoach;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/stoneballcoa.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808003D4_chstoneballcoach -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80107C2C();
+u32 D_808003A0_chstoneballcoach[6] = { 0x0, 0x0, 0x40800000, 0x7B0000, 0x40800000, 0x7B0000 };
+u8 D_808003B8_chstoneballcoach[16] = { 0x43, 0x20, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0, 0x42, 0x20, 0x0, 0x0 };
+u8 D_808003C8_chstoneballcoach[12] = { 0xC4, 0x96, 0x0, 0x0, 0xC3, 0xAF, 0x0, 0x0, 0xC3, 0xAF, 0x0, 0x0 };
+int D_808003D4_chstoneballcoach[19] = { 0x2570173, 0x6760001, (u32)&D_808003A0_chstoneballcoach, (u32)func_80800140_chstoneballcoach, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x80004, 0x0, 0x0, 0x0, (u32)func_8080035C_chstoneballcoach, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_80800000_chstoneballcoach, 0x0, 0x0 };

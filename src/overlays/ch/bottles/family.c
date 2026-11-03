@@ -1,14 +1,14 @@
 #include "common.h"
 
-extern int D_80800DE0_chbottlesfamily;
-extern int D_80800E28_chbottlesfamily;
-extern int D_80800E70_chbottlesfamily;
+extern int D_80800DE0_chbottlesfamily[];
+extern int D_80800E28_chbottlesfamily[];
+extern int D_80800E70_chbottlesfamily[];
 typedef struct { u8 pad[0x38]; f32 f38; u8 pad3C[0x29]; u8 pad65:3; u8 flag:1; u8 rest:4; } BottlesS;
 extern void func_80102FDC(BottlesS *, f32);
 extern s32 _glcutDll_entrypoint_20();
-extern s32 D_80800EB8_chbottlesfamily;
-extern s32 D_80800ECC_chbottlesfamily;
-extern s32 D_80800EDC_chbottlesfamily;
+extern s32 D_80800EB8_chbottlesfamily[];
+extern s32 D_80800ECC_chbottlesfamily[];
+extern s32 D_80800EDC_chbottlesfamily[];
 extern void _sudeflect_entrypoint_0(f32 *, f32, f32, s32);
 extern void _subaddieaudioquick_entrypoint_4(Actor *, f32 *, void *, void *);
 extern void *_suexpression_entrypoint_20(Actor *);
@@ -16,17 +16,17 @@ extern void _suexpression_entrypoint_10(void *, Unk80132ED0 *, s32);
 extern void *func_80100094(Actor *, u32);
 extern f32 func_800DC178(f32, f32);
 extern void _subaddierouteDll_entrypoint_1(void *);
-extern s16 D_80800F08_chbottlesfamily;
+extern s16 D_80800F08_chbottlesfamily[];
 extern int D_80800F04_chbottlesfamily;
 extern int _subaddierouteDll_entrypoint_7(void *param_0, int param_1, float param_2, float param_3, float param_4, int param_5);
 extern void func_80102424(void *param_0, int param_1);
 extern u8 D_80800F20_chbottlesfamily[];
 extern void _subaddieaudioquick_entrypoint_3(s32, s32, void *, f32);
-extern s32 D_80800F2C_chbottlesfamily;
+extern s32 D_80800F2C_chbottlesfamily[];
 extern f32 D_80800F68_chbottlesfamily[];
-extern s32 D_80800F48_chbottlesfamily;
-extern s32 D_80800F58_chbottlesfamily;
-extern s32 D_80800F78_chbottlesfamily;
+extern s32 D_80800F48_chbottlesfamily[];
+extern s32 D_80800F58_chbottlesfamily[];
+extern s32 D_80800F78_chbottlesfamily[];
 extern int func_80101E4C(Actor *, f32 *);
 extern int _subaddieaudioquick_entrypoint_1(Actor *, f32 *);
 extern void func_800C4350(s32, f32 *, void *);
@@ -172,11 +172,11 @@ int func_808004B4_chbottlesfamily(Actor *param_0)
   }
   if (func_800DA298(0x1A5))
   {
-    D_80800F08_chbottlesfamily = 0x1539;
+    D_80800F08_chbottlesfamily[0] = 0x1539;
   }
   else
   {
-    D_80800F08_chbottlesfamily = 0x1501;
+    D_80800F08_chbottlesfamily[0] = 0x1501;
   }
   func_808009F0_chbottlesfamily(param_0, &D_80800F04_chbottlesfamily);
 }
@@ -390,3 +390,32 @@ void func_80800CA4_chbottlesfamily(param_0, param_1, param_2) s32 *param_0; s32 
         return;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bottles/family.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800DE0_chbottlesfamily -> int[], D_80800E28_chbottlesfamily -> int[], D_80800E70_chbottlesfamily -> int[], D_80800EB8_chbottlesfamily -> s32[], D_80800ECC_chbottlesfamily -> s32[], D_80800EDC_chbottlesfamily -> s32[], D_80800F08_chbottlesfamily -> s16[] (uses written as NAME[0]), D_80800F2C_chbottlesfamily -> s32[], D_80800F48_chbottlesfamily -> s32[], D_80800F58_chbottlesfamily -> s32[], D_80800F78_chbottlesfamily -> s32[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80107C2C();
+u32 D_80800D50_chbottlesfamily[12] = { 0x0, 0x0, 0x4111999A, 0x4450001, 0x4111999A, 0x4450001, 0x0, 0x0, 0x0, 0x0, 0x4111999A, 0x4450001 };
+u32 D_80800D80_chbottlesfamily[12] = { 0x0, 0x0, 0x40D33333, 0x4B10000, 0x40D33333, 0x4B10000, 0x3F4CCCCD, 0x4B00000, 0x3F4CCCCD, 0x4B00000, 0x40D33333, 0x4B10000 };
+u32 D_80800DB0_chbottlesfamily[12] = { 0x0, 0x0, 0x40D33333, 0x4B70000, 0x40D33333, 0x4B70000, 0x0, 0x0, 0x0, 0x0, 0x40D33333, 0x4B70000 };
+int D_80800DE0_chbottlesfamily[18] = { 0x158043B, 0x90B0001, (u32)&D_80800D50_chbottlesfamily, (u32)func_80800080_chbottlesfamily, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x3F800000, 0x0, 0x128, (u32)func_8080086C_chbottlesfamily, 0x0, 0x0, (u32)func_80800024_chbottlesfamily, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800720_chbottlesfamily, 0x0 };
+int D_80800E28_chbottlesfamily[18] = { 0x158043C, 0x9190001, (u32)&D_80800D80_chbottlesfamily, (u32)func_808001B0_chbottlesfamily, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x3F800000, 0x0, 0x40121, (u32)func_8080086C_chbottlesfamily, 0x0, 0x100000, (u32)func_80800124_chbottlesfamily, (u32)func_80107C2C, -0x7FFFFBEE, (u32)func_8080046C_chbottlesfamily, 0x0 };
+int D_80800E70_chbottlesfamily[18] = { 0x158043D, 0x91A0001, (u32)&D_80800DB0_chbottlesfamily, (u32)func_80800630_chbottlesfamily, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x3F800000, 0x0, 0x120, (u32)func_8080086C_chbottlesfamily, 0x0, 0x0, (u32)func_80800600_chbottlesfamily, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800720_chbottlesfamily, 0x0 };
+s32 D_80800EB8_chbottlesfamily[5] = { 0x130541, 0x1012C, 0x3E8000D, 0xF3010C, 0x0 };
+s32 D_80800ECC_chbottlesfamily[4] = { 0x3EDC28F6, 0x3F1EB852, 0x3F2E147B, -0x40800000 };
+s32 D_80800EDC_chbottlesfamily[7] = { 0x1A7015E, 0x14FF1500, 0x201, 0x12080000, 0xAF0000, 0xC063C, 0x2000000 };
+u8 D_80800EF8_chbottlesfamily[12] = { 0x0, 0x13, 0x5, 0x25, 0x0, 0xD, 0x0, 0xD9, 0x0, 0xF3, 0x0, 0x0 };
+int D_80800F04_chbottlesfamily = 0x1A8015E;
+s16 D_80800F08_chbottlesfamily[12] = { 0x1501, 0x1502, 0x0, 0x201, 0x1208, 0x0, 0xB0, 0x0, 0xC, 0x23C, 0x200, 0x0 };
+u8 D_80800F20_chbottlesfamily[12] = { 0x0, 0x13, 0x4, 0x3A, 0x0, 0xD, 0x1, 0x26, 0x1, 0x40, 0x0, 0x0 };
+s32 D_80800F2C_chbottlesfamily[7] = { 0x1A9015E, 0x15031504, 0x201, 0x12080000, 0xB10000, 0xC063C, 0x2000000 };
+s32 D_80800F48_chbottlesfamily[4] = { 0x3060013, 0x67D000D, 0xF3010C, 0x110000 };
+s32 D_80800F58_chbottlesfamily[4] = { 0x1305CA, 0xD00F3, 0x10C0016, 0x61A80000 };
+f32 D_80800F68_chbottlesfamily[4] = { 0.82f, 0.87f, 0.9f, -1.0f };
+s32 D_80800F78_chbottlesfamily[4] = { 0x3EFAE148, 0x3F147AE1, 0x3F3D70A4, -0x40800000 };
+u8 D_80800F88_chbottlesfamily[16] = { 0x42, 0xB4, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0, 0x42, 0x48, 0x0, 0x0 };
+u8 D_80800F98_chbottlesfamily[16] = { 0x42, 0xF0, 0x0, 0x0, 0x42, 0xF0, 0x0, 0x0, 0x42, 0xA0, 0x0, 0x0, 0x42, 0x48, 0x0, 0x0 };
+u8 D_80800FA8_chbottlesfamily[24] = { 0x43, 0xC, 0x0, 0x0, 0x42, 0xDC, 0x0, 0x0, 0x42, 0xA0, 0x0, 0x0, 0x42, 0x48, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

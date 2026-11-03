@@ -285,3 +285,6 @@ s32 glsavegame_entrypoint_10(s32 param_0, s32 param_1)
     heap_free(local_3);
     return local_5;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/savegame.data.s) is defined here in C.
+ * Values are taken from the ROM. */

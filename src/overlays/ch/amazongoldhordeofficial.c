@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80801240_chamazongoldhordeofficial;
+extern int D_80801240_chamazongoldhordeofficial[];
 extern void *func_80100094(Actor *, u32);
 extern void func_8010A3E8(Actor *, f32);
 typedef struct { s16 local_0[3]; u16 local_1 : 9; u16 pad_0 : 7; u32 pad_1; u32 local_2 : 9; u32 pad_2 : 23; } GoldHordeProp;
@@ -20,19 +20,19 @@ extern void func_800BA22C(s32, s32);
 extern s32 func_800F640C(s32, s32);
 extern s32 func_800F54E4(void);
 extern s32 func_8008FE14(void);
-extern s32 D_80801324_chamazongoldhordeofficial;
-extern s32 D_80801340_chamazongoldhordeofficial;
-extern s32 D_8080135C_chamazongoldhordeofficial;
+extern s32 D_80801324_chamazongoldhordeofficial[];
+extern s32 D_80801340_chamazongoldhordeofficial[];
+extern s32 D_8080135C_chamazongoldhordeofficial[];
 void _subaddieaudioquick_entrypoint_4(s32, s32, s32 *, s32 *);
 typedef struct { u8 pad[0x68]; u8 cycles; } GoldHordeOfficialState;
 extern u8 D_808011D0_chamazongoldhordeofficial[];
 extern u8 D_80801368_chamazongoldhordeofficial[];
 extern u8 D_80801380_chamazongoldhordeofficial[];
 typedef struct { u8 pad_0[8]; s16 local_0; s16 local_1; s16 local_2[15]; s16 local_3[15]; u8 local_4; u8 local_5[15]; u8 local_6[15]; u8 local_7; u8 pad_1[2]; s16 local_8; u8 local_9[1]; } GoldOfficialState601;
-extern s32 D_80801288_chamazongoldhordeofficial;
-extern s32 D_80801294_chamazongoldhordeofficial;
-extern s32 D_808012A0_chamazongoldhordeofficial;
-extern s32 D_808012BC_chamazongoldhordeofficial;
+extern s32 D_80801288_chamazongoldhordeofficial[];
+extern s32 D_80801294_chamazongoldhordeofficial[];
+extern s32 D_808012A0_chamazongoldhordeofficial[];
+extern s32 D_808012BC_chamazongoldhordeofficial[];
 extern void _sudeflect_entrypoint_0(f32 *, f32, f32, s32);
 extern f32 func_800D8FF8(void);
 extern void func_80102924(Actor *, f32);
@@ -419,3 +419,28 @@ void func_80801060_chamazongoldhordeofficial(Actor *param_0)
     local_1 = (Actor *)func_80108528(0x1D9, local_0, 0, &param_0);
     local_1->rotation[1] = func_800F1DCC(param_0->rotation[1], 180.0f);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/amazongoldhordeofficial.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801240_chamazongoldhordeofficial -> int[], D_80801288_chamazongoldhordeofficial -> s32[], D_80801294_chamazongoldhordeofficial -> s32[], D_808012A0_chamazongoldhordeofficial -> s32[], D_808012BC_chamazongoldhordeofficial -> s32[], D_80801324_chamazongoldhordeofficial -> s32[], D_80801340_chamazongoldhordeofficial -> s32[], D_8080135C_chamazongoldhordeofficial -> s32[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+u8 D_808011C0_chamazongoldhordeofficial[16] = { 0x43, 0x66, 0x0, 0x0, 0x43, 0x16, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0 };
+u8 D_808011D0_chamazongoldhordeofficial[16] = { 0x0, 0x13, 0x4, 0xBC, 0x0, 0xD, 0x0, 0xD9, 0x1, 0x26, 0x0, 0x16, 0x3A, 0x98, 0x0, 0x0 };
+u32 D_808011E0_chamazongoldhordeofficial[24] = { 0x0, 0x0, 0x3F19999A, 0x1B40001, 0x3F19999A, 0x1B40001, 0x3F19999A, 0x1B40001, 0x40E00000, 0x1B50002, 0x3F19999A, 0x1B40001, 0x40400000, 0x1B60001, 0x40C33333, 0x3E30001, 0x3F333333, 0x1D60001, 0x40C33333, 0x3E30001, 0x40C33333, 0x3E30001, 0x40C33333, 0x3E30001 };
+int D_80801240_chamazongoldhordeofficial[18] = { 0x15E0115, 0x66B0002, (u32)&D_808011E0_chamazongoldhordeofficial, (u32)func_80800150_chamazongoldhordeofficial, (u32)func_80105834, (u32)func_80101870, 0x0, 0x40000000, 0x0, 0x160, (u32)func_80800630_chamazongoldhordeofficial, 0x0, 0x840000, (u32)func_8080000C_chamazongoldhordeofficial, (u32)func_80107C2C, -0x7FFFFF7E, (u32)func_808006F8_chamazongoldhordeofficial, 0x0 };
+s32 D_80801288_chamazongoldhordeofficial[3] = { 0x1304B8, 0x167FF8, 0x0 };
+s32 D_80801294_chamazongoldhordeofficial[3] = { 0x1304B9, 0x167FF8, 0x0 };
+s32 D_808012A0_chamazongoldhordeofficial[7] = { 0x3E99999A, 0x3EBC6A7F, 0x3EE353F8, 0x3F051EB8, 0x3F19999A, 0x3F2B851F, -0x40800000 };
+s32 D_808012BC_chamazongoldhordeofficial[5] = { 0x3EBAE148, 0x3EE66666, 0x3F08F5C3, 0x3F1EB852, -0x40800000 };
+s16 D_808012D0_chamazongoldhordeofficial[6] = { 0x4, 0x5, 0x4, 0x5, 0x4, 0x5 };
+f32 D_808012DC_chamazongoldhordeofficial[6] = { 0.33f, 0.4f, 0.478f, 0.55f, 0.63f, 0.7f };
+s16 D_808012F4_chamazongoldhordeofficial[4] = { 0x65A, 0x65B, 0x65C, -0x1 };
+s32 D_808012FC_chamazongoldhordeofficial[10] = { 0x210001B, -0x8330834, 0x2A0300, 0x3000300, 0x3000015, 0x20002, 0x70002, 0x50000, 0x40099, 0x0 };
+s32 D_80801324_chamazongoldhordeofficial[7] = { 0x1F4, 0xF2F, 0x201, 0xF580000, 0x310000, 0xC0000, 0x7000000 };
+s32 D_80801340_chamazongoldhordeofficial[7] = { 0x5A01F4, 0xF2E, 0x201, 0x12080000, 0x310000, 0xC0000, 0x0 };
+s32 D_8080135C_chamazongoldhordeofficial[3] = { 0x3ED70A3D, 0x3F6B851F, -0x40800000 };
+u8 D_80801368_chamazongoldhordeofficial[24] = { 0x3E, 0x4C, 0xCC, 0xCD, 0x3E, 0xAE, 0x14, 0x7B, 0x3E, 0xF5, 0xC2, 0x8F, 0x3F, 0x23, 0xD7, 0xA, 0x3F, 0x4C, 0xCC, 0xCD, 0xBF, 0x80, 0x0, 0x0 };
+u8 D_80801380_chamazongoldhordeofficial[16] = { 0x0, 0x13, 0x6, 0x12, 0x0, 0xD, 0x1, 0xC, 0x1, 0x26, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

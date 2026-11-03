@@ -11,7 +11,7 @@ extern void func_800DA524();
 extern f32 D_80800F94_suquiz[][6][2];
 extern f32 D_80800F74_suquiz[][2];
 extern f32 D_80800F70_suquiz[];
-extern int D_808010F0_suquiz;
+extern int D_808010F0_suquiz[];
 typedef struct { u8 pad0[0x18]; f32 f18; f32 f1C; u8 pad20[5]; u8 b25; s8 b26; s8 b27; s8 b28; s8 b29; } QuizState;
 typedef struct { f32 a; f32 b; } QPair;
 typedef struct { QPair p[6]; } QRow;
@@ -450,3 +450,17 @@ void suquiz_entrypoint_28(param_0, param_1, param_2) s32 param_0; s32 param_1; s
 {
     func_800C3F48(((D_808010FC_suquiz[param_1][param_0].local_0 & 0x7FF) + (((D_808010FC_suquiz[param_1][param_0].local_2 >> 5) & 0x3FF) << 11)) + (u32)((u16)(u32)(D_808010FC_suquiz[param_1][param_0].local_1 * 1023.0f) << 21));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/quiz.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800F94_suquiz = D_80800F90_suquiz + 0x4, D_80801054_suquiz = D_80801050_suquiz + 0x4
+ * extern declarations adjusted to the object (same addresses): D_808010F0_suquiz -> int[] */
+f32 D_80800F70_suquiz[1] = { 1.8e+02f };
+f32 D_80800F74_suquiz[3][2] = { 0.33f, 1.8e+02f, 0.33f, 1.8e+02f, 0.0f, 0.0f };
+static u32 D_80800F74_suquiz_rest[1] = { 0x3EA8F5C3 };
+QRow D_80800F90_suquiz[4] = { 3.0f, 5.0f, 2.0f, 3.0f, 2.0f, 6.0f, -1.0f, 6.0f, 2.0f, 6.0f, -1.0f, 6.0f, 3.0f, 5.0f, 2.0f, 3.0f, 2.0f, 6.0f, -1.0f, 6.0f, 1.5f, 6.0f, -1.0f, 6.0f, 2.0f, 5.0f, 2.0f, 3.0f, 2.0f, 6.0f, -1.0f, 6.0f, 1.0f, 6.0f, -1.0f, 6.0f, 2.0f, 5.0f, 2.0f, 3.0f, 2.0f, 6.0f, -1.0f, 6.0f, 1.0f, 6.0f, -1.0f, 6.0f };
+f32 D_80801050_suquiz[6][3][2] = { 0.1f, 0.9f, 0.2f, 0.9f, 0.25f, 0.9f, 0.4f, 0.8f, 0.6f, 0.8f, 0.7f, 0.8f, 0.4f, 0.8f, 0.6f, 0.8f, 0.7f, 0.8f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.9f, 0.7f, 0.9f, 0.8f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+Broad50QuizList D_808010E0_suquiz = { -0x1, -0x1, -0x1, -0x1 };
+int D_808010F0_suquiz[3] = { 0x0, 0x0, 0x0 };
+QuizPackedColor27 D_808010FC_suquiz[7][4] = { 0x620, 1.0f, 0x7D00, 0x650, 1.0f, 0x7D00, 0x652, 1.0f, 0x7D00, 0x681, 1.0f, 0x7D00, 0x621, 1.0f, 0x7D00, 0x64E, 1.0f, 0x7D00, 0x64F, 1.0f, 0x7D00, 0x680, 1.0f, 0x7D00, 0x622, 1.0f, 0x7D00, 0x3EA, 1.0f, 0x7D00, 0x3EB, 1.0f, 0x7D00, 0x427, 1.0f, 0x7D00, 0x620, 1.0f, 0x7D00, 0x5A2, 1.0f, 0x7D00, 0x5A4, 1.0f, 0x7D00, 0x50F, 1.0f, 0x7D00, 0x621, 1.0f, 0x7D00, 0x68F, 1.0f, 0x7D00, 0x68C, 1.0f, 0x7D00, 0x683, 1.0f, 0x7D00, 0x659, 1.0f, 0x7D00, 0x3EA, 1.0f, 0x7D00, 0x3EB, 1.0f, 0x7D00, 0x427, 1.0f, 0x7D00, 0x622, 1.0f, 0x7D00, 0x654, 1.0f, 0x7D00, 0x655, 1.0f, 0x7D00, 0x67F, 1.0f, 0x7D00 };
+static u32 D_808010FC_suquiz_rest[1] = { 0x0 };

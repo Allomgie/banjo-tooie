@@ -48,3 +48,7 @@ s32 subaddieaudioquick_entrypoint_4(Actor *param_0, f32 *param_1, void *param_2,
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/audioquick.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_808001D0_subaddieaudioquick[16] = { 0x1, 0x6, 0x0, 0x1, 0x0, 0xC8, 0xB, 0xB8, 0x0, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

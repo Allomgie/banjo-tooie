@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808003A0_chlightfader;
+extern int D_808003A0_chlightfader[];
 extern s32 func_800C954C(void);
 extern void _chbaddiesetup_entrypoint_3(void (*)(void), s32, s32, s32);
 extern void _chlightfader_entrypoint_2(void);
@@ -145,3 +145,9 @@ void chlightfader_entrypoint_2(s32 param_0, f32 param_1, s32 param_2)
     local_3->local_4 = local_3->local_5[1].local_0[1];
     local_0->unk58 = local_1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/light/fader.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808003A0_chlightfader -> int[] */
+int D_808003A0_chlightfader[20] = { 0x334033C, 0x1, 0x0, (u32)func_80800014_chlightfader, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x3C0000, (u32)func_8080000C_chlightfader, (u32)func_80107C2C, -0x7FFFDDFE, 0x0, 0x0, 0x0, 0x0 };

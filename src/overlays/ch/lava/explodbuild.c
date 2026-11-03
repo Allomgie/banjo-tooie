@@ -2,14 +2,14 @@
 
 extern u8 position_x[];
 extern u8 unk44[];
-extern int D_80800290_chlavaexplodbuild;
+extern int D_80800290_chlavaexplodbuild[];
 extern s32 D_808002A4_chlavaexplodbuild[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern void func_800EEB9C(f32 *, f32, f32);
 extern void func_800EF04C(f32 *, f32 *);
 extern f32 func_800DC178(f32, f32);
 extern s32 func_800BABB8(s32, f32 *, f32 *, f32, s32 *);
-extern int D_808002E0_chlavaexplodbuild;
+extern int D_808002E0_chlavaexplodbuild[];
 void func_80800138_chlavaexplodbuild();
 
 int func_80800000_chlavaexplodbuild(Actor *param_0)
@@ -69,3 +69,15 @@ int chlavaexplodbuild_entrypoint_0()
 {
     return (int)&D_808002E0_chlavaexplodbuild;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lava/explodbuild.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800290_chlavaexplodbuild -> int[], D_808002E0_chlavaexplodbuild -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_80800290_chlavaexplodbuild[5] = { 0x130413, 0xA0099, 0x167D00, 0x11F40, 0x1F400000 };
+s32 D_808002A4_chlavaexplodbuild[15] = { 0x1D09DD, 0x2B0200, 0x2990022, 0x1800200, 0x3800400, 0x150000, 0x990027, -0x630064, 0x640064, 0x190000, 0x7002D, 0x15E01C2, 0x2080C0, -0x3F3FFEE6, 0x0 };
+int D_808002E0_chlavaexplodbuild[20] = { 0x15804A4, 0x8F00001, 0x0, (u32)func_80800048_chlavaexplodbuild, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x490000, 0xC00, (u32)func_80800084_chlavaexplodbuild, (u32)func_80108ED0, 0x0, (u32)func_80800000_chlavaexplodbuild, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_808000A8_chlavaexplodbuild, 0x0, 0x0, 0x0 };

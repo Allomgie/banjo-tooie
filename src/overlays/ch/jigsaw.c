@@ -7,8 +7,8 @@ extern u8 unk6A[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_801015D0(Actor *);
 extern void *func_800DE448(f32 *, f32 *, f32, f32 *, s32);
-extern int D_80800770_chjigsaw;
-extern int D_808007B8_chjigsaw;
+extern int D_80800770_chjigsaw[];
+extern int D_808007B8_chjigsaw[];
 extern f32 func_800DC0C0(void);
 extern f32 func_800DC178(f32, f32);
 extern void func_800EE7F8(f32[3], f32[3]);
@@ -198,3 +198,13 @@ int chjigsaw_entrypoint_1()
 {
   return (int)&D_808007B8_chjigsaw;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jigsaw.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800770_chjigsaw -> int[], D_808007B8_chjigsaw -> int[] */
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void func_8010A730();
+int D_80800770_chjigsaw[18] = { 0x52021F, 0x6100001, 0x0, (u32)func_808001F8_chjigsaw, (u32)func_808001D0_chjigsaw, (u32)func_808004A0_chjigsaw, 0xDAC0000, 0x3F666666, 0x0, 0x200004, (u32)func_8080017C_chjigsaw, (u32)func_80108ED0, 0x0, (u32)func_80800070_chjigsaw, (u32)func_80107C2C, -0x77FF8FFC, (u32)func_80800518_chjigsaw, 0x0 };
+int D_808007B8_chjigsaw[18] = { 0x1580524, 0x1, 0x0, (u32)func_808006CC_chjigsaw, 0x0, (u32)func_8010A730, 0x0, 0x3F666666, 0x0, 0x4, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, 0x0, 0x0, 0x0 };

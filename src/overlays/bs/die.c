@@ -262,3 +262,20 @@ int bsdie_entrypoint_11(int param_0)
 {
   return D_80800980_bsdie[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/die.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsdie_entrypoint_2();
+extern void _bsdie_entrypoint_0();
+extern void _bsdie_entrypoint_1();
+extern void _basudie_entrypoint_11();
+extern void _bsdie_entrypoint_6();
+extern void _bsdie_entrypoint_4();
+extern void _bsdie_entrypoint_5();
+extern void _bsdie_entrypoint_10();
+extern void _bsdie_entrypoint_8();
+extern void _bsdie_entrypoint_9();
+s32 D_80800960_bsdie[4] = { (u32)_bsdie_entrypoint_2, (u32)_bsdie_entrypoint_0, (u32)_bsdie_entrypoint_1, (u32)_basudie_entrypoint_11 };
+s32 D_80800970_bsdie[4] = { (u32)_bsdie_entrypoint_6, (u32)_bsdie_entrypoint_4, (u32)_bsdie_entrypoint_5, (u32)_basudie_entrypoint_11 };
+s32 D_80800980_bsdie[4] = { (u32)_bsdie_entrypoint_10, (u32)_bsdie_entrypoint_8, (u32)_bsdie_entrypoint_9, (u32)_basudie_entrypoint_11 };

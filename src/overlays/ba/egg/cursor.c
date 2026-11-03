@@ -216,3 +216,8 @@ void baeggcursor_entrypoint_11(u8 *param_0)
         break;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/egg/cursor.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u32 D_80800670_baeggcursor[8] = { 0x0, 0x3F800000, 0x3DA3D70A, 0x3F000000, 0x3E99999A, 0x3F800000, 0x0, 0x0 };
+s32 D_80800690_baeggcursor[4] = { (u32)&D_80800670_baeggcursor, 0x0, 0x0, 0x0 };

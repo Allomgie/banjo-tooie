@@ -1,13 +1,13 @@
 #include "common.h"
 
-extern int D_80800988_chtntbox;
-extern int D_808009D0_chtntbox;
+extern int D_80800988_chtntbox[];
+extern int D_808009D0_chtntbox[];
 typedef struct { u8 pad_0[0x94]; u32 pad_1:15; u32 local_0:1; u32 pad_2:16; } TntBoxFlags;
 typedef union { s32 word; Unk80132ED0 *marker; } TntBoxEventPayload;
 extern void *func_800D674C(s32);
 extern void *func_801027F4(Actor *);
 extern void func_800DE448(f32 *, void *, f32, s32, void *);
-extern int D_80800A80_chtntbox;
+extern int D_80800A80_chtntbox[];
 extern s32 func_800C8A98(void);
 extern u8 D_80800AC8_chtntbox[];
 extern void func_800C8E54(s32, f32, f32);
@@ -15,10 +15,10 @@ extern s32 _chlightfader_entrypoint_1(s32, f32, s32);
 typedef struct { u8 pad_0[0x64]; u32 pad_1 : 2; u32 steering : 1; u32 pad_2 : 29; } TntBoxSteering29;
 extern f32 func_800D8FF8(void);
 extern s32 func_80101E14(Actor *, f32);
-extern s32 D_808008D0_chtntbox;
-extern s32 D_808008F4_chtntbox;
-extern int D_80800A18_chtntbox;
-extern s32 D_80800938_chtntbox;
+extern s32 D_808008D0_chtntbox[];
+extern s32 D_808008F4_chtntbox[];
+extern int D_80800A18_chtntbox[];
+extern s32 D_80800938_chtntbox[];
 extern void func_800BBCB8(f32 *, void *, f32, s32, void *);
 extern void func_800E1610(s32, f32, f32, f32 *);
 extern void func_80018820(s32, f32, f32);
@@ -258,3 +258,24 @@ void func_80800824_chtntbox(Actor *param_0, f32 param_1)
     func_800C8E54(local_0, param_1 * 400.0f, param_1 * 800.0f);
     _chlightfader_entrypoint_1(local_0, 1.4f, 5);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/tnt/box.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808008D0_chtntbox -> s32[], D_808008F4_chtntbox -> s32[], D_80800938_chtntbox -> s32[], D_80800988_chtntbox -> int[], D_808009D0_chtntbox -> int[], D_80800A18_chtntbox -> int[], D_80800A80_chtntbox -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern int func_80101870();
+s32 D_808008D0_chtntbox[9] = { 0xC0050, 0x230200, 0x2B0100, 0x1190015, 0xB300CC, 0x1D09BB, 0x180000, 0x90C00, 0xC000000 };
+s32 D_808008F4_chtntbox[17] = { 0x1D09EA, 0xE000F, 0x14002D, 0x2580320, 0x1BFB50, -0x3E7FFDC, 0x230042, 0x2A0000, 0x200CC, 0x1330015, 0x59, 0x160004, 0x190001, 0x60027, -0x12B012C, 0x12C012C, 0x0 };
+s32 D_80800938_chtntbox[5] = { 0x130413, 0xD00E6, 0x1000001, 0x3E81964, 0x0 };
+u32 D_8080094C_chtntbox[10] = { 0x0, 0x0, 0x3F99999A, 0x1EC0044, 0x3F99999A, 0x1EC0002, 0x0, 0x0, 0x3F99999A, 0x1EC0044 };
+u32 D_80800974_chtntbox[5] = { 0x10000, 0x0, 0x0, 0x30000, 0x40000 };
+int D_80800988_chtntbox[18] = { 0x90119, 0x68F0001, (u32)&D_8080094C_chtntbox, (u32)func_80800044_chtntbox, (u32)func_80105834, (u32)func_80800358_chtntbox, 0x0, 0x0, 0x0, 0x40000838, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800018_chtntbox, (u32)func_80107C2C, -0x7FDFDBEF, (u32)func_808002FC_chtntbox, (u32)&D_80800974_chtntbox };
+int D_808009D0_chtntbox[18] = { 0x3E0200, 0x64B0001, 0x0, (u32)func_80800624_chtntbox, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F4CCCCD, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFFFF0, 0x0, 0x0 };
+int D_80800A18_chtntbox[9] = { 0x1D06A3, 0x14002D, 0x2580320, 0x220066, 0x800033, 0x4C001E, 0x140014, 0xD003C, 0x0 };
+u8 D_80800A3C_chtntbox[60] = { 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x2B, 0x1, 0x0, 0x1, 0x66, 0x0, 0x22, 0x1, 0x80, 0x2, 0x0, 0x4, 0x80, 0x5, 0x0, 0x0, 0x15, 0x0, 0x0, 0x0, 0x99, 0x0, 0x27, 0xFF, 0x9C, 0xFF, 0x9C, 0x0, 0x64, 0x0, 0x64, 0x0, 0x19, 0x0, 0x0, 0x0, 0x7, 0x0, 0x2D, 0x0, 0xFA, 0x1, 0x5E, 0x0, 0x20, 0xC0, 0xC0, 0xC0, 0xC0, 0x1, 0x1A, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800A78_chtntbox[8] = { 0x0, 0x13, 0x4, 0xAC, 0x0, 0x0, 0x0, 0x0 };
+int D_80800A80_chtntbox[18] = { 0x1100015, 0x33, 0x2CFFE2, 0x3CFFE2, 0x1E0064, 0x1E001B, -0x13FFE2, 0xAFFF6, 0xFFF6, 0xA0000, 0xA0022, 0xF0019, 0x23002E, 0x2B004C, 0x800015, 0x6600B3, 0x160004, 0x0 };
+u8 D_80800AC8_chtntbox[24] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

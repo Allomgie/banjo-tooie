@@ -66,3 +66,8 @@ void func_808000A8_suchase(param_0, param_1) ChaseCache *param_0; f32 *param_1;
         local_1++;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/chase.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+ChaseCache D_808001D0_suchase = { -0x1, 0x0 };
+static u32 D_808001D0_suchase_rest[2] = { 0x0, 0x0 };

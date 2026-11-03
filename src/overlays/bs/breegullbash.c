@@ -119,3 +119,12 @@ int bsbreegullbash_entrypoint_3(s32 param_0)
 {
   return D_80800560_bsbreegullbash[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/breegullbash.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsbreegullbash_entrypoint_0();
+extern void _bsbreegullbash_entrypoint_1();
+extern void _bsbreegullbash_entrypoint_2();
+extern void func_80099B94();
+s32 D_80800560_bsbreegullbash[4] = { (u32)_bsbreegullbash_entrypoint_0, (u32)_bsbreegullbash_entrypoint_1, (u32)_bsbreegullbash_entrypoint_2, (u32)func_80099B94 };

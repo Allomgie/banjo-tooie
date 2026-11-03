@@ -80,3 +80,6 @@ s32 subaddielink_entrypoint_5(s32 src[2], s32 dst[2]){
     dst[0] = src[0];
     dst[1] = src[1];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/link.data.s) is defined here in C.
+ * Values are taken from the ROM. */

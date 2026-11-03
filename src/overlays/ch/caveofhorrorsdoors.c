@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_808001C0_chcaveofhorrorsdoors;
+extern int D_808001C0_chcaveofhorrorsdoors[];
 extern void func_800EF1B8(f32 *, f32, f32);
-extern s32 D_80800208_chcaveofhorrorsdoors;
+extern s32 D_80800208_chcaveofhorrorsdoors[];
 extern s32 func_80101080();
 extern s32 func_80106790(s32);
 extern void _chexploder_entrypoint_12(s32, s32);
@@ -68,3 +68,16 @@ void func_80800144_chcaveofhorrorsdoors(param_0) u8 *param_0; {
 s32 func_808001A4_chcaveofhorrorsdoors(param_0) DoorState *param_0; {
     return param_0->f76 + 0x65;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/caveofhorrorsdoors.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808001C0_chcaveofhorrorsdoors -> int[], D_80800208_chcaveofhorrorsdoors -> s32[] */
+extern void func_80102EC0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _bsbtrot_entrypoint_10();
+int D_808001C0_chcaveofhorrorsdoors[18] = { 0x19A014C, 0x78B0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x20000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chcaveofhorrorsdoors, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_10, (u32)func_8080006C_chcaveofhorrorsdoors, 0x0 };
+s32 D_80800208_chcaveofhorrorsdoors[6] = { 0x1304C8, 0xA00E6, 0x180001, 0x3201388, 0x0, 0x0 };

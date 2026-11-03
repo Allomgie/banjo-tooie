@@ -330,3 +330,6 @@ void bainvisible_entrypoint_9(PlayerState **param_0, s32 param_1, f32 *param_2)
         local_1[local_5] = local_2;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/invisible.data.s) is defined here in C.
+ * Values are taken from the ROM. */

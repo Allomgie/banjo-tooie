@@ -279,3 +279,12 @@ void func_80800ADC_bsmumswim(PlayerState *self) {
 s32 bsmumswim_entrypoint_7(s32 idx) {
     return D_80800B70_bsmumswim[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/mum/swim.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_80800B30_bsmumswim[4] = { (u32)_bsmumswim_entrypoint_0, (u32)_bsmumswim_entrypoint_1, (u32)_bsmumswim_entrypoint_2, (u32)_bsmum_entrypoint_0 };
+s32 D_80800B40_bsmumswim[4] = { (u32)func_80800714_bsmumswim, (u32)func_80800498_bsmumswim, (u32)func_8080056C_bsmumswim, (u32)_bsmum_entrypoint_0 };
+s32 D_80800B50_bsmumswim[4] = { (u32)func_808009A0_bsmumswim, (u32)func_80800750_bsmumswim, (u32)func_80800870_bsmumswim, (u32)_bsmum_entrypoint_0 };
+s32 D_80800B60_bsmumswim[4] = { (u32)func_808009D4_bsmumswim, (u32)func_808009FC_bsmumswim, (u32)func_80800A24_bsmumswim, (u32)_bsmum_entrypoint_0 };
+s32 D_80800B70_bsmumswim[4] = { (u32)func_80800ADC_bsmumswim, (u32)func_80800A70_bsmumswim, (u32)func_80800A98_bsmumswim, (u32)_bsdrone_entrypoint_3 };

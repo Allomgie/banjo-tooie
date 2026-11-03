@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_80800B28_chpowerhutwitchy;
-extern int D_80800B70_chpowerhutwitchy;
-extern int D_80800BB8_chpowerhutwitchy;
+extern int D_80800B28_chpowerhutwitchy[];
+extern int D_80800B70_chpowerhutwitchy[];
+extern int D_80800BB8_chpowerhutwitchy[];
 extern s32 D_80800C00_chpowerhutwitchy[];
 extern u8 D_80800B00_chpowerhutwitchy[];
 extern void _chpowerhut_entrypoint_0(s32, void *);
@@ -253,3 +253,21 @@ void func_80800A58_chpowerhutwitchy(Actor *param_0)
         if (local_0) _chdoormake_entrypoint_8(param_0, 0x10);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/powerhutwity.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800B28_chpowerhutwitchy -> int[], D_80800B70_chpowerhutwitchy -> int[], D_80800BB8_chpowerhutwitchy -> int[] */
+extern void func_80105834();
+extern void _chpowerhut_entrypoint_2();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+extern void func_80101870();
+extern void _chdoor_entrypoint_1();
+u8 D_80800B00_chpowerhutwitchy[20] = { 0x0, 0xEB, 0x0, 0x26, 0x0, 0x10, 0x2, 0x58, 0x41, 0xC8, 0x0, 0x0, 0x40, 0xE0, 0x0, 0x0, 0x41, 0x0, 0x0, 0x0 };
+u8 D_80800B14_chpowerhutwitchy[20] = { 0x0, 0xEC, 0x0, 0x31, 0x0, 0x30, 0x1, 0xC2, 0x41, 0x50, 0x0, 0x0, 0x40, 0x20, 0x0, 0x0, 0x40, 0xC0, 0x0, 0x0 };
+int D_80800B28_chpowerhutwitchy[18] = { 0x306039C, -0xFFFF, 0x0, (u32)func_80800068_chpowerhutwitchy, (u32)func_80105834, (u32)_chpowerhut_entrypoint_2, 0xBB80000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1C0000, (u32)func_80800030_chpowerhutwitchy, (u32)func_80107C2C, -0x7FFFF3FE, (u32)func_80800168_chpowerhutwitchy, 0x0 };
+int D_80800B70_chpowerhutwitchy[18] = { 0x307039D, -0xFFFF, 0x0, (u32)func_80800610_chpowerhutwitchy, (u32)func_80105834, (u32)_chpowerhut_entrypoint_2, 0xBB80000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1C0000, (u32)func_808005C8_chpowerhutwitchy, (u32)func_80107C2C, -0x7FFFF3FE, (u32)func_8080073C_chpowerhutwitchy, 0x0 };
+int D_80800BB8_chpowerhutwitchy[18] = { 0xAC039E, 0x79B0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800A58_chpowerhutwitchy, (u32)func_80107C2C, -0x7FFFD3FE, (u32)_chdoor_entrypoint_1, 0x0 };
+s32 D_80800C00_chpowerhutwitchy[18] = { 0xAC039F, 0x79C0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800A58_chpowerhutwitchy, (u32)func_80107C2C, -0x7FFFD3FE, (u32)_chdoor_entrypoint_1, 0x0 };
+u8 D_80800C48_chpowerhutwitchy[8] = { 0x64, 0x64, 0x64, 0x0, 0x0, 0x0, 0x0, 0x0 };

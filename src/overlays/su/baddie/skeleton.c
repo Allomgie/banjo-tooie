@@ -80,3 +80,6 @@ void *subaddieskeleton_entrypoint_4(param_0) Actor *param_0;
     local_0 = func_80102F74(param_0, 2) ? func_80104130() : NULL;
     return local_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/skeleton.data.s) is defined here in C.
+ * Values are taken from the ROM. */

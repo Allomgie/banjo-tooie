@@ -71,3 +71,6 @@ void bsdronesuckunder_entrypoint_3(PlayerState *param_0)
         func_8009BA9C(param_0, 0);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/drone/suckunder.data.s) is defined here in C.
+ * Values are taken from the ROM. */

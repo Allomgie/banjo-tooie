@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800110_changlerbossdoor;
+extern int D_80800110_changlerbossdoor[];
 extern void func_800F1A88();
 extern void func_80101FDC();
 typedef struct AnglerDoorFlags { u8 pad_0 : 7; u8 local_0 : 1; } AnglerDoorFlags;
@@ -39,3 +39,14 @@ void func_8080000C_changlerbossdoor(Actor *param_0)
         _chdoormake_entrypoint_8(param_0, 5);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/anglerboss/door.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800110_changlerbossdoor -> int[] */
+extern void _chdoor_entrypoint_0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_1();
+int D_80800110_changlerbossdoor[20] = { 0xAC046C, 0x9440004, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x3770000, 0x410, 0x0, 0x0, 0x0, (u32)func_8080000C_changlerbossdoor, (u32)func_80107C2C, -0x7FF7D3FE, (u32)_chdoor_entrypoint_1, 0x0, 0x0, 0x0 };

@@ -271,3 +271,12 @@ void func_80800A50_bskazglide(PlayerState *self) {
 s32 bskazglide_entrypoint_4(s32 idx) {
     return D_80800AF0_bskazglide[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/glide.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_80800AB0_bskazglide[4] = { (u32)func_8080022C_bskazglide, (u32)func_8080024C_bskazglide, (u32)func_80800364_bskazglide, (u32)func_80800184_bskazglide };
+s32 D_80800AC0_bskazglide[4] = { (u32)func_8080050C_bskazglide, (u32)func_80800544_bskazglide, (u32)func_80800650_bskazglide, (u32)func_808001E8_bskazglide };
+s32 D_80800AD0_bskazglide[4] = { (u32)func_808006BC_bskazglide, (u32)func_808006EC_bskazglide, (u32)func_80800780_bskazglide, (u32)func_80099B94 };
+s32 D_80800AE0_bskazglide[4] = { (u32)func_80800944_bskazglide, (u32)func_80800964_bskazglide, (u32)func_808009B4_bskazglide, (u32)func_80800184_bskazglide };
+s32 D_80800AF0_bskazglide[4] = { (u32)func_80800A00_bskazglide, (u32)func_80800A28_bskazglide, (u32)func_80800A50_bskazglide, (u32)_bsdrone_entrypoint_3 };

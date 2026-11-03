@@ -532,3 +532,17 @@ void bsledge_entrypoint_7(PlayerState *self) {
 s32 bsledge_entrypoint_8(s32 idx) {
     return D_808013A8_bsledge[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ledge.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099B94();
+s16 D_80801340_bsledge[4] = { 0x580, 0x581, 0x582, 0x0 };
+s32 D_80801348_bsledge[4] = { (u32)func_80800504_bsledge, (u32)func_80800540_bsledge, (u32)func_808005E0_bsledge, (u32)func_80099B94 };
+s32 D_80801358_bsledge[4] = { (u32)func_8080072C_bsledge, (u32)func_80800764_bsledge, (u32)func_808007F4_bsledge, (u32)func_80099B94 };
+s32 D_80801368_bsledge[4] = { (u32)func_808008D4_bsledge, (u32)func_808008F4_bsledge, (u32)func_808009C8_bsledge, (u32)func_80099B94 };
+s32 D_80801378_bsledge[4] = { (u32)func_80800AC0_bsledge, (u32)func_80800AE0_bsledge, (u32)func_80800B70_bsledge, (u32)func_80099B94 };
+u8 D_80801388_bsledge[8] = { 0x1, 0x2, 0x4, 0x1, 0x2, 0x2, 0x4, 0x3 };
+u8 D_80801390_bsledge[8] = { 0x1, 0x2, 0x1, 0x2, 0x2, 0x0, 0x0, 0x0 };
+s32 D_80801398_bsledge[4] = { (u32)func_80800EE0_bsledge, (u32)func_80800F0C_bsledge, (u32)func_80800F70_bsledge, (u32)func_80099B94 };
+s32 D_808013A8_bsledge[6] = { (u32)_bsledge_entrypoint_5, (u32)_bsledge_entrypoint_6, (u32)_bsledge_entrypoint_7, (u32)func_80099B94, 0x0, 0x0 };

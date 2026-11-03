@@ -691,3 +691,16 @@ void func_8080147C_bsstatue(param_0) s32 param_0;
         func_8009DB04(param_0, 0x632, 0.6f, 0x4E20);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/statue.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsdrone_entrypoint_3();
+s32 D_808015A0_bsstatue[4] = { (u32)func_80800474_bsstatue, (u32)func_808004B4_bsstatue, (u32)func_808004F4_bsstatue, (u32)_bsdrone_entrypoint_3 };
+s32 D_808015B0_bsstatue[4] = { (u32)func_808007D4_bsstatue, (u32)func_8080081C_bsstatue, (u32)func_8080084C_bsstatue, (u32)func_808003B4_bsstatue };
+s32 D_808015C0_bsstatue[4] = { (u32)func_808009C0_bsstatue, (u32)func_80800A24_bsstatue, (u32)func_80800AA8_bsstatue, (u32)func_808003B4_bsstatue };
+int D_808015D0_bsstatue[4] = { (u32)func_80800C64_bsstatue, (u32)func_80800C98_bsstatue, (u32)func_80800CCC_bsstatue, (u32)func_808003B4_bsstatue };
+s32 D_808015E0_bsstatue[4] = { (u32)func_80800EAC_bsstatue, (u32)func_80800ED4_bsstatue, (u32)func_80800F3C_bsstatue, (u32)func_80800D20_bsstatue };
+s32 D_808015F0_bsstatue[4] = { (u32)func_80800FCC_bsstatue, (u32)func_80800FEC_bsstatue, (u32)func_80801060_bsstatue, (u32)func_808003B4_bsstatue };
+s32 D_80801600_bsstatue[4] = { (u32)func_808010B4_bsstatue, (u32)func_808010D4_bsstatue, (u32)func_80801144_bsstatue, (u32)func_808003B4_bsstatue };
+s32 D_80801610_bsstatue[4] = { (u32)func_80801218_bsstatue, (u32)func_80801238_bsstatue, (u32)func_808012E8_bsstatue, (u32)func_808003B4_bsstatue };

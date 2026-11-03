@@ -17,3 +17,7 @@ s32 chboggykids_entrypoint_0(Actor *param_0)
     if (func_800DA564(D_808000E0_chboggykids[local_1], 2) != local_0 + 1) return 0;
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/boggy/kids.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u16 D_808000E0_chboggykids[8] = { 0x59D, 0x59F, 0x5A1, 0x0, 0x0, 0x0, 0x0, 0x0 };

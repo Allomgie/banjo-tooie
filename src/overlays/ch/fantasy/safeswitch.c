@@ -3,7 +3,7 @@
 extern void func_80103110();
 extern Actor *_subaddiefind_entrypoint_2(s32, s32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
-extern int D_80800288_chfantasysafeswitch;
+extern int D_80800288_chfantasysafeswitch[];
 
 void func_80800000_chfantasysafeswitch(u8 *param_0) {
     param_0[0x65] &= ~0x10;
@@ -73,3 +73,14 @@ int *chfantasysafeswitch_entrypoint_0()
 {
     return &D_80800288_chfantasysafeswitch;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fantasy/safeswitch.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800288_chfantasysafeswitch -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_80800260_chfantasysafeswitch[10] = { 0x0, 0x0, 0x3F800000, 0xD40044, 0x3F800000, 0xD40002, 0x3F800000, 0xD40084, 0x3F800000, 0xD40084 };
+int D_80800288_chfantasysafeswitch[18] = { 0x1210418, 0x8DB0001, (u32)&D_80800260_chfantasysafeswitch, (u32)func_8080002C_chfantasysafeswitch, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x808, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chfantasysafeswitch, (u32)func_80107C2C, -0x7FFFDC00, (u32)func_80800070_chfantasysafeswitch, 0x0 };

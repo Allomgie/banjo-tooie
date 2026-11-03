@@ -7,7 +7,7 @@ extern void func_80105A9C(Actor *, f32);
 extern u8 D_80800664_chdinofamilymissing[];
 extern u8 D_808006CC_chdinofamilymissing[];
 extern void _gcdialogcamera_entrypoint_3(void *, f32);
-extern int D_808006DC_chdinofamilymissing;
+extern int D_808006DC_chdinofamilymissing[];
 extern u8 D_808006A0_chdinofamilymissing[];
 extern f32 func_80103EF4(Actor *);
 extern f32 func_80103EAC(Actor *);
@@ -182,5 +182,19 @@ int func_808004A4_chdinofamilymissing(Actor *param_0, s32 param_1, s32 param_2)
 
 int chdinofamilymissing_entrypoint_0()
 {
-    return (int)&D_808006DC_chdinofamilymissing;
+    return (int)D_808006DC_chdinofamilymissing;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/dino/familymissing.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808006DC_chdinofamilymissing -> int[] (uses written as NAME[0]) */
+extern void func_801018A4();
+extern void func_80107C2C();
+extern u8 boot_thread_stack[];
+u32 D_80800660_chdinofamilymissing[1] = { 0x0 };
+u8 D_80800664_chdinofamilymissing[60] = { 0x0, 0x0, 0x0, 0x0, 0x3F, 0x0, 0x0, 0x0, 0x1, 0x4C, 0x0, 0x1, 0x3E, 0xB3, 0x33, 0x33, 0x1, 0x4C, 0x0, 0x1, 0x40, 0xC, 0xCC, 0xCD, 0x3, 0xF8, 0x0, 0x1, 0x40, 0xC, 0xCC, 0xCD, 0x3, 0xF8, 0x0, 0x1, 0x40, 0xC, 0xCC, 0xCD, 0x3, 0xF8, 0x0, 0x1, 0x40, 0xC, 0xCC, 0xCD, 0x3, 0xF8, 0x0, 0x1, 0x40, 0xC, 0xCC, 0xCD, 0x3, 0xF8, 0x0, 0x1 };
+u8 D_808006A0_chdinofamilymissing[12] = { 0x0, 0x13, 0x4, 0x4C, 0x0, 0xA, 0x0, 0xB3, 0x0, 0x0, 0x0, 0x0 };
+s32 D_808006AC_chdinofamilymissing[8] = { 0x0, 0x3F800000, 0x3E800000, 0x3F400000, 0x3F000000, 0x3F800000, 0x3F400000, 0x3F400000 };
+u8 D_808006CC_chdinofamilymissing[16] = { 0x43, 0x48, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0, 0x43, 0x48, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0 };
+int D_808006DC_chdinofamilymissing[21] = { 0x12B0293, 0x6CC0001, (u32)&D_80800660_chdinofamilymissing, (u32)func_80800104_chdinofamilymissing, (u32)func_80800104_chdinofamilymissing, (u32)func_801018A4, 0x13880000, 0x40000000, 0x0, 0x840100, 0x0, 0x0, 0x0, (u32)func_80800000_chdinofamilymissing, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0xF26), (u32)func_808004A4_chdinofamilymissing, 0x0, 0x0, 0x0, 0x0 };

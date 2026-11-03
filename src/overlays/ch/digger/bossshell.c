@@ -3,11 +3,11 @@
 extern void *D_80800560_chdiggerbossshell;
 extern void *D_808005A8_chdiggerbossshell;
 typedef union { s32 word; void *pointer; } DiggerBossShellEventPayload;
-extern int D_808005F0_chdiggerbossshell;
-extern u32 D_80800600_chdiggerbossshell;
+extern int D_808005F0_chdiggerbossshell[];
+extern u32 D_80800600_chdiggerbossshell[];
 extern s32 func_800D9078(f32 *);
 typedef struct { s16 a, b; } S16Pair;
-extern s32 D_8080060C_chdiggerbossshell;
+extern s32 D_8080060C_chdiggerbossshell[];
 extern f32 func_800EFB8C(f32 *, f32 *);
 extern f32 func_80102D78(Actor *, f32 *);
 extern f32 sqrtf(f32);
@@ -164,3 +164,19 @@ void func_80800504_chdiggerbossshell(param_0) s32 param_0; {
     func_8010A570(param_0);
     func_800FFAB0(param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/digger/bossshell.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808005F0_chdiggerbossshell -> int[], D_80800600_chdiggerbossshell -> u32[], D_8080060C_chdiggerbossshell -> s32[] */
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+void *D_80800560_chdiggerbossshell = (void *)0x01BD04F3;
+static u32 D_80800560_chdiggerbossshell_rest[17] = { 0x9040001, 0x0, (u32)func_808000B4_chdiggerbossshell, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x41000000, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800018_chdiggerbossshell, (u32)func_80107C2C, 0x80800000, (u32)func_80800188_chdiggerbossshell, 0x0 };
+void *D_808005A8_chdiggerbossshell = (void *)0x02AC04F4;
+static u32 D_808005A8_chdiggerbossshell_rest[17] = { 0xFFFF0001, 0x0, (u32)func_8080045C_chdiggerbossshell, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x40400000, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080044C_chdiggerbossshell, (u32)func_80107C2C, 0x0, (u32)func_808004C8_chdiggerbossshell, 0x0 };
+int D_808005F0_chdiggerbossshell[4] = { 0x130413, 0xD00F3, 0x10C0018, 0x0 };
+u32 D_80800600_chdiggerbossshell[3] = { 0xFF, 0xC0, 0x60 };
+s32 D_8080060C_chdiggerbossshell[13] = { 0x160004, 0x1D09C9, 0x20DCDC, -0x235FFFDE, 0x330066, 0x9900CC, 0x2B004C, 0x800015, 0x190099, 0x2D003C, 0x50000E, 0xF0014, 0x0 };

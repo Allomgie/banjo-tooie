@@ -65,3 +65,11 @@ void bskazshoesspringjump_entrypoint_2(PlayerState *self) {
 s32 bskazshoesspringjump_entrypoint_3(s32 idx) {
     return D_80800270_bskazshoesspringjump[idx];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/shoesspringjump.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bskazshoesspringjump_entrypoint_0();
+extern void _bskazshoesspringjump_entrypoint_1();
+extern void _bskazshoesspringjump_entrypoint_2();
+extern void func_80099B94();
+s32 D_80800270_bskazshoesspringjump[4] = { (u32)_bskazshoesspringjump_entrypoint_0, (u32)_bskazshoesspringjump_entrypoint_1, (u32)_bskazshoesspringjump_entrypoint_2, (u32)func_80099B94 };

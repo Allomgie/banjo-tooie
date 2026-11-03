@@ -6,7 +6,7 @@ extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_8009BF5C(s32, f32);
 extern void baroll_setIdeal(s32, f32);
 extern f32 D_80800740_bashoessuck[];
-extern f32 D_80800800_bashoessuck[];
+extern u32 D_80800800_bashoessuck[];
 extern void func_8009C128();
 extern s32 func_800C6A7C(f32 *, f32 *, f32 *, s32);
 extern void func_800EE7F8(void *, f32 *);
@@ -212,3 +212,8 @@ s32 bashoessuck_entrypoint_5(PlayerState *param_0, f32 *param_1)
     _bamovespline_entrypoint_8(param_0);
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/shoessuck.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+f32 D_80800740_bashoessuck[48] = { -24.0f, 8.0f, 0.0f, 24.0f, 8.0f, 0.0f, 24.0f, 8.0f, 0.0f, -24.0f, 8.0f, 0.0f, 0.0f, 8.0f, -24.0f, 0.0f, 8.0f, 24.0f, 0.0f, 8.0f, 24.0f, 0.0f, 8.0f, -24.0f, -24.0f, -8.0f, 0.0f, 24.0f, -8.0f, 0.0f, 24.0f, -8.0f, 0.0f, -24.0f, -8.0f, 0.0f, 0.0f, -8.0f, -24.0f, 0.0f, -8.0f, 24.0f, 0.0f, -8.0f, 24.0f, 0.0f, -8.0f, -24.0f };
+u32 D_80800800_bashoessuck[4] = { 0x16B, 0x16C, 0xFFFFFFFF, 0x0 };

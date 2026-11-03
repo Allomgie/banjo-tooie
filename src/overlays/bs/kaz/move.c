@@ -354,3 +354,10 @@ void bskazmove_entrypoint_11(PlayerState *self, s32 arg1) {
     }
     func_800962B0(self, 0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/move.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bskazshoessuckspline_entrypoint_0();
+s32 D_80800C70_bskazmove[4] = { (u32)_bskazmove_entrypoint_1, (u32)_bskazmove_entrypoint_2, (u32)_bskazmove_entrypoint_3, (u32)_bskazshoessuckspline_entrypoint_0 };
+s32 D_80800C80_bskazmove[4] = { (u32)_bskazmove_entrypoint_7, (u32)_bskazmove_entrypoint_8, (u32)_bskazmove_entrypoint_9, (u32)_bskazshoessuckspline_entrypoint_0 };

@@ -12,7 +12,7 @@ extern void func_8009DF58(PlayerState *, s32, f32);
 extern void func_8009DB04(PlayerState *, s32, f32, s32);
 extern s32 D_80800A40_bsbansnooze[];
 extern s32 D_80800A50_bsbansnooze[];
-extern s32 D_80800A60_bsbansnooze;
+extern s32 D_80800A60_bsbansnooze[];
 extern void *baanim_getAnimCtrlPtr(PlayerState *);
 extern f32 anctrl_getAnimTimer(void *);
 extern f32 func_800F3780(f32, void *, s32);
@@ -322,3 +322,17 @@ void func_808008A4_bsbansnooze(PlayerState *param_0)
 s32 bsbansnooze_entrypoint_5(s32 param_0) {
     return D_80800AA8_bsbansnooze[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ban/snooze.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800A60_bsbansnooze -> s32[] */
+extern void func_80099B94();
+extern void _bsdrone_entrypoint_3();
+s32 D_80800A40_bsbansnooze[4] = { (u32)func_8080019C_bsbansnooze, (u32)func_808001FC_bsbansnooze, (u32)func_80800278_bsbansnooze, (u32)func_80099B94 };
+s32 D_80800A50_bsbansnooze[4] = { (u32)func_8080037C_bsbansnooze, (u32)func_8080039C_bsbansnooze, (u32)func_80800414_bsbansnooze, (u32)func_80099B94 };
+s32 D_80800A60_bsbansnooze[6] = { 0x0, 0x3F800000, 0x3F000000, 0x0, 0x3F800000, 0x3F800000 };
+s32 D_80800A78_bsbansnooze[4] = { (u32)func_808004C0_bsbansnooze, (u32)func_808004E0_bsbansnooze, (u32)func_80800588_bsbansnooze, (u32)func_80099B94 };
+s32 D_80800A88_bsbansnooze[4] = { (u32)func_8080064C_bsbansnooze, (u32)func_80800674_bsbansnooze, (u32)func_8080069C_bsbansnooze, (u32)_bsdrone_entrypoint_3 };
+s32 D_80800A98_bsbansnooze[4] = { (u32)func_808006D0_bsbansnooze, (u32)func_808006F8_bsbansnooze, (u32)func_80800720_bsbansnooze, (u32)func_80099B94 };
+s32 D_80800AA8_bsbansnooze[6] = { (u32)func_8080076C_bsbansnooze, (u32)func_80800794_bsbansnooze, (u32)func_808008A4_bsbansnooze, (u32)func_80099B94, 0x0, 0x0 };

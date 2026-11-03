@@ -407,3 +407,16 @@ int bsbanshack_entrypoint_6(s32 param_0)
 {
   return D_80800D10_bsbanshack[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ban/shack.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099B94();
+extern void _bsdrone_entrypoint_3();
+s32 D_80800CB0_bsbanshack[4] = { (u32)func_808002AC_bsbanshack, (u32)func_8080030C_bsbanshack, (u32)func_8080037C_bsbanshack, (u32)func_80099B94 };
+s32 D_80800CC0_bsbanshack[4] = { (u32)func_80800430_bsbanshack, (u32)func_80800450_bsbanshack, (u32)func_808004AC_bsbanshack, (u32)func_80099B94 };
+s32 D_80800CD0_bsbanshack[4] = { (u32)func_80800744_bsbanshack, (u32)func_80800770_bsbanshack, (u32)func_808007A0_bsbanshack, (u32)func_80099B94 };
+s32 D_80800CE0_bsbanshack[4] = { (u32)func_80800928_bsbanshack, (u32)func_80800948_bsbanshack, (u32)func_808009E4_bsbanshack, (u32)func_80099B94 };
+s32 D_80800CF0_bsbanshack[4] = { (u32)func_80800AD0_bsbanshack, (u32)func_80800AF8_bsbanshack, (u32)func_80800B20_bsbanshack, (u32)_bsdrone_entrypoint_3 };
+s32 D_80800D00_bsbanshack[4] = { (u32)func_80800B54_bsbanshack, (u32)func_80800B7C_bsbanshack, (u32)func_80800BA4_bsbanshack, (u32)func_80099B94 };
+s32 D_80800D10_bsbanshack[4] = { (u32)func_80800BF0_bsbanshack, (u32)func_80800C10_bsbanshack, (u32)func_80800C6C_bsbanshack, (u32)func_80099B94 };

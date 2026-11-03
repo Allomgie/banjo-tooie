@@ -22,3 +22,6 @@ void bamotor_entrypoint_3(s32 param_0, s32 param_1, s32 param_2, s32 param_3, f3
     func_80018854(bakey_getControllerIndex(param_0), param_1, param_2, param_3,
                   param_4, param_5, param_6);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/motor.data.s) is defined here in C.
+ * Values are taken from the ROM. */

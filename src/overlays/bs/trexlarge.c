@@ -862,3 +862,20 @@ int bstrexlarge_entrypoint_15(int param_0)
 {
   return D_80801A40_bstrexlarge[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/trexlarge.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _basudie_entrypoint_11();
+s32 D_80801990_bstrexlarge[4] = { (u32)func_80800560_bstrexlarge, (u32)func_80800580_bstrexlarge, (u32)func_808005D4_bstrexlarge, (u32)func_8080024C_bstrexlarge };
+int D_808019A0_bstrexlarge[4] = { (u32)func_80800834_bstrexlarge, (u32)func_80800854_bstrexlarge, (u32)func_80800874_bstrexlarge, (u32)_basudie_entrypoint_11 };
+int D_808019B0_bstrexlarge[4] = { (u32)func_808008A8_bstrexlarge, (u32)func_808008D0_bstrexlarge, (u32)func_808008F8_bstrexlarge, (u32)func_80800270_bstrexlarge };
+int D_808019C0_bstrexlarge[4] = { (u32)func_80800A00_bstrexlarge, (u32)func_80800A20_bstrexlarge, (u32)func_80800A50_bstrexlarge, (u32)func_8080024C_bstrexlarge };
+int D_808019D0_bstrexlarge[4] = { (u32)func_80800DAC_bstrexlarge, (u32)func_80800DD8_bstrexlarge, (u32)func_80800E08_bstrexlarge, (u32)func_8080024C_bstrexlarge };
+s32 D_808019E0_bstrexlarge[4] = { (u32)func_80800F2C_bstrexlarge, (u32)func_80800F4C_bstrexlarge, (u32)func_80800F6C_bstrexlarge, (u32)func_8080024C_bstrexlarge };
+int D_808019F0_bstrexlarge[4] = { (u32)func_80800FA0_bstrexlarge, (u32)func_80800FC8_bstrexlarge, (u32)func_80801008_bstrexlarge, (u32)func_8080024C_bstrexlarge };
+s32 D_80801A00_bstrexlarge[4] = { (u32)func_80801060_bstrexlarge, (u32)func_80801088_bstrexlarge, (u32)func_808010B0_bstrexlarge, (u32)func_8080024C_bstrexlarge };
+int D_80801A10_bstrexlarge[4] = { (u32)func_80801244_bstrexlarge, (u32)func_8080126C_bstrexlarge, (u32)func_808012EC_bstrexlarge, (u32)func_80800294_bstrexlarge };
+int D_80801A20_bstrexlarge[4] = { (u32)func_808014A4_bstrexlarge, (u32)func_808014C4_bstrexlarge, (u32)func_80801574_bstrexlarge, (u32)func_8080024C_bstrexlarge };
+s32 D_80801A30_bstrexlarge[4] = { (u32)func_80801604_bstrexlarge, (u32)func_80801634_bstrexlarge, (u32)func_808016B4_bstrexlarge, (u32)func_8080024C_bstrexlarge };
+s32 D_80801A40_bstrexlarge[4] = { (u32)func_808017DC_bstrexlarge, (u32)func_808017FC_bstrexlarge, (u32)func_808018AC_bstrexlarge, (u32)func_8080024C_bstrexlarge };

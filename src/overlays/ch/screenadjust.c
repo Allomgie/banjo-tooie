@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800430_chscreenadjust;
+extern int D_80800430_chscreenadjust[];
 extern f32 func_800D8FF8(void);
 extern f32 mlAbsF(f32);
 
@@ -60,3 +60,11 @@ int chscreenadjust_entrypoint_0()
 {
   return (int)&D_80800430_chscreenadjust;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/screenadjust.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800430_chscreenadjust -> int[] */
+extern void func_80102EC0();
+extern void func_80107C2C();
+int D_80800430_chscreenadjust[20] = { 0x15801E8, -0xFFFF, 0x0, (u32)func_80800000_chscreenadjust, (u32)func_80102EC0, (u32)func_8080037C_chscreenadjust, 0x0, 0x0, 0x0, 0x400004, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFDFFE, (u32)func_8080016C_chscreenadjust, 0x0, 0x0, 0x0 };

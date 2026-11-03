@@ -88,3 +88,6 @@ void bahold_entrypoint_7(Actor *param_0, f32 param_1, f32 param_2) {
     *(f32 *)((u8 *)*(void **)((u8 *)param_0 + 0x9C) + 0) = param_1;
     *(f32 *)((u8 *)*(void **)((u8 *)param_0 + 0x9C) + 4) = param_2;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/hold.data.s) is defined here in C.
+ * Values are taken from the ROM. */

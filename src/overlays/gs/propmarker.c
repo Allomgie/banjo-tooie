@@ -87,3 +87,6 @@ f32 gspropmarker_entrypoint_3(u32 *param_0)
     }
     return local_1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gs/propmarker.data.s) is defined here in C.
+ * Values are taken from the ROM. */

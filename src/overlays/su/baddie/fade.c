@@ -147,3 +147,6 @@ s32 subaddiefade_entrypoint_14(Actor *this){
     func_800C87DC(local_0);
     subaddiefade_entrypoint_11(this, &local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/fade.data.s) is defined here in C.
+ * Values are taken from the ROM. */

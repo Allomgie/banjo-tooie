@@ -139,3 +139,6 @@ void gspropprop_entrypoint_3(u8 *param_0, s32 param_1)
             (u32)*(u16 *)(param_0 + 10) >> 11);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gs/propprop.data.s) is defined here in C.
+ * Values are taken from the ROM. */

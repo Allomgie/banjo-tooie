@@ -145,3 +145,9 @@ void vpwibble_entrypoint_3(u8 *param_0, s32 param_1, u8 *param_2, s32 param_3)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/vp/wibble.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080070E_vpwibble = D_80800700_vpwibble + 0xE, D_8080071E_vpwibble = D_80800710_vpwibble + 0xE */
+WibbleRecord D_80800700_vpwibble[1] = { 0x43, 0xC8, 0x0, 0x0, 0x41, 0xA0, 0x0, 0x0, 0x41, 0xA0, 0x0, 0x0, 0xA, 0x1, 0x4B0 };
+u32 D_80800710_vpwibble[20] = { 0x43C80000, 0x41A00000, 0x40800000, 0x32080514, 0x43C80000, 0x41A00000, 0x40800000, 0x32000578, 0x43C80000, 0x41A00000, 0x40800000, 0x805DC, 0x43C80000, 0x0, 0x40800000, 0x32080640, 0x43C80000, 0xC3480000, 0xC2200000, 0x32000834 };

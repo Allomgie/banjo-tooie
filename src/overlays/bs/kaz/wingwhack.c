@@ -185,3 +185,12 @@ void func_80800580_bskazwingwhack(PlayerState *self) {
 s32 bskazwingwhack_entrypoint_1(s32 idx) {
     return D_80800AC8_bskazwingwhack[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/wingwhack.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099B94();
+s32 D_80800920_bskazwingwhack[88] = { 0x3D086595, 0x0, 0x3D63BCD3, 0x4289EB85, 0x3D9F559B, 0x4260C28F, 0x3DCCCCCD, 0x42C723D7, 0x3DFA43FE, 0x430870A4, 0x3E13DD98, 0x431ED1EC, 0x3E2AB368, 0x42FFC7AE, 0x3E416F00, 0x429523D7, 0x3E582A99, 0x42906148, 0x3E6EE632, 0x4280D70A, 0x3E888CE7, 0x4232851F, 0x3E93EAB3, 0x42DBD70A, 0x3E9F4880, 0x4285999A, 0x3EB05532, 0x424E70A4, 0x3EBBC01A, 0x42F4FAE1, 0x3EC71DE7, 0x42AD2E14, 0x3ED27BB3, 0x42C2199A, 0x3EDDD97F, 0x42BDAE14, 0x3EE94467, 0x42BE3852, 0x3EF4A234, 0x42A90F5C, 0x3F000000, 0x4288A3D7, 0x3F05AEE6, 0x425C5C29, 0x3F0B5DCC, 0x424CB852, 0x3F111340, 0x4256AE14, 0x3F16C227, 0x42846B85, 0x3F1C710D, 0x42BC0F5C, 0x3F221FF3, 0x4302AE14, 0x3F27D567, 0x4320A8F6, 0x3F2D844D, 0x4329E148, 0x3F333333, 0x4323B5C3, 0x3F38E219, 0x430F23D7, 0x3F3E9100, 0x42ED23D7, 0x3F444674, 0x42C7E666, 0x3F49F55A, 0x4288B333, 0x3F4FA440, 0x4196F5C3, 0x3F555326, 0x412D47AE, 0x3F5B089A, 0x41C71EB8, 0x3F60B780, 0x416A3D71, 0x3F666666, 0x40CAE148, 0x3F6C154D, 0x40D8A3D7, 0x3F71C433, 0x40D8A3D7, 0x3F7779A7, 0x4107851F, 0x3F7D288D, 0x411CF5C3, 0x3F800000, 0x40DB3333 };
+s32 D_80800A80_bskazwingwhack[14] = { 0x7802002C, 0xFF06, 0x0, -0xFA0000, 0x150000, 0x20026, 0x0, 0x0, 0x0, 0x220200, 0x2000100, 0x100002B, 0x260026, 0x11A0000 };
+s32 D_80800AB8_bskazwingwhack[4] = { (u32)func_808000DC_bskazwingwhack, (u32)func_80800148_bskazwingwhack, (u32)func_80800278_bskazwingwhack, (u32)func_80099B94 };
+s32 D_80800AC8_bskazwingwhack[6] = { (u32)func_808004A8_bskazwingwhack, (u32)func_808004DC_bskazwingwhack, (u32)func_80800580_bskazwingwhack, (u32)func_80099B94, 0x0, 0x0 };

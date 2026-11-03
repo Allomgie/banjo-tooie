@@ -133,3 +133,6 @@ s32 sccustom_banjo_entrypoint_3(s32 param_0)
     local_1 = (local_0 * 20 + 40) * local_1;
     return (s32)local_1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/sc/custom_banjo.data.s) is defined here in C.
+ * Values are taken from the ROM. */

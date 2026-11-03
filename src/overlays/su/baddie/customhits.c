@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void func_800EC358(Unk80132ED0 *, void *);
-extern int D_80800350_subaddiecustomhits;
+extern int D_80800350_subaddiecustomhits[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern Actor *func_80106790(void);
 extern s32 func_800B1F8C(s32, f32 *, s32, f32, s32, s32, f32 *, f32, s32, s32);
@@ -86,3 +86,10 @@ f32 subaddiecustomhits_entrypoint_5(Actor *param_0, f32 *param_1)
     func_800EE7F8(param_1, param_0->position);
     return (f32)(u32)*(u16 *)((u8 *)param_0 + 0x6A) * param_0->scale * 1.15f;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/customhits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800350_subaddiecustomhits -> int[] */
+extern void _subaddiecustomhits_entrypoint_2();
+int D_80800350_subaddiecustomhits[4] = { 0x0, 0x0, 0x0, (u32)_subaddiecustomhits_entrypoint_2 };

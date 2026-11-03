@@ -3,7 +3,7 @@
 extern u8 D_80800250_chlavacolumns[];
 extern u8 D_80800258_chlavacolumns[];
 extern f32 func_800D8FF8(void);
-extern int D_80800260_chlavacolumns;
+extern int D_80800260_chlavacolumns[];
 s32 func_80800200_chlavacolumns(s32 param_0, f32 param_1);
 extern void func_800EDCB8(s32, f32);
 
@@ -69,3 +69,14 @@ int chlavacolumns_entrypoint_0(void)
 {
     return (int)&D_80800260_chlavacolumns;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lava/columns.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800260_chlavacolumns -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+u8 D_80800250_chlavacolumns[8] = { 0x0, 0x13, 0x4, 0xAD, 0x0, 0x2, 0x0, 0x0 };
+u8 D_80800258_chlavacolumns[8] = { 0x0, 0x13, 0x4, 0xC7, 0x0, 0x2, 0x0, 0x0 };
+int D_80800260_chlavacolumns[20] = { 0x158027F, 0x95F0001, 0x0, (u32)func_8080014C_chlavacolumns, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80800000_chlavacolumns, (u32)func_80107C2C, -0x7FFFD1FE, (u32)func_80800044_chlavacolumns, 0x0, 0x0, 0x0 };

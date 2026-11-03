@@ -129,3 +129,16 @@ Actor *chegggrenade_entrypoint_3(s32 param_0, s32 param_1, s32 param_2, s32 para
     local_0->unk70_10 = 1;
     return local_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/egg/grenade.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void _subaddiedraw25d_entrypoint_2();
+extern void _suegg_entrypoint_2();
+extern void _suegg_entrypoint_0();
+extern void _suegg_entrypoint_5();
+extern void func_80107C2C();
+extern void _suegg_entrypoint_17();
+void *D_80800450_chegggrenade = (void *)0x026F015D;
+static u32 D_80800450_chegggrenade_rest[19] = { 0x9C20001, 0x0, (u32)func_80800164_chegggrenade, (u32)func_80105834, (u32)_subaddiedraw25d_entrypoint_2, 0x0, 0x3F800000, 0x0, 0x4, (u32)_suegg_entrypoint_2, (u32)_suegg_entrypoint_0, 0x4C0000, (u32)_suegg_entrypoint_5, (u32)func_80107C2C, 0x88000000, (u32)_suegg_entrypoint_17, 0x0, 0x0, 0x0 };

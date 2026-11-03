@@ -132,3 +132,8 @@ void func_80800220_bskazhatch(PlayerState *self) {
 s32 bskazhatch_entrypoint_0(s32 idx) {
     return D_808004E0_bskazhatch[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/hatch.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_808004E0_bskazhatch[4] = { (u32)func_808000A8_bskazhatch, (u32)func_808000D4_bskazhatch, (u32)func_80800220_bskazhatch, (u32)func_80800108_bskazhatch };

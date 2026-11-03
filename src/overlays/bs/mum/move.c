@@ -157,3 +157,9 @@ void func_80800444_bsmummove(PlayerState *self) {
 s32 bsmummove_entrypoint_4(s32 idx) {
     return D_808005C0_bsmummove[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/mum/move.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_808005B0_bsmummove[4] = { (u32)func_80800030_bsmummove, (u32)func_80800068_bsmummove, (u32)func_808001D8_bsmummove, (u32)_bsmum_entrypoint_0 };
+s32 D_808005C0_bsmummove[4] = { (u32)func_80800318_bsmummove, (u32)func_80800338_bsmummove, (u32)func_80800444_bsmummove, (u32)_bsmum_entrypoint_0 };

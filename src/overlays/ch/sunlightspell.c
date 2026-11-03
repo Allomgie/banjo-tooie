@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern f32 D_808008B0_chsunlightspell;
+extern f32 D_808008B0_chsunlightspell[];
 extern void *func_80100094(Actor *, u32);
 typedef union { s32 word; void *pointer; } SunlightSpellEventPayload;
 extern void *D_808008BC_chsunlightspell;
@@ -209,3 +209,15 @@ void *chsunlightspell_entrypoint_0(void)
 {
     return &D_808008BC_chsunlightspell;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/sunlightspell.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808008B0_chsunlightspell -> f32[] */
+extern void func_80105834();
+extern void func_80107C2C();
+u8 D_80800890_chsunlightspell[20] = { 0x0, 0x13, 0x6, 0x73, 0x0, 0x20, 0x0, 0x2, 0x0, 0xA, 0x1, 0x19, 0x0, 0x16, 0x4E, 0x20, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808008A4_chsunlightspell[12] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF };
+f32 D_808008B0_chsunlightspell[3] = { -9e+03f, 8e+03f, -3.1e+03f };
+void *D_808008BC_chsunlightspell = (void *)0x01310297;
+static u32 D_808008BC_chsunlightspell_rest[20] = { 0x9280001, 0x0, (u32)func_80800048_chsunlightspell, (u32)func_80105834, (u32)func_80800768_chsunlightspell, 0x0, 0x0, 0x0, 0x21000, 0x0, 0x0, 0x0, (u32)func_80800000_chsunlightspell, (u32)func_80107C2C, 0x80000402, (u32)func_808007CC_chsunlightspell, 0x0, 0x0, 0x0, 0x0 };

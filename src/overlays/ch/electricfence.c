@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808004C0_chelectricfence;
+extern int D_808004C0_chelectricfence[];
 extern void func_800BBCB8(s32, s32, float, s32, void *);
 extern void _subaddieaudioquick_entrypoint_2(s32, s32, void *);
 extern s32 func_800C8A98(void);
@@ -116,3 +116,23 @@ void chelectricfence_entrypoint_2(Actor *param_0, f32 *param_1, f32 *param_2)
     func_800BA8F8(local_4, local_5, local_5);
     func_800BA22C(local_4, 1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/electricfence.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808004C0_chelectricfence -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_808004C0_chelectricfence[18] = { 0x33103D3, 0x79D0001, 0x0, (u32)func_80800060_chelectricfence, (u32)func_80105834, (u32)func_80101870, 0x17700000, 0x0, 0x0, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chelectricfence, (u32)func_80107C2C, -0x7FFFE000, (u32)func_8080010C_chelectricfence, 0x0 };
+u8 D_80800508_chelectricfence[20] = { 0x0, 0x13, 0x5, 0xB7, 0x0, 0xE, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x19, 0x0, 0x16, 0x46, 0x50, 0x0, 0x0, 0x0, 0x0 };
+void *D_8080051C_chelectricfence = (void *)0x001D09CD;
+static u32 D_8080051C_chelectricfence_rest[14] = { 0x1BFC18, 0xFCE0002D, 0x12C0190, 0xE0014, 0x140016, 0x11000018, 0x1, 0xA000F00, 0x220040, 0x590019, 0x330015, 0xCC, 0x2B0119, 0x14C0000 };
+void *D_80800558_chelectricfence = (void *)0x001D09DD;
+static u32 D_80800558_chelectricfence_rest[12] = { 0x2D000A, 0x1E000E, 0x140014, 0x20C0C0, 0xC0C00016, 0x80022, 0xCC0100, 0x1330166, 0x150000, 0x99002B, 0x119014C, 0x0 };
+void *D_8080058C_chelectricfence = (void *)0x001304B0;
+static u32 D_8080058C_chelectricfence_rest[2] = { 0xA014C, 0x180000 };
+void *D_80800598_chelectricfence = (void *)0x000000E0;
+static u32 D_80800598_chelectricfence_rest[2] = { 0xE0, 0xFF };
+u8 D_808005A4_chelectricfence[60] = { 0x0, 0x34, 0x0, 0x1D, 0x9, 0xCD, 0x0, 0x16, 0x12, 0x0, 0x0, 0x18, 0x0, 0x0, 0x0, 0x4, 0x1E, 0x0, 0x23, 0x0, 0x0, 0x22, 0x0, 0x40, 0x0, 0x59, 0x0, 0x19, 0x0, 0x33, 0x0, 0x15, 0x0, 0x19, 0x0, 0xE6, 0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

@@ -98,3 +98,6 @@ void glsplinefuncs_entrypoint_1(s32 param_0, s32 param_1, s32 param_2)
     ((AF *)local_7)->f10 = 1;
     if (local_2) func_800D87D4(local_7, local_2);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/spline/funcs.data.s) is defined here in C.
+ * Values are taken from the ROM. */

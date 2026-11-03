@@ -206,3 +206,6 @@ void gspropsDll_entrypoint_4(u8 *param_0)
         local_1[0xB] &= 0xDF;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gs/propsDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

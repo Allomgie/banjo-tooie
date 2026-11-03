@@ -18,7 +18,7 @@ extern void func_800DE498(void *, f32 *, f32 *, f32, s32, void *);
 typedef struct { u8 pad[0x65]; u8 pad65:3; u8 flag:1; u8 rest:4; } DrillS;
 extern void _chswitch_entrypoint_7(DrillS *, s32);
 extern void _chswitch_entrypoint_9(DrillS *);
-extern int D_808014F0_choildrill;
+extern int D_808014F0_choildrill[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 typedef struct { f32 v[3]; } OilVector;
 typedef struct { f32 time, speed; u8 event; u8 pad[3]; f32 volume; } OilKey;
@@ -201,7 +201,7 @@ void func_808007DC_choildrill(Actor *param_0, f32 param_1, s32 param_2)
 
 int choildrill_entrypoint_0(s32 param_0, unsigned int param_1)
 {
-  extern f32 D_808013DC_choildrill;
+  extern f32 D_808013DC_choildrill[];
   func_800BBCB8(param_1, 0, 1.0f, 1, &D_808013DC_choildrill);
 }
 
@@ -367,7 +367,7 @@ void func_80800F08_choildrill(Actor *param_0, void *param_1)
 
 int choildrill_entrypoint_1()
 {
-    extern int D_808014A8_choildrill;
+    extern int D_808014A8_choildrill[];
     return (int)&D_808014A8_choildrill;
 }
 
@@ -403,3 +403,26 @@ int *choildrill_entrypoint_2()
 {
     return &D_808014F0_choildrill;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/oildrill.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808013DC_choildrill -> f32[], D_808014A8_choildrill -> int[], D_808014F0_choildrill -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _chswitch_entrypoint_6();
+extern int func_80101870();
+u32 D_808012B0_choildrill[20] = { 0x0, 0x0, 0x0, 0x0, 0x3F800000, 0x4A0000, 0x3F800000, 0x4A0000, 0x3F800000, 0x4A0000, 0x3F800000, 0x4A0000, 0x3F800000, 0x4A0000, 0x3F800000, 0x4A0000, 0x3F800000, 0x4A0000, 0x3F800000, 0x4A0000 };
+OilVector D_80801300_choildrill = { -6.46e+03f, 0.0f, 1777.0f };
+OilKey D_8080130C_choildrill[8] = { 0.0f, 0.0f, 0x0, 0x0, 0x0, 0x0, 0.0f, 2.0f, 0.0f, 0x1, 0x0, 0x0, 0x0, 0.0f, 6.0f, 0.0f, 0x5, 0x0, 0x0, 0x0, 1.1f, 6.5f, 0.3f, 0x5, 0x0, 0x0, 0x0, 1.1f, 7.0f, 0.1f, 0x5, 0x0, 0x0, 0x0, 1.1f, 9.0f, 0.4f, 0x1, 0x0, 0x0, 0x0, 0.0f, 18.0f, 1.0f, 0x1, 0x0, 0x0, 0x0, 0.0f, -1.0f, 0.0f, 0x0, 0x0, 0x0, 0x0, 0.0f };
+u8 D_8080138C_choildrill[12] = { 0x0, 0x13, 0x4, 0xB4, 0x0, 0x1, 0x3, 0xE8, 0x27, 0x10, 0x0, 0x0 };
+s32 D_80801398_choildrill[14] = { 0x1D09DC, 0x180000, 0x131400, 0x1E00001B, 0x12C020D, 0xD001E, 0x1F5A5A, 0x5A000016, 0x12000025, 0x5000700, 0x15004F, 0x99002B, 0x2820300, 0x0 };
+f32 D_808013D0_choildrill[3] = { -5.26e+03f, 3.6e+03f, 4.51e+03f };
+f32 D_808013DC_choildrill[10] = { 2.666765e-39f, 2.026122e-39f, 3.949644e-39f, 3.7615913e-37f, 5.877741e-39f, 3.122766e-39f, 2.351204e-38f, 6.018553e-36f, -3.176683e-07f, -3.912045e-34f };
+s32 D_80801404_choildrill[19] = { 0x1D09D9, 0x1BFC18, -0x383FFD3, 0x12C0190, 0x161000, 0x23001E, 0x15000C, 0xE6002B, 0x4000400, 0x2F0080, 0x800000, 0x330059, 0x99, 0x31FFCE, -0x9FFF9, 0x1000B, 0x140032, 0x50000, 0x0 };
+s32 D_80801450_choildrill[16] = { 0x1D09F4, 0x1BFE3E, -0x225FFD3, 0x9600FA, 0xD001E, 0x161400, 0x2600FA, 0xFA0000, 0x1900190, 0x22, 0xB30100, 0x4C0080, 0x40099, 0x70002, 0x31FFF6, -0x1E0000 };
+u8 D_80801490_choildrill[12] = { 0xC5, 0xAC, 0xD0, 0x0, 0x45, 0x3C, 0x70, 0x0, 0x45, 0x8F, 0xC0, 0x0 };
+u8 D_8080149C_choildrill[12] = { 0xC5, 0xC2, 0xB0, 0x0, 0x45, 0x3A, 0x40, 0x0, 0x45, 0xCB, 0xC0, 0x0 };
+int D_808014A8_choildrill[18] = { 0x1580484, 0x91F0002, (u32)&D_808012B0_choildrill, (u32)func_80800104_choildrill, (u32)func_80105834, (u32)func_80800F08_choildrill, 0xFA04E20, 0x0, 0x0, 0x800C20, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_choildrill, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800BCC_choildrill, 0x0 };
+int D_808014F0_choildrill[20] = { 0x1580485, 0x9320001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808010C0_choildrill, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80801110_choildrill, 0x0, 0x0, 0x0 };

@@ -89,3 +89,6 @@ void cadbio_entrypoint_0(s32 param_0) {
         } while (_gsmaker_entrypoint_16(param_0, 0) == 0);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ca/dbio.data.s) is defined here in C.
+ * Values are taken from the ROM. */

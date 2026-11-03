@@ -43,3 +43,6 @@ void idglow_entrypoint_3(f32 *param_0, void *param_1, void *param_2)
     }
     _glid_entrypoint_0(param_1, param_2, _idglow_entrypoint_0, param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/glow.data.s) is defined here in C.
+ * Values are taken from the ROM. */

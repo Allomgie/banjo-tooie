@@ -283,3 +283,12 @@ int bscarry_entrypoint_4(s32 param_0)
 {
   return D_808007F0_bscarry[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/carry.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_808007B0_bscarry[4] = { (u32)func_8080027C_bscarry, (u32)func_8080029C_bscarry, (u32)func_80800310_bscarry, (u32)func_80800000_bscarry };
+s32 D_808007C0_bscarry[4] = { (u32)func_808003D8_bscarry, (u32)func_808003F8_bscarry, (u32)func_8080047C_bscarry, (u32)func_80800000_bscarry };
+s32 D_808007D0_bscarry[4] = { (u32)func_80800500_bscarry, (u32)func_80800520_bscarry, (u32)func_80800594_bscarry, (u32)func_80800000_bscarry };
+s32 D_808007E0_bscarry[4] = { (u32)func_8080065C_bscarry, (u32)func_80800684_bscarry, (u32)func_808006AC_bscarry, (u32)func_808000D0_bscarry };
+s32 D_808007F0_bscarry[4] = { (u32)func_808006E0_bscarry, (u32)func_80800708_bscarry, (u32)func_80800730_bscarry, (u32)func_80800000_bscarry };

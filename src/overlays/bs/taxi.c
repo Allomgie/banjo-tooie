@@ -67,9 +67,9 @@ extern s32 D_808021C8_bstaxi[];
 extern s32 D_808021D8_bstaxi[];
 extern s32 D_808021E8_bstaxi[];
 extern s32 D_808021F8_bstaxi[];
-extern s32 D_808020D0_bstaxi;
-extern s32 D_808020F0_bstaxi;
-extern s32 D_80802110_bstaxi;
+extern s32 D_808020D0_bstaxi[];
+extern s32 D_808020F0_bstaxi[];
+extern s32 D_80802110_bstaxi[];
 extern s32 baanim_isAt(PlayerState *, f32);
 extern f32 baanim_getTimer(PlayerState *);
 extern void func_8009DEC0(PlayerState *, s32, f32, f32, s32, s32);
@@ -890,3 +890,47 @@ int bstaxi_entrypoint_35(s32 param_0)
 {
   return D_808021F8_bstaxi[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/taxi.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808020D0_bstaxi -> s32[], D_808020F0_bstaxi -> s32[], D_80802110_bstaxi -> s32[] */
+extern void _bstaxi_entrypoint_2();
+extern void _bstaxi_entrypoint_3();
+extern void _bstaxi_entrypoint_4();
+extern int func_80099B94();
+extern void _bstaxi_entrypoint_7();
+extern void _bstaxi_entrypoint_8();
+extern void _bstaxi_entrypoint_9();
+extern void _bstaxi_entrypoint_11();
+extern void _bstaxi_entrypoint_12();
+extern void _bstaxi_entrypoint_13();
+extern void _bstaxi_entrypoint_17();
+extern void _bstaxi_entrypoint_15();
+extern void _bstaxi_entrypoint_16();
+extern void _bstaxi_entrypoint_19();
+extern void _bstaxi_entrypoint_20();
+extern void _bstaxi_entrypoint_21();
+extern void _bstaxi_entrypoint_23();
+extern void _bstaxi_entrypoint_24();
+extern void _bstaxi_entrypoint_25();
+extern void _bstaxi_entrypoint_27();
+extern void _bstaxi_entrypoint_28();
+extern void _bstaxi_entrypoint_30();
+extern void _bstaxi_entrypoint_29();
+extern void _bstaxi_entrypoint_32();
+extern void _bstaxi_entrypoint_33();
+extern void _bstaxi_entrypoint_34();
+s32 D_808020D0_bstaxi[8] = { 0x3060013, 0x41D0015, 0x40, 0x190016, 0x5208000C, 0x40, 0xCC0119, 0x110000 };
+s32 D_808020F0_bstaxi[8] = { 0x3060013, 0x41D0015, 0x40, 0x190016, 0x5DC0000C, 0x40, 0xCC0133, 0x110000 };
+s32 D_80802110_bstaxi[8] = { 0x3060013, 0x41D0015, 0x40, 0x190016, 0x6978000C, 0x40, 0xE60166, 0x110000 };
+int D_80802130_bstaxi[4] = { (u32)_bstaxi_entrypoint_2, (u32)_bstaxi_entrypoint_3, (u32)_bstaxi_entrypoint_4, (u32)func_80099B94 };
+u8 D_80802140_bstaxi[72] = { 0x0, 0x1D, 0x9, 0xE6, 0x0, 0x1B, 0xFD, 0x44, 0x1, 0x2C, 0x0, 0x2D, 0x0, 0x64, 0x0, 0xC8, 0x0, 0xD, 0x0, 0x1E, 0x0, 0x16, 0x10, 0x2, 0x0, 0x27, 0x0, 0x0, 0x0, 0x64, 0x0, 0x0, 0x0, 0xC8, 0x0, 0x22, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4C, 0x0, 0x99, 0x0, 0x15, 0x0, 0x33, 0x0, 0xB3, 0x0, 0x2B, 0x0, 0xC0, 0x1, 0x0, 0x0, 0x4, 0x0, 0x99, 0x0, 0x7, 0x0, 0x3, 0x0, 0x31, 0xFF, 0xF6, 0xFF, 0xF6, 0x0, 0x0 };
+s32 D_80802188_bstaxi[4] = { (u32)func_808005B8_bstaxi, (u32)func_808005F0_bstaxi, (u32)func_808006F4_bstaxi, (u32)func_808004A8_bstaxi };
+s32 D_80802198_bstaxi[4] = { (u32)_bstaxi_entrypoint_7, (u32)_bstaxi_entrypoint_8, (u32)_bstaxi_entrypoint_9, (u32)func_80099B94 };
+s32 D_808021A8_bstaxi[4] = { (u32)_bstaxi_entrypoint_11, (u32)_bstaxi_entrypoint_12, (u32)_bstaxi_entrypoint_13, (u32)func_80099B94 };
+s32 D_808021B8_bstaxi[4] = { (u32)_bstaxi_entrypoint_17, (u32)_bstaxi_entrypoint_15, (u32)_bstaxi_entrypoint_16, (u32)func_80099B94 };
+s32 D_808021C8_bstaxi[4] = { (u32)_bstaxi_entrypoint_19, (u32)_bstaxi_entrypoint_20, (u32)_bstaxi_entrypoint_21, (u32)func_80099B94 };
+s32 D_808021D8_bstaxi[4] = { (u32)_bstaxi_entrypoint_23, (u32)_bstaxi_entrypoint_24, (u32)_bstaxi_entrypoint_25, (u32)func_80099B94 };
+s32 D_808021E8_bstaxi[4] = { (u32)_bstaxi_entrypoint_27, (u32)_bstaxi_entrypoint_28, (u32)_bstaxi_entrypoint_30, (u32)_bstaxi_entrypoint_29 };
+s32 D_808021F8_bstaxi[6] = { (u32)_bstaxi_entrypoint_32, (u32)_bstaxi_entrypoint_33, (u32)_bstaxi_entrypoint_34, (u32)func_80099B94, 0x0, 0x0 };

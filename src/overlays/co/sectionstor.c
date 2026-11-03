@@ -82,3 +82,6 @@ void cosectionstor_entrypoint_4(s32 param_0)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/co/sectionstor.data.s) is defined here in C.
+ * Values are taken from the ROM. */

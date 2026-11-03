@@ -30,3 +30,6 @@ void badronemem_entrypoint_3(void *param_0)
 {
     *(u32 *)((char *)param_0 + 0x18C) = 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/dronemem.data.s) is defined here in C.
+ * Values are taken from the ROM. */

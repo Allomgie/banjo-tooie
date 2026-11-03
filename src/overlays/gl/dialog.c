@@ -50,3 +50,6 @@ void gldialog_entrypoint_5(s32 param_0)
     D_80127600[0] = 0;
     D_80127600[1] = -1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/dialog.data.s) is defined here in C.
+ * Values are taken from the ROM. */

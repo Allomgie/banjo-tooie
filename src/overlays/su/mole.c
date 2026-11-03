@@ -1,11 +1,10 @@
 #include "su/mole.h"
 
-void *D_exp_sumole_entrypoint_2[] = { (void *)sumole_entrypoint_2 };
 
 #define MOLE_DATA(arg0) ((MoleActorData*)(arg0->actorData))
 
-extern u32 D_80802510_sumole;
-extern u32 D_80802520_sumole;
+extern u32 D_80802510_sumole[];
+extern u32 D_80802520_sumole[];
 extern s32 D_80802530_sumole[];
 extern s32 D_8080254C_sumole[];
 extern s32 D_8080255C_sumole[];
@@ -77,11 +76,11 @@ void func_808001E0_sumole(Actor* arg0, s32 arg1)
     switch (arg1)
     {
     case 1:
-        _gcdialogcamera_entrypoint_3(&D_80802510_sumole, arg0->scale);
+        _gcdialogcamera_entrypoint_3(D_80802510_sumole, arg0->scale);
         break;
     case 2:
     case 3:
-        _gcdialogcamera_entrypoint_3(&D_80802520_sumole, arg0->scale);
+        _gcdialogcamera_entrypoint_3(D_80802520_sumole, arg0->scale);
         break;
     case 0:
         _gcdialogcamera_entrypoint_3((u32*)D_80802530_sumole, arg0->scale);
@@ -1043,3 +1042,14 @@ void sumole_entrypoint_21(Unk80132ED0* arg0, s32 arg1)
         func_80103140(sp20, 0x629U, sp24->unk0->unk16);
     }
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/mole.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808025B4_sumole = D_8080256C_sumole + 0x48
+ * extern declarations adjusted to the object (same addresses): D_80802510_sumole -> u32[] (uses written as NAME[0]), D_80802520_sumole -> u32[] (uses written as NAME[0]) */
+u32 D_80802510_sumole[4] = { 0x43480000, 0x43480000, 0x43480000, 0x0 };
+u32 D_80802520_sumole[4] = { 0x42F00000, 0x42B40000, 0x42C80000, 0x42A00000 };
+s32 D_80802530_sumole[7] = { 0x42A00000, 0x42B40000, 0x42C80000, 0x0, 0x42, 0x1E, 0x25 };
+s32 D_8080254C_sumole[4] = { 0xD, 0x21, 0x7, 0xF };
+s32 D_8080255C_sumole[4] = { 0x1C9, 0x1CA, 0x1CB, 0x1CC };
+s32 D_8080256C_sumole[27] = { 0xD8D, 0x4, 0x42, 0xD8E, 0x4, 0x42, 0xD9C, 0x5, 0x1E, 0xD9D, 0x5, 0x1E, 0xD68, 0x6, 0x25, 0xD67, 0x6, 0x25, 0xDAB, 0x0, 0xDB1, 0x1, 0xDAD, 0x2, 0xDAF, 0x3, 0x0 };
+u32 D_808025D8_sumole[2] = { 0x0, 0x0 };

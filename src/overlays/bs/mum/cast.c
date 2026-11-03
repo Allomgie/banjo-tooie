@@ -133,3 +133,10 @@ void bsmumcast_entrypoint_3(PlayerState *param_0)
 s32 bsmumcast_entrypoint_4(s32 idx) {
     return D_808004A0_bsmumcast[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/mum/cast.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsmumcast_entrypoint_3();
+extern void _bsmumcast_entrypoint_2();
+s32 D_808004A0_bsmumcast[4] = { (u32)_bsmumcast_entrypoint_0, (u32)_bsmumcast_entrypoint_1, (u32)_bsmumcast_entrypoint_3, (u32)_bsmumcast_entrypoint_2 };

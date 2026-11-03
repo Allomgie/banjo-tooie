@@ -254,3 +254,11 @@ int chlagoonfish_entrypoint_0()
 {
   return &D_80800B70_chlagoonfish;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lagoon/fish.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80107C2C();
+void *D_80800B70_chlagoonfish = (void *)0x02E4031F;
+static u32 D_80800B70_chlagoonfish_rest[19] = { 0x73F0001, 0x0, (u32)func_8080038C_chlagoonfish, (u32)func_80105834, (u32)func_80800908_chlagoonfish, 0x1D4C0000, 0x0, 0x0, 0x401, (u32)func_80800264_chlagoonfish, 0x0, 0x0, (u32)func_808001A0_chlagoonfish, (u32)func_80107C2C, 0x80004402, (u32)func_80800AE0_chlagoonfish, 0x0, 0x0, 0x0 };

@@ -431,3 +431,14 @@ void basnowball_entrypoint_12(SnowPlayer *param_0)
         param_0->unk110->unk2C = 0;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/snowll.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+float D_80801020_basnowball[6] = { 1.0f, 1.0f, 1.5f, 2.0f, 2.5f, 3.0f };
+struct D_80801038_basnowball D_80801038_basnowball[6] = { 83.0f, 46.0f, 83.0f, 46.0f, 114.0f, 66.0f, 1.5e+02f, 88.0f, 1.9e+02f, 105.0f, 2.3e+02f, 125.0f };
+f32 D_80801068_basnowball[6][2] = { 1.0f, 1.0f, 1.0f, 1.0f, 1.2f, 1.05f, 1.4f, 1.1f, 1.6f, 1.15f, 1.8f, 1.2f };
+s32 D_80801098_basnowball[10] = { 0x34001D, 0x9C90020, -0x19190001, 0x2CFFD8, 0x32FFD8, 0x280064, 0x280015, 0x140066, 0x161000, 0x0 };
+f32 D_808010C0_basnowball[4][3] = { -44.0f, 0.0f, 0.0f, 44.0f, 0.0f, 9e+01f, 0.0f, -44.0f, 1.8e+02f, 0.0f, 44.0f, 2.7e+02f };
+f32 D_808010F0_basnowball[2][3] = { 2.666779e-39f, 1.92858e-39f, 6.97955e-39f, 6.42858e-40f, 3.948998e-39f, 4.684005e-39f };
+static u32 D_808010F0_basnowball_rest[1] = { 0x0 };
+u8 D_8080110C_basnowball[52] = { 0x0, 0x1D, 0x9, 0xC9, 0x0, 0x20, 0xE6, 0xE6, 0xFF, 0xFF, 0x0, 0x15, 0x0, 0x19, 0x0, 0x4C, 0x0, 0x1B, 0xFB, 0x50, 0xFB, 0x50, 0x0, 0x24, 0x0, 0x4C, 0x0, 0x66, 0x0, 0x2B, 0x0, 0x59, 0x0, 0x61, 0x1, 0x1A, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

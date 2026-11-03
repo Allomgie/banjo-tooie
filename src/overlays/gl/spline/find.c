@@ -89,3 +89,6 @@ s32 glsplinefind_entrypoint_4(f32 *param_0, f32 *param_1)
     }
     return -1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/spline/find.data.s) is defined here in C.
+ * Values are taken from the ROM. */

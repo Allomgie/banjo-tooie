@@ -183,3 +183,6 @@ void baswim_entrypoint_13(PlayerState *param_0)
 f32 baswim_entrypoint_14(u8 *param_0) {
     return *(*(f32 **)((s8 *)(param_0) + (0x134)));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/swim.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -1,11 +1,11 @@
 #include "gc/collectDLL.h"
 
 extern s16 D_80800BE2_gccollectDll;
-extern s16 D_80800BE4_gccollectDll;
+extern s16 D_80800BE4_gccollectDll[];
 extern s16 D_80800BE6_gccollectDll;
-extern s16 D_80800BE8_gccollectDll;
+extern s16 D_80800BE8_gccollectDll[];
 extern s16 D_80800BEA_gccollectDll;
-extern s32 D_80800BEC_gccollectDll;
+extern s32 D_80800BEC_gccollectDll[];
 
 extern s16 D_80800BE0_gccollectDll[];
 
@@ -141,12 +141,12 @@ s32 func_808002C4_gccollectDll(s32 param_0, s32 param_1)
   {
     return 1;
   }
-  if ((param_0 == D_80800BE4_gccollectDll) && (param_1 == D_80800BE6_gccollectDll))
+  if ((param_0 == D_80800BE4_gccollectDll[0]) && (param_1 == D_80800BE6_gccollectDll))
   {
     return 1;
   }
   local_0 = &D_80800BEC_gccollectDll;
-  if ((param_0 == D_80800BE8_gccollectDll) && (param_1 == D_80800BEA_gccollectDll))
+  if ((param_0 == D_80800BE8_gccollectDll[0]) && (param_1 == D_80800BEA_gccollectDll))
   {
     return 1;
   }
@@ -400,3 +400,13 @@ void gccollectDll_entrypoint_8(s16* arg0)
         }
     }
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/collectDll.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800BE2_gccollectDll = D_80800BE0_gccollectDll + 0x2, D_80800BE6_gccollectDll = D_80800BE4_gccollectDll + 0x2, D_80800BEA_gccollectDll = D_80800BE8_gccollectDll + 0x2
+ * extern declarations adjusted to the object (same addresses): D_80800BE4_gccollectDll -> s16[] (uses written as NAME[0]), D_80800BE8_gccollectDll -> s16[] (uses written as NAME[0]), D_80800BEC_gccollectDll -> s32[] */
+s16 D_80800BE0_gccollectDll[2] = { 0x31, 0x1 };
+s16 D_80800BE4_gccollectDll[2] = { 0x26, 0x1 };
+s16 D_80800BE8_gccollectDll[2] = { 0xB, 0x4 };
+s32 D_80800BEC_gccollectDll[8] = { 0xA0001, 0x160002, 0x3D0001, 0x4C0001, 0xA0002, 0x140000, 0x360001, 0x60002 };
+s32 D_80800C0C_gccollectDll[3] = { 0x0, 0x0, 0x0 };
+u32 D_80800C18_gccollectDll[10] = { 0x1F4, 0x21F, 0x220, 0x21B, 0x136, 0x0, 0x0, 0x4E5, 0x3C6, 0x0 };

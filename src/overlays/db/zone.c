@@ -93,3 +93,6 @@ s32 dbzone_entrypoint_4(u8 *param_0, f32 *param_1, u8 *param_2)
     }
     return local_4;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/zone.data.s) is defined here in C.
+ * Values are taken from the ROM. */

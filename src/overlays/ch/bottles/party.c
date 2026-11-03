@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void *D_80800410_chbottlesparty;
-extern int D_80800458_chbottlesparty;
+extern int D_80800458_chbottlesparty[];
 extern u8 D_808004A0_chbottlesparty[];
 extern u8 D_808004B0_chbottlesparty[];
 extern s32 D_808004CC_chbottlesparty[][3];
@@ -123,3 +123,19 @@ void func_80800330_chbottlesparty(Actor *param_0)
 s32 func_808003E4_chbottlesparty(s32 param_0, s32 param_1, s32 param_2){
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bottles/party.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800458_chbottlesparty -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+void *D_80800410_chbottlesparty = (void *)0x00AC04F8;
+static u32 D_80800410_chbottlesparty_rest[17] = { 0x7810001, 0x0, (u32)func_8080005C_chbottlesparty, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x804, 0x0, 0x0, 0x0, (u32)func_80800018_chbottlesparty, (u32)func_80107C2C, 0x80082402, (u32)func_8080009C_chbottlesparty, 0x0 };
+int D_80800458_chbottlesparty[18] = { 0x15804F9, 0x1, 0x0, (u32)func_80800330_chbottlesparty, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_80800234_chbottlesparty, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_808003E4_chbottlesparty, 0x0 };
+u8 D_808004A0_chbottlesparty[16] = { 0x43, 0x85, 0x80, 0x0, 0x43, 0x85, 0x80, 0x0, 0x43, 0x85, 0x80, 0x0, 0x43, 0x5, 0x80, 0x0 };
+u8 D_808004B0_chbottlesparty[28] = { 0x6, 0x7C, 0x1, 0xF4, 0x15, 0x4E, 0x0, 0x0, 0x0, 0x0, 0x6, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0xF, 0x0, 0x0, 0x0, 0xC, 0x0, 0x0, 0x2, 0x0, 0x0, 0x0 };
+s32 D_808004CC_chbottlesparty[4][3] = { 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0x0 };
+s32 D_808004FC_chbottlesparty[3] = { 0x20, 0x20, 0x20 };
+s32 D_80800508_chbottlesparty[6] = { 0x0, 0x0, 0x3F000000, 0x3F800000, 0x3F800000, 0x0 };

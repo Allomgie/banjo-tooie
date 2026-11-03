@@ -1,9 +1,9 @@
 #include "ch/factory/maindoor.h"
 
-extern int D_808004D4_chfactorymaindoor;
+extern int D_808004D4_chfactorymaindoor[];
 typedef union { s32 word; void *pointer; } FactoryMainDoorEvent;
-extern int D_8080051C_chfactorymaindoor;
-extern int D_80800564_chfactorymaindoor;
+extern int D_8080051C_chfactorymaindoor[];
+extern int D_80800564_chfactorymaindoor[];
 extern f32 func_80103EF4(Actor *);
 extern u8 D_808004CC_chfactorymaindoor[];
 extern u8 D_808004C0_chfactorymaindoor[];
@@ -127,3 +127,18 @@ int *chfactorymaindoor_entrypoint_2()
 {
     return &D_80800564_chfactorymaindoor;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/maindoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808004D4_chfactorymaindoor -> int[], D_8080051C_chfactorymaindoor -> int[], D_80800564_chfactorymaindoor -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void _chswitch_entrypoint_6();
+extern void _chswitch_entrypoint_4();
+u8 D_808004C0_chfactorymaindoor[12] = { 0x0, 0x13, 0x5, 0xB0, 0x0, 0x18, 0x0, 0xA, 0x1, 0x33, 0x0, 0x0 };
+u8 D_808004CC_chfactorymaindoor[8] = { 0x0, 0x13, 0x4, 0xC7, 0x0, 0x18, 0x0, 0x0 };
+int D_808004D4_chfactorymaindoor[18] = { 0x11D03F8, 0x87C0001, 0x0, (u32)func_80800078_chfactorymaindoor, (u32)func_80105834, (u32)func_80101870, 0x13880000, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_80800000_chfactorymaindoor, (u32)func_80107C2C, -0x7FF7DBFE, (u32)func_808001F0_chfactorymaindoor, 0x0 };
+int D_8080051C_chfactorymaindoor[18] = { 0x11B03F9, 0x7B90001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x0, (u32)func_80800344_chfactorymaindoor, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_808003A8_chfactorymaindoor, 0x0 };
+int D_80800564_chfactorymaindoor[19] = { 0x34304DA, 0x8890001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_4, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x0, (u32)func_8080041C_chfactorymaindoor, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_8080043C_chfactorymaindoor, 0x0, 0x0 };

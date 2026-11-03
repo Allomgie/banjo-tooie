@@ -1,8 +1,8 @@
 #include "common.h"
 extern s32 func_800DC298(f32);
 
-extern int D_808012BC_chonearmbandit;
-extern int D_80801304_chonearmbandit;
+extern int D_808012BC_chonearmbandit[];
+extern int D_80801304_chonearmbandit[];
 typedef union { s32 word; Actor **actors; } BanditMessage30;
 extern u8 D_80801280_chonearmbandit[];
 typedef struct { s16 a, b; } S16Pair;
@@ -42,7 +42,7 @@ extern void func_800FFAB0(void *);
 extern void func_8010A570(void *);
 extern void *D_808013A4_chonearmbandit;
 extern void *D_808013DC_chonearmbandit;
-extern int D_808013E8_chonearmbandit;
+extern int D_808013E8_chonearmbandit[];
 typedef struct { u8 pad0[0x64]; u32 pad64_30:2; u32 unk64_29:1; u32 pad64_0:29; u8 pad68[0x10]; u32 pad78_3:29; u32 unk78_2:1; u32 pad78_0:2; } BanditBits;
 extern f32 D_808011F0_chonearmbandit[];
 extern f32 D_8080134C_chonearmbandit[];
@@ -561,3 +561,27 @@ s32 func_80801154_chonearmbandit(param_0) Actor *param_0;
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/onearmbandit.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808012BC_chonearmbandit -> int[], D_80801304_chonearmbandit -> int[], D_808013E8_chonearmbandit -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+f32 D_808011F0_chonearmbandit[3] = { 1.746342e-39f, 2.0414e-39f, 0.0f };
+f32 D_808011FC_chonearmbandit[6] = { 0.0f, 0.0f, 0.5f, 1.0f, 1.0f, 0.0f };
+u32 D_80801214_chonearmbandit[5] = { 0x10000, 0x80000, 0x80000, 0x90000, 0xA0000 };
+u32 D_80801228_chonearmbandit[22] = { 0x0, 0x0, 0x3F4CCCCD, 0x1800044, 0x3F4CCCCD, 0x1800001, 0x3F19999A, 0x1820001, 0x3F4CCCCD, 0x1800001, 0x3F666666, 0x1810002, 0x3F4CCCCD, 0x1800001, 0x3FA00000, 0x17F0002, 0x3F4CCCCD, 0x1800044, 0x3FA00000, 0x2, 0x3F4CCCCD, 0x1800044 };
+u8 D_80801280_chonearmbandit[60] = { 0x0, 0x0, 0x0, 0x3, 0x40, 0x80, 0x0, 0x0, 0x0, 0xFD, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2A, 0x40, 0x40, 0x0, 0x0, 0x0, 0xFD, 0x0, 0x0, 0x0, 0x0, 0x0, 0x12, 0x40, 0x0, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x0, 0x0, 0x43, 0x3F, 0xC0, 0x0, 0x0, 0x2, 0x42, 0x0, 0x0, 0x0, 0x0, 0x0, 0x42, 0x3F, 0xE0, 0x0, 0x0, 0x2, 0x43, 0x0, 0x0 };
+int D_808012BC_chonearmbandit[18] = { 0x1960144, 0x6C90001, (u32)&D_80801228_chonearmbandit, (u32)func_8080007C_chonearmbandit, (u32)func_80105834, (u32)func_8080063C_chonearmbandit, 0x9C40000, 0x40000000, 0x0, 0x43050261, 0x0, (u32)func_80108ED0, 0xC, (u32)func_80800018_chonearmbandit, (u32)func_80107C2C, -0x7FCDAFE3, (u32)func_80800520_chonearmbandit, (u32)&D_80801214_chonearmbandit };
+int D_80801304_chonearmbandit[18] = { 0x2EE035B, 0x6CA0001, 0x0, (u32)func_80800EBC_chonearmbandit, (u32)func_80105834, (u32)func_80801040_chonearmbandit, 0x0, 0x3F800000, 0x0, 0x0, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800F80_chonearmbandit, (u32)func_80107C2C, -0x7FFFFBF0, (u32)func_80801008_chonearmbandit, 0x0 };
+f32 D_8080134C_chonearmbandit[2] = { 1.746731e-39f, 2.204052e-39f };
+u8 D_80801354_chonearmbandit[16] = { 0x0, 0x13, 0x5, 0x2F, 0x0, 0xD, 0x1, 0xC, 0x1, 0x26, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80801364_chonearmbandit[14] = { 0x1D09DD, 0x20C0C0, -0x3F7FFFEA, 0x80022, 0x9900CC, 0x1000133, 0x150033, 0x99002B, 0xB300E6, 0xB000A, 0x140005, 0x2002D, 0x12C0190, 0x0 };
+s32 D_8080139C_chonearmbandit[2] = { 0x130413, 0x0 };
+void *D_808013A4_chonearmbandit = (void *)0x001D075C;
+static u32 D_808013A4_chonearmbandit_rest[13] = { 0x150033, 0x990027, 0x6400C8, 0x6400C8, 0x2B00CC, 0x1000016, 0x1400001B, 0xFE70FED4, 0x2D012C, 0x190001E, 0x50005, 0xD000A, 0x0 };
+void *D_808013DC_chonearmbandit = (void *)0x0013052C;
+static u32 D_808013DC_chonearmbandit_rest[2] = { 0xD00F3, 0x10C0000 };
+int D_808013E8_chonearmbandit[14] = { 0x1D09E6, 0x150033, 0x990027, 0x6400C8, 0x6400C8, 0x2B004C, 0x660016, 0x10000024, 0x4C0066, 0xC000A, 0x0, 0x0, 0x0, 0x0 };

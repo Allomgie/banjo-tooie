@@ -68,3 +68,6 @@ void ncbadeflect_entrypoint_1(s32 param_0, f32 *param_1, f32 param_2, f32 param_
         func_801110C4(param_0, local_1);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/deflect.data.s) is defined here in C.
+ * Values are taken from the ROM. */

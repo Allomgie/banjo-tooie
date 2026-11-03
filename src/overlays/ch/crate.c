@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern int D_80800458_chcrate;
-extern int D_808004A0_chcrate;
+extern int D_80800458_chcrate[];
+extern int D_808004A0_chcrate[];
 extern f32 func_800EC708(void *);
 extern u8 D_808004F8_chcrate[];
 extern void _chcrate_entrypoint_3();
@@ -28,7 +28,7 @@ s32 func_80800380_chcrate();
 
 int chcrate_entrypoint_0()
 {
-  extern int D_80800410_chcrate;
+  extern int D_80800410_chcrate[];
   return (int)&D_80800410_chcrate;
 }
 
@@ -161,3 +161,21 @@ s16 func_808003AC_chcrate(s32 param_0) {
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/crate.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800410_chcrate -> int[], D_80800458_chcrate -> int[], D_808004A0_chcrate -> int[] */
+extern void func_80102EC0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _bsbtrot_entrypoint_10();
+int D_80800410_chcrate[18] = { 0x2A01F0, 0x6A20001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000810, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800024_chcrate, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_10, (u32)func_80800064_chcrate, 0x0 };
+int D_80800458_chcrate[18] = { 0x33F03BC, 0x6FE0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000810, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800024_chcrate, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_10, (u32)func_80800064_chcrate, 0x0 };
+int D_808004A0_chcrate[18] = { 0x2A03C2, 0x7000001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000810, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800024_chcrate, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_10, (u32)func_80800064_chcrate, 0x0 };
+u8 D_808004E8_chcrate[16] = { 0x0, 0x13, 0x4, 0x7, 0x0, 0x16, 0x7D, 0x0, 0x0, 0xD, 0x0, 0xC0, 0x0, 0xD9, 0x0, 0x0 };
+u8 D_808004F8_chcrate[16] = { 0x0, 0x13, 0x4, 0xB, 0x0, 0x16, 0x6D, 0x60, 0x0, 0xD, 0x0, 0xD9, 0x0, 0xF3, 0x0, 0x0 };
+u8 D_80800508_chcrate[52] = { 0x0, 0x1D, 0x6, 0xA3, 0x0, 0x14, 0x0, 0x6, 0x0, 0x0, 0x0, 0x2D, 0x1, 0xC2, 0x2, 0x26, 0x0, 0x1B, 0xFD, 0xA8, 0xFE, 0x70, 0x0, 0x22, 0x0, 0x80, 0x0, 0x99, 0x0, 0x4C, 0x0, 0x66, 0x0, 0x1E, 0x0, 0x14, 0x0, 0x14, 0x0, 0x1F, 0x80, 0x80, 0x80, 0x0, 0x0, 0xD, 0x0, 0x64, 0x0, 0x0, 0x0, 0x0 };
+s16 D_8080053C_chcrate[10] = { 0x0, 0x21A, 0x22E, 0x3DB, 0x16A, 0x210, 0x211, 0x0, 0x4A6, 0x1E9 };

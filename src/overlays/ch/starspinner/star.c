@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808006B0_chstarspinnerstar;
+extern int D_808006B0_chstarspinnerstar[];
 extern Actor *_subaddiefind_entrypoint_0(f32 *, s32, s32, s32);
 extern s32 _chstarspinnerctrl_entrypoint_3(Actor *, f32 *);
 extern void func_800EE7F8(f32 *, f32 *);
@@ -165,3 +165,10 @@ f32 *func_80800660_chstarspinnerstar(param_0) s32 param_0;
   ((f32 *) B_80800710_chstarspinnerstar)[1] = ((f32 *) B_80800710_chstarspinnerstar)[1];
   return (f32 *) B_80800710_chstarspinnerstar;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/starspinner/star.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808006B0_chstarspinnerstar -> int[] */
+int D_808006B0_chstarspinnerstar[18] = { 0x1BF0336, 0x7790001, 0x0, (u32)func_8080000C_chstarspinnerstar, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x4C00, 0x0, 0x0, 0x0, (u32)func_80800320_chstarspinnerstar, (u32)func_80107C2C, -0x7FFFFBEE, (u32)func_808003F8_chstarspinnerstar, 0x0 };
+u8 D_808006F8_chstarspinnerstar[24] = { 0x0, 0x13, 0x4, 0xE0, 0x0, 0xA, 0x0, 0xCC, 0x0, 0x16, 0x1B, 0x58, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

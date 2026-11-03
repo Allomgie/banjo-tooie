@@ -229,3 +229,6 @@ void bamovespline_entrypoint_10(PlayerState *param_0)
         case 4: func_8080057C_bamovespline(param_0); break;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/move/spline.data.s) is defined here in C.
+ * Values are taken from the ROM. */

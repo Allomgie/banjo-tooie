@@ -10,7 +10,7 @@ extern s32 _subaddiefind_entrypoint_4(s32, Actor **, s32);
 extern void func_80103DFC(Actor *, f32 *);
 extern void *func_80100094(Actor *, s32);
 extern void _sumumbofx_entrypoint_7(void *, f32, s32, s32, f32 *, f32 *, f32 *);
-extern int D_808009F8_chswampplatform;
+extern int D_808009F8_chswampplatform[];
 extern f32 D_808009D0_chswampplatform[];
 extern f32 D_808009E4_chswampplatform[];
 extern void func_80103110(Actor *, s32);
@@ -216,3 +216,13 @@ int chswampplatform_entrypoint_0()
 {
     return (int)&D_808009F8_chswampplatform;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/swampplatform.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808009F8_chswampplatform -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+f32 D_808009D0_chswampplatform[5] = { 1.74635e-39f, 9.18534e-40f, 2.059617e-39f, 9.604e-41f, 7.754818e-25f };
+f32 D_808009E4_chswampplatform[5] = { 1.746351e-39f, 9.18714e-40f, 2.059617e-39f, 9.604e-41f, 7.754818e-25f };
+int D_808009F8_chswampplatform[18] = { 0x158028E, 0x6E80007, 0x0, (u32)func_808000BC_chswampplatform, (u32)func_80105834, (u32)func_8080061C_chswampplatform, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_80800000_chswampplatform, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_808007A4_chswampplatform, 0x0 };

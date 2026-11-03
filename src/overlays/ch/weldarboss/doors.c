@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void *D_80800270_chweldarbossdoors;
-extern int D_808002B8_chweldarbossdoors;
+extern int D_808002B8_chweldarbossdoors[];
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
@@ -69,3 +69,14 @@ void func_80800194_chweldarbossdoors(Actor *param_0)
         _chdoormake_entrypoint_8(param_0, 4);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/weldarboss/doors.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808002B8_chweldarbossdoors -> int[] */
+extern void _chdoor_entrypoint_0();
+extern void func_80105834();
+extern void func_80107C2C();
+void *D_80800270_chweldarbossdoors = (void *)0x00AC0341;
+static u32 D_80800270_chweldarbossdoors_rest[17] = { 0xFFFF0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80800140_chweldarbossdoors, 0x0, 0x0, 0x0, 0x400, 0x0, 0x0, 0x0, (u32)func_80800018_chweldarbossdoors, (u32)func_80107C2C, 0x80082412, (u32)func_808000E0_chweldarbossdoors, 0x0 };
+int D_808002B8_chweldarbossdoors[18] = { 0xAC0431, 0x8800004, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000800, 0x0, 0x0, 0x0, (u32)func_80800194_chweldarbossdoors, (u32)func_80107C2C, -0x7FF7DBEE, (u32)_chdoor_entrypoint_1, 0x0 };

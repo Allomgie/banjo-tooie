@@ -1,7 +1,7 @@
 #include "ch/fireicestorm.h"
 
-extern int D_80800EA8_chfireicestorm;
-extern char D_80800EF0_chfireicestorm;
+extern int D_80800EA8_chfireicestorm[];
+extern u32 D_80800EF0_chfireicestorm[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern f32 func_800DC178(f32, f32);
 typedef struct { u32 pad : 11; u32 flag : 1; u32 pad2 : 20; } IceStormBits;
@@ -9,7 +9,7 @@ extern void func_800EF368(f32 *, f32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 typedef struct { s32 f0; u8 pad[0x60]; u32 pad64:11; u32 flag:1; u32 rest:20; } StormState;
 extern void _subaddiedialog_entrypoint_11(s32, s32, s32, s32, s32);
-extern s32 D_80800F38_chfireicestorm;
+extern s32 D_80800F38_chfireicestorm[];
 extern f32 func_800D8FF8(void);
 extern void func_800EFA20(f32 *, f32 *, f32);
 typedef struct { u8 pad0[0x1A]; u16 unk1A_5 : 11; u16 pad1A : 5; u8 pad1C[8]; u32 unk24_22 : 10; u32 pad24 : 22; } StormHit;
@@ -26,16 +26,16 @@ extern s32 _capod_entrypoint_17(f32);
 extern void func_8010D930(s32, s32, f32 *, void *);
 extern void func_800FFAB0(Actor *);
 typedef struct { u8 pad0[4]; f32 position[3]; u8 pad10[0x64 - 0x10]; u32 unk64_21 : 11; u32 unk64_20 : 1; u32 unk64_19 : 1; u32 unk64_0 : 19; u8 pad68[0x70 - 0x68]; s32 unk70; } IceStorm;
-extern s32 D_80800F68_chfireicestorm;
-extern s32 D_80800F7C_chfireicestorm;
+extern s32 D_80800F68_chfireicestorm[];
+extern s32 D_80800F7C_chfireicestorm[];
 extern void _chexploder_entrypoint_3(IceStorm *, f32 *, s32);
 extern void func_800E1610(s32, f32, f32, f32 *);
 extern void func_80018820(s32, f32, f32);
 extern void func_80101FDC(IceStorm *, s32);
 extern u8 D_80800F94_chfireicestorm[];
 extern void func_800BBCB8(s32, s32, s32, s32, void *);
-extern s32 D_80800FCC_chfireicestorm;
-extern s32 D_80800FFC_chfireicestorm;
+extern s32 D_80800FCC_chfireicestorm[];
+extern s32 D_80800FFC_chfireicestorm[];
 extern void func_80103140(Actor *, u16, u16);
 typedef struct Mass45StormFlags { u32 local_0 : 11; u32 local_1 : 1; u32 local_2 : 20; } Mass45StormFlags;
 extern Actor *func_80108528(s32, f32 *, s32, Actor **);
@@ -406,3 +406,25 @@ void func_80800E08_chfireicestorm(param_0) Actor *param_0;
     func_800BBCB8((s32)param_0 + 4, 0, *(s32 *)((char *)param_0 + 0x38), 1, &D_80800FCC_chfireicestorm);
     func_800BBCB8((s32)param_0 + 4, 0, *(s32 *)((char *)param_0 + 0x38), 2, &D_80800FFC_chfireicestorm);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fire/icestorm.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800EA8_chfireicestorm -> int[], D_80800EF0_chfireicestorm -> u32[], D_80800F38_chfireicestorm -> s32[], D_80800F68_chfireicestorm -> s32[], D_80800F7C_chfireicestorm -> s32[], D_80800FCC_chfireicestorm -> s32[], D_80800FFC_chfireicestorm -> s32[] */
+extern void func_80102EC0();
+extern void func_8010A730();
+extern void func_80107C2C();
+extern void func_80101870();
+extern void func_80108EE8();
+u8 D_80800E80_chfireicestorm[20] = { 0x0, 0x13, 0x6, 0x1, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x18, 0x0, 0x1, 0x3, 0xE8, 0x13, 0x88, 0x0, 0x0 };
+u8 D_80800E94_chfireicestorm[20] = { 0x0, 0x13, 0x6, 0x3, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x18, 0x0, 0x1, 0x3, 0xE8, 0x13, 0x88, 0x0, 0x0 };
+int D_80800EA8_chfireicestorm[18] = { 0x15804FC, 0x1, 0x0, (u32)func_808001CC_chfireicestorm, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, (u32)func_80800360_chfireicestorm, 0x0, 0x0, (u32)func_80800018_chfireicestorm, (u32)func_80107C2C, -0x7FFFD9FE, (u32)func_80800384_chfireicestorm, 0x0 };
+u32 D_80800EF0_chfireicestorm[18] = { 0x15804FD, 0xFFFF0001, 0x0, (u32)func_80800A50_chfireicestorm, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, 0x0, (u32)func_80108EE8, 0x0, (u32)func_80800A40_chfireicestorm, (u32)func_80107C2C, 0x0, (u32)func_80800BA4_chfireicestorm, 0x0 };
+s32 D_80800F38_chfireicestorm[5] = { 0x130483, 0x163E80, 0xE0133, 0x1700180, 0x0 };
+f32 D_80800F4C_chfireicestorm[2] = { 0.07f, 0.2f };
+u8 D_80800F54_chfireicestorm[20] = { 0x0, 0x13, 0x6, 0x1, 0x0, 0xA, 0x0, 0xD9, 0x0, 0x18, 0x0, 0x1, 0x3, 0xE8, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80800F68_chfireicestorm[5] = { 0x1305B8, 0x180001, 0x4E209C4, 0xD0133, 0x14C0000 };
+s32 D_80800F7C_chfireicestorm[6] = { 0x130607, 0xD00F3, 0x10C0016, 0x6D600001, 0x4E209C4, 0x0 };
+u8 D_80800F94_chfireicestorm[56] = { 0x0, 0x1D, 0x9, 0xCE, 0x0, 0x16, 0x12, 0x0, 0x0, 0x32, 0x0, 0x2, 0x0, 0x15, 0x0, 0x0, 0x0, 0x99, 0x0, 0x22, 0x1, 0x99, 0x2, 0x0, 0x1, 0x33, 0x1, 0x99, 0x0, 0x2B, 0x0, 0x8C, 0x0, 0x8C, 0x0, 0x1B, 0x1, 0x2C, 0x1, 0x2C, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0, 0x19, 0x0, 0x19, 0x0, 0x0, 0x17, 0x0, 0x80, 0x0, 0x0 };
+s32 D_80800FCC_chfireicestorm[12] = { 0x1D09DD, 0x161200, 0x320002, 0x150000, 0x990022, 0x1990200, 0x1330199, 0x2B008C, 0x8C001B, 0x12C012C, 0x170080, 0x0 };
+s32 D_80800FFC_chfireicestorm[13] = { 0x1D09E0, 0x161200, 0xE0060, 0x600015, 0x190099, 0x220100, 0x1000066, 0x660027, -0x18FFE70, -0x31FFCE0, 0x2B004C, 0x800000, 0x0 };

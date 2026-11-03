@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800CE0_cheggproximity;
+extern int D_80800CE0_cheggproximity[];
 extern Actor *_suegg_entrypoint_11(s32, void *, s32);
 extern f32 func_80013B7C(f32, f32);
 extern void _sueggmove_entrypoint_5(Actor *, s32);
@@ -23,7 +23,7 @@ typedef struct { u8 pad_0[0x38]; u32 pad_1 : 8; u32 local_0 : 1; u32 local_1 : 1
 extern void _cheggproximity_entrypoint_2(void);
 extern void _suegg_entrypoint_23();
 extern void func_80101FDC();
-extern s32 D_80800D28_cheggproximity;
+extern s32 D_80800D28_cheggproximity[];
 typedef struct { u8 pad_0[0x40]; s32 local_0[8]; s32 local_1[8]; u8 pad_1[0x28]; s32 local_2; } ProximityEggPayload921;
 extern s32 func_800F6438(s32);
 extern s32 func_800F6CC8(s32);
@@ -407,3 +407,15 @@ s32 func_80800BF4_cheggproximity(param_0) Actor *param_0;
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/egg/proximity.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800CE0_cheggproximity -> int[], D_80800D28_cheggproximity -> s32[] */
+extern void func_80105834();
+extern void _suegg_entrypoint_2();
+extern void func_80108ED0();
+extern void _suegg_entrypoint_5();
+extern void func_80107C2C();
+int D_80800CE0_cheggproximity[18] = { 0x16D0160, 0x9C50001, 0x0, (u32)func_80800330_cheggproximity, (u32)func_80105834, (u32)func_80800164_cheggproximity, 0x0, 0x3F800000, 0x0, 0x4, (u32)_suegg_entrypoint_2, (u32)func_80108ED0, 0x4C00AC, (u32)_suegg_entrypoint_5, (u32)func_80107C2C, -0x7FFFFFF0, (u32)func_808000A8_cheggproximity, 0x0 };
+s32 D_80800D28_cheggproximity[6] = { 0x13065E, 0x1636B0, 0x1012C, 0x7D00000, 0x0, 0x0 };

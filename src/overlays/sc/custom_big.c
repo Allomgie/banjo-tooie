@@ -107,3 +107,6 @@ void sccustom_big_entrypoint_3(s32 param_0){
     out |= func_80800314_sccustom_big(param_0, out);
     return;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/sc/custom_big.data.s) is defined here in C.
+ * Values are taken from the ROM. */

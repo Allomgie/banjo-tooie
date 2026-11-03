@@ -261,3 +261,8 @@ void sulights_entrypoint_9(void)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/lights.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+LightCallbacks27 D_80800A00_sulights[6] = { (void *)func_808000D8_sulights, (void *)func_808000D0_sulights, (void *)func_80800194_sulights, (void *)func_808000D0_sulights, (void *)func_8080021C_sulights, 0, (void *)func_808000D8_sulights, (void *)func_80800340_sulights, (void *)func_80800194_sulights, (void *)func_8080038C_sulights, 0, 0 };

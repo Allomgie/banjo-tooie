@@ -225,3 +225,30 @@ s32 vpmodule_entrypoint_4(u8 *param_0, u8 *param_1, s32 param_2, int param_3)
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/vp/module.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _vplight_entrypoint_0();
+extern void _vplight_entrypoint_2();
+extern void _vplight_entrypoint_1();
+extern void _vplight_entrypoint_3();
+extern void _vplight_entrypoint_4();
+extern void _vpwibble_entrypoint_0();
+extern void _vpwibble_entrypoint_2();
+extern void _vpwibble_entrypoint_1();
+extern void _vpwibble_entrypoint_3();
+extern void _vpflicker_entrypoint_0();
+extern void _vpflicker_entrypoint_2();
+extern void _vpflicker_entrypoint_1();
+extern void _vpflicker_entrypoint_3();
+extern void _vpglow_entrypoint_0();
+extern void _vpglow_entrypoint_2();
+extern void _vpglow_entrypoint_1();
+extern void _vpglow_entrypoint_3();
+extern void _vpscroll_entrypoint_0();
+extern void _vpscroll_entrypoint_2();
+extern void _vpscroll_entrypoint_1();
+extern void _vpscroll_entrypoint_3();
+VMType_vpmodule_entrypoint_3 D_808008C0_vpmodule[5] = { (void *)_vplight_entrypoint_0, (void *)_vplight_entrypoint_2, (void *)_vplight_entrypoint_1, (void *)_vplight_entrypoint_3, (void *)_vplight_entrypoint_4, (void *)_vpwibble_entrypoint_0, (void *)_vpwibble_entrypoint_2, (void *)_vpwibble_entrypoint_1, (void *)_vpwibble_entrypoint_3, 0, (void *)_vpflicker_entrypoint_0, (void *)_vpflicker_entrypoint_2, (void *)_vpflicker_entrypoint_1, (void *)_vpflicker_entrypoint_3, 0, (void *)_vpglow_entrypoint_0, (void *)_vpglow_entrypoint_2, (void *)_vpglow_entrypoint_1, (void *)_vpglow_entrypoint_3, 0, (void *)_vpscroll_entrypoint_0, (void *)_vpscroll_entrypoint_2, (void *)_vpscroll_entrypoint_1, (void *)_vpscroll_entrypoint_3, 0 };
+static u32 D_808008C0_vpmodule_rest[3] = { 0x0, 0x0, 0x0 };

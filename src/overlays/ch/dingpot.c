@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800500_chdingpot;
+extern int D_80800500_chdingpot[];
 extern void func_80102FDC(u8 *, f32);
 extern int func_80101DDC(void *param_0);
 extern void func_80102424(void *param_0, int param_1);
@@ -20,16 +20,16 @@ extern u8 D_808005A4_chdingpot[];
 extern void _gcdialogcamera_entrypoint_3(void *, f32);
 typedef union { s16 local_0[2]; s32 local_1; } DingpotNotes1559;
 extern DingpotNotes1559 D_808005B4_chdingpot;
-extern s32 D_808005B8_chdingpot;
+extern s32 D_808005B8_chdingpot[];
 extern int func_80101E4C(Actor *, f32 *);
 extern int _subaddieaudioquick_entrypoint_1(Actor *, f32 *);
 extern int func_800DC128(s32, s32);
 extern void func_800C301C(s32, s32);
 extern void func_800C4350(s32, f32 *, void *);
 extern void func_800C3BDC(s32);
-extern s32 D_808005C8_chdingpot;
-extern s32 D_808004B0_chdingpot;
-extern int D_808005D8_chdingpot;
+extern s32 D_808005C8_chdingpot[];
+extern s32 D_808004B0_chdingpot[];
+extern int D_808005D8_chdingpot[];
 extern f32 func_800EEB40(f32 *, f32 *);
 extern void func_800C9C04(f32, s32, s32);
 void func_808002B4_chdingpot();
@@ -169,3 +169,23 @@ void func_80800388_chdingpot(param_0) s32 *param_0;
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/dingpot.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808004B0_chdingpot -> s32[], D_80800500_chdingpot -> int[], D_808005B8_chdingpot -> s32[], D_808005C8_chdingpot -> s32[], D_808005D8_chdingpot -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+s32 D_808004B0_chdingpot[10] = { 0x1, 0xCE90100, 0x601, 0xCEA0200, 0x200, 0xD080100, 0x400, 0xD090100, -0x12001, 0x120F0300 };
+u32 D_808004D8_chdingpot[10] = { 0x0, 0x0, 0x40CCCCCD, 0x2B00001, 0x40CCCCCD, 0x2B00001, 0x4059999A, 0x2B10002, 0x3F800000, 0x2B20002 };
+int D_80800500_chdingpot[18] = { 0x32F03D1, 0x7A70001, (u32)&D_808004D8_chdingpot, (u32)func_80800040_chdingpot, (u32)func_80105834, (u32)func_80101870, 0x9C40000, 0x40800000, 0x0, 0x908, 0x0, 0x0, 0x0, (u32)func_8080000C_chdingpot, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_8080021C_chdingpot, 0x0 };
+s32 D_80800548_chdingpot[4] = { 0x3F122D0E, 0x3F1BA5E3, 0x3F251EB8, 0x3F2F5C29 };
+static u32 D_80800548_chdingpot_rest[4] = { 0x3F374BC7, 0x3F400000, 0x3F4A7EFA, 0xBF800000 };
+s32 D_80800568_chdingpot[4] = { 0x3E960419, 0x3EC08312, 0x3ED70A3D, 0x3EE7EF9E };
+static u32 D_80800568_chdingpot_rest[11] = { 0x3EF9DB23, 0x3F05A1CB, 0x3F0E5604, 0x3F170A3D, 0x3F204189, 0x3F29374C, 0x3F316873, 0x3F3A9FBE, 0x3F439581, 0x3F5CED91, 0xBF800000 };
+u8 D_808005A4_chdingpot[16] = { 0x43, 0xC8, 0x0, 0x0, 0x43, 0xC8, 0x0, 0x0, 0x43, 0xC8, 0x0, 0x0, 0x43, 0x34, 0x0, 0x0 };
+DingpotNotes1559 D_808005B4_chdingpot = { 0x555, 0x556 };
+s32 D_808005B8_chdingpot[4] = { 0x306000D, 0x1000119, 0x162AF8, 0x30000 };
+s32 D_808005C8_chdingpot[4] = { 0x1AC0000, 0x15E00A4, 0xC, 0x63C0200 };
+int D_808005D8_chdingpot[6] = { 0x13041F, 0xD00C0, 0xD90000, 0x0, 0x0, 0x0 };

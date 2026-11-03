@@ -35,7 +35,6 @@ void sumultiscore_entrypoint_4();
 void func_80800BFC_sumultiscore();
 void func_808011E0_sumultiscore();
 void func_80801340_sumultiscore();
-void *D_exp_sumultiscore_entrypoint_4[] = { (void *)sumultiscore_entrypoint_4 };
 
 void sumultiscore_entrypoint_0(s32 *param_0, s32 *param_1, s32 param_2)
 {
@@ -512,3 +511,7 @@ void func_80801340_sumultiscore(param_0, param_1) MultiScoreState1436 *param_0; 
         break;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/multiscore.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s32 D_808014B0_sumultiscore[8] = { 0x0, 0xB81, 0xB83, 0xB82, 0xB84, 0xB85, 0x9C5, 0x9C3 };

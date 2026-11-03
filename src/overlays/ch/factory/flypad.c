@@ -1,7 +1,7 @@
 #include "ch/factory/flypad.h"
 
 extern void *D_80800250_chfactoryflypad;
-extern int D_80800298_chfactoryflypad;
+extern int D_80800298_chfactoryflypad[];
 typedef union { s32 word; void *pointer; } FlypadMessage29;
 extern Actor *func_801084B0(s32, Actor **);
 extern Actor *_subaddiefind_entrypoint_1(Actor *, s32, s32, s32);
@@ -76,3 +76,17 @@ s32 func_80800130_chfactoryflypad(Actor *param_0, s32 param_1, FlypadMessage29 p
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/flypad.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800298_chfactoryflypad -> int[] */
+extern u8 D_8011A270[];
+extern void _chswitch_entrypoint_6();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void func_80102EC0();
+void *D_80800250_chfactoryflypad = (void *)0x0343042E;
+static u32 D_80800250_chfactoryflypad_rest[17] = { 0x7BA0001, (u32)&D_8011A270, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x0, (u32)func_80800018_chfactoryflypad, (u32)func_80107C2C, 0x80082C12, (u32)func_80800044_chfactoryflypad, 0x0 };
+int D_80800298_chfactoryflypad[18] = { 0x342042F, 0x1, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80800080_chfactoryflypad, (u32)func_80107C2C, -0x7FFFF9FE, (u32)func_80800130_chfactoryflypad, 0x0 };

@@ -395,3 +395,6 @@ int func_80800CA8_baduo(param_0, param_1) s32 param_0; s32 param_1;
   local_1 = func_800A3274(param_1);
   func_800D5034(local_0, local_1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/duo.data.s) is defined here in C.
+ * Values are taken from the ROM. */

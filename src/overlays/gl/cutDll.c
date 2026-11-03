@@ -368,3 +368,6 @@ void glcutDll_entrypoint_24(u32 arg0, u32 arg1, u32 arg2)
     glcutDll_entrypoint_16();
     func_80800000_glcutDll(1U);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/cutDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

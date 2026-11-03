@@ -123,3 +123,14 @@ s32 func_808002DC_chjiggypost(Actor* arg0, s32 arg1, s32 arg2)
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jiggy/post.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80107C2C();
+void *D_80800380_chjiggypost = (void *)0x015804AF;
+static u32 D_80800380_chjiggypost_rest[17] = { 0x9770001, 0x0, (u32)func_80800068_chjiggypost, (u32)func_80102EC0, (u32)func_80101870, 0xFA0000, 0x0, 0x0, 0x40000800, 0x0, 0x0, 0x0, (u32)func_8080000C_chjiggypost, (u32)func_80107C2C, 0x80082452, (u32)func_808002DC_chjiggypost, 0x0 };
+void *D_808003C8_chjiggypost = (void *)0x43820000;
+static u32 D_808003C8_chjiggypost_rest[5] = { 0x432F0000, 0x432F0000, 0x42960000, 0x0, 0x0 };

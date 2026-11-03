@@ -1100,3 +1100,7 @@ void gcdialogexec_entrypoint_10(DialogUpdateState *param_0)
             break;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/dialog/exec.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80802EA0_gcdialogexec[16] = { 0x3F, 0xA, 0x3D, 0x71, 0x3F, 0x19, 0x99, 0x9A, 0x3F, 0xC, 0xCC, 0xCD, 0x0, 0x0, 0x0, 0x0 };

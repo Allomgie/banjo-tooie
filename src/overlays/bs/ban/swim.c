@@ -361,3 +361,12 @@ void func_808008A4_bsbanswim(s32 param_0) {
 s32 bsbanswim_entrypoint_3(s32 param_0) {
     return D_80800A60_bsbanswim[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ban/swim.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099B94();
+s32 D_80800A30_bsbanswim[4] = { (u32)func_808001A8_bsbanswim, (u32)func_808001C8_bsbanswim, (u32)func_8080025C_bsbanswim, (u32)func_80099B94 };
+s32 D_80800A40_bsbanswim[4] = { (u32)func_8080049C_bsbanswim, (u32)func_808004BC_bsbanswim, (u32)func_808004F4_bsbanswim, (u32)func_80099B94 };
+s32 D_80800A50_bsbanswim[4] = { (u32)func_80800670_bsbanswim, (u32)func_80800690_bsbanswim, (u32)func_808006CC_bsbanswim, (u32)func_80099B94 };
+s32 D_80800A60_bsbanswim[4] = { (u32)func_80800848_bsbanswim, (u32)func_80800868_bsbanswim, (u32)func_808008A4_bsbanswim, (u32)func_80099B94 };

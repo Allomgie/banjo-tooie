@@ -10,7 +10,7 @@ extern void func_800EF1B8(f32 *, f32, f32);
 extern f32 bastick_getZonePosition(PlayerState *);
 extern s32 bastick_getZone(PlayerState *);
 extern f32 func_800F1214(f32, f32, f32);
-extern f32 D_80800F5C_bsbwhirl;
+extern f32 D_80800F5C_bsbwhirl[];
 extern f32 yaw_get(PlayerState *);
 extern f32 func_800136E4(f32);
 extern void func_800EFCD8(f32 *, f32, f32);
@@ -501,3 +501,40 @@ int func_80800EA0_bsbwhirl(s32 param_0, void* param_1)
 void bsbwhirl_entrypoint_28(s32 param_0) {
     func_80800EA0_bsbwhirl(param_0, &func_80099B94);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/bwhirl.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800F5C_bsbwhirl -> f32[] */
+extern void _bsbwhirl_entrypoint_2();
+extern void _bsbwhirl_entrypoint_0();
+extern void _bsbwhirl_entrypoint_1();
+extern void _bsbwhirl_entrypoint_28();
+extern void _bsbwhirl_entrypoint_6();
+extern void _bsbwhirl_entrypoint_4();
+extern void _bsbwhirl_entrypoint_5();
+extern void _bsbwhirl_entrypoint_10();
+extern void _bsbwhirl_entrypoint_8();
+extern void _bsbwhirl_entrypoint_9();
+extern void _bsbwhirl_entrypoint_14();
+extern void _bsbwhirl_entrypoint_12();
+extern void _bsbwhirl_entrypoint_13();
+extern void _bsbwhirl_entrypoint_18();
+extern void _bsbwhirl_entrypoint_16();
+extern void _bsbwhirl_entrypoint_17();
+extern void _bsbwhirl_entrypoint_22();
+extern void _bsbwhirl_entrypoint_20();
+extern void _bsbwhirl_entrypoint_21();
+extern void _bsdrone_entrypoint_3();
+extern void _bsbwhirl_entrypoint_24();
+extern void _bsbwhirl_entrypoint_25();
+extern void _bsbwhirl_entrypoint_26();
+u8 D_80800F50_bsbwhirl[12] = { 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0xAA };
+f32 D_80800F5C_bsbwhirl[15] = { 2.666775e-39f, 1.010176e-39f, 4.683596e-39f, 9.18474e-40f, 9.18384e-40f, 1.83885e-40f, 3.122513e-39f, 6.979533e-39f, 2.295942e-39f, 5.32e-43f, 6.17e-43f, 3.949141e-39f, 1.4050869e-38f, -1.6365232e+37f, 0.0f };
+s32 D_80800F98_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_2, (u32)_bsbwhirl_entrypoint_0, (u32)_bsbwhirl_entrypoint_1, (u32)_bsbwhirl_entrypoint_28 };
+s32 D_80800FA8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_6, (u32)_bsbwhirl_entrypoint_4, (u32)_bsbwhirl_entrypoint_5, (u32)_bsbwhirl_entrypoint_28 };
+s32 D_80800FB8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_10, (u32)_bsbwhirl_entrypoint_8, (u32)_bsbwhirl_entrypoint_9, (u32)_bsbwhirl_entrypoint_28 };
+s32 D_80800FC8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_14, (u32)_bsbwhirl_entrypoint_12, (u32)_bsbwhirl_entrypoint_13, (u32)_bsbwhirl_entrypoint_28 };
+s32 D_80800FD8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_18, (u32)_bsbwhirl_entrypoint_16, (u32)_bsbwhirl_entrypoint_17, (u32)_bsbwhirl_entrypoint_28 };
+s32 D_80800FE8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_22, (u32)_bsbwhirl_entrypoint_20, (u32)_bsbwhirl_entrypoint_21, (u32)_bsdrone_entrypoint_3 };
+s32 D_80800FF8_bsbwhirl[6] = { (u32)_bsbwhirl_entrypoint_24, (u32)_bsbwhirl_entrypoint_25, (u32)_bsbwhirl_entrypoint_26, (u32)_bsbwhirl_entrypoint_28, 0x0, 0x0 };

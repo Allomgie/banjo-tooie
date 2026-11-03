@@ -27,10 +27,10 @@ extern void func_800FCA90(s32);
 extern s16 D_808012A0_chmusicmenu[];
 extern void *func_80100094(Actor *, s32);
 typedef union { s32 local_0; struct {s16 local_1; s16 local_2;} local_3; } MusicMenuEvent;
-extern int D_8080157C_chmusicmenu;
-extern int D_808015C4_chmusicmenu;
+extern int D_8080157C_chmusicmenu[];
+extern int D_808015C4_chmusicmenu[];
 typedef struct { u8 pad0[0x64]; u32 padH : 8; u32 f : 8; u32 padL : 16; } ByteBf65;
-extern int D_8080160C_chmusicmenu;
+extern int D_8080160C_chmusicmenu[];
 extern s32 func_800FCF50();
 extern void _gcnewoption_entrypoint_27(s32, s32, s32);
 extern void func_800FC660(s32);
@@ -494,3 +494,33 @@ int chmusicmenu_entrypoint_2()
 {
   return &D_8080160C_chmusicmenu;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/musicmenu.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808014F8_chmusicmenu = D_808014F4_chmusicmenu + 0x4
+ * extern declarations adjusted to the object (same addresses): D_8080157C_chmusicmenu -> int[], D_808015C4_chmusicmenu -> int[], D_8080160C_chmusicmenu -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+extern int func_80101870();
+s16 D_808012A0_chmusicmenu[48] = { 0x32, 0x33, 0x55, 0x39, 0x38, 0x3E, 0x42, 0x48, 0x40, 0x49, 0x47, 0x4C, 0x45, 0x4B, 0x4F, 0x50, 0x53, 0x3B, 0x52, 0x4E, 0x3F, 0x63, 0x41, 0x56, 0x57, 0x61, 0x76, 0x75, 0x7E, 0x82, 0x7A, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x62, 0x7F, 0x5E, 0x5F, 0x1F, 0x20, 0x65, 0x66, 0x64, 0x54, 0x9A };
+u32 D_80801300_chmusicmenu[5] = { 0x320001, 0x32FF01, 0x320002, 0x3300FF, 0x5500FF };
+u32 D_80801314_chmusicmenu[6] = { 0x390003, 0x390103, 0x390008, 0x390005, 0x390006, 0x3800FF };
+u32 D_8080132C_chmusicmenu[7] = { 0x3E000B, 0x3E010B, 0x3E000C, 0x3E0011, 0x3E000D, 0x4200FF, 0x4800FF };
+u32 D_80801348_chmusicmenu[7] = { 0x400013, 0x400014, 0x400015, 0x400016, 0x4900FF, 0x4700FF, 0x4C00FF };
+u32 D_80801364_chmusicmenu[11] = { 0x45001D, 0x45011D, 0x45001F, 0x4B0122, 0x4B0020, 0x4B0123, 0x4B0025, 0x4F00FF, 0x5000FF, 0x5300FF, 0x3B00FF };
+u32 D_80801390_chmusicmenu[4] = { 0x520026, 0x520126, 0x520027, 0x4E00FF };
+u32 D_808013A0_chmusicmenu[4] = { 0x3F0029, 0x3F002A, 0x3F002B, 0x6300FF };
+u32 D_808013B0_chmusicmenu[6] = { 0x41002C, 0x41012C, 0x41002D, 0x41002F, 0x410030, 0x5600FF };
+u32 D_808013C8_chmusicmenu[8] = { 0x570032, 0x570132, 0x570033, 0x570034, 0x570035, 0x570036, 0x7600FF, 0x6100FF };
+u32 D_808013E8_chmusicmenu[5] = { 0x750039, 0x75003A, 0x7E00FF, 0x8200FF, 0x7A00FF };
+u32 D_808013FC_chmusicmenu[23] = { 0x58003B, 0x58013B, 0x58003C, 0x58003D, 0x58003E, 0x58003F, 0x580041, 0x580043, 0x580040, 0x580042, 0x580044, 0x590037, 0x590038, 0x5A00FF, 0x5B00FF, 0x5C00FF, 0x5D00FF, 0x6200FF, 0x9A00FF, 0x7F00FF, 0x5F00FF, 0x5E00FF, 0x8300FF };
+u32 D_80801458_chmusicmenu[9] = { 0x7D00FF, 0x6700FF, 0x2400FF, 0x1F00FF, 0x2000FF, 0x6500FF, 0x6600FF, 0x6400FF, 0x5400FF };
+u32 D_8080147C_chmusicmenu[30] = { 0x0, 0x0, 0x40600000, 0x1B60001, 0x404CCCCD, 0x2F0001, 0x3F800000, 0x850001, 0x3F400000, 0x8F0001, 0x3F800000, 0x1570001, 0x3FACCCCD, 0x15A0001, 0x4084CCCD, 0x16C0101, 0x40000000, 0x16D0001, 0x40800000, 0x17B0101, 0x40966666, 0x1890001, 0x40A00000, 0x1E70001, 0x40500000, 0x2D30001, 0x3FC00000, 0x2FA0001, 0x40B00000, 0x32C0001 };
+MusicMenuList D_808014F4_chmusicmenu[12] = { (void *)&D_80801300_chmusicmenu, 0x50F0000, (void *)&D_80801314_chmusicmenu, 0x6310000, (void *)&D_8080132C_chmusicmenu, 0x73F0000, (void *)&D_80801348_chmusicmenu, 0x7500000, (void *)&D_80801364_chmusicmenu, 0xB6E0000, (void *)&D_80801390_chmusicmenu, 0x4A60000, (void *)&D_808013A0_chmusicmenu, 0x4AD0000, (void *)&D_808013B0_chmusicmenu, 0x6A80000, (void *)&D_808013C8_chmusicmenu, 0x8690000, (void *)&D_808013E8_chmusicmenu, 0x5220000, (void *)&D_808013FC_chmusicmenu, 0x177E0000, (void *)&D_80801458_chmusicmenu, 0x96F0000 };
+MusicStyle62 D_80801554_chmusicmenu = { 0xFF, 0xFF, 0xFF };
+MusicStyle62 D_8080155C_chmusicmenu = { 0x0, 0x0, 0x64 };
+static u32 D_8080155C_chmusicmenu_rest[6] = { 0xC3FA0000, 0x0, 0xC4FA0000, 0xC3A00000, 0x437A0000, 0xC4CE4000 };
+int D_8080157C_chmusicmenu[18] = { 0x15801A5, 0x99C0006, 0x0, (u32)func_80800DA4_chmusicmenu, (u32)func_80105834, (u32)func_80800F98_chmusicmenu, 0x0, 0x0, 0x0, 0xC01, (u32)func_80800F50_chmusicmenu, 0x0, 0x0, (u32)func_80800CBC_chmusicmenu, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_80801040_chmusicmenu, 0x0 };
+int D_808015C4_chmusicmenu[18] = { 0x1580531, 0x9A30001, 0x0, 0x0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x1808, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFD3FE, 0x0, 0x0 };
+int D_8080160C_chmusicmenu[21] = { 0x1580534, 0x6D60001, (u32)&D_8080147C_chmusicmenu, 0x0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F99999A, 0x0, 0x100, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7DFFD2FE, (u32)func_808010C4_chmusicmenu, 0x0, 0x0, 0x0, 0x0 };

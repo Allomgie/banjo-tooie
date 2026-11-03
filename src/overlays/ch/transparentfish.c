@@ -15,7 +15,7 @@ extern Unk80132ED0 *func_800D10D4(u32, u32, f32 *, s32, Unk80132ED0 *);
 extern void *func_80100094(Actor *, u32);
 extern Actor *_subaddielink_entrypoint_4(void *);
 extern void func_800EE7F8(f32 *, f32 *);
-extern int D_80801098_chtransparentfish;
+extern int D_80801098_chtransparentfish[];
 typedef struct { s32 local_0; s32 local_1; s32 local_2; } CodexTransparentFishRecord65;
 extern CodexTransparentFishRecord65 B_808010E0_chtransparentfish[20];
 typedef struct { u32 pad_0[2]; s32 local_0; } TransparentFishEntry;
@@ -354,3 +354,17 @@ s32 func_80800EE0_chtransparentfish(param_0) s32 param_0;
   }
 
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/transparentfish.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800FB8_chtransparentfish = D_80800FB4_chtransparentfish + 0x4, D_80800FBC_chtransparentfish = D_80800FB4_chtransparentfish + 0x8
+ * extern declarations adjusted to the object (same addresses): D_80801098_chtransparentfish -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_80800F80_chtransparentfish[5] = { 0x10000, 0x20000, 0x20000, 0x0, 0x30000 };
+u32 D_80800F94_chtransparentfish[8] = { 0x0, 0x0, 0x40200000, 0x1580001, 0x40200000, 0x1580001, 0x40200000, 0x1580001 };
+FishSpawnConfig271 D_80800FB4_chtransparentfish[13] = { 0x0, 0x0, 0x64, 0x21F, -0x1E, 0x64, 0x136, -0x32, 0x64, 0x1C8, -0x32, 0x64, 0x1C9, -0x32, 0x64, 0x1CA, -0x32, 0x64, 0x1CB, -0x32, 0x64, 0x1CC, -0x46, 0x5A, 0x1CE, -0x46, 0x64, 0x1CF, -0x46, 0x64, 0x1D7, -0x32, 0x64, 0x1D8, -0x46, 0x46, 0x220, -0x32, 0x5A };
+u8 D_80801050_chtransparentfish[72] = { 0x0, 0x1D, 0x9, 0xD9, 0x0, 0x16, 0x10, 0x4, 0x0, 0x1B, 0x0, 0x96, 0x0, 0x96, 0x0, 0x7, 0x0, 0x1, 0x0, 0xE, 0x0, 0xA, 0x0, 0xA, 0x0, 0x15, 0x0, 0x0, 0x0, 0xCC, 0x0, 0x2B, 0x3, 0x0, 0x3, 0x0, 0x0, 0x20, 0xFF, 0xFF, 0xFE, 0xFF, 0x0, 0x22, 0x0, 0xC, 0x0, 0x17, 0x0, 0xC, 0x0, 0x17, 0x0, 0x2F, 0x0, 0x40, 0x0, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0, 0x19, 0x0, 0x0, 0x0, 0x33, 0x0, 0x0, 0x0, 0x0 };
+int D_80801098_chtransparentfish[18] = { 0x12D0295, 0x6D90001, (u32)&D_80800F94_chtransparentfish, (u32)func_80800348_chtransparentfish, (u32)func_80105834, (u32)func_80800690_chtransparentfish, 0x13880000, 0x0, 0x0, 0x220123, (u32)func_80800B30_chtransparentfish, (u32)func_80108ED0, 0x80000, (u32)func_808002B8_chtransparentfish, (u32)func_80107C2C, -0x7FBFAFF1, (u32)func_8080078C_chtransparentfish, (u32)&D_80800F80_chtransparentfish };

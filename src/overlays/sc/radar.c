@@ -423,3 +423,8 @@ void scradar_entrypoint_1(Gfx **param_0)
     gDPPipeSync((*param_0)++);
     SCRADAR_SET_CYCLE_TYPE((*param_0)++, G_CYC_2CYCLE);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/sc/radar.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s16 D_80800E30_scradar[6] = { 0xB81, 0xB81, 0xB81, 0xB81, 0xB84, 0xB83 };
+u8 D_80800E3C_scradar[10][2] = { 0x40, 0x60, 0x40, 0x60, 0x40, 0x60, 0x40, 0x60, 0x60, 0x80, 0x70, 0x90, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

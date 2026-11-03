@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800140_chtntminecelldoor;
+extern int D_80800140_chtntminecelldoor[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern void func_800EF1B8(f32 *, f32, f32);
 void func_808000F4_chtntminecelldoor();
@@ -48,3 +48,13 @@ void func_808000F4_chtntminecelldoor(param_0) s32 param_0;
     _chexploder_entrypoint_12(sp1C, 0x3C);
     func_800DA544(0x85);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/tnt/minecelldoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800140_chtntminecelldoor -> int[] */
+extern void func_80102EC0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_80800140_chtntminecelldoor[36] = { 0xAC014B, 0x6AB0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_8080000C_chtntminecelldoor, (u32)func_80107C2C, -0x7FF7D3FE, (u32)func_80800034_chtntminecelldoor, 0x0, 0x310001D, 0x9DD002B, 0x8000A00, 0x220200, 0x2800600, 0x8000015, 0x26, 0x190000, 0x7002D, 0x320050, 0x20DEA7, 0x71C0000A, -0x31FFE7, -0x31FFCE, 0x280032, 0x31A0000, 0x0, 0x0 };

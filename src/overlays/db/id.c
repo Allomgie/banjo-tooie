@@ -78,3 +78,6 @@ s32 dbid_entrypoint_3(void *param_0, s32 param_1, u16 *param_2)
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/id.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -22,12 +22,12 @@ typedef struct { u32 a; u32 b; u32 c; } FsrTbl;
 typedef struct { f32 f0; f32 f4; f32 f8; f32 fC; f32 v10[2]; void *p18; s32 h1C; } FsrRec;
 extern FsrTbl D_808010FC_chfactorysparkroom;
 typedef struct { FactorySpark local_0[16]; s32 local_1; s32 local_2; s32 local_3; s32 local_4; } FactorySparkPool;
-extern int D_80801108_chfactorysparkroom;
+extern int D_80801108_chfactorysparkroom[];
 extern void func_8010A63C();
 extern void func_80108B04();
 extern u8 D_80801150_chfactorysparkroom[];
 extern s32 _chswitch_entrypoint_10(Actor *, s32, s32);
-extern int D_8080115C_chfactorysparkroom;
+extern int D_8080115C_chfactorysparkroom[];
 typedef struct { f32 v[3]; } SparkVec;
 typedef struct { f32 unk0; f32 unk4; f32 unk8; f32 unkC; u8 pad10[8]; s32 unk18; s32 unk1C; } Spark;
 typedef struct { u8 pad0[0x70]; u32 pad70_1:31; u32 unk70_0:1; } SparkBits;
@@ -396,3 +396,24 @@ int *chfactorysparkroom_entrypoint_1()
 {
     return &D_8080115C_chfactorysparkroom;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/sparkroom.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801108_chfactorysparkroom -> int[], D_8080115C_chfactorysparkroom -> int[] */
+extern void _chswitch_entrypoint_6();
+extern void func_80101870();
+f32 D_80801060_chfactorysparkroom[4] = { 1.746733e-39f, 2.048407e-39f, 1.194184e-39f, 2.8101662e-38f };
+f32 D_80801070_chfactorysparkroom[3] = { 1.746733e-39f, 2.059617e-39f, 0.0f };
+SparkVec D_8080107C_chfactorysparkroom = { 0.0f, 0.0f, 0.0f };
+SparkVec D_80801088_chfactorysparkroom = { 3.57e-43f, 3.57e-43f, 3.57e-43f };
+SparkRoomColor D_80801094_chfactorysparkroom = { 3.57e-43f, 3.57e-43f, 3.57e-43f };
+u8 D_808010A0_chfactorysparkroom[8] = { 0x44, 0x5A, 0xC0, 0x0, 0x44, 0xD4, 0x80, 0x0 };
+f32 D_808010A8_chfactorysparkroom[4][3] = { 875.0f, 5e+02f, 875.0f, 875.0f, 5e+02f, -875.0f, -875.0f, 5e+02f, 875.0f, -875.0f, 5e+02f, -875.0f };
+f32 D_808010D8_chfactorysparkroom[3] = { 0.0f, 0.0f, 0.0f };
+SparkRoomBlendColor D_808010E4_chfactorysparkroom = { 0x0, 0x0, 0x0 };
+SparkRoomBlendColor D_808010F0_chfactorysparkroom = { 0xFF, 0xFF, 0xFF };
+FsrTbl D_808010FC_chfactorysparkroom = { 0xFF, 0xFF, 0xFF };
+int D_80801108_chfactorysparkroom[18] = { 0x1580413, 0x6B90001, 0x0, (u32)func_8080013C_chfactorysparkroom, (u32)func_80105834, (u32)func_80800838_chfactorysparkroom, 0x0, 0x0, 0x0, 0x20400, (u32)func_80800D30_chfactorysparkroom, (u32)func_80108ED0, 0x2100000, (u32)func_80800000_chfactorysparkroom, (u32)func_80107C2C, -0x7FFFFC00, (u32)func_80800D90_chfactorysparkroom, 0x0 };
+u8 D_80801150_chfactorysparkroom[12] = { 0xC5, 0x1C, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+int D_8080115C_chfactorysparkroom[21] = { 0x34303ED, 0x8830001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x8, 0x0, 0x0, 0x0, (u32)func_80800E94_chfactorysparkroom, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_80800EC8_chfactorysparkroom, 0x0, 0x0, 0x0, 0x0 };

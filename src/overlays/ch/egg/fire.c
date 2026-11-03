@@ -16,7 +16,7 @@ extern void _suegg_entrypoint_3(Actor *);
 extern void _suegg_entrypoint_5(void);
 extern void _suegg_entrypoint_21(Actor *param_0, void *param_1);
 extern u8 D_808003B0_cheggfire[];
-extern int D_808003BC_cheggfire;
+extern int D_808003BC_cheggfire[];
 extern Actor *_suegg_entrypoint_11(s32, s32, s32);
 extern void _suegg_entrypoint_1(Actor *, f32);
 extern void _sueggmove_entrypoint_5(Actor *, s32);
@@ -123,3 +123,16 @@ Actor *cheggfire_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param_3
     local_0->unk70_10 = 1;
     return local_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/egg/fire.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808003BC_cheggfire -> int[] */
+extern void func_80105834();
+extern void _subaddiedraw25d_entrypoint_2();
+extern void _suegg_entrypoint_2();
+extern void _suegg_entrypoint_0();
+extern void func_80107C2C();
+extern void _suegg_entrypoint_17();
+u8 D_808003B0_cheggfire[12] = { 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0xC0, 0x0, 0x0, 0x0, 0x64 };
+int D_808003BC_cheggfire[21] = { 0x26D015B, 0x9C10001, 0x0, (u32)func_808000B8_cheggfire, (u32)func_80105834, (u32)_subaddiedraw25d_entrypoint_2, 0x0, 0x3F800000, 0x0, 0x4, (u32)_suegg_entrypoint_2, (u32)_suegg_entrypoint_0, 0x4C0000, (u32)func_80800228_cheggfire, (u32)func_80107C2C, -0x78000000, (u32)_suegg_entrypoint_17, 0x0, 0x0, 0x0, 0x0 };

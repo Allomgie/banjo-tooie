@@ -2,19 +2,19 @@
 
 #define PICKUPS_DATA(arg0) ((PickupsData*)(arg0->actorData))
 
-extern s32 D_80800790_chpickups;
-extern s32 D_808007D8_chpickups;
-extern s32 D_80800820_chpickups;
-extern s32 D_80800868_chpickups;
-extern s32 D_808008B0_chpickups;
-extern s32 D_808008F8_chpickups;
-extern s32 D_80800940_chpickups;
-extern s32 D_80800988_chpickups;
-extern s32 D_808009D0_chpickups;
-extern s32 D_80800A18_chpickups;
-extern s32 D_80800A60_chpickups;
-extern s32 D_80800AA8_chpickups;
-extern s32 D_80800AB8_chpickups;
+extern s32 D_80800790_chpickups[];
+extern s32 D_808007D8_chpickups[];
+extern s32 D_80800820_chpickups[];
+extern s32 D_80800868_chpickups[];
+extern s32 D_808008B0_chpickups[];
+extern s32 D_808008F8_chpickups[];
+extern s32 D_80800940_chpickups[];
+extern s32 D_80800988_chpickups[];
+extern s32 D_808009D0_chpickups[];
+extern s32 D_80800A18_chpickups[];
+extern s32 D_80800A60_chpickups[];
+extern s32 D_80800AA8_chpickups[];
+extern s32 D_80800AB8_chpickups[];
 
 s32* chpickups_entrypoint_0(void)
 {
@@ -285,3 +285,26 @@ void func_80800740_chpickups(s32 arg0)
     func_80800638_chpickups(arg0);
     _chdoubloon_entrypoint_1(arg0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/pickups.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800790_chpickups -> s32[], D_808007D8_chpickups -> s32[], D_80800820_chpickups -> s32[], D_80800868_chpickups -> s32[], D_808008B0_chpickups -> s32[], D_808008F8_chpickups -> s32[], D_80800940_chpickups -> s32[], D_80800988_chpickups -> s32[], D_808009D0_chpickups -> s32[], D_80800A18_chpickups -> s32[], D_80800A60_chpickups -> s32[], D_80800AA8_chpickups -> s32[], D_80800AB8_chpickups -> s32[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _chdoubloon_entrypoint_0();
+s32 D_80800790_chpickups[18] = { 0x1DD01D9, 0x9110005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F19999A, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_808007D8_chpickups[18] = { 0x1B803CA, 0x7A60005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F19999A, 0x0, 0x10802004, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_80800820_chpickups[18] = { 0x1BA03CB, 0x7A40005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F19999A, 0x0, 0x10802004, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_80800868_chpickups[18] = { 0x1580481, 0x8CF0005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F19999A, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_808008B0_chpickups[18] = { 0x15804E2, 0x7BF0005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F800000, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_808008F8_chpickups[18] = { 0x15804E3, 0x7F30005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F4CCCCD, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_80800940_chpickups[18] = { 0x15804E4, 0x7C00005, 0x0, (u32)func_80800740_chpickups, (u32)func_80105834, (u32)_chdoubloon_entrypoint_0, 0x0, 0x3F800000, 0x0, 0x20004, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800734_chpickups, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_80800988_chpickups[18] = { 0x6704D7, 0x8FA0005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F19999A, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_808009D0_chpickups[18] = { 0x1580515, 0x9750005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F19999A, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_80800A18_chpickups[18] = { 0x1580516, 0x9740005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F19999A, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_80800A60_chpickups[18] = { 0x15804B7, 0x6120005, 0x0, (u32)func_80800638_chpickups, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F4CCCCD, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x0, (u32)func_80800084_chpickups, 0x0 };
+s32 D_80800AA8_chpickups[4] = { 0x13041F, 0xA0100, 0x1661A8, 0x0 };
+s32 D_80800AB8_chpickups[6] = { 0x130418, 0xA00C2, 0x1661A8, 0x103E8, 0x7D00000, 0x0 };

@@ -382,3 +382,6 @@ int suspline_entrypoint_20(s32 param_0, s32 param_1, s32 param_2, s32 param_3, f
     func_80100074(param_0, 1, local_0);
     suspline_entrypoint_19(func_80100094(param_0, 1), param_1, param_2, param_3, param_4, param_5);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/spline.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -2,29 +2,29 @@
 
 typedef struct { s16 a, b; } S16Pair;
 extern s32 func_80108474(s32, f32 *, s32);
-extern int D_80800B98_chcrusher;
-extern s32 D_80800B30_chcrusher;
+extern int D_80800B98_chcrusher[];
+extern s32 D_80800B30_chcrusher[];
 extern f32 D_80800B48_chcrusher[][4];
-extern s32 D_80800BE0_chcrusher;
+extern s32 D_80800BE0_chcrusher[];
 extern f32 func_800D8FF8(void);
 extern s32 func_80101E14(Actor *, f32);
 extern s32 func_800E1610(s32, f32, f32, f32 *);
 extern s32 func_80018820(s32, f32, f32);
 typedef struct CrusherBounds { f32 local_0[3]; f32 local_1[3]; } CrusherBounds;
 extern void func_8008FE94(s32, f32 *);
-extern int D_80800C40_chcrusher;
+extern int D_80800C40_chcrusher[];
 extern s32 D_80800C88_chcrusher[3];
 extern s32 D_80800C94_chcrusher[3];
 extern s32 D_80800CA0_chcrusher[3];
 typedef struct { s32 local_0[3]; } local_struct;
-extern int D_80800CC8_chcrusher;
+extern int D_80800CC8_chcrusher[];
 extern void func_800EFA4C(u8 *, f32, f32, f32);
 extern s32 D_80800D20_chcrusher[];
-extern int D_80800D68_chcrusher;
+extern int D_80800D68_chcrusher[];
 extern void func_800BABB8(int, void *, int, float, void *);
-extern float D_80800BF0_chcrusher;
+extern u32 D_80800BF0_chcrusher[];
 typedef struct { u8 local_0[0x74]; u32 local_1 : 4; u32 local_2 : 1; u32 local_3 : 27; } CrusherFlagsView;
-extern u32 D_80800D10_chcrusher;
+extern u32 D_80800D10_chcrusher[];
 extern void func_80101CDC(Actor *, f32);
 void func_808003E4_chcrusher();
 void func_80800508_chcrusher();
@@ -45,7 +45,7 @@ s32 func_80800000_chcrusher(f32 *param_0, s32 param_1, S16Pair param_2) {
 
 int *chcrusher_entrypoint_0()
 {
-    return &D_80800B98_chcrusher;
+    return D_80800B98_chcrusher;
 }
 
 int func_80800068_chcrusher(Actor *param_0)
@@ -77,7 +77,7 @@ void func_808000D4_chcrusher(Actor *param_0)
         }
         if (func_80101E14(param_0, 0.9f)) {
             local_0 = param_0->position;
-            _subaddieaudioquick_entrypoint_2(param_0, local_0, &D_80800B30_chcrusher);
+            _subaddieaudioquick_entrypoint_2(param_0, local_0, D_80800B30_chcrusher);
             func_800E1610(2, 80.0f, 0.85f, local_0);
             func_80018820(0, 2.5f, 0.25f);
         }
@@ -116,7 +116,7 @@ void func_808000D4_chcrusher(Actor *param_0)
         func_80800508_chcrusher(param_0);
     }
     _subaddieaudioloop_entrypoint_4(param_0, local_0,
-        ((f32 *)param_0->actorData)[3] > 0.0f, &D_80800BE0_chcrusher);
+        ((f32 *)param_0->actorData)[3] > 0.0f, D_80800BE0_chcrusher);
     if (((f32 *)param_0->actorData)[3] > 0.0f) {
         ((f32 *)param_0->actorData)[3] -= func_800D8FF8();
     }
@@ -124,7 +124,7 @@ void func_808000D4_chcrusher(Actor *param_0)
 
 void func_80800394_chcrusher(param_0) void *param_0;
 {
-    func_800BABB8(0, (void *)((char *)param_0 + 0x28), 0, 1.0f, &D_80800BF0_chcrusher);
+    func_800BABB8(0, (void *)((char *)param_0 + 0x28), 0, 1.0f, D_80800BF0_chcrusher);
     *(f32 *)((char *)param_0 + 0x24) = 0.3f;
 }
 
@@ -227,7 +227,7 @@ int func_80800684_chcrusher(Actor *param_0, s32 param_1, s32 param_2)
 
 int *chcrusher_entrypoint_1()
 {
-    return &D_80800C40_chcrusher;
+    return D_80800C40_chcrusher;
 }
 
 void func_80800734_chcrusher(u8 *param_0) {
@@ -275,7 +275,7 @@ void func_80800838_chcrusher(Actor *param_0)
 
 int *chcrusher_entrypoint_2()
 {
-    return &D_80800CC8_chcrusher;
+    return D_80800CC8_chcrusher;
 }
 
 void func_808008FC_chcrusher(Actor *param_0)
@@ -283,7 +283,7 @@ void func_808008FC_chcrusher(Actor *param_0)
     s32 local_1;
     f32 local_0[3];
     local_1 = func_800DA298(0x4FB);
-    _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_1, &D_80800D10_chcrusher);
+    _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_1, D_80800D10_chcrusher);
     switch (param_0->unk70_10) {
         case 1:
             if (local_1) {
@@ -328,5 +328,32 @@ int chcrusher_entrypoint_3()
 
 int chcrusher_entrypoint_4()
 {
-    return (int)&D_80800D68_chcrusher;
+    return (int)D_80800D68_chcrusher;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/crusher.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800B30_chcrusher -> s32[] (uses written as NAME[0]), D_80800B98_chcrusher -> int[] (uses written as NAME[0]), D_80800BE0_chcrusher -> s32[] (uses written as NAME[0]), D_80800C40_chcrusher -> int[] (uses written as NAME[0]), D_80800CC8_chcrusher -> int[] (uses written as NAME[0]), D_80800D10_chcrusher -> u32[] (uses written as NAME[0]), D_80800D68_chcrusher -> int[] (uses written as NAME[0]) */
+extern void func_80105834();
+extern void func_80107C2C();
+extern int func_80101870();
+extern void func_80108ED0();
+extern void _chswitch_entrypoint_13();
+extern void _chswitch_entrypoint_0();
+s32 D_80800B30_chcrusher[6] = { 0x1304CE, 0xD00E6, 0x1330016, 0x7D000001, 0x1F41388, 0x0 };
+f32 D_80800B48_chcrusher[3][4] = { 0.5f, 1.0f, 2.0f, 1.0f, 2.0f, 2.0f, 2.0f, 2.0f, 1.0f, 2.0f, 0.5f, 2.0f };
+u32 D_80800B78_chcrusher[8] = { 0x0, 0x0, 0x4B189680, 0x870000, 0x3F4CCCCD, 0x870000, 0x4B189680, 0x870000 };
+int D_80800B98_chcrusher[18] = { 0x25E017A, 0x6830001, (u32)&D_80800B78_chcrusher, (u32)func_808000D4_chcrusher, (u32)func_80105834, (u32)func_80800068_chcrusher, 0x0, 0x0, 0x0, 0x1008000E, (u32)func_808005C0_chcrusher, 0x0, 0x0, (u32)func_808005C8_chcrusher, (u32)func_80107C2C, -0x7FFEFFFE, (u32)func_80800000_chcrusher, 0x0 };
+s32 D_80800BE0_chcrusher[4] = { 0x1304DC, 0x164E20, 0x101F4, 0x13880000 };
+u32 D_80800BF0_chcrusher[20] = { 0xA10001D, 0x9DD0019, 0x7, 0xAFFFB, 0xFFFB0050, 0x50005, 0x2C, 0xFFE2FFFB, 0xC8001E, 0x50190, 0x1B0005, 0xA0022, 0x33, 0xB30180, 0x2A000C, 0x190040, 0x800015, 0xD9, 0x64020028, 0x730000 };
+int D_80800C40_chcrusher[18] = { 0x260017C, 0x6860001, 0x0, (u32)func_80800734_chcrusher, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x880404, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800838_chcrusher, (u32)func_80107C2C, 0x0, (u32)func_80800684_chcrusher, 0x0 };
+s32 D_80800C88_chcrusher[3] = { -0x3AF04000, -0x3DB80000, -0x3BD74000 };
+s32 D_80800C94_chcrusher[3] = { -0x3AF3B000, 0x44340000, -0x3DB80000 };
+s32 D_80800CA0_chcrusher[3] = { 0x1304CB, 0x167D00, 0x101F4 };
+static u32 D_80800CA0_chcrusher_rest[1] = { 0x13880000 };
+u32 D_80800CB0_chcrusher[6] = { 0x0, 0x0, 0x4B189680, 0x8D0000, 0x4116DB6E, 0x8D0000 };
+int D_80800CC8_chcrusher[18] = { 0x25F017B, 0x6840001, (u32)&D_80800CB0_chcrusher, (u32)func_808008FC_chcrusher, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x80404, (u32)func_80800ACC_chcrusher, 0x0, 0x0, (u32)func_80800A98_chcrusher, (u32)func_80107C2C, -0x7F7FFFFE, 0x0, 0x0 };
+u32 D_80800D10_chcrusher[4] = { 0x1304CD, 0x164650, 0x101F4, 0x13880000 };
+s32 D_80800D20_chcrusher[18] = { 0x8017D, 0x6850001, -0x7FEE5D68, (u32)_chswitch_entrypoint_13, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x1008080C, 0x0, (u32)_chswitch_entrypoint_0, 0x0, (u32)func_80800AD4_chcrusher, (u32)func_80107C2C, -0x7FFEF800, 0x0, 0x0 };
+int D_80800D68_chcrusher[18] = { 0x1580386, 0x6AC0001, 0x0, 0x0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x20004, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFF7FE, 0x0, 0x0 };

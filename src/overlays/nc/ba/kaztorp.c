@@ -71,3 +71,6 @@ void ncbakaztorp_entrypoint_2(s32 param_0)
     func_80110A68(param_0, local_3, local_0);
     func_80110790(param_0, local_3);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/kaztorp.data.s) is defined here in C.
+ * Values are taken from the ROM. */

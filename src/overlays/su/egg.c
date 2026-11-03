@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern char D_80800E40_suegg;
+extern u32 D_80800E40_suegg[];
 typedef struct EggSpriteClock { f32 local_0; f32 local_1; s32 local_2; } EggSpriteClock;
 typedef struct EggSpriteFlags { u8 pad_0[0xA]; u8 local_0 : 5; u8 pad_1 : 3; } EggSpriteFlags;
 extern void *func_80100094(Actor *, u32);
@@ -429,3 +429,12 @@ s32 func_80800DC0_suegg(this, param_1) Actor *this; s32 param_1;
   }
   return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/egg.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800E40_suegg -> u32[] */
+extern void _suegg_entrypoint_10();
+u32 D_80800E40_suegg[5] = { 0x0, 0x0, 0x0, (u32)_suegg_entrypoint_10, 0x0 };
+u8 D_80800E54_suegg[16] = { 0x0, 0x13, 0x4, 0x7, 0x0, 0xD, 0x1, 0x99, 0x1, 0xB3, 0x0, 0x16, 0x32, 0xC8, 0x0, 0x0 };
+s32 D_80800E64_suegg[7] = { 0x130418, 0xD00F3, 0x10C0016, 0x2EE00000, 0x0, 0x0, 0x0 };

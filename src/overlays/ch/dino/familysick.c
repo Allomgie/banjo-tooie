@@ -2,11 +2,11 @@
 
 #define SFX (*(s32 *)&this->unk54)
 #define F74 ((ActorFlags74 *)((u8 *)this + 0x74))
-extern int D_80800E60_chdinofamilysick;
+extern int D_80800E60_chdinofamilysick[];
 extern void _sudeflect_entrypoint_1(f32 *, f32, f32, f32, s32);
 extern void _chbaddiesetup_entrypoint_6(void *, void *, s32, s32, s32, s32, s32);
 extern void _subaddietaxi_entrypoint_16(void);
-extern int D_80800EA8_chdinofamilysick;
+extern int D_80800EA8_chdinofamilysick[];
 extern u8 D_80800F48_chdinofamilysick[];
 extern f32 func_800F3780(f32, void*, u32);
 void func_80105A9C(u8*, f32);
@@ -33,7 +33,7 @@ extern s32 func_801022E4(Actor *);
 extern void func_800DF744(s32, s32);
 extern void _gcdialogcamera_entrypoint_4(f32 *);
 extern void _gcdialogcamera_entrypoint_3(void *, f32);
-extern int D_80800F78_chdinofamilysick;
+extern int D_80800F78_chdinofamilysick[];
 typedef struct { u8 local_0[0x78]; u32 local_1 : 26; u32 local_2 : 1; u32 local_3 : 5; } DinoSickFlags49;
 extern u32 D_80800E98_chdinofamilysick[];
 extern void func_80101EE4(Actor *, f32);
@@ -48,7 +48,7 @@ extern s32 func_80105998(Actor *, f32);
 
 int *chdinofamilysick_entrypoint_0()
 {
-  return &D_80800E60_chdinofamilysick;
+  return D_80800E60_chdinofamilysick;
 }
 
 void func_8080000C_chdinofamilysick(Actor *param_0)
@@ -204,7 +204,7 @@ s32 func_808003B0_chdinofamilysick(Actor *param_0, s32 param_1, s32 param_2)
 
 int *chdinofamilysick_entrypoint_1()
 {
-    return &D_80800EA8_chdinofamilysick;
+    return D_80800EA8_chdinofamilysick;
 }
 
 void func_808005F8_chdinofamilysick(s32 *param_0) {
@@ -396,5 +396,24 @@ s32 func_80800AB0_chdinofamilysick(Actor *this, s32 msg, s32 arg)
 
 int chdinofamilysick_entrypoint_2()
 {
-  return &D_80800F78_chdinofamilysick;
+  return D_80800F78_chdinofamilysick;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/dino/familysick.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800E60_chdinofamilysick -> int[] (uses written as NAME[0]), D_80800EA8_chdinofamilysick -> int[] (uses written as NAME[0]), D_80800F78_chdinofamilysick -> int[] (uses written as NAME[0]) */
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern u8 boot_thread_stack[];
+int D_80800E60_chdinofamilysick[2] = { (u32)func_80800368_chdinofamilysick, (u32)func_8080030C_chdinofamilysick };
+u32 D_80800E68_chdinofamilysick[12] = { 0x0, 0x0, 0x41066666, 0x3F70001, 0x41066666, 0x3F70001, 0x41066666, 0x3F70001, 0x41066666, 0x3F70001, 0x41066666, 0x3F70001 };
+u32 D_80800E98_chdinofamilysick[4] = { 0x43480000, 0x42C80000, 0x43480000, 0x42C80000 };
+int D_80800EA8_chdinofamilysick[18] = { 0x1290291, 0x89B0001, (u32)&D_80800E68_chdinofamilysick, (u32)func_8080000C_chdinofamilysick, (u32)func_80105834, (u32)func_801018A4, 0x13880000, 0x40000000, 0x0, 0x840120, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0xF24), (u32)func_808003B0_chdinofamilysick, 0x0 };
+u32 D_80800EF0_chdinofamilysick[16] = { 0x0, 0x0, 0x41066666, 0x3F70001, 0x41066666, 0x3F70001, 0x400CCCCD, 0x3F80001, 0x3F000000, 0x14C0001, 0x3EB33333, 0x14C0001, 0x400CCCCD, 0x3F80001, 0x400CCCCD, 0x3F80001 };
+Mass64DinoColor D_80800F30_chdinofamilysick = { 0x0, 0xFF, 0x0 };
+Mass64DinoColor D_80800F3C_chdinofamilysick = { 0xFF, 0xFF, 0xFF };
+u8 D_80800F48_chdinofamilysick[32] = { 0x0, 0x0, 0x0, 0x0, 0x3F, 0x80, 0x0, 0x0, 0x3E, 0x80, 0x0, 0x0, 0x3F, 0x40, 0x0, 0x0, 0x3F, 0x0, 0x0, 0x0, 0x3F, 0x80, 0x0, 0x0, 0x3F, 0x40, 0x0, 0x0, 0x3F, 0x40, 0x0, 0x0 };
+u8 D_80800F68_chdinofamilysick[16] = { 0x43, 0x48, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0, 0x43, 0x48, 0x0, 0x0, 0x42, 0xC8, 0x0, 0x0 };
+int D_80800F78_chdinofamilysick[18] = { 0x158052D, 0x89B0001, (u32)&D_80800EF0_chdinofamilysick, (u32)func_80800768_chdinofamilysick, (u32)func_80800768_chdinofamilysick, (u32)func_801018A4, 0x7D00000, 0x40000000, 0x0, 0x840120, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808005F8_chdinofamilysick, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0xF26), (u32)func_80800AB0_chdinofamilysick, 0x0 };

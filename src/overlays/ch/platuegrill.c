@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_808001D0_chplatuegrill;
+extern int D_808001D0_chplatuegrill[];
 typedef union { s32 word; void *pointer; } PlatueGrillEventPayload;
-extern int D_80800238_chplatuegrill;
+extern int D_80800238_chplatuegrill[];
 extern f32 func_80103EF4(Actor *);
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
@@ -60,3 +60,17 @@ int chplatuegrill_entrypoint_1()
 {
     return &D_80800238_chplatuegrill;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/platuegrill.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808001D0_chplatuegrill -> int[], D_80800238_chplatuegrill -> int[] */
+extern void _chdoor_entrypoint_0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_1();
+int D_808001D0_chplatuegrill[18] = { 0x1580518, 0x96A0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x1F40, 0x0, 0x3EA0000, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chplatuegrill, (u32)func_80107C2C, -0x7FFFDBFE, (u32)_chdoor_entrypoint_1, 0x0 };
+u32 D_80800218_chplatuegrill[8] = { 0x0, 0x0, 0x3ECCCCCD, 0x8E0044, 0x3ECCCCCD, 0x8E0002, 0x3C23D70A, 0x8E0002 };
+int D_80800238_chplatuegrill[18] = { 0x1110519, 0x99B0001, (u32)&D_80800218_chplatuegrill, (u32)func_808000DC_chplatuegrill, (u32)func_80105834, (u32)func_80101870, 0x1388, 0x0, 0x0, 0x828, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808000A0_chplatuegrill, (u32)func_80107C2C, -0x7FFDDC00, (u32)func_80800148_chplatuegrill, 0x0 };

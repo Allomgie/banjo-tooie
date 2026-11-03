@@ -1,8 +1,8 @@
 #include "common.h"
 
 #define CODEX_MADAME_REWARD_DEFINED
-extern int D_80800B50_chmadamegrunty;
-extern int D_80800B98_chmadamegrunty;
+extern int D_80800B50_chmadamegrunty[];
+extern int D_80800B98_chmadamegrunty[];
 typedef union { s32 local_0; s16 local_1[2]; } MadameMessage1417;
 extern void func_800EEB9C(f32 *, f32, f32);
 extern void func_800F4AC0(s32, f32 *, f32);
@@ -311,3 +311,19 @@ void func_80800A30_chmadamegrunty(Actor *param_0)
         _chdoormake_entrypoint_7(param_0, 1.0f);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/madamegrunty.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800B50_chmadamegrunty -> int[], D_80800B98_chmadamegrunty -> int[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+extern void func_80101870();
+extern void _chdoor_entrypoint_1();
+MadameReward D_80800AF0_chmadamegrunty[8] = { -0x1, -0x1, 0x0, 0x0, 0.01f, 0x40, 0x31, 0x14, 0x0, 0.11f, 0x41, 0x2C, 0x5, 0x0, 0.11f, 0x43, 0x2D, 0x5, 0x0, 0.11f, 0x46, 0x9, 0xA, 0x0, 0.11f, 0x47, 0x12, 0x5, 0x0, 0.11f, -0x1, -0x1, 0x1, 0x0, 0.11f, -0x1, -0x1, -0x1, 0x0, 0.33f };
+int D_80800B50_chmadamegrunty[18] = { 0x1AC014F, 0x1, 0x0, (u32)func_8080005C_chmadamegrunty, (u32)func_80105834, (u32)func_8010A730, 0x7D00000, 0x0, 0x0, 0x1, 0x0, 0x0, 0x0, (u32)func_80800018_chmadamegrunty, (u32)func_80107C2C, -0x7FFFD9FE, (u32)func_80800198_chmadamegrunty, 0x0 };
+int D_80800B98_chmadamegrunty[18] = { 0xAC03D4, 0x7010001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800A30_chmadamegrunty, (u32)func_80107C2C, -0x7FFFD3FE, (u32)_chdoor_entrypoint_1, 0x0 };
+MadameEntry D_80800BE0_chmadamegrunty[9] = { 0x415, 0.1f, 0.9f, 0x417, 0.15f, 0.9f, 0x427, 0.2f, 1.0f, 0x40D, 0.35f, 1.0f, 0x424, 0.45f, 1.0f, 0x415, 0.6f, 1.0f, 0x417, 0.65f, 1.0f, 0x423, 0.7f, 1.0f, 0x492, 0.85f, 1.0f };
+u8 D_80800C4C_chmadamegrunty[20] = { 0x0, 0x2, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

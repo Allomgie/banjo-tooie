@@ -1,7 +1,7 @@
 #include "common.h"
 #include "playerstate.h"
 
-extern u8 D_80800550_badeathmatch;
+extern u8 D_80800550_badeathmatch[];
 typedef struct { s16 local_0[8]; s16 local_1[8]; u8 local_2; } DeathmatchEggState;
 typedef struct { u8 pad_0[0x158]; DeathmatchEggState *local_0; } DeathmatchEggPlayer;
 typedef struct { u8 pad_0[0x21]; u8 local_0; u8 local_1; u8 local_2; } DeathmatchFlags1312;
@@ -213,3 +213,8 @@ void badeathmatch_entrypoint_11(u8 *param_0, s32 param_1, s32 param_2) {
     local_1 = (*(u8 **)((s8 *)(param_0) + (0x158)));
     (*(u8 *)((s8 *)(local_1) + (0x23))) = (u8) ((*(u8 *)((s8 *)(local_1) + (0x23))) & ~param_1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/deathmatch.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800550_badeathmatch -> u8[] */
+u8 D_80800550_badeathmatch[16] = { 0x2, 0x4, 0x5, 0x3, 0x6, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

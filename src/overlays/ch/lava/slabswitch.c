@@ -1,6 +1,6 @@
 #include "ch/lavaslabswitch.h"
 
-extern int D_808000A0_chlavaslabswitch;
+extern int D_808000A0_chlavaslabswitch[];
 
 int func_80800000_chlavaslabswitch(s32 param_0[2], s32 param_1)
 {
@@ -23,3 +23,14 @@ int chlavaslabswitch_entrypoint_0()
 {
   return &D_808000A0_chlavaslabswitch;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lava/slabswitch.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808000A0_chlavaslabswitch -> int[] */
+extern u8 D_8011A270[];
+extern void _chswitch_entrypoint_6();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_808000A0_chlavaslabswitch[20] = { 0x3430246, 0x8D50001, (u32)&D_8011A270, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, 0x0, 0x0, (u32)func_8080005C_chlavaslabswitch, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80800000_chlavaslabswitch, 0x0, 0x0, 0x0 };

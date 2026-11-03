@@ -79,3 +79,6 @@ void vpglow_entrypoint_3(f32 *param_0, s32 param_1, Vtx *param_2, s32 param_3)
         param_2->v.cn[2] *= local_1;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/vp/glow.data.s) is defined here in C.
+ * Values are taken from the ROM. */

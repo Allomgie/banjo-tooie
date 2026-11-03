@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_80800930_chhotwaterpoolbits;
-extern int D_80800978_chhotwaterpoolbits;
-extern int D_808009C0_chhotwaterpoolbits;
+extern int D_80800930_chhotwaterpoolbits[];
+extern int D_80800978_chhotwaterpoolbits[];
+extern int D_808009C0_chhotwaterpoolbits[];
 extern s32 D_80800A08_chhotwaterpoolbits[];
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
@@ -19,9 +19,9 @@ extern Actor *func_80106790();
 typedef struct { u8 pad[0x76]; u16 f76:9; u16 pad76:7; } PoolS;
 extern void func_800FFAB0(PoolS *);
 extern void func_800EE7F8();
-extern s32 D_80800A88_chhotwaterpoolbits;
-extern s32 D_80800AC0_chhotwaterpoolbits;
-extern s32 D_80800AD8_chhotwaterpoolbits;
+extern s32 D_80800A88_chhotwaterpoolbits[];
+extern s32 D_80800AC0_chhotwaterpoolbits[];
+extern s32 D_80800AD8_chhotwaterpoolbits[];
 extern f32 func_800F5628(s32);
 int func_808003E0_chhotwaterpoolbits();
 void func_80800528_chhotwaterpoolbits();
@@ -272,3 +272,24 @@ void chhotwaterpoolbits_entrypoint_5(s32 param_0, s32 param_1) {
     func_800BABB8(0, sp28, sp34, param_1, &D_80800A88_chhotwaterpoolbits);
     _subaddieaudioquick_entrypoint_2(param_0, sp28, &D_80800AC0_chhotwaterpoolbits);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/hot/waterpoolbits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800930_chhotwaterpoolbits -> int[], D_80800978_chhotwaterpoolbits -> int[], D_808009C0_chhotwaterpoolbits -> int[], D_80800A88_chhotwaterpoolbits -> s32[], D_80800AC0_chhotwaterpoolbits -> s32[], D_80800AD8_chhotwaterpoolbits -> s32[] */
+extern u8 D_8011A270[];
+extern void _chswitch_entrypoint_6();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void _chdoor_entrypoint_0();
+int D_80800930_chhotwaterpoolbits[18] = { 0x3390427, 0x7B80001, (u32)&D_8011A270, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4000080C, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800030_chhotwaterpoolbits, (u32)func_80107C2C, -0x7FF7D3FE, (u32)func_80800078_chhotwaterpoolbits, 0x0 };
+int D_80800978_chhotwaterpoolbits[18] = { 0xAC0428, 0x9470001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x1670000, 0x804, 0x0, 0x0, 0x0, (u32)func_80800124_chhotwaterpoolbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_808001A8_chhotwaterpoolbits, 0x0 };
+int D_808009C0_chhotwaterpoolbits[18] = { 0x1580439, 0x1, 0x0, (u32)func_8080024C_chhotwaterpoolbits, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_80800204_chhotwaterpoolbits, (u32)func_80107C2C, -0x7FFFF1FE, (u32)func_808003E0_chhotwaterpoolbits, 0x0 };
+s32 D_80800A08_chhotwaterpoolbits[18] = { 0x158043A, 0x1, 0x0, (u32)func_80800718_chhotwaterpoolbits, (u32)func_80102EC0, (u32)func_8010A730, 0xBB80000, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_808006BC_chhotwaterpoolbits, (u32)func_80107C2C, -0x7FFFF9FE, 0x0, 0x0 };
+u8 D_80800A50_chhotwaterpoolbits[12] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x78, 0x0, 0x0, 0x0, 0x78 };
+u8 D_80800A5C_chhotwaterpoolbits[12] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF };
+u8 D_80800A68_chhotwaterpoolbits[32] = { 0x0, 0x13, 0x5, 0x6A, 0x0, 0x18, 0x0, 0xA, 0x0, 0xC0, 0x0, 0xC, 0x0, 0x0, 0x9, 0x0, 0x0, 0xC0, 0x1, 0xC, 0x0, 0x15, 0x0, 0x33, 0x9, 0x4C, 0x0, 0x80, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80800A88_chhotwaterpoolbits[14] = { 0xC10001D, 0x9DD002D, 0x3E804B0, 0xB0000, 0x140000, 0x6002, 0x220099, 0x1000300, 0x3800015, 0x99, 0x2A0000, 0xA008C, 0xA6000F, 0x0 };
+s32 D_80800AC0_chhotwaterpoolbits[6] = { 0x1304DC, 0xD0100, 0x14C0015, 0x80, 0x660002, 0x0 };
+s32 D_80800AD8_chhotwaterpoolbits[6] = { 0x0, -0x3CFE0000, 0x0, 0x0, 0x0, 0x0 };

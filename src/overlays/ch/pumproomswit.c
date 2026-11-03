@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void *D_80800380_chpumproomswitch;
-extern int D_808003C8_chpumproomswitch;
+extern int D_808003C8_chpumproomswitch[];
 extern void func_801032B0(Actor *, u16, u16);
 extern void func_80103110(Actor *, s32);
 extern void _chswitch_entrypoint_10(Actor *, s32, s32);
@@ -97,3 +97,18 @@ s32 func_808002A0_chpumproomswitch(Actor *param_0, s32 param_1, s32 param_2)
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/pumproomswit.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808003C8_chpumproomswitch -> int[] */
+extern void _chswitch_entrypoint_6();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void func_8010A730();
+void *D_80800380_chpumproomswitch = (void *)0x0343034B;
+static u32 D_80800380_chpumproomswitch_rest[17] = { 0x7B80001, 0x8011A220, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4000080C, 0x0, 0x0, 0x0, (u32)func_80800018_chpumproomswitch, (u32)func_80107C2C, 0x80082C12, (u32)func_808000BC_chpumproomswitch, 0x0 };
+int D_808003C8_chpumproomswitch[18] = { 0x33003D2, 0x1, 0x0, (u32)func_808001E4_chpumproomswitch, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_80800194_chpumproomswitch, (u32)func_80107C2C, -0x7FFFF9FE, (u32)func_808002A0_chpumproomswitch, 0x0 };
+s16 D_80800410_chpumproomswitch[10] = { 0x206, 0x13, 0x4B4, 0x16, 0x2EE0, 0x1, 0x1F4, 0xDAC, 0x0, 0x0 };
+s16 D_80800424_chpumproomswitch[14] = { 0x206, 0x13, 0x4B4, 0x16, 0x1F40, 0x1, 0x320, 0x1194, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

@@ -1,14 +1,14 @@
 #include "common.h"
 
-extern int D_80800664_chcrystalbaddie;
+extern int D_80800664_chcrystalbaddie[];
 typedef union { s32 local_0; Actor *local_1; } CrystalMessage1410;
 extern f32 func_800DC178(f32, f32);
 extern void func_80102424();
 typedef struct { u8 pad[0x64]; u8 pad64:7; u8 flag:1; } CrystS;
 extern void _subaddiejoy_entrypoint_10(CrystS *, f32, f32);
 extern void _chexploder_entrypoint_4(CrystS *, s32, s32);
-extern int D_808006CC_chcrystalbaddie;
-extern int D_808006BC_chcrystalbaddie;
+extern int D_808006CC_chcrystalbaddie[];
+extern int D_808006BC_chcrystalbaddie[];
 extern u8 D_808006AC_chcrystalbaddie[];
 extern void *func_80100094(Actor *, u32);
 extern u8 func_800D9078(f32 *);
@@ -182,3 +182,17 @@ void func_8080052C_chcrystalbaddie(param_0) s32 param_0;
     func_800FFAB0(param_0);
   }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/crystalbaddie.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800664_chcrystalbaddie -> int[], D_808006BC_chcrystalbaddie -> int[], D_808006CC_chcrystalbaddie -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_80800610_chcrystalbaddie[5] = { 0x10000, 0x50000, 0x50000, 0x60000, 0x70000 };
+u32 D_80800624_chcrystalbaddie[16] = { 0x0, 0x0, 0x3F19999A, 0x38D0044, 0x3F19999A, 0x38D004A, 0x3F0F5C29, 0x38E0401, 0x3F19999A, 0x38D0092, 0x0, 0x0, 0x0, 0x0, 0x3F19999A, 0x38D0044 };
+int D_80800664_chcrystalbaddie[18] = { 0x3040426, 0x88F0001, (u32)&D_80800624_chcrystalbaddie, (u32)func_80800054_chcrystalbaddie, (u32)func_80105834, (u32)func_8080038C_chcrystalbaddie, 0x7D00000, 0x0, 0x0, 0x42840121, (u32)func_80800384_chcrystalbaddie, (u32)func_80108ED0, 0x100000, (u32)func_8080000C_chcrystalbaddie, (u32)func_80107C2C, -0x7FCFAFE3, (u32)func_808002E0_chcrystalbaddie, (u32)&D_80800610_chcrystalbaddie };
+u8 D_808006AC_chcrystalbaddie[16] = { 0x0, 0x13, 0x5, 0xE9, 0x0, 0xD, 0x1, 0x8C, 0x1, 0xA6, 0x0, 0x16, 0x36, 0xB0, 0x0, 0x0 };
+int D_808006BC_chcrystalbaddie[4] = { 0x13048D, 0xD00F3, 0x10C0016, 0x6D600000 };
+int D_808006CC_chcrystalbaddie[13] = { 0x1D09DD, 0x2D0064, 0xC8000B, 0x1E0028, -0x13FFB0, 0x220133, 0x1660200, 0x2660015, 0x1900CC, 0x2B0100, 0x1800000, 0x0, 0x0 };

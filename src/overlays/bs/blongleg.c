@@ -621,3 +621,42 @@ int bsblongleg_entrypoint_31(s32 param_0)
 {
   return D_808014E0_bsblongleg[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/blongleg.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsblongleg_entrypoint_2();
+extern void _bsblongleg_entrypoint_0();
+extern void _bsblongleg_entrypoint_1();
+extern void func_8009AB78();
+extern void _bsblongleg_entrypoint_6();
+extern void _bsblongleg_entrypoint_4();
+extern void _bsblongleg_entrypoint_5();
+extern void _bsblongleg_entrypoint_10();
+extern void _bsblongleg_entrypoint_8();
+extern void _bsblongleg_entrypoint_9();
+extern void _bsblongleg_entrypoint_14();
+extern void _bsblongleg_entrypoint_12();
+extern void _bsblongleg_entrypoint_13();
+extern void _bsblongleg_entrypoint_18();
+extern void _bsblongleg_entrypoint_16();
+extern void _bsblongleg_entrypoint_17();
+extern void func_80099B94();
+extern void _bsblongleg_entrypoint_22();
+extern void _bsblongleg_entrypoint_20();
+extern void _bsblongleg_entrypoint_21();
+extern void _bsblongleg_entrypoint_24();
+extern void _bsblongleg_entrypoint_25();
+extern void _bsblongleg_entrypoint_26();
+extern void _bsblongleg_entrypoint_30();
+extern void _bsblongleg_entrypoint_28();
+extern void _bsblongleg_entrypoint_29();
+extern void _bsdrone_entrypoint_3();
+s32 D_80801470_bsblongleg[4] = { (u32)_bsblongleg_entrypoint_2, (u32)_bsblongleg_entrypoint_0, (u32)_bsblongleg_entrypoint_1, (u32)func_8009AB78 };
+s32 D_80801480_bsblongleg[4] = { (u32)_bsblongleg_entrypoint_6, (u32)_bsblongleg_entrypoint_4, (u32)_bsblongleg_entrypoint_5, (u32)func_8009AB78 };
+s32 D_80801490_bsblongleg[4] = { (u32)_bsblongleg_entrypoint_10, (u32)_bsblongleg_entrypoint_8, (u32)_bsblongleg_entrypoint_9, (u32)func_8009AB78 };
+s32 D_808014A0_bsblongleg[4] = { (u32)_bsblongleg_entrypoint_14, (u32)_bsblongleg_entrypoint_12, (u32)_bsblongleg_entrypoint_13, (u32)func_8009AB78 };
+s32 D_808014B0_bsblongleg[4] = { (u32)_bsblongleg_entrypoint_18, (u32)_bsblongleg_entrypoint_16, (u32)_bsblongleg_entrypoint_17, (u32)func_80099B94 };
+s32 D_808014C0_bsblongleg[4] = { (u32)_bsblongleg_entrypoint_22, (u32)_bsblongleg_entrypoint_20, (u32)_bsblongleg_entrypoint_21, (u32)func_8009AB78 };
+s32 D_808014D0_bsblongleg[4] = { (u32)_bsblongleg_entrypoint_24, (u32)_bsblongleg_entrypoint_25, (u32)_bsblongleg_entrypoint_26, (u32)func_80099B94 };
+s32 D_808014E0_bsblongleg[4] = { (u32)_bsblongleg_entrypoint_30, (u32)_bsblongleg_entrypoint_28, (u32)_bsblongleg_entrypoint_29, (u32)_bsdrone_entrypoint_3 };

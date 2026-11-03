@@ -2,7 +2,7 @@
 
 extern void func_8010A85C(Actor *, s32);
 extern void func_80102424(Actor *, s32);
-extern s32 D_80800938_chjadesnake;
+extern s32 D_80800938_chjadesnake[];
 extern void func_800D1000(s32, s32, f32 *, s32, Unk80132ED0 *);
 extern void _subaddieaudioquick_entrypoint_2(Actor *, f32 *, void *);
 extern int func_800F54E4(void);
@@ -19,7 +19,7 @@ extern f32 D_808009E4_chjadesnake[];
 extern void _gcdialogcamera_entrypoint_3(f32 *, f32);
 extern void func_800EF334(f32 *, f32);
 extern void func_800EFB24(f32 *, f32 *, f32 *);
-extern int D_808009F4_chjadesnake;
+extern int D_808009F4_chjadesnake[];
 extern u8 D_80800910_chjadesnake[];
 extern u8 D_80800920_chjadesnake[];
 extern u8 D_8080092C_chjadesnake[];
@@ -267,3 +267,23 @@ int chjadesnake_entrypoint_0()
 {
     return (int)&D_808009F4_chjadesnake;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jadesnake.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800938_chjadesnake -> s32[], D_808009F4_chjadesnake -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_80800910_chjadesnake[16] = { 0x0, 0x13, 0x4, 0xAA, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x16, 0x79, 0x18, 0x0, 0x0 };
+u8 D_80800920_chjadesnake[12] = { 0x0, 0x13, 0x3, 0xE9, 0x0, 0x16, 0x52, 0x8, 0x0, 0x0, 0x0, 0x0 };
+u8 D_8080092C_chjadesnake[12] = { 0x0, 0x13, 0x4, 0xA4, 0x0, 0x16, 0x79, 0x18, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80800938_chjadesnake[4] = { 0x130430, 0xA0133, 0x167918, 0x0 };
+u8 D_80800948_chjadesnake[16] = { 0x0, 0x13, 0x5, 0x1F, 0x0, 0x16, 0x5D, 0xC0, 0x0, 0x1, 0x1, 0xF4, 0x13, 0x88, 0x0, 0x0 };
+u8 D_80800958_chjadesnake[12] = { 0x0, 0x13, 0x5, 0x1E, 0x0, 0x16, 0x5D, 0xC0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800964_chjadesnake[12] = { 0x0, 0x21, 0x0, 0xD, 0x1, 0x26, 0x1, 0x40, 0x0, 0x0, 0x0, 0x0 };
+u32 D_80800970_chjadesnake[20] = { 0x0, 0x0, 0x41100000, 0x1930001, 0x3FB33333, 0x1940002, 0x41000000, 0x1950001, 0x40AB851F, 0x1960002, 0x41000000, 0x1950001, 0x41000000, 0x1950001, 0x40AB851F, 0x1960002, 0x40AB851F, 0x1960002, 0x41000000, 0x1950001 };
+f32 D_808009C0_chjadesnake[7] = { 0.1f, 0.25f, 0.4f, 0.55f, 0.75f, 0.9f, -1.0f };
+f32 D_808009DC_chjadesnake[2] = { 0.64f, -1.0f };
+f32 D_808009E4_chjadesnake[4] = { 3.8e+02f, 0.0f, 2.7e+02f, 0.0f };
+int D_808009F4_chjadesnake[19] = { 0x154010C, 0x65F0001, (u32)&D_80800970_chjadesnake, (u32)func_80800150_chjadesnake, (u32)func_80105834, (u32)func_80800770_chjadesnake, 0x0, 0x0, 0x0, 0x8002E, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chjadesnake, (u32)func_80107C2C, -0x7FFFE000, (u32)func_808007DC_chjadesnake, 0x0, 0x0 };

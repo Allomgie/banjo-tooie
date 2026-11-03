@@ -9,10 +9,10 @@ extern s16 D_808006E2_chfootwear[][5];
 extern s16 D_808006E8_chfootwear[][5];
 extern s32 func_800F7C0C(s32, s32, f32);
 extern void *D_80800788_chfootwear;
-extern int D_808007D0_chfootwear;
-extern int D_80800818_chfootwear;
+extern int D_808007D0_chfootwear[];
+extern int D_80800818_chfootwear[];
 extern s32 D_80800860_chfootwear[];
-extern int D_808008A8_chfootwear;
+extern int D_808008A8_chfootwear[];
 extern s16 D_808006E4_chfootwear[][5];
 extern u8 D_80800754_chfootwear[];
 extern u8 D_80800768_chfootwear[];
@@ -243,3 +243,28 @@ int chfootwear_entrypoint_4()
 {
   return (int)&D_808008A8_chfootwear;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/footwear.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808006E2_chfootwear = D_808006E0_chfootwear + 0x2, D_808006E6_chfootwear = D_808006E0_chfootwear + 0x6, D_808006E4_chfootwear = D_808006E0_chfootwear + 0x4, D_808006E8_chfootwear = D_808006E0_chfootwear + 0x8
+ * extern declarations adjusted to the object (same addresses): D_808007D0_chfootwear -> int[], D_80800818_chfootwear -> int[], D_808008A8_chfootwear -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void func_80104410();
+s16 D_808006E0_chfootwear[5][5] = { 0x11, 0x1A, 0x3, 0xD, 0x0, 0xE, 0x1B, 0x2, 0x10, 0x0, 0x26, 0x2B, 0x3, 0xE, 0x4E, 0x25, 0x29, 0x3, 0xF, 0x4F, 0x11, 0x1A, 0x0, 0xD, 0x0 };
+u32 D_80800714_chfootwear[4] = { 0x0, 0x0, 0x3FC00000, 0xD60000 };
+u32 D_80800724_chfootwear[4] = { 0x0, 0x0, 0x3F333333, 0x670000 };
+u32 D_80800734_chfootwear[4] = { 0x0, 0x0, 0x3F4CCCCD, 0x2140000 };
+u32 D_80800744_chfootwear[4] = { 0x0, 0x0, 0x3FE66666, 0x2990000 };
+u8 D_80800754_chfootwear[20] = { 0x0, 0x13, 0x4, 0x4, 0x0, 0xA, 0x1, 0x99, 0x0, 0x16, 0x1B, 0x58, 0x0, 0x1, 0x2, 0x58, 0x5, 0xDC, 0x0, 0x0 };
+u8 D_80800768_chfootwear[12] = { 0x3E, 0xC2, 0x8F, 0x5C, 0x3F, 0x61, 0x47, 0xAE, 0xBF, 0x80, 0x0, 0x0 };
+u8 D_80800774_chfootwear[20] = { 0x0, 0x13, 0x3, 0xF0, 0x0, 0xA, 0x1, 0x66, 0x0, 0x16, 0x59, 0xD8, 0x0, 0x1, 0x2, 0x58, 0x5, 0xDC, 0x0, 0x0 };
+void *D_80800788_chfootwear = (void *)0x0158021A;
+static u32 D_80800788_chfootwear_rest[17] = { 0x6170001, (u32)&D_80800714_chfootwear, (u32)func_808000B8_chfootwear, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x40000000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chfootwear, (u32)func_80107C2C, (u32)func_80104410, (u32)func_80800364_chfootwear, 0x0 };
+int D_808007D0_chfootwear[18] = { 0x158022E, 0x6160001, (u32)&D_80800724_chfootwear, (u32)func_808000B8_chfootwear, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x40000000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chfootwear, (u32)func_80107C2C, -0x7FEF9BF0, (u32)func_80800364_chfootwear, 0x0 };
+int D_80800818_chfootwear[18] = { 0x15803DB, 0x7AA0001, (u32)&D_80800734_chfootwear, (u32)func_808000B8_chfootwear, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x40000000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chfootwear, (u32)func_80107C2C, -0x7FEF9BB0, (u32)func_80800364_chfootwear, 0x0 };
+s32 D_80800860_chfootwear[18] = { 0x158016A, 0x8320001, (u32)&D_80800744_chfootwear, (u32)func_808000B8_chfootwear, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x40000000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chfootwear, (u32)func_80107C2C, -0x7FEF9BB0, (u32)func_80800364_chfootwear, 0x0 };
+int D_808008A8_chfootwear[18] = { 0x1580471, 0x6170001, (u32)&D_80800714_chfootwear, (u32)func_808000B8_chfootwear, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x40000000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chfootwear, (u32)func_80107C2C, (u32)func_80104410, (u32)func_80800364_chfootwear, 0x0 };

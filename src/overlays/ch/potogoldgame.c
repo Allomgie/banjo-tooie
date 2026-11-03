@@ -20,7 +20,7 @@ extern void _chpotogoldgame_entrypoint_3();
 extern s32 func_800D91EC(f32 *, f32);
 extern f32 func_800F5F24(s32);
 extern void func_800EEB9C(f32 *, f32, f32);
-extern int D_80802578_chpotogoldgame;
+extern int D_80802578_chpotogoldgame[];
 typedef struct { u8 pad_0[0x64]; u8 local_0; u8 local_1; u8 local_2; } PotGameData88;
 extern void func_800CE8D8(s32, f32, s32);
 extern void func_800F7C0C(s32, s32, f32);
@@ -32,8 +32,8 @@ typedef struct { u8 pad[0x65]; u8 hi : 3; u8 f : 1; u8 lo : 4; } PgC;
 typedef struct { u8 pad[0x64]; u32 hi : 11; u32 b20 : 1; u32 lo : 20; } PgB;
 extern void _chappearfx_entrypoint_1(Actor *, u32, u32, f32);
 typedef struct { s32 value[3]; } PotGoldVector;
-extern s32 D_80802540_chpotogoldgame;
-extern s32 D_8080254C_chpotogoldgame;
+extern s32 D_80802540_chpotogoldgame[];
+extern s32 D_8080254C_chpotogoldgame[];
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800F3214(s32 *, s32 *, s32 *, f32);
 extern void func_800BF48C(s32, s32, s32);
@@ -1063,3 +1063,18 @@ int chpotogoldgame_entrypoint_4()
 {
     return (int)&D_80802578_chpotogoldgame;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/potogoldgame.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80802540_chpotogoldgame -> s32[], D_8080254C_chpotogoldgame -> s32[], D_80802578_chpotogoldgame -> int[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80108ED0();
+extern void func_80107C2C();
+PotoVector1238 D_808024F0_chpotogoldgame = { 0.0f, 1075.0f, -2.7e+03f };
+u8 D_808024FC_chpotogoldgame[68] = { 0x0, 0x1D, 0x9, 0xE2, 0x0, 0x1B, 0xFD, 0xA8, 0xFC, 0xE0, 0x0, 0x2D, 0x0, 0xC8, 0x1, 0x2C, 0x0, 0xE, 0x0, 0xA, 0x0, 0x28, 0x0, 0x22, 0x0, 0x26, 0x0, 0x4C, 0x0, 0x19, 0x0, 0x19, 0x0, 0x15, 0x0, 0x19, 0x0, 0xE6, 0x0, 0x2B, 0x1, 0x0, 0x1, 0x80, 0x0, 0x2F, 0x0, 0x66, 0x0, 0x5C, 0x0, 0x51, 0x0, 0x19, 0x0, 0x14, 0x0, 0x1E, 0x0, 0xC0, 0x0, 0x31, 0xFF, 0xCE, 0xFF, 0x9C, 0x0, 0x0 };
+s32 D_80802540_chpotogoldgame[3] = { 0x50, 0x50, 0x50 };
+s32 D_8080254C_chpotogoldgame[3] = { 0xDC, 0xDC, 0xDC };
+PotGoldHeightRanges D_80802558_chpotogoldgame = { 1825.0f, 1.57e+03f, 1475.0f, 1125.0f, 1025.0f, 6.5e+02f, 575.0f, 2.5e+02f };
+int D_80802578_chpotogoldgame[18] = { 0x1630405, 0x1, 0x0, (u32)func_80800124_chpotogoldgame, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80108ED0, 0x6700F0, (u32)func_80800000_chpotogoldgame, (u32)func_80107C2C, -0x7FFFDC00, (u32)func_80800A94_chpotogoldgame, 0x0 };

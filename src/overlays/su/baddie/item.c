@@ -97,3 +97,6 @@ void func_80800224_subaddieitem(param_0, param_1, param_2) s32 param_0; u8 *para
   func_8010108C(param_0, 0x2D, *((s16 *) (((s8 *) param_1) + 4)));
   *((s8 *) (((s8 *) param_1) + 0)) = 3;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/item.data.s) is defined here in C.
+ * Values are taken from the ROM. */

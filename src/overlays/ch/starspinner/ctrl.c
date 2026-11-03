@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern int D_8080092C_chstarspinnerctrl;
-extern int D_80800974_chstarspinnerctrl;
+extern int D_8080092C_chstarspinnerctrl[];
+extern int D_80800974_chstarspinnerctrl[];
 extern s32 D_80800900_chstarspinnerctrl[];
 extern s32 D_8080090C_chstarspinnerctrl[3];
 extern s32 D_80800918_chstarspinnerctrl[];
@@ -17,18 +17,18 @@ extern void func_800EF1B8(f32 *, f32, f32);
 extern s32 func_800BBCB8(f32 *, f32 *, f32, s32, s32 *);
 extern s32 D_808009BC_chstarspinnerctrl[];
 extern void func_801015D0(void);
-extern int D_80800A50_chstarspinnerctrl;
-extern int D_80800A00_chstarspinnerctrl;
-extern int D_80800A98_chstarspinnerctrl;
-extern int D_80800AA8_chstarspinnerctrl;
-extern int D_808008E0_chstarspinnerctrl;
+extern int D_80800A50_chstarspinnerctrl[];
+extern int D_80800A00_chstarspinnerctrl[];
+extern int D_80800A98_chstarspinnerctrl[];
+extern int D_80800AA8_chstarspinnerctrl[];
+extern int D_808008E0_chstarspinnerctrl[];
 typedef struct { u8 pad_0[0x14]; f32 local_0; } StarSpinnerColor1506;
 extern void func_800F2E60(s32 *, s32 *);
 extern Actor *_subaddiefind_entrypoint_2(s32, s32 *);
 extern Actor *_subaddiefind_entrypoint_3(s32, s32 *);
 extern void _subaddiefade_entrypoint_11(Actor *, s32 *);
-extern s32 D_808008E8_chstarspinnerctrl;
-extern s32 D_808008F4_chstarspinnerctrl;
+extern s32 D_808008E8_chstarspinnerctrl[];
+extern s32 D_808008F4_chstarspinnerctrl[];
 void func_808002B4_chstarspinnerctrl();
 void func_80800554_chstarspinnerctrl();
 void func_8080069C_chstarspinnerctrl();
@@ -246,3 +246,25 @@ s32 chstarspinnerctrl_entrypoint_4(Actor *param_0, s32 param_1, s32 param_2)
     }
     return param_2;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/starspinner/ctrl.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808008E0_chstarspinnerctrl -> int[], D_808008E8_chstarspinnerctrl -> s32[], D_808008F4_chstarspinnerctrl -> s32[], D_8080092C_chstarspinnerctrl -> int[], D_80800974_chstarspinnerctrl -> int[], D_80800A00_chstarspinnerctrl -> int[], D_80800A50_chstarspinnerctrl -> int[], D_80800A98_chstarspinnerctrl -> int[], D_80800AA8_chstarspinnerctrl -> int[] */
+extern void func_80105834();
+extern void _chpowerhut_entrypoint_2();
+extern void func_80107C2C();
+extern void func_80108ED0();
+int D_808008E0_chstarspinnerctrl[2] = { 0x43C80000, 0x44610000 };
+s32 D_808008E8_chstarspinnerctrl[3] = { 0x40, 0x40, 0x40 };
+s32 D_808008F4_chstarspinnerctrl[3] = { 0xFF, 0xFF, 0xFF };
+s32 D_80800900_chstarspinnerctrl[3] = { 0x60, 0x60, 0x60 };
+s32 D_8080090C_chstarspinnerctrl[3] = { 0xFF, 0xFF, 0xFF };
+s32 D_80800918_chstarspinnerctrl[5] = { 0xEA0000, 0x1001F4, 0x41B00000, 0x40800000, 0x41500000 };
+int D_8080092C_chstarspinnerctrl[18] = { 0x1C00337, -0xFFFF, 0x0, (u32)func_8080003C_chstarspinnerctrl, (u32)func_80105834, (u32)_chpowerhut_entrypoint_2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1C0000, (u32)func_80800018_chstarspinnerctrl, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800184_chstarspinnerctrl, 0x0 };
+int D_80800974_chstarspinnerctrl[18] = { 0x29F0338, 0x77A0001, 0x0, (u32)func_808003B8_chstarspinnerctrl, (u32)func_80105834, (u32)func_8080044C_chstarspinnerctrl, 0x7D00000, 0x0, 0x0, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800374_chstarspinnerctrl, (u32)func_80107C2C, -0x7FFFBC00, (u32)func_808004CC_chstarspinnerctrl, 0x0 };
+s32 D_808009BC_chstarspinnerctrl[17] = { 0x1D09DC, 0x190003, 0xB002C, 0x91, 0x0, 0xB90000, 0x20FFFF, -0xE4FFD9, -0x6A0050, 0x38, 0x2200EE, 0x13A037A, 0x38F0015, 0x3A00C2, 0x2B0238, 0x2990016, 0x2000000 };
+int D_80800A00_chstarspinnerctrl[20] = { 0x1D09E2, 0x1BFDA9, -0x1A0FFD2, 0x12C0000, 0x1AD0028, 0x2D027D, 0xAFFF4, 0x2B0000, 0x10005A, 0x1F, -0xA000, 0x16118A, 0x220019, 0x19000C, 0xC0015, 0xCC, 0x2B0119, 0x14C0004, 0x660007, 0x40000 };
+int D_80800A50_chstarspinnerctrl[18] = { 0x1D09DD, 0x2E0000, 0x96, 0x2D, 0xFA000A, 0xFFF1, 0x0, 0xF0000, 0x20C0C0, -0x3F3FFFEA, 0x80022, 0x9900B3, 0xD900E6, 0x150000, 0x99001E, 0x4F004F, 0x2B0133, 0x1990000 };
+int D_80800A98_chstarspinnerctrl[4] = { 0x130413, 0xA014C, 0x104E2, 0x9C40000 };
+int D_80800AA8_chstarspinnerctrl[6] = { 0x13048D, 0xA00CC, 0x104E2, 0x9C40000, 0x0, 0x0 };

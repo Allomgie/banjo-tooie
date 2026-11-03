@@ -1,14 +1,14 @@
 #include "common.h"
 
-extern int D_808003E0_chchompaslunch;
+extern int D_808003E0_chchompaslunch[];
 typedef union { s32 word; void *pointer; } ChompaLunchEventPayload;
 typedef struct { s16 local_0[6]; } ChompaLunchChannel;
 extern ChompaLunchChannel D_80800428_chchompaslunch[];
-extern s32 D_808004A4_chchompaslunch;
+extern s32 D_808004A4_chchompaslunch[];
 extern void _subaddieaudioquick_entrypoint_3(u8 *, u8 *, void *, f32);
-extern s32 D_8080044C_chchompaslunch;
-extern s32 D_80800458_chchompaslunch;
-extern s32 D_80800498_chchompaslunch;
+extern s32 D_8080044C_chchompaslunch[];
+extern s32 D_80800458_chchompaslunch[];
+extern s32 D_80800498_chchompaslunch[];
 extern s32 D_80800468_chchompaslunch[];
 extern f32 D_80800478_chchompaslunch[];
 extern s16 D_80800488_chchompaslunch[];
@@ -115,3 +115,23 @@ void func_80800250_chchompaslunch(param_0) Actor *param_0;
 void func_8080037C_chchompaslunch(param_0) u8 *param_0; {
     _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_808004A4_chchompaslunch, 0.0f);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/ompaslun.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080042A_chchompaslunch = D_80800428_chchompaslunch + 0x2, D_8080042E_chchompaslunch = D_80800428_chchompaslunch + 0x6, D_8080042C_chchompaslunch = D_80800428_chchompaslunch + 0x4
+ * extern declarations adjusted to the object (same addresses): D_808003E0_chchompaslunch -> int[], D_8080044C_chchompaslunch -> s32[], D_80800458_chchompaslunch -> s32[], D_80800498_chchompaslunch -> s32[], D_808004A4_chchompaslunch -> s32[] */
+extern void func_80102EC0();
+extern void func_801018A4();
+extern void func_80107C2C();
+u32 D_808003C0_chchompaslunch[8] = { 0x0, 0x0, 0x40800000, 0x2EE0001, 0x3FB33333, 0x2EF0002, 0x3F28F5C3, 0x2F00001 };
+int D_808003E0_chchompaslunch[18] = { 0x1580501, 0x7EE0001, (u32)&D_808003C0_chchompaslunch, (u32)func_80800070_chchompaslunch, (u32)func_80102EC0, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x128, 0x0, 0x0, 0x0, (u32)func_8080000C_chchompaslunch, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800118_chchompaslunch, 0x0 };
+ChompaLunchChannel D_80800428_chchompaslunch[3] = { 0x1, 0x1, 0x1, 0x3, 0x0, 0x0, 0x2, 0x2, 0x2, 0x1, 0x0, 0x0, 0x3, 0x2, 0x2, 0x2, 0x0, 0x0 };
+s32 D_8080044C_chchompaslunch[3] = { 0x130417, 0xD00C0, 0xD90000 };
+s32 D_80800458_chchompaslunch[4] = { 0x3F23D70A, 0x3F3AE148, 0x3F51EB85, -0x40800000 };
+s32 D_80800468_chchompaslunch[4] = { 0x0, 0x3E6B851F, 0x3EA3D70A, 0x3ED70A3D };
+f32 D_80800478_chchompaslunch[4] = { 0.9f, 1.1f, 1.05f, 1.0f };
+s16 D_80800488_chchompaslunch[4] = { 0x5BE, 0x5BC, 0x5BD, 0x5BD };
+s16 D_80800490_chchompaslunch[4] = { 0x7D00, 0x55F0, 0x55F0, 0x55F0 };
+s32 D_80800498_chchompaslunch[3] = { 0x3060001, 0xC80BB8, 0x70000 };
+s32 D_808004A4_chchompaslunch[7] = { 0x1305B6, 0xD00F3, 0x10C0018, 0x0, 0x0, 0x0, 0x0 };

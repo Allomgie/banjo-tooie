@@ -109,3 +109,6 @@ void ncbastring_entrypoint_4(StringCameraNode *param_0)
         param_0->local_0->local_0 = local_3;
     } else param_0->local_0->local_2 = 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/string.data.s) is defined here in C.
+ * Values are taken from the ROM. */

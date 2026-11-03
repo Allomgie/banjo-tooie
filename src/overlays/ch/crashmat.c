@@ -3,7 +3,7 @@
 extern s32 _plsu_entrypoint_3(void *);
 extern s32 func_800D90A4(f32 *);
 extern void func_800C3F48(s32);
-extern int D_808000A0_chcrashmat;
+extern int D_808000A0_chcrashmat[];
 
 void func_80800000_chcrashmat(Actor *param_0)
 {
@@ -21,3 +21,13 @@ int chcrashmat_entrypoint_0()
 {
     return (int)&D_808000A0_chcrashmat;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/crashmat.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808000A0_chcrashmat -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_808000A0_chcrashmat[20] = { 0x158050B, 0x92B0001, 0x0, (u32)func_80800000_chcrashmat, (u32)func_80105834, (u32)func_80101870, 0x3E80000, 0x0, 0x0, 0x21C08, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFFBFE, 0x0, 0x0, 0x0, 0x0 };

@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_80800508_chgoldsnakehead;
-extern int D_80800550_chgoldsnakehead;
-extern int D_80800598_chgoldsnakehead;
+extern int D_80800508_chgoldsnakehead[];
+extern int D_80800550_chgoldsnakehead[];
+extern int D_80800598_chgoldsnakehead[];
 extern void func_800FFAB0();
 extern void func_80103014();
 extern Actor *_subaddiefind_entrypoint_2(s32, s32 *);
@@ -10,7 +10,7 @@ extern Actor *_subaddiefind_entrypoint_3(s32, s32 *);
 extern s16 *_gccubesearch_entrypoint_1(s32, f32 *);
 extern void _gspropctrl_entrypoint_11();
 typedef struct { u8 pad_0[0x28]; u32 pad_1 : 18; u32 local_0 : 1; u32 pad_2 : 13; } GoldSnakeCollisionMarker961;
-extern s32 D_808004F0_chgoldsnakehead;
+extern s32 D_808004F0_chgoldsnakehead[];
 extern f32 func_800DC178(f32, f32);
 extern f32 func_800D8FF8(void);
 extern void func_80102B2C(Actor *, f32);
@@ -147,3 +147,18 @@ void func_80800440_chgoldsnakehead(Actor *param_0)
         func_800FFAB0(param_0);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/gold/snakehead.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808004F0_chgoldsnakehead -> s32[], D_80800508_chgoldsnakehead -> int[], D_80800550_chgoldsnakehead -> int[], D_80800598_chgoldsnakehead -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+extern int func_80101870();
+extern void _chdoor_entrypoint_1();
+s32 D_808004F0_chgoldsnakehead[6] = { 0x1303F1, 0xD00CC, 0x1000016, 0x6D600001, 0x4E21388, 0x0 };
+int D_80800508_chgoldsnakehead[18] = { 0x155010D, 0x6580001, 0x0, (u32)func_8080015C_chgoldsnakehead, (u32)func_80105834, (u32)func_808002B4_chgoldsnakehead, 0x0, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800024_chgoldsnakehead, (u32)func_80107C2C, -0x7FFFD400, (u32)func_808003A8_chgoldsnakehead, 0x0 };
+int D_80800550_chgoldsnakehead[18] = { 0xAC010E, 0x6570001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_808003E0_chgoldsnakehead, (u32)func_80107C2C, -0x7FFFD3FE, (u32)_chdoor_entrypoint_1, 0x0 };
+int D_80800598_chgoldsnakehead[18] = { 0xAC04C9, 0x6570001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800440_chgoldsnakehead, (u32)func_80107C2C, -0x7FFFD3FE, (u32)_chdoor_entrypoint_1, 0x0 };

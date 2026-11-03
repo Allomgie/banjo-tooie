@@ -484,3 +484,17 @@ void func_80801058_bsmum(PlayerState *self) {
 s32 bsmum_entrypoint_14(s32 idx) {
     return D_808011B0_bsmum[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/mum.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _basudie_entrypoint_11();
+extern void func_80099AA8();
+s32 D_80801140_bsmum[4] = { (u32)func_80800428_bsmum, (u32)func_80800454_bsmum, (u32)func_80800484_bsmum, (u32)_basudie_entrypoint_11 };
+s32 D_80801150_bsmum[4] = { (u32)func_80800560_bsmum, (u32)func_80800588_bsmum, (u32)func_808005B0_bsmum, (u32)func_80800130_bsmum };
+s32 D_80801160_bsmum[4] = { (u32)func_808005E4_bsmum, (u32)func_80800604_bsmum, (u32)func_8080065C_bsmum, (u32)_bsmum_entrypoint_0 };
+s32 D_80801170_bsmum[4] = { (u32)func_80800980_bsmum, (u32)func_808009C8_bsmum, (u32)func_808009F8_bsmum, (u32)_bsmum_entrypoint_0 };
+s32 D_80801180_bsmum[4] = { (u32)func_80800BC4_bsmum, (u32)func_80800BEC_bsmum, (u32)func_80800C2C_bsmum, (u32)func_80099AA8 };
+s32 D_80801190_bsmum[4] = { (u32)_bsmum_entrypoint_8, (u32)_bsmum_entrypoint_9, (u32)_bsmum_entrypoint_10, (u32)func_80099AA8 };
+s32 D_808011A0_bsmum[4] = { (u32)func_80800DC0_bsmum, (u32)func_80800DE8_bsmum, (u32)func_80800E10_bsmum, (u32)_bsmum_entrypoint_0 };
+s32 D_808011B0_bsmum[4] = { (u32)func_80800FA4_bsmum, (u32)func_80800FE0_bsmum, (u32)func_80801058_bsmum, (u32)_bsmum_entrypoint_0 };

@@ -21,7 +21,7 @@ extern f32 func_800EC708(Unk80132ED0 *);
 extern s32 func_800E3E8C(f32 *, f32);
 typedef struct { f32 local_0[15]; u8 local_1[16]; s32 local_2; u8 local_3[12]; s8 local_4, local_5; u8 local_6[2]; } FreezyDrawPart;
 typedef union { s32 word; void *pointer; } FreezyMessage;
-extern int D_80801978_chnewfreezy;
+extern int D_80801978_chnewfreezy[];
 typedef struct { u8 pad0[0x18]; f32 unk18[3]; u8 pad24[0xC]; f32 unk30[3]; u8 pad3C[0x10]; f32 unk4C; u8 pad50[0xC]; s8 state; u8 pad5D[3]; } FreezyPart_808000D4_chnewfreezy;
 extern f32 func_800F1DF4(void *, f32 *);
 extern void func_8010D254(f32 *);
@@ -578,3 +578,12 @@ int chnewfreezy_entrypoint_1()
 {
     return (int)&D_80801978_chnewfreezy;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/newfreezy.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801978_chnewfreezy -> int[] */
+Vec3f D_80801950_chnewfreezy = { 0.577f, 0.577f, 0.577f };
+u8 D_8080195C_chnewfreezy[16] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_8080196C_chnewfreezy[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+int D_80801978_chnewfreezy[18] = { 0x2F602FF, 0x75D0001, 0x0, (u32)func_808002C0_chnewfreezy, (u32)func_80105834, (u32)func_808016B4_chnewfreezy, 0x0, 0x0, 0x0, 0x120020, (u32)func_80800020_chnewfreezy, (u32)func_80108ED0, 0x8, (u32)func_80800000_chnewfreezy, (u32)func_80107C2C, -0x7FFFE000, (u32)func_808017FC_chnewfreezy, 0x0 };

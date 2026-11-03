@@ -16,9 +16,9 @@ extern Actor *_subaddiefind_entrypoint_0(f32 *, s32, s32, f32 *);
 extern void func_800DA3B8();
 typedef struct { u8 local_0; u8 local_1; u16 local_2; f32 local_3[3]; f32 local_4; s32 local_5; u32 local_6; } PiranhaPlacement49;
 extern void func_800EE7F8(f32 *, f32 *);
-extern int D_80801B60_chpiranha;
-extern int D_80801BA8_chpiranha;
-extern int D_80801BF0_chpiranha;
+extern int D_80801B60_chpiranha[];
+extern int D_80801BA8_chpiranha[];
+extern int D_80801BF0_chpiranha[];
 extern void func_800DE448(f32 *, f32 *, f32, s32, s32);
 extern Actor *func_80106790(Unk80132ED0 *);
 extern void func_800EFA20(f32 *, f32 *, f32);
@@ -683,7 +683,7 @@ s32 func_80801638_chpiranha(u8 *param_0) {
 
 int func_80801690_chpiranha(s32 param_0, s32 param_1)
 {
-  extern f32 D_80801B10_chpiranha;
+  extern f32 D_80801B10_chpiranha[];
   func_800BBCB8(param_1, 0, 0x3F800000, 1, &D_80801B10_chpiranha);
 }
 
@@ -765,3 +765,13 @@ int chpiranha_entrypoint_2()
 {
   return (int)&D_80801BF0_chpiranha;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/piranha.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801B10_chpiranha -> f32[], D_80801B60_chpiranha -> int[], D_80801BA8_chpiranha -> int[], D_80801BF0_chpiranha -> int[] */
+extern void func_80107C2C();
+f32 D_80801B10_chpiranha[20] = { 2.665463e-39f, 2.020384e-39f, 3.67521e-40f, 6.42853e-40f, 7.3497e-40f, 2.3509895e-38f, 1.7767901e-36f, 3.857091e-39f, 1.84388e-40f, 1.8807957e-37f, 2.33e-43f, 2.568872e-39f, -4.0240387e+34f, 5.877526e-39f, -2.807842e+37f, 1.5869846e-37f, 4.132177e-39f, 3.511722e-37f, 3.1593933e-38f, 3.159141e-38f };
+int D_80801B60_chpiranha[18] = { 0x2C102FC, 0x73F0001, 0x0, (u32)func_808002A0_chpiranha, 0x0, (u32)func_8080003C_chpiranha, 0xFA00000, 0x3F800000, 0x0, 0x1, (u32)func_80800000_chpiranha, 0x0, 0x0, (u32)func_80800280_chpiranha, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_8080182C_chpiranha, 0x0 };
+int D_80801BA8_chpiranha[18] = { 0x2C202FD, 0x73F0007, 0x0, (u32)func_808002A0_chpiranha, 0x0, (u32)func_8080003C_chpiranha, 0xFA00000, 0x3F800000, 0x0, 0x1, (u32)func_80800000_chpiranha, 0x0, 0x0, (u32)func_80800280_chpiranha, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_8080182C_chpiranha, 0x0 };
+int D_80801BF0_chpiranha[20] = { 0x2C302FE, 0x73F0007, 0x0, (u32)func_808002A0_chpiranha, 0x0, (u32)func_8080003C_chpiranha, 0xFA00000, 0x3F800000, 0x0, 0x1, (u32)func_80800000_chpiranha, 0x0, 0x0, (u32)func_80800280_chpiranha, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_8080182C_chpiranha, 0x0, 0x0, 0x0 };

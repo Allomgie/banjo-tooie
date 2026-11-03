@@ -80,3 +80,6 @@ void subaddiedraw25d_entrypoint_3(param_0) u8 *param_0; {
         func_800E249C(func_800D2F20(local_0));
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/draw25d.data.s) is defined here in C.
+ * Values are taken from the ROM. */

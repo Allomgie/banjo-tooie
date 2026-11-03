@@ -54,3 +54,6 @@ void indrv_lights_entrypoint_0(u32 param_0, Unk80132ED0 *param_1, s32 param_2)
         break;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/in/drv_lights.data.s) is defined here in C.
+ * Values are taken from the ROM. */

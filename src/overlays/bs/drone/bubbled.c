@@ -92,3 +92,6 @@ void bsdronebubbled_entrypoint_6()
 bsdronebubbled_entrypoint_7(param_0) {
     return;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/drone/bubbled.data.s) is defined here in C.
+ * Values are taken from the ROM. */

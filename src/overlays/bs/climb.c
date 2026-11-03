@@ -268,3 +268,21 @@ void bsclimb_entrypoint_12(PlayerState *param_0)
     func_8009E830(param_0, 1);
     bs_setState(param_0, 0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/climb.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsclimb_entrypoint_2();
+extern void _bsclimb_entrypoint_0();
+extern void _bsclimb_entrypoint_1();
+extern void _bsclimb_entrypoint_12();
+extern void _bsclimb_entrypoint_6();
+extern void _bsclimb_entrypoint_4();
+extern void _bsclimb_entrypoint_5();
+extern void _bsclimb_entrypoint_10();
+extern void _bsclimb_entrypoint_8();
+extern void _bsclimb_entrypoint_9();
+u8 D_808008C0_bsclimb[60] = { 0x1, 0x0, 0x4, 0x6E, 0x3F, 0x45, 0x1E, 0xB8, 0x0, 0x0, 0x3E, 0x80, 0x3F, 0x5E, 0xB8, 0x52, 0x0, 0x0, 0x3E, 0x80, 0x2, 0x0, 0x4, 0x6D, 0x3F, 0x8C, 0xCC, 0xCD, 0x0, 0x0, 0x7D, 0x0, 0x3F, 0x99, 0x99, 0x9A, 0x0, 0x0, 0x7D, 0x0, 0x3, 0x0, 0x4, 0x1B, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x27, 0x10, 0x3F, 0x8C, 0xCC, 0xCD, 0x0, 0x0, 0x27, 0x10 };
+s32 D_808008FC_bsclimb[4] = { (u32)_bsclimb_entrypoint_2, (u32)_bsclimb_entrypoint_0, (u32)_bsclimb_entrypoint_1, (u32)_bsclimb_entrypoint_12 };
+s32 D_8080090C_bsclimb[4] = { (u32)_bsclimb_entrypoint_6, (u32)_bsclimb_entrypoint_4, (u32)_bsclimb_entrypoint_5, (u32)_bsclimb_entrypoint_12 };
+s32 D_8080091C_bsclimb[5] = { (u32)_bsclimb_entrypoint_10, (u32)_bsclimb_entrypoint_8, (u32)_bsclimb_entrypoint_9, (u32)_bsclimb_entrypoint_12, 0x0 };

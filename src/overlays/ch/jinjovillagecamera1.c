@@ -3,7 +3,7 @@
 extern u8 D_80800470_chjinjovillagecamera1[];
 extern u8 D_8080047C_chjinjovillagecamera1[];
 extern u8 D_80800488_chjinjovillagecamera1[];
-extern int D_80800494_chjinjovillagecamera1;
+extern int D_80800494_chjinjovillagecamera1[];
 
 void func_80800000_chjinjovillagecamera1(Actor *param_0, s32 param_1, s32 param_2)
 {
@@ -133,3 +133,15 @@ int chjinjovillagecamera1_entrypoint_0()
 {
     return (int)&D_80800494_chjinjovillagecamera1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jinjovillagecamera1.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800494_chjinjovillagecamera1 -> int[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+u8 D_80800470_chjinjovillagecamera1[12] = { 0x10, 0x18, 0x0, 0x16, 0xD, 0x6, 0x3, 0xA, 0x13, 0x0, 0x0, 0x0 };
+u8 D_8080047C_chjinjovillagecamera1[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800488_chjinjovillagecamera1[12] = { 0x4, 0x5, 0x1, 0x9, 0x6, 0x8, 0x3, 0x7, 0x2, 0x0, 0x0, 0x0 };
+int D_80800494_chjinjovillagecamera1[19] = { 0x158048E, 0x1, 0x0, (u32)func_808003C0_chjinjovillagecamera1, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80404, 0x0, 0x0, 0x0, (u32)func_80800310_chjinjovillagecamera1, (u32)func_80107C2C, -0x7FFFDFFE, (u32)func_80800078_chjinjovillagecamera1, 0x0, 0x0 };

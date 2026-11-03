@@ -26,3 +26,6 @@ int gleeprom_entrypoint_2(s32 param_0, s32 param_1, s32 param_2)
   func_80016934(0);
   return local_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/eeprom.data.s) is defined here in C.
+ * Values are taken from the ROM. */

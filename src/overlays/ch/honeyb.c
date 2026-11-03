@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80801068_chhoneyb;
+extern int D_80801068_chhoneyb[];
 extern void func_80102424();
 typedef struct { f32 position[3]; f32 yaw; f32 scale; s32 flags; } HoneyBMarkerPose;
 extern u8 D_808010B0_chhoneyb[];
@@ -13,11 +13,11 @@ extern f32 func_800D8FF8(void);
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800C3FC0(s32, f32, s32);
 typedef struct { s16 a, b; } S16Pair;
-extern s32 D_808010C0_chhoneyb;
+extern s32 D_808010C0_chhoneyb[];
 extern void func_8010D5DC();
 extern void _suexpression_entrypoint_12(void *, f32, f32);
 extern void func_8008F990(f32 *, f32);
-extern s32 D_808010D0_chhoneyb;
+extern s32 D_808010D0_chhoneyb[];
 extern void _subaddieaudioloop_entrypoint_4();
 extern s32 _glcutDll_entrypoint_20();
 extern void func_800FFAB0(Actor *);
@@ -44,7 +44,7 @@ void func_80800744_chhoneyb();
 
 int chhoneyb_entrypoint_0(void)
 {
-    extern int D_80801020_chhoneyb;
+    extern int D_80801020_chhoneyb[];
     return (int)&D_80801020_chhoneyb;
 }
 
@@ -463,3 +463,18 @@ void chhoneyb_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
         } while (i >= 0);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/honeyb.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801020_chhoneyb -> int[], D_80801068_chhoneyb -> int[], D_808010C0_chhoneyb -> s32[], D_808010D0_chhoneyb -> s32[] */
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void func_801018A4();
+u32 D_80800FF0_chhoneyb[12] = { 0x0, 0x0, 0x40D570A4, 0x4AD0000, 0x40D570A4, 0x4AD0000, 0x40D570A4, 0x4AD0000, 0x40D570A4, 0x4AD0000, 0x40D570A4, 0x4AD0000 };
+int D_80801020_chhoneyb[18] = { 0x15804B0, 0x9180001, (u32)&D_80800FF0_chhoneyb, (u32)func_808002AC_chhoneyb, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x3FB33333, 0x0, 0x120, (u32)func_80800240_chhoneyb, 0x0, 0x2C, (u32)func_80800194_chhoneyb, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_80800968_chhoneyb, 0x0 };
+int D_80801068_chhoneyb[18] = { 0x15804B8, 0x7050001, 0x0, (u32)func_80800C58_chhoneyb, (u32)func_80102EC0, (u32)func_801018A4, 0x0, 0x3FCCCCCD, 0x0, 0x800000, 0x0, 0x0, 0x0, (u32)func_80800C34_chhoneyb, (u32)func_80107C2C, -0x7FFFDB7E, (u32)func_80800C78_chhoneyb, 0x0 };
+u8 D_808010B0_chhoneyb[16] = { 0x43, 0xE1, 0x0, 0x0, 0x43, 0x7A, 0x0, 0x0, 0x43, 0x48, 0x0, 0x0, 0x43, 0x48, 0x0, 0x0 };
+s32 D_808010C0_chhoneyb[4] = { 0x43E10000, 0x437A0000, 0x43480000, 0x43480000 };
+s32 D_808010D0_chhoneyb[8] = { 0x13049B, 0x161388, 0xE00E6, 0x1190180, 0x0, 0x0, 0x0, 0x0 };

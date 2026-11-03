@@ -61,3 +61,6 @@ void bamovethrust_entrypoint_5(MoveThrustPlayer *param_0)
 f32 bamovethrust_entrypoint_6(u8 *param_0) {
     return (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0xC8)))) + (0x8C)));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/move/thrust.data.s) is defined here in C.
+ * Values are taken from the ROM. */

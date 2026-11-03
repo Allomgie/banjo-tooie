@@ -96,3 +96,12 @@ int func_80800274_chsignpost(param_0) volatile s32 param_0[3];
   _subaddiedialog_entrypoint_11(param_0[0], local_1, 0xF, &param_0[1], 0x28);
   return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/signpost.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80101870();
+extern void func_80107C2C();
+void *D_808002E0_chsignpost = (void *)0x022D0198;
+static u32 D_808002E0_chsignpost_rest[17] = { 0x7A20001, 0x0, (u32)func_80800058_chsignpost, 0x0, (u32)func_80101870, 0x1C20000, 0x3FC00000, 0x0, 0x40000800, 0x0, 0x0, 0x0, (u32)func_8080000C_chsignpost, (u32)func_80107C2C, 0x82082452, (u32)func_8080019C_chsignpost, 0x0 };
+u8 D_80800328_chsignpost[24] = { 0x43, 0x82, 0x0, 0x0, 0x43, 0x2F, 0x0, 0x0, 0x43, 0x2F, 0x0, 0x0, 0x42, 0x96, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

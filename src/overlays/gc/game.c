@@ -37,3 +37,5 @@ void gcgame_entrypoint_1(void)
     func_800F8DD8();
     func_800DA188();
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/game.data.s) is defined here in C.
+ * Values are taken from the ROM. */

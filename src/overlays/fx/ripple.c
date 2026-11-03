@@ -74,3 +74,13 @@ s32 fxripple_entrypoint_4(f32 param_0){
     local_1 = (s16)param_0;
     func_800BA5D0(local_0 | 0, local_1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/ripple.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u32 D_80800280_fxripple[8] = { 0x2B00B3, 0xE60015, 0x80, 0x220019, 0x190066, 0x99001F, 0xFFFFFE00, 0x0 };
+u32 D_808002A0_fxripple[8] = { 0x2B00CC, 0x1330015, 0x80, 0x220019, 0x1900E6, 0x1CC001F, 0xFFFFFE00, 0x0 };
+u32 D_808002C0_fxripple[8] = { 0x2B00CC, 0x1000015, 0x80, 0x220019, 0x190099, 0x100001F, 0xFFFFFE00, 0x0 };
+u32 D_808002E0_fxripple[8] = { 0x2B00B3, 0xB30015, 0x80, 0x220066, 0x6601CC, 0x1E6001F, 0xFFFFFE00, 0x0 };
+u32 D_80800300_fxripple[8] = { 0x2B0180, 0x1800015, 0x80, 0x220019, 0x190C00, 0xC00001F, 0xFFFFFE00, 0x0 };
+u8 *D_80800320_fxripple[5] = { (void *)&D_80800280_fxripple, (void *)&D_808002A0_fxripple, (void *)&D_808002C0_fxripple, (void *)&D_808002E0_fxripple, (void *)&D_80800300_fxripple };
+u8 D_80800334_fxripple[12] = { 0x0, 0x1D, 0x9, 0xDB, 0x0, 0x16, 0x10, 0x1, 0x0, 0x0, 0x0, 0x0 };

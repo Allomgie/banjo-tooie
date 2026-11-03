@@ -482,3 +482,22 @@ s32 func_80800E30_chcablecar(Actor *this){
     _chswitch_entrypoint_7(this, 0xD4);
     _chswitch_entrypoint_9(this);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/cablecar.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80107C2C();
+extern u8 D_8011A248[];
+extern void _chswitch_entrypoint_6();
+extern void func_80101870();
+extern void _chswitch_entrypoint_10();
+void *D_80800EB0_chcablecar = (void *)0x02A5033E;
+static u32 D_80800EB0_chcablecar_rest[17] = { 0x77D0001, 0x0, (u32)func_80800018_chcablecar, (u32)func_80105834, (u32)func_801018A4, 0x9C40000, 0x0, 0x0, 0x4C00, 0x0, 0x0, 0x440000, (u32)func_808002E0_chcablecar, (u32)func_80107C2C, 0x80004402, (u32)func_80800424_chcablecar, 0x0 };
+void *D_80800EF8_chcablecar = (void *)0x0343033F;
+static u32 D_80800EF8_chcablecar_rest[17] = { 0x77F0001, (u32)&D_8011A248, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x480C, 0x0, 0x0, 0x0, (u32)func_80800E30_chcablecar, (u32)func_80107C2C, 0x80002802, (u32)_chswitch_entrypoint_10, 0x0 };
+f32 D_80800F40_chcablecar[3] = { 0.35f, 0.85f, -1.0f };
+s16 D_80800F4C_chcablecar[6] = { 0x13, 0x51B, 0xD, 0xD9, 0x126, 0x0 };
+s16 D_80800F58_chcablecar[8] = { 0x13, 0x4A1, 0x16, 0x4650, 0xD, 0xE6, 0x100, 0x0 };
+u8 D_80800F68_chcablecar[24] = { 0x0, 0x13, 0x4, 0xBF, 0x0, 0xA, 0x0, 0xE6, 0x0, 0x1, 0x3, 0xE8, 0x11, 0x94, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

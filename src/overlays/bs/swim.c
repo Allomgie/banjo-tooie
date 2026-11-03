@@ -367,3 +367,14 @@ int bsswim_entrypoint_3(s32 param_0)
 {
   return D_80800BD4_bsswim[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/swim.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099B94();
+extern void _bsdrone_entrypoint_3();
+s16 D_80800B90_bsswim[10] = { 0x57, 0x57, 0x57, 0x58, 0x57, 0x58, 0x57, 0x57, 0x58, 0x58 };
+s32 D_80800BA4_bsswim[4] = { (u32)func_80800688_bsswim, (u32)func_808002E0_bsswim, (u32)func_808004C4_bsswim, (u32)func_80099B94 };
+s32 D_80800BB4_bsswim[4] = { (u32)func_808009F0_bsswim, (u32)func_808006C4_bsswim, (u32)func_808007F8_bsswim, (u32)func_80099B94 };
+s32 D_80800BC4_bsswim[4] = { (u32)func_80800A24_bsswim, (u32)func_80800A4C_bsswim, (u32)func_80800A74_bsswim, (u32)func_80099B94 };
+s32 D_80800BD4_bsswim[7] = { (u32)func_80800B34_bsswim, (u32)func_80800AC8_bsswim, (u32)func_80800AF0_bsswim, (u32)_bsdrone_entrypoint_3, 0x0, 0x0, 0x0 };

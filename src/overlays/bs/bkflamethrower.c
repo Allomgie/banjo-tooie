@@ -158,3 +158,12 @@ int bsbkflamethrower_entrypoint_4(s32 param_0)
 {
   return D_80800450_bsbkflamethrower[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/bkflamethrower.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsbkflamethrower_entrypoint_1();
+extern void _bsbkflamethrower_entrypoint_2();
+extern void _bsbkflamethrower_entrypoint_3();
+extern void func_80099B94();
+s32 D_80800450_bsbkflamethrower[4] = { (u32)_bsbkflamethrower_entrypoint_1, (u32)_bsbkflamethrower_entrypoint_2, (u32)_bsbkflamethrower_entrypoint_3, (u32)func_80099B94 };

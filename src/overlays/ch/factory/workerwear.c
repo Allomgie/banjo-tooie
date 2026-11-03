@@ -122,3 +122,14 @@ int func_80800350_chfactoryworkerwear(Actor *param_0, s32 param_1, s32 param_2)
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/workerwear.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+u32 D_80800410_chfactoryworkerwear[10] = { 0x0, 0x0, 0x3ECCCCCD, 0x35D0001, 0x3ECCCCCD, 0x2A00001, 0x3F19999A, 0x2A10001, 0x3ECCCCCD, 0x2A00001 };
+void *D_80800438_chfactoryworkerwear = (void *)0x027E0239;
+static u32 D_80800438_chfactoryworkerwear_rest[17] = { 0x83D0001, (u32)&D_80800410_chfactoryworkerwear, (u32)func_8080012C_chfactoryworkerwear, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F800000, 0x0, 0x40000120, (u32)func_80800124_chfactoryworkerwear, 0x0, 0x280000, (u32)func_80800100_chfactoryworkerwear, (u32)func_80107C2C, 0x80002412, (u32)func_80800350_chfactoryworkerwear, 0x0 };
+f32 D_80800480_chfactoryworkerwear[12] = { 2.666786e-39f, 1.928617e-39f, 1.1754963e-38f, 4.591859e-39f, 3.581584e-39f, 1.8367099e-38f, 2.2958924e-38f, 3.214291e-39f, 3.397927e-39f, 9.18415e-40f, 6.979604e-39f, 0.0f };

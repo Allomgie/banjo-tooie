@@ -320,3 +320,6 @@ s32 gsmaker_entrypoint_25(enum gsworld_map_e map_id, enum gsworld_exit_e exit_id
   gsmaker_entrypoint_15(map_id, new_var, param_3);
   return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gs/maker.data.s) is defined here in C.
+ * Values are taken from the ROM. */

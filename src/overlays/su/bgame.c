@@ -304,3 +304,7 @@ void susubgame_entrypoint_12(param_0, param_1) float param_0[4]; float param_1[4
   param_0[4] = param_1[2];
   param_0[5] = param_1[3];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/bgame.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80800970_susubgame[16] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

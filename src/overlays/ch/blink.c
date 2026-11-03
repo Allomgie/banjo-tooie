@@ -9,7 +9,7 @@ typedef struct { u8 pad_0[0x18]; f32 timer; s32 index; } BlinkSequence;
 extern f32 func_800D8FF8(void);
 extern f32 mlAbsF(f32);
 typedef struct { f32 cur[2]; f32 target[2]; f32 speed[2]; } BlinkState;
-extern f32 D_80800430_chblink;
+extern f32 D_80800430_chblink[];
 extern void func_8001B754();
 extern s32 D_80800580_chblink[][3];
 extern f32 func_800F1214(f32, f32, f32);
@@ -112,3 +112,9 @@ void chblink_entrypoint_4(param_0) s16 param_0;
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/blink.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800430_chblink -> f32[] */
+f32 D_80800430_chblink[84] = { 2.0f, 2.3509887e-38f, 1.0f, 0.1f, 0.034f, 0.0f, 1.0f, 0.1f, 0.1f, 2.3509887e-38f, 0.0f, 0.1f, 0.034f, 0.0f, 0.0f, 0.1f, 5.0f, 2.3509887e-38f, 1.0f, 0.06f, 0.034f, 0.0f, 1.0f, 0.06f, 0.06f, 2.3509887e-38f, 0.0f, 0.06f, 0.034f, 0.0f, 0.0f, 0.06f, 0.2f, 2.3509887e-38f, 1.0f, 0.09f, 0.034f, 0.0f, 1.0f, 0.09f, 0.09f, 2.3509887e-38f, 0.0f, 0.09f, 0.034f, 0.0f, 0.0f, 0.09f, 1.0f, 2.3509887e-38f, 1.0f, 0.1f, 0.034f, 0.0f, 1.0f, 0.1f, 0.1f, 2.3509887e-38f, 0.0f, 0.1f, 0.034f, 0.0f, 0.0f, 0.1f, 5.0f, 2.3509887e-38f, 1.0f, 0.1f, 0.034f, 0.0f, 1.0f, 0.1f, 0.1f, 2.3509887e-38f, 0.0f, 0.1f, 0.034f, 0.0f, 0.0f, 0.1f, 0.0f, 9.403955e-38f, 0.0f, 0.0f };
+s32 D_80800580_chblink[4][3] = { 0x34, 0x35, 0x8, 0x1, -0x1, 0x4, 0x3, 0x3, 0x4, 0x38, 0x39, 0x8 };

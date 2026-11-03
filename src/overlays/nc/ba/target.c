@@ -85,3 +85,6 @@ void ncbatarget_entrypoint_5(Actor *param_0)
 {
     func_800EE7F8(*(s32 *)((s8 *)param_0 + 0x58));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/target.data.s) is defined here in C.
+ * Values are taken from the ROM. */

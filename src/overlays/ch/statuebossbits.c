@@ -1,11 +1,11 @@
 #include "common.h"
 
-extern int D_808006F0_chstatuebossbits;
-extern int D_80800738_chstatuebossbits;
-extern int D_80800780_chstatuebossbits;
+extern int D_808006F0_chstatuebossbits[];
+extern int D_80800738_chstatuebossbits[];
+extern int D_80800780_chstatuebossbits[];
 extern s32 D_808007C8_chstatuebossbits[];
-extern int D_80800810_chstatuebossbits;
-extern int D_8080084C_chstatuebossbits;
+extern int D_80800810_chstatuebossbits[];
+extern int D_8080084C_chstatuebossbits[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern f32 func_800F12D4(f32, f32, f32, f32, f32);
 extern void func_800EFE50(f32 *, void *, void *, f32);
@@ -13,7 +13,7 @@ typedef struct { u8 pad_0[0x54]; s32 local_0; } StatueBossSelector;
 extern void *func_80100094();
 extern u8 D_8080085C_chstatuebossbits[];
 typedef union { s32 word; s16 half; } StatueBitsPayload31;
-extern s32 D_80800864_chstatuebossbits;
+extern s32 D_80800864_chstatuebossbits[];
 extern void func_800EC398(s32, f32 *);
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
@@ -209,3 +209,24 @@ void func_8080064C_chstatuebossbits(Actor *param_0)
     _chdoormake_entrypoint_5(param_0, 2.0f);
     _chdoormake_entrypoint_8(param_0, 13);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/statuebossbits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808006F0_chstatuebossbits -> int[], D_80800738_chstatuebossbits -> int[], D_80800780_chstatuebossbits -> int[], D_80800810_chstatuebossbits -> int[], D_8080084C_chstatuebossbits -> int[], D_80800864_chstatuebossbits -> s32[] */
+extern void func_80105834();
+extern int func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+extern void _chdoor_entrypoint_1();
+extern void func_80102EC0();
+extern void func_8010A73C();
+int D_808006F0_chstatuebossbits[18] = { 0x1610448, 0x6640001, 0x0, (u32)func_80800038_chstatuebossbits, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800030_chstatuebossbits, (u32)func_80107C2C, -0x7FC00000, (u32)func_80800224_chstatuebossbits, 0x0 };
+int D_80800738_chstatuebossbits[18] = { 0x2A20449, 0x7C20002, 0x0, (u32)func_80800360_chstatuebossbits, (u32)func_80105834, (u32)func_8080040C_chstatuebossbits, 0x0, 0x0, 0x36F0000, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808002CC_chstatuebossbits, (u32)func_80107C2C, -0x7FF7F3FE, (u32)func_808004D8_chstatuebossbits, 0x0 };
+int D_80800780_chstatuebossbits[18] = { 0xAC0450, 0x83F0004, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x36F0000, 0x800, 0x0, 0x0, 0x0, (u32)func_8080064C_chstatuebossbits, (u32)func_80107C2C, -0x7FF7D3FE, (u32)_chdoor_entrypoint_1, 0x0 };
+s32 D_808007C8_chstatuebossbits[18] = { 0x158044F, 0x7C30001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_8010A73C, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFF3FE, 0x0, 0x0 };
+int D_80800810_chstatuebossbits[15] = { 0x160004, 0x1D09C9, 0x20DCDC, -0x235FFFDE, 0x330066, 0x9900CC, 0x2B004C, 0x800015, 0x19004C, 0x2CFFCE, 0x3CFFCE, 0x320064, 0x32000E, 0x5000A, 0x0 };
+int D_8080084C_chstatuebossbits[4] = { 0x130407, 0x1632C8, 0xD01B3, 0x1CC0000 };
+u8 D_8080085C_chstatuebossbits[8] = { 0x0, 0x13, 0x4, 0xF4, 0x0, 0x18, 0x0, 0x0 };
+s32 D_80800864_chstatuebossbits[11] = { 0x1D0652, 0x14002D, 0x1900258, 0x1BFCE0, -0x257FFDE, 0x260033, 0x140019, 0xE0014, 0x1E0005, 0x0, 0x0 };

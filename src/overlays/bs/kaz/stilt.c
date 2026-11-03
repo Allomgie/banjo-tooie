@@ -517,3 +517,40 @@ void bskazstilt_entrypoint_30(PlayerState *self) {
 s32 bskazstilt_entrypoint_31(s32 idx) {
     return D_80801270_bskazstilt[idx];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/stilt.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bskazstilt_entrypoint_2();
+extern void _bskazstilt_entrypoint_0();
+extern void _bskazstilt_entrypoint_1();
+extern void func_80099B94();
+extern void _bskazstilt_entrypoint_6();
+extern void _bskazstilt_entrypoint_4();
+extern void _bskazstilt_entrypoint_5();
+extern void _bskazstilt_entrypoint_10();
+extern void _bskazstilt_entrypoint_8();
+extern void _bskazstilt_entrypoint_9();
+extern void _bskazstilt_entrypoint_14();
+extern void _bskazstilt_entrypoint_12();
+extern void _bskazstilt_entrypoint_13();
+extern void _bskazstilt_entrypoint_18();
+extern void _bskazstilt_entrypoint_16();
+extern void _bskazstilt_entrypoint_17();
+extern void _bskazstilt_entrypoint_22();
+extern void _bskazstilt_entrypoint_20();
+extern void _bskazstilt_entrypoint_21();
+extern void _bskazstilt_entrypoint_24();
+extern void _bskazstilt_entrypoint_25();
+extern void _bskazstilt_entrypoint_26();
+extern void _bskazstilt_entrypoint_30();
+extern void _bskazstilt_entrypoint_28();
+extern void _bskazstilt_entrypoint_29();
+extern void _bsdrone_entrypoint_3();
+s32 D_80801200_bskazstilt[4] = { (u32)_bskazstilt_entrypoint_2, (u32)_bskazstilt_entrypoint_0, (u32)_bskazstilt_entrypoint_1, (u32)func_80099B94 };
+s32 D_80801210_bskazstilt[4] = { (u32)_bskazstilt_entrypoint_6, (u32)_bskazstilt_entrypoint_4, (u32)_bskazstilt_entrypoint_5, (u32)func_80099B94 };
+s32 D_80801220_bskazstilt[4] = { (u32)_bskazstilt_entrypoint_10, (u32)_bskazstilt_entrypoint_8, (u32)_bskazstilt_entrypoint_9, (u32)func_80099B94 };
+s32 D_80801230_bskazstilt[4] = { (u32)_bskazstilt_entrypoint_14, (u32)_bskazstilt_entrypoint_12, (u32)_bskazstilt_entrypoint_13, (u32)func_80099B94 };
+s32 D_80801240_bskazstilt[4] = { (u32)_bskazstilt_entrypoint_18, (u32)_bskazstilt_entrypoint_16, (u32)_bskazstilt_entrypoint_17, (u32)func_80099B94 };
+s32 D_80801250_bskazstilt[4] = { (u32)_bskazstilt_entrypoint_22, (u32)_bskazstilt_entrypoint_20, (u32)_bskazstilt_entrypoint_21, (u32)func_80099B94 };
+s32 D_80801260_bskazstilt[4] = { (u32)_bskazstilt_entrypoint_24, (u32)_bskazstilt_entrypoint_25, (u32)_bskazstilt_entrypoint_26, (u32)func_80099B94 };
+s32 D_80801270_bskazstilt[4] = { (u32)_bskazstilt_entrypoint_30, (u32)_bskazstilt_entrypoint_28, (u32)_bskazstilt_entrypoint_29, (u32)_bsdrone_entrypoint_3 };

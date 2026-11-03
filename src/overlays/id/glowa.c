@@ -61,3 +61,6 @@ void idglowa_entrypoint_4(u8 *param_0, s32 param_1, s32 param_2)
     }
     _glid_entrypoint_0(param_1, param_2, _idglowa_entrypoint_0, param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/glowa.data.s) is defined here in C.
+ * Values are taken from the ROM. */

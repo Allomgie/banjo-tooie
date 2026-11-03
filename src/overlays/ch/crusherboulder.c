@@ -9,11 +9,11 @@ extern void func_80105A9C(Actor *, f32);
 extern f32 func_800DC178(f32, f32);
 typedef struct { u8 pad[0x74]; u32 pad74:2; u32 flag:1; u32 rest:29; } CrushS;
 extern void _sudeflect_entrypoint_0(u8 *, f32, f32, s32);
-extern s32 D_80801470_chcrusherboulder;
+extern s32 D_80801470_chcrusherboulder[];
 extern void *D_80801464_chcrusherboulder;
 extern void func_800BBCB8(void *param_0, int param_1, float param_2, int param_3, s32 *param_4);
-extern s32 D_808014BC_chcrusherboulder;
-extern int D_808014EC_chcrusherboulder;
+extern s32 D_808014BC_chcrusherboulder[];
+extern int D_808014EC_chcrusherboulder[];
 extern f32 D_808013A0_chcrusherboulder[];
 extern s32 func_80100094(Actor *, s32);
 extern f32 func_800D8FF8(void);
@@ -502,3 +502,28 @@ int chcrusherboulder_entrypoint_0()
 {
     return (int)&D_808014EC_chcrusherboulder;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/crusherboulder.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801470_chcrusherboulder -> s32[], D_808014BC_chcrusherboulder -> s32[], D_808014EC_chcrusherboulder -> int[] */
+extern void func_80107C2C();
+f32 D_80801360_chcrusherboulder[5] = { 1.746595e-39f, 9.18714e-40f, 2.065222e-39f, 9.1835e-41f, 3.4331227e-27f };
+f32 D_80801374_chcrusherboulder[5] = { 1.746602e-39f, 9.18677e-40f, 2.065222e-39f, 1.05848e-40f, 0.001159668f };
+Vec3f D_80801388_chcrusherboulder = { 0.0f, 0.0f, 0.0f };
+Vec3f D_80801394_chcrusherboulder = { 0.0f, 1.5e+02f, 0.0f };
+f32 D_808013A0_chcrusherboulder[5] = { 1.746552e-39f, 9.18677e-40f, 2.054012e-39f, 9.2536e-41f, 3.4331227e-27f };
+f32 D_808013B4_chcrusherboulder[3] = { 0.0f, 0.0f, 0.0f };
+f32 D_808013C0_chcrusherboulder[2] = { 5e+02f, 1e+03f };
+f32 D_808013C8_chcrusherboulder[3] = { 0.0f, 3.57e-43f, 0.0f };
+f32 D_808013D4_chcrusherboulder[3] = { -5e+03f, 9.5e+02f, -6e+03f };
+Vec3f D_808013E0_chcrusherboulder = { -2.35e+03f, 325.0f, -325.0f };
+u8 D_808013EC_chcrusherboulder[16] = { 0x0, 0x13, 0x4, 0xD2, 0x0, 0x16, 0x7D, 0x0, 0x0, 0x1, 0x1, 0xF4, 0x13, 0x88, 0x0, 0x0 };
+s32 D_808013FC_chcrusherboulder[16] = { 0x310001D, 0x688000A, 0xFF9C, -0x320000, 0x640032, 0x1BFC18, -0x7CFFFD9, -0x1670168, 0x1680168, 0x220280, 0x6000500, 0x3800015, 0x180, 0x160004, 0x70001, 0x0 };
+s32 D_8080143C_chcrusherboulder[5] = { 0x2EFFE7, 0x5A0190, 0x190078, 0x320031A, 0x0 };
+s32 D_80801450_chcrusherboulder[5] = { 0x2EFFE7, 0x3C0190, 0x19005A, 0x320031A, 0x0 };
+void *D_80801464_chcrusherboulder = (void *)0xC59C4000;
+static u32 D_80801464_chcrusherboulder_rest[2] = { 0x446D8000, 0xC5BB8000 };
+s32 D_80801470_chcrusherboulder[19] = { 0x1D0688, 0xAFFCE, -0x310032, 0x320032, 0x32002E, -0x180023, 0x5DC0019, 0x2307D0, 0x1BF830, -0xF9FFFD9, -0x1670168, 0x1680168, 0x220280, 0x6000500, 0x3800015, 0x180, 0x160004, 0x70001, 0x0 };
+s32 D_808014BC_chcrusherboulder[12] = { 0x1100019, 0x10006, 0xA0096, -0x12B0064, 0xFA0064, 0x64001B, 0x320064, 0x220180, 0x2800080, 0x1800015, 0x180, -0x23FE0000 };
+int D_808014EC_chcrusherboulder[21] = { 0x262017E, 0x6870001, 0x0, (u32)func_808009C0_chcrusherboulder, (u32)func_808009C0_chcrusherboulder, (u32)func_80800000_chcrusherboulder, 0xFA00000, 0x0, 0x0, 0x20080004, (u32)func_80800ED0_chcrusherboulder, 0x0, 0x0, (u32)func_80800D3C_chcrusherboulder, (u32)func_80107C2C, -0x7FF7FFFE, (u32)func_80801184_chcrusherboulder, 0x0, 0x0, 0x0, 0x0 };

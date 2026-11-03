@@ -88,3 +88,6 @@ int fxfontstring_entrypoint_3(s32 param_0, u32 param_1, s32 param_2)
   *(local_0++) = param_1 & 0xFF;
  *(local_0++) = new_var >> 8; *(local_0++) = param_2 + 1; *(local_0++) = 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/fontstring.data.s) is defined here in C.
+ * Values are taken from the ROM. */

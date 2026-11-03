@@ -1,8 +1,8 @@
 #include "common.h"
 extern void func_800EF1B8(f32 *, f32, f32);
 
-extern int D_808013F0_chstonepillar;
-extern int D_80801438_chstonepillar;
+extern int D_808013F0_chstonepillar[];
+extern int D_80801438_chstonepillar[];
 extern void *func_80100094(Actor *, u32);
 typedef union { s32 local_0; Actor *local_1; } StonePillarMessage1410;
 extern u8 func_801015D0[];
@@ -12,8 +12,8 @@ extern Actor *_subaddiefind_entrypoint_3(s32, s32 *);
 extern u8 D_80801480_chstonepillar[];
 typedef struct { u8 pad_0[0x2C]; s16 local_0; u8 pad_1; u8 local_1; } StonePillarState;
 extern void func_800BBCB8(f32 *, f32 *, f32, s32, s32);
-extern s32 D_80801498_chstonepillar;
-extern f32 D_808014B8_chstonepillar;
+extern s32 D_80801498_chstonepillar[];
+extern f32 D_808014B8_chstonepillar[];
 extern f32 func_800136E4(f32);
 typedef struct { u8 pad_0[0x2C]; s16 local_0; } PillarActivation;
 extern void func_800CE8D8(s32, f32, s32);
@@ -21,7 +21,7 @@ extern s32 func_800DA564(s32, s32);
 extern f32 func_800D8FF8(void);
 extern f32 func_800DC178(f32, f32);
 typedef struct { u8 pad[0x5F]; u8 f5F; u8 pad60[0x12]; u16 f72:6; u16 rest:10; } PillarS;
-extern u8 D_808014F0_chstonepillar;
+extern u8 D_808014F0_chstonepillar[];
 extern void _subaddieaudioloop_entrypoint_4(PillarS *, s32, s32, void *);
 typedef struct { u8 pad[0xC]; f32 position[3]; u8 pad_18[0x18]; f32 yaw; f32 speed; f32 height; } StonePillarMotion;
 extern f32 func_800EFB8C(f32 *, f32 *);
@@ -548,3 +548,19 @@ void func_80801374_chstonepillar(param_0, param_1) PillarS *param_0; s32 param_1
         _subaddieaudioloop_entrypoint_4(param_0, 0, local_0, &D_808014F0_chstonepillar);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/stonepillar.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808013F0_chstonepillar -> int[], D_80801438_chstonepillar -> int[], D_80801498_chstonepillar -> s32[], D_808014B8_chstonepillar -> f32[], D_808014F0_chstonepillar -> u8[] */
+extern void func_80105834();
+extern void func_80107C2C();
+extern void func_80101870();
+extern void func_80108ED0();
+int D_808013F0_chstonepillar[18] = { 0x19F012E, 0x6490001, 0x0, (u32)func_80800018_chstonepillar, (u32)func_80105834, (u32)func_808003F4_chstonepillar, 0x0, 0x0, 0x0, 0xC02, 0x0, 0x0, 0x3C0000, (u32)func_80800520_chstonepillar, (u32)func_80107C2C, -0x7FFFDFFE, (u32)func_8080031C_chstonepillar, 0x0 };
+int D_80801438_chstonepillar[18] = { 0x1A0012F, 0x64A0001, 0x0, (u32)func_80800224_chstonepillar, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, (u32)func_80108ED0, 0x3C0000, (u32)func_808001FC_chstonepillar, (u32)func_80107C2C, -0x7FF7E000, (u32)func_80800390_chstonepillar, 0x0 };
+u8 D_80801480_chstonepillar[12] = { 0x0, 0x4, 0x0, 0x6, 0x0, 0x8, 0x0, 0xA, 0x0, 0x0, 0x0, 0x0 };
+u8 D_8080148C_chstonepillar[12] = { 0x0, 0x13, 0x3, 0xE9, 0x0, 0x16, 0x46, 0x50, 0x0, 0x2, 0x0, 0x0 };
+s32 D_80801498_chstonepillar[8] = { 0x1D09C9, 0x150026, 0xCC0018, 0x0, 0xE000E00, 0x230100, 0x2B0100, 0x1000000 };
+f32 D_808014B8_chstonepillar[14] = { 2.66674e-39f, 3.214511e-39f, 2.978337e-39f, 2.5769847e+10f, 3.490035e-39f, 2.204052e-39f, 5.022e-42f, 1.5777299e-30f, 6.979677e-39f, 1.010443e-39f, 1.8367099e-38f, 6.3e-44f, 1.6071562e-38f, 0.0f };
+u8 D_808014F0_chstonepillar[16] = { 0x0, 0x13, 0x4, 0xA9, 0x0, 0x16, 0x7D, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

@@ -1,13 +1,13 @@
 #include "common.h"
 
-extern int D_80800D5C_chboilerid;
+extern int D_80800D5C_chboilerid[];
 typedef struct { s16 values[15]; } BoilerSettings29;
 extern BoilerSettings29 D_80800D00_chboilerid[];
 extern void *func_80100094(Actor *, u32);
 extern void _mlwave_entrypoint_0(void *, f32, f32);
-extern s32 D_80800DA4_chboilerid;
-extern s32 D_80800DB0_chboilerid;
-extern s32 D_80800DE8_chboilerid;
+extern s32 D_80800DA4_chboilerid[];
+extern s32 D_80800DB0_chboilerid[];
+extern s32 D_80800DE8_chboilerid[];
 extern void _chboilerid_entrypoint_1(void);
 extern void _chboilerid_entrypoint_2(void);
 extern void _chboilerid_entrypoint_3(void);
@@ -323,3 +323,17 @@ int func_80800CB0_chboilerid(param_0) Actor *param_0;
   }
 
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/boiler/id.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800D5C_chboilerid -> int[], D_80800DA4_chboilerid -> s32[], D_80800DB0_chboilerid -> s32[], D_80800DE8_chboilerid -> s32[] */
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80107C2C();
+BoilerSettings29 D_80800D00_chboilerid[3] = { 0x12C, 0x64, 0x226, 0xFA, 0x64, 0x28, 0x12C, 0x96, 0xC8, 0x28, 0x1F4, 0xFA, 0x19, 0x40, 0xF, 0x12C, 0x64, 0x226, 0xFA, 0x50, 0x28, 0x96, 0x96, 0xC8, 0x28, 0x1F4, 0xFA, 0x19, 0x40, 0x32, 0x12C, 0x64, 0x226, 0xFA, 0x64, 0x28, 0x12C, 0x96, 0xC8, 0x28, 0x1F4, 0xFA, 0x19, 0x40, 0x14 };
+int D_80800D5C_chboilerid[18] = { 0x1AE0321, 0x1, 0x0, (u32)func_80800128_chboilerid, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x0, (u32)func_808003EC_chboilerid, 0x0, 0x680000, (u32)func_8080000C_chboilerid, (u32)func_80107C2C, -0x7FFFF9FE, (u32)func_808003AC_chboilerid, 0x0 };
+s32 D_80800DA4_chboilerid[3] = { 0x130486, 0xA0040, 0x140000 };
+s32 D_80800DB0_chboilerid[14] = { 0x1D09DD, 0x20B4B4, -0x4B3FFFD5, 0x1000133, 0x220033, 0x4C0180, 0x2000015, 0x80, 0x190000, 0x7002C, 0x64, 0x0, 0xC80000, 0x0 };
+s32 D_80800DE8_chboilerid[5] = { 0x1304DC, 0xD00B3, 0xCC0015, 0x190080, 0x190000 };
+u8 D_80800DFC_chboilerid[4] = { 0xFF, 0xAA, 0x0, 0x0 };

@@ -12,7 +12,7 @@ typedef struct { u8 pad0[0x24]; f32 unk24; u8 pad28[0x44]; u32 unk6C; u8 pad70[2
 extern s32 func_80090178(s32);
 extern s32 func_8010CAC0(void *, s32);
 extern f32 func_800D8FF8(void);
-extern int D_80801384_chsilo;
+extern int D_80801384_chsilo[];
 extern f32 D_808012C0_chsilo[];
 extern void _subaddieDll_entrypoint_4(Actor *, s32);
 extern void func_800DA544(s32);
@@ -535,3 +535,19 @@ int chsilo_entrypoint_0()
 {
     return (int)&D_80801384_chsilo;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/silo.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808012EC_chsilo = D_808012E8_chsilo + 0x4
+ * extern declarations adjusted to the object (same addresses): D_80801384_chsilo -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+f32 D_808012C0_chsilo[4] = { 1.746707e-39f, 9.18641e-40f, 2.059617e-39f, 0.0f };
+f32 D_808012D0_chsilo[4] = { 1.746927e-39f, 1.286037e-39f, 2.571401e-38f, 0.0f };
+f32 D_808012E0_chsilo[2] = { 1.746588e-39f, 2.048407e-39f };
+SiloGoto D_808012E8_chsilo[7] = { 0x0, 0x0, 0x61A0CC0, 0x4, 0xAE, 0x5400B74, 0x6, 0x97, 0x5400290, 0x5, 0x9B, 0x6E40A68, 0x5, 0x40, 0x5400C68, 0x7, 0x10, 0x5400CC8, 0x4, 0x65, 0x5400004 };
+static u32 D_808012E8_chsilo_rest[1] = { 0x40022 };
+u32 D_80801324_chsilo[24] = { 0x0, 0x0, 0x0, 0x4AA0044, 0x3FD9999A, 0x4AA000A, 0x3FD9999A, 0x4AA0084, 0x3FD9999A, 0x4AA0084, 0x3FD9999A, 0x4AA0084, 0x3FCCCCCD, 0x4AA0012, 0x3FD9999A, 0x4AA0084, 0x3FD9999A, 0x4AA000A, 0x3FD9999A, 0x4AA000A, 0x3FCCCCCD, 0x4AA0012, 0x3FD9999A, 0x4AA0084 };
+int D_80801384_chsilo[19] = { 0xB9019D, 0x9170001, (u32)&D_80801324_chsilo, (u32)func_80800B80_chsilo, (u32)func_80105834, (u32)func_808011C8_chsilo, 0x5DC0000, 0x0, 0x0, 0xA0864, (u32)func_808009E8_chsilo, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFDFFE, (u32)func_80801080_chsilo, 0x0, 0x0 };

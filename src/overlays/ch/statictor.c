@@ -7,7 +7,7 @@ extern void func_8008FB10(s32, f32, f32, f32);
 typedef struct { u8 pad[0x7C]; u32 pad7C:19; u32 flag:1; u32 rest:12; } TorchState;
 extern u8 D_80800230_chstatictorch[];
 extern void _subaddieaudioloop_entrypoint_4();
-extern int D_80800248_chstatictorch;
+extern int D_80800248_chstatictorch[];
 extern void _suflamefx_entrypoint_7(void *, f32 *, f32, f32, f32, s32, f32);
 void func_80800140_chstatictorch();
 
@@ -62,3 +62,12 @@ int *chstatictorch_entrypoint_0()
 {
     return &D_80800248_chstatictorch;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/statictor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800248_chstatictorch -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+u8 D_80800230_chstatictorch[24] = { 0x0, 0x13, 0x4, 0x83, 0x0, 0x16, 0x27, 0x10, 0x0, 0xE, 0x1, 0x33, 0x1, 0x70, 0x1, 0x80, 0x0, 0x1, 0x1, 0xF4, 0x5, 0xDC, 0x0, 0x0 };
+int D_80800248_chstatictorch[18] = { 0x20E02AE, 0x6740001, 0x0, (u32)func_80800090_chstatictorch, (u32)func_80105834, (u32)func_80800000_chstatictorch, 0x0, 0x0, 0x0, 0x23, (u32)func_808000EC_chstatictorch, 0x0, 0x0, (u32)func_808000E4_chstatictorch, (u32)func_80107C2C, 0x0, (u32)func_80800180_chstatictorch, 0x0 };

@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800268_chfactorystationdoors;
+extern int D_80800268_chfactorystationdoors[];
 extern u8 D_80800250_chfactorystationdoors[];
 extern u8 D_8080025C_chfactorystationdoors[];
 extern f32 func_80103EF4(Actor *);
@@ -74,3 +74,13 @@ int chfactorystationdoors_entrypoint_0()
 {
     return (int)&D_80800268_chfactorystationdoors;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/stationdoors.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800268_chfactorystationdoors -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+u8 D_80800250_chfactorystationdoors[12] = { 0x0, 0x13, 0x5, 0xB0, 0x0, 0x2, 0x0, 0xA, 0x1, 0x33, 0x0, 0x0 };
+u8 D_8080025C_chfactorystationdoors[12] = { 0x0, 0x13, 0x4, 0xC7, 0x0, 0x18, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0 };
+int D_80800268_chfactorystationdoors[18] = { 0x1640406, 0x87C0001, 0x0, (u32)func_80800054_chfactorystationdoors, (u32)func_80105834, (u32)func_80800158_chfactorystationdoors, 0x0, 0x0, 0x0, 0xC04, 0x0, 0x0, 0x0, (u32)func_80800000_chfactorystationdoors, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_8080019C_chfactorystationdoors, 0x0 };
