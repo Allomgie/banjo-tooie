@@ -159,6 +159,12 @@ void func_808005F8_chstarspinnerstar(param_0, param_1) u8 **param_0; s32 param_1
   }
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/starspinner/star.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+u8 B_80800710_chstarspinnerstar[16];
+
+
 f32 *func_80800660_chstarspinnerstar(param_0) s32 param_0;
 {
   func_800EE7F8(B_80800710_chstarspinnerstar, (f32 *)(param_0 + 4));

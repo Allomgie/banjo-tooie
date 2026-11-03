@@ -29,6 +29,13 @@ void func_80800000_fxkern(u8 param_0, u8 param_1, s32 *param_2, s32 *param_3)
     }
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/fx/kern.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+float B_80800480_fxkern;
+KernPos B_80800488_fxkern[65];
+
+
 s32 func_80800084_fxkern(u8 *param_0)
 {
     s32 local_0;

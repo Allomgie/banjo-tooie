@@ -580,6 +580,12 @@ void func_80801070_changlerboss();
 
 void func_80800F14_changlerboss();
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/anglerboss.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+s32 B_808030B0_changlerboss;
+
+
 s32 func_80800B7C_changlerboss(u8 *param_0, s32 param_1, s32 param_2)
 {
     u8 *local_0;

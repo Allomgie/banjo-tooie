@@ -407,6 +407,12 @@ void func_80801164_chinflatableboss();
 
 void func_808010BC_chinflatableboss();
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/inflatableboss.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+BalloonEntry B_80803020_chinflatableboss[12];
+
+
 s32 func_80800A98_chinflatableboss(Actor *param_0, s32 param_1, BalloonArg param_2)
 {
     BalloonData *local_0;

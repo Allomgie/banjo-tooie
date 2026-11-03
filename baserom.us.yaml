@@ -1729,7 +1729,7 @@ segments:
       - [0x01F1F200, c, xform]
       - [0x01F20370, .rodata, xform]
       - [0x01F203F0, .data, xform]
-      - [0x01F20570, bss, xform]
+      - [0x01F20570, .bss, xform]
   - name: bsjig_header
     dir: overlays/bsjig
     type: bin
@@ -4374,7 +4374,7 @@ segments:
       - [0x01F810E0, c, masterjiggy]
       - [0x01F82610, .rodata, masterjiggy]
       - [0x01F826A0, .data, masterjiggy]
-      - [0x01F828D0, bss, masterjiggy]
+      - [0x01F828D0, .bss, masterjiggy]
   - name: chjiggygamenew_header
     dir: overlays/chjiggygamenew
     type: bin
@@ -4393,7 +4393,7 @@ segments:
       - [0x01F82BA0, c, gamenew]
       - [0x01F86540, .rodata, gamenew]
       - [0x01F86680, .data, gamenew]
-      - [0x01F86AD0, bss, gamenew]
+      - [0x01F86AD0, .bss, gamenew]
   - name: chwaspnestgame_header
     dir: overlays/chwaspnestgame
     type: bin
@@ -4488,7 +4488,7 @@ segments:
       - [0x01F8B1E0, c, minisubgame]
       - [0x01F8C550, .rodata, minisubgame]
       - [0x01F8C5E0, .data, minisubgame]
-      - [0x01F8C770, bss, minisubgame]
+      - [0x01F8C770, .bss, minisubgame]
   - name: chjiggypost_header
     dir: overlays/chjiggypost
     type: bin
@@ -4545,7 +4545,7 @@ segments:
       - [0x01F8E370, c, gameselect]
       - [0x01F95FB0, .rodata, gameselect]
       - [0x01F96120, .data, gameselect]
-      - [0x01F968C0, bss, gameselect]
+      - [0x01F968C0, .bss, gameselect]
   - name: chjiggybeam_header
     dir: overlays/chjiggybeam
     type: bin
@@ -4583,7 +4583,7 @@ segments:
       - [0x01F96A70, c, attract]
       - [0x01F96EB0, .rodata, attract]
       - [0x01F96EB0, .data, attract]
-      - [0x01F96FB0, bss, attract]
+      - [0x01F96FB0, .bss, attract]
   - name: chwitchytents_header
     dir: overlays/chwitchytents
     type: bin
@@ -4678,7 +4678,7 @@ segments:
       - [0x01F986D0, c, inflatableboss]
       - [0x01F9B210, .rodata, inflatableboss]
       - [0x01F9B450, .data, inflatableboss]
-      - [0x01F9B6F0, bss, inflatableboss]
+      - [0x01F9B6F0, .bss, inflatableboss]
   - name: chballoonbomb_header
     dir: overlays/chballoonbomb
     type: bin
@@ -5267,7 +5267,7 @@ segments:
       - [0x01FAFE40, c, star]
       - [0x01FB04E0, .rodata, star]
       - [0x01FB04F0, .data, star]
-      - [0x01FB0550, bss, star]
+      - [0x01FB0550, .bss, star]
   - name: chstarspinnerctrl_header
     dir: overlays/chstarspinnerctrl
     type: bin
@@ -6008,7 +6008,7 @@ segments:
       - [0x01FD0980, c, terryegg]
       - [0x01FD1B90, .rodata, terryegg]
       - [0x01FD1BE0, .data, terryegg]
-      - [0x01FD1DE0, bss, terryegg]
+      - [0x01FD1DE0, .bss, terryegg]
   - name: charmouredcaveman_header
     dir: overlays/charmouredcaveman
     type: bin
@@ -6274,7 +6274,7 @@ segments:
       - [0x01FDB5B0, c, vandoor]
       - [0x01FDBBE0, .rodata, vandoor]
       - [0x01FDBBF0, .data, vandoor]
-      - [0x01FDBC40, bss, vandoor]
+      - [0x01FDBC40, .bss, vandoor]
   - name: chcoderoombits_header
     dir: overlays/chcoderoombits
     type: bin
@@ -7053,7 +7053,7 @@ segments:
       - [0x02001380, c, anglerboss]
       - [0x02003E90, .rodata, anglerboss]
       - [0x02004120, .data, anglerboss]
-      - [0x02004430, bss, anglerboss]
+      - [0x02004430, .bss, anglerboss]
   - name: changlerbossflare_header
     dir: overlays/changlerbossflare
     type: bin
@@ -7186,7 +7186,7 @@ segments:
       - [0x02006880, c, weldarboss]
       - [0x0200AB00, .rodata, weldarboss]
       - [0x0200AE70, .data, weldarboss]
-      - [0x0200B360, bss, weldarboss]
+      - [0x0200B360, .bss, weldarboss]
   - name: chaliendad_header
     dir: overlays/chaliendad
     type: bin
@@ -7262,7 +7262,7 @@ segments:
       - [0x0200E3F0, c, fireball]
       - [0x0200E800, .rodata, fireball]
       - [0x0200E800, .data, fireball]
-      - [0x0200E8D0, bss, fireball]
+      - [0x0200E8D0, .bss, fireball]
   - name: chweldarbossfusebox_header
     dir: overlays/chweldarbossfusebox
     type: bin
@@ -7756,7 +7756,7 @@ segments:
       - [0x02018860, c, boss]
       - [0x02021F30, .rodata, boss]
       - [0x020224C0, .data, boss]
-      - [0x02022B60, bss, boss]
+      - [0x02022B60, .bss, boss]
   - name: chdiggerbossdoor_header
     dir: overlays/chdiggerbossdoor
     type: bin
@@ -11328,7 +11328,7 @@ segments:
       - [0x020B2980, c, transparentfish]
       - [0x020B38E0, .rodata, transparentfish]
       - [0x020B3900, .data, transparentfish]
-      - [0x020B3A60, bss, transparentfish]
+      - [0x020B3A60, .bss, transparentfish]
   - name: chdummyjigsaw_header
     dir: overlays/chdummyjigsaw
     type: bin
@@ -11518,7 +11518,7 @@ segments:
       - [0x020B9340, c, wumbawigwam]
       - [0x020BA3C0, .rodata, wumbawigwam]
       - [0x020BA420, .data, wumbawigwam]
-      - [0x020BA500, bss, wumbawigwam]
+      - [0x020BA500, .bss, wumbawigwam]
   - name: chfactorybattery_header
     dir: overlays/chfactorybattery
     type: bin
@@ -11879,7 +11879,7 @@ segments:
       - [0x020CE070, c, drillfield]
       - [0x020CE920, .rodata, drillfield]
       - [0x020CE920, .data, drillfield]
-      - [0x020CEA80, bss, drillfield]
+      - [0x020CEA80, .bss, drillfield]
   - name: chfantasytrashcanbits_header
     dir: overlays/chfantasytrashcanbits
     type: bin
@@ -12145,7 +12145,7 @@ segments:
       - [0x020DF370, c, familysmall]
       - [0x020E01A0, .rodata, familysmall]
       - [0x020E0200, .data, familysmall]
-      - [0x020E02E0, bss, familysmall]
+      - [0x020E02E0, .bss, familysmall]
   - name: chdinofamilysick_header
     dir: overlays/chdinofamilysick
     type: bin
@@ -12981,7 +12981,7 @@ segments:
       - [0x020FB960, c, zoombox]
       - [0x020FF720, .rodata, zoombox]
       - [0x020FF790, .data, zoombox]
-      - [0x020FF7E0, bss, zoombox]
+      - [0x020FF7E0, .bss, zoombox]
   - name: gccubeDll_header
     dir: overlays/gccubeDll
     type: bin
@@ -13418,7 +13418,7 @@ segments:
       - [0x02115A40, c, cubesearch]
       - [0x021168E0, .rodata, cubesearch]
       - [0x021168F0, .data, cubesearch]
-      - [0x021168F0, bss, cubesearch]
+      - [0x021168F0, .bss, cubesearch]
   - name: gcstatusDll_header
     dir: overlays/gcstatusDll
     type: bin
@@ -13608,7 +13608,7 @@ segments:
       - [0x0211A820, c, gamestore]
       - [0x0211AA90, .rodata, gamestore]
       - [0x0211AA90, .data, gamestore]
-      - [0x0211AA90, bss, gamestore]
+      - [0x0211AA90, .bss, gamestore]
   - name: glsplineDll_header
     dir: overlays/glsplineDll
     type: bin
@@ -14292,7 +14292,7 @@ segments:
       - [0x02127C80, c, kern]
       - [0x021280A0, .rodata, kern]
       - [0x021280A0, .data, kern]
-      - [0x02128100, bss, kern]
+      - [0x02128100, .bss, kern]
   - name: fxdialog_header
     dir: overlays/fxdialog
     type: bin
@@ -14311,7 +14311,7 @@ segments:
       - [0x02128180, c, dialog]
       - [0x02128400, .rodata, dialog]
       - [0x02128410, .data, dialog]
-      - [0x02128410, bss, dialog]
+      - [0x02128410, .bss, dialog]
   - name: gsworldDll_header
     dir: overlays/gsworldDll
     type: bin
@@ -14653,7 +14653,7 @@ segments:
       - [0x0212D970, c, flame]
       - [0x0212DEC0, .rodata, flame]
       - [0x0212DED0, .data, flame]
-      - [0x0212DED0, bss, flame]
+      - [0x0212DED0, .bss, flame]
   - name: idwater_header
     dir: overlays/idwater
     type: bin
@@ -15584,7 +15584,7 @@ segments:
       - [0x0214BF10, c, radar]
       - [0x0214CD20, .rodata, radar]
       - [0x0214CD40, .data, radar]
-      - [0x0214CD60, bss, radar]
+      - [0x0214CD60, .bss, radar]
   - name: gemarkersDll_header
     dir: overlays/gemarkersDll
     type: bin
@@ -16040,7 +16040,7 @@ segments:
       - [0x02161460, c, deflect]
       - [0x02162480, .rodata, deflect]
       - [0x02162480, .data, deflect]
-      - [0x02162480, bss, deflect]
+      - [0x02162480, .bss, deflect]
   - name: subaddiesect_header
     dir: overlays/subaddiesect
     type: bin
@@ -16078,7 +16078,7 @@ segments:
       - [0x021627D0, c, routeDll]
       - [0x02164090, .rodata, routeDll]
       - [0x021640B0, .data, routeDll]
-      - [0x021640B0, bss, routeDll]
+      - [0x021640B0, .bss, routeDll]
   - name: subaddievolume_header
     dir: overlays/subaddievolume
     type: bin
@@ -16249,7 +16249,7 @@ segments:
       - [0x02166380, c, marker]
       - [0x02166560, .rodata, marker]
       - [0x02166560, .data, marker]
-      - [0x02166560, bss, marker]
+      - [0x02166560, .bss, marker]
   - name: subaddieskeleton_header
     dir: overlays/subaddieskeleton
     type: bin
@@ -16496,7 +16496,7 @@ segments:
       - [0x0216E390, c, deathmatch]
       - [0x0216E680, .rodata, deathmatch]
       - [0x0216E690, .data, deathmatch]
-      - [0x0216E690, bss, deathmatch]
+      - [0x0216E690, .bss, deathmatch]
   - name: suegg_header
     dir: overlays/suegg
     type: bin
@@ -16610,7 +16610,7 @@ segments:
       - [0x02171E70, c, custom]
       - [0x02172780, .rodata, custom]
       - [0x02172790, .data, custom]
-      - [0x021727A0, bss, custom]
+      - [0x021727A0, .bss, custom]
   - name: seqdat_header
     dir: overlays/seqdat
     type: bin
@@ -16781,7 +16781,7 @@ segments:
       - [0x02175B00, c, fade]
       - [0x02175C60, .rodata, fade]
       - [0x02175C60, .data, fade]
-      - [0x02175C60, bss, fade]
+      - [0x02175C60, .bss, fade]
   - name: sccustom_big_header
     dir: overlays/sccustom_big
     type: bin
@@ -16800,7 +16800,7 @@ segments:
       - [0x02175CF0, c, custom_big]
       - [0x021760E0, .rodata, custom_big]
       - [0x021760E0, .data, custom_big]
-      - [0x021760E0, bss, custom_big]
+      - [0x021760E0, .bss, custom_big]
   - name: sccustom_banjo_header
     dir: overlays/sccustom_banjo
     type: bin
@@ -16838,7 +16838,7 @@ segments:
       - [0x021766B0, c, trace]
       - [0x02177020, .rodata, trace]
       - [0x021770E0, .data, trace]
-      - [0x02177120, bss, trace]
+      - [0x02177120, .bss, trace]
   - name: gzreg_header
     dir: overlays/gzreg
     type: bin

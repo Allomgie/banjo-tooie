@@ -24,6 +24,14 @@ s32 func_80800D14_sudeflect();
 s32 func_80800E44_sudeflect(f32 *param_0, f32 param_1, f32 param_2, f32 param_3, f32 *param_4, f32 param_5);
 s32 func_80800ECC_sudeflect(f32 *param_0, f32 *param_1, f32 *param_2, f32 param_3);
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/su/deflect.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. The _pad/_tail objects fill bytes that no code names. */
+s32 B_80801020_sudeflect;
+u8 B_80801020_sudeflect_tail[4];
+u8 B_80801020_sudeflect_tail1[40];
+
+
 s32 sudeflect_entrypoint_0(f32 *param_0, f32 param_1, f32 param_2, s32 param_3)
 {
     s32 local_0;

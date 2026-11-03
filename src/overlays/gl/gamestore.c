@@ -78,6 +78,12 @@ s32 glgamestore_entrypoint_3(s32 param_0, s32 param_1){
     func_8080013C_glgamestore(func_80800030_glgamestore(param_0), param_1, 0x80);
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/gl/gamestore.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+s32 B_80800270_glgamestore;
+
+
 s32 func_808001E0_glgamestore(s32 param_0) {
     s32 local_0 = 0;
     if (_gleeprom_entrypoint_1(param_0, &B_80800270_glgamestore, 8) != 0) {

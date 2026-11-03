@@ -299,6 +299,20 @@ void func_8080015C_chgameselect(Actor *param_0)
     }
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/gameselect.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. The _pad/_tail objects fill bytes that no code names. */
+s32 B_80808550_chgameselect;
+u8 B_80808550_chgameselect_pad[4];
+s32 B_80808558_chgameselect;
+RankEntry B_80808560_chgameselect;
+u8 B_80808560_chgameselect_pad[4];
+s32 B_80808570_chgameselect;
+u8 B_80808578_chgameselect[16];
+s32 B_80808588_chgameselect[2];
+u8 B_80808590_chgameselect[16];
+
+
 s32 func_80800228_chgameselect(Actor *this, s32 msg, s32 arg)
 {
     Actor *child;

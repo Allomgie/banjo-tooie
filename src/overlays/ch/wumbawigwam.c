@@ -445,6 +445,15 @@ void func_80800B9C_chwumbawigwam(param_0, param_1) Actor *param_0; s32 param_1;
     func_80101FDC(param_0, param_1);
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/wumbawigwam.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt:
+ * B_808011E4_chwumbawigwam. */
+u8 B_808011C0_chwumbawigwam[48];
+u8 B_808011F0_chwumbawigwam[16];
+
+
 void func_80800E04_chwumbawigwam(Actor *param_0, s32 param_1)
 {
     f32 *local_0;

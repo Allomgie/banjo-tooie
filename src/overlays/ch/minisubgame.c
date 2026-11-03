@@ -56,6 +56,14 @@ int chminisubgame_entrypoint_1()
     return (int)&D_8080146C_chminisubgame;
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/minisubgame.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. The _pad/_tail objects fill bytes that no code names. */
+s32 B_80801590_chminisubgame;
+u8 B_80801590_chminisubgame_tail[4];
+u8 B_80801590_chminisubgame_tail1[232];
+
+
 void func_80800018_chminisubgame(u8 *param_0) {
     s32 local_0;
     s32 *local_1;

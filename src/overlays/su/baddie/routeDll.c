@@ -276,6 +276,12 @@ s32 func_808006D0_subaddierouteDll(Actor *param_0, s32 param_1, f32 param_2, f32
     return 1;
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/su/baddie/routeDll.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+s16 B_808018E0_subaddierouteDll[32];
+
+
 s32 func_80800828_subaddierouteDll(Actor *param_0, u8 *param_1, f32 param_2, f32 param_3, s32 param_4)
 {
     f32 local_2[3];
