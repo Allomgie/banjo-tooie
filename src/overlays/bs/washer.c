@@ -1,5 +1,7 @@
 #include "common.h"
+#include "overlays/ba/playerstate.h"
 #include "overlays/ba/yaw.h"
+
 extern void func_800C2FDC(u8);
 
 extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);

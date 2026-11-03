@@ -181,8 +181,9 @@ void idbounce_entrypoint_1(s32 param_0, Vtx *param_1, Vtx *param_2, s32 param_3,
     local_3 = param_4->local_2;
 
     for (local_10 = param_2 + param_3; param_2 < local_10; param_2++) {
-        if (1)
-            local_6 = 0.0f;
+        if (1) {
+        }
+        local_6 = 0.0f;
         if (D_80135480[1]) {
             local_8 = param_2->v.ob[0] - local_1;
             local_9 = param_2->v.ob[2] - local_2;

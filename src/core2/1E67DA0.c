@@ -1,4 +1,5 @@
 #include "core2/1E67DA0.h"
+#include "common.h"
 
 #define LOCAL_RECORD (*(local_record **) ((u8 *) param_0 + 0xC))
 typedef struct {

@@ -1,4 +1,5 @@
 #include "overlays/bs/ledge.h"
+#include "overlays/ba/playerstate.h"
 
 #ifndef NONMATCHINGS
 

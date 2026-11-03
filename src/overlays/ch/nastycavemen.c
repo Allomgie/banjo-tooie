@@ -425,45 +425,46 @@ int func_80800E90_chnastycavemen(Actor *param_0, s32 param_1, s32 param_2)
 {
     void *local_0;
     s32 local_1;
-    if (1)
-        switch (param_1) {
-            case 0x95:
-                func_80100094(param_0, 1);
-                func_80800968_chnastycavemen();
-                if (func_8080000C_chnastycavemen()) {
-                    func_80102424(param_0, 1);
-                } else if (func_800DA298(0x184)) {
-                    func_8010573C(param_0, 1.0f);
-                    param_0->rotation[1] = func_800F1DCC(param_0->rotation[1], 180.0f);
-                    func_80102424(param_0, 4);
-                } else if (func_800EA090() == 5) {
-                    func_80102424(param_0, 1);
-                }
-                _suexpression_entrypoint_7(param_0, 1, 150);
-                local_0 = func_80100094(param_0, 1);
-                _suexpression_entrypoint_12(local_0, 60.0f, 15.0f);
-                _suexpression_entrypoint_17(local_0, 800);
-                break;
-            case 0x2E:
-                local_1 = ((s16 *) &param_2)[0];
-                if (local_1 == 0x17EF || local_1 == 0x17F0) {
-                    func_8080010C_chnastycavemen(param_0);
-                } else {
-                    func_80090708(2);
-                    func_80102424(param_0, 3);
-                }
-                break;
-            case 0x1F:
-                func_801015D0(param_0);
-                func_800DF3E0();
-                func_800DF744(5, 2);
-                func_800DF744(6, 2);
-                func_800DF744(8, 2);
-                func_800DF744(4, 3);
-                break;
-            default:
-                return 0;
-        }
+    if (1) {
+    }
+    switch (param_1) {
+        case 0x95:
+            func_80100094(param_0, 1);
+            func_80800968_chnastycavemen();
+            if (func_8080000C_chnastycavemen()) {
+                func_80102424(param_0, 1);
+            } else if (func_800DA298(0x184)) {
+                func_8010573C(param_0, 1.0f);
+                param_0->rotation[1] = func_800F1DCC(param_0->rotation[1], 180.0f);
+                func_80102424(param_0, 4);
+            } else if (func_800EA090() == 5) {
+                func_80102424(param_0, 1);
+            }
+            _suexpression_entrypoint_7(param_0, 1, 150);
+            local_0 = func_80100094(param_0, 1);
+            _suexpression_entrypoint_12(local_0, 60.0f, 15.0f);
+            _suexpression_entrypoint_17(local_0, 800);
+            break;
+        case 0x2E:
+            local_1 = ((s16 *) &param_2)[0];
+            if (local_1 == 0x17EF || local_1 == 0x17F0) {
+                func_8080010C_chnastycavemen(param_0);
+            } else {
+                func_80090708(2);
+                func_80102424(param_0, 3);
+            }
+            break;
+        case 0x1F:
+            func_801015D0(param_0);
+            func_800DF3E0();
+            func_800DF744(5, 2);
+            func_800DF744(6, 2);
+            func_800DF744(8, 2);
+            func_800DF744(4, 3);
+            break;
+        default:
+            return 0;
+    }
     return 1;
 }
 

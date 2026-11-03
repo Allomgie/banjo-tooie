@@ -187,8 +187,9 @@ void *chtorpedo_entrypoint_0(f32 *param_0, f32 *param_1, f32 *param_2, s32 param
     }
     local_2 = (Actor *) func_80108474(0x168, param_0, 0);
     local_3 = (u8 *) func_80100094(local_2, 0);
-    if (1)
-        *(f32 *) ((u8 *) local_2 + 0x34) = 0.0f;
+    if (1) {
+    }
+    *(f32 *) ((u8 *) local_2 + 0x34) = 0.0f;
     func_800EE7F8((u8 *) local_2 + 0x28, param_2);
     func_80800350_chtorpedo(local_2);
     func_800EE7F8(local_3 + 0x14, param_0);

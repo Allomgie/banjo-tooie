@@ -274,8 +274,9 @@ void func_808001A0_chfactorytwinklies(Actor *param_0)
         case 7:
             if (func_800D0B68(0x3B, 1)) {
                 func_800F8300(func_800F54E4(), 2, 0);
-                if (1)
-                    *(s32 *) (local_0 + 0xA4) = 0xCEB;
+                if (1) {
+                }
+                *(s32 *) (local_0 + 0xA4) = 0xCEB;
                 *(s32 *) (local_0 + 0xA8) = 0x46;
                 func_80101FDC(param_0, 4);
             }
@@ -709,17 +710,16 @@ void func_8080145C_chfactorytwinklies(param_0) TwinkS *param_0;
     s32 local_0 = param_0->f76 - 0x32;
     param_0->f2C = local_0;
 
-switch (local_0) {
-    case 0:
-        param_0->f28 = 0x20000000;
-        break;
-    case 1:
-        param_0->f28 = 0x10000000;
-        break;
-    case 2:
-        param_0->f28 = 0x8000000;
-}
-
+    switch (local_0) {
+        case 0:
+            param_0->f28 = 0x20000000;
+            break;
+        case 1:
+            param_0->f28 = 0x10000000;
+            break;
+        case 2:
+            param_0->f28 = 0x8000000;
+    }
 }
 
 void func_808014B0_chfactorytwinklies(Actor *param_0)
@@ -734,23 +734,22 @@ void func_808014B0_chfactorytwinklies(Actor *param_0)
     s32 i;
     data = func_80100094(func_80106790(param_0->unk3C), 0);
 
-if (func_800CEAA8(0) && !func_800CEAD0(0)) {
-    for (i = 0; i < _gcstatusDll_entrypoint_11(); i++) {
-        if (func_800F6C5C(i) && (func_800F55FC(i) & param_0->actorData[4])) {
-            n = data->cnt[i][param_0->actorData[5]];
-            if (n > 0) {
-                pts = (3 - param_0->actorData[5]) * n;
-                p = &data->total[i];
-                *p += pts;
-                data->cnt[i][param_0->actorData[5]] = 0;
-                func_800F5A2C(i, 5, &local_0);
-                _chscorepoints_entrypoint_2(pts, i, &local_0, 1);
-                func_80108B04(param_0, i);
+    if (func_800CEAA8(0) && !func_800CEAD0(0)) {
+        for (i = 0; i < _gcstatusDll_entrypoint_11(); i++) {
+            if (func_800F6C5C(i) && (func_800F55FC(i) & param_0->actorData[4])) {
+                n = data->cnt[i][param_0->actorData[5]];
+                if (n > 0) {
+                    pts = (3 - param_0->actorData[5]) * n;
+                    p = &data->total[i];
+                    *p += pts;
+                    data->cnt[i][param_0->actorData[5]] = 0;
+                    func_800F5A2C(i, 5, &local_0);
+                    _chscorepoints_entrypoint_2(pts, i, &local_0, 1);
+                    func_80108B04(param_0, i);
+                }
             }
         }
     }
-}
-
 }
 
 s32 func_80801608_chfactorytwinklies(param_0, param_1, param_2)
@@ -763,29 +762,29 @@ s32 param_2;
     f32 local_2[3];
     Actor *local_3;
 
-switch (param_1) {
-    case 0x3D:
-        func_800F5A2C(param_2, 5, local_2);
-        local_1 = func_80108528(*(s32 *) ((u8 *) param_0 + 0x2C) + 0x443, local_2,
-                                func_800DC128(0, 0x167), &param_0);
-        local_0 = (u8 *) func_80100094(local_1, 0);
-        func_800EE7F8((f32 *) (local_0 + 0x1C), param_0->position);
-        func_800EE7F8((f32 *) (local_0 + 0x10), local_2);
-        func_80101FDC(local_1, 5);
-        func_80102FDC(local_1, 0.2f);
-        break;
-    case 0x95:
-        if (func_800EA05C() == 0x17D)
-            local_3 = _subaddiefind_entrypoint_2(0x44D, 0);
-        else
-            local_3 = _subaddiefind_entrypoint_2(0x442, 0);
-        param_0->unk3C = local_3->unk0;
-        break;
-    default:
-        return 0;
-}
+    switch (param_1) {
+        case 0x3D:
+            func_800F5A2C(param_2, 5, local_2);
+            local_1 = func_80108528(*(s32 *) ((u8 *) param_0 + 0x2C) + 0x443, local_2,
+                                    func_800DC128(0, 0x167), &param_0);
+            local_0 = (u8 *) func_80100094(local_1, 0);
+            func_800EE7F8((f32 *) (local_0 + 0x1C), param_0->position);
+            func_800EE7F8((f32 *) (local_0 + 0x10), local_2);
+            func_80101FDC(local_1, 5);
+            func_80102FDC(local_1, 0.2f);
+            break;
+        case 0x95:
+            if (func_800EA05C() == 0x17D)
+                local_3 = _subaddiefind_entrypoint_2(0x44D, 0);
+            else
+                local_3 = _subaddiefind_entrypoint_2(0x442, 0);
+            param_0->unk3C = local_3->unk0;
+            break;
+        default:
+            return 0;
+    }
 
-return 1;
+    return 1;
 }
 
 f32 func_80801FAC_chfactorytwinklies();
@@ -798,34 +797,32 @@ void func_8080171C_chfactorytwinklies(param_0) Actor *param_0;
     local_0 = (u8 *) func_80100094(param_0, 0);
     func_8010A3E8(param_0, 0.3f);
 
-if (param_0->unk70_10 == 1) {
-    param_0->position[1] -= 250.0f;
-    *(f32 *) ((u8 *) param_0 + 0x28) = 0.6f;
-    *(f32 *) ((u8 *) param_0 + 0x30) = func_80801ED0_chfactorytwinklies(param_0);
-    *(f32 *) ((u8 *) param_0 + 0x58) = func_80801FAC_chfactorytwinklies(param_0);
-    _subaddieDll_entrypoint_1(param_0);
-    _subaddierouteDll_entrypoint_3(param_0, local_0, param_0->position);
-    _subaddierouteDll_entrypoint_1(param_0);
-    *(s32 *) (local_0 + 12) = 0;
-    *(s32 *) ((u8 *) param_0 + 0x50) = func_800C8A98();
-    func_800C8E54(*(s32 *) ((u8 *) param_0 + 0x50), 500.0f, 800.0f);
-    func_800C8E84(*(s32 *) ((u8 *) param_0 + 0x50),
-                  D_808023C8_chfactorytwinklies + *(s32 *) ((u8 *) param_0 + 0x2C) * 12);
-    if (((TW28 *) param_0->unk0)->flag) {
+    if (param_0->unk70_10 == 1) {
+        param_0->position[1] -= 250.0f;
+        *(f32 *) ((u8 *) param_0 + 0x28) = 0.6f;
+        *(f32 *) ((u8 *) param_0 + 0x30) = func_80801ED0_chfactorytwinklies(param_0);
+        *(f32 *) ((u8 *) param_0 + 0x58) = func_80801FAC_chfactorytwinklies(param_0);
+        _subaddieDll_entrypoint_1(param_0);
+        _subaddierouteDll_entrypoint_3(param_0, local_0, param_0->position);
+        _subaddierouteDll_entrypoint_1(param_0);
+        *(s32 *) (local_0 + 12) = 0;
+        *(s32 *) ((u8 *) param_0 + 0x50) = func_800C8A98();
+        func_800C8E54(*(s32 *) ((u8 *) param_0 + 0x50), 500.0f, 800.0f);
+        func_800C8E84(*(s32 *) ((u8 *) param_0 + 0x50),
+                      D_808023C8_chfactorytwinklies + *(s32 *) ((u8 *) param_0 + 0x2C) * 12);
+        if (((TW28 *) param_0->unk0)->flag) {
+            ((u8 *) param_0)[0x64] &= ~1;
+            *(f32 *) ((u8 *) param_0 + 0x58) = 5.5f;
+        }
+        func_8010D930(4, *(u32 *) ((u8 *) param_0 + 0x70) & 1, param_0->position,
+                      D_808023EC_chfactorytwinklies);
+    } else {
+        func_8010D930(4, *(u32 *) ((u8 *) param_0 + 0x70) & 1, param_0->position,
+                      D_80802400_chfactorytwinklies);
+        func_8010A570(param_0);
+        *(f32 *) ((u8 *) param_0 + 0x58) = 1.2f;
         ((u8 *) param_0)[0x64] &= ~1;
-        *(f32 *) ((u8 *) param_0 + 0x58) = 5.5f;
     }
-    func_8010D930(4, *(u32 *) ((u8 *) param_0 + 0x70) & 1, param_0->position,
-                  D_808023EC_chfactorytwinklies);
-} else {
-
-func_8010D930(4, *(u32 *) ((u8 *) param_0 + 0x70) & 1, param_0->position,
-              D_80802400_chfactorytwinklies);
-func_8010A570(param_0);
-*(f32 *) ((u8 *) param_0 + 0x58) = 1.2f;
-((u8 *) param_0)[0x64] &= ~1;
-
-}
 }
 
 s32 func_8080207C_chfactorytwinklies();
@@ -856,337 +853,333 @@ void func_808018A0_chfactorytwinklies(u8 *param_0)
             func_80101FDC(param_0, 4);
             _subaddiefade_entrypoint_3(param_0);
         }
-
-}
-switch (((u32) *(u16 *) (param_0 + 0x72) >> 10)) {
-    case 1:
-        if (func_80802020_chfactorytwinklies(param_0) != 0) {
-            func_80101FDC(param_0, 2);
-        }
-
-break;
-
-case 2:
-    local_54 = func_800F3780(func_80101F24(param_0), D_808021C0_chfactorytwinklies, 5);
-
-if (func_80101E14(param_0, 0x3E800000) != 0) {
-    func_8010D930(2, *(u32 *) (param_0 + 0x70) & 1, param_0 + 4, D_80802414_chfactorytwinklies);
-}
-
-if (((TwB *) param_0)->b29) {
-    local_50 = _subaddiejoy_entrypoint_9(param_0, param_0 + 0x54, 3);
-    *(f32 *) (param_0 + 0x24) = func_80801F5C_chfactorytwinklies(param_0) * 1.4f;
-    func_80102BF8(param_0, 0x3E4CCCCD, 0x41000000, 0x44160000);
-    func_8010C3A8(param_0, 0x201025, local_50 * local_54);
-} else {
-
-if (_subaddierouteDll_entrypoint_4(param_0) != 0) {
-    _subaddierouteDll_entrypoint_7(param_0, local_5C, *(s32 *) (param_0 + 0x48),
-                                   *(s32 *) (param_0 + 0x54), 400.0f, 0x4802);
-    *(s32 *) ((u8 *) local_5C + 0xC) = (s32) *(u16 *) ((u8 *) local_5C + 6);
-}
-
-_subaddierouteDll_entrypoint_6(param_0, local_5C, *((s32 *) ((u8 *) local_5C + 0xC)), 0x3F, 0.4f,
-                               20, 40);
-_subaddierouteDll_entrypoint_5(param_0, local_5C, *((s32 *) ((u8 *) local_5C + 0xC)), 0x3E4CCCCD,
-                               4.0f, 200.0f);
-*((f32 *) (param_0 + 0x24)) = func_800F15F8(*((f32 *) (param_0 + 0x24)),
-                                            *((f32 *) (param_0 + 0x30)), local_58 * 800.0f);
-
-if (!((TwA *) *(u8 **) param_0)->b13) {
-    func_8010C3A8(param_0, 0x1325, local_54);
-}
-
-}
-if (func_800D9078(param_0 + 0x58) != 0) {
-    if (*(void **) (param_0 + 0x50) != NULL) {
-        *(void **) (param_0 + 0x50) =
-            _chlightfader_entrypoint_1(*(void **) (param_0 + 0x50), 0x3F800000, 2);
     }
+    switch (((u32) *(u16 *) (param_0 + 0x72) >> 10)) {
+        case 1:
+            if (func_80802020_chfactorytwinklies(param_0) != 0) {
+                func_80101FDC(param_0, 2);
+            }
 
-func_80101FDC(param_0, 3);
-*((f32 *) (param_0 + 0x28)) = 0.6f;
-param_0[0x64] = param_0[0x64] & ~1;
-}
-break;
+            break;
 
-case 3:
-    if (!(((TwB *) param_0)->b19)) {
-        tmp = func_800F10B4(*((f32 *) (param_0 + 0x28)), 0.0f, 0.6f, 1.0f, 0.0f);
+        case 2:
+            local_54 = func_800F3780(func_80101F24(param_0), D_808021C0_chfactorytwinklies, 5);
 
-if (0.3f < tmp) {
-    param_0[0x75] = param_0[0x75] & ~0x10;
-    func_8010D930(5, *(u32 *) (param_0 + 0x70) & 1, param_0 + 4, D_80802428_chfactorytwinklies);
-    ((TwC *) param_0)->b65_3 = 1;
-}
+            if (func_80101E14(param_0, 0x3E800000) != 0) {
+                func_8010D930(2, *(u32 *) (param_0 + 0x70) & 1, param_0 + 4,
+                              D_80802414_chfactorytwinklies);
+            }
 
-}
-if (func_8080207C_chfactorytwinklies(param_0) != 0) {
-    func_800FFAB0(param_0);
-}
+            if (((TwB *) param_0)->b29) {
+                local_50 = _subaddiejoy_entrypoint_9(param_0, param_0 + 0x54, 3);
+                *(f32 *) (param_0 + 0x24) = func_80801F5C_chfactorytwinklies(param_0) * 1.4f;
+                func_80102BF8(param_0, 0x3E4CCCCD, 0x41000000, 0x44160000);
+                func_8010C3A8(param_0, 0x201025, local_50 * local_54);
+            } else {
+                if (_subaddierouteDll_entrypoint_4(param_0) != 0) {
+                    _subaddierouteDll_entrypoint_7(param_0, local_5C, *(s32 *) (param_0 + 0x48),
+                                                   *(s32 *) (param_0 + 0x54), 400.0f, 0x4802);
+                    *(s32 *) ((u8 *) local_5C + 0xC) = (s32) *(u16 *) ((u8 *) local_5C + 6);
+                }
 
-case 4:
-    break;
+                _subaddierouteDll_entrypoint_6(
+                    param_0, local_5C, *((s32 *) ((u8 *) local_5C + 0xC)), 0x3F, 0.4f, 20, 40);
+                _subaddierouteDll_entrypoint_5(param_0, local_5C,
+                                               *((s32 *) ((u8 *) local_5C + 0xC)), 0x3E4CCCCD, 4.0f,
+                                               200.0f);
+                *((f32 *) (param_0 + 0x24)) = func_800F15F8(
+                    *((f32 *) (param_0 + 0x24)), *((f32 *) (param_0 + 0x30)), local_58 * 800.0f);
 
-case 5:
-    done = func_800D9078(param_0 + 0x58);
-    local_44 = func_800F12D4(*((f32 *) (param_0 + 0x58)), 0.0f, 1.2f, 1.0f, 0.0f);
-    *((f32 *) (param_0 + 0x44)) += func_800D8FF8() * 100.0f;
-    *((f32 *) (param_0 + 0x48)) += func_800D8FF8() * 60.0f;
-    tmp = func_800D8FF8();
-    *((f32 *) (param_0 + 0x38)) = func_800F15F8(*((f32 *) (param_0 + 0x38)), 1.0f, tmp + tmp);
-    func_800EFE50(param_0 + 4, (u8 *) local_5C + 0x10, (u8 *) local_5C + 0x1C, local_44);
-    *((f32 *) (param_0 + 8)) += 80.0f * func_80013970(local_44 * 180.0f);
-    if (done != 0) {
-        func_800FFAB0(param_0);
-    }
+                if (!((TwA *) *(u8 **) param_0)->b13) {
+                    func_8010C3A8(param_0, 0x1325, local_54);
+                }
+            }
+            if (func_800D9078(param_0 + 0x58) != 0) {
+                if (*(void **) (param_0 + 0x50) != NULL) {
+                    *(void **) (param_0 + 0x50) =
+                        _chlightfader_entrypoint_1(*(void **) (param_0 + 0x50), 0x3F800000, 2);
+                }
+
+                func_80101FDC(param_0, 3);
+                *((f32 *) (param_0 + 0x28)) = 0.6f;
+                param_0[0x64] = param_0[0x64] & ~1;
+            }
+            break;
+
+        case 3:
+            if (!(((TwB *) param_0)->b19)) {
+                tmp = func_800F10B4(*((f32 *) (param_0 + 0x28)), 0.0f, 0.6f, 1.0f, 0.0f);
+
+                if (0.3f < tmp) {
+                    param_0[0x75] = param_0[0x75] & ~0x10;
+                    func_8010D930(5, *(u32 *) (param_0 + 0x70) & 1, param_0 + 4,
+                                  D_80802428_chfactorytwinklies);
+                    ((TwC *) param_0)->b65_3 = 1;
+                }
+            }
+            if (func_8080207C_chfactorytwinklies(param_0) != 0) {
+                func_800FFAB0(param_0);
+            }
+
+        case 4:
+            break;
+
+        case 5:
+            done = func_800D9078(param_0 + 0x58);
+            local_44 = func_800F12D4(*((f32 *) (param_0 + 0x58)), 0.0f, 1.2f, 1.0f, 0.0f);
+            *((f32 *) (param_0 + 0x44)) += func_800D8FF8() * 100.0f;
+            *((f32 *) (param_0 + 0x48)) += func_800D8FF8() * 60.0f;
+            tmp = func_800D8FF8();
+            *((f32 *) (param_0 + 0x38)) =
+                func_800F15F8(*((f32 *) (param_0 + 0x38)), 1.0f, tmp + tmp);
+            func_800EFE50(param_0 + 4, (u8 *) local_5C + 0x10, (u8 *) local_5C + 0x1C, local_44);
+            *((f32 *) (param_0 + 8)) += 80.0f * func_80013970(local_44 * 180.0f);
+            if (done != 0) {
+                func_800FFAB0(param_0);
+            }
     }
     if (*((void **) (param_0 + 0x50)) != NULL) {
         func_80103DFC(param_0, local_38);
         local_38[1] = local_38[1] + 100.0f;
         func_800C8CB8(*((void **) (param_0 + 0x50)), local_38);
     }
+}
+
+void func_80801D58_chfactorytwinklies(param_0) u8 *param_0;
+{
+    int new_var;
+    s32 new_var2;
+    s32 temp_a3;
+    if (param_0) {
     }
-
-    void func_80801D58_chfactorytwinklies(param_0) u8 *param_0;
-    {
-        int new_var;
-        s32 new_var2;
-        s32 temp_a3;
-        if (param_0) {
-        }
-        new_var2 = *((s32 *) (((u8 *) param_0) + 0x50));
-        temp_a3 = *((s32 *) (((u8 *) param_0) + 0x50));
-        if (temp_a3 != 0) {
-            new_var = 0x50;
-            *((s32 *) (((u8 *) param_0) + new_var)) = _chlightfader_entrypoint_1(
-                new_var2, 0x3F800000, 2, *((s32 *) (((u8 *) param_0) + 0x50)));
-        }
+    new_var2 = *((s32 *) (((u8 *) param_0) + 0x50));
+    temp_a3 = *((s32 *) (((u8 *) param_0) + 0x50));
+    if (temp_a3 != 0) {
+        new_var = 0x50;
+        *((s32 *) (((u8 *) param_0) + new_var)) = _chlightfader_entrypoint_1(
+            new_var2, 0x3F800000, 2, *((s32 *) (((u8 *) param_0) + 0x50)));
     }
+}
 
-    s32 func_80801D94_chfactorytwinklies(Actor *param_0, s32 param_1,
-                                         TemplateEventValue1161 param_2)
-    {
-        switch (param_1) {
-            case 0x3E:
-                func_80801DD8_chfactorytwinklies(
-                    param_0, (u32) *(u16 *) ((u8 *) param_2.local_1 + 0x1A) >> 5);
-                break;
-            default:
-                return 0;
-        }
-        return 1;
+s32 func_80801D94_chfactorytwinklies(Actor *param_0, s32 param_1, TemplateEventValue1161 param_2)
+{
+    switch (param_1) {
+        case 0x3E:
+            func_80801DD8_chfactorytwinklies(param_0,
+                                             (u32) *(u16 *) ((u8 *) param_2.local_1 + 0x1A) >> 5);
+            break;
+        default:
+            return 0;
     }
+    return 1;
+}
 
-    void func_80801DD8_chfactorytwinklies(param_0, param_1) Actor *param_0;
-    s32 param_1;
-    {
-        Actor *local_3;
-        u8 *local_0;
-        s32 local_1;
-        f32 local_2[3];
+void func_80801DD8_chfactorytwinklies(param_0, param_1) Actor *param_0;
+s32 param_1;
+{
+    Actor *local_3;
+    u8 *local_0;
+    s32 local_1;
+    f32 local_2[3];
 
-        local_3 = func_80106790(param_0->unk3C);
-        local_0 = func_80100094(local_3, 0);
-        local_1 = func_800B53A4(12);
-        func_80103DFC(param_0, local_2);
-        func_800BABB8(local_1, local_2, local_2, 1.0f, D_8080243C_chfactorytwinklies);
-        func_800BA3FC(local_1, D_80802478_chfactorytwinklies[param_0->actorData[5]]);
-        func_800BA22C(local_1, 12);
-        (*(s32(*)[3])(local_0 + 0x40 + param_1 * 12))[param_0->actorData[5]]++;
-        func_8010D930(1, *(u32 *) ((u8 *) param_0 + 0x70) & 1, param_0->position,
-                      D_80802468_chfactorytwinklies);
-        func_800FFAB0(param_0);
+    local_3 = func_80106790(param_0->unk3C);
+    local_0 = func_80100094(local_3, 0);
+    local_1 = func_800B53A4(12);
+    func_80103DFC(param_0, local_2);
+    func_800BABB8(local_1, local_2, local_2, 1.0f, D_8080243C_chfactorytwinklies);
+    func_800BA3FC(local_1, D_80802478_chfactorytwinklies[param_0->actorData[5]]);
+    func_800BA22C(local_1, 12);
+    (*(s32(*)[3])(local_0 + 0x40 + param_1 * 12))[param_0->actorData[5]]++;
+    func_8010D930(1, *(u32 *) ((u8 *) param_0 + 0x70) & 1, param_0->position,
+                  D_80802468_chfactorytwinklies);
+    func_800FFAB0(param_0);
+}
+
+f32 func_80801ED0_chfactorytwinklies(Actor *param_0)
+{
+    switch (*(s32 *) &param_0->actorData[5]) {
+        case 0:
+            return func_800DC178(800.0f, 900.0f);
+        case 1:
+            return func_800DC178(600.0f, 700.0f);
+        default:
+            return func_800DC178(400.0f, 500.0f);
     }
+}
 
-    f32 func_80801ED0_chfactorytwinklies(Actor *param_0)
-    {
-        switch (*(s32 *) &param_0->actorData[5]) {
-            case 0:
-                return func_800DC178(800.0f, 900.0f);
-            case 1:
-                return func_800DC178(600.0f, 700.0f);
-            default:
-                return func_800DC178(400.0f, 500.0f);
-        }
+f32 func_80801F5C_chfactorytwinklies(void *param_0)
+{
+    s32 local_0;
+
+    local_0 = *(s32 *) ((char *) param_0 + 0x2C);
+    switch (local_0) {
+        case 0:
+            return 900.0f;
+        case 1:
+            return 700.0f;
+        default:
+            return 500.0f;
     }
+}
 
-    f32 func_80801F5C_chfactorytwinklies(void *param_0)
-    {
-        s32 local_0;
-
-        local_0 = *(s32 *) ((char *) param_0 + 0x2C);
-        switch (local_0) {
-            case 0:
-                return 900.0f;
-            case 1:
-                return 700.0f;
-            default:
-                return 500.0f;
-        }
+f32 func_80801FAC_chfactorytwinklies(Actor *param_0)
+{
+    switch (*(s32 *) &param_0->actorData[5]) {
+        case 0:
+            return func_800DC178(4.0f, 4.0f);
+        case 1:
+            return func_800DC178(4.0f, 4.0f);
+        default:
+            return func_800DC178(4.0f, 4.0f);
     }
+}
 
-    f32 func_80801FAC_chfactorytwinklies(Actor *param_0)
-    {
-        switch (*(s32 *) &param_0->actorData[5]) {
-            case 0:
-                return func_800DC178(4.0f, 4.0f);
-            case 1:
-                return func_800DC178(4.0f, 4.0f);
-            default:
-                return func_800DC178(4.0f, 4.0f);
-        }
-    }
+s32 func_80802020_chfactorytwinklies(u8 *param_0)
+{
+    s32 local_0 = func_800D9078(param_0 + 0x28);
+    *(f32 *) (param_0 + 8) = func_800F12D4(*(f32 *) (param_0 + 0x28), 0.0f, 0.6f, 0.0f, -250.0f);
+    return local_0;
+}
 
-    s32 func_80802020_chfactorytwinklies(u8 *param_0)
-    {
-        s32 local_0 = func_800D9078(param_0 + 0x28);
-        *(f32 *) (param_0 + 8) =
-            func_800F12D4(*(f32 *) (param_0 + 0x28), 0.0f, 0.6f, 0.0f, -250.0f);
-        return local_0;
-    }
+s32 func_8080207C_chfactorytwinklies(u8 *param_0)
+{
+    s32 local_0 = func_800D9078(param_0 + 0x28);
+    *(f32 *) (param_0 + 8) = func_800F12D4(*(f32 *) (param_0 + 0x28), 0.0f, 0.6f, -250.0f, 0.0f);
+    return local_0;
+}
 
-    s32 func_8080207C_chfactorytwinklies(u8 *param_0)
-    {
-        s32 local_0 = func_800D9078(param_0 + 0x28);
-        *(f32 *) (param_0 + 8) =
-            func_800F12D4(*(f32 *) (param_0 + 0x28), 0.0f, 0.6f, -250.0f, 0.0f);
-        return local_0;
-    }
-
-    extern void func_80108ED0();
-    u8 D_808021C0_chfactorytwinklies[40] = {
-        0x0,  0x0,  0x0,  0x0, 0x3F, 0x0,  0x0,  0x0, 0x3E, 0x80, 0x0,  0x0,  0x0, 0x0,
-        0x0,  0x0,  0x3F, 0x0, 0x0,  0x0,  0x3F, 0x0, 0x0,  0x0,  0x3F, 0x40, 0x0, 0x0,
-        0x3F, 0x80, 0x0,  0x0, 0x3F, 0x80, 0x0,  0x0, 0x3F, 0x0,  0x0,  0x0};
-    u8 D_808021E8_chfactorytwinklies[48] = {
-        0x0,  0x0, 0x0,  0x0,  0x0, 0x0,  0x0, 0x0, 0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0,
-        0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0, 0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0,
-        0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0, 0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0};
-    int D_80802218_chfactorytwinklies[18] = {0x1580442,
-                                             0x1,
-                                             0x0,
-                                             (u32) func_808001A0_chfactorytwinklies,
-                                             (u32) func_80105834,
-                                             (u32) func_80101870,
-                                             0x0,
-                                             0x0,
-                                             0x0,
-                                             0x1,
-                                             (u32) func_8080064C_chfactorytwinklies,
-                                             0x0,
-                                             0xC40000,
-                                             (u32) func_80800048_chfactorytwinklies,
-                                             (u32) func_80107C2C,
-                                             -0x7FFFF9FE,
-                                             (u32) func_8080040C_chfactorytwinklies,
-                                             0x0};
-    int D_80802260_chfactorytwinklies[18] = {0x158044D,
-                                             0x1,
-                                             0x0,
-                                             (u32) func_80800E9C_chfactorytwinklies,
-                                             (u32) func_80105834,
-                                             (u32) func_80101870,
-                                             0x0,
-                                             0x0,
-                                             0x0,
-                                             0x1,
-                                             (u32) func_8080064C_chfactorytwinklies,
-                                             0x0,
-                                             0xC40000,
-                                             (u32) func_80800DE0_chfactorytwinklies,
-                                             (u32) func_80107C2C,
-                                             -0x7FFFF9FE,
-                                             (u32) func_8080105C_chfactorytwinklies,
-                                             0x0};
-    int D_808022A8_chfactorytwinklies[18] = {0x1580446,
-                                             0x1,
-                                             0x0,
-                                             (u32) func_808014B0_chfactorytwinklies,
-                                             (u32) func_80105834,
-                                             (u32) func_80101870,
-                                             0x0,
-                                             0x0,
-                                             0x0,
-                                             0x0,
-                                             0x0,
-                                             0x0,
-                                             0x0,
-                                             (u32) func_8080145C_chfactorytwinklies,
-                                             (u32) func_80107C2C,
-                                             -0x7FFFFBFE,
-                                             (u32) func_80801608_chfactorytwinklies,
-                                             0x0};
-    void *D_808022F0_chfactorytwinklies[18] = {(void *) 0x01AB0443,
-                                               (void *) 0x07C50001,
-                                               (void *) &D_808021E8_chfactorytwinklies,
-                                               (void *) func_808018A0_chfactorytwinklies,
-                                               (void *) func_80105834,
-                                               (void *) func_80101870,
-                                               0,
-                                               (void *) 0x3F800000,
-                                               0,
-                                               (void *) 0x0006012C,
-                                               (void *) func_80801D58_chfactorytwinklies,
-                                               (void *) func_80108ED0,
-                                               (void *) 0x00280000,
-                                               (void *) func_8080171C_chfactorytwinklies,
-                                               (void *) func_80107C2C,
-                                               (void *) 0x80001001,
-                                               (void *) func_80801D94_chfactorytwinklies,
-                                               0};
-    int D_80802338_chfactorytwinklies[18] = {0x1AB0444,
-                                             0x7C60001,
-                                             (u32) &D_808021E8_chfactorytwinklies,
-                                             (u32) func_808018A0_chfactorytwinklies,
-                                             (u32) func_80105834,
-                                             (u32) func_80101870,
-                                             0x0,
-                                             0x3F800000,
-                                             0x0,
-                                             0x6012C,
-                                             (u32) func_80801D58_chfactorytwinklies,
-                                             (u32) func_80108ED0,
-                                             0x280000,
-                                             (u32) func_8080171C_chfactorytwinklies,
-                                             (u32) func_80107C2C,
-                                             -0x7FFFEFFF,
-                                             (u32) func_80801D94_chfactorytwinklies,
-                                             0x0};
-    int D_80802380_chfactorytwinklies[18] = {0x1AB0445,
-                                             0x7C70001,
-                                             (u32) &D_808021E8_chfactorytwinklies,
-                                             (u32) func_808018A0_chfactorytwinklies,
-                                             (u32) func_80105834,
-                                             (u32) func_80101870,
-                                             0x0,
-                                             0x3F800000,
-                                             0x0,
-                                             0x6012C,
-                                             (u32) func_80801D58_chfactorytwinklies,
-                                             (u32) func_80108ED0,
-                                             0x280000,
-                                             (u32) func_8080171C_chfactorytwinklies,
-                                             (u32) func_80107C2C,
-                                             -0x7FFFEFFF,
-                                             (u32) func_80801D94_chfactorytwinklies,
-                                             0x0};
-    u8 D_808023C8_chfactorytwinklies[36] = {0x0,  0x0,  0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-                                            0x0,  0x0,  0xFF, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-                                            0x0,  0xFF, 0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-                                            0xFF, 0x0,  0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
-    u8 D_808023EC_chfactorytwinklies[20] = {0x0, 0x13, 0x6, 0x1D, 0x0, 0xD,  0x1, 0x66, 0x1, 0x80,
-                                            0x0, 0x1,  0x1, 0xF4, 0x7, 0xD0, 0x0, 0x0,  0x0, 0x0};
-    u8 D_80802400_chfactorytwinklies[20] = {0x0, 0x13, 0x4, 0x3A, 0x0, 0xD,  0x0, 0xF3, 0x1, 0xC,
-                                            0x0, 0x1,  0x1, 0xF4, 0x7, 0xD0, 0x0, 0x0,  0x0, 0x0};
-    u8 D_80802414_chfactorytwinklies[20] = {0x0, 0x13, 0x3, 0xF0, 0x0, 0xD,  0x1, 0x33, 0x1, 0x4C,
-                                            0x0, 0x1,  0x1, 0xF4, 0x7, 0xD0, 0x0, 0x0,  0x0, 0x0};
-    u8 D_80802428_chfactorytwinklies[20] = {0x0, 0x13, 0x6, 0x1E, 0x0, 0xD,  0x0, 0xF3, 0x1, 0xC,
-                                            0x0, 0x1,  0x1, 0xF4, 0x7, 0xD0, 0x0, 0x0,  0x0, 0x0};
-    u8 D_8080243C_chfactorytwinklies[44] = {
-        0x0, 0x16, 0x12, 0x0, 0x0,  0x15, 0x0,  0x0,  0x0,  0xCC, 0x0,  0x2B, 0x0,  0xC0, 0x1,
-        0x0, 0x0,  0x22, 0x0, 0x4C, 0x0,  0x59, 0x0,  0x26, 0x0,  0x33, 0x0,  0x2D, 0x1,  0x90,
-        0x2, 0x58, 0x0,  0xD, 0x0,  0x14, 0x0,  0x1B, 0xFC, 0xE0, 0xFD, 0xA8, 0x0,  0x0};
-    u8 D_80802468_chfactorytwinklies[16] = {0x0, 0x13, 0x4, 0xFC, 0x0, 0x2, 0x0, 0x18,
-                                            0x0, 0xD,  0x0, 0xF3, 0x1, 0xC, 0x0, 0x0};
-    s16 D_80802478_chfactorytwinklies[4] = {0x9E0, 0x9E8, 0x9E4, 0x0};
+extern void func_80108ED0();
+u8 D_808021C0_chfactorytwinklies[40] = {0x0,  0x0, 0x0,  0x0,  0x3F, 0x0,  0x0,  0x0, 0x3E, 0x80,
+                                        0x0,  0x0, 0x0,  0x0,  0x0,  0x0,  0x3F, 0x0, 0x0,  0x0,
+                                        0x3F, 0x0, 0x0,  0x0,  0x3F, 0x40, 0x0,  0x0, 0x3F, 0x80,
+                                        0x0,  0x0, 0x3F, 0x80, 0x0,  0x0,  0x3F, 0x0, 0x0,  0x0};
+u8 D_808021E8_chfactorytwinklies[48] = {
+    0x0,  0x0, 0x0,  0x0,  0x0, 0x0,  0x0, 0x0, 0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0,
+    0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0, 0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0,
+    0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0, 0x3F, 0xA, 0x3D, 0x71, 0x3, 0x60, 0x0, 0x0};
+int D_80802218_chfactorytwinklies[18] = {0x1580442,
+                                         0x1,
+                                         0x0,
+                                         (u32) func_808001A0_chfactorytwinklies,
+                                         (u32) func_80105834,
+                                         (u32) func_80101870,
+                                         0x0,
+                                         0x0,
+                                         0x0,
+                                         0x1,
+                                         (u32) func_8080064C_chfactorytwinklies,
+                                         0x0,
+                                         0xC40000,
+                                         (u32) func_80800048_chfactorytwinklies,
+                                         (u32) func_80107C2C,
+                                         -0x7FFFF9FE,
+                                         (u32) func_8080040C_chfactorytwinklies,
+                                         0x0};
+int D_80802260_chfactorytwinklies[18] = {0x158044D,
+                                         0x1,
+                                         0x0,
+                                         (u32) func_80800E9C_chfactorytwinklies,
+                                         (u32) func_80105834,
+                                         (u32) func_80101870,
+                                         0x0,
+                                         0x0,
+                                         0x0,
+                                         0x1,
+                                         (u32) func_8080064C_chfactorytwinklies,
+                                         0x0,
+                                         0xC40000,
+                                         (u32) func_80800DE0_chfactorytwinklies,
+                                         (u32) func_80107C2C,
+                                         -0x7FFFF9FE,
+                                         (u32) func_8080105C_chfactorytwinklies,
+                                         0x0};
+int D_808022A8_chfactorytwinklies[18] = {0x1580446,
+                                         0x1,
+                                         0x0,
+                                         (u32) func_808014B0_chfactorytwinklies,
+                                         (u32) func_80105834,
+                                         (u32) func_80101870,
+                                         0x0,
+                                         0x0,
+                                         0x0,
+                                         0x0,
+                                         0x0,
+                                         0x0,
+                                         0x0,
+                                         (u32) func_8080145C_chfactorytwinklies,
+                                         (u32) func_80107C2C,
+                                         -0x7FFFFBFE,
+                                         (u32) func_80801608_chfactorytwinklies,
+                                         0x0};
+void *D_808022F0_chfactorytwinklies[18] = {(void *) 0x01AB0443,
+                                           (void *) 0x07C50001,
+                                           (void *) &D_808021E8_chfactorytwinklies,
+                                           (void *) func_808018A0_chfactorytwinklies,
+                                           (void *) func_80105834,
+                                           (void *) func_80101870,
+                                           0,
+                                           (void *) 0x3F800000,
+                                           0,
+                                           (void *) 0x0006012C,
+                                           (void *) func_80801D58_chfactorytwinklies,
+                                           (void *) func_80108ED0,
+                                           (void *) 0x00280000,
+                                           (void *) func_8080171C_chfactorytwinklies,
+                                           (void *) func_80107C2C,
+                                           (void *) 0x80001001,
+                                           (void *) func_80801D94_chfactorytwinklies,
+                                           0};
+int D_80802338_chfactorytwinklies[18] = {0x1AB0444,
+                                         0x7C60001,
+                                         (u32) &D_808021E8_chfactorytwinklies,
+                                         (u32) func_808018A0_chfactorytwinklies,
+                                         (u32) func_80105834,
+                                         (u32) func_80101870,
+                                         0x0,
+                                         0x3F800000,
+                                         0x0,
+                                         0x6012C,
+                                         (u32) func_80801D58_chfactorytwinklies,
+                                         (u32) func_80108ED0,
+                                         0x280000,
+                                         (u32) func_8080171C_chfactorytwinklies,
+                                         (u32) func_80107C2C,
+                                         -0x7FFFEFFF,
+                                         (u32) func_80801D94_chfactorytwinklies,
+                                         0x0};
+int D_80802380_chfactorytwinklies[18] = {0x1AB0445,
+                                         0x7C70001,
+                                         (u32) &D_808021E8_chfactorytwinklies,
+                                         (u32) func_808018A0_chfactorytwinklies,
+                                         (u32) func_80105834,
+                                         (u32) func_80101870,
+                                         0x0,
+                                         0x3F800000,
+                                         0x0,
+                                         0x6012C,
+                                         (u32) func_80801D58_chfactorytwinklies,
+                                         (u32) func_80108ED0,
+                                         0x280000,
+                                         (u32) func_8080171C_chfactorytwinklies,
+                                         (u32) func_80107C2C,
+                                         -0x7FFFEFFF,
+                                         (u32) func_80801D94_chfactorytwinklies,
+                                         0x0};
+u8 D_808023C8_chfactorytwinklies[36] = {
+    0x0, 0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,  0x0, 0xFF, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+    0x0, 0xFF, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+u8 D_808023EC_chfactorytwinklies[20] = {0x0, 0x13, 0x6, 0x1D, 0x0, 0xD,  0x1, 0x66, 0x1, 0x80,
+                                        0x0, 0x1,  0x1, 0xF4, 0x7, 0xD0, 0x0, 0x0,  0x0, 0x0};
+u8 D_80802400_chfactorytwinklies[20] = {0x0, 0x13, 0x4, 0x3A, 0x0, 0xD,  0x0, 0xF3, 0x1, 0xC,
+                                        0x0, 0x1,  0x1, 0xF4, 0x7, 0xD0, 0x0, 0x0,  0x0, 0x0};
+u8 D_80802414_chfactorytwinklies[20] = {0x0, 0x13, 0x3, 0xF0, 0x0, 0xD,  0x1, 0x33, 0x1, 0x4C,
+                                        0x0, 0x1,  0x1, 0xF4, 0x7, 0xD0, 0x0, 0x0,  0x0, 0x0};
+u8 D_80802428_chfactorytwinklies[20] = {0x0, 0x13, 0x6, 0x1E, 0x0, 0xD,  0x0, 0xF3, 0x1, 0xC,
+                                        0x0, 0x1,  0x1, 0xF4, 0x7, 0xD0, 0x0, 0x0,  0x0, 0x0};
+u8 D_8080243C_chfactorytwinklies[44] = {
+    0x0, 0x16, 0x12, 0x0, 0x0,  0x15, 0x0,  0x0,  0x0,  0xCC, 0x0,  0x2B, 0x0,  0xC0, 0x1,
+    0x0, 0x0,  0x22, 0x0, 0x4C, 0x0,  0x59, 0x0,  0x26, 0x0,  0x33, 0x0,  0x2D, 0x1,  0x90,
+    0x2, 0x58, 0x0,  0xD, 0x0,  0x14, 0x0,  0x1B, 0xFC, 0xE0, 0xFD, 0xA8, 0x0,  0x0};
+u8 D_80802468_chfactorytwinklies[16] = {0x0, 0x13, 0x4, 0xFC, 0x0, 0x2, 0x0, 0x18,
+                                        0x0, 0xD,  0x0, 0xF3, 0x1, 0xC, 0x0, 0x0};
+s16 D_80802478_chfactorytwinklies[4] = {0x9E0, 0x9E8, 0x9E4, 0x0};

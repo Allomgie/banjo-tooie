@@ -1,3 +1,4 @@
+#include "common.h"
 #include "core2/1EBB4F0.h"
 
 #define E1DF4_COMMAND(a, b)                                                                        \
@@ -6,6 +7,7 @@
         local_1->words.w0 = (a);                                                                   \
         local_1->words.w1 = (b);                                                                   \
     }
+
 extern s16 D_8012D48C;
 extern f32 func_800E3928(s32, s32);
 extern f32 func_800E42C0(void);
@@ -176,48 +178,45 @@ s32 param_1;
     Gfx *local_0 = *param_0;
     E1DF4_COMMAND(0xDE000000, (u32) ((u8 *) D_801231B0 - 0x80000000));
 
-if (!D_8012D470.RenderE1DF4.local_4) {
-    E1DF4_COMMAND(0xE3001801, 0xC0);
-}
-
-E1DF4_COMMAND(0xFA000000, ((D_8012D470.RenderE1DF4.local_1[0] & 0xFF) << 24) |
-                              ((D_8012D470.RenderE1DF4.local_1[1] & 0xFF) << 16) |
-                              ((D_8012D470.RenderE1DF4.local_1[2] & 0xFF) << 8) |
-                              (D_8012D470.RenderE1DF4.local_2 & 0xFF));
-E1DF4_COMMAND(0xFB000000, ((D_8012D470.RenderE1DF4.local_0[0] & 0xFF) << 24) |
-                              ((D_8012D470.RenderE1DF4.local_0[1] & 0xFF) << 16) |
-                              ((D_8012D470.RenderE1DF4.local_0[2] & 0xFF) << 8) | 0xFF);
-
-if (D_8012D470.RenderE1DF4.local_3 > 0 && D_8012D470.RenderE1DF4.local_3 < 5) {
-    E1DF4_COMMAND(0xD9FFFFFF, 1);
-    switch (D_8012D470.RenderE1DF4.local_3) {
-        case 1:
-            E1DF4_COMMAND(0xE200001C, 0x504A50);
-            break;
-        case 2:
-            E1DF4_COMMAND(0xE200001C, 0x504250);
-            break;
-        case 3:
-            E1DF4_COMMAND(0xE200001C, 0x504A70);
-            D_8012D470.RenderE1DF4.local_5 = 0x80;
-            break;
-        case 4:
-            E1DF4_COMMAND(0xE200001C, 0x504B70);
-            break;
+    if (!D_8012D470.RenderE1DF4.local_4) {
+        E1DF4_COMMAND(0xE3001801, 0xC0);
     }
-} else if (D_8012D470.RenderE1DF4.local_3 == 5) {
 
-E1DF4_COMMAND(0xE200001C, 0x504340);
-}
-else
-{
-    E1DF4_COMMAND(0xE200001C, 0x504240);
-}
-if (D_8012D470.RenderE1DF4.local_5) {
-    E1DF4_COMMAND(0xE2001E01, 1);
-    E1DF4_COMMAND(0xF9000000, D_8012D470.RenderE1DF4.local_5 & 0xFF);
-}
-*param_0 = local_0;
+    E1DF4_COMMAND(0xFA000000, ((D_8012D470.RenderE1DF4.local_1[0] & 0xFF) << 24) |
+                                  ((D_8012D470.RenderE1DF4.local_1[1] & 0xFF) << 16) |
+                                  ((D_8012D470.RenderE1DF4.local_1[2] & 0xFF) << 8) |
+                                  (D_8012D470.RenderE1DF4.local_2 & 0xFF));
+    E1DF4_COMMAND(0xFB000000, ((D_8012D470.RenderE1DF4.local_0[0] & 0xFF) << 24) |
+                                  ((D_8012D470.RenderE1DF4.local_0[1] & 0xFF) << 16) |
+                                  ((D_8012D470.RenderE1DF4.local_0[2] & 0xFF) << 8) | 0xFF);
+
+    if (D_8012D470.RenderE1DF4.local_3 > 0 && D_8012D470.RenderE1DF4.local_3 < 5) {
+        E1DF4_COMMAND(0xD9FFFFFF, 1);
+        switch (D_8012D470.RenderE1DF4.local_3) {
+            case 1:
+                E1DF4_COMMAND(0xE200001C, 0x504A50);
+                break;
+            case 2:
+                E1DF4_COMMAND(0xE200001C, 0x504250);
+                break;
+            case 3:
+                E1DF4_COMMAND(0xE200001C, 0x504A70);
+                D_8012D470.RenderE1DF4.local_5 = 0x80;
+                break;
+            case 4:
+                E1DF4_COMMAND(0xE200001C, 0x504B70);
+                break;
+        }
+    } else if (D_8012D470.RenderE1DF4.local_3 == 5) {
+        E1DF4_COMMAND(0xE200001C, 0x504340);
+    } else {
+        E1DF4_COMMAND(0xE200001C, 0x504240);
+    }
+    if (D_8012D470.RenderE1DF4.local_5) {
+        E1DF4_COMMAND(0xE2001E01, 1);
+        E1DF4_COMMAND(0xF9000000, D_8012D470.RenderE1DF4.local_5 & 0xFF);
+    }
+    *param_0 = local_0;
 }
 
 void func_800E204C(DrawE *param_0, SizeE204C *param_1)
@@ -232,15 +231,15 @@ void func_800E204C(DrawE *param_0, SizeE204C *param_1)
             (f32) D_8012D470.StateE204C.local_3 * D_8012D470.StateE204C.local_1 / param_1->local_1,
             1.0f);
 
-guMtxF2L(D_8012D4A8, param_0->local_1);
-{
-    Gfx *local_0 = param_0->local_0++;
-    local_0->words.w0 = 0xDA380000;
-    local_0->words.w1 = (u32) param_0->local_1;
-}
+        guMtxF2L(D_8012D4A8, param_0->local_1);
+        {
+            Gfx *local_0 = param_0->local_0++;
+            local_0->words.w0 = 0xDA380000;
+            local_0->words.w1 = (u32) param_0->local_1;
+        }
 
-param_0->local_1++;
-}
+        param_0->local_1++;
+    }
 }
 
 void func_800E2180(DrawE *param_0, void *param_1, s32 param_2)
@@ -277,23 +276,22 @@ u8 param_1;
         *(s32 *) (local_0 + 4) = 0;
         *(s32 *) local_0 = 0xE7000000;
 
-if (((u8 *) &D_8012D470)[0x1f] == 0) {
-    local_1 = *param_0;
-    *param_0 = local_1 + 8;
-    *(s32 *) (local_1 + 4) = 0;
-    *(s32 *) local_1 = 0xE3001801;
-}
+        if (((u8 *) &D_8012D470)[0x1f] == 0) {
+            local_1 = *param_0;
+            *param_0 = local_1 + 8;
+            *(s32 *) (local_1 + 4) = 0;
+            *(s32 *) local_1 = 0xE3001801;
+        }
 
-if (((u8 *) &D_8012D470)[0x20] != 0) {
-    local_2 = *param_0;
-    *param_0 = local_2 + 8;
-    *(s32 *) (local_2 + 4) = 0;
-    *(s32 *) local_2 = 0xE2001E01;
-}
-
-}
-func_800E8078(param_0, ((u8 *) &D_8012D470));
-func_800E23A4();
+        if (((u8 *) &D_8012D470)[0x20] != 0) {
+            local_2 = *param_0;
+            *param_0 = local_2 + 8;
+            *(s32 *) (local_2 + 4) = 0;
+            *(s32 *) local_2 = 0xE2001E01;
+        }
+    }
+    func_800E8078(param_0, ((u8 *) &D_8012D470));
+    func_800E23A4();
 }
 
 void func_800E23A4(void)
@@ -564,23 +562,22 @@ void func_800E2C54(DrawE *param_0, s32 param_1, s32 param_2, s32 param_3, f32 *p
     if (!func_800E1C00(param_1, param_4, local_0, local_1, local_3)) {
         func_800E23A4();
         return;
-
-}
-func_800E1DF4(param_0, param_1);
-func_80019CD4();
-func_800191F8(local_3[0], local_3[1], local_3[2]);
-if (param_5)
-    mlMtxRotatePYR(param_5[0], param_5[1], param_5[2]);
-if (param_6 || param_3)
-    mlMtxScale_xyz(param_3 ? -local_0 : local_0, local_1, local_2);
-mlMtxApply(param_0->local_1);
-gDma2p(param_0->local_0++, 0xDA, param_0->local_1, sizeof(Mtx), 2, 0);
-param_0->local_1++;
-func_800E204C(param_0, param_1);
-func_800E2180(param_0, param_1, param_2);
-func_800E2260(param_0, param_1);
-gDma2p(param_0->local_0++, 0xD8, sizeof(Mtx), sizeof(Mtx), 2, 0);
-func_800E22F0(param_0, param_1);
+    }
+    func_800E1DF4(param_0, param_1);
+    func_80019CD4();
+    func_800191F8(local_3[0], local_3[1], local_3[2]);
+    if (param_5)
+        mlMtxRotatePYR(param_5[0], param_5[1], param_5[2]);
+    if (param_6 || param_3)
+        mlMtxScale_xyz(param_3 ? -local_0 : local_0, local_1, local_2);
+    mlMtxApply(param_0->local_1);
+    gDma2p(param_0->local_0++, 0xDA, param_0->local_1, sizeof(Mtx), 2, 0);
+    param_0->local_1++;
+    func_800E204C(param_0, param_1);
+    func_800E2180(param_0, param_1, param_2);
+    func_800E2260(param_0, param_1);
+    gDma2p(param_0->local_0++, 0xD8, sizeof(Mtx), sizeof(Mtx), 2, 0);
+    func_800E22F0(param_0, param_1);
 }
 
 f32 func_800E2DF0(void)
@@ -591,9 +588,8 @@ f32 func_800E2DF0(void)
         {
             local_1 *= 1.3333334f / func_800A8AF0(func_800A89F8());
         }
-
-}
-return local_1;
+    }
+    return local_1;
 }
 
 void func_800E2E48(DrawE *param_0, ImageE2E48 *param_1, s32 param_2, LocalPosition *param_3)
@@ -610,7 +606,7 @@ void func_800E2E48(DrawE *param_0, ImageE2E48 *param_1, s32 param_2, LocalPositi
     local_1 = (f32) local_5 * local_3 / param_1->local_2;
     local_2 = (f32) D_8012D470.StateE2E48.local_2 * local_4 / param_1->local_3;
     func_800EFA4C(local_0, param_3->local_0 - 0x260, 0x1C8 - param_3->local_1,
-                  D_8012D470.StateE2E48.local_3);
+    D_8012D470.StateE2E48.local_3);
     func_80019CD4();
     func_800191F8(local_0[0], local_0[1], local_0[2]);
     if (D_8012D470.StateE2E48.local_4 != 0.0f)
@@ -618,7 +614,7 @@ void func_800E2E48(DrawE *param_0, ImageE2E48 *param_1, s32 param_2, LocalPositi
     if (local_3 != param_1->local_0 || local_4 != param_1->local_1 || local_5 != 1.0f ||
         D_8012D470.StateE2E48.local_2 != 1.0f) {
         mlMtxScale_xyz((f32) local_1 * param_1->local_2 / param_1->local_0,
-                       (f32) local_2 * param_1->local_3 / param_1->local_1, 1.0f);
+        (f32) local_2 * param_1->local_3 / param_1->local_1, 1.0f);
     }
     mlMtxApply(param_0->local_1);
     {
@@ -628,11 +624,11 @@ void func_800E2E48(DrawE *param_0, ImageE2E48 *param_1, s32 param_2, LocalPositi
     }
     param_0->local_1++;
 
-func_800E2180(param_0, param_1, param_2);
-{ Gfx *local_7 = param_0->local_0++; local_7->words.w0 = 0xD8380002; local_7->words.w1 = 0x40; }
+    func_800E2180(param_0, param_1, param_2);
+    { Gfx *local_7 = param_0->local_0++; local_7->words.w0 = 0xD8380002; local_7->words.w1 = 0x40; }
 
-func_800E22F0(param_0, param_1);
-func_800E4640(param_0);
+    func_800E22F0(param_0, param_1);
+    func_800E4640(param_0);
 }
 
 void func_800E30E0(s32 param_0, void *param_1, s32 param_2, void *param_3)
@@ -643,20 +639,19 @@ void func_800E30E0(s32 param_0, void *param_1, s32 param_2, void *param_3)
     s32 local_3, local_4;
     local_1 = func_800AF5FC(param_1, param_2);
 
-if (!local_1->local_0 && !local_1->local_1) {
-    local_2 = func_800E2DF0();
-    local_3 =
-        D_8012D470.StateE.local_0 ? D_8012D470.StateE.local_0 : ((ImageStruct *) param_1)->unk8 * 4;
-    local_4 =
-        D_8012D470.StateE.local_1 ? D_8012D470.StateE.local_1 : ((ImageStruct *) param_1)->unkA * 4;
-    local_0[0] = ((s32 *) param_3)[0] - local_2 * local_3 / 2;
-    local_0[1] = ((s32 *) param_3)[1] - D_8012D470.StateE.local_14 * local_4 / 2;
-} else {
-
-local_0[0] = ((s32 *) param_3)[0];
-local_0[1] = ((s32 *) param_3)[1];
-}
-func_800E2E48(param_0, param_1, param_2, local_0);
+    if (!local_1->local_0 && !local_1->local_1) {
+        local_2 = func_800E2DF0();
+        local_3 = D_8012D470.StateE.local_0 ? D_8012D470.StateE.local_0
+                                            : ((ImageStruct *) param_1)->unk8 * 4;
+        local_4 = D_8012D470.StateE.local_1 ? D_8012D470.StateE.local_1
+                                            : ((ImageStruct *) param_1)->unkA * 4;
+        local_0[0] = ((s32 *) param_3)[0] - local_2 * local_3 / 2;
+        local_0[1] = ((s32 *) param_3)[1] - D_8012D470.StateE.local_14 * local_4 / 2;
+    } else {
+        local_0[0] = ((s32 *) param_3)[0];
+        local_0[1] = ((s32 *) param_3)[1];
+    }
+    func_800E2E48(param_0, param_1, param_2, local_0);
 }
 
 void func_800E3220(s32 **param_0, s32 param_1)

@@ -76,8 +76,9 @@ void func_808000CC_chjigsawcollect(Actor *param_0)
     local_2 = func_80100094(param_0, 0);
     local_3 = func_800D8FF8();
     func_800F5A00(func_800F54E4(), local_0);
-    if (1)
-        local_0[1] += 120.0f;
+    if (1) {
+    }
+    local_0[1] += 120.0f;
     switch (((JigState *) param_0)->st) {
         case 1:
             local_6 = local_2[1];

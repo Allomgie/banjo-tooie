@@ -1,4 +1,5 @@
 #include "core2/1ECE0B0.h"
+#include "types.h"
 
 extern void func_800F4200(void *, f32 *);
 extern f32 func_800D8FF8(void);

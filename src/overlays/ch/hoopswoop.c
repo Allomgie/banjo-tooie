@@ -272,8 +272,9 @@ void func_808006A0_chhoopswoop(param_0) Actor *param_0;
     f32 local_2;
 
     local_0 = func_80100094(param_0, 0);
-    if (1)
-        local_2 = param_0->unk74_7;
+    if (1) {
+    }
+    local_2 = param_0->unk74_7;
     _subaddiemulti_entrypoint_2(local_0);
     for (local_1 = 0; local_1 < *(s32 *) local_0; local_1++) {
         *(f32 *) (local_0 + local_1 * 12 + 0x1C) = 0.0f;
@@ -819,32 +820,33 @@ Actor *param_0;
         return 0;
     local_6 = func_80100094(param_0, 0);
     for (local_5 = 0; local_5 < _gcstatusDll_entrypoint_11(); local_5++) {
-        if (1)
-            if (func_800F6438(local_5)) {
-                local_7 = (u8 *) &((HsArr *) local_6)->arr[local_5];
-                func_800F5A00(local_5, local_0);
-                local_0[1] += 50.0f;
-                func_800EF3DC(local_0, param_0->position);
-                if (*(s32 *) (local_7 + 0x20) && func_800EEFD4(local_0) < local_4 * local_4) {
-                    func_800EFA4C(local_3, 0.0f, 0.0f, 1.0f);
-                    func_800EF934(local_3, local_3, *(f32 *) ((u8 *) param_0 + 0x48));
-                    local_1 = (func_800EEAA4(local_0, local_3) >= 0) ? 1 : -1;
-                    if (local_1 == -*(s32 *) local_7) {
-                        local_7 = (u8 *) (*(s32 *) (local_6 + 0x40) + 1);
-                        if (func_800D3948()) {
-                            _sumultiscore_entrypoint_7(local_2 + 0x4DC, local_5, 7, (s32) local_7);
-                        } else {
-                            *(s32 *) (local_2 + 4) += (s32) local_7;
-                            func_80801D20_chhoopswoop(param_0, 0x9E2, 0xA);
-                        }
-                        param_0->unk64_20 = 1;
-                        _chscorepoints_entrypoint_2((s32) local_7, local_5, param_0->position, 1);
-                        return 1;
+        if (1) {
+        }
+        if (func_800F6438(local_5)) {
+            local_7 = (u8 *) &((HsArr *) local_6)->arr[local_5];
+            func_800F5A00(local_5, local_0);
+            local_0[1] += 50.0f;
+            func_800EF3DC(local_0, param_0->position);
+            if (*(s32 *) (local_7 + 0x20) && func_800EEFD4(local_0) < local_4 * local_4) {
+                func_800EFA4C(local_3, 0.0f, 0.0f, 1.0f);
+                func_800EF934(local_3, local_3, *(f32 *) ((u8 *) param_0 + 0x48));
+                local_1 = (func_800EEAA4(local_0, local_3) >= 0) ? 1 : -1;
+                if (local_1 == -*(s32 *) local_7) {
+                    local_7 = (u8 *) (*(s32 *) (local_6 + 0x40) + 1);
+                    if (func_800D3948()) {
+                        _sumultiscore_entrypoint_7(local_2 + 0x4DC, local_5, 7, (s32) local_7);
+                    } else {
+                        *(s32 *) (local_2 + 4) += (s32) local_7;
+                        func_80801D20_chhoopswoop(param_0, 0x9E2, 0xA);
                     }
+                    param_0->unk64_20 = 1;
+                    _chscorepoints_entrypoint_2((s32) local_7, local_5, param_0->position, 1);
+                    return 1;
                 }
-                *(s32 *) (local_7 + 0x20) = 1;
-                *(s32 *) local_7 = local_1;
             }
+            *(s32 *) (local_7 + 0x20) = 1;
+            *(s32 *) local_7 = local_1;
+        }
     }
     return 0;
 }

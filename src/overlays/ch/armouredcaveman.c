@@ -320,9 +320,10 @@ int func_808008B0_charmouredcaveman(s32 param_0)
     s32 local_0;
     s32 local_1;
     local_0 = param_0 + 4;
-    if (1)
-        local_1 =
-            _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80800C08_charmouredcaveman, 0.3f);
+    if (1) {
+    }
+    local_1 =
+        _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80800C08_charmouredcaveman, 0.3f);
     if (_subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80800C14_charmouredcaveman, 0.5f)) {
         func_80018820(0, 0x3F800000, 0x3ECCCCCD);
         func_800E15CC(0, 0x41A00000, 0x3F59999A);

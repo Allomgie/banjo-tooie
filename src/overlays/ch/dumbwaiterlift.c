@@ -1,3 +1,4 @@
+#include "common.h"
 #include "gc/newoption.h"
 
 extern int D_80800BE8_chdumbwaiterlift[];

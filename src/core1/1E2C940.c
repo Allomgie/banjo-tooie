@@ -1,3 +1,4 @@
+#include "types.h"
 #include "gfx.h"
 #include "threads.h"
 #include "common.h"
@@ -266,33 +267,31 @@ void func_8001546C(param_0) s32 param_0;
     s32 rv2;
     s32 i;
 
-while (1) {
-    osRecvMesg(&D_80078FD0, &sp50, 1);
-    func_80014A54();
-    if (1) {
-        D_80079138++;
-        hit = (D_80079138 == 0x258);
-        rv = (func_8001E7C0() == 0);
-    }
-    rv2 = D_8003F5D0;
-    if (((hit != 0) && (rv != 0)) && (rv2 != 0)) {
-        func_8001E5DC(2);
-        D_8003F5D0 = 0;
-    }
-    osSendMesg(&D_80079030, NULL, 0);
-    for (i = 0; i < 8; i++) {
-        if (D_80078F90[i].queue != NULL) {
-            osSendMesg(D_80078F90[i].queue, D_80078F90[i].msg, 0);
+    while (1) {
+        osRecvMesg(&D_80078FD0, &sp50, 1);
+        func_80014A54();
+        if (1) {
+            D_80079138++;
+            hit = (D_80079138 == 0x258);
+            rv = (func_8001E7C0() == 0);
+        }
+        rv2 = D_8003F5D0;
+        if (((hit != 0) && (rv != 0)) && (rv2 != 0)) {
+            func_8001E5DC(2);
+            D_8003F5D0 = 0;
+        }
+        osSendMesg(&D_80079030, NULL, 0);
+        for (i = 0; i < 8; i++) {
+            if (D_80078F90[i].queue != NULL) {
+                osSendMesg(D_80078F90[i].queue, D_80078F90[i].msg, 0);
+            }
         }
     }
-}
-
 }
 
 int func_8001559C(long param_0)
 {
     osViBlack(param_0);
-
 }
 
 void func_800155BC()
@@ -302,16 +301,15 @@ void func_800155BC()
         osWritebackDCache(*(void **) D_80078F80, 0x21D80);
     }
 
-if (D_80078F84 != 0) {
-    aligned8_memset(D_80078F84, 0x10001, 0x21D80);
-    osWritebackDCache(D_80078F84, 0x21D80);
-}
+    if (D_80078F84 != 0) {
+        aligned8_memset(D_80078F84, 0x10001, 0x21D80);
+        osWritebackDCache(D_80078F84, 0x21D80);
+    }
 
-if (*(void **) &D_80078F88 != 0) {
-    aligned8_memset(*(void **) &D_80078F88, 0x10001, 0x10EC0);
-    osWritebackDCache(*(void **) &D_80078F88, 0x10EC0);
-}
-
+    if (*(void **) &D_80078F88 != 0) {
+        aligned8_memset(*(void **) &D_80078F88, 0x10001, 0x10EC0);
+        osWritebackDCache(*(void **) &D_80078F88, 0x10EC0);
+    }
 }
 
 void func_80015670(s32 param_0, s32 param_1)
@@ -323,31 +321,29 @@ void func_80015670(s32 param_0, s32 param_1)
     u8 *local_4 = ((u8 *) D_80078F68) + 0x30;
     u8 *local_5 = ((u8 *) D_80078F68) + 0x32;
 
-if (param_0 < -0x20) {
-    param_0 = -0x20;
-}
+    if (param_0 < -0x20) {
+        param_0 = -0x20;
+    }
 
-else if (param_0 >= 0x21)
-{
-    param_0 = 0x20;
-}
+    else if (param_0 >= 0x21) {
+        param_0 = 0x20;
+    }
 
-if (param_1 < -0x28) {
-    param_1 = -0x28;
-}
+    if (param_1 < -0x28) {
+        param_1 = -0x28;
+    }
 
-else if (param_1 >= 0x19)
-{
-    param_1 = 0x18;
-}
+    else if (param_1 >= 0x19) {
+        param_1 = 0x18;
+    }
 
-local_0 = osSetIntMask(0x80401);
-*((s16 *) (local_1 + 0)) = param_0 + 0x80;
-*((s16 *) (local_1 + 2)) = param_0 + 0x2E0;
-*((s16 *) (local_4 + 0)) = param_1 + 0x30;
-*((s16 *) (local_5 + 0)) = param_1 + 0x1F4;
-*((s32 *) (local_3 + 0)) = *((s32 *) (local_2 + 0));
-osSetIntMask(local_0);
+    local_0 = osSetIntMask(0x80401);
+    *((s16 *) (local_1 + 0)) = param_0 + 0x80;
+    *((s16 *) (local_1 + 2)) = param_0 + 0x2E0;
+    *((s16 *) (local_4 + 0)) = param_1 + 0x30;
+    *((s16 *) (local_5 + 0)) = param_1 + 0x1F4;
+    *((s32 *) (local_3 + 0)) = *((s32 *) (local_2 + 0));
+    osSetIntMask(local_0);
 }
 
 s32 func_8001575C()
@@ -358,7 +354,6 @@ s32 func_8001575C()
 int func_80015768()
 {
     D_80078F62 = 1;
-
 }
 
 void wait_one_frame(void)
@@ -366,9 +361,8 @@ void wait_one_frame(void)
     while (osViGetCurrentLine() < 5) {
     }
 
-while (osViGetCurrentLine() > 5) {
-}
-
+    while (osViGetCurrentLine() > 5) {
+    }
 }
 
 void set_widescreen(s32 enabled)
@@ -394,14 +388,14 @@ s32 func_80015828(void)
 {
     s32 i;
 
-for (i = 0; i < 0x20; i++) {
-    if (D_80079778[i] == 0) {
-        break;
+    for (i = 0; i < 0x20; i++) {
+        if (D_80079778[i] == 0) {
+            break;
+        }
     }
-}
 
-D_80079778[i] = -1;
-return i;
+    D_80079778[i] = -1;
+    return i;
 }
 
 void func_80015860(s32 param_0)
@@ -414,19 +408,19 @@ void func_80015878(void)
     s16 *local_0;
     s16 *local_1;
 
-do { 0; local_1 = (s16 *) D_800797B8; local_1 += 0; local_0 = (s16 *) D_80079778; local_loop: { if (local_0[0] > 0) { local_0[0] = 0; } if (local_0[1] > 0) { local_0[1] = 0; } if (local_0[2] > 0) { local_0[2] = 0; } if (local_0[3] > 0) { local_0[3] = 0; } local_0 += 4; } } while (0);
-if (local_0 != local_1)
-{
-    goto local_loop;
-}
+    do { 0; local_1 = (s16 *) D_800797B8; local_1 += 0; local_0 = (s16 *) D_80079778; local_loop: { if (local_0[0] > 0) { local_0[0] = 0; } if (local_0[1] > 0) { local_0[1] = 0; } if (local_0[2] > 0) { local_0[2] = 0; } if (local_0[3] > 0) { local_0[3] = 0; } local_0 += 4; } } while (0);
+    if (local_0 != local_1)
+    {
+        goto local_loop;
+    }
 
-D_8003F5E0 = -1;
+    D_8003F5E0 = -1;
 }
 
 void func_800158E4(s32 *param_0)
 {
     func_80015860(*param_0);
-    *(u8 *)((char *)D_80079710 + ((s32)param_0 - (s32)((u8 *) D_80079718)) / 12) = 0;
+    *(u8 *) ((char *) D_80079710 + ((s32) param_0 - (s32) ((u8 *) D_80079718)) / 12) = 0;
 }
 
 Struct8001592C_0 *func_8001592C(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
@@ -436,37 +430,37 @@ Struct8001592C_0 *func_8001592C(s32 param_0, s32 param_1, s32 param_2, s32 param
     Struct8001592C_1 *local_2;
     local_0 = 0; while (1) {
 
-if (D_80079710[local_0] != 0) {
-    local_0++;
-    if (local_0 == 8) {
-        break;
+        if (D_80079710[local_0] != 0) {
+            local_0++;
+            if (local_0 == 8) {
+                break;
+            }
+        }
+
+        else
+        {
+            break;
+        }
     }
-}
 
-else
-{
-    break;
-}
-}
-
-D_80079710[local_0] = 1;
-local_1 = &D_80079718[local_0];
-local_1->local_0 = func_80015828();
-local_1->local_1 = param_0;
-local_1->local_2 = param_1;
-local_1->local_3 = param_2;
-local_1->local_4 = param_3;
-local_2 = &D_800797B8[local_1->local_0];
-local_2->local_0 = param_2 * 2;
-local_2->local_1 = param_3 * 2;
-local_2->local_2 = 0x1FF;
-local_2->local_3 = 0;
-local_2->local_4 = (s32) ((param_0 + (param_2 * 0.5f)) * 4.0f);
-local_2->local_5 = (s32) ((param_1 + (param_3 * 0.5f)) * 4.0f);
-local_2->local_6 = 0x1FF;
-local_2->local_7 = 0;
-osWritebackDCache(local_2, 0x200);
-return local_1;
+    D_80079710[local_0] = 1;
+    local_1 = &D_80079718[local_0];
+    local_1->local_0 = func_80015828();
+    local_1->local_1 = param_0;
+    local_1->local_2 = param_1;
+    local_1->local_3 = param_2;
+    local_1->local_4 = param_3;
+    local_2 = &D_800797B8[local_1->local_0];
+    local_2->local_0 = param_2 * 2;
+    local_2->local_1 = param_3 * 2;
+    local_2->local_2 = 0x1FF;
+    local_2->local_3 = 0;
+    local_2->local_4 = (s32) ((param_0 + (param_2 * 0.5f)) * 4.0f);
+    local_2->local_5 = (s32) ((param_1 + (param_3 * 0.5f)) * 4.0f);
+    local_2->local_6 = 0x1FF;
+    local_2->local_7 = 0;
+    osWritebackDCache(local_2, 0x200);
+    return local_1;
 }
 
 void func_80015A70(s32 *param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4)

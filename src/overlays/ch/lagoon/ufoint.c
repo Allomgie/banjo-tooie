@@ -345,9 +345,11 @@ void func_80800CD4_chlagoonufoint(u8 *param_0, s32 param_1)
     s32 local_1;
     u32 local_2;
     func_800DF3E0();
-    if (1)
-        if (1)
-            local_2 = (u32) (*(s32 *) ((s8 *) param_0 + 0x6C) << 0xB) >> 0x14;
+    if (1) {
+    }
+    if (1) {
+    }
+    local_2 = (u32) (*(s32 *) ((s8 *) param_0 + 0x6C) << 0xB) >> 0x14;
     switch (local_2) {
         case 0x1C6:
             func_800DF744(3, 1U);

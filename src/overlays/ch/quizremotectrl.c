@@ -1,4 +1,5 @@
 #include "common.h"
+#include "types.h"
 
 extern s32 func_800D90A4(void *arg);
 extern s32 func_800D91EC(void *arg, f32 param_1);

@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/ba/playerstate.h"
 
 extern s16 D_80117EC0[];

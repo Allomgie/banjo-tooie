@@ -1,3 +1,6 @@
+#include "common.h"
+#include "overlays/ba/playerstate.h"
+#include "core2/anctrl.h"
 #include "overlays/ba/anim.h"
 #include "core2/physics.h"
 #include "overlays/ba/yaw.h"

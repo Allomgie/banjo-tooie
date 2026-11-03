@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/shock.h"
 
 extern s32 D_80800770_bskazshock[];

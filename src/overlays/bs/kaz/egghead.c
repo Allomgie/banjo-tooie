@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/egghead.h"
 
 extern s32 D_808002F0_bskazegghead[];

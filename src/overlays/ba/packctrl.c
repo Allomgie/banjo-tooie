@@ -1,3 +1,4 @@
+#include "common.h"
 #include "playerstate.h"
 
 extern void func_8009EA58(s32);

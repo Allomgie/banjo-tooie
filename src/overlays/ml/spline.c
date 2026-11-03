@@ -40,8 +40,9 @@ void mlspline_entrypoint_2(f32 param_0, s32 param_1, f32 param_2[][3], f32 *para
         b = param_2[1][i];
         c = param_2[2][i];
         param_3[i] = ((c + a) - 2.0f * b) * (param_0 + param_0) + ((4.0f * b - 3.0f * a) - c);
-        if (1)
-            param_3[i] *= param_0;
+        if (1) {
+        }
+        param_3[i] *= param_0;
         param_3[i] += a;
     }
 }

@@ -1,5 +1,5 @@
+#include "common.h"
 #include "overlays/ba/timer.h"
-
 #include "core2/1EB2840.h"
 #include "core2/1ECA640.h"
 

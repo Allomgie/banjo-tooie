@@ -1,4 +1,7 @@
 #include "core2/1E6F080.h"
+#include "types.h"
+#include "macros.h"
+
 #define STATE(p) (*(LocalState **) ((u8 *) (p) + 0x98))
 extern f32 mlAbsF(f32);
 extern void func_8009C128(PlayerState *, f32 *);
@@ -455,31 +458,29 @@ void func_800978A4(param_0) u8 *param_0;
     s32 local_2[3];
     u8 *local_3;
 
-func_8009C15C(param_0, &local_0);
-{
-    local_3 = *(u8 **) (param_0 + 0x98);
-}
+    func_8009C15C(param_0, &local_0);
+    {
+        local_3 = *(u8 **) (param_0 + 0x98);
+    }
 
-if (*(u8 *) (local_3 + 0x26) != 0) {
-    *(u8 *) (local_3 + 0x26) = 0;
-    func_800EE7F8(&local_1, *(u8 **) (param_0 + 0x98) + 0x18);
-}
+    if (*(u8 *) (local_3 + 0x26) != 0) {
+        *(u8 *) (local_3 + 0x26) = 0;
+        func_800EE7F8(&local_1, *(u8 **) (param_0 + 0x98) + 0x18);
+    }
 
-else
-{
-    func_8009C128(param_0, &local_1);
-}
-func_800EE7F8(&local_2, *((u8 **) (param_0 + 0x98)));
+    else {
+        func_8009C128(param_0, &local_1);
+    }
+    func_800EE7F8(&local_2, *((u8 **) (param_0 + 0x98)));
 
-if (func_800972BC(param_0, &local_1) != 0) {
-    func_800EE7F8(&local_1, *(u8 **) (param_0 + 0x98) + 0x18);
-    baphysics_set_vertical_velocity(param_0, 1.0f);
-}
+    if (func_800972BC(param_0, &local_1) != 0) {
+        func_800EE7F8(&local_1, *(u8 **) (param_0 + 0x98) + 0x18);
+        baphysics_set_vertical_velocity(param_0, 1.0f);
+    }
 
-else
-{
-    func_800EE7F8(&local_1, &local_0);
-    func_800EE7F8(*((u8 **) (param_0 + 0x98)), &local_2);
-}
-func_8009C0F8(param_0, &local_1);
+    else {
+        func_800EE7F8(&local_1, &local_0);
+        func_800EE7F8(*((u8 **) (param_0 + 0x98)), &local_2);
+    }
+    func_8009C0F8(param_0, &local_1);
 }

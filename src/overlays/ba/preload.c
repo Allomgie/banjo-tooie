@@ -1,3 +1,4 @@
+#include "common.h"
 #include "playerstate.h"
 
 typedef struct {

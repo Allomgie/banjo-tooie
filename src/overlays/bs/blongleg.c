@@ -1,4 +1,5 @@
 #include "bs/blongleg.h"
+#include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
 
 extern f32 bastick_getZonePosition(PlayerState *);
@@ -383,21 +384,21 @@ void bsblongleg_entrypoint_13(PlayerState *param_0)
     local_0 = baanim_getAnimCtrlPtr(param_0);
     func_8009D3A8(param_0, 1);
 
-switch (param_0->unk15C.word) {
-    case 0:
-        if (anctrl_isAt(local_0, 0.68f))
-            func_800C3BDC(param_0->unk160.bytes[0]);
-        if (anctrl_isStopped(local_0))
-            func_80800A18_bsblongleg(param_0);
-        break;
-    case 1:
-        if (anctrl_isStopped(local_0))
-            local_1 = 1;
-}
+    switch (param_0->unk15C.word) {
+        case 0:
+            if (anctrl_isAt(local_0, 0.68f))
+                func_800C3BDC(param_0->unk160.bytes[0]);
+            if (anctrl_isStopped(local_0))
+                func_80800A18_bsblongleg(param_0);
+            break;
+        case 1:
+            if (anctrl_isStopped(local_0))
+                local_1 = 1;
+    }
 
-if (func_80800000_bsblongleg(param_0))
-    local_1 = 0x4C;
-bs_setState(param_0, local_1);
+    if (func_80800000_bsblongleg(param_0))
+        local_1 = 0x4C;
+    bs_setState(param_0, local_1);
 }
 
 int bsblongleg_entrypoint_14(s32 param_0)
@@ -450,63 +451,63 @@ void bsblongleg_entrypoint_17(PlayerState *param_0)
     func_80800064_bsblongleg(param_0);
     func_8009BB24(param_0, local_2);
 
-if (bakey_released(param_0, 8) && local_2[1] > 0.0f) {
-    baphysics_reset_gravity(param_0);
-}
+    if (bakey_released(param_0, 8) && local_2[1] > 0.0f) {
+        baphysics_reset_gravity(param_0);
+    }
 
-local_3 = func_8009C150(param_0);
-local_4 = local_3 - func_80096364(param_0);
+    local_3 = func_8009C150(param_0);
+    local_4 = local_3 - func_80096364(param_0);
 
-switch (param_0->unk15C.word) {
-    case 0:
-        if (local_2[1] < 100.0f || local_4 < 10.0f) {
-            anctrl_setDuration(local_1, 0.4f);
-        }
-        if (anctrl_isStopped(local_1)) {
-            anctrl_setSubrange(local_1, 0.0f, 0.5281999707f);
-            anctrl_setDuration(local_1, 4.5f);
-            anctrl_setPlaybackType(local_1, 1);
-            param_0->unk15C.word = 1;
-        }
-        break;
-    case 1:
-        if (anctrl_getAnimTimer(local_1) > 0.4f && local_4 < 70.0f) {
-            param_0->unk16C = anctrl_getAnimTimer(local_1);
-            param_0->unk170 = local_4;
-            anctrl_setPlaybackType(local_1, 3);
-            param_0->unk15C.word = 2;
-        }
-        break;
-    case 2:
-        func_8008B10C(local_1,
-                      func_800F10B4(local_4, param_0->unk170, 1.0f, param_0->unk16C, 0.6703f));
-        func_8009D2F0(param_0, 1, 0.5f);
-        if (player_isStable(param_0)) {
-            func_8009FE58(param_0);
-            anctrl_setSubrange(local_1, 0.0f, 1.0f);
-            anctrl_setDuration(local_1, 1.3f);
-            anctrl_setPlaybackType(local_1, 1);
-            param_0->unk15C.word = 3;
-        }
-        break;
-    case 3:
-        func_8009D2F0(param_0, 1, 0.5f);
-        if (anctrl_isStopped(local_1)) {
-            local_0 = 0x26;
-        }
-        if (bakey_pressed(param_0, 8)) {
-            local_0 = 0x28;
-        }
-        if (bastatetimer_isDone(param_0, 2)) {
-            local_0 = 0x29;
-        }
-}
+    switch (param_0->unk15C.word) {
+        case 0:
+            if (local_2[1] < 100.0f || local_4 < 10.0f) {
+                anctrl_setDuration(local_1, 0.4f);
+            }
+            if (anctrl_isStopped(local_1)) {
+                anctrl_setSubrange(local_1, 0.0f, 0.5281999707f);
+                anctrl_setDuration(local_1, 4.5f);
+                anctrl_setPlaybackType(local_1, 1);
+                param_0->unk15C.word = 1;
+            }
+            break;
+        case 1:
+            if (anctrl_getAnimTimer(local_1) > 0.4f && local_4 < 70.0f) {
+                param_0->unk16C = anctrl_getAnimTimer(local_1);
+                param_0->unk170 = local_4;
+                anctrl_setPlaybackType(local_1, 3);
+                param_0->unk15C.word = 2;
+            }
+            break;
+        case 2:
+            func_8008B10C(local_1,
+                          func_800F10B4(local_4, param_0->unk170, 1.0f, param_0->unk16C, 0.6703f));
+            func_8009D2F0(param_0, 1, 0.5f);
+            if (player_isStable(param_0)) {
+                func_8009FE58(param_0);
+                anctrl_setSubrange(local_1, 0.0f, 1.0f);
+                anctrl_setDuration(local_1, 1.3f);
+                anctrl_setPlaybackType(local_1, 1);
+                param_0->unk15C.word = 3;
+            }
+            break;
+        case 3:
+            func_8009D2F0(param_0, 1, 0.5f);
+            if (anctrl_isStopped(local_1)) {
+                local_0 = 0x26;
+            }
+            if (bakey_pressed(param_0, 8)) {
+                local_0 = 0x28;
+            }
+            if (bastatetimer_isDone(param_0, 2)) {
+                local_0 = 0x29;
+            }
+    }
 
-if (func_80800000_bsblongleg(param_0)) {
-    local_0 = 0x4C;
-}
+    if (func_80800000_bsblongleg(param_0)) {
+        local_0 = 0x4C;
+    }
 
-bs_setState(param_0, local_0);
+    bs_setState(param_0, local_0);
 }
 
 void bsblongleg_entrypoint_18(s32 arg0)
@@ -514,6 +515,7 @@ void bsblongleg_entrypoint_18(s32 arg0)
     baphysics_reset_gravity();
     func_80800204_bsblongleg(arg0);
 }
+
 int bsblongleg_entrypoint_19(s32 param_0)
 {
     return D_808014B0_bsblongleg[param_0];
@@ -551,22 +553,22 @@ void bsblongleg_entrypoint_21(PlayerState *param_0)
     func_8009D658(param_0);
     _batimer_decrement(param_0, 0);
 
-if (func_8008E148(param_0)) {
-    func_800963C0(param_0, local_1);
-    func_800F1EA4(local_1, &local_2);
-    func_8009D2F0(param_0, 1, 0.5f);
-    baphysics_set_target_horizontal_velocity(
-        param_0, func_800F10B4(func_8009BFD8(param_0), 20.0f, 60.0f, 550.0f, 700.0f));
-    baphysics_set_target_yaw(param_0, local_2);
-    _badust_entrypoint_1(param_0);
-} else
-    local_0 = 0x26;
+    if (func_8008E148(param_0)) {
+        func_800963C0(param_0, local_1);
+        func_800F1EA4(local_1, &local_2);
+        func_8009D2F0(param_0, 1, 0.5f);
+        baphysics_set_target_horizontal_velocity(
+            param_0, func_800F10B4(func_8009BFD8(param_0), 20.0f, 60.0f, 550.0f, 700.0f));
+        baphysics_set_target_yaw(param_0, local_2);
+        _badust_entrypoint_1(param_0);
+    } else
+        local_0 = 0x26;
 
-if (_batimer_isZero(param_0, 0) && bakey_pressed(param_0, 8))
-    local_0 = 0x28;
-if (func_80800000_bsblongleg(param_0))
-    local_0 = 0x4C;
-bs_setState(param_0, local_0);
+    if (_batimer_isZero(param_0, 0) && bakey_pressed(param_0, 8))
+        local_0 = 0x28;
+    if (func_80800000_bsblongleg(param_0))
+        local_0 = 0x4C;
+    bs_setState(param_0, local_0);
 }
 
 void bsblongleg_entrypoint_22()
@@ -584,22 +586,24 @@ void bsblongleg_entrypoint_24(s32 arg0)
     _bsrest_entrypoint_14();
     func_80800204_bsblongleg(arg0);
 }
+
 void bsblongleg_entrypoint_25(s32 arg0)
 {
     func_8080013C_bsblongleg();
     _bsrest_entrypoint_16(arg0);
 }
+
 void bsblongleg_entrypoint_26(s32 param_0)
 {
     s32 local_0 = 0;
     func_808000C8_bsblongleg(param_0);
     func_8009D3A8(param_0, 1);
 
-if (_bsrest_entrypoint_20(param_0)) {
-    local_0 = _bsrest_entrypoint_13(param_0);
-}
+    if (_bsrest_entrypoint_20(param_0)) {
+        local_0 = _bsrest_entrypoint_13(param_0);
+    }
 
-bs_setState(param_0, local_0);
+    bs_setState(param_0, local_0);
 }
 
 int bsblongleg_entrypoint_27(s32 param_0)
@@ -612,15 +616,15 @@ void bsblongleg_entrypoint_28(s32 arg0)
     func_8080013C_bsblongleg();
     _bsdrone_entrypoint_0(arg0);
 }
+
 int bsblongleg_entrypoint_29(Actor *param_0)
 {
     func_808000C8_bsblongleg();
     _bsdrone_entrypoint_1(param_0);
 
-if (bastatetimer_isDone(param_0, 2)) {
-    bs_setState(param_0, 0x29);
-}
-
+    if (bastatetimer_isDone(param_0, 2)) {
+        bs_setState(param_0, 0x29);
+    }
 }
 
 void bsblongleg_entrypoint_30(s32 arg0)
@@ -628,6 +632,7 @@ void bsblongleg_entrypoint_30(s32 arg0)
     _bsdrone_entrypoint_2();
     func_80800204_bsblongleg(arg0);
 }
+
 int bsblongleg_entrypoint_31(s32 param_0)
 {
     return D_808014E0_bsblongleg[param_0];

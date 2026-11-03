@@ -1,3 +1,4 @@
+#include "core1/heap.h"
 #include "memory.h"
 
 void *func_8001C0A0(s32);

@@ -1,7 +1,11 @@
+#include "common.h"
 #include "core2/1EA9160.h"
+#include "core2/1EAAD80.h"
 #include "core2/1EB3750.h"
 #include "core2/1EC3810.h"
 #include "gc/sectionDll.h"
+#include "ch/mrtannoy.h"
+#include "gameflags.h"
 
 extern f32 mlAbsF(f32);
 extern void func_800EFE50(f32 *, f32 *, f32 *, f32);
@@ -63,8 +67,9 @@ void func_8080019C_gcsectionskip(f32 *param_0, f32 *param_1, f32 *param_2, f32 p
     local_3 = 0;
     local_4 = 4.0f;
     do {
-        if (1)
-            func_800EFE50(local_1, param_1, param_0, (f32) local_3 / local_4);
+        if (1) {
+        }
+        func_800EFE50(local_1, param_1, param_0, (f32) local_3 / local_4);
         if (!func_80800000_gcsectionskip(local_1, param_2, param_3, local_2)) {
             break;
         }

@@ -77,12 +77,11 @@ void func_80800284_chcanarymarycage(param_0) s32 param_0;
 
     sp1C = func_80100094(param_0, 0);
 
-if ((func_800DA298(0x66) != 0) || (_glcutDll_entrypoint_20() != 0)) {
-    func_80800000_chcanarymarycage(param_0, 4);
-}
+    if ((func_800DA298(0x66) != 0) || (_glcutDll_entrypoint_20() != 0)) {
+        func_80800000_chcanarymarycage(param_0, 4);
+    }
 
-_subaddielink_entrypoint_0(sp1C);
-
+    _subaddielink_entrypoint_0(sp1C);
 }
 
 int func_808002E0_chcanarymarycage(param_0)
@@ -94,7 +93,6 @@ Actor *param_0;
             func_800DA544(0x507);
         }
     }
-
 }
 
 void func_80800338_chcanarymarycage(Actor *param_0, Actor **param_1)
@@ -119,50 +117,51 @@ s32 func_80800410_chcanarymarycage(Actor *param_0, s32 param_1, Actor **param_2)
 
     local_0 = func_80100094(param_0, 0);
 
-switch (param_1) {
-    case 0x90:
-        local_1 = func_80106790(func_80101080());
-        _chexploder_entrypoint_9(local_1, 1, 0);
-        _chexploder_entrypoint_9(local_1, 2, 1);
-        _chexploder_entrypoint_9(local_1, 3, 0);
-        _chexploder_entrypoint_6(local_1, 200.0f, 300.0f);
-        _subaddielink_entrypoint_1(local_0, *(s32 *) local_1);
-        break;
-    case 0xAB:
-        local_2 = _subaddielink_entrypoint_4(local_0);
-        local_3 = func_80101080();
-        func_801018A4(param_0, local_3);
-        if (1)
+    switch (param_1) {
+        case 0x90:
+            local_1 = func_80106790(func_80101080());
+            _chexploder_entrypoint_9(local_1, 1, 0);
+            _chexploder_entrypoint_9(local_1, 2, 1);
+            _chexploder_entrypoint_9(local_1, 3, 0);
+            _chexploder_entrypoint_6(local_1, 200.0f, 300.0f);
+            _subaddielink_entrypoint_1(local_0, *(s32 *) local_1);
+            break;
+        case 0xAB:
+            local_2 = _subaddielink_entrypoint_4(local_0);
+            local_3 = func_80101080();
+            func_801018A4(param_0, local_3);
+            if (1) {
+            }
             if (local_2 != NULL) {
                 func_8010114C(*(void **) local_2, 0xAB, 0);
             }
-        break;
-    case 0x1F:
-        func_801015D0(param_0);
-        if (param_0->unk70_10 == 1) {
-            func_800DF744(1, 1);
-        } else {
-            func_800DF744(1, 2);
-        }
-        func_800DF744(2, 0);
-        func_800DF744(3, 1);
-        break;
-    case 0x32:
-        param_0->unk79_4--;
-        if (param_0->unk79_4 == 0) {
-            func_80800000_chcanarymarycage(param_0, 4);
-        }
-        break;
-    case 0x40:
-        if (!func_80090270(local_0)) {
-            func_80800338_chcanarymarycage(param_0, *(Actor ***) &param_2);
-        }
-        break;
-    default:
-        return 0;
-}
+            break;
+        case 0x1F:
+            func_801015D0(param_0);
+            if (param_0->unk70_10 == 1) {
+                func_800DF744(1, 1);
+            } else {
+                func_800DF744(1, 2);
+            }
+            func_800DF744(2, 0);
+            func_800DF744(3, 1);
+            break;
+        case 0x32:
+            param_0->unk79_4--;
+            if (param_0->unk79_4 == 0) {
+                func_80800000_chcanarymarycage(param_0, 4);
+            }
+            break;
+        case 0x40:
+            if (!func_80090270(local_0)) {
+                func_80800338_chcanarymarycage(param_0, *(Actor ***) &param_2);
+            }
+            break;
+        default:
+            return 0;
+    }
 
-return 1;
+    return 1;
 }
 
 int chcanarymarycage_entrypoint_0()

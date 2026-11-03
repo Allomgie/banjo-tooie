@@ -79,8 +79,9 @@ void *vplight_entrypoint_0(LightGridDefinition *param_0, LightGridSource *param_
     local_8 = param_0->local_0 * sizeof(s16) + param_0->local_1 * sizeof(LightGridState);
     local_0 = heap_alloc(local_8);
     rare_memset(local_0, 0, local_8);
-    if (1)
-        local_5 = (s16 *) ((u8 *) local_0 + param_0->local_1 * sizeof(LightGridState));
+    if (1) {
+    }
+    local_5 = (s16 *) ((u8 *) local_0 + param_0->local_1 * sizeof(LightGridState));
     local_7 = local_5 + param_0->local_0;
     for (local_6 = local_5; local_6 < local_7;) {
         *local_6++ = -1;

@@ -27,9 +27,11 @@ void sccustom_banjo_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 para
     mode = _scinfobar_entrypoint_14(param_1);
     cap = (s32) ((f32) (cnt * 0 + 0x28) * fv);
     if (n < cap) {
-        if (1)
-            if (1)
-                scale = (s32) ((1.0f - (f32) (cap - n) / (f32) cap) * 256.0f);
+        if (1) {
+        }
+        if (1) {
+        }
+        scale = (s32) ((1.0f - (f32) (cap - n) / (f32) cap) * 256.0f);
     } else {
         scale = 0x100;
     }

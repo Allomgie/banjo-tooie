@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/glide.h"
 
 void func_80800000_bskazglide(PlayerState *self)

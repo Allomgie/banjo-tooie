@@ -1,4 +1,5 @@
 #include "common.h"
+#include <PR/gbi.h>
 
 #define LOCAL_MAX(a, b) ((a) > (b) ? (a) : (b))
 typedef struct {
@@ -98,8 +99,7 @@ s32 param_1;
             func_800DE448(local_1, local_2->local_2, local_2->local_3 * 0.00390625f, 0, local_0)
                 ? 1
                 : 0;
-
-}
+    }
 }
 
 void func_800BBED8(LocalPulse *param_0, f32 param_1, f32 *param_2)
@@ -116,8 +116,7 @@ void func_800BBED8(LocalPulse *param_0, f32 param_1, f32 *param_2)
                                     param_0->amplitude[local_0] + 1.0f);
             param_2[local_0] *= local_2;
         }
-
-}
+    }
 }
 
 void func_800BBFDC(param_0, param_1) StateBF *param_0;
@@ -154,18 +153,18 @@ s32 param_1;
         if (param_0->local_4 != 0.0f)
             func_800BBED8(param_0, local_4->local_3, local_3);
 
-if (param_0->local_0 & 1) {
-    local_4->local_6 |=
-        func_800E28A4(param_1, local_4->local_4 >> 8, local_5, local_1, local_2, local_3,
-                      (s32) ((u32) param_0->local_5[3] * local_4->local_1));
-} else {
-
-func_800E2530(local_4->local_2);
-local_4->local_6 |= func_800E2720(param_1, local_4->local_4 >> 8, local_5, local_1, local_3,
-                                  (s32) ((u32) param_0->local_5[3] * local_4->local_1));
-}
-}
-func_800E2A14(param_1);
+        if (param_0->local_0 & 1) {
+            local_4->local_6 |=
+                func_800E28A4(param_1, local_4->local_4 >> 8, local_5, local_1, local_2, local_3,
+                              (s32) ((u32) param_0->local_5[3] * local_4->local_1));
+        } else {
+            func_800E2530(local_4->local_2);
+            local_4->local_6 |=
+                func_800E2720(param_1, local_4->local_4 >> 8, local_5, local_1, local_3,
+                              (s32) ((u32) param_0->local_5[3] * local_4->local_1));
+        }
+    }
+    func_800E2A14(param_1);
 }
 
 void func_800BC358(void *param_0, s32 param_1, s32 param_2)
@@ -203,6 +202,7 @@ void *func_800BC3F0(void *arg0)
 {
     return defrag(arg0);
 }
+
 void func_800BC410(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
 {
     s32 local_1[4];

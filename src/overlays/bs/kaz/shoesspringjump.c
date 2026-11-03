@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/shoesspringjump.h"
 
 extern s32 D_80800270_bskazshoesspringjump[];

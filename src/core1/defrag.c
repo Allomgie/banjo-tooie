@@ -1,3 +1,4 @@
+#include "types.h"
 #include "memory.h"
 
 s32 D_8007C6F0;

@@ -109,10 +109,11 @@ u16 gczoomboxdata_entrypoint_5(s32 param_0)
         return 0;
     }
     local_0 = D_80800AA8_gczoomboxdata[param_0].a;
-    if (1)
-        if (local_0 == 0 || func_800D58FC(local_0) == 4) {
-            return 0;
-        }
+    if (1) {
+    }
+    if (local_0 == 0 || func_800D58FC(local_0) == 4) {
+        return 0;
+    }
     return local_0;
 }
 

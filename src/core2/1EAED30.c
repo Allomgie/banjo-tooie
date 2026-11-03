@@ -1,4 +1,5 @@
-#include "vector.h"
+#include "common.h"
+    #include "vector.h"
 
     typedef struct {s32 local_0, local_1;} local_type;
 extern Vector *D_8012B7F0;
@@ -102,13 +103,13 @@ void func_800D55DC(void)
     ((s32 *) &D_8012B7F0)[1] = tmp;
     end = vector_end(((s32 *) &D_8012B7F0)[0]);
 
-for (it = (s32 *) vector_begin(((s32 *) &D_8012B7F0)[0]); (u32) it < end; it += 2) {
-    for (i = 0; i < it[0]; i++) {
-        func_800D56C4(it[1]);
+    for (it = (s32 *) vector_begin(((s32 *) &D_8012B7F0)[0]); (u32) it < end; it += 2) {
+        for (i = 0; i < it[0]; i++) {
+            func_800D56C4(it[1]);
+        }
     }
-}
 
-vector_clear(((s32 *) &D_8012B7F0)[0]);
+    vector_clear(((s32 *) &D_8012B7F0)[0]);
 }
 
 int func_800D5688()
@@ -122,27 +123,27 @@ s32 func_800D56C4(param_0) void *param_0;
     s32 local_0;
     u8 local_1;
 
-if (param_0) {
-    for (local_0 = 0; local_0 < D_8012B7E4 && param_0 != D_8012B450[local_0]; local_0++) {
+    if (param_0) {
+        for (local_0 = 0; local_0 < D_8012B7E4 && param_0 != D_8012B450[local_0]; local_0++) {
+        }
+        if (local_0 == D_8012B7E4)
+            return 2;
+        D_8012B7E5 = local_0;
+        if (D_8012B658[local_0] == 1) {
+            heap_free(param_0);
+            local_1 = D_8012B7E4 - 1;
+            D_8012B7E4 = local_1;
+            D_8012B658[local_0] = D_8012B658[local_1];
+            D_8012B450[local_0] = D_8012B450[D_8012B7E4];
+            D_8012B6E0[local_0] = D_8012B6E0[D_8012B7E4];
+            return 0;
+        } else {
+            D_8012B658[local_0]--;
+            return 1;
+        }
     }
-    if (local_0 == D_8012B7E4)
-        return 2;
-    D_8012B7E5 = local_0;
-    if (D_8012B658[local_0] == 1) {
-        heap_free(param_0);
-        local_1 = D_8012B7E4 - 1;
-        D_8012B7E4 = local_1;
-        D_8012B658[local_0] = D_8012B658[local_1];
-        D_8012B450[local_0] = D_8012B450[D_8012B7E4];
-        D_8012B6E0[local_0] = D_8012B6E0[D_8012B7E4];
-        return 0;
-    } else {
-        D_8012B658[local_0]--;
-        return 1;
-    }
-}
 
-return 3;
+    return 3;
 }
 
 s32 func_800D5804(s32 param_0, s32 *param_1)
@@ -154,17 +155,18 @@ s32 func_800D5804(s32 param_0, s32 *param_1)
     var_v1 = 0;
     new_var = ((s32 *) D_8012B450);
 
-if ((s32) D_8012B7E4 > 0) {
-    if (param_0 != *new_var) {
-    loop_2:
-        var_v1 += 1;
+    if ((s32) D_8012B7E4 > 0) {
+        if (param_0 != *new_var) {
+        loop_2:
+            var_v1 += 1;
 
-        if (var_v1 < (s32) D_8012B7E4) {
-            if (param_0 != ((s32 *) D_8012B450)[var_v1]) {
-                goto loop_2;
-            }
-        }
+if (var_v1 < (s32) D_8012B7E4) {
+    if (param_0 != ((s32 *) D_8012B450)[var_v1]) {
+        goto loop_2;
     }
+}
+
+}
 }
 
 if (var_v1 == D_8012B7E4) {
@@ -232,14 +234,15 @@ s32 func_800D5A04(s32 param_0)
 
     idx = 0;
 
-if (((s32) D_8012B7E4 > 0) && (param_0 != ((s16 *) D_8012B6E0)[idx])) {
-loop_2:
-    idx += 1;
-    if (idx < (s32) D_8012B7E4) {
-        if (param_0 != ((s16 *) D_8012B6E0)[idx]) {
-            goto loop_2;
-        }
-    }
+    if (((s32) D_8012B7E4 > 0) && (param_0 != ((s16 *) D_8012B6E0)[idx])) {
+    loop_2:
+        idx += 1;
+        if (idx < (s32) D_8012B7E4) {
+            if (param_0 != ((s16 *) D_8012B6E0)[idx]) {
+                goto loop_2;
+            }
+
+}
 }
 
 if (idx < (s32) D_8012B7E4) {
@@ -266,16 +269,20 @@ s32 func_800D5AB4(unsigned int param_0)
     new_var = &D_8012B6E0[0];
     new_var2 = 0;
 
-if (((s32) D_8012B7E4 > 0) && (param_0 != *new_var)) {
-    do {
-        new_var2 += 1;
-        if (new_var2 < (s32) D_8012B7E4) {
-            if (param_0 != D_8012B6E0[new_var2]) {
-                continue;
-            }
-        }
-        break;
-    } while (1);
+    if (((s32) D_8012B7E4 > 0) && (param_0 != *new_var)) {
+        do {
+            new_var2 += 1;
+
+if (new_var2 < (s32) D_8012B7E4) {
+    if (param_0 != D_8012B6E0[new_var2]) {
+        continue;
+    }
+}
+
+break;
+}
+while (1)
+    ;
 }
 
 D_8012B7E5 = new_var2;
@@ -304,43 +311,38 @@ void *func_800D5B34(s32 param_0)
     if (local_1 < 0)
         return 0;
 
-if (local_1 < D_8012B7E4) {
-    D_8012B658[local_1]++;
-    return D_8012B450[local_1];
-}
+    if (local_1 < D_8012B7E4) {
+        D_8012B658[local_1]++;
+        return D_8012B450[local_1];
+    }
 
-local_1 = param_0 * 4;
-rom_read_word(D_8011B900 + local_1, ((AssetD5B34 *) &D_8012B440.raw));
-if (!D_8012B440.AssetD5B34.local_2 && !local_3)
-    local_3 = 2;
-
-if (func_800E4AF0(param_0)) {
-    local_2 = func_800E4BF4(param_0);
-} else if (D_8012B440.AssetD5B34.local_2 == 10) {
-
-local_2 = _gldbDll_entrypoint_0(param_0, &D_8012B7E8);
-}
-else if (D_8012B440.AssetD5B34.local_1 & 1)
-{
-    local_2 = func_800E6950(param_0, local_3, 0);
-}
-else
-{
-    rom_read_word(D_8011B900 + local_1 + 4, ((AssetD5B34 *) &D_8012B444));
+    local_1 = param_0 * 4;
     rom_read_word(D_8011B900 + local_1, ((AssetD5B34 *) &D_8012B440.raw));
-    local_0 = (*((AssetD5B34 *) &D_8012B444)).local_0 - D_8012B440.AssetD5B34.local_0;
-    D_8012B7E8 = local_0;
-    if (local_0 & 1)
-        local_0++;
-    local_2 = heap_alloc(local_0);
-    rom_dma_read(local_2, D_8012B448 + D_8012B440.AssetD5B34.local_0, local_0);
-}
-D_8012B7E5 = D_8012B7E4;
-D_8012B658[D_8012B7E4] = 1;
-D_8012B450[D_8012B7E4] = local_2;
-D_8012B6E0[D_8012B7E4] = param_0;
-D_8012B7E4++;
-return local_2;
+    if (!D_8012B440.AssetD5B34.local_2 && !local_3)
+        local_3 = 2;
+
+    if (func_800E4AF0(param_0)) {
+        local_2 = func_800E4BF4(param_0);
+    } else if (D_8012B440.AssetD5B34.local_2 == 10) {
+        local_2 = _gldbDll_entrypoint_0(param_0, &D_8012B7E8);
+    } else if (D_8012B440.AssetD5B34.local_1 & 1) {
+        local_2 = func_800E6950(param_0, local_3, 0);
+    } else {
+        rom_read_word(D_8011B900 + local_1 + 4, ((AssetD5B34 *) &D_8012B444));
+        rom_read_word(D_8011B900 + local_1, ((AssetD5B34 *) &D_8012B440.raw));
+        local_0 = (*((AssetD5B34 *) &D_8012B444)).local_0 - D_8012B440.AssetD5B34.local_0;
+        D_8012B7E8 = local_0;
+        if (local_0 & 1)
+            local_0++;
+        local_2 = heap_alloc(local_0);
+        rom_dma_read(local_2, D_8012B448 + D_8012B440.AssetD5B34.local_0, local_0);
+    }
+    D_8012B7E5 = D_8012B7E4;
+    D_8012B658[D_8012B7E4] = 1;
+    D_8012B450[D_8012B7E4] = local_2;
+    D_8012B6E0[D_8012B7E4] = param_0;
+    D_8012B7E4++;
+    return local_2;
 }
 
 void func_800D5D70()

@@ -1,3 +1,4 @@
+#include "common.h"
 #include "gc/newoption.h"
 
 extern int D_80800E98_chcheato[];
@@ -164,74 +165,74 @@ s32 param_2;
 {
     s32 local_0;
 
-switch (param_1) {
-    case 0x1144:
-        _subaddieitem_entrypoint_2(func_80100094(param_0, 1));
-        func_80102424(param_0, 3);
-        return;
-    case 0x115D:
-        _subaddiedialog_entrypoint_11(*param_0, func_80800888_chcheato(), 0xE, param_0 + 1, 0x37);
-        return;
-    case 0x1142:
-        if (func_800D1A04(0x4A) != 0) {
-            local_0 = 0xE;
-            _subaddiedialog_entrypoint_11(*param_0, func_80800824_chcheato(&local_0), local_0,
-                                          param_0 + 1, 0x37);
-            return;
-        }
-        func_800C01A8(0x64, 0);
-        func_800C0850();
-        func_80102424(param_0, 1);
-        func_80800CC0_chcheato(param_0);
-        return;
-    case 0x1145:
-        if (func_80800C0C_chcheato() != 0) {
-            func_80102424(param_0, 4);
-            return;
-        }
-        func_80102424(param_0, 1);
-        func_80800CC0_chcheato(param_0);
-        return;
-    case 0x1147:
-        func_80102424(param_0, 4);
-        return;
-    case 0x1148:
-        func_800DA544(0x69);
-        if (func_80800C0C_chcheato() != 0) {
-            func_80102424(param_0, 4);
-            return;
-        }
-        func_80102424(param_0, 1);
-        func_80800CC0_chcheato(param_0);
-        return;
-    case 0x114B:;
-    case 0x114C:
-    case 0x114D:;
-    case 0x114E:
-    case 0x114F:
-        if ((func_800D1A04(0x4A) >= 5) && (func_80800BB8_chcheato() != -1)) {
+    switch (param_1) {
+        case 0x1144:
             _subaddieitem_entrypoint_2(func_80100094(param_0, 1));
             func_80102424(param_0, 3);
             return;
-        }
-        if (func_800DA298(0x69) == 0) {
-            _subaddiedialog_entrypoint_11(*param_0, 0x1148, 0xE, param_0 + 1, 0x37);
+        case 0x115D:
+            _subaddiedialog_entrypoint_11(*param_0, func_80800888_chcheato(), 0xE, param_0 + 1,
+                                          0x37);
             return;
-        }
-        _subaddiedialog_entrypoint_11(*param_0, 0x115E, 0xE, param_0 + 1, 0x37);
-        return;
-    case 0x1143:
-        _capod_entrypoint_14();
-        _glcutDll_entrypoint_17();
-        return;
-    case 0x115E:
-        func_80102424(param_0, 4);
-        return;
-    default:
-        func_80102424(param_0, 1);
-        func_80800CC0_chcheato(param_0);
-}
-
+        case 0x1142:
+            if (func_800D1A04(0x4A) != 0) {
+                local_0 = 0xE;
+                _subaddiedialog_entrypoint_11(*param_0, func_80800824_chcheato(&local_0), local_0,
+                                              param_0 + 1, 0x37);
+                return;
+            }
+            func_800C01A8(0x64, 0);
+            func_800C0850();
+            func_80102424(param_0, 1);
+            func_80800CC0_chcheato(param_0);
+            return;
+        case 0x1145:
+            if (func_80800C0C_chcheato() != 0) {
+                func_80102424(param_0, 4);
+                return;
+            }
+            func_80102424(param_0, 1);
+            func_80800CC0_chcheato(param_0);
+            return;
+        case 0x1147:
+            func_80102424(param_0, 4);
+            return;
+        case 0x1148:
+            func_800DA544(0x69);
+            if (func_80800C0C_chcheato() != 0) {
+                func_80102424(param_0, 4);
+                return;
+            }
+            func_80102424(param_0, 1);
+            func_80800CC0_chcheato(param_0);
+            return;
+        case 0x114B:;
+        case 0x114C:
+        case 0x114D:;
+        case 0x114E:
+        case 0x114F:
+            if ((func_800D1A04(0x4A) >= 5) && (func_80800BB8_chcheato() != -1)) {
+                _subaddieitem_entrypoint_2(func_80100094(param_0, 1));
+                func_80102424(param_0, 3);
+                return;
+            }
+            if (func_800DA298(0x69) == 0) {
+                _subaddiedialog_entrypoint_11(*param_0, 0x1148, 0xE, param_0 + 1, 0x37);
+                return;
+            }
+            _subaddiedialog_entrypoint_11(*param_0, 0x115E, 0xE, param_0 + 1, 0x37);
+            return;
+        case 0x1143:
+            _capod_entrypoint_14();
+            _glcutDll_entrypoint_17();
+            return;
+        case 0x115E:
+            func_80102424(param_0, 4);
+            return;
+        default:
+            func_80102424(param_0, 1);
+            func_80800CC0_chcheato(param_0);
+    }
 }
 
 void func_808006B8_chcheato(Actor *param_0)
@@ -243,13 +244,11 @@ void func_808006B8_chcheato(Actor *param_0)
     local_0 = D_80800EFC_chcheato;
     local_1 = D_80800F04_chcheato;
     for (local_2 = 0; local_2 < 2; local_2++) {
-
-if (func_80101E14(param_0, local_0.local_0[local_2])) {
-    func_800C4B7C(local_1.local_0[local_2]);
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800F08_chcheato);
-}
-
-}
+        if (func_80101E14(param_0, local_0.local_0[local_2])) {
+            func_800C4B7C(local_1.local_0[local_2]);
+            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800F08_chcheato);
+        }
+    }
 }
 
 void func_8080078C_chcheato(Actor *param_0)
@@ -264,13 +263,11 @@ void func_8080078C_chcheato(Actor *param_0)
             param_0->unk64_20 = 1;
         }
 
-}
-else if (local_0 == 0)
-{
-    func_800FCAE0(0x44, 0, 0x1F4);
-    func_800FCA90(0x44);
-    param_0->unk64_20 = 0;
-}
+    } else if (local_0 == 0) {
+        func_800FCAE0(0x44, 0, 0x1F4);
+        func_800FCA90(0x44);
+        param_0->unk64_20 = 0;
+    }
 }
 
 s32 func_80800824_chcheato(param_0)
@@ -354,8 +351,7 @@ s32 param_3;
 
         case 2:
             func_80102424(param_0, 6);
-
-}
+    }
 }
 
 void func_80800B00_chcheato(Actor *param_0)
@@ -386,10 +382,9 @@ s32 func_80800BB8_chcheato(void)
             out = i;
             return out;
         }
-
-}
-out = -1;
-return out;
+    }
+    out = -1;
+    return out;
 }
 
 int func_80800C0C_chcheato()
@@ -400,10 +395,9 @@ int func_80800C0C_chcheato()
         if (func_800D3DD0(local_0 | 0)) {
             local_1++;
         }
+    }
 
-}
-
-return local_1;
+    return local_1;
 }
 
 int func_80800C64_chcheato(param_0, param_1, param_2)
@@ -416,9 +410,9 @@ s32 param_2;
             func_80800D08_chcheato(param_0, 2, 1);
         }
 
-return 2;
-}
-return 1;
+        return 2;
+    }
+    return 1;
 }
 
 void func_80800CC0_chcheato(Actor *param_0)

@@ -1,3 +1,4 @@
+#include "common.h"
 #include "playerstate.h"
 #include "core2/1E93440.h"
 

@@ -329,53 +329,52 @@ void gcmapDll_entrypoint_2(param_0) s32 param_0;
 
     local_0 = func_800EA05C();
 
-switch (local_0) {
-    case 0xA1:
-    case 0xA2:
-    case 0xA3:
-    case 0xA4:
-    case 0xA5:
-    case 0xA6:
-    case 0x18B:
-        func_80800668_gcmapDll(param_0, &D_80801B98_gcmapDll, 2);
-        return;
-    case 0xA7:
-    case 0xAF:
-    case 0x193:
-        func_80800668_gcmapDll(param_0, &D_80801BA0_gcmapDll, 2);
-        return;
-    case 0xB7:
-    case 0xD9:
-    case 0xEF:
-    case 0x13E:
-    case 0x13F:
-    case 0x156:
-    case 0x171:
-    case 0x172:
-    case 0x176:
-        func_80800668_gcmapDll(param_0, &D_80801BB0_gcmapDll, 2);
-        return;
-    case 0x134:
-        func_80800668_gcmapDll(param_0, &D_80801BA8_gcmapDll, 2);
-        return;
-    case 0x160:
-        if (func_800DA298(0x360) != 0) {
-            func_80800668_gcmapDll(param_0, &D_80801BC8_gcmapDll, 4);
+    switch (local_0) {
+        case 0xA1:
+        case 0xA2:
+        case 0xA3:
+        case 0xA4:
+        case 0xA5:
+        case 0xA6:
+        case 0x18B:
+            func_80800668_gcmapDll(param_0, &D_80801B98_gcmapDll, 2);
             return;
-        }
-        func_80800668_gcmapDll(param_0, &D_80801BB8_gcmapDll, 4);
-        return;
-    case 0x18C:
-        func_80800668_gcmapDll(param_0, &D_80801BB8_gcmapDll, 4);
-        return;
-    case 0x18D:
-        func_80800668_gcmapDll(param_0, &D_80801BD8_gcmapDll, 4);
-        return;
-    case 0x194:
-    case 0x195:
-        func_80800668_gcmapDll(param_0, &D_80801BC8_gcmapDll, 4);
-}
-
+        case 0xA7:
+        case 0xAF:
+        case 0x193:
+            func_80800668_gcmapDll(param_0, &D_80801BA0_gcmapDll, 2);
+            return;
+        case 0xB7:
+        case 0xD9:
+        case 0xEF:
+        case 0x13E:
+        case 0x13F:
+        case 0x156:
+        case 0x171:
+        case 0x172:
+        case 0x176:
+            func_80800668_gcmapDll(param_0, &D_80801BB0_gcmapDll, 2);
+            return;
+        case 0x134:
+            func_80800668_gcmapDll(param_0, &D_80801BA8_gcmapDll, 2);
+            return;
+        case 0x160:
+            if (func_800DA298(0x360) != 0) {
+                func_80800668_gcmapDll(param_0, &D_80801BC8_gcmapDll, 4);
+                return;
+            }
+            func_80800668_gcmapDll(param_0, &D_80801BB8_gcmapDll, 4);
+            return;
+        case 0x18C:
+            func_80800668_gcmapDll(param_0, &D_80801BB8_gcmapDll, 4);
+            return;
+        case 0x18D:
+            func_80800668_gcmapDll(param_0, &D_80801BD8_gcmapDll, 4);
+            return;
+        case 0x194:
+        case 0x195:
+            func_80800668_gcmapDll(param_0, &D_80801BC8_gcmapDll, 4);
+    }
 }
 
 void gcmapDll_entrypoint_3(MapDllState *this)
@@ -402,57 +401,56 @@ void gcmapDll_entrypoint_3(MapDllState *this)
         this->unk10 = func_800B2840(this->unkC);
         this->unk20 = func_800B284C(this->unkC);
 
-if (1)
-    if (this->unk20 && func_800EA068(0x80)) {
-        this->unk17C = _glzone_entrypoint_0(this->unk20);
-    }
+        if (1) {
+        }
+        if (this->unk20 && func_800EA068(0x80)) {
+            this->unk17C = _glzone_entrypoint_0(this->unk20);
+        }
 
-}
-else
-{
-    this->unkC = 0;
-    this->unk0 = 0;
-    this->unk10 = 0;
-    this->unk20 = 0;
-}
-this->unk1B0 = 0;
-if (this->unk5C) {
-    this->unk38 = func_800D674C(this->unk5C);
-    func_800D70D0(1);
-    func_800D71F4(1);
-    this->unk2C = func_800B2720(this->unk38);
-    this->unk3C = func_800B2840(this->unk38);
-    this->unk4C = func_800B284C(this->unk38);
-} else {
-    this->unk38 = 0;
-    this->unk2C = 0;
-    this->unk3C = 0;
-    this->unk4C = 0;
-}
-this->unk178 = func_800DBFF8();
-if (this->unkC) {
-    this->unk28 = func_800D731C(this->unk5A);
-} else {
-    this->unk28 = 0;
-}
-if (this->unk38) {
-    this->unk54 = func_800D731C(this->unk5C);
-} else {
-    this->unk54 = 0;
-}
-if (this->unk0) {
-    this->unk2A = 1;
-} else {
-    this->unk2A = 0;
-}
-if (this->unk2C) {
-    this->unk56 = 1;
-} else {
-    this->unk56 = 0;
-}
-_gcmapsects_entrypoint_15(this);
-func_808005A8_gcmapDll(this);
-this->unk2B = this->unk57 = 1;
+    } else {
+        this->unkC = 0;
+        this->unk0 = 0;
+        this->unk10 = 0;
+        this->unk20 = 0;
+    }
+    this->unk1B0 = 0;
+    if (this->unk5C) {
+        this->unk38 = func_800D674C(this->unk5C);
+        func_800D70D0(1);
+        func_800D71F4(1);
+        this->unk2C = func_800B2720(this->unk38);
+        this->unk3C = func_800B2840(this->unk38);
+        this->unk4C = func_800B284C(this->unk38);
+    } else {
+        this->unk38 = 0;
+        this->unk2C = 0;
+        this->unk3C = 0;
+        this->unk4C = 0;
+    }
+    this->unk178 = func_800DBFF8();
+    if (this->unkC) {
+        this->unk28 = func_800D731C(this->unk5A);
+    } else {
+        this->unk28 = 0;
+    }
+    if (this->unk38) {
+        this->unk54 = func_800D731C(this->unk5C);
+    } else {
+        this->unk54 = 0;
+    }
+    if (this->unk0) {
+        this->unk2A = 1;
+    } else {
+        this->unk2A = 0;
+    }
+    if (this->unk2C) {
+        this->unk56 = 1;
+    } else {
+        this->unk56 = 0;
+    }
+    _gcmapsects_entrypoint_15(this);
+    func_808005A8_gcmapDll(this);
+    this->unk2B = this->unk57 = 1;
 }
 
 void func_80800A94_gcmapDll(MapResourceRecord *param_0, s32 param_1)
@@ -503,8 +501,7 @@ int gcmapDll_entrypoint_4(s32 param_0)
     func_800DBFD8(*(s32 *) ((char *) (local_1) + 0x178));
     if ((*(u8 *) ((char *) (local_1) + 0x77)) != 0) {
         _gcmapsects_entrypoint_16(local_1);
-
-}
+    }
 }
 
 s32 gcmapDll_entrypoint_5(void)
@@ -517,9 +514,8 @@ s32 gcmapDll_entrypoint_5(void)
         if (local_0 == D_80801BE8_gcmapDll[local_1].map) {
             break;
         }
-
-}
-return D_80801BE8_gcmapDll[local_1].region;
+    }
+    return D_80801BE8_gcmapDll[local_1].region;
 }
 
 void gcmapDll_entrypoint_6(void *param_0, s32 param_1)

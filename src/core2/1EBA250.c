@@ -1,5 +1,5 @@
+#include "types.h"
 #include "memory.h"
-
 #include "core2/1EBA250.h"
 #include "core2/1EC8070.h"
 

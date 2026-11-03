@@ -1,4 +1,7 @@
+#include "common.h"
 #include "overlays/ba/boost.h"
+#include "playerstate.h"
+#include "boost.h"
 
 s32 baboost_entrypoint_0(void)
 {

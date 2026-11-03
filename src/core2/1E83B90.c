@@ -1,3 +1,4 @@
+#include "common.h"
 #include "core2/1EC8070.h"
 #include "core2/1ECB9F0.h"
 

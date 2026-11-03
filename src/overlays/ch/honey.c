@@ -247,8 +247,9 @@ void func_80800688_chhoney(param_0) s32 *param_0;
     s32 local_8;
 
     local_2 = 0;
-    if (1)
-        local_3 = func_8001211C();
+    if (1) {
+    }
+    local_3 = func_8001211C();
     local_4 = _subaddiefind_entrypoint_6(D_80801020_chhoney, local_0, 14);
     for (local_5 = 0; local_5 < local_4; local_5++) {
         local_7 = local_0[local_5];

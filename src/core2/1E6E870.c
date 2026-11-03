@@ -1,4 +1,5 @@
 #include "core2/1E6E870.h"
+#include "types.h"
 
 #define STATE(p) (*(LocalEntry **) ((u8 *) (p) + 0x78))
 f32 func_800A0C2C(void *param_0);

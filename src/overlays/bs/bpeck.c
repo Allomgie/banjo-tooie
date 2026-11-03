@@ -1,4 +1,6 @@
+#include "common.h"
 #include "overlays/ba/playerstate.h"
+#include <types.h>
 
 extern void baanim_playForDuration_once(PlayerState *, s32, f32);
 extern void yaw_setVelocityBounded(PlayerState *, f32, f32);

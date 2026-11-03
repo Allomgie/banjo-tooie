@@ -209,8 +209,9 @@ s32 subaddietaxi_entrypoint_5(Actor *param_0, s32 param_1)
 void subaddietaxi_entrypoint_6(Actor *param_0, TaxiCallbackFloatWord1001 param_1)
 {
     f32 local_0[3];
-    if (1)
-        func_800EFA4C(local_0, param_1.local_0, param_1.local_0, param_1.local_0);
+    if (1) {
+    }
+    func_800EFA4C(local_0, param_1.local_0, param_1.local_0, param_1.local_0);
     func_800DFF64(param_0, 0x12, local_0);
 }
 

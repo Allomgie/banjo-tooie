@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "gameflags.h"
 

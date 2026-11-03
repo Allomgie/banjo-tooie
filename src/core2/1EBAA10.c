@@ -1,4 +1,5 @@
 #include "common.h"
+#include "types.h"
 
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800EF8BC(f32 *, f32 *, f32);

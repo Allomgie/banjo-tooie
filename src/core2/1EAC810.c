@@ -261,10 +261,13 @@ s32 func_800D3724(s32 param_0)
     if (local_0[1] != 0) {
         local_1 = func_800D6C34(*(s16 *) local_0);
     } else {
-        if (1)
-            if (1)
-                if (1)
-                    local_1 = 1;
+        if (1) {
+        }
+        if (1) {
+        }
+        if (1) {
+        }
+        local_1 = 1;
         if (!param_0) {
         }
     }

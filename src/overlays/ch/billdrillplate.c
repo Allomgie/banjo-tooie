@@ -1,4 +1,6 @@
 #include "common.h"
+#include "types.h"
+#include "macros.h"
 
 extern int D_80801124_chbilldrillplate[];
 extern int D_8080116C_chbilldrillplate[];

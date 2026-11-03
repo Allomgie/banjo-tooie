@@ -122,9 +122,10 @@ void suquiz_entrypoint_1(void)
     s32 local_5;
     Broad50QuizList local_1;
     s32 local_6;
-    if (1)
+    if (1) {
+    }
 
-        local_0 = func_800D9004();
+    local_0 = func_800D9004();
     local_1 = D_808010E0_suquiz;
     local_2 = 0;
     if (D_80127614) {

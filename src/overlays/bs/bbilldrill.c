@@ -1,3 +1,6 @@
+#include "common.h"
+#include "overlays/ba/playerstate.h"
+#include "core2/anctrl.h"
 #include "overlays/ba/anim.h"
 
 struct UnkStruct {
@@ -118,9 +121,10 @@ void func_808002DC_bsbbilldrill(param_0, param_1) PlayerState *param_0;
 u32 param_1;
 {
     f32 local_0[3];
-    if (1)
+    if (1) {
+    }
 
-        param_0->unk15C.bytes[0] = param_1;
+    param_0->unk15C.bytes[0] = param_1;
     switch (param_1) {
         case 1:
             *(f32 *) ((u8 *) param_0 + 0x16C) = yaw_get(param_0);

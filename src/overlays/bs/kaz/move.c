@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/move.h"
 
 void func_80800000_bskazmove(PlayerState *self, f32 *arg1, f32 *arg2)

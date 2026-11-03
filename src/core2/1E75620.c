@@ -1,4 +1,6 @@
 #include "core2/1E75620.h"
+#include <ultra64.h>
+#include "types.h"
 
 extern void bastatetimer_set(void *, int, f32);
 extern s32 bastatetimer_isDone(void *, s32);

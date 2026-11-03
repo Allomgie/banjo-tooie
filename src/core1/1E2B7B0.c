@@ -1,3 +1,4 @@
+#include "common.h"
 #include "core2/1EC8070.h"
 
 extern void func_800F2984(f32 param_0[4][4], f32 *param_1, f32 param_2[3], f32 param_3[3],

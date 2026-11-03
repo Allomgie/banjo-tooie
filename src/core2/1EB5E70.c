@@ -1,4 +1,5 @@
 #include "core2/1EB5E70.h"
+#include "types.h"
 
 typedef struct {
     s32 pad[2];

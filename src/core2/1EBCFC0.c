@@ -1,3 +1,5 @@
+#include <ultra64.h>
+#include <PR/gbi.h>
 #include "core1/mlmtx.h"
 #include "gfx.h"
 

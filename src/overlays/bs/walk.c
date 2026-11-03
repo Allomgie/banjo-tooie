@@ -1,5 +1,6 @@
 #include "common.h"
 #include "overlays/bs/walk.h"
+#include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
 
 extern f32 func_800D8FF8(void);

@@ -1,4 +1,7 @@
+#include "common.h"
 #include "overlays/bs/kaz/flamethrower.h"
+#include "overlays/ba/playerstate.h"
+#include "core2/anctrl.h"
 
 extern s32 D_808003B0_bskazflamethrower[];
 

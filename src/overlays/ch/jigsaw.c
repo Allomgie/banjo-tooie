@@ -119,12 +119,13 @@ void func_808001F8_chjigsaw(Actor *param_0)
         }
     }
     if (param_0->unk70_10 == 1) {
-        if (1)
-            if (((CodexJigsawFlags65 *) ((u8 *) param_0 + 0x78))->local_0 && param_0->unk6C_0) {
-                func_800EE7F8(local_5, param_0->position);
-                local_5[1] += 100.0f;
-                func_800C8CB8(param_0->unk6C_0, local_5);
-            }
+        if (1) {
+        }
+        if (((CodexJigsawFlags65 *) ((u8 *) param_0 + 0x78))->local_0 && param_0->unk6C_0) {
+            func_800EE7F8(local_5, param_0->position);
+            local_5[1] += 100.0f;
+            func_800C8CB8(param_0->unk6C_0, local_5);
+        }
         func_8080011C_chjigsaw(param_0);
     }
 }

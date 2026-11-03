@@ -1,4 +1,6 @@
 #include "core2/1EEC090.h"
+#include <types.h>
+
 extern void func_800EF334(f32 *, f32);
 extern void func_800EFB24(f32 *, f32 *, f32 *);
 extern f32 func_800F0E00(f32, f32);

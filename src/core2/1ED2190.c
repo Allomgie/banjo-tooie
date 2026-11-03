@@ -1,4 +1,6 @@
 #include "core2/1ECE0B0.h"
+#include "types.h"
+
 extern s32 func_800DB9B0(void);
 extern s32 _plsu_entrypoint_1(s32);
 extern s32 D_801354F0;
@@ -362,17 +364,15 @@ int func_800F9110(int param_0)
 
 void func_800F911C(param_0) s32 param_0;
 {
+    if (*(u8 *) D_801354F8 == 3) {
+        func_800CF840(0);
+    }
 
-if (*(u8 *) D_801354F8 == 3) {
-    func_800CF840(0);
-}
+    (*((u8 *) D_801354F8)) = param_0;
 
-(*((u8 *) D_801354F8)) = param_0;
-
-if (*(u8 *) D_801354F8 == 3) {
-    func_800CF840(1);
-}
-
+    if (*(u8 *) D_801354F8 == 3) {
+        func_800CF840(1);
+    }
 }
 
 int func_800F9178()
@@ -383,7 +383,6 @@ int func_800F9178()
 int func_800F9184()
 {
     return !D_801354FA;
-
 }
 
 void func_800F9198()
@@ -395,13 +394,12 @@ void func_800F9198()
         D_801354FA = 1;
     }
 
-func_800F9C6C();
+    func_800F9C6C();
 }
 
 void func_800F91EC()
 {
     D_801354F0 = (s32) vector_defrag((void *) D_801354F0);
-
 }
 
 int func_800F9214()
@@ -410,7 +408,7 @@ int func_800F9214()
         return 2;
     }
 
-return 1;
+    return 1;
 }
 
 void func_800F9240(f32 *param_0, s32 param_1)
@@ -419,7 +417,6 @@ void func_800F9240(f32 *param_0, s32 param_1)
     func_800F5A00(param_1, sp1C);
     sp1C[0] += 200.0f;
     func_800EFA4C(param_0, sp1C[0], sp1C[1], sp1C[2] + 200.0f);
-
 }
 
 int func_800F929C()
@@ -428,7 +425,7 @@ int func_800F929C()
         return 0xB;
     }
 
-return 1;
+    return 1;
 }
 
 void func_800F92CC(s32 *param_0, volatile s32 *param_1, s32 *param_2, s32 *param_3)
@@ -441,15 +438,15 @@ void func_800F92CC(s32 *param_0, volatile s32 *param_1, s32 *param_2, s32 *param
     local_1 = func_800F5410(local_0);
     *param_1 = local_1;
 
-switch (local_1) {
-    case 10:
-        *param_3 = 0xB;
-        break;
-    case 11:
-        *param_3 = 0xA;
-}
+    switch (local_1) {
+        case 10:
+            *param_3 = 0xB;
+            break;
+        case 11:
+            *param_3 = 0xA;
+    }
 
-*param_2 = _plsu_entrypoint_1(*param_3);
+    *param_2 = _plsu_entrypoint_1(*param_3);
 }
 
 void func_800F9354(s32 *param_0, s32 *param_1, s32 *param_2)
@@ -462,14 +459,13 @@ void func_800F9354(s32 *param_0, s32 *param_1, s32 *param_2)
     local_1 = func_800F5410(local_0);
     *param_1 = local_1;
 
-switch (local_1) {
-    case 10:
-        *param_2 = 0xB;
-        return;
-    case 11:
-        *param_2 = 0xA;
-}
-
+    switch (local_1) {
+        case 10:
+            *param_2 = 0xB;
+            return;
+        case 11:
+            *param_2 = 0xA;
+    }
 }
 
 int func_800F93C4(s32 *param_0, s32 *param_1)
@@ -478,7 +474,6 @@ int func_800F93C4(s32 *param_0, s32 *param_1)
     local_0 = func_800F54E4();
     *param_0 = local_0;
     *param_1 = func_800F5410(local_0 | 0);
-
 }
 
 int func_800F9400(s32 param_0)
@@ -487,10 +482,9 @@ int func_800F9400(s32 param_0)
         func_800C964C(0xC);
     }
 
-else
-{
-    func_800C964C(0xE);
-}
+    else {
+        func_800C964C(0xE);
+    }
 }
 
 int func_800F9444(s32 param_0)
@@ -499,10 +493,9 @@ int func_800F9444(s32 param_0)
         func_800C964C(0xD);
     }
 
-else
-{
-    func_800C964C(0xF);
-}
+    else {
+        func_800C964C(0xF);
+    }
 }
 
 void func_800F9488(s32 param_0)
@@ -516,161 +509,160 @@ void func_800F9488(s32 param_0)
     f32 sp2C[3];
     f32 sp20[3];
 
-switch (D_80135520) {
-    case 3:
-        if (param_0 == 1) {
+    switch (D_80135520) {
+        case 3:
+            if (param_0 == 1) {
+                func_800F92CC(&sp58, &sp5C, &sp50, &sp54);
+                func_800F82D4(sp58, 0);
+                func_800F8268(sp58, 1, 1);
+            }
+            break;
+
+        case 6:
+            if (param_0 == 1) {
+                func_800F9354(&sp58, &sp5C, &sp54);
+                func_800F8EBC(sp58);
+                func_800F8268(sp58, 1, 1);
+                func_800F82D4(sp58, 0);
+            }
+            break;
+
+        case 9:
+            if (param_0 == 1) {
+                func_800F93C4(&sp58, &sp5C);
+                func_800F8EBC(sp58);
+                func_800F8268(sp58, 1, 1);
+                func_800F82D4(sp58, 0);
+            }
+            break;
+
+        case 15:
+            if (param_0 == 1) {
+                func_800F93C4(&sp58, &sp5C);
+                func_800F8E78(0xA);
+            }
+    }
+
+    switch (D_80135520 = param_0) {
+        case 2:
             func_800F92CC(&sp58, &sp5C, &sp50, &sp54);
-            func_800F82D4(sp58, 0);
-            func_800F8268(sp58, 1, 1);
-        }
-        break;
+            func_800F82D4(sp58, 2);
+            func_800F8268(sp58, 0, 1);
+            func_800F9444(sp5C);
+            return;
 
-    case 6:
-        if (param_0 == 1) {
+        case 3:
+            func_800F92CC(&sp58, &sp5C, &sp50, &sp54);
+            func_800F8128(sp50);
+            func_800F8EE4(sp58);
+            func_800F8EBC(sp50);
+            func_800F9400(sp54);
+            return;
+
+        case 4:
             func_800F9354(&sp58, &sp5C, &sp54);
-            func_800F8EBC(sp58);
-            func_800F8268(sp58, 1, 1);
-            func_800F82D4(sp58, 0);
-        }
-        break;
+            func_800F82D4(sp58, 2);
+            func_800F9444(sp5C);
+            return;
 
-    case 9:
-        if (param_0 == 1) {
-            func_800F93C4(&sp58, &sp5C);
-            func_800F8EBC(sp58);
-            func_800F8268(sp58, 1, 1);
-            func_800F82D4(sp58, 0);
-        }
-        break;
-
-    case 15:
-        if (param_0 == 1) {
-            func_800F93C4(&sp58, &sp5C);
-            func_800F8E78(0xA);
-        }
-}
-
-switch (D_80135520 = param_0) {
-    case 2:
-        func_800F92CC(&sp58, &sp5C, &sp50, &sp54);
-        func_800F82D4(sp58, 2);
-        func_800F8268(sp58, 0, 1);
-        func_800F9444(sp5C);
-        return;
-
-    case 3:
-        func_800F92CC(&sp58, &sp5C, &sp50, &sp54);
-        func_800F8128(sp50);
-        func_800F8EE4(sp58);
-        func_800F8EBC(sp50);
-        func_800F9400(sp54);
-        return;
-
-    case 4:
-        func_800F9354(&sp58, &sp5C, &sp54);
-        func_800F82D4(sp58, 2);
-        func_800F9444(sp5C);
-        return;
-
-    case 5:
-        func_800F9354(&sp58, &sp5C, &sp54);
-        func_800F9070(sp54, 1);
-        func_800F8268(sp58, 0, 1);
-        func_800F8EE4(sp58);
-        func_800F9070(sp5C, 0);
-        func_800A7990(func_800F8A5C(sp54), 0, 0);
-        return;
-
-    case 6:
-        func_800F9354(&sp58, &sp5C, &sp54);
-        func_800F82D4(sp58, 2);
-        func_800F9400(sp5C);
-        return;
-
-    case 7:
-        func_800F9444(func_800F929C());
-        return;
-
-    case 8:
-        sp54 = func_800F929C();
-        func_800F9070(sp54, 1);
-        if (func_800DB9B0() == 0) {
+        case 5:
+            func_800F9354(&sp58, &sp5C, &sp54);
+            func_800F9070(sp54, 1);
+            func_800F8268(sp58, 0, 1);
+            func_800F8EE4(sp58);
+            func_800F9070(sp5C, 0);
             func_800A7990(func_800F8A5C(sp54), 0, 0);
-        }
+            return;
 
-        return;
+        case 6:
+            func_800F9354(&sp58, &sp5C, &sp54);
+            func_800F82D4(sp58, 2);
+            func_800F9400(sp5C);
+            return;
 
-    case 9:
-        func_800F93C4(&sp58, &sp5C);
-        func_800F82D4(sp58, 2);
-        func_800F9400(sp5C);
-        return;
+        case 7:
+            func_800F9444(func_800F929C());
+            return;
 
-    case 10:
-        func_800F93C4(&sp58, &sp5C);
-        sp50 = _plsu_entrypoint_1(0x11);
-        func_800F8128(sp58);
-        func_800F759C(sp50);
-        func_800F8268(sp58, 1, 1);
-        return;
+        case 8:
+            sp54 = func_800F929C();
+            func_800F9070(sp54, 1);
+            if (func_800DB9B0() == 0) {
+                func_800A7990(func_800F8A5C(sp54), 0, 0);
+            }
 
-    case 11:
-        sp50 = D_80135522[0];
-        sp58 = D_80135521[0];
-        func_800F8128(sp50);
-        func_800F759C(sp58);
-        func_800F8268(sp50, 1, 1);
-        return;
+            return;
 
-    case 13:
-        func_800F93C4(&sp58, &sp5C);
-        func_800F82D4(sp58, 2);
-        func_800F9444(0xB);
-        return;
+        case 9:
+            func_800F93C4(&sp58, &sp5C);
+            func_800F82D4(sp58, 2);
+            func_800F9400(sp5C);
+            return;
 
-    case 14:
-        func_800F9070(0xA, 1);
-        func_800A7990(func_800F8A5C(0xA), 0, 0);
-        return;
+        case 10:
+            func_800F93C4(&sp58, &sp5C);
+            sp50 = _plsu_entrypoint_1(0x11);
+            func_800F8128(sp58);
+            func_800F759C(sp50);
+            func_800F8268(sp58, 1, 1);
+            return;
 
-    case 15:
-        func_800F93C4(&sp58, &sp5C);
-        sp50 = func_800F6224(sp58);
-        func_800F7E64(sp50, 0xB);
-        func_800F608C(sp50, 1);
-        func_800F9240(sp44, sp58);
-        func_800F7CF4(sp50, 0x50, sp44);
-        func_800F9400(0xA);
-        return;
+        case 11:
+            sp50 = D_80135522[0];
+            sp58 = D_80135521[0];
+            func_800F8128(sp50);
+            func_800F759C(sp58);
+            func_800F8268(sp50, 1, 1);
+            return;
 
-    case 16:
-        sp58 = _plsu_entrypoint_1(0xB);
-        sp50 = _plsu_entrypoint_1(0xA);
-        func_800F5A00(sp58, sp20);
-        func_800F5A00(sp50, sp2C);
-        if (func_800EEB40(sp20, sp2C) < 4.84e+04f) {
-            func_800EE7F8(sp38, sp20);
-        } else {
-            func_800F9240(sp38, sp50);
-        }
-        func_800F7CF4(sp58, 0x50, sp38);
-        func_800F8128(sp50);
-        func_800F8EBC(sp50);
-        func_800F8268(sp50, 1, 1);
-        return;
+        case 13:
+            func_800F93C4(&sp58, &sp5C);
+            func_800F82D4(sp58, 2);
+            func_800F9444(0xB);
+            return;
 
-    case 17:
-        sp58 = _plsu_entrypoint_1(0xB);
-        sp50 = _plsu_entrypoint_1(0xA);
-        func_800F759C(sp58);
-        func_800D5234(0);
-        func_800A16BC(0);
-        func_800F8128(sp50);
-        func_800F8EBC(sp50);
-        func_800F7B9C(sp50, 0x60);
-        func_800F8268(sp50, 1, 1);
-}
+        case 14:
+            func_800F9070(0xA, 1);
+            func_800A7990(func_800F8A5C(0xA), 0, 0);
+            return;
 
+        case 15:
+            func_800F93C4(&sp58, &sp5C);
+            sp50 = func_800F6224(sp58);
+            func_800F7E64(sp50, 0xB);
+            func_800F608C(sp50, 1);
+            func_800F9240(sp44, sp58);
+            func_800F7CF4(sp50, 0x50, sp44);
+            func_800F9400(0xA);
+            return;
+
+        case 16:
+            sp58 = _plsu_entrypoint_1(0xB);
+            sp50 = _plsu_entrypoint_1(0xA);
+            func_800F5A00(sp58, sp20);
+            func_800F5A00(sp50, sp2C);
+            if (func_800EEB40(sp20, sp2C) < 4.84e+04f) {
+                func_800EE7F8(sp38, sp20);
+            } else {
+                func_800F9240(sp38, sp50);
+            }
+            func_800F7CF4(sp58, 0x50, sp38);
+            func_800F8128(sp50);
+            func_800F8EBC(sp50);
+            func_800F8268(sp50, 1, 1);
+            return;
+
+        case 17:
+            sp58 = _plsu_entrypoint_1(0xB);
+            sp50 = _plsu_entrypoint_1(0xA);
+            func_800F759C(sp58);
+            func_800D5234(0);
+            func_800A16BC(0);
+            func_800F8128(sp50);
+            func_800F8EBC(sp50);
+            func_800F7B9C(sp50, 0x60);
+            func_800F8268(sp50, 1, 1);
+    }
 }
 
 int func_800F99E8()
@@ -683,11 +675,11 @@ int func_800F99FC()
 {
     u8 *local_0 = &D_80135520;
 
-if (*local_0 == 0x0E) {
-    return 1;
-}
+    if (*local_0 == 0x0E) {
+        return 1;
+    }
 
-return 0;
+    return 0;
 }
 
 int func_800F9A24()
@@ -699,7 +691,6 @@ int func_800F9A44()
 {
     D_80135520 = 0;
     func_800F9488(1);
-
 }
 
 int func_800F9A6C()
@@ -708,10 +699,9 @@ int func_800F9A6C()
         func_800F9488(2);
     }
 
-else
-{
-    func_800F9488(4);
-}
+    else {
+        func_800F9488(4);
+    }
 }
 
 void func_800F9AAC(long param_0, int param_1)
@@ -752,7 +742,6 @@ int func_800F9B54()
 void func_800F9BA4()
 {
     func_800D9240(0x11);
-
 }
 
 void func_800F9BC4()
@@ -781,7 +770,6 @@ void func_800F9BC4()
             }
         }
     }
-
 }
 
 int func_800F9C38()
@@ -789,7 +777,6 @@ int func_800F9C38()
     if (func_800F8B88() == 3) {
         func_800F9488(0x13);
     }
-
 }
 
 void func_800F9C6C(void)
@@ -797,77 +784,76 @@ void func_800F9C6C(void)
     s32 local_1;
     s32 local_0;
 
-switch (D_80135520) {
-    case 2:
-        if (!func_800C9510())
-            func_800F9488(3);
-        break;
-    case 3:
-        if (func_800C95D4())
+    switch (D_80135520) {
+        case 2:
+            if (!func_800C9510())
+                func_800F9488(3);
+            break;
+        case 3:
+            if (func_800C95D4())
+                func_800F9488(1);
+            break;
+        case 4:
+            if (!func_800C9510())
+                func_800F9488(5);
+            break;
+        case 5:
+            func_800F9488(6);
+            break;
+        case 6:
+            if (func_800C95D4())
+                func_800F9488(1);
+            break;
+        case 7:
+            if (!func_800C9510())
+                func_800F9488(8);
+            break;
+        case 8:
+            func_800F9488(9);
+            break;
+        case 9:
+            if (func_800C95D4())
+                func_800F9488(1);
+            break;
+        case 10:
             func_800F9488(1);
-        break;
-    case 4:
-        if (!func_800C9510())
-            func_800F9488(5);
-        break;
-    case 5:
-        func_800F9488(6);
-        break;
-    case 6:
-        if (func_800C95D4())
+            break;
+        case 11:
             func_800F9488(1);
-        break;
-    case 7:
-        if (!func_800C9510())
-            func_800F9488(8);
-        break;
-    case 8:
-        func_800F9488(9);
-        break;
-    case 9:
-        if (func_800C95D4())
+            break;
+        case 12:
+            if (_plsu_entrypoint_1(func_800F929C()) == -1)
+                func_800F9488(7);
+            else
+                func_800F9488(10);
+            break;
+        case 13:
+            if (!func_800C9510())
+                func_800F9488(14);
+            break;
+        case 14:
+            func_800F9488(15);
+            break;
+        case 15:
+            if (func_800C95D4())
+                func_800F9488(1);
+            break;
+        case 16:
             func_800F9488(1);
-        break;
-    case 10:
-        func_800F9488(1);
-        break;
-    case 11:
-        func_800F9488(1);
-        break;
-    case 12:
-        if (_plsu_entrypoint_1(func_800F929C()) == -1)
-            func_800F9488(7);
-        else
-            func_800F9488(10);
-        break;
-    case 13:
-        if (!func_800C9510())
-            func_800F9488(14);
-        break;
-    case 14:
-        func_800F9488(15);
-        break;
-    case 15:
-        if (func_800C95D4())
+            break;
+        case 17:
             func_800F9488(1);
-        break;
-    case 16:
-        func_800F9488(1);
-        break;
-    case 17:
-        func_800F9488(1);
-        break;
-    case 18:
-        local_0 = func_800F8A5C(10);
-        if (local_0 == func_800EA05C())
-            func_800F9488(16);
-        else
-            func_800F9488(13);
-        break;
-    case 19:
-        local_0 = func_800F8A5C(10);
-        if (local_0 == func_800EA05C())
-            func_800F9488(17);
-}
-
+            break;
+        case 18:
+            local_0 = func_800F8A5C(10);
+            if (local_0 == func_800EA05C())
+                func_800F9488(16);
+            else
+                func_800F9488(13);
+            break;
+        case 19:
+            local_0 = func_800F8A5C(10);
+            if (local_0 == func_800EA05C())
+                func_800F9488(17);
+    }
 }

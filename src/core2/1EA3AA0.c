@@ -1,4 +1,5 @@
 #include "core2/1EA3AA0.h"
+#include <types.h>
 
 extern void func_800EF8BC(void *, void *, f32);
 extern void func_800EF934(void *, void *, f32);
@@ -501,30 +502,27 @@ u16 func_800CB124(StateCB124 *param_0, f32 mf[4][4])
     if (((tmp * 0.5f) > 32767) || ((tmp * 0.5f) < (-32767))) {
         tmp = ((tmp * 0.5f) > 32767) ? (32767) : (-32767);
         near = ((-(tmp / 0.5f)) * far) / ((2 * far) - (tmp / 0.5f));
-
-}
-func_800F274C(mf);
-mf[0][0] = param_0->cot / param_0->aspect;
-mf[1][1] = param_0->cot;
-mf[2][2] = (near + far) / (near - far);
-mf[2][3] = -1;
-mf[3][2] = ((near + near) * far) / (near - far);
-mf[3][3] = 0;
-for (i = 0; i < 4; i++) {
-    for (j = 0; j < 4; j++) {
-        mf[i][j] *= 0.5f;
     }
+    func_800F274C(mf);
+    mf[0][0] = param_0->cot / param_0->aspect;
+    mf[1][1] = param_0->cot;
+    mf[2][2] = (near + far) / (near - far);
+    mf[2][3] = -1;
+    mf[3][2] = ((near + near) * far) / (near - far);
+    mf[3][3] = 0;
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            mf[i][j] *= 0.5f;
+        }
+    }
+    if ((near + far) <= 2.0f) {
+        perspNorm = (u16) 0xFFFF;
+    } else {
+        perspNorm = (u16) ((2.0f * 65536.0f) / (near + far));
 
-}
-if ((near + far) <= 2.0f) {
-    perspNorm = (u16) 0xFFFF;
-} else {
-    perspNorm = (u16) ((2.0f * 65536.0f) / (near + far));
-
-if (perspNorm <= 0) {
-    perspNorm = (u16) 0x0001;
-}
-
-}
-return perspNorm;
+        if (perspNorm <= 0) {
+            perspNorm = (u16) 0x0001;
+        }
+    }
+    return perspNorm;
 }

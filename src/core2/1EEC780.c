@@ -1,4 +1,6 @@
 #include "core2/1EEC090.h"
+#include <types.h>
+
 extern f32 func_800136E4(f32);
 typedef struct {
     u8 pad[12];
@@ -356,14 +358,13 @@ f32 *param_2;
     if (!local_3)
         local_4 = func_800FB3C0(local_1, local_2, 45.0f, local_0, 3, 0x820020);
 
-if (local_3 || local_4) {
-    func_800AAD28(local_5);
-    func_80114CF4(func_80110060(func_80110898(param_0)), local_5,
-                  local_3 ? local_3->local_0 : local_4->local_0, local_0);
-    func_801135D0(local_1, local_2, param_1, param_2, local_0);
-    func_800FAB50(param_1, param_2, local_0, 0x820020, 45.0f);
-}
-
+    if (local_3 || local_4) {
+        func_800AAD28(local_5);
+        func_80114CF4(func_80110060(func_80110898(param_0)), local_5,
+                      local_3 ? local_3->local_0 : local_4->local_0, local_0);
+        func_801135D0(local_1, local_2, param_1, param_2, local_0);
+        func_800FAB50(param_1, param_2, local_0, 0x820020, 45.0f);
+    }
 }
 
 int func_801137E4(void *param_0, f32 *param_1, f32 *param_2, f32 *param_3, f32 *param_4)
@@ -372,20 +373,20 @@ int func_801137E4(void *param_0, f32 *param_1, f32 *param_2, f32 *param_3, f32 *
     f32 local_0[3];
     f32 local_2;
 
-if (func_800C6A7C(param_1, param_3, &local_1, 0x860020)) {
-    func_800EFB24(&local_0, param_3, param_2);
-    func_800EF2A0(&local_0);
-    local_2 = func_800EEAA4(&local_0, &local_1);
-    if (local_2 < 0.0f) {
-        return 0;
+    if (func_800C6A7C(param_1, param_3, &local_1, 0x860020)) {
+        func_800EFB24(&local_0, param_3, param_2);
+        func_800EF2A0(&local_0);
+        local_2 = func_800EEAA4(&local_0, &local_1);
+        if (local_2 < 0.0f) {
+            return 0;
+        }
+        {
+            param_4[0] = 90.0f - func_80013A7C(local_2) + 5.0f;
+            return 1;
+        }
     }
-    {
-        param_4[0] = 90.0f - func_80013A7C(local_2) + 5.0f;
-        return 1;
-    }
-}
 
-return 0;
+    return 0;
 }
 
 s32 func_801138A0(u8 *param_0)
@@ -394,17 +395,16 @@ s32 func_801138A0(u8 *param_0)
 
     local_0 = (*(u8 **) ((s8 *) (param_0) + (0x28)));
 
-if (*(u8 *) ((s8 *) local_0 + 0x14) != 0) {
-    return 0;
-}
+    if (*(u8 *) ((s8 *) local_0 + 0x14) != 0) {
+        return 0;
+    }
 
-if (*(s16 *) ((s8 *) local_0 + 0xC) >= 4) {
-    *(s16 *) ((s8 *) local_0 + 0xE) = (s16) (*(s16 *) ((s8 *) local_0 + 0xE) + 1);
-} else {
-
-(*(s16 *) ((s8 *) (local_0) + (0xE))) = 0;
-}
-return (*(s16 *) ((s8 *) ((*(u8 **) ((s8 *) (param_0) + (0x28)))) + (0xE))) >= 5;
+    if (*(s16 *) ((s8 *) local_0 + 0xC) >= 4) {
+        *(s16 *) ((s8 *) local_0 + 0xE) = (s16) (*(s16 *) ((s8 *) local_0 + 0xE) + 1);
+    } else {
+        (*(s16 *) ((s8 *) (local_0) + (0xE))) = 0;
+    }
+    return (*(s16 *) ((s8 *) ((*(u8 **) ((s8 *) (param_0) + (0x28)))) + (0xE))) >= 5;
 }
 
 void func_801138F4(s32 param_0)
@@ -453,83 +453,81 @@ f32 func_80113978(LocalState *param_0, s32 param_1, s32 param_2)
         local_5 = 0;
         local_7 = 0;
 
-if (param_0->controls->count40 >= 4) {
-    local_6++;
-    local_5--;
-}
+        if (param_0->controls->count40 >= 4) {
+            local_6++;
+            local_5--;
+        }
 
-if (param_0->controls->count48 >= 4) {
-    local_6++;
-    local_5++;
-}
+        if (param_0->controls->count48 >= 4) {
+            local_6++;
+            local_5++;
+        }
 
-local_8 = 0.0f;
+        local_8 = 0.0f;
 
-if (local_6) {
-    if (!local_5)
-        local_5 = param_0->controls->value24 < param_0->controls->value1C ? 1 : -1;
-    if (local_5 < 0) {
-        if (func_801137E4(param_0, local_0, local_1, param_0->controls->point58, &local_8))
-            local_7 = 1;
-    } else {
-        if (func_801137E4(param_0, local_0, local_1, param_0->controls->point70, &local_8))
-            local_7 = 1;
+        if (local_6) {
+            if (!local_5)
+                local_5 = param_0->controls->value24 < param_0->controls->value1C ? 1 : -1;
+            if (local_5 < 0) {
+                if (func_801137E4(param_0, local_0, local_1, param_0->controls->point58, &local_8))
+                    local_7 = 1;
+            } else {
+                if (func_801137E4(param_0, local_0, local_1, param_0->controls->point70, &local_8))
+                    local_7 = 1;
+            }
+        }
+
+        if (local_7) {
+            func_800EFB24(local_12, local_1, local_0);
+            func_800F1A88(local_12, local_10);
+            local_9 = (local_5 < 0 ? -1.0f : 1.0f) * local_8;
+            func_800EF934(local_11, local_12, local_9 * 0.2f);
+            func_800EF04C(local_11, local_0);
+            if (func_8011349C(local_1, local_11)) {
+                func_80112D90(param_0, func_800136E4(local_10[1] + local_9), local_8 * 0.25f, 1, 1);
+                param_0->controls->direction7C = local_5;
+            }
+        } else if (param_0->controls->direction7C) {
+            func_80112E50(param_0, param_0->controls->direction7C * 2.5f, 1);
+            param_0->controls->direction7C = 0;
+        }
     }
-}
+    if (param_2) {
+        s32 local_13;
+        s32 local_14;
+        s32 local_15;
+        f32 local_16;
+        local_14 = 0;
+        local_13 = 0;
+        local_15 = 0;
+        if (param_0->controls->count44 >= 4) {
+            local_14++;
+            local_13--;
+        }
 
-if (local_7) {
-    func_800EFB24(local_12, local_1, local_0);
-    func_800F1A88(local_12, local_10);
-    local_9 = (local_5 < 0 ? -1.0f : 1.0f) * local_8;
-    func_800EF934(local_11, local_12, local_9 * 0.2f);
-    func_800EF04C(local_11, local_0);
-    if (func_8011349C(local_1, local_11)) {
-        func_80112D90(param_0, func_800136E4(local_10[1] + local_9), local_8 * 0.25f, 1, 1);
-        param_0->controls->direction7C = local_5;
+        if (param_0->controls->count3C >= 4) {
+            local_14++;
+            local_13++;
+        }
+
+        local_16 = 0.0f;
+
+        if (local_14) {
+            if (!local_13)
+                local_13 = param_0->controls->value18 < param_0->controls->value20 ? 1 : -1;
+            if (local_13 < 0) {
+                if (func_801137E4(param_0, local_0, local_1, param_0->controls->point64, &local_16))
+                    local_15 = 1;
+            } else {
+                if (func_801137E4(param_0, local_0, local_1, param_0->controls->point4C, &local_16))
+                    local_15 = 1;
+            }
+        }
+
+        if (local_15)
+            local_3 = func_800F0DC0(local_16, 10.0f);
     }
-} else if (param_0->controls->direction7C) {
-
-func_80112E50(param_0, param_0->controls->direction7C * 2.5f, 1);
-param_0->controls->direction7C = 0;
-}
-}
-if (param_2) {
-    s32 local_13;
-    s32 local_14;
-    s32 local_15;
-    f32 local_16;
-    local_14 = 0;
-    local_13 = 0;
-    local_15 = 0;
-    if (param_0->controls->count44 >= 4) {
-        local_14++;
-        local_13--;
-    }
-
-if (param_0->controls->count3C >= 4) {
-    local_14++;
-    local_13++;
-}
-
-local_16 = 0.0f;
-
-if (local_14) {
-    if (!local_13)
-        local_13 = param_0->controls->value18 < param_0->controls->value20 ? 1 : -1;
-    if (local_13 < 0) {
-        if (func_801137E4(param_0, local_0, local_1, param_0->controls->point64, &local_16))
-            local_15 = 1;
-    } else {
-        if (func_801137E4(param_0, local_0, local_1, param_0->controls->point4C, &local_16))
-            local_15 = 1;
-    }
-}
-
-if (local_15)
-    local_3 = func_800F0DC0(local_16, 10.0f);
-
-}
-return local_3;
+    return local_3;
 }
 
 void func_80113D30(Owner113D30 *param_0)
@@ -570,29 +568,28 @@ void func_80113D30(Owner113D30 *param_0)
                 func_800EFA4C(local_5, -local_8, 0.0f, 0.0f);
         }
 
-func_80019224(local_5, local_5);
-func_800EE780(local_6, local_5, local_3);
-func_800E8830(param_0->local_0->local_2[local_7], local_6);
-param_0->local_0->local_3[local_7] = func_800E8918(param_0->local_0->local_2[local_7], local_11,
-                                                   param_0->local_0->local_5[local_7], 0);
+        func_80019224(local_5, local_5);
+        func_800EE780(local_6, local_5, local_3);
+        func_800E8830(param_0->local_0->local_2[local_7], local_6);
+        param_0->local_0->local_3[local_7] = func_800E8918(
+            param_0->local_0->local_2[local_7], local_11, param_0->local_0->local_5[local_7], 0);
 
-if (param_0->local_0->local_3[local_7] == 0) {
-    if (param_0->local_0->local_1[local_7] == 0) {
-        param_0->local_0->local_1[local_7] = func_8001211C();
+        if (param_0->local_0->local_3[local_7] == 0) {
+            if (param_0->local_0->local_1[local_7] == 0) {
+                param_0->local_0->local_1[local_7] = func_8001211C();
+            }
+            param_0->local_0->local_4[local_7]++;
+        } else {
+            param_0->local_0->local_1[local_7] = 0;
+            param_0->local_0->local_4[local_7] = param_0->local_0->local_1[local_7];
+        }
     }
-    param_0->local_0->local_4[local_7]++;
-} else {
-
-param_0->local_0->local_1[local_7] = 0;
-param_0->local_0->local_4[local_7] = param_0->local_0->local_1[local_7];
-}
-}
-param_0->local_0->local_0 = 0;
-for (local_7 = param_0->local_0->local_0; local_7 < 4; local_7++) {
-    if (param_0->local_0->local_4[local_7] >= 4) {
-        param_0->local_0->local_0++;
+    param_0->local_0->local_0 = 0;
+    for (local_7 = param_0->local_0->local_0; local_7 < 4; local_7++) {
+        if (param_0->local_0->local_4[local_7] >= 4) {
+            param_0->local_0->local_0++;
+        }
     }
-}
 }
 
 u32 D_801249C0[1] = {0x0};

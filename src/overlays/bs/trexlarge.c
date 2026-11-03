@@ -1,4 +1,5 @@
 #include "bs/trexlarge.h"
+#include "overlays/ba/playerstate.h"
 #include "overlays/ba/stick.h"
 #include "core2/anctrl.h"
 
@@ -87,10 +88,9 @@ void func_8080000C_bstrexlarge(param_0) void *param_0;
 {
     s32 val = ((s32 *) param_0)[0x168 / 4];
 
-if (val > 0) {
-    ((s32 *) param_0)[0x168 / 4] = val - 1;
-}
-
+    if (val > 0) {
+        ((s32 *) param_0)[0x168 / 4] = val - 1;
+    }
 }
 
 int func_80800024_bstrexlarge(param_0)
@@ -102,16 +102,22 @@ s32 func_80800034_bstrexlarge(void *param_0)
 {
     unsigned int new_var2;
     unsigned int new_var;
-    if (1)
-        if (1)
-            if (1)
-                new_var2 = 0x59;
-    if (new_var2)
-        if (1)
-            do {
-            } while (0);
-    if (1)
-        new_var = new_var2;
+    if (1) {
+    }
+    if (1) {
+    }
+    if (1) {
+    }
+    new_var2 = 0x59;
+    if (new_var2) {
+    }
+    if (1) {
+    }
+    do {
+    } while (0);
+    if (1) {
+    }
+    new_var = new_var2;
     return ((s32 *) param_0)[new_var] >= 4;
 }
 
@@ -132,13 +138,12 @@ void func_80800044_bstrexlarge(PlayerState *param_0)
     local_1 = baphysics_get_vertical_velocity(param_0);
     local_5 = func_8009650C(param_0);
 
-if (local_5 && local_4 && local_0 < 70.0f && local_3[1] < 5.0f && local_1 < -100.0f) {
-    local_6 = *(s32 *) ((u8 *) param_0 + 0x164) + 1;
-    *(s32 *) ((u8 *) param_0 + 0x164) = func_800F13F0(local_6, 100.0f);
-} else {
-
-*(s32 *) ((u8 *) param_0 + 0x164) = 0;
-}
+    if (local_5 && local_4 && local_0 < 70.0f && local_3[1] < 5.0f && local_1 < -100.0f) {
+        local_6 = *(s32 *) ((u8 *) param_0 + 0x164) + 1;
+        *(s32 *) ((u8 *) param_0 + 0x164) = func_800F13F0(local_6, 100.0f);
+    } else {
+        *(s32 *) ((u8 *) param_0 + 0x164) = 0;
+    }
 }
 
 int func_80800140_bstrexlarge(s32 arg0)
@@ -152,6 +157,7 @@ int func_80800160_bstrexlarge(s32 arg0)
 }
 
 void func_80800180_bstrexlarge(param_0, param_1) PlayerState *param_0;
+
 void (*param_1)(PlayerState *);
 {
     switch (func_8009E6EC(param_0)) {
@@ -292,6 +298,7 @@ void func_80800560_bstrexlarge(void)
 {
     bstrexlarge_entrypoint_1();
 }
+
 int func_80800580_bstrexlarge(Actor *param_0)
 {
     bstrexlarge_entrypoint_2();
@@ -368,6 +375,7 @@ void func_80800834_bstrexlarge(void)
 {
     bstrexlarge_entrypoint_1();
 }
+
 void func_80800854_bstrexlarge()
 {
     bstrexlarge_entrypoint_2();
@@ -388,16 +396,19 @@ void func_808008A8_bstrexlarge(s32 arg0)
     bstrexlarge_entrypoint_1();
     _bsdrone_entrypoint_2(arg0);
 }
+
 void func_808008D0_bstrexlarge(s32 arg0)
 {
     bstrexlarge_entrypoint_2();
     _bsdrone_entrypoint_0(arg0);
 }
+
 void func_808008F8_bstrexlarge(s32 arg0)
 {
     _bsdrone_entrypoint_1();
     bstrexlarge_entrypoint_3(arg0);
 }
+
 int bstrexlarge_entrypoint_5(int param_0)
 {
     return D_808019B0_bstrexlarge[param_0];
@@ -428,6 +439,7 @@ void func_80800A00_bstrexlarge(void)
 {
     bstrexlarge_entrypoint_1();
 }
+
 void func_80800A20_bstrexlarge(BSTREXLarge *param_0)
 {
     bstrexlarge_entrypoint_2();
@@ -449,24 +461,23 @@ void func_80800A50_bstrexlarge(u8 *param_0)
         case 1:
             new_var = param_0;
 
-if (func_8008DF8C(new_var, 0x82) != 0) {
-    func_80800934_bstrexlarge(param_0, 2);
-}
+            if (func_8008DF8C(new_var, 0x82) != 0) {
+                func_80800934_bstrexlarge(param_0, 2);
+            }
 
-break;
+            break;
 
-case 2:
-    func_80800044_bstrexlarge(param_0);
+        case 2:
+            func_80800044_bstrexlarge(param_0);
 
-if ((player_isStable(param_0) != 0) || (func_80800034_bstrexlarge(param_0) != 0)) {
-    func_800A2EAC(param_0);
-    baphysics_set_target_horizontal_velocity(param_0, 0 & 0xFFFFFFFFFFFFFFFF);
-    sp24 = 0x147;
-}
+            if ((player_isStable(param_0) != 0) || (func_80800034_bstrexlarge(param_0) != 0)) {
+                func_800A2EAC(param_0);
+                baphysics_set_target_horizontal_velocity(param_0, 0 & 0xFFFFFFFFFFFFFFFF);
+                sp24 = 0x147;
+            }
+    }
 
-}
-
-bs_setState(param_0, sp24);
+    bs_setState(param_0, sp24);
 }
 
 int bstrexlarge_entrypoint_6(int param_0)
@@ -514,390 +525,384 @@ void func_80800BC4_bstrexlarge(PlayerState *param_0, s32 param_1)
             func_8009FFD8(param_0, 1, 1, 3, 6);
             sf_t461 = bastick_distance(param_0);
 
-if (sf_t461 != 0.0f) {
-    sf_t559 = bastick_getAngleRelativeToBanjo(param_0);
-    yaw_setIdeal(param_0, sf_t559);
+            if (sf_t461 != 0.0f) {
+                sf_t559 = bastick_getAngleRelativeToBanjo(param_0);
+                yaw_setIdeal(param_0, sf_t559);
+            }
+
+            baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
+            local_1 = yaw_getIdeal(param_0);
+            baphysics_set_horizontal_velocity(param_0, local_1,
+                                              baphysics_get_target_horizontal_velocity(param_0));
+            baphysics_set_vertical_velocity(param_0, 900.0f);
+            baphysics_set_gravity(param_0, -1350.0f);
+
+            if (func_800DC0C0() > 0.5f) {
+                func_8009DBB0(param_0, 0x4D8, 0x3F000000, 0x3F0CCCCD, 25000);
+            } else {
+                func_8009DBB0(param_0, 0x4D9, 0x3F000000, 0x3F0CCCCD, 25000);
+            }
+            break;
+        case 2:
+            baanim_setEndAndDuration(param_0, 1.0f, 0.8f);
+            break;
+        case 0:
+            baphysics_set_gravity(param_0, -3000.0f);
+    }
 }
 
-baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
-local_1 = yaw_getIdeal(param_0);
-baphysics_set_horizontal_velocity(param_0, local_1,
-                                  baphysics_get_target_horizontal_velocity(param_0));
-baphysics_set_vertical_velocity(param_0, 900.0f);
-baphysics_set_gravity(param_0, -1350.0f);
-
-if (func_800DC0C0() > 0.5f) {
-    func_8009DBB0(param_0, 0x4D8, 0x3F000000, 0x3F0CCCCD, 25000);
-} else {
-
-func_8009DBB0(param_0, 0x4D9, 0x3F000000, 0x3F0CCCCD, 25000);
+void func_80800DAC_bstrexlarge(s32 arg0)
+{
+    func_80800BC4_bstrexlarge(arg0, 0);
+    bstrexlarge_entrypoint_1(arg0);
 }
-break;
-case 2:
-    baanim_setEndAndDuration(param_0, 1.0f, 0.8f);
-    break;
-case 0:
-    baphysics_set_gravity(param_0, -3000.0f);
-    }
-    }
 
-    void func_80800DAC_bstrexlarge(s32 arg0)
-    {
-        func_80800BC4_bstrexlarge(arg0, 0);
-        bstrexlarge_entrypoint_1(arg0);
-    }
+void func_80800DD8_bstrexlarge(Actor *param_0)
+{
+    char *new_var;
+    new_var = ((char *) param_0) + 0x15c;
+    bstrexlarge_entrypoint_2();
+    *new_var = 0;
+    func_80800BC4_bstrexlarge(param_0, 1);
+}
 
-    void func_80800DD8_bstrexlarge(Actor *param_0)
-    {
-        char *new_var;
-        new_var = ((char *) param_0) + 0x15c;
-        bstrexlarge_entrypoint_2();
-        *new_var = 0;
-        func_80800BC4_bstrexlarge(param_0, 1);
+void func_80800E08_bstrexlarge(PlayerState *param_0)
+{
+    s32 local_0 = 0;
+    f32 local_1[3];
+    bstrexlarge_entrypoint_3(param_0);
+    func_8009BB24(param_0, local_1);
+    if (bakey_released(param_0, 8) && local_1[1] > 0.0f)
+        baphysics_reset_gravity(param_0);
+    switch (param_0->unk15C.bytes[0]) {
+        case 1:
+            func_808004B4_bstrexlarge(param_0);
+            if (func_8008DF8C(param_0, 0x82))
+                func_80800BC4_bstrexlarge(param_0, 2);
+            break;
+        case 2:
+            func_808004B4_bstrexlarge(param_0);
+            func_80800044_bstrexlarge(param_0);
+            if (player_isStable(param_0) || func_80800034_bstrexlarge(param_0)) {
+                func_800A2EAC(param_0);
+                baphysics_set_target_horizontal_velocity(param_0, 0.0f);
+                local_0 = 0x147;
+            }
     }
+    bs_setState(param_0, local_0);
+}
 
-    void func_80800E08_bstrexlarge(PlayerState *param_0)
-    {
-        s32 local_0 = 0;
-        f32 local_1[3];
-        bstrexlarge_entrypoint_3(param_0);
-        func_8009BB24(param_0, local_1);
-        if (bakey_released(param_0, 8) && local_1[1] > 0.0f)
-            baphysics_reset_gravity(param_0);
-        switch (param_0->unk15C.bytes[0]) {
-            case 1:
-                func_808004B4_bstrexlarge(param_0);
-                if (func_8008DF8C(param_0, 0x82))
-                    func_80800BC4_bstrexlarge(param_0, 2);
-                break;
-            case 2:
-                func_808004B4_bstrexlarge(param_0);
-                func_80800044_bstrexlarge(param_0);
-                if (player_isStable(param_0) || func_80800034_bstrexlarge(param_0)) {
-                    func_800A2EAC(param_0);
-                    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-                    local_0 = 0x147;
-                }
-        }
-        bs_setState(param_0, local_0);
-    }
+int bstrexlarge_entrypoint_8(s32 param_0)
+{
+    return D_808019D0_bstrexlarge[param_0];
+}
 
-    int bstrexlarge_entrypoint_8(s32 param_0)
-    {
-        return D_808019D0_bstrexlarge[param_0];
-    }
+void func_80800F2C_bstrexlarge(void)
+{
+    bstrexlarge_entrypoint_1();
+}
 
-    void func_80800F2C_bstrexlarge(void)
-    {
-        bstrexlarge_entrypoint_1();
-    }
-    void func_80800F4C_bstrexlarge()
-    {
-        bstrexlarge_entrypoint_2();
-    }
+void func_80800F4C_bstrexlarge()
+{
+    bstrexlarge_entrypoint_2();
+}
 
-    void func_80800F6C_bstrexlarge()
-    {
-        bstrexlarge_entrypoint_3();
-    }
+void func_80800F6C_bstrexlarge()
+{
+    bstrexlarge_entrypoint_3();
+}
 
-    int bstrexlarge_entrypoint_9(s32 param_0)
-    {
-        return D_808019E0_bstrexlarge[param_0];
-    }
+int bstrexlarge_entrypoint_9(s32 param_0)
+{
+    return D_808019E0_bstrexlarge[param_0];
+}
 
-    void func_80800FA0_bstrexlarge(s32 arg0)
-    {
-        _babounce_entrypoint_3();
-        bstrexlarge_entrypoint_1(arg0);
-    }
-    int func_80800FC8_bstrexlarge(Actor *param_0)
-    {
-        bstrexlarge_entrypoint_2();
-        _babounce_entrypoint_4(param_0, 2);
-        _babounce_entrypoint_5(param_0, 0x147, 0x3F30A3D7);
-    }
+void func_80800FA0_bstrexlarge(s32 arg0)
+{
+    _babounce_entrypoint_3();
+    bstrexlarge_entrypoint_1(arg0);
+}
 
-    int func_80801008_bstrexlarge(Actor *param_0)
-    {
-        s32 local_0;
-        local_0 = 0;
-        bstrexlarge_entrypoint_3(param_0);
-        if (_babounce_entrypoint_9(param_0)) {
-            local_0 = 0x151;
-        }
-        bs_setState(param_0, local_0);
-    }
+int func_80800FC8_bstrexlarge(Actor *param_0)
+{
+    bstrexlarge_entrypoint_2();
+    _babounce_entrypoint_4(param_0, 2);
+    _babounce_entrypoint_5(param_0, 0x147, 0x3F30A3D7);
+}
 
-    int bstrexlarge_entrypoint_10(int param_0)
-    {
-        return D_808019F0_bstrexlarge[param_0];
+int func_80801008_bstrexlarge(Actor *param_0)
+{
+    s32 local_0;
+    local_0 = 0;
+    bstrexlarge_entrypoint_3(param_0);
+    if (_babounce_entrypoint_9(param_0)) {
+        local_0 = 0x151;
     }
+    bs_setState(param_0, local_0);
+}
 
-    void func_80801060_bstrexlarge(s32 arg0)
-    {
-        _bsrest_entrypoint_14();
-        bstrexlarge_entrypoint_1(arg0);
-    }
-    void func_80801088_bstrexlarge(s32 arg0)
-    {
-        bstrexlarge_entrypoint_2();
-        _bsrest_entrypoint_16(arg0);
-    }
-    s32 func_808010B0_bstrexlarge(s32 param_0)
-    {
-        s32 local_0;
+int bstrexlarge_entrypoint_10(int param_0)
+{
+    return D_808019F0_bstrexlarge[param_0];
+}
 
-        local_0 = 0;
-        if (_bsrest_entrypoint_20(param_0)) {
-            local_0 = _bsrest_entrypoint_13(param_0);
-        }
-        bstrexlarge_entrypoint_3(param_0);
-        bs_setState(param_0, local_0);
-    }
+void func_80801060_bstrexlarge(s32 arg0)
+{
+    _bsrest_entrypoint_14();
+    bstrexlarge_entrypoint_1(arg0);
+}
 
-    int bstrexlarge_entrypoint_11(int param_0)
-    {
-        return D_80801A00_bstrexlarge[param_0];
-    }
+void func_80801088_bstrexlarge(s32 arg0)
+{
+    bstrexlarge_entrypoint_2();
+    _bsrest_entrypoint_16(arg0);
+}
 
-    void func_80801110_bstrexlarge(PlayerState *param_0)
-    {
-        f32 local_0[3];
-        func_8009C128(param_0, local_0);
-        param_0->unk160.word = func_800E1610(0, 30.0f, 1.0f, local_0);
-        func_8009DF18(param_0, 0x56C, 1.0f, 0x7FFF);
-        func_8009E5A4(param_0, 2, 1);
-        func_8009E55C(param_0, 2, 600.0f);
-        _bamotor_entrypoint_1(param_0, 1.0f, 1.0f, 5.0f);
-    }
+s32 func_808010B0_bstrexlarge(s32 param_0)
+{
+    s32 local_0;
 
-    int func_808011A8_bstrexlarge(param_0)
-    PlayerState *param_0;
-    {
-        if (param_0->unk160.word != -1) {
-            func_800E144C(param_0->unk160.word, 0.86f);
-        }
-        func_8009E55C(param_0, 2, 0.0f);
-        _bamotor_entrypoint_2(param_0, 1.0f, 0.1f, 0.5f);
+    local_0 = 0;
+    if (_bsrest_entrypoint_20(param_0)) {
+        local_0 = _bsrest_entrypoint_13(param_0);
     }
+    bstrexlarge_entrypoint_3(param_0);
+    bs_setState(param_0, local_0);
+}
 
-    int func_80801208_bstrexlarge(s32 param_0)
-    {
-        s32 local_0;
+int bstrexlarge_entrypoint_11(int param_0)
+{
+    return D_80801A00_bstrexlarge[param_0];
+}
 
-        local_0 = func_808011A8_bstrexlarge();
-        *(u8 *) (param_0 + 0x15E) = 0;
-    }
+void func_80801110_bstrexlarge(PlayerState *param_0)
+{
+    f32 local_0[3];
+    func_8009C128(param_0, local_0);
+    param_0->unk160.word = func_800E1610(0, 30.0f, 1.0f, local_0);
+    func_8009DF18(param_0, 0x56C, 1.0f, 0x7FFF);
+    func_8009E5A4(param_0, 2, 1);
+    func_8009E55C(param_0, 2, 600.0f);
+    _bamotor_entrypoint_1(param_0, 1.0f, 1.0f, 5.0f);
+}
 
-    func_80801230_bstrexlarge(u8 *param_0)
-    {
-        *(u32 *) (param_0 + 0x160) = 0xFFFFFFFF;
-        param_0[0x15E] = param_0[0x15D];
+int func_808011A8_bstrexlarge(param_0)
+PlayerState *param_0;
+{
+    if (param_0->unk160.word != -1) {
+        func_800E144C(param_0->unk160.word, 0.86f);
     }
+    func_8009E55C(param_0, 2, 0.0f);
+    _bamotor_entrypoint_2(param_0, 1.0f, 0.1f, 0.5f);
+}
 
-    void func_80801244_bstrexlarge(s32 arg0)
-    {
-        bstrexlarge_entrypoint_1();
-        func_80801208_bstrexlarge(arg0);
-    }
-    int func_8080126C_bstrexlarge(Actor *param_0)
-    {
-        s32 local_0;
-        local_0 = param_0;
-        bstrexlarge_entrypoint_2();
-        baanim_playForDuration_onceSmooth(local_0, 0x1D0, 0x40466666);
-        func_8009FFD8(local_0, 1, 3, 8, 2);
-        yaw_setVelocityBounded(local_0, 55.0f, 0.8f);
-        baphysics_set_target_horizontal_velocity(local_0, 0);
-        func_80801230_bstrexlarge(local_0);
-    }
+int func_80801208_bstrexlarge(s32 param_0)
+{
+    s32 local_0;
 
-    void func_808012EC_bstrexlarge(u8 *param_0)
-    {
-        void *temp_v0;
-        s32 sp40;
-        f32 sp3C;
-        s32 sp38;
-        f32 sp34;
-        f32 sp28[3];
+    local_0 = func_808011A8_bstrexlarge();
+    *(u8 *) (param_0 + 0x15E) = 0;
+}
 
-        temp_v0 = baanim_getAnimCtrlPtr();
-        sp40 = 0;
-        sp3C = anctrl_getAnimTimer(temp_v0);
-        bstrexlarge_entrypoint_3(param_0);
-        if ((*(u8 *) ((s8 *) param_0 + 0x15E)) != 0) {
-            sp38 = func_80092AD8(param_0);
-            func_800E0AF0((void *) sp38, 1.0f);
-            sp34 = func_800F10B4(sp3C, 0.75f, 1.0f, -25.0f, 0.0f);
-            func_800E0AFC((void *) sp38, 1, 1.0f, sp34, 0.0f, 0.0f);
-            func_800E0AFC((void *) sp38, 0x12, 1.0f, sp34, 0.0f, 0.0f);
-        }
-        if ((func_800DB9B0() != 0) && (func_8009D2E4(param_0) == 8)) {
-            func_8009D2D8(param_0, 2);
-        }
-        if ((sp3C >= 0.3f) && (sp3C <= 0.7f)) {
-            func_8009C128(param_0, sp28);
-            func_801013A8(sp28, 0x1B, (*(s32 *) ((s8 *) param_0 + 388)));
-        }
-        if (baanim_isAt(param_0, 0x3E051EB8) != 0) {
-            func_80801110_bstrexlarge(param_0);
-        }
-        if (baanim_isAt(param_0, 0x3F666666) != 0) {
-            func_808011A8_bstrexlarge(param_0);
-        }
-        if (baanim_isStopped(param_0) != 0) {
-            sp40 = 0x151;
-        }
-        bs_setState(param_0, sp40);
-    }
+func_80801230_bstrexlarge(u8 *param_0)
+{
+    *(u32 *) (param_0 + 0x160) = 0xFFFFFFFF;
+    param_0[0x15E] = param_0[0x15D];
+}
 
-    int bstrexlarge_entrypoint_12(int param_0)
-    {
-        return D_80801A10_bstrexlarge[param_0];
-    }
+void func_80801244_bstrexlarge(s32 arg0)
+{
+    bstrexlarge_entrypoint_1();
+    func_80801208_bstrexlarge(arg0);
+}
 
-    void func_808014A4_bstrexlarge(void)
-    {
-        bstrexlarge_entrypoint_1();
-    }
-    void func_808014C4_bstrexlarge(PlayerState *param_0)
-    {
-        bstrexlarge_entrypoint_2(param_0);
-        baanim_playForDuration_loopSmooth(param_0, 0x1CF, 0.7f);
-        func_8009FFD8(param_0, 2, 3, 1, 14);
-        yaw_setVelocityBounded(param_0, 300.0f, 3.5f);
-        baanim_setDurationRange(param_0, 0.1f, 10.0f);
-        func_8008C9F0(param_0, 400.0f, 1000.0f, 1.0f, 0.6f);
-        func_8008CA30(param_0, 1.0f);
-        func_80800000_bstrexlarge(param_0);
-    }
+int func_8080126C_bstrexlarge(Actor *param_0)
+{
+    s32 local_0;
+    local_0 = param_0;
+    bstrexlarge_entrypoint_2();
+    baanim_playForDuration_onceSmooth(local_0, 0x1D0, 0x40466666);
+    func_8009FFD8(local_0, 1, 3, 8, 2);
+    yaw_setVelocityBounded(local_0, 55.0f, 0.8f);
+    baphysics_set_target_horizontal_velocity(local_0, 0);
+    func_80801230_bstrexlarge(local_0);
+}
 
-    void func_80801574_bstrexlarge(s32 param_0)
-    {
-        func_8080000C_bstrexlarge(param_0);
-        bstrexlarge_entrypoint_3(param_0);
-        func_808004B4_bstrexlarge(param_0);
-        func_800A2D2C(param_0, 0x3F11F8A1, 3);
-        func_800A2D2C(param_0, 0x3D8FC505, 4);
-        bs_setState(param_0, func_808002E0_bstrexlarge(param_0, 0, 1));
-    }
+void func_808012EC_bstrexlarge(u8 *param_0)
+{
+    void *temp_v0;
+    s32 sp40;
+    f32 sp3C;
+    s32 sp38;
+    f32 sp34;
+    f32 sp28[3];
 
-    int bstrexlarge_entrypoint_13(int param_0)
-    {
-        return D_80801A20_bstrexlarge[param_0];
+    temp_v0 = baanim_getAnimCtrlPtr();
+    sp40 = 0;
+    sp3C = anctrl_getAnimTimer(temp_v0);
+    bstrexlarge_entrypoint_3(param_0);
+    if ((*(u8 *) ((s8 *) param_0 + 0x15E)) != 0) {
+        sp38 = func_80092AD8(param_0);
+        func_800E0AF0((void *) sp38, 1.0f);
+        sp34 = func_800F10B4(sp3C, 0.75f, 1.0f, -25.0f, 0.0f);
+        func_800E0AFC((void *) sp38, 1, 1.0f, sp34, 0.0f, 0.0f);
+        func_800E0AFC((void *) sp38, 0x12, 1.0f, sp34, 0.0f, 0.0f);
     }
+    if ((func_800DB9B0() != 0) && (func_8009D2E4(param_0) == 8)) {
+        func_8009D2D8(param_0, 2);
+    }
+    if ((sp3C >= 0.3f) && (sp3C <= 0.7f)) {
+        func_8009C128(param_0, sp28);
+        func_801013A8(sp28, 0x1B, (*(s32 *) ((s8 *) param_0 + 388)));
+    }
+    if (baanim_isAt(param_0, 0x3E051EB8) != 0) {
+        func_80801110_bstrexlarge(param_0);
+    }
+    if (baanim_isAt(param_0, 0x3F666666) != 0) {
+        func_808011A8_bstrexlarge(param_0);
+    }
+    if (baanim_isStopped(param_0) != 0) {
+        sp40 = 0x151;
+    }
+    bs_setState(param_0, sp40);
+}
 
-    void func_80801604_bstrexlarge(s32 arg0)
-    {
-        func_80090A2C();
-        func_800951B4(arg0);
-        bstrexlarge_entrypoint_1(arg0);
-    }
+int bstrexlarge_entrypoint_12(int param_0)
+{
+    return D_80801A10_bstrexlarge[param_0];
+}
 
-    void func_80801634_bstrexlarge(s32 param_0)
-    {
-        bstrexlarge_entrypoint_2();
-        baanim_playForDuration_loopSmooth(param_0, 0x1D2, 8.5f);
-        func_8009FFD8(param_0, 1, 3, 2, 2);
-        yaw_setVelocityBounded(param_0, 3e+02f, 3.5f);
-        baphysics_set_target_horizontal_velocity(param_0, 0);
-        func_800909CC(param_0);
-        func_80800000_bstrexlarge(param_0);
-    }
+void func_808014A4_bstrexlarge(void)
+{
+    bstrexlarge_entrypoint_1();
+}
 
-    void func_808016B4_bstrexlarge(s32 param_0)
-    {
-        func_8080000C_bstrexlarge();
-        bstrexlarge_entrypoint_3(param_0);
-        if (baanim_isAt(param_0, 0x3DC28F5C) != 0) {
-            func_8009DF18(param_0, 0x570, 0.9f, 0x4650);
-        }
-        if (baanim_isAt(param_0, 0x3F0B851F) != 0) {
-            func_8009DEC0(param_0, 0x56F, 0x3F666666, 0x3F8CCCCD, 0x4E20, 0x55F0);
-        }
-        if (baanim_isAt(param_0, 0x3F51EB85) != 0) {
-            func_8009DF18(param_0, 0x570, 0.9f, 0x4E20);
-        }
-        if (baanim_isAt(param_0, 0x3F6B851F) != 0) {
-            func_8009DF18(param_0, 0x570, 1.0f, 0x32C8);
-        }
-        func_808004B4_bstrexlarge(param_0);
-        bs_setState(param_0, func_808003C4_bstrexlarge(param_0, 0, 1));
-    }
+void func_808014C4_bstrexlarge(PlayerState *param_0)
+{
+    bstrexlarge_entrypoint_2(param_0);
+    baanim_playForDuration_loopSmooth(param_0, 0x1CF, 0.7f);
+    func_8009FFD8(param_0, 2, 3, 1, 14);
+    yaw_setVelocityBounded(param_0, 300.0f, 3.5f);
+    baanim_setDurationRange(param_0, 0.1f, 10.0f);
+    func_8008C9F0(param_0, 400.0f, 1000.0f, 1.0f, 0.6f);
+    func_8008CA30(param_0, 1.0f);
+    func_80800000_bstrexlarge(param_0);
+}
 
-    int bstrexlarge_entrypoint_14(s32 param_0)
-    {
-        return D_80801A30_bstrexlarge[param_0];
-    }
+void func_80801574_bstrexlarge(s32 param_0)
+{
+    func_8080000C_bstrexlarge(param_0);
+    bstrexlarge_entrypoint_3(param_0);
+    func_808004B4_bstrexlarge(param_0);
+    func_800A2D2C(param_0, 0x3F11F8A1, 3);
+    func_800A2D2C(param_0, 0x3D8FC505, 4);
+    bs_setState(param_0, func_808002E0_bstrexlarge(param_0, 0, 1));
+}
 
-    void func_808017DC_bstrexlarge(void)
-    {
-        bstrexlarge_entrypoint_1();
-    }
-    void func_808017FC_bstrexlarge(PlayerState *param_0)
-    {
-        bstrexlarge_entrypoint_2(param_0);
-        baanim_playForDuration_loopSmooth(param_0, 0x1CE, 1.2f);
-        func_8009FFD8(param_0, 2, 3, 1, 14);
-        yaw_setVelocityBounded(param_0, 3e+02f, 3.5f);
-        baanim_setDurationRange(param_0, 0.1f, 10.0f);
-        func_8008C9F0(param_0, 100.0f, 400.0f, 1.5f, 1.0f);
-        func_8008CA30(param_0, 1.0f);
-        func_80800000_bstrexlarge(param_0);
-    }
+int bstrexlarge_entrypoint_13(int param_0)
+{
+    return D_80801A20_bstrexlarge[param_0];
+}
 
-    int func_808018AC_bstrexlarge(Actor *param_0)
-    {
-        Actor *local_0;
-        local_0 = param_0;
-        func_8080000C_bstrexlarge(local_0);
-        bstrexlarge_entrypoint_3(local_0);
-        func_808004B4_bstrexlarge(local_0);
-        func_800A2D2C(local_0, 0x3F65CFAB, 3);
-        func_800A2D2C(local_0, 0x3ECB9F56, 4);
-        bs_setState(local_0, func_808002E0_bstrexlarge(local_0, 0, 1) | 0);
-    }
+void func_80801604_bstrexlarge(s32 arg0)
+{
+    func_80090A2C();
+    func_800951B4(arg0);
+    bstrexlarge_entrypoint_1(arg0);
+}
 
-    int bstrexlarge_entrypoint_15(int param_0)
-    {
-        return D_80801A40_bstrexlarge[param_0];
-    }
+void func_80801634_bstrexlarge(s32 param_0)
+{
+    bstrexlarge_entrypoint_2();
+    baanim_playForDuration_loopSmooth(param_0, 0x1D2, 8.5f);
+    func_8009FFD8(param_0, 1, 3, 2, 2);
+    yaw_setVelocityBounded(param_0, 3e+02f, 3.5f);
+    baphysics_set_target_horizontal_velocity(param_0, 0);
+    func_800909CC(param_0);
+    func_80800000_bstrexlarge(param_0);
+}
 
-    extern void _basudie_entrypoint_11();
-    s32 D_80801990_bstrexlarge[4] = {
-        (u32) func_80800560_bstrexlarge, (u32) func_80800580_bstrexlarge,
-        (u32) func_808005D4_bstrexlarge, (u32) func_8080024C_bstrexlarge};
-    int D_808019A0_bstrexlarge[4] = {(u32) func_80800834_bstrexlarge,
-                                     (u32) func_80800854_bstrexlarge,
-                                     (u32) func_80800874_bstrexlarge, (u32) _basudie_entrypoint_11};
-    int D_808019B0_bstrexlarge[4] = {
-        (u32) func_808008A8_bstrexlarge, (u32) func_808008D0_bstrexlarge,
-        (u32) func_808008F8_bstrexlarge, (u32) func_80800270_bstrexlarge};
-    int D_808019C0_bstrexlarge[4] = {
-        (u32) func_80800A00_bstrexlarge, (u32) func_80800A20_bstrexlarge,
-        (u32) func_80800A50_bstrexlarge, (u32) func_8080024C_bstrexlarge};
-    int D_808019D0_bstrexlarge[4] = {
-        (u32) func_80800DAC_bstrexlarge, (u32) func_80800DD8_bstrexlarge,
-        (u32) func_80800E08_bstrexlarge, (u32) func_8080024C_bstrexlarge};
-    s32 D_808019E0_bstrexlarge[4] = {
-        (u32) func_80800F2C_bstrexlarge, (u32) func_80800F4C_bstrexlarge,
-        (u32) func_80800F6C_bstrexlarge, (u32) func_8080024C_bstrexlarge};
-    int D_808019F0_bstrexlarge[4] = {
-        (u32) func_80800FA0_bstrexlarge, (u32) func_80800FC8_bstrexlarge,
-        (u32) func_80801008_bstrexlarge, (u32) func_8080024C_bstrexlarge};
-    s32 D_80801A00_bstrexlarge[4] = {
-        (u32) func_80801060_bstrexlarge, (u32) func_80801088_bstrexlarge,
-        (u32) func_808010B0_bstrexlarge, (u32) func_8080024C_bstrexlarge};
-    int D_80801A10_bstrexlarge[4] = {
-        (u32) func_80801244_bstrexlarge, (u32) func_8080126C_bstrexlarge,
-        (u32) func_808012EC_bstrexlarge, (u32) func_80800294_bstrexlarge};
-    int D_80801A20_bstrexlarge[4] = {
-        (u32) func_808014A4_bstrexlarge, (u32) func_808014C4_bstrexlarge,
-        (u32) func_80801574_bstrexlarge, (u32) func_8080024C_bstrexlarge};
-    s32 D_80801A30_bstrexlarge[4] = {
-        (u32) func_80801604_bstrexlarge, (u32) func_80801634_bstrexlarge,
-        (u32) func_808016B4_bstrexlarge, (u32) func_8080024C_bstrexlarge};
-    s32 D_80801A40_bstrexlarge[4] = {
-        (u32) func_808017DC_bstrexlarge, (u32) func_808017FC_bstrexlarge,
-        (u32) func_808018AC_bstrexlarge, (u32) func_8080024C_bstrexlarge};
+void func_808016B4_bstrexlarge(s32 param_0)
+{
+    func_8080000C_bstrexlarge();
+    bstrexlarge_entrypoint_3(param_0);
+    if (baanim_isAt(param_0, 0x3DC28F5C) != 0) {
+        func_8009DF18(param_0, 0x570, 0.9f, 0x4650);
+    }
+    if (baanim_isAt(param_0, 0x3F0B851F) != 0) {
+        func_8009DEC0(param_0, 0x56F, 0x3F666666, 0x3F8CCCCD, 0x4E20, 0x55F0);
+    }
+    if (baanim_isAt(param_0, 0x3F51EB85) != 0) {
+        func_8009DF18(param_0, 0x570, 0.9f, 0x4E20);
+    }
+    if (baanim_isAt(param_0, 0x3F6B851F) != 0) {
+        func_8009DF18(param_0, 0x570, 1.0f, 0x32C8);
+    }
+    func_808004B4_bstrexlarge(param_0);
+    bs_setState(param_0, func_808003C4_bstrexlarge(param_0, 0, 1));
+}
+
+int bstrexlarge_entrypoint_14(s32 param_0)
+{
+    return D_80801A30_bstrexlarge[param_0];
+}
+
+void func_808017DC_bstrexlarge(void)
+{
+    bstrexlarge_entrypoint_1();
+}
+
+void func_808017FC_bstrexlarge(PlayerState *param_0)
+{
+    bstrexlarge_entrypoint_2(param_0);
+    baanim_playForDuration_loopSmooth(param_0, 0x1CE, 1.2f);
+    func_8009FFD8(param_0, 2, 3, 1, 14);
+    yaw_setVelocityBounded(param_0, 3e+02f, 3.5f);
+    baanim_setDurationRange(param_0, 0.1f, 10.0f);
+    func_8008C9F0(param_0, 100.0f, 400.0f, 1.5f, 1.0f);
+    func_8008CA30(param_0, 1.0f);
+    func_80800000_bstrexlarge(param_0);
+}
+
+int func_808018AC_bstrexlarge(Actor *param_0)
+{
+    Actor *local_0;
+    local_0 = param_0;
+    func_8080000C_bstrexlarge(local_0);
+    bstrexlarge_entrypoint_3(local_0);
+    func_808004B4_bstrexlarge(local_0);
+    func_800A2D2C(local_0, 0x3F65CFAB, 3);
+    func_800A2D2C(local_0, 0x3ECB9F56, 4);
+    bs_setState(local_0, func_808002E0_bstrexlarge(local_0, 0, 1) | 0);
+}
+
+int bstrexlarge_entrypoint_15(int param_0)
+{
+    return D_80801A40_bstrexlarge[param_0];
+}
+
+extern void _basudie_entrypoint_11();
+s32 D_80801990_bstrexlarge[4] = {(u32) func_80800560_bstrexlarge, (u32) func_80800580_bstrexlarge,
+                                 (u32) func_808005D4_bstrexlarge, (u32) func_8080024C_bstrexlarge};
+int D_808019A0_bstrexlarge[4] = {(u32) func_80800834_bstrexlarge, (u32) func_80800854_bstrexlarge,
+                                 (u32) func_80800874_bstrexlarge, (u32) _basudie_entrypoint_11};
+int D_808019B0_bstrexlarge[4] = {(u32) func_808008A8_bstrexlarge, (u32) func_808008D0_bstrexlarge,
+                                 (u32) func_808008F8_bstrexlarge, (u32) func_80800270_bstrexlarge};
+int D_808019C0_bstrexlarge[4] = {(u32) func_80800A00_bstrexlarge, (u32) func_80800A20_bstrexlarge,
+                                 (u32) func_80800A50_bstrexlarge, (u32) func_8080024C_bstrexlarge};
+int D_808019D0_bstrexlarge[4] = {(u32) func_80800DAC_bstrexlarge, (u32) func_80800DD8_bstrexlarge,
+                                 (u32) func_80800E08_bstrexlarge, (u32) func_8080024C_bstrexlarge};
+s32 D_808019E0_bstrexlarge[4] = {(u32) func_80800F2C_bstrexlarge, (u32) func_80800F4C_bstrexlarge,
+                                 (u32) func_80800F6C_bstrexlarge, (u32) func_8080024C_bstrexlarge};
+int D_808019F0_bstrexlarge[4] = {(u32) func_80800FA0_bstrexlarge, (u32) func_80800FC8_bstrexlarge,
+                                 (u32) func_80801008_bstrexlarge, (u32) func_8080024C_bstrexlarge};
+s32 D_80801A00_bstrexlarge[4] = {(u32) func_80801060_bstrexlarge, (u32) func_80801088_bstrexlarge,
+                                 (u32) func_808010B0_bstrexlarge, (u32) func_8080024C_bstrexlarge};
+int D_80801A10_bstrexlarge[4] = {(u32) func_80801244_bstrexlarge, (u32) func_8080126C_bstrexlarge,
+                                 (u32) func_808012EC_bstrexlarge, (u32) func_80800294_bstrexlarge};
+int D_80801A20_bstrexlarge[4] = {(u32) func_808014A4_bstrexlarge, (u32) func_808014C4_bstrexlarge,
+                                 (u32) func_80801574_bstrexlarge, (u32) func_8080024C_bstrexlarge};
+s32 D_80801A30_bstrexlarge[4] = {(u32) func_80801604_bstrexlarge, (u32) func_80801634_bstrexlarge,
+                                 (u32) func_808016B4_bstrexlarge, (u32) func_8080024C_bstrexlarge};
+s32 D_80801A40_bstrexlarge[4] = {(u32) func_808017DC_bstrexlarge, (u32) func_808017FC_bstrexlarge,
+                                 (u32) func_808018AC_bstrexlarge, (u32) func_8080024C_bstrexlarge};

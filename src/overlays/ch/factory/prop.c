@@ -1,4 +1,6 @@
 #include "common.h"
+#include "types.h"
+#include "macros.h"
 
 extern int D_80800C20_chfactoryprop[];
 extern void *D_80800C68_chfactoryprop;

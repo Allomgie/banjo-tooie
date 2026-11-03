@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/crouch.h"
 
 extern f32 mlAbsF(f32);

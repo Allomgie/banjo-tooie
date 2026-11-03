@@ -1,3 +1,5 @@
+#include "common.h"
+#include "freelist.h"
 #include <freelist.h>
 
 typedef struct {
@@ -233,11 +235,10 @@ u8 param_0;
 {
     freelist_erase(D_8012D600, param_0);
 
-if (!freelist_used_count(D_8012D600)) {
-    freelist_free(D_8012D600);
-    D_8012D600 = 0;
-}
-
+    if (!freelist_used_count(D_8012D600)) {
+        freelist_free(D_8012D600);
+        D_8012D600 = 0;
+    }
 }
 
 void func_800E8830(param_0, param_1) u8 param_0;
@@ -290,22 +291,21 @@ f32 *param_3;
         local_1->local_8 = 0;
     local_3 = func_800C4C34(param_1, local_2, local_1, &local_4);
 
-if (local_4 && local_3) {
-    local_1->local_2 = func_800E3928(local_2, local_0);
-    func_800E3980(local_1->local_4);
-    func_800EE7F8(local_1->local_5, (f32 *) local_2);
-    local_1->local_8 = 1;
-}
+    if (local_4 && local_3) {
+        local_1->local_2 = func_800E3928(local_2, local_0);
+        func_800E3980(local_1->local_4);
+        func_800EE7F8(local_1->local_5, (f32 *) local_2);
+        local_1->local_8 = 1;
+    }
 
-if (param_3) {
-    param_3[0] = local_1->local_0;
-    param_3[1] = local_1->local_1;
-}
+    if (param_3) {
+        param_3[0] = local_1->local_0;
+        param_3[1] = local_1->local_1;
+    }
 
-if (param_2)
-    func_800EE7F8(param_2, local_1->local_6);
-return local_1->local_7;
-
+    if (param_2)
+        func_800EE7F8(param_2, local_1->local_6);
+    return local_1->local_7;
 }
 
 void func_800E8A20()
@@ -313,7 +313,6 @@ void func_800E8A20()
     if (D_8012D600 != 0) {
         D_8012D600 = freelist_defrag(D_8012D600);
     }
-
 }
 
 LocalExponent D_801234C0[8] = {0x6, 0x0,     0x5, 0x20000, 0x4, 0x30000, 0x3, 0x38000,

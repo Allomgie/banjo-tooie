@@ -1,4 +1,5 @@
 #include "gl/cutDll.h"
+#include "common.h"
 
 typedef struct {
     s16 unk0;

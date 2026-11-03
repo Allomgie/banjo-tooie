@@ -236,64 +236,65 @@ void func_808002C0_chnewfreezy(Actor *param_0)
     }
     local_2 = func_800DC128(0, param_0->unk6C_0 * 5);
     for (local_1 = 0; local_1 < param_0->unk6C_0; local_1++, local_0++) {
-        if (1)
-            switch (local_0->state) {
-                case 2:
-                    if (local_1 == local_2) {
-                        func_800E3980(local_5);
-                        func_800F18FC(local_0->pos, local_5, local_6);
-                        for (local_13 = 0; local_13 < 2; local_13++) {
-                            local_6[1] += func_800DC178(0.0f, 160.0f) - 80.0f;
-                        }
-                        func_800EEBF0(local_4, local_6, local_0->unk4C * 25.0f);
-                        func_800EF04C(local_4, local_0->pos);
-                        _fxtwinkle_entrypoint_1(local_4, 0x9E5);
+        if (1) {
+        }
+        switch (local_0->state) {
+            case 2:
+                if (local_1 == local_2) {
+                    func_800E3980(local_5);
+                    func_800F18FC(local_0->pos, local_5, local_6);
+                    for (local_13 = 0; local_13 < 2; local_13++) {
+                        local_6[1] += func_800DC178(0.0f, 160.0f) - 80.0f;
                     }
-                    break;
-                case 1:
-                    local_0->unk50 = func_800F10B4(*(f32 *) &param_0->actorData[3], local_0->unk54,
-                                                   local_0->unk58, 0, 1.0f);
-                    if (1.0f <= local_0->unk50) {
-                        local_0->state = 2;
+                    func_800EEBF0(local_4, local_6, local_0->unk4C * 25.0f);
+                    func_800EF04C(local_4, local_0->pos);
+                    _fxtwinkle_entrypoint_1(local_4, 0x9E5);
+                }
+                break;
+            case 1:
+                local_0->unk50 = func_800F10B4(*(f32 *) &param_0->actorData[3], local_0->unk54,
+                                               local_0->unk58, 0, 1.0f);
+                if (1.0f <= local_0->unk50) {
+                    local_0->state = 2;
+                }
+                local_0->unk4C = local_0->unk48 * local_0->unk50;
+                func_800EFB24(local_7, local_0->pos, local_0->unk24);
+                func_800EF334(local_7, local_0->unk50);
+                func_800EE780(local_0->unk3C, local_0->unk24, local_7);
+                break;
+            case 4:
+                func_800EFA20(local_8, local_0->vel, func_800D8FF8());
+                func_800EE7F8(local_9, local_0->unk3C);
+                func_800EE780(local_10, local_9, local_8);
+                func_800EF04C(local_10, local_8);
+                if (func_800BEF00(local_9, local_10, local_11, 0x20020)) {
+                    local_14 = func_800EEF94(local_0->vel);
+                    local_15 = func_800EEF94(local_8) * 2;
+                    local_16 = func_800EEAD4(local_9, local_10);
+                    if (local_16 < local_15) {
+                        func_800EF334(local_8, local_16 / local_15 * 0.9f);
                     }
-                    local_0->unk4C = local_0->unk48 * local_0->unk50;
-                    func_800EFB24(local_7, local_0->pos, local_0->unk24);
-                    func_800EF334(local_7, local_0->unk50);
-                    func_800EE780(local_0->unk3C, local_0->unk24, local_7);
-                    break;
-                case 4:
-                    func_800EFA20(local_8, local_0->vel, func_800D8FF8());
-                    func_800EE7F8(local_9, local_0->unk3C);
-                    func_800EE780(local_10, local_9, local_8);
-                    func_800EF04C(local_10, local_8);
-                    if (func_800BEF00(local_9, local_10, local_11, 0x20020)) {
-                        local_14 = func_800EEF94(local_0->vel);
-                        local_15 = func_800EEF94(local_8) * 2;
-                        local_16 = func_800EEAD4(local_9, local_10);
-                        if (local_16 < local_15) {
-                            func_800EF334(local_8, local_16 / local_15 * 0.9f);
-                        }
-                        func_800EFDE8(local_0->vel, local_0->vel, local_11);
-                        func_800EF368(local_0->vel, local_14 * 0.35f);
-                        func_800EF334(local_0->unk30, 0.35f);
-                        if (local_14 < 250.0f) {
-                            local_0->state = 5;
-                        }
-                    } else {
-                        local_0->vel[0] *= 0.95f;
-                        local_0->vel[2] *= 0.95f;
-                        local_0->vel[1] -= 50.0f;
-                        func_800EF04C(local_0->unkC, local_0->unk30);
-                        func_800EF334(local_0->unk30, 0.99f);
+                    func_800EFDE8(local_0->vel, local_0->vel, local_11);
+                    func_800EF368(local_0->vel, local_14 * 0.35f);
+                    func_800EF334(local_0->unk30, 0.35f);
+                    if (local_14 < 250.0f) {
+                        local_0->state = 5;
                     }
-                    func_800EF04C(local_0->unk3C, local_8);
-                    break;
-                case 3:
-                    local_3--;
-                    break;
-                case 5:
-                    local_3--;
-            }
+                } else {
+                    local_0->vel[0] *= 0.95f;
+                    local_0->vel[2] *= 0.95f;
+                    local_0->vel[1] -= 50.0f;
+                    func_800EF04C(local_0->unkC, local_0->unk30);
+                    func_800EF334(local_0->unk30, 0.99f);
+                }
+                func_800EF04C(local_0->unk3C, local_8);
+                break;
+            case 3:
+                local_3--;
+                break;
+            case 5:
+                local_3--;
+        }
     }
     if (local_3 == 0) {
         _subaddiefade_entrypoint_3(param_0);

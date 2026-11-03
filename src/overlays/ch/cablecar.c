@@ -1,3 +1,4 @@
+#include "common.h"
 #include "core2/1EB5980.h"
 #include "core2/1ED8C80.h"
 #include "su/baddieaudioquick.h"

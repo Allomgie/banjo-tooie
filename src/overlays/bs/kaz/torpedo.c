@@ -1,4 +1,6 @@
+#include "common.h"
 #include "overlays/bs/kaz/torpedo.h"
+#include "overlays/ba/playerstate.h"
 
 extern s32 D_80801730_bskaztorpedo[];
 extern s32 D_80801740_bskaztorpedo[];

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
 #include "overlays/ba/timer.h"
 #include "overlays/ba/yaw.h"

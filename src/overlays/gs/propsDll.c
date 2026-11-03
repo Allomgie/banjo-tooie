@@ -122,78 +122,77 @@ void gspropsDll_entrypoint_2(u8 *param_0, s32 param_1)
 
     k5a = 5;
     k5b = 5;
-    if (1)
-        if (param_0 != 0 && *(s16 *) (param_0 + 2) != 0) {
-            it = (u8 *) func_800E9D68();
-            end = (u8 *) func_800E9D90(param_0);
-            if (it < end) {
-                do {
-                    if (((u32) (*(u32 *) (it + 4) << 0x19) >> 0x1A) == 7) {
-                        want = param_1 ? 1 : 0;
-                        bit6 = ((GspFl *) (it + 0x10))->b6 ? 1 : 0;
-                        if (bit6 == want) {
-                            a2_1 = (u32) *(u16 *) (it + 6) >> 7;
-                            a3_1 = (*(u32 *) (it + 0xC) >> 0x17) * k5a;
-                            if (a3_1 == 0) {
-                                a3_1 = 0x12C;
-                            }
-                            if (((GspFl *) (it + 0x10))->b5) {
-                                a2_1 *= k5b;
-                            }
-                            func_800CBA68(*(u16 *) (it + 8), it, a2_1, a3_1,
-                                          ((GspFl *) (it + 0x10))->f21, ((GspFl *) (it + 0x10))->b9,
-                                          ((GspFl *) (it + 0x10))->b6);
+    if (1) {
+    }
+    if (param_0 != 0 && *(s16 *) (param_0 + 2) != 0) {
+        it = (u8 *) func_800E9D68();
+        end = (u8 *) func_800E9D90(param_0);
+        if (it < end) {
+            do {
+                if (((u32) (*(u32 *) (it + 4) << 0x19) >> 0x1A) == 7) {
+                    want = param_1 ? 1 : 0;
+                    bit6 = ((GspFl *) (it + 0x10))->b6 ? 1 : 0;
+                    if (bit6 == want) {
+                        a2_1 = (u32) *(u16 *) (it + 6) >> 7;
+                        a3_1 = (*(u32 *) (it + 0xC) >> 0x17) * k5a;
+                        if (a3_1 == 0) {
+                            a3_1 = 0x12C;
                         }
-                    }
-                    if (param_1 == 0) {
-                        type = ((u32) (*(u32 *) (it + 4) << 0x19) >> 0x1A);
-                        if (type == 9) {
-                            a2_3 = (u32) *(u16 *) (it + 6) >> 7;
-                            a3_3 = (*(u32 *) (it + 0xC) >> 0x17) * k5a;
-                            if (a3_3 == 0) {
-                                a3_3 = 0x12C;
-                            }
-                            if (((GspFl *) (it + 0x10))->b5) {
-                                a2_3 *= k5b;
-                            }
-                            func_800CBAC8(*(u16 *) (it + 8), it, a2_3, ((GspFl *) (it + 0x10))->low,
-                                          a3_3);
-                        } else if (type != 0xA && type == 0xC) {
-                            a2_2 = (u32) *(u16 *) (it + 6) >> 7;
-                            a3_2 = (*(u32 *) (it + 0xC) >> 0x17) * k5a;
-                            if (a3_2 == 0) {
-                                a3_2 = 0x12C;
-                            }
-                            if (((GspFl *) (it + 0x10))->b5) {
-                                a2_2 *= k5b;
-                            }
-                            func_800CBB18(*(u16 *) (it + 8), it, a2_2, a3_2,
-                                          ((GspFl *) (it + 0x10))->low,
-                                          ((GspFl *) (it + 0x10))->b9);
+                        if (((GspFl *) (it + 0x10))->b5) {
+                            a2_1 *= k5b;
                         }
+                        func_800CBA68(*(u16 *) (it + 8), it, a2_1, a3_1,
+                                      ((GspFl *) (it + 0x10))->f21, ((GspFl *) (it + 0x10))->b9,
+                                      ((GspFl *) (it + 0x10))->b6);
                     }
-                    it += 0x14;
-                } while (it < end);
-            }
+                }
+                if (param_1 == 0) {
+                    type = ((u32) (*(u32 *) (it + 4) << 0x19) >> 0x1A);
+                    if (type == 9) {
+                        a2_3 = (u32) *(u16 *) (it + 6) >> 7;
+                        a3_3 = (*(u32 *) (it + 0xC) >> 0x17) * k5a;
+                        if (a3_3 == 0) {
+                            a3_3 = 0x12C;
+                        }
+                        if (((GspFl *) (it + 0x10))->b5) {
+                            a2_3 *= k5b;
+                        }
+                        func_800CBAC8(*(u16 *) (it + 8), it, a2_3, ((GspFl *) (it + 0x10))->low,
+                                      a3_3);
+                    } else if (type != 0xA && type == 0xC) {
+                        a2_2 = (u32) *(u16 *) (it + 6) >> 7;
+                        a3_2 = (*(u32 *) (it + 0xC) >> 0x17) * k5a;
+                        if (a3_2 == 0) {
+                            a3_2 = 0x12C;
+                        }
+                        if (((GspFl *) (it + 0x10))->b5) {
+                            a2_2 *= k5b;
+                        }
+                        func_800CBB18(*(u16 *) (it + 8), it, a2_2, a3_2,
+                                      ((GspFl *) (it + 0x10))->low, ((GspFl *) (it + 0x10))->b9);
+                    }
+                }
+                it += 0x14;
+            } while (it < end);
         }
+    }
 }
 
 s32 func_808004E0_gspropsDll(param_0)
 PropState *param_0;
 {
+    switch (param_0->f) {
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+            return 0;
+    }
 
-switch (param_0->f) {
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-        return 0;
-}
-
-return 1;
+    return 1;
 }
 
 void func_80800524_gspropsDll(s16 *param_0)
@@ -206,22 +205,20 @@ void func_80800524_gspropsDll(s16 *param_0)
     local_6 = param_0[1];
     local_5 = 0;
     for (local_4 = 0; local_4 < local_6; local_4++) {
-
-if (func_808004E0_gspropsDll(func_800E9BF4(param_0, local_4))) {
-    local_1 = local_4;
-    local_5++;
-    while (local_1 > 0 && func_808004E0_gspropsDll(func_800E9BF4(param_0, local_1)) &&
-           !func_808004E0_gspropsDll(func_800E9BF4(param_0, local_1 - 1))) {
-        aligned4_memcpy(local_0, func_800E9BF4(param_0, local_1), 0x14);
-        aligned4_memcpy(func_800E9BF4(param_0, local_1), func_800E9BF4(param_0, (local_1 - 1)),
-                        0x14);
-        aligned4_memcpy(func_800E9BF4(param_0, (local_1 - 1)), local_0, 0x14);
-        local_1 -= 1;
+        if (func_808004E0_gspropsDll(func_800E9BF4(param_0, local_4))) {
+            local_1 = local_4;
+            local_5++;
+            while (local_1 > 0 && func_808004E0_gspropsDll(func_800E9BF4(param_0, local_1)) &&
+                   !func_808004E0_gspropsDll(func_800E9BF4(param_0, local_1 - 1))) {
+                aligned4_memcpy(local_0, func_800E9BF4(param_0, local_1), 0x14);
+                aligned4_memcpy(func_800E9BF4(param_0, local_1),
+                                func_800E9BF4(param_0, (local_1 - 1)), 0x14);
+                aligned4_memcpy(func_800E9BF4(param_0, (local_1 - 1)), local_0, 0x14);
+                local_1 -= 1;
+            }
+        }
     }
-}
-
-}
-*(u8 *) func_800BE5C4(param_0) = local_5;
+    *(u8 *) func_800BE5C4(param_0) = local_5;
 }
 
 void gspropsDll_entrypoint_3(void *param_0)

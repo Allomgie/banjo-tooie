@@ -341,20 +341,21 @@ Actor *param_0;
     local_2 = func_80100094(param_0, 0);
     local_4 = 0;
 
-if (local_2->count >= local_2->max) {
-    return 1;
-}
-
-if (local_2->unkE == 1) {
-    if (param_0->unk58 != 0.0f) {
+    if (local_2->count >= local_2->max) {
         return 1;
     }
-    param_0->unk58 = 0.06f;
-}
 
-func_800E3980(local_0);
+    if (local_2->unkE == 1) {
+        if (param_0->unk58 != 0.0f) {
+            return 1;
+        }
+        param_0->unk58 = 0.06f;
+    }
 
-if (1)
+    func_800E3980(local_0);
+
+    if (1) {
+    }
     while (local_2->count < local_2->max && local_4 < 2) {
         local_3 = &local_2->particles[local_2->count];
         local_3->local_0 = 0.0f;
@@ -370,7 +371,7 @@ if (1)
         local_4++;
     }
 
-return 1;
+    return 1;
 }
 
 void func_80800AA8_chfirefx(Actor *param_0)
@@ -382,31 +383,29 @@ void func_80800AA8_chfirefx(Actor *param_0)
     local_0 = func_80100094(param_0, 0);
     local_2 = (param_0->unk70_10 == 2);
 
-if (param_0->unk64_20) {
-    local_2 &= (func_800DA298(0) == 0);
-}
-
-func_8010D640(local_1);
-
-if (local_2 &&
-    (f32) (local_0->unk16 * local_0->unk16) < func_800EEB40(local_1, param_0->position)) {
-    local_2 = 0;
-}
-
-if (local_2) {
-    if (param_0->unk5F == 0) {
-        param_0->unk5F = func_800C4350(param_0->unk5F, param_0->position, D_80801290_chfirefx);
+    if (param_0->unk64_20) {
+        local_2 &= (func_800DA298(0) == 0);
     }
-    if (param_0->unk5F) {
-        func_800C4350(param_0->unk5F, param_0->position, NULL);
-        func_800C3584(param_0->unk5F, (f32) (u32) local_0->unk14, (f32) (u32) local_0->unk16);
-        func_800C3BDC(param_0->unk5F);
+
+    func_8010D640(local_1);
+
+    if (local_2 &&
+        (f32) (local_0->unk16 * local_0->unk16) < func_800EEB40(local_1, param_0->position)) {
+        local_2 = 0;
     }
-} else {
 
-_subaddieaudioloop_entrypoint_2(param_0);
-
-}
+    if (local_2) {
+        if (param_0->unk5F == 0) {
+            param_0->unk5F = func_800C4350(param_0->unk5F, param_0->position, D_80801290_chfirefx);
+        }
+        if (param_0->unk5F) {
+            func_800C4350(param_0->unk5F, param_0->position, NULL);
+            func_800C3584(param_0->unk5F, (f32) (u32) local_0->unk14, (f32) (u32) local_0->unk16);
+            func_800C3BDC(param_0->unk5F);
+        }
+    } else {
+        _subaddieaudioloop_entrypoint_2(param_0);
+    }
 }
 
 void func_80800C18_chfirefx(param_0) Actor *param_0;
@@ -425,45 +424,43 @@ void func_80800C18_chfirefx(param_0) Actor *param_0;
             *(s32 *) local_6 = _chlightfader_entrypoint_1(*(s32 *) local_6, 1.6f, 1);
         }
 
-}
-else
-{
-    if (*(s32 *) local_6 == 0) {
-        local_3 = 9;
-        *(s32 *) local_6 = func_800C8A98();
-        if (!(*(u16 *) (local_6 + 0x10) & 0x20)) {
-            local_3 = 11;
+    } else {
+        if (*(s32 *) local_6 == 0) {
+            local_3 = 9;
+            *(s32 *) local_6 = func_800C8A98();
+            if (!(*(u16 *) (local_6 + 0x10) & 0x20)) {
+                local_3 = 11;
+            }
+            func_800C8F64(*(s32 *) local_6, local_3);
+            func_800C8E54(*(s32 *) local_6, func_800F0E00(75.0f, *(s16 *) (local_6 + 0x12)) * 2.5f,
+                          (func_800F0E00(75.0f, *(s16 *) (local_6 + 0x12)) * 2.5f) * 3.0f);
+            func_800EE7F8(local_0, param_0->position);
+            local_0[1] += *(s16 *) (local_6 + 0x12) * 0.4f;
+            func_800C8CB8(*(s32 *) local_6, local_0);
+            local_1 = 1;
         }
-        func_800C8F64(*(s32 *) local_6, local_3);
-        func_800C8E54(*(s32 *) local_6, func_800F0E00(75.0f, *(s16 *) (local_6 + 0x12)) * 2.5f,
-                      (func_800F0E00(75.0f, *(s16 *) (local_6 + 0x12)) * 2.5f) * 3.0f);
-        func_800EE7F8(local_0, param_0->position);
-        local_0[1] += *(s16 *) (local_6 + 0x12) * 0.4f;
-        func_800C8CB8(*(s32 *) local_6, local_0);
-        local_1 = 1;
+
+        local_2 =
+            ((*(u32 *) ((u8 *) param_0 + 0x7C) << 19) >> 31) ||
+            func_8010CAC0(param_0->position,
+                          (s32) ((func_800F0E00(75.0f, *(s16 *) (local_6 + 0x12)) * 2.5f) * 3.0f));
+
+        if (*((u8 *) param_0 + 0x78)) {
+            if (!_subaddiezone_entrypoint_1(param_0)) {
+                local_2 = 0;
+            }
+        }
+
+        if (local_1 || local_2) {
+            if (!((Broad51FireFlags *) ((u8 *) param_0 + 0x74))->local_0) {
+                func_800EE7F8(local_0, param_0->position);
+                local_0[1] += *(s16 *) (local_6 + 0x12) * 0.4f;
+                func_800C8CB8(*(s32 *) local_6, local_0);
+            }
+            func_800F2F60(local_4, (s32 *) D_808012A8_chfirefx, func_800DC178(0.8f, 1.0f));
+            func_800C8E84(*(s32 *) local_6, local_4);
+        }
     }
-
-local_2 = ((*(u32 *) ((u8 *) param_0 + 0x7C) << 19) >> 31) ||
-          func_8010CAC0(param_0->position,
-                        (s32) ((func_800F0E00(75.0f, *(s16 *) (local_6 + 0x12)) * 2.5f) * 3.0f));
-
-if (*((u8 *) param_0 + 0x78)) {
-    if (!_subaddiezone_entrypoint_1(param_0)) {
-        local_2 = 0;
-    }
-}
-
-if (local_1 || local_2) {
-    if (!((Broad51FireFlags *) ((u8 *) param_0 + 0x74))->local_0) {
-        func_800EE7F8(local_0, param_0->position);
-        local_0[1] += *(s16 *) (local_6 + 0x12) * 0.4f;
-        func_800C8CB8(*(s32 *) local_6, local_0);
-    }
-    func_800F2F60(local_4, (s32 *) D_808012A8_chfirefx, func_800DC178(0.8f, 1.0f));
-    func_800C8E84(*(s32 *) local_6, local_4);
-}
-
-}
 }
 
 void func_80800E9C_chfirefx(Actor *param_0)
@@ -506,41 +503,40 @@ void func_80800F7C_chfirefx(Actor *this)
     for (i = 0, n = 0; i < local->unk4; i++) {
         list[n] = _subaddielink_entrypoint_4(local->unk8[i]);
 
-if (list[n] != NULL) {
-    n++;
-}
-
-}
-func_80103110(this, 0);
-local->unk4 = 0;
-if (n == 0) {
-    return;
-}
-if (local->unk0 >= n) {
+        if (list[n] != NULL) {
+            n++;
+        }
+    }
+    func_80103110(this, 0);
+    local->unk4 = 0;
+    if (n == 0) {
+        return;
+    }
+    if (local->unk0 >= n) {
+        for (i = 0; i < n; i++) {
+            func_80800AA8_chfirefx(list[i]);
+        }
+        return;
+    }
+    func_8010D254(c);
     for (i = 0; i < n; i++) {
+        dist[i] = func_800EEB40(c, list[i]->position);
+    }
+    for (j = 1; j < n; j++) {
+        i = j;
+        while (i > 0 && dist[i] < dist[i - 1]) {
+            tf = dist[i];
+            dist[i] = dist[i - 1];
+            dist[i - 1] = tf;
+            ta = list[i];
+            list[i] = list[i - 1];
+            list[i - 1] = ta;
+            i--;
+        }
+    }
+    for (i = 0; i < local->unk0; i++) {
         func_80800AA8_chfirefx(list[i]);
     }
-    return;
-}
-func_8010D254(c);
-for (i = 0; i < n; i++) {
-    dist[i] = func_800EEB40(c, list[i]->position);
-}
-for (j = 1; j < n; j++) {
-    i = j;
-    while (i > 0 && dist[i] < dist[i - 1]) {
-        tf = dist[i];
-        dist[i] = dist[i - 1];
-        dist[i - 1] = tf;
-        ta = list[i];
-        list[i] = list[i - 1];
-        list[i - 1] = ta;
-        i--;
-    }
-}
-for (i = 0; i < local->unk0; i++) {
-    func_80800AA8_chfirefx(list[i]);
-}
 }
 
 void func_8080116C_chfirefx(param_0, param_1) Actor *param_0;

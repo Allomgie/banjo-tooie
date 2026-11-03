@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/paddle.h"
 
 extern s32 D_80800A50_bskazpaddle[];

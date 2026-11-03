@@ -1,3 +1,4 @@
+#include "common.h"
 #include "playerstate.h"
 
 extern f32 D_80800100_bashake[][3];

@@ -1,4 +1,5 @@
 #include "overlays/ba/wandglow.h"
+#include "wandglow.h"
 
 extern void func_8008EEC4(PlayerState *, f32 *, s32, s32);
 

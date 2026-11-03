@@ -5,19 +5,28 @@
 #include "core2/1E91790.h"
 #include "core2/1EAD060.h"
 #include "core2/1EC2350.h"
+#include "core2/1EC3810.h"
+#include "core2/1ED4E30.h"
+#include "core2/1ED68A0.h"
+#include "core2/1E99980.h"
 #include "core2/1EABAC0.h"
 #include "core2/1ED3900.h"
 #include "core1/1E2D890.h"
 #include "core2/1E691A0.h"
 #include "core2/1E82660.h"
+#include "core2/1E9A960.h"
+#include "core2/1EA78C0.h"
 #include "core2/1EA0690.h"
 #include "core2/1EA9160.h"
 #include "core2/1EAAD80.h"
+#include "core2/1EAF950.h"
 #include "core2/1EB5E70.h"
+#include "core2/1EB2840.h"
 #include "core2/1EB45C0.h"
 #include "core2/1EBB4F0.h"
-
+#include "core2/1EB3750.h"
 #include "gc/level.h"
+#include "gc/audiolist.h"
 
 u32 _gcaudiolist_entrypoint_1(u32 a0, u32 a1);
 
@@ -504,8 +513,9 @@ u32 gcnewpause_entrypoint_2(0)
         u32 index;
 
         for (index = 0; index != 9; index++) {
-            if (1)
-                temp_v0 = func_800D1338(index);
+            if (1) {
+            }
+            temp_v0 = func_800D1338(index);
             if (temp_v0 != 0) {
                 temp_s2 = func_800D27A4(index + 0xE1);
                 if (func_80801844_gcnewpause(temp_v0, func_800D129C(index), index + 0x11, temp_s2,

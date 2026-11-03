@@ -1,4 +1,5 @@
 #include "common.h"
+#include <types.h>
 
 #define EGGBIT(p) (((EggBit75 *) (p))->f1)
 extern int D_80801328_chterryegg[];
@@ -260,95 +261,95 @@ void func_808005C4_chterryegg(Actor *param_0)
     s32 k0 = 1;
     local_0 = 1;
 
-switch (((EggState *)param_0)->st) {
-    case 1:
-    local_0 = 0;
-    param_0->unk64_16 = 0; EGGBIT(param_0) = 0;
-    if (func_800DA298(0xE5)) {
-        func_80800FE0_chterryegg(param_0);
-    }
-    break;
-    case 2:
-    param_0->unk64_16 = 1;
-    ((EggW74 *)param_0)->f1 = param_0->unk64_16;
-    local_0 = 0;
-    if (func_80101DDC(param_0)) {
-        func_800F82D4(func_800F54E4(), 0);
-        if (func_808010DC_chterryegg() == k0) {
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x17FE, 0xF, param_0->position, 0);
-            func_800DA7A8(0x361, param_0->unk74_7 - 0x31, 3);
-            func_80102424(param_0, 4);
-            func_8010A590(param_0);
-        } else {
-            local_1 = func_80100094(param_0, 0);
-            func_800DA544(param_0->unk74_7 + 0x143);
-            func_800CB698(param_0->unk74_7 - 0x2B, 6);
-            func_80102424(param_0, 5);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x17E1, 0x44, param_0->position, 0);
-            _subaddieDll_entrypoint_4(param_0, 1);
-            if (*local_1 != -1) {
-                _capod_entrypoint_13(param_0->unk0, 0, ((u8 *)D_80801260_chterryegg + 8)[param_0->unk74_7 - 0x32], 0x31);
-                func_801058C4(param_0, *local_1, 200.0f, 1);
+    switch (((EggState *)param_0)->st) {
+        case 1:
+        local_0 = 0;
+        param_0->unk64_16 = 0; EGGBIT(param_0) = 0;
+        if (func_800DA298(0xE5)) {
+            func_80800FE0_chterryegg(param_0);
+        }
+        break;
+        case 2:
+        param_0->unk64_16 = 1;
+        ((EggW74 *)param_0)->f1 = param_0->unk64_16;
+        local_0 = 0;
+        if (func_80101DDC(param_0)) {
+            func_800F82D4(func_800F54E4(), 0);
+            if (func_808010DC_chterryegg() == k0) {
+                _subaddiedialog_entrypoint_11(param_0->unk0, 0x17FE, 0xF, param_0->position, 0);
+                func_800DA7A8(0x361, param_0->unk74_7 - 0x31, 3);
+                func_80102424(param_0, 4);
+                func_8010A590(param_0);
+            } else {
+                local_1 = func_80100094(param_0, 0);
+                func_800DA544(param_0->unk74_7 + 0x143);
+                func_800CB698(param_0->unk74_7 - 0x2B, 6);
+                func_80102424(param_0, 5);
+                _subaddiedialog_entrypoint_11(param_0->unk0, 0x17E1, 0x44, param_0->position, 0);
+                _subaddieDll_entrypoint_4(param_0, 1);
+                if (*local_1 != -1) {
+                    _capod_entrypoint_13(param_0->unk0, 0, ((u8 *)D_80801260_chterryegg + 8)[param_0->unk74_7 - 0x32], 0x31);
+                    func_801058C4(param_0, *local_1, 200.0f, 1);
+                }
             }
         }
-    }
-    break;
-    case 3:
-    func_80801080_chterryegg(param_0);
-    break;
-    case 4:
-    func_80801050_chterryegg(param_0);
-    break;
-    case 5:
-    func_800FFAB0(param_0);
-    break;
-    case 6:
-    func_80801050_chterryegg(param_0);
-    break;
-    case 7:
-    func_80801050_chterryegg(param_0);
-    break;
-    case 8:
-    local_0 = 0;
-    break;
-    case 9:
-    local_0 = 0;
-    func_80801080_chterryegg(param_0);
-    if (_subaddietaxi_entrypoint_1(param_0, param_0->unk74_7 - 0x2B)) {
-        func_80102424(param_0, 0xB);
-        func_800DA544(param_0->unk74_7 + 0x143);
-        func_80101180(0x36F, 0x31, param_0->unk74_7 - 0x32);
-    }
-    break;
-    case 10:
-    func_80801050_chterryegg(param_0);
-    if (_subaddietaxi_entrypoint_11(param_0, param_0->unk74_7 - 0x2B)) {
-        if (_subaddietaxi_entrypoint_5(param_0, param_0->unk74_7 - 0x2B)) {
-            _subaddietaxi_entrypoint_14(param_0, param_0->unk74_7 - 0x2B);
-            func_80102424(param_0, 0xC);
+        break;
+        case 3:
+        func_80801080_chterryegg(param_0);
+        break;
+        case 4:
+        func_80801050_chterryegg(param_0);
+        break;
+        case 5:
+        func_800FFAB0(param_0);
+        break;
+        case 6:
+        func_80801050_chterryegg(param_0);
+        break;
+        case 7:
+        func_80801050_chterryegg(param_0);
+        break;
+        case 8:
+        local_0 = 0;
+        break;
+        case 9:
+        local_0 = 0;
+        func_80801080_chterryegg(param_0);
+        if (_subaddietaxi_entrypoint_1(param_0, param_0->unk74_7 - 0x2B)) {
+            func_80102424(param_0, 0xB);
+            func_800DA544(param_0->unk74_7 + 0x143);
+            func_80101180(0x36F, 0x31, param_0->unk74_7 - 0x32);
+        }
+        break;
+        case 10:
+        func_80801050_chterryegg(param_0);
+        if (_subaddietaxi_entrypoint_11(param_0, param_0->unk74_7 - 0x2B)) {
+            if (_subaddietaxi_entrypoint_5(param_0, param_0->unk74_7 - 0x2B)) {
+                _subaddietaxi_entrypoint_14(param_0, param_0->unk74_7 - 0x2B);
+                func_80102424(param_0, 0xC);
+            }
+        }
+        local_0 = _subaddietaxi_entrypoint_12(param_0, param_0->unk74_7 - 0x2B);
+        break;
+        case 11:
+        func_800EFD24(local_2);
+        param_0->unk54 = func_80102D78(param_0, local_2);
+        func_80102BF8(param_0, 0.1f, 4.0f, 80.0f);
+        func_80801080_chterryegg(param_0);
+        break;
+        case 12:
+        if (_subaddietaxi_entrypoint_15(param_0, param_0->unk74_7 - 0x2B)) {
+            func_80102424(param_0, 6);
+            func_8010A590(param_0);
         }
     }
-    local_0 = _subaddietaxi_entrypoint_12(param_0, param_0->unk74_7 - 0x2B);
-    break;
-    case 11:
-    func_800EFD24(local_2);
-    param_0->unk54 = func_80102D78(param_0, local_2);
-    func_80102BF8(param_0, 0.1f, 4.0f, 80.0f);
-    func_80801080_chterryegg(param_0);
-    break;
-    case 12:
-    if (_subaddietaxi_entrypoint_15(param_0, param_0->unk74_7 - 0x2B)) {
-        func_80102424(param_0, 6);
-        func_8010A590(param_0);
+
+    _subaddietaxi_entrypoint_9(param_0, param_0->unk74_7 - 0x2B);
+
+    if (local_0) {
+        func_800F4F34(func_800F54E4(), param_0->position, param_0->scale * 20.0f,
+        param_0->scale * 20.0f);
     }
-}
-
-_subaddietaxi_entrypoint_9(param_0, param_0->unk74_7 - 0x2B);
-
-if (local_0) {
-    func_800F4F34(func_800F54E4(), param_0->position, param_0->scale * 20.0f,
-                  param_0->scale * 20.0f);
-}
 
 }
 
@@ -364,7 +365,6 @@ void func_808009B4_chterryegg(param_0) u8 *param_0;
             func_800FFAB0(param_0);
         }
     }
-
 }
 
 int func_80800A2C_chterryegg(param_0, param_1, param_2)
@@ -408,8 +408,7 @@ s32 param_2;
             return 0;
     }
 
-return 1;
-
+    return 1;
 }
 
 s32 func_80800BD0_chterryegg(param_0, param_1, param_2)
@@ -423,7 +422,6 @@ s32 param_2;
         case 0x17FE:
             func_80102424(param_0, 6);
     }
-
 }
 
 s32 func_80800C08_chterryegg(param_0)
@@ -438,8 +436,8 @@ void func_80800C48_chterryegg(s32 arg0)
 {
     func_8010C964();
     func_80801080_chterryegg(arg0);
-
 }
+
 s32 func_80800C70_chterryegg(Actor *param_0, s32 param_1, TerryEggEvent60 param_2)
 {
     if (param_1 == 0x95) {
@@ -451,14 +449,13 @@ s32 func_80800C70_chterryegg(Actor *param_0, s32 param_1, TerryEggEvent60 param_
         return 1;
     }
 
-return 0;
+    return 0;
 }
 
 s32 func_80800CF4_chterryegg(s32 param_0, f32 param_1)
 {
     func_80102FDC(param_0, param_1);
     return 1;
-
 }
 
 int func_80800D20_chterryegg(s32 param_0, s32 *param_1, s32 param_2, s32 param_3)
@@ -467,7 +464,6 @@ int func_80800D20_chterryegg(s32 param_0, s32 *param_1, s32 param_2, s32 param_3
         _chbaddiesetup_entrypoint_6(&_subaddietaxi_entrypoint_16, param_0, param_1[0], param_1[1],
                                     param_1[2], param_2, param_3);
     }
-
 }
 
 Prop *B_80801460_chterryegg[4];
@@ -479,13 +475,11 @@ void func_80800D88_chterryegg(s32 param_0, f32 *param_1)
 
     local_0 = _gccubesearch_entrypoint_9(0x3D7, B_80801460_chterryegg, 4);
     for (local_1 = 0; local_1 < local_0; local_1++) {
-
-if (param_0 + 0x2B == B_80801460_chterryegg[local_1]->unk6_7) {
-    func_800EE88C(param_1, B_80801460_chterryegg[local_1]);
-    return;
-}
-
-}
+        if (param_0 + 0x2B == B_80801460_chterryegg[local_1]->unk6_7) {
+            func_800EE88C(param_1, B_80801460_chterryegg[local_1]);
+            return;
+        }
+    }
 }
 
 int func_80800E0C_chterryegg(s32 param_0, s32 param_1, s32 param_2)
@@ -496,11 +490,10 @@ int func_80800E0C_chterryegg(s32 param_0, s32 param_1, s32 param_2)
             func_80800D88_chterryegg(param_0, param_2);
             return 2;
         }
+    }
 
-}
-
-func_800C05B8(0x17E0, 1, 0, 0, 0, new_var = 0, 0);
-return 1 ^ 0;
+    func_800C05B8(0x17E0, 1, 0, 0, 0, new_var = 0, 0);
+    return 1 ^ 0;
 }
 
 void func_80800E88_chterryegg(param_0, param_1) Actor *param_0;
@@ -516,177 +509,176 @@ s32 param_1;
                 func_80102424(param_0, 6);
                 func_8010A590(param_0);
             } else {
-
-func_80800C08_chterryegg(param_0);
-func_80102424(param_0, 1);
-func_8010A570(param_0);
-param_0->unk64_16 = 0;
-((TerryEggFlags36 *) param_0)->local_1 = *(u16 *) ((u8 *) param_0 + 0x64);
+                func_80800C08_chterryegg(param_0);
+                func_80102424(param_0, 1);
+                func_8010A570(param_0);
+                param_0->unk64_16 = 0;
+                ((TerryEggFlags36 *) param_0)->local_1 = *(u16 *) ((u8 *) param_0 + 0x64);
+            }
+            break;
+        case 3:
+            _subaddietaxi_entrypoint_10(param_0, param_1, 10);
+            break;
+        case 4:
+            func_80800D88_chterryegg(param_1, local_0);
+            func_8010A570(param_0);
+            _subaddietaxi_entrypoint_0(param_0, param_1, local_0, 9);
+            break;
+        case 6:
+            func_80102424(param_0, 11);
+            func_8010A570(param_0);
+    }
 }
-break;
-case 3:
-    _subaddietaxi_entrypoint_10(param_0, param_1, 10);
-    break;
-case 4:
-    func_80800D88_chterryegg(param_1, local_0);
-    func_8010A570(param_0);
-    _subaddietaxi_entrypoint_0(param_0, param_1, local_0, 9);
-    break;
-case 6:
-    func_80102424(param_0, 11);
-    func_8010A570(param_0);
+
+void func_80800FE0_chterryegg(ChTerryEgg *param_0)
+{
+    func_800D9078(((int) param_0) + 0x58);
+    if ((*(f32 *) ((char *) (param_0) + 88)) <= 0.0f) {
+        _subaddieaudioquick_entrypoint_2(param_0, (float *) ((char *) param_0 + 4),
+                                         &D_80801410_chterryegg);
+        (*(f32 *) ((char *) (param_0) + 88)) = func_800DC178(1.5f, 2.5f);
     }
+}
+
+int func_80801050_chterryegg(s32 param_0)
+{
+    s32 local_0;
+    local_0 = param_0 + 4;
+    _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80801424_chterryegg, 0.81f);
+}
+
+void func_80801080_chterryegg(s32 param_0)
+{
+    _subaddieaudioquick_entrypoint_4(param_0, param_0 + 4, &D_8080126C_chterryegg,
+                                     &D_80801438_chterryegg);
+}
+
+void func_808010B0_chterryegg(u8 *param_0)
+{
+    _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_80801450_chterryegg, 0.0f);
+}
+
+s32 func_808010DC_chterryegg()
+{
+    s32 local_0;
+    s32 local_1;
+
+    local_0 = func_800DA564(0x175, 4);
+    local_1 = 0;
+    if (local_0 & 1) {
+        local_1++;
     }
-
-    void func_80800FE0_chterryegg(ChTerryEgg *param_0)
-    {
-        func_800D9078(((int) param_0) + 0x58);
-        if ((*(f32 *) ((char *) (param_0) + 88)) <= 0.0f) {
-            _subaddieaudioquick_entrypoint_2(param_0, (float *) ((char *) param_0 + 4),
-                                             &D_80801410_chterryegg);
-            (*(f32 *) ((char *) (param_0) + 88)) = func_800DC178(1.5f, 2.5f);
-        }
+    if (local_0 & 2) {
+        local_1++;
     }
-
-    int func_80801050_chterryegg(s32 param_0)
-    {
-        s32 local_0;
-        local_0 = param_0 + 4;
-        _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80801424_chterryegg, 0.81f);
+    if (local_0 & 4) {
+        local_1++;
     }
-
-    void func_80801080_chterryegg(s32 param_0)
-    {
-        _subaddieaudioquick_entrypoint_4(param_0, param_0 + 4, &D_8080126C_chterryegg,
-                                         &D_80801438_chterryegg);
+    if (local_0 & 8) {
+        local_1++;
     }
+    return 4 - local_1;
+}
 
-    void func_808010B0_chterryegg(u8 *param_0)
-    {
-        _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_80801450_chterryegg, 0.0f);
+s32 func_80801138_chterryegg(param_0)
+u8 *param_0;
+{
+    s32 local_0;
+
+    local_0 = func_800DA564(0x361, 3);
+    if (local_0 == 0) {
+        return 0;
     }
+    return (local_0 + 0x31) == ((u32) ((u16) (*(u16 *) ((s8 *) (param_0) + (0x76)))) >> 7);
+}
 
-    s32 func_808010DC_chterryegg()
-    {
-        s32 local_0;
-        s32 local_1;
-
-        local_0 = func_800DA564(0x175, 4);
-        local_1 = 0;
-        if (local_0 & 1) {
-            local_1++;
-        }
-        if (local_0 & 2) {
-            local_1++;
-        }
-        if (local_0 & 4) {
-            local_1++;
-        }
-        if (local_0 & 8) {
-            local_1++;
-        }
-        return 4 - local_1;
+f32 func_80801188_chterryegg(param_0, param_1)
+Actor *param_0;
+s32 param_1;
+{
+    if (param_1) {
+        return func_808010DC_chterryegg(param_0) == 1 ? 4.0f : 2.0f;
+    } else {
+        return func_80801138_chterryegg(param_0) ? 4.0f : 2.0f;
     }
+}
 
-    s32 func_80801138_chterryegg(param_0)
-    u8 *param_0;
-    {
-        s32 local_0;
-
-        local_0 = func_800DA564(0x361, 3);
-        if (local_0 == 0) {
-            return 0;
-        }
-        return (local_0 + 0x31) == ((u32) ((u16) (*(u16 *) ((s8 *) (param_0) + (0x76)))) >> 7);
-    }
-
-    f32 func_80801188_chterryegg(param_0, param_1)
-    Actor *param_0;
-    s32 param_1;
-    {
-        if (param_1) {
-            return func_808010DC_chterryegg(param_0) == 1 ? 4.0f : 2.0f;
-        } else {
-            return func_80801138_chterryegg(param_0) ? 4.0f : 2.0f;
-        }
-    }
-
-    extern int func_80105834();
-    extern void func_801018A4();
-    void *D_80801260_chterryegg[3] = {(void *) func_80800E0C_chterryegg,
-                                      (void *) func_80800D20_chterryegg, (void *) 0x14100D4E};
-    s32 D_8080126C_chterryegg[5] = {0x130562, 0xD00F3, 0x10C0001, 0x19005DC, 0x0};
-    u32 D_80801280_chterryegg[16] = {
-        0x0,        0x0,       0x0,        0x0,       0x0,        0x0,       0x0, 0x0,
-        0x40B00000, 0x1D40001, 0x40B00000, 0x1D40001, 0x3F75C28F, 0x1D50002, 0x0, 0x0};
-    u8 D_808012C0_chterryegg[104] = {
-        0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,
-        0x0,  0x3F, 0xC0, 0x0,  0x0,  0x1,  0xF9, 0x0,  0x2,  0x40, 0x7B, 0x85, 0x1F, 0x1,  0xFB,
-        0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1,  0x3E, 0xCC, 0xCC, 0xCD, 0x1,
-        0x68, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A,
-        0x1,  0xFA, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1,  0x40, 0x7B, 0x85,
-        0x1F, 0x1,  0xFB, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1,  0x40, 0x7B,
-        0x85, 0x1F, 0x1,  0xFB, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1};
-    int D_80801328_chterryegg[18] = {0x31203AA,
-                                     0x7020001,
-                                     (u32) &D_80801280_chterryegg,
-                                     (u32) func_808000A8_chterryegg,
-                                     (u32) func_80105834,
-                                     (u32) func_801018A4,
-                                     0x3E80000,
-                                     0x3F4CCCCD,
-                                     0x7BD,
-                                     0x40000808,
-                                     0x0,
-                                     0x0,
-                                     0x810,
-                                     (u32) func_80800030_chterryegg,
-                                     (u32) func_80107C2C,
-                                     -0x7DFEDBFE,
-                                     (u32) func_8080023C_chterryegg,
-                                     0x0};
-    int D_80801370_chterryegg[18] = {0x9E03D6,
-                                     0x7030001,
-                                     (u32) &D_808012C0_chterryegg,
-                                     (u32) func_808005C4_chterryegg,
-                                     (u32) func_808009B4_chterryegg,
-                                     (u32) func_80101870,
-                                     0x7D00000,
-                                     0x3ECCCCCD,
-                                     0x0,
-                                     0x40040104,
-                                     0x0,
-                                     (u32) func_80108ED0,
-                                     0x40000,
-                                     (u32) func_8080057C_chterryegg,
-                                     (u32) func_80107C2C,
-                                     -0x7FFFFFF0,
-                                     (u32) func_80800A2C_chterryegg,
-                                     0x0};
-    s32 D_808013B8_chterryegg[18] = {0x9E03D7,
-                                     0x703000B,
-                                     (u32) &D_808012C0_chterryegg,
-                                     (u32) func_80800C48_chterryegg,
-                                     (u32) func_80105834,
-                                     (u32) func_80101870,
-                                     0x7D00000,
-                                     0x3ECCCCCD,
-                                     0x0,
-                                     0x50802100,
-                                     0x0,
-                                     0x0,
-                                     0x0,
-                                     0x0,
-                                     (u32) func_80107C2C,
-                                     -0x7DFFDBEE,
-                                     (u32) func_80800C70_chterryegg,
-                                     0x0};
-    u8 D_80801400_chterryegg[16] = {0x0, 0x13, 0x3, 0xFF, 0x0,  0xD,  0x1, 0x26,
-                                    0x1, 0x40, 0x0, 0x16, 0x2E, 0xE0, 0x0, 0x0};
-    ChTerryEgg D_80801410_chterryegg[2] = {1.746807e-39f, 1.194202e-39f, 2.5713942e-38f,
-                                           5.2905654e-38f};
-    static u32 D_80801410_chterryegg_rest[1] = {0x5A050000};
-    s32 D_80801424_chterryegg[5] = {0x130563, 0xD00F3, 0x10C0001, 0x19005DC, 0x0};
-    s32 D_80801438_chterryegg[6] = {0x3DCCCCCD, 0x3E19999A, 0x3E570A3D,
-                                    0x3F19999A, 0x3F75C28F, -0x40800000};
-    s32 D_80801450_chterryegg[4] = {0x130561, 0x20018, 0x0, 0x0};
+extern int func_80105834();
+extern void func_801018A4();
+void *D_80801260_chterryegg[3] = {(void *) func_80800E0C_chterryegg,
+                                  (void *) func_80800D20_chterryegg, (void *) 0x14100D4E};
+s32 D_8080126C_chterryegg[5] = {0x130562, 0xD00F3, 0x10C0001, 0x19005DC, 0x0};
+u32 D_80801280_chterryegg[16] = {
+    0x0,        0x0,       0x0,        0x0,       0x0,        0x0,       0x0, 0x0,
+    0x40B00000, 0x1D40001, 0x40B00000, 0x1D40001, 0x3F75C28F, 0x1D50002, 0x0, 0x0};
+u8 D_808012C0_chterryegg[104] = {
+    0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,
+    0x0,  0x3F, 0xC0, 0x0,  0x0,  0x1,  0xF9, 0x0,  0x2,  0x40, 0x7B, 0x85, 0x1F, 0x1,  0xFB,
+    0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1,  0x3E, 0xCC, 0xCC, 0xCD, 0x1,
+    0x68, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A,
+    0x1,  0xFA, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1,  0x40, 0x7B, 0x85,
+    0x1F, 0x1,  0xFB, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1,  0x40, 0x7B,
+    0x85, 0x1F, 0x1,  0xFB, 0x0,  0x1,  0x41, 0x9,  0x99, 0x9A, 0x1,  0xFA, 0x0,  0x1};
+int D_80801328_chterryegg[18] = {0x31203AA,
+                                 0x7020001,
+                                 (u32) &D_80801280_chterryegg,
+                                 (u32) func_808000A8_chterryegg,
+                                 (u32) func_80105834,
+                                 (u32) func_801018A4,
+                                 0x3E80000,
+                                 0x3F4CCCCD,
+                                 0x7BD,
+                                 0x40000808,
+                                 0x0,
+                                 0x0,
+                                 0x810,
+                                 (u32) func_80800030_chterryegg,
+                                 (u32) func_80107C2C,
+                                 -0x7DFEDBFE,
+                                 (u32) func_8080023C_chterryegg,
+                                 0x0};
+int D_80801370_chterryegg[18] = {0x9E03D6,
+                                 0x7030001,
+                                 (u32) &D_808012C0_chterryegg,
+                                 (u32) func_808005C4_chterryegg,
+                                 (u32) func_808009B4_chterryegg,
+                                 (u32) func_80101870,
+                                 0x7D00000,
+                                 0x3ECCCCCD,
+                                 0x0,
+                                 0x40040104,
+                                 0x0,
+                                 (u32) func_80108ED0,
+                                 0x40000,
+                                 (u32) func_8080057C_chterryegg,
+                                 (u32) func_80107C2C,
+                                 -0x7FFFFFF0,
+                                 (u32) func_80800A2C_chterryegg,
+                                 0x0};
+s32 D_808013B8_chterryegg[18] = {0x9E03D7,
+                                 0x703000B,
+                                 (u32) &D_808012C0_chterryegg,
+                                 (u32) func_80800C48_chterryegg,
+                                 (u32) func_80105834,
+                                 (u32) func_80101870,
+                                 0x7D00000,
+                                 0x3ECCCCCD,
+                                 0x0,
+                                 0x50802100,
+                                 0x0,
+                                 0x0,
+                                 0x0,
+                                 0x0,
+                                 (u32) func_80107C2C,
+                                 -0x7DFFDBEE,
+                                 (u32) func_80800C70_chterryegg,
+                                 0x0};
+u8 D_80801400_chterryegg[16] = {0x0, 0x13, 0x3, 0xFF, 0x0,  0xD,  0x1, 0x26,
+                                0x1, 0x40, 0x0, 0x16, 0x2E, 0xE0, 0x0, 0x0};
+ChTerryEgg D_80801410_chterryegg[2] = {1.746807e-39f, 1.194202e-39f, 2.5713942e-38f,
+                                       5.2905654e-38f};
+static u32 D_80801410_chterryegg_rest[1] = {0x5A050000};
+s32 D_80801424_chterryegg[5] = {0x130563, 0xD00F3, 0x10C0001, 0x19005DC, 0x0};
+s32 D_80801438_chterryegg[6] = {0x3DCCCCCD, 0x3E19999A, 0x3E570A3D,
+                                0x3F19999A, 0x3F75C28F, -0x40800000};
+s32 D_80801450_chterryegg[4] = {0x130561, 0x20018, 0x0, 0x0};

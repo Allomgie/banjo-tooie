@@ -227,9 +227,10 @@ u8 *func_80800190_chbounce(s32 param_0, s32 param_1, s32 *param_2)
                 actor = func_80108474(tbl->s2, param_1, 0);
             } else {
                 actor = func_80108474(func_80800078_chbounce(tbl->s2), param_1, 0);
-                if (first)
-                    if (param_1) {
-                    }
+                if (first) {
+                }
+                if (param_1) {
+                }
             }
             if (actor != 0) {
                 func_80100074(actor, 2, 0x34);

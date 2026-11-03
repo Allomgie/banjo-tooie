@@ -1,3 +1,4 @@
+#include <ultra64.h>
 #include "threads.h"
 
 void func_800131C0(void);

@@ -1,3 +1,4 @@
+#include "types.h"
 #include "gfx.h"
 #include "memory.h"
 

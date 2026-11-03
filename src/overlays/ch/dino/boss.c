@@ -1059,21 +1059,21 @@ void func_80801D08_chdinoboss(Actor *param_0, s32 param_1)
 {
     f32 local_0[3];
 
-switch (param_1) {
-    case 0:
-        func_800EFD24(local_0);
-        param_0->unk54 = func_80102D78(param_0, local_0);
-        break;
-    case 1:
-        func_800EFD24(local_0);
-        param_0->unk54 = func_80102D78(param_0, local_0) - 90.0f;
-        break;
-    case 2:
-        func_8010D254(local_0);
-        param_0->unk54 = func_80102D78(param_0, local_0);
-}
+    switch (param_1) {
+        case 0:
+            func_800EFD24(local_0);
+            param_0->unk54 = func_80102D78(param_0, local_0);
+            break;
+        case 1:
+            func_800EFD24(local_0);
+            param_0->unk54 = func_80102D78(param_0, local_0) - 90.0f;
+            break;
+        case 2:
+            func_8010D254(local_0);
+            param_0->unk54 = func_80102D78(param_0, local_0);
+    }
 
-func_80102BF8(param_0, 0.1f, 0.05f, 120.0f);
+    func_80102BF8(param_0, 0.1f, 0.05f, 120.0f);
 }
 
 void func_80801DC8_chdinoboss(Actor *param_0)
@@ -1084,21 +1084,20 @@ void func_80801DC8_chdinoboss(Actor *param_0)
 
     local_2 = func_80100094(param_0, 0);
 
-switch (local_2->local_0) {
-    case 0:
-        break;
-    case 1:
-        func_8008FE68(local_0);
-        func_800EEC30(local_1, 60.0f, local_2->local_1, 2800.0f);
-        func_800EF934(local_1, local_1, param_0->rotation[1]);
-        func_800EF04C(local_1, param_0->position);
-        func_8080232C_chdinoboss(param_0, local_1, local_0);
-        break;
-    case 2:
-    case 3:
-        func_8080232C_chdinoboss(param_0, local_2->local_2, param_0->position);
-}
-
+    switch (local_2->local_0) {
+        case 0:
+            break;
+        case 1:
+            func_8008FE68(local_0);
+            func_800EEC30(local_1, 60.0f, local_2->local_1, 2800.0f);
+            func_800EF934(local_1, local_1, param_0->rotation[1]);
+            func_800EF04C(local_1, param_0->position);
+            func_8080232C_chdinoboss(param_0, local_1, local_0);
+            break;
+        case 2:
+        case 3:
+            func_8080232C_chdinoboss(param_0, local_2->local_2, param_0->position);
+    }
 }
 
 int func_80801E90_chdinoboss(f32 *param_0, f32 *param_1)
@@ -1111,12 +1110,10 @@ s32 func_80801ECC_chdinoboss(f32 *param_0, f32 *param_1)
     s32 i;
 
     for (i = 0; i < 8; i++) {
-
-if (func_800F6438(i) != 0) {
-    func_8010FE14(func_800F5EF8(i), param_0, param_1);
-}
-
-}
+        if (func_800F6438(i) != 0) {
+            func_8010FE14(func_800F5EF8(i), param_0, param_1);
+        }
+    }
 }
 
 int func_80801F44_chdinoboss(s32 param_0)
@@ -1126,8 +1123,7 @@ int func_80801F44_chdinoboss(s32 param_0)
         if (func_800F6438(local_0 | 0)) {
             func_8010F9C0(func_800F5EF8(local_0 | 0) | 0, param_0 | 0);
         }
-
-}
+    }
 }
 
 void func_80801FAC_chdinoboss(Actor *param_0, s32 param_1, s32 param_2)
@@ -1156,88 +1152,91 @@ void func_80801FAC_chdinoboss(Actor *param_0, s32 param_1, s32 param_2)
     }
     if (param_1 != local_9->local_0) {
         func_80801E90_chdinoboss(local_9->local_6, local_9->local_7);
-        if (1)
-            new_var = param_0;
-
-switch (local_9->local_0) {
-    case 1:
-    case 2:
-        if (1)
-        case 3:
-            break;
-    case 0:
-        func_800F7B9C(func_800F54E4(), 0x93);
-}
-
-switch (param_1) {
-    case 0:
-        func_8008FE68(local_0);
-        func_80801E90_chdinoboss(local_3, local_5);
-        func_800EFB24(local_4, local_3, local_0);
-        func_800EF368(local_4, 600.0f);
-        func_800EF04C(local_0, local_4);
-        func_80801ECC_chdinoboss(local_0, local_5);
-        func_80801F44_chdinoboss(2);
-        local_2 = 0;
-        break;
-    case 1:
-        func_80801F44_chdinoboss(6);
-        local_7 = func_80102D78(new_var, local_9->local_6);
-        if (!func_800F1EA4(new_var->position, &local_6)) {
-            local_6 = new_var->rotation[1];
+        if (1) {
         }
-        if (func_800F1DCC(local_7, local_6) > 0.0f) {
-            local_9->local_8 = -100.0f;
-        } else {
-            local_9->local_8 = 100.0f;
+        new_var = param_0;
+
+        switch (local_9->local_0) {
+            case 1:
+            case 2:
+                if (1) {
+                }
+            case 3:
+                break;
+            case 0:
+                func_800F7B9C(func_800F54E4(), 0x93);
         }
-        if (local_9->local_9) {
-            local_2 = 0;
-            local_9->local_9 = 0;
+
+        switch (param_1) {
+            case 0:
+                func_8008FE68(local_0);
+                func_80801E90_chdinoboss(local_3, local_5);
+                func_800EFB24(local_4, local_3, local_0);
+                func_800EF368(local_4, 600.0f);
+                func_800EF04C(local_0, local_4);
+                func_80801ECC_chdinoboss(local_0, local_5);
+                func_80801F44_chdinoboss(2);
+                local_2 = 0;
+                break;
+            case 1:
+                func_80801F44_chdinoboss(6);
+                local_7 = func_80102D78(new_var, local_9->local_6);
+                if (!func_800F1EA4(new_var->position, &local_6)) {
+                    local_6 = new_var->rotation[1];
+                }
+                if (func_800F1DCC(local_7, local_6) > 0.0f) {
+                    local_9->local_8 = -100.0f;
+                } else {
+                    local_9->local_8 = 100.0f;
+                }
+                if (local_9->local_9) {
+                    local_2 = 0;
+                    local_9->local_9 = 0;
+                }
+                if (new_var->unk70_10 == 0xB || param_0->unk70_10 == 0xC) {
+                    local_1 = 1;
+                }
+                break;
+            case 2:
+                func_80801F44_chdinoboss(6);
+                local_9->local_10 = 0.0f;
+                func_800EEB9C(
+                    local_9->local_11,
+                    func_800136E4((func_800DC298(0.5f) ? -35.0f : 35.0f) + param_0->rotation[1]),
+                    6000.0f);
+                func_800EF04C(local_9->local_11, param_0->position);
+                local_1 = 1;
+                local_2 = 0;
+                break;
+            case 3:
+                func_80801F44_chdinoboss(6);
+                local_1 = 1;
+                local_2 = 0;
         }
-        if (new_var->unk70_10 == 0xB || param_0->unk70_10 == 0xC) {
-            local_1 = 1;
+
+        if (local_1 && !local_9->local_2) {
+            _glcutDll_entrypoint_6(func_800EA05C(), 0x79);
+            func_800C52F4(0, 2);
+            local_9->local_2 = 1;
         }
-        break;
-    case 2:
-        func_80801F44_chdinoboss(6);
-        local_9->local_10 = 0.0f;
-        func_800EEB9C(local_9->local_11,
-                      func_800136E4((func_800DC298(0.5f) ? -35.0f : 35.0f) + param_0->rotation[1]),
-                      6000.0f);
-        func_800EF04C(local_9->local_11, param_0->position);
-        local_1 = 1;
-        local_2 = 0;
-        break;
-    case 3:
-        func_80801F44_chdinoboss(6);
-        local_1 = 1;
-        local_2 = 0;
-}
 
-if (local_1 && !local_9->local_2) {
-    _glcutDll_entrypoint_6(func_800EA05C(), 0x79);
-    func_800C52F4(0, 2);
-    local_9->local_2 = 1;
-}
+        if (!local_1 && local_9->local_2) {
+            _glcutDll_entrypoint_17();
+            func_800C53EC(0, 2);
+            local_9->local_2 = 0;
+        }
 
-if (!local_1 && local_9->local_2) {
-    _glcutDll_entrypoint_17();
-    func_800C53EC(0, 2);
-    local_9->local_2 = 0;
-}
+        local_9->local_0 = param_1;
 
-local_9->local_0 = param_1;
+        if (local_2) {
+            local_9->local_3 = 1;
+            local_9->local_5 = 1.0f;
+            local_9->local_4 = 1.0f;
+            return;
+        }
 
-if (local_2) {
-    local_9->local_3 = 1;
-    local_9->local_5 = 1.0f;
-    local_9->local_4 = 1.0f;
-    return;
-}
-
-local_9->local_3 = 0;
-}
+        local_9->local_3 = 0;
+    }
 }
 
 void func_8080232C_chdinoboss(param_0, param_1, param_2) Actor *param_0;

@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/ba/translate.h"
 #include "overlays/ba/yaw.h"
 #include "overlays/db/skeleton.h"

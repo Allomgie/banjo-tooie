@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/ba/playerstate.h"
 
 extern void func_8010114C();
@@ -33,7 +34,6 @@ void func_80800000_bsdronebubbled(param_0) u8 *param_0;
     func_8010114C(*(s32 *) ((s8 *) ((*(u8 **) ((s8 *) param_0 + 0x54))) + 0x48), 0x2C,
                   *(s32 *) ((s8 *) param_0 + 0x184), param_0);
     *(s32 *) ((s8 *) ((*(u8 **) ((s8 *) param_0 + 0x54))) + 0x48) = 0;
-
 }
 
 void bsdronebubbled_entrypoint_0(u8 *param_0)
@@ -41,7 +41,6 @@ void bsdronebubbled_entrypoint_0(u8 *param_0)
     if (*(s32 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x54) + 0x48) != 0) {
         func_80800000_bsdronebubbled();
     }
-
 }
 
 void bsdronebubbled_entrypoint_1(PlayerState *param_0)
@@ -54,7 +53,6 @@ void bsdronebubbled_entrypoint_1(PlayerState *param_0)
     (*(BubbledAnimationState **) ((u8 *) param_0 + 0x54))->local_0 = 0.0f;
     func_8009FFD8(param_0, 1, 1, 3, 7);
     func_8009D9D4(param_0);
-
 }
 
 void bsdronebubbled_entrypoint_2(PlayerState *param_0)
@@ -76,7 +74,6 @@ void bsdronebubbled_entrypoint_2(PlayerState *param_0)
         default:
             func_80099B94(param_0);
     }
-
 }
 
 void bsdronebubbled_entrypoint_3(PlayerState *param_0)
@@ -93,7 +90,9 @@ void bsdronebubbled_entrypoint_3(PlayerState *param_0)
 void bsdronebubbled_entrypoint_4(s32 arg0)
 {
 }
-void bsdronebubbled_entrypoint_5(s32 param_0) {
+
+void bsdronebubbled_entrypoint_5(s32 param_0)
+{
     f32 local_1;
     s32 local_0;
     _badata_entrypoint_0(param_0, &local_0, &local_1);
@@ -107,5 +106,6 @@ void bsdronebubbled_entrypoint_6()
     func_80099B94();
 }
 
-bsdronebubbled_entrypoint_7(param_0) {
+bsdronebubbled_entrypoint_7(param_0)
+{
 }

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "playerstate.h"
 #include "yaw.h"
 
 typedef struct {

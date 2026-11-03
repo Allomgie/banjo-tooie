@@ -90,9 +90,11 @@ void func_808000D8_bsbwhirl(void *param_0)
     new_var = (u8 *) param_0;
     ;
     if (0 != *(s32 *) ((u8 *) param_0 + 0x160)) {
-        if (1)
-            if (1)
-                new_var3 = (u8 *) param_0 + 0x160;
+        if (1) {
+        }
+        if (1) {
+        }
+        new_var3 = (u8 *) param_0 + 0x160;
         new_var2 = (u8 *) param_0;
         *(s32 *) new_var3 = _chlightfader_entrypoint_1(*(s32 *) (new_var + 0x160) ^ 0, 0x3E800000,
                                                        2, *(s32 *) (new_var2 + 0x160));

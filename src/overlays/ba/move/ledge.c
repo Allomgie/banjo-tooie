@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/ba/playerstate.h"
 
 extern void func_8009BC08(PlayerState *, f32 *);

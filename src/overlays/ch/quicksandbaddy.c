@@ -466,10 +466,11 @@ int func_80801154_chquicksandbaddy(Actor *param_0, f32 *param_1)
         local_1 = local_6;
         local_0[0] = local_6;
         for (; local_4 != 3; local_4++, local_1 += 3) {
-            if (1)
-                if (!func_800EEF24(local_1)) {
-                    break;
-                }
+            if (1) {
+            }
+            if (!func_800EEF24(local_1)) {
+                break;
+            }
             if (local_5 != -1) {
                 local_3 = func_800EEB40(param_0->position, local_1);
                 if (local_3 < local_2) {

@@ -1,3 +1,4 @@
+#include "common.h"
 #include "vector.h"
 
 typedef struct {

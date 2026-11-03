@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/ow.h"
 
 extern s32 D_808002D0_bskazow[];

@@ -442,12 +442,10 @@ u32 param_2;
 
 void func_80800D44_chdippy(param_0) BitsState *param_0;
 {
-
-if (param_0->flag) {
-    _capod_entrypoint_14(param_0);
-    ((u8 *) param_0)[0x65] &= ~0x10;
-}
-
+    if (param_0->flag) {
+        _capod_entrypoint_14(param_0);
+        ((u8 *) param_0)[0x65] &= ~0x10;
+    }
 }
 
 int func_80800D84_chdippy(Actor *param_0)
@@ -465,127 +463,126 @@ void func_80800D9C_chdippy(Actor *param_0)
     s32 local_4;
     s32 local_7;
 
-switch (((DippyState *) param_0)->st) {
-    case 2:
-        func_800D9078(&param_0->unk58);
-        AF(param_0, 0) = func_800F12D4(param_0->unk58, 0.0f, 6.0f, 0.0f, -2000.0f);
-        param_0->position[1] = AF(param_0, 1) + AF(param_0, 0);
-        if (1.0f < param_0->unk58) {
-            func_800BBCB8(param_0->position, param_0->position, 1.0f, 2, D_808016F0_chdippy);
-        } else {
-            param_0->alpha = (s32) func_800F10B4(param_0->unk58, 1.0f, 0.0f, 255.0f, 0.0f);
-        }
-        param_0->unk64_16 = 1;
-        local_7 = func_800D90A4(&param_0->actorData[2]);
-        if (local_7) {
-            param_0->unk64_16 = 0;
-            func_80101FDC(param_0, 3);
-        } else {
-            if (func_800D90A4(&param_0->actorData[3])) {
-                AF(param_0, 3) = func_800DC178(0.2f, 0.5f);
-                func_8010D930(9, -1, param_0->position, D_80801734_chdippy);
-            }
-            if (AF(param_0, 2) < 15.0f) {
-                if (func_800DC0C0() < func_800F10B4(AF(param_0, 2), 15.0f, 0.0f, 1.0f, 0.0f)) {
-                    local_0 = 1;
-                } else {
-                    local_0 = 0;
-                }
+    switch (((DippyState *) param_0)->st) {
+        case 2:
+            func_800D9078(&param_0->unk58);
+            AF(param_0, 0) = func_800F12D4(param_0->unk58, 0.0f, 6.0f, 0.0f, -2000.0f);
+            param_0->position[1] = AF(param_0, 1) + AF(param_0, 0);
+            if (1.0f < param_0->unk58) {
+                func_800BBCB8(param_0->position, param_0->position, 1.0f, 2, D_808016F0_chdippy);
             } else {
-                local_0 = func_800F10B4(AF(param_0, 2), 30.0f, 0.0f, 3.0f, 1.0f);
+                param_0->alpha = (s32) func_800F10B4(param_0->unk58, 1.0f, 0.0f, 255.0f, 0.0f);
             }
-            if (local_0 != 0) {
-                local_3 = func_800B53A4(local_0);
-                func_800EE7F8(local_1, param_0->position);
-                local_1[1] += 6000.0f;
-                func_800BA5A8(local_3, 0x200);
-                func_800BA714(local_3, 0x1F4, 0x1F4);
-                func_800BABB8(local_3, local_1, 0, 1.0f, (u8 *) D_808014D8_chdippy);
-                func_800BA4D0(local_3, 0x5DC);
-                func_800BA544(local_3, _chdippy_entrypoint_2);
-                func_800BA22C(local_3, local_0);
+            param_0->unk64_16 = 1;
+            local_7 = func_800D90A4(&param_0->actorData[2]);
+            if (local_7) {
+                param_0->unk64_16 = 0;
+                func_80101FDC(param_0, 3);
+            } else {
+                if (func_800D90A4(&param_0->actorData[3])) {
+                    AF(param_0, 3) = func_800DC178(0.2f, 0.5f);
+                    func_8010D930(9, -1, param_0->position, D_80801734_chdippy);
+                }
+                if (AF(param_0, 2) < 15.0f) {
+                    if (func_800DC0C0() < func_800F10B4(AF(param_0, 2), 15.0f, 0.0f, 1.0f, 0.0f)) {
+                        local_0 = 1;
+                    } else {
+                        local_0 = 0;
+                    }
+                } else {
+                    local_0 = func_800F10B4(AF(param_0, 2), 30.0f, 0.0f, 3.0f, 1.0f);
+                }
+                if (local_0 != 0) {
+                    local_3 = func_800B53A4(local_0);
+                    func_800EE7F8(local_1, param_0->position);
+                    local_1[1] += 6000.0f;
+                    func_800BA5A8(local_3, 0x200);
+                    func_800BA714(local_3, 0x1F4, 0x1F4);
+                    func_800BABB8(local_3, local_1, 0, 1.0f, (u8 *) D_808014D8_chdippy);
+                    func_800BA4D0(local_3, 0x5DC);
+                    func_800BA544(local_3, _chdippy_entrypoint_2);
+                    func_800BA22C(local_3, local_0);
+                }
             }
-        }
-        break;
-    case 1:
-    case 3:
-        local_2 = func_800BEA88(1);
-        _glid_entrypoint_0(local_2, 1, _chdippy_entrypoint_3, param_0->unk0);
-        _glid_entrypoint_0(local_2, 2, _chdippy_entrypoint_3, param_0->unk0);
-        if (1)
+            break;
+        case 1:
+        case 3:
+            local_2 = func_800BEA88(1);
+            _glid_entrypoint_0(local_2, 1, _chdippy_entrypoint_3, param_0->unk0);
+            _glid_entrypoint_0(local_2, 2, _chdippy_entrypoint_3, param_0->unk0);
+            if (1) {
+            }
             if (((DippyCnt *) param_0)->cnt-- == 0) {
                 func_800FFAB0(param_0);
             }
-}
+    }
 
-local_4 = func_800BEA88(1);
-local_7 = _idworld_entrypoint_4(local_4, 1);
+    local_4 = func_800BEA88(1);
+    local_7 = _idworld_entrypoint_4(local_4, 1);
 
-if (local_7) {
-    _idwibble_entrypoint_5(local_7, (s16) (s32) AF(param_0, 0));
-}
+    if (local_7) {
+        _idwibble_entrypoint_5(local_7, (s16) (s32) AF(param_0, 0));
+    }
 
-_glid_entrypoint_0(local_4, 2, _chdippy_entrypoint_3, param_0->unk0);
+    _glid_entrypoint_0(local_4, 2, _chdippy_entrypoint_3, param_0->unk0);
 }
 
 s32 func_80801110_chdippy(Actor *param_0, s32 param_1, DippyEvent param_2)
 {
     f32 local_0[3];
 
-switch (param_1) {
-    case 0x95:
-        func_80801200_chdippy();
-        return 1;
-    case 0x1F:
-        if (((DippyVisibilityFlags *) ((u8 *) param_0 + 0x64))->local_0) {
-            func_801015D0(param_0);
-            func_800E3980(local_0);
-            param_0->rotation[1] = func_800F1DF4(param_0->position, local_0);
-            if (param_0->unk58 < 3.0f) {
-                func_800DF500(1.0f, func_800F10B4(param_0->unk58, 3.0f, 0.0f, 5.0f, 0.001f), 1.0f);
-            } else {
-                func_800DF500(1.0f, 5.0f, 1.0f);
+    switch (param_1) {
+        case 0x95:
+            func_80801200_chdippy();
+            return 1;
+        case 0x1F:
+            if (((DippyVisibilityFlags *) ((u8 *) param_0 + 0x64))->local_0) {
+                func_801015D0(param_0);
+                func_800E3980(local_0);
+                param_0->rotation[1] = func_800F1DF4(param_0->position, local_0);
+                if (param_0->unk58 < 3.0f) {
+                    func_800DF500(1.0f, func_800F10B4(param_0->unk58, 3.0f, 0.0f, 5.0f, 0.001f),
+                                  1.0f);
+                } else {
+                    func_800DF500(1.0f, 5.0f, 1.0f);
+                }
             }
-        }
-        return 1;
-}
+            return 1;
+    }
 
-return 0;
+    return 0;
 }
 
 void func_80801200_chdippy(param_0) Actor *param_0;
 {
     s32 local_0 = func_800BEA88(1);
 
-if (_glcutDll_entrypoint_20()) {
-    param_0->unk79_4 = 2;
-    *(f32 *) &param_0->actorData[0] = 0.0f;
-    func_80101FDC(param_0, 3);
-} else if (_glcutDll_entrypoint_19(0x36)) {
-
-param_0->unk58 = 6.0f;
-func_80101FDC(param_0, 2);
-param_0->unk64_16 = 1;
-*(f32 *) &param_0->actorData[2] = 30.0f;
-*(f32 *) &param_0->actorData[3] = func_800DC178(0.2f, 0.5f);
-
-}
-else
-{
-    if (!func_800DA298(0x327)) {
+    if (_glcutDll_entrypoint_20()) {
         param_0->unk79_4 = 2;
-        *(f32 *) &param_0->actorData[0] = -2000.0f;
-        func_80101FDC(param_0, 1);
-        return;
-    }
+        *(f32 *) &param_0->actorData[0] = 0.0f;
+        func_80101FDC(param_0, 3);
+    } else if (_glcutDll_entrypoint_19(0x36)) {
+        param_0->unk58 = 6.0f;
+        func_80101FDC(param_0, 2);
+        param_0->unk64_16 = 1;
+        *(f32 *) &param_0->actorData[2] = 30.0f;
+        *(f32 *) &param_0->actorData[3] = func_800DC178(0.2f, 0.5f);
 
-param_0->unk79_4 = 2;
-*(f32 *) &param_0->actorData[0] = 0.0f;
-func_80101FDC(param_0, 3);
-}
-_idworldmake_entrypoint_1(local_0, 0x659, 1, 1);
-if (param_0->unk70_10 == 2)
-    func_800C4AF0(param_0->actorData, D_8080174C_chdippy);
+    } else {
+        if (!func_800DA298(0x327)) {
+            param_0->unk79_4 = 2;
+            *(f32 *) &param_0->actorData[0] = -2000.0f;
+            func_80101FDC(param_0, 1);
+            return;
+        }
+
+        param_0->unk79_4 = 2;
+        *(f32 *) &param_0->actorData[0] = 0.0f;
+        func_80101FDC(param_0, 3);
+    }
+    _idworldmake_entrypoint_1(local_0, 0x659, 1, 1);
+    if (param_0->unk70_10 == 2)
+        func_800C4AF0(param_0->actorData, D_8080174C_chdippy);
 }
 
 void chdippy_entrypoint_3(void *param_0, Vtx *param_1, Vtx *param_2, s32 param_3,

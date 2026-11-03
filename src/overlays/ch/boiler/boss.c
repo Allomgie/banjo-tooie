@@ -677,45 +677,45 @@ s32 param_1;
     func_80102424(param_0, param_1);
     func_80802594_chboilerboss(param_0);
 
-switch (param_1) {
-    case 7:
-        func_808027E4_chboilerboss(param_0, 2, 0x30, 0);
-        func_8080238C_chboilerboss(param_0, 0xF99, 0x40);
-        func_80109FE8(param_0, 0);
-        break;
-    case 8:
-        func_808027E4_chboilerboss(param_0, 4, 0x30, 0);
-        func_8080238C_chboilerboss(param_0, 0xF9A, 0x40);
-        func_80109FE8(param_0, 0);
-        break;
-    case 9:
-        func_808027E4_chboilerboss(param_0, 6, 0x30, 0);
-        func_8080238C_chboilerboss(param_0, 0xF9B, 0x40);
-        func_80109FE8(param_0, 0);
-        break;
-    case 5:
-        func_80801EB4_chboilerboss(param_0);
-        local_1 = 1;
-        break;
-    case 10:
-        local_1 = 1;
-        break;
-    case 2:
-        func_800187B4(0, 0x3FCCCCCD, 0x3E800000, 0x40000000);
-        func_808024B8_chboilerboss(param_0);
-        func_808027E4_chboilerboss(param_0, 0, 0x20, 0);
-        _chintrotext_entrypoint_1(0x18B9, 0, 1, 0);
-        *(s32 *) ((s8 *) local_0 + 0x60) = 1;
-        break;
-    case 6:
-        local_1 = 1;
-        break;
-    case 12:
-        *(u8 *) ((s8 *) param_0 + 0x65) = (u8) (*(u8 *) ((s8 *) param_0 + 0x65) & 0xFFFE);
-}
+    switch (param_1) {
+        case 7:
+            func_808027E4_chboilerboss(param_0, 2, 0x30, 0);
+            func_8080238C_chboilerboss(param_0, 0xF99, 0x40);
+            func_80109FE8(param_0, 0);
+            break;
+        case 8:
+            func_808027E4_chboilerboss(param_0, 4, 0x30, 0);
+            func_8080238C_chboilerboss(param_0, 0xF9A, 0x40);
+            func_80109FE8(param_0, 0);
+            break;
+        case 9:
+            func_808027E4_chboilerboss(param_0, 6, 0x30, 0);
+            func_8080238C_chboilerboss(param_0, 0xF9B, 0x40);
+            func_80109FE8(param_0, 0);
+            break;
+        case 5:
+            func_80801EB4_chboilerboss(param_0);
+            local_1 = 1;
+            break;
+        case 10:
+            local_1 = 1;
+            break;
+        case 2:
+            func_800187B4(0, 0x3FCCCCCD, 0x3E800000, 0x40000000);
+            func_808024B8_chboilerboss(param_0);
+            func_808027E4_chboilerboss(param_0, 0, 0x20, 0);
+            _chintrotext_entrypoint_1(0x18B9, 0, 1, 0);
+            *(s32 *) ((s8 *) local_0 + 0x60) = 1;
+            break;
+        case 6:
+            local_1 = 1;
+            break;
+        case 12:
+            *(u8 *) ((s8 *) param_0 + 0x65) = (u8) (*(u8 *) ((s8 *) param_0 + 0x65) & 0xFFFE);
+    }
 
-(*(s8 *) ((s8 *) (local_0) + (0x58))) = (s8) local_1;
-func_808024DC_chboilerboss(param_0);
+    (*(s8 *) ((s8 *) (local_0) + (0x58))) = (s8) local_1;
+    func_808024DC_chboilerboss(param_0);
 }
 
 void func_808010F4_chboilerboss(param_0) Actor *param_0;
@@ -723,48 +723,47 @@ void func_808010F4_chboilerboss(param_0) Actor *param_0;
     u8 *local_5;
     BoilerMorph61 local_6;
 
-if (((Mass45BoilerRenderFlags *) param_0->unk0)->local_0 && param_0->unk64_16) {
-    local_5 = func_80100094(param_0, 0);
-    local_6.local_4 = func_801039E4(param_0->unk0);
-    local_6.local_3 = func_80101F24(param_0);
-    switch (param_0->unk70_10) {
-        case 2:
-            if (local_6.local_3 < 0.15f) {
-                *(f32 *) (local_5 + 0x4C) = 6.6666665f * local_6.local_3;
-            } else {
-                *(f32 *) (local_5 + 0x4C) = 1.0f;
-            }
-            *(f32 *) (local_5 + 0x50) = *(f32 *) (local_5 + 0x4C);
-            break;
-        case 6:
-            if (local_6.local_3 < 0.5f) {
-                *(f32 *) (local_5 + 0x4C) = local_6.local_3 + local_6.local_3;
-            } else {
-                *(f32 *) (local_5 + 0x4C) = (1.0f - local_6.local_3) + (1.0f - local_6.local_3);
-            }
-            *(f32 *) (local_5 + 0x50) = *(f32 *) (local_5 + 0x4C);
-            break;
-        case 7:
-        case 8:
-        case 9:
-            if (local_6.local_3 < 0.15f) {
-                *(f32 *) (local_5 + 0x4C) = 6.6666665f * local_6.local_3;
-            } else {
-                *(f32 *) (local_5 + 0x4C) = 1.0f;
-            }
-            *(f32 *) (local_5 + 0x50) = *(f32 *) (local_5 + 0x4C);
-            break;
-        default:
-            local_6.local_2 = func_800F0E00(*(f32 *) (local_5 + 0x4C) - 0.2f, 0.0f);
-            *(f32 *) (local_5 + 0x4C) = local_6.local_2;
-            *(f32 *) (local_5 + 0x50) = local_6.local_2;
+    if (((Mass45BoilerRenderFlags *) param_0->unk0)->local_0 && param_0->unk64_16) {
+        local_5 = func_80100094(param_0, 0);
+        local_6.local_4 = func_801039E4(param_0->unk0);
+        local_6.local_3 = func_80101F24(param_0);
+        switch (param_0->unk70_10) {
+            case 2:
+                if (local_6.local_3 < 0.15f) {
+                    *(f32 *) (local_5 + 0x4C) = 6.6666665f * local_6.local_3;
+                } else {
+                    *(f32 *) (local_5 + 0x4C) = 1.0f;
+                }
+                *(f32 *) (local_5 + 0x50) = *(f32 *) (local_5 + 0x4C);
+                break;
+            case 6:
+                if (local_6.local_3 < 0.5f) {
+                    *(f32 *) (local_5 + 0x4C) = local_6.local_3 + local_6.local_3;
+                } else {
+                    *(f32 *) (local_5 + 0x4C) = (1.0f - local_6.local_3) + (1.0f - local_6.local_3);
+                }
+                *(f32 *) (local_5 + 0x50) = *(f32 *) (local_5 + 0x4C);
+                break;
+            case 7:
+            case 8:
+            case 9:
+                if (local_6.local_3 < 0.15f) {
+                    *(f32 *) (local_5 + 0x4C) = 6.6666665f * local_6.local_3;
+                } else {
+                    *(f32 *) (local_5 + 0x4C) = 1.0f;
+                }
+                *(f32 *) (local_5 + 0x50) = *(f32 *) (local_5 + 0x4C);
+                break;
+            default:
+                local_6.local_2 = func_800F0E00(*(f32 *) (local_5 + 0x4C) - 0.2f, 0.0f);
+                *(f32 *) (local_5 + 0x4C) = local_6.local_2;
+                *(f32 *) (local_5 + 0x50) = local_6.local_2;
+        }
+        local_6.local_0 = func_800B2768(local_6.local_4);
+        local_6.local_1 = func_80103CB8(param_0, local_6.local_4);
+        _dbmorph_entrypoint_3(local_6.local_0, local_6.local_1, func_800B2840(local_6.local_4), 1,
+                              local_5 + 0x4C);
     }
-    local_6.local_0 = func_800B2768(local_6.local_4);
-    local_6.local_1 = func_80103CB8(param_0, local_6.local_4);
-    _dbmorph_entrypoint_3(local_6.local_0, local_6.local_1, func_800B2840(local_6.local_4), 1,
-                          local_5 + 0x4C);
-}
-
 }
 
 void func_808012C8_chboilerboss(Actor *param_0)
@@ -790,7 +789,6 @@ void func_808012C8_chboilerboss(Actor *param_0)
             }
         }
     }
-
 }
 
 void func_808013C4_chboilerboss(Actor *param_0)
@@ -798,14 +796,13 @@ void func_808013C4_chboilerboss(Actor *param_0)
     BoilerWaitState *local_0;
     local_0 = func_80100094(param_0, 0);
 
-if (local_0->phase != 3 && local_0->timer == 0.0f && !func_800C0638()) {
-    func_80800F34_chboilerboss((u8 *) param_0, 10);
-    if (!local_0->used) {
-        func_8080238C_chboilerboss(param_0, 0xF9C, 0);
-        local_0->used++;
+    if (local_0->phase != 3 && local_0->timer == 0.0f && !func_800C0638()) {
+        func_80800F34_chboilerboss((u8 *) param_0, 10);
+        if (!local_0->used) {
+            func_8080238C_chboilerboss(param_0, 0xF9C, 0);
+            local_0->used++;
+        }
     }
-}
-
 }
 
 void func_80801464_chboilerboss(Actor *param_0, f32 *param_1, f32 param_2)
@@ -855,39 +852,39 @@ void func_80801628_chboilerboss(param_0) Actor *param_0;
     local_2 = ((BoilerThresholdFlags_80801628_chboilerboss *) param_0->unk0)->local_1;
     local_3 = ((BoilerThresholdFlags_80801628_chboilerboss *) param_0->unk0)->local_2;
 
-if ((s32) param_0->unk70_10 < 11) {
-    if (1)
+    if ((s32) param_0->unk70_10 < 11) {
         if (1) {
         }
-    if (local_3 && !local_1) {
-        if (param_0->unk70_10 == 5) {
-            if (func_800DC298(0.5f)) {
+        if (1) {
+        }
+        if (local_3 && !local_1) {
+            if (param_0->unk70_10 == 5) {
+                if (func_800DC298(0.5f)) {
+                    func_80801464_chboilerboss(param_0, local_4, 75.0f);
+                    func_808019C8_chboilerboss(param_0, local_4);
+                }
+            } else if (func_800DC298(0.15f)) {
                 func_80801464_chboilerboss(param_0, local_4, 75.0f);
                 func_808019C8_chboilerboss(param_0, local_4);
             }
-        } else if (func_800DC298(0.15f)) {
-            func_80801464_chboilerboss(param_0, local_4, 75.0f);
-            func_808019C8_chboilerboss(param_0, local_4);
         }
-    }
-    if (local_3 && !local_2) {
-        if (param_0->unk70_10 == 5) {
-            if (func_800DC298(0.5f)) {
+        if (local_3 && !local_2) {
+            if (param_0->unk70_10 == 5) {
+                if (func_800DC298(0.5f)) {
+                    func_808014F4_chboilerboss(param_0, local_4, 75.0f);
+                    func_808019C8_chboilerboss(param_0, local_4);
+                }
+            } else if (func_800DC298(0.15f)) {
                 func_808014F4_chboilerboss(param_0, local_4, 75.0f);
                 func_808019C8_chboilerboss(param_0, local_4);
             }
-        } else if (func_800DC298(0.15f)) {
-            func_808014F4_chboilerboss(param_0, local_4, 75.0f);
-            func_808019C8_chboilerboss(param_0, local_4);
+        }
+        if (!local_3 && param_0->unk70_10 != 9 && func_800DC298(0.4f)) {
+            func_800EE7F8(local_4, local_0 + 0x18);
+            func_800EF1B8(local_4, param_0->rotation[1], 75.0f);
+            func_80801A08_chboilerboss(param_0, local_4);
         }
     }
-    if (!local_3 && param_0->unk70_10 != 9 && func_800DC298(0.4f)) {
-        func_800EE7F8(local_4, local_0 + 0x18);
-        func_800EF1B8(local_4, param_0->rotation[1], 75.0f);
-        func_80801A08_chboilerboss(param_0, local_4);
-    }
-}
-
 }
 
 void func_80801B00_chboilerboss();
@@ -902,40 +899,39 @@ void func_808017F0_chboilerboss(param_0) Actor *param_0;
 
     local_0 = func_80100094(param_0, 0);
 
-if (func_80101F24(param_0) < 0.7f && func_800DC298(0.4f)) {
-    func_800EE7F8(local_1, param_0->position);
-    local_1[1] += 30.0f;
-    func_80801B00_chboilerboss(param_0, local_1);
-}
+    if (func_80101F24(param_0) < 0.7f && func_800DC298(0.4f)) {
+        func_800EE7F8(local_1, param_0->position);
+        local_1[1] += 30.0f;
+        func_80801B00_chboilerboss(param_0, local_1);
+    }
 
-if (func_80101E14(param_0, 0.0f)) {
-    func_800EE7F8(local_1, param_0->position);
-    local_1[1] -= 250.0f;
-    func_80801A74_chboilerboss(param_0, param_0->position, local_1, 0);
-}
+    if (func_80101E14(param_0, 0.0f)) {
+        func_800EE7F8(local_1, param_0->position);
+        local_1[1] -= 250.0f;
+        func_80801A74_chboilerboss(param_0, param_0->position, local_1, 0);
+    }
 
-if (func_80101E14(param_0, 0.45f)) {
-    func_800EE7F8(local_2, local_0 + 0x24);
-    local_2[1] = param_0->position[1];
-    func_800EE7F8(local_1, local_2);
-    local_1[1] -= 100.0f;
-    func_80801A74_chboilerboss(param_0, local_2, local_1, 1);
-}
+    if (func_80101E14(param_0, 0.45f)) {
+        func_800EE7F8(local_2, local_0 + 0x24);
+        local_2[1] = param_0->position[1];
+        func_800EE7F8(local_1, local_2);
+        local_1[1] -= 100.0f;
+        func_80801A74_chboilerboss(param_0, local_2, local_1, 1);
+    }
 
-if (func_80101E14(param_0, 0.65f)) {
-    func_800EE7F8(local_2, local_0 + 0x30);
-    local_2[1] = param_0->position[1];
-    func_800EE7F8(local_1, local_2);
-    local_1[1] -= 100.0f;
-    func_80801A74_chboilerboss(param_0, local_2, local_1, 1);
-}
+    if (func_80101E14(param_0, 0.65f)) {
+        func_800EE7F8(local_2, local_0 + 0x30);
+        local_2[1] = param_0->position[1];
+        func_800EE7F8(local_1, local_2);
+        local_1[1] -= 100.0f;
+        func_80801A74_chboilerboss(param_0, local_2, local_1, 1);
+    }
 
-if (func_80101E14(param_0, 0.85f)) {
-    func_800EE7F8(local_2, local_0 + 0x30);
-    local_2[1] = param_0->position[1] + 25.0f;
-    func_80801B44_chboilerboss(param_0, local_2);
-}
-
+    if (func_80101E14(param_0, 0.85f)) {
+        func_800EE7F8(local_2, local_0 + 0x30);
+        local_2[1] = param_0->position[1] + 25.0f;
+        func_80801B44_chboilerboss(param_0, local_2);
+    }
 }
 
 void func_808019C8_chboilerboss(s32 param_0, unsigned int param_1)
@@ -966,6 +962,7 @@ void func_80801B00_chboilerboss(Actor *param_0, s32 param_1)
 }
 
 extern u32 D_80802E00_chboilerboss[];
+
 int func_80801B44_chboilerboss(Actor *param_0, s32 param_1)
 {
     func_800BBCB8(param_1, 0, *(f32 *) ((char *) param_0 + 0x38), 8, D_80802E00_chboilerboss);
@@ -992,16 +989,16 @@ void func_80801C24_chboilerboss(Actor *param_0)
 
     local_0 = func_80100094(param_0, 0);
 
-if (!_subaddieaudioquick_entrypoint_3(param_0, local_0->local_2, D_80802EA4_chboilerboss, 0.1f)) {
-    if (_subaddieaudioquick_entrypoint_3(param_0, local_0->local_0, D_80802B20_chboilerboss,
-                                         0.65f) ||
-        _subaddieaudioquick_entrypoint_3(param_0, local_0->local_1, D_80802B20_chboilerboss,
-                                         0.88f)) {
-        func_800E1610(0, 10.0f, 0.9f, param_0->position);
-        func_80018820(0, 1.0f, 0.3f);
+    if (!_subaddieaudioquick_entrypoint_3(param_0, local_0->local_2, D_80802EA4_chboilerboss,
+                                          0.1f)) {
+        if (_subaddieaudioquick_entrypoint_3(param_0, local_0->local_0, D_80802B20_chboilerboss,
+                                             0.65f) ||
+            _subaddieaudioquick_entrypoint_3(param_0, local_0->local_1, D_80802B20_chboilerboss,
+                                             0.88f)) {
+            func_800E1610(0, 10.0f, 0.9f, param_0->position);
+            func_80018820(0, 1.0f, 0.3f);
+        }
     }
-}
-
 }
 
 void func_80801CE8_chboilerboss(s32 param_0)
@@ -1009,14 +1006,13 @@ void func_80801CE8_chboilerboss(s32 param_0)
     s32 local_0;
     local_0 = func_80100094(param_0, 0);
 
-if (_subaddieaudioquick_entrypoint_3(param_0, local_0 + 0x24, (u32 *) D_80802B20_chboilerboss, 0) !=
-        0 ||
-    _subaddieaudioquick_entrypoint_3(param_0, local_0 + 0x30, (u32 *) D_80802B20_chboilerboss,
-                                     0.5f) != 0) {
-    func_800E1610(0, 15.0f, 0.6f, param_0 + 4);
-    func_80018820(0, 0.5f, 0.2f);
-}
-
+    if (_subaddieaudioquick_entrypoint_3(param_0, local_0 + 0x24, (u32 *) D_80802B20_chboilerboss,
+                                         0) != 0 ||
+        _subaddieaudioquick_entrypoint_3(param_0, local_0 + 0x30, (u32 *) D_80802B20_chboilerboss,
+                                         0.5f) != 0) {
+        func_800E1610(0, 15.0f, 0.6f, param_0 + 4);
+        func_80018820(0, 0.5f, 0.2f);
+    }
 }
 
 void func_80802414_chboilerboss();
@@ -1027,35 +1023,34 @@ s32 param_2;
 {
     BoilerSpawnWord1506 local_0;
 
-switch (param_1) {
-    case 0xF97:
-    case 0xF9E:
-        func_80802414_chboilerboss(param_0);
-        break;
-    case 0xF99:
-    case 0xF9A:
-    case 0xF9B:
-        func_80109FE8(param_0, 1);
-        func_808026F0_chboilerboss((s32) param_0);
-        func_808024DC_chboilerboss(param_0);
-        break;
-    case 0xF98:
-        local_0.local_0 = param_0->position[1] + 200.0f;
-        _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, 5, *(s32 *) &param_0->position[0],
-                                    local_0.local_1, *(s32 *) &param_0->position[2],
-                                    *(s32 *) &param_0->rotation[1]);
-        _chexploder_entrypoint_5(param_0, 0x795, param_0->position, param_0->rotation[1],
-                                 param_0->scale, 3);
-        func_800FDC28(0);
-        func_80800F34_chboilerboss((u8 *) param_0, 12);
-        break;
-    case 0xCEB:
-        if (param_2 > 0)
-            _gcfrontend_entrypoint_11();
-        else
-            _gcfrontend_entrypoint_10();
-}
-
+    switch (param_1) {
+        case 0xF97:
+        case 0xF9E:
+            func_80802414_chboilerboss(param_0);
+            break;
+        case 0xF99:
+        case 0xF9A:
+        case 0xF9B:
+            func_80109FE8(param_0, 1);
+            func_808026F0_chboilerboss((s32) param_0);
+            func_808024DC_chboilerboss(param_0);
+            break;
+        case 0xF98:
+            local_0.local_0 = param_0->position[1] + 200.0f;
+            _chbaddiesetup_entrypoint_5(
+                _chbaddiesetup_entrypoint_10, 5, *(s32 *) &param_0->position[0], local_0.local_1,
+                *(s32 *) &param_0->position[2], *(s32 *) &param_0->rotation[1]);
+            _chexploder_entrypoint_5(param_0, 0x795, param_0->position, param_0->rotation[1],
+                                     param_0->scale, 3);
+            func_800FDC28(0);
+            func_80800F34_chboilerboss((u8 *) param_0, 12);
+            break;
+        case 0xCEB:
+            if (param_2 > 0)
+                _gcfrontend_entrypoint_11();
+            else
+                _gcfrontend_entrypoint_10();
+    }
 }
 
 void func_80801EB4_chboilerboss(BoilerS *param_0)
@@ -1064,7 +1059,6 @@ void func_80801EB4_chboilerboss(BoilerS *param_0)
     f32 local_0 = func_8010203C(param_0, param_0->f72);
     local_1 = D_80802B58_chboilerboss / func_80105AC4(param_0);
     func_80101CDC(param_0, local_0 * local_1);
-
 }
 
 s32 func_80801F10_chboilerboss(s32 param_0)
@@ -1072,38 +1066,36 @@ s32 func_80801F10_chboilerboss(s32 param_0)
     if (func_800DA298(0x86) != 0) {
         func_800FFAB0(param_0);
     }
-
 }
 
 void func_80801F44_chboilerboss(Actor *param_0)
 {
     Actor *local_0;
 
-if (!param_0->unk64_20) {
-    local_0 = func_80106790(param_0->unk3C);
-    switch (param_0->unk6C_9) {
-        case 0x223:
-            ((BoilerMarker1493 *) local_0->unk0)->local_1 = 0;
-            ((BoilerMarker1493 *) local_0->unk0)->local_0 =
-                (u8) (((BoilerMarker1493 *) local_0->unk0)->local_0 | 1);
-            break;
-        case 0x224:
-            ((BoilerMarker1493 *) local_0->unk0)->local_2 = 0;
-            ((BoilerMarker1493 *) local_0->unk0)->local_0 =
-                (u8) (((BoilerMarker1493 *) local_0->unk0)->local_0 | 2);
-            break;
-        case 0x225:
-            ((BoilerMarker1493 *) local_0->unk0)->local_3 = 0;
-            ((BoilerMarker1493 *) local_0->unk0)->local_0 =
-                (u8) (((BoilerMarker1493 *) local_0->unk0)->local_0 | 4);
+    if (!param_0->unk64_20) {
+        local_0 = func_80106790(param_0->unk3C);
+        switch (param_0->unk6C_9) {
+            case 0x223:
+                ((BoilerMarker1493 *) local_0->unk0)->local_1 = 0;
+                ((BoilerMarker1493 *) local_0->unk0)->local_0 =
+                    (u8) (((BoilerMarker1493 *) local_0->unk0)->local_0 | 1);
+                break;
+            case 0x224:
+                ((BoilerMarker1493 *) local_0->unk0)->local_2 = 0;
+                ((BoilerMarker1493 *) local_0->unk0)->local_0 =
+                    (u8) (((BoilerMarker1493 *) local_0->unk0)->local_0 | 2);
+                break;
+            case 0x225:
+                ((BoilerMarker1493 *) local_0->unk0)->local_3 = 0;
+                ((BoilerMarker1493 *) local_0->unk0)->local_0 =
+                    (u8) (((BoilerMarker1493 *) local_0->unk0)->local_0 | 4);
+        }
+        param_0->unk64_20 = 1;
     }
-    param_0->unk64_20 = 1;
-}
 
-if (func_80101DDC(param_0))
-    _subaddiefade_entrypoint_3(param_0);
-func_80802098_chboilerboss(param_0);
-
+    if (func_80101DDC(param_0))
+        _subaddiefade_entrypoint_3(param_0);
+    func_80802098_chboilerboss(param_0);
 }
 
 void func_80802098_chboilerboss(param_0) Actor *param_0;
@@ -1118,7 +1110,6 @@ void func_80802098_chboilerboss(param_0) Actor *param_0;
             _subaddieaudioquick_entrypoint_4(param_0, param_0->position, &D_80802EB0_chboilerboss,
                                              &D_80802ED0_chboilerboss);
     }
-
 }
 
 void func_80802114_chboilerboss(Actor *param_0)
@@ -1127,32 +1118,31 @@ void func_80802114_chboilerboss(Actor *param_0)
 
     local_0 = func_80100094(param_0, 0);
 
-if (func_800D9078(local_0 + 0x5C)) {
-    func_80109EF4(param_0, 0x40);
-}
+    if (func_800D9078(local_0 + 0x5C)) {
+        func_80109EF4(param_0, 0x40);
+    }
 
-func_800D9078(local_0 + 0x48);
+    func_800D9078(local_0 + 0x48);
 
-switch (local_0[0x55]) {
-    case 0:
-        if (func_800CEAA8(0)) {
-            func_800CE88C(0, 0);
-        }
-        break;
-    case 1:
-        func_800CE8D8(0, 150.0f, 150);
-        func_800CE88C(0, 1);
-        local_0[0x55] = 2;
-        break;
-    case 2:
-        if (func_800CEAD0(0)) {
-            local_0[0x55] = 3;
-            func_800C4AF0(0, D_80802EE4_chboilerboss);
-            func_80800F34_chboilerboss(param_0, 0xA);
-            func_8080238C_chboilerboss(param_0, 0xF9D, 0);
-        }
-}
-
+    switch (local_0[0x55]) {
+        case 0:
+            if (func_800CEAA8(0)) {
+                func_800CE88C(0, 0);
+            }
+            break;
+        case 1:
+            func_800CE8D8(0, 150.0f, 150);
+            func_800CE88C(0, 1);
+            local_0[0x55] = 2;
+            break;
+        case 2:
+            if (func_800CEAD0(0)) {
+                local_0[0x55] = 3;
+                func_800C4AF0(0, D_80802EE4_chboilerboss);
+                func_80800F34_chboilerboss(param_0, 0xA);
+                func_8080238C_chboilerboss(param_0, 0xF9D, 0);
+            }
+    }
 }
 
 void func_8080221C_chboilerboss(Actor *param_0, s32 param_1, volatile s32 param_2)
@@ -1161,25 +1151,24 @@ void func_8080221C_chboilerboss(Actor *param_0, s32 param_1, volatile s32 param_
     f32 *local_1;
     local_1 = param_0->position;
 
-if (!param_0->unk3C) {
-    local_0 = _subaddiefind_entrypoint_0(local_1, 0x321, -1, 0);
-    if (!local_0) {
-        return;
+    if (!param_0->unk3C) {
+        local_0 = _subaddiefind_entrypoint_0(local_1, 0x321, -1, 0);
+        if (!local_0) {
+            return;
+        }
+        param_0->unk3C = local_0->unk0;
     }
-    param_0->unk3C = local_0->unk0;
-}
 
-local_0 = func_80106790(param_0->unk3C);
+    local_0 = func_80106790(param_0->unk3C);
 
-if (param_1) {
-    _chboilerid_entrypoint_6(local_0, param_2);
-}
+    if (param_1) {
+        _chboilerid_entrypoint_6(local_0, param_2);
+    }
 
-else
-{
-    _chboilerid_entrypoint_5(local_0);
-}
-func_800EE7F8((f32 *) local_0->actorData, local_1);
+    else {
+        _chboilerid_entrypoint_5(local_0);
+    }
+    func_800EE7F8((f32 *) local_0->actorData, local_1);
 }
 
 void func_808022BC_chboilerboss(u8 *param_0)
@@ -1194,12 +1183,12 @@ void func_808022BC_chboilerboss(u8 *param_0)
     _subaddieaudioquick_entrypoint_2(param_0, local_1, &D_80802F60_chboilerboss);
     func_800BABB8(0, local_1, local_1, *(f32 *) (param_0 + 0x38), &D_80802EF8_chboilerboss);
 
-if (func_800D395C() == 0) {
-    func_800D1000(0xB, 1, local_1, 1, 0);
-}
+    if (func_800D395C() == 0) {
+        func_800D1000(0xB, 1, local_1, 1, 0);
+    }
 
-func_800DA544(0x86);
-func_800DA524(0x670);
+    func_800DA544(0x86);
+    func_800DA524(0x670);
 }
 
 void func_8080238C_chboilerboss(param_0, param_1, param_2) Actor *param_0;
@@ -1216,11 +1205,11 @@ s32 func_808023C8_chboilerboss(s32 param_0)
 
     local_0 = func_80100094(param_0, 0);
 
-if ((local_0[0x18] == 0) && (((s16 *) local_0)[0x32] != 0)) {
-    func_80800F34_chboilerboss(param_0, 2);
-}
+    if ((local_0[0x18] == 0) && (((s16 *) local_0)[0x32] != 0)) {
+        func_80800F34_chboilerboss(param_0, 2);
+    }
 
-return 0;
+    return 0;
 }
 
 void func_80802414_chboilerboss(Actor *param_0)
@@ -1250,11 +1239,10 @@ void func_808024DC_chboilerboss(Actor *param_0)
     u8 *flags;
     flags = func_80100094(param_0, 0);
 
-if (flags[0x57] == 0 && flags[0x58] != 0 && flags[0x59] == 0) {
-    func_80802538_chboilerboss(param_0);
-    flags[0x58] = 0;
-}
-
+    if (flags[0x57] == 0 && flags[0x58] != 0 && flags[0x59] == 0) {
+        func_80802538_chboilerboss(param_0);
+        flags[0x58] = 0;
+    }
 }
 
 int func_80802538_chboilerboss(param_0)
@@ -1263,12 +1251,12 @@ Actor *param_0;
     Actor *new_var;
     new_var = func_80100094(param_0, 0);
 
-if (*(u8 *) ((char *) new_var + 0x57) == 0) {
-    func_800F4AF4(func_800F54E4(), 0x14);
-    *(u8 *) ((char *) new_var + 0x57) = 1;
-}
+    if (*(u8 *) ((char *) new_var + 0x57) == 0) {
+        func_800F4AF4(func_800F54E4(), 0x14);
+        *(u8 *) ((char *) new_var + 0x57) = 1;
+    }
 
-func_808025DC_chboilerboss(param_0);
+    func_808025DC_chboilerboss(param_0);
 }
 
 void func_80802594_chboilerboss(s32 param_0)
@@ -1279,11 +1267,10 @@ void func_80802594_chboilerboss(s32 param_0)
     temp_v0 = func_80100094(param_0, 0);
     sp1C = temp_v0;
 
-if (*(u8 *) ((s8 *) temp_v0 + 0x57) != 0) {
-    func_800F4B20(func_800F54E4());
-    *(s8 *) ((s8 *) sp1C + 0x57) = 0;
-}
-
+    if (*(u8 *) ((s8 *) temp_v0 + 0x57) != 0) {
+        func_800F4B20(func_800F54E4());
+        *(s8 *) ((s8 *) sp1C + 0x57) = 0;
+    }
 }
 
 void func_808025DC_chboilerboss(param_0) Actor *param_0;
@@ -1293,17 +1280,16 @@ void func_808025DC_chboilerboss(param_0) Actor *param_0;
 
     local_0 = func_80100094(param_0, 0);
 
-if (*(u8 *) (local_0 + 0x57)) {
-    if (_plcamera_entrypoint_10(func_800F54E4()) != 20) {
-        *(u8 *) (local_0 + 0x57) = 0;
-        return;
+    if (*(u8 *) (local_0 + 0x57)) {
+        if (_plcamera_entrypoint_10(func_800F54E4()) != 20) {
+            *(u8 *) (local_0 + 0x57) = 0;
+            return;
+        }
+        func_800EE7F8(local_1, param_0->position);
+        local_1[1] += 400.0f;
+        _plcamera_entrypoint_9(func_800F54E4(), local_1, 0.0f);
+        func_80116088(func_80110014(func_800F5EF8(func_800F54E4())), local_1);
     }
-    func_800EE7F8(local_1, param_0->position);
-    local_1[1] += 400.0f;
-    _plcamera_entrypoint_9(func_800F54E4(), local_1, 0.0f);
-    func_80116088(func_80110014(func_800F5EF8(func_800F54E4())), local_1);
-}
-
 }
 
 int func_80802690_chboilerboss(s32 param_0, s32 param_1, s32 param_2)
@@ -1315,7 +1301,7 @@ int func_80802690_chboilerboss(s32 param_0, s32 param_1, s32 param_2)
         return 2;
     }
 
-return 1;
+    return 1;
 }
 
 void func_808026F0_chboilerboss(param_0) s32 param_0;
@@ -1324,11 +1310,10 @@ void func_808026F0_chboilerboss(param_0) s32 param_0;
 
     sp1C = func_80100094(param_0, 0);
 
-if (*(u8 *) (sp1C + 0x59) != 0) {
-    _capod_entrypoint_3(0);
-    *(u8 *) (sp1C + 0x59) = 0;
-}
-
+    if (*(u8 *) (sp1C + 0x59) != 0) {
+        _capod_entrypoint_3(0);
+        *(u8 *) (sp1C + 0x59) = 0;
+    }
 }
 
 void func_80802730_chboilerboss(param_0, param_1, param_2) Actor *param_0;
@@ -1339,20 +1324,19 @@ s32 param_2;
 
     local_0 = func_80100094(param_0, 0);
 
-switch (*(u8 *) (local_0 + 0x59)) {
-    case 0:
-        _capod_entrypoint_2(param_0->unk0, 20, 0);
-    case 1:
-        _capod_entrypoint_8(1);
-        *(u8 *) (local_0 + 0x59) = 2;
-        _gcdialogcamera_entrypoint_3(&D_80802AA0_chboilerboss, param_0->scale);
-        _gcdialogcamera_entrypoint_4(param_0->position);
-        _gcdialogcamera_entrypoint_5(param_0->rotation);
-        _gcdialogcamera_entrypoint_8();
-    case 2:
-        _capod_entrypoint_7(param_1, param_2);
-}
-
+    switch (*(u8 *) (local_0 + 0x59)) {
+        case 0:
+            _capod_entrypoint_2(param_0->unk0, 20, 0);
+        case 1:
+            _capod_entrypoint_8(1);
+            *(u8 *) (local_0 + 0x59) = 2;
+            _gcdialogcamera_entrypoint_3(&D_80802AA0_chboilerboss, param_0->scale);
+            _gcdialogcamera_entrypoint_4(param_0->position);
+            _gcdialogcamera_entrypoint_5(param_0->rotation);
+            _gcdialogcamera_entrypoint_8();
+        case 2:
+            _capod_entrypoint_7(param_1, param_2);
+    }
 }
 
 void func_808027E4_chboilerboss(param_0, param_1, param_2, param_3) Actor *param_0;
@@ -1365,15 +1349,14 @@ Unk80132ED0 *param_3;
     if (param_3 == NULL)
         param_3 = param_0->unk0;
 
-switch (local_0->state) {
-    case 0:
-        _capod_entrypoint_2(param_0->unk0, 0x14, param_2);
-    case 2:
-        local_0->state = 1;
-    case 1:
-        _capod_entrypoint_6(param_3, param_1, param_2);
-}
-
+    switch (local_0->state) {
+        case 0:
+            _capod_entrypoint_2(param_0->unk0, 0x14, param_2);
+        case 2:
+            local_0->state = 1;
+        case 1:
+            _capod_entrypoint_6(param_3, param_1, param_2);
+    }
 }
 
 extern int func_80105834();

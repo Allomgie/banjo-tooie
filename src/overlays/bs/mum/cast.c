@@ -1,4 +1,7 @@
 #include "overlays/bs/mum/cast.h"
+#include "overlays/ba/anim.h"
+#include "core2/physics.h"
+#include "overlays/ba/playerstate.h"
 
 #ifndef NONMATCHINGS
 

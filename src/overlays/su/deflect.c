@@ -105,8 +105,9 @@ int sudeflect_entrypoint_2(f32 *param_0, f32 *param_1, s32 param_2)
     s32 i0;
     s32 local_2 = 0;
     for (i0 = 0; i0 != 3; i0++) {
-        if (1)
-            local_0[i0] = param_0[i0] + (param_1[i0] - param_0[i0]) * 0.5f;
+        if (1) {
+        }
+        local_0[i0] = param_0[i0] + (param_1[i0] - param_0[i0]) * 0.5f;
     }
     *(s32 *) ((u8 *) &B_80801020_sudeflect + 0x24) = 0;
     if (param_2 & 0x18)
@@ -227,8 +228,9 @@ int func_808007F4_sudeflect(void *param_0, f32 param_1, f32 param_2, f32 param_3
     local_0 = *(void ***) &B_80801020_sudeflect;
     local_4 = 0;
     while (*local_0) {
-        if (1)
-            local_1 = func_800E9E88(*local_0);
+        if (1) {
+        }
+        local_1 = func_800E9E88(*local_0);
         local_2 = func_800E9EB4(*local_0);
         for (; local_1 < local_2; local_1++) {
             if (local_1->local_1 & 1) {

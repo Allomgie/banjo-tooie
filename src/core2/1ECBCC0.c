@@ -1,4 +1,6 @@
+#include <ultra64.h>
 #include "core1/mlmtx.h"
+
 s32 func_800F274C();
 
 #define F2984_DIR(x) ((x) * 128.0f < 127.0f ? (x) * 128.0f : 127.0f)

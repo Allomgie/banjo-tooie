@@ -1,4 +1,5 @@
 #include "core2/1E8F430.h"
+#include <ultra64.h>
 
 #define B62CC_RDPHALF_1 0xE1
 #define B62CC_RDPHALF_2 0xF1

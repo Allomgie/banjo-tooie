@@ -713,9 +713,10 @@ void func_80801424_chfishshootgame(u8 *param_0, s32 param_1)
 {
     s32 flag;
     u8 *s0;
-    if (1)
+    if (1) {
+    }
 
-        flag = 0;
+    flag = 0;
     if (param_1 == ((Actor *) param_0)->unk70_10) {
         return;
     }

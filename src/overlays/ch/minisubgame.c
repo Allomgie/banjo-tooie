@@ -538,8 +538,9 @@ s32 func_80801058_chminisubgame(Actor *param_0, s32 param_1, Actor *param_2)
             }
             local_2 = _subaddiemulti_entrypoint_5(local_1);
             local_3 = param_0->unk6C_0 + 1;
-            if (1)
-                local_0 = func_80106790(param_0->unk3C);
+            if (1) {
+            }
+            local_0 = func_80106790(param_0->unk3C);
             local_0->actorData[4] += local_3;
             if ((s32) param_0 == local_3) {
             }

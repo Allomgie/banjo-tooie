@@ -1,3 +1,4 @@
+#include <ultra64.h>
 #include "gfx.h"
 #include "core2/1E99980.h"
 

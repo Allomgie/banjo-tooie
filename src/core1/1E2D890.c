@@ -1,5 +1,6 @@
 #include "threads.h"
 #include "types.h"
+#include "core1/1E2D890.h"
 
 extern u32 D_8007DB54;
 typedef struct {

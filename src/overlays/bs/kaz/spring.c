@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/spring.h"
 
 extern s32 D_80800430_bskazspring[];

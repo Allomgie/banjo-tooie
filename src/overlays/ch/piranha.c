@@ -421,9 +421,10 @@ void func_80800EFC_chpiranha(u8 *param_0, f32 *param_1, f32 param_2)
 
     local_18 = (f32 *) (param_0 + 0x18);
     func_800EFB24(local_vec, (f32 *) (param_0 + 4), param_1);
-    if (1)
-        if (1) {
-        }
+    if (1) {
+    }
+    if (1) {
+    }
     if (((Actor *) param_0)->unk70_10 != 7) {
         if ((*(u32 *) (*(u8 **) param_0 + 0x24) >> 22) != 0x2C2) {
             if (((Actor *) param_0)->unk70_10 == 5) {

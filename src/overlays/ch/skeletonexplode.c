@@ -1,3 +1,4 @@
+#include "common.h"
 #include "core2/1EC8070.h"
 
 typedef struct {
@@ -446,14 +447,12 @@ s32 param_0;
 s32 param_1;
 s32 param_2;
 {
-
-if (param_1 == 0x1F) {
-    func_80800E88_chskeletonexplode(param_0);
-} else {
-
-return 0;
-}
-return 1;
+    if (param_1 == 0x1F) {
+        func_80800E88_chskeletonexplode(param_0);
+    } else {
+        return 0;
+    }
+    return 1;
 }
 
 int *chskeletonexplode_entrypoint_9()

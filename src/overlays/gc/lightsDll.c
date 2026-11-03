@@ -1,3 +1,4 @@
+#include "common.h"
 #include "vector.h"
 
 extern void *D_80800560_gclightsDll;

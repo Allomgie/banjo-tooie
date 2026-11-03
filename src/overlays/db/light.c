@@ -62,8 +62,9 @@ void dblight_entrypoint_1(u8 *param_0, s32 param_1, s32 param_2)
     for (; idx < end; idx++) {
         vtx = base + *idx * 16;
         nrm = _dbvtxnormal_entrypoint_0(param_2, *idx);
-        if (1)
-            r = vtx[0xC];
+        if (1) {
+        }
+        r = vtx[0xC];
         g = vtx[0xD];
         nx = nrm[0] * 0.007874015f;
         ny = nrm[1] * 0.007874015f;

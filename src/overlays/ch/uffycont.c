@@ -207,25 +207,24 @@ void func_80800540_chchuffycont(Actor *param_0, s32 param_1)
 
     local_0 = &D_80800B20_chchuffycont[param_1];
 
-if (local_0->local_0 == 0x12A && !func_800DA298(0x171)) {
-    func_80800000_chchuffycont(param_0, 6);
-    return;
-}
+    if (local_0->local_0 == 0x12A && !func_800DA298(0x171)) {
+        func_80800000_chchuffycont(param_0, 6);
+        return;
+    }
 
-func_800DA544(local_0->local_2);
-for (local_1 = 0; local_1 < 7; local_1++) {
-    if (func_800DA298(D_80800B20_chchuffycont[local_1].local_1))
-        break;
-
-}
-local_0 = &D_80800B20_chchuffycont[local_1];
-if (local_0->local_0 == 0xEC)
-    func_800DA544(0x6E7);
-_glcutDll_entrypoint_0();
-_glcutDll_entrypoint_7(local_0->local_0);
-_glcutDll_entrypoint_10(0xD0);
-_glcutDll_entrypoint_22(0x6F);
-_glcutDll_entrypoint_16();
+    func_800DA544(local_0->local_2);
+    for (local_1 = 0; local_1 < 7; local_1++) {
+        if (func_800DA298(D_80800B20_chchuffycont[local_1].local_1))
+            break;
+    }
+    local_0 = &D_80800B20_chchuffycont[local_1];
+    if (local_0->local_0 == 0xEC)
+        func_800DA544(0x6E7);
+    _glcutDll_entrypoint_0();
+    _glcutDll_entrypoint_7(local_0->local_0);
+    _glcutDll_entrypoint_10(0xD0);
+    _glcutDll_entrypoint_22(0x6F);
+    _glcutDll_entrypoint_16();
 }
 
 void func_80800620_chchuffycont(param_0, param_1) s32 param_0;
@@ -235,29 +234,34 @@ s32 param_1;
     s32 var_s1;
     var_s1 = 0;
     var_s0 = 0;
-    if (1)
-        if (1)
-            if (1)
-                if (1)
-                    if (1)
-                        if (1)
-                        loop_1:
-                            if (func_808006A4_chchuffycont(var_s0) != 0) {
-                                if (var_s1 == param_1) {
-                                    func_80800540_chchuffycont(param_0, var_s0);
-                                    return;
-                                }
+    if (1) {
+    }
+    if (1) {
+    }
+    if (1) {
+    }
+    if (1) {
+    }
+    if (1) {
+    }
+    if (1) {
+    }
+loop_1:
+    if (func_808006A4_chchuffycont(var_s0) != 0) {
+        if (var_s1 == param_1) {
+            func_80800540_chchuffycont(param_0, var_s0);
+            return;
+        }
 
-var_s1 += 1;
-}
+        var_s1 += 1;
+    }
 
-var_s0 += 1;
+    var_s0 += 1;
 
-if (var_s0 == 7) {
-    return;
-
-}
-goto loop_1;
+    if (var_s0 == 7) {
+        return;
+    }
+    goto loop_1;
 }
 
 int func_808006A4_chchuffycont(param_0)
@@ -278,10 +282,9 @@ s32 func_8080070C_chchuffycont(param_0) void *param_0;
         if (func_808006A4_chchuffycont(local_0)) {
             local_1++;
         }
+    }
 
-}
-
-return local_1;
+    return local_1;
 }
 
 void func_80800768_chchuffycont(param_0, param_1) s32 param_0;
@@ -290,15 +293,13 @@ s32 param_1;
     if (func_800EB854() == 3) {
         s32 local_0 = func_80100094(param_0, 1);
 
-if (local_0 != 0) {
-    _gcnewoption_entrypoint_1(local_0, param_1);
-}
+        if (local_0 != 0) {
+            _gcnewoption_entrypoint_1(local_0, param_1);
+        }
 
-}
-else
-{
-    func_80101870(param_0, param_1);
-}
+    } else {
+        func_80101870(param_0, param_1);
+    }
 }
 
 s32 chchuffycont_entrypoint_0(s32 *param_0, s32 *param_1)
@@ -310,42 +311,39 @@ s32 chchuffycont_entrypoint_0(s32 *param_0, s32 *param_1)
 
     if (func_800EA05C() == 0xD0) {
         for (i = 0; i < 7; i++) {
+            if (func_800DA298(((ChuffyStop *) D_80800B20_chchuffycont)[i].flag)) {
+                break;
+            }
+        }
+        *param_0 = ((ChuffyStop *) D_80800B20_chchuffycont)[i].map;
+        *param_1 = 2;
+        if (func_800DA298(0x66B)) {
+            func_800A7A5C();
+        } else {
+            local_0 = _gcsectionDll_entrypoint_4(*param_0);
 
-if (func_800DA298(((ChuffyStop *) D_80800B20_chchuffycont)[i].flag)) {
-    break;
-}
-
-}
-*param_0 = ((ChuffyStop *) D_80800B20_chchuffycont)[i].map;
-*param_1 = 2;
-if (func_800DA298(0x66B)) {
-    func_800A7A5C();
-} else {
-    local_0 = _gcsectionDll_entrypoint_4(*param_0);
-
-if (_gcsectionDll_entrypoint_4(0xD0) != local_0) {
-    func_800A8230();
-}
-
-}
-func_800DA3B8(0x66B, 0);
-return 1;
-}
-local_1 = func_800EA05C();
-for (j = 0; j < 7; j++) {
-    if (local_1 == ((ChuffyStop *) D_80800B20_chchuffycont)[j].map) {
-        break;
+            if (_gcsectionDll_entrypoint_4(0xD0) != local_0) {
+                func_800A8230();
+            }
+        }
+        func_800DA3B8(0x66B, 0);
+        return 1;
     }
-}
-if (func_800DA298(((ChuffyStop *) D_80800B20_chchuffycont)[j].flag)) {
-    *param_0 = 0xD0;
-    *param_1 = 1;
-    if (_gcsectionDll_entrypoint_4(0xD0) != D_8012762C) {
-        func_800A8230();
+    local_1 = func_800EA05C();
+    for (j = 0; j < 7; j++) {
+        if (local_1 == ((ChuffyStop *) D_80800B20_chchuffycont)[j].map) {
+            break;
+        }
     }
-    return 1;
-}
-return 0;
+    if (func_800DA298(((ChuffyStop *) D_80800B20_chchuffycont)[j].flag)) {
+        *param_0 = 0xD0;
+        *param_1 = 1;
+        if (_gcsectionDll_entrypoint_4(0xD0) != D_8012762C) {
+            func_800A8230();
+        }
+        return 1;
+    }
+    return 0;
 }
 
 s32 chchuffycont_entrypoint_1(s32 *param_0, s32 *param_1)
@@ -402,10 +400,11 @@ void func_80800A7C_chchuffycont(param_0) int param_0;
 
 int chchuffycont_entrypoint_2()
 {
-    return (int)&D_80800B84_chchuffycont;
+    return (int) &D_80800B84_chchuffycont;
 }
 
-void chchuffycont_entrypoint_3(void) {
+void chchuffycont_entrypoint_3(void)
+{
     s32 i;
     for (i = 0; i < 7; i++) {
         if (func_800DA298(((ChuffEnt *) D_80800B20_chchuffycont)[i].b)) {
@@ -415,7 +414,28 @@ void chchuffycont_entrypoint_3(void) {
     _gcsectionDll_entrypoint_4(((ChuffEnt *) D_80800B20_chchuffycont)[i].a);
 }
 
-ChuffyStationRecord D_80800B20_chchuffycont[7] = { 0xD7, 0x4ED, 0x669, -0x1, 0x3F, 0xEC, 0x4EE, 0x66A, 0x96, 0x52, 0x155, 0x4F3, 0x6CC, 0x403, 0x7D, 0x114, 0x4F0, 0x6AA, 0x164, 0x57, 0x102, 0x4EF, 0x6A9, 0x163, 0xA3, 0x129, 0x4F2, 0x6BC, 0x1D0, 0xAA, 0x12A, 0x4F1, 0x6BB, 0x1CF, 0x47 };
-int D_80800B68_chchuffycont[4] = { 0x1304E9, 0x164E20, 0x101F4, 0x13880000 };
-int D_80800B78_chchuffycont[3] = { 0x0, 0x0, -0x3B448000 };
-int D_80800B84_chchuffycont[19] = { 0x20602A6, 0x9030001, 0x0, (u32)func_808002C4_chchuffycont, (u32)func_80105834, (u32)func_80800768_chchuffycont, 0x0, 0x0, 0x0, 0xA1804, 0x0, 0x0, 0x0, (u32)func_80800440_chchuffycont, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_808001F8_chchuffycont, 0x0, 0x0 };
+ChuffyStationRecord D_80800B20_chchuffycont[7] = {
+    0xD7,  0x4ED, 0x669, -0x1,  0x3F,  0xEC,  0x4EE, 0x66A, 0x96,  0x52,  0x155, 0x4F3,
+    0x6CC, 0x403, 0x7D,  0x114, 0x4F0, 0x6AA, 0x164, 0x57,  0x102, 0x4EF, 0x6A9, 0x163,
+    0xA3,  0x129, 0x4F2, 0x6BC, 0x1D0, 0xAA,  0x12A, 0x4F1, 0x6BB, 0x1CF, 0x47};
+int D_80800B68_chchuffycont[4] = {0x1304E9, 0x164E20, 0x101F4, 0x13880000};
+int D_80800B78_chchuffycont[3] = {0x0, 0x0, -0x3B448000};
+int D_80800B84_chchuffycont[19] = {0x20602A6,
+                                   0x9030001,
+                                   0x0,
+                                   (u32) func_808002C4_chchuffycont,
+                                   (u32) func_80105834,
+                                   (u32) func_80800768_chchuffycont,
+                                   0x0,
+                                   0x0,
+                                   0x0,
+                                   0xA1804,
+                                   0x0,
+                                   0x0,
+                                   0x0,
+                                   (u32) func_80800440_chchuffycont,
+                                   (u32) func_80107C2C,
+                                   -0x7FFFFBFE,
+                                   (u32) func_808001F8_chchuffycont,
+                                   0x0,
+                                   0x0};

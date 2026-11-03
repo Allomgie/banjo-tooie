@@ -232,8 +232,9 @@ s32 func_8080073C_chfantasylakebits(Actor *param_0, s32 param_1, s32 param_2)
                 _chskeletonexplode_entrypoint_7(param_0, param_0->position);
                 func_800DA544(0x9FC);
                 return 1;
-            } else
-                return 0;
+            } else {
+            }
+            return 0;
         case 0x1F:
             func_801015D0(param_0);
             func_800DF744(1, 1);

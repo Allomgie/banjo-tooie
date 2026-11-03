@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/stilt.h"
 
 extern s32 D_80801200_bskazstilt[];

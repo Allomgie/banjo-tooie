@@ -1,3 +1,4 @@
+#include "common.h"
 #include "freelist.h"
 
 extern void *defrag(void *arg);
@@ -251,12 +252,12 @@ s16 param_0;
     u8 *local_1;
     local_0 = freelist_at(D_80135A60, param_0);
 
-if (local_0[8] == 0) {
-    return 0;
-}
+    if (local_0[8] == 0) {
+        return 0;
+    }
 
-local_1 = freelist_at(((s32) D_80135A64), local_0[8]);
-return local_1[8] ? *(s32 *) local_1 : 0;
+    local_1 = freelist_at(((s32) D_80135A64), local_0[8]);
+    return local_1[8] ? *(s32 *) local_1 : 0;
 }
 
 void func_80100B3C()
@@ -280,17 +281,16 @@ void func_80100B4C(void)
         (*((State100B4C *) &D_80135A60)).local_0 = 0;
     }
 
-if ((*(State100B4C *) &D_80135A60).local_1) {
-    for (local_0 = 1; local_0 < freelist_capacity((*(State100B4C *) &D_80135A60).local_1);
-         local_0++) {
-        if (freelist_is_element_alive((*(State100B4C *) &D_80135A60).local_1, local_0))
-            _glpackvtx_entrypoint_1(
-                *(void **) freelist_at((*(State100B4C *) &D_80135A60).local_1, local_0));
+    if ((*(State100B4C *) &D_80135A60).local_1) {
+        for (local_0 = 1; local_0 < freelist_capacity((*(State100B4C *) &D_80135A60).local_1);
+             local_0++) {
+            if (freelist_is_element_alive((*(State100B4C *) &D_80135A60).local_1, local_0))
+                _glpackvtx_entrypoint_1(
+                    *(void **) freelist_at((*(State100B4C *) &D_80135A60).local_1, local_0));
+        }
+        freelist_free((*(State100B4C *) &D_80135A60).local_1);
+        (*(State100B4C *) &D_80135A60).local_1 = 0;
     }
-    freelist_free((*(State100B4C *) &D_80135A60).local_1);
-    (*(State100B4C *) &D_80135A60).local_1 = 0;
-}
-
 }
 
 void func_80100C74()
@@ -299,34 +299,33 @@ void func_80100C74()
     u8 *local_1;
     local_0 = 1;
 
-if (D_80135A60 == 0) {
-    return;
-}
-
-if (freelist_capacity(D_80135A60) < 2) {
-    return;
-}
-
-for (;;) {
-    if (!freelist_is_element_alive(D_80135A60, local_0)) {
-        goto next;
+    if (D_80135A60 == 0) {
+        return;
     }
-    local_1 = freelist_at(D_80135A60, local_0);
-    if (local_1[0xA] == 0) {
-        goto next;
-    }
-    if (--local_1[0xA] != 0) {
-        goto next;
-    }
-    func_801009C4(local_1, local_0);
-next:
-    local_0++;
 
-    if ((D_80135A60 == 0) || (local_0 >= freelist_capacity(D_80135A60))) {
-        break;
+    if (freelist_capacity(D_80135A60) < 2) {
+        return;
     }
-}
 
+    for (;;) {
+        if (!freelist_is_element_alive(D_80135A60, local_0)) {
+            goto next;
+        }
+        local_1 = freelist_at(D_80135A60, local_0);
+        if (local_1[0xA] == 0) {
+            goto next;
+        }
+        if (--local_1[0xA] != 0) {
+            goto next;
+        }
+        func_801009C4(local_1, local_0);
+    next:
+        local_0++;
+
+        if ((D_80135A60 == 0) || (local_0 >= freelist_capacity(D_80135A60))) {
+            break;
+        }
+    }
 }
 
 s16 func_80100D24(void *param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4, u8 *param_5)
@@ -339,24 +338,21 @@ s16 func_80100D24(void *param_0, s32 param_1, s32 param_2, s32 param_3, s32 para
     local_1 = func_80100690(&local_0);
     local_2 = func_800B2840(param_0);
     for (local_3 = 0; local_3 < 2; local_3++) {
-
-if (local_3 < param_2) {
-    local_4 = func_800B2400(local_2, 0);
-    local_1->field_0[local_3] = local_4;
-    local_4->field_17 = 1;
-} else {
-
-local_1->field_0[local_3] = NULL;
-
-}
-}
-if (param_3)
-    local_1->field_8 = func_801007B8(param_0, param_1, param_4, param_5);
-else
-    local_1->field_8 = 0;
-local_1->field_9 = 1;
-local_1->field_A = 0;
-return local_0;
+        if (local_3 < param_2) {
+            local_4 = func_800B2400(local_2, 0);
+            local_1->field_0[local_3] = local_4;
+            local_4->field_17 = 1;
+        } else {
+            local_1->field_0[local_3] = NULL;
+        }
+    }
+    if (param_3)
+        local_1->field_8 = func_801007B8(param_0, param_1, param_4, param_5);
+    else
+        local_1->field_8 = 0;
+    local_1->field_9 = 1;
+    local_1->field_A = 0;
+    return local_0;
 }
 
 s32 func_80100E18(indx)
@@ -393,15 +389,15 @@ void func_80100E54()
                 s0->field0 = (u32) defrag((void *) s0->field0);
             }
 
-do {
-} while (0);
-}
+            do {
+            } while (0);
+        }
 
-if (!s0) {
-}
-(*((struct OSPiInfo *) &D_80135A60)).field4 = (u32)
-    freelist_defrag((void *) (*((struct OSPiInfo *) &D_80135A60)).field4);
-}
+        if (!s0) {
+        }
+        (*((struct OSPiInfo *) &D_80135A60)).field4 =
+            (u32) freelist_defrag((void *) (*((struct OSPiInfo *) &D_80135A60)).field4);
+    }
 }
 
 void func_80100F0C(s16 param_0, void *param_1)
@@ -417,22 +413,21 @@ void func_80100F0C(s16 param_0, void *param_1)
         if (local_1->field_8) {
             local_2 = local_1->field_4;
 
-if (local_1->field_6 < 0x3666) {
-    func_80100938(local_0->field_8);
-    local_1 = func_801006E0(&local_3);
-    local_0->field_8 = local_3;
-} else {
-
-_glpackvtx_entrypoint_1(local_1->field_0);
-}
-local_4 = func_800D674C(local_2);
-local_1->field_0 = _glpackvtx_entrypoint_0(func_800B2840(local_4), param_1, NULL);
-local_1->field_4 = local_2;
-local_1->field_6 = (*((LocalPools *) &D_80135A60)).field_8;
-(*((LocalPools *) &D_80135A60)).field_8++;
-local_1->field_8 = 1;
-}
-}
+            if (local_1->field_6 < 0x3666) {
+                func_80100938(local_0->field_8);
+                local_1 = func_801006E0(&local_3);
+                local_0->field_8 = local_3;
+            } else {
+                _glpackvtx_entrypoint_1(local_1->field_0);
+            }
+            local_4 = func_800D674C(local_2);
+            local_1->field_0 = _glpackvtx_entrypoint_0(func_800B2840(local_4), param_1, NULL);
+            local_1->field_4 = local_2;
+            local_1->field_6 = (*((LocalPools *) &D_80135A60)).field_8;
+            (*((LocalPools *) &D_80135A60)).field_8++;
+            local_1->field_8 = 1;
+        }
+    }
 }
 
 D_801243A0_t D_801243A0[5] = {0x30000, 0x0,     0x0, 0x40000, 0x0,     0x0, 0xC0000, 0x0,

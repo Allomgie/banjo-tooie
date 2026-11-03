@@ -1,4 +1,6 @@
 #include "core2/1E6F080.h"
+#include "types.h"
+#include "macros.h"
 
 #define LOCAL_COLLISION(p) (*(LocalCollision **) ((u8 *) (p) + 0x94))
 extern f32 func_800985B8(void);
@@ -180,14 +182,11 @@ void func_80095A08(param_0, param_1, param_2) PlayerState *param_0;
 s32 param_1;
 s32 param_2;
 {
-
-if (param_2 != 0) {
-    *(s32 *) (*(u8 **) ((u8 *) param_0 + 0x94) + 0x14) |= param_1;
-} else {
-
-*(s32 *) ((*(u8 **) ((u8 *) param_0 + 0x94)) + 0x14) &= ~param_1;
-
-}
+    if (param_2 != 0) {
+        *(s32 *) (*(u8 **) ((u8 *) param_0 + 0x94) + 0x14) |= param_1;
+    } else {
+        *(s32 *) ((*(u8 **) ((u8 *) param_0 + 0x94)) + 0x14) &= ~param_1;
+    }
 }
 
 void func_80095A40(PlayerState *param_0)
@@ -215,11 +214,10 @@ void func_80095A74(s32 param_0, s32 param_1)
             func_80095A08(param_0, 8, 1);
         }
 
-else
-{
-    func_80095A08(param_0, 8, 0);
-}
-}
+        else {
+            func_80095A08(param_0, 8, 0);
+        }
+    }
 }
 
 void func_80095AD0(u8 *param_0)
@@ -309,48 +307,48 @@ void func_80095C94(PlayerState *param_0)
             func_8009C128(param_0, LOCAL_COLLISION(param_0)->position78);
             func_8009C15C(param_0, LOCAL_COLLISION(param_0)->previous84);
 
-if (LOCAL_COLLISION(param_0)->mode9C == 3) {
-    void *local_4 = LOCAL_COLLISION(param_0)->floor;
-    if (func_800C670C(local_4)) {
-        f32 local_5 = func_800C67D8(local_4);
-        f32 local_6 = func_800A0E58(param_0);
-        if (local_5 - local_6 < LOCAL_COLLISION(param_0)->position78[1]) {
-            LOCAL_COLLISION(param_0)->position78[1] = local_5 - local_6;
-            LOCAL_COLLISION(param_0)->clampedA1 = 1;
-            baphysics_set_vertical_velocity(param_0, 1.0f);
-        }
-    }
-}
+            if (LOCAL_COLLISION(param_0)->mode9C == 3) {
+                void *local_4 = LOCAL_COLLISION(param_0)->floor;
+                if (func_800C670C(local_4)) {
+                    f32 local_5 = func_800C67D8(local_4);
+                    f32 local_6 = func_800A0E58(param_0);
+                    if (local_5 - local_6 < LOCAL_COLLISION(param_0)->position78[1]) {
+                        LOCAL_COLLISION(param_0)->position78[1] = local_5 - local_6;
+                        LOCAL_COLLISION(param_0)->clampedA1 = 1;
+                        baphysics_set_vertical_velocity(param_0, 1.0f);
+                    }
+                }
+            }
 
-func_800EFB24(LOCAL_COLLISION(param_0)->delta58, LOCAL_COLLISION(param_0)->position78,
-              LOCAL_COLLISION(param_0)->previous84);
-func_800D4584(LOCAL_COLLISION(param_0), LOCAL_COLLISION(param_0)->previous84,
-              LOCAL_COLLISION(param_0)->position78, LOCAL_COLLISION(param_0)->delta58);
-func_8009C0F8(param_0, LOCAL_COLLISION(param_0)->position78);
-break;
-case 5:
-    func_8009C128(param_0, LOCAL_COLLISION(param_0)->position78);
-    func_8009C15C(param_0, LOCAL_COLLISION(param_0)->previous84);
-    func_800EFB24(LOCAL_COLLISION(param_0)->delta58, LOCAL_COLLISION(param_0)->position78,
-                  LOCAL_COLLISION(param_0)->previous84);
-    func_800D4584(LOCAL_COLLISION(param_0), LOCAL_COLLISION(param_0)->previous84,
-                  LOCAL_COLLISION(param_0)->position78, LOCAL_COLLISION(param_0)->delta58);
-    func_80095798(param_0);
-    func_8009C0F8(param_0, LOCAL_COLLISION(param_0)->position78);
-    break;
-case 7:
-    func_800978A4(param_0);
-    break;
-case 8:
-    func_80096768(param_0);
-    break;
-case 10:
-    _bahitspline_entrypoint_2(param_0);
-case 2:
-case 6:
-    LOCAL_COLLISION(param_0)->hit54 = 0;
-    LOCAL_COLLISION(param_0)->hit55 = 0;
-    LOCAL_COLLISION(param_0)->stable56 = 0;
+            func_800EFB24(LOCAL_COLLISION(param_0)->delta58, LOCAL_COLLISION(param_0)->position78,
+                          LOCAL_COLLISION(param_0)->previous84);
+            func_800D4584(LOCAL_COLLISION(param_0), LOCAL_COLLISION(param_0)->previous84,
+                          LOCAL_COLLISION(param_0)->position78, LOCAL_COLLISION(param_0)->delta58);
+            func_8009C0F8(param_0, LOCAL_COLLISION(param_0)->position78);
+            break;
+        case 5:
+            func_8009C128(param_0, LOCAL_COLLISION(param_0)->position78);
+            func_8009C15C(param_0, LOCAL_COLLISION(param_0)->previous84);
+            func_800EFB24(LOCAL_COLLISION(param_0)->delta58, LOCAL_COLLISION(param_0)->position78,
+                          LOCAL_COLLISION(param_0)->previous84);
+            func_800D4584(LOCAL_COLLISION(param_0), LOCAL_COLLISION(param_0)->previous84,
+                          LOCAL_COLLISION(param_0)->position78, LOCAL_COLLISION(param_0)->delta58);
+            func_80095798(param_0);
+            func_8009C0F8(param_0, LOCAL_COLLISION(param_0)->position78);
+            break;
+        case 7:
+            func_800978A4(param_0);
+            break;
+        case 8:
+            func_80096768(param_0);
+            break;
+        case 10:
+            _bahitspline_entrypoint_2(param_0);
+        case 2:
+        case 6:
+            LOCAL_COLLISION(param_0)->hit54 = 0;
+            LOCAL_COLLISION(param_0)->hit55 = 0;
+            LOCAL_COLLISION(param_0)->stable56 = 0;
     }
     if (func_800C670C(LOCAL_COLLISION(param_0)->floor)) {
         local_7 = func_800C67D8(LOCAL_COLLISION(param_0)->floor);
@@ -363,45 +361,41 @@ case 6:
             func_800C67D8(LOCAL_COLLISION(param_0)->floor) - func_800A0E58(param_0)) {
         func_80096254(param_0, 3);
 
-if (LOCAL_COLLISION(param_0)->stable56 && baphysics_get_vertical_velocity(param_0) < 0.0f) {
-    baphysics_set_vertical_velocity(param_0, -1.0f);
-}
+        if (LOCAL_COLLISION(param_0)->stable56 && baphysics_get_vertical_velocity(param_0) < 0.0f) {
+            baphysics_set_vertical_velocity(param_0, -1.0f);
+        }
 
-}
-else if (LOCAL_COLLISION(param_0)->stable56)
-{
-    func_80096260(param_0);
+    } else if (LOCAL_COLLISION(param_0)->stable56) {
+        func_80096260(param_0);
 
-if (baphysics_get_vertical_velocity(param_0) < 0.0f) {
-    if (!(func_80096628(param_0) & 0x8000))
-        baphysics_set_vertical_velocity(param_0, -1.0f);
-}
+        if (baphysics_get_vertical_velocity(param_0) < 0.0f) {
+            if (!(func_80096628(param_0) & 0x8000))
+                baphysics_set_vertical_velocity(param_0, -1.0f);
+        }
 
-}
-else
-{
-    func_80096254(param_0, 1);
-}
-if (LOCAL_COLLISION(param_0)->restoreA2)
-    func_8009C0F8(param_0, local_0);
-func_800CB870();
-if (LOCAL_COLLISION(param_0)->hit54) {
-    LOCAL_COLLISION(param_0)->countA3 = func_800F1418(LOCAL_COLLISION(param_0)->countA3 + 1, 3);
-} else {
-    LOCAL_COLLISION(param_0)->countA3 = 0;
-}
-func_8009C15C(param_0, local_2);
-func_8009C128(param_0, local_1);
-func_800EFB24(LOCAL_COLLISION(param_0)->delta90, local_1, local_2);
-if (LOCAL_COLLISION(param_0)->triangle1C) {
-    func_800FB508(LOCAL_COLLISION(param_0)->triangle6C, LOCAL_COLLISION(param_0)->triangle1C);
-    LOCAL_COLLISION(param_0)->triangle1C = LOCAL_COLLISION(param_0)->triangle6C;
-}
-baflag_clear(param_0, 1);
-baflag_clear(param_0, 2);
-if (LOCAL_COLLISION(param_0)->actor50 && player_isStable(param_0)) {
-    func_8010114C(LOCAL_COLLISION(param_0)->actor50, 0x91, param_0->unk184);
-}
+    } else {
+        func_80096254(param_0, 1);
+    }
+    if (LOCAL_COLLISION(param_0)->restoreA2)
+        func_8009C0F8(param_0, local_0);
+    func_800CB870();
+    if (LOCAL_COLLISION(param_0)->hit54) {
+        LOCAL_COLLISION(param_0)->countA3 = func_800F1418(LOCAL_COLLISION(param_0)->countA3 + 1, 3);
+    } else {
+        LOCAL_COLLISION(param_0)->countA3 = 0;
+    }
+    func_8009C15C(param_0, local_2);
+    func_8009C128(param_0, local_1);
+    func_800EFB24(LOCAL_COLLISION(param_0)->delta90, local_1, local_2);
+    if (LOCAL_COLLISION(param_0)->triangle1C) {
+        func_800FB508(LOCAL_COLLISION(param_0)->triangle6C, LOCAL_COLLISION(param_0)->triangle1C);
+        LOCAL_COLLISION(param_0)->triangle1C = LOCAL_COLLISION(param_0)->triangle6C;
+    }
+    baflag_clear(param_0, 1);
+    baflag_clear(param_0, 2);
+    if (LOCAL_COLLISION(param_0)->actor50 && player_isStable(param_0)) {
+        func_8010114C(LOCAL_COLLISION(param_0)->actor50, 0x91, param_0->unk184);
+    }
 }
 
 void func_800961A0(void *arg, s32 v)

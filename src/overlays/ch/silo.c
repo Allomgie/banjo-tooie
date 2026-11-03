@@ -1,4 +1,5 @@
 #include "common.h"
+#include <types.h>
 
 extern u32 D_808012EC_chsilo[][2];
 extern void rom_read_word(u32, u32 *);

@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/shoessuckspline.h"
 
 extern s32 D_80800470_bskazshoessuckspline[];

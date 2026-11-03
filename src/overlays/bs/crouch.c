@@ -1,7 +1,10 @@
+#include "common.h"
+#include "overlays/ba/playerstate.h"
 #include "overlays/ba/anim.h"
 #include "core2/physics.h"
 #include "overlays/ba/yaw.h"
 #include "overlays/ba/timer.h"
+
 extern f32 mlAbsF(f32);
 extern void baphysics_set_target_horizontal_velocity(Actor *, f32);
 void baphysics_set_target_yaw(PlayerState *, f32 target_yaw);

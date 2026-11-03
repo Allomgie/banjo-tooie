@@ -1,3 +1,4 @@
+#include "common.h"
 #include "playerstate.h"
 
 extern u8 D_80800280_bamum[];

@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/jump.h"
 
 extern s32 D_80800C40_bskazjump[];

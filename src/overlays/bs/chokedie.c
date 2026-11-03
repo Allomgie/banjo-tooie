@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/ba/playerstate.h"
 
 extern void baanim_playForDuration_onceSmooth(PlayerState *, s32, f32);

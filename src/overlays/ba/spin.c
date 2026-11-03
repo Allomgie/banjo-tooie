@@ -1,3 +1,4 @@
+#include "common.h"
 #include "playerstate.h"
 
 extern f32 func_80092BE8();

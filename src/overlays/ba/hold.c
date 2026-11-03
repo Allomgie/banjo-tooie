@@ -1,4 +1,5 @@
 #include "ba/hold.h"
+#include "playerstate.h"
 
 extern void func_8009ADF0(void *, s32, s32);
 typedef struct {

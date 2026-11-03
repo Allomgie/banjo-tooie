@@ -1,4 +1,5 @@
 #include "bs/firstp.h"
+#include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
 #include "overlays/ba/stick.h"
 
@@ -558,103 +559,102 @@ void func_80800190_bsfirstp(Actor *param_0)
     *(f32 *) ((char *) local_0 + 0x50) = 0.0f;
 }
 
-
 int func_808001D0_bsfirstp(Actor *param_0)
 {
-  func_80808C48_bsfirstp(param_0);
-  func_80800858_bsfirstp(param_0, 0 | 0);
+    func_80808C48_bsfirstp(param_0);
+    func_80800858_bsfirstp(param_0, 0 | 0);
 }
 
 void func_808001FC_bsfirstp()
 {
-  AnCtrl *local_0;
-  local_0 = func_8008D04C();
-  anctrl_setPlaybackType(local_0, 3);
+    AnCtrl *local_0;
+    local_0 = func_8008D04C();
+    anctrl_setPlaybackType(local_0, 3);
 }
 
 int func_80800228_bsfirstp()
 {
-  s32 local_0;
-  s32 local_1;
-  local_0 = func_8008D04C();
-  if (anctrl_getPlaybackType(local_0 | 0) == 3)
-  {
-    local_1 = 1;
-  }
-  else
-  {
-    local_1 = 0 | 0;
-  }
-  return local_1 | 0;
+    s32 local_0;
+    s32 local_1;
+    local_0 = func_8008D04C();
+    if (anctrl_getPlaybackType(local_0 | 0) == 3) {
+        local_1 = 1;
+    } else {
+        local_1 = 0 | 0;
+    }
+    return local_1 | 0;
 }
-s32 func_80800264_bsfirstp(PlayerState *map_id, f32 exit_id){
+
+s32 func_80800264_bsfirstp(PlayerState *map_id, f32 exit_id)
+{
     func_8008B10C(func_8008D04C(map_id), exit_id);
 }
 
-s32 func_80800290_bsfirstp(s32 item_id, s32 param_1, s32 param_2) {
+s32 func_80800290_bsfirstp(s32 item_id, s32 param_1, s32 param_2)
+{
     baanim_playForDuration_loopStartingAt(item_id, param_1, param_2, baanim_getTimer(item_id));
 }
 
-
 void func_808002CC_bsfirstp(Actor *param_0, s32 param_1, f32 param_2, f32 param_3)
 {
-  void *local_0;
-  local_0 = func_8008D04C(param_0);
-  anctrl_reset(local_0);
-  anctrl_setIndex(local_0, param_1);
-  anctrl_setDuration(local_0, param_2);
-  anctrl_setStart(local_0, param_3);
-  anctrl_setPlaybackType(local_0, 2);
-  anctrl_start(local_0);
+    void *local_0;
+    local_0 = func_8008D04C(param_0);
+    anctrl_reset(local_0);
+    anctrl_setIndex(local_0, param_1);
+    anctrl_setDuration(local_0, param_2);
+    anctrl_setStart(local_0, param_3);
+    anctrl_setPlaybackType(local_0, 2);
+    anctrl_start(local_0);
 }
 
 void func_80800340_bsfirstp(Actor *param_0, s32 param_1, f32 param_2, f32 param_3)
 {
-  void *local_0;
-  local_0 = func_8008D04C(param_0);
-  anctrl_reset(local_0);
-  anctrl_setIndex(local_0, param_1);
-  anctrl_setDuration(local_0, param_2);
-  anctrl_setStart(local_0, param_3);
-  anctrl_setPlaybackType(local_0, 1);
-  anctrl_start(local_0);
+    void *local_0;
+    local_0 = func_8008D04C(param_0);
+    anctrl_reset(local_0);
+    anctrl_setIndex(local_0, param_1);
+    anctrl_setDuration(local_0, param_2);
+    anctrl_setStart(local_0, param_3);
+    anctrl_setPlaybackType(local_0, 1);
+    anctrl_start(local_0);
 }
 
 void func_808003B4_bsfirstp(Actor *param_0, s32 param_1, f32 param_2)
 {
-  void *local_0;
-  local_0 = func_8008D04C(param_0);
-  anctrl_reset(local_0);
-  anctrl_setSmoothTransition(local_0, 0);
-  anctrl_setIndex(local_0, param_1);
-  anctrl_setDuration(local_0, param_2);
-  anctrl_setPlaybackType(local_0, 1);
-  anctrl_start(local_0);
+    void *local_0;
+    local_0 = func_8008D04C(param_0);
+    anctrl_reset(local_0);
+    anctrl_setSmoothTransition(local_0, 0);
+    anctrl_setIndex(local_0, param_1);
+    anctrl_setDuration(local_0, param_2);
+    anctrl_setPlaybackType(local_0, 1);
+    anctrl_start(local_0);
 }
 
 int func_80800424_bsfirstp(Actor *param_0, s32 param_1, f32 param_2)
 {
-  AnCtrl *local_0;
+    AnCtrl *local_0;
 
-  local_0 = func_8008D04C(param_0);
-  anctrl_reset(local_0);
-  anctrl_setIndex(local_0, param_1);
-  anctrl_setDuration(local_0, param_2);
-  anctrl_setPlaybackType(local_0, 1);
-  anctrl_start(local_0);
+    local_0 = func_8008D04C(param_0);
+    anctrl_reset(local_0);
+    anctrl_setIndex(local_0, param_1);
+    anctrl_setDuration(local_0, param_2);
+    anctrl_setPlaybackType(local_0, 1);
+    anctrl_start(local_0);
 }
 
 void func_80800488_bsfirstp(Actor *param_0, s32 param_1, f32 param_2)
 {
-  void *local_0;
-  local_0 = func_8008D04C(param_0);
-  anctrl_reset(local_0);
-  anctrl_setSmoothTransition(local_0, 0);
-  anctrl_setIndex(local_0, param_1);
-  anctrl_setDuration(local_0, param_2);
-  anctrl_setPlaybackType(local_0, 2);
-  anctrl_start(local_0);
+    void *local_0;
+    local_0 = func_8008D04C(param_0);
+    anctrl_reset(local_0);
+    anctrl_setSmoothTransition(local_0, 0);
+    anctrl_setIndex(local_0, param_1);
+    anctrl_setDuration(local_0, param_2);
+    anctrl_setPlaybackType(local_0, 2);
+    anctrl_start(local_0);
 }
+
 void func_808004F8_bsfirstp(u8 *param_0)
 {
     u8 *local_0 = *(u8 **) (param_0 + 0x188);
@@ -662,14 +662,14 @@ void func_808004F8_bsfirstp(u8 *param_0)
     func_800EEC70(local_0 + 0x2C, local_1, yaw_get(), 150.0f);
 }
 
-
 int func_8080053C_bsfirstp(Actor *param_0)
 {
-  s32 local_0;
-  local_0 = *(s32*)((char*)param_0 + 0x188);
-  func_808004F8_bsfirstp(param_0);
-  func_800EFD24(local_0 + 0x38);
+    s32 local_0;
+    local_0 = *(s32 *) ((char *) param_0 + 0x188);
+    func_808004F8_bsfirstp(param_0);
+    func_800EFD24(local_0 + 0x38);
 }
+
 void func_8080056C_bsfirstp(PlayerState *param_0, f32 *local_2)
 {
     f32 local_0[4];
@@ -734,32 +734,37 @@ void func_808006DC_bsfirstp(PlayerState *param_0)
     }
 }
 
-void func_80800830_bsfirstp(arg0, arg1) s32 arg0; f32 *arg1;
+void func_80800830_bsfirstp(arg0, arg1) s32 arg0;
+f32 *arg1;
 {
     func_8080056C_bsfirstp(arg0, arg1);
     func_808006DC_bsfirstp(arg0);
 }
 
-void func_80800858_bsfirstp(param_0, param_1) u8 *param_0; s32 param_1;
+void func_80800858_bsfirstp(param_0, param_1) u8 *param_0;
+s32 param_1;
 {
     s8 *new_var;
     *(s32 *) ((new_var = (s8 *) *(u8 **) ((s8 *) param_0 + 0x188)) + 0x28) = param_1;
 }
 
-s32 func_80800864_bsfirstp(param_0) u8 *param_0; {
-    u8 *local_0 = *(u8 **)(param_0 + 0x188);
-    return *(s32 *)(local_0 + 0x28) ? 1 : 0;
+s32 func_80800864_bsfirstp(param_0)
+u8 *param_0;
+{
+    u8 *local_0 = *(u8 **) (param_0 + 0x188);
+    return *(s32 *) (local_0 + 0x28) ? 1 : 0;
 }
 
-void func_80800888_bsfirstp(u8 *param_0, s32 param_1) {
-    u8 *local_0 = *(u8 **)(param_0 + 0x188);
-    *(s32 *)(local_0 + 0x8C) = param_1;
+void func_80800888_bsfirstp(u8 *param_0, s32 param_1)
+{
+    u8 *local_0 = *(u8 **) (param_0 + 0x188);
+    *(s32 *) (local_0 + 0x8C) = param_1;
     func_80800900_bsfirstp(param_0, 1.0f);
 }
 
 int func_808008B0_bsfirstp(PlayerState *param_0)
 {
-    f32 *local_0 = (f32 *)param_0->kazfly;
+    f32 *local_0 = (f32 *) param_0->kazfly;
     f32 local_1;
 
     local_1 = local_0[0x24] - func_800D9004() * 5.5f;
@@ -772,7 +777,7 @@ int func_80800900_bsfirstp(PlayerState *param_0, f32 param_1)
     f32 *local_1;
     s32 local_2;
 
-    local_0 = (FirstPersonBlend1459 *)param_0->kazfly;
+    local_0 = (FirstPersonBlend1459 *) param_0->kazfly;
 
 if (param_1 <= 0.0f) {
     local_2 = 0;
@@ -790,22 +795,29 @@ local_0->components[3] = local_1[3] * param_1;
 return local_2;
 }
 
-void func_80800978_bsfirstp(param_0, param_1, param_2, param_3) PlayerState *param_0; void *param_1; f32 *param_2; f32 *param_3;
+void func_80800978_bsfirstp(param_0, param_1, param_2, param_3) PlayerState *param_0;
+void *param_1;
+f32 *param_2;
+f32 *param_3;
 {
     f32 *local_0;
     FirstPersonSplit *local_1;
     f32 local_2;
     f32 local_3;
     f32 local_4;
-    local_0 = (f32 *)param_0->kazfly;
+    local_0 = (f32 *) param_0->kazfly;
     local_1 = param_1;
     local_2 = local_0[0xC8 / 4] * 0.02712967992f;
     local_3 = local_0[0xCC / 4] * 0.01768659241f;
-    if (local_2 > 0.0f) local_4 = -local_1->upper;
-    else local_4 = local_1->lower;
+    if (local_2 > 0.0f)
+        local_4 = -local_1->upper;
+    else
+        local_4 = local_1->lower;
     local_2 *= local_4;
-    if (local_3 > 0.0f) local_4 = -local_1->right;
-    else local_4 = local_1->left;
+    if (local_3 > 0.0f)
+        local_4 = -local_1->right;
+    else
+        local_4 = local_1->left;
     local_3 *= local_4;
     param_2[0] = local_1->fraction * local_2;
     param_3[0] = local_1->fraction * local_3;
@@ -826,7 +838,7 @@ void func_80800A18_bsfirstp(PlayerState *param_0, void *param_1)
     func_80800978_bsfirstp(param_0, local_0, local_1, local_2);
     func_800E0AFC(param_1, local_0[0x2B], 1.0f, local_1[0], local_2[0], 0.0f);
     func_800E0AFC(param_1, local_0[0x2F], 1.0f, 0.0f, local_2[1], -local_1[1]);
-    local_5 = (f32 *)param_0->kazfly;
+    local_5 = (f32 *) param_0->kazfly;
     local_3 = local_5[0x44 / 4] * 20.0f;
     local_4 = local_5[0x60 / 4] * -15.0f;
     func_800E0AFC(param_1, 0x2D, 1.0f, 0.0f, local_3, local_4);
@@ -846,8 +858,8 @@ void func_80800B44_bsfirstp(PlayerState *param_0, void *param_1)
     func_80800978_bsfirstp(param_0, local_0, local_1, local_2);
     func_800E0AFC(param_1, local_0[0x2B], 1.0f, local_1[0], local_2[0], 0.0f);
     func_800E0AFC(param_1, local_0[0x2F], 1.0f, local_1[1], local_2[1], 0.0f);
-    local_3 = *(f32 *)((u8 *)param_0->kazfly + 0x44) * 20.0f;
-    local_4 = *(f32 *)((u8 *)param_0->kazfly + 0x60) * -15.0f;
+    local_3 = *(f32 *) ((u8 *) param_0->kazfly + 0x44) * 20.0f;
+    local_4 = *(f32 *) ((u8 *) param_0->kazfly + 0x60) * -15.0f;
     func_800E0AFC(param_1, 0x2B, 0.5f, 0.0f, local_3, local_4);
     func_800E0AFC(param_1, 0x2C, 0.5f, 0.0f, local_3, local_4);
     func_800E0AFC(param_1, 0x2D, 0.5f, 0.0f, local_3, local_4);
@@ -875,13 +887,13 @@ void func_80800D18_bsfirstp(PlayerState *param_0, void *param_1)
     u8 *local_5;
     f32 local_6;
 
-    local_0 = (Mass47Firstp *)func_80802484_bsfirstp(param_0);
+    local_0 = (Mass47Firstp *) func_80802484_bsfirstp(param_0);
     func_80800978_bsfirstp(param_0, local_0, local_1, local_2);
     func_800E0AFC(param_1, local_0->local_1, 1.0f, -local_1[0], local_2[0], 0.0f);
     func_800E0AFC(param_1, local_0->local_3, 1.0f, -local_1[1], local_2[1], 0.0f);
-    local_5 = (u8 *)param_0->kazfly;
-    local_3 = *(f32 *)(local_5 + 0x44) * -20.0f;
-    local_4 = *(f32 *)(local_5 + 0x60) * -15.0f;
+    local_5 = (u8 *) param_0->kazfly;
+    local_3 = *(f32 *) (local_5 + 0x44) * -20.0f;
+    local_4 = *(f32 *) (local_5 + 0x60) * -15.0f;
     local_6 = -local_4;
     func_800E0AFC(param_1, 0x3C, 0.5f, 0.0f, local_3, local_6);
     func_800E0AFC(param_1, 0x3E, 0.5f, 0.0f, local_3, local_6);
@@ -899,26 +911,26 @@ void func_80800F14_bsfirstp(param_0) PlayerState *param_0;
     u8 *local_0;
     void *local_1;
 
-    local_0 = *(u8 **)((u8 *)param_0 + 0x188);
+    local_0 = *(u8 **) ((u8 *) param_0 + 0x188);
     local_1 = func_8009370C(param_0);
     func_800E0ACC(local_1);
     func_800E0AF0(local_1, 1.0f);
-    *(f32 *)(local_0 + 0x18) = *(f32 *)(local_0 + 0x58) * 0.02f;
-    *(f32 *)(local_0 + 0x1C) = *(f32 *)(local_0 + 0x60) * 0.03f;
+    *(f32 *) (local_0 + 0x18) = *(f32 *) (local_0 + 0x58) * 0.02f;
+    *(f32 *) (local_0 + 0x1C) = *(f32 *) (local_0 + 0x60) * 0.03f;
     switch (func_800A3280(param_0)) {
         case 1:
         case 6:
-        func_80800A18_bsfirstp(param_0, local_1);
-        break;
+            func_80800A18_bsfirstp(param_0, local_1);
+            break;
         case 4:
-        func_80800B44_bsfirstp(param_0, local_1);
-        break;
+            func_80800B44_bsfirstp(param_0, local_1);
+            break;
         case 5:
-        func_80800C88_bsfirstp(param_0, local_1);
-        break;
+            func_80800C88_bsfirstp(param_0, local_1);
+            break;
         case 2:
         case 3:
-        func_80800D18_bsfirstp(param_0, local_1);
+            func_80800D18_bsfirstp(param_0, local_1);
 
 }
 }
@@ -1007,55 +1019,57 @@ case 3: {
 }
 
 case 0:
-func_800E0AFC(local_1, 3, 1.0f, 0, local_2[0], 0);
-func_800E0AFC(local_1, 0x6C, 1.0f, -local_3[0], -local_2[0], 0);
-}
-}
+    func_800E0AFC(local_1, 3, 1.0f, 0, local_2[0], 0);
+    func_800E0AFC(local_1, 0x6C, 1.0f, -local_3[0], -local_2[0], 0);
+    }
+    }
 
-void func_808015C0_bsfirstp(s32 param_0, u8 *param_1, u8 *param_2)
-{
-    u8 *sp1C;
-    f32 temp_f18;
-    sp1C = func_80802484_bsfirstp();
-    func_8009C128(param_0, param_1);
-    *((f32 *) (((s8 *) param_1) + 4)) = (f32) ((*((f32 *) (((s8 *) sp1C) + 8))) + (*((f32 *) (((s8 *) param_1) + 4))));
-    *((f32 *) (((s8 *) param_2) + 0)) = 0.0f;
-    temp_f18 = yaw_get(param_0) + 180.0f;
-    *((f32 *) (((s8 *) param_2) + 4)) = temp_f18;
-    *((f32 *) (((s8 *) param_2) + 8)) = 0.0f;
-}
+    void func_808015C0_bsfirstp(s32 param_0, u8 *param_1, u8 *param_2)
+    {
+        u8 *sp1C;
+        f32 temp_f18;
+        sp1C = func_80802484_bsfirstp();
+        func_8009C128(param_0, param_1);
+        *((f32 *) (((s8 *) param_1) + 4)) =
+            (f32) ((*((f32 *) (((s8 *) sp1C) + 8))) + (*((f32 *) (((s8 *) param_1) + 4))));
+        *((f32 *) (((s8 *) param_2) + 0)) = 0.0f;
+        temp_f18 = yaw_get(param_0) + 180.0f;
+        *((f32 *) (((s8 *) param_2) + 4)) = temp_f18;
+        *((f32 *) (((s8 *) param_2) + 8)) = 0.0f;
+    }
 
-extern f32 func_800C517C(s32);
-extern int func_800A4C68();
+    extern f32 func_800C517C(s32);
+    extern int func_800A4C68();
 
-f32 func_80801640_bsfirstp(s32 param_0)
-{
-    return func_800C517C(func_800A4C68(param_0));
-}
+    f32 func_80801640_bsfirstp(s32 param_0)
+    {
+        return func_800C517C(func_800A4C68(param_0));
+    }
 
-void func_80801668_bsfirstp(u8 *param_0, f32 param_1) {
-    u8 *local_0 = *(u8 **)(param_0 + 0x188);
-    *(f32 *)(local_0 + 0x9C) = func_80801640_bsfirstp(param_0);
-    *(f32 *)(local_0 + 0x98) = param_1;
-}
+    void func_80801668_bsfirstp(u8 *param_0, f32 param_1)
+    {
+        u8 *local_0 = *(u8 **) (param_0 + 0x188);
+        *(f32 *) (local_0 + 0x9C) = func_80801640_bsfirstp(param_0);
+        *(f32 *) (local_0 + 0x98) = param_1;
+    }
 
-void func_808016A0_bsfirstp(PlayerState *param_0)
-{
-    FirstPersonVolume1536 *local_0;
-    f32 local_1;
-    f32 local_6;
-    f32 local_5;
-    f32 local_3;
-    f32 local_2;
+    void func_808016A0_bsfirstp(PlayerState *param_0)
+    {
+        FirstPersonVolume1536 *local_0;
+        f32 local_1;
+        f32 local_6;
+        f32 local_5;
+        f32 local_3;
+        f32 local_2;
 
-    local_0 = (FirstPersonVolume1536 *)param_0->kazfly;
-    local_6 = local_0->local_0;
-    local_1 = local_0->local_1;
-    if (local_6 != local_1) {
-        local_2 = local_6 - local_1;
-        local_3 = func_800F2108(local_2);
-        local_6 = mlAbsF(local_2);
-        local_5 = local_6 * 0.5f;
+        local_0 = (FirstPersonVolume1536 *) param_0->kazfly;
+        local_6 = local_0->local_0;
+        local_1 = local_0->local_1;
+        if (local_6 != local_1) {
+            local_2 = local_6 - local_1;
+            local_3 = func_800F2108(local_2);
+            local_6 = mlAbsF(local_2);
+            local_5 = local_6 * 0.5f;
 
 if (local_5 < 0.5f) {
     if (local_6 > 0.5f)
@@ -1070,10 +1084,11 @@ func_800C5148(func_800A4C68(param_0), local_1);
 }
 }
 
-void func_8080175C_bsfirstp(u8 *param_0) {
-    u8 *local_0 = *(u8 **)(param_0 + 0x188);
-    f32 local_1 = *(f32 *)(local_0 + 0x98);
-    *(f32 *)(local_0 + 0x9C) = local_1;
+void func_8080175C_bsfirstp(u8 *param_0)
+{
+    u8 *local_0 = *(u8 **) (param_0 + 0x188);
+    f32 local_1 = *(f32 *) (local_0 + 0x98);
+    *(f32 *) (local_0 + 0x9C) = local_1;
     func_800C5148(func_800A4C68(), local_1);
 }
 
@@ -1096,10 +1111,11 @@ void bsfirstp_entrypoint_2(PlayerState *param_0)
         _ncba1p_entrypoint_4(local_3, 0);
     }
     func_8010FD60(func_800A4C88(param_0), local_0[0]);
-    func_80801668_bsfirstp(param_0, ((f32 *)local_0)[1]);
+    func_80801668_bsfirstp(param_0, ((f32 *) local_0)[1]);
 }
 
-void func_8080187C_bsfirstp(Actor *param_0) {
+void func_8080187C_bsfirstp(Actor *param_0)
+{
     if (func_800A5090(param_0) == 0) {
         func_800A5004(param_0);
         func_800CA6C0(func_800A5090(param_0), 0x3F800000, 0x447A0000);
@@ -1114,15 +1130,16 @@ int func_808018E0_bsfirstp(Actor *param_0)
     func_800A5044(param_0);
 }
 
-void func_80801928_bsfirstp(Actor *param_0) {
+void func_80801928_bsfirstp(Actor *param_0)
+{
     s32 local_2;
     f32 local_0[3];
     f32 local_1[3];
 
     if (func_800A5090(param_0) != 0) {
-        local_2 = *(s32*)((char*)param_0 + 0x188);
+        local_2 = *(s32 *) ((char *) param_0 + 0x188);
         func_808015C0_bsfirstp(param_0, local_0, local_1);
-        local_1[0] = *(f32*)((char*)local_2 + 0x20C);
+        local_1[0] = *(f32 *) ((char *) local_2 + 0x20C);
         _ncba1p_entrypoint_6(func_800A4CA8(param_0), local_0);
         _ncba1p_entrypoint_7(func_800A4CA8(param_0), local_1);
         func_808019B0_bsfirstp(param_0);
@@ -1130,7 +1147,8 @@ void func_80801928_bsfirstp(Actor *param_0) {
     func_808016A0_bsfirstp(param_0);
 }
 
-int func_808019B0_bsfirstp(param_0) s32 param_0;
+int func_808019B0_bsfirstp(param_0)
+s32 param_0;
 {
     s32 *local_1;
     s32 local_0;
@@ -1141,8 +1159,7 @@ int func_808019B0_bsfirstp(param_0) s32 param_0;
 
 int func_808019EC_bsfirstp(Actor *param_0)
 {
-    if (func_800A4D40(param_0) && func_800A5090(param_0))
-    {
+    if (func_800A4D40(param_0) && func_800A5090(param_0)) {
         func_808019B0_bsfirstp(param_0);
         func_8080175C_bsfirstp(param_0);
     }
@@ -1170,62 +1187,64 @@ int func_80801A98_bsfirstp(Actor *param_0)
 
 int func_80801AC4_bsfirstp(s32 param_0)
 {
-    s32 *p = *(s32 **)((char *)param_0 + 0x188);
+    s32 *p = *(s32 **) ((char *) param_0 + 0x188);
     p[0x28] = 0;
     func_80801B64_bsfirstp(param_0, 0);
 }
 
 void func_80801AEC_bsfirstp(s32 arg0)
 {
-    func_80801B64_bsfirstp(arg0,0);
+    func_80801B64_bsfirstp(arg0, 0);
 }
 
 int func_80801B0C_bsfirstp(s32 param_0, s32 *param_1, s32 *param_2)
 {
-    if (func_800F424C(param_0))
-    {
+    if (func_800F424C(param_0)) {
         *param_1 = bainput_func_80097B28(param_0);
         *param_2 = *param_1;
-    }
-    else
-    {
+    } else {
         *param_1 = 0;
         *param_2 = 0;
     }
 }
 
-s32 func_80801B64_bsfirstp(param_0, param_1) s32 param_0; s32 param_1; {
+s32 func_80801B64_bsfirstp(param_0, param_1)
+s32 param_0;
+s32 param_1;
+{
     switch (param_1) {
         case 0:
-        func_80801BDC_bsfirstp(param_0);
-        break;
+            func_80801BDC_bsfirstp(param_0);
+            break;
         case 1:
-        func_80801D30_bsfirstp(param_0);
-        break;
+            func_80801D30_bsfirstp(param_0);
+            break;
         case 2:
-        func_80801C18_bsfirstp(param_0);
-        break;
+            func_80801C18_bsfirstp(param_0);
+            break;
         case 3:
-        func_80801C74_bsfirstp(param_0);
+            func_80801C74_bsfirstp(param_0);
     }
 }
 
-void func_80801BDC_bsfirstp(param_0) u8 *param_0; {
-    u8 *local_0 = *(u8 **)(param_0 + 0x188);
+void func_80801BDC_bsfirstp(param_0) u8 *param_0;
+{
+    u8 *local_0 = *(u8 **) (param_0 + 0x188);
     _baeggcursor_entrypoint_7(param_0, 1);
     func_80801D70_bsfirstp(param_0);
-    *(s32 *)(local_0 + 0xA8) = 0;
+    *(s32 *) (local_0 + 0xA8) = 0;
 }
 
-void func_80801C18_bsfirstp(param_0) u8 *param_0; {
-    u8 *local_0 = *(u8 **)(param_0 + 0x188);
-    s32 local_1 = *(s32 *)(local_0 + 0xA8);
+void func_80801C18_bsfirstp(param_0) u8 *param_0;
+{
+    u8 *local_0 = *(u8 **) (param_0 + 0x188);
+    s32 local_1 = *(s32 *) (local_0 + 0xA8);
     if (local_1 != 0 && local_1 != 2) {
         _baeggcursor_entrypoint_7(param_0, 1);
-        *(s32 *)(local_0 + 0xAC) = *(s32 *)(local_0 + 0xA8);
-        *(s32 *)(local_0 + 0xA8) = 2;
-        *(s32 *)(local_0 + 0xA4) = *(s32 *)(local_0 + 0xA0);
-        *(s32 *)(local_0 + 0xA0) = 0;
+        *(s32 *) (local_0 + 0xAC) = *(s32 *) (local_0 + 0xA8);
+        *(s32 *) (local_0 + 0xA8) = 2;
+        *(s32 *) (local_0 + 0xA4) = *(s32 *) (local_0 + 0xA0);
+        *(s32 *) (local_0 + 0xA0) = 0;
     }
 }
 
@@ -1235,8 +1254,7 @@ void func_80801C74_bsfirstp(param_0) void *param_0;
     s32 local_1;
     s32 local_2;
     local_0 = *((u8 **) (((char *) param_0) + 0x188));
-    if ((*((s32 *) (((char *) local_0) + 0xA8))) == 2)
-    {
+    if ((*((s32 *) (((char *) local_0) + 0xA8))) == 2) {
         local_1 = *((s32 *) (((char *) local_0) + 0xAC));
 
 switch (local_1) {
@@ -1301,9 +1319,10 @@ void func_80801E18_bsfirstp(param_0) u8 *param_0;
     u8 *obj;
     s32 la;
     s32 lb;
-    if (1)
+    if (1) {
+    }
 
-        obj = *(u8 **) (param_0 + 0x188);
+    obj = *(u8 **) (param_0 + 0x188);
     func_80801B0C_bsfirstp(param_0, &la, &lb);
     switch (*(s32 *) (obj + 0xB0)) {
         case 0:
@@ -1760,10 +1779,11 @@ case 5:
                 if (!local_1) {
                     *(s16 *) (local_0 + 0xE2) = 0;
 
-                if (*(s16 *)(local_0 + 0xE6) == 0) {
-                    *(s16 *)(local_0 + 0xE6) = 1;
-                    func_80802C6C_bsfirstp(param_0);
-                }
+if (*(s16 *) (local_0 + 0xE6) == 0) {
+    *(s16 *) (local_0 + 0xE6) = 1;
+    func_80802C6C_bsfirstp(param_0);
+}
+
 return 0;
 }
 break;
@@ -1943,7 +1963,6 @@ case 1:
     }
 
 }
-
 }
 }
 
@@ -1959,7 +1978,7 @@ void func_808032C0_bsfirstp(PlayerState *param_0)
     func_80807BB8_bsfirstp(param_0);
     func_80808DB0_bsfirstp(param_0);
     func_80802670_bsfirstp(param_0, &local_0);
-    func_80800424_bsfirstp((Actor *)param_0, *(s16 *)local_0, *(f32 *)(local_0 + 4));
+    func_80800424_bsfirstp((Actor *) param_0, *(s16 *) local_0, *(f32 *) (local_0 + 4));
     _baeggsetup_entrypoint_7(param_0, _bsfirstp_entrypoint_10);
 }
 
@@ -1979,43 +1998,37 @@ int func_80803340_bsfirstp(s32 param_0)
     func_80807D48_bsfirstp(param_0);
     func_80808E78_bsfirstp(param_0);
     func_8080633C_bsfirstp(param_0, 1.0f);
-    if (func_80802D50_bsfirstp(param_0, &local_38))
-    {
+    if (func_80802D50_bsfirstp(param_0, &local_38)) {
         func_80802670_bsfirstp(param_0, &local_34);
-        func_80800424_bsfirstp(param_0, *(s16 *)((char *)(local_34) + 0x0), *(f32 *)((char *)(local_34) + 0x4));
+        func_80800424_bsfirstp(param_0, *(s16 *) ((char *) (local_34) + 0x0),
+                               *(f32 *) ((char *) (local_34) + 0x4));
         _baeggsetup_entrypoint_7(param_0, &_bsfirstp_entrypoint_10);
     }
-    local_30 = *(u8 **)((char *)(param_0) + 0x188);
+    local_30 = *(u8 **) ((char *) (param_0) + 0x188);
     local_3 = func_80809540_bsfirstp(param_0, local_30[0x218]);
-    switch (local_3)
-    {
-        case 0 :
-        if (local_30[0x218] != 0)
-        {
-            func_80808D80_bsfirstp(param_0);
-            local_30[0x218] = 0;
-        }
-        break;
-        case 1 :
-        if (local_30[0x218] != 1)
-        {
-            func_80809684_bsfirstp(param_0, 1);
-        }
-        func_80809740_bsfirstp(param_0);
-        break;
-        case 2 :
-        if (local_30[0x218] != 2)
-        {
-            func_80809684_bsfirstp(param_0, 2);
-        }
-        func_80809740_bsfirstp(param_0);
+    switch (local_3) {
+        case 0:
+            if (local_30[0x218] != 0) {
+                func_80808D80_bsfirstp(param_0);
+                local_30[0x218] = 0;
+            }
+            break;
+        case 1:
+            if (local_30[0x218] != 1) {
+                func_80809684_bsfirstp(param_0, 1);
+            }
+            func_80809740_bsfirstp(param_0);
+            break;
+        case 2:
+            if (local_30[0x218] != 2) {
+                func_80809684_bsfirstp(param_0, 2);
+            }
+            func_80809740_bsfirstp(param_0);
     }
-    if (func_80800228_bsfirstp(param_0))
-    {
+    if (func_80800228_bsfirstp(param_0)) {
         local_3C = func_808094F4_bsfirstp(param_0);
     }
-    if (local_3C != 0)
-    {
+    if (local_3C != 0) {
         bs_setState(param_0, local_3C);
     }
 }
@@ -2034,21 +2047,21 @@ void bsfirstp_entrypoint_10(s32 param_0)
     f32 local_2[3];
     f32 local_3[3];
 
-    local_4 = (PlayerState *)func_800F53D0();
-    local_5 = (u8 *)local_4->kazfly;
-    local_0 = (u8 *)func_808027A8_bsfirstp(*(s16 *)(local_5 + 0xE8));
+    local_4 = (PlayerState *) func_800F53D0();
+    local_5 = (u8 *) local_4->kazfly;
+    local_0 = (u8 *) func_808027A8_bsfirstp(*(s16 *) (local_5 + 0xE8));
     func_808035EC_bsfirstp(local_4, local_1, local_3);
     func_800EF368(local_3, 90.0f);
     func_800EE780(local_2, local_1, local_3);
-    func_800EF368(local_3, *(f32 *)(local_0 + 4));
-    func_800EF1B8(local_3, yaw_get(local_4) - 90.0f, *(f32 *)(local_5 + 0x1D4) * 0.33f);
+    func_800EF368(local_3, *(f32 *) (local_0 + 4));
+    func_800EF1B8(local_3, yaw_get(local_4) - 90.0f, *(f32 *) (local_5 + 0x1D4) * 0.33f);
     func_8009E0AC(local_4, 0);
-    func_80802A40_bsfirstp(local_4, *(s16 *)(local_5 + 0xE8));
+    func_80802A40_bsfirstp(local_4, *(s16 *) (local_5 + 0xE8));
     func_8009E0AC(local_4, 1);
     _baeggcursor_entrypoint_8(local_4);
     _bainvisible_entrypoint_7(local_4, 3, 1.0f, 1.0f, 0.25f);
-    _baeggsetup_entrypoint_3(param_0, *(s16 *)(local_5 + 0xE8), local_1, local_2, local_3);
-    func_80802CD8_bsfirstp(local_4, *(s16 *)(local_5 + 0xE8));
+    _baeggsetup_entrypoint_3(param_0, *(s16 *) (local_5 + 0xE8), local_1, local_2, local_3);
+    func_80802CD8_bsfirstp(local_4, *(s16 *) (local_5 + 0xE8));
 }
 
 void func_808035EC_bsfirstp(PlayerState *param_0, f32 *param_1, f32 *param_2)
@@ -2072,13 +2085,14 @@ void func_808035EC_bsfirstp(PlayerState *param_0, f32 *param_1, f32 *param_2)
     func_800EF368(param_2, 1.0f);
 }
 
-void func_808036F0_bsfirstp(u8 *param_0) {
+void func_808036F0_bsfirstp(u8 *param_0)
+{
     func_80807BB8_bsfirstp();
     func_800A38F0(param_0, 0, 1);
     func_808061AC_bsfirstp(param_0, 0);
     anctrl_setPlaybackType(baanim_getAnimCtrlPtr(param_0), 3);
     func_808001FC_bsfirstp(param_0);
-    _chbaddiesetup_entrypoint_1(&_bsfirstp_entrypoint_12, *(s32 **)(param_0 + 0x184));
+    _chbaddiesetup_entrypoint_1(&_bsfirstp_entrypoint_12, *(s32 **) (param_0 + 0x184));
 }
 
 void func_80803760_bsfirstp(int param_0)
@@ -2089,11 +2103,10 @@ void func_80803760_bsfirstp(int param_0)
 int func_80803784_bsfirstp(Actor *param_0)
 {
     s32 *local_0;
-    local_0 = *(s32 **)((char *)param_0 + 0x188);
-    if ((*(s32 *)((char *)local_0 + 0x114)) != 0)
-    {
-        func_8010114C(*(s32 *)((char *)local_0 + 0x114), 4, *(s32 *)((char *)param_0 + 0x184));
-        (*(s32 *)((char *)local_0 + 0x114)) = 0;
+    local_0 = *(s32 **) ((char *) param_0 + 0x188);
+    if ((*(s32 *) ((char *) local_0 + 0x114)) != 0) {
+        func_8010114C(*(s32 *) ((char *) local_0 + 0x114), 4, *(s32 *) ((char *) param_0 + 0x184));
+        (*(s32 *) ((char *) local_0 + 0x114)) = 0;
     }
     func_800A38F0(param_0, 1, 1);
     func_80807C8C_bsfirstp(param_0);
@@ -2103,21 +2116,20 @@ int func_808037E4_bsfirstp(Actor *param_0)
 {
     s32 local_0;
     local_0 = 0;
-    if (_batimer_decrement(param_0, 0))
-    {
+    if (_batimer_decrement(param_0, 0)) {
         local_0 = 0xCA;
     }
-    if (local_0 != 0)
-    {
+    if (local_0 != 0) {
         bs_setState(param_0, local_0);
     }
 }
 
-void func_80803828_bsfirstp(u8 *param_0) {
-    u8 *local_0 = *(u8 **)(param_0 + 0x188);
+void func_80803828_bsfirstp(u8 *param_0)
+{
+    u8 *local_0 = *(u8 **) (param_0 + 0x188);
     if (func_8009E6EC(param_0) == 0xF) {
-        if (*(s32 *)(local_0 + 0x114)) {
-            *(s32 *)(local_0 + 0x114) = 0;
+        if (*(s32 *) (local_0 + 0x114)) {
+            *(s32 *) (local_0 + 0x114) = 0;
         }
     } else {
         bsfirstp_entrypoint_26(param_0);
@@ -2129,15 +2141,16 @@ int bsfirstp_entrypoint_11(s32 param_0)
     return D_8080B494_bsfirstp[param_0];
 }
 
-void bsfirstp_entrypoint_12(s32 param_0) {
+void bsfirstp_entrypoint_12(s32 param_0)
+{
     u8 *local_0;
     u8 *local_1;
     f32 local_2[3];
 
     local_0 = func_800F53D0();
     if (bs_getCurrentState(local_0) == 0xD9) {
-        local_1 = (*(u8 **)((s8 *)(local_0) + (0x188)));
-        (*(s32 *)((s8 *)(local_1) + (0x114))) = _ch1pfreeze_entrypoint_1(param_0);
+        local_1 = (*(u8 **) ((s8 *) (local_0) + (0x188)));
+        (*(s32 *) ((s8 *) (local_1) + (0x114))) = _ch1pfreeze_entrypoint_1(param_0);
         func_8009C128(local_0, local_2);
         func_8010D930(7, -1, local_2, &D_8080B4A4_bsfirstp);
         _batimer_set(local_0, 0, 5.0f);
@@ -2152,20 +2165,29 @@ void bsfirstp_entrypoint_13(PlayerState *param_0, f32 *param_1, s16 param_2)
 
     if (baflag_isTrue(param_0, 0x3B)) {
         switch (param_2) {
-            case 1: param_2 = 3; break;
-            case 3: param_2 = 1; break;
+            case 1:
+                param_2 = 3;
+                break;
+            case 3:
+                param_2 = 1;
+                break;
         }
     }
-    if (func_8009E674(param_0, 0x20, param_2)) param_2 = 2;
+    if (func_8009E674(param_0, 0x20, param_2))
+        param_2 = 2;
     switch (param_2) {
-        case 1: func_800EE7F8(param_1, D_8080B4AC_bsfirstp); break;
-        case 2: func_800EE7F8(param_1, D_8080B4B8_bsfirstp); break;
+        case 1:
+            func_800EE7F8(param_1, D_8080B4AC_bsfirstp);
+            break;
+        case 2:
+            func_800EE7F8(param_1, D_8080B4B8_bsfirstp);
+            break;
         case 3:
-        func_800EE780(local_1, D_8080B4AC_bsfirstp, D_8080B4B8_bsfirstp);
-        func_800EF334(local_1, 0.5f);
-        func_800EFB24(local_2, D_8080B4C4_bsfirstp, local_1);
-        func_800EF334(local_2, func_80803B68_bsfirstp(param_0));
-        func_800EE780(param_1, local_1, local_2);
+            func_800EE780(local_1, D_8080B4AC_bsfirstp, D_8080B4B8_bsfirstp);
+            func_800EF334(local_1, 0.5f);
+            func_800EFB24(local_2, D_8080B4C4_bsfirstp, local_1);
+            func_800EF334(local_2, func_80803B68_bsfirstp(param_0));
+            func_800EE780(param_1, local_1, local_2);
     }
     func_8009C128(param_0, local_0);
     func_800EF8BC(param_1, param_1, func_8009BFCC(param_0));
@@ -2190,15 +2212,12 @@ int func_80803B04_bsfirstp(s32 param_0)
     int new_var;
     s32 local_1;
     local_1 = param_0 | 0;
-    if (local_1)
-    {
+    if (local_1) {
     }
     new_var = local_1 | 0;
-    for (local_0 = 0; local_0 < 3; local_0++)
-    {
+    for (local_0 = 0; local_0 < 3; local_0++) {
         func_8009E4E0(new_var, local_0 | 0, 0);
     }
-
 }
 
 void func_80803B58_bsfirstp(u8 *param_0, f32 param_1)
@@ -2208,16 +2227,17 @@ void func_80803B58_bsfirstp(u8 *param_0, f32 param_1)
     *((f32 *) (new_var + 0x110)) = param_1;
 }
 
-f32 func_80803B68_bsfirstp(param_0) void *param_0; {
+f32 func_80803B68_bsfirstp(param_0) void *param_0;
+{
     f32 *local_0;
 
-    local_0 = *(f32 **)((u8 *)param_0 + 0x188);
+    local_0 = *(f32 **) ((u8 *) param_0 + 0x188);
     return local_0[0x44];
 }
 
 void bsfirstp_entrypoint_14(PlayerState *param_0)
 {
-    s32 local_8 = *(s32 *)((u8 *)param_0 + 0x184);
+    s32 local_8 = *(s32 *) ((u8 *) param_0 + 0x184);
     s32 local_9;
     f32 local_0[3];
     f32 local_1;
@@ -2266,11 +2286,25 @@ s32 func_80803CD4_bsfirstp(PlayerState *param_0, s32 param_1, s32 param_2, s32 p
                 param_3 = 0; local_1 = 1; local_2 = 1;
             } else if (param_3) { local_1 = 1; local_2 = 2; }
 
-            else { local_1 = 0; local_2 = 1; }
-        } else { param_3 = 0; local_1 = 1; local_2 = 1; }
-    } else {
-        func_800A17A8(param_0, -param_3);
-        if (func_800A1718(param_0)) { local_1 = 0; local_2 = 1; }
+else
+{
+    local_1 = 0;
+    local_2 = 1;
+}
+}
+else
+{
+    param_3 = 0;
+    local_1 = 1;
+    local_2 = 1;
+}
+}
+else
+{
+    func_800A17A8(param_0, -param_3);
+
+if (func_800A1718(param_0)) { local_1 = 0; local_2 = 1; }
+
 else
 {
     local_1 = 1;
@@ -2347,13 +2381,15 @@ case 1:
         func_800F7F98(*(s32 *) ((u8 *) param_0 + 0x184), 0);
     }
 
-            break;
-        case 2:
-            func_80809D24_bsfirstp(param_0);
-            func_8080682C_bsfirstp(param_0);
-            func_808099B4_bsfirstp(param_0);
-            local_1 = func_808094F4_bsfirstp(param_0);
-            if (local_1 == 0xCA && !baanim_isStopped(param_0)) local_1 = 0;
+break;
+case 2:
+    func_80809D24_bsfirstp(param_0);
+    func_8080682C_bsfirstp(param_0);
+    func_808099B4_bsfirstp(param_0);
+    local_1 = func_808094F4_bsfirstp(param_0);
+    if (local_1 == 0xCA && !baanim_isStopped(param_0))
+        local_1 = 0;
+
 }
 bs_setState(param_0, local_1);
 }

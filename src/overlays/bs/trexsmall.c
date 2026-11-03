@@ -1,5 +1,7 @@
 #include "bs/trexsmall.h"
+#include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
+
 extern void _badust_entrypoint_5(s32, f32, f32);
 
 extern s32 func_800C2FDC(u8);

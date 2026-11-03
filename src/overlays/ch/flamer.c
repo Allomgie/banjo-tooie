@@ -106,10 +106,9 @@ void func_8080000C_chflamer(param_0) s32 param_0;
     *(s16 *) (local_0 + 0x18) = 0;
     *(s32 *) (local_0 + 0x1AC) = 0;
 
-if (func_800BF8E4() > 0) {
-    *(s16 *) (local_0 + 4) = 400;
-}
-
+    if (func_800BF8E4() > 0) {
+        *(s16 *) (local_0 + 4) = 400;
+    }
 }
 
 void func_80800050_chflamer(Actor *param_0)
@@ -127,16 +126,17 @@ void func_80800050_chflamer(Actor *param_0)
     local_0 = func_80100094(param_0, 0);
     local_1 = _subaddielink_entrypoint_4((u8 *) local_0 + 0x1B4);
 
-if (local_1 != 0 && !func_801072A8(local_1)) {
-    *(f32 *) ((u8 *) local_0 + 0x1B0) = func_80103F38(local_1, 0);
-    func_800EE7F8(param_0->position, (f32 *) (local_1 + 4));
-    func_800EE7F8(param_0->rotation, (f32 *) (local_1 + 0x44));
-    param_0->scale = *(f32 *) (local_1 + 0x38);
-}
+    if (local_1 != 0 && !func_801072A8(local_1)) {
+        *(f32 *) ((u8 *) local_0 + 0x1B0) = func_80103F38(local_1, 0);
+        func_800EE7F8(param_0->position, (f32 *) (local_1 + 4));
+        func_800EE7F8(param_0->rotation, (f32 *) (local_1 + 0x44));
+        param_0->scale = *(f32 *) (local_1 + 0x38);
+    }
 
-func_8080098C_chflamer(param_0);
+    func_8080098C_chflamer(param_0);
 
-if (1)
+    if (1) {
+    }
     switch (((FlamerState *) param_0)->st) {
         case 1:
             if (local_1 == 0 || !(local_1[0x74] & 1)) {
@@ -169,43 +169,42 @@ if (1)
             }
     }
 
-if (func_808007A8_chflamer(param_0, local_1)) {
-    local_2 = func_800D8FF8();
-    local_8 = local_0->ent;
-    local_3 = local_2 * 50.0f;
-    local_4 = local_2 * 300.0f;
-    for (local_7 = 0; local_7 < local_0->count;) {
-        {
-            local_8->f0 += local_2 * 15.0f;
-            if ((s32) local_8->f0 >= 9) {
-                local_0->count -= 1;
-                if (local_0->count > 0) {
-                    rare_memcpy(local_8, &local_0->ent[local_0->count], 0x14);
+    if (func_808007A8_chflamer(param_0, local_1)) {
+        local_2 = func_800D8FF8();
+        local_8 = local_0->ent;
+        local_3 = local_2 * 50.0f;
+        local_4 = local_2 * 300.0f;
+        for (local_7 = 0; local_7 < local_0->count;) {
+            {
+                local_8->f0 += local_2 * 15.0f;
+                if ((s32) local_8->f0 >= 9) {
+                    local_0->count -= 1;
+                    if (local_0->count > 0) {
+                        rare_memcpy(local_8, &local_0->ent[local_0->count], 0x14);
+                    }
+                    continue;
+                } else {
+                    local_8->s4 += local_4;
+                    local_8->sA += local_2 * local_8->s4;
+                    func_800EE88C(local_6, &local_8->s8);
+                    func_800EF04C(local_6, param_0->position);
+                    if (func_800EFC7C(local_6, param_0->position) > 1600.0f) {
+                        func_800EFB24(local_5, param_0->position, local_6);
+                        local_5[1] = 0.0f;
+                        func_800EF368(local_5, local_3);
+                        local_8->s8 += local_5[0];
+                        local_8->sC += local_5[2];
+                    }
+                    local_8++;
+                    local_7++;
                 }
-                continue;
-            } else {
-                local_8->s4 += local_4;
-                local_8->sA += local_2 * local_8->s4;
-                func_800EE88C(local_6, &local_8->s8);
-                func_800EF04C(local_6, param_0->position);
-                if (func_800EFC7C(local_6, param_0->position) > 1600.0f) {
-                    func_800EFB24(local_5, param_0->position, local_6);
-                    local_5[1] = 0.0f;
-                    func_800EF368(local_5, local_3);
-                    local_8->s8 += local_5[0];
-                    local_8->sC += local_5[2];
-                }
-                local_8++;
-                local_7++;
             }
         }
     }
-}
 
-if (func_800BF8E4() > 0) {
-    func_808009C0_chflamer(param_0, local_1);
-}
-
+    if (func_800BF8E4() > 0) {
+        func_808009C0_chflamer(param_0, local_1);
+    }
 }
 
 void func_80800434_chflamer(param_0, param_1) Actor *param_0;
@@ -244,17 +243,16 @@ s32 func_80800594_chflamer(Actor *param_0, s32 param_1, FlamerEvent param_2)
             local_0 = func_80100094(param_0, 0);
             _subaddielink_entrypoint_3(local_0 + 0x1B4);
 
-if (func_800BF8E4() > 0) {
-    *(s32 *) local_0 = func_800C8A98();
-    local_0[0x14] = 0;
-}
+            if (func_800BF8E4() > 0) {
+                *(s32 *) local_0 = func_800C8A98();
+                local_0[0x14] = 0;
+            }
 
-break;
-default:
-    return 0;
-
-}
-return 1;
+            break;
+        default:
+            return 0;
+    }
+    return 1;
 }
 
 void chflamer_entrypoint_1(Actor *param_0, void *param_1)
@@ -265,10 +263,10 @@ void chflamer_entrypoint_1(Actor *param_0, void *param_1)
                 func_8010114C(param_1, 0x92, 0);
         }
 
-((FlamerActorFlags *) param_0)->local_0 = 1;
-func_8010108C(param_0, 0x2B, 1);
-_chbaddiesetup_entrypoint_2(_chflamer_entrypoint_2, param_0->unk0, 0);
-}
+        ((FlamerActorFlags *) param_0)->local_0 = 1;
+        func_8010108C(param_0, 0x2B, 1);
+        _chbaddiesetup_entrypoint_2(_chflamer_entrypoint_2, param_0->unk0, 0);
+    }
 }
 
 void chflamer_entrypoint_2(Unk80132ED0 *param_0, s32 param_1)
@@ -280,14 +278,13 @@ void chflamer_entrypoint_2(Unk80132ED0 *param_0, s32 param_1)
     if (!local_0->unk64_17) {
         local_1 = func_801084B0(0x3A2, &local_0);
 
-if (local_1) {
-    local_2 = func_80100094(local_1, 0);
-    _subaddielink_entrypoint_1(local_2 + 0x1B4, param_0);
-    local_1->unk58 = func_800DC178(4.0f, 6.0f);
-    local_1->unk70_10 = 1;
-}
-
-}
+        if (local_1) {
+            local_2 = func_80100094(local_1, 0);
+            _subaddielink_entrypoint_1(local_2 + 0x1B4, param_0);
+            local_1->unk58 = func_800DC178(4.0f, 6.0f);
+            local_1->unk70_10 = 1;
+        }
+    }
 }
 
 void func_80800738_chflamer(param_0) Actor *param_0;

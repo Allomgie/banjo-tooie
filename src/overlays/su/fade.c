@@ -13,9 +13,10 @@ void sufade_entrypoint_0(s32 param_0, u8 *param_1)
     *(s8 *) ((s8 *) temp_v0 + 1) = (s8) *(s32 *) ((s8 *) param_1 + 4);
     *(s8 *) ((s8 *) temp_v0 + 2) = (s8) *(s32 *) ((s8 *) param_1 + 8);
     *(s8 *) ((s8 *) temp_v0 + 3) = (s8) param_0;
-    if (!(void *) D_80127EF4)
-        if (0) {
-        }
+    if (!(void *) D_80127EF4) {
+    }
+    if (0) {
+    }
 }
 
 s32 B_80800160_sufade;

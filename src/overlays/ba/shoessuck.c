@@ -1,3 +1,4 @@
+#include "common.h"
 #include "playerstate.h"
 
 extern void func_800EFA4C(f32 *, f32, f32, f32);

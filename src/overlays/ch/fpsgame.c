@@ -617,8 +617,9 @@ s32 state;
             break;
         case 6:
             best = _sumultiscore_entrypoint_8(local->score, 0, 2);
-            if (1)
-                local->timer = 5.0f;
+            if (1) {
+            }
+            local->timer = 5.0f;
             _sumultiscore_entrypoint_4(local->score, 5, 5, 2);
             for (i = 0; i < _gcstatusDll_entrypoint_11(); i++) {
                 v = _sumultiscore_entrypoint_8(local->score, i, 2);
@@ -961,24 +962,23 @@ void *param_1;
 
     local_2 = func_80100094(param_0, 0);
 
-if (local_2->local_0) {
-    local_1 = local_2->local_4 * 0.5f;
-    local_3 = (s32) local_1;
-    local_1 -= local_3;
-    _fxdialog_entrypoint_1(0x8F, 0x72);
-    _fxdialog_entrypoint_2(0.75f);
-    _fxdialog_entrypoint_4(param_1, 0xB4F, (s32) (local_1 * 20.0f), 0.0f, 0.0f, local_2->local_1,
-                           0);
-    func_800B8C50();
-    func_800B8C8C(local_2->local_1);
-    func_800B8C98(3);
-    func_800B8CBC(255, 255, 255);
-    func_800B7F14(param_1);
-    sprintf(local_0, "%d:%02d", local_2->local_2, local_2->local_3);
-    func_800B8E28(param_1, 0x99, 0x72, local_0);
-    func_800B811C(param_1);
-}
-
+    if (local_2->local_0) {
+        local_1 = local_2->local_4 * 0.5f;
+        local_3 = (s32) local_1;
+        local_1 -= local_3;
+        _fxdialog_entrypoint_1(0x8F, 0x72);
+        _fxdialog_entrypoint_2(0.75f);
+        _fxdialog_entrypoint_4(param_1, 0xB4F, (s32) (local_1 * 20.0f), 0.0f, 0.0f,
+                               local_2->local_1, 0);
+        func_800B8C50();
+        func_800B8C8C(local_2->local_1);
+        func_800B8C98(3);
+        func_800B8CBC(255, 255, 255);
+        func_800B7F14(param_1);
+        sprintf(local_0, "%d:%02d", local_2->local_2, local_2->local_3);
+        func_800B8E28(param_1, 0x99, 0x72, local_0);
+        func_800B811C(param_1);
+    }
 }
 
 void func_80801C5C_chfpsgame(s32 param_0)
@@ -1004,13 +1004,12 @@ void func_80801C9C_chfpsgame(Actor *param_0)
     for (i = 0; i < 4; i++) {
         l = &((FpsList *) (local_0 + 0x568))[i];
 
-if (l->count != 0) {
-    do {
-        func_8010114C(l->it[--l->count].x, 0x45, 0);
-    } while (l->count != 0);
-}
-
-}
+        if (l->count != 0) {
+            do {
+                func_8010114C(l->it[--l->count].x, 0x45, 0);
+            } while (l->count != 0);
+        }
+    }
 }
 
 void func_80801D40_chfpsgame(Actor *param_0, s32 param_1, s32 param_2)
@@ -1049,16 +1048,15 @@ s32 param_2;
         for (j = 0; j < e->count; j++) {
             local_2 = func_80106790(e->el[j].id);
 
-if (func_800EEB40(local_1->position, local_2->position) < 90000.0f) {
-    local_3 = 1;
-    func_8010108C(local_2, 0x40, 0);
-}
-
-}
-}
-if (local_3 != 0) {
-    func_8010108C(local_1, 0x40, 0);
-}
+            if (func_800EEB40(local_1->position, local_2->position) < 90000.0f) {
+                local_3 = 1;
+                func_8010108C(local_2, 0x40, 0);
+            }
+        }
+    }
+    if (local_3 != 0) {
+        func_8010108C(local_1, 0x40, 0);
+    }
 }
 
 void func_80801F34_chfpsgame(param_0, param_1) Actor *param_0;

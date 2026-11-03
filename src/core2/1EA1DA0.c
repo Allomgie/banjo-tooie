@@ -1,4 +1,5 @@
 #include "core2/1EA1DA0.h"
+#include <ultra64.h>
 
 typedef struct {
     s32 element_size;
@@ -156,24 +157,26 @@ s32 param_1;
     temp_v0 = vector_end(((void *) D_8012AB00));
     var_s0 = sp2C;
 
-if (var_s0 < temp_v0) {
-loop_1:
-    if ((*(u8 *) ((s8 *) var_s0 + 0x15) != 0) && (param_0(var_s0, param_1) != 0) &&
-        ((*(u8 *) ((s8 *) var_s0 + 0x17) != 0) || (*(u8 *) ((s8 *) var_s0 + 0x18) != 0))) {
-        return ((s32) (var_s0 - sp2C) / 28) + 1;
+    if (var_s0 < temp_v0) {
+    loop_1:
+        if ((*(u8 *) ((s8 *) var_s0 + 0x15) != 0) && (param_0(var_s0, param_1) != 0) &&
+            ((*(u8 *) ((s8 *) var_s0 + 0x17) != 0) || (*(u8 *) ((s8 *) var_s0 + 0x18) != 0))) {
+            return ((s32) (var_s0 - sp2C) / 28) + 1;
+        }
+        var_s0 += 0x1C;
+        if (var_s0 >= temp_v0) {
+            goto block_7;
+        }
+        goto loop_1;
     }
-    var_s0 += 0x1C;
-    if (var_s0 >= temp_v0) {
-        goto block_7;
-    }
-    goto loop_1;
-}
 
-block_7 : return 0;
+block_7:
+    return 0;
 }
 
 s32 func_800C8678(param_0, param_1, param_2)
 s32 param_0;
+
 s32 (*param_1)(u32, s32);
 s32 param_2;
 {
@@ -186,18 +189,18 @@ s32 param_2;
     local_3 = vector_end(((u8 *) D_8012AB00));
     local_2 += 0x1C;
 
-if (local_2 < local_3) {
-    do {
-        if ((*(u8 *) ((char *) local_2 + 0x15) != 0) && (param_1(local_2, param_2) != 0) &&
-            ((*(u8 *) ((char *) local_2 + 0x17) != 0) ||
-             (*(u8 *) ((char *) local_2 + 0x18) != 0))) {
-            return (((s32) local_2 - (s32) local_1) / 0x1C) + 1;
-        }
-        local_2 += 0x1C;
-    } while (local_2 < local_3);
-}
+    if (local_2 < local_3) {
+        do {
+            if ((*(u8 *) ((char *) local_2 + 0x15) != 0) && (param_1(local_2, param_2) != 0) &&
+                ((*(u8 *) ((char *) local_2 + 0x17) != 0) ||
+                 (*(u8 *) ((char *) local_2 + 0x18) != 0))) {
+                return (((s32) local_2 - (s32) local_1) / 0x1C) + 1;
+            }
+            local_2 += 0x1C;
+        } while (local_2 < local_3);
+    }
 
-return 0;
+    return 0;
 }
 
 void func_800C8760(s32 param_0)
@@ -247,14 +250,13 @@ int func_800C8900(s32 param_0, s32 param_1)
     u8 *local_0;
     local_0 = vector_at(((u8 *) D_8012AB00), param_0 - 1);
 
-if (!local_0[0x17]) {
-    func_800EFA88(param_1, 0, 0, 0);
-}
+    if (!local_0[0x17]) {
+        func_800EFA88(param_1, 0, 0, 0);
+    }
 
-else
-{
-    func_800F2EE0(param_1, local_0 + 0xA);
-}
+    else {
+        func_800F2EE0(param_1, local_0 + 0xA);
+    }
 }
 
 int func_800C8960(s32 param_0, s32 param_1)
@@ -263,10 +265,9 @@ int func_800C8960(s32 param_0, s32 param_1)
         func_800EE830(param_0, &D_8012AB1C);
     }
 
-if (param_1 != 0) {
-    func_800EE7F8(param_1, &D_8012AB28);
-}
-
+    if (param_1 != 0) {
+        func_800EE7F8(param_1, &D_8012AB28);
+    }
 }
 
 u8 func_800C89A8(s32 param_0)
@@ -289,23 +290,22 @@ void func_800C8A08(void)
     end = vector_end(((void *) D_8012AB00));
     local_0 = new_var;
 
-if (local_0 < end) {
-    do {
-        if (*(u8 *) ((char *) local_0 + 0x15) != 0) {
-            if (*(u8 *) ((char *) local_0 + 0x16) == 2) {
-                *(u8 *) ((char *) local_0 + 0x15) = 0;
-            } else {
-                *(u8 *) ((char *) local_0 + 0x16) = 0;
+    if (local_0 < end) {
+        do {
+            if (*(u8 *) ((char *) local_0 + 0x15) != 0) {
+                if (*(u8 *) ((char *) local_0 + 0x16) == 2) {
+                    *(u8 *) ((char *) local_0 + 0x15) = 0;
+                } else {
+                    *(u8 *) ((char *) local_0 + 0x16) = 0;
+                }
+                if (*(u8 *) ((char *) local_0 + 0x18) != 0) {
+                    *(u8 *) ((char *) local_0 + 0x18) = 0;
+                }
+                *(s8 *) ((char *) local_0 + 0x19) = 0;
             }
-            if (*(u8 *) ((char *) local_0 + 0x18) != 0) {
-                *(u8 *) ((char *) local_0 + 0x18) = 0;
-            }
-            *(s8 *) ((char *) local_0 + 0x19) = 0;
-        }
-        local_0 = (void *) ((char *) local_0 + 0x1C);
-    } while (local_0 < end);
-}
-
+            local_0 = (void *) ((char *) local_0 + 0x1C);
+        } while (local_0 < end);
+    }
 }
 
 s32 func_800C8A98(void)
@@ -324,18 +324,17 @@ s32 func_800C8A98(void)
 
     if (local_2 == local_1) {
         local_2 = (u8 *) vector_push_back(((void **) &D_8012AB00));
-
-}
-local_3 = vector_index_of((void *) D_8012AB00, (void *) local_2) + 1;
-local_2[0x15] = 0xb;
-local_2[0x16] = local_2[0x17] = 1;
-local_2[0x14] = 0;
-local_2[0x18] = 0;
-local_2[0x19] = 0;
-func_800C8CB8(local_3, D_8011A9CC);
-func_800C8D4C(local_3, D_8011A9D8);
-func_800C8E84(local_3, D_8011A9E0);
-return local_3;
+    }
+    local_3 = vector_index_of((void *) D_8012AB00, (void *) local_2) + 1;
+    local_2[0x15] = 0xb;
+    local_2[0x16] = local_2[0x17] = 1;
+    local_2[0x14] = 0;
+    local_2[0x18] = 0;
+    local_2[0x19] = 0;
+    func_800C8CB8(local_3, D_8011A9CC);
+    func_800C8D4C(local_3, D_8011A9D8);
+    func_800C8E84(local_3, D_8011A9E0);
+    return local_3;
 }
 
 void func_800C8B84(s32 param_0)
@@ -371,10 +370,10 @@ int func_800C8C18()
             local_0++;
         }
 
-local_2 += 28;
-}
+        local_2 += 28;
+    }
 
-return local_0;
+    return local_0;
 }
 
 int func_800C8C90(s32 param_0)
@@ -536,9 +535,8 @@ s32 func_800C9150(s32 param_0)
         bzero(local_0, 0x34);
         D_8012AB40.unk0[D_8012AB40.unk14++] = local_0;
         _gctransitionDll_entrypoint_8(local_0, param_0);
-
-}
-return (s32) local_0;
+    }
+    return (s32) local_0;
 }
 
 void *func_800C91C8(param_0)
@@ -549,9 +547,8 @@ s32 param_0;
         if (param_0 == *(s32 *) D_8012AB40.unk0[i]) {
             return D_8012AB40.unk0[i];
         }
-
-}
-return 0;
+    }
+    return 0;
 }
 
 void func_800C9214(void *param_0)
@@ -563,8 +560,7 @@ void func_800C9214(void *param_0)
             D_8012AB40.unk0[local_0] = D_8012AB40.unk0[--D_8012AB40.unk14];
             break;
         }
-
-}
+    }
 }
 
 void func_800C929C()
@@ -595,21 +591,21 @@ void func_800C9358(s32 param_0, s32 param_1)
     if (D_8012AB54) {
         local_0 = 0;
 
-if ((s32) D_8012AB54 > (local_0 * 0)) {
-    local_1 = (void **) &D_8012AB40;
-    do {
-        v0 = **(s32 **) local_1;
-        if (v0 != 4) {
-            func_800A8BD4(param_0, v0, param_1);
-            _gctransitionDll_entrypoint_0(*local_1, param_0);
+        if ((s32) D_8012AB54 > (local_0 * 0)) {
+            local_1 = (void **) &D_8012AB40;
+            do {
+                v0 = **(s32 **) local_1;
+                if (v0 != 4) {
+                    func_800A8BD4(param_0, v0, param_1);
+                    _gctransitionDll_entrypoint_0(*local_1, param_0);
+                }
+                local_0 += 1;
+                local_1 += 1;
+            } while (local_0 < (s32) D_8012AB54);
         }
-        local_0 += 1;
-        local_1 += 1;
-    } while (local_0 < (s32) D_8012AB54);
-}
 
-func_800A8CCC(param_0, param_1);
-}
+        func_800A8CCC(param_0, param_1);
+    }
 }
 
 void func_800C940C(s32 param_0, s32 param_1)
@@ -620,13 +616,12 @@ void func_800C940C(s32 param_0, s32 param_1)
         for (local_0 = 0; local_0 < D_8012AB54; local_0++) {
             local_1 = *((s32 **) &D_8012AB40)[local_0];
 
-if (local_1 == 4) {
-    _gctransitionDll_entrypoint_0(((s32 **) &D_8012AB40)[local_0], param_0);
-    return;
-}
-
-}
-}
+            if (local_1 == 4) {
+                _gctransitionDll_entrypoint_0(((s32 **) &D_8012AB40)[local_0], param_0);
+                return;
+            }
+        }
+    }
 }
 
 void func_800C9484(void)
@@ -641,21 +636,19 @@ void func_800C9484(void)
         do {
             local_2 = *local_1;
 
-if (local_2 != 0) {
-    local_3 = *(s32 *) ((char *) local_2 + 0x2C);
-    if (*(s32 *) ((char *) local_2 + 0x2C) != 0) {
-        *(s32 *) ((char *) *local_1 + 0x2C) =
-            func_8008AEB4(local_3, *(s32 *) ((char *) local_2 + 0x2C));
-    }
-    *local_1 = defrag(*local_1);
-}
+            if (local_2 != 0) {
+                local_3 = *(s32 *) ((char *) local_2 + 0x2C);
+                if (*(s32 *) ((char *) local_2 + 0x2C) != 0) {
+                    *(s32 *) ((char *) *local_1 + 0x2C) =
+                        func_8008AEB4(local_3, *(s32 *) ((char *) local_2 + 0x2C));
+                }
+                *local_1 = defrag(*local_1);
+            }
 
-local_0 += 1;
-local_1 += 1;
-}
-while (local_0 < ((s32) D_8012AB54))
-    ;
-}
+            local_0 += 1;
+            local_1 += 1;
+        } while (local_0 < ((s32) D_8012AB54));
+    }
 }
 
 s32 func_800C9510()

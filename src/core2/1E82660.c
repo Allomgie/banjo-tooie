@@ -184,8 +184,9 @@ void func_800A91F4(param_0) s32 param_0;
             func_8010FBD4(*(s32 *) ((s8 *) temp_s1 + 0x58));
             *(s32 *) ((s8 *) temp_s1 + 0x58) = 0;
             if (func_800A8984(*(s16 *) ((s8 *) temp_s0 + 8)) == *(s32 *) ((s8 *) temp_s1 + 0x38)) {
-                if (1)
-                    func_800A8948(*(s16 *) ((s8 *) temp_s0 + 8));
+                if (1) {
+                }
+                func_800A8948(*(s16 *) ((s8 *) temp_s0 + 8));
             }
             func_800CA364(*(s32 *) ((s8 *) temp_s1 + 0x38));
             do {

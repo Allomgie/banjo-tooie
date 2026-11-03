@@ -211,8 +211,9 @@ void func_8080060C_bsride(PlayerState *param_0)
     local_0 = baanim_getAnimCtrlPtr(param_0);
     if (param_0->unk15C.word != 0) {
         local_1 = 0;
-        if (1)
-            func_8008B10C(local_0, _chhandcart_entrypoint_1(param_0->unk15C.word));
+        if (1) {
+        }
+        func_8008B10C(local_0, _chhandcart_entrypoint_1(param_0->unk15C.word));
     } else {
         local_1 = 0x2F;
     }

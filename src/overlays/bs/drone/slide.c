@@ -86,9 +86,10 @@ void func_808001F4_bsdroneslide(PlayerState *param_0, f32 param_1)
     local_0 = func_800F1DCC(param_1, local_1);
     local_0 *= func_800D8FF8();
     local_1 += local_0;
-    if (1)
-        if (1) {
-        }
+    if (1) {
+    }
+    if (1) {
+    }
     baphysics_set_target_yaw(param_0, local_1);
     func_800A4DA4(param_0, 8);
 }

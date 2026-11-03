@@ -1710,8 +1710,9 @@ void func_808037B0_chdragonbrothers(Actor *param_0, s32 param_1)
     }
 
     local_0 = func_80106790(param_0->unk3C);
-    if (1)
-        local_1 = func_80100094(local_0, 0);
+    if (1) {
+    }
+    local_1 = func_80100094(local_0, 0);
     if (((DrbS *) local_1)->a[param_0->unk74_7] + ((DrbS *) local_1)->b[param_0->unk74_7] < 3) {
         if (param_0->unk70_10 == 4 || param_0->unk70_10 == 5) {
             if (func_808003F8_chdragonbrothers(local_0)) {
@@ -1973,9 +1974,10 @@ void func_808040A8_chdragonbrothers(u8 *param_0)
     s32 vec4C[3];
     s32 vec40[3];
     s32 vec34[3];
-    if (1)
+    if (1) {
+    }
 
-        dt = func_800D8FF8();
+    dt = func_800D8FF8();
     *(f32 *) (param_0 + 0x58) = *(f32 *) (param_0 + 0x58) + dt;
     if (((Actor *) param_0)->unk70_10 == 1) {
         func_800EFA20(vec4C, param_0 + 0x28, dt);

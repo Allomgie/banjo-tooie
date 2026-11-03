@@ -1581,8 +1581,9 @@ void func_80803388_chevilmumbo(Actor *param_0)
     param_0->unk6C_0 = func_800C8A98();
     if (local_1[0x93] < 5)
         *(f32 *) ((u8 *) param_0 + 0x24) = 1000.0f;
-    else
-        *(f32 *) ((u8 *) param_0 + 0x24) = 1000.0f;
+    else {
+    }
+    *(f32 *) ((u8 *) param_0 + 0x24) = 1000.0f;
     param_0->unk58 = 2.5f;
     if (local_1[0x93] < 5)
         *(f32 *) ((u8 *) param_0 + 0x20) = 0.5f;

@@ -307,10 +307,9 @@ void func_80800408_chinflatableboss(param_0) s32 param_0;
     } while (local_3 != 0x30);
     local_2 = (*(s32 *) ((s8 *) (local_0) + (0x434)));
 
-if (local_2 != 0) {
-    *(s32 *) ((s8 *) local_0 + 0x434) = func_800BA2C4(local_2);
-}
-
+    if (local_2 != 0) {
+        *(s32 *) ((s8 *) local_0 + 0x434) = func_800BA2C4(local_2);
+    }
 }
 
 void func_80802910_chinflatableboss();
@@ -338,131 +337,135 @@ void func_808004A0_chinflatableboss(param_0) u8 *param_0;
     func_8080272C_chinflatableboss(param_0);
     func_808029AC_chinflatableboss(param_0);
 
-switch ((u32) *(u16 *) (param_0 + 0x72) >> 10) {
-    case 2:
-        func_80802264_chinflatableboss(param_0, 0.3f, 0.3f, &D_80802E98_chinflatableboss, 2);
-        func_80802264_chinflatableboss(param_0, 0.3f, 0.5f, &D_80802EA0_chinflatableboss, 5);
-        if (func_80101DDC(param_0) != 0) {
-            _subaddiedialog_entrypoint_11(*(s32 *) param_0, 0x1082, 0x106, param_0 + 4, 0x3A);
-            func_80800F84_chinflatableboss(param_0, 3);
-            func_8008B1C8(func_80104248(param_0), 0.8f);
-        }
-        break;
-    case 4:
-        func_80802264_chinflatableboss(param_0, 0.5f, 0.8f, &D_80802EB4_chinflatableboss, 4);
-        if (func_80101E14(param_0, 0x3F000000) != 0) {
-            func_800DA544(4);
-        }
-        if (func_80101DDC(param_0) != 0) {
-            local_3 = param_0 + 4;
-            if (*(u8 *) (local_0 + 0x49C) != 0) {
-                func_80802910_chinflatableboss(param_0);
-            } else {
-                _subaddiedialog_entrypoint_11(*(s32 *) param_0, 0x1083, 0x106, local_3, 0x3A);
-                func_80800F84_chinflatableboss(param_0, 5);
+    switch ((u32) *(u16 *) (param_0 + 0x72) >> 10) {
+        case 2:
+            func_80802264_chinflatableboss(param_0, 0.3f, 0.3f, &D_80802E98_chinflatableboss, 2);
+            func_80802264_chinflatableboss(param_0, 0.3f, 0.5f, &D_80802EA0_chinflatableboss, 5);
+            if (func_80101DDC(param_0) != 0) {
+                _subaddiedialog_entrypoint_11(*(s32 *) param_0, 0x1082, 0x106, param_0 + 4, 0x3A);
+                func_80800F84_chinflatableboss(param_0, 3);
                 func_8008B1C8(func_80104248(param_0), 0.8f);
             }
-        }
-        break;
-    case 9:
-        *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
-        func_80102BF8(param_0, 0.1f, 3.0f, 90.0f);
-        if (func_800D9078(param_0 + 0x58) != 0) {
-            func_8080183C_chinflatableboss(param_0);
-            func_808024BC_chinflatableboss(param_0);
-            *(f32 *) (param_0 + 0x54) = func_80102D78(param_0, param_0 + 0x18);
-        }
-        break;
-    case 10:
-        *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
-        func_80102BF8(param_0, 0.1f, 3.0f, 90.0f);
-        if (func_80102CF4(param_0, 8.0f) != 0) {
-            func_80800F84_chinflatableboss(param_0, 0xB);
-        }
-        break;
-    case 6:
-        if (!((BF74 *) (param_0 + 0x74))->b) {
-            func_80801B04_chinflatableboss(param_0);
-        }
-        break;
-    case 7:
-        if (func_800D9078(param_0 + 0x58) != 0) {
-            func_808024BC_chinflatableboss(param_0);
-        }
-        break;
-    case 8:
-        if (!((BF74 *) (param_0 + 0x74))->b) {
-            func_80801B04_chinflatableboss(param_0);
-        }
-        break;
-    case 11:
-        *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
-        func_80102BF8(param_0, 0.1f, 3.0f, 90.0f);
-        if (func_80101E14(param_0, 0x3E99999A) != 0) {
-            func_800C4B64(func_800F10B4(*(f32 *) (param_0 + 0x38), 1.4f, 0.19913846f, 0.9f, 1.2f));
-            _subaddieaudioquick_entrypoint_2(param_0, local_0 + 0x1C, &D_80802EC4_chinflatableboss);
-        } else if (func_80101E14(param_0, 0x3EE66666) != 0) {
-            func_80108B04(param_0, 1);
-            *(f32 *) (param_0 + 0x58) = 1.0f;
-            *(u8 *) (local_0 + 0x495) = *(u8 *) (local_0 + 0x495) - 1;
-        } else if (func_80101E14(param_0, 0x3F7FBE77) != 0 && *(u8 *) (local_0 + 0x495) == 0) {
-            func_8080183C_chinflatableboss(param_0);
-            func_808024BC_chinflatableboss(param_0);
-            *(f32 *) (param_0 + 0x54) = func_80102D78(param_0, param_0 + 0x18);
-        }
-        break;
-    case 12:
-        if (func_80101E14(param_0, 0x3E800000) != 0) {
-            func_800C4B64(func_800F10B4(*(f32 *) (param_0 + 0x38), 1.4f, 0.19913846f, 1.0f, 1.4f) *
-                          0.8f);
-            _subaddieaudioquick_entrypoint_2(param_0, local_0 + 0x1C, &D_80802ED0_chinflatableboss);
-        }
-        if (func_80101DDC(param_0) != 0) {
-            func_80800F84_chinflatableboss(param_0, 0xD);
-        }
-        break;
-    case 13:
-        func_80802450_chinflatableboss(param_0);
-        if (func_80101DDC(param_0) != 0) {
-            if (func_80801CB4_chinflatableboss(param_0) == 0) {
-                func_80800F84_chinflatableboss(param_0, 0xE);
-            } else {
+            break;
+        case 4:
+            func_80802264_chinflatableboss(param_0, 0.5f, 0.8f, &D_80802EB4_chinflatableboss, 4);
+            if (func_80101E14(param_0, 0x3F000000) != 0) {
+                func_800DA544(4);
+            }
+            if (func_80101DDC(param_0) != 0) {
+                local_3 = param_0 + 4;
+                if (*(u8 *) (local_0 + 0x49C) != 0) {
+                    func_80802910_chinflatableboss(param_0);
+                } else {
+                    _subaddiedialog_entrypoint_11(*(s32 *) param_0, 0x1083, 0x106, local_3, 0x3A);
+                    func_80800F84_chinflatableboss(param_0, 5);
+                    func_8008B1C8(func_80104248(param_0), 0.8f);
+                }
+            }
+            break;
+        case 9:
+            *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
+            func_80102BF8(param_0, 0.1f, 3.0f, 90.0f);
+            if (func_800D9078(param_0 + 0x58) != 0) {
+                func_8080183C_chinflatableboss(param_0);
+                func_808024BC_chinflatableboss(param_0);
+                *(f32 *) (param_0 + 0x54) = func_80102D78(param_0, param_0 + 0x18);
+            }
+            break;
+        case 10:
+            *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
+            func_80102BF8(param_0, 0.1f, 3.0f, 90.0f);
+            if (func_80102CF4(param_0, 8.0f) != 0) {
+                func_80800F84_chinflatableboss(param_0, 0xB);
+            }
+            break;
+        case 6:
+            if (!((BF74 *) (param_0 + 0x74))->b) {
+                func_80801B04_chinflatableboss(param_0);
+            }
+            break;
+        case 7:
+            if (func_800D9078(param_0 + 0x58) != 0) {
                 func_808024BC_chinflatableboss(param_0);
             }
-        }
-        break;
-    case 15:
-        _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_80802EDC_chinflatableboss, 0.03f);
-        if (func_80101E14(param_0, 0x3D75C28F) != 0) {
-            _subaddieskeleton_entrypoint_3(*(s32 *) param_0, 7, sp30);
-            *(s32 *) (local_0 + 0x434) =
-                func_8080200C_chinflatableboss(param_0, sp30, local_0 + 0x28);
-        }
-        if (func_80101E14(param_0, 0x3EDC28F6) != 0) {
-            func_800C4AF0(local_0 + 0x34, &D_80802EE8_chinflatableboss);
-        }
-        if (func_80101DDC(param_0) != 0) {
-            func_800FDC28(0);
-            func_800DA544(3);
-            if (func_800D395C() != 0) {
-                func_80800F84_chinflatableboss(param_0, 0x10);
-                func_80802A9C_chinflatableboss(param_0);
-                _gcfrontend_entrypoint_10();
-            } else {
-                func_800DA544(0x9C);
-                func_80108B04(param_0, 3);
-                func_80800F84_chinflatableboss(param_0, 0x10);
+            break;
+        case 8:
+            if (!((BF74 *) (param_0 + 0x74))->b) {
+                func_80801B04_chinflatableboss(param_0);
             }
-        }
-        break;
-    case 18:
-        func_80802264_chinflatableboss(param_0, 0.5f, 0.8f, &D_80802EB4_chinflatableboss, 4);
-        if (func_80101DDC(param_0) != 0) {
-            func_80800F84_chinflatableboss(param_0, 0x13);
-        }
-}
+            break;
+        case 11:
+            *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
+            func_80102BF8(param_0, 0.1f, 3.0f, 90.0f);
+            if (func_80101E14(param_0, 0x3E99999A) != 0) {
+                func_800C4B64(
+                    func_800F10B4(*(f32 *) (param_0 + 0x38), 1.4f, 0.19913846f, 0.9f, 1.2f));
+                _subaddieaudioquick_entrypoint_2(param_0, local_0 + 0x1C,
+                                                 &D_80802EC4_chinflatableboss);
+            } else if (func_80101E14(param_0, 0x3EE66666) != 0) {
+                func_80108B04(param_0, 1);
+                *(f32 *) (param_0 + 0x58) = 1.0f;
+                *(u8 *) (local_0 + 0x495) = *(u8 *) (local_0 + 0x495) - 1;
+            } else if (func_80101E14(param_0, 0x3F7FBE77) != 0 && *(u8 *) (local_0 + 0x495) == 0) {
+                func_8080183C_chinflatableboss(param_0);
+                func_808024BC_chinflatableboss(param_0);
+                *(f32 *) (param_0 + 0x54) = func_80102D78(param_0, param_0 + 0x18);
+            }
+            break;
+        case 12:
+            if (func_80101E14(param_0, 0x3E800000) != 0) {
+                func_800C4B64(
+                    func_800F10B4(*(f32 *) (param_0 + 0x38), 1.4f, 0.19913846f, 1.0f, 1.4f) * 0.8f);
+                _subaddieaudioquick_entrypoint_2(param_0, local_0 + 0x1C,
+                                                 &D_80802ED0_chinflatableboss);
+            }
+            if (func_80101DDC(param_0) != 0) {
+                func_80800F84_chinflatableboss(param_0, 0xD);
+            }
+            break;
+        case 13:
+            func_80802450_chinflatableboss(param_0);
+            if (func_80101DDC(param_0) != 0) {
+                if (func_80801CB4_chinflatableboss(param_0) == 0) {
+                    func_80800F84_chinflatableboss(param_0, 0xE);
+                } else {
+                    func_808024BC_chinflatableboss(param_0);
+                }
+            }
+            break;
+        case 15:
+            _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_80802EDC_chinflatableboss,
+                                             0.03f);
+            if (func_80101E14(param_0, 0x3D75C28F) != 0) {
+                _subaddieskeleton_entrypoint_3(*(s32 *) param_0, 7, sp30);
+                *(s32 *) (local_0 + 0x434) =
+                    func_8080200C_chinflatableboss(param_0, sp30, local_0 + 0x28);
+            }
+            if (func_80101E14(param_0, 0x3EDC28F6) != 0) {
+                func_800C4AF0(local_0 + 0x34, &D_80802EE8_chinflatableboss);
+            }
+            if (func_80101DDC(param_0) != 0) {
+                func_800FDC28(0);
+                func_800DA544(3);
+                if (func_800D395C() != 0) {
+                    func_80800F84_chinflatableboss(param_0, 0x10);
+                    func_80802A9C_chinflatableboss(param_0);
+                    _gcfrontend_entrypoint_10();
+                } else {
+                    func_800DA544(0x9C);
+                    func_80108B04(param_0, 3);
+                    func_80800F84_chinflatableboss(param_0, 0x10);
+                }
+            }
+            break;
+        case 18:
+            func_80802264_chinflatableboss(param_0, 0.5f, 0.8f, &D_80802EB4_chinflatableboss, 4);
+            if (func_80101DDC(param_0) != 0) {
+                func_80800F84_chinflatableboss(param_0, 0x13);
+            }
+    }
 
-func_8080267C_chinflatableboss(param_0);
+    func_8080267C_chinflatableboss(param_0);
 }
 
 void func_80801DE0_chinflatableboss();
@@ -488,135 +491,136 @@ s32 func_80800A98_chinflatableboss(Actor *param_0, s32 param_1, BalloonArg param
 
     local_0 = func_80100094(param_0, 0);
 
-switch (param_1) {
-    case 0xB:
-        switch (param_2.i) {
-            case 0x14:
-                func_80800F84_chinflatableboss(param_0, 0x11);
-                func_80802A00_chinflatableboss(param_0, 0x31, 0x10);
-                func_80101180(0x46E, 7, 0);
-                return 4;
-            case 0x31:
-                local_0->unk49D = 0;
-                func_800FFAB0(param_0);
-            default:
-            ret3:
-                return 3;
-            case 3:
-                if (local_0->unk49C) {
-                    goto ret3;
-                }
-                func_80802A00_chinflatableboss(param_0, 0xC, 0x20);
-                return 4;
-            case 0xA:
-                local_0->unk49D = 0;
-                if (param_0) {
-                }
-                return 3;
-            case 0xC:
-            case 0x19:
-            case 0x22:
-                local_0->unk49A = 1;
-                if (1)
+    switch (param_1) {
+        case 0xB:
+            switch (param_2.i) {
+                case 0x14:
+                    func_80800F84_chinflatableboss(param_0, 0x11);
+                    func_80802A00_chinflatableboss(param_0, 0x31, 0x10);
+                    func_80101180(0x46E, 7, 0);
+                    return 4;
+                case 0x31:
+                    local_0->unk49D = 0;
+                    func_800FFAB0(param_0);
+                default:
+                ret3:
                     return 3;
-            case 8:
-                func_80108B04(param_0, 2);
-                func_80802A00_chinflatableboss(param_0, 0xA, 0x10);
-                return 4;
-        }
-    case 0x2E:
-        func_80801958_chinflatableboss(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
-        break;
-    case 0x2F:
-        func_80801AD8_chinflatableboss(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
-        break;
-    case 0x3D:
-        switch (param_2.i) {
-            case 0:
-                func_80801DE0_chinflatableboss(param_0);
-                return 1;
-            case 1:
-                func_80801D38_chinflatableboss(param_0);
-                return 1;
-            case 2:
-                func_80801EA0_chinflatableboss(param_0);
-                return 1;
-            case 3:
-                func_80801F4C_chinflatableboss(param_0);
-        }
-        break;
-    case 0x32:
-        if (local_0->unk498 == 2) {
-            local_0->unk498 = 3;
-            local_0->unk49A = 0;
-            func_800F497C(func_800F54E4());
-            func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
-            func_800F4A58(func_800F54E4(), local_0->unk54, 300.0f);
-            func_80802A00_chinflatableboss(param_0, 0x19, 0x20);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x10CC, 0x44, param_0->position, 0x3A);
-            func_80101180(0x46E, 8, 0);
-            return 1;
-        }
-        local_0->unk499 = 1;
-        func_800F8300(func_800F54E4(), 2, param_0->position);
-        break;
-    case 0x3F:
-        func_808010BC_chinflatableboss(param_0, *(s32 *) &param_2);
-        break;
-    case 0x40:
-        func_80801164_chinflatableboss(param_0, *(s32 *) &param_2);
-        break;
-    case 6:
-        func_80101010(local_0->unk1C);
-        break;
-    case 0xA:
-        local_1 = func_800F54E4();
-        param_0->unk64_16 = 1;
-        local_0->unk498 = 2;
-        func_800F497C(local_1);
-        func_800F49A8(local_1, 1);
-        func_800F49D4(local_1, func_8010D5DC, param_0->unk0);
-        func_800F4A58(local_1, local_0->unk48, 300.0f);
-        func_80802A00_chinflatableboss(param_0, 0x2F, 0x20);
-        break;
-    case 0x95:
-        if (local_0->unk496) {
-            local_0->unk496 = 0;
-            func_800FDC28(1);
-        }
-        break;
-    case 0x96:
-        if (!func_800D395C()) {
-            return 0;
-        }
-        _subaddiedialog_entrypoint_11(param_0->unk0, 0xCEB, 0x146, param_0->position, 0x3A);
-        break;
-    case 0x9F:
-        func_800FDC28(0);
-        func_80800F84_chinflatableboss(param_0, 5);
-        break;
-    case 0x1F:
-        func_80801418_chinflatableboss(param_0, *(s32 *) &param_2);
-        break;
-    case 0xA2:
-        local_3 = 0;
-        if (!param_0->unk7C_12) {
-            return 0;
-        }
-        for (local_2 = 0; local_2 != 12; local_2++) {
-            if (local_0->unk487[local_2] == 1) {
-                func_80802590_chinflatableboss(param_0, &B_80803020_chinflatableboss[local_3],
-                                               local_2 + 3);
-                local_3++;
+                case 3:
+                    if (local_0->unk49C) {
+                        goto ret3;
+                    }
+                    func_80802A00_chinflatableboss(param_0, 0xC, 0x20);
+                    return 4;
+                case 0xA:
+                    local_0->unk49D = 0;
+                    if (param_0) {
+                    }
+                    return 3;
+                case 0xC:
+                case 0x19:
+                case 0x22:
+                    local_0->unk49A = 1;
+                    if (1) {
+                    }
+                    return 3;
+                case 8:
+                    func_80108B04(param_0, 2);
+                    func_80802A00_chinflatableboss(param_0, 0xA, 0x10);
+                    return 4;
             }
-        }
-        func_80101074(B_80803020_chinflatableboss);
-        return local_3;
-    default:
-        return 0;
-}
+        case 0x2E:
+            func_80801958_chinflatableboss(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            break;
+        case 0x2F:
+            func_80801AD8_chinflatableboss(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            break;
+        case 0x3D:
+            switch (param_2.i) {
+                case 0:
+                    func_80801DE0_chinflatableboss(param_0);
+                    return 1;
+                case 1:
+                    func_80801D38_chinflatableboss(param_0);
+                    return 1;
+                case 2:
+                    func_80801EA0_chinflatableboss(param_0);
+                    return 1;
+                case 3:
+                    func_80801F4C_chinflatableboss(param_0);
+            }
+            break;
+        case 0x32:
+            if (local_0->unk498 == 2) {
+                local_0->unk498 = 3;
+                local_0->unk49A = 0;
+                func_800F497C(func_800F54E4());
+                func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
+                func_800F4A58(func_800F54E4(), local_0->unk54, 300.0f);
+                func_80802A00_chinflatableboss(param_0, 0x19, 0x20);
+                _subaddiedialog_entrypoint_11(param_0->unk0, 0x10CC, 0x44, param_0->position, 0x3A);
+                func_80101180(0x46E, 8, 0);
+                return 1;
+            }
+            local_0->unk499 = 1;
+            func_800F8300(func_800F54E4(), 2, param_0->position);
+            break;
+        case 0x3F:
+            func_808010BC_chinflatableboss(param_0, *(s32 *) &param_2);
+            break;
+        case 0x40:
+            func_80801164_chinflatableboss(param_0, *(s32 *) &param_2);
+            break;
+        case 6:
+            func_80101010(local_0->unk1C);
+            break;
+        case 0xA:
+            local_1 = func_800F54E4();
+            param_0->unk64_16 = 1;
+            local_0->unk498 = 2;
+            func_800F497C(local_1);
+            func_800F49A8(local_1, 1);
+            func_800F49D4(local_1, func_8010D5DC, param_0->unk0);
+            func_800F4A58(local_1, local_0->unk48, 300.0f);
+            func_80802A00_chinflatableboss(param_0, 0x2F, 0x20);
+            break;
+        case 0x95:
+            if (local_0->unk496) {
+                local_0->unk496 = 0;
+                func_800FDC28(1);
+            }
+            break;
+        case 0x96:
+            if (!func_800D395C()) {
+                return 0;
+            }
+            _subaddiedialog_entrypoint_11(param_0->unk0, 0xCEB, 0x146, param_0->position, 0x3A);
+            break;
+        case 0x9F:
+            func_800FDC28(0);
+            func_80800F84_chinflatableboss(param_0, 5);
+            break;
+        case 0x1F:
+            func_80801418_chinflatableboss(param_0, *(s32 *) &param_2);
+            break;
+        case 0xA2:
+            local_3 = 0;
+            if (!param_0->unk7C_12) {
+                return 0;
+            }
+            for (local_2 = 0; local_2 != 12; local_2++) {
+                if (local_0->unk487[local_2] == 1) {
+                    func_80802590_chinflatableboss(param_0, &B_80803020_chinflatableboss[local_3],
+                                                   local_2 + 3);
+                    local_3++;
+                }
+            }
+            func_80101074(B_80803020_chinflatableboss);
+            return local_3;
+        default:
+            return 0;
+    }
 
-return 1;
+    return 1;
 }
 
 void func_80800F84_chinflatableboss(Actor *param_0, s32 param_1)
@@ -626,25 +630,24 @@ void func_80800F84_chinflatableboss(Actor *param_0, s32 param_1)
     local_0 = func_80100094(param_0, 0);
     func_80102424(param_0, param_1);
 
-switch (param_1) {
-    case 11:
-        func_8008B1C8(func_80104248(param_0), 0.8f);
-        local_0[0x495] = D_80802D8C_chinflatableboss[func_80801C7C_chinflatableboss(param_0)];
-        break;
-    case 13:
-        func_8008B1C8(func_80104248(param_0), 0.8f);
-        *(f32 *) (local_0 + 0x44) = param_0->scale;
-        break;
-    case 14:
-        func_80802A00_chinflatableboss(param_0, 0x2B, 0x30);
-        _subaddiedialog_entrypoint_11(param_0->unk0, 0x1084, 0x10C, param_0->position, 0x3A);
-        func_8010A570(param_0);
-        func_8008B1C8(func_80104248(param_0), 0.8f);
-        break;
-    case 16:
-        ((u8 *) param_0)[0x65] &= ~1;
-}
-
+    switch (param_1) {
+        case 11:
+            func_8008B1C8(func_80104248(param_0), 0.8f);
+            local_0[0x495] = D_80802D8C_chinflatableboss[func_80801C7C_chinflatableboss(param_0)];
+            break;
+        case 13:
+            func_8008B1C8(func_80104248(param_0), 0.8f);
+            *(f32 *) (local_0 + 0x44) = param_0->scale;
+            break;
+        case 14:
+            func_80802A00_chinflatableboss(param_0, 0x2B, 0x30);
+            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1084, 0x10C, param_0->position, 0x3A);
+            func_8010A570(param_0);
+            func_8008B1C8(func_80104248(param_0), 0.8f);
+            break;
+        case 16:
+            ((u8 *) param_0)[0x65] &= ~1;
+    }
 }
 
 void func_808010BC_chinflatableboss(Actor *param_0, s32 param_1)
@@ -655,20 +658,20 @@ void func_808010BC_chinflatableboss(Actor *param_0, s32 param_1)
     s32 idx;
     local_0 = func_80100094(param_0, 0);
 
-if (!func_800DA298(5)) {
-    sec = ((InflatableBossMarker *) param_0->unk0)->section;
-    local_1 = sec;
-    if (local_1 >= 3 && local_1 < 15) {
-        local_1 -= 3;
-        idx = 0x487 + local_1;
-        if (local_0[idx] != 2) {
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1086, 0x10E, param_0->position, 0x3A);
-            func_800DA544(5);
-            param_0->unk74_30 = 1;
+    if (!func_800DA298(5)) {
+        sec = ((InflatableBossMarker *) param_0->unk0)->section;
+        local_1 = sec;
+        if (local_1 >= 3 && local_1 < 15) {
+            local_1 -= 3;
+            idx = 0x487 + local_1;
+            if (local_0[idx] != 2) {
+                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1086, 0x10E, param_0->position,
+                                              0x3A);
+                func_800DA544(5);
+                param_0->unk74_30 = 1;
+            }
         }
     }
-}
-
 }
 
 void func_80801164_chinflatableboss(Actor *param_0, s32 param_1)
@@ -684,36 +687,35 @@ void func_80801164_chinflatableboss(Actor *param_0, s32 param_1)
     local_0 = func_80100094(param_0, 0);
     param_1 = (*(u32 *) ((u8 *) param_0->unk0 + 0x18) << 11) >> 28;
 
-if (param_1 >= 3) {
-    local_6 = param_1 - 3;
-    if (param_1 < 15 && (local_0 + 0x487)[local_6] != 2) {
-        local_4 = func_80802590_chinflatableboss(param_0, local_2, param_1);
-        _subaddieaudioquick_entrypoint_2(param_0, local_2, D_80802F08_chinflatableboss);
-        func_808012EC_chinflatableboss(param_0, local_2, local_4);
-        func_80801904_chinflatableboss(param_0, local_6, local_3);
-        *(s32 *) (local_0 + local_6 * 4 + 0x43C) =
-            func_80801FC0_chinflatableboss(param_0, local_2, local_3);
-        func_80802AD8_chinflatableboss(param_0, local_6, 2);
-        func_80800F84_chinflatableboss(param_0, 12);
-        local_5 = func_80104248(param_0);
-        func_8008B1C8(local_5, 0.8f);
-        local_0[0x493] = 1;
-        local_5 = func_80801CB4_chinflatableboss(param_0);
-        if (local_5 != 0) {
-            if (local_5 == 11) {
-                func_800DA544(5);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1085, 0x10E, param_0->position,
-                                              0x3A);
-                func_80802A00_chinflatableboss(param_0, 0x2D, 0x20);
-                param_0->unk74_30 = 1;
+    if (param_1 >= 3) {
+        local_6 = param_1 - 3;
+        if (param_1 < 15 && (local_0 + 0x487)[local_6] != 2) {
+            local_4 = func_80802590_chinflatableboss(param_0, local_2, param_1);
+            _subaddieaudioquick_entrypoint_2(param_0, local_2, D_80802F08_chinflatableboss);
+            func_808012EC_chinflatableboss(param_0, local_2, local_4);
+            func_80801904_chinflatableboss(param_0, local_6, local_3);
+            *(s32 *) (local_0 + local_6 * 4 + 0x43C) =
+                func_80801FC0_chinflatableboss(param_0, local_2, local_3);
+            func_80802AD8_chinflatableboss(param_0, local_6, 2);
+            func_80800F84_chinflatableboss(param_0, 12);
+            local_5 = func_80104248(param_0);
+            func_8008B1C8(local_5, 0.8f);
+            local_0[0x493] = 1;
+            local_5 = func_80801CB4_chinflatableboss(param_0);
+            if (local_5 != 0) {
+                if (local_5 == 11) {
+                    func_800DA544(5);
+                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1085, 0x10E, param_0->position,
+                                                  0x3A);
+                    func_80802A00_chinflatableboss(param_0, 0x2D, 0x20);
+                    param_0->unk74_30 = 1;
+                }
+            } else {
+                func_800DA544(0);
+                func_80802A00_chinflatableboss(param_0, 0x29, 0x30);
             }
-        } else {
-            func_800DA544(0);
-            func_80802A00_chinflatableboss(param_0, 0x29, 0x30);
         }
     }
-}
-
 }
 
 void func_808012EC_chinflatableboss(param_0, param_1, param_2) Actor *param_0;
@@ -787,41 +789,41 @@ s32 param_1;
         local_6 = func_800D674C(0x637);
         func_800EFD24(local_3);
 
-if (func_800AE630(func_801040A8(param_0), (u8 *) local_5, 12, local_4)) {
-    func_800EF334(local_4, *(f32 *) &param_0->actorData[4]);
-    func_800EF5A0(local_4, param_0->rotation, local_4[0], local_4[1], local_4[2]);
-    func_800EF04C(local_4, param_0->position);
-    local_4[1] = param_0->position[1];
-    func_800DF410(_subaddiefade_entrypoint_0(param_0));
-    func_800DF830(3);
-    func_800DE448(local_4, local_3, *(f32 *) &param_0->actorData[4] * 9.0f, 0, (s32) local_6);
-}
+        if (func_800AE630(func_801040A8(param_0), (u8 *) local_5, 12, local_4)) {
+            func_800EF334(local_4, *(f32 *) &param_0->actorData[4]);
+            func_800EF5A0(local_4, param_0->rotation, local_4[0], local_4[1], local_4[2]);
+            func_800EF04C(local_4, param_0->position);
+            local_4[1] = param_0->position[1];
+            func_800DF410(_subaddiefade_entrypoint_0(param_0));
+            func_800DF830(3);
+            func_800DE448(local_4, local_3, *(f32 *) &param_0->actorData[4] * 9.0f, 0,
+                          (s32) local_6);
+        }
 
-if (func_800AE630(func_801040A8(param_0), (u8 *) local_5, 26, local_4)) {
-    func_800EF334(local_4, *(f32 *) &param_0->actorData[4]);
-    func_800EF5A0(local_4, param_0->rotation, local_4[0], local_4[1], local_4[2]);
-    func_800EF04C(local_4, param_0->position);
-    local_4[1] = param_0->position[1];
-    func_800DF410(_subaddiefade_entrypoint_0(param_0));
-    func_800DF830(3);
-    func_800DE448(local_4, local_3, *(f32 *) &param_0->actorData[4] * 9.0f, 0, (s32) local_6);
-}
+        if (func_800AE630(func_801040A8(param_0), (u8 *) local_5, 26, local_4)) {
+            func_800EF334(local_4, *(f32 *) &param_0->actorData[4]);
+            func_800EF5A0(local_4, param_0->rotation, local_4[0], local_4[1], local_4[2]);
+            func_800EF04C(local_4, param_0->position);
+            local_4[1] = param_0->position[1];
+            func_800DF410(_subaddiefade_entrypoint_0(param_0));
+            func_800DF830(3);
+            func_800DE448(local_4, local_3, *(f32 *) &param_0->actorData[4] * 9.0f, 0,
+                          (s32) local_6);
+        }
 
-func_800DF410(_subaddiefade_entrypoint_0(param_0));
-func_800DF830(3);
-func_800DE448(param_0->position, local_3, *(f32 *) &param_0->actorData[4] * 1.4f * 9.0f, 0,
-              (s32) local_6);
-
-}
-for (local_10 = 0; local_10 < 12; local_10++) {
-    if (((s32 *) (local_0 + 0x43C))[local_10]) {
-        func_800BC358(((s32 *) (local_0 + 0x43C))[local_10], param_1, 0);
+        func_800DF410(_subaddiefade_entrypoint_0(param_0));
+        func_800DF830(3);
+        func_800DE448(param_0->position, local_3, *(f32 *) &param_0->actorData[4] * 1.4f * 9.0f, 0,
+                      (s32) local_6);
     }
-
-}
-if (*(s32 *) (local_0 + 0x434)) {
-    func_800BC358(*(s32 *) (local_0 + 0x434), param_1, 0);
-}
+    for (local_10 = 0; local_10 < 12; local_10++) {
+        if (((s32 *) (local_0 + 0x43C))[local_10]) {
+            func_800BC358(((s32 *) (local_0 + 0x43C))[local_10], param_1, 0);
+        }
+    }
+    if (*(s32 *) (local_0 + 0x434)) {
+        func_800BC358(*(s32 *) (local_0 + 0x434), param_1, 0);
+    }
 }
 
 void func_8080183C_chinflatableboss(Actor *param_0)
@@ -897,8 +899,7 @@ s32 func_80801AD8_chinflatableboss(s32 param_0, s32 param_1, s32 param_2)
 {
     if (param_1 == 0x1085) {
         func_80108B04(param_0, 0);
-
-}
+    }
 }
 
 void func_80801B04_chinflatableboss(Actor *param_0)
@@ -918,13 +919,12 @@ void func_80801B04_chinflatableboss(Actor *param_0)
             local_0[0x497] = 0;
             *(f32 *) ((u8 *) param_0 + 0x58) = func_800DC178(4.0f, 6.0f);
         } else if (local_0[0x493] == 0) {
-
-func_80800F84_chinflatableboss(param_0, 9);
-*(f32 *) ((u8 *) param_0 + 0x58) = func_800DC178(6.0f, 8.0f);
-}
-else func_80800F84_chinflatableboss(param_0, 10);
-func_8008B1C8(func_80104248(param_0), 0.8f);
-}
+            func_80800F84_chinflatableboss(param_0, 9);
+            *(f32 *) ((u8 *) param_0 + 0x58) = func_800DC178(6.0f, 8.0f);
+        } else
+            func_80800F84_chinflatableboss(param_0, 10);
+        func_8008B1C8(func_80104248(param_0), 0.8f);
+    }
 }
 
 s32 func_80801C7C_chinflatableboss()
@@ -1044,46 +1044,43 @@ void func_80802058_chinflatableboss(param_0) Actor *param_0;
             func_80802590_chinflatableboss(param_0, local_0, local_7);
             local_8 = *local_3 != 0;
 
-if (local_8) {
-    local_8 = func_800BA198(*local_3) >= 8;
-}
+            if (local_8) {
+                local_8 = func_800BA198(*local_3) >= 8;
+            }
 
-*local_4 = _subaddieaudioloop_entrypoint_7(*local_4, local_0, local_8, &D_80802FF8_chinflatableboss,
-                                           *(u32 *) ((u8 *) param_0 + 0x70) & 1);
+            *local_4 = _subaddieaudioloop_entrypoint_7(*local_4, local_0, local_8,
+                                                       &D_80802FF8_chinflatableboss,
+                                                       *(u32 *) ((u8 *) param_0 + 0x70) & 1);
 
-if (*local_3) {
-    func_800BBD18(*local_3, local_0, local_1, param_0->scale, 0);
-    if (func_800BA28C(*local_3)) {
-        ((s32 *) (local_5 + 0x43C))[local_6] = func_800BA2C4(*local_3);
+            if (*local_3) {
+                func_800BBD18(*local_3, local_0, local_1, param_0->scale, 0);
+                if (func_800BA28C(*local_3)) {
+                    ((s32 *) (local_5 + 0x43C))[local_6] = func_800BA2C4(*local_3);
+                }
+            }
+        }
+        local_6++;
+        local_3++;
+        local_4++;
+    } while (local_6 != 12);
+    if (*(s32 *) (local_5 + 0x434) || local_5[0x438]) {
+        _subaddieskeleton_entrypoint_3(param_0->unk0, 7, local_2);
+        local_8 = *(s32 *) (local_5 + 0x434) != 0;
+        if (local_8) {
+            local_8 = func_80101F24(param_0) < 0.43f;
+        }
+        local_5[0x438] = _subaddieaudioloop_entrypoint_7(local_5[0x438], local_2, local_8,
+                                                         &D_80802FF8_chinflatableboss,
+                                                         *(u32 *) ((u8 *) param_0 + 0x70) & 1);
+        if (*(s32 *) (local_5 + 0x434)) {
+            func_800BBD18(*(s32 *) (local_5 + 0x434), local_2, (f32 *) (local_5 + 0x28),
+                          param_0->scale, 0);
+
+            if (func_800BA28C(*(s32 *) (local_5 + 0x434))) {
+                *(s32 *) (local_5 + 0x434) = func_800BA2C4(*(s32 *) (local_5 + 0x434));
+            }
+        }
     }
-}
-
-}
-local_6++;
-local_3++;
-local_4++;
-}
-while (local_6 != 12)
-    ;
-if (*(s32 *) (local_5 + 0x434) || local_5[0x438]) {
-    _subaddieskeleton_entrypoint_3(param_0->unk0, 7, local_2);
-    local_8 = *(s32 *) (local_5 + 0x434) != 0;
-    if (local_8) {
-        local_8 = func_80101F24(param_0) < 0.43f;
-    }
-    local_5[0x438] = _subaddieaudioloop_entrypoint_7(local_5[0x438], local_2, local_8,
-                                                     &D_80802FF8_chinflatableboss,
-                                                     *(u32 *) ((u8 *) param_0 + 0x70) & 1);
-    if (*(s32 *) (local_5 + 0x434)) {
-        func_800BBD18(*(s32 *) (local_5 + 0x434), local_2, (f32 *) (local_5 + 0x28), param_0->scale,
-                      0);
-
-if (func_800BA28C(*(s32 *) (local_5 + 0x434))) {
-    *(s32 *) (local_5 + 0x434) = func_800BA2C4(*(s32 *) (local_5 + 0x434));
-}
-
-}
-}
 }
 
 void func_80802264_chinflatableboss(Actor *param_0, f32 param_1, f32 param_2, s32 *param_3,
@@ -1098,9 +1095,8 @@ void func_80802264_chinflatableboss(Actor *param_0, f32 param_1, f32 param_2, s3
             local_2 = _subaddieaudioquick_entrypoint_1(param_0, param_0->position);
             func_800C3868(local_2, 0.15f, 0.25f, local_1, local_1 + 0.12f);
             func_800C4350(local_2, param_0->position, D_80803008_chinflatableboss);
-
-}
-}
+        }
+    }
 }
 
 f32 func_808023B0_chinflatableboss(param_0)
@@ -1206,166 +1202,164 @@ s32 func_8080272C_chinflatableboss(Actor *param_0)
                     func_800FDC28(1);
                 }
 
-if (param_0->unk70_10 == 4) {
-    local_0[0x49A] = local_0[0x499] = 0;
-    func_800F82D4(func_800F54E4(), 0);
-    func_800F497C(func_800F54E4());
-    func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
-    func_800F4A58(func_800F54E4(), (f32 *) (local_0 + 0x60), 400.0f);
-    local_0[0x498] = 4;
-}
-
-}
-break;
-case 5:
-    if (param_0->unk70_10 == 4) {
-        local_0[0x49A] = 0;
-        local_0[0x499] = 1;
-        func_800F82D4(func_800F54E4(), 0);
-        func_800F497C(func_800F54E4());
-        func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
-        func_800F4A58(func_800F54E4(), (f32 *) (local_0 + 0x60), 400.0f);
-        local_0[0x498] = 4;
-    }
+                if (param_0->unk70_10 == 4) {
+                    local_0[0x49A] = local_0[0x499] = 0;
+                    func_800F82D4(func_800F54E4(), 0);
+                    func_800F497C(func_800F54E4());
+                    func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
+                    func_800F4A58(func_800F54E4(), (f32 *) (local_0 + 0x60), 400.0f);
+                    local_0[0x498] = 4;
+                }
+            }
+            break;
+        case 5:
+            if (param_0->unk70_10 == 4) {
+                local_0[0x49A] = 0;
+                local_0[0x499] = 1;
+                func_800F82D4(func_800F54E4(), 0);
+                func_800F497C(func_800F54E4());
+                func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
+                func_800F4A58(func_800F54E4(), (f32 *) (local_0 + 0x60), 400.0f);
+                local_0[0x498] = 4;
+            }
     }
     return 0;
+}
+
+void func_80802910_chinflatableboss(Actor *param_0)
+{
+    u8 *local_0;
+
+    local_0 = func_80100094(param_0, 0);
+    func_800FDC28(4);
+    func_80802A9C_chinflatableboss(param_0);
+    func_800A51C0();
+    func_808024BC_chinflatableboss(param_0);
+    func_800DA544(1);
+    func_800DA544(0x17F);
+    _gcfrontend_entrypoint_9(0x25);
+    func_800F82D4(func_800F54E4(), 0);
+    local_0[0x498] = 6;
+    func_8010A590(param_0);
+    func_80109FE8(param_0, 1);
+}
+
+int func_808029AC_chinflatableboss(s32 param_0)
+{
+    if (func_800DA298(1) != 0 && func_800DA298(3) == 0) {
+        func_800D2498(0xEC, func_80801CB4_chinflatableboss(param_0), 0);
     }
+}
 
-    void func_80802910_chinflatableboss(Actor *param_0)
-    {
-        u8 *local_0;
+void func_80802A00_chinflatableboss(param_0, param_1, param_2) s32 *param_0;
+s32 param_1;
+s32 param_2;
+{
+    func_80802A2C_chinflatableboss(param_0, *param_0, param_1, param_2);
+}
 
-        local_0 = func_80100094(param_0, 0);
-        func_800FDC28(4);
-        func_80802A9C_chinflatableboss(param_0);
-        func_800A51C0();
-        func_808024BC_chinflatableboss(param_0);
-        func_800DA544(1);
-        func_800DA544(0x17F);
-        _gcfrontend_entrypoint_9(0x25);
-        func_800F82D4(func_800F54E4(), 0);
-        local_0[0x498] = 6;
-        func_8010A590(param_0);
-        func_80109FE8(param_0, 1);
+int func_80802A2C_chinflatableboss(param_0, param_1, param_2, param_3)
+s32 param_0[3];
+s32 param_1;
+s32 param_2;
+s32 param_3;
+{
+    u8 *local_0;
+    local_0 = func_80100094(param_0, 0);
+    if (local_0[0x49D]) {
+        param_3 |= 0x2000;
+        _capod_entrypoint_14();
     }
+    _capod_entrypoint_13(param_1, *param_0, param_2, param_3);
+    local_0[0x49D] = 1;
+}
 
-    int func_808029AC_chinflatableboss(s32 param_0)
-    {
-        if (func_800DA298(1) != 0 && func_800DA298(3) == 0) {
-            func_800D2498(0xEC, func_80801CB4_chinflatableboss(param_0), 0);
-        }
+void func_80802A9C_chinflatableboss(param_0) s32 param_0;
+{
+    u8 *sp1C;
+
+    sp1C = func_80100094(param_0, 0);
+    if (sp1C[0x49d] != 0) {
+        _capod_entrypoint_14();
+        sp1C[0x49d] = 0;
     }
+}
 
-    void func_80802A00_chinflatableboss(param_0, param_1, param_2) s32 *param_0;
-    s32 param_1;
-    s32 param_2;
-    {
-        func_80802A2C_chinflatableboss(param_0, *param_0, param_1, param_2);
+void func_80802AD8_chinflatableboss(param_0, param_1, param_2) Actor *param_0;
+s32 param_1;
+s32 param_2;
+{
+    u8 *local_0;
+
+    local_0 = func_80100094(param_0, 0);
+    local_0[0x487 + param_1] = param_2;
+    if (param_1 >= 9) {
+        param_1 = param_1 + param_1 - 9;
+        local_0[0x478 + param_1] = param_2;
+        local_0[0x479 + param_1] = param_2;
+    } else {
+        local_0[0x478 + param_1] = param_2;
     }
+}
 
-    int func_80802A2C_chinflatableboss(param_0, param_1, param_2, param_3)
-    s32 param_0[3];
-    s32 param_1;
-    s32 param_2;
-    s32 param_3;
-    {
-        u8 *local_0;
-        local_0 = func_80100094(param_0, 0);
-        if (local_0[0x49D]) {
-            param_3 |= 0x2000;
-            _capod_entrypoint_14();
-        }
-        _capod_entrypoint_13(param_1, *param_0, param_2, param_3);
-        local_0[0x49D] = 1;
-    }
-
-    void func_80802A9C_chinflatableboss(param_0) s32 param_0;
-    {
-        u8 *sp1C;
-
-        sp1C = func_80100094(param_0, 0);
-        if (sp1C[0x49d] != 0) {
-            _capod_entrypoint_14();
-            sp1C[0x49d] = 0;
-        }
-    }
-
-    void func_80802AD8_chinflatableboss(param_0, param_1, param_2) Actor *param_0;
-    s32 param_1;
-    s32 param_2;
-    {
-        u8 *local_0;
-
-        local_0 = func_80100094(param_0, 0);
-        local_0[0x487 + param_1] = param_2;
-        if (param_1 >= 9) {
-            param_1 = param_1 + param_1 - 9;
-            local_0[0x478 + param_1] = param_2;
-            local_0[0x479 + param_1] = param_2;
-        } else {
-            local_0[0x478 + param_1] = param_2;
-        }
-    }
-
-    s16 D_80802D80_chinflatableboss[6] = {0x190, 0x1F4, 0x258, 0x2BC, 0x320, 0x384};
-    s16 D_80802D8C_chinflatableboss[6] = {0x1, 0x1, 0x2, 0x2, 0x3, 0x3};
-    f32 D_80802D98_chinflatableboss[6] = {3.0f, 2.8f, 2.6f, 2.4f, 2.2f, 2.0f};
-    u8 D_80802DB0_chinflatableboss[160] = {
-        0x0,  0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x41, 0x10, 0x0,  0x0,  0x2, 0x4, 0x0, 0x44,
-        0x41, 0x10, 0x0, 0x0, 0x2, 0x4, 0x0, 0x2, 0x40, 0x90, 0x0,  0x0,  0x2, 0x8, 0x0, 0x1,
-        0x40, 0xF0, 0x0, 0x0, 0x2, 0x5, 0x0, 0x2, 0x40, 0x90, 0x0,  0x0,  0x2, 0x2, 0x0, 0x1,
-        0x40, 0xA0, 0x0, 0x0, 0x2, 0x3, 0x0, 0x1, 0x40, 0x90, 0x0,  0x0,  0x2, 0x2, 0x0, 0x1,
-        0x40, 0xA0, 0x0, 0x0, 0x2, 0x3, 0x0, 0x1, 0x40, 0x90, 0x0,  0x0,  0x2, 0x2, 0x0, 0x1,
-        0x40, 0x90, 0x0, 0x0, 0x2, 0x2, 0x0, 0x1, 0x3F, 0xE6, 0x66, 0x66, 0x2, 0x9, 0x0, 0x1,
-        0x40, 0x0,  0x0, 0x0, 0x2, 0x6, 0x0, 0x2, 0x40, 0x40, 0x0,  0x0,  0x2, 0x2, 0x0, 0x2,
-        0x40, 0x90, 0x0, 0x0, 0x2, 0x2, 0x0, 0x1, 0x40, 0xCC, 0xCC, 0xCD, 0x2, 0xA, 0x0, 0x2,
-        0x0,  0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0, 0x0, 0x0, 0x0,
-        0x40, 0xF0, 0x0, 0x0, 0x2, 0x5, 0x0, 0x2, 0x40, 0x90, 0x0,  0x0,  0x2, 0x2, 0x0, 0x1};
-    void *D_80802E50_chinflatableboss = (void *) 0x018E013C;
-    static u32 D_80802E50_chinflatableboss_rest[17] = {0x7940001,
-                                                       (u32) &D_80802DB0_chinflatableboss,
-                                                       (u32) func_808004A0_chinflatableboss,
-                                                       (u32) func_80105834,
-                                                       (u32) func_80801554_chinflatableboss,
-                                                       0x0,
-                                                       0x0,
-                                                       0x0,
-                                                       0x3000042A,
-                                                       (u32) func_80800408_chinflatableboss,
-                                                       (u32) func_80108ED0,
-                                                       0x4A00000,
-                                                       (u32) func_8080000C_chinflatableboss,
-                                                       (u32) func_80107C2C,
-                                                       0x80200402,
-                                                       (u32) func_80800A98_chinflatableboss,
-                                                       0x0};
-    s32 D_80802E98_chinflatableboss[2] = {0x3D4CCCCD, 0x3E6147AE};
-    s32 D_80802EA0_chinflatableboss[5] = {0x3EB33333, 0x3EDC28F6, 0x3F0CCCCD, 0x3F23D70A,
-                                          0x3F3D70A4};
-    s32 D_80802EB4_chinflatableboss[4] = {0x3C23D70A, 0x3E19999A, 0x3ECCCCCD, 0x3F333333};
-    s32 D_80802EC4_chinflatableboss[3] = {0x1304FF, 0x18001D, 0x20000};
-    s32 D_80802ED0_chinflatableboss[3] = {0x1304FE, 0x18001D, 0x20000};
-    s32 D_80802EDC_chinflatableboss[3] = {0x1304B1, 0x180002, 0x0};
-    s32 D_80802EE8_chinflatableboss[8] = {0x1304FD,  0x176D60, 0x7D0001F4, 0x150000,
-                                          0x33300A3, 0xE0100,  0x14C0180,  0x20000};
-    u8 D_80802F08_chinflatableboss[36] = {0x0,  0x13, 0x4,  0xFB, 0x0,  0x18, 0x0,  0x2,  0x0,
-                                          0x0,  0x0,  0x0,  0x7,  0x9A, 0x7,  0x98, 0x7,  0x99,
-                                          0x7,  0x98, 0x7,  0x97, 0x7,  0x97, 0x7,  0x99, 0x7,
-                                          0x97, 0x7,  0x97, 0x7,  0x98, 0x7,  0x99, 0x7,  0x9A};
-    s32 D_80802F2C_chinflatableboss[15] = {0x1130810,  0x2200C0,   0xD90073,  0x8C0015,  0x99,
-                                           0x27FE0C,   -0x1F3FE0C, 0x1F4002D, 0x6A40898, 0x1BFC18,
-                                           -0x4AFFFFB, 0x16,       0x204002B, 0x4000500, 0x0};
-    u8 D_80802F68_chinflatableboss[40] = {
-        0x0,  0x0,  0x0,  0x0, 0x3F, 0x19, 0x99, 0x9A, 0x3E, 0x80, 0x0,  0x0,  0x3F, 0x80,
-        0x0,  0x0,  0x3F, 0x0, 0x0,  0x0,  0x3F, 0x19, 0x99, 0x9A, 0x3F, 0x40, 0x0,  0x0,
-        0x3F, 0x80, 0x0,  0x0, 0x3F, 0x80, 0x0,  0x0,  0x3F, 0x19, 0x99, 0x9A};
-    s32 D_80802F90_chinflatableboss[13] = {0x1130A1C, 0x1D09DD,  0x160200, 0x2D05DC, 0x7080022,
-                                           0x2800300, 0x7000880, 0x150000, 0x99002A, 0x0,
-                                           0xCC00E6,  0x280500,  0x0};
-    s32 D_80802FC4_chinflatableboss[13] = {0x113141C, 0x1D09DD,  0x160200, 0x2D04B0, 0x5DC0022,
-                                           0x1800200, 0x4000500, 0x150000, 0x99002A, 0x0,
-                                           0x660080,  0x28051E,  0x0};
-    s32 D_80802FF8_chinflatableboss[4] = {0x1304DC, 0x18000D, 0x1190133, 0x20000};
-    u8 D_80803008_chinflatableboss[24] = {0x0, 0xF, 0x0, 0x13, 0x4, 0xFA, 0x0, 0x18,
-                                          0x0, 0x2, 0x0, 0x11, 0x0, 0x0,  0x0, 0x0,
-                                          0x0, 0x0, 0x0, 0x0,  0x0, 0x0,  0x0, 0x0};
+s16 D_80802D80_chinflatableboss[6] = {0x190, 0x1F4, 0x258, 0x2BC, 0x320, 0x384};
+s16 D_80802D8C_chinflatableboss[6] = {0x1, 0x1, 0x2, 0x2, 0x3, 0x3};
+f32 D_80802D98_chinflatableboss[6] = {3.0f, 2.8f, 2.6f, 2.4f, 2.2f, 2.0f};
+u8 D_80802DB0_chinflatableboss[160] = {
+    0x0,  0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x41, 0x10, 0x0,  0x0,  0x2, 0x4, 0x0, 0x44,
+    0x41, 0x10, 0x0, 0x0, 0x2, 0x4, 0x0, 0x2, 0x40, 0x90, 0x0,  0x0,  0x2, 0x8, 0x0, 0x1,
+    0x40, 0xF0, 0x0, 0x0, 0x2, 0x5, 0x0, 0x2, 0x40, 0x90, 0x0,  0x0,  0x2, 0x2, 0x0, 0x1,
+    0x40, 0xA0, 0x0, 0x0, 0x2, 0x3, 0x0, 0x1, 0x40, 0x90, 0x0,  0x0,  0x2, 0x2, 0x0, 0x1,
+    0x40, 0xA0, 0x0, 0x0, 0x2, 0x3, 0x0, 0x1, 0x40, 0x90, 0x0,  0x0,  0x2, 0x2, 0x0, 0x1,
+    0x40, 0x90, 0x0, 0x0, 0x2, 0x2, 0x0, 0x1, 0x3F, 0xE6, 0x66, 0x66, 0x2, 0x9, 0x0, 0x1,
+    0x40, 0x0,  0x0, 0x0, 0x2, 0x6, 0x0, 0x2, 0x40, 0x40, 0x0,  0x0,  0x2, 0x2, 0x0, 0x2,
+    0x40, 0x90, 0x0, 0x0, 0x2, 0x2, 0x0, 0x1, 0x40, 0xCC, 0xCC, 0xCD, 0x2, 0xA, 0x0, 0x2,
+    0x0,  0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0, 0x0, 0x0, 0x0,
+    0x40, 0xF0, 0x0, 0x0, 0x2, 0x5, 0x0, 0x2, 0x40, 0x90, 0x0,  0x0,  0x2, 0x2, 0x0, 0x1};
+void *D_80802E50_chinflatableboss = (void *) 0x018E013C;
+static u32 D_80802E50_chinflatableboss_rest[17] = {0x7940001,
+                                                   (u32) &D_80802DB0_chinflatableboss,
+                                                   (u32) func_808004A0_chinflatableboss,
+                                                   (u32) func_80105834,
+                                                   (u32) func_80801554_chinflatableboss,
+                                                   0x0,
+                                                   0x0,
+                                                   0x0,
+                                                   0x3000042A,
+                                                   (u32) func_80800408_chinflatableboss,
+                                                   (u32) func_80108ED0,
+                                                   0x4A00000,
+                                                   (u32) func_8080000C_chinflatableboss,
+                                                   (u32) func_80107C2C,
+                                                   0x80200402,
+                                                   (u32) func_80800A98_chinflatableboss,
+                                                   0x0};
+s32 D_80802E98_chinflatableboss[2] = {0x3D4CCCCD, 0x3E6147AE};
+s32 D_80802EA0_chinflatableboss[5] = {0x3EB33333, 0x3EDC28F6, 0x3F0CCCCD, 0x3F23D70A, 0x3F3D70A4};
+s32 D_80802EB4_chinflatableboss[4] = {0x3C23D70A, 0x3E19999A, 0x3ECCCCCD, 0x3F333333};
+s32 D_80802EC4_chinflatableboss[3] = {0x1304FF, 0x18001D, 0x20000};
+s32 D_80802ED0_chinflatableboss[3] = {0x1304FE, 0x18001D, 0x20000};
+s32 D_80802EDC_chinflatableboss[3] = {0x1304B1, 0x180002, 0x0};
+s32 D_80802EE8_chinflatableboss[8] = {0x1304FD,  0x176D60, 0x7D0001F4, 0x150000,
+                                      0x33300A3, 0xE0100,  0x14C0180,  0x20000};
+u8 D_80802F08_chinflatableboss[36] = {0x0,  0x13, 0x4,  0xFB, 0x0,  0x18, 0x0,  0x2,  0x0,
+                                      0x0,  0x0,  0x0,  0x7,  0x9A, 0x7,  0x98, 0x7,  0x99,
+                                      0x7,  0x98, 0x7,  0x97, 0x7,  0x97, 0x7,  0x99, 0x7,
+                                      0x97, 0x7,  0x97, 0x7,  0x98, 0x7,  0x99, 0x7,  0x9A};
+s32 D_80802F2C_chinflatableboss[15] = {0x1130810,  0x2200C0,   0xD90073,  0x8C0015,  0x99,
+                                       0x27FE0C,   -0x1F3FE0C, 0x1F4002D, 0x6A40898, 0x1BFC18,
+                                       -0x4AFFFFB, 0x16,       0x204002B, 0x4000500, 0x0};
+u8 D_80802F68_chinflatableboss[40] = {0x0,  0x0,  0x0,  0x0,  0x3F, 0x19, 0x99, 0x9A, 0x3E, 0x80,
+                                      0x0,  0x0,  0x3F, 0x80, 0x0,  0x0,  0x3F, 0x0,  0x0,  0x0,
+                                      0x3F, 0x19, 0x99, 0x9A, 0x3F, 0x40, 0x0,  0x0,  0x3F, 0x80,
+                                      0x0,  0x0,  0x3F, 0x80, 0x0,  0x0,  0x3F, 0x19, 0x99, 0x9A};
+s32 D_80802F90_chinflatableboss[13] = {0x1130A1C, 0x1D09DD,  0x160200, 0x2D05DC, 0x7080022,
+                                       0x2800300, 0x7000880, 0x150000, 0x99002A, 0x0,
+                                       0xCC00E6,  0x280500,  0x0};
+s32 D_80802FC4_chinflatableboss[13] = {0x113141C, 0x1D09DD,  0x160200, 0x2D04B0, 0x5DC0022,
+                                       0x1800200, 0x4000500, 0x150000, 0x99002A, 0x0,
+                                       0x660080,  0x28051E,  0x0};
+s32 D_80802FF8_chinflatableboss[4] = {0x1304DC, 0x18000D, 0x1190133, 0x20000};
+u8 D_80803008_chinflatableboss[24] = {0x0, 0xF, 0x0, 0x13, 0x4, 0xFA, 0x0, 0x18,
+                                      0x0, 0x2, 0x0, 0x11, 0x0, 0x0,  0x0, 0x0,
+                                      0x0, 0x0, 0x0, 0x0,  0x0, 0x0,  0x0, 0x0};

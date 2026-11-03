@@ -236,17 +236,18 @@ subaddiestore_entrypoint_1(s32 param_0, s16 *param_1)
     s16 *local_5 = param_1;
 
     for (local_0 = func_801067C4(&local_2); local_0 != 0; local_0 = func_8010682C(&local_2)) {
-        if (1)
-            if ((*(u32 *) (local_0 + 0x6C) >> 21) != 0) {
-                local_3 = func_80801054_subaddiestore(param_1, local_0, &local_1);
-                if (local_3 != 0) {
-                    if (local_3 == 1 && (!((Bit70 *) local_1)->f17 || _glcutDll_entrypoint_1())) {
-                        func_80800B24_subaddiestore(local_1, local_0);
-                    }
-                } else if (!((Bit70 *) local_0)->f17 && func_80102F74(local_0, 0x80000) == 0) {
-                    func_800FFAB0(local_0);
+        if (1) {
+        }
+        if ((*(u32 *) (local_0 + 0x6C) >> 21) != 0) {
+            local_3 = func_80801054_subaddiestore(param_1, local_0, &local_1);
+            if (local_3 != 0) {
+                if (local_3 == 1 && (!((Bit70 *) local_1)->f17 || _glcutDll_entrypoint_1())) {
+                    func_80800B24_subaddiestore(local_1, local_0);
                 }
+            } else if (!((Bit70 *) local_0)->f17 && func_80102F74(local_0, 0x80000) == 0) {
+                func_800FFAB0(local_0);
             }
+        }
     }
     local_1 = (u8 *) param_1 + 4;
     for (local_4 = 0; local_4 < *local_5; local_4++) {
@@ -580,13 +581,11 @@ u8 *param_0;
     s32 local_0;
 
     for (local_0 = 0; local_0 < 3; local_0++) {
-
-if (((s16 *) (param_0 + 0x82))[local_0] != 0) {
-    return 1;
-}
-
-}
-return 0;
+        if (((s16 *) (param_0 + 0x82))[local_0] != 0) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 u8 *func_80800FD0_subaddiestore(param_0)

@@ -1,3 +1,4 @@
+#include "common.h"
 #include "core2/1E6A190.h"
 
 typedef struct {

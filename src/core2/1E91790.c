@@ -1,12 +1,16 @@
 #include "core2/1E91790.h"
+#include "common.h"
+#include <ultra64.h>
 
 #define SHL(x, n) ((unsigned int) (((unsigned int) (x) & 255) << (n)))
+
 #define CMD(a, b)                                                                                  \
     {                                                                                              \
         GfxB7F14 *local_0 = (*param_0)++;                                                          \
         local_0->local_0 = (a);                                                                    \
         local_0->local_1 = (b);                                                                    \
     }
+
 #define COLOR_SHIFT(x, n) ((unsigned int) (((unsigned int) (x) & ((1 << 8) - 1)) << (n)))
 
 #define B81CC_UPLOAD_TILE(pkt, c, tile, uls, ult, lrs, lrt)                                        \
@@ -580,33 +584,33 @@ u8 *param_2;
 {
     func_800EFB24(&D_80127160, param_2, ((s32 *) D_80127148));
 
-if ((*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x38) > -17000.0f) &&
-    (*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x38) < 17000.0f) &&
-    (*(f32 *) ((s8 *) param_2 + 4) > -200.0f) &&
-    (*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x40) > -17000.0f) &&
-    (*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x40) < 17000.0f) &&
-    (func_800E3E8C(param_2, *(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x50)) != 0)) {
-    mlMtx_set_translation(((f32 *) param_2)[0], ((f32 *) param_2)[1], ((f32 *) param_2)[2]);
-    mlMtxApply((Mtx *) *param_1);
-    func_800193C4(&D_8012716C, *(u8 **) ((s8 *) (s32 *) &D_80127128 + 0x58) + 0xC);
-    mlMtx_set_translation(*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x44),
-                          *(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x48),
-                          *(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x4C));
-    mlMtxRotYaw(*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x30));
-    mlMtxRotPitch(*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x2C));
-    mlMtxTranslate(-*(f32 *) ((s8 *) *(u8 **) ((s8 *) (s32 *) &D_80127128 + 0x58) + 0xC),
-                   -*(f32 *) ((s8 *) *(u8 **) ((s8 *) (s32 *) &D_80127128 + 0x58) + 0x10),
-                   -*(f32 *) ((s8 *) *(u8 **) ((s8 *) (s32 *) &D_80127128 + 0x58) + 0x14));
-    mlMtxApply((Mtx *) *param_1);
-    gDma2p((*param_0)++, 0xDA, *param_1, sizeof(Mtx), 2, 0);
-    *param_1 += 0x40;
-    gDma1p((*param_0)++, 0xDE, osVirtualToPhysical(*(s32 *) ((u8 *) (s32 *) &D_80127128 + 0x54)), 0,
-           0);
-    gDma2p((*param_0)++, 0xD8, sizeof(Mtx), sizeof(Mtx), 2, 0);
-    return 1;
-}
+    if ((*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x38) > -17000.0f) &&
+        (*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x38) < 17000.0f) &&
+        (*(f32 *) ((s8 *) param_2 + 4) > -200.0f) &&
+        (*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x40) > -17000.0f) &&
+        (*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x40) < 17000.0f) &&
+        (func_800E3E8C(param_2, *(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x50)) != 0)) {
+        mlMtx_set_translation(((f32 *) param_2)[0], ((f32 *) param_2)[1], ((f32 *) param_2)[2]);
+        mlMtxApply((Mtx *) *param_1);
+        func_800193C4(&D_8012716C, *(u8 **) ((s8 *) (s32 *) &D_80127128 + 0x58) + 0xC);
+        mlMtx_set_translation(*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x44),
+                              *(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x48),
+                              *(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x4C));
+        mlMtxRotYaw(*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x30));
+        mlMtxRotPitch(*(f32 *) ((s8 *) (s32 *) &D_80127128 + 0x2C));
+        mlMtxTranslate(-*(f32 *) ((s8 *) *(u8 **) ((s8 *) (s32 *) &D_80127128 + 0x58) + 0xC),
+                       -*(f32 *) ((s8 *) *(u8 **) ((s8 *) (s32 *) &D_80127128 + 0x58) + 0x10),
+                       -*(f32 *) ((s8 *) *(u8 **) ((s8 *) (s32 *) &D_80127128 + 0x58) + 0x14));
+        mlMtxApply((Mtx *) *param_1);
+        gDma2p((*param_0)++, 0xDA, *param_1, sizeof(Mtx), 2, 0);
+        *param_1 += 0x40;
+        gDma1p((*param_0)++, 0xDE,
+               osVirtualToPhysical(*(s32 *) ((u8 *) (s32 *) &D_80127128 + 0x54)), 0, 0);
+        gDma2p((*param_0)++, 0xD8, sizeof(Mtx), sizeof(Mtx), 2, 0);
+        return 1;
+    }
 
-return 0;
+    return 0;
 }
 
 u8 D_8011A630[56] = {0xE7, 0x0, 0x0, 0x0, 0x0,  0x0,  0x0,  0x0,  0xD9, 0xC0, 0xFF, 0xFA,

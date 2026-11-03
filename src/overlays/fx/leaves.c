@@ -1,3 +1,4 @@
+#include "common.h"
 #include "vector.h"
 
 extern f32 func_800DC178(f32, f32);

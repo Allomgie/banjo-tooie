@@ -1,3 +1,4 @@
+#include "common.h"
 #include "overlays/bs/kaz/die.h"
 
 extern s32 D_80800460_bskazdie[];
