@@ -47,6 +47,14 @@ void func_80800000_chfantasydrillfield(param_0) Actor *param_0;
     func_80103014(param_0);
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/fantasy/drillfield.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt:
+ * B_80800A18_chfantasydrillfield. */
+DrillFieldRecord B_80800A10_chfantasydrillfield[8];
+
+
 void func_808000C4_chfantasydrillfield(s32 param_0)
 {
     void *sp70[8];

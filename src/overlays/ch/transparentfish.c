@@ -260,6 +260,12 @@ int chtransparentfish_entrypoint_0()
     return (int)&D_80801098_chtransparentfish;
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/transparentfish.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+CodexTransparentFishRecord65 B_808010E0_chtransparentfish[20];
+
+
 void func_80800B60_chtransparentfish(void)
 {
     s32 local_1;

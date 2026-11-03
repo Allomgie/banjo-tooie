@@ -271,6 +271,12 @@ void func_808002BC_chweldarboss(param_0) s32 param_0;
     (*(u8 *)((char *)(local_0) + 0xB2)) = _subaddieaudioloop_entrypoint_3((*(u8 *)((char *)(local_0) + 0xB2)));
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/weldarboss.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+u8 B_80804AE0_chweldarboss[16];
+
+
 void func_8080030C_chweldarboss(param_0) Actor *param_0;
 {
     extern u8 B_80804AE0_chweldarboss[];

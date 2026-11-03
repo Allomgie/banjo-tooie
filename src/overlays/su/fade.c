@@ -21,6 +21,12 @@ void sufade_entrypoint_0(s32 param_0, u8 *param_1)
  if (0) { }
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/su/fade.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+s32 B_80800160_sufade;
+
+
 void sufade_entrypoint_1(s32 param_0) {
     u32 local_0;
     u32 local_1;

@@ -281,6 +281,12 @@ int func_808006B4_gczoombox(u16 *param_0, u32 param_1)
     return ret;
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/gc/zoombox.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+u8 D_80803E80_gczoombox[32];
+
+
 void func_808006E0_gczoombox(ZoomBoxMouth *this, s32 count)
 {
     s32 n;

@@ -310,6 +310,12 @@ void func_808007D4_scradar(RadarBlip *param_0, f32 *param_1, f32 param_2)
     param_0->unk0 = local_4;
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/sc/radar.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+RadarView211 B_80800E50_scradar[4];
+
+
 void scradar_entrypoint_0(void)
 {
     s32 local_0;

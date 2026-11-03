@@ -89,6 +89,12 @@ int func_808001D0_chmasterjiggy(param_0, param_1) s32 *param_0; s32 param_1; {
     _subaddiedialog_entrypoint_11(*param_0, (*(s16 *)((u8 *)(temp_v0) + 0)), (*(s16 *)((u8 *)(temp_v0) + 2)), param_0 + 1, 0x97);
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/masterjiggy.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+s32 B_808017F0_chmasterjiggy;
+
+
 void func_80800220_chmasterjiggy(param_0, param_1) u8 *param_0; s32 param_1; {
   s8 _sfpad[8];
     s32 local_0;

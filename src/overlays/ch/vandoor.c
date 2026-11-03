@@ -125,6 +125,14 @@ void func_80800388_chvandoor(param_0, param_1) Actor *param_0; s32 param_1; {
     }
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/vandoor.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. The _pad/_tail objects fill bytes that no code names. */
+u8 *B_80800690_chvandoor[1];
+u8 *B_80800694_chvandoor;
+u8 B_80800694_chvandoor_tail[24];
+
+
 s32 func_8080044C_chvandoor(param_0) u8 *param_0;
 {
     f32 local_0[3];

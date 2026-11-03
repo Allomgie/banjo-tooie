@@ -345,6 +345,17 @@ D_80123D6C = D_80123880 + 0x4EC;
 D_80123E5E = D_80123E50 + 0xE;
 D_80124744 = D_80124740 + 0x4;
 D_801243DC = D_801243A0 + 0x3C;
+B_80800F94_chdinofamilysmall = B_80800F70_chdinofamilysmall + 0x24;
+B_80800A18_chfantasydrillfield = B_80800A10_chfantasydrillfield + 0x8;
+B_808011E4_chwumbawigwam = B_808011C0_chwumbawigwam + 0x24;
+B_808002A0_fxdialog = B_80800290_fxdialog + 0x10;
+B_808002A4_fxdialog = B_80800290_fxdialog + 0x14;
+B_80800ABA_gztrace = B_80800A70_gztrace + 0x4A;
+B_80800ABD_gztrace = B_80800A70_gztrace + 0x4D;
+B_80800AC3_gztrace = B_80800A70_gztrace + 0x53;
+B_80800ACD_gztrace = B_80800A70_gztrace + 0x5D;
+B_80800AD5_gztrace = B_80800A70_gztrace + 0x65;
+B_80800AD6_gztrace = B_80800A70_gztrace + 0x66;
 
 /* Second names for functions that the overlay code calls with fewer arguments than the definition
  * has (the call sites leave the argument registers untouched). The call sites declare the second name

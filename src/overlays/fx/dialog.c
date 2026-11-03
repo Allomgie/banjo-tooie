@@ -1,12 +1,20 @@
 #include "common.h"
 
-extern __OSBlockInfo B_80800290_fxdialog;
+extern f32 B_80800290_fxdialog[8];
 extern f32 B_808002A0_fxdialog;
 extern void func_800E2554(f32, f32);
 extern void func_800E257C(s32);
 extern f32 B_808002A4_fxdialog;
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void *func_800DF944(u32, f32 *, f32, f32, f32 *, s32, s32);
+
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/fx/dialog.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt:
+ * B_808002A0_fxdialog, B_808002A4_fxdialog. */
+f32 B_80800290_fxdialog[8];
+
 
 void fxdialog_entrypoint_0(void)
 {

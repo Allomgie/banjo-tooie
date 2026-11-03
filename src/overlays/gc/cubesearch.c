@@ -142,6 +142,12 @@ int gccubesearch_entrypoint_9(param_0) s32 param_0;
   gccubesearch_entrypoint_7(sp18);
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/gc/cubesearch.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+int B_80800EB0_gccubesearch[40];
+
+
 int gccubesearch_entrypoint_10(int param_0, int param_1)
 {
   int local_0;

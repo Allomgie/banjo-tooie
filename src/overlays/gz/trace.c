@@ -101,6 +101,18 @@ u8 *func_80800290_gztrace(u32 param_0, s32 param_1, u8 *param_2)
     return local_1;
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/gz/trace.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. The _pad/_tail objects fill bytes that no code names.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt:
+ * B_80800ABA_gztrace, B_80800ABD_gztrace, B_80800AC3_gztrace, B_80800ACD_gztrace, B_80800AD5_gztrace, B_80800AD6_gztrace. */
+TraceState1459 B_80800A70_gztrace;
+u8 B_80800A70_gztrace_pad[4];
+s32 B_80800AA8_gztrace;
+u8 B_80800AD6_gztrace_tail[4];
+u8 B_80800AD6_gztrace_tail1[256];
+
+
 void func_808003D0_gztrace(TraceHeader1459 *param_0)
 {
   int new_var;

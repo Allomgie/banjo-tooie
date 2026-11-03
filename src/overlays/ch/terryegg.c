@@ -401,6 +401,12 @@ int func_80800D20_chterryegg(s32 param_0, s32 *param_1, s32 param_2, s32 param_3
   }
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/terryegg.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+Prop *B_80801460_chterryegg[4];
+
+
 void func_80800D88_chterryegg(s32 param_0, f32 *param_1)
 {
     s32 local_0;

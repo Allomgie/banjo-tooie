@@ -1245,6 +1245,12 @@ s32 func_808019A8_chdiggerboss(param_0) s32 param_0; {
     _suexpression_entrypoint_8(param_0, 1);
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/digger/boss.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+s32 B_8080A300_chdiggerboss;
+
+
 
 
 

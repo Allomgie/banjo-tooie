@@ -5,6 +5,13 @@ extern s32 B_80800400_sccustom_big;
 extern f32 _scinfobar_entrypoint_18(s32);
 extern s32 func_800E7188(s32);
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/sc/custom_big.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+u8 B_808003F0_sccustom_big[16];
+s32 B_80800400_sccustom_big;
+
+
 int func_80800000_sccustom_big(s32 param_0)
 {
   func_800E73D4(&B_808003F0_sccustom_big);

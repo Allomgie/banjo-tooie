@@ -73,6 +73,12 @@ void idflame_entrypoint_0(void *param_0, Vtx *param_1, Vtx *param_2, s32 param_3
     }
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/id/flame.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+s16 *B_80800560_idflame[2];
+
+
 void idflame_entrypoint_1(s32 param_0, s16 *param_1, s32 param_2, s32 param_3)
 {
     s16 *local_0;

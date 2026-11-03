@@ -252,6 +252,15 @@ s32 func_80800AF4_chdinofamilysmall(Actor *param_0, s32 param_1, DinoMessage30 p
     }
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/dino/familysmall.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt:
+ * B_80800F94_chdinofamilysmall. */
+f32 B_80800F70_chdinofamilysmall[12];
+f32 B_80800FA0_chdinofamilysmall[4];
+
+
 void func_80800C10_chdinofamilysmall(Actor *param_0, s32 param_1)
 {
     f32 *local_0;

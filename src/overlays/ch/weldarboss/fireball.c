@@ -110,6 +110,12 @@ s32 func_80800284_chweldarbossfireball(Actor *param_0, s32 param_1, WeldarFireba
     return 1;
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/weldarboss/fireball.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+u8 B_808004E0_chweldarbossfireball[16];
+
+
 void func_808002E0_chweldarbossfireball(param_0) Actor *param_0;
 {
     f32 local_0[3];

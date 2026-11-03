@@ -136,6 +136,16 @@ void func_80800264_sccustom(void *param_0, s32 param_1, s32 param_2, s32 param_3
     func_800B811C(param_0);
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/sc/custom.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. The _pad/_tail objects fill bytes that no code names. */
+s32 B_80800930_sccustom;
+u8 B_80800930_sccustom_pad[4];
+u8 B_80800930_sccustom_pad1[8];
+u8 B_80800940_sccustom[16];
+s32 B_80800950_sccustom;
+
+
 s32 *func_808004C8_sccustom(s32 param_0) {
     func_800E73D4(&B_80800930_sccustom);
     func_800E6DB4(&B_80800930_sccustom, _scinfobar_entrypoint_19(param_0));

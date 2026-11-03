@@ -103,6 +103,12 @@ void chattract_entrypoint_1(s32 param_0) {
     _chbaddiesetup_entrypoint_1(_chattract_entrypoint_2, param_0);
 }
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/attract.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+f32 B_80800540_chattract[4];
+
+
 void chattract_entrypoint_2(s32 param_0)
 {
     Actor *local_0;

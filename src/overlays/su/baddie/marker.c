@@ -5,6 +5,12 @@ typedef struct MarkerSearchResult { f32 local_0[3]; s32 local_1; f32 local_2; f3
 extern u8 *B_808001E0_subaddiemarker[];
 extern f32 _gspropmarker_entrypoint_3(void *);
 
+/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/su/baddie/marker.bss.s) is defined here in C, ahead of
+ * its first use: IDO places .bss objects used before their definition first, the rest in definition
+ * order. */
+u8 *B_808001E0_subaddiemarker[40];
+
+
 s32 subaddiemarker_entrypoint_0(s32 param_0, void *param_1, MarkerSearchResult *param_2, s32 param_3)
 {
     s32 local_0;
