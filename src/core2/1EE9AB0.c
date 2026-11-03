@@ -1,5 +1,4 @@
 #include "core2/1EE9AB0.h"
-extern f32 D_80126540;
 #include "types.h"
 
 extern s16 D_80137340[25];
@@ -90,6 +89,10 @@ void func_801113B8();
 void func_80111590(u8 *param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4);
 void func_80111B8C(u8 *param_0, f32 param_1, f32 param_2);
 void func_801120CC(u8 *param_0, f32 param_1, f32 param_2, f32 param_3);
+
+/* TU-NOTE: the .rodata of this file starts with these constants (formerly asm/data/core2/1EE9AB0.rodata.s);
+ * each is a 16-byte object whose zero words belong to it, as the alignment in the ROM shows. */
+const struct { f32 x; f32 pad[3]; } D_80126540 = { 0.2f };
 
 void func_801101C0(void) {
 
@@ -606,7 +609,7 @@ int func_801111D0(void *param_0, f32 param_1) {
     func_800F1EA4(local_1, &local_3);
     local_4 = func_800136E4(local_3 + param_1);
     if (func_80112E84(param_0) != 1) {
-        func_800EF934(local_5, local_1, param_1 * D_80126540);
+        func_800EF934(local_5, local_1, param_1 * D_80126540.x);
         func_800EF04C(local_5, local_2);
         if (!func_8011349C(local_0, local_5)) return 0;
     }

@@ -10,7 +10,6 @@ u8 _ido_bss_gap_AEF0_B4E0[0x5F0];
 typedef struct { u32 unk0; u32 count; } Header178C4;
 typedef struct { Header178C4 *header; } Wrapper178C4;
 typedef struct { u8 pad0[0x18]; Wrapper178C4 *wrapper; u8 pad1C[0x44]; u8 *channels; } Obj178C4;
-extern f32 D_80041720;
 extern u32 D_8007AED0[];
 extern s32 D_8007AEA0[];
 typedef struct { u8 pad0[0x18]; s32 unk18; } Struct17810;
@@ -42,7 +41,6 @@ typedef union {
     Struct8007B2D0 local_other;
 } Union8007B2D0;
 extern Union8007B2D0 D_8007B2D0[];
-extern f32 D_80041730;
 typedef struct { s32 local_0; u8 pad_4[0x80]; } Struct80018854;
 extern void func_800C9EAC(f32, void *, s32, s32, s32, s32);
 
@@ -50,6 +48,11 @@ extern void func_800C9EAC(f32, void *, s32, s32, s32, s32);
 void func_800187B4(s32 param_0, f32 param_1, f32 param_2, f32 param_3);
 
 #pragma GLOBAL_ASM("src/core1/1E2F380_head.inc")
+
+/* TU-NOTE: the .rodata of this file starts with these constants (formerly asm/data/core1/1E2F380.rodata.s);
+ * each is a 16-byte object whose zero words belong to it, as the alignment in the ROM shows. */
+const struct { f32 x; f32 pad[3]; } D_80041720 = { 1e+06f };
+const struct { f32 x; f32 pad[3]; } D_80041730 = { 0.1f };
 
 void func_80017850(s32 param_0)
 {
@@ -90,7 +93,7 @@ s32 func_800178C4(s32 param_0, s32 param_1, f32 param_2)
   if (local_0->wrapper != 0)
   {
     local_2 = func_800260B0(local_0);
-    local_3 = (u32) (((param_2 * D_80041720) * ((f32) local_0->wrapper->header->unk0)) / ((f32) local_2));
+    local_3 = (u32) (((param_2 * D_80041720.x) * ((f32) local_0->wrapper->header->unk0)) / ((f32) local_2));
     local_6 = D_8007AE80;
     if (0)
     {
@@ -471,7 +474,7 @@ void func_80018704(s32 param_0, f32 param_1, f32 param_2, f32 param_3, s32 param
   if (param_3 != .0f)
   {
     if ((((Struct8007B2D0 *) D_8007B2D0)[param_0].unk0 != 0)
-        && (((param_4 != 0) || (!(D_80041730 < (((Struct8007B2D0 *) D_8007B2D0)[param_0].unkC - ((Struct8007B2D0 *) D_8007B2D0)[param_0].unk10))))
+        && (((param_4 != 0) || (!(D_80041730.x < (((Struct8007B2D0 *) D_8007B2D0)[param_0].unkC - ((Struct8007B2D0 *) D_8007B2D0)[param_0].unk10))))
             || (!((param_1 + param_2) < (((Struct8007B2D0 *) D_8007B2D0)[param_0].unk14 + ((Struct8007B2D0 *) D_8007B2D0)[param_0].unk18)))))
     {
       ((Struct8007B2D0 *) D_8007B2D0)[param_0].unk10 = (local_2 = 0.0f);

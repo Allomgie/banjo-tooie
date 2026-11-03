@@ -1,7 +1,6 @@
 #include "common.h"
 
 extern f32 func_800E42C0(void);
-extern f32 D_80125B00;
 extern s32 func_800E3D0C(f32 *, f32 *);
 typedef struct { s16 pad[4]; } CellD31;
 typedef struct { CellD31 *local_0; s32 local_1[3]; s32 pad10[3]; s32 local_2[2]; s32 pad24; s32 local_3[3]; CellD31 local_4; } GridD31;
@@ -35,6 +34,10 @@ Entry_8011B560 D_8011B560[4] = {
 u8 D_8011B580[] = "0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ@%?()<>\".;-!/'";
 extern s32 func_800D6C34(s32);
 
+/* TU-NOTE: the .rodata of this file starts with these constants (formerly asm/data/core2/1EAC810.rodata.s);
+ * each is a 16-byte object whose zero words belong to it, as the alignment in the ROM shows. */
+const struct { f32 x; f32 pad[3]; } D_80125B00 = { 1.4142135f };
+
 int func_800D2F20()
 {
   return func_800BDC5C() << 2;
@@ -50,7 +53,7 @@ s32 func_800D2F44(s32 param_0, s32 *param_1, s32 param_2, f32 *param_3) {
     local_2[0] = param_1[0] * param_2 + param_2 / 2 - param_3[0];
     local_2[1] = param_1[1] * param_2 + param_2 / 2 - param_3[1];
     local_2[2] = param_1[2] * param_2 + param_2 / 2 - param_3[2];
-    local_3 = local_3 * 4.0f * (D_80125B00 * param_2);
+    local_3 = local_3 * 4.0f * (D_80125B00.x * param_2);
     if (local_3 * local_3 < local_2[0] * local_2[0] + local_2[1] * local_2[1] + local_2[2] * local_2[2]) return 0;
     for (local_4 = 0; local_4 < 3; local_4++) {
         local_0[local_4] = param_1[local_4] * param_2 - 150;

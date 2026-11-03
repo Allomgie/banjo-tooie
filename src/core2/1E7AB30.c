@@ -278,3 +278,9 @@ void func_800A18E8(s32 param_0) {
         }
     }
 }
+
+/* TU-NOTE: the .rodata of this file holds constants that 1E79FD0 uses (formerly part of
+ * asm/data/core2/1E79FD0.rodata.s). They follow the literals of 1E79FD0 in the ROM, so they cannot come from that
+ * file: IDO places a file's const objects in front of its literals. This is the next file in link
+ * order without .rodata of its own. */
+const struct { f32 x; f32 pad[3]; } D_80125490 = { 0.65f };

@@ -4,8 +4,6 @@
 
 typedef struct { s32 shift, base; } LocalExponent;
 extern LocalExponent D_801234C0[];
-extern f32 D_80125E40;
-extern f32 D_80125E44;
 extern u16 func_8001A0C0(s32, s32);
 extern f32 mlAbsF(f32);
 typedef struct { s32 vector[3]; } LocalRecord;
@@ -32,6 +30,10 @@ extern f32 func_800E3928(local_outer *, f32 *);
 extern void func_800E3980(f32 *);
 s16 func_800E8918();
 
+/* TU-NOTE: the .rodata of this file starts with these constants (formerly asm/data/core2/1EC1AD0.rodata.s);
+ * each is a 16-byte object whose zero words belong to it, as the alignment in the ROM shows. */
+const struct { f32 x; f32 y; f32 pad[2]; } D_80125E40 = { 511.0f, 1e-06f };
+
 f32 func_800E81E0(s32 param_0, s32 param_1, f32 param_2, f32 param_3)
 {
     s32 local_0;
@@ -45,8 +47,8 @@ f32 func_800E81E0(s32 param_0, s32 param_1, f32 param_2, f32 param_3)
     local_5 = (local_0 >> 2) & 0x7FF;
     local_1 = local_2->base + (local_5 << local_2->shift);
     local_6 = local_1 / 256 - 511;
-    local_3 = local_6 / D_80125E40 - param_2;
-    return mlAbsF(local_3) < D_80125E44 ? 0.0f : param_3 / local_3;
+    local_3 = local_6 / D_80125E40.x - param_2;
+    return mlAbsF(local_3) < D_80125E40.y ? 0.0f : param_3 / local_3;
 }
 
 void func_800E829C(void)

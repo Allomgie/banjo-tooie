@@ -1,5 +1,4 @@
 #include "core2/1EA78C0.h"
-extern f32 D_801259B0;
 
 typedef struct { u8 pad[0x24]; u32 local_0; } ActorCDFD0;
 typedef struct { u8 pad[19]; u8 local_0:1; u8 pad1:7; } PropCDFD0;
@@ -82,6 +81,10 @@ int func_800CF6D0();
 void func_800CF734();
 void func_800CF7F4();
 
+/* TU-NOTE: the .rodata of this file starts with these constants (formerly asm/data/core2/1EA78C0.rodata.s);
+ * each is a 16-byte object whose zero words belong to it, as the alignment in the ROM shows. */
+const struct { f32 x; f32 pad[3]; } D_801259B0 = { 1.4142135f };
+
 void func_800CDFD0(ActorCDFD0 *param_0) {
     s32 local_8;
     s32 local_0[3];
@@ -128,7 +131,7 @@ int func_800CE1A8(param_0, param_1, param_2) int * param_0; int * param_1; int p
     int local_2;
     int local_3;
     int local_4;
-    local_0 = param_2 * D_801259B0;
+    local_0 = param_2 * D_801259B0.x;
     local_1 = param_0[0] - param_1[0] + local_0;
     local_2 = param_0[2] - param_1[2];
     local_4 = local_1 - local_2;

@@ -84,3 +84,9 @@ TTAcmd *func_8002C230(void *arg0, TTAcmd *cmdIn)
 
     return cmd;
 }
+
+/* TU-NOTE: the .rodata of this file holds constants that 1E42810 uses (formerly part of
+ * asm/data/core1/1E42810.rodata.s). They follow the literals of 1E42810 in the ROM, so they cannot come from that
+ * file: IDO places a file's const objects in front of its literals. This is the next file in link
+ * order without .rodata of its own (1E440D0 and 1E440F0 would fit as well). */
+const struct { f32 x; f32 pad[3]; } D_80041D90 = { 26755.0f };
