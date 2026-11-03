@@ -6201,7 +6201,7 @@ segments:
     subsegments: 
       - [0x01FDBD40, c, coderoombits]
       - [0x01FDCD80, .rodata, coderoombits]
-      - [0x01FDCEB0, data, coderoombits]
+      - [0x01FDCEB0, .data, coderoombits]
       - [0x01FDD060, bss, coderoombits]
   - name: chdingpot_header
     dir: overlays/chdingpot
@@ -8386,7 +8386,7 @@ segments:
     subsegments: 
       - [0x02044260, c, handcart]
       - [0x02048620, .rodata, handcart]
-      - [0x02048920, data, handcart]
+      - [0x02048920, .data, handcart]
       - [0x02049120, bss, handcart]
   - name: chcredits_header
     dir: overlays/chcredits
@@ -8405,7 +8405,7 @@ segments:
     subsegments: 
       - [0x02049250, c, credits]
       - [0x0204A400, .rodata, credits]
-      - [0x0204A450, data, credits]
+      - [0x0204A450, .data, credits]
       - [0x0204A840, bss, credits]
   - name: chcrusherboulder_header
     dir: overlays/chcrusherboulder
@@ -16518,7 +16518,7 @@ segments:
     subsegments: 
       - [0x02171E70, c, custom]
       - [0x02172780, .rodata, custom]
-      - [0x02172790, data, custom]
+      - [0x02172790, .data, custom]
       - [0x021727A0, bss, custom]
   - name: seqdat_header
     dir: overlays/seqdat
@@ -16765,7 +16765,7 @@ segments:
     subsegments: 
       - [0x02177340, c, reg]
       - [0x021778E0, .rodata, reg]
-      - [0x021781E0, data, reg]
+      - [0x021781E0, .data, reg]
       - [0x02178710, bss, reg]
   - name: gzthread_header
     dir: overlays/gzthread
@@ -16784,7 +16784,7 @@ segments:
     subsegments: 
       - [0x021787C0, c, thread]
       - [0x02178A70, .rodata, thread]
-      - [0x02178B40, data, thread]
+      - [0x02178B40, .data, thread]
       - [0x02178B70, bss, thread]
   - name: gzpublic_header
     dir: overlays/gzpublic

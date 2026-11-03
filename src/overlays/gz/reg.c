@@ -1,231 +1,143 @@
+/*
+ * gz/reg (overlays) -- IDO 5.3, -O2 -mips2 -G 0 (project default).
+ */
+
 #include "common.h"
+#define R(i) ((u32)ctx->gpr[i])
+#define F(i) ((s32)ctx->fpr[1 + (i) * 2])
+
+typedef struct { u32 local_0; u32 local_1; char *local_2; } RegisterBitName;
+extern void func_8001D37C();
+typedef struct { u64 gpr[29]; u64 lohi[2]; u32 sr; u32 pc; u32 cause; u32 badvaddr; u32 pad108; u32 fpcsr; u32 fpr[2 * 16]; } RegCtx;
+extern u32 D_80800FF0_gzreg[];
+extern u32 D_808012B4_gzreg[];
+extern u32 D_80801140_gzreg[];
+extern RegisterBitName D_80800EA0_gzreg[];
+extern RegisterBitName D_80800F30_gzreg[];
+typedef union { f32 local_0; s32 local_1; } RegisterFloatBits;
+extern s32 func_800F21C4(f32);
+
+/* Forward declarations of the functions in this file. */
+
+void func_80800000_gzreg(u32 param_0, char *param_1, RegisterBitName *param_2);
+void gzreg_entrypoint_0(u8 *param_0);
+void gzreg_entrypoint_1(void);
+int gzreg_entrypoint_2();
+void func_808000CC_gzreg();
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gz/reg.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Pointers to strings are written as string literals; IDO places these strings in .rodata where the
+ * original has them, which is why this block stands in front of the functions.
+ * extern declarations adjusted to the object (same addresses): D_80800FF0_gzreg -> u32, D_80801140_gzreg -> u32, D_808012B4_gzreg -> u32 */
+RegisterBitName D_80800EA0_gzreg[12] = { 0x1, 0x1, "DPC_STATUS_XBUS_DMEM_DMA", 0x2, 0x2, "DPC_STATUS_FREEZE", 0x4, 0x4, "DPC_STATUS_FLUSH", 0x8, 0x8, "DPC_STATUS_START_GCLK", 0x10, 0x10, "DPC_STATUS_TMEM_BUSY", 0x20, 0x20, "DPC_STATUS_PIPE_BUSY", 0x40, 0x40, "DPC_STATUS_CMD_BUSY", 0x80, 0x80, "DPC_STATUS_CBUF_READY", 0x100, 0x100, "DPC_STATUS_DMA_BUSY", 0x200, 0x200, "DPC_STATUS_END_VALID", 0x400, 0x400, "DPC_STATUS_START_VALID", 0x0, 0x0, "" };
+RegisterBitName D_80800F30_gzreg[16] = { 0x1, 0x1, "SP_STATUS_HALT", 0x2, 0x2, "SP_STATUS_BROKE", 0x4, 0x4, "SP_STATUS_DMA_BUSY", 0x8, 0x8, "SP_STATUS_DMA_FULL", 0x10, 0x10, "SP_STATUS_IO_FULL", 0x20, 0x20, "SP_STATUS_SSTEP", 0x40, 0x40, "SP_STATUS_INTR_BREAK", 0x80, 0x80, "SP_STATUS_YIELD", 0x100, 0x100, "SP_STATUS_YIELDED", 0x200, 0x200, "SP_STATUS_TASKDONE", 0x400, 0x400, "SP_STATUS_SIG3", 0x800, 0x800, "SP_STATUS_SIG4", 0x1000, 0x1000, "SP_STATUS_SIG5", 0x2000, 0x2000, "SP_STATUS_SIG6", 0x4000, 0x4000, "SP_STATUS_SIG7", 0x0, 0x0, "" };
+u32 D_80800FF0_gzreg[84] = { 0x80000000, 0x80000000, (u32)"BD", 0x8000, 0x8000, (u32)"IP8", 0x4000, 0x4000, (u32)"IP7", 0x2000, 0x2000, (u32)"IP6", 0x1000, 0x1000, (u32)"IP5", 0x800, 0x800, (u32)"IP4", 0x400, 0x400, (u32)"IP3", 0x200, 0x200, (u32)"IP2", 0x100, 0x100, (u32)"IP1", 0x7C, 0x0, (u32)"Interrupt", 0x7C, 0x4, (u32)"TLB modification exception", 0x7C, 0x8, (u32)"TLB exception on load or instruction fetch", 0x7C, 0xC, (u32)"TLB exception on store", 0x7C, 0x10, (u32)"Address error on load or instruction fetch", 0x7C, 0x14, (u32)"Address error on store", 0x7C, 0x18, (u32)"Bus error exception on instruction fetch", 0x7C, 0x1C, (u32)"Bus error exception on data reference", 0x7C, 0x20, (u32)"System call exception", 0x7C, 0x24, (u32)"Breakpoint exception", 0x7C, 0x28, (u32)"Reserved instruction exception", 0x7C, 0x2C, (u32)"Coprocessor unusable exception", 0x7C, 0x30, (u32)"Arithmetic overflow exception", 0x7C, 0x34, (u32)"Trap exception", 0x7C, 0x38, (u32)"Virtual coherency exception on intruction fetch", 0x7C, 0x3C, (u32)"Floating point exception (see fpcsr)", 0x7C, 0x5C, (u32)"Watchpoint exception", 0x7C, 0x7C, (u32)"Virtual coherency exception on data reference", 0x0, 0x0, (u32)"" };
+u32 D_80801140_gzreg[93] = { 0x80000000, 0x80000000, (u32)"CU3", 0x40000000, 0x40000000, (u32)"CU2", 0x20000000, 0x20000000, (u32)"CU1", 0x10000000, 0x10000000, (u32)"CU0", 0x8000000, 0x8000000, (u32)"RP", 0x4000000, 0x4000000, (u32)"FR", 0x2000000, 0x2000000, (u32)"RE", 0x400000, 0x400000, (u32)"BEV", 0x200000, 0x200000, (u32)"TS", 0x100000, 0x100000, (u32)"SR", 0x40000, 0x40000, (u32)"CH", 0x20000, 0x20000, (u32)"CE", 0x10000, 0x10000, (u32)"DE", 0x8000, 0x8000, (u32)"IM8", 0x4000, 0x4000, (u32)"IM7", 0x2000, 0x2000, (u32)"IM6", 0x1000, 0x1000, (u32)"IM5", 0x800, 0x800, (u32)"IM4", 0x400, 0x400, (u32)"IM3", 0x200, 0x200, (u32)"IM2", 0x100, 0x100, (u32)"IM1", 0x80, 0x80, (u32)"KX", 0x40, 0x40, (u32)"SX", 0x20, 0x20, (u32)"UX", 0x18, 0x10, (u32)"USR", 0x18, 0x8, (u32)"SUP", 0x18, 0x0, (u32)"KER", 0x4, 0x4, (u32)"ERL", 0x2, 0x2, (u32)"EXL", 0x1, 0x1, (u32)"IE", 0x0, 0x0, (u32)"" };
+u32 D_808012B4_gzreg[71] = { 0x1000000, 0x1000000, (u32)"FS", 0x800000, 0x800000, (u32)"C", 0x20000, 0x20000, (u32)"Unimplemented operation", 0x10000, 0x10000, (u32)"Invalid operation", 0x8000, 0x8000, (u32)"Division by zero", 0x4000, 0x4000, (u32)"Overflow", 0x2000, 0x2000, (u32)"Underflow", 0x1000, 0x1000, (u32)"Inexact operation", 0x800, 0x800, (u32)"EV", 0x400, 0x400, (u32)"EZ", 0x200, 0x200, (u32)"EO", 0x100, 0x100, (u32)"EU", 0x80, 0x80, (u32)"EI", 0x40, 0x40, (u32)"FV", 0x20, 0x20, (u32)"FZ", 0x10, 0x10, (u32)"FO", 0x8, 0x8, (u32)"FU", 0x4, 0x4, (u32)"FI", 0x3, 0x0, (u32)"RN", 0x3, 0x1, (u32)"RZ", 0x3, 0x2, (u32)"RP", 0x3, 0x3, (u32)"RM", 0x0, 0x0, (u32)"", 0x0, 0x0 };
+
+void func_80800000_gzreg(u32 param_0, char *param_1, RegisterBitName *param_2)
+{
+    s32 local_0;
+
+    local_0 = 1;
+    func_8001D37C("%s: x%08X ", param_1, param_0);
+    func_8001D37C("<");
+    for (; param_2->local_0; param_2++) {
+        if ((param_2->local_0 & param_0) == param_2->local_1) {
+            if (local_0) local_0 = 0;
+            else func_8001D37C(",");
+            func_8001D37C("%s", param_2->local_2);
+        }
+    }
+    func_8001D37C(">\n");
+}
+
+void func_808000CC_gzreg(param_0, param_1) char *param_0; RegisterFloatBits param_1;
+{
+    switch (func_800F21C4(param_1.local_0)) {
+        case 0: sprintf(param_0, "S.NaN"); break;
+        case 1: sprintf(param_0, "Q.NaN"); break;
+        case 2: sprintf(param_0, "+ve INF"); break;
+        case 3: sprintf(param_0, "-ve INF"); break;
+        case 4:
+        case 5:
+        case 8:
+        case 9:
+            sprintf(param_0, "%.6e", (f64)param_1.local_0);
+            break;
+        case 6:
+        case 7:
+            sprintf(param_0, "%d", param_1.local_1);
+            break;
+    }
+}
+
+void gzreg_entrypoint_0(u8 *param_0)
+{
+    char sp50[24];
+    char sp40[16];
+    char sp30[16];
+    RegCtx *ctx;
+
+    ctx = (RegCtx *)(param_0 + 0x20);
+    func_8001D37C("pc:x%08X\n", *(s32 *)(param_0 + 0x11C));
+    func_80800000_gzreg(ctx->cause, "cause", D_80800FF0_gzreg);
+    func_8001D37C("\n");
+    func_8001D37C("at:x%08X v0:x%08X v1:x%08X a0:x%08X\n", R(0), R(1), R(2), R(3));
+    func_8001D37C("a1:x%08X a2:x%08X a3:x%08X t0:x%08X\n", R(4), R(5), R(6), R(7));
+    func_8001D37C("t1:x%08X t2:x%08X t3:x%08X t4:x%08X\n", R(8), R(9), R(10), R(11));
+    func_8001D37C("t5:x%08X t6:x%08X t7:x%08X s0:x%08X\n", R(12), R(13), R(14), R(15));
+    func_8001D37C("s1:x%08X s2:x%08X s3:x%08X s4:x%08X\n", R(16), R(17), R(18), R(19));
+    func_8001D37C("s5:x%08X s6:x%08X s7:x%08X t8:x%08X\n", R(20), R(21), R(22), R(23));
+    func_8001D37C("t9:x%08X gp:x%08X sp:x%08X s8:x%08X\n", R(24), R(25), R(26), R(27));
+    func_8001D37C("ra:x%08X %s          badvaddr:x%08X\n", R(28), "          ", ctx->badvaddr);
+    func_8001D37C("\n");
+    func_80800000_gzreg(ctx->fpcsr, "fpcsr", D_808012B4_gzreg);
+    func_8001D37C("\n");
+    func_808000CC_gzreg(sp50, F(0));
+    func_808000CC_gzreg(sp40, F(1));
+    func_808000CC_gzreg(sp30, F(2));
+    func_8001D37C("f0  %-13s f2  %-13s f4  %-13s\n", sp50, sp40, sp30);
+    func_808000CC_gzreg(sp50, F(3));
+    func_808000CC_gzreg(sp40, F(4));
+    func_808000CC_gzreg(sp30, F(5));
+    func_8001D37C("f6  %-13s f8  %-13s f10 %-13s\n", sp50, sp40, sp30);
+    func_808000CC_gzreg(sp50, F(6));
+    func_808000CC_gzreg(sp40, F(7));
+    func_808000CC_gzreg(sp30, F(8));
+    func_8001D37C("f12 %-13s f14 %-13s f16 %-13s\n", sp50, sp40, sp30);
+    func_808000CC_gzreg(sp50, F(9));
+    func_808000CC_gzreg(sp40, F(10));
+    func_808000CC_gzreg(sp30, F(11));
+    func_8001D37C("f18 %-13s f20 %-13s f22 %-13s\n", sp50, sp40, sp30);
+    func_808000CC_gzreg(sp50, F(12));
+    func_808000CC_gzreg(sp40, F(13));
+    func_808000CC_gzreg(sp30, F(14));
+    func_8001D37C("f24 %-13s f26 %-13s f28 %-13s\n", sp50, sp40, sp30);
+    func_808000CC_gzreg(sp50, F(15));
+    func_8001D37C("f30 %-13s\n", sp50);
+    func_8001D37C("\n");
+    func_80800000_gzreg(ctx->sr, "sr", D_80801140_gzreg);
+}
+
+void gzreg_entrypoint_1(void)
+{
+    func_8001D37C("RDP current = 0x%08X   (0x%016llx) \n",
+        *(volatile u32 *)0xA4100008 + 0x80000000,
+        *(u64 *)(*(volatile u32 *)0xA4100008 + 0x80000000));
+    func_8001D37C("RDP start   = 0x%08X   (0x%016llx) \n",
+        *(volatile u32 *)0xA4100000 + 0x80000000,
+        *(u64 *)(*(volatile u32 *)0xA4100000 + 0x80000000));
+    func_8001D37C("RDP end     = 0x%08X   (0x%016llx) \n",
+        *(volatile u32 *)0xA4100004 + 0x80000000,
+        *(u64 *)(*(volatile u32 *)0xA4100004 + 0x80000000));
+    func_80800000_gzreg(*(volatile u32 *)0xA410000C, "\nRDP status:", D_80800EA0_gzreg);
+    func_80800000_gzreg(*(volatile u32 *)0xA4040010, "\nRSP status:", D_80800F30_gzreg);
+    func_8001D37C("\nFree memory was %d bytes.\n", heap_bytes_free());
+}
+
+int gzreg_entrypoint_2(union U *param_0)
+{
+  return *(s32 *)((char *)param_0 + 0x11C);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808005A0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808005BC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808005D0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808005E4_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808005FC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800614_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080062C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800640_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800658_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080066C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800684_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080069C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808006A0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808006B0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808006C0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808006D4_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808006E8_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808006FC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080070C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800724_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800734_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800748_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080075C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080076C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080077C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080078C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080079C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007AC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007B0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007B4_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007B8_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007BC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007C0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007C4_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007C8_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007CC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007D0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007D4_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007E0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808007FC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800828_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800840_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_8080086C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800884_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808008B0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808008D8_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808008F0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800908_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800928_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800948_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800968_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800978_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808009A8_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808009D0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_808009E8_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A18_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A1C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A20_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A24_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A28_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A2C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A30_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A34_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A38_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A3C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A40_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A44_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A48_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A4C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A50_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A54_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A58_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A5C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A60_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A64_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A68_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A6C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A70_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A74_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A78_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A7C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A80_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A84_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A88_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A8C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A90_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A94_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A98_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800A9C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800AA0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800AB8_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800ACC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800AE0_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800AEC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800AF8_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B0C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B10_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B14_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B18_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B1C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B20_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B24_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B28_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B2C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B30_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B34_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B38_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B3C_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B40_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/R_80800B44_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/func_80800000_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/func_808000CC_gzreg.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/gzreg_entrypoint_0.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/gzreg_entrypoint_1.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/gz/reg/gzreg_entrypoint_2.s")
