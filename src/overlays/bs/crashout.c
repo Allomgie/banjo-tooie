@@ -1,5 +1,3 @@
-#include "common.h"
-#include "overlays/ba/playerstate.h"
 #include "overlays/ba/playerstate.h"
 
 extern f32 yaw_getIdeal(void *);
@@ -16,7 +14,6 @@ extern s32 baanim_isAt(PlayerState *, f32);
 extern s32 D_808003D0_bscrashout[];
 extern f32 baanim_getTimer(PlayerState *);
 extern void func_8009DB04(PlayerState *, s32, f32, s32);
-void func_80800000_bscrashout();
 
 void func_80800000_bscrashout(param_0) PlayerState *param_0;
 {
@@ -32,27 +29,28 @@ void func_80800000_bscrashout(param_0) PlayerState *param_0;
     }
 }
 
-void func_808000B0_bscrashout(u8 *param_0, s32 param_1) {
-    (*(s32 *)((s8 *)(param_0) + (0x15C))) = param_1;
-    switch (param_1) {                                 
-    case 1:
-        baanim_playForDuration_onceSmooth(param_0, 0x3E, 0x3FB33333);
-        func_8009FFD8(param_0, 1, 3, 3, 3);
-        baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
-        baphysics_set_target_horizontal_velocity(param_0, (*(f32 *)((s8 *)(param_0) + (0x16C))));
-        baphysics_set_horizontal_velocity(param_0, 0x42C80000, (*(s32 *)((s8 *)(param_0) + (0x16C))));
-        return;
-    case 2:
-        func_800951B4(param_0);
-        baanim_playForDuration_onceSmooth(param_0, 0xD2, 0x40100000);
-        return;
-    case 3:
-        func_800A0180(param_0);
-        func_800A4DFC(param_0, 0xA);
-        _ncbadie_entrypoint_3(func_800A4CA8(param_0), 0x41F00000);
-        _basudie_entrypoint_1(param_0);
-        _batimer_set(param_0, 0, 0x404CCCCD);
-        return;
+void func_808000B0_bscrashout(u8 *param_0, s32 param_1)
+{
+    *(s32 *) ((s8 *) param_0 + 0x15C) = param_1;
+    switch (param_1) {
+        case 1:
+            baanim_playForDuration_onceSmooth(param_0, 0x3E, 0x3FB33333);
+            func_8009FFD8(param_0, 1, 3, 3, 3);
+            baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
+            baphysics_set_target_horizontal_velocity(param_0, *(f32 *) ((s8 *) param_0 + 0x16C));
+            baphysics_set_horizontal_velocity(param_0, 0x42C80000,
+                                              *(s32 *) ((s8 *) param_0 + 0x16C));
+            return;
+        case 2:
+            func_800951B4(param_0);
+            baanim_playForDuration_onceSmooth(param_0, 0xD2, 0x40100000);
+            return;
+        case 3:
+            func_800A0180(param_0);
+            func_800A4DFC(param_0, 0xA);
+            _ncbadie_entrypoint_3(func_800A4CA8(param_0), 0x41F00000);
+            _basudie_entrypoint_1(param_0);
+            _batimer_set(param_0, 0, 0x404CCCCD);
     }
 }
 
@@ -80,34 +78,35 @@ void bscrashout_entrypoint_2(PlayerState *param_0)
 {
     s32 local_0 = 0;
     func_800F1574(&param_0->unk16C, func_800D8FF8() * 300.0f);
-    baphysics_set_target_horizontal_velocity(param_0, *(f32 *)&param_0->unk16C);
+    baphysics_set_target_horizontal_velocity(param_0, *(f32 *) &param_0->unk16C);
     switch (param_0->unk15C.word) {
-    case 1:
-        func_80800000_bscrashout(param_0);
-        if (baanim_isAt(param_0, 0.2f) && !func_800A1718(param_0)) func_808000B0_bscrashout(param_0, 3);
-        if (baanim_isStopped(param_0)) func_808000B0_bscrashout(param_0, 2);
-        break;
-    case 2:
-        if (baanim_isStopped(param_0)) local_0 = 1;
-        break;
-    case 3:
-        func_80800000_bscrashout(param_0);
-        if (_batimer_decrement(param_0, 0)) _basudie_entrypoint_0(param_0);
-        break;
+        case 1:
+            func_80800000_bscrashout(param_0);
+            if (baanim_isAt(param_0, 0.2f) && !func_800A1718(param_0))
+                func_808000B0_bscrashout(param_0, 3);
+            if (baanim_isStopped(param_0))
+                func_808000B0_bscrashout(param_0, 2);
+            break;
+        case 2:
+            if (baanim_isStopped(param_0))
+                local_0 = 1;
+            break;
+        case 3:
+            func_80800000_bscrashout(param_0);
+            if (_batimer_decrement(param_0, 0))
+                _basudie_entrypoint_0(param_0);
     }
     bs_setState(param_0, local_0);
 }
 
 int bscrashout_entrypoint_3(s32 param_0)
 {
-  return D_808003D0_bscrashout[param_0];
+    return D_808003D0_bscrashout[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/crashout.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bscrashout_entrypoint_0();
 extern void _bscrashout_entrypoint_1();
 extern void _bscrashout_entrypoint_2();
 extern void func_80099AA8();
-s32 D_808003D0_bscrashout[4] = { (u32)_bscrashout_entrypoint_0, (u32)_bscrashout_entrypoint_1, (u32)_bscrashout_entrypoint_2, (u32)func_80099AA8 };
+s32 D_808003D0_bscrashout[4] = {(u32) _bscrashout_entrypoint_0, (u32) _bscrashout_entrypoint_1,
+                                (u32) _bscrashout_entrypoint_2, (u32) func_80099AA8};

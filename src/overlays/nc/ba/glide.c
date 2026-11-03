@@ -23,10 +23,11 @@ void ncbaglide_entrypoint_0(void *param_0)
     func_801124D0(param_0, 1);
 }
 
-void ncbaglide_entrypoint_1(s32 arg0) 
+void ncbaglide_entrypoint_1(s32 arg0)
 {
 }
-void func_8080007C_ncbaglide(PlayerState* arg0, f32* arg1)
+
+void func_8080007C_ncbaglide(PlayerState *arg0, f32 *arg1)
 {
     func_80112550(arg0, arg1);
 }
@@ -61,11 +62,9 @@ void ncbaglide_entrypoint_2(void *param_0)
     local_4[1] = func_800136E4(func_801112B0(param_0) + 180.0f);
     func_800EEBF0(local_6, local_4, local_3);
     func_800EE780(local_1, local_0, local_6);
-    if (func_80111CC8(param_0, local_1)) func_801138F4(param_0);
+    if (func_80111CC8(param_0, local_1))
+        func_801138F4(param_0);
     func_80112524(param_0, local_0);
     func_80110A68(param_0, local_2, local_0);
     func_80110790(param_0, local_2);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/glide.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -7,35 +7,36 @@ extern u32 D_80800570_chLagoonInnBlockedWall[];
 extern u8 D_8080046C_chLagoonInnBlockedWall[];
 extern u8 D_80800400_chLagoonInnBlockedWall[];
 extern void func_800BABB8(s32, f32 *, f32 *, f32, void *);
-typedef union { u32 word; s16 halves[2]; } LagoonWallEvent;
+typedef union {
+    u32 word;
+    s16 halves[2];
+} LagoonWallEvent;
 extern u8 D_80800528_chLagoonInnBlockedWall[];
 extern u8 D_808004C8_chLagoonInnBlockedWall[];
 extern u8 D_8080054C_chLagoonInnBlockedWall[];
 extern u8 D_80800514_chLagoonInnBlockedWall[];
 extern void func_800BBCB8(f32 *, f32 *, f32, s32, void *);
 extern void func_80109704(Actor *, s32, s32, s32, f32, s32, s32, s32);
-void func_8080025C_chLagoonInnBlockedWall();
 
 void func_80800000_chLagoonInnBlockedWall(Actor *param_0)
 {
     f32 local_0[3];
 
     switch (param_0->unk70_10) {
-    case 3:
-        if (func_800D9078(&param_0->unk58)) {
-            func_800EE7F8(local_0, param_0->position);
-            func_800EF1B8(local_0, param_0->rotation[1], -100.0f);
-            _chexploder_entrypoint_3(param_0, local_0, 3);
-            func_800DA544(0x3A9);
-        }
-        break;
-    case 2:
-        if (func_800D9078(&param_0->unk58)) {
-            func_800F82D4(func_800F54E4(), 0);
-            _glcutDll_entrypoint_6(0x1A7, 0x32);
-            func_800FFAB0(param_0);
-        }
-        break;
+        case 3:
+            if (func_800D9078(&param_0->unk58)) {
+                func_800EE7F8(local_0, param_0->position);
+                func_800EF1B8(local_0, param_0->rotation[1], -100.0f);
+                _chexploder_entrypoint_3(param_0, local_0, 3);
+                func_800DA544(0x3A9);
+            }
+            break;
+        case 2:
+            if (func_800D9078(&param_0->unk58)) {
+                func_800F82D4(func_800F54E4(), 0);
+                _glcutDll_entrypoint_6(0x1A7, 0x32);
+                func_800FFAB0(param_0);
+            }
     }
 }
 
@@ -49,42 +50,44 @@ int func_808000E0_chLagoonInnBlockedWall(Actor *param_0, s32 param_1, LagoonWall
     f32 local_0[3];
 
     switch (param_1) {
-    case 0x49:
-        if (_glcutDll_entrypoint_19(0x32)) {
-            param_0->unk58 = 0.4f;
-            func_80103110(param_0, 1);
-            func_80101FDC(param_0, 3);
-            _capod_entrypoint_13(param_0->unk0, 0, 0x1C, 0x910);
+        case 0x49:
+            if (_glcutDll_entrypoint_19(0x32)) {
+                param_0->unk58 = 0.4f;
+                func_80103110(param_0, 1);
+                func_80101FDC(param_0, 3);
+                _capod_entrypoint_13(param_0->unk0, 0, 0x1C, 0x910);
+                return 1;
+            }
+            break;
+        case 5:
+            func_8010A570(param_0);
+            func_800EE7F8(local_0, param_0->position);
+            func_800EF1B8(local_0, *(f32 *) ((u8 *) param_0 + 0x48), 100.0f);
+            _chexploder_entrypoint_3(param_0, local_0, 3);
+            func_800F8300(func_800F54E4(), 2, param_0->position);
             return 1;
-        }
-        break;
-    case 5:
-        func_8010A570(param_0);
-        func_800EE7F8(local_0, param_0->position);
-        func_800EF1B8(local_0, *(f32 *)((u8 *)param_0 + 0x48), 100.0f);
-        _chexploder_entrypoint_3(param_0, local_0, 3);
-        func_800F8300(func_800F54E4(), 2, param_0->position);
-        return 1;
-    case 0x90:
-        if (func_800EA05C() == 0xED) {
-            func_80101FDC(param_0, 2);
-            func_80103110(param_0, 1);
-            param_0->unk58 = 0.8f;
-        } else func_800FFAB0(param_0);
-        func_800BABB8(0, param_0->position, param_0->position,
-            param_0->scale, D_80800400_chLagoonInnBlockedWall);
-        func_800C4AF0(param_0->position, D_8080046C_chLagoonInnBlockedWall);
-        return 1;
+        case 0x90:
+            if (func_800EA05C() == 0xED) {
+                func_80101FDC(param_0, 2);
+                func_80103110(param_0, 1);
+                param_0->unk58 = 0.8f;
+            } else
+                func_800FFAB0(param_0);
+            func_800BABB8(0, param_0->position, param_0->position, param_0->scale,
+                          D_80800400_chLagoonInnBlockedWall);
+            func_800C4AF0(param_0->position, D_8080046C_chLagoonInnBlockedWall);
+            return 1;
     }
     return 0;
 }
 
 int chLagoonInnBlockedWall_entrypoint_0()
 {
-  return &D_80800480_chLagoonInnBlockedWall;
+    return &D_80800480_chLagoonInnBlockedWall;
 }
 
-void func_8080025C_chLagoonInnBlockedWall(param_0, param_1) Actor *param_0; s32 param_1;
+void func_8080025C_chLagoonInnBlockedWall(param_0, param_1) Actor *param_0;
+s32 param_1;
 {
     f32 local_0[3];
 
@@ -101,38 +104,88 @@ void func_8080025C_chLagoonInnBlockedWall(param_0, param_1) Actor *param_0; s32 
 
 s32 func_80800398_chLagoonInnBlockedWall(s32 param_0, s32 param_1, s32 param_2)
 {
-  unsigned int *new_var;
-  ;
-  if ((param_1 == 0x40) ^ 0)
-  {
-    func_8080025C_chLagoonInnBlockedWall(*(&param_0), param_2 | 0);
-    if (!param_2)
-    {
+    if ((param_1 == 0x40) ^ 0) {
+        func_8080025C_chLagoonInnBlockedWall(*&param_0, param_2 | 0);
+        if (!param_2) {
+        }
+        return 1;
     }
-    return 1;
-  }
-  return 0;
+    return 0;
 }
 
-u8 *chLagoonInnBlockedWall_entrypoint_1(void) {
+u8 *chLagoonInnBlockedWall_entrypoint_1(void)
+{
     return D_80800570_chLagoonInnBlockedWall;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/LagoonInnBlockedWall.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800480_chLagoonInnBlockedWall -> int[], D_80800570_chLagoonInnBlockedWall -> u32 */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
 extern void func_80102EC0();
 extern void _bsbtrot_entrypoint_8();
-u8 D_80800400_chLagoonInnBlockedWall[108] = { 0x6, 0x10, 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x2B, 0x2, 0x0, 0x3, 0x0, 0x0, 0x22, 0x1, 0x80, 0x2, 0x0, 0x4, 0x80, 0x6, 0x0, 0x0, 0x15, 0x0, 0x0, 0x0, 0x26, 0x0, 0x19, 0x0, 0x0, 0x0, 0x7, 0x0, 0x2D, 0x0, 0x32, 0x0, 0x64, 0x0, 0x20, 0xDE, 0xA7, 0x71, 0xC0, 0x0, 0xA, 0xFF, 0x9C, 0x0, 0x19, 0xFF, 0x9C, 0x0, 0x64, 0x0, 0x4B, 0x0, 0x64, 0x6, 0x1A, 0x19, 0x10, 0x0, 0x1D, 0x6, 0xA0, 0x0, 0x14, 0x0, 0x2D, 0x1, 0x90, 0x2, 0x58, 0x0, 0x1B, 0xFC, 0xE0, 0xFD, 0xA8, 0x0, 0x22, 0x0, 0xB3, 0x0, 0xCC, 0x0, 0xB3, 0x0, 0xB3, 0x0, 0x1E, 0x0, 0x32, 0x0, 0x32, 0x0, 0xD, 0x0, 0x4B, 0x19, 0x1A, 0x0, 0x0, 0x0, 0x0 };
-u8 D_8080046C_chLagoonInnBlockedWall[20] = { 0x0, 0x13, 0x4, 0x13, 0x0, 0xA, 0x0, 0xE6, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x1, 0x19, 0x64, 0x19, 0x64, 0x0, 0x0 };
-int D_80800480_chLagoonInnBlockedWall[18] = { 0xAC0488, 0x8EF0001, 0x0, (u32)func_80800000_chLagoonInnBlockedWall, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x3A90000, 0x400, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808000C0_chLagoonInnBlockedWall, (u32)func_80107C2C, -0x7FF7D3FE, (u32)func_808000E0_chLagoonInnBlockedWall, 0x0 };
-u8 D_808004C8_chLagoonInnBlockedWall[76] = { 0x0, 0x2C, 0xFE, 0x5C, 0x1, 0x9A, 0xFE, 0x5C, 0x1, 0xE0, 0x3, 0x5C, 0x1, 0xE0, 0x0, 0x1B, 0xFB, 0x50, 0xFC, 0x18, 0x0, 0x1E, 0xFF, 0xEC, 0x0, 0x14, 0x0, 0x24, 0x0, 0x35, 0x0, 0x63, 0x0, 0x2A, 0x0, 0x0, 0x0, 0x2, 0x0, 0xCC, 0x1, 0x33, 0x0, 0x15, 0x0, 0x0, 0x0, 0x59, 0x0, 0x16, 0x0, 0x4, 0x0, 0x1D, 0x9, 0xEA, 0x0, 0x19, 0x0, 0x1, 0x0, 0x6, 0x0, 0x27, 0xFE, 0xD4, 0xFE, 0xD4, 0x1, 0x2C, 0x1, 0x2C, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80800514_chLagoonInnBlockedWall[20] = { 0x0, 0x13, 0x4, 0x13, 0x0, 0xD, 0x0, 0xE6, 0x1, 0x0, 0x0, 0x1, 0x3, 0xE8, 0x19, 0x64, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80800528_chLagoonInnBlockedWall[36] = { 0x0, 0xC, 0x0, 0x50, 0x0, 0x23, 0x3, 0x0, 0x0, 0x2B, 0x1, 0x80, 0x1, 0xA6, 0x0, 0x15, 0x0, 0xB3, 0x0, 0xCC, 0x0, 0x1D, 0x9, 0xBB, 0x0, 0x18, 0x0, 0x0, 0x0, 0x9, 0xC, 0x0, 0xC, 0x0, 0x0, 0x0 };
-u8 D_8080054C_chLagoonInnBlockedWall[36] = { 0x0, 0x1D, 0x6, 0xA3, 0x0, 0x14, 0x0, 0x2D, 0x2, 0x58, 0x3, 0x20, 0x0, 0x22, 0x0, 0x66, 0x0, 0x80, 0x0, 0x33, 0x0, 0x4C, 0x0, 0x1E, 0x0, 0x14, 0x0, 0x14, 0x0, 0xD, 0x0, 0x3C, 0x0, 0x0, 0x0, 0x0 };
-u32 D_80800570_chLagoonInnBlockedWall[20] = { 0x3760491, 0x6AA0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x3A90000, 0x800, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_8, (u32)func_80800398_chLagoonInnBlockedWall, 0x0, 0x0, 0x0 };
+u8 D_80800400_chLagoonInnBlockedWall[108] = {
+    0x6,  0x10, 0x0, 0x1D, 0x9,  0xDD, 0x0,  0x2B, 0x2, 0x0,  0x3,  0x0,  0x0,  0x22, 0x1,  0x80,
+    0x2,  0x0,  0x4, 0x80, 0x6,  0x0,  0x0,  0x15, 0x0, 0x0,  0x0,  0x26, 0x0,  0x19, 0x0,  0x0,
+    0x0,  0x7,  0x0, 0x2D, 0x0,  0x32, 0x0,  0x64, 0x0, 0x20, 0xDE, 0xA7, 0x71, 0xC0, 0x0,  0xA,
+    0xFF, 0x9C, 0x0, 0x19, 0xFF, 0x9C, 0x0,  0x64, 0x0, 0x4B, 0x0,  0x64, 0x6,  0x1A, 0x19, 0x10,
+    0x0,  0x1D, 0x6, 0xA0, 0x0,  0x14, 0x0,  0x2D, 0x1, 0x90, 0x2,  0x58, 0x0,  0x1B, 0xFC, 0xE0,
+    0xFD, 0xA8, 0x0, 0x22, 0x0,  0xB3, 0x0,  0xCC, 0x0, 0xB3, 0x0,  0xB3, 0x0,  0x1E, 0x0,  0x32,
+    0x0,  0x32, 0x0, 0xD,  0x0,  0x4B, 0x19, 0x1A, 0x0, 0x0,  0x0,  0x0};
+u8 D_8080046C_chLagoonInnBlockedWall[20] = {0x0,  0x13, 0x4,  0x13, 0x0,  0xA, 0x0,
+                                            0xE6, 0x0,  0x16, 0x6D, 0x60, 0x0, 0x1,
+                                            0x19, 0x64, 0x19, 0x64, 0x0,  0x0};
+int D_80800480_chLagoonInnBlockedWall[18] = {0xAC0488,
+                                             0x8EF0001,
+                                             0x0,
+                                             (u32) func_80800000_chLagoonInnBlockedWall,
+                                             (u32) func_80105834,
+                                             (u32) func_80101870,
+                                             0x0,
+                                             0x0,
+                                             0x3A90000,
+                                             0x400,
+                                             0x0,
+                                             (u32) func_80108ED0,
+                                             0x0,
+                                             (u32) func_808000C0_chLagoonInnBlockedWall,
+                                             (u32) func_80107C2C,
+                                             -0x7FF7D3FE,
+                                             (u32) func_808000E0_chLagoonInnBlockedWall,
+                                             0x0};
+u8 D_808004C8_chLagoonInnBlockedWall[76] = {
+    0x0,  0x2C, 0xFE, 0x5C, 0x1, 0x9A, 0xFE, 0x5C, 0x1, 0xE0, 0x3, 0x5C, 0x1, 0xE0, 0x0, 0x1B,
+    0xFB, 0x50, 0xFC, 0x18, 0x0, 0x1E, 0xFF, 0xEC, 0x0, 0x14, 0x0, 0x24, 0x0, 0x35, 0x0, 0x63,
+    0x0,  0x2A, 0x0,  0x0,  0x0, 0x2,  0x0,  0xCC, 0x1, 0x33, 0x0, 0x15, 0x0, 0x0,  0x0, 0x59,
+    0x0,  0x16, 0x0,  0x4,  0x0, 0x1D, 0x9,  0xEA, 0x0, 0x19, 0x0, 0x1,  0x0, 0x6,  0x0, 0x27,
+    0xFE, 0xD4, 0xFE, 0xD4, 0x1, 0x2C, 0x1,  0x2C, 0x0, 0x0,  0x0, 0x0};
+u8 D_80800514_chLagoonInnBlockedWall[20] = {0x0, 0x13, 0x4, 0x13, 0x0,  0xD,  0x0, 0xE6, 0x1, 0x0,
+                                            0x0, 0x1,  0x3, 0xE8, 0x19, 0x64, 0x0, 0x0,  0x0, 0x0};
+u8 D_80800528_chLagoonInnBlockedWall[36] = {0x0,  0xC,  0x0,  0x50, 0x0,  0x23, 0x3,  0x0,  0x0,
+                                            0x2B, 0x1,  0x80, 0x1,  0xA6, 0x0,  0x15, 0x0,  0xB3,
+                                            0x0,  0xCC, 0x0,  0x1D, 0x9,  0xBB, 0x0,  0x18, 0x0,
+                                            0x0,  0x0,  0x9,  0xC,  0x0,  0xC,  0x0,  0x0,  0x0};
+u8 D_8080054C_chLagoonInnBlockedWall[36] = {0x0,  0x1D, 0x6,  0xA3, 0x0,  0x14, 0x0,  0x2D, 0x2,
+                                            0x58, 0x3,  0x20, 0x0,  0x22, 0x0,  0x66, 0x0,  0x80,
+                                            0x0,  0x33, 0x0,  0x4C, 0x0,  0x1E, 0x0,  0x14, 0x0,
+                                            0x14, 0x0,  0xD,  0x0,  0x3C, 0x0,  0x0,  0x0,  0x0};
+u32 D_80800570_chLagoonInnBlockedWall[20] = {0x3760491,
+                                             0x6AA0001,
+                                             0x0,
+                                             (u32) func_80102EC0,
+                                             (u32) func_80105834,
+                                             (u32) func_80101870,
+                                             0x0,
+                                             0x0,
+                                             0x3A90000,
+                                             0x800,
+                                             0x0,
+                                             (u32) func_80108ED0,
+                                             0x0,
+                                             0x0,
+                                             (u32) func_80107C2C,
+                                             (u32) _bsbtrot_entrypoint_8,
+                                             (u32) func_80800398_chLagoonInnBlockedWall,
+                                             0x0,
+                                             0x0,
+                                             0x0};

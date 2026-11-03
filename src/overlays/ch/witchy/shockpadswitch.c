@@ -1,8 +1,12 @@
 #include "common.h"
 
-#define CODEX_MARKER_SETUP_RECORD
 extern int D_80800170_chwitchyshockpadswitch[];
-typedef struct { f32 position[3]; s32 unkC; f32 unk10; f32 unk14; } MarkerSetupRecord;
+typedef struct {
+    f32 position[3];
+    s32 unkC;
+    f32 unk10;
+    f32 unk14;
+} MarkerSetupRecord;
 extern s32 _subaddiemarker_entrypoint_1(Actor *, s32, s32, MarkerSetupRecord *, s32);
 extern void func_800FFAB0(Actor *);
 extern void func_800EE7F8(f32 *, f32 *);
@@ -15,7 +19,7 @@ extern void _chappearfx_entrypoint_1(Actor *, s32, s32, f32);
 
 int chwitchyshockpadswitch_entrypoint_0()
 {
-    return (int)&D_80800170_chwitchyshockpadswitch;
+    return (int) &D_80800170_chwitchyshockpadswitch;
 }
 
 void func_8080000C_chwitchyshockpadswitch(Actor *param_0)
@@ -25,8 +29,8 @@ void func_8080000C_chwitchyshockpadswitch(Actor *param_0)
     if (!_subaddiemarker_entrypoint_1(param_0, 0x4E8, 50, &local_0, 1)) {
         func_800FFAB0(param_0);
     } else {
-        func_800EE7F8((f32 *)&param_0->actorData[0], local_0.position);
-        *(f32 *)&param_0->actorData[3] = local_0.unk10;
+        func_800EE7F8((f32 *) &param_0->actorData[0], local_0.position);
+        *(f32 *) &param_0->actorData[3] = local_0.unk10;
         if (_chswitch_entrypoint_7(param_0, 0x365)) {
             func_80108B04(param_0, 0);
         }
@@ -39,30 +43,46 @@ s32 func_80800094_chwitchyshockpadswitch(Actor *param_0, s32 param_1, s32 param_
     Actor *local_0;
 
     switch (param_1) {
-    case 7:
-        func_80108B04(param_0, 1);
-        _capod_entrypoint_13(param_0->unk0, NULL, 0x8B, 0x10);
-        break;
-    case 0x3D:
-        local_0 = func_80108528(0x210, (f32 *)param_0->actorData, (s32)*(f32 *)((u8 *)param_0 + 0x24), &param_0);
-        if (param_2 != 0) {
-            _subaddiefade_entrypoint_2(local_0);
-            _chappearfx_entrypoint_1(local_0, 0x22, 1, 1.0f);
-        }
-        break;
-    default:
-        return _chswitch_entrypoint_10(param_0, param_1, param_2);
+        case 7:
+            func_80108B04(param_0, 1);
+            _capod_entrypoint_13(param_0->unk0, NULL, 0x8B, 0x10);
+            break;
+        case 0x3D:
+            local_0 = func_80108528(0x210, (f32 *) param_0->actorData,
+                                    (s32) *(f32 *) ((u8 *) param_0 + 0x24), &param_0);
+            if (param_2 != 0) {
+                _subaddiefade_entrypoint_2(local_0);
+                _chappearfx_entrypoint_1(local_0, 0x22, 1, 1.0f);
+            }
+            break;
+        default:
+            return _chswitch_entrypoint_10(param_0, param_1, param_2);
     }
     return 1;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/witchy/shockpadswitch.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800170_chwitchyshockpadswitch -> int[] */
 extern u8 D_8011A270[];
 extern void _chswitch_entrypoint_6();
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
-int D_80800170_chwitchyshockpadswitch[20] = { 0x34304E7, 0x7520001, (u32)&D_8011A270, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, 0x0, 0x0, (u32)func_8080000C_chwitchyshockpadswitch, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80800094_chwitchyshockpadswitch, 0x0, 0x0, 0x0 };
+int D_80800170_chwitchyshockpadswitch[20] = {0x34304E7,
+                                             0x7520001,
+                                             (u32) &D_8011A270,
+                                             (u32) _chswitch_entrypoint_6,
+                                             (u32) func_80105834,
+                                             (u32) func_80101870,
+                                             0x0,
+                                             0x0,
+                                             0x0,
+                                             0x808,
+                                             0x0,
+                                             0x0,
+                                             0x0,
+                                             (u32) func_8080000C_chwitchyshockpadswitch,
+                                             (u32) func_80107C2C,
+                                             -0x7FFFD3FE,
+                                             (u32) func_80800094_chwitchyshockpadswitch,
+                                             0x0,
+                                             0x0,
+                                             0x0};

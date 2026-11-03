@@ -26,10 +26,11 @@ void func_80800000_glcrc(u8 *param_0, u8 *param_1, u32 *param_2)
     param_2[1] = local_3;
 }
 
-s32 glcrc_entrypoint_0(u8 *param_0, s32 param_1) {
+s32 glcrc_entrypoint_0(u8 *param_0, s32 param_1)
+{
     u8 *local_0 = param_0 + param_1 - 8;
     func_80800000_glcrc(param_0, local_0, local_0);
-    return *(s32 *)local_0;
+    return *(s32 *) local_0;
 }
 
 s32 glcrc_entrypoint_1(u8 *param_0, s32 param_1)
@@ -37,10 +38,7 @@ s32 glcrc_entrypoint_1(u8 *param_0, s32 param_1)
     u32 local_1[2];
     u32 *local_0;
 
-    local_0 = (u32 *)(param_0 + param_1 - 8);
+    local_0 = (u32 *) (param_0 + param_1 - 8);
     func_80800000_glcrc(param_0, local_0, local_1);
     return (local_0[0] != local_1[0] || local_0[1] != local_1[1]) ? 0x6E382 : 0;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/crc.data.s) is defined here in C.
- * Values are taken from the ROM. */

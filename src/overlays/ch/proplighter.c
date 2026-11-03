@@ -5,11 +5,18 @@ extern void func_80103014();
 extern void func_80108944();
 extern f32 func_800136E4(f32);
 extern void func_80102FDC(Actor *, f32);
-typedef struct { u8 pad_0[8]; u32 pad_1 : 26; u32 local_0 : 1; u32 local_1 : 1; u32 pad_2 : 4; } PropLightFlags1001;
+
+typedef struct {
+    u8 pad_0[8];
+    u32 pad_1 : 26;
+    u32 local_0 : 1;
+    u32 local_1 : 1;
+    u32 pad_2 : 4;
+} PropLightFlags1001;
 
 int chproplighter_entrypoint_0()
 {
-    return (int)&D_808001A0_chproplighter;
+    return (int) &D_808001A0_chproplighter;
 }
 
 void func_8080000C_chproplighter(Actor *param_0)
@@ -22,30 +29,46 @@ void func_8080000C_chproplighter(Actor *param_0)
     func_800EE904(local_2, param_0->position);
     if (_gccubesearch_entrypoint_16(local_2, &local_0, &local_1, 2, 500)) {
         local_3 = local_1;
-        ((PropLightFlags1001 *)local_3)->local_0 = 1;
-        ((PropLightFlags1001 *)local_3)->local_1 = 0;
+        ((PropLightFlags1001 *) local_3)->local_0 = 1;
+        ((PropLightFlags1001 *) local_3)->local_1 = 0;
         func_800EE88C(param_0->position, local_3 + 4);
-        *(f32 *)((u8 *)param_0 + 0x48) = func_800136E4(2.0f * (f32)(u32)local_3[2]);
-        *(f32 *)((u8 *)param_0 + 0x44) = func_800136E4(2.0f * (f32)(u32)local_3[3]);
+        *(f32 *) ((u8 *) param_0 + 0x48) = func_800136E4(2.0f * (f32) (u32) local_3[2]);
+        *(f32 *) ((u8 *) param_0 + 0x44) = func_800136E4(2.0f * (f32) (u32) local_3[3]);
         func_80103140(param_0, _gsproplookup_entrypoint_0(local_3) & 0xFFFF, 0);
-        func_80102FDC(param_0, (f32)(u32)local_3[0xA] * 0.01f);
+        func_80102FDC(param_0, (f32) (u32) local_3[0xA] * 0.01f);
         func_80103014(param_0);
         func_80108944(param_0, param_0);
-        if (!func_80105010(param_0)) func_80104E78(param_0);
+        if (!func_80105010(param_0))
+            func_80104E78(param_0);
         func_8010A63C(param_0);
-    } else func_800FFAB0(param_0);
+    } else
+        func_800FFAB0(param_0);
 }
 
-s32 func_8080017C_chproplighter(s32 param_0){
-    s32 local_0;
-    local_0 = param_0;
+s32 func_8080017C_chproplighter(s32 param_0)
+{
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/proplighter.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808001A0_chproplighter -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
-int D_808001A0_chproplighter[20] = { 0x158044B, -0xFFFF, 0x0, (u32)func_8080017C_chproplighter, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_8080000C_chproplighter, (u32)func_80107C2C, -0x7FF7D3EE, 0x0, 0x0, 0x0, 0x0 };
+int D_808001A0_chproplighter[20] = {0x158044B,
+                                    -0xFFFF,
+                                    0x0,
+                                    (u32) func_8080017C_chproplighter,
+                                    (u32) func_80105834,
+                                    (u32) func_80101870,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x4,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    (u32) func_8080000C_chproplighter,
+                                    (u32) func_80107C2C,
+                                    -0x7FF7D3EE,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0};

@@ -11,7 +11,10 @@ extern s32 func_800BABB8(s32, f32 *, f32 *, f32, s32 *);
 extern void func_800BBCB8(f32 *, s32, f32, s32, void *);
 extern void func_800CB840();
 extern void func_80101FDC();
-typedef struct { u8 pad_0[0x28]; u8 local_0; } StingerLife;
+typedef struct {
+    u8 pad_0[0x28];
+    u8 local_0;
+} StingerLife;
 extern void func_80109BEC(f32 *, f32, s32, s32, s32, Unk80132ED0 *);
 extern void func_800F1A88(int, f32 *);
 extern void func_800F5A00(s32, f32 *);
@@ -35,13 +38,13 @@ void func_80800000_chstinger(Actor *param_0)
 
     if (param_0->unk7C_12) {
         local_0 = func_800B5BE4(0x1B);
-        local_0 = func_800BABB8(local_0,
-            param_0->position, param_0->position, 1.0f, &D_808007D0_chstinger);
-        func_800EFA98(local_1, (f32 *)((u8 *)param_0 + 0x28),
-            func_800DC178(-200.0f, -400.0f));
-        func_800BA930(local_0, (s16)local_1[0], (s16)local_1[1], (s16)local_1[2], (s16)local_1[0], (s16)local_1[1], (s16)local_1[2]);
+        local_0 = func_800BABB8(local_0, param_0->position, param_0->position, 1.0f,
+                                &D_808007D0_chstinger);
+        func_800EFA98(local_1, (f32 *) ((u8 *) param_0 + 0x28), func_800DC178(-200.0f, -400.0f));
+        func_800BA930(local_0, (s16) local_1[0], (s16) local_1[1], (s16) local_1[2],
+                      (s16) local_1[0], (s16) local_1[1], (s16) local_1[2]);
         func_800BA22C(local_0, 3);
-        func_800EFA98(local_1, (f32 *)((u8 *)param_0 + 0x28), -25.0f);
+        func_800EFA98(local_1, (f32 *) ((u8 *) param_0 + 0x28), -25.0f);
         func_800EE780(local_2, param_0->position, local_1);
         func_800BBCB8(local_2, 0, 1.0f, 1, &D_80800844_chstinger);
         func_800EF04C(local_2, local_1);
@@ -59,13 +62,14 @@ void func_8080015C_chstinger(Actor *param_0, s32 param_1)
         func_80101FDC(param_0, param_1);
         local_1 = param_0->unk70_10;
         switch (local_1) {
-        case 2: local_0->local_0 = 1; break;
-        case 3:
-            func_800CB840(4, param_0);
-            func_80109BEC(param_0->position, 120.0f, 2, 0, 0, param_0->unk0);
-            func_800CB870();
-            func_80800000_chstinger(param_0);
-            break;
+            case 2:
+                local_0->local_0 = 1;
+                break;
+            case 3:
+                func_800CB840(4, param_0);
+                func_80109BEC(param_0->position, 120.0f, 2, 0, 0, param_0->unk0);
+                func_800CB870();
+                func_80800000_chstinger(param_0);
         }
     }
 }
@@ -74,13 +78,14 @@ void func_80800218_chstinger(s32 param_0)
 {
     f32 local_0[2];
     func_800F1A88(param_0 + 0x28, local_0);
-    *(f32 *)(param_0 + 0x44) = -local_0[0];
-    *(f32 *)(param_0 + 0x48) = local_0[1];
+    *(f32 *) (param_0 + 0x44) = -local_0[0];
+    *(f32 *) (param_0 + 0x48) = local_0[1];
 }
 
-void func_8080025C_chstinger(s32 arg0) 
+void func_8080025C_chstinger(s32 arg0)
 {
 }
+
 s32 func_80800264_chstinger(Actor *param_0, f32 *param_1)
 {
     f32 local_2;
@@ -95,15 +100,16 @@ s32 func_80800264_chstinger(Actor *param_0, f32 *param_1)
     f32 local_1[3];
     local_4 = func_80100094(param_0, 0);
     local_2 = 0.0f;
-    local_5 = (f32 *)(local_4 + 0x18);
+    local_5 = (f32 *) (local_4 + 0x18);
     local_7 = -1;
-    local_8 = *(s8 *)local_4;
+    local_8 = *(s8 *) local_4;
     for (local_6 = 0; local_6 < func_800F5898(); local_6++) {
         if (func_800F6438(local_6) && local_6 != local_8) {
             func_800F5A00(local_6, local_1);
             local_3 = func_800EEB40(local_1, local_5);
             if (local_7 < 0 || local_3 < local_2) {
-                local_9 = func_800F0734(local_5, param_0->position, local_1, 55.0f, 120.0f, local_0, local_0);
+                local_9 = func_800F0734(local_5, param_0->position, local_1, 55.0f, 120.0f, local_0,
+                                        local_0);
                 if (local_9) {
                     local_7 = local_6;
                     local_2 = local_3;
@@ -115,7 +121,8 @@ s32 func_80800264_chstinger(Actor *param_0, f32 *param_1)
     return local_7;
 }
 
-s32 func_808003B0_chstinger(s32 param_0) {
+s32 func_808003B0_chstinger(s32 param_0)
+{
     f32 local_1[3];
     s32 local_0;
     s32 local_2;
@@ -123,7 +130,8 @@ s32 func_808003B0_chstinger(s32 param_0) {
         local_2 = func_80800264_chstinger(param_0, local_1);
         local_0 = local_2;
         if (local_2 >= 0) {
-            func_800F7A7C(local_0, *(s8*)((char*)func_80100094(param_0, 0) + 0x0), 1, 3, local_1);
+            func_800F7A7C(local_0, *(s8 *) ((char *) func_80100094(param_0, 0) + 0x0), 1, 3,
+                          local_1);
             return 1;
         }
     }
@@ -140,44 +148,45 @@ void func_80800420_chstinger(Actor *param_0)
     u8 *local_6;
 
     local_6 = func_80100094(param_0, 0);
-    local_0 = *(f32 *)(local_6 + 0x14);
+    local_0 = *(f32 *) (local_6 + 0x14);
     local_1 = func_800D8FF8();
     switch (param_0->unk70_10) {
-    case 2:
-        if (local_6[0x28]) {
-            local_6[0x28] = 0;
-            local_2 = 0;
-        } else {
-            _sumissilehome_entrypoint_6(param_0, local_6);
-            local_2 = func_8010B990(param_0, 0x100004);
-        }
-        if (local_2 == 0x20) func_8010AA78(param_0->position);
-        func_80800218_chstinger(param_0);
-        param_0->rotation[2] = func_800136E4(param_0->rotation[2] + local_1 * 1200.0f);
-        func_80103014(param_0);
-        func_8010A590(param_0);
-        func_800CB840(4, param_0);
-        local_3 = func_800CD820(param_0->unk0, (f32 *)(local_6 + 0x18), param_0->position, 80.0f);
-        func_800CB870();
-        func_8010A570(param_0);
-        if (local_2 == 0x20 || (local_3 != 0) != 0 || *(f32 *)(local_6 + 0x24) > 5000.0f) {
-            func_8080015C_chstinger(param_0, 3);
-        }
-        sf_t989 = func_808003B0_chstinger(param_0);
-        if (sf_t989) func_8080015C_chstinger(param_0, 3);
-        break;
-    case 3:
-        func_800FFAB0(param_0);
-        break;
-    default:
-        break;
+        case 2:
+            if (local_6[0x28]) {
+                local_6[0x28] = 0;
+                local_2 = 0;
+            } else {
+                _sumissilehome_entrypoint_6(param_0, local_6);
+                local_2 = func_8010B990(param_0, 0x100004);
+            }
+            if (local_2 == 0x20)
+                func_8010AA78(param_0->position);
+            func_80800218_chstinger(param_0);
+            param_0->rotation[2] = func_800136E4(param_0->rotation[2] + local_1 * 1200.0f);
+            func_80103014(param_0);
+            func_8010A590(param_0);
+            func_800CB840(4, param_0);
+            local_3 =
+                func_800CD820(param_0->unk0, (f32 *) (local_6 + 0x18), param_0->position, 80.0f);
+            func_800CB870();
+            func_8010A570(param_0);
+            if (local_2 == 0x20 || (local_3 != 0) != 0 || *(f32 *) (local_6 + 0x24) > 5000.0f) {
+                func_8080015C_chstinger(param_0, 3);
+            }
+            sf_t989 = func_808003B0_chstinger(param_0);
+            if (sf_t989)
+                func_8080015C_chstinger(param_0, 3);
+            break;
+        case 3:
+            func_800FFAB0(param_0);
     }
-    *(f32 *)(local_6 + 0x14) = local_0 + local_1;
-    *(f32 *)(local_6 + 0x24) += func_800EEAD4(param_0->position, (f32 *)(local_6 + 0x18));
-    func_800EE7F8((f32 *)(local_6 + 0x18), param_0->position);
+    *(f32 *) (local_6 + 0x14) = local_0 + local_1;
+    *(f32 *) (local_6 + 0x24) += func_800EEAD4(param_0->position, (f32 *) (local_6 + 0x18));
+    func_800EE7F8((f32 *) (local_6 + 0x18), param_0->position);
 }
 
-s32 chstinger_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4) {
+s32 chstinger_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4)
+{
     u8 *local_4;
     f32 local_0[3];
     f32 local_1[3];
@@ -193,12 +202,12 @@ s32 chstinger_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s
     }
     local_4 = func_80108474(0x16F, param_0, 0);
     local_3 = func_80100094(local_4, 0);
-    (*(f32 *)((s8 *)(local_4) + (0x34))) = 0.0f;
+    *(f32 *) ((s8 *) local_4 + 0x34) = 0.0f;
     func_800EE7F8(local_4 + 0x28, param_2);
     func_80800218_chstinger(local_4);
-    (*(f32 *)((s8 *)(local_3) + (0x24))) = 0.0f;
+    *(f32 *) ((s8 *) local_3 + 0x24) = 0.0f;
     func_800EE7F8(local_3 + 0x18, param_0);
-    (*(f32 *)((s8 *)(local_3) + (0x14))) = 0.0f;
+    *(f32 *) ((s8 *) local_3 + 0x14) = 0.0f;
     func_8010A570(local_4);
     _sumissilehome_entrypoint_0(local_4, local_3);
     _sumissilehome_entrypoint_3(local_4, local_3, param_4);
@@ -209,38 +218,54 @@ s32 chstinger_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s
     }
     _sumissilehome_entrypoint_5(local_4, local_3, 0x458CA000, 0x44960000);
     func_8080015C_chstinger(local_4, 2);
-    return (*(s32 *)((s8 *)(local_4) + (0)));
+    return *(s32 *) ((s8 *) local_4 + 0);
 }
 
 s32 func_80800774_chstinger(Actor *this, s32 param_1, s32 param_2)
 {
-  Actor *new_var;
-  if (param_1 == 0x95)
-  {
-    new_var = this;
-    func_80109EEC(new_var, 16);
-  }
-  else
-  {
-    return 0;
-  }
-  return 1;
+    Actor *new_var;
+    if (param_1 == 0x95) {
+        new_var = this;
+        func_80109EEC(new_var, 16);
+    } else {
+        return 0;
+    }
+    return 1;
 }
 
 int chstinger_entrypoint_1()
 {
-    return (int)&D_80800870_chstinger;
+    return (int) &D_80800870_chstinger;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/stinger.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808007D0_chstinger -> s32[], D_808007FC_chstinger -> s32[], D_80800844_chstinger -> s32[], D_80800870_chstinger -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
-s32 D_808007D0_chstinger[11] = { 0x1D09E4, 0x22004C, 0x4C0005, 0x50027, 0x0, 0x3200320, 0x2B004C, 0x4C000E, 0xF0028, 0x1BFCE0, -0x3200000 };
-s32 D_808007FC_chstinger[18] = { 0x1D09DC, 0x2CFFD8, 0x32FFD8, 0x280064, 0x280015, 0x140066, 0x20F0F0, -0xFAFFFDE, 0x800099, 0x14C0199, 0x161000, 0x180000, 0x30000, 0x2B, 0xE60100, 0x210000, 0x0, 0x11A0000 };
-s32 D_80800844_chstinger[11] = { 0x1D09E4, 0x150019, 0x4C0016, 0x10000022, 0xCC00CC, 0x70007, 0x270000, 0x3200000, 0x320002B, 0x260026, 0x0 };
-int D_80800870_chstinger[20] = { 0x27F016F, 0x8370001, 0x0, (u32)func_80800420_chstinger, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, (u32)func_8080025C_chstinger, (u32)func_80108ED0, 0x2C0000, 0x0, (u32)func_80107C2C, -0x7FFFE000, (u32)func_80800774_chstinger, 0x0, 0x0, 0x0 };
+s32 D_808007D0_chstinger[11] = {0x1D09E4, 0x22004C, 0x4C0005, 0x50027,  0x0,       0x3200320,
+                                0x2B004C, 0x4C000E, 0xF0028,  0x1BFCE0, -0x3200000};
+s32 D_808007FC_chstinger[18] = {0x1D09DC, 0x2CFFD8,   0x32FFD8, 0x280064,  0x280015, 0x140066,
+                                0x20F0F0, -0xFAFFFDE, 0x800099, 0x14C0199, 0x161000, 0x180000,
+                                0x30000,  0x2B,       0xE60100, 0x210000,  0x0,      0x11A0000};
+s32 D_80800844_chstinger[11] = {0x1D09E4, 0x150019,  0x4C0016,  0x10000022, 0xCC00CC, 0x70007,
+                                0x270000, 0x3200000, 0x320002B, 0x260026,   0x0};
+int D_80800870_chstinger[20] = {0x27F016F,
+                                0x8370001,
+                                0x0,
+                                (u32) func_80800420_chstinger,
+                                (u32) func_80105834,
+                                (u32) func_80101870,
+                                0x0,
+                                0x0,
+                                0x0,
+                                0x4,
+                                (u32) func_8080025C_chstinger,
+                                (u32) func_80108ED0,
+                                0x2C0000,
+                                0x0,
+                                (u32) func_80107C2C,
+                                -0x7FFFE000,
+                                (u32) func_80800774_chstinger,
+                                0x0,
+                                0x0,
+                                0x0};

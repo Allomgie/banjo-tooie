@@ -1,10 +1,30 @@
 #include "common.h"
 
-#define CODEX_ATTRACT_RECORDS_DEFINED
-typedef struct { s16 id; s8 type; u8 flags; u8 count; u8 pad_1; } AttractEntry_gsattract_entrypoint_1;
-typedef struct { s16 id; u8 count; u8 pad_0; AttractEntry_gsattract_entrypoint_1 *entries; u8 flags; u8 pad_1[3]; } AttractMode_gsattract_entrypoint_1;
-typedef struct { u8 mode; u8 entry; u8 pad_2[2]; f32 timer; } AttractState_gsattract_entrypoint_1;
-typedef struct { s32 pad_0; AttractState_gsattract_entrypoint_1 state; } AttractGlobal;
+typedef struct {
+    s16 id;
+    s8 type;
+    u8 flags;
+    u8 count;
+    u8 pad_1;
+} AttractEntry_gsattract_entrypoint_1;
+typedef struct {
+    s16 id;
+    u8 count;
+    u8 pad_0;
+    AttractEntry_gsattract_entrypoint_1 *entries;
+    u8 flags;
+    u8 pad_1[3];
+} AttractMode_gsattract_entrypoint_1;
+typedef struct {
+    u8 mode;
+    u8 entry;
+    u8 pad_2[2];
+    f32 timer;
+} AttractState_gsattract_entrypoint_1;
+typedef struct {
+    s32 pad_0;
+    AttractState_gsattract_entrypoint_1 state;
+} AttractGlobal;
 extern AttractMode_gsattract_entrypoint_1 D_80800490_gsattract[];
 extern s32 func_800C95D4(void);
 extern f32 func_800D9004(void);
@@ -14,12 +34,38 @@ extern s32 func_80015FA0(s32);
 extern void func_800A9C50(void);
 extern u8 D_80135470[];
 extern u8 D_80800493_gsattract[];
-typedef struct { s16 id; s8 type; u8 pad_0; u8 count; u8 pad_1; } AttractEntry_808002A4_gsattract;
-typedef struct { s16 id; u8 count; u8 pad_0; AttractEntry_808002A4_gsattract *entries; s32 pad_1; } AttractMode_808002A4_gsattract;
-typedef struct { u8 mode; u8 entry; } AttractState_808002A4_gsattract;
-typedef struct { s16 id; s8 type; u8 pad_0; u8 count; u8 pad_1; } AttractEntry_gsattract_entrypoint_5;
-typedef struct { s16 id; u8 count; u8 pad_0; AttractEntry_gsattract_entrypoint_5 *entries; s32 pad_1; } AttractMode_gsattract_entrypoint_5;
-typedef struct { u8 mode; u8 entry; } AttractState_gsattract_entrypoint_5;
+typedef struct {
+    s16 id;
+    s8 type;
+    u8 pad_0;
+    u8 count;
+    u8 pad_1;
+} AttractEntry_808002A4_gsattract;
+typedef struct {
+    s16 id;
+    u8 count;
+    u8 pad_0;
+    AttractEntry_808002A4_gsattract *entries;
+    s32 pad_1;
+} AttractMode_808002A4_gsattract;
+typedef struct {
+    u8 mode;
+    u8 entry;
+} AttractState_808002A4_gsattract;
+typedef struct {
+    s16 id;
+    s8 type;
+    u8 pad_0;
+    u8 count;
+    u8 pad_1;
+} AttractEntry_gsattract_entrypoint_5;
+typedef struct {
+    s16 id;
+    u8 count;
+    u8 pad_0;
+    AttractEntry_gsattract_entrypoint_5 *entries;
+    s32 pad_1;
+} AttractMode_gsattract_entrypoint_5;
 extern AttractGlobal D_8013546C;
 extern s16 widescreen_enabled;
 extern void func_800FE4E4(void);
@@ -28,24 +74,32 @@ void func_808002A4_gsattract();
 
 void gsattract_entrypoint_0()
 {
-  (*(f32 *)((u8 *)((u8 *) &D_8013546C) + 0x8)) = 0.0f;
+    *(f32 *) ((u8 *) (u8 *) &D_8013546C + 0x8) = 0.0f;
 }
 
 void gsattract_entrypoint_1(void)
 {
     f32 prev;
 
-    prev = (*((AttractState_gsattract_entrypoint_1 *) D_80135470)).timer;
+    prev = (*(AttractState_gsattract_entrypoint_1 *) D_80135470).timer;
     if (func_800C95D4()) {
-        (*((AttractState_gsattract_entrypoint_1 *) D_80135470)).timer += func_800D9004();
+        (*(AttractState_gsattract_entrypoint_1 *) D_80135470).timer += func_800D9004();
     }
-    if ((D_80800490_gsattract[(*((AttractState_gsattract_entrypoint_1 *) D_80135470)).mode].flags & 1) && 6.0f <= (*((AttractState_gsattract_entrypoint_1 *) D_80135470)).timer && prev < 6.0f) {
+    if ((D_80800490_gsattract[(*(AttractState_gsattract_entrypoint_1 *) D_80135470).mode].flags &
+         1) &&
+        6.0f <= (*(AttractState_gsattract_entrypoint_1 *) D_80135470).timer && prev < 6.0f) {
         _chattract_entrypoint_1(func_800167F4() ? 3 : 1);
     }
-    if ((D_80800490_gsattract[(*((AttractState_gsattract_entrypoint_1 *) D_80135470)).mode].flags & 2) && 0.5f <= (*((AttractState_gsattract_entrypoint_1 *) D_80135470)).timer && prev < 0.5f) {
+    if ((D_80800490_gsattract[(*(AttractState_gsattract_entrypoint_1 *) D_80135470).mode].flags &
+         2) &&
+        0.5f <= (*(AttractState_gsattract_entrypoint_1 *) D_80135470).timer && prev < 0.5f) {
         _chattract_entrypoint_1(2);
     }
-    if ((D_80800490_gsattract[(*((AttractState_gsattract_entrypoint_1 *) D_80135470)).mode].entries[(*((AttractState_gsattract_entrypoint_1 *) D_80135470)).entry].flags & 1) && 1.0f <= (*((AttractState_gsattract_entrypoint_1 *) D_80135470)).timer && prev < 1.0f) {
+    if ((D_80800490_gsattract[(*(AttractState_gsattract_entrypoint_1 *) D_80135470).mode]
+             .entries[(*(AttractState_gsattract_entrypoint_1 *) D_80135470).entry]
+             .flags &
+         1) &&
+        1.0f <= (*(AttractState_gsattract_entrypoint_1 *) D_80135470).timer && prev < 1.0f) {
         _chattract_entrypoint_1(0);
     }
     if (func_800C95D4() && func_80015FA0(0)) {
@@ -53,10 +107,12 @@ void gsattract_entrypoint_1(void)
     }
 }
 
-void gsattract_entrypoint_2(s32 arg0) 
+void gsattract_entrypoint_2(s32 arg0)
 {
 }
-void gsattract_entrypoint_3(void) {
+
+void gsattract_entrypoint_3(void)
+{
     s32 var_a0;
 
     if (func_800A8264() == 0) {
@@ -70,22 +126,24 @@ void gsattract_entrypoint_3(void) {
 
 void gsattract_entrypoint_4(void)
 {
-  s32 local_0 = 2;
-  ((u8 *) &D_8013546C)[4] = local_0;
+    s32 local_0 = 2;
+    ((u8 *) &D_8013546C)[4] = local_0;
 }
 
-void func_80800274_gsattract(s32 param_0) {
+void func_80800274_gsattract(s32 param_0)
+{
     D_80135470[0] = param_0;
-    D_80135470[1] = D_80800493_gsattract[(u8)param_0 * 12];
+    D_80135470[1] = D_80800493_gsattract[(u8) param_0 * 12];
 }
 
 void func_808002A4_gsattract(param_0) s32 param_0;
 {
     AttractEntry_808002A4_gsattract *local_0;
     AttractState_808002A4_gsattract *local_1;
-    local_1 = ((AttractState_808002A4_gsattract *) D_80135470);
+    local_1 = (AttractState_808002A4_gsattract *) D_80135470;
     local_1->entry = param_0;
-    local_0 = &((AttractMode_808002A4_gsattract *) D_80800490_gsattract)[local_1->mode].entries[param_0];
+    local_0 =
+        &((AttractMode_808002A4_gsattract *) D_80800490_gsattract)[local_1->mode].entries[param_0];
     if (local_0->type < 0) {
         func_800A791C(local_0->id, 1, 1);
     } else {
@@ -98,20 +156,27 @@ void gsattract_entrypoint_5(s32 param_0)
 {
     AttractMode_gsattract_entrypoint_5 *local_0;
     if (!func_800A8264()) {
-        if (widescreen_enabled) param_0 = 1;
-        if (param_0 != D_8013546C.state.mode) func_80800274_gsattract(param_0);
+        if (widescreen_enabled)
+            param_0 = 1;
+        if (param_0 != D_8013546C.state.mode)
+            func_80800274_gsattract(param_0);
         func_800FE4E4();
         func_800A9B84();
-        local_0 = &((AttractMode_gsattract_entrypoint_5 *) D_80800490_gsattract)[D_8013546C.state.mode];
+        local_0 =
+            &((AttractMode_gsattract_entrypoint_5 *) D_80800490_gsattract)[D_8013546C.state.mode];
         func_800A9B8C(local_0->id, local_0->count);
         gsattract_entrypoint_3();
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gs/attract.data.s) is defined here in C.
- * Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800493_gsattract = D_80800490_gsattract + 0x3, D_80800494_gsattract = D_80800490_gsattract + 0x4 */
-u32 D_808003D0_gsattract[24] = { 0x14F0801, 0x1000116, 0x7000100, 0x13A0800, 0xD00018B, 0xFF000000, 0xEB0501, 0x1000128, 0x8000100, 0xB90700, 0xD00018B, 0xFF000000, 0x11A0801, 0x1000108, 0x8000700, 0xE60800, 0xD00018B, 0xFF000000, 0xF40701, 0xB000114, 0x6001200, 0x1A70800, 0xD00018B, 0xFF000000 };
-u32 D_80800430_gsattract[24] = { 0x14F0701, 0x1000116, 0x5000100, 0x13A0700, 0xD00018B, 0xFF000000, 0xEB0601, 0x1000128, 0x7000100, 0xB90600, 0xD00018B, 0xFF000000, 0x11A0401, 0x1000108, 0x7000700, 0xE60700, 0xD00018B, 0xFF000000, 0xF40501, 0xB000114, 0x3001200, 0x1A70600, 0xD00018B, 0xFF000000 };
-AttractMode_gsattract_entrypoint_1 D_80800490_gsattract[2] = { 0x158, 0x1, 0x10, (void *)&D_808003D0_gsattract, 0x1, 0x0, 0x0, 0x0, 0x158, 0x1, 0x10, (void *)&D_80800430_gsattract, 0x1, 0x0, 0x0, 0x0 };
-static u32 D_80800490_gsattract_rest[2] = { 0x0, 0x0 };
+u32 D_808003D0_gsattract[24] = {0x14F0801, 0x1000116, 0x7000100, 0x13A0800, 0xD00018B, 0xFF000000,
+                                0xEB0501,  0x1000128, 0x8000100, 0xB90700,  0xD00018B, 0xFF000000,
+                                0x11A0801, 0x1000108, 0x8000700, 0xE60800,  0xD00018B, 0xFF000000,
+                                0xF40701,  0xB000114, 0x6001200, 0x1A70800, 0xD00018B, 0xFF000000};
+u32 D_80800430_gsattract[24] = {0x14F0701, 0x1000116, 0x5000100, 0x13A0700, 0xD00018B, 0xFF000000,
+                                0xEB0601,  0x1000128, 0x7000100, 0xB90600,  0xD00018B, 0xFF000000,
+                                0x11A0401, 0x1000108, 0x7000700, 0xE60700,  0xD00018B, 0xFF000000,
+                                0xF40501,  0xB000114, 0x3001200, 0x1A70600, 0xD00018B, 0xFF000000};
+AttractMode_gsattract_entrypoint_1 D_80800490_gsattract[2] = {
+    0x158, 0x1, 0x10, (void *) &D_808003D0_gsattract, 0x1, 0x0, 0x0, 0x0,
+    0x158, 0x1, 0x10, (void *) &D_80800430_gsattract, 0x1, 0x0, 0x0, 0x0};

@@ -13,7 +13,8 @@ void func_80800000_chfantasytrashcanbits(Actor *param_0)
     } else {
         func_80101FDC(param_0, 1);
     }
-    _chdoormake_entrypoint_3(param_0, param_0->rotation[1], 90.0f, param_0->scale * 325.0f, 0x80A, 0);
+    _chdoormake_entrypoint_3(param_0, param_0->rotation[1], 90.0f, param_0->scale * 325.0f, 0x80A,
+                             0);
     _chdoormake_entrypoint_8(param_0, 2);
     _chdoormake_entrypoint_5(param_0, 2.0f);
     _chdoormake_entrypoint_9(param_0, 0, 7, 16);
@@ -27,31 +28,32 @@ void func_808000EC_chfantasytrashcanbits(Actor *param_0)
     f32 local_0[3];
 
     switch (param_0->unk70_10) {
-    case 4:
-        func_800F5A00(func_800F54E4(), local_0);
-        _subaddieDll_entrypoint_4(param_0, 1);
-        if (func_800EFC7C(param_0->position, local_0) > 4000000.0f) {
-            func_8010108C(param_0, 8, 0);
-        }
-        break;
-    case 1:
-        _subaddieDll_entrypoint_4(param_0, 0);
-        break;
+        case 4:
+            func_800F5A00(func_800F54E4(), local_0);
+            _subaddieDll_entrypoint_4(param_0, 1);
+            if (func_800EFC7C(param_0->position, local_0) > 4000000.0f) {
+                func_8010108C(param_0, 8, 0);
+            }
+            break;
+        case 1:
+            _subaddieDll_entrypoint_4(param_0, 0);
     }
     _chdoor_entrypoint_0(param_0);
 }
 
 int chfantasytrashcanbits_entrypoint_0()
 {
-    return (int)&D_80800240_chfantasytrashcanbits;
+    return (int) &D_80800240_chfantasytrashcanbits;
 }
 
-s32 func_808001A8_chfantasytrashcanbits(Actor *this){
+s32 func_808001A8_chfantasytrashcanbits(Actor *this)
+{
     _chswitch_entrypoint_7(this, 0x9FF);
     _chswitch_entrypoint_8(this, 0x400);
 }
 
-s32 func_808001D8_chfantasytrashcanbits(s32 param_0, s32 param_1, s32 param_2) {
+s32 func_808001D8_chfantasytrashcanbits(s32 param_0, s32 param_1, s32 param_2)
+{
     if (param_1 == 7) {
         func_80101180(0x40C);
     }
@@ -60,17 +62,47 @@ s32 func_808001D8_chfantasytrashcanbits(s32 param_0, s32 param_1, s32 param_2) {
 
 int chfantasytrashcanbits_entrypoint_1()
 {
-    return (int)&D_80800288_chfantasytrashcanbits;
+    return (int) &D_80800288_chfantasytrashcanbits;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fantasy/trashcanbits.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800240_chfantasytrashcanbits -> int[], D_80800288_chfantasytrashcanbits -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
 extern void _chdoor_entrypoint_1();
 extern void _chswitch_entrypoint_6();
-int D_80800240_chfantasytrashcanbits[18] = { 0xAC040C, 0x8CC0001, 0x0, (u32)func_808000EC_chfantasytrashcanbits, (u32)func_80105834, (u32)func_80101870, 0x9C40000, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800000_chfantasytrashcanbits, (u32)func_80107C2C, -0x7FFFDBFE, (u32)_chdoor_entrypoint_1, 0x0 };
-int D_80800288_chfantasytrashcanbits[18] = { 0x343040B, 0x7B90001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, 0x0, 0x0, (u32)func_808001A8_chfantasytrashcanbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_808001D8_chfantasytrashcanbits, 0x0 };
+int D_80800240_chfantasytrashcanbits[18] = {0xAC040C,
+                                            0x8CC0001,
+                                            0x0,
+                                            (u32) func_808000EC_chfantasytrashcanbits,
+                                            (u32) func_80105834,
+                                            (u32) func_80101870,
+                                            0x9C40000,
+                                            0x0,
+                                            0x0,
+                                            0x800,
+                                            0x0,
+                                            0x0,
+                                            0x0,
+                                            (u32) func_80800000_chfantasytrashcanbits,
+                                            (u32) func_80107C2C,
+                                            -0x7FFFDBFE,
+                                            (u32) _chdoor_entrypoint_1,
+                                            0x0};
+int D_80800288_chfantasytrashcanbits[18] = {0x343040B,
+                                            0x7B90001,
+                                            -0x7FEE5DE0,
+                                            (u32) _chswitch_entrypoint_6,
+                                            (u32) func_80105834,
+                                            (u32) func_80101870,
+                                            0x0,
+                                            0x0,
+                                            0x0,
+                                            0x808,
+                                            0x0,
+                                            0x0,
+                                            0x0,
+                                            (u32) func_808001A8_chfantasytrashcanbits,
+                                            (u32) func_80107C2C,
+                                            -0x7FFFD3FE,
+                                            (u32) func_808001D8_chfantasytrashcanbits,
+                                            0x0};

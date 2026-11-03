@@ -1,12 +1,18 @@
 #include "common.h"
 
-typedef struct { s16 position[3]; u16 flags; s16 uv[2]; u8 color[4]; } DbVplVertex;
+typedef struct {
+    s16 position[3];
+    u16 flags;
+    s16 uv[2];
+    u8 color[4];
+} DbVplVertex;
 
-s32 *dbvpl_entrypoint_0(u8 *param_0, s32 param_1) {
+s32 *dbvpl_entrypoint_0(u8 *param_0, s32 param_1)
+{
     s32 i;
     s32 *local_0;
-    for (i = 0; i < *(s32 *)(param_0 + 0x2C); i++) {
-        local_0 = (s32 *)(param_0 + ((s32 *)(param_0 + 0x30))[i]);
+    for (i = 0; i < *(s32 *) (param_0 + 0x2C); i++) {
+        local_0 = (s32 *) (param_0 + ((s32 *) (param_0 + 0x30))[i]);
         if (*local_0 == param_1) {
             return local_0;
         }
@@ -39,6 +45,3 @@ void dbvpl_entrypoint_1(s32 param_0, DbVplVertex *param_1, s32 param_2, s32 *par
         }
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/vpl.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -1,6 +1,9 @@
 #include "nc/ba/jig.h"
 
-typedef struct { u8 pad_0[0x2C]; f32 *local_0; } JigCameraState;
+typedef struct {
+    u8 pad_0[0x2C];
+    f32 *local_0;
+} JigCameraState;
 extern void func_80111B8C(void *, f32, f32);
 extern void func_80115870(void *, f32);
 extern void func_800EFB24(f32 *, f32 *, f32 *);
@@ -13,19 +16,19 @@ extern f32 func_80112C3C(void *, f32);
 extern void func_800EEBF0(f32 *, f32 *, f32);
 extern void func_800EE780(f32 *, f32 *, f32 *);
 
-s32 ncbajig_entrypoint_0() 
+s32 ncbajig_entrypoint_0()
 {
     return 0xC;
 }
 
-void func_80800008_ncbajig(PlayerState* arg0, f32* arg1)
+void func_80800008_ncbajig(PlayerState *arg0, f32 *arg1)
 {
-    func_80112524(arg0,arg1);
+    func_80112524(arg0, arg1);
 }
 
-void func_80800028_ncbajig(PlayerState* arg0, f32* arg1)
+void func_80800028_ncbajig(PlayerState *arg0, f32 *arg1)
 {
-    func_80112524(arg0,arg1);
+    func_80112524(arg0, arg1);
 }
 
 void ncbajig_entrypoint_1(JigCameraState *param_0)
@@ -38,9 +41,10 @@ void ncbajig_entrypoint_1(JigCameraState *param_0)
     func_801124D0(param_0, 5);
 }
 
-void ncbajig_entrypoint_2(s32 arg0) 
+void ncbajig_entrypoint_2(s32 arg0)
 {
 }
+
 void ncbajig_entrypoint_3(u8 *param_0)
 {
     f32 local_0[3];
@@ -55,10 +59,10 @@ void ncbajig_entrypoint_3(u8 *param_0)
     local_5 = func_800EEF94(local_1);
     func_800F1A88(local_1, local_4);
     local_5 = func_80115358(param_0, local_5);
-    if (((f32 *)*(u8 **)(param_0 + 0x2C))[0] < local_5)
-        local_5 = ((f32 *)*(u8 **)(param_0 + 0x2C))[0];
-    func_80115828(param_0, ((f32 *)*(u8 **)(param_0 + 0x2C))[1],
-        ((f32 *)*(u8 **)(param_0 + 0x2C))[1]);
+    if (((f32 *) *(u8 **) (param_0 + 0x2C))[0] < local_5)
+        local_5 = ((f32 *) *(u8 **) (param_0 + 0x2C))[0];
+    func_80115828(param_0, ((f32 *) *(u8 **) (param_0 + 0x2C))[1],
+                  ((f32 *) *(u8 **) (param_0 + 0x2C))[1]);
     local_4[0] = func_80115750(param_0, local_4[0]);
     local_4[1] = func_80112C3C(param_0, local_4[1]);
     func_800EEBF0(local_1, local_4, local_5);
@@ -69,6 +73,3 @@ void ncbajig_entrypoint_3(u8 *param_0)
     func_80110A68(param_0, local_3, local_0);
     func_80110790(param_0, local_3);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/jig.data.s) is defined here in C.
- * Values are taken from the ROM. */

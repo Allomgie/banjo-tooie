@@ -14,7 +14,7 @@ extern void func_800EEBF0(f32 *, f32 *, f32);
 s32 ncbafly_entrypoint_4();
 s32 ncbafly_entrypoint_5();
 
-s32 ncbafly_entrypoint_0() 
+s32 ncbafly_entrypoint_0()
 {
     return 0x4;
 }
@@ -30,12 +30,13 @@ void ncbafly_entrypoint_1(void *param_0)
     func_801124D0(param_0, 1);
 }
 
-void ncbafly_entrypoint_2(s32 arg0) 
+void ncbafly_entrypoint_2(s32 arg0)
 {
 }
-void func_808000A4_ncbafly(PlayerState* arg0, f32* arg1)
+
+void func_808000A4_ncbafly(PlayerState *arg0, f32 *arg1)
 {
-    func_80112550(arg0,arg1);
+    func_80112550(arg0, arg1);
 }
 
 void ncbafly_entrypoint_3(void *param_0)
@@ -68,20 +69,22 @@ void ncbafly_entrypoint_3(void *param_0)
     local_4[1] = func_800136E4(func_801112B0(param_0) + 180.0f);
     func_800EEBF0(local_6, local_4, local_3);
     func_800EE780(local_1, local_0, local_6);
-    if (func_80111CC8(param_0, local_1)) func_801138F4(param_0);
+    if (func_80111CC8(param_0, local_1))
+        func_801138F4(param_0);
     func_80112524(param_0, local_0);
     func_80110A68(param_0, local_2, local_0);
     func_80110790(param_0, local_2);
 }
 
-s32 ncbafly_entrypoint_4(param_0, param_1, param_2, param_3) s32 param_0; s32 param_1; s32 param_2; s32 param_3;{
-    s32 local_0;
-    local_0 = param_3;
+s32 ncbafly_entrypoint_4(param_0, param_1, param_2, param_3)
+s32 param_0;
+s32 param_1;
+s32 param_2;
+s32 param_3;
+{
 }
 
-s32 ncbafly_entrypoint_5(param_0) s32 param_0;{
-    s32 local_0 = param_0;
+s32 ncbafly_entrypoint_5(param_0)
+s32 param_0;
+{
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/fly.data.s) is defined here in C.
- * Values are taken from the ROM. */

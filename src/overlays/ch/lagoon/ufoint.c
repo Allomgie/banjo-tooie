@@ -22,7 +22,6 @@ extern s32 D_80801BB0_chlagoonufoint[3];
 extern s32 D_80801BBC_chlagoonufoint[3];
 extern void _chlagoonufoint_entrypoint_6();
 extern s16 D_80801940_chlagoonufoint[];
-typedef struct { s16 a, b; } S16Pair;
 extern void func_800CE8D8(s32, f32, s32);
 extern void *func_80100094(Actor *, u32);
 extern u8 D_80801990_chlagoonufoint[];
@@ -38,19 +37,25 @@ extern u8 D_80801B50_chlagoonufoint[];
 extern void func_8008FB10(f32 *, f32, f32, f32);
 extern f32 func_80101F24(Actor *);
 extern void func_800EFE50(f32 *, f32 *, f32 *, f32);
-typedef struct { u8 pad_0[0x72]; u8 local_0 : 6; u8 pad_1 : 2; } LagoonUfoState;
-void func_8080000C_chlagoonufoint();
-void func_80800E80_chlagoonufoint();
+
+typedef struct {
+    u8 pad_0[0x72];
+    u8 local_0 : 6;
+    u8 pad_1 : 2;
+} LagoonUfoState;
 
 int chlagoonufoint_entrypoint_0()
 {
     return &D_80801948_chlagoonufoint;
 }
 
-void func_8080000C_chlagoonufoint(param_0, param_1) Actor *param_0; s32 param_1;
+void func_8080000C_chlagoonufoint(param_0, param_1) Actor *param_0;
+s32 param_1;
 {
     switch (param_1) {
-        case 1: func_800DA524(0); break;
+        case 1:
+            func_800DA524(0);
+            break;
         case 2:
             func_800CE8D8(0, 20.0f, 0x14);
             func_800CE88C(0, 1);
@@ -66,29 +71,29 @@ void func_8080000C_chlagoonufoint(param_0, param_1) Actor *param_0; s32 param_1;
             param_0->unk79_4 = 0;
             func_800FC63C(0x17, 0x6D60);
             func_800DA544(0);
-            *(f32 *)((u8 *)param_0 + 0x28) = 0.0f;
-            *(f32 *)((u8 *)param_0 + 0x2C) = -0.33333334f;
+            *(f32 *) ((u8 *) param_0 + 0x28) = 0.0f;
+            *(f32 *) ((u8 *) param_0 + 0x2C) = -0.33333334f;
             if (!func_800DA298(0x9EF)) {
                 _susubgame_entrypoint_6(param_0, func_80100094(param_0, 0), 4, 0x30, 0);
                 _subaddiedialog_entrypoint_11(param_0->unk0, 0xFF4, 8, param_0->position, 0x62);
             }
             param_0->unk58 = 3.0f;
-            break;
     }
     param_0->unk70_10 = param_1;
 }
 
-void func_808001A0_chlagoonufoint(u8 *param_0) {
+void func_808001A0_chlagoonufoint(u8 *param_0)
+{
     u8 *local_1;
     f32 local_0;
 
     local_1 = param_0 + 0x28;
     local_0 = 0.0f;
-    *(f32 *)(local_1 - 4) = local_0;
+    *(f32 *) (local_1 - 4) = local_0;
     func_800EFD24(local_1);
     if ((func_800DA298(0x9F0) != 0) || (_glcutDll_entrypoint_20() != 0)) {
         param_0[0x79] = (param_0[0x79] & 0xFF0F) | 0x40;
-        *(f32 *)(param_0 + 0x24) = 1.0f;
+        *(f32 *) (param_0 + 0x24) = 1.0f;
     } else {
         func_8080000C_chlagoonufoint(param_0, 1);
     }
@@ -96,7 +101,8 @@ void func_808001A0_chlagoonufoint(u8 *param_0) {
     _susubgame_entrypoint_11(0);
 }
 
-void func_80800240_chlagoonufoint(s32 param_0) {
+void func_80800240_chlagoonufoint(s32 param_0)
+{
     if (_susubgame_entrypoint_2(param_0, func_80100094(param_0, 0)) != 0) {
         _susubgame_entrypoint_4(param_0, func_80100094(param_0, 0));
     }
@@ -107,31 +113,40 @@ void func_80800294_chlagoonufoint(Actor *param_0)
 {
     f32 local_0;
     local_0 = func_800D8FF8();
-    if (*(f32 *)&param_0->actorData[5] != 0.0f) {
-        *(f32 *)&param_0->actorData[3] += *(f32 *)&param_0->actorData[5] * local_0;
-        if ((*(f32 *)&param_0->actorData[5] > 0.0f && *(f32 *)&param_0->actorData[4] < *(f32 *)&param_0->actorData[3]) ||
-            (*(f32 *)&param_0->actorData[5] < 0.0f && *(f32 *)&param_0->actorData[3] < *(f32 *)&param_0->actorData[4])) {
-            *(f32 *)&param_0->actorData[3] = *(f32 *)&param_0->actorData[4];
-            *(f32 *)&param_0->actorData[5] = 0.0f;
+    if (*(f32 *) &param_0->actorData[5] != 0.0f) {
+        *(f32 *) &param_0->actorData[3] += *(f32 *) &param_0->actorData[5] * local_0;
+        if ((*(f32 *) &param_0->actorData[5] > 0.0f &&
+             *(f32 *) &param_0->actorData[4] < *(f32 *) &param_0->actorData[3]) ||
+            (*(f32 *) &param_0->actorData[5] < 0.0f &&
+             *(f32 *) &param_0->actorData[3] < *(f32 *) &param_0->actorData[4])) {
+            *(f32 *) &param_0->actorData[3] = *(f32 *) &param_0->actorData[4];
+            *(f32 *) &param_0->actorData[5] = 0.0f;
         }
     }
-    if (*(f32 *)&param_0->actorData[3] != 0) {
-        func_800C4B70((s32)func_800F10B4(*(f32 *)&param_0->actorData[4], 0.0f, 1.0f, 12000.0f, 20000.0f));
+    if (*(f32 *) &param_0->actorData[3] != 0) {
+        func_800C4B70(
+            (s32) func_800F10B4(*(f32 *) &param_0->actorData[4], 0.0f, 1.0f, 12000.0f, 20000.0f));
         _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80801990_chlagoonufoint);
-        if (*(f32 *)&param_0->actorData[6] <= 0) {
-            func_800C3FC0(0x67A, func_800F10B4(*(f32 *)&param_0->actorData[4], 0.0f, 1.0f, 0.4f, 1.0f), 0x4650);
-            *(f32 *)&param_0->actorData[6] = func_800F10B4(*(f32 *)&param_0->actorData[4], 0.0f, 1.0f, 0.95f, 0.25f);
-        } else *(f32 *)&param_0->actorData[6] -= local_0;
+        if (*(f32 *) &param_0->actorData[6] <= 0) {
+            func_800C3FC0(0x67A,
+                          func_800F10B4(*(f32 *) &param_0->actorData[4], 0.0f, 1.0f, 0.4f, 1.0f),
+                          0x4650);
+            *(f32 *) &param_0->actorData[6] =
+                func_800F10B4(*(f32 *) &param_0->actorData[4], 0.0f, 1.0f, 0.95f, 0.25f);
+        } else
+            *(f32 *) &param_0->actorData[6] -= local_0;
     }
     switch (param_0->unk70_10) {
-    case 2:
-        if (param_0->unk79_4 == 4) func_8080000C_chlagoonufoint(param_0, 4);
-        else if (func_800CEAD0(0)) func_8080000C_chlagoonufoint(param_0, 3);
-        break;
-    case 3:
-        param_0->unk58 -= func_800D8FF8();
-        if (param_0->unk58 < 0.0f) func_8080000C_chlagoonufoint(param_0, 1);
-        break;
+        case 2:
+            if (param_0->unk79_4 == 4)
+                func_8080000C_chlagoonufoint(param_0, 4);
+            else if (func_800CEAD0(0))
+                func_8080000C_chlagoonufoint(param_0, 3);
+            break;
+        case 3:
+            param_0->unk58 -= func_800D8FF8();
+            if (param_0->unk58 < 0.0f)
+                func_8080000C_chlagoonufoint(param_0, 1);
     }
     _glid_entrypoint_0(func_800BEA88(0), 0x11, _chlagoonufoint_entrypoint_5, param_0->unk0);
 }
@@ -143,8 +158,8 @@ void func_808004D8_chlagoonufoint(Unk80132ED0 *param_0, s32 param_1)
 
     local_0 = func_80106790(param_0);
     local_0->unk79_4++;
-    *(f32 *)((u8 *)local_0 + 0x28) = local_0->unk79_4 / local_1;
-    *(f32 *)((u8 *)local_0 + 0x2C) = 0.33333334f;
+    *(f32 *) ((u8 *) local_0 + 0x28) = local_0->unk79_4 / local_1;
+    *(f32 *) ((u8 *) local_0 + 0x2C) = 0.33333334f;
     if (local_0->unk79_4 == 1) {
         if (!func_800DA298(0x9EE)) {
             _susubgame_entrypoint_6(local_0, func_80100094(local_0, 0), 0, 0x38, param_1);
@@ -158,47 +173,52 @@ void func_808004D8_chlagoonufoint(Unk80132ED0 *param_0, s32 param_1)
 s32 func_808005D0_chlagoonufoint(Actor *param_0, s32 param_1, s32 param_2)
 {
     switch (param_1) {
-    case 0xB:
-        if (param_2) {
-            if (param_2 == 4) func_800DA3B8(0x9EF, 1);
-            _susubgame_entrypoint_5((*(Actor * *)&param_0), func_80100094(param_0, 0), 5, 1, 0);
-            return 4;
-        }
-        return 3;
-    case 0x2E:
-        switch (*(s16 *)&param_2) {
-        case 0xFF4:
-        case 0xFF5: _susubgame_entrypoint_4(param_0, func_80100094(param_0, 0)); break;
-        case 0xFF3:
-            func_800DA3B8(0x9EE, 1);
-            func_8080000C_chlagoonufoint(param_0, 2);
-            _susubgame_entrypoint_4(param_0, func_80100094(param_0, 0));
+        case 0xB:
+            if (param_2) {
+                if (param_2 == 4)
+                    func_800DA3B8(0x9EF, 1);
+                _susubgame_entrypoint_5(*(Actor **) &param_0, func_80100094(param_0, 0), 5, 1, 0);
+                return 4;
+            }
+            return 3;
+        case 0x2E:
+            switch (*(s16 *) &param_2) {
+                case 0xFF4:
+                case 0xFF5:
+                    _susubgame_entrypoint_4(param_0, func_80100094(param_0, 0));
+                    break;
+                case 0xFF3:
+                    func_800DA3B8(0x9EE, 1);
+                    func_8080000C_chlagoonufoint(param_0, 2);
+                    _susubgame_entrypoint_4(param_0, func_80100094(param_0, 0));
+            }
             break;
-        }
-        break;
-    case 0x57:
-        return _susubgame_entrypoint_3(param_0, func_80100094(param_0, 0), param_2 & 0xFFFF, (u32)(param_2 & 0xFFFF0000) >> 16);
-    default: return 0;
+        case 0x57:
+            return _susubgame_entrypoint_3(param_0, func_80100094(param_0, 0), param_2 & 0xFFFF,
+                                           (u32) (param_2 & 0xFFFF0000) >> 16);
+        default:
+            return 0;
     }
     return 1;
 }
 
 int chlagoonufoint_entrypoint_1()
 {
-  return (int)&D_808019C0_chlagoonufoint;
+    return (int) &D_808019C0_chlagoonufoint;
 }
 
 int chlagoonufoint_entrypoint_2(void)
 {
-    return (int)&D_80801A28_chlagoonufoint;
+    return (int) &D_80801A28_chlagoonufoint;
 }
 
 int chlagoonufoint_entrypoint_3()
 {
-  return D_80801A90_chlagoonufoint;
+    return D_80801A90_chlagoonufoint;
 }
 
-void func_80800744_chlagoonufoint(s32 param_0) {
+void func_80800744_chlagoonufoint(s32 param_0)
+{
     s32 *var_a2;
 
     if (func_800DA298(0x9F0) != 0) {
@@ -212,21 +232,19 @@ void func_80800744_chlagoonufoint(s32 param_0) {
 int func_8080078C_chlagoonufoint()
 {
     int local_0 = _subaddiefind_entrypoint_2(0x1C5, 0);
-    return *(int *)local_0;
+    return *(int *) local_0;
 }
 
 void func_808007B4_chlagoonufoint(Actor *param_0)
 {
     s32 *local_0;
 
-    local_0 = (s32 *)param_0;
+    local_0 = (s32 *) param_0;
     local_0[0x3C / 4] = func_8080078C_chlagoonufoint();
-    if (_glcutDll_entrypoint_20() != 0)
-    {
+    if (_glcutDll_entrypoint_20() != 0) {
         func_80102424(param_0, 3);
     }
-    if (((u32)(local_0[0x6C / 4] << 11) >> 20) == 0x1C7)
-    {
+    if (((u32) (local_0[0x6C / 4] << 11) >> 20) == 0x1C7) {
         func_80101EE4(param_0, func_800DC0C0());
     }
 }
@@ -239,7 +257,8 @@ void func_80800820_chlagoonufoint(Actor *param_0, f32 *param_1)
     func_800C4350(param_0->unk5F, param_1, NULL);
 }
 
-void func_80800878_chlagoonufoint(u8 *param_0, s32 param_1) {
+void func_80800878_chlagoonufoint(u8 *param_0, s32 param_1)
+{
     func_800C4104(param_1, 1.0f, 0x55F0, param_0 + 4, 500.0f, 1000.0f);
 }
 
@@ -253,163 +272,158 @@ void func_808008C8_chlagoonufoint(Actor *param_0)
 
     func_8008FB10(param_0->position, 240.0f, 0.0f, 100.0f);
     switch (param_0->unk70_10) {
-    case 1:
-        func_80800744_chlagoonufoint(param_0);
-    case 2:
-        switch (param_0->unk6C_9) {
-        case 0x1C6:
-            if (func_80101E4C(param_0, D_80801B1C_chlagoonufoint)) {
-                func_80800878_chlagoonufoint(param_0, 0x5C1);
+        case 1:
+            func_80800744_chlagoonufoint(param_0);
+        case 2:
+            switch (param_0->unk6C_9) {
+                case 0x1C6:
+                    if (func_80101E4C(param_0, D_80801B1C_chlagoonufoint)) {
+                        func_80800878_chlagoonufoint(param_0, 0x5C1);
+                    }
+                    break;
+                case 0x1C7:
+                    if (func_80101E4C(param_0, D_80801B2C_chlagoonufoint)) {
+                        func_80800878_chlagoonufoint(param_0, 0x5BF);
+                    }
+                    break;
+                default:
+                    if (func_80101E4C(param_0, D_80801B38_chlagoonufoint)) {
+                        func_80800878_chlagoonufoint(param_0, 0x5C0);
+                    }
             }
-            break;
-        case 0x1C7:
-            if (func_80101E4C(param_0, D_80801B2C_chlagoonufoint)) {
-                func_80800878_chlagoonufoint(param_0, 0x5BF);
+            if (func_800DA298(0x9F0)) {
+                func_80102424(param_0, 3);
+                if (param_0->unk6C_9 == 0x1C7) {
+                    func_80101EE4(param_0, func_800DC0C0());
+                }
             }
-            break;
-        default:
-            if (func_80101E4C(param_0, D_80801B38_chlagoonufoint)) {
-                func_80800878_chlagoonufoint(param_0, 0x5C0);
-            }
-            break;
-        }
-        if (func_800DA298(0x9F0)) {
-            func_80102424(param_0, 3);
+            return;
+        case 3:
             if (param_0->unk6C_9 == 0x1C7) {
-                func_80101EE4(param_0, func_800DC0C0());
-                return;
+                local_4 = func_80101F24(param_0);
+                param_0->unk79_4 = 0;
+                param_0->unk6C_0 = 0;
+                if (local_4 > 0.05f && local_4 < 0.120000005f) {
+                    param_0->unk79_4 = 1;
+                } else if (local_4 > 0.23f && local_4 < 0.3f) {
+                    param_0->unk6C_0 = 1;
+                } else if ((local_4 > 0.39f && local_4 < 0.45000002f) ||
+                           (local_4 > 0.48f && local_4 < 0.53999996f) ||
+                           (local_4 > 0.58000004f && local_4 < 0.64f)) {
+                    param_0->unk6C_0 = 1;
+                    param_0->unk79_4 = param_0->unk6C_0;
+                }
+                local_0 = func_80100094(param_0, 0);
+                if (!*local_0) {
+                    *local_0 = func_800C8A98();
+                    func_800C8E84(*local_0, D_80801B44_chlagoonufoint);
+                    func_800C8D4C(*local_0, D_80801B50_chlagoonufoint);
+                    func_800C8F64(*local_0, 1);
+                }
+                _subaddieskeleton_entrypoint_3(param_0->unk0, 4, local_2);
+                _subaddieskeleton_entrypoint_3(param_0->unk0, 5, local_1);
+                if (param_0->unk79_4 && param_0->unk6C_0) {
+                    func_800EFE50(local_3, local_1, local_2, 0.5f);
+                } else if (param_0->unk79_4) {
+                    func_800EE7F8(local_3, local_1);
+                } else {
+                    func_800EE7F8(local_3, local_2);
+                }
+                func_800C8CB8(*local_0, local_3);
+                func_800C8FE0(*local_0, (param_0->unk79_4 || param_0->unk6C_0) ? 1 : 0);
+                if (param_0->unk79_4 || param_0->unk6C_0) {
+                    func_80800820_chlagoonufoint(param_0, local_3);
+                }
             }
-        }
-        return;
-    case 3:
-        if (param_0->unk6C_9 == 0x1C7) {
-            local_4 = func_80101F24(param_0);
-            param_0->unk79_4 = 0;
-            param_0->unk6C_0 = 0;
-            if (local_4 > 0.05f && local_4 < 0.120000005f) {
-                param_0->unk79_4 = 1;
-            } else if (local_4 > 0.23f && local_4 < 0.3f) {
-                param_0->unk6C_0 = 1;
-            } else if ((local_4 > 0.39f && local_4 < 0.45000002f) ||
-                       (local_4 > 0.48f && local_4 < 0.53999996f) ||
-                       (local_4 > 0.58000004f && local_4 < 0.64f)) {
-                param_0->unk6C_0 = 1;
-                param_0->unk79_4 = param_0->unk6C_0;
-            }
-            local_0 = func_80100094(param_0, 0);
-            if (!*local_0) {
-                *local_0 = func_800C8A98();
-                func_800C8E84(*local_0, D_80801B44_chlagoonufoint);
-                func_800C8D4C(*local_0, D_80801B50_chlagoonufoint);
-                func_800C8F64(*local_0, 1);
-            }
-            _subaddieskeleton_entrypoint_3(param_0->unk0, 4, local_2);
-            _subaddieskeleton_entrypoint_3(param_0->unk0, 5, local_1);
-            if (param_0->unk79_4 && param_0->unk6C_0) {
-                func_800EFE50(local_3, local_1, local_2, 0.5f);
-            } else if (param_0->unk79_4) {
-                func_800EE7F8(local_3, local_1);
-            } else {
-                func_800EE7F8(local_3, local_2);
-            }
-            func_800C8CB8(*local_0, local_3);
-            func_800C8FE0(*local_0, (param_0->unk79_4 || param_0->unk6C_0) ? 1 : 0);
-            if (param_0->unk79_4 || param_0->unk6C_0) {
-                func_80800820_chlagoonufoint(param_0, local_3);
-            }
-        }
-        func_80800744_chlagoonufoint(param_0);
-        break;
+            func_80800744_chlagoonufoint(param_0);
     }
 }
 
 void func_80800CD4_chlagoonufoint(u8 *param_0, s32 param_1)
 {
-  s32 local_0;
-  s32 local_1;
-  u32 local_2;
-  func_800DF3E0();
- if (1) { } if (1) { }
-  local_2 = ((u32) ((*((s32 *) (((s8 *) param_0) + 0x6C))) << 0xB)) >> 0x14;
-  switch (local_2)
-  {
-    case 0x1C6:
-      func_800DF744(3, 1U);
-      func_800DF744(4, 1U);
-      break;
+    s32 local_0;
+    s32 local_1;
+    u32 local_2;
+    func_800DF3E0();
+    if (1)
+        if (1)
+            local_2 = (u32) (*(s32 *) ((s8 *) param_0 + 0x6C) << 0xB) >> 0x14;
+    switch (local_2) {
+        case 0x1C6:
+            func_800DF744(3, 1U);
+            func_800DF744(4, 1U);
+            break;
 
-    case 0x1C7:
-      func_800DF744(6, 1U);
-      func_800DF744(7, 1U);
-      func_800DF744(8, ((u32) ((u8) (*((u8 *) (((s8 *) param_0) + 0x79))))) >> 4);
-      func_800DF744(9, (*((s32 *) (((s8 *) param_0) + 0x6C))) & 0x1FF);
-      break;
+        case 0x1C7:
+            func_800DF744(6, 1U);
+            func_800DF744(7, 1U);
+            func_800DF744(8, (u32) (u8) *(u8 *) ((s8 *) param_0 + 0x79) >> 4);
+            func_800DF744(9, *(s32 *) ((s8 *) param_0 + 0x6C) & 0x1FF);
+            break;
 
-    default:
-      func_800DF744(5, 1U);
-      break;
+        default:
+            func_800DF744(5, 1U);
+    }
 
-  }
-
-  local_0 = *((s32 *) (((s8 *) param_0) + 0x3C));
-  if (local_0 != 0)
-  {
-    local_1 = (s32) ((((*((f32 *) (((s8 *) func_80106790(local_0)) + 0x24))) * 0.8f) + 0.2f) * 255.0f);
-    func_800DF5D8(local_1, local_1, local_1, 0xFF);
-  }
- ;
-  func_80101870(param_0, param_1);
+    local_0 = *(s32 *) ((s8 *) param_0 + 0x3C);
+    if (local_0 != 0) {
+        local_1 =
+            (s32) (((*(f32 *) ((s8 *) func_80106790(local_0) + 0x24) * 0.8f) + 0.2f) * 255.0f);
+        func_800DF5D8(local_1, local_1, local_1, 0xFF);
+    }
+    func_80101870(param_0, param_1);
 }
 
 s32 func_80800E00_chlagoonufoint(Actor *param_0, s32 param_1, s32 param_2)
 {
     switch (param_1) {
-    case 0x2E:
-        func_80102424(param_0, 1);
-        break;
-    case 0x52:
-        _gcdialogcamera_entrypoint_3(&D_80801B58_chlagoonufoint, *(void **)((u8 *)param_0 + 0x38));
-        break;
-    default:
-        return 0;
+        case 0x2E:
+            func_80102424(param_0, 1);
+            break;
+        case 0x52:
+            _gcdialogcamera_entrypoint_3(&D_80801B58_chlagoonufoint,
+                                         *(void **) ((u8 *) param_0 + 0x38));
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
 
 int chlagoonufoint_entrypoint_4()
 {
-  return (int)&D_80801B68_chlagoonufoint;
+    return (int) &D_80801B68_chlagoonufoint;
 }
 
-void func_80800E80_chlagoonufoint(param_0, param_1) Actor *param_0; s32 param_1;
+void func_80800E80_chlagoonufoint(param_0, param_1) Actor *param_0;
+s32 param_1;
 {
-
     switch (param_1) {
-    case 2:
-        param_0->unk6C_0 = 3;
-        break;
-    case 3:
-        func_808004D8_chlagoonufoint(param_0->unk3C, param_0->unk0);
-        *(f32 *)&param_0->actorData[5] = 0.3333333433f;
-        break;
-    case 4:
-        *(f32 *)&param_0->actorData[3] = 1.0f;
-        break;
-    case 5:
-        *(f32 *)&param_0->actorData[5] = -0.3333333433f;
-        param_0->unk79_4 = 0;
-        break;
+        case 2:
+            param_0->unk6C_0 = 3;
+            break;
+        case 3:
+            func_808004D8_chlagoonufoint(param_0->unk3C, param_0->unk0);
+            *(f32 *) &param_0->actorData[5] = 0.3333333433f;
+            break;
+        case 4:
+            *(f32 *) &param_0->actorData[3] = 1.0f;
+            break;
+        case 5:
+            *(f32 *) &param_0->actorData[5] = -0.3333333433f;
+            param_0->unk79_4 = 0;
     }
-    ((LagoonUfoState *)param_0)->local_0 = param_1;
+    ((LagoonUfoState *) param_0)->local_0 = param_1;
 }
 
-void func_80800F48_chlagoonufoint(u8 *param_0) {
+void func_80800F48_chlagoonufoint(u8 *param_0)
+{
     s32 *local_0;
     s32 local_1;
 
     local_0 = func_80100094(param_0, 0);
-    (*(s32 *)((s8 *)(param_0) + (0x3C))) = func_8080078C_chlagoonufoint();
-    (*(f32 *)((s8 *)(param_0) + (0x24))) = 0.0f;
+    *(s32 *) ((s8 *) param_0 + 0x3C) = func_8080078C_chlagoonufoint();
+    *(f32 *) ((s8 *) param_0 + 0x24) = 0.0f;
     func_800EFD24(param_0 + 0x18);
     local_1 = func_800C8A98();
     *local_0 = local_1;
@@ -431,44 +445,44 @@ void func_80800FD4_chlagoonufoint(Actor *param_0)
     s32 local_5;
 
     local_0 = func_800D8FF8();
-    local_7 = ((f32 *)param_0->actorData)[3] * local_0;
-    ((f32 *)param_0->actorData)[0] += 640.0f * local_7;
-    ((f32 *)param_0->actorData)[1] += 3200.0f * local_7;
-    ((f32 *)param_0->actorData)[2] += 2560.0f * local_7;
+    local_7 = ((f32 *) param_0->actorData)[3] * local_0;
+    ((f32 *) param_0->actorData)[0] += 640.0f * local_7;
+    ((f32 *) param_0->actorData)[1] += 3200.0f * local_7;
+    ((f32 *) param_0->actorData)[2] += 2560.0f * local_7;
     for (local_8 = 0; local_8 < 3; local_8++) {
-        if (((f32 *)param_0->actorData)[local_8] > 16384.0f) {
-            ((f32 *)param_0->actorData)[local_8] -= 16384.0f;
+        if (((f32 *) param_0->actorData)[local_8] > 16384.0f) {
+            ((f32 *) param_0->actorData)[local_8] -= 16384.0f;
         }
     }
     local_1 = func_80100094(param_0, 0);
-    local_2[0] = ((f32 *)param_0->actorData)[3] * 350.0f + 150.0f;
-    local_2[1] = ((f32 *)param_0->actorData)[3] * 350.0f + 250.0f;
-    func_800F3214(local_3, D_80801BB0_chlagoonufoint, D_80801BBC_chlagoonufoint, ((f32 *)param_0->actorData)[3]);
+    local_2[0] = ((f32 *) param_0->actorData)[3] * 350.0f + 150.0f;
+    local_2[1] = ((f32 *) param_0->actorData)[3] * 350.0f + 250.0f;
+    func_800F3214(local_3, D_80801BB0_chlagoonufoint, D_80801BBC_chlagoonufoint,
+                  ((f32 *) param_0->actorData)[3]);
     func_800C8D4C(*local_1, local_2);
     func_800C8E84(*local_1, local_3);
     switch (param_0->unk70_10) {
-    case 2:
-        if (!--param_0->unk6C_0) {
-            func_80800E80_chlagoonufoint(param_0, 1);
-        }
-        break;
-    case 3:
-        ((f32 *)param_0->actorData)[3] += local_0 * ((f32 *)param_0->actorData)[5];
-        if (((f32 *)param_0->actorData)[3] > 1.0f) {
-            func_80800E80_chlagoonufoint(param_0, 4);
-        }
-        break;
-    case 4:
-        if (func_800DA298(0)) {
-            func_80800E80_chlagoonufoint(param_0, 5);
-        }
-        break;
-    case 5:
-        ((f32 *)param_0->actorData)[3] += local_0 * ((f32 *)param_0->actorData)[5];
-        if (((f32 *)param_0->actorData)[3] < 0.0f) {
-            func_80800E80_chlagoonufoint(param_0, 1);
-        }
-        break;
+        case 2:
+            if (!--param_0->unk6C_0) {
+                func_80800E80_chlagoonufoint(param_0, 1);
+            }
+            break;
+        case 3:
+            ((f32 *) param_0->actorData)[3] += local_0 * ((f32 *) param_0->actorData)[5];
+            if (((f32 *) param_0->actorData)[3] > 1.0f) {
+                func_80800E80_chlagoonufoint(param_0, 4);
+            }
+            break;
+        case 4:
+            if (func_800DA298(0)) {
+                func_80800E80_chlagoonufoint(param_0, 5);
+            }
+            break;
+        case 5:
+            ((f32 *) param_0->actorData)[3] += local_0 * ((f32 *) param_0->actorData)[5];
+            if (((f32 *) param_0->actorData)[3] < 0.0f) {
+                func_80800E80_chlagoonufoint(param_0, 1);
+            }
     }
     local_4 = func_800BEA88(0);
     local_5 = param_0->unk74_7 * 4 - 4;
@@ -492,7 +506,8 @@ void func_808012A4_chlagoonufoint(Actor *param_0)
     }
 }
 
-s32 func_8080135C_chlagoonufoint(s32 param_0, s32 param_1, s32 param_2) {
+s32 func_8080135C_chlagoonufoint(s32 param_0, s32 param_1, s32 param_2)
+{
     if (param_1 == 0x40) {
         func_808012A4_chlagoonufoint(param_0);
     } else {
@@ -505,60 +520,149 @@ void chlagoonufoint_entrypoint_5(s32 param_0, Vtx *param_1, Vtx *param_2, s32 pa
 {
     Vtx *local_0;
     f32 local_1;
-    local_1 = *(f32 *)((u8 *)func_80106790(param_4) + 0x24) * 0.8f + 0.2f;
+    local_1 = *(f32 *) ((u8 *) func_80106790(param_4) + 0x24) * 0.8f + 0.2f;
     for (local_0 = param_1 + param_3; param_1 < local_0; param_1++, param_2++) {
-        param_2->v.cn[0] = (u32)((u32)param_1->v.cn[0] * local_1);
-        param_2->v.cn[1] = (u32)((u32)param_1->v.cn[1] * local_1);
-        param_2->v.cn[2] = (u32)((u32)param_1->v.cn[2] * local_1);
+        param_2->v.cn[0] = (u32) ((u32) param_1->v.cn[0] * local_1);
+        param_2->v.cn[1] = (u32) ((u32) param_1->v.cn[1] * local_1);
+        param_2->v.cn[2] = (u32) ((u32) param_1->v.cn[2] * local_1);
     }
 }
 
-void chlagoonufoint_entrypoint_6(s32 param_0, Vtx *param_1, Vtx *param_2, s32 param_3, Unk80132ED0 *param_4)
+void chlagoonufoint_entrypoint_6(s32 param_0, Vtx *param_1, Vtx *param_2, s32 param_3,
+                                 Unk80132ED0 *param_4)
 {
     Vtx *local_0;
     Actor *local_1;
     f32 local_2;
     s16 local_3;
 
-    local_1 = (Actor *)func_80106790(param_4);
-    local_2 = ((f32 *)local_1->actorData)[3] * 0.8f + 0.2f;
-    local_3 = (s32)((f32 *)((u8 *)local_1 + 0x14))[(param_0 - 1) % 4];
+    local_1 = (Actor *) func_80106790(param_4);
+    local_2 = ((f32 *) local_1->actorData)[3] * 0.8f + 0.2f;
+    local_3 = (s32) ((f32 *) ((u8 *) local_1 + 0x14))[(param_0 - 1) % 4];
     local_0 = param_1 + param_3;
     for (; param_1 < local_0; param_1++, param_2++) {
-        param_2->v.cn[0] = (u32)((u32)param_1->v.cn[0] * local_2);
-        param_2->v.cn[1] = (u32)((u32)param_1->v.cn[1] * local_2);
-        param_2->v.cn[2] = (u32)((u32)param_1->v.cn[2] * local_2);
+        param_2->v.cn[0] = (u32) ((u32) param_1->v.cn[0] * local_2);
+        param_2->v.cn[1] = (u32) ((u32) param_1->v.cn[1] * local_2);
+        param_2->v.cn[2] = (u32) ((u32) param_1->v.cn[2] * local_2);
         param_2->v.tc[1] = param_1->v.tc[1] + local_3;
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lagoon/ufoint.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80801948_chlagoonufoint -> int[], D_808019C0_chlagoonufoint -> int[], D_80801A28_chlagoonufoint -> int[], D_80801AD8_chlagoonufoint -> s32[], D_80801AF4_chlagoonufoint -> s32[], D_80801B58_chlagoonufoint -> s32[], D_80801B68_chlagoonufoint -> int[] */
 extern void func_80102EC0();
 extern void func_8010A730();
 extern void func_80107C2C();
 extern void func_80108ED0();
-s16 D_80801940_chlagoonufoint[4] = { 0x1, 0x1, 0x1, 0x1 };
-int D_80801948_chlagoonufoint[18] = { 0x15801C5, 0x1, 0x0, (u32)func_80800294_chlagoonufoint, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, (u32)func_80800240_chlagoonufoint, 0x0, 0x180000, (u32)func_808001A0_chlagoonufoint, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_808005D0_chlagoonufoint, 0x0 };
-u8 D_80801990_chlagoonufoint[16] = { 0x0, 0x13, 0x4, 0xA9, 0x0, 0x1E, 0x0, 0xA, 0x1, 0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0 };
-u32 D_808019A0_chlagoonufoint[8] = { 0x0, 0x0, 0x4120CCCD, 0x17C0009, 0x4120CCCD, 0x17C0009, 0x40351EB8, 0x17B0109 };
-int D_808019C0_chlagoonufoint[18] = { 0x15801C3, 0x6CD0001, (u32)&D_808019A0_chlagoonufoint, (u32)func_808008C8_chlagoonufoint, (u32)func_80102EC0, (u32)func_80800CD4_chlagoonufoint, 0x0, 0x3FC00000, 0x0, 0x100, 0x0, 0x0, 0x0, (u32)func_808007B4_chlagoonufoint, (u32)func_80107C2C, -0x7BFFFBFE, (u32)func_80800E00_chlagoonufoint, 0x0 };
-u32 D_80801A08_chlagoonufoint[8] = { 0x0, 0x0, 0x40A28F5C, 0x17A0009, 0x40A28F5C, 0x17A0009, 0x4017AE14, 0x1710109 };
-int D_80801A28_chlagoonufoint[18] = { 0x15801C6, 0x6CD0001, (u32)&D_80801A08_chlagoonufoint, (u32)func_808008C8_chlagoonufoint, (u32)func_80102EC0, (u32)func_80800CD4_chlagoonufoint, 0x0, 0x3FC00000, 0x0, 0x100, 0x0, 0x0, 0x0, (u32)func_808007B4_chlagoonufoint, (u32)func_80107C2C, -0x7BFFFBFE, (u32)func_80800E00_chlagoonufoint, 0x0 };
-u32 D_80801A70_chlagoonufoint[8] = { 0x0, 0x0, 0x40F00000, 0x1790009, 0x40F00000, 0x1790009, 0x40F00000, 0x1730109 };
-s32 D_80801A90_chlagoonufoint[18] = { 0x15801C7, 0x6CD0001, (u32)&D_80801A70_chlagoonufoint, (u32)func_808008C8_chlagoonufoint, (u32)func_80102EC0, (u32)func_80800CD4_chlagoonufoint, 0x0, 0x3FC00000, 0x0, 0x1140, 0x0, 0x0, 0x40000, (u32)func_808007B4_chlagoonufoint, (u32)func_80107C2C, -0x7BFFFBFE, (u32)func_80800E00_chlagoonufoint, 0x0 };
-s32 D_80801AD8_chlagoonufoint[7] = { 0x9ED012C, 0xFF10FF2, 0x1, 0x106A0000, 0x620000, 0x80628, 0x2000000 };
-s32 D_80801AF4_chlagoonufoint[7] = { 0x12C, 0x1069, -0x1, 0x0, 0x620000, 0x80628, 0x2000000 };
-s16 D_80801B10_chlagoonufoint[6] = { 0x206, 0x13, 0x50C, 0xA, 0x14C, 0x0 };
-u8 D_80801B1C_chlagoonufoint[16] = { 0x3D, 0xB8, 0x51, 0xEC, 0x3E, 0xDC, 0x28, 0xF6, 0x3F, 0xF, 0x5C, 0x29, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_80801B2C_chlagoonufoint[12] = { 0x3E, 0xCC, 0xCC, 0xCD, 0x3F, 0x19, 0x99, 0x9A, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_80801B38_chlagoonufoint[12] = { 0x3D, 0xA3, 0xD7, 0xA, 0x3E, 0xE6, 0x66, 0x66, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_80801B44_chlagoonufoint[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80801B50_chlagoonufoint[8] = { 0x43, 0x96, 0x0, 0x0, 0x43, 0xC8, 0x0, 0x0 };
-s32 D_80801B58_chlagoonufoint[4] = { 0x43870000, 0x43160000, 0x43340000, 0x43340000 };
-int D_80801B68_chlagoonufoint[18] = { 0x1CB01C4, 0x6FB0001, 0x0, (u32)func_80800FD4_chlagoonufoint, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80108ED0, 0x40000, (u32)func_80800F48_chlagoonufoint, (u32)func_80107C2C, -0x7FFFFC00, (u32)func_8080135C_chlagoonufoint, 0x0 };
-s32 D_80801BB0_chlagoonufoint[3] = { 0x64, 0x64, 0x64 };
-s32 D_80801BBC_chlagoonufoint[3] = { 0xFF, 0xFF, 0xFF };
-static u32 D_80801BBC_chlagoonufoint_rest[2] = { 0x0, 0x0 };
+s16 D_80801940_chlagoonufoint[4] = {0x1, 0x1, 0x1, 0x1};
+int D_80801948_chlagoonufoint[18] = {0x15801C5,
+                                     0x1,
+                                     0x0,
+                                     (u32) func_80800294_chlagoonufoint,
+                                     (u32) func_80102EC0,
+                                     (u32) func_8010A730,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     (u32) func_80800240_chlagoonufoint,
+                                     0x0,
+                                     0x180000,
+                                     (u32) func_808001A0_chlagoonufoint,
+                                     (u32) func_80107C2C,
+                                     -0x7FFFFBFE,
+                                     (u32) func_808005D0_chlagoonufoint,
+                                     0x0};
+u8 D_80801990_chlagoonufoint[16] = {0x0, 0x13, 0x4, 0xA9, 0x0, 0x1E, 0x0, 0xA,
+                                    0x1, 0x0,  0x0, 0x2,  0x0, 0x0,  0x0, 0x0};
+u32 D_808019A0_chlagoonufoint[8] = {0x0,        0x0,       0x4120CCCD, 0x17C0009,
+                                    0x4120CCCD, 0x17C0009, 0x40351EB8, 0x17B0109};
+int D_808019C0_chlagoonufoint[18] = {0x15801C3,
+                                     0x6CD0001,
+                                     (u32) &D_808019A0_chlagoonufoint,
+                                     (u32) func_808008C8_chlagoonufoint,
+                                     (u32) func_80102EC0,
+                                     (u32) func_80800CD4_chlagoonufoint,
+                                     0x0,
+                                     0x3FC00000,
+                                     0x0,
+                                     0x100,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     (u32) func_808007B4_chlagoonufoint,
+                                     (u32) func_80107C2C,
+                                     -0x7BFFFBFE,
+                                     (u32) func_80800E00_chlagoonufoint,
+                                     0x0};
+u32 D_80801A08_chlagoonufoint[8] = {0x0,        0x0,       0x40A28F5C, 0x17A0009,
+                                    0x40A28F5C, 0x17A0009, 0x4017AE14, 0x1710109};
+int D_80801A28_chlagoonufoint[18] = {0x15801C6,
+                                     0x6CD0001,
+                                     (u32) &D_80801A08_chlagoonufoint,
+                                     (u32) func_808008C8_chlagoonufoint,
+                                     (u32) func_80102EC0,
+                                     (u32) func_80800CD4_chlagoonufoint,
+                                     0x0,
+                                     0x3FC00000,
+                                     0x0,
+                                     0x100,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     (u32) func_808007B4_chlagoonufoint,
+                                     (u32) func_80107C2C,
+                                     -0x7BFFFBFE,
+                                     (u32) func_80800E00_chlagoonufoint,
+                                     0x0};
+u32 D_80801A70_chlagoonufoint[8] = {0x0,        0x0,       0x40F00000, 0x1790009,
+                                    0x40F00000, 0x1790009, 0x40F00000, 0x1730109};
+s32 D_80801A90_chlagoonufoint[18] = {0x15801C7,
+                                     0x6CD0001,
+                                     (u32) &D_80801A70_chlagoonufoint,
+                                     (u32) func_808008C8_chlagoonufoint,
+                                     (u32) func_80102EC0,
+                                     (u32) func_80800CD4_chlagoonufoint,
+                                     0x0,
+                                     0x3FC00000,
+                                     0x0,
+                                     0x1140,
+                                     0x0,
+                                     0x0,
+                                     0x40000,
+                                     (u32) func_808007B4_chlagoonufoint,
+                                     (u32) func_80107C2C,
+                                     -0x7BFFFBFE,
+                                     (u32) func_80800E00_chlagoonufoint,
+                                     0x0};
+s32 D_80801AD8_chlagoonufoint[7] = {0x9ED012C, 0xFF10FF2, 0x1,      0x106A0000,
+                                    0x620000,  0x80628,   0x2000000};
+s32 D_80801AF4_chlagoonufoint[7] = {0x12C, 0x1069, -0x1, 0x0, 0x620000, 0x80628, 0x2000000};
+s16 D_80801B10_chlagoonufoint[6] = {0x206, 0x13, 0x50C, 0xA, 0x14C, 0x0};
+u8 D_80801B1C_chlagoonufoint[16] = {0x3D, 0xB8, 0x51, 0xEC, 0x3E, 0xDC, 0x28, 0xF6,
+                                    0x3F, 0xF,  0x5C, 0x29, 0xBF, 0x80, 0x0,  0x0};
+u8 D_80801B2C_chlagoonufoint[12] = {0x3E, 0xCC, 0xCC, 0xCD, 0x3F, 0x19,
+                                    0x99, 0x9A, 0xBF, 0x80, 0x0,  0x0};
+u8 D_80801B38_chlagoonufoint[12] = {0x3D, 0xA3, 0xD7, 0xA,  0x3E, 0xE6,
+                                    0x66, 0x66, 0xBF, 0x80, 0x0,  0x0};
+u8 D_80801B44_chlagoonufoint[12] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x0};
+u8 D_80801B50_chlagoonufoint[8] = {0x43, 0x96, 0x0, 0x0, 0x43, 0xC8, 0x0, 0x0};
+s32 D_80801B58_chlagoonufoint[4] = {0x43870000, 0x43160000, 0x43340000, 0x43340000};
+int D_80801B68_chlagoonufoint[18] = {0x1CB01C4,
+                                     0x6FB0001,
+                                     0x0,
+                                     (u32) func_80800FD4_chlagoonufoint,
+                                     (u32) func_80102EC0,
+                                     (u32) func_8010A730,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     (u32) func_80108ED0,
+                                     0x40000,
+                                     (u32) func_80800F48_chlagoonufoint,
+                                     (u32) func_80107C2C,
+                                     -0x7FFFFC00,
+                                     (u32) func_8080135C_chlagoonufoint,
+                                     0x0};
+s32 D_80801BB0_chlagoonufoint[3] = {0x64, 0x64, 0x64};
+s32 D_80801BBC_chlagoonufoint[3] = {0xFF, 0xFF, 0xFF};

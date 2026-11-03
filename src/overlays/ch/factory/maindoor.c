@@ -1,7 +1,10 @@
 #include "ch/factory/maindoor.h"
 
 extern int D_808004D4_chfactorymaindoor[];
-typedef union { s32 word; void *pointer; } FactoryMainDoorEvent;
+typedef union {
+    s32 word;
+    void *pointer;
+} FactoryMainDoorEvent;
 extern int D_8080051C_chfactorymaindoor[];
 extern int D_80800564_chfactorymaindoor[];
 extern f32 func_80103EF4(Actor *);
@@ -17,7 +20,7 @@ void func_80800000_chfactorymaindoor(Actor *param_0)
     } else {
         param_0->unk58 = 8.0f;
     }
-    *(f32 *)&param_0->actorData[7] = param_0->position[1];
+    *(f32 *) &param_0->actorData[7] = param_0->position[1];
 }
 
 void func_80800078_chfactorymaindoor(Actor *param_0)
@@ -25,29 +28,34 @@ void func_80800078_chfactorymaindoor(Actor *param_0)
     f32 local_1;
     f32 local_0;
     switch (param_0->unk70_10) {
-    case 1:
-        if (func_800DA298(0xA00) && func_800DA298(0xA01)) {
-            func_8009EC88(0x102, 2, 0x100, 9);
-            func_80101FDC(param_0, 2);
-            _capod_entrypoint_13(param_0->unk0, param_0->unk0, 4, 0x830);
-        }
-        return;
-    case 2:
-        if (func_800D90A4((u8 *)param_0 + 0x58)) {
-            func_80101FDC(param_0, 3);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_808004CC_chfactorymaindoor);
-            _subaddieaudioloop_entrypoint_2(param_0);
-            param_0->position[1] = *(f32 *)((u8 *)param_0 + 0x34) + func_80103EF4(param_0) * 0.8f;
-        } else {
-            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, &D_808004C0_chfactorymaindoor);
-            local_0 = func_80103EF4(param_0);
-            param_0->position[1] = *(f32 *)((u8 *)param_0 + 0x34) + func_800F10B4(*(f32 *)((u8 *)param_0 + 0x58), 8.0f, 0.0f, 0.0f, 0.8f) * local_0;
-        }
-        return;
-    case 3:
-        func_800DA544(0x1AB);
-        func_80103110(param_0, 0);
-        break;
+        case 1:
+            if (func_800DA298(0xA00) && func_800DA298(0xA01)) {
+                func_8009EC88(0x102, 2, 0x100, 9);
+                func_80101FDC(param_0, 2);
+                _capod_entrypoint_13(param_0->unk0, param_0->unk0, 4, 0x830);
+            }
+            return;
+        case 2:
+            if (func_800D90A4((u8 *) param_0 + 0x58)) {
+                func_80101FDC(param_0, 3);
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 &D_808004CC_chfactorymaindoor);
+                _subaddieaudioloop_entrypoint_2(param_0);
+                param_0->position[1] =
+                    *(f32 *) ((u8 *) param_0 + 0x34) + func_80103EF4(param_0) * 0.8f;
+            } else {
+                _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                                &D_808004C0_chfactorymaindoor);
+                local_0 = func_80103EF4(param_0);
+                param_0->position[1] =
+                    *(f32 *) ((u8 *) param_0 + 0x34) +
+                    func_800F10B4(*(f32 *) ((u8 *) param_0 + 0x58), 8.0f, 0.0f, 0.0f, 0.8f) *
+                        local_0;
+            }
+            return;
+        case 3:
+            func_800DA544(0x1AB);
+            func_80103110(param_0, 0);
     }
 }
 
@@ -82,7 +90,7 @@ s32 func_808001F0_chfactorymaindoor(Actor *param_0, s32 param_1, s32 param_2)
 
 int chfactorymaindoor_entrypoint_0()
 {
-    return (int)&D_808004D4_chfactorymaindoor;
+    return (int) &D_808004D4_chfactorymaindoor;
 }
 
 void func_80800344_chfactorymaindoor(Actor *param_0)
@@ -106,21 +114,20 @@ s32 func_808003A8_chfactorymaindoor(Actor *param_0, s32 param_1, FactoryMainDoor
 
 int chfactorymaindoor_entrypoint_1()
 {
-    return (int)&D_8080051C_chfactorymaindoor;
+    return (int) &D_8080051C_chfactorymaindoor;
 }
 
 void func_8080041C_chfactorymaindoor(s32 arg0)
 {
-    _chswitch_entrypoint_3(arg0,FLAG_188_UNK);
+    _chswitch_entrypoint_3(arg0, FLAG_188_UNK);
 }
 
 int func_8080043C_chfactorymaindoor(s32 param_0, s32 param_1, s32 param_2)
 {
-  if (param_1 == 7)
-  {
-    _glcutDll_entrypoint_6(0x100, 0x86);
-  }
-  _chswitch_entrypoint_5(param_0, param_1 | param_1, param_2);
+    if (param_1 == 7) {
+        _glcutDll_entrypoint_6(0x100, 0x86);
+    }
+    _chswitch_entrypoint_5(param_0, param_1 | param_1, param_2);
 }
 
 int *chfactorymaindoor_entrypoint_2()
@@ -128,17 +135,66 @@ int *chfactorymaindoor_entrypoint_2()
     return &D_80800564_chfactorymaindoor;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/maindoor.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808004D4_chfactorymaindoor -> int[], D_8080051C_chfactorymaindoor -> int[], D_80800564_chfactorymaindoor -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
 extern void _chswitch_entrypoint_6();
 extern void _chswitch_entrypoint_4();
-u8 D_808004C0_chfactorymaindoor[12] = { 0x0, 0x13, 0x5, 0xB0, 0x0, 0x18, 0x0, 0xA, 0x1, 0x33, 0x0, 0x0 };
-u8 D_808004CC_chfactorymaindoor[8] = { 0x0, 0x13, 0x4, 0xC7, 0x0, 0x18, 0x0, 0x0 };
-int D_808004D4_chfactorymaindoor[18] = { 0x11D03F8, 0x87C0001, 0x0, (u32)func_80800078_chfactorymaindoor, (u32)func_80105834, (u32)func_80101870, 0x13880000, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_80800000_chfactorymaindoor, (u32)func_80107C2C, -0x7FF7DBFE, (u32)func_808001F0_chfactorymaindoor, 0x0 };
-int D_8080051C_chfactorymaindoor[18] = { 0x11B03F9, 0x7B90001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x0, (u32)func_80800344_chfactorymaindoor, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_808003A8_chfactorymaindoor, 0x0 };
-int D_80800564_chfactorymaindoor[19] = { 0x34304DA, 0x8890001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_4, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x0, (u32)func_8080041C_chfactorymaindoor, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_8080043C_chfactorymaindoor, 0x0, 0x0 };
+u8 D_808004C0_chfactorymaindoor[12] = {0x0, 0x13, 0x5, 0xB0, 0x0, 0x18,
+                                       0x0, 0xA,  0x1, 0x33, 0x0, 0x0};
+u8 D_808004CC_chfactorymaindoor[8] = {0x0, 0x13, 0x4, 0xC7, 0x0, 0x18, 0x0, 0x0};
+int D_808004D4_chfactorymaindoor[18] = {0x11D03F8,
+                                        0x87C0001,
+                                        0x0,
+                                        (u32) func_80800078_chfactorymaindoor,
+                                        (u32) func_80105834,
+                                        (u32) func_80101870,
+                                        0x13880000,
+                                        0x0,
+                                        0x0,
+                                        0xC00,
+                                        0x0,
+                                        0x0,
+                                        0x0,
+                                        (u32) func_80800000_chfactorymaindoor,
+                                        (u32) func_80107C2C,
+                                        -0x7FF7DBFE,
+                                        (u32) func_808001F0_chfactorymaindoor,
+                                        0x0};
+int D_8080051C_chfactorymaindoor[18] = {0x11B03F9,
+                                        0x7B90001,
+                                        -0x7FEE5DE0,
+                                        (u32) _chswitch_entrypoint_6,
+                                        (u32) func_80105834,
+                                        (u32) func_80101870,
+                                        0x0,
+                                        0x0,
+                                        0x0,
+                                        0x40000808,
+                                        0x0,
+                                        0x0,
+                                        0x0,
+                                        (u32) func_80800344_chfactorymaindoor,
+                                        (u32) func_80107C2C,
+                                        -0x7FF7D3EE,
+                                        (u32) func_808003A8_chfactorymaindoor,
+                                        0x0};
+int D_80800564_chfactorymaindoor[19] = {0x34304DA,
+                                        0x8890001,
+                                        -0x7FEE5DE0,
+                                        (u32) _chswitch_entrypoint_4,
+                                        (u32) func_80105834,
+                                        (u32) func_80101870,
+                                        0x0,
+                                        0x0,
+                                        0x0,
+                                        0x40000808,
+                                        0x0,
+                                        0x0,
+                                        0x0,
+                                        (u32) func_8080041C_chfactorymaindoor,
+                                        (u32) func_80107C2C,
+                                        -0x7FF7D3EE,
+                                        (u32) func_8080043C_chfactorymaindoor,
+                                        0x0,
+                                        0x0};

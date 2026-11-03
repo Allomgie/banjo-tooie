@@ -1,10 +1,9 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/egghead.h"
 
 extern s32 D_808002F0_bskazegghead[];
 
-void bskazegghead_entrypoint_0(PlayerState *self) {
+void bskazegghead_entrypoint_0(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     baanim_playForDuration_once(self, 0x28D, 0.75f);
     func_8009FFD8(self, 1, 3, 1, 3);
@@ -17,17 +16,18 @@ void bskazegghead_entrypoint_0(PlayerState *self) {
     bainput_enable(self, 2, 0);
 }
 
-
-void bskazegghead_entrypoint_1(PlayerState *self) {
+void bskazegghead_entrypoint_1(PlayerState *self)
+{
     BanjoStateId next_state;
-    AnimCtrl* sp28;
+    AnimCtrl *sp28;
     s32 sp24;
 
     next_state = BS_STATE_0_INVALID;
-    sp28 = (AnimCtrl*) baanim_getAnimCtrlPtr(self);
+    sp28 = (AnimCtrl *) baanim_getAnimCtrlPtr(self);
     sp24 = func_80094BC0(self) != 0;
     if ((bainput_should_shoot_egg(self) != 0) && (func_80094B14(self) != 0)) {
-        self->unk15C.word = func_800F1418(self->unk15C.word + 1, func_800944E0(self, self->unk164.word));
+        self->unk15C.word =
+            func_800F1418(self->unk15C.word + 1, func_800944E0(self, self->unk164.word));
     }
     if (sp24 != 0) {
         if (anctrl_isAt(sp28, 0.1f) != 0) {
@@ -62,18 +62,19 @@ void bskazegghead_entrypoint_1(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void bskazegghead_entrypoint_2(PlayerState *self) {
+void bskazegghead_entrypoint_2(PlayerState *self)
+{
     bainput_enable(self, 2, 1);
     baphysics_reset_gravity(self);
     func_800A0CF4(self, 0);
     _bskaz_entrypoint_2(self);
 }
 
-s32 bskazegghead_entrypoint_3(s32 idx) {
+s32 bskazegghead_entrypoint_3(s32 idx)
+{
     return D_808002F0_bskazegghead[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/egghead.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
-s32 D_808002F0_bskazegghead[4] = { (u32)_bskazegghead_entrypoint_2, (u32)_bskazegghead_entrypoint_0, (u32)_bskazegghead_entrypoint_1, (u32)func_80099B94 };
+s32 D_808002F0_bskazegghead[4] = {(u32) _bskazegghead_entrypoint_2,
+                                  (u32) _bskazegghead_entrypoint_0,
+                                  (u32) _bskazegghead_entrypoint_1, (u32) func_80099B94};

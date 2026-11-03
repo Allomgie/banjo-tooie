@@ -8,10 +8,10 @@ extern f32 func_800F13F0(f32, f32);
 extern f32 func_800DC0C0(void);
 extern void func_800EF368(f32 *, f32);
 extern void func_800EF04C(f32 *, f32 *);
-extern f32 sqrtf(f32);
 extern void func_800EFB24(f32 *, f32 *, f32 *);
 
-void ncbadeflect_entrypoint_0(void *param_0, f32 *param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5)
+void ncbadeflect_entrypoint_0(void *param_0, f32 *param_1, f32 param_2, f32 param_3, f32 param_4,
+                              f32 param_5)
 {
     f32 local_2;
     f32 local_3;
@@ -20,14 +20,17 @@ void ncbadeflect_entrypoint_0(void *param_0, f32 *param_1, f32 param_2, f32 para
     f32 local_6;
     f32 local_0[3];
     f32 local_1[3];
-  s32 pad0;
+    s32 pad0;
     func_80111094(param_0, local_0);
-    if (local_0[1] + 40.0f < param_1[1] + param_3) return;
-    if (param_1[1] + param_2 < local_0[1] - 40.0f) return;
+    if (local_0[1] + 40.0f < param_1[1] + param_3)
+        return;
+    if (param_1[1] + param_2 < local_0[1] - 40.0f)
+        return;
     func_800EFA4C(local_1, local_0[0] - param_1[0], 0.0f, local_0[2] - param_1[2]);
     local_2 = local_1[0] * local_1[0] + local_1[1] * local_1[1] + local_1[2] * local_1[2];
     local_3 = param_4 + 80.0f;
-    if (local_3 * local_3 < local_2) return;
+    if (local_3 * local_3 < local_2)
+        return;
     local_2 = sqrtf(local_2);
     local_4 = func_800F13F0(func_800D8FF8() * param_5, local_3 - local_2);
     if (local_2 == 0.0f) {
@@ -68,6 +71,3 @@ void ncbadeflect_entrypoint_1(s32 param_0, f32 *param_1, f32 param_2, f32 param_
         func_801110C4(param_0, local_1);
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/deflect.data.s) is defined here in C.
- * Values are taken from the ROM. */

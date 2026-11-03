@@ -3,11 +3,13 @@
 extern int D_808013F0_chpoolkids[];
 extern int D_80801438_chpoolkids[];
 extern void *D_80801480_chpoolkids;
-extern s32 field_30;
 extern u32 D_808014E8_chpoolkids[];
 extern u32 D_808014F8_chpoolkids[];
 extern void _gcdialogcamera_entrypoint_3(u32 *, f32);
-typedef struct { s16 a; s16 b; } PK2;
+typedef struct {
+    s16 a;
+    s16 b;
+} PK2;
 extern s32 _glcutDll_entrypoint_20();
 extern void func_8010D600(f32 *);
 extern f32 func_80102D78();
@@ -54,68 +56,31 @@ extern void *func_800BABB8(void *, f32 *, f32 *, f32, void *);
 void func_808006F8_chpoolkids();
 void func_808007F0_chpoolkids();
 void func_80800D74_chpoolkids();
-void func_80800618_chpoolkids();
 void func_808008DC_chpoolkids();
 void func_808011A8_chpoolkids();
 
 int chpoolkids_entrypoint_0()
 {
-    return (int)&D_808013F0_chpoolkids;
+    return (int) &D_808013F0_chpoolkids;
 }
 
 int chpoolkids_entrypoint_1()
 {
-  return (int)&D_80801438_chpoolkids;
+    return (int) &D_80801438_chpoolkids;
 }
 
 int chpoolkids_entrypoint_2()
 {
-  return &D_80801480_chpoolkids;
+    return &D_80801480_chpoolkids;
 }
 
 int func_80800024_chpoolkids(Actor *param_0)
 {
-  int local_0;
-  local_0 = _subaddiesect_entrypoint_1();
-  *(s32*)((char*)param_0 + 0x30) = local_0;
-  _subaddiesect_entrypoint_2(param_0, local_0, 1);
+    int local_0;
+    local_0 = _subaddiesect_entrypoint_1();
+    *(s32 *) ((char *) param_0 + 0x30) = local_0;
+    _subaddiesect_entrypoint_2(param_0, local_0, 1);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void func_80800944_chpoolkids(Actor *param_0, f32 param_1);
 
@@ -126,46 +91,50 @@ void func_80800058_chpoolkids(Actor *param_0)
     if (func_80104248(param_0)) {
         if (func_801022E4(param_0) == 0x2B9) {
             local_0 = func_80101F24(param_0);
-            *(f32 *)&param_0->actorData[5] = func_80013970(func_800F10B4(local_0, 0.75f, 0.99f, 0.0f, 180.0f));
+            *(f32 *) &param_0->actorData[5] =
+                func_80013970(func_800F10B4(local_0, 0.75f, 0.99f, 0.0f, 180.0f));
             if (local_0 > 0.33f && local_0 < 0.52f) {
-                *((u8 *)param_0 + 0x77) = (*((u8 *)param_0 + 0x77) & ~0xF) | 2;
+                *((u8 *) param_0 + 0x77) = (*((u8 *) param_0 + 0x77) & ~0xF) | 2;
             } else {
-                *((u8 *)param_0 + 0x77) = (*((u8 *)param_0 + 0x77) & ~0xF) | 1;
+                *((u8 *) param_0 + 0x77) = (*((u8 *) param_0 + 0x77) & ~0xF) | 1;
             }
         } else {
-            *((u8 *)param_0 + 0x77) = (*((u8 *)param_0 + 0x77) & ~0xF) | 1;
-            *(f32 *)&param_0->actorData[5] = 0.0f;
+            *((u8 *) param_0 + 0x77) = (*((u8 *) param_0 + 0x77) & ~0xF) | 1;
+            *(f32 *) &param_0->actorData[5] = 0.0f;
         }
     }
     func_8008FB58(param_0->position, 60.0f, 60.0f);
     local_2 = param_0->unk70_10;
     switch (local_2) {
-    case 1:
-        param_0->actorData[4] = local_2;
-        _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014C8_chpoolkids, D_808012B0_chpoolkids, 5);
-        func_80800AA0_chpoolkids(param_0);
-        break;
-    case 2:
-        func_80800AA0_chpoolkids(param_0);
-        break;
-    case 3:
-        func_80800AA0_chpoolkids(param_0);
-        if (func_800D9078(&param_0->unk58)) _glcutDll_entrypoint_17();
-        break;
-    case 4:
-        param_0->actorData[4] = local_2;
-        _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014C8_chpoolkids, D_808012D8_chpoolkids, 4);
-        func_80800AA0_chpoolkids(param_0);
-        break;
-    case 5:
-        param_0->actorData[4] = local_2;
-        _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014C8_chpoolkids, D_808012F8_chpoolkids, 4);
-        func_80800AA0_chpoolkids(param_0);
-        break;
-    case 6:
-        func_808008DC_chpoolkids(param_0);
-        func_80800944_chpoolkids(param_0, 0.55f);
-        break;
+        case 1:
+            param_0->actorData[4] = local_2;
+            _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014C8_chpoolkids,
+                                         D_808012B0_chpoolkids, 5);
+            func_80800AA0_chpoolkids(param_0);
+            break;
+        case 2:
+            func_80800AA0_chpoolkids(param_0);
+            break;
+        case 3:
+            func_80800AA0_chpoolkids(param_0);
+            if (func_800D9078(&param_0->unk58))
+                _glcutDll_entrypoint_17();
+            break;
+        case 4:
+            param_0->actorData[4] = local_2;
+            _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014C8_chpoolkids,
+                                         D_808012D8_chpoolkids, 4);
+            func_80800AA0_chpoolkids(param_0);
+            break;
+        case 5:
+            param_0->actorData[4] = local_2;
+            _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014C8_chpoolkids,
+                                         D_808012F8_chpoolkids, 4);
+            func_80800AA0_chpoolkids(param_0);
+            break;
+        case 6:
+            func_808008DC_chpoolkids(param_0);
+            func_80800944_chpoolkids(param_0, 0.55f);
     }
 }
 
@@ -176,21 +145,32 @@ void func_80800290_chpoolkids(Actor *param_0)
     s32 local_0;
     func_8008FB58(param_0->position, 60.0f, 60.0f);
     switch (local_0 = param_0->unk70_10) {
-    case 1:
-        param_0->actorData[4] = local_0;
-        _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014D8_chpoolkids, D_80801318_chpoolkids, 5);
-        func_80800B38_chpoolkids(param_0); break;
-    case 2: func_80800B38_chpoolkids(param_0); break;
-    case 4:
-        param_0->actorData[4] = local_0;
-        _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014D8_chpoolkids, D_80801340_chpoolkids, 4);
-        func_80800B38_chpoolkids(param_0); break;
-    case 5:
-        param_0->actorData[4] = local_0;
-        _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014D8_chpoolkids, D_80801360_chpoolkids, 4);
-        func_80800B38_chpoolkids(param_0); break;
-    case 6:
-        func_80800884_chpoolkids(param_0); func_808008DC_chpoolkids(param_0); func_80800944_chpoolkids(param_0, 0.9f); break;
+        case 1:
+            param_0->actorData[4] = local_0;
+            _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014D8_chpoolkids,
+                                         D_80801318_chpoolkids, 5);
+            func_80800B38_chpoolkids(param_0);
+            break;
+        case 2:
+            func_80800B38_chpoolkids(param_0);
+            break;
+        case 4:
+            param_0->actorData[4] = local_0;
+            _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014D8_chpoolkids,
+                                         D_80801340_chpoolkids, 4);
+            func_80800B38_chpoolkids(param_0);
+            break;
+        case 5:
+            param_0->actorData[4] = local_0;
+            _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808014D8_chpoolkids,
+                                         D_80801360_chpoolkids, 4);
+            func_80800B38_chpoolkids(param_0);
+            break;
+        case 6:
+            func_80800884_chpoolkids(param_0);
+            func_808008DC_chpoolkids(param_0);
+            func_80800944_chpoolkids(param_0, 0.9f);
+            break;
     }
 }
 
@@ -201,62 +181,67 @@ s32 func_808003DC_chpoolkids(Actor *param_0, s32 param_1, PK2 param_2)
     f32 local_2[2];
     s32 local_3;
     switch (param_1) {
-    case 0x2E:
-        func_808007F0_chpoolkids(param_0, param_2.a, param_2.b);
-        break;
-    case 0xC:
-        local_0 = func_800DA298(0x166);
-        local_1 = func_800DA298(0x167);
-        if (local_0 && local_1) {
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1022, 6, param_0->position, 0xA0);
-            return 3;
-        }
-        if (local_0) {
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1021, 6, param_0->position, 0xA0);
-            return 3;
-        }
-        _subaddiedialog_entrypoint_11(param_0->unk0, 0x1020, 6, param_0->position, 0xA0);
-        return 3;
-    case 0x1F:
-        local_3 = *(s32 *)&param_2;
-        local_2[0] = local_2[1] = *(f32 *)&param_0->actorData[5];
-        _dbmorph_entrypoint_3((void *)func_800B2768(local_3), (void *)func_80103CB8(param_0, local_3), func_800B2840(local_3), 1, local_2);
-        func_801015D0(param_0);
-        break;
-    case 0x49:
-        if (param_0->unk6C_9 != 0x3A3) return 0;
-        if (_glcutDll_entrypoint_19(0x2A)) {
-            _capod_entrypoint_13(param_0->unk0, 0, 0x1F, 0x2830);
+        case 0x2E:
+            func_808007F0_chpoolkids(param_0, param_2.a, param_2.b);
             break;
-        }
-        if (_glcutDll_entrypoint_19(0x29)) {
-            _capod_entrypoint_13(param_0->unk0, 0, 0x2A, 0x2830);
+        case 0xC:
+            local_0 = func_800DA298(0x166);
+            local_1 = func_800DA298(0x167);
+            if (local_0 && local_1) {
+                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1022, 6, param_0->position, 0xA0);
+                return 3;
+            }
+            if (local_0) {
+                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1021, 6, param_0->position, 0xA0);
+                return 3;
+            }
+            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1020, 6, param_0->position, 0xA0);
+            return 3;
+        case 0x1F:
+            local_3 = *(s32 *) &param_2;
+            local_2[0] = local_2[1] = *(f32 *) &param_0->actorData[5];
+            _dbmorph_entrypoint_3((void *) func_800B2768(local_3),
+                                  (void *) func_80103CB8(param_0, local_3), func_800B2840(local_3),
+                                  1, local_2);
+            func_801015D0(param_0);
             break;
-        }
-        return 0;
-    case 0x95:
-        func_808006F8_chpoolkids(param_0);
-        break;
-    case 0x52:
-        _gcdialogcamera_entrypoint_3(param_0->unk6C_9 == 0x3A3 ? D_808014E8_chpoolkids : D_808014F8_chpoolkids, param_0->scale);
-        break;
-    default:
-        return 0;
+        case 0x49:
+            if (param_0->unk6C_9 != 0x3A3)
+                return 0;
+            if (_glcutDll_entrypoint_19(0x2A)) {
+                _capod_entrypoint_13(param_0->unk0, 0, 0x1F, 0x2830);
+                break;
+            }
+            if (_glcutDll_entrypoint_19(0x29)) {
+                _capod_entrypoint_13(param_0->unk0, 0, 0x2A, 0x2830);
+                break;
+            }
+            return 0;
+        case 0x95:
+            func_808006F8_chpoolkids(param_0);
+            break;
+        case 0x52:
+            _gcdialogcamera_entrypoint_3(param_0->unk6C_9 == 0x3A3 ? D_808014E8_chpoolkids
+                                                                   : D_808014F8_chpoolkids,
+                                         param_0->scale);
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
 
 void func_80800618_chpoolkids(param_0) Actor *param_0;
 {
-
     func_80102424(param_0, 6);
     switch (param_0->unk6C_9) {
-    case 0x3A3: func_800EE7F8(param_0->position, D_80801508_chpoolkids); break;
-    case 0x3A4:
-        func_800EE7F8(param_0->position, D_80801514_chpoolkids);
-        func_801020DC(param_0, 0);
-        func_80101DAC(param_0, 0);
-        break;
+        case 0x3A3:
+            func_800EE7F8(param_0->position, D_80801508_chpoolkids);
+            break;
+        case 0x3A4:
+            func_800EE7F8(param_0->position, D_80801514_chpoolkids);
+            func_801020DC(param_0, 0);
+            func_80101DAC(param_0, 0);
     }
     if (!_glcutDll_entrypoint_20()) {
         func_800EF1B8(param_0->position, func_800DC178(0.0f, 359.0f), func_800DC178(0.0f, 200.0f));
@@ -279,43 +264,43 @@ void func_808006F8_chpoolkids(param_0) Actor *param_0;
         local_2 = 1;
     } else if ((local_0 != 0) && (local_1 == 0)) {
         func_80102424(param_0, 4);
-        goto _L808007C8_chpoolkids;
     } else if ((local_0 == 0) && (local_1 != 0)) {
         func_80102424(param_0, 5);
     } else if ((local_0 != 0) && (local_1 != 0)) {
         func_80800618_chpoolkids(param_0);
     }
-_L808007C8_chpoolkids:
     if (local_2 != 0) {
         func_800DA524(0x168);
         func_800DA524(0x1CE);
     }
 }
 
-void func_808007F0_chpoolkids(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+void func_808007F0_chpoolkids(param_0, param_1, param_2) Actor *param_0;
+s32 param_1;
+s32 param_2;
 {
     switch (param_1) {
-    case 0x1020:
-    case 0x1021:
-        _capod_entrypoint_14();
-        _glcutDll_entrypoint_17();
-        break;
-    case 0x1022:
-        func_800D0C78(0x22, 1, 0);
-        param_0->unk58 = 4.5f;
-        func_80102424(param_0, 3);
-        break;
-    default:
-        func_80102424(param_0, param_0->actorData[4]);
-        break;
+        case 0x1020:
+        case 0x1021:
+            _capod_entrypoint_14();
+            _glcutDll_entrypoint_17();
+            break;
+        case 0x1022:
+            func_800D0C78(0x22, 1, 0);
+            param_0->unk58 = 4.5f;
+            func_80102424(param_0, 3);
+            break;
+        default:
+            func_80102424(param_0, param_0->actorData[4]);
     }
 }
 
-void func_80800884_chpoolkids(u8 *param_0) {
+void func_80800884_chpoolkids(u8 *param_0)
+{
     f32 local_0[3];
     if (!_glcutDll_entrypoint_20(param_0)) {
         func_8010D600(local_0);
-        *(f32 *)(param_0 + 0x54) = func_80102D78(param_0, local_0);
+        *(f32 *) (param_0 + 0x54) = func_80102D78(param_0, local_0);
         func_80102BF8(param_0, 0.15f, 4.0f, 120.0f);
     }
 }
@@ -353,19 +338,20 @@ void func_80800944_chpoolkids(Actor *param_0, f32 param_1)
 
 int func_80800AA0_chpoolkids(s32 param_0)
 {
-  s32 local_0;
-  local_0 = param_0 | 0;
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_8080152C_chpoolkids, 0x3ECCCCCD);
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_8080153C_chpoolkids, 0x3e3851ec);
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_8080154C_chpoolkids, 0x3f3ae148);
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_8080155C_chpoolkids, 0x3f451eb8);
+    s32 local_0;
+    local_0 = param_0 | 0;
+    _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_8080152C_chpoolkids, 0x3ECCCCCD);
+    _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_8080153C_chpoolkids, 0x3e3851ec);
+    _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_8080154C_chpoolkids, 0x3f3ae148);
+    _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_8080155C_chpoolkids, 0x3f451eb8);
 }
 
 int func_80800B38_chpoolkids(s32 param_0)
 {
-  s32 local_0;
-  local_0 = param_0 + 4;
-  _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_8080156C_chpoolkids, &D_8080157C_chpoolkids);
+    s32 local_0;
+    local_0 = param_0 + 4;
+    _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_8080156C_chpoolkids,
+                                     &D_8080157C_chpoolkids);
 }
 
 void func_80800B68_chpoolkids(Actor *param_0)
@@ -377,41 +363,41 @@ void func_80800B68_chpoolkids(Actor *param_0)
     s32 local_4;
 
     local_0 = func_80100094(param_0, 0);
-    if (_gcmapsects_entrypoint_5(*(s16 *)local_0)) {
-        local_1 = *(s16 *)(local_0 + 0x10) == 0;
+    if (_gcmapsects_entrypoint_5(*(s16 *) local_0)) {
+        local_1 = *(s16 *) (local_0 + 0x10) == 0;
         if (local_1 || (!local_1 && param_0->unk5F)) {
-            _subaddieaudioloop_entrypoint_5(param_0, param_0->position,
-                local_1, -1, D_80801594_chpoolkids);
+            _subaddieaudioloop_entrypoint_5(param_0, param_0->position, local_1, -1,
+                                            D_80801594_chpoolkids);
         }
-        switch (*(s16 *)(local_0 + 2)) {
-        case 1:
-            local_2 = func_800D9078((f32 *)(local_0 + 4));
-            *(f32 *)(local_0 + 0xC) = func_800F12D4(*(f32 *)(local_0 + 4),
-                0.0f, 4.0f, 1.0f, 0.0f);
-            if (local_2) {
-                *(s16 *)(local_0 + 0x10) = 1;
-                *(s16 *)(local_0 + 2) = 0;
-            }
-            break;
-        case 2:
-            local_3 = func_800D9078((f32 *)(local_0 + 4));
-            func_808011A8_chpoolkids(param_0);
-            func_800BF744(3, 1);
-            *(f32 *)(local_0 + 0x20) = func_800F12D4(*(f32 *)(local_0 + 4),
-                0.0f, 2.1f, 1.0f, 0.0f);
-            if (local_3) {
-                *(s16 *)(local_0 + 0x24) = 1;
-                *(s16 *)(local_0 + 2) = 0;
-            }
-            break;
+        switch (*(s16 *) (local_0 + 2)) {
+            case 1:
+                local_2 = func_800D9078((f32 *) (local_0 + 4));
+                *(f32 *) (local_0 + 0xC) =
+                    func_800F12D4(*(f32 *) (local_0 + 4), 0.0f, 4.0f, 1.0f, 0.0f);
+                if (local_2) {
+                    *(s16 *) (local_0 + 0x10) = 1;
+                    *(s16 *) (local_0 + 2) = 0;
+                }
+                break;
+            case 2:
+                local_3 = func_800D9078((f32 *) (local_0 + 4));
+                func_808011A8_chpoolkids(param_0);
+                func_800BF744(3, 1);
+                *(f32 *) (local_0 + 0x20) =
+                    func_800F12D4(*(f32 *) (local_0 + 4), 0.0f, 2.1f, 1.0f, 0.0f);
+                if (local_3) {
+                    *(s16 *) (local_0 + 0x24) = 1;
+                    *(s16 *) (local_0 + 2) = 0;
+                }
+                break;
         }
-        if (!*(s16 *)(local_0 + 0x10) || !*(s16 *)(local_0 + 0x24)) {
+        if (!*(s16 *) (local_0 + 0x10) || !*(s16 *) (local_0 + 0x24)) {
             local_4 = func_800BEA88(1);
             if (local_4) {
-                if (!*(s16 *)(local_0 + 0x24) && func_800E3DC0(local_0 + 0x28, local_0 + 0x2E)) {
+                if (!*(s16 *) (local_0 + 0x24) && func_800E3DC0(local_0 + 0x28, local_0 + 0x2E)) {
                     _glid_entrypoint_0(local_4, 1, _chpoolkids_entrypoint_3, param_0->unk0);
                 }
-                if (!*(s16 *)(local_0 + 0x10) && func_800E3DC0(local_0 + 0x14, local_0 + 0x1A)) {
+                if (!*(s16 *) (local_0 + 0x10) && func_800E3DC0(local_0 + 0x14, local_0 + 0x1A)) {
                     _glid_entrypoint_0(local_4, 2, _chpoolkids_entrypoint_3, param_0->unk0);
                 }
             }
@@ -421,12 +407,11 @@ void func_80800B68_chpoolkids(Actor *param_0)
 
 int func_80800D3C_chpoolkids(s32 param_0, s32 param_1, s32 param_2)
 {
-  if (param_1 == 0x95)
-  {
-    func_80800D74_chpoolkids(param_0);
-    return 1;
-  }
-  return 0;
+    if (param_1 == 0x95) {
+        func_80800D74_chpoolkids(param_0);
+        return 1;
+    }
+    return 0;
 }
 
 void func_80800D74_chpoolkids(param_0) Actor *param_0;
@@ -435,52 +420,51 @@ void func_80800D74_chpoolkids(param_0) Actor *param_0;
     s32 local_0;
     s32 local_1;
     void *local_2;
-    s32 local_3;
 
     local_4 = func_80100094(param_0, 0);
     local_0 = func_800DA298(0x166);
     local_1 = func_800DA298(0x167);
-    *(s16 *)local_4 = _gcmapsects_entrypoint_4(param_0->position);
-    *(s16 *)(local_4 + 2) = 0;
-    *(f32 *)(local_4 + 4) = 0.0f;
-    *(f32 *)(local_4 + 8) = 0.0f;
-    *(f32 *)(local_4 + 0x20) = 0.0f;
-    *(f32 *)(local_4 + 0xC) = 0.0f;
+    *(s16 *) local_4 = _gcmapsects_entrypoint_4(param_0->position);
+    *(s16 *) (local_4 + 2) = 0;
+    *(f32 *) (local_4 + 4) = 0.0f;
+    *(f32 *) (local_4 + 8) = 0.0f;
+    *(f32 *) (local_4 + 0x20) = 0.0f;
+    *(f32 *) (local_4 + 0xC) = 0.0f;
     if (_glcutDll_entrypoint_20()) {
         local_0 = 1;
         local_1 = 1;
     }
     if (local_0) {
-        *(f32 *)(local_4 + 0xC) = 1.0f;
+        *(f32 *) (local_4 + 0xC) = 1.0f;
     }
     if (local_1) {
-        *(f32 *)(local_4 + 0x20) = 1.0f;
+        *(f32 *) (local_4 + 0x20) = 1.0f;
     }
     if (_glcutDll_entrypoint_19(0x2A)) {
-        *(s16 *)(local_4 + 2) = 1;
-        *(f32 *)(local_4 + 0xC) = 0.0f;
-        *(f32 *)(local_4 + 4) = 4.0f;
-        *(f32 *)(local_4 + 8) = 4.0f;
+        *(s16 *) (local_4 + 2) = 1;
+        *(f32 *) (local_4 + 0xC) = 0.0f;
+        *(f32 *) (local_4 + 4) = 4.0f;
+        *(f32 *) (local_4 + 8) = 4.0f;
         _subaddieDll_entrypoint_4(param_0, 1);
     } else if (_glcutDll_entrypoint_19(0x29)) {
-        *(s16 *)(local_4 + 2) = 2;
-        *(f32 *)(local_4 + 0x20) = 0.0f;
-        *(f32 *)(local_4 + 4) = 6.0f;
-        *(f32 *)(local_4 + 8) = 6.0f;
+        *(s16 *) (local_4 + 2) = 2;
+        *(f32 *) (local_4 + 0x20) = 0.0f;
+        *(f32 *) (local_4 + 4) = 6.0f;
+        *(f32 *) (local_4 + 8) = 6.0f;
         _subaddieDll_entrypoint_4(param_0, 1);
     }
-    if (*(f32 *)(local_4 + 0xC) == 1.0f) {
-        *(s16 *)(local_4 + 0x10) = 1;
+    if (*(f32 *) (local_4 + 0xC) == 1.0f) {
+        *(s16 *) (local_4 + 0x10) = 1;
     } else {
-        *(s16 *)(local_4 + 0x10) = 0;
+        *(s16 *) (local_4 + 0x10) = 0;
     }
-    if (*(f32 *)(local_4 + 0x20) == 1.0f) {
-        *(s16 *)(local_4 + 0x24) = 1;
+    if (*(f32 *) (local_4 + 0x20) == 1.0f) {
+        *(s16 *) (local_4 + 0x24) = 1;
     } else {
-        *(s16 *)(local_4 + 0x24) = 0;
+        *(s16 *) (local_4 + 0x24) = 0;
     }
     func_800BF744(3, 0);
-    func_800BF744(2, *(s16 *)(local_4 + 0x10) ? 0 : 1);
+    func_800BF744(2, *(s16 *) (local_4 + 0x10) ? 0 : 1);
     local_2 = func_800BEA88(1);
     _glidmake_entrypoint_2(local_2, 1, local_4 + 0x28, local_4 + 0x2E);
     _glidmake_entrypoint_2(local_2, 2, local_4 + 0x14, local_4 + 0x1A);
@@ -488,7 +472,8 @@ void func_80800D74_chpoolkids(param_0) Actor *param_0;
     _idworldmake_entrypoint_1(local_2, 0x8D, 2, 1);
 }
 
-void chpoolkids_entrypoint_3(s32 param_0, Vtx *param_1, Vtx *param_2, s32 param_3, Unk80132ED0 *param_4)
+void chpoolkids_entrypoint_3(s32 param_0, Vtx *param_1, Vtx *param_2, s32 param_3,
+                             Unk80132ED0 *param_4)
 {
     u8 *local_0;
     Vtx *local_1;
@@ -496,20 +481,19 @@ void chpoolkids_entrypoint_3(s32 param_0, Vtx *param_1, Vtx *param_2, s32 param_
 
     local_0 = func_80100094(func_80106790(param_4), 0);
     switch (param_0) {
-    case 1:
-        local_2 = 1.0f - *(f32 *)(local_0 + 0x20);
-        local_1 = param_1 + param_3;
-        for (; param_1 < local_1; param_1++, param_2++) {
-            param_2->v.cn[3] = (u32)((u32)param_1->v.cn[3] * local_2);
-        }
-        break;
-    case 2:
-        local_2 = 1.0f - *(f32 *)(local_0 + 0xC);
-        local_1 = param_1 + param_3;
-        for (; param_1 < local_1; param_1++, param_2++) {
-            param_2->v.cn[3] = (u32)((u32)param_1->v.cn[3] * local_2);
-        }
-        break;
+        case 1:
+            local_2 = 1.0f - *(f32 *) (local_0 + 0x20);
+            local_1 = param_1 + param_3;
+            for (; param_1 < local_1; param_1++, param_2++) {
+                param_2->v.cn[3] = (u32) ((u32) param_1->v.cn[3] * local_2);
+            }
+            break;
+        case 2:
+            local_2 = 1.0f - *(f32 *) (local_0 + 0xC);
+            local_1 = param_1 + param_3;
+            for (; param_1 < local_1; param_1++, param_2++) {
+                param_2->v.cn[3] = (u32) ((u32) param_1->v.cn[3] * local_2);
+            }
     }
 }
 
@@ -522,46 +506,118 @@ void func_808011A8_chpoolkids(param_0) Actor *param_0;
     local_0 = func_800B5BE4(0x23);
     local_2 = 1;
     for (local_1 = 0; local_1 < local_2; local_1++) {
-        func_800BABB8(local_0, D_808015EC_chpoolkids, D_808015EC_chpoolkids,
-            param_0->scale * 1.15f, D_808015A0_chpoolkids);
+        func_800BABB8(local_0, D_808015EC_chpoolkids, D_808015EC_chpoolkids, param_0->scale * 1.15f,
+                      D_808015A0_chpoolkids);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/poolkids.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808013F0_chpoolkids -> int[], D_80801438_chpoolkids -> int[], D_80801520_chpoolkids -> s32[], D_8080152C_chpoolkids -> int[], D_8080153C_chpoolkids -> int[], D_8080154C_chpoolkids -> int[], D_8080155C_chpoolkids -> int[], D_8080156C_chpoolkids -> int[], D_8080157C_chpoolkids -> int[] */
 extern void func_80105834();
 extern void func_801018A4();
 extern void func_80107C2C();
 extern void func_80101870();
 extern void func_80102EC0();
 extern void func_8010A730();
-u8 D_808012B0_chpoolkids[40] = { 0x0, 0x0, 0x0, 0x1, 0x10, 0x14, 0x1, 0x0, 0x0, 0x0, 0x6, 0x1, 0x10, 0x16, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x10, 0x61, 0x1, 0x0, 0x0, 0x0, 0x4, 0x0, 0x10, 0x62, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
-u8 D_808012D8_chpoolkids[32] = { 0x0, 0x0, 0x2, 0x1, 0x10, 0x18, 0x1, 0x0, 0x0, 0x0, 0x6, 0x1, 0x10, 0x1A, 0x2, 0x0, 0x0, 0x0, 0x4, 0x0, 0x10, 0x65, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
-u8 D_808012F8_chpoolkids[32] = { 0x0, 0x0, 0x2, 0x1, 0x10, 0x1C, 0x1, 0x0, 0x0, 0x0, 0x6, 0x1, 0x10, 0x1E, 0x2, 0x0, 0x0, 0x0, 0x4, 0x0, 0x10, 0x67, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
-u8 D_80801318_chpoolkids[40] = { 0x0, 0x0, 0x0, 0x1, 0x10, 0x15, 0x1, 0x0, 0x0, 0x0, 0x6, 0x1, 0x10, 0x17, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x10, 0x63, 0x1, 0x0, 0x0, 0x0, 0x4, 0x0, 0x10, 0x64, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
-u8 D_80801340_chpoolkids[32] = { 0x0, 0x0, 0x4, 0x1, 0x10, 0x19, 0x1, 0x0, 0x0, 0x0, 0x6, 0x1, 0x10, 0x1B, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x10, 0x66, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
-u8 D_80801360_chpoolkids[32] = { 0x0, 0x0, 0x4, 0x1, 0x10, 0x1D, 0x1, 0x0, 0x0, 0x0, 0x6, 0x1, 0x10, 0x1F, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x10, 0x68, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
-u32 D_80801380_chpoolkids[14] = { 0x0, 0x0, 0x413547AE, 0x2B90000, 0x413547AE, 0x2B90000, 0x413547AE, 0x2B90000, 0x413547AE, 0x2B90000, 0x413547AE, 0x2B90000, 0x412E6666, 0x2C00000 };
-u32 D_808013B8_chpoolkids[14] = { 0x0, 0x0, 0x40C0F5C3, 0x2BA0000, 0x40C0F5C3, 0x2BA0000, 0x40C0F5C3, 0x2BA0000, 0x40C0F5C3, 0x2BA0000, 0x40C0F5C3, 0x2BA0000, 0x40A00000, 0x2B40000 };
-int D_808013F0_chpoolkids[18] = { 0x30C03A3, 0x7D40001, (u32)&D_80801380_chpoolkids, (u32)func_80800058_chpoolkids, (u32)func_80105834, (u32)func_801018A4, 0x7D00000, 0x3F800000, 0x0, 0x800100, 0x0, 0x0, 0x0, (u32)func_80800024_chpoolkids, (u32)func_80107C2C, -0x7BEF9B6E, (u32)func_808003DC_chpoolkids, 0x0 };
-int D_80801438_chpoolkids[18] = { 0x30D03A4, 0x7D50001, (u32)&D_808013B8_chpoolkids, (u32)func_80800290_chpoolkids, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x3F800000, 0x0, 0x100, 0x0, 0x0, 0x0, (u32)func_80800024_chpoolkids, (u32)func_80107C2C, -0x7BEF9B6E, (u32)func_808003DC_chpoolkids, 0x0 };
-void *D_80801480_chpoolkids = (void *)0x032D03CD;
-static u32 D_80801480_chpoolkids_rest[17] = { 0x1, 0x0, (u32)func_80800B68_chpoolkids, (u32)func_80102EC0, (u32)func_8010A730, 0xBB80000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x340000, 0x0, (u32)func_80107C2C, 0x80002602, (u32)func_80800D3C_chpoolkids, 0x0 };
-u8 D_808014C8_chpoolkids[16] = { 0x1, 0x68, 0x0, 0x0, 0x0, 0xFA, 0x0, 0xA0, 0x0, 0x0, 0x0, 0xC, 0x6, 0x32, 0x2, 0x0 };
-u8 D_808014D8_chpoolkids[16] = { 0x1, 0xCE, 0x0, 0x0, 0x0, 0xFA, 0x0, 0xA1, 0x0, 0x0, 0x0, 0xC, 0x6, 0x32, 0x2, 0x0 };
-u32 D_808014E8_chpoolkids[4] = { 0x430C0000, 0x42C80000, 0x42C80000, 0x42200000 };
-u32 D_808014F8_chpoolkids[4] = { 0x430C0000, 0x43160000, 0x43160000, 0x42200000 };
-f32 D_80801508_chpoolkids[3] = { -1.57e+04f, 8189.0f, -7e+03f };
-f32 D_80801514_chpoolkids[3] = { -1.48e+04f, 8189.0f, -8e+03f };
-s32 D_80801520_chpoolkids[3] = { 0x130409, 0xD00F3, 0x10C0000 };
-int D_8080152C_chpoolkids[4] = { 0x130524, 0xD00F3, 0x10C0016, 0x46500000 };
-int D_8080153C_chpoolkids[4] = { 0x13041D, 0xD00B3, 0xCC0016, 0x46500000 };
-int D_8080154C_chpoolkids[4] = { 0x13055E, 0xD00F3, 0x10C0016, 0x46500000 };
-int D_8080155C_chpoolkids[4] = { 0x1303FF, 0xD00F3, 0x10C0016, 0x46500000 };
-int D_8080156C_chpoolkids[4] = { 0x130402, 0xD00F3, 0x10C0016, 0x5DC00000 };
-int D_8080157C_chpoolkids[6] = { 0x3E4CCCCD, 0x3EB33333, 0x3F0A3D71, 0x3F47AE14, 0x3F7D70A4, -0x40800000 };
-u8 D_80801594_chpoolkids[12] = { 0x0, 0x13, 0x6, 0x2C, 0x0, 0x16, 0x46, 0x50, 0x0, 0x0, 0x0, 0x0 };
-u8 D_808015A0_chpoolkids[76] = { 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x1B, 0x1, 0xC2, 0x2, 0x26, 0x0, 0x2D, 0x0, 0xC8, 0x0, 0xFA, 0x0, 0xB, 0x0, 0x28, 0x0, 0x50, 0x0, 0xA, 0xFF, 0xF6, 0x0, 0x16, 0x6, 0x0, 0x0, 0x32, 0x0, 0x0, 0x0, 0x33, 0x0, 0x2, 0x0, 0x27, 0xFF, 0x9C, 0xFF, 0x9C, 0x0, 0x64, 0x0, 0x64, 0x0, 0x22, 0x0, 0x91, 0x0, 0xAB, 0x0, 0xF8, 0x1, 0xF, 0x0, 0x15, 0x0, 0xC, 0x0, 0xA6, 0x0, 0x2B, 0x0, 0x99, 0x0, 0xB3, 0x80, 0x2, 0x1, 0x1A, 0x0, 0x0 };
-f32 D_808015EC_chpoolkids[5] = { -1.53e+04f, 8.2e+03f, -8.2e+03f, 0.0f, 0.0f };
+u8 D_808012B0_chpoolkids[40] = {0x0,  0x0,  0x0,  0x1,  0x10, 0x14, 0x1,  0x0, 0x0,  0x0,
+                                0x6,  0x1,  0x10, 0x16, 0x2,  0x0,  0x0,  0x0, 0x2,  0x0,
+                                0x10, 0x61, 0x1,  0x0,  0x0,  0x0,  0x4,  0x0, 0x10, 0x62,
+                                0x1,  0x0,  0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3,  0x0};
+u8 D_808012D8_chpoolkids[32] = {0x0, 0x0,  0x2,  0x1,  0x10, 0x18, 0x1,  0x0, 0x0, 0x0,  0x6,
+                                0x1, 0x10, 0x1A, 0x2,  0x0,  0x0,  0x0,  0x4, 0x0, 0x10, 0x65,
+                                0x1, 0x0,  0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0};
+u8 D_808012F8_chpoolkids[32] = {0x0, 0x0,  0x2,  0x1,  0x10, 0x1C, 0x1,  0x0, 0x0, 0x0,  0x6,
+                                0x1, 0x10, 0x1E, 0x2,  0x0,  0x0,  0x0,  0x4, 0x0, 0x10, 0x67,
+                                0x1, 0x0,  0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0};
+u8 D_80801318_chpoolkids[40] = {0x0,  0x0,  0x0,  0x1,  0x10, 0x15, 0x1,  0x0, 0x0,  0x0,
+                                0x6,  0x1,  0x10, 0x17, 0x2,  0x0,  0x0,  0x0, 0x2,  0x0,
+                                0x10, 0x63, 0x1,  0x0,  0x0,  0x0,  0x4,  0x0, 0x10, 0x64,
+                                0x1,  0x0,  0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3,  0x0};
+u8 D_80801340_chpoolkids[32] = {0x0, 0x0,  0x4,  0x1,  0x10, 0x19, 0x1,  0x0, 0x0, 0x0,  0x6,
+                                0x1, 0x10, 0x1B, 0x2,  0x0,  0x0,  0x0,  0x2, 0x0, 0x10, 0x66,
+                                0x1, 0x0,  0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0};
+u8 D_80801360_chpoolkids[32] = {0x0, 0x0,  0x4,  0x1,  0x10, 0x1D, 0x1,  0x0, 0x0, 0x0,  0x6,
+                                0x1, 0x10, 0x1F, 0x2,  0x0,  0x0,  0x0,  0x2, 0x0, 0x10, 0x68,
+                                0x1, 0x0,  0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0};
+u32 D_80801380_chpoolkids[14] = {0x0,        0x0,        0x413547AE, 0x2B90000,  0x413547AE,
+                                 0x2B90000,  0x413547AE, 0x2B90000,  0x413547AE, 0x2B90000,
+                                 0x413547AE, 0x2B90000,  0x412E6666, 0x2C00000};
+u32 D_808013B8_chpoolkids[14] = {0x0,        0x0,        0x40C0F5C3, 0x2BA0000,  0x40C0F5C3,
+                                 0x2BA0000,  0x40C0F5C3, 0x2BA0000,  0x40C0F5C3, 0x2BA0000,
+                                 0x40C0F5C3, 0x2BA0000,  0x40A00000, 0x2B40000};
+int D_808013F0_chpoolkids[18] = {0x30C03A3,
+                                 0x7D40001,
+                                 (u32) &D_80801380_chpoolkids,
+                                 (u32) func_80800058_chpoolkids,
+                                 (u32) func_80105834,
+                                 (u32) func_801018A4,
+                                 0x7D00000,
+                                 0x3F800000,
+                                 0x0,
+                                 0x800100,
+                                 0x0,
+                                 0x0,
+                                 0x0,
+                                 (u32) func_80800024_chpoolkids,
+                                 (u32) func_80107C2C,
+                                 -0x7BEF9B6E,
+                                 (u32) func_808003DC_chpoolkids,
+                                 0x0};
+int D_80801438_chpoolkids[18] = {0x30D03A4,
+                                 0x7D50001,
+                                 (u32) &D_808013B8_chpoolkids,
+                                 (u32) func_80800290_chpoolkids,
+                                 (u32) func_80105834,
+                                 (u32) func_80101870,
+                                 0x7D00000,
+                                 0x3F800000,
+                                 0x0,
+                                 0x100,
+                                 0x0,
+                                 0x0,
+                                 0x0,
+                                 (u32) func_80800024_chpoolkids,
+                                 (u32) func_80107C2C,
+                                 -0x7BEF9B6E,
+                                 (u32) func_808003DC_chpoolkids,
+                                 0x0};
+void *D_80801480_chpoolkids = (void *) 0x032D03CD;
+static u32 D_80801480_chpoolkids_rest[17] = {0x1,
+                                             0x0,
+                                             (u32) func_80800B68_chpoolkids,
+                                             (u32) func_80102EC0,
+                                             (u32) func_8010A730,
+                                             0xBB80000,
+                                             0x0,
+                                             0x0,
+                                             0x0,
+                                             0x0,
+                                             0x0,
+                                             0x340000,
+                                             0x0,
+                                             (u32) func_80107C2C,
+                                             0x80002602,
+                                             (u32) func_80800D3C_chpoolkids,
+                                             0x0};
+u8 D_808014C8_chpoolkids[16] = {0x1, 0x68, 0x0, 0x0, 0x0, 0xFA, 0x0, 0xA0,
+                                0x0, 0x0,  0x0, 0xC, 0x6, 0x32, 0x2, 0x0};
+u8 D_808014D8_chpoolkids[16] = {0x1, 0xCE, 0x0, 0x0, 0x0, 0xFA, 0x0, 0xA1,
+                                0x0, 0x0,  0x0, 0xC, 0x6, 0x32, 0x2, 0x0};
+u32 D_808014E8_chpoolkids[4] = {0x430C0000, 0x42C80000, 0x42C80000, 0x42200000};
+u32 D_808014F8_chpoolkids[4] = {0x430C0000, 0x43160000, 0x43160000, 0x42200000};
+f32 D_80801508_chpoolkids[3] = {-1.57e+04f, 8189.0f, -7e+03f};
+f32 D_80801514_chpoolkids[3] = {-1.48e+04f, 8189.0f, -8e+03f};
+s32 D_80801520_chpoolkids[3] = {0x130409, 0xD00F3, 0x10C0000};
+int D_8080152C_chpoolkids[4] = {0x130524, 0xD00F3, 0x10C0016, 0x46500000};
+int D_8080153C_chpoolkids[4] = {0x13041D, 0xD00B3, 0xCC0016, 0x46500000};
+int D_8080154C_chpoolkids[4] = {0x13055E, 0xD00F3, 0x10C0016, 0x46500000};
+int D_8080155C_chpoolkids[4] = {0x1303FF, 0xD00F3, 0x10C0016, 0x46500000};
+int D_8080156C_chpoolkids[4] = {0x130402, 0xD00F3, 0x10C0016, 0x5DC00000};
+int D_8080157C_chpoolkids[6] = {0x3E4CCCCD, 0x3EB33333, 0x3F0A3D71,
+                                0x3F47AE14, 0x3F7D70A4, -0x40800000};
+u8 D_80801594_chpoolkids[12] = {0x0, 0x13, 0x6, 0x2C, 0x0, 0x16, 0x46, 0x50, 0x0, 0x0, 0x0, 0x0};
+u8 D_808015A0_chpoolkids[76] = {
+    0x0, 0x1D, 0x9, 0xDD, 0x0, 0x1B, 0x1,  0xC2, 0x2,  0x26, 0x0,  0x2D, 0x0, 0xC8, 0x0, 0xFA,
+    0x0, 0xB,  0x0, 0x28, 0x0, 0x50, 0x0,  0xA,  0xFF, 0xF6, 0x0,  0x16, 0x6, 0x0,  0x0, 0x32,
+    0x0, 0x0,  0x0, 0x33, 0x0, 0x2,  0x0,  0x27, 0xFF, 0x9C, 0xFF, 0x9C, 0x0, 0x64, 0x0, 0x64,
+    0x0, 0x22, 0x0, 0x91, 0x0, 0xAB, 0x0,  0xF8, 0x1,  0xF,  0x0,  0x15, 0x0, 0xC,  0x0, 0xA6,
+    0x0, 0x2B, 0x0, 0x99, 0x0, 0xB3, 0x80, 0x2,  0x1,  0x1A, 0x0,  0x0};
+f32 D_808015EC_chpoolkids[5] = {-1.53e+04f, 8.2e+03f, -8.2e+03f, 0.0f, 0.0f};

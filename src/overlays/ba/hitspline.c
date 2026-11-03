@@ -1,6 +1,5 @@
 #include "common.h"
 
-extern s32 D_00000000;
 extern void func_80095870(void *, f32 *, f32 *);
 extern s32 func_8009588C(void *);
 extern void *func_800C6C94(f32 *, f32, f32 *, u32);
@@ -39,10 +38,10 @@ void bahitspline_entrypoint_0(void *param_0)
     }
 }
 
-void bahitspline_entrypoint_1(s32 arg0) 
+void bahitspline_entrypoint_1(s32 arg0)
 {
 }
-void bahitspline_entrypoint_2(void *param_0) {}
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/hitspline.data.s) is defined here in C.
- * Values are taken from the ROM. */
+void bahitspline_entrypoint_2(void *param_0)
+{
+}

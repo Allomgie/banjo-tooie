@@ -18,7 +18,7 @@ extern Vec3f D_808004C4_chjujubagfx;
 
 int chjujubagfx_entrypoint_0()
 {
-  return &D_80800470_chjujubagfx;
+    return &D_80800470_chjujubagfx;
 }
 
 void func_8080000C_chjujubagfx(Actor *param_0, s32 param_1)
@@ -42,7 +42,6 @@ void func_8080000C_chjujubagfx(Actor *param_0, s32 param_1)
             func_800DA524(0x9F3);
             _sumumbofx_entrypoint_16(func_80100094(param_0, 1), 0.5f);
             param_0->unk64_20 = 1;
-            break;
     }
 }
 
@@ -51,21 +50,19 @@ int func_80800100_chjujubagfx(Actor *param_0)
     s32 local_0;
     s32 *local_1;
     local_0 = func_8010D278();
-    if (local_0 != 0xD)
-    {
+    if (local_0 != 0xD) {
         local_1 = _subaddiefind_entrypoint_0(&param_0->position, 0x190, -1, 0);
-        *(s32 *)((char *)(param_0) + 0x3C) = (*(s32 *)((char *)(local_1) + 0x0));
-    }
-    else
-    {
+        *(s32 *) ((char *) param_0 + 0x3C) = *(s32 *) ((char *) local_1 + 0x0);
+    } else {
         func_8008FE94(1, &param_0->position);
     }
-    *(u8 *)((char *)(param_0) + 0x65) &= 0xFFEF;
+    *(u8 *) ((char *) param_0 + 0x65) &= 0xFFEF;
     func_8080000C_chjujubagfx(param_0, 2);
 }
 
-s32 func_80800174_chjujubagfx(Actor *this){
-    if(func_80100094(this, 1) != 0){
+s32 func_80800174_chjujubagfx(Actor *this)
+{
+    if (func_80100094(this, 1) != 0) {
         _sumumbofx_entrypoint_1(this, 1);
     }
 }
@@ -93,36 +90,37 @@ void func_808001A8_chjujubagfx(Actor *param_0)
         }
     }
     switch (param_0->unk70_10) {
-    case 2:
-        local_3 = param_0->position;
-        _sumumbofx_entrypoint_14(local_2);
-        _sumumbofx_entrypoint_7(local_2, 28.0f, 0, 10, local_3, local_1.f, local_0.f);
-        if (_sumumbofx_entrypoint_21(local_2) == 0.0f) {
-            _sumumbofx_entrypoint_17(local_2, 10.0f);
-            func_8080000C_chjujubagfx(param_0, 3);
-        }
-        return;
-    case 3:
-        local_3 = param_0->position;
-        _sumumbofx_entrypoint_14(local_2);
-        _sumumbofx_entrypoint_7(local_2, 28.0f, 0, 10, local_3, local_1.f, local_0.f);
-        return;
-    case 4:
-        local_3 = param_0->position;
-        _sumumbofx_entrypoint_14(local_2);
-        _sumumbofx_entrypoint_7(local_2, 28.0f, 0, 10, local_3, local_1.f, local_0.f);
-        if (_sumumbofx_entrypoint_22(local_2) < 0.05f) {
-            func_800FFAB0(param_0);
-        }
-        break;
+        case 2:
+            local_3 = param_0->position;
+            _sumumbofx_entrypoint_14(local_2);
+            _sumumbofx_entrypoint_7(local_2, 28.0f, 0, 10, local_3, local_1.f, local_0.f);
+            if (_sumumbofx_entrypoint_21(local_2) == 0.0f) {
+                _sumumbofx_entrypoint_17(local_2, 10.0f);
+                func_8080000C_chjujubagfx(param_0, 3);
+            }
+            return;
+        case 3:
+            local_3 = param_0->position;
+            _sumumbofx_entrypoint_14(local_2);
+            _sumumbofx_entrypoint_7(local_2, 28.0f, 0, 10, local_3, local_1.f, local_0.f);
+            return;
+        case 4:
+            local_3 = param_0->position;
+            _sumumbofx_entrypoint_14(local_2);
+            _sumumbofx_entrypoint_7(local_2, 28.0f, 0, 10, local_3, local_1.f, local_0.f);
+            if (_sumumbofx_entrypoint_22(local_2) < 0.05f) {
+                func_800FFAB0(param_0);
+            }
     }
 }
 
-s32 func_808003D4_chjujubagfx(s32 param_0, s32 param_1){
+s32 func_808003D4_chjujubagfx(s32 param_0, s32 param_1)
+{
     _sumumbofx_entrypoint_8(func_80100094(param_0, 1), param_1);
 }
 
-s32 chjujubagfx_entrypoint_1(void){
+s32 chjujubagfx_entrypoint_1(void)
+{
     f32 local_0[3];
 
     func_8010D254(local_0);
@@ -131,15 +129,28 @@ s32 chjujubagfx_entrypoint_1(void){
 
 void chjujubagfx_entrypoint_2(void)
 {
-  _chbaddiesetup_entrypoint_0(&_chjujubagfx_entrypoint_1);
+    _chbaddiesetup_entrypoint_0(&_chjujubagfx_entrypoint_1);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jujubagfx.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void func_80105834();
 extern void func_80107C2C();
-void *D_80800470_chjujubagfx = (void *)0x02BE02F9;
-static u32 D_80800470_chjujubagfx_rest[17] = { 0x63F0001, 0x0, (u32)func_808001A8_chjujubagfx, (u32)func_80105834, (u32)func_808003D4_chjujubagfx, 0x13880000, 0x0, 0x0, 0x4, (u32)func_80800174_chjujubagfx, 0x0, 0x0, (u32)func_80800100_chjujubagfx, (u32)func_80107C2C, 0x80000002, 0x0, 0x0 };
-Vec3f D_808004B8_chjujubagfx = { 0.0f, 0.0f, 0.0f };
-Vec3f D_808004C4_chjujubagfx = { 0.0f, -14.0f, 0.0f };
+void *D_80800470_chjujubagfx = (void *) 0x02BE02F9;
+static u32 D_80800470_chjujubagfx_rest[17] = {0x63F0001,
+                                              0x0,
+                                              (u32) func_808001A8_chjujubagfx,
+                                              (u32) func_80105834,
+                                              (u32) func_808003D4_chjujubagfx,
+                                              0x13880000,
+                                              0x0,
+                                              0x0,
+                                              0x4,
+                                              (u32) func_80800174_chjujubagfx,
+                                              0x0,
+                                              0x0,
+                                              (u32) func_80800100_chjujubagfx,
+                                              (u32) func_80107C2C,
+                                              0x80000002,
+                                              0x0,
+                                              0x0};
+Vec3f D_808004B8_chjujubagfx = {0.0f, 0.0f, 0.0f};
+Vec3f D_808004C4_chjujubagfx = {0.0f, -14.0f, 0.0f};

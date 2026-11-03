@@ -1,5 +1,3 @@
-#include "common.h"
-#include "overlays/ba/playerstate.h"
 #include "overlays/ba/anim.h"
 #include "core2/physics.h"
 #include "overlays/ba/yaw.h"
@@ -9,11 +7,10 @@ extern void baphysics_set_target_horizontal_velocity(Actor *, f32);
 void baphysics_set_target_yaw(PlayerState *, f32 target_yaw);
 
 extern s32 D_80800990_bscrouch[];
-extern void * _bapackctrl_entrypoint_1(PlayerState *);
+extern void *_bapackctrl_entrypoint_1(PlayerState *);
 extern void func_8009C128(PlayerState *, f32 *);
 extern s32 func_800CB7C4(void *, f32 *, f32 *);
 extern f32 func_800F1DF4(f32 *, f32 *);
-extern void yaw_setIdeal(PlayerState *, f32);
 extern s32 bakey_released(PlayerState *, s32);
 extern s32 bakey_pressed(PlayerState *, s32);
 extern s32 func_800A055C(PlayerState *, s32);
@@ -42,32 +39,34 @@ extern s32 func_8008DD04(PlayerState *);
 extern s32 player_inWater(PlayerState *);
 extern void bs_setState(PlayerState *, s32);
 
-void func_80800000_bscrouch(void *param_0) {
+void func_80800000_bscrouch(void *param_0)
+{
     baanim_playForDuration_loopSmooth(param_0, 0x10C, 0.5f);
-    *(s32 *)((char *)param_0 + 0x15C) = 4;
+    *(s32 *) ((char *) param_0 + 0x15C) = 4;
 }
 
 void func_80800034_bscrouch(void *param_0)
 {
-  baanim_playForDuration_onceSmooth(param_0, 0x116, 2.0f);
-  *((s32 *) (((char *) param_0) + 0x15c)) = 2;
+    baanim_playForDuration_onceSmooth(param_0, 0x116, 2.0f);
+    *(s32 *) ((char *) param_0 + 0x15c) = 2;
 }
 
 void func_80800068_bscrouch(Actor *param_0)
 {
-  baanim_playForDuration_onceSmoothStartingAt(param_0, 0x10C, 0.5f, 0.9999f);
-  _batimer_set(param_0, 2, 2.0f);
-  *(int *)((char *)param_0 + 0x15C) = 1;
+    baanim_playForDuration_onceSmoothStartingAt(param_0, 0x10C, 0.5f, 0.9999f);
+    _batimer_set(param_0, 2, 2.0f);
+    *(int *) ((char *) param_0 + 0x15C) = 1;
 }
 
-void func_808000B4_bscrouch(s32 param_0, f32 param_1) {
+void func_808000B4_bscrouch(s32 param_0, f32 param_1)
+{
     anctrl_setDuration(param_0, func_800F10B4(param_1, 0.0f, 180.0f, 0.5f, 0.2f));
 }
 
 int func_808000FC_bscrouch(s32 param_0, s32 param_1)
 {
-  func_800A2CE8(param_0, 0x3ED1EB85, 4);
-  func_800A2CE8(param_0, 0x3F68F5C3, 3);
+    func_800A2CE8(param_0, 0x3ED1EB85, 4);
+    func_800A2CE8(param_0, 0x3F68F5C3, 3);
 }
 
 void bscrouch_entrypoint_0(PlayerState *param_0)
@@ -80,8 +79,10 @@ void bscrouch_entrypoint_0(PlayerState *param_0)
 
     local_0 = baanim_getAnimCtrlPtr(param_0);
     local_4 = bs_getPreviousState(param_0);
-    if (local_4 != 9 && local_4 != 0xA && local_4 != 0x1A) local_2 = 0.0f;
-    else local_2 = 0.5357f;
+    if (local_4 != 9 && local_4 != 0xA && local_4 != 0x1A)
+        local_2 = 0.0f;
+    else
+        local_2 = 0.5357f;
     anctrl_reset(local_0);
     anctrl_setIndex(local_0, 1);
     anctrl_setDuration(local_0, 0.5f);
@@ -98,8 +99,10 @@ void bscrouch_entrypoint_0(PlayerState *param_0)
     _batimer_set(param_0, 1, 0.2f);
     func_8009BB24(param_0, local_1);
     param_0->unk16C = sqrtf(local_1[0] * local_1[0] + local_1[2] * local_1[2]);
-    if (param_0->unk16C > 140.0f) func_8009D658(param_0);
-    if (func_800F1EA4(local_1, &local_3)) baphysics_set_target_yaw(param_0, local_3);
+    if (param_0->unk16C > 140.0f)
+        func_8009D658(param_0);
+    if (func_800F1EA4(local_1, &local_3))
+        baphysics_set_target_yaw(param_0, local_3);
     param_0->unk15C.word = 0;
 }
 
@@ -130,60 +133,59 @@ void bscrouch_entrypoint_1(PlayerState *this)
     temp_f2 = mlAbsF(func_800F1DCC(sp20, yaw_get(this)));
 
     switch (this->unk15C.word) {
-    case 0:
-        if (sp30 != 0.0f)
+        case 0:
+            if (sp30 != 0.0f)
+                break;
+            _batimer_set(this, 2, 2.0f);
+            this->unk15C.word = 1;
             break;
-        _batimer_set(this, 2, 2.0f);
-        this->unk15C.word = 1;
-        break;
 
-    case 1:
-        if (temp_f2 != 0.0f) {
-            func_80800000_bscrouch(this);
-        } else {
-            _batimer_decrement(this, 2);
-            if (_batimer_isZero(this, 2))
-                func_80800034_bscrouch(this);
-        }
-        break;
-
-    case 2:
-        if (temp_f2 != 0.0f) {
-            func_80800000_bscrouch(this);
-        } else {
-            if (anctrl_isStopped(aCtrl))
-                func_80800068_bscrouch(this);
-        }
-        break;
-
-    case 4:
-        func_808000B4_bscrouch(aCtrl, temp_f2);
-        func_808000FC_bscrouch(this, aCtrl);
-        if (temp_f2 != 0.0f)
-            break;
-        if (anctrl_getAnimTimer(aCtrl) <= 0.5f) {
-            anctrl_setSubrange(aCtrl, 0, 0.5f);
-        } else {
-            anctrl_setSubrange(aCtrl, 0, 1.0f);
-        }
-        anctrl_setPlaybackType(aCtrl, 1);
-        this->unk15C.word = 3;
-        break;
-
-    case 3:
-        func_808000B4_bscrouch(aCtrl, temp_f2);
-        func_808000FC_bscrouch(this, aCtrl);
-        if (temp_f2 != 0.0f) {
-            anctrl_setSubrange(aCtrl, 0, 1.0f);
-            anctrl_setPlaybackType(aCtrl, 2);
-            this->unk15C.word = 4;
-        } else {
-            if (anctrl_isStopped(aCtrl)) {
-                yaw_setIdeal(this, yaw_get(this));
-                func_80800068_bscrouch(this);
+        case 1:
+            if (temp_f2 != 0.0f) {
+                func_80800000_bscrouch(this);
+            } else {
+                _batimer_decrement(this, 2);
+                if (_batimer_isZero(this, 2))
+                    func_80800034_bscrouch(this);
             }
-        }
-        break;
+            break;
+
+        case 2:
+            if (temp_f2 != 0.0f) {
+                func_80800000_bscrouch(this);
+            } else {
+                if (anctrl_isStopped(aCtrl))
+                    func_80800068_bscrouch(this);
+            }
+            break;
+
+        case 4:
+            func_808000B4_bscrouch(aCtrl, temp_f2);
+            func_808000FC_bscrouch(this, aCtrl);
+            if (temp_f2 != 0.0f)
+                break;
+            if (anctrl_getAnimTimer(aCtrl) <= 0.5f) {
+                anctrl_setSubrange(aCtrl, 0, 0.5f);
+            } else {
+                anctrl_setSubrange(aCtrl, 0, 1.0f);
+            }
+            anctrl_setPlaybackType(aCtrl, 1);
+            this->unk15C.word = 3;
+            break;
+
+        case 3:
+            func_808000B4_bscrouch(aCtrl, temp_f2);
+            func_808000FC_bscrouch(this, aCtrl);
+            if (temp_f2 != 0.0f) {
+                anctrl_setSubrange(aCtrl, 0, 1.0f);
+                anctrl_setPlaybackType(aCtrl, 2);
+                this->unk15C.word = 4;
+            } else {
+                if (anctrl_isStopped(aCtrl)) {
+                    yaw_setIdeal(this, yaw_get(this));
+                    func_80800068_bscrouch(this);
+                }
+            }
     }
 
     if (func_8008E148(this))
@@ -198,12 +200,13 @@ void bscrouch_entrypoint_1(PlayerState *this)
     bs_setState(this, next);
 }
 
-void bscrouch_entrypoint_2(s32 arg0) 
+void bscrouch_entrypoint_2(s32 arg0)
 {
 }
+
 int bscrouch_entrypoint_3(s32 param_0)
 {
-  return D_80800990_bscrouch[param_0];
+    return D_80800990_bscrouch[param_0];
 }
 
 s32 func_808006A4_bscrouch(PlayerState *param_0)
@@ -246,14 +249,13 @@ s32 bscrouch_entrypoint_4(PlayerState *this, s32 next)
                 next = 0x122;
             } else {
                 switch (func_808006A4_bscrouch(this)) {
-                case 0:
-                    break;
-                case 1:
-                    next = 0x129;
-                    break;
-                case 2:
-                    next = 0x128;
-                    break;
+                    case 0:
+                        break;
+                    case 1:
+                        next = 0x129;
+                        break;
+                    case 2:
+                        next = 0x128;
                 }
             }
         }
@@ -284,11 +286,9 @@ s32 bscrouch_entrypoint_4(PlayerState *this, s32 next)
     return next;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/crouch.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bscrouch_entrypoint_2();
 extern void _bscrouch_entrypoint_0();
 extern void _bscrouch_entrypoint_1();
 extern void func_8009AB78();
-s32 D_80800990_bscrouch[4] = { (u32)_bscrouch_entrypoint_2, (u32)_bscrouch_entrypoint_0, (u32)_bscrouch_entrypoint_1, (u32)func_8009AB78 };
+s32 D_80800990_bscrouch[4] = {(u32) _bscrouch_entrypoint_2, (u32) _bscrouch_entrypoint_0,
+                              (u32) _bscrouch_entrypoint_1, (u32) func_8009AB78};

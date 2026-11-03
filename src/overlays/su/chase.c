@@ -1,10 +1,23 @@
 #include "common.h"
 
-typedef struct { s32 frame; s32 count; } ChaseCache;
+typedef struct {
+    s32 frame;
+    s32 count;
+} ChaseCache;
 extern ChaseCache D_808001D0_suchase;
 extern void func_8010D254(f32 *);
-typedef struct { u8 pad_0[0x64]; u32 pad_1 : 1; u32 local_0 : 1; u32 local_1 : 1; u32 pad_2 : 29; } ChaseActorFlags;
-typedef struct { Unk80132ED0 *local_0; u32 pad_0; u32 local_1; } ChaseActorEntry;
+typedef struct {
+    u8 pad_0[0x64];
+    u32 pad_1 : 1;
+    u32 local_0 : 1;
+    u32 local_1 : 1;
+    u32 pad_2 : 29;
+} ChaseActorFlags;
+typedef struct {
+    Unk80132ED0 *local_0;
+    u32 pad_0;
+    u32 local_1;
+} ChaseActorEntry;
 extern s32 *func_800BE444(f32 *);
 extern ChaseActorEntry *func_800E9E88(s32);
 extern ChaseActorEntry *func_800E9EB4(s32);
@@ -27,12 +40,14 @@ s32 suchase_entrypoint_0(void)
     return D_808001D0_suchase.count;
 }
 
-int suchase_entrypoint_1(s32 *param_0) {
+int suchase_entrypoint_1(s32 *param_0)
+{
     s32 local_0 = suchase_entrypoint_0();
     return local_0 == 0 || local_0 == *param_0;
 }
 
-void func_808000A8_suchase(param_0, param_1) ChaseCache *param_0; f32 *param_1;
+void func_808000A8_suchase(param_0, param_1) ChaseCache *param_0;
+f32 *param_1;
 {
     f32 local_0;
     s32 *local_1;
@@ -50,13 +65,13 @@ void func_808000A8_suchase(param_0, param_1) ChaseCache *param_0; f32 *param_1;
         for (; local_2 < local_3; local_2++) {
             if (local_2->local_1 & 1) {
                 local_4 = local_2->local_0;
-                if (*(u16 *)((u8 *)local_4 + 0x18) & 1) {
+                if (*(u16 *) ((u8 *) local_4 + 0x18) & 1) {
                     local_5 = func_80106790(local_4);
-                    if (!((ChaseActorFlags *)local_5)->local_1 &&
-                        ((ChaseActorFlags *)local_5)->local_0) {
+                    if (!((ChaseActorFlags *) local_5)->local_1 &&
+                        ((ChaseActorFlags *) local_5)->local_0) {
                         local_6 = func_800EEB40(local_5->position, param_1);
                         if (local_6 < local_0) {
-                            param_0->count = (s32)local_4;
+                            param_0->count = (s32) local_4;
                             local_0 = local_6;
                         }
                     }
@@ -67,7 +82,4 @@ void func_808000A8_suchase(param_0, param_1) ChaseCache *param_0; f32 *param_1;
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/chase.data.s) is defined here in C.
- * Values are taken from the ROM. */
-ChaseCache D_808001D0_suchase = { -0x1, 0x0 };
-static u32 D_808001D0_suchase_rest[2] = { 0x0, 0x0 };
+ChaseCache D_808001D0_suchase = {-0x1, 0x0};

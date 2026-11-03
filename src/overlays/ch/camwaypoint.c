@@ -9,13 +9,13 @@ extern void _ncbawaypoint_entrypoint_2(void *, f32 *, f32 *, f32);
 
 int chcamwaypoint_entrypoint_0()
 {
-    return (int)&D_80800130_chcamwaypoint;
+    return (int) &D_80800130_chcamwaypoint;
 }
 
 void func_8080000C_chcamwaypoint(Actor *param_0)
 {
-    func_800EEBF0((f32 *)param_0->actorData, param_0->rotation, 1.0f);
-    *(f32 *)&param_0->actorData[3] = func_800EEAA4(param_0->position, (f32 *)param_0->actorData);
+    func_800EEBF0((f32 *) param_0->actorData, param_0->rotation, 1.0f);
+    *(f32 *) &param_0->actorData[3] = func_800EEAA4(param_0->position, (f32 *) param_0->actorData);
 }
 
 void func_8080005C_chcamwaypoint(Actor *param_0)
@@ -28,21 +28,38 @@ void func_8080005C_chcamwaypoint(Actor *param_0)
     local_1 = func_8008FFE8();
     if (func_8010FAE4(local_1) == 2) {
         local_0 = func_80110014(local_1);
-        local_2 = (f32)((s32)param_0->unk74_7 * 10);
+        local_2 = (f32) ((s32) param_0->unk74_7 * 10);
         func_8008FE68(local_3);
         if (!func_800EFFB4(param_0->position, local_2, local_3)) {
             func_801107F0(local_0, local_3);
-            if (!func_800EFFB4(param_0->position, local_2, local_3)) return;
+            if (!func_800EFFB4(param_0->position, local_2, local_3))
+                return;
         }
-        _ncbawaypoint_entrypoint_2(local_0, param_0->position, (f32 *)param_0->actorData, *(f32 *)&param_0->actorData[3]);
+        _ncbawaypoint_entrypoint_2(local_0, param_0->position, (f32 *) param_0->actorData,
+                                   *(f32 *) &param_0->actorData[3]);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/camwaypoint.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800130_chcamwaypoint -> int[] */
 extern void func_80102EC0();
 extern void func_8010A730();
 extern void func_80107C2C();
-int D_80800130_chcamwaypoint[20] = { 0x15801DD, 0x1, 0x0, (u32)func_8080005C_chcamwaypoint, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_8080000C_chcamwaypoint, (u32)func_80107C2C, -0x7FFFD9FE, 0x0, 0x0, 0x0, 0x0 };
+int D_80800130_chcamwaypoint[20] = {0x15801DD,
+                                    0x1,
+                                    0x0,
+                                    (u32) func_8080005C_chcamwaypoint,
+                                    (u32) func_80102EC0,
+                                    (u32) func_8010A730,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    (u32) func_8080000C_chcamwaypoint,
+                                    (u32) func_80107C2C,
+                                    -0x7FFFD9FE,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0};

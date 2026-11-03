@@ -9,7 +9,11 @@ extern void _chexploder_entrypoint_12(s32, s32);
 extern void func_800C4AF0();
 extern void func_800DA544(s32);
 extern void func_800FFAB0();
-typedef struct { u8 pad[0x76]; u16 f76:9; u16 pad76:7; } DoorState;
+typedef struct {
+    u8 pad[0x76];
+    u16 f76 : 9;
+    u16 pad76 : 7;
+} DoorState;
 void func_80800144_chcaveofhorrorsdoors();
 s32 func_808001A4_chcaveofhorrorsdoors();
 
@@ -20,22 +24,18 @@ int *chcaveofhorrorsdoors_entrypoint_0()
 
 int func_8080000C_chcaveofhorrorsdoors(s32 param_0)
 {
-  s32 local_0;
-  unsigned int new_var2;
-  int new_var;
-  local_0 = func_808001A4_chcaveofhorrorsdoors(param_0);
-  ;
-  new_var2 = local_0 | local_0;
-  if (func_800DA298(new_var = new_var2))
-  {
-    func_800FFAB0(param_0);
-  }
-  else
-  {
-    func_80109EEC(param_0, 0x40);
-    _subaddiefade_entrypoint_14(param_0);
-    func_8010A63C(param_0);
-  }
+    s32 local_0;
+    unsigned int new_var2;
+    int new_var;
+    local_0 = func_808001A4_chcaveofhorrorsdoors(param_0);
+    new_var2 = local_0 | local_0;
+    if (func_800DA298(new_var = new_var2)) {
+        func_800FFAB0(param_0);
+    } else {
+        func_80109EEC(param_0, 0x40);
+        _subaddiefade_entrypoint_14(param_0);
+        func_8010A63C(param_0);
+    }
 }
 
 s32 func_8080006C_chcaveofhorrorsdoors(Actor *param_0, s32 param_1, s32 param_2)
@@ -48,36 +48,54 @@ s32 func_8080006C_chcaveofhorrorsdoors(Actor *param_0, s32 param_1, s32 param_2)
             local_0[1] += 150.0f;
             func_800EF1B8(local_0, param_0->rotation[1], -80.0f);
             _chexploder_entrypoint_3(param_0, local_0, 7);
-            if ((s32)param_0->unk74_7 < 0x34) func_800F8300(func_800F54E4(), 2, param_0->position);
+            if ((s32) param_0->unk74_7 < 0x34)
+                func_800F8300(func_800F54E4(), 2, param_0->position);
             break;
         case 0x90:
             func_80800144_chcaveofhorrorsdoors(param_0);
             break;
-        default: return 0;
+        default:
+            return 0;
     }
     return 1;
 }
 
-void func_80800144_chcaveofhorrorsdoors(param_0) u8 *param_0; {
+void func_80800144_chcaveofhorrorsdoors(param_0) u8 *param_0;
+{
     _chexploder_entrypoint_12(func_80106790(func_80101080(param_0)), 0x3C);
     func_800C4AF0(param_0 + 4, &D_80800208_chcaveofhorrorsdoors);
     func_800DA544(func_808001A4_chcaveofhorrorsdoors(param_0));
     func_800FFAB0(param_0);
 }
 
-s32 func_808001A4_chcaveofhorrorsdoors(param_0) DoorState *param_0; {
+s32 func_808001A4_chcaveofhorrorsdoors(param_0)
+DoorState *param_0;
+{
     return param_0->f76 + 0x65;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/caveofhorrorsdoors.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808001C0_chcaveofhorrorsdoors -> int[], D_80800208_chcaveofhorrorsdoors -> s32[] */
 extern void func_80102EC0();
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
 extern void _bsbtrot_entrypoint_10();
-int D_808001C0_chcaveofhorrorsdoors[18] = { 0x19A014C, 0x78B0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x20000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chcaveofhorrorsdoors, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_10, (u32)func_8080006C_chcaveofhorrorsdoors, 0x0 };
-s32 D_80800208_chcaveofhorrorsdoors[6] = { 0x1304C8, 0xA00E6, 0x180001, 0x3201388, 0x0, 0x0 };
+int D_808001C0_chcaveofhorrorsdoors[18] = {0x19A014C,
+                                           0x78B0001,
+                                           0x0,
+                                           (u32) func_80102EC0,
+                                           (u32) func_80105834,
+                                           (u32) func_80101870,
+                                           0x0,
+                                           0x0,
+                                           0x0,
+                                           0x20000,
+                                           0x0,
+                                           (u32) func_80108ED0,
+                                           0x0,
+                                           (u32) func_8080000C_chcaveofhorrorsdoors,
+                                           (u32) func_80107C2C,
+                                           (u32) _bsbtrot_entrypoint_10,
+                                           (u32) func_8080006C_chcaveofhorrorsdoors,
+                                           0x0};
+s32 D_80800208_chcaveofhorrorsdoors[6] = {0x1304C8, 0xA00E6, 0x180001, 0x3201388, 0x0, 0x0};

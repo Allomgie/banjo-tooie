@@ -1,7 +1,6 @@
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
-#include "core2/anctrl.h"
 extern void baanim_playForDuration_onceSmooth(PlayerState *, s32, f32);
 
 extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);
@@ -28,7 +27,6 @@ extern void func_8009BF5C(s32, f32);
 extern AnimCtrl *baanim_getAnimCtrlPtr(PlayerState *);
 extern void _batimer_set(PlayerState *, s32, f32);
 extern void yaw_setVelocityBounded(PlayerState *, f32, f32);
-extern void func_8008B1C8(AnimCtrl *, f32);
 extern f32 func_80096364(PlayerState *);
 extern u8 D_80802140_bstaxi[];
 extern f32 _batimer_get(PlayerState *, s32);
@@ -88,8 +86,6 @@ extern void func_8009DF18(PlayerState *, s32, f32, s32);
 extern void func_8009DFD4(PlayerState *, s32, f32, f32, s32, s32);
 extern void func_8009E55C(PlayerState *, s32, f32);
 extern void _subaddietaxi_entrypoint_8(s32, f32 *, f32, f32, s32);
-void func_80800A18_bstaxi();
-void func_80801600_bstaxi();
 
 void func_80800000_bstaxi(PlayerState *param_0)
 {
@@ -105,23 +101,19 @@ void func_80800000_bstaxi(PlayerState *param_0)
 
 int func_80800064_bstaxi(s32 param_0, s32 param_1)
 {
-  if (bakey_released(param_0, 1))
-  {
-    param_1 = 0x127;
-  }
-  if (bakey_pressed(param_0, 9))
-  {
-    param_1 = 0x124;
-  }
-  if (bakey_pressed(param_0, 8))
-  {
-    param_1 = 0x126;
-  }
-  return param_1 | 0;
+    if (bakey_released(param_0, 1)) {
+        param_1 = 0x127;
+    }
+    if (bakey_pressed(param_0, 9)) {
+        param_1 = 0x124;
+    }
+    if (bakey_pressed(param_0, 8)) {
+        param_1 = 0x126;
+    }
+    return param_1 | 0;
 }
 
 void bstaxi_entrypoint_0(param_0)
-PlayerState *param_0;
 {
     if (!func_8009E74C(param_0, 0xE)) {
         func_800A0CD0(param_0, 1);
@@ -145,7 +137,7 @@ void bstaxi_entrypoint_1(param_0) PlayerState *param_0;
 
 void bstaxi_entrypoint_2(void *param_0)
 {
-    ((u32 *)param_0)[0x58] = 0;
+    ((u32 *) param_0)[0x58] = 0;
     bstaxi_entrypoint_0(param_0);
 }
 
@@ -166,10 +158,16 @@ void bstaxi_entrypoint_4(PlayerState *param_0)
     local_0 = 0;
     bainput_enable(param_0, 0, 1);
     func_8009D3A8(param_0, 0);
-    if (baanim_isAt(param_0, 0.0161f)) { _babackpack_set_state(param_0, 3); func_800A0CD0(param_0, 0); }
-    if (baanim_isAt(param_0, 0.33f)) func_8009D454(param_0, 0, &D_808020D0_bstaxi);
-    if (baanim_isAt(param_0, 0.435f)) func_8009D454(param_0, 0, &D_808020F0_bstaxi);
-    if (baanim_isAt(param_0, 0.545f)) func_8009D454(param_0, 0, &D_80802110_bstaxi);
+    if (baanim_isAt(param_0, 0.0161f)) {
+        _babackpack_set_state(param_0, 3);
+        func_800A0CD0(param_0, 0);
+    }
+    if (baanim_isAt(param_0, 0.33f))
+        func_8009D454(param_0, 0, &D_808020D0_bstaxi);
+    if (baanim_isAt(param_0, 0.435f))
+        func_8009D454(param_0, 0, &D_808020F0_bstaxi);
+    if (baanim_isAt(param_0, 0.545f))
+        func_8009D454(param_0, 0, &D_80802110_bstaxi);
     if (baanim_isAt(param_0, 0.5662f)) {
         _babackpack_entrypoint_6(param_0, local_1, 0);
         local_2 = _bapackctrl_entrypoint_1(param_0);
@@ -177,15 +175,20 @@ void bstaxi_entrypoint_4(PlayerState *param_0)
         func_8009DB04(param_0, 0x5C2, 1.8f, 0x7FFF);
         func_800CB598(local_2, local_1, yaw_get(param_0));
     }
-    if (baanim_isAt(param_0, 0.8153f)) { _babackpack_set_state(param_0, 1); func_800A0CD0(param_0, 1); }
-    if (baanim_isStopped(param_0)) local_0 = 1;
-    if (baanim_getTimer(param_0) > 0.8153f && bastick_getZone(param_0) > 0) local_0 = 2;
+    if (baanim_isAt(param_0, 0.8153f)) {
+        _babackpack_set_state(param_0, 1);
+        func_800A0CD0(param_0, 1);
+    }
+    if (baanim_isStopped(param_0))
+        local_0 = 1;
+    if (baanim_getTimer(param_0) > 0.8153f && bastick_getZone(param_0) > 0)
+        local_0 = 2;
     bs_setState(param_0, local_0);
 }
 
 int bstaxi_entrypoint_5(s32 param_0)
 {
-  return D_80802130_bstaxi[param_0];
+    return D_80802130_bstaxi[param_0];
 }
 
 void func_80800420_bstaxi(PlayerState *param_0)
@@ -200,40 +203,40 @@ void func_80800420_bstaxi(PlayerState *param_0)
     func_800CB598(local_1, local_0, yaw_get(param_0));
 }
 
-void func_808004A8_bstaxi(s32 param_0) {
+void func_808004A8_bstaxi(s32 param_0)
+{
     s32 temp_v0;
 
     temp_v0 = func_8009E6EC();
     switch (temp_v0) {
-    case 0x1F: ;
-    case 0x20:
-    case 0x21: ;
-    case 0x24:
-    case 0x2D: ;
-    case 0x2E:
-    case 0x45: ;
-    case 0x4E:
-    case 0x51: ;
-    case 0x52:
-    case 0x59: ;
-    case 0x5A:
-    case 0x5B: ;
-    case 0x5C:
-        func_80800420_bstaxi(param_0);
-        func_80099B94(param_0);
-        return;
-    case 0x15: ;
-    case 0x1C:
-    case 0x1D: ;
-    case 0x1E:
-    case 0x25: ;
-    case 0x43:
-        func_80800420_bstaxi(param_0);
-        func_80099B94(param_0);
-        return;
-    default:
-        func_80099B94(param_0);
-        return;
+        case 0x1F:;
+        case 0x20:
+        case 0x21:;
+        case 0x24:
+        case 0x2D:;
+        case 0x2E:
+        case 0x45:;
+        case 0x4E:
+        case 0x51:;
+        case 0x52:
+        case 0x59:;
+        case 0x5A:
+        case 0x5B:;
+        case 0x5C:
+            func_80800420_bstaxi(param_0);
+            func_80099B94(param_0);
+            return;
+        case 0x15:;
+        case 0x1C:
+        case 0x1D:;
+        case 0x1E:
+        case 0x25:;
+        case 0x43:
+            func_80800420_bstaxi(param_0);
+            func_80099B94(param_0);
+            return;
+        default:
+            func_80099B94(param_0);
     }
 }
 
@@ -244,7 +247,8 @@ void func_80800524_bstaxi(PlayerState *param_0)
     f32 local_1;
     f32 local_2[3];
     local_0 = bastick_distance(param_0);
-    if (local_0 == 0.0f) _bamovehover_entrypoint_4(param_0, NULL);
+    if (local_0 == 0.0f)
+        _bamovehover_entrypoint_4(param_0, NULL);
     else {
         local_1 = bastick_getAngleRelativeToBanjo(param_0);
         local_3 = func_800F10B4(local_0, 0.0f, 1.0f, 0.0f, 400.0f);
@@ -255,9 +259,9 @@ void func_80800524_bstaxi(PlayerState *param_0)
 
 s32 func_808005B8_bstaxi(Actor *this)
 {
-  baroll_setIdeal(this, 0);
-  func_8009BF5C(this, 0);
-  bstaxi_entrypoint_0(this);
+    baroll_setIdeal(this, 0);
+    func_8009BF5C(this, 0);
+    bstaxi_entrypoint_0(this);
 }
 
 void func_808005F0_bstaxi(PlayerState *param_0)
@@ -267,7 +271,7 @@ void func_808005F0_bstaxi(PlayerState *param_0)
     f32 local_2;
 
     bstaxi_entrypoint_1(param_0);
-    _batimer_set(param_0, 0, *(f32 *)((u8 *)param_0 + 0x16C));
+    _batimer_set(param_0, 0, *(f32 *) ((u8 *) param_0 + 0x16C));
     local_0 = baanim_getAnimCtrlPtr(param_0);
     anctrl_reset(local_0);
     anctrl_setIndex(local_0, 0x24A);
@@ -293,7 +297,7 @@ void func_808006F4_bstaxi(PlayerState *param_0)
     s32 local_2;
     f32 local_3[3];
     _batimer_decrement(param_0, 0);
-    func_800D2498(0x100, (s32)_batimer_get(param_0, 0), 0);
+    func_800D2498(0x100, (s32) _batimer_get(param_0, 0), 0);
     func_80800524_bstaxi(param_0);
     if (func_8001210C(1)) {
         local_2 = func_800B5BE4(0x1C);
@@ -308,13 +312,14 @@ void func_808006F4_bstaxi(PlayerState *param_0)
         local_1 = 1;
         local_0 = 0x2F;
     }
-    if (local_1) func_80800420_bstaxi(param_0);
+    if (local_1)
+        func_80800420_bstaxi(param_0);
     bs_setState(param_0, local_0);
 }
 
 int bstaxi_entrypoint_6(s32 param_0)
 {
-  return D_80802188_bstaxi[param_0];
+    return D_80802188_bstaxi[param_0];
 }
 
 void bstaxi_entrypoint_7()
@@ -324,12 +329,11 @@ void bstaxi_entrypoint_7()
 
 int bstaxi_entrypoint_8(Actor *param_0)
 {
-  extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);
-  bstaxi_entrypoint_1(param_0);
-  baanim_playForDuration_onceSmooth(param_0, 0xf3, 1.1f);
-  func_8009FFD8(param_0, 1, 1, 3, 2);
-  baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-  bainput_enable(param_0, 0, 0);
+    bstaxi_entrypoint_1(param_0);
+    baanim_playForDuration_onceSmooth(param_0, 0xf3, 1.1f);
+    func_8009FFD8(param_0, 1, 1, 3, 2);
+    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
+    bainput_enable(param_0, 0, 0);
 }
 
 void bstaxi_entrypoint_9(PlayerState *param_0)
@@ -337,73 +341,75 @@ void bstaxi_entrypoint_9(PlayerState *param_0)
     s32 local_0 = 0;
     f32 local_1;
     bainput_enable(param_0, 0, 1);
-    if (baanim_isAt(param_0, 0.3f)) func_8009DEC0(param_0, 0x588, 0.95f, 1.05f, 20000, 22000);
+    if (baanim_isAt(param_0, 0.3f))
+        func_8009DEC0(param_0, 0x588, 0.95f, 1.05f, 20000, 22000);
     func_8009D3A8(param_0, 0);
     if (baanim_isAt(param_0, 0.084f)) {
         _babackpack_set_state(param_0, 3);
         func_800A0CD0(param_0, 0);
     }
-    if (baanim_isStopped(param_0)) local_0 = 0x125;
+    if (baanim_isStopped(param_0))
+        local_0 = 0x125;
     local_1 = baanim_getTimer(param_0);
     if (local_1 > 0.6723f) {
-        if (bastick_getZone(param_0) > 0) local_0 = 0x123;
-        if (bakey_released(param_0, 1)) local_0 = 0x127;
+        if (bastick_getZone(param_0) > 0)
+            local_0 = 0x123;
+        if (bakey_released(param_0, 1))
+            local_0 = 0x127;
     }
-    if (local_1 > 0.2f && bakey_pressed(param_0, 9)) local_0 = 0x124;
+    if (local_1 > 0.2f && bakey_pressed(param_0, 9))
+        local_0 = 0x124;
     bs_setState(param_0, local_0);
 }
 
 int bstaxi_entrypoint_10(s32 param_0)
 {
-  return D_80802198_bstaxi[param_0];
+    return D_80802198_bstaxi[param_0];
 }
 
 void func_80800A18_bstaxi(void *param_0, unsigned int param_1)
 {
-  switch (param_1)
-  {
-    case 0:
-      if (((u8 *) param_0)[0x15c] == 3)
-    {
-      _bapackctrl_entrypoint_5(param_0, 2);
+    switch (param_1) {
+        case 0:
+            if (((u8 *) param_0)[0x15c] == 3) {
+                _bapackctrl_entrypoint_5(param_0, 2);
+            }
+            break;
+
+        case 1:
+            ((u8 *) param_0)[0x15d] = 0;
+            baanim_playForDuration_onceSmooth(param_0, 0x121, 1.1f);
+            bainput_enable(param_0, 0, 0);
+            break;
+
+        case 2:
+            baanim_playForDuration_loopSmooth(param_0, 0x12B, 4.5f);
+            break;
+
+        case 3:
+            baanim_playForDuration_onceSmooth(param_0, 0x12D, 2.8f);
+            break;
+
+        case 4:
+            baanim_playForDuration_onceSmooth(param_0, 0x12C, 1.4f);
     }
-      break;
 
-    case 1:
-      ((u8 *) param_0)[0x15d] = 0;
-      baanim_playForDuration_onceSmooth(param_0, 0x121, 1.1f);
-      bainput_enable(param_0, 0, 0);
-      break;
-
-    case 2:
-      baanim_playForDuration_loopSmooth(param_0, 0x12B, 4.5f);
-      break;
-
-    case 3:
-      baanim_playForDuration_onceSmooth(param_0, 0x12D, 2.8f);
-      break;
-
-    case 4:
-      baanim_playForDuration_onceSmooth(param_0, 0x12C, 1.4f);
-      break;
-
-  }
-
-  ((u8 *) param_0)[0x15c] = param_1;
+    ((u8 *) param_0)[0x15c] = param_1;
 }
 
 void bstaxi_entrypoint_11(s32 arg0)
 {
-    func_80800A18_bstaxi(arg0,0);
+    func_80800A18_bstaxi(arg0, 0);
     bstaxi_entrypoint_0(arg0);
 }
 
 void bstaxi_entrypoint_12(s32 param_0)
 {
-  bstaxi_entrypoint_1();
-  func_8009FFD8(param_0, 1, 1, 3, 2);
-  baphysics_set_target_horizontal_velocity(param_0, ((0 & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF);
-  func_80800A18_bstaxi(param_0, 1);
+    bstaxi_entrypoint_1();
+    func_8009FFD8(param_0, 1, 1, 3, 2);
+    baphysics_set_target_horizontal_velocity(
+        param_0, ((0 & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF);
+    func_80800A18_bstaxi(param_0, 1);
 }
 
 void bstaxi_entrypoint_13(PlayerState *param_0)
@@ -417,71 +423,70 @@ void bstaxi_entrypoint_13(PlayerState *param_0)
 
     local_1 = baanim_getTimer(param_0);
     func_8009D3A8(param_0, 0);
-    switch (((u8 *)param_0)[0x15C]) {
-    case 1:
-        bainput_enable(param_0, 0, 1);
-        if (baanim_isAt(param_0, 0.084f)) {
-            _babackpack_set_state(param_0, 3);
-            func_800A0CD0(param_0, 0);
-        }
-        if (bakey_pressed(param_0, 9)) {
-            ((u8 *)param_0)[0x15D] = 1;
-        }
-        if ((local_1 > 0.3883f && ((u8 *)param_0)[0x15D]) || baanim_isStopped(param_0)) {
-            func_80800A18_bstaxi(param_0, 2);
-        }
-        break;
-    case 2:
-        if (bakey_pressed(param_0, 9) || ((u8 *)param_0)[0x15D]) {
-            ((u8 *)param_0)[0x15D] = 0;
-            func_8009C128(param_0, local_2.f);
-            func_800EF1B8(local_2.f, yaw_get(param_0), 45.0f);
-            local_2.pos.y += 80.0f;
-            if (func_800C6C94(local_2.f, 40.0f, local_3.f, 0x420020)) {
-                func_800FC6B0(0xF);
-            } else {
-                func_80800A18_bstaxi(param_0, 3);
+    switch (((u8 *) param_0)[0x15C]) {
+        case 1:
+            bainput_enable(param_0, 0, 1);
+            if (baanim_isAt(param_0, 0.084f)) {
+                _babackpack_set_state(param_0, 3);
+                func_800A0CD0(param_0, 0);
             }
-        }
-        if (bakey_released(param_0, 1)) {
-            func_80800A18_bstaxi(param_0, 4);
-        }
-        break;
-    case 3:
-        if (baanim_isAt(param_0, 0.16f)) {
-            _babackpack_entrypoint_6(param_0, local_4.f, 0);
-            local_5 = _bapackctrl_entrypoint_1(param_0);
-            _bapackctrl_entrypoint_4(param_0, 0);
-            func_8009DEC0(param_0, 0x53C, 0.95f, 1.05f, 0x6978, 0x6D60);
-            func_800CB5D4(local_5, local_4.f, yaw_get(param_0));
-        }
-        if (baanim_isAt(param_0, 0.6511f)) {
-            _babackpack_set_state(param_0, 1);
-            func_800A0CD0(param_0, 1);
-        }
-        if (local_1 > 0.6511f) {
-            local_0 = 0x20;
-        }
-        break;
-    case 4:
-        if (baanim_isAt(param_0, 0.48f)) {
-            func_8009DEC0(param_0, 0x584, 0.95f, 1.05f, 0x55F0, 0x55F0);
-        }
-        if (baanim_isAt(param_0, 0.5053f)) {
-            _babackpack_set_state(param_0, 1);
-            func_800A0CD0(param_0, 1);
-        }
-        if (local_1 > 0.5053f) {
-            local_0 = 0x20;
-        }
-        break;
+            if (bakey_pressed(param_0, 9)) {
+                ((u8 *) param_0)[0x15D] = 1;
+            }
+            if ((local_1 > 0.3883f && ((u8 *) param_0)[0x15D]) || baanim_isStopped(param_0)) {
+                func_80800A18_bstaxi(param_0, 2);
+            }
+            break;
+        case 2:
+            if (bakey_pressed(param_0, 9) || ((u8 *) param_0)[0x15D]) {
+                ((u8 *) param_0)[0x15D] = 0;
+                func_8009C128(param_0, local_2.f);
+                func_800EF1B8(local_2.f, yaw_get(param_0), 45.0f);
+                local_2.pos.y += 80.0f;
+                if (func_800C6C94(local_2.f, 40.0f, local_3.f, 0x420020)) {
+                    func_800FC6B0(0xF);
+                } else {
+                    func_80800A18_bstaxi(param_0, 3);
+                }
+            }
+            if (bakey_released(param_0, 1)) {
+                func_80800A18_bstaxi(param_0, 4);
+            }
+            break;
+        case 3:
+            if (baanim_isAt(param_0, 0.16f)) {
+                _babackpack_entrypoint_6(param_0, local_4.f, 0);
+                local_5 = _bapackctrl_entrypoint_1(param_0);
+                _bapackctrl_entrypoint_4(param_0, 0);
+                func_8009DEC0(param_0, 0x53C, 0.95f, 1.05f, 0x6978, 0x6D60);
+                func_800CB5D4(local_5, local_4.f, yaw_get(param_0));
+            }
+            if (baanim_isAt(param_0, 0.6511f)) {
+                _babackpack_set_state(param_0, 1);
+                func_800A0CD0(param_0, 1);
+            }
+            if (local_1 > 0.6511f) {
+                local_0 = 0x20;
+            }
+            break;
+        case 4:
+            if (baanim_isAt(param_0, 0.48f)) {
+                func_8009DEC0(param_0, 0x584, 0.95f, 1.05f, 0x55F0, 0x55F0);
+            }
+            if (baanim_isAt(param_0, 0.5053f)) {
+                _babackpack_set_state(param_0, 1);
+                func_800A0CD0(param_0, 1);
+            }
+            if (local_1 > 0.5053f) {
+                local_0 = 0x20;
+            }
     }
     bs_setState(param_0, local_0);
 }
 
 int bstaxi_entrypoint_14(s32 param_0)
 {
-  return D_808021A8_bstaxi[param_0];
+    return D_808021A8_bstaxi[param_0];
 }
 
 void bstaxi_entrypoint_15(PlayerState *param_0)
@@ -499,14 +504,16 @@ void bstaxi_entrypoint_15(PlayerState *param_0)
     anctrl_setPlaybackType(local_0, 1);
     anctrl_start(local_0);
     func_8009FFD8(param_0, 1, 1, 3, 6);
-    if (bastick_distance(param_0) != 0.0f) yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
+    if (bastick_distance(param_0) != 0.0f)
+        yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
     baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
     func_80800000_bstaxi(param_0);
-    baphysics_set_horizontal_velocity(param_0, yaw_getIdeal(param_0), baphysics_get_target_horizontal_velocity(param_0));
+    baphysics_set_horizontal_velocity(param_0, yaw_getIdeal(param_0),
+                                      baphysics_get_target_horizontal_velocity(param_0));
     baphysics_set_vertical_velocity(param_0, 500.0f);
     baphysics_set_gravity(param_0, -1900.0f);
     func_8009D7A4(param_0, 0.91f, 1.09f);
-    *(u8 *)((u8 *)param_0 + 0x15C) = 0;
+    *(u8 *) ((u8 *) param_0 + 0x15C) = 0;
 }
 
 void bstaxi_entrypoint_16(PlayerState *this)
@@ -523,42 +530,41 @@ void bstaxi_entrypoint_16(PlayerState *this)
         baphysics_reset_gravity(this);
     }
     switch (this->unk15C.bytes[0]) {
-    case 0:
-        if (func_8008DF8C(this, 0x82)) {
-            baanim_setEndAndDuration(this, 1.0, 0.7f);
-            this->unk15C.bytes[0] = 2;
-        } else if (anctrl_isStopped(aCtrl)) {
-            baanim_setEndAndDuration(this, 0.472f, 3.0f);
-            this->unk15C.bytes[0] = 1;
-        }
-        break;
-    case 1:
-        if (func_8008DF8C(this, 0x82)) {
-            baanim_setEndAndDuration(this, 1.0, 1.0f);
-            this->unk15C.bytes[0] = 2;
-        }
-        break;
-    case 2:
-        func_8009D3A8(this, 0);
-        if (player_isStable(this)) {
-            func_8009FE58(this);
-            baanim_setEndAndDuration(this, 1.0, 1.0f);
-            this->unk15C.bytes[0] = 3;
-        }
-        break;
-    case 3:
-        baphysics_set_target_horizontal_velocity(this, func_8009BB5C(this) * 0.25f);
-        func_8009D2D8(this, 3);
-        func_8009D3A8(this, 0);
-        if (0.0f < func_8009BB5C(this)) {
-            next = 0x123;
-        } else if (anctrl_isStopped(aCtrl)) {
-            next = 0x125;
-        }
-        if (bakey_pressed(this, 9)) {
-            next = 0x124;
-        }
-        break;
+        case 0:
+            if (func_8008DF8C(this, 0x82)) {
+                baanim_setEndAndDuration(this, 1.0, 0.7f);
+                this->unk15C.bytes[0] = 2;
+            } else if (anctrl_isStopped(aCtrl)) {
+                baanim_setEndAndDuration(this, 0.472f, 3.0f);
+                this->unk15C.bytes[0] = 1;
+            }
+            break;
+        case 1:
+            if (func_8008DF8C(this, 0x82)) {
+                baanim_setEndAndDuration(this, 1.0, 1.0f);
+                this->unk15C.bytes[0] = 2;
+            }
+            break;
+        case 2:
+            func_8009D3A8(this, 0);
+            if (player_isStable(this)) {
+                func_8009FE58(this);
+                baanim_setEndAndDuration(this, 1.0, 1.0f);
+                this->unk15C.bytes[0] = 3;
+            }
+            break;
+        case 3:
+            baphysics_set_target_horizontal_velocity(this, func_8009BB5C(this) * 0.25f);
+            func_8009D2D8(this, 3);
+            func_8009D3A8(this, 0);
+            if (0.0f < func_8009BB5C(this)) {
+                next = 0x123;
+            } else if (anctrl_isStopped(aCtrl)) {
+                next = 0x125;
+            }
+            if (bakey_pressed(this, 9)) {
+                next = 0x124;
+            }
     }
     if (baphysics_get_vertical_velocity(this) < 0.0f && player_inWater(this)) {
         next = 0x4C;
@@ -575,7 +581,8 @@ void bstaxi_entrypoint_16(PlayerState *this)
     bs_setState(this, next);
 }
 
-void bstaxi_entrypoint_17(s32 param_0) {
+void bstaxi_entrypoint_17(s32 param_0)
+{
     baphysics_reset_gravity(param_0);
     func_8009BF5C(param_0, 0.0f);
     baroll_setIdeal(param_0, 0.0f);
@@ -584,7 +591,7 @@ void bstaxi_entrypoint_17(s32 param_0) {
 
 int bstaxi_entrypoint_18(s32 param_0)
 {
-  return D_808021B8_bstaxi[param_0];
+    return D_808021B8_bstaxi[param_0];
 }
 
 void bstaxi_entrypoint_19()
@@ -611,17 +618,21 @@ void bstaxi_entrypoint_21(PlayerState *param_0)
     func_800A2CE8(param_0, 0.1f, 4);
     func_800A2CE8(param_0, 0.6f, 3);
     func_80800000_bstaxi(param_0);
-    if (!bastick_getZone(param_0)) local_0 = 0x125;
+    if (!bastick_getZone(param_0))
+        local_0 = 0x125;
     local_0 = func_80800064_bstaxi(param_0, local_0);
-    if (func_8008E148(param_0)) local_0 = 1;
-    if (func_8008E260(param_0)) local_0 = 0x3D;
-    if (player_inWater(param_0)) local_0 = 0x4C;
+    if (func_8008E148(param_0))
+        local_0 = 1;
+    if (func_8008E260(param_0))
+        local_0 = 0x3D;
+    if (player_inWater(param_0))
+        local_0 = 0x4C;
     bs_setState(param_0, func_800A02DC(param_0, local_0));
 }
 
 int bstaxi_entrypoint_22(s32 param_0)
 {
-  return D_808021C8_bstaxi[param_0];
+    return D_808021C8_bstaxi[param_0];
 }
 
 void bstaxi_entrypoint_23()
@@ -631,10 +642,10 @@ void bstaxi_entrypoint_23()
 
 int bstaxi_entrypoint_24(Actor *param_0)
 {
-  bstaxi_entrypoint_1(param_0);
-  baanim_playForDuration_onceSmooth(param_0, 0x128, 1.4f);
-  func_8009FFD8(param_0, 1, 1, 3, 2);
-  baphysics_set_target_horizontal_velocity(param_0, 0.0f);
+    bstaxi_entrypoint_1(param_0);
+    baanim_playForDuration_onceSmooth(param_0, 0x128, 1.4f);
+    func_8009FFD8(param_0, 1, 1, 3, 2);
+    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
 }
 
 void bstaxi_entrypoint_25(PlayerState *param_0)
@@ -647,65 +658,69 @@ void bstaxi_entrypoint_25(PlayerState *param_0)
         _babackpack_set_state(param_0, 1);
         func_800A0CD0(param_0, 1);
     }
-    if (baanim_isAt(param_0, 0.48f)) func_8009DEC0(param_0, 0x584, 0.95f, 1.05f, 0x55F0, 0x55F0);
-    if (baanim_getTimer(param_0) > 0.5053f) local_0 = 0x20;
+    if (baanim_isAt(param_0, 0.48f))
+        func_8009DEC0(param_0, 0x584, 0.95f, 1.05f, 0x55F0, 0x55F0);
+    if (baanim_getTimer(param_0) > 0.5053f)
+        local_0 = 0x20;
     bs_setState(param_0, local_0);
 }
 
 int bstaxi_entrypoint_26(s32 param_0)
 {
-  return D_808021D8_bstaxi[param_0];
+    return D_808021D8_bstaxi[param_0];
 }
 
-void func_80801600_bstaxi(param_0, param_1) u8 *param_0; u32 param_1; {
-  s8 _sfpad[8];
+void func_80801600_bstaxi(param_0, param_1) u8 *param_0;
+u32 param_1;
+{
+    s8 _sfpad[8];
     s32 local_0;
     s32 local_1;
 
-    switch (param_1) {
+switch (param_1) {
     case 0:
         if (func_8008E0C8(param_0) != 0) {
             _bapackctrl_entrypoint_5(param_0, 1);
         }
         baflag_clear(param_0, 0x33);
         func_8009E55C(param_0, 2, 0.0f);
-        local_1 = (*(s32 *)((s8 *)(param_0) + (0x160)));
+        local_1 = *(s32 *) ((s8 *) param_0 + 0x160);
         if (local_1 != 0) {
             func_800FFA88(local_1);
-            (*(s32 *)((s8 *)(param_0) + (0x160))) = 0;
+            *(s32 *) ((s8 *) param_0 + 0x160) = 0;
         }
         break;
     case 1:
-        (*(s32 *)((s8 *)(param_0) + (0x160))) = 0;
-        (*(f32 *)((s8 *)(param_0) + (0x16C))) = 0.0f;
+        *(s32 *) ((s8 *) param_0 + 0x160) = 0;
+        *(f32 *) ((s8 *) param_0 + 0x16C) = 0.0f;
         func_8009E55C(param_0, 2, 50.0f);
         func_8009E4E0(param_0, 2, &_babackpack_entrypoint_6);
         break;
     case 2:
-        _bapackctrl_entrypoint_4(param_0, (*(u8 *)((s8 *)(param_0) + (0x164))));
+        _bapackctrl_entrypoint_4(param_0, *(u8 *) ((s8 *) param_0 + 0x164));
         baflag_clear(param_0, 0x33);
         _batimer_set(param_0, 0, 0.5f);
         func_8009C128(param_0, &local_0);
-        _subaddietaxi_entrypoint_7((*(s32 *)((s8 *)(param_0) + (0x160))));
+        _subaddietaxi_entrypoint_7(*(s32 *) ((s8 *) param_0 + 0x160));
         break;
     case 3:
         func_8009DBB0(param_0, 0x5AD, 0x3F666666, 0x3F8CCCCD, 0x3E80);
         break;
     case 4:
-        func_800CB698((*(u8 *)((s8 *)(param_0) + (0x164))), 2);
-        func_800FFA88((*(s32 *)((s8 *)(param_0) + (0x160))));
-        (*(s32 *)((s8 *)(param_0) + (0x160))) = 0;
+        func_800CB698(*(u8 *) ((s8 *) param_0 + 0x164), 2);
+        func_800FFA88(*(s32 *) ((s8 *) param_0 + 0x160));
+        *(s32 *) ((s8 *) param_0 + 0x160) = 0;
         break;
     case 5:
         baanim_playForDuration_onceSmooth(param_0, 0x126, 2.5f);
-        break;
-    }
-    (*(s8 *)((s8 *)(param_0) + (0x15C))) = (s8) param_1;
+}
+
+(*(s8 *) ((s8 *) (param_0) + (0x15C))) = (s8) param_1;
 }
 
 void bstaxi_entrypoint_27(s32 arg0)
 {
-    func_80801600_bstaxi(arg0,0);
+    func_80801600_bstaxi(arg0, 0);
     bstaxi_entrypoint_0(arg0);
 }
 
@@ -716,15 +731,26 @@ void bstaxi_entrypoint_28(PlayerState *param_0)
     func_8009FFD8(param_0, 1, 1, 3, 2);
     param_0->unk15C.bytes[0] = 0;
     func_80801600_bstaxi(param_0, 1);
+
 }
 
 void bstaxi_entrypoint_29(PlayerState *param_0)
 {
     switch (func_8009E6EC(param_0)) {
-        case 0x1F: case 0x20: case 0x21: case 0x24:
-        case 0x2D: case 0x2E: case 0x45: case 0x4E:
-        case 0x51: case 0x52: case 0x59: case 0x5A:
-        case 0x5B: case 0x5C:
+        case 0x1F:
+        case 0x20:
+        case 0x21:
+        case 0x24:
+        case 0x2D:
+        case 0x2E:
+        case 0x45:
+        case 0x4E:
+        case 0x51:
+        case 0x52:
+        case 0x59:
+        case 0x5A:
+        case 0x5B:
+        case 0x5C:
             if (param_0->unk16C > 0.0f) {
                 func_808004A8_bstaxi(param_0);
                 return;
@@ -733,8 +759,12 @@ void bstaxi_entrypoint_29(PlayerState *param_0)
                 func_80099B94(param_0);
             }
             return;
-        case 0x15: case 0x1C: case 0x1D: case 0x1E:
-        case 0x25: case 0x43:
+        case 0x15:
+        case 0x1C:
+        case 0x1D:
+        case 0x1E:
+        case 0x25:
+        case 0x43:
             if (param_0->unk16C > 0.0f) {
                 func_808004A8_bstaxi(param_0);
             }
@@ -755,8 +785,8 @@ void bstaxi_entrypoint_29(PlayerState *param_0)
             return;
         default:
             func_80099B94(param_0);
-            break;
     }
+
 }
 
 void bstaxi_entrypoint_30(PlayerState *param_0)
@@ -767,7 +797,8 @@ void bstaxi_entrypoint_30(PlayerState *param_0)
     f32 local_3;
 
     func_8009D3A8(param_0, 0);
-    switch (((u8 *)param_0)[0x15C]) {
+
+switch (((u8 *) param_0)[0x15C]) {
     case 1:
         func_80800000_bstaxi(param_0);
         if (baflag_isTrue(param_0, 0x33)) {
@@ -790,8 +821,8 @@ void bstaxi_entrypoint_30(PlayerState *param_0)
         _babackpack_entrypoint_6(param_0, local_1, 0);
         local_3 = func_800F10B4(_batimer_get(param_0, 0), 0.0f, 0.5f, 0, 1.0f);
         local_2 = func_800F10B4(_batimer_get(param_0, 0), 0.19999999f, 0.5f, 0.0f, 1.0f);
-        _subaddietaxi_entrypoint_8(*(s32 *)((u8 *)param_0 + 0x160), local_1,
-                                 local_2, local_3, _bapackctrl_entrypoint_1(param_0));
+        _subaddietaxi_entrypoint_8(*(s32 *) ((u8 *) param_0 + 0x160), local_1, local_2, local_3,
+                                   _bapackctrl_entrypoint_1(param_0));
         if (_batimer_decrement(param_0, 0)) {
             func_80801600_bstaxi(param_0, 4);
         }
@@ -826,20 +857,20 @@ void bstaxi_entrypoint_30(PlayerState *param_0)
             func_8009E55C(param_0, 2, 0);
         }
         if (baanim_isStopped(param_0)) {
-            if (*(f32 *)((u8 *)param_0 + 0x16C) != 0.0f) {
+            if (*(f32 *) ((u8 *) param_0 + 0x16C) != 0.0f) {
                 local_0 = 0x6F;
             } else {
                 local_0 = 1;
             }
         }
-        break;
-    }
-    bs_setState(param_0, local_0);
+}
+
+bs_setState(param_0, local_0);
 }
 
 int bstaxi_entrypoint_31(s32 param_0)
 {
-  return D_808021E8_bstaxi[param_0];
+    return D_808021E8_bstaxi[param_0];
 }
 
 void bstaxi_entrypoint_32(s32 arg0)
@@ -847,54 +878,50 @@ void bstaxi_entrypoint_32(s32 arg0)
     func_80090A2C();
     bstaxi_entrypoint_0(arg0);
 }
-void bstaxi_entrypoint_33(Actor *param_0) {
-  extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);
-  int new_var;
-  s32 local_0;
-  local_0 = param_0;
-  bstaxi_entrypoint_1(param_0);
-  new_var = 0x124;
-  baanim_playForDuration_loopSmooth(local_0, new_var, 6.0f);
-  func_8009FFD8(local_0, 1, 1, 1, 2);
-  baphysics_set_target_horizontal_velocity(local_0, 0);
-  func_800909CC(local_0);
+void bstaxi_entrypoint_33(Actor *param_0)
+{
+    int new_var;
+    s32 local_0;
+    local_0 = param_0;
+    bstaxi_entrypoint_1(param_0);
+    new_var = 0x124;
+    baanim_playForDuration_loopSmooth(local_0, new_var, 6.0f);
+    func_8009FFD8(local_0, 1, 1, 1, 2);
+    baphysics_set_target_horizontal_velocity(local_0, 0);
+    func_800909CC(local_0);
 }
 
 void bstaxi_entrypoint_34(Actor *param_0)
 {
-  s32 local_0;
-  s32 local_1 = 0;
-  local_0 = (s32) param_0;
-  func_8009D3A8(param_0, 0);
-  if (bastick_getZone(param_0) > 0)
-  {
+    s32 local_1 = 0;
+    func_8009D3A8(param_0, 0);
+
+if (bastick_getZone(param_0) > 0) {
     local_1 = 0x123;
-  }
-  local_1 = func_80800064_bstaxi(param_0, local_1);
-  if (func_8008E148(param_0))
-  {
+}
+
+local_1 = func_80800064_bstaxi(param_0, local_1);
+
+if (func_8008E148(param_0)) {
     local_1 = 1;
-  }
-  if (func_8008E260(param_0))
-  {
+}
+
+if (func_8008E260(param_0)) {
     local_1 = 0x3D;
-  }
-  if (player_inWater(param_0))
-  {
+}
+
+if (player_inWater(param_0)) {
     local_1 = 0x4C;
-  }
-  bs_setState(param_0, func_800A02DC(param_0, local_1));
+}
+
+bs_setState(param_0, func_800A02DC(param_0, local_1));
 }
 
 int bstaxi_entrypoint_35(s32 param_0)
 {
-  return D_808021F8_bstaxi[param_0];
+    return D_808021F8_bstaxi[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/taxi.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808020D0_bstaxi -> s32[], D_808020F0_bstaxi -> s32[], D_80802110_bstaxi -> s32[] */
 extern void _bstaxi_entrypoint_2();
 extern void _bstaxi_entrypoint_3();
 extern void _bstaxi_entrypoint_4();
@@ -921,16 +948,37 @@ extern void _bstaxi_entrypoint_29();
 extern void _bstaxi_entrypoint_32();
 extern void _bstaxi_entrypoint_33();
 extern void _bstaxi_entrypoint_34();
-s32 D_808020D0_bstaxi[8] = { 0x3060013, 0x41D0015, 0x40, 0x190016, 0x5208000C, 0x40, 0xCC0119, 0x110000 };
-s32 D_808020F0_bstaxi[8] = { 0x3060013, 0x41D0015, 0x40, 0x190016, 0x5DC0000C, 0x40, 0xCC0133, 0x110000 };
-s32 D_80802110_bstaxi[8] = { 0x3060013, 0x41D0015, 0x40, 0x190016, 0x6978000C, 0x40, 0xE60166, 0x110000 };
-int D_80802130_bstaxi[4] = { (u32)_bstaxi_entrypoint_2, (u32)_bstaxi_entrypoint_3, (u32)_bstaxi_entrypoint_4, (u32)func_80099B94 };
-u8 D_80802140_bstaxi[72] = { 0x0, 0x1D, 0x9, 0xE6, 0x0, 0x1B, 0xFD, 0x44, 0x1, 0x2C, 0x0, 0x2D, 0x0, 0x64, 0x0, 0xC8, 0x0, 0xD, 0x0, 0x1E, 0x0, 0x16, 0x10, 0x2, 0x0, 0x27, 0x0, 0x0, 0x0, 0x64, 0x0, 0x0, 0x0, 0xC8, 0x0, 0x22, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4C, 0x0, 0x99, 0x0, 0x15, 0x0, 0x33, 0x0, 0xB3, 0x0, 0x2B, 0x0, 0xC0, 0x1, 0x0, 0x0, 0x4, 0x0, 0x99, 0x0, 0x7, 0x0, 0x3, 0x0, 0x31, 0xFF, 0xF6, 0xFF, 0xF6, 0x0, 0x0 };
-s32 D_80802188_bstaxi[4] = { (u32)func_808005B8_bstaxi, (u32)func_808005F0_bstaxi, (u32)func_808006F4_bstaxi, (u32)func_808004A8_bstaxi };
-s32 D_80802198_bstaxi[4] = { (u32)_bstaxi_entrypoint_7, (u32)_bstaxi_entrypoint_8, (u32)_bstaxi_entrypoint_9, (u32)func_80099B94 };
-s32 D_808021A8_bstaxi[4] = { (u32)_bstaxi_entrypoint_11, (u32)_bstaxi_entrypoint_12, (u32)_bstaxi_entrypoint_13, (u32)func_80099B94 };
-s32 D_808021B8_bstaxi[4] = { (u32)_bstaxi_entrypoint_17, (u32)_bstaxi_entrypoint_15, (u32)_bstaxi_entrypoint_16, (u32)func_80099B94 };
-s32 D_808021C8_bstaxi[4] = { (u32)_bstaxi_entrypoint_19, (u32)_bstaxi_entrypoint_20, (u32)_bstaxi_entrypoint_21, (u32)func_80099B94 };
-s32 D_808021D8_bstaxi[4] = { (u32)_bstaxi_entrypoint_23, (u32)_bstaxi_entrypoint_24, (u32)_bstaxi_entrypoint_25, (u32)func_80099B94 };
-s32 D_808021E8_bstaxi[4] = { (u32)_bstaxi_entrypoint_27, (u32)_bstaxi_entrypoint_28, (u32)_bstaxi_entrypoint_30, (u32)_bstaxi_entrypoint_29 };
-s32 D_808021F8_bstaxi[6] = { (u32)_bstaxi_entrypoint_32, (u32)_bstaxi_entrypoint_33, (u32)_bstaxi_entrypoint_34, (u32)func_80099B94, 0x0, 0x0 };
+s32 D_808020D0_bstaxi[8] = {0x3060013,  0x41D0015, 0x40,     0x190016,
+                            0x5208000C, 0x40,      0xCC0119, 0x110000};
+s32 D_808020F0_bstaxi[8] = {0x3060013,  0x41D0015, 0x40,     0x190016,
+                            0x5DC0000C, 0x40,      0xCC0133, 0x110000};
+s32 D_80802110_bstaxi[8] = {0x3060013,  0x41D0015, 0x40,     0x190016,
+                            0x6978000C, 0x40,      0xE60166, 0x110000};
+int D_80802130_bstaxi[4] = {(u32) _bstaxi_entrypoint_2, (u32) _bstaxi_entrypoint_3,
+                            (u32) _bstaxi_entrypoint_4, (u32) func_80099B94};
+u8 D_80802140_bstaxi[72] = {0x0, 0x1D, 0x9, 0xE6, 0x0, 0x1B, 0xFD, 0x44, 0x1,  0x2C, 0x0,  0x2D,
+                            0x0, 0x64, 0x0, 0xC8, 0x0, 0xD,  0x0,  0x1E, 0x0,  0x16, 0x10, 0x2,
+                            0x0, 0x27, 0x0, 0x0,  0x0, 0x64, 0x0,  0x0,  0x0,  0xC8, 0x0,  0x22,
+                            0x0, 0x0,  0x0, 0x0,  0x0, 0x4C, 0x0,  0x99, 0x0,  0x15, 0x0,  0x33,
+                            0x0, 0xB3, 0x0, 0x2B, 0x0, 0xC0, 0x1,  0x0,  0x0,  0x4,  0x0,  0x99,
+                            0x0, 0x7,  0x0, 0x3,  0x0, 0x31, 0xFF, 0xF6, 0xFF, 0xF6, 0x0,  0x0};
+s32 D_80802188_bstaxi[4] = {(u32) func_808005B8_bstaxi, (u32) func_808005F0_bstaxi,
+                            (u32) func_808006F4_bstaxi, (u32) func_808004A8_bstaxi};
+s32 D_80802198_bstaxi[4] = {(u32) _bstaxi_entrypoint_7, (u32) _bstaxi_entrypoint_8,
+                            (u32) _bstaxi_entrypoint_9, (u32) func_80099B94};
+s32 D_808021A8_bstaxi[4] = {(u32) _bstaxi_entrypoint_11, (u32) _bstaxi_entrypoint_12,
+                            (u32) _bstaxi_entrypoint_13, (u32) func_80099B94};
+s32 D_808021B8_bstaxi[4] = {(u32) _bstaxi_entrypoint_17, (u32) _bstaxi_entrypoint_15,
+                            (u32) _bstaxi_entrypoint_16, (u32) func_80099B94};
+s32 D_808021C8_bstaxi[4] = {(u32) _bstaxi_entrypoint_19, (u32) _bstaxi_entrypoint_20,
+                            (u32) _bstaxi_entrypoint_21, (u32) func_80099B94};
+s32 D_808021D8_bstaxi[4] = {(u32) _bstaxi_entrypoint_23, (u32) _bstaxi_entrypoint_24,
+                            (u32) _bstaxi_entrypoint_25, (u32) func_80099B94};
+s32 D_808021E8_bstaxi[4] = {(u32) _bstaxi_entrypoint_27, (u32) _bstaxi_entrypoint_28,
+                            (u32) _bstaxi_entrypoint_30, (u32) _bstaxi_entrypoint_29};
+s32 D_808021F8_bstaxi[6] = {(u32) _bstaxi_entrypoint_32,
+                            (u32) _bstaxi_entrypoint_33,
+                            (u32) _bstaxi_entrypoint_34,
+                            (u32) func_80099B94,
+                            0x0,
+                            0x0};

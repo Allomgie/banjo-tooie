@@ -9,14 +9,36 @@ extern void *func_80100094(Actor *, u32);
 extern void func_800EE7F8(f32 *, f32 *);
 extern f32 func_800F1828();
 extern f32 func_800F1DF4();
-typedef struct { u8 pad_0[0x4C]; f32 local_0[3]; f32 local_1[3]; } ChuffyPositionData;
-typedef struct { u8 pad_0[0x2A8]; s32 local_0; } ChuffyInitData;
-typedef struct { u8 pad_0[0xA]; u8 local_0 : 5; u8 pad_1 : 3; } ChuffyPropFlags;
-typedef struct { s32 f0; s32 f4; u8 pad[0x6C]; u8 pad74:1; u8 flag:1; u8 rest:6; } FarmerState;
+typedef struct {
+    u8 pad_0[0x4C];
+    f32 local_0[3];
+    f32 local_1[3];
+} ChuffyPositionData;
+typedef struct {
+    u8 pad_0[0x2A8];
+    s32 local_0;
+} ChuffyInitData;
+typedef struct {
+    u8 pad_0[0xA];
+    u8 local_0 : 5;
+    u8 pad_1 : 3;
+} ChuffyPropFlags;
+typedef struct {
+    s32 f0;
+    s32 f4;
+    u8 pad[0x6C];
+    u8 pad74 : 1;
+    u8 flag : 1;
+    u8 rest : 6;
+} FarmerState;
 extern s32 _subaddiedialog_entrypoint_11(s32, s32, s32, void *, s32);
 extern Actor *func_801084B0(s32, Actor **);
-typedef struct { f32 local_0[2]; } ChuffyEffectPair;
-typedef struct { f32 local_0[3]; } ChuffyEffectVector;
+typedef struct {
+    f32 local_0[2];
+} ChuffyEffectPair;
+typedef struct {
+    f32 local_0[3];
+} ChuffyEffectVector;
 extern s32 D_80802568_chchuffy[];
 extern s32 D_80802570_chchuffy[];
 extern s32 D_8080257C_chchuffy[];
@@ -28,10 +50,20 @@ extern s16 D_8080247E_chchuffy[][4];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern s32 func_800BBCB8(f32 *, s32, f32, s32, s32 *);
 extern s32 D_808025A0_chchuffy[];
-typedef struct { u8 pad[0x7C]; u32 pad7C:19; u32 flag:1; u32 rest:12; } ChuffyS;
+typedef struct {
+    u8 pad[0x7C];
+    u32 pad7C : 19;
+    u32 flag : 1;
+    u32 rest : 12;
+} ChuffyS;
 extern s32 D_808025E4_chchuffy[];
 extern u8 D_80802630_chchuffy[];
-typedef struct { u8 pad_0[0x14]; f32 local_0[3]; u8 pad_1[0x1C]; f32 local_1; } ChuffySound1590;
+typedef struct {
+    u8 pad_0[0x14];
+    f32 local_0[3];
+    u8 pad_1[0x1C];
+    f32 local_1;
+} ChuffySound1590;
 extern s16 D_8080267C_chchuffy[];
 extern s32 func_800C4350();
 extern void func_800C3058(s32, s32);
@@ -50,9 +82,35 @@ extern f32 D_808026E8_chchuffy[3];
 extern s32 func_800F0064(f32 *, f32, f32 *);
 extern void func_800F7F00(s32, f32 *, f32 *, f32, s32, s32, f32);
 extern int D_808026F4_chchuffy[];
-typedef struct { u8 pad_0[0x14]; f32 origin[3]; u8 pad_1[0x44]; f32 positions[20][3]; f32 velocities[10][3]; f32 acceleration[10][3]; f32 strength[10]; u8 frame[10]; u8 pad_2[6]; s32 color[10]; } ChuffySmokeVectors;
+typedef struct {
+    u8 pad_0[0x14];
+    f32 origin[3];
+    u8 pad_1[0x44];
+    f32 positions[20][3];
+    f32 velocities[10][3];
+    f32 acceleration[10][3];
+    f32 strength[10];
+    u8 frame[10];
+    u8 pad_2[6];
+    s32 color[10];
+} ChuffySmokeVectors;
 extern f32 func_800DC178(f32, f32);
-typedef struct { u8 pad0[0x14]; f32 unk14[3]; u8 pad20[0x18]; f32 unk38; f32 unk3C; u8 pad40[0x24]; f32 pos[10][3]; /* 0x064 */ f32 out[10][3]; /* 0x0DC */ f32 vel[10][3]; /* 0x154 */ f32 rise[10][3]; /* 0x1D0 */ f32 scale[10]; /* 0x244 */ s32 pad26C[3]; f32 unk278; s32 timer[10]; /* 0x27C */ } ChuffySmoke;
+typedef struct {
+    u8 pad0[0x14];
+    f32 unk14[3];
+    u8 pad20[0x18];
+    f32 unk38;
+    f32 unk3C;
+    u8 pad40[0x24];
+    f32 pos[10][3];
+    f32 out[10][3];
+    f32 vel[10][3];
+    f32 rise[10][3];
+    f32 scale[10];
+    s32 pad26C[3];
+    f32 unk278;
+    s32 timer[10];
+} ChuffySmoke;
 extern f32 func_800D8FF8(void);
 extern void func_800EFD24(f32 *);
 extern s32 func_800DC128(s32, s32);
@@ -80,14 +138,13 @@ extern s32 D_808024FC_chchuffy[];
 extern void func_80102424(Actor *, s32);
 void func_808013E8_chchuffy();
 void func_80802060_chchuffy();
-void func_80800410_chchuffy();
 void func_80800FBC_chchuffy();
 void func_8080115C_chchuffy();
 void func_808017D4_chchuffy();
 
 int chchuffy_entrypoint_0()
 {
-    return (int)&D_80802434_chchuffy;
+    return (int) &D_80802434_chchuffy;
 }
 
 s32 func_8080000C_chchuffy(s32 param_0)
@@ -127,60 +184,52 @@ s32 func_8080000C_chchuffy(s32 param_0)
 
 int func_80800110_chchuffy(s32 param_0)
 {
-  u32 local_2;
-  s16 *local_0;
-  s32 local_1;
-  switch (param_0)
-  {
-    case 4:
-      local_1 = func_800EA05C();
-      for (local_2 = 0; local_2 < 7; local_2++)
-    {
-      if (func_8080000C_chchuffy(local_2) == local_1)
-      {
-        break;
-      }
+    u32 local_2;
+    s16 *local_0;
+    s32 local_1;
+    switch (param_0) {
+        case 4:
+            local_1 = func_800EA05C();
+            for (local_2 = 0; local_2 < 7; local_2++) {
+                if (func_8080000C_chchuffy(local_2) == local_1) {
+                    break;
+                }
+            }
+
+            break;
+
+        case 0:
+
+        case 1:
+            local_0 = (s16 *) ((u8 *) D_8080247C_chchuffy + (param_0 * 2));
+            for (local_2 = 0; local_2 < 7; local_2++, local_0 += 4) {
+                if (func_800DA298(*local_0)) {
+                    break;
+                }
+            }
     }
 
-      break;
-
-    case 0:
-
-    case 1:
-      local_0 = (s16 *) (((u8 *) D_8080247C_chchuffy) + (param_0 * 2));
-      for (local_2 = 0; local_2 < 7; local_2++, local_0 += 4)
-    {
-      if (func_800DA298(*local_0))
-      {
-        break;
-      }
+    if (local_2 >= 7) {
+        return -1;
     }
-
-      break;
-
-  }
-
-  if (local_2 >= 7)
-  {
-    return -1;
-  }
-  return local_2;
+    return local_2;
 }
 
-void func_808001DC_chchuffy(void) {
+void func_808001DC_chchuffy(void)
+{
     s32 *local_0;
     s32 local_1;
     s32 local_2;
 
     local_1 = func_800EA05C();
-    local_0 = (s32 *)D_8080247C_chchuffy;
+    local_0 = (s32 *) D_8080247C_chchuffy;
     local_2 = 0;
     do {
         if (func_8080000C_chchuffy(local_2) == local_1) {
-            func_800DA544((*(s16 *)((s8 *)(local_0) + (0))));
-            func_800DA524((*(s16 *)((s8 *)(local_0) + (2))));
+            func_800DA544(*(s16 *) ((s8 *) local_0 + 0));
+            func_800DA524(*(s16 *) ((s8 *) local_0 + 2));
         } else {
-            func_800DA524((*(s16 *)((s8 *)(local_0) + (0))));
+            func_800DA524(*(s16 *) ((s8 *) local_0 + 0));
         }
         local_2 += 1;
         local_0 += 2;
@@ -189,18 +238,18 @@ void func_808001DC_chchuffy(void) {
 
 int func_80800264_chchuffy(void)
 {
-  s32 local_0;
-  s32 local_1;
+    s32 local_0;
+    s32 local_1;
 
-  local_1 = func_800EA05C();
-  for (local_0 = 0; local_0 < 7; local_0++) {
-    if (func_8080000C_chchuffy(local_0) != local_1) {
-      if (func_800DA298(D_8080247C_chchuffy[local_0][1])) {
-        return 1;
-      }
+    local_1 = func_800EA05C();
+    for (local_0 = 0; local_0 < 7; local_0++) {
+        if (func_8080000C_chchuffy(local_0) != local_1) {
+            if (func_800DA298(D_8080247C_chchuffy[local_0][1])) {
+                return 1;
+            }
+        }
     }
-  }
-  return 0;
+    return 0;
 }
 
 s32 chchuffy_entrypoint_1(s32 param_0, f32 *param_1, f32 *param_2)
@@ -209,12 +258,12 @@ s32 chchuffy_entrypoint_1(s32 param_0, f32 *param_1, f32 *param_2)
     s32 local_1;
 
     local_0 = func_80106790(param_0);
-    local_1 = (s32)func_80100094(local_0, 0);
-    func_800EE7F8(param_1, (f32 *)(local_1 + 0x4C));
-    param_2[0] = 90.0f - func_800F1828((f32 *)(local_1 + 0x4C), (f32 *)(local_1 + 0x58));
-    param_2[1] = func_800F1DF4((f32 *)(local_1 + 0x4C), (f32 *)(local_1 + 0x58));
+    local_1 = (s32) func_80100094(local_0, 0);
+    func_800EE7F8(param_1, (f32 *) (local_1 + 0x4C));
+    param_2[0] = 90.0f - func_800F1828((f32 *) (local_1 + 0x4C), (f32 *) (local_1 + 0x58));
+    param_2[1] = func_800F1DF4((f32 *) (local_1 + 0x4C), (f32 *) (local_1 + 0x58));
     param_2[2] = 0.0f;
-    if ((s32)local_0->unk70_10 < 4) {
+    if ((s32) local_0->unk70_10 < 4) {
         return 1;
     }
     return 0;
@@ -231,10 +280,11 @@ void func_80800398_chchuffy(Actor *param_0)
     func_808013E8_chchuffy(param_0, local_0->local_0, local_1);
 }
 
-void func_80800410_chchuffy(param_0, param_1) Actor *param_0; s32 param_1;
+void func_80800410_chchuffy(param_0, param_1) Actor *param_0;
+s32 param_1;
 {
     ChuffySmokeVectors *local_0;
-    local_0 = (ChuffySmokeVectors *)func_80100094(param_0, 0);
+    local_0 = (ChuffySmokeVectors *) func_80100094(param_0, 0);
     local_0->velocities[param_1][0] = func_800DC178(-13.0f, 13.0f);
     local_0->velocities[param_1][1] = func_800DC178(10.0f, 20.0f);
     local_0->velocities[param_1][2] = func_800DC178(-13.0f, 13.0f);
@@ -255,7 +305,7 @@ void func_80800524_chchuffy(Actor *param_0)
     for (local_1 = 0; local_1 < 10; local_1++) {
         func_80800410_chchuffy(param_0, local_1);
     }
-    ((ChuffyPropFlags *)param_0->unk0->unk0)->local_0 = 3;
+    ((ChuffyPropFlags *) param_0->unk0->unk0)->local_0 = 3;
 }
 
 void func_8080059C_chchuffy(Actor *param_0)
@@ -302,7 +352,8 @@ void func_8080059C_chchuffy(Actor *param_0)
     }
 }
 
-void func_80800818_chchuffy(FarmerState *param_0, s32 param_1, s32 param_2) {
+void func_80800818_chchuffy(FarmerState *param_0, s32 param_1, s32 param_2)
+{
     param_2 |= 4;
     _subaddiedialog_entrypoint_11(param_0->f0, param_1, param_2, &param_0->f4, 0x6f);
     param_0->flag = 1;
@@ -313,31 +364,33 @@ int func_80800864_chchuffy(Actor *param_0, s32 param_1, void *param_2)
     Actor *local_0;
 
     switch (param_1) {
-    case 0x3D:
-        local_0 = func_801084B0(0x316, &param_0);
-        *(s32 *)((u8 *)param_0 + 0x3C) = (s32)local_0->unk0;
-        *(s32 *)((u8 *)local_0 + 0x3C) = (s32)param_0->unk0;
-        break;
-    case 0x3E:
-        if (*(s32 *)((u8 *)param_0 + 0x3C)) {
-            local_0 = func_80106790(*(s32 *)((u8 *)param_0 + 0x3C));
-            if ((*(u32 *)((u8 *)param_2 + 0x24) >> 22) == 0) {
-                switch ((*(u32 *)((u8 *)param_0->unk0 + 0x18) << 11) >> 28) {
-                case 1:
-                    local_0->unk64_20 = 1;
-                    if (func_80090178(1)) _gcsectionskip_entrypoint_1(0, 0, 0, 1, 0);
-                    else if (!param_0->unk74_30) func_80800818_chchuffy(param_0, 0x121E, 0);
-                    break;
-                case 2:
-                    local_0->unk64_19 = 1;
-                    if (func_80090178(-1)) _gcsectionskip_entrypoint_1(0, 0, 0, 2, 0);
-                    break;
+        case 0x3D:
+            local_0 = func_801084B0(0x316, &param_0);
+            *(s32 *) ((u8 *) param_0 + 0x3C) = (s32) local_0->unk0;
+            *(s32 *) ((u8 *) local_0 + 0x3C) = (s32) param_0->unk0;
+            break;
+        case 0x3E:
+            if (*(s32 *) ((u8 *) param_0 + 0x3C)) {
+                local_0 = func_80106790(*(s32 *) ((u8 *) param_0 + 0x3C));
+                if ((*(u32 *) ((u8 *) param_2 + 0x24) >> 22) == 0) {
+                    switch ((*(u32 *) ((u8 *) param_0->unk0 + 0x18) << 11) >> 28) {
+                        case 1:
+                            local_0->unk64_20 = 1;
+                            if (func_80090178(1))
+                                _gcsectionskip_entrypoint_1(0, 0, 0, 1, 0);
+                            else if (!param_0->unk74_30)
+                                func_80800818_chchuffy(param_0, 0x121E, 0);
+                            break;
+                        case 2:
+                            local_0->unk64_19 = 1;
+                            if (func_80090178(-1))
+                                _gcsectionskip_entrypoint_1(0, 0, 0, 2, 0);
+                    }
                 }
             }
-        }
-        break;
-    default:
-        return 0;
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
@@ -353,127 +406,131 @@ void func_808009CC_chchuffy(Actor *param_0)
 
     local_0 = func_80100094(param_0, 0);
     switch (param_0->unk70_10) {
-    case 1:
-        if (func_800DA298(0x9DE)) {
-            func_800DA3B8(0x9DE, 0);
-            _capod_entrypoint_13(param_0->unk0, 0, 0, 0);
-            func_80090734(2, local_0 + 0x2C);
-            func_8080130C_chchuffy(param_0);
-            func_808017D4_chchuffy(param_0, 2);
-            *(f32 *)(local_0 + 4) = 0.0f;
-            _chbaddiesetup_entrypoint_1(_chchuffyglow_entrypoint_0, param_0->unk0);
-        }
-        break;
-    case 2:
-        func_80800398_chchuffy(param_0);
-        break;
-    case 3:
-        func_80800398_chchuffy(param_0);
-        func_800DA544(0x95);
-        func_800DA544(0x4ED);
-        local_1 = func_80106790((s32)param_0->unk3C);
-        func_80103140(local_1, 0x87A, local_1->unk0->unk16);
-        func_8010A590(local_1);
-        if (func_80101E14(param_0, 0.73f) || func_80101E14(param_0, 0.75f)) {
-            func_800E1610(2, 100.0f, 0.65f, (f32 *)(local_0 + 0x20));
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80802320_chchuffy);
-        }
-        _subaddieaudioquick_entrypoint_3(param_0, param_0->position, &D_80802334_chchuffy, 0.9f);
-        _subaddieaudioquick_entrypoint_3(param_0, param_0->position, &D_80802348_chchuffy, 0.95f);
-        if (func_80101F24(param_0) < 0.1f) {
-            if (func_800DC0C0() < 0.04f) {
-                _subaddieaudioquick_entrypoint_2(param_0, (f32 *)(local_0 + 0x4C), &D_8080235C_chchuffy);
+        case 1:
+            if (func_800DA298(0x9DE)) {
+                func_800DA3B8(0x9DE, 0);
+                _capod_entrypoint_13(param_0->unk0, 0, 0, 0);
+                func_80090734(2, local_0 + 0x2C);
+                func_8080130C_chchuffy(param_0);
+                func_808017D4_chchuffy(param_0, 2);
+                *(f32 *) (local_0 + 4) = 0.0f;
+                _chbaddiesetup_entrypoint_1(_chchuffyglow_entrypoint_0, param_0->unk0);
             }
-        } else if (func_80101F24(param_0) < 0.95f && func_800DC0C0() < 0.04f) {
-            _subaddieaudioquick_entrypoint_2(param_0, (f32 *)(local_0 + 0x4C), &D_80802374_chchuffy);
-        }
-        if (func_80101E14(param_0, 0.95f)) {
-            func_800DA3B8(0x9DF, 1);
-        }
-        break;
-    case 4:
-        func_80800398_chchuffy(param_0);
-        if (_sumumbofx_entrypoint_22(func_80100094(param_0, 1)) < 0.05f) {
-            _sumumbofx_entrypoint_1(param_0, 1);
-            func_808017D4_chchuffy(param_0, 5);
-        }
-    case 5:
-        if (*(f32 *)(local_0 + 4) < 20000.0f) {
-            *(f32 *)(local_0 + 4) = *(f32 *)(local_0 + 4) + 250.0f;
-        }
-        break;
-    case 6:
-        if (*(f32 *)(local_0 + 0x38) <= 0.0f) {
-            func_808017D4_chchuffy(param_0, 7);
-        }
-        break;
-    case 7:
-        if (*(f32 *)(local_0 + 4) > 10000.0f) {
-            *(f32 *)(local_0 + 4) = *(f32 *)(local_0 + 4) - 250.0f;
-        }
-        if (func_80101DDC(param_0)) {
-            func_800DA3B8(0x66B, 1);
-            if (func_800DA298(0x6B7)) {
-                _glcutDll_entrypoint_17();
-                _capod_entrypoint_14();
-            } else {
-                _glcutDll_entrypoint_24(func_8080000C_chchuffy(func_80800110_chchuffy(1)), -1, 0x70);
-                func_800FE844(0);
-                func_800FE734(0);
+            break;
+        case 2:
+            func_80800398_chchuffy(param_0);
+            break;
+        case 3:
+            func_80800398_chchuffy(param_0);
+            func_800DA544(0x95);
+            func_800DA544(0x4ED);
+            local_1 = func_80106790((s32) param_0->unk3C);
+            func_80103140(local_1, 0x87A, local_1->unk0->unk16);
+            func_8010A590(local_1);
+            if (func_80101E14(param_0, 0.73f) || func_80101E14(param_0, 0.75f)) {
+                func_800E1610(2, 100.0f, 0.65f, (f32 *) (local_0 + 0x20));
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80802320_chchuffy);
             }
-        }
-        break;
-    case 8:
-        if (func_80101F24(param_0) > 0.75f) {
-            if (*(f32 *)(local_0 + 4) < 20000.0f) {
-                *(f32 *)(local_0 + 4) = *(f32 *)(local_0 + 4) + 250.0f;
-            }
-        }
-        if (param_0->unk74_30) {
-            if (param_0->unk58 > 0.0f) {
-                param_0->unk58 -= func_800D8FF8();
-            } else {
-                if (!func_808016D0_chchuffy(param_0)) {
-                    _glcutDll_entrypoint_17();
-                    _capod_entrypoint_14();
+            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, &D_80802334_chchuffy,
+                                             0.9f);
+            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, &D_80802348_chchuffy,
+                                             0.95f);
+            if (func_80101F24(param_0) < 0.1f) {
+                if (func_800DC0C0() < 0.04f) {
+                    _subaddieaudioquick_entrypoint_2(param_0, (f32 *) (local_0 + 0x4C),
+                                                     &D_8080235C_chchuffy);
                 }
+            } else if (func_80101F24(param_0) < 0.95f && func_800DC0C0() < 0.04f) {
+                _subaddieaudioquick_entrypoint_2(param_0, (f32 *) (local_0 + 0x4C),
+                                                 &D_80802374_chchuffy);
+            }
+            if (func_80101E14(param_0, 0.95f)) {
+                func_800DA3B8(0x9DF, 1);
+            }
+            break;
+        case 4:
+            func_80800398_chchuffy(param_0);
+            if (_sumumbofx_entrypoint_22(func_80100094(param_0, 1)) < 0.05f) {
+                _sumumbofx_entrypoint_1(param_0, 1);
                 func_808017D4_chchuffy(param_0, 5);
             }
-        } else if (func_80101DDC(param_0)) {
-            param_0->unk74_30 = 1;
-            param_0->unk58 = 2.0f;
-        }
-        break;
+        case 5:
+            if (*(f32 *) (local_0 + 4) < 20000.0f) {
+                *(f32 *) (local_0 + 4) = *(f32 *) (local_0 + 4) + 250.0f;
+            }
+            break;
+        case 6:
+            if (*(f32 *) (local_0 + 0x38) <= 0.0f) {
+                func_808017D4_chchuffy(param_0, 7);
+            }
+            break;
+        case 7:
+            if (*(f32 *) (local_0 + 4) > 10000.0f) {
+                *(f32 *) (local_0 + 4) = *(f32 *) (local_0 + 4) - 250.0f;
+            }
+            if (func_80101DDC(param_0)) {
+                func_800DA3B8(0x66B, 1);
+                if (func_800DA298(0x6B7)) {
+                    _glcutDll_entrypoint_17();
+                    _capod_entrypoint_14();
+                } else {
+                    _glcutDll_entrypoint_24(func_8080000C_chchuffy(func_80800110_chchuffy(1)), -1,
+                                            0x70);
+                    func_800FE844(0);
+                    func_800FE734(0);
+                }
+            }
+            break;
+        case 8:
+            if (func_80101F24(param_0) > 0.75f) {
+                if (*(f32 *) (local_0 + 4) < 20000.0f) {
+                    *(f32 *) (local_0 + 4) = *(f32 *) (local_0 + 4) + 250.0f;
+                }
+            }
+            if (param_0->unk74_30) {
+                if (param_0->unk58 > 0.0f) {
+                    param_0->unk58 -= func_800D8FF8();
+                } else {
+                    if (!func_808016D0_chchuffy(param_0)) {
+                        _glcutDll_entrypoint_17();
+                        _capod_entrypoint_14();
+                    }
+                    func_808017D4_chchuffy(param_0, 5);
+                }
+            } else if (func_80101DDC(param_0)) {
+                param_0->unk74_30 = 1;
+                param_0->unk58 = 2.0f;
+            }
     }
     switch (func_801022E4(param_0)) {
-    case 0x99:
-        func_8080115C_chchuffy(param_0);
-        break;
-    case 0x9A:
-        func_80800FBC_chchuffy(param_0);
-        break;
+        case 0x99:
+            func_8080115C_chchuffy(param_0);
+            break;
+        case 0x9A:
+            func_80800FBC_chchuffy(param_0);
     }
-    *(f32 *)(local_0 + 0x38) -= func_800D8FF8();
+    *(f32 *) (local_0 + 0x38) -= func_800D8FF8();
 }
 
-void func_80800EF4_chchuffy(s32 *param_0) {
+void func_80800EF4_chchuffy(s32 *param_0)
+{
     s32 local_0;
 
     local_0 = func_80800110_chchuffy(4);
-    if (*(s16 *)((char *)&D_8080247C_chchuffy + (local_0 * 8) + 4) != -1) {
-        _capod_entrypoint_13(*param_0, 0, *(s16 *)((char *)&D_8080247C_chchuffy + (local_0 * 8) + 4), 0x2830);
+    if (*(s16 *) ((char *) &D_8080247C_chchuffy + (local_0 * 8) + 4) != -1) {
+        _capod_entrypoint_13(*param_0, 0,
+                             *(s16 *) ((char *) &D_8080247C_chchuffy + (local_0 * 8) + 4), 0x2830);
     }
 }
 
 void func_80800F54_chchuffy(s32 *param_0)
 {
-  s32 local_0;
-  local_0 = func_80800110_chchuffy(4);
-  if (D_8080247C_chchuffy[local_0][3] != -1)
-  {
-    _capod_entrypoint_13(*param_0, 0, D_8080247C_chchuffy[local_0][3], 0x2830);
-    _chintrotext_entrypoint_2(1);
-  }
+    s32 local_0;
+    local_0 = func_80800110_chchuffy(4);
+    if (D_8080247C_chchuffy[local_0][3] != -1) {
+        _capod_entrypoint_13(*param_0, 0, D_8080247C_chchuffy[local_0][3], 0x2830);
+        _chintrotext_entrypoint_2(1);
+    }
 }
 
 void func_80801EAC_chchuffy();
@@ -490,15 +547,19 @@ void func_80800FBC_chchuffy(param_0) Actor *param_0;
 {
     u8 *local_0;
     local_0 = func_80100094(param_0, 0);
-    if (func_800DC0C0() < 0.25f) { func_80801D3C_chchuffy(param_0, 1); }
+    if (func_800DC0C0() < 0.25f) {
+        func_80801D3C_chchuffy(param_0, 1);
+    }
     func_8080059C_chchuffy(param_0);
-    if (func_80102320(param_0, 0.65f, 0.72f)) { func_80801EAC_chchuffy(param_0); }
+    if (func_80102320(param_0, 0.65f, 0.72f)) {
+        func_80801EAC_chchuffy(param_0);
+    }
     func_80801F04_chchuffy(param_0);
     func_80801DDC_chchuffy(param_0);
     if (func_80101E4C(param_0, D_808024D0_chchuffy)) {
         _subaddieaudioquick_entrypoint_2(param_0, local_0 + 8, D_8080238C_chchuffy);
         func_80801D94_chchuffy(param_0, 5);
-        *(f32 *)(local_0 + 0x38) = 0.3f;
+        *(f32 *) (local_0 + 0x38) = 0.3f;
     }
     if (func_80101E4C(param_0, D_808024E8_chchuffy)) {
         _subaddieaudioquick_entrypoint_2(param_0, local_0 + 8, D_8080238C_chchuffy);
@@ -507,40 +568,47 @@ void func_80800FBC_chchuffy(param_0) Actor *param_0;
         _subaddieaudioquick_entrypoint_2(param_0, local_0 + 0x2C, D_808023A0_chchuffy);
         func_80801CF8_chchuffy(param_0, 5);
     }
-    if (func_80101E14(param_0, 0.7f)) { *(f32 *)(local_0 + 0x38) = 3.0f; }
+    if (func_80101E14(param_0, 0.7f)) {
+        *(f32 *) (local_0 + 0x38) = 3.0f;
+    }
     _subaddieaudioquick_entrypoint_3(param_0, local_0 + 0x4C, D_808023C8_chchuffy, 0.88f);
 }
 
-void func_8080115C_chchuffy(param_0) Actor *param_0; {
+void func_8080115C_chchuffy(param_0) Actor *param_0;
+{
     u8 *sp24;
 
     sp24 = func_80100094(param_0, 0);
-    if (func_800DC0C0() < 0.25f) {
-        func_80801D3C_chchuffy(param_0, 1);
+
+if (func_800DC0C0() < 0.25f) {
+    func_80801D3C_chchuffy(param_0, 1);
+}
+
+func_80801F04_chchuffy(param_0);
+func_8080059C_chchuffy(param_0);
+
+if (((u32) *(u16 *) ((s8 *) param_0 + 0x72) >> 0xA) != 5) {
+    if (func_80102320(param_0, 0.21f, 0.31f) != 0) {
+        func_80801EAC_chchuffy(param_0);
     }
-    func_80801F04_chchuffy(param_0);
-    func_8080059C_chchuffy(param_0);
-    if (((u32) (*(u16 *)((s8 *)(param_0) + (0x72))) >> 0xA) != 5) {
-        if (func_80102320(param_0, 0.21f, 0.31f) != 0) {
-            func_80801EAC_chchuffy(param_0);
-        }
-        func_80801DDC_chchuffy(param_0);
-        if (func_80101E4C(param_0, &D_808024FC_chchuffy) != 0) {
-            _subaddieaudioquick_entrypoint_2(param_0, sp24 + 8, &D_8080238C_chchuffy);
-            func_80801D94_chchuffy(param_0, 5);
-            (*(f32 *)((s8 *)(sp24) + (0x38))) = 0.3f;
-        }
-        if (func_80101E4C(param_0, &D_80802534_chchuffy) != 0) {
-            _subaddieaudioquick_entrypoint_2(param_0, sp24 + 8, &D_8080238C_chchuffy);
-        }
-        if ((func_80101E14(param_0, 0.02f) != 0) || (func_80101E14(param_0, 0.035f) != 0)) {
-            _subaddieaudioquick_entrypoint_2(param_0, sp24 + 0x2C, &D_808023A0_chchuffy);
-            func_80801CF8_chchuffy(param_0, 5);
-        }
-        if ((func_80101E14(param_0, 0.59f) != 0) || (func_80101E14(param_0, 0.49f) != 0)) {
-            _subaddieaudioquick_entrypoint_2(param_0, sp24 + 0x20, &D_808023C8_chchuffy);
-        }
+    func_80801DDC_chchuffy(param_0);
+    if (func_80101E4C(param_0, &D_808024FC_chchuffy) != 0) {
+        _subaddieaudioquick_entrypoint_2(param_0, sp24 + 8, &D_8080238C_chchuffy);
+        func_80801D94_chchuffy(param_0, 5);
+        *(f32 *) ((s8 *) sp24 + 0x38) = 0.3f;
     }
+    if (func_80101E4C(param_0, &D_80802534_chchuffy) != 0) {
+        _subaddieaudioquick_entrypoint_2(param_0, sp24 + 8, &D_8080238C_chchuffy);
+    }
+    if ((func_80101E14(param_0, 0.02f) != 0) || (func_80101E14(param_0, 0.035f) != 0)) {
+        _subaddieaudioquick_entrypoint_2(param_0, sp24 + 0x2C, &D_808023A0_chchuffy);
+        func_80801CF8_chchuffy(param_0, 5);
+    }
+    if ((func_80101E14(param_0, 0.59f) != 0) || (func_80101E14(param_0, 0.49f) != 0)) {
+        _subaddieaudioquick_entrypoint_2(param_0, sp24 + 0x20, &D_808023C8_chchuffy);
+    }
+}
+
 }
 
 void func_8080130C_chchuffy(Actor *param_0)
@@ -549,33 +617,33 @@ void func_8080130C_chchuffy(Actor *param_0)
     ChuffyEffectPair local_1;
     ChuffyEffectVector local_2;
     ChuffyEffectVector local_3;
-    _sumumbofx_entrypoint_0(param_0, 1, 0x41, (s16)_chmumbopad_entrypoint_0(0));
+    _sumumbofx_entrypoint_0(param_0, 1, 0x41, (s16) _chmumbopad_entrypoint_0(0));
     local_0 = func_80100094(param_0, 1);
     _sumumbofx_entrypoint_2(local_0);
     _sumumbofx_entrypoint_24(local_0, 2.25f);
     _sumumbofx_entrypoint_15(local_0, 3.0f);
-    local_1 = *(ChuffyEffectPair *)D_80802568_chchuffy;
-    local_2 = *(ChuffyEffectVector *)D_80802570_chchuffy;
-    local_3 = *(ChuffyEffectVector *)D_8080257C_chchuffy;
+    local_1 = *(ChuffyEffectPair *) D_80802568_chchuffy;
+    local_2 = *(ChuffyEffectVector *) D_80802570_chchuffy;
+    local_3 = *(ChuffyEffectVector *) D_8080257C_chchuffy;
     _sumumbofx_entrypoint_12(local_0, &local_2, &local_1, &local_3);
 }
 
-void func_808013E8_chchuffy(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+void func_808013E8_chchuffy(param_0, param_1, param_2) Actor *param_0;
+s32 param_1;
+s32 param_2;
 {
     extern void _sumumbofx_entrypoint_6(void *, f32, f32, s32, s32, void *, s32, s32);
     extern s32 _sumumbofx_entrypoint_5(void *, f32);
     extern void _sumumbofx_entrypoint_18(void *, f32);
     extern void _sumumbofx_entrypoint_16(void *, f32);
-    extern void func_800EFA4C(f32 *, f32, f32, f32);
-    extern s32 func_80101E14(Actor *, f32);
     void *local_0;
     ChuffyEffectVector local_1;
     ChuffyEffectVector local_2;
     f32 local_3[3];
     f32 local_4[3];
     local_0 = func_80100094(param_0, 1);
-    local_1 = *(ChuffyEffectVector *)D_80802588_chchuffy;
-    local_2 = *(ChuffyEffectVector *)D_80802594_chchuffy;
+    local_1 = *(ChuffyEffectVector *) D_80802588_chchuffy;
+    local_2 = *(ChuffyEffectVector *) D_80802594_chchuffy;
     func_8010D254(local_3);
     func_800EFA4C(local_1.local_0, 0.0f, -675.0f, -155.0f);
     _sumumbofx_entrypoint_6(local_0, 700.0f, 300.0f, 0, 20, &local_1, param_1, param_2);
@@ -585,7 +653,8 @@ void func_808013E8_chchuffy(param_0, param_1, param_2) Actor *param_0; s32 param
     _sumumbofx_entrypoint_6(local_0, 750.0f, 45.0f, 45, 55, &local_1, param_1, param_2);
     func_800EFA4C(local_1.local_0, 160.0f, 650.0f, 235.0f);
     _sumumbofx_entrypoint_6(local_0, 275.0f, 90.0f, 55, 65, &local_1, param_1, param_2);
-    switch (param_0->unk70_10) {
+
+switch (param_0->unk70_10) {
     case 2:
         if (_sumumbofx_entrypoint_27(local_0) && _sumumbofx_entrypoint_5(local_0, 4.6f)) {
             _sumumbofx_entrypoint_18(local_0, 4.0f);
@@ -602,25 +671,27 @@ void func_808013E8_chchuffy(param_0, param_1, param_2) Actor *param_0; s32 param
             func_80090708(0);
         }
         break;
-    }
-    func_800EE7F8(local_4, (u8 *)param_0 + 0x18);
-    local_4[1] += 500.0f;
-    _sumumbofx_entrypoint_11(local_0, local_4);
-    _sumumbofx_entrypoint_14(local_0);
+}
+
+func_800EE7F8(local_4, (u8 *) param_0 + 0x18);
+local_4[1] += 500.0f;
+_sumumbofx_entrypoint_11(local_0, local_4);
+_sumumbofx_entrypoint_14(local_0);
+
 }
 
 void func_8080167C_chchuffy(s32 *param_0)
 {
-  if (_glcutDll_entrypoint_19(0x72))
-  {
-    _capod_entrypoint_14();
-    func_800D9290();
-    _glcutDll_entrypoint_21();
-  }
-  else
-  {
+    if (_glcutDll_entrypoint_19(0x72)) {
+        _capod_entrypoint_14();
+        func_800D9290();
+        _glcutDll_entrypoint_21();
+    }
+
+else
+{
     *param_0 = 0xD0;
-  }
+}
 }
 
 s32 func_808016D0_chchuffy(Actor *param_0)
@@ -628,61 +699,66 @@ s32 func_808016D0_chchuffy(Actor *param_0)
     s32 local_0;
 
     local_0 = func_800EA05C();
-    switch (local_0) {
-        case 0xEC:
-            if (func_800DA298(0x98) && !func_800DA298(0x588) && !func_800DA298(0x8A)) {
-                func_8080167C_chchuffy(&local_0);
-                _glcutDll_entrypoint_24(0xEA, local_0, 0x1F);
-                return 1;
-            }
-            break;
-        case 0x114:
-            if (func_800DA298(0x588)) {
-                func_8080167C_chchuffy(&local_0);
-                _glcutDll_entrypoint_24(0x114, -1, 0x35);
-                return 1;
-            } else if (func_800DA298(0x189) && func_800DA298(0x15E)) {
-                func_8080167C_chchuffy(&local_0);
-                _glcutDll_entrypoint_24(0x114, -1, 0x38);
-                return 1;
-            }
-            break;
-    }
-    return 0;
+
+switch (local_0) {
+    case 0xEC:
+        if (func_800DA298(0x98) && !func_800DA298(0x588) && !func_800DA298(0x8A)) {
+            func_8080167C_chchuffy(&local_0);
+            _glcutDll_entrypoint_24(0xEA, local_0, 0x1F);
+            return 1;
+        }
+        break;
+    case 0x114:
+        if (func_800DA298(0x588)) {
+            func_8080167C_chchuffy(&local_0);
+            _glcutDll_entrypoint_24(0x114, -1, 0x35);
+            return 1;
+        } else if (func_800DA298(0x189) && func_800DA298(0x15E)) {
+            func_8080167C_chchuffy(&local_0);
+            _glcutDll_entrypoint_24(0x114, -1, 0x38);
+            return 1;
+        }
 }
 
-void func_808017D4_chchuffy(param_0, param_1) Actor *param_0; s32 param_1;
+return 0;
+}
+
+void func_808017D4_chchuffy(param_0, param_1) Actor *param_0;
+s32 param_1;
 {
     u8 *local_0;
     u32 local_1;
 
     local_0 = func_80100094(param_0, 0);
-    if (param_0->unk70_10 == 5) {
-        func_8010A570(param_0);
-    }
-    func_80102424(param_0, param_1);
-    local_1 = param_0->unk70_10;
-    switch (local_1) {
-        case 6:
-            func_80800EF4_chchuffy(param_0);
-            *(f32 *)(local_0 + 0x38) = 1.2f;
-            break;
-        case 8:
-            func_800DA3B8(0x6E4, func_800DA298(0x6B7));
-            if (func_800DA9E4(0x6B7, 0)) {
-                _glcutDll_entrypoint_6(func_800EA05C(), 0x72);
-            }
-            param_0->unk74_30 = 0;
-            func_80800F54_chchuffy(param_0);
-            func_808001DC_chchuffy();
-            break;
-        case 5:
-            func_8010A590(param_0);
-            break;
-        case 1:
-            func_8010A590(param_0);
-            break;
-    }
+
+if (param_0->unk70_10 == 5) {
+    func_8010A570(param_0);
+}
+
+func_80102424(param_0, param_1);
+local_1 = param_0->unk70_10;
+
+switch (local_1) {
+    case 6:
+        func_80800EF4_chchuffy(param_0);
+        *(f32 *) (local_0 + 0x38) = 1.2f;
+        break;
+    case 8:
+        func_800DA3B8(0x6E4, func_800DA298(0x6B7));
+        if (func_800DA9E4(0x6B7, 0)) {
+            _glcutDll_entrypoint_6(func_800EA05C(), 0x72);
+        }
+        param_0->unk74_30 = 0;
+        func_80800F54_chchuffy(param_0);
+        func_808001DC_chchuffy();
+        break;
+    case 5:
+        func_8010A590(param_0);
+        break;
+    case 1:
+        func_8010A590(param_0);
+}
+
 }
 
 void func_808018F8_chchuffy(Actor *param_0)
@@ -690,65 +766,68 @@ void func_808018F8_chchuffy(Actor *param_0)
     s32 local_0;
 
     local_0 = func_80800110_chchuffy(4);
-    if (func_800DA298(((s16 (*)[4])D_8080247C_chchuffy)[local_0][0])) {
-        if (func_80800264_chchuffy()) {
-            func_808017D4_chchuffy(param_0, 6);
-        } else {
-            func_808017D4_chchuffy(param_0, 5);
-        }
-    } else if (func_800DA298(D_8080247E_chchuffy[local_0][0])) {
-        func_808017D4_chchuffy(param_0, 8);
+
+if (func_800DA298((s16(*)[4]) D_8080247C_chchuffy[local_0][0])) {
+    if (func_80800264_chchuffy()) {
+        func_808017D4_chchuffy(param_0, 6);
     } else {
-        func_800FFAB0(param_0);
+        func_808017D4_chchuffy(param_0, 5);
     }
+} else if (func_800DA298(D_8080247E_chchuffy[local_0][0])) {
+
+func_808017D4_chchuffy(param_0, 8);
+} else {
+func_800FFAB0(param_0);
+}
 }
 
 void func_808019A4_chchuffy(Actor *param_0, s32 param_1)
 {
-  u8 *new_var2;
-  int new_var;
-  u8 *local_0;
-  f32 local_1[3];
-  u8 *local_2;
-  u8 *local_3;
-  f32 *local_4;
-  s32 local_5;
-  s32 local_6;
-  local_0 = func_80100094(param_0, 0);
-  func_800EFD24(param_0->position);
-  if (func_80100094(param_0, 1) != 0)
-  {
-    local_6 = _sumumbofx_entrypoint_10(func_80100094(param_0, 1));
-    func_800DF5D8(local_6, 255, local_6, 255);
-  }
-  func_80101870(param_0, param_1);
-  new_var2 = local_0 + 8;
-  func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 7, local_0 + 0x14);
-  func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 5, new_var2);
-  func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 8, local_0 + 0x20);
-  func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 4, local_0 + 0x2C);
-  func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 10, local_0 + 0x4C);
-  func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 9, local_0 + 0x58);
-  if (func_80100094(param_0, 1) != 0)
-  {
-    _sumumbofx_entrypoint_8(func_80100094(param_0, 1), param_1);
-  }
-  if (((s32) param_0->unk70_10) >= 6)
-  {
-    func_800E2588(1);
-    func_800E2594(param_1, func_800D674C(*((s32 *) (local_0 + 0x2A8))));
-    local_2 = local_0;
-    local_3 = local_0;
- local_5 = 0; local_4 = (f32 *) (local_0 + 0xDC); for (; local_5 != 0x78; local_5 += 12, local_2 += 4, local_3++, local_4 += 3) {
-      local_1[0] = *((f32 *) (local_2 + 0x244));
-      new_var = 0x244;
-      local_1[1] = *((f32 *) (local_2 + new_var));
-      local_1[2] = *((f32 *) (local_2 + new_var));
-      func_800E2720(param_1, local_3[0x26C], 0, local_4, local_1, *((s32 *) (local_2 + 0x27C)));
+    u8 *new_var2;
+    int new_var;
+    u8 *local_0;
+    f32 local_1[3];
+    u8 *local_2;
+    u8 *local_3;
+    f32 *local_4;
+    s32 local_5;
+    s32 local_6;
+    local_0 = func_80100094(param_0, 0);
+    func_800EFD24(param_0->position);
+    if (func_80100094(param_0, 1) != 0)
+    {
+        local_6 = _sumumbofx_entrypoint_10(func_80100094(param_0, 1));
+        func_800DF5D8(local_6, 255, local_6, 255);
     }
+    func_80101870(param_0, param_1);
+    new_var2 = local_0 + 8;
+    func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 7, local_0 + 0x14);
+    func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 5, new_var2);
+    func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 8, local_0 + 0x20);
+    func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 4, local_0 + 0x2C);
+    func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 10, local_0 + 0x4C);
+    func_800DBEFC(*((s32 *) (((u8 *) param_0->unk0) + 4)), 9, local_0 + 0x58);
+    if (func_80100094(param_0, 1) != 0)
+    {
+        _sumumbofx_entrypoint_8(func_80100094(param_0, 1), param_1);
+    }
+    if (((s32) param_0->unk70_10) >= 6)
+    {
+        func_800E2588(1);
+        func_800E2594(param_1, func_800D674C(*((s32 *) (local_0 + 0x2A8))));
+        local_2 = local_0;
+        local_3 = local_0;
+        local_5 = 0; local_4 = (f32 *) (local_0 + 0xDC); for (; local_5 != 0x78; local_5 += 12, local_2 += 4, local_3++, local_4 += 3) {
+            local_1[0] = *((f32 *) (local_2 + 0x244));
+            new_var = 0x244;
+            local_1[1] = *((f32 *) (local_2 + new_var));
+            local_1[2] = *((f32 *) (local_2 + new_var));
+            func_800E2720(param_1, local_3[0x26C], 0, local_4, local_1, *((s32 *) (local_2 + 0x27C)));
 
-    func_800E2A14(param_1);
-  }
+}
+
+func_800E2A14(param_1);
+}
 }
 
 void func_80801B8C_chchuffy(Actor *param_0)
@@ -757,65 +836,71 @@ void func_80801B8C_chchuffy(Actor *param_0)
 
     local_0 = func_80100094(param_0, 0);
     local_0[1] = 0;
-    *(f32 *)(local_0 + 0x3C) = 0.0f;
-    *(f32 *)(local_0 + 4) = 20000.0f;
+    *(f32 *) (local_0 + 0x3C) = 0.0f;
+    *(f32 *) (local_0 + 4) = 20000.0f;
     local_0[0] = 0;
-    *(f32 *)(local_0 + 0x48) = 1.0f;
+    *(f32 *) (local_0 + 0x48) = 1.0f;
     func_80800524_chchuffy(param_0);
     if (func_800EA05C() == 0xD7) {
         if (func_80800110_chchuffy(0) == -1) {
             if (!func_800DA298(0x95)) {
                 func_808017D4_chchuffy(param_0, 1);
             } else {
-                func_808017D4_chchuffy(param_0, 5);
-            }
-        } else {
-            func_808018F8_chchuffy(param_0);
-        }
-    } else {
-        func_808018F8_chchuffy(param_0);
-    }
-    if (!param_0->unk64_17) {
-        func_80108B04(param_0, 0);
-    }
+
+func_808017D4_chchuffy(param_0, 5);
+}
+}
+else
+{
+    func_808018F8_chchuffy(param_0);
+}
+}
+else
+{
+    func_808018F8_chchuffy(param_0);
+}
+if (!param_0->unk64_17) {
+    func_80108B04(param_0, 0);
+}
 }
 
 void func_80801C78_chchuffy(s32 param_0)
 {
-  u8 *local_0;
-  local_0 = func_80100094(param_0, 0);
-  {
-    if ((*local_0) != 0)
+    u8 *local_0;
+    local_0 = func_80100094(param_0, 0);
     {
-      func_800C2FDC(*local_0);
-      *local_0 = 0;
+        if ((*local_0) != 0) {
+            func_800C2FDC(*local_0);
+            *local_0 = 0;
+        }
+        if (local_0[1] != 0) {
+            func_800C2FDC(local_0[1]);
+            local_0[1] = 0;
+        }
     }
-    if (local_0[1] != 0)
-    {
-      func_800C2FDC(local_0[1]);
-      local_0[1] = 0;
+    if (func_80100094(param_0, 1) != 0) {
+        _sumumbofx_entrypoint_1(param_0, 1);
     }
-  }
-  if (func_80100094(param_0, 1) != 0)
-  {
-    _sumumbofx_entrypoint_1(param_0, 1);
-  }
 }
 
-void func_80801CF8_chchuffy(s32 unused, s32 param_1) {
-    func_800BBCB8((f32 *)((u8 *)func_80100094((Actor *)unused, 0) + 0x2C), 0, 1.0f, param_1, &D_808025A0_chchuffy);
+void func_80801CF8_chchuffy(s32 unused, s32 param_1)
+{
+    func_800BBCB8((f32 *) ((u8 *) func_80100094((Actor *) unused, 0) + 0x2C), 0, 1.0f, param_1,
+                  &D_808025A0_chchuffy);
 }
 
-void func_80801D3C_chchuffy(ChuffyS *param_0, s32 param_1) {
-    u8 *local_0 = (u8 *)func_80100094((Actor *)param_0, 0) + 8;
+void func_80801D3C_chchuffy(ChuffyS *param_0, s32 param_1)
+{
+    u8 *local_0 = (u8 *) func_80100094((Actor *) param_0, 0) + 8;
     if (param_0->flag) {
-        func_800BBCB8((f32 *)local_0, 0, 1.0f, param_1, &D_808025E4_chchuffy);
+        func_800BBCB8((f32 *) local_0, 0, 1.0f, param_1, &D_808025E4_chchuffy);
     }
 }
 
 void func_80801D94_chchuffy(Actor *param_0, s32 param_1)
 {
-    func_800BBCB8((u8 *)func_80100094((*(Actor * *)&param_0), 0) + 8, 0, 1.0f, param_1, D_80802630_chchuffy);
+    func_800BBCB8((u8 *) func_80100094((*(Actor **) &param_0), 0) + 8, 0, 1.0f, param_1,
+                  D_80802630_chchuffy);
 }
 
 void func_80801DDC_chchuffy(Actor *param_0)
@@ -823,23 +908,26 @@ void func_80801DDC_chchuffy(Actor *param_0)
     ChuffySound1590 *local_0;
 
     local_0 = func_80100094(param_0, 0);
-    if (param_0->unk5F == 0) param_0->unk5F = func_800C4350(0, local_0->local_0, D_8080267C_chchuffy);
+    if (param_0->unk5F == 0)
+        param_0->unk5F = func_800C4350(0, local_0->local_0, D_8080267C_chchuffy);
     else {
         if (local_0->local_1 > 2000.0f && param_0->unk7C_12) {
-            func_800C3058(param_0->unk5F, (s32)local_0->local_1);
+            func_800C3058(param_0->unk5F, (s32) local_0->local_1);
             func_800C4350(param_0->unk5F, local_0->local_0, NULL);
         }
         local_0->local_1 -= 1000.0f;
     }
 }
 
-void func_80801EAC_chchuffy(u8 *param_0) {
+void func_80801EAC_chchuffy(u8 *param_0)
+{
     u8 *local_0;
     u8 *local_1;
 
     local_1 = func_80100094(param_0, 0);
     local_0 = local_1;
-    *local_0 = _subaddieaudioloop_entrypoint_7(*local_1, local_1 + 0x20, 1, &D_80802690_chchuffy, (*(s32 *)((s8 *)(param_0) + (0x70))) & 1);
+    *local_0 = _subaddieaudioloop_entrypoint_7(*local_1, local_1 + 0x20, 1, &D_80802690_chchuffy,
+                                               (*(s32 *) ((s8 *) (param_0) + (0x70))) & 1);
 }
 
 int func_80801F04_chchuffy(Actor *param_0)
@@ -849,12 +937,13 @@ int func_80801F04_chchuffy(Actor *param_0)
     if (local_0[1] == 0) {
         local_0[1] = func_800C4350(0, local_0 + 0x20, D_808023DC_chchuffy);
     } else {
-        func_800C3058(local_0[1], (s32)*(f32 *)(local_0 + 4));
+        func_800C3058(local_0[1], (s32) *(f32 *) (local_0 + 4));
         func_800C4350(local_0[1], local_0 + 0x20, 0);
     }
 }
 
-s32 func_80801F84_chchuffy(s32 param_0){
+s32 func_80801F84_chchuffy(s32 param_0)
+{
     func_800EFD24(param_0 + 4);
 }
 
@@ -863,42 +952,46 @@ s32 func_80801FA4_chchuffy(Actor *param_0, s32 param_1, Unk80132ED0 *param_2)
     s32 local_0;
 
     switch (param_1) {
-    case 0x95:
-        local_0 = func_800DA298(0x95) ? 0x87A : 0x879;
-        func_80103140(param_0, (u16)local_0, param_0->unk0->unk16);
-        func_8010A5B0(param_0, func_800DA298(0x95));
-        break;
-    case 0x2E:
-        param_0->unk74_30 = 0;
-        break;
-    case 0x3E:
-        func_80802060_chchuffy(param_0, (*(Unk80132ED0 * *)&param_2));
-        break;
-    default:
-        return 0;
+        case 0x95:
+            local_0 = func_800DA298(0x95) ? 0x87A : 0x879;
+            func_80103140(param_0, (u16) local_0, param_0->unk0->unk16);
+            func_8010A5B0(param_0, func_800DA298(0x95));
+            break;
+        case 0x2E:
+            param_0->unk74_30 = 0;
+            break;
+        case 0x3E:
+            func_80802060_chchuffy(param_0, (*(Unk80132ED0 **) &param_2));
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
 
-void func_80802060_chchuffy(param_0, param_1) u8 *param_0; u8 *param_1; {
+void func_80802060_chchuffy(param_0, param_1) u8 *param_0;
+u8 *param_1;
+{
     s32 temp_v0;
     f32 local_38[3];
     f32 local_2C[3];
     u32 local_28;
     f32 local_1C[3];
 
-    local_28 = (u32) (*(u16 *)((u8 *)param_1 + 0x1A)) >> 5;
-    if ((func_800F6C5C(local_28) != 0) && (func_800F55D0(local_28) == (*(s32 *)((u8 *)param_0 + 0)))) {
+    local_28 = (u32) (*(u16 *) ((u8 *) param_1 + 0x1A)) >> 5;
+    if ((func_800F6C5C(local_28) != 0) &&
+        (func_800F55D0(local_28) == (*(s32 *) ((u8 *) param_0 + 0)))) {
         func_800F5A00(local_28, local_38);
         temp_v0 = _gccubesearch_entrypoint_6(&D_808026A4_chchuffy, local_38);
         if (temp_v0 != 0) {
             _gspropctrl_entrypoint_11(temp_v0, local_2C);
         } else {
-            chchuffy_entrypoint_1((*(s32 *)((u8 *)param_0 + 0x3C)), local_2C, local_1C);
+            chchuffy_entrypoint_1((*(s32 *) ((u8 *) param_0 + 0x3C)), local_2C, local_1C);
             if (local_38[2] < local_2C[2]) {
-                func_800EF1B8(local_2C, (*(f32 *)((u8 *)param_0 + 0x48)) - 180.0f, (u32)0x43FA0000);
+                func_800EF1B8(local_2C, (*(f32 *) ((u8 *) param_0 + 0x48)) - 180.0f,
+                              (u32) 0x43FA0000);
             } else {
-                func_800EF1B8(local_2C, (*(f32 *)((u8 *)param_0 + 0x48)), (u32)0x43FA0000);
+                func_800EF1B8(local_2C, (*(f32 *) ((u8 *) param_0 + 0x48)), (u32) 0x43FA0000);
             }
             local_2C[0] = local_38[0];
         }
@@ -915,7 +1008,8 @@ void func_80802164_chchuffy(Actor *param_0)
         func_8010D254(local_0);
         if (func_800F0064(local_0, 130.0f, D_808026AC_chchuffy) &&
             D_808026B0_chchuffy < local_0[1] && local_0[1] <= D_808026BC_chchuffy) {
-            func_800F7F00(func_800F54E4(), D_808026AC_chchuffy, D_808026B8_chchuffy, 80.0f, 2, 2, 0.0f);
+            func_800F7F00(func_800F54E4(), D_808026AC_chchuffy, D_808026B8_chchuffy, 80.0f, 2, 2,
+                          0.0f);
         }
         if (param_0->unk64_20 && !func_80090178(1)) {
             func_8008FA94(D_808026C4_chchuffy, D_808026D0_chchuffy);
@@ -931,48 +1025,105 @@ int *chchuffy_entrypoint_2()
     return &D_808026F4_chchuffy;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/uffy.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080247E_chchuffy = D_8080247C_chchuffy + 0x2, D_808026B0_chchuffy = D_808026AC_chchuffy + 0x4, D_808026BC_chchuffy = D_808026B8_chchuffy + 0x4
- * extern declarations adjusted to the object (same addresses): D_80802320_chchuffy -> s32[], D_80802334_chchuffy -> s32[], D_80802348_chchuffy -> s32[], D_8080235C_chchuffy -> s32[], D_80802374_chchuffy -> s32[], D_80802434_chchuffy -> int[], D_808025A0_chchuffy -> s32[], D_808025E4_chchuffy -> s32[], D_80802690_chchuffy -> s32[], D_808026F4_chchuffy -> int[] */
 extern void func_80105834();
 extern void func_80108EE8();
 extern void func_80107C2C();
 extern void func_8010A73C();
 extern void func_80108ED0();
-s32 D_80802320_chchuffy[5] = { 0x1304C1, 0xA0099, 0x167D00, 0x101F4, 0x13880000 };
-s32 D_80802334_chchuffy[5] = { 0x1304C1, 0xA0066, 0x167D00, 0x101F4, 0x13880000 };
-s32 D_80802348_chchuffy[5] = { 0x1304C1, 0xA0066, 0x166D60, 0x101F4, 0x13880000 };
-s32 D_8080235C_chchuffy[6] = { 0x1304A1, 0xD0080, 0xB30019, 0x465055F0, 0x11388, 0x27100000 };
-s32 D_80802374_chchuffy[6] = { 0x1304A1, 0xD0080, 0xB30019, 0x465055F0, 0x11388, 0x27100000 };
-u8 D_8080238C_chchuffy[20] = { 0x0, 0x13, 0x4, 0xE8, 0x0, 0xA, 0x0, 0xCC, 0x0, 0x18, 0x0, 0x1, 0x1, 0xF4, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
-u8 D_808023A0_chchuffy[40] = { 0x0, 0x13, 0x4, 0xE7, 0x0, 0xA, 0x0, 0xF3, 0x0, 0x16, 0x7D, 0x0, 0x0, 0x1, 0x1, 0xF4, 0x13, 0x88, 0x0, 0x0, 0x0, 0x13, 0x4, 0xE7, 0x0, 0xA, 0x1, 0x0, 0x0, 0x16, 0x7D, 0x0, 0x0, 0x1, 0x1, 0xF4, 0x13, 0x88, 0x0, 0x0 };
-u8 D_808023C8_chchuffy[20] = { 0x0, 0x13, 0x4, 0xC1, 0x0, 0xA, 0x0, 0x66, 0x0, 0x16, 0x7D, 0x0, 0x0, 0x1, 0x1, 0xF4, 0x13, 0x88, 0x0, 0x0 };
-u8 D_808023DC_chchuffy[16] = { 0x2, 0x6, 0x0, 0x13, 0x4, 0xE9, 0x0, 0x7, 0x0, 0x1, 0x1, 0xF4, 0x1F, 0x40, 0x0, 0x0 };
-u32 D_808023EC_chchuffy[18] = { 0x0, 0x0, 0x41600000, 0x970044, 0x41600000, 0x970044, 0x41600000, 0x97004A, 0x41600000, 0x990044, 0x41600000, 0x990244, 0x41600000, 0x990044, 0x41600000, 0x99004A, 0x41600000, 0x9A004A };
-int D_80802434_chchuffy[18] = { 0x20502A5, 0x6A90001, (u32)&D_808023EC_chchuffy, (u32)func_808009CC_chchuffy, (u32)func_80105834, (u32)func_808019A4_chchuffy, 0x0, 0x0, 0x0, 0x880464, (u32)func_80801C78_chchuffy, (u32)func_80108EE8, 0x2AC0000, (u32)func_80801B8C_chchuffy, (u32)func_80107C2C, -0x7F7FFFFE, (u32)func_80800864_chchuffy, 0x0 };
-s16 D_8080247C_chchuffy[7][4] = { 0x4ED, 0x669, 0x2, 0x4, 0x4EE, 0x66A, 0x0, 0x2, 0x4F3, 0x6CC, 0xE, 0xC, 0x4F0, 0x6AA, 0x2, 0x0, 0x4EF, 0x6A9, 0x2, 0x0, 0x4F2, 0x6BC, 0xF, 0xD, 0x4F1, 0x6BB, 0x6, 0x1 };
-u32 D_808024B4_chchuffy[7] = { 0x9500CB8, 0x964, 0x5400C68, 0xDAE0CC8, 0x68A, 0xAF60CC0, 0xAF60B74 };
-u8 D_808024D0_chchuffy[24] = { 0x3C, 0x23, 0xD7, 0xA, 0x3D, 0xA3, 0xD7, 0xA, 0x3E, 0x19, 0x99, 0x9A, 0x3E, 0x8F, 0x5C, 0x29, 0x3F, 0xC, 0xCC, 0xCD, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_808024E8_chchuffy[20] = { 0x3D, 0x38, 0x51, 0xEC, 0x3D, 0xEB, 0x85, 0x1F, 0x3E, 0x5C, 0x28, 0xF6, 0x3E, 0xD4, 0x7A, 0xE1, 0xBF, 0x80, 0x0, 0x0 };
-s32 D_808024FC_chchuffy[14] = { 0x3C23D70A, 0x3E23D70A, 0x3E570A3D, 0x3E75C28F, 0x3E851EB8, 0x3E8F5C29, 0x3E9EB852, 0x3EC7AE14, 0x3F028F5C, 0x3F2147AE, 0x3F400000, 0x3F5EB852, 0x3F7851EC, -0x40800000 };
-s32 D_80802534_chchuffy[13] = { 0x3DAE147B, 0x3E3D70A4, 0x3E666666, 0x3E800000, 0x3E8A3D71, 0x3E970A3D, 0x3EB33333, 0x3EE66666, 0x3F11EB85, 0x3F30A3D7, 0x3F4F5C29, 0x3F6B851F, -0x40800000 };
-s32 D_80802568_chchuffy[2] = { 0x44BB8000, 0x451C4000 };
-s32 D_80802570_chchuffy[3] = { -0x3BD10000, 0x447A0000, -0x3CEA0000 };
-s32 D_8080257C_chchuffy[3] = { 0x0, 0xFF, 0x0 };
-s32 D_80802588_chchuffy[3] = { 0x0, 0x0, 0x0 };
-s32 D_80802594_chchuffy[3] = { 0x0, 0x0, 0x0 };
-s32 D_808025A0_chchuffy[17] = { 0x1D09DD, 0x190000, 0x7000A, -0x180032, -0x40005, 0x190005, 0x2CFFC9, 0x12CFFE7, -0xEFDA8, 0x19001B, 0xA0014, 0x220080, 0x1800400, 0x500002A, 0xC00C0, 0x1800280, 0x64020000 };
-s32 D_808025E4_chchuffy[19] = { 0x1D09DD, 0x190000, 0x7000A, -0x40005, 0x500005, 0x50000, 0x2CFFC4, 0xC8FFC4, 0x3C0190, 0x3C001B, 0x5000A, 0x220080, 0x2000400, 0x500002A, 0xC00C0, 0x1800280, 0x150000, 0xD96402, 0x0 };
-u8 D_80802630_chchuffy[76] = { 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x19, 0x0, 0x0, 0x0, 0x7, 0x0, 0xA, 0xFF, 0xFB, 0xFF, 0xFB, 0x0, 0x50, 0x0, 0x5, 0x0, 0x5, 0x0, 0x0, 0x0, 0x2C, 0xFF, 0xC4, 0x0, 0xC8, 0xFF, 0xC4, 0x0, 0x3C, 0x1, 0x90, 0x0, 0x3C, 0x0, 0x1B, 0x0, 0x5, 0x0, 0xA, 0x0, 0x22, 0x0, 0x80, 0x3, 0x0, 0x6, 0x0, 0x8, 0x0, 0x0, 0x2A, 0x0, 0xC, 0x0, 0xC0, 0x1, 0x80, 0x2, 0x80, 0x0, 0x15, 0x0, 0x0, 0x0, 0xD9, 0x64, 0x2, 0x0, 0x0, 0x0, 0x0 };
-s16 D_8080267C_chchuffy[10] = { 0x206, 0x13, 0x4DC, 0x7, 0x16, 0x0, 0x1, 0x1F4, 0x1388, 0x0 };
-s32 D_80802690_chchuffy[5] = { 0x1304C0, 0x167D00, 0xA00E6, 0x101F4, 0x13880000 };
-u8 D_808026A4_chchuffy[8] = { 0x0, 0x0, 0x4, 0xFB, 0xFF, 0xFF, 0xFF, 0xFF };
-f32 D_808026AC_chchuffy[3] = { -7.5e+02f, 1e+02f, -858.0f };
-f32 D_808026B8_chchuffy[3] = { -7.5e+02f, 2.2e+02f, -858.0f };
-f32 D_808026C4_chchuffy[3] = { -8.7e+02f, 324.0f, -1035.0f };
-f32 D_808026D0_chchuffy[3] = { -6.5e+02f, 7.7e+02f, -835.0f };
-f32 D_808026DC_chchuffy[3] = { 115.0f, 303.0f, -1292.0f };
-f32 D_808026E8_chchuffy[3] = { 465.0f, 7.6e+02f, -851.0f };
-int D_808026F4_chchuffy[19] = { 0x2DB0316, 0x1, 0x0, (u32)func_80802164_chchuffy, (u32)func_80105834, (u32)func_8010A73C, 0x0, 0x0, 0x0, 0xC04, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80801F84_chchuffy, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_80801FA4_chchuffy, 0x0, 0x0 };
+s32 D_80802320_chchuffy[5] = {0x1304C1, 0xA0099, 0x167D00, 0x101F4, 0x13880000};
+s32 D_80802334_chchuffy[5] = {0x1304C1, 0xA0066, 0x167D00, 0x101F4, 0x13880000};
+s32 D_80802348_chchuffy[5] = {0x1304C1, 0xA0066, 0x166D60, 0x101F4, 0x13880000};
+s32 D_8080235C_chchuffy[6] = {0x1304A1, 0xD0080, 0xB30019, 0x465055F0, 0x11388, 0x27100000};
+s32 D_80802374_chchuffy[6] = {0x1304A1, 0xD0080, 0xB30019, 0x465055F0, 0x11388, 0x27100000};
+u8 D_8080238C_chchuffy[20] = {0x0, 0x13, 0x4, 0xE8, 0x0,  0xA,  0x0, 0xCC, 0x0, 0x18,
+                              0x0, 0x1,  0x1, 0xF4, 0x13, 0x88, 0x0, 0x0,  0x0, 0x0};
+u8 D_808023A0_chchuffy[40] = {0x0,  0x13, 0x4, 0xE7, 0x0, 0xA,  0x0,  0xF3, 0x0, 0x16,
+                              0x7D, 0x0,  0x0, 0x1,  0x1, 0xF4, 0x13, 0x88, 0x0, 0x0,
+                              0x0,  0x13, 0x4, 0xE7, 0x0, 0xA,  0x1,  0x0,  0x0, 0x16,
+                              0x7D, 0x0,  0x0, 0x1,  0x1, 0xF4, 0x13, 0x88, 0x0, 0x0};
+u8 D_808023C8_chchuffy[20] = {0x0,  0x13, 0x4, 0xC1, 0x0, 0xA,  0x0,  0x66, 0x0, 0x16,
+                              0x7D, 0x0,  0x0, 0x1,  0x1, 0xF4, 0x13, 0x88, 0x0, 0x0};
+u8 D_808023DC_chchuffy[16] = {0x2, 0x6, 0x0, 0x13, 0x4,  0xE9, 0x0, 0x7,
+                              0x0, 0x1, 0x1, 0xF4, 0x1F, 0x40, 0x0, 0x0};
+u32 D_808023EC_chchuffy[18] = {0x0,        0x0,      0x41600000, 0x970044, 0x41600000, 0x970044,
+                               0x41600000, 0x97004A, 0x41600000, 0x990044, 0x41600000, 0x990244,
+                               0x41600000, 0x990044, 0x41600000, 0x99004A, 0x41600000, 0x9A004A};
+int D_80802434_chchuffy[18] = {0x20502A5,
+                               0x6A90001,
+                               (u32) &D_808023EC_chchuffy,
+                               (u32) func_808009CC_chchuffy,
+                               (u32) func_80105834,
+                               (u32) func_808019A4_chchuffy,
+                               0x0,
+                               0x0,
+                               0x0,
+                               0x880464,
+                               (u32) func_80801C78_chchuffy,
+                               (u32) func_80108EE8,
+                               0x2AC0000,
+                               (u32) func_80801B8C_chchuffy,
+                               (u32) func_80107C2C,
+                               -0x7F7FFFFE,
+                               (u32) func_80800864_chchuffy,
+                               0x0};
+s16 D_8080247C_chchuffy[7][4] = {
+    0x4ED, 0x669, 0x2,   0x4, 0x4EE, 0x66A, 0x0,   0x2, 0x4F3, 0x6CC, 0xE,   0xC, 0x4F0, 0x6AA, 0x2,
+    0x0,   0x4EF, 0x6A9, 0x2, 0x0,   0x4F2, 0x6BC, 0xF, 0xD,   0x4F1, 0x6BB, 0x6, 0x1};
+u32 D_808024B4_chchuffy[7] = {0x9500CB8, 0x964, 0x5400C68, 0xDAE0CC8, 0x68A, 0xAF60CC0, 0xAF60B74};
+u8 D_808024D0_chchuffy[24] = {0x3C, 0x23, 0xD7, 0xA,  0x3D, 0xA3, 0xD7, 0xA,
+                              0x3E, 0x19, 0x99, 0x9A, 0x3E, 0x8F, 0x5C, 0x29,
+                              0x3F, 0xC,  0xCC, 0xCD, 0xBF, 0x80, 0x0,  0x0};
+u8 D_808024E8_chchuffy[20] = {0x3D, 0x38, 0x51, 0xEC, 0x3D, 0xEB, 0x85, 0x1F, 0x3E, 0x5C,
+                              0x28, 0xF6, 0x3E, 0xD4, 0x7A, 0xE1, 0xBF, 0x80, 0x0,  0x0};
+s32 D_808024FC_chchuffy[14] = {0x3C23D70A, 0x3E23D70A, 0x3E570A3D, 0x3E75C28F, 0x3E851EB8,
+                               0x3E8F5C29, 0x3E9EB852, 0x3EC7AE14, 0x3F028F5C, 0x3F2147AE,
+                               0x3F400000, 0x3F5EB852, 0x3F7851EC, -0x40800000};
+s32 D_80802534_chchuffy[13] = {0x3DAE147B, 0x3E3D70A4, 0x3E666666, 0x3E800000, 0x3E8A3D71,
+                               0x3E970A3D, 0x3EB33333, 0x3EE66666, 0x3F11EB85, 0x3F30A3D7,
+                               0x3F4F5C29, 0x3F6B851F, -0x40800000};
+s32 D_80802568_chchuffy[2] = {0x44BB8000, 0x451C4000};
+s32 D_80802570_chchuffy[3] = {-0x3BD10000, 0x447A0000, -0x3CEA0000};
+s32 D_8080257C_chchuffy[3] = {0x0, 0xFF, 0x0};
+s32 D_80802588_chchuffy[3] = {0x0, 0x0, 0x0};
+s32 D_80802594_chchuffy[3] = {0x0, 0x0, 0x0};
+s32 D_808025A0_chchuffy[17] = {0x1D09DD,  0x190000,  0x7000A,  -0x180032, -0x40005,  0x190005,
+                               0x2CFFC9,  0x12CFFE7, -0xEFDA8, 0x19001B,  0xA0014,   0x220080,
+                               0x1800400, 0x500002A, 0xC00C0,  0x1800280, 0x64020000};
+s32 D_808025E4_chchuffy[19] = {0x1D09DD,  0x190000, 0x7000A,   -0x40005,  0x500005,
+                               0x50000,   0x2CFFC4, 0xC8FFC4,  0x3C0190,  0x3C001B,
+                               0x5000A,   0x220080, 0x2000400, 0x500002A, 0xC00C0,
+                               0x1800280, 0x150000, 0xD96402,  0x0};
+u8 D_80802630_chchuffy[76] = {
+    0x0, 0x1D, 0x9, 0xDD, 0x0, 0x19, 0x0,  0x0,  0x0, 0x7,  0x0,  0xA,  0xFF, 0xFB, 0xFF, 0xFB,
+    0x0, 0x50, 0x0, 0x5,  0x0, 0x5,  0x0,  0x0,  0x0, 0x2C, 0xFF, 0xC4, 0x0,  0xC8, 0xFF, 0xC4,
+    0x0, 0x3C, 0x1, 0x90, 0x0, 0x3C, 0x0,  0x1B, 0x0, 0x5,  0x0,  0xA,  0x0,  0x22, 0x0,  0x80,
+    0x3, 0x0,  0x6, 0x0,  0x8, 0x0,  0x0,  0x2A, 0x0, 0xC,  0x0,  0xC0, 0x1,  0x80, 0x2,  0x80,
+    0x0, 0x15, 0x0, 0x0,  0x0, 0xD9, 0x64, 0x2,  0x0, 0x0,  0x0,  0x0};
+s16 D_8080267C_chchuffy[10] = {0x206, 0x13, 0x4DC, 0x7, 0x16, 0x0, 0x1, 0x1F4, 0x1388, 0x0};
+s32 D_80802690_chchuffy[5] = {0x1304C0, 0x167D00, 0xA00E6, 0x101F4, 0x13880000};
+u8 D_808026A4_chchuffy[8] = {0x0, 0x0, 0x4, 0xFB, 0xFF, 0xFF, 0xFF, 0xFF};
+f32 D_808026AC_chchuffy[3] = {-7.5e+02f, 1e+02f, -858.0f};
+f32 D_808026B8_chchuffy[3] = {-7.5e+02f, 2.2e+02f, -858.0f};
+f32 D_808026C4_chchuffy[3] = {-8.7e+02f, 324.0f, -1035.0f};
+f32 D_808026D0_chchuffy[3] = {-6.5e+02f, 7.7e+02f, -835.0f};
+f32 D_808026DC_chchuffy[3] = {115.0f, 303.0f, -1292.0f};
+f32 D_808026E8_chchuffy[3] = {465.0f, 7.6e+02f, -851.0f};
+int D_808026F4_chchuffy[19] = {0x2DB0316,
+                               0x1,
+                               0x0,
+                               (u32) func_80802164_chchuffy,
+                               (u32) func_80105834,
+                               (u32) func_8010A73C,
+                               0x0,
+                               0x0,
+                               0x0,
+                               0xC04,
+                               0x0,
+                               (u32) func_80108ED0,
+                               0x0,
+                               (u32) func_80801F84_chchuffy,
+                               (u32) func_80107C2C,
+                               -0x7FFFFFFE,
+                               (u32) func_80801FA4_chchuffy,
+                               0x0,
+                               0x0};

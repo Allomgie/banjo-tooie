@@ -23,14 +23,14 @@ extern Actor *func_80108528(s32, f32 *, s32, Actor **);
 int chlifeforcespell_entrypoint_0()
 {
     extern int D_80800460_chlifeforcespell[];
-    return (int)&D_80800460_chlifeforcespell;
+    return (int) &D_80800460_chlifeforcespell;
 }
 
 void func_8080000C_chlifeforcespell(Actor *param_0)
 {
     Vec3f local_0 = D_808004A8_chlifeforcespell;
     void *local_1;
-    _sumumbofx_entrypoint_0(param_0, 1, 0x14, (s16)_chmumbopad_entrypoint_0(0xD));
+    _sumumbofx_entrypoint_0(param_0, 1, 0x14, (s16) _chmumbopad_entrypoint_0(0xD));
     local_1 = func_80100094(param_0, 1);
     _sumumbofx_entrypoint_2(local_1);
     _sumumbofx_entrypoint_25(local_1, 150, local_0.f);
@@ -44,59 +44,60 @@ void func_808000C8_chlifeforcespell(Actor *param_0)
     f32 local_0[3];
     void *local_1;
     Actor *local_2;
-    local_1 = (void *)func_80100094(param_0, 1);
+    local_1 = (void *) func_80100094(param_0, 1);
     local_2 = func_80106790(param_0->unk3C);
     func_800EFD24(local_0);
     if (func_800DA298(0x9DE)) {
         _subaddieskeleton_entrypoint_0(local_2, param_0->unk6C_0, param_0->position);
-        _sumumbofx_entrypoint_7(local_1, param_0->actorData[3], 0, 20, local_0, param_0->position, &D_808004B4_chlifeforcespell);
+        _sumumbofx_entrypoint_7(local_1, param_0->actorData[3], 0, 20, local_0, param_0->position,
+                                &D_808004B4_chlifeforcespell);
         switch (param_0->unk70_10) {
-        case 1:
-            if (_sumumbofx_entrypoint_21(local_1) == 0.0f) {
-                func_800D9078(&param_0->unk58);
-                if (_sumumbofx_entrypoint_5(local_1, 1.85f)) {
-                    _sumumbofx_entrypoint_17(local_1, ((f32 *)param_0->actorData)[4]);
-                    func_80101FDC(param_0, 2);
-                    param_0->unk58 = ((f32 *)param_0->actorData)[4];
+            case 1:
+                if (_sumumbofx_entrypoint_21(local_1) == 0.0f) {
+                    func_800D9078(&param_0->unk58);
+                    if (_sumumbofx_entrypoint_5(local_1, 1.85f)) {
+                        _sumumbofx_entrypoint_17(local_1, ((f32 *) param_0->actorData)[4]);
+                        func_80101FDC(param_0, 2);
+                        param_0->unk58 = ((f32 *) param_0->actorData)[4];
+                    }
                 }
-            }
-            break;
-        case 2:
-            if (func_800D9078(&param_0->unk58)) {
-                _chglowbo_entrypoint_6();
-                _sumumbofx_entrypoint_16(local_1, 1.5f);
-                func_80101FDC(param_0, 3);
-            }
-            break;
-        case 3:
-            if (_sumumbofx_entrypoint_22(local_1) < 0.05f) {
-                _sumumbofx_entrypoint_1(param_0, 1);
-                func_8010114C(param_0->unk3C, 0x4C, 0);
-                func_800FFA88(param_0->unk0);
-                func_800DA544(0x9DF);
-                func_800DA524(0x9DE);
-                return;
-            }
-            break;
+                break;
+            case 2:
+                if (func_800D9078(&param_0->unk58)) {
+                    _chglowbo_entrypoint_6();
+                    _sumumbofx_entrypoint_16(local_1, 1.5f);
+                    func_80101FDC(param_0, 3);
+                }
+                break;
+            case 3:
+                if (_sumumbofx_entrypoint_22(local_1) < 0.05f) {
+                    _sumumbofx_entrypoint_1(param_0, 1);
+                    func_8010114C(param_0->unk3C, 0x4C, 0);
+                    func_800FFA88(param_0->unk0);
+                    func_800DA544(0x9DF);
+                    func_800DA524(0x9DE);
+                    return;
+                }
         }
         _sumumbofx_entrypoint_14(local_1);
     }
 }
 
-s32 func_8080028C_chlifeforcespell(s32 param_0, s32 param_1) {
+s32 func_8080028C_chlifeforcespell(s32 param_0, s32 param_1)
+{
     _sumumbofx_entrypoint_9(func_80100094(param_0, 1), param_1);
     _sumumbofx_entrypoint_8(func_80100094(param_0, 1), param_1);
 }
 
-Unk80132ED0 *chlifeforcespell_entrypoint_1(Actor **param_0, f32 *param_1,
-    s32 param_2, f32 param_3, s32 param_4)
+Unk80132ED0 *chlifeforcespell_entrypoint_1(Actor **param_0, f32 *param_1, s32 param_2, f32 param_3,
+                                           s32 param_4)
 {
     Actor *local_0;
 
     local_0 = func_80108528(0x45C, param_1, 0, param_0);
-    *(f32 *)&local_0->actorData[3] = param_2;
+    *(f32 *) &local_0->actorData[3] = param_2;
     local_0->unk6C_0 = param_4;
-    *(f32 *)&local_0->actorData[4] = param_3;
+    *(f32 *) &local_0->actorData[4] = param_3;
     local_0->unk58 = 1.85f;
     local_0->unk3C = (*param_0)->unk0;
     return local_0->unk0;
@@ -110,7 +111,7 @@ int chlifeforcespell_entrypoint_2(void *param_0, Unk80132ED0 *param_1, f32 *para
     f32 local_3;
 
     local_0 = func_80106790(param_1);
-    local_1 = (void *)func_80100094(local_0, 1);
+    local_1 = (void *) func_80100094(local_0, 1);
     if (func_800DA298(0x9DE) && local_1) {
         _subaddiefade_entrypoint_9(param_0, local_2);
         if (local_0->unk70_10 == 1) {
@@ -118,20 +119,35 @@ int chlifeforcespell_entrypoint_2(void *param_0, Unk80132ED0 *param_1, f32 *para
             func_800F3214(param_2, local_2, D_808004C0_chlifeforcespell, local_3);
             return 1;
         }
-        func_800F3214(param_2, local_2, D_808004C0_chlifeforcespell, _sumumbofx_entrypoint_22(local_1));
+        func_800F3214(param_2, local_2, D_808004C0_chlifeforcespell,
+                      _sumumbofx_entrypoint_22(local_1));
         return 1;
     }
     _subaddiefade_entrypoint_9(param_0, param_2);
     return 0;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lifeforcespell.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800460_chlifeforcespell -> int[], D_808004B4_chlifeforcespell -> s32[] */
 extern void func_80105834();
 extern void func_80107C2C();
-int D_80800460_chlifeforcespell[18] = { 0x158045C, -0xFFFF, 0x0, (u32)func_808000C8_chlifeforcespell, (u32)func_80105834, (u32)func_8080028C_chlifeforcespell, 0x0, 0x0, 0x0, 0x400, 0x0, 0x0, 0x0, (u32)func_8080000C_chlifeforcespell, (u32)func_80107C2C, -0x7FFFFBFE, 0x0, 0x0 };
-Vec3f D_808004A8_chlifeforcespell = { 0.0f, 0.0f, 0.0f };
-s32 D_808004B4_chlifeforcespell[3] = { 0x0, 0x42B40000, 0x0 };
-u8 D_808004C0_chlifeforcespell[16] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x60, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x0 };
+int D_80800460_chlifeforcespell[18] = {0x158045C,
+                                       -0xFFFF,
+                                       0x0,
+                                       (u32) func_808000C8_chlifeforcespell,
+                                       (u32) func_80105834,
+                                       (u32) func_8080028C_chlifeforcespell,
+                                       0x0,
+                                       0x0,
+                                       0x0,
+                                       0x400,
+                                       0x0,
+                                       0x0,
+                                       0x0,
+                                       (u32) func_8080000C_chlifeforcespell,
+                                       (u32) func_80107C2C,
+                                       -0x7FFFFBFE,
+                                       0x0,
+                                       0x0};
+Vec3f D_808004A8_chlifeforcespell = {0.0f, 0.0f, 0.0f};
+s32 D_808004B4_chlifeforcespell[3] = {0x0, 0x42B40000, 0x0};
+u8 D_808004C0_chlifeforcespell[16] = {0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x60,
+                                      0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x0};

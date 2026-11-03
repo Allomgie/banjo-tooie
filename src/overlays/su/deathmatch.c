@@ -1,19 +1,12 @@
 #include "common.h"
 
-extern void *B_80800300_sudeathmatch[40];
-extern u8 B_808003A0_sudeathmatch[40];
-extern s32 B_808003C8_sudeathmatch;
 extern f32 func_800DC0C0(void);
 extern f32 func_800DC178(f32, f32);
 extern f32 func_800EFC7C(f32 *, f32 *);
 
-/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/su/deathmatch.bss.s) is defined here in C, ahead of
- * its first use: IDO places .bss objects used before their definition first, the rest in definition
- * order. */
 void *B_80800300_sudeathmatch[40];
 u8 B_808003A0_sudeathmatch[40];
 s32 B_808003C8_sudeathmatch;
-
 
 s32 sudeathmatch_entrypoint_0(s32 param_0, f32 *param_1, f32 *param_2)
 {
@@ -76,6 +69,3 @@ s32 sudeathmatch_entrypoint_0(s32 param_0, f32 *param_1, f32 *param_2)
     }
     return 0;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/deathmatch.data.s) is defined here in C.
- * Values are taken from the ROM. */

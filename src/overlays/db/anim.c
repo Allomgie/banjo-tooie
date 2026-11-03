@@ -3,7 +3,11 @@
 extern void *func_800B2190(s32);
 extern void *func_80100480(s32, s32);
 extern void *func_800ADE2C(void *, s32);
-typedef struct { s16 local_0[3]; u8 local_1[10]; } Mass47DBAnimVertex;
+
+typedef struct {
+    s16 local_0[3];
+    u8 local_1[10];
+} Mass47DBAnimVertex;
 
 void dbanim_entrypoint_0(s16 *param_0, s32 param_1, void *param_2)
 {
@@ -23,11 +27,13 @@ void dbanim_entrypoint_0(s16 *param_0, s32 param_1, void *param_2)
         func_80116568(func_800ADE2C(param_2, local_2[0]), local_4, local_3, local_2[1]);
         local_0 = local_4;
         local_0 += local_2[1] * 3;
-        if (param_0[0]) local_0 += local_2[2] * 2;
+        if (param_0[0])
+            local_0 += local_2[2] * 2;
         while (*local_0 >= -1) {
-            if (*local_0 == -1) local_3 += 3;
+            if (*local_0 == -1)
+                local_3 += 3;
             else {
-                local_6 = (s16 *)(local_5 + *local_0 * 0x10);
+                local_6 = (s16 *) (local_5 + *local_0 * 0x10);
                 local_6[0] = local_3[0];
                 local_6[1] = local_3[1];
                 local_6[2] = local_3[2];
@@ -72,9 +78,9 @@ void dbanim_entrypoint_1(s16 *param_0, s32 param_1, void *param_2, u8 *param_3)
                 local_5->local_0[2] = local_1[2];
                 local_3 += 3;
                 local_6 = param_3 + *local_2 * 4;
-                local_6[0] = (s32)(local_3[-3] * 127.0f);
-                local_6[1] = (s32)(local_3[-2] * 127.0f);
-                local_6[2] = (s32)(local_3[-1] * 127.0f);
+                local_6[0] = (s32) (local_3[-3] * 127.0f);
+                local_6[1] = (s32) (local_3[-2] * 127.0f);
+                local_6[2] = (s32) (local_3[-1] * 127.0f);
             }
             local_2++;
         }
@@ -85,6 +91,3 @@ void dbanim_entrypoint_1(s16 *param_0, s32 param_1, void *param_2, u8 *param_3)
     osWritebackDCache(local_4, local_8 * 16);
     osWritebackDCache(param_3, local_8 * 4);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/anim.data.s) is defined here in C.
- * Values are taken from the ROM. */

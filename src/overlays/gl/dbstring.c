@@ -1,6 +1,7 @@
 #include "common.h"
 
-s32 gldbstring_entrypoint_0(s32 param_0, s32 param_1){
+s32 gldbstring_entrypoint_0(s32 param_0, s32 param_1)
+{
     param_0 = func_800D674C(param_1);
     func_800D70D0(1);
     func_800D71F4(1);
@@ -35,11 +36,9 @@ u8 *gldbstring_entrypoint_1(u8 *param_0, s16 param_1)
     return NULL;
 }
 
-s32 gldbstring_entrypoint_2(Actor *this){
+s32 gldbstring_entrypoint_2(Actor *this)
+{
     func_800D721C(this, 0);
     func_800D70F8(this, 0);
     func_800D6CEC(this);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/dbstring.data.s) is defined here in C.
- * Values are taken from the ROM. */

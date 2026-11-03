@@ -1,38 +1,71 @@
 #include "common.h"
 
-#define OD(n) (((f32 *)param_0->actorData)[n])
+#define OD(n) (((f32 *) param_0->actorData)[n])
 extern int D_80804DB4_chdodgemcontrol[];
 extern void *func_80100094(Actor *, u32);
 extern Actor *func_80106790();
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800EF934(f32 *, f32 *, f32);
 extern void func_800EE7F8(f32 *, f32 *);
-typedef struct { s32 v[4]; } Quad;
+typedef struct {
+    s32 v[4];
+} Quad;
 extern Quad D_80804DFC_chdodgemcontrol;
 extern void func_800904C8(s32);
 extern s32 _sumultiscore_entrypoint_2(s32 *, s32 *, s32 *, s32, s32);
-typedef struct { u8 pad_0[0x10]; s32 local_0[2]; } DodgemScores;
+typedef struct {
+    u8 pad_0[0x10];
+    s32 local_0[2];
+} DodgemScores;
 extern s32 D_80804D20_chdodgemcontrol[];
 extern s32 D_80804D34_chdodgemcontrol[];
-typedef struct { f32 value[3]; } DodgemVector;
+typedef struct {
+    f32 value[3];
+} DodgemVector;
 extern u8 D_80804E0C_chdodgemcontrol[];
 extern s32 func_800F0064(f32 *, f32, f32 *);
 extern f32 func_800DC178(f32, f32);
 extern f32 func_800EEF94(f32 *);
 extern void func_800EF368(f32 *, f32);
-typedef struct { f32 v[4]; } DodgemF4;
+typedef struct {
+    f32 v[4];
+} DodgemF4;
 extern DodgemF4 D_80804E18_chdodgemcontrol;
-typedef struct { f32 local_0[4][3]; } DodgemPositions;
+typedef struct {
+    f32 local_0[4][3];
+} DodgemPositions;
 extern DodgemPositions D_80804E28_chdodgemcontrol;
 extern s32 D_80804D00_chdodgemcontrol[];
-typedef struct { u8 pad[0x64]; u8 pad_0 : 2; u8 flag_20 : 1; u8 mode : 2; u8 pad_1 : 2; u8 flag_1 : 1; } DodgemFlags;
-typedef struct { s32 a[12]; u8 b[0x92]; u8 count; } DodgeS;
+typedef struct {
+    u8 pad[0x64];
+    u8 pad_0 : 2;
+    u8 flag_20 : 1;
+    u8 mode : 2;
+    u8 pad_1 : 2;
+    u8 flag_1 : 1;
+} DodgemFlags;
+typedef struct {
+    s32 a[12];
+    u8 b[0x92];
+    u8 count;
+} DodgeS;
 extern Actor *func_801084B0(s32, Actor **);
-typedef struct { Unk80132ED0 *local_0[4]; s32 local_1[4]; u8 pad_0[0x10]; u8 local_2[4]; } DodgemRacers61;
+typedef struct {
+    Unk80132ED0 *local_0[4];
+    s32 local_1[4];
+    u8 pad_0[0x10];
+    u8 local_2[4];
+} DodgemRacers61;
 extern u8 D_80804E78_chdodgemcontrol[];
 extern u8 D_80804EA4_chdodgemcontrol[];
-typedef struct { s16 a, b; } S16Pair;
-typedef struct { u8 pad[0x72]; u16 f72:6; u16 rest72:10; } DodgemState;
+typedef struct {
+    s16 a, b;
+} S16Pair;
+typedef struct {
+    u8 pad[0x72];
+    u16 f72 : 6;
+    u16 rest72 : 10;
+} DodgemState;
 extern void func_80102424();
 extern void _subaddiefade_entrypoint_5(DodgemState *);
 extern f32 func_800D8FF8(void);
@@ -41,24 +74,55 @@ extern u32 D_80804EC0_chdodgemcontrol[3];
 extern s16 D_80804ECC_chdodgemcontrol[];
 extern int D_80804EDC_chdodgemcontrol[];
 extern s32 D_80804F64_chdodgemcontrol[];
-typedef struct { u8 pad_0[0x1C]; f32 local_0; } DodgemTimer1312;
-typedef struct { u8 pad_0[0x64]; u32 pad_1 : 2; u32 local_0 : 1; u32 pad_2 : 29; } DodgemFlags1312;
+typedef struct {
+    u8 pad_0[0x1C];
+    f32 local_0;
+} DodgemTimer1312;
+typedef struct {
+    u8 pad_0[0x64];
+    u32 pad_1 : 2;
+    u32 local_0 : 1;
+    u32 pad_2 : 29;
+} DodgemFlags1312;
 extern void func_80018820(s32, f32, f32);
 extern void func_80101CDC(Actor *, f32);
 extern f32 func_800F1DCC(f32, f32);
-extern u8 position_x[];
-extern u8 unk79[];
 extern int D_80804FAC_chdodgemcontrol[];
-typedef struct { u8 pad0[0x34]; f32 unk34[10][3]; u8 unkAC[10]; u8 unkB6[12]; u8 unkC2; u8 padC3[2]; u8 unkC5; } DodgemLocal;
+typedef struct {
+    u8 pad0[0x34];
+    f32 unk34[10][3];
+    u8 unkAC[10];
+    u8 unkB6[12];
+    u8 unkC2;
+    u8 padC3[2];
+    u8 unkC5;
+} DodgemLocal;
 extern s32 func_800CEB54(s32, f32);
 extern s32 func_800CEAD0(s32);
 extern f32 func_800EEB40(f32 *, f32 *);
 extern void _chscorepoints_entrypoint_2(s32, s32, f32 *, s32);
 extern void func_80108B04(Actor *, s32);
 extern f32 func_800DC0C0(void);
-typedef struct { u8 pad_0[0x34]; f32 local_0[10][3]; u8 local_1[10]; u8 pad_1[0xF]; u8 local_2; } DodgemOccupiedPositions;
+typedef struct {
+    u8 pad_0[0x34];
+    f32 local_0[10][3];
+    u8 local_1[10];
+    u8 pad_1[0xF];
+    u8 local_2;
+} DodgemOccupiedPositions;
 extern void func_800CE8D8(s32, f32, s32);
-typedef struct { u8 pad0[0x10]; s32 unk10; u8 pad14[0xAC - 0x14]; u8 unkAC[0x15]; u8 unkC1; u8 padC2; u8 unkC3; u8 unkC4; u8 unkC5; u8 unkC6; } DodgemData_80800938_chdodgemcontrol;
+typedef struct {
+    u8 pad0[0x10];
+    s32 unk10;
+    u8 pad14[0xAC - 0x14];
+    u8 unkAC[0x15];
+    u8 unkC1;
+    u8 padC2;
+    u8 unkC3;
+    u8 unkC4;
+    u8 unkC5;
+    u8 unkC6;
+} DodgemData_80800938_chdodgemcontrol;
 extern s32 _capod_entrypoint_17(f32);
 extern s32 func_800EA05C(void);
 extern s32 func_800DA9E4(s32, s32);
@@ -72,7 +136,12 @@ extern void func_800C8CB8();
 extern void func_800C8FB0();
 extern u16 D_80804ED4_chdodgemcontrol[];
 extern void func_800C8E54(s32, f32, f32);
-typedef struct { f32 vel[3]; f32 unkC; u8 pad10[8]; f32 unk18; } DodgemData_80802180_chdodgemcontrol;
+typedef struct {
+    f32 vel[3];
+    f32 unkC;
+    u8 pad10[8];
+    f32 unk18;
+} DodgemData_80802180_chdodgemcontrol;
 extern f32 func_800138D0(f32);
 extern f32 mlAbsF(f32);
 extern void func_80102B2C(Actor *, f32);
@@ -80,7 +149,15 @@ extern s32 func_80102CF4(Actor *, f32);
 extern void func_800EEB9C(f32 *, f32, f32);
 extern void func_800EF04C(f32 *, f32 *);
 extern void func_800EF334(f32 *, f32);
-typedef struct { u8 pad[0x64]; u32 b31 : 1; u32 b30 : 1; u32 b29 : 1; u32 mid : 8; u32 b20 : 1; u32 rest : 20; } DCFlags;
+typedef struct {
+    u8 pad[0x64];
+    u32 b31 : 1;
+    u32 b30 : 1;
+    u32 b29 : 1;
+    u32 mid : 8;
+    u32 b20 : 1;
+    u32 rest : 20;
+} DCFlags;
 extern u8 D_80804D10_chdodgemcontrol[];
 extern u8 D_80804D48_chdodgemcontrol[];
 extern u8 D_80804D5C_chdodgemcontrol[];
@@ -102,7 +179,6 @@ extern s32 func_80101E4C();
 extern void _subaddieaudioquick_entrypoint_2();
 extern u8 *func_80104248();
 extern s32 anctrl_isStopped();
-extern void func_80801D7C_chdodgemcontrol();
 extern Vec3f D_80804FA0_chdodgemcontrol;
 extern f32 func_80102D78(Actor *, void *);
 extern int func_800EFFB4(f32 *, f32, f32 *);
@@ -112,71 +188,35 @@ int func_80801928_chdodgemcontrol();
 void func_808019C4_chdodgemcontrol();
 void func_80801A3C_chdodgemcontrol();
 void func_808042A4_chdodgemcontrol();
-void func_8080010C_chdodgemcontrol();
-s32 func_8080040C_chdodgemcontrol();
-s32 func_80800938_chdodgemcontrol();
 void func_80803200_chdodgemcontrol();
 void func_8080349C_chdodgemcontrol();
 void func_808037C8_chdodgemcontrol();
 void func_808039B8_chdodgemcontrol();
-void func_8080440C_chdodgemcontrol();
 void func_8080476C_chdodgemcontrol();
-extern void func_80101870(), func_80105834(), func_80107C2C(), func_8080010C_chdodgemcontrol(), func_808013D0_chdodgemcontrol();
-extern void func_801018A4(), func_80105834(), func_80107C2C(), func_8080440C_chdodgemcontrol(), func_8080455C_chdodgemcontrol();
-extern u8 D_80804F24_chdodgemcontrol[];
+extern void func_80101870(), func_80105834(), func_80107C2C(), func_8080010C_chdodgemcontrol(),
+    func_808013D0_chdodgemcontrol();
+extern void func_801018A4(), func_80105834(), func_80107C2C(), func_8080440C_chdodgemcontrol(),
+    func_8080455C_chdodgemcontrol();
 
-int * chdodgemcontrol_entrypoint_0();
-Actor * func_8080000C_chdodgemcontrol(Actor *param_0, s32 param_1);
-void func_80800044_chdodgemcontrol(Actor *param_0);
-void func_808000B8_chdodgemcontrol(s32 param_0);
-s32 func_80800350_chdodgemcontrol(void);
-void func_808003B0_chdodgemcontrol();
-void func_808004E4_chdodgemcontrol(s32 *param_0, s32 param_1);
-int func_808005CC_chdodgemcontrol(s32 param_0);
-int func_8080061C_chdodgemcontrol();
-void func_808006CC_chdodgemcontrol(Actor *param_0, s32 param_1, s32 param_2);
-s32 func_808008EC_chdodgemcontrol(u8 *param_0);
 void func_80800CA0_chdodgemcontrol(Actor *param_0);
 void func_80800FC4_chdodgemcontrol(Actor *param_0, s32 param_1, s32 param_2);
-s32 func_80801084_chdodgemcontrol(f32 *param_0, f32 *param_1, f32 param_2);
-f32 func_80801214_chdodgemcontrol(s32 param_0);
-void func_80801258_chdodgemcontrol(s32 param_0, f32 *param_1);
-void func_808012C8_chdodgemcontrol(Actor *param_0, s32 param_1);
-int func_80801344_chdodgemcontrol(Actor *param_0);
 void func_8080160C_chdodgemcontrol(Actor *param_0);
-void func_80801744_chdodgemcontrol(Actor *param_0, Actor *param_1);
 void func_808017F0_chdodgemcontrol();
-Actor * func_80801844_chdodgemcontrol(Actor *param_0);
+Actor *func_80801844_chdodgemcontrol(Actor *param_0);
 void func_80801A8C_chdodgemcontrol(Actor *param_0, s32 param_1);
-void func_80801B94_chdodgemcontrol(s32 param_0, s32 param_1);
-void func_80801C18_chdodgemcontrol();
-void func_80801C60_chdodgemcontrol(Actor *param_0);
-void func_80801F00_chdodgemcontrol(Actor *param_0);
-void func_80801F2C_chdodgemcontrol(Actor *param_0);
-int chdodgemcontrol_entrypoint_1();
-void func_80802104_chdodgemcontrol(Actor *param_0);
-void func_80802180_chdodgemcontrol(Actor *param_0);
-void func_808026D0_chdodgemcontrol(s32 param_0);
-void func_80802720_chdodgemcontrol(Actor *param_0);
-void func_80802764_chdodgemcontrol(Actor *this);
-void func_808027C4_chdodgemcontrol(Actor *param_0);
-void func_80802824_chdodgemcontrol(Actor *param_0);
-void func_80802884_chdodgemcontrol(Actor *this);
-void func_808028E4_chdodgemcontrol(Actor *param_0);
-void func_80802D04_chdodgemcontrol(u8 *param_0);
-void func_8080372C_chdodgemcontrol(Actor *param_0, f32 param_1, f32 param_2);
 void func_8080422C_chdodgemcontrol(Actor *param_0, s32 param_1);
 f32 func_8080458C_chdodgemcontrol(Actor *param_0);
 f32 func_8080460C_chdodgemcontrol(Actor *param_0);
 f32 func_808046EC_chdodgemcontrol(u8 *param_0);
-int chdodgemcontrol_entrypoint_2();
+
 int *chdodgemcontrol_entrypoint_0()
 {
     return &D_80804DB4_chdodgemcontrol;
 }
 
-Actor *func_8080000C_chdodgemcontrol(Actor *param_0, s32 param_1) {
-    return func_80106790(((Unk80132ED0 **)func_80100094(param_0, 0))[param_1]);
+Actor *func_8080000C_chdodgemcontrol(Actor *param_0, s32 param_1)
+{
+    return func_80106790(((Unk80132ED0 **) func_80100094(param_0, 0))[param_1]);
 }
 
 void func_80800044_chdodgemcontrol(Actor *param_0)
@@ -192,14 +232,11 @@ void func_80800044_chdodgemcontrol(Actor *param_0)
     func_800906DC(local_1);
 }
 
-void func_808000B8_chdodgemcontrol(s32 param_0) {
+void func_808000B8_chdodgemcontrol(s32 param_0)
+{
     Quad local_0 = D_80804DFC_chdodgemcontrol;
     func_800904C8(local_0.v[param_0]);
 }
-
-
-
-
 
 void func_8080010C_chdodgemcontrol(this) Actor *this;
 {
@@ -210,57 +247,53 @@ void func_8080010C_chdodgemcontrol(this) Actor *this;
     s32 cnt;
 
     local = func_80100094(this, 0);
-    switch ((s32)this->unk70_10) {
-    case 1:
-        func_8080160C_chdodgemcontrol(this);
-        break;
-    case 2:
-        break;
-    case 3:
-        func_80801A8C_chdodgemcontrol(this, 0);
-        if (!func_800CEB54(0, 6.0f) && func_800CEAD0(0)) {
-            func_80800CA0_chdodgemcontrol(this);
-        }
-        alive = 0;
-        /* probe: the empty if (0) block adds exactly one uopt block to the case 3 path. It breaks the tie between the
-         * comparison constants 2/3 (priority 10, count rounding ((n-2)>>2)+2): 3 gets fp, 2 goes through at, as in the target.
-         * The original probably had a disabled debug or macro remnant here (while (0) or goto act the same). */
-        if (0) {}
-        for (i = 0; i < local->unkC5; i++) {
-            switch (local->unkAC[i]) {
-            case 1:
-                    cnt = local->unkC2;
-                    for (j = 0; j < cnt; j++) {
-                        if (func_800EEB40(func_8080000C_chdodgemcontrol(this, j)->position, local->unk34[i]) < 22500.0f) {
-                            switch (this->unk79_4) {
-                            case 0:
-                            case 1:
-                            case 2:
-                                if (j != 0) {
-                                    local->unkAC[i] = 3;
-                                    break;
+    switch ((s32) this->unk70_10) {
+        case 1:
+            func_8080160C_chdodgemcontrol(this);
+        case 2:
+            break;
+        case 3:
+            func_80801A8C_chdodgemcontrol(this, 0);
+            if (!func_800CEB54(0, 6.0f) && func_800CEAD0(0)) {
+                func_80800CA0_chdodgemcontrol(this);
+            }
+            alive = 0;
+            if (0) {
+            }
+            for (i = 0; i < local->unkC5; i++) {
+                switch (local->unkAC[i]) {
+                    case 1:
+                        cnt = local->unkC2;
+                        for (j = 0; j < cnt; j++) {
+                            if (func_800EEB40(func_8080000C_chdodgemcontrol(this, j)->position,
+                                              local->unk34[i]) < 22500.0f) {
+                                switch (this->unk79_4) {
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                        if (j != 0) {
+                                            local->unkAC[i] = 3;
+                                            break;
+                                        }
+                                    case 3:
+                                        _chscorepoints_entrypoint_2(local->unkB6[i] + 1, 0,
+                                                                    local->unk34[i], 1);
+                                        func_80800FC4_chdodgemcontrol(this, j, local->unkB6[i] + 1);
+                                        local->unkAC[i] = 2;
                                 }
-                            case 3:
-                                _chscorepoints_entrypoint_2(local->unkB6[i] + 1, 0, local->unk34[i], 1);
-                                func_80800FC4_chdodgemcontrol(this, j, local->unkB6[i] + 1);
-                                local->unkAC[i] = 2;
-                                break;
                             }
                         }
-                    }
-                break;
-            case 0:
-                alive = 1;
-                break;
+                        break;
+                    case 0:
+                        alive = 1;
+                }
             }
-        }
-        if (alive) {
-            func_80108B04(this, -1);
-        }
-        break;
-    case 4:
-        func_80801A8C_chdodgemcontrol(this, 1);
-        break;
+            if (alive) {
+                func_80108B04(this, -1);
+            }
+            break;
+        case 4:
+            func_80801A8C_chdodgemcontrol(this, 1);
     }
 }
 
@@ -277,13 +310,17 @@ s32 func_80800350_chdodgemcontrol(void)
     return 2;
 }
 
-void func_808003B0_chdodgemcontrol(param_0) f32 *param_0; {
+void func_808003B0_chdodgemcontrol(param_0) f32 *param_0;
+{
     param_0[0] = func_800DC178(-645.0f, 645.0f);
     param_0[1] = 0.0f;
     param_0[2] = func_800DC178(-645.0f, 645.0f);
 }
 
-s32 func_8080040C_chdodgemcontrol(param_0, param_1, param_2) Actor *param_0; f32 *param_1; s32 param_2;
+s32 func_8080040C_chdodgemcontrol(param_0, param_1, param_2)
+Actor *param_0;
+f32 *param_1;
+s32 param_2;
 {
     DodgemOccupiedPositions *local_0;
     s32 local_1;
@@ -291,9 +328,11 @@ s32 func_8080040C_chdodgemcontrol(param_0, param_1, param_2) Actor *param_0; f32
     local_0 = func_80100094(param_0, 0);
     for (local_1 = 0; local_1 < local_0->local_2; local_1++) {
         if (local_1 != param_2 && local_0->local_1[local_1] == 1 &&
-            func_800EEB40(local_0->local_0[local_1], param_1) < 40000.0f) return 0;
-    }
-    return 1;
+            func_800EEB40(local_0->local_0[local_1], param_1) < 40000.0f)
+            return 0;
+
+}
+return 1;
 }
 
 void func_808004E4_chdodgemcontrol(s32 *param_0, s32 param_1)
@@ -305,69 +344,66 @@ void func_808004E4_chdodgemcontrol(s32 *param_0, s32 param_1)
 
     local_0 = func_801084B0(0x37F, &param_0);
     local_1 = func_80100094(param_0, 0);
-    *(s32 *)(local_0 + 0x3C) = *param_0;
+    *(s32 *) (local_0 + 0x3C) = *param_0;
     local_1[param_1 + 0xAC] = 1;
     local_1[param_1 + 0xB6] = func_80800350_chdodgemcontrol();
-    ((Actor *)local_0)->unk6C_0 = param_1;
-    new_var = 1; /* probe: guard new_var plus an if (1) block around the loop; without it 3 words differ */
+    ((Actor *) local_0)->unk6C_0 = param_1;
+    new_var = 1;
     if (1) {
         if (new_var) {
             do {
                 func_808003B0_chdodgemcontrol(local_2);
             } while (func_8080040C_chdodgemcontrol(param_0, local_2, param_1) == 0);
         }
-    }
-    func_800EE7F8(local_0 + 4, local_2);
-    func_800EE7F8(local_1 + 0x34 + param_1 * 12, local_0 + 4);
+
+}
+func_800EE7F8(local_0 + 4, local_2);
+func_800EE7F8(local_1 + 0x34 + param_1 * 12, local_0 + 4);
 }
 
 int func_808005CC_chdodgemcontrol(s32 param_0)
 {
-  switch (param_0)
-  {
-    case 0:
-      return 0x2D;
-    case 1:
-      return 0x2D;
-    case 2:
-      return 0x2D;
-    case 3:
-      return 0x3C;
-    default:
-      return 0;
-  }
+    switch (param_0) {
+        case 0:
+            return 0x2D;
+        case 1:
+            return 0x2D;
+        case 2:
+            return 0x2D;
+        case 3:
+            return 0x3C;
+        default:
+            return 0;
+    }
 }
 
 int func_8080061C_chdodgemcontrol(param_0, param_1, param_2)
 s32 *param_0;
-s32 param_1;
-u32 param_2;
 {
-  param_2 |= 6;
-  switch (param_1) {
-    case 0x10D9:
-    case 0x10DA:
-      func_800FC6B0(0x10);
-      func_800FDC28(0);
-      break;
-    case 0x10D4:
-    case 0x10D5:
-    case 0x10D6:
-    case 0x10EC:
-    case 0x10EE:
-    case 0x10F0:
-      func_800FC6B0(0x16);
-      func_800FDC28(0);
-      break;
-    case 0x10D7:
-    case 0x10ED:
-    case 0x10EF:
-    case 0x10F1:
-      func_800FC6B0(0x17);
-      func_800FDC28(0);
-      break;
-  }
-  _subaddiedialog_entrypoint_11(param_0[0], param_1, param_2, &param_0[1], 0x22);
+    param_2 |= 6;
+    switch (param_1) {
+        case 0x10D9:
+        case 0x10DA:
+            func_800FC6B0(0x10);
+            func_800FDC28(0);
+            break;
+        case 0x10D4:
+        case 0x10D5:
+        case 0x10D6:
+        case 0x10EC:
+        case 0x10EE:
+        case 0x10F0:
+            func_800FC6B0(0x16);
+            func_800FDC28(0);
+            break;
+        case 0x10D7:
+        case 0x10ED:
+        case 0x10EF:
+        case 0x10F1:
+            func_800FC6B0(0x17);
+            func_800FDC28(0);
+    }
+    _subaddiedialog_entrypoint_11(param_0[0], param_1, param_2, &param_0[1], 0x22);
 }
 
 void func_808006CC_chdodgemcontrol(Actor *param_0, s32 param_1, s32 param_2)
@@ -378,103 +414,105 @@ void func_808006CC_chdodgemcontrol(Actor *param_0, s32 param_1, s32 param_2)
 
     local_1 = func_80100094(param_0, 0);
     switch (param_1) {
-    case 0x10D9:
-    case 0x10DA:
-        _gcfrontend_entrypoint_10();
-        return;
-    case 0x10FC:
-        func_8080061C_chdodgemcontrol(param_0, 0x10D3, 0, param_1);
-        return;
-    case 0x10D3:
-    case 0x10EB:
-        local_0 = func_808005CC_chdodgemcontrol(param_0->unk79_4);
-        func_800CE8D8(0, (f32)local_0, func_808005CC_chdodgemcontrol(param_0->unk79_4));
-        func_800CE88C(0, 1);
-        func_808019C4_chdodgemcontrol(param_0, 0);
-        param_0->unk70_10 = 3;
-        func_800FDC28(12);
-        return;
-    case 0x10D4:
-        func_800DA3B8(0xA9, 1);
-        _gcgoto_entrypoint_1(0xDD, 5);
-        return;
-    case 0x10D5:
-        func_800DA3B8(0xAA, 1);
-        _gcgoto_entrypoint_1(0xDD, 5);
-        return;
-    case 0x10D6:
-        func_800DA3B8(0xB0, 1);
-        _gcgoto_entrypoint_1(0xDD, 5);
-        return;
-    case 0xCEB:
-        if (func_800D395C()) {
-            if (param_2 == 1) {
-                _gcfrontend_entrypoint_11();
-                return;
-            }
+        case 0x10D9:
+        case 0x10DA:
             _gcfrontend_entrypoint_10();
             return;
-        }
+        case 0x10FC:
+            func_8080061C_chdodgemcontrol(param_0, 0x10D3, 0, param_1);
+            return;
+        case 0x10D3:
+        case 0x10EB:
+            local_0 = func_808005CC_chdodgemcontrol(param_0->unk79_4);
+            func_800CE8D8(0, (f32) local_0, func_808005CC_chdodgemcontrol(param_0->unk79_4));
+            func_800CE88C(0, 1);
+            func_808019C4_chdodgemcontrol(param_0, 0);
+            param_0->unk70_10 = 3;
+            func_800FDC28(12);
+            return;
+        case 0x10D4:
+            func_800DA3B8(0xA9, 1);
+            _gcgoto_entrypoint_1(0xDD, 5);
+            return;
+        case 0x10D5:
+            func_800DA3B8(0xAA, 1);
+            _gcgoto_entrypoint_1(0xDD, 5);
+            return;
+        case 0x10D6:
+            func_800DA3B8(0xB0, 1);
+            _gcgoto_entrypoint_1(0xDD, 5);
+            return;
+
+case 0xCEB:
+    if (func_800D395C()) {
         if (param_2 == 1) {
-            _gcgoto_entrypoint_1(func_800EA05C(), 1);
+            _gcfrontend_entrypoint_11();
             return;
         }
-        _gcgoto_entrypoint_1(0xDD, 5);
+        _gcfrontend_entrypoint_10();
         return;
-    case 0x10D7:
-    case 0x10EC:
-    case 0x10ED:
-    case 0x10EE:
-    case 0x10EF:
-    case 0x10F0:
-    case 0x10F1:
-        func_8080061C_chdodgemcontrol(param_0, 0xCEB, 0x40, param_1);
-        return;
-    case 0x10BB:
-    case 0x10BC:
-    case 0x10BD:
-        local_1[0xC4] = 1;
-        break;
     }
+
+if (param_2 == 1) {
+    _gcgoto_entrypoint_1(func_800EA05C(), 1);
+    return;
 }
 
-s32 func_808008EC_chdodgemcontrol(u8 *param_0)
-{
-  u32 temp_t6;
-  temp_t6 = (unsigned short) param_0[0x79];
-  temp_t6 = temp_t6 >> 4;
-  switch (temp_t6)
-  {
-    case 0:
-      return 0x3C;
+_gcgoto_entrypoint_1(0xDD, 5);
+return;
+case 0x10D7:
+case 0x10EC:
+case 0x10ED:
+case 0x10EE:
+case 0x10EF:
+case 0x10F0:
+case 0x10F1:
+    func_8080061C_chdodgemcontrol(param_0, 0xCEB, 0x40, param_1);
+    return;
+case 0x10BB:
+case 0x10BC:
+case 0x10BD:
+    local_1[0xC4] = 1;
+    }
+    }
 
-    case 1:
-      return 0x32;
+    s32 func_808008EC_chdodgemcontrol(u8 *param_0)
+    {
+        u32 temp_t6;
+        temp_t6 = (unsigned short) param_0[0x79];
+        temp_t6 = temp_t6 >> 4;
+        switch (temp_t6) {
+            case 0:
+                return 0x3C;
 
-    case 2:
-      return 0x28;
+            case 1:
+                return 0x32;
 
-    default:
-      return 0;
+            case 2:
+                return 0x28;
 
-  }
+            default:
+                return 0;
+        }
+    }
 
-}
+    s32 func_80800938_chdodgemcontrol(param_0, param_1, param_2)
+    Actor *param_0;
+    s32 param_1;
+    s32 param_2;
+    {
+        DodgemData_80800938_chdodgemcontrol *local_0;
+        s32 local_1;
+        s32 i;
 
+        local_0 = func_80100094(param_0, 0);
+        switch (param_1) {
+            case 0x0B:
+                local_0->unkC3 = 1;
+                return 3;
 
-s32 func_80800938_chdodgemcontrol(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
-{
-    DodgemData_80800938_chdodgemcontrol *local_0;
-    s32 local_1;
-    s32 i;
-
-    local_0 = func_80100094(param_0, 0);
-    switch (param_1) {
-    case 0x0B:
-        local_0->unkC3 = 1;
-        return 3;
-    case 0x0E:
-        switch (param_0->unk79_4) {
+case 0x0E:
+    switch (param_0->unk79_4) {
         case 0:
             if (_capod_entrypoint_17(0.5f)) {
                 func_80801A3C_chdodgemcontrol(param_0, 1, 2);
@@ -489,160 +527,174 @@ s32 func_80800938_chdodgemcontrol(param_0, param_1, param_2) Actor *param_0; s32
             if (_capod_entrypoint_17(0.5f)) {
                 func_80801A3C_chdodgemcontrol(param_0, 3, 2);
             }
-            break;
-        }
-        return 3;
-    case 0x49:
-        param_0 = func_80801844_chdodgemcontrol(param_0);
-        local_1 = func_800EA05C();
-        if (local_1 == 0xDE) {
-        } else if (local_1 == 0xDF) {
-        } else if (local_1 == 0xE0) {
-        } else if (local_1 == 0xE1) {
-        } else if (local_1 == 0xE2) {
-        }
-        switch (param_0->unk79_4) {
-        case 0:
-        case 1:
-        case 2:
-            if (!func_800DA9E4(param_0->unk79_4 + 0x419, 1) && !func_800D395C()) {
-                _capod_entrypoint_13(param_0->unk0, 0, 1, 0x2020);
-                local_0->unkC6 = 1;
-            } else {
-                local_0->unkC4 = 1;
-                local_0->unkC3 = 1;
-                func_800A54F8(0);
-            }
-            break;
-        case 3:
-            local_0->unkC4 = 1;
-            local_0->unkC3 = 1;
-            _subaddiemulti_entrypoint_4(0);
-            break;
-        }
-        break;
-    case 0x2E:
-        func_808006CC_chdodgemcontrol(param_0, ((s16 *)&param_2)[0], ((s16 *)&param_2)[1]);
-        break;
-    case 0x30:
-        switch (((s16 *)&param_2)[0]) {
+    }
+
+return 3;
+case 0x49:
+    param_0 = func_80801844_chdodgemcontrol(param_0);
+    local_1 = func_800EA05C();
+
+if (local_1 == 0xDE) {
+} else if (local_1 == 0xDF) {
+
+}
+else if (local_1 == 0xE0)
+{
+}
+else if (local_1 == 0xE1)
+{
+}
+else if (local_1 == 0xE2)
+{
+}
+switch (param_0->unk79_4) {
+    case 0:
+    case 1:
+    case 2:
+        if (!func_800DA9E4(param_0->unk79_4 + 0x419, 1) && !func_800D395C()) {
+            _capod_entrypoint_13(param_0->unk0, 0, 1, 0x2020);
+            local_0->unkC6 = 1;
+        } else {
+
+local_0->unkC4 = 1;
+local_0->unkC3 = 1;
+func_800A54F8(0);
+}
+break;
+case 3:
+    local_0->unkC4 = 1;
+    local_0->unkC3 = 1;
+    _subaddiemulti_entrypoint_4(0);
+    }
+    break;
+case 0x2E:
+    func_808006CC_chdodgemcontrol(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+    break;
+case 0x30:
+    switch (((s16 *) &param_2)[0]) {
         case 0x10FC:
-            if (((s16 *)&param_2)[1] == 0) {
+            if (((s16 *) &param_2)[1] == 0) {
                 return func_808008EC_chdodgemcontrol(param_0);
+
+}
+return func_808005CC_chdodgemcontrol(param_0->unk79_4);
+case 0x10D9:
+    return local_0->unkC1;
+case 0x10D4:
+case 0x10D5:
+case 0x10D6:
+case 0x10EC:
+case 0x10EE:
+case 0x10F0:
+    return local_0->unk10;
+case 0x10ED:
+    return func_800D211C(0x8A);
+case 0x10EF:
+    return func_800D211C(0x8B);
+case 0x10F1:
+    return func_800D211C(0x8C);
+case 0x10D7:
+    return func_808008EC_chdodgemcontrol(param_0);
+    }
+    break;
+case 0x3D:
+    if (param_2 == -1) {
+        for (i = 0; i < local_0->unkC5; i++) {
+            if (!local_0->unkAC[i]) {
+                func_808004E4_chdodgemcontrol(param_0, i);
+                break;
             }
-            return func_808005CC_chdodgemcontrol(param_0->unk79_4);
-        case 0x10D9:
-            return local_0->unkC1;
-        case 0x10D4:
-        case 0x10D5:
-        case 0x10D6:
-        case 0x10EC:
-        case 0x10EE:
-        case 0x10F0:
-            return local_0->unk10;
-        case 0x10ED:
-            return func_800D211C(0x8A);
-        case 0x10EF:
-            return func_800D211C(0x8B);
-        case 0x10F1:
-            return func_800D211C(0x8C);
-        case 0x10D7:
-            return func_808008EC_chdodgemcontrol(param_0);
-        }
-        break;
-    case 0x3D:
-        if (param_2 == -1) {
-            for (i = 0; i < local_0->unkC5; i++) {
-                if (!local_0->unkAC[i]) {
-                    func_808004E4_chdodgemcontrol(param_0, i);
-                    break;
-                }
-            }
-        }
-        break;
-    default:
-        return 0;
+
+}
+}
+break;
+default:
+    return 0;
     }
     return 1;
-}
-
-void func_80800CA0_chdodgemcontrol(Actor *param_0)
-{
-    u8 *local_0;
-    s16 local_1;
-    s32 local_2[4];
-    s32 local_3[4];
-    s32 local_4;
-    s32 local_5;
-
-    local_0 = func_80100094(param_0, 0);
-    param_0->unk70_10 = 4;
-    func_808019C4_chdodgemcontrol((s32)param_0, 1);
-    if (param_0->unk64_19) {
-        switch (param_0->unk79_4) {
-        case 0:
-            local_1 = func_800D2054(0, 0x8A, *(s32 *)(local_0 + 0x10)) == 1 ? 0x10EC : 0x10ED;
-            func_8080061C_chdodgemcontrol(param_0, local_1, 0);
-            break;
-        case 1:
-            local_1 = func_800D2054(0, 0x8B, *(s32 *)(local_0 + 0x10)) == 1 ? 0x10EE : 0x10EF;
-            func_8080061C_chdodgemcontrol(param_0, local_1, 0);
-            break;
-        case 2:
-            local_1 = func_800D2054(0, 0x8C, *(s32 *)(local_0 + 0x10)) == 1 ? 0x10F0 : 0x10F1;
-            func_8080061C_chdodgemcontrol(param_0, local_1, 0);
-            break;
-        }
-    } else {
-        switch (param_0->unk79_4) {
-        case 0:
-            if (*(s32 *)(local_0 + 0x10) >= func_808008EC_chdodgemcontrol(param_0)) {
-                local_1 = 0x10D4;
-                func_800D2054(0, 0x8A, *(s32 *)(local_0 + 0x10));
-            } else {
-                local_1 = 0x10D7;
-            }
-            func_8080061C_chdodgemcontrol(param_0, local_1, 0);
-            break;
-        case 1:
-            if (*(s32 *)(local_0 + 0x10) >= func_808008EC_chdodgemcontrol(param_0)) {
-                local_1 = 0x10D5;
-                func_800D2054(0, 0x8B, *(s32 *)(local_0 + 0x10));
-            } else {
-                local_1 = 0x10D7;
-            }
-            func_8080061C_chdodgemcontrol(param_0, local_1, 0);
-            break;
-        case 2:
-            if (*(s32 *)(local_0 + 0x10) >= func_808008EC_chdodgemcontrol(param_0)) {
-                local_1 = 0x10D6;
-                func_800D2054(0, 0x8C, *(s32 *)(local_0 + 0x10));
-            } else {
-                local_1 = 0x10D7;
-            }
-            func_8080061C_chdodgemcontrol(param_0, local_1, 0);
-            break;
-        case 3:
-            local_4 = _sumultiscore_entrypoint_2((s32 *)(local_0 + 0x10), local_2, local_3, 0, local_0[0xC2]);
-            for (local_5 = 0; local_5 < local_0[0xC2]; local_5++) {
-                if (local_2[local_5] == 1) {
-                    ((s32 *)(local_0 + 0x20))[local_5] = 1;
-                } else {
-                    ((s32 *)(local_0 + 0x20))[local_5] = 0;
-                }
-            }
-            if (local_4) {
-                local_1 = 0x10D9;
-                local_0[0xC1] = local_4;
-                func_800FC6B0(0x16);
-            } else {
-                local_1 = 0x10DA;
-                func_800FC6B0(0x17);
-            }
-            func_8080061C_chdodgemcontrol(param_0, local_1, 0);
-            break;
-        }
     }
+
+    void func_80800CA0_chdodgemcontrol(Actor *param_0)
+    {
+        u8 *local_0;
+        s16 local_1;
+        s32 local_2[4];
+        s32 local_3[4];
+        s32 local_4;
+        s32 local_5;
+
+        local_0 = func_80100094(param_0, 0);
+        param_0->unk70_10 = 4;
+        func_808019C4_chdodgemcontrol((s32) param_0, 1);
+        if (param_0->unk64_19) {
+            switch (param_0->unk79_4) {
+                case 0:
+                    local_1 =
+                        func_800D2054(0, 0x8A, *(s32 *) (local_0 + 0x10)) == 1 ? 0x10EC : 0x10ED;
+                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+                    break;
+                case 1:
+                    local_1 =
+                        func_800D2054(0, 0x8B, *(s32 *) (local_0 + 0x10)) == 1 ? 0x10EE : 0x10EF;
+                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+                    break;
+                case 2:
+                    local_1 =
+                        func_800D2054(0, 0x8C, *(s32 *) (local_0 + 0x10)) == 1 ? 0x10F0 : 0x10F1;
+                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+            }
+        } else {
+            switch (param_0->unk79_4) {
+                case 0:
+                    if (*(s32 *) (local_0 + 0x10) >= func_808008EC_chdodgemcontrol(param_0)) {
+                        local_1 = 0x10D4;
+                        func_800D2054(0, 0x8A, *(s32 *) (local_0 + 0x10));
+                    } else {
+                        local_1 = 0x10D7;
+                    }
+                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+                    break;
+                case 1:
+                    if (*(s32 *) (local_0 + 0x10) >= func_808008EC_chdodgemcontrol(param_0)) {
+                        local_1 = 0x10D5;
+                        func_800D2054(0, 0x8B, *(s32 *) (local_0 + 0x10));
+                    } else {
+                        local_1 = 0x10D7;
+                    }
+                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+                    break;
+                case 2:
+                    if (*(s32 *) (local_0 + 0x10) >= func_808008EC_chdodgemcontrol(param_0)) {
+                        local_1 = 0x10D6;
+                        func_800D2054(0, 0x8C, *(s32 *) (local_0 + 0x10));
+                    } else {
+                        local_1 = 0x10D7;
+
+}
+func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+break;
+case 3:
+    local_4 =
+        _sumultiscore_entrypoint_2((s32 *) (local_0 + 0x10), local_2, local_3, 0, local_0[0xC2]);
+    for (local_5 = 0; local_5 < local_0[0xC2]; local_5++) {
+        if (local_2[local_5] == 1) {
+            ((s32 *) (local_0 + 0x20))[local_5] = 1;
+        } else {
+
+((s32 *) (local_0 + 0x20))[local_5] = 0;
+}
+}
+if (local_4) {
+    local_1 = 0x10D9;
+    local_0[0xC1] = local_4;
+    func_800FC6B0(0x16);
+} else {
+    local_1 = 0x10DA;
+    func_800FC6B0(0x17);
+}
+func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+}
+}
 }
 
 void func_80800FC4_chdodgemcontrol(Actor *param_0, s32 param_1, s32 param_2)
@@ -653,9 +705,11 @@ void func_80800FC4_chdodgemcontrol(Actor *param_0, s32 param_1, s32 param_2)
     if (param_0->unk70_10 == 3 && (param_2 >= 0 || local_0->local_0[param_1] >= -param_2)) {
         local_0->local_0[param_1] += param_2;
         if (param_2 > 0) {
-            if (param_1 == 0) func_8010D930(4, 0, param_0->position, &D_80804D34_chdodgemcontrol);
+            if (param_1 == 0)
+                func_8010D930(4, 0, param_0->position, &D_80804D34_chdodgemcontrol);
         } else {
-            if (param_1 == 0) func_8010D930(5, 0, param_0->position, &D_80804D20_chdodgemcontrol);
+            if (param_1 == 0)
+                func_8010D930(5, 0, param_0->position, &D_80804D20_chdodgemcontrol);
         }
     }
 }
@@ -668,7 +722,7 @@ s32 func_80801084_chdodgemcontrol(f32 *param_0, f32 *param_1, f32 param_2)
     f32 local_3;
     f32 local_4;
     if (func_800F0064(param_0, param_2, param_1)) {
-        local_0 = *(DodgemVector *)D_80804E0C_chdodgemcontrol;
+        local_0 = *(DodgemVector *) D_80804E0C_chdodgemcontrol;
         local_3 = param_1[1];
         local_4 = param_0[1];
         func_800EE7F8(local_1, param_0);
@@ -690,7 +744,8 @@ s32 func_80801084_chdodgemcontrol(f32 *param_0, f32 *param_1, f32 param_2)
     return 0;
 }
 
-f32 func_80801214_chdodgemcontrol(s32 param_0) {
+f32 func_80801214_chdodgemcontrol(s32 param_0)
+{
     DodgemF4 local_0 = D_80804E18_chdodgemcontrol;
     return local_0.v[param_0];
 }
@@ -714,32 +769,29 @@ void func_808012C8_chdodgemcontrol(Actor *param_0, s32 param_1)
 
 int func_80801344_chdodgemcontrol(Actor *param_0)
 {
-  char *new_var;
-  unsigned int local_0;
-  u32 local_1;
-  new_var = ((char *) param_0) + 0x79;
-  local_0 = *((u8 *) new_var);
-  local_0 = local_0 >> 4;
-  local_1 = local_0;
-  switch (local_1)
-  {
-    case 0:
+    char *new_var;
+    unsigned int local_0;
+    u32 local_1;
+    new_var = ((char *) param_0) + 0x79;
+    local_0 = *((u8 *) new_var);
+    local_0 = local_0 >> 4;
+    local_1 = local_0;
+    switch (local_1) {
+        case 0:
 
-    case 1:
+        case 1:
 
-    case 2:
-      func_800D2748(0xC3, 0x5B);
-      break;
+        case 2:
+            func_800D2748(0xC3, 0x5B);
+            break;
 
-    case 3:
-      func_800D2748(0xC3, 0x23);
-      break;
+        case 3:
+            func_800D2748(0xC3, 0x23);
+    }
 
-  }
-
-  func_800D2748(0xC4, 0x24);
-  func_800D2748(0xC5, 0x25);
-  func_800D2748(0xC6, 0x26);
+    func_800D2748(0xC4, 0x24);
+    func_800D2748(0xC5, 0x25);
+    func_800D2748(0xC6, 0x26);
 }
 
 void func_808013D0_chdodgemcontrol(param_0) Actor *param_0;
@@ -754,34 +806,33 @@ void func_808013D0_chdodgemcontrol(param_0) Actor *param_0;
         func_800D2054(0, 0x8C, 3);
     }
     switch (func_800EA05C()) {
-    case 0xDE:
-        param_0->unk79_4 = 0;
-        local_0[0xC5] = 3;
-        func_808012C8_chdodgemcontrol(param_0, func_800DA298(0xAC));
-        local_0[0xC2] = D_80804D00_chdodgemcontrol[param_0->unk79_4];
-        break;
-    case 0xDF:
-        param_0->unk79_4 = 1;
-        local_0[0xC5] = 3;
-        func_808012C8_chdodgemcontrol(param_0, func_800DA298(0xAD));
-        local_0[0xC2] = D_80804D00_chdodgemcontrol[param_0->unk79_4];
-        break;
-    case 0xE0:
-        param_0->unk79_4 = 2;
-        local_0[0xC5] = 3;
-        func_808012C8_chdodgemcontrol(param_0, func_800D0A9C(0x16, 1));
-        local_0[0xC2] = D_80804D00_chdodgemcontrol[param_0->unk79_4];
-        break;
-    case 0x186:
-        for (local_1 = 0; local_1 < 8; local_1++) {
-            if (func_800F6438(local_1)) {
-                func_800F4CEC(local_1, 0);
+        case 0xDE:
+            param_0->unk79_4 = 0;
+            local_0[0xC5] = 3;
+            func_808012C8_chdodgemcontrol(param_0, func_800DA298(0xAC));
+            local_0[0xC2] = D_80804D00_chdodgemcontrol[param_0->unk79_4];
+            break;
+        case 0xDF:
+            param_0->unk79_4 = 1;
+            local_0[0xC5] = 3;
+            func_808012C8_chdodgemcontrol(param_0, func_800DA298(0xAD));
+            local_0[0xC2] = D_80804D00_chdodgemcontrol[param_0->unk79_4];
+            break;
+        case 0xE0:
+            param_0->unk79_4 = 2;
+            local_0[0xC5] = 3;
+            func_808012C8_chdodgemcontrol(param_0, func_800D0A9C(0x16, 1));
+            local_0[0xC2] = D_80804D00_chdodgemcontrol[param_0->unk79_4];
+            break;
+        case 0x186:
+            for (local_1 = 0; local_1 < 8; local_1++) {
+                if (func_800F6438(local_1)) {
+                    func_800F4CEC(local_1, 0);
+                }
             }
-        }
-        param_0->unk79_4 = 3;
-        local_0[0xC2] = _gcstatusDll_entrypoint_11();
-        local_0[0xC5] = 3;
-        break;
+            param_0->unk79_4 = 3;
+            local_0[0xC2] = _gcstatusDll_entrypoint_11();
+            local_0[0xC5] = 3;
     }
     if (local_0[0xC5] >= 11) {
         local_0[0xC5] = 10;
@@ -794,7 +845,7 @@ void func_808013D0_chdodgemcontrol(param_0) Actor *param_0;
 
 void func_808015E8_chdodgemcontrol(param_0) u8 *param_0;
 {
-    u32 t = (u32)param_0[0x79] >> 4;
+    u32 t = (u32) param_0[0x79] >> 4;
     if (t != 0 && t != 1) {
         if (t && t) {
         }
@@ -823,7 +874,6 @@ void func_8080160C_chdodgemcontrol(Actor *param_0)
                 case 1:
                 case 2:
                     func_800A54F8(0);
-                    break;
                 case 3:
                     break;
             }
@@ -847,22 +897,21 @@ void func_80801744_chdodgemcontrol(Actor *param_0, Actor *param_1)
         case 2:
             switch (param_1->unk6C_0) {
                 case 0:
-                    ((DodgemFlags *)param_1)->flag_20 = 1;
-                    ((DodgemFlags *)param_1)->mode = 0;
+                    ((DodgemFlags *) param_1)->flag_20 = 1;
+                    ((DodgemFlags *) param_1)->mode = 0;
                     break;
                 case 1:
-                    ((DodgemFlags *)param_1)->flag_1 = 1;
-                    break;
+                    ((DodgemFlags *) param_1)->flag_1 = 1;
             }
             break;
         case 3:
-            ((DodgemFlags *)param_1)->flag_20 = 0;
-            ((DodgemFlags *)param_1)->mode = param_1->unk6C_0;
-            break;
+            ((DodgemFlags *) param_1)->flag_20 = 0;
+            ((DodgemFlags *) param_1)->mode = param_1->unk6C_0;
     }
 }
 
-void func_808017F0_chdodgemcontrol(param_0) Actor *param_0; {
+void func_808017F0_chdodgemcontrol(param_0) Actor *param_0;
+{
     DodgeS *local_0 = func_80100094(param_0, 0);
     s32 i;
     for (i = 0; i < local_0->count; i++) {
@@ -882,7 +931,7 @@ Actor *func_80801844_chdodgemcontrol(Actor *param_0)
 
     local_0 = param_0->unk79_4;
     local_5 = func_80100094(param_0, 0);
-    local_3 = *(u8 *)((u8 *)local_5 + 0xC2);
+    local_3 = *(u8 *) ((u8 *) local_5 + 0xC2);
     local_1 = 0;
     local_2 = local_5;
     for (; local_1 < local_3; local_1++, local_2++) {
@@ -897,7 +946,9 @@ Actor *func_80801844_chdodgemcontrol(Actor *param_0)
     return param_0;
 }
 
-int func_80801928_chdodgemcontrol(param_0, param_1) Actor *param_0; s32 param_1;
+int func_80801928_chdodgemcontrol(param_0, param_1)
+Actor *param_0;
+s32 param_1;
 {
     DodgemRacers61 *local_0;
     Actor *local_1;
@@ -912,28 +963,30 @@ int func_80801928_chdodgemcontrol(param_0, param_1) Actor *param_0; s32 param_1;
     local_0->local_2[param_1] = 1;
 }
 
-void func_808019C4_chdodgemcontrol(param_0, param_1) s32 param_0; s32 param_1;
+void func_808019C4_chdodgemcontrol(param_0, param_1) s32 param_0;
+s32 param_1;
 {
     s32 var_s0;
     u8 *temp_v0;
 
     temp_v0 = func_80100094(param_0, 0);
     var_s0 = 0;
-    if ((s32) (*(u8 *)((s8 *)(temp_v0) + (0xC2))) > 0) {
+    if ((s32) (*(u8 *) ((s8 *) (temp_v0) + (0xC2))) > 0) {
         do {
             func_80801A3C_chdodgemcontrol(param_0, var_s0, param_1);
             var_s0 += 1;
-        } while (var_s0 < (s32) (*(u8 *)((s8 *)(temp_v0) + (0xC2))));
+        } while (var_s0 < (s32) (*(u8 *) ((s8 *) (temp_v0) + (0xC2))));
     }
 }
 
-void func_80801A3C_chdodgemcontrol(param_0, param_1, param_2) s32 param_0; s32 param_1; s32 param_2;
+void func_80801A3C_chdodgemcontrol(param_0, param_1, param_2) s32 param_0;
+s32 param_1;
+s32 param_2;
 {
     s32 *local_0;
-    local_0 = (s32 *)func_80100094(param_0, 0);
-    if (local_0[param_1] != 0)
-    {
-        func_808042A4_chdodgemcontrol((void *)local_0[param_1], param_2);
+    local_0 = (s32 *) func_80100094(param_0, 0);
+    if (local_0[param_1] != 0) {
+        func_808042A4_chdodgemcontrol((void *) local_0[param_1], param_2);
     }
 }
 
@@ -946,30 +999,30 @@ void func_80801A8C_chdodgemcontrol(Actor *param_0, s32 param_1)
 
     local_1 = func_80100094(param_0, 0);
     switch (param_0->unk79_4) {
-    case 0:
-    case 1:
-    case 2:
-        local_0 = 1;
-        break;
-    case 3:
-        local_0 = local_1[0xC2];
-        break;
+        case 0:
+        case 1:
+        case 2:
+            local_0 = 1;
+            break;
+        case 3:
+            local_0 = local_1[0xC2];
     }
     for (local_2 = 0; local_2 < local_0; local_2++) {
         local_3 = local_2 + 0xC3;
         if (!local_1[0xC0]) {
             func_800D2770(local_3, 0);
         } else {
-            func_800D24E8(local_3, ((s32 *)(local_1 + 0x10))[local_2], 0);
+            func_800D24E8(local_3, ((s32 *) (local_1 + 0x10))[local_2], 0);
         }
-        if (param_1 && ((s32 *)(local_1 + 0x20))[local_2]) {
+        if (param_1 && ((s32 *) (local_1 + 0x20))[local_2]) {
             func_800D28A0(local_3);
         }
     }
     local_1[0xC0] = 1;
 }
 
-void func_80801B94_chdodgemcontrol(s32 param_0, s32 param_1) {
+void func_80801B94_chdodgemcontrol(s32 param_0, s32 param_1)
+{
     s32 local_1;
     f32 local_0[3];
 
@@ -981,7 +1034,10 @@ void func_80801B94_chdodgemcontrol(s32 param_0, s32 param_1) {
     _subaddieaudioquick_entrypoint_2(param_0, &local_0, &D_80804EA4_chdodgemcontrol);
 }
 
-void func_80801C18_chdodgemcontrol(param_0, param_1, param_2) DodgemState *param_0; S16Pair param_1; s32 param_2; {
+void func_80801C18_chdodgemcontrol(param_0, param_1, param_2) DodgemState *param_0;
+S16Pair param_1;
+s32 param_2;
+{
     func_80102424(param_0, param_2);
     if (param_0->f72 == 3) {
         _subaddiefade_entrypoint_5(param_0);
@@ -999,113 +1055,110 @@ void func_80801C60_chdodgemcontrol(Actor *param_0)
     local_0 = func_80106790(param_0->unk3C);
     local_1 = func_80100094(local_0, 0);
     switch (param_0->unk70_10) {
-    case 1:
-        _subaddiefade_entrypoint_6(param_0, 7);
-        if (_subaddiefade_entrypoint_0(param_0) == 255) {
-            func_80801C18_chdodgemcontrol(param_0, local_0, 2);
-        }
-        break;
-    case 2:
-        if (param_0->unk58 > 0.0f) {
-            param_0->unk58 -= func_800D8FF8();
-        } else {
-            func_80801C18_chdodgemcontrol(param_0, local_0, 3);
-        }
-        break;
-    case 3:
-        _subaddiefade_entrypoint_6(param_0, -7);
-        break;
-    }
-    switch (param_0->unk70_10) {
-    case 3:
-        *(Vec3f *)local_2 = *(Vec3f *)D_80804EB4_chdodgemcontrol;
-        local_2[local_1[param_0->unk6C_0 + 0xB6]] = _subaddiefade_entrypoint_0(param_0);
-        func_800C8E84(((s32 *)param_0)[0x50 / 4], local_2);
-        if (_subaddiefade_entrypoint_0(param_0) == 0) {
-            local_1[param_0->unk6C_0 + 0xAC] = 0;
-            func_800FFAB0(param_0);
-        }
-        break;
-    case 1:
-        *(Vec3f *)local_3 = *(Vec3f *)D_80804EC0_chdodgemcontrol;
-        local_3[local_1[param_0->unk6C_0 + 0xB6]] = _subaddiefade_entrypoint_0(param_0);
-        func_800C8E84(((s32 *)param_0)[0x50 / 4], local_3);
-        break;
-    }
-    if ((s32)param_0->unk70_10 < 3) {
-        local_4 = (u8 *)((s32)local_1 + param_0->unk6C_0);
-        switch (local_4[0xAC]) {
+        case 1:
+            _subaddiefade_entrypoint_6(param_0, 7);
+            if (_subaddiefade_entrypoint_0(param_0) == 255) {
+                func_80801C18_chdodgemcontrol(param_0, local_0, 2);
+            }
+            break;
         case 2:
-            func_80801B94_chdodgemcontrol(param_0, D_80804ECC_chdodgemcontrol[local_4[0xB6]]);
-            local_1[param_0->unk6C_0 + 0xAC] = 0;
-            func_800FFAB0(param_0);
+            if (param_0->unk58 > 0.0f) {
+                param_0->unk58 -= func_800D8FF8();
+            } else {
+                func_80801C18_chdodgemcontrol(param_0, local_0, 3);
+            }
             break;
         case 3:
-            local_4[0xAC] = 0;
-            func_800FFAB0(param_0);
+            _subaddiefade_entrypoint_6(param_0, -7);
+    }
+    switch (param_0->unk70_10) {
+        case 3:
+            *(Vec3f *) local_2 = *(Vec3f *) D_80804EB4_chdodgemcontrol;
+            local_2[local_1[param_0->unk6C_0 + 0xB6]] = _subaddiefade_entrypoint_0(param_0);
+            func_800C8E84(((s32 *) param_0)[0x50 / 4], local_2);
+            if (_subaddiefade_entrypoint_0(param_0) == 0) {
+                local_1[param_0->unk6C_0 + 0xAC] = 0;
+                func_800FFAB0(param_0);
+            }
             break;
+        case 1:
+            *(Vec3f *) local_3 = *(Vec3f *) D_80804EC0_chdodgemcontrol;
+            local_3[local_1[param_0->unk6C_0 + 0xB6]] = _subaddiefade_entrypoint_0(param_0);
+            func_800C8E84(((s32 *) param_0)[0x50 / 4], local_3);
+    }
+    if ((s32) param_0->unk70_10 < 3) {
+        local_4 = (u8 *) ((s32) local_1 + param_0->unk6C_0);
+        switch (local_4[0xAC]) {
+            case 2:
+                func_80801B94_chdodgemcontrol(param_0, D_80804ECC_chdodgemcontrol[local_4[0xB6]]);
+                local_1[param_0->unk6C_0 + 0xAC] = 0;
+                func_800FFAB0(param_0);
+                break;
+            case 3:
+                local_4[0xAC] = 0;
+                func_800FFAB0(param_0);
         }
     }
 }
 
 void func_80801F00_chdodgemcontrol(Actor *param_0)
 {
-  s32 var;
-  var = *((s32 *) (((char *) param_0) + 0x50));
-  if (var != 0)
-  {
-    func_800C8B84(var, *((s32 *) (((char *) param_0) + 0x50)));
-  }
-  return;
+    s32 var;
+    var = *((s32 *) (((char *) param_0) + 0x50));
+    if (var != 0) {
+        func_800C8B84(var, *((s32 *) (((char *) param_0) + 0x50)));
+    }
 }
 
 void func_80801F2C_chdodgemcontrol(Actor *param_0)
 {
-  s32 pad0;
-  u8 *local_0;
-  local_0 = func_80100094(func_80106790(param_0->unk3C), 0);
-  param_0->scale = 0.8f;
-  func_801032B0(param_0, D_80804ED4_chdodgemcontrol[((0, local_0))[0xB6 + param_0->unk6C_0]], *((u16 *) (((u8 *) param_0->unk0) + 0x16)));
-  *((s32 *) (((u8 *) param_0) + 0x50)) = func_800C8A98();
-  func_800C8E54(*((s32 *) (((u8 *) param_0) + 0x50)), param_0->scale * 500.0f, param_0->scale * 800.0f);
-  func_800C8FB0(*((s32 *) (((u8 *) param_0) + 0x50)), 0, 0, 0);
-  func_800C8CB8(*((s32 *) (((u8 *) param_0) + 0x50)), param_0->position);
-  _subaddiefade_entrypoint_2(param_0);
-  switch (param_0->unk6C_0)
-  {
-    case 0:
-      *((f32 *) (((u8 *) param_0) + 0x58)) = 6.0f;
-      break;
+    s32 pad0;
+    u8 *local_0;
+    local_0 = func_80100094(func_80106790(param_0->unk3C), 0);
+    param_0->scale = 0.8f;
+    func_801032B0(param_0, D_80804ED4_chdodgemcontrol[((0, local_0))[0xB6 + param_0->unk6C_0]],
+                  *((u16 *) (((u8 *) param_0->unk0) + 0x16)));
+    *((s32 *) (((u8 *) param_0) + 0x50)) = func_800C8A98();
+    func_800C8E54(*((s32 *) (((u8 *) param_0) + 0x50)), param_0->scale * 500.0f,
+                  param_0->scale * 800.0f);
+    func_800C8FB0(*((s32 *) (((u8 *) param_0) + 0x50)), 0, 0, 0);
+    func_800C8CB8(*((s32 *) (((u8 *) param_0) + 0x50)), param_0->position);
+    _subaddiefade_entrypoint_2(param_0);
+    switch (param_0->unk6C_0) {
+        case 0:
+            *((f32 *) (((u8 *) param_0) + 0x58)) = 6.0f;
+            break;
 
-    case 1:
-      *((f32 *) (((u8 *) param_0) + 0x58)) = 5.0f;
-      break;
+        case 1:
+            *((f32 *) (((u8 *) param_0) + 0x58)) = 5.0f;
+            break;
 
-    case 2:
-      *((f32 *) (((u8 *) param_0) + 0x58)) = 4.0f;
-      break;
+        case 2:
+            *((f32 *) (((u8 *) param_0) + 0x58)) = 4.0f;
+    }
 
-  }
-
-  local_0[0xC4] = 0;
-  local_0[0xC6] = 0;
+    local_0[0xC4] = 0;
+    local_0[0xC6] = 0;
 }
 
 int chdodgemcontrol_entrypoint_1()
 {
-  return (int)&D_80804EDC_chdodgemcontrol;
+    return (int) &D_80804EDC_chdodgemcontrol;
 }
 
-int func_8080207C_chdodgemcontrol(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+int func_8080207C_chdodgemcontrol(param_0, param_1, param_2)
+Actor *param_0;
+s32 param_1;
+s32 param_2;
 {
     switch (param_1) {
-    case 0x1F:
-        func_801015D0(param_0);
-        func_800DF744(3, D_80804F64_chdodgemcontrol[param_0->unk6C_0]);
-        func_800DF744(4, D_80804F64_chdodgemcontrol[param_0->unk6C_0]);
-        break;
-    default:
-        return 0;
+        case 0x1F:
+            func_801015D0(param_0);
+            func_800DF744(3, D_80804F64_chdodgemcontrol[param_0->unk6C_0]);
+            func_800DF744(4, D_80804F64_chdodgemcontrol[param_0->unk6C_0]);
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
@@ -1117,7 +1170,7 @@ void func_80802104_chdodgemcontrol(Actor *param_0)
     local_0 = func_80100094(param_0, 0);
     if (!(local_0->local_0 > 0.0f)) {
         local_0->local_0 = 1.5f;
-        if (param_0->unk6C_0 == 0 || ((DodgemFlags1312 *)param_0)->local_0) {
+        if (param_0->unk6C_0 == 0 || ((DodgemFlags1312 *) param_0)->local_0) {
             func_80018820(param_0->unk6C_0, 0.5f, 1.0f);
         }
     }
@@ -1229,7 +1282,8 @@ void func_80802180_chdodgemcontrol(Actor *param_0)
     func_808039B8_chdodgemcontrol(param_0);
 }
 
-void func_808026D0_chdodgemcontrol(s32 param_0) {
+void func_808026D0_chdodgemcontrol(s32 param_0)
+{
     anctrl_setPlaybackType(func_80104248(), 1);
     func_8008B188(func_80104248(param_0), 1);
     anctrl_start(func_80104248(param_0));
@@ -1237,68 +1291,71 @@ void func_808026D0_chdodgemcontrol(s32 param_0) {
 
 void func_80802720_chdodgemcontrol(Actor *param_0)
 {
-  int local_0;
-  local_0 = func_80104248();
-  anctrl_setIndex(local_0, 0x105);
-  func_80101CDC(param_0, 10000000.0f);
-  func_808026D0_chdodgemcontrol(param_0);
+    int local_0;
+    local_0 = func_80104248();
+    anctrl_setIndex(local_0, 0x105);
+    func_80101CDC(param_0, 10000000.0f);
+    func_808026D0_chdodgemcontrol(param_0);
 }
 
 void func_80802764_chdodgemcontrol(Actor *this)
 {
-  s32 new_var;
-  int new_var2;
-  int new_var3;
-  anctrl_setIndex(func_80104248(), 0x10B);
-  func_80101CDC(this, 0.9f);
-  func_808026D0_chdodgemcontrol(this);
-  new_var3 = (*((s32 *) (((char *) this) + 0x64))) & 0xFFFFFFFFFFFFFFFFu;
-  new_var2 = (new_var3 & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
-  new_var2 = new_var2 & 0xFFFFFFFFFFFFFFFFu;
-  if (0 != ((new_var = ((new_var2 & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0x100000))
-  {
-    func_808000B8_chdodgemcontrol(0);
-  }
+    s32 new_var;
+    int new_var2;
+    int new_var3;
+    anctrl_setIndex(func_80104248(), 0x10B);
+    func_80101CDC(this, 0.9f);
+    func_808026D0_chdodgemcontrol(this);
+    new_var3 = (*((s32 *) (((char *) this) + 0x64))) & 0xFFFFFFFFFFFFFFFFu;
+    new_var2 = (new_var3 & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
+    new_var2 = new_var2 & 0xFFFFFFFFFFFFFFFFu;
+    if (0 != ((new_var =
+                   ((new_var2 & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) &
+              0x100000)) {
+        func_808000B8_chdodgemcontrol(0);
+    }
 }
 
 void func_808027C4_chdodgemcontrol(Actor *param_0)
 {
-  anctrl_setIndex(func_80104248(), 0x108);
-  func_80101CDC(param_0, 0.9f);
-  func_808026D0_chdodgemcontrol(param_0);
-  if (param_0->unk64_20) {
-    func_808000B8_chdodgemcontrol(1);
-  }
+    anctrl_setIndex(func_80104248(), 0x108);
+    func_80101CDC(param_0, 0.9f);
+    func_808026D0_chdodgemcontrol(param_0);
+    if (param_0->unk64_20) {
+        func_808000B8_chdodgemcontrol(1);
+    }
 }
 
 void func_80802824_chdodgemcontrol(Actor *param_0)
 {
-  anctrl_setIndex(func_80104248(), 0x109);
-  func_80101CDC(param_0, 0.9f);
-  func_808026D0_chdodgemcontrol(param_0);
-  if (param_0->unk64_20) {
-    func_808000B8_chdodgemcontrol(2);
-  }
+    anctrl_setIndex(func_80104248(), 0x109);
+    func_80101CDC(param_0, 0.9f);
+    func_808026D0_chdodgemcontrol(param_0);
+    if (param_0->unk64_20) {
+        func_808000B8_chdodgemcontrol(2);
+    }
 }
 
 void func_80802884_chdodgemcontrol(Actor *this)
 {
-  int new_var;
-  int new_var2;
-  int new_var3;
-  if (!this)
-  {
-  }
-  anctrl_setIndex(func_80104248(), 0x10A);
-  func_80101CDC(this, 0.9f);
-  func_808026D0_chdodgemcontrol(this);
-  new_var2 = (((*((s32 *) (((char *) this) + 0x64))) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
-  new_var = ((new_var = new_var2 & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
-  new_var3 = (((((new_var & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
-  if (0 != (new_var3 & 0x100000))
-  {
-    func_808000B8_chdodgemcontrol(3);
-  }
+    int new_var;
+    int new_var2;
+    int new_var3;
+    anctrl_setIndex(func_80104248(), 0x10A);
+    func_80101CDC(this, 0.9f);
+    func_808026D0_chdodgemcontrol(this);
+    new_var2 =
+        (((*((s32 *) (((char *) this) + 0x64))) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) &
+        0xFFFFFFFFFFFFFFFFu;
+    new_var =
+        ((new_var = new_var2 & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
+    new_var3 = (((((new_var & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) &
+                 0xFFFFFFFFFFFFFFFFu) &
+                0xFFFFFFFFFFFFFFFFu) &
+               0xFFFFFFFFFFFFFFFFu;
+    if (0 != (new_var3 & 0x100000)) {
+        func_808000B8_chdodgemcontrol(3);
+    }
 }
 
 void func_808028E4_chdodgemcontrol(Actor *param_0)
@@ -1320,98 +1377,89 @@ void func_808028E4_chdodgemcontrol(Actor *param_0)
     }
     if (local_0 > 10.0f) {
         switch (func_801022E4(param_0)) {
-        case 0x105:
-            anctrl_setIndex(func_80104248(param_0), 0x106);
-            func_80101CDC(param_0, 0.5f);
-            anctrl_setPlaybackType(func_80104248(param_0), 1);
-            func_8008B188(func_80104248(param_0), 1);
-            anctrl_start(func_80104248(param_0));
-            return;
-        case 0x107:
-            if (func_8008B28C(func_80104248(param_0))) {
-                func_8008B188(func_80104248(param_0), 0);
-                func_80101CDC(param_0, 3.0f);
+            case 0x105:
+                anctrl_setIndex(func_80104248(param_0), 0x106);
+                func_80101CDC(param_0, 0.5f);
+                anctrl_setPlaybackType(func_80104248(param_0), 1);
+                func_8008B188(func_80104248(param_0), 1);
+                anctrl_start(func_80104248(param_0));
                 return;
-            }
-            if (anctrl_isStopped(func_80104248(param_0))) {
-                func_80802720_chdodgemcontrol(param_0);
-                return;
-            }
-            break;
-        case 0x108:
-        case 0x109:
-        case 0x10A:
-        case 0x10B:
-            if (anctrl_isStopped(func_80104248(param_0))) {
-                func_80802720_chdodgemcontrol(param_0);
-                return;
-            }
-            break;
+            case 0x107:
+                if (func_8008B28C(func_80104248(param_0))) {
+                    func_8008B188(func_80104248(param_0), 0);
+                    func_80101CDC(param_0, 3.0f);
+                    return;
+                }
+                if (anctrl_isStopped(func_80104248(param_0))) {
+                    func_80802720_chdodgemcontrol(param_0);
+                }
+                break;
+            case 0x108:
+            case 0x109:
+            case 0x10A:
+            case 0x10B:
+                if (anctrl_isStopped(func_80104248(param_0))) {
+                    func_80802720_chdodgemcontrol(param_0);
+                }
         }
     } else if (local_0 < -10.0f) {
         switch (func_801022E4(param_0)) {
-        case 0x105:
-            anctrl_setIndex(func_80104248(param_0), 0x107);
-            func_80101CDC(param_0, 0.5f);
-            anctrl_setPlaybackType(func_80104248(param_0), 1);
-            func_8008B188(func_80104248(param_0), 1);
-            anctrl_start(func_80104248(param_0));
-            return;
-        case 0x106:
-            if (func_8008B28C(func_80104248(param_0))) {
-                func_80101CDC(param_0, 3.0f);
-                func_8008B188(func_80104248(param_0), 0);
+            case 0x105:
+                anctrl_setIndex(func_80104248(param_0), 0x107);
+                func_80101CDC(param_0, 0.5f);
+                anctrl_setPlaybackType(func_80104248(param_0), 1);
+                func_8008B188(func_80104248(param_0), 1);
+                anctrl_start(func_80104248(param_0));
                 return;
-            }
-            if (anctrl_isStopped(func_80104248(param_0))) {
-                func_80802720_chdodgemcontrol(param_0);
-                return;
-            }
-            break;
-        case 0x108:
-        case 0x109:
-        case 0x10A:
-        case 0x10B:
-            if (anctrl_isStopped(func_80104248(param_0))) {
-                func_80802720_chdodgemcontrol(param_0);
-                return;
-            }
-            break;
+            case 0x106:
+                if (func_8008B28C(func_80104248(param_0))) {
+                    func_80101CDC(param_0, 3.0f);
+                    func_8008B188(func_80104248(param_0), 0);
+                    return;
+                }
+                if (anctrl_isStopped(func_80104248(param_0))) {
+                    func_80802720_chdodgemcontrol(param_0);
+                }
+                break;
+            case 0x108:
+            case 0x109:
+            case 0x10A:
+            case 0x10B:
+                if (anctrl_isStopped(func_80104248(param_0))) {
+                    func_80802720_chdodgemcontrol(param_0);
+                }
         }
     } else {
         switch (func_801022E4(param_0)) {
-        case 0x105:
-            break;
-        case 0x106:
-            if (func_8008B28C(func_80104248(param_0))) {
-                func_80101CDC(param_0, 3.0f);
-                func_8008B188(func_80104248(param_0), 0);
+            case 0x105:
+                break;
+            case 0x106:
+                if (func_8008B28C(func_80104248(param_0))) {
+                    func_80101CDC(param_0, 3.0f);
+                    func_8008B188(func_80104248(param_0), 0);
+                    return;
+                }
+                if (anctrl_isStopped(func_80104248(param_0))) {
+                    func_80802720_chdodgemcontrol(param_0);
+                }
                 return;
-            }
-            if (anctrl_isStopped(func_80104248(param_0))) {
-                func_80802720_chdodgemcontrol(param_0);
-                return;
-            }
-            return;
-        case 0x107:
-            if (func_8008B28C(func_80104248(param_0))) {
-                func_80101CDC(param_0, 3.0f);
-                func_8008B188(func_80104248(param_0), 0);
-                return;
-            }
-            if (anctrl_isStopped(func_80104248(param_0))) {
-                func_80802720_chdodgemcontrol(param_0);
-                return;
-            }
-            break;
-        case 0x108:
-        case 0x109:
-        case 0x10A:
-        case 0x10B:
-            if (anctrl_isStopped(func_80104248(param_0))) {
-                func_80802720_chdodgemcontrol(param_0);
-            }
-            break;
+            case 0x107:
+                if (func_8008B28C(func_80104248(param_0))) {
+                    func_80101CDC(param_0, 3.0f);
+                    func_8008B188(func_80104248(param_0), 0);
+                    return;
+                }
+                if (anctrl_isStopped(func_80104248(param_0))) {
+                    func_80802720_chdodgemcontrol(param_0);
+                }
+                break;
+            case 0x108:
+            case 0x109:
+            case 0x10A:
+            case 0x10B:
+                if (anctrl_isStopped(func_80104248(param_0))) {
+                    func_80802720_chdodgemcontrol(param_0);
+                }
         }
     }
 }
@@ -1429,13 +1477,11 @@ void func_80802D04_chdodgemcontrol(u8 *param_0)
     local_1 = func_80100094(param_0, 0);
     dt = func_800D8FF8();
     f2 = *((f32 *) (local_1 + 0x1C));
-    if (0.0f <= f2)
-    {
+    if (0.0f <= f2) {
         *((f32 *) (local_1 + 0x1C)) = f2 - dt;
     }
 
-    if (10.0f < *((f32 *) (param_0 + 0x24)))
-    {
+    if (10.0f < *((f32 *) (param_0 + 0x24))) {
         sp38 = func_8080460C_chdodgemcontrol(param_0);
         f2 = func_8080460C_chdodgemcontrol(param_0);
         sp44 = func_800F11E4(*((f32 *) (param_0 + 0x24)), sp38 * 0.1f, f2, 2000.0f, 15000.0f);
@@ -1445,78 +1491,62 @@ void func_80802D04_chdodgemcontrol(u8 *param_0)
         f2 = func_800F11E4(*((f32 *) (param_0 + 0x24)), sp34 * 0.5f, f2, 0.85f, 1.1f);
         func_800C31DC(param_0[0x5F], f2);
         func_800C3058(param_0[0x5F], (s32) sp44);
-        if (func_800DC0C0() < 0.01f)
-        {
+        if (func_800DC0C0() < 0.01f) {
             func_800C4B70((s32) sp44);
             func_8010D930(8, 0, (s32) (param_0 + 4), D_80804DA4_chdodgemcontrol);
         }
     }
-    if (((DCFlags *) param_0)->b20)
-    {
+    if (((DCFlags *) param_0)->b20) {
         func_80800044_chdodgemcontrol(param_0);
     }
 
-    switch (((u32) (*((u16 *) (param_0 + 0x72)))) >> 10)
-    {
+    switch (((u32) (*((u16 *) (param_0 + 0x72)))) >> 10) {
         case 4:
             *((f32 *) (param_0 + 0x24)) = *((f32 *) (param_0 + 0x24)) * 0.8f;
             break;
 
         case 3:
-            *((f32 *) (param_0 + 0x54)) = (f32) _subaddiejoy_entrypoint_2(param_0, (s32) *((f32 *) (param_0 + 0x48)), &sp40);
+            *((f32 *) (param_0 + 0x54)) =
+                (f32) _subaddiejoy_entrypoint_2(param_0, (s32) *((f32 *) (param_0 + 0x48)), &sp40);
             f2 = func_8080460C_chdodgemcontrol(param_0);
-            if (*((f32 *) (param_0 + 0x24)) < f2)
-            {
+            if (*((f32 *) (param_0 + 0x24)) < f2) {
                 f2 = func_8080458C_chdodgemcontrol(param_0);
-    *((f32 *) (param_0 + 0x24)) = *((f32 *) (param_0 + 0x24)) + sp40 * f2;
+                *((f32 *) (param_0 + 0x24)) = *((f32 *) (param_0 + 0x24)) + sp40 * f2;
             }
             func_80802180_chdodgemcontrol(param_0);
-            if (!(((DCFlags *) param_0)->b29))
-            {
+            if (!(((DCFlags *) param_0)->b29)) {
                 param_0[0x72] = (u8) ((param_0[0x72] & 0xFF03) | 8);
             }
             func_808028E4_chdodgemcontrol(param_0);
             return;
 
         case 2:
-            if (((DCFlags *) param_0)->b29)
-            {
+            if (((DCFlags *) param_0)->b29) {
                 param_0[0x72] = (u8) ((param_0[0x72] & 0xFF03) | 0xC);
             }
             f2 = *((f32 *) (local_1 + 0x10));
-            if (f2 <= 0.0f)
-            {
+            if (f2 <= 0.0f) {
                 func_8080476C_chdodgemcontrol(param_0);
                 f2 = func_8080460C_chdodgemcontrol(param_0);
-                if (*((f32 *) (param_0 + 0x24)) < f2)
-                {
+                if (*((f32 *) (param_0 + 0x24)) < f2) {
                     f2 = func_8080458C_chdodgemcontrol(param_0);
-    *((f32 *) (param_0 + 0x24)) = *((f32 *) (param_0 + 0x24)) + f2;
+                    *((f32 *) (param_0 + 0x24)) = *((f32 *) (param_0 + 0x24)) + f2;
                 }
-                if (0.0f < *((f32 *) (local_1 + 0x14)))
-                {
+                if (0.0f < *((f32 *) (local_1 + 0x14))) {
                     *((f32 *) (local_1 + 0x14)) = *((f32 *) (local_1 + 0x14)) - dt;
-                }
-                else
-                {
+                } else {
                     *((f32 *) (param_0 + 0x50)) = *((f32 *) (param_0 + 0x50)) - dt;
                 }
-            }
-            else
-            {
+            } else {
                 *((f32 *) (local_1 + 0x10)) = f2 - dt;
-                if (0.0f < *((f32 *) (local_1 + 0x14)))
-                {
+                if (0.0f < *((f32 *) (local_1 + 0x14))) {
                     *((f32 *) (local_1 + 0x14)) = *((f32 *) (local_1 + 0x14)) - dt;
                     f2 = func_8080460C_chdodgemcontrol(param_0);
-                    if (*((f32 *) (param_0 + 0x24)) < f2 * 0.5f)
-                    {
+                    if (*((f32 *) (param_0 + 0x24)) < f2 * 0.5f) {
                         f2 = func_8080458C_chdodgemcontrol(param_0);
-    *((f32 *) (param_0 + 0x24)) = *((f32 *) (param_0 + 0x24)) + f2;
+                        *((f32 *) (param_0 + 0x24)) = *((f32 *) (param_0 + 0x24)) + f2;
                     }
-                }
-                else
-                {
+                } else {
                     func_8080349C_chdodgemcontrol(param_0);
                     func_808037C8_chdodgemcontrol(param_0);
                     func_80803200_chdodgemcontrol(param_0);
@@ -1527,93 +1557,80 @@ void func_80802D04_chdodgemcontrol(u8 *param_0)
             return;
 
         case 5:
-            if (func_80101E14(param_0, 0.7283f) != 0)
-            {
+            if (func_80101E14(param_0, 0.7283f) != 0) {
                 _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, D_80804D48_chdodgemcontrol);
             }
-            if (func_80101E4C(param_0, D_80804F74_chdodgemcontrol) != 0)
-            {
+            if (func_80101E4C(param_0, D_80804F74_chdodgemcontrol) != 0) {
                 _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, D_80804D5C_chdodgemcontrol);
             }
-            if (anctrl_isStopped(func_80104248(param_0)))
-            {
+            if (anctrl_isStopped(func_80104248(param_0))) {
                 func_8080422C_chdodgemcontrol(param_0, 4);
             }
             return;
 
         case 6:
-            if (func_80101E4C(param_0, D_80804F84_chdodgemcontrol) != 0)
-            {
+            if (func_80101E4C(param_0, D_80804F84_chdodgemcontrol) != 0) {
                 _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, D_80804D74_chdodgemcontrol);
             }
-            if (anctrl_isStopped(func_80104248(param_0)))
-            {
+            if (anctrl_isStopped(func_80104248(param_0))) {
                 func_8080422C_chdodgemcontrol(param_0, 4);
             }
             return;
 
         case 7:
-            if (func_80101E4C(param_0, D_80804F94_chdodgemcontrol) != 0)
-            {
+            if (func_80101E4C(param_0, D_80804F94_chdodgemcontrol) != 0) {
                 _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, D_80804D8C_chdodgemcontrol);
             }
-            if (func_80101E14(param_0, 0.39f) != 0)
-            {
+            if (func_80101E14(param_0, 0.39f) != 0) {
                 _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, D_80804D48_chdodgemcontrol);
             }
-            if (anctrl_isStopped(func_80104248(param_0)))
-            {
+            if (anctrl_isStopped(func_80104248(param_0))) {
                 func_8080422C_chdodgemcontrol(param_0, 4);
             }
-            break;
     }
 }
 
 void func_80803200_chdodgemcontrol(param_0) Actor *param_0;
 {
-    extern f32 func_800DC0C0(void);
-
-    extern void func_800EEB9C(f32 *, f32, f32);
-    extern s32 func_800F0064(f32 *, f32, f32 *);
     u8 *local_0;
     Actor *local_1;
     u8 *local_2;
     Actor *local_3;
     s32 local_5;
     Vec3f local_4;
-    local_0 = (u8 *)func_80100094(param_0, 0);
-    local_1 = (Actor *)func_80106790(param_0->unk3C);
-    local_2 = (u8 *)func_80100094(local_1, 0);
+    local_0 = (u8 *) func_80100094(param_0, 0);
+    local_1 = (Actor *) func_80106790(param_0->unk3C);
+    local_2 = (u8 *) func_80100094(local_1, 0);
     for (local_5 = 0; local_5 < local_2[0xC2]; local_5++) {
         if (local_5 != param_0->unk6C_0) {
-            local_3 = (Actor *)func_8080000C_chdodgemcontrol(local_1, local_5);
+            local_3 = (Actor *) func_8080000C_chdodgemcontrol(local_1, local_5);
             func_800EEB9C(local_4.f, param_0->rotation[1] - 145.0f, 325.0f);
             func_800EF04C(local_4.f, param_0->position);
             if (func_800F0064(local_4.f, 110.0f, local_3->position)) {
-                *(f32 *)(local_0 + 0x10) = 1.0f;
+                *(f32 *) (local_0 + 0x10) = 1.0f;
                 if (func_800DC0C0() < 0.5f) {
                     param_0->unk54 = param_0->rotation[1] - 65.0f;
                 } else {
                     param_0->unk54 = param_0->rotation[1] + 65.0f;
                 }
-                if (*(f32 *)((u8 *)param_0 + 0x24) < func_8080460C_chdodgemcontrol(param_0)) {
-                    *(f32 *)((u8 *)param_0 + 0x24) += func_8080458C_chdodgemcontrol(param_0);
+                if (*(f32 *) ((u8 *) param_0 + 0x24) < func_8080460C_chdodgemcontrol(param_0)) {
+                    *(f32 *) ((u8 *) param_0 + 0x24) += func_8080458C_chdodgemcontrol(param_0);
                 }
-                *(f32 *)(local_0 + 0x14) = 0.25f;
+                *(f32 *) (local_0 + 0x14) = 0.25f;
             }
             func_800EEB9C(local_4.f, param_0->rotation[1] + 145.0f, 325.0f);
             func_800EF04C(local_4.f, param_0->position);
             if (func_800F0064(local_4.f, 110.0f, local_3->position)) {
-                *(f32 *)(local_0 + 0x10) = 1.0f;
+                *(f32 *) (local_0 + 0x10) = 1.0f;
                 if (func_800DC0C0() < 0.5f) {
                     param_0->unk54 = param_0->rotation[1] - 65.0f;
                 } else {
                     param_0->unk54 = param_0->rotation[1] + 65.0f;
                 }
-                if (*(f32 *)((u8 *)param_0 + 0x24) < func_8080460C_chdodgemcontrol(param_0)) {
-                    *(f32 *)((u8 *)param_0 + 0x24) += func_8080458C_chdodgemcontrol(param_0);
+                if (*(f32 *) ((u8 *) param_0 + 0x24) < func_8080460C_chdodgemcontrol(param_0)) {
+                    *(f32 *) ((u8 *) param_0 + 0x24) += func_8080458C_chdodgemcontrol(param_0);
                 }
-                *(f32 *)(local_0 + 0x14) = 0.25f;
+                *(f32 *) (local_0 + 0x14) = 0.25f;
             }
         }
     }
@@ -1621,9 +1638,6 @@ void func_80803200_chdodgemcontrol(param_0) Actor *param_0;
 
 void func_8080349C_chdodgemcontrol(param_0) Actor *param_0;
 {
-
-    extern void func_800EEB9C(f32 *, f32, f32);
-    extern s32 func_800F0064(f32 *, f32, f32 *);
     u8 *local_0;
     Actor *local_1;
     u8 *local_2;
@@ -1631,32 +1645,35 @@ void func_8080349C_chdodgemcontrol(param_0) Actor *param_0;
     s32 local_5;
     f32 local_4[3];
     f32 local_6;
-    local_0 = (u8 *)func_80100094(param_0, 0);
-    local_1 = (Actor *)func_80106790(param_0->unk3C);
-    local_2 = (u8 *)func_80100094(local_1, 0);
+    local_0 = (u8 *) func_80100094(param_0, 0);
+    local_1 = (Actor *) func_80106790(param_0->unk3C);
+    local_2 = (u8 *) func_80100094(local_1, 0);
     for (local_5 = 0; local_5 < local_2[0xC2]; local_5++) {
         if (local_5 != param_0->unk6C_0 &&
-            (*(f32 *)(local_0 + 0x10) > 0.0f || *(f32 *)((u8 *)param_0 + 0x34) != (local_6 = local_5))) {
-            local_3 = (Actor *)func_8080000C_chdodgemcontrol(local_1, local_5);
+            (*(f32 *) (local_0 + 0x10) > 0.0f ||
+             *(f32 *) ((u8 *) param_0 + 0x34) != (local_6 = local_5))) {
+            local_3 = (Actor *) func_8080000C_chdodgemcontrol(local_1, local_5);
             func_800EEB9C(local_4, param_0->rotation[1] + 20.0f, 325.0f);
             func_800EF04C(local_4, param_0->position);
             if (func_800F0064(local_4, 150.0f, local_3->position)) {
-                *(f32 *)(local_0 + 0x10) = 1.0f;
+                *(f32 *) (local_0 + 0x10) = 1.0f;
                 param_0->unk54 = param_0->rotation[1] - 65.0f;
-                if (*(f32 *)((u8 *)param_0 + 0x24) > func_8080460C_chdodgemcontrol(param_0) * 0.25f) {
-                    *(f32 *)((u8 *)param_0 + 0x24) -= func_8080458C_chdodgemcontrol(param_0) * 2;
+                if (*(f32 *) ((u8 *) param_0 + 0x24) >
+                    func_8080460C_chdodgemcontrol(param_0) * 0.25f) {
+                    *(f32 *) ((u8 *) param_0 + 0x24) -= func_8080458C_chdodgemcontrol(param_0) * 2;
                 }
-                *(f32 *)(local_0 + 0x14) = 0.25f;
+                *(f32 *) (local_0 + 0x14) = 0.25f;
             }
             func_800EEB9C(local_4, param_0->rotation[1] - 20.0f, 325.0f);
             func_800EF04C(local_4, param_0->position);
             if (func_800F0064(local_4, 150.0f, local_3->position)) {
-                *(f32 *)(local_0 + 0x10) = 1.0f;
+                *(f32 *) (local_0 + 0x10) = 1.0f;
                 param_0->unk54 = param_0->rotation[1] + 65.0f;
-                if (*(f32 *)((u8 *)param_0 + 0x24) > func_8080460C_chdodgemcontrol(param_0) * 0.25f) {
-                    *(f32 *)((u8 *)param_0 + 0x24) -= func_8080458C_chdodgemcontrol(param_0) * 2;
+                if (*(f32 *) ((u8 *) param_0 + 0x24) >
+                    func_8080460C_chdodgemcontrol(param_0) * 0.25f) {
+                    *(f32 *) ((u8 *) param_0 + 0x24) -= func_8080458C_chdodgemcontrol(param_0) * 2;
                 }
-                *(f32 *)(local_0 + 0x14) = 0.25f;
+                *(f32 *) (local_0 + 0x14) = 0.25f;
             }
         }
     }
@@ -1696,23 +1713,21 @@ void func_808037C8_chdodgemcontrol(param_0) Actor *param_0;
         local_1 = D_80804FA0_chdodgemcontrol;
         local_2 = func_80102D78(param_0, &local_1);
         func_8080372C_chdodgemcontrol(param_0, func_800DC178(15.0f, 70.0f) + local_2,
-            local_2 - func_800DC178(15.0f, 70.0f));
-        if (func_8080460C_chdodgemcontrol(param_0) * 0.5f < ((f32 *)param_0->actorData)[3]) {
-            ((f32 *)param_0->actorData)[3] -= func_8080458C_chdodgemcontrol(param_0);
+                                      local_2 - func_800DC178(15.0f, 70.0f));
+        if (func_8080460C_chdodgemcontrol(param_0) * 0.5f < ((f32 *) param_0->actorData)[3]) {
+            ((f32 *) param_0->actorData)[3] -= func_8080458C_chdodgemcontrol(param_0);
         }
-        if (((f32 *)param_0->actorData)[3] < func_8080460C_chdodgemcontrol(param_0) * 0.5f) {
-            ((f32 *)param_0->actorData)[3] += func_8080458C_chdodgemcontrol(param_0);
+        if (((f32 *) param_0->actorData)[3] < func_8080460C_chdodgemcontrol(param_0) * 0.5f) {
+            ((f32 *) param_0->actorData)[3] += func_8080458C_chdodgemcontrol(param_0);
         }
-        *(f32 *)(local_0 + 0x14) = 0.25f;
-    } else if (((f32 *)param_0->actorData)[3] < func_8080460C_chdodgemcontrol(param_0) * 0.75f) {
-        ((f32 *)param_0->actorData)[3] += func_8080458C_chdodgemcontrol(param_0);
+        *(f32 *) (local_0 + 0x14) = 0.25f;
+    } else if (((f32 *) param_0->actorData)[3] < func_8080460C_chdodgemcontrol(param_0) * 0.75f) {
+        ((f32 *) param_0->actorData)[3] += func_8080458C_chdodgemcontrol(param_0);
     }
 }
 
 void func_808039B8_chdodgemcontrol(param_0) Actor *param_0;
 {
-    extern u8 D_80804D5C_chdodgemcontrol[];
-
     char *local_0;
     Actor *local_1;
     char *local_2;
@@ -1731,353 +1746,194 @@ void func_808039B8_chdodgemcontrol(param_0) Actor *param_0;
     f32 local_9[3];
     f32 local_10[3];
 
-    local_0 = (char *)func_80100094(param_0, 0);
+    local_0 = (char *) func_80100094(param_0, 0);
     local_1 = func_80106790(param_0->unk3C);
-    local_2 = (char *)func_80100094(local_1, 0);
+    local_2 = (char *) func_80100094(local_1, 0);
 
     local_18 = 0;
 
-    while (local_18 < *(u8 *)(local_2 + 0xC2)) {
-        if (local_18 !=
-            param_0->unk6C_0) {
-            local_3 = func_8080000C_chdodgemcontrol(
-                local_1,
-                local_18
-            );
-            local_4 = (char *)func_80100094(local_3, 0);
+    while (local_18 < *(u8 *) (local_2 + 0xC2)) {
+        if (local_18 != param_0->unk6C_0) {
+            local_3 = func_8080000C_chdodgemcontrol(local_1, local_18);
+            local_4 = (char *) func_80100094(local_3, 0);
 
             local_8[0] = local_3->position[0];
             local_8[1] = local_3->position[1];
             local_8[2] = local_3->position[2];
 
-            func_800EEB9C(
-                local_6,
-                *(f32 *)((char *)param_0 + 0x48),
-                75.0f
-            );
+            func_800EEB9C(local_6, *(f32 *) ((char *) param_0 + 0x48), 75.0f);
             func_800EF04C(local_6, param_0->position);
 
-            func_800EEB9C(
-                local_7,
-                local_3->rotation[1],
-                48.75f
-            );
+            func_800EEB9C(local_7, local_3->rotation[1], 48.75f);
             func_800EF04C(local_7, local_3->position);
 
-            if (func_800EFFB4(
-                    param_0->position,
-                    182.0f,
-                    local_8) ||
-                func_800EFFB4(
-                    local_6,
-                    156.0f,
-                    local_8) ||
-                func_800EFFB4(
-                    param_0->position,
-                    156.0f,
-                    local_7) ||
-                func_800EFFB4(
-                    local_6,
-                    130.0f,
-                    local_7)) {
+            if (func_800EFFB4(param_0->position, 182.0f, local_8) ||
+                func_800EFFB4(local_6, 156.0f, local_8) ||
+                func_800EFFB4(param_0->position, 156.0f, local_7) ||
+                func_800EFFB4(local_6, 130.0f, local_7)) {
+                local_13 = func_800EEF94((char *) param_0 + 0x28);
 
-                local_13 =
-                    func_800EEF94((char *)param_0 + 0x28);
-
-                if (local_18 ==
-                    (s32)*(f32 *)((char *)param_0 + 0x34)) {
-                    *(f32 *)((char *)param_0 + 0x50) = 0.0f;
+                if (local_18 == (s32) *(f32 *) ((char *) param_0 + 0x34)) {
+                    *(f32 *) ((char *) param_0 + 0x50) = 0.0f;
                 }
 
-                if (func_800EEF94((f32 *)&local_3->actorData[4]) <= local_13) {
-                    local_19 = (s32)func_800F1DF4(
-                        local_3->position,
-                        param_0->position
-                    );
+                if (func_800EEF94((f32 *) &local_3->actorData[4]) <= local_13) {
+                    local_19 = (s32) func_800F1DF4(local_3->position, param_0->position);
 
-                    local_14 = func_800F1DCC(
-                        local_3->rotation[1],
-                        (f32)local_19
-                    );
+                    local_14 = func_800F1DCC(local_3->rotation[1], (f32) local_19);
 
-                    if (*(f32 *)(local_0 + 0x18) <= 0.0f) {
-                        func_8010D930(
-                            1,
-                            0,
-                            param_0->position,
-                            D_80804D5C_chdodgemcontrol
-                        );
+if (*(f32 *) (local_0 + 0x18) <= 0.0f) {
+    func_8010D930(1, 0, param_0->position, D_80804D5C_chdodgemcontrol);
 
-                        *(f32 *)(local_0 + 0x18) = 1.0f;
-                    }
+    *(f32 *) (local_0 + 0x18) = 1.0f;
+}
 
-                    if (-45.0f < local_14 &&
-                        local_14 < 45.0f) {
-                        func_80802764_chdodgemcontrol(local_3);
-                    }
+if (-45.0f < local_14 && local_14 < 45.0f) {
+    func_80802764_chdodgemcontrol(local_3);
+}
 
-                    if (local_14 < -45.0f &&
-                        -135.0f < local_14) {
-                        func_80802824_chdodgemcontrol(local_3);
-                    }
+if (local_14 < -45.0f && -135.0f < local_14) {
+    func_80802824_chdodgemcontrol(local_3);
+}
 
-                    if (45.0f < local_14 &&
-                        local_14 < 135.0f) {
-                        func_80802884_chdodgemcontrol(local_3);
-                    }
+if (45.0f < local_14 && local_14 < 135.0f) {
+    func_80802884_chdodgemcontrol(local_3);
+}
 
-                    if (local_14 < -135.0f ||
-                        135.0f < local_14) {
-                        func_808027C4_chdodgemcontrol(local_3);
-                    }
+if (local_14 < -135.0f || 135.0f < local_14) {
+    func_808027C4_chdodgemcontrol(local_3);
+}
 
-                    if (*(f32 *)((char *)param_0 + 0x24) <
-                        150.0f) {
-                        *(f32 *)((char *)param_0 + 0x24) =
-                            150.0f;
-                    }
+if (*(f32 *) ((char *) param_0 + 0x24) < 150.0f) {
+    *(f32 *) ((char *) param_0 + 0x24) = 150.0f;
+}
 
-                    if ((param_0->unk6C_0 == 0) &&
-                        (local_1->unk79_4 != 3)) {
-                        *(f32 *)((char *)param_0 + 0x24) *=
-                            0.8999938965f;
+if ((param_0->unk6C_0 == 0) && (local_1->unk79_4 != 3)) {
+    *(f32 *) ((char *) param_0 + 0x24) *= 0.8999938965f;
 
-                        local_15 = (f32)local_19;
+    local_15 = (f32) local_19;
 
-                        func_800EEB9C(
-                            local_0,
-                            local_15,
-                            *(f32 *)((char *)param_0 + 0x24) *
-                                0.5f
-                        );
-                    } else {
-                        *(f32 *)((char *)param_0 + 0x24) *=
-                            0.6999969482f;
+    func_800EEB9C(local_0, local_15, *(f32 *) ((char *) param_0 + 0x24) * 0.5f);
+} else {
 
-                        local_15 = (f32)local_19;
+*(f32 *) ((char *) param_0 + 0x24) *= 0.6999969482f;
 
-                        func_800EEB9C(
-                            local_0,
-                            local_15,
-                            *(f32 *)((char *)param_0 + 0x24) * 1
-                        );
-                    }
+local_15 = (f32) local_19;
 
-                    if (local_18 == 0 &&
-                        (local_1->unk79_4 != 3)) {
-                        *(f32 *)&local_3->actorData[3] *= 0.5f;
+func_800EEB9C(local_0, local_15, *(f32 *) ((char *) param_0 + 0x24) * 1);
+}
 
-                        func_800EEB9C(
-                            local_4,
-                            local_15,
-                            -(*(f32 *)((char *)param_0 + 0x24)) *
-                                3.0f
-                        );
-                    } else {
-                        *(f32 *)&local_3->actorData[3] *=
-                            0.6999969482f;
+if (local_18 == 0 && (local_1->unk79_4 != 3)) {
+    *(f32 *) &local_3->actorData[3] *= 0.5f;
 
-                        func_800EEB9C(
-                            local_4,
-                            local_15,
-                            -(*(f32 *)((char *)param_0 + 0x24)) * 1
-                        );
-                    }
+    func_800EEB9C(local_4, local_15, -(*(f32 *) ((char *) param_0 + 0x24)) * 3.0f);
+} else {
+    *(f32 *) &local_3->actorData[3] *= 0.6999969482f;
 
-                    func_800EEB9C(
-                        local_9,
-                        *(f32 *)((char *)param_0 + 0x48),
-                        48.75f
-                    );
+    func_800EEB9C(local_4, local_15, -(*(f32 *) ((char *) param_0 + 0x24)) * 1);
+}
 
-                    func_800EEB9C(
-                        local_10,
-                        local_3->rotation[1],
-                        48.75f
-                    );
+func_800EEB9C(local_9, *(f32 *) ((char *) param_0 + 0x48), 48.75f);
 
-                    func_80801084_chdodgemcontrol(
-                        param_0->position,
-                        local_3->position,
-                        170.625f
-                    );
+func_800EEB9C(local_10, local_3->rotation[1], 48.75f);
 
-                    func_800EE780(
-                        local_11,
-                        local_9,
-                        param_0->position
-                    );
+func_80801084_chdodgemcontrol(param_0->position, local_3->position, 170.625f);
 
-                    func_80801084_chdodgemcontrol(
-                        local_11,
-                        local_3->position,
-                        170.625f
-                    );
+func_800EE780(local_11, local_9, param_0->position);
 
-                    func_800EFB24(
-                        param_0->position,
-                        local_11,
-                        local_9
-                    );
+func_80801084_chdodgemcontrol(local_11, local_3->position, 170.625f);
 
-                    func_800EE780(
-                        local_12,
-                        local_10,
-                        local_3->position
-                    );
+func_800EFB24(param_0->position, local_11, local_9);
 
-                    func_80801084_chdodgemcontrol(
-                        param_0->position,
-                        local_12,
-                        136.5f
-                    );
+func_800EE780(local_12, local_10, local_3->position);
 
-                    func_800EFB24(
-                        local_3->position,
-                        local_12,
-                        local_10
-                    );
+func_80801084_chdodgemcontrol(param_0->position, local_12, 136.5f);
 
-                    func_800EE780(
-                        local_11,
-                        local_9,
-                        param_0->position
-                    );
+func_800EFB24(local_3->position, local_12, local_10);
 
-                    func_800EE780(
-                        local_12,
-                        local_10,
-                        local_3->position
-                    );
+func_800EE780(local_11, local_9, param_0->position);
 
-                    func_80801084_chdodgemcontrol(
-                        local_11,
-                        local_12,
-                        136.5f
-                    );
+func_800EE780(local_12, local_10, local_3->position);
 
-                    func_800EFB24(
-                        local_3->position,
-                        local_12,
-                        local_10
-                    );
+func_80801084_chdodgemcontrol(local_11, local_12, 136.5f);
 
-                    func_800EFB24(
-                        param_0->position,
-                        local_11,
-                        local_9
-                    );
+func_800EFB24(local_3->position, local_12, local_10);
 
-                    local_14 = func_800F1DCC(
-                        *(f32 *)((char *)param_0 + 0x48),
-                        (f32)(local_19 + 180)
-                    );
+func_800EFB24(param_0->position, local_11, local_9);
 
-                    if (-45.0f < local_14 &&
-                        local_14 < 45.0f) {
-                        func_80802104_chdodgemcontrol(param_0);
-                    }
+local_14 = func_800F1DCC(*(f32 *) ((char *) param_0 + 0x48), (f32) (local_19 + 180));
 
-                    if (local_14 < -45.0f &&
-                        -135.0f < local_14) {
-                        func_80802104_chdodgemcontrol(param_0);
-                    }
+if (-45.0f < local_14 && local_14 < 45.0f) {
+    func_80802104_chdodgemcontrol(param_0);
+}
 
-                    if (45.0f < local_14 &&
-                        local_14 < 135.0f) {
-                        func_80802104_chdodgemcontrol(param_0);
-                    }
+if (local_14 < -45.0f && -135.0f < local_14) {
+    func_80802104_chdodgemcontrol(param_0);
+}
 
-                    if (local_14 < -135.0f ||
-                        135.0f < local_14) {
-                        func_80802104_chdodgemcontrol(param_0);
-                    }
+if (45.0f < local_14 && local_14 < 135.0f) {
+    func_80802104_chdodgemcontrol(param_0);
+}
 
-                    local_14 = func_800F1DCC(
-                        *(f32 *)((char *)param_0 + 0x48),
-                        local_15
-                    );
+if (local_14 < -135.0f || 135.0f < local_14) {
+    func_80802104_chdodgemcontrol(param_0);
+}
 
-                    if (-80.0f < local_14 &&
-                        local_14 < 10.0f) {
-                        *(f32 *)(local_0 + 0xC) =
-                            *(f32 *)((char *)param_0 + 0x24) *
-                            0.01f;
-                    }
+local_14 = func_800F1DCC(*(f32 *) ((char *) param_0 + 0x48), local_15);
 
-                    if (local_14 < 80.0f &&
-                        10.0f < local_14) {
-                        *(f32 *)(local_0 + 0xC) =
-                            *(f32 *)((char *)param_0 + 0x24) *
-                            -0.01f;
-                    }
+if (-80.0f < local_14 && local_14 < 10.0f) {
+    *(f32 *) (local_0 + 0xC) = *(f32 *) ((char *) param_0 + 0x24) * 0.01f;
+}
 
-                    if (-170.0f < local_14 &&
-                        local_14 < -100.0f) {
-                        *(f32 *)(local_0 + 0xC) =
-                            *(f32 *)((char *)param_0 + 0x24) *
-                            -0.01f;
-                    }
+if (local_14 < 80.0f && 10.0f < local_14) {
+    *(f32 *) (local_0 + 0xC) = *(f32 *) ((char *) param_0 + 0x24) * -0.01f;
+}
 
-                    if (local_14 < 170.0f &&
-                        80.0f < local_14) {
-                        *(f32 *)(local_0 + 0xC) =
-                            *(f32 *)((char *)param_0 + 0x24) *
-                            0.01f;
-                    }
+if (-170.0f < local_14 && local_14 < -100.0f) {
+    *(f32 *) (local_0 + 0xC) = *(f32 *) ((char *) param_0 + 0x24) * -0.01f;
+}
 
-                    local_14 = func_800F1DCC(
-                        local_3->rotation[1],
-                        local_15
-                    );
+if (local_14 < 170.0f && 80.0f < local_14) {
+    *(f32 *) (local_0 + 0xC) = *(f32 *) ((char *) param_0 + 0x24) * 0.01f;
+}
 
-                    if (-80.0f < local_14 &&
-                        local_14 < 10.0f) {
-                        *(f32 *)(local_4 + 0xC) =
-                            *(f32 *)((char *)param_0 + 0x24) *
-                            -0.01f;
-                    }
+local_14 = func_800F1DCC(local_3->rotation[1], local_15);
 
-                    if (local_14 < 80.0f &&
-                        10.0f < local_14) {
-                        *(f32 *)(local_4 + 0xC) =
-                            *(f32 *)((char *)param_0 + 0x24) *
-                            0.01f;
-                    }
+if (-80.0f < local_14 && local_14 < 10.0f) {
+    *(f32 *) (local_4 + 0xC) = *(f32 *) ((char *) param_0 + 0x24) * -0.01f;
+}
 
-                    if (-170.0f < local_14 &&
-                        local_14 < -100.0f) {
-                        *(f32 *)(local_4 + 0xC) =
-                            *(f32 *)((char *)param_0 + 0x24) *
-                            0.01f;
-                    }
+if (local_14 < 80.0f && 10.0f < local_14) {
+    *(f32 *) (local_4 + 0xC) = *(f32 *) ((char *) param_0 + 0x24) * 0.01f;
+}
 
-                    if (local_14 < 170.0f &&
-                        80.0f < local_14) {
-                        *(f32 *)(local_4 + 0xC) =
-                            *(f32 *)((char *)param_0 + 0x24) *
-                            -0.01f;
-                    }
-                }
-            }
-        }
+if (-170.0f < local_14 && local_14 < -100.0f) {
+    *(f32 *) (local_4 + 0xC) = *(f32 *) ((char *) param_0 + 0x24) * 0.01f;
+}
 
-        local_18++;
-    }
+if (local_14 < 170.0f && 80.0f < local_14) {
+    *(f32 *) (local_4 + 0xC) = *(f32 *) ((char *) param_0 + 0x24) * -0.01f;
+}
+}
+}
+}
+
+local_18++;
+}
 }
 
 void func_8080422C_chdodgemcontrol(Actor *param_0, s32 param_1)
 {
     func_80101FDC(param_0);
-    if (param_1 == 5 || param_1 == 6 || param_1 == 7)
-    {
+    if (param_1 == 5 || param_1 == 6 || param_1 == 7) {
         anctrl_setPlaybackType(func_80104248(param_0, param_1), 2);
         return;
     }
     anctrl_setPlaybackType(func_80104248(param_0, param_1), 1);
 }
 
-void func_808042A4_chdodgemcontrol(param_0, param_1) Unk80132ED0 *param_0; s32 param_1;
+void func_808042A4_chdodgemcontrol(param_0, param_1) Unk80132ED0 *param_0;
+s32 param_1;
 {
     Actor *local_0;
 
@@ -2086,21 +1942,28 @@ void func_808042A4_chdodgemcontrol(param_0, param_1) Unk80132ED0 *param_0; s32 p
         case 2:
             switch (local_0->unk6C_0) {
                 case 1:
-                    _subaddiedialog_entrypoint_11(local_0->unk3C, 0x10BB, 4, local_0->position, 0x78);
+                    _subaddiedialog_entrypoint_11(local_0->unk3C, 0x10BB, 4, local_0->position,
+                                                  0x78);
                     break;
                 case 2:
-                    _subaddiedialog_entrypoint_11(local_0->unk3C, 0x10BD, 4, local_0->position, 0x78);
+                    _subaddiedialog_entrypoint_11(local_0->unk3C, 0x10BD, 4, local_0->position,
+                                                  0x78);
                     break;
                 case 3:
-                    _subaddiedialog_entrypoint_11(local_0->unk3C, 0x10BC, 4, local_0->position, 0x78);
-                    break;
+                    _subaddiedialog_entrypoint_11(local_0->unk3C, 0x10BC, 4, local_0->position,
+                                                  0x78);
             }
-            /* Fall through: apply the result after displaying its dialogue. */
         case 3:
             switch (local_0->unk6C_0) {
-                case 1: func_8080422C_chdodgemcontrol(local_0, 5); break;
-                case 2: func_8080422C_chdodgemcontrol(local_0, 7); break;
-                case 3: func_8080422C_chdodgemcontrol(local_0, 6); break;
+                case 1:
+                    func_8080422C_chdodgemcontrol(local_0, 5);
+                    break;
+                case 2:
+                    func_8080422C_chdodgemcontrol(local_0, 7);
+                    break;
+                case 3:
+                    func_8080422C_chdodgemcontrol(local_0, 6);
+                    break;
             }
             break;
         case 0:
@@ -2108,7 +1971,6 @@ void func_808042A4_chdodgemcontrol(param_0, param_1) Unk80132ED0 *param_0; s32 p
             break;
         case 1:
             func_8080422C_chdodgemcontrol(local_0, 4);
-            break;
     }
 }
 
@@ -2121,119 +1983,109 @@ void func_8080440C_chdodgemcontrol(param_0) Actor *param_0;
     func_800EFD24(local_0);
     local_0[3] = 0.0f;
     switch (param_0->unk79_4) {
-    case 0:
-    case 1:
-    case 2:
-        switch (param_0->unk6C_0) {
         case 0:
-            func_80103140(param_0, 0x828, param_0->unk0->unk16);
-            func_800904F4(0x27, param_0->unk0);
-            func_800904C8(0x74);
-            param_0->unk64_20 = 1;
-            return;
         case 1:
-            func_8080422C_chdodgemcontrol(param_0, 5);
-            return;
         case 2:
-            func_8080422C_chdodgemcontrol(param_0, 7);
-            return;
+            switch (param_0->unk6C_0) {
+                case 0:
+                    func_80103140(param_0, 0x828, param_0->unk0->unk16);
+                    func_800904F4(0x27, param_0->unk0);
+                    func_800904C8(0x74);
+                    param_0->unk64_20 = 1;
+                    return;
+                case 1:
+                    func_8080422C_chdodgemcontrol(param_0, 5);
+                    return;
+                case 2:
+                    func_8080422C_chdodgemcontrol(param_0, 7);
+                    return;
+                case 3:
+                    func_8080422C_chdodgemcontrol(param_0, 6);
+            }
+            break;
         case 3:
-            func_8080422C_chdodgemcontrol(param_0, 6);
-            return;
-        }
-        break;
-    case 3:
-        if (param_0->unk6C_0 < _gcstatusDll_entrypoint_11()) {
-            ((DodgemFlags1312 *)param_0)->local_0 = 1;
-        }
-        return;
+            if (param_0->unk6C_0 < _gcstatusDll_entrypoint_11()) {
+                ((DodgemFlags1312 *) param_0)->local_0 = 1;
+            }
     }
 }
 
 void func_8080455C_chdodgemcontrol(param_0) Actor *param_0;
 {
-  if (param_0->unk64_20) func_800904C8(0x28);
+    if (param_0->unk64_20)
+        func_800904C8(0x28);
 }
 
 f32 func_8080458C_chdodgemcontrol(Actor *param_0)
 {
-  u32 temp_t6;
-  temp_t6 = (u8) (*((u8 *) (((s8 *) param_0) + 0x79)));
-  temp_t6 = temp_t6 >> 4;
-  switch (temp_t6)
-  {
-    case 0:
+    u32 temp_t6;
+    temp_t6 = (u8) (*((u8 *) (((s8 *) param_0) + 0x79)));
+    temp_t6 = temp_t6 >> 4;
+    switch (temp_t6) {
+        case 0:
 
-    case 1:
+        case 1:
 
-    case 2:
-      if (!((*((s32 *) (((s8 *) param_0) + 0x6C))) & 0x1FF))
-    {
-      return 60.0f;
+        case 2:
+            if (!((*((s32 *) (((s8 *) param_0) + 0x6C))) & 0x1FF)) {
+                return 60.0f;
+            }
+            return 50.0f;
+
+        case 3:
+            return 60.0f;
+
+        default:
+            return 0.0f;
     }
-      return 50.0f;
-
-    case 3:
-      return 60.0f;
-
-    default:
-      return 0.0f;
-
-  }
-
 }
 
 f32 func_8080460C_chdodgemcontrol(Actor *param_0)
 {
-  f32 local_0;
-  switch ((u32)(*(u8 *)((char *)(param_0) + 0x79)) >> 4)
-  {
-    case 0 :
-      if ((*(s32 *)((char *)(param_0) + 0x6C) & 0x1FF) == 0)
-      {
-        return 600.0f;
-      }
-      return 400.0f;
+    switch ((u32) (*(u8 *) ((char *) (param_0) + 0x79)) >> 4) {
+        case 0:
+            if ((*(s32 *) ((char *) (param_0) + 0x6C) & 0x1FF) == 0) {
+                return 600.0f;
+            }
+            return 400.0f;
 
-    case 1 :
-      if ((*(s32 *)((char *)(param_0) + 0x6C) & 0x1FF) == 0)
-      {
-        return 600.0f;
-      }
-      return 500.0f;
+        case 1:
+            if ((*(s32 *) ((char *) (param_0) + 0x6C) & 0x1FF) == 0) {
+                return 600.0f;
+            }
+            return 500.0f;
 
-    case 2 :
-      if ((*(s32 *)((char *)(param_0) + 0x6C) & 0x1FF) == 0)
-      {
-        return 600.0f;
-      }
-      return 600.0f;
+        case 2:
+            if ((*(s32 *) ((char *) (param_0) + 0x6C) & 0x1FF) == 0) {
+                return 600.0f;
+            }
+            return 600.0f;
 
-    case 3 :
-      return 600.0f;
+        case 3:
+            return 600.0f;
 
-    default :
-      return 0.0f;
-  }
+        default:
+            return 0.0f;
+    }
 }
 
 f32 func_808046EC_chdodgemcontrol(u8 *param_0)
 {
     u32 local_0;
 
-    local_0 = (u32)(*(u8*)((char*)param_0 + 0x79)) >> 4;
-    switch (local_0) {                              
-    case 0:
-    case 1:
-    case 2:
-        if (!((* (s32*)((char*)param_0 + 0x6C)) & 0x1FF)) {
-            return 800.0f;
-        }
-        return 600.0f;
-    case 3:
-        return 600.0f;
-    default:
-        return 0.0f;
+    local_0 = (u32) (*(u8 *) ((char *) param_0 + 0x79)) >> 4;
+    switch (local_0) {
+        case 0:
+        case 1:
+        case 2:
+            if (!((*(s32 *) ((char *) param_0 + 0x6C)) & 0x1FF)) {
+                return 800.0f;
+            }
+            return 600.0f;
+        case 3:
+            return 600.0f;
+        default:
+            return 0.0f;
     }
 }
 
@@ -2251,73 +2103,147 @@ void func_8080476C_chdodgemcontrol(param_0) Actor *param_0;
     local_1 = func_80106790(param_0->unk3C);
     local_3 = func_80100094(local_1, 0);
     if (local_1->unk79_4 == 3) {
-        if (*(f32 *)((u8 *)param_0 + 0x50) <= 0.0f) {
+        if (*(f32 *) ((u8 *) param_0 + 0x50) <= 0.0f) {
             local_4 = func_800DC128(0, local_3[0xC5]);
-            if ((s32)(*(u8 *)(local_3 + local_4 + 0xAC)) == 1) {
-                (*(f32 *)((u8 *)param_0 + 0x34)) = local_4;
+            if ((s32) (*(u8 *) (local_3 + local_4 + 0xAC)) == 1) {
+                (*(f32 *) ((u8 *) param_0 + 0x34)) = local_4;
             }
-            *(f32 *)((u8 *)param_0 + 0x50) = func_800DC178(3.0f, 5.0f);
+            *(f32 *) ((u8 *) param_0 + 0x50) = func_800DC178(3.0f, 5.0f);
         }
-        *(f32 *)((u8 *)param_0 + 0x54) = func_800F1DF4(param_0->position,
-            ((f32 (*)[3])(local_3 + 0x34))[(s32)(*(f32 *)((u8 *)param_0 + 0x34))]);
+        *(f32 *) ((u8 *) param_0 + 0x54) =
+            func_800F1DF4(param_0->position,
+                          ((f32(*)[3])(local_3 + 0x34))[(s32) (*(f32 *) ((u8 *) param_0 + 0x34))]);
     } else {
         local_2 = func_8080000C_chdodgemcontrol(local_1, 0);
         local_5 = 0;
         for (local_6 = 1; local_6 < local_3[0xC2]; local_6++) {
             if (local_6 != param_0->unk6C_0 &&
-                func_800EEB40(func_8080000C_chdodgemcontrol(local_1, local_6)->position, local_2->position) < 90000.0f) {
+                func_800EEB40(func_8080000C_chdodgemcontrol(local_1, local_6)->position,
+                              local_2->position) < 90000.0f) {
                 local_5++;
             }
         }
         if (local_5 >= 2) {
-            if (*(f32 *)((u8 *)param_0 + 0x50) <= 0.0f) {
+            if (*(f32 *) ((u8 *) param_0 + 0x50) <= 0.0f) {
                 local_0[1] = 0.0f;
                 local_0[0] = func_800DC178(-600.0f, 600.0f);
                 local_0[2] = func_800DC178(-600.0f, 600.0f);
-                *(f32 *)((u8 *)param_0 + 0x54) = func_800F1DF4(param_0->position, local_0);
-                *(f32 *)((u8 *)param_0 + 0x50) = func_800DC178(0.5f, 1.5f);
+                *(f32 *) ((u8 *) param_0 + 0x54) = func_800F1DF4(param_0->position, local_0);
+                *(f32 *) ((u8 *) param_0 + 0x50) = func_800DC178(0.5f, 1.5f);
             }
         } else {
-            *(f32 *)((u8 *)param_0 + 0x54) = func_800F1DF4(param_0->position, local_2->position);
+            *(f32 *) ((u8 *) param_0 + 0x54) = func_800F1DF4(param_0->position, local_2->position);
         }
     }
 }
 
 int chdodgemcontrol_entrypoint_2()
 {
-    return (int)&D_80804FAC_chdodgemcontrol;
+    return (int) &D_80804FAC_chdodgemcontrol;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/dodgemcontrol.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80804D20_chdodgemcontrol -> s32[], D_80804D34_chdodgemcontrol -> s32[], D_80804DB4_chdodgemcontrol -> int[], D_80804EDC_chdodgemcontrol -> int[], D_80804FAC_chdodgemcontrol -> int[] */
-s32 D_80804D00_chdodgemcontrol[4] = { 0x2, 0x3, 0x4, 0x4 };
-u8 D_80804D10_chdodgemcontrol[16] = { 0x0, 0x13, 0x5, 0x16, 0x0, 0x16, 0x1, 0xF4, 0x0, 0x1, 0xD, 0xAC, 0x13, 0x88, 0x0, 0x0 };
-s32 D_80804D20_chdodgemcontrol[5] = { 0x13054C, 0xD00F3, 0x10C0018, 0x10DAC, 0x13880000 };
-s32 D_80804D34_chdodgemcontrol[5] = { 0x13054B, 0xD00F3, 0x10C0018, 0x10DAC, 0x13880000 };
-u8 D_80804D48_chdodgemcontrol[20] = { 0x0, 0x13, 0x6, 0x61, 0x0, 0xA, 0x0, 0xB8, 0x0, 0x16, 0x46, 0x50, 0x0, 0x1, 0xD, 0xAC, 0x13, 0x88, 0x0, 0x0 };
-u8 D_80804D5C_chdodgemcontrol[24] = { 0x0, 0x13, 0x5, 0x19, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x16, 0x46, 0x50, 0x0, 0x1, 0xD, 0xAC, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80804D74_chdodgemcontrol[24] = { 0x0, 0x13, 0x6, 0x2B, 0x0, 0xD, 0x0, 0xCC, 0x0, 0xE6, 0x0, 0x16, 0x46, 0x50, 0x0, 0x1, 0xD, 0xAC, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80804D8C_chdodgemcontrol[24] = { 0x0, 0x13, 0x4, 0xB6, 0x0, 0xD, 0x0, 0xCC, 0x0, 0xE6, 0x0, 0x16, 0x46, 0x50, 0x0, 0x1, 0xD, 0xAC, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80804DA4_chdodgemcontrol[16] = { 0x0, 0x13, 0x5, 0x15, 0x0, 0x1E, 0x0, 0x1, 0xD, 0xAC, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
-int D_80804DB4_chdodgemcontrol[18] = { 0x2CB0306, 0x1, 0x0, (u32)func_8080010C_chdodgemcontrol, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, (u32)func_808015E8_chdodgemcontrol, 0x0, 0xC80000, (u32)func_808013D0_chdodgemcontrol, (u32)func_80107C2C, -0x7FFFF9FE, (u32)func_80800938_chdodgemcontrol, 0x0 };
-Quad D_80804DFC_chdodgemcontrol = { 0x77, 0x78, 0x7A, 0x79 };
-u8 D_80804E0C_chdodgemcontrol[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
-DodgemF4 D_80804E18_chdodgemcontrol = { 2.7e+02f, 9e+01f, 1.8e+02f, 0.0f };
-DodgemPositions D_80804E28_chdodgemcontrol = { 615.0f, 0.0f, 0.0f, -615.0f, 0.0f, 0.0f, 0.0f, 0.0f, 615.0f, 0.0f, 0.0f, -615.0f };
-u32 D_80804E58_chdodgemcontrol[8] = { 0x0, 0x0, 0x3F0A3D71, 0x3600000, 0x3F0A3D71, 0x3600000, 0x3F0A3D71, 0x3600000 };
-u8 D_80804E78_chdodgemcontrol[44] = { 0x0, 0x16, 0x12, 0x0, 0x0, 0x15, 0x0, 0x0, 0x0, 0xCC, 0x0, 0x2B, 0x0, 0xC0, 0x1, 0x0, 0x0, 0x22, 0x0, 0x4C, 0x0, 0x59, 0x0, 0x26, 0x0, 0x33, 0x0, 0x2D, 0x1, 0x90, 0x2, 0x58, 0x0, 0xD, 0x0, 0x14, 0x0, 0x1B, 0xFC, 0xE0, 0xFD, 0xA8, 0x0, 0x0 };
-u8 D_80804EA4_chdodgemcontrol[16] = { 0x0, 0x13, 0x4, 0xFC, 0x0, 0x18, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x0, 0x0, 0x0 };
-u32 D_80804EB4_chdodgemcontrol[3] = { 0x0, 0x0, 0x0 };
-u32 D_80804EC0_chdodgemcontrol[3] = { 0x0, 0x0, 0x0 };
-s16 D_80804ECC_chdodgemcontrol[4] = { 0x9E4, 0x9E8, 0x9E0, 0x0 };
-u16 D_80804ED4_chdodgemcontrol[4] = { 0x7C7, 0x7C6, 0x7C5, 0x0 };
-int D_80804EDC_chdodgemcontrol[18] = { 0x1FC037F, 0x7C50001, (u32)&D_80804E58_chdodgemcontrol, (u32)func_80801C60_chdodgemcontrol, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x20004, (u32)func_80801F00_chdodgemcontrol, 0x0, 0x0, (u32)func_80801F2C_chdodgemcontrol, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
-u8 D_80804F24_chdodgemcontrol[64] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4B, 0x18, 0x96, 0x80, 0x1, 0x5, 0x0, 0x0, 0x4B, 0x18, 0x96, 0x80, 0x1, 0x5, 0x0, 0x0, 0x4B, 0x18, 0x96, 0x80, 0x1, 0x5, 0x0, 0x0, 0x4B, 0x18, 0x96, 0x80, 0x1, 0x5, 0x0, 0x0, 0x40, 0x55, 0x1E, 0xB8, 0x1, 0xE, 0x0, 0x1, 0x40, 0x80, 0x0, 0x0, 0x1, 0xF, 0x0, 0x1, 0x40, 0x80, 0x0, 0x0, 0x1, 0x10, 0x0, 0x1 };
-s32 D_80804F64_chdodgemcontrol[4] = { 0x4, 0x1, 0x3, 0x2 };
-u8 D_80804F74_chdodgemcontrol[16] = { 0x3E, 0x17, 0xDB, 0xF5, 0x3E, 0x99, 0x99, 0x9A, 0x3E, 0xEF, 0x9D, 0xB2, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_80804F84_chdodgemcontrol[16] = { 0x3D, 0x8F, 0x5C, 0x29, 0x3E, 0x75, 0xC2, 0x8F, 0x3E, 0xCC, 0xCC, 0xCD, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_80804F94_chdodgemcontrol[12] = { 0x3D, 0xA3, 0xD7, 0xA, 0x3F, 0x61, 0x47, 0xAE, 0xBF, 0x80, 0x0, 0x0 };
-Vec3f D_80804FA0_chdodgemcontrol = { 0.0f, 0.0f, 0.0f };
-int D_80804FAC_chdodgemcontrol[21] = { 0x2CA0305, 0x6BA0004, (u32)&D_80804F24_chdodgemcontrol, (u32)func_80802D04_chdodgemcontrol, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x3F800000, 0x0, 0x4, (u32)func_8080455C_chdodgemcontrol, 0x0, 0x200000, (u32)func_8080440C_chdodgemcontrol, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_8080207C_chdodgemcontrol, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80804D00_chdodgemcontrol[4] = {0x2, 0x3, 0x4, 0x4};
+u8 D_80804D10_chdodgemcontrol[16] = {0x0, 0x13, 0x5, 0x16, 0x0,  0x16, 0x1, 0xF4,
+                                     0x0, 0x1,  0xD, 0xAC, 0x13, 0x88, 0x0, 0x0};
+s32 D_80804D20_chdodgemcontrol[5] = {0x13054C, 0xD00F3, 0x10C0018, 0x10DAC, 0x13880000};
+s32 D_80804D34_chdodgemcontrol[5] = {0x13054B, 0xD00F3, 0x10C0018, 0x10DAC, 0x13880000};
+u8 D_80804D48_chdodgemcontrol[20] = {0x0,  0x13, 0x6, 0x61, 0x0, 0xA,  0x0,  0xB8, 0x0, 0x16,
+                                     0x46, 0x50, 0x0, 0x1,  0xD, 0xAC, 0x13, 0x88, 0x0, 0x0};
+u8 D_80804D5C_chdodgemcontrol[24] = {0x0, 0x13, 0x5,  0x19, 0x0,  0xD,  0x0, 0xF3,
+                                     0x1, 0xC,  0x0,  0x16, 0x46, 0x50, 0x0, 0x1,
+                                     0xD, 0xAC, 0x13, 0x88, 0x0,  0x0,  0x0, 0x0};
+u8 D_80804D74_chdodgemcontrol[24] = {0x0, 0x13, 0x6,  0x2B, 0x0,  0xD,  0x0, 0xCC,
+                                     0x0, 0xE6, 0x0,  0x16, 0x46, 0x50, 0x0, 0x1,
+                                     0xD, 0xAC, 0x13, 0x88, 0x0,  0x0,  0x0, 0x0};
+u8 D_80804D8C_chdodgemcontrol[24] = {0x0, 0x13, 0x4,  0xB6, 0x0,  0xD,  0x0, 0xCC,
+                                     0x0, 0xE6, 0x0,  0x16, 0x46, 0x50, 0x0, 0x1,
+                                     0xD, 0xAC, 0x13, 0x88, 0x0,  0x0,  0x0, 0x0};
+u8 D_80804DA4_chdodgemcontrol[16] = {0x0, 0x13, 0x5,  0x15, 0x0, 0x1E, 0x0, 0x1,
+                                     0xD, 0xAC, 0x13, 0x88, 0x0, 0x0,  0x0, 0x0};
+int D_80804DB4_chdodgemcontrol[18] = {0x2CB0306,
+                                      0x1,
+                                      0x0,
+                                      (u32) func_8080010C_chdodgemcontrol,
+                                      (u32) func_80105834,
+                                      (u32) func_80101870,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      0x4,
+                                      (u32) func_808015E8_chdodgemcontrol,
+                                      0x0,
+                                      0xC80000,
+                                      (u32) func_808013D0_chdodgemcontrol,
+                                      (u32) func_80107C2C,
+                                      -0x7FFFF9FE,
+                                      (u32) func_80800938_chdodgemcontrol,
+                                      0x0};
+Quad D_80804DFC_chdodgemcontrol = {0x77, 0x78, 0x7A, 0x79};
+u8 D_80804E0C_chdodgemcontrol[12] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+DodgemF4 D_80804E18_chdodgemcontrol = {2.7e+02f, 9e+01f, 1.8e+02f, 0.0f};
+DodgemPositions D_80804E28_chdodgemcontrol = {615.0f, 0.0f, 0.0f,   -615.0f, 0.0f, 0.0f,
+                                              0.0f,   0.0f, 615.0f, 0.0f,    0.0f, -615.0f};
+u32 D_80804E58_chdodgemcontrol[8] = {0x0,        0x0,       0x3F0A3D71, 0x3600000,
+                                     0x3F0A3D71, 0x3600000, 0x3F0A3D71, 0x3600000};
+u8 D_80804E78_chdodgemcontrol[44] = {
+    0x0, 0x16, 0x12, 0x0, 0x0,  0x15, 0x0,  0x0,  0x0,  0xCC, 0x0,  0x2B, 0x0,  0xC0, 0x1,
+    0x0, 0x0,  0x22, 0x0, 0x4C, 0x0,  0x59, 0x0,  0x26, 0x0,  0x33, 0x0,  0x2D, 0x1,  0x90,
+    0x2, 0x58, 0x0,  0xD, 0x0,  0x14, 0x0,  0x1B, 0xFC, 0xE0, 0xFD, 0xA8, 0x0,  0x0};
+u8 D_80804EA4_chdodgemcontrol[16] = {0x0, 0x13, 0x4, 0xFC, 0x0, 0x18, 0x0, 0xD,
+                                     0x0, 0xF3, 0x1, 0xC,  0x0, 0x0,  0x0, 0x0};
+u32 D_80804EB4_chdodgemcontrol[3] = {0x0, 0x0, 0x0};
+u32 D_80804EC0_chdodgemcontrol[3] = {0x0, 0x0, 0x0};
+s16 D_80804ECC_chdodgemcontrol[4] = {0x9E4, 0x9E8, 0x9E0, 0x0};
+u16 D_80804ED4_chdodgemcontrol[4] = {0x7C7, 0x7C6, 0x7C5, 0x0};
+int D_80804EDC_chdodgemcontrol[18] = {0x1FC037F,
+                                      0x7C50001,
+                                      (u32) &D_80804E58_chdodgemcontrol,
+                                      (u32) func_80801C60_chdodgemcontrol,
+                                      (u32) func_80105834,
+                                      (u32) func_80101870,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      0x20004,
+                                      (u32) func_80801F00_chdodgemcontrol,
+                                      0x0,
+                                      0x0,
+                                      (u32) func_80801F2C_chdodgemcontrol,
+                                      (u32) func_80107C2C,
+                                      -0x7FFFFFFE,
+                                      0x0,
+                                      0x0};
+u8 D_80804F24_chdodgemcontrol[64] = {
+    0x0,  0x0,  0x0,  0x0,  0x0, 0x0, 0x0, 0x0, 0x4B, 0x18, 0x96, 0x80, 0x1, 0x5,  0x0, 0x0,
+    0x4B, 0x18, 0x96, 0x80, 0x1, 0x5, 0x0, 0x0, 0x4B, 0x18, 0x96, 0x80, 0x1, 0x5,  0x0, 0x0,
+    0x4B, 0x18, 0x96, 0x80, 0x1, 0x5, 0x0, 0x0, 0x40, 0x55, 0x1E, 0xB8, 0x1, 0xE,  0x0, 0x1,
+    0x40, 0x80, 0x0,  0x0,  0x1, 0xF, 0x0, 0x1, 0x40, 0x80, 0x0,  0x0,  0x1, 0x10, 0x0, 0x1};
+s32 D_80804F64_chdodgemcontrol[4] = {0x4, 0x1, 0x3, 0x2};
+u8 D_80804F74_chdodgemcontrol[16] = {0x3E, 0x17, 0xDB, 0xF5, 0x3E, 0x99, 0x99, 0x9A,
+                                     0x3E, 0xEF, 0x9D, 0xB2, 0xBF, 0x80, 0x0,  0x0};
+u8 D_80804F84_chdodgemcontrol[16] = {0x3D, 0x8F, 0x5C, 0x29, 0x3E, 0x75, 0xC2, 0x8F,
+                                     0x3E, 0xCC, 0xCC, 0xCD, 0xBF, 0x80, 0x0,  0x0};
+u8 D_80804F94_chdodgemcontrol[12] = {0x3D, 0xA3, 0xD7, 0xA,  0x3F, 0x61,
+                                     0x47, 0xAE, 0xBF, 0x80, 0x0,  0x0};
+Vec3f D_80804FA0_chdodgemcontrol = {0.0f, 0.0f, 0.0f};
+int D_80804FAC_chdodgemcontrol[21] = {0x2CA0305,
+                                      0x6BA0004,
+                                      (u32) &D_80804F24_chdodgemcontrol,
+                                      (u32) func_80802D04_chdodgemcontrol,
+                                      (u32) func_80105834,
+                                      (u32) func_801018A4,
+                                      0x0,
+                                      0x3F800000,
+                                      0x0,
+                                      0x4,
+                                      (u32) func_8080455C_chdodgemcontrol,
+                                      0x0,
+                                      0x200000,
+                                      (u32) func_8080440C_chdodgemcontrol,
+                                      (u32) func_80107C2C,
+                                      -0x7FFFFFFE,
+                                      (u32) func_8080207C_chdodgemcontrol,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      0x0};

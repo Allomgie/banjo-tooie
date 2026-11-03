@@ -4,8 +4,17 @@ extern int D_80800230_chdiggerbossinterior[];
 extern u8 D_80800278_chdiggerbossinterior[];
 extern Actor *_subaddiefind_entrypoint_2(s32, void *);
 extern Actor *_subaddiefind_entrypoint_3(s32, void *);
-typedef union { s32 local_0; f32 local_1; void *local_2; } DiggerInteriorEvent59;
-typedef struct { f32 position[3]; f32 unused; f32 yaw; f32 scale; } DiggerInteriorPose;
+typedef union {
+    s32 local_0;
+    f32 local_1;
+    void *local_2;
+} DiggerInteriorEvent59;
+typedef struct {
+    f32 position[3];
+    f32 unused;
+    f32 yaw;
+    f32 scale;
+} DiggerInteriorPose;
 extern s32 _subaddiemarker_entrypoint_1(Actor *, s32, s32, DiggerInteriorPose *, s32);
 extern Actor *func_80108528(s32, f32 *, s32, Actor **);
 extern void func_80102FDC(Actor *, f32);
@@ -13,12 +22,12 @@ Actor *func_80800178_chdiggerbossinterior();
 
 int chdiggerbossinterior_entrypoint_0()
 {
-    return (int)&D_80800230_chdiggerbossinterior;
+    return (int) &D_80800230_chdiggerbossinterior;
 }
 
-void func_8080000C_chdiggerbossinterior(s32 param_0){
+void func_8080000C_chdiggerbossinterior(s32 param_0)
+{
     func_800FE850();
-    return;
 }
 
 void func_8080002C_chdiggerbossinterior(Actor *param_0)
@@ -42,12 +51,12 @@ s32 func_808000F4_chdiggerbossinterior(Actor *param_0, s32 param_1, DiggerInteri
 
     switch (param_1) {
         case 0x49:
-        local_0 = func_80800178_chdiggerbossinterior(param_0, 0x32);
-        if (func_800DA980(0xA4F, 2) > 0) {
-            local_0 = func_80800178_chdiggerbossinterior(local_0, 0x33);
-        }
-        func_80101FDC(local_0, 2);
-        local_0->unk79_4 = 1;
+            local_0 = func_80800178_chdiggerbossinterior(param_0, 0x32);
+            if (func_800DA980(0xA4F, 2) > 0) {
+                local_0 = func_80800178_chdiggerbossinterior(local_0, 0x33);
+            }
+            func_80101FDC(local_0, 2);
+            local_0->unk79_4 = 1;
             break;
         default:
             return 0;
@@ -55,12 +64,14 @@ s32 func_808000F4_chdiggerbossinterior(Actor *param_0, s32 param_1, DiggerInteri
     return 1;
 }
 
-Actor *func_80800178_chdiggerbossinterior(param_0, param_1) Actor *param_0; s32 param_1;
+Actor *func_80800178_chdiggerbossinterior(param_0, param_1)
+Actor *param_0;
+s32 param_1;
 {
     DiggerInteriorPose local_0;
     Actor *local_1;
     if (_subaddiemarker_entrypoint_1(param_0, 0x154, param_1, &local_0, 1)) {
-        local_1 = func_80108528(0x131, local_0.position, (s32)local_0.yaw, &param_0);
+        local_1 = func_80108528(0x131, local_0.position, (s32) local_0.yaw, &param_0);
         local_1->unk64_20 = 1;
         local_1->unk74_17 = 0;
         local_1->unk74_7 = 100;
@@ -70,12 +81,27 @@ Actor *func_80800178_chdiggerbossinterior(param_0, param_1) Actor *param_0; s32 
     return param_0;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/digger/bossinterior.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800230_chdiggerbossinterior -> int[] */
 extern void func_80102EC0();
 extern void func_80101870();
 extern void func_80107C2C();
-int D_80800230_chdiggerbossinterior[18] = { 0x15804F7, 0x1, 0x0, (u32)func_8080002C_chdiggerbossinterior, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_8080000C_chdiggerbossinterior, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_808000F4_chdiggerbossinterior, 0x0 };
-u8 D_80800278_chdiggerbossinterior[24] = { 0x0, 0x13, 0x5, 0xF0, 0x0, 0xE, 0x0, 0xE6, 0x1, 0x0, 0x0, 0x66, 0x0, 0x18, 0x0, 0x14, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+int D_80800230_chdiggerbossinterior[18] = {0x15804F7,
+                                           0x1,
+                                           0x0,
+                                           (u32) func_8080002C_chdiggerbossinterior,
+                                           (u32) func_80102EC0,
+                                           (u32) func_80101870,
+                                           0x0,
+                                           0x0,
+                                           0x0,
+                                           0x0,
+                                           0x0,
+                                           0x0,
+                                           0x0,
+                                           (u32) func_8080000C_chdiggerbossinterior,
+                                           (u32) func_80107C2C,
+                                           -0x7FFFFBFE,
+                                           (u32) func_808000F4_chdiggerbossinterior,
+                                           0x0};
+u8 D_80800278_chdiggerbossinterior[24] = {0x0, 0x13, 0x5, 0xF0, 0x0, 0xE,  0x0, 0xE6,
+                                          0x1, 0x0,  0x0, 0x66, 0x0, 0x18, 0x0, 0x14,
+                                          0x0, 0x2,  0x0, 0x0,  0x0, 0x0,  0x0, 0x0};

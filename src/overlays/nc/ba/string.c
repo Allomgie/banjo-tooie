@@ -7,31 +7,40 @@ extern f32 func_80115750(void *, f32);
 extern f32 func_80112C3C(void *, f32);
 extern f32 func_800EEAD4(f32 *, f32 *);
 extern void func_800EEBF0(f32 *, f32 *, f32);
-typedef struct { f32 local_0; f32 local_1; u8 local_2; } StringCameraLimits;
-typedef struct { u8 pad_0[0x50]; StringCameraLimits *local_0; } StringCameraNode;
 
-s32 ncbastring_entrypoint_0() 
+typedef struct {
+    f32 local_0;
+    f32 local_1;
+    u8 local_2;
+} StringCameraLimits;
+typedef struct {
+    u8 pad_0[0x50];
+    StringCameraLimits *local_0;
+} StringCameraNode;
+
+s32 ncbastring_entrypoint_0()
 {
     return 0xC;
 }
 
-void func_80800008_ncbastring(PlayerState* arg0, f32* arg1)
+void func_80800008_ncbastring(PlayerState *arg0, f32 *arg1)
 {
-    func_80112524(arg0,arg1);
+    func_80112524(arg0, arg1);
 }
 
 int ncbastring_entrypoint_1(Actor *param_0)
 {
-  func_80111B8C(param_0, 0x40800000, 0x41000000);
-  func_801124D0(param_0, 1);
-  func_80115858(param_0, 1);
-  func_80115870(param_0, 0x40A00000);
+    func_80111B8C(param_0, 0x40800000, 0x41000000);
+    func_801124D0(param_0, 1);
+    func_80115858(param_0, 1);
+    func_80115870(param_0, 0x40A00000);
 }
 
-void ncbastring_entrypoint_2(s32 arg0) 
+void ncbastring_entrypoint_2(s32 arg0)
 {
 }
-void func_8080007C_ncbastring(PlayerState* arg0, f32* arg1)
+
+void func_8080007C_ncbastring(PlayerState *arg0, f32 *arg1)
 {
     func_80112550(arg0, arg1);
 }
@@ -51,7 +60,7 @@ void ncbastring_entrypoint_3(void *param_0)
 
     func_8080007C_ncbastring(param_0, local_0);
     func_801107F0(param_0, local_2);
-    if (**(s32 **)((u8 *)param_0 + 0x5C)) {
+    if (**(s32 **) ((u8 *) param_0 + 0x5C)) {
         local_5 = _ncbawaypoint_entrypoint_3(param_0, local_0, local_2);
     } else {
         local_5 = 0.0f;
@@ -73,8 +82,7 @@ void ncbastring_entrypoint_3(void *param_0)
             func_80115444(param_0, &local_8, &local_9);
             func_801107F0(param_0, local_2);
             local_4 = func_800EEAD4(local_2, local_0);
-            if (local_9 * 1.5f < local_6 && local_9 * 1.5f < local_4 &&
-                func_801138F4(param_0)) {
+            if (local_9 * 1.5f < local_6 && local_9 * 1.5f < local_4 && func_801138F4(param_0)) {
                 func_80110F44(param_0);
             }
         } else if (func_801138F4(param_0)) {
@@ -107,8 +115,6 @@ void ncbastring_entrypoint_4(StringCameraNode *param_0)
     } else if (local_4 < param_0->local_0->local_1) {
         param_0->local_0->local_2 = 1;
         param_0->local_0->local_0 = local_3;
-    } else param_0->local_0->local_2 = 0;
+    } else
+        param_0->local_0->local_2 = 0;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/string.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -22,9 +22,9 @@ extern void baanim_playForDuration_onceSmooth(PlayerState *, s32, f32);
 extern void _subaddiefind_entrypoint_5(s32, Actor **, s32, f32 *, f32, f32 (*)(f32 *, f32 *));
 extern f32 baanim_getTimer(PlayerState *);
 extern void _bamovegoto_entrypoint_7(PlayerState *, f32);
-void func_8080012C_bssplitup();
 
-void bssplitup_entrypoint_0(s32 param_0) {
+void bssplitup_entrypoint_0(s32 param_0)
+{
     func_800A3410(param_0, 0xA);
     _bapackctrl_entrypoint_5(param_0, 3);
     baanim_playForDuration_onceSmooth(param_0, 0xA2, 2.2f);
@@ -33,13 +33,14 @@ void bssplitup_entrypoint_0(s32 param_0) {
     func_8009BA9C(param_0, 0);
 }
 
-void bssplitup_entrypoint_1(u8 *param_0) {
+void bssplitup_entrypoint_1(u8 *param_0)
+{
     s32 local_0;
 
     local_0 = 0;
     if (baanim_isStopped() != 0) {
         local_0 = 1;
-        if (func_800F54E4() != (*(s32 *)((s8 *)(param_0) + (0x184)))) {
+        if (func_800F54E4() != *(s32 *) ((s8 *) param_0 + 0x184)) {
             func_800F457C(param_0, 2);
         }
     }
@@ -48,24 +49,24 @@ void bssplitup_entrypoint_1(u8 *param_0) {
 
 int bssplitup_entrypoint_2(Actor *param_0)
 {
-  _baduo_entrypoint_7(param_0, 3);
-  if (bs_getNextState(param_0) != 0x5A)
-  {
-    _sudialog_entrypoint_0(0x4F5, 0xc);
-  }
+    _baduo_entrypoint_7(param_0, 3);
+    if (bs_getNextState(param_0) != 0x5A) {
+        _sudialog_entrypoint_0(0x4F5, 0xc);
+    }
 }
 
 int bssplitup_entrypoint_3(s32 param_0)
 {
-  return D_80800700_bssplitup[param_0];
+    return D_80800700_bssplitup[param_0];
 }
 
-void func_8080012C_bssplitup(param_0, param_1) PlayerState *param_0; s32 param_1;
+void func_8080012C_bssplitup(param_0, param_1) PlayerState *param_0;
+s32 param_1;
 {
     f32 local_0[4];
     Actor *local_1;
 
-    *(s32 *)((u8 *)param_0 + 0x15C) = param_1;
+    *(s32 *) ((u8 *) param_0 + 0x15C) = param_1;
     switch (param_1) {
         case 1:
             baanim_playForDuration_onceSmooth(param_0, 0xA3, 2.2f);
@@ -86,46 +87,45 @@ void func_8080012C_bssplitup(param_0, param_1) PlayerState *param_0; s32 param_1
             break;
         case 3:
             baphysics_set_type(param_0, 2);
-            break;
     }
 }
 
 void bssplitup_entrypoint_4(s32 param_0)
 {
-  s32 local_0;
-  local_0 = param_0 | 0;
-  func_800A3410(local_0, 11);
-  func_800A38F0(local_0, 0, 0);
-  func_80092778(local_0);
-  bastick_func_8009F258(local_0);
-  *(s32 *)((char *)(param_0) + 0x15C) = 0;
+    s32 local_0;
+    local_0 = param_0 | 0;
+    func_800A3410(local_0, 11);
+    func_800A38F0(local_0, 0, 0);
+    func_80092778(local_0);
+    bastick_func_8009F258(local_0);
+    *(s32 *) ((char *) param_0 + 0x15C) = 0;
 
-  func_8080012C_bssplitup(local_0, 1);
+    func_8080012C_bssplitup(local_0, 1);
 }
 
-void bssplitup_entrypoint_5(u8 *param_0) {
+void bssplitup_entrypoint_5(u8 *param_0)
+{
     s32 local_0;
     s32 local_1;
 
     local_0 = 0;
-    local_1 = (*(s32 *)((s8 *)(param_0) + (0x15C)));
-    switch (local_1) {                              
-    case 3:
-        break;
-    case 1:
-        if (baanim_isAt(param_0, 0x3D4CCCCD) != 0) {
-            func_8080012C_bssplitup(param_0, 2);
-        }
-        break;
-    case 2:
-        if (baanim_isAt(param_0, 0x3F028F5C) != 0) {
-            func_8080012C_bssplitup(param_0, 3);
-        }
-        break;
+    local_1 = *(s32 *) ((s8 *) param_0 + 0x15C);
+    switch (local_1) {
+        case 3:
+            break;
+        case 1:
+            if (baanim_isAt(param_0, 0x3D4CCCCD) != 0) {
+                func_8080012C_bssplitup(param_0, 2);
+            }
+            break;
+        case 2:
+            if (baanim_isAt(param_0, 0x3F028F5C) != 0) {
+                func_8080012C_bssplitup(param_0, 3);
+            }
     }
     if (baanim_isStopped(param_0) != 0) {
         local_0 = 0xBB;
-        if (func_800F54E4() != (*(s32 *)((s8 *)(param_0) + (0x184)))) {
+        if (func_800F54E4() != *(s32 *) ((s8 *) param_0 + 0x184)) {
             func_800F457C(param_0, 2);
         }
     }
@@ -134,13 +134,13 @@ void bssplitup_entrypoint_5(u8 *param_0) {
 
 void bssplitup_entrypoint_6(Actor *param_0)
 {
-  _baduo_entrypoint_7(param_0, 3);
-  func_800F8EE4(*(int *)((char *)param_0 + 0x184));
+    _baduo_entrypoint_7(param_0, 3);
+    func_800F8EE4(*(int *) ((char *) param_0 + 0x184));
 }
 
 int bssplitup_entrypoint_7(s32 param_0)
 {
-  return D_80800710_bssplitup[param_0];
+    return D_80800710_bssplitup[param_0];
 }
 
 void bssplitup_entrypoint_8(Actor *param_0)
@@ -152,7 +152,8 @@ void bssplitup_entrypoint_8(Actor *param_0)
     _batimer_set(param_0, 0, 0x3DCCCCCD);
 }
 
-void bssplitup_entrypoint_9(s32 param_0) {
+void bssplitup_entrypoint_9(s32 param_0)
+{
     s32 local_0 = 0;
     if (_batimer_decrement(param_0, 0)) {
         _baduo_entrypoint_16(param_0);
@@ -161,12 +162,13 @@ void bssplitup_entrypoint_9(s32 param_0) {
     bs_setState(param_0, local_0);
 }
 
-void bssplitup_entrypoint_10(s32 arg0) 
+void bssplitup_entrypoint_10(s32 arg0)
 {
 }
+
 int bssplitup_entrypoint_11(s32 param_0)
 {
-  return D_80800720_bssplitup[param_0];
+    return D_80800720_bssplitup[param_0];
 }
 
 void bssplitup_entrypoint_12(PlayerState *param_0)
@@ -179,7 +181,8 @@ void bssplitup_entrypoint_12(PlayerState *param_0)
     func_8009DF18(param_0, 0x3EA, 1.0f, 0x6D60);
 }
 
-void bssplitup_entrypoint_13(s32 param_0) {
+void bssplitup_entrypoint_13(s32 param_0)
+{
     s32 local_0 = 0;
     if (baanim_isStopped(param_0) != 0) {
         local_0 = 1;
@@ -189,12 +192,12 @@ void bssplitup_entrypoint_13(s32 param_0) {
 
 void bssplitup_entrypoint_14(s32 arg0)
 {
-    func_800A0CF4(arg0,0);
+    func_800A0CF4(arg0, 0);
 }
 
 int bssplitup_entrypoint_15(s32 param_0)
 {
-  return D_80800730_bssplitup[param_0];
+    return D_80800730_bssplitup[param_0];
 }
 
 void bssplitup_entrypoint_16(PlayerState *param_0)
@@ -207,10 +210,11 @@ void bssplitup_entrypoint_16(PlayerState *param_0)
     func_8009DF18(param_0, 0x3EA, 1.0f, 0x6D60);
 }
 
-s32 bssplitup_entrypoint_17(s32 param_0){
+s32 bssplitup_entrypoint_17(s32 param_0)
+{
     s32 local_0;
     local_0 = 0;
-    if(baanim_isStopped()){
+    if (baanim_isStopped()) {
         local_0 = 1;
     }
     bs_setState(param_0, local_0);
@@ -218,17 +222,14 @@ s32 bssplitup_entrypoint_17(s32 param_0){
 
 void bssplitup_entrypoint_18(s32 arg0)
 {
-    func_800A0CF4(arg0,0);
+    func_800A0CF4(arg0, 0);
 }
 
 int bssplitup_entrypoint_19(s32 param_0)
 {
-  return D_80800740_bssplitup[param_0];
+    return D_80800740_bssplitup[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/splitup.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bssplitup_entrypoint_2();
 extern void _bssplitup_entrypoint_0();
 extern void _bssplitup_entrypoint_1();
@@ -246,8 +247,13 @@ extern void func_80099B94();
 extern void _bssplitup_entrypoint_18();
 extern void _bssplitup_entrypoint_16();
 extern void _bssplitup_entrypoint_17();
-s32 D_80800700_bssplitup[4] = { (u32)_bssplitup_entrypoint_2, (u32)_bssplitup_entrypoint_0, (u32)_bssplitup_entrypoint_1, (u32)func_80099AA8 };
-s32 D_80800710_bssplitup[4] = { (u32)_bssplitup_entrypoint_6, (u32)_bssplitup_entrypoint_4, (u32)_bssplitup_entrypoint_5, (u32)func_80099AA8 };
-s32 D_80800720_bssplitup[4] = { (u32)_bssplitup_entrypoint_10, (u32)_bssplitup_entrypoint_8, (u32)_bssplitup_entrypoint_9, (u32)func_80099AA8 };
-s32 D_80800730_bssplitup[4] = { (u32)_bssplitup_entrypoint_14, (u32)_bssplitup_entrypoint_12, (u32)_bssplitup_entrypoint_13, (u32)func_80099B94 };
-s32 D_80800740_bssplitup[4] = { (u32)_bssplitup_entrypoint_18, (u32)_bssplitup_entrypoint_16, (u32)_bssplitup_entrypoint_17, (u32)func_80099B94 };
+s32 D_80800700_bssplitup[4] = {(u32) _bssplitup_entrypoint_2, (u32) _bssplitup_entrypoint_0,
+                               (u32) _bssplitup_entrypoint_1, (u32) func_80099AA8};
+s32 D_80800710_bssplitup[4] = {(u32) _bssplitup_entrypoint_6, (u32) _bssplitup_entrypoint_4,
+                               (u32) _bssplitup_entrypoint_5, (u32) func_80099AA8};
+s32 D_80800720_bssplitup[4] = {(u32) _bssplitup_entrypoint_10, (u32) _bssplitup_entrypoint_8,
+                               (u32) _bssplitup_entrypoint_9, (u32) func_80099AA8};
+s32 D_80800730_bssplitup[4] = {(u32) _bssplitup_entrypoint_14, (u32) _bssplitup_entrypoint_12,
+                               (u32) _bssplitup_entrypoint_13, (u32) func_80099B94};
+s32 D_80800740_bssplitup[4] = {(u32) _bssplitup_entrypoint_18, (u32) _bssplitup_entrypoint_16,
+                               (u32) _bssplitup_entrypoint_17, (u32) func_80099B94};

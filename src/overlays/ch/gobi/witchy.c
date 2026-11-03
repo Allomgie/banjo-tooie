@@ -17,7 +17,7 @@ void func_8080024C_chgobiwitchy();
 
 int chgobiwitchy_entrypoint_0()
 {
-  return (int)&D_80800410_chgobiwitchy;
+    return (int) &D_80800410_chgobiwitchy;
 }
 
 void func_808002DC_chgobiwitchy();
@@ -40,7 +40,6 @@ void func_8080000C_chgobiwitchy(Actor *param_0)
                     _glcutDll_entrypoint_6(0x127, 0x47);
                 }
             }
-            break;
         case 2:
             break;
     }
@@ -52,47 +51,50 @@ s32 func_80800104_chgobiwitchy(Actor *param_0, s32 param_1, s32 param_2)
     void *local_0;
 
     switch (param_1) {
-    case 0x2E:
-        func_8080024C_chgobiwitchy(param_0, ((s16 *)&param_2)[0], ((s16 *)&param_2)[1]);
-        break;
-    case 0x52:
-        _gcdialogcamera_entrypoint_3(D_80800458_chgobiwitchy, param_0->scale);
-        break;
-    case 0x95:
-        local_0 = _suexpression_entrypoint_7(param_0, 1, 0x38);
-        _suexpression_entrypoint_12(local_0, 40.0f, 60.0f);
-        _suexpression_entrypoint_14(local_0, 1.0f, 1.0f);
-        break;
-    default:
-        return 0;
+        case 0x2E:
+            func_8080024C_chgobiwitchy(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            break;
+        case 0x52:
+            _gcdialogcamera_entrypoint_3(D_80800458_chgobiwitchy, param_0->scale);
+            break;
+        case 0x95:
+            local_0 = _suexpression_entrypoint_7(param_0, 1, 0x38);
+            _suexpression_entrypoint_12(local_0, 40.0f, 60.0f);
+            _suexpression_entrypoint_14(local_0, 1.0f, 1.0f);
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
 
-void func_808001C8_chgobiwitchy(Actor* arg0) 
+void func_808001C8_chgobiwitchy(Actor *arg0)
 {
     _suexpression_entrypoint_8(arg0, 1);
 }
+
 void func_808001E8_chgobiwitchy(u8 *param_0)
 {
-  if (func_800DA298(0x97) != 0)
-  {
-    func_800FFAB0(param_0);
-    return;
-  }
-  func_80105A9C(param_0, 0x43FA0000);
-  func_80102FDC(param_0, 0x3E800000);
-  *((u8 *) (((s8 *) param_0) + 0x95)) = (u8) (((*((u8 *) (((s8 *) param_0) + 0x95))) & 0xFFFFu) | 1);
+    if (func_800DA298(0x97) != 0) {
+        func_800FFAB0(param_0);
+        return;
+    }
+    func_80105A9C(param_0, 0x43FA0000);
+    func_80102FDC(param_0, 0x3E800000);
+    *(u8 *) ((s8 *) param_0 + 0x95) = (u8) ((*(u8 *) ((s8 *) param_0 + 0x95) & 0xFFFFu) | 1);
 }
 
-void func_8080024C_chgobiwitchy(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+void func_8080024C_chgobiwitchy(param_0, param_1, param_2) Actor *param_0;
+s32 param_1;
+s32 param_2;
 {
     _capod_entrypoint_22();
     if (param_1 == 0x107B) {
         _suexpression_entrypoint_12(func_80100094(param_0, 1), 0.0f, 0.0f);
         func_80101FDC(param_0, 4);
         _capod_entrypoint_13(param_0->unk0, 0, 1, 0x2031);
-    } else func_80101FDC(param_0, 1);
+    } else
+        func_80101FDC(param_0, 1);
 }
 
 void func_808002DC_chgobiwitchy(Actor *param_0)
@@ -109,23 +111,42 @@ void func_808002DC_chgobiwitchy(Actor *param_0)
             local_0 = 1;
         }
     } else {
-        local_0 = _subaddiedialog_entrypoint_8(param_0, param_0->position,
-                    D_80800468_chgobiwitchy, D_808003C0_chgobiwitchy, 5);
+        local_0 = _subaddiedialog_entrypoint_8(param_0, param_0->position, D_80800468_chgobiwitchy,
+                                               D_808003C0_chgobiwitchy, 5);
     }
     if (local_0) {
         _capod_entrypoint_21(param_0->unk0, 0, 0xA, 0);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/gobi/witchy.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800410_chgobiwitchy -> int[] */
 extern void func_80102EC0();
 extern void func_80101870();
 extern void func_80107C2C();
-u8 D_808003C0_chgobiwitchy[40] = { 0x0, 0x0, 0x0, 0x1, 0x10, 0x79, 0x1, 0x0, 0x0, 0x0, 0x6, 0x1, 0x10, 0x7A, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x11, 0x16, 0x1, 0x0, 0x0, 0x0, 0x4, 0x0, 0x11, 0x17, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
-u32 D_808003E8_chgobiwitchy[10] = { 0x0, 0x0, 0x413CCCCD, 0x2210000, 0x413CCCCD, 0x2210000, 0x40900000, 0x2220000, 0x3F07AE14, 0x2230000 };
-int D_80800410_chgobiwitchy[18] = { 0x1880137, 0x7880001, (u32)&D_808003E8_chgobiwitchy, (u32)func_80102EC0, (u32)func_8080000C_chgobiwitchy, (u32)func_80101870, 0x0, 0x4119999A, 0x0, 0x40040128, (u32)func_808001C8_chgobiwitchy, 0x0, 0x0, (u32)func_808001E8_chgobiwitchy, (u32)func_80107C2C, -0x7FFFFBEE, (u32)func_80800104_chgobiwitchy, 0x0 };
-u8 D_80800458_chgobiwitchy[16] = { 0x43, 0x16, 0x0, 0x0, 0x43, 0xFA, 0x0, 0x0, 0x43, 0x8C, 0x0, 0x0, 0x42, 0xF0, 0x0, 0x0 };
-u8 D_80800468_chgobiwitchy[24] = { 0x0, 0x87, 0x0, 0x0, 0x2, 0x58, 0x0, 0x38, 0x0, 0x0, 0x0, 0xE, 0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808003C0_chgobiwitchy[40] = {0x0,  0x0,  0x0,  0x1,  0x10, 0x79, 0x1,  0x0, 0x0,  0x0,
+                                  0x6,  0x1,  0x10, 0x7A, 0x2,  0x0,  0x0,  0x0, 0x2,  0x0,
+                                  0x11, 0x16, 0x1,  0x0,  0x0,  0x0,  0x4,  0x0, 0x11, 0x17,
+                                  0x1,  0x0,  0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3,  0x0};
+u32 D_808003E8_chgobiwitchy[10] = {0x0,       0x0,        0x413CCCCD, 0x2210000,  0x413CCCCD,
+                                   0x2210000, 0x40900000, 0x2220000,  0x3F07AE14, 0x2230000};
+int D_80800410_chgobiwitchy[18] = {0x1880137,
+                                   0x7880001,
+                                   (u32) &D_808003E8_chgobiwitchy,
+                                   (u32) func_80102EC0,
+                                   (u32) func_8080000C_chgobiwitchy,
+                                   (u32) func_80101870,
+                                   0x0,
+                                   0x4119999A,
+                                   0x0,
+                                   0x40040128,
+                                   (u32) func_808001C8_chgobiwitchy,
+                                   0x0,
+                                   0x0,
+                                   (u32) func_808001E8_chgobiwitchy,
+                                   (u32) func_80107C2C,
+                                   -0x7FFFFBEE,
+                                   (u32) func_80800104_chgobiwitchy,
+                                   0x0};
+u8 D_80800458_chgobiwitchy[16] = {0x43, 0x16, 0x0, 0x0, 0x43, 0xFA, 0x0, 0x0,
+                                  0x43, 0x8C, 0x0, 0x0, 0x42, 0xF0, 0x0, 0x0};
+u8 D_80800468_chgobiwitchy[24] = {0x0, 0x87, 0x0, 0x0, 0x2, 0x58, 0x0, 0x38, 0x0, 0x0, 0x0, 0xE,
+                                  0x0, 0x0,  0x2, 0x0, 0x0, 0x0,  0x0, 0x0,  0x0, 0x0, 0x0, 0x0};

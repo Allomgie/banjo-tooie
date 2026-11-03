@@ -1,6 +1,5 @@
 #include "common.h"
 
-extern f32 B_80800290_fxdialog[8];
 extern f32 B_808002A0_fxdialog;
 extern void func_800E2554(f32, f32);
 extern void func_800E257C(s32);
@@ -8,40 +7,33 @@ extern f32 B_808002A4_fxdialog;
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void *func_800DF944(u32, f32 *, f32, f32, f32 *, s32, s32);
 
-/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/fx/dialog.bss.s) is defined here in C, ahead of
- * its first use: IDO places .bss objects used before their definition first, the rest in definition
- * order.
- * Labels inside an object are linker symbols in undefined_syms.us.txt:
- * B_808002A0_fxdialog, B_808002A4_fxdialog. */
 f32 B_80800290_fxdialog[8];
-
 
 void fxdialog_entrypoint_0(void)
 {
-  *((s32 *) (((s8 *) (((s32 *) &B_80800290_fxdialog))) + 0xC)) = 0;
-  *((s32 *) (((s8 *) (((s32 *) &B_80800290_fxdialog))) + 8)) = 0;
-  *((f32 *) (((s8 *) (((s32 *) &B_80800290_fxdialog))) + 0x10)) = 1.0f;
-  *((f32 *) (((s8 *) (((s32 *) &B_80800290_fxdialog))) + 4)) = 0.0f;
-  *((f32 *) (((s8 *) (((s32 *) &B_80800290_fxdialog))) + 0)) = (f32) (*((f32 *) (((s8 *) (((s32 *) &B_80800290_fxdialog))) + 4)));
+    *(s32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 0xC) = 0;
+    *(s32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 8) = 0;
+    *(f32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 0x10) = 1.0f;
+    *(f32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 4) = 0.0f;
+    *(f32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 0) =
+        (f32) *(f32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 4);
 }
 
 void fxdialog_entrypoint_1(s32 param_0, s32 param_1)
 {
-  char *new_var;
-  new_var = (char *) (&B_80800290_fxdialog);
-  *((f32 *) (((char *) (&B_80800290_fxdialog)) + 0x4)) = (f32) param_1;
-  *((s32 *) (((char *) (&B_80800290_fxdialog)) + 0x8)) = param_0 << 2;
-  *((s32 *) (((char *) (&B_80800290_fxdialog)) + 0xC)) = param_1 << 2;
-  *((f32 *) (new_var + 0x0)) = (f32) param_0;
-  *((f32 *) (((char *) (&B_80800290_fxdialog)) + 0x4)) = (f32) param_1;
+    char *new_var;
+    new_var = (char *) &B_80800290_fxdialog;
+    *(s32 *) ((char *) &B_80800290_fxdialog + 0x8) = param_0 << 2;
+    *(s32 *) ((char *) &B_80800290_fxdialog + 0xC) = param_1 << 2;
+    *(f32 *) (new_var + 0x0) = (f32) param_0;
+    *(f32 *) ((char *) &B_80800290_fxdialog + 0x4) = (f32) param_1;
 }
 
 fxdialog_entrypoint_2(f32 param_0)
 {
-    if (param_0 > 0.0f)
-    {
-        *(f32*)((char*)((u8 *) &B_80800290_fxdialog) + 0x10) = param_0;
-        *(f32*)((char*)((u8 *) &B_80800290_fxdialog) + 0x14) = 1.0f / param_0;
+    if (param_0 > 0.0f) {
+        *(f32 *) ((char *) (u8 *) &B_80800290_fxdialog + 0x10) = param_0;
+        *(f32 *) ((char *) (u8 *) &B_80800290_fxdialog + 0x14) = 1.0f / param_0;
     }
 }
 
@@ -58,10 +50,12 @@ void fxdialog_entrypoint_3(u32 param_0, f32 param_1, s32 param_2, s32 param_3)
     func_800DFFA0(local_2, 0x2A, local_1);
     func_800DF41C(local_2);
     func_800DF410(param_3);
-    func_800DF944(param_0, (f32 *)((s32 *) &B_80800290_fxdialog), param_2 * 90.0f, ((f32 *)((s32 *) &B_80800290_fxdialog))[4], local_0, 0, func_800D674C(0x9F1));
+    func_800DF944(param_0, (f32 *) (s32 *) &B_80800290_fxdialog, param_2 * 90.0f,
+                  ((f32 *) (s32 *) &B_80800290_fxdialog)[4], local_0, 0, func_800D674C(0x9F1));
 }
 
-void fxdialog_entrypoint_4(s32 param_0, s32 param_1, s32 param_2, f32 param_3, f32 param_4, s32 param_5, s32 param_6)
+void fxdialog_entrypoint_4(s32 param_0, s32 param_1, s32 param_2, f32 param_3, f32 param_4,
+                           s32 param_5, s32 param_6)
 {
     s32 local_0[2];
     f32 local_1;
@@ -75,6 +69,3 @@ void fxdialog_entrypoint_4(s32 param_0, s32 param_1, s32 param_2, f32 param_3, f
     local_0[1] = ((s32 *) &B_80800290_fxdialog)[3] + param_4 * 4.0f * local_2;
     func_800E30E0(param_0, func_800D674C(param_1), param_2, local_0);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/dialog.data.s) is defined here in C.
- * Values are taken from the ROM. */

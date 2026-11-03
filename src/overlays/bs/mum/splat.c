@@ -1,9 +1,11 @@
 #include "overlays/bs/mum/splat.h"
 
-void func_80800000_bsmumsplat(PlayerState *self) {
+void func_80800000_bsmumsplat(PlayerState *self)
+{
     _bsmum_entrypoint_2(self);
     baanim_playForDuration_onceStartingAt(self, ASSET_CB_ANIM_BSMUMSPLAT_UNKNOWN, 3.08f, 0.085f);
-    func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 3, BA_PHYSICS_3_LOCKED_ROTATION);
+    func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 3,
+                  BA_PHYSICS_3_LOCKED_ROTATION);
     _bssplat_entrypoint_0(self);
     func_8009DF18(self, 0x50F, 1.0f, 0x7FFF);
     func_8009BA9C(self, NULL);
@@ -12,7 +14,8 @@ void func_80800000_bsmumsplat(PlayerState *self) {
     func_8008E944(self);
 }
 
-void func_808000A0_bsmumsplat(PlayerState *self) {
+void func_808000A0_bsmumsplat(PlayerState *self)
+{
     enum bs_state_e next_state;
     AnimCtrl *anim_ctrl;
 
@@ -39,18 +42,18 @@ void func_808000A0_bsmumsplat(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void func_8080019C_bsmumsplat(PlayerState *self) {
+void func_8080019C_bsmumsplat(PlayerState *self)
+{
     func_8008E95C(self);
     func_8009BD88(self);
     _bsmum_entrypoint_1(self);
 }
 
-s32 bsmumsplat_entrypoint_0(s32 idx) {
+s32 bsmumsplat_entrypoint_0(s32 idx)
+{
     return D_808001E0_bsmumsplat[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/mum/splat.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void func_80099AA8();
-s32 D_808001E0_bsmumsplat[4] = { (u32)func_8080019C_bsmumsplat, (u32)func_80800000_bsmumsplat, (u32)func_808000A0_bsmumsplat, (u32)func_80099AA8 };
+s32 D_808001E0_bsmumsplat[4] = {(u32) func_8080019C_bsmumsplat, (u32) func_80800000_bsmumsplat,
+                                (u32) func_808000A0_bsmumsplat, (u32) func_80099AA8};

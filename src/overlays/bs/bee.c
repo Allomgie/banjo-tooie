@@ -22,7 +22,8 @@ void bsbee_entrypoint_0(void *param_0)
     }
 }
 
-void bsbee_entrypoint_1(s32 param_0) {
+void bsbee_entrypoint_1(s32 param_0)
+{
     if (func_8009E77C(param_0, 1) == 0) {
         _babee_entrypoint_4(param_0);
         func_8009BFE4(param_0, 0x447A0000, 0x41400000);
@@ -45,8 +46,5 @@ void bsbee_entrypoint_1(s32 param_0) {
 
 int bsbee_entrypoint_2()
 {
-  _babee_entrypoint_8();
+    _babee_entrypoint_8();
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/bee.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -1,6 +1,5 @@
 #include "common.h"
 #include "overlays/ba/playerstate.h"
-#include "overlays/ba/playerstate.h"
 
 extern void func_8009C128(PlayerState *, f32 *);
 extern f32 func_800DC178(f32, f32);
@@ -100,7 +99,7 @@ void func_8080010C_bsbeefly(PlayerState *param_0)
     baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
     baphysics_set_target_horizontal_velocity(param_0, 0.0f);
     baphysics_set_gravity(param_0, -1200.0f);
-    *(s32 *)((u8 *)param_0 + 0x15C) = 0;
+    *(s32 *) ((u8 *) param_0 + 0x15C) = 0;
 }
 
 void func_808001C4_bsbeefly(PlayerState *param_0)
@@ -110,12 +109,12 @@ void func_808001C4_bsbeefly(PlayerState *param_0)
 
     local_1 = baanim_getAnimCtrlPtr(param_0);
     _bsbee_entrypoint_2(param_0);
-    switch (*(s32 *)((u8 *)param_0 + 0x15C)) {
+    switch (*(s32 *) ((u8 *) param_0 + 0x15C)) {
         case 0:
             if (anctrl_isAt(local_1, 0.266f)) {
                 baphysics_set_vertical_velocity(param_0, 1600.0f);
                 func_8009DE38(param_0, 0x406, 0.7f);
-                *(s32 *)((u8 *)param_0 + 0x15C) = 1;
+                *(s32 *) ((u8 *) param_0 + 0x15C) = 1;
             }
             break;
         case 1:
@@ -126,7 +125,6 @@ void func_808001C4_bsbeefly(PlayerState *param_0)
             if (baphysics_get_vertical_velocity(param_0) < 0.0f) {
                 local_0 = 0x8C;
             }
-            break;
     }
     bs_setState(param_0, local_0);
 }
@@ -138,11 +136,10 @@ void func_808002B0_bsbeefly()
 
 int bsbeefly_entrypoint_0(s32 param_0)
 {
-  return D_80800E18_bsbeefly[param_0];
+    return D_80800E18_bsbeefly[param_0];
 }
 
-void func_808002E4_bsbeefly(param_0)
-PlayerState *param_0;
+void func_808002E4_bsbeefly(param_0) PlayerState *param_0;
 {
     s32 local_0;
 
@@ -165,21 +162,21 @@ PlayerState *param_0;
 
 void func_8080039C_bsbeefly(Actor *param_0)
 {
-  if (func_8009CA70(param_0, bs_getPreviousState(), 0x4000) == 0) {
-    _bafly_entrypoint_5(param_0);
-    _babee_entrypoint_6(param_0);
-    _babee_entrypoint_7(param_0, 0x45BB8000, 0x3E4CCCCD, 0x463B8000);
-    func_80093360(param_0, 65.0f);
-    yaw_setUpdateType(param_0, 3);
-    baroll_setAngularVelocity(param_0, 0x43FA0000, 0x40000000);
-    _bafly_entrypoint_20(param_0);
-    baphysics_set_gravity(param_0, -300.0f);
-    baphysics_set_terminal_velocity(param_0, 0xC2C7CCCD);
-    _baboost_entrypoint_3(param_0);
-    _baboost_entrypoint_4(param_0, 1);
-    _babuzz_entrypoint_2(param_0);
-    _bafpctrl_entrypoint_18(param_0, 1);
-  }
+    if (func_8009CA70(param_0, bs_getPreviousState(), 0x4000) == 0) {
+        _bafly_entrypoint_5(param_0);
+        _babee_entrypoint_6(param_0);
+        _babee_entrypoint_7(param_0, 0x45BB8000, 0x3E4CCCCD, 0x463B8000);
+        func_80093360(param_0, 65.0f);
+        yaw_setUpdateType(param_0, 3);
+        baroll_setAngularVelocity(param_0, 0x43FA0000, 0x40000000);
+        _bafly_entrypoint_20(param_0);
+        baphysics_set_gravity(param_0, -300.0f);
+        baphysics_set_terminal_velocity(param_0, 0xC2C7CCCD);
+        _baboost_entrypoint_3(param_0);
+        _baboost_entrypoint_4(param_0, 1);
+        _babuzz_entrypoint_2(param_0);
+        _bafpctrl_entrypoint_18(param_0, 1);
+    }
 }
 
 void func_80800480_bsbeefly(PlayerState *param_0)
@@ -190,7 +187,7 @@ void func_80800480_bsbeefly(PlayerState *param_0)
     f32 local_3;
 
     local_3 = bastick_getX(param_0);
-    _ncbafly_entrypoint_4((void *)func_800A4CA8(param_0), 2.0f, 2000.0f, 350.0f);
+    _ncbafly_entrypoint_4((void *) func_800A4CA8(param_0), 2.0f, 2000.0f, 350.0f);
     if (bakey_held(param_0, 3)) {
         yaw_setVelocityBounded(param_0, 500.0f, 30.0f);
         local_1 = 6.0f;
@@ -208,15 +205,12 @@ void func_80800480_bsbeefly(PlayerState *param_0)
 
 s32 func_808005B0_bsbeefly(s32 param_0)
 {
-  if (func_8009E6EC() == 0x18)
-  {
-    _baboost_entrypoint_2(param_0, 1.0f);
-    func_8009E830(param_0, 2);
-  }
-  else
-  {
-    func_80099B94(param_0);
-  }
+    if (func_8009E6EC() == 0x18) {
+        _baboost_entrypoint_2(param_0, 1.0f);
+        func_8009E830(param_0, 2);
+    } else {
+        func_80099B94(param_0);
+    }
 }
 
 void func_80800600_bsbeefly(void *param_0)
@@ -235,17 +229,18 @@ void func_80800600_bsbeefly(void *param_0)
         baphysics_set_target_horizontal_velocity(param_0, 600.0);
     }
     local_1 = yaw_getIdeal(param_0);
-    baphysics_set_horizontal_velocity(param_0, local_1, baphysics_get_target_horizontal_velocity(param_0));
+    baphysics_set_horizontal_velocity(param_0, local_1,
+                                      baphysics_get_target_horizontal_velocity(param_0));
     local_2 = yaw_getIdeal(param_0);
     baphysics_set_target_yaw(param_0, local_2);
     func_800A4DA4(param_0, 0x16);
     func_8080039C_bsbeefly(param_0);
     if (local_0 != 0x8B) {
         _baboost_entrypoint_2(param_0, 1.0f);
-        *(s32 *)((char *)param_0 + 0x15C) = 0;
+        *(s32 *) ((char *) param_0 + 0x15C) = 0;
         return;
     }
-    *(s32 *)((char *)param_0 + 0x15C) = 1;
+    *(s32 *) ((char *) param_0 + 0x15C) = 1;
 }
 
 void func_80800708_bsbeefly(PlayerState *param_0)
@@ -298,27 +293,26 @@ void func_80800708_bsbeefly(PlayerState *param_0)
     _babuzz_entrypoint_4(param_0, local_3);
     _babuzz_entrypoint_3(param_0);
     switch (param_0->unk15C.word) {
-    case 0:
-        if (local_6 != D_80800E3C_bsbeefly) {
-            param_0->unk15C.word = 1;
-        }
-        break;
-    case 1:
-        local_7 = func_800136E4(func_8009BFD8(param_0) - 30.0f);
-        if (80.0f < local_7 && local_7 < 300.0f) {
-            local_7 = 300.0f;
-        }
-        func_8009BF5C(param_0, local_7);
-        _bafly_entrypoint_21(param_0);
-        if (local_2 != 0) {
-            baphysics_set_vertical_velocity(param_0, local_2 * 400.0f);
-            func_80800000_bsbeefly(param_0);
-        }
-        if (local_6 == D_80800E3C_bsbeefly) {
-            _bafly_entrypoint_20(param_0);
-            param_0->unk15C.word = 0;
-        }
-        break;
+        case 0:
+            if (local_6 != D_80800E3C_bsbeefly) {
+                param_0->unk15C.word = 1;
+            }
+            break;
+        case 1:
+            local_7 = func_800136E4(func_8009BFD8(param_0) - 30.0f);
+            if (80.0f < local_7 && local_7 < 300.0f) {
+                local_7 = 300.0f;
+            }
+            func_8009BF5C(param_0, local_7);
+            _bafly_entrypoint_21(param_0);
+            if (local_2 != 0) {
+                baphysics_set_vertical_velocity(param_0, local_2 * 400.0f);
+                func_80800000_bsbeefly(param_0);
+            }
+            if (local_6 == D_80800E3C_bsbeefly) {
+                _bafly_entrypoint_20(param_0);
+                param_0->unk15C.word = 0;
+            }
     }
     if (bakey_held(param_0, 9)) {
         local_8 = -1500.0f;
@@ -330,7 +324,8 @@ void func_80800708_bsbeefly(PlayerState *param_0)
     _bafly_entrypoint_8(param_0, 300.0f, 80.0f, 600.0f, -300.0f, -99.9f, local_8, local_7);
     if (bakey_held(param_0, 9)) {
         func_808000A4_bsbeefly(param_0);
-        baphysics_set_target_horizontal_velocity(param_0, baphysics_get_target_horizontal_velocity(param_0) * 3.5f);
+        baphysics_set_target_horizontal_velocity(
+            param_0, baphysics_get_target_horizontal_velocity(param_0) * 3.5f);
     }
     if (bakey_held(param_0, 1)) {
         _babee_entrypoint_2(param_0);
@@ -347,32 +342,32 @@ void func_80800B18_bsbeefly(s32 arg0)
     func_808002E4_bsbeefly();
     _bsbee_entrypoint_0(arg0);
 }
+
 int bsbeefly_entrypoint_1(s32 param_0)
 {
-  return D_80800E50_bsbeefly[param_0];
+    return D_80800E50_bsbeefly[param_0];
 }
 
 s32 func_80800B54_bsbeefly(void *param_0)
 {
-  s32 s0;
-  s0 = (s32) param_0;
-  _bsbee_entrypoint_1(s0);
-  func_8080039C_bsbeefly(s0);
-  _bsrest_entrypoint_16(s0);
-  baphysics_set_gravity(s0, 0);
-  func_8009BA9C(s0, 0);
+    s32 s0;
+    s0 = (s32) param_0;
+    _bsbee_entrypoint_1(s0);
+    func_8080039C_bsbeefly(s0);
+    _bsrest_entrypoint_16(s0);
+    baphysics_set_gravity(s0, 0);
+    func_8009BA9C(s0, 0);
 }
 
 int func_80800BA4_bsbeefly(Actor *param_0)
 {
-  s32 local_0;
-  local_0 = 0;
-  _bsbee_entrypoint_2();
-  if (_bsrest_entrypoint_20(param_0))
-  {
-    local_0 = 0x8C;
-  }
-  bs_setState(param_0, local_0);
+    s32 local_0;
+    local_0 = 0;
+    _bsbee_entrypoint_2();
+    if (_bsrest_entrypoint_20(param_0)) {
+        local_0 = 0x8C;
+    }
+    bs_setState(param_0, local_0);
 }
 
 void func_80800BE8_bsbeefly(s32 arg0)
@@ -384,7 +379,7 @@ void func_80800BE8_bsbeefly(s32 arg0)
 
 int bsbeefly_entrypoint_2(s32 param_0)
 {
-  return D_80800E60_bsbeefly[param_0];
+    return D_80800E60_bsbeefly[param_0];
 }
 
 void func_80800C2C_bsbeefly(s32 arg0)
@@ -396,22 +391,22 @@ void func_80800C2C_bsbeefly(s32 arg0)
 
 int func_80800C5C_bsbeefly(Actor *param_0)
 {
-  _bsbee_entrypoint_1();
-  func_8080039C_bsbeefly(param_0);
-  _bafly_entrypoint_16(param_0, 0x1E0, 0x3F800000);
+    _bsbee_entrypoint_1();
+    func_8080039C_bsbeefly(param_0);
+    _bafly_entrypoint_16(param_0, 0x1E0, 0x3F800000);
 }
 
 int func_80800C94_bsbeefly(s32 param_0)
 {
-  s32 local_0;
-  local_0 = 0;
-  _bsbee_entrypoint_2(param_0);
-  _bafly_entrypoint_17(param_0, 0x8C, 0x85, &local_0);
+    s32 local_0;
+    local_0 = 0;
+    _bsbee_entrypoint_2(param_0);
+    _bafly_entrypoint_17(param_0, 0x8C, 0x85, &local_0);
 }
 
 int bsbeefly_entrypoint_3(s32 param_0)
 {
-  return D_80800E70_bsbeefly[param_0];
+    return D_80800E70_bsbeefly[param_0];
 }
 
 void func_80800CE0_bsbeefly(s32 arg0)
@@ -423,36 +418,39 @@ void func_80800CE0_bsbeefly(s32 arg0)
 
 int func_80800D10_bsbeefly(Actor *param_0)
 {
-  _bsbee_entrypoint_1();
-  func_8080039C_bsbeefly(param_0);
-  _bafly_entrypoint_13(param_0, 1, 0xD3, 0x3F99999A);
+    _bsbee_entrypoint_1();
+    func_8080039C_bsbeefly(param_0);
+    _bafly_entrypoint_13(param_0, 1, 0xD3, 0x3F99999A);
 }
 
 int func_80800D50_bsbeefly(Actor *param_0)
 {
-  extern void _bafly_entrypoint_14(Actor*, s32, s32);
-  extern void _bsbee_entrypoint_2(void);
-  _bsbee_entrypoint_2();
-  _bafly_entrypoint_14(param_0, 0x8C, 0x85);
-  return;
+    extern void _bafly_entrypoint_14(Actor *, s32, s32);
+    extern void _bsbee_entrypoint_2(void);
+    _bsbee_entrypoint_2();
+    _bafly_entrypoint_14(param_0, 0x8C, 0x85);
 }
 
 int bsbeefly_entrypoint_4(s32 param_0)
 {
-  return D_80800E80_bsbeefly[param_0];
+    return D_80800E80_bsbeefly[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/beefly.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern int func_80099B94();
 extern void func_80099AA8();
-s32 D_80800DC0_bsbeefly[10] = { 0x1D09E2, 0x150019, 0x990022, 0x660059, 0x190019, 0x270190, 0x1900320, 0x320002B, 0x800080, 0x0 };
-s32 D_80800DE8_bsbeefly[12] = { 0x1D09E0, 0xE0014, 0x2D0015, 0x190099, 0x220066, 0x800014, 0x140027, 0x1900190, 0x3200320, 0x2B0073, 0x73021A, 0x0 };
-s32 D_80800E18_bsbeefly[4] = { (u32)func_808002B0_bsbeefly, (u32)func_8080010C_bsbeefly, (u32)func_808001C4_bsbeefly, (u32)func_80099B94 };
-f32 D_80800E28_bsbeefly[5] = { 0.38f, 0.3f, 0.24f, 0.18f, 0.14f };
-f32 D_80800E3C_bsbeefly[5] = { 0.0f, 0.2f, 0.3f, 0.4f, 0.5f };
-s32 D_80800E50_bsbeefly[4] = { (u32)func_80800B18_bsbeefly, (u32)func_80800600_bsbeefly, (u32)func_80800708_bsbeefly, (u32)func_808005B0_bsbeefly };
-s32 D_80800E60_bsbeefly[4] = { (u32)func_80800BE8_bsbeefly, (u32)func_80800B54_bsbeefly, (u32)func_80800BA4_bsbeefly, (u32)func_80099B94 };
-s32 D_80800E70_bsbeefly[4] = { (u32)func_80800C2C_bsbeefly, (u32)func_80800C5C_bsbeefly, (u32)func_80800C94_bsbeefly, (u32)func_80099AA8 };
-s32 D_80800E80_bsbeefly[4] = { (u32)func_80800CE0_bsbeefly, (u32)func_80800D10_bsbeefly, (u32)func_80800D50_bsbeefly, (u32)func_80099AA8 };
+s32 D_80800DC0_bsbeefly[10] = {0x1D09E2, 0x150019,  0x990022,  0x660059, 0x190019,
+                               0x270190, 0x1900320, 0x320002B, 0x800080, 0x0};
+s32 D_80800DE8_bsbeefly[12] = {0x1D09E0, 0xE0014,   0x2D0015,  0x190099, 0x220066, 0x800014,
+                               0x140027, 0x1900190, 0x3200320, 0x2B0073, 0x73021A, 0x0};
+s32 D_80800E18_bsbeefly[4] = {(u32) func_808002B0_bsbeefly, (u32) func_8080010C_bsbeefly,
+                              (u32) func_808001C4_bsbeefly, (u32) func_80099B94};
+f32 D_80800E28_bsbeefly[5] = {0.38f, 0.3f, 0.24f, 0.18f, 0.14f};
+f32 D_80800E3C_bsbeefly[5] = {0.0f, 0.2f, 0.3f, 0.4f, 0.5f};
+s32 D_80800E50_bsbeefly[4] = {(u32) func_80800B18_bsbeefly, (u32) func_80800600_bsbeefly,
+                              (u32) func_80800708_bsbeefly, (u32) func_808005B0_bsbeefly};
+s32 D_80800E60_bsbeefly[4] = {(u32) func_80800BE8_bsbeefly, (u32) func_80800B54_bsbeefly,
+                              (u32) func_80800BA4_bsbeefly, (u32) func_80099B94};
+s32 D_80800E70_bsbeefly[4] = {(u32) func_80800C2C_bsbeefly, (u32) func_80800C5C_bsbeefly,
+                              (u32) func_80800C94_bsbeefly, (u32) func_80099AA8};
+s32 D_80800E80_bsbeefly[4] = {(u32) func_80800CE0_bsbeefly, (u32) func_80800D10_bsbeefly,
+                              (u32) func_80800D50_bsbeefly, (u32) func_80099AA8};

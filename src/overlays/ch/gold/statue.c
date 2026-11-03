@@ -25,31 +25,30 @@ extern void _sudeflect_entrypoint_1(f32 *, f32, f32, f32, s32);
 extern void _sumumbofx_entrypoint_16(void *, f32);
 extern void _subaddieaudioquick_entrypoint_3(Actor *, f32 *, void *, f32);
 extern u8 _subaddieaudioloop_entrypoint_7();
-void func_80800150_chgoldstatue();
 
 int func_80800000_chgoldstatue(s32 param_0)
 {
-  s32 local_1;
-  s16 local_0;
-  local_0 = _chmumbopad_entrypoint_0(2);
-  local_1 = _sumumbofx_entrypoint_0(param_0, 1, 0x2D, local_0 | 0);
-  local_1 = func_80100094(param_0, 1);
-  _sumumbofx_entrypoint_2(local_1);
-  _sumumbofx_entrypoint_24(local_1, 0x3F266666);
-  if (func_800DA298(0x57C) == 0)
-  {
-    _sumumbofx_entrypoint_15(local_1, 0x40400000);
-    return;
-  }
-  _sumumbofx_entrypoint_15(local_1, 0x3E800000);
+    s32 local_1;
+    s16 local_0;
+    local_0 = _chmumbopad_entrypoint_0(2);
+    local_1 = _sumumbofx_entrypoint_0(param_0, 1, 0x2D, local_0 | 0);
+    local_1 = func_80100094(param_0, 1);
+    _sumumbofx_entrypoint_2(local_1);
+    _sumumbofx_entrypoint_24(local_1, 0x3F266666);
+    if (func_800DA298(0x57C) == 0) {
+        _sumumbofx_entrypoint_15(local_1, 0x40400000);
+        return;
+    }
+    _sumumbofx_entrypoint_15(local_1, 0x3E800000);
 }
 
 void func_80800094_chgoldstatue(s32 arg0)
 {
-    _sumumbofx_entrypoint_1(arg0,1);
+    _sumumbofx_entrypoint_1(arg0, 1);
 }
 
-void func_808000B4_chgoldstatue(s32 param_0, s32 param_1) {
+void func_808000B4_chgoldstatue(s32 param_0, s32 param_1)
+{
     Actor *local_0;
     s32 local_1;
 
@@ -62,40 +61,47 @@ void func_808000B4_chgoldstatue(s32 param_0, s32 param_1) {
     }
 }
 
-void func_80800150_chgoldstatue(param_0, param_1) Actor *param_0; s32 param_1;
+void func_80800150_chgoldstatue(param_0, param_1) Actor *param_0;
+s32 param_1;
 {
     func_80102424(param_0, param_1);
     switch (param_0->unk70_10) {
-    case 2:
-        _subaddieDll_entrypoint_4(param_0, 1);
-        func_801032B0(param_0, 0x673, param_0->unk0->unk16);
-        if (!func_800DA298(0x57C)) _capod_entrypoint_13(param_0->unk0, 0, 2, 0x20);
-        else _capod_entrypoint_13(param_0->unk0, 0, 8, 0x20);
-        func_80101180(0x2B0, 0xBB, 2);
-        func_80800000_chgoldstatue(param_0);
-        func_80090734(2, param_0->position);
-        break;
-    case 3: func_800DA3B8(0x57C, 1); break;
-    case 4: break;
-    case 5:
-        _capod_entrypoint_14();
-        func_80800094_chgoldstatue(param_0);
-        func_800F7D38(func_800F54E4(), 0x3F, param_0->position, param_0->rotation[1]);
-        func_800DA524(0x9DE);
-        func_8010381C(param_0);
-        *((u8 *)param_0 + 0x65) &= ~1;
-        break;
-    case 6:
-        if (*(u16 *)((u8 *)param_0 + 0x64) & 1) {
+        case 2:
+            _subaddieDll_entrypoint_4(param_0, 1);
+            func_801032B0(param_0, 0x673, param_0->unk0->unk16);
+            if (!func_800DA298(0x57C))
+                _capod_entrypoint_13(param_0->unk0, 0, 2, 0x20);
+            else
+                _capod_entrypoint_13(param_0->unk0, 0, 8, 0x20);
+            func_80101180(0x2B0, 0xBB, 2);
+            func_80800000_chgoldstatue(param_0);
+            func_80090734(2, param_0->position);
+            break;
+        case 3:
+            func_800DA3B8(0x57C, 1);
+            break;
+        case 5:
+            _capod_entrypoint_14();
+            func_80800094_chgoldstatue(param_0);
+            func_800F7D38(func_800F54E4(), 0x3F, param_0->position, param_0->rotation[1]);
+            func_800DA524(0x9DE);
             func_8010381C(param_0);
-            *((u8 *)param_0 + 0x65) &= ~1;
-        }
-        break;
-    case 7: func_801032B0(param_0, 0x673, param_0->unk0->unk16); break;
+            *((u8 *) param_0 + 0x65) &= ~1;
+            break;
+        case 6:
+            if (*(u16 *) ((u8 *) param_0 + 0x64) & 1) {
+                func_8010381C(param_0);
+                *((u8 *) param_0 + 0x65) &= ~1;
+            }
+            break;
+        case 7:
+            func_801032B0(param_0, 0x673, param_0->unk0->unk16);
+            break;
     }
 }
 
-void func_808002C8_chgoldstatue(Actor *param_0) {
+void func_808002C8_chgoldstatue(Actor *param_0)
+{
     _subaddieDll_entrypoint_1();
     if (func_8010D278() == 0xE) {
         func_80800150_chgoldstatue(param_0, 6);
@@ -161,11 +167,14 @@ void func_80800528_chgoldstatue(Actor *param_0)
                     local_0 = 1;
                 }
                 if (func_80101E14(param_0, 0.38f)) {
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800890_chgoldstatue);
+                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                     D_80800890_chgoldstatue);
                 } else if (func_80101E4C(param_0, D_80800940_chgoldstatue)) {
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808008A0_chgoldstatue);
+                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                     D_808008A0_chgoldstatue);
                 } else if (func_80101E4C(param_0, D_80800954_chgoldstatue)) {
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808008B8_chgoldstatue);
+                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                     D_808008B8_chgoldstatue);
                 }
                 if (func_80101E14(param_0, 0.39f)) {
                     func_800DA544(0x9DF);
@@ -182,7 +191,7 @@ void func_80800528_chgoldstatue(Actor *param_0)
                     local_0 = 1;
                 }
                 _subaddieaudioquick_entrypoint_3(param_0, param_0->position,
-                    D_80800890_chgoldstatue, 0.38f);
+                                                 D_80800890_chgoldstatue, 0.38f);
                 if (func_80101E14(param_0, 0.34f)) {
                     _sumumbofx_entrypoint_16(local_1, 0.25f);
                     func_800DA544(0x9DF);
@@ -199,38 +208,63 @@ void func_80800528_chgoldstatue(Actor *param_0)
                 if (func_8010C500(param_0)) {
                     func_800F7B9C(func_800F54E4(), 0x82);
                 }
-                break;
         }
         if (local_0) {
             _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80800968_chgoldstatue);
-            param_0->unk6C_0 = _subaddieaudioloop_entrypoint_7((u8)param_0->unk6C_0,
-                param_0->position, 1, D_8080097C_chgoldstatue,
-                *(u32 *)((u8 *)param_0 + 0x70) & 1);
+            param_0->unk6C_0 = _subaddieaudioloop_entrypoint_7(
+                (u8) param_0->unk6C_0, param_0->position, 1, D_8080097C_chgoldstatue,
+                *(u32 *) ((u8 *) param_0 + 0x70) & 1);
         }
     }
 }
 
 int chgoldstatue_entrypoint_0()
 {
-    return (int)&D_80800990_chgoldstatue;
+    return (int) &D_80800990_chgoldstatue;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/gold/statue.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800990_chgoldstatue -> int[] */
 extern void func_80105834();
 extern void func_80107C2C();
-u8 D_80800890_chgoldstatue[16] = { 0x0, 0x13, 0x4, 0xCC, 0x0, 0x16, 0x7D, 0x0, 0x0, 0x1, 0x9, 0xC4, 0x13, 0x88, 0x0, 0x0 };
-u8 D_808008A0_chgoldstatue[24] = { 0x0, 0x13, 0x4, 0xA1, 0x0, 0xD, 0x0, 0xE1, 0x0, 0xF3, 0x0, 0x16, 0x2A, 0xF8, 0x0, 0x1, 0x9, 0xC4, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
-u8 D_808008B8_chgoldstatue[24] = { 0x0, 0x13, 0x6, 0x32, 0x0, 0xD, 0x0, 0x8C, 0x0, 0xA6, 0x0, 0x16, 0x1F, 0x40, 0x0, 0x1, 0x9, 0xC4, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
-u32 D_808008D0_chgoldstatue[16] = { 0x0, 0x0, 0x4159999A, 0x1ED0044, 0x4159999A, 0x1ED0044, 0x4159999A, 0x1ED0002, 0x4159999A, 0x1ED0002, 0x40E00000, 0x1EE0002, 0x40E00000, 0x1EE0002, 0x40E00000, 0x1EE0001 };
-Vec3f D_80800910_chgoldstatue = { 0.0f, 0.0f, 0.0f };
-Vec3f D_8080091C_chgoldstatue = { 0.0f, 2.5e+02f, 0.0f };
-Vec3f D_80800928_chgoldstatue = { 0.0f, 75.0f, 0.0f };
-Vec3f D_80800934_chgoldstatue = { 0.0f, -2.5e+02f, 0.0f };
-u8 D_80800940_chgoldstatue[20] = { 0x3E, 0xDC, 0x28, 0xF6, 0x3F, 0xF, 0x5C, 0x29, 0x3F, 0x45, 0x1E, 0xB8, 0x3F, 0x66, 0x66, 0x66, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_80800954_chgoldstatue[20] = { 0x3F, 0x0, 0x0, 0x0, 0x3F, 0x28, 0xF5, 0xC3, 0x3F, 0x57, 0xA, 0x3D, 0x3F, 0x78, 0x51, 0xEC, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_80800968_chgoldstatue[20] = { 0x0, 0x13, 0x4, 0xAD, 0x0, 0x16, 0x61, 0xA8, 0x0, 0xA, 0x0, 0x99, 0x0, 0x1, 0x9, 0xC4, 0x13, 0x88, 0x0, 0x0 };
-u8 D_8080097C_chgoldstatue[20] = { 0x0, 0x13, 0x4, 0xA9, 0x0, 0x16, 0x61, 0xA8, 0x0, 0xA, 0x1, 0x0, 0x0, 0x1, 0x9, 0xC4, 0x13, 0x88, 0x0, 0x0 };
-int D_80800990_chgoldstatue[20] = { 0x2750163, 0x83E0001, (u32)&D_808008D0_chgoldstatue, (u32)func_80800528_chgoldstatue, (u32)func_80105834, (u32)func_808000B4_chgoldstatue, 0x3E80000, 0x0, 0x0, 0x80141, 0x0, 0x0, 0x0, (u32)func_808002C8_chgoldstatue, (u32)func_80107C2C, -0x7FFFFBFE, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800890_chgoldstatue[16] = {0x0, 0x13, 0x4, 0xCC, 0x0,  0x16, 0x7D, 0x0,
+                                  0x0, 0x1,  0x9, 0xC4, 0x13, 0x88, 0x0,  0x0};
+u8 D_808008A0_chgoldstatue[24] = {0x0, 0x13, 0x4,  0xA1, 0x0,  0xD,  0x0, 0xE1,
+                                  0x0, 0xF3, 0x0,  0x16, 0x2A, 0xF8, 0x0, 0x1,
+                                  0x9, 0xC4, 0x13, 0x88, 0x0,  0x0,  0x0, 0x0};
+u8 D_808008B8_chgoldstatue[24] = {0x0, 0x13, 0x6,  0x32, 0x0,  0xD,  0x0, 0x8C,
+                                  0x0, 0xA6, 0x0,  0x16, 0x1F, 0x40, 0x0, 0x1,
+                                  0x9, 0xC4, 0x13, 0x88, 0x0,  0x0,  0x0, 0x0};
+u32 D_808008D0_chgoldstatue[16] = {
+    0x0,        0x0,       0x4159999A, 0x1ED0044, 0x4159999A, 0x1ED0044, 0x4159999A, 0x1ED0002,
+    0x4159999A, 0x1ED0002, 0x40E00000, 0x1EE0002, 0x40E00000, 0x1EE0002, 0x40E00000, 0x1EE0001};
+Vec3f D_80800910_chgoldstatue = {0.0f, 0.0f, 0.0f};
+Vec3f D_8080091C_chgoldstatue = {0.0f, 2.5e+02f, 0.0f};
+Vec3f D_80800928_chgoldstatue = {0.0f, 75.0f, 0.0f};
+Vec3f D_80800934_chgoldstatue = {0.0f, -2.5e+02f, 0.0f};
+u8 D_80800940_chgoldstatue[20] = {0x3E, 0xDC, 0x28, 0xF6, 0x3F, 0xF,  0x5C, 0x29, 0x3F, 0x45,
+                                  0x1E, 0xB8, 0x3F, 0x66, 0x66, 0x66, 0xBF, 0x80, 0x0,  0x0};
+u8 D_80800954_chgoldstatue[20] = {0x3F, 0x0,  0x0,  0x0,  0x3F, 0x28, 0xF5, 0xC3, 0x3F, 0x57,
+                                  0xA,  0x3D, 0x3F, 0x78, 0x51, 0xEC, 0xBF, 0x80, 0x0,  0x0};
+u8 D_80800968_chgoldstatue[20] = {0x0, 0x13, 0x4, 0xAD, 0x0, 0x16, 0x61, 0xA8, 0x0, 0xA,
+                                  0x0, 0x99, 0x0, 0x1,  0x9, 0xC4, 0x13, 0x88, 0x0, 0x0};
+u8 D_8080097C_chgoldstatue[20] = {0x0, 0x13, 0x4, 0xA9, 0x0, 0x16, 0x61, 0xA8, 0x0, 0xA,
+                                  0x1, 0x0,  0x0, 0x1,  0x9, 0xC4, 0x13, 0x88, 0x0, 0x0};
+int D_80800990_chgoldstatue[20] = {0x2750163,
+                                   0x83E0001,
+                                   (u32) &D_808008D0_chgoldstatue,
+                                   (u32) func_80800528_chgoldstatue,
+                                   (u32) func_80105834,
+                                   (u32) func_808000B4_chgoldstatue,
+                                   0x3E80000,
+                                   0x0,
+                                   0x0,
+                                   0x80141,
+                                   0x0,
+                                   0x0,
+                                   0x0,
+                                   (u32) func_808002C8_chgoldstatue,
+                                   (u32) func_80107C2C,
+                                   -0x7FFFFBFE,
+                                   0x0,
+                                   0x0,
+                                   0x0,
+                                   0x0};

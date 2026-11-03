@@ -1,14 +1,11 @@
 #include "overlays/bs/kaz/hatch.h"
 
-extern s16 func_8009E6EC(PlayerState *);
-extern void func_8009E830(PlayerState *, s32);
 extern void func_80099B94(PlayerState *);
-extern void baphysics_set_type(PlayerState *, BaPhysicsType);
 extern void func_800FC660(s32);
-extern s32 func_8010114C(s32, s32, s32);
 extern s32 func_80099A4C(PlayerState *);
 
-void func_80800000_bskazhatch(PlayerState *self, s32 arg1) {
+void func_80800000_bskazhatch(PlayerState *self, s32 arg1)
+{
     switch (arg1) {
         case 0:
         case 3:
@@ -20,17 +17,18 @@ void func_80800000_bskazhatch(PlayerState *self, s32 arg1) {
             break;
         case 2:
             baanim_playForDuration_onceSmooth(self, ASSET_140_ANIM_KAZHATCH_UNKNOWN, 3);
-            break;
     }
-    self->unk15C.bytes[0] = (s8)arg1;
+    self->unk15C.bytes[0] = (s8) arg1;
 }
 
-void func_808000A8_bskazhatch(PlayerState *self) {
+void func_808000A8_bskazhatch(PlayerState *self)
+{
     func_80800000_bskazhatch(self, 0);
     _bskaz_entrypoint_2(self);
 }
 
-void func_808000D4_bskazhatch(PlayerState *self) {
+void func_808000D4_bskazhatch(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     self->unk15C.bytes[0] = 0;
     self->unk160.word = 0;
@@ -44,38 +42,39 @@ void func_80800108_bskazhatch(PlayerState *param_0)
 
     local_0 = func_8009E6EC(param_0);
     switch (local_0) {
-    case 0x15: ;
-    case 0x1C:
-    case 0x1D: ;
-    case 0x1E:
-    case 0x25:
-        func_8009E830(param_0, 1);
-        return;
-    case 0x53:
-        if (param_0->unk160.word == 0) {
-            local_1 = func_80099A4C(param_0);
-            param_0->unk160.word = local_1;
-            if (func_8010114C(local_1, 0xA0, 0) <= 0) {
-                func_800FC660(0xE);
+        case 0x15:;
+        case 0x1C:
+        case 0x1D:;
+        case 0x1E:
+        case 0x25:
+            func_8009E830(param_0, 1);
+            return;
+        case 0x53:
+            if (param_0->unk160.word == 0) {
+                local_1 = func_80099A4C(param_0);
+                param_0->unk160.word = local_1;
+                if (func_8010114C(local_1, 0xA0, 0) <= 0) {
+                    func_800FC660(0xE);
+                }
+                baphysics_set_type(param_0, 7);
             }
-            baphysics_set_type(param_0, 7);
-        }
-        func_8009E830(param_0, 2);
-        return;
-    default:
-        func_80099B94(param_0);
-        return;
+            func_8009E830(param_0, 2);
+            return;
+        default:
+            func_80099B94(param_0);
     }
 }
 
-BanjoStateId func_808001E4_bskazhatch(PlayerState *self) {
+BanjoStateId func_808001E4_bskazhatch(PlayerState *self)
+{
     if (func_8008E124(self) != 0) {
         return _badata_entrypoint_32(self);
     }
     return BS_STATE_BB;
 }
 
-void func_80800220_bskazhatch(PlayerState *self) {
+void func_80800220_bskazhatch(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -104,7 +103,7 @@ void func_80800220_bskazhatch(PlayerState *self) {
             break;
 
         case 2:
-            if (baanim_isAt(self,  0.6) != 0) {
+            if (baanim_isAt(self, 0.6) != 0) {
                 func_8009DEC0(self, 0x4599, 0.95, 1.05, 26000, 26000);
             }
             if (baanim_isStopped(self) != 0) {
@@ -123,17 +122,15 @@ void func_80800220_bskazhatch(PlayerState *self) {
             if (baanim_isStopped(self) != 0) {
                 next_state = func_808001E4_bskazhatch(self);
             }
-            break;
     }
-    
+
     bs_setState(self, next_state);
 }
 
-s32 bskazhatch_entrypoint_0(s32 idx) {
+s32 bskazhatch_entrypoint_0(s32 idx)
+{
     return D_808004E0_bskazhatch[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/hatch.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
-s32 D_808004E0_bskazhatch[4] = { (u32)func_808000A8_bskazhatch, (u32)func_808000D4_bskazhatch, (u32)func_80800220_bskazhatch, (u32)func_80800108_bskazhatch };
+s32 D_808004E0_bskazhatch[4] = {(u32) func_808000A8_bskazhatch, (u32) func_808000D4_bskazhatch,
+                                (u32) func_80800220_bskazhatch, (u32) func_80800108_bskazhatch};

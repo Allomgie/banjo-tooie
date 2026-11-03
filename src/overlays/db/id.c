@@ -1,6 +1,10 @@
 #include "common.h"
 
-typedef struct { s16 local_0; s16 local_1; s16 local_2[1]; } DbIdRecord;
+typedef struct {
+    s16 local_0;
+    s16 local_1;
+    s16 local_2[1];
+} DbIdRecord;
 
 s32 dbid_entrypoint_0(s16 *param_0, s32 param_1)
 {
@@ -28,30 +32,26 @@ s32 dbid_entrypoint_0(s16 *param_0, s32 param_1)
 
 int dbid_entrypoint_1(s16 *param_0)
 {
-  s16 temp_a0;
-  s16 temp_a2;
-  s32 var_a1;
-  s32 var_v1;
-  u8 *var_v0;
-  ;
-  var_v1 = 0;
-  var_v0 = ((u8 *) param_0) + 2;
-  var_a1 = 0;
-  if ((*param_0) > 0)
-  {
-    do
-    {
-      temp_a0 = *((s16 *) (((s8 *) var_v0) + 2));
-      var_a1 += 1;
-      var_v0 = (u8 *) ((((s8 *) var_v0) + (temp_a0 * 2)) + 4);
-      var_v1 += temp_a0;
+    s16 temp_a0;
+    s32 var_a1;
+    s32 var_v1;
+    u8 *var_v0;
+    var_v1 = 0;
+    var_v0 = (u8 *) param_0 + 2;
+    var_a1 = 0;
+    if (*param_0 > 0) {
+        do {
+            temp_a0 = *(s16 *) ((s8 *) var_v0 + 2);
+            var_a1 += 1;
+            var_v0 = (u8 *) (((s8 *) var_v0 + (temp_a0 * 2)) + 4);
+            var_v1 += temp_a0;
+        } while (var_a1 < *param_0);
     }
-    while (var_a1 < (*param_0));
-  }
-  return var_v1;
+    return var_v1;
 }
 
-s16 *dbid_entrypoint_2(s16 *param_0, s32 param_1) {
+s16 *dbid_entrypoint_2(s16 *param_0, s32 param_1)
+{
     s32 i;
     s16 *local_0 = param_0 + 1;
     for (i = 0; i < *param_0; i++) {
@@ -78,6 +78,3 @@ s32 dbid_entrypoint_3(void *param_0, s32 param_1, u16 *param_2)
     }
     return 0;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/id.data.s) is defined here in C.
- * Values are taken from the ROM. */

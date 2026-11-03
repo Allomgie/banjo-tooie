@@ -21,33 +21,30 @@ extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern f32 func_80013970(f32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern s32 func_800F78EC(s32, f32 *, f32, f32);
-extern f32 sqrtf(f32);
 int func_808009B8_chfantasycannon();
 void func_80800544_chfantasycannon();
 
 int func_80800000_chfantasycannon(Actor *param_0)
 {
-  func_800DA298(((u32)*(u16 *)((char *)param_0 + 0x76) >> 7) + 0x55D);
+    func_800DA298(((u32) *(u16 *) ((char *) param_0 + 0x76) >> 7) + 0x55D);
 }
 
 int func_80800028_chfantasycannon(Actor *param_0)
 {
-  func_800DA544(((u32)*(u16 *)((char *)param_0 + 0x76) >> 7) + 0x55D);
+    func_800DA544(((u32) *(u16 *) ((char *) param_0 + 0x76) >> 7) + 0x55D);
 }
 
 int func_80800050_chfantasycannon()
 {
-  s32 local_0;
-  if (!func_8010C500())
-  {
-    return 0;
-  }
-  local_0 = func_800F54E4();
-  if (func_800F64DC(local_0 | 0) == 0)
-  {
-    return 0;
-  }
-  return 1;
+    s32 local_0;
+    if (!func_8010C500()) {
+        return 0;
+    }
+    local_0 = func_800F54E4();
+    if (func_800F64DC(local_0 | 0) == 0) {
+        return 0;
+    }
+    return 1;
 }
 
 void func_808000A4_chfantasycannon(void)
@@ -74,9 +71,10 @@ void func_8080010C_chfantasycannon(Actor *param_0)
     }
     for (local_3 = 0; local_3 < local_2; local_3++) {
         if (_gspropctrl_entrypoint_8(local_0[local_3]) == param_0->unk74_7) {
-            _gspropctrl_entrypoint_11(local_0[local_3], (f32 *)param_0->actorData);
-            func_800EF1B8((f32 *)param_0->actorData, func_800F1DF4((f32 *)param_0->actorData, param_0->position), -70.0f);
-            *(f32 *)((u8 *)param_0 + 0x1C) += 60.0f;
+            _gspropctrl_entrypoint_11(local_0[local_3], (f32 *) param_0->actorData);
+            func_800EF1B8((f32 *) param_0->actorData,
+                          func_800F1DF4((f32 *) param_0->actorData, param_0->position), -70.0f);
+            *(f32 *) ((u8 *) param_0 + 0x1C) += 60.0f;
             local_1 = 1;
             break;
         }
@@ -93,7 +91,7 @@ void func_808008B0_chfantasycannon();
 
 void func_80800228_chfantasycannon(Actor *param_0)
 {
-  s32 pad0;
+    s32 pad0;
     f32 local_0[3];
     f32 local_1;
 
@@ -104,14 +102,12 @@ void func_80800228_chfantasycannon(Actor *param_0)
                 return;
             }
             _sudeflect_entrypoint_0(param_0->position, param_0->scale * 226.0f * 0.75f,
-                param_0->scale * 226.0f * 0.75f, 14);
+                                    param_0->scale * 226.0f * 0.75f, 14);
             return;
         case 2:
             if (func_800D90A4(&param_0->unk54)) {
                 func_80800544_chfantasycannon(param_0, 3);
-                return;
             }
-        default:
             return;
         case 3:
             if (func_80101E14(param_0, 0.47f)) {
@@ -127,10 +123,9 @@ void func_80800228_chfantasycannon(Actor *param_0)
             }
             if (func_80101F24(param_0) <= 0.3f) {
                 local_1 = func_800F10B4(func_80101F24(param_0), 0.0f, 0.16f, 0.0f, 1.0f);
-                func_800EFE50(local_0, (f32 *)&param_0->actorData[4], param_0->position, local_1);
+                func_800EFE50(local_0, (f32 *) &param_0->actorData[4], param_0->position, local_1);
                 local_0[1] += func_80013970(local_1 * 180.0f) * 300.0f;
                 func_800F8294(func_800F54E4(), local_0);
-                return;
             }
             break;
         case 4:
@@ -160,11 +155,11 @@ void func_80800228_chfantasycannon(Actor *param_0)
                 return;
             }
             func_808008B0_chfantasycannon(param_0);
-            break;
     }
 }
 
-void func_80800544_chfantasycannon(param_0, param_1) Actor *param_0; s32 param_1;
+void func_80800544_chfantasycannon(param_0, param_1) Actor *param_0;
+s32 param_1;
 {
     f32 *local_0;
     f32 local_1[3];
@@ -180,72 +175,75 @@ void func_80800544_chfantasycannon(param_0, param_1) Actor *param_0; s32 param_1
 
     local_0 = func_80100094(param_0, 0);
     switch (param_1) {
-    case 1:
-        _subaddieDll_entrypoint_4(param_0, 0);
-        func_800F7F98(func_800F54E4(), 0);
-        if (param_0->unk64_19) {
-            param_0->unk64_19 = 0;
-            _capod_entrypoint_3(0);
-        }
-        break;
-    case 2:
-        param_0->unk54 = 1.0f;
-        break;
-    case 3:
-        if (func_800DA298(0x1E1)) {
-            local_8 = (Actor *)_subaddiefind_entrypoint_2(0x40E, 0);
-            if (local_8) func_8010A624(local_8);
-        }
-        _subaddieDll_entrypoint_4(param_0, 1);
-        func_8010FFB0(func_800F5EF8(func_800F54E4()), local_2, local_1);
-        _capod_entrypoint_2(param_0->unk0, 45, 0x10804);
-        _capod_entrypoint_8(0);
-        _capod_entrypoint_1(local_2, local_1);
-        if (func_80800000_chfantasycannon(param_0)) {
-            func_800EE7F8(local_0, local_2);
-            func_800EE7F8(local_0 + 3, local_1);
-        }
-        func_800F7F98(func_800F54E4(), 1);
-        param_0->unk64_19 = 1;
-        func_800F5A00(func_800F54E4(), (f32 *)&param_0->actorData[4]);
-        *(s32 *)&param_0->unk50 = func_80015184();
-        func_80015178(4);
-        break;
-    case 4:
-        if (func_80800000_chfantasycannon(param_0)) {
-            local_0 = (f32 *)param_0->actorData;
-            func_800EEC30(local_6, 45.0f, func_800F1DF4(local_0, param_0->position), 1250.0f);
-            func_800EFA4C(local_5, ((f32 *)param_0->actorData)[0] + local_6[0],
-                         ((f32 *)param_0->actorData)[1] + local_6[1],
-                         ((f32 *)param_0->actorData)[2] + local_6[2]);
-            func_800F8294(func_800F54E4(), local_5);
-            local_4 = -1250.0f;
-            local_3 = 50.0f;
-        } else {
-            local_4 = -800.0f;
-            func_800EFA4C(local_7, param_0->position[0], param_0->position[1] + 350.0f, param_0->position[2]);
-            func_800F8294(func_800F54E4(), local_7);
-            local_9 = 1700.0f;
-            local_3 = local_9 * local_9 - (((f32 *)param_0->actorData)[1] - local_7[1]) * (local_4 + local_4);
-            if (local_3 > 0.0f) {
-                local_0 = (f32 *)param_0->actorData;
-                local_3 = sqrtf(local_3);
-            } else {
-                local_3 = local_9;
-                local_0 = (f32 *)param_0->actorData;
+        case 1:
+            _subaddieDll_entrypoint_4(param_0, 0);
+            func_800F7F98(func_800F54E4(), 0);
+            if (param_0->unk64_19) {
+                param_0->unk64_19 = 0;
+                _capod_entrypoint_3(0);
             }
-        }
-        func_800F78EC(func_800F54E4(), local_0, local_3, local_4);
-        break;
-    case 6:
-        param_0->unk54 = 0.25f;
-        func_80015178(*(s32 *)&param_0->unk50);
-        func_80800028_chfantasycannon(param_0);
-        if (func_800DA298(0x1E1)) {
-            local_10 = (Actor *)_subaddiefind_entrypoint_2(0x40E, 0);
-            if (local_10) func_8010A63C(local_10);
-        }
-        break;
+            break;
+        case 2:
+            param_0->unk54 = 1.0f;
+            break;
+        case 3:
+            if (func_800DA298(0x1E1)) {
+                local_8 = (Actor *) _subaddiefind_entrypoint_2(0x40E, 0);
+                if (local_8)
+                    func_8010A624(local_8);
+            }
+            _subaddieDll_entrypoint_4(param_0, 1);
+            func_8010FFB0(func_800F5EF8(func_800F54E4()), local_2, local_1);
+            _capod_entrypoint_2(param_0->unk0, 45, 0x10804);
+            _capod_entrypoint_8(0);
+            _capod_entrypoint_1(local_2, local_1);
+            if (func_80800000_chfantasycannon(param_0)) {
+                func_800EE7F8(local_0, local_2);
+                func_800EE7F8(local_0 + 3, local_1);
+            }
+            func_800F7F98(func_800F54E4(), 1);
+            param_0->unk64_19 = 1;
+            func_800F5A00(func_800F54E4(), (f32 *) &param_0->actorData[4]);
+            *(s32 *) &param_0->unk50 = func_80015184();
+            func_80015178(4);
+            break;
+        case 4:
+            if (func_80800000_chfantasycannon(param_0)) {
+                local_0 = (f32 *) param_0->actorData;
+                func_800EEC30(local_6, 45.0f, func_800F1DF4(local_0, param_0->position), 1250.0f);
+                func_800EFA4C(local_5, ((f32 *) param_0->actorData)[0] + local_6[0],
+                              ((f32 *) param_0->actorData)[1] + local_6[1],
+                              ((f32 *) param_0->actorData)[2] + local_6[2]);
+                func_800F8294(func_800F54E4(), local_5);
+                local_4 = -1250.0f;
+                local_3 = 50.0f;
+            } else {
+                local_4 = -800.0f;
+                func_800EFA4C(local_7, param_0->position[0], param_0->position[1] + 350.0f,
+                              param_0->position[2]);
+                func_800F8294(func_800F54E4(), local_7);
+                local_9 = 1700.0f;
+                local_3 = local_9 * local_9 -
+                          (((f32 *) param_0->actorData)[1] - local_7[1]) * (local_4 + local_4);
+                if (local_3 > 0.0f) {
+                    local_0 = (f32 *) param_0->actorData;
+                    local_3 = sqrtf(local_3);
+                } else {
+                    local_3 = local_9;
+                    local_0 = (f32 *) param_0->actorData;
+                }
+            }
+            func_800F78EC(func_800F54E4(), local_0, local_3, local_4);
+            break;
+        case 6:
+            param_0->unk54 = 0.25f;
+            func_80015178(*(s32 *) &param_0->unk50);
+            func_80800028_chfantasycannon(param_0);
+            if (func_800DA298(0x1E1)) {
+                local_10 = (Actor *) _subaddiefind_entrypoint_2(0x40E, 0);
+                if (local_10)
+                    func_8010A63C(local_10);
+            }
     }
     func_80102424(param_0, param_1);
 }
@@ -259,7 +257,7 @@ void func_808008B0_chfantasycannon(Actor *param_0)
 
     local_3 = func_80100094(param_0, 0);
     if (func_80800000_chfantasycannon(param_0)) {
-        if ((s32)param_0->unk70_10 < 4) {
+        if ((s32) param_0->unk70_10 < 4) {
             _capod_entrypoint_1(local_3, local_3 + 3);
         } else {
             func_800A516C(local_0, param_0->actorData, local_3 + 6);
@@ -268,13 +266,15 @@ void func_808008B0_chfantasycannon(Actor *param_0)
     } else {
         func_800F5A00(func_800F54E4(), local_2);
         func_800EFE50(local_1, local_3 + 6, local_3,
-                     func_800EEB40(local_2, (f32 *)param_0->actorData) / func_800EEB40(param_0->position, (f32 *)param_0->actorData));
+                      func_800EEB40(local_2, (f32 *) param_0->actorData) /
+                          func_800EEB40(param_0->position, (f32 *) param_0->actorData));
         func_800A516C(local_0, local_2, local_1);
         _capod_entrypoint_1(local_1, local_0);
     }
 }
 
-int func_808009B8_chfantasycannon(param_0) Actor *param_0;
+int func_808009B8_chfantasycannon(param_0)
+Actor *param_0;
 {
     f32 *local_5;
     f32 local_0[3];
@@ -283,28 +283,30 @@ int func_808009B8_chfantasycannon(param_0) Actor *param_0;
     u8 *local_2;
     s32 local_7;
     s32 local_8;
-    local_2 = (u8 *)func_80100094(param_0, 0);
-    local_6 = func_800F1DF4(param_0->position, (f32 *)param_0->actorData) - 180.0f;
+    local_2 = (u8 *) func_80100094(param_0, 0);
+    local_6 = func_800F1DF4(param_0->position, (f32 *) param_0->actorData) - 180.0f;
     local_7 = 5;
     local_8 = 60;
-    local_5 = (f32 *)(local_2 + 0x18);
+    local_5 = (f32 *) (local_2 + 0x18);
     do {
         func_800EEC30(local_0, func_800DC0C0() * 10.0f + 25.0f, local_8 + local_6, 2000.0f);
-        func_800EE780(local_5, (f32 *)param_0->actorData, local_0);
-        if (!func_800BEF00(param_0->position, local_5, local_1, 0)) break;
+        func_800EE780(local_5, (f32 *) param_0->actorData, local_0);
+        if (!func_800BEF00(param_0->position, local_5, local_1, 0))
+            break;
         func_800EEC30(local_0, func_800DC0C0() * 10.0f + 25.0f, local_7 * -12 + local_6, 2000.0f);
-        func_800EE780(local_5, (f32 *)param_0->actorData, local_0);
-        if (!func_800BEF00(param_0->position, local_5, local_1, 0)) break;
+        func_800EE780(local_5, (f32 *) param_0->actorData, local_0);
+        if (!func_800BEF00(param_0->position, local_5, local_1, 0))
+            break;
         local_7++;
         local_8 += 12;
     } while (local_7 >= 0);
     func_800EE780(local_2, local_5, param_0->position);
-    func_800EF334((f32 *)local_2, 0.5f);
+    func_800EF334((f32 *) local_2, 0.5f);
 }
 
 int chfantasycannon_entrypoint_0()
 {
-    return (int)D_80800D30_chfantasycannon;
+    return (int) D_80800D30_chfantasycannon;
 }
 
 void func_80800B84_chfantasycannon()
@@ -312,9 +314,10 @@ void func_80800B84_chfantasycannon()
     func_80101870();
 }
 
-void func_80800BA4_chfantasycannon(u8 *param_0) {
-    *(f32 *)(param_0 + 0x48) = 0.0f;
-    if ((u32)(((u16 *)(param_0 + 0x76))[0]) >> 7 == 0x38) {
+void func_80800BA4_chfantasycannon(u8 *param_0)
+{
+    *(f32 *) (param_0 + 0x48) = 0.0f;
+    if ((u32) ((u16 *) (param_0 + 0x76))[0] >> 7 == 0x38) {
         func_800FFAB0();
     }
 }
@@ -332,20 +335,53 @@ void func_80800BDC_chfantasycannon(Actor *param_0)
 
 int chfantasycannon_entrypoint_1()
 {
-  return &D_80800D78_chfantasycannon;
+    return &D_80800D78_chfantasycannon;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fantasy/cannon.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800D30_chfantasycannon -> int[] (uses written as NAME[0]) */
 extern void func_80105834();
 extern int func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
 extern u8 boot_thread_stack[];
-u32 D_80800CC0_chfantasycannon[14] = { 0x0, 0x0, 0x3F6ED917, 0x3910049, 0x3F6ED917, 0x3910009, 0x402EB852, 0x392004A, 0x402EB852, 0x392000A, 0x3F6ED917, 0x3910049, 0x3F6ED917, 0x3910049 };
-s32 D_80800CF8_chfantasycannon[14] = { 0x1D09DF, 0x161200, 0x1BFC18, -0x257FFF2, 0x19003C, 0x270000, 0x0, 0x12C0022, 0x400066, 0x190066, 0x150019, 0x80002B, 0x660080, 0x31A0000 };
-int D_80800D30_chfantasycannon[18] = { 0x158047D, 0x8920001, (u32)&D_80800CC0_chfantasycannon, (u32)func_80800228_chfantasycannon, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x9, 0x0, (u32)func_80108ED0, 0x240000, (u32)func_8080010C_chfantasycannon, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0x1F20), 0x0, 0x0 };
-void *D_80800D78_chfantasycannon = (void *)0x0158047E;
-static u32 D_80800D78_chfantasycannon_rest[17] = { 0x92E0001, 0x0, (u32)func_80800BDC_chfantasycannon, (u32)func_80105834, (u32)func_80800B84_chfantasycannon, 0x2580000, 0x0, 0x0, 0x21808, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800BA4_chfantasycannon, (u32)func_80107C2C, 0x80000402, 0x0, 0x0 };
+u32 D_80800CC0_chfantasycannon[14] = {0x0,        0x0,        0x3F6ED917, 0x3910049,  0x3F6ED917,
+                                      0x3910009,  0x402EB852, 0x392004A,  0x402EB852, 0x392000A,
+                                      0x3F6ED917, 0x3910049,  0x3F6ED917, 0x3910049};
+s32 D_80800CF8_chfantasycannon[14] = {0x1D09DF, 0x161200, 0x1BFC18,  -0x257FFF2, 0x19003C,
+                                      0x270000, 0x0,      0x12C0022, 0x400066,   0x190066,
+                                      0x150019, 0x80002B, 0x660080,  0x31A0000};
+int D_80800D30_chfantasycannon[18] = {0x158047D,
+                                      0x8920001,
+                                      (u32) &D_80800CC0_chfantasycannon,
+                                      (u32) func_80800228_chfantasycannon,
+                                      (u32) func_80105834,
+                                      (u32) func_80101870,
+                                      0x1F40000,
+                                      0x0,
+                                      0x0,
+                                      0x9,
+                                      0x0,
+                                      (u32) func_80108ED0,
+                                      0x240000,
+                                      (u32) func_8080010C_chfantasycannon,
+                                      (u32) func_80107C2C,
+                                      (u32) ((u8 *) boot_thread_stack + 0x1F20),
+                                      0x0,
+                                      0x0};
+void *D_80800D78_chfantasycannon = (void *) 0x0158047E;
+static u32 D_80800D78_chfantasycannon_rest[17] = {0x92E0001,
+                                                  0x0,
+                                                  (u32) func_80800BDC_chfantasycannon,
+                                                  (u32) func_80105834,
+                                                  (u32) func_80800B84_chfantasycannon,
+                                                  0x2580000,
+                                                  0x0,
+                                                  0x0,
+                                                  0x21808,
+                                                  0x0,
+                                                  (u32) func_80108ED0,
+                                                  0x0,
+                                                  (u32) func_80800BA4_chfantasycannon,
+                                                  (u32) func_80107C2C,
+                                                  0x80000402,
+                                                  0x0,
+                                                  0x0};

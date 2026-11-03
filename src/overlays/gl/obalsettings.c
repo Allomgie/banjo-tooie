@@ -1,6 +1,5 @@
 #include "gl/globalsettings.h"
 
-extern void func_800DA3B8();
 extern s16 D_80800560_glglobalsettings[][2];
 s32 glglobalsettings_entrypoint_4();
 int glglobalsettings_entrypoint_5();
@@ -8,7 +7,8 @@ void glglobalsettings_entrypoint_6();
 s32 glglobalsettings_entrypoint_7();
 void glglobalsettings_entrypoint_8();
 
-s32 glglobalsettings_entrypoint_0(void){
+s32 glglobalsettings_entrypoint_0(void)
+{
     glglobalsettings_entrypoint_4(0);
     glglobalsettings_entrypoint_6(0, 0);
     glglobalsettings_entrypoint_8(1);
@@ -53,20 +53,18 @@ s32 func_808000A4_glglobalsettings(s32 param_0, s32 param_1)
 
 s32 func_80800114_glglobalsettings(void *param_0)
 {
-  s32 i;
-  s32 new_var;
-  new_var = (s32) param_0;
-  for (i = 0; i < 2; i++)
-  {
-    if (i != new_var)
-    {
-      _glgamestore_entrypoint_5(i);
+    s32 i;
+    s32 new_var;
+    new_var = (s32) param_0;
+    for (i = 0; i < 2; i++) {
+        if (i != new_var) {
+            _glgamestore_entrypoint_5(i);
+        }
     }
-  }
-
 }
 
-s32 func_80800168_glglobalsettings(s32 *param_0) {
+s32 func_80800168_glglobalsettings(s32 *param_0)
+{
     s32 temp_v0;
     s32 var_s0;
     s32 var_s1;
@@ -96,7 +94,8 @@ s32 func_80800168_glglobalsettings(s32 *param_0) {
     return var_s5;
 }
 
-s32 glglobalsettings_entrypoint_1(void) {
+s32 glglobalsettings_entrypoint_1(void)
+{
     s32 temp;
     void *local_0;
 
@@ -111,7 +110,8 @@ s32 glglobalsettings_entrypoint_1(void) {
     heap_free(local_0);
 }
 
-s32 func_80800278_glglobalsettings(s32 param_0, s32 param_1) {
+s32 func_80800278_glglobalsettings(s32 param_0, s32 param_1)
+{
     s32 local_3;
     s32 local_4;
     s32 local_2;
@@ -131,7 +131,8 @@ loop_1:
     return local_2;
 }
 
-s32 glglobalsettings_entrypoint_2(void) {
+s32 glglobalsettings_entrypoint_2(void)
+{
     s32 local_0;
     s32 local_1;
     s32 local_5;
@@ -165,35 +166,44 @@ s32 glglobalsettings_entrypoint_3()
     return func_800DA298(GFLAG_BB9_WIDESCREEN_ENABLED);
 }
 
-s32 glglobalsettings_entrypoint_4(param_0) int param_0; {
+s32 glglobalsettings_entrypoint_4(param_0)
+int param_0;
+{
     set_widescreen(param_0);
     func_800DA3B8(0xBB9, param_0 ? 1 : 0);
 }
 
-int glglobalsettings_entrypoint_5(param_0, param_1) s32 *param_0; s32 *param_1;
+int glglobalsettings_entrypoint_5(param_0, param_1)
+s32 *param_0;
+s32 *param_1;
 {
-  s32 local_0;
-  local_0 = func_800DA564(0xBBA, 6);
-  param_0[0] = local_0 - 0x20;
-  param_1[0] = func_800DA564(0xBC0, 6) - 0x28;
+    s32 local_0;
+    local_0 = func_800DA564(0xBBA, 6);
+    param_0[0] = local_0 - 0x20;
+    param_1[0] = func_800DA564(0xBC0, 6) - 0x28;
 }
 
-void glglobalsettings_entrypoint_6(param_0, param_1) s32 param_0; s32 param_1;
+void glglobalsettings_entrypoint_6(param_0, param_1) s32 param_0;
+s32 param_1;
 {
     func_80015670();
     param_0 += 0x20;
     param_1 += 0x28;
-    if (param_0 >= 0x40) {
-        param_0 = 0x3F;
-    }
-    if (param_1 >= 0x40) {
-        param_1 = 0x3F;
-    }
-    func_800DA7A8(0xBBA, param_0, 6);
-    func_800DA7A8(0xBC0, param_1, 6);
+
+if (param_0 >= 0x40) {
+    param_0 = 0x3F;
 }
 
-s32 glglobalsettings_entrypoint_7(void){
+if (param_1 >= 0x40) {
+    param_1 = 0x3F;
+}
+
+func_800DA7A8(0xBBA, param_0, 6);
+func_800DA7A8(0xBC0, param_1, 6);
+}
+
+s32 glglobalsettings_entrypoint_7(void)
+{
     func_800DA564(0xBC6, 2);
 }
 
@@ -205,6 +215,4 @@ void glglobalsettings_entrypoint_8(param_0) s32 param_0;
     func_800DA7A8(0xBC6, param_0, 2);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/obalsettings.data.s) is defined here in C.
- * Values are taken from the ROM. */
-s16 D_80800560_glglobalsettings[4][2] = { 0x1, 0x4, 0x2, 0x4, 0x3, 0x4, 0x4, 0x4 };
+s16 D_80800560_glglobalsettings[4][2] = {0x1, 0x4, 0x2, 0x4, 0x3, 0x4, 0x4, 0x4};

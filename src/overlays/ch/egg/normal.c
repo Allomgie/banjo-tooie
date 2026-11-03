@@ -1,6 +1,12 @@
 #include "common.h"
 
-typedef struct { u8 pad_0[0x30]; f32 unk30; u8 pad_34[5]; u8 flags : 1; u8 pad_39 : 7; } EggUpdateLocal;
+typedef struct {
+    u8 pad_0[0x30];
+    f32 unk30;
+    u8 pad_34[5];
+    u8 flags : 1;
+    u8 pad_39 : 7;
+} EggUpdateLocal;
 extern void *func_80100094(Actor *, u32);
 extern s32 func_800EEEA8(void *);
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
@@ -14,11 +20,21 @@ extern s32 _suegg_entrypoint_12(Actor *);
 extern void _sueggmisc_entrypoint_1(Actor *);
 extern void _suegg_entrypoint_3(Actor *);
 extern int D_808004D0_cheggnormal[];
-typedef struct { u8 pad_0[0x39]; u8 pad_1 : 3; u8 local_0 : 1; u8 pad_2 : 4; } NormalEggFlags;
+typedef struct {
+    u8 pad_0[0x39];
+    u8 pad_1 : 3;
+    u8 local_0 : 1;
+    u8 pad_2 : 4;
+} NormalEggFlags;
 extern Actor *_suegg_entrypoint_11(s32, f32 *, s32);
 extern void _sueggmove_entrypoint_6(Actor *, f32, f32);
 extern void _suegg_entrypoint_1(Actor *, f32);
-typedef struct { u8 pad_0[0x38]; u32 pad_1 : 11; u32 local_0 : 1; u32 pad_2 : 20; } EggNormalFlags;
+typedef struct {
+    u8 pad_0[0x38];
+    u32 pad_1 : 11;
+    u32 local_0 : 1;
+    u32 pad_2 : 20;
+} EggNormalFlags;
 extern f32 func_800D8FF8(void);
 extern f32 func_800DC0C0(void);
 extern void func_800EFA20(f32 *, f32 *, f32);
@@ -26,9 +42,19 @@ extern void _fxegg_entrypoint_7(f32 *, f32 *, f32);
 extern void _fxegg_entrypoint_8(f32 *, f32 *, f32);
 extern void _fxegg_entrypoint_2(f32 *, f32);
 extern void _fxegg_entrypoint_1(f32 *, f32);
-typedef struct { u8 pad_0[0x38]; u8 local_0; u8 pad_1 : 3; u8 local_1 : 1; u8 pad_2 : 4; } NormalEggSpawnState;
-typedef struct { u8 pad_0[0x72]; u8 local_0 : 6; u8 pad_1 : 2; } NormalEggActorState;
-void func_80800000_cheggnormal();
+
+typedef struct {
+    u8 pad_0[0x38];
+    u8 local_0;
+    u8 pad_1 : 3;
+    u8 local_1 : 1;
+    u8 pad_2 : 4;
+} NormalEggSpawnState;
+typedef struct {
+    u8 pad_0[0x72];
+    u8 local_0 : 6;
+    u8 pad_1 : 2;
+} NormalEggActorState;
 
 void func_80800000_cheggnormal(param_0) Actor *param_0;
 {
@@ -37,15 +63,18 @@ void func_80800000_cheggnormal(param_0) Actor *param_0;
     f32 local_0[3];
     f32 local_1[3];
     local_3 = func_80100094(param_0, 0);
-    *(f32 *)(local_3 + 0x28) -= func_800D8FF8();
-    local_2 = func_800F10B4(*(f32 *)(local_3 + 0x30), 0.0f, 2.0f, 0.0333f, 0.1f);
-    while (*(f32 *)(local_3 + 0x28) <= 0) {
-        *(f32 *)(local_3 + 0x28) += local_2;
+    *(f32 *) (local_3 + 0x28) -= func_800D8FF8();
+    local_2 = func_800F10B4(*(f32 *) (local_3 + 0x30), 0.0f, 2.0f, 0.0333f, 0.1f);
+    while (*(f32 *) (local_3 + 0x28) <= 0) {
+        *(f32 *) (local_3 + 0x28) += local_2;
         func_800EE7F8(local_0, param_0->position);
-        if (((EggNormalFlags *)local_3)->local_0) {
-            func_800EFA20(local_1, (f32 *)((u8 *)param_0 + 0x28), 0.125f);
-            if (func_800DC0C0() < 0.5f) { _fxegg_entrypoint_7(local_0, local_1, param_0->scale); }
-            else { _fxegg_entrypoint_8(local_0, local_1, param_0->scale); }
+        if (((EggNormalFlags *) local_3)->local_0) {
+            func_800EFA20(local_1, (f32 *) ((u8 *) param_0 + 0x28), 0.125f);
+            if (func_800DC0C0() < 0.5f) {
+                _fxegg_entrypoint_7(local_0, local_1, param_0->scale);
+            } else {
+                _fxegg_entrypoint_8(local_0, local_1, param_0->scale);
+            }
         } else if (func_800DC0C0() < 0.5f) {
             _fxegg_entrypoint_2(local_0, param_0->scale);
         } else {
@@ -60,35 +89,35 @@ void func_80800194_cheggnormal(Actor *param_0)
 
     local_0 = func_80100094(param_0, 0);
     switch (param_0->unk70_10) {
-    case 1:
-        if (!_suegg_entrypoint_8(param_0)) {
-            if (func_800EEEA8(&param_0->actorData[4])) {
-                local_0->flags = 1;
-            } else {
-                func_80800000_cheggnormal(param_0);
-                _suegg_entrypoint_16(param_0);
-                if (_suegg_entrypoint_14(param_0)) {
+        case 1:
+            if (!_suegg_entrypoint_8(param_0)) {
+                if (func_800EEEA8(&param_0->actorData[4])) {
                     local_0->flags = 1;
+                } else {
+                    func_80800000_cheggnormal(param_0);
+                    _suegg_entrypoint_16(param_0);
+                    if (_suegg_entrypoint_14(param_0)) {
+                        local_0->flags = 1;
+                    }
                 }
             }
-        }
-        break;
-    case 2:
-        if (!_suegg_entrypoint_8(param_0)) {
-            param_0->scale = func_800F10B4(local_0->unk30, 0.0f, 0.134f, 0.1f, 0.25f);
-            if (_sueggmove_entrypoint_3(param_0)) {
-                _suegg_entrypoint_23(param_0);
+            break;
+        case 2:
+            if (!_suegg_entrypoint_8(param_0)) {
+                param_0->scale = func_800F10B4(local_0->unk30, 0.0f, 0.134f, 0.1f, 0.25f);
+                if (_sueggmove_entrypoint_3(param_0)) {
+                    _suegg_entrypoint_23(param_0);
+                }
+                if (_suegg_entrypoint_13(param_0)) {
+                    local_0->flags = 1;
+                } else if (_suegg_entrypoint_12(param_0)) {
+                    _sueggmisc_entrypoint_1(param_0);
+                } else {
+                    func_80800000_cheggnormal(param_0);
+                    _suegg_entrypoint_16(param_0);
+                }
             }
-            if (_suegg_entrypoint_13(param_0)) {
-                local_0->flags = 1;
-            } else if (_suegg_entrypoint_12(param_0)) {
-                _sueggmisc_entrypoint_1(param_0);
-            } else {
-                func_80800000_cheggnormal(param_0);
-                _suegg_entrypoint_16(param_0);
-            }
-        }
-        break;
+            break;
     }
     if (local_0->flags) {
         _suegg_entrypoint_3(param_0);
@@ -97,7 +126,7 @@ void func_80800194_cheggnormal(Actor *param_0)
 
 void *cheggnormal_entrypoint_0()
 {
-    return (void *)&D_808004D0_cheggnormal;
+    return (void *) &D_808004D0_cheggnormal;
 }
 
 Actor *cheggnormal_entrypoint_1(void *param_0, f32 *param_1, s32 param_2, s32 param_3)
@@ -114,7 +143,7 @@ Actor *cheggnormal_entrypoint_1(void *param_0, f32 *param_1, s32 param_2, s32 pa
     _sueggmove_entrypoint_5(local_0, 1);
     _sueggmove_entrypoint_6(local_0, -2200.0f, -22000.0f);
     _sueggmove_entrypoint_7(local_0, param_2);
-    ((NormalEggActorState *)local_0)->local_0 = 2;
+    ((NormalEggActorState *) local_0)->local_0 = 2;
     local_1->local_1 = 0;
     return local_0;
 }
@@ -132,15 +161,13 @@ Actor *cheggnormal_entrypoint_2(void *param_0, f32 *param_1, s32 param_2, s32 pa
     _suegg_entrypoint_1(local_0, 30.0f);
     _sueggmove_entrypoint_7(local_0, param_2);
     local_0->unk70_10 = 1;
-    if (func_800F693C(param_3)) local_1->local_0 = 1;
-    else local_1->local_0 = 0;
+    if (func_800F693C(param_3))
+        local_1->local_0 = 1;
+    else
+        local_1->local_0 = 0;
     return local_0;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/egg/normal.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808004D0_cheggnormal -> int[] */
 extern void func_80105834();
 extern void _subaddiedraw25d_entrypoint_2();
 extern void _suegg_entrypoint_2();
@@ -148,4 +175,23 @@ extern void _suegg_entrypoint_0();
 extern void _suegg_entrypoint_5();
 extern void func_80107C2C();
 extern void _suegg_entrypoint_17();
-int D_808004D0_cheggnormal[20] = { 0x26C015A, 0x9D70001, 0x0, (u32)func_80800194_cheggnormal, (u32)func_80105834, (u32)_subaddiedraw25d_entrypoint_2, 0x0, 0x3F800000, 0x0, 0x4, (u32)_suegg_entrypoint_2, (u32)_suegg_entrypoint_0, 0x4C0000, (u32)_suegg_entrypoint_5, (u32)func_80107C2C, -0x78000000, (u32)_suegg_entrypoint_17, 0x0, 0x0, 0x0 };
+int D_808004D0_cheggnormal[20] = {0x26C015A,
+                                  0x9D70001,
+                                  0x0,
+                                  (u32) func_80800194_cheggnormal,
+                                  (u32) func_80105834,
+                                  (u32) _subaddiedraw25d_entrypoint_2,
+                                  0x0,
+                                  0x3F800000,
+                                  0x0,
+                                  0x4,
+                                  (u32) _suegg_entrypoint_2,
+                                  (u32) _suegg_entrypoint_0,
+                                  0x4C0000,
+                                  (u32) _suegg_entrypoint_5,
+                                  (u32) func_80107C2C,
+                                  -0x78000000,
+                                  (u32) _suegg_entrypoint_17,
+                                  0x0,
+                                  0x0,
+                                  0x0};

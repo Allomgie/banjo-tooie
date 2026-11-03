@@ -8,24 +8,44 @@ extern f32 func_800D8FF8(void);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_801015D0(void);
 extern void func_800DF944(void *, f32 *, f32, f32, s32, s32, s32);
-typedef struct { u16 local_0; u8 local_1; u8 pad_0; f32 local_2; f32 pad_1; f32 local_3; s16 local_4; s16 local_5; f32 local_6; u8 local_7; u8 pad_2[3]; } AttractEntry26;
-typedef struct { u8 pad_0[0x7A]; u8 local_0:2; u8 pad_1:6; } AttractFlags26;
+typedef struct {
+    u16 local_0;
+    u8 local_1;
+    u8 pad_0;
+    f32 local_2;
+    f32 pad_1;
+    f32 local_3;
+    s16 local_4;
+    s16 local_5;
+    f32 local_6;
+    u8 local_7;
+    u8 pad_2[3];
+} AttractEntry26;
+typedef struct {
+    u8 pad_0[0x7A];
+    u8 local_0 : 2;
+    u8 pad_1 : 6;
+} AttractFlags26;
 extern AttractEntry26 D_80800468_chattract[];
 extern void _subaddiefade_entrypoint_2(Actor *);
 extern void _chattract_entrypoint_2(void);
 extern void _chbaddiesetup_entrypoint_1(void *, s32);
-typedef struct { u8 unused[0x12]; u16 type : 15; u16 enabled : 1; } AttractMarkerType;
-extern f32 B_80800540_chattract[];
+typedef struct {
+    u8 unused[0x12];
+    u16 type : 15;
+    u16 enabled : 1;
+} AttractMarkerType;
 extern Actor *func_80108454(s32, f32 *, s32);
 
 void *chattract_entrypoint_0()
 {
-  return &D_808004F4_chattract;
+    return &D_808004F4_chattract;
 }
 
-void func_8080000C_chattract(s32 arg0) 
+void func_8080000C_chattract(s32 arg0)
 {
 }
+
 void func_80800014_chattract(Actor *param_0)
 {
     u8 *local_0;
@@ -34,26 +54,26 @@ void func_80800014_chattract(Actor *param_0)
         param_0->rotation[1] += param_0->unk54 * func_800D8FF8();
     }
     if (param_0->unk79_4) {
-        if ((*(u16 *)((u8 *)param_0 + 0x78) & 3) == 0 && func_800D9078(&param_0->unk58)) {
+        if ((*(u16 *) ((u8 *) param_0 + 0x78) & 3) == 0 && func_800D9078(&param_0->unk58)) {
             if (D_8080046A_chattract[param_0->unk74_7 * 28]) {
                 _subaddiefade_entrypoint_2(param_0);
             } else {
                 _subaddiefade_entrypoint_1(param_0, 255);
             }
-            param_0->unk58 = *(f32 *)(D_8080046C_chattract + param_0->unk74_7 * 28);
+            param_0->unk58 = *(f32 *) (D_8080046C_chattract + param_0->unk74_7 * 28);
             param_0->unk79_4 = 0;
             func_80102424(param_0, param_0->unk70_10);
         }
     } else {
-        if ((*(u16 *)((u8 *)param_0 + 0x78) & 3) == 0 && func_800D9078(&param_0->unk58)) {
-            local_0 = ((u8 *) D_80800468_chattract) + param_0->unk74_7 * 28;
-            if (*(f32 *)(local_0 + 8) != 0.0f) {
+        if ((*(u16 *) ((u8 *) param_0 + 0x78) & 3) == 0 && func_800D9078(&param_0->unk58)) {
+            local_0 = (u8 *) D_80800468_chattract + param_0->unk74_7 * 28;
+            if (*(f32 *) (local_0 + 8) != 0.0f) {
                 if (local_0[3]) {
                     _subaddiefade_entrypoint_5(param_0);
                 } else {
                     _subaddiefade_entrypoint_1(param_0, 0);
                 }
-                param_0->unk58 = *(f32 *)(D_80800470_chattract + param_0->unk74_7 * 28);
+                param_0->unk58 = *(f32 *) (D_80800470_chattract + param_0->unk74_7 * 28);
                 param_0->unk79_4 = 1;
             } else if (local_0[3]) {
                 _subaddiefade_entrypoint_3(param_0);
@@ -73,7 +93,8 @@ void func_80800204_chattract(Actor *param_0, void *param_1)
     }
     func_800DF410(param_0->alpha);
     func_800DF47C(func_801015D0, param_0);
-    func_800DF944(param_1, param_0->position, 0.0f, param_0->scale, 0, 1, func_8010347C(param_0->unk0));
+    func_800DF944(param_1, param_0->position, 0.0f, param_0->scale, 0, 1,
+                  func_8010347C(param_0->unk0));
 }
 
 s32 func_808002AC_chattract(Actor *param_0, s32 param_1, s32 param_2)
@@ -86,7 +107,7 @@ s32 func_808002AC_chattract(Actor *param_0, s32 param_1, s32 param_2)
         func_80102424(param_0, param_0->unk74_7);
         param_0->unk58 = local_0->local_2;
         param_0->scale = local_0->local_3;
-        ((AttractFlags26 *)param_0)->local_0 = local_0->local_7;
+        ((AttractFlags26 *) param_0)->local_0 = local_0->local_7;
         if (local_0->local_1) {
             _subaddiefade_entrypoint_2(param_0);
         }
@@ -99,15 +120,12 @@ s32 func_808002AC_chattract(Actor *param_0, s32 param_1, s32 param_2)
     return 0;
 }
 
-void chattract_entrypoint_1(s32 param_0) {
+void chattract_entrypoint_1(s32 param_0)
+{
     _chbaddiesetup_entrypoint_1(_chattract_entrypoint_2, param_0);
 }
 
-/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/attract.bss.s) is defined here in C, ahead of
- * its first use: IDO places .bss objects used before their definition first, the rest in definition
- * order. */
 f32 B_80800540_chattract[4];
-
 
 void chattract_entrypoint_2(s32 param_0)
 {
@@ -116,18 +134,37 @@ void chattract_entrypoint_2(s32 param_0)
     local_0 = func_80108454(0x4B5, B_80800540_chattract, 0);
     if (local_0 != NULL) {
         local_0->unk74_7 = param_0 + 1;
-        ((AttractMarkerType *)local_0->unk0)->type = 1;
+        ((AttractMarkerType *) local_0->unk0)->type = 1;
         func_800EC828();
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/attract.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080046A_chattract = D_80800468_chattract + 0x2, D_8080046C_chattract = D_80800468_chattract + 0x4, D_80800470_chattract = D_80800468_chattract + 0x8 */
 extern void func_80102EC0();
 extern void func_80107C2C();
-u32 D_80800440_chattract[10] = { 0x0, 0x0, 0x0, 0x0, 0x3FCCCCCD, 0x284004A, 0x0, 0x0, 0x3F8CCCCD, 0x286004A };
-AttractEntry26 D_80800468_chattract[5] = { 0x0, 0x0, 0x0, 0.0f, 0.0f, 0.0f, 0x0, 0x0, 0.0f, 0x0, 0x0, 0x0, 0x0, 0x8A8, 0x1, 0x1, 2.5f, 0.0f, 0.14f, 0x98, 0x5E, 0.0f, 0x1, 0x0, 0x0, 0x0, 0x85A, 0x0, 0x1, 5.0f, 2.0f, 0.2f, 0x98, 0xAB, 0.0f, 0x0, 0x0, 0x0, 0x0, 0x859, 0x1, 0x0, 0.0f, 0.0f, 0.1f, 0x112, 0xC6, 2.8e+02f, 0x0, 0x0, 0x0, 0x0, 0x85B, 0x0, 0x1, 5.0f, 2.0f, 0.2f, 0x98, 0xAB, 0.0f, 0x0, 0x0, 0x0, 0x0 };
-void *D_808004F4_chattract = (void *)0x015804B5;
-static u32 D_808004F4_chattract_rest[18] = { 0x2, (u32)&D_80800440_chattract, (u32)func_80800014_chattract, (u32)func_80102EC0, (u32)func_80800204_chattract, 0x0, 0x0, 0x0, 0x8400404, 0x0, 0x0, 0x0, (u32)func_8080000C_chattract, (u32)func_80107C2C, 0x80000002, (u32)func_808002AC_chattract, 0x0, 0x0 };
+u32 D_80800440_chattract[10] = {0x0,       0x0, 0x0, 0x0,        0x3FCCCCCD,
+                                0x284004A, 0x0, 0x0, 0x3F8CCCCD, 0x286004A};
+AttractEntry26 D_80800468_chattract[5] = {
+    0x0,   0x0, 0x0, 0.0f, 0.0f, 0.0f,  0x0,   0x0,  0.0f,     0x0, 0x0, 0x0, 0x0,
+    0x8A8, 0x1, 0x1, 2.5f, 0.0f, 0.14f, 0x98,  0x5E, 0.0f,     0x1, 0x0, 0x0, 0x0,
+    0x85A, 0x0, 0x1, 5.0f, 2.0f, 0.2f,  0x98,  0xAB, 0.0f,     0x0, 0x0, 0x0, 0x0,
+    0x859, 0x1, 0x0, 0.0f, 0.0f, 0.1f,  0x112, 0xC6, 2.8e+02f, 0x0, 0x0, 0x0, 0x0,
+    0x85B, 0x0, 0x1, 5.0f, 2.0f, 0.2f,  0x98,  0xAB, 0.0f,     0x0, 0x0, 0x0, 0x0};
+void *D_808004F4_chattract = (void *) 0x015804B5;
+static u32 D_808004F4_chattract_rest[18] = {0x2,
+                                            (u32) &D_80800440_chattract,
+                                            (u32) func_80800014_chattract,
+                                            (u32) func_80102EC0,
+                                            (u32) func_80800204_chattract,
+                                            0x0,
+                                            0x0,
+                                            0x0,
+                                            0x8400404,
+                                            0x0,
+                                            0x0,
+                                            0x0,
+                                            (u32) func_8080000C_chattract,
+                                            (u32) func_80107C2C,
+                                            0x80000002,
+                                            (u32) func_808002AC_chattract,
+                                            0x0,
+                                            0x0};

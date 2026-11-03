@@ -18,7 +18,8 @@ void cosectionstor_entrypoint_0(void)
     }
 }
 
-void cosectionstor_entrypoint_1(void) {
+void cosectionstor_entrypoint_1(void)
+{
     s32 i;
     for (i = 1; i < 0x10B; i++) {
         if (D_80127194[i] != 0) {
@@ -28,7 +29,8 @@ void cosectionstor_entrypoint_1(void) {
     }
 }
 
-void cosectionstor_entrypoint_2(void) {
+void cosectionstor_entrypoint_2(void)
+{
     s32 i;
     for (i = 1; i < 0x10B; i++) {
         if (D_80127194[i] != 0) {
@@ -52,13 +54,16 @@ void cosectionstor_entrypoint_3(s32 param_0)
         }
         wSize = 4;
         D_80127198[param_0] = heap_alloc(wSize * sizeof(u32));
-        if (1) {} /* probe: block boundary, so valPtr is reloaded from D_80127198 (uses up the temp the target uses up) */
-        valPtr = (u32 *)D_80127198[param_0];
+        if (1) {
+        }
+        valPtr = (u32 *) D_80127198[param_0];
         *valPtr = func_800DAA1C();
         iBit += 8 * sizeof(u32);
         iWord = iBit >> 5;
         D_80127198[param_0] = _gccollectDll_entrypoint_6(D_80127198[param_0], &iWord);
-        D_80127198[param_0] = _subaddiestore_entrypoint_0(D_80127198[param_0], (u8 *)((s32 *)D_80127198[param_0] + (((iWord << 5) + 0x7F) >> 7) * 4));
+        D_80127198[param_0] = _subaddiestore_entrypoint_0(
+            D_80127198[param_0],
+            (u8 *) ((s32 *) D_80127198[param_0] + (((iWord << 5) + 0x7F) >> 7) * 4));
     }
 }
 
@@ -70,18 +75,17 @@ void cosectionstor_entrypoint_4(s32 param_0)
 
     if (param_0 >= 0xA0) {
         param_0 -= 0xA0;
-        if (*(s32 *)&D_80127198[param_0]) {
-            flag_ptr = (u32 *)D_80127198[param_0];
+        if (*(s32 *) &D_80127198[param_0]) {
+            flag_ptr = (u32 *) D_80127198[param_0];
             func_800DAA28(*flag_ptr);
             iBit += 8 * sizeof(u32);
             iWord = iBit >> 5;
             D_80127198[param_0] = _gccollectDll_entrypoint_7(D_80127198[param_0], &iWord);
-            _subaddiestore_entrypoint_1(D_80127198[param_0], (u8 *)((s32 *)D_80127198[param_0] + (((iWord << 5) + 0x7F) >> 7) * 4));
+            _subaddiestore_entrypoint_1(
+                D_80127198[param_0],
+                (u8 *) ((s32 *) D_80127198[param_0] + (((iWord << 5) + 0x7F) >> 7) * 4));
             heap_free(D_80127198[param_0]);
             D_80127198[param_0] = NULL;
         }
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/co/sectionstor.data.s) is defined here in C.
- * Values are taken from the ROM. */

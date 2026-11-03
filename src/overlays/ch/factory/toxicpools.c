@@ -3,7 +3,11 @@
 extern int D_80800940_chfactorytoxicpools[];
 extern int D_80800988_chfactorytoxicpools[];
 extern int D_808009D0_chfactorytoxicpools[];
-typedef struct { s16 local_0; s16 local_1; f32 local_2; } ToxicPoolSwitchState;
+typedef struct {
+    s16 local_0;
+    s16 local_1;
+    f32 local_2;
+} ToxicPoolSwitchState;
 extern void *func_80100094(Actor *, u32);
 extern s32 func_800D9078(f32 *);
 extern f32 func_800F12D4(f32, f32, f32, f32, f32);
@@ -15,18 +19,41 @@ extern void func_800C4AF0(f32 *, s32 *);
 extern s32 func_800BEA88(s32);
 extern void _idworldmake_entrypoint_1(s32, s32, s32, s32);
 extern s32 _chswitch_entrypoint_10(Actor *, s32, s32);
-typedef struct { s16 pad_0; s16 state; f32 timer; } ToxicPoolState;
-typedef struct { s16 pad_0; s16 local_0; } ToxicPoolInteraction;
+typedef struct {
+    s16 pad_0;
+    s16 state;
+    f32 timer;
+} ToxicPoolState;
+typedef struct {
+    s16 pad_0;
+    s16 local_0;
+} ToxicPoolInteraction;
 extern u8 _chfactorytoxicpools_entrypoint_3[];
 extern s32 D_80800A38_chfactorytoxicpools[];
 extern s32 D_80800A74_chfactorytoxicpools[];
 extern s32 D_80800AB0_chfactorytoxicpools[];
 extern s32 D_80800AC8_chfactorytoxicpools[];
-typedef struct ToxicPoolItem { s16 local_0; s16 pad_0; f32 local_1[3]; f32 local_2[3]; } ToxicPoolItem;
-typedef struct ToxicPoolNodes { s16 local_0; s16 local_1; ToxicPoolItem local_2[8]; } ToxicPoolNodes;
+typedef struct ToxicPoolItem {
+    s16 local_0;
+    s16 pad_0;
+    f32 local_1[3];
+    f32 local_2[3];
+} ToxicPoolItem;
+typedef struct ToxicPoolNodes {
+    s16 local_0;
+    s16 local_1;
+    ToxicPoolItem local_2[8];
+} ToxicPoolNodes;
 extern f32 func_800F5628(void *);
 extern s32 func_800CC338(f32 *, s32, s32);
-typedef struct { s16 sel; s16 cnt; s16 id; s16 pad; f32 src[3]; f32 dst[2]; } TPEntry;
+typedef struct {
+    s16 sel;
+    s16 cnt;
+    s16 id;
+    s16 pad;
+    f32 src[3];
+    f32 dst[2];
+} TPEntry;
 int func_80800270_chfactorytoxicpools();
 void func_808004A4_chfactorytoxicpools();
 
@@ -37,7 +64,7 @@ int chfactorytoxicpools_entrypoint_0()
 
 int chfactorytoxicpools_entrypoint_1()
 {
-    return (int)&D_80800988_chfactorytoxicpools;
+    return (int) &D_80800988_chfactorytoxicpools;
 }
 
 int *chfactorytoxicpools_entrypoint_2()
@@ -45,7 +72,8 @@ int *chfactorytoxicpools_entrypoint_2()
     return &D_808009D0_chfactorytoxicpools;
 }
 
-void func_80800024_chfactorytoxicpools(s32 param_0) {
+void func_80800024_chfactorytoxicpools(s32 param_0)
+{
     u8 *local_0;
     s32 local_1;
 
@@ -54,16 +82,16 @@ void func_80800024_chfactorytoxicpools(s32 param_0) {
     if (_chswitch_entrypoint_7(param_0, 0x18E) != 0) {
         func_80103110(param_0, 0, local_1);
     }
-    *(f32 *)(local_0 + 4) = 8.0f;
+    *(f32 *) (local_0 + 4) = 8.0f;
     if (local_1 != 0) {
-        *(s16 *)(local_0 + 0) = 0x384;
+        *(s16 *) (local_0 + 0) = 0x384;
     } else {
-        *(s16 *)(local_0 + 0) = 0;
+        *(s16 *) (local_0 + 0) = 0;
     }
     if (local_1 != 0) {
-        *(s16 *)(local_0 + 2) = 2;
+        *(s16 *) (local_0 + 2) = 2;
     } else {
-        *(s16 *)(local_0 + 2) = 0;
+        *(s16 *) (local_0 + 2) = 0;
     }
     if (local_1 != 0) {
         func_8010A570(param_0);
@@ -77,17 +105,16 @@ void func_808000D0_chfactorytoxicpools(Actor *param_0)
 
     local_0 = func_80100094(param_0, 1);
     switch (local_0->local_1) {
-    case 0:
-        _chswitch_entrypoint_6(param_0);
-        break;
-    case 1:
-        local_1 = func_800D9078(&local_0->local_2);
-        local_0->local_0 = (s32)func_800F12D4(local_0->local_2, 0.0f, 8.0f, 900.0f, 0.0f);
-        if (local_1) {
-            local_0->local_1 = 2;
-            func_80103110(param_0, 0);
-        }
-        break;
+        case 0:
+            _chswitch_entrypoint_6(param_0);
+            break;
+        case 1:
+            local_1 = func_800D9078(&local_0->local_2);
+            local_0->local_0 = (s32) func_800F12D4(local_0->local_2, 0.0f, 8.0f, 900.0f, 0.0f);
+            if (local_1) {
+                local_0->local_1 = 2;
+                func_80103110(param_0, 0);
+            }
     }
     func_80800270_chfactorytoxicpools(param_0);
 }
@@ -97,24 +124,25 @@ s32 func_80800190_chfactorytoxicpools(Actor *param_0, s32 param_1, s32 param_2)
     s16 *local_0;
 
     switch (param_1) {
-    case 7:
-        local_0 = func_80100094(param_0, 1);
-        func_80103110(param_0, 1);
-        func_8010A570(param_0);
-        local_0[1] = 1;
-        _capod_entrypoint_13(param_0->unk0, 0, 0, 0x10);
-        func_800C4AF0(param_0->position, &D_80800A18_chfactorytoxicpools);
-        break;
-    case 0x95:
-        _idworldmake_entrypoint_1(func_800BEA88(1), 0x659, 1, 1);
-        func_80800270_chfactorytoxicpools(param_0);
-    default:
-        return _chswitch_entrypoint_10(param_0, param_1, param_2);
+        case 7:
+            local_0 = func_80100094(param_0, 1);
+            func_80103110(param_0, 1);
+            func_8010A570(param_0);
+            local_0[1] = 1;
+            _capod_entrypoint_13(param_0->unk0, 0, 0, 0x10);
+            func_800C4AF0(param_0->position, &D_80800A18_chfactorytoxicpools);
+            break;
+        case 0x95:
+            _idworldmake_entrypoint_1(func_800BEA88(1), 0x659, 1, 1);
+            func_80800270_chfactorytoxicpools(param_0);
+        default:
+            return _chswitch_entrypoint_10(param_0, param_1, param_2);
     }
     return 1;
 }
 
-int func_80800270_chfactorytoxicpools(param_0) s32 param_0;
+int func_80800270_chfactorytoxicpools(param_0)
+s32 param_0;
 {
     s16 *local_0;
 
@@ -130,11 +158,11 @@ void func_808002B8_chfactorytoxicpools(s32 param_0)
     local_0 = func_80100094(param_0, 1);
     local_1 = func_800DA298(0x166);
     _chswitch_entrypoint_14(param_0, 0x166);
-    *(f32 *)(local_0 + 4) = 1.0f;
+    *(f32 *) (local_0 + 4) = 1.0f;
     if (local_1 != 0) {
-        *(s16 *)(local_0 + 2) = 2;
+        *(s16 *) (local_0 + 2) = 2;
     } else {
-        *(s16 *)(local_0 + 2) = 0;
+        *(s16 *) (local_0 + 2) = 0;
     }
     if (local_1 != 0) {
         func_8010A570(param_0);
@@ -157,7 +185,6 @@ void func_80800338_chfactorytoxicpools(Actor *param_0)
                 func_800F82D4(func_800F54E4(), 0);
                 _capod_entrypoint_13(param_0->unk0, 0, 0x12, 0x2030);
             }
-            break;
     }
 }
 
@@ -166,43 +193,44 @@ s32 func_808003DC_chfactorytoxicpools(Actor *param_0, s32 param_1, s32 param_2)
     ToxicPoolInteraction *local_0;
 
     switch (param_1) {
-    case 0x95:
-        func_808004A4_chfactorytoxicpools(param_0);
-        break;
-    case 7:
-        local_0 = func_80100094(param_0, 1);
-        func_80103110(param_0, 1);
-        func_8010A570(param_0);
-        local_0->local_0 = 1;
-        func_800F8300(func_800F54E4(), 2, param_0->position);
-        break;
-    case 11:
-        _capod_entrypoint_14();
-        _glcutDll_entrypoint_6(0x1A7, 0x2A);
-        return 4;
-    default:
-        return 0;
+        case 0x95:
+            func_808004A4_chfactorytoxicpools(param_0);
+            break;
+        case 7:
+            local_0 = func_80100094(param_0, 1);
+            func_80103110(param_0, 1);
+            func_8010A570(param_0);
+            local_0->local_0 = 1;
+            func_800F8300(func_800F54E4(), 2, param_0->position);
+            break;
+        case 11:
+            _capod_entrypoint_14();
+            _glcutDll_entrypoint_6(0x1A7, 0x2A);
+            return 4;
+        default:
+            return 0;
     }
     return 1;
 }
 
 void func_808004A4_chfactorytoxicpools(param_0) s32 param_0[3];
 {
-  s32 local_0;
-  local_0 = func_800BEA88(1);
-  if (local_0 != 0)
-  {
-    _idworldmake_entrypoint_1(local_0, 0x7D, 2, 1);
-    _glid_entrypoint_0(local_0, 2, &_chfactorytoxicpools_entrypoint_3, param_0[0]);
-  }
+    s32 local_0;
+    local_0 = func_800BEA88(1);
+    if (local_0 != 0) {
+        _idworldmake_entrypoint_1(local_0, 0x7D, 2, 1);
+        _glid_entrypoint_0(local_0, 2, &_chfactorytoxicpools_entrypoint_3, param_0[0]);
+    }
 }
 
 void chfactorytoxicpools_entrypoint_3(void *param_0, Vtx *param_1, Vtx *param_2, s32 param_3)
 {
     s32 local_0;
     Vtx *local_1;
-    if (func_800DA298(0x166)) local_0 = -300;
-    else local_0 = 0;
+    if (func_800DA298(0x166))
+        local_0 = -300;
+    else
+        local_0 = 0;
     local_1 = param_1 + param_3;
     for (; param_1 < local_1; param_1++, param_2++) {
         param_2->v.ob[1] = param_1->v.ob[1] + local_0;
@@ -243,49 +271,49 @@ void func_80800670_chfactorytoxicpools(Actor *param_0)
 
     local_2 = func_80100094(param_0, 0);
     switch (param_0->unk70_10) {
-    case 1:
-        local_4 = func_800F54E4();
-        if (func_800F6A38(local_4)) {
-            local_5 = func_800F5C94(local_4);
-            local_6 = func_800F5D18(local_4);
-            if (local_5 != 12 && local_5 != 14 && local_6 && func_800D9078(&param_0->unk58)) {
-                func_800F7D90(local_4, 0x52, local_2[local_2->sel].dst, 1);
-                func_80101FDC(param_0, 2);
-                func_80800898_chfactorytoxicpools(param_0);
-                param_0->unk58 = 2.5f;
-            }
-            return;
-        }
-        func_800F5A00(local_4, local_0);
-        for (local_7 = 0; local_7 < local_2->cnt; local_7++) {
-            local_8 = func_800F5628(local_4);
-            local_1 = local_8 != -18000.0f;
-            if (local_1) {
-                local_0[1] = local_8;
-            } else {
-                local_0[1] = local_2[local_7].dst[1];
-            }
-            if (func_800CC338(local_0, local_2[local_7].id, 0) != -1) {
-                if (!local_1) {
-                    func_800EE7F8(local_2[local_7].dst, local_2[local_7].src);
-                } else {
-                    func_800EE7F8(local_2[local_7].dst, local_0);
+        case 1:
+            local_4 = func_800F54E4();
+            if (func_800F6A38(local_4)) {
+                local_5 = func_800F5C94(local_4);
+                local_6 = func_800F5D18(local_4);
+                if (local_5 != 12 && local_5 != 14 && local_6 && func_800D9078(&param_0->unk58)) {
+                    func_800F7D90(local_4, 0x52, local_2[local_2->sel].dst, 1);
+                    func_80101FDC(param_0, 2);
+                    func_80800898_chfactorytoxicpools(param_0);
+                    param_0->unk58 = 2.5f;
                 }
-                local_2->sel = local_7;
+                return;
             }
-        }
-        param_0->unk58 = 1.2f;
-        return;
-    case 2:
-        if (func_800D9078(&param_0->unk58) && func_800F5578(func_800F54E4()) > 0) {
-            func_80101FDC(param_0, 1);
+            func_800F5A00(local_4, local_0);
+            for (local_7 = 0; local_7 < local_2->cnt; local_7++) {
+                local_8 = func_800F5628(local_4);
+                local_1 = local_8 != -18000.0f;
+                if (local_1) {
+                    local_0[1] = local_8;
+                } else {
+                    local_0[1] = local_2[local_7].dst[1];
+                }
+                if (func_800CC338(local_0, local_2[local_7].id, 0) != -1) {
+                    if (!local_1) {
+                        func_800EE7F8(local_2[local_7].dst, local_2[local_7].src);
+                    } else {
+                        func_800EE7F8(local_2[local_7].dst, local_0);
+                    }
+                    local_2->sel = local_7;
+                }
+            }
             param_0->unk58 = 1.2f;
-        }
-        break;
+            return;
+        case 2:
+            if (func_800D9078(&param_0->unk58) && func_800F5578(func_800F54E4()) > 0) {
+                func_80101FDC(param_0, 1);
+                param_0->unk58 = 1.2f;
+            }
     }
 }
 
-void func_80800898_chfactorytoxicpools(s32 param_0) {
+void func_80800898_chfactorytoxicpools(s32 param_0)
+{
     f32 local_0[3];
     f32 local_1[3];
 
@@ -296,21 +324,73 @@ void func_80800898_chfactorytoxicpools(s32 param_0) {
     _subaddieaudioquick_entrypoint_2(param_0, local_1, &D_80800AB0_chfactorytoxicpools);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/toxicpools.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800940_chfactorytoxicpools -> int[], D_80800988_chfactorytoxicpools -> int[], D_808009D0_chfactorytoxicpools -> int[], D_80800A18_chfactorytoxicpools -> s32[], D_80800A38_chfactorytoxicpools -> s32[], D_80800A74_chfactorytoxicpools -> s32[], D_80800AB0_chfactorytoxicpools -> s32[], D_80800AC8_chfactorytoxicpools -> s32[] */
 extern u8 D_8011A270[];
 extern void func_80102EC0();
 extern void func_80101870();
 extern void func_80107C2C();
 extern void _chswitch_entrypoint_0();
 extern void func_8010A730();
-int D_80800940_chfactorytoxicpools[18] = { 0x34303C4, 0x7C10001, (u32)&D_8011A270, (u32)func_808000D0_chfactorytoxicpools, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x8, (u32)func_80800024_chfactorytoxicpools, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_80800190_chfactorytoxicpools, 0x0 };
-int D_80800988_chfactorytoxicpools[18] = { 0x34303C5, 0x7490001, -0x7FEE5D68, (u32)func_80800338_chfactorytoxicpools, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x80C, 0x0, (u32)_chswitch_entrypoint_0, 0x8, (u32)func_808002B8_chfactorytoxicpools, (u32)func_80107C2C, -0x7FF7DBF0, (u32)func_808003DC_chfactorytoxicpools, 0x0 };
-int D_808009D0_chfactorytoxicpools[18] = { 0x340432, 0x1, 0x0, (u32)func_80800670_chfactorytoxicpools, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0xE40000, (u32)func_8080057C_chfactorytoxicpools, (u32)func_80107C2C, -0x7FFFD9FE, 0x0, 0x0 };
-s32 D_80800A18_chfactorytoxicpools[8] = { 0x13056A, 0x18000A, 0xC0000C, 0x733, 0xC0010C, 0x150033, 0x74C0080, 0x140000 };
-s32 D_80800A38_chfactorytoxicpools[15] = { 0x1D095C, 0x2C0000, 0x1E0000, 0x3C, 0x1B, 0xA0014, 0x220019, 0x33000C, 0x190015, 0x3300CC, 0xB0014, 0x780014, -0x4FFD5, 0x1CC0233, 0x0 };
-s32 D_80800A74_chfactorytoxicpools[15] = { 0x1D09DD, 0x1B002B, 0x46002D, 0x1D0030, 0xB0012, 0x2D001E, 0x20, -0x3900685B, 0x160200, 0x150033, 0xB3002B, 0x2020268, 0x2200CC, 0x13301CC, 0x2330000 };
-s32 D_80800AB0_chfactorytoxicpools[6] = { 0x1304DC, 0xD0100, 0x14C0015, 0x80, 0x660002, 0x0 };
-s32 D_80800AC8_chfactorytoxicpools[6] = { 0x0, -0x3CFE0000, 0x0, 0x0, 0x0, 0x0 };
+int D_80800940_chfactorytoxicpools[18] = {0x34303C4,
+                                          0x7C10001,
+                                          (u32) &D_8011A270,
+                                          (u32) func_808000D0_chfactorytoxicpools,
+                                          (u32) func_80102EC0,
+                                          (u32) func_80101870,
+                                          0x0,
+                                          0x0,
+                                          0x0,
+                                          0x40000808,
+                                          0x0,
+                                          0x0,
+                                          0x8,
+                                          (u32) func_80800024_chfactorytoxicpools,
+                                          (u32) func_80107C2C,
+                                          -0x7FF7D3EE,
+                                          (u32) func_80800190_chfactorytoxicpools,
+                                          0x0};
+int D_80800988_chfactorytoxicpools[18] = {0x34303C5,
+                                          0x7490001,
+                                          -0x7FEE5D68,
+                                          (u32) func_80800338_chfactorytoxicpools,
+                                          (u32) func_80102EC0,
+                                          (u32) func_80101870,
+                                          0x0,
+                                          0x0,
+                                          0x0,
+                                          0x80C,
+                                          0x0,
+                                          (u32) _chswitch_entrypoint_0,
+                                          0x8,
+                                          (u32) func_808002B8_chfactorytoxicpools,
+                                          (u32) func_80107C2C,
+                                          -0x7FF7DBF0,
+                                          (u32) func_808003DC_chfactorytoxicpools,
+                                          0x0};
+int D_808009D0_chfactorytoxicpools[18] = {0x340432,
+                                          0x1,
+                                          0x0,
+                                          (u32) func_80800670_chfactorytoxicpools,
+                                          (u32) func_80102EC0,
+                                          (u32) func_8010A730,
+                                          0x0,
+                                          0x0,
+                                          0x0,
+                                          0x4,
+                                          0x0,
+                                          0x0,
+                                          0xE40000,
+                                          (u32) func_8080057C_chfactorytoxicpools,
+                                          (u32) func_80107C2C,
+                                          -0x7FFFD9FE,
+                                          0x0,
+                                          0x0};
+s32 D_80800A18_chfactorytoxicpools[8] = {0x13056A, 0x18000A, 0xC0000C,  0x733,
+                                         0xC0010C, 0x150033, 0x74C0080, 0x140000};
+s32 D_80800A38_chfactorytoxicpools[15] = {0x1D095C, 0x2C0000, 0x1E0000, 0x3C,      0x1B,
+                                          0xA0014,  0x220019, 0x33000C, 0x190015,  0x3300CC,
+                                          0xB0014,  0x780014, -0x4FFD5, 0x1CC0233, 0x0};
+s32 D_80800A74_chfactorytoxicpools[15] = {0x1D09DD, 0x1B002B,  0x46002D,    0x1D0030,  0xB0012,
+                                          0x2D001E, 0x20,      -0x3900685B, 0x160200,  0x150033,
+                                          0xB3002B, 0x2020268, 0x2200CC,    0x13301CC, 0x2330000};
+s32 D_80800AB0_chfactorytoxicpools[6] = {0x1304DC, 0xD0100, 0x14C0015, 0x80, 0x660002, 0x0};
+s32 D_80800AC8_chfactorytoxicpools[6] = {0x0, -0x3CFE0000, 0x0, 0x0, 0x0, 0x0};

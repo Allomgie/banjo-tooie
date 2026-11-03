@@ -10,22 +10,23 @@ extern void func_800EEBF0(f32 *, f32 *, f32);
 
 int ncbabee_entrypoint_0(Actor *param_0)
 {
-  extern void func_80115870(Actor *a0, f32 a1);
-  int new_var;
-  func_801120CC(param_0, 0x44FA0000, 0x457A0000, 0xC57A0000);
-  func_80111B8C(param_0, 0x40800000, 0x41000000);
-  new_var = 0;
-  func_80115858(param_0, new_var);
-  func_80115870(param_0, 0);
-  func_801124D0(param_0, 1);
+    extern void func_80115870(Actor * a0, f32 a1);
+    int new_var;
+    func_801120CC(param_0, 0x44FA0000, 0x457A0000, 0xC57A0000);
+    func_80111B8C(param_0, 0x40800000, 0x41000000);
+    new_var = 0;
+    func_80115858(param_0, new_var);
+    func_80115870(param_0, 0);
+    func_801124D0(param_0, 1);
 }
 
-void ncbabee_entrypoint_1(s32 arg0) 
+void ncbabee_entrypoint_1(s32 arg0)
 {
 }
-void func_80800070_ncbabee(PlayerState* arg0, f32* arg1)
+
+void func_80800070_ncbabee(PlayerState *arg0, f32 *arg1)
 {
-    func_80112550(arg0,arg1);
+    func_80112550(arg0, arg1);
 }
 
 void ncbabee_entrypoint_2(void *param_0)
@@ -60,6 +61,3 @@ void ncbabee_entrypoint_2(void *param_0)
     func_80110A68(param_0, local_2, local_0);
     func_80110790(param_0, local_2);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/bee.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -5,8 +5,18 @@ extern s32 func_800C954C(void);
 extern void _chbaddiesetup_entrypoint_3(void (*)(void), s32, s32, s32);
 extern void _chlightfader_entrypoint_2(void);
 extern void func_800C8B84(s32);
-typedef struct LightFadeSample { f32 local_0[2]; f32 local_1[3]; } LightFadeSample;
-typedef struct LightFadeState { s32 local_0; f32 local_1; s32 local_2; s32 local_3; f32 local_4; LightFadeSample local_5[2]; } LightFadeState;
+typedef struct LightFadeSample {
+    f32 local_0[2];
+    f32 local_1[3];
+} LightFadeSample;
+typedef struct LightFadeState {
+    s32 local_0;
+    f32 local_1;
+    s32 local_2;
+    s32 local_3;
+    f32 local_4;
+    LightFadeSample local_5[2];
+} LightFadeState;
 extern void func_800C8800(s32, f32 *);
 extern Actor *func_80108474(u32, f32 *, s32);
 extern void *func_80100094(Actor *, u32);
@@ -27,17 +37,28 @@ extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800F2F60(f32 *, f32 *, f32);
 extern s32 func_800F6438(s32);
 extern void func_800FFA88(s32);
-typedef struct { s32 h; f32 f04; u32 flags; u8 pad0C[4]; f32 f10; f32 in[2]; f32 v1C[3]; f32 out[2]; f32 v30[3]; } LF;
+typedef struct {
+    s32 h;
+    f32 f04;
+    u32 flags;
+    u8 pad0C[4];
+    f32 f10;
+    f32 in[2];
+    f32 v1C[3];
+    f32 out[2];
+    f32 v30[3];
+} LF;
 extern void func_80105834(), func_80107C2C(), func_8010A730(), func_8080000C_chlightfader();
 
 int chlightfader_entrypoint_0()
 {
-  return &D_808003A0_chlightfader;
+    return &D_808003A0_chlightfader;
 }
 
-void func_8080000C_chlightfader(s32 arg0) 
+void func_8080000C_chlightfader(s32 arg0)
 {
 }
+
 void func_80800014_chlightfader(Actor *param_0)
 {
     s32 local_1;
@@ -98,11 +119,12 @@ void func_80800014_chlightfader(Actor *param_0)
     }
     if (local_1 != 0) {
         func_800C8B84(s1->h);
-        func_800FFA88(*(s32 *)param_0);
+        func_800FFA88(*(s32 *) param_0);
     }
 }
 
-s32 chlightfader_entrypoint_1(s32 param_0, s32 param_1, s32 param_2) {
+s32 chlightfader_entrypoint_1(s32 param_0, s32 param_1, s32 param_2)
+{
     if (func_800C954C() == 0) {
         _chbaddiesetup_entrypoint_3(_chlightfader_entrypoint_2, param_0, param_1, param_2);
     } else {
@@ -123,7 +145,7 @@ void chlightfader_entrypoint_2(s32 param_0, f32 param_1, s32 param_2)
     f32 *local_5;
     f32 *local_6;
 
-    local_1 = *(f32 *)&param_1;
+    local_1 = *(f32 *) &param_1;
     local_8 = local_2;
     func_800C8800(param_0, local_8);
     local_0 = func_80108474(0x33C, local_8, 0);
@@ -146,8 +168,23 @@ void chlightfader_entrypoint_2(s32 param_0, f32 param_1, s32 param_2)
     local_0->unk58 = local_1;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/light/fader.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808003A0_chlightfader -> int[] */
-int D_808003A0_chlightfader[20] = { 0x334033C, 0x1, 0x0, (u32)func_80800014_chlightfader, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x3C0000, (u32)func_8080000C_chlightfader, (u32)func_80107C2C, -0x7FFFDDFE, 0x0, 0x0, 0x0, 0x0 };
+int D_808003A0_chlightfader[20] = {0x334033C,
+                                   0x1,
+                                   0x0,
+                                   (u32) func_80800014_chlightfader,
+                                   (u32) func_80105834,
+                                   (u32) func_8010A730,
+                                   0x0,
+                                   0x0,
+                                   0x0,
+                                   0x4,
+                                   0x0,
+                                   0x0,
+                                   0x3C0000,
+                                   (u32) func_8080000C_chlightfader,
+                                   (u32) func_80107C2C,
+                                   -0x7FFFDDFE,
+                                   0x0,
+                                   0x0,
+                                   0x0,
+                                   0x0};

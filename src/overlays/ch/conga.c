@@ -1,7 +1,10 @@
 #include "ch/conga.h"
 
 extern int D_808006A0_chconga[];
-typedef union { s32 local_0; s16 local_1[2]; } CongaEvent;
+typedef union {
+    s32 local_0;
+    s16 local_1[2];
+} CongaEvent;
 extern s32 D_808006E8_chconga[];
 extern void *func_80100094(Actor *, u32);
 extern void _suexpression_entrypoint_12(void *, f32, f32);
@@ -62,36 +65,42 @@ void func_80800118_chconga(Actor *param_0)
 
     _suexpression_entrypoint_10(func_80100094(param_0, 1), param_0->unk0, 0);
     switch (param_0->unk70_10) {
-    case 1:
-        func_800D1824(0x4D);
-        func_80800538_chconga(param_0);
-        func_80800618_chconga(param_0);
-        break;
-    case 2:
-        func_800D1824(0x4D);
-        func_80800618_chconga(param_0);
-        break;
-    case 3:
-        func_800D1824(0x4D);
-        func_80103DFC(param_0, local_0);
-        if (_subaddieitem_entrypoint_3(param_0, local_0, func_80100094(param_0, 0))) {
-            func_800DA544(0x4A);
-            func_80102424(param_0, 2);
-            _subaddiedialog_entrypoint_11(param_0->unk0, *(s32 *)((u8 *)param_0 + 0x28),
-                0xE, param_0->position, 0x52);
-            if (func_800C6E38(0x1B) && func_800C6E38(0x2D)) func_80101180(0x46E, 7, 0);
-        }
-        break;
-    case 4: func_80105854(param_0); break;
-    case 5: func_80800618_chconga(param_0); break;
+        case 1:
+            func_800D1824(0x4D);
+            func_80800538_chconga(param_0);
+            func_80800618_chconga(param_0);
+            break;
+        case 2:
+            func_800D1824(0x4D);
+            func_80800618_chconga(param_0);
+            break;
+        case 3:
+            func_800D1824(0x4D);
+            func_80103DFC(param_0, local_0);
+            if (_subaddieitem_entrypoint_3(param_0, local_0, func_80100094(param_0, 0))) {
+                func_800DA544(0x4A);
+                func_80102424(param_0, 2);
+                _subaddiedialog_entrypoint_11(param_0->unk0, *(s32 *) ((u8 *) param_0 + 0x28), 0xE,
+                                              param_0->position, 0x52);
+                if (func_800C6E38(0x1B) && func_800C6E38(0x2D))
+                    func_80101180(0x46E, 7, 0);
+            }
+            break;
+        case 4:
+            func_80105854(param_0);
+            break;
+        case 5:
+            func_80800618_chconga(param_0);
+            break;
     }
     _sudeflect_entrypoint_0(param_0->position, 150.0f, 175.0f, 0xA);
 }
 
-void func_80800280_chconga(Actor* arg0) 
+void func_80800280_chconga(Actor *arg0)
 {
     _suexpression_entrypoint_8(arg0, 1);
 }
+
 s32 func_808002A0_chconga(Actor *param_0, s32 param_1, CongaEvent param_2)
 {
     switch (param_1) {
@@ -113,7 +122,9 @@ s32 func_808002A0_chconga(Actor *param_0, s32 param_1, CongaEvent param_2)
     return 1;
 }
 
-void func_80800374_chconga(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+void func_80800374_chconga(param_0, param_1, param_2) Actor *param_0;
+s32 param_1;
+s32 param_2;
 {
     switch (param_1) {
         case 0x10B1:
@@ -135,11 +146,13 @@ void func_80800374_chconga(param_0, param_1, param_2) Actor *param_0; s32 param_
             break;
         default:
             func_80102424(param_0, 1);
-            break;
     }
 }
 
-int func_80800478_chconga(param_0, param_1, param_2) s32 param_0; s32 param_1; s32 param_2;
+int func_80800478_chconga(param_0, param_1, param_2)
+s32 param_0;
+s32 param_1;
+s32 param_2;
 {
     s32 local_0;
 
@@ -150,7 +163,9 @@ int func_80800478_chconga(param_0, param_1, param_2) s32 param_0; s32 param_1; s
     return local_0;
 }
 
-int func_808004BC_chconga(param_0, param_1) s32 param_0; s32 param_1;
+int func_808004BC_chconga(param_0, param_1)
+s32 param_0;
+s32 param_1;
 {
     int local_0;
 
@@ -171,33 +186,52 @@ void func_80800538_chconga(Actor *param_0)
     if (func_800DA298(0x4A) && func_800F64A4(func_800F54E4(), 1)) {
         D_808006FE_chconga = func_808004BC_chconga(param_0, 0x1101);
     } else {
-        if (func_800D1A04(0x4D) >= 4) D_808006FC_chconga = 0x10B1;
-        else D_808006FC_chconga = 0x10B0;
-        if (func_800D1A04(0x4D) >= 4) D_808006FE_chconga = 0x10B3;
-        else D_808006FE_chconga = 0x10B2;
+        if (func_800D1A04(0x4D) >= 4)
+            D_808006FC_chconga = 0x10B1;
+        else
+            D_808006FC_chconga = 0x10B0;
+        if (func_800D1A04(0x4D) >= 4)
+            D_808006FE_chconga = 0x10B3;
+        else
+            D_808006FE_chconga = 0x10B2;
     }
-    if (_subaddiedialog_entrypoint_7(param_0, param_0->position, D_808006F8_chconga) == 0x1101) func_80101180(0x46E, 7, 0);
+    if (_subaddiedialog_entrypoint_7(param_0, param_0->position, D_808006F8_chconga) == 0x1101)
+        func_80101180(0x46E, 7, 0);
 }
 
 int func_80800618_chconga(s32 param_0)
 {
-  s32 local_0;
-  local_0 = param_0 + 4;
-  _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_80800714_chconga, &D_80800724_chconga);
+    s32 local_0;
+    local_0 = param_0 + 4;
+    _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_80800714_chconga, &D_80800724_chconga);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/conga.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808006FE_chconga = D_808006FC_chconga + 0x2
- * extern declarations adjusted to the object (same addresses): D_808006A0_chconga -> int[], D_80800714_chconga -> s32[], D_80800724_chconga -> s32[] */
 extern void func_80101870();
 extern void func_80107C2C();
-u32 D_80800670_chconga[12] = { 0x0, 0x0, 0x40D66666, 0xFE0000, 0x40D66666, 0xFE0000, 0x40D66666, 0xFE0000, 0x3F4CCCCD, 0x3ED0000, 0x40D66666, 0xFE0000 };
-int D_808006A0_chconga[18] = { 0x1B50333, 0x6930001, (u32)&D_80800670_chconga, (u32)func_80800118_chconga, (u32)func_80800118_chconga, (u32)func_80101870, 0x0, 0x40400000, 0x0, 0x40120, (u32)func_80800280_chconga, 0x0, 0x140000, (u32)func_8080000C_chconga, (u32)func_80107C2C, -0x7FFFFBEE, (u32)func_808002A0_chconga, 0x0 };
-s32 D_808006E8_chconga[4] = { 0x43AB8000, 0x43AB8000, 0x43AB8000, 0x432B8000 };
-u8 D_808006F8_chconga[4] = { 0x0, 0xA1, 0x1, 0x90 };
+u32 D_80800670_chconga[12] = {0x0,        0x0,      0x40D66666, 0xFE0000,  0x40D66666, 0xFE0000,
+                              0x40D66666, 0xFE0000, 0x3F4CCCCD, 0x3ED0000, 0x40D66666, 0xFE0000};
+int D_808006A0_chconga[18] = {0x1B50333,
+                              0x6930001,
+                              (u32) &D_80800670_chconga,
+                              (u32) func_80800118_chconga,
+                              (u32) func_80800118_chconga,
+                              (u32) func_80101870,
+                              0x0,
+                              0x40400000,
+                              0x0,
+                              0x40120,
+                              (u32) func_80800280_chconga,
+                              0x0,
+                              0x140000,
+                              (u32) func_8080000C_chconga,
+                              (u32) func_80107C2C,
+                              -0x7FFFFBEE,
+                              (u32) func_808002A0_chconga,
+                              0x0};
+s32 D_808006E8_chconga[4] = {0x43AB8000, 0x43AB8000, 0x43AB8000, 0x432B8000};
+u8 D_808006F8_chconga[4] = {0x0, 0xA1, 0x1, 0x90};
 s16 D_808006FC_chconga = 0x0;
-static u32 D_808006FC_chconga_rest[5] = { 0x1, 0x120E0000, 0x520000, 0xC063C, 0x2000000 };
-s32 D_80800714_chconga[4] = { 0x130417, 0xD0166, 0x1800016, 0x2EE00000 };
-s32 D_80800724_chconga[7] = { 0x3ED70A3D, 0x3EF5C28F, 0x3F0A3D71, 0x3F2E147B, 0x3F400000, 0x3F4F5C29, -0x40800000 };
+static u32 D_808006FC_chconga_rest[5] = {0x1, 0x120E0000, 0x520000, 0xC063C, 0x2000000};
+s32 D_80800714_chconga[4] = {0x130417, 0xD0166, 0x1800016, 0x2EE00000};
+s32 D_80800724_chconga[7] = {0x3ED70A3D, 0x3EF5C28F, 0x3F0A3D71, 0x3F2E147B,
+                             0x3F400000, 0x3F4F5C29, -0x40800000};

@@ -11,7 +11,6 @@ extern s32 D_80800560_bsbreegullbash[];
 extern void func_800EFCD8(f32 *, f32, f32);
 extern void _badust_entrypoint_2(PlayerState *, f32 *, f32 *, f32, f32, f32);
 extern f32 func_800136E4(f32);
-void func_808000A4_bsbreegullbash();
 
 void func_80800000_bsbreegullbash(PlayerState *param_0, f32 param_1, f32 param_2, f32 param_3)
 {
@@ -38,24 +37,23 @@ void func_808000A4_bsbreegullbash(param_0) PlayerState *param_0;
 
 void func_808001B4_bsbreegullbash(s32 arg0)
 {
-    _babackpack_set_state(arg0,0x7);
+    _babackpack_set_state(arg0, 0x7);
 }
 
 int func_808001D4_bsbreegullbash(Actor *param_0)
 {
-  if (_babackpack_get_state() != 1)
-  {
-    _babackpack_set_state(param_0, 1);
-    func_8009E4E0(param_0, 2, 0);
-    func_8009E55C(param_0, 2, 0);
-  }
+    if (_babackpack_get_state() != 1) {
+        _babackpack_set_state(param_0, 1);
+        func_8009E4E0(param_0, 2, 0);
+        func_8009E55C(param_0, 2, 0);
+    }
 }
 
 int bsbreegullbash_entrypoint_0(Actor *param_0)
 {
-  func_8009E474();
-  func_808001D4_bsbreegullbash(param_0);
-  baflag_clear(param_0, 0x3E);
+    func_8009E474();
+    func_808001D4_bsbreegullbash(param_0);
+    baflag_clear(param_0, 0x3E);
 }
 
 void bsbreegullbash_entrypoint_1(PlayerState *param_0)
@@ -69,7 +67,8 @@ void bsbreegullbash_entrypoint_1(PlayerState *param_0)
     baphysics_set_target_horizontal_velocity(param_0, 0.0f);
 }
 
-void bsbreegullbash_entrypoint_2(s32 param_0) {
+void bsbreegullbash_entrypoint_2(s32 param_0)
+{
     s32 local_0;
 
     local_0 = 0;
@@ -117,14 +116,13 @@ void bsbreegullbash_entrypoint_2(s32 param_0) {
 
 int bsbreegullbash_entrypoint_3(s32 param_0)
 {
-  return D_80800560_bsbreegullbash[param_0];
+    return D_80800560_bsbreegullbash[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/breegullbash.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bsbreegullbash_entrypoint_0();
 extern void _bsbreegullbash_entrypoint_1();
 extern void _bsbreegullbash_entrypoint_2();
 extern void func_80099B94();
-s32 D_80800560_bsbreegullbash[4] = { (u32)_bsbreegullbash_entrypoint_0, (u32)_bsbreegullbash_entrypoint_1, (u32)_bsbreegullbash_entrypoint_2, (u32)func_80099B94 };
+s32 D_80800560_bsbreegullbash[4] = {(u32) _bsbreegullbash_entrypoint_0,
+                                    (u32) _bsbreegullbash_entrypoint_1,
+                                    (u32) _bsbreegullbash_entrypoint_2, (u32) func_80099B94};

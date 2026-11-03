@@ -1,6 +1,10 @@
 #include "common.h"
 
-typedef struct { u8 pad[0x72]; u16 f72:6; u16 rest:10; } MoleS;
+typedef struct {
+    u8 pad[0x72];
+    u16 f72 : 6;
+    u16 rest : 10;
+} MoleS;
 extern void _gcnewoption_entrypoint_1(void *, s32);
 extern void _gcnewoption_entrypoint_32(void *, s16);
 extern void _gcnewoption_entrypoint_31(void *, s32, s16);
@@ -11,7 +15,11 @@ extern int D_80800F30_chmole_training[];
 extern u8 D_80800E34_chmole_training[];
 extern u8 D_80800E32_chmole_training[];
 extern s32 _sumole_entrypoint_6(Actor *, s32, f32);
-typedef struct MoleTrainingState { u8 pad_0[0x72]; u8 local_0 : 6; u8 pad_1 : 2; } MoleTrainingState;
+typedef struct MoleTrainingState {
+    u8 pad_0[0x72];
+    u8 local_0 : 6;
+    u8 pad_1 : 2;
+} MoleTrainingState;
 extern s16 D_80800F08_chmole_training[];
 extern s16 D_80800F10_chmole_training[];
 extern s16 D_80800F18_chmole_training[];
@@ -25,13 +33,15 @@ void func_808003D4_chmole_training();
 void func_80800A48_chmole_training();
 void func_80800BA8_chmole_training();
 
-s32 func_80800000_chmole_training(Actor *this) {
+s32 func_80800000_chmole_training(Actor *this)
+{
     if (func_80100094(this, 0)) {
         _gcnewoption_entrypoint_6(this, 0);
     }
 }
 
-void func_80800034_chmole_training(MoleS *param_0, s32 param_1) {
+void func_80800034_chmole_training(MoleS *param_0, s32 param_1)
+{
     u32 local_0 = param_0->f72;
     if (local_0 == 5 || local_0 == 7 || local_0 == 6) {
         _gcnewoption_entrypoint_1(func_80100094(param_0, 0), param_1);
@@ -54,7 +64,7 @@ void func_80800088_chmole_training(Actor *param_0)
                 func_808003D4_chmole_training(param_0);
                 break;
             case 3:
-                *((u8 *)param_0 + 0x72) = (*((u8 *)param_0 + 0x72) & 0xFF03) | 0x10;
+                *((u8 *) param_0 + 0x72) = (*((u8 *) param_0 + 0x72) & 0xFF03) | 0x10;
                 break;
             case 4:
                 func_80800A48_chmole_training(param_0);
@@ -64,7 +74,7 @@ void func_80800088_chmole_training(Actor *param_0)
                 break;
             case 7:
                 _gcnewoption_entrypoint_6(param_0, 0);
-                local_0 = *(s8 *)(D_80800E34_chmole_training + (s32)param_0->unk54 * 8);
+                local_0 = *(s8 *) (D_80800E34_chmole_training + (s32) param_0->unk54 * 8);
                 if (local_0 != -1 && !func_800C6E38(local_0)) {
                     func_80101FDC(param_0, 8);
                     return;
@@ -76,8 +86,9 @@ void func_80800088_chmole_training(Actor *param_0)
                 func_80101FDC(param_0, 11);
                 break;
             case 10:
-                if (_sumole_entrypoint_17(param_0,
-                    *(s16 *)(D_80800E32_chmole_training + (s32)param_0->unk54 * 8), -1, 0)) {
+                if (_sumole_entrypoint_17(
+                        param_0, *(s16 *) (D_80800E32_chmole_training + (s32) param_0->unk54 * 8),
+                        -1, 0)) {
                     _sumole_entrypoint_19(param_0, 0);
                     func_80101FDC(param_0, 12);
                 }
@@ -93,31 +104,37 @@ void func_80800088_chmole_training(Actor *param_0)
                 break;
             case 13:
                 _sumole_entrypoint_19(param_0, 0);
-                *((u8 *)param_0 + 0x72) = (*((u8 *)param_0 + 0x72) & 0xFF03) | 0x30;
-                break;
+                *((u8 *) param_0 + 0x72) = (*((u8 *) param_0 + 0x72) & 0xFF03) | 0x30;
         }
     }
 }
 
 void func_80800270_chmole_training(param_0) Actor *param_0;
 {
-    switch ((u32)param_0->unk54) {
+    switch ((u32) param_0->unk54) {
         case 6:
             if (!func_800DA298(0x53)) {
-                if (_sumole_entrypoint_6(param_0, -1, 350.0f)) func_80101FDC(param_0, 2);
+                if (_sumole_entrypoint_6(param_0, -1, 350.0f))
+                    func_80101FDC(param_0, 2);
             } else if ((func_8008FD70() & 0x701) && _sumole_entrypoint_1(param_0, -1, 0, 0)) {
                 func_80101FDC(param_0, 2);
             }
             break;
-        case 0: case 1: case 2: case 3: case 4: case 5: case 7:
-            if ((func_8008FD70() & 0x701) && _sumole_entrypoint_1(param_0, -1, 0, 0)) func_80101FDC(param_0, 2);
-            break;
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 7:
+            if ((func_8008FD70() & 0x701) && _sumole_entrypoint_1(param_0, -1, 0, 0))
+                func_80101FDC(param_0, 2);
     }
 }
 
 void func_808003D4_chmole_training(param_0) Actor *param_0;
 {
-    switch ((u32)param_0->unk54) {
+    switch ((u32) param_0->unk54) {
         case 6:
             if (!func_800DA298(0x53)) {
                 func_800DA3B8(0x53, 1);
@@ -131,54 +148,51 @@ void func_808003D4_chmole_training(param_0) Actor *param_0;
         case 5:
         case 7:
             _sumole_entrypoint_19(param_0, 3);
-            ((MoleTrainingState *)param_0)->local_0 = 3;
-            break;
+            ((MoleTrainingState *) param_0)->local_0 = 3;
     }
 }
 
 volatile int func_808004D0_chmole_training(Actor *param_0, u32 param_1)
 {
-  u32 local_0 = param_1 | 0U;
-  switch ((u32)param_0->unk54)
-  {
-    case 1:
-      _gcnewoption_entrypoint_12(local_0, 0, 0xa);
-      _gcnewoption_entrypoint_12(local_0, 1, 0x15);
-      _gcnewoption_entrypoint_12(local_0, 2, 0x16);
-      break;
+    u32 local_0 = param_1 | 0U;
+    switch ((u32) param_0->unk54) {
+        case 1:
+            _gcnewoption_entrypoint_12(local_0, 0, 0xa);
+            _gcnewoption_entrypoint_12(local_0, 1, 0x15);
+            _gcnewoption_entrypoint_12(local_0, 2, 0x16);
+            break;
 
-    case 2:
-      _gcnewoption_entrypoint_12(local_0, 0, 0xb);
-      _gcnewoption_entrypoint_12(local_0, 1, 0xc);
-      _gcnewoption_entrypoint_12(local_0, 2, 0x1a);
-      break;
+        case 2:
+            _gcnewoption_entrypoint_12(local_0, 0, 0xb);
+            _gcnewoption_entrypoint_12(local_0, 1, 0xc);
+            _gcnewoption_entrypoint_12(local_0, 2, 0x1a);
+            break;
 
-    case 4:
-      _gcnewoption_entrypoint_12(local_0, 0, 0x17);
-      _gcnewoption_entrypoint_12(local_0, 1, 0x18);
-      _gcnewoption_entrypoint_12(local_0, 2, 0x19);
-      break;
+        case 4:
+            _gcnewoption_entrypoint_12(local_0, 0, 0x17);
+            _gcnewoption_entrypoint_12(local_0, 1, 0x18);
+            _gcnewoption_entrypoint_12(local_0, 2, 0x19);
+            break;
 
-    case 0:
-      _gcnewoption_entrypoint_12(local_0, 0, 0x14);
-      _gcnewoption_entrypoint_12(local_0, 1, 0xd);
-      break;
+        case 0:
+            _gcnewoption_entrypoint_12(local_0, 0, 0x14);
+            _gcnewoption_entrypoint_12(local_0, 1, 0xd);
+            break;
 
-    case 3:
-      _gcnewoption_entrypoint_12(local_0, 0, 0xe);
-      _gcnewoption_entrypoint_12(local_0, 1, 0xf);
-      break;
+        case 3:
+            _gcnewoption_entrypoint_12(local_0, 0, 0xe);
+            _gcnewoption_entrypoint_12(local_0, 1, 0xf);
+            break;
 
-    case 7:
-      _gcnewoption_entrypoint_12(local_0, 0, 0x10);
-      _gcnewoption_entrypoint_12(local_0, 1, 0x11);
-      break;
+        case 7:
+            _gcnewoption_entrypoint_12(local_0, 0, 0x10);
+            _gcnewoption_entrypoint_12(local_0, 1, 0x11);
+            break;
 
-    case 5:
-      _gcnewoption_entrypoint_12(local_0, 0, 0x12);
-      _gcnewoption_entrypoint_12(local_0, 1, 0x13);
-  }
-
+        case 5:
+            _gcnewoption_entrypoint_12(local_0, 0, 0x12);
+            _gcnewoption_entrypoint_12(local_0, 1, 0x13);
+    }
 }
 
 void chmole_training_entrypoint_0(Unk80132ED0 *param_0, s32 param_1, s32 param_2, s32 param_3)
@@ -187,24 +201,37 @@ void chmole_training_entrypoint_0(Unk80132ED0 *param_0, s32 param_1, s32 param_2
 
     local_0 = func_80106790(param_0);
     switch (param_3) {
-    case 3:
-        switch ((u32)local_0->unk54) {
-        case 1: local_0->unk54 = D_80800F08_chmole_training[param_2]; break;
-        case 2: local_0->unk54 = D_80800F10_chmole_training[param_2]; break;
-        case 4: local_0->unk54 = D_80800F18_chmole_training[param_2]; break;
-        case 0: local_0->unk54 = D_80800F20_chmole_training[param_2]; break;
-        case 3: local_0->unk54 = D_80800F24_chmole_training[param_2]; break;
-        case 7: local_0->unk54 = D_80800F28_chmole_training[param_2]; break;
-        case 5: local_0->unk54 = D_80800F2C_chmole_training[param_2]; break;
-        }
-        func_80101FDC(local_0, 7);
-        break;
-    case 0:
-        func_808004D0_chmole_training(local_0, param_1);
-        break;
-    case 2:
-        func_80101FDC(local_0, 6);
-        break;
+        case 3:
+            switch ((u32) local_0->unk54) {
+                case 1:
+                    local_0->unk54 = D_80800F08_chmole_training[param_2];
+                    break;
+                case 2:
+                    local_0->unk54 = D_80800F10_chmole_training[param_2];
+                    break;
+                case 4:
+                    local_0->unk54 = D_80800F18_chmole_training[param_2];
+                    break;
+                case 0:
+                    local_0->unk54 = D_80800F20_chmole_training[param_2];
+                    break;
+                case 3:
+                    local_0->unk54 = D_80800F24_chmole_training[param_2];
+                    break;
+                case 7:
+                    local_0->unk54 = D_80800F28_chmole_training[param_2];
+                    break;
+                case 5:
+                    local_0->unk54 = D_80800F2C_chmole_training[param_2];
+                    break;
+            }
+            func_80101FDC(local_0, 7);
+            break;
+        case 0:
+            func_808004D0_chmole_training(local_0, param_1);
+            break;
+        case 2:
+            func_80101FDC(local_0, 6);
     }
 }
 
@@ -234,86 +261,143 @@ void func_80800988_chmole_training(Actor *param_0, s32 param_1, s32 param_2)
 
 void func_80800A48_chmole_training(param_0) Actor *param_0;
 {
-    switch ((u32)param_0->unk54) {
-        case 1: func_80800988_chmole_training(param_0, 3, 3); break;
-        case 2: func_80800988_chmole_training(param_0, 3, 3); break;
-        case 4: func_80800988_chmole_training(param_0, 3, 3); break;
-        case 0: func_80800988_chmole_training(param_0, 2, 2); break;
-        case 3: func_80800988_chmole_training(param_0, 2, 2); break;
-        case 7: func_80800988_chmole_training(param_0, 2, 2); break;
-        case 5: func_80800988_chmole_training(param_0, 2, 2); break;
-        case 6: func_80101FDC(param_0, 4); break;
-        case 10: case 11: case 12: case 13: case 14: case 15:
-        case 16: case 17: case 18: case 19: case 20: case 21:
-        case 22: case 23: case 24: case 25: case 26:
+    switch ((u32) param_0->unk54) {
+        case 1:
+            func_80800988_chmole_training(param_0, 3, 3);
+            break;
+        case 2:
+            func_80800988_chmole_training(param_0, 3, 3);
+            break;
+        case 4:
+            func_80800988_chmole_training(param_0, 3, 3);
+            break;
+        case 0:
+            func_80800988_chmole_training(param_0, 2, 2);
+            break;
+        case 3:
+            func_80800988_chmole_training(param_0, 2, 2);
+            break;
+        case 7:
+            func_80800988_chmole_training(param_0, 2, 2);
+            break;
+        case 5:
+            func_80800988_chmole_training(param_0, 2, 2);
+            break;
+        case 6:
             func_80101FDC(param_0, 4);
             break;
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+        case 25:
+        case 26:
+            func_80101FDC(param_0, 4);
     }
 }
 
 void func_80800BA8_chmole_training(param_0) Actor *param_0;
 {
-    switch ((s32)param_0->unk54) {
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    case 16:
-    case 17:
-    case 18:
-    case 19:
-    case 20:
-    case 21:
-    case 22:
-    case 23:
-    case 24:
-    case 25:
-    case 26:
-        param_0->unk54 = (s32)param_0->rotation[1];
-        param_0->unk70_10 = 4;
-        break;
-    default:
-        param_0->unk70_10 = 11;
-        break;
+    switch ((s32) param_0->unk54) {
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+        case 25:
+        case 26:
+            param_0->unk54 = (s32) param_0->rotation[1];
+            param_0->unk70_10 = 4;
+            break;
+        default:
+            param_0->unk70_10 = 11;
     }
 }
 
-void func_80800C28_chmole_training(u8 *param_0) {
-    param_0[0x72] = (u8)((param_0[0x72] & 0xFF03) | 0x34);
+void func_80800C28_chmole_training(u8 *param_0)
+{
+    param_0[0x72] = (u8) ((param_0[0x72] & 0xFF03) | 0x34);
 }
 
 void func_80800C3C_chmole_training(u8 *param_0)
 {
-  *((f32 *) (&param_0[0x54])) = (f32) ((s32) (*((f32 *) (&param_0[0x48]))));
-  param_0[0x72] = (param_0[0x72] & 0xFF03) | 4;
+    *(f32 *) &param_0[0x54] = (f32) (s32) *(f32 *) &param_0[0x48];
+    param_0[0x72] = (param_0[0x72] & 0xFF03) | 4;
 }
 
 void func_80800C70_chmole_training(Actor *param_0)
 {
-    *(f32 *)((char *)param_0 + 0x54) = (f32)(s32)*(f32 *)((char *)param_0 + 0x48);
+    *(f32 *) ((char *) param_0 + 0x54) = (f32) (s32) *(f32 *) ((char *) param_0 + 0x48);
     _sumole_entrypoint_0(param_0, 1);
 }
 
 int chmole_training_entrypoint_1()
 {
-    return (int)&D_80800F30_chmole_training;
+    return (int) &D_80800F30_chmole_training;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/mole/_training.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800E32_chmole_training = D_80800E30_chmole_training + 0x2
- * extern declarations adjusted to the object (same addresses): D_80800F30_chmole_training -> int[] */
 extern void func_80107C2C();
-u32 D_80800E30_chmole_training[1] = { 0xFFFFFFFF };
-u8 D_80800E34_chmole_training[212] = { 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x59, 0xD, 0x59, 0xA, 0x3C, 0x0, 0x0, 0xD, 0x5A, 0xD, 0x5A, 0x5, 0x40, 0x0, 0x0, 0xD, 0x5D, 0xD, 0x5D, 0xD, 0x45, 0x0, 0x0, 0xD, 0x62, 0xD, 0x62, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x5B, 0xD, 0x5B, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x5C, 0xD, 0x5C, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x60, 0xD, 0x60, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x61, 0xD, 0x61, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x5E, 0xD, 0x5E, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x5F, 0xD, 0x5F, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x52, 0xD, 0x52, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x53, 0xD, 0x53, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x54, 0xD, 0x54, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x55, 0xD, 0x55, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x56, 0xD, 0x56, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x57, 0xD, 0x57, 0xFF, 0xFF, 0x0, 0x0, 0xD, 0x58, 0xD, 0x58, 0xFF, 0xFF, 0x0, 0x0 };
-s16 D_80800F08_chmole_training[4] = { 0xA, 0x15, 0x16, 0x0 };
-s16 D_80800F10_chmole_training[4] = { 0xB, 0xC, 0x1A, 0x0 };
-s16 D_80800F18_chmole_training[4] = { 0x17, 0x18, 0x19, 0x0 };
-s16 D_80800F20_chmole_training[2] = { 0x14, 0xD };
-s16 D_80800F24_chmole_training[2] = { 0xE, 0xF };
-s16 D_80800F28_chmole_training[2] = { 0x10, 0x11 };
-s16 D_80800F2C_chmole_training[2] = { 0x12, 0x13 };
-int D_80800F30_chmole_training[20] = { 0x2EA01A9, -0xFFFF, 0x0, (u32)func_80800088_chmole_training, 0x0, (u32)func_80800034_chmole_training, 0x1F40000, 0x0, 0x0, 0xA0004, (u32)func_80800000_chmole_training, 0x0, 0x0, (u32)func_80800C70_chmole_training, (u32)func_80107C2C, -0x7FFFDFFE, 0x0, 0x0, 0x0, 0x0 };
+u32 D_80800E30_chmole_training[1] = {0xFFFFFFFF};
+u8 D_80800E34_chmole_training[212] = {
+    0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0x0, 0x0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0xD,  0x59, 0xD,  0x59,
+    0xA,  0x3C, 0x0, 0x0, 0xD,  0x5A, 0xD,  0x5A, 0x5,  0x40, 0x0, 0x0, 0xD,  0x5D, 0xD,  0x5D,
+    0xD,  0x45, 0x0, 0x0, 0xD,  0x62, 0xD,  0x62, 0xFF, 0xFF, 0x0, 0x0, 0xD,  0x5B, 0xD,  0x5B,
+    0xFF, 0xFF, 0x0, 0x0, 0xD,  0x5C, 0xD,  0x5C, 0xFF, 0xFF, 0x0, 0x0, 0xD,  0x60, 0xD,  0x60,
+    0xFF, 0xFF, 0x0, 0x0, 0xD,  0x61, 0xD,  0x61, 0xFF, 0xFF, 0x0, 0x0, 0xD,  0x5E, 0xD,  0x5E,
+    0xFF, 0xFF, 0x0, 0x0, 0xD,  0x5F, 0xD,  0x5F, 0xFF, 0xFF, 0x0, 0x0, 0xD,  0x52, 0xD,  0x52,
+    0xFF, 0xFF, 0x0, 0x0, 0xD,  0x53, 0xD,  0x53, 0xFF, 0xFF, 0x0, 0x0, 0xD,  0x54, 0xD,  0x54,
+    0xFF, 0xFF, 0x0, 0x0, 0xD,  0x55, 0xD,  0x55, 0xFF, 0xFF, 0x0, 0x0, 0xD,  0x56, 0xD,  0x56,
+    0xFF, 0xFF, 0x0, 0x0, 0xD,  0x57, 0xD,  0x57, 0xFF, 0xFF, 0x0, 0x0, 0xD,  0x58, 0xD,  0x58,
+    0xFF, 0xFF, 0x0, 0x0};
+s16 D_80800F08_chmole_training[4] = {0xA, 0x15, 0x16, 0x0};
+s16 D_80800F10_chmole_training[4] = {0xB, 0xC, 0x1A, 0x0};
+s16 D_80800F18_chmole_training[4] = {0x17, 0x18, 0x19, 0x0};
+s16 D_80800F20_chmole_training[2] = {0x14, 0xD};
+s16 D_80800F24_chmole_training[2] = {0xE, 0xF};
+s16 D_80800F28_chmole_training[2] = {0x10, 0x11};
+s16 D_80800F2C_chmole_training[2] = {0x12, 0x13};
+int D_80800F30_chmole_training[20] = {0x2EA01A9,
+                                      -0xFFFF,
+                                      0x0,
+                                      (u32) func_80800088_chmole_training,
+                                      0x0,
+                                      (u32) func_80800034_chmole_training,
+                                      0x1F40000,
+                                      0x0,
+                                      0x0,
+                                      0xA0004,
+                                      (u32) func_80800000_chmole_training,
+                                      0x0,
+                                      0x0,
+                                      (u32) func_80800C70_chmole_training,
+                                      (u32) func_80107C2C,
+                                      -0x7FFFDFFE,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      0x0};

@@ -1,8 +1,5 @@
-#include "common.h"
-
 #include "overlays/ba/bounce.h"
 
-#include "overlays/ba/physics.h"
 #include "overlays/ba/react.h"
 #include "overlays/ba/stick.h"
 #include "overlays/ba/timer.h"
@@ -18,26 +15,31 @@
 #include "core2/1ECB0F0.h"
 #include "core2/1EDA900.h"
 
-s32 babounce_entrypoint_0(void) {
+s32 babounce_entrypoint_0(void)
+{
     return sizeof(BaBounce);
 }
 
-void func_80800008_babounce(PlayerState *self, s32 arg1) {
+void func_80800008_babounce(PlayerState *self, s32 arg1)
+{
     self->bounce->unkC = arg1;
     if (arg1 == 1) {
         func_8008E95C(self);
     }
 }
 
-s32 babounce_entrypoint_1(PlayerState *self) {
+s32 babounce_entrypoint_1(PlayerState *self)
+{
     return self->bounce->unkC;
 }
 
-int babounce_entrypoint_2(PlayerState *self) {
+int babounce_entrypoint_2(PlayerState *self)
+{
     return (_bareact_entrypoint_2(self) == 2);
 }
 
-void babounce_entrypoint_3(PlayerState *self) {
+void babounce_entrypoint_3(PlayerState *self)
+{
     if (self->bounce->unkC == 3) {
         func_8009BA9C(self, 0);
     }
@@ -56,7 +58,8 @@ void babounce_entrypoint_3(PlayerState *self) {
     }
 }
 
-void babounce_entrypoint_4(PlayerState *self, s32 arg1) {
+void babounce_entrypoint_4(PlayerState *self, s32 arg1)
+{
     f32 sp5C[3];
     f32 sp50[3];
     f32 sp44[3];
@@ -78,7 +81,6 @@ void babounce_entrypoint_4(PlayerState *self, s32 arg1) {
 
         case 2:
             func_8009DA40(self);
-            break;
     }
     sp34 = func_80099A58(self);
     _bareact_entrypoint_1(self, sp34);
@@ -92,7 +94,8 @@ void babounce_entrypoint_4(PlayerState *self, s32 arg1) {
         func_8009FFD8(self, 1, 1, 2, 1);
         yaw_setIdeal(self, func_800136E4(sp3C[0]));
         self->bounce->unk1C = func_80099A40(self);
-        sp38 = func_8009F3BC(self, sp44[1], sp50[1], (sp3C[1] = func_80099A34(self)), self->bounce->unk1C);
+        sp38 = func_8009F3BC(self, sp44[1], sp50[1], (sp3C[1] = func_80099A34(self)),
+                             self->bounce->unk1C);
         func_800EFB24(sp5C, sp50, sp44);
         sp5C[0] = sp5C[0] / sp38;
         sp5C[2] = sp5C[2] / sp38;
@@ -105,7 +108,8 @@ void babounce_entrypoint_4(PlayerState *self, s32 arg1) {
         yaw_setIdeal(self, func_800136E4(sp3C[0] + 180.0f));
         baphysics_set_target_horizontal_velocity(self, _bareact_entrypoint_4(self));
         baphysics_set_target_yaw(self, sp3C[0]);
-        baphysics_set_horizontal_velocity(self, sp3C[0], baphysics_get_target_horizontal_velocity(self));
+        baphysics_set_horizontal_velocity(self, sp3C[0],
+                                          baphysics_get_target_horizontal_velocity(self));
         baphysics_set_vertical_velocity(self, _bareact_entrypoint_3(self));
         self->bounce->unk1C = _bareact_entrypoint_5(self);
         func_8009FFD8(self, 1, 1, 2, 3);
@@ -119,7 +123,8 @@ void babounce_entrypoint_4(PlayerState *self, s32 arg1) {
     func_8008E944(self);
 }
 
-void babounce_entrypoint_5(PlayerState *self, AssetId asset_id, f32 arg2) {
+void babounce_entrypoint_5(PlayerState *self, AssetId asset_id, f32 arg2)
+{
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
     anctrl_reset(anctrl);
     anctrl_setIndex(anctrl, asset_id);
@@ -133,22 +138,25 @@ void babounce_entrypoint_5(PlayerState *self, AssetId asset_id, f32 arg2) {
     anctrl_start(anctrl);
 }
 
-void babounce_entrypoint_6(PlayerState *self, AssetId asset_id, f32 arg2, f32 arg3, f32 arg4) {
+void babounce_entrypoint_6(PlayerState *self, AssetId asset_id, f32 arg2, f32 arg3, f32 arg4)
+{
     self->bounce->unk0 = arg3;
     self->bounce->unk4 = arg4;
     babounce_entrypoint_5(self, asset_id, arg2);
 }
 
-void babounce_entrypoint_7(PlayerState *self, s32 arg1) {
-    self->bounce->unk10 =  arg1;
+void babounce_entrypoint_7(PlayerState *self, s32 arg1)
+{
+    self->bounce->unk10 = arg1;
 }
 
-s32 babounce_entrypoint_8(PlayerState *self) {
+s32 babounce_entrypoint_8(PlayerState *self)
+{
     f32 sp24[3];
 
     switch (self->bounce->unkC) {
         case 3:
-            if (_batimer_decrement(self, 6)){
+            if (_batimer_decrement(self, 6)) {
                 func_8009BB24(self, sp24);
                 sp24[0] = 0.0f;
                 sp24[2] = 0.0f;
@@ -169,30 +177,29 @@ s32 babounce_entrypoint_8(PlayerState *self) {
 
         case 1:
             return 2;
-        
     }
     return 0;
 }
 
-s32 babounce_entrypoint_9(PlayerState *self) {
+s32 babounce_entrypoint_9(PlayerState *self)
+{
     switch (babounce_entrypoint_8(self)) {
         case 1:
             baanim_setEndAndDuration(self, 1.0f, self->bounce->unk4);
             return 0;
 
         case 2:
-            if (baanim_isStopped(self) || (bastick_distance(self) != 0.0f)){ 
+            if (baanim_isStopped(self) || (bastick_distance(self) != 0.0f)) {
                 return 1;
             }
-            break;
     }
     return 0;
 }
 
-s32 babounce_entrypoint_10(PlayerState *self) {
-    if(babounce_entrypoint_8(self) == 1) {
+s32 babounce_entrypoint_10(PlayerState *self)
+{
+    if (babounce_entrypoint_8(self) == 1) {
         return 1;
     }
     return 0;
 }
-

@@ -1,7 +1,4 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/still.h"
-#include "overlays/ba/playerstate.h"
 
 extern u8 D_808008A0_bskazstill[];
 extern s32 D_808008A4_bskazstill[];
@@ -9,7 +6,8 @@ extern s32 D_808008B4_bskazstill[];
 extern s32 D_808008C4_bskazstill[];
 extern s32 D_808008D4_bskazstill[];
 
-u8 func_80800000_bskazstill(PlayerState *self) {
+u8 func_80800000_bskazstill(PlayerState *self)
+{
     if (self->unk160.word >= 4U) {
         self->unk160.word = 0;
     }
@@ -20,34 +18,49 @@ void func_80800030_bskazstill(PlayerState *param_0, s32 param_1)
 {
     s32 local_0;
 
-    if (*(s32 *)((u8 *)param_0 + 0x15C) == 0) {
-        *(s32 *)((u8 *)param_0 + 0x160) = 0;
-        *(s32 *)((u8 *)param_0 + 0x164) = 0;
+    if (*(s32 *) ((u8 *) param_0 + 0x15C) == 0) {
+        *(s32 *) ((u8 *) param_0 + 0x160) = 0;
+        *(s32 *) ((u8 *) param_0 + 0x164) = 0;
         func_8009FFD8(param_0, 1, 1, 1, 2);
         baphysics_set_target_horizontal_velocity(param_0, 0.0f);
         func_800909CC(param_0);
         bastick_func_8009F258(param_0);
     }
-    *(s32 *)((u8 *)param_0 + 0x15C) = param_1;
+    *(s32 *) ((u8 *) param_0 + 0x15C) = param_1;
     switch (param_1) {
-    case 0: break;
-    case 1: baanim_playForDuration_onceSmooth(param_0, 0xA4, 6.5f); break;
-    case 2: baanim_playForDuration_onceSmooth(param_0, 0xA5, 6.5f); break;
-    case 3: baanim_playForDuration_onceSmooth(param_0, 0xAC, 5.7f); break;
-    case 4: baanim_playForDuration_onceSmooth(param_0, 0xAD, 5.3f); break;
-    case 5:
-        local_0 = _bashoes_entrypoint_1(param_0);
-        *(s32 *)((u8 *)param_0 + 0x168) = local_0;
-        switch (local_0) {
-        case 3: baanim_playForDuration_loopSmooth(param_0, 0xA4, 6.5f); break;
-        case 4: baanim_playForDuration_loopSmooth(param_0, 0x24E, 1.4f); break;
-        case 5: baanim_playForDuration_loopSmooth(param_0, 0x24B, 1.4f); break;
-        }
-        break;
+        case 0:
+            break;
+        case 1:
+            baanim_playForDuration_onceSmooth(param_0, 0xA4, 6.5f);
+            break;
+        case 2:
+            baanim_playForDuration_onceSmooth(param_0, 0xA5, 6.5f);
+            break;
+        case 3:
+            baanim_playForDuration_onceSmooth(param_0, 0xAC, 5.7f);
+            break;
+        case 4:
+            baanim_playForDuration_onceSmooth(param_0, 0xAD, 5.3f);
+            break;
+        case 5:
+            local_0 = _bashoes_entrypoint_1(param_0);
+            *(s32 *) ((u8 *) param_0 + 0x168) = local_0;
+            switch (local_0) {
+                case 3:
+                    baanim_playForDuration_loopSmooth(param_0, 0xA4, 6.5f);
+                    break;
+                case 4:
+                    baanim_playForDuration_loopSmooth(param_0, 0x24E, 1.4f);
+                    break;
+                case 5:
+                    baanim_playForDuration_loopSmooth(param_0, 0x24B, 1.4f);
+                    break;
+            }
     }
 }
 
-BanjoStateId func_808001A4_bskazstill(PlayerState *self, BanjoStateId nextState) {
+BanjoStateId func_808001A4_bskazstill(PlayerState *self, BanjoStateId nextState)
+{
     s32 sp24;
     s32 temp_v0;
 
@@ -65,7 +78,6 @@ BanjoStateId func_808001A4_bskazstill(PlayerState *self, BanjoStateId nextState)
             break;
         case BS_STICK_ZONE_ID_2:
             nextState = BS_STATE_C7;
-            break;
     }
     if (sp24 != 0) {
         if (func_8008E3E8(self) != 0) {
@@ -104,14 +116,16 @@ BanjoStateId func_808001A4_bskazstill(PlayerState *self, BanjoStateId nextState)
     return func_800A02DC(self, nextState);
 }
 
-void bskazstill_entrypoint_0(PlayerState *self) {
+void bskazstill_entrypoint_0(PlayerState *self)
+{
     func_80800030_bskazstill(self, 0);
     func_80090A2C(self);
     func_800951B4(self);
     _bskaz_entrypoint_2(self);
 }
 
-void bskazstill_entrypoint_1(PlayerState *self) {
+void bskazstill_entrypoint_1(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     self->unk15C.word = 0;
     if (func_8008E39C(self) != 0) {
@@ -121,7 +135,8 @@ void bskazstill_entrypoint_1(PlayerState *self) {
     func_80800030_bskazstill(self, 1U);
 }
 
-void bskazstill_entrypoint_2(PlayerState *self) {
+void bskazstill_entrypoint_2(PlayerState *self)
+{
     s32 var_v1;
     AnimCtrl *animCtrl;
     s32 sp24;
@@ -178,7 +193,6 @@ void bskazstill_entrypoint_2(PlayerState *self) {
             if (sp24 != 0) {
                 func_80800030_bskazstill(self, 5U);
             }
-            break;
     }
     if (anctrl_isStopped(animCtrl) != 0) {
         func_80800030_bskazstill(self, func_80800000_bskazstill(self));
@@ -186,25 +200,30 @@ void bskazstill_entrypoint_2(PlayerState *self) {
     bs_setState(self, func_808001A4_bskazstill(self, BS_STATE_0_INVALID));
 }
 
-s32 bskazstill_entrypoint_3(s32 idx) {
+s32 bskazstill_entrypoint_3(s32 idx)
+{
     return D_808008A4_bskazstill[idx];
 }
 
-BanjoStateId bskazstill_entrypoint_4(PlayerState *self, BanjoStateId arg1) {
+BanjoStateId bskazstill_entrypoint_4(PlayerState *self, BanjoStateId arg1)
+{
     func_808001A4_bskazstill(self, arg1);
 }
 
-void bskazstill_entrypoint_5(PlayerState *self) {
+void bskazstill_entrypoint_5(PlayerState *self)
+{
     _bskaz_entrypoint_2(self);
 }
 
-void bskazstill_entrypoint_6(PlayerState *self) {
+void bskazstill_entrypoint_6(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     func_8009FFD8(self, 1, 1, 1, 2);
     baphysics_set_target_horizontal_velocity(self, 0);
 }
 
-void bskazstill_entrypoint_7(PlayerState *self) {
+void bskazstill_entrypoint_7(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -214,39 +233,47 @@ void bskazstill_entrypoint_7(PlayerState *self) {
     bs_setState(self, func_808001A4_bskazstill(self, next_state));
 }
 
-s32 bskazstill_entrypoint_8(s32 idx) {
+s32 bskazstill_entrypoint_8(s32 idx)
+{
     return D_808008B4_bskazstill[idx];
 }
 
-void func_80800758_bskazstill(PlayerState *self) {
+void func_80800758_bskazstill(PlayerState *self)
+{
     _bskaz_entrypoint_2(self);
     _bsdrone_entrypoint_2(self);
 }
 
-void func_80800780_bskazstill(PlayerState *self) {
+void func_80800780_bskazstill(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     _bsdrone_entrypoint_0(self);
 }
 
-void func_808007A8_bskazstill(PlayerState *self) {
+void func_808007A8_bskazstill(PlayerState *self)
+{
     _bsdrone_entrypoint_1(self);
 }
 
-s32 bskazstill_entrypoint_9(s32 idx) {
+s32 bskazstill_entrypoint_9(s32 idx)
+{
     return D_808008C4_bskazstill[idx];
 }
 
-void func_808007DC_bskazstill(PlayerState *self) {
+void func_808007DC_bskazstill(PlayerState *self)
+{
     _bsrest_entrypoint_14(self);
     _bskaz_entrypoint_2(self);
 }
 
-void func_80800804_bskazstill(PlayerState *self) {
+void func_80800804_bskazstill(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     _bsrest_entrypoint_16(self);
 }
 
-void func_8080082C_bskazstill(PlayerState *self) {
+void func_8080082C_bskazstill(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -256,24 +283,25 @@ void func_8080082C_bskazstill(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskazstill_entrypoint_10(s32 idx) {
+s32 bskazstill_entrypoint_10(s32 idx)
+{
     return D_808008D4_bskazstill[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/still.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
-extern void _bskazstill_entrypoint_0();
-extern void _bskazstill_entrypoint_1();
-extern void _bskazstill_entrypoint_2();
 extern void func_8009AB78();
-extern void _bskazstill_entrypoint_5();
-extern void _bskazstill_entrypoint_6();
-extern void _bskazstill_entrypoint_7();
 extern void _bsdrone_entrypoint_3();
 extern void func_80099B94();
-u8 D_808008A0_bskazstill[4] = { 0x1, 0x4, 0x3, 0x2 };
-s32 D_808008A4_bskazstill[4] = { (u32)_bskazstill_entrypoint_0, (u32)_bskazstill_entrypoint_1, (u32)_bskazstill_entrypoint_2, (u32)func_8009AB78 };
-s32 D_808008B4_bskazstill[4] = { (u32)_bskazstill_entrypoint_5, (u32)_bskazstill_entrypoint_6, (u32)_bskazstill_entrypoint_7, (u32)func_8009AB78 };
-s32 D_808008C4_bskazstill[4] = { (u32)func_80800758_bskazstill, (u32)func_80800780_bskazstill, (u32)func_808007A8_bskazstill, (u32)_bsdrone_entrypoint_3 };
-s32 D_808008D4_bskazstill[7] = { (u32)func_808007DC_bskazstill, (u32)func_80800804_bskazstill, (u32)func_8080082C_bskazstill, (u32)func_80099B94, 0x0, 0x0, 0x0 };
+u8 D_808008A0_bskazstill[4] = {0x1, 0x4, 0x3, 0x2};
+s32 D_808008A4_bskazstill[4] = {(u32) _bskazstill_entrypoint_0, (u32) _bskazstill_entrypoint_1,
+                                (u32) _bskazstill_entrypoint_2, (u32) func_8009AB78};
+s32 D_808008B4_bskazstill[4] = {(u32) _bskazstill_entrypoint_5, (u32) _bskazstill_entrypoint_6,
+                                (u32) _bskazstill_entrypoint_7, (u32) func_8009AB78};
+s32 D_808008C4_bskazstill[4] = {(u32) func_80800758_bskazstill, (u32) func_80800780_bskazstill,
+                                (u32) func_808007A8_bskazstill, (u32) _bsdrone_entrypoint_3};
+s32 D_808008D4_bskazstill[7] = {(u32) func_808007DC_bskazstill,
+                                (u32) func_80800804_bskazstill,
+                                (u32) func_8080082C_bskazstill,
+                                (u32) func_80099B94,
+                                0x0,
+                                0x0,
+                                0x0};

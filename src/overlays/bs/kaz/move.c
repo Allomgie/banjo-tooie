@@ -1,9 +1,8 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/move.h"
 
-void func_80800000_bskazmove(PlayerState *self, f32 *arg1, f32 *arg2) {
-    switch ( _bashoes_entrypoint_1(self)) {
+void func_80800000_bskazmove(PlayerState *self, f32 *arg1, f32 *arg2)
+{
+    switch (_bashoes_entrypoint_1(self)) {
         case 3:
             *arg1 = 250.0f;
             *arg2 = 1200.0f;
@@ -15,22 +14,21 @@ void func_80800000_bskazmove(PlayerState *self, f32 *arg1, f32 *arg2) {
         case 5:
             *arg1 = 250.0f;
             *arg2 = 800.0f;
-            return;
     }
 }
 
-void bskazmove_entrypoint_0(PlayerState *self) {
+void bskazmove_entrypoint_0(PlayerState *self)
+{
     s32 temp_v0;
     f32 value;
     f32 max;
     f32 min;
     s32 zone;
 
-    // Fake match?: Force self onto the stack by taking its address.
     if (&self) {
     }
 
-    value = bastick_getZonePosition(self); 
+    value = bastick_getZonePosition(self);
     zone = bastick_getZone(self);
     temp_v0 = func_8008E39C(self);
     switch (zone) {
@@ -58,16 +56,16 @@ void bskazmove_entrypoint_0(PlayerState *self) {
                 min = 250;
                 max = 800;
             }
-            break;
     }
 
     baphysics_set_target_horizontal_velocity(self, func_800F1214(value, min, max));
 }
 
-BanjoStateId func_808001C4_bskazmove(PlayerState *self, BanjoStateId nextState) {
+BanjoStateId func_808001C4_bskazmove(PlayerState *self, BanjoStateId nextState)
+{
     if (func_8008E39C(self) != 0) {
         return nextState;
-    } 
+    }
 
     if (baphysics_get_target_horizontal_velocity(self) > 80.0f) {
         if (bainput_func_80097FB8(self) != 0) {
@@ -79,17 +77,20 @@ BanjoStateId func_808001C4_bskazmove(PlayerState *self, BanjoStateId nextState) 
     return nextState;
 }
 
-void func_8080025C_bskazmove(PlayerState *self) {
+void func_8080025C_bskazmove(PlayerState *self)
+{
     if (bakey_pressed(self, BUTTON_B) != 0) {
         _bashoes_entrypoint_6(self, 2);
     }
 }
 
-void bskazmove_entrypoint_1(PlayerState *self) {
+void bskazmove_entrypoint_1(PlayerState *self)
+{
     _bskaz_entrypoint_2(self);
 }
 
-void bskazmove_entrypoint_2(PlayerState *self) {
+void bskazmove_entrypoint_2(PlayerState *self)
+{
     AnimCtrl *animCtrl;
     f32 animTimer;
 
@@ -112,9 +113,9 @@ void bskazmove_entrypoint_2(PlayerState *self) {
     func_8008CA30(self, 1);
 }
 
-void bskazmove_entrypoint_3(PlayerState *self) {
+void bskazmove_entrypoint_3(PlayerState *self)
+{
     BanjoStateId next_state;
-    s32 temp_v0;
 
     next_state = BS_STATE_0_INVALID;
     if (bastick_distance(self) == 0.0f) {
@@ -131,7 +132,6 @@ void bskazmove_entrypoint_3(PlayerState *self) {
             break;
         case BS_STICK_ZONE_ID_2:
             next_state = BS_STATE_C7;
-            break;
     }
 
     if (func_8008E39C(self) != 0) {
@@ -154,7 +154,8 @@ void bskazmove_entrypoint_3(PlayerState *self) {
 
     if (bakey_pressed(self, 8) != 0) {
         next_state = _bskaz_entrypoint_3(self);
-        if ((baphysics_get_target_horizontal_velocity(self) == 0.0f) && (func_8008D790(self) != 0)) {
+        if ((baphysics_get_target_horizontal_velocity(self) == 0.0f) &&
+            (func_8008D790(self) != 0)) {
             _baduo_entrypoint_12(self);
             return;
         }
@@ -171,15 +172,16 @@ void bskazmove_entrypoint_3(PlayerState *self) {
     bs_setState(self, func_800A02DC(self, next_state));
 }
 
-s32 bskazmove_entrypoint_4(s32 idx) {
+s32 bskazmove_entrypoint_4(s32 idx)
+{
     return D_80800C70_bskazmove[idx];
 }
 
-void bskazmove_entrypoint_5(PlayerState *self, s32 arg1) {
+void bskazmove_entrypoint_5(PlayerState *self, s32 arg1)
+{
     s32 animIndex;
     s32 pad0;
     f32 animTimer;
-    s32 pad1;
     AnimCtrl *animCtrl;
 
     animCtrl = baanim_getAnimCtrlPtr(self);
@@ -200,7 +202,6 @@ void bskazmove_entrypoint_5(PlayerState *self, s32 arg1) {
         default:
             animIndex = ASSET_A6_ANIM_BSKAZMOVE_UNKNOWN;
             func_8008C9F0(self, 250.0f, 800.0f, 0.54, 0.35f);
-            break;
     }
 
     anctrl_reset(animCtrl);
@@ -214,7 +215,8 @@ void bskazmove_entrypoint_5(PlayerState *self, s32 arg1) {
     baanim_setDurationRange(self, 0.3, 1.5);
 }
 
-void func_80800754_bskazmove(PlayerState *self) {
+void func_80800754_bskazmove(PlayerState *self)
+{
     s32 temp_v0;
 
     temp_v0 = _bashoes_entrypoint_1(self);
@@ -224,12 +226,12 @@ void func_80800754_bskazmove(PlayerState *self) {
     }
 }
 
-void bskazmove_entrypoint_6(PlayerState *self) {
+void bskazmove_entrypoint_6(PlayerState *self)
+{
     AnimCtrl *animCtrl;
     f32 sp28;
     f32 sp24;
     s32 sp20;
-    s32 temp_v0;
 
     animCtrl = baanim_getAnimCtrlPtr(self);
     sp20 = 1;
@@ -256,7 +258,6 @@ void bskazmove_entrypoint_6(PlayerState *self) {
             if ((anctrl_isAt(animCtrl, 0.2115f) != 0) || (anctrl_isAt(animCtrl, 0.7115f) != 0)) {
                 _badust_entrypoint_1(self);
             }
-            break;
     }
 
     if (sp20 != 0) {
@@ -269,13 +270,15 @@ void bskazmove_entrypoint_6(PlayerState *self) {
     func_800A2D2C(self, sp28, 3);
 }
 
-void bskazmove_entrypoint_7(PlayerState *self) {
+void bskazmove_entrypoint_7(PlayerState *self)
+{
     func_8009BF5C(self, 0);
     baroll_setIdeal(self, 0);
     _bskaz_entrypoint_2(self);
 }
 
-void bskazmove_entrypoint_8(PlayerState *self) {
+void bskazmove_entrypoint_8(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     if ((bs_getPreviousState(self) == 0xBC) && (func_8009BB5C(self) < 200.0f)) {
         _badust_entrypoint_3(self, 0.0f, 0.0f);
@@ -287,7 +290,8 @@ void bskazmove_entrypoint_8(PlayerState *self) {
     baroll_setAngularVelocity(self, 1000, 12);
 }
 
-void bskazmove_entrypoint_9(PlayerState *self) {
+void bskazmove_entrypoint_9(PlayerState *self)
+{
     BanjoStateId next_state;
     s32 sp20;
 
@@ -307,7 +311,6 @@ void bskazmove_entrypoint_9(PlayerState *self) {
             if ((sp20 == 0) && (func_8009BCD4(self, 250) != 0)) {
                 next_state = BS_STATE_BC;
             }
-            break;
     }
 
     if (func_8008DD04(self) != 0) {
@@ -326,7 +329,8 @@ void bskazmove_entrypoint_9(PlayerState *self) {
 
     if (bakey_pressed(self, BUTTON_A) != 0) {
         next_state = _bskaz_entrypoint_3(self);
-        if ((baphysics_get_target_horizontal_velocity(self) == 0.0f) && (func_8008D790(self) != 0)) {
+        if ((baphysics_get_target_horizontal_velocity(self) == 0.0f) &&
+            (func_8008D790(self) != 0)) {
             _baduo_entrypoint_12(self);
             return;
         }
@@ -343,21 +347,25 @@ void bskazmove_entrypoint_9(PlayerState *self) {
     bs_setState(self, func_800A02DC(self, next_state));
 }
 
-s32 bskazmove_entrypoint_10(s32 idx) {
+s32 bskazmove_entrypoint_10(s32 idx)
+{
     return D_80800C80_bskazmove[idx];
 }
 
-void bskazmove_entrypoint_11(PlayerState *self, s32 arg1) {
-    if ((arg1 == 3) && (bastick_getZone(self) == BS_STICK_ZONE_ID_2) && (bastick_getZonePosition(self) > 0.8f)) {
+void bskazmove_entrypoint_11(PlayerState *self, s32 arg1)
+{
+    if ((arg1 == 3) && (bastick_getZone(self) == BS_STICK_ZONE_ID_2) &&
+        (bastick_getZonePosition(self) > 0.8f)) {
         func_800962B0(self, 1);
         return;
     }
     func_800962B0(self, 0);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/move.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bskazshoessuckspline_entrypoint_0();
-s32 D_80800C70_bskazmove[4] = { (u32)_bskazmove_entrypoint_1, (u32)_bskazmove_entrypoint_2, (u32)_bskazmove_entrypoint_3, (u32)_bskazshoessuckspline_entrypoint_0 };
-s32 D_80800C80_bskazmove[4] = { (u32)_bskazmove_entrypoint_7, (u32)_bskazmove_entrypoint_8, (u32)_bskazmove_entrypoint_9, (u32)_bskazshoessuckspline_entrypoint_0 };
+s32 D_80800C70_bskazmove[4] = {(u32) _bskazmove_entrypoint_1, (u32) _bskazmove_entrypoint_2,
+                               (u32) _bskazmove_entrypoint_3,
+                               (u32) _bskazshoessuckspline_entrypoint_0};
+s32 D_80800C80_bskazmove[4] = {(u32) _bskazmove_entrypoint_7, (u32) _bskazmove_entrypoint_8,
+                               (u32) _bskazmove_entrypoint_9,
+                               (u32) _bskazshoessuckspline_entrypoint_0};

@@ -1,38 +1,42 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/crouch.h"
 
 extern f32 mlAbsF(f32);
-void func_808000B4_bskazcrouch(AnimCtrl *, f32);
 
 extern s32 D_808007C0_bskazcrouch[];
 
-void func_80800000_bskazcrouch(PlayerState *self) {
+void func_80800000_bskazcrouch(PlayerState *self)
+{
     baanim_playForDuration_loopSmooth(self, ASSET_28F_ANIM_BSKAZCROUCH_UNKNOWN, 0.5f);
     self->unk15C.word = 4;
 }
 
-void func_80800034_bskazcrouch(PlayerState *self) {
+void func_80800034_bskazcrouch(PlayerState *self)
+{
     baanim_playForDuration_onceSmooth(self, ASSET_141_ANIM_BSKAZCROUCH_UNKNOWN, 3.5f);
     self->unk15C.word = 2;
 }
 
-void func_80800068_bskazcrouch(PlayerState *self) {
-    baanim_playForDuration_onceSmoothStartingAt(self, ASSET_28F_ANIM_BSKAZCROUCH_UNKNOWN, 0.5f, 0.9999f);
+void func_80800068_bskazcrouch(PlayerState *self)
+{
+    baanim_playForDuration_onceSmoothStartingAt(self, ASSET_28F_ANIM_BSKAZCROUCH_UNKNOWN, 0.5f,
+                                                0.9999f);
     _batimer_set(self, 2, 2.0f);
     self->unk15C.word = 1;
 }
 
-void func_808000B4_bskazcrouch(AnimCtrl *anim_ctrl, f32 arg1) {
+void func_808000B4_bskazcrouch(AnimCtrl *anim_ctrl, f32 arg1)
+{
     anctrl_setDuration(anim_ctrl, func_800F10B4(arg1, 0, 180, 0.5, 0.2));
 }
 
-void func_808000FC_bskazcrouch(PlayerState *self, s32 arg1) {
+void func_808000FC_bskazcrouch(PlayerState *self, s32 arg1)
+{
     func_800A2CE8(self, 0.41f, 4);
     func_800A2CE8(self, 0.91f, 3);
 }
 
-BanjoStateId bskazcrouch_entrypoint_0(PlayerState* self, BanjoStateId arg1) {
+BanjoStateId bskazcrouch_entrypoint_0(PlayerState *self, BanjoStateId arg1)
+{
     if (bakey_released(self, BUTTON_Z) != 0) {
         arg1 = BS_STATE_BB;
         if (bakey_pressed(self, BUTTON_A) != 0) {
@@ -56,8 +60,9 @@ BanjoStateId bskazcrouch_entrypoint_0(PlayerState* self, BanjoStateId arg1) {
     return arg1;
 }
 
-void bskazcrouch_entrypoint_1(PlayerState *self) {
-    AnimCtrl* animCtrl;
+void bskazcrouch_entrypoint_1(PlayerState *self)
+{
+    AnimCtrl *animCtrl;
     f32 unk0;
     f32 pad0;
     f32 unk1;
@@ -82,7 +87,7 @@ void bskazcrouch_entrypoint_1(PlayerState *self) {
     anctrl_start(animCtrl);
     func_8008CA4C(self, 1);
     yaw_setUpdateType(self, 3);
-    yaw_setVelocityBounded(self, 350.0f , 14.0f );
+    yaw_setVelocityBounded(self, 350.0f, 14.0f);
     func_8009D2D8(self, 7);
     func_8009CFD8(self, 8.0f);
     baphysics_set_type(self, 3);
@@ -99,7 +104,6 @@ void bskazcrouch_entrypoint_1(PlayerState *self) {
     }
     self->unk15C.word = NULL;
 }
-
 
 void bskazcrouch_entrypoint_2(PlayerState *param_0)
 {
@@ -128,54 +132,53 @@ void bskazcrouch_entrypoint_2(PlayerState *param_0)
     local_5 = yaw_get(param_0);
     local_3 = mlAbsF(func_800F1DCC(local_4, local_5));
     switch (param_0->unk15C.word) {
-    case 0:
-        if (local_1 == 0.0f) {
-            _batimer_set(param_0, 2, 2.0f);
-            param_0->unk15C.word = 1;
-        }
-        break;
-    case 1:
-        if (local_3 != 0.0f) {
-            func_80800000_bskazcrouch(param_0);
-        } else {
-            _batimer_decrement(param_0, 2);
-            if (_batimer_isZero(param_0, 2)) {
-                func_80800034_bskazcrouch(param_0);
+        case 0:
+            if (local_1 == 0.0f) {
+                _batimer_set(param_0, 2, 2.0f);
+                param_0->unk15C.word = 1;
             }
-        }
-        break;
-    case 2:
-        if (local_3 != 0.0f) {
-            func_80800000_bskazcrouch(param_0);
-        } else if (anctrl_isStopped(local_2)) {
-            func_80800068_bskazcrouch(param_0);
-        }
-        break;
-    case 4:
-        func_808000B4_bskazcrouch(local_2, local_3);
-        func_808000FC_bskazcrouch(param_0, (s32)local_2);
-        if (local_3 == 0.0f) {
-            if (anctrl_getAnimTimer(local_2) <= 0.5f) {
-                anctrl_setSubrange(local_2, 0.0f, 0.5f);
+            break;
+        case 1:
+            if (local_3 != 0.0f) {
+                func_80800000_bskazcrouch(param_0);
             } else {
-                anctrl_setSubrange(local_2, 0.0f, 1.0f);
+                _batimer_decrement(param_0, 2);
+                if (_batimer_isZero(param_0, 2)) {
+                    func_80800034_bskazcrouch(param_0);
+                }
             }
-            anctrl_setPlaybackType(local_2, 1);
-            param_0->unk15C.word = 3;
-        }
-        break;
-    case 3:
-        func_808000B4_bskazcrouch(local_2, local_3);
-        func_808000FC_bskazcrouch(param_0, (s32)local_2);
-        if (local_3 != 0.0f) {
-            anctrl_setSubrange(local_2, 0.0f, 1.0f);
-            anctrl_setPlaybackType(local_2, 2);
-            param_0->unk15C.word = 4;
-        } else if (anctrl_isStopped(local_2)) {
-            yaw_setIdeal(param_0, yaw_get(param_0));
-            func_80800068_bskazcrouch(param_0);
-        }
-        break;
+            break;
+        case 2:
+            if (local_3 != 0.0f) {
+                func_80800000_bskazcrouch(param_0);
+            } else if (anctrl_isStopped(local_2)) {
+                func_80800068_bskazcrouch(param_0);
+            }
+            break;
+        case 4:
+            func_808000B4_bskazcrouch(local_2, local_3);
+            func_808000FC_bskazcrouch(param_0, (s32) local_2);
+            if (local_3 == 0.0f) {
+                if (anctrl_getAnimTimer(local_2) <= 0.5f) {
+                    anctrl_setSubrange(local_2, 0.0f, 0.5f);
+                } else {
+                    anctrl_setSubrange(local_2, 0.0f, 1.0f);
+                }
+                anctrl_setPlaybackType(local_2, 1);
+                param_0->unk15C.word = 3;
+            }
+            break;
+        case 3:
+            func_808000B4_bskazcrouch(local_2, local_3);
+            func_808000FC_bskazcrouch(param_0, (s32) local_2);
+            if (local_3 != 0.0f) {
+                anctrl_setSubrange(local_2, 0.0f, 1.0f);
+                anctrl_setPlaybackType(local_2, 2);
+                param_0->unk15C.word = 4;
+            } else if (anctrl_isStopped(local_2)) {
+                yaw_setIdeal(param_0, yaw_get(param_0));
+                func_80800068_bskazcrouch(param_0);
+            }
     }
     if (func_8008DF18(param_0)) {
         local_0 = _badrone_entrypoint_25(param_0);
@@ -190,20 +193,16 @@ void bskazcrouch_entrypoint_2(PlayerState *param_0)
     bs_setState(param_0, local_0);
 }
 
-void bskazcrouch_entrypoint_3(PlayerState *self) {
+void bskazcrouch_entrypoint_3(PlayerState *self)
+{
     _bskaz_entrypoint_2(self);
 }
 
-
-s32 bskazcrouch_entrypoint_4(s32 idx) {
+s32 bskazcrouch_entrypoint_4(s32 idx)
+{
     return D_808007C0_bskazcrouch[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/crouch.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
-extern void _bskazcrouch_entrypoint_3();
-extern void _bskazcrouch_entrypoint_1();
 extern void _bskazcrouch_entrypoint_2();
-extern void func_80099B94();
-s32 D_808007C0_bskazcrouch[4] = { (u32)_bskazcrouch_entrypoint_3, (u32)_bskazcrouch_entrypoint_1, (u32)_bskazcrouch_entrypoint_2, (u32)func_80099B94 };
+s32 D_808007C0_bskazcrouch[4] = {(u32) _bskazcrouch_entrypoint_3, (u32) _bskazcrouch_entrypoint_1,
+                                 (u32) _bskazcrouch_entrypoint_2, (u32) func_80099B94};

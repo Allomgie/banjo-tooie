@@ -8,30 +8,31 @@ extern f32 func_80112C3C(void *, f32);
 extern f32 func_801125E8(void *);
 extern void func_800EEBF0(Vec3f *, f32 *, f32);
 
-s32 ncbapivot_entrypoint_0() 
+s32 ncbapivot_entrypoint_0()
 {
     return 0x4;
 }
 
-void func_80800008_ncbapivot(PlayerState* arg0, f32* arg1)
+void func_80800008_ncbapivot(PlayerState *arg0, f32 *arg1)
 {
-    func_80112524(arg0,arg1);
+    func_80112524(arg0, arg1);
 }
 
 int ncbapivot_entrypoint_1(s32 param_0)
 {
-  s32 local_0;
-  local_0 = param_0 | 0;
-  func_801120CC(local_0, 0x44FA0000, 0x457A0000, 0xC57A0000);
-  func_80111B8C(local_0, 0x40800000, 0x41000000);
-  func_801124D0(local_0, 1);
-  func_80115858(local_0, 1);
-  func_80115870(local_0, 0x40A00000);
+    s32 local_0;
+    local_0 = param_0 | 0;
+    func_801120CC(local_0, 0x44FA0000, 0x457A0000, 0xC57A0000);
+    func_80111B8C(local_0, 0x40800000, 0x41000000);
+    func_801124D0(local_0, 1);
+    func_80115858(local_0, 1);
+    func_80115870(local_0, 0x40A00000);
 }
 
-void ncbapivot_entrypoint_2(s32 arg0) 
+void ncbapivot_entrypoint_2(s32 arg0)
 {
 }
+
 void ncbapivot_entrypoint_3(u8 *param_0)
 {
     Vec3f local_0;
@@ -49,7 +50,7 @@ void ncbapivot_entrypoint_3(u8 *param_0)
     func_80800008_ncbapivot(param_0, &local_0);
     func_801107F0(param_0, &local_3);
     func_800EE7F8(&local_9, &local_0);
-    if (**(s32 **)(param_0 + 0x5C)) {
+    if (**(s32 **) (param_0 + 0x5C)) {
         local_5 = _ncbawaypoint_entrypoint_3(param_0, &local_9, &local_3);
     } else {
         local_5 = 0.0f;
@@ -81,6 +82,3 @@ void ncbapivot_entrypoint_3(u8 *param_0)
         func_80111310(param_0);
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/pivot.data.s) is defined here in C.
- * Values are taken from the ROM. */

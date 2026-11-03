@@ -1,21 +1,11 @@
-/* TU-NOTE: gc/sectionskip.h is not included as a whole: through gc/goto.h -> core2/1E80A70.h -> core2/1E99980.h
- * it would declare func_800C05B8 with an s16 first parameter, but this file calls it without a prototype
- * (a0 is passed on unnarrowed). The other headers of gc/sectionskip.h are included directly. */
-#include "common.h"
 #include "core2/1EA9160.h"
-#include "core2/1EAAD80.h"
 #include "core2/1EB3750.h"
 #include "core2/1EC3810.h"
 #include "gc/sectionDll.h"
-#include "ch/mrtannoy.h"
-#include "gameflags.h"
 
 extern f32 mlAbsF(f32);
-extern f32 sqrtf(f32);
-extern void func_800EE7F8(f32 *, f32 *);
 extern void func_800EFE50(f32 *, f32 *, f32 *, f32);
 extern f32 func_800D8FF8(void);
-extern void func_800EF334(f32 *, f32);
 extern s32 func_800DC298(f32);
 int func_80800D3C_gcsectionskip();
 
@@ -32,11 +22,18 @@ int func_80800000_gcsectionskip(f32 *param_0, f32 *param_1, f32 param_2, s32 par
     func_800EE7F8(local_0, param_0);
     if (!param_3) {
         local_1 = (param_1[0] + param_2) - param_0[0];
-        if (local_1 > param_2) { local_1 -= param_2 + param_2; }
+        if (local_1 > param_2) {
+            local_1 -= param_2 + param_2;
+        }
         local_2 = (param_1[2] + param_2) - param_0[2];
-        if (local_2 > param_2) { local_2 -= param_2 + param_2; }
-        if (mlAbsF(local_1) < mlAbsF(local_2)) { param_0[0] += local_1; }
-        else { param_0[2] += local_2; }
+        if (local_2 > param_2) {
+            local_2 -= param_2 + param_2;
+        }
+        if (mlAbsF(local_1) < mlAbsF(local_2)) {
+            param_0[0] += local_1;
+        } else {
+            param_0[2] += local_2;
+        }
     } else {
         local_4 = (param_2 + param_2) / sqrtf(2.0f);
         local_5 = param_0[0] - param_1[0];
@@ -66,8 +63,8 @@ void func_8080019C_gcsectionskip(f32 *param_0, f32 *param_1, f32 *param_2, f32 p
     local_3 = 0;
     local_4 = 4.0f;
     do {
-        if (1) {}
-        func_800EFE50(local_1, param_1, param_0, (f32)local_3 / local_4);
+        if (1)
+            func_800EFE50(local_1, param_1, param_0, (f32) local_3 / local_4);
         if (!func_80800000_gcsectionskip(local_1, param_2, param_3, local_2)) {
             break;
         }
@@ -87,25 +84,27 @@ void func_808002A0_gcsectionskip(s32 param_0, u8 *param_1)
     f32 local_5;
 
     if (param_1 != NULL) {
-        local_4 = (u32)param_1[0x13] >> 7;
-        local_5 = (f32)((u32)*(u16 *)(param_1 + 6) >> 7);
+        local_4 = (u32) param_1[0x13] >> 7;
+        local_5 = (f32) ((u32) *(u16 *) (param_1 + 6) >> 7);
         func_800F5D9C(param_0, local_3);
         func_800F5D70(param_0, local_2);
         func_800EF334(local_2, func_800D8FF8());
         func_800EFB24(local_1, local_3, local_2);
         func_800EE88C(local_0, param_1);
-        func_8080019C_gcsectionskip(local_1, local_3, local_0, local_5, (f32)local_4);
+        func_8080019C_gcsectionskip(local_1, local_3, local_0, local_5, (f32) local_4);
         func_800F8418(param_0, local_3);
     }
 }
 
-s32 func_80800374_gcsectionskip(s32 param_0, s32 param_1) {
+s32 func_80800374_gcsectionskip(s32 param_0, s32 param_1)
+{
     func_800F7E3C(param_0, 0);
     func_808002A0_gcsectionskip(param_0, param_1);
 }
 
-s32 gcsectionskip_entrypoint_0(s32 param_0, s32 param_1, s32 param_2){
-    if(param_1 == 0xDAA){
+s32 gcsectionskip_entrypoint_0(s32 param_0, s32 param_1, s32 param_2)
+{
+    if (param_1 == 0xDAA) {
         func_800DA524(0x6C9);
     }
 }
@@ -134,8 +133,7 @@ s32 gcsectionskip_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_
 
     local_1 = func_800F54E4();
 
-    if (param_4 != 0 &&
-        local_1 != ((u32)*(u16 *)((char *)param_4 + 0x1A) >> 5)) {
+    if (param_4 != 0 && local_1 != ((u32) *(u16 *) ((char *) param_4 + 0x1A) >> 5)) {
         return 0;
     }
 
@@ -143,11 +141,8 @@ s32 gcsectionskip_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_
 
     _gcgoto_entrypoint_0(&param_1, &param_2);
 
-    if (func_800F6D24(local_1) ||
-        func_800F8004(local_1) ||
-        func_800F6CC8(local_1) ||
-        func_800F66F0(local_1) ||
-        func_800F70BC(func_800F54E4())) {
+    if (func_800F6D24(local_1) || func_800F8004(local_1) || func_800F6CC8(local_1) ||
+        func_800F66F0(local_1) || func_800F70BC(func_800F54E4())) {
         func_808002A0_gcsectionskip(local_1, param_0);
         return 0;
     }
@@ -228,7 +223,6 @@ s32 gcsectionskip_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_
 
         case 14:
             param_2 = D_80801040_gcsectionskip[func_800DA564(0x3A4, 4)];
-            break;
 
         case 10:
         case 15:
@@ -246,32 +240,31 @@ s32 gcsectionskip_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_
             }
 
             switch (func_800EA05C()) {
-            case 0x136:
-                switch (param_1) {
+                case 0x136:
+                    switch (param_1) {
+                        case 0x13E:
+                            if (!func_800DA298(0x40A)) {
+                                param_1 = 0x13F;
+                            }
+                            break;
+                        case 0x13F:
+                            if (!func_800DA298(0x40A)) {
+                                param_1 = 0x13E;
+                            }
+                            break;
+                        default:
+                            return 0;
+                    }
+                    break;
                 case 0x13E:
                     if (!func_800DA298(0x40A)) {
-                        param_1 = 0x13F;
+                        param_2 = 9;
                     }
                     break;
                 case 0x13F:
                     if (!func_800DA298(0x40A)) {
-                        param_1 = 0x13E;
+                        param_2 = 0x16;
                     }
-                    break;
-                default:
-                    return 0;
-                }
-                break;
-            case 0x13E:
-                if (!func_800DA298(0x40A)) {
-                    param_2 = 9;
-                }
-                break;
-            case 0x13F:
-                if (!func_800DA298(0x40A)) {
-                    param_2 = 0x16;
-                }
-                break;
             }
             break;
 
@@ -348,8 +341,7 @@ s32 gcsectionskip_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_
                 return 0;
             }
 
-            if (func_800DA298(0x44) &&
-                !func_800DA298(0x43)) {
+            if (func_800DA298(0x44) && !func_800DA298(0x43)) {
                 param_1 = 0x19A;
                 param_2 = 1;
             }
@@ -376,8 +368,7 @@ s32 gcsectionskip_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_
                 return 0;
             }
 
-            if (!func_800C6E38(0x1F) ||
-                !func_800C6E38(0x2D)) {
+            if (!func_800C6E38(0x1F) || !func_800C6E38(0x2D)) {
                 func_80800EF8_gcsectionskip(0x1226, 0x6F);
                 func_808002A0_gcsectionskip(local_1, param_0);
                 return 0;
@@ -456,8 +447,7 @@ s32 gcsectionskip_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_
             break;
 
         case 31:
-            if (!func_800DA298(0x360) &&
-                !func_800DA298(0x3B)) {
+            if (!func_800DA298(0x360) && !func_800DA298(0x3B)) {
                 func_800F7E3C(local_1, 0x1566);
                 func_808002A0_gcsectionskip(local_1, param_0);
                 return 0;
@@ -483,8 +473,7 @@ s32 gcsectionskip_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_
         local_6 = _gcsectionDll_entrypoint_4(param_1);
         local_7 = local_6 == local_5 && local_2 == 0xD;
 
-        if (local_5 != local_6 ||
-            (local_5 == 0x1A && !local_7)) {
+        if (local_5 != local_6 || (local_5 == 0x1A && !local_7)) {
             func_80800374_gcsectionskip(local_1, param_0);
             return 0;
         }
@@ -498,35 +487,55 @@ s32 gcsectionskip_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_
     return 1;
 }
 
-int func_80800D3C_gcsectionskip(param_0, param_1) s32 *param_0; s32 *param_1;
+int func_80800D3C_gcsectionskip(param_0, param_1)
+s32 *param_0;
+s32 *param_1;
 {
-    if (func_800F5410(func_800F54E4()) != 1) return 0;
+    if (func_800F5410(func_800F54E4()) != 1)
+        return 0;
     switch (func_800EA05C()) {
-    case 0xAF:
-        if (func_800DA298(0x318)) { *param_0 = 0x142; *param_1 = 3; }
-        break;
-    case 0x142:
-        if (func_800DA298(0x318)) { *param_0 = 0xAF; *param_1 = 3; }
-        else *param_1 = 1;
-        break;
-    case 0x15A:
-        if (func_800DA298(0x319)) { *param_0 = 0x154; *param_1 = 3; }
-        else *param_1 = 1;
-        break;
-    case 0x154:
-        if (func_800DA298(0x319)) { *param_0 = 0x15A; *param_1 = 1; }
-        break;
-    case 0x15D:
-        if (func_800DA298(0x31A)) {
-            *param_0 = 0x15F;
-            if (func_800DA298(0x441)) *param_1 = 3;
-            else *param_1 = 1;
-        }
-        break;
-    case 0x15F:
-        if (func_800DA298(0x31A)) { *param_0 = 0x15D; *param_1 = 2; }
-        else *param_1 = 1;
-        break;
+        case 0xAF:
+            if (func_800DA298(0x318)) {
+                *param_0 = 0x142;
+                *param_1 = 3;
+            }
+            break;
+        case 0x142:
+            if (func_800DA298(0x318)) {
+                *param_0 = 0xAF;
+                *param_1 = 3;
+            } else
+                *param_1 = 1;
+            break;
+        case 0x15A:
+            if (func_800DA298(0x319)) {
+                *param_0 = 0x154;
+                *param_1 = 3;
+            } else
+                *param_1 = 1;
+            break;
+        case 0x154:
+            if (func_800DA298(0x319)) {
+                *param_0 = 0x15A;
+                *param_1 = 1;
+            }
+            break;
+        case 0x15D:
+            if (func_800DA298(0x31A)) {
+                *param_0 = 0x15F;
+                if (func_800DA298(0x441))
+                    *param_1 = 3;
+                else
+                    *param_1 = 1;
+            }
+            break;
+        case 0x15F:
+            if (func_800DA298(0x31A)) {
+                *param_0 = 0x15D;
+                *param_1 = 2;
+            } else
+                *param_1 = 1;
+            break;
     }
     return 1;
 }
@@ -536,6 +545,5 @@ void func_80800EF8_gcsectionskip(s32 param_0, s32 param_1)
     func_800C05B8(param_0, 0, 0, 0, 0, 0, param_1);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/sectionskip.data.s) is defined here in C.
- * Values are taken from the ROM. */
-u8 D_80801040_gcsectionskip[16] = { 0x0, 0x16, 0x23, 0x28, 0x17, 0x13, 0x24, 0x25, 0x15, 0x14, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80801040_gcsectionskip[16] = {0x0,  0x16, 0x23, 0x28, 0x17, 0x13, 0x24, 0x25,
+                                   0x15, 0x14, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0};

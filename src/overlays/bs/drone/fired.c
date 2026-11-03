@@ -45,11 +45,9 @@ void bsdronefired_entrypoint_2()
     func_80099AA8();
 }
 
-s32 bsdronefired_entrypoint_3(Actor *this){
-    if(_babounce_entrypoint_10(this) != 0){
+s32 bsdronefired_entrypoint_3(Actor *this)
+{
+    if (_babounce_entrypoint_10(this) != 0) {
         bs_setState(this, _badata_entrypoint_24(this));
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/drone/fired.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -1,4 +1,3 @@
-#include "common.h"
 #include "overlays/ba/playerstate.h"
 
 extern void func_8009BC08(PlayerState *, f32 *);
@@ -8,17 +7,19 @@ extern void func_800EF334(f32 *, f32);
 extern void func_800EF04C(f32 *, f32 *);
 extern void func_8009B98C(PlayerState *, f32 *);
 
-s32 bamoveledge_entrypoint_0() 
+s32 bamoveledge_entrypoint_0()
 {
     return 0x4;
 }
 
-void bamoveledge_entrypoint_1(s32 arg0) 
+void bamoveledge_entrypoint_1(s32 arg0)
 {
 }
-void bamoveledge_entrypoint_2(s32 arg0) 
+
+void bamoveledge_entrypoint_2(s32 arg0)
 {
 }
+
 void bamoveledge_entrypoint_3(PlayerState *param_0)
 {
     f32 local_0[3];
@@ -30,6 +31,3 @@ void bamoveledge_entrypoint_3(PlayerState *param_0)
     func_800EF04C(local_1, local_0);
     func_8009B98C(param_0, local_1);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/move/ledge.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -1,10 +1,9 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/die.h"
 
 extern s32 D_80800460_bskazdie[];
 
-void func_80800000_bskazdie(PlayerState *self) {
+void func_80800000_bskazdie(PlayerState *self)
+{
     f32 sp30 = 0.0f;
     while (sp30 < 360) {
         _badust_entrypoint_5(self, sp30, 230);
@@ -12,12 +11,12 @@ void func_80800000_bskazdie(PlayerState *self) {
     }
 }
 
-void bskazdie_entrypoint_0(PlayerState *self) {
+void bskazdie_entrypoint_0(PlayerState *self)
+{
     AnimCtrl *animCtrl;
     f32 targetYaw;
     f32 unk0[3];
     s32 unk1[3];
-
 
     animCtrl = baanim_getAnimCtrlPtr(self);
     _bskaz_entrypoint_1(self);
@@ -38,7 +37,8 @@ void bskazdie_entrypoint_0(PlayerState *self) {
     yaw_applyIdeal(self);
     baphysics_set_target_horizontal_velocity(self, self->unk16C);
     baphysics_set_target_yaw(self, targetYaw);
-    baphysics_set_horizontal_velocity(self, targetYaw, baphysics_get_target_horizontal_velocity(self));
+    baphysics_set_horizontal_velocity(self, targetYaw,
+                                      baphysics_get_target_horizontal_velocity(self));
     func_8008CA4C(self, BAANIM_UPDATE_1_NORMAL);
     yaw_setUpdateType(self, 1);
     func_8009D2D8(self, 2);
@@ -55,10 +55,9 @@ void bskazdie_entrypoint_0(PlayerState *self) {
     self->unk15C.word = 0;
 }
 
-void bskazdie_entrypoint_1(PlayerState *self) {
+void bskazdie_entrypoint_1(PlayerState *self)
+{
     AnimCtrl *animCtrl;
-    f32 temp_f0;
-    s32 temp_v0;
 
     animCtrl = baanim_getAnimCtrlPtr(self);
     _basudie_entrypoint_12(self);
@@ -91,7 +90,6 @@ void bskazdie_entrypoint_1(PlayerState *self) {
                 self->unk15C.word = 3;
                 self->unk16C = 0.0f;
             }
-            break;
     }
     if (_batimer_decrement(self, 0) != 0) {
         _basudie_entrypoint_0(self);
@@ -99,7 +97,8 @@ void bskazdie_entrypoint_1(PlayerState *self) {
     bs_setState(self, BS_STATE_0_INVALID);
 }
 
-void bskazdie_entrypoint_2(PlayerState *self) {
+void bskazdie_entrypoint_2(PlayerState *self)
+{
     baphysics_reset_gravity(self);
     func_8009BF5C(self, 0);
     baroll_setIdeal(self, 0);
@@ -108,12 +107,11 @@ void bskazdie_entrypoint_2(PlayerState *self) {
     _bskaz_entrypoint_2(self);
 }
 
-s32 bskazdie_entrypoint_3(s32 idx) {
+s32 bskazdie_entrypoint_3(s32 idx)
+{
     return D_80800460_bskazdie[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/die.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _basudie_entrypoint_11();
-s32 D_80800460_bskazdie[4] = { (u32)_bskazdie_entrypoint_2, (u32)_bskazdie_entrypoint_0, (u32)_bskazdie_entrypoint_1, (u32)_basudie_entrypoint_11 };
+s32 D_80800460_bskazdie[4] = {(u32) _bskazdie_entrypoint_2, (u32) _bskazdie_entrypoint_0,
+                              (u32) _bskazdie_entrypoint_1, (u32) _basudie_entrypoint_11};

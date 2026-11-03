@@ -1,16 +1,16 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/shoesspringjump.h"
 
 extern s32 D_80800270_bskazshoesspringjump[];
 
-void func_80800000_bskazshoesspringjump(PlayerState *self, s32 arg1) {
+void func_80800000_bskazshoesspringjump(PlayerState *self, s32 arg1)
+{
     switch (arg1) {
         case 0:
             baphysics_reset_gravity(self);
             break;
         case 1:
-            baanim_playForDuration_onceSmooth(self, ASSET_24C_ANIM_BSKAZSHOESSPRINGJUMP_UNKNOWN, 1.9);
+            baanim_playForDuration_onceSmooth(self, ASSET_24C_ANIM_BSKAZSHOESSPRINGJUMP_UNKNOWN,
+                                              1.9);
             func_8009FFD8(self, 1, 1, 3, 6);
             baphysics_set_target_horizontal_velocity(self, 0);
             baphysics_set_gravity(self, -2700);
@@ -20,26 +20,28 @@ void func_80800000_bskazshoesspringjump(PlayerState *self, s32 arg1) {
             baphysics_set_type(self, 6);
             baphysics_set_vertical_velocity(self, 3207);
             func_8009DEC0(self, 0x4598, 0.95, 1.05, 0x7FFF, 0x7FFF);
-            break;
     }
     self->unk15C.word = arg1;
 }
 
-void bskazshoesspringjump_entrypoint_0(PlayerState *self) {
+void bskazshoesspringjump_entrypoint_0(PlayerState *self)
+{
     func_80800000_bskazshoesspringjump(self, 0);
     _bashoes_entrypoint_6(self, 2);
     _bashoes_entrypoint_5(self, 0);
     _bskaz_entrypoint_2(self);
 }
 
-void bskazshoesspringjump_entrypoint_1(PlayerState *self) {
+void bskazshoesspringjump_entrypoint_1(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     _bashoes_entrypoint_5(self, 1);
     self->unk15C.word = 0;
     func_80800000_bskazshoesspringjump(self, 1);
 }
 
-void bskazshoesspringjump_entrypoint_2(PlayerState *self) {
+void bskazshoesspringjump_entrypoint_2(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -57,19 +59,16 @@ void bskazshoesspringjump_entrypoint_2(PlayerState *self) {
             if (baanim_isStopped(self) != 0) {
                 next_state = BS_STATE_DF;
             }
-            break;
     }
     bs_setState(self, next_state);
 }
 
-s32 bskazshoesspringjump_entrypoint_3(s32 idx) {
+s32 bskazshoesspringjump_entrypoint_3(s32 idx)
+{
     return D_80800270_bskazshoesspringjump[idx];
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/shoesspringjump.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
-extern void _bskazshoesspringjump_entrypoint_0();
-extern void _bskazshoesspringjump_entrypoint_1();
-extern void _bskazshoesspringjump_entrypoint_2();
+
 extern void func_80099B94();
-s32 D_80800270_bskazshoesspringjump[4] = { (u32)_bskazshoesspringjump_entrypoint_0, (u32)_bskazshoesspringjump_entrypoint_1, (u32)_bskazshoesspringjump_entrypoint_2, (u32)func_80099B94 };
+s32 D_80800270_bskazshoesspringjump[4] = {
+    (u32) _bskazshoesspringjump_entrypoint_0, (u32) _bskazshoesspringjump_entrypoint_1,
+    (u32) _bskazshoesspringjump_entrypoint_2, (u32) func_80099B94};

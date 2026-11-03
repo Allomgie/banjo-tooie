@@ -1,8 +1,8 @@
 #include "common.h"
 
-
-s32 func_80800000_fxfontstring(char *str){
-    while(*str){
+s32 func_80800000_fxfontstring(char *str)
+{
+    while (*str) {
         str++;
     }
     return str;
@@ -10,8 +10,8 @@ s32 func_80800000_fxfontstring(char *str){
 
 void fxfontstring_entrypoint_0(s32 param_0, s32 param_1)
 {
-  u8 *local_0;
- do { do { local_0 = func_80800000_fxfontstring(param_0); *local_0 = 0xFD; local_0++; if (param_1 != 0) { *local_0 = 0x68; } else { *local_0 = 0x6C; } local_0++; *local_0 = 0; } while (0); } while (0);
+    u8 *local_0;
+    do { do { local_0 = func_80800000_fxfontstring(param_0); *local_0 = 0xFD; local_0++; if (param_1 != 0) { *local_0 = 0x68; } else { *local_0 = 0x6C; } local_0++; *local_0 = 0; } while (0); } while (0);
 }
 
 void fxfontstring_entrypoint_1(u8 *param_0, s32 param_1)
@@ -79,15 +79,14 @@ u8 *fxfontstring_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param_3
 
 int fxfontstring_entrypoint_3(s32 param_0, u32 param_1, s32 param_2)
 {
-  u8 *local_0;
-  unsigned short new_var;
-  local_0 = func_80800000_fxfontstring(param_0);
-  new_var = param_1;
-  *(local_0++) = 0xFD;
-  *(local_0++) = 0x69;
-  *(local_0++) = param_1 & 0xFF;
- *(local_0++) = new_var >> 8; *(local_0++) = param_2 + 1; *(local_0++) = 0;
+    u8 *local_0;
+    unsigned short new_var;
+    local_0 = func_80800000_fxfontstring(param_0);
+    new_var = param_1;
+    *local_0++ = 0xFD;
+    *local_0++ = 0x69;
+    *local_0++ = param_1 & 0xFF;
+    *local_0++ = new_var >> 8;
+    *local_0++ = param_2 + 1;
+    *local_0++ = 0;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/fontstring.data.s) is defined here in C.
- * Values are taken from the ROM. */

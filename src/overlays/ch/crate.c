@@ -22,19 +22,24 @@ extern void func_8010A570(Actor *);
 extern void func_8010A624(Actor *);
 extern s16 D_8080053C_chcrate[];
 extern Actor *func_80108474(s32, f32 *, s32);
-typedef struct { u8 pad_0[0x70]; u32 pad_1 : 14; u32 local_0 : 1; u32 pad_2 : 17; } CrateSpawnFlags;
+typedef struct {
+    u8 pad_0[0x70];
+    u32 pad_1 : 14;
+    u32 local_0 : 1;
+    u32 pad_2 : 17;
+} CrateSpawnFlags;
 void func_80800104_chcrate();
 s32 func_80800380_chcrate();
 
 int chcrate_entrypoint_0()
 {
-  extern int D_80800410_chcrate[];
-  return (int)&D_80800410_chcrate;
+    extern int D_80800410_chcrate[];
+    return (int) &D_80800410_chcrate;
 }
 
 int chcrate_entrypoint_1()
 {
-  return (int)&D_80800458_chcrate;
+    return (int) &D_80800458_chcrate;
 }
 
 int *chcrate_entrypoint_2()
@@ -44,28 +49,28 @@ int *chcrate_entrypoint_2()
 
 int func_80800024_chcrate(s32 param_0)
 {
-  s32 new_var;
-  new_var = func_80800380_chcrate();
-  if ((new_var != 0) && (func_800DA298(new_var) != 0))
-  {
-    func_800FFAB0(param_0);
-  }
+    s32 new_var;
+    new_var = func_80800380_chcrate();
+    if ((new_var != 0) && (func_800DA298(new_var) != 0)) {
+        func_800FFAB0(param_0);
+    }
 }
 
 s32 func_80800064_chcrate(Actor *param_0, s32 param_1, void *param_2)
 {
     void *local_0;
     switch (param_1) {
-    case 0x40:
-        local_0 = (*(void * *)&param_2);
-        func_800EC398(local_0, (f32 *)param_0->actorData);
-        ((f32 *)param_0->actorData)[1] += func_800EC708(local_0);
-        _chexploder_entrypoint_4(param_0, (u8 *)*(void **)local_0 + 4, 4);
-        break;
-    case 0x90:
-        func_80800104_chcrate(param_0);
-        break;
-    default: return 0;
+        case 0x40:
+            local_0 = *(void **) &param_2;
+            func_800EC398(local_0, (f32 *) param_0->actorData);
+            ((f32 *) param_0->actorData)[1] += func_800EC708(local_0);
+            _chexploder_entrypoint_4(param_0, (u8 *) *(void **) local_0 + 4, 4);
+            break;
+        case 0x90:
+            func_80800104_chcrate(param_0);
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
@@ -87,13 +92,14 @@ void func_80800104_chcrate(param_0) Actor *param_0;
     func_801096C8(param_0, 0);
     _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808004E8_chcrate);
     _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808004F8_chcrate);
-    if ((s32)param_0->unk74_7 >= 0x33) {
+    if ((s32) param_0->unk74_7 >= 0x33) {
         local_2[0] = param_0->position[0];
         local_3[0] = param_0->position[1];
         local_4[0] = param_0->position[2];
         local_5[0] = param_0->rotation[1];
         local_6[0] = param_0->unk74_7;
-        _chbaddiesetup_entrypoint_5(_chcrate_entrypoint_3, local_2[0], local_3[0], local_4[0], local_5[0], local_6[0]);
+        _chbaddiesetup_entrypoint_5(_chcrate_entrypoint_3, local_2[0], local_3[0], local_4[0],
+                                    local_5[0], local_6[0]);
     } else if (local_1) {
         func_800DA544(local_1);
     }
@@ -135,26 +141,26 @@ void chcrate_entrypoint_3(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s3
             if (!func_800D0B68(6, 2)) {
                 func_800D1000(6, 2, local_0, 3, 0);
             }
-            break;
     }
     if (local_1 != NULL) {
-        ((CrateSpawnFlags *)local_1)->local_0 = 1;
+        ((CrateSpawnFlags *) local_1)->local_0 = 1;
     }
 }
 
-s32 func_80800380_chcrate(param_0) u16 *param_0;
+s32 func_80800380_chcrate(param_0)
+u16 *param_0;
 {
-  u32 local_0;
-  int new_var;
-  local_0 = ((u32) ((u16) param_0[0x3B])) >> 7;
-  if (((s32) local_0) < 0x32)
-  {
-    return (new_var = 0x31 - (((u32) ((u16) param_0[0x3B])) >> 7)) + 0xA40;
-  }
-  return 0;
+    u32 local_0;
+    int new_var;
+    local_0 = (u32) (u16) param_0[0x3B] >> 7;
+    if ((s32) local_0 < 0x32) {
+        return (new_var = 0x31 - ((u32) (u16) param_0[0x3B] >> 7)) + 0xA40;
+    }
+    return 0;
 }
 
-s16 func_808003AC_chcrate(s32 param_0) {
+s16 func_808003AC_chcrate(s32 param_0)
+{
     s32 local_0 = param_0 - 0x32;
     if (local_0 > 0) {
         return D_8080053C_chcrate[local_0];
@@ -162,20 +168,73 @@ s16 func_808003AC_chcrate(s32 param_0) {
     return 0;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/crate.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800410_chcrate -> int[], D_80800458_chcrate -> int[], D_808004A0_chcrate -> int[] */
 extern void func_80102EC0();
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
 extern void _bsbtrot_entrypoint_10();
-int D_80800410_chcrate[18] = { 0x2A01F0, 0x6A20001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000810, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800024_chcrate, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_10, (u32)func_80800064_chcrate, 0x0 };
-int D_80800458_chcrate[18] = { 0x33F03BC, 0x6FE0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000810, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800024_chcrate, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_10, (u32)func_80800064_chcrate, 0x0 };
-int D_808004A0_chcrate[18] = { 0x2A03C2, 0x7000001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000810, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800024_chcrate, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_10, (u32)func_80800064_chcrate, 0x0 };
-u8 D_808004E8_chcrate[16] = { 0x0, 0x13, 0x4, 0x7, 0x0, 0x16, 0x7D, 0x0, 0x0, 0xD, 0x0, 0xC0, 0x0, 0xD9, 0x0, 0x0 };
-u8 D_808004F8_chcrate[16] = { 0x0, 0x13, 0x4, 0xB, 0x0, 0x16, 0x6D, 0x60, 0x0, 0xD, 0x0, 0xD9, 0x0, 0xF3, 0x0, 0x0 };
-u8 D_80800508_chcrate[52] = { 0x0, 0x1D, 0x6, 0xA3, 0x0, 0x14, 0x0, 0x6, 0x0, 0x0, 0x0, 0x2D, 0x1, 0xC2, 0x2, 0x26, 0x0, 0x1B, 0xFD, 0xA8, 0xFE, 0x70, 0x0, 0x22, 0x0, 0x80, 0x0, 0x99, 0x0, 0x4C, 0x0, 0x66, 0x0, 0x1E, 0x0, 0x14, 0x0, 0x14, 0x0, 0x1F, 0x80, 0x80, 0x80, 0x0, 0x0, 0xD, 0x0, 0x64, 0x0, 0x0, 0x0, 0x0 };
-s16 D_8080053C_chcrate[10] = { 0x0, 0x21A, 0x22E, 0x3DB, 0x16A, 0x210, 0x211, 0x0, 0x4A6, 0x1E9 };
+int D_80800410_chcrate[18] = {0x2A01F0,
+                              0x6A20001,
+                              0x0,
+                              (u32) func_80102EC0,
+                              (u32) func_80105834,
+                              (u32) func_80101870,
+                              0x0,
+                              0x0,
+                              0x0,
+                              0x40000810,
+                              0x0,
+                              (u32) func_80108ED0,
+                              0x0,
+                              (u32) func_80800024_chcrate,
+                              (u32) func_80107C2C,
+                              (u32) _bsbtrot_entrypoint_10,
+                              (u32) func_80800064_chcrate,
+                              0x0};
+int D_80800458_chcrate[18] = {0x33F03BC,
+                              0x6FE0001,
+                              0x0,
+                              (u32) func_80102EC0,
+                              (u32) func_80105834,
+                              (u32) func_80101870,
+                              0x0,
+                              0x0,
+                              0x0,
+                              0x40000810,
+                              0x0,
+                              (u32) func_80108ED0,
+                              0x0,
+                              (u32) func_80800024_chcrate,
+                              (u32) func_80107C2C,
+                              (u32) _bsbtrot_entrypoint_10,
+                              (u32) func_80800064_chcrate,
+                              0x0};
+int D_808004A0_chcrate[18] = {0x2A03C2,
+                              0x7000001,
+                              0x0,
+                              (u32) func_80102EC0,
+                              (u32) func_80105834,
+                              (u32) func_80101870,
+                              0x0,
+                              0x0,
+                              0x0,
+                              0x40000810,
+                              0x0,
+                              (u32) func_80108ED0,
+                              0x0,
+                              (u32) func_80800024_chcrate,
+                              (u32) func_80107C2C,
+                              (u32) _bsbtrot_entrypoint_10,
+                              (u32) func_80800064_chcrate,
+                              0x0};
+u8 D_808004E8_chcrate[16] = {0x0, 0x13, 0x4, 0x7,  0x0, 0x16, 0x7D, 0x0,
+                             0x0, 0xD,  0x0, 0xC0, 0x0, 0xD9, 0x0,  0x0};
+u8 D_808004F8_chcrate[16] = {0x0, 0x13, 0x4, 0xB,  0x0, 0x16, 0x6D, 0x60,
+                             0x0, 0xD,  0x0, 0xD9, 0x0, 0xF3, 0x0,  0x0};
+u8 D_80800508_chcrate[52] = {0x0,  0x1D, 0x6,  0xA3, 0x0,  0x14, 0x0,  0x6,  0x0,  0x0,  0x0,
+                             0x2D, 0x1,  0xC2, 0x2,  0x26, 0x0,  0x1B, 0xFD, 0xA8, 0xFE, 0x70,
+                             0x0,  0x22, 0x0,  0x80, 0x0,  0x99, 0x0,  0x4C, 0x0,  0x66, 0x0,
+                             0x1E, 0x0,  0x14, 0x0,  0x14, 0x0,  0x1F, 0x80, 0x80, 0x80, 0x0,
+                             0x0,  0xD,  0x0,  0x64, 0x0,  0x0,  0x0,  0x0};
+s16 D_8080053C_chcrate[10] = {0x0, 0x21A, 0x22E, 0x3DB, 0x16A, 0x210, 0x211, 0x0, 0x4A6, 0x1E9};

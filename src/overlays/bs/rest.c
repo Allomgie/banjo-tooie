@@ -3,21 +3,24 @@
 extern enum bs_state_e bsrest_entrypoint_13(PlayerState *self);
 extern void bsrest_entrypoint_17(PlayerState *self, s32);
 
-static void func_80800000_bsrest(PlayerState *self) {
+static void func_80800000_bsrest(PlayerState *self)
+{
     baphysics_set_target_horizontal_velocity(self, 0.0f);
     if (player_isStable(self) != 0) {
         func_8009BA9C(self, NULL);
     }
 }
 
-static void func_8080003C_bsrest(PlayerState *self) {
+static void func_8080003C_bsrest(PlayerState *self)
+{
     if (baflag_isFalse(self, BA_FLAG_18) == 0) {
         baflag_clear(self, BA_FLAG_18);
         func_80110C2C(func_800A4CA8(self));
     }
 }
 
-static void func_80800080_bsrest(PlayerState *self) {
+static void func_80800080_bsrest(PlayerState *self)
+{
     f32 sp1C[3];
     PlayerState *sp18;
 
@@ -30,7 +33,8 @@ static void func_80800080_bsrest(PlayerState *self) {
     }
 }
 
-static void func_808000E4_bsrest(PlayerState *self) {
+static void func_808000E4_bsrest(PlayerState *self)
+{
     PlayerState *sp54;
     f32 sp48[3];
     f32 sp3C[3];
@@ -48,7 +52,8 @@ static void func_808000E4_bsrest(PlayerState *self) {
     }
 }
 
-void bsrest_entrypoint_0(PlayerState *self) {
+void bsrest_entrypoint_0(PlayerState *self)
+{
     f32 sp3C;
     f32 sp30[3];
     f32 sp24[3];
@@ -66,7 +71,8 @@ void bsrest_entrypoint_0(PlayerState *self) {
     }
 }
 
-static void func_8080020C_bsrest(PlayerState *self, enum asset_e animId, f32 duration) {
+static void func_8080020C_bsrest(PlayerState *self, enum asset_e animId, f32 duration)
+{
     AnimCtrl *animCtrl;
 
     animCtrl = baanim_getAnimCtrlPtr(self);
@@ -85,7 +91,6 @@ static void func_8080020C_bsrest(PlayerState *self, enum asset_e animId, f32 dur
             default:
                 baanim_playForDuration_onceSmooth(self, ASSET_5B_ANIM_BSREST_UNKNOWN, 0.5f);
                 anctrl_setPlaybackType(animCtrl, 1);
-                break;
         }
     } else {
         baanim_playForDuration_loopSmooth(self, animId, duration);
@@ -96,7 +101,8 @@ static void func_8080020C_bsrest(PlayerState *self, enum asset_e animId, f32 dur
     bsrest_entrypoint_0(self);
 }
 
-static s32 func_8080032C_bsrest(PlayerState *self) {
+static s32 func_8080032C_bsrest(PlayerState *self)
+{
     AnimCtrl *animCtrl;
     s32 sp20;
     enum asset_e animIndex;
@@ -124,19 +130,20 @@ static s32 func_8080032C_bsrest(PlayerState *self) {
             if (func_8009CC68(self) == 0) {
                 sp20 = 1;
             }
-            break;
     }
 
     return sp20;
 }
 
-static void func_808003FC_bsrest(PlayerState *self) {
+static void func_808003FC_bsrest(PlayerState *self)
+{
     if (func_800A0C20(self) != 0) {
         func_800A0D14(self, 0, 0.5f);
     }
 }
 
-void bsrest_entrypoint_1(PlayerState *self) {
+void bsrest_entrypoint_1(PlayerState *self)
+{
     enum asset_e assetId;
     f32 duration;
 
@@ -144,7 +151,8 @@ void bsrest_entrypoint_1(PlayerState *self) {
     func_8080020C_bsrest(self, assetId, duration);
 }
 
-void bsrest_entrypoint_2(PlayerState *self) {
+void bsrest_entrypoint_2(PlayerState *self)
+{
     enum bs_state_e next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -159,15 +167,18 @@ void bsrest_entrypoint_2(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void bsrest_entrypoint_3(PlayerState *self) {
+void bsrest_entrypoint_3(PlayerState *self)
+{
     func_808003FC_bsrest(self);
 }
 
-s32 bsrest_entrypoint_4(s32 idx) {
+s32 bsrest_entrypoint_4(s32 idx)
+{
     return D_80800910_bsrest[idx];
 }
 
-void bsrest_entrypoint_5(PlayerState *self) {
+void bsrest_entrypoint_5(PlayerState *self)
+{
     enum asset_e assetId;
     f32 duration;
 
@@ -175,7 +186,8 @@ void bsrest_entrypoint_5(PlayerState *self) {
     func_8080020C_bsrest(self, assetId, duration);
 }
 
-void bsrest_entrypoint_6(PlayerState *self) {
+void bsrest_entrypoint_6(PlayerState *self)
+{
     enum bs_state_e sp1C;
 
     sp1C = BS_STATE_0_INVALID;
@@ -190,15 +202,18 @@ void bsrest_entrypoint_6(PlayerState *self) {
     bs_setState(self, sp1C);
 }
 
-void bsrest_entrypoint_7(PlayerState *self) {
+void bsrest_entrypoint_7(PlayerState *self)
+{
     func_808003FC_bsrest(self);
 }
 
-s32 bsrest_entrypoint_8(s32 idx) {
+s32 bsrest_entrypoint_8(s32 idx)
+{
     return D_80800920_bsrest[idx];
 }
 
-void bsrest_entrypoint_9(PlayerState *self) {
+void bsrest_entrypoint_9(PlayerState *self)
+{
     enum asset_e assetId;
     f32 duration;
 
@@ -207,7 +222,8 @@ void bsrest_entrypoint_9(PlayerState *self) {
     func_80800080_bsrest(self);
 }
 
-void bsrest_entrypoint_10(PlayerState *self) {
+void bsrest_entrypoint_10(PlayerState *self)
+{
     enum bs_state_e next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -223,16 +239,19 @@ void bsrest_entrypoint_10(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void bsrest_entrypoint_11(PlayerState *self) {
+void bsrest_entrypoint_11(PlayerState *self)
+{
     func_808003FC_bsrest(self);
     func_8080003C_bsrest(self);
 }
 
-s32 bsrest_entrypoint_12(s32 idx) {
+s32 bsrest_entrypoint_12(s32 idx)
+{
     return D_80800930_bsrest[idx];
 }
 
-enum bs_state_e bsrest_entrypoint_13(PlayerState *self) {
+enum bs_state_e bsrest_entrypoint_13(PlayerState *self)
+{
     if (_bafpctrl_entrypoint_4(self) == 3) {
         return _badrone_entrypoint_24(self);
     }
@@ -240,13 +259,15 @@ enum bs_state_e bsrest_entrypoint_13(PlayerState *self) {
     return _badata_entrypoint_34(self);
 }
 
-void bsrest_entrypoint_14(PlayerState *self) {
+void bsrest_entrypoint_14(PlayerState *self)
+{
     func_8009BF5C(self, 0.0f);
     baroll_setIdeal(self, 0.0f);
     func_8080003C_bsrest(self);
 }
 
-void bsrest_entrypoint_15(PlayerState *self, s32 arg1) {
+void bsrest_entrypoint_15(PlayerState *self, s32 arg1)
+{
     f32 duration;
     enum asset_e assetId;
 
@@ -260,7 +281,6 @@ void bsrest_entrypoint_15(PlayerState *self, s32 arg1) {
         default:
         case 2:
             _badata_entrypoint_11(self, &assetId, &duration);
-            break;
     }
     if (assetId != 0) {
         baanim_playForDuration_loopSmooth(self, assetId, duration);
@@ -268,11 +288,13 @@ void bsrest_entrypoint_15(PlayerState *self, s32 arg1) {
     bsrest_entrypoint_17(self, arg1);
 }
 
-void bsrest_entrypoint_16(PlayerState *self) {
+void bsrest_entrypoint_16(PlayerState *self)
+{
     bsrest_entrypoint_15(self, 1);
 }
 
-void bsrest_entrypoint_17(PlayerState *self, s32 arg1) {
+void bsrest_entrypoint_17(PlayerState *self, s32 arg1)
+{
     func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 3, BA_PHYSICS_2_NORMAL);
     func_80800000_bsrest(self);
     func_80800080_bsrest(self);
@@ -281,11 +303,13 @@ void bsrest_entrypoint_17(PlayerState *self, s32 arg1) {
     }
 }
 
-void bsrest_entrypoint_18(PlayerState *self) {
+void bsrest_entrypoint_18(PlayerState *self)
+{
     bsrest_entrypoint_17(self, 1);
 }
 
-s32 bsrest_entrypoint_19(PlayerState *self, s32 arg1) {
+s32 bsrest_entrypoint_19(PlayerState *self, s32 arg1)
+{
     if (arg1 != 0) {
         bsrest_entrypoint_0(self);
         if (_badata_entrypoint_15(self) != 0) {
@@ -303,13 +327,15 @@ s32 bsrest_entrypoint_19(PlayerState *self, s32 arg1) {
     return 0;
 }
 
-s32 bsrest_entrypoint_20(PlayerState *self) {
+s32 bsrest_entrypoint_20(PlayerState *self)
+{
     return bsrest_entrypoint_19(self, 1);
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/rest.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+
 extern void func_80099B94();
-s32 D_80800910_bsrest[4] = { (u32)_bsrest_entrypoint_3, (u32)_bsrest_entrypoint_1, (u32)_bsrest_entrypoint_2, (u32)func_80099B94 };
-s32 D_80800920_bsrest[4] = { (u32)_bsrest_entrypoint_7, (u32)_bsrest_entrypoint_5, (u32)_bsrest_entrypoint_6, (u32)func_80099B94 };
-s32 D_80800930_bsrest[4] = { (u32)_bsrest_entrypoint_11, (u32)_bsrest_entrypoint_9, (u32)_bsrest_entrypoint_10, (u32)func_80099B94 };
+s32 D_80800910_bsrest[4] = {(u32) _bsrest_entrypoint_3, (u32) _bsrest_entrypoint_1,
+                            (u32) _bsrest_entrypoint_2, (u32) func_80099B94};
+s32 D_80800920_bsrest[4] = {(u32) _bsrest_entrypoint_7, (u32) _bsrest_entrypoint_5,
+                            (u32) _bsrest_entrypoint_6, (u32) func_80099B94};
+s32 D_80800930_bsrest[4] = {(u32) _bsrest_entrypoint_11, (u32) _bsrest_entrypoint_9,
+                            (u32) _bsrest_entrypoint_10, (u32) func_80099B94};

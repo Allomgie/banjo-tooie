@@ -4,14 +4,20 @@ extern void *D_808002A0_chfloater;
 extern void *func_80100094(Actor *, s32);
 extern f32 _mlwave_entrypoint_5(void *, f32, f32);
 extern f32 func_800136E4(f32);
-typedef struct { u8 pad_0[8]; u32 pad_1 : 26; u32 local_0 : 1; u32 local_1 : 1; u32 pad_2 : 4; } FloaterNodeFlags;
+typedef struct {
+    u8 pad_0[8];
+    u32 pad_1 : 26;
+    u32 local_0 : 1;
+    u32 local_1 : 1;
+    u32 pad_2 : 4;
+} FloaterNodeFlags;
 extern void func_80102FDC(Actor *, f32);
 extern void _mlwave_entrypoint_0(void *, f32, f32);
 extern void _mlwave_entrypoint_2(void *, f32, f32);
 
 int chfloater_entrypoint_0()
 {
-  return &D_808002A0_chfloater;
+    return &D_808002A0_chfloater;
 }
 
 void func_8080000C_chfloater(Actor *param_0)
@@ -22,9 +28,12 @@ void func_8080000C_chfloater(Actor *param_0)
     _mlwave_entrypoint_1(local_0);
     _mlwave_entrypoint_1(local_0 + 0x1C);
     _mlwave_entrypoint_1(local_0 + 0x38);
-    param_0->rotation[2] = func_800136E4(((f32 *)param_0->actorData)[4] + _mlwave_entrypoint_5(local_0 + 0x1C, -7.5f, 7.5f));
-    param_0->rotation[0] = func_800136E4(((f32 *)param_0->actorData)[5] + _mlwave_entrypoint_5(local_0, -3.0f, 3.0f));
-    param_0->position[1] = ((f32 *)param_0->actorData)[6] + _mlwave_entrypoint_5(local_0 + 0x38, -20.0f, 20.0f);
+    param_0->rotation[2] = func_800136E4(((f32 *) param_0->actorData)[4] +
+                                         _mlwave_entrypoint_5(local_0 + 0x1C, -7.5f, 7.5f));
+    param_0->rotation[0] =
+        func_800136E4(((f32 *) param_0->actorData)[5] + _mlwave_entrypoint_5(local_0, -3.0f, 3.0f));
+    param_0->position[1] =
+        ((f32 *) param_0->actorData)[6] + _mlwave_entrypoint_5(local_0 + 0x38, -20.0f, 20.0f);
 }
 
 void func_808000C0_chfloater(Actor *param_0)
@@ -38,15 +47,15 @@ void func_808000C0_chfloater(Actor *param_0)
     func_800EE904(local_3, param_0->position);
     if (_gccubesearch_entrypoint_16(local_3, &local_1, &local_2, 2, 500)) {
         local_5 = local_2;
-        ((FloaterNodeFlags *)local_5)->local_0 = 1;
-        ((FloaterNodeFlags *)local_5)->local_1 = 0;
+        ((FloaterNodeFlags *) local_5)->local_0 = 1;
+        ((FloaterNodeFlags *) local_5)->local_1 = 0;
         func_800EE88C(param_0->position, local_5 + 4);
-        param_0->rotation[1] = func_800136E4(2.0f * (f32)(u32)local_5[2]);
-        param_0->rotation[0] = func_800136E4(2.0f * (f32)(u32)local_5[3]);
-        ((f32 *)param_0->actorData)[5] = param_0->rotation[0];
-        ((f32 *)param_0->actorData)[4] = 0.0f;
-        ((f32 *)param_0->actorData)[6] = param_0->position[1];
-        func_80102FDC(param_0, (f32)(u32)local_5[0xA] * 0.01f);
+        param_0->rotation[1] = func_800136E4(2.0f * (f32) (u32) local_5[2]);
+        param_0->rotation[0] = func_800136E4(2.0f * (f32) (u32) local_5[3]);
+        ((f32 *) param_0->actorData)[5] = param_0->rotation[0];
+        ((f32 *) param_0->actorData)[4] = 0.0f;
+        ((f32 *) param_0->actorData)[6] = param_0->position[1];
+        func_80102FDC(param_0, (f32) (u32) local_5[0xA] * 0.01f);
         func_80103140(param_0, _gsproplookup_entrypoint_0(local_5) & 0xFFFF, 0);
         _mlwave_entrypoint_0(local_0, 100.0f, 30.0f);
         local_5 = local_0 + 0x1C;
@@ -60,11 +69,26 @@ void func_808000C0_chfloater(Actor *param_0)
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/floater.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void func_80102EC0();
 extern void func_80101870();
 extern void func_80107C2C();
-void *D_808002A0_chfloater = (void *)0x02AB0349;
-static u32 D_808002A0_chfloater_rest[19] = { 0xFFFF0001, 0x0, (u32)func_8080000C_chfloater, (u32)func_80102EC0, (u32)func_80101870, 0x28A0000, 0x0, 0x0, 0x4804, 0x0, 0x0, 0x540000, (u32)func_808000C0_chfloater, (u32)func_80107C2C, 0x80004412, 0x0, 0x0, 0x0, 0x0 };
+void *D_808002A0_chfloater = (void *) 0x02AB0349;
+static u32 D_808002A0_chfloater_rest[19] = {0xFFFF0001,
+                                            0x0,
+                                            (u32) func_8080000C_chfloater,
+                                            (u32) func_80102EC0,
+                                            (u32) func_80101870,
+                                            0x28A0000,
+                                            0x0,
+                                            0x0,
+                                            0x4804,
+                                            0x0,
+                                            0x0,
+                                            0x540000,
+                                            (u32) func_808000C0_chfloater,
+                                            (u32) func_80107C2C,
+                                            0x80004412,
+                                            0x0,
+                                            0x0,
+                                            0x0,
+                                            0x0};

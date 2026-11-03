@@ -28,27 +28,23 @@ void idflashbaddie_entrypoint_0(s32 param_0, Vtx *param_1, Vtx *param_2, s32 par
     }
 }
 
-void idflashbaddie_entrypoint_1(s32 arg0) 
+void idflashbaddie_entrypoint_1(s32 arg0)
 {
 }
-s32 idflashbaddie_entrypoint_2(f32 *param_0, s32 param_1, s32 param_2, s32 param_3){
+
+s32 idflashbaddie_entrypoint_2(f32 *param_0, s32 param_1, s32 param_2, s32 param_3)
+{
     *param_0 = 0.0f;
 }
 
 void idflashbaddie_entrypoint_3(f32 *param_0, s32 param_1, s32 param_2)
 {
-  s32 temp_v0;
-  temp_v0 = func_80106520(param_2 - 0x64);
-  if (temp_v0)
-  {
-    *param_0 = _idflasha_entrypoint_1(temp_v0) * 0.003921568859f;
-  }
-  else
-  {
-    *param_0 = 0.0f;
-  }
-  _glid_entrypoint_0(param_1, param_2, &_idflashbaddie_entrypoint_0, param_0);
+    s32 temp_v0;
+    temp_v0 = func_80106520(param_2 - 0x64);
+    if (temp_v0) {
+        *param_0 = _idflasha_entrypoint_1(temp_v0) * 0.003921568859f;
+    } else {
+        *param_0 = 0.0f;
+    }
+    _glid_entrypoint_0(param_1, param_2, &_idflashbaddie_entrypoint_0, param_0);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/flashbaddie.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -1,19 +1,9 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/flamethrower.h"
-#include "overlays/ba/playerstate.h"
-#include "core2/anctrl.h"
-
-extern AnimCtrl *baanim_getAnimCtrlPtr(PlayerState *);
-extern void baanim_playForDuration_onceSmooth(PlayerState *, AssetId, f32);
-extern void baanim_setEnd(PlayerState *, f32);
-extern void baphysics_set_target_horizontal_velocity(PlayerState *, f32);
-extern void yaw_setVelocityBounded(PlayerState *, f32, f32);
-extern void _batimer_set(PlayerState *, s32, f32);
 
 extern s32 D_808003B0_bskazflamethrower[];
 
-void bskazflamethrower_entrypoint_0(PlayerState *self, f32 arg1[3], f32 arg2[3]) {
+void bskazflamethrower_entrypoint_0(PlayerState *self, f32 arg1[3], f32 arg2[3])
+{
     f32 unk0[3];
     s32 pad2;
     f32 unk1;
@@ -56,20 +46,22 @@ void func_80800094_bskazflamethrower(PlayerState *param_0, s32 param_1)
             break;
         case 0:
             _baflamethrower_entrypoint_1(param_0);
-            break;
     }
 }
 
-void bskazflamethrower_entrypoint_1(PlayerState *self) {
+void bskazflamethrower_entrypoint_1(PlayerState *self)
+{
     func_80800094_bskazflamethrower(self, 0);
 }
 
-void bskazflamethrower_entrypoint_2(PlayerState *self) {
+void bskazflamethrower_entrypoint_2(PlayerState *self)
+{
     self->unk15C.word = 0;
     func_80800094_bskazflamethrower(self, 1);
 }
 
-void bskazflamethrower_entrypoint_3(PlayerState *self) {
+void bskazflamethrower_entrypoint_3(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -100,20 +92,17 @@ void bskazflamethrower_entrypoint_3(PlayerState *self) {
             if (baanim_getTimer(self) > 0.7f) {
                 next_state = _bskazstill_entrypoint_4(self, next_state);
             }
-            break;
     }
     _baflamethrower_entrypoint_5(self);
     bs_setState(self, next_state);
 }
 
-s32 bskazflamethrower_entrypoint_4(s32 idx) {
+s32 bskazflamethrower_entrypoint_4(s32 idx)
+{
     return D_808003B0_bskazflamethrower[idx];
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/flamethrower.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
-extern void _bskazflamethrower_entrypoint_1();
-extern void _bskazflamethrower_entrypoint_2();
-extern void _bskazflamethrower_entrypoint_3();
+
 extern void func_80099B94();
-s32 D_808003B0_bskazflamethrower[4] = { (u32)_bskazflamethrower_entrypoint_1, (u32)_bskazflamethrower_entrypoint_2, (u32)_bskazflamethrower_entrypoint_3, (u32)func_80099B94 };
+s32 D_808003B0_bskazflamethrower[4] = {(u32) _bskazflamethrower_entrypoint_1,
+                                       (u32) _bskazflamethrower_entrypoint_2,
+                                       (u32) _bskazflamethrower_entrypoint_3, (u32) func_80099B94};

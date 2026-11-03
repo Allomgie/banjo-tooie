@@ -11,36 +11,32 @@ extern void anctrl_setDuration(void *, f32);
 
 void func_80800000_chjigsawdance(Actor *param_0)
 {
-  if (func_800CFA70((s32)param_0->unk50, 1) != -1) {
-    param_0->unk6C_0 = func_800C8A98();
-    func_800CF9E4((s32)param_0->unk50, 1, param_0->unk6C_0);
-    func_800C8CB8(param_0->unk6C_0, (u8 *)param_0 + 4);
-    return;
-  }
-  param_0->unk6C_0 = 0;
+    if (func_800CFA70((s32) param_0->unk50, 1) != -1) {
+        param_0->unk6C_0 = func_800C8A98();
+        func_800CF9E4((s32) param_0->unk50, 1, param_0->unk6C_0);
+        func_800C8CB8(param_0->unk6C_0, (u8 *) param_0 + 4);
+        return;
+    }
+    param_0->unk6C_0 = 0;
 }
 
 int func_808000AC_chjigsawdance(Actor *param_0)
 {
-  Actor *new_var;
-  s32 local_0;
-  s32 new_var5;
-  char *new_var4;
-  s32 new_var2;
-  s32 new_var3;
-  new_var5 = *((s32 *) ((new_var4 = (char *) param_0) + 0x6C));
-  local_0 = new_var5 & 0x1FF;
-  new_var2 = (unsigned short) local_0;
-  new_var3 = new_var2;
-  if (new_var3 != 0)
-  {
-    func_800C8B84(new_var3);
-    new_var = param_0;
-    *((u16 *) (((char *) new_var) + 0x6E)) &= 0xFE00;
-  }
-  if (!param_0)
-  {
-  }
+    Actor *new_var;
+    s32 local_0;
+    s32 new_var5;
+    char *new_var4;
+    s32 new_var2;
+    s32 new_var3;
+    new_var5 = *(s32 *) ((new_var4 = (char *) param_0) + 0x6C);
+    local_0 = new_var5 & 0x1FF;
+    new_var2 = (unsigned short) local_0;
+    new_var3 = new_var2;
+    if (new_var3 != 0) {
+        func_800C8B84(new_var3);
+        new_var = param_0;
+        *(u16 *) ((char *) new_var + 0x6E) &= 0xFE00;
+    }
 }
 
 void func_808000F0_chjigsawdance(Actor *param_0)
@@ -89,11 +85,11 @@ void func_808000F0_chjigsawdance(Actor *param_0)
             anctrl_setStart(local_2, anctrl_getAnimTimer(local_0));
             anctrl_setDuration(local_2, 1000.0f);
             anctrl_start(local_2);
-            break;
     }
 }
 
-s32 chjigsawdance_entrypoint_0(Actor *this, s32 param_1){
+s32 chjigsawdance_entrypoint_0(Actor *this, s32 param_1)
+{
     this->unk50 = param_1;
 }
 
@@ -125,11 +121,10 @@ void chjigsawdance_entrypoint_1(Actor *param_0, s32 param_1)
             break;
         case 5:
             if (param_0->unk6C_0) {
-                func_800C8B84((s32)param_0->unk6C_0);
+                func_800C8B84((s32) param_0->unk6C_0);
                 param_0->unk6C_0 = 0;
             }
             func_800FFA88(param_0->unk0);
-            break;
     }
 }
 
@@ -138,12 +133,26 @@ int *chjigsawdance_entrypoint_2()
     return &D_80800488_chjigsawdance;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jigsaw/dance.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800488_chjigsawdance -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
-u32 D_80800460_chjigsawdance[10] = { 0x0, 0x0, 0x40000000, 0x0, 0x3FC00000, 0x760000, 0x3FC00000, 0x760000, 0x40A00000, 0x300000 };
-int D_80800488_chjigsawdance[18] = { 0x68022C, 0x60F0001, (u32)&D_80800460_chjigsawdance, (u32)func_808000F0_chjigsawdance, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, (u32)func_808000AC_chjigsawdance, 0x0, 0x0, (u32)func_80800000_chjigsawdance, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+u32 D_80800460_chjigsawdance[10] = {0x0,      0x0,        0x40000000, 0x0,        0x3FC00000,
+                                    0x760000, 0x3FC00000, 0x760000,   0x40A00000, 0x300000};
+int D_80800488_chjigsawdance[18] = {0x68022C,
+                                    0x60F0001,
+                                    (u32) &D_80800460_chjigsawdance,
+                                    (u32) func_808000F0_chjigsawdance,
+                                    (u32) func_80105834,
+                                    (u32) func_80101870,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x4,
+                                    (u32) func_808000AC_chjigsawdance,
+                                    0x0,
+                                    0x0,
+                                    (u32) func_80800000_chjigsawdance,
+                                    (u32) func_80107C2C,
+                                    -0x7FFFFFFE,
+                                    0x0,
+                                    0x0};

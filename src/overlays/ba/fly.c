@@ -44,7 +44,7 @@ extern void func_800C3BDC(u8);
 extern void _bamotor_entrypoint_1(PlayerState *, f32, f32, f32);
 extern void func_8009BFE4(PlayerState *, f32, f32);
 
-s32 bafly_entrypoint_0() 
+s32 bafly_entrypoint_0()
 {
     return 0x10;
 }
@@ -78,50 +78,52 @@ int bafly_entrypoint_2(Actor *param_0)
 
 s32 bafly_entrypoint_3(s32 param_0)
 {
-    return ((u8 *)(*(u8 **)(param_0 + 0x8c)))[8];
+    return ((u8 *) *(u8 **) (param_0 + 0x8c))[8];
 }
 
 void bafly_entrypoint_4(u8 *param_0)
 {
-  short local_0;
-  local_0 = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) param_0) + 0x8C)))) + 9));
-  if (local_0 != 0)
-  {
-    func_800C2FDC(local_0 & 0xFF, local_0, param_0);
-    *((s8 *) (((s8 *) (*((u8 **) (((s8 *) param_0) + 0x8C)))) + 9)) = 0;
-  }
+    short local_0;
+    local_0 = *(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9);
+    if (local_0 != 0) {
+        func_800C2FDC(local_0 & 0xFF, local_0, param_0);
+        *(s8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9) = 0;
+    }
 }
 
-void bafly_entrypoint_5(u8 *param_0) {
+void bafly_entrypoint_5(u8 *param_0)
+{
     s32 local_0;
 
     if (_gcstatusDll_entrypoint_11() >= 2) {
-        (*(u8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x8C)))) + (9))) = 0U;
+        *(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9) = 0U;
     } else {
-        (*(u8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x8C)))) + (9))) = func_800C2E04();
-        func_800C3418((*(u8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x8C)))) + (9))), 0);
+        *(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9) = func_800C2E04();
+        func_800C3418(*(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9), 0);
     }
-    (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x8C)))) + (4))) = 1.0f;
-    (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x8C)))) + (0))) = 0.0f;
-    (*(s8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x8C)))) + (8))) = 0;
+    *(f32 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 4) = 1.0f;
+    *(f32 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 0) = 0.0f;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 8) = 0;
     local_0 = func_800EA05C();
     if ((local_0 != 0xE4) && (local_0 != 0x17B)) {
-        (*(s8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x8C)))) + (0xE))) = 0;
+        *(s8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 0xE) = 0;
         return;
     }
-    (*(s8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x8C)))) + (0xE))) = 1;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 0xE) = 1;
 }
 
-void bafly_entrypoint_6(s32 param_0, f32 param_1) {
-    *(f32*)(*(s32*)(param_0 + 0x8c) + 0x0) = param_1;
+void bafly_entrypoint_6(s32 param_0, f32 param_1)
+{
+    *(f32 *) (*(s32 *) (param_0 + 0x8c) + 0x0) = param_1;
 }
 
 void bafly_entrypoint_7(void *arg, s32 v)
 {
-    ((s8 *)(*(void **)((char *)arg + 0x8C)))[8] = v;
+    ((s8 *) *(void **) ((char *) arg + 0x8C))[8] = v;
 }
 
-void bafly_entrypoint_8(PlayerState *param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5, f32 param_6, f32 param_7)
+void bafly_entrypoint_8(PlayerState *param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4,
+                        f32 param_5, f32 param_6, f32 param_7)
 {
     f32 local_3[3];
     f32 local_0;
@@ -134,17 +136,21 @@ void bafly_entrypoint_8(PlayerState *param_0, f32 param_1, f32 param_2, f32 para
         func_8009BA9C(param_0, 0);
         local_1 = 0.0f;
     } else if (local_0 <= param_2) {
-        baphysics_set_terminal_velocity(param_0, func_800F10B4(local_0, param_2 - 20.0f, param_2, param_5, param_7));
-        baphysics_set_gravity(param_0, func_800F10B4(local_0, param_2 - 20.0f, param_2, param_4, param_6));
+        baphysics_set_terminal_velocity(
+            param_0, func_800F10B4(local_0, param_2 - 20.0f, param_2, param_5, param_7));
+        baphysics_set_gravity(param_0,
+                              func_800F10B4(local_0, param_2 - 20.0f, param_2, param_4, param_6));
         local_1 = func_800F10B4(local_0, param_2 - 20.0f, param_2, param_3, param_3 / 10.0f);
         bafly_entrypoint_6(param_0, func_800F10B4(local_0, param_2 - 20.0f, param_2, 0.0f, 0.35f));
     } else {
-        baphysics_set_terminal_velocity(param_0, func_800F10B4(local_0, param_1, param_1 + 10.0f, -399.99f, param_5));
+        baphysics_set_terminal_velocity(
+            param_0, func_800F10B4(local_0, param_1, param_1 + 10.0f, -399.99f, param_5));
         local_1 = func_800F10B4(local_0, param_1, param_1 + 40.0f, 0.0f, param_3);
         bafly_entrypoint_6(param_0, func_800F10B4(local_0, param_1, param_1 + 40.0f, -0.25f, 0.0f));
     }
     func_80096394(param_0, local_3);
-    if (func_8009650C(param_0) && local_3[1] > -1.0f) local_1 = 0.0f;
+    if (func_8009650C(param_0) && local_3[1] > -1.0f)
+        local_1 = 0.0f;
     baphysics_set_target_yaw(param_0, yaw_get(param_0));
     baphysics_set_target_horizontal_velocity(param_0, local_1);
 }
@@ -189,21 +195,24 @@ void bafly_entrypoint_11(PlayerState *param_0)
     f32 local_1;
     f32 local_0[3];
     local_1 = 1.2f;
-    if ((*(u8 **)((u8 *)param_0 + 0x8C))[8]) local_1 += 0.4f;
-    func_80110818((void *)func_800A4CA8(param_0), local_0);
+    if ((*(u8 **) ((u8 *) param_0 + 0x8C))[8])
+        local_1 += 0.4f;
+    func_80110818((void *) func_800A4CA8(param_0), local_0);
     local_2 = func_800F1DCC(local_0[1] + 180.0f, yaw_get(param_0));
     local_1 -= func_800F10B4(mlAbsF(local_2), 0.0f, 50.0f, 0.0f, 0.4f);
-    local_1 += *(f32 *)*(u8 **)((u8 *)param_0 + 0x8C);
-    local_2 = local_1 - *(f32 *)(*(u8 **)((u8 *)param_0 + 0x8C) + 4);
+    local_1 += *(f32 *) *(u8 **) ((u8 *) param_0 + 0x8C);
+    local_2 = local_1 - *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x8C) + 4);
     if (mlAbsF(local_2) > 0.01f) {
-        if (local_2 > 0.0f) local_2 = 0.01f;
-        else local_2 = -0.01f;
+        if (local_2 > 0.0f)
+            local_2 = 0.01f;
+        else
+            local_2 = -0.01f;
     }
-    *(f32 *)(*(u8 **)((u8 *)param_0 + 0x8C) + 4) += local_2;
-    local_3 = (*(u8 **)((u8 *)param_0 + 0x8C))[9];
+    *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x8C) + 4) += local_2;
+    local_3 = (*(u8 **) ((u8 *) param_0 + 0x8C))[9];
     if (local_3) {
-        func_800C31DC(local_3, *(f32 *)(*(u8 **)((u8 *)param_0 + 0x8C) + 4));
-        func_800C31DC(local_3, *(f32 *)(*(u8 **)((u8 *)param_0 + 0x8C) + 4));
+        func_800C31DC(local_3, *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x8C) + 4));
+        func_800C31DC(local_3, *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x8C) + 4));
         func_800C3058(local_3, 6000);
         if (!func_800C3D78(local_3)) {
             func_800C301C(local_3, 0x4A3);
@@ -213,9 +222,10 @@ void bafly_entrypoint_11(PlayerState *param_0)
     }
 }
 
-s32 bafly_entrypoint_12(u8 *param_0) {
+s32 bafly_entrypoint_12(u8 *param_0)
+{
     s32 local_0;
-    if ((*(u8 **)(param_0 + 0x8C))[0xE]) {
+    if ((*(u8 **) (param_0 + 0x8C))[0xE]) {
         return 1;
     }
     _suinv_entrypoint_0(&local_0, 0, 1, 0x46, 1);
@@ -250,7 +260,8 @@ void bafly_entrypoint_13(PlayerState *param_0, s32 param_1, s32 param_2, f32 par
     yaw_applyIdeal(param_0);
     baphysics_set_target_horizontal_velocity(param_0, local_4);
     baphysics_set_target_yaw(param_0, local_2);
-    baphysics_set_horizontal_velocity(param_0, local_2, baphysics_get_target_horizontal_velocity(param_0));
+    baphysics_set_horizontal_velocity(param_0, local_2,
+                                      baphysics_get_target_horizontal_velocity(param_0));
     func_8009FFD8(param_0, 1, 1, 2, 3);
     baphysics_set_vertical_velocity(param_0, 800.0f);
     baphysics_set_gravity(param_0, local_3);
@@ -262,24 +273,22 @@ void bafly_entrypoint_13(PlayerState *param_0, s32 param_1, s32 param_2, f32 par
 
 int bafly_entrypoint_14(Actor *param_0, s32 param_1, s32 param_2)
 {
-  s32 local_0 = 0;
-  if (anctrl_isStopped(baanim_getAnimCtrlPtr(param_0)))
-  {
-    local_0 = param_1;
-  }
-  if (player_isStable(param_0))
-  {
-    local_0 = param_2;
-  }
-  bs_setState(param_0, local_0);
+    s32 local_0 = 0;
+    if (anctrl_isStopped(baanim_getAnimCtrlPtr(param_0))) {
+        local_0 = param_1;
+    }
+    if (player_isStable(param_0)) {
+        local_0 = param_2;
+    }
+    bs_setState(param_0, local_0);
 }
 
 int bafly_entrypoint_15(Actor *param_0)
 {
-  func_8009BC34(param_0);
-  func_8008E95C(param_0);
-  func_8009BD88(param_0);
-  func_800A4E30(param_0);
+    func_8009BC34(param_0);
+    func_8008E95C(param_0);
+    func_8009BD88(param_0);
+    func_800A4E30(param_0);
 }
 
 void bafly_entrypoint_16(PlayerState *param_0, s32 param_1, f32 param_2)
@@ -298,7 +307,8 @@ void bafly_entrypoint_16(PlayerState *param_0, s32 param_1, f32 param_2)
     yaw_applyIdeal(param_0);
     baphysics_set_target_horizontal_velocity(param_0, 1300.0f);
     baphysics_set_target_yaw(param_0, local_0);
-    baphysics_set_horizontal_velocity(param_0, local_0, baphysics_get_target_horizontal_velocity(param_0));
+    baphysics_set_horizontal_velocity(param_0, local_0,
+                                      baphysics_get_target_horizontal_velocity(param_0));
     func_8009FFD8(param_0, 1, 1, 2, 3);
     baphysics_set_vertical_velocity(param_0, 400.0f);
     baphysics_set_gravity(param_0, -1800.0f);
@@ -312,7 +322,8 @@ void bafly_entrypoint_17(PlayerState *param_0, s32 param_1, s32 param_2, s32 *pa
     s32 local_0 = 0;
     AnimCtrl *local_1;
     local_1 = baanim_getAnimCtrlPtr(param_0);
-    if (player_isStable(param_0)) local_0 = param_2;
+    if (player_isStable(param_0))
+        local_0 = param_2;
     if (anctrl_isStopped(local_1)) {
         if (func_8008DD04(param_0) || func_8009650C(param_0)) {
             *param_3 = 1;
@@ -327,7 +338,9 @@ void bafly_entrypoint_18(s32 arg0)
     baphysics_reset_gravity();
     func_8008E95C(arg0);
 }
-void bafly_entrypoint_19(s32 param_0) {
+
+void bafly_entrypoint_19(s32 param_0)
+{
     if (_bafpctrl_entrypoint_4() != 3) {
         if (baflag_isTrue(param_0, 0x2F) != 0) {
             _bafpctrl_entrypoint_14(param_0, 3);
@@ -360,6 +373,3 @@ void bafly_entrypoint_21(PlayerState *param_0)
     local_1 = func_800F10B4(local_0, 0.1f, 1.0f, local_0 * local_0, 1.0f);
     func_8009BFE4(param_0, 1000.0f * local_1, 2.2f);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/fly.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -1,6 +1,5 @@
 #include "common.h"
 #include "overlays/ba/playerstate.h"
-#include "overlays/ba/playerstate.h"
 
 extern s32 bastick_getZone(PlayerState *);
 extern f32 bastick_getZonePosition(PlayerState *);
@@ -31,10 +30,14 @@ extern s32 D_80800D10_bsbanshack[];
 
 s32 func_80800000_bsbanshack(PlayerState *param_0, s32 param_1)
 {
-    if (bakey_pressed(param_0, 8)) param_1 = 0x16E;
-    if (func_8008E148(param_0)) param_1 = 1;
-    if (func_8008E260(param_0)) param_1 = 0x3D;
-    if (bakey_released(param_0, 1)) param_1 = 0x16B;
+    if (bakey_pressed(param_0, 8))
+        param_1 = 0x16E;
+    if (func_8008E148(param_0))
+        param_1 = 1;
+    if (func_8008E260(param_0))
+        param_1 = 0x3D;
+    if (bakey_released(param_0, 1))
+        param_1 = 0x16B;
     return param_1;
 }
 
@@ -70,63 +73,53 @@ void func_80800100_bsbanshack(PlayerState *param_0)
     }
 }
 
-int func_80800164_bsbanshack(param_0) Actor *param_0;
+int func_80800164_bsbanshack(param_0)
+Actor *param_0;
 {
-  if (func_8009E74C(param_0, 0x13))
-  {
-    if (_babackpack_get_state(param_0) != 5)
-    {
-      _babackpack_set_state(param_0, 5);
+    if (func_8009E74C(param_0, 0x13)) {
+        if (_babackpack_get_state(param_0) != 5) {
+            _babackpack_set_state(param_0, 5);
+        }
+    } else {
+        if (_babackpack_get_state(param_0) != 1) {
+            _babackpack_set_state(param_0, 1);
+        }
+        func_800A0CD0(param_0, 1);
+        if (bs_getCurrentState(param_0) != 0x16B) {
+            baanim_playForDuration_once(param_0, 0x6F, 0x40B00000);
+            func_8008CA98(param_0);
+        }
+        func_80095A40(param_0);
+        bastick_popZone(param_0);
     }
-  }
-  else
-  {
-    if (_babackpack_get_state(param_0) != 1)
-    {
-      _babackpack_set_state(param_0, 1);
-    }
-    func_800A0CD0(param_0, 1);
-    if (bs_getCurrentState(param_0) != 0x16B)
-    {
-      baanim_playForDuration_once(param_0, 0x6F, 0x40B00000);
-      func_8008CA98(param_0);
-    }
-    func_80095A40(param_0);
-    bastick_popZone(param_0);
-  }
 }
 
-int func_8080021C_bsbanshack(param_0) s32 param_0;
+int func_8080021C_bsbanshack(param_0)
+s32 param_0;
 {
-  s32 local_0;
-  local_0 = param_0 | 0;
-  if (!func_8009E77C(local_0, 0x13))
-  {
-    _babackpack_set_state(local_0, 5);
-    func_800A0CD0(local_0, 0);
-    bastick_pushZone(local_0);
-    bastick_setZoneMax(local_0, 0, 0x3DF5C28F);
-    bastick_setZoneMax(local_0, 1, 0x3F800000);
-    func_800959C8(local_0, 0x42540000, 0x41c80000);
-    func_8009590C(local_0, 0x42540000);
-  }
+    s32 local_0;
+    local_0 = param_0 | 0;
+    if (!func_8009E77C(local_0, 0x13)) {
+        _babackpack_set_state(local_0, 5);
+        func_800A0CD0(local_0, 0);
+        bastick_pushZone(local_0);
+        bastick_setZoneMax(local_0, 0, 0x3DF5C28F);
+        bastick_setZoneMax(local_0, 1, 0x3F800000);
+        func_800959C8(local_0, 0x42540000, 0x41c80000);
+        func_8009590C(local_0, 0x42540000);
+    }
 }
 
 int func_808002AC_bsbanshack(u8 *param_0)
 {
-  if (param_0[0x15D])
-  {
-    if ((param_0 && param_0) && param_0)
-    {
+    if (param_0[0x15D]) {
+        if ((param_0 && param_0) && param_0) {
+        }
+        func_80800164_bsbanshack();
+    } else if (_babackpack_get_state() != 1) {
+        func_800A0CD0(param_0, 1);
+        _babackpack_set_state(param_0, 1);
     }
-    func_80800164_bsbanshack();
-  }
-  else
-    if (_babackpack_get_state() != 1)
-  {
-    func_800A0CD0(param_0, 1);
-    _babackpack_set_state(param_0, 1);
-  }
 }
 
 void func_8080030C_bsbanshack(PlayerState *param_0)
@@ -158,7 +151,7 @@ void func_8080037C_bsbanshack(PlayerState *param_0)
 
 int bsbanshack_entrypoint_0(s32 param_0)
 {
-  return D_80800CB0_bsbanshack[param_0];
+    return D_80800CB0_bsbanshack[param_0];
 }
 
 void func_80800430_bsbanshack()
@@ -168,17 +161,16 @@ void func_80800430_bsbanshack()
 
 void func_80800450_bsbanshack(Actor *param_0)
 {
-  Actor *new_var;
-  s32 local_0;
-  new_var = param_0;
-  func_8080021C_bsbanshack();
-  baanim_playForDuration_onceSmooth(new_var, 0x295, 1.4f);
-  local_0 = 2;
-  func_8009FFD8(new_var, 1, 1, 1, 2);
-  baphysics_set_target_horizontal_velocity(new_var, 0x0 & 0xFFFFFFFFFFFFFFFF);
+    Actor *new_var;
+    new_var = param_0;
+    func_8080021C_bsbanshack();
+    baanim_playForDuration_onceSmooth(new_var, 0x295, 1.4f);
+    func_8009FFD8(new_var, 1, 1, 1, 2);
+    baphysics_set_target_horizontal_velocity(new_var, 0x0 & 0xFFFFFFFFFFFFFFFF);
 }
 
-void func_808004AC_bsbanshack(s32 param_0) {
+void func_808004AC_bsbanshack(s32 param_0)
+{
     s32 local_0;
     s32 local_1;
     s32 local_2;
@@ -207,59 +199,57 @@ void func_808004AC_bsbanshack(s32 param_0) {
 
 int bsbanshack_entrypoint_1(s32 param_0)
 {
-  return D_80800CC0_bsbanshack[param_0];
+    return D_80800CC0_bsbanshack[param_0];
 }
 
 void func_808005DC_bsbanshack(void *param_0, s32 param_1)
 {
-  s32 local_0;
-  s32 local_1;
-  switch (param_1)
-  {
-    case 0:
-      baphysics_reset_gravity(param_0);
-      break;
+    s32 local_0;
+    s32 local_1;
+    switch (param_1) {
+        case 0:
+            baphysics_reset_gravity(param_0);
+            break;
 
-    case 1:
-      local_1 = baanim_getAnimCtrlPtr(param_0);
-      local_0 = local_1;
-      *((s32 *) (((char *) param_0) + 0x160)) = 0;
-      anctrl_reset(local_1);
-      anctrl_setIndex(local_0, 0x294);
-      anctrl_setDuration(local_0, 0x3F800000);
-      func_8008B1C8(local_0, 0x3E09374C);
-      anctrl_setStart(local_0, 0x3E0F5C29);
-      anctrl_setSubrange(local_0, 0, 0x3F333333 & 0xFFFFFFFFFFFFFFFF);
-      anctrl_setPlaybackType(local_0, 1);
-      anctrl_start(local_0);
-      func_8009FFD8(param_0, 1, 1, 1, 2);
-      baphysics_set_vertical_velocity(param_0, 0x44188000);
-      baphysics_set_gravity(param_0, 0xC47A0000);
-      func_8009DF18(param_0, 0x589, 1.0f, 0x3A98);
-      break;
+        case 1:
+            local_1 = baanim_getAnimCtrlPtr(param_0);
+            local_0 = local_1;
+            *(s32 *) ((char *) param_0 + 0x160) = 0;
+            anctrl_reset(local_1);
+            anctrl_setIndex(local_0, 0x294);
+            anctrl_setDuration(local_0, 0x3F800000);
+            func_8008B1C8(local_0, 0x3E09374C);
+            anctrl_setStart(local_0, 0x3E0F5C29);
+            anctrl_setSubrange(local_0, 0, 0x3F333333 & 0xFFFFFFFFFFFFFFFF);
+            anctrl_setPlaybackType(local_0, 1);
+            anctrl_start(local_0);
+            func_8009FFD8(param_0, 1, 1, 1, 2);
+            baphysics_set_vertical_velocity(param_0, 0x44188000);
+            baphysics_set_gravity(param_0, 0xC47A0000);
+            func_8009DF18(param_0, 0x589, 1.0f, 0x3A98);
+            break;
 
-    case 2:
-      baanim_setEndAndDuration(param_0, 0x3F4F5C29, 0x404CCCCD);
-      break;
+        case 2:
+            baanim_setEndAndDuration(param_0, 0x3F4F5C29, 0x404CCCCD);
+            break;
 
-    case 3:
-      baanim_setEndAndDuration(param_0, 0x3F800000, 0x3F4CCCCD);
-      break;
+        case 3:
+            baanim_setEndAndDuration(param_0, 0x3F800000, 0x3F4CCCCD);
+    }
 
-  }
-
-  *((s8 *) (((char *) param_0) + 0x15C)) = (s8) param_1;
+    *(s8 *) ((char *) param_0 + 0x15C) = (s8) param_1;
 }
 
 void func_80800744_bsbanshack(s32 arg0)
 {
-    func_808005DC_bsbanshack(arg0,0);
+    func_808005DC_bsbanshack(arg0, 0);
     func_80800164_bsbanshack(arg0);
 }
 
-void func_80800770_bsbanshack(s32 param_0) {
+void func_80800770_bsbanshack(s32 param_0)
+{
     func_8080021C_bsbanshack(param_0);
-    *(u8 *)(param_0 + 0x15C) = 0;
+    *(u8 *) (param_0 + 0x15C) = 0;
     func_808005DC_bsbanshack(param_0, 1);
 }
 
@@ -271,35 +261,40 @@ void func_808007A0_bsbanshack(PlayerState *param_0)
     if (bakey_released(param_0, 8) && baphysics_get_vertical_velocity(param_0) > 0.0f) {
         baphysics_reset_gravity(param_0);
     }
-    switch (*((u8 *)param_0 + 0x15C)) {
-    case 1:
-        func_80800100_bsbanshack(param_0);
-        if (baanim_isStopped(param_0)) func_808005DC_bsbanshack(param_0, 2);
-        if (func_8008DF8C(param_0, 0x5A)) func_808005DC_bsbanshack(param_0, 3);
-        break;
-    case 2:
-        func_80800100_bsbanshack(param_0);
-        if (func_8008DF8C(param_0, 0x5A)) func_808005DC_bsbanshack(param_0, 3);
-        break;
-    case 3:
-        if (player_isStable(param_0)) {
-            if (*(s32 *)((u8 *)param_0 + 0x160) == 0) {
-                (*(s32 *)((u8 *)param_0 + 0x160))++;
-                func_8009FE58(param_0);
+    switch (*((u8 *) param_0 + 0x15C)) {
+        case 1:
+            func_80800100_bsbanshack(param_0);
+            if (baanim_isStopped(param_0))
+                func_808005DC_bsbanshack(param_0, 2);
+            if (func_8008DF8C(param_0, 0x5A))
+                func_808005DC_bsbanshack(param_0, 3);
+            break;
+        case 2:
+            func_80800100_bsbanshack(param_0);
+            if (func_8008DF8C(param_0, 0x5A))
+                func_808005DC_bsbanshack(param_0, 3);
+            break;
+        case 3:
+            if (player_isStable(param_0)) {
+                if (*(s32 *) ((u8 *) param_0 + 0x160) == 0) {
+                    (*(s32 *) ((u8 *) param_0 + 0x160))++;
+                    func_8009FE58(param_0);
+                }
+                if (baanim_isStopped(param_0))
+                    local_0 = 0x16C;
+                local_0 = func_80800074_bsbanshack(param_0, local_0);
+                if (local_0 == 0)
+                    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
             }
-            if (baanim_isStopped(param_0)) local_0 = 0x16C;
-            local_0 = func_80800074_bsbanshack(param_0, local_0);
-            if (local_0 == 0) baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-        }
-        break;
     }
-    if (func_8008E260(param_0)) local_0 = 0x3D;
+    if (func_8008E260(param_0))
+        local_0 = 0x3D;
     bs_setState(param_0, local_0);
 }
 
 int bsbanshack_entrypoint_2(s32 param_0)
 {
-  return D_80800CD0_bsbanshack[param_0];
+    return D_80800CD0_bsbanshack[param_0];
 }
 
 void func_80800928_bsbanshack()
@@ -328,13 +323,14 @@ void func_808009E4_bsbanshack(PlayerState *param_0)
     if (baanim_isAt(param_0, 0.51f)) {
         func_8009DF18(param_0, func_800DC0C0() < 0.5f ? 0x58A : 0x58B, 1.0f, 0x1388);
     }
-    if (bastick_getZone(param_0) == 0 && func_8009BCD4(param_0, 3.0f)) local_0 = 0x16C;
+    if (bastick_getZone(param_0) == 0 && func_8009BCD4(param_0, 3.0f))
+        local_0 = 0x16C;
     bs_setState(param_0, func_80800000_bsbanshack(param_0, local_0));
 }
 
 int bsbanshack_entrypoint_3(s32 param_0)
 {
-  return D_80800CE0_bsbanshack[param_0];
+    return D_80800CE0_bsbanshack[param_0];
 }
 
 void func_80800AD0_bsbanshack(s32 arg0)
@@ -342,18 +338,21 @@ void func_80800AD0_bsbanshack(s32 arg0)
     _bsdrone_entrypoint_2();
     func_80800164_bsbanshack(arg0);
 }
+
 void func_80800AF8_bsbanshack(s32 arg0)
 {
     func_8080021C_bsbanshack();
     _bsdrone_entrypoint_0(arg0);
 }
-void func_80800B20_bsbanshack(PlayerState* self)
+
+void func_80800B20_bsbanshack(PlayerState *self)
 {
     _bsdrone_entrypoint_1(self);
 }
+
 int bsbanshack_entrypoint_4(s32 param_0)
 {
-  return D_80800CF0_bsbanshack[param_0];
+    return D_80800CF0_bsbanshack[param_0];
 }
 
 void func_80800B54_bsbanshack(s32 arg0)
@@ -361,25 +360,26 @@ void func_80800B54_bsbanshack(s32 arg0)
     _bsrest_entrypoint_14();
     func_80800164_bsbanshack(arg0);
 }
+
 void func_80800B7C_bsbanshack(s32 arg0)
 {
     func_8080021C_bsbanshack();
     _bsrest_entrypoint_16(arg0);
 }
+
 int func_80800BA4_bsbanshack(Actor *param_0)
 {
-  s32 local_0;
-  local_0 = 0;
-  if (_bsrest_entrypoint_20())
-  {
-    local_0 = 0x16C;
-  }
-  bs_setState(param_0, local_0);
+    s32 local_0;
+    local_0 = 0;
+    if (_bsrest_entrypoint_20()) {
+        local_0 = 0x16C;
+    }
+    bs_setState(param_0, local_0);
 }
 
 int bsbanshack_entrypoint_5(s32 param_0)
 {
-  return D_80800D00_bsbanshack[param_0];
+    return D_80800D00_bsbanshack[param_0];
 }
 
 void func_80800BF0_bsbanshack()
@@ -389,34 +389,38 @@ void func_80800BF0_bsbanshack()
 
 void func_80800C10_bsbanshack(s32 param_0)
 {
-  s32 *new_var;
-  func_8080021C_bsbanshack();
-  baanim_playForDuration_loopSmooth(param_0, 0x293, 5.4f);
-  {
-  }
-  func_8009FFD8(param_0, 1, 1, 1, 2);
-  baphysics_set_target_horizontal_velocity(*(new_var = &param_0), (double) 0);
+    s32 *new_var;
+    func_8080021C_bsbanshack();
+    baanim_playForDuration_loopSmooth(param_0, 0x293, 5.4f);
+
+    func_8009FFD8(param_0, 1, 1, 1, 2);
+    baphysics_set_target_horizontal_velocity(*(new_var = &param_0), (double) 0);
 }
 
-s32 func_80800C6C_bsbanshack(s32 param_0){
+s32 func_80800C6C_bsbanshack(s32 param_0)
+{
     s32 next_state = func_80800074_bsbanshack(param_0, 0);
     bs_setState(param_0, next_state | 0x20000000 & 0xFF);
 }
 
 int bsbanshack_entrypoint_6(s32 param_0)
 {
-  return D_80800D10_bsbanshack[param_0];
+    return D_80800D10_bsbanshack[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ban/shack.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void func_80099B94();
 extern void _bsdrone_entrypoint_3();
-s32 D_80800CB0_bsbanshack[4] = { (u32)func_808002AC_bsbanshack, (u32)func_8080030C_bsbanshack, (u32)func_8080037C_bsbanshack, (u32)func_80099B94 };
-s32 D_80800CC0_bsbanshack[4] = { (u32)func_80800430_bsbanshack, (u32)func_80800450_bsbanshack, (u32)func_808004AC_bsbanshack, (u32)func_80099B94 };
-s32 D_80800CD0_bsbanshack[4] = { (u32)func_80800744_bsbanshack, (u32)func_80800770_bsbanshack, (u32)func_808007A0_bsbanshack, (u32)func_80099B94 };
-s32 D_80800CE0_bsbanshack[4] = { (u32)func_80800928_bsbanshack, (u32)func_80800948_bsbanshack, (u32)func_808009E4_bsbanshack, (u32)func_80099B94 };
-s32 D_80800CF0_bsbanshack[4] = { (u32)func_80800AD0_bsbanshack, (u32)func_80800AF8_bsbanshack, (u32)func_80800B20_bsbanshack, (u32)_bsdrone_entrypoint_3 };
-s32 D_80800D00_bsbanshack[4] = { (u32)func_80800B54_bsbanshack, (u32)func_80800B7C_bsbanshack, (u32)func_80800BA4_bsbanshack, (u32)func_80099B94 };
-s32 D_80800D10_bsbanshack[4] = { (u32)func_80800BF0_bsbanshack, (u32)func_80800C10_bsbanshack, (u32)func_80800C6C_bsbanshack, (u32)func_80099B94 };
+s32 D_80800CB0_bsbanshack[4] = {(u32) func_808002AC_bsbanshack, (u32) func_8080030C_bsbanshack,
+                                (u32) func_8080037C_bsbanshack, (u32) func_80099B94};
+s32 D_80800CC0_bsbanshack[4] = {(u32) func_80800430_bsbanshack, (u32) func_80800450_bsbanshack,
+                                (u32) func_808004AC_bsbanshack, (u32) func_80099B94};
+s32 D_80800CD0_bsbanshack[4] = {(u32) func_80800744_bsbanshack, (u32) func_80800770_bsbanshack,
+                                (u32) func_808007A0_bsbanshack, (u32) func_80099B94};
+s32 D_80800CE0_bsbanshack[4] = {(u32) func_80800928_bsbanshack, (u32) func_80800948_bsbanshack,
+                                (u32) func_808009E4_bsbanshack, (u32) func_80099B94};
+s32 D_80800CF0_bsbanshack[4] = {(u32) func_80800AD0_bsbanshack, (u32) func_80800AF8_bsbanshack,
+                                (u32) func_80800B20_bsbanshack, (u32) _bsdrone_entrypoint_3};
+s32 D_80800D00_bsbanshack[4] = {(u32) func_80800B54_bsbanshack, (u32) func_80800B7C_bsbanshack,
+                                (u32) func_80800BA4_bsbanshack, (u32) func_80099B94};
+s32 D_80800D10_bsbanshack[4] = {(u32) func_80800BF0_bsbanshack, (u32) func_80800C10_bsbanshack,
+                                (u32) func_80800C6C_bsbanshack, (u32) func_80099B94};

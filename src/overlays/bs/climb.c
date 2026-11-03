@@ -2,7 +2,10 @@
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
 
-typedef struct { s32 a; s32 b; } ClimbPair;
+typedef struct {
+    s32 a;
+    s32 b;
+} ClimbPair;
 extern u8 D_808008C0_bsclimb[];
 extern s32 func_80098634(void);
 extern void func_8009DF94(s32, s32, s32, s32);
@@ -27,14 +30,15 @@ extern f32 func_800F1344(f32, f32, f32, f32, f32);
 extern void func_8009B94C(PlayerState *, f32 *);
 extern void baanim_playForDuration_loopSmooth(void *param_0, int param_1, float param_2);
 extern void baanim_setDurationRange(void *param_0, float param_1, float param_2);
-extern void func_8008C9F0(void *param_0, float param_1, float param_2, float param_3, float param_4);
+extern void func_8008C9F0(void *param_0, float param_1, float param_2, float param_3,
+                          float param_4);
 extern void func_8008CA4C(void *param_0, int param_1);
-void func_8080005C_bsclimb();
 
-void func_80800000_bsclimb(s32 param_0, s32 param_1) {
+void func_80800000_bsclimb(s32 param_0, s32 param_1)
+{
     u8 *local_0 = D_808008C0_bsclimb + func_80098634() * 20;
-    ClimbPair *local_1 = (ClimbPair *)(local_0 - 0x10);
-    func_8009DF94(param_0, *(s16 *)(local_0 - 0x12), local_1[param_1].a, local_1[param_1].b);
+    ClimbPair *local_1 = (ClimbPair *) (local_0 - 0x10);
+    func_8009DF94(param_0, *(s16 *) (local_0 - 0x12), local_1[param_1].a, local_1[param_1].b);
 }
 
 void func_8080005C_bsclimb(param_0) PlayerState *param_0;
@@ -43,15 +47,18 @@ void func_8080005C_bsclimb(param_0) PlayerState *param_0;
     f32 local_1;
     f32 local_2;
     local_1 = bastick_getY(param_0);
-    if (mlAbsF(local_1) < 0.03f) local_2 = 0.0f;
-    else local_2 = func_800F1344(local_1, 0.03f, 1.0f, 100.0f, 300.0f);
+    if (mlAbsF(local_1) < 0.03f)
+        local_2 = 0.0f;
+    else
+        local_2 = func_800F1344(local_1, 0.03f, 1.0f, 100.0f, 300.0f);
     local_0[0] = 0.0f;
     local_0[1] = local_2;
     local_0[2] = 0.0f;
     func_8009B94C(param_0, local_0);
 }
 
-void func_808000E8_bsclimb(s32 param_0) {
+void func_808000E8_bsclimb(s32 param_0)
+{
     if (func_8009861C() == 2) {
         func_8009D2D8(param_0, 3);
     } else {
@@ -71,27 +78,27 @@ void func_808000E8_bsclimb(s32 param_0) {
     }
 }
 
-int func_808001D0_bsclimb(param_0) s32 param_0;
+int func_808001D0_bsclimb(param_0)
+s32 param_0;
 {
-  s32 local_0;
-  local_0 = param_0 | 0;
-  if (!func_8009E74C(local_0, 0xA))
-  {
-    func_800A4E30(local_0);
-    bastick_resetZones(local_0);
-    func_8008CA4C(local_0, 1);
-    baphysics_set_type(local_0, 2);
-    func_800961AC(local_0, 1);
-    func_80095A40(local_0);
-    if (func_8008E0E8(local_0))
-    {
-      _bapackctrl_entrypoint_5(local_0, 3);
+    s32 local_0;
+    local_0 = param_0 | 0;
+    if (!func_8009E74C(local_0, 0xA)) {
+        func_800A4E30(local_0);
+        bastick_resetZones(local_0);
+        func_8008CA4C(local_0, 1);
+        baphysics_set_type(local_0, 2);
+        func_800961AC(local_0, 1);
+        func_80095A40(local_0);
+        if (func_8008E0E8(local_0)) {
+            _bapackctrl_entrypoint_5(local_0, 3);
+        }
     }
-  }
 }
 
-void func_80800258_bsclimb(u8 *param_0, f32 param_1, f32 param_2) {
-    *(f32 *)(param_0 + 0x16C) = func_800DC0C0() * param_2 + param_1;
+void func_80800258_bsclimb(u8 *param_0, f32 param_1, f32 param_2)
+{
+    *(f32 *) (param_0 + 0x16C) = func_800DC0C0() * param_2 + param_1;
 }
 
 int func_80800298_bsclimb(PlayerState *param_0)
@@ -99,7 +106,8 @@ int func_80800298_bsclimb(PlayerState *param_0)
     return mlAbsF(func_8009BB0C(param_0)) > 0.0f || yaw_get(param_0) != yaw_getIdeal(param_0);
 }
 
-void bsclimb_entrypoint_0(u8 *param_0) {
+void bsclimb_entrypoint_0(u8 *param_0)
+{
     s32 local_0;
     f32 local_1[3];
     f32 local_2[3];
@@ -115,9 +123,9 @@ void bsclimb_entrypoint_0(u8 *param_0) {
     baanim_playForDuration_loopSmooth(param_0, 0xB2, 2.64f);
     func_8008CA4C(param_0, 1);
     func_808000E8_bsclimb(param_0);
-    (*(s32 *)((s8 *)(param_0) + (0x160))) = 1;
+    *(s32 *) ((s8 *) param_0 + 0x160) = 1;
     func_80800258_bsclimb(param_0, 1.0f, 0.5f);
-    (*(s32 *)((s8 *)(param_0) + (0x15C))) = 0;
+    *(s32 *) ((s8 *) param_0 + 0x15C) = 0;
 }
 
 void bsclimb_entrypoint_1(PlayerState *param_0)
@@ -139,10 +147,9 @@ void bsclimb_entrypoint_1(PlayerState *param_0)
         case 1:
             if (anctrl_isStopped(local_1)) {
                 baanim_playForDuration_loopSmooth(param_0, 0xB2, 2.64f);
-                func_80800258_bsclimb((u8 *)param_0, 3.0f, 4.0f);
+                func_80800258_bsclimb((u8 *) param_0, 3.0f, 4.0f);
                 param_0->unk15C.word = 0;
             }
-            break;
     }
     func_8080005C_bsclimb(param_0);
     if (func_80800298_bsclimb(param_0)) {
@@ -165,7 +172,7 @@ void bsclimb_entrypoint_2()
 
 int bsclimb_entrypoint_3(s32 param_0)
 {
-  return D_808008FC_bsclimb[param_0];
+    return D_808008FC_bsclimb[param_0];
 }
 
 void bsclimb_entrypoint_4(void *param_0)
@@ -200,8 +207,8 @@ void bsclimb_entrypoint_5(PlayerState *param_0)
     if (func_8009BB0C(param_0) < 0.0f && func_800985B8(param_0) == local_1[1]) {
         local_0 = 1;
     }
-    if (func_80098640(param_0) == 2 && func_8009BB0C(param_0) > 0.0f
-        && func_8009864C(param_0) == local_1[1]) {
+    if (func_80098640(param_0) == 2 && func_8009BB0C(param_0) > 0.0f &&
+        func_8009864C(param_0) == local_1[1]) {
         if (func_800985C4(param_0, local_2)) {
             local_0 = _badrone_entrypoint_23(param_0, local_2);
         } else {
@@ -225,26 +232,25 @@ void bsclimb_entrypoint_6()
 
 int bsclimb_entrypoint_7(s32 param_0)
 {
-  return D_8080090C_bsclimb[param_0];
+    return D_8080090C_bsclimb[param_0];
 }
 
 int bsclimb_entrypoint_8(Actor *param_0)
 {
-  baanim_playForDuration_loopSmooth(param_0, 0xB2, 2.64f);
-  func_8008CA4C(param_0, 1);
-  func_808000E8_bsclimb(param_0);
-  baphysics_set_type(param_0, 7);
+    baanim_playForDuration_loopSmooth(param_0, 0xB2, 2.64f);
+    func_8008CA4C(param_0, 1);
+    func_808000E8_bsclimb(param_0);
+    baphysics_set_type(param_0, 7);
 }
 
 int bsclimb_entrypoint_9(Actor *param_0)
 {
-  s32 local_0;
-  local_0 = 0;
-  if (!func_8009CC68())
-  {
-    local_0 = 0x4F;
-  }
-  bs_setState(param_0, local_0);
+    s32 local_0;
+    local_0 = 0;
+    if (!func_8009CC68()) {
+        local_0 = 0x4F;
+    }
+    bs_setState(param_0, local_0);
 }
 
 void bsclimb_entrypoint_10()
@@ -254,7 +260,7 @@ void bsclimb_entrypoint_10()
 
 int bsclimb_entrypoint_11(s32 param_0)
 {
-  return D_8080091C_bsclimb[param_0];
+    return D_8080091C_bsclimb[param_0];
 }
 
 void bsclimb_entrypoint_12(PlayerState *param_0)
@@ -269,9 +275,6 @@ void bsclimb_entrypoint_12(PlayerState *param_0)
     bs_setState(param_0, 0);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/climb.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bsclimb_entrypoint_2();
 extern void _bsclimb_entrypoint_0();
 extern void _bsclimb_entrypoint_1();
@@ -282,7 +285,14 @@ extern void _bsclimb_entrypoint_5();
 extern void _bsclimb_entrypoint_10();
 extern void _bsclimb_entrypoint_8();
 extern void _bsclimb_entrypoint_9();
-u8 D_808008C0_bsclimb[60] = { 0x1, 0x0, 0x4, 0x6E, 0x3F, 0x45, 0x1E, 0xB8, 0x0, 0x0, 0x3E, 0x80, 0x3F, 0x5E, 0xB8, 0x52, 0x0, 0x0, 0x3E, 0x80, 0x2, 0x0, 0x4, 0x6D, 0x3F, 0x8C, 0xCC, 0xCD, 0x0, 0x0, 0x7D, 0x0, 0x3F, 0x99, 0x99, 0x9A, 0x0, 0x0, 0x7D, 0x0, 0x3, 0x0, 0x4, 0x1B, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x27, 0x10, 0x3F, 0x8C, 0xCC, 0xCD, 0x0, 0x0, 0x27, 0x10 };
-s32 D_808008FC_bsclimb[4] = { (u32)_bsclimb_entrypoint_2, (u32)_bsclimb_entrypoint_0, (u32)_bsclimb_entrypoint_1, (u32)_bsclimb_entrypoint_12 };
-s32 D_8080090C_bsclimb[4] = { (u32)_bsclimb_entrypoint_6, (u32)_bsclimb_entrypoint_4, (u32)_bsclimb_entrypoint_5, (u32)_bsclimb_entrypoint_12 };
-s32 D_8080091C_bsclimb[5] = { (u32)_bsclimb_entrypoint_10, (u32)_bsclimb_entrypoint_8, (u32)_bsclimb_entrypoint_9, (u32)_bsclimb_entrypoint_12, 0x0 };
+u8 D_808008C0_bsclimb[60] = {
+    0x1,  0x0, 0x4,  0x6E, 0x3F, 0x45, 0x1E, 0xB8, 0x0,  0x0,  0x3E, 0x80, 0x3F, 0x5E, 0xB8,
+    0x52, 0x0, 0x0,  0x3E, 0x80, 0x2,  0x0,  0x4,  0x6D, 0x3F, 0x8C, 0xCC, 0xCD, 0x0,  0x0,
+    0x7D, 0x0, 0x3F, 0x99, 0x99, 0x9A, 0x0,  0x0,  0x7D, 0x0,  0x3,  0x0,  0x4,  0x1B, 0x3F,
+    0x80, 0x0, 0x0,  0x0,  0x0,  0x27, 0x10, 0x3F, 0x8C, 0xCC, 0xCD, 0x0,  0x0,  0x27, 0x10};
+s32 D_808008FC_bsclimb[4] = {(u32) _bsclimb_entrypoint_2, (u32) _bsclimb_entrypoint_0,
+                             (u32) _bsclimb_entrypoint_1, (u32) _bsclimb_entrypoint_12};
+s32 D_8080090C_bsclimb[4] = {(u32) _bsclimb_entrypoint_6, (u32) _bsclimb_entrypoint_4,
+                             (u32) _bsclimb_entrypoint_5, (u32) _bsclimb_entrypoint_12};
+s32 D_8080091C_bsclimb[5] = {(u32) _bsclimb_entrypoint_10, (u32) _bsclimb_entrypoint_8,
+                             (u32) _bsclimb_entrypoint_9, (u32) _bsclimb_entrypoint_12, 0x0};

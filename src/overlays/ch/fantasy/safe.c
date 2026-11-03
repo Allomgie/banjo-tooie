@@ -11,7 +11,11 @@ extern s32 _glcutDll_entrypoint_20(void);
 extern void func_800DF744(s32, s32);
 extern int D_80800AA0_chfantasysafe[];
 extern int D_80800AE8_chfantasysafe[];
-typedef struct { f32 unk0; f32 unk4; u8 unk8; } SafeKey;
+typedef struct {
+    f32 unk0;
+    f32 unk4;
+    u8 unk8;
+} SafeKey;
 extern u8 D_808009AC_chfantasysafe[];
 extern u8 D_808009D4_chfantasysafe[];
 extern u8 D_808009DC_chfantasysafe[];
@@ -34,9 +38,8 @@ extern f32 func_800F12D4(f32, f32, f32, f32, f32);
 extern f32 func_800F1214(f32, f32, f32);
 extern s32 func_8010262C(Unk80132ED0 *, s32);
 extern void func_800E0AFC(s32, s32, f32, f32, f32, f32);
-void func_808001A0_chfantasysafe();
-extern void func_801018A4(), func_80105834(), func_80107C2C(), func_80108ED0(), func_80800000_chfantasysafe(), func_808001A0_chfantasysafe();
-extern u8 D_80800960_chfantasysafe[];
+extern void func_801018A4(), func_80105834(), func_80107C2C(), func_80108ED0(),
+    func_80800000_chfantasysafe(), func_808001A0_chfantasysafe();
 
 void func_80800000_chfantasysafe(param_0) Actor *param_0;
 {
@@ -50,8 +53,8 @@ void func_80800000_chfantasysafe(param_0) Actor *param_0;
     if (_glcutDll_entrypoint_20()) {
         param_0->actorData[4] = 0;
         param_0->unk79_4 = 0;
-        param_0->unk58 = param_0->unk54 = param_0->unk50 =
-            ((f32 *)param_0->actorData)[3] = ((f32 *)param_0->actorData)[7] = 0.0f;
+        param_0->unk58 = param_0->unk54 = param_0->unk50 = ((f32 *) param_0->actorData)[3] =
+            ((f32 *) param_0->actorData)[7] = 0.0f;
         param_0->rotation[1] = 228.0f;
         func_80101FDC(param_0, 6);
         return;
@@ -67,7 +70,8 @@ void func_80800000_chfantasysafe(param_0) Actor *param_0;
     local_1 = func_800DA298(0x38A) ? 1 : 0;
     local_2 = func_800DA298(0x389) ? 1 : 0;
     local_3 = func_800DA298(0x38C) ? 1 : 0;
-    param_0->unk50 = ((f32 *)param_0->actorData)[3] = ((f32 *)param_0->actorData)[7] = D_80800998_chfantasysafe[local_3 + local_2 + local_1 + local_0];
+    param_0->unk50 = ((f32 *) param_0->actorData)[3] = ((f32 *) param_0->actorData)[7] =
+        D_80800998_chfantasysafe[local_3 + local_2 + local_1 + local_0];
     param_0->unk54 = 0.0f;
     param_0->rotation[1] = 228.0f;
 }
@@ -77,7 +81,7 @@ void func_808001A0_chfantasysafe(param_0) Actor *param_0;
     s32 local_0;
     s32 local_1;
     f32 local_2;
-    SafeKey *local_3; /* unused: the target's frame has this slot */
+    SafeKey *local_3;
     s32 local_4;
     s32 local_5;
     s32 local_6;
@@ -85,75 +89,86 @@ void func_808001A0_chfantasysafe(param_0) Actor *param_0;
     f32 local_8;
 
     switch (param_0->unk70_10) {
-    case 1:
-        _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808009DC_chfantasysafe, D_808009AC_chfantasysafe, 5);
-        break;
-    case 2:
-        if (func_800D90A4(&param_0->unk58)) {
-            local_6 = func_800DA298(0x38B) ? 1 : 0;
-            local_5 = func_800DA298(0x38A) ? 1 : 0;
-            local_4 = func_800DA298(0x389) ? 1 : 0;
-            local_7 = func_800DA298(0x38C) ? 1 : 0;
-            if (local_7 + local_4 + local_5 + local_6 >= 3) {
-                param_0->unk58 = 1.0f;
-                func_80101FDC(param_0, 3);
-                local_1 = 0x10;
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x13DD, 0, param_0->position, 0);
+        case 1:
+            _subaddiedialog_entrypoint_8(param_0, param_0->position, D_808009DC_chfantasysafe,
+                                         D_808009AC_chfantasysafe, 5);
+            break;
+        case 2:
+            if (func_800D90A4(&param_0->unk58)) {
+                local_6 = func_800DA298(0x38B) ? 1 : 0;
+                local_5 = func_800DA298(0x38A) ? 1 : 0;
+                local_4 = func_800DA298(0x389) ? 1 : 0;
+                local_7 = func_800DA298(0x38C) ? 1 : 0;
+                if (local_7 + local_4 + local_5 + local_6 >= 3) {
+                    param_0->unk58 = 1.0f;
+                    func_80101FDC(param_0, 3);
+                    local_1 = 0x10;
+                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x13DD, 0, param_0->position, 0);
+                } else {
+                    func_80101FDC(param_0, 1);
+                    local_1 = 0xE;
+                }
+                func_800DA544(param_0->unk6C_0 + 0x389);
+                _subaddieaudioloop_entrypoint_2(param_0);
+                func_800FC6B0(local_1);
+                param_0->unk50 = ((f32 *) param_0->actorData)[7] = ((f32 *) param_0->actorData)[3];
             } else {
-                func_80101FDC(param_0, 1);
-                local_1 = 0xE;
+                _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                                D_808009F4_chfantasysafe);
+                param_0->unk50 =
+                    func_800F10B4(param_0->unk58, 2.0f, 0, ((f32 *) param_0->actorData)[7],
+                                  ((f32 *) param_0->actorData)[3]);
             }
-            func_800DA544(param_0->unk6C_0 + 0x389);
-            _subaddieaudioloop_entrypoint_2(param_0);
-            func_800FC6B0(local_1);
-            param_0->unk50 = ((f32 *)param_0->actorData)[7] = ((f32 *)param_0->actorData)[3];
-        } else {
-            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_808009F4_chfantasysafe);
-            param_0->unk50 = func_800F10B4(param_0->unk58, 2.0f, 0, ((f32 *)param_0->actorData)[7], ((f32 *)param_0->actorData)[3]);
-        }
-        break;
-    case 3:
-        param_0->unk54 = func_800F10B4(param_0->unk58, 1.0f, 0, 0, 110.0f);
-        if (func_800D90A4(&param_0->unk58)) {
-            param_0->unk54 = 110.0f;
-            param_0->unk58 = 3.0f;
-            func_80101FDC(param_0, 4);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808009D4_chfantasysafe);
-        }
-        break;
-    case 4:
-        if (func_800D90A4(&param_0->unk58)) {
-            func_80101FDC(param_0, 5);
-            func_800DA544(0x38D);
-            _subaddieaudioloop_entrypoint_2(param_0);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808009D4_chfantasysafe);
-        } else {
-            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_808009FC_chfantasysafe);
-        }
-        param_0->rotation[1] = func_800F10B4(param_0->unk58, 3.0f, 0, 228.0f, 360.0f);
-        break;
-    case 5:
-        func_80103110(param_0, 0);
-        break;
-    case 6:
-        func_800D91B8(&param_0->unk58);
-        local_8 = D_80800A08_chfantasysafe[param_0->actorData[4] + 1].unk0;
-        if (local_8 < param_0->unk58) {
-            param_0->actorData[4]++;
-            if (D_80800A08_chfantasysafe[param_0->actorData[4]].unk4 == 0.0f) {
-                func_800C3F48(0x66538CA0);
-                func_800C3F48(0x4CB38CA1);
+            break;
+        case 3:
+            param_0->unk54 = func_800F10B4(param_0->unk58, 1.0f, 0, 0, 110.0f);
+            if (func_800D90A4(&param_0->unk58)) {
+                param_0->unk54 = 110.0f;
+                param_0->unk58 = 3.0f;
+                func_80101FDC(param_0, 4);
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_808009D4_chfantasysafe);
+            }
+            break;
+        case 4:
+            if (func_800D90A4(&param_0->unk58)) {
+                func_80101FDC(param_0, 5);
+                func_800DA544(0x38D);
+                _subaddieaudioloop_entrypoint_2(param_0);
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_808009D4_chfantasysafe);
             } else {
-                func_800C3F48(0x66538CA1);
+                _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                                D_808009FC_chfantasysafe);
             }
-            param_0->unk79_4 = D_80800A08_chfantasysafe[param_0->actorData[4]].unk8;
-        }
-        local_2 = func_800F12D4(param_0->unk58, D_80800A08_chfantasysafe[param_0->actorData[4]].unk0, D_80800A08_chfantasysafe[param_0->actorData[4] + 1].unk0, D_80800A08_chfantasysafe[param_0->actorData[4]].unk4, D_80800A08_chfantasysafe[param_0->actorData[4] + 1].unk4);
-        param_0->rotation[1] = func_800F1214(local_2, 228.0f, 360.0f);
-        param_0->unk54 = func_800F1214(local_2, 0.0f, 110.0f);
-        param_0->unk50 = func_800F1214(local_2, 0.0f, 360.0f);
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80800A98_chfantasysafe);
-        break;
+            param_0->rotation[1] = func_800F10B4(param_0->unk58, 3.0f, 0, 228.0f, 360.0f);
+            break;
+        case 5:
+            func_80103110(param_0, 0);
+            break;
+        case 6:
+            func_800D91B8(&param_0->unk58);
+            local_8 = D_80800A08_chfantasysafe[param_0->actorData[4] + 1].unk0;
+            if (local_8 < param_0->unk58) {
+                param_0->actorData[4]++;
+                if (D_80800A08_chfantasysafe[param_0->actorData[4]].unk4 == 0.0f) {
+                    func_800C3F48(0x66538CA0);
+                    func_800C3F48(0x4CB38CA1);
+                } else {
+                    func_800C3F48(0x66538CA1);
+                }
+                param_0->unk79_4 = D_80800A08_chfantasysafe[param_0->actorData[4]].unk8;
+            }
+            local_2 =
+                func_800F12D4(param_0->unk58, D_80800A08_chfantasysafe[param_0->actorData[4]].unk0,
+                              D_80800A08_chfantasysafe[param_0->actorData[4] + 1].unk0,
+                              D_80800A08_chfantasysafe[param_0->actorData[4]].unk4,
+                              D_80800A08_chfantasysafe[param_0->actorData[4] + 1].unk4);
+            param_0->rotation[1] = func_800F1214(local_2, 228.0f, 360.0f);
+            param_0->unk54 = func_800F1214(local_2, 0.0f, 110.0f);
+            param_0->unk50 = func_800F1214(local_2, 0.0f, 360.0f);
+            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                            D_80800A98_chfantasysafe);
     }
     local_0 = func_8010262C(param_0->unk0, 2);
     if (local_0) {
@@ -162,7 +177,10 @@ void func_808001A0_chfantasysafe(param_0) Actor *param_0;
     }
 }
 
-s32 func_80800630_chfantasysafe(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+s32 func_80800630_chfantasysafe(param_0, param_1, param_2)
+Actor *param_0;
+s32 param_1;
+s32 param_2;
 {
     s32 local_0;
     s32 local_1[1];
@@ -185,8 +203,8 @@ s32 func_80800630_chfantasysafe(param_0, param_1, param_2) Actor *param_0; s32 p
                 func_80101FDC(param_0, 2);
                 param_0->unk6C_0 = local_0;
                 local_2 = &D_80800998_chfantasysafe[local_0];
-                ((f32 *)param_0->actorData)[7] = param_0->unk50 = local_2[0];
-                ((f32 *)param_0->actorData)[3] = local_2[1];
+                ((f32 *) param_0->actorData)[7] = param_0->unk50 = local_2[0];
+                ((f32 *) param_0->actorData)[3] = local_2[1];
                 local_3 = func_800DA298(0x38B) ? 1 : 0;
                 local_6 = func_800DA298(0x38A) ? 1 : 0;
                 local_5 = func_800DA298(0x389) ? 1 : 0;
@@ -220,28 +238,69 @@ s32 func_80800630_chfantasysafe(param_0, param_1, param_2) Actor *param_0; s32 p
 
 int chfantasysafe_entrypoint_0()
 {
-    return (int)&D_80800AA0_chfantasysafe;
+    return (int) &D_80800AA0_chfantasysafe;
 }
 
 int chfantasysafe_entrypoint_1()
 {
-    return (int)&D_80800AE8_chfantasysafe;
+    return (int) &D_80800AE8_chfantasysafe;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fantasy/safe.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800AA0_chfantasysafe -> int[], D_80800AE8_chfantasysafe -> int[] */
 extern void func_8010C964();
 extern void func_80101870();
-u8 D_80800960_chfantasysafe[56] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x4A, 0x0, 0x44, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x4A, 0x0, 0x44, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x4A, 0x0, 0x44, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x4A, 0x0, 0x44, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x4A, 0x0, 0x44, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x4A, 0x0, 0x44 };
-f32 D_80800998_chfantasysafe[5] = { 135.0f, 7.2e+02f, 3.2e+02f, 6.4e+02f, 1.2e+02f };
-u8 D_808009AC_chfantasysafe[40] = { 0x0, 0x0, 0x0, 0x1, 0x13, 0xDB, 0x1, 0x0, 0x0, 0x0, 0x6, 0x1, 0x13, 0xDC, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x14, 0x57, 0x1, 0x0, 0x0, 0x0, 0x4, 0x0, 0x14, 0x58, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
-u8 D_808009D4_chfantasysafe[8] = { 0x0, 0x13, 0x4, 0xC7, 0x0, 0x0, 0x0, 0x0 };
-u8 D_808009DC_chfantasysafe[24] = { 0x3, 0x88, 0x0, 0x0, 0x3, 0xE8, 0x0, 0x69, 0x0, 0x0, 0x0, 0xF, 0x0, 0x0, 0x1, 0x0, 0x0, 0x13, 0x5, 0x21, 0x0, 0x0, 0x0, 0x0 };
-u8 D_808009F4_chfantasysafe[8] = { 0x0, 0x13, 0x5, 0x7, 0x0, 0x0, 0x0, 0x0 };
-u8 D_808009FC_chfantasysafe[12] = { 0x0, 0x13, 0x4, 0xA1, 0x0, 0xA, 0x0, 0x99, 0x0, 0x0, 0x0, 0x0 };
-SafeKey D_80800A08_chfantasysafe[12] = { 0.0f, 0.0f, 0x0, 2.0f, 1.0f, 0x1, 2.5f, 0.0f, 0x0, 3.0f, 0.25f, 0x2, 3.5f, 0.0f, 0x0, 4.0f, 0.5f, 0x4, 4.5f, 0.0f, 0x0, 5.0f, 0.75f, 0x8, 5.5f, 0.0f, 0x0, 6.25f, 1.0f, 0x0, 7.0f, 0.0f, 0xF, 1e+02f, 0.0f, 0xF };
-u8 D_80800A98_chfantasysafe[8] = { 0x0, 0x13, 0x5, 0x7, 0x0, 0x0, 0x0, 0x0 };
-int D_80800AA0_chfantasysafe[18] = { 0xAC0417, 0x8DA0001, (u32)&D_80800960_chfantasysafe, (u32)func_808001A0_chfantasysafe, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x800C20, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chfantasysafe, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_80800630_chfantasysafe, 0x0 };
-int D_80800AE8_chfantasysafe[18] = { 0x158050D, 0x9300001, 0x0, (u32)func_8010C964, (u32)func_80105834, (u32)func_80101870, 0x12C0000, 0x0, 0x0, 0x100, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFDBFE, 0x0, 0x0 };
+u8 D_80800960_chfantasysafe[56] = {
+    0x0, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x3F, 0x80, 0x0,  0x0,  0x0,  0x4A,
+    0x0, 0x44, 0x3F, 0x80, 0x0,  0x0,  0x0,  0x4A, 0x0,  0x44, 0x3F, 0x80, 0x0,  0x0,
+    0x0, 0x4A, 0x0,  0x44, 0x3F, 0x80, 0x0,  0x0,  0x0,  0x4A, 0x0,  0x44, 0x3F, 0x80,
+    0x0, 0x0,  0x0,  0x4A, 0x0,  0x44, 0x3F, 0x80, 0x0,  0x0,  0x0,  0x4A, 0x0,  0x44};
+f32 D_80800998_chfantasysafe[5] = {135.0f, 7.2e+02f, 3.2e+02f, 6.4e+02f, 1.2e+02f};
+u8 D_808009AC_chfantasysafe[40] = {0x0,  0x0,  0x0,  0x1,  0x13, 0xDB, 0x1,  0x0, 0x0,  0x0,
+                                   0x6,  0x1,  0x13, 0xDC, 0x2,  0x0,  0x0,  0x0, 0x2,  0x0,
+                                   0x14, 0x57, 0x1,  0x0,  0x0,  0x0,  0x4,  0x0, 0x14, 0x58,
+                                   0x1,  0x0,  0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3,  0x0};
+u8 D_808009D4_chfantasysafe[8] = {0x0, 0x13, 0x4, 0xC7, 0x0, 0x0, 0x0, 0x0};
+u8 D_808009DC_chfantasysafe[24] = {0x3, 0x88, 0x0, 0x0, 0x3, 0xE8, 0x0, 0x69, 0x0, 0x0, 0x0, 0xF,
+                                   0x0, 0x0,  0x1, 0x0, 0x0, 0x13, 0x5, 0x21, 0x0, 0x0, 0x0, 0x0};
+u8 D_808009F4_chfantasysafe[8] = {0x0, 0x13, 0x5, 0x7, 0x0, 0x0, 0x0, 0x0};
+u8 D_808009FC_chfantasysafe[12] = {0x0, 0x13, 0x4, 0xA1, 0x0, 0xA, 0x0, 0x99, 0x0, 0x0, 0x0, 0x0};
+SafeKey D_80800A08_chfantasysafe[12] = {0.0f,  0.0f,  0x0, 2.0f, 1.0f,  0x1, 2.5f,   0.0f, 0x0,
+                                        3.0f,  0.25f, 0x2, 3.5f, 0.0f,  0x0, 4.0f,   0.5f, 0x4,
+                                        4.5f,  0.0f,  0x0, 5.0f, 0.75f, 0x8, 5.5f,   0.0f, 0x0,
+                                        6.25f, 1.0f,  0x0, 7.0f, 0.0f,  0xF, 1e+02f, 0.0f, 0xF};
+u8 D_80800A98_chfantasysafe[8] = {0x0, 0x13, 0x5, 0x7, 0x0, 0x0, 0x0, 0x0};
+int D_80800AA0_chfantasysafe[18] = {0xAC0417,
+                                    0x8DA0001,
+                                    (u32) &D_80800960_chfantasysafe,
+                                    (u32) func_808001A0_chfantasysafe,
+                                    (u32) func_80105834,
+                                    (u32) func_801018A4,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x800C20,
+                                    0x0,
+                                    (u32) func_80108ED0,
+                                    0x0,
+                                    (u32) func_80800000_chfantasysafe,
+                                    (u32) func_80107C2C,
+                                    -0x7FFFDBFE,
+                                    (u32) func_80800630_chfantasysafe,
+                                    0x0};
+int D_80800AE8_chfantasysafe[18] = {0x158050D,
+                                    0x9300001,
+                                    0x0,
+                                    (u32) func_8010C964,
+                                    (u32) func_80105834,
+                                    (u32) func_80101870,
+                                    0x12C0000,
+                                    0x0,
+                                    0x0,
+                                    0x100,
+                                    0x0,
+                                    (u32) func_80108ED0,
+                                    0x0,
+                                    0x0,
+                                    (u32) func_80107C2C,
+                                    -0x7FFFDBFE,
+                                    0x0,
+                                    0x0};

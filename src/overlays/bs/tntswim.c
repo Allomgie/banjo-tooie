@@ -67,7 +67,8 @@ void func_808000B0_bstntswim(PlayerState *param_0)
     }
 }
 
-s32 func_80800114_bstntswim(param_0) s32 param_0;
+s32 func_80800114_bstntswim(param_0)
+s32 param_0;
 {
     _bstnt_entrypoint_3(param_0);
     if (func_8009E6C4(param_0, 1) == 0) {
@@ -77,20 +78,21 @@ s32 func_80800114_bstntswim(param_0) s32 param_0;
     }
 }
 
-int func_80800174_bstntswim(param_0) s32 param_0;
+int func_80800174_bstntswim(param_0)
+s32 param_0;
 {
-  s32 local_0;
-  local_0 = param_0 | 0;
-  if (!func_8009E69C(local_0, 1))
-  {
-    baphysics_reset_terminal_velocity(local_0);
-    baphysics_reset_gravity(local_0);
-    func_800961AC(local_0, 1);
-  }
-  _bstnt_entrypoint_2(local_0);
+    s32 local_0;
+    local_0 = param_0 | 0;
+    if (!func_8009E69C(local_0, 1)) {
+        baphysics_reset_terminal_velocity(local_0);
+        baphysics_reset_gravity(local_0);
+        func_800961AC(local_0, 1);
+    }
+    _bstnt_entrypoint_2(local_0);
 }
 
-s32 func_808001CC_bstntswim(Actor *this){
+s32 func_808001CC_bstntswim(Actor *this)
+{
     func_8009BC34();
     func_800961AC(this, 1);
     _bstnt_entrypoint_2(this);
@@ -130,30 +132,32 @@ void func_808002D0_bstntswim(PlayerState *param_0)
         param_0->unk16C += func_800F0E00(mlAbsF(param_0->unk16C) * 0.1f, 50.0f);
         baphysics_set_vertical_velocity(param_0, param_0->unk16C);
     }
-    if (player_isStable(param_0)) local_0 = 0x10F;
-    if (!player_inWater(param_0)) local_0 = 0x10C;
-    if (baphysics_get_vertical_velocity(param_0) >= 0.0f) local_0 = 0x10F;
+    if (player_isStable(param_0))
+        local_0 = 0x10F;
+    if (!player_inWater(param_0))
+        local_0 = 0x10C;
+    if (baphysics_get_vertical_velocity(param_0) >= 0.0f)
+        local_0 = 0x10F;
     _bstnt_entrypoint_4(param_0);
     bs_setState(param_0, local_0);
 }
 
 int bstntswim_entrypoint_0(s32 param_0)
 {
-  return D_808009B0_bstntswim[param_0];
+    return D_808009B0_bstntswim[param_0];
 }
 
 int func_8080042C_bstntswim(Actor *param_0)
 {
-  extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);
-  s32 local_0;
-  int new_var;
-  local_0 = param_0;
-  func_80800114_bstntswim();
-  baanim_playForDuration_loopSmooth(local_0 | 0, 0xE7, 0x40D00000);
-  func_8009FFD8(local_0 | 0, 1, 3, 3, 2);
-  yaw_setVelocityBounded(local_0 | (0 ^ 0), 0x43FA0000, 0x40A00000);
-  new_var = 0;
-  baphysics_set_target_horizontal_velocity(local_0 | 0, new_var);
+    s32 local_0;
+    int new_var;
+    local_0 = param_0;
+    func_80800114_bstntswim();
+    baanim_playForDuration_loopSmooth(local_0 | 0, 0xE7, 0x40D00000);
+    func_8009FFD8(local_0 | 0, 1, 3, 3, 2);
+    yaw_setVelocityBounded(local_0 | (0 ^ 0), 0x43FA0000, 0x40A00000);
+    new_var = 0;
+    baphysics_set_target_horizontal_velocity(local_0 | 0, new_var);
 }
 
 void func_8080049C_bstntswim(PlayerState *param_0)
@@ -161,13 +165,20 @@ void func_8080049C_bstntswim(PlayerState *param_0)
     s32 local_0 = 0;
     void *local_1 = baanim_getAnimCtrlPtr(param_0);
 
-    if (!func_8001210C(7) && func_800DC0C0() < 0.5f) func_8009FC34(param_0, 1);
-    if (!func_8001210C(7) && func_800DC0C0() < 0.5f) func_80800000_bstntswim(param_0);
-    if (anctrl_isAt(local_1, 0.01f)) func_8009DEC0(param_0, 0x46F, 0.85f, 1.15f, 16000, 16000);
-    if (bastick_getZone(param_0) == 1) local_0 = 0x110;
-    if (!player_inWater(param_0)) local_0 = 0x10C;
-    if (_bstnt_entrypoint_8(param_0)) local_0 = 0x10E;
-    if (func_80096500(param_0) && bakey_pressed(param_0, 8)) local_0 = 0x107;
+    if (!func_8001210C(7) && func_800DC0C0() < 0.5f)
+        func_8009FC34(param_0, 1);
+    if (!func_8001210C(7) && func_800DC0C0() < 0.5f)
+        func_80800000_bstntswim(param_0);
+    if (anctrl_isAt(local_1, 0.01f))
+        func_8009DEC0(param_0, 0x46F, 0.85f, 1.15f, 16000, 16000);
+    if (bastick_getZone(param_0) == 1)
+        local_0 = 0x110;
+    if (!player_inWater(param_0))
+        local_0 = 0x10C;
+    if (_bstnt_entrypoint_8(param_0))
+        local_0 = 0x10E;
+    if (func_80096500(param_0) && bakey_pressed(param_0, 8))
+        local_0 = 0x107;
     _bstnt_entrypoint_4(param_0);
     bs_setState(param_0, local_0);
 }
@@ -179,7 +190,7 @@ void func_808005FC_bstntswim()
 
 int bstntswim_entrypoint_1(int param_0)
 {
-  return D_808009C0_bstntswim[param_0];
+    return D_808009C0_bstntswim[param_0];
 }
 
 void func_80800630_bstntswim(PlayerState *param_0)
@@ -195,7 +206,8 @@ void func_80800630_bstntswim(PlayerState *param_0)
     baphysics_set_type(param_0, 2);
 }
 
-void func_808006E4_bstntswim(s32 param_0) {
+void func_808006E4_bstntswim(s32 param_0)
+{
     s32 local_0;
     s32 local_1;
     s32 local_2;
@@ -239,7 +251,7 @@ void func_80800830_bstntswim()
 
 int bstntswim_entrypoint_2(s32 param_0)
 {
-  return D_808009D0_bstntswim[param_0];
+    return D_808009D0_bstntswim[param_0];
 }
 
 void func_80800864_bstntswim(s32 arg0)
@@ -247,26 +259,27 @@ void func_80800864_bstntswim(s32 arg0)
     _bsrest_entrypoint_14();
     func_80800174_bstntswim(arg0);
 }
+
 void func_8080088C_bstntswim(s32 arg0)
 {
     func_80800114_bstntswim();
     _bsrest_entrypoint_16(arg0);
 }
+
 int func_808008B4_bstntswim(Actor *param_0)
 {
-  s32 local_0;
-  local_0 = 0;
-  if (_bsrest_entrypoint_20())
-  {
-    local_0 = 0x10F;
-  }
-  _bstnt_entrypoint_4(param_0);
-  bs_setState(param_0, local_0);
+    s32 local_0;
+    local_0 = 0;
+    if (_bsrest_entrypoint_20()) {
+        local_0 = 0x10F;
+    }
+    _bstnt_entrypoint_4(param_0);
+    bs_setState(param_0, local_0);
 }
 
 int bstntswim_entrypoint_3(s32 param_0)
 {
-  return D_808009E0_bstntswim[param_0];
+    return D_808009E0_bstntswim[param_0];
 }
 
 void func_8080090C_bstntswim(s32 arg0)
@@ -274,28 +287,33 @@ void func_8080090C_bstntswim(s32 arg0)
     func_80800114_bstntswim();
     _bsdrone_entrypoint_0(arg0);
 }
+
 void func_80800934_bstntswim(s32 arg0)
 {
     _bsdrone_entrypoint_1();
     _bstnt_entrypoint_4(arg0);
 }
+
 void func_8080095C_bstntswim(s32 arg0)
 {
     _bsdrone_entrypoint_2();
     func_80800174_bstntswim(arg0);
 }
+
 int bstntswim_entrypoint_4(s32 param_0)
 {
-  return D_808009F0_bstntswim[param_0];
+    return D_808009F0_bstntswim[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/tntswim.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bstnt_entrypoint_10();
 extern void _bsdrone_entrypoint_3();
-s32 D_808009B0_bstntswim[4] = { (u32)func_808001CC_bstntswim, (u32)func_80800200_bstntswim, (u32)func_808002D0_bstntswim, (u32)_bstnt_entrypoint_10 };
-int D_808009C0_bstntswim[4] = { (u32)func_808005FC_bstntswim, (u32)func_8080042C_bstntswim, (u32)func_8080049C_bstntswim, (u32)_bstnt_entrypoint_10 };
-s32 D_808009D0_bstntswim[4] = { (u32)func_80800830_bstntswim, (u32)func_80800630_bstntswim, (u32)func_808006E4_bstntswim, (u32)_bstnt_entrypoint_10 };
-s32 D_808009E0_bstntswim[4] = { (u32)func_80800864_bstntswim, (u32)func_8080088C_bstntswim, (u32)func_808008B4_bstntswim, (u32)_bstnt_entrypoint_10 };
-s32 D_808009F0_bstntswim[4] = { (u32)func_8080095C_bstntswim, (u32)func_8080090C_bstntswim, (u32)func_80800934_bstntswim, (u32)_bsdrone_entrypoint_3 };
+s32 D_808009B0_bstntswim[4] = {(u32) func_808001CC_bstntswim, (u32) func_80800200_bstntswim,
+                               (u32) func_808002D0_bstntswim, (u32) _bstnt_entrypoint_10};
+int D_808009C0_bstntswim[4] = {(u32) func_808005FC_bstntswim, (u32) func_8080042C_bstntswim,
+                               (u32) func_8080049C_bstntswim, (u32) _bstnt_entrypoint_10};
+s32 D_808009D0_bstntswim[4] = {(u32) func_80800830_bstntswim, (u32) func_80800630_bstntswim,
+                               (u32) func_808006E4_bstntswim, (u32) _bstnt_entrypoint_10};
+s32 D_808009E0_bstntswim[4] = {(u32) func_80800864_bstntswim, (u32) func_8080088C_bstntswim,
+                               (u32) func_808008B4_bstntswim, (u32) _bstnt_entrypoint_10};
+s32 D_808009F0_bstntswim[4] = {(u32) func_8080095C_bstntswim, (u32) func_8080090C_bstntswim,
+                               (u32) func_80800934_bstntswim, (u32) _bsdrone_entrypoint_3};

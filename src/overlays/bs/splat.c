@@ -1,4 +1,3 @@
-#include "common.h"
 #include "overlays/ba/playerstate.h"
 
 extern void func_800954E8(PlayerState *, s32 *);
@@ -42,24 +41,31 @@ void func_80800114_bssplat(PlayerState *param_0)
     s32 local_0 = 0;
     void *local_1 = baanim_getAnimCtrlPtr(param_0);
 
-    baphysics_set_target_horizontal_velocity(param_0, func_800F0E00(0.0f, baphysics_get_target_horizontal_velocity(param_0) - 15.0f));
-    switch (*(s32 *)((u8 *)param_0 + 0x15C)) {
+    baphysics_set_target_horizontal_velocity(
+        param_0, func_800F0E00(0.0f, baphysics_get_target_horizontal_velocity(param_0) - 15.0f));
+    switch (*(s32 *) ((u8 *) param_0 + 0x15C)) {
         case 0:
-            if (baphysics_get_target_horizontal_velocity(param_0) > 140.0f) _badust_entrypoint_9(param_0);
-            if (func_8008DD04(param_0)) local_0 = 0x2F;
+            if (baphysics_get_target_horizontal_velocity(param_0) > 140.0f)
+                _badust_entrypoint_9(param_0);
+            if (func_8008DD04(param_0))
+                local_0 = 0x2F;
             if (anctrl_isStopped(local_1)) {
                 baanim_playForDuration_onceSmooth(param_0, 0xD2, 2.25f);
-                *(s32 *)((u8 *)param_0 + 0x15C) = 1;
+                *(s32 *) ((u8 *) param_0 + 0x15C) = 1;
             }
             break;
         case 1:
-            if (anctrl_isAt(local_1, 0.63f)) local_0 = 0x20;
-            if (anctrl_isStopped(local_1)) local_0 = 1;
-            if (func_8008DD04(param_0)) local_0 = 0x2F;
-            break;
+            if (anctrl_isAt(local_1, 0.63f))
+                local_0 = 0x20;
+            if (anctrl_isStopped(local_1))
+                local_0 = 1;
+            if (func_8008DD04(param_0))
+                local_0 = 0x2F;
     }
-    if (!player_isStable(param_0) && player_inWater(param_0)) local_0 = 0x2D;
-    if (!func_800A1718(param_0)) local_0 = 0x41;
+    if (!player_isStable(param_0) && player_inWater(param_0))
+        local_0 = 0x2D;
+    if (!func_800A1718(param_0))
+        local_0 = 0x41;
     bs_setState(param_0, local_0);
 }
 
@@ -68,13 +74,12 @@ void func_80800274_bssplat(s32 arg0)
     func_8008E95C();
     func_8009BD88(arg0);
 }
+
 int bssplat_entrypoint_1(s32 param_0)
 {
-  return D_808002B0_bssplat[param_0];
+    return D_808002B0_bssplat[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/splat.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void func_80099AA8();
-s32 D_808002B0_bssplat[4] = { (u32)func_80800274_bssplat, (u32)func_8080009C_bssplat, (u32)func_80800114_bssplat, (u32)func_80099AA8 };
+s32 D_808002B0_bssplat[4] = {(u32) func_80800274_bssplat, (u32) func_8080009C_bssplat,
+                             (u32) func_80800114_bssplat, (u32) func_80099AA8};

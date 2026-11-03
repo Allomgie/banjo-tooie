@@ -25,39 +25,39 @@ void sccustom_banjo_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 para
     lim = _scinfobar_entrypoint_19(param_1);
     cnt = _scinfobar_entrypoint_20(param_1);
     mode = _scinfobar_entrypoint_14(param_1);
-    cap = (s32)(((f32)(cnt * 0 + 0x28)) * fv);
+    cap = (s32) ((f32) (cnt * 0 + 0x28) * fv);
     if (n < cap) {
-        if (1) {}
-        if (1) {}
-        scale = (s32)((1.0f - ((f32)(cap - n)) / ((f32)cap)) * 256.0f);
+        if (1)
+            if (1)
+                scale = (s32) ((1.0f - (f32) (cap - n) / (f32) cap) * 256.0f);
     } else {
         scale = 0x100;
     }
     i = cnt - 1;
     if (i >= 0) {
         do {
-            pos = (s32)(((f32)(i * 0x14 + 0x28)) * fv);
+            pos = (s32) ((f32) (i * 0x14 + 0x28) * fv);
             if (n < pos) {
                 pos = n;
             }
             switch (mode) {
-            case 1:
-                if (lim == i + 1) {
-                    alpha = 0xFF;
-                } else {
+                case 1:
+                    if (lim == i + 1) {
+                        alpha = 0xFF;
+                    } else {
+                        alpha = 0x78;
+                    }
+                    break;
+                case 2:
                     alpha = 0x78;
-                }
-                break;
-            case 2:
-                alpha = 0x78;
-                break;
-            default:
-                if (i < lim) {
-                    alpha = 0xFF;
-                } else {
-                    alpha = 0x78;
-                }
-                break;
+                    break;
+                default:
+                    if (i < lim) {
+                        alpha = 0xFF;
+                    } else {
+                        alpha = 0x78;
+                    }
+                    break;
             }
             func_800E257C((alpha * scale) >> 8);
             func_800E253C(fv);
@@ -88,16 +88,16 @@ void sccustom_banjo_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 para
     fv = _scinfobar_entrypoint_18(param_1);
     lim = func_800CF6B0();
     cnt = func_800CF6D0();
-    cap = (s32)(((f32)(cnt * 0 + 0x28)) * fv);
+    cap = (s32) ((f32) (cnt * 0 + 0x28) * fv);
     if (n < cap) {
-        scale = (s32)((1.0f - ((f32)(cap - n)) / ((f32)cap)) * 256.0f);
+        scale = (s32) ((1.0f - (f32) (cap - n) / (f32) cap) * 256.0f);
     } else {
         scale = 0x100;
     }
     i = cnt - 1;
     if (i >= 0) {
         do {
-            pos = (s32)(((f32)(i * 0x14 + 0x28)) * fv);
+            pos = (s32) ((f32) (i * 0x14 + 0x28) * fv);
             if (n < pos) {
                 pos = n;
             }
@@ -117,7 +117,8 @@ void sccustom_banjo_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 para
     }
 }
 
-s32 sccustom_banjo_entrypoint_2(s32 param_0) {
+s32 sccustom_banjo_entrypoint_2(s32 param_0)
+{
     s32 local_0 = _scinfobar_entrypoint_20(param_0) - 1;
     f32 local_1 = _scinfobar_entrypoint_18(param_0);
     return (local_0 * 20 + 0x28) * local_1;
@@ -131,8 +132,5 @@ s32 sccustom_banjo_entrypoint_3(s32 param_0)
     local_0 = func_800CF6D0() - 1;
     local_1 = _scinfobar_entrypoint_18(param_0);
     local_1 = (local_0 * 20 + 40) * local_1;
-    return (s32)local_1;
+    return (s32) local_1;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/sc/custom_banjo.data.s) is defined here in C.
- * Values are taken from the ROM. */

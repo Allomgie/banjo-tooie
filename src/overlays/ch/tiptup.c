@@ -23,12 +23,14 @@ extern s32 D_808015CC_chtiptup[];
 extern s32 D_808015DC_chtiptup[];
 extern s32 D_808015EC_chtiptup[];
 extern s32 D_80801600_chtiptup[];
-extern u8 unk2C[];
 extern void _capod_entrypoint_2();
 extern void _gcdialogcamera_entrypoint_4(f32 *);
 extern void _gcdialogcamera_entrypoint_5(f32 *);
-extern u8 unk2A[];
-typedef struct { u8 pad[0x95]; u8 local_0:7; u8 local_1:1; } TiptupFlags27;
+typedef struct {
+    u8 pad[0x95];
+    u8 local_0 : 7;
+    u8 local_1 : 1;
+} TiptupFlags27;
 extern Actor *_subaddiefind_entrypoint_2(s32, s32);
 extern int D_8080165C_chtiptup[];
 extern int D_80801668_chtiptup[];
@@ -41,8 +43,6 @@ extern s32 func_800D9154(f32 *, f32);
 extern s32 _subaddieaudioquick_entrypoint_3(Actor *, void *, void *, f32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800EF1B8(f32 *, f32, f32);
-extern u8 unk6E[];
-extern u8 unk6C[];
 extern u8 D_80801520_chtiptup[];
 extern u8 D_8080152C_chtiptup[];
 extern u8 D_8080154C_chtiptup[];
@@ -76,17 +76,17 @@ int func_808007CC_chtiptup();
 void func_80800808_chtiptup();
 int func_808008B4_chtiptup();
 void func_80800934_chtiptup();
-extern void func_80101870(), func_80102EC0(), func_80107C2C(), func_80108ED0(), func_80800C70_chtiptup();
-extern u8 D_808013E0_chtiptup[];
+extern void func_80101870(), func_80102EC0(), func_80107C2C(), func_80108ED0(),
+    func_80800C70_chtiptup();
 
 int chtiptup_entrypoint_0()
 {
-    return (int)&D_80801448_chtiptup;
+    return (int) &D_80801448_chtiptup;
 }
 
 int chtiptup_entrypoint_1()
 {
-  return (int)&D_80801490_chtiptup;
+    return (int) &D_80801490_chtiptup;
 }
 
 int *chtiptup_entrypoint_2()
@@ -106,58 +106,61 @@ void func_80800024_chtiptup(Actor *param_0)
     _sudeflect_entrypoint_1(param_0->position, 250.0f, 0.0f, 70.0f, 0xE);
     func_80800694_chtiptup(param_0);
     switch (param_0->unk70_10) {
-    case 1:
-        func_808004C4_chtiptup(param_0);
-        break;
-    case 4:
-        if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801520_chtiptup, 0.7f)) {
-            func_80800614_chtiptup(param_0->position, param_0->position, 8, 1.5f, D_8080152C_chtiptup);
-        }
-        if (func_80101DDC(param_0)) {
-            func_80102424(param_0, 5);
-            _subaddieDll_entrypoint_4(param_0, 1);
-        }
-        break;
-    case 5:
-        if (!func_80105A5C(param_0) && func_800D9154(&param_0->unk58, 2.4f)) {
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80801558_chtiptup);
-        }
-        if (!func_8001210C(3)) {
-            local_0 = (func_80105AE8(param_0) < 0.45f) ? NULL : D_80801568_chtiptup;
-            func_800EE7F8(local_1, param_0->position);
-            func_800EF1B8(local_1, param_0->rotation[1], 5e+01f);
-            local_1[1] -= 40.0f;
-            func_80800614_chtiptup(param_0->position, local_1, 3, 1.0f, local_0);
-        }
-        func_80105834(param_0);
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, func_80105A5C(param_0) == 0, D_8080154C_chtiptup);
-        break;
+        case 1:
+            func_808004C4_chtiptup(param_0);
+            break;
+        case 4:
+            if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801520_chtiptup,
+                                                 0.7f)) {
+                func_80800614_chtiptup(param_0->position, param_0->position, 8, 1.5f,
+                                       D_8080152C_chtiptup);
+            }
+            if (func_80101DDC(param_0)) {
+                func_80102424(param_0, 5);
+                _subaddieDll_entrypoint_4(param_0, 1);
+            }
+            break;
+        case 5:
+            if (!func_80105A5C(param_0) && func_800D9154(&param_0->unk58, 2.4f)) {
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80801558_chtiptup);
+            }
+            if (!func_8001210C(3)) {
+                local_0 = (func_80105AE8(param_0) < 0.45f) ? NULL : D_80801568_chtiptup;
+                func_800EE7F8(local_1, param_0->position);
+                func_800EF1B8(local_1, param_0->rotation[1], 5e+01f);
+                local_1[1] -= 40.0f;
+                func_80800614_chtiptup(param_0->position, local_1, 3, 1.0f, local_0);
+            }
+            func_80105834(param_0);
+            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, func_80105A5C(param_0) == 0,
+                                            D_8080154C_chtiptup);
     }
 }
 
 void func_80800200_chtiptup(Actor *param_0)
 {
-  s32 *local_0;
+    s32 *local_0;
 
-  if ((func_800D0A9C(0x20, 1) != 0) && (_glcutDll_entrypoint_20() == 0)) {
-    func_800FFAB0(param_0);
-    return;
-  }
-  param_0->unk6C_0 = _subaddiesect_entrypoint_1(param_0);
-  _subaddiesect_entrypoint_2(param_0, param_0->unk6C_0, 0);
-  local_0 = _subaddiefind_entrypoint_2(0x359, 0);
-  if (local_0 != 0) {
-    param_0->unk3C = (Unk80132ED0 *)*local_0;
-  }
-  func_80105A9C(param_0, 4e+02f);
-  if (_glcutDll_entrypoint_20() != 0) {
-    func_80102424(param_0, 6);
-  }
+    if ((func_800D0A9C(0x20, 1) != 0) && (_glcutDll_entrypoint_20() == 0)) {
+        func_800FFAB0(param_0);
+        return;
+    }
+    param_0->unk6C_0 = _subaddiesect_entrypoint_1(param_0);
+    _subaddiesect_entrypoint_2(param_0, param_0->unk6C_0, 0);
+    local_0 = _subaddiefind_entrypoint_2(0x359, 0);
+    if (local_0 != 0) {
+        param_0->unk3C = (Unk80132ED0 *) *local_0;
+    }
+    func_80105A9C(param_0, 4e+02f);
+    if (_glcutDll_entrypoint_20() != 0) {
+        func_80102424(param_0, 6);
+    }
 }
 
-s32 func_808002C8_chtiptup(Actor *this){
-    u8 local_0 = _subaddieaudioloop_entrypoint_3((*(u8 *)((char *)(this) + 40)));
-    (*(u8 *)((char *)(this) + 40)) = local_0;
+s32 func_808002C8_chtiptup(Actor *this)
+{
+    u8 local_0 = _subaddieaudioloop_entrypoint_3(*(u8 *) ((char *) this + 40));
+    *(u8 *) ((char *) this + 40) = local_0;
 }
 
 int func_808002F4_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
@@ -165,30 +168,45 @@ int func_808002F4_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
     s32 local_0;
     s32 local_1;
     switch (param_1) {
-    case 0x2E: func_80800578_chtiptup(param_0, ((s16 *)&param_2)[0], ((s16 *)&param_2)[1]); break;
-    case 0x2F: func_80800534_chtiptup(param_0, ((s16 *)&param_2)[0], ((s16 *)&param_2)[1]); break;
-    case 0x52: _gcdialogcamera_entrypoint_3(D_80801398_chtiptup, param_0->scale); break;
-    case 0x57: return func_80800774_chtiptup(param_0, param_2 & 0xFFFF, (u32)(param_2 & 0xFFFF0000) >> 16);
-    case 0xB:
-        if (param_2 == 4) {
-            func_808007CC_chtiptup(param_0);
-            func_800FFA88(param_0->unk3C);
-            func_800FFAB0(param_0);
-            return 4;
-        }
-        return 3;
-    case 0x95: ((u8 *)param_0)[0x28] = 0; break;
-    case 0xB8:
-        local_0 = param_2 & 0xFFFF;
-        local_1 = func_800DA298(0xBD);
-        switch (local_0) {
-        case 1: return local_1 ? 0xFF8 : 0xFF7;
-        case 2: return local_1 ? 0xFF8 : 0x104F;
-        case 3: return local_1 ? 0xFF8 : 0xFF7;
-        }
-    default: return 0;
-    case 0x29:
-    case 0x2A: break;
+        case 0x2E:
+            func_80800578_chtiptup(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            break;
+        case 0x2F:
+            func_80800534_chtiptup(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            break;
+        case 0x52:
+            _gcdialogcamera_entrypoint_3(D_80801398_chtiptup, param_0->scale);
+            break;
+        case 0x57:
+            return func_80800774_chtiptup(param_0, param_2 & 0xFFFF,
+                                          (u32) (param_2 & 0xFFFF0000) >> 16);
+        case 0xB:
+            if (param_2 == 4) {
+                func_808007CC_chtiptup(param_0);
+                func_800FFA88(param_0->unk3C);
+                func_800FFAB0(param_0);
+                return 4;
+            }
+            return 3;
+        case 0x95:
+            ((u8 *) param_0)[0x28] = 0;
+            break;
+        case 0xB8:
+            local_0 = param_2 & 0xFFFF;
+            local_1 = func_800DA298(0xBD);
+            switch (local_0) {
+                case 1:
+                    return local_1 ? 0xFF8 : 0xFF7;
+                case 2:
+                    return local_1 ? 0xFF8 : 0x104F;
+                case 3:
+                    return local_1 ? 0xFF8 : 0xFF7;
+            }
+        default:
+            return 0;
+        case 0x29:
+        case 0x2A:
+            break;
     }
     return 1;
 }
@@ -197,7 +215,8 @@ void func_808004C4_chtiptup(Actor *param_0)
 {
     s32 local_0;
 
-    local_0 = _subaddiedialog_entrypoint_8(param_0, param_0->position, &D_80801570_chtiptup, &D_80801360_chtiptup, 7);
+    local_0 = _subaddiedialog_entrypoint_8(param_0, param_0->position, &D_80801570_chtiptup,
+                                           &D_80801360_chtiptup, 7);
     if (local_0 != 0) {
         if (_subaddiedialog_entrypoint_9(param_0, local_0, &D_80801360_chtiptup, 7) != 3) {
             func_80800808_chtiptup(param_0, 2, 0);
@@ -205,27 +224,27 @@ void func_808004C4_chtiptup(Actor *param_0)
     }
 }
 
-s32 func_80800534_chtiptup(s32 param_0, s32 param_1, s32 param_2) {
+s32 func_80800534_chtiptup(s32 param_0, s32 param_1, s32 param_2)
+{
     func_80800934_chtiptup(param_0, 0x40, 0);
     func_800D1000(0x20, 1, 0, 0, 0);
 }
 
-int func_80800578_chtiptup(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+int func_80800578_chtiptup(param_0, param_1, param_2)
+Actor *param_0;
+s32 param_1;
+s32 param_2;
 {
-  if (param_1 == 0xFFA)
-  {
-    func_800F82D4(func_800F54E4(param_0), 0);
-    func_80102424(param_0, 4);
-    func_808008B4_chtiptup(param_0, 4, 0x30);
-  }
-  else
-  {
-    if ((*((s32 *) (((char *) param_0) + 0x2C))) != 0)
-    {
-      func_808007CC_chtiptup(param_0);
+    if (param_1 == 0xFFA) {
+        func_800F82D4(func_800F54E4(param_0), 0);
+        func_80102424(param_0, 4);
+        func_808008B4_chtiptup(param_0, 4, 0x30);
+    } else {
+        if (*(s32 *) ((char *) param_0 + 0x2C) != 0) {
+            func_808007CC_chtiptup(param_0);
+        }
+        func_80102424(param_0, func_800DA298(0xBE) ? 3 : 1);
     }
-    func_80102424(param_0, (func_800DA298(0xBE)) ? (3) : (1));
-  }
 }
 
 void func_80800614_chtiptup(f32 *param_0, f32 *param_1, s32 param_2, f32 param_3, void *param_4)
@@ -240,102 +259,111 @@ void func_80800614_chtiptup(f32 *param_0, f32 *param_1, s32 param_2, f32 param_3
     func_800BA22C(local_0, param_2);
 }
 
-void func_80800694_chtiptup(u8 *param_0) {
+void func_80800694_chtiptup(u8 *param_0)
+{
     switch (func_801022E4()) {
-    case 0x18A:
-        _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_808015B0_chtiptup, 0.7f);
-        _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_808015C0_chtiptup, 0.35f);
-        _subaddieaudioquick_entrypoint_4(param_0, param_0 + 4, &D_808015CC_chtiptup, &D_808015DC_chtiptup);
-        break;
-    case 0x189:
-        if (func_80101E4C(param_0, &D_80801600_chtiptup) != 0) {
-            if (param_0[0x28] == 0) {
-                param_0[0x28] = _subaddieaudioquick_entrypoint_1(param_0, param_0 + 4);
+        case 0x18A:
+            _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_808015B0_chtiptup, 0.7f);
+            _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_808015C0_chtiptup, 0.35f);
+            _subaddieaudioquick_entrypoint_4(param_0, param_0 + 4, &D_808015CC_chtiptup,
+                                             &D_808015DC_chtiptup);
+            break;
+        case 0x189:
+            if (func_80101E4C(param_0, &D_80801600_chtiptup) != 0) {
+                if (param_0[0x28] == 0) {
+                    param_0[0x28] = _subaddieaudioquick_entrypoint_1(param_0, param_0 + 4);
+                }
+                func_800C4350(param_0[0x28], param_0 + 4, &D_808015EC_chtiptup);
             }
-            func_800C4350(param_0[0x28], param_0 + 4, &D_808015EC_chtiptup);
+    }
+}
+
+int func_80800774_chtiptup(param_0, param_1, param_2)
+Actor *param_0;
+s32 param_1;
+s32 param_2;
+{
+    if (_gcdialogcamera_entrypoint_0(param_1 | 0, param_2 | 0)) {
+        if (*(s32 *) ((char *) param_0 + 0x2C) != 2) {
+            func_80800808_chtiptup(param_0, 2, 1);
         }
-        break;
+        return 2;
     }
+    return 1;
 }
 
-int func_80800774_chtiptup(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+int func_808007CC_chtiptup(param_0)
+Actor *param_0;
 {
-  if (_gcdialogcamera_entrypoint_0(param_1 | 0, param_2 | 0))
-  {
-    if ((*(s32 *)((char *)(param_0) + 0x2C)) != 2)
-    {
-      func_80800808_chtiptup(param_0, 2, 1);
-    }
-    return 2;
-  }
-  return 1;
-}
-
-int func_808007CC_chtiptup(param_0) Actor *param_0;
-{
-    s32 *ptr = (s32 *)((char *)param_0 + 0x2C);
+    s32 *ptr = (s32 *) ((char *) param_0 + 0x2C);
     if (*ptr != 0) {
         _capod_entrypoint_3(0, param_0);
         *ptr = 0;
     }
 }
 
-void func_80800808_chtiptup(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+void func_80800808_chtiptup(param_0, param_1, param_2) Actor *param_0;
+s32 param_1;
+s32 param_2;
 {
     switch (param_0->actorData[5]) {
-    case 0:
-        _capod_entrypoint_2(param_0->unk0, 0x16, 0);
-    case 1:
-    case 3:
-        _capod_entrypoint_8(1);
-        param_0->actorData[5] = 2;
-        _gcdialogcamera_entrypoint_3(D_80801398_chtiptup, param_0->scale);
-        _gcdialogcamera_entrypoint_4(param_0->position);
-        _gcdialogcamera_entrypoint_5(param_0->rotation);
-        _gcdialogcamera_entrypoint_8();
-    case 2:
-        _capod_entrypoint_7(param_1, param_2);
-        break;
+        case 0:
+            _capod_entrypoint_2(param_0->unk0, 0x16, 0);
+        case 1:
+        case 3:
+            _capod_entrypoint_8(1);
+            param_0->actorData[5] = 2;
+            _gcdialogcamera_entrypoint_3(D_80801398_chtiptup, param_0->scale);
+            _gcdialogcamera_entrypoint_4(param_0->position);
+            _gcdialogcamera_entrypoint_5(param_0->rotation);
+            _gcdialogcamera_entrypoint_8();
+        case 2:
+            _capod_entrypoint_7(param_1, param_2);
     }
 }
 
-int func_808008B4_chtiptup(param_0, param_1, param_2) Unk80132ED0 *param_0; s32 param_1; s32 param_2;
+int func_808008B4_chtiptup(param_0, param_1, param_2)
+Unk80132ED0 *param_0;
+s32 param_1;
+s32 param_2;
 {
-  Unk80132ED0 *local_0;
-  s32 local_1;
-  local_0 = param_0;
-  local_1 = (*(s32 *)((char *)(param_0) + 0x2C));
-  switch (local_1)
-  {
-    case 0 :
-      _capod_entrypoint_2((*(s32 *)((char *)(param_0) + 0x0)), 0x16, param_2, param_0);
-      
-    case 2 :
-    case 3 :
-      (*(s32 *)((char *)(param_0) + 0x2C)) = 1;
-      
-    case 1 :
-      _capod_entrypoint_6((*(s32 *)((char *)(local_0) + 0x0)), param_1, param_2, param_0);
-      return;
-  }
+    Unk80132ED0 *local_0;
+    s32 local_1;
+    local_0 = param_0;
+    local_1 = *(s32 *) ((char *) param_0 + 0x2C);
+    switch (local_1) {
+        case 0:
+            _capod_entrypoint_2(*(s32 *) ((char *) param_0 + 0x0), 0x16, param_2, param_0);
+
+        case 2:
+        case 3:
+            *(s32 *) ((char *) param_0 + 0x2C) = 1;
+
+        case 1:
+            _capod_entrypoint_6(*(s32 *) ((char *) local_0 + 0x0), param_1, param_2, param_0);
+    }
 }
 
-void func_80800934_chtiptup(param_0, param_1, param_2) s32 *param_0; s32 param_1; s32 param_2; {
+void func_80800934_chtiptup(param_0, param_1, param_2) s32 *param_0;
+s32 param_1;
+s32 param_2;
+{
     s32 local_0;
 
-    local_0 = *(s32*)((char*)param_0 + 0x2C);
-    switch (local_0) {
+    local_0 = *(s32 *) ((char *) param_0 + 0x2C);
+
+switch (local_0) {
     case 0:
-        _capod_entrypoint_2(*(s32*)((char*)param_0 + 0), 0x16, param_2, param_0);
-        
-    case 1: ;
+        _capod_entrypoint_2(*(s32 *) ((char *) param_0 + 0), 0x16, param_2, param_0);
+
+    case 1:;
     case 2:
-        *(s32*)((char*)param_0 + 0x2C) = 3;
-        
+        *(s32 *) ((char *) param_0 + 0x2C) = 3;
+
     case 3:
-        _capod_entrypoint_20(*(s32*)((char*)param_0 + 0), param_1, param_2, param_0);
-        return;
-    }
+        _capod_entrypoint_20(*(s32 *) ((char *) param_0 + 0), param_1, param_2, param_0);
+}
+
 }
 
 void func_80800E9C_chtiptup();
@@ -345,10 +373,11 @@ void func_808009B4_chtiptup(Actor *param_0)
     Actor *local_0;
     Actor *local_1;
 
-    if (_subaddieskeleton_entrypoint_3(param_0->unk0, 4, (f32 *)param_0->actorData)) {
-        _chbadshad_entrypoint_1(param_0, (f32 *)param_0->actorData, 0.8f);
-    }
-    switch (param_0->unk70_10) {
+if (_subaddieskeleton_entrypoint_3(param_0->unk0, 4, (f32 *) param_0->actorData)) {
+    _chbadshad_entrypoint_1(param_0, (f32 *) param_0->actorData, 0.8f);
+}
+
+switch (param_0->unk70_10) {
     case 1:
         return;
     case 2:
@@ -358,7 +387,6 @@ void func_808009B4_chtiptup(Actor *param_0)
             func_8010A590(param_0);
             local_0 = func_80106790(param_0->unk3C);
             func_800F82D4(func_800F54E4(), 0);
-            if (1) {}
             _subaddiedialog_entrypoint_11(local_0->unk0, 0xFF9, 0xC, local_0->position, 0x54);
         }
         break;
@@ -387,7 +415,8 @@ void func_808009B4_chtiptup(Actor *param_0)
         break;
     case 5:
         func_80800E9C_chtiptup(param_0);
-        func_80105A9C(param_0, func_800F3780(func_80101F24(param_0), D_80801644_chtiptup, 3) * 200.0f);
+        func_80105A9C(param_0,
+                      func_800F3780(func_80101F24(param_0), D_80801644_chtiptup, 3) * 200.0f);
         func_80105854(param_0);
         break;
     case 6:
@@ -395,11 +424,12 @@ void func_808009B4_chtiptup(Actor *param_0)
         if (func_80101DDC(param_0)) {
             func_80102424(param_0, 7);
         }
-        break;
-    }
-    if (func_800F52B8(func_800F54E4(), param_0->unk0) != 1) {
-        func_800F4F34(func_800F54E4(), (f32 *)param_0->actorData, 0.0f, 30.0f);
-    }
+}
+
+if (func_800F52B8(func_800F54E4(), param_0->unk0) != 1) {
+    func_800F4F34(func_800F54E4(), (f32 *) param_0->actorData, 0.0f, 30.0f);
+}
+
 }
 
 void func_80800C70_chtiptup(param_0) Actor *param_0;
@@ -407,21 +437,24 @@ void func_80800C70_chtiptup(param_0) Actor *param_0;
     if (func_800DA298(0xBE) && !_glcutDll_entrypoint_20()) {
         func_800FFAB0(param_0);
     } else {
-        param_0->unk6C_0 = _subaddiesect_entrypoint_1(param_0);
-        _subaddiesect_entrypoint_2(param_0, param_0->unk6C_0, 0);
-        if (_glcutDll_entrypoint_20()) {
-            func_80102424(param_0, 6);
-        } else if (func_800DA298(0xBD)) {
-            func_80102424(param_0, 3);
-            func_8010A590(param_0);
-        } else {
-            func_80102424(param_0, 1);
-            func_80103110(param_0, 0);
-            param_0->unk64_16 = 0;
-        }
-        func_80105BAC(param_0);
-        ((TiptupFlags27 *)param_0)->local_1 = 1;
-    }
+
+param_0->unk6C_0 = _subaddiesect_entrypoint_1(param_0);
+_subaddiesect_entrypoint_2(param_0, param_0->unk6C_0, 0);
+
+if (_glcutDll_entrypoint_20()) {
+    func_80102424(param_0, 6);
+} else if (func_800DA298(0xBD)) {
+
+func_80102424(param_0, 3);
+func_8010A590(param_0);
+} else {
+func_80102424(param_0, 1);
+func_80103110(param_0, 0);
+param_0->unk64_16 = 0;
+}
+func_80105BAC(param_0);
+((TiptupFlags27 *)param_0)->local_1 = 1;
+}
 }
 
 s32 func_80800D78_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
@@ -429,20 +462,20 @@ s32 func_80800D78_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
     Actor *local_0;
 
     switch (param_1) {
-    case 0x40:
+        case 0x40:
         func_800F8300(func_800F54E4(), 2, param_0->position);
         func_8010A570(param_0);
         func_80102424(param_0, 4);
         _subaddieDll_entrypoint_4(param_0, 1);
         func_800FC660(0xE);
         return 1;
-    case 0x95:
+        case 0x95:
         local_0 = _subaddiefind_entrypoint_2(0x358, 0);
         if (local_0) {
             param_0->unk3C = local_0->unk0;
         }
         break;
-    default:
+        default:
         return 0;
     }
     return 1;
@@ -450,10 +483,10 @@ s32 func_80800D78_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
 
 int func_80800E2C_chtiptup(s32 param_0)
 {
-  s32 local_0;
- local_0 = param_0 + 0x18; _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_8080165C_chtiptup, 0.02f);
-  _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80801668_chtiptup, 0.14f);
-  _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_80801674_chtiptup, &D_8080167C_chtiptup);
+    s32 local_0;
+    local_0 = param_0 + 0x18; _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_8080165C_chtiptup, 0.02f);
+    _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80801668_chtiptup, 0.14f);
+    _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_80801674_chtiptup, &D_8080167C_chtiptup);
 }
 
 void func_80800E9C_chtiptup(Actor *param_0)
@@ -483,47 +516,44 @@ void func_80800FE8_chtiptup(u8 *param_0) {
         _chbadshad_entrypoint_1(param_0, param_0 + 0x18, 1.0f);
     }
     switch ((u32)(*(u16 *)((s8 *)param_0 + 0x72)) >> 0xA) {
-    case 1:
+        case 1:
         temp_v0 = _plsu_entrypoint_3(*(s32 *)((s8 *)param_0 + 0));
         if (temp_v0 != -1) {
             func_800F7BC8(temp_v0, 0x53, *(s32 *)((s8 *)param_0 + 0));
-            return;
         }
         return;
-    case 2:
+        case 2:
         if (func_80101DDC(param_0) != 0) {
             func_80102424(param_0, 3);
             func_800DA544(0xBD);
-            return;
         }
         break;
-    case 3:
+        case 3:
         func_800F4F34(func_800F54E4(), param_0 + 0x18, 3e+01f, 8e+01f);
-        break;
     }
 }
 
 void func_808010CC_chtiptup(Actor *param_0)
 {
-  u16 local_0;
-  s32 local_1;
-  local_0 = ((*((u16 *) (((char *) param_0) + 0x6E))) & 0xFE00) | ((u16) (_subaddiesect_entrypoint_1() & 0x1FF));
-  *((u16 *) (((char *) param_0) + 0x6E)) = local_0;
-  local_1 = (*((s32 *) (((char *) param_0) + 0x6C))) & 0x1FF;
-  _subaddiesect_entrypoint_2(param_0, local_1, 0);
-  if (_glcutDll_entrypoint_20() != 0)
-  {
-    func_80102424(param_0, 4);
-    return;
-  }
-  if (func_800DA298(0xBD) != 0)
-  {
-    func_8010A570(param_0);
-    func_80102424(param_0, 3);
-    return;
-  }
-  func_8010A63C(param_0);
-  func_80102424(param_0, 1);
+    u16 local_0;
+    s32 local_1;
+    local_0 = ((*((u16 *) (((char *) param_0) + 0x6E))) & 0xFE00) | ((u16) (_subaddiesect_entrypoint_1() & 0x1FF));
+    *((u16 *) (((char *) param_0) + 0x6E)) = local_0;
+    local_1 = (*((s32 *) (((char *) param_0) + 0x6C))) & 0x1FF;
+    _subaddiesect_entrypoint_2(param_0, local_1, 0);
+    if (_glcutDll_entrypoint_20() != 0)
+    {
+        func_80102424(param_0, 4);
+        return;
+    }
+    if (func_800DA298(0xBD) != 0)
+    {
+        func_8010A570(param_0);
+        func_80102424(param_0, 3);
+        return;
+    }
+    func_8010A63C(param_0);
+    func_80102424(param_0, 1);
 }
 
 s32 func_80801180_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
@@ -534,7 +564,7 @@ s32 func_80801180_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
     f32 *local_4;
     Actor *local_3;
     switch (param_1) {
-    case 0x18:
+        case 0x18:
         local_4 = param_0->position;
         func_800EE7F8(local_2, local_4);
         func_800EF1B8(local_2, param_0->rotation[1] + 40.0f, 150.0f);
@@ -551,27 +581,23 @@ s32 func_80801180_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
         func_800DA544(0xBC);
         func_808008B4_chtiptup(local_1, 0xB, 0x820);
         break;
-    case 0x95:
+        case 0x95:
         local_3 = _subaddiefind_entrypoint_2(0x359, 0);
         if (local_3) param_0->unk3C = local_3->unk0;
         else param_0->unk3C = 0;
         break;
-    case 0x40:
+        case 0x40:
         local_3 = _subaddiefind_entrypoint_2(0x358, 0);
         if (local_3 && local_3->unk70_10 == 1) {
             _subaddiedialog_entrypoint_11(local_3->unk0, 0x1045, 0xE, local_3->position, 0x54);
             func_80102424(local_3, 2);
         }
         break;
-    default: return 0;
+        default: return 0;
     }
     return 1;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/tiptup.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80801360_chtiptup -> s32[], D_80801448_chtiptup -> int[], D_80801490_chtiptup -> int[], D_808014D8_chtiptup -> int[], D_80801570_chtiptup -> s32[], D_80801580_chtiptup -> s32[], D_808015B0_chtiptup -> s32[], D_808015C0_chtiptup -> s32[], D_808015CC_chtiptup -> s32[], D_808015DC_chtiptup -> s32[], D_808015EC_chtiptup -> s32[], D_80801600_chtiptup -> s32[], D_80801620_chtiptup -> s32[], D_8080162C_chtiptup -> s32[], D_80801638_chtiptup -> s32[], D_8080165C_chtiptup -> int[], D_80801668_chtiptup -> int[], D_80801674_chtiptup -> int[], D_8080167C_chtiptup -> int[] */
 s32 D_80801360_chtiptup[14] = { 0x1, 0xFF60100, 0x1, -0xFE00, 0x200, 0x104D0100, 0x200, -0x1FE00, 0x400, 0x104E0100, 0x400, -0x2FE00, -0x12001, 0x120B0300 };
 f32 D_80801398_chtiptup[4] = { 2.2e+02f, 2e+02f, 1.4e+02f, 8e+01f };
 u32 D_808013A8_chtiptup[14] = { 0x0, 0x0, 0x40D66666, 0x18A0001, 0x40D66666, 0x18A0001, 0x40900000, 0x1890001, 0x3FA00000, 0x1880002, 0x3F800000, 0x1870101, 0x40900000, 0x1890001 };

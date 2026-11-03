@@ -55,8 +55,9 @@ extern s32 D_80800FF8_bsbwhirl[];
 extern void func_80099B94(void);
 extern void func_8008C9F0(PlayerState *, f32, f32, f32, f32);
 
-void func_80800000_bsbwhirl(void *param_0) {
-    *(u32 *)((u8 *)param_0 + 0x160) = 0;
+void func_80800000_bsbwhirl(void *param_0)
+{
+    *(u32 *) ((u8 *) param_0 + 0x160) = 0;
 }
 
 void func_80800008_bsbwhirl(PlayerState *param_0)
@@ -83,14 +84,19 @@ void func_80800008_bsbwhirl(PlayerState *param_0)
 
 void func_808000D8_bsbwhirl(void *param_0)
 {
-  s32 temp_a3;
-  u8 *new_var;
-  u8 *new_var2;
-  u8 *new_var3;
-  new_var = (u8 *) param_0;
-  ;
- ; if (0 != (*((s32 *) (((u8 *) param_0) + 0x160)))) { if (1) { } if (1) { } new_var3 = ((u8 *) param_0) + 0x160; new_var2 = (u8 *) param_0; *((s32 *) new_var3) = _chlightfader_entrypoint_1((*((s32 *) (new_var + 0x160))) ^ 0, 0x3E800000, 2, *((s32 *) (new_var2 + 0x160)));
-  }
+    u8 *new_var;
+    u8 *new_var2;
+    u8 *new_var3;
+    new_var = (u8 *) param_0;
+    ;
+    if (0 != *(s32 *) ((u8 *) param_0 + 0x160)) {
+        if (1)
+            if (1)
+                new_var3 = (u8 *) param_0 + 0x160;
+        new_var2 = (u8 *) param_0;
+        *(s32 *) new_var3 = _chlightfader_entrypoint_1(*(s32 *) (new_var + 0x160) ^ 0, 0x3E800000,
+                                                       2, *(s32 *) (new_var2 + 0x160));
+    }
 }
 
 extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);
@@ -109,15 +115,15 @@ void func_80800114_bsbwhirl(PlayerState *param_0)
 
 void func_8080017C_bsbwhirl(param_0) Actor *param_0;
 {
-  int state = bs_getNextState();
-  if ((state != 0x1B) && (state != 0x1C) && (state != 0x1D) && (state != 0x1E) && (state != 0xA4) && (state != 0xA5))
-  {
-    bastick_resetZones(param_0);
-    func_800A0CF4(param_0, 0);
-    func_800FC74C(0xD);
-    func_808000D8_bsbwhirl(param_0);
-  }
-  func_8008CA4C(param_0, 1);
+    int state = bs_getNextState();
+    if ((state != 0x1B) && (state != 0x1C) && (state != 0x1D) && (state != 0x1E) &&
+        (state != 0xA4) && (state != 0xA5)) {
+        bastick_resetZones(param_0);
+        func_800A0CF4(param_0, 0);
+        func_800FC74C(0xD);
+        func_808000D8_bsbwhirl(param_0);
+    }
+    func_8008CA4C(param_0, 1);
 }
 
 void func_80800200_bsbwhirl(param_0) PlayerState *param_0;
@@ -152,32 +158,28 @@ void func_80800200_bsbwhirl(param_0) PlayerState *param_0;
         local_1[2] = local_5;
     }
     param_0->unk170 = func_800136E4(param_0->unk170 + 45.0f);
-    func_800BA930(local_4, (s16)(s32)local_1[0], 250,
-                 (s16)(s32)local_1[2], (s32)local_2[0], 250, (s32)local_2[2]);
+    func_800BA930(local_4, (s16) (s32) local_1[0], 250, (s16) (s32) local_1[2], (s32) local_2[0],
+                  250, (s32) local_2[2]);
     func_800BA22C(local_4, 2);
 }
 
 int func_808003A8_bsbwhirl(s32 param_0, s32 param_1)
 {
-  s32 local_0;
-  local_0 = param_1;
-  if (bastick_getZone(param_0) > 0)
-  {
-    local_0 = 0x1C;
-  }
-  if (bakey_released(param_0, 1))
-  {
-    local_0 = 0x1E;
-  }
-  if (bakey_pressed(param_0, 8) && player_isStable(param_0))
-  {
-    local_0 = 0x1D;
-  }
-  if (player_inWater(param_0))
-  {
-    local_0 = 0x2D;
-  }
-  return local_0;
+    s32 local_0;
+    local_0 = param_1;
+    if (bastick_getZone(param_0) > 0) {
+        local_0 = 0x1C;
+    }
+    if (bakey_released(param_0, 1)) {
+        local_0 = 0x1E;
+    }
+    if (bakey_pressed(param_0, 8) && player_isStable(param_0)) {
+        local_0 = 0x1D;
+    }
+    if (player_inWater(param_0)) {
+        local_0 = 0x2D;
+    }
+    return local_0;
 }
 
 void func_80800430_bsbwhirl(PlayerState *param_0, s32 *param_1)
@@ -211,42 +213,39 @@ void bsbwhirl_entrypoint_0(PlayerState *param_0)
 
 int bsbwhirl_entrypoint_1(Actor *param_0)
 {
-  s32 local_0;
-  local_0 = 0;
-  bainput_enable(param_0, 1, 1);
-  if (anctrl_isStopped(baanim_getAnimCtrlPtr(param_0)))
-  {
-    local_0 = 0x1B;
-  }
-  func_80800008_bsbwhirl(param_0);
-  bs_setState(param_0, local_0);
+    s32 local_0;
+    local_0 = 0;
+    bainput_enable(param_0, 1, 1);
+    if (anctrl_isStopped(baanim_getAnimCtrlPtr(param_0))) {
+        local_0 = 0x1B;
+    }
+    func_80800008_bsbwhirl(param_0);
+    bs_setState(param_0, local_0);
 }
 
 int bsbwhirl_entrypoint_2(Actor *param_0)
 {
-  bainput_enable(param_0, 1, 1);
-  func_8080017C_bsbwhirl(param_0);
+    bainput_enable(param_0, 1, 1);
+    func_8080017C_bsbwhirl(param_0);
 }
 
 int bsbwhirl_entrypoint_3(s32 param_0)
 {
-  return D_80800F98_bsbwhirl[param_0];
+    return D_80800F98_bsbwhirl[param_0];
 }
 
 void bsbwhirl_entrypoint_4(Actor *param_0)
 {
-  extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);
-  int new_var;
-  new_var = 0x23;
-  baanim_playForDuration_loopSmooth(param_0, new_var, 1);
-  new_var = 1;
-  new_var = 1;
-  new_var = new_var & (new_var ^ 0);
-  func_8009FFD8(param_0, 1, (0, 1), new_var, 2);
-  baphysics_set_target_horizontal_velocity(param_0, 0);
+    int new_var;
+    new_var = 0x23;
+    baanim_playForDuration_loopSmooth(param_0, new_var, 1);
+    new_var = 1;
+    func_8009FFD8(param_0, 1, (0, 1), new_var, 2);
+    baphysics_set_target_horizontal_velocity(param_0, 0);
 }
 
-void bsbwhirl_entrypoint_5(s32 param_0) {
+void bsbwhirl_entrypoint_5(s32 param_0)
+{
     s32 local_0;
 
     local_0 = 0;
@@ -270,7 +269,7 @@ void bsbwhirl_entrypoint_6()
 
 int bsbwhirl_entrypoint_7(s32 param_0)
 {
-  return D_80800FA8_bsbwhirl[param_0];
+    return D_80800FA8_bsbwhirl[param_0];
 }
 
 void bsbwhirl_entrypoint_8(PlayerState *param_0)
@@ -287,13 +286,18 @@ void bsbwhirl_entrypoint_9(PlayerState *param_0)
     func_800A2CE8(param_0, 0.47f, 4);
     func_800A2CE8(param_0, 0.97f, 3);
     func_80800114_bsbwhirl(param_0);
-    if (!bastick_getZone(param_0) && func_8009BCD4(param_0, 1.0f)) local_0 = 0x1B;
-    if (bakey_released(param_0, 1)) local_0 = 0x1E;
-    if (bakey_pressed(param_0, 8) && player_isStable(param_0)) local_0 = 0x1D;
-    if (player_inWater(param_0)) local_0 = 0x4C;
+    if (!bastick_getZone(param_0) && func_8009BCD4(param_0, 1.0f))
+        local_0 = 0x1B;
+    if (bakey_released(param_0, 1))
+        local_0 = 0x1E;
+    if (bakey_pressed(param_0, 8) && player_isStable(param_0))
+        local_0 = 0x1D;
+    if (player_inWater(param_0))
+        local_0 = 0x4C;
     func_80800430_bsbwhirl(param_0, &local_0);
     func_80800008_bsbwhirl(param_0);
-    if (func_8008E148(param_0)) local_0 = _badrone_entrypoint_25(param_0);
+    if (func_8008E148(param_0))
+        local_0 = _badrone_entrypoint_25(param_0);
     bs_setState(param_0, local_0);
 }
 
@@ -304,7 +308,7 @@ void bsbwhirl_entrypoint_10()
 
 int bsbwhirl_entrypoint_11(s32 param_0)
 {
-  return D_80800FB8_bsbwhirl[param_0];
+    return D_80800FB8_bsbwhirl[param_0];
 }
 
 void bsbwhirl_entrypoint_12(PlayerState *param_0)
@@ -320,14 +324,16 @@ void bsbwhirl_entrypoint_12(PlayerState *param_0)
     anctrl_setPlaybackType(local_0, 1);
     anctrl_start(local_0);
     func_8009FFD8(param_0, 1, 1, 3, 6);
-    if (bastick_distance(param_0) != 0.0f) yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
+    if (bastick_distance(param_0) != 0.0f)
+        yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
     baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
     func_80800114_bsbwhirl(param_0);
-    baphysics_set_horizontal_velocity(param_0, yaw_getIdeal(param_0), baphysics_get_target_horizontal_velocity(param_0));
+    baphysics_set_horizontal_velocity(param_0, yaw_getIdeal(param_0),
+                                      baphysics_get_target_horizontal_velocity(param_0));
     baphysics_set_vertical_velocity(param_0, 693.5f);
     baphysics_set_gravity(param_0, -1200.0f);
     func_8009D7A4(param_0, 0.91f, 1.09f);
-    *(s32 *)((u8 *)param_0 + 0x15C) = 0;
+    *(s32 *) ((u8 *) param_0 + 0x15C) = 0;
 }
 
 void bsbwhirl_entrypoint_13(Actor *param_0)
@@ -343,48 +349,39 @@ void bsbwhirl_entrypoint_13(Actor *param_0)
     func_80800200_bsbwhirl(param_0);
     func_80800114_bsbwhirl(param_0);
     func_8009BB24(param_0, &local_4);
-    if ((bakey_released(param_0, 8) != 0) && (local_3 > 0.0f))
-    {
+    if ((bakey_released(param_0, 8) != 0) && (local_3 > 0.0f)) {
         baphysics_reset_gravity(param_0);
     }
-    switch ((*(s32 *)((s8 *)(param_0) + (0x15C))))
-    {
-    case 0:
-        if (func_8008DF8C(param_0, 0x82) != 0)
-        {
-            anctrl_setSubrange(local_0, 0.0f, 1.0f);
-            anctrl_setDuration(local_0, 0.8f);
-            anctrl_setPlaybackType(local_0, 1);
-            (*(s32 *)((s8 *)(param_0) + (0x15C))) = 1;
-        }
-        break;
-    case 1:
-        if (player_inWater(param_0) != 0)
-        {
-            local_1 = 0x2D;
-        }
-        if (player_isStable(param_0) != 0)
-        {
-            (*(s32 *)((s8 *)(param_0) + (0x15C))) = 2;
-            func_8009FE58(param_0);
-        }
-        break;
-    case 2:
-        if (anctrl_isStopped(local_0) != 0)
-        {
-            local_1 = 0x1B;
-        }
-        local_1 = func_808003A8_bsbwhirl(param_0, local_1);
-        break;
+    switch (*(s32 *) ((s8 *) param_0 + 0x15C)) {
+        case 0:
+            if (func_8008DF8C(param_0, 0x82) != 0) {
+                anctrl_setSubrange(local_0, 0.0f, 1.0f);
+                anctrl_setDuration(local_0, 0.8f);
+                anctrl_setPlaybackType(local_0, 1);
+                *(s32 *) ((s8 *) param_0 + 0x15C) = 1;
+            }
+            break;
+        case 1:
+            if (player_inWater(param_0) != 0) {
+                local_1 = 0x2D;
+            }
+            if (player_isStable(param_0) != 0) {
+                *(s32 *) ((s8 *) param_0 + 0x15C) = 2;
+                func_8009FE58(param_0);
+            }
+            break;
+        case 2:
+            if (anctrl_isStopped(local_0) != 0) {
+                local_1 = 0x1B;
+            }
+            local_1 = func_808003A8_bsbwhirl(param_0, local_1);
     }
     func_80800430_bsbwhirl(param_0, &local_1);
     func_80800008_bsbwhirl(param_0);
-    if (func_8008DA24(param_0) != 0)
-    {
+    if (func_8008DA24(param_0) != 0) {
         local_1 = 0xA8;
     }
-    if (player_inWater(param_0) != 0)
-    {
+    if (player_inWater(param_0) != 0) {
         local_1 = 0x4C;
     }
     bs_setState(param_0, local_1);
@@ -395,9 +392,10 @@ void bsbwhirl_entrypoint_14(s32 arg0)
     baphysics_reset_gravity();
     func_8080017C_bsbwhirl(arg0);
 }
+
 int bsbwhirl_entrypoint_15(s32 param_0)
 {
-  return D_80800FC8_bsbwhirl[param_0];
+    return D_80800FC8_bsbwhirl[param_0];
 }
 
 void bsbwhirl_entrypoint_16(PlayerState *param_0)
@@ -419,14 +417,13 @@ void bsbwhirl_entrypoint_16(PlayerState *param_0)
 
 int bsbwhirl_entrypoint_17(Actor *param_0)
 {
-  s32 local_0;
-  local_0 = 0;
-  if (anctrl_isStopped((s32)baanim_getAnimCtrlPtr(param_0) | 0))
-  {
-    local_0 = 1;
-  }
-  func_80800008_bsbwhirl(param_0);
-  bs_setState(param_0, local_0);
+    s32 local_0;
+    local_0 = 0;
+    if (anctrl_isStopped((s32) baanim_getAnimCtrlPtr(param_0) | 0)) {
+        local_0 = 1;
+    }
+    func_80800008_bsbwhirl(param_0);
+    bs_setState(param_0, local_0);
 }
 
 void bsbwhirl_entrypoint_18()
@@ -436,7 +433,7 @@ void bsbwhirl_entrypoint_18()
 
 int bsbwhirl_entrypoint_19(s32 param_0)
 {
-  return D_80800FD8_bsbwhirl[param_0];
+    return D_80800FD8_bsbwhirl[param_0];
 }
 
 void bsbwhirl_entrypoint_20()
@@ -456,9 +453,10 @@ void bsbwhirl_entrypoint_22(s32 arg0)
     _bsdrone_entrypoint_2();
     func_8080017C_bsbwhirl(arg0);
 }
+
 int bsbwhirl_entrypoint_23(s32 param_0)
 {
-  return D_80800FE8_bsbwhirl[param_0];
+    return D_80800FE8_bsbwhirl[param_0];
 }
 
 void bsbwhirl_entrypoint_24(s32 arg0)
@@ -466,12 +464,14 @@ void bsbwhirl_entrypoint_24(s32 arg0)
     _bsrest_entrypoint_14();
     func_8080017C_bsbwhirl(arg0);
 }
+
 void bsbwhirl_entrypoint_25()
 {
     _bsrest_entrypoint_16();
 }
 
-void bsbwhirl_entrypoint_26(s32 param_0) {
+void bsbwhirl_entrypoint_26(s32 param_0)
+{
     s32 local_0 = 0;
     func_80800200_bsbwhirl(param_0);
     func_80800008_bsbwhirl(param_0);
@@ -483,10 +483,10 @@ void bsbwhirl_entrypoint_26(s32 param_0) {
 
 int bsbwhirl_entrypoint_27(s32 param_0)
 {
-  return D_80800FF8_bsbwhirl[param_0];
+    return D_80800FF8_bsbwhirl[param_0];
 }
 
-int func_80800EA0_bsbwhirl(s32 param_0, void* param_1)
+int func_80800EA0_bsbwhirl(s32 param_0, void *param_1)
 {
     s32 ret = func_8009E6EC(param_0);
 
@@ -495,17 +495,14 @@ int func_80800EA0_bsbwhirl(s32 param_0, void* param_1)
         return;
     }
 
-    ((void (*)(s32))param_1)(param_0);
+    ((void (*)(s32)) param_1)(param_0);
 }
 
-void bsbwhirl_entrypoint_28(s32 param_0) {
+void bsbwhirl_entrypoint_28(s32 param_0)
+{
     func_80800EA0_bsbwhirl(param_0, &func_80099B94);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/bwhirl.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800F5C_bsbwhirl -> f32[] */
 extern void _bsbwhirl_entrypoint_2();
 extern void _bsbwhirl_entrypoint_0();
 extern void _bsbwhirl_entrypoint_1();
@@ -529,12 +526,26 @@ extern void _bsdrone_entrypoint_3();
 extern void _bsbwhirl_entrypoint_24();
 extern void _bsbwhirl_entrypoint_25();
 extern void _bsbwhirl_entrypoint_26();
-u8 D_80800F50_bsbwhirl[12] = { 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0xAA };
-f32 D_80800F5C_bsbwhirl[15] = { 2.666775e-39f, 1.010176e-39f, 4.683596e-39f, 9.18474e-40f, 9.18384e-40f, 1.83885e-40f, 3.122513e-39f, 6.979533e-39f, 2.295942e-39f, 5.32e-43f, 6.17e-43f, 3.949141e-39f, 1.4050869e-38f, -1.6365232e+37f, 0.0f };
-s32 D_80800F98_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_2, (u32)_bsbwhirl_entrypoint_0, (u32)_bsbwhirl_entrypoint_1, (u32)_bsbwhirl_entrypoint_28 };
-s32 D_80800FA8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_6, (u32)_bsbwhirl_entrypoint_4, (u32)_bsbwhirl_entrypoint_5, (u32)_bsbwhirl_entrypoint_28 };
-s32 D_80800FB8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_10, (u32)_bsbwhirl_entrypoint_8, (u32)_bsbwhirl_entrypoint_9, (u32)_bsbwhirl_entrypoint_28 };
-s32 D_80800FC8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_14, (u32)_bsbwhirl_entrypoint_12, (u32)_bsbwhirl_entrypoint_13, (u32)_bsbwhirl_entrypoint_28 };
-s32 D_80800FD8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_18, (u32)_bsbwhirl_entrypoint_16, (u32)_bsbwhirl_entrypoint_17, (u32)_bsbwhirl_entrypoint_28 };
-s32 D_80800FE8_bsbwhirl[4] = { (u32)_bsbwhirl_entrypoint_22, (u32)_bsbwhirl_entrypoint_20, (u32)_bsbwhirl_entrypoint_21, (u32)_bsdrone_entrypoint_3 };
-s32 D_80800FF8_bsbwhirl[6] = { (u32)_bsbwhirl_entrypoint_24, (u32)_bsbwhirl_entrypoint_25, (u32)_bsbwhirl_entrypoint_26, (u32)_bsbwhirl_entrypoint_28, 0x0, 0x0 };
+u8 D_80800F50_bsbwhirl[12] = {0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0xAA};
+f32 D_80800F5C_bsbwhirl[15] = {2.666775e-39f,  1.010176e-39f,   4.683596e-39f, 9.18474e-40f,
+                               9.18384e-40f,   1.83885e-40f,    3.122513e-39f, 6.979533e-39f,
+                               2.295942e-39f,  5.32e-43f,       6.17e-43f,     3.949141e-39f,
+                               1.4050869e-38f, -1.6365232e+37f, 0.0f};
+s32 D_80800F98_bsbwhirl[4] = {(u32) _bsbwhirl_entrypoint_2, (u32) _bsbwhirl_entrypoint_0,
+                              (u32) _bsbwhirl_entrypoint_1, (u32) _bsbwhirl_entrypoint_28};
+s32 D_80800FA8_bsbwhirl[4] = {(u32) _bsbwhirl_entrypoint_6, (u32) _bsbwhirl_entrypoint_4,
+                              (u32) _bsbwhirl_entrypoint_5, (u32) _bsbwhirl_entrypoint_28};
+s32 D_80800FB8_bsbwhirl[4] = {(u32) _bsbwhirl_entrypoint_10, (u32) _bsbwhirl_entrypoint_8,
+                              (u32) _bsbwhirl_entrypoint_9, (u32) _bsbwhirl_entrypoint_28};
+s32 D_80800FC8_bsbwhirl[4] = {(u32) _bsbwhirl_entrypoint_14, (u32) _bsbwhirl_entrypoint_12,
+                              (u32) _bsbwhirl_entrypoint_13, (u32) _bsbwhirl_entrypoint_28};
+s32 D_80800FD8_bsbwhirl[4] = {(u32) _bsbwhirl_entrypoint_18, (u32) _bsbwhirl_entrypoint_16,
+                              (u32) _bsbwhirl_entrypoint_17, (u32) _bsbwhirl_entrypoint_28};
+s32 D_80800FE8_bsbwhirl[4] = {(u32) _bsbwhirl_entrypoint_22, (u32) _bsbwhirl_entrypoint_20,
+                              (u32) _bsbwhirl_entrypoint_21, (u32) _bsdrone_entrypoint_3};
+s32 D_80800FF8_bsbwhirl[6] = {(u32) _bsbwhirl_entrypoint_24,
+                              (u32) _bsbwhirl_entrypoint_25,
+                              (u32) _bsbwhirl_entrypoint_26,
+                              (u32) _bsbwhirl_entrypoint_28,
+                              0x0,
+                              0x0};

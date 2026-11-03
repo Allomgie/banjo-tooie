@@ -1,26 +1,84 @@
 #include "common.h"
 
-typedef struct { s16 local_0; s16 pad_0; s32 pad_1 : 17; s32 local_1 : 15; void *local_2; } InfoBarSound;
+typedef struct {
+    s16 local_0;
+    s16 pad_0;
+    s32 pad_1 : 17;
+    s32 local_1 : 15;
+    void *local_2;
+} InfoBarSound;
 extern InfoBarSound D_808008B0_scinfobar[];
 extern s32 func_800E8B74(s32);
 extern void func_800E8D28(s32, f32);
 extern void func_800E8C08(u8);
-typedef struct ScInfobarCallback { s32 (*local_0)(void); u32 pad_0[2]; } ScInfobarCallback;
+typedef struct ScInfobarCallback {
+    s32 (*local_0)(void);
+    u32 pad_0[2];
+} ScInfobarCallback;
 extern ScInfobarCallback D_80800D58_scinfobar[];
-typedef struct { u8 percent; u8 mode; u8 state; u8 active; s16 id; s16 index; u8 pad_0[2]; u8 flag; u8 pad_1[9]; f32 time; u8 pad_2[8]; s32 first; s32 second; s32 third; u8 pad_3[8]; } InfoBar;
+typedef struct {
+    u8 percent;
+    u8 mode;
+    u8 state;
+    u8 active;
+    s16 id;
+    s16 index;
+    u8 pad_0[2];
+    u8 flag;
+    u8 pad_1[9];
+    f32 time;
+    u8 pad_2[8];
+    s32 first;
+    s32 second;
+    s32 third;
+    u8 pad_3[8];
+} InfoBar;
 extern void *heap_alloc(s32);
 extern void heap_free(void *);
-typedef struct { u8 local_0; u8 pad_0[9]; u8 local_1; u8 pad_1[9]; f32 local_2; f32 local_3; } InfobarTransition;
+typedef struct {
+    u8 local_0;
+    u8 pad_0[9];
+    u8 local_1;
+    u8 pad_1[9];
+    f32 local_2;
+    f32 local_3;
+} InfobarTransition;
 extern f32 func_800D8FF8(void);
 extern int D_80800D5C_scinfobar[];
-typedef struct { u8 pad0[8]; s16 unk8; u16 padA; f32 unkC; f32 unk10; f32 pad14; f32 unk18; } InfoBarRateRecord;
-extern u8 unkC[];
-typedef struct { s16 local_0; s8 local_1; s8 local_2; s16 local_3; u16 local_4; s32 local_5; } InfoBarDialog;
+typedef struct {
+    u8 pad0[8];
+    s16 unk8;
+    u16 padA;
+    f32 unkC;
+    f32 unk10;
+    f32 pad14;
+    f32 unk18;
+} InfoBarRateRecord;
+typedef struct {
+    s16 local_0;
+    s8 local_1;
+    s8 local_2;
+    s16 local_3;
+    u16 local_4;
+    s32 local_5;
+} InfoBarDialog;
 extern void _fxdialog_entrypoint_2(f32);
 extern void _fxdialog_entrypoint_4(s32, s32, s32, f32, f32, s32, s32);
-typedef struct { u8 local_0; u8 local_1; u8 pad_0[6]; s16 local_2; u8 pad_1[2]; f32 local_3; u8 pad_2[4]; f32 local_4; } InfoBarDrawState;
+typedef struct {
+    u8 local_0;
+    u8 local_1;
+    u8 pad_0[6];
+    s16 local_2;
+    u8 pad_1[2];
+    f32 local_3;
+    u8 pad_2[4];
+    f32 local_4;
+} InfoBarDrawState;
 extern void _fxdialog_entrypoint_3(void *, f32, s32, s32);
-typedef struct { s32 (*local_0)(s32, u8 *, s32, s32); s32 local_1, local_2; } InfobarDrawCallbacks;
+typedef struct {
+    s32 (*local_0)(s32, u8 *, s32, s32);
+    s32 local_1, local_2;
+} InfobarDrawCallbacks;
 extern InfobarDrawCallbacks D_80800D54_scinfobar[];
 int scinfobar_entrypoint_3();
 void scinfobar_entrypoint_8();
@@ -45,24 +103,24 @@ void func_80800000_scinfobar(u8 *param_0, s32 param_1)
 
 void func_808000B0_scinfobar(void *param_0)
 {
-  s16 local_0;
-  *((s16 *) (((s8 *) param_0) + 0x30)) = 0;
-  *((s16 *) (((s8 *) param_0) + 0x2E)) = (local_0 = *((s16 *) (((s8 *) param_0) + 0x30)));
-  *((s16 *) (((s8 *) param_0) + 0x2C)) = local_0;
+    s16 local_0;
+    *(s16 *) ((s8 *) param_0 + 0x30) = 0;
+    *(s16 *) ((s8 *) param_0 + 0x2E) = (local_0 = *(s16 *) ((s8 *) param_0 + 0x30));
+    *(s16 *) ((s8 *) param_0 + 0x2C) = local_0;
 }
 
 void func_808000C4_scinfobar(u8 *param_0)
 {
-    *(s16 *)(param_0 + 4) = *(s16 *)(param_0 + 6);
-    *(s16 *)(param_0 + 6) = -1;
+    *(s16 *) (param_0 + 4) = *(s16 *) (param_0 + 6);
+    *(s16 *) (param_0 + 6) = -1;
     param_0[2] = 0;
     if (param_0[0x32]) {
         func_800E8C08(param_0[0x32]);
     }
-    func_80800000_scinfobar(param_0, *(s16 *)(param_0 + 4));
-    scinfobar_entrypoint_8(param_0, *(s16 *)(param_0 + 0x2C));
-    scinfobar_entrypoint_9(param_0, *(s16 *)(param_0 + 0x2E));
-    scinfobar_entrypoint_3(param_0, *(s16 *)(param_0 + 0x30));
+    func_80800000_scinfobar(param_0, *(s16 *) (param_0 + 4));
+    scinfobar_entrypoint_8(param_0, *(s16 *) (param_0 + 0x2C));
+    scinfobar_entrypoint_9(param_0, *(s16 *) (param_0 + 0x2E));
+    scinfobar_entrypoint_3(param_0, *(s16 *) (param_0 + 0x30));
     func_808000B0_scinfobar(param_0);
 }
 
@@ -79,19 +137,17 @@ void func_80800144_scinfobar(u8 *param_0, s32 param_1)
     param_0[0] = param_1;
     switch (param_1) {
         case 0x65:
-            local_0 = param_0[2] ? *(s16 *)(param_0 + 0x30) : *(s32 *)(param_0 + 0x1C);
+            local_0 = param_0[2] ? *(s16 *) (param_0 + 0x30) : *(s32 *) (param_0 + 0x1C);
             if (D_80800D58_scinfobar[local_0].local_0 != NULL) {
                 scinfobar_entrypoint_10(param_0, D_80800D58_scinfobar[local_0].local_0());
             }
             break;
         case 0x66:
-            *(f32 *)(param_0 + 0x14) = 1.0f;
-            break;
+            *(f32 *) (param_0 + 0x14) = 1.0f;
         case 0x67:
             break;
         case 0x64:
-            *(f32 *)(param_0 + 0x14) = 0.0f;
-            break;
+            *(f32 *) (param_0 + 0x14) = 0.0f;
     }
 }
 
@@ -107,7 +163,7 @@ InfoBar *scinfobar_entrypoint_0(s32 param_0, s32 param_1, s32 param_2)
     local_0->active = 0;
     local_0->flag = 0;
     local_0->time = 0.0f;
-    scinfobar_entrypoint_3((u8 *)local_0, param_2);
+    scinfobar_entrypoint_3((u8 *) local_0, param_2);
     scinfobar_entrypoint_10(local_0, 0xD8);
     local_0->second = 0;
     local_0->third = 0;
@@ -117,7 +173,8 @@ InfoBar *scinfobar_entrypoint_0(s32 param_0, s32 param_1, s32 param_2)
     return local_0;
 }
 
-void scinfobar_entrypoint_1(u8 *param_0) {
+void scinfobar_entrypoint_1(u8 *param_0)
+{
     u8 local_0 = param_0[0x32];
     if (local_0 != 0) {
         func_800E8C08(local_0);
@@ -135,39 +192,40 @@ void scinfobar_entrypoint_2(InfobarTransition *param_0)
             break;
         case 0x65:
             param_0->local_2 += local_0 * param_0->local_3;
-            if (param_0->local_2 > 1.0f) func_80800144_scinfobar(param_0, 0x66);
+            if (param_0->local_2 > 1.0f)
+                func_80800144_scinfobar(param_0, 0x66);
             break;
         case 0x67:
             param_0->local_2 -= local_0 * param_0->local_3;
-            if (param_0->local_2 < 0.0f) func_80800144_scinfobar(param_0, 0x64);
-            break;
+            if (param_0->local_2 < 0.0f)
+                func_80800144_scinfobar(param_0, 0x64);
     }
     param_0->local_1 = 0;
 }
 
-int scinfobar_entrypoint_3(param_0, param_1) u8 *param_0; s32 param_1;
+int scinfobar_entrypoint_3(param_0, param_1)
+u8 *param_0;
+s32 param_1;
 {
-  if (param_0[2])
-  {
-    *(s16*)((char*)param_0 + 0x30) = param_1;
-  }
-  else
-  {
-    *(s32*)((char*)param_0 + 0x1C) = param_1;
-    *(f32*)((char*)param_0 + 0xC) = *(f32*)((char*)D_80800D5C_scinfobar + (param_1 * 3) * 4);
-  }
+    if (param_0[2]) {
+        *(s16 *) ((char *) param_0 + 0x30) = param_1;
+    } else {
+        *(s32 *) ((char *) param_0 + 0x1C) = param_1;
+        *(f32 *) ((char *) param_0 + 0xC) =
+            *(f32 *) ((char *) D_80800D5C_scinfobar + (param_1 * 3) * 4);
+    }
 }
 
 void scinfobar_entrypoint_4(s32 param_0, s32 param_1)
 {
-  s32 local_0 = param_0;
-  s32 local_1 = param_1;
-  *(s32 *)(local_0 + 0x28) = local_1;
+    s32 local_0 = param_0;
+    s32 local_1 = param_1;
+    *(s32 *) (local_0 + 0x28) = local_1;
 }
 
 void scinfobar_entrypoint_5(void *arg, s32 v)
 {
-    ((s8 *)arg)[10] = v;
+    ((s8 *) arg)[10] = v;
 }
 
 void scinfobar_entrypoint_6(u8 *param_0, s32 param_1)
@@ -183,135 +241,146 @@ void scinfobar_entrypoint_6(u8 *param_0, s32 param_1)
 
 s32 scinfobar_entrypoint_7(u8 *param_0, int param_1)
 {
-  u8 temp_v0;
-  s8 *new_var;
-  if ((*((u8 *) (((s8 *) param_0) + 2))) != 0)
-  {
-    return 0;
-  }
-  if ((param_1 == (*((s16 *) (((s8 *) param_0) + 4)))) || (param_1 == (*((s16 *) (((s8 *) param_0) + 6)))))
-  {
+    u8 temp_v0;
+    s8 *new_var;
+    if (*(u8 *) ((s8 *) param_0 + 2) != 0) {
+        return 0;
+    }
+    if ((param_1 == *(s16 *) ((s8 *) param_0 + 4)) || (param_1 == *(s16 *) ((s8 *) param_0 + 6))) {
+        return 1;
+    }
+    temp_v0 = *(u8 *) ((s8 *) param_0 + 0);
+    new_var = (s8 *) param_0 + 6;
+    *(s16 *) new_var = param_1;
+    if ((temp_v0 == 0x66) || (temp_v0 == 0x65)) {
+        *(u8 *) ((s8 *) param_0 + 2) = 0x67U;
+    } else {
+        *(u8 *) ((s8 *) param_0 + 2) = 0x65U;
+    }
     return 1;
-  }
-  temp_v0 = *((u8 *) (((s8 *) param_0) + 0));
-  new_var = ((s8 *) param_0) + 6;
-  *((s16 *) new_var) = param_1;
-  if ((temp_v0 == 0x66) || (temp_v0 == 0x65))
-  {
-    *((u8 *) (((s8 *) param_0) + 2)) = 0x67U;
-  }
-  else
-  {
-    *((u8 *) (((s8 *) param_0) + 2)) = 0x65U;
-  }
-  return 1;
 }
 
-void scinfobar_entrypoint_8(param_0, param_1) u8 *param_0; s32 param_1; {
-    if (param_0[2]) {
-        *(s16 *)(param_0 + 0x2c) = param_1;
-        return;
-    }
-    *(s32 *)(param_0 + 0x20) = param_1;
-}
-
-void scinfobar_entrypoint_9(param_0, param_1) u8 *param_0; s32 param_1; {
-    if (param_0[2]) {
-        *(s16 *)(param_0 + 0x2E) = param_1;
-        return;
-    }
-    *(s32 *)(param_0 + 0x24) = param_1;
-}
-
-void scinfobar_entrypoint_10(param_0, param_1) InfoBarRateRecord *param_0; s32 param_1;
+void scinfobar_entrypoint_8(param_0, param_1) u8 *param_0;
+s32 param_1;
 {
-    f32 local_0;
 
-    param_0->unk10 = (f32)param_1 / (24.0f * param_0->unkC);
+if (param_0[2]) {
+    *(s16 *) (param_0 + 0x2c) = param_1;
+    return;
+}
+
+*(s32 *) (param_0 + 0x20) = param_1;
+
+}
+
+void scinfobar_entrypoint_9(param_0, param_1) u8 *param_0;
+s32 param_1;
+{
+    if (param_0[2]) {
+        *(s16 *) (param_0 + 0x2E) = param_1;
+        return;
+    }
+
+*(s32 *) (param_0 + 0x24) = param_1;
+}
+
+void scinfobar_entrypoint_10(param_0, param_1) InfoBarRateRecord *param_0;
+s32 param_1;
+{
+    param_0->unk10 = (f32) param_1 / (24.0f * param_0->unkC);
     param_0->unk8 = param_1;
-    param_0->unk18 = 250.0f / (f32)param_1;
+    param_0->unk18 = 250.0f / (f32) param_1;
 }
 
 s32 scinfobar_entrypoint_11(u8 *param_0)
 {
-  return (s32) (((f32) (*((s16 *) (((char *) param_0) + 0x8)))) * (*((f32 *) (((char *) param_0) + 0x14))));
+    return (s32) (((f32) (*((s16 *) (((char *) param_0) + 0x8)))) *
+                  (*((f32 *) (((char *) param_0) + 0x14))));
 }
 
-int scinfobar_entrypoint_12(param_0) s16 param_0[5];
+int scinfobar_entrypoint_12(param_0)
+s16 param_0[5];
 {
-  return param_0[4];
+    return param_0[4];
 }
 
 f32 scinfobar_entrypoint_13(void *arg)
 {
-    return ((f32 *)arg)[5];
+    return ((f32 *) arg)[5];
 }
 
 int scinfobar_entrypoint_14(void *param_0)
 {
-    return ((int *)param_0)[0x28 / 4];
+    return ((int *) param_0)[0x28 / 4];
 }
 
-scinfobar_entrypoint_15(u8 *param_0) {
+scinfobar_entrypoint_15(u8 *param_0)
+{
     return param_0[1];
 }
 
-int scinfobar_entrypoint_16(param_0) s16 param_0[5];
+int scinfobar_entrypoint_16(param_0)
+s16 param_0[5];
 {
-  return param_0[2];
+    return param_0[2];
 }
 
-scinfobar_entrypoint_17(u8 *param_0) {
+scinfobar_entrypoint_17(u8 *param_0)
+{
     return param_0[10];
 }
 
 f32 scinfobar_entrypoint_18(Actor *param_0)
 {
-  return (*(f32 *)((char *)(param_0) + 0xC));
+    return (*(f32 *) ((char *) (param_0) + 0xC));
 }
 
 int scinfobar_entrypoint_19(void *param_0)
 {
-  return (*(s32 *)((char *)(param_0) + 0x20));
+    return (*(s32 *) ((char *) (param_0) + 0x20));
 }
 
 int scinfobar_entrypoint_20(void *param_0)
 {
-  return (*(s32 *)((char *)(param_0) + 0x24));
+    return (*(s32 *) ((char *) (param_0) + 0x24));
 }
 
-int scinfobar_entrypoint_21(u8 *param_0) {
+int scinfobar_entrypoint_21(u8 *param_0)
+{
     return param_0[0] == 'd';
 }
 
 s32 scinfobar_entrypoint_22(u8 *param_0)
 {
-  u8 v0;
-  return (*param_0) == 0x66;
+    return (*param_0) == 0x66;
 }
 
 s32 scinfobar_entrypoint_23(u8 *self)
 {
-  u8 local_0 = *self;
-  s32 local_1 = (((((local_0 & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & (0xFFFFFFFF & 0xFF)) == 0x65;
-  s32 new_var;
-  new_var = local_1;
-  return new_var;
+    u8 local_0 = *self;
+    s32 local_1 = (((((local_0 & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) &
+                   (0xFFFFFFFF & 0xFF)) == 0x65;
+    s32 new_var;
+    new_var = local_1;
+    return new_var;
 }
 
-void func_80800608_scinfobar(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4, s32 param_5)
+void func_80800608_scinfobar(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4,
+                             s32 param_5)
 {
     InfoBarDialog *local_0;
     s32 local_1;
 
-    if (param_1 >= 0 && param_1 < 100 && param_1 != 0) {
-        local_0 = &((InfoBarDialog *)D_808008B0_scinfobar)[param_1];
-        if (local_0->local_3 != 0) {
-            _fxdialog_entrypoint_2(local_0->local_3 * (1.0f / 256.0f));
-        }
-        local_1 = param_5 ? func_800E8C58((u8)param_5) : 0;
-        _fxdialog_entrypoint_4(param_0, local_0->local_0, local_1, (f32)local_0->local_1, (f32)local_0->local_2, param_4, (u32)local_0->local_4 >> 15);
+if (param_1 >= 0 && param_1 < 100 && param_1 != 0) {
+    local_0 = &((InfoBarDialog *) D_808008B0_scinfobar)[param_1];
+    if (local_0->local_3 != 0) {
+        _fxdialog_entrypoint_2(local_0->local_3 * (1.0f / 256.0f));
     }
+    local_1 = param_5 ? func_800E8C58((u8) param_5) : 0;
+    _fxdialog_entrypoint_4(param_0, local_0->local_0, local_1, (f32) local_0->local_1,
+                           (f32) local_0->local_2, param_4, (u32) local_0->local_4 >> 15);
+}
+
 }
 
 void func_808006EC_scinfobar(void *param_0, InfoBarDrawState *param_1, s32 param_2, s32 param_3)
@@ -319,8 +388,7 @@ void func_808006EC_scinfobar(void *param_0, InfoBarDrawState *param_1, s32 param
     _fxdialog_entrypoint_0();
     _fxdialog_entrypoint_1(param_2, param_3);
     _fxdialog_entrypoint_2(param_1->local_3);
-    _fxdialog_entrypoint_3(param_0,
-        param_1->local_4 * param_1->local_2, param_1->local_1, 0xFF);
+    _fxdialog_entrypoint_3(param_0, param_1->local_4 * param_1->local_2, param_1->local_1, 0xFF);
 }
 
 void scinfobar_entrypoint_24(s32 param_0, u8 *param_1, s32 param_2, s32 param_3)
@@ -328,25 +396,86 @@ void scinfobar_entrypoint_24(s32 param_0, u8 *param_1, s32 param_2, s32 param_3)
     s32 local_0;
     s32 (*local_1)(s32, u8 *, s32, s32);
     func_808006EC_scinfobar(param_0, param_1, param_2, param_3);
-    if (param_1[0] != 100) {
-        local_1 = D_80800D54_scinfobar[*(s32 *)(param_1 + 0x1C)].local_0;
-        if (local_1) local_1(param_0, param_1, param_2, param_3);
-    }
-    if (param_1[2] && param_1[0] == param_1[2]) {
-        local_0 = *(f32 *)(param_1 + 0x14) * 255.0f;
-        if (param_1[2] == 101) local_0 = 255 - local_0;
-        func_80800608_scinfobar(param_0, *(s16 *)(param_1 + 4), param_2, param_3, local_0, param_1[0x32]);
-        func_80800608_scinfobar(param_0, *(s16 *)(param_1 + 6), param_2, param_3, 255 - local_0, 0);
-        return;
-    }
-    func_80800608_scinfobar(param_0, *(s16 *)(param_1 + 4), param_2, param_3, 255, param_1[0x32]);
+
+if (param_1[0] != 100) {
+    local_1 = D_80800D54_scinfobar[*(s32 *) (param_1 + 0x1C)].local_0;
+    if (local_1)
+        local_1(param_0, param_1, param_2, param_3);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/sc/infobar.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800D58_scinfobar = D_80800D54_scinfobar + 0x4, D_80800D5C_scinfobar = D_80800D54_scinfobar + 0x8 */
+if (param_1[2] && param_1[0] == param_1[2]) {
+    local_0 = *(f32 *) (param_1 + 0x14) * 255.0f;
+    if (param_1[2] == 101)
+        local_0 = 255 - local_0;
+    func_80800608_scinfobar(param_0, *(s16 *) (param_1 + 4), param_2, param_3, local_0,
+                            param_1[0x32]);
+    func_80800608_scinfobar(param_0, *(s16 *) (param_1 + 6), param_2, param_3, 255 - local_0, 0);
+    return;
+}
+
+func_80800608_scinfobar(param_0, *(s16 *) (param_1 + 4), param_2, param_3, 255, param_1[0x32]);
+}
+
 extern void _sccustom_entrypoint_0();
 extern void _sccustom_entrypoint_3();
-InfoBarSound D_808008B0_scinfobar[99] = { 0x0, 0x0, 0x0, 0x0, 0, 0xB50, 0x0, 0x0, 0x0, 0, 0xBE9, 0x0, 0x0, 0x0, 0, 0xB81, 0x0, 0x0, 0x0, 0, 0xB83, 0x0, 0x0, 0x0, 0, 0xB82, 0x0, 0x0, 0x0, 0, 0xB84, 0x0, 0x0, 0x0, 0, 0xB85, 0x0, 0x0, 0x0, 0, 0xBE6, 0x0, 0x0, 0x0, 0, 0xB4A, 0x0, 0x0, 0x100, 0, 0xB4B, 0x0, 0x0, 0x100, 0, 0xBD0, 0x0, 0x0, 0x0, 0, 0xBEA, 0x0, 0x0, 0x0, 0, 0xC06, 0x0, 0x0, 0x0, 0, 0xB4F, 0x0, 0x0, 0x200, 0, 0xBAE, 0x0, 0x0, 0x0, 0, 0xB89, 0x0, 0x0, 0x0, 0, 0xBD9, 0x0, 0x0, 0x0, 0, 0xB99, 0x0, 0x0, 0x0, 0, 0xBD3, 0x0, 0x0, 0x0, 0, 0xBD7, 0x0, 0x0, 0x0, 0, 0xBD6, 0x0, 0x0, 0x0, 0, 0xBD4, 0x0, 0x0, 0x0, 0, 0xBD5, 0x0, 0x0, 0x0, 0, 0xBD8, 0x0, 0x0, 0x0, 0, 0xBD2, 0x0, 0x0, 0x0, 0, 0xBD1, 0x0, 0x0, 0x0, 0, 0xB98, 0x0, 0x0, 0x100, 0, 0xB86, 0x0, 0x0, 0x0, 0, 0xBA2, 0x0, 0x0, 0x0, 0, 0xBAB, 0x0, 0x0, 0x0, 0, 0xC0D, 0x0, 0x0, 0x0, 0, 0xC0C, 0x0, 0x0, 0x0, 0, 0xBBF, 0x0, 0x0, 0x0, 0, 0xC0E, 0x0, 0x0, 0x0, 0, 0xBE1, 0x0, 0x0, 0x0, 0, 0xBC8, 0x0, 0x0, 0x0, 0, 0xBC7, 0x0, 0x0, 0x0, 0, 0xBC9, 0x0, 0x0, 0x0, 0, 0xBDF, 0x0, 0x0, 0x0, 0, 0xBDE, 0x0, 0x0, 0x0, 0, 0x9C3, 0x0, 0x0, 0x0, 0, 0xB6D, 0x0, 0x0, 0x0, 0, 0xB6C, 0x0, 0x0, 0x0, 0, 0xB6B, 0x0, 0x0, 0x0, 0, 0xC04, 0x0, 0x0, 0x0, 0, 0xC02, 0x0, 0x0, 0x0, 0, 0xC03, 0x0, 0x0, 0x0, 0, 0xC09, 0x0, 0x0, 0x0, 0, 0xC05, 0x0, 0x0, 0x0, 0, 0xBFF, 0x0, 0x0, 0x0, 0, 0xBA4, 0x0, 0x0, 0x0, 0, 0xBAE, 0x0, 0x0, 0x0, 0, 0xB9E, 0x0, 0x0, 0x0, 0, 0xC00, 0x0, 0x0, 0x0, 0, 0xC14, 0x0, 0x0, 0x0, 0, 0xB6E, 0x0, 0x0, 0x0, 0, 0xB4E, 0x0, 0x232, 0x0, 0, 0xB4C, 0x0, 0x232, 0x0, 0, 0xBE7, 0x0, 0x0, 0x0, 0, 0xBC6, 0x0, 0x0, 0x0, 0, 0xC07, 0x0, 0x0, 0x0, 0, 0xC08, 0x0, 0x0, 0x0, 0, 0xC0B, 0x0, 0x0, 0x0, 0, 0xBED, 0x0, 0x0, 0x0, 0, 0xBCD, 0x0, 0x101, 0x0, 0, 0xBDA, 0x0, 0x101, 0x0, 0, 0xBA8, 0x0, 0x101, 0x0, 0, 0xBA7, 0x0, 0x101, 0x0, 0, 0xBE5, 0x0, 0x0, 0x0, 0, 0xBAA, 0x0, 0x101, 0x0, 0, 0xBA9, 0x0, 0x101, 0x0, 0, 0xC1A, 0x0, 0x0, 0x0, 0, 0xC1C, 0x0, 0x0, 0x0, 0, 0xC1B, 0x0, 0x0, 0x0, 0, 0xC16, 0x0, 0x0, 0x0, 0, 0xC15, 0x0, 0x0, 0x0, 0, 0xC13, 0x0, 0x0, 0x0, 0, 0xC19, 0x0, 0x0, 0x0, 0, 0xC18, 0x0, 0x0, 0x0, 0, 0xC17, 0x0, 0x0, 0x0, 0, 0xC06, 0x0, 0x0, 0x0, 0, 0xBA3, 0x0, 0x0, 0x0, 0, 0xBA1, -0xA00, 0x0, 0x0, 0, 0xBE8, 0x0, 0x0, 0x0, 0, 0xC11, 0x0, 0x0, 0x0, 0, 0xBA2, 0x0, 0x1, 0x0, 0, 0xB89, 0x0, 0x1, 0x0, 0, 0xB8B, 0x0, 0x1, 0x0, 0, 0xBD9, 0x0, 0x1, 0x0, 0, 0xC00, 0x0, 0x1, 0x0, 0, 0xB50, 0x0, 0xE6, 0x0, 0, 0xB51, 0x0, 0xE6, 0x0, 0, 0xB52, 0x0, 0xE6, 0x0, 0, 0xB53, 0x0, 0xE6, 0x0, 0, 0xB8B, 0x0, 0x0, 0x0, 0, 0xB54, 0x0, 0x0, 0x0, 0, 0xB55, 0x0, 0x0, 0x0, 0, 0xB56, 0x0, 0x0, 0x0, 0 };
-InfobarDrawCallbacks D_80800D54_scinfobar[9] = { (void *)_sccustom_entrypoint_0, (u32)_sccustom_entrypoint_3, 0x3F266666, (void *)0x8008A658, -0x7FF75990, 0x3F266666, (void *)0x8008A928, -0x7FF756C8, 0x3F266666, (void *)0x8008A930, -0x7FF756C0, 0x3F266666, (void *)0x8008A678, -0x7FF75980, 0x3F666666, (void *)0x8008A908, -0x7FF756E8, 0x3F666666, (void *)0x8008A910, -0x7FF756E0, 0x3F666666, (void *)0x80085BA8, -0x7FF756C8, 0x3F266666, (void *)0x8008A650, -0x7FF75998, 0x3F266666 };
+InfoBarSound D_808008B0_scinfobar[99] = {
+    0x0,   0x0, 0x0,   0x0,   0, 0xB50, 0x0, 0x0,   0x0,   0, 0xBE9, 0x0,    0x0,   0x0,   0,
+    0xB81, 0x0, 0x0,   0x0,   0, 0xB83, 0x0, 0x0,   0x0,   0, 0xB82, 0x0,    0x0,   0x0,   0,
+    0xB84, 0x0, 0x0,   0x0,   0, 0xB85, 0x0, 0x0,   0x0,   0, 0xBE6, 0x0,    0x0,   0x0,   0,
+    0xB4A, 0x0, 0x0,   0x100, 0, 0xB4B, 0x0, 0x0,   0x100, 0, 0xBD0, 0x0,    0x0,   0x0,   0,
+    0xBEA, 0x0, 0x0,   0x0,   0, 0xC06, 0x0, 0x0,   0x0,   0, 0xB4F, 0x0,    0x0,   0x200, 0,
+    0xBAE, 0x0, 0x0,   0x0,   0, 0xB89, 0x0, 0x0,   0x0,   0, 0xBD9, 0x0,    0x0,   0x0,   0,
+    0xB99, 0x0, 0x0,   0x0,   0, 0xBD3, 0x0, 0x0,   0x0,   0, 0xBD7, 0x0,    0x0,   0x0,   0,
+    0xBD6, 0x0, 0x0,   0x0,   0, 0xBD4, 0x0, 0x0,   0x0,   0, 0xBD5, 0x0,    0x0,   0x0,   0,
+    0xBD8, 0x0, 0x0,   0x0,   0, 0xBD2, 0x0, 0x0,   0x0,   0, 0xBD1, 0x0,    0x0,   0x0,   0,
+    0xB98, 0x0, 0x0,   0x100, 0, 0xB86, 0x0, 0x0,   0x0,   0, 0xBA2, 0x0,    0x0,   0x0,   0,
+    0xBAB, 0x0, 0x0,   0x0,   0, 0xC0D, 0x0, 0x0,   0x0,   0, 0xC0C, 0x0,    0x0,   0x0,   0,
+    0xBBF, 0x0, 0x0,   0x0,   0, 0xC0E, 0x0, 0x0,   0x0,   0, 0xBE1, 0x0,    0x0,   0x0,   0,
+    0xBC8, 0x0, 0x0,   0x0,   0, 0xBC7, 0x0, 0x0,   0x0,   0, 0xBC9, 0x0,    0x0,   0x0,   0,
+    0xBDF, 0x0, 0x0,   0x0,   0, 0xBDE, 0x0, 0x0,   0x0,   0, 0x9C3, 0x0,    0x0,   0x0,   0,
+    0xB6D, 0x0, 0x0,   0x0,   0, 0xB6C, 0x0, 0x0,   0x0,   0, 0xB6B, 0x0,    0x0,   0x0,   0,
+    0xC04, 0x0, 0x0,   0x0,   0, 0xC02, 0x0, 0x0,   0x0,   0, 0xC03, 0x0,    0x0,   0x0,   0,
+    0xC09, 0x0, 0x0,   0x0,   0, 0xC05, 0x0, 0x0,   0x0,   0, 0xBFF, 0x0,    0x0,   0x0,   0,
+    0xBA4, 0x0, 0x0,   0x0,   0, 0xBAE, 0x0, 0x0,   0x0,   0, 0xB9E, 0x0,    0x0,   0x0,   0,
+    0xC00, 0x0, 0x0,   0x0,   0, 0xC14, 0x0, 0x0,   0x0,   0, 0xB6E, 0x0,    0x0,   0x0,   0,
+    0xB4E, 0x0, 0x232, 0x0,   0, 0xB4C, 0x0, 0x232, 0x0,   0, 0xBE7, 0x0,    0x0,   0x0,   0,
+    0xBC6, 0x0, 0x0,   0x0,   0, 0xC07, 0x0, 0x0,   0x0,   0, 0xC08, 0x0,    0x0,   0x0,   0,
+    0xC0B, 0x0, 0x0,   0x0,   0, 0xBED, 0x0, 0x0,   0x0,   0, 0xBCD, 0x0,    0x101, 0x0,   0,
+    0xBDA, 0x0, 0x101, 0x0,   0, 0xBA8, 0x0, 0x101, 0x0,   0, 0xBA7, 0x0,    0x101, 0x0,   0,
+    0xBE5, 0x0, 0x0,   0x0,   0, 0xBAA, 0x0, 0x101, 0x0,   0, 0xBA9, 0x0,    0x101, 0x0,   0,
+    0xC1A, 0x0, 0x0,   0x0,   0, 0xC1C, 0x0, 0x0,   0x0,   0, 0xC1B, 0x0,    0x0,   0x0,   0,
+    0xC16, 0x0, 0x0,   0x0,   0, 0xC15, 0x0, 0x0,   0x0,   0, 0xC13, 0x0,    0x0,   0x0,   0,
+    0xC19, 0x0, 0x0,   0x0,   0, 0xC18, 0x0, 0x0,   0x0,   0, 0xC17, 0x0,    0x0,   0x0,   0,
+    0xC06, 0x0, 0x0,   0x0,   0, 0xBA3, 0x0, 0x0,   0x0,   0, 0xBA1, -0xA00, 0x0,   0x0,   0,
+    0xBE8, 0x0, 0x0,   0x0,   0, 0xC11, 0x0, 0x0,   0x0,   0, 0xBA2, 0x0,    0x1,   0x0,   0,
+    0xB89, 0x0, 0x1,   0x0,   0, 0xB8B, 0x0, 0x1,   0x0,   0, 0xBD9, 0x0,    0x1,   0x0,   0,
+    0xC00, 0x0, 0x1,   0x0,   0, 0xB50, 0x0, 0xE6,  0x0,   0, 0xB51, 0x0,    0xE6,  0x0,   0,
+    0xB52, 0x0, 0xE6,  0x0,   0, 0xB53, 0x0, 0xE6,  0x0,   0, 0xB8B, 0x0,    0x0,   0x0,   0,
+    0xB54, 0x0, 0x0,   0x0,   0, 0xB55, 0x0, 0x0,   0x0,   0, 0xB56, 0x0,    0x0,   0x0,   0};
+InfobarDrawCallbacks D_80800D54_scinfobar[9] = {(void *) _sccustom_entrypoint_0,
+                                                (u32) _sccustom_entrypoint_3,
+                                                0x3F266666,
+                                                (void *) 0x8008A658,
+                                                -0x7FF75990,
+                                                0x3F266666,
+                                                (void *) 0x8008A928,
+                                                -0x7FF756C8,
+                                                0x3F266666,
+                                                (void *) 0x8008A930,
+                                                -0x7FF756C0,
+                                                0x3F266666,
+                                                (void *) 0x8008A678,
+                                                -0x7FF75980,
+                                                0x3F666666,
+                                                (void *) 0x8008A908,
+                                                -0x7FF756E8,
+                                                0x3F666666,
+                                                (void *) 0x8008A910,
+                                                -0x7FF756E0,
+                                                0x3F666666,
+                                                (void *) 0x80085BA8,
+                                                -0x7FF756C8,
+                                                0x3F266666,
+                                                (void *) 0x8008A650,
+                                                -0x7FF75998,
+                                                0x3F266666};

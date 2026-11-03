@@ -10,9 +10,9 @@ extern void func_80110848(void *, s32, s32);
 extern u8 D_80800510_plcamera[];
 extern void *_gccubesearch_entrypoint_6(void *, f32 *);
 extern f32 func_800EEB40(f32 *, f32 *);
-s32 func_80800300_plcamera();
 
-void plcamera_entrypoint_0(void) {
+void plcamera_entrypoint_0(void)
+{
     s32 sp1C;
     s32 temp_v0;
 
@@ -24,54 +24,51 @@ void plcamera_entrypoint_0(void) {
 
 int plcamera_entrypoint_1(s32 param_0)
 {
-  s32 local_0;
-  s32 local_1;
-  local_0 = func_800F53E4();
-  if (local_0 == 0)
-  {
+    s32 local_0;
+    s32 local_1;
+    local_0 = func_800F53E4();
+    if (local_0 == 0) {
+        return 0;
+    }
+    local_1 = local_0;
+    if ((func_800A3404(local_1) != 0) && (func_800F693C(param_0) != 0) && (func_800EA068(8) != 0)) {
+        _bsfirstp_entrypoint_2(local_1);
+        return 1;
+    }
+    if (func_800A3404(local_1) != 0) {
+        return 1;
+    }
     return 0;
-  }
-  local_1 = local_0;
-  if ((func_800A3404(local_1) != 0) && (func_800F693C(param_0) != 0) && (func_800EA068(8) != 0))
-  {
-    _bsfirstp_entrypoint_2(local_1);
-    return 1;
-  }
-  if (func_800A3404(local_1) != 0)
-  {
-    return 1;
-  }
-  return 0;
 }
 
 int plcamera_entrypoint_2(s32 param_0, s32 param_1)
 {
-  int var;
-  var = func_800F5EF8(param_0);
-  var = func_80110014(var);
-  func_801106A8(var, param_1);
+    int var;
+    var = func_800F5EF8(param_0);
+    var = func_80110014(var);
+    func_801106A8(var, param_1);
 }
 
 int plcamera_entrypoint_3(s32 param_0, s32 param_1)
 {
-  int var;
-  var = func_800F5EF8(param_0);
-  var = func_80110014(var);
-  func_80110720(var, param_1);
+    int var;
+    var = func_800F5EF8(param_0);
+    var = func_80110014(var);
+    func_80110720(var, param_1);
 }
 
 int plcamera_entrypoint_4(s32 param_0, s32 param_1)
 {
-  u32 local_0;
-  local_0 = func_800F5EF8(param_0);
-  func_80110770(func_80110014(local_0), param_1);
+    u32 local_0;
+    local_0 = func_800F5EF8(param_0);
+    func_80110770(func_80110014(local_0), param_1);
 }
 
 int plcamera_entrypoint_5(s32 param_0, s32 param_1)
 {
-  s32 local_0;
-  local_0 = func_800F5EF8(param_0);
-  func_80110790(func_80110014(local_0), param_1);
+    s32 local_0;
+    local_0 = func_800F5EF8(param_0);
+    func_80110790(func_80110014(local_0), param_1);
 }
 
 void plcamera_entrypoint_6(void *param_0, s32 param_1, s32 param_2, s32 param_3, f32 param_4)
@@ -87,7 +84,8 @@ void plcamera_entrypoint_6(void *param_0, s32 param_1, s32 param_2, s32 param_3,
     }
 }
 
-void plcamera_entrypoint_7(s32 param_0, s32 param_1, s32 param_2, s32 param_3) {
+void plcamera_entrypoint_7(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+{
     s32 local_0 = func_800F5EF8(param_0);
     if (local_0 != 0) {
         local_0 = func_80110014(local_0);
@@ -97,7 +95,8 @@ void plcamera_entrypoint_7(s32 param_0, s32 param_1, s32 param_2, s32 param_3) {
     }
 }
 
-void plcamera_entrypoint_8(void) {
+void plcamera_entrypoint_8(void)
+{
     s32 sp1C;
     s32 temp_v0;
 
@@ -107,20 +106,24 @@ void plcamera_entrypoint_8(void) {
     func_8010FD88(sp1C);
 }
 
-void plcamera_entrypoint_9(s32 param_0, s32 param_1, s32 param_2) {
+void plcamera_entrypoint_9(s32 param_0, s32 param_1, s32 param_2)
+{
     func_801110EC(func_80110014(func_800F5EF8(param_0)), param_1, param_2);
 }
 
 int plcamera_entrypoint_10()
 {
-    func_801106A0((s32)func_80110014(func_800F5EF8()) | 0);
+    func_801106A0((s32) func_80110014(func_800F5EF8()) | 0);
 }
 
-s32 func_80800300_plcamera(param_0, param_1) f32 *param_0; f32 *param_1;
+s32 func_80800300_plcamera(param_0, param_1)
+f32 *param_0;
+f32 *param_1;
 {
     void *local_0;
     local_0 = _gccubesearch_entrypoint_6(D_80800510_plcamera, param_0);
-    if (local_0 == NULL) return 0;
+    if (local_0 == NULL)
+        return 0;
     _gspropctrl_entrypoint_11(local_0, param_1);
     return func_800EEB40(param_0, param_1) < 4000000.0f;
 }
@@ -136,7 +139,7 @@ void plcamera_entrypoint_11(s32 param_0, f32 *param_1)
     f32 local_6;
     f32 local_7[3];
 
-    local_0 = (s32)func_800F5EF8((void *)param_0);
+    local_0 = (s32) func_800F5EF8((void *) param_0);
     local_1 = func_80110014(local_0);
     func_800F5A00(param_0, local_3);
     func_801107F0(local_1, local_2);
@@ -153,10 +156,11 @@ void plcamera_entrypoint_11(s32 param_0, f32 *param_1)
 
 int plcamera_entrypoint_12(s32 param_0, s32 param_1, s32 param_2)
 {
-  func_8010FDA8((s32)func_800F5EF8(param_0) | 0, param_1, param_2);
+    func_8010FDA8((s32) func_800F5EF8(param_0) | 0, param_1, param_2);
 }
 
-s32 plcamera_entrypoint_13(s32 param_0, s32 param_1) {
+s32 plcamera_entrypoint_13(s32 param_0, s32 param_1)
+{
     s32 local_0;
 
     local_0 = func_800F5EF8(param_0);
@@ -168,6 +172,5 @@ void plcamera_entrypoint_14(void *param_0, s32 param_1, s32 param_2)
     func_80110848(func_80110014(func_800F5EF8(param_0)), param_1, param_2);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/pl/camera.data.s) is defined here in C.
- * Values are taken from the ROM. */
-u8 D_80800510_plcamera[16] = { 0x0, 0x0, 0x4, 0xC8, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800510_plcamera[16] = {0x0, 0x0, 0x4, 0xC8, 0xFF, 0xFF, 0xFF, 0xFF,
+                              0x0, 0x0, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0};

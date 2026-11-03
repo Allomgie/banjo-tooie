@@ -1,7 +1,4 @@
-#include "common.h"
-
 #include "overlays/ba/bee.h"
-#include "overlays/ba/yaw.h"
 
 #include "overlays/ch/stinger.h"
 
@@ -11,23 +8,25 @@
 #include "core2/1EB2840.h"
 #include "core2/1EC8070.h"
 #include "core2/1ECE0B0.h"
-#include "core2/1ECD170.h"
 
 extern s32 D_80800390_babee[];
 extern s32 D_808003BC_babee[];
 
-s32 babee_entrypoint_0(void) {
+s32 babee_entrypoint_0(void)
+{
     return sizeof(BaBee);
 }
 
-void func_80800008_babee(f32 arg0[3], f32 arg1[3], f32 arg2) {
+void func_80800008_babee(f32 arg0[3], f32 arg1[3], f32 arg2)
+{
     f32 sp24[3];
     func_800EFA98(sp24, arg1, arg2);
     func_800EF04C(sp24, arg0);
     func_800BBCB8(sp24, 0, 1.0f, 1, &D_80800390_babee);
 }
 
-void babee_entrypoint_1(s32 arg0) {
+void babee_entrypoint_1(s32 arg0)
+{
     f32 sp5C[3];
     f32 sp50[3];
     f32 sp44[3];
@@ -36,13 +35,13 @@ void babee_entrypoint_1(s32 arg0) {
     PlayerState *self;
     BaBee *bee;
     f32 sp30;
-    
+
     self = func_800F53D0(arg0);
     bee = self->bee;
     sp3C = func_80092CDC(self, sp50, 4);
     sp40 = func_80092EB0(self);
     if (sp3C && sp40) {
-        sp30 = (player_isStable(self)) ? 0.0f : -func_8009BFCC(self);
+        sp30 = player_isStable(self) ? 0.0f : -func_8009BFCC(self);
         func_800F3BD0(self, 0x5, sp5C);
         func_800EEC30(sp44, sp30, yaw_get(self), bee->unk0[bee->index].unk0);
         func_80800008_babee(sp50, sp44, 0.0f);
@@ -57,7 +56,8 @@ void babee_entrypoint_1(s32 arg0) {
     _chstinger_entrypoint_0(sp50, sp5C, sp44, bee->unk0[bee->index].unk8, arg0);
 }
 
-void babee_entrypoint_2(PlayerState *self) {
+void babee_entrypoint_2(PlayerState *self)
+{
     BaBee *bee = self->bee;
     f32 sp20[3];
 
@@ -69,9 +69,12 @@ void babee_entrypoint_2(PlayerState *self) {
     }
 }
 
-void babee_entrypoint_3(PlayerState *self) {}
+void babee_entrypoint_3(PlayerState *self)
+{
+}
 
-void babee_entrypoint_4(PlayerState *self) {
+void babee_entrypoint_4(PlayerState *self)
+{
     BaBee *bee = self->bee;
     bee->index = 0;
     bee->cooldown = 0.0f;
@@ -80,31 +83,34 @@ void babee_entrypoint_4(PlayerState *self) {
     bee->unk0[0].unk0 = 1500.0f;
 }
 
-void babee_entrypoint_5(PlayerState *self) {
+void babee_entrypoint_5(PlayerState *self)
+{
     BaBee *bee = self->bee;
     bee->index--;
 }
-void babee_entrypoint_6(PlayerState *self) {
+
+void babee_entrypoint_6(PlayerState *self)
+{
     BaBee *bee = self->bee;
     bee->index++;
 }
 
-void babee_entrypoint_7(PlayerState *self, f32 arg1, f32 cooldown, f32 arg3) {
+void babee_entrypoint_7(PlayerState *self, f32 arg1, f32 cooldown, f32 arg3)
+{
     BaBee *bee = self->bee;
     bee->unk0[bee->index].unk0 = arg1;
     bee->unk0[bee->index].cooldown_time = cooldown;
     bee->unk0[bee->index].unk8 = arg3;
 }
 
-void babee_entrypoint_8(PlayerState *self) {
+void babee_entrypoint_8(PlayerState *self)
+{
     BaBee *bee = self->bee;
     if (0.0f < bee->cooldown) {
         bee->cooldown -= func_800D8FF8();
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/bee.data.s) is defined here in C.
- * Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800390_babee -> s32[], D_808003BC_babee -> s32[] */
-s32 D_80800390_babee[11] = { 0x1D09E2, 0x150019, 0x4C0016, 0x10000022, 0xCC00CC, 0x70007, 0x270000, 0x1F40000, 0x384002B, 0x260026, 0x0 };
-s32 D_808003BC_babee[5] = { 0x13061B, 0x164E20, 0xD0100, 0x1190011, 0x0 };
+s32 D_80800390_babee[11] = {0x1D09E2, 0x150019,  0x4C0016,  0x10000022, 0xCC00CC, 0x70007,
+                            0x270000, 0x1F40000, 0x384002B, 0x260026,   0x0};
+s32 D_808003BC_babee[5] = {0x13061B, 0x164E20, 0xD0100, 0x1190011, 0x0};

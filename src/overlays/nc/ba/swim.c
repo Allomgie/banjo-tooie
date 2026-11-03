@@ -17,19 +17,20 @@ extern f32 func_80112C3C(void *, f32);
 extern f32 func_801155E8(void *);
 extern PlayerState *func_800F53D0(s32);
 
-s32 ncbaswim_entrypoint_0() 
+s32 ncbaswim_entrypoint_0()
 {
     return 0x4;
 }
 
-void ncbaswim_entrypoint_1(s32 arg0) 
+void ncbaswim_entrypoint_1(s32 arg0)
 {
 }
+
 s32 ncbaswim_entrypoint_2(s32 param_0)
 {
-  func_801124D0(param_0, 1);
-  func_80115858(param_0, 2);
-  func_80115870(param_0, 0);
+    func_801124D0(param_0, 1);
+    func_80115858(param_0, 2);
+    func_80115870(param_0, 0);
 }
 
 void ncbaswim_entrypoint_3(u8 *param_0)
@@ -52,7 +53,7 @@ void ncbaswim_entrypoint_3(u8 *param_0)
 
     func_80112524(param_0, local_0.f);
     func_801107F0(param_0, local_2.f);
-    if (**(s32 **)(param_0 + 0x5C)) {
+    if (**(s32 **) (param_0 + 0x5C)) {
         local_5 = _ncbawaypoint_entrypoint_3(param_0, local_0.f, local_2.f);
     } else {
         local_5 = 0.0f;
@@ -66,9 +67,11 @@ void ncbaswim_entrypoint_3(u8 *param_0)
     func_80110818(param_0, local_10.f);
     local_13 = _baswim_entrypoint_14(local_9);
     local_11 = func_800F1DCC(180.0f, func_8009BFCC(local_9));
-    if (param_0) {}
+    if (param_0) {
+    }
     local_12 = func_80013728(local_10.pos.y - yaw_get(local_9) - 180.0f);
-    if (local_11) {}
+    if (local_11) {
+    }
     if (local_12 > 90.0f) {
         local_12 = 180.0f - local_12;
     } else if (local_12 < -90.0f) {
@@ -101,6 +104,3 @@ void ncbaswim_entrypoint_3(u8 *param_0)
     func_80110A68(param_0, local_3.f, local_0.f);
     func_80110790(param_0, local_3.f);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/swim.data.s) is defined here in C.
- * Values are taken from the ROM. */

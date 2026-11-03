@@ -1,19 +1,19 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/shock.h"
 
 extern s32 D_80800770_bskazshock[];
 extern s32 D_808007A4_bskazshock[];
 extern s32 D_808007B4_bskazshock[];
 
-void bskazshock_entrypoint_0(PlayerState *self) {
+void bskazshock_entrypoint_0(PlayerState *self)
+{
     f32 sp24[3];
 
     func_80092C24(self, sp24);
     func_800BBCB8(sp24, 0, 1, 1, D_80800770_bskazshock);
 }
 
-void bskazshock_entrypoint_1(PlayerState *self) {
+void bskazshock_entrypoint_1(PlayerState *self)
+{
     f32 sp2C[3];
     AnimCtrl *animCtrl;
 
@@ -33,7 +33,8 @@ void bskazshock_entrypoint_1(PlayerState *self) {
     baphysics_set_target_yaw(self, yaw_getIdeal(self));
     _bskazmove_entrypoint_0(self);
     sp2C[0] = yaw_getIdeal(self);
-    baphysics_set_horizontal_velocity(self, sp2C[0], baphysics_get_target_horizontal_velocity(self));
+    baphysics_set_horizontal_velocity(self, sp2C[0],
+                                      baphysics_get_target_horizontal_velocity(self));
     self->unk164.bytes[0] = func_800C2E04();
     func_800C3418(self->unk164.bytes[0], 0);
     func_800C2E40(self->unk164.bytes[0]);
@@ -44,7 +45,8 @@ void bskazshock_entrypoint_1(PlayerState *self) {
     self->unk160.word = 0;
 }
 
-void bskazshock_entrypoint_2(PlayerState *self) {
+void bskazshock_entrypoint_2(PlayerState *self)
+{
     BanjoStateId next_state;
     AnimCtrl *animCtrl;
     f32 sp24[3];
@@ -85,7 +87,6 @@ void bskazshock_entrypoint_2(PlayerState *self) {
             if (anctrl_isStopped(animCtrl) != 0) {
                 next_state = BS_STATE_BB;
             }
-            break;
     }
     if (func_8008DF8C(self, 0x3C) != 0) {
         if ((anctrl_getAnimTimer(animCtrl) < 0.5f) && (bakey_released(self, BUTTON_A) != 0)) {
@@ -107,17 +108,20 @@ void bskazshock_entrypoint_2(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void bskazshock_entrypoint_3(PlayerState *self) {
+void bskazshock_entrypoint_3(PlayerState *self)
+{
     func_800C2FDC(self->unk164.bytes[0]);
     func_80092BF4(self);
     _bskaz_entrypoint_2(self);
 }
 
-s32 bskazshock_entrypoint_4(s32 idx) {
+s32 bskazshock_entrypoint_4(s32 idx)
+{
     return D_808007A4_bskazshock[idx];
 }
 
-void bskazshock_entrypoint_5(PlayerState *self) {
+void bskazshock_entrypoint_5(PlayerState *self)
+{
     f32 sp2C[3];
     AnimCtrl *animCtrl;
 
@@ -138,7 +142,8 @@ void bskazshock_entrypoint_5(PlayerState *self) {
     baphysics_set_target_yaw(self, yaw_getIdeal(self));
     _bskazmove_entrypoint_0(self);
     sp2C[0] = yaw_getIdeal(self);
-    baphysics_set_horizontal_velocity(self, sp2C[0], baphysics_get_target_horizontal_velocity(self));
+    baphysics_set_horizontal_velocity(self, sp2C[0],
+                                      baphysics_get_target_horizontal_velocity(self));
     baphysics_set_vertical_velocity(self, 1820);
     baphysics_set_gravity(self, -1200);
     func_8009DBF0(self, 0x408, 1);
@@ -146,7 +151,8 @@ void bskazshock_entrypoint_5(PlayerState *self) {
     self->unk160.word = 0;
 }
 
-void bskazshock_entrypoint_6(PlayerState *self) {
+void bskazshock_entrypoint_6(PlayerState *self)
+{
     BanjoStateId next_state;
     f32 sp28[3];
     AnimCtrl *animCtrl;
@@ -181,24 +187,27 @@ void bskazshock_entrypoint_6(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void bskazshock_entrypoint_7(PlayerState *self) {
+void bskazshock_entrypoint_7(PlayerState *self)
+{
     baphysics_reset_gravity(self);
     _bskaz_entrypoint_2(self);
 }
 
-s32 bskazshock_entrypoint_8(s32 idx) {
+s32 bskazshock_entrypoint_8(s32 idx)
+{
     return D_808007B4_bskazshock[idx];
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/shock.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
-extern void _bskazshock_entrypoint_3();
-extern void _bskazshock_entrypoint_1();
-extern void _bskazshock_entrypoint_2();
+
 extern void func_80099B94();
-extern void _bskazshock_entrypoint_7();
-extern void _bskazshock_entrypoint_5();
-extern void _bskazshock_entrypoint_6();
-s32 D_80800770_bskazshock[13] = { 0x1D09E1, 0xAFFE7, 0xFFE7, 0x19001E, 0x190015, 0x190099, 0x220066, 0x590019, 0x190027, 0x1900190, 0x3200320, 0x2B0080, 0x800000 };
-s32 D_808007A4_bskazshock[4] = { (u32)_bskazshock_entrypoint_3, (u32)_bskazshock_entrypoint_1, (u32)_bskazshock_entrypoint_2, (u32)func_80099B94 };
-s32 D_808007B4_bskazshock[7] = { (u32)_bskazshock_entrypoint_7, (u32)_bskazshock_entrypoint_5, (u32)_bskazshock_entrypoint_6, (u32)func_80099B94, 0x0, 0x0, 0x0 };
+s32 D_80800770_bskazshock[13] = {0x1D09E1,  0xAFFE7,  0xFFE7,   0x19001E, 0x190015,
+                                 0x190099,  0x220066, 0x590019, 0x190027, 0x1900190,
+                                 0x3200320, 0x2B0080, 0x800000};
+s32 D_808007A4_bskazshock[4] = {(u32) _bskazshock_entrypoint_3, (u32) _bskazshock_entrypoint_1,
+                                (u32) _bskazshock_entrypoint_2, (u32) func_80099B94};
+s32 D_808007B4_bskazshock[7] = {(u32) _bskazshock_entrypoint_7,
+                                (u32) _bskazshock_entrypoint_5,
+                                (u32) _bskazshock_entrypoint_6,
+                                (u32) func_80099B94,
+                                0x0,
+                                0x0,
+                                0x0};

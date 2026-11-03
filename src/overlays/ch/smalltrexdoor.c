@@ -27,7 +27,8 @@ void func_80800000_chsmalltrexdoor(Actor *param_0)
     param_0->position[1] -= 100.0f;
     func_800BEF00(local_0, param_0->position, local_1, 0);
     param_0->position[1] += func_80103EAC(param_0);
-    _chdoormake_entrypoint_2(param_0, param_0->rotation[1] + 90.0f, 0.0f, param_0->scale * 200.0f, 10, -1);
+    _chdoormake_entrypoint_2(param_0, param_0->rotation[1] + 90.0f, 0.0f, param_0->scale * 200.0f,
+                             10, -1);
     _chdoormake_entrypoint_5(param_0, 1.0f);
     _chdoormake_entrypoint_6(param_0, 0.5f);
     _chdoormake_entrypoint_8(param_0, 5);
@@ -38,7 +39,7 @@ void func_80800150_chsmalltrexdoor(Actor *param_0)
     f32 local_0[3];
     f32 local_1;
 
-    if (param_0->unk70_10 == 4 && func_800D90A4((f32 *)((u8 *)param_0 + 0x34))) {
+    if (param_0->unk70_10 == 4 && func_800D90A4((f32 *) ((u8 *) param_0 + 0x34))) {
         func_800F5A00(func_800F54E4(), local_0);
         local_1 = func_800F1DF4(param_0->position, local_0);
         if (func_800EEAD4(local_0, param_0->position) < 400.0f) {
@@ -56,7 +57,7 @@ void func_80800244_chsmalltrexdoor(Actor *param_0, s32 param_1, s32 param_2)
 {
     if (param_1 == 0x1D || param_1 == 0x1E) {
         if (func_800F52B8(func_800F54E4(), param_0->unk0) == 0x18) {
-            ((f32 *)param_0->actorData)[7] = 4.0f;
+            ((f32 *) param_0->actorData)[7] = 4.0f;
             _chdoor_entrypoint_1(param_0, 7, 0);
             return;
         }
@@ -69,12 +70,27 @@ int *chsmalltrexdoor_entrypoint_0()
     return D_808002E0_chsmalltrexdoor;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/smalltrexdoor.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808002E0_chsmalltrexdoor -> int[] (uses written as NAME[0]) */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
 extern u8 boot_thread_stack[];
-int D_808002E0_chsmalltrexdoor[20] = { 0xAC028F, 0x8880001, 0x0, (u32)func_80800150_chsmalltrexdoor, (u32)func_80105834, (u32)func_80101870, 0x13880000, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800000_chsmalltrexdoor, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0x1F22), (u32)func_80800244_chsmalltrexdoor, 0x0, 0x0, 0x0 };
+int D_808002E0_chsmalltrexdoor[20] = {0xAC028F,
+                                      0x8880001,
+                                      0x0,
+                                      (u32) func_80800150_chsmalltrexdoor,
+                                      (u32) func_80105834,
+                                      (u32) func_80101870,
+                                      0x13880000,
+                                      0x0,
+                                      0x0,
+                                      0x800,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      (u32) func_80800000_chsmalltrexdoor,
+                                      (u32) func_80107C2C,
+                                      (u32) ((u8 *) boot_thread_stack + 0x1F22),
+                                      (u32) func_80800244_chsmalltrexdoor,
+                                      0x0,
+                                      0x0,
+                                      0x0};

@@ -13,15 +13,17 @@ extern f32 func_80112C3C(s32, f32);
 extern void func_800EEBF0(f32 *, f32 *, f32);
 extern void func_800EE780(f32 *, f32 *, f32 *);
 
-void ncbakaztorp_entrypoint_0(s32 arg0) 
+void ncbakaztorp_entrypoint_0(s32 arg0)
 {
 }
-s32 ncbakaztorp_entrypoint_1(s32 param_0) {
-  func_801120CC(param_0, 0x44FA0000, 0x457A0000, 0xC57A0000);
-  func_80111B8C(param_0, 0x40800000, 0x41000000);
-  func_801124D0(param_0, 1);
-  func_80115858(param_0, 2);
-  func_80115870(param_0, 0);
+
+s32 ncbakaztorp_entrypoint_1(s32 param_0)
+{
+    func_801120CC(param_0, 0x44FA0000, 0x457A0000, 0xC57A0000);
+    func_80111B8C(param_0, 0x40800000, 0x41000000);
+    func_801124D0(param_0, 1);
+    func_80115858(param_0, 2);
+    func_80115870(param_0, 0);
 }
 
 void ncbakaztorp_entrypoint_2(s32 param_0)
@@ -54,12 +56,16 @@ void ncbakaztorp_entrypoint_2(s32 param_0)
     local_13 = func_800F1DCC(180.0f, func_8009BFCC(local_7));
     local_12 = func_80013728(local_8[1] - yaw_get(local_7) - 180.0f);
     local_10 = local_12;
-    if (local_12 > 90.0f) local_10 = 180.0f - local_12;
-    else if (local_12 < -90.0f) local_10 = -180.0f - local_12;
+    if (local_12 > 90.0f)
+        local_10 = 180.0f - local_12;
+    else if (local_12 < -90.0f)
+        local_10 = -180.0f - local_12;
     local_9 = func_80013728(local_8[0] - local_13);
     local_13 = local_9;
-    if (local_9 > 90.0f) local_13 = 180.0f - local_9;
-    else if (local_9 < -90.0f) local_13 = -180.0f - local_9;
+    if (local_9 > 90.0f)
+        local_13 = 180.0f - local_9;
+    else if (local_9 < -90.0f)
+        local_13 = -180.0f - local_9;
     local_14 = local_11 / 225.0f * 0.4f;
     local_5[0] -= local_14 * local_13;
     local_5[1] -= local_14 * local_10;
@@ -67,10 +73,8 @@ void ncbakaztorp_entrypoint_2(s32 param_0)
     local_5[1] = func_80112C3C(param_0, local_5[1]);
     func_800EEBF0(local_1, local_5, local_4);
     func_800EE780(local_2, local_0, local_1);
-    if (func_80111FD4(param_0, local_2)) func_801138F4(param_0);
+    if (func_80111FD4(param_0, local_2))
+        func_801138F4(param_0);
     func_80110A68(param_0, local_3, local_0);
     func_80110790(param_0, local_3);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/kaztorp.data.s) is defined here in C.
- * Values are taken from the ROM. */

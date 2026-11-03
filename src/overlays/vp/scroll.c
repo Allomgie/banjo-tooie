@@ -1,16 +1,47 @@
 #include "common.h"
 
-#define SCROLL_STATE_1446
-typedef struct { f32 value; s16 offset; u8 pad_0[2]; f32 speed; s32 count; s16 indices[1]; } ScrollState1446;
-typedef struct { u8 pad_0[0x14]; s32 count; } ScrollModel1446;
-typedef struct { u16 id, enabled; } ScrollItem1446;
-typedef struct { s32 seed; u8 pad_0[0x10]; ScrollItem1446 items[1]; } ScrollItems1446;
+typedef struct {
+    f32 value;
+    s16 offset;
+    u8 pad_0[2];
+    f32 speed;
+    s32 count;
+    s16 indices[1];
+} ScrollState1446;
+typedef struct {
+    u8 pad_0[0x14];
+    s32 count;
+} ScrollModel1446;
+typedef struct {
+    u16 id, enabled;
+} ScrollItem1446;
+typedef struct {
+    s32 seed;
+    u8 pad_0[0x10];
+    ScrollItem1446 items[1];
+} ScrollItems1446;
 extern void *heap_alloc(s32);
-typedef struct { u8 pad_0[0x1C]; s32 offset; } ScrollMesh1446;
-typedef struct { u8 pad_0[3]; u8 dirty; u8 pad_1[16]; } ScrollDirty1446;
+typedef struct {
+    u8 pad_0[0x1C];
+    s32 offset;
+} ScrollMesh1446;
+typedef struct {
+    u8 pad_0[3];
+    u8 dirty;
+    u8 pad_1[16];
+} ScrollDirty1446;
 extern f32 func_800D8FF8(void);
-typedef struct { s16 local_0[3]; u16 local_1; s16 local_2[2]; u8 local_3[4]; } ScrollVertex1255;
-typedef struct { u8 pad_0[4]; s16 local_0; } ScrollOffset1255;
+
+typedef struct {
+    s16 local_0[3];
+    u16 local_1;
+    s16 local_2[2];
+    u8 local_3[4];
+} ScrollVertex1255;
+typedef struct {
+    u8 pad_0[4];
+    s16 local_0;
+} ScrollOffset1255;
 
 ScrollState1446 *vpscroll_entrypoint_0(ScrollModel1446 *param_0, ScrollItems1446 *param_1)
 {
@@ -20,7 +51,7 @@ ScrollState1446 *vpscroll_entrypoint_0(ScrollModel1446 *param_0, ScrollItems1446
     ScrollItem1446 *local_3;
 
     local_0 = heap_alloc(param_0->count * 2 + 0x10);
-    local_2 = (ScrollItem1446 *)(param_0->count * sizeof(ScrollItem1446) + (u32)param_1 + 0x14);
+    local_2 = (ScrollItem1446 *) (param_0->count * sizeof(ScrollItem1446) + (u32) param_1 + 0x14);
     local_3 = param_1->items;
     local_0->count = 0;
     local_0->offset = 0;
@@ -37,10 +68,11 @@ ScrollState1446 *vpscroll_entrypoint_0(ScrollModel1446 *param_0, ScrollItems1446
     return local_0;
 }
 
-void vpscroll_entrypoint_1(void* arg0) 
+void vpscroll_entrypoint_1(void *arg0)
 {
     heap_free(arg0);
 }
+
 void vpscroll_entrypoint_2(ScrollState1446 *param_0, ScrollMesh1446 *param_1)
 {
     s32 local_0;
@@ -49,13 +81,13 @@ void vpscroll_entrypoint_2(ScrollState1446 *param_0, ScrollMesh1446 *param_1)
     s16 *local_3;
 
     param_0->value += param_0->speed * 64.0f * func_800D8FF8();
-    local_0 = (s32)param_0->value;
+    local_0 = (s32) param_0->value;
     if (local_0 >= 0x2001) {
         param_0->value -= 8192.0f;
-        local_0 = (s32)param_0->value;
+        local_0 = (s32) param_0->value;
     }
     param_0->offset = local_0;
-    local_2 = (ScrollDirty1446 *)((u8 *)param_1 + param_1->offset);
+    local_2 = (ScrollDirty1446 *) ((u8 *) param_1 + param_1->offset);
     local_1 = 0;
     if (param_0->count > 0) {
         local_3 = param_0->indices;
@@ -67,8 +99,8 @@ void vpscroll_entrypoint_2(ScrollState1446 *param_0, ScrollMesh1446 *param_1)
     }
 }
 
-void vpscroll_entrypoint_3(ScrollOffset1255 *param_0, s32 param_1,
-                        ScrollVertex1255 *param_2, s32 param_3)
+void vpscroll_entrypoint_3(ScrollOffset1255 *param_0, s32 param_1, ScrollVertex1255 *param_2,
+                           s32 param_3)
 {
     s16 local_0;
     ScrollVertex1255 *local_1;
@@ -82,6 +114,3 @@ void vpscroll_entrypoint_3(ScrollOffset1255 *param_0, s32 param_1,
         } while (param_2 < local_1);
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/vp/scroll.data.s) is defined here in C.
- * Values are taken from the ROM. */

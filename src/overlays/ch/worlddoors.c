@@ -24,13 +24,14 @@ extern void func_800EE7F8();
 extern u8 D_808009F8_chworlddoors[];
 extern f32 func_80103EAC(Actor *);
 extern void func_800DE498(s32, void *, void *, f32, s32, s32);
-void func_80800214_chworlddoors();
 
-void func_80800000_chworlddoors(u8 *param_0) {
+void func_80800000_chworlddoors(u8 *param_0)
+{
     f32 local_0[3];
 
     func_800EE7F8(local_0, param_0 + 0x28);
-    func_800EF214(local_0, (*(f32 *)((s8 *)(param_0) + (0x44))), (*(f32 *)((s8 *)(param_0) + (0x48))), -5e+01f);
+    func_800EF214(local_0, *(f32 *) ((s8 *) param_0 + 0x44), *(f32 *) ((s8 *) param_0 + 0x48),
+                  -5e+01f);
     func_800BBCB8(param_0 + 0x28, local_0, 0x3F800000, 6, &D_80800990_chworlddoors);
 }
 
@@ -51,9 +52,9 @@ s32 func_80800068_chworlddoors(Actor *param_0)
         local_8 = local_0;
         do {
             if (_gspropctrl_entrypoint_8(*local_8) == local_5 + 0x32) {
-                _gspropctrl_entrypoint_11(*local_8, (f32 *)&param_0->actorData[0]);
+                _gspropctrl_entrypoint_11(*local_8, (f32 *) &param_0->actorData[0]);
                 local_2 = _gspropctrl_entrypoint_13(*local_8) - 1;
-                *(f32 *)&param_0->actorData[13] = _gspropctrl_entrypoint_12(*local_8);
+                *(f32 *) &param_0->actorData[13] = _gspropctrl_entrypoint_12(*local_8);
             }
             local_7++;
             local_8++;
@@ -65,7 +66,7 @@ s32 func_80800068_chworlddoors(Actor *param_0)
         local_8 = local_0;
         do {
             if (_gspropctrl_entrypoint_8(*local_8) == local_5 + 0x32) {
-                _gspropctrl_entrypoint_11(*local_8, (f32 *)&param_0->actorData[4]);
+                _gspropctrl_entrypoint_11(*local_8, (f32 *) &param_0->actorData[4]);
                 param_0->unk54 = _gspropctrl_entrypoint_13(*local_8) / 10.0f;
                 param_0->unk50 = _gspropctrl_entrypoint_12(*local_8) / 10.0f;
             }
@@ -73,56 +74,56 @@ s32 func_80800068_chworlddoors(Actor *param_0)
             local_8++;
         } while (local_7 != local_6);
     }
-    func_800F18FC((f32 *)&param_0->actorData[4], (f32 *)&param_0->actorData[0], local_1);
+    func_800F18FC((f32 *) &param_0->actorData[4], (f32 *) &param_0->actorData[0], local_1);
     param_0->rotation[0] = local_1[0];
     param_0->rotation[1] = local_1[1];
-    func_800EEBF0((f32 *)&param_0->actorData[0], local_1, 4000.0f);
-    func_800EF04C((f32 *)&param_0->actorData[0], (f32 *)&param_0->actorData[4]);
+    func_800EEBF0((f32 *) &param_0->actorData[0], local_1, 4000.0f);
+    func_800EF04C((f32 *) &param_0->actorData[0], (f32 *) &param_0->actorData[4]);
     return local_2;
 }
 
-void func_80800214_chworlddoors(param_0, param_1) void *param_0; s32 param_1;
+void func_80800214_chworlddoors(param_0, param_1) void *param_0;
+s32 param_1;
 {
     s32 local_0;
     float local_1;
     s32 local_2;
 
     switch (param_1) {
-    case 1:
-        local_0 = func_80800068_chworlddoors(param_0);
-        func_800EE7F8((s32 *)((char *)param_0 + 0x4), (s32 *)((char *)param_0 + 0x18));
-        local_2 = *(s32 *)((char *)param_0 + 0x0);
-        _capod_entrypoint_13(local_2, local_2, local_0, 0x6830);
-        *(float *)((char *)param_0 + 0x58) = 0.0f;
-        break;
-    case 2:
-        local_1 = 1.0f;
-        *(s8 *)((char *)param_0 + 0x34) = 0;
-        *(float *)((char *)param_0 + 0x58) = local_1;
-        break;
-    case 3:
-        *(float *)((char *)param_0 + 0x58) = 0.8f;
-        *(s8 *)((char *)param_0 + 0x34) = 0;
-        func_800C3F48(0x7FFFFC90);
-        break;
-    case 4:
-        func_800E1720(*(s32 *)((char *)param_0 + 0x24) - 1);
-        _subaddieaudioloop_entrypoint_2(param_0);
-        *(float *)((char *)param_0 + 0x58) = 2.0f;
-        func_8010A800(param_0, 3);
-        break;
-    case 5:
-        func_80101180(_sujiggy_entrypoint_23((u32)(*(u8 *)((char *)param_0 + 0x79)) >> 4), 7, (s32)*(float *)((char *)param_0 + 0x50));
-        *(float *)((char *)param_0 + 0x58) = *(float *)((char *)param_0 + 0x50);
-        break;
-    case 6:
-        if ((((u32)(*(u8 *)((char *)param_0 + 0x79)) >> 4) == 0)) {
-            *(s32 *)((char *)param_0 + 0x24) = func_800E15CC(2, 5e+01f, 0.5f);
-            func_80018820(0, 1.0f, 0.4f);
-        }
-        *(float *)((char *)param_0 + 0x58) = *(float *)((char *)param_0 + 0x54);
-        local_1 = *(float *)((char *)param_0 + 0x54);
-        break;
+        case 1:
+            local_0 = func_80800068_chworlddoors(param_0);
+            func_800EE7F8((s32 *) ((char *) param_0 + 0x4), (s32 *) ((char *) param_0 + 0x18));
+            local_2 = *(s32 *) ((char *) param_0 + 0x0);
+            _capod_entrypoint_13(local_2, local_2, local_0, 0x6830);
+            *(float *) ((char *) param_0 + 0x58) = 0.0f;
+            break;
+        case 2:
+            local_1 = 1.0f;
+            *(s8 *) ((char *) param_0 + 0x34) = 0;
+            *(float *) ((char *) param_0 + 0x58) = local_1;
+            break;
+        case 3:
+            *(float *) ((char *) param_0 + 0x58) = 0.8f;
+            *(s8 *) ((char *) param_0 + 0x34) = 0;
+            func_800C3F48(0x7FFFFC90);
+            break;
+        case 4:
+            func_800E1720(*(s32 *) ((char *) param_0 + 0x24) - 1);
+            _subaddieaudioloop_entrypoint_2(param_0);
+            *(float *) ((char *) param_0 + 0x58) = 2.0f;
+            func_8010A800(param_0, 3);
+            break;
+        case 5:
+            func_80101180(_sujiggy_entrypoint_23((u32) *(u8 *) ((char *) param_0 + 0x79) >> 4), 7,
+                          (s32) *(float *) ((char *) param_0 + 0x50));
+            *(float *) ((char *) param_0 + 0x58) = *(float *) ((char *) param_0 + 0x50);
+            break;
+        case 6:
+            if ((((u32) *(u8 *) ((char *) param_0 + 0x79) >> 4) == 0)) {
+                *(s32 *) ((char *) param_0 + 0x24) = func_800E15CC(2, 5e+01f, 0.5f);
+                func_80018820(0, 1.0f, 0.4f);
+            }
+            *(float *) ((char *) param_0 + 0x58) = *(float *) ((char *) param_0 + 0x54);
     }
     func_80101FDC(param_0, param_1);
 }
@@ -132,65 +133,69 @@ void func_80800388_chworlddoors(Actor *param_0)
     f32 local_0;
 
     switch (param_0->unk70_10) {
-    case 1:
-        local_0 = _capod_entrypoint_18();
-        if (local_0 < 0.1f) {
-            local_0 = 0.1f;
-        }
-        if (param_0->actorData[3] == 0) {
-            param_0->actorData[3] = func_800E15CC(0, 0.0f, 1.0f) + 1;
-        }
-        func_800E13F0(param_0->actorData[3] - 1, local_0 * 10.0f);
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_808009E8_chworlddoors);
-        func_800C4B70((s32)(24000.0f * local_0));
-        func_80018820(0, local_0, 0.1f);
-        break;
-    case 2:
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_808009E8_chworlddoors);
-        func_800C4B70(24000);
-        func_80018820(0, 1.0f, 0.1f);
-        if (func_800D90A4(&param_0->unk58)) {
-            func_80800214_chworlddoors(param_0, 3);
-            func_800EE7F8(param_0->position, (f32 *)&param_0->actorData[4]);
-        } else {
-            func_800EFE50(param_0->position, (f32 *)param_0->actorData, (f32 *)&param_0->actorData[4],
-                func_800F10B4(param_0->unk58, 1.0f, 0.0f, 0.0f, 1.0f));
-        }
-        *(u8 *)&param_0->actorData[7] = _subaddieaudioloop_entrypoint_7(
-            *(u8 *)&param_0->actorData[7], param_0->position, 1, D_808009D8_chworlddoors, 0);
-        break;
-    case 3:
-        if (func_800D90A4(&param_0->unk58)) {
-            func_80800214_chworlddoors(param_0, 4);
-            *(u8 *)&param_0->actorData[7] = _subaddieaudioloop_entrypoint_3(*(u8 *)&param_0->actorData[7]);
-            _subaddieaudioloop_entrypoint_2(param_0);
-        } else {
+        case 1:
+            local_0 = _capod_entrypoint_18();
+            if (local_0 < 0.1f) {
+                local_0 = 0.1f;
+            }
+            if (param_0->actorData[3] == 0) {
+                param_0->actorData[3] = func_800E15CC(0, 0.0f, 1.0f) + 1;
+            }
+            func_800E13F0(param_0->actorData[3] - 1, local_0 * 10.0f);
+            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_808009E8_chworlddoors);
+            func_800C4B70((s32) (24000.0f * local_0));
+            func_80018820(0, local_0, 0.1f);
+            break;
+        case 2:
             _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_808009E8_chworlddoors);
             func_800C4B70(24000);
             func_80018820(0, 1.0f, 0.1f);
-            func_80800000_chworlddoors(param_0);
-            param_0->scale = func_800F10B4(param_0->unk58, 0.8f, 0.0f, 1.0f, 0.001f);
-            *(u8 *)&param_0->actorData[7] = _subaddieaudioloop_entrypoint_7(
-                *(u8 *)&param_0->actorData[7], param_0->position, 1, D_808009D8_chworlddoors, 0);
-            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_808009E8_chworlddoors);
-            func_800C4B70(24000);
-        }
-        break;
-    case 4:
-        if (func_800D90A4(&param_0->unk58)) {
-            func_80800214_chworlddoors(param_0, 5);
-        }
-        break;
-    case 5:
-        if (func_800D90A4(&param_0->unk58)) {
-            func_80800214_chworlddoors(param_0, 6);
-        }
-        break;
-    case 6:
-        if (func_800D90A4(&param_0->unk58)) {
-            _glcutDll_entrypoint_17();
-        }
-        break;
+            if (func_800D90A4(&param_0->unk58)) {
+                func_80800214_chworlddoors(param_0, 3);
+                func_800EE7F8(param_0->position, (f32 *) &param_0->actorData[4]);
+            } else {
+                func_800EFE50(param_0->position, (f32 *) param_0->actorData,
+                              (f32 *) &param_0->actorData[4],
+                              func_800F10B4(param_0->unk58, 1.0f, 0.0f, 0.0f, 1.0f));
+            }
+            *(u8 *) &param_0->actorData[7] = _subaddieaudioloop_entrypoint_7(
+                *(u8 *) &param_0->actorData[7], param_0->position, 1, D_808009D8_chworlddoors, 0);
+            break;
+        case 3:
+            if (func_800D90A4(&param_0->unk58)) {
+                func_80800214_chworlddoors(param_0, 4);
+                *(u8 *) &param_0->actorData[7] =
+                    _subaddieaudioloop_entrypoint_3(*(u8 *) &param_0->actorData[7]);
+                _subaddieaudioloop_entrypoint_2(param_0);
+            } else {
+                _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                                D_808009E8_chworlddoors);
+                func_800C4B70(24000);
+                func_80018820(0, 1.0f, 0.1f);
+                func_80800000_chworlddoors(param_0);
+                param_0->scale = func_800F10B4(param_0->unk58, 0.8f, 0.0f, 1.0f, 0.001f);
+                *(u8 *) &param_0->actorData[7] = _subaddieaudioloop_entrypoint_7(
+                    *(u8 *) &param_0->actorData[7], param_0->position, 1, D_808009D8_chworlddoors,
+                    0);
+                _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                                D_808009E8_chworlddoors);
+                func_800C4B70(24000);
+            }
+            break;
+        case 4:
+            if (func_800D90A4(&param_0->unk58)) {
+                func_80800214_chworlddoors(param_0, 5);
+            }
+            break;
+        case 5:
+            if (func_800D90A4(&param_0->unk58)) {
+                func_80800214_chworlddoors(param_0, 6);
+            }
+            break;
+        case 6:
+            if (func_800D90A4(&param_0->unk58)) {
+                _glcutDll_entrypoint_17();
+            }
     }
 }
 
@@ -207,7 +212,8 @@ s32 func_808006A8_chworlddoors(Actor *param_0, s32 param_1, s32 param_2)
             func_800FFAB0(param_0);
             return 0;
         case 0xB:
-            if (param_0->unk70_10 == 1) func_80800214_chworlddoors(param_0, 2);
+            if (param_0->unk70_10 == 1)
+                func_80800214_chworlddoors(param_0, 2);
             return 3;
     }
     return 0;
@@ -215,13 +221,10 @@ s32 func_808006A8_chworlddoors(Actor *param_0, s32 param_1, s32 param_2)
 
 int func_80800750_chworlddoors(Actor *param_0)
 {
-
-    if (*((s32 *)((char *)param_0 + 0x24)) != 0)
-    {
-        func_800E1720(*((s32 *)((char *)param_0 + 0x24)) - 1);
+    if (*(s32 *) ((char *) param_0 + 0x24) != 0) {
+        func_800E1720(*(s32 *) ((char *) param_0 + 0x24) - 1);
     }
-    if ((*(u8 *)((char *)param_0 + 0x5F)) != 0)
-    {
+    if (*(u8 *) ((char *) param_0 + 0x5F) != 0) {
         _subaddieaudioloop_entrypoint_2(param_0);
     }
 }
@@ -233,38 +236,61 @@ void func_80800798_chworlddoors(Actor *param_0, s32 param_1)
     s32 local_2;
     f32 local_3;
     func_800EE7F8(local_0, param_0->position);
-    func_800EF214(param_0->position, param_0->rotation[0], param_0->rotation[1], func_80103EAC(param_0));
+    func_800EF214(param_0->position, param_0->rotation[0], param_0->rotation[1],
+                  func_80103EAC(param_0));
     switch (param_0->unk70_10) {
         case 3:
             local_1 = func_800F10B4(param_0->unk58, 0.8f, 0.0f, 0.0001f, 20.0f);
             local_2 = func_800F10B4(param_0->unk58, 0.8f, 0.0f, 0.0f, 255.0f);
             func_800DF830(0);
-            func_800DE498(param_1, (u8 *)param_0 + 0x28, param_0->rotation, local_1, 0, func_800D674C(0x8CB));
+            func_800DE498(param_1, (u8 *) param_0 + 0x28, param_0->rotation, local_1, 0,
+                          func_800D674C(0x8CB));
             func_80101870(param_0, param_1);
             func_800B99CC(param_1, local_2, D_808009F8_chworlddoors);
             break;
-        case 2: func_80101870(param_0, param_1); break;
-        case 4:
-            func_800B99CC(param_1, (s32)func_800F10B4(param_0->unk58, 2.0f, 0.0f, 255.0f, 0.0f), D_808009F8_chworlddoors);
+        case 2:
+            func_80101870(param_0, param_1);
             break;
+        case 4:
+            func_800B99CC(param_1, (s32) func_800F10B4(param_0->unk58, 2.0f, 0.0f, 255.0f, 0.0f),
+                          D_808009F8_chworlddoors);
     }
     func_800EE7F8(param_0->position, local_0);
 }
 
 int chworlddoors_entrypoint_0()
 {
-  return &D_80800A04_chworlddoors;
+    return &D_80800A04_chworlddoors;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/worlddoors.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800990_chworlddoors -> s32[], D_80800A04_chworlddoors -> int[] */
 extern void func_80105834();
 extern void func_80108ED0();
 extern void func_80107C2C();
-s32 D_80800990_chworlddoors[18] = { 0x1D09E5, 0x1BFCE0, -0x257FFD3, 0x32003E8, 0xE0000, 0x280016, 0x10020022, 0x33004C, 0x9900E6, 0x150000, 0xCC002B, 0xC00180, 0x4004C, 0x70002, 0x0, -0x3CCB0000, -0x3CF00000, -0x3CF50000 };
-u8 D_808009D8_chworlddoors[16] = { 0x0, 0x13, 0x6, 0x73, 0x0, 0x20, 0x0, 0x2, 0x0, 0xA, 0x0, 0xD9, 0x0, 0x0, 0x0, 0x0 };
-u8 D_808009E8_chworlddoors[16] = { 0x0, 0x13, 0x4, 0xA9, 0x0, 0x2, 0x0, 0x1E, 0x0, 0xA, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0 };
-u8 D_808009F8_chworlddoors[12] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF };
-int D_80800A04_chworlddoors[19] = { 0x158051B, 0x9660001, 0x0, (u32)func_80800388_chworlddoors, (u32)func_80105834, (u32)func_80800798_chworlddoors, 0x0, 0x0, 0x0, 0x21000, (u32)func_80800750_chworlddoors, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FBFFBFE, (u32)func_808006A8_chworlddoors, 0x0, 0x0 };
+s32 D_80800990_chworlddoors[18] = {0x1D09E5,    0x1BFCE0,    -0x257FFD3, 0x32003E8, 0xE0000,
+                                   0x280016,    0x10020022,  0x33004C,   0x9900E6,  0x150000,
+                                   0xCC002B,    0xC00180,    0x4004C,    0x70002,   0x0,
+                                   -0x3CCB0000, -0x3CF00000, -0x3CF50000};
+u8 D_808009D8_chworlddoors[16] = {0x0, 0x13, 0x6, 0x73, 0x0, 0x20, 0x0, 0x2,
+                                  0x0, 0xA,  0x0, 0xD9, 0x0, 0x0,  0x0, 0x0};
+u8 D_808009E8_chworlddoors[16] = {0x0, 0x13, 0x4, 0xA9, 0x0, 0x2, 0x0, 0x1E,
+                                  0x0, 0xA,  0x1, 0x0,  0x0, 0x0, 0x0, 0x0};
+u8 D_808009F8_chworlddoors[12] = {0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF};
+int D_80800A04_chworlddoors[19] = {0x158051B,
+                                   0x9660001,
+                                   0x0,
+                                   (u32) func_80800388_chworlddoors,
+                                   (u32) func_80105834,
+                                   (u32) func_80800798_chworlddoors,
+                                   0x0,
+                                   0x0,
+                                   0x0,
+                                   0x21000,
+                                   (u32) func_80800750_chworlddoors,
+                                   (u32) func_80108ED0,
+                                   0x0,
+                                   0x0,
+                                   (u32) func_80107C2C,
+                                   -0x7FBFFBFE,
+                                   (u32) func_808006A8_chworlddoors,
+                                   0x0,
+                                   0x0};

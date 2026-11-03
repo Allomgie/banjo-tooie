@@ -1,8 +1,7 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/glide.h"
 
-void func_80800000_bskazglide(PlayerState *self) {
+void func_80800000_bskazglide(PlayerState *self)
+{
     if (func_8009E69C(self, 0x200) == 0) {
         baphysics_reset_gravity(self);
         baphysics_reset_terminal_velocity(self);
@@ -17,7 +16,8 @@ void func_80800000_bskazglide(PlayerState *self) {
     }
 }
 
-void func_80800090_bskazglide(PlayerState *self) {
+void func_80800090_bskazglide(PlayerState *self)
+{
     if (func_8009E6C4(self, 0x200) == 0) {
         _bskaz_entrypoint_1(self);
         _bafly_entrypoint_5(self);
@@ -37,7 +37,8 @@ void func_80800090_bskazglide(PlayerState *self) {
     }
 }
 
-void func_80800184_bskazglide(PlayerState *self) {
+void func_80800184_bskazglide(PlayerState *self)
+{
     if (func_8009E6EC(self) == 0x23) {
         func_800995B8(self, 1);
         bs_setState(self, BS_STATE_15B);
@@ -47,7 +48,8 @@ void func_80800184_bskazglide(PlayerState *self) {
     func_80099B94(self);
 }
 
-void func_808001E8_bskazglide(PlayerState *self) {
+void func_808001E8_bskazglide(PlayerState *self)
+{
     if (func_8009E6EC(self) == 0x23) {
         func_8009E830(self, 2);
         return;
@@ -55,17 +57,20 @@ void func_808001E8_bskazglide(PlayerState *self) {
     func_80099B94(self);
 }
 
-void func_8080022C_bskazglide(PlayerState *self) {
+void func_8080022C_bskazglide(PlayerState *self)
+{
     func_80800000_bskazglide(self);
 }
 
-void func_8080024C_bskazglide(PlayerState *self) {
+void func_8080024C_bskazglide(PlayerState *self)
+{
     s32 sp2C;
     s32 isAboveMaximumVelocity;
 
     func_80800090_bskazglide(self);
     baanim_playForDuration_loopSmooth(self, ASSET_13D_ANIM_KAZGLIDE_UNKNOWN, 0.8f);
-    func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_3_BOUNDED, 3, BA_PHYSICS_3_LOCKED_ROTATION);
+    func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_3_BOUNDED, 3,
+                  BA_PHYSICS_3_LOCKED_ROTATION);
     if (baflag_isTrue(self, BA_FLAG_9) != 0) {
         baphysics_set_target_horizontal_velocity(self, 0.0f);
     } else {
@@ -83,7 +88,8 @@ void func_8080024C_bskazglide(PlayerState *self) {
     self->unk15C.bytes[0] = 0;
 }
 
-void func_80800364_bskazglide(PlayerState *self) {
+void func_80800364_bskazglide(PlayerState *self)
+{
     BanjoStateId next_state;
     s32 sp30;
 
@@ -98,7 +104,8 @@ void func_80800364_bskazglide(PlayerState *self) {
     _bafly_entrypoint_10(self, 300, 80);
     _bafly_entrypoint_11(self);
     _bafly_entrypoint_8(self, 300, 80, 600, -300.0f, -50.0f, -700.0f, -1000.0f);
-    if ((func_8008DF8C(self, 0x28) != 0) || ((bakey_released(self, BUTTON_Z) != 0) && (sp30 != 0))) {
+    if ((func_8008DF8C(self, 0x28) != 0) ||
+        ((bakey_released(self, BUTTON_Z) != 0) && (sp30 != 0))) {
         next_state = BS_STATE_DF;
     }
     if (sp30 != 0) {
@@ -124,18 +131,21 @@ void func_80800364_bskazglide(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskazglide_entrypoint_0(s32 idx) {
+s32 bskazglide_entrypoint_0(s32 idx)
+{
     return D_80800AB0_bskazglide[idx];
 }
 
-void func_8080050C_bskazglide(PlayerState *self) {
+void func_8080050C_bskazglide(PlayerState *self)
+{
     func_8009BC34(self);
     func_8008E95C(self);
     func_8009BD88(self);
     func_80800000_bskazglide(self);
 }
 
-void func_80800544_bskazglide(PlayerState *self) {
+void func_80800544_bskazglide(PlayerState *self)
+{
     f32 sp3C[3];
     f32 sp30[3];
     f32 sp2C;
@@ -158,7 +168,8 @@ void func_80800544_bskazglide(PlayerState *self) {
     func_8008E944(self);
 }
 
-void func_80800650_bskazglide(PlayerState *self) {
+void func_80800650_bskazglide(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -171,17 +182,20 @@ void func_80800650_bskazglide(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskazglide_entrypoint_1(s32 idx) {
+s32 bskazglide_entrypoint_1(s32 idx)
+{
     return D_80800AC0_bskazglide[idx];
 }
 
-void func_808006BC_bskazglide(PlayerState *self) {
+void func_808006BC_bskazglide(PlayerState *self)
+{
     baphysics_reset_gravity(self);
     baphysics_reset_terminal_velocity(self);
     _bskaz_entrypoint_2(self);
 }
 
-void func_808006EC_bskazglide(PlayerState *self) {
+void func_808006EC_bskazglide(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     baanim_playForDuration_loopSmooth(self, 0x13E, 0.4);
     func_8009FFD8(self, 1, 1, 1, 2);
@@ -191,7 +205,8 @@ void func_808006EC_bskazglide(PlayerState *self) {
     baflag_set(self, 0x12);
 }
 
-void func_80800780_bskazglide(PlayerState *self) {
+void func_80800780_bskazglide(PlayerState *self)
+{
     s32 sp34;
     BanjoStateId next_state;
     f32 sp2C;
@@ -226,21 +241,25 @@ void func_80800780_bskazglide(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskazglide_entrypoint_2(s32 idx) {
+s32 bskazglide_entrypoint_2(s32 idx)
+{
     return D_80800AD0_bskazglide[idx];
 }
 
-void func_80800944_bskazglide(PlayerState *self) {
+void func_80800944_bskazglide(PlayerState *self)
+{
     func_80800000_bskazglide(self);
 }
 
-void func_80800964_bskazglide(PlayerState *self) {
+void func_80800964_bskazglide(PlayerState *self)
+{
     func_80800090_bskazglide(self);
     baanim_playForDuration_loopSmooth(self, ASSET_13D_ANIM_KAZGLIDE_UNKNOWN, 0.8);
     func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 3, BA_PHYSICS_7_FREEZE);
 }
 
-void func_808009B4_bskazglide(PlayerState *self) {
+void func_808009B4_bskazglide(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -250,33 +269,40 @@ void func_808009B4_bskazglide(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskazglide_entrypoint_3(s32 idx) {
+s32 bskazglide_entrypoint_3(s32 idx)
+{
     return D_80800AE0_bskazglide[idx];
 }
 
-void func_80800A00_bskazglide(PlayerState *self) {
+void func_80800A00_bskazglide(PlayerState *self)
+{
     _bsdrone_entrypoint_2(self);
     func_80800000_bskazglide(self);
 }
 
-void func_80800A28_bskazglide(PlayerState *self) {
+void func_80800A28_bskazglide(PlayerState *self)
+{
     func_80800090_bskazglide(self);
     _bsdrone_entrypoint_0(self);
 }
 
-void func_80800A50_bskazglide(PlayerState *self) {
+void func_80800A50_bskazglide(PlayerState *self)
+{
     _bsdrone_entrypoint_1(self);
 }
 
-s32 bskazglide_entrypoint_4(s32 idx) {
+s32 bskazglide_entrypoint_4(s32 idx)
+{
     return D_80800AF0_bskazglide[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/glide.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
-s32 D_80800AB0_bskazglide[4] = { (u32)func_8080022C_bskazglide, (u32)func_8080024C_bskazglide, (u32)func_80800364_bskazglide, (u32)func_80800184_bskazglide };
-s32 D_80800AC0_bskazglide[4] = { (u32)func_8080050C_bskazglide, (u32)func_80800544_bskazglide, (u32)func_80800650_bskazglide, (u32)func_808001E8_bskazglide };
-s32 D_80800AD0_bskazglide[4] = { (u32)func_808006BC_bskazglide, (u32)func_808006EC_bskazglide, (u32)func_80800780_bskazglide, (u32)func_80099B94 };
-s32 D_80800AE0_bskazglide[4] = { (u32)func_80800944_bskazglide, (u32)func_80800964_bskazglide, (u32)func_808009B4_bskazglide, (u32)func_80800184_bskazglide };
-s32 D_80800AF0_bskazglide[4] = { (u32)func_80800A00_bskazglide, (u32)func_80800A28_bskazglide, (u32)func_80800A50_bskazglide, (u32)_bsdrone_entrypoint_3 };
+s32 D_80800AB0_bskazglide[4] = {(u32) func_8080022C_bskazglide, (u32) func_8080024C_bskazglide,
+                                (u32) func_80800364_bskazglide, (u32) func_80800184_bskazglide};
+s32 D_80800AC0_bskazglide[4] = {(u32) func_8080050C_bskazglide, (u32) func_80800544_bskazglide,
+                                (u32) func_80800650_bskazglide, (u32) func_808001E8_bskazglide};
+s32 D_80800AD0_bskazglide[4] = {(u32) func_808006BC_bskazglide, (u32) func_808006EC_bskazglide,
+                                (u32) func_80800780_bskazglide, (u32) func_80099B94};
+s32 D_80800AE0_bskazglide[4] = {(u32) func_80800944_bskazglide, (u32) func_80800964_bskazglide,
+                                (u32) func_808009B4_bskazglide, (u32) func_80800184_bskazglide};
+s32 D_80800AF0_bskazglide[4] = {(u32) func_80800A00_bskazglide, (u32) func_80800A28_bskazglide,
+                                (u32) func_80800A50_bskazglide, (u32) _bsdrone_entrypoint_3};

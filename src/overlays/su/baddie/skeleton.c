@@ -23,7 +23,8 @@ s32 subaddieskeleton_entrypoint_0(Actor *param_0, s32 param_1, f32 *param_2)
             func_800EE780(param_2, local_0, param_0->position);
             return 1;
         }
-    } else if (_dbskeleton_entrypoint_2(func_800B27E0(func_801039E4(param_0->unk0)), param_1, local_0)) {
+    } else if (_dbskeleton_entrypoint_2(func_800B27E0(func_801039E4(param_0->unk0)), param_1,
+                                        local_0)) {
         func_800EF334(local_0, param_0->scale);
         func_800EF5A0(local_0, param_0->rotation, local_0[0], local_0[1], local_0[2]);
         func_800EE780(param_2, local_0, param_0->position);
@@ -34,7 +35,7 @@ s32 subaddieskeleton_entrypoint_0(Actor *param_0, s32 param_1, f32 *param_2)
 
 void subaddieskeleton_entrypoint_1(u8 **param_0)
 {
-    func_800DBEFC((*(s32 *)((s8 *)(*param_0) + (4))));
+    func_800DBEFC(*(s32 *) ((s8 *) *param_0 + 4));
 }
 
 int subaddieskeleton_entrypoint_2(Unk80132ED0 *param_0, s32 param_1, s32 param_2)
@@ -69,7 +70,8 @@ int subaddieskeleton_entrypoint_3(Unk80132ED0 *param_0, s32 param_1, f32 *param_
     return 0;
 }
 
-void *subaddieskeleton_entrypoint_4(param_0) Actor *param_0;
+void *subaddieskeleton_entrypoint_4(param_0)
+Actor *param_0;
 {
     void *local_0;
 
@@ -80,6 +82,3 @@ void *subaddieskeleton_entrypoint_4(param_0) Actor *param_0;
     local_0 = func_80102F74(param_0, 2) ? func_80104130() : NULL;
     return local_0;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/skeleton.data.s) is defined here in C.
- * Values are taken from the ROM. */

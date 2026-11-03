@@ -1,11 +1,4 @@
-#include "common.h"
-
-#include "core2/anctrl.h"
-#include "overlays/ba/anim.h"
-#include "overlays/ba/assets.h"
-#include "overlays/ba/physics.h"
 #include "overlays/ba/timer.h"
-#include "overlays/bs/state.h"
 #include "core2/1E72EA0.h"
 #include "core2/1E68670.h"
 #include "core2/1E76880.h"
@@ -14,17 +7,12 @@
 #include "core2/1E78BF0.h"
 #include "core2/1E79FD0.h"
 #include "core2/1EA0690.h"
-#include "buttons.h"
 #include "bs.h"
 
-void bsbbarge_end(PlayerState *self);
-void bsbbarge_init(PlayerState *self);
-void bsbbarge_update(PlayerState *self);
+extern BsScript D_80800630_bsbbarge[4];
 
-extern BsScript D_80800630_bsbbarge[4]; //= {bsbbarge_end, bsbbarge_init, bsbbarge_update, func_8009AB78};
-
-
-void bsbbarge_setSubstate(PlayerState *self, int substate) {
+void bsbbarge_setSubstate(PlayerState *self, int substate)
+{
     switch (substate) {
         case 1:
             break;
@@ -42,7 +30,8 @@ void bsbbarge_setSubstate(PlayerState *self, int substate) {
             func_8009D2D8(self, 1);
             baanim_setEndAndDuration(self, 0.565f, 1.0f);
             baphysics_set_target_horizontal_velocity(self, self->unk16C);
-            baphysics_set_horizontal_velocity(self, yaw_getIdeal(self), baphysics_get_target_horizontal_velocity(self));
+            baphysics_set_horizontal_velocity(self, yaw_getIdeal(self),
+                                              baphysics_get_target_horizontal_velocity(self));
             func_8009DF18(self, 0x3FF, 0.558f, 0x55F0);
             _badust_entrypoint_12(self, 2);
             baflag_set(self, 0x20);
@@ -56,12 +45,12 @@ void bsbbarge_setSubstate(PlayerState *self, int substate) {
         case 5:
             baanim_setEndAndDuration(self, 1.0f, 1.5f);
             _badust_entrypoint_12(self, 1);
-            break;
     }
     self->unk160.word = substate;
 }
 
-void bsbbarge_end(PlayerState *self) {
+void bsbbarge_end(PlayerState *self)
+{
     func_8009E474(self);
     func_800C6DA0(0x41);
     func_800A0CF4(self, 0);
@@ -69,8 +58,9 @@ void bsbbarge_end(PlayerState *self) {
     _badust_entrypoint_12(self, 0x1);
 }
 
-void bsbbarge_init(PlayerState *self) {
-    AnimCtrl *anctrl =  baanim_getAnimCtrlPtr(self);
+void bsbbarge_init(PlayerState *self)
+{
+    AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
     anctrl_reset(anctrl);
     anctrl_setSmoothTransition(anctrl, 0);
     anctrl_setIndex(anctrl, ASSET_1C_ANIM_BSBBARGE);
@@ -81,8 +71,10 @@ void bsbbarge_init(PlayerState *self) {
     func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_3_BOUNDED, 3, 14);
     yaw_setVelocityBounded(self, 300.0f, 6.5f);
     baphysics_set_target_yaw(self, yaw_getIdeal(self));
-    baphysics_set_target_horizontal_velocity(self, baphysics_get_target_horizontal_velocity(self)*0.3f);
-    baphysics_set_horizontal_velocity(self, yaw_getIdeal(self), baphysics_get_target_horizontal_velocity(self));
+    baphysics_set_target_horizontal_velocity(self,
+                                             baphysics_get_target_horizontal_velocity(self) * 0.3f);
+    baphysics_set_horizontal_velocity(self, yaw_getIdeal(self),
+                                      baphysics_get_target_horizontal_velocity(self));
     func_800A0CF4(self, 1);
     baflag_clear(self, 0x20);
     baflag_clear(self, 0xA);
@@ -96,186 +88,91 @@ void bsbbarge_init(PlayerState *self) {
 }
 
 #ifndef NONMATCHING
+
 void bsbbarge_update(PlayerState *param_0)
 {
-  BanjoStateId local_0;
-  AnimCtrl *local_1;
-  local_0 = 0;
-  local_1 = baanim_getAnimCtrlPtr(param_0);
-  if (bakey_released(param_0, 9))
-  {
-    baflag_set(param_0, 0xA);
-  }
-  switch (param_0->unk160.word)
-  {
-    case 1:
-      if (anctrl_isAt(local_1, 0.139200002f) != 0)
-    {
-      func_8009D874(param_0);
+    BanjoStateId local_0;
+    AnimCtrl *local_1;
+    local_0 = 0;
+    local_1 = baanim_getAnimCtrlPtr(param_0);
+    if (bakey_released(param_0, 9)) {
+        baflag_set(param_0, 0xA);
     }
-      if (anctrl_isStopped(local_1) != 0)
-    {
-      bsbbarge_setSubstate(param_0, 2);
-    }
-      break;
-
-    case 2:
-      _batimer_decrement(param_0, 1);
-      if ((baflag_isFalse(param_0, 0xB) != 0) && (_batimer_isLessThan(param_0, 1, 0.100000001f) != 0))
-    {
-      if (baflag_isTrue(param_0, 0xC) != 0)
-      {
-        func_8009DF94(param_0, 0x4400, 1.0f, 0x7530);
-      }
-      else
-      {
-        func_8009DF94(param_0, 0x442D, 1.0f, 0x7530);
-      }
-      baflag_set(param_0, 0xB);
-    }
-      if (_batimer_isZero(param_0, 1) != 0)
-    {
-      bsbbarge_setSubstate(param_0, 3);
-    }
-      break;
-
-    case 3:
-      baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
-      if (anctrl_isStopped(local_1) != 0)
-    {
-      bsbbarge_setSubstate(param_0, 4);
-    }
-      break;
-
-    case 4:
-      _batimer_decrement(param_0, 0);
-      if ((baflag_isFalse(param_0, 0xC) != 0) || (_batimer_isZero(param_0, 0) != 0))
-    {
-      param_0->unk16C = (param_0->unk16C) - 80.0f;
-    }
-      baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
-      if ((param_0->unk16C) < 200.0f)
-    {
-      bsbbarge_setSubstate(param_0, 5);
-    }
-      break;
-
-    case 5:
-      if (player_isStable(param_0) == 0)
-    {
-      local_0 = 0x2F;
-    }
-      if (anctrl_isAt(local_1, 0.699999988f) != 0)
-    {
-      param_0->unk16C = 0.0f;
-      baflag_clear(param_0, 0x20);
-    }
-      baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
-      if (anctrl_isAt(local_1, 0.91930002f) != 0)
-    {
-      local_0 = 0x20;
-    }
-      break;
-
-  }
-
-  if (baflag_isTrue(param_0, 0x20) != 0)
-  {
-    func_8008EE88(param_0, 50.0f);
-  }
-  if (player_inWater(param_0) != 0)
-  {
-    local_0 = 0x4C;
-  }
-  bs_setState(param_0, local_0);
-}
-#else
-void bsbbarge_update(PlayerState *self) {
-    BanjoStateId next_state = BS_STATE_0_INVALID;
-    AnimCtrl *anctrl =  baanim_getAnimCtrlPtr(self);
-    if (bakey_released(self, BUTTON_B)) {
-        baflag_set(self, 0xA); //miscFlag_set
-    }
-    switch(self->unk160.word) {
+    switch (param_0->unk160.word) {
         case 1:
-            if(anctrl_isAt(anctrl, 0.1392f)) {
-                func_8009D874(self); // BK:func_80299BD4();
+            if (anctrl_isAt(local_1, 0.139200002f) != 0) {
+                func_8009D874(param_0);
             }
-            
-            if(anctrl_isStopped(anctrl)) {
-                bsbbarge_setSubstate(self, 2);
+            if (anctrl_isStopped(local_1) != 0) {
+                bsbbarge_setSubstate(param_0, 2);
             }
             break;
 
         case 2:
-            _batimer_decrement(self, 1);
-            if (baflag_isFalse(self, 0xB) && _batimer_isLessThan(self, 1, 0.1f)) {
-                if (baflag_isTrue(self, 0xC)) {
-                    func_8009DF94(self, 0x4400, 1.0f, 0x7530);
+            _batimer_decrement(param_0, 1);
+            if ((baflag_isFalse(param_0, 0xB) != 0) &&
+                (_batimer_isLessThan(param_0, 1, 0.100000001f) != 0)) {
+                if (baflag_isTrue(param_0, 0xC) != 0) {
+                    func_8009DF94(param_0, 0x4400, 1.0f, 0x7530);
                 } else {
-                    func_8009DF94(self, 0x442D, 1.0f, 0x7530);
+                    func_8009DF94(param_0, 0x442D, 1.0f, 0x7530);
                 }
-                baflag_set(self, 0xB);
+                baflag_set(param_0, 0xB);
             }
-
-            if (_batimer_isZero(self, 1)){
-                bsbbarge_setSubstate(self, 3);
-            } 
-
+            if (_batimer_isZero(param_0, 1) != 0) {
+                bsbbarge_setSubstate(param_0, 3);
+            }
             break;
 
         case 3:
-            baphysics_set_target_horizontal_velocity(self, self->unk16C);
-            if (anctrl_isStopped(anctrl)) {
-                bsbbarge_setSubstate(self, 4);
+            baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
+            if (anctrl_isStopped(local_1) != 0) {
+                bsbbarge_setSubstate(param_0, 4);
             }
             break;
 
         case 4:
-            _batimer_decrement(self, 0);
-            if (baflag_isFalse(self, 0xC) || _batimer_isZero(self, 0)) {
-                self->unk16C -= 80.0f;
+            _batimer_decrement(param_0, 0);
+            if ((baflag_isFalse(param_0, 0xC) != 0) || (_batimer_isZero(param_0, 0) != 0)) {
+                param_0->unk16C = param_0->unk16C - 80.0f;
             }
-            baphysics_set_target_horizontal_velocity(self, self->unk16C);
-            if (self->unk16C < 200.0f) {
-                bsbbarge_setSubstate(self, 5);
+            baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
+            if (param_0->unk16C < 200.0f) {
+                bsbbarge_setSubstate(param_0, 5);
             }
             break;
 
         case 5:
-            if (!player_isStable(self)) {
-                next_state = BS_STATE_2F_FALL;
+            if (player_isStable(param_0) == 0) {
+                local_0 = 0x2F;
             }
-
-            if (anctrl_isAt(anctrl, 0.7f)) {
-                self->unk16C = 0.0f;
-                baflag_clear(self, 0x20);
+            if (anctrl_isAt(local_1, 0.699999988f) != 0) {
+                param_0->unk16C = 0.0f;
+                baflag_clear(param_0, 0x20);
             }
-
-            baphysics_set_target_horizontal_velocity(self, self->unk16C);
-
-            if (anctrl_isAt(anctrl, 0.9193f)) {
-                next_state = BS_STATE_20_LANDING;
+            baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
+            if (anctrl_isAt(local_1, 0.91930002f) != 0) {
+                local_0 = 0x20;
             }
-            break;
     }
 
-    if (baflag_isTrue(self, 0x20)) {
-        func_8008EE88(self, 50.0f);
+    if (baflag_isTrue(param_0, 0x20) != 0) {
+        func_8008EE88(param_0, 50.0f);
     }
-
-    if (player_inWater(self)) {
-        next_state = BS_STATE_4C_LANDING_IN_WATER;
+    if (player_inWater(param_0) != 0) {
+        local_0 = 0x4C;
     }
-
-    bs_setState(self, next_state);
+    bs_setState(param_0, local_0);
 }
+
+#else
+void bsbbarge_update(0)
+{
 #endif
 
-BsScript bsbbarge_entrypoint_0(BsScriptType type) {
-    return D_80800630_bsbbarge[type];
-}
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/bbarge.data.s) is defined here in C --
- * tables holding function pointers must be in the same unit, otherwise IDO's assembler schedules those functions differently. */
-extern void func_80099B94();
-BsScript D_80800630_bsbbarge[4] = { (void *)bsbbarge_end, (void *)bsbbarge_init, (void *)bsbbarge_update, (void *)func_80099B94 };
+    BsScript bsbbarge_entrypoint_0(BsScriptType type)
+    {
+        return D_80800630_bsbbarge[type];
+    }
+    BsScript D_80800630_bsbbarge[4] = {(void *) bsbbarge_end, (void *) bsbbarge_init,
+                                       (void *) bsbbarge_update, (void *) func_80099B94};

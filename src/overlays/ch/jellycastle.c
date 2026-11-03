@@ -19,15 +19,30 @@ void func_80800000_chjellycastle(Actor *param_0)
 
 int chjellycastle_entrypoint_0()
 {
-    return (int)&D_808000A0_chjellycastle;
+    return (int) &D_808000A0_chjellycastle;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jellycastle.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808000A0_chjellycastle -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
-int D_808000A0_chjellycastle[20] = { 0x158050C, 0x92D0001, 0x0, (u32)func_80800000_chjellycastle, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0x21C08, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFDBFE, 0x0, 0x0, 0x0, 0x0 };
+int D_808000A0_chjellycastle[20] = {0x158050C,
+                                    0x92D0001,
+                                    0x0,
+                                    (u32) func_80800000_chjellycastle,
+                                    (u32) func_80105834,
+                                    (u32) func_80101870,
+                                    0x7D00000,
+                                    0x0,
+                                    0x0,
+                                    0x21C08,
+                                    0x0,
+                                    (u32) func_80108ED0,
+                                    0x0,
+                                    0x0,
+                                    (u32) func_80107C2C,
+                                    -0x7FFFDBFE,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0};

@@ -22,7 +22,7 @@ extern s32 D_808002F0_bsthrow[];
 void bsthrow_entrypoint_0(Actor *param_0)
 {
     void *local_0;
-    
+
     local_0 = baanim_getAnimCtrlPtr();
     anctrl_reset(local_0);
     anctrl_setIndex(local_0, 0x11B);
@@ -35,7 +35,7 @@ void bsthrow_entrypoint_0(Actor *param_0)
     baphysics_set_type(param_0, 3);
     baphysics_set_target_horizontal_velocity(param_0, 0);
     func_8009BA9C(param_0, 0);
-    *(int *)((char *)param_0 + 0x15c) = 0;
+    *(int *) ((char *) param_0 + 0x15c) = 0;
 }
 
 void bsthrow_entrypoint_1(void *param_0)
@@ -50,7 +50,7 @@ void bsthrow_entrypoint_1(void *param_0)
     local_0 = 0;
     local_1 = baanim_getAnimCtrlPtr(param_0);
     local_5 = _bahold_entrypoint_5(param_0);
-    if (*(s32 *)((u8 *)param_0 + 0x15C) == 0 && local_5 != NULL) {
+    if (*(s32 *) ((u8 *) param_0 + 0x15C) == 0 && local_5 != NULL) {
         _bahold_entrypoint_6(param_0, local_5);
     }
     func_8009C128(param_0, local_3);
@@ -58,7 +58,7 @@ void bsthrow_entrypoint_1(void *param_0)
     func_800F1E6C(local_3, local_2, &local_4);
     yaw_setIdeal(param_0, local_4);
     if (anctrl_isAt(local_1, 0.35f) && local_5 != NULL) {
-        *(s32 *)((u8 *)param_0 + 0x15C) = 1;
+        *(s32 *) ((u8 *) param_0 + 0x15C) = 1;
         func_80106790(local_5)->unk64_22 = 1;
     }
     if (anctrl_isStopped(local_1)) {
@@ -69,50 +69,48 @@ void bsthrow_entrypoint_1(void *param_0)
 
 void bsthrow_entrypoint_2(u8 *param_0)
 {
-  if (!param_0)
-  {
-  }
- *((s32 *) (((s8 *) param_0) + 0x15C)) = 0; if (bs_getNextState() == 1) {
-    bastatetimer_set(param_0, 0, 0x3E0F5C29);
-    bastatetimer_set(param_0, 1, 0x3E8F5C29);
-  }
+    if (!param_0) {
+    }
+    *(s32 *) ((s8 *) param_0 + 0x15C) = 0;
+    if (bs_getNextState() == 1) {
+        bastatetimer_set(param_0, 0, 0x3E0F5C29);
+        bastatetimer_set(param_0, 1, 0x3E8F5C29);
+    }
 }
 
 int bsthrow_entrypoint_3(s32 param_0)
 {
-  return D_808002F0_bsthrow[param_0];
+    return D_808002F0_bsthrow[param_0];
 }
 
-void bsthrow_entrypoint_4(u8 *param_0) {
+void bsthrow_entrypoint_4(u8 *param_0)
+{
     s32 local_0;
 
     local_0 = func_8009E6EC();
     switch (local_0) {
-    case 18:
-        if ((*(s32 *)((s8 *)(param_0) + (0x15C))) == 0) {
-            func_8008F6B8(param_0, func_8008E9AC(param_0));
+        case 18:
+            if (*(s32 *) ((s8 *) param_0 + 0x15C) == 0) {
+                func_8008F6B8(param_0, func_8008E9AC(param_0));
+                return;
+            }
+            func_8009E830(param_0, 1);
             return;
-        }
-        func_8009E830(param_0, 1);
-        return;
-    case 21: ;
-    case 28:
-    case 29: ;
-    case 30:
-    case 37:
-        func_8009E830(param_0, 1);
-        return;
-    default:
-        func_80099B94(param_0);
-        return;
+        case 21:;
+        case 28:
+        case 29:;
+        case 30:
+        case 37:
+            func_8009E830(param_0, 1);
+            return;
+        default:
+            func_80099B94(param_0);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/throw.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bsthrow_entrypoint_2();
 extern void _bsthrow_entrypoint_0();
 extern void _bsthrow_entrypoint_1();
 extern void _bsthrow_entrypoint_4();
-s32 D_808002F0_bsthrow[4] = { (u32)_bsthrow_entrypoint_2, (u32)_bsthrow_entrypoint_0, (u32)_bsthrow_entrypoint_1, (u32)_bsthrow_entrypoint_4 };
+s32 D_808002F0_bsthrow[4] = {(u32) _bsthrow_entrypoint_2, (u32) _bsthrow_entrypoint_0,
+                             (u32) _bsthrow_entrypoint_1, (u32) _bsthrow_entrypoint_4};

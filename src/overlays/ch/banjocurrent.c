@@ -27,16 +27,16 @@ int func_80800000_chbanjocurrent()
 
 int chbanjocurrent_entrypoint_0()
 {
-    return (int)&D_808007D0_chbanjocurrent;
+    return (int) &D_808007D0_chbanjocurrent;
 }
 
 void func_80800034_chbanjocurrent(void *param_0)
 {
-  s32 temp;
-  temp = *((s32 *) (((char *) param_0) + 4));
-  *((s32 *) (((char *) param_0) + 4)) = *((s32 *) (((char *) param_0) + 8));
-  *((s32 *) (((char *) param_0) + 8)) = *((s32 *) (((char *) param_0) + 0));
-  *((s32 *) (((char *) param_0) + 0)) = temp;
+    s32 temp;
+    temp = *(s32 *) ((char *) param_0 + 4);
+    *(s32 *) ((char *) param_0 + 4) = *(s32 *) ((char *) param_0 + 8);
+    *(s32 *) ((char *) param_0 + 8) = *(s32 *) ((char *) param_0 + 0);
+    *(s32 *) ((char *) param_0 + 0) = temp;
 }
 
 void func_80800050_chbanjocurrent(u16 *param_0, f32 (*param_1)[3], f32 (*param_2)[2], s32 *param_3)
@@ -46,13 +46,14 @@ void func_80800050_chbanjocurrent(u16 *param_0, f32 (*param_1)[3], f32 (*param_2
     u8 *local_2;
     s32 local_3;
     local_0 = func_800BEB28(1);
-    if (!local_0) local_0 = func_800BEB28(0);
-    local_1 = (u8 *)func_800B2840(local_0) + 0x18;
+    if (!local_0)
+        local_0 = func_800BEB28(0);
+    local_1 = (u8 *) func_800B2840(local_0) + 0x18;
     for (local_3 = 0; local_3 != 3; local_3++) {
         local_2 = local_1 + param_0[local_3] * 0x10;
         func_800EE88C(param_1[local_3], local_2);
-        param_2[local_3][0] = *(s16 *)(local_2 + 8);
-        param_2[local_3][1] = *(s16 *)(local_2 + 10);
+        param_2[local_3][0] = *(s16 *) (local_2 + 8);
+        param_2[local_3][1] = *(s16 *) (local_2 + 10);
         param_3[local_3] = local_3;
     }
     if (param_2[param_3[2]][0] <= param_2[param_3[1]][0])
@@ -80,22 +81,28 @@ void func_808001D0_chbanjocurrent(Actor *param_0)
     s32 argp_3;
     f32 local_8[3];
     f32 local_9[3];
-    if (!func_80800000_chbanjocurrent(param_0)) return;
+    if (!func_80800000_chbanjocurrent(param_0))
+        return;
     local_0 = func_800F54E4();
     local_14 = func_8008FF94();
-    if (!local_14) return;
+    if (!local_14)
+        return;
     if (local_14 == 2) {
         local_10 = func_800F5E7C(local_0) - func_800F5F7C(local_0);
-        if (local_10 >= 1000.0f) return;
-        if (local_10 < 0) local_10 = 0;
+        if (local_10 >= 1000.0f)
+            return;
+        if (local_10 < 0)
+            local_10 = 0;
         local_1 = 1.0f - local_10 * 0.001f;
     } else {
         local_1 = 1.0f;
     }
     local_15 = func_800F5E50(local_0);
-    local_14 = (*(u32 *)((u8 *)local_15 + 8) & 0x78000000) >> 27;
-    if (!local_14) return;
-    if (param_0->rotation[1] != 0.0f && param_0->rotation[1] != (local_13 = local_14)) return;
+    local_14 = (*(u32 *) ((u8 *) local_15 + 8) & 0x78000000) >> 27;
+    if (!local_14)
+        return;
+    if (param_0->rotation[1] != 0.0f && param_0->rotation[1] != (local_13 = local_14))
+        return;
     func_80800050_chbanjocurrent(local_15, local_2, local_3, local_4);
     func_800EFB24(local_5, local_2[local_4[2]], local_2[local_4[1]]);
     local_12 = local_3[local_4[2]][0] - local_3[local_4[1]][0];
@@ -116,7 +123,7 @@ void func_808001D0_chbanjocurrent(Actor *param_0)
     func_800EF2A0(local_8);
     func_800EF334(local_7, func_80013A7C(local_8[1]) * 0.05f + 1.0f);
     func_80090794(local_9);
-    func_800EF174(local_9, local_7, func_800D8FF8() * (u32)param_0->unk74_7 * local_1);
+    func_800EF174(local_9, local_7, func_800D8FF8() * (u32) param_0->unk74_7 * local_1);
     if (param_0->rotation[1] != 0.0f) {
         func_800907C0(local_9);
     }
@@ -124,7 +131,7 @@ void func_808001D0_chbanjocurrent(Actor *param_0)
 
 int chbanjocurrent_entrypoint_1()
 {
-    return (int)&D_80800818_chbanjocurrent;
+    return (int) &D_80800818_chbanjocurrent;
 }
 
 f32 func_80800514_chbanjocurrent(f32 *param_0, f32 *param_1, f32 param_2)
@@ -157,18 +164,23 @@ void func_808005F4_chbanjocurrent(Actor *param_0)
     s32 local_5;
     f32 local_2[3];
     f32 local_3[2];
-    if (!func_80800000_chbanjocurrent()) return;
+    if (!func_80800000_chbanjocurrent())
+        return;
     local_0 = func_800F54E4();
-    param_0->unk58 += (func_800D8FF8() * (f32)param_0->unk74_7) * 4.0f;
+    param_0->unk58 += (func_800D8FF8() * (f32) param_0->unk74_7) * 4.0f;
     local_5 = func_8008FF94();
-    if (!local_5) return;
+    if (!local_5)
+        return;
     if (local_5 == 2) {
         local_4 = func_800F5E7C(local_0) - func_800F5F7C(local_0);
-        if (local_4 >= 2000.0f) return;
-        if (local_4 < 0.0f) local_4 = 0.0f;
+        if (local_4 >= 2000.0f)
+            return;
+        if (local_4 < 0.0f)
+            local_4 = 0.0f;
         local_1 = 1.0f - local_4 * 0.0005f;
-    } else local_1 = 1.0f;
-    local_5 = (*(u32 *)((u8 *)func_800F5E50(local_0) + 8) & 0x78000000) >> 27;
+    } else
+        local_1 = 1.0f;
+    local_5 = (*(u32 *) ((u8 *) func_800F5E50(local_0) + 8) & 0x78000000) >> 27;
     if (local_5 && param_0->rotation[1] == (local_4 = local_5)) {
         func_80090794(local_2);
         func_80800514_chbanjocurrent(local_2, local_3, param_0->unk58);
@@ -178,10 +190,39 @@ void func_808005F4_chbanjocurrent(Actor *param_0)
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/banjocurrent.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800818_chbanjocurrent -> int[] */
-void *D_808007D0_chbanjocurrent = (void *)0x015801D1;
-static u32 D_808007D0_chbanjocurrent_rest[17] = { 0x2, 0x0, (u32)func_808001D0_chbanjocurrent, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, 0x80002602, 0x0, 0x0 };
-int D_80800818_chbanjocurrent[18] = { 0x15801D6, 0x1, 0x0, (u32)func_808005F4_chbanjocurrent, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFD9FE, 0x0, 0x0 };
+void *D_808007D0_chbanjocurrent = (void *) 0x015801D1;
+static u32 D_808007D0_chbanjocurrent_rest[17] = {0x2,
+                                                 0x0,
+                                                 (u32) func_808001D0_chbanjocurrent,
+                                                 (u32) func_80102EC0,
+                                                 (u32) func_8010A730,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0,
+                                                 (u32) func_80107C2C,
+                                                 0x80002602,
+                                                 0x0,
+                                                 0x0};
+int D_80800818_chbanjocurrent[18] = {0x15801D6,
+                                     0x1,
+                                     0x0,
+                                     (u32) func_808005F4_chbanjocurrent,
+                                     (u32) func_80102EC0,
+                                     (u32) func_8010A730,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     (u32) func_80107C2C,
+                                     -0x7FFFD9FE,
+                                     0x0,
+                                     0x0};

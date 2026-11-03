@@ -9,7 +9,8 @@ extern int D_808001D0_chdinotraindoor[];
 void func_80800000_chdinotraindoor(Actor *param_0)
 {
     f32 local_0 = param_0->rotation[1];
-    if (param_0->unk74_7 == 50) local_0 += 180.0f;
+    if (param_0->unk74_7 == 50)
+        local_0 += 180.0f;
     func_800EFD24(param_0->position);
     func_80103014(param_0);
     if (_chdoormake_entrypoint_3(param_0, local_0, 0.0f, param_0->scale * 600.0f, 0x20, 0x164)) {
@@ -21,18 +22,18 @@ void func_80800000_chdinotraindoor(Actor *param_0)
             _chdoormake_entrypoint_9(param_0, 0, 10, 0x910);
         }
     }
-    if (func_800DA298(0x164) && !_glcutDll_entrypoint_19(0x3C)) func_800FFAB0(param_0);
+    if (func_800DA298(0x164) && !_glcutDll_entrypoint_19(0x3C))
+        func_800FFAB0(param_0);
 }
 
 s32 func_80800120_chdinotraindoor(Actor *param_0, s32 param_1, s32 param_2)
 {
     switch (param_1) {
-    case 0x95:
-        func_80103140(param_0, param_0->unk74_7 == 0x32 ? 0x949 : 0x94A, 0);
-        break;
-    case 0x9D:
-        func_800FFAB0(param_0);
-        break;
+        case 0x95:
+            func_80103140(param_0, param_0->unk74_7 == 0x32 ? 0x949 : 0x94A, 0);
+            break;
+        case 0x9D:
+            func_800FFAB0(param_0);
     }
     return _chdoor_entrypoint_1(param_0, param_1, param_2);
 }
@@ -42,12 +43,27 @@ int *chdinotraindoor_entrypoint_0()
     return &D_808001D0_chdinotraindoor;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/dino/traindoor.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808001D0_chdinotraindoor -> int[] */
 extern void _chdoor_entrypoint_0();
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
-int D_808001D0_chdinotraindoor[20] = { 0xAC049B, -0xFFFF, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_80800000_chdinotraindoor, (u32)func_80107C2C, -0x7FF7D3FE, (u32)func_80800120_chdinotraindoor, 0x0, 0x0, 0x0 };
+int D_808001D0_chdinotraindoor[20] = {0xAC049B,
+                                      -0xFFFF,
+                                      0x0,
+                                      (u32) _chdoor_entrypoint_0,
+                                      (u32) func_80105834,
+                                      (u32) func_80101870,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      0xC00,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      (u32) func_80800000_chdinotraindoor,
+                                      (u32) func_80107C2C,
+                                      -0x7FF7D3FE,
+                                      (u32) func_80800120_chdinotraindoor,
+                                      0x0,
+                                      0x0,
+                                      0x0};

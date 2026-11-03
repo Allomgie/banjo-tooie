@@ -16,14 +16,15 @@ extern f32 func_80115750(void *, f32);
 extern f32 func_80112C3C(void *, f32);
 extern void func_800EEBF0(f32 *, f32 *, f32);
 
-void ncbasub_entrypoint_0(s32 arg0) 
+void ncbasub_entrypoint_0(s32 arg0)
 {
 }
+
 void ncbasub_entrypoint_1(s32 param_0)
 {
-  func_801124D0(param_0, 1);
-  func_80115858(param_0, 2);
-  func_80115870(param_0, 0);
+    func_801124D0(param_0, 1);
+    func_80115858(param_0, 2);
+    func_80115870(param_0, 0);
 }
 
 void ncbasub_entrypoint_2(void *param_0)
@@ -86,6 +87,3 @@ void ncbasub_entrypoint_2(void *param_0)
     func_80110790(param_0, local_3.f);
     func_80115858(param_0, local_6 ? 1 : 2);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/sub.data.s) is defined here in C.
- * Values are taken from the ROM. */

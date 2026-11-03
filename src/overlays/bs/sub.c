@@ -29,7 +29,10 @@ extern void _basub_entrypoint_11(PlayerState *, f32);
 extern void _basub_entrypoint_13(PlayerState *, f32);
 extern void _baspin_entrypoint_2(PlayerState *, s32, f32, s32, s32);
 extern void _batimer_set(PlayerState *, s32, f32);
-typedef struct { s32 type; s32 sprite; } SubPartDef;
+typedef struct {
+    s32 type;
+    s32 sprite;
+} SubPartDef;
 extern SubPartDef D_80801840_bssub[];
 extern u8 D_8080172C_bssub[];
 extern u8 D_80801748_bssub[];
@@ -76,66 +79,62 @@ extern f32 func_800DC178(f32, f32);
 extern s32 func_800914FC(PlayerState *, f32, s32);
 extern int player_inWater(PlayerState *);
 extern f32 bastick_getY(PlayerState *);
-extern void func_8008B1C8(AnimCtrl *, f32);
 extern void func_8008C9F0(PlayerState *, f32, f32, f32, f32);
-void func_808000F0_bssub();
-void func_80800254_bssub();
-void func_80800768_bssub();
-void func_8080102C_bssub();
 
-void func_80800000_bssub(s32 param_0) {
+void func_80800000_bssub(s32 param_0)
+{
     func_8009FFD8(param_0, 1, 3, 3, 15);
 }
 
 f32 func_80800030_bssub(f32 param_0, f32 param_1)
 {
-  return param_1 * 300.0f;
+    return param_1 * 300.0f;
 }
 
-f32 func_80800048_bssub(f32 param_0, f32 param_1) {
+f32 func_80800048_bssub(f32 param_0, f32 param_1)
+{
     return -param_1 * 428.57144f;
 }
 
 void func_80800064_bssub(PlayerState *param_0)
 {
     switch (func_8009E6EC(param_0)) {
-    case 0x85:
-        _basub_entrypoint_15(param_0, func_80099A58(param_0));
-        break;
-    case 0x2D:
-        func_800995B8(param_0, 3);
-        func_8009E830(param_0, 2);
-        bs_setState(param_0, 0x46);
-        break;
-    default:
-        func_80099B94(param_0);
-        break;
+        case 0x85:
+            _basub_entrypoint_15(param_0, func_80099A58(param_0));
+            break;
+        case 0x2D:
+            func_800995B8(param_0, 3);
+            func_8009E830(param_0, 2);
+            bs_setState(param_0, 0x46);
+            break;
+        default:
+            func_80099B94(param_0);
     }
 }
 
 void func_808000F0_bssub(param_0) PlayerState *param_0;
 {
-  f32 local_0 = func_800F10B4(func_8009BB94(param_0), 0.0f, 225.0f, 0.0f, 1.0f);
-  f32 local_2;
-  f32 local_1;
-  f32 local_5;
-  f32 local_4;
-  f32 local_3;
-  if (player_inWater(param_0))
-  {
-    local_1 = func_800F1214(local_0, 50.0f, 150.0f);
- local_2 = func_800F1214(local_0, 0.5f, 2.0f); local_3 = func_800F1214(local_0, 40.0f, 150.0f); local_5 = func_800F1214(local_0, 0.6f, 3.0f); baroll_setAngularVelocity(param_0, local_3, local_5); yaw_setVelocityBounded(param_0, 250, 20);
-  }
-  else
-  {
-    local_1 = 250.0f;
-    local_2 = 2.8f;
-    baroll_setAngularVelocity(param_0, 250, local_2);
-    yaw_setVelocityBounded(param_0, 300.0f, 3.0f);
-  }
-  local_4 = _bafpctrl_entrypoint_3(param_0);
-  local_1 *= func_800F10B4(local_4, 0.1f, 1.0f, local_4 * local_4, 1.0f);
-  func_8009BFE4(param_0, local_1, local_2);
+    f32 local_0 = func_800F10B4(func_8009BB94(param_0), 0.0f, 225.0f, 0.0f, 1.0f);
+    f32 local_2;
+    f32 local_1;
+    f32 local_5;
+    f32 local_4;
+    f32 local_3;
+    if (player_inWater(param_0))
+    {
+        local_1 = func_800F1214(local_0, 50.0f, 150.0f);
+        local_2 = func_800F1214(local_0, 0.5f, 2.0f); local_3 = func_800F1214(local_0, 40.0f, 150.0f); local_5 = func_800F1214(local_0, 0.6f, 3.0f); baroll_setAngularVelocity(param_0, local_3, local_5); yaw_setVelocityBounded(param_0, 250, 20);
+    }
+    else
+    {
+        local_1 = 250.0f;
+        local_2 = 2.8f;
+        baroll_setAngularVelocity(param_0, 250, local_2);
+        yaw_setVelocityBounded(param_0, 300.0f, 3.0f);
+    }
+    local_4 = _bafpctrl_entrypoint_3(param_0);
+    local_1 *= func_800F10B4(local_4, 0.1f, 1.0f, local_4 * local_4, 1.0f);
+    func_8009BFE4(param_0, local_1, local_2);
 }
 
 void func_80800254_bssub(param_0) PlayerState *param_0;
@@ -169,7 +168,8 @@ void func_80800254_bssub(param_0) PlayerState *param_0;
         local_0 = func_80800048_bssub(param_0->unk16C, local_3);
     }
     if (_basub_entrypoint_2(param_0) != 0.0f) {
-        param_0->unk16C = func_800F0D50(param_0->unk16C + local_0, 0.0f, _basub_entrypoint_2(param_0));
+        param_0->unk16C =
+            func_800F0D50(param_0->unk16C + local_0, 0.0f, _basub_entrypoint_2(param_0));
     } else {
         param_0->unk16C = func_800F0D50(param_0->unk16C + local_0, 0, local_1);
     }
@@ -190,14 +190,15 @@ void func_80800254_bssub(param_0) PlayerState *param_0;
         if (_basub_entrypoint_2(param_0) != 0.0f) {
             func_800914FC(param_0, 60.0f, 1);
         } else {
-            func_800914FC(param_0, func_800F10B4(param_0->unk16C, 0.0f, local_1,
-                func_800DC178(1.0f, 3.0f), 40.0f), 0);
+            func_800914FC(
+                param_0,
+                func_800F10B4(param_0->unk16C, 0.0f, local_1, func_800DC178(1.0f, 3.0f), 40.0f), 0);
         }
     } else if (param_0->unk16C > 0.0f && player_isStable(param_0)) {
         func_8009C128(param_0, local_5);
         local_6 = func_800B5BE4(8);
         func_800BABB8(local_6, local_5, 0, 1.0f, D_808016E0_bssub);
-        func_800BA77C(local_6, 0, 0, (s16)func_800DC178(0.0f, 359.0f));
+        func_800BA77C(local_6, 0, 0, (s16) func_800DC178(0.0f, 359.0f));
         func_800BA22C(local_6, 1);
     }
     func_808000F0_bssub(param_0);
@@ -216,7 +217,8 @@ void func_80800634_bssub(PlayerState *param_0)
     local_1 = func_800F10B4(func_8009BB94(param_0), 0.0f, 225.0f, 11.25f, 45.0f);
     baroll_setIdeal(param_0, func_800F10B4(local_4, -1.0f, 1.0f, -local_1, local_1));
     if (player_inWater(param_0)) {
-        local_2 = func_800F10B4(func_8009BB94(param_0), 0.0f, 225.0f, 42.666667938232421875f, 128.0f);
+        local_2 =
+            func_800F10B4(func_8009BB94(param_0), 0.0f, 225.0f, 42.666667938232421875f, 128.0f);
     } else {
         local_2 = 300.0f;
     }
@@ -251,11 +253,15 @@ void func_80800768_bssub(param_0) PlayerState *param_0;
 
 void func_80800834_bssub(PlayerState *param_0)
 {
-    if (bakey_pressed(param_0, 2)) _basub_entrypoint_1(param_0);
-    if (bakey_pressed(param_0, 1)) _basub_entrypoint_8(param_0, func_8009BB94(param_0));
+    if (bakey_pressed(param_0, 2))
+        _basub_entrypoint_1(param_0);
+    if (bakey_pressed(param_0, 1))
+        _basub_entrypoint_8(param_0, func_8009BB94(param_0));
     if (bakey_pressed(param_0, 9)) {
-        if (func_800EA068(0x40)) _basub_entrypoint_3(param_0, 160.0f, 1.0f);
-        else _basub_entrypoint_5(param_0);
+        if (func_800EA068(0x40))
+            _basub_entrypoint_3(param_0, 160.0f, 1.0f);
+        else
+            _basub_entrypoint_5(param_0);
     }
 }
 
@@ -281,8 +287,7 @@ void func_808008D8_bssub(PlayerState *param_0)
     }
 }
 
-void func_808009B0_bssub(param_0)
-PlayerState *param_0;
+void func_808009B0_bssub(param_0) PlayerState *param_0;
 {
     if (!func_8009E77C(param_0, 15)) {
         _basub_entrypoint_10(param_0);
@@ -334,15 +339,15 @@ void func_80800B2C_bssub(PlayerState *param_0)
 
 int func_80800BD8_bssub(Actor *param_0)
 {
-  _baspin_entrypoint_3();
-  if (_batimer_decrement(param_0, 9) != 0) {
-        func_80101180(0x2C4, 0x71, *(u32*)((char*)param_0 + 0x184));
+    _baspin_entrypoint_3();
+    if (_batimer_decrement(param_0, 9) != 0) {
+        func_80101180(0x2C4, 0x71, *(u32 *) ((char *) param_0 + 0x184));
     }
 }
 
 void func_80800C1C_bssub(void *param_0)
 {
-    if (*(s32 *)((char *)param_0 + 0x15C) != 0) {
+    if (*(s32 *) ((char *) param_0 + 0x15C) != 0) {
         func_80800B0C_bssub(param_0);
     } else {
         _basudie_entrypoint_8(param_0);
@@ -363,16 +368,20 @@ void func_80800C60_bssub(void *param_0)
     for (local_2 = 0; local_2 < 10; local_2++) {
         local_1[local_2] = func_800B53A4(D_80801840_bssub[local_2].type);
         func_800BA670(local_1[local_2], D_80801840_bssub[local_2].sprite);
-        local_1[local_2] = func_800BABB8(local_1[local_2], local_0, local_0, 1.0f, D_8080172C_bssub);
+        local_1[local_2] =
+            func_800BABB8(local_1[local_2], local_0, local_0, 1.0f, D_8080172C_bssub);
     }
     if (player_inWater(param_0)) {
-        func_800BABB8(_fxairbub_entrypoint_1(local_0, 100.0f, func_800964DC(param_0), 1.0f), local_0, local_0, 1.0f, D_808017CC_bssub);
+        func_800BABB8(_fxairbub_entrypoint_1(local_0, 100.0f, func_800964DC(param_0), 1.0f),
+                      local_0, local_0, 1.0f, D_808017CC_bssub);
         for (local_2 = 0; local_2 < 10; local_2++) {
-            local_1[local_2] = func_800BABB8(local_1[local_2], local_0, local_0, 1.0f, D_80801748_bssub);
+            local_1[local_2] =
+                func_800BABB8(local_1[local_2], local_0, local_0, 1.0f, D_80801748_bssub);
         }
     } else {
         for (local_2 = 0; local_2 < 10; local_2++) {
-            local_1[local_2] = func_800BABB8(local_1[local_2], local_0, local_0, 1.0f, D_80801774_bssub);
+            local_1[local_2] =
+                func_800BABB8(local_1[local_2], local_0, local_0, 1.0f, D_80801774_bssub);
         }
     }
     for (local_2 = 0; local_2 < 10; local_2++) {
@@ -382,28 +391,25 @@ void func_80800C60_bssub(void *param_0)
 
 void func_80800E34_bssub(s32 param_0)
 {
-  s32 local_0;
-  s32 *s0;
-  s0 = (s32 *) param_0;
-  func_808009B0_bssub(s0);
-  local_0 = func_800EA068(0x40);
-  s0[0x57] = local_0;
-  if (local_0 != 0)
-  {
-    func_80800B2C_bssub(s0);
-  }
-  else
-  {
-    _bafpctrl_entrypoint_19(s0);
-    _basudie_entrypoint_9(s0, 0x41F00000);
-    func_80800C60_bssub(s0);
-  }
+    s32 local_0;
+    s32 *s0;
+    s0 = (s32 *) param_0;
+    func_808009B0_bssub(s0);
+    local_0 = func_800EA068(0x40);
+    s0[0x57] = local_0;
+    if (local_0 != 0) {
+        func_80800B2C_bssub(s0);
+    } else {
+        _bafpctrl_entrypoint_19(s0);
+        _basudie_entrypoint_9(s0, 0x41F00000);
+        func_80800C60_bssub(s0);
+    }
 }
 
 int func_80800E98_bssub(Actor *param_0)
 {
     func_80800AEC_bssub();
-    if (*(s32 *)((char *)param_0 + 0x15c) != 0) {
+    if (*(s32 *) ((char *) param_0 + 0x15c) != 0) {
         func_80800BD8_bssub(param_0);
     } else {
         _basudie_entrypoint_10();
@@ -412,25 +418,22 @@ int func_80800E98_bssub(Actor *param_0)
 
 int func_80800EE0_bssub(Actor *param_0)
 {
-  s32 local_0;
-  Actor *local_1 = param_0;
-  local_0 = func_8009E6EC();
-  if (local_0 == 0x83)
-  {
-    func_8009BDAC(local_1, func_80099A34(local_1));
-    func_80093370(local_1, 1);
-    bs_setState(local_1, 0x131);
-    func_8009E830(local_1, 2);
-  }
-  else
-  {
-    _basudie_entrypoint_11(local_1);
-  }
+    s32 local_0;
+    Actor *local_1 = param_0;
+    local_0 = func_8009E6EC();
+    if (local_0 == 0x83) {
+        func_8009BDAC(local_1, func_80099A34(local_1));
+        func_80093370(local_1, 1);
+        bs_setState(local_1, 0x131);
+        func_8009E830(local_1, 2);
+    } else {
+        _basudie_entrypoint_11(local_1);
+    }
 }
 
 int bssub_entrypoint_0(s32 param_0)
 {
-  return D_80801890_bssub[param_0];
+    return D_80801890_bssub[param_0];
 }
 
 void func_80800F70_bssub(s32 arg0)
@@ -438,11 +441,13 @@ void func_80800F70_bssub(s32 arg0)
     _bsdrone_entrypoint_2();
     func_808008D8_bssub(arg0);
 }
+
 void func_80800F98_bssub(s32 arg0)
 {
     func_808009B0_bssub();
     _bsdrone_entrypoint_0(arg0);
 }
+
 void func_80800FC0_bssub(s32 arg0)
 {
     func_80800AEC_bssub();
@@ -452,7 +457,7 @@ void func_80800FC0_bssub(s32 arg0)
 
 int bssub_entrypoint_1(s32 param_0)
 {
-  return D_808018A0_bssub[param_0];
+    return D_808018A0_bssub[param_0];
 }
 
 void func_80801004_bssub(s32 arg0)
@@ -460,6 +465,7 @@ void func_80801004_bssub(s32 arg0)
     func_80090A2C();
     func_808008D8_bssub(arg0);
 }
+
 void func_8080102C_bssub(param_0) PlayerState *param_0;
 {
     AnimCtrl *local_0;
@@ -485,16 +491,17 @@ void func_8080102C_bssub(param_0) PlayerState *param_0;
 
 int func_80801130_bssub(s32 param_0)
 {
-  s32 local_0;
-  local_0 = param_0 | 0;
-  func_808009B0_bssub(local_0);
-  func_8080102C_bssub(local_0);
-  baanim_setDurationRange(local_0, 0x3E99999A, 0x41200000);
-  func_8008CA30(local_0, 0x3F800000);
-  func_800909CC(local_0);
+    s32 local_0;
+    local_0 = param_0 | 0;
+    func_808009B0_bssub(local_0);
+    func_8080102C_bssub(local_0);
+    baanim_setDurationRange(local_0, 0x3E99999A, 0x41200000);
+    func_8008CA30(local_0, 0x3F800000);
+    func_800909CC(local_0);
 }
 
-void func_80801188_bssub(u8 *param_0) {
+void func_80801188_bssub(u8 *param_0)
+{
     s32 local_0;
 
     local_0 = 0;
@@ -504,7 +511,7 @@ void func_80801188_bssub(u8 *param_0) {
     func_80800768_bssub(param_0);
     func_80800254_bssub(param_0);
     func_80800834_bssub(param_0);
-    if ((*(f32 *)((s8 *)(param_0) + (0x16C))) == 0.0f) {
+    if (*(f32 *) ((s8 *) param_0 + 0x16C) == 0.0f) {
         local_0 = 0x131;
     }
     bs_setState(param_0, local_0);
@@ -512,7 +519,7 @@ void func_80801188_bssub(u8 *param_0) {
 
 int bssub_entrypoint_2(s32 param_0)
 {
-  return D_808018B0_bssub[param_0];
+    return D_808018B0_bssub[param_0];
 }
 
 void func_8080121C_bssub(s32 arg0)
@@ -520,6 +527,7 @@ void func_8080121C_bssub(s32 arg0)
     _baspin_entrypoint_1();
     func_808008D8_bssub(arg0);
 }
+
 void func_80801244_bssub(s32 param_0)
 {
     func_808009B0_bssub();
@@ -532,8 +540,7 @@ void func_80801284_bssub(Actor *param_0)
     local_0 = 0;
     func_80800AEC_bssub();
     func_800914FC(param_0, 4e+01f, 0);
-    if (_baspin_entrypoint_3(param_0) == 2)
-    {
+    if (_baspin_entrypoint_3(param_0) == 2) {
         local_0 = 0x131;
     }
     bs_setState(param_0, local_0);
@@ -541,7 +548,7 @@ void func_80801284_bssub(Actor *param_0)
 
 int bssub_entrypoint_3(s32 param_0)
 {
-  return D_808018C0_bssub[param_0];
+    return D_808018C0_bssub[param_0];
 }
 
 void func_808012F0_bssub(s32 arg0)
@@ -549,6 +556,7 @@ void func_808012F0_bssub(s32 arg0)
     _baspin_entrypoint_1();
     func_808008D8_bssub(arg0);
 }
+
 void func_80801318_bssub(s32 param_0)
 {
     func_808009B0_bssub();
@@ -557,20 +565,19 @@ void func_80801318_bssub(s32 param_0)
 
 void func_80801358_bssub(Actor *param_0)
 {
-  s32 local_0;
-  local_0 = 0;
-  func_80800AEC_bssub();
-  func_800914FC(param_0, 4e+01f, 0);
-  if (_baspin_entrypoint_3(param_0) == 2)
-  {
-    local_0 = 0x131;
-  }
-  bs_setState(param_0, local_0);
+    s32 local_0;
+    local_0 = 0;
+    func_80800AEC_bssub();
+    func_800914FC(param_0, 4e+01f, 0);
+    if (_baspin_entrypoint_3(param_0) == 2) {
+        local_0 = 0x131;
+    }
+    bs_setState(param_0, local_0);
 }
 
 int bssub_entrypoint_4(s32 param_0)
 {
-  return D_808018D0_bssub[param_0];
+    return D_808018D0_bssub[param_0];
 }
 
 void func_808013C4_bssub(s32 arg0)
@@ -578,14 +585,16 @@ void func_808013C4_bssub(s32 arg0)
     _babounce_entrypoint_3();
     func_808008D8_bssub(arg0);
 }
+
 int func_808013EC_bssub(s32 param_0)
 {
-  func_808009B0_bssub();
-  _babounce_entrypoint_4(param_0, 2);
-  _babounce_entrypoint_5(param_0, 0x12E, 0x40C00000);
+    func_808009B0_bssub();
+    _babounce_entrypoint_4(param_0, 2);
+    _babounce_entrypoint_5(param_0, 0x12E, 0x40C00000);
 }
 
-s32 func_80801428_bssub(s32 param_0) {
+s32 func_80801428_bssub(s32 param_0)
+{
     s32 local_0;
 
     local_0 = 0;
@@ -599,7 +608,7 @@ s32 func_80801428_bssub(s32 param_0) {
 
 int bssub_entrypoint_5(s32 param_0)
 {
-  return D_808018E0_bssub[param_0];
+    return D_808018E0_bssub[param_0];
 }
 
 void func_80801490_bssub(s32 arg0)
@@ -607,30 +616,31 @@ void func_80801490_bssub(s32 arg0)
     _bsrest_entrypoint_14();
     func_808008D8_bssub(arg0);
 }
-void func_808014B8_bssub(u8 *param_0) {
+
+void func_808014B8_bssub(u8 *param_0)
+{
     func_808009B0_bssub();
     func_8009BF5C(param_0, 0);
     _bsrest_entrypoint_16(param_0);
     func_8009B94C(param_0, 0);
     func_8009BA9C(param_0, 0);
-    (*(f32 *)((s8 *)(param_0) + (0x16C))) = 0.0f;
+    *(f32 *) ((s8 *) param_0 + 0x16C) = 0.0f;
 }
 
 int func_80801518_bssub(Actor *param_0)
 {
-  s32 local_0;
-  local_0 = 0;
-  func_80800AEC_bssub();
-  if (_bsrest_entrypoint_20(param_0))
-  {
-    local_0 = _badata_entrypoint_34(param_0);
-  }
-  bs_setState(param_0, local_0);
+    s32 local_0;
+    local_0 = 0;
+    func_80800AEC_bssub();
+    if (_bsrest_entrypoint_20(param_0)) {
+        local_0 = _badata_entrypoint_34(param_0);
+    }
+    bs_setState(param_0, local_0);
 }
 
 int bssub_entrypoint_6(s32 param_0)
 {
-  return D_808018F0_bssub[param_0];
+    return D_808018F0_bssub[param_0];
 }
 
 void func_80801578_bssub(s32 arg0)
@@ -638,6 +648,7 @@ void func_80801578_bssub(s32 arg0)
     func_80090A2C();
     func_808008D8_bssub(arg0);
 }
+
 void func_808015A0_bssub(PlayerState *param_0)
 {
     AnimCtrl *local_0;
@@ -662,7 +673,7 @@ void func_80801618_bssub(Actor *param_0)
     func_80800768_bssub(param_0);
     func_80800254_bssub(param_0);
     func_80800834_bssub(param_0);
-    if (*(f32 *)((char *)param_0 + 0x16C) != 0.0f) {
+    if (*(f32 *) ((char *) param_0 + 0x16C) != 0.0f) {
         local_0 = 0x12C;
     }
     bs_setState(param_0, local_0);
@@ -670,25 +681,53 @@ void func_80801618_bssub(Actor *param_0)
 
 int bssub_entrypoint_7(s32 param_0)
 {
-  return D_80801900_bssub[param_0];
+    return D_80801900_bssub[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/sub.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bsdrone_entrypoint_3();
-s32 D_808016E0_bssub[19] = { 0x1D09DC, 0xA0000, 0x0, 0x0, 0x2C, -0x4FFFCE, -0x4FFFB0, 0x320050, 0x150014, 0x660020, -0xF0F0FB0, 0x220033, 0x6600CC, 0x1330016, 0x10000018, 0x6, 0x0, 0x2B0099, 0xB30000 };
-u8 D_8080172C_bssub[28] = { 0x0, 0x16, 0x0, 0x2, 0x0, 0x15, 0x0, 0x0, 0x0, 0xB3, 0x0, 0x1E, 0x0, 0x1E, 0x0, 0x1E, 0x0, 0x4, 0x0, 0x99, 0x0, 0x7, 0x0, 0x5, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80801748_bssub[44] = { 0x0, 0x26, 0x0, 0x96, 0x0, 0x96, 0x0, 0x0, 0x0, 0xFA, 0x0, 0xFA, 0x0, 0x0, 0x0, 0x2E, 0xFF, 0xA8, 0x0, 0x0, 0x0, 0x96, 0x0, 0x58, 0x1, 0x67, 0x0, 0xFA, 0x0, 0x1B, 0xFF, 0x38, 0xFF, 0x9C, 0x0, 0x2B, 0x2, 0xB3, 0x2, 0xB3, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80801774_bssub[44] = { 0x0, 0x26, 0x1, 0x90, 0x0, 0xC8, 0x0, 0x0, 0x3, 0x84, 0x1, 0xF4, 0x0, 0x0, 0x0, 0x2E, 0xFF, 0xA4, 0x0, 0x0, 0x2, 0x58, 0xFF, 0xD8, 0x1, 0x67, 0x3, 0x20, 0x0, 0x1B, 0xFA, 0x24, 0xFA, 0x88, 0x0, 0x2B, 0x2, 0x66, 0x2, 0x66, 0x0, 0x0, 0x0, 0x0 };
-u8 D_808017A0_bssub[44] = { 0x0, 0x1D, 0x9, 0xD6, 0x0, 0x15, 0x0, 0x0, 0x0, 0x4C, 0x0, 0x16, 0x10, 0x0, 0x0, 0x1E, 0x0, 0x1E, 0x0, 0x1E, 0x0, 0x19, 0x0, 0x0, 0x0, 0x0, 0x0, 0x22, 0x1, 0x0, 0x1, 0x0, 0x4, 0x0, 0x4, 0x0, 0x0, 0x2B, 0x0, 0x80, 0x0, 0x80, 0x0, 0x0 };
-u8 D_808017CC_bssub[116] = { 0x0, 0xC, 0x0, 0x23, 0x0, 0x2B, 0x2, 0x0, 0x2, 0x80, 0x0, 0x2D, 0x0, 0x14, 0x0, 0x28, 0x0, 0x22, 0x0, 0x14, 0x0, 0x1E, 0x0, 0x23, 0x0, 0x30, 0x4, 0x1A, 0x0, 0xC, 0x0, 0x2D, 0x0, 0x2B, 0x1, 0x80, 0x2, 0x0, 0x0, 0x2D, 0x0, 0x32, 0x0, 0x46, 0x0, 0x22, 0x0, 0x21, 0x0, 0x26, 0x0, 0x2E, 0x0, 0x3A, 0x6, 0x1A, 0x0, 0xC, 0x0, 0x37, 0x0, 0x2B, 0x1, 0x0, 0x1, 0x80, 0x0, 0x2D, 0x0, 0x46, 0x0, 0x50, 0x0, 0x22, 0x0, 0x28, 0x0, 0x35, 0x0, 0x40, 0x0, 0x4C, 0x7, 0x1A, 0x0, 0xC, 0x0, 0x3C, 0x0, 0x2D, 0x0, 0x50, 0x0, 0x5A, 0x0, 0x2B, 0x0, 0x80, 0x1, 0x0, 0x0, 0x22, 0x0, 0x3D, 0x0, 0x40, 0x0, 0x4A, 0x0, 0x59, 0x8, 0x1A, 0x0, 0x0, 0x0, 0x0 };
-SubPartDef D_80801840_bssub[10] = { 0x1, 0x711, 0x1, 0x712, 0x1, 0x713, 0x3, 0x714, 0x4, 0x715, 0x2, 0x716, 0x1, 0x717, 0x1, 0x718, 0x1, 0x719, 0x1, 0x963 };
-s32 D_80801890_bssub[4] = { (u32)func_80800C1C_bssub, (u32)func_80800E34_bssub, (u32)func_80800E98_bssub, (u32)func_80800EE0_bssub };
-s32 D_808018A0_bssub[4] = { (u32)func_80800F70_bssub, (u32)func_80800F98_bssub, (u32)func_80800FC0_bssub, (u32)_bsdrone_entrypoint_3 };
-s32 D_808018B0_bssub[4] = { (u32)func_80801004_bssub, (u32)func_80801130_bssub, (u32)func_80801188_bssub, (u32)func_80800064_bssub };
-s32 D_808018C0_bssub[4] = { (u32)func_8080121C_bssub, (u32)func_80801244_bssub, (u32)func_80801284_bssub, (u32)func_80800064_bssub };
-s32 D_808018D0_bssub[4] = { (u32)func_808012F0_bssub, (u32)func_80801318_bssub, (u32)func_80801358_bssub, (u32)func_80800064_bssub };
-s32 D_808018E0_bssub[4] = { (u32)func_808013C4_bssub, (u32)func_808013EC_bssub, (u32)func_80801428_bssub, (u32)func_80800064_bssub };
-s32 D_808018F0_bssub[4] = { (u32)func_80801490_bssub, (u32)func_808014B8_bssub, (u32)func_80801518_bssub, (u32)func_80800064_bssub };
-s32 D_80801900_bssub[4] = { (u32)func_80801578_bssub, (u32)func_808015A0_bssub, (u32)func_80801618_bssub, (u32)func_80800064_bssub };
+s32 D_808016E0_bssub[19] = {0x1D09DC,   0xA0000,   0x0,      0x0,       0x2C,
+                            -0x4FFFCE,  -0x4FFFB0, 0x320050, 0x150014,  0x660020,
+                            -0xF0F0FB0, 0x220033,  0x6600CC, 0x1330016, 0x10000018,
+                            0x6,        0x0,       0x2B0099, 0xB30000};
+u8 D_8080172C_bssub[28] = {0x0, 0x16, 0x0, 0x2,  0x0, 0x15, 0x0, 0x0, 0x0, 0xB3,
+                           0x0, 0x1E, 0x0, 0x1E, 0x0, 0x1E, 0x0, 0x4, 0x0, 0x99,
+                           0x0, 0x7,  0x0, 0x5,  0x0, 0x0,  0x0, 0x0};
+u8 D_80801748_bssub[44] = {0x0,  0x26, 0x0,  0x96, 0x0,  0x96, 0x0,  0x0,  0x0,  0xFA, 0x0,
+                           0xFA, 0x0,  0x0,  0x0,  0x2E, 0xFF, 0xA8, 0x0,  0x0,  0x0,  0x96,
+                           0x0,  0x58, 0x1,  0x67, 0x0,  0xFA, 0x0,  0x1B, 0xFF, 0x38, 0xFF,
+                           0x9C, 0x0,  0x2B, 0x2,  0xB3, 0x2,  0xB3, 0x0,  0x0,  0x0,  0x0};
+u8 D_80801774_bssub[44] = {0x0,  0x26, 0x1,  0x90, 0x0,  0xC8, 0x0,  0x0,  0x3,  0x84, 0x1,
+                           0xF4, 0x0,  0x0,  0x0,  0x2E, 0xFF, 0xA4, 0x0,  0x0,  0x2,  0x58,
+                           0xFF, 0xD8, 0x1,  0x67, 0x3,  0x20, 0x0,  0x1B, 0xFA, 0x24, 0xFA,
+                           0x88, 0x0,  0x2B, 0x2,  0x66, 0x2,  0x66, 0x0,  0x0,  0x0,  0x0};
+u8 D_808017A0_bssub[44] = {0x0,  0x1D, 0x9, 0xD6, 0x0,  0x15, 0x0,  0x0, 0x0,  0x4C, 0x0,
+                           0x16, 0x10, 0x0, 0x0,  0x1E, 0x0,  0x1E, 0x0, 0x1E, 0x0,  0x19,
+                           0x0,  0x0,  0x0, 0x0,  0x0,  0x22, 0x1,  0x0, 0x1,  0x0,  0x4,
+                           0x0,  0x4,  0x0, 0x0,  0x2B, 0x0,  0x80, 0x0, 0x80, 0x0,  0x0};
+u8 D_808017CC_bssub[116] = {
+    0x0,  0xC,  0x0,  0x23, 0x0,  0x2B, 0x2,  0x0,  0x2,  0x80, 0x0,  0x2D, 0x0,  0x14, 0x0,
+    0x28, 0x0,  0x22, 0x0,  0x14, 0x0,  0x1E, 0x0,  0x23, 0x0,  0x30, 0x4,  0x1A, 0x0,  0xC,
+    0x0,  0x2D, 0x0,  0x2B, 0x1,  0x80, 0x2,  0x0,  0x0,  0x2D, 0x0,  0x32, 0x0,  0x46, 0x0,
+    0x22, 0x0,  0x21, 0x0,  0x26, 0x0,  0x2E, 0x0,  0x3A, 0x6,  0x1A, 0x0,  0xC,  0x0,  0x37,
+    0x0,  0x2B, 0x1,  0x0,  0x1,  0x80, 0x0,  0x2D, 0x0,  0x46, 0x0,  0x50, 0x0,  0x22, 0x0,
+    0x28, 0x0,  0x35, 0x0,  0x40, 0x0,  0x4C, 0x7,  0x1A, 0x0,  0xC,  0x0,  0x3C, 0x0,  0x2D,
+    0x0,  0x50, 0x0,  0x5A, 0x0,  0x2B, 0x0,  0x80, 0x1,  0x0,  0x0,  0x22, 0x0,  0x3D, 0x0,
+    0x40, 0x0,  0x4A, 0x0,  0x59, 0x8,  0x1A, 0x0,  0x0,  0x0,  0x0};
+SubPartDef D_80801840_bssub[10] = {0x1, 0x711, 0x1, 0x712, 0x1, 0x713, 0x3, 0x714, 0x4, 0x715,
+                                   0x2, 0x716, 0x1, 0x717, 0x1, 0x718, 0x1, 0x719, 0x1, 0x963};
+s32 D_80801890_bssub[4] = {(u32) func_80800C1C_bssub, (u32) func_80800E34_bssub,
+                           (u32) func_80800E98_bssub, (u32) func_80800EE0_bssub};
+s32 D_808018A0_bssub[4] = {(u32) func_80800F70_bssub, (u32) func_80800F98_bssub,
+                           (u32) func_80800FC0_bssub, (u32) _bsdrone_entrypoint_3};
+s32 D_808018B0_bssub[4] = {(u32) func_80801004_bssub, (u32) func_80801130_bssub,
+                           (u32) func_80801188_bssub, (u32) func_80800064_bssub};
+s32 D_808018C0_bssub[4] = {(u32) func_8080121C_bssub, (u32) func_80801244_bssub,
+                           (u32) func_80801284_bssub, (u32) func_80800064_bssub};
+s32 D_808018D0_bssub[4] = {(u32) func_808012F0_bssub, (u32) func_80801318_bssub,
+                           (u32) func_80801358_bssub, (u32) func_80800064_bssub};
+s32 D_808018E0_bssub[4] = {(u32) func_808013C4_bssub, (u32) func_808013EC_bssub,
+                           (u32) func_80801428_bssub, (u32) func_80800064_bssub};
+s32 D_808018F0_bssub[4] = {(u32) func_80801490_bssub, (u32) func_808014B8_bssub,
+                           (u32) func_80801518_bssub, (u32) func_80800064_bssub};
+s32 D_80801900_bssub[4] = {(u32) func_80801578_bssub, (u32) func_808015A0_bssub,
+                           (u32) func_80801618_bssub, (u32) func_80800064_bssub};

@@ -1,10 +1,4 @@
-#include "common.h"
-
 #include "overlays/bs/kaz/torpedo.h"
-#include "overlays/ba/playerstate.h"
-
-extern void func_80800AF0_bskaztorpedo(), func_80800B34_bskaztorpedo(), func_80800BA0_bskaztorpedo();
-extern void func_8080123C_bskaztorpedo(), func_80801268_bskaztorpedo(), func_808012DC_bskaztorpedo();
 
 extern s32 D_80801730_bskaztorpedo[];
 extern s32 D_80801740_bskaztorpedo[];
@@ -19,22 +13,27 @@ extern s32 D_80801884_bskaztorpedo[];
 extern s32 D_80801894_bskaztorpedo[];
 extern s32 D_808018A4_bskaztorpedo[];
 
-f32 func_80800000_bskaztorpedo(PlayerState *self) {
+f32 func_80800000_bskaztorpedo(PlayerState *self)
+{
     return (func_8009BB94(self) * 100.0f) / 1500.0f;
 }
 
-void func_80800034_bskaztorpedo(PlayerState *self) {
-    if ((self->unk15C.word != 0) || (bakey_pressed(self, BUTTON_B) != 0) || (_bakaztorpedo_entrypoint_1(self) == 0.0f)) {
+void func_80800034_bskaztorpedo(PlayerState *self)
+{
+    if ((self->unk15C.word != 0) || (bakey_pressed(self, BUTTON_B) != 0) ||
+        (_bakaztorpedo_entrypoint_1(self) == 0.0f)) {
         self->unk15C.word = 1;
         func_800F9BC4();
     }
 }
 
-void func_8080009C_bskaztorpedo(PlayerState *self) {
+void func_8080009C_bskaztorpedo(PlayerState *self)
+{
     func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_3_BOUNDED, 3, 0xF);
 }
 
-void func_808000CC_bskaztorpedo(PlayerState *self) {
+void func_808000CC_bskaztorpedo(PlayerState *self)
+{
     if (player_inWater(self) != 0) {
         func_8009BFE4(self, 220.0f, 3.5f);
         baroll_setAngularVelocity(self, 120.0f, 1.8f);
@@ -62,12 +61,12 @@ void func_8080016C_bskaztorpedo(PlayerState *self) {
     } else {
         sp38 = 350.0f;
     }
-    // Following \ is required for comp to match
     sp28 = yaw_getIdeal(self); \
-    yaw_setIdeal(self, (func_800F10B4(sp30, -1.0f, 1.0f, sp38, -sp38) * sp34) + sp28);
+        yaw_setIdeal(self, (func_800F10B4(sp30, -1.0f, 1.0f, sp38, -sp38) * sp34) + sp28);
 }
 
-void func_8080024C_bskaztorpedo(PlayerState *self) {
+void func_8080024C_bskaztorpedo(PlayerState *self)
+{
     f32 temp_f0;
 
     temp_f0 = bastick_getY(self);
@@ -78,7 +77,8 @@ void func_8080024C_bskaztorpedo(PlayerState *self) {
     func_8009BF5C(self, func_800F10B4(temp_f0, 0.0f, 1.0f, 0.0f, 85.0f));
 }
 
-void func_808002E0_bskaztorpedo(PlayerState *self) {
+void func_808002E0_bskaztorpedo(PlayerState *self)
+{
     s32 sp44;
     f32 sp38[3];
     f32 sp34;
@@ -109,17 +109,21 @@ void func_808002E0_bskaztorpedo(PlayerState *self) {
         self->unk16C = 22.5f;
     }
     func_808000CC_bskaztorpedo(self);
-    _bakaztorpedo_entrypoint_7(self, func_800F10B4(func_8009BB94(self), 0.0f, 1500.0f, 300.0f, 1200.0f));
+    _bakaztorpedo_entrypoint_7(self,
+                               func_800F10B4(func_8009BB94(self), 0.0f, 1500.0f, 300.0f, 1200.0f));
     sp2C[2] = func_8009BFD8(self);
     sp34 = func_80013728(sp2C[2] - func_8009BFCC(self));
     sp38[0] = yaw_getIdeal(self);
     _bakaztorpedo_entrypoint_5(self, sp34 * 0.75f, func_80013728(sp38[0] - yaw_get(self)) * 0.75f);
     if (sp44 != 0) {
-        func_80091290(self, func_800F10B4(self->unk16C, 0.0f, 225.0f, func_800DC178(5.0f, 10.0f), 60.0f), 0, 0xD);
+        func_80091290(self,
+                      func_800F10B4(self->unk16C, 0.0f, 225.0f, func_800DC178(5.0f, 10.0f), 60.0f),
+                      0, 0xD);
     }
 }
 
-void func_80800508_bskaztorpedo(PlayerState *self) {
+void func_80800508_bskaztorpedo(PlayerState *self)
+{
     if (func_8009E69C(self, 2) == 0) {
         func_800A0DC4(self, 0);
         func_8008C984(self, 3);
@@ -141,7 +145,8 @@ void func_80800508_bskaztorpedo(PlayerState *self) {
     }
 }
 
-void func_808005F0_bskaztorpedo(PlayerState *self) {
+void func_808005F0_bskaztorpedo(PlayerState *self)
+{
     if (func_8009E6C4(self, 2) == 0) {
         func_800A0DC4(self, 1);
         _bakaztorpedo_entrypoint_4(self);
@@ -173,11 +178,13 @@ void func_808005F0_bskaztorpedo(PlayerState *self) {
     }
 }
 
-void func_8080076C_bskaztorpedo(PlayerState *self) {
+void func_8080076C_bskaztorpedo(PlayerState *self)
+{
     _bakaztorpedo_entrypoint_8(self);
 }
 
-void func_8080078C_bskaztorpedo(PlayerState *self) {
+void func_8080078C_bskaztorpedo(PlayerState *self)
+{
     s32 sp44;
     f32 sp38[3];
     f32 sp2C[3];
@@ -208,7 +215,8 @@ void func_8080078C_bskaztorpedo(PlayerState *self) {
     }
 }
 
-void func_8080088C_bskaztorpedo(PlayerState *self, s32 arg1) {
+void func_8080088C_bskaztorpedo(PlayerState *self, s32 arg1)
+{
     func_800995B8(self, arg1);
     if (bs_getCurrentState(self) != BS_STATE_15A) {
         bs_setState(self, BS_STATE_15A);
@@ -235,17 +243,22 @@ void func_808008D4_bskaztorpedo(PlayerState *param_0)
         case 0x21:
             func_8080088C_bskaztorpedo(param_0, 0);
             break;
-        case 0x1F: case 0x20: case 0x24: case 0x2D: case 0x2E:
-        case 0x4E: case 0x51: case 0x52:
+        case 0x1F:
+        case 0x20:
+        case 0x24:
+        case 0x2D:
+        case 0x2E:
+        case 0x4E:
+        case 0x51:
+        case 0x52:
             func_8080088C_bskaztorpedo(param_0, 1);
             break;
         case 0x88:
-            *(s32 *)((u8 *)param_0 + 0x15C) = 1;
+            *(s32 *) ((u8 *) param_0 + 0x15C) = 1;
             func_8009E830(param_0, 2);
             break;
         default:
             func_80099B94(param_0);
-            break;
     }
 }
 
@@ -254,33 +267,34 @@ void func_80800A34_bskaztorpedo(PlayerState *param_0)
     if (baflag_isFalse(param_0, 0x35)) {
         func_808008D4_bskaztorpedo(param_0);
     }
-    
+
     switch (func_8009E6EC(param_0)) {
-    case 0x1F:
-    case 0x20:
-    case 0x21:
-    case 0x24:
-    case 0x2D:
-    case 0x2E:
-    case 0x4E:
-    case 0x51:
-    case 0x52:
-        func_8009E830(param_0, 2);
-        break;
-    default:
-        func_808008D4_bskaztorpedo(param_0);
-        break;
+        case 0x1F:
+        case 0x20:
+        case 0x21:
+        case 0x24:
+        case 0x2D:
+        case 0x2E:
+        case 0x4E:
+        case 0x51:
+        case 0x52:
+            func_8009E830(param_0, 2);
+            break;
+        default:
+            func_808008D4_bskaztorpedo(param_0);
     }
 }
 
-void func_80800AF0_bskaztorpedo(PlayerState *self) {
+void func_80800AF0_bskaztorpedo(PlayerState *self)
+{
     _batranslate_entrypoint_3(self, 1);
     func_80800508_bskaztorpedo(self);
     self->unk16C = 225.0f;
     _bamovethrust_entrypoint_2(self, 225.0f);
 }
 
-void func_80800B34_bskaztorpedo(PlayerState *self) {
+void func_80800B34_bskaztorpedo(PlayerState *self)
+{
     func_808005F0_bskaztorpedo(self);
     baanim_playForDuration_onceSmoothStartingAt(self, 0x133, 1.5f, 0.2308f);
     func_8080009C_bskaztorpedo(self);
@@ -289,7 +303,8 @@ void func_80800B34_bskaztorpedo(PlayerState *self) {
     _batranslate_entrypoint_3(self, 2);
 }
 
-void func_80800BA0_bskaztorpedo(PlayerState *self) {
+void func_80800BA0_bskaztorpedo(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -299,16 +314,19 @@ void func_80800BA0_bskaztorpedo(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskaztorpedo_entrypoint_0(s32 idx) {
+s32 bskaztorpedo_entrypoint_0(s32 idx)
+{
     return D_80801730_bskaztorpedo[idx];
 }
 
-void func_80800BF8_bskaztorpedo(PlayerState *self) {
+void func_80800BF8_bskaztorpedo(PlayerState *self)
+{
     func_80090A2C(self);
     func_80800508_bskaztorpedo(self);
 }
 
-void func_80800C20_bskaztorpedo(PlayerState *self) {
+void func_80800C20_bskaztorpedo(PlayerState *self)
+{
     func_808005F0_bskaztorpedo(self);
     func_8080009C_bskaztorpedo(self);
     baanim_playForDuration_loopSmooth(self, 0x132, 1.0f);
@@ -318,7 +336,8 @@ void func_80800C20_bskaztorpedo(PlayerState *self) {
     func_800909CC(self);
 }
 
-void func_80800CAC_bskaztorpedo(PlayerState *self) {
+void func_80800CAC_bskaztorpedo(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -334,22 +353,26 @@ void func_80800CAC_bskaztorpedo(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskaztorpedo_entrypoint_1(s32 idx) {
+s32 bskaztorpedo_entrypoint_1(s32 idx)
+{
     return D_80801740_bskaztorpedo[idx];
 }
 
-void func_80800D48_bskaztorpedo(PlayerState *self) {
+void func_80800D48_bskaztorpedo(PlayerState *self)
+{
     _bsrest_entrypoint_14(self);
     func_80800508_bskaztorpedo(self);
 }
 
-void func_80800D70_bskaztorpedo(PlayerState *self) {
+void func_80800D70_bskaztorpedo(PlayerState *self)
+{
     func_808005F0_bskaztorpedo(self);
     _bsrest_entrypoint_16(self);
     func_8009BA9C(self, 0);
 }
 
-void func_80800DA4_bskaztorpedo(PlayerState *self) {
+void func_80800DA4_bskaztorpedo(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -361,31 +384,37 @@ void func_80800DA4_bskaztorpedo(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskaztorpedo_entrypoint_2(s32 idx) {
+s32 bskaztorpedo_entrypoint_2(s32 idx)
+{
     return D_80801750_bskaztorpedo[idx];
 }
 
-void func_80800E04_bskaztorpedo(PlayerState *self) {
+void func_80800E04_bskaztorpedo(PlayerState *self)
+{
     _bsdrone_entrypoint_2(self);
     func_80800508_bskaztorpedo(self);
 }
 
-void func_80800E2C_bskaztorpedo(PlayerState *self) {
+void func_80800E2C_bskaztorpedo(PlayerState *self)
+{
     func_808005F0_bskaztorpedo(self);
     _bsdrone_entrypoint_0(self);
 }
 
-void func_80800E54_bskaztorpedo(PlayerState *self) {
+void func_80800E54_bskaztorpedo(PlayerState *self)
+{
     func_8080076C_bskaztorpedo(self);
     func_808002E0_bskaztorpedo(self);
     _bsdrone_entrypoint_1(self);
 }
 
-s32 bskaztorpedo_entrypoint_3(s32 idx) {
+s32 bskaztorpedo_entrypoint_3(s32 idx)
+{
     return D_80801760_bskaztorpedo[idx];
 }
 
-void func_80800E98_bskaztorpedo(PlayerState *self) {
+void func_80800E98_bskaztorpedo(PlayerState *self)
+{
     f32 sp1C[3];
 
     func_800F5A00(_plsu_entrypoint_1(0xA), sp1C);
@@ -393,11 +422,13 @@ void func_80800E98_bskaztorpedo(PlayerState *self) {
     _bamovegoto_entrypoint_12(self, sp1C);
 }
 
-void func_80800EE8_bskaztorpedo(PlayerState *self) {
+void func_80800EE8_bskaztorpedo(PlayerState *self)
+{
     func_80800508_bskaztorpedo(self);
 }
 
-void func_80800F08_bskaztorpedo(PlayerState *self) {
+void func_80800F08_bskaztorpedo(PlayerState *self)
+{
     func_808005F0_bskaztorpedo(self);
     baanim_playForDuration_loopSmooth(self, 0x135, 0.5f);
     func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 3, BA_PHYSICS_0_NONE);
@@ -411,13 +442,13 @@ void func_80800F08_bskaztorpedo(PlayerState *self) {
     self->unk174 = 0.0f;
 }
 
-void func_80800FB4_bskaztorpedo(PlayerState *self) {
+void func_80800FB4_bskaztorpedo(PlayerState *self)
+{
     Unkfunc_800E0960_1 *sp54;
     f32 sp48[3];
     f32 sp3C[3];
     s32 pad0;
     PlayerState *sp34;
-    Unkfunc_800E0960_1 * temp_v0;
 
     func_80800E98_bskaztorpedo(self);
     sp54 = func_80092AD8(self);
@@ -449,13 +480,15 @@ void func_80800FB4_bskaztorpedo(PlayerState *self) {
     }
 }
 
-s32 bskaztorpedo_entrypoint_4(s32 idx) {
+s32 bskaztorpedo_entrypoint_4(s32 idx)
+{
     return D_808017E4_bskaztorpedo[idx];
 }
 
-void func_808011A4_bskaztorpedo(PlayerState *self) {
+void func_808011A4_bskaztorpedo(PlayerState *self)
+{
     s32 result;
-    f32 sp2C[2]; // should be of size 3 but can't get it to match that way    
+    f32 sp2C[2];
 
     func_8009E154(self, NULL, sp2C);
     result = func_800BABB8(func_800B5BE4(0x24), sp2C, sp2C, 1.0f, D_808017F4_bskaztorpedo);
@@ -463,12 +496,14 @@ void func_808011A4_bskaztorpedo(PlayerState *self) {
     result = func_800BABB8(result, sp2C, sp2C, 1.0f, D_80801854_bskaztorpedo);
 }
 
-void func_8080123C_bskaztorpedo(PlayerState *self) {
+void func_8080123C_bskaztorpedo(PlayerState *self)
+{
     baflag_clear(self, 0x35);
     func_80800508_bskaztorpedo(self);
 }
 
-void func_80801268_bskaztorpedo(PlayerState *self) {
+void func_80801268_bskaztorpedo(PlayerState *self)
+{
     func_808005F0_bskaztorpedo(self);
     baanim_playForDuration_onceSmoothStartingAt(self, 0x132, 0.3f, 0.5f);
     anctrl_setPlaybackType(baanim_getAnimCtrlPtr(self), 3);
@@ -477,7 +512,8 @@ void func_80801268_bskaztorpedo(PlayerState *self) {
     self->unk170 = 0.0f;
 }
 
-void func_808012DC_bskaztorpedo(PlayerState *self) {
+void func_808012DC_bskaztorpedo(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -494,23 +530,27 @@ void func_808012DC_bskaztorpedo(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskaztorpedo_entrypoint_5(s32 idx) {
+s32 bskaztorpedo_entrypoint_5(s32 idx)
+{
     return D_80801884_bskaztorpedo[idx];
 }
 
-void func_80801380_bskaztorpedo(PlayerState *self) {
+void func_80801380_bskaztorpedo(PlayerState *self)
+{
     _baspin_entrypoint_1();
     _bakaztorpedo_entrypoint_6(self, 2);
     func_80800508_bskaztorpedo(self);
 }
 
-void func_808013B4_bskaztorpedo(PlayerState *self) {
+void func_808013B4_bskaztorpedo(PlayerState *self)
+{
     func_808005F0_bskaztorpedo(self);
     _bakaztorpedo_entrypoint_6(self, 4);
     _baspin_entrypoint_2(self, 0x134, 1.8f, 0, 1);
 }
 
-void func_80801400_bskaztorpedo(PlayerState *self) {
+void func_80801400_bskaztorpedo(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -525,11 +565,13 @@ void func_80801400_bskaztorpedo(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskaztorpedo_entrypoint_6(s32 idx) {
+s32 bskaztorpedo_entrypoint_6(s32 idx)
+{
     return D_80801894_bskaztorpedo[idx];
 }
 
-void func_80801484_bskaztorpedo(PlayerState *self) {
+void func_80801484_bskaztorpedo(PlayerState *self)
+{
     func_8009BD88(self);
     func_8008E95C(self);
     func_800951B4(self);
@@ -540,7 +582,8 @@ void func_80801484_bskaztorpedo(PlayerState *self) {
     func_80800508_bskaztorpedo(self);
 }
 
-void func_808014F8_bskaztorpedo(PlayerState *self) {
+void func_808014F8_bskaztorpedo(PlayerState *self)
+{
     f32 sp4C;
     s32 pad0;
     s32 pad1;
@@ -548,7 +591,6 @@ void func_808014F8_bskaztorpedo(PlayerState *self) {
     s32 pad2;
     s32 pad3;
     f32 sp34;
-    s32 pad4;
 
     func_808005F0_bskaztorpedo(self);
     _bakaztorpedo_entrypoint_6(self, 4);
@@ -565,12 +607,14 @@ void func_808014F8_bskaztorpedo(PlayerState *self) {
     baphysics_set_target_horizontal_velocity(self, _bareact_entrypoint_4(self));
     baphysics_set_target_yaw(self, sp4C);
     baphysics_set_horizontal_velocity(self, sp4C, baphysics_get_target_horizontal_velocity(self));
-    func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 2, BA_PHYSICS_3_LOCKED_ROTATION);
+    func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 2,
+                  BA_PHYSICS_3_LOCKED_ROTATION);
     func_8008E944(self);
     func_8009514C(self);
 }
 
-void func_80801614_bskaztorpedo(PlayerState *self) {
+void func_80801614_bskaztorpedo(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -584,21 +628,48 @@ void func_80801614_bskaztorpedo(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskaztorpedo_entrypoint_7(s32 idx) {
+s32 bskaztorpedo_entrypoint_7(s32 idx)
+{
     return D_808018A4_bskaztorpedo[idx];
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/torpedo.data.s) is defined here in C --
- * tables holding function pointers must be in the same unit, otherwise IDO's assembler schedules those functions differently. */
+
 extern void func_80099AA8();
-s32 D_80801730_bskaztorpedo[4] = { (u32)func_80800AF0_bskaztorpedo, (u32)func_80800B34_bskaztorpedo, (u32)func_80800BA0_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
-s32 D_80801740_bskaztorpedo[4] = { (u32)func_80800BF8_bskaztorpedo, (u32)func_80800C20_bskaztorpedo, (u32)func_80800CAC_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
-s32 D_80801750_bskaztorpedo[4] = { (u32)func_80800D48_bskaztorpedo, (u32)func_80800D70_bskaztorpedo, (u32)func_80800DA4_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
-s32 D_80801760_bskaztorpedo[4] = { (u32)func_80800E04_bskaztorpedo, (u32)func_80800E2C_bskaztorpedo, (u32)func_80800E54_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
-s32 D_80801770_bskaztorpedo[29] = { 0xC0023, 0x2B0200, 0x280002D, 0x140028, 0x220014, 0x1E0023, 0x30061A, 0xC002D, 0x2B0180, 0x200002D, 0x320046, 0x220021, 0x26002E, 0x3A081A, 0xC0037, 0x2B0100, 0x180002D, 0x460050, 0x220028, 0x350040, 0x4C081A, 0xC003C, 0x2D0050, 0x5A002B, 0x800100, 0x22003D, 0x40004A, 0x59021A, 0x0 };
-s32 D_808017E4_bskaztorpedo[4] = { (u32)func_80800EE8_bskaztorpedo, (u32)func_80800F08_bskaztorpedo, (u32)func_80800FB4_bskaztorpedo, (u32)func_80099AA8 };
-s32 D_808017F4_bskaztorpedo[12] = { 0x1D09E4, 0xE0005, 0xA0015, 0x190080, 0x220021, 0x23000C, 0xC0027, 0x1900190, 0x3200320, 0x2B0080, 0x99031A, 0x0 };
-s32 D_80801824_bskaztorpedo[12] = { 0x1D09E4, 0xE000F, 0x190015, 0x99, 0x220019, 0x1E000C, 0xC0027, 0x1900190, 0x3200320, 0x2B004C, 0x66061A, 0x0 };
-s32 D_80801854_bskaztorpedo[12] = { 0x1D09E4, 0xE001E, 0x280015, 0x99, 0x22000C, 0xF0007, 0x70027, 0x1900190, 0x3200320, 0x2B0019, 0x4C0E1A, 0x0 };
-s32 D_80801884_bskaztorpedo[4] = { (u32)func_8080123C_bskaztorpedo, (u32)func_80801268_bskaztorpedo, (u32)func_808012DC_bskaztorpedo, (u32)func_80800A34_bskaztorpedo };
-s32 D_80801894_bskaztorpedo[4] = { (u32)func_80801380_bskaztorpedo, (u32)func_808013B4_bskaztorpedo, (u32)func_80801400_bskaztorpedo, (u32)func_808008D4_bskaztorpedo };
-s32 D_808018A4_bskaztorpedo[7] = { (u32)func_80801484_bskaztorpedo, (u32)func_808014F8_bskaztorpedo, (u32)func_80801614_bskaztorpedo, (u32)func_808008D4_bskaztorpedo, 0x0, 0x0, 0x0 };
+s32 D_80801730_bskaztorpedo[4] = {
+    (u32) func_80800AF0_bskaztorpedo, (u32) func_80800B34_bskaztorpedo,
+    (u32) func_80800BA0_bskaztorpedo, (u32) func_808008D4_bskaztorpedo};
+s32 D_80801740_bskaztorpedo[4] = {
+    (u32) func_80800BF8_bskaztorpedo, (u32) func_80800C20_bskaztorpedo,
+    (u32) func_80800CAC_bskaztorpedo, (u32) func_808008D4_bskaztorpedo};
+s32 D_80801750_bskaztorpedo[4] = {
+    (u32) func_80800D48_bskaztorpedo, (u32) func_80800D70_bskaztorpedo,
+    (u32) func_80800DA4_bskaztorpedo, (u32) func_808008D4_bskaztorpedo};
+s32 D_80801760_bskaztorpedo[4] = {
+    (u32) func_80800E04_bskaztorpedo, (u32) func_80800E2C_bskaztorpedo,
+    (u32) func_80800E54_bskaztorpedo, (u32) func_808008D4_bskaztorpedo};
+s32 D_80801770_bskaztorpedo[29] = {0xC0023,  0x2B0200, 0x280002D, 0x140028,  0x220014,  0x1E0023,
+                                   0x30061A, 0xC002D,  0x2B0180,  0x200002D, 0x320046,  0x220021,
+                                   0x26002E, 0x3A081A, 0xC0037,   0x2B0100,  0x180002D, 0x460050,
+                                   0x220028, 0x350040, 0x4C081A,  0xC003C,   0x2D0050,  0x5A002B,
+                                   0x800100, 0x22003D, 0x40004A,  0x59021A,  0x0};
+s32 D_808017E4_bskaztorpedo[4] = {(u32) func_80800EE8_bskaztorpedo,
+                                  (u32) func_80800F08_bskaztorpedo,
+                                  (u32) func_80800FB4_bskaztorpedo, (u32) func_80099AA8};
+s32 D_808017F4_bskaztorpedo[12] = {0x1D09E4, 0xE0005,   0xA0015,   0x190080, 0x220021, 0x23000C,
+                                   0xC0027,  0x1900190, 0x3200320, 0x2B0080, 0x99031A, 0x0};
+s32 D_80801824_bskaztorpedo[12] = {0x1D09E4, 0xE000F,   0x190015,  0x99,     0x220019, 0x1E000C,
+                                   0xC0027,  0x1900190, 0x3200320, 0x2B004C, 0x66061A, 0x0};
+s32 D_80801854_bskaztorpedo[12] = {0x1D09E4, 0xE001E,   0x280015,  0x99,     0x22000C, 0xF0007,
+                                   0x70027,  0x1900190, 0x3200320, 0x2B0019, 0x4C0E1A, 0x0};
+s32 D_80801884_bskaztorpedo[4] = {
+    (u32) func_8080123C_bskaztorpedo, (u32) func_80801268_bskaztorpedo,
+    (u32) func_808012DC_bskaztorpedo, (u32) func_80800A34_bskaztorpedo};
+s32 D_80801894_bskaztorpedo[4] = {
+    (u32) func_80801380_bskaztorpedo, (u32) func_808013B4_bskaztorpedo,
+    (u32) func_80801400_bskaztorpedo, (u32) func_808008D4_bskaztorpedo};
+s32 D_808018A4_bskaztorpedo[7] = {(u32) func_80801484_bskaztorpedo,
+                                  (u32) func_808014F8_bskaztorpedo,
+                                  (u32) func_80801614_bskaztorpedo,
+                                  (u32) func_808008D4_bskaztorpedo,
+                                  0x0,
+                                  0x0,
+                                  0x0};

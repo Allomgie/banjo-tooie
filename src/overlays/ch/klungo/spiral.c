@@ -7,10 +7,12 @@ extern void func_80105A9C(u8 *, f32);
 extern void func_80105BAC();
 extern f32 D_80800668_chklungospiral[];
 extern void *func_80100094(Actor *, s32);
-extern u8 unk6C[];
 extern u8 D_808005F0_chklungospiral[];
-extern u8 unk6A[];
-typedef struct { u8 pad[0x6C]; u32 pad6C:23; u32 f:9; } KlungoS;
+typedef struct {
+    u8 pad[0x6C];
+    u32 pad6C : 23;
+    u32 f : 9;
+} KlungoS;
 extern void _capod_entrypoint_3(s32, KlungoS *);
 extern s32 D_80800688_chklungospiral[];
 extern s32 D_80800674_chklungospiral[];
@@ -26,10 +28,11 @@ void func_80800480_chklungospiral();
 
 int chklungospiral_entrypoint_0()
 {
-  return &D_80800620_chklungospiral;
+    return &D_80800620_chklungospiral;
 }
 
-void func_8080000C_chklungospiral(u8 *param_0) {
+void func_8080000C_chklungospiral(u8 *param_0)
+{
     s32 local_0[6];
     _subaddiemarker_entrypoint_1(param_0, 0x154, 0x33, local_0, 1);
     _subaddieDll_entrypoint_2(param_0, local_0);
@@ -57,7 +60,6 @@ void func_80800060_chklungospiral(Actor *param_0)
                 func_800FFAB0(param_0);
                 func_800DA544(0x3C);
             }
-            break;
     }
     if (func_80100094(param_0, 1)) {
         _suexpression_entrypoint_10(func_80100094(param_0, 1), param_0->unk0, 0);
@@ -79,7 +81,8 @@ s32 func_8080015C_chklungospiral(Actor *param_0, s32 param_1, u32 param_2)
             func_80102424(param_0, 3);
             break;
         case 0x57:
-            return func_808002A0_chklungospiral(param_0, param_2 & 0xFFFF, (param_2 & 0xFFFF0000) >> 16);
+            return func_808002A0_chklungospiral(param_0, param_2 & 0xFFFF,
+                                                (param_2 & 0xFFFF0000) >> 16);
         case 41:
             _suexpression_entrypoint_7(param_0, 1, 0xAB);
             break;
@@ -98,72 +101,75 @@ s32 func_8080015C_chklungospiral(Actor *param_0, s32 param_1, u32 param_2)
 
 int func_808002A0_chklungospiral(Actor *param_0, s32 param_1, s32 param_2)
 {
-  if (_gcdialogcamera_entrypoint_0(param_1 | 0, param_2 | 0))
-  {
-    if (((*(s32 *)((char *)(param_0) + 0x6C)) & 0x1FF) != 2)
-    {
-      func_808002FC_chklungospiral(param_0, 2, 1);
+    if (_gcdialogcamera_entrypoint_0(param_1 | 0, param_2 | 0)) {
+        if ((*(s32 *) ((char *) param_0 + 0x6C) & 0x1FF) != 2) {
+            func_808002FC_chklungospiral(param_0, 2, 1);
+        }
+        return 2;
     }
-    return 2;
-  }
-  return 1;
+    return 1;
 }
 
-void func_808002FC_chklungospiral(param_0, param_1, param_2) u8 *param_0; s32 param_1; s32 param_2;
+void func_808002FC_chklungospiral(param_0, param_1, param_2) u8 *param_0;
+s32 param_1;
+s32 param_2;
 {
     s32 local_0;
 
-    local_0 = (*(s32 *)((s8 *)(param_0) + (0x6C))) & 0x1FF;
-    switch (local_0) {                              
-    case 0:
-        _capod_entrypoint_2((*(s32 *)((s8 *)(param_0) + (0))), 0xc, 0);
-        
-    case 1:
-        _capod_entrypoint_8(1);
-        (*(u16 *)((s8 *)(param_0) + (0x6E))) = (u16) (((*(u16 *)((s8 *)(param_0) + (0x6E))) & 0xFE00) | 2);
-        _gcdialogcamera_entrypoint_3(&D_808005F0_chklungospiral, (*(s32 *)((s8 *)(param_0) + (0x38))));
-        _gcdialogcamera_entrypoint_4(param_0 + 4);
-        _gcdialogcamera_entrypoint_5(param_0 + 0x44);
-        _gcdialogcamera_entrypoint_8();
-        
-    case 2:
-        _capod_entrypoint_7(param_1, param_2);
-        return;
+    local_0 = *(s32 *) ((s8 *) param_0 + 0x6C) & 0x1FF;
+    switch (local_0) {
+        case 0:
+            _capod_entrypoint_2(*(s32 *) ((s8 *) param_0 + 0), 0xc, 0);
+
+        case 1:
+            _capod_entrypoint_8(1);
+            *(u16 *) ((s8 *) param_0 + 0x6E) =
+                (u16) ((*(u16 *) ((s8 *) param_0 + 0x6E) & 0xFE00) | 2);
+            _gcdialogcamera_entrypoint_3(&D_808005F0_chklungospiral,
+                                         *(s32 *) ((s8 *) param_0 + 0x38));
+            _gcdialogcamera_entrypoint_4(param_0 + 4);
+            _gcdialogcamera_entrypoint_5(param_0 + 0x44);
+            _gcdialogcamera_entrypoint_8();
+
+        case 2:
+            _capod_entrypoint_7(param_1, param_2);
     }
 }
 
-int func_808003AC_chklungospiral(param_0, param_1, param_2) Actor *param_0; s32 param_1; s32 param_2;
+int func_808003AC_chklungospiral(param_0, param_1, param_2)
+Actor *param_0;
+s32 param_1;
+s32 param_2;
 {
-  s32 new_var;
-  s32 temp_t6;
-  new_var = *((s32 *) (((char *) param_0) + 0x6C));
-  temp_t6 = new_var & 0x1FF;
-  switch (temp_t6 & 0xFFFF)
-  {
-    case 0:
-      _capod_entrypoint_2(*((s32 *) (((char *) param_0) + 0x0)), 0xC, param_2, param_0);
+    s32 new_var;
+    s32 temp_t6;
+    new_var = *(s32 *) ((char *) param_0 + 0x6C);
+    temp_t6 = new_var & 0x1FF;
+    switch (temp_t6 & 0xFFFF) {
+        case 0:
+            _capod_entrypoint_2(*(s32 *) ((char *) param_0 + 0x0), 0xC, param_2, param_0);
 
-    case 2:
-      *((u16 *) (((char *) param_0) + 0x6E)) = (u16) (((*((u16 *) (((char *) param_0) + 0x6E))) & 0xFE00) | 1);
+        case 2:
+            *(u16 *) ((char *) param_0 + 0x6E) =
+                (u16) ((*(u16 *) ((char *) param_0 + 0x6E) & 0xFE00) | 1);
 
-    case 1:
-      _capod_entrypoint_6(*((s32 *) (((char *) param_0) + 0x0)), param_1, param_2, param_0);
-      return;
-      if (!param_0)
-    {
+        case 1:
+            _capod_entrypoint_6(*(s32 *) ((char *) param_0 + 0x0), param_1, param_2, param_0);
     }
-
-  }
-
 }
 
-s32 func_80800430_chklungospiral(param_0) KlungoS *param_0; {
-    if (param_0->f) {
-        _capod_entrypoint_3(0, param_0);
-        param_0->f = 0;
-        return 1;
-    }
-    return 0;
+s32 func_80800430_chklungospiral(param_0)
+KlungoS *param_0;
+{
+
+if (param_0->f) {
+    _capod_entrypoint_3(0, param_0);
+    param_0->f = 0;
+    return 1;
+}
+
+return 0;
+
 }
 
 void func_80800480_chklungospiral(param_0) Actor *param_0;
@@ -171,30 +177,48 @@ void func_80800480_chklungospiral(param_0) Actor *param_0;
     if (!param_0->unk7C_12) {
         return;
     }
-    if (func_80101E4C(param_0, &D_80800688_chklungospiral)) {
-        func_80018820(0, 0.8f, 0.3f);
-        func_800E15CC(0, 5.0f, 0.7f);
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800674_chklungospiral);
-        return;
-    }
-    if (func_80101E14(param_0, 0.7f)) {
-        func_80018820(0, 1.0f, 0.4f);
-        func_800E15CC(0, 10.0f, 0.8f);
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800674_chklungospiral);
-    }
+
+if (func_80101E4C(param_0, &D_80800688_chklungospiral)) {
+    func_80018820(0, 0.8f, 0.3f);
+    func_800E15CC(0, 5.0f, 0.7f);
+    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800674_chklungospiral);
+    return;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/klungo/spiral.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800674_chklungospiral -> s32[], D_80800688_chklungospiral -> s32[] */
+if (func_80101E14(param_0, 0.7f)) {
+    func_80018820(0, 1.0f, 0.4f);
+    func_800E15CC(0, 10.0f, 0.8f);
+    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800674_chklungospiral);
+}
+
+}
+
 extern void func_80102EC0();
 extern void func_801018A4();
 extern void func_80107C2C();
-u8 D_808005F0_chklungospiral[16] = { 0x43, 0x34, 0x0, 0x0, 0x43, 0x48, 0x0, 0x0, 0x43, 0x48, 0x0, 0x0, 0x43, 0x2, 0x0, 0x0 };
-u32 D_80800600_chklungospiral[8] = { 0x0, 0x0, 0x40F570A4, 0x25C0001, 0x40F570A4, 0x25C0001, 0x3F333333, 0x2640001 };
-void *D_80800620_chklungospiral = (void *)0x015804EC;
-static u32 D_80800620_chklungospiral_rest[17] = { 0x7070001, (u32)&D_80800600_chklungospiral, (u32)func_80102EC0, (u32)func_80800060_chklungospiral, (u32)func_801018A4, 0x0, 0x40000000, 0x3C0000, 0x40040120, 0x0, 0x0, 0x0, (u32)func_8080000C_chklungospiral, (u32)func_80107C2C, 0x80001416, (u32)func_8080015C_chklungospiral, 0x0 };
-f32 D_80800668_chklungospiral[3] = { 0.0f, 0.5f, -1.0f };
-s32 D_80800674_chklungospiral[5] = { 0x130417, 0xD00F3, 0x10C0001, 0x3201D4C, 0x0 };
-s32 D_80800688_chklungospiral[6] = { 0x3D75C28F, 0x3E19999A, 0x3E75C28F, 0x3F07AE14, 0x3F1C28F6, -0x40800000 };
+u8 D_808005F0_chklungospiral[16] = {0x43, 0x34, 0x0, 0x0, 0x43, 0x48, 0x0, 0x0,
+                                    0x43, 0x48, 0x0, 0x0, 0x43, 0x2,  0x0, 0x0};
+u32 D_80800600_chklungospiral[8] = {0x0,        0x0,       0x40F570A4, 0x25C0001,
+                                    0x40F570A4, 0x25C0001, 0x3F333333, 0x2640001};
+void *D_80800620_chklungospiral = (void *) 0x015804EC;
+static u32 D_80800620_chklungospiral_rest[17] = {0x7070001,
+                                                 (u32) &D_80800600_chklungospiral,
+                                                 (u32) func_80102EC0,
+                                                 (u32) func_80800060_chklungospiral,
+                                                 (u32) func_801018A4,
+                                                 0x0,
+                                                 0x40000000,
+                                                 0x3C0000,
+                                                 0x40040120,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0,
+                                                 (u32) func_8080000C_chklungospiral,
+                                                 (u32) func_80107C2C,
+                                                 0x80001416,
+                                                 (u32) func_8080015C_chklungospiral,
+                                                 0x0};
+f32 D_80800668_chklungospiral[3] = {0.0f, 0.5f, -1.0f};
+s32 D_80800674_chklungospiral[5] = {0x130417, 0xD00F3, 0x10C0001, 0x3201D4C, 0x0};
+s32 D_80800688_chklungospiral[6] = {0x3D75C28F, 0x3E19999A, 0x3E75C28F,
+                                    0x3F07AE14, 0x3F1C28F6, -0x40800000};

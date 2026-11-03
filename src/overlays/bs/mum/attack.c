@@ -1,6 +1,7 @@
 #include "overlays/bs/mum/attack.h"
 
-void func_80800000_bsmumattack(PlayerState *self) {
+void func_80800000_bsmumattack(PlayerState *self)
+{
     if (self->unk160.bytes[0] != 0) {
         func_800C2FDC(self->unk160.bytes[0]);
         self->unk160.bytes[0] = 0;
@@ -12,24 +13,28 @@ void func_80800000_bsmumattack(PlayerState *self) {
     }
 }
 
-void func_80800054_bsmumattack(PlayerState *self) {
+void func_80800054_bsmumattack(PlayerState *self)
+{
     self->unk160.bytes[0] = 0;
     self->unk164.word = 0;
 }
 
-void func_80800060_bsmumattack(PlayerState *self) {
+void func_80800060_bsmumattack(PlayerState *self)
+{
     self->unk160.bytes[0] = func_8009D454(self, 0, D_808006F0_bsmumattack);
     self->unk164.word = func_800C8A98();
     self->unk16C = 1.0f;
 }
 
-void func_808000AC_bsmumattack(PlayerState *self, f32 arg1) {
+void func_808000AC_bsmumattack(PlayerState *self, f32 arg1)
+{
     if (self->unk160.bytes[0] != 0) {
         func_800C31DC(self->unk160.bytes[0], arg1);
     }
 }
 
-void func_808000E0_bsmumattack(PlayerState *self) {
+void func_808000E0_bsmumattack(PlayerState *self)
+{
     f32 sp3C[3];
     s32 sp30[3];
     f32 sp28[3];
@@ -38,7 +43,7 @@ void func_808000E0_bsmumattack(PlayerState *self) {
     if (self->unk164.word == 0) {
         return;
     }
-    
+
     func_80092C48(self, sp3C);
     func_800C8CB8(self->unk164.word, sp3C);
     if (func_8001210C(1) != 0) {
@@ -47,10 +52,10 @@ void func_808000E0_bsmumattack(PlayerState *self) {
         sp30[1] = temp_f10;
         sp30[2] = temp_f10;
     } else {
-        temp_f10 = (s32)(self->unk16C * 100);
+        temp_f10 = (s32) (self->unk16C * 100);
         sp30[0] = temp_f10;
         sp30[2] = 0;
-        sp30[1] = temp_f10 * 0; // temp_f10 * 0 is required to match
+        sp30[1] = temp_f10 * 0;
     }
     sp28[1] = 120;
     sp28[2] = 500;
@@ -58,7 +63,8 @@ void func_808000E0_bsmumattack(PlayerState *self) {
     func_800C8E84(self->unk164.word, sp30);
 }
 
-void func_808001B4_bsmumattack(PlayerState *self, s32 arg1) {
+void func_808001B4_bsmumattack(PlayerState *self, s32 arg1)
+{
     AnimCtrl *anim_ctrl;
 
     anim_ctrl = baanim_getAnimCtrlPtr(self);
@@ -85,11 +91,11 @@ void func_808001B4_bsmumattack(PlayerState *self, s32 arg1) {
             func_8008B2E8(anim_ctrl, 0);
             anctrl_setPlaybackType(anim_ctrl, 1);
             baanim_setEnd(self, 1.0f);
-            return;
     }
 }
 
-void func_808002E8_bsmumattack(PlayerState *self) {
+void func_808002E8_bsmumattack(PlayerState *self)
+{
     func_808001B4_bsmumattack(self, 0);
     _bamum_entrypoint_5(self, 0.0f);
     func_80800000_bsmumattack(self);
@@ -98,7 +104,8 @@ void func_808002E8_bsmumattack(PlayerState *self) {
     _bsmum_entrypoint_1(self);
 }
 
-void func_80800344_bsmumattack(PlayerState *self) {
+void func_80800344_bsmumattack(PlayerState *self)
+{
     _bsmum_entrypoint_2(self);
     _bawandglow_entrypoint_6(self);
     self->unk168.word = 1;
@@ -111,7 +118,8 @@ void func_80800344_bsmumattack(PlayerState *self) {
     func_808001B4_bsmumattack(self, 1);
 }
 
-void func_808003DC_bsmumattack(PlayerState *self) {
+void func_808003DC_bsmumattack(PlayerState *self)
+{
     AnimCtrl *anim_ctrl;
     enum bs_state_e next_state;
     f32 timer_value;
@@ -167,7 +175,6 @@ void func_808003DC_bsmumattack(PlayerState *self) {
             if (anctrl_isAt(anim_ctrl, 0.9f) != 0) {
                 next_state = BS_STATE_EF;
             }
-            break;
     }
     if (baflag_isTrue(self, BA_FLAG_2C) != 0) {
         _bawandglow_entrypoint_3(self, 60.0f);
@@ -176,12 +183,11 @@ void func_808003DC_bsmumattack(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bsmumattack_entrypoint_0(s32 idx) {
+s32 bsmumattack_entrypoint_0(s32 idx)
+{
     return D_80800700_bsmumattack[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/mum/attack.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
-s32 D_808006F0_bsmumattack[4] = { 0x3060013, 0x50C0016, 0x75300011, 0x0 };
-s32 D_80800700_bsmumattack[4] = { (u32)func_808002E8_bsmumattack, (u32)func_80800344_bsmumattack, (u32)func_808003DC_bsmumattack, (u32)_bsmum_entrypoint_0 };
+s32 D_808006F0_bsmumattack[4] = {0x3060013, 0x50C0016, 0x75300011, 0x0};
+s32 D_80800700_bsmumattack[4] = {(u32) func_808002E8_bsmumattack, (u32) func_80800344_bsmumattack,
+                                 (u32) func_808003DC_bsmumattack, (u32) _bsmum_entrypoint_0};

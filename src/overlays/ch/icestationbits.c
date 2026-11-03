@@ -17,7 +17,8 @@ void *chicestationbits_entrypoint_1()
     return &D_808002C8_chicestationbits;
 }
 
-s32 func_80800018_chicestationbits(void *param_0) {
+s32 func_80800018_chicestationbits(void *param_0)
+{
     _chswitch_entrypoint_7(param_0, 0x1CF);
     _chswitch_entrypoint_9(param_0);
     _chswitch_entrypoint_8(param_0, 2);
@@ -26,15 +27,15 @@ s32 func_80800018_chicestationbits(void *param_0) {
 s32 func_80800050_chicestationbits(Actor *param_0, s32 param_1, s32 param_2)
 {
     switch (param_1) {
-    case 7:
-        _glcutDll_entrypoint_6(0x12A, 0x48);
-        break;
-    case 0x91:
-        if (!func_800F6B94(func_800F54E4())) {
-            return 0;
-        }
-    default:
-        return _chswitch_entrypoint_10(param_0, param_1, param_2);
+        case 7:
+            _glcutDll_entrypoint_6(0x12A, 0x48);
+            break;
+        case 0x91:
+            if (!func_800F6B94(func_800F54E4())) {
+                return 0;
+            }
+        default:
+            return _chswitch_entrypoint_10(param_0, param_1, param_2);
     }
     return 1;
 }
@@ -67,26 +68,55 @@ s32 func_808001E0_chicestationbits(Actor *param_0, s32 param_1, s32 param_2)
 {
     s32 local_0;
     switch (param_1) {
-    case 0x95:
-        local_0 = param_0->unk74_7 == 0x32 ? 0x872 : 0x873;
-        func_80103140(param_0, local_0, param_0->unk0->unk16);
-        break;
-    case 0x9D:
-        func_800FFAB0(param_0);
-        break;
+        case 0x95:
+            local_0 = param_0->unk74_7 == 0x32 ? 0x872 : 0x873;
+            func_80103140(param_0, local_0, param_0->unk0->unk16);
+            break;
+        case 0x9D:
+            func_800FFAB0(param_0);
     }
     return _chdoor_entrypoint_1(param_0, param_1, param_2);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/icestationbits.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800280_chicestationbits -> int[], D_808002C8_chicestationbits -> int[] */
 extern u8 D_8011A248[];
 extern void _chswitch_entrypoint_6();
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
 extern void _chdoor_entrypoint_0();
-int D_80800280_chicestationbits[18] = { 0x343041A, 0x86D0001, (u32)&D_8011A248, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x80C, 0x0, 0x0, 0x0, (u32)func_80800018_chicestationbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80800050_chicestationbits, 0x0 };
-int D_808002C8_chicestationbits[18] = { 0xAC041B, -0xFFFF, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_808000D4_chicestationbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_808001E0_chicestationbits, 0x0 };
+int D_80800280_chicestationbits[18] = {0x343041A,
+                                       0x86D0001,
+                                       (u32) &D_8011A248,
+                                       (u32) _chswitch_entrypoint_6,
+                                       (u32) func_80105834,
+                                       (u32) func_80101870,
+                                       0x0,
+                                       0x0,
+                                       0x0,
+                                       0x80C,
+                                       0x0,
+                                       0x0,
+                                       0x0,
+                                       (u32) func_80800018_chicestationbits,
+                                       (u32) func_80107C2C,
+                                       -0x7FFFD3FE,
+                                       (u32) func_80800050_chicestationbits,
+                                       0x0};
+int D_808002C8_chicestationbits[18] = {0xAC041B,
+                                       -0xFFFF,
+                                       0x0,
+                                       (u32) _chdoor_entrypoint_0,
+                                       (u32) func_80105834,
+                                       (u32) func_80101870,
+                                       0x0,
+                                       0x0,
+                                       0x0,
+                                       0xC00,
+                                       0x0,
+                                       0x0,
+                                       0x0,
+                                       (u32) func_808000D4_chicestationbits,
+                                       (u32) func_80107C2C,
+                                       -0x7FFFD3FE,
+                                       (u32) func_808001E0_chicestationbits,
+                                       0x0};

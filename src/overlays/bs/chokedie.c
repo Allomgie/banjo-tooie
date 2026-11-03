@@ -1,4 +1,3 @@
-#include "common.h"
 #include "overlays/ba/playerstate.h"
 
 extern void baanim_playForDuration_onceSmooth(PlayerState *, s32, f32);
@@ -26,7 +25,8 @@ void bschokedie_entrypoint_0(PlayerState *param_0)
     _basudie_entrypoint_1(param_0);
 }
 
-void bschokedie_entrypoint_1(s32 param_0) {
+void bschokedie_entrypoint_1(s32 param_0)
+{
     if (baanim_isAt(param_0, 0x3ECCCCCD) != 0) {
         func_80090A2C(param_0);
     }
@@ -59,7 +59,8 @@ void bschokedie_entrypoint_1(s32 param_0) {
     }
 }
 
-void bschokedie_entrypoint_2(s32 param_0) {
+void bschokedie_entrypoint_2(s32 param_0)
+{
     func_800951B4(param_0);
     func_8009BF5C(param_0, 0.0f);
     baroll_setIdeal(param_0, 0.0f);
@@ -68,14 +69,12 @@ void bschokedie_entrypoint_2(s32 param_0) {
 
 int bschokedie_entrypoint_3(s32 param_0)
 {
-  return D_808002B0_bschokedie[param_0];
+    return D_808002B0_bschokedie[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/chokedie.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bschokedie_entrypoint_2();
 extern void _bschokedie_entrypoint_0();
 extern void _bschokedie_entrypoint_1();
 extern void _basudie_entrypoint_11();
-s32 D_808002B0_bschokedie[4] = { (u32)_bschokedie_entrypoint_2, (u32)_bschokedie_entrypoint_0, (u32)_bschokedie_entrypoint_1, (u32)_basudie_entrypoint_11 };
+s32 D_808002B0_bschokedie[4] = {(u32) _bschokedie_entrypoint_2, (u32) _bschokedie_entrypoint_0,
+                                (u32) _bschokedie_entrypoint_1, (u32) _basudie_entrypoint_11};

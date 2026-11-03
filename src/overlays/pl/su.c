@@ -28,23 +28,22 @@ s32 plsu_entrypoint_0(f32 *param_0, f32 *param_1)
 
 int plsu_entrypoint_1(s32 param_0)
 {
-  s32 local_0;
-  s32 local_1;
-  local_1 = param_0 | 0;
-  local_0 = 0;
-  while (local_0 < func_800F5898())
-  {
-    if (func_800F6BE4(local_0) && func_800F5410(local_0) == local_1)
-    {
-      return local_0;
+    s32 local_0;
+    s32 local_1;
+    local_1 = param_0 | 0;
+    local_0 = 0;
+    while (local_0 < func_800F5898()) {
+        if (func_800F6BE4(local_0) && func_800F5410(local_0) == local_1) {
+            return local_0;
+        }
+        local_0++;
     }
-    local_0++;
-  }
 
-  return -1;
+    return -1;
 }
 
-s32 plsu_entrypoint_2(void) {
+s32 plsu_entrypoint_2(void)
+{
     if ((plsu_entrypoint_1(0xA) == -1)) {
         return 0;
     }
@@ -56,21 +55,16 @@ s32 plsu_entrypoint_2(void) {
 
 int plsu_entrypoint_3(s32 param_0)
 {
-  s32 local_0;
-  s32 local_1;
-  local_1 = param_0 | 0;
-  local_0 = 0;
-  while (local_0 < func_800F5898())
-  {
-    if (func_800F6BE4(local_0) && func_800F6C5C(local_0) && func_800F55D0(local_0) == local_1)
-    {
-      return local_0;
+    s32 local_0;
+    s32 local_1;
+    local_1 = param_0 | 0;
+    local_0 = 0;
+    while (local_0 < func_800F5898()) {
+        if (func_800F6BE4(local_0) && func_800F6C5C(local_0) && func_800F55D0(local_0) == local_1) {
+            return local_0;
+        }
+        local_0++;
     }
-    local_0++;
-  }
 
-  return -1;
+    return -1;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/pl/su.data.s) is defined here in C.
- * Values are taken from the ROM. */

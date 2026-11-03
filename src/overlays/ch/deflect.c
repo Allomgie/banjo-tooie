@@ -3,27 +3,44 @@
 extern void _sudeflect_entrypoint_0(u8 *, f32, f32, s32);
 extern int D_80800090_chdeflect[];
 
-s32 func_80800000_chdeflect(s32 param_0){
-    if(func_800C6E38(0x14) != 0){
+s32 func_80800000_chdeflect(s32 param_0)
+{
+    if (func_800C6E38(0x14) != 0) {
         func_800FFAB0(param_0);
     }
 }
 
-void func_80800034_chdeflect(u8 *param_0) {
-    _sudeflect_entrypoint_0(param_0 + 4, 0.0f, *(f32 *)(param_0 + 0x38) * 100.0f, 2);
+void func_80800034_chdeflect(u8 *param_0)
+{
+    _sudeflect_entrypoint_0(param_0 + 4, 0.0f, *(f32 *) (param_0 + 0x38) * 100.0f, 2);
 }
 
 int chdeflect_entrypoint_0()
 {
-  return (int)&D_80800090_chdeflect;
+    return (int) &D_80800090_chdeflect;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/deflect.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800090_chdeflect -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
-int D_80800090_chdeflect[20] = { 0x1580535, 0x1, 0x0, (u32)func_80800034_chdeflect, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0x0, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chdeflect, (u32)func_80107C2C, -0x7FFFFC00, 0x0, 0x0, 0x0, 0x0 };
+int D_80800090_chdeflect[20] = {0x1580535,
+                                0x1,
+                                0x0,
+                                (u32) func_80800034_chdeflect,
+                                (u32) func_80105834,
+                                (u32) func_80101870,
+                                0x7D00000,
+                                0x0,
+                                0x0,
+                                0x0,
+                                0x0,
+                                (u32) func_80108ED0,
+                                0x0,
+                                (u32) func_80800000_chdeflect,
+                                (u32) func_80107C2C,
+                                -0x7FFFFC00,
+                                0x0,
+                                0x0,
+                                0x0,
+                                0x0};

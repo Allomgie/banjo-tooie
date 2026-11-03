@@ -1,30 +1,106 @@
 #include "common.h"
 
-typedef struct { s16 origin[3]; u16 pad6[3]; u16 stride_y; u16 stride_z; } RtLightGrid32_80800000_rtlight;
-typedef struct { u8 pad0[0x10]; u16 n; s16 size; s32 m; u16 cells[1][2]; } RtSrc;
-typedef struct { u8 b[15]; s8 f; s16 min[3]; s16 max[3]; u16 unk1C; u16 unk1E; } RtCell_rtlight_entrypoint_1;
-typedef struct { u8 pad0[6]; s16 idx; u8 col[3]; u8 padB; } RtLight_rtlight_entrypoint_1;
-typedef struct { u8 pad0[0xC]; u8 col[3]; u8 padF; } RtTblEntry_rtlight_entrypoint_1;
-typedef struct { RtSrc *src; s16 size; u16 n; f32 inv; RtCell_rtlight_entrypoint_1 cells[1]; } RtOut_rtlight_entrypoint_1;
+typedef struct {
+    s16 origin[3];
+    u16 pad6[3];
+    u16 stride_y;
+    u16 stride_z;
+} RtLightGrid32_80800000_rtlight;
+typedef struct {
+    u8 pad0[0x10];
+    u16 n;
+    s16 size;
+    s32 m;
+    u16 cells[1][2];
+} RtSrc;
+typedef struct {
+    u8 b[15];
+    s8 f;
+    s16 min[3];
+    s16 max[3];
+    u16 unk1C;
+    u16 unk1E;
+} RtCell_rtlight_entrypoint_1;
+typedef struct {
+    u8 pad0[6];
+    s16 idx;
+    u8 col[3];
+    u8 padB;
+} RtLight_rtlight_entrypoint_1;
+typedef struct {
+    u8 pad0[0xC];
+    u8 col[3];
+    u8 padF;
+} RtTblEntry_rtlight_entrypoint_1;
+typedef struct {
+    RtSrc *src;
+    s16 size;
+    u16 n;
+    f32 inv;
+    RtCell_rtlight_entrypoint_1 cells[1];
+} RtOut_rtlight_entrypoint_1;
 extern void *heap_alloc(s32);
 extern RtTblEntry_rtlight_entrypoint_1 *func_800B2190(s32);
-typedef struct { s16 origin[3]; s16 max[3]; u16 stride_y; u16 stride_z; } RtLightGrid32_8080036C_rtlight;
-typedef struct { u8 b[15]; s8 f; s16 min[3]; s16 max[3]; u16 unk1C; u16 unk1E; } RtCell_8080036C_rtlight;
-typedef struct { RtLightGrid32_8080036C_rtlight *src; s16 size; u16 n; f32 inv; RtCell_8080036C_rtlight cells[1]; } RtOut_8080036C_rtlight;
-typedef struct { RtCell_8080036C_rtlight *list[150]; RtCell_8080036C_rtlight **cur; } RtCellList;
+typedef struct {
+    s16 origin[3];
+    s16 max[3];
+    u16 stride_y;
+    u16 stride_z;
+} RtLightGrid32_8080036C_rtlight;
+typedef struct {
+    u8 b[15];
+    s8 f;
+    s16 min[3];
+    s16 max[3];
+    u16 unk1C;
+    u16 unk1E;
+} RtCell_8080036C_rtlight;
+typedef struct {
+    RtLightGrid32_8080036C_rtlight *src;
+    s16 size;
+    u16 n;
+    f32 inv;
+    RtCell_8080036C_rtlight cells[1];
+} RtOut_8080036C_rtlight;
+typedef struct {
+    RtCell_8080036C_rtlight *list[150];
+    RtCell_8080036C_rtlight **cur;
+} RtCellList;
 extern RtCellList D_80135550;
 extern void func_800C8898(s32, f32[3]);
-typedef struct { u8 b[15]; s8 f; s16 min[3]; s16 max[3]; s16 unk1C; s16 unk1E; } RtCell_rtlight_entrypoint_2;
-typedef struct { s16 s[3]; s16 idx; u8 col[3]; u8 padB; } RtLight_rtlight_entrypoint_2;
-typedef struct { s16 pos[3]; u8 pad6[6]; u8 col[3]; u8 padF; } RtTblEntry_rtlight_entrypoint_2;
-typedef struct { void *src; s16 size; s16 n; f32 inv; RtCell_rtlight_entrypoint_2 cells[1]; } RtOut_rtlight_entrypoint_2;
+typedef struct {
+    u8 b[15];
+    s8 f;
+    s16 min[3];
+    s16 max[3];
+    s16 unk1C;
+    s16 unk1E;
+} RtCell_rtlight_entrypoint_2;
+typedef struct {
+    s16 s[3];
+    s16 idx;
+    u8 col[3];
+    u8 padB;
+} RtLight_rtlight_entrypoint_2;
+typedef struct {
+    s16 pos[3];
+    u8 pad6[6];
+    u8 col[3];
+    u8 padF;
+} RtTblEntry_rtlight_entrypoint_2;
+typedef struct {
+    void *src;
+    s16 size;
+    s16 n;
+    f32 inv;
+    RtCell_rtlight_entrypoint_2 cells[1];
+} RtOut_rtlight_entrypoint_2;
 extern s32 func_800C8760(s32, s32);
 extern s32 func_800C878C(s32, s32, s32);
 extern void func_800C8800(s32, f32 *);
 extern void func_800C883C(s32, f32 *);
 extern s32 func_800E3DC0();
 extern void func_800C8900(s32, s32 *);
-extern f32 sqrtf(f32);
 
 void func_80800000_rtlight(RtLightGrid32_80800000_rtlight *param_0, s32 param_1, s32 param_2[3])
 {
@@ -36,10 +112,11 @@ void func_80800000_rtlight(RtLightGrid32_80800000_rtlight *param_0, s32 param_1,
     param_2[2] += param_0->origin[2];
 }
 
-void rtlight_entrypoint_0(void* arg0) 
+void rtlight_entrypoint_0(void *arg0)
 {
     heap_free(arg0);
 }
+
 RtOut_rtlight_entrypoint_1 *rtlight_entrypoint_1(RtSrc *src, s32 arg1, s32 arg2)
 {
     RtOut_rtlight_entrypoint_1 *out;
@@ -64,7 +141,7 @@ RtOut_rtlight_entrypoint_1 *rtlight_entrypoint_1(RtSrc *src, s32 arg1, s32 arg2)
     out->inv = 1.0f / src->size;
     sc = src->cells[0];
     first = out->cells;
-    end = (RtCell_rtlight_entrypoint_1 *)((n << 5) + (u8 *)out + 12);
+    end = (RtCell_rtlight_entrypoint_1 *) ((n << 5) + (u8 *) out + 12);
     for (c = first; c < end; c++, sc += 2) {
         if (sc[1] == 0) {
             c->f = -1;
@@ -82,9 +159,9 @@ RtOut_rtlight_entrypoint_1 *rtlight_entrypoint_1(RtSrc *src, s32 arg1, s32 arg2)
         c->unk1E = sc[1];
         c->f = 0;
     }
-    l = (RtLight_rtlight_entrypoint_1 *)c;
+    l = (RtLight_rtlight_entrypoint_1 *) c;
     lend = l + src->m;
-    si = (s16 *)sc;
+    si = (s16 *) sc;
     tbl = func_800B2190(arg1);
     for (; l < lend; l++, si++) {
         l->idx = *si;
@@ -96,7 +173,8 @@ RtOut_rtlight_entrypoint_1 *rtlight_entrypoint_1(RtSrc *src, s32 arg1, s32 arg2)
     return out;
 }
 
-void func_8080036C_rtlight(RtOut_8080036C_rtlight *grid, f32 *pos, f32 r, RtCell_8080036C_rtlight ***outList, RtCell_8080036C_rtlight ***outEnd)
+void func_8080036C_rtlight(RtOut_8080036C_rtlight *grid, f32 *pos, f32 r,
+                           RtCell_8080036C_rtlight ***outList, RtCell_8080036C_rtlight ***outEnd)
 {
     s32 lo[3];
     s32 hi[3];
@@ -147,7 +225,8 @@ void func_8080036C_rtlight(RtOut_8080036C_rtlight *grid, f32 *pos, f32 r, RtCell
     for (z = lo[2]; z <= hi[2]; z++) {
         for (y = lo[1]; y <= hi[1]; y++) {
             for (x = lo[0]; x <= hi[0]; x++) {
-                c = (RtCell_8080036C_rtlight *)(((src->stride_z * z) << 5) + (u8 *)grid + (x << 5) + ((y * src->stride_y) << 5) + 12);
+                c = (RtCell_8080036C_rtlight *) (((src->stride_z * z) << 5) + (u8 *) grid +
+                                                 (x << 5) + ((y * src->stride_y) << 5) + 12);
                 if (c->f >= 0 && D_80135550.cur < &D_80135550.list[150]) {
                     *D_80135550.cur = c;
                     D_80135550.cur++;
@@ -161,11 +240,11 @@ void func_8080036C_rtlight(RtOut_8080036C_rtlight *grid, f32 *pos, f32 r, RtCell
 
 void func_80800544_rtlight(s32 param_0, s32 *param_1)
 {
-  f32 local_0[3];
-  func_800C8800(param_0, local_0);
-  param_1[0] = local_0[0];
-  param_1[1] = local_0[1];
-  param_1[2] = local_0[2];
+    f32 local_0[3];
+    func_800C8800(param_0, local_0);
+    param_1[0] = local_0[0];
+    param_1[1] = local_0[1];
+    param_1[2] = local_0[2];
 }
 
 void func_808005AC_rtlight(s32 param_0, s32 *param_1)
@@ -173,9 +252,9 @@ void func_808005AC_rtlight(s32 param_0, s32 *param_1)
     f32 local_0[3];
 
     func_800C8898(param_0, local_0);
-    param_1[0] = (s32)(local_0[0] * 256.0f);
-    param_1[1] = (s32)(local_0[1] * local_0[1]);
-    param_1[2] = (s32)(local_0[2] * 16384.0f);
+    param_1[0] = (s32) (local_0[0] * 256.0f);
+    param_1[1] = (s32) (local_0[1] * local_0[1]);
+    param_1[2] = (s32) (local_0[2] * 16384.0f);
 }
 
 void rtlight_entrypoint_2(RtOut_rtlight_entrypoint_2 *grid, s32 arg1, s32 arg2, s32 flag)
@@ -210,7 +289,7 @@ void rtlight_entrypoint_2(RtOut_rtlight_entrypoint_2 *grid, s32 arg1, s32 arg2, 
     s32 s;
     s32 v;
 
-    end = (RtCell_rtlight_entrypoint_2 *)((grid->n << 5) + (u8 *)grid + 12);
+    end = (RtCell_rtlight_entrypoint_2 *) ((grid->n << 5) + (u8 *) grid + 12);
     for (h = func_800C8760(2, 2); h != 0; h = func_800C878C(h, 2, 2)) {
         for (c = grid->cells; c < end; c++) {
             if (c->f < 0) {
@@ -253,7 +332,7 @@ void rtlight_entrypoint_2(RtOut_rtlight_entrypoint_2 *grid, s32 arg1, s32 arg2, 
                 break;
             }
         }
-        l = c->unk1C + (RtLight_rtlight_entrypoint_2 *)end;
+        l = c->unk1C + (RtLight_rtlight_entrypoint_2 *) end;
         lend = l + c->unk1E;
         if (k == 15) {
             for (; l < lend; l++) {
@@ -320,6 +399,3 @@ void rtlight_entrypoint_2(RtOut_rtlight_entrypoint_2 *grid, s32 arg1, s32 arg2, 
         c->f--;
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/rt/light.data.s) is defined here in C.
- * Values are taken from the ROM. */

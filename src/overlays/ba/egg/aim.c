@@ -1,4 +1,3 @@
-#include "common.h"
 #include "overlays/ba/playerstate.h"
 
 extern f32 bastick_getX(PlayerState *);
@@ -13,9 +12,8 @@ extern f32 func_800D8FF8(void);
 extern f32 _bsdronelook_entrypoint_2(f32);
 extern u32 func_800D8FEC(void);
 extern f32 func_800F0DC0(f32, f32);
-f32 func_80800008_baeggaim(f32 param_0, f32 param_1, f32 param_2);
 
-s32 baeggaim_entrypoint_0() 
+s32 baeggaim_entrypoint_0()
 {
     return 0x4;
 }
@@ -23,7 +21,7 @@ s32 baeggaim_entrypoint_0()
 f32 func_80800008_baeggaim(f32 param_0, f32 param_1, f32 param_2)
 {
     s32 local_0;
-    for (local_0 = 0; local_0 < (s32)(func_800D8FEC() * 5); local_0++) {
+    for (local_0 = 0; local_0 < (s32) (func_800D8FEC() * 5); local_0++) {
         param_0 += func_800F0DC0((param_1 - param_0) * 0.04f, param_2);
     }
     return param_0;
@@ -50,13 +48,17 @@ void func_80800170_baeggaim(f32 *param_0, f32 *param_1, f32 param_2)
     local_2 = 0;
     local_1 = 0;
     local_0 = 78.0f - param_0[0];
-    if (local_0 > 0.0f) local_1 = local_0;
+    if (local_0 > 0.0f)
+        local_1 = local_0;
     local_0 = 226.0f - param_0[0];
-    if (local_0 < 0.0f) local_1 = local_0;
+    if (local_0 < 0.0f)
+        local_1 = local_0;
     local_0 = 61.0f - param_0[1];
-    if (local_0 > 0.0f) local_2 = local_0;
+    if (local_0 > 0.0f)
+        local_2 = local_0;
     local_0 = 167.0f - param_0[1];
-    if (local_0 < 0.0f) local_2 = local_0;
+    if (local_0 < 0.0f)
+        local_2 = local_0;
     param_1[0] = func_800F1344(local_1, 0, 40.0f, 0.0f, param_2);
     param_1[1] = func_800F1344(local_2, 0, 32.5f, 0.0f, param_2);
 }
@@ -85,17 +87,18 @@ void func_80800264_baeggaim(PlayerState *param_0, PlayerState *param_1)
 
 void baeggaim_entrypoint_1(s32 arg0)
 {
-    _baeggcursor_entrypoint_7(arg0,0x4);
+    _baeggcursor_entrypoint_7(arg0, 0x4);
     _baeggfire_entrypoint_4(arg0);
 }
 
 void baeggaim_entrypoint_2(s32 arg0)
 {
-    _baeggcursor_entrypoint_7(arg0,0x3);
+    _baeggcursor_entrypoint_7(arg0, 0x3);
     _baeggfire_entrypoint_5(arg0);
 }
 
-void baeggaim_entrypoint_3(s32 param_0) {
+void baeggaim_entrypoint_3(s32 param_0)
+{
     f32 local_0[2];
     s32 local_1;
 
@@ -119,6 +122,3 @@ void baeggaim_entrypoint_3(s32 param_0) {
     }
     _baeggfire_entrypoint_6(param_0);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/egg/aim.data.s) is defined here in C.
- * Values are taken from the ROM. */

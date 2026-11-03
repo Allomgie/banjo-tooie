@@ -1,5 +1,4 @@
 #include "common.h"
-#include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
 #include "overlays/ba/yaw.h"
 #include "overlays/ba/stick.h"
@@ -11,13 +10,13 @@ extern void baphysics_set_horizontal_velocity(PlayerState *, f32, f32);
 extern void func_800C3730(s32, f32, f32, f32);
 extern void func_80093300(PlayerState *, f32);
 extern void func_8009C1B4(PlayerState *, f32);
-typedef struct { f32 local_0; f32 local_1; AnimCtrl *local_2; } ShockMotion61;
+typedef struct {
+    f32 local_0;
+    f32 local_1;
+    AnimCtrl *local_2;
+} ShockMotion61;
 extern f32 func_80092BF4(PlayerState *);
 extern s32 D_80800870_bsbshock[];
-extern f32 bastick_distance(PlayerState *);
-extern f32 bastick_getAngleRelativeToBanjo(PlayerState *);
-extern f32 yaw_getIdeal(PlayerState *);
-extern void yaw_setIdeal(PlayerState *, f32);
 extern void baphysics_set_vertical_velocity(PlayerState *, f32);
 extern void baphysics_set_gravity(PlayerState *, f32);
 extern void func_8009DBF0(PlayerState *, s32, f32);
@@ -27,42 +26,41 @@ extern void baphysics_set_target_horizontal_velocity(PlayerState *, f32);
 
 void bsbshock_entrypoint_0(PlayerState *param_0)
 {
-  ShockMotion61 local_4;
-  AnimCtrl *local_2;
-  s32 local_3;
-  local_2 = baanim_getAnimCtrlPtr(param_0);
-  local_4.local_2 = local_2;
-  anctrl_reset(local_2);
-  anctrl_setIndex(local_4.local_2, 0x48);
-  func_8008B1C8(local_4.local_2, 0.4f);
-  anctrl_setDuration(local_4.local_2, 4.2f);
-  anctrl_setSubrange(local_4.local_2, 0.0f, 0.1061f);
-  anctrl_setPlaybackType(local_4.local_2, 1);
-  anctrl_start(local_4.local_2);
-  func_8009FFD8(param_0, 1, 1, 3, 6);
-  if (bastick_distance(param_0) != 0.0f)
-  {
-    yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
-  }
-  baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
-  _bswalk_entrypoint_1(param_0);
-  local_4.local_0 = yaw_getIdeal(param_0);
-  local_4.local_1 = baphysics_get_target_horizontal_velocity(param_0);
-  baphysics_set_horizontal_velocity(param_0, local_4.local_0, local_4.local_1);
-  func_800A0CE8(param_0, 1);
-  func_800A0CF4(param_0, 1);
-  func_8009D874(param_0);
-  local_3 = func_800C2E04();
-  *((u8 *) (((s8 *) param_0) + 0x164)) = local_3;
-  func_800C3418(local_3 & 0xFF, 0);
-  func_800C2E40(*((u8 *) (((s8 *) param_0) + 0x164)));
-  func_800C330C(*((u8 *) (((s8 *) param_0) + 0x164)), 3);
-  func_800C301C(*((u8 *) (((s8 *) param_0) + 0x164)), 0x41D);
-  func_800C3730(*((u8 *) (((s8 *) param_0) + 0x164)), 1.4f, 0.4f, -1.2f);
-  func_80093300(param_0, -87.0f);
-  func_8009C1B4(param_0, -87.0f);
-  *((s32 *) (((s8 *) param_0) + 0x15C)) = 1;
-  *((s32 *) (((s8 *) param_0) + 0x160)) = 0;
+    ShockMotion61 local_4;
+    AnimCtrl *local_2;
+    s32 local_3;
+    local_2 = baanim_getAnimCtrlPtr(param_0);
+    local_4.local_2 = local_2;
+    anctrl_reset(local_2);
+    anctrl_setIndex(local_4.local_2, 0x48);
+    func_8008B1C8(local_4.local_2, 0.4f);
+    anctrl_setDuration(local_4.local_2, 4.2f);
+    anctrl_setSubrange(local_4.local_2, 0.0f, 0.1061f);
+    anctrl_setPlaybackType(local_4.local_2, 1);
+    anctrl_start(local_4.local_2);
+    func_8009FFD8(param_0, 1, 1, 3, 6);
+    if (bastick_distance(param_0) != 0.0f) {
+        yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
+    }
+    baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
+    _bswalk_entrypoint_1(param_0);
+    local_4.local_0 = yaw_getIdeal(param_0);
+    local_4.local_1 = baphysics_get_target_horizontal_velocity(param_0);
+    baphysics_set_horizontal_velocity(param_0, local_4.local_0, local_4.local_1);
+    func_800A0CE8(param_0, 1);
+    func_800A0CF4(param_0, 1);
+    func_8009D874(param_0);
+    local_3 = func_800C2E04();
+    *(u8 *) ((s8 *) param_0 + 0x164) = local_3;
+    func_800C3418(local_3 & 0xFF, 0);
+    func_800C2E40(*(u8 *) ((s8 *) param_0 + 0x164));
+    func_800C330C(*(u8 *) ((s8 *) param_0 + 0x164), 3);
+    func_800C301C(*(u8 *) ((s8 *) param_0 + 0x164), 0x41D);
+    func_800C3730(*(u8 *) ((s8 *) param_0 + 0x164), 1.4f, 0.4f, -1.2f);
+    func_80093300(param_0, -87.0f);
+    func_8009C1B4(param_0, -87.0f);
+    *(s32 *) ((s8 *) param_0 + 0x15C) = 1;
+    *(s32 *) ((s8 *) param_0 + 0x160) = 0;
 }
 
 void bsbshock_entrypoint_1(PlayerState *param_0)
@@ -85,28 +83,27 @@ void bsbshock_entrypoint_1(PlayerState *param_0)
         baphysics_reset_gravity(param_0);
     }
     switch (param_0->unk160.word) {
-    case 0:
-        if (func_8008E260(param_0)) {
-            local_0 = 0x3D;
-        }
-        if (func_8008DF8C(param_0, 0x82)) {
-            anctrl_setSubrange(local_1, 0.0f, 1.0f);
-            anctrl_setDuration(local_1, 2.8f);
-            anctrl_setPlaybackType(local_1, 1);
-            param_0->unk160.word = 1;
-        }
-        break;
-    case 1:
-        if (anctrl_isAt(local_1, 0.11f)) {
-            func_800C3BDC(((u8 *)param_0)[0x164]);
-        }
-        if (anctrl_isAt(local_1, 0.4036000073f)) {
-            anctrl_setDuration(local_1, 1.4f);
-        }
-        if (anctrl_isStopped(local_1)) {
-            local_0 = 1;
-        }
-        break;
+        case 0:
+            if (func_8008E260(param_0)) {
+                local_0 = 0x3D;
+            }
+            if (func_8008DF8C(param_0, 0x82)) {
+                anctrl_setSubrange(local_1, 0.0f, 1.0f);
+                anctrl_setDuration(local_1, 2.8f);
+                anctrl_setPlaybackType(local_1, 1);
+                param_0->unk160.word = 1;
+            }
+            break;
+        case 1:
+            if (anctrl_isAt(local_1, 0.11f)) {
+                func_800C3BDC(((u8 *) param_0)[0x164]);
+            }
+            if (anctrl_isAt(local_1, 0.4036000073f)) {
+                anctrl_setDuration(local_1, 1.4f);
+            }
+            if (anctrl_isStopped(local_1)) {
+                local_0 = 1;
+            }
     }
     if (func_8008DF8C(param_0, 0x3C)) {
         if (anctrl_getAnimTimer(local_1) < 0.3637000024f) {
@@ -141,7 +138,7 @@ void bsbshock_entrypoint_1(PlayerState *param_0)
 
 void bsbshock_entrypoint_2(PlayerState *param_0)
 {
-    func_800C2FDC(*((u8 *)param_0 + 0x164));
+    func_800C2FDC(*((u8 *) param_0 + 0x164));
     func_800A0CE8(param_0, 0);
     func_800A0CF4(param_0, 0);
     if (func_80092BF4(param_0) != 0.0f) {
@@ -152,7 +149,7 @@ void bsbshock_entrypoint_2(PlayerState *param_0)
 
 int bsbshock_entrypoint_3(s32 param_0)
 {
-  return D_80800870_bsbshock[param_0];
+    return D_80800870_bsbshock[param_0];
 }
 
 void bsbshock_entrypoint_4(PlayerState *param_0)
@@ -179,7 +176,8 @@ void bsbshock_entrypoint_4(PlayerState *param_0)
     baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
     _bswalk_entrypoint_1(param_0);
     local_1 = yaw_getIdeal(param_0);
-    baphysics_set_horizontal_velocity(param_0, local_1, baphysics_get_target_horizontal_velocity(param_0));
+    baphysics_set_horizontal_velocity(param_0, local_1,
+                                      baphysics_get_target_horizontal_velocity(param_0));
     baphysics_set_vertical_velocity(param_0, 1250.0f);
     baphysics_set_gravity(param_0, -1200.0f);
     func_8009DBF0(param_0, 0x408, 1.0f);
@@ -208,7 +206,7 @@ void bsbshock_entrypoint_5(Actor *param_0)
     if ((bakey_released(param_0, 8) != 0) && (sp28[1] > 0.0f)) {
         baphysics_reset_gravity(param_0);
     }
-    if ((*(s32 *)((s8 *)param_0 + 0x160)) == 0) {
+    if (*(s32 *) ((s8 *) param_0 + 0x160) == 0) {
         func_8009FC80(param_0);
         if (sp28[1] < 0.0f) {
             sp34 = 0x2F;
@@ -233,24 +231,20 @@ void bsbshock_entrypoint_5(Actor *param_0)
 
 void bsbshock_entrypoint_6(s32 param_0)
 {
-  if (bs_getNextState() != 0x11)
-  {
-    baphysics_reset_gravity(param_0);
-  }
-  func_800A0CE8(param_0, 0);
-  func_800A0CF4(param_0, 0);
-  func_80093300(param_0, 0 & 0xFFFFFFFFFFFFFFFF);
-  func_8009C1B4(param_0, 87.0f);
+    if (bs_getNextState() != 0x11) {
+        baphysics_reset_gravity(param_0);
+    }
+    func_800A0CE8(param_0, 0);
+    func_800A0CF4(param_0, 0);
+    func_80093300(param_0, 0 & 0xFFFFFFFFFFFFFFFF);
+    func_8009C1B4(param_0, 87.0f);
 }
 
 int bsbshock_entrypoint_7(s32 param_0)
 {
-  return D_80800880_bsbshock[param_0];
+    return D_80800880_bsbshock[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/hock.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bsbshock_entrypoint_2();
 extern void _bsbshock_entrypoint_0();
 extern void _bsbshock_entrypoint_1();
@@ -258,5 +252,7 @@ extern void func_80099B94();
 extern void _bsbshock_entrypoint_6();
 extern void _bsbshock_entrypoint_4();
 extern void _bsbshock_entrypoint_5();
-s32 D_80800870_bsbshock[4] = { (u32)_bsbshock_entrypoint_2, (u32)_bsbshock_entrypoint_0, (u32)_bsbshock_entrypoint_1, (u32)func_80099B94 };
-s32 D_80800880_bsbshock[4] = { (u32)_bsbshock_entrypoint_6, (u32)_bsbshock_entrypoint_4, (u32)_bsbshock_entrypoint_5, (u32)func_80099B94 };
+s32 D_80800870_bsbshock[4] = {(u32) _bsbshock_entrypoint_2, (u32) _bsbshock_entrypoint_0,
+                              (u32) _bsbshock_entrypoint_1, (u32) func_80099B94};
+s32 D_80800880_bsbshock[4] = {(u32) _bsbshock_entrypoint_6, (u32) _bsbshock_entrypoint_4,
+                              (u32) _bsbshock_entrypoint_5, (u32) func_80099B94};

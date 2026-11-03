@@ -1,6 +1,6 @@
 #include "common.h"
 
-#define OD(n) (((f32 *)param_0->actorData)[n])
+#define OD(n) (((f32 *) param_0->actorData)[n])
 extern int D_80800920_chpotogoldbits[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern s32 func_800F54E4(void);
@@ -26,45 +26,44 @@ extern void func_800EFE50(f32 *, f32 *, f32 *, f32);
 extern f32 func_80013970(f32);
 extern void _chpotogoldbits_entrypoint_1();
 extern void func_800CE8D8(void *, f32, s32);
-s32 func_80800618_chpotogoldbits();
 extern void func_80101870(), func_80105834(), func_80107C2C(), func_8080007C_chpotogoldbits();
 
-s32 func_80800000_chpotogoldbits(Actor *this) {
+s32 func_80800000_chpotogoldbits(Actor *this)
+{
     _chswitch_entrypoint_7(this, 0xA2D);
     _chswitch_entrypoint_8(this, 0x601);
 }
 
 s32 func_80800030_chpotogoldbits(void *this, s32 next_state)
 {
-  if (next_state == 7)
-  {
-    func_80101180(0x408, 7, 0);
-    return 1;
-  }
-  _chswitch_entrypoint_10(this, next_state);
+    if (next_state == 7) {
+        func_80101180(0x408, 7, 0);
+        return 1;
+    }
+    _chswitch_entrypoint_10(this, next_state);
 }
 
 int chpotogoldbits_entrypoint_0()
 {
-    return (int)&D_80800920_chpotogoldbits;
+    return (int) &D_80800920_chpotogoldbits;
 }
 
 void func_8080007C_chpotogoldbits(param_0) Actor *param_0;
 {
     f32 local_0[3];
 
-    func_800EE7F8((f32 *)&param_0->actorData[4], param_0->position);
-    func_800EE7F8((f32 *)param_0->actorData, param_0->position);
+    func_800EE7F8((f32 *) &param_0->actorData[4], param_0->position);
+    func_800EE7F8((f32 *) param_0->actorData, param_0->position);
     if (func_800EA05C() == 0x136) {
-        ((f32 *)param_0->actorData)[1] -= 500.0f;
-        ((f32 *)param_0->actorData)[3] = 0.0f;
+        ((f32 *) param_0->actorData)[1] -= 500.0f;
+        ((f32 *) param_0->actorData)[3] = 0.0f;
         param_0->unk54 = 3.0f;
         return;
     }
     func_800F5A00(func_800F54E4(), local_0);
     if (func_800EA090() == 1 && param_0->position[1] <= local_0[1]) {
-        ((f32 *)param_0->actorData)[1] -= 2000.0f;
-        ((f32 *)param_0->actorData)[3] = 0.0f;
+        ((f32 *) param_0->actorData)[1] -= 2000.0f;
+        ((f32 *) param_0->actorData)[3] = 0.0f;
         param_0->unk54 = 3.0f;
         func_80101FDC(param_0, 9);
         func_800CE88C(0, 0);
@@ -76,154 +75,158 @@ void func_8080007C_chpotogoldbits(param_0) Actor *param_0;
 void func_80800188_chpotogoldbits(Actor *param_0)
 {
     switch (param_0->unk70_10) {
-    case 1:
-        func_80103110(param_0, 0);
-        break;
-    case 2:
-        if (!param_0->unk74_30) {
-            param_0->unk74_30 = 1;
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800978_chpotogoldbits);
-        }
-        if (func_800D90A4(&OD(7))) {
-            if (1) {}
-            func_80101FDC(param_0, 3);
-        }
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80800968_chpotogoldbits);
-        break;
-    case 3:
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80800968_chpotogoldbits);
-        if (func_800D91EC(&OD(3), param_0->unk54)) {
-            _subaddieaudioloop_entrypoint_2(param_0);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800978_chpotogoldbits);
-            func_80101FDC(param_0, 4);
-        }
-        break;
-    case 4:
-        func_80103110(param_0, 0);
-        break;
-    case 5:
-        if (!param_0->unk74_30) {
-            param_0->unk74_30 = 1;
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800978_chpotogoldbits);
-        }
-        if (func_800D90A4(&OD(7))) {
-            if (1) {}
-            func_80101FDC(param_0, 6);
-        }
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80800968_chpotogoldbits);
-        break;
-    case 6:
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80800968_chpotogoldbits);
-        if (func_800D90A4(&OD(3))) {
-            _subaddieaudioloop_entrypoint_2(param_0);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800978_chpotogoldbits);
-            func_80101FDC(param_0, 1);
-        }
-        break;
-    case 7:
-        break;
-    case 8:
-        if (!param_0->unk74_30) {
-            param_0->unk74_30 = 1;
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800978_chpotogoldbits);
-        }
-        if (func_800D90A4(&OD(7))) {
-            func_80101FDC(param_0, 9);
-        }
-        break;
-    case 9:
-        if (func_800D91EC(&OD(3), param_0->unk54)) {
-            _subaddieaudioloop_entrypoint_2(param_0);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800978_chpotogoldbits);
-            param_0->unk74_30 = 0;
-            func_80101FDC(param_0, 10);
-        }
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80800968_chpotogoldbits);
-        break;
-    case 10:
-        if (!param_0->unk74_30) {
-            param_0->unk74_30 = 1;
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800978_chpotogoldbits);
-        }
-        if (func_800D90A4(&OD(7))) {
-            param_0->unk50 = 0.5f;
-            func_80101FDC(param_0, 11);
-        }
-        break;
-    case 11:
-        if (func_800D90A4(&param_0->unk50)) {
-            func_800FFA88(param_0->unk0);
-        }
-        param_0->alpha = func_800F10B4(param_0->unk50, 0.5f, 0.0f, 255.0f, 0.0f);
-        break;
+        case 1:
+            func_80103110(param_0, 0);
+            break;
+        case 2:
+            if (!param_0->unk74_30) {
+                param_0->unk74_30 = 1;
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_80800978_chpotogoldbits);
+            }
+            if (func_800D90A4(&OD(7))) {
+                func_80101FDC(param_0, 3);
+            }
+            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                            D_80800968_chpotogoldbits);
+            break;
+        case 3:
+            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                            D_80800968_chpotogoldbits);
+            if (func_800D91EC(&OD(3), param_0->unk54)) {
+                _subaddieaudioloop_entrypoint_2(param_0);
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_80800978_chpotogoldbits);
+                func_80101FDC(param_0, 4);
+            }
+            break;
+        case 4:
+            func_80103110(param_0, 0);
+            break;
+        case 5:
+            if (!param_0->unk74_30) {
+                param_0->unk74_30 = 1;
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_80800978_chpotogoldbits);
+            }
+            if (func_800D90A4(&OD(7))) {
+                func_80101FDC(param_0, 6);
+            }
+            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                            D_80800968_chpotogoldbits);
+            break;
+        case 6:
+            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                            D_80800968_chpotogoldbits);
+            if (func_800D90A4(&OD(3))) {
+                _subaddieaudioloop_entrypoint_2(param_0);
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_80800978_chpotogoldbits);
+                func_80101FDC(param_0, 1);
+            }
+            break;
+        case 8:
+            if (!param_0->unk74_30) {
+                param_0->unk74_30 = 1;
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_80800978_chpotogoldbits);
+            }
+            if (func_800D90A4(&OD(7))) {
+                func_80101FDC(param_0, 9);
+            }
+            break;
+        case 9:
+            if (func_800D91EC(&OD(3), param_0->unk54)) {
+                _subaddieaudioloop_entrypoint_2(param_0);
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_80800978_chpotogoldbits);
+                param_0->unk74_30 = 0;
+                func_80101FDC(param_0, 10);
+            }
+            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+                                            D_80800968_chpotogoldbits);
+            break;
+        case 10:
+            if (!param_0->unk74_30) {
+                param_0->unk74_30 = 1;
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_80800978_chpotogoldbits);
+            }
+            if (func_800D90A4(&OD(7))) {
+                param_0->unk50 = 0.5f;
+                func_80101FDC(param_0, 11);
+            }
+            break;
+        case 11:
+            if (func_800D90A4(&param_0->unk50)) {
+                func_800FFA88(param_0->unk0);
+            }
+            param_0->alpha = func_800F10B4(param_0->unk50, 0.5f, 0.0f, 255.0f, 0.0f);
     }
     param_0->unk58 = func_800F12D4(OD(3), 0.0f, param_0->unk54, 0.0f, 1.0f);
     func_800EFE50(param_0->position, &OD(4), &OD(0), param_0->unk58);
     if (OD(7) != 0) {
-        param_0->position[1] += func_80013970(func_800F10B4(OD(7), 0.3f, 0.0f, 0.0f, 1.0f) * 180.0f) * 20.0f;
+        param_0->position[1] +=
+            func_80013970(func_800F10B4(OD(7), 0.3f, 0.0f, 0.0f, 1.0f) * 180.0f) * 20.0f;
     }
 }
 
-s32 func_80800618_chpotogoldbits(param_0, param_1, param_2) u8 *param_0; s32 param_1; s32 param_2;
+s32 func_80800618_chpotogoldbits(param_0, param_1, param_2)
+u8 *param_0;
+s32 param_1;
+s32 param_2;
 {
-  switch (param_1)
-  {
-    case 0x7:
-      if ((((u32) ((u16) (*((u16 *) (((s8 *) param_0) + 0x72))))) >> 0xA) != 4)
-    {
-      *((u8 *) (((s8 *) param_0) + 0x74)) = (u8) ((*((u8 *) (((s8 *) param_0) + 0x74))) & 0xFFBF);
-      _capod_entrypoint_13(*((s32 *) (((s8 *) param_0) + 0)), 0, 3, 0x810);
-      func_80103110(param_0, 1);
-      *((f32 *) (((s8 *) param_0) + 0x34)) = 0.3f;
-      func_80101FDC(param_0, 2);
+    switch (param_1) {
+        case 0x7:
+            if (((u32) (u16) *(u16 *) ((s8 *) param_0 + 0x72) >> 0xA) != 4) {
+                *(u8 *) ((s8 *) param_0 + 0x74) = (u8) (*(u8 *) ((s8 *) param_0 + 0x74) & 0xFFBF);
+                _capod_entrypoint_13(*(s32 *) ((s8 *) param_0 + 0), 0, 3, 0x810);
+                func_80103110(param_0, 1);
+                *(f32 *) ((s8 *) param_0 + 0x34) = 0.3f;
+                func_80101FDC(param_0, 2);
+            }
+            return 1;
+
+        case 0x8:
+            if (((u32) (u16) *(u16 *) ((s8 *) param_0 + 0x72) >> 0xA) == 4) {
+                *(u8 *) ((s8 *) param_0 + 0x74) = (u8) (*(u8 *) ((s8 *) param_0 + 0x74) & 0xFFBF);
+                _capod_entrypoint_13(*(s32 *) ((s8 *) param_0 + 0), 0, 5, 0x810);
+                func_80103110(param_0, 1);
+                *(f32 *) ((s8 *) param_0 + 0x34) = 0.3f;
+                func_80101FDC(param_0, 5);
+            }
+            return 1;
+
+        case 0x91:
+            if ((s32) ((Actor *) param_0)->unk70_10 == 7) {
+                func_80103110(param_0, 1);
+                *(u8 *) ((s8 *) param_0 + 0x74) = (u8) (*(u8 *) ((s8 *) param_0 + 0x74) & 0xFFBF);
+                *(f32 *) ((s8 *) param_0 + 0x34) = 0.3f;
+                func_80101FDC(param_0, 8);
+            }
+            return 1;
+
+        case 0xB:
+            if (param_2 == 3) {
+                func_800CE8D8(0, ((Actor *) param_0)->unk74_7, ((Actor *) param_0)->unk74_7);
+                func_800CE928(0, _chpotogoldbits_entrypoint_1, 0);
+                func_800CE88C(0, 1);
+            }
+            return 3;
+
+        default:
+            return 0;
     }
-      return 1;
-
-    case 0x8:
-      if ((((u32) ((u16) (*((u16 *) (((s8 *) param_0) + 0x72))))) >> 0xA) == 4)
-    {
-      *((u8 *) (((s8 *) param_0) + 0x74)) = (u8) ((*((u8 *) (((s8 *) param_0) + 0x74))) & 0xFFBF);
-      _capod_entrypoint_13(*((s32 *) (((s8 *) param_0) + 0)), 0, 5, 0x810);
-      func_80103110(param_0, 1);
-      *((f32 *) (((s8 *) param_0) + 0x34)) = 0.3f;
-      func_80101FDC(param_0, 5);
-    }
-      return 1;
-
-    case 0x91:
-      if ((s32)((Actor *)param_0)->unk70_10 == 7)
-    {
-      func_80103110(param_0, 1);
-      *((u8 *) (((s8 *) param_0) + 0x74)) = (u8) ((*((u8 *) (((s8 *) param_0) + 0x74))) & 0xFFBF);
-      *((f32 *) (((s8 *) param_0) + 0x34)) = 0.3f;
-      func_80101FDC(param_0, 8);
-    }
-      return 1;
-
-    case 0xB:
-      if (param_2 == 3)
-    {
-      func_800CE8D8(0, ((Actor *)param_0)->unk74_7, ((Actor *)param_0)->unk74_7);
-      func_800CE928(0, _chpotogoldbits_entrypoint_1, 0);
-      func_800CE88C(0, 1);
-    }
-      return 3;
-
-    default:
-      return 0;
-
-  }
-
 }
 
 int chpotogoldbits_entrypoint_1(s32 param_0, s32 param_1)
 {
-  func_80101180(0x408, 8, 0);
+    func_80101180(0x408, 8, 0);
 }
 
 int chpotogoldbits_entrypoint_2(void)
 {
-    return (int)&D_80800988_chpotogoldbits;
+    return (int) &D_80800988_chpotogoldbits;
 }
 
 void func_80800810_chpotogoldbits(Actor *param_0)
@@ -242,19 +245,70 @@ void func_80800810_chpotogoldbits(Actor *param_0)
 
 s32 chpotogoldbits_entrypoint_3()
 {
-  return (s32)D_808009D0_chpotogoldbits;
+    return (s32) D_808009D0_chpotogoldbits;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/potogoldbits.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800920_chpotogoldbits -> int[], D_80800988_chpotogoldbits -> int[] */
 extern void _chswitch_entrypoint_6();
 extern void func_80108ED0();
 extern void _chdoor_entrypoint_0();
 extern void _chdoor_entrypoint_1();
-int D_80800920_chpotogoldbits[18] = { 0x3430407, 0x82D0001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chpotogoldbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80800030_chpotogoldbits, 0x0 };
-u8 D_80800968_chpotogoldbits[16] = { 0x0, 0x13, 0x5, 0xB9, 0x0, 0x16, 0x61, 0xA8, 0x0, 0xA, 0x1, 0x0, 0x0, 0x2, 0x0, 0x0 };
-u8 D_80800978_chpotogoldbits[16] = { 0x0, 0x13, 0x5, 0xE7, 0x0, 0x16, 0x7F, 0xFF, 0x0, 0xA, 0x1, 0x0, 0x0, 0x2, 0x0, 0x0 };
-int D_80800988_chpotogoldbits[18] = { 0xAC0408, 0x82F0001, 0x0, (u32)func_80800188_chpotogoldbits, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F800000, 0x0, 0x24800, 0x0, 0x0, 0x0, (u32)func_8080007C_chpotogoldbits, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800618_chpotogoldbits, 0x0 };
-s32 D_808009D0_chpotogoldbits[20] = { 0xAC0409, 0x82E0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800810_chpotogoldbits, (u32)func_80107C2C, -0x7FFFDBFE, (u32)_chdoor_entrypoint_1, 0x0, 0x0, 0x0 };
+int D_80800920_chpotogoldbits[18] = {0x3430407,
+                                     0x82D0001,
+                                     -0x7FEE5DE0,
+                                     (u32) _chswitch_entrypoint_6,
+                                     (u32) func_80105834,
+                                     (u32) func_80101870,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x808,
+                                     0x0,
+                                     (u32) func_80108ED0,
+                                     0x0,
+                                     (u32) func_80800000_chpotogoldbits,
+                                     (u32) func_80107C2C,
+                                     -0x7FFFD3FE,
+                                     (u32) func_80800030_chpotogoldbits,
+                                     0x0};
+u8 D_80800968_chpotogoldbits[16] = {0x0, 0x13, 0x5, 0xB9, 0x0, 0x16, 0x61, 0xA8,
+                                    0x0, 0xA,  0x1, 0x0,  0x0, 0x2,  0x0,  0x0};
+u8 D_80800978_chpotogoldbits[16] = {0x0, 0x13, 0x5, 0xE7, 0x0, 0x16, 0x7F, 0xFF,
+                                    0x0, 0xA,  0x1, 0x0,  0x0, 0x2,  0x0,  0x0};
+int D_80800988_chpotogoldbits[18] = {0xAC0408,
+                                     0x82F0001,
+                                     0x0,
+                                     (u32) func_80800188_chpotogoldbits,
+                                     (u32) func_80105834,
+                                     (u32) func_80101870,
+                                     0x0,
+                                     0x3F800000,
+                                     0x0,
+                                     0x24800,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     (u32) func_8080007C_chpotogoldbits,
+                                     (u32) func_80107C2C,
+                                     -0x7FFFFBFE,
+                                     (u32) func_80800618_chpotogoldbits,
+                                     0x0};
+s32 D_808009D0_chpotogoldbits[20] = {0xAC0409,
+                                     0x82E0001,
+                                     0x0,
+                                     (u32) _chdoor_entrypoint_0,
+                                     (u32) func_80105834,
+                                     (u32) func_80101870,
+                                     0x7D00000,
+                                     0x0,
+                                     0x0,
+                                     0x800,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     (u32) func_80800810_chpotogoldbits,
+                                     (u32) func_80107C2C,
+                                     -0x7FFFDBFE,
+                                     (u32) _chdoor_entrypoint_1,
+                                     0x0,
+                                     0x0,
+                                     0x0};

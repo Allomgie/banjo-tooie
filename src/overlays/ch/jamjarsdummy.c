@@ -2,7 +2,10 @@
 
 extern f32 func_800D8FF8(void);
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
-typedef struct { u16 model; s16 state; } JamjarsDummyRecord;
+typedef struct {
+    u16 model;
+    s16 state;
+} JamjarsDummyRecord;
 extern JamjarsDummyRecord D_8080032C_chjamjarsdummy[];
 extern int D_80800338_chjamjarsdummy[];
 
@@ -10,21 +13,26 @@ void func_80800000_chjamjarsdummy(Actor *param_0, s32 param_1)
 {
     param_0->unk79_4 = param_1;
     switch (param_0->unk79_4) {
-    case 0:
-        param_0->unk58 = 2.0f;
-        _subaddiefade_entrypoint_8(param_0, 255);
-        break;
-    case 1:
-        switch (param_0->unk6C_0) {
-        case 0: param_0->unk58 = 5.0f; break;
-        case 1: param_0->unk58 = 5.0f; break;
-        case 2: param_0->unk58 = 5.0f; break;
-        }
-        break;
-    case 2:
-        param_0->unk58 = 2.0f;
-        ((f32 *)param_0->actorData)[4] = 0.0f;
-        break;
+        case 0:
+            param_0->unk58 = 2.0f;
+            _subaddiefade_entrypoint_8(param_0, 255);
+            break;
+        case 1:
+            switch (param_0->unk6C_0) {
+                case 0:
+                    param_0->unk58 = 5.0f;
+                    break;
+                case 1:
+                    param_0->unk58 = 5.0f;
+                    break;
+                case 2:
+                    param_0->unk58 = 5.0f;
+                    break;
+            }
+            break;
+        case 2:
+            param_0->unk58 = 2.0f;
+            ((f32 *) param_0->actorData)[4] = 0.0f;
     }
 }
 
@@ -33,62 +41,78 @@ void func_808000E0_chjamjarsdummy(Actor *param_0)
     s32 local_0;
     s32 local_1;
 
-    *(f32 *)&param_0->actorData[4] += func_800D8FF8();
-    if (param_0->unk6C_0 == 2) _chswappy_entrypoint_0(param_0, 0);
+    *(f32 *) &param_0->actorData[4] += func_800D8FF8();
+    if (param_0->unk6C_0 == 2)
+        _chswappy_entrypoint_0(param_0, 0);
     switch (param_0->unk79_4) {
         case 0:
-            local_0 = func_800F10B4(*(f32 *)&param_0->actorData[4], 0.0f, param_0->unk58, 0.0f, 255.0f);
+            local_0 =
+                func_800F10B4(*(f32 *) &param_0->actorData[4], 0.0f, param_0->unk58, 0.0f, 255.0f);
             _subaddiefade_entrypoint_8(param_0, local_0);
-            if (local_0 >= 255) func_80800000_chjamjarsdummy(param_0, 1);
+            if (local_0 >= 255)
+                func_80800000_chjamjarsdummy(param_0, 1);
             break;
         case 1:
-            if (func_800DA9E4(0x9F1, 0)) func_800FFAB0(param_0);
-            if (param_0->unk58 < *(f32 *)&param_0->actorData[4]) func_80800000_chjamjarsdummy(param_0, 2);
+            if (func_800DA9E4(0x9F1, 0))
+                func_800FFAB0(param_0);
+            if (param_0->unk58 < *(f32 *) &param_0->actorData[4])
+                func_80800000_chjamjarsdummy(param_0, 2);
             break;
         case 2:
-            local_1 = func_800F10B4(*(f32 *)&param_0->actorData[4], 0.0f, param_0->unk58, 255.0f, 0.0f);
+            local_1 =
+                func_800F10B4(*(f32 *) &param_0->actorData[4], 0.0f, param_0->unk58, 255.0f, 0.0f);
             _subaddiefade_entrypoint_8(param_0, local_1);
-            if (local_1 <= 0) func_800FFAB0(param_0);
-            break;
+            if (local_1 <= 0)
+                func_800FFAB0(param_0);
     }
 }
 
-void func_80800238_chjamjarsdummy(s32 arg0) 
+void func_80800238_chjamjarsdummy(s32 arg0)
 {
 }
+
 void func_80800240_chjamjarsdummy(Actor *param_0)
 {
-    func_80103140(param_0, D_8080032C_chjamjarsdummy[param_0->unk6C_0].model,
-        param_0->unk0->unk16);
+    func_80103140(param_0, D_8080032C_chjamjarsdummy[param_0->unk6C_0].model, param_0->unk0->unk16);
     func_80102424(param_0, D_8080032C_chjamjarsdummy[param_0->unk6C_0].state);
     func_80800000_chjamjarsdummy(param_0, 0);
 }
 
 void func_808002AC_chjamjarsdummy(void *param_0)
 {
-  if (((*((s32 *)((char *)(param_0) + 108))) & 0x1FF) == 2)
-  {
-    *((u8 *) (((u8 *) param_0) + 126)) = ((*((u8 *) (((u8 *) param_0) + 126))) & 0xFFFF) | 0x10;
-  }
-  else
-  {
-    func_80101870();
-  }
+    if ((*(s32 *) ((char *) param_0 + 108) & 0x1FF) == 2) {
+        *(u8 *) ((u8 *) param_0 + 126) = (*(u8 *) ((u8 *) param_0 + 126) & 0xFFFF) | 0x10;
+    } else {
+        func_80101870();
+    }
 }
 
 int chjamjarsdummy_entrypoint_0()
 {
-    return (int)&D_80800338_chjamjarsdummy;
+    return (int) &D_80800338_chjamjarsdummy;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jamjarsdummy.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080032E_chjamjarsdummy = D_8080032C_chjamjarsdummy + 0x2
- * extern declarations adjusted to the object (same addresses): D_80800338_chjamjarsdummy -> int[] */
 extern void func_80105834();
 extern void func_80107C2C();
-u32 D_80800300_chjamjarsdummy[3] = { 0x40A00000, 0x40A00000, 0x40A00000 };
-u32 D_8080030C_chjamjarsdummy[8] = { 0x0, 0x0, 0x0, 0x0, 0x3FE66666, 0x2990001, 0x3F4CCCCD, 0x2140001 };
-JamjarsDummyRecord D_8080032C_chjamjarsdummy[3] = { 0x7AA, 0x2, 0x832, 0x3, 0x6FB, 0x1 };
-int D_80800338_chjamjarsdummy[18] = { 0x15800B7, 0x7D10001, (u32)&D_8080030C_chjamjarsdummy, (u32)func_808000E0_chjamjarsdummy, (u32)func_80105834, (u32)func_808002AC_chjamjarsdummy, 0x0, 0x0, 0x0, 0x4, (u32)func_80800238_chjamjarsdummy, 0x0, 0x0, (u32)func_80800240_chjamjarsdummy, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+u32 D_80800300_chjamjarsdummy[3] = {0x40A00000, 0x40A00000, 0x40A00000};
+u32 D_8080030C_chjamjarsdummy[8] = {0x0,        0x0,       0x0,        0x0,
+                                    0x3FE66666, 0x2990001, 0x3F4CCCCD, 0x2140001};
+JamjarsDummyRecord D_8080032C_chjamjarsdummy[3] = {0x7AA, 0x2, 0x832, 0x3, 0x6FB, 0x1};
+int D_80800338_chjamjarsdummy[18] = {0x15800B7,
+                                     0x7D10001,
+                                     (u32) &D_8080030C_chjamjarsdummy,
+                                     (u32) func_808000E0_chjamjarsdummy,
+                                     (u32) func_80105834,
+                                     (u32) func_808002AC_chjamjarsdummy,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     0x4,
+                                     (u32) func_80800238_chjamjarsdummy,
+                                     0x0,
+                                     0x0,
+                                     (u32) func_80800240_chjamjarsdummy,
+                                     (u32) func_80107C2C,
+                                     -0x7FFFFFFE,
+                                     0x0,
+                                     0x0};

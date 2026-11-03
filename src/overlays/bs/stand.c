@@ -23,121 +23,104 @@ extern s32 D_80800D98_bsstand[];
 extern s32 D_80800DA8_bsstand[];
 extern s32 D_80800DB8_bsstand[];
 
-u8 * func_80800000_bsstand(Actor *param_0)
+u8 *func_80800000_bsstand(Actor *param_0)
 {
-  return D_80800D90_bsstand[*(s32 *)((char *)param_0 + 0x160)];
+    return D_80800D90_bsstand[*(s32 *) ((char *) param_0 + 0x160)];
 }
 
-s32 func_80800018_bsstand(u8 *param_0, s32 param_1) {
+s32 func_80800018_bsstand(u8 *param_0, s32 param_1)
+{
     param_1++;
-    if (param_1 >= *(s32 *)(param_0 + 0x164)) {
+    if (param_1 >= *(s32 *) (param_0 + 0x164)) {
         param_1 = 0;
     }
     return param_1;
 }
 
-s32 func_80800038_bsstand(param_0, param_1) s32 param_0; s32 param_1;
+s32 func_80800038_bsstand(param_0, param_1)
+s32 param_0;
+s32 param_1;
 {
-  s32 local_0;
-  local_0 = param_1;
-  switch (bastick_getZone())
-  {
-    case 1:
-      local_0 = 0x1F;
-      break;
+    s32 local_0;
+    local_0 = param_1;
+    switch (bastick_getZone()) {
+        case 1:
+            local_0 = 0x1F;
+            break;
 
-    case 2:
-      local_0 = 2;
-      break;
+        case 2:
+            local_0 = 2;
+            break;
 
-    case 3:
-      local_0 = 3;
-      break;
+        case 3:
+            local_0 = 3;
+            break;
 
-    case 4:
-      local_0 = 4;
-      break;
-
-  }
-
-  if (bakey_held(param_0, 1) != 0)
-  {
-    local_0 = 7;
-  }
-  if (bakey_pressed(param_0, 9) != 0)
-  {
-    local_0 = func_800A055C(param_0, local_0);
-  }
-  if (bakey_pressed(param_0, 8) != 0)
-  {
-    local_0 = bs_getTypeOfJump(param_0);
-    if (func_8008D714(param_0) != 0)
-    {
-      local_0 = 0xB8;
-      goto block_18;
+        case 4:
+            local_0 = 4;
     }
-    if (func_8008D790(param_0) != 0)
-    {
-      _baduo_entrypoint_12(param_0);
-      if (((!param_0) && (!param_0)) && (!param_0))
-      {
-      }
-      return 0;
-    }
-    goto block_18;
-  }
-  block_18:
-  if (bainput_should_enter_first_person(param_0) != 0)
-  {
-    local_0 = _badrone_entrypoint_24(param_0);
-  }
 
-  if (func_8008E148(param_0) != 0)
-  {
-    local_0 = _badrone_entrypoint_25(param_0);
-  }
-  if (player_inWater(param_0) != 0)
-  {
-    local_0 = 0x2D;
-  }
-  return func_800A02DC(param_0, local_0);
+    if (bakey_held(param_0, 1) != 0) {
+        local_0 = 7;
+    }
+    if (bakey_pressed(param_0, 9) != 0) {
+        local_0 = func_800A055C(param_0, local_0);
+    }
+    if (bakey_pressed(param_0, 8) != 0) {
+        local_0 = bs_getTypeOfJump(param_0);
+        if (func_8008D714(param_0) != 0) {
+            local_0 = 0xB8;
+            goto block_18;
+        }
+        if (func_8008D790(param_0) != 0) {
+            _baduo_entrypoint_12(param_0);
+            if ((!param_0 && !param_0) && 0) {
+            }
+            return 0;
+        }
+    }
+block_18:
+    if (bainput_should_enter_first_person(param_0) != 0) {
+        local_0 = _badrone_entrypoint_24(param_0);
+    }
+
+    if (func_8008E148(param_0) != 0) {
+        local_0 = _badrone_entrypoint_25(param_0);
+    }
+    if (player_inWater(param_0) != 0) {
+        local_0 = 0x2D;
+    }
+    return func_800A02DC(param_0, local_0);
 }
 
 void bsstand_entrypoint_0(u8 *param_0)
 {
-  s32 local_0;
-  int new_var;
-  s32 local_1;
-  local_1 = bs_getPreviousState();
-  local_0 = local_1;
-  if (func_8009CBDC(param_0, local_1) == 0xA)
-  {
-    func_80098840(param_0);
-  }
-  new_var = 1;
-  if (local_0 == 0x5B)
-  {
-    baanim_playForDuration_once(param_0, 0x6F, 0x40B00000);
-  }
-  else
-  {
-    baanim_playForDuration_onceSmooth(param_0, 0x6F, 5.5f);
-  }
-  func_8009FFD8(param_0, new_var, 1, 1, 2);
-  baphysics_set_target_horizontal_velocity(param_0, 0 & 0xFFFFFFFFFFFFFFFFu);
-  func_800909CC(param_0);
-  if (func_8008E23C(param_0) != 0)
-  {
-    *((s32 *) (((s8 *) param_0) + 0x160)) = 0;
-    *((s32 *) (((s8 *) param_0) + 0x164)) = 6;
-  }
-  else
-  {
-    *((s32 *) (((s8 *) param_0) + 0x160)) = 1;
-    *((s32 *) (((s8 *) param_0) + 0x164)) = 0x15;
-  }
-  *((s32 *) (((s8 *) param_0) + 0x15C)) = 0;
-  *((s32 *) (((s8 *) param_0) + 0x168)) = 0;
+    s32 local_0;
+    int new_var;
+    s32 local_1;
+    local_1 = bs_getPreviousState();
+    local_0 = local_1;
+    if (func_8009CBDC(param_0, local_1) == 0xA) {
+        func_80098840(param_0);
+    }
+    new_var = 1;
+    if (local_0 == 0x5B) {
+        baanim_playForDuration_once(param_0, 0x6F, 0x40B00000);
+    } else {
+        baanim_playForDuration_onceSmooth(param_0, 0x6F, 5.5f);
+    }
+    func_8009FFD8(param_0, new_var, 1, 1, 2);
+    baphysics_set_target_horizontal_velocity(param_0, 0 & 0xFFFFFFFFFFFFFFFFu);
+    func_800909CC(param_0);
+    if (func_8008E23C(param_0) != 0) {
+        *(s32 *) ((s8 *) param_0 + 0x160) = 0;
+        *(s32 *) ((s8 *) param_0 + 0x164) = 6;
+    } else {
+        *(s32 *) ((s8 *) param_0 + 0x160) = 1;
+        *(s32 *) ((s8 *) param_0 + 0x164) = 0x15;
+    }
+    *(s32 *) ((s8 *) param_0 + 0x15C) = 0;
+    *(s32 *) ((s8 *) param_0 + 0x168) = 0;
 }
 
 void func_80800274_bsstand(Actor *param_0, void *param_1)
@@ -347,7 +330,8 @@ void bsstand_entrypoint_1(PlayerState *param_0)
     bs_setState(param_0, local_0);
 }
 
-s32 bsstand_entrypoint_2(Actor *this){
+s32 bsstand_entrypoint_2(Actor *this)
+{
     func_800A0CF4(this, 0);
     func_80090A2C(this);
     func_800951B4(this);
@@ -355,17 +339,17 @@ s32 bsstand_entrypoint_2(Actor *this){
 
 int bsstand_entrypoint_3(s32 param_0)
 {
-  return D_80800D98_bsstand[param_0];
+    return D_80800D98_bsstand[param_0];
 }
 
 void bsstand_entrypoint_4(Actor *param_0)
 {
-  func_8009FFD8(param_0, 1, 1, 1, 2);
-  baphysics_set_target_horizontal_velocity(param_0, 0 & 0xFFFFFFFFFFFFFFFF);
-  return;
+    func_8009FFD8(param_0, 1, 1, 1, 2);
+    baphysics_set_target_horizontal_velocity(param_0, 0 & 0xFFFFFFFFFFFFFFFF);
 }
 
-void bsstand_entrypoint_5(s32 param_0) {
+void bsstand_entrypoint_5(s32 param_0)
+{
     s32 sp24;
     s32 sp20;
     s32 temp_v0;
@@ -387,12 +371,13 @@ void bsstand_entrypoint_5(s32 param_0) {
     bs_setState(param_0, func_80800038_bsstand(param_0, sp24));
 }
 
-void bsstand_entrypoint_6(s32 arg0) 
+void bsstand_entrypoint_6(s32 arg0)
 {
 }
+
 int bsstand_entrypoint_7(s32 param_0)
 {
-  return D_80800DA8_bsstand[param_0];
+    return D_80800DA8_bsstand[param_0];
 }
 
 void bsstand_entrypoint_8()
@@ -405,24 +390,22 @@ void bsstand_entrypoint_9()
     _bsdrone_entrypoint_0();
 }
 
-void bsstand_entrypoint_10(PlayerState* self)
+void bsstand_entrypoint_10(PlayerState *self)
 {
     _bsdrone_entrypoint_1(self);
 }
+
 void bsstand_entrypoint_11(s32 arg0)
 {
-    _bafpctrl_entrypoint_10(arg0,0);
+    _bafpctrl_entrypoint_10(arg0, 0);
     _bsdrone_entrypoint_2(arg0);
 }
 
 int bsstand_entrypoint_12(s32 param_0)
 {
-  return D_80800DB8_bsstand[param_0];
+    return D_80800DB8_bsstand[param_0];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/stand.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void _bsstand_entrypoint_2();
 extern void _bsstand_entrypoint_0();
 extern void _bsstand_entrypoint_1();
@@ -434,9 +417,16 @@ extern void _bsstand_entrypoint_11();
 extern void _bsstand_entrypoint_9();
 extern void _bsstand_entrypoint_10();
 extern void _bsdrone_entrypoint_3();
-u32 D_80800D70_bsstand[2] = { 0x8080840, 0x8080000 };
-u32 D_80800D78_bsstand[6] = { 0x90A0C10, 0x9090A09, 0x20090A0C, 0x1009090A, 0x910090A, 0x20000000 };
-s32 D_80800D90_bsstand[2] = { (u32)&D_80800D70_bsstand, (u32)&D_80800D78_bsstand };
-s32 D_80800D98_bsstand[4] = { (u32)_bsstand_entrypoint_2, (u32)_bsstand_entrypoint_0, (u32)_bsstand_entrypoint_1, (u32)func_8009AB78 };
-s32 D_80800DA8_bsstand[4] = { (u32)_bsstand_entrypoint_6, (u32)_bsstand_entrypoint_4, (u32)_bsstand_entrypoint_5, (u32)func_8009AB78 };
-s32 D_80800DB8_bsstand[6] = { (u32)_bsstand_entrypoint_11, (u32)_bsstand_entrypoint_9, (u32)_bsstand_entrypoint_10, (u32)_bsdrone_entrypoint_3, 0x0, 0x0 };
+u32 D_80800D70_bsstand[2] = {0x8080840, 0x8080000};
+u32 D_80800D78_bsstand[6] = {0x90A0C10, 0x9090A09, 0x20090A0C, 0x1009090A, 0x910090A, 0x20000000};
+s32 D_80800D90_bsstand[2] = {(u32) &D_80800D70_bsstand, (u32) &D_80800D78_bsstand};
+s32 D_80800D98_bsstand[4] = {(u32) _bsstand_entrypoint_2, (u32) _bsstand_entrypoint_0,
+                             (u32) _bsstand_entrypoint_1, (u32) func_8009AB78};
+s32 D_80800DA8_bsstand[4] = {(u32) _bsstand_entrypoint_6, (u32) _bsstand_entrypoint_4,
+                             (u32) _bsstand_entrypoint_5, (u32) func_8009AB78};
+s32 D_80800DB8_bsstand[6] = {(u32) _bsstand_entrypoint_11,
+                             (u32) _bsstand_entrypoint_9,
+                             (u32) _bsstand_entrypoint_10,
+                             (u32) _bsdrone_entrypoint_3,
+                             0x0,
+                             0x0};

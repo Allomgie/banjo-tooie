@@ -10,46 +10,63 @@ void *chbigtopticket_entrypoint_0()
     return &D_80800120_chbigtopticket;
 }
 
-void func_8080000C_chbigtopticket(s32 arg0) 
+void func_8080000C_chbigtopticket(s32 arg0)
 {
 }
-void func_80800014_chbigtopticket(u8 *param_0) {
-    *(f32 *)(param_0 + 0x48) -= func_800D8FF8() * 175.0f;
+
+void func_80800014_chbigtopticket(u8 *param_0)
+{
+    *(f32 *) (param_0 + 0x48) -= func_800D8FF8() * 175.0f;
     func_80103110(param_0, 0);
 }
 
 void func_80800058_chbigtopticket(Actor *param_0)
 {
     func_80101870();
-    func_80103110(param_0, ((*(u32 *)((char *)param_0 + 0x7C)) << 19) >> 31);
+    func_80103110(param_0, (*(u32 *) ((char *) param_0 + 0x7C) << 19) >> 31);
 }
 
 s32 func_8080008C_chbigtopticket(Actor *param_0, s32 param_1, s32 param_2)
 {
     switch (param_1) {
-    case 0x3E:
-        _sudialog_entrypoint_0(0x19F, 4);
-        func_800D0BD4(*(s32 *)&param_0->unk54, 8);
-        func_800D1844(0x4D);
-        func_800FC6B0(0x73);
-        _fxsparkle_entrypoint_1(param_0->position, 0x11);
-        func_8010A570(param_0);
-        func_800FFAB0(param_0);
-        return 1;
-    case 0x13:
-        *(s32 *)&param_0->unk54 = param_2;
-        break;
-    default:
-        return 0;
+        case 0x3E:
+            _sudialog_entrypoint_0(0x19F, 4);
+            func_800D0BD4(*(s32 *) &param_0->unk54, 8);
+            func_800D1844(0x4D);
+            func_800FC6B0(0x73);
+            _fxsparkle_entrypoint_1(param_0->position, 0x11);
+            func_8010A570(param_0);
+            func_800FFAB0(param_0);
+            return 1;
+        case 0x13:
+            *(s32 *) &param_0->unk54 = param_2;
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bigtopticket.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void func_80105834();
 extern void func_80108ED0();
 extern void func_80107C2C();
-void *D_80800120_chbigtopticket = (void *)0x032903C6;
-static u32 D_80800120_chbigtopticket_rest[19] = { 0x7BF0001, 0x0, (u32)func_80800014_chbigtopticket, (u32)func_80105834, (u32)func_80800058_chbigtopticket, 0x0, 0x3F800000, 0x0, 0x40040004, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chbigtopticket, (u32)func_80107C2C, 0x80001814, (u32)func_8080008C_chbigtopticket, 0x0, 0x0, 0x0 };
+void *D_80800120_chbigtopticket = (void *) 0x032903C6;
+static u32 D_80800120_chbigtopticket_rest[19] = {0x7BF0001,
+                                                 0x0,
+                                                 (u32) func_80800014_chbigtopticket,
+                                                 (u32) func_80105834,
+                                                 (u32) func_80800058_chbigtopticket,
+                                                 0x0,
+                                                 0x3F800000,
+                                                 0x0,
+                                                 0x40040004,
+                                                 0x0,
+                                                 (u32) func_80108ED0,
+                                                 0x0,
+                                                 (u32) func_8080000C_chbigtopticket,
+                                                 (u32) func_80107C2C,
+                                                 0x80001814,
+                                                 (u32) func_8080008C_chbigtopticket,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0};

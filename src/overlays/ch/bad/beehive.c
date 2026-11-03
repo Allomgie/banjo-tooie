@@ -1,6 +1,6 @@
 #include "common.h"
 
-#define AF(p, i) (*(f32 *)&(p)->actorData[i])
+#define AF(p, i) (*(f32 *) &(p)->actorData[i])
 extern int D_80800B1C_chbadbeehive[];
 extern void *func_80100094(Actor *, u32);
 extern void func_800EE7F8(f32 *, f32 *);
@@ -19,10 +19,28 @@ extern Actor *func_80106790();
 extern void func_800BBCB8(f32 *, f32 *, f32, s32, void *);
 extern void _chexploder_entrypoint_15(Actor *, s32, f32);
 extern u8 D_8012762C;
-typedef struct { u8 pad_0[0x72]; u16 st : 6; u16 rest : 10; } BHState;
-typedef struct { u8 pad_0[0x64]; u32 a : 2; u32 b : 1; u32 c : 29; } BHBits;
-typedef struct { s32 a; s32 b; s32 c; } BH12;
-typedef struct { u8 pad_0[0x78]; u32 a : 29; u32 f : 1; u32 b : 2; } BH78;
+typedef struct {
+    u8 pad_0[0x72];
+    u16 st : 6;
+    u16 rest : 10;
+} BHState;
+typedef struct {
+    u8 pad_0[0x64];
+    u32 a : 2;
+    u32 b : 1;
+    u32 c : 29;
+} BHBits;
+typedef struct {
+    s32 a;
+    s32 b;
+    s32 c;
+} BH12;
+typedef struct {
+    u8 pad_0[0x78];
+    u32 a : 29;
+    u32 f : 1;
+    u32 b : 2;
+} BH78;
 extern u8 D_80800B90_chbadbeehive[];
 extern u8 D_80800BD8_chbadbeehive[];
 extern f32 func_800F3780(f32, u8 *, s32);
@@ -38,43 +56,42 @@ extern void _subaddierouteDll_entrypoint_5(Actor *, u8 *, f32, f32, f32, f32);
 extern s32 func_800DC298(f32);
 extern s32 func_800EFFB4();
 extern void func_8010D254(u32 *);
-extern u8 func_800D9078(f32*);
+extern u8 func_800D9078(f32 *);
 extern void func_8010C908(Actor *, f32 *);
 void func_808008F8_chbadbeehive();
-f32 func_8080000C_chbadbeehive();
 
 int chbadbeehive_entrypoint_0()
 {
-  return (int)&D_80800B1C_chbadbeehive;
+    return (int) &D_80800B1C_chbadbeehive;
 }
 
 f32 func_8080000C_chbadbeehive(void)
 {
     switch (D_8012762C) {
-    case 19:
-        return 420.0f;
-    case 16:
-        return 440.0f;
-    case 15:
-        return 460.0f;
-    case 18:
-        return 480.0f;
-    case 20:
-        return 500.0f;
-    case 21:
-        return 550.0f;
-    case 22:
-        return 600.0f;
-    case 23:
-        return 650.0f;
-    case 24:
-        return 700.0f;
-    case 25:
-        return 630.0f;
-    case 26:
-        return 700.0f;
-    default:
-        return 0.0f;
+        case 19:
+            return 420.0f;
+        case 16:
+            return 440.0f;
+        case 15:
+            return 460.0f;
+        case 18:
+            return 480.0f;
+        case 20:
+            return 500.0f;
+        case 21:
+            return 550.0f;
+        case 22:
+            return 600.0f;
+        case 23:
+            return 650.0f;
+        case 24:
+            return 700.0f;
+        case 25:
+            return 630.0f;
+        case 26:
+            return 700.0f;
+        default:
+            return 0.0f;
     }
 }
 
@@ -84,10 +101,10 @@ void func_808000EC_chbadbeehive(Actor *param_0)
 
     local_0 = func_80100094(param_0, 0);
     _subaddierouteDll_entrypoint_3(param_0, local_0, param_0->position);
-    *(f32 *)&param_0->actorData[3] = 0.0f;
-    *(f32 *)&param_0->actorData[5] = 0.0f;
+    *(f32 *) &param_0->actorData[3] = 0.0f;
+    *(f32 *) &param_0->actorData[5] = 0.0f;
     func_800EE7F8(local_0 + 4, param_0->position);
-    *(f32 *)&param_0->actorData[6] = func_8080000C_chbadbeehive();
+    *(f32 *) &param_0->actorData[6] = func_8080000C_chbadbeehive();
 }
 
 void func_80800158_chbadbeehive(Actor *param_0)
@@ -97,13 +114,15 @@ void func_80800158_chbadbeehive(Actor *param_0)
     switch (func_801022E4(param_0)) {
         case 0x1C7:
             if (func_80101E14(param_0, 0.48f) || func_80101E14(param_0, 0.98f)) {
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800AEC_chbadbeehive);
+                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                                                 D_80800AEC_chbadbeehive);
             }
-            if (func_80101E4C(param_0, D_80800B74_chbadbeehive)) local_0 = 1;
+            if (func_80101E4C(param_0, D_80800B74_chbadbeehive))
+                local_0 = 1;
             break;
         case 0x54:
-            if (func_80101E4C(param_0, D_80800B64_chbadbeehive)) local_0 = 1;
-            break;
+            if (func_80101E4C(param_0, D_80800B64_chbadbeehive))
+                local_0 = 1;
     }
     if (local_0) {
         func_800C3CE8(param_0->unk5F);
@@ -125,64 +144,72 @@ void func_80800298_chbadbeehive(Actor *param_0)
 
     local_0 = func_80100094(param_0, 0);
     local_1 = func_800F3780(func_80101F24(param_0), D_80800B90_chbadbeehive, 9);
-    if (((BH78 *)param_0)->f) {
+    if (((BH78 *) param_0)->f) {
         return;
     }
     func_800D9078(&param_0->unk58);
-    switch (((BHState *)param_0)->st) {
-    case 1:
-        if (((BHBits *)param_0)->b) {
-            if (0.1f < _subaddiejoy_entrypoint_9(param_0, 0, 0)) {
+    switch (((BHState *) param_0)->st) {
+        case 1:
+            if (((BHBits *) param_0)->b) {
+                if (0.1f < _subaddiejoy_entrypoint_9(param_0, 0, 0)) {
+                    func_808008F8_chbadbeehive(param_0, 2);
+                }
+            } else if (func_80800990_chbadbeehive(param_0)) {
                 func_808008F8_chbadbeehive(param_0, 2);
             }
-        } else if (func_80800990_chbadbeehive(param_0)) {
-            func_808008F8_chbadbeehive(param_0, 2);
-        }
-        break;
-    case 2:
-        func_801026CC(param_0, *(BH12 *)D_80800BD8_chbadbeehive, AF(param_0, 3));
-        func_8010D254(param_0->actorData);
-        if (((BHBits *)param_0)->b) {
-            local_2 = _subaddiejoy_entrypoint_9(param_0, &param_0->unk54, 3);
-            AF(param_0, 3) = AF(param_0, 5);
-            func_80102BF8(param_0, 0.2f, 8.0f, 500.0f);
-            func_8010C3A8(param_0, 0x205015, local_2 * local_1);
-            if (_subaddiejoy_entrypoint_9(param_0, 0, 0) == 0.0f) {
-                func_808008F8_chbadbeehive(param_0, 1);
+            break;
+        case 2:
+            func_801026CC(param_0, *(BH12 *) D_80800BD8_chbadbeehive, AF(param_0, 3));
+            func_8010D254(param_0->actorData);
+            if (((BHBits *) param_0)->b) {
+                local_2 = _subaddiejoy_entrypoint_9(param_0, &param_0->unk54, 3);
+                AF(param_0, 3) = AF(param_0, 5);
+                func_80102BF8(param_0, 0.2f, 8.0f, 500.0f);
+                func_8010C3A8(param_0, 0x205015, local_2 * local_1);
+                if (_subaddiejoy_entrypoint_9(param_0, 0, 0) == 0.0f) {
+                    func_808008F8_chbadbeehive(param_0, 1);
+                }
+            } else {
+                if (_subaddierouteDll_entrypoint_4(param_0)) {
+                    param_0->unk54 = func_80102D78(param_0, param_0->actorData);
+                    _subaddierouteDll_entrypoint_7(param_0, local_0, param_0->rotation[1],
+                                                   param_0->unk54, 200.0f, 0x5800);
+                    *(s32 *) (local_0 + 0xC) = *(u16 *) (local_0 + 6);
+                }
+                _subaddierouteDll_entrypoint_5(param_0, local_0, *(f32 *) (local_0 + 0xC), 0.15f,
+                                               8.0f, 200.0f);
+                AF(param_0, 3) =
+                    func_800F15F8(AF(param_0, 3), AF(param_0, 5), func_800D8FF8() * 400.0f);
+                func_8010C3A8(param_0, 0x305115, local_1);
+                if (_subaddierouteDll_entrypoint_4(param_0) && func_800DC298(0.2f) &&
+                    (!func_8010C9B0(param_0->position, 1000) || !func_8010C500(param_0))) {
+                    func_808008F8_chbadbeehive(param_0, 3);
+                }
             }
-        } else {
+            break;
+        case 3:
+            func_801026CC(param_0, *(BH12 *) D_80800BD8_chbadbeehive, AF(param_0, 3));
+            if (func_80800990_chbadbeehive(param_0)) {
+                func_808008F8_chbadbeehive(param_0, 2);
+            }
             if (_subaddierouteDll_entrypoint_4(param_0)) {
                 param_0->unk54 = func_80102D78(param_0, param_0->actorData);
-                _subaddierouteDll_entrypoint_7(param_0, local_0, param_0->rotation[1], param_0->unk54, 200.0f, 0x5800);
-                *(s32 *)(local_0 + 0xC) = *(u16 *)(local_0 + 6);
+                _subaddierouteDll_entrypoint_7(param_0, local_0, param_0->rotation[1],
+                                               param_0->unk54, 200.0f, 0x5800);
+                *(s32 *) (local_0 + 0xC) = *(u16 *) (local_0 + 6);
             }
-            _subaddierouteDll_entrypoint_5(param_0, local_0, *(f32 *)(local_0 + 0xC), 0.15f, 8.0f, 200.0f);
-            AF(param_0, 3) = func_800F15F8(AF(param_0, 3), AF(param_0, 5), func_800D8FF8() * 400.0f);
+            _subaddierouteDll_entrypoint_5(param_0, local_0, *(f32 *) (local_0 + 0xC), 0.15f, 8.0f,
+                                           200.0f);
+            AF(param_0, 3) =
+                func_800F15F8(AF(param_0, 3), AF(param_0, 5), func_800D8FF8() * 400.0f);
             func_8010C3A8(param_0, 0x305115, local_1);
-            if (_subaddierouteDll_entrypoint_4(param_0) && func_800DC298(0.2f) && (!func_8010C9B0(param_0->position, 1000) || !func_8010C500(param_0))) {
-                func_808008F8_chbadbeehive(param_0, 3);
+            if (_subaddierouteDll_entrypoint_4(param_0) && func_800DC298(0.2f) &&
+                func_800EFFB4(param_0->position, 0x42C80000, local_0 + 0x10)) {
+                func_808008F8_chbadbeehive(param_0, 1);
             }
-        }
-        break;
-    case 3:
-        func_801026CC(param_0, *(BH12 *)D_80800BD8_chbadbeehive, AF(param_0, 3));
-        if (func_80800990_chbadbeehive(param_0)) {
-            func_808008F8_chbadbeehive(param_0, 2);
-        }
-        if (_subaddierouteDll_entrypoint_4(param_0)) {
-            param_0->unk54 = func_80102D78(param_0, param_0->actorData);
-            _subaddierouteDll_entrypoint_7(param_0, local_0, param_0->rotation[1], param_0->unk54, 200.0f, 0x5800);
-            *(s32 *)(local_0 + 0xC) = *(u16 *)(local_0 + 6);
-        }
-        _subaddierouteDll_entrypoint_5(param_0, local_0, *(f32 *)(local_0 + 0xC), 0.15f, 8.0f, 200.0f);
-        AF(param_0, 3) = func_800F15F8(AF(param_0, 3), AF(param_0, 5), func_800D8FF8() * 400.0f);
-        func_8010C3A8(param_0, 0x305115, local_1);
-        if (_subaddierouteDll_entrypoint_4(param_0) && func_800DC298(0.2f) && func_800EFFB4(param_0->position, 0x42C80000, local_0 + 0x10)) {
-            func_808008F8_chbadbeehive(param_0, 1);
-        }
-        break;
+            break;
     }
-    if (((BHState *)param_0)->st < 4) {
+    if (((BHState *) param_0)->st < 4) {
         func_8010C908(param_0, param_0->position);
     }
     func_80800158_chbadbeehive(param_0);
@@ -194,99 +221,134 @@ s32 func_8080070C_chbadbeehive(Actor *param_0, s32 param_1, Actor **param_2)
     Actor *local_1;
 
     switch (param_1) {
-    case 0x95:
-        param_0->unk5F = func_800C2E04();
-        _subaddierouteDll_entrypoint_1(param_0);
-        break;
-    case 0x40:
-        func_800EE88C(local_0, (*param_2)->position);
-        local_0[1] = param_0->position[1];
-        _chexploder_entrypoint_3(param_0, local_0, 0x20);
-        break;
-    case 0x90:
-        local_1 = func_80106790(func_80101080());
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800AFC_chbadbeehive);
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800B0C_chbadbeehive);
-        func_800BBCB8(param_0->position, NULL, param_0->scale, 1, &D_80800BE4_chbadbeehive);
-        if (!func_80107070(param_0, 3)) func_800FFAB0(param_0);
-        _chexploder_entrypoint_15(local_1, 2, 1.0f);
-        _chexploder_entrypoint_9(local_1, 3, 2);
-        break;
-    case 1:
-        func_808008F8_chbadbeehive(param_0, 2);
-        break;
-    case 2:
-        if (!_subaddieDll_entrypoint_3(param_0)) {
-            if (!func_80107070(param_0, 1)) _subaddiefade_entrypoint_3(param_0);
-        } else {
-            func_808008F8_chbadbeehive(param_0, 3);
-        }
-        break;
-    case 0x1F:
-        func_801015D0(param_0);
-        func_800DF744(3, 2);
-        break;
-    case 0x38:
-        func_80101074(&D_80800ABC_chbadbeehive);
-        return 4;
-    default:
-        return 0;
+        case 0x95:
+            param_0->unk5F = func_800C2E04();
+            _subaddierouteDll_entrypoint_1(param_0);
+            break;
+        case 0x40:
+            func_800EE88C(local_0, (*param_2)->position);
+            local_0[1] = param_0->position[1];
+            _chexploder_entrypoint_3(param_0, local_0, 0x20);
+            break;
+        case 0x90:
+            local_1 = func_80106790(func_80101080());
+            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800AFC_chbadbeehive);
+            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800B0C_chbadbeehive);
+            func_800BBCB8(param_0->position, NULL, param_0->scale, 1, &D_80800BE4_chbadbeehive);
+            if (!func_80107070(param_0, 3))
+                func_800FFAB0(param_0);
+            _chexploder_entrypoint_15(local_1, 2, 1.0f);
+            _chexploder_entrypoint_9(local_1, 3, 2);
+            break;
+        case 1:
+            func_808008F8_chbadbeehive(param_0, 2);
+            break;
+        case 2:
+            if (!_subaddieDll_entrypoint_3(param_0)) {
+                if (!func_80107070(param_0, 1))
+                    _subaddiefade_entrypoint_3(param_0);
+            } else {
+                func_808008F8_chbadbeehive(param_0, 3);
+            }
+            break;
+        case 0x1F:
+            func_801015D0(param_0);
+            func_800DF744(3, 2);
+            break;
+        case 0x38:
+            func_80101074(&D_80800ABC_chbadbeehive);
+            return 4;
+        default:
+            return 0;
     }
     return 1;
 }
 
-void func_808008F0_chbadbeehive(s32 arg0) 
+void func_808008F0_chbadbeehive(s32 arg0)
 {
 }
-void func_808008F8_chbadbeehive(param_0, param_1) u8 *param_0; s32 param_1; {
+
+void func_808008F8_chbadbeehive(param_0, param_1) u8 *param_0;
+s32 param_1;
+{
     s32 local_0;
 
     local_0 = func_80100094(param_0, 0);
     func_80102424(param_0, param_1);
-    switch (param_1) {                                 
+
+switch (param_1) {
     case 2:
-        (*(f32 *)((s8 *)(param_0) + (0x2C))) = (f32) (*(f32 *)((s8 *)(param_0) + (0x30)));
+        *(f32 *) ((s8 *) param_0 + 0x2C) = (f32) *(f32 *) ((s8 *) param_0 + 0x30);
         return;
     case 3:
         func_800EE7F8(param_0 + 0x18, local_0 + 0x10);
-        (*(f32 *)((s8 *)(param_0) + (0x2C))) = (f32) ((*(f32 *)((s8 *)(param_0) + (0x2C))) * 0.5f);
-        
+        *(f32 *) ((s8 *) param_0 + 0x2C) = (f32) (*(f32 *) ((s8 *) param_0 + 0x2C) * 0.5f);
+
     case 1:
         return;
-    }
+}
+
 }
 
 int func_80800990_chbadbeehive(f32 param_0[3])
 {
-  f32 local_0;
-  if (param_0[0x16] > 0.0f)
-  {
-    return 0;
-  }
-  if (_subaddierouteDll_entrypoint_4(param_0) && func_8010C9B0(&param_0[1], 1000) != 0 && _suchase_entrypoint_1(param_0) != 0 && func_8010C500(param_0) != 0)
-  {
+    if (param_0[0x16] > 0.0f) {
+        return 0;
+    }
+
+if (_subaddierouteDll_entrypoint_4(param_0) && func_8010C9B0(&param_0[1], 1000) != 0 &&
+    _suchase_entrypoint_1(param_0) != 0 && func_8010C500(param_0) != 0) {
     return 1;
-  }
-  return 0;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bad/beehive.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800ABC_chbadbeehive -> s32[], D_80800AFC_chbadbeehive -> s32[], D_80800B0C_chbadbeehive -> s32[], D_80800B1C_chbadbeehive -> int[], D_80800BE4_chbadbeehive -> s32[] */
+return 0;
+}
+
 extern void func_80105834();
 extern void func_801018A4();
 extern void func_80108ED0();
 extern void func_80107C2C();
-u32 D_80800A70_chbadbeehive[5] = { 0x10000, 0x40000, 0x40000, 0x50000, 0x60000 };
-u32 D_80800A84_chbadbeehive[14] = { 0x0, 0x0, 0x3F266666, 0x540001, 0x3FC00000, 0x1C70401, 0x3FC00000, 0x1C70001, 0x3FC00000, 0x1C70000, 0x0, 0x0, 0x3F266666, 0x540001 };
-s32 D_80800ABC_chbadbeehive[12] = { 0x3, 0x40400000, 0x2A0000, 0x2A, 0x40333333, 0x2B0000, 0x2B, 0x40266666, 0x2C0000, 0x2C, 0x4019999A, 0x2D0000 };
-u8 D_80800AEC_chbadbeehive[16] = { 0x0, 0x13, 0x4, 0x4, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x0 };
-s32 D_80800AFC_chbadbeehive[4] = { 0x13040B, 0xA0100, 0x166D60, 0x0 };
-s32 D_80800B0C_chbadbeehive[4] = { 0x130407, 0xA0100, 0x166D60, 0x0 };
-int D_80800B1C_chbadbeehive[18] = { 0x22F019A, 0x6150001, (u32)&D_80800A84_chbadbeehive, (u32)func_80800298_chbadbeehive, (u32)func_80105834, (u32)func_801018A4, 0x7D00000, 0x40000000, 0x0, 0x2048329, (u32)func_808008F0_chbadbeehive, (u32)func_80108ED0, 0x1C0000, (u32)func_808000EC_chbadbeehive, (u32)func_80107C2C, -0x7FCDAFE3, (u32)func_8080070C_chbadbeehive, (u32)&D_80800A70_chbadbeehive };
-u8 D_80800B64_chbadbeehive[16] = { 0x3E, 0xE6, 0x66, 0x66, 0x3F, 0xC, 0xCC, 0xCD, 0x3F, 0x19, 0x99, 0x9A, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_80800B74_chbadbeehive[28] = { 0x3E, 0xE6, 0x66, 0x66, 0x3F, 0xC, 0xCC, 0xCD, 0x3F, 0x19, 0x99, 0x9A, 0x3F, 0x66, 0x66, 0x66, 0x3F, 0x73, 0x33, 0x33, 0x0, 0x0, 0x0, 0x0, 0xBF, 0x80, 0x0, 0x0 };
-u8 D_80800B90_chbadbeehive[72] = { 0x0, 0x0, 0x0, 0x0, 0x3E, 0x99, 0x99, 0x9A, 0x3D, 0x4C, 0xCC, 0xCD, 0x3F, 0x19, 0x99, 0x9A, 0x3E, 0x80, 0x0, 0x0, 0x3F, 0x99, 0x99, 0x9A, 0x3E, 0xCC, 0xCC, 0xCD, 0x3F, 0x19, 0x99, 0x9A, 0x3E, 0xF5, 0xC2, 0x8F, 0x3E, 0x99, 0x99, 0x9A, 0x3F, 0x5, 0x1E, 0xB8, 0x3F, 0x19, 0x99, 0x9A, 0x3F, 0x40, 0x0, 0x0, 0x3F, 0x99, 0x99, 0x9A, 0x3F, 0x73, 0x33, 0x33, 0x3F, 0x19, 0x99, 0x9A, 0x3F, 0x80, 0x0, 0x0, 0x3E, 0x99, 0x99, 0x9A };
-u8 D_80800BD8_chbadbeehive[12] = { 0x40, 0x6, 0x66, 0x66, 0xBB, 0x83, 0x12, 0x6F, 0x3E, 0xCC, 0xCC, 0xCD };
-s32 D_80800BE4_chbadbeehive[19] = { 0x1D09C9, 0x160238, 0x150013, 0x660020, -0x5050588, 0x1E000A, 0x14002C, 0x14, 0x0, 0x320000, 0x2B0133, 0x1660022, 0x2000280, 0x4000480, 0x180000, 0x80, 0x800000, 0x0, 0x0 };
+u32 D_80800A70_chbadbeehive[5] = {0x10000, 0x40000, 0x40000, 0x50000, 0x60000};
+u32 D_80800A84_chbadbeehive[14] = {0x0,       0x0,        0x3F266666, 0x540001,   0x3FC00000,
+                                   0x1C70401, 0x3FC00000, 0x1C70001,  0x3FC00000, 0x1C70000,
+                                   0x0,       0x0,        0x3F266666, 0x540001};
+s32 D_80800ABC_chbadbeehive[12] = {0x3,  0x40400000, 0x2A0000, 0x2A, 0x40333333, 0x2B0000,
+                                   0x2B, 0x40266666, 0x2C0000, 0x2C, 0x4019999A, 0x2D0000};
+u8 D_80800AEC_chbadbeehive[16] = {0x0, 0x13, 0x4, 0x4,  0x0,  0xD,  0x0, 0xF3,
+                                  0x1, 0xC,  0x0, 0x16, 0x6D, 0x60, 0x0, 0x0};
+s32 D_80800AFC_chbadbeehive[4] = {0x13040B, 0xA0100, 0x166D60, 0x0};
+s32 D_80800B0C_chbadbeehive[4] = {0x130407, 0xA0100, 0x166D60, 0x0};
+int D_80800B1C_chbadbeehive[18] = {0x22F019A,
+                                   0x6150001,
+                                   (u32) &D_80800A84_chbadbeehive,
+                                   (u32) func_80800298_chbadbeehive,
+                                   (u32) func_80105834,
+                                   (u32) func_801018A4,
+                                   0x7D00000,
+                                   0x40000000,
+                                   0x0,
+                                   0x2048329,
+                                   (u32) func_808008F0_chbadbeehive,
+                                   (u32) func_80108ED0,
+                                   0x1C0000,
+                                   (u32) func_808000EC_chbadbeehive,
+                                   (u32) func_80107C2C,
+                                   -0x7FCDAFE3,
+                                   (u32) func_8080070C_chbadbeehive,
+                                   (u32) &D_80800A70_chbadbeehive};
+u8 D_80800B64_chbadbeehive[16] = {0x3E, 0xE6, 0x66, 0x66, 0x3F, 0xC,  0xCC, 0xCD,
+                                  0x3F, 0x19, 0x99, 0x9A, 0xBF, 0x80, 0x0,  0x0};
+u8 D_80800B74_chbadbeehive[28] = {0x3E, 0xE6, 0x66, 0x66, 0x3F, 0xC,  0xCC, 0xCD, 0x3F, 0x19,
+                                  0x99, 0x9A, 0x3F, 0x66, 0x66, 0x66, 0x3F, 0x73, 0x33, 0x33,
+                                  0x0,  0x0,  0x0,  0x0,  0xBF, 0x80, 0x0,  0x0};
+u8 D_80800B90_chbadbeehive[72] = {
+    0x0,  0x0,  0x0,  0x0,  0x3E, 0x99, 0x99, 0x9A, 0x3D, 0x4C, 0xCC, 0xCD, 0x3F, 0x19, 0x99,
+    0x9A, 0x3E, 0x80, 0x0,  0x0,  0x3F, 0x99, 0x99, 0x9A, 0x3E, 0xCC, 0xCC, 0xCD, 0x3F, 0x19,
+    0x99, 0x9A, 0x3E, 0xF5, 0xC2, 0x8F, 0x3E, 0x99, 0x99, 0x9A, 0x3F, 0x5,  0x1E, 0xB8, 0x3F,
+    0x19, 0x99, 0x9A, 0x3F, 0x40, 0x0,  0x0,  0x3F, 0x99, 0x99, 0x9A, 0x3F, 0x73, 0x33, 0x33,
+    0x3F, 0x19, 0x99, 0x9A, 0x3F, 0x80, 0x0,  0x0,  0x3E, 0x99, 0x99, 0x9A};
+u8 D_80800BD8_chbadbeehive[12] = {0x40, 0x6,  0x66, 0x66, 0xBB, 0x83,
+                                  0x12, 0x6F, 0x3E, 0xCC, 0xCC, 0xCD};
+s32 D_80800BE4_chbadbeehive[19] = {
+    0x1D09C9, 0x160238,  0x150013,  0x660020,  -0x5050588, 0x1E000A, 0x14002C, 0x14, 0x0, 0x320000,
+    0x2B0133, 0x1660022, 0x2000280, 0x4000480, 0x180000,   0x80,     0x800000, 0x0,  0x0};

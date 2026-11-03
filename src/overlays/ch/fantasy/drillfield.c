@@ -1,9 +1,15 @@
 #include "common.h"
 
-typedef struct { f32 local_0[3]; f32 local_1; } DrillfieldPlacement;
+typedef struct {
+    f32 local_0[3];
+    f32 local_1;
+} DrillfieldPlacement;
 extern DrillfieldPlacement D_808008D0_chfantasydrillfield[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
-typedef struct { s32 key; s32 val; } DrillEnt;
+typedef struct {
+    s32 key;
+    s32 val;
+} DrillEnt;
 extern s32 _gccubesearch_entrypoint_9(s32, void *, s32);
 extern s32 func_800DA298(s32);
 extern void func_800DA3B8(s32, s32);
@@ -11,8 +17,10 @@ extern void func_800DA544(s32);
 extern s32 func_800DC128(s32, s32);
 extern s32 func_800DC090(void);
 extern void func_800DC324(s32);
-typedef struct { s32 unused; s32 value; } DrillFieldRecord;
-extern DrillFieldRecord B_80800A10_chfantasydrillfield[8];
+typedef struct {
+    s32 unused;
+    s32 value;
+} DrillFieldRecord;
 extern void func_800DA524(s32);
 extern s32 D_808008B0_chfantasydrillfield[];
 extern u8 D_80800950_chfantasydrillfield[];
@@ -38,22 +46,18 @@ void func_80800000_chfantasydrillfield(param_0) Actor *param_0;
     local_1 = _subaddiefind_entrypoint_4(0x40A, local_0, 8) - 1;
     local_2 = 0;
     while (local_1 >= 0) {
-        if (local_0[local_1]->pad6C_21 < param_0->pad6C_21) local_2++;
+        if (local_0[local_1]->pad6C_21 < param_0->pad6C_21)
+            local_2++;
         local_1--;
     }
     func_800EFA4C(param_0->position, D_808008D0_chfantasydrillfield[local_2].local_0[0],
-                 D_808008D0_chfantasydrillfield[local_2].local_0[1], D_808008D0_chfantasydrillfield[local_2].local_0[2]);
+                  D_808008D0_chfantasydrillfield[local_2].local_0[1],
+                  D_808008D0_chfantasydrillfield[local_2].local_0[2]);
     param_0->rotation[1] = D_808008D0_chfantasydrillfield[local_2].local_1;
     func_80103014(param_0);
 }
 
-/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/ch/fantasy/drillfield.bss.s) is defined here in C, ahead of
- * its first use: IDO places .bss objects used before their definition first, the rest in definition
- * order.
- * Labels inside an object are linker symbols in undefined_syms.us.txt:
- * B_80800A18_chfantasydrillfield. */
 DrillFieldRecord B_80800A10_chfantasydrillfield[8];
-
 
 void func_808000C4_chfantasydrillfield(s32 param_0)
 {
@@ -79,9 +83,11 @@ void func_808000C4_chfantasydrillfield(s32 param_0)
         s2 = 0;
         do {
             for (j = 0; j < n; j++) {
-                if (((DrillEnt *) B_80800A10_chfantasydrillfield)[s2].key < ((DrillEnt *) B_80800A10_chfantasydrillfield)[j].key) {
+                if (((DrillEnt *) B_80800A10_chfantasydrillfield)[s2].key <
+                    ((DrillEnt *) B_80800A10_chfantasydrillfield)[j].key) {
                     t = ((DrillEnt *) B_80800A10_chfantasydrillfield)[j].key;
-                    ((DrillEnt *) B_80800A10_chfantasydrillfield)[j].key = ((DrillEnt *) B_80800A10_chfantasydrillfield)[s2].key;
+                    ((DrillEnt *) B_80800A10_chfantasydrillfield)[j].key =
+                        ((DrillEnt *) B_80800A10_chfantasydrillfield)[s2].key;
                     ((DrillEnt *) B_80800A10_chfantasydrillfield)[s2].key = t;
                 }
             }
@@ -162,20 +168,20 @@ void func_8080048C_chfantasydrillfield(Actor *param_0)
         func_800DA544(0xA0F);
         func_808000C4_chfantasydrillfield(param_0);
     }
-    *(s32 *)((char *)param_0 + 0x34) = func_808003C8_chfantasydrillfield(*(u32 *)((char *)param_0 + 0x6C) >> 0x15);
+    *(s32 *) ((char *) param_0 + 0x34) =
+        func_808003C8_chfantasydrillfield(*(u32 *) ((char *) param_0 + 0x6C) >> 0x15);
 }
 
 void func_808004E8_chfantasydrillfield(Actor *param_0)
 {
     switch (param_0->unk70_10) {
-    case 1:
-        func_80103110(param_0, 0);
-        break;
-    case 2:
-        if (_subaddieDll_entrypoint_6(param_0, 0xB)) {
-            func_80108B04(param_0, 1);
-        }
-        break;
+        case 1:
+            func_80103110(param_0, 0);
+            break;
+        case 2:
+            if (_subaddieDll_entrypoint_6(param_0, 0xB)) {
+                func_80108B04(param_0, 1);
+            }
     }
 }
 
@@ -188,92 +194,120 @@ s32 func_8080054C_chfantasydrillfield(Actor *param_0, s32 param_1, s32 param_2)
     Actor *local_3;
 
     switch (param_1) {
-    case 0x40:
-        if (_subaddieDll_entrypoint_5(param_0, param_2)) {
-            func_80103110(param_0, 1);
-            func_80101FDC(param_0, 2);
-        }
-        return 1;
-    case 0x3D:
-        func_800EE7F8(local_1, param_0->position);
-        func_800EE7F8(local_0, param_0->position);
-        local_0[1] += 200.0f;
-        local_1[1] -= 200.0f;
-        func_800BEF00(local_0, local_1, local_2, 0);
-        switch (D_808008B0_chfantasydrillfield[param_0->actorData[7]]) {
-        case 0:
-            func_800FFA88(param_0->unk0);
-            break;
-        case 0x1F7:
-            func_80106790(func_800D10D4(0x16, 2, local_1, 3, NULL));
-            break;
-        default:
-            local_4 = func_80108528(D_808008B0_chfantasydrillfield[param_0->actorData[7]], local_1, 0, &param_0);
-            if (local_4->unk6C_9 == 0x3DB) {
-                local_4->rotation[1] = 20.0f;
-            } else if (local_4->unk6C_9 == 0x40D) {
-                local_4->unk74_7 = param_0->actorData[7];
+        case 0x40:
+            if (_subaddieDll_entrypoint_5(param_0, param_2)) {
+                func_80103110(param_0, 1);
+                func_80101FDC(param_0, 2);
             }
-            break;
-        }
-        if (param_2) {
-            func_800DA544(param_0->actorData[7] + 0x335);
-            _chskeletonexplode_entrypoint_7(param_0, param_0->position);
-            func_8010A570(param_0);
-            func_8010A624(param_0);
-            func_800FFA88(param_0->unk0);
-        }
-        return 1;
-    case 0xF:
-        func_800C4140(0x59919413, param_0->position, 0x04B000FA);
-        func_800BBCB8(param_0->position, param_0->position, 1.0f, 6, D_80800950_chfantasydrillfield);
-        func_800BBCB8(param_0->position, param_0->position, 1.0f, 3, D_80800988_chfantasydrillfield);
-        return 1;
-    case 0x95:
-        if (func_800DA298(param_0->actorData[7] + 0x335)) {
-            param_0->unk64_16 = 0;
-            func_8010A570(param_0);
-            func_8010A624(param_0);
+            return 1;
+        case 0x3D:
+            func_800EE7F8(local_1, param_0->position);
+            func_800EE7F8(local_0, param_0->position);
+            local_0[1] += 200.0f;
+            local_1[1] -= 200.0f;
+            func_800BEF00(local_0, local_1, local_2, 0);
             switch (D_808008B0_chfantasydrillfield[param_0->actorData[7]]) {
-            case 0:
-                func_800FFA88(param_0->unk0);
-                break;
-            case 0x1F7:
-                if (func_800D0B68(0x16, 2)) {
+                case 0:
                     func_800FFA88(param_0->unk0);
-                } else {
-                    func_80108B04(param_0, 0);
-                }
-                break;
-            default:
-                if (!_subaddiefind_entrypoint_5(D_808008B0_chfantasydrillfield[param_0->actorData[7]],
-                     &local_3, 1, param_0->position, func_80103EAC(param_0), func_800EEB40)) {
-                    func_80108B04(param_0, 0);
-                }
-                break;
+                    break;
+                case 0x1F7:
+                    func_80106790(func_800D10D4(0x16, 2, local_1, 3, NULL));
+                    break;
+                default:
+                    local_4 = func_80108528(D_808008B0_chfantasydrillfield[param_0->actorData[7]],
+                                            local_1, 0, &param_0);
+                    if (local_4->unk6C_9 == 0x3DB) {
+                        local_4->rotation[1] = 20.0f;
+                    } else if (local_4->unk6C_9 == 0x40D) {
+                        local_4->unk74_7 = param_0->actorData[7];
+                    }
             }
-        }
-        func_800DA524(0xA0F);
-        return 1;
+            if (param_2) {
+                func_800DA544(param_0->actorData[7] + 0x335);
+                _chskeletonexplode_entrypoint_7(param_0, param_0->position);
+                func_8010A570(param_0);
+                func_8010A624(param_0);
+                func_800FFA88(param_0->unk0);
+            }
+            return 1;
+        case 0xF:
+            func_800C4140(0x59919413, param_0->position, 0x04B000FA);
+            func_800BBCB8(param_0->position, param_0->position, 1.0f, 6,
+                          D_80800950_chfantasydrillfield);
+            func_800BBCB8(param_0->position, param_0->position, 1.0f, 3,
+                          D_80800988_chfantasydrillfield);
+            return 1;
+        case 0x95:
+            if (func_800DA298(param_0->actorData[7] + 0x335)) {
+                param_0->unk64_16 = 0;
+                func_8010A570(param_0);
+                func_8010A624(param_0);
+                switch (D_808008B0_chfantasydrillfield[param_0->actorData[7]]) {
+                    case 0:
+                        func_800FFA88(param_0->unk0);
+                        break;
+                    case 0x1F7:
+                        if (func_800D0B68(0x16, 2)) {
+                            func_800FFA88(param_0->unk0);
+                        } else {
+                            func_80108B04(param_0, 0);
+                        }
+                        break;
+                    default:
+                        if (!_subaddiefind_entrypoint_5(
+                                D_808008B0_chfantasydrillfield[param_0->actorData[7]], &local_3, 1,
+                                param_0->position, func_80103EAC(param_0), func_800EEB40)) {
+                            func_80108B04(param_0, 0);
+                        }
+                }
+            }
+            func_800DA524(0xA0F);
+            return 1;
     }
     return 0;
 }
 
 int chfantasydrillfield_entrypoint_0()
 {
-    return (int)&D_808009C4_chfantasydrillfield;
+    return (int) &D_808009C4_chfantasydrillfield;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fantasy/drillfield.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808009C4_chfantasydrillfield -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
-s32 D_808008B0_chfantasydrillfield[8] = { 0x40D, 0x40D, 0x229, 0x3DB, 0x1F7, 0x1E9, 0x4A6, 0x0 };
-DrillfieldPlacement D_808008D0_chfantasydrillfield[8] = { 4845.53f, 2.54e+03f, -5329.37f, 0.0f, 3727.57f, 2.54e+03f, -5898.67f, 45.0f, 3982.39f, 2.54e+03f, -6356.72f, 335.0f, 4253.13f, 2.54e+03f, -5679.16f, 345.0f, 4760.04f, 2.54e+03f, -5970.08f, 0.0f, 5161.16f, 2.54e+03f, -5691.5f, 25.0f, 4477.09f, 2.54e+03f, -6476.48f, 6e+01f, 5202.73f, 2.54e+03f, -6440.36f, -2e+01f };
-u8 D_80800950_chfantasydrillfield[56] = { 0x0, 0x1D, 0x9, 0x29, 0x0, 0x14, 0x0, 0x16, 0x10, 0x6, 0x0, 0x2D, 0x2, 0x58, 0x3, 0x20, 0x0, 0x2B, 0x1, 0x0, 0x2, 0x0, 0x0, 0x1B, 0xFC, 0x18, 0xFC, 0xE0, 0x0, 0x22, 0x1, 0x0, 0x0, 0xCC, 0x0, 0xC0, 0x0, 0xC0, 0x0, 0x7, 0x0, 0x2, 0x0, 0xD, 0x0, 0x64, 0x0, 0x31, 0xFF, 0xCE, 0xFF, 0xE7, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80800988_chfantasydrillfield[60] = { 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x2B, 0x4, 0x0, 0x5, 0x0, 0x0, 0x16, 0x10, 0x0, 0x0, 0x22, 0x1, 0x80, 0x2, 0x0, 0x4, 0x80, 0x6, 0x0, 0x0, 0x15, 0x0, 0x0, 0x0, 0x26, 0x0, 0x19, 0x0, 0x0, 0x0, 0x7, 0x0, 0x2D, 0x0, 0x32, 0x0, 0x64, 0x0, 0x20, 0xDE, 0xA7, 0x71, 0xC0, 0x0, 0xD, 0x0, 0x64, 0x0, 0x31, 0xFF, 0xCE, 0xFF, 0xE7, 0x0, 0x0 };
-int D_808009C4_chfantasydrillfield[19] = { 0x354040A, 0x82C0001, 0x0, (u32)func_808004E8_chfantasydrillfield, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080048C_chfantasydrillfield, (u32)func_80107C2C, -0x7FFFDC00, (u32)func_8080054C_chfantasydrillfield, 0x0, 0x0 };
+s32 D_808008B0_chfantasydrillfield[8] = {0x40D, 0x40D, 0x229, 0x3DB, 0x1F7, 0x1E9, 0x4A6, 0x0};
+DrillfieldPlacement D_808008D0_chfantasydrillfield[8] = {
+    4845.53f, 2.54e+03f, -5329.37f, 0.0f,   3727.57f, 2.54e+03f, -5898.67f, 45.0f,
+    3982.39f, 2.54e+03f, -6356.72f, 335.0f, 4253.13f, 2.54e+03f, -5679.16f, 345.0f,
+    4760.04f, 2.54e+03f, -5970.08f, 0.0f,   5161.16f, 2.54e+03f, -5691.5f,  25.0f,
+    4477.09f, 2.54e+03f, -6476.48f, 6e+01f, 5202.73f, 2.54e+03f, -6440.36f, -2e+01f};
+u8 D_80800950_chfantasydrillfield[56] = {
+    0x0, 0x1D, 0x9, 0x29, 0x0, 0x14, 0x0,  0x16, 0x10, 0x6,  0x0,  0x2D, 0x2,  0x58,
+    0x3, 0x20, 0x0, 0x2B, 0x1, 0x0,  0x2,  0x0,  0x0,  0x1B, 0xFC, 0x18, 0xFC, 0xE0,
+    0x0, 0x22, 0x1, 0x0,  0x0, 0xCC, 0x0,  0xC0, 0x0,  0xC0, 0x0,  0x7,  0x0,  0x2,
+    0x0, 0xD,  0x0, 0x64, 0x0, 0x31, 0xFF, 0xCE, 0xFF, 0xE7, 0x0,  0x0,  0x0,  0x0};
+u8 D_80800988_chfantasydrillfield[60] = {
+    0x0,  0x1D, 0x9,  0xDD, 0x0, 0x2B, 0x4,  0x0,  0x5,  0x0,  0x0,  0x16, 0x10, 0x0,  0x0,
+    0x22, 0x1,  0x80, 0x2,  0x0, 0x4,  0x80, 0x6,  0x0,  0x0,  0x15, 0x0,  0x0,  0x0,  0x26,
+    0x0,  0x19, 0x0,  0x0,  0x0, 0x7,  0x0,  0x2D, 0x0,  0x32, 0x0,  0x64, 0x0,  0x20, 0xDE,
+    0xA7, 0x71, 0xC0, 0x0,  0xD, 0x0,  0x64, 0x0,  0x31, 0xFF, 0xCE, 0xFF, 0xE7, 0x0,  0x0};
+int D_808009C4_chfantasydrillfield[19] = {0x354040A,
+                                          0x82C0001,
+                                          0x0,
+                                          (u32) func_808004E8_chfantasydrillfield,
+                                          (u32) func_80105834,
+                                          (u32) func_80101870,
+                                          0x7D00000,
+                                          0x0,
+                                          0x0,
+                                          0x800,
+                                          0x0,
+                                          (u32) func_80108ED0,
+                                          0x0,
+                                          (u32) func_8080048C_chfantasydrillfield,
+                                          (u32) func_80107C2C,
+                                          -0x7FFFDC00,
+                                          (u32) func_8080054C_chfantasydrillfield,
+                                          0x0,
+                                          0x0};

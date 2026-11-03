@@ -1,6 +1,7 @@
 #include "overlays/bs/kaz/fly.h"
 
-void func_80800000_bskazfly(PlayerState *self) {
+void func_80800000_bskazfly(PlayerState *self)
+{
     f32 sp24[3];
 
     func_8009C128(self, sp24);
@@ -10,7 +11,8 @@ void func_80800000_bskazfly(PlayerState *self) {
     func_800BBCB8(sp24, 0, 1, 1, D_80801C10_bskazfly);
 }
 
-void func_808000AC_bskazfly(PlayerState *self) {
+void func_808000AC_bskazfly(PlayerState *self)
+{
     func_80093360(self, 60);
     yaw_setUpdateType(self, 3);
     yaw_setVelocityBounded(self, 500, 2);
@@ -20,7 +22,8 @@ void func_808000AC_bskazfly(PlayerState *self) {
     func_800961AC(self, 4);
 }
 
-void func_80800128_bskazfly(PlayerState *self) {
+void func_80800128_bskazfly(PlayerState *self)
+{
     if (func_8009E77C(self, 9) == 0) {
         _bastatemem_entrypoint_0(self, 0x20);
         _bafly_entrypoint_5(self);
@@ -30,7 +33,8 @@ void func_80800128_bskazfly(PlayerState *self) {
     }
 }
 
-void func_80800188_bskazfly(PlayerState *self) {
+void func_80800188_bskazfly(PlayerState *self)
+{
     if (func_8009E74C(self, 9) == 0) {
         _bafly_entrypoint_4(self);
         _bastatemem_entrypoint_1(self);
@@ -49,7 +53,8 @@ void func_80800188_bskazfly(PlayerState *self) {
     }
 }
 
-void func_80800248_bskazfly(PlayerState *self) {
+void func_80800248_bskazfly(PlayerState *self)
+{
     baanim_playForDuration_once(self, ASSET_AB_ANIM_BZKAZFLY_UNKNOWN, 1.4);
     func_8009FFD8(self, 1, 1, 3, 6);
     if (bastick_distance(self) != 0.0f) {
@@ -66,11 +71,10 @@ void func_80800248_bskazfly(PlayerState *self) {
     self->unk15C.word = 0;
 }
 
-void func_80800320_bskazfly(PlayerState *self) {
+void func_80800320_bskazfly(PlayerState *self)
+{
     BanjoStateId next_state;
     AnimCtrl *animCtrl;
-    s32 sp20;
-    s32 temp_v0;
 
     next_state = BS_STATE_0_INVALID;
     animCtrl = baanim_getAnimCtrlPtr(self);
@@ -90,22 +94,26 @@ void func_80800320_bskazfly(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void func_808003E0_bskazfly(PlayerState *self) {
+void func_808003E0_bskazfly(PlayerState *self)
+{
     func_800C6DA0(0x44);
     func_800A0CF4(self, 0);
     func_800A4E30(self);
 }
 
-s32 bskazfly_entrypoint_0(s32 idx) {
+s32 bskazfly_entrypoint_0(s32 idx)
+{
     return D_80801C38_bskazfly[idx];
 }
 
-void func_8080042C_bskazfly(PlayerState *self) {
+void func_8080042C_bskazfly(PlayerState *self)
+{
     f32 sp2C;
     f32 sp28;
 
     baanim_playForDuration_loopSmooth(self, ASSET_AA_ANIM_BZKAZFLY_UNKNOWN, 0.62);
-    func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 3, BA_PHYSICS_3_LOCKED_ROTATION);
+    func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 3,
+                  BA_PHYSICS_3_LOCKED_ROTATION);
     if (baflag_isTrue(self, BA_FLAG_9) != 0) {
         baphysics_set_target_horizontal_velocity(self, 0);
     } else {
@@ -125,8 +133,8 @@ void func_8080042C_bskazfly(PlayerState *self) {
     _bafly_entrypoint_19(self);
 }
 
-
-void func_80800540_bskazfly(PlayerState *self) {
+void func_80800540_bskazfly(PlayerState *self)
+{
     BanjoStateId next_state;
     AnimCtrl *animCtrl;
     f32 sp40;
@@ -183,14 +191,14 @@ void func_80800540_bskazfly(PlayerState *self) {
                 _bafly_entrypoint_20(self);
                 self->unk160.word = 0;
             }
-            break;
     }
     if (anctrl_isAt(animCtrl, 0.1358) != 0) {
         func_8009DFD4(self, 1023, 0.6, 0.7, 10000, 12000);
     }
     _bafly_entrypoint_8(self, 300, 80, 800, -300.0f, -50.0f, -700.0f, -1000.0f);
     self->kazfly->unk0 = func_800F0E00(self->kazfly->unk0 - func_800D8FF8(), 0);
-    if ((self->kazfly->unk0 == 0.0f) && (bakey_pressed(self, BUTTON_B) != 0) && (func_8008D0E0(self) != 0) && (_bafly_entrypoint_12(self) != 0)) {
+    if ((self->kazfly->unk0 == 0.0f) && (bakey_pressed(self, BUTTON_B) != 0) &&
+        (func_8008D0E0(self) != 0) && (_bafly_entrypoint_12(self) != 0)) {
         next_state = BS_STATE_174;
     }
     if (player_inWater(self) != 0) {
@@ -203,13 +211,15 @@ void func_80800540_bskazfly(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void func_808008A8_bskazfly(PlayerState *self) {
+void func_808008A8_bskazfly(PlayerState *self)
+{
     s32 temp_v0;
 
     baflag_clear(self, BA_FLAG_2F);
     baflag_clear(self, BA_FLAG_30);
     temp_v0 = bs_getNextState(self);
-    if (((temp_v0 == 0x173) || (temp_v0 == 0x174) || (temp_v0 == 0x179)) && (_bafpctrl_entrypoint_4(self) == 3)) {
+    if (((temp_v0 == 0x173) || (temp_v0 == 0x174) || (temp_v0 == 0x179)) &&
+        (_bafpctrl_entrypoint_4(self) == 3)) {
         baflag_set(self, 0x2F);
         if (_bafpctrl_entrypoint_5(self) != 0) {
             baflag_set(self, 0x30);
@@ -221,11 +231,13 @@ void func_808008A8_bskazfly(PlayerState *self) {
     func_80800188_bskazfly(self);
 }
 
-s32 bskazfly_entrypoint_1(s32 idx) {
+s32 bskazfly_entrypoint_1(s32 idx)
+{
     return D_80801C48_bskazfly[idx];
 }
 
-void func_80800974_bskazfly(PlayerState *self) {
+void func_80800974_bskazfly(PlayerState *self)
+{
     f32 sp1C[3];
 
     func_8009C128(self, sp1C);
@@ -234,7 +246,8 @@ void func_80800974_bskazfly(PlayerState *self) {
     func_8009DF58(self, 0x40D, 1);
 }
 
-void func_808009C8_bskazfly(PlayerState *self, s32 arg1) {
+void func_808009C8_bskazfly(PlayerState *self, s32 arg1)
+{
     f32 sp3C;
     f32 sp38;
     f32 sp34;
@@ -273,12 +286,12 @@ void func_808009C8_bskazfly(PlayerState *self, s32 arg1) {
             func_8009DF94(self, 0x4437, 1.3, 0x7FFF);
             baflag_set(self, BA_FLAG_1C);
             _batimer_set(self, 1, 0.0001);
-            break;
     }
     self->unk160.word = arg1;
 }
 
-void func_80800BDC_bskazfly(PlayerState *self) {
+void func_80800BDC_bskazfly(PlayerState *self)
+{
     f32 unk0[3];
     f32 unk1[3];
     s32 pad2;
@@ -298,14 +311,15 @@ void func_80800BDC_bskazfly(PlayerState *self) {
     func_8009BA9C(self, unk1);
 }
 
-void func_80800CF4_bskazfly(PlayerState *self) {
+void func_80800CF4_bskazfly(PlayerState *self)
+{
     func_80800128_bskazfly(self);
     self->unk160.word = 0;
     func_808009C8_bskazfly(self, 1);
 }
 
-
-BanjoStateId func_80800D24_bskazfly(PlayerState *self, BanjoStateId nextState) {
+BanjoStateId func_80800D24_bskazfly(PlayerState *self, BanjoStateId nextState)
+{
     f32 sp44;
     f32 sp38[3];
     f32 sp2C[3];
@@ -319,7 +333,7 @@ BanjoStateId func_80800D24_bskazfly(PlayerState *self, BanjoStateId nextState) {
     is_player_stable = player_isStable(self);
     if (func_8009650C(self) == 0 && is_player_stable == 0) {
         return nextState;
-    } 
+    }
 
     if (is_player_stable != 0) {
         func_800963C0(self, sp38);
@@ -354,7 +368,8 @@ BanjoStateId func_80800D24_bskazfly(PlayerState *self, BanjoStateId nextState) {
     return nextState;
 }
 
-void func_80800EB4_bskazfly(PlayerState *self) {
+void func_80800EB4_bskazfly(PlayerState *self)
+{
     BanjoStateId next_state;
     AnimCtrl *animCtrl;
     f32 unk0[3];
@@ -364,63 +379,65 @@ void func_80800EB4_bskazfly(PlayerState *self) {
     animCtrl = baanim_getAnimCtrlPtr(self);
     _bafly_entrypoint_11(self);
     func_8009DDDC(self);
-    switch (self->unk160.word) {                              
-    case 1:
-        if (anctrl_isAt(animCtrl, 0.6905) != 0) {
-            func_808009C8_bskazfly(self, 2);
-        }
-        break;
-    case 2:
-        func_80800BDC_bskazfly(self);
-        if (anctrl_isStopped(animCtrl) != 0) {
-            anctrl_setIndex(animCtrl, ASSET_29E_ANIM_BSKAZFLY_UNKNOWN);
-            anctrl_setDuration(animCtrl, 0.3);
-            anctrl_setPlaybackType(animCtrl, 2);
-            anctrl_start(animCtrl);
-        }
-        func_8009C128(self, unk0);
-        func_800EF3DC(unk0, self->kazfly->unk4);
-        _bafly_entrypoint_6(self, func_800F10B4(func_800EEFD4(unk0), 0, 16000000, 0.2, 0.7f));
-        if (func_800EEFD4(unk0) > 1.6e7f) {
-            if (bakey_held(self, 9) != 0) {
-                func_808009C8_bskazfly(self, 3);
-            } else {
-                next_state = BS_STATE_175;
+    switch (self->unk160.word) {
+        case 1:
+            if (anctrl_isAt(animCtrl, 0.6905) != 0) {
+                func_808009C8_bskazfly(self, 2);
             }
-        }
-        func_80800000_bskazfly(self);
-        next_state = func_80800D24_bskazfly(self, next_state);
-        break;
-    case 3:
-        func_80800BDC_bskazfly(self);
-        if (bakey_released(self, 9) != 0) {
-            next_state = BS_STATE_175;
-        } else if (_batimer_decrement(self, 1) != 0) {
-            if (_bafly_entrypoint_12(self) != 0) {
-                _chusefeather_entrypoint_1(self->unk184, 0);
-                _batimer_set(self, 1, 1);
-            } else {
-                next_state = BS_STATE_175;
+            break;
+        case 2:
+            func_80800BDC_bskazfly(self);
+            if (anctrl_isStopped(animCtrl) != 0) {
+                anctrl_setIndex(animCtrl, ASSET_29E_ANIM_BSKAZFLY_UNKNOWN);
+                anctrl_setDuration(animCtrl, 0.3);
+                anctrl_setPlaybackType(animCtrl, 2);
+                anctrl_start(animCtrl);
             }
-        }
-        func_80800000_bskazfly(self);
-        next_state = func_80800D24_bskazfly(self, next_state);
+            func_8009C128(self, unk0);
+            func_800EF3DC(unk0, self->kazfly->unk4);
+            _bafly_entrypoint_6(self, func_800F10B4(func_800EEFD4(unk0), 0, 16000000, 0.2, 0.7f));
+            if (func_800EEFD4(unk0) > 1.6e7f) {
+                if (bakey_held(self, 9) != 0) {
+                    func_808009C8_bskazfly(self, 3);
+                } else {
+                    next_state = BS_STATE_175;
+                }
+            }
+            func_80800000_bskazfly(self);
+            next_state = func_80800D24_bskazfly(self, next_state);
+            break;
+        case 3:
+            func_80800BDC_bskazfly(self);
+            if (bakey_released(self, 9) != 0) {
+                next_state = BS_STATE_175;
+            } else if (_batimer_decrement(self, 1) != 0) {
+                if (_bafly_entrypoint_12(self) != 0) {
+                    _chusefeather_entrypoint_1(self->unk184, 0);
+                    _batimer_set(self, 1, 1);
+                } else {
+                    next_state = BS_STATE_175;
+                }
+            }
+            func_80800000_bskazfly(self);
+            next_state = func_80800D24_bskazfly(self, next_state);
     }
 
     bs_setState(self, next_state);
 }
 
-void func_808010DC_bskazfly(PlayerState *self) {
+void func_808010DC_bskazfly(PlayerState *self)
+{
     func_808009C8_bskazfly(self, 0);
     func_80800188_bskazfly(self);
 }
 
-
-s32 bskazfly_entrypoint_2(s32 idx) {
+s32 bskazfly_entrypoint_2(s32 idx)
+{
     return D_80801C58_bskazfly[idx];
 }
 
-void func_8080111C_bskazfly(PlayerState *self) {
+void func_8080111C_bskazfly(PlayerState *self)
+{
     AnimCtrl *animCtrl;
 
     animCtrl = baanim_getAnimCtrlPtr(self);
@@ -446,7 +463,8 @@ void func_8080111C_bskazfly(PlayerState *self) {
     self->unk160.word = 0;
 }
 
-void func_80801248_bskazfly(PlayerState *self) {
+void func_80801248_bskazfly(PlayerState *self)
+{
     BanjoStateId next_state;
     f32 sp28[3];
 
@@ -477,7 +495,8 @@ void func_80801248_bskazfly(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void func_80801320_bskazfly(PlayerState *self) {
+void func_80801320_bskazfly(PlayerState *self)
+{
     s32 temp_v0;
 
     func_8009E0DC(self);
@@ -495,23 +514,24 @@ void func_80801320_bskazfly(PlayerState *self) {
     func_800A0CF4(self, 0);
 }
 
-
-s32 bskazfly_entrypoint_3(s32 idx) {
+s32 bskazfly_entrypoint_3(s32 idx)
+{
     return D_80801C68_bskazfly[idx];
 }
 
-
-void func_808013BC_bskazfly(PlayerState *self) {
+void func_808013BC_bskazfly(PlayerState *self)
+{
     f32 var_f20;
 
     var_f20 = 0.0f;
     while (var_f20 < 360.0f) {
         _badust_entrypoint_5(self, var_f20, 230);
         var_f20 += 45.0f;
-    } 
+    }
 }
 
-void func_80801448_bskazfly(PlayerState *self) {
+void func_80801448_bskazfly(PlayerState *self)
+{
     s32 sp2C;
 
     sp2C = bs_getPreviousState(self);
@@ -534,7 +554,8 @@ void func_80801448_bskazfly(PlayerState *self) {
     self->unk160.word = 0;
 }
 
-void func_80801550_bskazfly(PlayerState *self) {
+void func_80801550_bskazfly(PlayerState *self)
+{
     AnimCtrl *animCtrl;
     AnimCtrl *animCtrl2;
 
@@ -556,7 +577,8 @@ void func_80801550_bskazfly(PlayerState *self) {
     }
 }
 
-void func_80801640_bskazfly(PlayerState *self) {
+void func_80801640_bskazfly(PlayerState *self)
+{
     BanjoStateId next_state;
     AnimCtrl *anim_ctrl;
 
@@ -595,80 +617,92 @@ void func_80801640_bskazfly(PlayerState *self) {
             if (_batimer_decrement(self, 0) != 0) {
                 _basudie_entrypoint_0(self);
             }
-            break;
     }
 
     bs_setState(self, next_state);
 }
 
-void func_808017B0_bskazfly(PlayerState *self) {
+void func_808017B0_bskazfly(PlayerState *self)
+{
     func_800A4E30(self);
     func_800A042C(self);
     func_800A0CF4(self, 0);
     func_8008E95C(self);
 }
 
-s32 bskazfly_entrypoint_4(s32 idx) {
+s32 bskazfly_entrypoint_4(s32 idx)
+{
     return D_80801C78_bskazfly[idx];
 }
 
-void func_80801800_bskazfly(PlayerState *self) {
+void func_80801800_bskazfly(PlayerState *self)
+{
     func_80800128_bskazfly(self);
     _bafly_entrypoint_13(self, 0, 0x11C, 0.9);
 }
 
-void func_80801838_bskazfly(PlayerState *self) {
+void func_80801838_bskazfly(PlayerState *self)
+{
     _bafly_entrypoint_14(self, 0x162, 0xBB);
 }
 
-void func_8080185C_bskazfly(PlayerState *self) {
+void func_8080185C_bskazfly(PlayerState *self)
+{
     _bafly_entrypoint_15();
     func_80800188_bskazfly(self);
 }
 
-s32 bskazfly_entrypoint_5(s32 idx) {
+s32 bskazfly_entrypoint_5(s32 idx)
+{
     return D_80801C88_bskazfly[idx];
 }
 
-
-void func_80801898_bskazfly(PlayerState *self) {
+void func_80801898_bskazfly(PlayerState *self)
+{
     func_80800128_bskazfly(self);
     _bafly_entrypoint_13(self, 1, 0x11C, 0.9);
 }
 
-void func_808018D0_bskazfly(PlayerState *self) {
+void func_808018D0_bskazfly(PlayerState *self)
+{
     _bafly_entrypoint_14(self, 0x162, 0xBB);
 }
 
-void func_808018F4_bskazfly(PlayerState *self) {
+void func_808018F4_bskazfly(PlayerState *self)
+{
     _bafly_entrypoint_15();
     func_80800188_bskazfly(self);
 }
 
-
-s32 bskazfly_entrypoint_6(s32 idx) {
+s32 bskazfly_entrypoint_6(s32 idx)
+{
     return D_80801C98_bskazfly[idx];
 }
 
-void func_80801930_bskazfly(PlayerState *self) {
+void func_80801930_bskazfly(PlayerState *self)
+{
     func_80800128_bskazfly(self);
     _bafly_entrypoint_16(self, 0x120, 0.9);
 }
 
-void func_80801964_bskazfly(PlayerState *self) {
-    _bafly_entrypoint_17(self, 0x162,  0xBB, self->unk15C.bytes);
+void func_80801964_bskazfly(PlayerState *self)
+{
+    _bafly_entrypoint_17(self, 0x162, 0xBB, self->unk15C.bytes);
 }
 
-void func_8080198C_bskazfly(PlayerState *self) {
+void func_8080198C_bskazfly(PlayerState *self)
+{
     _bafly_entrypoint_18();
     func_80800188_bskazfly(self);
 }
 
-s32 bskazfly_entrypoint_7(s32 idx) {
+s32 bskazfly_entrypoint_7(s32 idx)
+{
     return D_80801CA8_bskazfly[idx];
 }
 
-void func_808019C8_bskazfly(PlayerState *self) {
+void func_808019C8_bskazfly(PlayerState *self)
+{
     baanim_playForDuration_loopSmooth(self, ASSET_AA_ANIM_BZKAZFLY_UNKNOWN, 0.62);
     func_8009FFD8(self, 1, 1, 3, 7);
     func_800A0CF4(self, 1);
@@ -676,7 +710,8 @@ void func_808019C8_bskazfly(PlayerState *self) {
     func_80800128_bskazfly(self);
 }
 
-void func_80801A38_bskazfly(PlayerState *self) {
+void func_80801A38_bskazfly(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -691,15 +726,18 @@ void func_80801A38_bskazfly(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void func_80801ABC_bskazfly(PlayerState *self) {
+void func_80801ABC_bskazfly(PlayerState *self)
+{
     func_80800188_bskazfly(self);
 }
 
-s32 bskazfly_entrypoint_8(s32 idx) {
+s32 bskazfly_entrypoint_8(s32 idx)
+{
     return D_80801CB8_bskazfly[idx];
 }
 
-void func_80801AF0_bskazfly(PlayerState *self) {
+void func_80801AF0_bskazfly(PlayerState *self)
+{
     if (func_8009E6EC(self) == 9) {
         func_8009E830(self, 2);
         baflag_set(self, 7);
@@ -709,7 +747,8 @@ void func_80801AF0_bskazfly(PlayerState *self) {
     func_80099B94(self);
 }
 
-void func_80801B50_bskazfly(PlayerState *self) {
+void func_80801B50_bskazfly(PlayerState *self)
+{
     func_80800128_bskazfly(self);
     _bsdrone_entrypoint_0(self);
     if (_badrone_entrypoint_3(self) == 0xE) {
@@ -717,30 +756,46 @@ void func_80801B50_bskazfly(PlayerState *self) {
     }
 }
 
-void func_80801B94_bskazfly(PlayerState *self) {
+void func_80801B94_bskazfly(PlayerState *self)
+{
     _bsdrone_entrypoint_1(self);
 }
 
-void func_80801BB4_bskazfly(PlayerState *self) {
+void func_80801BB4_bskazfly(PlayerState *self)
+{
     _bsdrone_entrypoint_2(self);
     func_80800188_bskazfly(self);
 }
 
-s32 bskazfly_entrypoint_9(s32 idx) {
+s32 bskazfly_entrypoint_9(s32 idx)
+{
     return D_80801CC8_bskazfly[idx];
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/fly.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+
 extern void func_80099AA8();
-s32 D_80801C10_bskazfly[10] = { 0x1D09E4, 0x150019, 0x990022, 0x660059, 0x190019, 0x270190, 0x1900320, 0x320002B, 0x800080, 0x0 };
-s32 D_80801C38_bskazfly[4] = { (u32)func_808003E0_bskazfly, (u32)func_80800248_bskazfly, (u32)func_80800320_bskazfly, (u32)func_80801AF0_bskazfly };
-s32 D_80801C48_bskazfly[4] = { (u32)func_808008A8_bskazfly, (u32)func_8080042C_bskazfly, (u32)func_80800540_bskazfly, (u32)func_80801AF0_bskazfly };
-s32 D_80801C58_bskazfly[4] = { (u32)func_808010DC_bskazfly, (u32)func_80800CF4_bskazfly, (u32)func_80800EB4_bskazfly, (u32)func_80801AF0_bskazfly };
-s32 D_80801C68_bskazfly[4] = { (u32)func_80801320_bskazfly, (u32)func_8080111C_bskazfly, (u32)func_80801248_bskazfly, (u32)func_80801AF0_bskazfly };
-s32 D_80801C78_bskazfly[4] = { (u32)func_808017B0_bskazfly, (u32)func_80801448_bskazfly, (u32)func_80801640_bskazfly, (u32)func_80099AA8 };
-s32 D_80801C88_bskazfly[4] = { (u32)func_8080185C_bskazfly, (u32)func_80801800_bskazfly, (u32)func_80801838_bskazfly, (u32)func_80801AF0_bskazfly };
-s32 D_80801C98_bskazfly[4] = { (u32)func_808018F4_bskazfly, (u32)func_80801898_bskazfly, (u32)func_808018D0_bskazfly, (u32)func_80801AF0_bskazfly };
-s32 D_80801CA8_bskazfly[4] = { (u32)func_8080198C_bskazfly, (u32)func_80801930_bskazfly, (u32)func_80801964_bskazfly, (u32)func_80099B94 };
-s32 D_80801CB8_bskazfly[4] = { (u32)func_80801ABC_bskazfly, (u32)func_808019C8_bskazfly, (u32)func_80801A38_bskazfly, (u32)func_80099B94 };
-s32 D_80801CC8_bskazfly[6] = { (u32)func_80801BB4_bskazfly, (u32)func_80801B50_bskazfly, (u32)func_80801B94_bskazfly, (u32)_bsdrone_entrypoint_3, 0x0, 0x0 };
+s32 D_80801C10_bskazfly[10] = {0x1D09E4, 0x150019,  0x990022,  0x660059, 0x190019,
+                               0x270190, 0x1900320, 0x320002B, 0x800080, 0x0};
+s32 D_80801C38_bskazfly[4] = {(u32) func_808003E0_bskazfly, (u32) func_80800248_bskazfly,
+                              (u32) func_80800320_bskazfly, (u32) func_80801AF0_bskazfly};
+s32 D_80801C48_bskazfly[4] = {(u32) func_808008A8_bskazfly, (u32) func_8080042C_bskazfly,
+                              (u32) func_80800540_bskazfly, (u32) func_80801AF0_bskazfly};
+s32 D_80801C58_bskazfly[4] = {(u32) func_808010DC_bskazfly, (u32) func_80800CF4_bskazfly,
+                              (u32) func_80800EB4_bskazfly, (u32) func_80801AF0_bskazfly};
+s32 D_80801C68_bskazfly[4] = {(u32) func_80801320_bskazfly, (u32) func_8080111C_bskazfly,
+                              (u32) func_80801248_bskazfly, (u32) func_80801AF0_bskazfly};
+s32 D_80801C78_bskazfly[4] = {(u32) func_808017B0_bskazfly, (u32) func_80801448_bskazfly,
+                              (u32) func_80801640_bskazfly, (u32) func_80099AA8};
+s32 D_80801C88_bskazfly[4] = {(u32) func_8080185C_bskazfly, (u32) func_80801800_bskazfly,
+                              (u32) func_80801838_bskazfly, (u32) func_80801AF0_bskazfly};
+s32 D_80801C98_bskazfly[4] = {(u32) func_808018F4_bskazfly, (u32) func_80801898_bskazfly,
+                              (u32) func_808018D0_bskazfly, (u32) func_80801AF0_bskazfly};
+s32 D_80801CA8_bskazfly[4] = {(u32) func_8080198C_bskazfly, (u32) func_80801930_bskazfly,
+                              (u32) func_80801964_bskazfly, (u32) func_80099B94};
+s32 D_80801CB8_bskazfly[4] = {(u32) func_80801ABC_bskazfly, (u32) func_808019C8_bskazfly,
+                              (u32) func_80801A38_bskazfly, (u32) func_80099B94};
+s32 D_80801CC8_bskazfly[6] = {(u32) func_80801BB4_bskazfly,
+                              (u32) func_80801B50_bskazfly,
+                              (u32) func_80801B94_bskazfly,
+                              (u32) _bsdrone_entrypoint_3,
+                              0x0,
+                              0x0};

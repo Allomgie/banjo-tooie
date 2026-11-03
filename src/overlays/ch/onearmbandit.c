@@ -3,11 +3,29 @@ extern s32 func_800DC298(f32);
 
 extern int D_808012BC_chonearmbandit[];
 extern int D_80801304_chonearmbandit[];
-typedef union { s32 word; Actor **actors; } BanditMessage30;
+typedef union {
+    s32 word;
+    Actor **actors;
+} BanditMessage30;
 extern u8 D_80801280_chonearmbandit[];
-typedef struct { s16 a, b; } S16Pair;
-typedef struct { u8 pad[0x72]; u16 f72:6; u16 rest72:10; u8 pad74[4]; u32 pad78:29; u32 flag:1; u32 rest78:2; } BanditState;
-typedef struct { u8 pad0[0x64]; u32 pad64 : 2; u32 unk64_29 : 1; u32 pad64_0 : 29; } BanditActor;
+typedef struct {
+    s16 a, b;
+} S16Pair;
+typedef struct {
+    u8 pad[0x72];
+    u16 f72 : 6;
+    u16 rest72 : 10;
+    u8 pad74[4];
+    u32 pad78 : 29;
+    u32 flag : 1;
+    u32 rest78 : 2;
+} BanditState;
+typedef struct {
+    u8 pad0[0x64];
+    u32 pad64 : 2;
+    u32 unk64_29 : 1;
+    u32 pad64_0 : 29;
+} BanditActor;
 extern f32 _subaddiejoy_entrypoint_9(Actor *, f32 *, s32);
 extern void func_80102BF8(Actor *, f32, f32, f32);
 extern f32 func_800D8FF8(void);
@@ -26,7 +44,12 @@ extern f32 D_808011FC_chonearmbandit[];
 extern s32 _subaddieaudioquick_entrypoint_3(Actor *, f32 *, void *, f32);
 extern void _subaddiejoy_entrypoint_10(Actor *, f32, f32);
 extern s32 D_80801364_chonearmbandit[];
-typedef struct { u8 local_0[0x64]; u32 local_1:2; u32 local_2:1; u32 local_3:29; } BanditFlags49;
+typedef struct {
+    u8 local_0[0x64];
+    u32 local_1 : 2;
+    u32 local_2 : 1;
+    u32 local_3 : 29;
+} BanditFlags49;
 extern void func_800EE7F8(f32 *, f32 *);
 extern Actor *func_80108528(s32, f32 *, s32, Actor **);
 extern void func_80102FDC(Actor *, f32);
@@ -43,7 +66,16 @@ extern void func_8010A570(void *);
 extern void *D_808013A4_chonearmbandit;
 extern void *D_808013DC_chonearmbandit;
 extern int D_808013E8_chonearmbandit[];
-typedef struct { u8 pad0[0x64]; u32 pad64_30:2; u32 unk64_29:1; u32 pad64_0:29; u8 pad68[0x10]; u32 pad78_3:29; u32 unk78_2:1; u32 pad78_0:2; } BanditBits;
+typedef struct {
+    u8 pad0[0x64];
+    u32 pad64_30 : 2;
+    u32 unk64_29 : 1;
+    u32 pad64_0 : 29;
+    u8 pad68[0x10];
+    u32 pad78_3 : 29;
+    u32 unk78_2 : 1;
+    u32 pad78_0 : 2;
+} BanditBits;
 extern f32 D_808011F0_chonearmbandit[];
 extern f32 D_8080134C_chonearmbandit[];
 extern s32 func_8010C9B0(f32 *, s32);
@@ -53,10 +85,21 @@ extern s32 func_8010D278(void);
 extern s32 func_80102CF4(Actor *, f32);
 extern void func_80108B04(Actor *, s32);
 extern s32 func_80101DDC(Actor *);
-typedef struct { u8 pad_0[0x64]; u32 pad_1 : 2; u32 local_0 : 1; u32 pad_2 : 29; } OneArmBanditFlags;
+typedef struct {
+    u8 pad_0[0x64];
+    u32 pad_1 : 2;
+    u32 local_0 : 1;
+    u32 pad_2 : 29;
+} OneArmBanditFlags;
 extern u8 D_80801354_chonearmbandit[];
-typedef union { f32 local_0[3]; s32 local_1[3]; } DeferredPosition1864;
-typedef union { f32 local_0; s32 local_1; } DeferredAngle1864;
+typedef union {
+    f32 local_0[3];
+    s32 local_1[3];
+} DeferredPosition1864;
+typedef union {
+    f32 local_0;
+    s32 local_1;
+} DeferredAngle1864;
 extern s32 D_8080139C_chonearmbandit[];
 extern Actor *func_80106790(Unk80132ED0 *);
 extern void _chexploder_entrypoint_6(Actor *, f32, f32);
@@ -73,62 +116,28 @@ int func_80800D00_chonearmbandit();
 
 int chonearmbandit_entrypoint_0()
 {
-    return (int)&D_808012BC_chonearmbandit;
+    return (int) &D_808012BC_chonearmbandit;
 }
 
 int chonearmbandit_entrypoint_1()
 {
-    return (int)&D_80801304_chonearmbandit;
+    return (int) &D_80801304_chonearmbandit;
 }
 
-void func_80800018_chonearmbandit(u8 *param_0) {
-    *(f32 *)(param_0 + 0x24) = 400.0f;
+void func_80800018_chonearmbandit(u8 *param_0)
+{
+    *(f32 *) (param_0 + 0x24) = 400.0f;
     func_80800040_chonearmbandit();
 }
 
-int func_80800040_chonearmbandit(param_0) s32 param_0;
+int func_80800040_chonearmbandit(param_0)
+s32 param_0;
 {
-  s32 local_0;
-  local_0 = func_80100094(param_0, 1);
-  _subaddierouteDll_entrypoint_3(param_0, local_0 | 0, param_0 + 4);
-  _subaddierouteDll_entrypoint_1(param_0);
+    s32 local_0;
+    local_0 = func_80100094(param_0, 1);
+    _subaddierouteDll_entrypoint_3(param_0, local_0 | 0, param_0 + 4);
+    _subaddierouteDll_entrypoint_1(param_0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void func_80800A14_chonearmbandit(Actor *param_0, f32 param_1);
 
@@ -140,155 +149,162 @@ void func_8080007C_chonearmbandit(Actor *param_0)
 {
     f32 *local_0;
 
-    if (((BanditBits *)param_0)->unk78_2) {
+    if (((BanditBits *) param_0)->unk78_2) {
         return;
     }
     switch (param_0->unk70_10) {
-    case 1:
-        if (((BanditBits *)param_0)->unk64_29) {
-            func_80800680_chonearmbandit(param_0, 2);
-            return;
-        }
-        if (func_8010C9B0(param_0->position, 1500)) {
-            func_80800680_chonearmbandit(param_0, 4);
-        }
-        break;
-    case 2:
-        if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_808011F0_chonearmbandit, 0.75f)) {
-            _subaddiejoy_entrypoint_10(param_0, 0.8f, 0.2f);
-        }
-        func_808008E0_chonearmbandit(param_0, 0.0f);
-        if (_subaddiejoy_entrypoint_6(param_0, 1)) {
-            func_80800680_chonearmbandit(param_0, 3);
-        } else if (_subaddiejoy_entrypoint_6(param_0, 0)) {
-            func_80800680_chonearmbandit(param_0, 5);
-        }
-        if (!((BanditBits *)param_0)->unk64_29) {
-            func_80800680_chonearmbandit(param_0, 3);
-        }
-        break;
-    case 3:
-        local_0 = param_0->position;
-        if (_subaddieaudioquick_entrypoint_3(param_0, local_0, D_808011F0_chonearmbandit, 0.75f)) {
-            _subaddiejoy_entrypoint_10(param_0, 0.8f, 0.2f);
-        }
-        func_80800A14_chonearmbandit(param_0, 0.7f);
-        func_808008E0_chonearmbandit(param_0, 0.0f);
-        if (func_80101E14(param_0, 0.999f)) {
-            if (((BanditBits *)param_0)->unk64_29) {
-                if (!_subaddiejoy_entrypoint_6(param_0, 1)) {
-                    func_80800680_chonearmbandit(param_0, 2);
-                }
-            } else if (!func_8010C9B0(local_0, 800)) {
-                func_80800680_chonearmbandit(param_0, 4);
-            }
-        }
-        break;
-    case 4:
-        local_0 = param_0->position;
-        _subaddieaudioquick_entrypoint_3(param_0, local_0, D_808011F0_chonearmbandit, 0.75f);
-        if (func_80101E14(param_0, 0.999f)) {
-            if (((BanditBits *)param_0)->unk64_29) {
+        case 1:
+            if (((BanditBits *) param_0)->unk64_29) {
                 func_80800680_chonearmbandit(param_0, 2);
                 return;
             }
-            if (!func_8010C9B0(local_0, 1500)) {
-                func_80800680_chonearmbandit(param_0, 1);
-                return;
+            if (func_8010C9B0(param_0->position, 1500)) {
+                func_80800680_chonearmbandit(param_0, 4);
             }
-            if (func_8010C9B0(local_0, 800)) {
-                func_80800680_chonearmbandit(param_0, (func_8010D278() == 0x10) ? 6 : 2);
+            break;
+        case 2:
+            if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position,
+                                                 D_808011F0_chonearmbandit, 0.75f)) {
+                _subaddiejoy_entrypoint_10(param_0, 0.8f, 0.2f);
             }
-            return;
-        }
-        func_80800740_chonearmbandit(param_0, 0.0f);
-        if (func_8010C9B0(local_0, 1500)) {
-            if (func_80102CF4(param_0, 8.0f)) {
+            func_808008E0_chonearmbandit(param_0, 0.0f);
+            if (_subaddiejoy_entrypoint_6(param_0, 1)) {
+                func_80800680_chonearmbandit(param_0, 3);
+            } else if (_subaddiejoy_entrypoint_6(param_0, 0)) {
                 func_80800680_chonearmbandit(param_0, 5);
             }
-        } else {
-            func_80800680_chonearmbandit(param_0, 1);
-        }
-        break;
-    case 5:
-        local_0 = param_0->position;
-        _subaddieaudioquick_entrypoint_3(param_0, local_0, D_8080134C_chonearmbandit, 0.1f);
-        if (func_80101E14(param_0, 0.25f)) {
-            func_80108B04(param_0, 0);
-        }
-        if (func_80101DDC(param_0)) {
-            param_0->unk58 -= func_800D8FF8();
-            if (param_0->unk58 < 0.0f) {
-                if (((BanditBits *)param_0)->unk64_29) {
+            if (!((BanditBits *) param_0)->unk64_29) {
+                func_80800680_chonearmbandit(param_0, 3);
+            }
+            break;
+        case 3:
+            local_0 = param_0->position;
+            if (_subaddieaudioquick_entrypoint_3(param_0, local_0, D_808011F0_chonearmbandit,
+                                                 0.75f)) {
+                _subaddiejoy_entrypoint_10(param_0, 0.8f, 0.2f);
+            }
+            func_80800A14_chonearmbandit(param_0, 0.7f);
+            func_808008E0_chonearmbandit(param_0, 0.0f);
+            if (func_80101E14(param_0, 0.999f)) {
+                if (((BanditBits *) param_0)->unk64_29) {
+                    if (!_subaddiejoy_entrypoint_6(param_0, 1)) {
+                        func_80800680_chonearmbandit(param_0, 2);
+                    }
+                } else if (!func_8010C9B0(local_0, 800)) {
+                    func_80800680_chonearmbandit(param_0, 4);
+                }
+            }
+            break;
+        case 4:
+            local_0 = param_0->position;
+            _subaddieaudioquick_entrypoint_3(param_0, local_0, D_808011F0_chonearmbandit, 0.75f);
+            if (func_80101E14(param_0, 0.999f)) {
+                if (((BanditBits *) param_0)->unk64_29) {
                     func_80800680_chonearmbandit(param_0, 2);
                     return;
                 }
-                func_80800680_chonearmbandit(param_0, func_8010C9B0(local_0, 800) ? ((func_8010D278() == 0x10) ? 6 : 2) : 4);
+                if (!func_8010C9B0(local_0, 1500)) {
+                    func_80800680_chonearmbandit(param_0, 1);
+                    return;
+                }
+                if (func_8010C9B0(local_0, 800)) {
+                    func_80800680_chonearmbandit(param_0, (func_8010D278() == 0x10) ? 6 : 2);
+                }
+                return;
             }
-        }
-        break;
-    case 7:
-        if (func_80101DDC(param_0)) {
-            func_80800680_chonearmbandit(param_0, 1);
-        }
-        break;
-    case 6:
-        local_0 = param_0->position;
-        _subaddieaudioquick_entrypoint_3(param_0, local_0, D_808011F0_chonearmbandit, 0.75f);
-        if (func_80101E14(param_0, 0.999f)) {
-            if (((BanditBits *)param_0)->unk64_29) {
-                func_80800680_chonearmbandit(param_0, 2);
-            } else if (!func_8010C9B0(local_0, 800)) {
-                func_80800680_chonearmbandit(param_0, 4);
+            func_80800740_chonearmbandit(param_0, 0.0f);
+            if (func_8010C9B0(local_0, 1500)) {
+                if (func_80102CF4(param_0, 8.0f)) {
+                    func_80800680_chonearmbandit(param_0, 5);
+                }
+            } else {
+                func_80800680_chonearmbandit(param_0, 1);
             }
-        }
-        func_808008E0_chonearmbandit(param_0, 180.0f);
-        break;
+            break;
+        case 5:
+            local_0 = param_0->position;
+            _subaddieaudioquick_entrypoint_3(param_0, local_0, D_8080134C_chonearmbandit, 0.1f);
+            if (func_80101E14(param_0, 0.25f)) {
+                func_80108B04(param_0, 0);
+            }
+            if (func_80101DDC(param_0)) {
+                param_0->unk58 -= func_800D8FF8();
+                if (param_0->unk58 < 0.0f) {
+                    if (((BanditBits *) param_0)->unk64_29) {
+                        func_80800680_chonearmbandit(param_0, 2);
+                        return;
+                    }
+                    func_80800680_chonearmbandit(param_0, func_8010C9B0(local_0, 800)
+                                                              ? ((func_8010D278() == 0x10) ? 6 : 2)
+                                                              : 4);
+                }
+            }
+            break;
+        case 7:
+            if (func_80101DDC(param_0)) {
+                func_80800680_chonearmbandit(param_0, 1);
+            }
+            break;
+        case 6:
+            local_0 = param_0->position;
+            _subaddieaudioquick_entrypoint_3(param_0, local_0, D_808011F0_chonearmbandit, 0.75f);
+            if (func_80101E14(param_0, 0.999f)) {
+                if (((BanditBits *) param_0)->unk64_29) {
+                    func_80800680_chonearmbandit(param_0, 2);
+                } else if (!func_8010C9B0(local_0, 800)) {
+                    func_80800680_chonearmbandit(param_0, 4);
+                }
+            }
+            func_808008E0_chonearmbandit(param_0, 180.0f);
     }
 }
 
 s32 func_80800520_chonearmbandit(Actor *param_0, s32 param_1, BanditMessage30 param_2)
 {
     switch (param_1) {
-    case 0x3F:
-        func_808006F8_chonearmbandit(param_0, param_2.word);
-        break;
-    case 0x40:
-        _chexploder_entrypoint_4(param_0, (*param_2.actors)->position, 4);
-        break;
-    case 0x3D:
-        if (!func_801072A8(param_0)) func_80800AB8_chonearmbandit(param_0);
-        break;
-    case 0x90:
-        func_80800D00_chonearmbandit(param_0);
-        break;
-    case 2:
-        if ((s32)param_0->unk70_10 > 0 && !_subaddieDll_entrypoint_3(param_0)) func_80107070(param_0, 1);
-        break;
-    case 0x95:
-        _subaddierouteDll_entrypoint_1(param_0);
-        break;
-    case 0x38:
-        func_80101074(D_80801280_chonearmbandit);
-        return 5;
-    default:
-        return 0;
+        case 0x3F:
+            func_808006F8_chonearmbandit(param_0, param_2.word);
+            break;
+        case 0x40:
+            _chexploder_entrypoint_4(param_0, (*param_2.actors)->position, 4);
+            break;
+        case 0x3D:
+            if (!func_801072A8(param_0))
+                func_80800AB8_chonearmbandit(param_0);
+            break;
+        case 0x90:
+            func_80800D00_chonearmbandit(param_0);
+            break;
+        case 2:
+            if ((s32) param_0->unk70_10 > 0 && !_subaddieDll_entrypoint_3(param_0))
+                func_80107070(param_0, 1);
+            break;
+        case 0x95:
+            _subaddierouteDll_entrypoint_1(param_0);
+            break;
+        case 0x38:
+            func_80101074(D_80801280_chonearmbandit);
+            return 5;
+        default:
+            return 0;
     }
     return 1;
 }
 
-s32 func_8080063C_chonearmbandit(s32 param_0, s32 param_1) {
+s32 func_8080063C_chonearmbandit(s32 param_0, s32 param_1)
+{
     func_800DF744(3, 1);
     func_800DF744(4, 0);
     func_80101870(param_0, param_1);
 }
 
-void func_80800680_chonearmbandit(param_0, param_1) Actor *param_0; s32 param_1;
+void func_80800680_chonearmbandit(param_0, param_1) Actor *param_0;
+s32 param_1;
 {
     func_80102424(param_0, param_1);
     if (param_1 == 5) {
         _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80801354_chonearmbandit);
-        if (((OneArmBanditFlags *)param_0)->local_0) {
+        if (((OneArmBanditFlags *) param_0)->local_0) {
             param_0->unk58 = 0.36f;
         } else {
             param_0->unk58 = 1.2f;
@@ -296,7 +312,8 @@ void func_80800680_chonearmbandit(param_0, param_1) Actor *param_0; s32 param_1;
     }
 }
 
-void func_808006F8_chonearmbandit(BanditState *param_0, S16Pair param_1) {
+void func_808006F8_chonearmbandit(BanditState *param_0, S16Pair param_1)
+{
     if (!param_0->flag && param_0->f72 != 7) {
         func_80800680_chonearmbandit(param_0, 7);
     }
@@ -309,7 +326,7 @@ void func_80800740_chonearmbandit(Actor *param_0, f32 param_1)
     f32 local_1;
     f32 local_2;
 
-    if (((BanditActor *)param_0)->unk64_29) {
+    if (((BanditActor *) param_0)->unk64_29) {
         _subaddiejoy_entrypoint_9(param_0, &param_0->unk54, 3);
         func_80102BF8(param_0, 0.2f, 6.0f, 220.0f);
         return;
@@ -317,20 +334,23 @@ void func_80800740_chonearmbandit(Actor *param_0, f32 param_1)
     local_2 = func_800D8FF8();
     func_8010D09C(func_800F54E4(), local_0, 0.8f);
     switch (param_0->unk70_10) {
-    case 2:
-    case 3:
-    case 6:
-        if (_subaddierouteDll_entrypoint_4(param_0)) {
+        case 2:
+        case 3:
+        case 6:
+            if (_subaddierouteDll_entrypoint_4(param_0)) {
+                param_0->unk54 = func_800136E4(func_80102D78(param_0, local_0) + param_1);
+                _subaddierouteDll_entrypoint_7(param_0, func_80100094(param_0, 1),
+                                               param_0->rotation[1], param_0->unk54, 200.0f,
+                                               0x4000);
+            }
+            break;
+        default:
             param_0->unk54 = func_800136E4(func_80102D78(param_0, local_0) + param_1);
-            _subaddierouteDll_entrypoint_7(param_0, func_80100094(param_0, 1), param_0->rotation[1], param_0->unk54, 200.0f, 0x4000);
-        }
-        break;
-    default:
-        param_0->unk54 = func_800136E4(func_80102D78(param_0, local_0) + param_1);
-        break;
     }
-    local_1 = func_800F1DCC(func_800F1FF0(param_0->rotation[1], param_0->unk54, 0.15f, local_2 * 4.0f, local_2 * 120.0f), param_0->rotation[1]);
-    local_1 *= func_800F3780(func_80101F24(param_0), ((u8 *) D_808011FC_chonearmbandit), 3);
+    local_1 = func_800F1DCC(func_800F1FF0(param_0->rotation[1], param_0->unk54, 0.15f,
+                                          local_2 * 4.0f, local_2 * 120.0f),
+                            param_0->rotation[1]);
+    local_1 *= func_800F3780(func_80101F24(param_0), (u8 *) D_808011FC_chonearmbandit, 3);
     param_0->rotation[1] = func_800136E4(param_0->rotation[1] + local_1);
 }
 
@@ -341,102 +361,86 @@ s32 func_808008E0_chonearmbandit(Actor *param_0, f32 param_1)
     f32 local_1;
     s32 local_2;
 
-    local_0 = *(f32 *)&param_0->actorData[3];
-    if (((OneArmBanditFlags *)param_0)->local_0) {
+    local_0 = *(f32 *) &param_0->actorData[3];
+    if (((OneArmBanditFlags *) param_0)->local_0) {
         local_1 = _subaddiejoy_entrypoint_9(param_0, 0, 0);
         local_3 = func_80101F24(param_0);
-        *(f32 *)&param_0->actorData[3] = func_800F3780(local_3, D_808011FC_chonearmbandit, 3) *
-            (param_0->scale * (local_1 * 400.0f));
+        *(f32 *) &param_0->actorData[3] = func_800F3780(local_3, D_808011FC_chonearmbandit, 3) *
+                                          (param_0->scale * (local_1 * 400.0f));
     } else {
         local_3 = func_80101F24(param_0);
-        *(f32 *)&param_0->actorData[3] = func_800F3780(local_3, D_808011FC_chonearmbandit, 3) *
-            (param_0->scale * 400.0f);
+        *(f32 *) &param_0->actorData[3] =
+            func_800F3780(local_3, D_808011FC_chonearmbandit, 3) * (param_0->scale * 400.0f);
     }
     func_80800740_chonearmbandit(param_0, param_1);
-    if (((OneArmBanditFlags *)param_0)->local_0) {
+    if (((OneArmBanditFlags *) param_0)->local_0) {
         func_8010B990(param_0, 0x205025);
     } else {
         func_8010B990(param_0, 0x5425);
     }
     local_2 = 0;
-    if (*(f32 *)&param_0->actorData[3] > 0.0f) {
+    if (*(f32 *) &param_0->actorData[3] > 0.0f) {
         local_2 = 1;
     }
-    *(f32 *)&param_0->actorData[3] = local_0;
+    *(f32 *) &param_0->actorData[3] = local_0;
     return local_2;
 }
 
 void func_80800A14_chonearmbandit(Actor *param_0, f32 param_1)
 {
     f32 local_0[3];
-    if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position, ((u8 *) D_808011F0_chonearmbandit), param_1)) {
+    if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position,
+                                         (u8 *) D_808011F0_chonearmbandit, param_1)) {
         if (_subaddieskeleton_entrypoint_2(param_0->unk0, 5, local_0)) {
-            if (param_0->position[1] < local_0[1]) local_0[1] = param_0->position[1];
+            if (param_0->position[1] < local_0[1])
+                local_0[1] = param_0->position[1];
             func_800BBCB8(local_0, local_0, 0x3F333333, 6, D_80801364_chonearmbandit);
         }
         _subaddiejoy_entrypoint_10(param_0, 1.4f, 0.3f);
     }
 }
 
-int func_80800AB8_chonearmbandit(param_0) Actor *param_0;
+int func_80800AB8_chonearmbandit(param_0)
+Actor *param_0;
 {
-  f32 local_1[3];
-  f32 local_0[3];
-  Actor *local_2;
-  f32 local_3;
-  if (!_subaddieskeleton_entrypoint_2(param_0->unk0, 4, local_0))
-  {
-    func_800EE7F8(local_0, param_0->position);
-    if (local_0)
-    {
+    f32 local_1[3];
+    f32 local_0[3];
+    Actor *local_2;
+    f32 local_3;
+    if (!_subaddieskeleton_entrypoint_2(param_0->unk0, 4, local_0)) {
+        func_800EE7F8(local_0, param_0->position);
+        local_0[1] += param_0->scale * 60.0f;
     }
-    local_0[1] += param_0->scale * 60.0f;
-  }
-  local_2 = func_80108528(0x35B, local_0, (s32) param_0->rotation[1], &param_0);
-  func_80102FDC(local_2, param_0->scale);
-  func_8010D09C(func_800F54E4(), local_1, 0.8f);
-  local_1[1] += 60.0f;
-  if (((BanditFlags49 *) param_0)->local_2)
-  {
-    local_3 = func_800136E4(func_800F1DF4(local_2->position, local_1));
-    if (func_800F20BC(local_3, param_0->rotation[1], 8.0f))
-    {
-      local_2->rotation[1] = local_3;
+    local_2 = func_80108528(0x35B, local_0, (s32) param_0->rotation[1], &param_0);
+    func_80102FDC(local_2, param_0->scale);
+    func_8010D09C(func_800F54E4(), local_1, 0.8f);
+    local_1[1] += 60.0f;
+    if (((BanditFlags49 *) param_0)->local_2) {
+        local_3 = func_800136E4(func_800F1DF4(local_2->position, local_1));
+        if (func_800F20BC(local_3, param_0->rotation[1], 8.0f)) {
+            local_2->rotation[1] = local_3;
+        } else {
+            local_2->rotation[1] = param_0->rotation[1];
+        }
+    } else {
+        s32 pad0;
+        local_2->rotation[1] = func_800136E4(func_800F1DF4(local_2->position, local_1));
+        local_3 = func_800F1DCC(local_2->rotation[1], param_0->rotation[1]);
+        if (local_3 < -60.0f) {
+            local_2->rotation[1] = param_0->rotation[1] - 60.0f;
+        } else if (local_3 > 60.0f) {
+            local_2->rotation[1] = param_0->rotation[1] + 60.0f;
+        }
     }
-    else
-    {
-      local_2->rotation[1] = param_0->rotation[1];
+    local_2->rotation[0] = func_800136E4(func_800F1828(local_2->position, local_1));
+    if (local_2->rotation[0] > 180.0f) {
+        if (local_2->rotation[0] < 350.0f) {
+            local_2->rotation[0] = 350.0f;
+        }
+    } else if (local_2->rotation[0] > 10.0f) {
+        local_2->rotation[0] = 10.0f;
     }
-  }
-  else
-  {
-    s32 pad0;
-    local_2->rotation[1] = func_800136E4(func_800F1DF4(local_2->position, local_1));
-    local_3 = func_800F1DCC(local_2->rotation[1], param_0->rotation[1]);
-    if (local_3 < (-60.0f))
-    {
-      local_2->rotation[1] = param_0->rotation[1] - 60.0f;
-    }
-    else
-      if (local_3 > 60.0f)
-    {
-      local_2->rotation[1] = param_0->rotation[1] + 60.0f;
-    }
-  }
-  local_2->rotation[0] = func_800136E4(func_800F1828(local_2->position, local_1));
-  if (local_2->rotation[0] > 180.0f)
-  {
-    if (local_2->rotation[0] < 350.0f)
-    {
-      local_2->rotation[0] = 350.0f;
-    }
-  }
-  else
-    if (local_2->rotation[0] > 10.0f)
-  {
-    local_2->rotation[0] = 10.0f;
-  }
-  func_80108944(local_2, param_0);
+    func_80108944(local_2, param_0);
 }
 
 s32 func_80800E78_chonearmbandit();
@@ -457,26 +461,30 @@ int func_80800D00_chonearmbandit(Actor *param_0)
     _subaddiefade_entrypoint_11(local_1, local_0);
     _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_8080139C_chonearmbandit);
     _subaddiejoy_entrypoint_10(param_0, 1.4f, 0.3f);
-    *((u8 *)param_0 + 0x64) &= ~1;
+    *((u8 *) param_0 + 0x64) &= ~1;
     local_6 = func_80800E78_chonearmbandit(param_0);
-    if (local_6) func_800D1000(local_6, 8, param_0->position, 1, 0);
+    if (local_6)
+        func_800D1000(local_6, 8, param_0->position, 1, 0);
     else if (func_8010A430(param_0)) {
         local_3.local_0 = func_800DC178(0.0f, 359.0f);
-        if (func_800DC298(0.5f)) local_4 = 0x18;
-        else local_4 = 0x19;
+        if (func_800DC298(0.5f))
+            local_4 = 0x18;
+        else
+            local_4 = 0x19;
         func_80103DFC(param_0, local_2.local_0);
-        _chbaddiesetup_entrypoint_5(&_chbaddiesetup_entrypoint_10, local_4, local_2.local_1[0], local_2.local_1[1], local_2.local_1[2], local_3.local_1);
+        _chbaddiesetup_entrypoint_5(&_chbaddiesetup_entrypoint_10, local_4, local_2.local_1[0],
+                                    local_2.local_1[1], local_2.local_1[2], local_3.local_1);
     }
-    if (!func_80107070(param_0, 3)) func_800FFAB0(param_0);
+    if (!func_80107070(param_0, 3))
+        func_800FFAB0(param_0);
 }
 
 s32 func_80800E78_chonearmbandit(s32 param_0)
 {
     s32 local_0;
 
-    local_0 = ((u32)(*(u16 *)((char *)param_0 + 0x76)) >> 7) - 0x31;
-    if (func_800D0A9C(local_0, 8) != 0)
-    {
+    local_0 = ((u32) *(u16 *) ((char *) param_0 + 0x76) >> 7) - 0x31;
+    if (func_800D0A9C(local_0, 8) != 0) {
         return 0;
     }
     return local_0;
@@ -492,9 +500,11 @@ void func_80800EBC_chonearmbandit(Actor *param_0)
         _subaddiefade_entrypoint_3(param_0);
         param_0->unk64_20 = 1;
     }
-    param_0->unk54 += local_0 * *(f32 *)&param_0->actorData[4];
-    if (func_8001210C(1)) func_80801114_chonearmbandit(param_0);
-    if (param_0->unk70_10 == 1) func_80801154_chonearmbandit(param_0);
+    param_0->unk54 += local_0 * *(f32 *) &param_0->actorData[4];
+    if (func_8001210C(1))
+        func_80801114_chonearmbandit(param_0);
+    if (param_0->unk70_10 == 1)
+        func_80801154_chonearmbandit(param_0);
 }
 
 void func_80800F80_chonearmbandit(Actor *param_0)
@@ -502,52 +512,53 @@ void func_80800F80_chonearmbandit(Actor *param_0)
     f32 local_0;
 
     local_0 = func_800DC298(0.5f) ? -1.0f : 1.0f;
-    ((f32 *)param_0->actorData)[4] = func_800DC178(600.0f, 800.0f) * local_0;
+    ((f32 *) param_0->actorData)[4] = func_800DC178(600.0f, 800.0f) * local_0;
     param_0->unk58 = 4.0f;
-    ((f32 *)param_0->actorData)[3] = 1000.0f;
+    ((f32 *) param_0->actorData)[3] = 1000.0f;
 }
 
 int func_80801008_chonearmbandit(unsigned long param_0, s32 param_1, s32 param_2)
 {
-  s32 *new_var2;
-  s32 *new_var;
-  if (param_1 == 0x40)
-  {
-    new_var = &param_2;
-    new_var2 = new_var;
-    func_808010AC_chonearmbandit(param_0, (*new_var2) | 0);
-    return 1;
-  }
-  return 0;
-  if (!new_var2)
-  {
-  }
+    s32 *new_var2;
+    s32 *new_var;
+    if (param_1 == 0x40) {
+        new_var = &param_2;
+        new_var2 = new_var;
+        func_808010AC_chonearmbandit(param_0, *new_var2 | 0);
+        return 1;
+    }
+    return 0;
 }
 
 void func_80801040_chonearmbandit(ALSeqPlayer *param_0, s32 param_1)
 {
     f32 local_0[3];
     void *new_var;
-    func_800EFA4C(local_0, *(ALSeqMarker ***)((char *)param_0 + 0x50), *(ALSeqMarker ***)((char *)param_0 + 0x54), 0);
+    func_800EFA4C(local_0, *(ALSeqMarker ***) ((char *) param_0 + 0x50),
+                  *(ALSeqMarker ***) ((char *) param_0 + 0x54), 0);
     func_800DF47C(&func_801015D0, param_0);
-    new_var = func_8010347C(*(ALSeqMarker ***)param_0);
-    func_800DE448(&((ALSeqMarker ***)param_0)[1], local_0, *(ALVoiceState ***)((char *)param_0 + 0x38), 0, new_var);
+    new_var = func_8010347C(*(ALSeqMarker ***) param_0);
+    func_800DE448(&((ALSeqMarker ***) param_0)[1], local_0,
+                  *(ALVoiceState ***) ((char *) param_0 + 0x38), 0, new_var);
 }
 
-void func_808010AC_chonearmbandit(param_0, param_1) void *param_0; void *param_1;
+void func_808010AC_chonearmbandit(param_0, param_1) void *param_0;
+void *param_1;
 {
-  func_800BBCB8(((char *) param_0) + 4, ((char *) param_0) + 4, *((void **) (((char *) param_0) + 0x38)), 6, &D_808013A4_chonearmbandit);
-  func_800C4AF0(((char *) param_0) + 4, &D_808013DC_chonearmbandit);
-  func_8010A570(param_0);
-  func_800FFAB0(param_0);
+    func_800BBCB8((char *) param_0 + 4, (char *) param_0 + 4, *(void **) ((char *) param_0 + 0x38),
+                  6, &D_808013A4_chonearmbandit);
+    func_800C4AF0((char *) param_0 + 4, &D_808013DC_chonearmbandit);
+    func_8010A570(param_0);
+    func_800FFAB0(param_0);
 }
 
 void func_80801114_chonearmbandit(param_0) u8 *param_0;
 {
-    func_800BBCB8(param_0 + 4, 0, *(s32 **)(param_0 + 0x38), 1, &D_808013E8_chonearmbandit);
+    func_800BBCB8(param_0 + 4, 0, *(s32 **) (param_0 + 0x38), 1, &D_808013E8_chonearmbandit);
 }
 
-s32 func_80801154_chonearmbandit(param_0) Actor *param_0;
+s32 func_80801154_chonearmbandit(param_0)
+Actor *param_0;
 {
     s32 local_0 = 6;
 
@@ -562,26 +573,70 @@ s32 func_80801154_chonearmbandit(param_0) Actor *param_0;
     return 0;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/onearmbandit.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808012BC_chonearmbandit -> int[], D_80801304_chonearmbandit -> int[], D_808013E8_chonearmbandit -> int[] */
 extern void func_80105834();
 extern void func_80108ED0();
 extern void func_80107C2C();
-f32 D_808011F0_chonearmbandit[3] = { 1.746342e-39f, 2.0414e-39f, 0.0f };
-f32 D_808011FC_chonearmbandit[6] = { 0.0f, 0.0f, 0.5f, 1.0f, 1.0f, 0.0f };
-u32 D_80801214_chonearmbandit[5] = { 0x10000, 0x80000, 0x80000, 0x90000, 0xA0000 };
-u32 D_80801228_chonearmbandit[22] = { 0x0, 0x0, 0x3F4CCCCD, 0x1800044, 0x3F4CCCCD, 0x1800001, 0x3F19999A, 0x1820001, 0x3F4CCCCD, 0x1800001, 0x3F666666, 0x1810002, 0x3F4CCCCD, 0x1800001, 0x3FA00000, 0x17F0002, 0x3F4CCCCD, 0x1800044, 0x3FA00000, 0x2, 0x3F4CCCCD, 0x1800044 };
-u8 D_80801280_chonearmbandit[60] = { 0x0, 0x0, 0x0, 0x3, 0x40, 0x80, 0x0, 0x0, 0x0, 0xFD, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2A, 0x40, 0x40, 0x0, 0x0, 0x0, 0xFD, 0x0, 0x0, 0x0, 0x0, 0x0, 0x12, 0x40, 0x0, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x0, 0x0, 0x43, 0x3F, 0xC0, 0x0, 0x0, 0x2, 0x42, 0x0, 0x0, 0x0, 0x0, 0x0, 0x42, 0x3F, 0xE0, 0x0, 0x0, 0x2, 0x43, 0x0, 0x0 };
-int D_808012BC_chonearmbandit[18] = { 0x1960144, 0x6C90001, (u32)&D_80801228_chonearmbandit, (u32)func_8080007C_chonearmbandit, (u32)func_80105834, (u32)func_8080063C_chonearmbandit, 0x9C40000, 0x40000000, 0x0, 0x43050261, 0x0, (u32)func_80108ED0, 0xC, (u32)func_80800018_chonearmbandit, (u32)func_80107C2C, -0x7FCDAFE3, (u32)func_80800520_chonearmbandit, (u32)&D_80801214_chonearmbandit };
-int D_80801304_chonearmbandit[18] = { 0x2EE035B, 0x6CA0001, 0x0, (u32)func_80800EBC_chonearmbandit, (u32)func_80105834, (u32)func_80801040_chonearmbandit, 0x0, 0x3F800000, 0x0, 0x0, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800F80_chonearmbandit, (u32)func_80107C2C, -0x7FFFFBF0, (u32)func_80801008_chonearmbandit, 0x0 };
-f32 D_8080134C_chonearmbandit[2] = { 1.746731e-39f, 2.204052e-39f };
-u8 D_80801354_chonearmbandit[16] = { 0x0, 0x13, 0x5, 0x2F, 0x0, 0xD, 0x1, 0xC, 0x1, 0x26, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0 };
-s32 D_80801364_chonearmbandit[14] = { 0x1D09DD, 0x20C0C0, -0x3F7FFFEA, 0x80022, 0x9900CC, 0x1000133, 0x150033, 0x99002B, 0xB300E6, 0xB000A, 0x140005, 0x2002D, 0x12C0190, 0x0 };
-s32 D_8080139C_chonearmbandit[2] = { 0x130413, 0x0 };
-void *D_808013A4_chonearmbandit = (void *)0x001D075C;
-static u32 D_808013A4_chonearmbandit_rest[13] = { 0x150033, 0x990027, 0x6400C8, 0x6400C8, 0x2B00CC, 0x1000016, 0x1400001B, 0xFE70FED4, 0x2D012C, 0x190001E, 0x50005, 0xD000A, 0x0 };
-void *D_808013DC_chonearmbandit = (void *)0x0013052C;
-static u32 D_808013DC_chonearmbandit_rest[2] = { 0xD00F3, 0x10C0000 };
-int D_808013E8_chonearmbandit[14] = { 0x1D09E6, 0x150033, 0x990027, 0x6400C8, 0x6400C8, 0x2B004C, 0x660016, 0x10000024, 0x4C0066, 0xC000A, 0x0, 0x0, 0x0, 0x0 };
+f32 D_808011F0_chonearmbandit[3] = {1.746342e-39f, 2.0414e-39f, 0.0f};
+f32 D_808011FC_chonearmbandit[6] = {0.0f, 0.0f, 0.5f, 1.0f, 1.0f, 0.0f};
+u32 D_80801214_chonearmbandit[5] = {0x10000, 0x80000, 0x80000, 0x90000, 0xA0000};
+u32 D_80801228_chonearmbandit[22] = {
+    0x0,        0x0,       0x3F4CCCCD, 0x1800044, 0x3F4CCCCD, 0x1800001, 0x3F19999A, 0x1820001,
+    0x3F4CCCCD, 0x1800001, 0x3F666666, 0x1810002, 0x3F4CCCCD, 0x1800001, 0x3FA00000, 0x17F0002,
+    0x3F4CCCCD, 0x1800044, 0x3FA00000, 0x2,       0x3F4CCCCD, 0x1800044};
+u8 D_80801280_chonearmbandit[60] = {0x0, 0x0, 0x0, 0x3,  0x40, 0x80, 0x0, 0x0, 0x0, 0xFD, 0x0, 0x0,
+                                    0x0, 0x0, 0x0, 0x2A, 0x40, 0x40, 0x0, 0x0, 0x0, 0xFD, 0x0, 0x0,
+                                    0x0, 0x0, 0x0, 0x12, 0x40, 0x0,  0x0, 0x0, 0x0, 0xFF, 0x0, 0x0,
+                                    0x0, 0x0, 0x0, 0x43, 0x3F, 0xC0, 0x0, 0x0, 0x2, 0x42, 0x0, 0x0,
+                                    0x0, 0x0, 0x0, 0x42, 0x3F, 0xE0, 0x0, 0x0, 0x2, 0x43, 0x0, 0x0};
+int D_808012BC_chonearmbandit[18] = {0x1960144,
+                                     0x6C90001,
+                                     (u32) &D_80801228_chonearmbandit,
+                                     (u32) func_8080007C_chonearmbandit,
+                                     (u32) func_80105834,
+                                     (u32) func_8080063C_chonearmbandit,
+                                     0x9C40000,
+                                     0x40000000,
+                                     0x0,
+                                     0x43050261,
+                                     0x0,
+                                     (u32) func_80108ED0,
+                                     0xC,
+                                     (u32) func_80800018_chonearmbandit,
+                                     (u32) func_80107C2C,
+                                     -0x7FCDAFE3,
+                                     (u32) func_80800520_chonearmbandit,
+                                     (u32) &D_80801214_chonearmbandit};
+int D_80801304_chonearmbandit[18] = {0x2EE035B,
+                                     0x6CA0001,
+                                     0x0,
+                                     (u32) func_80800EBC_chonearmbandit,
+                                     (u32) func_80105834,
+                                     (u32) func_80801040_chonearmbandit,
+                                     0x0,
+                                     0x3F800000,
+                                     0x0,
+                                     0x0,
+                                     0x0,
+                                     (u32) func_80108ED0,
+                                     0x0,
+                                     (u32) func_80800F80_chonearmbandit,
+                                     (u32) func_80107C2C,
+                                     -0x7FFFFBF0,
+                                     (u32) func_80801008_chonearmbandit,
+                                     0x0};
+f32 D_8080134C_chonearmbandit[2] = {1.746731e-39f, 2.204052e-39f};
+u8 D_80801354_chonearmbandit[16] = {0x0, 0x13, 0x5, 0x2F, 0x0, 0xD, 0x1, 0xC,
+                                    0x1, 0x26, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0};
+s32 D_80801364_chonearmbandit[14] = {0x1D09DD,  0x20C0C0, -0x3F7FFFEA, 0x80022,  0x9900CC,
+                                     0x1000133, 0x150033, 0x99002B,    0xB300E6, 0xB000A,
+                                     0x140005,  0x2002D,  0x12C0190,   0x0};
+s32 D_8080139C_chonearmbandit[2] = {0x130413, 0x0};
+void *D_808013A4_chonearmbandit = (void *) 0x001D075C;
+static u32 D_808013A4_chonearmbandit_rest[13] = {
+    0x150033,   0x990027, 0x6400C8,  0x6400C8, 0x2B00CC, 0x1000016, 0x1400001B,
+    0xFE70FED4, 0x2D012C, 0x190001E, 0x50005,  0xD000A,  0x0};
+void *D_808013DC_chonearmbandit = (void *) 0x0013052C;
+static u32 D_808013DC_chonearmbandit_rest[2] = {0xD00F3, 0x10C0000};
+int D_808013E8_chonearmbandit[14] = {0x1D09E6, 0x150033, 0x990027,   0x6400C8, 0x6400C8,
+                                     0x2B004C, 0x660016, 0x10000024, 0x4C0066, 0xC000A,
+                                     0x0,      0x0,      0x0,        0x0};

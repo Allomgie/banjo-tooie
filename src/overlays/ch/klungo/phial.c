@@ -2,8 +2,13 @@
 
 extern int D_80800C30_chklungophial[];
 extern int D_80800C78_chklungophial[];
-typedef struct { f32 local_0[9]; } PhialRecord1826;
-typedef struct { s32 local_0; PhialRecord1826 local_1[1]; } PhialList1826;
+typedef struct {
+    f32 local_0[9];
+} PhialRecord1826;
+typedef struct {
+    s32 local_0;
+    PhialRecord1826 local_1[1];
+} PhialList1826;
 extern f32 func_800D8FF8(void);
 extern void *func_80100094(Actor *, u32);
 extern void func_800E2588();
@@ -38,19 +43,22 @@ extern void func_800EF04C(f32 *, f32 *);
 extern s32 _chlightfader_entrypoint_1(s32, f32, s32);
 extern f32 mlAbsF(f32);
 extern void func_800EF174(f32 *, f32 *, f32);
-typedef struct { s32 local_0; f32 local_1[50][9]; } PhialParticles26;
+typedef struct {
+    s32 local_0;
+    f32 local_1[50][9];
+} PhialParticles26;
 void func_808003C8_chklungophial();
 s32 func_808006B4_chklungophial();
 s32 func_80800AEC_chklungophial(Actor *param_0, f32 *param_1, f32 param_2);
 
 int chklungophial_entrypoint_0()
 {
-    return (int)&D_80800C30_chklungophial;
+    return (int) &D_80800C30_chklungophial;
 }
 
 int chklungophial_entrypoint_1()
 {
-  return (int)&D_80800C78_chklungophial;
+    return (int) &D_80800C78_chklungophial;
 }
 
 void func_80800018_chklungophial(Actor *param_0)
@@ -63,17 +71,18 @@ void func_80800018_chklungophial(Actor *param_0)
     local_1 = func_80100094(param_0, 0);
     func_8010D12C(func_800F54E4(), local_0, param_0->unk58, 5);
     for (local_4 = 0; local_4 < 3; local_4++) {
-        ((f32 *)((u8 *)param_0 + 0x28))[local_4] = (local_0[local_4] - param_0->position[local_4]) / ((f32 *)param_0->actorData)[3];
+        ((f32 *) ((u8 *) param_0 + 0x28))[local_4] =
+            (local_0[local_4] - param_0->position[local_4]) / ((f32 *) param_0->actorData)[3];
     }
-    ((f32 *)param_0->actorData)[5] += 400.0f * ((f32 *)param_0->actorData)[3];
+    ((f32 *) param_0->actorData)[5] += 400.0f * ((f32 *) param_0->actorData)[3];
     param_0->unk50 = (func_800DC298(0.5f) ? -1.0f : 1.0f) * func_800DC178(250.0f, 350.0f);
     param_0->unk54 = (func_800DC298(0.5f) ? -1.0f : 1.0f) * func_800DC178(150.0f, 250.0f);
-    func_800EE7F8((f32 *)local_1, param_0->position);
-    *(f32 *)(local_1 + 0x10) = 0.15f;
-    *(s32 *)(local_1 + 0xC) = func_800C8A98();
-    func_800C8E84(*(s32 *)(local_1 + 0xC), D_80800CC0_chklungophial);
-    func_800C8E54(*(s32 *)(local_1 + 0xC), 250.0f, 600.0f);
-    func_800C8CB8(*(s32 *)(local_1 + 0xC), param_0->position);
+    func_800EE7F8((f32 *) local_1, param_0->position);
+    *(f32 *) (local_1 + 0x10) = 0.15f;
+    *(s32 *) (local_1 + 0xC) = func_800C8A98();
+    func_800C8E84(*(s32 *) (local_1 + 0xC), D_80800CC0_chklungophial);
+    func_800C8E54(*(s32 *) (local_1 + 0xC), 250.0f, 600.0f);
+    func_800C8CB8(*(s32 *) (local_1 + 0xC), param_0->position);
     if (!_subaddiefind_entrypoint_2(0x423, 0)) {
         func_800EFD24(local_2);
         func_80108A30(0x423, local_2, 0.0f, 0x32);
@@ -87,14 +96,18 @@ void func_80800204_chklungophial(Actor *param_0)
     Actor *local_2;
     f32 local_3[3];
     local_0 = func_80100094(param_0, 0);
-    if (func_800D9078(local_0 + 0x10)) _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800CCC_chklungophial);
+    if (func_800D9078(local_0 + 0x10))
+        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800CCC_chklungophial);
     if (param_0->unk70_10 == 1) {
         local_1 = func_800D8FF8();
-        local_2 = (Actor *)_subaddiefind_entrypoint_2(0x423, 0);
-        param_0->rotation[1] = func_800136E4(local_1 * *(f32 *)((u8 *)param_0 + 0x50) + param_0->rotation[1]);
-        param_0->rotation[0] = func_800136E4(local_1 * *(f32 *)((u8 *)param_0 + 0x54) + param_0->rotation[0]);
-        *(f32 *)((u8 *)param_0 + 0x2C) -= 800.0f * local_1;
-        if (func_8010B990(param_0, 0x400007) & 0x20) func_808003C8_chklungophial(param_0, 1);
+        local_2 = (Actor *) _subaddiefind_entrypoint_2(0x423, 0);
+        param_0->rotation[1] =
+            func_800136E4(local_1 * *(f32 *) ((u8 *) param_0 + 0x50) + param_0->rotation[1]);
+        param_0->rotation[0] =
+            func_800136E4(local_1 * *(f32 *) ((u8 *) param_0 + 0x54) + param_0->rotation[0]);
+        *(f32 *) ((u8 *) param_0 + 0x2C) -= 800.0f * local_1;
+        if (func_8010B990(param_0, 0x400007) & 0x20)
+            func_808003C8_chklungophial(param_0, 1);
         if (func_800DC298(0.6f) && local_2) {
             _subaddieskeleton_entrypoint_3(param_0->unk0, 4, local_3);
             func_80800AEC_chklungophial(local_2, local_3, 0.0f);
@@ -102,28 +115,27 @@ void func_80800204_chklungophial(Actor *param_0)
     }
     if (!func_800BFA1C(param_0->position)) {
         func_800FFAB0(param_0);
-        if (*(s32 *)(local_0 + 12)) {
-            func_800C8B84(*(s32 *)(local_0 + 12));
-            *(s32 *)(local_0 + 12) = 0;
+        if (*(s32 *) (local_0 + 12)) {
+            func_800C8B84(*(s32 *) (local_0 + 12));
+            *(s32 *) (local_0 + 12) = 0;
         }
     }
-    if (*(s32 *)(local_0 + 12)) func_800C8CB8(*(s32 *)(local_0 + 12), param_0->position);
+    if (*(s32 *) (local_0 + 12))
+        func_800C8CB8(*(s32 *) (local_0 + 12), param_0->position);
 }
 
 int func_8080038C_chklungophial(s32 param_0, s32 param_1, s32 param_2)
 {
-  if (param_1 == 0x40)
-  {
-    func_808003C8_chklungophial(param_0, 0);
-  }
-  else
-  {
-    return 0;
-  }
-  return 1;
+    if (param_1 == 0x40) {
+        func_808003C8_chklungophial(param_0, 0);
+    } else {
+        return 0;
+    }
+    return 1;
 }
 
-void func_808003C8_chklungophial(param_0, param_1) Actor *param_0; s32 param_1;
+void func_808003C8_chklungophial(param_0, param_1) Actor *param_0;
+s32 param_1;
 {
     Vec3f local_0;
     Vec3f local_1;
@@ -141,7 +153,8 @@ void func_808003C8_chklungophial(param_0, param_1) Actor *param_0; s32 param_1;
     local_3 = func_80100094(param_0, 0);
     func_80103DFC(param_0, local_0.f);
     func_800EE7F8(local_1.f, local_0.f);
-    func_800EF1B8(local_1.f, func_800F1DF4(param_0->position, (f32 *)local_3), param_0->scale * 60.0f);
+    func_800EF1B8(local_1.f, func_800F1DF4(param_0->position, (f32 *) local_3),
+                  param_0->scale * 60.0f);
     local_1.pos.y -= param_0->scale * 40.0f;
     func_800BBCB8(local_0.f, local_1.f, param_0->scale, 10, D_80800CDC_chklungophial);
     _subaddieaudioquick_entrypoint_2(param_0, local_0.f, D_80800D18_chklungophial);
@@ -149,8 +162,9 @@ void func_808003C8_chklungophial(param_0, param_1) Actor *param_0; s32 param_1;
     if (param_1 == 1) {
         local_2 = _subaddiefind_entrypoint_2(0x423, 0);
         if (func_808006B4_chklungophial(param_0, local_0.f, local_4.f)) {
-            local_9 = func_800BABB8(0, local_0.f, NULL, param_0->scale * 0.25f, D_80800D6C_chklungophial);
-            func_800BA77C(local_9, (s16)local_4.pos.x, (s16)local_4.pos.y, (s16)local_4.pos.z);
+            local_9 =
+                func_800BABB8(0, local_0.f, NULL, param_0->scale * 0.25f, D_80800D6C_chklungophial);
+            func_800BA77C(local_9, (s16) local_4.pos.x, (s16) local_4.pos.y, (s16) local_4.pos.z);
             func_800BA22C(local_9, 1);
         }
         func_800BABB8(0, local_0.f, NULL, param_0->scale, D_80800D90_chklungophial);
@@ -177,7 +191,10 @@ void func_808003C8_chklungophial(param_0, param_1) Actor *param_0; s32 param_1;
     func_8010A570(param_0);
 }
 
-s32 func_808006B4_chklungophial(param_0, param_1, param_2) Actor *param_0; f32 *param_1; f32 *param_2;
+s32 func_808006B4_chklungophial(param_0, param_1, param_2)
+Actor *param_0;
+f32 *param_1;
+f32 *param_2;
 {
     f32 local_0[3];
     f32 local_1[3];
@@ -187,11 +204,11 @@ s32 func_808006B4_chklungophial(param_0, param_1, param_2) Actor *param_0; f32 *
     local_3 = param_0->position;
     func_800EE7F8(local_0, local_3);
     local_5 = func_800D8FF8() * -6.0f;
-    func_800EF174(local_0, ((f32 *)((u8 *)param_0 + 0x28)), local_5);
+    func_800EF174(local_0, (f32 *) ((u8 *) param_0 + 0x28), local_5);
     func_800EE7F8(local_1, local_3);
     local_5 = func_800D8FF8() * 3.0f;
-    func_800EF174(local_1, ((f32 *)((u8 *)param_0 + 0x28)), local_5);
-    if (func_800C6A7C(local_0, local_1, local_2, *(s32 *)((u8 *)param_0 + 0x14))) {
+    func_800EF174(local_1, (f32 *) ((u8 *) param_0 + 0x28), local_5);
+    if (func_800C6A7C(local_0, local_1, local_2, *(s32 *) ((u8 *) param_0 + 0x14))) {
         if (func_800F1988(local_2, param_2, param_2 + 1)) {
             param_2[2] = 0.0f;
             func_800EE7F8(param_1, local_1);
@@ -207,23 +224,25 @@ s32 func_808006B4_chklungophial(param_0, param_1, param_2) Actor *param_0; f32 *
     return 0;
 }
 
-void func_80800820_chklungophial(s32 arg0) 
+void func_80800820_chklungophial(s32 arg0)
 {
 }
+
 void func_80800828_chklungophial(Actor *param_0)
 {
     s32 sv_state;
     f32 local_0 = func_800D8FF8();
-    PhialList1826 *local_1 = (PhialList1826 *)func_80100094(param_0, 0);
+    PhialList1826 *local_1 = (PhialList1826 *) func_80100094(param_0, 0);
     PhialRecord1826 *local_2 = local_1->local_1;
     s32 local_3 = 0;
 
     while (local_3 < local_1->local_0) {
         if (func_800D90A4(&local_2->local_0[5])) {
-            if (func_800D90A4(&local_2->local_0[3])) local_2->local_0[4] += local_0 * 15.0f;
+            if (func_800D90A4(&local_2->local_0[3]))
+                local_2->local_0[4] += local_0 * 15.0f;
             if (local_2->local_0[4] > 11.0f) {
                 rare_memcpy(local_2, &local_1->local_1[local_1->local_0 - 1], 0x24);
-                (local_1->local_0)--;
+                local_1->local_0--;
                 continue;
             }
             local_2->local_0[1] += local_0 * local_2->local_0[7];
@@ -234,26 +253,22 @@ void func_80800828_chklungophial(Actor *param_0)
     if (param_0->unk70_10 == 2) {
         sv_state = local_1->local_0;
         switch (sv_state) {
-        case 0:
-            func_800FFAB0(param_0);
-            break;
+            case 0:
+                func_800FFAB0(param_0);
         }
     }
 }
 
 s32 func_80800980_chklungophial(Actor *this, s32 param_1, s32 param_2)
 {
-  Actor *new_var;
-  if (param_1 == 0x4f)
-  {
-    new_var = this;
-    func_80101FDC(new_var, 2);
-  }
-  else
-  {
-    return 0;
-  }
-  return 1;
+    Actor *new_var;
+    if (param_1 == 0x4f) {
+        new_var = this;
+        func_80101FDC(new_var, 2);
+    } else {
+        return 0;
+    }
+    return 1;
 }
 
 void func_808009BC_chklungophial(Actor *param_0, s32 param_1)
@@ -266,7 +281,7 @@ void func_808009BC_chklungophial(Actor *param_0, s32 param_1)
     s32 local_5;
 
     local_0 = func_80100094(param_0, 0);
-    local_3 = (u8 *)local_0 + 4;
+    local_3 = (u8 *) local_0 + 4;
     param_0->unk7C_12 = 1;
     if (*local_0) {
         local_4 = func_800D674C(0x9CF);
@@ -274,11 +289,11 @@ void func_808009BC_chklungophial(Actor *param_0, s32 param_1)
         func_800E2594(param_1, local_4);
         func_800E24D8(1);
         for (local_2 = 0; local_2 < *local_0; local_2++, local_3 += 0x24) {
-            if (*(f32 *)(local_3 + 0x14) == 0.0f) {
-                func_800EFA4C(local_1, *(f32 *)(local_3 + 0x18),
-                    *(f32 *)(local_3 + 0x18), *(f32 *)(local_3 + 0x18));
-                func_800E2530(*(f32 *)(local_3 + 0x20));
-                func_800E2720(param_1, (s32)*(f32 *)(local_3 + 0x10), 0, local_3, local_1, 255);
+            if (*(f32 *) (local_3 + 0x14) == 0.0f) {
+                func_800EFA4C(local_1, *(f32 *) (local_3 + 0x18), *(f32 *) (local_3 + 0x18),
+                              *(f32 *) (local_3 + 0x18));
+                func_800E2530(*(f32 *) (local_3 + 0x20));
+                func_800E2720(param_1, (s32) *(f32 *) (local_3 + 0x10), 0, local_3, local_1, 255);
             }
         }
         func_800E2A14(param_1);
@@ -307,22 +322,70 @@ s32 func_80800AEC_chklungophial(Actor *param_0, f32 *param_1, f32 param_2)
     return 1;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/klungo/phial.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800C30_chklungophial -> int[], D_80800C78_chklungophial -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
-int D_80800C30_chklungophial[18] = { 0x3320422, 0x7080001, 0x0, (u32)func_80800204_chklungophial, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F800000, 0x0, 0x44, 0x0, (u32)func_80108ED0, 0x140000, (u32)func_80800018_chklungophial, (u32)func_80107C2C, 0x0, (u32)func_8080038C_chklungophial, 0x0 };
-int D_80800C78_chklungophial[18] = { 0x3330423, -0xFFFF, 0x0, (u32)func_80800828_chklungophial, (u32)func_80105834, (u32)func_808009BC_chklungophial, 0x0, 0x0, 0x0, 0x20404, 0x0, 0x0, 0x70C0000, (u32)func_80800820_chklungophial, (u32)func_80107C2C, -0x7FFFDFFE, (u32)func_80800980_chklungophial, 0x0 };
-u8 D_80800CC0_chklungophial[12] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x80 };
-u8 D_80800CCC_chklungophial[16] = { 0x0, 0x13, 0x6, 0x1, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80800CDC_chklungophial[60] = { 0x0, 0x1D, 0x7, 0xB0, 0x0, 0x16, 0x5, 0x86, 0x0, 0x2B, 0x1, 0x33, 0x1, 0x99, 0x0, 0x27, 0x0, 0xC8, 0x0, 0xC8, 0x1, 0x90, 0x1, 0x90, 0x0, 0x2D, 0x1, 0xF4, 0x2, 0x58, 0x0, 0x1B, 0xFC, 0x18, 0xFC, 0xE0, 0x0, 0x22, 0x1, 0x0, 0x1, 0x33, 0x0, 0x80, 0x0, 0x99, 0x0, 0x15, 0x0, 0x0, 0x0, 0xCC, 0x0, 0xE, 0x0, 0x1E, 0x0, 0x32, 0x0, 0x0 };
-u8 D_80800D18_chklungophial[16] = { 0x0, 0x13, 0x4, 0x8D, 0x0, 0x18, 0x0, 0xD, 0x1, 0x59, 0x1, 0x73, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80800D28_chklungophial[40] = { 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x22, 0x1, 0x80, 0x2, 0x0, 0x2, 0x0, 0x2, 0x80, 0x0, 0x15, 0x0, 0x0, 0x0, 0x99, 0x0, 0x19, 0x0, 0x0, 0x0, 0x7, 0x0, 0x2B, 0x1, 0x33, 0x1, 0x66, 0x0, 0x20, 0xFF, 0xFF, 0x40, 0xE0, 0x0, 0x0 };
-u8 D_80800D50_chklungophial[28] = { 0x0, 0x13, 0x4, 0xDC, 0x0, 0xD, 0x1, 0x0, 0x1, 0x19, 0x0, 0x15, 0x0, 0x26, 0x0, 0x80, 0x0, 0x66, 0x0, 0x1, 0x3, 0x20, 0xD, 0xAC, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80800D6C_chklungophial[36] = { 0x1, 0x10, 0x0, 0x1D, 0x8, 0x21, 0x0, 0x2B, 0x2, 0x0, 0x2, 0x80, 0x0, 0x22, 0x1, 0x80, 0x2, 0x0, 0x4, 0x80, 0x5, 0x0, 0x0, 0x15, 0x0, 0x0, 0x0, 0x80, 0x0, 0x33, 0x0, 0x3, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80800D90_chklungophial[60] = { 0x4, 0x10, 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x1B, 0x0, 0x96, 0x0, 0xAF, 0x0, 0xB, 0x0, 0x14, 0x0, 0x28, 0x0, 0x0, 0x0, 0x0, 0x0, 0x20, 0xFF, 0xFF, 0xC0, 0x60, 0x0, 0x22, 0x0, 0x66, 0x0, 0x80, 0x0, 0x99, 0x0, 0xB3, 0x0, 0x15, 0x0, 0x0, 0x0, 0x99, 0x0, 0x2A, 0x0, 0x0, 0x0, 0xA, 0x1, 0x0, 0x1, 0x80, 0x0, 0xF, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80800DCC_chklungophial[20] = { 0x0, 0x13, 0x4, 0x1F, 0x0, 0x18, 0x0, 0xD, 0x0, 0xA6, 0x0, 0xC0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+int D_80800C30_chklungophial[18] = {0x3320422,
+                                    0x7080001,
+                                    0x0,
+                                    (u32) func_80800204_chklungophial,
+                                    (u32) func_80105834,
+                                    (u32) func_80101870,
+                                    0x0,
+                                    0x3F800000,
+                                    0x0,
+                                    0x44,
+                                    0x0,
+                                    (u32) func_80108ED0,
+                                    0x140000,
+                                    (u32) func_80800018_chklungophial,
+                                    (u32) func_80107C2C,
+                                    0x0,
+                                    (u32) func_8080038C_chklungophial,
+                                    0x0};
+int D_80800C78_chklungophial[18] = {0x3330423,
+                                    -0xFFFF,
+                                    0x0,
+                                    (u32) func_80800828_chklungophial,
+                                    (u32) func_80105834,
+                                    (u32) func_808009BC_chklungophial,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x20404,
+                                    0x0,
+                                    0x0,
+                                    0x70C0000,
+                                    (u32) func_80800820_chklungophial,
+                                    (u32) func_80107C2C,
+                                    -0x7FFFDFFE,
+                                    (u32) func_80800980_chklungophial,
+                                    0x0};
+u8 D_80800CC0_chklungophial[12] = {0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x80};
+u8 D_80800CCC_chklungophial[16] = {0x0, 0x13, 0x6, 0x1, 0x0, 0xD, 0x0, 0xF3,
+                                   0x1, 0xC,  0x0, 0x2, 0x0, 0x0, 0x0, 0x0};
+u8 D_80800CDC_chklungophial[60] = {
+    0x0,  0x1D, 0x7,  0xB0, 0x0,  0x16, 0x5,  0x86, 0x0,  0x2B, 0x1,  0x33, 0x1,  0x99, 0x0,
+    0x27, 0x0,  0xC8, 0x0,  0xC8, 0x1,  0x90, 0x1,  0x90, 0x0,  0x2D, 0x1,  0xF4, 0x2,  0x58,
+    0x0,  0x1B, 0xFC, 0x18, 0xFC, 0xE0, 0x0,  0x22, 0x1,  0x0,  0x1,  0x33, 0x0,  0x80, 0x0,
+    0x99, 0x0,  0x15, 0x0,  0x0,  0x0,  0xCC, 0x0,  0xE,  0x0,  0x1E, 0x0,  0x32, 0x0,  0x0};
+u8 D_80800D18_chklungophial[16] = {0x0, 0x13, 0x4, 0x8D, 0x0, 0x18, 0x0, 0xD,
+                                   0x1, 0x59, 0x1, 0x73, 0x0, 0x0,  0x0, 0x0};
+u8 D_80800D28_chklungophial[40] = {0x0, 0x1D, 0x9, 0xDD, 0x0,  0x22, 0x1,  0x80, 0x2, 0x0,
+                                   0x2, 0x0,  0x2, 0x80, 0x0,  0x15, 0x0,  0x0,  0x0, 0x99,
+                                   0x0, 0x19, 0x0, 0x0,  0x0,  0x7,  0x0,  0x2B, 0x1, 0x33,
+                                   0x1, 0x66, 0x0, 0x20, 0xFF, 0xFF, 0x40, 0xE0, 0x0, 0x0};
+u8 D_80800D50_chklungophial[28] = {0x0, 0x13, 0x4, 0xDC, 0x0, 0xD,  0x1, 0x0,  0x1, 0x19,
+                                   0x0, 0x15, 0x0, 0x26, 0x0, 0x80, 0x0, 0x66, 0x0, 0x1,
+                                   0x3, 0x20, 0xD, 0xAC, 0x0, 0x0,  0x0, 0x0};
+u8 D_80800D6C_chklungophial[36] = {0x1, 0x10, 0x0, 0x1D, 0x8, 0x21, 0x0, 0x2B, 0x2, 0x0, 0x2, 0x80,
+                                   0x0, 0x22, 0x1, 0x80, 0x2, 0x0,  0x4, 0x80, 0x5, 0x0, 0x0, 0x15,
+                                   0x0, 0x0,  0x0, 0x80, 0x0, 0x33, 0x0, 0x3,  0x0, 0x0, 0x0, 0x0};
+u8 D_80800D90_chklungophial[60] = {
+    0x4,  0x10, 0x0,  0x1D, 0x9, 0xDD, 0x0, 0x1B, 0x0,  0x96, 0x0,  0xAF, 0x0,  0xB,  0x0,
+    0x14, 0x0,  0x28, 0x0,  0x0, 0x0,  0x0, 0x0,  0x20, 0xFF, 0xFF, 0xC0, 0x60, 0x0,  0x22,
+    0x0,  0x66, 0x0,  0x80, 0x0, 0x99, 0x0, 0xB3, 0x0,  0x15, 0x0,  0x0,  0x0,  0x99, 0x0,
+    0x2A, 0x0,  0x0,  0x0,  0xA, 0x1,  0x0, 0x1,  0x80, 0x0,  0xF,  0x0,  0x0,  0x0,  0x0};
+u8 D_80800DCC_chklungophial[20] = {0x0, 0x13, 0x4, 0x1F, 0x0, 0x18, 0x0, 0xD, 0x0, 0xA6,
+                                   0x0, 0xC0, 0x0, 0x0,  0x0, 0x0,  0x0, 0x0, 0x0, 0x0};

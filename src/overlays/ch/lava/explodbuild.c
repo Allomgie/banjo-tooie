@@ -1,7 +1,5 @@
 #include "ch/lavaexplodbuild.h"
 
-extern u8 position_x[];
-extern u8 unk44[];
 extern int D_80800290_chlavaexplodbuild[];
 extern s32 D_808002A4_chlavaexplodbuild[];
 extern void func_800EE7F8(f32 *, f32 *);
@@ -14,13 +12,14 @@ void func_80800138_chlavaexplodbuild();
 
 int func_80800000_chlavaexplodbuild(Actor *param_0)
 {
-    f32 *local_0 = (f32 *)((char *)param_0 + 4);
-    (*(f32 *)((char *)(local_0) + 68)) = 45.0f;
+    f32 *local_0 = (f32 *) ((char *) param_0 + 4);
+    *(f32 *) ((char *) local_0 + 68) = 45.0f;
     func_800EFA4C(local_0, 0xC6115000, 0x42480000, 0xC3FA0000);
     func_80103014(param_0);
 }
 
-s32 func_80800048_chlavaexplodbuild(s32 param_0){
+s32 func_80800048_chlavaexplodbuild(s32 param_0)
+{
     s32 temp = func_8010CB0C(param_0 + 4, 0x708, 0x7D0, -0x1F4);
     func_800DA3B8(0xA24, temp);
 }
@@ -32,16 +31,15 @@ void func_80800084_chlavaexplodbuild(s32 arg0)
 
 int func_808000A8_chlavaexplodbuild(s32 param_0, s32 param_1, s32 param_2)
 {
-  u8 *local_0;
-  if (param_1 == 0x40)
-  {
-    local_0 = param_0 + 4;
-    _chexploder_entrypoint_3(param_0, local_0, 0xC);
-    func_80800138_chlavaexplodbuild(param_0);
-    func_800C4AF0(local_0, &D_80800290_chlavaexplodbuild);
-    func_800E15CC(0, 0x42A00000, 0x3F733333);
-    func_80018820(0, 0x40800000, 0x3EE66666);
-    func_800DA544(0x49);
+    u8 *local_0;
+    if (param_1 == 0x40) {
+        local_0 = param_0 + 4;
+        _chexploder_entrypoint_3(param_0, local_0, 0xC);
+        func_80800138_chlavaexplodbuild(param_0);
+        func_800C4AF0(local_0, &D_80800290_chlavaexplodbuild);
+        func_800E15CC(0, 0x42A00000, 0x3F733333);
+        func_80018820(0, 0x40800000, 0x3EE66666);
+        func_800DA544(0x49);
     } else {
         return 0;
     }
@@ -58,7 +56,7 @@ void func_80800138_chlavaexplodbuild(param_0) Actor *param_0;
     func_800EE7F8(local_1.f, param_0->position);
     local_2 = func_800B53A4(10);
     for (local_3 = 0; local_3 != 10; local_3++) {
-        func_800EEB9C(local_0.f, (f32)local_3 * 36.0f, func_800DC178(300.0f, 400.0f));
+        func_800EEB9C(local_0.f, (f32) local_3 * 36.0f, func_800DC178(300.0f, 400.0f));
         func_800EF04C(local_0.f, param_0->position);
         local_0.f[1] += func_800DC178(400.0f, 600.0f);
         func_800BABB8(local_2, local_0.f, local_1.f, 2.25f, D_808002A4_chlavaexplodbuild);
@@ -67,17 +65,34 @@ void func_80800138_chlavaexplodbuild(param_0) Actor *param_0;
 
 int chlavaexplodbuild_entrypoint_0()
 {
-    return (int)&D_808002E0_chlavaexplodbuild;
+    return (int) &D_808002E0_chlavaexplodbuild;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lava/explodbuild.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800290_chlavaexplodbuild -> int[], D_808002E0_chlavaexplodbuild -> int[] */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
-int D_80800290_chlavaexplodbuild[5] = { 0x130413, 0xA0099, 0x167D00, 0x11F40, 0x1F400000 };
-s32 D_808002A4_chlavaexplodbuild[15] = { 0x1D09DD, 0x2B0200, 0x2990022, 0x1800200, 0x3800400, 0x150000, 0x990027, -0x630064, 0x640064, 0x190000, 0x7002D, 0x15E01C2, 0x2080C0, -0x3F3FFEE6, 0x0 };
-int D_808002E0_chlavaexplodbuild[20] = { 0x15804A4, 0x8F00001, 0x0, (u32)func_80800048_chlavaexplodbuild, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x490000, 0xC00, (u32)func_80800084_chlavaexplodbuild, (u32)func_80108ED0, 0x0, (u32)func_80800000_chlavaexplodbuild, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_808000A8_chlavaexplodbuild, 0x0, 0x0, 0x0 };
+int D_80800290_chlavaexplodbuild[5] = {0x130413, 0xA0099, 0x167D00, 0x11F40, 0x1F400000};
+s32 D_808002A4_chlavaexplodbuild[15] = {0x1D09DD, 0x2B0200,  0x2990022, 0x1800200,   0x3800400,
+                                        0x150000, 0x990027,  -0x630064, 0x640064,    0x190000,
+                                        0x7002D,  0x15E01C2, 0x2080C0,  -0x3F3FFEE6, 0x0};
+int D_808002E0_chlavaexplodbuild[20] = {0x15804A4,
+                                        0x8F00001,
+                                        0x0,
+                                        (u32) func_80800048_chlavaexplodbuild,
+                                        (u32) func_80105834,
+                                        (u32) func_80101870,
+                                        0x0,
+                                        0x0,
+                                        0x490000,
+                                        0xC00,
+                                        (u32) func_80800084_chlavaexplodbuild,
+                                        (u32) func_80108ED0,
+                                        0x0,
+                                        (u32) func_80800000_chlavaexplodbuild,
+                                        (u32) func_80107C2C,
+                                        -0x7FFFDBFE,
+                                        (u32) func_808000A8_chlavaexplodbuild,
+                                        0x0,
+                                        0x0,
+                                        0x0};
