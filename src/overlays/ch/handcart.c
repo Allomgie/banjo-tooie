@@ -4,26 +4,74 @@
 
 extern f32 func_80013970(f32);
 
-extern u32 D_808046C0_chhandcart;
-extern u32 D_808046D4_chhandcart;
-extern u32 D_808046E8_chhandcart;
+extern u32 D_808046C0_chhandcart[];
+extern u32 D_808046D4_chhandcart[];
+extern u32 D_808046E8_chhandcart[];
 extern unk80804B84* D_80804B84_chhandcart[4];
 extern s32 D_80804B94_chhandcart[4];
-extern unk80804D84* (D_80804D84_chhandcart[4]);
+extern unk80804D84 *D_80804D84_chhandcart[4];
 extern s32 D_80804D94_chhandcart[4];
-extern s32 D_80804DA4_chhandcart;
+extern s32 D_80804DA4_chhandcart[];
 extern f32 D_80804DB8_chhandcart[3];
 extern void* D_80804DC4_chhandcart;
 extern void* D_80804E6C_chhandcart;
-extern u32 D_80804E0C_chhandcart;
-extern u32 D_80804E18_chhandcart;
-extern u32 D_80804E2C_chhandcart;
-extern u32 D_80804E38_chhandcart;
-extern u32 D_80804E4C_chhandcart;
-extern u32 D_80804E5C_chhandcart;
-extern f32 D_808046F4_chhandcart;
-extern u32 D_80804704_chhandcart;
-extern u32 D_80804714_chhandcart;
+extern u32 D_80804E0C_chhandcart[];
+extern u32 D_80804E18_chhandcart[];
+extern u32 D_80804E2C_chhandcart[];
+extern u32 D_80804E38_chhandcart[];
+extern u32 D_80804E4C_chhandcart[];
+extern u32 D_80804E5C_chhandcart[];
+extern f32 D_808046F4_chhandcart[];
+extern u32 D_80804704_chhandcart[];
+extern u32 D_80804714_chhandcart[];
+
+void func_80801D50_chhandcart(Actor* arg0);
+void func_80801FF4_chhandcart(s32 arg0);
+void func_80802120_chhandcart(Actor* arg0);
+s32 func_80802468_chhandcart(Actor* arg0, s32 arg1, s32 arg2);
+void func_8080256C_chhandcart(Actor* arg0, u32 arg1);
+void func_808028F0_chhandcart(Actor* arg0);
+void func_80802B74_chhandcart(Actor* arg0);
+void func_80803794_chhandcart(Actor* arg0);
+s32 func_80803FC4_chhandcart(Actor* arg0, s32 arg1, u32 arg2);
+void func_8080436C_chhandcart(void);
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/handcart.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Pointers to strings are written as string literals; IDO places these strings in .rodata where the
+ * original has them, which is why this block stands in front of the functions.
+ * extern declarations adjusted to the object (same addresses): D_808046C0_chhandcart -> u32[], D_808046D4_chhandcart -> u32[], D_808046E8_chhandcart -> u32[], D_808046F4_chhandcart -> f32[], D_80804704_chhandcart -> u32[], D_80804714_chhandcart -> u32[], D_80804DA4_chhandcart -> s32[], D_80804E0C_chhandcart -> u32[], D_80804E18_chhandcart -> u32[], D_80804E2C_chhandcart -> u32[], D_80804E38_chhandcart -> u32[], D_80804E4C_chhandcart -> u32[], D_80804E5C_chhandcart -> u32[] */
+extern void func_80107C2C();
+u32 D_808046C0_chhandcart[5] = { 0x1303FF, 0xD00CC, 0xE60019, 0x3E804650, 0x0 };
+u32 D_808046D4_chhandcart[5] = { 0x130660, 0xD00E6, 0x1190019, 0x3E804650, 0x0 };
+u32 D_808046E8_chhandcart[3] = { 0x130404, 0x164E20, 0x0 };
+f32 D_808046F4_chhandcart[4] = { 1.74658e-39f, 1.194202e-39f, 2.5714e-38f, 4.33279e+27f };
+u32 D_80804704_chhandcart[4] = { 0x130436, 0xD00F3, 0x10C0018, 0x0 };
+u32 D_80804714_chhandcart[7] = { 0x130684, 0xD00D9, 0xF30016, 0x3A980000, (u32)"Wait", (u32)"Race", (u32)"Report" };
+u32 D_80804730_chhandcart[54] = { 0x0, 0x0, 0x40C00000, 0x800001, 0x40C00000, 0x800001, 0x40C00000, 0x800001, 0x40C00000, 0x800001, 0x3ECCCCCD, 0x7D0001, 0x3ECCCCCD, 0x7D0001, 0x3ECCCCCD, 0x7D0001, 0x3ECCCCCD, 0x7D0001, 0x3F800000, 0x890001, 0x40000000, 0x8A0042, 0x3F800000, 0x850001, 0x3F800000, 0x890001, 0x40000000, 0x8A0042, 0x3F800000, 0x850001, 0x3F800000, 0x850001, 0x3ECCCCCD, 0x7D0001, 0x3F800000, 0x850001, 0x3ECCCCCD, 0x7D0201, 0x3ECCCCCD, 0x7D0001, 0x3ECCCCCD, 0x7D0001, 0x3F800000, 0x890001, 0x40000000, 0x8A0042, 0x40C00000, 0x800001, 0x40800000, 0x7E0000, 0x40800000, 0x7E0000, 0x3ECCCCCD, 0x7D0201 };
+u32 D_80804808_chhandcart[48] = { 0x0, 0x0, 0x3F800000, 0x840044, 0x3F800000, 0x840044, 0x3F800000, 0x840044, 0x3F800000, 0x840044, 0x3F800000, 0x840044, 0x3F800000, 0x840001, 0x3F800000, 0x840004, 0x3F800000, 0x840004, 0x3F800000, 0x840001, 0x3F800000, 0x840001, 0x3F800000, 0x840001, 0x3F800000, 0x840004, 0x3F800000, 0x840004, 0x3F800000, 0x840004, 0x3F800000, 0x840004, 0x3F800000, 0x840004, 0x3F800000, 0x840004, 0x3F800000, 0x840004, 0x3F800000, 0x840044, 0x3F800000, 0x840044, 0x3F800000, 0x840044, 0x3F800000, 0x840044, 0x3F800000, 0x840044 };
+u32 D_808048C8_chhandcart[45] = { 0x41700000, 0x42200000, 0x0, 0x44960000, 0x0, 0x41700000, 0x41C80000, 0x0, 0x447A0000, 0x14A0000, 0x41700000, 0x41C80000, 0x0, 0x447A0000, 0x17C0000, 0x41C80000, 0xC3200000, 0x0, 0x44960000, 0x1FE0000, 0x41C80000, 0xC3200000, 0x0, 0x44960000, 0x2580000, 0x41200000, 0x432F0000, 0x0, 0x43E10000, 0x29E0000, 0x41200000, 0x432F0000, 0x0, 0x43E10000, 0x3520000, 0x41700000, 0x41C80000, 0x0, 0x443B8000, 0x3840000, 0x41700000, 0x41C80000, 0x0, 0x443B8000, 0x3E80000 };
+u32 D_8080497C_chhandcart[40] = { 0x41700000, 0x434D0000, 0x0, 0x43FA0000, 0x0, 0x41700000, 0x434D0000, 0x0, 0x43FA0000, 0x14A0000, 0x41700000, 0x434D0000, 0x0, 0x43FA0000, 0x17C0000, 0x41700000, 0x434D0000, 0x0, 0x43FA0000, 0x1B80000, 0x41700000, 0x434D0000, 0x0, 0x43FA0000, 0x2940000, 0x41700000, 0x434D0000, 0x0, 0x43FA0000, 0x3520000, 0x41700000, 0x434D0000, 0x0, 0x43FA0000, 0x3840000, 0x41700000, 0x434D0000, 0x0, 0x43FA0000, 0x3E80000 };
+u32 D_80804A1C_chhandcart[50] = { 0x41700000, 0x0, 0x0, 0x443B8000, 0x0, 0x41A00000, 0x0, 0x0, 0x443B8000, 0xE60000, 0x41700000, 0x0, 0x0, 0x43FA0000, 0x17C0000, 0x41700000, 0x41F00000, 0x0, 0x447A0000, 0x19A0000, 0x41700000, 0x41F00000, 0x0, 0x447A0000, 0x1EA0000, 0x41200000, 0xC3200000, 0x0, 0x44610000, 0x2620000, 0x41200000, 0xC3200000, 0x0, 0x44610000, 0x3200000, 0x41700000, 0xC2700000, 0x0, 0x447A0000, 0x3520000, 0x41700000, 0xC2700000, 0x0, 0x447A0000, 0x3840000, 0x41700000, 0xC2700000, 0x0, 0x447A0000, 0x3E80000 };
+u32 D_80804AE4_chhandcart[40] = { 0x41700000, 0xC1C80000, 0x0, 0x43FA0000, 0x0, 0x41700000, 0xC1C80000, 0x0, 0x43FA0000, 0x14A0000, 0x41700000, 0xC1C80000, 0x0, 0x43FA0000, 0x17C0000, 0x41700000, 0xC1C80000, 0x0, 0x43FA0000, 0x1B80000, 0x41700000, 0xC1C80000, 0x0, 0x43FA0000, 0x2940000, 0x41700000, 0xC1C80000, 0x0, 0x43FA0000, 0x3520000, 0x41700000, 0xC1C80000, 0x0, 0x43FA0000, 0x3840000, 0x41700000, 0xC1C80000, 0x0, 0x43FA0000, 0x3E80000 };
+unk80804B84 *D_80804B84_chhandcart[4] = { (void *)&D_808048C8_chhandcart, (void *)&D_8080497C_chhandcart, (void *)&D_80804A1C_chhandcart, (void *)&D_80804AE4_chhandcart };
+s32 D_80804B94_chhandcart[4] = { 0x9, 0x8, 0xA, 0x8 };
+u32 D_80804BA4_chhandcart[60] = { 0x3DF5C28F, 0x0, 0x0, 0x2000C, 0x3E3851EC, 0x0, 0x0, 0x20002, 0x3E800000, 0x0, 0x0, 0x10000, 0x3E99999A, 0x0, 0x0, 0x2000B, 0x3EC28F5C, 0x0, 0x0, 0x20003, 0x3EDC28F6, 0x0, 0x0, 0x2000E, 0x3EF0A3D7, 0x0, 0x0, 0x2000F, 0x3F066666, 0x0, 0x0, 0x10000, 0x3F0F5C29, 0x0, 0x0, 0x20005, 0x3F2E147B, 0x0, 0x0, 0x10000, 0x3F428F5C, 0x0, 0x0, 0x20006, 0x3F4A3D71, 0x0, 0x0, 0x20007, 0x3F51EB85, 0x0, 0x0, 0x20008, 0x3F570A3D, 0x0, 0x0, 0x20009, 0x3F666666, 0x0, 0x0, 0x2000A };
+u32 D_80804C94_chhandcart[60] = { 0x3E19999A, 0x0, 0x0, 0x20002, 0x3E3851EC, 0x0, 0x0, 0x20003, 0x3E570A3D, 0x0, 0x0, 0x20004, 0x3E75C28F, 0x0, 0x0, 0x10000, 0x3E99999A, 0x0, 0x0, 0x20005, 0x3EB33333, 0x0, 0x0, 0x20006, 0x3EC7AE14, 0x0, 0x0, 0x20007, 0x3ED70A3D, 0x0, 0x0, 0x10000, 0x3EF5C28F, 0x0, 0x0, 0x20008, 0x3F0F5C29, 0x0, 0x0, 0x20009, 0x3F1EB852, 0x0, 0x0, 0x10000, 0x3F333333, 0x0, 0x0, 0x2000A, 0x3F400000, 0x0, 0x0, 0x2000B, 0x3F4A3D71, 0x0, 0x0, 0x2000C, 0x3F5C28F6, 0x0, 0x0, 0x10000 };
+unk80804D84 *D_80804D84_chhandcart[4] = { (void *)&D_80804BA4_chhandcart, 0, (void *)&D_80804C94_chhandcart, 0 };
+s32 D_80804D94_chhandcart[4] = { 0xF, 0x0, 0xF, 0x0 };
+s32 D_80804DA4_chhandcart[5] = { 0x2060013, 0x4BF0016, 0x46500001, 0x1F409C4, 0x0 };
+f32 D_80804DB8_chhandcart[3] = { 0.0f, 0.0f, 0.0f };
+void *D_80804DC4_chhandcart = (void *)0x0158038A;
+static u32 D_80804DC4_chhandcart_rest[17] = { 0x67C0002, (u32)&D_80804808_chhandcart, (u32)func_80801D50_chhandcart, (u32)func_80801D50_chhandcart, (u32)func_8080256C_chhandcart, 0x5DC0000, 0x0, 0x0, 0x80064, (u32)func_80801FF4_chhandcart, 0x0, 0x9400000, (u32)func_80802120_chhandcart, (u32)func_80107C2C, 0x80000002, (u32)func_80802468_chhandcart, 0x0 };
+u32 D_80804E0C_chhandcart[3] = { 0x3E0F5C29, 0x3F266666, 0xBF800000 };
+u32 D_80804E18_chhandcart[5] = { 0x3D8F5C29, 0x3E99999A, 0x3F0F5C29, 0x3F51EB85, 0xBF800000 };
+u32 D_80804E2C_chhandcart[3] = { 0x0, 0x3F000000, 0xBF800000 };
+u32 D_80804E38_chhandcart[5] = { 0x3F266666, 0x3F400000, 0x3F4CCCCD, 0x3F59999A, 0xBF800000 };
+u32 D_80804E4C_chhandcart[4] = { 0x430C0000, 0x43590000, 0x43590000, 0x0 };
+u32 D_80804E5C_chhandcart[4] = { 0x43590000, 0x43590000, 0x43590000, 0x42D90000 };
+void *D_80804E6C_chhandcart = (void *)0x0158051E;
+static u32 D_80804E6C_chhandcart_rest[20] = { 0x67B0002, (u32)&D_80804730_chhandcart, (u32)func_80803794_chhandcart, (u32)func_80803794_chhandcart, (u32)func_8080436C_chhandcart, 0x9C42710, 0x0, 0x0, 0x880564, (u32)func_80802B74_chhandcart, 0x0, 0x100000, (u32)func_808028F0_chhandcart, (u32)func_80107C2C, 0x84000002, (u32)func_80803FC4_chhandcart, 0x0, 0x0, 0x0, 0x0 };
 
 s32 func_80800000_chhandcart(void)
 {
@@ -2130,8 +2178,5 @@ void* chhandcart_entrypoint_2(void)
     return &D_80804E6C_chhandcart;
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/handcart/R_808043C0_chhandcart.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/handcart/R_808043C8_chhandcart.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/overlays/ch/handcart/R_808043D0_chhandcart.s")
