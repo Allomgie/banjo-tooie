@@ -3,23 +3,31 @@
 extern s32 D_8012B420;
 extern u8 D_8011B641[];
 extern u8 D_8011B642[];
-typedef struct { u8 unused, initial, count; } LocalEntry;
+typedef struct {
+    u8 unused, initial, count;
+} LocalEntry;
 extern LocalEntry D_8011B640[];
 int func_800D4E7C();
 void func_800D4FB8();
 
-s32 func_800D4DD0(s32 param_0) {
+s32 func_800D4DD0(s32 param_0)
+{
     if (D_8012B420 != 0) {
         switch (param_0) {
-        case 10: param_0 = 1; break;
-        case 4:
-        case 11: param_0 = 0; break;
+            case 10:
+                param_0 = 1;
+                break;
+            case 4:
+            case 11:
+                param_0 = 0;
+                break;
         }
     }
     return param_0;
 }
 
-void func_800D4E18(s32 param_0, s32 param_1) {
+void func_800D4E18(s32 param_0, s32 param_1)
+{
     if (param_0 == 9) {
         param_0 = 1;
     }
@@ -29,7 +37,8 @@ void func_800D4E18(s32 param_0, s32 param_1) {
     func_800D4FB8(param_0, func_800D4E7C(param_0) + param_1);
 }
 
-int func_800D4E7C(param_0) s32 param_0;
+int func_800D4E7C(param_0)
+s32 param_0;
 {
     s32 idx;
     if (param_0 == 9) {
@@ -51,120 +60,160 @@ u8 func_800D4EB8(s32 param_0)
 
 int func_800D4EF4(s32 param_0)
 {
-  switch (param_0 - 1)
-  {
-    case 0:  return 5;
-    case 1:  return 5;
-    case 5:  return 3;
-    case 6:  return 6;
-    case 7:  return 5;
-    case 9:  return 3;
-    case 10: return 2;
-    case 11: return 5;
-    case 12: return 4;
-    case 13: return 0;
-    case 14: return 4;
-    case 15: return 0;
-    case 16: return 0;
-    case 17: return 4;
-    case 18: return 0;
-  }
-  return 0;
+    switch (param_0 - 1) {
+        case 0:
+            return 5;
+        case 1:
+            return 5;
+        case 5:
+            return 3;
+        case 6:
+            return 6;
+        case 7:
+            return 5;
+        case 9:
+            return 3;
+        case 10:
+            return 2;
+        case 11:
+            return 5;
+        case 12:
+            return 4;
+        case 13:
+            return 0;
+        case 14:
+            return 4;
+        case 15:
+            return 0;
+        case 16:
+            return 0;
+        case 17:
+            return 4;
+        case 18:
+            return 0;
+    }
+    return 0;
 }
 
-func_800D4F9C(param_0){
-    if(param_0 == 2)
+func_800D4F9C(param_0)
+{
+    if (param_0 == 2)
         return 0;
     return 1;
 }
 
-void func_800D4FB8(param_0, param_1) s32 param_0; s32 param_1;
+void func_800D4FB8(param_0, param_1) s32 param_0;
+s32 param_1;
 {
-  s32 idx;
-  u8 *var_v1;
-  if (param_0 == 9)
-  {
-    param_0 = 1;
-  }
-  idx = func_800D4DD0(param_0);
-  if (param_1 < 0)
-  {
-    var_v1 = ((u8 *) D_8011B640) + idx * 3;
-    param_1 = 0;
-  }
-  else
-  {
-    var_v1 = ((u8 *) D_8011B640) + idx * 3;
-    if (var_v1[2] < param_1)
-    {
-      param_1 = var_v1[2];
+    s32 idx;
+    u8 *var_v1;
+    if (param_0 == 9) {
+        param_0 = 1;
     }
-  }
-  var_v1[1] = param_1;
+    idx = func_800D4DD0(param_0);
+    if (param_1 < 0) {
+        var_v1 = (u8 *) D_8011B640 + idx * 3;
+        param_1 = 0;
+    } else {
+        var_v1 = (u8 *) D_8011B640 + idx * 3;
+        if (var_v1[2] < param_1) {
+            param_1 = var_v1[2];
+        }
+    }
+    var_v1[1] = param_1;
 }
 
 void func_800D5034(s32 param_0, s32 param_1)
 {
     s32 local_0;
     s32 local_1;
-    if (param_1 == 9) param_1 = 1;
+    if (param_1 == 9)
+        param_1 = 1;
     local_0 = D_8011B640[param_1].initial;
     local_1 = D_8011B640[param_1].count;
     switch (param_1) {
-    case 1:
-        switch (param_0) {
-        case 0: case 2: case 6: case 7: case 8: case 12: case 15: case 16: case 18: case 19:
-            local_0 = local_1; break;
-        case 10: case 11:
-            local_0 = D_8011B640[10].initial + D_8011B640[11].initial; break;
-        }
-        break;
-    case 2: local_0 = 1; break;
-    case 6: case 7: case 8: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19:
-        local_0 = local_1; break;
-    case 10: case 11:
-        if ((param_0 == 0) != 0) {
+        case 1:
+            switch (param_0) {
+                case 0:
+                case 2:
+                case 6:
+                case 7:
+                case 8:
+                case 12:
+                case 15:
+                case 16:
+                case 18:
+                case 19:
+                    local_0 = local_1;
+                    break;
+                case 10:
+                case 11:
+                    local_0 = D_8011B640[10].initial + D_8011B640[11].initial;
+                    break;
+            }
+            break;
+        case 2:
+            local_0 = 1;
+            break;
+        case 6:
+        case 7:
+        case 8:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+        case 18:
+        case 19:
             local_0 = local_1;
-            func_800D4FB8(param_1 == 10 ? 11 : 10, local_1);
-        } else {
-            local_0 = (s32)D_8011B640[param_0].initial / 2;
-            if (param_1 == 10) local_0 += (s32)D_8011B640[param_0].initial % 2;
-            if (!local_0) local_0 = 1;
-        }
-        break;
+            break;
+        case 10:
+        case 11:
+            if ((param_0 == 0) != 0) {
+                local_0 = local_1;
+                func_800D4FB8(param_1 == 10 ? 11 : 10, local_1);
+            } else {
+                local_0 = (s32) D_8011B640[param_0].initial / 2;
+                if (param_1 == 10)
+                    local_0 += (s32) D_8011B640[param_0].initial % 2;
+                if (!local_0)
+                    local_0 = 1;
+            }
     }
     func_800D4FB8(param_1, local_0);
 }
 
 void func_800D517C()
 {
-  u8 *local_1;
-  u32 *local_2;
-  s32 local_0;
-  s32 local_3;
-  s32 local_4;
-  s32 local_5;
+    u8 *local_1;
+    u32 *local_2;
+    s32 local_0;
+    s32 local_3;
+    s32 local_4;
+    s32 local_5;
 
-  local_5 = _gcextra_entrypoint_0();
-  local_2 = ((u32 *) &D_8012B420);
-  *local_2 = 0;
-  local_1 = ((u8 *) D_8011B640);
-  local_0 = 0;
-  do {
-    local_4 = func_800D4EF4(local_0);
-    local_3 = local_4;
-    if ((local_4 != 0) && (func_800D4F9C(local_0) != 0)) {
-      local_3 += local_5;
-    }
-    local_0 += 1;
-    local_1 += 3;
-    local_1[-1] = local_3;
-    local_1[-2] = local_3;
-  } while (local_0 != 0x14);
+    local_5 = _gcextra_entrypoint_0();
+    local_2 = (u32 *) &D_8012B420;
+    *local_2 = 0;
+    local_1 = (u8 *) D_8011B640;
+    local_0 = 0;
+    do {
+        local_4 = func_800D4EF4(local_0);
+        local_3 = local_4;
+        if ((local_4 != 0) && (func_800D4F9C(local_0) != 0)) {
+            local_3 += local_5;
+        }
+        local_0 += 1;
+        local_1 += 3;
+        local_1[-1] = local_3;
+        local_1[-2] = local_3;
+    } while (local_0 != 0x14);
 }
 
-int func_800D5210(param_0){
-    if(param_0 == 9){
+int func_800D5210(param_0)
+{
+    if (param_0 == 9) {
         param_0 = 1;
     }
 
@@ -173,15 +222,16 @@ int func_800D5210(param_0){
 
 void func_800D5234(s32 param_0)
 {
-  D_8012B420 = param_0;
+    D_8012B420 = param_0;
 }
 
 int func_800D5240()
 {
-  return D_8012B420;
+    return D_8012B420;
 }
 
-/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EAE6C0.data.s) is defined here in C.
- * Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8011B641 = D_8011B640 + 0x1, D_8011B642 = D_8011B640 + 0x2 */
-LocalEntry D_8011B640[21] = { 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0x32, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x31, 0x0, 0x0, 0x36, 0x0, 0x0, 0x2D, 0x0, 0x0, 0x0, 0x0, 0x0, 0x10, 0x0, 0x0, 0x5F, 0x0, 0x0, 0x2F, 0x0, 0x0, 0x11, 0x0, 0x0, 0x35, 0x0, 0x0, 0x2E, 0x0, 0x0, 0x34, 0x0, 0x0, 0x37, 0x0, 0x0, 0x30, 0x0, 0x0, 0x30, 0x0, 0x0, 0x0, 0x0, 0x0 };
+LocalEntry D_8011B640[21] = {
+    0x0,  0x0,  0x0,  0x1,  0x0,  0x0,  0x32, 0x0,  0x0,  0x0,  0x0,  0x0, 0x0, 0x0,  0x0,  0x0,
+    0x0,  0x0,  0x31, 0x0,  0x0,  0x36, 0x0,  0x0,  0x2D, 0x0,  0x0,  0x0, 0x0, 0x0,  0x10, 0x0,
+    0x0,  0x5F, 0x0,  0x0,  0x2F, 0x0,  0x0,  0x11, 0x0,  0x0,  0x35, 0x0, 0x0, 0x2E, 0x0,  0x0,
+    0x34, 0x0,  0x0,  0x37, 0x0,  0x0,  0x30, 0x0,  0x0,  0x30, 0x0,  0x0, 0x0, 0x0,  0x0};

@@ -1,69 +1,75 @@
-#include "types.h"
 #include "memory.h"
 
 #include "core2/1EBA250.h"
 #include "core2/1EC8070.h"
 
-// TODO move these to a math header.
 void func_800D9470(f32[4], f32[4], f32[4]);
 void func_800D952C(f32[4], f32[4]);
 void func_800D9888(f32[4], f32[4], f32[4], f32);
 void func_800D9AD4(f32[4], f32[4], f32[4], f32);
 
 s16 func_8001B668(s32, s32);
-Unkfunc_800E0960_1* func_8001B798(s16);
+Unkfunc_800E0960_1 *func_8001B798(s16);
 void func_8001B754(s16);
 
-void* func_800E0960(s32 arg0) {
-    void* sp18;
-    Unkfunc_800E0960_1* temp_v0;
+void *func_800E0960(s32 arg0)
+{
+    void *sp18;
+    Unkfunc_800E0960_1 *temp_v0;
 
-    temp_v0 = (Unkfunc_800E0960_1*)heap_alloc(arg0 * sizeof(Unkfunc_800E0960_2) + sizeof(Unkfunc_800E0960_1));
-    sp18 = temp_v0;
-    temp_v0->unk0 = (Unkfunc_800E0960_2* )&temp_v0[1];
+    temp_v0 = (Unkfunc_800E0960_1 *) heap_alloc(arg0 * sizeof(Unkfunc_800E0960_2) +
+                                                sizeof(Unkfunc_800E0960_1));
+    temp_v0->unk0 = (Unkfunc_800E0960_2 *) &temp_v0[1];
     temp_v0->unk6 = (s16) arg0;
     temp_v0->unkC = 0.0f;
     func_800E0ACC(temp_v0);
     return temp_v0;
 }
 
-s16 func_800E09B8(s32 arg0) {
-    Unkfunc_800E0960_1* temp_v0_2;
+s16 func_800E09B8(s32 arg0)
+{
+    Unkfunc_800E0960_1 *temp_v0_2;
     s16 temp_v0;
 
     temp_v0 = func_8001B668(3, arg0 * sizeof(Unkfunc_800E0960_2) + sizeof(Unkfunc_800E0960_1));
     temp_v0_2 = func_800E0A28(temp_v0);
-    temp_v0_2->unk0 = (Unkfunc_800E0960_2* )&temp_v0_2[1];
+    temp_v0_2->unk0 = (Unkfunc_800E0960_2 *) &temp_v0_2[1];
     temp_v0_2->unk6 = (s16) arg0;
     temp_v0_2->unkC = 0.0f;
     func_800E0ACC(temp_v0_2);
     return temp_v0;
 }
 
-Unkfunc_800E0960_1* func_800E0A28(s16 arg0) {
+Unkfunc_800E0960_1 *func_800E0A28(s16 arg0)
+{
     return func_8001B798(arg0);
 }
 
-void func_800E0A50(void* arg0) {
+void func_800E0A50(void *arg0)
+{
     heap_free(arg0);
 }
 
-void func_800E0A70(s16 arg0) {
+void func_800E0A70(s16 arg0)
+{
     func_8001B754(arg0);
 }
 
-void func_800E0A98(Unkfunc_800E0960_1* arg0) {
-    Unkfunc_800E0960_1* temp_v0;
+void func_800E0A98(Unkfunc_800E0960_1 *arg0)
+{
+    Unkfunc_800E0960_1 *temp_v0;
 
-    temp_v0 = (Unkfunc_800E0960_1*)defrag(arg0);
-    temp_v0->unk0 = (Unkfunc_800E0960_2* )&temp_v0[1];
+    temp_v0 = (Unkfunc_800E0960_1 *) defrag(arg0);
+    temp_v0->unk0 = (Unkfunc_800E0960_2 *) &temp_v0[1];
 }
 
-void func_800E0AC0(Unkfunc_800E0960_1* arg0) {
-    arg0->unk0 = (Unkfunc_800E0960_2* )&arg0[1];
+void func_800E0AC0(Unkfunc_800E0960_1 *arg0)
+{
+    arg0->unk0 = (Unkfunc_800E0960_2 *) &arg0[1];
 }
 
-void func_800E0ACC(Unkfunc_800E0960_1* arg0) {
+void func_800E0ACC(Unkfunc_800E0960_1 *arg0)
+{
     arg0->unk10[1] = 0;
     arg0->unk10[2] = 0;
     arg0->unk10[3] = 0;
@@ -74,12 +80,14 @@ void func_800E0ACC(Unkfunc_800E0960_1* arg0) {
     arg0->unkA = 0;
 }
 
-void func_800E0AF0(Unkfunc_800E0960_1* arg0, f32 arg1) {
+void func_800E0AF0(Unkfunc_800E0960_1 *arg0, f32 arg1)
+{
     arg0->unkC = arg1;
 }
 
-void func_800E0AFC(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5) {
-    Unkfunc_800E0960_2* temp_v1;
+void func_800E0AFC(Unkfunc_800E0960_1 *arg0, u8 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5)
+{
+    Unkfunc_800E0960_2 *temp_v1;
 
     if (arg0->unk4 < arg0->unk6) {
         temp_v1 = &arg0->unk0[arg0->unk4++];
@@ -94,8 +102,9 @@ void func_800E0AFC(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2, f32 arg3, f32 ar
     }
 }
 
-void func_800E0B8C(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5) {
-    Unkfunc_800E0960_2* temp_v1;
+void func_800E0B8C(Unkfunc_800E0960_1 *arg0, u8 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5)
+{
+    Unkfunc_800E0960_2 *temp_v1;
 
     if (arg0->unk4 < arg0->unk6) {
         temp_v1 = &arg0->unk0[arg0->unk4++];
@@ -110,8 +119,9 @@ void func_800E0B8C(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2, f32 arg3, f32 ar
     }
 }
 
-void func_800E0C20(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5) {
-    Unkfunc_800E0960_2* temp_v1;
+void func_800E0C20(Unkfunc_800E0960_1 *arg0, u8 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5)
+{
+    Unkfunc_800E0960_2 *temp_v1;
 
     if (arg0->unk4 < arg0->unk6) {
         temp_v1 = &arg0->unk0[arg0->unk4++];
@@ -126,13 +136,14 @@ void func_800E0C20(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2, f32 arg3, f32 ar
     }
 }
 
-void func_800E0CB4(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2[4]) {
+void func_800E0CB4(Unkfunc_800E0960_1 *arg0, u8 arg1, f32 arg2[4])
+{
     f32 temp_f20;
     s32 i;
     f32 sp78[4];
     f32 sp68[4];
     f32 sp5C[3];
-    Unkfunc_800E0960_2* temp_v0;
+    Unkfunc_800E0960_2 *temp_v0;
 
     for (i = 0; i < arg0->unk4; i++) {
         temp_v0 = &arg0->unk0[i];
@@ -165,10 +176,11 @@ void func_800E0CB4(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2[4]) {
     }
 }
 
-void func_800E0E94(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2[3]) {
+void func_800E0E94(Unkfunc_800E0960_1 *arg0, u8 arg1, f32 arg2[3])
+{
     f32 temp_f0;
     s32 i;
-    Unkfunc_800E0960_2* temp_a1;
+    Unkfunc_800E0960_2 *temp_a1;
 
     for (i = 0; i < arg0->unk4; i++) {
         temp_a1 = arg0->unk0 + i;
@@ -187,10 +199,11 @@ void func_800E0E94(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2[3]) {
     }
 }
 
-void func_800E0FE8(Unkfunc_800E0960_1* arg0, u8 arg1, f32 arg2[3]) {
+void func_800E0FE8(Unkfunc_800E0960_1 *arg0, u8 arg1, f32 arg2[3])
+{
     f32 temp_f0;
     s32 i;
-    Unkfunc_800E0960_2* temp_a1;
+    Unkfunc_800E0960_2 *temp_a1;
 
     for (i = 0; i < arg0->unk4; i++) {
         temp_a1 = &arg0->unk0[i];

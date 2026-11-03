@@ -1,5 +1,3 @@
-#include "common.h"
-
 #include "core2/1E6A190.h"
 
 typedef struct {
@@ -8,35 +6,36 @@ typedef struct {
 
 typedef struct {
     f32 unk0;
-    Unk_1E6A190_1 unk4[4];
 } Unk_1E6A190_0;
 
-/* keyframe list of varying length; the struct view covers only its head */
 extern u32 D_80117CC0[];
 extern u32 D_80117CFC[];
 extern u32 D_80117D80[];
 
-s32 func_800908A0(void) {
+s32 func_800908A0(void)
+{
     return sizeof(BaUnknown20);
 }
 
-Unk_1E6A190_0 *func_800908A8(s32 arg0) {
+Unk_1E6A190_0 *func_800908A8(s32 arg0)
+{
     switch (arg0) {
-    case 0:
-        return (Unk_1E6A190_0 *)D_80117D80;
+        case 0:
+            return (Unk_1E6A190_0 *) D_80117D80;
 
-    case 1:
-        return (Unk_1E6A190_0 *)D_80117CFC;
-    
-    case 2:
-        return (Unk_1E6A190_0 *)D_80117CC0;
+        case 1:
+            return (Unk_1E6A190_0 *) D_80117CFC;
 
-    default:
-        return NULL;
+        case 2:
+            return (Unk_1E6A190_0 *) D_80117CC0;
+
+        default:
+            return NULL;
     }
 }
 
-void func_800908F0(PlayerState *self, s32 arg1) {
+void func_800908F0(PlayerState *self, s32 arg1)
+{
     self->unk20->unk9 = arg1;
     if (arg1 == 1) {
         func_8009ADF0(self, 4, 0);
@@ -45,92 +44,96 @@ void func_800908F0(PlayerState *self, s32 arg1) {
     }
 }
 
-void func_80090938(PlayerState *self) {
+void func_80090938(PlayerState *self)
+{
     self->unk20->unk0 = 0;
     self->unk20->unk4 = 0.0f;
     self->unk20->unk8 = 0;
     self->unk20->unk9 = 0;
     func_800908F0(self, 1);
-
 }
 
-void func_8009097C(PlayerState *self, s32 arg1) {
+void func_8009097C(PlayerState *self, s32 arg1)
+{
     self->unk20->unk0 = arg1;
     self->unk20->unk8 = 0;
     self->unk20->unk4 = func_800908A8(arg1)->unk0;
     func_800908F0(self, 2);
 }
 
-void func_800909CC(PlayerState *self) {
+void func_800909CC(PlayerState *self)
+{
     func_8009097C(self, 1);
 }
 
-void func_800909EC(PlayerState *self) {
+void func_800909EC(PlayerState *self)
+{
     func_8009097C(self, 0);
 }
 
-void func_80090A0C(PlayerState *self) {
+void func_80090A0C(PlayerState *self)
+{
     func_8009097C(self, 2);
 }
 
-void func_80090A2C(PlayerState *self) {
+void func_80090A2C(PlayerState *self)
+{
     func_800908F0(self, 1);
 }
 
 void func_80090A4C(u8 *param_0)
 {
-  u8 *local_0;
-  f32 local_1;
-  f32 local_2;
-  f32 local_3;
-  u8 *local_4;
-  u8 *local_5;
-  u8 *local_6;
-  float mlAbsF(float);
-  local_1 = func_800D8FF8();
-  local_3 = local_1;
-  if (local_1 > 0.0f)
-  {
+    f32 local_1;
+    f32 local_2;
+    f32 local_3;
+    u8 *local_4;
+    u8 *local_5;
+    u8 *local_6;
+    float mlAbsF(float);
+    local_1 = func_800D8FF8();
+    local_3 = local_1;
+    if (local_1 > 0.0f) {
     loop_1:
-    local_5 = *((u8 **) (((s8 *) param_0) + 0x20));
+        local_5 = *(u8 **) ((s8 *) param_0 + 0x20);
 
-    *((f32 *) (((s8 *) local_5) + 4)) = (f32) ((*((f32 *) (((s8 *) local_5) + 4))) - local_3);
-    local_2 = *((f32 *) (((s8 *) (*((u8 **) (((s8 *) param_0) + 0x20)))) + 4));
-    if (!(local_2 > 0.0f))
-    {
-      local_3 = mlAbsF(local_2);
-      local_4 = ((*((u8 *) (((s8 *) (*((u8 **) (((s8 *) param_0) + 0x20)))) + 8))) * 0xC) + (u8 *) func_800908A8(*((u8 *) (((s8 *) (*((u8 **) (((s8 *) param_0) + 0x20)))) + 0)));
-      func_800950FC(param_0, *((u8 *) (((s8 *) local_4) + 4)), *((s32 *) (((s8 *) local_4) + 8)));
-      local_4 += 0xC;
-      if ((*((u8 *) (((s8 *) local_4) + 4))) == 4)
-      {
-        if ((*((f32 *) (local_4))) == 0.0f)
-        {
-          func_800908F0(param_0, 1);
-          return;
+        *(f32 *) ((s8 *) local_5 + 4) = (f32) (*(f32 *) ((s8 *) local_5 + 4) - local_3);
+        local_2 = *(f32 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x20) + 4);
+        if (!(local_2 > 0.0f)) {
+            local_3 = mlAbsF(local_2);
+            local_4 = (*(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x20) + 8) * 0xC) +
+                      (u8 *) func_800908A8(*(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x20) + 0));
+            func_800950FC(param_0, *(u8 *) ((s8 *) local_4 + 4), *(s32 *) ((s8 *) local_4 + 8));
+            local_4 += 0xC;
+            if (*(u8 *) ((s8 *) local_4 + 4) == 4) {
+                if (*(f32 *) local_4 == 0.0f) {
+                    func_800908F0(param_0, 1);
+                    return;
+                }
+                local_4 = func_800908A8(*(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x20) + 0));
+                *(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x20) + 8) = 0U;
+                goto block_7;
+            }
+            local_6 = *(u8 **) ((s8 *) param_0 + 0x20);
+            *(u8 *) ((s8 *) local_6 + 8) = (u8) (*(u8 *) ((s8 *) local_6 + 8) + 1);
+        block_7:
+            *(f32 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x20) + 4) = *(f32 *) local_4;
+
+            if (!(local_3 > 0.0f)) {
+            } else {
+                goto loop_1;
+            }
         }
-        local_4 = func_800908A8(*((u8 *) (((s8 *) (*((u8 **) (((s8 *) param_0) + 0x20)))) + 0)));
-        *((u8 *) (((s8 *) (*((u8 **) (((s8 *) param_0) + 0x20)))) + 8)) = 0U;
-        goto block_7;
-      }
-      local_6 = *((u8 **) (((s8 *) param_0) + 0x20));
-      *((u8 *) (((s8 *) local_6) + 8)) = (u8) ((*((u8 *) (((s8 *) local_6) + 8))) + 1);
-      block_7:
-      *((f32 *) (((s8 *) (*((u8 **) (((s8 *) param_0) + 0x20)))) + 4)) = *((f32 *) local_4);
-
-      if (!(local_3 > 0.0f))
-      {
-      }
-      else
-      {
-        goto loop_1;
-      }
     }
-  }
 }
 
-/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E6A190.data.s) is defined here in C.
- * Values are taken from the ROM. */
-u32 D_80117CC0[15] = { 0x3E99999A, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x3E99999A, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x3F800000, 0x4000000, 0x0 };
-u32 D_80117CFC[33] = { 0x40000000, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x40A00000, 0x1000000, 0x3D75C28F, 0x3D0B4396, 0x0, 0x3D75C28F, 0x3E4CCCCD, 0x1000000, 0x3DB851EC, 0x3D0B4396, 0x0, 0x3DB851EC, 0x3F800000, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x40A00000, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x3F800000, 0x4000000, 0x0 };
-u32 D_80117D80[12] = { 0x0, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x0, 0x4000000, 0x0, 0x0, 0x0, 0x0 };
+u32 D_80117CC0[15] = {0x3E99999A, 0x1000000,  0x3DCCCCCD, 0x3D0B4396, 0x0,
+                      0x3DCCCCCD, 0x3E99999A, 0x1000000,  0x3DCCCCCD, 0x3D0B4396,
+                      0x0,        0x3DCCCCCD, 0x3F800000, 0x4000000,  0x0};
+u32 D_80117CFC[33] = {0x40000000, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD,
+                      0x40A00000, 0x1000000, 0x3D75C28F, 0x3D0B4396, 0x0, 0x3D75C28F,
+                      0x3E4CCCCD, 0x1000000, 0x3DB851EC, 0x3D0B4396, 0x0, 0x3DB851EC,
+                      0x3F800000, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD,
+                      0x40A00000, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD,
+                      0x3F800000, 0x4000000, 0x0};
+u32 D_80117D80[12] = {0x0, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD,
+                      0x0, 0x4000000, 0x0,        0x0,        0x0, 0x0};

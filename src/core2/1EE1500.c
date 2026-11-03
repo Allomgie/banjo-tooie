@@ -1,4 +1,5 @@
 #include "common.h"
 
-void func_80107C10(void) {
+void func_80107C10(void)
+{
 }

@@ -1,6 +1,6 @@
 #include "core2/1E83680.h"
 
-s32 func_800A9D90(s32 arg0) 
+s32 func_800A9D90(s32 arg0)
 {
     if (has_free_block_after(arg0) == 0) {
         func_8008160C(2);

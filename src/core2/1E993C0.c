@@ -14,7 +14,7 @@ void func_800BFAD0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param
     s32 sp24;
 
     sp24 = func_800BFC34(param_4);
-    func_800DF428((f32)func_800D2F20());
+    func_800DF428((f32) func_800D2F20());
     func_800DF470(1);
     func_800DF830(1);
     func_800DF3E0();
@@ -22,7 +22,9 @@ void func_800BFAD0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param
     func_800DE448(param_1, param_2, param_3, 0, sp24);
 }
 
-void func_800BFB58(s32 param_0, s32 param_1, f32 param_2, s32 param_3, s32 param_4, s32 param_5, s32 param_6, s32 param_7, s32 param_8) {
+void func_800BFB58(s32 param_0, s32 param_1, f32 param_2, s32 param_3, s32 param_4, s32 param_5,
+                   s32 param_6, s32 param_7, s32 param_8)
+{
     f32 sp2C[3];
     s32 sp28;
     s32 var_a0;
@@ -61,11 +63,14 @@ s32 func_800BFC94(s32 arg0)
     return func_800D674C(arg0);
 }
 
-void func_800BFCB4(void) {
+void func_800BFCB4(void)
+{
 }
 
-void func_800BFCBC(void) {
+void func_800BFCBC(void)
+{
 }
 
-func_800BFCC4(s32 param_0){
+func_800BFCC4(s32 param_0)
+{
 }

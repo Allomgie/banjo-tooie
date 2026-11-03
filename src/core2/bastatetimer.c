@@ -1,88 +1,93 @@
-#include "common.h"
-
 #include "overlays/ba/statetimer.h"
 
 #include "core2/1EB2840.h"
 
-typedef struct { f32 unk0; f32 unk4; s8 unk8; } BaStateTimerX;
+typedef struct {
+    f32 unk0;
+    f32 unk4;
+    s8 unk8;
+} BaStateTimerX;
 
-s32 bastatetimerList_getSize(void) {
+s32 bastatetimerList_getSize(void)
+{
     return sizeof(BaStateTimerList);
 }
 
-f32 bastatetimer_get(PlayerState *self, BaStateTimerId id) {
+f32 bastatetimer_get(PlayerState *self, BaStateTimerId id)
+{
     return self->state_timer->timer[id].now;
 }
 
-f32 bastatetimer_getPrevious(PlayerState *self, BaStateTimerId id) {
+f32 bastatetimer_getPrevious(PlayerState *self, BaStateTimerId id)
+{
     return self->state_timer->timer[id].prev;
 }
 
-int bastatetimer_isActive(PlayerState *self, BaStateTimerId id) {
+int bastatetimer_isActive(PlayerState *self, BaStateTimerId id)
+{
     return (self->state_timer->timer[id].now != 0.0f);
 }
 
-int bastatetimer_isDone(PlayerState *self, BaStateTimerId id) {
+int bastatetimer_isDone(PlayerState *self, BaStateTimerId id)
+{
     return (self->state_timer->timer[id].now == 0.0f);
 }
 
-int bastatetimer_isAt(PlayerState *self, BaStateTimerId id, f32 arg2) {
+int bastatetimer_isAt(PlayerState *self, BaStateTimerId id, f32 arg2)
+{
     BaStateTimer *timer = &self->state_timer->timer[id];
-    return ((timer->now  < arg2) && (arg2 <= timer->prev));
+    return ((timer->now < arg2) && (arg2 <= timer->prev));
 }
 
-void bastatetimerlist_free(PlayerState *self) {}
+void bastatetimerlist_free(PlayerState *self)
+{
+}
 
 #ifndef NONMATCHING
+
 void bastatetimerlist_init(PlayerState *param_0)
 {
-  s32 i;
-  for (i = 0; i < 10; i++)
-  {
-    (*(BaStateTimerX **)((u8 *)param_0 + 0x3C))[i].unk0 = 0.0f;
-    (*(BaStateTimerX **)((u8 *)param_0 + 0x3C))[i].unk4 = 0.0f;
-    (*(BaStateTimerX **)((u8 *)param_0 + 0x3C))[i].unk8 = (i == 2) || (i == 3);
-  }
-}
-#else
-void bastatetimerlist_init(PlayerState *self) {
-    int i;
-
-    for (i = 0; i < BA_STATE_TIMER_COUNT; i++) {
-        self->state_timer->timer[i].now = 0.0f;
-        self->state_timer->timer[i].prev = 0.0f;
-        self->state_timer->timer[i].unk8 = 0;
+    s32 i;
+    for (i = 0; i < 10; i++) {
+        (*(BaStateTimerX **) ((u8 *) param_0 + 0x3C))[i].unk0 = 0.0f;
+        (*(BaStateTimerX **) ((u8 *) param_0 + 0x3C))[i].unk4 = 0.0f;
+        (*(BaStateTimerX **) ((u8 *) param_0 + 0x3C))[i].unk8 = (i == 2) || (i == 3);
     }
 }
+
+#else
+void bastatetimerlist_init(0)
+{
 #endif
 
-void bastatetimer_clear(PlayerState *self, BaStateTimerId id) {
-    bastatetimer_set(self, id, 0.0f);
-}
+    void bastatetimer_clear(PlayerState * self, BaStateTimerId id)
+    {
+        bastatetimer_set(self, id, 0.0f);
+    }
 
-void bastatetimer_set(PlayerState *self, BaStateTimerId id, f32 arg2) {
-    self->state_timer->timer[id].now = arg2;
-    self->state_timer->timer[id].prev = arg2;
-}
+    void bastatetimer_set(PlayerState * self, BaStateTimerId id, f32 arg2)
+    {
+        self->state_timer->timer[id].now = arg2;
+        self->state_timer->timer[id].prev = arg2;
+    }
 
+    void bastatetimerlist_update(PlayerState * self)
+    {
+        int i;
+        f32 pad0;
+        s32 sp1C;
+        f32 delta;
 
-void bastatetimerlist_update(PlayerState *self){
-    int i;
-    f32 pad0;
-    s32 sp1C;
-    f32 delta;
-
-    sp1C = !func_800F424C(self);
-    delta = func_800D8FF8();
-    for(i = 0; i < BA_STATE_TIMER_COUNT; i++){
-        self->state_timer->timer[i].prev = self->state_timer->timer[i].now;
-        if(0.0f != self->state_timer->timer[i].now
-            && !(self->state_timer->timer[i].unk8 && sp1C)
-        ){
-            self->state_timer->timer[i].now -= delta;
-            if(self->state_timer->timer[i].now < 0.0f){
-                self->state_timer->timer[i].now = 0.0f;
+        sp1C = !func_800F424C(self);
+        delta = func_800D8FF8();
+        for (i = 0; i < BA_STATE_TIMER_COUNT; i++) {
+            self->state_timer->timer[i].prev = self->state_timer->timer[i].now;
+            if (0.0f != self->state_timer->timer[i].now &&
+                !(self->state_timer->timer[i].unk8 && sp1C)) {
+                self->state_timer->timer[i].now -= delta;
+                if (self->state_timer->timer[i].now < 0.0f) {
+                    self->state_timer->timer[i].now = 0.0f;
+                }
             }
         }
     }
-}

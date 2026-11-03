@@ -17,7 +17,7 @@ void func_800A5320(void)
 
     func_800EFA4C(local_0, 0.0f, -1.0f, 0.0f);
     func_800EF8BC(local_1, local_0, 68.0f);
-    func_800EFA4C(local_2, *(f32 *)D_801255C0 * local_1[1], 0.0f, local_1[2]);
+    func_800EFA4C(local_2, *(f32 *) D_801255C0 * local_1[1], 0.0f, local_1[2]);
 
     D_801270E0[0] = local_1[0];
     D_801270E0[1] = local_1[1];
@@ -38,21 +38,20 @@ void func_800A5320(void)
 
 void func_800A5430(s32 param_0[2], volatile s32 param_1, f32 param_2, unsigned int param_3)
 {
-  extern void func_800EF4E4(void *, s32, s32, f32, f32, f32);
-  extern void func_800EE780(s32, void *, s32);
-  s8 _sfpad[12];
-  s32 *sp_0x30 = param_0;
-  func_800EF4E4(_sfpad, sp_0x30[0], sp_0x30[1], 0.0f, 0.0f, -param_2);
-  func_800EE780(param_3, sp_0x30 = (s32 *) _sfpad, param_1);
+    extern void func_800EF4E4(void *, s32, s32, f32, f32, f32);
+    extern void func_800EE780(s32, void *, s32);
+    s8 _sfpad[12];
+    s32 *sp_0x30 = param_0;
+    func_800EF4E4(_sfpad, sp_0x30[0], sp_0x30[1], 0.0f, 0.0f, -param_2);
+    func_800EE780(param_3, sp_0x30 = (s32 *) _sfpad, param_1);
 }
 
 int func_800A5490()
 {
-  s32 local_0;
-  local_0 = func_8008FFE8();
-  func_8010FFD8(local_0 | 0);
+    s32 local_0;
+    local_0 = func_8008FFE8();
+    func_8010FFD8(local_0 | 0);
 }
 
-/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E7EC10.data.s) is defined here in C.
- * Values are taken from the ROM. */
-const u8 D_801255C0[16] = { 0x3F, 0xAA, 0xAA, 0xAB, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+const u8 D_801255C0[16] = {0x3F, 0xAA, 0xAA, 0xAB, 0x0, 0x0, 0x0, 0x0,
+                           0x0,  0x0,  0x0,  0x0,  0x0, 0x0, 0x0, 0x0};
