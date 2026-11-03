@@ -66,7 +66,6 @@ extern void baroll_setAngularVelocity(PlayerState *, f32, f32);
 extern int func_800EA068(int param_0);
 void func_80801134_bsbabykaz();
 void bsbabykaz_entrypoint_1();
-void *D_exp_bsbabykaz_entrypoint_1[] = { (void *)bsbabykaz_entrypoint_1 };
 
 void bsbabykaz_entrypoint_0(s32 param_0);
 unsigned int func_80800050_bsbabykaz(void *param_0);
@@ -763,3 +762,18 @@ s32 bsbabykaz_entrypoint_14(f32 *param_0)
     if (func_800C6C94(local_2, 12.0f, local_1, 0x400005)) return 0;
     return 1;
 }
+
+/* TU-NOTE: the state tables (formerly asm/data/overlays/bs/babykaz.data.s) are defined here. The original source
+ * referenced the overlay's own bsbabykaz_entrypoint_1 in seven of them. Rare's post-link tool redirected those data
+ * words to the core2 trampoline _bsbabykaz_entrypoint_1 (0x800827C0) and left them out of the header's reloc list.
+ * The local reference matters for codegen: taking the function's address in data is what makes as1 schedule the
+ * switch dispatch in bsbabykaz_entrypoint_1 the way the ROM shows (one instruction moves without it). The addend
+ * reproduces the redirect with a standard linker, as in bs/btrot.c. */
+s32 D_80801730_bsbabykaz[4] = { (u32)func_808003D0_bsbabykaz, (u32)func_808003F0_bsbabykaz, (u32)func_80800438_bsbabykaz, (u32)bsbabykaz_entrypoint_1 + (0x800827C0 - 0x80800270) };
+s32 D_80801740_bsbabykaz[4] = { (u32)func_8080072C_bsbabykaz, (u32)func_80800754_bsbabykaz, (u32)func_8080077C_bsbabykaz, (u32)bsbabykaz_entrypoint_1 + (0x800827C0 - 0x80800270) };
+s32 D_80801750_bsbabykaz[4] = { (u32)func_808007EC_bsbabykaz, (u32)func_8080080C_bsbabykaz, (u32)func_80800864_bsbabykaz, (u32)bsbabykaz_entrypoint_1 + (0x800827C0 - 0x80800270) };
+s32 D_80801760_bsbabykaz[4] = { (u32)func_808009C4_bsbabykaz, (u32)func_808009EC_bsbabykaz, (u32)func_80800B54_bsbabykaz, (u32)bsbabykaz_entrypoint_1 + (0x800827C0 - 0x80800270) };
+s32 D_80801770_bsbabykaz[4] = { (u32)func_80800D18_bsbabykaz, (u32)func_80800D40_bsbabykaz, (u32)func_80800D68_bsbabykaz, (u32)bsbabykaz_entrypoint_1 + (0x800827C0 - 0x80800270) };
+s32 D_80801780_bsbabykaz[4] = { (u32)func_80800DD4_bsbabykaz, (u32)func_80800E0C_bsbabykaz, (u32)func_80800EC8_bsbabykaz, (u32)bsbabykaz_entrypoint_1 + (0x800827C0 - 0x80800270) };
+s32 D_80801790_bsbabykaz[4] = { (u32)func_80801014_bsbabykaz, (u32)func_80801044_bsbabykaz, (u32)func_808010AC_bsbabykaz, (u32)bsbabykaz_entrypoint_1 + (0x800827C0 - 0x80800270) };
+s32 D_808017A0_bsbabykaz[4] = { (u32)func_808012C4_bsbabykaz, (u32)func_808012EC_bsbabykaz, (u32)func_80801384_bsbabykaz, (u32)func_808011EC_bsbabykaz };

@@ -1068,7 +1068,7 @@ segments:
     subsegments: 
       - [0x01F08A60, c, babykaz]
       - [0x01F0A060, .rodata, babykaz]
-      - [0x01F0A190, data, babykaz]
+      - [0x01F0A190, .data, babykaz]
       - [0x01F0A210, .bss, babykaz]
   - name: bsbee_header
     dir: overlays/bsbee
