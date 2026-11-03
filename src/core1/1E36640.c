@@ -91,7 +91,7 @@ extern void *D_800411F0;
 extern void func_80020F70(void *);
 extern void func_80027200(void);
 
-/* Vorwaertsdeklarationen der Funktionen dieser TU. */
+/* Forward declarations of the functions in this file. */
 s32 func_8001ED68(TTCSPmp *arg0);
 void func_8001EE34(u16 *arg0);
 void func_800200B8(TTSnd *p);
@@ -895,3 +895,16 @@ void func_80020DEC(s32 arg0)
         D_800411F4 = 0;
     }
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core1/1E36640.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+extern u8 D_8007E9C0[];
+TTSnd *D_800411D0 = 0;
+u8 *D_800411D4 = 0;
+TTSndI *D_800411D8 = 0;
+u8 *D_800411DC = (void *)&D_8007E9C0;
+s16 D_800411E0 = 0x0;
+static u32 D_800411E0_rest[3] = { 0x0, 0x0, 0x0 };
+void *D_800411F0 = 0;
+u8 *D_800411F4 = 0;
+static u32 D_800411F4_rest[26] = { 0x0, 0x0, 0x3, 0x898, 0x0, 0x4A0, 0x2666, 0xFFFFD99A, 0x0, 0x0, 0x0, 0x0, 0x1A0, 0x340, 0xCCC, 0xFFFFF334, 0x3FFF, 0x0, 0x0, 0x0, 0x0, 0x528, 0x1388, 0x0, 0x0, 0x0 };

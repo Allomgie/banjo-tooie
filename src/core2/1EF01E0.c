@@ -188,3 +188,9 @@ void func_80116914(u32 *param_0,u32 param_1,u32 param_2,u16 *param_3,u16 *param_
    
 
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EF01E0.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+struct LocalHuft *D_80124A80 = 0;
+static u32 D_80124A80_rest[2] = { 0x0, 0x0 };
+s32 *D_80124A8C = 0;

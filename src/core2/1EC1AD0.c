@@ -214,3 +214,7 @@ void func_800E8A20()
     D_8012D600 = freelist_defrag(D_8012D600);
   }
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EC1AD0.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+LocalExponent D_801234C0[8] = { 0x6, 0x0, 0x5, 0x20000, 0x4, 0x30000, 0x3, 0x38000, 0x2, 0x3C000, 0x1, 0x3E000, 0x0, 0x3F000, 0x0, 0x3F800 };

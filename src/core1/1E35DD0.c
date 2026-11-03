@@ -30,7 +30,7 @@ extern OSThread *func_80012598(void);
 extern s32 D_8007E95C[];
 extern s16 D_8007DB80;
 
-/* Vorwaertsdeklarationen der Funktionen dieser TU. */
+/* Forward declarations of the functions in this file. */
 void func_8001E7B4();
 
 void func_8001E2A0()
@@ -214,3 +214,7 @@ int func_8001E7CC()
 {
   return D_8007E948;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core1/1E35DD0.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80041180[16] = { 0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

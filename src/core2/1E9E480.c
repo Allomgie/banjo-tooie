@@ -311,3 +311,7 @@ void func_800C5668(s32 param_0, void *param_1)
         func_800B9A24(param_1, local_7, D_8011A880, local_0, local_1+local_3-local_4, local_2, local_4);
     }
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E9E480.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_8011A880[16] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

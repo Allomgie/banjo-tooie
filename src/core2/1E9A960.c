@@ -1689,3 +1689,10 @@ void func_800C4B7C(param_0) unsigned int param_0;
 {
   D_8012A996 = param_0;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E9A960.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+float D_8011A870 = 0.0f;
+float D_8011A874 = 1.0f;
+f32 D_8011A878 = 1.0f;
+static u32 D_8011A878_rest[1] = { 0x0 };

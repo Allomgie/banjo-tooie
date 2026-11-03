@@ -29,8 +29,6 @@
 #define M2C_STRUCT_COPY memcpy
 #endif
 
-extern f32 D_80041CD0;
-extern f32 D_80041CD4;
 typedef s32 M2C_UNK;
 typedef s8 M2C_UNK8;
 typedef s16 M2C_UNK16;
@@ -44,9 +42,9 @@ f32 func_80027170(s32 cents)
     f32 ratio = 1.0f;
 
     if (cents >= 0) {
-        x = D_80041CD0;
+        x = 1.0005778f;
     } else {
-        x = D_80041CD4;
+        x = 0.99942255f;
         cents = -cents;
     }
 

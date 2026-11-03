@@ -1,7 +1,7 @@
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 
-extern s16 D_80117EC0;
+extern s16 D_80117EC0[];
 extern void func_800BED18(void *, void *);
 extern s32 func_800EA05C(void);
 extern void func_800EE84C(void *, void *);
@@ -30,7 +30,7 @@ void func_80098898(u8 *param_0)
     func_800EE84C(*((u8 **)(param_0 + 0xBC)) + 0xC, local_1);
     func_800EE84C(*((u8 **)(param_0 + 0xBC)), local_0);
 
-    local_3 = (struct Unknown *)&D_80117EC0;
+    local_3 = (struct Unknown *)D_80117EC0;
     while (local_3->field_0 != 0 && local_2 != local_3->field_0) local_3++;
 
     *(f32 *)(*(u8 **)(param_0 + 0xBC) + 12) -= local_3->field_2;
@@ -428,3 +428,8 @@ void func_80099544(u8 *param_0)
  bakey_defrag(new_var3); func_800A266C(new_var3);
   }
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E72180.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80117EC0 -> s16[] (uses written as NAME[0]) */
+s16 D_80117EC0[24] = { 0x136, 0x5DC, 0x1F40, 0x5DC, 0x5DC, 0xBB8, 0x5DC, 0x155, 0x7D0, 0x1F40, 0x7D0, 0x7D0, 0x7D0, 0x7D0, 0x0, 0x1F4, 0x1F40, 0x1F4, 0x1F4, 0x3E8, 0x1F4, 0x0, 0x0, 0x0 };

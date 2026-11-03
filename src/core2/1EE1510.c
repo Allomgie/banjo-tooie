@@ -1,7 +1,7 @@
 #include "common.h"
 
 #define reinterpret_cast(type, var) (*((type *)&var))
-extern s32 D_80124580;
+extern s32 D_80124580[];
 extern void func_8010A3E8(void *, f32);
 typedef struct { u32 top:31; u32 flag:1; } CtorTailDest;
 typedef struct { u32 top:30; u32 flag:1; u32 tail:1; } CtorTailSource;
@@ -48,7 +48,7 @@ ActorE1510 *func_80108DC0(s32 arg0, s32 *position, s32 yaw, s32 arg3, s32 arg4, 
 
 int func_80107C20()
 {
-  return (int)&D_80124580;
+  return (int)D_80124580;
 }
 
 u8 *func_80107C2C(u8 *param_0, s32 param_1, u8 *param_2, s32 param_3, u8 *param_4)
@@ -587,3 +587,10 @@ ActorE1510 *func_80108DC0(s32 arg0, s32 *position, s32 yaw, s32 arg3, s32 arg4, 
     }
     return actor;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EE1510.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80124580 -> s32[] (uses written as NAME[0]) */
+extern void func_80108F08();
+s32 D_80124580[8] = { 0x0, 0x0, 0x0, (u32)func_80108F08, 0x0, 0x0, 0x0, 0x0 };

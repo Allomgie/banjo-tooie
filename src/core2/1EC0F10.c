@@ -153,3 +153,7 @@ void func_800E7A4C(Gfx** gfx) {
     func_800E78C8(gfx, G_TF_BILERP);
     D_8012D580.unk25 = 0;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EC0F10.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+Gfx D_80123310[6] = { 0xE7000000, 0x0, 0xD9C0FFFA, 0x0, 0xD9FFFFFF, 0x200004, 0xD7000002, 0x80008000, 0xDF000000, 0x0, 0x0, 0x0 };

@@ -14,13 +14,13 @@ extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern s32 func_800EFFB4(void *, f32, void *);
 extern s32 _gcmapsects_entrypoint_7(void *);
 extern f32 func_800D8FF8(void);
-extern s32 D_80123F68;
-extern s32 D_80124004;
-extern s32 D_8012401C;
-extern s32 D_80124028;
-extern s32 D_80124034;
-extern s32 D_80124040;
-extern s32 D_801241D8;
+extern s32 D_80123F68[];
+extern s32 D_80124004[];
+extern s32 D_8012401C[];
+extern s32 D_80124028[];
+extern s32 D_80124034[];
+extern s32 D_80124040[];
+extern s32 D_801241D8[];
 extern f32 D_801241E4[4];
 extern f32 D_801241F4[3];
 extern f32 D_80124200[3];
@@ -36,12 +36,12 @@ typedef struct { u8 pad0[0x18]; u8 unk18; u8 pad19[0x27]; u8 unk40; } G_FDC28;
 typedef struct { f32 value_00; /* Volume/scale passed to func_800FC934. */ f32 value_04; /* Multiplier for the tempo-derived value. */ s16 value_08; /* Main sound handle; -1 means absent. */ u8 pad_0A[5]; u8 value_0F, value_10; u8 pad_11[2]; u8 value_13, value_14, pad_15, value_16, value_17, value_18; u8 pad_19[7]; s16 value_20, value_22; u8 pad_24[4]; s32 value_28; u8 pad_2C[0x10]; f32 value_3C; u8 value_40, value_41; } FDC58State;
 typedef struct { s32 local_0[2]; s16 local_1[2]; } FDC58Entry;
 extern FDC58Entry D_80123E84[];
-extern FDC58Entry D_80123FC8;
-extern FDC58Entry D_80124064;
+extern FDC58Entry D_80123FC8[];
+extern FDC58Entry D_80124064[];
 extern FDC58Entry D_801241CC;
-extern FDC58Entry D_8012419C;
+extern FDC58Entry D_8012419C[];
 extern FDC58Entry D_80124010;
-extern FDC58Entry D_80124124;
+extern FDC58Entry D_80124124[];
 extern FDC58Entry *D_80135A04;
 extern FDC58Entry *D_80135A08;
 extern u8 D_801359E8[];
@@ -209,14 +209,14 @@ void func_800FD2A0(u8 *param_0, s32 param_1) {
                     local_6 = local_7;
                 }
                 if (local_6 == 2) {
-                    D_80135A04 = &D_80123F68;
+                    D_80135A04 = D_80123F68;
                     return;
                 }
             }
         } else {
             if ((*(f32 *)((s8 *)(param_0) + (4))) > 2000.0f) {
                 func_800FCFB0(0, 0x4A, ((s32 *) D_80123E84), param_1, 1.75f);
-                ((s32 *) D_80135A04) = ((s32 *) &D_80123FC8);
+                ((s32 *) D_80135A04) = ((s32 *) D_80123FC8);
                 return;
             }
         default:
@@ -263,7 +263,7 @@ void func_800FD2A0(u8 *param_0, s32 param_1) {
         case 3:
         case 4:
 
-            func_800FCFB0(0, 0x4B, &D_8012401C, param_1, 1.75f);
+            func_800FCFB0(0, 0x4B, D_8012401C, param_1, 1.75f);
             ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
             return;
         }
@@ -276,23 +276,23 @@ void func_800FD2A0(u8 *param_0, s32 param_1) {
         switch ((*(u8 *)((s8 *)(((u8 *) &D_801359C0)) + 0x11))) {
         case 3:
             if (param_1 != 0) {
-                func_800FCFB0(0, 0x4B, &D_8012401C, param_1, 1.75f);
+                func_800FCFB0(0, 0x4B, D_8012401C, param_1, 1.75f);
             } else {
-                func_800FCFB0(0, 0x4B, &D_80124004, param_1, 1.75f);
+                func_800FCFB0(0, 0x4B, D_80124004, param_1, 1.75f);
             }
             ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
             break;
         case 0:
         case 2:
-            func_800FCFB0(0, 0x4B, &D_8012401C, param_1, 1.75f);
+            func_800FCFB0(0, 0x4B, D_8012401C, param_1, 1.75f);
             ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
             D_80135A1E = 0;
             break;
         case 1:
             if (D_80135A1E != 0) {
-                func_800FCFB0(0, 0x4B, &D_80124028, param_1, 1.75f);
+                func_800FCFB0(0, 0x4B, D_80124028, param_1, 1.75f);
             } else {
-                func_800FCFB0(0, 0x4B, &D_8012401C, param_1, 1.75f);
+                func_800FCFB0(0, 0x4B, D_8012401C, param_1, 1.75f);
             }
             ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
             break;
@@ -310,9 +310,9 @@ void func_800FD2A0(u8 *param_0, s32 param_1) {
         case 3:
 
             if (param_1 != 0) {
-                func_800FCFB0(0, 0x4B, &D_80124028, param_1, 1.75f);
+                func_800FCFB0(0, 0x4B, D_80124028, param_1, 1.75f);
             } else {
-                func_800FCFB0(0, 0x4B, &D_80124004, param_1, 1.75f);
+                func_800FCFB0(0, 0x4B, D_80124004, param_1, 1.75f);
             }
             ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
             D_80135A1E = 1;
@@ -321,20 +321,20 @@ void func_800FD2A0(u8 *param_0, s32 param_1) {
         break;
     case 22:
         if (param_1 != 0) {
-            func_800FCFB0(0, 0x4B, &D_8012401C, param_1, 1.75f);
+            func_800FCFB0(0, 0x4B, D_8012401C, param_1, 1.75f);
         } else {
-            func_800FCFB0(0, 0x4B, &D_80124004, param_1, 1.75f);
+            func_800FCFB0(0, 0x4B, D_80124004, param_1, 1.75f);
         }
         ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
         return;
     case 5:
         if ((*(u8 *)((s8 *)(((u8 *) &D_801359C0)) + (0x40))) == 0) {
-            func_800FCFB0(0, 0x4B, &D_80124004, param_1, 1.75f);
+            func_800FCFB0(0, 0x4B, D_80124004, param_1, 1.75f);
         }
         ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
         return;
     case 6:
-        func_800FCFB0(0, 0x4B, &D_80124040, param_1, 1.75f);
+        func_800FCFB0(0, 0x4B, D_80124040, param_1, 1.75f);
         ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
         return;
     case 8:
@@ -346,15 +346,15 @@ void func_800FD2A0(u8 *param_0, s32 param_1) {
         ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
         return;
     case 9:
-        func_800FCFB0(0, 0x4B, &D_80124034, param_1, 1.75f);
+        func_800FCFB0(0, 0x4B, D_80124034, param_1, 1.75f);
         ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
         return;
     case 10:
-        func_800FCFB0(0, 0x4B, &D_8012401C, param_1, 1.75f);
+        func_800FCFB0(0, 0x4B, D_8012401C, param_1, 1.75f);
         ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
         return;
     case 11:
-        func_800FCFB0(0, 0x4B, &D_80124028, param_1, 1.75f);
+        func_800FCFB0(0, 0x4B, D_80124028, param_1, 1.75f);
         ((s32 *) D_80135A04) = ((s32 *) &D_80124010);
         return;
     /* Advance/retreat the blend by delta time inside/outside the test region.
@@ -374,7 +374,7 @@ void func_800FD2A0(u8 *param_0, s32 param_1) {
                 if (D_80135A44 >= 0.5f) {
                     ((s32 *) D_80135A04) = ((s32 *) &D_801241CC);
                 } else {
-                    D_80135A04 = &D_801241D8;
+                    D_80135A04 = D_801241D8;
                 }
             }
         }
@@ -440,17 +440,17 @@ void func_800FDC58(s32 param_0)
                 switch (func_800CBBE0(D_801359C0.FDC58State.value_28)) {
                 case 0:
                     func_800FCFB0(0, 0x47, D_80123E84, param_0, 1.75f);
-                    D_80135A04 = &D_80123FC8;
+                    D_80135A04 = D_80123FC8;
                     break;
                 case 1:
                     func_800FCFB0(0, 0x4A, D_80123E84, param_0, 1.75f);
-                    D_80135A04 = &D_80123FC8;
+                    D_80135A04 = D_80123FC8;
                     break;
                 case 7: D_80135A1E = 1; break;
                 case 8: D_80135A1E = 0; break;
                 case 9:
                     func_800FCFB0(0, 0x4A, D_80123E84, param_0, 1.75f);
-                    D_80135A04 = &D_80124064;
+                    D_80135A04 = D_80124064;
                     break;
                 case 12:
                     if (func_800DA298(0x360)) D_80135A04 = &D_801241CC;
@@ -461,13 +461,13 @@ void func_800FDC58(s32 param_0)
                     break;
                 case 15:
                     func_800FCFB0(0, 0x8D, D_80123E84, param_0, 1.75f);
-                    D_80135A04 = &D_8012419C;
+                    D_80135A04 = D_8012419C;
                     break;
                 case 16:
                     if (func_800DA298(0x3B) && !func_800DA298(0x43)) {
                         func_800FCFB0(0, 0x9A, D_80123E84, param_0, 1.75f);
                         D_80135A04 = &D_80124010;
-                    } else D_80135A04 = &D_80124124;
+                    } else D_80135A04 = D_80124124;
                     break;
                 case 17:
                     if (func_800DA298(0x3B) && !func_800DA298(0x43)) {
@@ -1063,3 +1063,34 @@ f32 func_800FF060(f32 param_0, f32 *param_1, f32 param_2, f32 param_3, f32 param
   *param_1 = ((f32) local_23) * local_22;
   return (((local_0 + local_1) + local_2) + local_11) * ((f32) local_23);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1ED68A0.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80123E5E = D_80123E50 + 0xE
+ * extern declarations adjusted to the object (same addresses): D_80123F68 -> s32[] (uses written as NAME[0]), D_80123FC8 -> FDC58Entry[] (uses written as NAME[0]), D_80124004 -> s32[] (uses written as NAME[0]), D_8012401C -> s32[] (uses written as NAME[0]), D_80124028 -> s32[] (uses written as NAME[0]), D_80124034 -> s32[] (uses written as NAME[0]), D_80124040 -> s32[] (uses written as NAME[0]), D_80124064 -> FDC58Entry[] (uses written as NAME[0]), D_80124124 -> FDC58Entry[] (uses written as NAME[0]), D_8012419C -> FDC58Entry[] (uses written as NAME[0]), D_801241D8 -> s32[] (uses written as NAME[0]) */
+u32 D_80123E50[4] = { 0x0, 0x0, 0x0, 0x0 };
+s32 D_80123E60 = 0x0;
+AudioRecord D_80123E64[4] = { 0x486, 0x32C8, 0.6f, 0x66A, 0x2710, 1.0f, 0x669, 0x2710, 1.0f, 0x616, 0x61A8, 0.5f };
+FDC58Entry D_80123E84[19] = { -0x1, -0x1, -0x1, -0x1, 0x63FF, 0x1C00, 0x50, 0x50, 0x1FE0000, 0x1C00, 0x50, 0x50, 0x73FF, 0xC00, 0x78, 0x69, 0x41C00000, 0x0, 0x78, 0x69, 0x41C00000, 0x0, 0x78, 0x69, -0x41E00000, 0x0, 0x5F, 0x69, 0x401D0000, 0x0, 0x78, 0x69, 0x401F0000, 0x0, 0x78, 0x69, 0x73DF, 0x0, 0x78, 0x69, 0xE108, 0x0, 0x78, 0x69, 0x4FF, 0x300, 0x82, 0x64, 0x7FF0000, 0x300, 0x64, 0x64, 0x7C610000, 0x300, 0x5A, 0x64, 0x7EF0000, 0x0, 0x64, 0x64, 0x113800, 0x0, 0x64, 0x64, -0x7FA00000, 0x0, 0x6E, 0x64, 0xC090, 0x0, 0x75, 0x64, 0x0, 0x0, 0x82, 0x64 };
+s32 D_80123F68[24] = { 0xFF, 0x0, 0xB400B4, 0x1F00, 0x0, 0xA500B4, 0x1FF0000, 0x1FF0000, 0xAA00AA, -0x1F80000, 0x0, 0xB400B4, 0x60FF, 0x0, 0xB400B4, 0x13F0000, 0x0, 0xAA00B4, 0x72, 0x0, 0xB400B4, 0x30098050, 0x0, 0xB400B4 };
+FDC58Entry D_80123FC8[5] = { 0x0, 0x0, 0xB4, 0xB4, 0xE00, 0x0, 0xA5, 0xB4, 0xCFF, 0x3000, 0x64, 0x5F, 0xFFF, 0x3000, 0x64, 0x5F, 0x3F0000, 0x0, 0x5C, 0x5C };
+s32 D_80124004[3] = { 0x3F80000, 0x60000, 0x640064 };
+FDC58Entry D_80124010 = { 0x0, 0x0, 0x5F, 0x5F };
+s32 D_8012401C[3] = { 0x0, 0xFE, 0x5F006E };
+s32 D_80124028[3] = { 0x0, 0x1F00, 0x5F0064 };
+s32 D_80124034[3] = { 0x0, 0xE001, 0x5F0064 };
+s32 D_80124040[9] = { -0x1FF0000, 0x70000, 0x640064, 0xC1FF, 0x600, 0x96008F, 0x7F0000, 0x600, 0x8F008F };
+FDC58Entry D_80124064[16] = { 0xD000, 0x0, 0x96, 0x8F, 0x3F, 0xF00000, 0x8E, 0x8E, 0x1FD0, 0xF00000, 0x89, 0x89, 0xFE040, 0xF00000, 0x82, 0x82, 0xFFF, 0x40000, 0x66, 0x5F, 0x2FE40, 0x40000, 0x5F, 0x5F, 0x2FE40, 0x40000, 0x5F, 0x5F, 0xFF90000, 0x40000, 0x66, 0x5F, -0x26E0000, 0x40000, 0x5F, 0x5F, -0x1, -0x1, 0x50, 0x50, 0x7FE, 0x1800, 0x7D, 0x74, 0xE001, 0x1800, 0x74, 0x74, 0x3F0000, 0x1800, 0x74, 0x74, 0x3C80000, 0x1800, 0x74, 0x74, 0x1C080000, 0x1800, 0x74, 0x74, 0x41FE, -0x1, 0x69, 0x69 };
+FDC58Entry D_80124124[10] = { 0x601, -0x1, 0x66, 0x66, 0x80FE, -0x1, 0x73, 0x73, 0xF00, -0x1, 0x73, 0x73, 0x7F, 0x80, 0x66, 0x66, 0x1F00, 0x80, 0x66, 0x66, 0xE000, 0x80, 0x66, 0x66, 0x70000, 0x80, 0x66, 0x66, 0x1C0000, 0x80, 0x66, 0x66, 0xE00000, 0x80, 0x66, 0x66, 0x3000A00, 0x80, 0x66, 0x66 };
+FDC58Entry D_8012419C[4] = { 0xC040000, 0x80, 0x66, 0x66, 0x30800000, 0x80, 0x66, 0x66, -0x20000000, 0x80, 0x66, 0x66, -0x1, -0x1, 0x7D, 0x7D };
+FDC58Entry D_801241CC = { 0xB000, -0x1, 0x4B, 0x69 };
+s32 D_801241D8[3] = { 0xE060, -0x1, 0x5A0069 };
+f32 D_801241E4[4] = { 3.25e+03f, 6.75e+03f, 7e+02f, 9.3e+03f };
+f32 D_801241F4[3] = { -6326.0f, 7e+02f, -6.1e+03f };
+f32 D_80124200[3] = { 0.0f, 5.3e+03f, 2.1e+03f };
+f32 D_8012420C[3] = { 5.98e+03f, 1.5e+03f, 1.53e+03f };
+f32 D_80124218[3] = { 0.0f, 0.0f, 0.0f };
+E_FDBB8 D_80124224[23] = { -0x1, -0x1, 0x2, 0x54, 0x1, 0x38, 0x1, 0x48, 0x1, 0x4C, 0x1, 0x3B, 0x1, 0x4E, 0x1, 0x63, 0x1, 0x56, 0x1, 0x56, 0x1, 0x61, 0x1, 0x55, 0x1, 0x49, 0x1, 0x3D, 0x2, 0x43, 0x1, 0x84, 0x2, 0x43, 0x1, 0x49, 0x1, 0x5B, 0x1, 0x76, 0x1, 0x7A, 0x1, 0x42, 0x2, 0x7C };
+s32 D_801242DC[14] = { 0x2710, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3A98, 0x0, 0x0, 0x0, 0x0, 0xFA0, 0x0 };
+f32 D_80124314[15][2] = { 0.5f, 0.5f, 1.75f, 1.75f, 1.75f, 1.75f, 1.75f, 1.75f, 0.0f, 0.25f, 1.75f, 1.75f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 1.75f, 1.75f, 0.0f, 0.05f, 0.0f, 0.05f, 0.0f, 0.0f };
+static u32 D_80124314_rest[1] = { 0x0 };

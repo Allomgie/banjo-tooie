@@ -11,9 +11,10 @@ typedef struct {
     Unk_1E6A190_1 unk4[4];
 } Unk_1E6A190_0;
 
-extern Unk_1E6A190_0 D_80117CC0;
-extern Unk_1E6A190_0 D_80117CFC;
-extern Unk_1E6A190_0 D_80117D80;
+/* keyframe list of varying length; the struct view covers only its head */
+extern u32 D_80117CC0[];
+extern u32 D_80117CFC[];
+extern u32 D_80117D80[];
 
 s32 func_800908A0(void) {
     return sizeof(BaUnknown20);
@@ -22,13 +23,13 @@ s32 func_800908A0(void) {
 Unk_1E6A190_0 *func_800908A8(s32 arg0) {
     switch (arg0) {
     case 0:
-        return &D_80117D80;
+        return (Unk_1E6A190_0 *)D_80117D80;
 
     case 1:
-        return &D_80117CFC;
+        return (Unk_1E6A190_0 *)D_80117CFC;
     
     case 2:
-        return &D_80117CC0;
+        return (Unk_1E6A190_0 *)D_80117CC0;
 
     default:
         return NULL;
@@ -127,3 +128,9 @@ void func_80090A4C(u8 *param_0)
     }
   }
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E6A190.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u32 D_80117CC0[15] = { 0x3E99999A, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x3E99999A, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x3F800000, 0x4000000, 0x0 };
+u32 D_80117CFC[33] = { 0x40000000, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x40A00000, 0x1000000, 0x3D75C28F, 0x3D0B4396, 0x0, 0x3D75C28F, 0x3E4CCCCD, 0x1000000, 0x3DB851EC, 0x3D0B4396, 0x0, 0x3DB851EC, 0x3F800000, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x40A00000, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x3F800000, 0x4000000, 0x0 };
+u32 D_80117D80[12] = { 0x0, 0x1000000, 0x3DCCCCCD, 0x3D0B4396, 0x0, 0x3DCCCCCD, 0x0, 0x4000000, 0x0, 0x0, 0x0, 0x0 };

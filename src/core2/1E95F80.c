@@ -201,3 +201,7 @@ void func_800BCC90(param_0) s32 * param_0;
   param_0[0] += 8;
  *new_var2 = 0xDA380005U; new_var2[1] = (s32) ((u8 *) &D_80128338 - 0x80000000);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E95F80.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+LocalEntry D_8011A760[3] = { 0x151, 0x861, 0xFF, 0x1, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0x103, 0x860, 0xFF, 0x0, 1.05e+03f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0x15E, 0x857, 0xFF, 0x1, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f };

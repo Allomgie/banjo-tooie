@@ -424,3 +424,8 @@ s32 heap_largest_free(s32* size_out) {
     
     return block_count;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core1/heap.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s32 D_8003F750 = 0x0;
+static u32 D_8003F750_rest[3] = { 0x0, 0x0, 0x0 };

@@ -646,3 +646,7 @@ void func_800EE108(LocalEffect *param_0, s32 param_1, s32 param_2)
         }
     }
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EC6180.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s16 D_80123580[8] = { 0xB0, 0x514, 0x190, 0x10, 0x0, 0x0, 0x320, 0x8 };

@@ -5,7 +5,7 @@ extern u16 D_8011B5BA[][4];
 extern u16 D_8011B5BC[][4];
 typedef struct { u16 unk0; u16 unk2; u16 unk4; u16 unk6; } S8_D3F58;
 extern S8_D3F58 D_8011B5C0[];
-extern S8_D3F58 D_8011B608;
+extern S8_D3F58 D_8011B608[];
 extern void func_800DA3B8(s32);
 extern void *func_800F54E4(void);
 extern void func_800F4924(void *, s32);
@@ -95,7 +95,7 @@ int func_800D3F2C(s32 param_0)
 
 void func_800D3F58(s32 param_0, s32 param_1) {
     func_800DA3B8(D_8011B5C0[param_0 - 1].unk4);
-    if (&D_8011B608 == &D_8011B5C0[param_0]) {
+    if (D_8011B608 == &D_8011B5C0[param_0]) {
         if (param_1 != 0) {
             func_800F4924(func_800F54E4(), 0x3E7);
         }
@@ -235,3 +235,13 @@ int func_800D4398(param_0, param_1) s32 param_0; s32 param_1;
   local_1 = func_800D1ACC(param_0);
   func_800D1960(param_0, local_1 << 1, param_1);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EAD6C0.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8011B622 = D_8011B620 + 0x2, D_8011B626 = D_8011B624 + 0x2, D_8011B62A = D_8011B628 + 0x2
+ * extern declarations adjusted to the object (same addresses): D_8011B608 -> S8_D3F58[] (uses written as NAME[0]) */
+S8_D3F58 D_8011B5C0[9] = { 0x6C, 0x71, 0x534, 0xA, 0x6D, 0x72, 0x535, 0x5, 0x6E, 0x73, 0x536, 0x2, 0x6F, 0x74, 0x537, 0x2, 0x70, 0x75, 0x538, 0x55, 0x76, 0x77, 0x539, 0x1, 0x0, 0x78, 0x53A, 0xC, 0x0, 0x79, 0x53B, 0x22, 0x0, 0x7A, 0x53C, 0x2 };
+S8_D3F58 D_8011B608[3] = { 0x0, 0x42, 0x53D, 0xB, 0x0, 0x4B, 0x4C, 0x97, 0x5A4, 0x446, 0x5A3, 0xCB };
+P8011B620 D_8011B620[1] = { 0x40, 0x6 };
+u32 D_8011B624[1] = { 0x41002C };
+u32 D_8011B628[6] = { 0x42002F, 0x43002D, 0x44002E, 0x460009, 0x470012, 0x0 };

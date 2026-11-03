@@ -5,7 +5,7 @@ extern u8 unk8[];
 extern u8 unk2[];
 extern void *defrag(void *arg);
 typedef struct { s32 unk0; s32 unk4; s32 unk8; } D_801243A0_t;
-extern D_801243A0_t D_801243A0;
+extern D_801243A0_t D_801243A0[];
 extern D_801243A0_t D_801243DC;
 extern FreeList *D_80135A60;
 typedef struct { u8 pad_0[0x17]; u8 field_17; } LocalObject_801007B8;
@@ -33,7 +33,7 @@ s32 func_80100480(s32 param_0, s32 param_1) {
     s32 local_1;
     u8 *local_2;
 
-    local_2 = (u8 *)((s32 *) &D_801243A0) + param_0 * 12;
+    local_2 = (u8 *)((s32 *) D_801243A0) + param_0 * 12;
     local_0 = *(s32 *)((s8 *)local_2 + 8);
     if (local_0 == 0) {
         *(s16 *)((s8 *)local_2 + 2) = param_1;
@@ -56,7 +56,7 @@ void func_80100534(void)
   s32 local_0;
   ALBank *local_1;
   local_0 = func_8001211C();
- local_1 = (ALBank *) (((u8 *) &D_801243A0)); do {
+ local_1 = (ALBank *) (((u8 *) D_801243A0)); do {
     if (((*((s32 *) (((char *) local_1) + 0x8))) != 0) && ((local_0 - (*((s32 *) (((char *) local_1) + 0x4)))) >= 0x1F))
     {
       heap_free(*((s32 *) (((char *) local_1) + 0x8)));
@@ -71,7 +71,7 @@ void func_80100534(void)
 
 void func_801005B8()
 {
-  D_801243A0_t *local_0 = &D_801243A0, *local_1 = &D_801243DC;
+  D_801243A0_t *local_0 = D_801243A0, *local_1 = &D_801243DC;
   do {
     s32 new_var3 = local_0->unk8;
     if (new_var3 != 0)
@@ -86,7 +86,7 @@ void func_80100610(void)
 {
   s32 local_1;
   s8 *local_0;
- local_0 = ((s8 *) &D_801243A0); do {
+ local_0 = ((s8 *) D_801243A0); do {
     local_1 = *((s32 *) (((0, (s8 *) local_0)) - -8));
     if (local_1 != 0)
     {
@@ -387,3 +387,9 @@ void func_80100F0C(s16 param_0, void *param_1)
         }
     }
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1ED9D70.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_801243DC = D_801243A0 + 0x3C
+ * extern declarations adjusted to the object (same addresses): D_801243A0 -> D_801243A0_t[] (uses written as NAME[0]) */
+D_801243A0_t D_801243A0[5] = { 0x30000, 0x0, 0x0, 0x40000, 0x0, 0x0, 0xC0000, 0x0, 0x0, 0xC0000, 0x0, 0x0, 0x60000, 0x0, 0x0 };

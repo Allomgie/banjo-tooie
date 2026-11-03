@@ -36,8 +36,8 @@ int func_800C0F8C();
 void func_800C0FD8();
 int func_800C1044();
 
-/* Objekt, kein Zeiger: das Ziel materialisiert ueberall %hi/%lo der
-   Adresse. Als Array meinen alle Zugriffsformen dieser TU dasselbe. */
+/* An object, not a pointer: the target materialises %hi/%lo of the address everywhere. As an array,
+   every form of access in this file means the same thing. */
 extern u8 D_801288B0[];
 void func_800C0658();
 extern s32 D_80128AF4;
@@ -535,3 +535,11 @@ int func_800C1044(param_0) s32 param_0;
 {
   func_800EA34C(1);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E99980.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s8 D_8011A7C0[16] = { 0x1, 0x1E, 0x14, 0xF, 0xB, 0x8, 0x6, 0x4, 0x3, 0x2, -0x1, -0x1, 0x0, 0x0, 0x0, 0x0 };
+s32 D_8011A7D0 = 0x1;
+static u32 D_8011A7D0_rest[3] = { 0x0, 0x0, 0x0 };
+Gfx D_8011A7E0[12] = { 0xE7000000, 0x0, 0xD9C0FFFA, 0x0, 0xD9FFFFFF, 0x200004, 0xD7000002, 0xFFFFFFFF, 0xE200001C, 0xF0A4000, 0xE3000A01, 0x0, 0xFC157E2A, 0xFFFFF3F9, 0xE3001201, 0x0, 0xE3000C00, 0x0, 0xFA000000, 0xFF, 0xE3001801, 0xC0, 0xDF000000, 0x0 };
+Gfx D_8011A840[6] = { 0xE7000000, 0x0, 0xE3001201, 0x2000, 0xE3000C00, 0x80000, 0xE3001801, 0x0, 0xDF000000, 0x0, 0x0, 0x0 };

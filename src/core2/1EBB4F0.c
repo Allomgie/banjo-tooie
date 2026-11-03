@@ -598,3 +598,7 @@ s32 func_800E368C(s32 param_0){
     D_8012D4F4 = 0;
     func_800E4640(param_0);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EBB4F0.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+Gfx D_801231B0[8] = { 0xD9C0F9FA, 0x0, 0xD9FFFFFF, 0x200004, 0xD7000002, 0x80008000, 0xE7000000, 0x0, 0xFC309661, 0x552EFF7F, 0xE3000A01, 0x0, 0xDF000000, 0x0, 0x0, 0x0 };

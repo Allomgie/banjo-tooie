@@ -19,7 +19,7 @@ typedef struct HitC5 HitC5;
 extern f32 mlAbsF(f32);
 extern void func_800AAAE0();
 extern void func_800AAD28();
-extern int D_8011A890;
+extern int D_8011A890[];
 typedef struct { u8 pad0[0x10]; u8 unk10; u8 pad11[0x63]; f32 unk74; u8 pad78[8]; u32 unk80; u8 pad84[0xB]; u8 unk8F; u8 pad90[8]; f32 unk98; u8 unk9C; } S_C5FCC;
 typedef struct { u8 pad0[8]; u32 unk8; } T_C5FCC;
 extern void func_800FB508();
@@ -254,7 +254,7 @@ void func_800C5F40(s32 param_0, s32 *param_1, s32 param_2) {
 }
 
 void func_800C5F8C(int param_0) {
-    func_800C5EB8(param_0, (-1.8e+04f), 0, 0, &D_8011A890, 0, 0);
+    func_800C5EB8(param_0, (-1.8e+04f), 0, 0, D_8011A890, 0, 0);
 }
 
 void func_800C5FCC(S_C5FCC *param_0, f32 param_1, T_C5FCC *param_2) {
@@ -546,3 +546,8 @@ int func_800C68E8(u8 *param_0, unsigned int param_1, f32 param_2)
   param_0[0x9C] = param_1;
  goto dummy_label_574333; dummy_label_574333: ;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E9F060.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_8011A890 -> int[] (uses written as NAME[0]) */
+int D_8011A890[4] = { 0x0, 0x3F800000, 0x0, 0x0 };

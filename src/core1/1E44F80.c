@@ -1,8 +1,7 @@
 #include "common.h"
 
-/* func_8002D450 (TU core1/1E44F80): Audio-RSP-Command-Builder (0x0A.../0x05...-Acmds)
- * mit Pitch-Quantisierung auf 1/32768 und Fraktions-Akkumulator @0x4C.
- * D_80041DB0 = f64-Grenzwert, D_80041DB8 = f32-Clamp. -g-Axiom-Kampagne. */
+/* func_8002D450: builds audio RSP commands (0x0A... / 0x05... acmds) with the pitch quantised to
+ * 1/32768 and a fraction accumulator at 0x4C. 1.99996 is the f64 limit, 1.99996f the f32 clamp. */
 
 typedef struct {
     u32 w0;
@@ -18,8 +17,6 @@ typedef struct {
     s32 unk50;             /* 0x50: Startmode 0..3 */
 } TTVoiceD;
 
-extern f64 D_80041DB0;
-extern f32 D_80041DB8;
 extern TTAcmd2 *func_8002C5F8(TTVoiceD *, s16 *, s32, TTAcmd2 *);
 
 TTAcmd2 *func_8002D450(TTVoiceD *v, s16 *arg1, TTAcmd2 *cmd)
@@ -44,8 +41,8 @@ TTAcmd2 *func_8002D450(TTVoiceD *v, s16 *arg1, TTAcmd2 *cmd)
         }
     }
     else {
-        if (v->unk44 > D_80041DB0)
-            v->unk44 = D_80041DB8;
+        if (v->unk44 > 1.99996)
+            v->unk44 = 1.99996f;
 
         v->unk44 = (f32)(s32)(v->unk44 * 32768.0f);
         v->unk44 = v->unk44 / 32768.0f;

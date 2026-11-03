@@ -31,8 +31,6 @@
 
 typedef struct TTV2C_s { struct TTV2C_s *next; /* 0x00 */ u8 unk4; /* 0x04 */ u8 pad5[0x1D]; s16 unk22; /* 0x22 */ s16 unk24; /* 0x24 */ u8 pad26[2]; union { struct { u8 unk28; /* 0x28 */ u8 unk29; /* 0x29 */ } b; f32 f; /* 0x28 */ } u28; } TTV2C;
 typedef struct { u8 pad0[4]; u8 type; /* 0x04 */ u8 pad5[0x1D]; u16 maxCount; /* 0x22 */ u16 curCount; /* 0x24 */ u8 pad26[2]; union { struct { u8 depth; /* 0x28 */ u8 base; /* 0x29 */ } b; f32 fdepth; /* 0x28 */ } u; } TTOsc;
-extern f32 D_80041994;
-extern f32 D_80041998;
 extern f32 func_8001395C(f32);
 extern f32 func_80027170(s32);
 typedef s32 M2C_UNK;
@@ -46,15 +44,13 @@ typedef struct { u8 pad0[0xC]; void *unkC; /* 0x0C: Heap */ void *unk10; /* 0x10
 extern TTN2C *D_8007EA44;
 extern void *func_80020EE4(void *, s32, void *, s32, s32);
 
-/* func_80021C10 (TU core1/1E39740): pow-by-squaring mit u8-Exponent, Basis D_80041990. */
-extern f32 D_80041990;
-
+/* func_80021C10 (TU core1/1E39740): pow-by-squaring mit u8-Exponent, Basis 1.030993f. */
 f32 func_80021C10(u8 exp)
 {
     f32 x;
     f32 ratio;
 
-    x = D_80041990;
+    x = 1.030993f;
     ratio = 1.0f;
 
     while (exp) {
@@ -116,7 +112,7 @@ s32 func_80021E1C(void *oscState, f32 *updateVal)
         if (statePtr->curCount >= statePtr->maxCount)
             statePtr->curCount = 0;
         findex = (f32)statePtr->curCount / (f32)statePtr->maxCount;
-        findex = func_8001395C(findex * D_80041994);
+        findex = func_8001395C(findex * 6.2831855f);
         findex = statePtr->u.b.depth * findex;
         *updateVal = statePtr->u.b.base + findex;
         break;
@@ -126,7 +122,7 @@ s32 func_80021E1C(void *oscState, f32 *updateVal)
         if (statePtr->curCount >= statePtr->maxCount)
             statePtr->curCount = 0;
         findex = (f32)statePtr->curCount / (f32)statePtr->maxCount;
-        findex = func_8001395C(findex * D_80041998) * statePtr->u.fdepth;
+        findex = func_8001395C(findex * 6.2831855f) * statePtr->u.fdepth;
         *updateVal = func_80027170((s32)findex);
         break;
 

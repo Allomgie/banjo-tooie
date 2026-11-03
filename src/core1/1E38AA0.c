@@ -55,7 +55,6 @@ typedef s8 M2C_UNK8;
 typedef s16 M2C_UNK16;
 typedef s32 M2C_UNK32;
 typedef s64 M2C_UNK64;
-extern f32 D_80041980;
 typedef struct TTPN_s { struct TTPN_s *next; /* 0x00 */ u8 pad4[0xC]; s32 unk10; /* 0x10: Zeitstempel */ } TTPN;
 typedef struct { TTPN *unk0; /* 0x00 */ u8 pad4[0x1C]; s32 unk20; /* 0x20: globale Zeit */ } TTAMgrM;
 extern u8 D_8007EA30;
@@ -65,7 +64,7 @@ extern u8 D_8007EA33[];
 extern u8 D_8007EA34[];
 extern u8 D_8007EA35[];
 
-/* Vorwaertsdeklarationen der Funktionen dieser TU. */
+/* Forward declarations of the functions in this file. */
 void func_80021820();
 s32 func_800218C4();
 s32 func_80021960(TTPN **out);
@@ -231,7 +230,7 @@ s32 func_800218C4(t) s32 t;
 {
     f32 x;
 
-    x = (f32)t * D_800411F4->unk40 / D_80041980 + 0.5f;
+    x = (f32)t * D_800411F4->unk40 / 1e+06f + 0.5f;
     return (s32)x;
 }
 

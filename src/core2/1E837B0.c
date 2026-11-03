@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern s32 D_8011A480;
-extern s32 D_8011A498;
+extern s32 D_8011A480[];
+extern s32 D_8011A498[];
 extern s32 D_80127770;
 typedef struct { s16 f0; s8 f2; s8 f3; s16 a[4]; s16 b[4]; } Struct_80127780;
 Struct_80127780 D_80127780;
@@ -16,9 +16,9 @@ void func_800A9EC0(s32 param_0)
   s32 new_var;
  new_var = param_0; D_80127770 = 0x3E800;
   ;
- do { local_0 = (s8 *) (&D_8011A480); loop_1: if (new_var == (*((s16 *) (local_0 + 0)))) { new_var = 9; new_var = (*((s16 *) (((s8 *) local_0) + 2))) << new_var; D_80127770 = new_var << 1; return; } } while (0);
+ do { local_0 = (s8 *) (D_8011A480); loop_1: if (new_var == (*((s16 *) (local_0 + 0)))) { new_var = 9; new_var = (*((s16 *) (((s8 *) local_0) + 2))) << new_var; D_80127770 = new_var << 1; return; } } while (0);
   local_0 += 1;
-  if (local_0 == (&D_8011A498))
+  if (local_0 == (D_8011A498))
   {
     return;
   }
@@ -168,3 +168,9 @@ int func_800AA274()
 {
   func_800A9F80();
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E837B0.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_8011A480 -> s32[] (uses written as NAME[0]), D_8011A498 -> s32[] (uses written as NAME[0]) */
+s32 D_8011A480[6] = { 0x1A7015E, 0x1A8015E, 0x1A9015E, 0x112015E, 0x136015E, 0xD6015E };
+s32 D_8011A498[2] = { 0x0, 0x0 };

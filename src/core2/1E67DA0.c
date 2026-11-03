@@ -28,7 +28,6 @@ typedef struct { u8 pad0[0xC]; S1_8E974 *unkC; } S0_8E974;
 typedef struct { u8 pad00[0x1A]; u16 id : 11; u16 pad1A : 5; } LocalMarker;
 typedef struct { u8 pad00[0x5C]; u8 health[3]; } LocalHealth;
 typedef struct { u8 pad00[0x24]; u32 flags; } LocalActorInfo;
-extern f32 D_80124B70, D_80124B74;
 extern s32 func_800D3948();
 extern Actor *func_80106790(LocalMarker *);
 extern PlayerState *func_800F53D0(s32);
@@ -42,7 +41,7 @@ extern void func_800F76B0();
 extern void _bamotor_entrypoint_1(PlayerState *, f32, f32, f32);
 extern LocalActorInfo *func_80100368(Actor *);
 extern void func_801096C8(Actor *, void *);
-extern s32 D_80117CAC;
+extern s32 D_80117CAC[];
 int func_8008ED70();
 
 s32 func_8008E4B0(void) {
@@ -291,14 +290,14 @@ void func_8008E9E4(LocalMarker *param_0, LocalMarker *param_1, s32 param_2)
                 local_7 = func_8010108C(local_4, 0x50, (local_0 << 16) | (local_3 & 0xFFFF));
                 if (local_7 > 0) local_0 = func_800F0D90(local_7 - 1, 0, 4);
                 func_800F76B0(local_3, local_0 + 8, param_1);
-                _bamotor_entrypoint_1(local_5, 0.8f, (f32)local_0 + D_80124B70, 0.3f);
+                _bamotor_entrypoint_1(local_5, 0.8f, (f32)local_0 + 0.2f, 0.3f);
                 break;
             case 2:
                 local_0 = func_800F0D90(local_0, 1, 5) - 1;
                 local_7 = func_8010108C(local_4, 0x50, (local_0 << 16) | (local_3 & 0xFFFF));
                 if (local_7 > 0) local_0 = func_800F0D90(local_7 - 1, 0, 4);
                 func_800F79DC(local_3, local_0 + 3, param_1);
-                _bamotor_entrypoint_1(local_5, 1.0f, (f32)local_0 + D_80124B74, 0.5f);
+                _bamotor_entrypoint_1(local_5, 1.0f, (f32)local_0 + 0.3f, 0.5f);
                 if (func_80100368(local_4)->flags & 0x3000000) {
                     func_801096C8(local_4, **(void ***)((u8 *)local_5 + 0xC));
                 }
@@ -310,5 +309,12 @@ void func_8008E9E4(LocalMarker *param_0, LocalMarker *param_1, s32 param_2)
 
 int func_8008ED70()
 {
-  return (int)&D_80117CAC;
+  return (int)D_80117CAC;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E67DA0.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80117CAC -> s32[] (uses written as NAME[0]) */
+u32 D_80117CA0[3] = { 0x0, 0x0, 0x0 };
+s32 D_80117CAC[5] = { 0x0, 0x0, 0x0, (u32)func_8008E9E4, 0x0 };

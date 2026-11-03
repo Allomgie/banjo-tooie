@@ -65,10 +65,9 @@ extern void *func_800272B0();
 extern void func_80027AF0();
 typedef struct { s16 unk0; /* 0x00 */ s16 unk2; /* 0x02 */ } TTFxA;
 typedef struct { u8 pad0[0x40]; s32 unk40; /* 0x40 */ } TTAMgrA;
-extern f32 D_80041D30;
 extern void func_80028C04(void *, f32);
 
-/* Vorwaertsdeklarationen der Funktionen dieser TU. */
+/* Forward declarations of the functions in this file. */
 void func_8002A150(SeqPlayer_8002A150 *param_0, s32 param_1);
 void func_8002A318(TTSeqI *p, s32 bank, s32 chan);
 
@@ -492,7 +491,7 @@ void func_8002AA30(void *p, s16 x, void *y)
 void func_8002AA74(TTFxA *p, s16 type, s32 *val)
 {
     if (type == 8) {
-        p->unk2 = (s32)((f32)*val * D_80041D30);
+        p->unk2 = (s32)((f32)*val * 0.1f);
     } else if (type == 9) {
         p->unk0 = *val;
     }

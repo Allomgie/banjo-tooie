@@ -27,7 +27,7 @@ extern EntryEB8C0 *func_800E9E88(void *);
 extern EntryEB8C0 *func_800E9EB4(void *);
 extern PropEB8C0 *func_800E9D68(void *);
 extern PropEB8C0 *func_800E9D90(void *);
-extern s32 D_80123540;
+extern s32 D_80123540[];
 extern s32 D_8013546C;
 typedef struct { u8 pad0[0x12]; u16 unk12; u8 pad14[0x1C]; } Sub_EBB94;
 typedef struct { Sub_EBB94 sub[4]; } E_EBB94;
@@ -250,7 +250,7 @@ int func_800EBB30(s32 *param_0, s32 *param_1)
 
 int func_800EBB50()
 {
-  return (int)&D_80123540;
+  return (int)D_80123540;
 }
 
 void func_800EBB5C()
@@ -632,3 +632,9 @@ s32 func_800EC854(void)
     }
     return local_0;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EC4CC0.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80123540 -> s32[] (uses written as NAME[0]) */
+s32 D_80123540[5] = { 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80123554[44] = { 0x0, 0x0, 0x0, 0x7F, 0x0, 0x0, 0x0, 0xBF, 0x0, 0x0, 0x0, 0xDF, 0x0, 0x0, 0x0, 0xEF, 0x0, 0x0, 0x0, 0xF7, 0x0, 0x0, 0x0, 0xFB, 0x0, 0x0, 0x0, 0xFD, 0x0, 0x0, 0x0, 0xFE, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

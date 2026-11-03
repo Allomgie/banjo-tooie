@@ -22,7 +22,7 @@ extern void func_80015FFC(s32, s32 *);
 extern s32 func_80015F84(s32);
 extern struct { s32 local_0, local_1, local_2; } D_80127670;
 typedef struct { s16 x; s16 y; s16 z; s16 w; } Struct_8011A420;
-extern Struct_8011A420 D_8011A420[20];
+extern Struct_8011A420 D_8011A420[];
 typedef struct { s32 local_0, local_1; f32 local_2; } SoundA84EC;
 extern void func_800158E4(s32);
 extern void func_80015CE8(s32, s32);
@@ -986,3 +986,12 @@ void func_800A8D00(s32 param_0, s32 param_1)
         func_800A85A8();
     }
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E80A70.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s32 D_8011A3F0 = 0x0;
+s32 D_8011A3F4 = 0x258;
+s32 D_8011A3F8[8] = { 0x2, 0x9, 0x1, 0x5, 0x0, 0x1, 0x6, -0x1 };
+s32 D_8011A418 = 0x0;
+static u32 D_8011A418_rest[1] = { 0x0 };
+Struct_8011A420 D_8011A420[10] = { 0x0, 0x0, 0x2, 0x2, 0x0, 0x0, 0x2, 0x1, 0x0, 0x1, 0x2, 0x1, 0x0, 0x0, 0x1, 0x1, 0x1, 0x0, 0x1, 0x1, 0x0, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x0, 0x0, 0x1, 0x2, 0x1, 0x0, 0x1, 0x2, 0x0, 0x0, 0x0, 0x0 };

@@ -382,3 +382,8 @@ void func_800A10A0(PlayerState *param_0)
     else if (player_isStable(param_0) || local_2 == 10 || local_2 == 5) STATE(param_0)->active = 0;
     STATE(param_0)->contact = func_80096518(param_0);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E79FD0.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80119250[4] = { 0x2, 0x1, 0x4, 0x3 };
+u8 D_80119254[12] = { 0x3, 0x2, 0x1, 0x4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

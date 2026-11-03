@@ -6,7 +6,8 @@ extern s16 D_80135A94;
 typedef struct { u8 pad0[0x10]; s16 id; u8 pad12[2]; u16 model; } LocalDesc;
 typedef struct { LocalDesc *desc; u8 pad4[0x6C]; u32 unused0:7, flag0:1, unused1:2, flag1:1, unused2:21; u32 word74; u32 unused3:16, mode:2, unused4:14; u32 unused5:19, disabled:1, unused6:7, updated:1, unused7:4; u8 pad80[0x1B], alpha; } LocalActor_801015D0;
 extern f32 D_801243E0[2];
-extern void (*D_801243E8[])(void);
+typedef void (*D_801243E8Entry)(void);
+extern D_801243E8Entry D_801243E8[];
 typedef struct { u8 pad0[0x70]; u32 pad70_0 : 11; u32 unk70_11 : 1; u32 pad70_12 : 20; u8 pad74[0x20]; u32 pad94_0 : 1; u32 unk94_1 : 1; u32 pad94_2 : 30; } S80101970;
 extern void func_800DF428(f32);
 extern void func_800DF470(s32);
@@ -196,3 +197,9 @@ int func_80101BA0(s32 param_0)
   func_800DF744(1, 4);
   func_800DF744(2, 4);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EDAEA0.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+f32 D_801243E0[2] = { 0.0f, -4.0f };
+D_801243E8Entry D_801243E8[6] = { 0, (void *)func_80101A50, (void *)func_80101BA0, 0, 0, 0 };

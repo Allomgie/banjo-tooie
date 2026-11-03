@@ -530,3 +530,9 @@ s32 func_8010038C(param_0, param_1) LocalActor * param_0; f32 * param_1;
     if (param_0->flag0 && param_0->flag1) return 1;
     return func_800EFFB4((u8 *)param_0 + 4, (f32)(s32)param_0->radius, param_1);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1ED8C80.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80124390[4] = { 0x0, 0x0, 0x0, 0x0 };
+void *D_80124394 = 0;
+static u32 D_80124394_rest[2] = { 0x0, 0x0 };

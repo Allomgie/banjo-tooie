@@ -20,13 +20,12 @@ s32 D_800459D0;
 s32 D_800459D4;
 u64 D_800459D8;
 extern u8 core2_RODATA_END[];
-extern f32 D_800416A0;
 extern s32 D_80043384;
 extern f32 func_800D9004(void);
 extern u8 D_80045938[];
 extern u8 D_80045788[];
 
-/* Vorwaertsdeklarationen der Funktionen dieser TU. */
+/* Forward declarations of the functions in this file. */
 int func_80012520();
 void func_8001253C();
 
@@ -191,7 +190,7 @@ void func_800123F4(void) {
     }
     func_8008160C(1);
     func_8001E010();
-    if (func_800D9004() <= D_800416A0) {
+    if (func_800D9004() <= 0.05f) {
         do_crc_check();
     }
     if (D_80043384 != 0) {
@@ -233,3 +232,10 @@ int *func_80012598()
 {
     return ((int *) D_80045788);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core1/1E29B60.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void rom_read_word();
+extern void func_8001EB10();
+u32 D_8003C9D0[28] = { 0x9, 0x4, 0xA, 0x3, 0xB, 0x2, 0xC, 0x5, 0x0, 0x1, 0x6, 0xD, 0xFFFFFFFF, 0x486A756E, 0x6B446972, 0x653A3636, 0x37383132, 0x0, (u32)rom_read_word, (u32)sprintf, (u32)sqrtf, (u32)func_8001EB10, (u32)guOrtho, (u32)osEepromLongRead, (u32)osEepromLongWrite, 0x0, 0x0, 0x0 };

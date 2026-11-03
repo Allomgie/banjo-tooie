@@ -96,3 +96,9 @@ void func_800DC354()
   D_8012C7F0 = D_8012C7F8;
   D_8012C7F4 = D_8012C7FC;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EB5980.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s32 D_8011B9A0 = 0x3F800000;
+s32 D_8011B9A4 = 0x7FFFFF;
+static u32 D_8011B9A4_rest[2] = { 0x0, 0x0 };
