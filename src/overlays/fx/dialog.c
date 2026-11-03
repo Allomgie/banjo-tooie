@@ -7,10 +7,14 @@ extern f32 B_808002A4_fxdialog;
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void *func_800DF944(u32, f32 *, f32, f32, f32 *, s32, s32);
 
+// TU-NOTE: .bss is defined here, ahead of its first use: IDO places .bss objects used
+// before their definition first, the rest in definition order. Labels inside an object
+// (B_808002A0_fxdialog, B_808002A4_fxdialog) are linker symbols in undefined_syms.us.txt.
 f32 B_80800290_fxdialog[8];
 
 void fxdialog_entrypoint_0(void)
 {
+    // Matching: the odd pointer cast chains reproduce the original address arithmetic.
     *(s32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 0xC) = 0;
     *(s32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 8) = 0;
     *(f32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 0x10) = 1.0f;
@@ -19,53 +23,56 @@ void fxdialog_entrypoint_0(void)
         (f32) *(f32 *) ((s8 *) (s32 *) &B_80800290_fxdialog + 4);
 }
 
-void fxdialog_entrypoint_1(s32 param_0, s32 param_1)
+void fxdialog_entrypoint_1(s32 x, s32 y)
 {
-    char *new_var;
-    new_var = (char *) &B_80800290_fxdialog;
-    *(s32 *) ((char *) &B_80800290_fxdialog + 0x8) = param_0 << 2;
-    *(s32 *) ((char *) &B_80800290_fxdialog + 0xC) = param_1 << 2;
-    *(f32 *) (new_var + 0x0) = (f32) param_0;
-    *(f32 *) ((char *) &B_80800290_fxdialog + 0x4) = (f32) param_1;
+    // Matching: extra temporary pointer to the base address.
+    char *base;
+    base = (char *) &B_80800290_fxdialog;
+    *(s32 *) ((char *) &B_80800290_fxdialog + 0x8) = x << 2;
+    *(s32 *) ((char *) &B_80800290_fxdialog + 0xC) = y << 2;
+    *(f32 *) (base + 0x0) = (f32) x;
+    *(f32 *) ((char *) &B_80800290_fxdialog + 0x4) = (f32) y;
 }
 
-fxdialog_entrypoint_2(f32 param_0)
+fxdialog_entrypoint_2(f32 scale)
 {
-    if (param_0 > 0.0f) {
-        *(f32 *) ((char *) (u8 *) &B_80800290_fxdialog + 0x10) = param_0;
-        *(f32 *) ((char *) (u8 *) &B_80800290_fxdialog + 0x14) = 1.0f / param_0;
+    if (scale > 0.0f) {
+        *(f32 *) ((char *) (u8 *) &B_80800290_fxdialog + 0x10) = scale;
+        *(f32 *) ((char *) (u8 *) &B_80800290_fxdialog + 0x14) = 1.0f / scale;
     }
 }
 
-void fxdialog_entrypoint_3(u32 param_0, f32 param_1, s32 param_2, s32 param_3)
+void fxdialog_entrypoint_3(u32 unk_0, f32 unk_1, s32 unk_2, s32 unk_3)
 {
-    f32 local_0[2];
-    f32 local_1[3];
-    s32 local_2;
+    f32 unk_4[2];
+    f32 vec[3];
+    s32 unk_5;
 
-    local_2 = func_801040D0(param_0);
-    local_0[1] = -24.0f;
-    local_0[0] = 0.0f;
-    func_800EFA4C(local_1, param_1 * 0.041666667f * B_808002A4_fxdialog - 2.0f, 0.0f, 0.0f);
-    func_800DFFA0(local_2, 0x2A, local_1);
-    func_800DF41C(local_2);
-    func_800DF410(param_3);
-    func_800DF944(param_0, (f32 *) (s32 *) &B_80800290_fxdialog, param_2 * 90.0f,
-                  ((f32 *) (s32 *) &B_80800290_fxdialog)[4], local_0, 0, func_800D674C(0x9F1));
+    unk_5 = func_801040D0(unk_0);
+    unk_4[1] = -24.0f;
+    unk_4[0] = 0.0f;
+    func_800EFA4C(vec, unk_1 * 0.041666667f * B_808002A4_fxdialog - 2.0f, 0.0f, 0.0f);
+    func_800DFFA0(unk_5, 0x2A, vec);
+    func_800DF41C(unk_5);
+    func_800DF410(unk_3);
+    func_800DF944(unk_0, (f32 *) (s32 *) &B_80800290_fxdialog, unk_2 * 90.0f,
+                  ((f32 *) (s32 *) &B_80800290_fxdialog)[4], unk_4, 0, func_800D674C(0x9F1));
 }
 
-void fxdialog_entrypoint_4(s32 param_0, s32 param_1, s32 param_2, f32 param_3, f32 param_4,
-                           s32 param_5, s32 param_6)
+void fxdialog_entrypoint_4(s32 unk_0, s32 unk_1, s32 unk_2, f32 dx, f32 dy,
+                           s32 unk_3, s32 flip)
 {
-    s32 local_0[2];
-    f32 local_1;
-    f32 local_2;
+    s32 pos[2];
+    f32 scale_x;
+    f32 scale_y;
 
-    local_1 = param_6 ? -B_808002A0_fxdialog : B_808002A0_fxdialog;
-    local_2 = B_808002A0_fxdialog;
-    func_800E2554(local_1, local_2);
-    func_800E257C(param_5);
-    local_0[0] = ((s32 *) &B_80800290_fxdialog)[2] + param_3 * 4.0f * local_1;
-    local_0[1] = ((s32 *) &B_80800290_fxdialog)[3] + param_4 * 4.0f * local_2;
-    func_800E30E0(param_0, func_800D674C(param_1), param_2, local_0);
+    scale_x = flip ? -B_808002A0_fxdialog : B_808002A0_fxdialog;
+    scale_y = B_808002A0_fxdialog;
+    func_800E2554(scale_x, scale_y);
+    func_800E257C(unk_3);
+    pos[0] = ((s32 *) &B_80800290_fxdialog)[2] + dx * 4.0f * scale_x;
+    pos[1] = ((s32 *) &B_80800290_fxdialog)[3] + dy * 4.0f * scale_y;
+    func_800E30E0(unk_0, func_800D674C(unk_1), unk_2, pos);
 }
+
+// TU-NOTE: the .data of this overlay is defined in C; values are taken from the ROM.

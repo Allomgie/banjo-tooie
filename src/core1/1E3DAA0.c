@@ -2,7 +2,7 @@
 
 typedef struct {
     u8 pad[0x48];
-    u8 evtq;
+    u8 evtq; // 0x48, event queue (only its address is used)
 } TTCSPlayer;
 typedef struct {
     s16 type;
@@ -29,6 +29,7 @@ typedef struct {
 } TTEvt;
 extern void func_80026500(void *, TTEvt *, s32, s32);
 
+// Posts a MIDI event: controller 0x5B (channel FX mix).
 void func_80025F70(TTCSPlayer *seqp, u8 chan, u8 fxmix)
 {
     TTEvt evt;
@@ -43,6 +44,7 @@ void func_80025F70(TTCSPlayer *seqp, u8 chan, u8 fxmix)
     func_80026500(&seqp->evtq, &evt, 0, 0);
 }
 
+// Posts Rare-specific event 0x18 carrying two floats.
 void func_80025FE0(TTCSPlayer *seqp, f32 a, f32 b)
 {
     TTEvt evt;
@@ -54,6 +56,7 @@ void func_80025FE0(TTCSPlayer *seqp, f32 a, f32 b)
     func_80026500(&seqp->evtq, &evt, 0, 0);
 }
 
+// Posts a MIDI event: controller 0x5C.
 void func_8002603C(TTCSPlayer *seqp, u8 chan, u8 val)
 {
     TTEvt evt;

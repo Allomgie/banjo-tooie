@@ -2,7 +2,7 @@
 
 typedef struct {
     u8 pad[0x48];
-    u8 evtq;
+    u8 evtq; // 0x48, event queue (only its address is used)
 } TTCSPlayer;
 typedef struct {
     s16 type;
@@ -29,6 +29,7 @@ typedef struct {
 } TTEvt;
 extern void func_80026500(void *, TTEvt *, s32, s32);
 
+// Posts AL_SEQP_SEQ_EVT (set sequence).
 void func_80025E80(TTCSPlayer *seqp, void *seq)
 {
     TTEvt evt;
@@ -39,6 +40,7 @@ void func_80025E80(TTCSPlayer *seqp, void *seq)
     func_80026500(&seqp->evtq, &evt, 0, 0);
 }
 
+// Posts AL_SEQP_VOL_EVT (set volume).
 void func_80025ED0(TTCSPlayer *seqp, s16 vol)
 {
     TTEvt evt;
@@ -49,6 +51,7 @@ void func_80025ED0(TTCSPlayer *seqp, s16 vol)
     func_80026500(&seqp->evtq, &evt, 0, 0);
 }
 
+// Posts AL_SEQP_PLAY_EVT (play).
 void func_80025F20(TTCSPlayer *seqp)
 {
     TTEvt evt;

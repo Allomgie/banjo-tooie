@@ -8,239 +8,243 @@ typedef struct {
     u32 w1;
 } TTAcmd;
 typedef struct {
-    s32 unk0;
-    s32 unk4;
+    s32 base; // 0x00: sample data in ROM
+    s32 len; // 0x04: length, quantised to 9-byte frames
 } TTLoopH;
 typedef struct {
     u8 pad0[0x14];
-    u32 unk14;
-    u32 unk18;
-    s32 unk1C;
-    TTLoopH *unk20;
-    u32 unk24;
+    u32 loop_start; // 0x14
+    u32 loop_end; // 0x18
+    s32 loop_count; // 0x1C
+    TTLoopH *wave;
+    u32 book_size; // 0x24
     u8 pad28[8];
-    u32 unk30;
-    u32 unk34;
-    s32 unk38;
-    s32 unk3C;
+    u32 pos; // 0x30: current sample position
+    u32 phase; // 0x34: 0..15, position inside a 16-sample ADPCM frame
+    s32 flags; // 0x38
+    s32 rom_cursor; // 0x3C: ROM read cursor
 } TTVceH;
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    u8 unk14[0x20];
-    s32 unk34;
+    s32 base; // 0x00: sample data in ROM
+    s32 len; // 0x04: length, quantised to 9-byte frames
+    s32 loop_start; // 0x08: loop {start, end, count}
+    s32 loop_end;
+    s32 loop_count;
+    u8 loop_state[0x20]; // 0x14: ADPCM loop state block
+    s32 unk_34;
     u8 pad38[0x80];
-    s32 unkB8;
+    s32 unk_B8;
 } TTWave;
 typedef struct {
     u8 pad0[0x10];
-    void *unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    TTWave *unk20;
-    s32 unk24;
+    void *state_dst; // 0x10
+    s32 loop_start;
+    s32 loop_end;
+    s32 loop_count;
+    TTWave *wave;
+    s32 book_size;
     u8 pad28[8];
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    s32 unk3C;
+    s32 pos;
+    s32 phase;
+    s32 flags;
+    s32 rom_cursor;
 } TTVoiceF;
 typedef struct {
     u8 pad0[0xC];
-    s32 unkC;
-    s32 unk10;
+    s32 state_addr;
+    s32 loop_addr;
     u8 pad14[0x14];
-    s32 (*unk28)(s32, s32, s32);
-    s32 unk2C;
+    s32 (*dma)(s32, s32, s32); // 0x28: DMA callback
+    s32 dma_state;
     u8 pad30[8];
-    s32 unk38;
-    s32 unk3C;
+    s32 flags;
+    s32 rom_cursor;
 } TTVoiceG;
 
-TTAcmd *func_8002CE70(TTAcmd *p, TTVoiceG *v, s32 arg2, s32 len, s16 arg4, s16 arg5, s32 flags);
+TTAcmd *func_8002CE70(TTAcmd *list, TTVoiceG *voice, s32 sample_cnt, s32 byte_len, s16 dmem_addr, s16 dmem_off, s32 flags);
 
-s32 func_8002C5C0(u8 *param_0)
+// Returns 1 when the {head, tail} pair differs.
+s32 func_8002C5C0(u8 *queue)
 {
-    if (M2C_FIELD(param_0, s32 *, 4) == M2C_FIELD(param_0, s32 *, 0)) {
+    if (M2C_FIELD(queue, s32 *, 4) == M2C_FIELD(queue, s32 *, 0)) {
         return 0;
     } else {
         return 1;
     }
 }
 
-TTAcmd *func_8002C5F8(TTVceH *state, s16 *arg1, s32 count, TTAcmd *cmdIn)
+// ADPCM pull: DMAs the compressed data and emits LOADADPCM/LOADBUFF/SETLOOP/ADPCM/
+// DMEMMOVE/CLEARBUF commands, handling loops that wrap inside one pull.
+TTAcmd *func_8002C5F8(TTVceH *state, s16 *dmem, s32 count, TTAcmd *list)
 {
-    TTAcmd *cmd = cmdIn;
-    s16 var7A;
-    s32 t74;
-    s32 n70;
-    s32 sz6C;
-    s32 rem68;
-    s32 len64;
-    s32 skip60;
-    s32 len5C;
-    s32 addr58;
-    s32 pad54;
-    s32 pos50;
-    s32 flag4C = 0;
-    s32 flag48 = 0;
-    TTVceH *v = state;
-    TTAcmd *p0;
-    TTAcmd *p1;
-    TTAcmd *p2;
+    TTAcmd *cmd = list;
+    s16 unk_0;
+    s32 sample_cnt;
+    s32 frames;
+    s32 bytes;
+    s32 over;
+    s32 zero_off;
+    s32 skip;
+    s32 chunk;
+    s32 loop_dmem;
+    s32 lead;
+    s32 cur_dmem;
+    s32 partial = 0;
+    s32 wraps = 0;
+    TTVceH *voice = state;
+    TTAcmd *book;
+    TTAcmd *move;
+    TTAcmd *clear;
 
     if (count == 0)
         return cmd;
 
-    var7A = 0;
+    unk_0 = 0;
 
-    p0 = cmd++;
-    p0->w0 = (v->unk24 & 0xFFFFFF) | 0x0B000000;
-    p0->w1 = ((u32) v->unk20 + 0x38) & 0x1FFFFFFF;
+    book = cmd++;
+    book->w0 = (voice->book_size & 0xFFFFFF) | 0x0B000000;
+    book->w1 = ((u32) voice->wave + 0x38) & 0x1FFFFFFF;
 
-    flag48 = (v->unk30 + count > v->unk18) && (v->unk1C != 0);
+    wraps = (voice->pos + count > voice->loop_end) && (voice->loop_count != 0);
 
-    if (flag48)
-        len5C = v->unk18 - v->unk30;
+    if (wraps)
+        chunk = voice->loop_end - voice->pos;
     else
-        len5C = count;
+        chunk = count;
 
-    if (v->unk34)
-        pad54 = 0x10 - v->unk34;
+    if (voice->phase)
+        lead = 0x10 - voice->phase;
     else
-        pad54 = 0;
+        lead = 0;
 
-    t74 = len5C - pad54;
-    if (t74 < 0)
-        t74 = 0;
+    sample_cnt = chunk - lead;
+    if (sample_cnt < 0)
+        sample_cnt = 0;
 
-    n70 = (t74 + 0xF) >> 4;
-    sz6C = n70 * 9;
+    frames = (sample_cnt + 0xF) >> 4;
+    bytes = frames * 9;
 
-    if (flag48) {
-        cmd = func_8002CE70(cmd, v, t74, sz6C, *arg1, var7A, v->unk38);
+    if (wraps) {
+        cmd = func_8002CE70(cmd, voice, sample_cnt, bytes, *dmem, unk_0, voice->flags);
 
-        if (v->unk34)
-            *arg1 = *arg1 + v->unk34 * 2;
+        if (voice->phase)
+            *dmem = *dmem + voice->phase * 2;
         else
-            *arg1 = *arg1 + 0x20;
+            *dmem = *dmem + 0x20;
 
-        v->unk34 = v->unk14 & 0xF;
-        v->unk3C = v->unk20->unk0 + (v->unk14 >> 4) * 9 + 9;
-        v->unk30 = v->unk14;
-        pos50 = *arg1;
+        voice->phase = voice->loop_start & 0xF;
+        voice->rom_cursor = voice->wave->base + (voice->loop_start >> 4) * 9 + 9;
+        voice->pos = voice->loop_start;
+        cur_dmem = *dmem;
 
-        while (count > len5C) {
-            count -= len5C;
-            addr58 = (((n70 + 1) << 5) + pos50 + 0x10) & ~0x1F;
-            pos50 += len5C * 2;
+        while (count > chunk) {
+            count -= chunk;
+            loop_dmem = (((frames + 1) << 5) + cur_dmem + 0x10) & ~0x1F;
+            cur_dmem += chunk * 2;
 
-            if (v->unk1C != -1 && v->unk1C != 0)
-                v->unk1C--;
+            if (voice->loop_count != -1 && voice->loop_count != 0)
+                voice->loop_count--;
 
-            len5C = (count < v->unk18 - v->unk14) ? count : v->unk18 - v->unk14;
+            chunk = (count < voice->loop_end - voice->loop_start) ? count : voice->loop_end - voice->loop_start;
 
-            t74 = len5C + v->unk34 - 0x10;
-            if (t74 < 0)
-                t74 = 0;
+            sample_cnt = chunk + voice->phase - 0x10;
+            if (sample_cnt < 0)
+                sample_cnt = 0;
 
-            n70 = (t74 + 0xF) >> 4;
-            sz6C = n70 * 9;
+            frames = (sample_cnt + 0xF) >> 4;
+            bytes = frames * 9;
 
-            cmd = func_8002CE70(cmd, v, t74, sz6C, addr58, var7A, v->unk38 | 2);
+            cmd = func_8002CE70(cmd, voice, sample_cnt, bytes, loop_dmem, unk_0, voice->flags | 2);
 
-            p1 = cmd++;
-            p1->w0 = ((v->unk34 * 2 + addr58) & 0xFFFFFF) | 0x0A000000;
-            p1->w1 = ((pos50 & 0xFFFF) << 16) | ((len5C * 2) & 0xFFFF);
+            move = cmd++;
+            move->w0 = ((voice->phase * 2 + loop_dmem) & 0xFFFFFF) | 0x0A000000;
+            move->w1 = ((cur_dmem & 0xFFFF) << 16) | ((chunk * 2) & 0xFFFF);
         }
 
-        v->unk34 = (v->unk34 + count) & 0xF;
-        v->unk30 = v->unk30 + count;
-        v->unk3C = v->unk3C + n70 * 9;
+        voice->phase = (voice->phase + count) & 0xF;
+        voice->pos = voice->pos + count;
+        voice->rom_cursor = voice->rom_cursor + frames * 9;
         return cmd;
     }
 
     {
-        len5C = n70 << 4;
+        chunk = frames << 4;
 
-        rem68 = (v->unk3C + sz6C) - (v->unk20->unk0 + v->unk20->unk4);
-        if (rem68 < 0)
-            rem68 = 0;
+        over = (voice->rom_cursor + bytes) - (voice->wave->base + voice->wave->len);
+        if (over < 0)
+            over = 0;
 
-        skip60 = rem68 / 9 << 4;
+        skip = over / 9 << 4;
 
-        if (skip60 > len5C + pad54)
-            skip60 = len5C + pad54;
+        if (skip > chunk + lead)
+            skip = chunk + lead;
 
-        sz6C = sz6C - rem68;
+        bytes = bytes - over;
 
-        if (skip60 - (skip60 & 0xF) < count) {
-            flag4C = 1;
+        if (skip - (skip & 0xF) < count) {
+            partial = 1;
 
-            cmd = func_8002CE70(cmd, v, len5C - skip60, sz6C, *arg1, var7A, v->unk38);
+            cmd = func_8002CE70(cmd, voice, chunk - skip, bytes, *dmem, unk_0, voice->flags);
 
-            if (v->unk34)
-                *arg1 = *arg1 + v->unk34 * 2;
+            if (voice->phase)
+                *dmem = *dmem + voice->phase * 2;
             else
-                *arg1 = *arg1 + 0x20;
+                *dmem = *dmem + 0x20;
 
-            v->unk34 = (v->unk34 + count) & 0xF;
-            v->unk30 = v->unk30 + count;
-            v->unk3C = v->unk3C + n70 * 9;
+            voice->phase = (voice->phase + count) & 0xF;
+            voice->pos = voice->pos + count;
+            voice->rom_cursor = voice->rom_cursor + frames * 9;
         } else {
-            v->unk34 = 0;
-            v->unk3C = v->unk3C + n70 * 9;
+            voice->phase = 0;
+            voice->rom_cursor = voice->rom_cursor + frames * 9;
         }
 
-        if (skip60 != 0) {
-            v->unk34 = 0;
+        if (skip != 0) {
+            voice->phase = 0;
 
-            if (flag4C)
-                len64 = (pad54 + len5C - skip60) * 2;
+            if (partial)
+                zero_off = (lead + chunk - skip) * 2;
             else
-                len64 = 0;
+                zero_off = 0;
 
-            p2 = cmd++;
-            p2->w0 = ((*arg1 + len64) & 0xFFFFFF) | 0x02000000;
-            p2->w1 = skip60 * 2;
+            clear = cmd++;
+            clear->w0 = ((*dmem + zero_off) & 0xFFFFFF) | 0x02000000;
+            clear->w1 = skip * 2;
         }
     }
 
     return cmd;
 }
 
+// Loader param handler: 5 sets the wavetable, 4 resets.
 s32 func_8002CC9C(TTVoiceF *arg0, s32 type, TTWave *val)
 {
-    TTVoiceF *v = arg0;
+    TTVoiceF *voice = arg0;
 
     switch (type) {
         case 5:
-            v->unk20 = val;
-            v->unk3C = v->unk20->unk0;
-            v->unk30 = 0;
-            v->unk20->unk4 = (v->unk20->unk4 / 9) * 9;
-            v->unk24 = v->unk20->unk34 * 2 * v->unk20->unkB8 * 8;
-            if (func_8002C5C0(&v->unk20->unk8)) {
-                v->unk14 = v->unk20->unk8;
-                v->unk18 = v->unk20->unkC;
-                v->unk1C = v->unk20->unk10;
-                bcopy(v->unk20->unk14, v->unk10, 0x20);
+            voice->wave = val;
+            voice->rom_cursor = voice->wave->base;
+            voice->pos = 0;
+            voice->wave->len = (voice->wave->len / 9) * 9;
+            voice->book_size = voice->wave->unk_34 * 2 * voice->wave->unk_B8 * 8;
+            if (func_8002C5C0(&voice->wave->loop_start)) {
+                voice->loop_start = voice->wave->loop_start;
+                voice->loop_end = voice->wave->loop_end;
+                voice->loop_count = voice->wave->loop_count;
+                bcopy(voice->wave->loop_state, voice->state_dst, 0x20);
             } else {
-                v->unk14 = v->unk18 = v->unk1C = 0;
+                voice->loop_start = voice->loop_end = voice->loop_count = 0;
             }
             break;
         case 4:
-            v->unk34 = 0;
-            v->unk38 = 1;
-            v->unk30 = 0;
-            if (v->unk20) {
-                v->unk3C = v->unk20->unk0;
-                if (func_8002C5C0(&v->unk20->unk8)) {
-                    v->unk1C = v->unk20->unk10;
+            voice->phase = 0;
+            voice->flags = 1;
+            voice->pos = 0;
+            if (voice->wave) {
+                voice->rom_cursor = voice->wave->base;
+                if (func_8002C5C0(&voice->wave->loop_start)) {
+                    voice->loop_count = voice->wave->loop_count;
                 }
             }
             break;
@@ -251,21 +255,23 @@ s32 func_8002CC9C(TTVoiceF *arg0, s32 type, TTWave *val)
     return 0;
 }
 
-TTAcmd *func_8002CE70(TTAcmd *p, TTVoiceG *v, s32 arg2, s32 len, s16 arg4, s16 arg5, s32 flags)
+// Emits LOADBUFF (via the DMA callback), optional SETLOOP and ADPCM for one chunk.
+TTAcmd *func_8002CE70(TTAcmd *list, TTVoiceG *voice, s32 sample_cnt, s32 byte_len, s16 dmem_addr, s16 dmem_off, s32 flags)
 {
     s32 rem;
-    s32 x;
-    TTAcmd *c1;
-    TTAcmd *c2;
-    TTAcmd *c3;
+    s32 rom_addr;
+    TTAcmd *loadbuf;
+    TTAcmd *setloop;
+    TTAcmd *adpcm;
 
-    if (len > 0) {
-        x = v->unk28(v->unk3C, len, v->unk2C);
-        rem = x & 7;
-        len = len + rem;
-        c1 = p++;
-        c1->w0 = ((((len - (len & 7)) + 8) & 0xFFF) << 12 | 0x04000000) | (arg5 & 0xFFF);
-        c1->w1 = x - rem;
+    if (byte_len > 0) {
+        rom_addr = voice->dma(voice->rom_cursor, byte_len, voice->dma_state);
+        rem = rom_addr & 7;
+        byte_len = byte_len + rem;
+        loadbuf = list++;
+        loadbuf->w0 = ((((byte_len - (byte_len & 7)) + 8) & 0xFFF) << 12 | 0x04000000) | (dmem_off & 0xFFF);
+        loadbuf->w1 = rom_addr - rem;
+        // Matching: empty block steers IDO's register allocation.
         if (1) {
         }
     } else {
@@ -273,17 +279,17 @@ TTAcmd *func_8002CE70(TTAcmd *p, TTVoiceG *v, s32 arg2, s32 len, s16 arg4, s16 a
     }
 
     if (flags & 2) {
-        c2 = p++;
-        c2->w0 = 0x0F000000;
-        c2->w1 = v->unk10 & 0x1FFFFFFF;
+        setloop = list++;
+        setloop->w0 = 0x0F000000;
+        setloop->w1 = voice->loop_addr & 0x1FFFFFFF;
     }
 
-    c3 = p++;
-    c3->w0 = ((v->unkC & 0x1FFFFFFF) & 0xFFFFFF) | 0x01000000;
-    c3->w1 =
-        ((flags & 0xF) << 28) | (((arg2 * 2) & 0xFFF) << 16) | ((rem & 0xF) << 12) | (arg4 & 0xFFF);
+    adpcm = list++;
+    adpcm->w0 = ((voice->state_addr & 0x1FFFFFFF) & 0xFFFFFF) | 0x01000000;
+    adpcm->w1 =
+        ((flags & 0xF) << 28) | (((sample_cnt * 2) & 0xFFF) << 16) | ((rem & 0xF) << 12) | (dmem_addr & 0xFFF);
 
-    v->unk38 = 0;
+    voice->flags = 0;
 
-    return p;
+    return list;
 }

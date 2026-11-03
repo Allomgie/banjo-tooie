@@ -5,33 +5,37 @@ extern void func_8001DA00(s32, s32);
 extern void _Printf(void *param_0, ...);
 extern void func_8001D9CC();
 
-int func_8001D340(s32 param_0, s32 param_1, s32 param_2)
+// _Printf output callback: forwards the formatted chunk to the console buffer.
+int func_8001D340(s32 ctx, s32 buf, s32 len)
 {
     if (D_8007D160 & 1) {
-        func_8001DA00(param_1 | 0, param_2 | 0);
+        // Matching: the `| 0` operands are needed for the match.
+        func_8001DA00(buf | 0, len | 0);
     }
     return 1;
 }
 
-void func_8001D37C(s32 param_0, ...)
+// printf to the on-screen console. The va_list is built by hand from the first argument.
+void func_8001D37C(s32 fmt, ...)
 {
-    s32 local_0;
+    s32 args;
 
     D_8007D160 = 1;
-    local_0 = (s32) &param_0;
-    local_0 += 7;
-    local_0 &= ~3;
-    _Printf(&func_8001D340, 0, param_0, local_0);
+    args = (s32) &fmt;
+    args += 7;
+    args &= ~3;
+    _Printf(&func_8001D340, 0, fmt, args);
 }
 
-void func_8001D3D8(s16 param_0, s16 param_1, s32 param_2, ...)
+// printf at console position (x, y).
+void func_8001D3D8(s16 x, s16 y, s32 fmt, ...)
 {
-    s32 local_0;
+    s32 args;
 
     D_8007D160 = 1;
-    func_8001D9CC((u16) param_0, (u16) param_1);
-    local_0 = (s32) &param_2;
-    local_0 += 7;
-    local_0 &= ~3;
-    _Printf(&func_8001D340, 0, param_2, local_0);
+    func_8001D9CC((u16) x, (u16) y);
+    args = (s32) &fmt;
+    args += 7;
+    args &= ~3;
+    _Printf(&func_8001D340, 0, fmt, args);
 }

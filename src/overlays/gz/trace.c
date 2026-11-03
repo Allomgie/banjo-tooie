@@ -4,9 +4,9 @@ typedef struct {
     s16 blocks[4];
     s16 words, shorts, pointers;
     u8 extra_size;
-    u8 pad_0[0x1D];
+    u8 pad_F[0x1D];
     s16 type;
-    u8 pad_1[6];
+    u8 pad_2E[6];
 } TraceHeader1459;
 typedef struct {
     s32 type;
@@ -27,140 +27,154 @@ extern s32 overlay_syscalls;
 extern s32 overlay_syscalls_end;
 extern s32 func_8001D37C();
 
-s32 func_80800000_gztrace(u32 param_0)
+// Returns 1 if addr is word-aligned and in the 0x80000000-0x80800000 range.
+s32 func_80800000_gztrace(u32 addr)
 {
-    if ((param_0 < 0x80000000U) || (param_0 >= 0x80800001U) || (param_0 & 3)) {
+    if ((addr < 0x80000000U) || (addr >= 0x80800001U) || (addr & 3)) {
         return 0;
     }
     return 1;
 }
 
-int func_80800038_gztrace(u8 *param_0, u8 *param_1)
+// strcpy
+int func_80800038_gztrace(u8 *dst, u8 *src)
 {
-    while ((*param_0++ = *param_1++) != '\0')
+    while ((*dst++ = *src++) != '\0')
         ;
 }
 
-void func_80800068_gztrace(char *param_0, char *param_1)
+// strcat
+void func_80800068_gztrace(char *dst, char *src)
 {
-    char *local_0 = param_0;
-    while (*local_0++) {
+    char *end = dst;
+    while (*end++) {
     }
-    local_0--;
-    while (*local_0++ = *param_1++) {
+    end--;
+    while (*end++ = *src++) {
     }
 }
 
-s32 func_808000B8_gztrace(void *arg)
+// strlen
+s32 func_808000B8_gztrace(void *str)
 {
-    u8 *v0;
-    u32 v1;
-    v1 = 0;
-    v0 = (u8 *) arg;
-    if (*v0) {
+    u8 *p;
+    u32 len;
+    len = 0;
+    p = (u8 *) str;
+    if (*p) {
         do {
-            v1++;
-            v0++;
-        } while (*v0);
+            len++;
+            p++;
+        } while (*p);
     }
-    return v1;
+    return len;
 }
 
-void func_808000E8_gztrace(u8 *param_0, u8 *param_1, s32 param_2, u8 param_3, s32 param_4)
+// Fits src into head_len + tail_len + 1 chars: pads with spaces, or keeps the head and tail joined by sep.
+void func_808000E8_gztrace(u8 *dst, u8 *src, s32 head_len, u8 sep, s32 tail_len)
 {
-    s32 local_2;
-    s32 local_3;
-    s32 local_0;
-    s32 local_1;
+    s32 i;
+    s32 j;
+    s32 src_len;
+    s32 width;
 
-    local_0 = func_808000B8_gztrace(param_1);
-    local_1 = param_2 + param_4 + 1;
-    if (local_1 >= local_0) {
-        func_80800038_gztrace(param_0, param_1);
-        for (local_2 = local_0; local_2 < local_1; local_2++) {
-            param_0[local_2] = ' ';
+    src_len = func_808000B8_gztrace(src);
+    width = head_len + tail_len + 1;
+    if (width >= src_len) {
+        func_80800038_gztrace(dst, src);
+        for (i = src_len; i < width; i++) {
+            dst[i] = ' ';
         }
     } else {
-        for (local_2 = 0; local_2 < param_2; local_2++) {
-            param_0[local_2] = param_1[local_2];
+        for (i = 0; i < head_len; i++) {
+            dst[i] = src[i];
         }
-        param_0[local_2++] = param_3;
-        for (local_3 = local_0 - param_4; local_2 < local_1; local_2++) {
-            param_0[local_2] = param_1[local_3++];
+        dst[i++] = sep;
+        for (j = src_len - tail_len; i < width; i++) {
+            dst[i] = src[j++];
         }
     }
-    param_0[local_1] = 0;
+    dst[width] = 0;
 }
 
-u8 *func_80800290_gztrace(u32 param_0, s32 param_1, u8 *param_2)
+// Writes the low num_bytes of value as lowercase hex to buf; returns the end of the output.
+u8 *func_80800290_gztrace(u32 value, s32 num_bytes, u8 *buf)
 {
-    s32 local_0;
-    u8 *local_1 = param_2;
-    u8 *local_2 = (u8 *) &param_0;
+    s32 i;
+    u8 *out = buf;
+    u8 *bytes = (u8 *) &value;
 
-    for (local_0 = 4 - param_1; local_0 < 4; local_0++) {
-        *local_1 = (local_2[local_0] >> 4) + 0x30;
-        if (*local_1 >= 0x3A) {
-            *local_1 += 0x27;
+    for (i = 4 - num_bytes; i < 4; i++) {
+        *out = (bytes[i] >> 4) + 0x30;
+        if (*out >= 0x3A) {
+            *out += 0x27;
         }
-        local_1++;
-        *local_1 = (local_2[local_0] & 0xF) + 0x30;
-        if (*local_1 >= 0x3A) {
-            *local_1 += 0x27;
+        out++;
+        *out = (bytes[i] & 0xF) + 0x30;
+        if (*out >= 0x3A) {
+            *out += 0x27;
         }
-        local_1++;
+        out++;
     }
-    return local_1;
+    return out;
 }
 
+// TU-NOTE: .bss is defined here in C, ahead of its first use: IDO places .bss objects used before
+// their definition first, the rest in definition order.
+// TU-NOTE: the _pad/_tail objects fill bytes that no code names.
+// TU-NOTE: B_80800ABA/ABD/AC3/ACD/AD5/AD6_gztrace are labels inside these objects (linker symbols
+// in undefined_syms.us.txt).
 TraceState1459 B_80800A70_gztrace;
 u8 B_80800A70_gztrace_pad[4];
 s32 B_80800AA8_gztrace;
 u8 B_80800AD6_gztrace_tail[4];
 u8 B_80800AD6_gztrace_tail1[256];
 
-void func_808003D0_gztrace(TraceHeader1459 *param_0)
+// Fills B_80800A70_gztrace with the section pointers of a trace header.
+void func_808003D0_gztrace(TraceHeader1459 *header)
 {
-    int new_var;
-    B_80800A70_gztrace.type = param_0->type;
-    B_80800A70_gztrace.word_count = param_0->words;
-    B_80800A70_gztrace.header = param_0;
-    B_80800A70_gztrace.prefix = (u8 *) param_0 + 0x34;
-    B_80800A70_gztrace.words = (u8 *) param_0 + 0x38;
-    B_80800A70_gztrace.extra = ((u8 *) param_0 + 0x38) + (param_0->words * 4);
+    // Matching: the temporary index variable and the always-true empty if below are needed.
+    int block_index;
+    B_80800A70_gztrace.type = header->type;
+    B_80800A70_gztrace.word_count = header->words;
+    B_80800A70_gztrace.header = header;
+    B_80800A70_gztrace.prefix = (u8 *) header + 0x34;
+    B_80800A70_gztrace.words = (u8 *) header + 0x38;
+    B_80800A70_gztrace.extra = ((u8 *) header + 0x38) + (header->words * 4);
     B_80800A70_gztrace.shorts =
-        (u8 *) ((((u32) B_80800A70_gztrace.extra + param_0->extra_size) + 3) & ~3U);
-    B_80800A70_gztrace.pointers = B_80800A70_gztrace.shorts + (param_0->shorts * 2);
+        (u8 *) ((((u32) B_80800A70_gztrace.extra + header->extra_size) + 3) & ~3U);
+    B_80800A70_gztrace.pointers = B_80800A70_gztrace.shorts + (header->shorts * 2);
     B_80800A70_gztrace.pointers += 3;
     B_80800A70_gztrace.pointers = (u8 *) ((u32) B_80800A70_gztrace.pointers & ~3U);
-    new_var = 0;
-    B_80800A70_gztrace.blocks[new_var] = B_80800A70_gztrace.pointers + (param_0->pointers * 4);
+    block_index = 0;
+    B_80800A70_gztrace.blocks[block_index] = B_80800A70_gztrace.pointers + (header->pointers * 4);
     B_80800A70_gztrace.blocks[0] += 15;
     B_80800A70_gztrace.blocks[0] = (u8 *) ((u32) B_80800A70_gztrace.blocks[0] & ~15U);
-    if ((param_0 && param_0) != 0) {
+    if ((header && header) != 0) {
     }
-    B_80800A70_gztrace.blocks[1] = B_80800A70_gztrace.blocks[0] + (param_0->blocks[0] * 16);
-    B_80800A70_gztrace.blocks[2] = B_80800A70_gztrace.blocks[1] + (param_0->blocks[1] * 16);
-    B_80800A70_gztrace.blocks[3] = B_80800A70_gztrace.blocks[2] + (param_0->blocks[2] * 16);
-    B_80800A70_gztrace.end = B_80800A70_gztrace.blocks[3] + (param_0->blocks[3] * 16);
+    B_80800A70_gztrace.blocks[1] = B_80800A70_gztrace.blocks[0] + (header->blocks[0] * 16);
+    B_80800A70_gztrace.blocks[2] = B_80800A70_gztrace.blocks[1] + (header->blocks[1] * 16);
+    B_80800A70_gztrace.blocks[3] = B_80800A70_gztrace.blocks[2] + (header->blocks[2] * 16);
+    B_80800A70_gztrace.end = B_80800A70_gztrace.blocks[3] + (header->blocks[3] * 16);
 }
 
-s32 func_808004B0_gztrace(u32 **param_0, u32 **param_1, u32 *param_2, u32 **param_3, u32 *param_4)
+// Unwinds one stack frame: scans forward from *pc_ref for the saved ra and the sp adjustment.
+s32 func_808004B0_gztrace(u32 **sp_ref, u32 **pc_ref, u32 *jal_target, u32 **fallback_pc, u32 *ret_addr)
 {
     u32 *pc;
     u32 *sp;
     u32 insn;
     s32 done;
 
-    sp = *param_0;
-    pc = *param_1;
+    sp = *sp_ref;
+    pc = *pc_ref;
     done = 0;
-    *param_3 = *param_1 - 2;
+    *fallback_pc = *pc_ref - 2;
     do {
         insn = *pc++;
         switch (insn >> 16) {
             case 0x8FBF:
-                param_4 = *(u32 **) ((u8 *) sp + (s16) insn);
+                ret_addr = *(u32 **) ((u8 *) sp + (s16) insn);
                 break;
             case 0x27BD:
                 sp += (s16) insn >> 2;
@@ -173,17 +187,17 @@ s32 func_808004B0_gztrace(u32 **param_0, u32 **param_1, u32 *param_2, u32 **para
     if ((insn >> 16) == 0x27BD) {
         sp += (s16) insn >> 2;
     }
-    *param_1 = param_4;
-    *param_0 = sp;
-    if (param_4 != NULL) {
-        insn = param_4[-2];
+    *pc_ref = ret_addr;
+    *sp_ref = sp;
+    if (ret_addr != NULL) {
+        insn = ret_addr[-2];
         switch (insn >> 26) {
             case 3:
-                *param_2 = ((insn + 0xF4000000) << 2) + 0x80000000;
+                *jal_target = ((insn + 0xF4000000) << 2) + 0x80000000;
                 return 1;
             case 0:
                 if ((insn & 0x3F) == 9) {
-                    *param_2 = 0;
+                    *jal_target = 0;
                     return 1;
                 }
                 break;
@@ -194,66 +208,69 @@ s32 func_808004B0_gztrace(u32 **param_0, u32 **param_1, u32 *param_2, u32 **para
     return 0;
 }
 
-void func_808005C4_gztrace(s32 param_0, u8 *param_1, s32 param_2, s32 param_3, s32 param_4)
+// Prints up to 16 frames of a stack trace; prints nothing if quiet is set.
+void func_808005C4_gztrace(s32 pc, u8 *sp, s32 ret_addr, s32 platform, s32 quiet)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
+    s32 func_addr;
+    s32 fallback_pc;
+    s32 header;
+    s32 lookup_addr;
+    s32 shown_func;
+    s32 shown_pc;
     s32 i;
 
     i = 0;
-    if (func_808004B0_gztrace(&param_1, &param_0, &local_0, &local_1, param_2) != 0) {
+    if (func_808004B0_gztrace(&sp, &pc, &func_addr, &fallback_pc, ret_addr) != 0) {
         do {
-            local_4 = local_0;
-            local_5 = local_1;
-            if (local_0 != 0) {
-                local_3 = local_0;
+            shown_func = func_addr;
+            shown_pc = fallback_pc;
+            if (func_addr != 0) {
+                lookup_addr = func_addr;
             } else {
-                local_3 = local_1;
+                lookup_addr = fallback_pc;
             }
-            local_2 = func_80081AA4(local_3);
-            if (local_2 != 0) {
-                func_808003D0_gztrace(local_2);
+            header = func_80081AA4(lookup_addr);
+            if (header != 0) {
+                func_808003D0_gztrace(header);
+                // Raw offsets into B_80800A70_gztrace: 0x1C = extra, 0x20 = blocks[0].
                 func_808000E8_gztrace(&B_80800AA8_gztrace,
                                       *(s32 *) ((u8 *) (s32 *) &B_80800A70_gztrace + 0x1C), 0xD,
                                       0x7E, 2);
-                if (param_3 == 0) {
-                    if (local_4 != 0 && (local_4 < (s32) &overlay_syscalls ||
-                                         (s32) &overlay_syscalls_end < local_4)) {
-                        local_4 -= *(s32 *) ((u8 *) (s32 *) &B_80800A70_gztrace + 0x20);
+                if (platform == 0) {
+                    if (shown_func != 0 && (shown_func < (s32) &overlay_syscalls ||
+                                            (s32) &overlay_syscalls_end < shown_func)) {
+                        shown_func -= *(s32 *) ((u8 *) (s32 *) &B_80800A70_gztrace + 0x20);
                     }
-                    local_5 -= *(s32 *) ((u8 *) (s32 *) &B_80800A70_gztrace + 0x20);
+                    shown_pc -= *(s32 *) ((u8 *) (s32 *) &B_80800A70_gztrace + 0x20);
                 }
             } else {
                 func_808000E8_gztrace(&B_80800AA8_gztrace, "core", 0xD, 0x7E, 2);
             }
-            switch (param_3) {
+            switch (platform) {
                 case 0:
                     func_80800068_gztrace(&B_80800AA8_gztrace, " (********,********) ");
-                    func_80800290_gztrace(*(u8 **) param_1, 4, &B_80800ABA_gztrace);
-                    func_80800290_gztrace(*(u8 **) (param_1 + 4), 4, &B_80800AC3_gztrace);
+                    func_80800290_gztrace(*(u8 **) sp, 4, &B_80800ABA_gztrace);
+                    func_80800290_gztrace(*(u8 **) (sp + 4), 4, &B_80800AC3_gztrace);
                     break;
                 case 1:
                     func_80800068_gztrace(&B_80800AA8_gztrace, " SP: ********    PC: ");
-                    func_80800290_gztrace(param_1, 4, &B_80800ABD_gztrace);
+                    func_80800290_gztrace(sp, 4, &B_80800ABD_gztrace);
             }
-            if (local_0 != 0) {
-                func_80800290_gztrace((u8 *) local_4, 4, &B_80800ACD_gztrace);
+            if (func_addr != 0) {
+                func_80800290_gztrace((u8 *) shown_func, 4, &B_80800ACD_gztrace);
             } else {
                 func_80800068_gztrace(&B_80800ACD_gztrace, " (*f)() ");
             }
             func_80800068_gztrace(&B_80800AD5_gztrace, "-********");
-            func_80800290_gztrace((u8 *) local_5, 4, &B_80800AD6_gztrace);
+            func_80800290_gztrace((u8 *) shown_pc, 4, &B_80800AD6_gztrace);
+            // Terminate the line buffer.
             *(s8 *) ((u8 *) &B_80800AA8_gztrace + 0x36) = 0;
-            if (param_4 == 0) {
+            if (quiet == 0) {
                 func_8001D37C("%s\n", &B_80800AA8_gztrace);
             }
             i += 1;
         } while (i < 16 &&
-                 func_808004B0_gztrace(&param_1, &param_0, &local_0, &local_1, param_2) != 0);
+                 func_808004B0_gztrace(&sp, &pc, &func_addr, &fallback_pc, ret_addr) != 0);
     }
 }
 
@@ -261,34 +278,36 @@ void gztrace_entrypoint_0(void)
 {
 }
 
-void gztrace_entrypoint_1(OSThread *param_0, s32 param_1, s32 param_2, s32 param_3)
+// Prints a stack trace of thread, skipping the first skip_frames frames.
+void gztrace_entrypoint_1(OSThread *thread, s32 skip_frames, s32 platform, s32 quiet)
 {
-    s32 local_4;
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
+    s32 ret_addr;
+    s32 pc;
+    s32 sp;
+    s32 func_addr;
+    s32 fallback_pc;
 
-    local_0 = param_0->context.pc;
-    local_1 = param_0->context.sp;
-    local_4 = param_0->context.ra;
+    pc = thread->context.pc;
+    sp = thread->context.sp;
+    ret_addr = thread->context.ra;
     func_8001D37C("Stack trace: %s\n\nSP = %08X, PC = %08X, RA = %08X\n\n",
-                  param_2 == 0 ? "Work-Station" : "N64", local_1, local_0, local_4);
-    if (!func_80800000_gztrace(local_0)) {
-        local_0 = local_4;
-        local_4 = 0;
-        if (!func_80800000_gztrace(local_0)) {
+                  platform == 0 ? "Work-Station" : "N64", sp, pc, ret_addr);
+    if (!func_80800000_gztrace(pc)) {
+        pc = ret_addr;
+        ret_addr = 0;
+        if (!func_80800000_gztrace(pc)) {
             func_8001D37C("Unable to trace, invalid PC,RA!\n");
             return;
         }
     }
-    while (param_1--) {
-        func_808004B0_gztrace(&local_1, &local_0, &local_2, &local_3, local_4);
-        local_4 = 0;
+    while (skip_frames--) {
+        func_808004B0_gztrace(&sp, &pc, &func_addr, &fallback_pc, ret_addr);
+        ret_addr = 0;
     }
-    func_808005C4_gztrace(local_0, local_1, local_4, param_2, param_3);
+    func_808005C4_gztrace(pc, sp, ret_addr, platform, quiet);
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C; the values come from the ROM.
 u32 D_80800A30_gztrace[16] = {
     0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D,
     0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D000000};

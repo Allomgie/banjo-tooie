@@ -8,13 +8,15 @@ extern int D_8007E948;
 extern void _gzpublic_entrypoint_0(void *);
 extern s32 D_8007E958;
 extern s32 D_8007E94C;
+// TU-NOTE: D_8007E948 starts a Struct_E948 (crash state); D_8007E94C, D_8007E950, D_8007E958 and
+// D_8007E95C alias its culprit, culprit_id, caller_id and saved_pri.
 typedef struct {
-    s32 unk0;
-    OSThread *unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14[10];
+    s32 crash_reason;
+    OSThread *culprit;
+    s32 culprit_id;
+    s32 culprit_pri;
+    s32 caller_id;
+    s32 saved_pri[10];
 } Struct_E948;
 extern u8 D_80041180[];
 extern s32 D_8011A3F0;
@@ -29,11 +31,13 @@ extern s16 D_8007DB80;
 
 void func_8001E7B4();
 
+// Draws the debug console into the current framebuffer.
 void func_8001E2A0()
 {
     func_8001DA60(func_80014F00());
 }
 
+// Crash reason 0: CPU exception.
 void func_8001E2C8(void)
 {
     func_8001D96C();
@@ -41,6 +45,7 @@ void func_8001E2C8(void)
     func_8001E2A0();
 }
 
+// Crash reason 1.
 void func_8001E304()
 {
     func_8001D96C();
@@ -50,6 +55,7 @@ void func_8001E304()
     func_8001E2A0();
 }
 
+// Crash reason 2: hang detected.
 s32 func_8001E34C(void)
 {
     func_8001D96C();
@@ -57,11 +63,13 @@ s32 func_8001E34C(void)
     func_8001E2A0();
 }
 
+// Crash reason 3: no message, only draws the console.
 void func_8001E380()
 {
     func_8001E2A0();
 }
 
+// Any other crash reason.
 void func_8001E3A0()
 {
     s32 ret;
@@ -70,12 +78,14 @@ void func_8001E3A0()
     func_8001E2A0();
 }
 
+// Crash reason 5: out of memory.
 s32 func_8001E3E0(void)
 {
     func_8001D37C("\n[%d] Out of Memory!\n", func_8001211C());
     func_8001E2A0();
 }
 
+// Crash reason 4: halt.
 s32 func_8001E418(void)
 {
     func_8001D96C();
@@ -83,6 +93,7 @@ s32 func_8001E418(void)
     func_8001E2A0();
 }
 
+// Crash reason 6: software lock.
 s32 func_8001E44C(void)
 {
     func_8001D96C();
@@ -90,11 +101,13 @@ s32 func_8001E44C(void)
     func_8001E2A0();
 }
 
+// Crash reason 7: destroys the current thread.
 int func_8001E490()
 {
     osDestroyThread(0);
 }
 
+// Shows the message for the recorded crash reason.
 void func_8001E4B0()
 {
     switch (D_8007E948) {
@@ -135,7 +148,8 @@ void func_8001E4B0()
     }
 }
 
-void func_8001E578(s32 param_0)
+// Entry of the crash thread: shows the message, then enters the gz overlay.
+void func_8001E578(s32 arg)
 {
     func_8001E7B4(1);
     osSetThreadPri(func_8001DDA4(D_8007E958), 0);
@@ -144,67 +158,69 @@ void func_8001E578(s32 param_0)
     _gzpublic_entrypoint_0(D_8007E94C);
 }
 
-void func_8001E5DC(s32 param_0)
+// Records the crash (reason, culprit thread, thread priorities) and starts the crash thread.
+void func_8001E5DC(s32 reason)
 {
     s32 i;
-    OSThread *t;
+    OSThread *thread;
     s32 id;
 
     if (D_8011A3F0 != 0) {
         func_8001559C(0);
-        (*(Struct_E948 *) &D_8007E948).unk10 = osGetThreadId(NULL);
+        (*(Struct_E948 *) &D_8007E948).caller_id = osGetThreadId(NULL);
         for (i = 0; i != 10; i++) {
-            t = func_8001DDA4(i);
-            if (t != NULL) {
-                (*(Struct_E948 *) &D_8007E948).unk14[i] = osGetThreadPri(t);
+            thread = func_8001DDA4(i);
+            if (thread != NULL) {
+                (*(Struct_E948 *) &D_8007E948).saved_pri[i] = osGetThreadPri(thread);
             } else {
-                (*(Struct_E948 *) &D_8007E948).unk14[i] = 0;
+                (*(Struct_E948 *) &D_8007E948).saved_pri[i] = 0;
             }
         }
         for (i = 0; i != 10; i++) {
-            if (i != (*(Struct_E948 *) &D_8007E948).unk10) {
-                t = func_8001DDA4(i);
-                if (t != NULL) {
-                    osSetThreadPri(t, D_80041180[i]);
+            if (i != (*(Struct_E948 *) &D_8007E948).caller_id) {
+                thread = func_8001DDA4(i);
+                if (thread != NULL) {
+                    osSetThreadPri(thread, D_80041180[i]);
                 }
             }
         }
         osSetThreadPri(NULL, 0xA);
-        switch (param_0) {
+        switch (reason) {
             default:
-                (*(Struct_E948 *) &D_8007E948).unk4 = __osRunningThread;
+                (*(Struct_E948 *) &D_8007E948).culprit = __osRunningThread;
                 break;
             case 1:
-                (*(Struct_E948 *) &D_8007E948).unk4 = func_8001DDA4(6);
+                (*(Struct_E948 *) &D_8007E948).culprit = func_8001DDA4(6);
                 break;
             case 2:
-                (*(Struct_E948 *) &D_8007E948).unk4 = func_80012598();
+                (*(Struct_E948 *) &D_8007E948).culprit = func_80012598();
                 break;
             case 0:
-                (*(Struct_E948 *) &D_8007E948).unk4 = __osFaultedThread;
+                (*(Struct_E948 *) &D_8007E948).culprit = __osFaultedThread;
                 break;
             case 7:
-                (*(Struct_E948 *) &D_8007E948).unk4 = __osFaultedThread;
+                (*(Struct_E948 *) &D_8007E948).culprit = __osFaultedThread;
         }
-        id = osGetThreadId((*(Struct_E948 *) &D_8007E948).unk4);
-        (*(Struct_E948 *) &D_8007E948).unk8 = id;
-        (*(Struct_E948 *) &D_8007E948).unkC =
-            (*(Struct_E948 *) &D_8007E948).unk14[(*(Struct_E948 *) &D_8007E948).unk8];
-        (*(Struct_E948 *) &D_8007E948).unk0 = param_0;
+        id = osGetThreadId((*(Struct_E948 *) &D_8007E948).culprit);
+        (*(Struct_E948 *) &D_8007E948).culprit_id = id;
+        (*(Struct_E948 *) &D_8007E948).culprit_pri =
+            (*(Struct_E948 *) &D_8007E948).saved_pri[(*(Struct_E948 *) &D_8007E948).culprit_id];
+        (*(Struct_E948 *) &D_8007E948).crash_reason = reason;
         func_8001DCB0(&D_8007E788, D_8007E938, 9, func_8001E578, NULL,
                       (OSThread *) (D_8007E938 - 0x1B0), 0x5A);
         osStartThread(&D_8007E788);
     }
 }
 
-int func_8001E7A0(s32 param_0)
+// Returns the saved priority of thread index.
+int func_8001E7A0(s32 index)
 {
-    return D_8007E95C[param_0];
+    return D_8007E95C[index];
 }
 
-void func_8001E7B4(param_0) s32 param_0;
+void func_8001E7B4(flag) s32 flag;
 {
-    D_8007DB80 = param_0;
+    D_8007DB80 = flag;
 }
 
 int func_8001E7C0()
@@ -212,10 +228,12 @@ int func_8001E7C0()
     return D_8007DB80;
 }
 
+// Returns the recorded crash reason.
 int func_8001E7CC()
 {
     return D_8007E948;
 }
 
+// TU-NOTE: the .data of this file is defined here in C; values are from the ROM.
 u8 D_80041180[16] = {0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
                      0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};

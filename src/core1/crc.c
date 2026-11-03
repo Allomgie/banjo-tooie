@@ -13,6 +13,7 @@ void set_crc_entry(s32);
 extern u8 build_data_ROM_START[];
 void rom_read_word(uintptr_t, u32 *);
 
+// Do not change these two structs: the ROM compressor's CRC calculation depends on them.
 typedef struct {
     u32 crc1;
     u32 crc2;
@@ -25,6 +26,7 @@ typedef struct {
     u8 in_rom;
 } CrcEntry;
 
+// Do not rename: the ROM compressor's CRC calculation depends on this name.
 CrcEntry crc_entries[] = {
     {init_crc_check, 9, FALSE}, {ovl_entrypoint, 12, FALSE}, {func_800A1364, 15, FALSE},
     {func_800965D4, 18, FALSE}, {func_8009B7C0, 21, FALSE},  {func_8001C1C0, 24, FALSE},
@@ -59,6 +61,8 @@ void set_crc_entry(s32 symbol_index)
     }
 }
 
+// Matching: the line breaks in this function are needed for the match.
+// Advances the CRC by one word. Returns FALSE on a CRC mismatch.
 s32 advance_crc_check(void) {
     u32 crc1;
     u32 crc2;
@@ -112,6 +116,7 @@ s32 advance_crc_check(void) {
     return TRUE;
 }
 
+// Hangs forever if the code integrity check has failed.
 void do_crc_check(void)
 {
     s32 good = crc_good != FALSE;

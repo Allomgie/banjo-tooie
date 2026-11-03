@@ -86,65 +86,65 @@ typedef struct {
 } TTAcmd;
 typedef struct {
     u8 pad0[0x14];
-    void *unk14[4];
-    f32 unk24;
+    void *buf[4];
+    f32 frac_acc;
     s32 unk28;
 } TTLine;
 typedef struct {
-    s32 unk0;
-    s32 unk4;
+    s32 input;
+    s32 output;
     u8 pad8[8];
-    f32 unk10;
+    f32 rsinc;
     f32 unk14;
     s32 unk18;
-    f32 unk1C;
+    f32 rsgain;
     u8 pad20[4];
-    TTLine *unk24;
+    TTLine *rs;
 } TTReverb;
 typedef struct {
-    u32 unk0;
+    u32 length;
     u8 pad4[0x1C];
-    u8 *unk20[2];
-    u8 *unk28[2];
+    u8 *base[2];
+    u8 *input[2];
 } TTBank;
 typedef struct {
-    u32 unk0;
+    u32 length;
     u8 pad4[0x1C];
-    u8 *unk20[4];
+    u8 *base[4];
 } TTDlyD;
 typedef struct {
     u8 pad0[2];
     s16 unk2;
     u8 pad4[4];
-    u32 unk8;
+    u32 coef;
     u8 padC[0x1C];
     s32 unk28;
     void *unk2C[2];
 } TTRvbF;
 typedef struct {
     u8 pad0[0x10];
-    f32 unk10;
-    f32 unk14;
+    f32 rate;
+    f32 phase;
     u8 pad18[4];
-    f32 unk1C;
+    f32 depth;
 } TTOscT;
 extern f32 D_80041D10;
 extern f32 D_80041D14;
 extern f32 func_80013C48(f32, f32);
 typedef struct {
-    s16 unk0;
+    s16 fc;
     s16 unk2;
     u8 pad4[4];
-    s16 unk8[16];
+    s16 coef[16];
     s32 unk28;
 } TTEnvA;
 extern f32 D_80041D18;
 extern f32 D_80041D1C;
 typedef struct {
-    s16 unk0;
+    s16 fc;
     s16 unk2;
     u8 pad4[4];
-    s16 unk8[16];
+    s16 coef[16];
 } TTFxC;
 extern f32 D_80041D20;
 extern f32 D_80041D24;
@@ -153,46 +153,46 @@ typedef struct {
     void *unk14;
     void *unk18;
     u8 pad1C[8];
-    f32 unk24;
+    f32 frac_acc;
     s32 unk28;
     u8 pad2C[0xC];
 } ElemA;
 typedef struct {
-    s16 unk0;
+    s16 fc;
     u8 pad2[0x2A];
     void *unk2C;
     void *unk30;
     u8 pad34[4];
 } ElemB;
 typedef struct {
-    u32 unk0;
-    u32 unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
+    u32 input;
+    u32 output;
+    s16 ffcoef;
+    s16 fbcoef;
+    s16 gain;
     u8 padE[2];
-    f32 unk10;
+    f32 rsinc;
     f32 unk14;
     s32 unk18;
-    f32 unk1C;
-    ElemB *unk20;
-    ElemA *unk24;
+    f32 rsgain;
+    ElemB *lp;
+    ElemA *rs;
 } Elem;
 typedef struct {
-    u32 unk0;
-    Elem *unk4;
-    u8 unk8;
+    u32 length;
+    Elem *delay;
+    u8 section_count;
     u8 pad9[0x17];
-    s16 *unk20;
-    s16 *unk24;
-    void *unk28;
-    void *unk2C;
+    s16 *base_0;
+    s16 *base_1;
+    void *input_0;
+    void *input_1;
 } TTObj;
 typedef struct {
     u8 pad0[0x18];
-    s32 unk18;
-    u8 unk1C[4];
-    s32 *unk20[4];
+    s32 output_rate;
+    u8 fx_type[4];
+    s32 *custom_tbl[4];
 } TTDesc;
 extern void *func_80020EE4(s32, s32, void *, s32, s32);
 extern s32 D_80041268[];
@@ -248,457 +248,472 @@ TTAcmd *func_800286FC(TTRvbF *r, s32 idx, s32 vol, TTAcmd *cmdIn);
 f32 func_800287FC(TTOscT *p, s32 step);
 void func_80028A24(TTEnvA *p);
 
-Acmd *func_800272B0(s32 param_0, Acmd *param_1, s32 param_2)
+// n_alFxPull: emit RSP audio commands for one FX bus (multi-tap delay lines, optional stereo reverb)
+Acmd *func_800272B0(s32 unk_0, Acmd *cmd_start, s32 bus)
 {
-    Acmd *local_0 = param_1;
-    Effect_800272B0 *local_1 = D_800411F4->auxBus[param_2].fx;
-    s16 local_2;
-    s16 local_3;
-    s16 local_4;
-    s16 local_5;
-    s16 local_6;
-    s16 *local_7;
-    s16 *local_8;
-    s16 *local_10 = 0;
-    Delay_800272B0 *local_11;
-    s32 local_13 = 1;
-    u32 local_14;
+    Acmd *cmd = cmd_start;
+    Effect_800272B0 *fx = D_800411F4->auxBus[bus].fx;
+    s16 j;
+    s16 buf_a;
+    s16 buf_b;
+    s16 in_dmem;
+    s16 acc_dmem;
+    s16 *in_ptr;
+    s16 *out_ptr;
+    s16 *prev_out = 0;
+    Delay_800272B0 *delay;
+    s32 unk_1 = 1;
+    u32 i;
 
-    local_0 = func_8002BD40(param_0, param_1, param_2, &local_13);
-    local_5 = 0x7C0;
-    local_6 = 0x930;
-    local_3 = 0;
-    local_4 = 0x170;
+    cmd = func_8002BD40(unk_0, cmd_start, bus, &unk_1);
+    in_dmem = 0x7C0;
+    acc_dmem = 0x930;
+    buf_a = 0;
+    buf_b = 0x170;
 
-    if (D_8007EA33[param_2] == 0) {
-        CMD_MIX(local_0++, 0, 0xC000, 0x7C0, local_5);
-        CMD_MIX(local_0++, 0, 0x4000, 0x930, local_5);
+    if (D_8007EA33[bus] == 0) {
+        CMD_MIX(cmd++, 0, 0xC000, 0x7C0, in_dmem);
+        CMD_MIX(cmd++, 0, 0x4000, 0x930, in_dmem);
     }
 
-    local_0 = func_80028520(local_1, 0, local_1->input[0], local_5, local_0);
-    if (D_8007EA33[param_2]) {
-        local_0 = func_80028520(local_1, 1, local_1->input[1], 0x930, local_0);
+    cmd = func_80028520(fx, 0, fx->input[0], in_dmem, cmd);
+    if (D_8007EA33[bus]) {
+        cmd = func_80028520(fx, 1, fx->input[1], 0x930, cmd);
     }
 
-    for (local_14 = 0; local_14 <= D_8007EA33[param_2]; local_14++) {
-        CMD_CLEAR(local_0++, local_6, 0x170);
+    for (i = 0; i <= D_8007EA33[bus]; i++) {
+        CMD_CLEAR(cmd++, acc_dmem, 0x170);
 
-        for (local_2 = 0; local_2 < local_1->section_count; local_2++) {
-            local_11 = &local_1->delay[local_2];
-            local_7 = &local_1->input[local_14][-local_11->input];
-            local_8 = &local_1->input[local_14][-local_11->output];
+        for (j = 0; j < fx->section_count; j++) {
+            delay = &fx->delay[j];
+            in_ptr = &fx->input[i][-delay->input];
+            out_ptr = &fx->input[i][-delay->output];
 
-            if (D_8007EA34[param_2] && D_8007EA33[param_2]) {
-                local_11->ffcoef = -local_11->ffcoef;
-                local_11->fbcoef = -local_11->fbcoef;
+            if (D_8007EA34[bus] && D_8007EA33[bus]) {
+                delay->ffcoef = -delay->ffcoef;
+                delay->fbcoef = -delay->fbcoef;
             }
 
-            if (local_7 == local_10) {
-                s16 local_15 = local_4;
-                local_4 = local_3;
-                local_3 = local_15;
+            if (in_ptr == prev_out) {
+                s16 tmp = buf_b;
+                buf_b = buf_a;
+                buf_a = tmp;
             } else {
-                local_0 = func_80028328(local_1, local_14, local_7, local_3, 0xB8, local_0);
+                cmd = func_80028328(fx, i, in_ptr, buf_a, 0xB8, cmd);
             }
 
-            local_0 = func_80028010(local_1, local_11, local_14, local_4, local_0);
+            cmd = func_80028010(fx, delay, i, buf_b, cmd);
 
-            if (local_11->ffcoef) {
-                CMD_MIX(local_0++, 0, (u16) local_11->ffcoef, local_3, local_4);
-                if (!local_11->rs && !local_11->lp) {
-                    local_0 = func_80028520(local_1, local_14, local_8, local_4, local_0);
+            if (delay->ffcoef) {
+                CMD_MIX(cmd++, 0, (u16) delay->ffcoef, buf_a, buf_b);
+                if (!delay->rs && !delay->lp) {
+                    cmd = func_80028520(fx, i, out_ptr, buf_b, cmd);
                 }
             }
-            if (local_11->fbcoef) {
-                CMD_MIX(local_0++, 0, (u16) local_11->fbcoef, local_4, local_3);
-                local_0 = func_80028520(local_1, local_14, local_7, local_3, local_0);
+            if (delay->fbcoef) {
+                CMD_MIX(cmd++, 0, (u16) delay->fbcoef, buf_b, buf_a);
+                cmd = func_80028520(fx, i, in_ptr, buf_a, cmd);
             }
-            if (local_11->lp) {
-                local_0 = func_800286FC(local_11->lp, local_14, local_4, local_0);
+            if (delay->lp) {
+                cmd = func_800286FC(delay->lp, i, buf_b, cmd);
             }
-            if (!local_11->rs) {
-                local_0 = func_80028520(local_1, local_14, local_8, local_4, local_0);
+            if (!delay->rs) {
+                cmd = func_80028520(fx, i, out_ptr, buf_b, cmd);
             }
-            if (local_11->gain) {
-                if (D_8007EA33[param_2]) {
-                    CMD_MIX(local_0++, 0, (u16) local_11->gain, local_4, local_6);
+            if (delay->gain) {
+                if (D_8007EA33[bus]) {
+                    CMD_MIX(cmd++, 0, (u16) delay->gain, buf_b, acc_dmem);
                 } else {
-                    u32 local_16 = local_11->gain * 1.4141999483109f;
-                    if (local_16 > 0x7FFF) {
-                        local_16 = 0x7FFF;
+                    u32 gain = delay->gain * 1.4141999483109f;
+                    if (gain > 0x7FFF) {
+                        gain = 0x7FFF;
                     }
-                    CMD_MIX(local_0++, 0, (u16) local_16, local_4, local_6);
+                    CMD_MIX(cmd++, 0, (u16) gain, buf_b, acc_dmem);
                 }
             }
-            local_10 = &local_1->input[local_14][local_11->output];
+            prev_out = &fx->input[i][delay->output];
         }
 
-        if (D_8007EA33[param_2] && local_14 == 0) {
-            local_0 = func_80028328(local_1, 1, local_1->input[1], local_5, 0xB8, local_0);
-            if (D_8007EA34[param_2]) {
-                CMD_MIX(local_0++, 0, 0x5A82, local_6, 0x650);
+        if (D_8007EA33[bus] && i == 0) {
+            cmd = func_80028328(fx, 1, fx->input[1], in_dmem, 0xB8, cmd);
+            if (D_8007EA34[bus]) {
+                CMD_MIX(cmd++, 0, 0x5A82, acc_dmem, 0x650);
             } else {
-                CMD_MIX(local_0++, 0, 0x5A82, local_6, 0x4E0);
+                CMD_MIX(cmd++, 0, 0x5A82, acc_dmem, 0x4E0);
             }
         } else {
+            // Matching: empty else block needed for the match.
         }
 
-        CMD_MOVE(local_0++, local_6, 0x7C0, 0x170);
-        local_1->input[local_14] += 0xB8;
-        if (local_1->input[local_14] > &local_1->base[local_14][local_1->length]) {
-            local_1->input[local_14] -= local_1->length;
+        CMD_MOVE(cmd++, acc_dmem, 0x7C0, 0x170);
+        fx->input[i] += 0xB8;
+        if (fx->input[i] > &fx->base[i][fx->length]) {
+            fx->input[i] -= fx->length;
         }
     }
-    return local_0;
+    return cmd;
 }
 
-s32 func_80027AF0(void *param_0, s32 param_1, void *param_2)
+// alFxParam: set one delay line parameter; low 3 bits of param select it, the rest the delay line
+s32 func_80027AF0(void *fx, s32 param, void *value_ptr)
 {
-    Effect_80027AF0 *local_0 = (Effect_80027AF0 *) param_0;
-    s32 local_1 = param_1 & 7;
-    s32 local_2 = param_1 >> 3;
-    s32 local_3 = *(s32 *) param_2;
-    f32 local_4;
+    Effect_80027AF0 *effect = (Effect_80027AF0 *) fx;
+    s32 type = param & 7;
+    s32 section = param >> 3;
+    s32 value = *(s32 *) value_ptr;
+    f32 unk_0;
 
-    if (local_2 >= local_0->section_count) {
+    if (section >= effect->section_count) {
         return 0;
     }
 
-    switch (local_1) {
+    switch (type) {
         case 0:
-            local_0->delay[local_2].input =
-                ((s32) local_3 * ((Synth_80027AF0 *) D_800411F4)->outputRate / 1000) & 0xFFFFFFF8;
+            effect->delay[section].input =
+                ((s32) value * ((Synth_80027AF0 *) D_800411F4)->outputRate / 1000) & 0xFFFFFFF8;
             break;
         case 1:
-            local_0->delay[local_2].output =
-                ((s32) local_3 * ((Synth_80027AF0 *) D_800411F4)->outputRate / 1000) & 0xFFFFFFF8;
+            effect->delay[section].output =
+                ((s32) value * ((Synth_80027AF0 *) D_800411F4)->outputRate / 1000) & 0xFFFFFFF8;
             break;
         case 2:
-            local_0->delay[local_2].fbcoef = (s16) local_3;
+            effect->delay[section].fbcoef = (s16) value;
             break;
         case 3:
-            local_0->delay[local_2].ffcoef = (s16) local_3;
+            effect->delay[section].ffcoef = (s16) value;
             break;
         case 4:
-            local_0->delay[local_2].gain = (s16) local_3;
+            effect->delay[section].gain = (s16) value;
             break;
         case 5:
-            local_0->delay[local_2].rsinc =
-                (((f32) local_3 / 1000.0f) * 2.0f) / ((Synth_80027AF0 *) D_800411F4)->outputRate;
+            effect->delay[section].rsinc =
+                (((f32) value / 1000.0f) * 2.0f) / ((Synth_80027AF0 *) D_800411F4)->outputRate;
             break;
         case 6:
-            local_4 = local_3;
+            unk_0 = value;
             break;
         case 7:
-            if (local_0->delay[local_2].lp) {
-                local_0->delay[local_2].lp->fc = (s16) local_3;
-                func_80028A24(local_0->delay[local_2].lp);
+            if (effect->delay[section].lp) {
+                effect->delay[section].lp->fc = (s16) value;
+                func_80028A24(effect->delay[section].lp);
             }
             break;
     }
 
-    if (local_0->delay[local_2].input >= local_0->length - 16) {
-        local_0->delay[local_2].input = local_0->length - 16;
+    if (effect->delay[section].input >= effect->length - 16) {
+        effect->delay[section].input = effect->length - 16;
     }
-    if (local_0->delay[local_2].input >= local_0->length - 8) {
-        local_0->delay[local_2].input = local_0->length - 8;
+    if (effect->delay[section].input >= effect->length - 8) {
+        effect->delay[section].input = effect->length - 8;
     }
-    if (local_0->delay[local_2].input >= local_0->delay[local_2].output) {
-        local_0->delay[local_2].output = local_0->delay[local_2].input + 8;
+    if (effect->delay[section].input >= effect->delay[section].output) {
+        effect->delay[section].output = effect->delay[section].input + 8;
     }
 
-    if (local_0->delay[local_2].rs) {
-        if (local_1 != 6) {
-            if ((local_0->delay[local_2].output - local_0->delay[local_2].input) != 0) {
-                local_4 = (f32) local_0->delay[local_2].rsgain /
-                          (local_0->delay[local_2].output - local_0->delay[local_2].input) *
+    if (effect->delay[section].rs) {
+        if (type != 6) {
+            if ((effect->delay[section].output - effect->delay[section].input) != 0) {
+                unk_0 = (f32) effect->delay[section].rsgain /
+                          (effect->delay[section].output - effect->delay[section].input) *
                           173123.404906676f;
             } else {
-                local_4 = 0;
+                unk_0 = 0;
             }
         }
-        local_0->delay[local_2].rsgain =
-            (local_0->delay[local_2].output - local_0->delay[local_2].input) *
-            (local_4 / 173123.404906676f);
+        effect->delay[section].rsgain =
+            (effect->delay[section].output - effect->delay[section].input) *
+            (unk_0 / 173123.404906676f);
     }
     return 0;
 }
 
-TTAcmd *func_80028010(TTBank *bank, TTReverb *r, s32 idx, s32 dmem, TTAcmd *cmdBuf)
+// Load the delay input for one line into DMEM; reads through the modulated resampler when rs is set
+TTAcmd *func_80028010(TTBank *bank, TTReverb *delay, s32 idx, s32 dmem, TTAcmd *cmd_buf)
 {
-    TTAcmd *cmd = cmdBuf;
+    TTAcmd *cmd = cmd_buf;
     s32 gain;
-    s32 accInt;
-    s32 dmemDflt = 0x2E0;
+    s32 acc_int;
+    s32 dmem_dflt = 0x2E0;
     u8 *pos;
     f32 acc;
-    f32 invVal;
+    f32 inv_val;
     f32 val;
     s32 align = 0;
     s32 len;
     s32 budget = 0xB8;
-    s16 var2A;
-    TTAcmd *p1;
+    s16 dmem_hi;
+    TTAcmd *c1;
 
-    if (r->unk24 != 0) {
-        len = r->unk4 - r->unk0;
+    if (delay->rs != 0) {
+        len = delay->output - delay->input;
 
-        val = func_800287FC(r, budget);
+        val = func_800287FC(delay, budget);
         val = val / (f32) len;
         val = (f32) (s32) (val * 32768.0f);
         val = val / 32768.0f;
-        invVal = 1.0f - val;
+        inv_val = 1.0f - val;
 
-        acc = r->unk24->unk24 + invVal * (f32) budget;
-        accInt = (s32) acc;
-        r->unk24->unk24 = acc - (f32) accInt;
+        acc = delay->rs->frac_acc + inv_val * (f32) budget;
+        acc_int = (s32) acc;
+        delay->rs->frac_acc = acc - (f32) acc_int;
 
-        pos = bank->unk28[idx] + -(r->unk4 - r->unk18) * 2;
+        pos = bank->input[idx] + -(delay->output - delay->unk18) * 2;
         align = ((s32) pos & 7) >> 1;
 
-        cmd = func_80028328(bank, idx, pos - align * 2, dmemDflt, accInt + align, cmd);
+        cmd = func_80028328(bank, idx, pos - align * 2, dmem_dflt, acc_int + align, cmd);
 
-        gain = (s32) (invVal * 32768.0f);
-        var2A = dmem >> 8;
+        gain = (s32) (inv_val * 32768.0f);
+        dmem_hi = dmem >> 8;
 
-        p1 = cmd++;
-        p1->w0 = (osVirtualToPhysical(r->unk24->unk14[idx]) & 0xFFFFFF) | 0x05000000;
-        p1->w1 = ((r->unk24->unk28 & 3) << 30) | ((gain & 0xFFFF) << 14) |
-                 (((dmemDflt + align * 2) & 0xFFF) << 2) | (var2A & 3);
-        r->unk24->unk28 = 0;
+        c1 = cmd++;
+        c1->w0 = (osVirtualToPhysical(delay->rs->buf[idx]) & 0xFFFFFF) | 0x05000000;
+        c1->w1 = ((delay->rs->unk28 & 3) << 30) | ((gain & 0xFFFF) << 14) |
+                 (((dmem_dflt + align * 2) & 0xFFF) << 2) | (dmem_hi & 3);
+        delay->rs->unk28 = 0;
 
-        r->unk18 = r->unk18 + (accInt - budget);
+        delay->unk18 = delay->unk18 + (acc_int - budget);
     } else {
-        pos = bank->unk28[idx] + -r->unk4 * 2;
+        pos = bank->input[idx] + -delay->output * 2;
         cmd = func_80028328(bank, idx, pos, dmem, 0xB8, cmd);
     }
 
     return cmd;
 }
 
-TTAcmd *func_80028328(TTDlyD *d, s32 idx, u8 *pos, s32 dmem, s32 len, TTAcmd *cmdIn)
+// Load len samples from the circular delay buffer into DMEM, splitting at the wrap point
+TTAcmd *func_80028328(TTDlyD *fx, s32 idx, u8 *pos, s32 dmem, s32 len, TTAcmd *cmd_in)
 {
-    TTAcmd *cmd = cmdIn;
+    TTAcmd *cmd = cmd_in;
     s32 len2;
     s32 len1;
     u8 *end;
-    u8 *loopEnd;
-    TTAcmd *p1;
-    TTAcmd *p2;
-    TTAcmd *p3;
+    u8 *loop_end;
+    TTAcmd *c1;
+    TTAcmd *c2;
+    TTAcmd *c3;
 
-    loopEnd = d->unk20[idx] + d->unk0 * 2;
+    loop_end = fx->base[idx] + fx->length * 2;
 
-    if (pos < d->unk20[idx]) {
-        pos += d->unk0 * 2;
+    if (pos < fx->base[idx]) {
+        pos += fx->length * 2;
     }
 
     end = len * 2 + pos;
 
-    if (end > loopEnd) {
-        len2 = (end - loopEnd) >> 1;
-        len1 = (loopEnd - pos) >> 1;
+    if (end > loop_end) {
+        len2 = (end - loop_end) >> 1;
+        len1 = (loop_end - pos) >> 1;
 
-        p1 = cmd++;
-        p1->w0 = ((len1 * 2 & 0xFFF) << 12) | 0x04000000 | (dmem & 0xFFF);
-        p1->w1 = osVirtualToPhysical(pos);
+        c1 = cmd++;
+        c1->w0 = ((len1 * 2 & 0xFFF) << 12) | 0x04000000 | (dmem & 0xFFF);
+        c1->w1 = osVirtualToPhysical(pos);
 
-        p2 = cmd++;
-        p2->w0 = ((len2 * 2 & 0xFFF) << 12) | 0x04000000 | ((dmem + len1 * 2) & 0xFFF);
-        p2->w1 = osVirtualToPhysical(d->unk20[idx]);
+        c2 = cmd++;
+        c2->w0 = ((len2 * 2 & 0xFFF) << 12) | 0x04000000 | ((dmem + len1 * 2) & 0xFFF);
+        c2->w1 = osVirtualToPhysical(fx->base[idx]);
+        // Matching: empty block needed for the match.
         if (1) {
         }
     } else {
-        p3 = cmd++;
-        p3->w0 = ((len * 2 & 0xFFF) << 12) | 0x04000000 | (dmem & 0xFFF);
-        p3->w1 = osVirtualToPhysical(pos);
+        c3 = cmd++;
+        c3->w0 = ((len * 2 & 0xFFF) << 12) | 0x04000000 | (dmem & 0xFFF);
+        c3->w1 = osVirtualToPhysical(pos);
     }
 
     return cmd;
 }
 
-TTAcmd *func_80028520(TTDlyD *d, s32 idx, u8 *pos, s32 dmem, TTAcmd *cmdIn)
+// Save 0x170 bytes from DMEM into the circular delay buffer, splitting at the wrap point
+TTAcmd *func_80028520(TTDlyD *fx, s32 idx, u8 *pos, s32 dmem, TTAcmd *cmd_in)
 {
-    TTAcmd *cmd = cmdIn;
+    TTAcmd *cmd = cmd_in;
     s32 len2;
     s32 len1;
     u8 *end;
-    u8 *loopEnd;
-    TTAcmd *p1;
-    TTAcmd *p2;
-    TTAcmd *p3;
+    u8 *loop_end;
+    TTAcmd *c1;
+    TTAcmd *c2;
+    TTAcmd *c3;
 
-    loopEnd = d->unk20[idx] + d->unk0 * 2;
+    loop_end = fx->base[idx] + fx->length * 2;
 
-    if (pos < d->unk20[idx]) {
-        pos += d->unk0 * 2;
+    if (pos < fx->base[idx]) {
+        pos += fx->length * 2;
     }
 
     end = pos + 0x170;
 
-    if (end > loopEnd) {
-        len2 = (end - loopEnd) >> 1;
-        len1 = (loopEnd - pos) >> 1;
+    if (end > loop_end) {
+        len2 = (end - loop_end) >> 1;
+        len1 = (loop_end - pos) >> 1;
 
-        p1 = cmd++;
-        p1->w0 = ((len1 * 2 & 0xFFF) << 12) | 0x06000000 | (dmem & 0xFFF);
-        p1->w1 = osVirtualToPhysical(pos);
+        c1 = cmd++;
+        c1->w0 = ((len1 * 2 & 0xFFF) << 12) | 0x06000000 | (dmem & 0xFFF);
+        c1->w1 = osVirtualToPhysical(pos);
 
-        p2 = cmd++;
-        p2->w0 = ((len2 * 2 & 0xFFF) << 12) | 0x06000000 | ((dmem + len1 * 2) & 0xFFF);
-        p2->w1 = osVirtualToPhysical(d->unk20[idx]);
+        c2 = cmd++;
+        c2->w0 = ((len2 * 2 & 0xFFF) << 12) | 0x06000000 | ((dmem + len1 * 2) & 0xFFF);
+        c2->w1 = osVirtualToPhysical(fx->base[idx]);
+        // Matching: empty block needed for the match.
         if (1) {
         }
     } else {
-        p3 = cmd++;
-        p3->w0 = (dmem & 0xFFF) | 0x06170000;
-        p3->w1 = osVirtualToPhysical(pos);
+        c3 = cmd++;
+        c3->w0 = (dmem & 0xFFF) | 0x06170000;
+        c3->w1 = osVirtualToPhysical(pos);
     }
 
     return cmd;
 }
 
-TTAcmd *func_800286FC(TTRvbF *r, s32 idx, s32 vol, TTAcmd *cmdIn)
+// Emit the low-pass filter commands for one delay line
+TTAcmd *func_800286FC(TTRvbF *lp, s32 idx, s32 dmem, TTAcmd *cmd_in)
 {
-    TTAcmd *c = cmdIn;
-    s16 gain;
-    TTAcmd *p1;
-    TTAcmd *p2;
+    TTAcmd *cmd = cmd_in;
+    s16 dmem_hi;
+    TTAcmd *c1;
+    TTAcmd *c2;
 
-    gain = vol >> 8;
+    dmem_hi = dmem >> 8;
 
-    p1 = c++;
-    p1->w0 = 0x0B000020;
-    p1->w1 = osVirtualToPhysical(&r->unk8);
+    c1 = cmd++;
+    c1->w0 = 0x0B000020;
+    c1->w1 = osVirtualToPhysical(&lp->coef);
 
-    p2 = c++;
-    p2->w0 = (((r->unk28 & 0xFF) << 16) | 0x0E000000) | (r->unk2 & 0xFFFF);
-    p2->w1 = (osVirtualToPhysical(r->unk2C[idx]) & 0xFFFFFF) | ((gain & 0xFF) << 24);
+    c2 = cmd++;
+    c2->w0 = (((lp->unk28 & 0xFF) << 16) | 0x0E000000) | (lp->unk2 & 0xFFFF);
+    c2->w1 = (osVirtualToPhysical(lp->unk2C[idx]) & 0xFFFFFF) | ((dmem_hi & 0xFF) << 24);
 
-    r->unk28 = 0;
+    lp->unk28 = 0;
 
-    return c;
+    return cmd;
 }
 
-f32 func_800287FC(TTOscT *p, s32 step)
+// LFO: advance the phase by rate * samples and return a triangle wave scaled by depth
+f32 func_800287FC(TTOscT *lfo, s32 samples)
 {
-    f32 t;
+    f32 value;
 
-    p->unk14 += p->unk10 * (f32) step;
+    lfo->phase += lfo->rate * (f32) samples;
 
-    if (p->unk14 > 2.0f)
-        p->unk14 = p->unk14 - 4.0f;
+    if (lfo->phase > 2.0f)
+        lfo->phase = lfo->phase - 4.0f;
     else
-        p->unk14 = p->unk14;
+        lfo->phase = lfo->phase; // Matching: self-assignment needed for the match.
 
-    t = p->unk14;
-    t = (t < 0.0f) ? -t : t;
+    value = lfo->phase;
+    value = (value < 0.0f) ? -value : value;
 
-    t = t - 1.0f;
-    return p->unk1C * t;
+    value = value - 1.0f;
+    return lfo->depth * value;
 }
 
-void func_800288C0(f32 a, f32 b, f32 c, f32 *out1, f32 *out2)
+// Compute low-pass biquad coefficients: out1 = numerator, out2 = denominator
+void func_800288C0(f32 rate, f32 cutoff, f32 q_factor, f32 *out1, f32 *out2)
 {
-    f32 s;
-    f32 s2;
-    f32 q;
+    f32 w;
+    f32 w2;
+    f32 qw;
 
-    if (b >= a - 200.0f)
-        b = a - 200.0f;
+    if (cutoff >= rate - 200.0f)
+        cutoff = rate - 200.0f;
 
-    s = func_80013C48(b * D_80041D10, a);
-    s2 = s * s;
-    q = s * D_80041D14 / c;
+    w = func_80013C48(cutoff * D_80041D10, rate);
+    w2 = w * w;
+    qw = w * D_80041D14 / q_factor;
 
-    *out1 = s2 / (1.0f + s2 + q);
+    *out1 = w2 / (1.0f + w2 + qw);
     out1[1] = *out1 * 2.0f;
     out1[2] = *out1;
 
-    out2[1] = (s2 - 1.0f) * 2.0f / (1.0f + s2 + q);
-    out2[2] = (1.0f + s2 - q) / (1.0f + s2 + q);
+    out2[1] = (w2 - 1.0f) * 2.0f / (1.0f + w2 + qw);
+    out2[2] = (1.0f + w2 - qw) / (1.0f + w2 + qw);
 }
 
-void func_80028A24(TTEnvA *p)
+// Compute the low-pass coefficient table from the cutoff fc
+void func_80028A24(TTEnvA *lp)
 {
     s32 i;
-    s32 tmp;
+    s32 scaled;
     s16 half;
-    f32 r8;
-    f32 r4;
-    f32 max;
+    f32 ratio;
+    f32 power;
+    f32 scale;
 
-    tmp = (s32) ((f32) p->unk0 * 16384.0f);
-    half = tmp >> 15;
-    p->unk2 = (s32) (16384.0f - (f32) half);
-    p->unk28 = 0;
+    scaled = (s32) ((f32) lp->fc * 16384.0f);
+    half = scaled >> 15;
+    lp->unk2 = (s32) (16384.0f - (f32) half);
+    lp->unk28 = 0;
 
     for (i = 0; i < 8; i++)
-        p->unk8[i] = 0;
+        lp->coef[i] = 0;
 
-    p->unk8[i] = half;
+    lp->coef[i] = half;
     i++;
 
-    max = 16384.0f;
-    r4 = r8 = (f32) half / max;
+    scale = 16384.0f;
+    power = ratio = (f32) half / scale;
 
     for (; i < 0x10; i++) {
-        r4 = r4 * r8;
-        p->unk8[i] = (s32) (r4 * max);
+        power = power * ratio;
+        lp->coef[i] = (s32) (power * scale);
     }
 }
 
-f32 func_80028B74(s32 e)
+// Semitone/cents ratio helper: raises a base constant to the power by repeated squaring
+f32 func_80028B74(s32 power)
 {
     f32 base;
-    f32 r;
+    f32 result;
 
-    r = 1.0f;
-    if (e >= 0) {
+    result = 1.0f;
+    if (power >= 0) {
         base = D_80041D18;
     } else {
         base = D_80041D1C;
-        e = -e;
+        power = -power;
     }
 
-    while (e != 0) {
-        if (e & 1) {
-            r = r * base;
+    while (power != 0) {
+        if (power & 1) {
+            result = result * base;
         }
         base = base * base;
-        e = e >> 1;
+        power = power >> 1;
     }
 
-    return r;
+    return result;
 }
 
-void func_80028C04(TTFxC *p, f32 rate)
+// Compute low-pass coefficients for the given output rate
+void func_80028C04(TTFxC *lp, f32 rate)
 {
     s32 i;
-    f32 o1[3];
-    f32 o2[3];
+    f32 b_coef[3];
+    f32 a_coef[3];
 
-    if (p->unk2 == 0)
+    if (lp->unk2 == 0)
         return;
 
-    if (p->unk2 < 0xA)
-        p->unk2 = 0xA;
+    if (lp->unk2 < 0xA)
+        lp->unk2 = 0xA;
 
-    func_800288C0(rate, (f32) p->unk0 + 10.0f, (f32) p->unk2 / 10.0f, o1, o2);
+    func_800288C0(rate, (f32) lp->fc + 10.0f, (f32) lp->unk2 / 10.0f, b_coef, a_coef);
 
     for (i = 3; i < 8; i++)
-        p->unk8[i] = 0;
+        lp->coef[i] = 0;
 
-    p->unk8[0] = (s32) (o1[0] * (D_80041D20 - (f32) p->unk2 * 128.0f));
-    p->unk8[1] = (s32) (o1[1] * (D_80041D24 - (f32) p->unk2 * 128.0f));
-    p->unk8[2] = 0;
-    p->unk8[8] = (s32) (o2[1] * -16384.0f);
-    p->unk8[9] = (s32) (o2[2] * -16384.0f);
+    lp->coef[0] = (s32) (b_coef[0] * (D_80041D20 - (f32) lp->unk2 * 128.0f));
+    lp->coef[1] = (s32) (b_coef[1] * (D_80041D24 - (f32) lp->unk2 * 128.0f));
+    lp->coef[2] = 0;
+    lp->coef[8] = (s32) (a_coef[1] * -16384.0f);
+    lp->coef[9] = (s32) (a_coef[2] * -16384.0f);
 
     for (i = 0xA; i < 0x10; i++)
-        p->unk8[i] = 0;
+        lp->coef[i] = 0;
 }
 
+// alFxNew: build the effect from the preset table, or from a custom table when the type is 6
 void func_80028DF0(TTObj **out, TTDesc *desc, s32 idx, void *heap)
 {
     u16 i;
@@ -708,13 +723,14 @@ void func_80028DF0(TTObj **out, TTDesc *desc, s32 idx, void *heap)
     Elem *elem;
     TTObj *obj;
 
+    // Matching: the dead initialisation is needed for the match.
     tbl = 0;
     obj = func_80020EE4(0, 0, heap, 1, 0x30);
     *out = obj;
 
-    switch (desc->unk1C[(s16) idx]) {
+    switch (desc->fx_type[(s16) idx]) {
         case 6:
-            tbl = desc->unk20[(s16) idx];
+            tbl = desc->custom_tbl[(s16) idx];
             break;
         default:
             tbl = D_80041268;
@@ -722,105 +738,109 @@ void func_80028DF0(TTObj **out, TTDesc *desc, s32 idx, void *heap)
     }
 
     k = 0;
-    obj->unk8 = tbl[k];
+    obj->section_count = tbl[k];
     k++;
-    obj->unk0 = tbl[k];
+    obj->length = tbl[k];
     k++;
 
-    obj->unk4 = func_80020EE4(0, 0, heap, obj->unk8, 0x28);
-    obj->unk20 = func_80020EE4(0, 0, heap, obj->unk0, 2);
-    obj->unk28 = obj->unk20;
-    obj->unk24 = func_80020EE4(0, 0, heap, obj->unk0, 2);
-    obj->unk2C = obj->unk24;
+    obj->delay = func_80020EE4(0, 0, heap, obj->section_count, 0x28);
+    obj->base_0 = func_80020EE4(0, 0, heap, obj->length, 2);
+    obj->input_0 = obj->base_0;
+    obj->base_1 = func_80020EE4(0, 0, heap, obj->length, 2);
+    obj->input_1 = obj->base_1;
 
-    for (j = 0; j < obj->unk0; j++) {
-        obj->unk24[j] = 0;
-        obj->unk20[j] = obj->unk24[j];
+    for (j = 0; j < obj->length; j++) {
+        obj->base_1[j] = 0;
+        obj->base_0[j] = obj->base_1[j];
     }
 
-    for (i = 0; i < obj->unk8; i++) {
+    for (i = 0; i < obj->section_count; i++) {
+        // Matching: the extra block is needed for the match.
         {
-            elem = &obj->unk4[i];
-            elem->unk0 = tbl[k];
+            elem = &obj->delay[i];
+            elem->input = tbl[k];
             k++;
-            elem->unk4 = tbl[k];
+            elem->output = tbl[k];
             k++;
-            elem->unkA = tbl[k];
+            elem->fbcoef = tbl[k];
             k++;
-            elem->unk8 = tbl[k];
+            elem->ffcoef = tbl[k];
             k++;
-            elem->unkC = tbl[k];
+            elem->gain = tbl[k];
             k++;
             if (tbl[k] != 0) {
-                elem->unk10 = (f32) tbl[k] / 1000.0f * 2.0f / (f32) desc->unk18;
+                elem->rsinc = (f32) tbl[k] / 1000.0f * 2.0f / (f32) desc->output_rate;
                 k++;
-                elem->unk1C = (f32) tbl[k] / D_80041D28 * (f32) (u32) (elem->unk4 - elem->unk0);
+                elem->rsgain = (f32) tbl[k] / D_80041D28 * (f32) (u32) (elem->output - elem->input);
                 k++;
                 elem->unk14 = 1.0f;
                 elem->unk18 = 0;
-                elem->unk24 = func_80020EE4(0, 0, heap, 1, 0x38);
-                elem->unk24->unk14 = func_80020EE4(0, 0, heap, 1, 0x20);
-                elem->unk24->unk18 = func_80020EE4(0, 0, heap, 1, 0x20);
-                elem->unk24->unk24 = 0.0f;
-                elem->unk24->unk28 = 1;
+                elem->rs = func_80020EE4(0, 0, heap, 1, 0x38);
+                elem->rs->unk14 = func_80020EE4(0, 0, heap, 1, 0x20);
+                elem->rs->unk18 = func_80020EE4(0, 0, heap, 1, 0x20);
+                elem->rs->frac_acc = 0.0f;
+                elem->rs->unk28 = 1;
             } else {
-                elem->unk24 = 0;
+                elem->rs = 0;
                 k++;
                 k++;
             }
             if (tbl[k] != 0) {
-                elem->unk20 = func_80020EE4(0, 0, heap, 1, 0x38);
-                elem->unk20->unk2C = func_80020EE4(0, 0, heap, 1, 8);
-                elem->unk20->unk30 = func_80020EE4(0, 0, heap, 1, 8);
-                elem->unk20->unk0 = tbl[k];
+                elem->lp = func_80020EE4(0, 0, heap, 1, 0x38);
+                elem->lp->unk2C = func_80020EE4(0, 0, heap, 1, 8);
+                elem->lp->unk30 = func_80020EE4(0, 0, heap, 1, 8);
+                elem->lp->fc = tbl[k];
                 k++;
-                func_80028A24(elem->unk20);
+                func_80028A24(elem->lp);
             } else {
-                elem->unk20 = 0;
+                elem->lp = 0;
                 k++;
             }
         }
     }
 }
 
-void func_800293B4(TTVceI2 *v, void **fn(void *), void *heap)
+// Initialise the envmixer/resampler/loader state of a physical voice
+void func_800293B4(TTVceI2 *pvoice, void **fn(void *), void *heap)
 {
-    v->unkC = func_80020EE4(0, 0, heap, 1, 0x20);
-    v->unk10 = func_80020EE4(0, 0, heap, 1, 0x20);
-    v->unk28 = fn(&v->unk2C);
-    v->unk34 = 0;
-    v->unk38 = 1;
-    v->unk3C = 0;
-    v->unk40 = func_80020EE4(0, 0, heap, 1, 0x20);
-    v->unk4C = 0.0f;
-    v->unk50 = 1;
-    v->unk44 = 1.0f;
-    v->unk48 = 0;
-    v->unk54 = func_80020EE4(0, 0, heap, 1, 0x50);
-    v->unk78 = 1;
-    v->unk84 = 0;
-    v->unk5A = 1;
-    v->unk68 = 1;
-    v->unk6E = 1;
-    v->unk5C = 1;
-    v->unk5E = 1;
-    v->unk60 = 0;
-    v->unk62 = 0;
-    v->unk66 = 1;
-    v->unk64 = 0;
-    v->unk66 = 1;
-    v->unk64 = 0;
-    v->unk70 = 0;
-    v->unk74 = 0;
-    v->unk58 = 0;
-    v->unk7C = 0;
-    v->unk80 = 0;
-    v->unk8C = 0;
-    v->unk92 = 0;
-    v->unk90 = 0;
-    v->unkBC = func_80020EE4(0, 0, heap, 1, 8);
-    v->unkB8 = 0;
+    pvoice->unkC = func_80020EE4(0, 0, heap, 1, 0x20);
+    pvoice->unk10 = func_80020EE4(0, 0, heap, 1, 0x20);
+    pvoice->unk28 = fn(&pvoice->unk2C);
+    pvoice->unk34 = 0;
+    pvoice->unk38 = 1;
+    pvoice->unk3C = 0;
+    pvoice->unk40 = func_80020EE4(0, 0, heap, 1, 0x20);
+    pvoice->unk4C = 0.0f;
+    pvoice->unk50 = 1;
+    pvoice->unk44 = 1.0f;
+    pvoice->unk48 = 0;
+    pvoice->unk54 = func_80020EE4(0, 0, heap, 1, 0x50);
+    pvoice->unk78 = 1;
+    pvoice->unk84 = 0;
+    pvoice->unk5A = 1;
+    pvoice->unk68 = 1;
+    pvoice->unk6E = 1;
+    pvoice->unk5C = 1;
+    pvoice->unk5E = 1;
+    pvoice->unk60 = 0;
+    pvoice->unk62 = 0;
+    // Matching: the repeated unk66/unk64 stores are needed for the match.
+    pvoice->unk66 = 1;
+    pvoice->unk64 = 0;
+    pvoice->unk66 = 1;
+    pvoice->unk64 = 0;
+    pvoice->unk70 = 0;
+    pvoice->unk74 = 0;
+    pvoice->unk58 = 0;
+    pvoice->unk7C = 0;
+    pvoice->unk80 = 0;
+    pvoice->unk8C = 0;
+    pvoice->unk92 = 0;
+    pvoice->unk90 = 0;
+    pvoice->unkBC = func_80020EE4(0, 0, heap, 1, 8);
+    pvoice->unkB8 = 0;
 }
 
+// TU-NOTE: the .data of this file is defined here in C; values taken from the ROM.
 u32 D_80041260[2] = {0x0, 0x5000};
 s32 D_80041268[10] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};

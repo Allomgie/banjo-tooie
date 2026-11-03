@@ -14,95 +14,95 @@ int chvandoor_entrypoint_0()
     return &D_80800640_chvandoor;
 }
 
-void func_8080000C_chvandoor(Actor *param_0)
+void func_8080000C_chvandoor(Actor *actor)
 {
-    s32 local_0;
+    s32 unk_0;
 
-    local_0 = param_0->unk74_7 + 0xA08;
-    func_800EE7F8((f32 *) ((u8 *) param_0 + 0x18), param_0->position);
-    func_800EE7F8((f32 *) ((u8 *) param_0 + 0x28), param_0->position);
-    *(f32 *) ((u8 *) param_0 + 0x2C) += param_0->scale * 300.0f;
-    *(s32 *) ((u8 *) param_0 + 0x50) = local_0;
+    unk_0 = actor->unk74_7 + 0xA08;
+    func_800EE7F8((f32 *) ((u8 *) actor + 0x18), actor->position);
+    func_800EE7F8((f32 *) ((u8 *) actor + 0x28), actor->position);
+    *(f32 *) ((u8 *) actor + 0x2C) += actor->scale * 300.0f;
+    *(s32 *) ((u8 *) actor + 0x50) = unk_0;
     if (!func_800F64A4(func_800F54E4(), 0x8000)) {
-        func_800DA524(local_0);
+        func_800DA524(unk_0);
     }
-    if (func_800DA298(local_0)) {
-        func_80800388_chvandoor(param_0, 3);
-        func_800EE7F8(param_0->position, (f32 *) ((u8 *) param_0 + 0x28));
+    if (func_800DA298(unk_0)) {
+        func_80800388_chvandoor(actor, 3);
+        func_800EE7F8(actor->position, (f32 *) ((u8 *) actor + 0x28));
     } else {
-        func_80800388_chvandoor(param_0, 1);
+        func_80800388_chvandoor(actor, 1);
     }
-    func_8010A800(param_0, 0);
+    func_8010A800(actor, 0);
     if (func_800EA05C() == 0xE7) {
-        _subaddieDll_entrypoint_0(param_0);
+        _subaddieDll_entrypoint_0(actor);
     }
 }
 
-void func_80800104_chvandoor(Actor *param_0)
+void func_80800104_chvandoor(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
-    f32 *local_3;
-    local_0 = 0;
-    switch (param_0->unk70_10) {
+    s32 in_progress;
+    s32 finished;
+    f32 *pos;
+    in_progress = 0;
+    switch (actor->unk70_10) {
         default:
-            local_3 = param_0->position;
+            pos = actor->position;
             break;
         case 1:
-            local_3 = param_0->position;
+            pos = actor->position;
             break;
         case 2:
-            local_1 = func_800D9078((u8 *) param_0 + 0x58);
-            local_3 = param_0->position;
-            func_800EFE50(local_3, (f32 *) param_0->actorData, (f32 *) ((u8 *) param_0 + 0x28),
-                          func_800F10B4(*(f32 *) ((u8 *) param_0 + 0x58), 0.0f, 2.0f, 1.0f, 0.0f));
-            if (local_1)
-                func_80800388_chvandoor(param_0, 3);
-            local_0 = !local_1;
+            finished = func_800D9078((u8 *) actor + 0x58);
+            pos = actor->position;
+            func_800EFE50(pos, (f32 *) actor->actorData, (f32 *) ((u8 *) actor + 0x28),
+                          func_800F10B4(*(f32 *) ((u8 *) actor + 0x58), 0.0f, 2.0f, 1.0f, 0.0f));
+            if (finished)
+                func_80800388_chvandoor(actor, 3);
+            in_progress = !finished;
             break;
         case 3:
-            if (func_8080044C_chvandoor(param_0))
-                func_80101180(0x3CC, 8, (u32) *(u16 *) ((u8 *) param_0 + 0x76) >> 7);
-            local_3 = param_0->position;
+            if (func_8080044C_chvandoor(actor))
+                func_80101180(0x3CC, 8, (u32) *(u16 *) ((u8 *) actor + 0x76) >> 7);
+            pos = actor->position;
             break;
         case 4: {
-            s32 local_2;
-            local_2 = func_800D9078((u8 *) param_0 + 0x58);
-            local_3 = param_0->position;
-            func_800EFE50(local_3, (f32 *) param_0->actorData, (f32 *) ((u8 *) param_0 + 0x28),
-                          func_800F10B4(*(f32 *) ((u8 *) param_0 + 0x58), 0.0f, 2.0f, 0.0f, 1.0f));
-            if (local_2)
-                func_80800388_chvandoor(param_0, 1);
-            local_0 = !local_2;
+            s32 finished_2;
+            finished_2 = func_800D9078((u8 *) actor + 0x58);
+            pos = actor->position;
+            func_800EFE50(pos, (f32 *) actor->actorData, (f32 *) ((u8 *) actor + 0x28),
+                          func_800F10B4(*(f32 *) ((u8 *) actor + 0x58), 0.0f, 2.0f, 0.0f, 1.0f));
+            if (finished_2)
+                func_80800388_chvandoor(actor, 1);
+            in_progress = !finished_2;
         }
     }
-    _subaddieaudioloop_entrypoint_4(param_0, local_3, local_0, &D_80800688_chvandoor);
+    _subaddieaudioloop_entrypoint_4(actor, pos, in_progress, &D_80800688_chvandoor);
 }
 
-int func_80800280_chvandoor(Actor *param_0, s32 param_1, s32 param_2)
+int func_80800280_chvandoor(Actor *actor, s32 msg, s32 id)
 {
-    f32 local_0[3];
+    f32 pos[3];
 
-    switch (param_1) {
+    switch (msg) {
         case 0x19:
-            if (param_0->unk70_10 == 1) {
-                func_800F5A00(param_2, local_0);
-                if (func_800EEB40(local_0, param_0->position) < 250000.0f) {
-                    func_80101180(0x3CC, 7, param_0->unk74_7);
+            if (actor->unk70_10 == 1) {
+                func_800F5A00(id, pos);
+                if (func_800EEB40(pos, actor->position) < 250000.0f) {
+                    func_80101180(0x3CC, 7, actor->unk74_7);
                 }
             }
             break;
         case 7:
-            if (param_2 != param_0->unk74_7) {
+            if (id != actor->unk74_7) {
                 return 0;
             }
-            func_80800388_chvandoor(param_0, 2);
+            func_80800388_chvandoor(actor, 2);
             break;
         case 8:
-            if (param_2 != param_0->unk74_7) {
+            if (id != actor->unk74_7) {
                 return 0;
             }
-            func_80800388_chvandoor(param_0, 4);
+            func_80800388_chvandoor(actor, 4);
             break;
         default:
             return 0;
@@ -110,75 +110,83 @@ int func_80800280_chvandoor(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800388_chvandoor(param_0, param_1) Actor *param_0;
-s32 param_1;
+// Matching: old-style (K&R) parameter list.
+void func_80800388_chvandoor(actor, state) Actor *actor;
+s32 state;
 {
     func_80101FDC();
 
-switch (param_1) {
+switch (state) {
     case 1:
-        func_80103110(param_0, 0);
-        func_800DA524(*(s32 **) ((char *) param_0 + 0x50));
+        func_80103110(actor, 0);
+        func_800DA524(*(s32 **) ((char *) actor + 0x50));
         return;
     case 2:
-        func_80103110(param_0, 1);
-        *(f32 *) ((char *) param_0 + 0x58) = 2.0f;
-        func_800DA544(*(s32 **) ((char *) param_0 + 0x50));
+        func_80103110(actor, 1);
+        *(f32 *) ((char *) actor + 0x58) = 2.0f;
+        func_800DA544(*(s32 **) ((char *) actor + 0x50));
         return;
     case 3:
-        func_80103110(param_0, 1);
+        func_80103110(actor, 1);
         return;
     case 4:
-        *(f32 *) ((char *) param_0 + 0x58) = 2.0f;
+        *(f32 *) ((char *) actor + 0x58) = 2.0f;
 }
 
 }
 
+// TU-NOTE: .bss is defined here, ahead of its first use: IDO places .bss objects used before
+// their definition first, the rest in definition order. The _tail object fills bytes no code names.
 u8 *B_80800690_chvandoor[1];
 u8 *B_80800694_chvandoor;
 u8 B_80800694_chvandoor_tail[24];
 
-s32 func_8080044C_chvandoor(param_0)
-u8 *param_0;
+// Matching: the line breaks in this function are needed for the match.
+// Collects doors with the same group id, sorts them by distance to the target (insertion sort),
+// and returns 1 if this door is the closest and farther than 1500 units (2250000 = 1500^2).
+s32 func_8080044C_chvandoor(door)
+u8 *door;
 {
-    f32 local_0[3];
-    s32 local_1[2];
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    u8 *local_6;
+    f32 target_pos[3];
+    s32 find_state[2];
+    s32 target_id;
+    s32 count;
+    s32 i;
+    s32 j;
+    u8 *other;
 
-    local_2 = func_8010D290(0x10000);
-    local_3 = 0;
+    target_id = func_8010D290(0x10000);
+    count = 0;
 
-if (local_2 == -1) {
+if (target_id == -1) {
     return 0;
 }
 
-func_800F5A00(local_2, local_0);
-local_6 = _subaddiefind_entrypoint_2(0x3CC, local_1);
+func_800F5A00(target_id, target_pos);
+other = _subaddiefind_entrypoint_2(0x3CC, find_state);
 
-if (local_6 != 0) {
-    do { if (((u32)*(u16 *)(local_6 + 0x76) >> 7) == ((u32)*(u16 *)(param_0 + 0x76) >> 7)) { B_80800690_chvandoor[local_3] = local_6; local_3++; } local_6 = _subaddiefind_entrypoint_3(0x3CC, local_1); } while (local_6 != 0);
+if (other != 0) {
+    do { if (((u32)*(u16 *)(other + 0x76) >> 7) == ((u32)*(u16 *)(door + 0x76) >> 7)) { B_80800690_chvandoor[count] = other; count++; } other = _subaddiefind_entrypoint_3(0x3CC, find_state); } while (other != 0);
 }
 
-for (local_4 = 1; local_4 < local_3; local_4++) {
-    for (local_5 = local_4;
-         local_5 > 0 && func_800EEB40((f32 *) (B_80800690_chvandoor[local_5] + 4), local_0) <
-                            func_800EEB40((f32 *) (B_80800690_chvandoor[local_5 - 1] + 4), local_0);
-         local_5--) {
-        local_6 = B_80800690_chvandoor[local_5];
-        B_80800690_chvandoor[local_5] = B_80800690_chvandoor[local_5 - 1];
-        B_80800690_chvandoor[local_5 - 1] = local_6;
+for (i = 1; i < count; i++) {
+    for (j = i;
+         j > 0 && func_800EEB40((f32 *) (B_80800690_chvandoor[j] + 4), target_pos) <
+                            func_800EEB40((f32 *) (B_80800690_chvandoor[j - 1] + 4), target_pos);
+         j--) {
+        other = B_80800690_chvandoor[j];
+        B_80800690_chvandoor[j] = B_80800690_chvandoor[j - 1];
+        B_80800690_chvandoor[j - 1] = other;
     }
 }
-if (param_0 != B_80800690_chvandoor[0]) {
+if (door != B_80800690_chvandoor[0]) {
     return 0;
 }
-return func_800EEB40((f32 *) (B_80800690_chvandoor[0] + 4), local_0) > 2250000.0f;
+return func_800EEB40((f32 *) (B_80800690_chvandoor[0] + 4), target_pos) > 2250000.0f;
 }
 
+// TU-NOTE: .data is defined here in C. Its tables hold pointers to functions of this file; IDO's
+// assembler schedules some of them differently unless the tables are in the same unit. Values from the ROM.
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();

@@ -16,10 +16,11 @@ typedef struct {
 } TTEvent2;
 typedef struct {
     u8 pad[0x48];
-    u8 evtq;
+    u8 evtq; // 0x48, event queue (only its address is used)
 } TTCSPlayer;
 extern void func_80026500(void *, TTEvent2 *, s32, s32);
 
+// alCSPSetTempo: posts a meta tempo event (0xFF 0x51, 24-bit microseconds per quarter note).
 void func_80026330(TTCSPlayer *seqp, s32 tempo)
 {
     TTEvent2 evt;

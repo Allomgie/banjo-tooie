@@ -21,7 +21,8 @@ extern u8 D_80045788[];
 
 int func_80012520();
 
-void func_80012030(s32 param_0)
+// core1 entry: clears BSS and creates the idle thread.
+void func_80012030(s32 unk_0)
 {
     bzero(&core1_BSS_START, &core1_BSS_END - &core1_BSS_START);
     osWritebackDCacheAll();
@@ -34,27 +35,31 @@ void func_8001207C(void)
     func_800D5E74();
 }
 
-void func_8001209C(s32 param_0)
+// Switches the game mode (1 = in-game).
+void func_8001209C(s32 new_mode)
 {
-    s32 new_var;
-    new_var = (new_var = param_0);
+    s32 mode;
+    // Matching: the double assignment is needed for the match.
+    mode = (mode = new_mode);
     func_8001A2B0();
     func_800155BC();
     if (D_80043380 == 1) {
-        if (!new_var) {
+        // Matching: empty block steers IDO's register allocation.
+        if (!mode) {
         }
         func_800A7B24();
     }
     func_8001207C();
-    D_80043380 = new_var;
-    if (new_var == 1) {
+    D_80043380 = mode;
+    if (mode == 1) {
         func_800A7BB8(D_800459CC);
     }
 }
 
-s32 func_8001210C(s32 param_0)
+// Frame counter masked with `mask`; used as a timer by other TUs.
+s32 func_8001210C(s32 mask)
 {
-    return D_800459C8 & param_0;
+    return D_800459C8 & mask;
 }
 
 s32 func_8001211C(void)
@@ -67,19 +72,23 @@ void func_80012128(void)
     D_800459C8 = 0;
 }
 
+// Starts in-game mode on the intro cutscene map.
 int func_80012134()
 {
-    s32 local_0;
-    local_0 = _cosection_entrypoint_1();
-    func_8001253C(local_0 | 0);
+    s32 map;
+    map = _cosection_entrypoint_1();
+    // Matching: `| 0` is needed for the match.
+    func_8001253C(map | 0);
     func_80012520(1);
 }
 
+// Starts in-game mode on the Spiral Mountain map.
 s32 func_80012164()
 {
-    s32 local_0;
-    local_0 = _cosection_entrypoint_0();
-    func_8001253C(local_0 | 0);
+    s32 map;
+    map = _cosection_entrypoint_0();
+    // Matching: `| 0` is needed for the match.
+    func_8001253C(map | 0);
     func_80012520(1);
 }
 
@@ -95,13 +104,14 @@ s32 func_800121AC()
 
 void func_800121D0(void)
 {
-    s32 local_0;
-    s32 v1;
-    local_0 = func_80012194();
+    s32 size;
+    s32 addr;
+    size = func_80012194();
+    // Matching: `if (1)` wrapper is needed for the match.
     if (1) {
-        v1 = func_8001E830() + local_0;
-        while (v1 & 0xF) {
-            v1--;
+        addr = func_8001E830() + size;
+        while (addr & 0xF) {
+            addr--;
         }
     }
 }
@@ -110,6 +120,7 @@ void func_800121D0(void)
 
 #else
 
+// One-time init of all subsystems, then enters the intro cutscene mode.
 void func_80012214(void)
 {
     D_800459D0 = osGetMemSize();
@@ -163,6 +174,7 @@ s32 func_800123BC(void)
     func_800A5D1C();
 }
 
+// One iteration of the main loop.
 void func_800123F4(void)
 {
     func_8001207C();
@@ -188,7 +200,8 @@ void func_800123F4(void)
     }
 }
 
-void func_800124EC(s32 param_0)
+// Main thread entry.
+void func_800124EC(s32 unk_0)
 {
     func_80012214();
 
@@ -197,10 +210,11 @@ void func_800124EC(s32 param_0)
     }
 }
 
-int func_80012520(param_0)
-s32 param_0;
+// Requests a mode switch, applied at the end of the frame.
+int func_80012520(mode)
+s32 mode;
 {
-    D_80043384 = param_0 + 1;
+    D_80043384 = mode + 1;
 }
 
 int func_80012530()
@@ -208,11 +222,13 @@ int func_80012530()
     return D_80043380;
 }
 
-void func_8001253C(param_0) s32 param_0;
+// Sets the map to start when entering mode 1.
+void func_8001253C(map) s32 map;
 {
-    D_800459CC = param_0;
+    D_800459CC = map;
 }
 
+// Creates the main game thread.
 void func_80012548()
 {
     func_8001DD28(&D_80045788, &D_80045938, 6, &func_800124EC, 0, (u8 *) D_80045938 - 0x1B0, 0x14);
@@ -223,6 +239,8 @@ int *func_80012598()
     return (int *) D_80045788;
 }
 
+// TU-NOTE: this .data table is defined here (not in asm) because it points at functions of this
+// file, and IDO's assembler only schedules them as in the original when the table is in the same unit.
 extern void rom_read_word();
 extern void func_8001EB10();
 u32 D_8003C9D0[28] = {0x9,

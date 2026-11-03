@@ -5,12 +5,16 @@ void func_800131C0(void);
 void func_80012548(void);
 OSThread *func_80012598(void);
 
+// idle_thread_stack
 extern u64 D_800773F0[IDLE_THREAD_STACK_SIZE64];
+// idle_thread
 extern OSThread D_800775F0;
+// TODO: only 0x10 bytes, so probably a different struct (same as the joy thread).
 extern __OSThreadOddFpStorage D_800777A0;
 
 void func_80013678(void *);
 
+// create_idle_thread
 void func_80013620(void)
 {
     func_8001DCB0(&D_800775F0, &D_800777A0, THREAD_ID_IDLE, func_80013678, NULL,
@@ -18,6 +22,7 @@ void func_80013620(void)
     osStartThread(&D_800775F0);
 }
 
+// idle_thread_entry: inits the PI manager, starts the main thread, then spins.
 void func_80013678(void *arg)
 {
     func_800131C0();

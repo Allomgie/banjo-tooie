@@ -10,14 +10,16 @@ typedef struct {
     s32 count;
 } TTHeap;
 
-void func_80020EC0(u8 *param_0, s32 param_1, s32 param_2)
+// alHeapInit: sets up the bump allocator (base, len, cur = base, count = 0).
+void func_80020EC0(u8 *heap, s32 base, s32 len)
 {
-    M2C_FIELD(param_0, s32 *, 0) = param_1;
-    M2C_FIELD(param_0, s32 *, 8) = param_2;
-    M2C_FIELD(param_0, s32 *, 4) = (s32) M2C_FIELD(param_0, s32 *, 0);
-    M2C_FIELD(param_0, s32 *, 0xC) = 0;
+    M2C_FIELD(heap, s32 *, 0) = base;
+    M2C_FIELD(heap, s32 *, 8) = len;
+    M2C_FIELD(heap, s32 *, 4) = (s32) M2C_FIELD(heap, s32 *, 0);
+    M2C_FIELD(heap, s32 *, 0xC) = 0;
 }
 
+// alHeapDBAlloc: bump-allocates num * size bytes rounded up to 16; returns NULL when exhausted.
 void *func_80020EE4(u8 *file, s32 line, TTHeap *hp, s32 num, s32 size)
 {
     s32 bytes;

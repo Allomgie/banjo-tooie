@@ -8,10 +8,11 @@ s32 func_8001E830();
 
 int func_8001E7E0()
 {
-    s32 local_0 = 0x80400000;
-    return local_0;
+    s32 heap_end = 0x80400000;
+    return heap_end;
 }
 
+// Sets the main heap bounds: D_8007E998 = end, D_8007E990 = start, D_8007E994 = start.
 void func_8001E7E8()
 {
     D_8007E998 = func_8001E7E0();

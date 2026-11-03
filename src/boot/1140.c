@@ -9,17 +9,19 @@ u8 *func_800016BC();
 
 extern s32 D_800064F0;
 
+// TU-NOTE: copy of core1's 1E33CF0.c.
 void func_80000540()
 {
     func_80001590();
 }
 
-s32 func_80000560(u8 **arg0, u8 **arg1)
+// Inflates one member from *src to *dst; advances both cursors (dst rounded up to 16).
+s32 func_80000560(u8 **src, u8 **dst)
 {
-    D_800064F0 = func_800006D4(*arg0, *arg1, &D_8000E800);
-    *arg1 += D_800064F0;
-    *arg1 = ((uintptr_t) *arg1 & 0xF) ? (u8 *) (((uintptr_t) *arg1 & ~0xF) + 0x10) : *arg1;
-    *arg0 = func_800016BC();
+    D_800064F0 = func_800006D4(*src, *dst, &D_8000E800);
+    *dst += D_800064F0;
+    *dst = ((uintptr_t) *dst & 0xF) ? (u8 *) (((uintptr_t) *dst & ~0xF) + 0x10) : *dst;
+    *src = func_800016BC();
     return 1;
 }
 
@@ -33,12 +35,14 @@ u32 func_8000060C()
     return func_800016DC();
 }
 
-s32 func_8000062C(u8 *arg0, u8 *arg1)
+// Inflates from src to dst without advancing any cursor.
+s32 func_8000062C(u8 *src, u8 *dst)
 {
-    D_800064F0 = func_800006D4(arg0, arg1, D_8000E800);
+    D_800064F0 = func_800006D4(src, dst, D_8000E800);
     return 0;
 }
 
+// Size of the last decompressed output.
 s32 func_80000658()
 {
     return D_800064F0;

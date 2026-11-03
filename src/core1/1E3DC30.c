@@ -8,47 +8,53 @@ typedef struct {
 } TTVc38;
 typedef struct {
     u8 pad0[0x30];
-    s32 unk30;
+    s32 chan_mask; // 0x30
     u8 pad34[2];
-    u8 unk36;
+    u8 num_chans; // 0x36
     u8 pad37[0x60 - 0x37];
-    TTVc38 *unk60;
+    TTVc38 *chans; // 0x60, stride 0x38
 } TTSeqObj;
 extern void func_8002ACE0(TTSeqObj *, s32, s32, s32, s32, s32);
 
-void func_80026100(TTSeqObj *obj)
+// Resets the channel mask and per-channel state bytes.
+void func_80026100(TTSeqObj *seqp)
 {
     s32 i;
 
-    obj->unk30 = -1;
-    for (i = 0; i < obj->unk36; i++) {
-        obj->unk60[i].unkA = 0xFF;
-        obj->unk60[i].unk9 = 0xFF;
+    seqp->chan_mask = -1;
+    for (i = 0; i < seqp->num_chans; i++) {
+        seqp->chans[i].unkA = 0xFF;
+        seqp->chans[i].unk9 = 0xFF;
     }
 }
 
-void func_80026188(TTSeqObj *obj, s32 chan)
+// Sends MIDI controller 0xFC (Rare custom) with value 0.
+void func_80026188(TTSeqObj *seqp, s32 chan)
 {
-    func_8002ACE0(obj, 0, 0xB0, chan, 0xFC, 0);
+    func_8002ACE0(seqp, 0, 0xB0, chan, 0xFC, 0);
 }
 
-void func_800261D0(TTSeqObj *obj, s32 chan)
+// Sets the channel's mask bit, then sends controller 0xFC with 0xFF.
+void func_800261D0(TTSeqObj *seqp, s32 chan)
 {
-    obj->unk30 = obj->unk30 | (1 << chan);
-    func_8002ACE0(obj, 0, 0xB0, chan, 0xFC, 0xFF);
+    seqp->chan_mask = seqp->chan_mask | (1 << chan);
+    func_8002ACE0(seqp, 0, 0xB0, chan, 0xFC, 0xFF);
 }
 
-void func_80026238(TTSeqObj *obj, s32 chan, u8 val, s32 unused)
+// Sends MIDI controller 0xFF (Rare custom).
+void func_80026238(TTSeqObj *seqp, s32 chan, u8 val, s32 unused)
 {
-    func_8002ACE0(obj, 0, 0xB0, chan, 0xFF, val);
+    func_8002ACE0(seqp, 0, 0xB0, chan, 0xFF, val);
 }
 
-void func_8002628C(TTSeqObj *obj, s32 chan, u8 val)
+// Sends MIDI controller 0x41.
+void func_8002628C(TTSeqObj *seqp, s32 chan, u8 val)
 {
-    func_8002ACE0(obj, 0, 0xB0, chan, 0x41, val);
+    func_8002ACE0(seqp, 0, 0xB0, chan, 0x41, val);
 }
 
-void func_800262DC(TTSeqObj *obj, s32 chan, u8 val)
+// Sends MIDI controller 0xFC (Rare custom).
+void func_800262DC(TTSeqObj *seqp, s32 chan, u8 val)
 {
-    func_8002ACE0(obj, 0, 0xB0, chan, 0xFC, val);
+    func_8002ACE0(seqp, 0, 0xB0, chan, 0xFC, val);
 }

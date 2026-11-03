@@ -2,10 +2,11 @@
 
 typedef struct {
     u8 pad0[0x16];
-    s16 unk16;
+    s16 priority;
 } TTHdl;
 
-void func_8002C5A0(TTHdl *param_0, s16 param_1)
+// n_alSynSetPriority
+void func_8002C5A0(TTHdl *hdl, s16 priority)
 {
-    param_0->unk16 = param_1;
+    hdl->priority = priority;
 }

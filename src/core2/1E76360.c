@@ -4,78 +4,83 @@ extern s32 D_80117F34[];
 extern u32 D_80117F38[1202];
 extern u16 D_80117F32[];
 
-s32 func_8009CA70(PlayerState *param_0, s32 param_1, s32 param_2)
+s32 func_8009CA70(PlayerState *player, s32 index, s32 mask)
 {
-    s32 local_0 = param_1 * 12;
-    return (*(s32 *) ((char *) D_80117F34 + local_0) & param_2) ? 1 : 0;
+    s32 offset = index * 12;
+    return (*(s32 *) ((char *) D_80117F34 + offset) & mask) ? 1 : 0;
 }
 
-s32 func_8009CAAC(s32 param_0, s32 param_1)
+s32 func_8009CAAC(s32 unk_0, s32 index)
 {
-    s32 (*local_0)(s32);
+    s32 (*callback)(s32);
 
-    local_0 = (s32(*)(s32)) * (u32 *) &((u8 *) D_80117F38)[param_1 * 0xC];
-    if (local_0 != NULL) {
-        return local_0(0);
+    callback = (s32(*)(s32)) * (u32 *) &((u8 *) D_80117F38)[index * 0xC];
+    if (callback != NULL) {
+        return callback(0);
     }
     return 0;
 }
 
-int func_8009CAF8(s32 param_0, s32 param_1)
+int func_8009CAF8(s32 unk_0, s32 index)
 {
-    int new_var;
+    // Matching: the redundant 0xFFFFFFFFFFFFFFFFu masks and the extra temporaries are needed for the match.
+    int scaled_index;
     u32 idx;
-    int new_var2;
-    new_var =
-        ((((param_1 * 3) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) &
+    int table_index;
+    scaled_index =
+        ((((index * 3) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) &
         0xFFFFFFFFFFFFFFFFu;
-    new_var2 = (((new_var & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) &
+    table_index = (((scaled_index & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) &
                0xFFFFFFFFFFFFFFFFu;
-    idx = (new_var2 & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
+    idx = (table_index & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
     if (D_80117F38[idx] != 0) {
         return ((int (*)(s32)) D_80117F38[idx])(1);
     }
     return 0;
 }
 
-s32 func_8009CB44(s32 param_0, s32 param_1)
+s32 func_8009CB44(s32 unk_0, s32 index)
 {
-    s32 *new_var;
-    s32 (*local_0)(s32);
-    new_var = (s32 *) &((u8 *) D_80117F38)[param_1 * 0xC];
-    local_0 = *new_var;
-    if (local_0 != 0) {
-        return local_0(3);
+    s32 *entry;
+    s32 (*callback)(s32);
+    entry = (s32 *) &((u8 *) D_80117F38)[index * 0xC];
+    callback = *entry;
+    if (callback != 0) {
+        return callback(3);
     }
     return 0;
 }
 
-int func_8009CB90(s32 param_0, s32 param_1)
+int func_8009CB90(s32 unk_0, s32 index)
 {
-    int new_var3;
-    int (*new_var)(s32);
-    int new_var2;
-    new_var3 = (((3 * param_1) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
-    new_var2 = (((((new_var3 & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) &
+    // Matching: the redundant 0xFFFFFFFFFFFFFFFFu masks and the extra temporaries are needed for the match.
+    int scaled_index;
+    int (*callback)(s32);
+    int table_index;
+    scaled_index = (((3 * index) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
+    table_index = (((((scaled_index & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) &
                  0xFFFFFFFFFFFFFFFFu) &
                 0xFFFFFFFFFFFFFFFFu) &
                0xFFFFFFFFFFFFFFFFu;
-    new_var = (int (*)(s32)) D_80117F38[(new_var2 & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu];
-    if (new_var != 0) {
-        return new_var(2);
+    callback = (int (*)(s32)) D_80117F38[(table_index & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu];
+    if (callback != 0) {
+        return callback(2);
     }
     return 0;
 }
 
-short func_8009CBDC(s32 param_0, s32 param_1)
+short func_8009CBDC(s32 unk_0, s32 index)
 {
-    return *(s16 *) ((char *) D_80117F32 + param_1 * 12);
+    return *(s16 *) ((char *) D_80117F32 + index * 12);
 }
 
-func_8009CBFC(s32 param_0)
+func_8009CBFC(s32 unk_0)
 {
 }
 
+// TU-NOTE: the data below (formerly asm/data/core2/1E76360.data.s) is defined in C. Its tables point
+// to functions of this file, and IDO's assembler schedules some of them differently unless the
+// tables are in the same unit. D_80117F32 = D_80117F30 + 0x2 is a linker symbol in undefined_syms.us.txt.
 extern void _bsstand_entrypoint_3();
 extern void _bswalk_entrypoint_9();
 extern void _bswalk_entrypoint_13();

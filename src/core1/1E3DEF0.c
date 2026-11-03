@@ -21,14 +21,14 @@ typedef struct {
 extern void func_80020E40(TTLink *, TTLink *);
 extern void func_80020E74(TTLink *);
 typedef struct TTPNode_s {
-    struct TTPNode_s *unk0;
+    struct TTPNode_s *next;
     u8 pad4[0xC];
-    s32 unk10;
+    s32 time; // synth time when the client was added
 } TTPNode;
 typedef struct {
-    TTPNode *unk0;
+    TTPNode *head; // synth client list
     u8 pad4[0x1C];
-    s32 unk20;
+    s32 time;
 } TTAMgrE;
 extern TTAMgrE *D_800411F4;
 typedef struct TTHandleB_s {
@@ -90,7 +90,8 @@ typedef struct {
 
 s32 func_80026AA4(TTPlayerA **out, s16 prio);
 
-void func_800263C0(TTEvtq *evtq, TTItem *items, s32 itemCount)
+// alEvtqNew: all items start on the free list.
+void func_800263C0(TTEvtq *evtq, TTItem *items, s32 item_count)
 {
     s32 i;
 
@@ -99,11 +100,12 @@ void func_800263C0(TTEvtq *evtq, TTItem *items, s32 itemCount)
     evtq->allocList.prev = 0;
     evtq->freeList.next = 0;
     evtq->freeList.prev = 0;
-    for (i = 0; i < itemCount; i++) {
+    for (i = 0; i < item_count; i++) {
         func_80020E40(&items[i].node, &evtq->freeList);
     }
 }
 
+// alEvtqNextEvent: pop the first event, returns its delta (type -1 if the queue is empty).
 s32 func_8002645C(TTEvtq *evtq, TTEvt16 *evt)
 {
     TTItem *item;
@@ -129,12 +131,13 @@ s32 func_8002645C(TTEvtq *evtq, TTEvt16 *evt)
     return delta;
 }
 
+// alEvtqPostEvent: insert the event into the delta-ordered list.
 void func_80026500(TTEvtq *evtq, TTEvt16 *evt, s32 delta, s32 arg3)
 {
     TTItem *item;
-    TTItem *nextItem;
+    TTItem *next_item;
     TTLink *node;
-    s32 postAtEnd = 0;
+    s32 post_at_end = 0;
     s32 mask;
 
     mask = osSetIntMask(1);
@@ -154,104 +157,109 @@ void func_80026500(TTEvtq *evtq, TTEvt16 *evt, s32 delta, s32 arg3)
     bcopy(evt, &item->evt, sizeof(item->evt));
 
     if (delta == 0x7FFFFFFF)
-        postAtEnd = -1;
+        post_at_end = -1;
 
     for (node = &evtq->allocList; node != 0; node = node->next) {
         if (!node->next) {
-            if (postAtEnd)
+            if (post_at_end)
                 item->delta = 0;
             else
                 item->delta = delta;
             func_80020E40(&item->node, node);
             break;
         } else {
-            nextItem = (TTItem *) node->next;
+            next_item = (TTItem *) node->next;
 
-            if (delta < nextItem->delta) {
+            if (delta < next_item->delta) {
                 item->delta = delta;
-                nextItem->delta -= delta;
+                next_item->delta -= delta;
 
                 func_80020E40(&item->node, node);
                 break;
             }
 
-            delta -= nextItem->delta;
+            delta -= next_item->delta;
         }
     }
 
     osSetIntMask(mask);
 }
 
+// alEvtqFlushType: remove all queued events of the given type.
 void func_800266B0(TTEvtq *evtq, s16 type)
 {
-    TTLink *thisNode;
-    TTLink *nextNode;
-    TTItem *thisItem;
-    TTItem *nextItem;
+    TTLink *this_node;
+    TTLink *next_node;
+    TTItem *this_item;
+    TTItem *next_item;
     s32 mask;
 
     mask = osSetIntMask(1);
 
-    thisNode = evtq->allocList.next;
-    while (thisNode != 0) {
-        nextNode = thisNode->next;
-        thisItem = (TTItem *) thisNode;
-        nextItem = (TTItem *) nextNode;
-        if (thisItem->evt.type == type) {
-            if (nextItem) {
-                nextItem->delta += thisItem->delta;
+    this_node = evtq->allocList.next;
+    while (this_node != 0) {
+        next_node = this_node->next;
+        this_item = (TTItem *) this_node;
+        next_item = (TTItem *) next_node;
+        if (this_item->evt.type == type) {
+            if (next_item) {
+                next_item->delta += this_item->delta;
             }
-            func_80020E74(thisNode);
-            func_80020E40(thisNode, &evtq->freeList);
+            func_80020E74(this_node);
+            func_80020E40(this_node, &evtq->freeList);
         }
-        thisNode = nextNode;
+        this_node = next_node;
     }
 
     osSetIntMask(mask);
 }
 
-void func_80026780(TTPNode *n)
+// alSynAddPlayer: push the client onto the synth list with the current time.
+void func_80026780(TTPNode *client)
 {
     s32 mask;
 
     mask = osSetIntMask(1);
 
-    n->unk10 = D_800411F4->unk20;
-    n->unk0 = D_800411F4->unk0;
-    D_800411F4->unk0 = n;
+    client->time = D_800411F4->time;
+    client->next = D_800411F4->head;
+    D_800411F4->head = client;
 
     osSetIntMask(mask);
 }
 
-void func_800267F0(TTPNode *n)
+// Same as func_80026780 (used by the sound player).
+void func_800267F0(TTPNode *client)
 {
     s32 mask;
 
     mask = osSetIntMask(1);
 
-    n->unk10 = D_800411F4->unk20;
-    n->unk0 = D_800411F4->unk0;
-    D_800411F4->unk0 = n;
+    client->time = D_800411F4->time;
+    client->next = D_800411F4->head;
+    D_800411F4->head = client;
 
     osSetIntMask(mask);
 }
 
-void func_80026860(TTPNode *n)
+// Same as func_80026780 (used by the sequence player).
+void func_80026860(TTPNode *client)
 {
     s32 mask;
 
     mask = osSetIntMask(1);
 
-    n->unk10 = D_800411F4->unk20;
-    n->unk0 = D_800411F4->unk0;
-    D_800411F4->unk0 = n;
+    client->time = D_800411F4->time;
+    client->next = D_800411F4->head;
+    D_800411F4->head = client;
 
     osSetIntMask(mask);
 }
 
+// alSynAllocVoice: assign a voice, stealing one by fading it out when none is free.
 s32 func_800268D0(TTHandleB *h, TTParamsB *params)
 {
-    TTPlayerB *picked = 0;
+    TTPlayerB *voice = 0;
     TTQEvtH *evt;
     s32 stolen;
 
@@ -262,14 +270,14 @@ s32 func_800268D0(TTHandleB *h, TTParamsB *params)
     h->unk14 = 0;
     h->unk8 = 0;
 
-    stolen = func_80026AA4(&picked, params->unk0);
+    stolen = func_80026AA4(&voice, params->unk0);
 
-    if (picked) {
+    if (voice) {
         if (stolen) {
-            picked->unk88 = 0x228;
-            picked->unk8->unk8 = 0;
-            picked->unk8 = h;
-            h->unk8 = picked;
+            voice->unk88 = 0x228;
+            voice->unk8->unk8 = 0;
+            voice->unk8 = h;
+            h->unk8 = voice;
 
             evt = func_80021794();
             if (evt) {
@@ -283,26 +291,28 @@ s32 func_800268D0(TTHandleB *h, TTParamsB *params)
 
             evt = func_80021794();
             if (evt) {
-                evt->unk4 = ((TTAMgrH *) D_800411F4)->unk1C + picked->unk88;
+                evt->unk4 = ((TTAMgrH *) D_800411F4)->unk1C + voice->unk88;
                 evt->type = 0xF;
                 evt->unk0 = 0;
                 func_8002B684(h->unk8, 3, evt);
             } else {
             }
         } else {
-            picked->unk88 = 0;
-            picked->unk8 = h;
-            h->unk8 = picked;
+            voice->unk88 = 0;
+            voice->unk8 = h;
+            h->unk8 = voice;
         }
     }
 
-    return picked != 0;
+    return voice != 0;
 }
 
+// _allocatePVoice: take a voice from the free list (or the lame list), else pick the lowest-priority allocated one.
+// Returns 1 if the voice has to be stolen.
 s32 func_80026AA4(TTPlayerA **out, s16 prio)
 {
     TTLink *node;
-    TTPlayerA *q;
+    TTPlayerA *player;
     s32 found = 0;
 
     if (node = (TTLink *) ((TTAMgrP *) D_800411F4)->unk14) {
@@ -315,10 +325,10 @@ s32 func_80026AA4(TTPlayerA **out, s16 prio)
         func_80020E40(node, (TTLink *) &((TTAMgrP *) D_800411F4)->unkC);
     } else {
         for (node = (TTLink *) ((TTAMgrP *) D_800411F4)->unkC; node != 0; node = node->next) {
-            q = (TTPlayerA *) node;
-            if (q->unk8->unk16 <= prio && q->unk88 == 0) {
-                *out = q;
-                prio = q->unk8->unk16;
+            player = (TTPlayerA *) node;
+            if (player->unk8->unk16 <= prio && player->unk88 == 0) {
+                *out = player;
+                prio = player->unk8->unk16;
                 found = 1;
             }
         }

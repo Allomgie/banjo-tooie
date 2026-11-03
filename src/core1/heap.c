@@ -118,6 +118,7 @@ struct EmptyHeapBlock *find_free_block(s32 size, s32 alloc_type)
 
     switch (alloc_type) {
         case 1:
+            // Find the last free block that can hold the given size
             found_block = NULL;
             cur_block = FIRST_BLOCK()->next_free;
 
@@ -138,8 +139,10 @@ struct EmptyHeapBlock *find_free_block(s32 size, s32 alloc_type)
 
             return found_block;
         case 0:
+            // Find the first free block that can hold the given size
             cur_block = FIRST_BLOCK()->next_free;
 
+            // Stop at the end of the heap if none fits
             while (!BLOCK_CAN_HOLD(&cur_block->header, size) &&
                    cur_block->next_free != LAST_BLOCK()) {
                 cur_block = cur_block->next_free;
@@ -153,6 +156,7 @@ struct EmptyHeapBlock *find_free_block(s32 size, s32 alloc_type)
         case 2:
             return func_8001C0A0(size);
         default:
+            // Invalid alloc type
             return NULL;
     }
 }
@@ -178,8 +182,10 @@ void *heap_alloc_sided(s32 size, s32 alloc_side)
         func_8001A6C0(1, size);
     }
 
+    // Align the size and prevent 0-byte allocations
     alloc_size = func_8001BD30(size > 0 ? size : 1);
 
+    // Try to find a free block on the given side
     cur_block = find_free_block(size, alloc_side);
 
     if (cur_block == NULL) {
@@ -193,6 +199,7 @@ void *heap_alloc_sided(s32 size, s32 alloc_side)
 
     if (alloc_size + sizeof(struct HeapHeader) < GET_BLOCK_MEM_SIZE(&cur_block->header)) {
         if (alloc_side == 1) {
+            // Split off the allocation at the end of the free block
             new_block = cur_block;
             cur_block = (struct EmptyHeapBlock *) ((char *) new_block->header.next - alloc_size -
                                                    sizeof(struct HeapHeader));
@@ -202,12 +209,15 @@ void *heap_alloc_sided(s32 size, s32 alloc_side)
             cur_block->header.prev = &new_block->header;
             heap_merge_free_block(new_block);
         } else {
+            // Create a new free block after the allocation
             new_block = (struct EmptyHeapBlock *) ((char *) cur_block + alloc_size +
                                                    sizeof(struct HeapHeader));
+            // Free list links
             new_block->next_free = cur_block->next_free;
             new_block->prev_free = cur_block->prev_free;
             new_block->next_free->prev_free = new_block;
             new_block->prev_free->next_free = new_block;
+            // Block list links
             new_block->header.prev = &cur_block->header;
             new_block->header.next = cur_block->header.next;
             new_block->header.next->prev = &new_block->header;
@@ -219,6 +229,7 @@ void *heap_alloc_sided(s32 size, s32 alloc_side)
             heap_merge_free_block(new_block);
         }
     } else {
+        // Use the whole block: remove it from the free list
         cur_block->next_free->prev_free = cur_block->prev_free;
         cur_block->prev_free->next_free = cur_block->next_free;
     }
@@ -275,22 +286,27 @@ void heap_resize_block_internal(struct HeapHeader *block, s32 new_size)
     u32 size_delta;
     s32 offset;
 
+    // Update the overhead byte count
     block->allocation_overhead = GET_BLOCK_MEM_SIZE(block) - new_size;
 
+    // Bytes the block shrinks by (sizes are aligned to 0x10, minimum 0x10)
     if (new_size > 0) {
         size_delta = GET_BLOCK_MEM_SIZE(block) - func_8001BD30(new_size);
     } else {
         size_delta = GET_BLOCK_MEM_SIZE(block) - 0x10;
     }
 
+    // Offset to the start of the new block
     offset = GET_BLOCK_TOTAL_SIZE(block);
     offset -= size_delta;
 
+    // Only split if the freed space can hold a free block
     if (size_delta >= sizeof(struct EmptyHeapBlock)) {
         new_block = (struct HeapHeader *) ((char *) block + offset);
 
         D_8003F750 -= size_delta;
 
+        // Link the new block into the block list
         new_block->prev = block;
         new_block->next = block->next;
         block->next = new_block;
@@ -302,11 +318,11 @@ void heap_resize_block_internal(struct HeapHeader *block, s32 new_size)
     }
 }
 
-void heap_resize_block(struct HeapHeader *arg0, s32 arg1)
+void heap_resize_block(struct HeapHeader *block, s32 new_size)
 {
-    heap_resize_block_internal(arg0, arg1);
-    if (arg0->next->state == HEAP_BLOCK_STATE_EMPTY) {
-        heap_merge_free_block((struct EmptyHeapBlock *) arg0->next);
+    heap_resize_block_internal(block, new_size);
+    if (block->next->state == HEAP_BLOCK_STATE_EMPTY) {
+        heap_merge_free_block((struct EmptyHeapBlock *) block->next);
     }
 }
 
@@ -315,42 +331,51 @@ void *heap_realloc(void *mem, s32 size)
     struct HeapHeader *cur_block;
     void *new_mem;
 
+    // Resize in place if the block already holds the new size
     cur_block = GET_BLOCK_HEADER(mem);
     if (GET_BLOCK_MEM_SIZE(cur_block) >= size) {
         heap_resize_block(cur_block, size);
         return mem;
     }
 
+    // Pin this block
     func_8001B864(mem);
 
+    // Grow in place if the next block is free and merging it fits the size
     if (cur_block->next->state == 0 &&
         (char *) cur_block->next->next - (char *) cur_block - sizeof(struct HeapHeader) >= size) {
         new_mem = cur_block->next;
 
+        // Remove the next block from the free list
         AS_EMPTY_BLOCK(new_mem)->next_free->prev_free = AS_EMPTY_BLOCK(new_mem)->prev_free;
         AS_EMPTY_BLOCK(new_mem)->prev_free->next_free = AS_EMPTY_BLOCK(new_mem)->next_free;
 
         D_8003F750 += GET_BLOCK_TOTAL_SIZE(&AS_EMPTY_BLOCK(new_mem)->header);
 
+        // Remove the next block from the block list
         cur_block->next = AS_EMPTY_BLOCK(new_mem)->header.next;
         AS_EMPTY_BLOCK(new_mem)->header.next->prev = cur_block;
 
         heap_resize_block(cur_block, size);
 
+        // Unpin
         func_8001B864(NULL);
         return mem;
     }
 
+    // Otherwise move to new memory
     new_mem = heap_alloc(size);
     if (new_mem == NULL) {
         return NULL;
     }
 
+    // Copy the flags from the original block
     GET_BLOCK_HEADER(new_mem)->unkC_28 = cur_block->unkC_28;
     GET_BLOCK_HEADER(new_mem)->unkC_29 = cur_block->unkC_29;
 
     aligned8_memcpy(new_mem, mem, func_8001BD30(size));
 
+    // Free the original block and unpin
     heap_free(mem);
     func_8001B864(NULL);
     return new_mem;
@@ -362,12 +387,14 @@ s32 heap_get_allocation_size(void *mem)
     return GET_BLOCK_MEM_SIZE(block) - block->allocation_overhead;
 }
 
+// Sets header flag unkC_29 (used for movable handle blocks).
 void func_8001B3A0(void *mem)
 {
     struct HeapHeader *block = GET_BLOCK_HEADER(mem);
     block->unkC_29 = 1;
 }
 
+// Sets header flag unkC_28.
 void func_8001B3B0(void *mem)
 {
     struct HeapHeader *block = GET_BLOCK_HEADER(mem);
@@ -384,6 +411,7 @@ s32 heap_bytes_allocated()
     return D_8007BF00;
 }
 
+// Returns the number of free blocks; the largest size goes to *size_out.
 s32 heap_largest_free(s32 *size_out)
 {
     s32 block_count;
@@ -403,4 +431,5 @@ s32 heap_largest_free(s32 *size_out)
     return block_count;
 }
 
+// TU-NOTE: the .data of this file (formerly heap.data.s) is defined here in C, values from the ROM.
 s32 D_8003F750 = 0x0;

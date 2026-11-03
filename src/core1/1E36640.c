@@ -3,6 +3,10 @@
 #define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr) ((s8 *) (expr) + (offset)))
 #endif
 
+// TU-NOTE: sound player (n_alSndPlayer). D_800411D0/D_800411D4 = head/tail of the playing list,
+// D_800411D8 = free list, D_800411DC = player state (D_8007E9C0), D_800411E0 = active voice count,
+// D_8007EA24 = per-channel-group volume table.
+
 typedef struct {
     s16 type;
     u8 pad2[0xE];
@@ -12,25 +16,25 @@ typedef struct TTSndI_s {
 } TTSndI;
 typedef struct {
     s32 unk0;
-    void *unk4;
-    void *unk8;
+    void *self;
+    void *handler;
     u8 padC[8];
-    u8 evtq14;
+    u8 evtq;
     u8 pad15[0x13];
-    TTEvtC unk28;
+    TTEvtC cur_evt;
     u8 pad38[4];
-    s32 unk3C;
-    TTSndI *unk40;
-    void *unk44;
-    s32 unk48;
-    s32 unk4C;
+    s32 last_snd;
+    TTSndI *snds;
+    void *max_voices;
+    s32 tick_us;
+    s32 next_delay;
 } TTCSMgr;
 typedef struct {
-    u32 unk0;
-    u32 unk4;
-    void *unk8;
-    void *unkC;
-    u16 unk10;
+    u32 snd_count;
+    u32 evt_count;
+    void *max_voices;
+    void *heap;
+    u16 group_count;
 } TTCfgI;
 extern TTSndI *D_800411D8;
 extern void *func_80020EE4(s32, s32, void *, s32, s32);
@@ -42,11 +46,11 @@ typedef struct {
     u8 pad0[0x14];
     u8 evtq;
     u8 pad15[0x13];
-    TTEvtC unk28;
+    TTEvtC cur_evt;
     u8 pad38[0x10];
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
+    s32 tick_us;
+    s32 next_delay;
+    s32 time;
 } TTCSPmp;
 extern u8 *D_800411D4;
 extern u8 *D_800411DC;
@@ -75,11 +79,11 @@ typedef struct {
     u8 padC[4];
 } TTEvtK2;
 typedef struct TTSnd_s {
-    struct TTSnd_s *unk0;
+    struct TTSnd_s *next;
     u8 pad4[4];
-    void *unk8;
+    void *def;
     u8 padC[0x38];
-    u8 unk44;
+    u8 flags;
 } TTSnd;
 typedef struct {
     u8 pad0[0x14];
@@ -114,19 +118,19 @@ typedef struct {
     void *p;
 } TTEvtF;
 typedef struct TTItemS_s {
-    struct TTItemS_s *unk0;
+    struct TTItemS_s *next;
     u8 pad4[4];
-    s32 unk8;
+    s32 delay;
     TTEvtF evt;
 } TTItemS;
 typedef struct {
     TTLinkS freeList;
-    TTItemS *unk8;
+    TTItemS *pending;
 } TTEvtqS;
 extern void func_80020E74(void *);
 typedef struct TTSndL_s {
-    struct TTSndL_s *unk0;
-    struct TTSndL_s *unk4;
+    struct TTSndL_s *next;
+    struct TTSndL_s *prev;
 } TTSndL;
 typedef struct {
     u8 pad0[3];
@@ -141,33 +145,33 @@ typedef struct {
     TTPrmSub unk10;
 } TTPrmA;
 typedef struct TTSndA_s {
-    struct TTSndA_s *unk0;
-    struct TTSndA_s *unk4;
-    void *unk8;
+    struct TTSndA_s *next;
+    struct TTSndA_s *prev;
+    void *def;
     u8 padC[0x1C];
-    f32 unk28;
-    f32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    s16 unk38;
+    f32 base_pitch;
+    f32 pitch;
+    s32 owner;
+    s32 retries;
+    s16 volume;
     u8 pad3A[6];
-    u8 unk40;
-    u8 unk41;
-    u8 unk42;
+    u8 unk_40;
+    u8 pan;
+    u8 fx_mix;
     u8 pad43[1];
-    u8 unk44;
-    u8 unk45;
+    u8 flags;
+    u8 state;
 } TTSndA;
 extern void func_800E9070(void *, s32);
 typedef struct TTSndU_s {
-    struct TTSndU_s *unk0;
-    struct TTSndU_s *unk4;
-    void *unk8;
+    struct TTSndU_s *next;
+    struct TTSndU_s *prev;
+    void *def;
     u8 padC[0x24];
-    struct TTSndU_s **unk30;
+    struct TTSndU_s **owner;
     u8 pad34[0x10];
-    u8 unk44;
-    u8 unk45;
+    u8 flags;
+    u8 state;
 } TTSndU;
 extern void func_800E90A4(void *, s32);
 typedef struct {
@@ -177,30 +181,30 @@ typedef struct {
     u8 pad8[8];
 } TTEvtK1;
 typedef struct {
-    u8 unk0;
+    u8 next_id_lo;
     u8 pad1[1];
-    u8 unk2;
+    u8 unk2;  // flags; bits 6-7 extend the next id
 } TTPrmSubB;
 typedef struct {
     u8 pad0[0x11];
-    u8 unk11;
+    u8 duration;  // ticks of 33333 us
 } TTPrmB2;
 typedef struct TTSndB_s {
-    struct TTSndB_s *unk0;
+    struct TTSndB_s *next;
     u8 pad4[0x28];
-    f32 unk2C;
-    void *unk30;
+    f32 pitch;
+    void *owner;
     u8 pad34[4];
-    s16 unk38;
+    s16 volume;
     u8 pad3A[7];
-    u8 unk41;
-    u8 unk42;
-    u8 unk43;
-    u8 unk44;
+    u8 pan;
+    u8 fx_mix;
+    u8 unk_43;
+    u8 flags;
 } TTSndB_80020790;
 typedef struct {
     u8 pad0[0x14];
-    u8 evtq14;
+    u8 evtq;
     u8 pad15[0x27];
     TTSndB_80020790 *unk3C;
 } TTSMgrB;
@@ -213,438 +217,453 @@ extern void *D_800411F0;
 extern void func_80020F70(void *);
 extern void func_80027200(void);
 
-s32 func_8001ED68(TTCSPmp *arg0);
-void func_8001EE34(u16 *arg0);
-void func_800200B8(TTSnd *p);
+s32 func_8001ED68(TTCSPmp *player);
+void func_8001EE34(u16 *evt);
+void func_800200B8(TTSnd *snd);
 void func_80020128(TTSndP *snd);
-void func_800201A4(TTEvtqS *evtq, void *match, u16 mask);
-u16 func_80020298(u16 *outStopped, u16 *outPlaying);
-void func_800205D0(TTSndU *p);
-TTSndB_80020790 *func_80020790(s16 id, u16 vol, u8 pan, f32 pitchMul, u8 a4, u8 a5,
+void func_800201A4(TTEvtqS *evtq, void *target, u16 mask);
+u16 func_80020298(u16 *out_free, u16 *out_playing);
+void func_800205D0(TTSndU *snd);
+TTSndB_80020790 *func_80020790(s16 id, u16 vol, u8 pan, f32 pitch_mul, u8 fx_mix, u8 unk_0,
                                TTSndB_80020790 **out);
 
+// Sets up the sound-state pool, the event queue and the group volume table (default 0x7FFF).
 void func_8001EB10(TTCfgI *cfg)
 {
     u32 i;
     void *mem;
     TTEvtC evt;
-    TTSndI *s;
+    TTSndI *snd;
 
-    ((TTCSMgr *) D_800411DC)->unk44 = cfg->unk8;
-    ((TTCSMgr *) D_800411DC)->unk3C = 0;
-    ((TTCSMgr *) D_800411DC)->unk48 = 0x3E80;
+    ((TTCSMgr *) D_800411DC)->max_voices = cfg->max_voices;
+    ((TTCSMgr *) D_800411DC)->last_snd = 0;
+    ((TTCSMgr *) D_800411DC)->tick_us = 0x3E80;
 
-    mem = func_80020EE4(0, 0, cfg->unkC, 1, cfg->unk0 * 0x48);
-    ((TTCSMgr *) D_800411DC)->unk40 = mem;
+    mem = func_80020EE4(0, 0, cfg->heap, 1, cfg->snd_count * 0x48);
+    ((TTCSMgr *) D_800411DC)->snds = mem;
 
-    mem = func_80020EE4(0, 0, cfg->unkC, 1, cfg->unk4 * 0x1C);
-    func_800263C0(&((TTCSMgr *) D_800411DC)->evtq14, mem, cfg->unk4);
+    mem = func_80020EE4(0, 0, cfg->heap, 1, cfg->evt_count * 0x1C);
+    func_800263C0(&((TTCSMgr *) D_800411DC)->evtq, mem, cfg->evt_count);
 
-    D_800411D8 = ((TTCSMgr *) D_800411DC)->unk40;
+    D_800411D8 = ((TTCSMgr *) D_800411DC)->snds;
 
-    for (i = 1; i < cfg->unk0; i++) {
-        s = ((TTCSMgr *) D_800411DC)->unk40;
-        func_80020E40(&s[i], &s[i] - 1);
+    for (i = 1; i < cfg->snd_count; i++) {
+        snd = ((TTCSMgr *) D_800411DC)->snds;
+        func_80020E40(&snd[i], &snd[i] - 1);
     }
 
-    D_8007EA24 = func_80020EE4(0, 0, cfg->unkC, 2, cfg->unk10);
+    D_8007EA24 = func_80020EE4(0, 0, cfg->heap, 2, cfg->group_count);
 
-    for (i = 0; i < cfg->unk10; i++) {
+    for (i = 0; i < cfg->group_count; i++) {
         ((u16 *) D_8007EA24)[i] = 0x7FFF;
     }
 
     ((TTCSMgr *) D_800411DC)->unk0 = 0;
-    ((TTCSMgr *) D_800411DC)->unk8 = func_8001ED68;
-    ((TTCSMgr *) D_800411DC)->unk4 = (TTCSMgr *) D_800411DC;
+    ((TTCSMgr *) D_800411DC)->handler = func_8001ED68;
+    ((TTCSMgr *) D_800411DC)->self = (TTCSMgr *) D_800411DC;
 
     func_800267F0((TTCSMgr *) D_800411DC);
 
     evt.type = 0x20;
-    func_80026500(&((TTCSMgr *) D_800411DC)->evtq14, &evt, ((TTCSMgr *) D_800411DC)->unk48, 1);
-    ((TTCSMgr *) D_800411DC)->unk4C =
-        func_8002645C(&((TTCSMgr *) D_800411DC)->evtq14, &((TTCSMgr *) D_800411DC)->unk28);
+    func_80026500(&((TTCSMgr *) D_800411DC)->evtq, &evt, ((TTCSMgr *) D_800411DC)->tick_us, 1);
+    ((TTCSMgr *) D_800411DC)->next_delay =
+        func_8002645C(&((TTCSMgr *) D_800411DC)->evtq, &((TTCSMgr *) D_800411DC)->cur_evt);
 }
 
-s32 func_8001ED68(TTCSPmp *arg0)
+// Player handler: runs queued events until the next one has a non-zero delay.
+s32 func_8001ED68(TTCSPmp *player)
 {
-    TTCSPmp *v = arg0;
+    TTCSPmp *p = player;
     TTEvtC evt;
 
     do {
-        switch (v->unk28.type) {
+        switch (p->cur_evt.type) {
+            // timer tick
             case 0x20:
                 evt.type = 0x20;
-                func_80026500(&v->evtq, &evt, v->unk48, 1);
+                func_80026500(&p->evtq, &evt, p->tick_us, 1);
                 break;
             default:
-                func_8001EE34(&v->unk28);
+                func_8001EE34(&p->cur_evt);
                 break;
         }
 
-        v->unk4C = func_8002645C(&v->evtq, &v->unk28);
-    } while (v->unk4C == 0);
+        p->next_delay = func_8002645C(&p->evtq, &p->cur_evt);
+    } while (p->next_delay == 0);
 
-    v->unk50 = v->unk50 + v->unk4C;
-    return v->unk4C;
+    p->time = p->time + p->next_delay;
+    return p->next_delay;
 }
 
-void func_8001EE34(u16 *arg0)
+// Handles one sound event (play, stop, pan, volume, pitch, fx mix) and follows chained sounds.
+void func_8001EE34(u16 *evt)
 {
     VConfig config;
-    u8 *spAC;
-    u8 *spA8;
-    u8 spA7;
-    Evt sp94e;
-    Evt sp84e;
-    s32 sp80;
-    s32 sp7C;
-    s32 sp78;
-    s32 sp74;
-    s32 sp70;
-    s32 sp6C;
-    s32 sp68;
-    s32 sp64;
-    u8 *sp60;
-    u8 *sp5C;
-    s16 sp5A;
-    s16 sp58;
-    u8 *sp54;
-    Evt sp44e;
-    sp68 = 1;
-    sp64 = 0;
-    sp60 = 0;
-    sp5C = 0;
+    u8 *def;
+    u8 *def_sub;
+    u8 pan;
+    Evt new_evt;
+    Evt chain_evt;
+    s32 ticks;
+    s32 fxmix;
+    s32 vol;
+    s32 pan_raw;
+    s32 voices_full;
+    s32 stop_bits;
+    s32 is_last;
+    s32 voice_ok;
+    u8 *snd;
+    u8 *next;
+    s16 n_free;
+    s16 n_playing;
+    u8 *victim;
+    Evt steal_evt;
+    is_last = 1;
+    voice_ok = 0;
+    snd = 0;
+    next = 0;
     do {
-        if (sp5C != 0) {
-            sp84e.unk4 = sp60;
-            sp84e.unk0 = *(u16 *) ((s8 *) arg0 + 0);
-            sp84e.unk8 = *(u32 *) ((s8 *) arg0 + 8);
-            arg0 = (u16 *) &sp84e;
+        if (next != 0) {
+            chain_evt.unk4 = snd;
+            chain_evt.unk0 = *(u16 *) ((s8 *) evt + 0);
+            chain_evt.unk8 = *(u32 *) ((s8 *) evt + 8);
+            evt = (u16 *) &chain_evt;
         }
-        sp60 = *(u8 **) ((s8 *) arg0 + 4);
-        spAC = *(u8 **) ((s8 *) sp60 + 8);
-        if (spAC == 0) {
-            func_80020298(&sp5A, &sp58);
+        snd = *(u8 **) ((s8 *) evt + 4);
+        def = *(u8 **) ((s8 *) snd + 8);
+        if (def == 0) {
+            func_80020298(&n_free, &n_playing);
             return;
         }
-        spA8 = spAC + 0x10;
-        sp5C = *(u8 **) ((s8 *) sp60 + 0);
-        switch ((s32) *(u16 *) ((s8 *) arg0 + 0)) {
+        def_sub = def + 0x10;
+        next = *(u8 **) ((s8 *) snd + 0);
+        switch ((s32) *(u16 *) ((s8 *) evt + 0)) {
+            // play
             case 0x1:
-                if ((*(u8 *) ((s8 *) sp60 + 0x45) != 5) && (*(u8 *) ((s8 *) sp60 + 0x45) != 4)) {
+                if ((*(u8 *) ((s8 *) snd + 0x45) != 5) && (*(u8 *) ((s8 *) snd + 0x45) != 4)) {
                     return;
                 }
-                config.unk2 = (s16) *(u8 *) (sp60 + 0x43);
-                config.unk0 = (s16) *(u8 *) ((s8 *) sp60 + 0x40);
+                config.unk2 = (s16) *(u8 *) (snd + 0x43);
+                config.unk0 = (s16) *(u8 *) ((s8 *) snd + 0x40);
                 config.unk4 = 0;
-                sp70 = D_800411E0 >= *(s32 *) ((s8 *) D_800411DC + 0x44);
-                if ((sp70 == 0) || (*(u8 *) ((s8 *) sp60 + 0x44) & 0x10)) {
-                    sp64 = func_800268D0(sp60 + 0xC, &config);
+                voices_full = D_800411E0 >= *(s32 *) ((s8 *) D_800411DC + 0x44);
+                if ((voices_full == 0) || (*(u8 *) ((s8 *) snd + 0x44) & 0x10)) {
+                    voice_ok = func_800268D0(snd + 0xC, &config);
                 }
-                if (sp64 == 0) {
-                    if ((*(u8 *) ((s8 *) sp60 + 0x44) & 0x12) ||
-                        (*(s32 *) ((s8 *) sp60 + 0x34) > 0)) {
-                        *(u8 *) ((s8 *) sp60 + 0x45) = 4U;
-                        *(s32 *) ((s8 *) sp60 + 0x34) = (s32) (*(s32 *) ((s8 *) sp60 + 0x34) - 1);
-                        func_80026500(D_800411DC + 0x14, arg0, 0x8235, 0);
-                    } else if (sp70 != 0) {
-                        sp54 = D_800411D4;
+                if (voice_ok == 0) {
+                    if ((*(u8 *) ((s8 *) snd + 0x44) & 0x12) ||
+                        (*(s32 *) ((s8 *) snd + 0x34) > 0)) {
+                        *(u8 *) ((s8 *) snd + 0x45) = 4U;
+                        *(s32 *) ((s8 *) snd + 0x34) = (s32) (*(s32 *) ((s8 *) snd + 0x34) - 1);
+                        func_80026500(D_800411DC + 0x14, evt, 0x8235, 0);
+                    } else if (voices_full != 0) {
+                        victim = D_800411D4;
                         do {
-                            if ((!(*(u8 *) ((s8 *) sp54 + 0x44) & 0x12) &&
-                                 (*(u8 *) ((s8 *) sp54 + 0x44) & 4)) &&
-                                (*(u8 *) ((s8 *) sp54 + 0x45) != 3)) {
-                                sp70 = 0;
-                                sp44e.unk0 = 0x80;
-                                sp44e.unk4 = sp54;
-                                *(u8 *) ((s8 *) sp54 + 0x45) = 3U;
-                                func_80026500(D_800411DC + 0x14, &sp44e, 0x3E8, 0);
-                                func_80026BE0(sp54 + 0xC, 0, 0x3E8);
+                            if ((!(*(u8 *) ((s8 *) victim + 0x44) & 0x12) &&
+                                 (*(u8 *) ((s8 *) victim + 0x44) & 4)) &&
+                                (*(u8 *) ((s8 *) victim + 0x45) != 3)) {
+                                voices_full = 0;
+                                steal_evt.unk0 = 0x80;
+                                steal_evt.unk4 = victim;
+                                *(u8 *) ((s8 *) victim + 0x45) = 3U;
+                                func_80026500(D_800411DC + 0x14, &steal_evt, 0x3E8, 0);
+                                func_80026BE0(victim + 0xC, 0, 0x3E8);
                             }
-                            sp54 = *(u8 **) ((s8 *) sp54 + 4);
-                        } while ((sp70 != 0) && (sp54 != 0));
-                        if (sp70 == 0) {
-                            *(s32 *) ((s8 *) sp60 + 0x34) = 2;
-                            func_80026500(D_800411DC + 0x14, arg0, 0x3E9, 0);
+                            victim = *(u8 **) ((s8 *) victim + 4);
+                        } while ((voices_full != 0) && (victim != 0));
+                        if (voices_full == 0) {
+                            *(s32 *) ((s8 *) snd + 0x34) = 2;
+                            func_80026500(D_800411DC + 0x14, evt, 0x3E9, 0);
                         } else {
-                            func_800200B8(sp60);
+                            func_800200B8(snd);
                         }
                     } else {
-                        func_800200B8(sp60);
+                        func_800200B8(snd);
                     }
                     return;
                 }
-                *(u8 *) ((s8 *) sp60 + 0x44) = (u8) (*(u8 *) ((s8 *) sp60 + 0x44) | 4);
-                *(s16 *) ((s8 *) sp60 + 0x3A) = (s16) *(u8 *) ((s8 *) spAC + 0xC);
-                *(u8 *) ((s8 *) sp60 + 0x43) = (u8) config.unk2;
-                sp80 = (s32) (((f32) *(s32 *) ((s8 *) spAC + 0) / *(f32 *) ((s8 *) sp60 + 0x2C)) /
-                              *(f32 *) ((s8 *) sp60 + 0x28));
-                *(s32 *) ((s8 *) sp60 + 0x3C) = (s32) (*(s32 *) ((s8 *) D_800411DC + 0x50) + sp80);
-                if (((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) * *(s16 *) ((s8 *) sp60 + 0x38)) *
-                              *(u8 *) ((s8 *) spAC + 0xD5)) /
+                *(u8 *) ((s8 *) snd + 0x44) = (u8) (*(u8 *) ((s8 *) snd + 0x44) | 4);
+                *(s16 *) ((s8 *) snd + 0x3A) = (s16) *(u8 *) ((s8 *) def + 0xC);
+                *(u8 *) ((s8 *) snd + 0x43) = (u8) config.unk2;
+                ticks = (s32) (((f32) *(s32 *) ((s8 *) def + 0) / *(f32 *) ((s8 *) snd + 0x2C)) /
+                              *(f32 *) ((s8 *) snd + 0x28));
+                *(s32 *) ((s8 *) snd + 0x3C) = (s32) (*(s32 *) ((s8 *) D_800411DC + 0x50) + ticks);
+                if (((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) * *(s16 *) ((s8 *) snd + 0x38)) *
+                              *(u8 *) ((s8 *) def + 0xD5)) /
                              16129) *
-                            D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                            D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                      32767) <= 0) {
-                    sp78 = 0;
+                    vol = 0;
                 } else {
-                    sp78 =
-                        ((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) * *(s16 *) ((s8 *) sp60 + 0x38)) *
-                                  *(u8 *) ((s8 *) spAC + 0xD5)) /
+                    vol =
+                        ((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) * *(s16 *) ((s8 *) snd + 0x38)) *
+                                  *(u8 *) ((s8 *) def + 0xD5)) /
                                  16129) *
-                                D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                                D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                          32767) -
                         1;
                 }
-                sp74 = (*(u8 *) ((s8 *) spAC + 0xD4) + *(u8 *) ((s8 *) sp60 + 0x41)) - 0x40;
-                spA7 = (u8) ((((sp74 > 0) ? sp74 : 0) < 0x7F) ? ((sp74 > 0) ? sp74 : 0) : 0x7F);
-                sp7C =
-                    ((*(u8 *) ((s8 *) spA8 + 3) & 0xF) * 8) + (*(u8 *) ((s8 *) sp60 + 0x42) & 0x7F);
-                sp7C = (127 < ((0 > sp7C) ? 0 : sp7C)) ? 127 : ((0 > sp7C) ? 0 : sp7C);
-                sp7C |= *(u8 *) ((s8 *) sp60 + 0x42) & 0x80;
-                func_80026CB0(sp60 + 0xC, spAC + 0x18,
-                              *(f32 *) ((s8 *) sp60 + 0x28) * *(f32 *) ((s8 *) sp60 + 0x2C), sp78,
-                              (s32) spA7, sp7C, 0, 0.0f, 0, sp80);
-                *(u8 *) ((s8 *) sp60 + 0x45) = 1U;
+                pan_raw = (*(u8 *) ((s8 *) def + 0xD4) + *(u8 *) ((s8 *) snd + 0x41)) - 0x40;
+                pan = (u8) ((((pan_raw > 0) ? pan_raw : 0) < 0x7F) ? ((pan_raw > 0) ? pan_raw : 0) : 0x7F);
+                fxmix =
+                    ((*(u8 *) ((s8 *) def_sub + 3) & 0xF) * 8) + (*(u8 *) ((s8 *) snd + 0x42) & 0x7F);
+                fxmix = (127 < ((0 > fxmix) ? 0 : fxmix)) ? 127 : ((0 > fxmix) ? 0 : fxmix);
+                fxmix |= *(u8 *) ((s8 *) snd + 0x42) & 0x80;
+                func_80026CB0(snd + 0xC, def + 0x18,
+                              *(f32 *) ((s8 *) snd + 0x28) * *(f32 *) ((s8 *) snd + 0x2C), vol,
+                              (s32) pan, fxmix, 0, 0.0f, 0, ticks);
+                *(u8 *) ((s8 *) snd + 0x45) = 1U;
                 D_800411E0 += 1;
-                if (!(*(u8 *) ((s8 *) sp60 + 0x44) & 2)) {
-                    if (sp80 == 0) {
-                        *(s16 *) ((s8 *) sp60 + 0x3A) = (s16) *(u8 *) ((s8 *) spAC + 0xD);
-                        if (((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) *
-                                       *(s16 *) ((s8 *) sp60 + 0x38)) *
-                                      *(u8 *) ((s8 *) spAC + 0xD5)) /
+                if (!(*(u8 *) ((s8 *) snd + 0x44) & 2)) {
+                    if (ticks == 0) {
+                        *(s16 *) ((s8 *) snd + 0x3A) = (s16) *(u8 *) ((s8 *) def + 0xD);
+                        if (((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) *
+                                       *(s16 *) ((s8 *) snd + 0x38)) *
+                                      *(u8 *) ((s8 *) def + 0xD5)) /
                                      16129) *
-                                    D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                                    D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                              32767) <= 0) {
-                            sp78 = 0;
+                            vol = 0;
                         } else {
-                            sp78 = ((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) *
-                                              *(s16 *) ((s8 *) sp60 + 0x38)) *
-                                             *(u8 *) ((s8 *) spAC + 0xD5)) /
+                            vol = ((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) *
+                                              *(s16 *) ((s8 *) snd + 0x38)) *
+                                             *(u8 *) ((s8 *) def + 0xD5)) /
                                             16129) *
-                                           D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                                           D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                                     32767) -
                                    1;
                         }
-                        sp80 = (s32) (((f32) *(s32 *) ((s8 *) spAC + 4) /
-                                       *(f32 *) ((s8 *) sp60 + 0x28)) /
-                                      *(f32 *) ((s8 *) sp60 + 0x2C));
-                        *(s32 *) ((s8 *) sp60 + 0x3C) =
-                            (s32) (*(s32 *) ((s8 *) D_800411DC + 0x50) + sp80);
-                        func_80026BE0(sp60 + 0xC, sp78, sp80);
-                        sp94e.unk0 = 2;
-                        sp94e.unk4 = sp60;
-                        func_80026500(D_800411DC + 0x14, &sp94e, sp80, 0);
-                        if (*(u8 *) ((s8 *) sp60 + 0x44) & 0x20) {
-                            func_80020128(sp60);
+                        ticks = (s32) (((f32) *(s32 *) ((s8 *) def + 4) /
+                                       *(f32 *) ((s8 *) snd + 0x28)) /
+                                      *(f32 *) ((s8 *) snd + 0x2C));
+                        *(s32 *) ((s8 *) snd + 0x3C) =
+                            (s32) (*(s32 *) ((s8 *) D_800411DC + 0x50) + ticks);
+                        func_80026BE0(snd + 0xC, vol, ticks);
+                        new_evt.unk0 = 2;
+                        new_evt.unk4 = snd;
+                        func_80026500(D_800411DC + 0x14, &new_evt, ticks, 0);
+                        if (*(u8 *) ((s8 *) snd + 0x44) & 0x20) {
+                            func_80020128(snd);
                         }
                     } else {
-                        sp94e.unk0 = 0x40;
-                        sp94e.unk4 = sp60;
-                        sp80 = (s32) (((f32) *(s32 *) ((s8 *) spAC + 0) /
-                                       *(f32 *) ((s8 *) sp60 + 0x2C)) /
-                                      *(f32 *) ((s8 *) sp60 + 0x28));
-                        func_80026500(D_800411DC + 0x14, &sp94e, sp80, 0);
+                        new_evt.unk0 = 0x40;
+                        new_evt.unk4 = snd;
+                        ticks = (s32) (((f32) *(s32 *) ((s8 *) def + 0) /
+                                       *(f32 *) ((s8 *) snd + 0x2C)) /
+                                      *(f32 *) ((s8 *) snd + 0x28));
+                        func_80026500(D_800411DC + 0x14, &new_evt, ticks, 0);
                     }
                 }
                 break;
 
+            // stop / release
             case 0x2:
 
             case 0x400:
 
             case 0x1000:
-                if ((*(u16 *) ((s8 *) arg0 + 0) != 0x1000) || (*(u8 *) ((s8 *) sp60 + 0x44) & 2)) {
-                    switch (*(u8 *) ((s8 *) sp60 + 0x45)) {
+                if ((*(u16 *) ((s8 *) evt + 0) != 0x1000) || (*(u8 *) ((s8 *) snd + 0x44) & 2)) {
+                    switch (*(u8 *) ((s8 *) snd + 0x45)) {
                         case 1:
-                            func_800201A4(D_800411DC + 0x14, sp60, 0x40);
-                            sp80 = (s32) (((f32) *(s32 *) ((s8 *) spAC + 8) /
-                                           *(f32 *) ((s8 *) sp60 + 0x28)) /
-                                          *(f32 *) ((s8 *) sp60 + 0x2C));
-                            func_80026BE0(sp60 + 0xC, 0, sp80);
-                            if (sp80 != 0) {
-                                sp94e.unk0 = 0x80;
-                                sp94e.unk4 = sp60;
-                                func_80026500(D_800411DC + 0x14, &sp94e, sp80, 0);
-                                *(u8 *) ((s8 *) sp60 + 0x45) = 2U;
+                            func_800201A4(D_800411DC + 0x14, snd, 0x40);
+                            ticks = (s32) (((f32) *(s32 *) ((s8 *) def + 8) /
+                                           *(f32 *) ((s8 *) snd + 0x28)) /
+                                          *(f32 *) ((s8 *) snd + 0x2C));
+                            func_80026BE0(snd + 0xC, 0, ticks);
+                            if (ticks != 0) {
+                                new_evt.unk0 = 0x80;
+                                new_evt.unk4 = snd;
+                                func_80026500(D_800411DC + 0x14, &new_evt, ticks, 0);
+                                *(u8 *) ((s8 *) snd + 0x45) = 2U;
                             } else {
-                                func_800200B8(sp60);
+                                func_800200B8(snd);
                             }
                             break;
 
                         case 4:
 
                         case 5:
-                            func_800200B8(sp60);
+                            func_800200B8(snd);
                             break;
 
                         default:
                             break;
                     }
 
-                    if (*(u16 *) ((s8 *) arg0 + 0) == 2) {
-                        *(u16 *) ((s8 *) arg0 + 0) = 0x1000;
+                    if (*(u16 *) ((s8 *) evt + 0) == 2) {
+                        *(u16 *) ((s8 *) evt + 0) = 0x1000;
                     }
                 }
                 break;
 
+            // pan
             case 0x4:
-                *(u8 *) ((s8 *) sp60 + 0x41) = (u8) *(u32 *) ((s8 *) arg0 + 8);
-                if (*(u8 *) ((s8 *) sp60 + 0x45) == 1) {
-                    sp74 = (*(u8 *) ((s8 *) spAC + 0xD4) + *(u8 *) ((s8 *) sp60 + 0x41)) - 0x40;
-                    spA7 = (u8) ((((sp74 > 0) ? sp74 : 0) < 0x7F) ? ((sp74 > 0) ? sp74 : 0) : 0x7F);
-                    func_80026DE0(sp60 + 0xC, spA7);
+                *(u8 *) ((s8 *) snd + 0x41) = (u8) *(u32 *) ((s8 *) evt + 8);
+                if (*(u8 *) ((s8 *) snd + 0x45) == 1) {
+                    pan_raw = (*(u8 *) ((s8 *) def + 0xD4) + *(u8 *) ((s8 *) snd + 0x41)) - 0x40;
+                    pan = (u8) ((((pan_raw > 0) ? pan_raw : 0) < 0x7F) ? ((pan_raw > 0) ? pan_raw : 0) : 0x7F);
+                    func_80026DE0(snd + 0xC, pan);
                 }
                 break;
 
+            // pitch
             case 0x10:
-                *(f32 *) ((s8 *) sp60 + 0x2C) = *(f32 *) ((s8 *) arg0 + 8);
-                if (*(u8 *) ((s8 *) sp60 + 0x45) == 1) {
-                    func_80026E90(sp60 + 0xC,
-                                  *(f32 *) ((s8 *) sp60 + 0x28) * *(f32 *) ((s8 *) sp60 + 0x2C));
-                    if (*(u8 *) ((s8 *) sp60 + 0x44) & 0x20) {
-                        func_80020128(sp60);
+                *(f32 *) ((s8 *) snd + 0x2C) = *(f32 *) ((s8 *) evt + 8);
+                if (*(u8 *) ((s8 *) snd + 0x45) == 1) {
+                    func_80026E90(snd + 0xC,
+                                  *(f32 *) ((s8 *) snd + 0x28) * *(f32 *) ((s8 *) snd + 0x2C));
+                    if (*(u8 *) ((s8 *) snd + 0x44) & 0x20) {
+                        func_80020128(snd);
                     }
                 }
                 break;
 
+            // fx mix
             case 0x100:
-                *(u8 *) ((s8 *) sp60 + 0x42) = (u8) *(u32 *) ((s8 *) arg0 + 8);
-                if (*(u8 *) ((s8 *) sp60 + 0x45) == 1) {
-                    sp7C = ((*(u8 *) ((s8 *) spA8 + 3) & 0xF) * 8) +
-                           (*(u8 *) ((s8 *) sp60 + 0x42) & 0x7F);
-                    sp7C = (127 < ((0 > sp7C) ? 0 : sp7C)) ? 127 : ((0 > sp7C) ? 0 : sp7C);
-                    sp7C |= *(u8 *) ((s8 *) sp60 + 0x42) & 0x80;
-                    func_80026F40(sp60 + 0xC, sp7C);
+                *(u8 *) ((s8 *) snd + 0x42) = (u8) *(u32 *) ((s8 *) evt + 8);
+                if (*(u8 *) ((s8 *) snd + 0x45) == 1) {
+                    fxmix = ((*(u8 *) ((s8 *) def_sub + 3) & 0xF) * 8) +
+                           (*(u8 *) ((s8 *) snd + 0x42) & 0x7F);
+                    fxmix = (127 < ((0 > fxmix) ? 0 : fxmix)) ? 127 : ((0 > fxmix) ? 0 : fxmix);
+                    fxmix |= *(u8 *) ((s8 *) snd + 0x42) & 0x80;
+                    func_80026F40(snd + 0xC, fxmix);
                 }
                 break;
 
             case 0x2000:
-                *(u8 *) ((s8 *) sp60 + 0x43) = (u8) *(u32 *) ((s8 *) arg0 + 8);
-                if ((s32) *(u8 *) ((s8 *) sp60 + 0x43) >= *(s32 *) ((s8 *) D_800411F4 + 0x3C)) {
-                    *(u8 *) ((s8 *) sp60 + 0x43) = 0U;
+                *(u8 *) ((s8 *) snd + 0x43) = (u8) *(u32 *) ((s8 *) evt + 8);
+                if ((s32) *(u8 *) ((s8 *) snd + 0x43) >= *(s32 *) ((s8 *) D_800411F4 + 0x3C)) {
+                    *(u8 *) ((s8 *) snd + 0x43) = 0U;
                 }
-                if (*(u8 *) ((s8 *) sp60 + 0x45) == 1) {
-                    *(s16 *) ((s8 *) sp60 + 0x24) = (s16) *(u8 *) ((s8 *) sp60 + 0x43);
+                if (*(u8 *) ((s8 *) snd + 0x45) == 1) {
+                    *(s16 *) ((s8 *) snd + 0x24) = (s16) *(u8 *) ((s8 *) snd + 0x43);
                 }
                 break;
 
+            // volume
             case 0x8:
-                *(s16 *) ((s8 *) sp60 + 0x38) = (s16) *(u32 *) ((s8 *) arg0 + 8);
-                if (*(u8 *) ((s8 *) sp60 + 0x45) == 1) {
-                    if (((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) * *(s16 *) ((s8 *) sp60 + 0x38)) *
-                                  *(u8 *) ((s8 *) spAC + 0xD5)) /
+                *(s16 *) ((s8 *) snd + 0x38) = (s16) *(u32 *) ((s8 *) evt + 8);
+                if (*(u8 *) ((s8 *) snd + 0x45) == 1) {
+                    if (((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) * *(s16 *) ((s8 *) snd + 0x38)) *
+                                  *(u8 *) ((s8 *) def + 0xD5)) /
                                  16129) *
-                                D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                                D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                          32767) <= 0) {
-                        sp78 = 0;
+                        vol = 0;
                     } else {
-                        sp78 = ((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) *
-                                          *(s16 *) ((s8 *) sp60 + 0x38)) *
-                                         *(u8 *) ((s8 *) spAC + 0xD5)) /
+                        vol = ((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) *
+                                          *(s16 *) ((s8 *) snd + 0x38)) *
+                                         *(u8 *) ((s8 *) def + 0xD5)) /
                                         16129) *
-                                       D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                                       D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                                 32767) -
                                1;
                     }
-                    func_80026BE0(sp60 + 0xC, sp78,
-                                  (0x3E8 > (*(s32 *) ((s8 *) sp60 + 0x3C) -
+                    func_80026BE0(snd + 0xC, vol,
+                                  (0x3E8 > (*(s32 *) ((s8 *) snd + 0x3C) -
                                             *(s32 *) ((s8 *) D_800411DC + 0x50)))
                                       ? 0x3E8
-                                      : (*(s32 *) ((s8 *) sp60 + 0x3C) -
+                                      : (*(s32 *) ((s8 *) snd + 0x3C) -
                                          *(s32 *) ((s8 *) D_800411DC + 0x50)));
                 }
                 break;
 
+            // group volume update
             case 0x800:
-                if (*(u8 *) ((s8 *) sp60 + 0x45) == 1) {
-                    sp80 =
-                        (s32) (((f32) *(s32 *) ((s8 *) spAC + 8) / *(f32 *) ((s8 *) sp60 + 0x28)) /
-                               *(f32 *) ((s8 *) sp60 + 0x2C));
-                    if (((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) * *(s16 *) ((s8 *) sp60 + 0x38)) *
-                                  *(u8 *) ((s8 *) spAC + 0xD5)) /
+                if (*(u8 *) ((s8 *) snd + 0x45) == 1) {
+                    ticks =
+                        (s32) (((f32) *(s32 *) ((s8 *) def + 8) / *(f32 *) ((s8 *) snd + 0x28)) /
+                               *(f32 *) ((s8 *) snd + 0x2C));
+                    if (((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) * *(s16 *) ((s8 *) snd + 0x38)) *
+                                  *(u8 *) ((s8 *) def + 0xD5)) /
                                  16129) *
-                                D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                                D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                          32767) <= 0) {
-                        sp78 = 0;
+                        vol = 0;
                     } else {
-                        sp78 = ((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) *
-                                          *(s16 *) ((s8 *) sp60 + 0x38)) *
-                                         *(u8 *) ((s8 *) spAC + 0xD5)) /
+                        vol = ((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) *
+                                          *(s16 *) ((s8 *) snd + 0x38)) *
+                                         *(u8 *) ((s8 *) def + 0xD5)) /
                                         16129) *
-                                       D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                                       D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                                 32767) -
                                1;
                     }
-                    func_80026BE0(sp60 + 0xC, sp78, sp80);
+                    func_80026BE0(snd + 0xC, vol, ticks);
                 }
                 break;
 
             case 0x40:
-                if (!(*(u8 *) ((s8 *) sp60 + 0x44) & 2)) {
-                    *(s16 *) ((s8 *) sp60 + 0x3A) = (s16) *(u8 *) ((s8 *) spAC + 0xD);
-                    if (((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) * *(s16 *) ((s8 *) sp60 + 0x38)) *
-                                  *(u8 *) ((s8 *) spAC + 0xD5)) /
+                if (!(*(u8 *) ((s8 *) snd + 0x44) & 2)) {
+                    *(s16 *) ((s8 *) snd + 0x3A) = (s16) *(u8 *) ((s8 *) def + 0xD);
+                    if (((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) * *(s16 *) ((s8 *) snd + 0x38)) *
+                                  *(u8 *) ((s8 *) def + 0xD5)) /
                                  16129) *
-                                D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                                D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                          32767) <= 0) {
-                        sp78 = 0;
+                        vol = 0;
                     } else {
-                        sp78 = ((s32) ((((*(s16 *) ((s8 *) sp60 + 0x3A) *
-                                          *(s16 *) ((s8 *) sp60 + 0x38)) *
-                                         *(u8 *) ((s8 *) spAC + 0xD5)) /
+                        vol = ((s32) ((((*(s16 *) ((s8 *) snd + 0x3A) *
+                                          *(s16 *) ((s8 *) snd + 0x38)) *
+                                         *(u8 *) ((s8 *) def + 0xD5)) /
                                         16129) *
-                                       D_8007EA24[*(u8 *) ((s8 *) spA8 + 2) & 0x1F]) /
+                                       D_8007EA24[*(u8 *) ((s8 *) def_sub + 2) & 0x1F]) /
                                 32767) -
                                1;
                     }
-                    sp80 =
-                        (s32) (((f32) *(s32 *) ((s8 *) spAC + 4) / *(f32 *) ((s8 *) sp60 + 0x28)) /
-                               *(f32 *) ((s8 *) sp60 + 0x2C));
-                    *(s32 *) ((s8 *) sp60 + 0x3C) =
-                        (s32) (*(s32 *) ((s8 *) D_800411DC + 0x50) + sp80);
-                    func_80026BE0(sp60 + 0xC, sp78, sp80);
-                    sp94e.unk0 = 2;
-                    sp94e.unk4 = sp60;
-                    func_80026500(D_800411DC + 0x14, &sp94e, sp80, 0);
-                    if (*(u8 *) ((s8 *) sp60 + 0x44) & 0x20) {
-                        func_80020128(sp60);
+                    ticks =
+                        (s32) (((f32) *(s32 *) ((s8 *) def + 4) / *(f32 *) ((s8 *) snd + 0x28)) /
+                               *(f32 *) ((s8 *) snd + 0x2C));
+                    *(s32 *) ((s8 *) snd + 0x3C) =
+                        (s32) (*(s32 *) ((s8 *) D_800411DC + 0x50) + ticks);
+                    func_80026BE0(snd + 0xC, vol, ticks);
+                    new_evt.unk0 = 2;
+                    new_evt.unk4 = snd;
+                    func_80026500(D_800411DC + 0x14, &new_evt, ticks, 0);
+                    if (*(u8 *) ((s8 *) snd + 0x44) & 0x20) {
+                        func_80020128(snd);
                     }
                 }
                 break;
 
+            // free the sound
             case 0x80:
-                func_800200B8(sp60);
+                func_800200B8(snd);
                 break;
 
+            // start next sound of the chain
             case 0x200:
-                if (*(u8 *) ((s8 *) sp60 + 0x44) & 0x10) {
-                    func_80020790(*(u32 *) ((s8 *) arg0 + 8), *(s16 *) ((s8 *) sp60 + 0x38),
-                                  *(u8 *) ((s8 *) sp60 + 0x41), *(f32 *) ((s8 *) sp60 + 0x2C),
-                                  (s32) *(u8 *) ((s8 *) sp60 + 0x42),
-                                  (s32) *(u8 *) ((s8 *) sp60 + 0x43),
-                                  *(s32 *) ((s8 *) sp60 + 0x30));
+                if (*(u8 *) ((s8 *) snd + 0x44) & 0x10) {
+                    func_80020790(*(u32 *) ((s8 *) evt + 8), *(s16 *) ((s8 *) snd + 0x38),
+                                  *(u8 *) ((s8 *) snd + 0x41), *(f32 *) ((s8 *) snd + 0x2C),
+                                  (s32) *(u8 *) ((s8 *) snd + 0x42),
+                                  (s32) *(u8 *) ((s8 *) snd + 0x43),
+                                  *(s32 *) ((s8 *) snd + 0x30));
                 }
                 break;
             default:
                 break;
         }
 
-        sp6C = *(u16 *) ((s8 *) arg0 + 0) & 0x2D1;
-        if (((sp60 = sp5C) != 0) && (sp6C == 0)) {
-            sp68 = *(u8 *) ((s8 *) sp60 + 0x44) & 1;
+        stop_bits = *(u16 *) ((s8 *) evt + 0) & 0x2D1;
+        if (((snd = next) != 0) && (stop_bits == 0)) {
+            is_last = *(u8 *) ((s8 *) snd + 0x44) & 1;
         }
-    } while (((sp68 == 0) && (sp60 != 0)) && (sp6C == 0));
+    } while (((is_last == 0) && (snd != 0)) && (stop_bits == 0));
 }
 
-void func_800200B8(TTSnd *p)
+// Stops the voice if active, frees the sound state and drops its queued events.
+void func_800200B8(TTSnd *snd)
 {
-    if (p->unk44 & 4) {
-        func_80026FF0(&((TTSndB_800200B8 *) p)->unkC);
-        func_80027090(&((TTSndB_800200B8 *) p)->unkC);
+    if (snd->flags & 4) {
+        func_80026FF0(&((TTSndB_800200B8 *) snd)->unkC);
+        func_80027090(&((TTSndB_800200B8 *) snd)->unkC);
     }
-    func_800205D0(p);
-    func_800201A4(&((TTSMgr *) D_800411DC)->evtq, p, 0xFFFF);
+    func_800205D0(snd);
+    func_800201A4(&((TTSMgr *) D_800411DC)->evtq, snd, 0xFFFF);
 }
 
+// Posts a pitch event: wave base pitch times the sound's pitch.
 void func_80020128(TTSndP *snd)
 {
     TTEvtK2 evt;
@@ -657,26 +676,27 @@ void func_80020128(TTSndP *snd)
     func_80026500(&((TTSMgr *) D_800411DC)->evtq, &evt, 0x8235, 0);
 }
 
-void func_800201A4(TTEvtqS *evtq, void *match, u16 mask)
+// Removes queued events of `target` matching `mask`; their delay is passed on to the next event.
+void func_800201A4(TTEvtqS *evtq, void *target, u16 mask)
 {
     TTItemS *item;
     TTItemS *next;
-    TTItemS *thisItem;
-    TTItemS *nextItem;
+    TTItemS *cur_item;
+    TTItemS *next_item;
     TTEvtF *evt;
-    s32 msk;
+    s32 prev_mask;
 
-    msk = osSetIntMask(1);
+    prev_mask = osSetIntMask(1);
 
-    item = evtq->unk8;
+    item = evtq->pending;
     while (item != 0) {
-        next = item->unk0;
-        thisItem = item;
-        nextItem = next;
-        evt = &thisItem->evt;
-        if (evt->p == match && (evt->type & mask)) {
-            if (nextItem != 0) {
-                nextItem->unk8 += thisItem->unk8;
+        next = item->next;
+        cur_item = item;
+        next_item = next;
+        evt = &cur_item->evt;
+        if (evt->p == target && (evt->type & mask)) {
+            if (next_item != 0) {
+                next_item->delay += cur_item->delay;
             }
             func_80020E74(item);
             func_80020E40(item, evtq);
@@ -684,231 +704,235 @@ void func_800201A4(TTEvtqS *evtq, void *match, u16 mask)
         item = next;
     }
 
-    osSetIntMask(msk);
+    osSetIntMask(prev_mask);
 }
 
-u16 func_80020298(u16 *outStopped, u16 *outPlaying)
+// Counts the sounds on the free and playing lists.
+u16 func_80020298(u16 *out_free, u16 *out_playing)
 {
-    s32 msk;
-    u16 na;
-    u16 nb;
-    u16 nc;
-    TTSndL *a;
-    TTSndL *b;
-    TTSndL *c;
+    s32 prev_mask;
+    u16 playing_cnt;
+    u16 free_cnt;
+    u16 back_cnt;
+    TTSndL *play_node;
+    TTSndL *free_node;
+    TTSndL *back_node;
 
-    msk = osSetIntMask(1);
+    prev_mask = osSetIntMask(1);
 
-    a = (TTSndL *) D_800411D0;
-    b = (TTSndL *) D_800411D8;
-    c = (TTSndL *) D_800411D4;
+    play_node = (TTSndL *) D_800411D0;
+    free_node = (TTSndL *) D_800411D8;
+    back_node = (TTSndL *) D_800411D4;
 
-    for (na = 0; a != 0; na++, a = a->unk0)
+    for (playing_cnt = 0; play_node != 0; playing_cnt++, play_node = play_node->next)
         ;
-    for (nb = 0; b != 0; nb++, b = b->unk0)
+    for (free_cnt = 0; free_node != 0; free_cnt++, free_node = free_node->next)
         ;
-    for (nc = 0; c != 0; nc++, c = c->unk4)
+    for (back_cnt = 0; back_node != 0; back_cnt++, back_node = back_node->prev)
         ;
 
-    *outStopped = nb;
-    *outPlaying = na;
+    *out_free = free_cnt;
+    *out_playing = playing_cnt;
 
-    osSetIntMask(msk);
+    osSetIntMask(prev_mask);
 
-    return nc;
+    return back_cnt;
 }
 
-TTSndA *func_8002039C(TTPrmA *prm)
+// Takes a sound state from the free list, links it into the playing list and fills it from its definition.
+TTSndA *func_8002039C(TTPrmA *def)
 {
-    TTSndA *s;
-    TTPrmSub *pp;
+    TTSndA *snd;
+    TTPrmSub *sub;
     s32 flag;
-    s32 msk;
+    s32 prev_mask;
 
-    pp = &prm->unk10;
-    msk = osSetIntMask(1);
+    sub = &def->unk10;
+    prev_mask = osSetIntMask(1);
 
-    s = (TTSndA *) D_800411D8;
-    if (s != 0) {
-        D_800411D8 = s->unk0;
-        func_80020E74(s);
+    snd = (TTSndA *) D_800411D8;
+    if (snd != 0) {
+        D_800411D8 = snd->next;
+        func_80020E74(snd);
 
         if ((TTSndA *) D_800411D0 != 0) {
-            s->unk0 = (TTSndA *) D_800411D0;
-            s->unk4 = 0;
-            ((TTSndA *) D_800411D0)->unk4 = s;
-            D_800411D0 = s;
+            snd->next = (TTSndA *) D_800411D0;
+            snd->prev = 0;
+            ((TTSndA *) D_800411D0)->prev = snd;
+            D_800411D0 = snd;
         } else {
-            s->unk4 = 0;
-            s->unk0 = s->unk4;
-            D_800411D0 = s;
-            D_800411D4 = s;
+            snd->prev = 0;
+            snd->next = snd->prev;
+            D_800411D0 = snd;
+            D_800411D4 = snd;
         }
 
-        osSetIntMask(msk);
-        func_800E9070(prm, 0);
+        osSetIntMask(prev_mask);
+        func_800E9070(def, 0);
 
-        flag = prm->unk4 + 1 == 0;
+        flag = def->unk4 + 1 == 0;
 
-        s->unk8 = prm;
-        s->unk40 = flag + 0x40;
-        s->unk45 = 5;
-        s->unk2C = 1.0f;
-        s->unk34 = 2;
-        s->unk44 = pp->unk3 & 0xF0;
-        s->unk30 = 0;
+        snd->def = def;
+        snd->unk_40 = flag + 0x40;
+        snd->state = 5;
+        snd->pitch = 1.0f;
+        snd->retries = 2;
+        snd->flags = sub->unk3 & 0xF0;
+        snd->owner = 0;
 
-        if (s->unk44 & 0x20) {
-            s->unk28 = func_80027170(pp->unk4 * 100 - 6000);
+        if (snd->flags & 0x20) {
+            snd->base_pitch = func_80027170(sub->unk4 * 100 - 6000);
         } else {
-            s->unk28 = func_80027170(pp->unk4 * 100 + pp->unk5 - 6000);
+            snd->base_pitch = func_80027170(sub->unk4 * 100 + sub->unk5 - 6000);
         }
 
         if (flag) {
-            s->unk44 = s->unk44 | 2;
+            snd->flags = snd->flags | 2;
         }
 
-        s->unk42 = 0;
-        s->unk41 = 0x40;
-        s->unk38 = 0x7FFF;
+        snd->fx_mix = 0;
+        snd->pan = 0x40;
+        snd->volume = 0x7FFF;
     } else {
-        osSetIntMask(msk);
+        osSetIntMask(prev_mask);
     }
 
-    return s;
+    return snd;
 }
 
-void func_800205D0(TTSndU *p)
+// Moves a sound state from the playing list back to the free list.
+void func_800205D0(TTSndU *snd)
 {
-    s32 msk;
+    s32 prev_mask;
 
-    msk = osSetIntMask(1);
+    prev_mask = osSetIntMask(1);
 
-    if ((TTSndU *) D_800411D0 == p)
-        D_800411D0 = p->unk0;
+    if ((TTSndU *) D_800411D0 == snd)
+        D_800411D0 = snd->next;
 
-    if ((TTSndU *) D_800411D4 == p)
-        D_800411D4 = p->unk4;
+    if ((TTSndU *) D_800411D4 == snd)
+        D_800411D4 = snd->prev;
 
-    func_80020E74(p);
+    func_80020E74(snd);
 
     if ((TTSndU *) D_800411D8 != 0) {
-        p->unk0 = (TTSndU *) D_800411D8;
-        p->unk4 = 0;
-        ((TTSndU *) D_800411D8)->unk4 = p;
-        D_800411D8 = p;
+        snd->next = (TTSndU *) D_800411D8;
+        snd->prev = 0;
+        ((TTSndU *) D_800411D8)->prev = snd;
+        D_800411D8 = snd;
     } else {
-        p->unk4 = 0;
-        p->unk0 = p->unk4;
-        D_800411D8 = p;
+        snd->prev = 0;
+        snd->next = snd->prev;
+        D_800411D8 = snd;
     }
 
-    if (p->unk44 & 4) {
+    if (snd->flags & 4) {
         D_800411E0 = D_800411E0 - 1;
     }
 
-    p->unk45 = 0;
+    snd->state = 0;
 
-    if (p->unk30 != 0) {
-        if (*p->unk30 == p)
-            *p->unk30 = 0;
-        p->unk30 = 0;
+    if (snd->owner != 0) {
+        if (*snd->owner == snd)
+            *snd->owner = 0;
+        snd->owner = 0;
     }
 
-    func_800E90A4(p->unk8, 0);
+    func_800E90A4(snd->def, 0);
 
-    osSetIntMask(msk);
+    osSetIntMask(prev_mask);
 }
 
-void func_80020738(u8 *param_0, u8 param_1)
+void func_80020738(u8 *snd, u8 value)
 {
-    if (param_0 != NULL) {
-        M2C_FIELD(param_0, s8 *, 0x40) = (s8) (s16) param_1;
+    if (snd != NULL) {
+        M2C_FIELD(snd, s8 *, 0x40) = (s8) (s16) value;
     }
 }
 
-u8 func_80020760(u8 *param_0)
+u8 func_80020760(u8 *snd)
 {
-    if (param_0 != NULL) {
-        return M2C_FIELD(param_0, u8 *, 0x45);
+    if (snd != NULL) {
+        return M2C_FIELD(snd, u8 *, 0x45);
     } else {
         return 0U;
     }
 }
 
-TTSndB_80020790 *func_80020790(s16 id, u16 vol, u8 pan, f32 pitchMul, u8 a4, u8 a5,
+// Starts sound `id` and the sounds chained after it; stores the last one in *out.
+TTSndB_80020790 *func_80020790(s16 id, u16 vol, u8 pan, f32 pitch_mul, u8 fx_mix, u8 unk_0,
                                TTSndB_80020790 **out)
 {
-    TTSndB_80020790 *s;
+    TTSndB_80020790 *snd;
     TTSndB_80020790 *last;
-    TTPrmSubB *pp;
-    TTPrmB2 *prm;
-    s16 nid;
-    s32 dur2;
+    TTPrmSubB *link;
+    TTPrmB2 *def;
+    s16 next_id;
+    s32 next_delay;
     s32 dur;
-    s32 total;
-    s32 x;
-    TTEvtK1 evt1;
-    TTEvtK2 evt2;
+    s32 elapsed;
+    s32 pan_val;
+    TTEvtK1 play_evt;
+    TTEvtK2 chain_evt;
 
     last = 0;
-    nid = 0;
-    total = 0;
+    next_id = 0;
+    elapsed = 0;
 
     if (id != 0) {
         do {
-            prm = func_800E9320(0, id - 1);
-            s = func_8002039C(prm);
+            def = func_800E9320(0, id - 1);
+            snd = func_8002039C(def);
 
-            if (s != 0) {
-                ((TTSMgrB *) D_800411DC)->unk3C = s;
+            if (snd != 0) {
+                ((TTSMgrB *) D_800411DC)->unk3C = snd;
 
-                evt1.type = 1;
-                evt1.p = s;
+                play_evt.type = 1;
+                play_evt.p = snd;
 
-                x = pan + s->unk41 - 0x40;
-                if (x >= 0x80)
-                    x = 0x7F;
-                else if (x < 0)
-                    x = 0;
-                s->unk41 = x;
+                pan_val = pan + snd->pan - 0x40;
+                if (pan_val >= 0x80)
+                    pan_val = 0x7F;
+                else if (pan_val < 0)
+                    pan_val = 0;
+                snd->pan = pan_val;
 
-                s->unk38 = (u32) (vol * s->unk38) >> 15;
-                s->unk2C *= pitchMul;
-                s->unk42 = a4;
-                s->unk43 = a5;
+                snd->volume = (u32) (vol * snd->volume) >> 15;
+                snd->pitch *= pitch_mul;
+                snd->fx_mix = fx_mix;
+                snd->unk_43 = unk_0;
 
-                dur = prm->unk11 * 33333;
+                dur = def->duration * 33333;
 
-                if (s->unk44 & 0x10) {
-                    s->unk44 = s->unk44 & ~0x10;
-                    func_80026500(&((TTSMgrB *) D_800411DC)->evtq14, &evt1, total + 1, 0);
-                    dur2 = dur + 1;
-                    nid = id;
+                if (snd->flags & 0x10) {
+                    snd->flags = snd->flags & ~0x10;
+                    func_80026500(&((TTSMgrB *) D_800411DC)->evtq, &play_evt, elapsed + 1, 0);
+                    next_delay = dur + 1;
+                    next_id = id;
                 } else {
-                    func_80026500(&((TTSMgrB *) D_800411DC)->evtq14, &evt1, dur + 1, 0);
+                    func_80026500(&((TTSMgrB *) D_800411DC)->evtq, &play_evt, dur + 1, 0);
                 }
 
-                last = s;
+                last = snd;
             }
 
-            total = total + dur;
+            elapsed = elapsed + dur;
 
-            pp = (TTPrmSubB *) ((u8 *) prm + 0x10);
-            id = pp->unk0 + ((pp->unk2 & 0xC0) << 2);
-        } while (id != 0 && s != 0);
+            link = (TTPrmSubB *) ((u8 *) def + 0x10);
+            id = link->next_id_lo + ((link->unk2 & 0xC0) << 2);
+        } while (id != 0 && snd != 0);
 
         if (last != 0) {
-            last->unk44 = last->unk44 | 1;
-            last->unk30 = out;
+            last->flags = last->flags | 1;
+            last->owner = out;
 
-            if (nid != 0) {
-                last->unk44 = last->unk44 | 0x10;
+            if (next_id != 0) {
+                last->flags = last->flags | 0x10;
 
-                evt2.type = 0x200;
-                evt2.p = last;
-                evt2.data = nid;
-                func_80026500(&((TTSMgrB *) D_800411DC)->evtq14, &evt2, dur2, 0);
+                chain_evt.type = 0x200;
+                chain_evt.p = last;
+                chain_evt.data = next_id;
+                func_80026500(&((TTSMgrB *) D_800411DC)->evtq, &chain_evt, next_delay, 0);
             }
         }
     }
@@ -920,36 +944,39 @@ TTSndB_80020790 *func_80020790(s16 id, u16 vol, u8 pan, f32 pitchMul, u8 a4, u8 
     return last;
 }
 
-void func_80020A60(TTSnd *p)
+// Posts an end event (0x400) for the sound and clears its 0x10 flag.
+void func_80020A60(TTSnd *snd)
 {
     TTEvtK2 evt;
 
     evt.type = 0x400;
-    evt.p = p;
-    if (p != 0) {
-        ((TTSnd *) evt.p)->unk44 = ((TTSnd *) evt.p)->unk44 & ~0x10;
+    evt.p = snd;
+    if (snd != 0) {
+        ((TTSnd *) evt.p)->flags = ((TTSnd *) evt.p)->flags & ~0x10;
         func_80026500(&((TTSMgr *) D_800411DC)->evtq, &evt, 0, 0);
     }
 }
 
+// Posts an end event to every playing sound whose flags contain all bits of `mask`.
+// Matching: old-style parameter declaration, needed for the match.
 void func_80020AD0(mask) u8 mask;
 {
-    s32 msk;
+    s32 prev_mask;
     TTEvtK2 evt;
-    TTSnd *p;
+    TTSnd *snd;
 
-    msk = osSetIntMask(1);
-    p = D_800411D0;
-    while (p != 0) {
+    prev_mask = osSetIntMask(1);
+    snd = D_800411D0;
+    while (snd != 0) {
         evt.type = 0x400;
-        evt.p = p;
-        if ((p->unk44 & mask) == mask) {
-            ((TTSnd *) evt.p)->unk44 = ((TTSnd *) evt.p)->unk44 & ~0x10;
+        evt.p = snd;
+        if ((snd->flags & mask) == mask) {
+            ((TTSnd *) evt.p)->flags = ((TTSnd *) evt.p)->flags & ~0x10;
             func_80026500(&((TTSMgr *) D_800411DC)->evtq, &evt, 0, 0);
         }
-        p = p->unk0;
+        snd = snd->next;
     }
-    osSetIntMask(msk);
+    osSetIntMask(prev_mask);
 }
 
 void func_80020B90(void)
@@ -967,52 +994,56 @@ void func_80020BE0(void)
     func_80020AD0(3);
 }
 
-void func_80020C08(TTSnd *p, s16 type, s32 data)
+void func_80020C08(TTSnd *snd, s16 type, s32 data)
 {
     TTEvtK2 evt;
 
     evt.type = type;
-    evt.p = p;
+    evt.p = snd;
     evt.data = data;
-    if (p != 0) {
+    if (snd != 0) {
         func_80026500(&((TTSMgr *) D_800411DC)->evtq, &evt, 0, 0);
     }
 }
 
-u16 func_80020C74(param_0)
-u8 param_0;
+// Matching: old-style parameter declaration, needed for the match.
+u16 func_80020C74(chan)
+u8 chan;
 {
-    return D_8007EA24[param_0];
+    return D_8007EA24[chan];
 }
 
+// Sets the volume of channel group `chan` and posts a volume update to its sounds.
+// Matching: old-style parameter declaration, needed for the match.
 void func_80020CA0(chan, val) u8 chan;
 u16 val;
 {
-    s32 msk;
-    TTSnd *p;
+    s32 prev_mask;
+    TTSnd *snd;
     s32 i;
     TTEvtK2 evt;
 
-    msk = osSetIntMask(1);
-    p = D_800411D0;
+    prev_mask = osSetIntMask(1);
+    snd = D_800411D0;
     ((u16 *) D_8007EA24)[chan] = val;
-    for (i = 0; p != 0;) {
+    for (i = 0; snd != 0;) {
 
-if ((((TTWaveC *) p->unk8)->unk12 & 0x1F) == chan) {
+if ((((TTWaveC *) snd->def)->unk12 & 0x1F) == chan) {
     evt.type = 0x800;
-    evt.p = p;
+    evt.p = snd;
     func_80026500(&((TTSMgr *) D_800411DC)->evtq, &evt, 0, 0);
 }
 
-(i++, p = p->unk0);
+(i++, snd = snd->next);
 }
-osSetIntMask(msk);
+osSetIntMask(prev_mask);
 }
 
-void func_80020D80(void *m, void *cfg)
+// Creates the synthesizer once (same sequence as n_alInit).
+void func_80020D80(void *unk_0, void *cfg)
 {
     if (D_800411F0 == 0) {
-        D_800411F0 = m;
+        D_800411F0 = unk_0;
 
 if ((void *) D_800411F4 == 0) {
     D_800411F4 = D_800411F0;
@@ -1022,7 +1053,7 @@ if ((void *) D_800411F4 == 0) {
 }
 }
 
-void func_80020DEC(s32 arg0)
+void func_80020DEC(s32 unk_0)
 {
     if (((s32) D_800411F0)) {
         func_80027200();
@@ -1031,6 +1062,8 @@ void func_80020DEC(s32 arg0)
     }
 }
 
+// TU-NOTE: the .data of this file (formerly asm/data/core1/1E36640.data.s) is defined here in C;
+// values are taken from the ROM. The *_rest arrays are the data that follows D_800411E0/D_800411F4.
 extern u8 D_8007E9C0[];
 TTSnd *D_800411D0 = 0;
 u8 *D_800411D4 = 0;

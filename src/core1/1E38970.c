@@ -5,19 +5,21 @@ typedef struct TTLink_s {
     struct TTLink_s *prev;
 } TTLink;
 
-void func_80020E40(TTLink *param_0, TTLink *param_1)
+// Inserts node into the list after the given node.
+void func_80020E40(TTLink *node, TTLink *after)
 {
-    param_0->next = param_1->next;
-    param_0->prev = param_1;
-    if (param_1->next)
-        param_1->next->prev = param_0;
-    param_1->next = param_0;
+    node->next = after->next;
+    node->prev = after;
+    if (after->next)
+        after->next->prev = node;
+    after->next = node;
 }
 
-void func_80020E74(TTLink *param_0)
+// Removes node from its list.
+void func_80020E74(TTLink *node)
 {
-    if (param_0->next)
-        param_0->next->prev = param_0->prev;
-    if (param_0->prev)
-        param_0->prev->next = param_0->next;
+    if (node->next)
+        node->next->prev = node->prev;
+    if (node->prev)
+        node->prev->next = node->next;
 }

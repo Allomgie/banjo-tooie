@@ -10,10 +10,11 @@ typedef struct {
 } TTEvt;
 extern void func_80026500(void *, TTEvt *, s32, s32);
 
-void func_80024E90(TTSeqPlayer *param_0)
+// Posts AL_SEQP_STOPPING_EVT to the sequence player's event queue.
+void func_80024E90(TTSeqPlayer *player)
 {
-    TTEvt local_0;
+    TTEvt evt;
 
-    local_0.type = 0x11;
-    func_80026500(&param_0->evtq, &local_0, 0, 0);
+    evt.type = 0x11;
+    func_80026500(&player->evtq, &evt, 0, 0);
 }
