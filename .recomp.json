@@ -1,0 +1,23 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "Banjo-Tooie",
+  "wikidata": "Q806598",
+  "system": "N64",
+  "type": "decomp",
+  "original": {
+    "region": "USA",
+    "revision": "1.0",
+    "serial": "NUS-NB7E-USA",
+    "sha1": "af1a89e12b638b8d82cc4c085c8e01d4cba03fb3"
+  },
+  "project": "Banjo-Tooie Decomp",
+  "status": "complete",
+  "toolchain": ["Splat", "IDO"],
+  "approach": "Matching decompilation: the C source rebuilds the USA ROM byte for byte (make check)",
+  "maintainers": [{ "name": "Allomgie", "link": "https://github.com/Allomgie" }],
+  "links": [
+    { "label": "Based on Mr-Wiseguy/banjo-tooie", "url": "https://github.com/Mr-Wiseguy/banjo-tooie" }
+  ],
+  "tags": ["matching"],
+  "notes": "Forked from Mr-Wiseguy/banjo-tooie at 13.0 % matched code (upstream state of 2025-11-29); the remaining 87 % were matched in this fork. All code is matched (100 %), and .data, .rodata and .bss are defined in C except where they belong to handwritten asm. A hybrid project: part of the matching was done by hand, much of it was produced with different AI models as part of a research project on AI-assisted decompilation (more in the README). Every function is verified byte-identical against the ROM. Cleanup and documentation are under way."
+}
