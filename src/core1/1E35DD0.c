@@ -1,16 +1,9 @@
 #include "common.h"
 
-extern s32 D_80041840;
 extern s32 D_8007E950;
 extern void func_8001D96C();
 extern void func_8001E2A0();
 extern void func_8001D37C();
-extern int D_80041868;
-extern s32 D_8004187C;
-extern u8 D_800418A8[44];
-extern s32 D_800418D4;
-extern s32 D_800418EC;
-extern s32 D_800418FC;
 extern void func_8001D3D8();
 extern int D_8007E948;
 extern void func_8001E380();
@@ -40,14 +33,14 @@ void func_8001E2A0()
 
 void func_8001E2C8(void){
     func_8001D96C();
-    func_8001D37C(&D_80041840, D_8007E950);
+    func_8001D37C("\nFault: CPU exception in thread %d!\n", D_8007E950);
     func_8001E2A0();
 }
 
 void func_8001E304()
 {
     func_8001D96C();
-    func_8001D37C(&D_80041868);
+    func_8001D37C("\nFault: WATCH GFX!\n");
     func_8001D9CC(0, 0xa);
     _gzreg_entrypoint_1();
     func_8001E2A0();
@@ -55,7 +48,7 @@ void func_8001E304()
 
 s32 func_8001E34C(void){
     func_8001D96C();
-    func_8001D37C(&D_8004187C);
+    func_8001D37C("\nWe seem to be stuck in an infinite loop!\n");
     func_8001E2A0();
 }
 
@@ -68,24 +61,24 @@ void func_8001E3A0()
 {
   s32 ret;
   ret = func_8001211C();
-  func_8001D37C(&D_800418A8, ret, ((s32) D_8007E948));
+  func_8001D37C("\n[%d] Crash of unknown origin! (type = %d)\n", ret, ((s32) D_8007E948));
   func_8001E2A0();
 }
 
 s32 func_8001E3E0(void){
-    func_8001D37C(&D_800418D4, func_8001211C());
+    func_8001D37C("\n[%d] Out of Memory!\n", func_8001211C());
     func_8001E2A0();
 }
 
 s32 func_8001E418(void){
     func_8001D96C();
-    func_8001D37C(&D_800418EC);
+    func_8001D37C("\nFault: Halt!\n");
     func_8001E2A0();
 }
 
 s32 func_8001E44C(void){
     func_8001D96C();
-    func_8001D3D8(0x11, 0x18, &D_800418FC, D_8007E950);
+    func_8001D3D8(0x11, 0x18, "Error: Software lock in thread %d!\n", D_8007E950);
     func_8001E2A0();
 }
 

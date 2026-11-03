@@ -30,14 +30,16 @@ extern LocalEntry *func_800E9EB4(void *);
 extern LocalActor *func_80106790(LocalMarker *);
 extern f32 _subaddiecustomhits_entrypoint_5(LocalActor *, f32 *);
 extern LocalCallbacks_800CD820 *func_800EC3C4(LocalMarker *);
-extern f32 D_801259A0;
 typedef struct { u8 pad_0[0xC]; s32 (*field_C)(LocalMarker *, f32 *, f32, f32 *, u32); s32 (*field_10)(LocalMarker *, LocalMarker *); } LocalCallbacks_800CDBA8;
 typedef struct { LocalMarker *field_0[32]; u8 field_80[32]; } LocalResults;
 extern LocalResults D_8012AF70;
 extern u8 D_8012AFF0[];
-extern f32 D_801259A4;
 extern void func_800EF334(f32 *, f32);
 extern f32 func_800EEAD4(f32 *, f32 *);
+
+/* TU-NOTE: the .rodata of this file starts with these constants (formerly asm/data/core2/1EA6B20.rodata.s);
+ * each is a 16-byte object whose zero words belong to it, as the alignment in the ROM shows. */
+const struct { f32 x; f32 y; f32 pad[2]; } D_801259A0 = { 1.1f, 1.1f };
 
 void func_800CD230(f32 param_0)
 {
@@ -215,7 +217,7 @@ struct LocalMarker_800CD820 *func_800CD820(struct LocalMarker_800CD820 *param_0,
             if (!local_12->field_2A || param_0 == local_12 || !local_12->field_14 || local_12->field_14 == 0xFFFF || !local_12->field_19) continue;
             local_14 = func_80106790(local_12);
             if (local_14->field_65 || (local_14->field_66 & local_8)) continue;
-            local_18 = local_16 * param_3 * D_801259A0;
+            local_18 = local_16 * param_3 * D_801259A0.x;
             local_19 = _subaddiecustomhits_entrypoint_5(local_14, local_9);
             if ((local_19 + local_18) * (local_19 + local_18) < func_800EEB40(local_9, local_7)) continue;
             local_18 = func_800EEB40(local_9, local_5);
@@ -271,7 +273,7 @@ s32 func_800CDBA8(struct LocalMarker_800CDBA8 *param_0, f32 param_1[][3], f32 *p
         local_16 = param_2[local_14] + func_800EEAD4(local_1, param_1[local_14]);
         if (local_2 < local_16) local_2 = local_16;
     }
-    local_2 *= D_801259A4;
+    local_2 *= D_801259A0.y;
     local_0 = func_800BE444(local_1);
     while (*local_0) {
         local_9[0] = func_800E9E88(*local_0);
