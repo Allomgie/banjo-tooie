@@ -13,88 +13,93 @@ extern void func_8009518C(PlayerState *, s32, f32);
 extern s32 D_80800330_bstimeout[];
 extern s32 D_80800340_bstimeout[];
 
-void bstimeout_entrypoint_0(PlayerState *param_0)
+void bstimeout_entrypoint_0(PlayerState *player)
 {
-    baanim_playForDuration_onceSmooth(param_0, 0x77, 3.2f);
-    func_8009FFD8(param_0, 1, 1, 3, 2);
-    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-    func_800A4DA4(param_0, 10);
-    yaw_setIdeal(param_0, func_8009F308(param_0) + 35.0f);
-    _ncbadie_entrypoint_3(func_800A4CA8(param_0), 80.0f);
+    baanim_playForDuration_onceSmooth(player, 0x77, 3.2f);
+    func_8009FFD8(player, 1, 1, 3, 2);
+    baphysics_set_target_horizontal_velocity(player, 0.0f);
+    func_800A4DA4(player, 10);
+    yaw_setIdeal(player, func_8009F308(player) + 35.0f);
+    _ncbadie_entrypoint_3(func_800A4CA8(player), 80.0f);
     func_800FC6B0(0x17);
-    func_800A0CF4(param_0, 1);
-    func_8008E944(param_0);
+    func_800A0CF4(player, 1);
+    func_8008E944(player);
 }
 
-void bstimeout_entrypoint_1(PlayerState *param_0)
+void bstimeout_entrypoint_1(PlayerState *player)
 {
-    AnimCtrl *local_0;
+    AnimCtrl *anim_ctrl;
 
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    if (anctrl_isAt(local_0, 0.0625f))
-        func_8009514C(param_0);
-    if (anctrl_isAt(local_0, 0.18f))
-        func_8009DF18(param_0, 0x3EB, 1.0f, 0x4650);
-    if (anctrl_isAt(local_0, 0.8421f)) {
-        func_8009518C(param_0, 0, 0.3f);
-        func_8009518C(param_0, 1, 0.3f);
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    if (anctrl_isAt(anim_ctrl, 0.0625f))
+        func_8009514C(player);
+    if (anctrl_isAt(anim_ctrl, 0.18f))
+        func_8009DF18(player, 0x3EB, 1.0f, 0x4650);
+    if (anctrl_isAt(anim_ctrl, 0.8421f)) {
+        func_8009518C(player, 0, 0.3f);
+        func_8009518C(player, 1, 0.3f);
     }
-    if (anctrl_isAt(local_0, 0.84f))
-        func_800A05DC(param_0);
+    // Warp back to the stored return map.
+    if (anctrl_isAt(anim_ctrl, 0.84f))
+        func_800A05DC(player);
 }
 
-void bstimeout_entrypoint_2(s32 arg0)
+void bstimeout_entrypoint_2(s32 player)
 {
     func_800951B4();
-    func_800A4E30(arg0);
+    func_800A4E30(player);
 }
 
-int bstimeout_entrypoint_3(s32 param_0)
+int bstimeout_entrypoint_3(s32 index)
 {
-    return D_80800330_bstimeout[param_0];
+    return D_80800330_bstimeout[index];
 }
 
-void bstimeout_entrypoint_4(s32 param_0)
+void bstimeout_entrypoint_4(s32 player)
 {
-    s32 local_0;
-    s32 local_1;
-    int new_var;
-    local_1 = baanim_getAnimCtrlPtr();
-    local_0 = local_1;
-    anctrl_reset(local_1);
-    func_800A0110(param_0, local_0);
-    anctrl_setPlaybackType(local_0, 2);
-    anctrl_start(local_0);
-    func_8009FFD8(param_0, 1, 1, 3, 7);
-    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-    func_800A4DA4(param_0, 0xA);
-    yaw_setIdeal(param_0, func_8009F308(param_0) + 35.0f);
-    _ncbadie_entrypoint_3(func_800A4CA8(param_0), 8e+01f);
+    s32 anim_ctrl;
+    s32 anim_ctrl_ptr;
+    int timer_index;
+    anim_ctrl_ptr = baanim_getAnimCtrlPtr();
+    anim_ctrl = anim_ctrl_ptr;
+    anctrl_reset(anim_ctrl_ptr);
+    func_800A0110(player, anim_ctrl);
+    anctrl_setPlaybackType(anim_ctrl, 2);
+    anctrl_start(anim_ctrl);
+    func_8009FFD8(player, 1, 1, 3, 7);
+    baphysics_set_target_horizontal_velocity(player, 0.0f);
+    func_800A4DA4(player, 0xA);
+    yaw_setIdeal(player, func_8009F308(player) + 35.0f);
+    _ncbadie_entrypoint_3(func_800A4CA8(player), 8e+01f);
     func_800FC6B0(0x17);
-    func_8008E944(param_0);
-    new_var = 0;
-    _batimer_set(param_0, new_var, 0x4039999A);
+    func_8008E944(player);
+    // Matching: the timer index goes through a temporary.
+    timer_index = 0;
+    _batimer_set(player, timer_index, 0x4039999A);
 }
 
-s32 bstimeout_entrypoint_5(Actor *this)
+s32 bstimeout_entrypoint_5(Actor *player)
 {
-    if (_batimer_decrement(this, 0)) {
-        func_800A05DC(this);
+    if (_batimer_decrement(player, 0)) {
+        func_800A05DC(player);
     }
 }
 
-s32 bstimeout_entrypoint_6(Actor *this)
+s32 bstimeout_entrypoint_6(Actor *player)
 {
-    func_800A0CF4(this, 0);
-    func_800A4E30(this);
+    func_800A0CF4(player, 0);
+    func_800A4E30(player);
     func_800FC7C4();
 }
 
-int bstimeout_entrypoint_7(s32 param_0)
+int bstimeout_entrypoint_7(s32 index)
 {
-    return D_80800340_bstimeout[param_0];
+    return D_80800340_bstimeout[index];
 }
 
+// TU-NOTE: the overlay .data is defined here in C. The tables hold pointers to functions of this
+// file; IDO's assembler schedules some of them differently unless they are in the same unit.
+// Values are taken from the ROM.
 extern void _bstimeout_entrypoint_2();
 extern void _bstimeout_entrypoint_0();
 extern void _bstimeout_entrypoint_1();

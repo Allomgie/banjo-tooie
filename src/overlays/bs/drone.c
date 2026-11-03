@@ -1,8 +1,9 @@
 #include "common.h"
 
+// Drone mode table entry: mode id and the enter/update/exit/interrupt callbacks.
 typedef struct {
     u8 id;
-    u8 pad1[3];
+    u8 pad_1[3];
     void *fn[4];
 } DroneEnt;
 extern DroneEnt D_80800180_bsdrone[];
@@ -13,44 +14,49 @@ extern void (*D_80800188_bsdrone[][5])(s32);
 extern void (*D_8080018C_bsdrone[][5])(s32);
 extern s32 D_80800190_bsdrone;
 
+// Returns the table index of the current drone mode, 0 if it is not listed.
 s32 func_80800000_bsdrone()
 {
-    s32 local_0 = _badrone_entrypoint_3();
+    s32 mode = _badrone_entrypoint_3();
     s32 i;
     for (i = 0; D_80800180_bsdrone[i].id != 0; i++) {
-        if (local_0 == D_80800180_bsdrone[i].id) {
+        if (mode == D_80800180_bsdrone[i].id) {
             return i;
         }
     }
     return 0;
 }
 
-void bsdrone_entrypoint_0(s32 param_0)
+void bsdrone_entrypoint_0(s32 player)
 {
-    _badrone_entrypoint_4(param_0);
-    D_80800184_bsdrone[func_80800000_bsdrone(param_0)][0](param_0);
+    _badrone_entrypoint_4(player);
+    D_80800184_bsdrone[func_80800000_bsdrone(player)][0](player);
 }
 
-void bsdrone_entrypoint_1(s32 param_0)
+void bsdrone_entrypoint_1(s32 player)
 {
-    D_80800188_bsdrone[func_80800000_bsdrone()][0](param_0);
+    D_80800188_bsdrone[func_80800000_bsdrone()][0](player);
 }
 
-void bsdrone_entrypoint_2(s32 param_0)
+void bsdrone_entrypoint_2(s32 player)
 {
-    D_8080018C_bsdrone[func_80800000_bsdrone()][0](param_0);
+    D_8080018C_bsdrone[func_80800000_bsdrone()][0](player);
 }
 
-void bsdrone_entrypoint_3(s32 param_0)
+void bsdrone_entrypoint_3(s32 player)
 {
-    s32 (*local_0)(s32);
+    s32 (*interrupt)(s32);
 
-    local_0 = *(s32(**)(s32))((char *) &D_80800190_bsdrone + func_80800000_bsdrone() * 0x14);
-    if (local_0 != NULL) {
-        local_0(param_0);
+    interrupt = *(s32(**)(s32))((char *) &D_80800190_bsdrone + func_80800000_bsdrone() * 0x14);
+    if (interrupt != NULL) {
+        interrupt(player);
     }
 }
 
+// TU-NOTE: the overlay's .data is defined here, taken from the ROM. The table points to functions
+// of other bs/drone units; IDO schedules some functions differently unless it is in this unit.
+// D_80800184/88/8C/90_bsdrone are linker aliases (undefined_syms.us.txt) for D_80800180_bsdrone
+// + 0x4/0x8/0xC/0x10.
 extern void _bsdronegoto_entrypoint_0();
 extern void _bsdronegoto_entrypoint_1();
 extern void _bsdronegoto_entrypoint_2();

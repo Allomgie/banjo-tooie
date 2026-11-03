@@ -4,14 +4,15 @@
 extern s32 D_80800470_bskazshoessuckspline[];
 extern s32 D_80800480_bskazshoessuckspline[];
 
+// Interrupt handler: catches interrupt 0x58 (wall path) and enters state 0x188.
 void bskazshoessuckspline_entrypoint_0(PlayerState *self)
 {
-    f32 sp24[3];
+    f32 unk_0[3];
 
     if ((_bashoes_entrypoint_1(self) == 4) && (func_8009E6EC(self) == 0x58)) {
         if (baflag_isTrue(self, BA_FLAG_3D) == 0) {
-            func_80099A7C(self, &sp24);
-            if (_bashoessuck_entrypoint_5(self, &sp24) != 0) {
+            func_80099A7C(self, &unk_0);
+            if (_bashoessuck_entrypoint_5(self, &unk_0) != 0) {
                 baflag_set(self, BA_FLAG_3D);
                 bs_setState(self, BS_STATE_188);
                 func_8009E830(self, 2);
@@ -57,10 +58,11 @@ void bskazshoessuckspline_entrypoint_2(PlayerState *self)
     func_8009FFD8(self, 2, 1, 9, 0x12);
 }
 
+// Walking along the wall path.
 void bskazshoessuckspline_entrypoint_3(PlayerState *self)
 {
     BanjoStateId next_state;
-    f32 sp20[3];
+    f32 unk_0[3];
 
     next_state = BS_STATE_0_INVALID;
     func_800956B8(self);
@@ -81,8 +83,8 @@ void bskazshoessuckspline_entrypoint_3(PlayerState *self)
     }
     if (_bamovespline_entrypoint_2(self) != 0) {
         if (_bashoes_entrypoint_2(self) == 2) {
-            _bashoessuck_entrypoint_1(self, &sp20);
-            next_state = _badrone_entrypoint_23(self, &sp20);
+            _bashoessuck_entrypoint_1(self, &unk_0);
+            next_state = _badrone_entrypoint_23(self, &unk_0);
         } else {
             next_state = BS_STATE_C7;
         }
@@ -90,9 +92,9 @@ void bskazshoessuckspline_entrypoint_3(PlayerState *self)
     bs_setState(self, next_state);
 }
 
-s32 bskazshoessuckspline_entrypoint_4(s32 idx)
+s32 bskazshoessuckspline_entrypoint_4(s32 index)
 {
-    return D_80800470_bskazshoessuckspline[idx];
+    return D_80800470_bskazshoessuckspline[index];
 }
 
 void bskazshoessuckspline_entrypoint_5(PlayerState *self)
@@ -104,6 +106,7 @@ void bskazshoessuckspline_entrypoint_5(PlayerState *self)
     baphysics_set_target_horizontal_velocity(self, 0);
 }
 
+// Standing still on the wall path.
 void bskazshoessuckspline_entrypoint_6(PlayerState *self)
 {
     BanjoStateId next_state;
@@ -130,11 +133,12 @@ void bskazshoessuckspline_entrypoint_7(PlayerState *self)
     _bskaz_entrypoint_2(self);
 }
 
-s32 bskazshoessuckspline_entrypoint_8(s32 idx)
+s32 bskazshoessuckspline_entrypoint_8(s32 index)
 {
-    return D_80800480_bskazshoessuckspline[idx];
+    return D_80800480_bskazshoessuckspline[index];
 }
 
+// TU-NOTE: the overlay .data tables are defined in C here; IDO schedules some functions differently otherwise. Values are from the ROM.
 s32 D_80800470_bskazshoessuckspline[4] = {
     (u32) _bskazshoessuckspline_entrypoint_1, (u32) _bskazshoessuckspline_entrypoint_2,
     (u32) _bskazshoessuckspline_entrypoint_3, (u32) _bskazshoessuckspline_entrypoint_0};

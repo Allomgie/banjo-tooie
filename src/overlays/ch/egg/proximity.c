@@ -6,30 +6,31 @@ extern f32 func_80013B7C(f32, f32);
 extern void _sueggmove_entrypoint_5(Actor *, s32);
 extern void _sueggmove_entrypoint_6(Actor *, f32, f32);
 extern void _suegg_entrypoint_1(Actor *, f32);
+// Proximity egg (mine): lands, arms, explodes when a player comes near.
 typedef struct {
     u8 pad_0[0x38];
     u32 pad_1 : 8;
-    u32 local_0 : 1;
+    u32 triggered : 1;
     u32 pad_2 : 23;
 } EggProximityState;
 typedef struct {
     u8 pad_0[0xA4];
-    s32 local_0;
+    s32 flag;
 } EggProximityExplosion;
 extern void *func_80100094(Actor *, s32);
 typedef struct {
     u8 unused[0x78];
-    u16 unusedMode : 14;
+    u16 unused_mode : 14;
     u16 mode : 2;
 } ProximityRenderMode;
 extern u8 func_800D9078();
 typedef struct {
     u8 pad_0[0x40];
-    s32 local_0[8];
-    s32 local_1[8];
-    f32 local_2[8];
+    s32 state[8];
+    s32 prev_state[8];
+    f32 rumble_timer[8];
     u8 pad_1[4];
-    s32 local_3;
+    s32 flag;
 } EggPlayerTimers1559;
 extern int func_800F5898(void);
 extern void *func_800F53D0(s32);
@@ -47,8 +48,8 @@ extern void _fxegg_entrypoint_5(f32 *, f32 *, f32);
 typedef struct {
     u8 pad_0[0x38];
     u32 pad_1 : 8;
-    u32 local_0 : 1;
-    u32 local_1 : 1;
+    u32 triggered : 1;
+    u32 unk_39_40 : 1;
     u32 pad_2 : 22;
 } ProximityFlags1834;
 extern void _cheggproximity_entrypoint_2(void);
@@ -57,10 +58,10 @@ extern void func_80101FDC();
 extern s32 D_80800D28_cheggproximity[];
 typedef struct {
     u8 pad_0[0x40];
-    s32 local_0[8];
-    s32 local_1[8];
+    s32 state[8];
+    s32 prev_state[8];
     u8 pad_1[0x28];
-    s32 local_2;
+    s32 dialog;
 } ProximityEggPayload921;
 extern s32 func_800F6438(s32);
 extern s32 func_800F6CC8(s32);
@@ -77,7 +78,7 @@ typedef struct {
 } EggProx;
 typedef struct {
     u8 pad[0x3A];
-    s16 h3A;
+    s16 owner;
 } EggProxLocal;
 void func_80800AFC_cheggproximity();
 s32 func_80800BF4_cheggproximity();
@@ -90,35 +91,36 @@ int *cheggproximity_entrypoint_0()
     return &D_80800CE0_cheggproximity;
 }
 
-Actor *cheggproximity_entrypoint_1(s32 param_0, void *param_1, f32 *param_2, s32 param_3)
+Actor *cheggproximity_entrypoint_1(s32 param_0, void *param_1, f32 *velocity, s32 param_3)
 {
-    Actor *local_0;
+    Actor *egg;
     _sueggmove_entrypoint_10(param_0, param_1);
-    local_0 = _suegg_entrypoint_11(0x160, param_1, param_3);
-    local_0->scale = 0.25f;
-    local_0->rotation[1] = func_80013B7C(param_2[0], param_2[2]);
-    _sueggmove_entrypoint_5(local_0, 0);
-    _sueggmove_entrypoint_6(local_0, 0.0f, -22000.0f);
-    _sueggmove_entrypoint_7(local_0, param_2);
-    _suegg_entrypoint_1(local_0, 30.0f);
-    return local_0;
+    egg = _suegg_entrypoint_11(0x160, param_1, param_3);
+    egg->scale = 0.25f;
+    egg->rotation[1] = func_80013B7C(velocity[0], velocity[2]);
+    _sueggmove_entrypoint_5(egg, 0);
+    _sueggmove_entrypoint_6(egg, 0.0f, -22000.0f);
+    _sueggmove_entrypoint_7(egg, velocity);
+    _suegg_entrypoint_1(egg, 30.0f);
+    return egg;
 }
 
-s32 func_808000A8_cheggproximity(Actor *param_0, s32 param_1, s32 param_2)
+// Message handler: 0x4F removes, 0x40 explodes, 0x45/0x78 set the flag.
+s32 func_808000A8_cheggproximity(Actor *actor, s32 msg, s32 param_2)
 {
-    EggProximityState *local_0;
-    local_0 = func_80100094(param_0, 0);
-    switch (param_1) {
+    EggProximityState *base;
+    base = func_80100094(actor, 0);
+    switch (msg) {
         case 0x4F:
-            func_800FFAB0(param_0);
+            func_800FFAB0(actor);
             return 1;
         case 0x45:
         case 0x78:
-            ((EggProximityExplosion *) func_80100094(param_0, 1))->local_0 = 1;
+            ((EggProximityExplosion *) func_80100094(actor, 1))->flag = 1;
             break;
         case 0x40:
-            func_80800718_cheggproximity(param_0, 6);
-            local_0->local_0 = 1;
+            func_80800718_cheggproximity(actor, 6);
+            base->triggered = 1;
             break;
         default:
             return 0;
@@ -126,47 +128,50 @@ s32 func_808000A8_cheggproximity(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800164_cheggproximity(Actor *param_0)
+// Draw; uses render mode 1 while the alpha is not 0xFF.
+void func_80800164_cheggproximity(Actor *actor)
 {
-    u32 local_0 = ((ProximityRenderMode *) param_0)->mode;
+    u32 saved_mode = ((ProximityRenderMode *) actor)->mode;
 
-    if (*(u8 *) ((u8 *) param_0 + 0x9B) != 0xFF) {
-        ((ProximityRenderMode *) param_0)->mode = 1;
+    if (*(u8 *) ((u8 *) actor + 0x9B) != 0xFF) {
+        ((ProximityRenderMode *) actor)->mode = 1;
     }
-    _subaddiedraw25d_entrypoint_1(param_0);
-    ((ProximityRenderMode *) param_0)->mode = local_0;
+    _subaddiedraw25d_entrypoint_1(actor);
+    ((ProximityRenderMode *) actor)->mode = saved_mode;
 }
 
-void func_808001CC_cheggproximity(param_0) Actor *param_0;
+// Emits egg particles on a countdown timer.
+void func_808001CC_cheggproximity(actor) Actor *actor;
 {
-    u8 *local_2;
-    f32 local_3;
-    f32 local_0[3];
-    f32 local_1[3];
+    u8 *base;
+    f32 interval;
+    f32 pos[3];
+    f32 unk_0[3];
 
-    local_2 = func_80100094(param_0, 0);
-    *(f32 *) (local_2 + 0x28) -= func_800D8FF8();
-    local_3 = func_800F10B4(*(f32 *) (local_2 + 0x30), 0, 2.0f, 0.0333f, 0.1f);
-    _suegg_entrypoint_20(param_0, local_1);
-    while (0.0f >= *(f32 *) (local_2 + 0x28)) {
-        *(f32 *) (local_2 + 0x28) += local_3;
-        func_800EE7F8(local_0, param_0->position);
-        _fxegg_entrypoint_5(param_0->position, local_1, param_0->scale);
+    base = func_80100094(actor, 0);
+    *(f32 *) (base + 0x28) -= func_800D8FF8();
+    interval = func_800F10B4(*(f32 *) (base + 0x30), 0, 2.0f, 0.0333f, 0.1f);
+    _suegg_entrypoint_20(actor, unk_0);
+    while (0.0f >= *(f32 *) (base + 0x28)) {
+        *(f32 *) (base + 0x28) += interval;
+        func_800EE7F8(pos, actor->position);
+        _fxegg_entrypoint_5(actor->position, unk_0, actor->scale);
     }
 }
 
+// Deferred explosion: spawns the blast through cheggsplode.
 void cheggproximity_entrypoint_2(u8 *param_0)
 {
-    s32 local_0;
-    s32 local_2;
-    s32 local_1;
+    s32 egg_ref;
+    s32 egg;
+    s32 owner;
 
-    local_2 = func_80106790();
-    local_0 = local_2;
-    local_1 = (s32) *(s16 *) ((s8 *) func_80100094(local_2, 0) + 0x3A);
-    _cheggsplode_entrypoint_1(&local_0, local_1,
+    egg = func_80106790();
+    egg_ref = egg;
+    owner = (s32) *(s16 *) ((s8 *) func_80100094(egg, 0) + 0x3A);
+    _cheggsplode_entrypoint_1(&egg_ref, owner,
                               _gcegg_entrypoint_0((u32) *(u32 *) ((s8 *) param_0 + 0x24) >> 0x16));
-    _suegg_entrypoint_4(local_0, 0);
+    _suegg_entrypoint_4(egg_ref, 0);
 }
 
 void func_808006A4_cheggproximity();
@@ -179,188 +184,194 @@ void func_80800588_cheggproximity();
 
 void func_80800510_cheggproximity();
 
-void func_80800330_cheggproximity(Actor *param_0)
+// Update: dispatches on the current state (unk70_10).
+void func_80800330_cheggproximity(Actor *actor)
 {
-    u8 *local_0 = func_80100094(param_0, 0);
-    u8 *local_1;
+    u8 *base = func_80100094(actor, 0);
+    u8 *prox;
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            if (!_suegg_entrypoint_8(param_0))
-                func_8080048C_cheggproximity(param_0, local_0);
+            if (!_suegg_entrypoint_8(actor))
+                func_8080048C_cheggproximity(actor, base);
             break;
         case 2:
-            if (!_suegg_entrypoint_8(param_0))
-                func_80800510_cheggproximity(param_0, local_0);
+            if (!_suegg_entrypoint_8(actor))
+                func_80800510_cheggproximity(actor, base);
             break;
         case 3:
-            func_80800588_cheggproximity(param_0, (Actor *) local_0);
+            func_80800588_cheggproximity(actor, (Actor *) base);
             break;
         case 4:
-            func_808005EC_cheggproximity(param_0, (Actor *) local_0);
+            func_808005EC_cheggproximity(actor, (Actor *) base);
             break;
         case 5:
-            func_80800650_cheggproximity(param_0, local_0);
+            func_80800650_cheggproximity(actor, base);
             break;
         case 6:
-            func_808006A4_cheggproximity(param_0, local_0);
+            func_808006A4_cheggproximity(actor, base);
             break;
     }
-    if (((ProximityFlags1834 *) local_0)->local_0 && !((ProximityFlags1834 *) local_0)->local_1) {
-        local_1 = func_80100094(param_0, 1);
-        if (*(s32 *) (local_1 + 0xA8))
-            func_80101180(0x2C4, 0x74, param_0->unk0);
-        if (param_0->unk70_10 == 6)
-            _chbaddiesetup_entrypoint_1(_cheggproximity_entrypoint_2, param_0->unk0);
+    if (((ProximityFlags1834 *) base)->triggered && !((ProximityFlags1834 *) base)->unk_39_40) {
+        prox = func_80100094(actor, 1);
+        if (*(s32 *) (prox + 0xA8))
+            func_80101180(0x2C4, 0x74, actor->unk0);
+        if (actor->unk70_10 == 6)
+            _chbaddiesetup_entrypoint_1(_cheggproximity_entrypoint_2, actor->unk0);
         else
-            func_800FFAB0(param_0);
+            func_800FFAB0(actor);
     }
 }
 
-int func_8080048C_cheggproximity(param_0, param_1)
-s32 param_0;
-f32 param_1[3];
+int func_8080048C_cheggproximity(actor, base)
+s32 actor;
+f32 base[3];
 {
-    if (func_800EEEA8(param_0 + 0x28) != 0) {
-        func_80800718_cheggproximity(param_0, 3);
+    if (func_800EEEA8(actor + 0x28) != 0) {
+        func_80800718_cheggproximity(actor, 3);
         return;
     }
-    func_808001CC_cheggproximity(param_0);
-    _suegg_entrypoint_16(param_0);
-    if (param_1[12] > 0.19999695f) {
-        func_80800718_cheggproximity(param_0, 2);
+    func_808001CC_cheggproximity(actor);
+    _suegg_entrypoint_16(actor);
+    if (base[12] > 0.19999695f) {
+        func_80800718_cheggproximity(actor, 2);
     }
 }
 
-void func_80800510_cheggproximity(f32 param_0[3], u8 *var_arg1)
+void func_80800510_cheggproximity(f32 actor[3], u8 *base)
 {
-    int new_var;
-    if (func_800EEEA8((void *) ((char *) param_0 + 0x28)) != 0) {
-        func_80800718_cheggproximity(param_0, 3);
+    int is_null;
+    if (func_800EEEA8((void *) ((char *) actor + 0x28)) != 0) {
+        func_80800718_cheggproximity(actor, 3);
         return;
     }
-    func_808001CC_cheggproximity(param_0);
-    new_var = !param_0;
-    _suegg_entrypoint_16(param_0);
-    if ((new_var && !param_0) && !param_0) {
+    func_808001CC_cheggproximity(actor);
+    // Matching: temp and empty if block are needed for the match.
+    is_null = !actor;
+    _suegg_entrypoint_16(actor);
+    if ((is_null && !actor) && !actor) {
     }
-    if (_suegg_entrypoint_14(param_0) != 0) {
-        var_arg1[0x39] |= 0x80 & 0xFFFF;
+    if (_suegg_entrypoint_14(actor) != 0) {
+        base[0x39] |= 0x80 & 0xFFFF;
     }
 }
 
-void func_80800588_cheggproximity(Actor *param_0, Actor *param_1)
+void func_80800588_cheggproximity(Actor *actor, Actor *base)
 {
-    if (*(s32 *) ((u8 *) func_80100094(param_0, 1) + 0xA4) == 0) {
-        func_80800874_cheggproximity(param_0);
-        if (!func_80800BF4_cheggproximity(param_0) &&
-            func_800D9078((f32 *) ((u8 *) param_1 + 0x30))) {
-            func_80800718_cheggproximity(param_0, 4);
+    if (*(s32 *) ((u8 *) func_80100094(actor, 1) + 0xA4) == 0) {
+        func_80800874_cheggproximity(actor);
+        if (!func_80800BF4_cheggproximity(actor) &&
+            func_800D9078((f32 *) ((u8 *) base + 0x30))) {
+            func_80800718_cheggproximity(actor, 4);
         }
     }
 }
 
-void func_808005EC_cheggproximity(Actor *param_0, Actor *param_1)
+void func_808005EC_cheggproximity(Actor *actor, Actor *base)
 {
-    if (*(s32 *) ((u8 *) func_80100094(param_0, 1) + 0xA4) == 0) {
-        func_80800874_cheggproximity(param_0);
-        if (!func_80800BF4_cheggproximity(param_0) &&
-            func_800D9078((f32 *) ((u8 *) param_1 + 0x30))) {
-            func_80800718_cheggproximity(param_0, 5);
+    if (*(s32 *) ((u8 *) func_80100094(actor, 1) + 0xA4) == 0) {
+        func_80800874_cheggproximity(actor);
+        if (!func_80800BF4_cheggproximity(actor) &&
+            func_800D9078((f32 *) ((u8 *) base + 0x30))) {
+            func_80800718_cheggproximity(actor, 5);
         }
     }
 }
 
-void func_80800650_cheggproximity(param_0, param_1) void *param_0;
+// Fades the actor out (alpha -8 per frame), then enters state 6.
+void func_80800650_cheggproximity(actor, param_1) void *actor;
 u8 param_1;
 {
-    void *new_var;
-    char *new_var2;
-    new_var = param_0;
+    // Matching: the temporaries are needed for the match.
+    void *actor_alias;
+    char *bytes;
+    actor_alias = actor;
     func_80800874_cheggproximity();
-    func_80800AFC_cheggproximity(new_var);
-    new_var2 = (char *) param_0;
-    if ((s32) *(u8 *) (new_var2 + 0x9B) < 0x79) {
-        func_80800718_cheggproximity(new_var, 6);
+    func_80800AFC_cheggproximity(actor_alias);
+    bytes = (char *) actor;
+    if ((s32) *(u8 *) (bytes + 0x9B) < 0x79) {
+        func_80800718_cheggproximity(actor_alias, 6);
         return;
     }
-    *(u8 *) ((char *) new_var + 0x9B) = (u8) (*(u8 *) (new_var2 + 0x9B) - 8);
+    *(u8 *) ((char *) actor_alias + 0x9B) = (u8) (*(u8 *) (bytes + 0x9B) - 8);
 }
 
-void func_808006A4_cheggproximity(Actor *param_0, EggProximityState *param_1)
+void func_808006A4_cheggproximity(Actor *actor, EggProximityState *base)
 {
-    u8 *local_0;
-    s32 local_1;
+    u8 *prox;
+    s32 player;
 
-    local_0 = func_80100094(param_0, 1);
-    local_1 = *(s32 *) (local_0 + 0xA0);
-    func_80800874_cheggproximity(param_0);
-    func_80800AFC_cheggproximity(param_0);
-    if (((s32 *) (local_0 + 0x40))[local_1] == 1) {
-        param_1->local_0 = 1;
+    prox = func_80100094(actor, 1);
+    player = *(s32 *) (prox + 0xA0);
+    func_80800874_cheggproximity(actor);
+    func_80800AFC_cheggproximity(actor);
+    if (((s32 *) (prox + 0x40))[player] == 1) {
+        base->triggered = 1;
     }
 }
 
-void func_80800718_cheggproximity(param_0, param_1) Actor *param_0;
-s32 param_1;
+// Enters a new state and runs its setup.
+void func_80800718_cheggproximity(actor, new_state) Actor *actor;
+s32 new_state;
 {
-    u8 *local_0 = func_80100094(param_0, 0);
-    ProximityEggPayload921 *local_1 = func_80100094(param_0, 1);
-    s32 local_2;
+    u8 *base = func_80100094(actor, 0);
+    ProximityEggPayload921 *prox = func_80100094(actor, 1);
+    s32 i;
 
-    func_80101FDC(param_0, param_1);
-    switch (param_1) {
+    func_80101FDC(actor, new_state);
+    switch (new_state) {
         case 1:
-            local_1->local_2 = 0;
+            prox->dialog = 0;
             break;
         case 2:
-            _sueggmove_entrypoint_6(param_0, -3000.0f, -22000.0f);
+            _sueggmove_entrypoint_6(actor, -3000.0f, -22000.0f);
             break;
         case 3:
-            func_8010A590(param_0);
-            local_1->local_2 = 1;
-            _suegg_entrypoint_23(param_0);
-            *(f32 *) (local_0 + 0x30) = 1.0f;
-            func_80101180(0x2C4, 0x73, param_0->unk0);
+            func_8010A590(actor);
+            prox->dialog = 1;
+            _suegg_entrypoint_23(actor);
+            *(f32 *) (base + 0x30) = 1.0f;
+            func_80101180(0x2C4, 0x73, actor->unk0);
             break;
         case 4:
-            *(f32 *) (local_0 + 0x30) = 3.5f;
+            *(f32 *) (base + 0x30) = 3.5f;
             break;
         case 5:
-            for (local_2 = 0; local_2 < 8; local_2++) {
-                local_1->local_1[local_2] = -1;
-                local_1->local_0[local_2] = -1;
+            for (i = 0; i < 8; i++) {
+                prox->prev_state[i] = -1;
+                prox->state[i] = -1;
             }
-            func_8010D930(4, *(u32 *) ((u8 *) param_0 + 0x70) & 1, param_0->position,
+            func_8010D930(4, *(u32 *) ((u8 *) actor + 0x70) & 1, actor->position,
                           &D_80800D28_cheggproximity);
         case 6:
             break;
     }
 }
 
-void func_80800874_cheggproximity(param_0) Actor *param_0;
+// Updates each player's proximity zone (-1 out of range, 0..2 by distance) and picks the closest.
+void func_80800874_cheggproximity(actor) Actor *actor;
 {
-    EggProxLocal *local;
-    EggProx *d;
+    EggProxLocal *base;
+    EggProx *prox;
     s32 best;
     s32 i;
     s32 state;
-    f32 vec[3];
+    f32 player_pos[3];
     f32 dist;
     f32 dy;
 
-    local = func_80100094(param_0, 0);
-    d = func_80100094(param_0, 1);
+    base = func_80100094(actor, 0);
+    prox = func_80100094(actor, 1);
     best = -1;
     for (i = 0; i < func_800F5898(); i++) {
         state = -1;
-        if ((param_0->unk70_10 != 3 || i != local->h3A) && d->flag == 0) {
+        if ((actor->unk70_10 != 3 || i != base->owner) && prox->flag == 0) {
             if (func_800F6438(i) && !func_800F6CC8(i)) {
-                func_800F5A00(i, vec);
-                dist = func_800EFC7C(vec, param_0->position);
-                dy = vec[1] - param_0->position[1];
-                d->dist[i] = dist;
-                d->dy[i] = dy;
+                func_800F5A00(i, player_pos);
+                dist = func_800EFC7C(player_pos, actor->position);
+                dy = player_pos[1] - actor->position[1];
+                prox->dist[i] = dist;
+                prox->dy[i] = dy;
                 if (!(160000.0f < dist)) {
                     if (90000.0f < dist) {
                         state = 0;
@@ -388,59 +399,63 @@ void func_80800874_cheggproximity(param_0) Actor *param_0;
                 if (state != -1) {
                     if (best < 0) {
                         best = i;
-                    } else if (d->dist[i] < d->dist[best]) {
+                    } else if (prox->dist[i] < prox->dist[best]) {
                         best = i;
                     }
                 }
             }
-            d->prev[i] = d->state[i];
-            d->state[i] = state;
+            prox->prev[i] = prox->state[i];
+            prox->state[i] = state;
         }
     }
-    d->best = best;
+    prox->best = best;
 }
 
-void func_80800AFC_cheggproximity(param_0) Actor *param_0;
+// Rumbles in-range players, on entry and then periodically.
+void func_80800AFC_cheggproximity(actor) Actor *actor;
 {
-    EggPlayerTimers1559 *local_0;
-    s32 local_1;
+    EggPlayerTimers1559 *prox;
+    s32 i;
 
-    local_0 = func_80100094(param_0, 1);
-    if (local_0->local_3 == 0) {
-        for (local_1 = 0; local_1 < func_800F5898(); local_1++) {
-            if (local_0->local_0[local_1] != -1) {
-                if (local_0->local_1[local_1] == -1) {
-                    local_0->local_2[local_1] = 1.0f;
-                    _bamotor_entrypoint_0(func_800F53D0(local_1), 1.0f, 0.25f);
-                } else if (func_800D9078(&local_0->local_2[local_1])) {
-                    local_0->local_2[local_1] = 1.0f;
-                    _bamotor_entrypoint_0(func_800F53D0(local_1), 1.0f, 0.25f);
+    prox = func_80100094(actor, 1);
+    if (prox->flag == 0) {
+        for (i = 0; i < func_800F5898(); i++) {
+            if (prox->state[i] != -1) {
+                if (prox->prev_state[i] == -1) {
+                    prox->rumble_timer[i] = 1.0f;
+                    _bamotor_entrypoint_0(func_800F53D0(i), 1.0f, 0.25f);
+                } else if (func_800D9078(&prox->rumble_timer[i])) {
+                    prox->rumble_timer[i] = 1.0f;
+                    _bamotor_entrypoint_0(func_800F53D0(i), 1.0f, 0.25f);
                 }
             }
         }
     }
 }
 
-s32 func_80800BF4_cheggproximity(param_0)
-Actor *param_0;
+s32 func_80800BF4_cheggproximity(actor)
+Actor *actor;
 {
-    ProximityEggState *local_0;
-    s32 local_1;
+    ProximityEggState *prox;
+    s32 player;
 
-    local_0 = func_80100094(param_0, 1);
-    local_1 = local_0->player;
-    if (local_1 >= 0 && local_0->states[local_1] == 2) {
-        if (((ProximityEggState *) func_80100094(param_0, 1))->dialog) {
-            func_80101180(0x2C4, 0x74, param_0->unk0, local_1);
+    prox = func_80100094(actor, 1);
+    player = prox->player;
+    if (player >= 0 && prox->states[player] == 2) {
+        if (((ProximityEggState *) func_80100094(actor, 1))->dialog) {
+            func_80101180(0x2C4, 0x74, actor->unk0, player);
         }
-        func_800F7664(local_1, 0x45, 1);
-        _sueggmisc_entrypoint_2(param_0->position, 6);
-        func_800FFAB0(param_0);
+        func_800F7664(player, 0x45, 1);
+        _sueggmisc_entrypoint_2(actor->position, 6);
+        func_800FFAB0(actor);
         return 1;
     }
     return 0;
 }
 
+// TU-NOTE: the overlay .data (formerly asm/data/overlays/ch/egg/proximity.data.s) is defined here in
+// C; IDO schedules some functions differently unless the tables are in the same unit. Values are
+// from the ROM. Externs adjusted: D_80800CE0_cheggproximity -> int[], D_80800D28_cheggproximity -> s32[].
 extern void func_80105834();
 extern void _suegg_entrypoint_2();
 extern void func_80108ED0();

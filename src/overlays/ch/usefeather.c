@@ -16,67 +16,70 @@ extern f32 func_800F5F24(s32);
 extern Actor *func_80108474(u32, f32 *, s32);
 extern void func_80102FDC(Actor *, f32);
 
-void func_80800000_chusefeather(Actor *param_0)
+// Per-frame update of the feather actor: fall, emit sparkles, fade out and despawn.
+void func_80800000_chusefeather(Actor *actor)
 {
-    s32 local_2;
-    s32 local_3;
-    f32 local_0[3];
-    s32 local_4;
+    s32 i;
+    s32 emitter;
+    f32 spark_pos[3];
+    s32 alpha;
 
-    func_800EF1B8(param_0->position, param_0->rotation[1], ((f32 *) param_0->actorData)[3]);
-    if (((f32 *) param_0->actorData)[1] > -100.0f)
-        ((f32 *) param_0->actorData)[1] -= 3.5f;
-    if (param_0->position[1] > -16000.0f)
-        param_0->position[1] += ((f32 *) param_0->actorData)[1];
-    if (param_0->unk58 > 0.5f) {
-        for (local_2 = 0; local_2 < 3; local_2++) {
-            local_0[local_2] = param_0->position[local_2] + func_800DC0C0() * 2.0f * 25.0f -
-                               (local_2 == 1 ? 0 : 25);
+    func_800EF1B8(actor->position, actor->rotation[1], ((f32 *) actor->actorData)[3]);
+    if (((f32 *) actor->actorData)[1] > -100.0f)
+        ((f32 *) actor->actorData)[1] -= 3.5f;
+    if (actor->position[1] > -16000.0f)
+        actor->position[1] += ((f32 *) actor->actorData)[1];
+    if (actor->unk58 > 0.5f) {
+        for (i = 0; i < 3; i++) {
+            spark_pos[i] = actor->position[i] + func_800DC0C0() * 2.0f * 25.0f -
+                           (i == 1 ? 0 : 25);
         }
-        local_3 = func_800BABB8(0, local_0, NULL, 1.0f, D_80800340_chusefeather);
-        func_800BA3FC(local_3, param_0->unk6C_9 == 0x26A ? 0x9E4 : 0x9E2);
-        func_800BA75C(local_3, local_0);
-        func_800BABA0(local_3, 0.25f);
+        emitter = func_800BABB8(0, spark_pos, NULL, 1.0f, D_80800340_chusefeather);
+        func_800BA3FC(emitter, actor->unk6C_9 == 0x26A ? 0x9E4 : 0x9E2);
+        func_800BA75C(emitter, spark_pos);
+        func_800BABA0(emitter, 0.25f);
     }
-    param_0->unk58 -= func_800D8FF8();
-    if (param_0->unk58 < 0)
-        func_800FFAB0(param_0);
+    actor->unk58 -= func_800D8FF8();
+    if (actor->unk58 < 0)
+        func_800FFAB0(actor);
     else {
-        local_4 = func_800F10B4(param_0->unk58, 0.0f, 0.3f, 0.0f, 255.0f);
-        _subaddiefade_entrypoint_1(param_0, local_4);
-        if (local_4 == 0)
-            func_800FFAB0(param_0);
+        alpha = func_800F10B4(actor->unk58, 0.0f, 0.3f, 0.0f, 255.0f);
+        _subaddiefade_entrypoint_1(actor, alpha);
+        if (alpha == 0)
+            func_800FFAB0(actor);
     }
 }
 
-void chusefeather_entrypoint_0(s32 param_0, s32 param_1)
+// Spawns a feather actor (actor_id) beside the player.
+void chusefeather_entrypoint_0(s32 player, s32 actor_id)
 {
-    Actor *local_0;
-    f32 local_1[3];
-    s32 local_2;
-    f32 local_3;
+    Actor *actor;
+    f32 pos[3];
+    s32 side_offset;
+    f32 yaw;
 
-    func_800F5A00(param_0, local_1);
-    local_3 = func_800F5F24(param_0);
-    local_2 = func_800DC0C0() > 0.5f ? 30 : -30;
-    local_0 = func_80108474(param_1, local_1, (s32) ((f32) local_2 + local_3));
-    func_80102FDC(local_0, 0.45f);
-    *(f32 *) &local_0->actorData[3] = 22.0f;
-    *(f32 *) &local_0->actorData[1] = 48.0f;
-    local_0->unk58 = 1.2f;
+    func_800F5A00(player, pos);
+    yaw = func_800F5F24(player);
+    side_offset = func_800DC0C0() > 0.5f ? 30 : -30;
+    actor = func_80108474(actor_id, pos, (s32) ((f32) side_offset + yaw));
+    func_80102FDC(actor, 0.45f);
+    *(f32 *) &actor->actorData[3] = 22.0f;
+    *(f32 *) &actor->actorData[1] = 48.0f;
+    actor->unk58 = 1.2f;
 }
 
-void chusefeather_entrypoint_1(s32 param_0, s32 param_1)
+// kind 0 = red feather (0x26A), otherwise gold (0x26B); not spawned in multiplayer.
+void chusefeather_entrypoint_1(s32 player, s32 kind)
 {
-    s32 local_0;
+    s32 actor_id;
 
     if (func_800D3948() == 0) {
-        if (param_1 == 0) {
-            local_0 = 0x26A;
+        if (kind == 0) {
+            actor_id = 0x26A;
         } else {
-            local_0 = 0x26B;
+            actor_id = 0x26B;
         }
-        _chbaddiesetup_entrypoint_2(&_chusefeather_entrypoint_0, param_0, local_0);
+        _chbaddiesetup_entrypoint_2(&_chusefeather_entrypoint_0, player, actor_id);
     }
 }
 
@@ -90,6 +93,7 @@ int chusefeather_entrypoint_3()
     return D_808003AC_chusefeather;
 }
 
+// TU-NOTE: the overlay .data is defined here in C; values are taken from the ROM.
 extern void func_80105834();
 extern void _subaddiedraw25d_entrypoint_2();
 extern void func_80107C2C();

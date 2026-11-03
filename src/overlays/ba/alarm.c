@@ -27,48 +27,49 @@ void baalarm_new(PlayerState *self)
     self->alarm->active = 1;
 }
 
-void baalarm_entrypoint_3(PlayerState *self, f32 arg1, f32 arg2)
+// Countdown beeps: plays one when a beep time falls between the previous and current remaining time.
+void baalarm_entrypoint_3(PlayerState *self, f32 prev_time, f32 time)
 {
-    f32 f20;
-    f32 f22;
-    f32 sp64[3];
-    s32 s0;
+    f32 beep_time;
+    f32 unused;
+    f32 pos[3];
+    s32 alt;
 
     if (self->alarm->active == 0) {
         return;
     }
 
-    func_8009C128(self, sp64);
-    if (arg2 < 1.0f) {
-        if (arg1 != arg2) {
+    func_8009C128(self, pos);
+    if (time < 1.0f) {
+        if (prev_time != time) {
             func_80800294_baalarm(self->alarm->id, 2);
-            func_800C35E8(self->alarm->id, sp64);
+            func_800C35E8(self->alarm->id, pos);
             func_800C301C(self->alarm->id, 0x414);
             func_800C3058(self->alarm->id, 0x7FFF);
             func_800C3BDC(self->alarm->id);
         }
     } else {
-        f20 = 5.0f;
-        s0 = 0;
-        while (0.0f < f20) {
-            if (f20 <= arg1 && arg2 < f20) {
-                func_800C35E8(self->alarm->id, sp64);
-                func_800C301C(self->alarm->id, s0 ? 0x41C : 0x438);
+        beep_time = 5.0f;
+        alt = 0;
+        while (0.0f < beep_time) {
+            if (beep_time <= prev_time && time < beep_time) {
+                func_800C35E8(self->alarm->id, pos);
+                func_800C301C(self->alarm->id, alt ? 0x41C : 0x438);
                 func_800C3058(self->alarm->id, 0x7FFF);
                 func_80800294_baalarm(self->alarm->id, 3);
                 func_800C3BDC(self->alarm->id);
                 break;
             }
-            s0 ^= 1;
-            f20 -= func_800F10B4(f20, 0.0f, 5.0f, 0.1f, 0.25f);
+            alt ^= 1;
+            beep_time -= func_800F10B4(beep_time, 0.0f, 5.0f, 0.1f, 0.25f);
         }
     }
 }
 
-void func_80800294_baalarm(u8 id, s32 arg1)
+void func_80800294_baalarm(u8 id, s32 unk_0)
 {
-    if (func_800C39A0(id) != arg1) {
+    if (func_800C39A0(id) != unk_0) {
         func_800C3CE8(id);
-        func_800C330C(id, arg1);
+        func_800C330C(id, unk_0);
     }
 }

@@ -4,6 +4,7 @@ typedef struct {
     u8 id;
     u8 pad[15];
 } ReactEnt;
+// Hit reaction table, 16-byte entries, zero id terminates (defined at the end of this file).
 extern ReactEnt D_808000B0_bareact[];
 
 s32 bareact_entrypoint_0()
@@ -11,37 +12,43 @@ s32 bareact_entrypoint_0()
     return 0x4;
 }
 
-void bareact_entrypoint_1(u8 *param_0, s32 param_1)
+// Selects the table entry for hit_kind and stores it in the player's reaction slot (+0xEC).
+void bareact_entrypoint_1(u8 *player, s32 hit_kind)
 {
     s32 i;
     for (i = 0; D_808000B0_bareact[i].id != 0; i++) {
-        if (param_1 == D_808000B0_bareact[i].id) {
-            **(ReactEnt ***) (param_0 + 0xEC) = &D_808000B0_bareact[i];
+        if (hit_kind == D_808000B0_bareact[i].id) {
+            **(ReactEnt ***) (player + 0xEC) = &D_808000B0_bareact[i];
             return;
         }
     }
 }
 
-u8 bareact_entrypoint_2(u8 *param_0)
+// Reaction class of the selected entry.
+u8 bareact_entrypoint_2(u8 *player)
 {
-    return *(u8 *) ((s8 *) **(u8 ***) ((s8 *) param_0 + 0xEC) + 1);
+    return *(u8 *) ((s8 *) **(u8 ***) ((s8 *) player + 0xEC) + 1);
 }
 
-f32 bareact_entrypoint_3(Actor *param_0)
+// Vertical speed of the selected entry.
+f32 bareact_entrypoint_3(Actor *player)
 {
-    return ((f32 *) *(s32 *) *(s32 **) ((char *) param_0 + 0xEC))[1];
+    return ((f32 *) *(s32 *) *(s32 **) ((char *) player + 0xEC))[1];
 }
 
-f32 bareact_entrypoint_4(u8 *param_0)
+// Horizontal speed of the selected entry.
+f32 bareact_entrypoint_4(u8 *player)
 {
-    return *(f32 *) ((s8 *) **(u8 ***) ((s8 *) param_0 + 0xEC) + 0xC);
+    return *(f32 *) ((s8 *) **(u8 ***) ((s8 *) player + 0xEC) + 0xC);
 }
 
-f32 bareact_entrypoint_5(u8 *param_0)
+// Gravity of the selected entry.
+f32 bareact_entrypoint_5(u8 *player)
 {
-    return *(f32 *) ((s8 *) **(u8 ***) ((s8 *) param_0 + 0xEC) + 8);
+    return *(f32 *) ((s8 *) **(u8 ***) ((s8 *) player + 0xEC) + 8);
 }
 
+// TU-NOTE: this overlay's .data (formerly react.data.s) is defined here in C; values are from the ROM.
 ReactEnt D_808000B0_bareact[17] = {
     0x1,  0x1, 0x0, 0x0, 0x43, 0xFF, 0x0, 0x0, 0xC4, 0x96, 0x0,  0x0, 0x43, 0x48, 0x0, 0x0,
     0x2,  0x1, 0x0, 0x0, 0x44, 0x16, 0x0, 0x0, 0xC4, 0xBB, 0x80, 0x0, 0x43, 0x96, 0x0, 0x0,

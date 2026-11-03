@@ -45,256 +45,265 @@ extern void func_8009DE74(void *, s32, f32, f32);
 extern f32 func_800964DC(void *);
 extern f32 func_8009C150(void *);
 
+// Returns the dive state (0x6D or 0x30).
 int func_80800000_bsswim()
 {
-    s32 local_0;
+    s32 next_state;
     if (func_8008E23C()) {
-        local_0 = 0x6D;
+        next_state = 0x6D;
     } else {
-        local_0 = 0x30;
+        next_state = 0x30;
     }
-    return local_0 | 0;
+    // Matching: the no-op OR is needed for the match.
+    return next_state | 0;
 }
 
-void func_80800030_bsswim(PlayerState *param_0)
+// Spawns a breath bubble emitter.
+void func_80800030_bsswim(PlayerState *player)
 {
-    f32 local_1[3];
-    s32 local_0;
+    f32 pos[3];
+    s32 emitter;
 
-    if (func_80096544(param_0)) {
+    if (func_80096544(player)) {
         if (func_800DC0C0() > 0.5f) {
-            func_80092C00(param_0, local_1);
+            func_80092C00(player, pos);
         } else {
-            func_80092C24(param_0, local_1);
+            func_80092C24(player, pos);
         }
-        local_0 = func_8009FBB0(param_0, local_1, 0.0f);
-        func_800BA930(local_0, -60, -100, -60, 60, 0, 60);
-        func_800BA22C(local_0, 1);
+        emitter = func_8009FBB0(player, pos, 0.0f);
+        func_800BA930(emitter, -60, -100, -60, 60, 0, 60);
+        func_800BA22C(emitter, 1);
     }
 }
 
-void func_808000E0_bsswim(PlayerState *param_0, void *param_1)
+void func_808000E0_bsswim(PlayerState *player, void *anim_ctrl)
 {
-    s32 local_0;
-    local_0 = D_80800B90_bsswim[param_0->unk15C.word];
-    if (anctrl_getIndex(param_1) != local_0) {
-        anctrl_setStart(param_1, anctrl_getAnimTimer(param_1));
-        anctrl_setIndex(param_1, local_0);
-        anctrl_start(param_1);
+    s32 anim_id;
+    anim_id = D_80800B90_bsswim[player->unk15C.word];
+    if (anctrl_getIndex(anim_ctrl) != anim_id) {
+        anctrl_setStart(anim_ctrl, anctrl_getAnimTimer(anim_ctrl));
+        anctrl_setIndex(anim_ctrl, anim_id);
+        anctrl_start(anim_ctrl);
     }
-    param_0->unk15C.word++;
-    if ((u32) param_0->unk15C.word >= 10)
-        param_0->unk15C.word = 0;
+    player->unk15C.word++;
+    if ((u32) player->unk15C.word >= 10)
+        player->unk15C.word = 0;
 }
 
-void func_80800178_bsswim(PlayerState *param_0)
+void func_80800178_bsswim(PlayerState *player)
 {
-    f32 local_0;
+    f32 stick_pos;
 
-    local_0 = bastick_getZonePosition(param_0);
-    if (bastick_getZone(param_0) == 0) {
-        baphysics_set_target_horizontal_velocity(param_0, 0.0f);
+    stick_pos = bastick_getZonePosition(player);
+    if (bastick_getZone(player) == 0) {
+        baphysics_set_target_horizontal_velocity(player, 0.0f);
     } else {
-        baphysics_set_target_horizontal_velocity(param_0, func_800F1214(local_0, 30.0f, 300.0f));
+        baphysics_set_target_horizontal_velocity(player, func_800F1214(stick_pos, 30.0f, 300.0f));
     }
 }
 
-void func_808001DC_bsswim(param_0) s32 param_0;
+// Enter water: set gravity, terminal velocity, stick zones and collision mode.
+void func_808001DC_bsswim(player) s32 player;
 {
-    if (func_8009E6C4(param_0, 1) == 0) {
-        baphysics_set_gravity(param_0, 0x42C80000);
-        baphysics_set_terminal_velocity(param_0, 0x4305547B);
-        bastick_setZoneMax(param_0, 0, 0x3CF5C28F);
-        bastick_setZoneMax(param_0, 1, 0x3F800000);
-        func_800961AC(param_0, 3);
-        if (func_8008E0E8(param_0) != 0) {
-            _bapackctrl_entrypoint_5(param_0, 4);
+    if (func_8009E6C4(player, 1) == 0) {
+        baphysics_set_gravity(player, 0x42C80000);
+        baphysics_set_terminal_velocity(player, 0x4305547B);
+        bastick_setZoneMax(player, 0, 0x3CF5C28F);
+        bastick_setZoneMax(player, 1, 0x3F800000);
+        func_800961AC(player, 3);
+        if (func_8008E0E8(player) != 0) {
+            _bapackctrl_entrypoint_5(player, 4);
         }
     }
 }
 
-int func_80800270_bsswim(param_0)
-s32 param_0;
+// Leave water: undo the water physics and stick zones.
+int func_80800270_bsswim(player)
+s32 player;
 {
-    if (!func_8009E69C(param_0, 1)) {
-        baphysics_reset_terminal_velocity(param_0);
-        baphysics_reset_gravity(param_0);
-        bastick_resetZones(param_0);
-        func_800961AC(param_0, 1);
-        if (func_8008E0E8(param_0)) {
-            _bapackctrl_entrypoint_5(param_0, 3);
+    if (!func_8009E69C(player, 1)) {
+        baphysics_reset_terminal_velocity(player);
+        baphysics_reset_gravity(player);
+        bastick_resetZones(player);
+        func_800961AC(player, 1);
+        if (func_8008E0E8(player)) {
+            _bapackctrl_entrypoint_5(player, 3);
         }
     }
 }
 
-void func_808002E0_bsswim(PlayerState *param_0)
+// Tread water: enter.
+void func_808002E0_bsswim(PlayerState *player)
 {
-    s32 local_0;
-    s32 local_3;
-    f32 local_1;
-    void *local_2;
+    s32 last_state;
+    s32 prev_state;
+    f32 blend;
+    void *anim_ctrl;
 
-    local_2 = baanim_getAnimCtrlPtr(param_0);
-    func_808001DC_bsswim(param_0);
-    local_3 = bs_getPreviousState(param_0);
-    if (local_3 == 0x4C)
-        local_1 = 0.8f;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    func_808001DC_bsswim(player);
+    prev_state = bs_getPreviousState(player);
+    if (prev_state == 0x4C)
+        blend = 0.8f;
     else
-        local_1 = 0.5f;
-    local_0 = local_3;
-    if (func_8009CA70(param_0, local_0, 2)) {
-        if (local_0 == 0x54) {
-            func_8009DF18(param_0, 0x461, 1.0f, 30000);
-        } else if (local_0 != 0x4C) {
-            func_8009DF18(param_0, 0x461, 1.0f,
+        blend = 0.5f;
+    last_state = prev_state;
+    if (func_8009CA70(player, last_state, 2)) {
+        if (last_state == 0x54) {
+            func_8009DF18(player, 0x461, 1.0f, 30000);
+        } else if (last_state != 0x4C) {
+            func_8009DF18(player, 0x461, 1.0f,
                           (s32) func_800F10B4(func_800CF67C(), 1.0f, 0.0f, 8000.0f, 30000.0f));
         }
-        bainput_setDiveCooldown(param_0, 4, 0.7f);
+        bainput_setDiveCooldown(player, 4, 0.7f);
     }
-    if (anctrl_getIndex(local_2) == 0x57 && local_0 != 0x4C) {
-        anctrl_setDuration(local_2, 1.2f);
+    if (anctrl_getIndex(anim_ctrl) == 0x57 && last_state != 0x4C) {
+        anctrl_setDuration(anim_ctrl, 1.2f);
     } else {
-        anctrl_reset(local_2);
-        func_8008B1C8(local_2, local_1);
-        anctrl_setIndex(local_2, 0x57);
-        anctrl_setPlaybackType(local_2, 2);
-        anctrl_setStart(local_2, 0.3f);
-        anctrl_setDuration(local_2, 1.2f);
-        anctrl_start(local_2);
+        anctrl_reset(anim_ctrl);
+        func_8008B1C8(anim_ctrl, blend);
+        anctrl_setIndex(anim_ctrl, 0x57);
+        anctrl_setPlaybackType(anim_ctrl, 2);
+        anctrl_setStart(anim_ctrl, 0.3f);
+        anctrl_setDuration(anim_ctrl, 1.2f);
+        anctrl_start(anim_ctrl);
     }
-    func_8009FFD8(param_0, 1, 3, 3, 2);
-    yaw_setVelocityBounded(param_0, 500.0f, 5.0f);
-    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-    param_0->unk15C.word = 0;
-    func_800A4DA4(param_0, 8);
+    func_8009FFD8(player, 1, 3, 3, 2);
+    yaw_setVelocityBounded(player, 500.0f, 5.0f);
+    baphysics_set_target_horizontal_velocity(player, 0.0f);
+    player->unk15C.word = 0;
+    func_800A4DA4(player, 8);
 }
 
-void func_808004C4_bsswim(Actor *param_0)
+// Tread water: update (breath bubbles, dive, first person, jump out).
+void func_808004C4_bsswim(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = 0;
-    local_1 = baanim_getAnimCtrlPtr();
+    s32 next_state;
+    s32 anim_ctrl;
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr();
     if ((func_8001210C(7) == 0) && (func_800DC0C0() < 0.5f)) {
-        func_8009FC34(param_0, 1);
+        func_8009FC34(actor, 1);
     }
     if ((func_8001210C(7) == 0) && (func_800DC0C0() < 0.5f)) {
-        func_80800030_bsswim(param_0);
+        func_80800030_bsswim(actor);
     }
-    if (anctrl_isAt(local_1, 0.01f) != 0) {
-        func_8009DEC0(param_0, 0x46F, 0.85f, 1.15f, 0x3E80, 0x3E80);
+    if (anctrl_isAt(anim_ctrl, 0.01f) != 0) {
+        func_8009DEC0(actor, 0x46F, 0.85f, 1.15f, 0x3E80, 0x3E80);
     }
-    if (anctrl_isAt(local_1, 0.4348f) != 0) {
-        func_808000E0_bsswim(param_0, local_1);
+    if (anctrl_isAt(anim_ctrl, 0.4348f) != 0) {
+        func_808000E0_bsswim(actor, anim_ctrl);
     }
-    if (bastick_getZone(param_0) == 1) {
-        local_0 = 0x2E;
+    if (bastick_getZone(actor) == 1) {
+        next_state = 0x2E;
     }
-    if (player_inWater(param_0) == 0) {
-        local_0 = 1;
+    if (player_inWater(actor) == 0) {
+        next_state = 1;
     }
-    if (bainput_should_enter_first_person(param_0) != 0) {
-        local_0 = _badrone_entrypoint_24(param_0);
+    if (bainput_should_enter_first_person(actor) != 0) {
+        next_state = _badrone_entrypoint_24(actor);
     }
-    if (bainput_should_dive(param_0) != 0) {
-        local_0 = func_80800000_bsswim(param_0);
+    if (bainput_should_dive(actor) != 0) {
+        next_state = func_80800000_bsswim(actor);
     }
-    if ((func_80096500(param_0) != 0) && (bakey_pressed(param_0, 8) != 0)) {
-        local_0 = 5;
+    if ((func_80096500(actor) != 0) && (bakey_pressed(actor, 8) != 0)) {
+        next_state = 5;
     }
-    if ((baflag_isTrue(param_0, 6) != 0) || (baflag_isTrue(param_0, 0x14) != 0)) {
-        local_0 = 0xD;
+    if ((baflag_isTrue(actor, 6) != 0) || (baflag_isTrue(actor, 0x14) != 0)) {
+        next_state = 0xD;
     }
-    bs_setState(param_0, local_0);
+    bs_setState(actor, next_state);
 }
 
-void func_80800688_bsswim(s32 arg0)
+void func_80800688_bsswim(s32 player)
 {
     func_80800270_bsswim();
-    func_800A4E30(arg0);
+    func_800A4E30(player);
 }
 
-int bsswim_entrypoint_0(s32 param_0)
+int bsswim_entrypoint_0(s32 index)
 {
-    return D_80800BA4_bsswim[param_0];
+    return D_80800BA4_bsswim[index];
 }
 
-void func_808006C4_bsswim(PlayerState *param_0)
+// Paddle swim: enter.
+void func_808006C4_bsswim(PlayerState *player)
 {
-    void *local_0;
-    f32 local_1;
+    void *anim_ctrl;
+    f32 blend;
 
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    func_808001DC_bsswim(param_0);
-    if (bs_getPreviousState(param_0) == 0x4C) {
-        local_1 = 0.8f;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    func_808001DC_bsswim(player);
+    if (bs_getPreviousState(player) == 0x4C) {
+        blend = 0.8f;
     } else {
-        local_1 = 0.4f;
+        blend = 0.4f;
     }
-    if (anctrl_getIndex(local_0) != 0x39) {
-        anctrl_reset(local_0);
-        anctrl_setIndex(local_0, 0x39);
-        func_8008B1C8(local_0, local_1);
-        anctrl_setStart(local_0, 0.8f);
-        anctrl_setPlaybackType(local_0, 2);
-        anctrl_start(local_0);
+    if (anctrl_getIndex(anim_ctrl) != 0x39) {
+        anctrl_reset(anim_ctrl);
+        anctrl_setIndex(anim_ctrl, 0x39);
+        func_8008B1C8(anim_ctrl, blend);
+        anctrl_setStart(anim_ctrl, 0.8f);
+        anctrl_setPlaybackType(anim_ctrl, 2);
+        anctrl_start(anim_ctrl);
     }
-    func_8008CA4C(param_0, 2);
-    baanim_setDurationRange(param_0, 0.3f, 1.5f);
-    func_8008C9F0(param_0, 30.0f, 300.0f, 1.2f, 0.7f);
-    yaw_setUpdateType(param_0, 3);
-    yaw_setVelocityBounded(param_0, 500.0f, 5.0f);
-    func_8009D2D8(param_0, 1);
-    baphysics_set_type(param_0, 2);
+    func_8008CA4C(player, 2);
+    baanim_setDurationRange(player, 0.3f, 1.5f);
+    func_8008C9F0(player, 30.0f, 300.0f, 1.2f, 0.7f);
+    yaw_setUpdateType(player, 3);
+    yaw_setVelocityBounded(player, 500.0f, 5.0f);
+    func_8009D2D8(player, 1);
+    baphysics_set_type(player, 2);
 }
 
-void func_808007F8_bsswim(PlayerState *param_0)
+// Paddle swim: update (stroke sounds, dive, jump out).
+void func_808007F8_bsswim(PlayerState *player)
 {
-    s32 local_0;
-    void *local_1;
-    f32 local_2[3];
-    f32 local_3;
+    s32 next_state;
+    void *anim_ctrl;
+    f32 unk_0[3];
+    f32 unk_1;
 
-    local_0 = 0;
-    local_1 = baanim_getAnimCtrlPtr(param_0);
-    if (anctrl_isAt(local_1, 0.38f)) {
-        func_8009FD24(param_0, 1);
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    if (anctrl_isAt(anim_ctrl, 0.38f)) {
+        func_8009FD24(player, 1);
     }
-    if (anctrl_isAt(local_1, 0.88f)) {
-        func_8009FD24(param_0, 0);
+    if (anctrl_isAt(anim_ctrl, 0.88f)) {
+        func_8009FD24(player, 0);
     }
-    if (anctrl_isAt(local_1, 0.2f)) {
-        func_8009DE74(param_0, 0x40C, 0.9f, 1.1f);
+    if (anctrl_isAt(anim_ctrl, 0.2f)) {
+        func_8009DE74(player, 0x40C, 0.9f, 1.1f);
     }
-    if (anctrl_isAt(local_1, 0.7f)) {
-        func_8009DE74(param_0, 0x40C, 0.9f, 1.1f);
+    if (anctrl_isAt(anim_ctrl, 0.7f)) {
+        func_8009DE74(player, 0x40C, 0.9f, 1.1f);
     }
-    func_80800178_bsswim(param_0);
-    if (bastick_getZone(param_0) == 0) {
-        local_0 = 0x2D;
+    func_80800178_bsswim(player);
+    if (bastick_getZone(player) == 0) {
+        next_state = 0x2D;
     }
-    if (!player_inWater(param_0)) {
-        local_0 = 1;
+    if (!player_inWater(player)) {
+        next_state = 1;
     }
-    if (func_8009650C(param_0) && func_8008D214(param_0)) {
-        func_80096440(param_0, &local_2);
-        if (local_2[1] < -0.7f) {
-            local_3 = func_800964DC(param_0);
-            if (local_3 - func_8009C150(param_0) > 90.0f) {
-                local_0 = func_80800000_bsswim(param_0);
+    if (func_8009650C(player) && func_8008D214(player)) {
+        func_80096440(player, &unk_0);
+        if (unk_0[1] < -0.7f) {
+            unk_1 = func_800964DC(player);
+            if (unk_1 - func_8009C150(player) > 90.0f) {
+                next_state = func_80800000_bsswim(player);
             }
         }
     }
-    if (bainput_should_dive(param_0)) {
-        local_0 = func_80800000_bsswim(param_0);
+    if (bainput_should_dive(player)) {
+        next_state = func_80800000_bsswim(player);
     }
-    if (func_80096500(param_0) && bakey_pressed(param_0, 8)) {
-        local_0 = 5;
+    if (func_80096500(player) && bakey_pressed(player, 8)) {
+        next_state = 5;
     }
-    if (baflag_isTrue(param_0, 6) || baflag_isTrue(param_0, 0x14)) {
-        local_0 = 0xD;
+    if (baflag_isTrue(player, 6) || baflag_isTrue(player, 0x14)) {
+        next_state = 0xD;
     }
-    bs_setState(param_0, local_0);
+    bs_setState(player, next_state);
 }
 
 void func_808009F0_bsswim()
@@ -302,66 +311,69 @@ void func_808009F0_bsswim()
     func_80800270_bsswim();
 }
 
-int bsswim_entrypoint_1(s32 param_0)
+int bsswim_entrypoint_1(s32 index)
 {
-    return D_80800BB4_bsswim[param_0];
+    return D_80800BB4_bsswim[index];
 }
 
-void func_80800A24_bsswim(s32 arg0)
+void func_80800A24_bsswim(s32 player)
 {
     _bsrest_entrypoint_14();
-    func_80800270_bsswim(arg0);
+    func_80800270_bsswim(player);
 }
 
-void func_80800A4C_bsswim(s32 arg0)
+void func_80800A4C_bsswim(s32 player)
 {
     func_808001DC_bsswim();
-    _bsrest_entrypoint_16(arg0);
+    _bsrest_entrypoint_16(player);
 }
 
-s32 func_80800A74_bsswim(Actor *this)
+s32 func_80800A74_bsswim(Actor *actor)
 {
     s32 need_rewind;
 
     need_rewind = 0;
     if (_bsrest_entrypoint_20())
-        need_rewind = _bsrest_entrypoint_13(this);
+        need_rewind = _bsrest_entrypoint_13(actor);
 
-    bs_setState(this, need_rewind);
+    bs_setState(actor, need_rewind);
 }
 
-int bsswim_entrypoint_2(s32 param_0)
+int bsswim_entrypoint_2(s32 index)
 {
-    return D_80800BC4_bsswim[param_0];
+    return D_80800BC4_bsswim[index];
 }
 
-void func_80800AC8_bsswim(s32 arg0)
+void func_80800AC8_bsswim(s32 player)
 {
     func_808001DC_bsswim();
-    _bsdrone_entrypoint_0(arg0);
+    _bsdrone_entrypoint_0(player);
 }
 
-s32 func_80800AF0_bsswim(Actor *this)
+s32 func_80800AF0_bsswim(Actor *actor)
 {
     s32 next_state = 0;
-    if (_badrone_entrypoint_30(this)) {
+    if (_badrone_entrypoint_30(actor)) {
         next_state = 1;
     }
-    _bsdrone_entrypoint_1(this);
-    bs_setState(this, next_state);
+    _bsdrone_entrypoint_1(actor);
+    bs_setState(actor, next_state);
 }
 
-void func_80800B34_bsswim(s32 arg0)
+void func_80800B34_bsswim(s32 player)
 {
     _bsdrone_entrypoint_2();
-    func_80800270_bsswim(arg0);
+    func_80800270_bsswim(player);
 }
 
-int bsswim_entrypoint_3(s32 param_0)
+int bsswim_entrypoint_3(s32 index)
 {
-    return D_80800BD4_bsswim[param_0];
+    return D_80800BD4_bsswim[index];
 }
 
+// TU-NOTE: the overlay .data is defined here in C. The tables point to functions of this
+// file; IDO's assembler schedules some of them differently unless they share the unit.
+// Values are taken from the ROM.
 extern void func_80099B94();
 extern void _bsdrone_entrypoint_3();
 s16 D_80800B90_bsswim[10] = {0x57, 0x57, 0x57, 0x58, 0x57, 0x58, 0x57, 0x57, 0x58, 0x58};

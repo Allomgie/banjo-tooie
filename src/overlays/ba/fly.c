@@ -44,332 +44,342 @@ extern void func_800C3BDC(u8);
 extern void _bamotor_entrypoint_1(PlayerState *, f32, f32, f32);
 extern void func_8009BFE4(PlayerState *, f32, f32);
 
+// Flight data size.
 s32 bafly_entrypoint_0()
 {
     return 0x10;
 }
 
-void bafly_entrypoint_1(PlayerState *param_0, f32 *param_1, s32 *param_2, f32 param_3)
+// Aim vector for shooting while flying.
+void bafly_entrypoint_1(PlayerState *state, f32 *aim, s32 *unk_2, f32 unk_3)
 {
-    f32 local_0[3];
-    if (baflag_isTrue(param_0, 0x30)) {
-        _baeggfire_entrypoint_3(param_0, local_0, param_1);
-        func_800EF334(param_1, param_3);
-        func_800CA9D8(func_800A4C48(param_0), param_2);
+    f32 unk_0[3];
+    if (baflag_isTrue(state, 0x30)) {
+        _baeggfire_entrypoint_3(state, unk_0, aim);
+        func_800EF334(aim, unk_3);
+        func_800CA9D8(func_800A4C48(state), unk_2);
     } else {
-        func_800CA740(func_800A4C48(param_0), param_1);
-        func_800EF334(param_1, param_3);
-        func_800CA9D8(func_800A4C48(param_0), param_2);
+        func_800CA740(func_800A4C48(state), aim);
+        func_800EF334(aim, unk_3);
+        func_800CA9D8(func_800A4C48(state), unk_2);
     }
 }
 
-int bafly_entrypoint_2(Actor *param_0)
+int bafly_entrypoint_2(Actor *actor)
 {
-    int local_0;
+    int status;
     if (!player_isStable()) {
         return 0;
     }
-    local_0 = func_80096628(param_0);
-    if (!(local_0 << 11 >= 0)) {
+    status = func_80096628(actor);
+    if (!(status << 11 >= 0)) {
         return 0;
     }
     return 1;
 }
 
-s32 bafly_entrypoint_3(s32 param_0)
+s32 bafly_entrypoint_3(s32 state)
 {
-    return ((u8 *) *(u8 **) (param_0 + 0x8c))[8];
+    return ((u8 *) *(u8 **) (state + 0x8c))[8];
 }
 
-void bafly_entrypoint_4(u8 *param_0)
+// Stop the looping sfx.
+void bafly_entrypoint_4(u8 *state)
 {
-    short local_0;
-    local_0 = *(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9);
-    if (local_0 != 0) {
-        func_800C2FDC(local_0 & 0xFF, local_0, param_0);
-        *(s8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9) = 0;
+    short sfx_handle;
+    sfx_handle = *(u8 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 9);
+    if (sfx_handle != 0) {
+        func_800C2FDC(sfx_handle & 0xFF, sfx_handle, state);
+        *(s8 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 9) = 0;
     }
 }
 
-void bafly_entrypoint_5(u8 *param_0)
+// Init flight data; red feathers are unlimited in the Balloon Burst maps.
+void bafly_entrypoint_5(u8 *state)
 {
-    s32 local_0;
+    s32 map;
 
     if (_gcstatusDll_entrypoint_11() >= 2) {
-        *(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9) = 0U;
+        *(u8 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 9) = 0U;
     } else {
-        *(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9) = func_800C2E04();
-        func_800C3418(*(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 9), 0);
+        *(u8 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 9) = func_800C2E04();
+        func_800C3418(*(u8 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 9), 0);
     }
-    *(f32 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 4) = 1.0f;
-    *(f32 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 0) = 0.0f;
-    *(s8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 8) = 0;
-    local_0 = func_800EA05C();
-    if ((local_0 != 0xE4) && (local_0 != 0x17B)) {
-        *(s8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 0xE) = 0;
+    *(f32 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 4) = 1.0f;
+    *(f32 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 0) = 0.0f;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 8) = 0;
+    map = func_800EA05C();
+    if ((map != 0xE4) && (map != 0x17B)) {
+        *(s8 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 0xE) = 0;
         return;
     }
-    *(s8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x8C) + 0xE) = 1;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) state + 0x8C) + 0xE) = 1;
 }
 
-void bafly_entrypoint_6(s32 param_0, f32 param_1)
+void bafly_entrypoint_6(s32 state, f32 unk_1)
 {
-    *(f32 *) (*(s32 *) (param_0 + 0x8c) + 0x0) = param_1;
+    *(f32 *) (*(s32 *) (state + 0x8c) + 0x0) = unk_1;
 }
 
-void bafly_entrypoint_7(void *arg, s32 v)
+void bafly_entrypoint_7(void *state, s32 flag)
 {
-    ((s8 *) *(void **) ((char *) arg + 0x8C))[8] = v;
+    ((s8 *) *(void **) ((char *) state + 0x8C))[8] = flag;
 }
 
-void bafly_entrypoint_8(PlayerState *param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4,
-                        f32 param_5, f32 param_6, f32 param_7)
+// Height-dependent gravity, terminal velocity and speed near the flight ceiling.
+void bafly_entrypoint_8(PlayerState *state, f32 hard_ceiling, f32 soft_ceiling, f32 speed, f32 gravity,
+                        f32 terminal_velocity, f32 ceiling_gravity, f32 ceiling_terminal_velocity)
 {
-    f32 local_3[3];
-    f32 local_0;
-    f32 local_1;
-    local_0 = func_8009BFCC(param_0);
-    baphysics_set_gravity(param_0, param_4);
-    bafly_entrypoint_6(param_0, 0.0f);
-    if (baflag_isTrue(param_0, 9)) {
-        baphysics_set_terminal_velocity(param_0, 0.0f);
-        func_8009BA9C(param_0, 0);
-        local_1 = 0.0f;
-    } else if (local_0 <= param_2) {
+    f32 unk_0[3];
+    f32 height;
+    f32 target_speed;
+    height = func_8009BFCC(state);
+    baphysics_set_gravity(state, gravity);
+    bafly_entrypoint_6(state, 0.0f);
+    if (baflag_isTrue(state, 9)) {
+        baphysics_set_terminal_velocity(state, 0.0f);
+        func_8009BA9C(state, 0);
+        target_speed = 0.0f;
+    } else if (height <= soft_ceiling) {
         baphysics_set_terminal_velocity(
-            param_0, func_800F10B4(local_0, param_2 - 20.0f, param_2, param_5, param_7));
-        baphysics_set_gravity(param_0,
-                              func_800F10B4(local_0, param_2 - 20.0f, param_2, param_4, param_6));
-        local_1 = func_800F10B4(local_0, param_2 - 20.0f, param_2, param_3, param_3 / 10.0f);
-        bafly_entrypoint_6(param_0, func_800F10B4(local_0, param_2 - 20.0f, param_2, 0.0f, 0.35f));
+            state, func_800F10B4(height, soft_ceiling - 20.0f, soft_ceiling, terminal_velocity, ceiling_terminal_velocity));
+        baphysics_set_gravity(state,
+                              func_800F10B4(height, soft_ceiling - 20.0f, soft_ceiling, gravity, ceiling_gravity));
+        target_speed = func_800F10B4(height, soft_ceiling - 20.0f, soft_ceiling, speed, speed / 10.0f);
+        bafly_entrypoint_6(state, func_800F10B4(height, soft_ceiling - 20.0f, soft_ceiling, 0.0f, 0.35f));
     } else {
         baphysics_set_terminal_velocity(
-            param_0, func_800F10B4(local_0, param_1, param_1 + 10.0f, -399.99f, param_5));
-        local_1 = func_800F10B4(local_0, param_1, param_1 + 40.0f, 0.0f, param_3);
-        bafly_entrypoint_6(param_0, func_800F10B4(local_0, param_1, param_1 + 40.0f, -0.25f, 0.0f));
+            state, func_800F10B4(height, hard_ceiling, hard_ceiling + 10.0f, -399.99f, terminal_velocity));
+        target_speed = func_800F10B4(height, hard_ceiling, hard_ceiling + 40.0f, 0.0f, speed);
+        bafly_entrypoint_6(state, func_800F10B4(height, hard_ceiling, hard_ceiling + 40.0f, -0.25f, 0.0f));
     }
-    func_80096394(param_0, local_3);
-    if (func_8009650C(param_0) && local_3[1] > -1.0f)
-        local_1 = 0.0f;
-    baphysics_set_target_yaw(param_0, yaw_get(param_0));
-    baphysics_set_target_horizontal_velocity(param_0, local_1);
+    func_80096394(state, unk_0);
+    if (func_8009650C(state) && unk_0[1] > -1.0f)
+        target_speed = 0.0f;
+    baphysics_set_target_yaw(state, yaw_get(state));
+    baphysics_set_target_horizontal_velocity(state, target_speed);
 }
 
-void bafly_entrypoint_9(PlayerState *param_0)
+// Stick X to roll and yaw.
+void bafly_entrypoint_9(PlayerState *state)
 {
-    f32 local_3;
-    f32 local_1;
-    f32 local_2;
-    f32 local_0;
-    local_0 = bastick_getX(param_0);
-    if (bakey_held(param_0, 3)) {
-        yaw_setVelocityBounded(param_0, 500.0f, 30.0f);
-        local_1 = 6.0f;
-        local_2 = 85.0f;
+    f32 yaw_delta;
+    f32 turn_rate;
+    f32 max_roll;
+    f32 stick_x;
+    stick_x = bastick_getX(state);
+    if (bakey_held(state, 3)) {
+        yaw_setVelocityBounded(state, 500.0f, 30.0f);
+        turn_rate = 6.0f;
+        max_roll = 85.0f;
     } else {
-        yaw_setVelocityBounded(param_0, 500.0f, 2.0f);
-        local_1 = 3.0f;
-        local_2 = 75.0f;
+        yaw_setVelocityBounded(state, 500.0f, 2.0f);
+        turn_rate = 3.0f;
+        max_roll = 75.0f;
     }
-    baroll_setIdeal(param_0, func_800F10B4(local_0, -1.0f, 1.0f, -local_2, local_2));
-    local_3 = func_800F10B4(local_0, -1.0f, 1.0f, local_1, -local_1);
-    local_3 *= _bafpctrl_entrypoint_3(param_0);
-    yaw_setIdeal(param_0, yaw_getIdeal(param_0) + local_3);
+    baroll_setIdeal(state, func_800F10B4(stick_x, -1.0f, 1.0f, -max_roll, max_roll));
+    yaw_delta = func_800F10B4(stick_x, -1.0f, 1.0f, turn_rate, -turn_rate);
+    yaw_delta *= _bafpctrl_entrypoint_3(state);
+    yaw_setIdeal(state, yaw_getIdeal(state) + yaw_delta);
 }
 
-void bafly_entrypoint_10(PlayerState *param_0, f32 param_1, f32 param_2)
+// Stick Y to pitch.
+void bafly_entrypoint_10(PlayerState *state, f32 pitch_neg, f32 pitch_pos)
 {
-    f32 local_0;
-    local_0 = bastick_getY(param_0);
-    if (local_0 < 0.0f) {
-        func_8009BF5C(param_0, func_800F10B4(local_0, -1.0f, 0.0f, param_1, 360.0f));
+    f32 stick_y;
+    stick_y = bastick_getY(state);
+    if (stick_y < 0.0f) {
+        func_8009BF5C(state, func_800F10B4(stick_y, -1.0f, 0.0f, pitch_neg, 360.0f));
     } else {
-        func_8009BF5C(param_0, func_800F10B4(local_0, 0.0f, 1.0f, 0.0f, param_2));
+        func_8009BF5C(state, func_800F10B4(stick_y, 0.0f, 1.0f, 0.0f, pitch_pos));
     }
 }
 
-void bafly_entrypoint_11(PlayerState *param_0)
+void bafly_entrypoint_11(PlayerState *state)
 {
-    u8 local_3;
-    f32 local_2;
-    f32 local_1;
-    f32 local_0[3];
-    local_1 = 1.2f;
-    if ((*(u8 **) ((u8 *) param_0 + 0x8C))[8])
-        local_1 += 0.4f;
-    func_80110818((void *) func_800A4CA8(param_0), local_0);
-    local_2 = func_800F1DCC(local_0[1] + 180.0f, yaw_get(param_0));
-    local_1 -= func_800F10B4(mlAbsF(local_2), 0.0f, 50.0f, 0.0f, 0.4f);
-    local_1 += *(f32 *) *(u8 **) ((u8 *) param_0 + 0x8C);
-    local_2 = local_1 - *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x8C) + 4);
-    if (mlAbsF(local_2) > 0.01f) {
-        if (local_2 > 0.0f)
-            local_2 = 0.01f;
+    u8 sfx_handle;
+    f32 delta;
+    f32 target;
+    f32 unk_0[3];
+    target = 1.2f;
+    if ((*(u8 **) ((u8 *) state + 0x8C))[8])
+        target += 0.4f;
+    func_80110818((void *) func_800A4CA8(state), unk_0);
+    delta = func_800F1DCC(unk_0[1] + 180.0f, yaw_get(state));
+    target -= func_800F10B4(mlAbsF(delta), 0.0f, 50.0f, 0.0f, 0.4f);
+    target += *(f32 *) *(u8 **) ((u8 *) state + 0x8C);
+    delta = target - *(f32 *) (*(u8 **) ((u8 *) state + 0x8C) + 4);
+    if (mlAbsF(delta) > 0.01f) {
+        if (delta > 0.0f)
+            delta = 0.01f;
         else
-            local_2 = -0.01f;
+            delta = -0.01f;
     }
-    *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x8C) + 4) += local_2;
-    local_3 = (*(u8 **) ((u8 *) param_0 + 0x8C))[9];
-    if (local_3) {
-        func_800C31DC(local_3, *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x8C) + 4));
-        func_800C31DC(local_3, *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x8C) + 4));
-        func_800C3058(local_3, 6000);
-        if (!func_800C3D78(local_3)) {
-            func_800C301C(local_3, 0x4A3);
-            func_800C330C(local_3, 3);
-            func_800C3BDC(local_3);
+    *(f32 *) (*(u8 **) ((u8 *) state + 0x8C) + 4) += delta;
+    sfx_handle = (*(u8 **) ((u8 *) state + 0x8C))[9];
+    if (sfx_handle) {
+        func_800C31DC(sfx_handle, *(f32 *) (*(u8 **) ((u8 *) state + 0x8C) + 4));
+        func_800C31DC(sfx_handle, *(f32 *) (*(u8 **) ((u8 *) state + 0x8C) + 4));
+        func_800C3058(sfx_handle, 6000);
+        if (!func_800C3D78(sfx_handle)) {
+            func_800C301C(sfx_handle, 0x4A3);
+            func_800C330C(sfx_handle, 3);
+            func_800C3BDC(sfx_handle);
         }
     }
 }
 
-s32 bafly_entrypoint_12(u8 *param_0)
+// Has red feathers (always true in the Balloon Burst maps).
+s32 bafly_entrypoint_12(u8 *state)
 {
-    s32 local_0;
-    if ((*(u8 **) (param_0 + 0x8C))[0xE]) {
+    s32 count;
+    if ((*(u8 **) (state + 0x8C))[0xE]) {
         return 1;
     }
-    _suinv_entrypoint_0(&local_0, 0, 1, 0x46, 1);
-    return local_0;
+    _suinv_entrypoint_0(&count, 0, 1, 0x46, 1);
+    return count;
 }
 
-void bafly_entrypoint_13(PlayerState *param_0, s32 param_1, s32 param_2, f32 param_3)
+// Launch with camera shake and fly camera setup.
+void bafly_entrypoint_13(PlayerState *state, s32 mode, s32 anim_id, f32 anim_duration)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_3;
-    f32 local_2;
-    f32 local_5;
-    f32 local_4;
-    f32 local_6;
+    f32 pos[3];
+    f32 unk_0[3];
+    f32 gravity;
+    f32 yaw;
+    f32 unk_1;
+    f32 speed;
+    f32 unk_2;
 
-    if (param_1 == 0) {
-        local_3 = -2200.0f;
-        local_4 = 800.0f;
+    if (mode == 0) {
+        gravity = -2200.0f;
+        speed = 800.0f;
     } else {
-        local_3 = -1200.0f;
-        local_4 = 400.0f;
+        gravity = -1200.0f;
+        speed = 400.0f;
     }
-    func_8009C128(param_0, local_0);
-    func_800E1610(2, 100.0f, 0.85f, local_0);
-    baanim_playForDuration_once(param_0, param_2, param_3);
-    func_8009D9D4(param_0);
-    _bamotor_entrypoint_1(param_0, 1.0f, 0.5f, 0.5f);
-    func_800A32C4(param_0, local_1);
-    func_800F1E6C(local_1, local_0, &local_2);
-    yaw_setIdeal(param_0, func_800136E4(local_2 + 180.0f));
-    yaw_applyIdeal(param_0);
-    baphysics_set_target_horizontal_velocity(param_0, local_4);
-    baphysics_set_target_yaw(param_0, local_2);
-    baphysics_set_horizontal_velocity(param_0, local_2,
-                                      baphysics_get_target_horizontal_velocity(param_0));
-    func_8009FFD8(param_0, 1, 1, 2, 3);
-    baphysics_set_vertical_velocity(param_0, 800.0f);
-    baphysics_set_gravity(param_0, local_3);
-    baphysics_set_terminal_velocity(param_0, -4000.0f);
-    func_800A4DA4(param_0, 3);
-    _ncbafly_entrypoint_4(func_800A4CA8(param_0), 12.0f, 10000.0f, 800.0f);
-    func_8008E944(param_0);
+    func_8009C128(state, pos);
+    func_800E1610(2, 100.0f, 0.85f, pos);
+    baanim_playForDuration_once(state, anim_id, anim_duration);
+    func_8009D9D4(state);
+    _bamotor_entrypoint_1(state, 1.0f, 0.5f, 0.5f);
+    func_800A32C4(state, unk_0);
+    func_800F1E6C(unk_0, pos, &yaw);
+    yaw_setIdeal(state, func_800136E4(yaw + 180.0f));
+    yaw_applyIdeal(state);
+    baphysics_set_target_horizontal_velocity(state, speed);
+    baphysics_set_target_yaw(state, yaw);
+    baphysics_set_horizontal_velocity(state, yaw,
+                                      baphysics_get_target_horizontal_velocity(state));
+    func_8009FFD8(state, 1, 1, 2, 3);
+    baphysics_set_vertical_velocity(state, 800.0f);
+    baphysics_set_gravity(state, gravity);
+    baphysics_set_terminal_velocity(state, -4000.0f);
+    func_800A4DA4(state, 3);
+    _ncbafly_entrypoint_4(func_800A4CA8(state), 12.0f, 10000.0f, 800.0f);
+    func_8008E944(state);
 }
 
-int bafly_entrypoint_14(Actor *param_0, s32 param_1, s32 param_2)
+int bafly_entrypoint_14(Actor *actor, s32 anim_done_state, s32 stable_state)
 {
-    s32 local_0 = 0;
-    if (anctrl_isStopped(baanim_getAnimCtrlPtr(param_0))) {
-        local_0 = param_1;
+    s32 next_state = 0;
+    if (anctrl_isStopped(baanim_getAnimCtrlPtr(actor))) {
+        next_state = anim_done_state;
     }
-    if (player_isStable(param_0)) {
-        local_0 = param_2;
+    if (player_isStable(actor)) {
+        next_state = stable_state;
     }
-    bs_setState(param_0, local_0);
+    bs_setState(actor, next_state);
 }
 
-int bafly_entrypoint_15(Actor *param_0)
+int bafly_entrypoint_15(Actor *actor)
 {
-    func_8009BC34(param_0);
-    func_8008E95C(param_0);
-    func_8009BD88(param_0);
-    func_800A4E30(param_0);
+    func_8009BC34(actor);
+    func_8008E95C(actor);
+    func_8009BD88(actor);
+    func_800A4E30(actor);
 }
 
-void bafly_entrypoint_16(PlayerState *param_0, s32 param_1, f32 param_2)
+// Launch with camera shake and fly camera setup.
+void bafly_entrypoint_16(PlayerState *state, s32 anim_id, f32 anim_duration)
 {
-    f32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
+    f32 yaw;
+    f32 pos[3];
+    f32 unk_0[3];
 
-    func_8009C128(param_0, local_1);
-    func_800E1610(2, 100.0f, 0.85f, local_1);
-    baanim_playForDuration_once(param_0, param_1, param_2);
-    func_8009DA40(param_0);
-    func_800A32C4(param_0, local_2);
-    func_800F1E6C(local_2, local_1, &local_0);
-    yaw_setIdeal(param_0, func_800136E4(local_0 + 180.0f));
-    yaw_applyIdeal(param_0);
-    baphysics_set_target_horizontal_velocity(param_0, 1300.0f);
-    baphysics_set_target_yaw(param_0, local_0);
-    baphysics_set_horizontal_velocity(param_0, local_0,
-                                      baphysics_get_target_horizontal_velocity(param_0));
-    func_8009FFD8(param_0, 1, 1, 2, 3);
-    baphysics_set_vertical_velocity(param_0, 400.0f);
-    baphysics_set_gravity(param_0, -1800.0f);
-    func_8008E944(param_0);
-    func_800A4DA4(param_0, 3);
-    _ncbafly_entrypoint_4(func_800A4CA8(param_0), 12.0f, 10000.0f, 800.0f);
+    func_8009C128(state, pos);
+    func_800E1610(2, 100.0f, 0.85f, pos);
+    baanim_playForDuration_once(state, anim_id, anim_duration);
+    func_8009DA40(state);
+    func_800A32C4(state, unk_0);
+    func_800F1E6C(unk_0, pos, &yaw);
+    yaw_setIdeal(state, func_800136E4(yaw + 180.0f));
+    yaw_applyIdeal(state);
+    baphysics_set_target_horizontal_velocity(state, 1300.0f);
+    baphysics_set_target_yaw(state, yaw);
+    baphysics_set_horizontal_velocity(state, yaw,
+                                      baphysics_get_target_horizontal_velocity(state));
+    func_8009FFD8(state, 1, 1, 2, 3);
+    baphysics_set_vertical_velocity(state, 400.0f);
+    baphysics_set_gravity(state, -1800.0f);
+    func_8008E944(state);
+    func_800A4DA4(state, 3);
+    _ncbafly_entrypoint_4(func_800A4CA8(state), 12.0f, 10000.0f, 800.0f);
 }
 
-void bafly_entrypoint_17(PlayerState *param_0, s32 param_1, s32 param_2, s32 *param_3)
+void bafly_entrypoint_17(PlayerState *state, s32 done_state, s32 stable_state, s32 *landed)
 {
-    s32 local_0 = 0;
-    AnimCtrl *local_1;
-    local_1 = baanim_getAnimCtrlPtr(param_0);
-    if (player_isStable(param_0))
-        local_0 = param_2;
-    if (anctrl_isStopped(local_1)) {
-        if (func_8008DD04(param_0) || func_8009650C(param_0)) {
-            *param_3 = 1;
-            local_0 = param_1;
+    s32 next_state = 0;
+    AnimCtrl *anim_ctrl;
+    anim_ctrl = baanim_getAnimCtrlPtr(state);
+    if (player_isStable(state))
+        next_state = stable_state;
+    if (anctrl_isStopped(anim_ctrl)) {
+        if (func_8008DD04(state) || func_8009650C(state)) {
+            *landed = 1;
+            next_state = done_state;
         }
     }
-    bs_setState(param_0, local_0);
+    bs_setState(state, next_state);
 }
 
-void bafly_entrypoint_18(s32 arg0)
+void bafly_entrypoint_18(s32 state)
 {
     baphysics_reset_gravity();
-    func_8008E95C(arg0);
+    func_8008E95C(state);
 }
 
-void bafly_entrypoint_19(s32 param_0)
+void bafly_entrypoint_19(s32 state)
 {
     if (_bafpctrl_entrypoint_4() != 3) {
-        if (baflag_isTrue(param_0, 0x2F) != 0) {
-            _bafpctrl_entrypoint_14(param_0, 3);
+        if (baflag_isTrue(state, 0x2F) != 0) {
+            _bafpctrl_entrypoint_14(state, 3);
         } else {
-            _bafpctrl_entrypoint_14(param_0, 2);
+            _bafpctrl_entrypoint_14(state, 2);
         }
-        _bafpctrl_entrypoint_9(param_0, 1);
+        _bafpctrl_entrypoint_9(state, 1);
         if (func_800C6E38(0x1B) == 0) {
-            _bafpctrl_entrypoint_11(param_0, 4, 1);
+            _bafpctrl_entrypoint_11(state, 4, 1);
         }
     }
 }
 
-void bafly_entrypoint_20(PlayerState *param_0)
+void bafly_entrypoint_20(PlayerState *state)
 {
-    f32 local_0;
-    f32 local_1;
+    f32 input;
+    f32 scale;
 
-    local_0 = _bafpctrl_entrypoint_3(param_0);
-    local_1 = func_800F10B4(local_0, 0.1f, 1.0f, local_0 * local_0, 1.0f);
-    func_8009BFE4(param_0, 500.0f * local_1, 1.2f);
+    input = _bafpctrl_entrypoint_3(state);
+    scale = func_800F10B4(input, 0.1f, 1.0f, input * input, 1.0f);
+    func_8009BFE4(state, 500.0f * scale, 1.2f);
 }
 
-void bafly_entrypoint_21(PlayerState *param_0)
+void bafly_entrypoint_21(PlayerState *state)
 {
-    f32 local_0;
-    f32 local_1;
+    f32 input;
+    f32 scale;
 
-    local_0 = _bafpctrl_entrypoint_3(param_0);
-    local_1 = func_800F10B4(local_0, 0.1f, 1.0f, local_0 * local_0, 1.0f);
-    func_8009BFE4(param_0, 1000.0f * local_1, 2.2f);
+    input = _bafpctrl_entrypoint_3(state);
+    scale = func_800F10B4(input, 0.1f, 1.0f, input * input, 1.0f);
+    func_8009BFE4(state, 1000.0f * scale, 2.2f);
 }

@@ -18,18 +18,19 @@
 
 void func_80800000_bsbflip(PlayerState *self)
 {
-    f32 sp1C = bastick_getZonePosition(self);
+    f32 zone_pos = bastick_getZonePosition(self);
     if (!bastick_getZone(self)) {
         baphysics_set_target_horizontal_velocity(self, 0.0f);
     } else {
-        baphysics_set_target_horizontal_velocity(self, func_800F1214(sp1C, 80.0f, 200.0f));
+        baphysics_set_target_horizontal_velocity(self, func_800F1214(zone_pos, 80.0f, 200.0f));
     }
 }
 
+// Substates: 1 crouch, 2 launch, 3 hold pose, 4 landing.
 void func_80800064_bsbflip(PlayerState *self, s32 substate)
 {
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
-    f32 sp30[3];
+    f32 unk_0[3];
 
     switch (substate) {
         case 0:
@@ -60,6 +61,7 @@ void func_80800064_bsbflip(PlayerState *self, s32 substate)
             if (bastick_distance(self) != 0.0f) {
                 yaw_setUpdateType(self, YAW_TYPE_2_UNBOUNDED);
                 func_8009D2D8(self, 3);
+                // Matching: needed for the match.
                 if (bastick_distance) {
                     yaw_setIdeal(self, bastick_getAngleRelativeToBanjo(self));
                 }
@@ -99,8 +101,8 @@ void func_80800064_bsbflip(PlayerState *self, s32 substate)
             anctrl_start(anctrl);
             baphysics_set_type(self, 3);
             baphysics_set_target_horizontal_velocity(self, 0.0f);
-            func_800EFD24(sp30);
-            func_8009BA9C(self, sp30);
+            func_800EFD24(unk_0);
+            func_8009BA9C(self, unk_0);
             func_8009FE58(self);
             func_800A0CF4(self, 0);
     }

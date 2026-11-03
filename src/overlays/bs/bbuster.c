@@ -21,6 +21,7 @@
 #include "core2/1EB2840.h"
 #include "core2/1ECB9F0.h"
 
+// Substates: 1 stop in mid-air, 2 hover, 3 slam down, 4 ground impact, 5 recovery.
 void bsbbuster_setSubstate(PlayerState *self, int substate)
 {
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
@@ -109,8 +110,8 @@ void bsbbuster_update(PlayerState *self)
 {
     BanjoStateId next_state = BS_STATE_0_INVALID;
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
-    s32 sp34;
-    f32 sp28[3];
+    s32 unk_0;
+    f32 vec[3];
 
     if (baanim_isAt(self, 0.24f)) {
         func_8009D874(self);
@@ -124,7 +125,7 @@ void bsbbuster_update(PlayerState *self)
             }
 
             if (baanim_isAt(self, 0.3637f) && bakey_held(self, BUTTON_Z) && func_800C6E38(0x19)) {
-                next_state = BS_STATE_B6_BILL_DRILL;
+                next_state = BS_STATE_B6_BILL_DRILL; // chain into Bill Drill
             }
             break;
 
@@ -152,8 +153,8 @@ void bsbbuster_update(PlayerState *self)
                 self->unk15C.bytes[3]++;
             }
             self->unk15C.bytes[1] = baflag_isTrue(self, BA_FLAG_8);
-            func_80096394(self, sp28);
-            if (mlAbsF(sp28[1]) < 1.0f) {
+            func_80096394(self, vec);
+            if (mlAbsF(vec[1]) < 1.0f) {
                 self->unk160.bytes[0]++;
             } else {
                 self->unk160.bytes[0] = 0;
@@ -165,7 +166,7 @@ void bsbbuster_update(PlayerState *self)
 
             if (player_isStable(self) || self->unk15C.bytes[1] || !(self->unk160.bytes[0] < 4)) {
                 bsbbuster_setSubstate(self, 4);
-                if (func_800954E8(self, &sp34)) {
+                if (func_800954E8(self, &unk_0)) {
                     next_state = BS_STATE_72;
                 }
             }
@@ -175,7 +176,7 @@ void bsbbuster_update(PlayerState *self)
             baflag_clear(self, BA_FLAG_27);
             self->unk15C.bytes[2] = 0;
             if (func_8009BD44(self) == 1) {
-                func_8009BDAC(self, 0.9f);
+                func_8009BDAC(self, 0.9f); // 0.9 s damage immunity
             }
             self->unk16C -= func_800D8FF8();
             if (self->unk16C <= 0.0f) {

@@ -4,9 +4,10 @@ extern void func_80099B94(PlayerState *);
 extern void func_800FC660(s32);
 extern s32 func_80099A4C(PlayerState *);
 
-void func_80800000_bskazhatch(PlayerState *self, s32 arg1)
+// Enters a hatch stage: 1 = sit on the egg, 2 = hatch, 3 = get up again.
+void func_80800000_bskazhatch(PlayerState *self, s32 stage)
 {
-    switch (arg1) {
+    switch (stage) {
         case 0:
         case 3:
             break;
@@ -18,7 +19,7 @@ void func_80800000_bskazhatch(PlayerState *self, s32 arg1)
         case 2:
             baanim_playForDuration_onceSmooth(self, ASSET_140_ANIM_KAZHATCH_UNKNOWN, 3);
     }
-    self->unk15C.bytes[0] = (s8) arg1;
+    self->unk15C.bytes[0] = (s8) stage;
 }
 
 void func_808000A8_bskazhatch(PlayerState *self)
@@ -35,33 +36,35 @@ void func_808000D4_bskazhatch(PlayerState *self)
     func_80800000_bskazhatch(self, 1);
 }
 
-void func_80800108_bskazhatch(PlayerState *param_0)
+// Interrupt handler: interrupt 0x53 means an egg actor wants to be sat on.
+void func_80800108_bskazhatch(PlayerState *self)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 interrupt;
+    s32 egg;
 
-    local_0 = func_8009E6EC(param_0);
-    switch (local_0) {
+    interrupt = func_8009E6EC(self);
+    // Matching: the empty statements after some case labels are needed for the match.
+    switch (interrupt) {
         case 0x15:;
         case 0x1C:
         case 0x1D:;
         case 0x1E:
         case 0x25:
-            func_8009E830(param_0, 1);
+            func_8009E830(self, 1);
             return;
         case 0x53:
-            if (param_0->unk160.word == 0) {
-                local_1 = func_80099A4C(param_0);
-                param_0->unk160.word = local_1;
-                if (func_8010114C(local_1, 0xA0, 0) <= 0) {
+            if (self->unk160.word == 0) {
+                egg = func_80099A4C(self);
+                self->unk160.word = egg;
+                if (func_8010114C(egg, 0xA0, 0) <= 0) {
                     func_800FC660(0xE);
                 }
-                baphysics_set_type(param_0, 7);
+                baphysics_set_type(self, 7);
             }
-            func_8009E830(param_0, 2);
+            func_8009E830(self, 2);
             return;
         default:
-            func_80099B94(param_0);
+            func_80099B94(self);
     }
 }
 
@@ -73,6 +76,7 @@ BanjoStateId func_808001E4_bskazhatch(PlayerState *self)
     return BS_STATE_BB;
 }
 
+// Update: sit on the egg, ask it whether it can hatch, then hatch or get up.
 void func_80800220_bskazhatch(PlayerState *self)
 {
     BanjoStateId next_state;
@@ -132,5 +136,8 @@ s32 bskazhatch_entrypoint_0(s32 idx)
     return D_808004E0_bskazhatch[idx];
 }
 
-s32 D_808004E0_bskazhatch[4] = {(u32) func_808000A8_bskazhatch, (u32) func_808000D4_bskazhatch,
+// TU-NOTE: the .data of this overlay is defined here in C. The table holds pointers to functions of
+// this file; IDO's assembler schedules some of these functions differently unless the table is
+// defined in the same unit. Values are taken from the ROM.
+s32 D_808004E0_bskazhatch[4] ={(u32) func_808000A8_bskazhatch, (u32) func_808000D4_bskazhatch,
                                 (u32) func_80800220_bskazhatch, (u32) func_80800108_bskazhatch};

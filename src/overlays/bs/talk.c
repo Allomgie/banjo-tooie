@@ -4,59 +4,63 @@ void baphysics_set_target_horizontal_velocity(s32, f32);
 extern void bs_setState();
 extern s32 D_80800170_bstalk[];
 
-void bstalk_entrypoint_0(u8 *param_0)
+// Enter: stop, face the conversation partner, play idle animation.
+void bstalk_entrypoint_0(u8 *player)
 {
-    s32 sp3C;
-    s32 sp38;
-    f32 sp2C[3];
-    f32 sp20[3];
+    s32 anim_ctrl;
+    s32 yaw;
+    f32 player_pos[3];
+    f32 target_pos[3];
 
-    sp3C = baanim_getAnimCtrlPtr();
-    anctrl_reset(sp3C);
-    func_800A0110(param_0, sp3C);
-    anctrl_setPlaybackType(sp3C, 2);
-    anctrl_start(sp3C);
-    func_8009C128(param_0, sp2C);
-    func_800A33A0(param_0, sp20);
-    func_800F1E6C(sp2C, sp20, &sp38);
-    yaw_setIdeal(param_0, sp38);
-    func_8008CA4C(param_0, 1);
-    yaw_setUpdateType(param_0, 1);
-    func_8009D2D8(param_0, 3);
-    baphysics_set_type(param_0, 2);
-    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-    *(s32 *) ((s8 *) param_0 + 0x15C) = 1;
+    anim_ctrl = baanim_getAnimCtrlPtr();
+    anctrl_reset(anim_ctrl);
+    func_800A0110(player, anim_ctrl);
+    anctrl_setPlaybackType(anim_ctrl, 2);
+    anctrl_start(anim_ctrl);
+    func_8009C128(player, player_pos);
+    func_800A33A0(player, target_pos);
+    func_800F1E6C(player_pos, target_pos, &yaw);
+    yaw_setIdeal(player, yaw);
+    func_8008CA4C(player, 1);
+    yaw_setUpdateType(player, 1);
+    func_8009D2D8(player, 3);
+    baphysics_set_type(player, 2);
+    baphysics_set_target_horizontal_velocity(player, 0.0f);
+    *(s32 *) ((s8 *) player + 0x15C) = 1;
 }
 
-void bstalk_entrypoint_1(u8 *param_0)
+// Update: return to the default state once the dialog has ended.
+void bstalk_entrypoint_1(u8 *player)
 {
-    s32 local_0 = 0;
-    if (*(s32 *) (param_0 + 0x15C) == 0) {
-        local_0 = 1;
+    s32 done = 0;
+    if (*(s32 *) (player + 0x15C) == 0) {
+        done = 1;
     }
-    *(s32 *) (param_0 + 0x15C) = 0;
-    bs_setState(param_0, local_0);
+    *(s32 *) (player + 0x15C) = 0;
+    bs_setState(player, done);
 }
 
-void bstalk_entrypoint_2(s32 arg0)
+void bstalk_entrypoint_2(s32 unk_0)
 {
 }
 
-int bstalk_entrypoint_3(s32 param_0)
+int bstalk_entrypoint_3(s32 player)
 {
-    return D_80800170_bstalk[param_0];
+    return D_80800170_bstalk[player];
 }
 
-void bstalk_entrypoint_4(u8 *param_0)
+// Interrupt: 8 = dialog ended.
+void bstalk_entrypoint_4(u8 *player)
 {
     if (func_8009E6EC() == 8) {
-        *(s32 *) ((s8 *) param_0 + 0x15C) = 1;
-        func_8009E830(param_0, 2);
+        *(s32 *) ((s8 *) player + 0x15C) = 1;
+        func_8009E830(player, 2);
         return;
     }
-    func_80099B94(param_0);
+    func_80099B94(player);
 }
 
+// TU-NOTE: the overlay .data table is defined here so IDO schedules the functions as in the original; values come from the ROM.
 extern void _bstalk_entrypoint_2();
 extern void _bstalk_entrypoint_0();
 extern void _bstalk_entrypoint_1();

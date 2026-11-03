@@ -9,6 +9,7 @@ void bskaz_entrypoint_0(PlayerState *self, s32 arg1, s32 arg2)
     }
 }
 
+// Common enter for solo Kazooie states.
 void bskaz_entrypoint_1(PlayerState *self)
 {
     _bashoes_entrypoint_15();
@@ -19,6 +20,7 @@ void bskaz_entrypoint_1(PlayerState *self)
     func_80092864(self, 0.8999939);
 }
 
+// Common exit for solo Kazooie states.
 void bskaz_entrypoint_2(PlayerState *self)
 {
     baflag_clear(self, 3);
@@ -26,6 +28,7 @@ void bskaz_entrypoint_2(PlayerState *self)
     func_80092864(self, 1);
 }
 
+// Next state for a jump: 0x186, 0x161, 0xC6 (Z held) or 0xBD.
 BanjoStateId bskaz_entrypoint_3(PlayerState *self)
 {
     if (func_8008E430() != 0) {
@@ -43,6 +46,7 @@ BanjoStateId bskaz_entrypoint_3(PlayerState *self)
     return BS_STATE_BD;
 }
 
+// Air state: 0x18B or 0xC2.
 BanjoStateId bskaz_entrypoint_4(PlayerState *self)
 {
     if (func_8009EA2C() != 0) {

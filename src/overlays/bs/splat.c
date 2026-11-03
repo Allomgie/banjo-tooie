@@ -13,74 +13,80 @@ extern s32 anctrl_isAt(void *, f32);
 extern void baanim_playForDuration_onceSmooth(PlayerState *, s32, f32);
 extern s32 D_808002B0_bssplat[];
 
-void bssplat_entrypoint_0(PlayerState *param_0)
+// Fall damage, dust and camera shake; also used by Kazooie flight and Mumbo.
+void bssplat_entrypoint_0(PlayerState *player)
 {
-    s32 local_0;
-    func_800954E8(param_0, &local_0);
-    func_800A17A8(param_0, -local_0);
-    if (func_80096694(param_0) == 3) {
-        func_8009DB04(param_0, 0x417, 0.8f, 0x7FFF);
+    s32 damage;
+    func_800954E8(player, &damage);
+    func_800A17A8(player, -damage);
+    // Matching: both branches are identical but the branch is needed for the match.
+    if (func_80096694(player) == 3) {
+        func_8009DB04(player, 0x417, 0.8f, 0x7FFF);
     } else {
-        func_8009DB04(param_0, 0x417, 0.8f, 0x7FFF);
+        func_8009DB04(player, 0x417, 0.8f, 0x7FFF);
     }
-    _badust_entrypoint_8(param_0);
-    _bashake_entrypoint_0(param_0, 3, 2);
+    _badust_entrypoint_8(player);
+    _bashake_entrypoint_0(player, 3, 2);
 }
 
-void func_8080009C_bssplat(PlayerState *param_0)
+// Enter: flop animation.
+void func_8080009C_bssplat(PlayerState *player)
 {
-    baanim_playForDuration_once(param_0, 0x46, 1.1f);
-    func_8009FFD8(param_0, 1, 1, 3, 3);
-    bssplat_entrypoint_0(param_0);
-    func_8009DF18(param_0, 0x427, 1.0f, 0x6D60);
-    param_0->unk15C.word = 0;
-    func_8008E944(param_0);
+    baanim_playForDuration_once(player, 0x46, 1.1f);
+    func_8009FFD8(player, 1, 1, 3, 3);
+    bssplat_entrypoint_0(player);
+    func_8009DF18(player, 0x427, 1.0f, 0x6D60);
+    player->unk15C.word = 0;
+    func_8008E944(player);
 }
 
-void func_80800114_bssplat(PlayerState *param_0)
+// Update: slow down, get up, then pick the next state.
+void func_80800114_bssplat(PlayerState *player)
 {
-    s32 local_0 = 0;
-    void *local_1 = baanim_getAnimCtrlPtr(param_0);
+    s32 next_state = 0;
+    void *anim_ctrl = baanim_getAnimCtrlPtr(player);
 
     baphysics_set_target_horizontal_velocity(
-        param_0, func_800F0E00(0.0f, baphysics_get_target_horizontal_velocity(param_0) - 15.0f));
-    switch (*(s32 *) ((u8 *) param_0 + 0x15C)) {
+        player, func_800F0E00(0.0f, baphysics_get_target_horizontal_velocity(player) - 15.0f));
+    switch (*(s32 *) ((u8 *) player + 0x15C)) {
         case 0:
-            if (baphysics_get_target_horizontal_velocity(param_0) > 140.0f)
-                _badust_entrypoint_9(param_0);
-            if (func_8008DD04(param_0))
-                local_0 = 0x2F;
-            if (anctrl_isStopped(local_1)) {
-                baanim_playForDuration_onceSmooth(param_0, 0xD2, 2.25f);
-                *(s32 *) ((u8 *) param_0 + 0x15C) = 1;
+            if (baphysics_get_target_horizontal_velocity(player) > 140.0f)
+                _badust_entrypoint_9(player);
+            if (func_8008DD04(player))
+                next_state = 0x2F;
+            if (anctrl_isStopped(anim_ctrl)) {
+                baanim_playForDuration_onceSmooth(player, 0xD2, 2.25f);
+                *(s32 *) ((u8 *) player + 0x15C) = 1;
             }
             break;
         case 1:
-            if (anctrl_isAt(local_1, 0.63f))
-                local_0 = 0x20;
-            if (anctrl_isStopped(local_1))
-                local_0 = 1;
-            if (func_8008DD04(param_0))
-                local_0 = 0x2F;
+            if (anctrl_isAt(anim_ctrl, 0.63f))
+                next_state = 0x20;
+            if (anctrl_isStopped(anim_ctrl))
+                next_state = 1;
+            if (func_8008DD04(player))
+                next_state = 0x2F;
     }
-    if (!player_isStable(param_0) && player_inWater(param_0))
-        local_0 = 0x2D;
-    if (!func_800A1718(param_0))
-        local_0 = 0x41;
-    bs_setState(param_0, local_0);
+    if (!player_isStable(player) && player_inWater(player))
+        next_state = 0x2D;
+    if (!func_800A1718(player))
+        next_state = 0x41;
+    bs_setState(player, next_state);
 }
 
-void func_80800274_bssplat(s32 arg0)
+// Exit.
+void func_80800274_bssplat(s32 player)
 {
     func_8008E95C();
-    func_8009BD88(arg0);
+    func_8009BD88(player);
 }
 
-int bssplat_entrypoint_1(s32 param_0)
+int bssplat_entrypoint_1(s32 index)
 {
-    return D_808002B0_bssplat[param_0];
+    return D_808002B0_bssplat[index];
 }
 
+// TU-NOTE: this table is defined in C; IDO schedules some functions differently unless it is in the same unit.
 extern void func_80099AA8();
 s32 D_808002B0_bssplat[4] = {(u32) func_80800274_bssplat, (u32) func_8080009C_bssplat,
                              (u32) func_80800114_bssplat, (u32) func_80099AA8};

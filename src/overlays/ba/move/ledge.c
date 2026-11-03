@@ -13,22 +13,23 @@ s32 bamoveledge_entrypoint_0()
     return 0x4;
 }
 
-void bamoveledge_entrypoint_1(s32 arg0)
+void bamoveledge_entrypoint_1(s32 actor)
 {
 }
 
-void bamoveledge_entrypoint_2(s32 arg0)
+void bamoveledge_entrypoint_2(s32 actor)
 {
 }
 
-void bamoveledge_entrypoint_3(PlayerState *param_0)
+// Integrates position from velocity while hanging on a ledge.
+void bamoveledge_entrypoint_3(PlayerState *player)
 {
-    f32 local_0[3];
-    f32 local_1[3];
+    f32 velocity[3];
+    f32 pos[3];
 
-    func_8009BC08(param_0, local_1);
-    func_8009BB24(param_0, local_0);
-    func_800EF334(local_0, func_800D8FF8());
-    func_800EF04C(local_1, local_0);
-    func_8009B98C(param_0, local_1);
+    func_8009BC08(player, pos);
+    func_8009BB24(player, velocity);
+    func_800EF334(velocity, func_800D8FF8());
+    func_800EF04C(pos, velocity);
+    func_8009B98C(player, pos);
 }

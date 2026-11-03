@@ -12,6 +12,7 @@
 #include "core2/1E79FD0.h"
 #include "core2/1ECA640.h"
 
+// Init.
 void bsbegghead_entrypoint_0(PlayerState *player)
 {
     baanim_playForDuration_once(player, ASSET_2A_ANIM_BSEGGHEAD, 1.0f);
@@ -24,33 +25,34 @@ void bsbegghead_entrypoint_0(PlayerState *player)
     bainput_enable(player, 2, 0);
 }
 
+// Update: fires the selected egg forwards at the right animation time, then returns to crouch/idle or falls.
 void bsbegghead_entrypoint_1(PlayerState *player)
 {
     BanjoStateId next_state;
-    AnimCtrl *aCtrl;
+    AnimCtrl *anim_ctrl;
     s32 has_eggs;
 
     next_state = BS_STATE_0_INVALID;
-    aCtrl = baanim_getAnimCtrlPtr(player);
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
     has_eggs = func_80094BC0(player) != 0;
     if (bainput_should_shoot_egg(player) && func_80094B14(player)) {
         player->unk15C.word =
             func_800F1418(player->unk15C.word + 1, func_800944E0(player, player->unk164.word));
     }
     if (has_eggs) {
-        if (anctrl_isAt(aCtrl, 0.1f)) {
+        if (anctrl_isAt(anim_ctrl, 0.1f)) {
             _baeggsetup_entrypoint_10(player);
         }
-        if (anctrl_isAt(aCtrl, 0.4f)) {
+        if (anctrl_isAt(anim_ctrl, 0.4f)) {
             _baeggsetup_entrypoint_8(player, player->unk164.word);
         }
-        if (anctrl_isAt(aCtrl, 0.4704f)) {
+        if (anctrl_isAt(anim_ctrl, 0.4704f)) {
             _baeggsetup_entrypoint_5(player, player->unk164.word, 80.0f, 120.0f);
             func_800C6DA0(0x43);
         }
-        if (anctrl_isAt(aCtrl, 0.5919f) && player->unk160.word < player->unk15C.word) {
-            anctrl_setStart(aCtrl, 0.3878f);
-            anctrl_start(aCtrl);
+        if (anctrl_isAt(anim_ctrl, 0.5919f) && player->unk160.word < player->unk15C.word) {
+            anctrl_setStart(anim_ctrl, 0.3878f);
+            anctrl_start(anim_ctrl);
             player->unk160.word++;
         }
     }
@@ -58,18 +60,19 @@ void bsbegghead_entrypoint_1(PlayerState *player)
         next_state = BS_STATE_2F_FALL;
     }
     if (bakey_held(player, BUTTON_Z)) {
-        if (anctrl_isStopped(aCtrl)) {
+        if (anctrl_isStopped(anim_ctrl)) {
             next_state = BS_STATE_7_CROUCH;
         }
-        if (0.65f < anctrl_getAnimTimer(aCtrl)) {
+        if (0.65f < anctrl_getAnimTimer(anim_ctrl)) {
             next_state = _bscrouch_entrypoint_4(player, next_state);
         }
-    } else if (anctrl_isStopped(aCtrl)) {
+    } else if (anctrl_isStopped(anim_ctrl)) {
         next_state = BS_STATE_1_IDLE;
     }
     bs_setState(player, next_state);
 }
 
+// End.
 void bsbegghead_entrypoint_2(PlayerState *player)
 {
     bainput_enable(player, 2, 1);
@@ -80,7 +83,7 @@ void bsbegghead_entrypoint_2(PlayerState *player)
 void *D_808002E0_bsbegghead[] = {_bsbegghead_entrypoint_2, _bsbegghead_entrypoint_0,
                                  _bsbegghead_entrypoint_1, func_8009AB78};
 
-void *bsbegghead_entrypoint_3(s32 arg0)
+void *bsbegghead_entrypoint_3(s32 index)
 {
-    return D_808002E0_bsbegghead[arg0];
+    return D_808002E0_bsbegghead[index];
 }

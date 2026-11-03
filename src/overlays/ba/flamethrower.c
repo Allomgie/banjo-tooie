@@ -1,22 +1,22 @@
 #include "common.h"
 
 typedef struct {
-    void (*local_0)(void *, f32 *, f32 *);
-    f32 local_1;
-    f32 local_2;
+    void (*get_ray)(void *, f32 *, f32 *);
+    f32 length;
+    f32 target;
 } FlameThrowerData;
 extern void _baflameline_entrypoint_6(void *, f32);
 extern f32 func_800F15F8(f32, f32, f32);
 
 typedef struct {
     s32 pad_0;
-    f32 local_0;
-    f32 local_1;
-    u8 local_2;
+    f32 length;
+    f32 target;
+    u8 mode;
 } FlamethrowerState;
 typedef struct {
     u8 pad_0[0x88];
-    FlamethrowerState *local_0;
+    FlamethrowerState *flame;
 } FlamethrowerPlayer;
 
 s32 baflamethrower_entrypoint_0()
@@ -24,43 +24,45 @@ s32 baflamethrower_entrypoint_0()
     return 0x10;
 }
 
-void func_80800008_baflamethrower(u8 *param_0)
+// Feeds the beam with origin and direction from the callback, then ramps its length to the target.
+void func_80800008_baflamethrower(u8 *player)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    (*(FlameThrowerData **) (param_0 + 0x88))->local_0(param_0, local_0, local_1);
-    _baflameline_entrypoint_4(param_0, local_0);
-    _baflameline_entrypoint_5(param_0, local_1);
-    _baflameline_entrypoint_6(param_0, (*(FlameThrowerData **) (param_0 + 0x88))->local_1);
-    (*(FlameThrowerData **) (param_0 + 0x88))->local_1 =
-        func_800F15F8((*(FlameThrowerData **) (param_0 + 0x88))->local_1,
-                      (*(FlameThrowerData **) (param_0 + 0x88))->local_2, 20.0f);
+    f32 origin[3];
+    f32 dir[3];
+    (*(FlameThrowerData **) (player + 0x88))->get_ray(player, origin, dir);
+    _baflameline_entrypoint_4(player, origin);
+    _baflameline_entrypoint_5(player, dir);
+    _baflameline_entrypoint_6(player, (*(FlameThrowerData **) (player + 0x88))->length);
+    (*(FlameThrowerData **) (player + 0x88))->length =
+        func_800F15F8((*(FlameThrowerData **) (player + 0x88))->length,
+                      (*(FlameThrowerData **) (player + 0x88))->target, 20.0f);
 }
 
-void func_80800088_baflamethrower(FlamethrowerPlayer *param_0, s32 param_1)
+// Sets the mode: 0 = off, 1 = start, 2 = firing, 3 = stopping.
+void func_80800088_baflamethrower(FlamethrowerPlayer *player, s32 mode)
 {
-    s32 local_0;
+    s32 prev_mode;
 
-    local_0 = param_0->local_0->local_2;
-    if ((local_0 == 1 || local_0 == 3) && param_1 == 3)
+    prev_mode = player->flame->mode;
+    if ((prev_mode == 1 || prev_mode == 3) && mode == 3)
         return;
-    param_0->local_0->local_2 = param_1;
-    switch (param_1) {
+    player->flame->mode = mode;
+    switch (mode) {
         case 0:
             break;
         case 1:
-            param_0->local_0->local_1 = 0.0f;
-            param_0->local_0->local_0 = param_0->local_0->local_1;
-            func_80800008_baflamethrower(param_0);
+            player->flame->target = 0.0f;
+            player->flame->length = player->flame->target;
+            func_80800008_baflamethrower(player);
             break;
         case 2:
-            param_0->local_0->local_0 = 150.0f;
-            param_0->local_0->local_1 = 300.0f;
-            func_80800008_baflamethrower(param_0);
+            player->flame->length = 150.0f;
+            player->flame->target = 300.0f;
+            func_80800008_baflamethrower(player);
             break;
         case 3:
-            param_0->local_0->local_1 = 150.0f;
-            _baflameline_entrypoint_1(param_0);
+            player->flame->target = 150.0f;
+            _baflameline_entrypoint_1(player);
     }
 }
 
@@ -70,12 +72,12 @@ void baflamethrower_entrypoint_1(s32 arg0)
     _baflameline_entrypoint_2(arg0);
 }
 
-void baflamethrower_entrypoint_2(u8 *param_0, s32 param_1)
+void baflamethrower_entrypoint_2(u8 *player, s32 get_ray)
 {
     _baflameline_entrypoint_3();
-    *(s32 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x88) + 0) = param_1;
-    *(s8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x88) + 0xC) = 0;
-    func_80800088_baflamethrower(param_0, 1);
+    *(s32 *) ((s8 *) *(u8 **) ((s8 *) player + 0x88) + 0) = get_ray;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x88) + 0xC) = 0;
+    func_80800088_baflamethrower(player, 1);
 }
 
 void baflamethrower_entrypoint_3(s32 arg0)
@@ -88,24 +90,24 @@ void baflamethrower_entrypoint_4(s32 arg0)
     func_80800088_baflamethrower(arg0, 0x3);
 }
 
-void baflamethrower_entrypoint_5(u8 *param_0)
+void baflamethrower_entrypoint_5(u8 *player)
 {
-    u8 local_0;
-    u8 *local_1;
+    u8 mode;
+    u8 *flame;
 
-    local_0 = *(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x88) + 0xC);
-    switch (local_0) {
+    mode = *(u8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x88) + 0xC);
+    switch (mode) {
         case 1:
             break;
         case 2:
-            func_80800008_baflamethrower(param_0);
+            func_80800008_baflamethrower(player);
             break;
         case 3:
-            func_80800008_baflamethrower(param_0);
-            local_1 = *(u8 **) ((s8 *) param_0 + 0x88);
-            if (*(f32 *) ((s8 *) local_1 + 8) == *(f32 *) ((s8 *) local_1 + 4)) {
-                func_80800088_baflamethrower(param_0, 1);
+            func_80800008_baflamethrower(player);
+            flame = *(u8 **) ((s8 *) player + 0x88);
+            if (*(f32 *) ((s8 *) flame + 8) == *(f32 *) ((s8 *) flame + 4)) {
+                func_80800088_baflamethrower(player, 1);
             }
     }
-    _baflameline_entrypoint_7(param_0);
+    _baflameline_entrypoint_7(player);
 }

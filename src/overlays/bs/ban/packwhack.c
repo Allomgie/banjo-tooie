@@ -19,17 +19,18 @@ extern BsScript D_8080050C_bsbanpackwhack[4];
 extern void _babackpack_entrypoint_5(PlayerState *);
 extern void func_800F1574(f32 *, f32);
 
-s32 func_80800000_bsbanpackwhack(s32 arg0, f32 arg1)
+// Spawns the impact particles at pos.
+s32 func_80800000_bsbanpackwhack(s32 pos, f32 yaw)
 {
-    s32 sp24 = func_800B5BE4(0xA);
-    func_800BA77C(sp24, 0, (s16) arg1, 0);
-    return func_800BABB8(sp24, arg0, 0, 1.0f, &D_808004D0_bsbanpackwhack);
+    s32 particle = func_800B5BE4(0xA);
+    func_800BA77C(particle, 0, (s16) yaw, 0);
+    return func_800BABB8(particle, pos, 0, 1.0f, &D_808004D0_bsbanpackwhack);
 }
 
-void func_80800074_bsbanpackwhack(PlayerState *self, s32 arg1)
+void func_80800074_bsbanpackwhack(PlayerState *self, s32 pos)
 {
-    s32 tmp_v0 = func_80800000_bsbanpackwhack(arg1, yaw_get(self));
-    func_800BA22C(tmp_v0, 1);
+    s32 particle = func_80800000_bsbanpackwhack(pos, yaw_get(self));
+    func_800BA22C(particle, 1);
 }
 
 void bsbanpackwhack_entrypoint_0(PlayerState *self)
@@ -61,8 +62,8 @@ void bsbanpackwhack_entrypoint_2(PlayerState *self)
 {
     BanjoStateId next_state = BS_STATE_0_INVALID;
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
-    f32 tmp_f0;
-    f32 sp28[3];
+    f32 anim_time;
+    f32 pos[3];
 
     if (player_isStable(self)) {
         func_800F1574(&self->unk16C, func_800F0E00(self->unk16C * 0.08f, 3.0f));
@@ -84,10 +85,10 @@ void bsbanpackwhack_entrypoint_2(PlayerState *self)
     }
 
     if (_babackpack_get_state(self) == 2) {
-        tmp_f0 = anctrl_getAnimTimer(anctrl);
-        if ((0.23f < tmp_f0) && (tmp_f0 < 0.695f)) {
-            _babackpack_entrypoint_6(self, sp28, 0);
-            func_80800074_bsbanpackwhack(self, sp28);
+        anim_time = anctrl_getAnimTimer(anctrl);
+        if ((0.23f < anim_time) && (anim_time < 0.695f)) {
+            _babackpack_entrypoint_6(self, pos, 0);
+            func_80800074_bsbanpackwhack(self, pos);
         }
     }
 
@@ -135,6 +136,9 @@ BsScript bsbanpackwhack_entrypoint_3(BsScriptType type)
     return D_8080050C_bsbanpackwhack[type];
 }
 
+// TU-NOTE: the overlay .data is defined here in C. Its tables point to functions of this
+// file, and IDO's assembler schedules some of them differently unless the tables are in
+// the same unit. Values are taken from the ROM.
 extern void _bsbanpackwhack_entrypoint_0();
 extern void _bsbanpackwhack_entrypoint_1();
 extern void _bsbanpackwhack_entrypoint_2();

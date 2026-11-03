@@ -5,50 +5,52 @@
 
 extern s32 D_808003B0_bskazflamethrower[];
 
-void bskazflamethrower_entrypoint_0(PlayerState *self, f32 arg1[3], f32 arg2[3])
+// Emitter callback: mouth position is the player position 17 units forward along pitch/yaw, 57 up.
+void bskazflamethrower_entrypoint_0(PlayerState *self, f32 pos[3], f32 dir[3])
 {
-    f32 unk0[3];
-    s32 pad2;
-    f32 unk1;
+    f32 offset[3];
+    s32 unk_0;
+    f32 pitch;
 
-    unk1 = func_8009BFCC(self);
-    func_800EEC30(arg2, -unk1, yaw_get(self), 1);
-    func_8009C128(self, arg1);
-    func_800EFA98(unk0, arg2, 17);
-    func_800EF04C(arg1, unk0);
-    arg1[1] += 57.0f;
+    pitch = func_8009BFCC(self);
+    func_800EEC30(dir, -pitch, yaw_get(self), 1);
+    func_8009C128(self, pos);
+    func_800EFA98(offset, dir, 17);
+    func_800EF04C(pos, offset);
+    pos[1] += 57.0f;
 }
 
-void func_80800094_bskazflamethrower(PlayerState *param_0, s32 param_1)
+// Enters a phase: 1 wind-up, 2 hold, 3 release, 4 wind-down, 0 stops the emitter.
+void func_80800094_bskazflamethrower(PlayerState *self, s32 phase)
 {
-    AnimCtrl *local_0;
+    AnimCtrl *anim_ctrl;
 
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    param_0->unk15C.word = param_1;
-    switch (param_1) {
+    anim_ctrl = baanim_getAnimCtrlPtr(self);
+    self->unk15C.word = phase;
+    switch (phase) {
         case 1:
-            baanim_playForDuration_onceSmooth(param_0, 0xE1, 1.0f);
-            func_8009FFD8(param_0, 1, 3, 8, 2);
-            yaw_setVelocityBounded(param_0, 300.0f, 1.6f);
-            baphysics_set_target_horizontal_velocity(param_0, 0);
-            _baflamethrower_entrypoint_2(param_0, &_bskazflamethrower_entrypoint_0);
+            baanim_playForDuration_onceSmooth(self, 0xE1, 1.0f);
+            func_8009FFD8(self, 1, 3, 8, 2);
+            yaw_setVelocityBounded(self, 300.0f, 1.6f);
+            baphysics_set_target_horizontal_velocity(self, 0);
+            _baflamethrower_entrypoint_2(self, &_bskazflamethrower_entrypoint_0);
             break;
         case 2:
-            anctrl_setSubrange(local_0, 0.375f, 0.5625f);
-            anctrl_setPlaybackType(local_0, 4);
-            _batimer_set(param_0, 2, 0.14f);
-            _baflamethrower_entrypoint_3(param_0);
+            anctrl_setSubrange(anim_ctrl, 0.375f, 0.5625f);
+            anctrl_setPlaybackType(anim_ctrl, 4);
+            _batimer_set(self, 2, 0.14f);
+            _baflamethrower_entrypoint_3(self);
             break;
         case 3:
-            _baflamethrower_entrypoint_4(param_0);
-            _batimer_set(param_0, 1, 0.05f);
+            _baflamethrower_entrypoint_4(self);
+            _batimer_set(self, 1, 0.05f);
             break;
         case 4:
-            anctrl_setPlaybackType(local_0, 1);
-            baanim_setEnd(param_0, 1.0f);
+            anctrl_setPlaybackType(anim_ctrl, 1);
+            baanim_setEnd(self, 1.0f);
             break;
         case 0:
-            _baflamethrower_entrypoint_1(param_0);
+            _baflamethrower_entrypoint_1(self);
     }
 }
 
@@ -78,6 +80,7 @@ void bskazflamethrower_entrypoint_3(PlayerState *self)
             }
             break;
         case 2:
+            // Stops on button release, but only after a 0.14 s minimum.
             _batimer_decrement(self, 2);
             if ((_batimer_isZero(self, 2) != 0) && (bakey_released(self, 9) != 0)) {
                 func_80800094_bskazflamethrower(self, 3);
@@ -105,6 +108,9 @@ s32 bskazflamethrower_entrypoint_4(s32 idx)
     return D_808003B0_bskazflamethrower[idx];
 }
 
+// TU-NOTE: the overlay .data (formerly flamethrower.data.s) is defined here in C. The table holds
+// function pointers from this file; IDO's assembler schedules these functions differently
+// unless the table is in the same unit. Values are taken from the ROM.
 extern void func_80099B94();
 s32 D_808003B0_bskazflamethrower[4] = {(u32) _bskazflamethrower_entrypoint_1,
                                        (u32) _bskazflamethrower_entrypoint_2,

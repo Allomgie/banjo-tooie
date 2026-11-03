@@ -10,17 +10,19 @@ void func_80800000_bskazow(PlayerState *self)
     _bskaz_entrypoint_2(self);
 }
 
+// Light knockback: enter.
 void func_80800028_bskazow(PlayerState *self)
 {
-    AnimCtrl *animCtrl;
+    AnimCtrl *anim_ctrl;
 
-    animCtrl = baanim_getAnimCtrlPtr(self);
+    anim_ctrl = baanim_getAnimCtrlPtr(self);
     _bskaz_entrypoint_1(self);
     _babounce_entrypoint_4(self, 1);
     _babounce_entrypoint_6(self, 0xC9, 0.4692, 2.1, 1.2f);
-    func_8008B10C(animCtrl, 0.1792);
+    func_8008B10C(anim_ctrl, 0.1792);
 }
 
+// Light knockback update: blink, steer, then idle or water.
 void func_80800098_bskazow(PlayerState *self)
 {
     BanjoStateId next_state;
@@ -52,17 +54,19 @@ void func_8080015C_bskazow(PlayerState *self)
     _bskaz_entrypoint_2(self);
 }
 
+// Heavy knockback: enter.
 void func_80800184_bskazow(PlayerState *self)
 {
-    AnimCtrl *animCtrl;
+    AnimCtrl *anim_ctrl;
 
-    animCtrl = baanim_getAnimCtrlPtr(self);
+    anim_ctrl = baanim_getAnimCtrlPtr(self);
     _bskaz_entrypoint_1(self);
     _babounce_entrypoint_4(self, 2);
     _babounce_entrypoint_6(self, 0xC9, 0.4692, 2.5, 1.8f);
-    func_8008B10C(animCtrl, 0.1792);
+    func_8008B10C(anim_ctrl, 0.1792);
 }
 
+// Heavy knockback update: blink, steer, then idle or water.
 void func_808001F0_bskazow(PlayerState *self)
 {
     BanjoStateId next_state;
@@ -88,6 +92,9 @@ s32 bskazow_entrypoint_1(s32 idx)
     return D_808002E0_bskazow[idx];
 }
 
+// TU-NOTE: the overlay .data is defined here in C. The tables point to functions of this file;
+// IDO's assembler schedules some of them differently unless the tables are in the same unit.
+// Values are taken from the ROM.
 extern void func_80099AA8();
 s32 D_808002D0_bskazow[4] = {(u32) func_80800000_bskazow, (u32) func_80800028_bskazow,
                              (u32) func_80800098_bskazow, (u32) func_80099AA8};

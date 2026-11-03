@@ -59,9 +59,9 @@ extern void _bafly_entrypoint_7();
 extern void _bafly_entrypoint_9();
 extern void _chusefeather_entrypoint_1();
 typedef struct {
-    f32 local_0;
-    u8 pad_0[0x18];
-    u8 local_1;
+    f32 cooldown;
+    u8 pad_4[0x18];
+    u8 flap_queued;
 } FlyState561;
 extern void _bafly_entrypoint_10(PlayerState *, f32, f32);
 extern void _bafly_entrypoint_8(PlayerState *, f32, f32, f32, f32, f32, f32, f32);
@@ -85,99 +85,101 @@ extern void func_80093360(PlayerState *, f32);
 extern void func_8009DB04(PlayerState *, s32, f32, s32);
 extern f32 anctrl_getAnimTimer(void *);
 
-void func_80800000_bsbfly(PlayerState *param_0)
+void func_80800000_bsbfly(PlayerState *player)
 {
-    f32 local_0[3];
-    func_8009C128(param_0, local_0);
-    local_0[0] += func_800DC178(-30.0f, 30.0f);
-    local_0[1] += 50.0f + func_800DC178(0.0f, 30.0f);
-    local_0[2] += func_800DC178(-30.0f, 30.0f);
-    func_800BBCB8(local_0, 0, 1.0f, 1, D_80801D20_bsbfly);
+    f32 pos[3];
+    func_8009C128(player, pos);
+    pos[0] += func_800DC178(-30.0f, 30.0f);
+    pos[1] += 50.0f + func_800DC178(0.0f, 30.0f);
+    pos[2] += func_800DC178(-30.0f, 30.0f);
+    func_800BBCB8(pos, 0, 1.0f, 1, D_80801D20_bsbfly);
 }
 
-void func_808000AC_bsbfly(s32 param_0)
+void func_808000AC_bsbfly(s32 player)
 {
-    func_80093360(param_0, 6e+01f);
-    yaw_setUpdateType(param_0, 3);
-    yaw_setVelocityBounded(param_0, 0x43FA0000, 0x40000000);
-    baroll_setAngularVelocity(param_0, 0x43FA0000, 0x40000000);
-    _bafly_entrypoint_20(param_0);
-    func_800959C8(param_0, 0x42820000, 0x42480000);
-    func_800961AC(param_0, 4);
+    func_80093360(player, 6e+01f);
+    yaw_setUpdateType(player, 3);
+    yaw_setVelocityBounded(player, 0x43FA0000, 0x40000000);
+    baroll_setAngularVelocity(player, 0x43FA0000, 0x40000000);
+    _bafly_entrypoint_20(player);
+    func_800959C8(player, 0x42820000, 0x42480000);
+    func_800961AC(player, 4);
 }
 
-int func_80800128_bsbfly(param_0)
-s32 param_0;
+int func_80800128_bsbfly(actor)
+s32 actor;
 {
-    s32 local_0;
-    local_0 = param_0 | 0;
-    if (!func_8009E77C(local_0, 9)) {
-        _bastatemem_entrypoint_0(local_0, 0x20);
-        _bafly_entrypoint_5(local_0);
-        func_808000AC_bsbfly(local_0);
-        _baboost_entrypoint_3(local_0);
-        _baboost_entrypoint_4(local_0, 1);
+    s32 player;
+    // Matching: `| 0` on the copy is needed for the match.
+    player = actor | 0;
+    if (!func_8009E77C(player, 9)) {
+        _bastatemem_entrypoint_0(player, 0x20);
+        _bafly_entrypoint_5(player);
+        func_808000AC_bsbfly(player);
+        _baboost_entrypoint_3(player);
+        _baboost_entrypoint_4(player, 1);
     }
 }
 
-int func_80800188_bsbfly(param_0)
-Actor *param_0;
+int func_80800188_bsbfly(player)
+Actor *player;
 {
-    if (!func_8009E74C(param_0, 9)) {
-        _bafly_entrypoint_4(param_0);
-        _bastatemem_entrypoint_1(param_0);
-        baphysics_reset_gravity(param_0);
-        baphysics_reset_terminal_velocity(param_0);
-        func_800A0CF4(param_0, 0);
-        func_80093360(param_0,
+    if (!func_8009E74C(player, 9)) {
+        _bafly_entrypoint_4(player);
+        _bastatemem_entrypoint_1(player);
+        baphysics_reset_gravity(player);
+        baphysics_reset_terminal_velocity(player);
+        func_800A0CF4(player, 0);
+        // Matching: the chain of `& 0xFFFFFFFFFFFFFFFF` is needed for the match.
+        func_80093360(player,
                       ((0 & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF);
-        func_800A042C(param_0);
-        yaw_setUpdateType(param_0, 1);
-        func_800A4E30(param_0);
-        func_80095A40(param_0);
-        func_800961AC(param_0, 1);
-        _baboost_entrypoint_4(param_0, 0);
-        baflag_clear(param_0, 0x2F);
-        baflag_clear(param_0, 0x30);
+        func_800A042C(player);
+        yaw_setUpdateType(player, 1);
+        func_800A4E30(player);
+        func_80095A40(player);
+        func_800961AC(player, 1);
+        _baboost_entrypoint_4(player, 0);
+        baflag_clear(player, 0x2F);
+        baflag_clear(player, 0x30);
     }
 }
 
-void func_80800248_bsbfly(PlayerState *param_0)
+void func_80800248_bsbfly(PlayerState *player)
 {
-    baanim_playForDuration_once(param_0, 0x45, 1.4f);
-    func_8009FFD8(param_0, 1, 1, 3, 6);
-    if (bastick_distance(param_0) != 0.0f)
-        yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
-    baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
-    func_8009BA9C(param_0, 0);
-    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-    baphysics_set_gravity(param_0, -1200.0f);
-    func_800A0CF4(param_0, 1);
-    func_8009D874(param_0);
-    param_0->unk160.word = 0;
-    param_0->unk15C.word = 0;
+    baanim_playForDuration_once(player, 0x45, 1.4f);
+    func_8009FFD8(player, 1, 1, 3, 6);
+    if (bastick_distance(player) != 0.0f)
+        yaw_setIdeal(player, bastick_getAngleRelativeToBanjo(player));
+    baphysics_set_target_yaw(player, yaw_getIdeal(player));
+    func_8009BA9C(player, 0);
+    baphysics_set_target_horizontal_velocity(player, 0.0f);
+    baphysics_set_gravity(player, -1200.0f);
+    func_800A0CF4(player, 1);
+    func_8009D874(player);
+    player->unk160.word = 0;
+    player->unk15C.word = 0;
 }
 
-void func_80800320_bsbfly(PlayerState *param_0)
+void func_80800320_bsbfly(PlayerState *player)
 {
-    s32 local_0;
-    void *local_1;
+    s32 next_state;
+    void *anim_ctrl;
 
-    local_0 = 0;
-    local_1 = baanim_getAnimCtrlPtr(param_0);
-    if (!param_0->unk160.word) {
-        if (anctrl_isAt(local_1, 0.2416f)) {
-            anctrl_setDuration(local_1, 2.4f);
-            baphysics_set_vertical_velocity(param_0, 1600.0f);
-            func_8009DE38(param_0, 0x406, 0.7f);
-            param_0->unk160.word = 1;
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    if (!player->unk160.word) {
+        if (anctrl_isAt(anim_ctrl, 0.2416f)) {
+            anctrl_setDuration(anim_ctrl, 2.4f);
+            baphysics_set_vertical_velocity(player, 1600.0f);
+            func_8009DE38(player, 0x406, 0.7f);
+            player->unk160.word = 1;
         }
     } else {
-        func_80800000_bsbfly(param_0);
-        if (baphysics_get_vertical_velocity(param_0) < 0.0f)
-            local_0 = 0x24;
+        func_80800000_bsbfly(player);
+        if (baphysics_get_vertical_velocity(player) < 0.0f)
+            next_state = 0x24;
     }
-    bs_setState(param_0, local_0);
+    bs_setState(player, next_state);
 }
 
 s32 func_808003E0_bsbfly(Actor *this)
@@ -187,513 +189,517 @@ s32 func_808003E0_bsbfly(Actor *this)
     func_800A4E30(this);
 }
 
-int bsbfly_entrypoint_0(s32 param_0)
+int bsbfly_entrypoint_0(s32 idx)
 {
-    return D_80801D48_bsbfly[param_0];
+    return D_80801D48_bsbfly[idx];
 }
 
 void func_80801BB4_bsbfly();
 
-void func_8080042C_bsbfly(s32 arg0)
+void func_8080042C_bsbfly(s32 player)
 {
     func_8009E6EC();
-    func_80801BB4_bsbfly(arg0);
+    func_80801BB4_bsbfly(player);
 }
 
-void func_80800454_bsbfly(Actor *param_0)
+void func_80800454_bsbfly(Actor *player)
 {
-    s32 local_0;
-    baflag_clear(param_0, 0x2F);
-    baflag_clear(param_0, 0x30);
-    local_0 = bs_getNextState(param_0);
-    if ((((local_0 == 0x18) || (local_0 == 0x2A)) || (local_0 == 0x91)) &&
-        (_bafpctrl_entrypoint_4(param_0) == 3)) {
-        baflag_set(param_0, 0x2F);
-        if (_bafpctrl_entrypoint_5(param_0) != 0) {
-            baflag_set(param_0, 0x30);
+    s32 next_state;
+    baflag_clear(player, 0x2F);
+    baflag_clear(player, 0x30);
+    next_state = bs_getNextState(player);
+    if ((((next_state == 0x18) || (next_state == 0x2A)) || (next_state == 0x91)) &&
+        (_bafpctrl_entrypoint_4(player) == 3)) {
+        baflag_set(player, 0x2F);
+        if (_bafpctrl_entrypoint_5(player) != 0) {
+            baflag_set(player, 0x30);
         }
     }
-    _bafpctrl_entrypoint_17(param_0);
-    _bafly_entrypoint_6(param_0, (unsigned long long) 0);
-    _bafly_entrypoint_7(param_0, 0);
-    func_80800188_bsbfly(param_0);
+    _bafpctrl_entrypoint_17(player);
+    // Matching: the 64-bit cast of 0 is needed for the match.
+    _bafly_entrypoint_6(player, (unsigned long long) 0);
+    _bafly_entrypoint_7(player, 0);
+    func_80800188_bsbfly(player);
 }
 
-void func_8080050C_bsbfly(PlayerState *param_0)
+void func_8080050C_bsbfly(PlayerState *player)
 {
-    baanim_playForDuration_loopSmooth(param_0, 0x38, 0.62f);
-    func_8009FFD8(param_0, 1, 1, 3, 3);
-    if (baflag_isTrue(param_0, 9))
-        baphysics_set_target_horizontal_velocity(param_0, 0);
+    baanim_playForDuration_loopSmooth(player, 0x38, 0.62f);
+    func_8009FFD8(player, 1, 1, 3, 3);
+    if (baflag_isTrue(player, 9))
+        baphysics_set_target_horizontal_velocity(player, 0);
     else
-        baphysics_set_target_horizontal_velocity(param_0, 600.0f);
-    baphysics_set_horizontal_velocity(param_0, yaw_getIdeal(param_0),
-                                      baphysics_get_target_horizontal_velocity(param_0));
-    baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
-    func_800A0CF4(param_0, 1);
-    baphysics_set_gravity(param_0, -300.0f);
-    baphysics_set_terminal_velocity(param_0, -99.9f);
-    func_800A4DA4(param_0, 3);
-    func_80800128_bsbfly(param_0);
-    *(f32 *) param_0->kazfly = 1.0f;
-    param_0->unk160.word = 0;
-    ((u8 *) param_0->kazfly)[0x1C] = 0;
-    _bafly_entrypoint_19(param_0);
+        baphysics_set_target_horizontal_velocity(player, 600.0f);
+    baphysics_set_horizontal_velocity(player, yaw_getIdeal(player),
+                                      baphysics_get_target_horizontal_velocity(player));
+    baphysics_set_target_yaw(player, yaw_getIdeal(player));
+    func_800A0CF4(player, 1);
+    baphysics_set_gravity(player, -300.0f);
+    baphysics_set_terminal_velocity(player, -99.9f);
+    func_800A4DA4(player, 3);
+    func_80800128_bsbfly(player);
+    *(f32 *) player->kazfly = 1.0f;
+    player->unk160.word = 0;
+    ((u8 *) player->kazfly)[0x1C] = 0;
+    _bafly_entrypoint_19(player);
 }
 
-void func_80800624_bsbfly(PlayerState *param_0)
+void func_80800624_bsbfly(PlayerState *player)
 {
-    s32 local_0;
-    void *local_1;
-    u8 local_7;
-    s32 local_2;
-    s32 local_3;
-    f32 local_4;
-    f32 local_5;
+    s32 next_state;
+    void *anim_ctrl;
+    u8 unk_0;
+    s32 boost;
+    s32 feather_used;
+    f32 unk_1;
+    f32 unk_2;
 
-    local_0 = 0;
-    local_1 = baanim_getAnimCtrlPtr(param_0);
-    _bafly_entrypoint_20(param_0);
-    _bafly_entrypoint_9(param_0);
-    _bafly_entrypoint_10(param_0, 300.0f, 80.0f);
-    _bafly_entrypoint_11(param_0);
-    local_3 = 0;
-    if (bakey_pressed(param_0, 8)) {
-        ((FlyState561 *) param_0->kazfly)->local_1 = 1;
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    _bafly_entrypoint_20(player);
+    _bafly_entrypoint_9(player);
+    _bafly_entrypoint_10(player, 300.0f, 80.0f);
+    _bafly_entrypoint_11(player);
+    feather_used = 0;
+    if (bakey_pressed(player, 8)) {
+        ((FlyState561 *) player->kazfly)->flap_queued = 1;
     }
-    if (((FlyState561 *) param_0->kazfly)->local_1 && func_8001211C() % 3 == 0) {
-        ((FlyState561 *) param_0->kazfly)->local_1 = 0;
-        local_3 = _bafly_entrypoint_12(param_0);
+    if (((FlyState561 *) player->kazfly)->flap_queued && func_8001211C() % 3 == 0) {
+        ((FlyState561 *) player->kazfly)->flap_queued = 0;
+        feather_used = _bafly_entrypoint_12(player);
     }
-    if (local_3 || param_0->unk15C.word) {
-        if (local_3) {
-            anctrl_setDuration(local_1, 0.3f);
-            _chusefeather_entrypoint_1(param_0->unk184, 0);
+    if (feather_used || player->unk15C.word) {
+        if (feather_used) {
+            anctrl_setDuration(anim_ctrl, 0.3f);
+            _chusefeather_entrypoint_1(player->unk184, 0);
         }
-        if (param_0->unk15C.word) {
-            param_0->unk15C.word = 0;
-            _baboost_entrypoint_2(param_0, 0.35f);
+        if (player->unk15C.word) {
+            player->unk15C.word = 0;
+            _baboost_entrypoint_2(player, 0.35f);
         } else {
-            _baboost_entrypoint_2(param_0, 1.0f);
+            _baboost_entrypoint_2(player, 1.0f);
         }
     }
-    local_2 = _baboost_entrypoint_1(param_0);
-    _bafly_entrypoint_7(param_0, 0);
-    switch (param_0->unk160.word) {
+    boost = _baboost_entrypoint_1(player);
+    _bafly_entrypoint_7(player, 0);
+    switch (player->unk160.word) {
         case 0:
-            if (local_2) {
-                param_0->unk160.word = 1;
+            if (boost) {
+                player->unk160.word = 1;
             }
             break;
         case 1:
-            _bafly_entrypoint_7(param_0, 1);
-            local_4 = func_800136E4(func_8009BFD8(param_0) - 30.0f);
-            local_5 = local_4;
-            if (local_4 > 80.0f && local_4 < 300.0f) {
-                local_5 = 300.0f;
+            _bafly_entrypoint_7(player, 1);
+            unk_1 = func_800136E4(func_8009BFD8(player) - 30.0f);
+            unk_2 = unk_1;
+            if (unk_1 > 80.0f && unk_1 < 300.0f) {
+                unk_2 = 300.0f;
             }
-            func_8009BF5C(param_0, local_5);
-            _bafly_entrypoint_21(param_0);
-            if (local_2) {
-                baphysics_set_vertical_velocity(param_0, (f32) local_2 * 400.0f);
+            func_8009BF5C(player, unk_2);
+            _bafly_entrypoint_21(player);
+            if (boost) {
+                baphysics_set_vertical_velocity(player, (f32) boost * 400.0f);
             }
-            if (!local_2) {
-                anctrl_setDuration(local_1, 0.62f);
-                _bafly_entrypoint_20(param_0);
-                param_0->unk160.word = 0;
+            if (!boost) {
+                anctrl_setDuration(anim_ctrl, 0.62f);
+                _bafly_entrypoint_20(player);
+                player->unk160.word = 0;
             }
     }
-    if (anctrl_isAt(local_1, 0.1358f)) {
-        func_8009DFD4(param_0, 0x3FF, 0.6f, 0.7f, 10000, 12000);
+    if (anctrl_isAt(anim_ctrl, 0.1358f)) {
+        func_8009DFD4(player, 0x3FF, 0.6f, 0.7f, 10000, 12000);
     }
-    _bafly_entrypoint_8(param_0, 300.0f, 80.0f, 600.0f, -300.0f, -99.9f, -700.0f, -1000.0f);
-    if (_bafpctrl_entrypoint_4(param_0) != 3 && bainput_should_beak_bust(param_0)) {
-        local_0 = 0xF;
+    _bafly_entrypoint_8(player, 300.0f, 80.0f, 600.0f, -300.0f, -99.9f, -700.0f, -1000.0f);
+    if (_bafpctrl_entrypoint_4(player) != 3 && bainput_should_beak_bust(player)) {
+        next_state = 0xF;
     }
-    ((FlyState561 *) param_0->kazfly)->local_0 =
-        func_800F0E00(((FlyState561 *) param_0->kazfly)->local_0 - func_800D8FF8(), 0.0f);
-    if (((FlyState561 *) param_0->kazfly)->local_0 == 0.0f && bakey_pressed(param_0, 9) &&
-        func_8008D0E0(param_0) && _bafly_entrypoint_12(param_0)) {
-        local_0 = 0x2A;
+    ((FlyState561 *) player->kazfly)->cooldown =
+        func_800F0E00(((FlyState561 *) player->kazfly)->cooldown - func_800D8FF8(), 0.0f);
+    if (((FlyState561 *) player->kazfly)->cooldown == 0.0f && bakey_pressed(player, 9) &&
+        func_8008D0E0(player) && _bafly_entrypoint_12(player)) {
+        next_state = 0x2A;
     }
-    if (player_inWater(param_0)) {
-        local_0 = 0x2D;
+    if (player_inWater(player)) {
+        next_state = 0x2D;
     }
-    if (_bafly_entrypoint_2(param_0)) {
-        local_0 = 1;
+    if (_bafly_entrypoint_2(player)) {
+        next_state = 1;
     }
-    _baboost_entrypoint_5(param_0);
-    bs_setState(param_0, local_0);
+    _baboost_entrypoint_5(player);
+    bs_setState(player, next_state);
 }
 
-int bsbfly_entrypoint_1(s32 param_0)
+int bsbfly_entrypoint_1(s32 idx)
 {
-    return D_80801D58_bsbfly[param_0];
+    return D_80801D58_bsbfly[idx];
 }
 
-void func_808009D0_bsbfly(u8 *param_0)
+void func_808009D0_bsbfly(u8 *player)
 {
+    // Matching: unused stack padding is needed for the match.
     s8 _sfpad[8];
-    s32 local_0;
+    s32 pos;
 
-    func_8009C128(param_0, &local_0);
-    func_800EF04C(&local_0, *(s32 *) ((s8 *) param_0 + 0x188) + 0x10);
-    func_800A34AC(param_0, &local_0);
-    func_8009DF58(param_0, 0x40D, 0x3F800000);
+    func_8009C128(player, &pos);
+    func_800EF04C(&pos, *(s32 *) ((s8 *) player + 0x188) + 0x10);
+    func_800A34AC(player, &pos);
+    func_8009DF58(player, 0x40D, 0x3F800000);
 }
 
-void func_80800A24_bsbfly(PlayerState *param_0, s32 param_1)
+// Beak Bomb dive: sets up the given phase.
+void func_80800A24_bsbfly(PlayerState *player, s32 phase)
 {
-    Vec3f local_0;
-    void *local_1;
+    Vec3f aim;
+    void *anim_ctrl;
 
-    local_1 = baanim_getAnimCtrlPtr(param_0);
-    switch (param_1) {
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    switch (phase) {
         case 0:
-            func_8009E0DC(param_0);
-            baflag_clear(param_0, 0x1C);
+            func_8009E0DC(player);
+            baflag_clear(player, 0x1C);
             break;
         case 1:
-            baanim_playForDuration_onceSmooth(param_0, 0x43, 1.0f);
-            func_8009FFD8(param_0, 1, 1, 3, 7);
-            _bafly_entrypoint_1(param_0, (u8 *) param_0->kazfly + 0x10, local_0.f, 4200.0f);
-            yaw_setIdeal(param_0, local_0.f[1] + 180.0f);
-            func_8009BF5C(param_0, local_0.f[0]);
-            baroll_setIdeal(param_0, 0.0f);
-            func_8009BA9C(param_0, (u8 *) param_0->kazfly + 0x10);
-            func_800A0CF4(param_0, 1);
-            func_800A4DA4(param_0, 4);
-            _ncbadive_entrypoint_4(func_800A4CA8(param_0), (u8 *) param_0->kazfly + 0x10);
-            _ncbafly_entrypoint_5(func_800A4CA8(param_0), 1);
-            func_8009DF94(param_0, 0x439, 1.0f, 28000);
-            baflag_clear(param_0, 0x1C);
-            func_8009C128(param_0, (u8 *) param_0->kazfly + 4);
-            _chusefeather_entrypoint_1(param_0->unk184, 0);
+            baanim_playForDuration_onceSmooth(player, 0x43, 1.0f);
+            func_8009FFD8(player, 1, 1, 3, 7);
+            _bafly_entrypoint_1(player, (u8 *) player->kazfly + 0x10, aim.f, 4200.0f);
+            yaw_setIdeal(player, aim.f[1] + 180.0f);
+            func_8009BF5C(player, aim.f[0]);
+            baroll_setIdeal(player, 0.0f);
+            func_8009BA9C(player, (u8 *) player->kazfly + 0x10);
+            func_800A0CF4(player, 1);
+            func_800A4DA4(player, 4);
+            _ncbadive_entrypoint_4(func_800A4CA8(player), (u8 *) player->kazfly + 0x10);
+            _ncbafly_entrypoint_5(func_800A4CA8(player), 1);
+            func_8009DF94(player, 0x439, 1.0f, 28000);
+            baflag_clear(player, 0x1C);
+            func_8009C128(player, (u8 *) player->kazfly + 4);
+            _chusefeather_entrypoint_1(player->unk184, 0);
             break;
         case 2:
-            baphysics_set_type(param_0, 8);
-            func_800A4DA4(param_0, 4);
-            _ncbadive_entrypoint_4(func_800A4CA8(param_0), (u8 *) param_0->kazfly + 0x10);
-            anctrl_setDuration(local_1, 0.05f);
-            func_8009DF94(param_0, 0x4437, 1.3f, 32767);
-            baflag_set(param_0, 0x1C);
-            _batimer_set(param_0, 1, 0.0001f);
+            baphysics_set_type(player, 8);
+            func_800A4DA4(player, 4);
+            _ncbadive_entrypoint_4(func_800A4CA8(player), (u8 *) player->kazfly + 0x10);
+            anctrl_setDuration(anim_ctrl, 0.05f);
+            func_8009DF94(player, 0x4437, 1.3f, 32767);
+            baflag_set(player, 0x1C);
+            _batimer_set(player, 1, 0.0001f);
         case 3:
             break;
     }
-    param_0->unk160.word = param_1;
+    player->unk160.word = phase;
 }
 
-void func_80800C38_bsbfly(PlayerState *param_0)
+void func_80800C38_bsbfly(PlayerState *player)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    func_800EE7F8(local_1, (f32 *) ((u8 *) param_0->kazfly + 0x10));
-    func_800CA9D8(func_800A4C48(param_0), local_2);
-    func_800EFA4C(local_0, bastick_getX(param_0) * 1000.0f, 0.0f, 0.0f);
-    func_800EF8BC(local_0, local_0, local_2[0]);
-    func_800EF934(local_0, local_0, local_2[1]);
-    func_800EF04C(local_1, local_0);
-    func_800EFA4C(local_0, 0.0f, -bastick_getY(param_0) * 1000.0f, 0.0f);
-    func_800EF8BC(local_0, local_0, local_2[0]);
-    func_800EF934(local_0, local_0, local_2[1]);
-    func_800EF04C(local_1, local_0);
-    func_8009BA9C(param_0, local_1);
+    f32 stick_vec[3];
+    f32 aim_dir[3];
+    f32 cam_angles[3];
+    func_800EE7F8(aim_dir, (f32 *) ((u8 *) player->kazfly + 0x10));
+    func_800CA9D8(func_800A4C48(player), cam_angles);
+    func_800EFA4C(stick_vec, bastick_getX(player) * 1000.0f, 0.0f, 0.0f);
+    func_800EF8BC(stick_vec, stick_vec, cam_angles[0]);
+    func_800EF934(stick_vec, stick_vec, cam_angles[1]);
+    func_800EF04C(aim_dir, stick_vec);
+    func_800EFA4C(stick_vec, 0.0f, -bastick_getY(player) * 1000.0f, 0.0f);
+    func_800EF8BC(stick_vec, stick_vec, cam_angles[0]);
+    func_800EF934(stick_vec, stick_vec, cam_angles[1]);
+    func_800EF04C(aim_dir, stick_vec);
+    func_8009BA9C(player, aim_dir);
 }
 
-void func_80800D50_bsbfly(Actor *param_0)
+void func_80800D50_bsbfly(Actor *player)
 {
     func_80800128_bsbfly();
-    *(s32 *) ((char *) param_0 + 0x160) = 0;
-    func_80800A24_bsbfly(param_0, 1);
+    *(s32 *) ((char *) player + 0x160) = 0;
+    func_80800A24_bsbfly(player, 1);
 }
 
-s32 func_80800D80_bsbfly(PlayerState *param_0, s32 param_1)
+s32 func_80800D80_bsbfly(PlayerState *player, s32 next_state)
 {
-    f32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    s32 local_3;
-    s32 local_4;
-    if (player_inWater(param_0)) {
-        param_1 = 0x4C;
+    f32 dot;
+    f32 normal[3];
+    f32 dive_dir[3];
+    s32 unk_0;
+    s32 stable;
+    if (player_inWater(player)) {
+        next_state = 0x4C;
     }
-    local_4 = player_isStable(param_0);
-    if (!func_8009650C(param_0) && !local_4) {
-        return param_1;
+    stable = player_isStable(player);
+    if (!func_8009650C(player) && !stable) {
+        return next_state;
     }
-    if (local_4) {
-        func_800963C0(param_0, local_1);
-        local_3 = func_80096628(param_0);
+    if (stable) {
+        func_800963C0(player, normal);
+        unk_0 = func_80096628(player);
     } else {
-        func_80096440(param_0, local_1);
-        local_3 = func_80096434(param_0);
+        func_80096440(player, normal);
+        unk_0 = func_80096434(player);
     }
-    func_800EE7F8(local_2, *(u8 **) ((u8 *) param_0 + 0x188) + 0x10);
-    func_800EF2A0(local_2);
-    local_0 = mlAbsF(func_800EEAA4(local_1, local_2));
-    if (baflag_isTrue(param_0, 8) || (local_3 & 0x80)) {
-        func_808009D0_bsbfly(param_0);
-        param_1 = 0x18;
-    } else if (local_0 > 0.4f) {
-        if (local_1[1] < 0.65f) {
-            func_808009D0_bsbfly(param_0);
-            func_800A17A8(param_0, -1);
-            param_1 = func_800A1718(param_0) ? 0x59 : 0x41;
+    func_800EE7F8(dive_dir, *(u8 **) ((u8 *) player + 0x188) + 0x10);
+    func_800EF2A0(dive_dir);
+    dot = mlAbsF(func_800EEAA4(normal, dive_dir));
+    if (baflag_isTrue(player, 8) || (unk_0 & 0x80)) {
+        func_808009D0_bsbfly(player);
+        next_state = 0x18;
+    } else if (dot > 0.4f) {
+        if (normal[1] < 0.65f) {
+            func_808009D0_bsbfly(player);
+            func_800A17A8(player, -1);
+            next_state = func_800A1718(player) ? 0x59 : 0x41;
         } else {
-            param_1 = 0x58;
+            next_state = 0x58;
         }
-    } else if (local_4) {
-        param_1 = 0x58;
+    } else if (stable) {
+        next_state = 0x58;
     }
-    return param_1;
+    return next_state;
 }
 
-void func_80800F10_bsbfly(PlayerState *param_0)
+void func_80800F10_bsbfly(PlayerState *player)
 {
-    s32 local_0;
-    void *local_1;
-    Vec3f local_2;
-    s32 local_3;
-    f32 local_4;
+    s32 next_state;
+    void *anim_ctrl;
+    Vec3f delta;
+    s32 phase;
+    f32 dist_sq;
 
-    local_0 = 0;
-    local_1 = baanim_getAnimCtrlPtr(param_0);
-    _bafly_entrypoint_11(param_0);
-    func_8009DDDC(param_0);
-    local_3 = param_0->unk160.word;
-    switch (local_3) {
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    _bafly_entrypoint_11(player);
+    func_8009DDDC(player);
+    phase = player->unk160.word;
+    switch (phase) {
         case 1:
-            if (anctrl_isAt(local_1, 0.6905f)) {
-                func_80800A24_bsbfly(param_0, 2);
+            if (anctrl_isAt(anim_ctrl, 0.6905f)) {
+                func_80800A24_bsbfly(player, 2);
             }
             break;
         case 2:
-            func_80800C38_bsbfly(param_0);
-            if (anctrl_isStopped(local_1)) {
-                anctrl_setIndex(local_1, 0x47);
-                anctrl_setDuration(local_1, 0.3f);
-                anctrl_setPlaybackType(local_1, 2);
-                anctrl_start(local_1);
+            func_80800C38_bsbfly(player);
+            if (anctrl_isStopped(anim_ctrl)) {
+                anctrl_setIndex(anim_ctrl, 0x47);
+                anctrl_setDuration(anim_ctrl, 0.3f);
+                anctrl_setPlaybackType(anim_ctrl, 2);
+                anctrl_start(anim_ctrl);
             }
-            func_8009C128(param_0, local_2.f);
-            func_800EF3DC(local_2.f, (u8 *) param_0->kazfly + 4);
-            local_4 = func_800EEFD4(local_2.f);
-            _bafly_entrypoint_6(param_0, func_800F10B4(local_4, 0.0f, 16000000.0f, 0.2f, 0.7f));
-            local_4 = func_800EEFD4(local_2.f);
-            if (local_4 > 16000000.0f) {
-                if (bakey_held(param_0, 9)) {
-                    func_80800A24_bsbfly(param_0, 3);
+            func_8009C128(player, delta.f);
+            func_800EF3DC(delta.f, (u8 *) player->kazfly + 4);
+            dist_sq = func_800EEFD4(delta.f);
+            _bafly_entrypoint_6(player, func_800F10B4(dist_sq, 0.0f, 16000000.0f, 0.2f, 0.7f));
+            dist_sq = func_800EEFD4(delta.f);
+            if (dist_sq > 16000000.0f) {
+                if (bakey_held(player, 9)) {
+                    func_80800A24_bsbfly(player, 3);
                 } else {
-                    local_0 = 0x57;
+                    next_state = 0x57;
                 }
             }
-            func_80800000_bsbfly(param_0);
-            local_0 = func_80800D80_bsbfly(param_0, local_0);
+            func_80800000_bsbfly(player);
+            next_state = func_80800D80_bsbfly(player, next_state);
             break;
         case 3:
-            func_80800C38_bsbfly(param_0);
-            if (bakey_released(param_0, 9)) {
-                local_0 = 0x57;
-            } else if (_batimer_decrement(param_0, 1)) {
-                if (_bafly_entrypoint_12(param_0)) {
-                    _chusefeather_entrypoint_1(param_0->unk184, 0);
-                    _batimer_set(param_0, 1, 1.0f);
+            func_80800C38_bsbfly(player);
+            if (bakey_released(player, 9)) {
+                next_state = 0x57;
+            } else if (_batimer_decrement(player, 1)) {
+                if (_bafly_entrypoint_12(player)) {
+                    _chusefeather_entrypoint_1(player->unk184, 0);
+                    _batimer_set(player, 1, 1.0f);
                 } else {
-                    local_0 = 0x57;
+                    next_state = 0x57;
                 }
             }
-            func_80800000_bsbfly(param_0);
-            local_0 = func_80800D80_bsbfly(param_0, local_0);
+            func_80800000_bsbfly(player);
+            next_state = func_80800D80_bsbfly(player, next_state);
     }
-    bs_setState(param_0, local_0);
+    bs_setState(player, next_state);
 }
 
-void func_80801138_bsbfly(s32 arg0)
+void func_80801138_bsbfly(s32 player)
 {
-    func_80800A24_bsbfly(arg0, 0);
-    func_80800188_bsbfly(arg0);
+    func_80800A24_bsbfly(player, 0);
+    func_80800188_bsbfly(player);
 }
 
-int bsbfly_entrypoint_2(s32 param_0)
+int bsbfly_entrypoint_2(s32 idx)
 {
-    return D_80801D68_bsbfly[param_0];
+    return D_80801D68_bsbfly[idx];
 }
 
-s32 func_80801178_bsbfly(s32 param_0)
+s32 func_80801178_bsbfly(s32 player)
 {
-    func_8009E0DC(param_0);
-    func_8009E100(param_0);
-    if (func_8009E74C(param_0, 9) != 0) {
-        func_808000AC_bsbfly(param_0);
+    func_8009E0DC(player);
+    func_8009E100(player);
+    if (func_8009E74C(player, 9) != 0) {
+        func_808000AC_bsbfly(player);
     }
     {
-        s32 local_0 = bs_getNextState(param_0);
-        if ((local_0 == 0x20) || (local_0 == 0x24) || (local_0 == 0x2D)) {
-            s32 _t0 = param_0;
+        s32 next_state = bs_getNextState(player);
+        if ((next_state == 0x20) || (next_state == 0x24) || (next_state == 0x2D)) {
+            // Matching: the extra temporaries are needed for the match.
+            s32 _t0 = player;
             s32 _t1 = 0x3EA;
             s32 _t2 = 0x3F800000;
             func_8009DBF0(_t0, _t1, _t2);
         }
     }
-    func_80800188_bsbfly(param_0);
-    func_800A0CF4(param_0, 0);
+    func_80800188_bsbfly(player);
+    func_800A0CF4(player, 0);
 }
 
-void func_80801208_bsbfly(PlayerState *param_0)
+void func_80801208_bsbfly(PlayerState *player)
 {
-    void *local_0;
+    void *anim_ctrl;
 
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    anctrl_reset(local_0);
-    func_8008B1C8(local_0, 0.3f);
-    anctrl_setIndex(local_0, 0xCC);
-    anctrl_setDuration(local_0, 0.38f);
-    anctrl_setPlaybackType(local_0, 2);
-    anctrl_start(local_0);
-    func_8009FFD8(param_0, 1, 1, 3, 3);
-    func_800A0CF4(param_0, 1);
-    func_80800128_bsbfly((s32) param_0);
-    func_80095A40(param_0);
-    func_800961AC(param_0, 1);
-    baroll_setIdeal(param_0, 0.0f);
-    func_8009BF5C(param_0, 0.0f);
-    baphysics_reset_gravity(param_0);
-    baphysics_reset_terminal_velocity(param_0);
-    func_80093360(param_0, 0.0f);
-    func_8009DF94(param_0, 0x420, 1.0f, 0x7FFF);
-    func_8009DB04(param_0, 0x444, 1.0f, 0x7FFF);
-    *(f32 *) param_0->kazfly = 0.35f;
-    param_0->unk160.word = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    anctrl_reset(anim_ctrl);
+    func_8008B1C8(anim_ctrl, 0.3f);
+    anctrl_setIndex(anim_ctrl, 0xCC);
+    anctrl_setDuration(anim_ctrl, 0.38f);
+    anctrl_setPlaybackType(anim_ctrl, 2);
+    anctrl_start(anim_ctrl);
+    func_8009FFD8(player, 1, 1, 3, 3);
+    func_800A0CF4(player, 1);
+    func_80800128_bsbfly((s32) player);
+    func_80095A40(player);
+    func_800961AC(player, 1);
+    baroll_setIdeal(player, 0.0f);
+    func_8009BF5C(player, 0.0f);
+    baphysics_reset_gravity(player);
+    baphysics_reset_terminal_velocity(player);
+    func_80093360(player, 0.0f);
+    func_8009DF94(player, 0x420, 1.0f, 0x7FFF);
+    func_8009DB04(player, 0x444, 1.0f, 0x7FFF);
+    *(f32 *) player->kazfly = 0.35f;
+    player->unk160.word = 0;
 }
 
-void func_80801334_bsbfly(PlayerState *param_0)
+void func_80801334_bsbfly(PlayerState *player)
 {
-    s32 local_0 = 0;
-    f32 local_1[3];
-    func_8009BB24(param_0, local_1);
-    switch (param_0->unk160.word) {
+    s32 next_state = 0;
+    f32 unk_0[3];
+    func_8009BB24(player, unk_0);
+    switch (player->unk160.word) {
         case 0:
-            if (func_8008DF8C(param_0, 0x5A)) {
-                baanim_playForDuration_onceSmoothStartingAt(param_0, 8, 2.0f, 0.6667f);
-                param_0->unk160.word = 1;
+            if (func_8008DF8C(player, 0x5A)) {
+                baanim_playForDuration_onceSmoothStartingAt(player, 8, 2.0f, 0.6667f);
+                player->unk160.word = 1;
             }
         case 1:
             break;
     }
-    *(f32 *) param_0->kazfly -= func_800D8FF8();
-    if (*(f32 *) param_0->kazfly < 0.0f) {
-        param_0->unk15C.word = 1;
-        local_0 = 0x24;
+    *(f32 *) player->kazfly -= func_800D8FF8();
+    if (*(f32 *) player->kazfly < 0.0f) {
+        player->unk15C.word = 1;
+        next_state = 0x24;
     }
-    if (bainput_should_beak_bust(param_0))
-        local_0 = 0xF;
-    if (player_isStable(param_0)) {
-        func_8009FE58(param_0);
-        local_0 = 0x20;
+    if (bainput_should_beak_bust(player))
+        next_state = 0xF;
+    if (player_isStable(player)) {
+        func_8009FE58(player);
+        next_state = 0x20;
     }
-    if (player_inWater(param_0))
-        local_0 = 0x2D;
-    bs_setState(param_0, local_0);
+    if (player_inWater(player))
+        next_state = 0x2D;
+    bs_setState(player, next_state);
 }
 
-int bsbfly_entrypoint_3(s32 param_0)
+int bsbfly_entrypoint_3(s32 idx)
 {
-    return D_80801D78_bsbfly[param_0];
+    return D_80801D78_bsbfly[idx];
 }
 
-void func_8080145C_bsbfly(s32 param_0)
+void func_8080145C_bsbfly(s32 player)
 {
-    f32 local_0;
+    f32 angle;
 
-    for (local_0 = 0.0f; local_0 < 360.0f; local_0 += 45.0f) {
-        _badust_entrypoint_5(param_0, local_0, 230.0f);
-    }
-}
-
-void func_808014E8_bsbfly(PlayerState *param_0)
-{
-    baanim_playForDuration_onceSmooth(param_0, 0x3E, 1.4f);
-    func_8009FFD8(param_0, 1, 1, 3, 3);
-    func_800A0CF4(param_0, 1);
-    func_8009DF18(param_0, 0x417, 0.8f, 0x7FFF);
-    func_8009D820(param_0, 1.8f);
-    _bamotor_entrypoint_1(param_0, 1.0f, 0.5f, 0.5f);
-    func_800A17A8(param_0, -1);
-    if (!func_800A1718(param_0))
-        _basudie_entrypoint_1(param_0);
-    func_8080145C_bsbfly(param_0);
-    func_8008E944(param_0);
-    *(s32 *) ((u8 *) param_0 + 0x160) = 0;
-}
-
-void func_808015C4_bsbfly(param_0) PlayerState *param_0;
-{
-    void *local_0;
-
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    if (anctrl_isAt(local_0, 0.3659f)) {
-        func_8009DF18(param_0, 0x417, 1.0f, 0x36B0);
-        func_8009DF18(param_0, 0x4454, 1.0f, 0x6D60);
-    }
-    if (anctrl_isAt(local_0, 0.6862f)) {
-        func_8009DF18(param_0, 0x417, 0.8f, 0x4650);
-        func_8009DF18(param_0, 0x427, 1.0f, 0x55F0);
-    }
-    if (anctrl_isAt(local_0, 0.92f)) {
-        baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-    }
-    if (anctrl_getAnimTimer(local_0) < 0.8f) {
-        _badust_entrypoint_9(param_0);
+    for (angle = 0.0f; angle < 360.0f; angle += 45.0f) {
+        _badust_entrypoint_5(player, angle, 230.0f);
     }
 }
 
-void func_808016B4_bsbfly(u8 *param_0)
+void func_808014E8_bsbfly(PlayerState *player)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
+    baanim_playForDuration_onceSmooth(player, 0x3E, 1.4f);
+    func_8009FFD8(player, 1, 1, 3, 3);
+    func_800A0CF4(player, 1);
+    func_8009DF18(player, 0x417, 0.8f, 0x7FFF);
+    func_8009D820(player, 1.8f);
+    _bamotor_entrypoint_1(player, 1.0f, 0.5f, 0.5f);
+    func_800A17A8(player, -1);
+    if (!func_800A1718(player))
+        _basudie_entrypoint_1(player);
+    func_8080145C_bsbfly(player);
+    func_8008E944(player);
+    *(s32 *) ((u8 *) player + 0x160) = 0;
+}
 
-    local_0 = 0;
-    local_1 = baanim_getAnimCtrlPtr();
-    func_8009D3A8(param_0, 0);
-    local_2 = *(s32 *) ((s8 *) param_0 + 0x160);
-    switch (local_2) {
+void func_808015C4_bsbfly(player) PlayerState *player;
+{
+    void *anim_ctrl;
+
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    if (anctrl_isAt(anim_ctrl, 0.3659f)) {
+        func_8009DF18(player, 0x417, 1.0f, 0x36B0);
+        func_8009DF18(player, 0x4454, 1.0f, 0x6D60);
+    }
+    if (anctrl_isAt(anim_ctrl, 0.6862f)) {
+        func_8009DF18(player, 0x417, 0.8f, 0x4650);
+        func_8009DF18(player, 0x427, 1.0f, 0x55F0);
+    }
+    if (anctrl_isAt(anim_ctrl, 0.92f)) {
+        baphysics_set_target_horizontal_velocity(player, 0.0f);
+    }
+    if (anctrl_getAnimTimer(anim_ctrl) < 0.8f) {
+        _badust_entrypoint_9(player);
+    }
+}
+
+void func_808016B4_bsbfly(u8 *player)
+{
+    s32 next_state;
+    s32 anim_ctrl;
+    s32 phase;
+
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr();
+    func_8009D3A8(player, 0);
+    phase = *(s32 *) ((s8 *) player + 0x160);
+    switch (phase) {
         case 0:
-            func_808015C4_bsbfly(param_0);
-            if (anctrl_isAt(local_1, 0.2f) != 0) {
+            func_808015C4_bsbfly(player);
+            if (anctrl_isAt(anim_ctrl, 0.2f) != 0) {
                 if (func_800F8B64() != 0) {
-                    func_800A0180(param_0);
-                    func_800A4DFC(param_0, 0xA);
-                    _ncbadie_entrypoint_3(func_800A4CA8(param_0), 0x41F00000);
-                    _basudie_entrypoint_1(param_0);
-                    _batimer_set(param_0, 0, 3.2f);
-                    *(s32 *) ((s8 *) param_0 + 0x160) = 2;
+                    func_800A0180(player);
+                    func_800A4DFC(player, 0xA);
+                    _ncbadie_entrypoint_3(func_800A4CA8(player), 0x41F00000);
+                    _basudie_entrypoint_1(player);
+                    _batimer_set(player, 0, 3.2f);
+                    *(s32 *) ((s8 *) player + 0x160) = 2;
                 }
-            } else if (anctrl_isAt(local_1, 0.92f) != 0) {
-                baanim_playForDuration_onceSmooth(param_0, 0xD2, 2.25f);
-                *(s32 *) ((s8 *) param_0 + 0x160) = 1;
+            } else if (anctrl_isAt(anim_ctrl, 0.92f) != 0) {
+                baanim_playForDuration_onceSmooth(player, 0xD2, 2.25f);
+                *(s32 *) ((s8 *) player + 0x160) = 1;
             }
             break;
         case 1:
-            if (anctrl_isAt(local_1, 0.63f) != 0) {
-                local_0 = 0x20;
+            if (anctrl_isAt(anim_ctrl, 0.63f) != 0) {
+                next_state = 0x20;
             }
-            if (anctrl_isStopped(local_1) != 0) {
-                local_0 = 1;
+            if (anctrl_isStopped(anim_ctrl) != 0) {
+                next_state = 1;
             }
-            if (func_8008DD04(param_0) != 0) {
-                local_0 = 0x2F;
+            if (func_8008DD04(player) != 0) {
+                next_state = 0x2F;
             }
             break;
         case 2:
-            func_808015C4_bsbfly(param_0);
-            if (_batimer_decrement(param_0, 0) != 0) {
-                _basudie_entrypoint_0(param_0);
+            func_808015C4_bsbfly(player);
+            if (_batimer_decrement(player, 0) != 0) {
+                _basudie_entrypoint_0(player);
             }
     }
-    bs_setState(param_0, local_0);
+    bs_setState(player, next_state);
 }
 
 s32 func_8080183C_bsbfly(Actor *this)
@@ -704,21 +710,21 @@ s32 func_8080183C_bsbfly(Actor *this)
     func_8008E95C(this);
 }
 
-int bsbfly_entrypoint_4(s32 param_0)
+int bsbfly_entrypoint_4(s32 idx)
 {
-    return D_80801D88_bsbfly[param_0];
+    return D_80801D88_bsbfly[idx];
 }
 
-int func_8080188C_bsbfly(Actor *param_0)
+int func_8080188C_bsbfly(Actor *actor)
 {
-    func_80800128_bsbfly(param_0);
-    _bafly_entrypoint_13(param_0, 0, 0xD3, 0x3F99999A);
-    func_800A0CF4(param_0, 1);
+    func_80800128_bsbfly(actor);
+    _bafly_entrypoint_13(actor, 0, 0xD3, 0x3F99999A);
+    func_800A0CF4(actor, 1);
 }
 
-int func_808018D0_bsbfly(int param_0)
+int func_808018D0_bsbfly(int player)
 {
-    _bafly_entrypoint_14(param_0, 0x24, 2);
+    _bafly_entrypoint_14(player, 0x24, 2);
 }
 
 s32 func_808018F4_bsbfly(Actor *this)
@@ -728,21 +734,21 @@ s32 func_808018F4_bsbfly(Actor *this)
     func_80800188_bsbfly(this);
 }
 
-int bsbfly_entrypoint_5(s32 param_0)
+int bsbfly_entrypoint_5(s32 idx)
 {
-    return D_80801D98_bsbfly[param_0];
+    return D_80801D98_bsbfly[idx];
 }
 
-int func_8080193C_bsbfly(Actor *param_0)
+int func_8080193C_bsbfly(Actor *actor)
 {
-    func_80800128_bsbfly(param_0);
-    _bafly_entrypoint_13(param_0, 1, 0xD3, 0x3F99999A);
-    func_800A0CF4(param_0, 1);
+    func_80800128_bsbfly(actor);
+    _bafly_entrypoint_13(actor, 1, 0xD3, 0x3F99999A);
+    func_800A0CF4(actor, 1);
 }
 
-void func_80801980_bsbfly(int param_0)
+void func_80801980_bsbfly(int player)
 {
-    _bafly_entrypoint_14(param_0, 0x24, 2);
+    _bafly_entrypoint_14(player, 0x24, 2);
 }
 
 s32 func_808019A4_bsbfly(Actor *this)
@@ -752,56 +758,57 @@ s32 func_808019A4_bsbfly(Actor *this)
     func_80800188_bsbfly(this);
 }
 
-int bsbfly_entrypoint_6(s32 param_0)
+int bsbfly_entrypoint_6(s32 idx)
 {
-    return D_80801DA8_bsbfly[param_0];
+    return D_80801DA8_bsbfly[idx];
 }
 
-int func_808019EC_bsbfly(s32 param_0)
+int func_808019EC_bsbfly(s32 player)
 {
     func_80800128_bsbfly();
-    _bafly_entrypoint_16(param_0, 269, 1.0f);
+    _bafly_entrypoint_16(player, 269, 1.0f);
 }
 
-int func_80801A1C_bsbfly(Actor *param_0)
+int func_80801A1C_bsbfly(Actor *actor)
 {
-    _bafly_entrypoint_17(param_0, 0x24, 0x20, (char *) param_0 + 0x15C);
+    _bafly_entrypoint_17(actor, 0x24, 0x20, (char *) actor + 0x15C);
 }
 
-void func_80801A44_bsbfly(s32 arg0)
+void func_80801A44_bsbfly(s32 player)
 {
     _bafly_entrypoint_18();
-    func_80800188_bsbfly(arg0);
+    func_80800188_bsbfly(player);
 }
 
-int bsbfly_entrypoint_7(s32 param_0)
+int bsbfly_entrypoint_7(s32 idx)
 {
-    return D_80801DB8_bsbfly[param_0];
+    return D_80801DB8_bsbfly[idx];
 }
 
-int func_80801A80_bsbfly(Actor *param_0)
+int func_80801A80_bsbfly(Actor *actor)
 {
-    s32 local_0;
-    local_0 = param_0;
+    s32 player;
+    // Matching: copy through a local is needed for the match.
+    player = actor;
     func_80800128_bsbfly();
-    baanim_playForDuration_loopSmooth(local_0 | 0, 0x38, 0.62f);
-    func_8009FFD8(local_0 | 0, 1, 1, 3, 7);
-    func_800A0CF4(local_0 | 0, 1);
-    func_800A0024(local_0 | 0);
+    baanim_playForDuration_loopSmooth(player | 0, 0x38, 0.62f);
+    func_8009FFD8(player | 0, 1, 1, 3, 7);
+    func_800A0CF4(player | 0, 1);
+    func_800A0024(player | 0);
 }
 
-int func_80801AEC_bsbfly(Actor *param_0)
+int func_80801AEC_bsbfly(Actor *actor)
 {
-    s32 local_0;
-    local_0 = 0;
-    if (anctrl_isAt(baanim_getAnimCtrlPtr(param_0), 0.1358f) != 0) {
-        func_8009DEC0(param_0, 0x3FF, 0x3F19999A, 0x3F333333, 10000, 12000);
+    s32 next_state;
+    next_state = 0;
+    if (anctrl_isAt(baanim_getAnimCtrlPtr(actor), 0.1358f) != 0) {
+        func_8009DEC0(actor, 0x3FF, 0x3F19999A, 0x3F333333, 10000, 12000);
     }
-    if (!func_8009CC68(param_0)) {
-        local_0 = 0x24;
+    if (!func_8009CC68(actor)) {
+        next_state = 0x24;
     }
-    func_800A0024(param_0);
-    bs_setState(param_0, local_0);
+    func_800A0024(actor);
+    bs_setState(actor, next_state);
 }
 
 void func_80801B80_bsbfly()
@@ -809,40 +816,41 @@ void func_80801B80_bsbfly()
     func_80800188_bsbfly();
 }
 
-int bsbfly_entrypoint_8(s32 param_0)
+int bsbfly_entrypoint_8(s32 idx)
 {
-    return D_80801DC8_bsbfly[param_0];
+    return D_80801DC8_bsbfly[idx];
 }
 
-void func_80801BB4_bsbfly(Actor *param_0)
+void func_80801BB4_bsbfly(Actor *actor)
 {
-    s32 local_0;
-    local_0 = (s32) param_0;
+    s32 player;
+    // Matching: copy through an s32 local is needed for the match.
+    player = (s32) actor;
     switch (func_8009E6EC()) {
         case 9:
-            func_8009E830(local_0, 2);
-            baflag_set(local_0, 7);
-            func_800A046C(local_0);
+            func_8009E830(player, 2);
+            baflag_set(player, 7);
+            func_800A046C(player);
             return;
 
         case 0x18:
-            if (bs_getCurrentState(local_0) == 0x24) {
-                _baboost_entrypoint_2(local_0, 6.0f);
-                func_8009E830(local_0, 2);
+            if (bs_getCurrentState(player) == 0x24) {
+                _baboost_entrypoint_2(player, 6.0f);
+                func_8009E830(player, 2);
             }
             return;
 
         default:
-            func_80099B94(local_0);
+            func_80099B94(player);
     }
 }
 
-void func_80801C58_bsbfly(s32 param_0)
+void func_80801C58_bsbfly(s32 player)
 {
     func_80800128_bsbfly();
-    _bsdrone_entrypoint_0(param_0);
-    if (_badrone_entrypoint_3(param_0) == 0xE) {
-        baphysics_set_type(param_0, 7);
+    _bsdrone_entrypoint_0(player);
+    if (_badrone_entrypoint_3(player) == 0xE) {
+        baphysics_set_type(player, 7);
     }
 }
 
@@ -851,17 +859,20 @@ void func_80801C9C_bsbfly(PlayerState *self)
     _bsdrone_entrypoint_1(self);
 }
 
-void func_80801CBC_bsbfly(s32 arg0)
+void func_80801CBC_bsbfly(s32 player)
 {
     _bsdrone_entrypoint_2();
-    func_80800188_bsbfly(arg0);
+    func_80800188_bsbfly(player);
 }
 
-int bsbfly_entrypoint_9(s32 param_0)
+int bsbfly_entrypoint_9(s32 idx)
 {
-    return D_80801DD8_bsbfly[param_0];
+    return D_80801DD8_bsbfly[idx];
 }
 
+// TU-NOTE: the .data tables of this overlay are defined at the end of this file in C.
+// They hold pointers to functions of this file; IDO's assembler schedules some of these
+// functions differently unless the tables are in the same unit. Values are from the ROM.
 extern void func_80099AA8();
 extern int func_80099B94();
 extern void _bsdrone_entrypoint_3();

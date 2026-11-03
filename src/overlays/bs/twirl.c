@@ -23,6 +23,7 @@ BsScript D_808002C0_bstwirl[4] = {func_80800000_bstwirl, bstwirl_init, bstwirl_u
 void func_80800000_bstwirl(PlayerState *self)
 {
     func_800A0CF4(self, 0);
+    // Mark the twirl move as used.
     func_800C6DA0(0x48);
     baflag_clear(self, 0x29);
     _badust_entrypoint_12(self, 1);
@@ -39,6 +40,7 @@ void bstwirl_init(PlayerState *self)
     baphysics_set_target_horizontal_velocity(self, 600.0f);
     func_800A0CF4(self, 1);
     baflag_set(self, 0x29);
+    // Random voice clip.
     if (func_800DC0C0() < 0.5f) {
         func_8009DE38(self, 0x57C, 1.0f);
     } else {
@@ -49,19 +51,19 @@ void bstwirl_init(PlayerState *self)
 void bstwirl_update(PlayerState *self)
 {
     BanjoStateId next_state = BS_STATE_0_INVALID;
-    AnimCtrl *aCtrl = baanim_getAnimCtrlPtr(self);
+    AnimCtrl *anim_ctrl = baanim_getAnimCtrlPtr(self);
     baphysics_set_target_yaw(self, yaw_getIdeal(self));
-    if (anctrl_isAt(aCtrl, 0.18f)) {
+    if (anctrl_isAt(anim_ctrl, 0.18f)) {
         func_8009DF18(self, 0x5A7, 1.0f, 26000);
     }
-    if (anctrl_isAt(aCtrl, 0.3f)) {
+    if (anctrl_isAt(anim_ctrl, 0.3f)) {
         _badust_entrypoint_12(self, 2);
     }
-    if (anctrl_isAt(aCtrl, 0.75f)) {
+    if (anctrl_isAt(anim_ctrl, 0.75f)) {
         _badust_entrypoint_12(self, 1);
     }
 
-    if (anctrl_isAt(aCtrl, 0.8011f)) {
+    if (anctrl_isAt(anim_ctrl, 0.8011f)) {
         baphysics_set_target_horizontal_velocity(self, 0.0f);
         next_state = BS_STATE_20_LANDING;
     }
@@ -70,7 +72,7 @@ void bstwirl_update(PlayerState *self)
         next_state = bs_getTypeOfJump(self);
     }
 
-    if (0.6f < anctrl_getAnimTimer(aCtrl) && !player_isStable(self)) {
+    if (0.6f < anctrl_getAnimTimer(anim_ctrl) && !player_isStable(self)) {
         next_state = BS_STATE_2F_FALL;
     }
 

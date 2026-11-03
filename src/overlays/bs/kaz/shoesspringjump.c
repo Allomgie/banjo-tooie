@@ -3,6 +3,7 @@
 
 extern s32 D_80800270_bskazshoesspringjump[];
 
+// Springy Step Shoes jump phases: 0 = reset gravity, 1 = crouch, 2 = launch (3207 up, gravity -2700).
 void func_80800000_bskazshoesspringjump(PlayerState *self, s32 arg1)
 {
     switch (arg1) {
@@ -69,6 +70,9 @@ s32 bskazshoesspringjump_entrypoint_3(s32 idx)
     return D_80800270_bskazshoesspringjump[idx];
 }
 
+// TU-NOTE: the overlay .data is defined here in C. The table points to functions of this file;
+// IDO's assembler schedules some of them differently unless the table is in the same unit.
+// Values are taken from the ROM.
 extern void func_80099B94();
 s32 D_80800270_bskazshoesspringjump[4] = {
     (u32) _bskazshoesspringjump_entrypoint_0, (u32) _bskazshoesspringjump_entrypoint_1,

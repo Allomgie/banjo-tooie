@@ -1,3 +1,5 @@
+// TU-NOTE: the overlay .data (D_80800990_bscrouch) is defined in this file. It points at
+// functions of this file; IDO schedules some of them differently unless they share the unit.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "overlays/ba/anim.h"
@@ -42,251 +44,254 @@ extern s32 func_8008DD04(PlayerState *);
 extern s32 player_inWater(PlayerState *);
 extern void bs_setState(PlayerState *, s32);
 
-void func_80800000_bscrouch(void *param_0)
+void func_80800000_bscrouch(void *player)
 {
-    baanim_playForDuration_loopSmooth(param_0, 0x10C, 0.5f);
-    *(s32 *) ((char *) param_0 + 0x15C) = 4;
+    baanim_playForDuration_loopSmooth(player, 0x10C, 0.5f);
+    *(s32 *) ((char *) player + 0x15C) = 4;
 }
 
-void func_80800034_bscrouch(void *param_0)
+void func_80800034_bscrouch(void *player)
 {
-    baanim_playForDuration_onceSmooth(param_0, 0x116, 2.0f);
-    *(s32 *) ((char *) param_0 + 0x15c) = 2;
+    baanim_playForDuration_onceSmooth(player, 0x116, 2.0f);
+    *(s32 *) ((char *) player + 0x15c) = 2;
 }
 
-void func_80800068_bscrouch(Actor *param_0)
+void func_80800068_bscrouch(Actor *player)
 {
-    baanim_playForDuration_onceSmoothStartingAt(param_0, 0x10C, 0.5f, 0.9999f);
-    _batimer_set(param_0, 2, 2.0f);
-    *(int *) ((char *) param_0 + 0x15C) = 1;
+    baanim_playForDuration_onceSmoothStartingAt(player, 0x10C, 0.5f, 0.9999f);
+    _batimer_set(player, 2, 2.0f);
+    *(int *) ((char *) player + 0x15C) = 1;
 }
 
-void func_808000B4_bscrouch(s32 param_0, f32 param_1)
+// Turn-in-place anim speed from turn rate.
+void func_808000B4_bscrouch(s32 anim_ctrl, f32 turn_rate)
 {
-    anctrl_setDuration(param_0, func_800F10B4(param_1, 0.0f, 180.0f, 0.5f, 0.2f));
+    anctrl_setDuration(anim_ctrl, func_800F10B4(turn_rate, 0.0f, 180.0f, 0.5f, 0.2f));
 }
 
-int func_808000FC_bscrouch(s32 param_0, s32 param_1)
+int func_808000FC_bscrouch(s32 player, s32 anim_ctrl)
 {
-    func_800A2CE8(param_0, 0x3ED1EB85, 4);
-    func_800A2CE8(param_0, 0x3F68F5C3, 3);
+    func_800A2CE8(player, 0x3ED1EB85, 4);
+    func_800A2CE8(player, 0x3F68F5C3, 3);
 }
 
-void bscrouch_entrypoint_0(PlayerState *param_0)
+void bscrouch_entrypoint_0(PlayerState *player)
 {
-    AnimCtrl *local_0;
-    f32 local_1[3];
-    f32 local_2;
-    f32 local_3;
-    s32 local_4;
+    AnimCtrl *anim_ctrl;
+    f32 velocity[3];
+    f32 anim_start;
+    f32 yaw;
+    s32 prev_state;
 
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    local_4 = bs_getPreviousState(param_0);
-    if (local_4 != 9 && local_4 != 0xA && local_4 != 0x1A)
-        local_2 = 0.0f;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    prev_state = bs_getPreviousState(player);
+    if (prev_state != 9 && prev_state != 0xA && prev_state != 0x1A)
+        anim_start = 0.0f;
     else
-        local_2 = 0.5357f;
-    anctrl_reset(local_0);
-    anctrl_setIndex(local_0, 1);
-    anctrl_setDuration(local_0, 0.5f);
-    anctrl_setPlaybackType(local_0, 1);
-    anctrl_setStart(local_0, local_2);
-    anctrl_start(local_0);
-    func_8008CA4C(param_0, 1);
-    yaw_setUpdateType(param_0, 3);
-    yaw_setVelocityBounded(param_0, 350.0f, 14.0f);
-    func_8009D2D8(param_0, 7);
-    func_8009CFD8(param_0, 8.0f);
-    baphysics_set_type(param_0, 3);
-    _batimer_set(param_0, 0, 0.7f);
-    _batimer_set(param_0, 1, 0.2f);
-    func_8009BB24(param_0, local_1);
-    param_0->unk16C = sqrtf(local_1[0] * local_1[0] + local_1[2] * local_1[2]);
-    if (param_0->unk16C > 140.0f)
-        func_8009D658(param_0);
-    if (func_800F1EA4(local_1, &local_3))
-        baphysics_set_target_yaw(param_0, local_3);
-    param_0->unk15C.word = 0;
+        anim_start = 0.5357f;
+    anctrl_reset(anim_ctrl);
+    anctrl_setIndex(anim_ctrl, 1);
+    anctrl_setDuration(anim_ctrl, 0.5f);
+    anctrl_setPlaybackType(anim_ctrl, 1);
+    anctrl_setStart(anim_ctrl, anim_start);
+    anctrl_start(anim_ctrl);
+    func_8008CA4C(player, 1);
+    yaw_setUpdateType(player, 3);
+    yaw_setVelocityBounded(player, 350.0f, 14.0f);
+    func_8009D2D8(player, 7);
+    func_8009CFD8(player, 8.0f);
+    baphysics_set_type(player, 3);
+    _batimer_set(player, 0, 0.7f);
+    _batimer_set(player, 1, 0.2f);
+    func_8009BB24(player, velocity);
+    player->unk16C = sqrtf(velocity[0] * velocity[0] + velocity[2] * velocity[2]);
+    if (player->unk16C > 140.0f)
+        func_8009D658(player);
+    if (func_800F1EA4(velocity, &yaw))
+        baphysics_set_target_yaw(player, yaw);
+    player->unk15C.word = 0;
 }
 
 s32 bscrouch_entrypoint_4();
 
-void bscrouch_entrypoint_1(PlayerState *this)
+void bscrouch_entrypoint_1(PlayerState *player)
 {
-    s32 next;
-    f32 sp30;
-    AnimCtrl *aCtrl;
-    f32 temp_f2;
+    s32 next_state;
+    f32 target_speed;
+    AnimCtrl *anim_ctrl;
+    f32 turn_rate;
     f32 pad;
-    f32 sp20;
+    f32 ideal_yaw;
 
-    next = 0;
-    aCtrl = baanim_getAnimCtrlPtr(this);
-    _batimer_decrement(this, 0);
-    _batimer_decrement(this, 1);
-    sp30 = func_800F10B4(_batimer_get(this, 0), 0.0f, 0.3f, 0.0f, this->unk16C);
-    baphysics_set_target_horizontal_velocity(this, sp30);
-    if (220.0f < sp30)
-        _badust_entrypoint_9(this);
-    if (160.0f < sp30)
-        func_8009D658(this);
-    if (bastick_distance(this) == 0.0f)
-        yaw_setIdeal(this, yaw_get(this));
-    sp20 = yaw_getIdeal(this);
-    temp_f2 = mlAbsF(func_800F1DCC(sp20, yaw_get(this)));
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    _batimer_decrement(player, 0);
+    _batimer_decrement(player, 1);
+    target_speed = func_800F10B4(_batimer_get(player, 0), 0.0f, 0.3f, 0.0f, player->unk16C);
+    baphysics_set_target_horizontal_velocity(player, target_speed);
+    if (220.0f < target_speed)
+        _badust_entrypoint_9(player);
+    if (160.0f < target_speed)
+        func_8009D658(player);
+    if (bastick_distance(player) == 0.0f)
+        yaw_setIdeal(player, yaw_get(player));
+    ideal_yaw = yaw_getIdeal(player);
+    turn_rate = mlAbsF(func_800F1DCC(ideal_yaw, yaw_get(player)));
 
-    switch (this->unk15C.word) {
+    switch (player->unk15C.word) {
         case 0:
-            if (sp30 != 0.0f)
+            if (target_speed != 0.0f)
                 break;
-            _batimer_set(this, 2, 2.0f);
-            this->unk15C.word = 1;
+            _batimer_set(player, 2, 2.0f);
+            player->unk15C.word = 1;
             break;
 
         case 1:
-            if (temp_f2 != 0.0f) {
-                func_80800000_bscrouch(this);
+            if (turn_rate != 0.0f) {
+                func_80800000_bscrouch(player);
             } else {
-                _batimer_decrement(this, 2);
-                if (_batimer_isZero(this, 2))
-                    func_80800034_bscrouch(this);
+                _batimer_decrement(player, 2);
+                if (_batimer_isZero(player, 2))
+                    func_80800034_bscrouch(player);
             }
             break;
 
         case 2:
-            if (temp_f2 != 0.0f) {
-                func_80800000_bscrouch(this);
+            if (turn_rate != 0.0f) {
+                func_80800000_bscrouch(player);
             } else {
-                if (anctrl_isStopped(aCtrl))
-                    func_80800068_bscrouch(this);
+                if (anctrl_isStopped(anim_ctrl))
+                    func_80800068_bscrouch(player);
             }
             break;
 
         case 4:
-            func_808000B4_bscrouch(aCtrl, temp_f2);
-            func_808000FC_bscrouch(this, aCtrl);
-            if (temp_f2 != 0.0f)
+            func_808000B4_bscrouch(anim_ctrl, turn_rate);
+            func_808000FC_bscrouch(player, anim_ctrl);
+            if (turn_rate != 0.0f)
                 break;
-            if (anctrl_getAnimTimer(aCtrl) <= 0.5f) {
-                anctrl_setSubrange(aCtrl, 0, 0.5f);
+            if (anctrl_getAnimTimer(anim_ctrl) <= 0.5f) {
+                anctrl_setSubrange(anim_ctrl, 0, 0.5f);
             } else {
-                anctrl_setSubrange(aCtrl, 0, 1.0f);
+                anctrl_setSubrange(anim_ctrl, 0, 1.0f);
             }
-            anctrl_setPlaybackType(aCtrl, 1);
-            this->unk15C.word = 3;
+            anctrl_setPlaybackType(anim_ctrl, 1);
+            player->unk15C.word = 3;
             break;
 
         case 3:
-            func_808000B4_bscrouch(aCtrl, temp_f2);
-            func_808000FC_bscrouch(this, aCtrl);
-            if (temp_f2 != 0.0f) {
-                anctrl_setSubrange(aCtrl, 0, 1.0f);
-                anctrl_setPlaybackType(aCtrl, 2);
-                this->unk15C.word = 4;
+            func_808000B4_bscrouch(anim_ctrl, turn_rate);
+            func_808000FC_bscrouch(player, anim_ctrl);
+            if (turn_rate != 0.0f) {
+                anctrl_setSubrange(anim_ctrl, 0, 1.0f);
+                anctrl_setPlaybackType(anim_ctrl, 2);
+                player->unk15C.word = 4;
             } else {
-                if (anctrl_isStopped(aCtrl)) {
-                    yaw_setIdeal(this, yaw_get(this));
-                    func_80800068_bscrouch(this);
+                if (anctrl_isStopped(anim_ctrl)) {
+                    yaw_setIdeal(player, yaw_get(player));
+                    func_80800068_bscrouch(player);
                 }
             }
     }
 
-    if (func_8008E148(this))
-        next = _badrone_entrypoint_25(this);
-    if (func_8008DD04(this))
-        next = 0x2F;
-    next = bscrouch_entrypoint_4(this, next);
-    if (next == 1 && _batimer_isNonzero(this, 1))
-        next = 0;
-    if (player_inWater(this))
-        next = 0x2D;
-    bs_setState(this, next);
+    if (func_8008E148(player))
+        next_state = _badrone_entrypoint_25(player);
+    if (func_8008DD04(player))
+        next_state = 0x2F;
+    next_state = bscrouch_entrypoint_4(player, next_state);
+    if (next_state == 1 && _batimer_isNonzero(player, 1))
+        next_state = 0;
+    if (player_inWater(player))
+        next_state = 0x2D;
+    bs_setState(player, next_state);
 }
 
-void bscrouch_entrypoint_2(s32 arg0)
+void bscrouch_entrypoint_2(s32 player)
 {
 }
 
-int bscrouch_entrypoint_3(s32 param_0)
+int bscrouch_entrypoint_3(s32 index)
 {
-    return D_80800990_bscrouch[param_0];
+    return D_80800990_bscrouch[index];
 }
 
-s32 func_808006A4_bscrouch(PlayerState *param_0)
+// Picks the taxi/sack target for the pack move; result 2 also turns toward it.
+s32 func_808006A4_bscrouch(PlayerState *player)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    void *local_2;
-    s32 local_3;
+    f32 pos[3];
+    f32 target_pos[3];
+    void *pack_ctrl;
+    s32 result;
 
-    local_2 = _bapackctrl_entrypoint_1(param_0);
-    func_8009C128(param_0, local_0);
-    local_3 = func_800CB7C4(local_2, local_0, local_1);
-    if (local_3 == 2) {
-        yaw_setIdeal(param_0, func_800F1DF4(local_0, local_1));
+    pack_ctrl = _bapackctrl_entrypoint_1(player);
+    func_8009C128(player, pos);
+    result = func_800CB7C4(pack_ctrl, pos, target_pos);
+    if (result == 2) {
+        yaw_setIdeal(player, func_800F1DF4(pos, target_pos));
     }
-    return local_3;
+    return result;
 }
 
-s32 bscrouch_entrypoint_4(PlayerState *this, s32 next)
+// Crouch move table. Solo Banjo: pack moves on C buttons gated by abilities; otherwise duo moves.
+s32 bscrouch_entrypoint_4(PlayerState *player, s32 next_state)
 {
-    if (bakey_released(this, 1)) {
-        next = 1;
-        if (bakey_pressed(this, 9)) {
-            next = func_800A055C(this, next);
+    if (bakey_released(player, 1)) {
+        next_state = 1;
+        if (bakey_pressed(player, 9)) {
+            next_state = func_800A055C(player, next_state);
         }
-        if (bakey_pressed(this, 8)) {
-            next = bs_getTypeOfJump(this);
+        if (bakey_pressed(player, 8)) {
+            next_state = bs_getTypeOfJump(player);
         }
-        return next;
+        return next_state;
     }
-    if (func_8008E23C(this)) {
-        if (bakey_pressed(this, 0xB) && func_800C6E38(0x21)) {
-            next = 0x16A;
-        } else if (bakey_pressed(this, 0xC) && func_800C6E38(0x2A)) {
-            next = 0x163;
-        } else if (bakey_pressed(this, 0xD) && func_800C6E38(0x23)) {
-            next = 0x171;
-        } else if (bakey_pressed(this, 0xA) && func_800C6E38(0x27)) {
-            if (!func_8008E0C8(this)) {
-                next = 0x122;
+    if (func_8008E23C(player)) {
+        if (bakey_pressed(player, 0xB) && func_800C6E38(0x21)) {
+            next_state = 0x16A;
+        } else if (bakey_pressed(player, 0xC) && func_800C6E38(0x2A)) {
+            next_state = 0x163;
+        } else if (bakey_pressed(player, 0xD) && func_800C6E38(0x23)) {
+            next_state = 0x171;
+        } else if (bakey_pressed(player, 0xA) && func_800C6E38(0x27)) {
+            if (!func_8008E0C8(player)) {
+                next_state = 0x122;
             } else {
-                switch (func_808006A4_bscrouch(this)) {
+                switch (func_808006A4_bscrouch(player)) {
                     case 0:
                         break;
                     case 1:
-                        next = 0x129;
+                        next_state = 0x129;
                         break;
                     case 2:
-                        next = 0x128;
+                        next_state = 0x128;
                 }
             }
         }
-        if (bakey_pressed(this, 8)) {
-            next = 0x6C;
+        if (bakey_pressed(player, 8)) {
+            next_state = 0x6C;
         }
-        return next;
+        return next_state;
     } else {
-        if (bainput_should_wonderwing(this)) {
-            _suinv_entrypoint_0(&next, -1, 0x1A, 0x47, 1);
+        if (bainput_should_wonderwing(player)) {
+            _suinv_entrypoint_0(&next_state, -1, 0x1A, 0x47, 1);
         }
-        if (bainput_should_trot(this)) {
-            next = 0x14;
+        if (bainput_should_trot(player)) {
+            next_state = 0x14;
         }
-        if (bainput_should_poop_egg(this) && func_80094B14(this)) {
-            next = 0xA;
+        if (bainput_should_poop_egg(player) && func_80094B14(player)) {
+            next_state = 0xA;
         }
-        if (bainput_should_shoot_egg(this) && func_80094B14(this)) {
-            next = 9;
+        if (bainput_should_shoot_egg(player) && func_80094B14(player)) {
+            next_state = 9;
         }
-        if (bainput_should_flap_flip(this)) {
-            next = 0x12;
+        if (bainput_should_flap_flip(player)) {
+            next_state = 0x12;
         }
-        if (bainput_should_beak_barge(this)) {
-            next = 0x13;
+        if (bainput_should_beak_barge(player)) {
+            next_state = 0x13;
         }
     }
-    return next;
+    return next_state;
 }
 
 extern void _bscrouch_entrypoint_2();

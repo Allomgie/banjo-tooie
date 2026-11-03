@@ -25,9 +25,10 @@ void bacough_entrypoint_3(PlayerState *self)
     bacough_entrypoint_4(self, 1);
 }
 
-void bacough_entrypoint_4(PlayerState *self, s32 arg1)
+// state: 0 = reset, 1 = disabled, 2 = enabled
+void bacough_entrypoint_4(PlayerState *self, s32 state)
 {
-    switch (arg1) {
+    switch (state) {
         case 1:
             func_8009ADF0(self, 9, 0);
             break;
@@ -36,52 +37,54 @@ void bacough_entrypoint_4(PlayerState *self, s32 arg1)
             self->cough->unk4 = 2.0f;
             func_8009ADF0(self, 9, 1);
     }
-    self->cough->unk0 = arg1;
+    self->cough->unk0 = state;
 }
 
+// Per-frame tick: when the timer runs out, play a random cough for the current form and pick the next gap.
 void bacough_entrypoint_5(PlayerState *self)
 {
-    s32 sp24;
-    f32 sp20;
-    f32 sp1C;
+    s32 sfx_id;
+    f32 roll;
+    f32 pitch;
 
     if ((self->cough->unk0 == 2) && func_800F424C(self) && func_800D9078(&self->cough->unk4)) {
-        sp20 = func_800DC0C0();
-        sp1C = func_800DC178(0.97f, 1.03f);
+        roll = func_800DC0C0();
+        pitch = func_800DC178(0.97f, 1.03f);
         switch (func_800A3274(self)) {
             case TRANSFORM_1_BK:
             case TRANSFORM_A_BANJO:
-                if (sp20 < 0.3333f) {
-                    sp24 = 0x571;
-                } else if (0.6666f < sp20) {
-                    sp24 = 0x572;
+                if (roll < 0.3333f) {
+                    sfx_id = 0x571;
+                } else if (0.6666f < roll) {
+                    sfx_id = 0x572;
                 } else {
-                    sp24 = 0x573;
+                    sfx_id = 0x573;
                 }
                 break;
 
+            // Kazooie
             case 0xB:
-                if (sp20 < 0.5f) {
-                    sp24 = 0x45B;
+                if (roll < 0.5f) {
+                    sfx_id = 0x45B;
                 } else {
-                    sp24 = 0x59F;
+                    sfx_id = 0x59F;
                 }
                 break;
 
             case TRANSFORM_D_MUMBO:
-                if (sp20 < 0.5f) {
-                    sp24 = 0x50F;
+                if (roll < 0.5f) {
+                    sfx_id = 0x50F;
                 } else {
-                    sp24 = 0x510;
+                    sfx_id = 0x510;
                 }
                 break;
             default:
-                sp24 = 0;
+                sfx_id = 0;
                 break;
         }
 
-        if (sp24 != 0) {
-            func_8009DB04(self, sp24, sp1C, 24000);
+        if (sfx_id != 0) {
+            func_8009DB04(self, sfx_id, pitch, 24000);
         }
 
         if (func_800DC298(0.1f)) {

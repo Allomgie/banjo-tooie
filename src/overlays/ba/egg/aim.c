@@ -19,107 +19,112 @@ s32 baeggaim_entrypoint_0()
     return 0x4;
 }
 
-f32 func_80800008_baeggaim(f32 param_0, f32 param_1, f32 param_2)
+// Frame-rate independent smoothing of value toward target
+f32 func_80800008_baeggaim(f32 value, f32 target, f32 speed)
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < (s32) (func_800D8FEC() * 5); local_0++) {
-        param_0 += func_800F0DC0((param_1 - param_0) * 0.04f, param_2);
+    s32 i;
+    for (i = 0; i < (s32) (func_800D8FEC() * 5); i++) {
+        value += func_800F0DC0((target - value) * 0.04f, speed);
     }
-    return param_0;
+    return value;
 }
 
-void func_808000B4_baeggaim(PlayerState *param_0, f32 *param_1)
+// Moves the screen cursor toward the stick position
+void func_808000B4_baeggaim(PlayerState *player, f32 *cursor)
 {
-    f32 local_0;
-    f32 local_1;
-    _baeggcursor_entrypoint_3(param_0, param_1, param_1 + 1);
-    local_0 = bastick_getX(param_0) * 114.0f + 114.0f + 38.0f;
-    local_1 = bastick_getY(param_0) * 85.5f + 85.5f + 28.5f;
-    param_1[0] = func_80800008_baeggaim(param_1[0], local_0, 7.4f);
-    param_1[1] = func_80800008_baeggaim(param_1[1], local_1, 5.5f);
-    _baeggcursor_entrypoint_10(param_0, param_1[0], param_1[1]);
+    f32 target_x;
+    f32 target_y;
+    _baeggcursor_entrypoint_3(player, cursor, cursor + 1);
+    target_x = bastick_getX(player) * 114.0f + 114.0f + 38.0f;
+    target_y = bastick_getY(player) * 85.5f + 85.5f + 28.5f;
+    cursor[0] = func_80800008_baeggaim(cursor[0], target_x, 7.4f);
+    cursor[1] = func_80800008_baeggaim(cursor[1], target_y, 5.5f);
+    _baeggcursor_entrypoint_10(player, cursor[0], cursor[1]);
 }
 
-void func_80800170_baeggaim(f32 *param_0, f32 *param_1, f32 param_2)
+// Camera turn rate from how far the cursor is inside the screen edge zone
+void func_80800170_baeggaim(f32 *cursor, f32 *turn, f32 scale)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
+    f32 dist;
+    f32 edge_x;
+    f32 edge_y;
 
-    local_2 = 0;
-    local_1 = 0;
-    local_0 = 78.0f - param_0[0];
-    if (local_0 > 0.0f)
-        local_1 = local_0;
-    local_0 = 226.0f - param_0[0];
-    if (local_0 < 0.0f)
-        local_1 = local_0;
-    local_0 = 61.0f - param_0[1];
-    if (local_0 > 0.0f)
-        local_2 = local_0;
-    local_0 = 167.0f - param_0[1];
-    if (local_0 < 0.0f)
-        local_2 = local_0;
-    param_1[0] = func_800F1344(local_1, 0, 40.0f, 0.0f, param_2);
-    param_1[1] = func_800F1344(local_2, 0, 32.5f, 0.0f, param_2);
+    edge_y = 0;
+    edge_x = 0;
+    dist = 78.0f - cursor[0];
+    if (dist > 0.0f)
+        edge_x = dist;
+    dist = 226.0f - cursor[0];
+    if (dist < 0.0f)
+        edge_x = dist;
+    dist = 61.0f - cursor[1];
+    if (dist > 0.0f)
+        edge_y = dist;
+    dist = 167.0f - cursor[1];
+    if (dist < 0.0f)
+        edge_y = dist;
+    turn[0] = func_800F1344(edge_x, 0, 40.0f, 0.0f, scale);
+    turn[1] = func_800F1344(edge_y, 0, 32.5f, 0.0f, scale);
 }
 
-void func_80800264_baeggaim(PlayerState *param_0, PlayerState *param_1)
+// Turns the first-person camera when the cursor is in the edge zone
+void func_80800264_baeggaim(PlayerState *player, PlayerState *cursor)
 {
     s32 pad;
-    f32 local_3;
-    f32 local_2[3];
-    f32 local_1[2];
-    PlayerState *local_0;
+    f32 scale;
+    f32 cam_rot[3];
+    f32 turn[2];
+    PlayerState *camera;
 
-    local_0 = func_800A4CA8(param_0);
-    _ncba1p_entrypoint_8(local_0, local_2);
-    local_3 = _bafpctrl_entrypoint_3(param_0) * 70.0f;
-    func_80800170_baeggaim(param_1, local_1, local_3);
-    local_3 = func_800D8FF8();
-    local_2[1] += local_1[0] * local_3;
-    if (!baflag_isTrue(param_0, 0x3A)) {
-        local_2[0] += local_1[1] * local_3;
-        local_2[0] = _bsdronelook_entrypoint_2(local_2[0]);
+    camera = func_800A4CA8(player);
+    _ncba1p_entrypoint_8(camera, cam_rot);
+    scale = _bafpctrl_entrypoint_3(player) * 70.0f;
+    func_80800170_baeggaim(cursor, turn, scale);
+    scale = func_800D8FF8();
+    cam_rot[1] += turn[0] * scale;
+    if (!baflag_isTrue(player, 0x3A)) {
+        cam_rot[0] += turn[1] * scale;
+        cam_rot[0] = _bsdronelook_entrypoint_2(cam_rot[0]);
     }
-    local_2[2] = 0.0f;
-    _ncba1p_entrypoint_7(local_0, local_2);
+    cam_rot[2] = 0.0f;
+    _ncba1p_entrypoint_7(camera, cam_rot);
 }
 
-void baeggaim_entrypoint_1(s32 arg0)
+void baeggaim_entrypoint_1(s32 player)
 {
-    _baeggcursor_entrypoint_7(arg0, 0x4);
-    _baeggfire_entrypoint_4(arg0);
+    _baeggcursor_entrypoint_7(player, 0x4);
+    _baeggfire_entrypoint_4(player);
 }
 
-void baeggaim_entrypoint_2(s32 arg0)
+void baeggaim_entrypoint_2(s32 player)
 {
-    _baeggcursor_entrypoint_7(arg0, 0x3);
-    _baeggfire_entrypoint_5(arg0);
+    _baeggcursor_entrypoint_7(player, 0x3);
+    _baeggfire_entrypoint_5(player);
 }
 
-void baeggaim_entrypoint_3(s32 param_0)
+void baeggaim_entrypoint_3(s32 player)
 {
-    f32 local_0[2];
-    s32 local_1;
+    f32 cursor[2];
+    s32 fire;
 
     if (_bafpctrl_entrypoint_2() == 0) {
-        func_80094AB4(param_0);
+        func_80094AB4(player);
     }
-    func_808000B4_baeggaim(param_0, local_0);
-    if ((baflag_isTrue(param_0, 0x2E) == 0) && (_bafpctrl_entrypoint_1(param_0) == 0)) {
-        func_80800264_baeggaim(param_0, local_0);
+    func_808000B4_baeggaim(player, cursor);
+    if ((baflag_isTrue(player, 0x2E) == 0) && (_bafpctrl_entrypoint_1(player) == 0)) {
+        func_80800264_baeggaim(player, cursor);
     }
-    local_1 = 0;
-    if (func_80094510(param_0) == 7) {
-        if (bakey_held(param_0, 1) != 0) {
-            local_1 = 1;
+    // B press fires; golden/auto eggs fire while held
+    fire = 0;
+    if (func_80094510(player) == 7) {
+        if (bakey_held(player, 1) != 0) {
+            fire = 1;
         }
-    } else if (bakey_pressed(param_0, 1) != 0) {
-        local_1 = 1;
+    } else if (bakey_pressed(player, 1) != 0) {
+        fire = 1;
     }
-    if ((local_1 != 0) && (_bafpctrl_entrypoint_2(param_0) == 0) && (func_80094B14(param_0) != 0)) {
-        _baeggfire_entrypoint_7(param_0);
+    if ((fire != 0) && (_bafpctrl_entrypoint_2(player) == 0) && (func_80094B14(player) != 0)) {
+        _baeggfire_entrypoint_7(player);
     }
-    _baeggfire_entrypoint_6(param_0);
+    _baeggfire_entrypoint_6(player);
 }

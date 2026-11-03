@@ -17,6 +17,7 @@ extern void _bsbanbflip_end(PlayerState *);
 extern void _bsbanbflip_init(PlayerState *);
 extern void _bsbanbflip_update(PlayerState *);
 
+// Steers horizontal velocity from the stick during the airborne phase.
 void func_80800000_bsbanbflip(PlayerState *self)
 {
     f32 stick_position = bastick_getZonePosition(self);
@@ -31,7 +32,7 @@ void func_80800000_bsbanbflip(PlayerState *self)
 void __bsbanbflip_set_substate(PlayerState *self, BanjoStateId next_state)
 {
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
-    f32 sp38[3];
+    f32 vec[3];
     switch (next_state) {
         case 0:
             func_800C6DA0(0x3E);
@@ -60,6 +61,7 @@ void __bsbanbflip_set_substate(PlayerState *self, BanjoStateId next_state)
             if (bastick_distance(self) != 0.0f) {
                 yaw_setUpdateType(self, YAW_TYPE_2_UNBOUNDED);
                 func_8009D2D8(self, 3);
+                // Matching: tests the function address, not its result.
                 if (bastick_distance) {
                     yaw_setIdeal(self, bastick_getAngleRelativeToBanjo(self));
                 }
@@ -89,8 +91,8 @@ void __bsbanbflip_set_substate(PlayerState *self, BanjoStateId next_state)
             anctrl_start(anctrl);
             baphysics_set_type(self, BA_PHYSICS_3_LOCKED_ROTATION);
             baphysics_set_target_horizontal_velocity(self, 0.0f);
-            func_800EFD24(sp38);
-            func_8009BA9C(self, sp38);
+            func_800EFD24(vec);
+            func_8009BA9C(self, vec);
             func_8009FE58(self);
             func_800A0CF4(self, 0);
     }
@@ -118,13 +120,13 @@ void bsbanbflip_update(PlayerState *self)
     }
 
     switch (self->unk15C.word) {
-        case 1:
+        case 1: // crouch
             if (anctrl_isAt(anctrl, 0.1837f)) {
                 __bsbanbflip_set_substate(self, 2);
             }
             break;
 
-        case 2:
+        case 2: // airborne
             func_80800000_bsbanbflip(self);
             if (anctrl_isStopped(anctrl)) {
                 next_state = BS_STATE_2F_FALL;
@@ -134,7 +136,7 @@ void bsbanbflip_update(PlayerState *self)
             }
             break;
 
-        case 3:
+        case 3: // landing
             if (anctrl_isStopped(anctrl)) {
                 next_state = BS_STATE_1_SLOW_WALK;
             }

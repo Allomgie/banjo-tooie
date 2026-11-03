@@ -1,3 +1,5 @@
+// TU-NOTE: the .data of this overlay is defined in this file; its table points to functions here,
+// and IDO schedules some of them differently unless they share a unit. Values come from the ROM.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
@@ -13,89 +15,92 @@ extern void func_8009E55C(PlayerState *, s32, f32);
 extern AnimCtrl *baanim_getAnimCtrlPtr(PlayerState *);
 extern void baphysics_set_horizontal_velocity(PlayerState *, f32, f32);
 
-int bsclaw_entrypoint_0(Actor *param_0)
+// End.
+int bsclaw_entrypoint_0(Actor *player)
 {
     func_8009E474();
     func_800C6DA0(0x47);
-    baflag_clear(param_0, 0x1F);
-    func_800A0CF4(param_0, 0);
+    baflag_clear(player, 0x1F);
+    func_800A0CF4(player, 0);
 }
 
-void bsclaw_entrypoint_1(PlayerState *param_0)
+// Init: the combo window (0.24 s) only opens if ability 0x32 is learned.
+void bsclaw_entrypoint_1(PlayerState *player)
 {
-    f32 local_0;
+    f32 combo_window;
 
-    baanim_playForDuration_onceSmooth(param_0, 5, 1.4f);
-    func_8009FFD8(param_0, 1, 1, 1, 2);
-    baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
-    baphysics_set_target_horizontal_velocity(param_0, 80.0f);
-    baflag_clear(param_0, 0x1F);
-    func_800A0CF4(param_0, 1);
+    baanim_playForDuration_onceSmooth(player, 5, 1.4f);
+    func_8009FFD8(player, 1, 1, 1, 2);
+    baphysics_set_target_yaw(player, yaw_getIdeal(player));
+    baphysics_set_target_horizontal_velocity(player, 80.0f);
+    baflag_clear(player, 0x1F);
+    func_800A0CF4(player, 1);
     if (func_800C6E38(0x32))
-        local_0 = 0.24f;
+        combo_window = 0.24f;
     else
-        local_0 = 0.0f;
-    _batimer_set(param_0, 0, local_0);
-    func_8009E4AC(param_0);
-    func_8009E5A4(param_0, 2, 3);
-    func_8009E55C(param_0, 2, 40.0f);
+        combo_window = 0.0f;
+    _batimer_set(player, 0, combo_window);
+    func_8009E4AC(player);
+    func_8009E5A4(player, 2, 3);
+    func_8009E55C(player, 2, 40.0f);
 }
 
-void bsclaw_entrypoint_2(PlayerState *param_0)
+// Update: three swipe windows set attack flag 0x1F; B again in the window chains into state 0x189.
+void bsclaw_entrypoint_2(PlayerState *player)
 {
-    AnimCtrl *local_2;
-    s32 local_0;
-    f32 local_1;
+    AnimCtrl *anim_ctrl;
+    s32 next_state;
+    f32 anim_time;
 
-    local_2 = baanim_getAnimCtrlPtr(param_0);
-    local_0 = 0;
-    local_1 = anctrl_getAnimTimer(local_2);
-    if ((_batimer_get(param_0, 0) != 0.0f) && (bakey_pressed(param_0, 9) != 0)) {
-        local_0 = 0x189;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    next_state = 0;
+    anim_time = anctrl_getAnimTimer(anim_ctrl);
+    if ((_batimer_get(player, 0) != 0.0f) && (bakey_pressed(player, 9) != 0)) {
+        next_state = 0x189;
     }
-    _batimer_decrement(param_0, 0);
-    if (anctrl_isAt(local_2, 0.512899995f)) {
-        baphysics_set_horizontal_velocity(param_0, yaw_get(param_0), 360.0f);
+    _batimer_decrement(player, 0);
+    if (anctrl_isAt(anim_ctrl, 0.512899995f)) {
+        baphysics_set_horizontal_velocity(player, yaw_get(player), 360.0f);
     }
-    if (anctrl_isAt(local_2, 0.653900027f) != 0) {
-        baphysics_set_target_horizontal_velocity(param_0, 0);
+    if (anctrl_isAt(anim_ctrl, 0.653900027f) != 0) {
+        baphysics_set_target_horizontal_velocity(player, 0);
     }
-    if ((anctrl_isAt(local_2, 0.148800001f) != 0) ||
-        ((local_1 > 0.0488f) && (local_1 < 0.24880001f)) ||
-        (anctrl_isAt(local_2, 0.328799993f) != 0) || ((local_1 > 0.2288f) && (local_1 < 0.4288f)) ||
-        (anctrl_isAt(local_2, 0.578800023f) != 0) ||
-        ((local_1 > 0.47880003f) && (local_1 < 0.67880005f))) {
-        baflag_set(param_0, 0x1F);
+    if ((anctrl_isAt(anim_ctrl, 0.148800001f) != 0) ||
+        ((anim_time > 0.0488f) && (anim_time < 0.24880001f)) ||
+        (anctrl_isAt(anim_ctrl, 0.328799993f) != 0) || ((anim_time > 0.2288f) && (anim_time < 0.4288f)) ||
+        (anctrl_isAt(anim_ctrl, 0.578800023f) != 0) ||
+        ((anim_time > 0.47880003f) && (anim_time < 0.67880005f))) {
+        baflag_set(player, 0x1F);
     } else {
-        baflag_clear(param_0, 0x1F);
+        baflag_clear(player, 0x1F);
     }
-    if (anctrl_isAt(local_2, 0.578800023f) != 0) {
-        baphysics_set_target_horizontal_velocity(param_0, 0);
+    if (anctrl_isAt(anim_ctrl, 0.578800023f) != 0) {
+        baphysics_set_target_horizontal_velocity(player, 0);
     }
-    if (anctrl_isAt(local_2, 0.118799999f) != 0) {
-        func_8009DE38(param_0, 0x442C, 1.13f);
+    if (anctrl_isAt(anim_ctrl, 0.118799999f) != 0) {
+        func_8009DE38(player, 0x442C, 1.13f);
     }
-    if (anctrl_isAt(local_2, 0.288800001f) != 0) {
-        func_8009DE38(param_0, 0x442C, 1.10000002f);
+    if (anctrl_isAt(anim_ctrl, 0.288800001f) != 0) {
+        func_8009DE38(player, 0x442C, 1.10000002f);
     }
-    if (anctrl_isAt(local_2, 0.5f) != 0) {
-        func_8009DE38(param_0, 0x442C, 1.32000005f);
+    if (anctrl_isAt(anim_ctrl, 0.5f) != 0) {
+        func_8009DE38(player, 0x442C, 1.32000005f);
     }
-    if (anctrl_isStopped(local_2) != 0) {
-        local_0 = 1;
+    if (anctrl_isStopped(anim_ctrl) != 0) {
+        next_state = 1;
     }
-    if (player_inWater(param_0) != 0) {
-        local_0 = 0x4C;
+    if (player_inWater(player) != 0) {
+        next_state = 0x4C;
     }
-    if (bakey_pressed(param_0, 8) != 0) {
-        local_0 = bs_getTypeOfJump(param_0);
+    if (bakey_pressed(player, 8) != 0) {
+        next_state = bs_getTypeOfJump(player);
     }
-    bs_setState(param_0, local_0);
+    bs_setState(player, next_state);
 }
 
-int bsclaw_entrypoint_3(s32 param_0)
+int bsclaw_entrypoint_3(s32 index)
 {
-    return D_80800400_bsclaw[param_0];
+    return D_80800400_bsclaw[index];
 }
 
 extern void _bsclaw_entrypoint_0();

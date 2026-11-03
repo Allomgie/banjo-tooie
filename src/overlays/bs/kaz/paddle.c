@@ -1,6 +1,8 @@
 #include "common.h"
 #include "overlays/bs/kaz/paddle.h"
 
+// TU-NOTE: The overlay .data tables at the bottom are defined in this file; IDO schedules some
+// functions differently unless they are in the same unit. Values come from the ROM.
 extern s32 D_80800A50_bskazpaddle[];
 extern s32 D_80800A60_bskazpaddle[];
 extern s32 D_80800A70_bskazpaddle[];
@@ -8,6 +10,7 @@ extern s32 D_80800A80_bskazpaddle[];
 extern s32 D_80800A90_bskazpaddle[];
 extern s32 D_80800AA0_bskazpaddle[];
 
+// Shared water exit setup.
 void func_80800000_bskazpaddle(PlayerState *self)
 {
     if (func_8009E69C(self, 1) == 0) {
@@ -20,6 +23,7 @@ void func_80800000_bskazpaddle(PlayerState *self)
     }
 }
 
+// Shared water enter setup.
 void func_80800068_bskazpaddle(PlayerState *self)
 {
     if (func_8009E6C4(self, 1) == 0) {
@@ -35,14 +39,14 @@ void func_80800068_bskazpaddle(PlayerState *self)
 
 void func_80800100_bskazpaddle(PlayerState *self)
 {
-    f32 sp1C;
+    f32 stick_pos;
 
-    sp1C = bastick_getZonePosition(self);
+    stick_pos = bastick_getZonePosition(self);
     if (bastick_getZone(self) == BS_STICK_ZONE_ID_0) {
         baphysics_set_target_horizontal_velocity(self, 0);
         return;
     }
-    baphysics_set_target_horizontal_velocity(self, func_800F1214(sp1C, 30, 350));
+    baphysics_set_target_horizontal_velocity(self, func_800F1214(stick_pos, 30, 350));
 }
 
 void func_80800164_bskazpaddle(PlayerState *self)
@@ -53,23 +57,23 @@ void func_80800164_bskazpaddle(PlayerState *self)
 
 void func_80800190_bskazpaddle(PlayerState *self)
 {
-    AnimCtrl *animCtrl;
-    f32 sp28;
+    AnimCtrl *anim_ctrl;
+    f32 unk_0;
 
-    animCtrl = baanim_getAnimCtrlPtr(self);
+    anim_ctrl = baanim_getAnimCtrlPtr(self);
     baphysics_set_gravity(self, 0);
     baphysics_set_terminal_velocity(self, -399.99);
     func_800961AC(self, 3);
     func_8009BC5C(self, 2);
     func_800A046C(self);
-    sp28 = func_800A3298(self);
-    anctrl_reset(animCtrl);
-    anctrl_setIndex(animCtrl, ASSET_139_ANIM_BSKAZPADDLE_UNKNOWN);
-    anctrl_setPlaybackType(animCtrl, 2);
-    anctrl_setDuration(animCtrl, 1.2);
-    anctrl_setStart(animCtrl, 0.6412);
-    anctrl_start(animCtrl);
-    self->unk16C = func_800F10B4(sp28, 40, 1000, -300, -1200.0f);
+    unk_0 = func_800A3298(self);
+    anctrl_reset(anim_ctrl);
+    anctrl_setIndex(anim_ctrl, ASSET_139_ANIM_BSKAZPADDLE_UNKNOWN);
+    anctrl_setPlaybackType(anim_ctrl, 2);
+    anctrl_setDuration(anim_ctrl, 1.2);
+    anctrl_setStart(anim_ctrl, 0.6412);
+    anctrl_start(anim_ctrl);
+    self->unk16C = func_800F10B4(unk_0, 40, 1000, -300, -1200.0f);
     baphysics_set_vertical_velocity(self, self->unk16C);
     func_8009FFD8(self, 1, 3, 3, 6);
 }
@@ -77,15 +81,15 @@ void func_80800190_bskazpaddle(PlayerState *self)
 void func_808002A0_bskazpaddle(PlayerState *self)
 {
     BanjoStateId next_state;
-    f32 sp40[3];
-    s32 sp3C;
+    f32 emitter_pos[3];
+    s32 emitter;
 
     next_state = BS_STATE_0_INVALID;
-    func_8009C128(self, sp40);
-    sp40[1] = sp40[1] + 60.0f;
-    sp3C = func_8009FBB0(self, sp40, 20);
-    func_800BA930(sp3C, -30, -30, -30, 30, 30, 30);
-    func_800BA22C(sp3C, 1);
+    func_8009C128(self, emitter_pos);
+    emitter_pos[1] = emitter_pos[1] + 60.0f;
+    emitter = func_8009FBB0(self, emitter_pos, 20);
+    func_800BA930(emitter, -30, -30, -30, 30, 30, 30);
+    func_800BA22C(emitter, 1);
     if (self->unk16C < 0.0f) {
         self->unk16C += func_800F0E00(mlAbsF(self->unk16C) * 0.1f, 50);
         baphysics_set_vertical_velocity(self, self->unk16C);
@@ -107,13 +111,14 @@ s32 bskazpaddle_entrypoint_0(s32 idx)
     return D_80800A50_bskazpaddle[idx];
 }
 
-void func_808003F4_bskazpaddle(PlayerState *self, f32 arg1[3])
+// Spawns a bubble emitter at pos.
+void func_808003F4_bskazpaddle(PlayerState *self, f32 pos[3])
 {
-    s32 sp2C;
+    s32 emitter;
 
-    sp2C = func_8009FBB0(self, arg1, 40);
-    func_800BA930(sp2C, 0, 100, 0, 0, 100, 0);
-    func_800BA22C(sp2C, 1);
+    emitter = func_8009FBB0(self, pos, 40);
+    func_800BA930(emitter, 0, 100, 0, 0, 100, 0);
+    func_800BA22C(emitter, 1);
 }
 
 void func_80800448_bskazpaddle(PlayerState *self)
@@ -137,19 +142,20 @@ void func_80800468_bskazpaddle(PlayerState *self)
 void func_80800518_bskazpaddle(PlayerState *self)
 {
     BanjoStateId next_state;
-    AnimCtrl *animCtrl;
-    f32 sp24[3];
+    AnimCtrl *anim_ctrl;
+    f32 pos[3];
 
     next_state = BS_STATE_0_INVALID;
-    animCtrl = baanim_getAnimCtrlPtr(self);
-    func_80092C24(self, sp24);
-    func_808003F4_bskazpaddle(self, sp24);
-    func_80092C00(self, sp24);
-    func_808003F4_bskazpaddle(self, sp24);
-    if (anctrl_isAt(animCtrl, 0.2) != 0) {
+    anim_ctrl = baanim_getAnimCtrlPtr(self);
+    func_80092C24(self, pos);
+    func_808003F4_bskazpaddle(self, pos);
+    func_80092C00(self, pos);
+    func_808003F4_bskazpaddle(self, pos);
+    // Paddle sound at two points of the animation.
+    if (anctrl_isAt(anim_ctrl, 0.2) != 0) {
         func_8009DE74(self, 0x40C, 0.9f, 1.1f);
     }
-    if (anctrl_isAt(animCtrl, 0.7) != 0) {
+    if (anctrl_isAt(anim_ctrl, 0.7) != 0) {
         func_8009DE74(self, 0x40C, 0.9f, 1.1f);
     }
     func_80800100_bskazpaddle(self);

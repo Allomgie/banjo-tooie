@@ -10,28 +10,29 @@ s32 bawobble_entrypoint_0(void)
     return sizeof(BaWobble);
 }
 
-void func_80800008_bawobble(PlayerState *self, s32 arg1)
+// Starts a ramp: 2 = in, 3 = out.
+void func_80800008_bawobble(PlayerState *self, s32 state)
 {
-    switch (arg1) {
+    switch (state) {
         case 2:
             self->wobble->unk18 = self->wobble->unk10;
             break;
         case 3:
             self->wobble->unk18 = self->wobble->unk14;
     }
-    self->wobble->unk1C = arg1;
+    self->wobble->unk1C = state;
 }
 
-void func_8080004C_bawobble(PlayerState *self, s32 arg1)
+void func_8080004C_bawobble(PlayerState *self, s32 mode)
 {
-    if ((arg1 != 1) && (arg1 == 2)) {
+    if ((mode != 1) && (mode == 2)) {
         if (self->wobble->unkC == 2) {
             return;
         }
         self->wobble->unk8 = 0.0f;
         func_80800008_bawobble(self, 2);
     }
-    self->wobble->unkC = arg1;
+    self->wobble->unkC = mode;
 }
 
 void bawobble_entrypoint_1(PlayerState *self)
@@ -54,16 +55,18 @@ void bawobble_entrypoint_3(PlayerState *self)
     bawobble_entrypoint_1(self);
 }
 
-void bawobble_entrypoint_4(PlayerState *self, f32 arg1, f32 arg2)
+// Sets the ramp-in and ramp-out durations.
+void bawobble_entrypoint_4(PlayerState *self, f32 ramp_in_time, f32 ramp_out_time)
 {
-    self->wobble->unk10 = arg1;
-    self->wobble->unk14 = arg2;
+    self->wobble->unk10 = ramp_in_time;
+    self->wobble->unk14 = ramp_out_time;
 }
 
-void bawobble_entrypoint_5(PlayerState *self, f32 arg1, f32 arg2)
+// Sets the scale range of the wobble.
+void bawobble_entrypoint_5(PlayerState *self, f32 max_scale, f32 min_scale)
 {
-    self->wobble->unk4 = arg1;
-    self->wobble->unk0 = arg2;
+    self->wobble->unk4 = max_scale;
+    self->wobble->unk0 = min_scale;
 }
 
 void bawobble_entrypoint_6(PlayerState *self)
@@ -76,24 +79,26 @@ void bawobble_entrypoint_7(PlayerState *self)
     self->wobble->unk1D = 1;
 }
 
-void func_808001C0_bawobble(PlayerState *self, f32 arg1)
+// Scales bone 3 by three phase-shifted sine waves.
+void func_808001C0_bawobble(PlayerState *self, f32 weight)
 {
-    f32 sp4C[3];
-    Unkfunc_800E0960_1 *sp48 = func_80092AD8(self);
+    f32 scale[3];
+    Unkfunc_800E0960_1 *bone_list = func_80092AD8(self);
     s32 i;
 
-    func_800E0AF0(sp48, 1.0f);
+    func_800E0AF0(bone_list, 1.0f);
     func_800D91B8(&self->wobble->unk8);
     for (i = 0; i < 3; i++) {
-        sp4C[i] = func_800F101C(self->wobble->unk8 + (0.2f * (f32) i) * 0.25f, 0.2f);
-        sp4C[i] = func_800F1214(sp4C[i], self->wobble->unk0, self->wobble->unk4);
+        scale[i] = func_800F101C(self->wobble->unk8 + (0.2f * (f32) i) * 0.25f, 0.2f);
+        scale[i] = func_800F1214(scale[i], self->wobble->unk0, self->wobble->unk4);
     }
-    func_800E0B8C(sp48, 3, arg1, sp4C[0], sp4C[1], sp4C[2]);
+    func_800E0B8C(bone_list, 3, weight, scale[0], scale[1], scale[2]);
 }
 
+// Per-frame update: advances the ramp and applies the wobble.
 void bawobble_entrypoint_8(PlayerState *self)
 {
-    f32 sp2C;
+    f32 weight;
 
     if (self->wobble->unkC != 2) {
         return;
@@ -102,17 +107,17 @@ void bawobble_entrypoint_8(PlayerState *self)
     switch (self->wobble->unk1C) {
         case 2:
             func_800D9078(&self->wobble->unk18);
-            sp2C = func_800F10B4(self->wobble->unk18, 0.0f, self->wobble->unk10, 1.0f, 0);
-            if ((sp2C == 1.0f) && self->wobble->unk1D) {
+            weight = func_800F10B4(self->wobble->unk18, 0.0f, self->wobble->unk10, 1.0f, 0);
+            if ((weight == 1.0f) && self->wobble->unk1D) {
                 func_80800008_bawobble(self, 3);
             }
             break;
         case 3:
             func_800D9078(&self->wobble->unk18);
-            sp2C = func_800F10B4(self->wobble->unk18, 0.0f, self->wobble->unk14, 0, 1.0f);
-            if ((sp2C == 0.0f)) {
+            weight = func_800F10B4(self->wobble->unk18, 0.0f, self->wobble->unk14, 0, 1.0f);
+            if ((weight == 0.0f)) {
                 func_8080004C_bawobble(self, 1);
             }
     }
-    func_808001C0_bawobble(self, sp2C);
+    func_808001C0_bawobble(self, weight);
 }

@@ -50,6 +50,7 @@ void func_80800120_bsbflap(PlayerState *self)
     }
 }
 
+// Flap animation duration, depends on the number of completed flaps.
 f32 func_80800168_bsbflap(PlayerState *self)
 {
     switch (self->unk160.word) {
@@ -80,11 +81,13 @@ void func_80800210_bsbflap(PlayerState *self)
     self->unk170 += func_800D8FF8();
 }
 
-int func_80800248_bsbflap(PlayerState *self, f32 value)
+// True if time was crossed between the previous and current flap timer.
+int func_80800248_bsbflap(PlayerState *self, f32 time)
 {
-    return ((self->unk16C <= value) && (value < self->unk170));
+    return ((self->unk16C <= time) && (time < self->unk170));
 }
 
+// Plays the flap sound effects.
 void func_80800294_bsbflap(PlayerState *self)
 {
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
@@ -105,9 +108,10 @@ void bsbflap_update(PlayerState *self)
     BanjoStateId next_state = BS_STATE_0_INVALID;
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
     _bswalk_entrypoint_1(self);
+    // unk15C.word is the flap phase (0 = enter animation, 4 = released).
     switch (self->unk15C.word) {
         case 0:
-            func_800956B8(self);
+            func_800956B8(self); // bafalldamage_start
             func_80800210_bsbflap(self);
             func_80800294_bsbflap(self);
             if (anctrl_isAt(anctrl, 0.9f)) {

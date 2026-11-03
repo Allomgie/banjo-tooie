@@ -3,9 +3,10 @@
 
 #ifndef NONMATCHINGS
 
-int func_80800000_bsledge(u8 *param_0)
+// Probably checks whether Kazooie can attack (B pressed).
+int func_80800000_bsledge(u8 *self)
 {
-    return func_8008E23C(param_0) == 0 && bakey_pressed(param_0, 9) != 0;
+    return func_8008E23C(self) == 0 && bakey_pressed(self, 9) != 0;
 }
 
 #else
@@ -13,40 +14,43 @@ s32 func_80800000_bsledge(0)
 {
 #endif
 
-    void func_80800040_bsledge(PlayerState * self, f32 arg1[3])
+    // Shimmy direction vector from the stick, relative to the ledge.
+    void func_80800040_bsledge(PlayerState * self, f32 move_dir[3])
     {
-        f32 sp34;
-        f32 sp30;
-        s32 sp2C;
-        s32 sp28;
+        f32 ledge_dir;
+        f32 angle_diff;
+        // Matching: unused locals pad the stack frame.
+        s32 unk_0;
+        s32 unk_1;
         f32 stick_distance;
         f32 angle;
-        f32 sp1C;
-        f32 sp18;
+        f32 speed;
+        f32 abs_diff;
 
         stick_distance = bastick_distance(self);
         if (stick_distance == 0.0f) {
-            func_800EFD24(arg1);
+            func_800EFD24(move_dir);
             return;
         }
         angle = bastick_getAngleRelativeToBanjo(self);
-        sp34 = func_800974FC(self);
-        sp30 = func_800F1DCC(angle, sp34);
-        sp18 = mlAbsF(sp30);
-        if (sp18 > 90.0f) {
-            sp18 = 180.0f - sp18;
+        ledge_dir = func_800974FC(self);
+        angle_diff = func_800F1DCC(angle, ledge_dir);
+        abs_diff = mlAbsF(angle_diff);
+        if (abs_diff > 90.0f) {
+            abs_diff = 180.0f - abs_diff;
         }
-        if (mlAbsF(sp18) < 10.0f) {
-            func_800EFD24(arg1);
+        if (mlAbsF(abs_diff) < 10.0f) {
+            func_800EFD24(move_dir);
             return;
         }
-        self->unk15C.word = sp30 < 0.0f ? 1 : -1;
-        sp30 = -self->unk15C.word * 90.0f;
-        sp1C = func_800F1214(stick_distance, 40.0f, 200.0f);
-        arg1[1] = 0.0f;
-        func_800EFCD8(arg1, sp34 + sp30, sp1C);
+        self->unk15C.word = angle_diff < 0.0f ? 1 : -1;
+        angle_diff = -self->unk15C.word * 90.0f;
+        speed = func_800F1214(stick_distance, 40.0f, 200.0f);
+        move_dir[1] = 0.0f;
+        func_800EFCD8(move_dir, ledge_dir + angle_diff, speed);
     }
 
+    // Common exit: leaves ledge collision mode and restores the backpack pose.
     void func_808001A8_bsledge(PlayerState * self)
     {
         if (func_8009E74C(self, 2) == 0) {
@@ -64,6 +68,7 @@ s32 func_80800000_bsledge(0)
     }
 
     static void func_80800324_bsledge(PlayerState * self);
+    // Common enter: switches to ledge collision mode and the backpack pose.
     void func_80800238_bsledge(PlayerState * self)
     {
         if (func_8009E77C(self, 2) == 0) {
@@ -92,27 +97,29 @@ s32 func_80800000_bsledge(0)
         self->unk168.bytes[1] = 0;
     }
 
+    // Fidget sound: countdown with random reset, cycles through three sounds.
     void func_80800334_bsledge(PlayerState * self)
     {
-        s32 temp_a1;
+        s32 unk_0;
 
-        temp_a1 = self->unk168.bytes[0];
+        unk_0 = self->unk168.bytes[0];
         self->unk168.bytes[0]--;
-        if (temp_a1 == 0) {
+        if (unk_0 == 0) {
             self->unk168.bytes[0] = func_800DC128(1, 3);
-            temp_a1 = D_80801340_bsledge[self->unk168.bytes[1]];
+            unk_0 = D_80801340_bsledge[self->unk168.bytes[1]];
             self->unk168.bytes[1]++;
             if (self->unk168.bytes[1] >= 3U) {
                 self->unk168.bytes[1] = 0U;
             }
-            func_8009DF18(self, temp_a1, func_800DC178(0.8f, 1.0f), 10000);
+            func_8009DF18(self, unk_0, func_800DC178(0.8f, 1.0f), 10000);
         }
     }
 
 #ifndef NONMATCHINGS
-    int func_808003D0_bsledge(u8 * param_0)
+    // Probably checks whether Banjo can pull up (A pressed).
+    int func_808003D0_bsledge(u8 * self)
     {
-        return bakey_pressed(param_0, 8) && func_80097530(param_0);
+        return bakey_pressed(self, 8) && func_80097530(self);
     }
 #else
 s32 func_808003D0_bsledge(0)
@@ -120,9 +127,9 @@ s32 func_808003D0_bsledge(0)
 #endif
 
 #ifndef NONMATCHINGS
-    int func_80800410_bsledge(u8 * param_0)
+    int func_80800410_bsledge(u8 * self)
     {
-        return func_80096388(param_0) == 7 && func_80097524(param_0) != 4;
+        return func_80096388(self) == 7 && func_80097524(self) != 4;
     }
 #else
     s32 func_80800410_bsledge(0)
@@ -134,17 +141,17 @@ s32 func_808003D0_bsledge(0)
         return func_8009BB5C(self) > 0.0f;
     }
 
-    void func_80800488_bsledge(PlayerState * self, f32 arg1[3])
+    void func_80800488_bsledge(PlayerState * self, f32 move_dir[3])
     {
-        func_8009BA9C(self, arg1);
+        func_8009BA9C(self, move_dir);
     }
 
     void func_808004A8_bsledge(PlayerState * self)
     {
-        f32 sp1C[3];
+        f32 move_dir[3];
 
-        func_80800040_bsledge(self, sp1C);
-        func_8009BA9C(self, sp1C);
+        func_80800040_bsledge(self, move_dir);
+        func_8009BA9C(self, move_dir);
     }
 
     void func_808004D8_bsledge(PlayerState * self)
@@ -161,12 +168,12 @@ s32 func_808003D0_bsledge(0)
 
     void func_80800540_bsledge(PlayerState * self)
     {
-        enum asset_e var_a1;
+        enum asset_e anim_id;
 
         func_80800238_bsledge(self);
-        var_a1 =
+        anim_id =
             self->unk15C.word < 0 ? ASSET_1E_ANIM_BSLEDGE_UNKNOWN : ASSET_D_ANIM_BSLEDGE_UNKNOWN;
-        baanim_playForDuration_onceSmooth(self, var_a1, 1.3f);
+        baanim_playForDuration_onceSmooth(self, anim_id, 1.3f);
         func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_1_DEFAULT, 3, BA_PHYSICS_D_END);
         func_80800488_bsledge(self, 0);
         func_800A0CF4(self, 1);
@@ -176,13 +183,13 @@ s32 func_808003D0_bsledge(0)
 
     void func_808005E0_bsledge(PlayerState * self)
     {
-        enum bs_state_e sp2C;
-        f32 sp20[3];
+        enum bs_state_e next_state;
+        f32 move_dir[3];
 
-        sp2C = BS_STATE_0_INVALID;
+        next_state = BS_STATE_0_INVALID;
         func_808004D8_bsledge(self);
         if (baanim_isStopped(self) != 0) {
-            sp2C = BS_STATE_A6;
+            next_state = BS_STATE_A6;
         }
         if (baanim_isAt(self, 0.1233f) != 0) {
             func_8009DF94(self, 0x442C, 1.15f, 22000);
@@ -191,24 +198,24 @@ s32 func_808003D0_bsledge(0)
             func_8009DF94(self, 0x442C, 1.1f, 22000);
         }
         if (baanim_getTimer(self) > 0.6329f) {
-            func_80800040_bsledge(self, sp20);
-            if (func_800EEF24(sp20) != 0) {
-                sp2C = BS_STATE_A7;
+            func_80800040_bsledge(self, move_dir);
+            if (func_800EEF24(move_dir) != 0) {
+                next_state = BS_STATE_A7;
             }
             if (func_808003D0_bsledge(self) != 0) {
-                sp2C = BS_STATE_AA;
+                next_state = BS_STATE_AA;
             }
             if (func_80800000_bsledge(self) != 0) {
-                sp2C = BS_STATE_A9;
+                next_state = BS_STATE_A9;
             }
             if (bakey_pressed(self, BUTTON_Z) != 0) {
-                sp2C = BS_STATE_2F_FALL;
+                next_state = BS_STATE_2F_FALL;
             }
         }
         if (func_80800410_bsledge(self) == 0) {
-            sp2C = BS_STATE_2F_FALL;
+            next_state = BS_STATE_2F_FALL;
         }
-        bs_setState(self, sp2C);
+        bs_setState(self, next_state);
     }
 
     s32 bsledge_entrypoint_0(s32 idx)
@@ -307,6 +314,7 @@ s32 func_808003D0_bsledge(0)
         return D_80801368_bsledge[idx];
     }
 
+    // Shimmy animation for the current direction.
     AssetId func_80800AA0_bsledge(PlayerState * self)
     {
         return self->unk15C.word < 0 ? ASSET_51_ANIM_BSLEDGE_UNKNOWN : ASSET_6_ANIM_BSLEDGE_UNKNOWN;
@@ -329,14 +337,14 @@ s32 func_808003D0_bsledge(0)
     void func_80800B70_bsledge(PlayerState * self)
     {
         enum bs_state_e next_state;
-        enum asset_e sp20;
+        enum asset_e anim_id;
 
         next_state = BS_STATE_0_INVALID;
         func_808004A8_bsledge(self);
         func_808004D8_bsledge(self);
-        sp20 = func_80800AA0_bsledge(self);
-        if (anctrl_getIndex(baanim_getAnimCtrlPtr(self)) != sp20) {
-            baanim_playForDuration_loopSmooth(self, sp20, 1.0f);
+        anim_id = func_80800AA0_bsledge(self);
+        if (anctrl_getIndex(baanim_getAnimCtrlPtr(self)) != anim_id) {
+            baanim_playForDuration_loopSmooth(self, anim_id, 1.0f);
         }
         if (baanim_isAt(self, 0.15f) != 0) {
             func_8009DF94(self, 0x46E, 0.77f, 10000);
@@ -373,15 +381,17 @@ s32 func_808003D0_bsledge(0)
         return D_80801378_bsledge[idx];
     }
 
-    s32 func_80800CF4_bsledge(PlayerState * self, u8 * arg1, u32 arg2)
+    // Next byte of a table, wrapping at len.
+    s32 func_80800CF4_bsledge(PlayerState * self, u8 * table, u32 len)
     {
-        if (self->unk164.word >= arg2) {
+        if (self->unk164.word >= len) {
             self->unk164.word = 0;
         }
 
-        return arg1[self->unk164.word++];
+        return table[self->unk164.word++];
     }
 
+    // Next fidget id; Banjo alone uses a different table.
     s32 func_80800D24_bsledge(PlayerState * self)
     {
         if (func_800A3274(self) == TRANSFORM_A_BANJO) {
@@ -392,40 +402,41 @@ s32 func_808003D0_bsledge(0)
     }
 
 #ifndef NONMATCHINGS
-    void func_80800D78_bsledge(PlayerState * param_0, s32 param_1)
+    // Switches the hang idle fidget phase and starts its animation.
+    void func_80800D78_bsledge(PlayerState * self, s32 phase)
     {
-        switch (param_0->unk160.word) {
+        switch (self->unk160.word) {
             case 1:
-                if (!func_8008E0E8(param_0))
-                    _bapackctrl_entrypoint_5(param_0, 1);
+                if (!func_8008E0E8(self))
+                    _bapackctrl_entrypoint_5(self, 1);
             case 2:
                 break;
             case 3:
-                func_800A0D14(param_0, 0, 0.2f);
+                func_800A0D14(self, 0, 0.2f);
                 break;
             case 4:
-                func_800A0D14(param_0, 0, 0.2f);
+                func_800A0D14(self, 0, 0.2f);
         }
-        param_0->unk160.word = param_1;
-        switch (param_1) {
+        self->unk160.word = phase;
+        switch (phase) {
             case 0:
                 break;
             case 1:
-                func_800A0CF4(param_0, 0);
-                baanim_playForDuration_onceSmooth(param_0, 0x52, 1.8f);
-                if (!func_8008E0E8(param_0))
-                    _bapackctrl_entrypoint_5(param_0, 5);
+                func_800A0CF4(self, 0);
+                baanim_playForDuration_onceSmooth(self, 0x52, 1.8f);
+                if (!func_8008E0E8(self))
+                    _bapackctrl_entrypoint_5(self, 5);
                 break;
             case 2:
-                baanim_playForDuration_onceSmooth(param_0, 0x55, 4.5f);
+                baanim_playForDuration_onceSmooth(self, 0x55, 4.5f);
                 break;
             case 3:
-                func_800A0CF4(param_0, 1);
-                baanim_playForDuration_onceSmooth(param_0, 0x56, 5.0f);
+                func_800A0CF4(self, 1);
+                baanim_playForDuration_onceSmooth(self, 0x56, 5.0f);
                 break;
             case 4:
-                func_800A0CF4(param_0, 1);
-                baanim_playForDuration_onceSmooth(param_0, 0x52, 2.0f);
+                func_800A0CF4(self, 1);
+                baanim_playForDuration_onceSmooth(self, 0x52, 2.0f);
         }
     }
 #endif
@@ -551,6 +562,9 @@ s32 func_808003D0_bsledge(0)
         return D_808013A8_bsledge[idx];
     }
 
+    // TU-NOTE: .data is defined in C; the tables point to functions of this file, and IDO
+    // schedules some of them differently unless the tables live in the same unit. Values are
+    // from the ROM.
     extern void func_80099B94();
     s16 D_80801340_bsledge[4] = {0x580, 0x581, 0x582, 0x0};
     s32 D_80801348_bsledge[4] = {(u32) func_80800504_bsledge, (u32) func_80800540_bsledge,

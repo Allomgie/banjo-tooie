@@ -16,6 +16,7 @@ void __babackpack_free(PlayerState *self)
     self->backpack->anctrl = NULL;
 }
 
+// Create the backpack's own AnimCtrl (used in state 7).
 void func_8080003C_babackpack(PlayerState *self)
 {
     self->backpack->anctrl = func_8008AD80(1);
@@ -28,6 +29,7 @@ void func_8080003C_babackpack(PlayerState *self)
     func_8008B304(self->backpack->anctrl);
 }
 
+// Model asset of the backpack (also used by the shadow renderer).
 s32 babackpack_entrypoint_1(PlayerState *self)
 {
     if (self->backpack->unk0 != 0) {
@@ -37,11 +39,12 @@ s32 babackpack_entrypoint_1(PlayerState *self)
     }
 }
 
-void func_8080011C_babackpack(PlayerState *self, s32 arg1, f32 scale)
+// Attach a backpack model: allocate the model point buffer and vertex instance.
+void func_8080011C_babackpack(PlayerState *self, s32 model_id, f32 scale)
 {
-    s32 sp34;
-    s32 sp30;
-    s32 sp2C;
+    s32 unk_0;
+    s32 unk_1;
+    s32 asset;
 
     self->backpack->scale = scale;
     func_8009272C(self, 1);
@@ -50,32 +53,32 @@ void func_8080011C_babackpack(PlayerState *self, s32 arg1, f32 scale)
     }
 
     if (self->backpack->unk0 == 0) {
-        self->backpack->unk0 = arg1;
+        self->backpack->unk0 = model_id;
     }
 
     if (self->backpack->unk8 == 0) {
-        sp2C = babackpack_entrypoint_1(self);
-        if (func_800B26F0(sp2C)) {
+        asset = babackpack_entrypoint_1(self);
+        if (func_800B26F0(asset)) {
             self->backpack->unkA = 1;
         } else {
             self->backpack->unkA = 0;
         }
-        sp34 = self->backpack->unkA + 1;
+        unk_0 = self->backpack->unkA + 1;
         self->backpack->unk8 =
-            func_80100D24(sp2C, self->backpack->unk0, sp34, func_800A25D0(self), 0, 0);
+            func_80100D24(asset, self->backpack->unk0, unk_0, func_800A25D0(self), 0, 0);
         self->backpack->unk9 = 0;
     }
 }
 
 s32 func_8080021C_babackpack(PlayerState *self)
 {
-    s32 tmp_v1 = self->backpack->unk8;
-    if (tmp_v1) {
-        tmp_v1 = func_80100A74((s16) tmp_v1, self->backpack->unk9);
+    s32 value = self->backpack->unk8;
+    if (value) {
+        value = func_80100A74((s16) value, self->backpack->unk9);
     } else {
-        tmp_v1 = 0;
+        value = 0;
     }
-    return tmp_v1;
+    return value;
 }
 
 void babackpack_entrypoint_2(PlayerState *self)
@@ -92,7 +95,8 @@ void babackpack_entrypoint_2(PlayerState *self)
     }
 }
 
-void babackpack_entrypoint_3(PlayerState *self, f32 *position, f32 *arg2, s32 arg3, f32 *arg4)
+// Draw the backpack model at the player's bone with its scale.
+void babackpack_entrypoint_3(PlayerState *self, f32 *position, f32 *unk_2, s32 unk_3, f32 *unk_4)
 {
     func_800DF738(self->backpack->unk4);
     func_800DF818(func_8080021C_babackpack(self));
@@ -105,7 +109,7 @@ void babackpack_entrypoint_3(PlayerState *self, f32 *position, f32 *arg2, s32 ar
     } else {
         func_800DF41C(func_8008CA74(self));
     }
-    func_800DE448(position, arg2, self->backpack->scale, arg4, babackpack_entrypoint_1(self));
+    func_800DE448(position, unk_2, self->backpack->scale, unk_4, babackpack_entrypoint_1(self));
     if (self->backpack->unkA != 0) {
         self->backpack->unk9 ^= 1;
     }
@@ -116,14 +120,14 @@ s32 babackpack_get_state(PlayerState *self)
     return self->backpack->state;
 }
 
-void babackpack_entrypoint_5(PlayerState *self, s32 arg1, s32 arg2)
+void babackpack_entrypoint_5(PlayerState *self, s32 unk_1, s32 unk_2)
 {
-    func_800DBEFC(self->backpack->unk4, (s16) arg2, arg1);
+    func_800DBEFC(self->backpack->unk4, (s16) unk_2, unk_1);
 }
 
-void babackpack_entrypoint_6(PlayerState *self, s32 arg1, s32 arg2)
+void babackpack_entrypoint_6(PlayerState *self, s32 unk_1, s32 unk_2)
 {
-    func_800DBEFC(self->backpack->unk4, 4, arg1);
+    func_800DBEFC(self->backpack->unk4, 4, unk_1);
 }
 
 f32 babackpack_get_scale(PlayerState *self)
@@ -149,11 +153,12 @@ void babackpack_entrypoint_9(PlayerState *self)
     babackpack_set_state(self, 1);
 }
 
+// States 2-6 attach fixed pack models, 7 uses the form model from bapreload.
 void babackpack_set_state(PlayerState *self, BaBackpackState state)
 {
-    s16 sp2E;
-    s16 sp2C;
-    s32 tmp_v1;
+    s16 model_id;
+    s16 variant;
+    s32 instance;
 
     if (self->backpack->state == BA_BACKPACK_STATE_7_FREE) {
         __babackpack_free(self);
@@ -161,9 +166,9 @@ void babackpack_set_state(PlayerState *self, BaBackpackState state)
 
     if ((self->backpack->state != 0) && (self->backpack->state != 1) && (state != 0) &&
         (state != 1)) {
-        tmp_v1 = self->backpack->unk8;
-        if (tmp_v1) {
-            func_80100E18((s16) tmp_v1);
+        instance = self->backpack->unk8;
+        if (instance) {
+            func_80100E18((s16) instance);
         }
         self->backpack->unk8 = 0;
         self->backpack->unk0 = 0;
@@ -187,9 +192,9 @@ void babackpack_set_state(PlayerState *self, BaBackpackState state)
             }
             self->backpack->unk4 = NULL;
 
-            tmp_v1 = self->backpack->unk8;
-            if (tmp_v1) {
-                func_80100E18((s16) tmp_v1);
+            instance = self->backpack->unk8;
+            if (instance) {
+                func_80100E18((s16) instance);
             }
 
             self->backpack->unk8 = 0;
@@ -218,9 +223,9 @@ void babackpack_set_state(PlayerState *self, BaBackpackState state)
             break;
 
         case 7:
-            _bapreload_entrypoint_0(self, 0xB, &sp2E, &sp2C);
+            _bapreload_entrypoint_0(self, 0xB, &model_id, &variant);
             func_8080003C_babackpack(self);
-            func_8080011C_babackpack(self, sp2E, 1.0f);
+            func_8080011C_babackpack(self, model_id, 1.0f);
             break;
 
         default:

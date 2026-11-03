@@ -3,10 +3,10 @@
 
 extern f32 func_80092BE8();
 typedef struct {
-    u8 local_0;
-    u8 local_1;
-    u8 local_2[2];
-    f32 local_3;
+    u8 turns;
+    u8 first_person;
+    u8 pad_2[2];
+    f32 start_yaw;
 } Broad42SpinState;
 extern void baroll_setIdeal(PlayerState *, f32);
 extern void func_8009BF5C(PlayerState *, f32);
@@ -30,75 +30,77 @@ s32 baspin_entrypoint_0()
     return 0x8;
 }
 
-void baspin_entrypoint_1(u8 *param_0)
+void baspin_entrypoint_1(u8 *player)
 {
-    if ((*(u8 *) ((s8 *) *(u8 **) ((s8 *) param_0 + 0x118) + 1) == 1) &&
+    if ((*(u8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x118) + 1) == 1) &&
         (_bafpctrl_entrypoint_4() == 3)) {
-        _ncba1p_entrypoint_4(func_800A4CA8(param_0), 1);
+        _ncba1p_entrypoint_4(func_800A4CA8(player), 1);
     }
-    func_8009BD88(param_0);
-    func_8008E95C(param_0);
-    func_800951B4(param_0);
-    yaw_setIdeal(param_0, func_80092BE8(param_0));
-    yaw_applyIdeal(param_0);
-    func_800931AC(param_0, 1);
+    func_8009BD88(player);
+    func_8008E95C(player);
+    func_800951B4(player);
+    yaw_setIdeal(player, func_80092BE8(player));
+    yaw_applyIdeal(player);
+    func_800931AC(player, 1);
 }
 
-void baspin_entrypoint_2(PlayerState *param_0, s32 param_1, f32 param_2, s32 param_3, s32 param_4)
+// Spin-out start: turn toward the hit, set knock-back velocity, spin the model for 1.5 s (timer 0xB).
+void baspin_entrypoint_2(PlayerState *player, s32 anim_id, f32 anim_duration, s32 turns, s32 first_person)
 {
-    f32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
+    f32 knock_yaw;
+    f32 pos[3];
+    f32 other_pos[3];
 
-    ((Broad42SpinState *) *(void **) ((u8 *) param_0 + 0x118))->local_1 = param_4;
-    ((Broad42SpinState *) *(void **) ((u8 *) param_0 + 0x118))->local_0 = param_3;
-    _bareact_entrypoint_1(param_0, func_80099A58());
-    baanim_playForDuration_once(param_0, param_1, param_2);
-    if (func_800A32EC(param_0) != 3) {
-        func_8009D9D4(param_0);
+    ((Broad42SpinState *) *(void **) ((u8 *) player + 0x118))->first_person = first_person;
+    ((Broad42SpinState *) *(void **) ((u8 *) player + 0x118))->turns = turns;
+    _bareact_entrypoint_1(player, func_80099A58());
+    baanim_playForDuration_once(player, anim_id, anim_duration);
+    if (func_800A32EC(player) != 3) {
+        func_8009D9D4(player);
     }
-    func_8009C128(param_0, local_1);
-    func_800A32C4(param_0, local_2);
-    func_800F1E6C(local_2, local_1, &local_0);
-    yaw_setIdeal(param_0, local_0);
-    yaw_applyIdeal(param_0);
-    baroll_setIdeal(param_0, 0.0f);
-    func_8009BF5C(param_0, 0.0f);
-    ((Broad42SpinState *) *(void **) ((u8 *) param_0 + 0x118))->local_3 = yaw_get(param_0);
-    func_800931AC(param_0, 3);
-    func_8009328C(param_0, ((Broad42SpinState *) *(void **) ((u8 *) param_0 + 0x118))->local_3);
-    baphysics_set_target_horizontal_velocity(param_0, _bareact_entrypoint_4(param_0));
-    baphysics_set_target_yaw(param_0, local_0);
-    baphysics_set_horizontal_velocity(param_0, local_0,
-                                      baphysics_get_target_horizontal_velocity(param_0));
-    func_8009FFD8(param_0, 1, 1, 2, 3);
-    func_8008E944(param_0);
-    func_8009514C(param_0);
-    _batimer_set(param_0, 0xB, 1.5f);
-    if (((Broad42SpinState *) *(void **) ((u8 *) param_0 + 0x118))->local_1 == 1 &&
-        _bafpctrl_entrypoint_4(param_0) == 3) {
-        _ncba1p_entrypoint_4(func_800A4CA8(param_0), 0);
+    func_8009C128(player, pos);
+    func_800A32C4(player, other_pos);
+    func_800F1E6C(other_pos, pos, &knock_yaw);
+    yaw_setIdeal(player, knock_yaw);
+    yaw_applyIdeal(player);
+    baroll_setIdeal(player, 0.0f);
+    func_8009BF5C(player, 0.0f);
+    ((Broad42SpinState *) *(void **) ((u8 *) player + 0x118))->start_yaw = yaw_get(player);
+    func_800931AC(player, 3);
+    func_8009328C(player, ((Broad42SpinState *) *(void **) ((u8 *) player + 0x118))->start_yaw);
+    baphysics_set_target_horizontal_velocity(player, _bareact_entrypoint_4(player));
+    baphysics_set_target_yaw(player, knock_yaw);
+    baphysics_set_horizontal_velocity(player, knock_yaw,
+                                      baphysics_get_target_horizontal_velocity(player));
+    func_8009FFD8(player, 1, 1, 2, 3);
+    func_8008E944(player);
+    func_8009514C(player);
+    _batimer_set(player, 0xB, 1.5f);
+    if (((Broad42SpinState *) *(void **) ((u8 *) player + 0x118))->first_person == 1 &&
+        _bafpctrl_entrypoint_4(player) == 3) {
+        _ncba1p_entrypoint_4(func_800A4CA8(player), 0);
     }
 }
 
-s32 baspin_entrypoint_3(PlayerState *param_0)
+// Spin-out update: eases the model yaw through the full turns; returns 2 when finished.
+s32 baspin_entrypoint_3(PlayerState *player)
 {
-    u8 *local_0 = *(u8 **) ((u8 *) param_0 + 0x118);
-    f32 local_1 = 360.0f * (f32) (u32) local_0[0] + *(f32 *) (local_0 + 4) + 180.0f;
-    f32 local_2;
-    f32 local_3;
+    u8 *state = *(u8 **) ((u8 *) player + 0x118);
+    f32 total_yaw = 360.0f * (f32) (u32) state[0] + *(f32 *) (state + 4) + 180.0f;
+    f32 model_yaw;
+    f32 angle;
 
-    local_3 = func_800F10B4(_batimer_get(param_0, 11), 0.0f, 1.5f, 1.0f, 0) * 90.0f;
-    local_2 = func_80013970(local_3) * local_1;
-    func_8009328C(param_0, local_2);
-    if ((*(u8 **) ((u8 *) param_0 + 0x118))[1] == 1 && _bafpctrl_entrypoint_4(param_0) == 3) {
-        yaw_setIdeal(param_0, local_2);
-        yaw_applyIdeal(param_0);
+    angle = func_800F10B4(_batimer_get(player, 11), 0.0f, 1.5f, 1.0f, 0) * 90.0f;
+    model_yaw = func_80013970(angle) * total_yaw;
+    func_8009328C(player, model_yaw);
+    if ((*(u8 **) ((u8 *) player + 0x118))[1] == 1 && _bafpctrl_entrypoint_4(player) == 3) {
+        yaw_setIdeal(player, model_yaw);
+        yaw_applyIdeal(player);
     }
-    _batimer_decrement(param_0, 11);
-    if (baanim_isAt(param_0, 0.5f))
-        func_800951B4(param_0);
-    if (_batimer_get(param_0, 11) == 0.0f && baanim_isStopped(param_0))
+    _batimer_decrement(player, 11);
+    if (baanim_isAt(player, 0.5f))
+        func_800951B4(player);
+    if (_batimer_get(player, 11) == 0.0f && baanim_isStopped(player))
         return 2;
     return 1;
 }

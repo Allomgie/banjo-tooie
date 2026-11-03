@@ -21,10 +21,11 @@ s32 babounce_entrypoint_0(void)
     return sizeof(BaBounce);
 }
 
-void func_80800008_babounce(PlayerState *self, s32 arg1)
+// States: 1 done, 2 knocked back, 3 launched toward a point.
+void func_80800008_babounce(PlayerState *self, s32 state)
 {
-    self->bounce->unkC = arg1;
-    if (arg1 == 1) {
+    self->bounce->unkC = state;
+    if (state == 1) {
         func_8008E95C(self);
     }
 }
@@ -34,11 +35,13 @@ s32 babounce_entrypoint_1(PlayerState *self)
     return self->bounce->unkC;
 }
 
+// True when the current reaction is of class 2.
 int babounce_entrypoint_2(PlayerState *self)
 {
     return (_bareact_entrypoint_2(self) == 2);
 }
 
+// Ends the knock-back: restores gravity and terminal velocity, then notifies the attacker.
 void babounce_entrypoint_3(PlayerState *self)
 {
     if (self->bounce->unkC == 3) {
@@ -59,20 +62,21 @@ void babounce_entrypoint_3(PlayerState *self)
     }
 }
 
-void babounce_entrypoint_4(PlayerState *self, s32 arg1)
+// Starts a knock-back for the current hit reaction.
+void babounce_entrypoint_4(PlayerState *self, s32 mode)
 {
-    f32 sp5C[3];
-    f32 sp50[3];
-    f32 sp44[3];
-    f32 sp3C[2];
-    f32 sp38;
-    s32 sp34;
+    f32 velocity[3];
+    f32 target[3];
+    f32 pos[3];
+    f32 aim[2];
+    f32 flight_time;
+    s32 reaction_kind;
 
     self->bounce->unk14 = func_8009BADC(self);
     self->bounce->unk18 = func_8009BAE8(self);
     self->bounce->unk10 = 0;
-    self->bounce->unkD = arg1;
-    switch (arg1) {
+    self->bounce->unkD = mode;
+    switch (mode) {
         case 1:
             if (func_800A32EC(self) != 3) {
                 func_8009D9D4(self);
@@ -83,33 +87,35 @@ void babounce_entrypoint_4(PlayerState *self, s32 arg1)
         case 2:
             func_8009DA40(self);
     }
-    sp34 = func_80099A58(self);
-    _bareact_entrypoint_1(self, sp34);
+    reaction_kind = func_80099A58(self);
+    _bareact_entrypoint_1(self, reaction_kind);
     self->bounce->unk0 = 1.2f;
     self->bounce->unk4 = 1.4f;
-    func_800A32C4(self, sp50);
-    func_8009C128(self, sp44);
-    func_800F1E6C(sp50, sp44, sp3C);
-    if ((sp34 == 0xE) || (sp34 == 0x10)) {
+    func_800A32C4(self, target);
+    func_8009C128(self, pos);
+    func_800F1E6C(target, pos, aim);
+    // Reaction kinds 0xE and 0x10 launch the player on a ballistic arc toward a point.
+    if ((reaction_kind == 0xE) || (reaction_kind == 0x10)) {
         func_80800008_babounce(self, 3);
         func_8009FFD8(self, 1, 1, 2, 1);
-        yaw_setIdeal(self, func_800136E4(sp3C[0]));
+        yaw_setIdeal(self, func_800136E4(aim[0]));
         self->bounce->unk1C = func_80099A40(self);
-        sp38 = func_8009F3BC(self, sp44[1], sp50[1], (sp3C[1] = func_80099A34(self)),
+        flight_time = func_8009F3BC(self, pos[1], target[1], (aim[1] = func_80099A34(self)),
                              self->bounce->unk1C);
-        func_800EFB24(sp5C, sp50, sp44);
-        sp5C[0] = sp5C[0] / sp38;
-        sp5C[2] = sp5C[2] / sp38;
-        sp5C[1] = sp3C[1];
-        self->bounce->unk8 = sp38;
-        func_8009BA9C(self, sp5C);
-        _batimer_set(self, 6, sp38);
+        func_800EFB24(velocity, target, pos);
+        velocity[0] = velocity[0] / flight_time;
+        velocity[2] = velocity[2] / flight_time;
+        velocity[1] = aim[1];
+        self->bounce->unk8 = flight_time;
+        func_8009BA9C(self, velocity);
+        _batimer_set(self, 6, flight_time);
     } else {
+        // Otherwise knock back away from the attacker with the reaction speeds.
         func_80800008_babounce(self, 2);
-        yaw_setIdeal(self, func_800136E4(sp3C[0] + 180.0f));
+        yaw_setIdeal(self, func_800136E4(aim[0] + 180.0f));
         baphysics_set_target_horizontal_velocity(self, _bareact_entrypoint_4(self));
-        baphysics_set_target_yaw(self, sp3C[0]);
-        baphysics_set_horizontal_velocity(self, sp3C[0],
+        baphysics_set_target_yaw(self, aim[0]);
+        baphysics_set_horizontal_velocity(self, aim[0],
                                           baphysics_get_target_horizontal_velocity(self));
         baphysics_set_vertical_velocity(self, _bareact_entrypoint_3(self));
         self->bounce->unk1C = _bareact_entrypoint_5(self);
@@ -124,44 +130,45 @@ void babounce_entrypoint_4(PlayerState *self, s32 arg1)
     func_8008E944(self);
 }
 
-void babounce_entrypoint_5(PlayerState *self, AssetId asset_id, f32 arg2)
+void babounce_entrypoint_5(PlayerState *self, AssetId asset_id, f32 range_end)
 {
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
     anctrl_reset(anctrl);
     anctrl_setIndex(anctrl, asset_id);
     if (self->bounce->unkC == 3) {
-        anctrl_setDuration(anctrl, self->bounce->unk8 * (1.0f / arg2));
+        anctrl_setDuration(anctrl, self->bounce->unk8 * (1.0f / range_end));
     } else {
         anctrl_setDuration(anctrl, self->bounce->unk0);
     }
-    anctrl_setSubrange(anctrl, 0.0f, arg2);
+    anctrl_setSubrange(anctrl, 0.0f, range_end);
     anctrl_setPlaybackType(anctrl, 1);
     anctrl_start(anctrl);
 }
 
-void babounce_entrypoint_6(PlayerState *self, AssetId asset_id, f32 arg2, f32 arg3, f32 arg4)
+void babounce_entrypoint_6(PlayerState *self, AssetId asset_id, f32 range_end, f32 duration, f32 landing_duration)
 {
-    self->bounce->unk0 = arg3;
-    self->bounce->unk4 = arg4;
-    babounce_entrypoint_5(self, asset_id, arg2);
+    self->bounce->unk0 = duration;
+    self->bounce->unk4 = landing_duration;
+    babounce_entrypoint_5(self, asset_id, range_end);
 }
 
-void babounce_entrypoint_7(PlayerState *self, s32 arg1)
+void babounce_entrypoint_7(PlayerState *self, s32 attacker)
 {
-    self->bounce->unk10 = arg1;
+    self->bounce->unk10 = attacker;
 }
 
+// Advances the knock-back; returns 1 on landing or timeout, 2 once finished, else 0.
 s32 babounce_entrypoint_8(PlayerState *self)
 {
-    f32 sp24[3];
+    f32 velocity[3];
 
     switch (self->bounce->unkC) {
         case 3:
             if (_batimer_decrement(self, 6)) {
-                func_8009BB24(self, sp24);
-                sp24[0] = 0.0f;
-                sp24[2] = 0.0f;
-                func_8009BA9C(self, sp24);
+                func_8009BB24(self, velocity);
+                velocity[0] = 0.0f;
+                velocity[2] = 0.0f;
+                func_8009BA9C(self, velocity);
                 baphysics_set_target_horizontal_velocity(self, 0.0f);
                 func_80800008_babounce(self, 1);
                 return 1;

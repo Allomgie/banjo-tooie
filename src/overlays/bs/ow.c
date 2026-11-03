@@ -8,9 +8,9 @@ void bsow_entrypoint_0(PlayerState *self)
 
 void bsow_entrypoint_1(PlayerState *self)
 {
-    enum bs_state_e next_State;
+    enum bs_state_e next_state;
 
-    next_State = BS_STATE_0_INVALID;
+    next_state = BS_STATE_0_INVALID;
     if (baanim_isAt(self, 0.3f) != 0) {
         func_800951B4(self);
     }
@@ -18,17 +18,17 @@ void bsow_entrypoint_1(PlayerState *self)
         _bswalk_entrypoint_1(self);
     }
     if (_babounce_entrypoint_9(self) != 0) {
-        next_State = BS_STATE_1_IDLE;
+        next_state = BS_STATE_1_IDLE;
     }
     if (_babounce_entrypoint_1(self) == 2) {
         if (func_8008E260(self) != 0) {
-            next_State = BS_STATE_3D_FALL_TUMBLING;
+            next_state = BS_STATE_3D_FALL_TUMBLING;
         }
         if ((player_inWater(self) != 0) && (baphysics_get_vertical_velocity(self) <= 0.0f)) {
-            next_State = BS_STATE_4C_LANDING_IN_WATER;
+            next_state = BS_STATE_4C_LANDING_IN_WATER;
         }
     }
-    bs_setState(self, next_State);
+    bs_setState(self, next_state);
 }
 
 void bsow_entrypoint_2(PlayerState *self)
@@ -41,6 +41,8 @@ s32 bsow_entrypoint_3(s32 idx)
     return D_80800150_bsow[idx];
 }
 
+// TU-NOTE: .data is defined in C; the tables point to functions of this file, and IDO schedules
+// some of them differently unless the tables live in the same unit. Values are from the ROM.
 extern void func_80099AA8();
 s32 D_80800150_bsow[4] = {(u32) _bsow_entrypoint_2, (u32) _bsow_entrypoint_0,
                           (u32) _bsow_entrypoint_1, (u32) func_80099AA8};
