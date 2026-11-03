@@ -8,12 +8,12 @@ typedef struct { s32 a; s32 b; } CoinEnt;
 extern CoinEnt D_80800470_chfaircoinbox[];
 extern s32 func_800DA298(s32);
 extern s32 func_8008FB10(f32 *, f32, f32, f32);
-extern u16 D_80800490_chfaircoinbox;
+extern u16 D_80800490_chfaircoinbox[];
 extern s16 D_80800494_chfaircoinbox;
 extern s32 func_808003E4_chfaircoinbox[];
 typedef union { s32 local_0; s16 local_1[2]; } CoinboxMessage;
-extern s32 D_808004B8_chfaircoinbox;
-extern int D_808004C8_chfaircoinbox;
+extern s32 D_808004B8_chfaircoinbox[];
+extern int D_808004C8_chfaircoinbox[];
 void func_808002CC_chfaircoinbox();
 void func_80800264_chfaircoinbox();
 
@@ -114,13 +114,13 @@ void func_808002CC_chfaircoinbox(param_0) Actor *param_0;
 
     D_80800494_chfaircoinbox = func_808003E4_chfaircoinbox[param_0->unk74_7];
     local_0 = func_80800000_chfaircoinbox();
-    D_80800490_chfaircoinbox = local_0;
+    D_80800490_chfaircoinbox[0] = local_0;
     if (func_800DA298((u16)local_0)) {
         return;
     }
     /* Probe: `^ 0` makes the first argument a new value, so param_0 lives in its copy for the fourth argument (a3)
      * as in the target (lw a3 + or a0,a3); compare chgameselect 944/998. */
-    local_0 = _subaddiedialog_entrypoint_7((Actor *)((s32)param_0 ^ 0), param_0->position, &D_80800490_chfaircoinbox, param_0);
+    local_0 = _subaddiedialog_entrypoint_7((Actor *)((s32)param_0 ^ 0), param_0->position, D_80800490_chfaircoinbox, param_0);
     if (local_0 != 0) {
         /* empty else-if chain over the dialog IDs of this file's table: keeps the beq test for 0x10B5 (the original body was probably debug code) */
         if (local_0 == 0x10B5) {
@@ -166,3 +166,16 @@ int chfaircoinbox_entrypoint_2(void)
 {
     return (int)&D_808004C8_chfaircoinbox;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fair/coinbox.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800490_chfaircoinbox -> u16[] (uses written as NAME[0]), D_808004B8_chfaircoinbox -> s32[], D_808004C8_chfaircoinbox -> int[] */
+extern void func_80101870();
+extern void func_80107C2C();
+CoinEnt D_80800470_chfaircoinbox[4] = { 0x695, 0xA4, 0x696, 0xA5, 0x697, 0xA6, 0x9E309E4, 0x9E50000 };
+u16 D_80800490_chfaircoinbox[2] = { 0x0, 0x12C };
+s16 D_80800494_chfaircoinbox = 0x0;
+static u32 D_80800494_chfaircoinbox_rest[8] = { 0x8000, 0x10B409E1, 0x8C0000, 0x60732, 0x0, 0x10B5, 0x10B6, 0x10B7 };
+s32 D_808004B8_chfaircoinbox[4] = { 0x42200000, 0x42480000, 0x42200000, 0x0 };
+int D_808004C8_chfaircoinbox[18] = { 0x2770165, 0x7D30001, 0x0, (u32)func_808001C8_chfaircoinbox, 0x0, (u32)func_80101870, 0x2580000, 0x0, 0x0, 0x40000000, (u32)func_8080016C_chfaircoinbox, 0x0, 0x0, (u32)func_80800174_chfaircoinbox, (u32)func_80107C2C, -0x7FF7FBEE, (u32)func_808003C4_chfaircoinbox, 0x0 };

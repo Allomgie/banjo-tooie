@@ -18,7 +18,7 @@ extern f32 func_80101F24();
 extern void _subaddierouteDll_entrypoint_5(u8 *, u8 *, s32, f32, f32, f32);
 extern void _subaddierouteDll_entrypoint_6(u8 *, u8 *, s32, s32, f32, s32, s32);
 extern void _subaddierouteDll_entrypoint_7(u8 *, u8 *, f32, f32, f32, s32);
-extern s32 D_80800870_chbkcart;
+extern s32 D_80800870_chbkcart[];
 extern f32 func_8010CD50(Actor *, s32);
 extern void _chbounce_entrypoint_3(f32);
 extern Actor *_chbounce_entrypoint_5(s32, Actor *);
@@ -173,3 +173,19 @@ int chbkcart_entrypoint_0()
 {
   return &D_80800880_chbkcart;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bkcart.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800870_chbkcart -> s32[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_80800800_chbkcart[10] = { 0x0, 0x0, 0x3F800000, 0x49F0044, 0x3F400000, 0x49E0000, 0x3FC00000, 0x49F004A, 0x3FC00000, 0x49F004A };
+u8 D_80800828_chbkcart[48] = { 0x0, 0x0, 0x0, 0x0, 0x3E, 0x4C, 0xCC, 0xCD, 0x3E, 0x19, 0x99, 0x9A, 0x3F, 0x80, 0x0, 0x0, 0x3E, 0xB3, 0x33, 0x33, 0x3F, 0x4C, 0xCC, 0xCD, 0x3F, 0x0, 0x0, 0x0, 0x3E, 0x4C, 0xCC, 0xCD, 0x3F, 0x26, 0x66, 0x66, 0x3F, 0x80, 0x0, 0x0, 0x3F, 0x59, 0x99, 0x9A, 0x3F, 0x4C, 0xCC, 0xCD };
+u8 D_80800858_chbkcart[12] = { 0x0, 0x0, 0x0, 0x0, 0x3F, 0x0, 0x0, 0x0, 0xBF, 0x80, 0x0, 0x0 };
+V3C D_80800864_chbkcart = { 1.5f, -0.00235f, 0.3f };
+s32 D_80800870_chbkcart[4] = { 0x42C80000, 0x42C80000, 0x42480000, 0x42480000 };
+void *D_80800880_chbkcart = (void *)0x0357051A;
+static u32 D_80800880_chbkcart_rest[19] = { 0x9100002, (u32)&D_80800800_chbkcart, (u32)func_80800130_chbkcart, (u32)func_80105834, (u32)func_80101870, 0x13880000, 0x3F19999A, 0x0, 0x3050321, 0x0, (u32)func_80108ED0, 0xC0000, (u32)func_80800000_chbkcart, (u32)func_80107C2C, 0x80021414, (u32)func_808004DC_chbkcart, 0x0, 0x0, 0x0 };

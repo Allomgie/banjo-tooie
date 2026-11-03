@@ -1,9 +1,9 @@
 #include "common.h"
 
 #define DOOR_EVENT_DATA_DEFINED
-extern int D_80800160_chfactorylobbydoor;
+extern int D_80800160_chfactorylobbydoor[];
 extern int _chdoormake_entrypoint_3(s32, f32, s32, s32, s32, s32);
-extern s32 D_808001A8_chfactorylobbydoor;
+extern s32 D_808001A8_chfactorylobbydoor[];
 typedef union { s32 word; s16 half[2]; } DoorEventData;
 extern void func_8010108C(Actor *, s32, s32);
 extern s32 _chdoor_entrypoint_1(Actor *, s32, s32);
@@ -48,3 +48,13 @@ s32 func_80800108_chfactorylobbydoor(Actor *param_0, s32 param_1, DoorEventData 
     }
     return _chdoor_entrypoint_1(param_0, param_1, param_2.word);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/lobbydoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800160_chfactorylobbydoor -> int[], D_808001A8_chfactorylobbydoor -> s32[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_80800160_chfactorylobbydoor[18] = { 0xAC02C2, 0x84F0004, 0x0, (u32)func_808000A8_chfactorylobbydoor, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000800, 0x0, 0x0, 0x0, (u32)func_8080000C_chfactorylobbydoor, (u32)func_80107C2C, -0x7FF7DBEE, (u32)func_80800108_chfactorylobbydoor, 0x0 };
+s32 D_808001A8_chfactorylobbydoor[10] = { 0x190, 0x13701370, 0x100, 0x12230000, 0xA30000, 0xA4000, 0x0, 0x0, 0x0, 0x0 };

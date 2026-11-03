@@ -1,13 +1,13 @@
 #include "common.h"
 
-extern int D_80800940_chfactorytoxicpools;
-extern int D_80800988_chfactorytoxicpools;
-extern int D_808009D0_chfactorytoxicpools;
+extern int D_80800940_chfactorytoxicpools[];
+extern int D_80800988_chfactorytoxicpools[];
+extern int D_808009D0_chfactorytoxicpools[];
 typedef struct { s16 local_0; s16 local_1; f32 local_2; } ToxicPoolSwitchState;
 extern void *func_80100094(Actor *, u32);
 extern s32 func_800D9078(f32 *);
 extern f32 func_800F12D4(f32, f32, f32, f32, f32);
-extern s32 D_80800A18_chfactorytoxicpools;
+extern s32 D_80800A18_chfactorytoxicpools[];
 extern void func_80103110();
 extern void func_8010A570(Actor *);
 extern void _capod_entrypoint_13(void *, s32, s32, s32);
@@ -18,10 +18,10 @@ extern s32 _chswitch_entrypoint_10(Actor *, s32, s32);
 typedef struct { s16 pad_0; s16 state; f32 timer; } ToxicPoolState;
 typedef struct { s16 pad_0; s16 local_0; } ToxicPoolInteraction;
 extern u8 _chfactorytoxicpools_entrypoint_3[];
-extern s32 D_80800A38_chfactorytoxicpools;
-extern s32 D_80800A74_chfactorytoxicpools;
-extern s32 D_80800AB0_chfactorytoxicpools;
-extern s32 D_80800AC8_chfactorytoxicpools;
+extern s32 D_80800A38_chfactorytoxicpools[];
+extern s32 D_80800A74_chfactorytoxicpools[];
+extern s32 D_80800AB0_chfactorytoxicpools[];
+extern s32 D_80800AC8_chfactorytoxicpools[];
 typedef struct ToxicPoolItem { s16 local_0; s16 pad_0; f32 local_1[3]; f32 local_2[3]; } ToxicPoolItem;
 typedef struct ToxicPoolNodes { s16 local_0; s16 local_1; ToxicPoolItem local_2[8]; } ToxicPoolNodes;
 extern f32 func_800F5628(void *);
@@ -295,3 +295,22 @@ void func_80800898_chfactorytoxicpools(s32 param_0) {
     func_800BBCB8(local_1, local_0, 0x3F800000, 4, &D_80800A74_chfactorytoxicpools);
     _subaddieaudioquick_entrypoint_2(param_0, local_1, &D_80800AB0_chfactorytoxicpools);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/toxicpools.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800940_chfactorytoxicpools -> int[], D_80800988_chfactorytoxicpools -> int[], D_808009D0_chfactorytoxicpools -> int[], D_80800A18_chfactorytoxicpools -> s32[], D_80800A38_chfactorytoxicpools -> s32[], D_80800A74_chfactorytoxicpools -> s32[], D_80800AB0_chfactorytoxicpools -> s32[], D_80800AC8_chfactorytoxicpools -> s32[] */
+extern u8 D_8011A270[];
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void _chswitch_entrypoint_0();
+extern void func_8010A730();
+int D_80800940_chfactorytoxicpools[18] = { 0x34303C4, 0x7C10001, (u32)&D_8011A270, (u32)func_808000D0_chfactorytoxicpools, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x8, (u32)func_80800024_chfactorytoxicpools, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_80800190_chfactorytoxicpools, 0x0 };
+int D_80800988_chfactorytoxicpools[18] = { 0x34303C5, 0x7490001, -0x7FEE5D68, (u32)func_80800338_chfactorytoxicpools, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x80C, 0x0, (u32)_chswitch_entrypoint_0, 0x8, (u32)func_808002B8_chfactorytoxicpools, (u32)func_80107C2C, -0x7FF7DBF0, (u32)func_808003DC_chfactorytoxicpools, 0x0 };
+int D_808009D0_chfactorytoxicpools[18] = { 0x340432, 0x1, 0x0, (u32)func_80800670_chfactorytoxicpools, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0xE40000, (u32)func_8080057C_chfactorytoxicpools, (u32)func_80107C2C, -0x7FFFD9FE, 0x0, 0x0 };
+s32 D_80800A18_chfactorytoxicpools[8] = { 0x13056A, 0x18000A, 0xC0000C, 0x733, 0xC0010C, 0x150033, 0x74C0080, 0x140000 };
+s32 D_80800A38_chfactorytoxicpools[15] = { 0x1D095C, 0x2C0000, 0x1E0000, 0x3C, 0x1B, 0xA0014, 0x220019, 0x33000C, 0x190015, 0x3300CC, 0xB0014, 0x780014, -0x4FFD5, 0x1CC0233, 0x0 };
+s32 D_80800A74_chfactorytoxicpools[15] = { 0x1D09DD, 0x1B002B, 0x46002D, 0x1D0030, 0xB0012, 0x2D001E, 0x20, -0x3900685B, 0x160200, 0x150033, 0xB3002B, 0x2020268, 0x2200CC, 0x13301CC, 0x2330000 };
+s32 D_80800AB0_chfactorytoxicpools[6] = { 0x1304DC, 0xD0100, 0x14C0015, 0x80, 0x660002, 0x0 };
+s32 D_80800AC8_chfactorytoxicpools[6] = { 0x0, -0x3CFE0000, 0x0, 0x0, 0x0, 0x0 };

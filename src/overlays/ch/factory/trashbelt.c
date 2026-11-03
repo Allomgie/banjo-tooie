@@ -114,3 +114,12 @@ int chfactorytrashbelt_entrypoint_0()
 {
   return &D_808005EC_chfactorytrashbelt;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/trashbelt.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+u8 D_808005C0_chfactorytrashbelt[20] = { 0x0, 0x13, 0x5, 0x27, 0x0, 0xA, 0x0, 0x80, 0x0, 0x16, 0x46, 0x50, 0x0, 0x1, 0x0, 0xC8, 0x17, 0x70, 0x0, 0x0 };
+Vec3f D_808005D4_chfactorytrashbelt = { -7e+02f, 0.0f, 0.0f };
+Vec3f D_808005E0_chfactorytrashbelt = { 0.0f, 9e+01f, 0.0f };
+void *D_808005EC_chfactorytrashbelt = (void *)0x01580403;
+static u32 D_808005EC_chfactorytrashbelt_rest[20] = { 0x87D0001, 0x0, (u32)func_80800000_chfactorytrashbelt, (u32)func_80105834, (u32)func_808001EC_chfactorytrashbelt, 0x0, 0x0, 0x0, 0x400, 0x0, 0x0, 0x140000, 0x0, (u32)func_80107C2C, 0x80000402, (u32)func_8080041C_chfactorytrashbelt, 0x0, 0x0, 0x0, 0x0 };

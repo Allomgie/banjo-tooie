@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808001A0_chalienbeam;
+extern int D_808001A0_chalienbeam[];
 extern s32 func_800D9078(f32 *);
 extern f32 func_800F12D4(f32, f32, f32, f32, f32);
 extern void func_800EFE50(f32 *, void *, void *, f32);
@@ -50,3 +50,11 @@ void func_8080015C_chalienbeam(u8 *param_0, s32 param_1) {
     *(f32 *)((char *)param_0 + 0x48) = local_0[1];
     func_80101870(param_0, param_1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/alienbeam.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808001A0_chalienbeam -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+int D_808001A0_chalienbeam[20] = { 0x1580466, 0x81B0001, 0x0, (u32)func_80800088_chalienbeam, (u32)func_80105834, (u32)func_8080015C_chalienbeam, 0x0, 0x0, 0x0, 0x21404, 0x0, 0x0, 0x0, (u32)func_8080000C_chalienbeam, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_80800110_chalienbeam, 0x0, 0x0, 0x0 };

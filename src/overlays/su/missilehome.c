@@ -106,3 +106,6 @@ void sumissilehome_entrypoint_6(Actor *param_0, MissileHomeTarget *param_1)
     if (param_1->local_4 == 1) func_808001C8_sumissilehome(param_0, local_0, param_1->local_1);
     else func_80800178_sumissilehome(param_0, local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/missilehome.data.s) is defined here in C.
+ * Values are taken from the ROM. */

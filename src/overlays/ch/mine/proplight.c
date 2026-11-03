@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800240_chmineproplight;
+extern int D_80800240_chmineproplight[];
 extern void func_800FFAB0();
 extern void func_80103014();
 extern void func_80108944();
@@ -59,3 +59,11 @@ void func_80800168_chmineproplight(u8 *param_0, s32 param_1) {
 void func_80800228_chmineproplight(s32 arg0) 
 {
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/mine/proplight.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800240_chmineproplight -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+int D_80800240_chmineproplight[20] = { 0x158024C, -0xFFFF, 0x0, (u32)func_80800228_chmineproplight, (u32)func_80105834, (u32)func_80800168_chmineproplight, 0x0, 0x0, 0x0, 0xA0804, 0x0, 0x0, 0x0, (u32)func_8080000C_chmineproplight, (u32)func_80107C2C, -0x7FF7D7EE, 0x0, 0x0, 0x0, 0x0 };

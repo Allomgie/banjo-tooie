@@ -133,3 +133,6 @@ s32 mlwave_entrypoint_9(s32 param_0, f32 *param_1)
   return 0;
 
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ml/wave.data.s) is defined here in C.
+ * Values are taken from the ROM. */

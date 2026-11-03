@@ -189,3 +189,16 @@ void bskazshock_entrypoint_7(PlayerState *self) {
 s32 bskazshock_entrypoint_8(s32 idx) {
     return D_808007B4_bskazshock[idx];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/shock.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bskazshock_entrypoint_3();
+extern void _bskazshock_entrypoint_1();
+extern void _bskazshock_entrypoint_2();
+extern void func_80099B94();
+extern void _bskazshock_entrypoint_7();
+extern void _bskazshock_entrypoint_5();
+extern void _bskazshock_entrypoint_6();
+s32 D_80800770_bskazshock[13] = { 0x1D09E1, 0xAFFE7, 0xFFE7, 0x19001E, 0x190015, 0x190099, 0x220066, 0x590019, 0x190027, 0x1900190, 0x3200320, 0x2B0080, 0x800000 };
+s32 D_808007A4_bskazshock[4] = { (u32)_bskazshock_entrypoint_3, (u32)_bskazshock_entrypoint_1, (u32)_bskazshock_entrypoint_2, (u32)func_80099B94 };
+s32 D_808007B4_bskazshock[7] = { (u32)_bskazshock_entrypoint_7, (u32)_bskazshock_entrypoint_5, (u32)_bskazshock_entrypoint_6, (u32)func_80099B94, 0x0, 0x0, 0x0 };

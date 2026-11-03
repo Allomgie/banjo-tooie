@@ -97,3 +97,12 @@ int chping_entrypoint_1()
 {
   return (int)&D_80800410_chping;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/ping.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+void *D_80800410_chping = (void *)0x027B0169;
+static u32 D_80800410_chping_rest[19] = { 0x6DF0001, 0x0, (u32)func_808001B8_chping, (u32)func_80105834, (u32)func_80800000_chping, 0x0, 0x0, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x80000, 0x0, (u32)func_80107C2C, 0x0, 0x0, 0x0, 0x0, 0x0 };

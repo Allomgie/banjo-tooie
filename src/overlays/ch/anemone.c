@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808008D8_chanemone;
+extern int D_808008D8_chanemone[];
 extern void func_80102FDC(Actor *, f32);
 extern f32 func_800DC178(f32, f32);
 extern void _subaddiecustomhits_entrypoint_0(void *param_0, void *param_1);
@@ -8,7 +8,7 @@ extern void func_800E0AFC(void *param_0, s32 param_1, f32 param_2, void *param_3
 extern s32 func_8010262C(void *param_0, s32 param_1);
 extern void *_chanemone_entrypoint_1;
 extern u8 D_80800954_chanemone[];
-extern u8 D_80800964_chanemone[];
+extern u32 D_80800964_chanemone[];
 extern void _subaddieDll_entrypoint_4();
 extern void _subaddieaudioloop_entrypoint_5();
 extern u8 D_80800920_chanemone[];
@@ -210,3 +210,19 @@ s32 func_80800648_chanemone(Unk80132ED0 *param_0, f32 *param_1, f32 param_2, s32
 u8 *chanemone_entrypoint_1(void) {
     return D_80800964_chanemone;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/anemone.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808008D8_chanemone -> int[], D_80800964_chanemone -> u32 */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_808008B0_chanemone[10] = { 0x0, 0x0, 0x3F4CCCCD, 0x14E0001, 0x3FC00000, 0x14F0002, 0x3FC00000, 0x14F0084, 0x40266666, 0x1500002 };
+int D_808008D8_chanemone[18] = { 0x2F2035F, 0x6D20001, (u32)&D_808008B0_chanemone, (u32)func_8080000C_chanemone, (u32)func_80105834, (u32)func_80101870, 0x11940000, 0x0, 0x0, 0x28, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800260_chanemone, (u32)func_80107C2C, -0x7FCF9BB0, (u32)func_808002E8_chanemone, 0x0 };
+u8 D_80800920_chanemone[20] = { 0x0, 0x13, 0x6, 0x36, 0x0, 0xA, 0x0, 0xE6, 0x0, 0x1, 0x3, 0x20, 0x7, 0xD0, 0x0, 0x16, 0x46, 0x50, 0x0, 0x0 };
+u8 D_80800934_chanemone[16] = { 0x0, 0x13, 0x5, 0xC0, 0x0, 0xD, 0x0, 0x80, 0x0, 0x99, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800944_chanemone[16] = { 0x0, 0x13, 0x6, 0x37, 0x0, 0xD, 0x0, 0x80, 0x0, 0x99, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800954_chanemone[16] = { 0x0, 0x13, 0x4, 0xB7, 0x0, 0xD, 0x0, 0xB3, 0x0, 0xCC, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x0 };
+u32 D_80800964_chanemone[7] = { 0x0, 0x0, 0x0, (u32)func_80800648_chanemone, 0x0, 0x0, 0x0 };

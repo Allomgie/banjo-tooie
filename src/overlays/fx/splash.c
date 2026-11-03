@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800130_fxsplash;
+extern int D_80800130_fxsplash[];
 extern s32 D_80800144_fxsplash[];
 extern void _fxsplash_entrypoint_0(void);
 extern s32 func_800B5BE4(s32);
@@ -34,3 +34,9 @@ int fxsplash_entrypoint_2(f32 *param_0, f32 param_1)
     func_800BA544((void *)local_0, (s32)_fxsplash_entrypoint_0);
     func_800BABB8(local_0, param_0, NULL, 1.0f, D_80800144_fxsplash);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/splash.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800130_fxsplash -> int[] */
+int D_80800130_fxsplash[5] = { 0x2CFF4C, 0x190FF4C, 0xB402BC, 0xB4141A, 0x0 };
+s32 D_80800144_fxsplash[15] = { 0x1D09DA, 0x20FFFF, -0x14BFFE5, -0x5130514, 0x70001, 0x150000, 0xCC0022, 0x5000A, 0x20002, 0x2B0200, 0x2000016, 0x10000000, 0x0, 0x0, 0x0 };

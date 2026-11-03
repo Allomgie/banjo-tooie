@@ -47,3 +47,6 @@ void sueggmisc_entrypoint_2(param_0, param_1) s32 param_0; s32 param_1;
 s32 sueggmisc_entrypoint_3(void){
     func_800DA544(0xA31);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/eggmisc.data.s) is defined here in C.
+ * Values are taken from the ROM. */

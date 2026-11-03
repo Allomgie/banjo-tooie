@@ -1,9 +1,9 @@
 #include "common.h"
 
-extern s32 D_8080091C_chlinkpipefan;
-extern s32 D_80800960_chlinkpipefan;
-extern s32 D_80800994_chlinkpipefan;
-extern s32 D_808009A0_chlinkpipefan;
+extern s32 D_8080091C_chlinkpipefan[];
+extern s32 D_80800960_chlinkpipefan[];
+extern s32 D_80800994_chlinkpipefan[];
+extern s32 D_808009A0_chlinkpipefan[];
 extern f32 func_800F13C4(f32, f32);
 extern void func_800DA544(s32);
 extern void func_800BBCB8(f32 *, f32 *, f32, s32, void *);
@@ -11,11 +11,11 @@ extern void _subaddieaudioquick_entrypoint_2(Actor *, f32 *, void *);
 extern void _chskeletonexplode_entrypoint_7(Actor *, f32 *);
 extern Actor *func_80106790(Unk80132ED0 *);
 extern f32 func_800F12D4(f32, f32, f32, f32, f32);
-extern s32 D_808009AC_chlinkpipefan;
-extern s32 D_808009B8_chlinkpipefan;
+extern s32 D_808009AC_chlinkpipefan[];
+extern s32 D_808009B8_chlinkpipefan[];
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 typedef union { Unk80132ED0 *marker; s32 word; } Mass63FanEvent;
-extern int D_808009C8_chlinkpipefan;
+extern int D_808009C8_chlinkpipefan[];
 extern u8 D_80800910_chlinkpipefan[];
 extern void _chlinkpipefan_entrypoint_0(void);
 extern f32 func_800F1FF0(f32, f32, f32, f32, f32);
@@ -213,3 +213,20 @@ int chlinkpipefan_entrypoint_1()
 {
     return (int)&D_808009C8_chlinkpipefan;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/linkpipefan.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_8080091C_chlinkpipefan -> s32[], D_80800960_chlinkpipefan -> s32[], D_80800994_chlinkpipefan -> s32[], D_808009A0_chlinkpipefan -> s32[], D_808009AC_chlinkpipefan -> s32[], D_808009B8_chlinkpipefan -> s32[], D_808009C8_chlinkpipefan -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_80800910_chlinkpipefan[12] = { 0x0, 0x13, 0x4, 0xA9, 0x0, 0x16, 0x5D, 0xC0, 0x0, 0x1B, 0x0, 0x0 };
+s32 D_8080091C_chlinkpipefan[17] = { 0x1D09DD, 0x2B0400, 0x6000022, 0x2000280, 0x6000800, 0x150000, 0x260019, 0x7, 0x2CFFEC, 0x14FFEC, 0x140028, 0x140020, 0x60606080, 0xAFFEC, -0x310014, 0x140032, 0x140000 };
+s32 D_80800960_chlinkpipefan[13] = { 0x1D09D9, 0x1B00C8, 0x190000E, 0x320096, 0x150000, 0xFD002B, 0x4000600, 0x20DEDE, -0x21FFDE, 0xC0019, 0x190026, 0x2D00C8, 0x1900000 };
+s32 D_80800994_chlinkpipefan[3] = { 0x1304C8, 0x166D60, 0x1B0000 };
+s32 D_808009A0_chlinkpipefan[3] = { 0x13052B, 0x164E20, 0x1B0000 };
+s32 D_808009AC_chlinkpipefan[3] = { 0x1304A0, 0x166D60, 0x1B0000 };
+s32 D_808009B8_chlinkpipefan[4] = { 0x130546, 0xA0080, 0x166D60, 0x1B0000 };
+int D_808009C8_chlinkpipefan[18] = { 0x133029C, 0x6F10002, 0x0, (u32)func_80800080_chlinkpipefan, (u32)func_80105834, (u32)func_801018A4, 0x17700000, 0x0, 0x0, 0x821000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chlinkpipefan, (u32)func_80107C2C, -0x7FFFFC00, (u32)func_80800638_chlinkpipefan, 0x0 };

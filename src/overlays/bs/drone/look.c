@@ -72,3 +72,6 @@ int bsdronelook_entrypoint_4()
 {
   func_80099B94();
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/drone/look.data.s) is defined here in C.
+ * Values are taken from the ROM. */

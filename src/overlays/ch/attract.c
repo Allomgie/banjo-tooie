@@ -114,3 +114,14 @@ void chattract_entrypoint_2(s32 param_0)
         func_800EC828();
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/attract.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080046A_chattract = D_80800468_chattract + 0x2, D_8080046C_chattract = D_80800468_chattract + 0x4, D_80800470_chattract = D_80800468_chattract + 0x8 */
+extern void func_80102EC0();
+extern void func_80107C2C();
+u32 D_80800440_chattract[10] = { 0x0, 0x0, 0x0, 0x0, 0x3FCCCCCD, 0x284004A, 0x0, 0x0, 0x3F8CCCCD, 0x286004A };
+AttractEntry26 D_80800468_chattract[5] = { 0x0, 0x0, 0x0, 0.0f, 0.0f, 0.0f, 0x0, 0x0, 0.0f, 0x0, 0x0, 0x0, 0x0, 0x8A8, 0x1, 0x1, 2.5f, 0.0f, 0.14f, 0x98, 0x5E, 0.0f, 0x1, 0x0, 0x0, 0x0, 0x85A, 0x0, 0x1, 5.0f, 2.0f, 0.2f, 0x98, 0xAB, 0.0f, 0x0, 0x0, 0x0, 0x0, 0x859, 0x1, 0x0, 0.0f, 0.0f, 0.1f, 0x112, 0xC6, 2.8e+02f, 0x0, 0x0, 0x0, 0x0, 0x85B, 0x0, 0x1, 5.0f, 2.0f, 0.2f, 0x98, 0xAB, 0.0f, 0x0, 0x0, 0x0, 0x0 };
+void *D_808004F4_chattract = (void *)0x015804B5;
+static u32 D_808004F4_chattract_rest[18] = { 0x2, (u32)&D_80800440_chattract, (u32)func_80800014_chattract, (u32)func_80102EC0, (u32)func_80800204_chattract, 0x0, 0x0, 0x0, 0x8400404, 0x0, 0x0, 0x0, (u32)func_8080000C_chattract, (u32)func_80107C2C, 0x80000002, (u32)func_808002AC_chattract, 0x0, 0x0 };

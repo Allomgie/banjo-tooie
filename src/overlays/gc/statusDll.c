@@ -184,3 +184,8 @@ int gcstatusDll_entrypoint_20()
   }
   return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/statusDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80800230_gcstatusDll[4][2] = { 0x1, 0x0, 0x2, 0x1, 0x4, 0x2, 0x5, 0x3 };
+static u32 D_80800230_gcstatusDll_rest[2] = { 0x0, 0x0 };

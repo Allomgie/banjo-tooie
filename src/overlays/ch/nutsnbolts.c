@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern int D_80800E28_chnutsnbolts;
-extern int D_80800E70_chnutsnbolts;
-extern int D_80800EB8_chnutsnbolts;
+extern int D_80800E28_chnutsnbolts[];
+extern int D_80800E70_chnutsnbolts[];
+extern int D_80800EB8_chnutsnbolts[];
 extern void _subaddierouteDll_entrypoint_3();
 typedef struct { u8 pad_0[0x64]; u32 local_0 : 1; u32 pad_1 : 1; u32 local_1 : 1; u32 pad_2 : 4; u32 local_2 : 1; u32 pad_3 : 24; u8 pad_4[8]; u32 pad_5 : 15; u32 local_3 : 1; u32 pad_6 : 16; u8 pad_7[4]; u32 pad_8 : 29; u32 local_4 : 1; u32 pad_9 : 2; } NutsFlags1226;
 typedef union { f32 local_0[3]; s32 local_1[3]; } NutsPosition1226;
@@ -15,11 +15,11 @@ extern Actor *_subaddiefind_entrypoint_2(s32, s32 *);
 extern Actor *_subaddiefind_entrypoint_3(s32, s32 *);
 extern f32 func_800DC178(f32, f32);
 extern void func_800EF368(f32 *, f32);
-extern s32 D_80800CC0_chnutsnbolts;
-extern s32 D_80800F3C_chnutsnbolts;
-extern s32 D_80800F2C_chnutsnbolts;
-extern s32 D_80800F48_chnutsnbolts;
-extern s32 D_80800F58_chnutsnbolts;
+extern s32 D_80800CC0_chnutsnbolts[];
+extern s32 D_80800F3C_chnutsnbolts[];
+extern s32 D_80800F2C_chnutsnbolts[];
+extern s32 D_80800F48_chnutsnbolts[];
+extern s32 D_80800F58_chnutsnbolts[];
 extern void _subaddieaudioquick_entrypoint_4(u8 *, u8 *, void *, void *);
 typedef struct { u8 pad0[8]; u8 unk8[6]; u16 unkE; u8 pad10[4]; s16 unk14; u8 unk16; u8 pad17; f32 unk18; f32 unk1C; } NutsData;
 typedef struct { u8 pad0[0x64]; u32 pad64_30:2; u32 unk64_29:1; u32 pad64_0:29; u8 pad68[0x10]; u32 pad78_3:29; u32 unk78_2:1; u32 pad78_0:2; } NutsBits;
@@ -358,3 +358,24 @@ void func_80800C04_chnutsnbolts(u8 *param_0) {
     _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_80800F48_chnutsnbolts, 0x3F333333);
     _subaddieaudioquick_entrypoint_4(param_0, param_0 + 4, &D_80800CC0_chnutsnbolts, &D_80800F58_chnutsnbolts);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/nutsnbolts.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800CC0_chnutsnbolts -> s32[], D_80800E28_chnutsnbolts -> int[], D_80800E70_chnutsnbolts -> int[], D_80800EB8_chnutsnbolts -> int[], D_80800F2C_chnutsnbolts -> s32[], D_80800F3C_chnutsnbolts -> s32[], D_80800F48_chnutsnbolts -> s32[], D_80800F58_chnutsnbolts -> s32[] */
+s32 D_80800CC0_chnutsnbolts[4] = { 0x13045A, 0xD0140, 0x1590016, 0x36B00000 };
+u8 D_80800CD0_chnutsnbolts[96] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3F, 0xCC, 0xCC, 0xCD, 0x2, 0xE3, 0x0, 0x4C, 0x3F, 0xCC, 0xCC, 0xCD, 0x2, 0xE3, 0x0, 0x4C, 0x3F, 0xCC, 0xCC, 0xCD, 0x2, 0xE3, 0x0, 0x2, 0x3F, 0x28, 0xF5, 0xC3, 0x2, 0xE4, 0x0, 0x1, 0x3F, 0x28, 0xF5, 0xC3, 0x2, 0xE4, 0x0, 0x1, 0x40, 0x0, 0x0, 0x0, 0x2, 0xE3, 0x0, 0x92, 0x3F, 0x8F, 0x5C, 0x29, 0x2, 0xE5, 0x0, 0x1, 0x3F, 0x8F, 0x5C, 0x29, 0x2, 0xE5, 0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3F, 0x28, 0xF5, 0xC3, 0x2, 0xE4, 0x4, 0x1, 0x3F, 0xCC, 0xCC, 0xCD, 0x2, 0xE3, 0x0, 0x4C };
+u32 D_80800D30_chnutsnbolts[24] = { 0x0, 0x0, 0x3FCCCCCD, 0x2E9004C, 0x3FCCCCCD, 0x2E9004C, 0x3FCCCCCD, 0x2E90002, 0x3F28F5C3, 0x2EA0001, 0x3F28F5C3, 0x2EA0001, 0x40000000, 0x2E90092, 0x3F8F5C29, 0x2EB0001, 0x3FAF5C29, 0x2EB0001, 0x0, 0x0, 0x3F28F5C3, 0x2EA0401, 0x3FCCCCCD, 0x2E9004C };
+u32 D_80800D90_chnutsnbolts[24] = { 0x0, 0x0, 0x3FCCCCCD, 0x2E6004C, 0x3FCCCCCD, 0x2E6004C, 0x3FCCCCCD, 0x2E60002, 0x3F28F5C3, 0x2E70001, 0x3F28F5C3, 0x2E70001, 0x40000000, 0x2E60092, 0x3F8F5C29, 0x2E80001, 0x3F8F5C29, 0x2E80001, 0x0, 0x0, 0x3F28F5C3, 0x2E70401, 0x3FCCCCCD, 0x2E6004C };
+u8 D_80800DF0_chnutsnbolts[20] = { 0x0, 0x2, 0x0, 0x0, 0x0, 0xA, 0x0, 0x0, 0x0, 0x8, 0x0, 0x0, 0x0, 0x9, 0x0, 0x0, 0x0, 0xB, 0x0, 0x0 };
+u8 D_80800E04_chnutsnbolts[12] = { 0x0, 0x0, 0x0, 0x1, 0x3F, 0xE6, 0x66, 0x66, 0x0, 0x12, 0x0, 0x0 };
+u8 D_80800E10_chnutsnbolts[24] = { 0x0, 0x0, 0x0, 0x3, 0x3F, 0xC0, 0x0, 0x0, 0x0, 0x12, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x40, 0x0, 0x0, 0x0, 0x0, 0x12, 0x0, 0x0 };
+int D_80800E28_chnutsnbolts[18] = { 0x19D043E, 0x7EA0002, (u32)&D_80800CD0_chnutsnbolts, (u32)func_80800080_chnutsnbolts, (u32)func_80105834, (u32)func_80101870, 0x9C40000, 0x3F800000, 0x0, 0x3850261, (u32)func_808008FC_chnutsnbolts, (u32)func_80108ED0, 0x200000, (u32)func_80800024_chnutsnbolts, (u32)func_80107C2C, -0x7FDDABE3, (u32)func_808005D0_chnutsnbolts, (u32)&D_80800DF0_chnutsnbolts };
+int D_80800E70_chnutsnbolts[18] = { 0x19D043F, 0x7EB0002, (u32)&D_80800D30_chnutsnbolts, (u32)func_80800080_chnutsnbolts, (u32)func_80105834, (u32)func_80101870, 0x9C40000, 0x3F4CCCCD, 0x0, 0x3850261, (u32)func_808008FC_chnutsnbolts, (u32)func_80108ED0, 0x200000, (u32)func_80800024_chnutsnbolts, (u32)func_80107C2C, -0x7FDDABE3, (u32)func_808005D0_chnutsnbolts, (u32)&D_80800DF0_chnutsnbolts };
+int D_80800EB8_chnutsnbolts[18] = { 0x19D0440, 0x7EC0002, (u32)&D_80800D90_chnutsnbolts, (u32)func_80800080_chnutsnbolts, (u32)func_80105834, (u32)func_80101870, 0x9C40000, 0x3F99999A, 0x0, 0x3850261, (u32)func_808008FC_chnutsnbolts, (u32)func_80108ED0, 0x200000, (u32)func_80800024_chnutsnbolts, (u32)func_80107C2C, -0x7FDDABE3, (u32)func_808005D0_chnutsnbolts, (u32)&D_80800DF0_chnutsnbolts };
+f32 D_80800F00_chnutsnbolts[5] = { 1.746939e-39f, 1.194112e-39f, 1.8734443e-38f, 2.0695875e-35f, 0.0f };
+f32 D_80800F14_chnutsnbolts[6] = { 0.0f, 0.1f, 0.5f, 1.0f, 1.0f, 0.1f };
+s32 D_80800F2C_chnutsnbolts[4] = { 0x1304B2, 0xD00D9, 0xF30016, 0x36B00000 };
+s32 D_80800F3C_chnutsnbolts[3] = { 0x3F19999A, 0x3F666666, -0x40800000 };
+s32 D_80800F48_chnutsnbolts[4] = { 0x1304B2, 0xD00C0, 0xD90016, 0x36B00000 };
+s32 D_80800F58_chnutsnbolts[6] = { 0x3E4CCCCD, 0x3F000000, -0x40800000, 0x0, 0x0, 0x0 };

@@ -259,3 +259,21 @@ void func_8080082C_bskazstill(PlayerState *self) {
 s32 bskazstill_entrypoint_10(s32 idx) {
     return D_808008D4_bskazstill[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/still.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bskazstill_entrypoint_0();
+extern void _bskazstill_entrypoint_1();
+extern void _bskazstill_entrypoint_2();
+extern void func_8009AB78();
+extern void _bskazstill_entrypoint_5();
+extern void _bskazstill_entrypoint_6();
+extern void _bskazstill_entrypoint_7();
+extern void _bsdrone_entrypoint_3();
+extern void func_80099B94();
+u8 D_808008A0_bskazstill[4] = { 0x1, 0x4, 0x3, 0x2 };
+s32 D_808008A4_bskazstill[4] = { (u32)_bskazstill_entrypoint_0, (u32)_bskazstill_entrypoint_1, (u32)_bskazstill_entrypoint_2, (u32)func_8009AB78 };
+s32 D_808008B4_bskazstill[4] = { (u32)_bskazstill_entrypoint_5, (u32)_bskazstill_entrypoint_6, (u32)_bskazstill_entrypoint_7, (u32)func_8009AB78 };
+s32 D_808008C4_bskazstill[4] = { (u32)func_80800758_bskazstill, (u32)func_80800780_bskazstill, (u32)func_808007A8_bskazstill, (u32)_bsdrone_entrypoint_3 };
+s32 D_808008D4_bskazstill[7] = { (u32)func_808007DC_bskazstill, (u32)func_80800804_bskazstill, (u32)func_8080082C_bskazstill, (u32)func_80099B94, 0x0, 0x0, 0x0 };

@@ -61,3 +61,6 @@ void chbaddieDll_entrypoint_3(BaddieCallQueue *param_0)
     }
     param_0->count = 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bad/dieDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

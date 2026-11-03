@@ -2,7 +2,7 @@
 
 #include "overlays/bs/kaz/die.h"
 
-s32 D_80800460_bskazdie[];
+extern s32 D_80800460_bskazdie[];
 
 void func_80800000_bskazdie(PlayerState *self) {
     f32 sp30 = 0.0f;
@@ -111,3 +111,9 @@ void bskazdie_entrypoint_2(PlayerState *self) {
 s32 bskazdie_entrypoint_3(s32 idx) {
     return D_80800460_bskazdie[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/die.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _basudie_entrypoint_11();
+s32 D_80800460_bskazdie[4] = { (u32)_bskazdie_entrypoint_2, (u32)_bskazdie_entrypoint_0, (u32)_bskazdie_entrypoint_1, (u32)_basudie_entrypoint_11 };

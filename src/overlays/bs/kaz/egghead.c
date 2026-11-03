@@ -2,7 +2,7 @@
 
 #include "overlays/bs/kaz/egghead.h"
 
-s32 D_808002F0_bskazegghead[];
+extern s32 D_808002F0_bskazegghead[];
 
 void bskazegghead_entrypoint_0(PlayerState *self) {
     _bskaz_entrypoint_1(self);
@@ -72,3 +72,8 @@ void bskazegghead_entrypoint_2(PlayerState *self) {
 s32 bskazegghead_entrypoint_3(s32 idx) {
     return D_808002F0_bskazegghead[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/egghead.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_808002F0_bskazegghead[4] = { (u32)_bskazegghead_entrypoint_2, (u32)_bskazegghead_entrypoint_0, (u32)_bskazegghead_entrypoint_1, (u32)func_80099B94 };

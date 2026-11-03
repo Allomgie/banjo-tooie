@@ -12,9 +12,9 @@ extern s32 *D_80801020_chhoney[];
 extern f32 func_800D8FF8(void);
 typedef struct { u8 pad_0[0x78]; u32 pad_1 : 26; u32 disabled : 1; u32 pad_2 : 5; } HoneyFlags;
 extern s32 func_800D9078(f32 *);
-extern int D_80801048_chhoney;
+extern int D_80801048_chhoney[];
 extern void *D_80801090_chhoney;
-extern int D_808010D8_chhoney;
+extern int D_808010D8_chhoney[];
 extern u8 D_8012762C;
 extern void func_800CE8D8(s32, f32, s32);
 extern s32 func_800DC298(f32);
@@ -440,3 +440,19 @@ int chhoney_entrypoint_2()
 {
     return (int)&D_808010D8_chhoney;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/honey.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801048_chhoney -> int[], D_808010D8_chhoney -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+s32 *D_80801020_chhoney[2] = { (void *)0x02290196, (void *)0x0197FFFF };
+u8 D_80801028_chhoney[16] = { 0x0, 0x13, 0x6, 0x57, 0x0, 0x16, 0x27, 0x10, 0x1, 0x22, 0x0, 0x2, 0x0, 0x1D, 0x0, 0x0 };
+u8 D_80801038_chhoney[16] = { 0x0, 0x13, 0x6, 0x79, 0x0, 0x16, 0x46, 0x50, 0x0, 0x1, 0x5, 0xDC, 0x9, 0xC4, 0x0, 0x0 };
+int D_80801048_chhoney[18] = { 0x550229, 0x7040001, 0x0, (u32)func_80800A5C_chhoney, (u32)func_80105834, (u32)func_801018A4, 0xBB80000, 0x3FE66666, 0x0, 0x40000000, (u32)func_80800634_chhoney, (u32)func_80108ED0, 0x0, (u32)func_80800244_chhoney, (u32)func_80107C2C, -0x7DFF8FB0, (u32)func_8080046C_chhoney, 0x0 };
+void *D_80801090_chhoney = (void *)0x022B0196;
+static u32 D_80801090_chhoney_rest[17] = { 0x7050001, 0x0, (u32)func_80800A5C_chhoney, (u32)func_80105834, (u32)func_801018A4, 0xBB80000, 0x3FE66666, 0x0, 0x40A00000, (u32)func_80800634_chhoney, (u32)func_80108ED0, 0x0, (u32)func_80800244_chhoney, (u32)func_80107C2C, 0x82007050, (u32)func_8080046C_chhoney, 0x0 };
+int D_808010D8_chhoney[18] = { 0x22C0197, 0x7050001, 0x0, (u32)func_80800A5C_chhoney, (u32)func_80105834, (u32)func_801018A4, 0xBB80000, 0x3FE66666, 0x0, 0x40A00000, (u32)func_80800634_chhoney, (u32)func_80108ED0, 0x0, (u32)func_80800244_chhoney, (u32)func_80107C2C, -0x7DFF8FB0, (u32)func_8080046C_chhoney, 0x0 };

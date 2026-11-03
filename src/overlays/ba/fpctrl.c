@@ -28,7 +28,7 @@ extern f32 yaw_get(s32);
 extern void func_800EEB9C(f32 *, f32, f32);
 extern void func_800EF04C(f32 *, f32 *);
 extern u8 D_808010B0_bafpctrl[];
-extern s32 D_808010A0_bafpctrl;
+extern s32 D_808010A0_bafpctrl[];
 extern void _ncba1p_entrypoint_12(PlayerState *, f32);
 extern f32 _ncba1p_entrypoint_11(PlayerState *);
 extern void func_800F10B4(f32, f32, f32, f32, f32);
@@ -490,3 +490,11 @@ void bafpctrl_entrypoint_19(void *param_0)
         _plcamera_entrypoint_0(((int *)param_0)[0x61]);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/fpctrl.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808010A0_bafpctrl -> s32[] */
+s32 D_808010A0_bafpctrl[4] = { 0x130487, 0xA0133, 0x162EE0, 0x0 };
+u8 D_808010B0_bafpctrl[16] = { 0x0, 0x13, 0x4, 0x88, 0x0, 0xA, 0x1, 0x33, 0x0, 0x16, 0x2E, 0xE0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808010C0_bafpctrl[16] = { 0x0, 0x13, 0x4, 0x6B, 0x0, 0xA, 0x1, 0x66, 0x0, 0x16, 0x27, 0x10, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808010D0_bafpctrl[16] = { 0x0, 0x13, 0x4, 0x6C, 0x0, 0xA, 0x1, 0x66, 0x0, 0x16, 0x27, 0x10, 0x0, 0x0, 0x0, 0x0 };

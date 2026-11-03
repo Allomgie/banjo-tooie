@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80801B34_chfactorybattery;
+extern int D_80801B34_chfactorybattery[];
 extern s32 _gccubesearch_entrypoint_12(f32 *, s32, f32 *, Actor *);
 extern void func_800EE7F8(f32 *, f32 *);
 extern void func_80102FDC(Actor *, f32);
@@ -14,14 +14,14 @@ extern f32 func_800EEAD4(f32 *, f32 *);
 typedef struct { u8 pad_0[0x50]; s32 local_0; } BatteryParticleHolder;
 extern f32 func_80103EAC(Actor *);
 extern s32 func_800C8A98(void);
-extern int D_80801BA8_chfactorybattery;
+extern int D_80801BA8_chfactorybattery[];
 extern void _chdoormake_entrypoint_9();
 extern s32 _chdoormake_entrypoint_1(Actor *, f32, s32, s32);
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
 typedef union { s32 word; void *pointer; } FactoryBatteryEvent;
-extern int D_80801BF0_chfactorybattery;
+extern int D_80801BF0_chfactorybattery[];
 extern Vec3f D_80801B3C_chfactorybattery;
 extern Vec3f D_80801B48_chfactorybattery;
 extern Vec3f D_80801B54_chfactorybattery;
@@ -77,7 +77,7 @@ extern u8 D_80801AB0_chfactorybattery[], D_80801AC4_chfactorybattery[], boot_thr
 
 int *chfactorybattery_entrypoint_0()
 {
-    return &D_80801B34_chfactorybattery;
+    return D_80801B34_chfactorybattery;
 }
 
 s32 func_8080000C_chfactorybattery(Actor *param_0)
@@ -616,7 +616,7 @@ s32 func_808014C0_chfactorybattery(param_0) s32 param_0; {
 
 int chfactorybattery_entrypoint_1()
 {
-  return (int)&D_80801BA8_chfactorybattery;
+  return (int)D_80801BA8_chfactorybattery;
 }
 
 void func_8080150C_chfactorybattery(Actor *param_0)
@@ -678,5 +678,22 @@ s32 func_80801804_chfactorybattery(Actor *param_0, s32 param_1, FactoryBatteryEv
 
 int chfactorybattery_entrypoint_2()
 {
-    return (int)&D_80801BF0_chfactorybattery;
+    return (int)D_80801BF0_chfactorybattery;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/battery.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801B34_chfactorybattery -> int[] (uses written as NAME[0]), D_80801BA8_chfactorybattery -> int[] (uses written as NAME[0]), D_80801BF0_chfactorybattery -> int[] (uses written as NAME[0]) */
+extern void func_80101870();
+u8 D_80801AB0_chfactorybattery[20] = { 0x0, 0x6, 0x0, 0x0, 0x0, 0xB, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xC, 0x0, 0x0 };
+u8 D_80801AC4_chfactorybattery[112] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCC, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCC, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCC, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCC, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCC, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCB, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCC, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCB, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCC, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCB, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCB, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCB, 0x0, 0x1, 0x3E, 0xEF, 0x1A, 0xA0, 0x2, 0xCC, 0x0, 0x1 };
+int D_80801B34_chfactorybattery[2] = { (u32)func_808003C0_chfactorybattery, (u32)func_8080019C_chfactorybattery };
+Vec3f D_80801B3C_chfactorybattery = { 2.8e-43f, 2.8e-43f, 2.8e-43f };
+Vec3f D_80801B48_chfactorybattery = { 0.0f, 0.0f, 0.0f };
+Vec3f D_80801B54_chfactorybattery = { 5.6e-44f, 2.8e-43f, 3.57e-43f };
+u8 D_80801B60_chfactorybattery[24] = { 0x0, 0x13, 0x4, 0xD5, 0x0, 0x16, 0x27, 0x10, 0x0, 0xD, 0x0, 0xCC, 0x0, 0xE6, 0x0, 0x1, 0x0, 0xC8, 0x17, 0x70, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80801B78_chfactorybattery[16] = { 0x0, 0x13, 0x5, 0x2E, 0x0, 0xD, 0x1, 0x33, 0x1, 0x66, 0x0, 0x16, 0x36, 0xB0, 0x0, 0x0 };
+f32 D_80801B88_chfactorybattery[8] = { 0.0f, 0.0f, 0.4f, 0.0f, 0.8f, 1.0f, 1.0f, 0.0f };
+int D_80801BA8_chfactorybattery[18] = { 0x124028C, 0x7E40006, (u32)&D_80801AC4_chfactorybattery, (u32)func_80800AB8_chfactorybattery, (u32)func_80105834, (u32)func_801018A4, 0x7D00000, 0x3FC00000, 0x0, 0x840165, (u32)func_808014C0_chfactorybattery, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, (u32)((u8 *)&boot_thread_stack + 0xF25), (u32)func_80801040_chfactorybattery, (u32)&D_80801AB0_chfactorybattery };
+int D_80801BF0_chfactorybattery[20] = { 0x11A03FB, 0x87B0001, 0x0, (u32)func_80801728_chfactorybattery, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0x40000C00, 0x0, 0x0, 0x0, (u32)func_8080150C_chfactorybattery, (u32)func_80107C2C, -0x7FF79BEE, (u32)func_80801804_chfactorybattery, 0x0, 0x0, 0x0 };

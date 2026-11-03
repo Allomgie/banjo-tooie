@@ -11,7 +11,7 @@ extern void func_8010D5DC();
 typedef struct { u8 pad_0[0x70]; u32 pad_1 : 16; u32 local_0 : 6; u32 pad_2 : 10; } MolehillMode;
 extern void _chmolehill_entrypoint_0(void);
 extern Actor *func_80106790();
-extern int D_80800B70_chmolehill;
+extern int D_80800B70_chmolehill[];
 typedef struct { f32 local_0[5]; } MoleHillTimes401;
 extern u8 D_80800AC0_chmolehill[];
 extern u8 D_80800ACC_chmolehill[];
@@ -336,3 +336,17 @@ int *chmolehill_entrypoint_6()
 {
     return &D_80800B70_chmolehill;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/mole/hill.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800B70_chmolehill -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80107C2C();
+u8 D_80800AC0_chmolehill[12] = { 0x0, 0x13, 0x5, 0x56, 0x0, 0x16, 0x55, 0xF0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800ACC_chmolehill[16] = { 0x0, 0x13, 0x4, 0xA1, 0x0, 0xD, 0x0, 0xF3, 0x1, 0x0, 0x0, 0x16, 0x2E, 0xE0, 0x0, 0x0 };
+u8 D_80800ADC_chmolehill[16] = { 0x0, 0x13, 0x4, 0xA0, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x16, 0x2E, 0xE0, 0x0, 0x0 };
+u32 D_80800AEC_chmolehill[28] = { 0x0, 0x0, 0x0, 0x2290044, 0x3FD9999A, 0x2290002, 0x3FCCCCCD, 0x22A0002, 0x0, 0x2290004, 0x0, 0x2290004, 0x0, 0x2290004, 0x3F4CCCCD, 0x22B0002, 0x3F666666, 0x22C0002, 0x40800000, 0x22D0001, 0x0, 0x2290004, 0x40C00000, 0x22E0002, 0x40800000, 0x22D0004, 0x0, 0x2290004 };
+MoleHillTimes401 D_80800B5C_chmolehill = { 0.1258f, 0.1558f, 0.76f, 0.96f, -1.0f };
+int D_80800B70_chmolehill[20] = { 0xB80247, 0x7D70001, (u32)&D_80800AEC_chmolehill, (u32)func_80800160_chmolehill, (u32)func_80105834, (u32)func_801018A4, 0x1F40000, 0x0, 0x0, 0x854, 0x0, 0x0, 0x40000, 0x0, (u32)func_80107C2C, -0x7FFFDFFE, (u32)func_808009A0_chmolehill, 0x0, 0x0, 0x0 };

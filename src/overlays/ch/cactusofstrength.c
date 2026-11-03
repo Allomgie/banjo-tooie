@@ -1,9 +1,9 @@
 #include "common.h"
 
 #define D ((CactusData *)this)
-extern int D_80800D00_chcactusofstrength;
-extern int D_80800D48_chcactusofstrength;
-extern int D_80800D90_chcactusofstrength;
+extern int D_80800D00_chcactusofstrength[];
+extern int D_80800D48_chcactusofstrength[];
+extern int D_80800D90_chcactusofstrength[];
 extern s32 func_800D9058(f32);
 typedef union { s32 local_0; void *local_1; } CactusStrengthEvent;
 typedef struct { u8 pad0[0x24]; f32 vel; f32 minY; f32 maxY; } CactusData;
@@ -17,7 +17,7 @@ extern u8 unk50_31[];
 extern u8 unk2C[];
 extern Actor *_subaddiefind_entrypoint_0(f32 *, s32, s32, s32);
 extern Actor *func_80106790();
-extern s32 D_80800DD8_chcactusofstrength;
+extern s32 D_80800DD8_chcactusofstrength[];
 extern f32 func_800DC178(f32, f32);
 extern void func_800EEB9C(f32 *, f32, f32);
 extern s32 func_800BABB8(s32, f32 *, f32 *, f32, void *);
@@ -28,8 +28,8 @@ extern s32 _mlwave_entrypoint_8(void *, f32);
 extern void func_800CE88C(int, int);
 extern int func_800CEAA8(int);
 extern void func_800D1000(int, int, int, int, int);
-extern int D_80800E24_chcactusofstrength;
-extern int D_80800E64_chcactusofstrength;
+extern int D_80800E24_chcactusofstrength[];
+extern int D_80800E64_chcactusofstrength[];
 extern u8 unk50[];
 extern void func_800B4470(f32 *, f32 *, s32 *, s32, f32, f32, s32, s32, s32);
 extern void func_800C4104(s32, f32, s32, f32 *, f32, f32);
@@ -417,3 +417,21 @@ void func_80800C18_chcactusofstrength(param_0) Actor *param_0;
     func_800CE88C(0, 0);
   }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/cactusofstrength.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800D00_chcactusofstrength -> int[], D_80800D48_chcactusofstrength -> int[], D_80800D90_chcactusofstrength -> int[], D_80800DD8_chcactusofstrength -> s32[], D_80800E24_chcactusofstrength -> int[], D_80800E64_chcactusofstrength -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_80800CE0_chcactusofstrength[8] = { 0x0, 0x0, 0x3EB33333, 0xD40044, 0x3E99999A, 0xD40002, 0x3E800000, 0xD50002 };
+int D_80800D00_chcactusofstrength[18] = { 0x18B0139, 0x7540001, (u32)&D_80800CE0_chcactusofstrength, (u32)func_80800024_chcactusofstrength, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800108_chcactusofstrength, (u32)func_80107C2C, -0x7FFFD400, (u32)func_808001C4_chcactusofstrength, 0x0 };
+int D_80800D48_chcactusofstrength[18] = { 0x18D013B, 0x78E0001, 0x0, (u32)func_80800200_chcactusofstrength, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_808003EC_chcactusofstrength, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800440_chcactusofstrength, 0x0 };
+int D_80800D90_chcactusofstrength[18] = { 0x18C013A, 0x77C0001, 0x0, (u32)func_80800A44_chcactusofstrength, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800B24_chcactusofstrength, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80800B90_chcactusofstrength, 0x0 };
+s32 D_80800DD8_chcactusofstrength[12] = { 0x1D09E6, 0x2B0059, 0x730022, 0x4C0066, 0x190026, 0x150000, 0x800027, -0x630064, 0x640064, 0x2D00E1, 0x12C011A, 0x0 };
+u8 D_80800E08_chcactusofstrength[16] = { 0x0, 0x13, 0x4, 0xAD, 0x0, 0x1, 0x0, 0xC8, 0x9, 0xC4, 0x0, 0x3, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800E18_chcactusofstrength[12] = { 0x0, 0x13, 0x5, 0x1A, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x0, 0x0, 0x0 };
+int D_80800E24_chcactusofstrength[16] = { 0x411001D, 0x9DD002B, 0x6000800, 0x220180, 0x2000480, 0x6000015, 0x26, 0x190000, 0x7002D, 0x9600FA, 0x208E75, 0x16C0000A, -0x63FFE7, -0x63FF9C, 0x4B0064, 0x0 };
+int D_80800E64_chcactusofstrength[3] = { 0x130413, 0xA00E6, 0x0 };

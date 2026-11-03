@@ -64,3 +64,6 @@ void bawandglow_entrypoint_7(PlayerState *self) {
         _chwandglow_entrypoint_2(self->wandglow->unkC);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/wandglow.data.s) is defined here in C.
+ * Values are taken from the ROM. */

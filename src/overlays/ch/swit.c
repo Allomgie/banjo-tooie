@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800DB0_chswitch;
+extern int D_80800DB0_chswitch[];
 extern void *D_80800DC4_chswitch;
 extern void *D_80800DD8_chswitch;
 extern Actor *func_80106790();
@@ -420,3 +420,14 @@ s32 chswitch_entrypoint_14(Actor *param_0, s32 param_1)
     func_80103110(param_0, 0);
     return local_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/swit.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800DB0_chswitch -> int[] */
+extern void func_80108F08();
+int D_80800DB0_chswitch[5] = { (u32)func_80800024_chswitch, 0x0, (u32)func_808000B8_chswitch, (u32)func_80108F08, 0x0 };
+void *D_80800DC4_chswitch = (void *)func_808002B4_chswitch;
+static u32 D_80800DC4_chswitch_rest[4] = { 0x0, 0x0, 0x0, 0x0 };
+void *D_80800DD8_chswitch = (void *)func_8080012C_chswitch;
+static u32 D_80800DD8_chswitch_rest[5] = { 0x0, 0x0, 0x0, 0x0, 0x0 };

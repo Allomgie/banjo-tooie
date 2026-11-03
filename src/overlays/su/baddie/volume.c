@@ -157,3 +157,6 @@ s32 subaddievolume_entrypoint_0(Actor *param_0, f32 (*param_1)[3], s32 param_2, 
     }
     return local_1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/volume.data.s) is defined here in C.
+ * Values are taken from the ROM. */

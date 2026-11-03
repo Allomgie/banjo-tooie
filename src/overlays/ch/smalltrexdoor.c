@@ -9,7 +9,7 @@ extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
 extern f32 func_800F1DF4(f32 *, f32 *);
 extern f32 func_800F2094(f32, f32);
-extern int D_808002E0_chsmalltrexdoor;
+extern int D_808002E0_chsmalltrexdoor[];
 
 void func_80800000_chsmalltrexdoor(Actor *param_0)
 {
@@ -66,5 +66,15 @@ void func_80800244_chsmalltrexdoor(Actor *param_0, s32 param_1, s32 param_2)
 
 int *chsmalltrexdoor_entrypoint_0()
 {
-    return &D_808002E0_chsmalltrexdoor;
+    return D_808002E0_chsmalltrexdoor;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/smalltrexdoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808002E0_chsmalltrexdoor -> int[] (uses written as NAME[0]) */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern u8 boot_thread_stack[];
+int D_808002E0_chsmalltrexdoor[20] = { 0xAC028F, 0x8880001, 0x0, (u32)func_80800150_chsmalltrexdoor, (u32)func_80105834, (u32)func_80101870, 0x13880000, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800000_chsmalltrexdoor, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0x1F22), (u32)func_80800244_chsmalltrexdoor, 0x0, 0x0, 0x0 };

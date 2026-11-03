@@ -1,24 +1,24 @@
 #include "common.h"
 
 extern void func_800DBE60(u8, s32, s32);
-extern int D_808015B4_chfiregen;
-extern int D_808015FC_chfiregen;
-extern int D_80801644_chfiregen;
+extern int D_808015B4_chfiregen[];
+extern int D_808015FC_chfiregen[];
+extern int D_80801644_chfiregen[];
 extern s32 D_8080168C_chfiregen[];
-extern int D_808016D4_chfiregen;
-extern int D_8080171C_chfiregen;
+extern int D_808016D4_chfiregen[];
+extern int D_8080171C_chfiregen[];
 typedef struct { u8 pad_0[0x72]; u8 local_0 : 6; u8 pad_1 : 2; } FireGeneratorMode;
 extern f32 func_800DC178(f32, f32);
 extern s32 func_800DC298(f32);
-extern int D_808017BC_chfiregen;
+extern int D_808017BC_chfiregen[];
 extern s32 D_80801804_chfiregen[];
-extern int D_8080184C_chfiregen;
-extern int D_80801894_chfiregen;
-extern int D_808018DC_chfiregen;
+extern int D_8080184C_chfiregen[];
+extern int D_80801894_chfiregen[];
+extern int D_808018DC_chfiregen[];
 extern s32 D_80801924_chfiregen[];
-extern int D_8080196C_chfiregen;
-extern int D_808019B4_chfiregen;
-extern int D_808019FC_chfiregen;
+extern int D_8080196C_chfiregen[];
+extern int D_808019B4_chfiregen[];
+extern int D_808019FC_chfiregen[];
 extern int D_80801A44_chfiregen[];
 extern s32 D_80801A8C_chfiregen[];
 extern void *D_80801AD4_chfiregen;
@@ -689,3 +689,36 @@ void func_80801300_chfiregen(Actor *param_0)
     local_1 = (void *)func_808010B4_chfiregen(param_0);
     if (local_1) func_800EDDDC(local_1, local_0, local_0, 5.0f);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fire/gen.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808015B4_chfiregen -> int[], D_808015FC_chfiregen -> int[], D_80801644_chfiregen -> int[], D_808016D4_chfiregen -> int[], D_8080171C_chfiregen -> int[], D_808017BC_chfiregen -> int[], D_8080184C_chfiregen -> int[], D_80801894_chfiregen -> int[], D_808018DC_chfiregen -> int[], D_8080196C_chfiregen -> int[], D_808019B4_chfiregen -> int[], D_808019FC_chfiregen -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void func_8010A730();
+u8 D_80801570_chfiregen[16] = { 0x0, 0x13, 0x4, 0xB5, 0x0, 0xD, 0x0, 0xE6, 0x1, 0x19, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0 };
+s16 D_80801580_chfiregen[10] = { 0x206, 0x13, 0x4B4, 0x16, 0x61A8, 0x1, 0x1F4, 0x1388, 0x0, 0x0 };
+u32 D_80801594_chfiregen[8] = { 0x0, 0x0, 0x4B189680, 0x1D80000, 0x3ECCCCCD, 0x1D80000, 0x3F19999A, 0x1D80000 };
+int D_808015B4_chfiregen[18] = { 0x24401AA, 0x66C0001, (u32)&D_80801594_chfiregen, (u32)func_808000EC_chfiregen, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x880044, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800A78_chfiregen, (u32)func_80107C2C, 0x0, (u32)func_80800000_chfiregen, 0x0 };
+int D_808015FC_chfiregen[18] = { 0x24401AC, 0x66C0001, (u32)&D_80801594_chfiregen, (u32)func_808000EC_chfiregen, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x880044, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800A78_chfiregen, (u32)func_80107C2C, 0x0, (u32)func_80800000_chfiregen, 0x0 };
+int D_80801644_chfiregen[18] = { 0x24401AE, 0x66C0001, (u32)&D_80801594_chfiregen, (u32)func_808000EC_chfiregen, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x880044, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800A78_chfiregen, (u32)func_80107C2C, 0x0, (u32)func_80800000_chfiregen, 0x0 };
+s32 D_8080168C_chfiregen[18] = { 0x24401B0, 0x66C0001, (u32)&D_80801594_chfiregen, (u32)func_808000EC_chfiregen, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x880044, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800A78_chfiregen, (u32)func_80107C2C, 0x0, (u32)func_80800000_chfiregen, 0x0 };
+int D_808016D4_chfiregen[18] = { 0x24401B2, 0x66C0001, (u32)&D_80801594_chfiregen, (u32)func_808000EC_chfiregen, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x880044, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800A78_chfiregen, (u32)func_80107C2C, 0x0, (u32)func_80800000_chfiregen, 0x0 };
+int D_8080171C_chfiregen[26] = { 0x24401B4, 0x66C0001, (u32)&D_80801594_chfiregen, (u32)func_808000EC_chfiregen, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x880044, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800A78_chfiregen, (u32)func_80107C2C, 0x0, (u32)func_80800000_chfiregen, 0x0, 0xFF, 0xFF, 0xFF, 0x64, 0x28, 0x0, 0x42C80000, 0x43960000 };
+u8 D_80801784_chfiregen[56] = { 0x0, 0x19, 0x0, 0x1, 0x0, 0x6, 0x23, 0x2, 0x0, 0x2C, 0x0, 0x0, 0x0, 0x60, 0x0, 0x0, 0x0, 0x0, 0x0, 0xD8, 0x0, 0x0, 0x0, 0x22, 0x1, 0xA, 0x1, 0xEB, 0x2, 0x0, 0x3, 0x99, 0x0, 0x2A, 0x0, 0x0, 0x0, 0x2, 0x4, 0x0, 0x7, 0x0, 0x0, 0x15, 0x0, 0x4C, 0x0, 0xB3, 0x0, 0x16, 0x0, 0x4, 0x0, 0x0, 0x0, 0x0 };
+int D_808017BC_chfiregen[18] = { 0x24501AB, 0x4, 0x0, (u32)func_80800C44_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_80800E54_chfiregen, 0x0, 0x0, (u32)func_80800EB8_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+s32 D_80801804_chfiregen[18] = { 0x24501AD, 0x4, 0x0, (u32)func_80800C44_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_80800E54_chfiregen, 0x0, 0x0, (u32)func_80800EB8_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+int D_8080184C_chfiregen[18] = { 0x24501AF, 0x4, 0x0, (u32)func_80800C44_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_80800E54_chfiregen, 0x0, 0x0, (u32)func_80800EB8_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+int D_80801894_chfiregen[18] = { 0x24501B1, 0x4, 0x0, (u32)func_80800C44_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_80800E54_chfiregen, 0x0, 0x0, (u32)func_80800EB8_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+int D_808018DC_chfiregen[18] = { 0x24501B3, 0x4, 0x0, (u32)func_80800C44_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_80800E54_chfiregen, 0x0, 0x0, (u32)func_80800EB8_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+s32 D_80801924_chfiregen[18] = { 0x24501B5, 0x4, 0x0, (u32)func_80800C44_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_80800E54_chfiregen, 0x0, 0x0, (u32)func_80800EB8_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+int D_8080196C_chfiregen[18] = { 0x20702A7, 0x4, 0x0, (u32)func_8080110C_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_808012F8_chfiregen, 0x0, 0x0, (u32)func_80801300_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+int D_808019B4_chfiregen[18] = { 0x20702A8, 0x4, 0x0, (u32)func_8080110C_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_808012F8_chfiregen, 0x0, 0x0, (u32)func_80801300_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+int D_808019FC_chfiregen[18] = { 0x20702A9, 0x4, 0x0, (u32)func_8080110C_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_808012F8_chfiregen, 0x0, 0x0, (u32)func_80801300_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+int D_80801A44_chfiregen[18] = { 0x20702AA, 0x4, 0x0, (u32)func_8080110C_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_808012F8_chfiregen, 0x0, 0x0, (u32)func_80801300_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+s32 D_80801A8C_chfiregen[18] = { 0x20702AB, 0x4, 0x0, (u32)func_8080110C_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_808012F8_chfiregen, 0x0, 0x0, (u32)func_80801300_chfiregen, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+void *D_80801AD4_chfiregen = (void *)0x020702AC;
+static u32 D_80801AD4_chfiregen_rest[18] = { 0x4, 0x0, (u32)func_8080110C_chfiregen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, (u32)func_808012F8_chfiregen, 0x0, 0x0, (u32)func_80801300_chfiregen, (u32)func_80107C2C, 0x80000002, 0x0, 0x0, 0x0 };

@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800150_chminegrill2switches;
+extern int D_80800150_chminegrill2switches[];
 extern void *D_80800198_chminegrill2switches;
 
 s32 func_80800000_chminegrill2switches(Actor *this, s32 param_1, s32 param_2){
@@ -47,3 +47,16 @@ int chminegrill2switches_entrypoint_1()
 {
   return &D_80800198_chminegrill2switches;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/mine/grill2switches.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800150_chminegrill2switches -> int[] */
+extern void _chswitch_entrypoint_6();
+extern void func_80105834();
+extern void func_80101870();
+extern void _chswitch_entrypoint_2();
+extern void func_80107C2C();
+int D_80800150_chminegrill2switches[18] = { 0x343049D, 0x7B80001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, (u32)_chswitch_entrypoint_2, 0x0, (u32)func_80800094_chminegrill2switches, (u32)func_80107C2C, -0x7FF7D3FE, (u32)func_808000B8_chminegrill2switches, 0x0 };
+void *D_80800198_chminegrill2switches = (void *)0x0343049E;
+static u32 D_80800198_chminegrill2switches_rest[17] = { 0x7B90001, 0x8011A220, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, (u32)_chswitch_entrypoint_2, 0x0, (u32)func_808000EC_chminegrill2switches, (u32)func_80107C2C, 0x80082C02, (u32)func_80800110_chminegrill2switches, 0x0 };

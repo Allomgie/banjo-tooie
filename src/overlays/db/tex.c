@@ -39,3 +39,6 @@ s32 dbtex_entrypoint_1(void *texture){
         heap_free(texture);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/tex.data.s) is defined here in C.
+ * Values are taken from the ROM. */

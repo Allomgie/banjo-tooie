@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern u8 D_80800090_chwaterfallgrillswitch;
+extern u32 D_80800090_chwaterfallgrillswitch[];
 
 int func_80800000_chwaterfallgrillswitch(s32 param_0, s32 param_1, s32 param_2)
 {
@@ -20,3 +20,14 @@ int chwaterfallgrillswitch_entrypoint_0()
 {
     return (int)&D_80800090_chwaterfallgrillswitch;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/waterfall/grillswitch.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800090_chwaterfallgrillswitch -> u32[] */
+extern u8 D_8011A248[];
+extern void _chswitch_entrypoint_6();
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80107C2C();
+u32 D_80800090_chwaterfallgrillswitch[20] = { 0xC011C, 0x6800001, (u32)&D_8011A248, (u32)_chswitch_entrypoint_6, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, 0x0, 0x0, (u32)func_80800054_chwaterfallgrillswitch, (u32)func_80107C2C, 0x80002C02, (u32)func_80800000_chwaterfallgrillswitch, 0x0, 0x0, 0x0 };

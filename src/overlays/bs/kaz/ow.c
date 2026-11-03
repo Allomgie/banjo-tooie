@@ -81,3 +81,10 @@ s32 bskazow_entrypoint_1(s32 idx) {
     return D_808002E0_bskazow[idx];
 }
 
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/ow.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099AA8();
+s32 D_808002D0_bskazow[4] = { (u32)func_80800000_bskazow, (u32)func_80800028_bskazow, (u32)func_80800098_bskazow, (u32)func_80099AA8 };
+s32 D_808002E0_bskazow[4] = { (u32)func_8080015C_bskazow, (u32)func_80800184_bskazow, (u32)func_808001F0_bskazow, (u32)func_80099AA8 };

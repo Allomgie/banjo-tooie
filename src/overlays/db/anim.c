@@ -85,3 +85,6 @@ void dbanim_entrypoint_1(s16 *param_0, s32 param_1, void *param_2, u8 *param_3)
     osWritebackDCache(local_4, local_8 * 16);
     osWritebackDCache(param_3, local_8 * 4);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/anim.data.s) is defined here in C.
+ * Values are taken from the ROM. */

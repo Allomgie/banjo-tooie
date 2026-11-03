@@ -320,3 +320,6 @@ void rtlight_entrypoint_2(RtOut_rtlight_entrypoint_2 *grid, s32 arg1, s32 arg2, 
         c->f--;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/rt/light.data.s) is defined here in C.
+ * Values are taken from the ROM. */

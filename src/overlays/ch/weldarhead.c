@@ -7,7 +7,7 @@ extern void func_8010D5DC(void);
 extern void func_800F4A58(s32, f32 *, f32);
 typedef struct { f32 local_0[3]; s32 local_1; f32 local_2; f32 local_3; } WeldarMarker37;
 extern s16 D_8080053E_chweldarhead;
-extern s32 D_80800538_chweldarhead;
+extern s32 D_80800538_chweldarhead[];
 typedef struct { f32 pos[3]; s32 unkC; f32 unk10; f32 unk14; u8 unk18[1]; } WeldarHeadLocal;
 typedef union { u32 w; s32 s; struct { s16 a; s16 b; } h; } WeldarHeadArg;
 extern s32 _susubgame_entrypoint_3(Actor *, void *, s32, s32);
@@ -119,3 +119,16 @@ void func_8080038C_chweldarhead(Actor *param_0, s32 param_1, s32 param_2)
         break;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/weldarhead.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080053E_chweldarhead = D_80800538_chweldarhead + 0x6
+ * extern declarations adjusted to the object (same addresses): D_80800538_chweldarhead -> s32[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+u8 D_808004E0_chweldarhead[16] = { 0x43, 0x12, 0x0, 0x0, 0x43, 0x12, 0x0, 0x0, 0x43, 0x12, 0x0, 0x0, 0x42, 0x92, 0x0, 0x0 };
+void *D_808004F0_chweldarhead = (void *)0x01580146;
+static u32 D_808004F0_chweldarhead_rest[17] = { 0x8700001, 0x0, (u32)func_80800170_chweldarhead, (u32)func_80105834, (u32)func_80101870, 0x3E80000, 0x4019999A, 0x0, 0x500, 0x0, 0x0, 0x300000, (u32)func_8080000C_chweldarhead, (u32)func_80107C2C, 0x80000402, (u32)func_808001E4_chweldarhead, 0x0 };
+s32 D_80800538_chweldarhead[10] = { 0x190, 0x0, 0x201, 0x120F0000, 0xB50000, 0xC0000, 0x2000000, 0x0, 0x0, 0x0 };

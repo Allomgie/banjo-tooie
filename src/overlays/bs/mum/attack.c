@@ -179,3 +179,9 @@ void func_808003DC_bsmumattack(PlayerState *self) {
 s32 bsmumattack_entrypoint_0(s32 idx) {
     return D_80800700_bsmumattack[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/mum/attack.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_808006F0_bsmumattack[4] = { 0x3060013, 0x50C0016, 0x75300011, 0x0 };
+s32 D_80800700_bsmumattack[4] = { (u32)func_808002E8_bsmumattack, (u32)func_80800344_bsmumattack, (u32)func_808003DC_bsmumattack, (u32)_bsmum_entrypoint_0 };

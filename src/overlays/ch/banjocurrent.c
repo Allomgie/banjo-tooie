@@ -2,7 +2,7 @@
 
 extern void *D_808007D0_chbanjocurrent;
 extern void func_800EE88C(f32 *, void *);
-extern int D_80800818_chbanjocurrent;
+extern int D_80800818_chbanjocurrent[];
 extern s32 func_800F54E4(void);
 extern f32 func_800F5E7C(u32);
 extern f32 func_800F5F7C(u32);
@@ -177,3 +177,11 @@ void func_808005F4_chbanjocurrent(Actor *param_0)
         func_800907C0(local_2);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/banjocurrent.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800818_chbanjocurrent -> int[] */
+void *D_808007D0_chbanjocurrent = (void *)0x015801D1;
+static u32 D_808007D0_chbanjocurrent_rest[17] = { 0x2, 0x0, (u32)func_808001D0_chbanjocurrent, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, 0x80002602, 0x0, 0x0 };
+int D_80800818_chbanjocurrent[18] = { 0x15801D6, 0x1, 0x0, (u32)func_808005F4_chbanjocurrent, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFD9FE, 0x0, 0x0 };

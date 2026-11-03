@@ -326,3 +326,12 @@ int bsride_entrypoint_3(s32 param_0)
 {
   return D_80800A90_bsride[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ride.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_808009C0_bsride[4] = { (u32)func_8080016C_bsride, (u32)func_8080018C_bsride, (u32)func_808001CC_bsride, (u32)func_8080011C_bsride };
+Mass47Ride D_808009D0_bsride[8] = { 0x74, 0x281, 0.7f, 0x1, 0x0, 0x0, 0x0, 0.0f, 0.0f, 0x75, 0x250, 0.7f, 0x0, 0x0, 0x0, 0x0, 0.5f, 0.0f, 0x76, 0x251, 0.7f, 0x0, 0x0, 0x0, 0x0, 0.5f, 0.0f, 0x77, 0x252, 0.7f, 0x0, 0x1, 0x1, 0x0, 1.0f, 0.75f, 0x78, 0x253, 0.7f, 0x0, 0x1, 0x1, 0x0, 1.0f, 0.75f, 0x79, 0x254, 0.7f, 0x0, 0x1, 0x1, 0x0, 1.0f, 0.75f, 0x7A, 0x255, 0.7f, 0x0, 0x1, 0x1, 0x0, 1.0f, 0.75f, 0x0, 0x0, 0.0f, 0x0, 0x0, 0x0, 0x0, 0.0f, 0.0f };
+int D_80800A70_bsride[4] = { (u32)func_808004AC_bsride, (u32)func_808004D8_bsride, (u32)func_80800524_bsride, (u32)func_808002A0_bsride };
+s32 D_80800A80_bsride[4] = { (u32)func_808005B8_bsride, (u32)func_808005D8_bsride, (u32)func_8080060C_bsride, (u32)func_8080066C_bsride };
+s32 D_80800A90_bsride[4] = { (u32)func_8080084C_bsride, (u32)func_80800878_bsride, (u32)func_80800904_bsride, (u32)func_80800798_bsride };

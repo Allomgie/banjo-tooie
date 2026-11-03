@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern s32 D_808004E0_subaddiefx;
-extern s32 D_80800500_subaddiefx;
+extern s32 D_808004E0_subaddiefx[];
+extern s32 D_80800500_subaddiefx[];
 extern f32 R_808004D0_subaddiefx;
 extern f32 func_80103EAC();
 extern f32 func_8010A40C();
@@ -119,3 +119,9 @@ void subaddiefx_entrypoint_1(s32 param_0, u8 *param_1) {
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/fx.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808004E0_subaddiefx -> s32[], D_80800500_subaddiefx -> s32[] */
+s32 D_808004E0_subaddiefx[8] = { 0x161100, 0x220040, 0x4C0000, 0x15, 0x0, 0x2B0026, 0x26011A, 0x0 };
+s32 D_80800500_subaddiefx[4] = { 0x1305C3, 0xD00F3, 0x10C0000, 0x0 };

@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern int D_80800240_chhotwatersteam;
-extern int D_80800288_chhotwatersteam;
+extern int D_80800240_chhotwatersteam[];
+extern int D_80800288_chhotwatersteam[];
 typedef struct { u8 pad[0x76]; u16 f76:9; u16 pad76:7; } SteamState;
 extern s32 func_800DA298(s32);
 int func_808001E8_chhotwatersteam();
@@ -94,3 +94,13 @@ int func_808001E8_chhotwatersteam(param_0) SteamState *param_0; {
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/hot/watersteam.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800240_chhotwatersteam -> int[], D_80800288_chhotwatersteam -> int[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+int D_80800240_chhotwatersteam[18] = { 0x158046F, 0x1, 0x0, (u32)func_8080003C_chhotwatersteam, (u32)func_80105834, (u32)func_8010A730, 0x9C40000, 0x0, 0x0, 0x5, 0x0, 0x0, 0x0, (u32)func_8080000C_chhotwatersteam, (u32)func_80107C2C, -0x7FFFF9FE, (u32)func_808000C4_chhotwatersteam, 0x0 };
+int D_80800288_chhotwatersteam[14] = { 0x1D09DD, 0x161200, 0x2D0014, 0x28001B, 0xFA015E, 0x60020022, 0x990100, 0x3000380, 0x150000, 0x99002B, 0x1000180, 0x0, 0x0, 0x0 };

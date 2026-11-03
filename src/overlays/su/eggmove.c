@@ -151,3 +151,6 @@ void sueggmove_entrypoint_10(s32 param_0, s32 param_1) {
     f32 local_0[3];
     func_800FAB50(param_0, param_1, local_0, 0x24200A0, 15.0f);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/eggmove.data.s) is defined here in C.
+ * Values are taken from the ROM. */

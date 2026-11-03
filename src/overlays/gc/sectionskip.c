@@ -535,3 +535,7 @@ void func_80800EF8_gcsectionskip(s32 param_0, s32 param_1)
 {
     func_800C05B8(param_0, 0, 0, 0, 0, 0, param_1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/sectionskip.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80801040_gcsectionskip[16] = { 0x0, 0x16, 0x23, 0x28, 0x17, 0x13, 0x24, 0x25, 0x15, 0x14, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

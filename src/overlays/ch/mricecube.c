@@ -1,15 +1,15 @@
 #include "common.h"
 
-extern int D_80800928_chmricecube;
+extern int D_80800928_chmricecube[];
 typedef struct { u8 pad0[0x1A]; u16 val : 11; u16 pad1A : 5; } RiceCubeMsg;
 extern u8 D_808009A8_chmricecube[];
 extern u8 D_808008B0_chmricecube[];
 extern void func_800EE7F8();
 extern void func_800EF1B8(f32 *, f32, f32);
 extern void _gcdialogcamera_entrypoint_3(void *, f32);
-extern s32 D_808009B8_chmricecube;
+extern s32 D_808009B8_chmricecube[];
 extern void _subaddiedialog_entrypoint_8(s32, s32, s32 *, s32 *, s32);
-extern s32 D_80800A00_chmricecube;
+extern s32 D_80800A00_chmricecube[];
 extern f32 D_80800970_chmricecube[];
 extern f32 D_80800980_chmricecube[];
 extern f32 D_80800990_chmricecube[];
@@ -239,3 +239,21 @@ int func_80800850_chmricecube(s32 param_0)
   local_0 = param_0 + 4;
   _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80800A00_chmricecube, 0x3DCCCCCD);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/mricecube.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800928_chmricecube -> int[], D_808009B8_chmricecube -> s32[], D_80800A00_chmricecube -> s32[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_808008B0_chmricecube[40] = { 0x0, 0x0, 0x0, 0x1, 0x13, 0xCA, 0x1, 0x0, 0x0, 0x0, 0x6, 0x1, 0x13, 0xCB, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x14, 0x52, 0x1, 0x0, 0x0, 0x0, 0x4, 0x0, 0x14, 0x53, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
+u32 D_808008D8_chmricecube[20] = { 0x0, 0x0, 0x3FA66666, 0x4A80044, 0x3FA66666, 0x4A80002, 0x3FA66666, 0x4A90001, 0x3FA66666, 0x4A80092, 0x3FA66666, 0x4A80002, 0x3FA66666, 0x4A80002, 0x3FA66666, 0x4A90001, 0x3FA66666, 0x4A90001, 0x3FA66666, 0x4A90001 };
+int D_80800928_chmricecube[18] = { 0xAE03E7, 0x9150001, (u32)&D_808008D8_chmricecube, (u32)func_808000AC_chmricecube, (u32)func_80105834, (u32)func_80800734_chmricecube, 0x7D00000, 0x0, 0x0, 0x20904, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chmricecube, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_8080050C_chmricecube, 0x0 };
+f32 D_80800970_chmricecube[4] = { 1.746407e-39f, 9.18928e-40f, 1.83705e-40f, 0.0f };
+f32 D_80800980_chmricecube[4] = { 1.746332e-39f, 9.18785e-40f, 1.83705e-40f, 0.0f };
+f32 D_80800990_chmricecube[6] = { 1.746618e-39f, 9.1882e-40f, 2.204081e-39f, 1.435e-42f, 9.367223e-39f, 0.0f };
+u8 D_808009A8_chmricecube[16] = { 0x43, 0xF0, 0x0, 0x0, 0x43, 0x96, 0x0, 0x0, 0x43, 0x8E, 0x0, 0x0, 0x42, 0xF0, 0x0, 0x0 };
+s32 D_808009B8_chmricecube[4] = { 0x1C90000, 0x19000A9, 0xC, 0x200 };
+u8 D_808009C8_chmricecube[56] = { 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x16, 0x2, 0x0, 0x0, 0x2D, 0x1, 0x90, 0x2, 0x58, 0x0, 0xB, 0x0, 0xF0, 0x0, 0xFA, 0x0, 0x0, 0x0, 0x0, 0x0, 0x22, 0x0, 0x99, 0x1, 0x0, 0x3, 0x0, 0x3, 0x80, 0x0, 0x15, 0x0, 0x0, 0x0, 0xB3, 0x0, 0x2B, 0x0, 0x80, 0x0, 0x99, 0x0, 0x1E, 0x0, 0x64, 0x0, 0x64, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80800A00_chmricecube[4] = { 0x13047F, 0xD00F3, 0x10C0000, 0x0 };

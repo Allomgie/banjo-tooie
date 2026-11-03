@@ -3,10 +3,10 @@
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern f32 func_80103EF4(Actor *);
 extern s32 func_800D91EC(f32 *, f32);
-extern s32 D_80800320_chfactorybtwmdoor;
-extern s32 D_8080032C_chfactorybtwmdoor;
-extern s32 D_80800338_chfactorybtwmdoor;
-extern int D_80800344_chfactorybtwmdoor;
+extern s32 D_80800320_chfactorybtwmdoor[];
+extern s32 D_8080032C_chfactorybtwmdoor[];
+extern s32 D_80800338_chfactorybtwmdoor[];
+extern int D_80800344_chfactorybtwmdoor[];
 
 void func_80800000_chfactorybtwmdoor(f32 *param_0)
 {
@@ -75,3 +75,15 @@ int chfactorybtwmdoor_entrypoint_0()
 {
     return (int)&D_80800344_chfactorybtwmdoor;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/btwmdoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800320_chfactorybtwmdoor -> s32[], D_8080032C_chfactorybtwmdoor -> s32[], D_80800338_chfactorybtwmdoor -> s32[], D_80800344_chfactorybtwmdoor -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+s32 D_80800320_chfactorybtwmdoor[3] = { 0x130528, 0xA00C0, 0x0 };
+s32 D_8080032C_chfactorybtwmdoor[3] = { 0x1304A0, 0xA0099, 0x0 };
+s32 D_80800338_chfactorybtwmdoor[3] = { 0x1304CE, 0x167D00, 0x0 };
+int D_80800344_chfactorybtwmdoor[19] = { 0x11E03F7, 0x70C0001, 0x0, (u32)func_80800068_chfactorybtwmdoor, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000C01, 0x0, 0x0, 0x0, (u32)func_80800000_chfactorybtwmdoor, (u32)func_80107C2C, -0x7FF7FBEE, 0x0, 0x0, 0x0 };

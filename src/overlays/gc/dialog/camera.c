@@ -292,3 +292,7 @@ void gcdialogcamera_entrypoint_10(DialogCamera27 *param_0, s32 param_1, s32 para
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/dialog/camera.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+f32 D_808007C0_gcdialogcamera[21][4] = { 1.3e+02f, 7e+01f, 1e+02f, 75.0f, 1.3e+02f, 7e+01f, 1e+02f, 75.0f, 9e+01f, 6e+01f, 1.8e+02f, 2e+01f, 1.9e+02f, 1.5e+02f, 1.8e+02f, 8e+01f, 1.2e+02f, 6e+01f, 6e+01f, 4e+01f, 9e+01f, 6e+01f, 7e+01f, 4e+01f, 165.0f, 8e+01f, 1e+02f, 5e+01f, 1e+02f, 7e+01f, 1e+02f, 45.0f, 1.5e+02f, 1.5e+02f, 1.5e+02f, 0.0f, 165.0f, 165.0f, 165.0f, 25.0f, 9e+01f, 9e+01f, 9e+01f, 0.0f, 1.2e+02f, 1.2e+02f, 1.6e+02f, 5e+01f, 1.5e+02f, 1.5e+02f, 1.5e+02f, 0.0f, 1.8e+02f, 2.2e+02f, 2.4e+02f, 0.0f, 1.8e+02f, 1.5e+02f, 1.5e+02f, 0.0f, 45.0f, 4e+01f, 4e+01f, 1e+01f, 115.0f, 1e+02f, 1.2e+02f, 5e+01f, 1.2e+02f, 1e+02f, 7e+01f, 6e+01f, 9e+01f, 9e+01f, 9e+01f, 2e+01f, 725.0f, 3e+02f, 3e+02f, 3.5e+02f, 6.5e+02f, 6e+02f, 8e+02f, 1.5e+02f };

@@ -72,3 +72,9 @@ int bssplat_entrypoint_1(s32 param_0)
 {
   return D_808002B0_bssplat[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/splat.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099AA8();
+s32 D_808002B0_bssplat[4] = { (u32)func_80800274_bssplat, (u32)func_8080009C_bssplat, (u32)func_80800114_bssplat, (u32)func_80099AA8 };

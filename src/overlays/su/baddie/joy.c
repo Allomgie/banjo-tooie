@@ -141,3 +141,6 @@ void subaddiejoy_entrypoint_10(JoyS *param_0, f32 param_1, f32 param_2) {
         func_80018820(param_0->f, param_1, param_2);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/joy.data.s) is defined here in C.
+ * Values are taken from the ROM. */

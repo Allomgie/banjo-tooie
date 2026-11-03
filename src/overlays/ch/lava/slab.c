@@ -16,3 +16,14 @@ int chlavaslab_entrypoint_0()
 {
   return &D_808000A0_chlavaslab;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lava/slab.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _chdoor_entrypoint_0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_1();
+void *D_808000A0_chlavaslab = (void *)0x032C0250;
+static u32 D_808000A0_chlavaslab_rest[19] = { 0x8D40001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800000_chlavaslab, (u32)func_80107C2C, 0x80002C02, (u32)_chdoor_entrypoint_1, 0x0, 0x0, 0x0 };

@@ -288,3 +288,14 @@ int bstntswim_entrypoint_4(s32 param_0)
 {
   return D_808009F0_bstntswim[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/tntswim.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bstnt_entrypoint_10();
+extern void _bsdrone_entrypoint_3();
+s32 D_808009B0_bstntswim[4] = { (u32)func_808001CC_bstntswim, (u32)func_80800200_bstntswim, (u32)func_808002D0_bstntswim, (u32)_bstnt_entrypoint_10 };
+int D_808009C0_bstntswim[4] = { (u32)func_808005FC_bstntswim, (u32)func_8080042C_bstntswim, (u32)func_8080049C_bstntswim, (u32)_bstnt_entrypoint_10 };
+s32 D_808009D0_bstntswim[4] = { (u32)func_80800830_bstntswim, (u32)func_80800630_bstntswim, (u32)func_808006E4_bstntswim, (u32)_bstnt_entrypoint_10 };
+s32 D_808009E0_bstntswim[4] = { (u32)func_80800864_bstntswim, (u32)func_8080088C_bstntswim, (u32)func_808008B4_bstntswim, (u32)_bstnt_entrypoint_10 };
+s32 D_808009F0_bstntswim[4] = { (u32)func_8080095C_bstntswim, (u32)func_8080090C_bstntswim, (u32)func_80800934_bstntswim, (u32)_bsdrone_entrypoint_3 };

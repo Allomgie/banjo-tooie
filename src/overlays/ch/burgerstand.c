@@ -4,30 +4,30 @@ extern void func_80102424(Actor *, s32);
 extern void func_800EE7F8(f32 *, f32 *);
 extern void func_80090734(s32, f32 *);
 extern void *func_80100094(Actor *, u32);
-extern int D_80800C28_chburgerstand;
+extern int D_80800C28_chburgerstand[];
 extern void *D_80800C70_chburgerstand;
-extern int D_80800CB8_chburgerstand;
+extern int D_80800CB8_chburgerstand[];
 extern s32 D_80800D00_chburgerstand[];
-extern s32 D_80800D48_chburgerstand;
+extern s32 D_80800D48_chburgerstand[];
 extern int func_80102320(Actor *, f32, f32);
 extern s32 func_800F4EC8(s32, f32 *, f32, f32, f32);
 extern void _subaddieaudioquick_entrypoint_3(Actor *, f32 *, void *, f32);
-extern int D_80800DA0_chburgerstand;
-extern int D_80800DCC_chburgerstand;
-extern int D_80800D7C_chburgerstand;
-extern int D_80800D88_chburgerstand;
-extern int D_80800D94_chburgerstand;
-extern int D_80800D60_chburgerstand;
-extern int D_80800DAC_chburgerstand;
-extern int D_80800D6C_chburgerstand;
-extern int D_80800DB8_chburgerstand;
+extern int D_80800DA0_chburgerstand[];
+extern int D_80800DCC_chburgerstand[];
+extern int D_80800D7C_chburgerstand[];
+extern int D_80800D88_chburgerstand[];
+extern int D_80800D94_chburgerstand[];
+extern int D_80800D60_chburgerstand[];
+extern int D_80800DAC_chburgerstand[];
+extern int D_80800D6C_chburgerstand[];
+extern int D_80800DB8_chburgerstand[];
 extern s32 func_800BABB8(s32, f32 *, f32 *, f32, u8 *);
 extern u8 D_80800DDC_chburgerstand[];
 extern u8 D_80800DEC_chburgerstand[];
 extern void _suexpression_entrypoint_7(s32, s32, s32);
 extern void _suexpression_entrypoint_12(s32, f32, f32);
 extern void _suexpression_entrypoint_17(s32, s32);
-extern s32 D_80800E14_chburgerstand;
+extern s32 D_80800E14_chburgerstand[];
 extern u8 D_80800BC0_chburgerstand[];
 extern s32 _subaddiedialog_entrypoint_8();
 extern Actor *func_80106790(Unk80132ED0 *);
@@ -56,7 +56,7 @@ void func_80800754_chburgerstand();
 
 int chburgerstand_entrypoint_0()
 {
-    return (int)&D_80800C28_chburgerstand;
+    return (int)D_80800C28_chburgerstand;
 }
 
 int chburgerstand_entrypoint_1()
@@ -66,7 +66,7 @@ int chburgerstand_entrypoint_1()
 
 int *chburgerstand_entrypoint_2()
 {
-    return &D_80800CB8_chburgerstand;
+    return D_80800CB8_chburgerstand;
 }
 
 int chburgerstand_entrypoint_3()
@@ -112,7 +112,7 @@ void func_808000C4_chburgerstand(Actor *param_0)
     case 1: func_808004DC_chburgerstand(param_0); func_808005AC_chburgerstand(param_0); func_80800754_chburgerstand(param_0); break;
     case 2: func_808004DC_chburgerstand(param_0); func_808005AC_chburgerstand(param_0); break;
     case 3:
-        _subaddieaudioquick_entrypoint_3(param_0, param_0->position, &D_80800D48_chburgerstand, 0.7f);
+        _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80800D48_chburgerstand, 0.7f);
         if (func_80101DDC(param_0)) {
             func_800D175C(0x4B, 5 - func_800D1A04(0x4B));
             func_800FC660(14);
@@ -197,12 +197,12 @@ int func_808004DC_chburgerstand(param_0) s32 param_0;
 {
   s32 local_0;
   local_0 = param_0 | 0;
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_80800D7C_chburgerstand, 0.02f);
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_80800D88_chburgerstand, 0.04f);
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_80800D94_chburgerstand, 0.11f);
-  _subaddieaudioquick_entrypoint_4(local_0, local_0 + 4, &D_80800D60_chburgerstand, &D_80800DAC_chburgerstand);
-  _subaddieaudioquick_entrypoint_4(local_0, local_0 + 4, &D_80800D6C_chburgerstand, &D_80800DB8_chburgerstand);
-  _subaddieaudioquick_entrypoint_4(local_0, local_0 + 4, &D_80800DA0_chburgerstand, &D_80800DCC_chburgerstand);
+  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, D_80800D7C_chburgerstand, 0.02f);
+  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, D_80800D88_chburgerstand, 0.04f);
+  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, D_80800D94_chburgerstand, 0.11f);
+  _subaddieaudioquick_entrypoint_4(local_0, local_0 + 4, D_80800D60_chburgerstand, D_80800DAC_chburgerstand);
+  _subaddieaudioquick_entrypoint_4(local_0, local_0 + 4, D_80800D6C_chburgerstand, D_80800DB8_chburgerstand);
+  _subaddieaudioquick_entrypoint_4(local_0, local_0 + 4, D_80800DA0_chburgerstand, D_80800DCC_chburgerstand);
 }
 
 void func_808005AC_chburgerstand(param_0) Actor *param_0;
@@ -235,7 +235,7 @@ void func_80800720_chburgerstand(Actor* arg0)
     }
 }
 void func_80800754_chburgerstand(param_0) u8 *param_0; {
-    if (_subaddiedialog_entrypoint_8(param_0, param_0 + 4, &D_80800E14_chburgerstand, &D_80800BC0_chburgerstand, 5)) {
+    if (_subaddiedialog_entrypoint_8(param_0, param_0 + 4, D_80800E14_chburgerstand, &D_80800BC0_chburgerstand, 5)) {
         func_80090734(1, (f32 *)(param_0 + 4));
     }
 }
@@ -338,3 +338,39 @@ s32 func_80800AB8_chburgerstand(s32 param_0, s32 param_1) {
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/burgerstand.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800C28_chburgerstand -> int[] (uses written as NAME[0]), D_80800CB8_chburgerstand -> int[] (uses written as NAME[0]), D_80800D48_chburgerstand -> s32[] (uses written as NAME[0]), D_80800D60_chburgerstand -> int[] (uses written as NAME[0]), D_80800D6C_chburgerstand -> int[] (uses written as NAME[0]), D_80800D7C_chburgerstand -> int[] (uses written as NAME[0]), D_80800D88_chburgerstand -> int[] (uses written as NAME[0]), D_80800D94_chburgerstand -> int[] (uses written as NAME[0]), D_80800DA0_chburgerstand -> int[] (uses written as NAME[0]), D_80800DAC_chburgerstand -> int[] (uses written as NAME[0]), D_80800DB8_chburgerstand -> int[] (uses written as NAME[0]), D_80800DCC_chburgerstand -> int[] (uses written as NAME[0]), D_80800E14_chburgerstand -> s32[] (uses written as NAME[0]) */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern u8 boot_thread_stack[];
+extern void func_80102EC0();
+extern void _chdoor_entrypoint_0();
+extern void _chdoor_entrypoint_1();
+extern u8 D_8011A270[];
+extern void _chswitch_entrypoint_6();
+u8 D_80800BC0_chburgerstand[40] = { 0x0, 0x0, 0x0, 0x1, 0x10, 0xAA, 0x1, 0x0, 0x0, 0x0, 0x0, 0x1, 0xFF, 0xFF, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x11, 0x5, 0x1, 0x0, 0x0, 0x0, 0x2, 0x0, 0xFF, 0xFE, 0x2, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0x10, 0x3, 0x0 };
+u32 D_80800BE8_chburgerstand[10] = { 0x0, 0x0, 0x41940000, 0xDC0001, 0x41940000, 0xDC0001, 0x3FE00000, 0xDD0002, 0x41940000, 0xDC0001 };
+u32 D_80800C10_chburgerstand[6] = { 0x0, 0x0, 0x3FE00000, 0xD90044, 0x3FE00000, 0xD90002 };
+int D_80800C28_chburgerstand[18] = { 0x1B7032B, 0x6AE0001, (u32)&D_80800BE8_chburgerstand, (u32)func_808000C4_chburgerstand, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0x40000160, (u32)func_80800284_chburgerstand, 0x0, 0x0, (u32)func_80800030_chburgerstand, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0x1F32), (u32)func_808002A4_chburgerstand, 0x0 };
+void *D_80800C70_chburgerstand = (void *)0x01B8032C;
+static u32 D_80800C70_chburgerstand_rest[17] = { 0x6AF0001, (u32)&D_80800C10_chburgerstand, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_808009C4_chburgerstand, (u32)func_80107C2C, 0x80102812, 0x0, 0x0 };
+int D_80800CB8_chburgerstand[18] = { 0xAC032F, 0x7740001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000C00, 0x0, 0x0, 0x0, (u32)func_808009CC_chburgerstand, (u32)func_80107C2C, -0x7FFFD3FE, (u32)_chdoor_entrypoint_1, 0x0 };
+s32 D_80800D00_chburgerstand[18] = { 0x3430330, 0x7600001, (u32)&D_8011A270, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, 0x0, 0x0, (u32)func_80800A8C_chburgerstand, (u32)func_80107C2C, -0x7FFFD3EE, (u32)func_80800AB8_chburgerstand, 0x0 };
+s32 D_80800D48_chburgerstand[2] = { 0x1303FF, 0x0 };
+u32 D_80800D50_chburgerstand[4] = { 0x436B0000, 0x432A0000, 0x42C80000, 0x42DC0000 };
+int D_80800D60_chburgerstand[3] = { 0x130430, 0xD0099, 0xB30000 };
+int D_80800D6C_chburgerstand[4] = { 0x130449, 0xD00B3, 0xCC0016, 0x2EE00000 };
+int D_80800D7C_chburgerstand[3] = { 0x130500, 0xD00F3, 0x10C0000 };
+int D_80800D88_chburgerstand[3] = { 0x130502, 0xD00C0, 0xD90000 };
+int D_80800D94_chburgerstand[3] = { 0x130503, 0xD00D9, 0xF30000 };
+int D_80800DA0_chburgerstand[3] = { 0x130501, 0xD00F3, 0x10C0000 };
+int D_80800DAC_chburgerstand[3] = { 0x3F1EB852, 0x3F266666, -0x40800000 };
+int D_80800DB8_chburgerstand[5] = { 0x3F051EB8, 0x3F0CCCCD, 0x3F3851EC, 0x3F400000, -0x40800000 };
+int D_80800DCC_chburgerstand[4] = { 0x3E4CCCCD, 0x3E77CED9, 0x3E99999A, -0x40800000 };
+u8 D_80800DDC_chburgerstand[16] = { 0x3D, 0xF5, 0xC2, 0x8F, 0x3F, 0x1E, 0xB8, 0x52, 0x3F, 0x26, 0x66, 0x66, 0xBF, 0x80, 0x0, 0x0 };
+u8 D_80800DEC_chburgerstand[40] = { 0x3, 0x10, 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x16, 0x2, 0x8, 0x0, 0x1F, 0x50, 0xC0, 0x50, 0x0, 0x0, 0x22, 0x0, 0x33, 0x0, 0x4C, 0x0, 0xCC, 0x1, 0x0, 0x0, 0x15, 0x0, 0x0, 0x0, 0x99, 0x0, 0x2B, 0x1, 0x0, 0x1, 0x33, 0x0, 0x0 };
+s32 D_80800E14_chburgerstand[7] = { 0x9D0000, 0x1900050, 0x6, 0x7320200, 0x0, 0x0, 0x0 };

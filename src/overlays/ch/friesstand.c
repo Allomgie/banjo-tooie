@@ -4,18 +4,18 @@ extern void func_80102424(Actor *, s32);
 extern void func_800EE7F8(f32 *, f32 *);
 extern void func_80090734(s32, f32 *);
 extern void *func_80100094(Actor *, u32);
-extern int D_80800EC8_chfriesstand;
-extern int D_80800F10_chfriesstand;
+extern int D_80800EC8_chfriesstand[];
+extern int D_80800F10_chfriesstand[];
 extern s32 D_80800FA0_chfriesstand[];
-extern int D_80801000_chfriesstand;
-extern int D_8080100C_chfriesstand;
-extern int D_8080102C_chfriesstand;
-extern int D_80801038_chfriesstand;
-extern int D_80801044_chfriesstand;
-extern int D_80801050_chfriesstand;
-extern int D_8080101C_chfriesstand;
-extern int D_8080105C_chfriesstand;
-extern s32 D_80801088_chfriesstand;
+extern int D_80801000_chfriesstand[];
+extern int D_8080100C_chfriesstand[];
+extern int D_8080102C_chfriesstand[];
+extern int D_80801038_chfriesstand[];
+extern int D_80801044_chfriesstand[];
+extern int D_80801050_chfriesstand[];
+extern int D_8080101C_chfriesstand[];
+extern int D_8080105C_chfriesstand[];
+extern s32 D_80801088_chfriesstand[];
 extern u8 D_80800E50_chfriesstand[];
 extern s32 _subaddiedialog_entrypoint_8();
 extern Actor *func_80106790(Unk80132ED0 *);
@@ -36,7 +36,7 @@ extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void func_80101180(s32, s32, s32);
 extern s32 _chswitch_entrypoint_10(Actor *, s32);
-extern s32 D_80800FE8_chfriesstand;
+extern s32 D_80800FE8_chfriesstand[];
 extern s32 func_80102320(Actor *, f32, f32);
 extern s32 func_80101E14(Actor *, f32);
 extern s32 func_800F4EC8(s32, f32 *, f32, f32, f32);
@@ -52,18 +52,18 @@ void func_808006D4_chfriesstand();
 
 int chfriesstand_entrypoint_0()
 {
-    return (int)&D_80800EC8_chfriesstand;
+    return (int)D_80800EC8_chfriesstand;
 }
 
 int chfriesstand_entrypoint_1()
 {
-    return (int)&D_80800F10_chfriesstand;
+    return (int)D_80800F10_chfriesstand;
 }
 
 int chfriesstand_entrypoint_2()
 {
-    extern int D_80800F58_chfriesstand;
-    return (int)&D_80800F58_chfriesstand;
+    extern int D_80800F58_chfriesstand[];
+    return (int)D_80800F58_chfriesstand;
 }
 
 int chfriesstand_entrypoint_3()
@@ -130,7 +130,7 @@ void func_808000C4_chfriesstand(Actor *param_0)
         func_808005F0_chfriesstand(param_0);
         return;
     case 4:
-        _subaddieaudioquick_entrypoint_3(param_0, param_0->position, &D_80800FE8_chfriesstand, 0.7f);
+        _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80800FE8_chfriesstand, 0.7f);
         if (func_80101E14(param_0, 0.837f)) {
             if (param_0->unk3C) {
                 func_800FC660(0xE);
@@ -228,18 +228,18 @@ s32 func_808003B8_chfriesstand(Actor *param_0, s32 param_1, StandEvent_chfriesst
 
 void func_808005F0_chfriesstand(s32 param_0)
 {
-  _subaddieaudioquick_entrypoint_4(param_0, param_0 + 4, &D_80801000_chfriesstand, &D_8080100C_chfriesstand);
+  _subaddieaudioquick_entrypoint_4(param_0, param_0 + 4, D_80801000_chfriesstand, D_8080100C_chfriesstand);
 }
 
 int func_80800620_chfriesstand(s32 param_0)
 {
   s32 local_0;
   local_0 = param_0 | 0;
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_8080102C_chfriesstand, 0.0799999982f);
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_80801038_chfriesstand, 0.230000004f);
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_80801044_chfriesstand, 0.340000004f);
-  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, &D_80801050_chfriesstand, 0.419999987f);
-  _subaddieaudioquick_entrypoint_4(local_0, local_0 + 4, &D_8080101C_chfriesstand, &D_8080105C_chfriesstand);
+  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, D_8080102C_chfriesstand, 0.0799999982f);
+  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, D_80801038_chfriesstand, 0.230000004f);
+  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, D_80801044_chfriesstand, 0.340000004f);
+  _subaddieaudioquick_entrypoint_3(local_0, local_0 + 4, D_80801050_chfriesstand, 0.419999987f);
+  _subaddieaudioquick_entrypoint_4(local_0, local_0 + 4, D_8080101C_chfriesstand, D_8080105C_chfriesstand);
 }
 
 void func_808006D4_chfriesstand(param_0) Actor *param_0;
@@ -281,7 +281,7 @@ void func_80800970_chfriesstand(Actor* arg0)
     }
 }
 void func_808009A4_chfriesstand(u8 *param_0) {
-    if (_subaddiedialog_entrypoint_8(param_0, param_0 + 4, &D_80801088_chfriesstand, &D_80800E50_chfriesstand, 5)) {
+    if (_subaddiedialog_entrypoint_8(param_0, param_0 + 4, D_80801088_chfriesstand, &D_80800E50_chfriesstand, 5)) {
         func_80090734(1, (f32 *)(param_0 + 4));
     }
 }
@@ -389,3 +389,36 @@ s32 func_80800D1C_chfriesstand(Actor *param_0, s32 param_1)
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/friesstand.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800EC8_chfriesstand -> int[] (uses written as NAME[0]), D_80800F10_chfriesstand -> int[] (uses written as NAME[0]), D_80800F58_chfriesstand -> int[] (uses written as NAME[0]), D_80800FE8_chfriesstand -> s32[] (uses written as NAME[0]), D_80801000_chfriesstand -> int[] (uses written as NAME[0]), D_8080100C_chfriesstand -> int[] (uses written as NAME[0]), D_8080101C_chfriesstand -> int[] (uses written as NAME[0]), D_8080102C_chfriesstand -> int[] (uses written as NAME[0]), D_80801038_chfriesstand -> int[] (uses written as NAME[0]), D_80801044_chfriesstand -> int[] (uses written as NAME[0]), D_80801050_chfriesstand -> int[] (uses written as NAME[0]), D_8080105C_chfriesstand -> int[] (uses written as NAME[0]), D_80801088_chfriesstand -> s32[] (uses written as NAME[0]) */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern u8 boot_thread_stack[];
+extern void func_80102EC0();
+extern void _chdoor_entrypoint_0();
+extern void _chdoor_entrypoint_1();
+extern u8 D_8011A270[];
+extern void _chswitch_entrypoint_6();
+u8 D_80800E50_chfriesstand[40] = { 0x0, 0x0, 0x0, 0x1, 0x10, 0xAD, 0x1, 0x0, 0x0, 0x0, 0x0, 0x1, 0xFF, 0xFF, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x11, 0x8, 0x1, 0x0, 0x0, 0x0, 0x2, 0x0, 0xFF, 0xFE, 0x2, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0x10, 0x3, 0x0 };
+u32 D_80800E78_chfriesstand[14] = { 0x0, 0x0, 0x41200000, 0xD00001, 0x41200000, 0xD10002, 0x41200000, 0xD00001, 0x40100000, 0xDA0002, 0x41200000, 0xD00002, 0x41200000, 0xD10002 };
+u32 D_80800EB0_chfriesstand[6] = { 0x0, 0x0, 0x40100000, 0xDB0044, 0x40100000, 0xDB0002 };
+int D_80800EC8_chfriesstand[18] = { 0x1B9032D, 0x6AD0001, (u32)&D_80800E78_chfriesstand, (u32)func_808000C4_chfriesstand, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0x40000160, (u32)func_80800398_chfriesstand, 0x0, 0x0, (u32)func_80800030_chfriesstand, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0x1F32), (u32)func_808003B8_chfriesstand, 0x0 };
+int D_80800F10_chfriesstand[18] = { 0x1BA032E, 0x6B00001, (u32)&D_80800EB0_chfriesstand, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_80800C34_chfriesstand, (u32)func_80107C2C, -0x7FEFD7EE, 0x0, 0x0 };
+int D_80800F58_chfriesstand[18] = { 0xAC0331, 0x7750001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000C00, 0x0, 0x0, 0x0, (u32)func_80800C3C_chfriesstand, (u32)func_80107C2C, -0x7FFFD3FE, (u32)_chdoor_entrypoint_1, 0x0 };
+s32 D_80800FA0_chfriesstand[18] = { 0x3430332, 0x93D0001, (u32)&D_8011A270, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, 0x0, 0x0, (u32)func_80800CF0_chfriesstand, (u32)func_80107C2C, -0x7FFFD3EE, (u32)func_80800D1C_chfriesstand, 0x0 };
+s32 D_80800FE8_chfriesstand[2] = { 0x1303FF, 0x0 };
+u32 D_80800FF0_chfriesstand[4] = { 0x436B0000, 0x43160000, 0x42C80000, 0x42C80000 };
+int D_80801000_chfriesstand[3] = { 0x130419, 0xD01A6, 0x1C00000 };
+int D_8080100C_chfriesstand[4] = { 0x3E6B851F, 0x3E9EB852, 0x3EB33333, -0x40800000 };
+int D_8080101C_chfriesstand[4] = { 0x130449, 0xD0166, 0x1800016, 0x27100000 };
+int D_8080102C_chfriesstand[3] = { 0x130500, 0xD0140, 0x1590000 };
+int D_80801038_chfriesstand[3] = { 0x130502, 0xD0126, 0x1400000 };
+int D_80801044_chfriesstand[3] = { 0x130503, 0xD0126, 0x1400000 };
+int D_80801050_chfriesstand[3] = { 0x130501, 0xD0126, 0x1400000 };
+int D_8080105C_chfriesstand[4] = { 0x3F4F5C29, 0x3F570A3D, 0x3F5D70A4, -0x40800000 };
+u8 D_8080106C_chfriesstand[28] = { 0x0, 0x1D, 0x9, 0x5C, 0x0, 0x22, 0x0, 0x2, 0x0, 0x5, 0x0, 0x7, 0x0, 0xC, 0x0, 0x15, 0x0, 0x0, 0x0, 0x99, 0x0, 0x2B, 0x0, 0x80, 0x0, 0xCC, 0x0, 0x0 };
+s32 D_80801088_chfriesstand[6] = { 0x9E0000, 0x12C0051, 0x6, 0x7320300, 0x0, 0x0 };

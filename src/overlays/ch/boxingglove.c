@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800708_chboxingglove;
+extern int D_80800708_chboxingglove[];
 extern void *D_80800750_chboxingglove;
 extern void *_subaddiefind_entrypoint_2(int, s32 *);
 extern u8 D_80800798_chboxingglove[];
@@ -222,3 +222,17 @@ void func_80800630_chboxingglove(param_0) Actor *param_0;
         local_1[local_3].radius = local_0[local_3]->scale * 150.0f;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/boxingglove.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800708_chboxingglove -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+u32 D_808006E0_chboxingglove[10] = { 0x0, 0x0, 0x3FC00000, 0x20B0044, 0x3FC00000, 0x20B0044, 0x3FC00000, 0x20B0002, 0x3FC00000, 0x20B0044 };
+int D_80800708_chboxingglove[18] = { 0x1B4013E, 0x7760001, (u32)&D_808006E0_chboxingglove, (u32)func_80800018_chboxingglove, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x3010024, 0x0, 0x0, 0x400000, (u32)func_80800168_chboxingglove, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+void *D_80800750_chboxingglove = (void *)0x01AD036E;
+static u32 D_80800750_chboxingglove_rest[17] = { 0x6290001, 0x0, (u32)func_808001CC_chboxingglove, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x804, 0x0, 0x0, 0x0, (u32)func_808002AC_chboxingglove, (u32)func_80107C2C, 0x80000002, 0x0, 0x0 };
+u8 D_80800798_chboxingglove[8] = { 0x0, 0x13, 0x4, 0xD2, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808007A0_chboxingglove[16] = { 0x0, 0x13, 0x5, 0x8, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

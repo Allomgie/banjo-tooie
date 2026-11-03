@@ -306,3 +306,10 @@ s32 bsrest_entrypoint_19(PlayerState *self, s32 arg1) {
 s32 bsrest_entrypoint_20(PlayerState *self) {
     return bsrest_entrypoint_19(self, 1);
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/rest.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099B94();
+s32 D_80800910_bsrest[4] = { (u32)_bsrest_entrypoint_3, (u32)_bsrest_entrypoint_1, (u32)_bsrest_entrypoint_2, (u32)func_80099B94 };
+s32 D_80800920_bsrest[4] = { (u32)_bsrest_entrypoint_7, (u32)_bsrest_entrypoint_5, (u32)_bsrest_entrypoint_6, (u32)func_80099B94 };
+s32 D_80800930_bsrest[4] = { (u32)_bsrest_entrypoint_11, (u32)_bsrest_entrypoint_9, (u32)_bsrest_entrypoint_10, (u32)func_80099B94 };

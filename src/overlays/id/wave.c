@@ -93,3 +93,6 @@ void idwave_entrypoint_3(WaveState48 *arg0, s32 arg1, s32 arg2)
     arg0->local_5 = (sp2C[1] >= 0.0f) ? (sp2C[1] + 0.5f) : (sp2C[1] - 0.5f);
     _glid_entrypoint_0(arg1, arg2, _idwave_entrypoint_0, arg0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/wave.data.s) is defined here in C.
+ * Values are taken from the ROM. */

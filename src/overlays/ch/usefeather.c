@@ -10,7 +10,7 @@ extern void func_800EF1B8(f32 *, f32, f32);
 extern void *_chusefeather_entrypoint_0;
 extern void _chbaddiesetup_entrypoint_2(void *, s32, s32);
 extern s32 func_800D3948(void);
-extern int D_80800364_chusefeather;
+extern int D_80800364_chusefeather[];
 extern s32 D_808003AC_chusefeather[];
 extern f32 func_800F5F24(s32);
 extern Actor *func_80108474(u32, f32 *, s32);
@@ -84,3 +84,14 @@ int chusefeather_entrypoint_3()
 {
   return D_808003AC_chusefeather;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/usefeather.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800364_chusefeather -> int[] */
+extern void func_80105834();
+extern void _subaddiedraw25d_entrypoint_2();
+extern void func_80107C2C();
+s32 D_80800340_chusefeather[9] = { 0x1100022, 0x3D0033, 0x20002, 0x2A0000, 0x40, 0x400015, 0x4C, 0x161000, 0x0 };
+int D_80800364_chusefeather[18] = { 0x158026A, 0x9BE0001, 0x0, (u32)func_80800000_chusefeather, (u32)func_80105834, (u32)_subaddiedraw25d_entrypoint_2, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+s32 D_808003AC_chusefeather[21] = { 0x158026B, 0x9BF0001, 0x0, (u32)func_80800000_chusefeather, (u32)func_80105834, (u32)_subaddiedraw25d_entrypoint_2, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0, 0x0, 0x0, 0x0 };

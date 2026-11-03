@@ -97,3 +97,6 @@ void gzpublic_entrypoint_0(struct unkD_8007E94C* arg0) {
         func_80015430(func_80014F38());
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gz/public.data.s) is defined here in C.
+ * Values are taken from the ROM. */

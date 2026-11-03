@@ -35,3 +35,6 @@ int subaddie3d_entrypoint_1(f32 param_0[3], f32 param_1, f32 param_2, f32 *param
   }
   return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/3d.data.s) is defined here in C.
+ * Values are taken from the ROM. */

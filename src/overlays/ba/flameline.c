@@ -1,9 +1,9 @@
 #include "common.h"
 
-extern s32 D_80800784_baflameline;
+extern s32 D_80800784_baflameline[];
 extern s32 func_800EE7F8(s32);
 extern void func_800EF2A0(int);
-extern s32 D_808006F0_baflameline;
+extern s32 D_808006F0_baflameline[];
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern f32 func_800DC178(f32, f32);
 extern void func_800EFA20(f32 *, f32 *, f32);
@@ -11,9 +11,9 @@ extern s32 func_800BABB8(s32, f32 *, f32 *, f32, void *);
 extern void func_800BA77C();
 typedef struct { u8 pad_0[0xC]; f32 local_0[3]; f32 local_1; s32 local_2; } FlameLineData31;
 typedef struct { u8 pad_0[0x84]; FlameLineData31 *local_0; } FlameLineOwner31;
-extern s32 D_80800738_baflameline;
+extern s32 D_80800738_baflameline[];
 extern void func_800BA930();
-extern s32 D_80800798_baflameline;
+extern s32 D_80800798_baflameline[];
 extern void func_800EFE50(f32 *, void *, void *, f32);
 extern void func_800C8E54(s32, f32, f32);
 extern void func_8008EEC4(void *, f32 *, f32, s32);
@@ -143,3 +143,11 @@ void baflameline_entrypoint_7(u8 *param_0)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/flameline.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808006F0_baflameline -> s32[], D_80800738_baflameline -> s32[], D_80800784_baflameline -> s32[], D_80800798_baflameline -> s32[] */
+s32 D_808006F0_baflameline[18] = { 0x1D09DC, 0x2CFFEC, 0x1EFFEC, 0x140050, 0x14000E, 0x50005, 0x150002, 0x660020, 0x28412832, 0x22004C, 0x4C0133, 0x1660016, 0x10000018, 0x3, 0x0, 0x2B0233, 0x3E6011A, 0x0 };
+s32 D_80800738_baflameline[19] = { 0x1D09CE, 0x150002, 0xAE0016, 0x1000000E, 0x50005, 0x260000, 0xFF9C, 0x0, 0x640032, 0x20018, 0x0, 0x17551755, 0x220040, 0x400099, 0x99002B, 0x4C004C, 0x1B015E, 0x15E011A, 0x0 };
+s32 D_80800784_baflameline[5] = { 0x2060013, 0x483001B, 0x1655F0, 0xA0100, 0x0 };
+s32 D_80800798_baflameline[6] = { 0xFF, 0xFF, 0x40, 0xFF, 0x40, 0x20 };

@@ -130,3 +130,6 @@ s32 bsdroneslide_entrypoint_2(Actor *this)
   new_var2 = this;
   func_800A4E30(new_var2);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/drone/slide.data.s) is defined here in C.
+ * Values are taken from the ROM. */

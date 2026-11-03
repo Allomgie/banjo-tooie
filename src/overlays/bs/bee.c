@@ -47,3 +47,6 @@ int bsbee_entrypoint_2()
 {
   _babee_entrypoint_8();
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/bee.data.s) is defined here in C.
+ * Values are taken from the ROM. */

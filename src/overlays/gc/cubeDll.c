@@ -245,3 +245,6 @@ u32 gccubeDll_entrypoint_7(void)
     }
     return local_2;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/cubeDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

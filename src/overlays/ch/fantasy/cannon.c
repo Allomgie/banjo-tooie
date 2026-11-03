@@ -12,7 +12,7 @@ extern void func_800EFE50(f32 *, f32 *, f32 *, f32);
 extern f32 func_800DC0C0(void);
 extern void func_800EEC30(f32 *, f32, f32, f32);
 extern void func_800EF334(f32 *, f32);
-extern int D_80800D30_chfantasycannon;
+extern int D_80800D30_chfantasycannon[];
 extern void *D_80800D78_chfantasycannon;
 extern s32 _sudeflect_entrypoint_0(f32 *, f32, f32, s32);
 extern s32 func_80101E14(Actor *, f32);
@@ -304,7 +304,7 @@ int func_808009B8_chfantasycannon(param_0) Actor *param_0;
 
 int chfantasycannon_entrypoint_0()
 {
-    return (int)&D_80800D30_chfantasycannon;
+    return (int)D_80800D30_chfantasycannon;
 }
 
 void func_80800B84_chfantasycannon()
@@ -334,3 +334,18 @@ int chfantasycannon_entrypoint_1()
 {
   return &D_80800D78_chfantasycannon;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fantasy/cannon.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800D30_chfantasycannon -> int[] (uses written as NAME[0]) */
+extern void func_80105834();
+extern int func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern u8 boot_thread_stack[];
+u32 D_80800CC0_chfantasycannon[14] = { 0x0, 0x0, 0x3F6ED917, 0x3910049, 0x3F6ED917, 0x3910009, 0x402EB852, 0x392004A, 0x402EB852, 0x392000A, 0x3F6ED917, 0x3910049, 0x3F6ED917, 0x3910049 };
+s32 D_80800CF8_chfantasycannon[14] = { 0x1D09DF, 0x161200, 0x1BFC18, -0x257FFF2, 0x19003C, 0x270000, 0x0, 0x12C0022, 0x400066, 0x190066, 0x150019, 0x80002B, 0x660080, 0x31A0000 };
+int D_80800D30_chfantasycannon[18] = { 0x158047D, 0x8920001, (u32)&D_80800CC0_chfantasycannon, (u32)func_80800228_chfantasycannon, (u32)func_80105834, (u32)func_80101870, 0x1F40000, 0x0, 0x0, 0x9, 0x0, (u32)func_80108ED0, 0x240000, (u32)func_8080010C_chfantasycannon, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0x1F20), 0x0, 0x0 };
+void *D_80800D78_chfantasycannon = (void *)0x0158047E;
+static u32 D_80800D78_chfantasycannon_rest[17] = { 0x92E0001, 0x0, (u32)func_80800BDC_chfantasycannon, (u32)func_80105834, (u32)func_80800B84_chfantasycannon, 0x2580000, 0x0, 0x0, 0x21808, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800BA4_chfantasycannon, (u32)func_80107C2C, 0x80000402, 0x0, 0x0 };

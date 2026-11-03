@@ -192,3 +192,14 @@ s32 func_808006C0_chfreezy(param_0) s32 param_0;{
     _sufreezy_entrypoint_2();
     func_800FFAB0(param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/freezy.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+void *D_80800700_chfreezy = (void *)0x02F60363;
+static u32 D_80800700_chfreezy_rest[17] = { 0x75D0001, 0x0, (u32)func_80800080_chfreezy, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x100000, 0x0, (u32)func_80108ED0, 0x8, (u32)func_8080000C_chfreezy, (u32)func_80107C2C, 0x80200000, (u32)func_80800190_chfreezy, 0x0 };
+u8 D_80800748_chfreezy[24] = { 0x0, 0x13, 0x4, 0xDC, 0x0, 0xD, 0x1, 0x0, 0x1, 0x4C, 0x0, 0x15, 0x0, 0x0, 0x0, 0x80, 0x0, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

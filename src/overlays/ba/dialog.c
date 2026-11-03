@@ -42,3 +42,6 @@ int badialog_entrypoint_4(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
   }
   return func_800DA298(param_3);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/dialog.data.s) is defined here in C.
+ * Values are taken from the ROM. */

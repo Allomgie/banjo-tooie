@@ -86,3 +86,6 @@ void ncbasub_entrypoint_2(void *param_0)
     func_80110790(param_0, local_3.f);
     func_80115858(param_0, local_6 ? 1 : 2);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/sub.data.s) is defined here in C.
+ * Values are taken from the ROM. */

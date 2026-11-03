@@ -6,7 +6,7 @@ extern f32 func_80013970(f32);
 extern f32 func_800138D0(f32);
 extern BubbleWarpData D_80800C20_chbubbleelevator[2];
 extern u32 D_80800C50_chbubbleelevator[2];
-extern u32 D_80800C58_chbubbleelevator;
+extern u32 D_80800C58_chbubbleelevator[];
 
 //Setup
 void func_80800000_chbubbleelevator(Actor* arg0)
@@ -342,3 +342,15 @@ u32* chbubbleelevator_entrypoint_0(void)
 {
     return &D_80800C58_chbubbleelevator;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bubbleelevator.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800C21_chbubbleelevator = D_80800C20_chbubbleelevator + 0x1, D_80800C2C_chbubbleelevator = D_80800C20_chbubbleelevator + 0xC
+ * extern declarations adjusted to the object (same addresses): D_80800C58_chbubbleelevator -> u32[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+BubbleWarpData D_80800C20_chbubbleelevator[2] = { 0x0, 0x2, 0x0, 0x0, 0x14, 0x136, 3e+03f, 0.5f, 1.0f, 0x1F, 0x21, 0x0, 0x0, 0x5, 0x15A, -3e+03f, 1.5f, 1.0f };
+u32 D_80800C50_chbubbleelevator[2] = { 0x130486, 0x20000 };
+u32 D_80800C58_chbubbleelevator[18] = { 0x3560412, 0xFFFF0001, 0x0, (u32)func_80800124_chbubbleelevator, (u32)func_80105834, (u32)func_80800A10_chbubbleelevator, 0x3E80000, 0x0, 0x0, 0x20001, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chbubbleelevator, (u32)func_80107C2C, 0x80000400, (u32)func_8080090C_chbubbleelevator, 0x0 };

@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808009B0_chspotlight;
+extern int D_808009B0_chspotlight[];
 extern void *func_80100094(Actor *, u32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern u8 func_801017D0[];
@@ -272,3 +272,12 @@ int func_80800934_chspotlight(param_0, param_1, param_2) s32 param_0; s32 param_
   }
   return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/spotlight.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808009B0_chspotlight -> int[] */
+f32 D_80800990_chspotlight[2] = { 8e+02f, 1.6e+03f };
+s32 D_80800998_chspotlight[3] = { 0x0, 0x0, 0x0 };
+s32 D_808009A4_chspotlight[3] = { 0xC0, 0xC0, 0xC0 };
+int D_808009B0_chspotlight[20] = { 0x2AF034D, 0x7550001, 0x0, (u32)func_80800210_chspotlight, (u32)func_80105834, (u32)func_80800518_chspotlight, 0x0, 0x0, 0x0, 0x21400, 0x0, 0x0, 0x3C0000, (u32)func_8080000C_chspotlight, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800934_chspotlight, 0x0, 0x0, 0x0 };

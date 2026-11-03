@@ -889,3 +889,17 @@ void func_80801D20_bsbansack(PlayerState *param_0)
 s32 bsbansack_entrypoint_9(s32 param_0) {
     return D_80801EA0_bsbansack[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ban/sack.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_80801E10_bsbansack[4] = { (u32)func_80800434_bsbansack, (u32)func_8080045C_bsbansack, (u32)func_808004B0_bsbansack, (u32)func_80800168_bsbansack };
+s32 D_80801E20_bsbansack[4] = { (u32)func_80800508_bsbansack, (u32)func_80800540_bsbansack, (u32)func_808005BC_bsbansack, (u32)func_80800168_bsbansack };
+s32 D_80801E30_bsbansack[4] = { (u32)func_8080077C_bsbansack, (u32)func_808007A4_bsbansack, (u32)func_80800810_bsbansack, (u32)func_80800710_bsbansack };
+s32 D_80801E40_bsbansack[4] = { (u32)func_80800D4C_bsbansack, (u32)func_80800D78_bsbansack, (u32)func_80800DAC_bsbansack, (u32)func_80800168_bsbansack };
+s32 D_80801E50_bsbansack[4] = { (u32)func_80801318_bsbansack, (u32)func_80801348_bsbansack, (u32)func_80801390_bsbansack, (u32)func_808001B0_bsbansack };
+s32 D_80801E60_bsbansack[4] = { (u32)func_8080143C_bsbansack, (u32)func_8080146C_bsbansack, (u32)func_808014B4_bsbansack, (u32)func_808001B0_bsbansack };
+s32 D_80801E70_bsbansack[4] = { (u32)func_80801560_bsbansack, (u32)func_80801588_bsbansack, (u32)func_808015B0_bsbansack, (u32)func_8080018C_bsbansack };
+s32 D_80801E80_bsbansack[4] = { (u32)func_808015E4_bsbansack, (u32)func_8080160C_bsbansack, (u32)func_80801634_bsbansack, (u32)func_80800168_bsbansack };
+s32 D_80801E90_bsbansack[4] = { (u32)func_80801A04_bsbansack, (u32)func_80801A30_bsbansack, (u32)func_80801A64_bsbansack, (u32)func_80800168_bsbansack };
+s32 D_80801EA0_bsbansack[4] = { (u32)func_80801CB4_bsbansack, (u32)func_80801CD4_bsbansack, (u32)func_80801D20_bsbansack, (u32)func_80800168_bsbansack };

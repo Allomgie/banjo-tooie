@@ -10,7 +10,7 @@ extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800F3214(f32 *, f32 *, void *, f32);
 extern f32 _sumumbofx_entrypoint_22(void *);
 extern void _subaddiefade_entrypoint_9();
-extern s32 D_808004B4_chlifeforcespell;
+extern s32 D_808004B4_chlifeforcespell[];
 extern int func_80100094();
 extern void func_800EFD24(f32 *);
 extern f32 _sumumbofx_entrypoint_21(void *);
@@ -22,7 +22,7 @@ extern Actor *func_80108528(s32, f32 *, s32, Actor **);
 
 int chlifeforcespell_entrypoint_0()
 {
-    extern int D_80800460_chlifeforcespell;
+    extern int D_80800460_chlifeforcespell[];
     return (int)&D_80800460_chlifeforcespell;
 }
 
@@ -124,3 +124,14 @@ int chlifeforcespell_entrypoint_2(void *param_0, Unk80132ED0 *param_1, f32 *para
     _subaddiefade_entrypoint_9(param_0, param_2);
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lifeforcespell.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800460_chlifeforcespell -> int[], D_808004B4_chlifeforcespell -> s32[] */
+extern void func_80105834();
+extern void func_80107C2C();
+int D_80800460_chlifeforcespell[18] = { 0x158045C, -0xFFFF, 0x0, (u32)func_808000C8_chlifeforcespell, (u32)func_80105834, (u32)func_8080028C_chlifeforcespell, 0x0, 0x0, 0x0, 0x400, 0x0, 0x0, 0x0, (u32)func_8080000C_chlifeforcespell, (u32)func_80107C2C, -0x7FFFFBFE, 0x0, 0x0 };
+Vec3f D_808004A8_chlifeforcespell = { 0.0f, 0.0f, 0.0f };
+s32 D_808004B4_chlifeforcespell[3] = { 0x0, 0x42B40000, 0x0 };
+u8 D_808004C0_chlifeforcespell[16] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x60, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x0 };

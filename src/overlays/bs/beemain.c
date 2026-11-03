@@ -626,3 +626,22 @@ bsbeemain_entrypoint_11(param_0)
 {
     return D_808012E0_bsbeemain[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/beemain.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099B94();
+extern void _bsbeemain_entrypoint_4();
+extern void _bsbeemain_entrypoint_5();
+extern void _bsbeemain_entrypoint_6();
+extern void func_80099AA8();
+extern void _bsdrone_entrypoint_3();
+s32 D_80801260_bsbeemain[4] = { (u32)func_808001FC_bsbeemain, (u32)func_808000C0_bsbeemain, (u32)func_80800128_bsbeemain, (u32)func_80099B94 };
+s32 D_80801270_bsbeemain[4] = { (u32)func_808003B4_bsbeemain, (u32)func_80800238_bsbeemain, (u32)func_808002C0_bsbeemain, (u32)func_80099B94 };
+s32 D_80801280_bsbeemain[4] = { (u32)func_80800788_bsbeemain, (u32)func_808003F0_bsbeemain, (u32)func_80800548_bsbeemain, (u32)func_80099B94 };
+s32 D_80801290_bsbeemain[4] = { (u32)func_80800A74_bsbeemain, (u32)func_808007C4_bsbeemain, (u32)func_80800874_bsbeemain, (u32)func_80099B94 };
+s32 D_808012A0_bsbeemain[4] = { (u32)_bsbeemain_entrypoint_4, (u32)_bsbeemain_entrypoint_5, (u32)_bsbeemain_entrypoint_6, (u32)func_80099AA8 };
+s32 D_808012B0_bsbeemain[4] = { (u32)func_80800B68_bsbeemain, (u32)func_80800B90_bsbeemain, (u32)func_80800BD0_bsbeemain, (u32)func_80099AA8 };
+s32 D_808012C0_bsbeemain[4] = { (u32)func_80800FB8_bsbeemain, (u32)func_80800C28_bsbeemain, (u32)func_80800E0C_bsbeemain, (u32)func_80800FF0_bsbeemain };
+s32 D_808012D0_bsbeemain[4] = { (u32)func_808010F4_bsbeemain, (u32)func_80801080_bsbeemain, (u32)func_808010A8_bsbeemain, (u32)func_80099B94 };
+s32 D_808012E0_bsbeemain[4] = { (u32)func_808011E8_bsbeemain, (u32)func_80801130_bsbeemain, (u32)func_8080118C_bsbeemain, (u32)_bsdrone_entrypoint_3 };

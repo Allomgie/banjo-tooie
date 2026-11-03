@@ -5,7 +5,7 @@ extern s32 D_80800100_chufoextdoor[];
 extern s32 D_80800114_chufoextdoor[];
 extern void func_800EF1B8(f32 *, f32, f32);
 extern s32 func_800BBCB8(f32 *, f32 *, f32, s32, s32 *);
-extern int D_80800148_chufoextdoor;
+extern int D_80800148_chufoextdoor[];
 
 s32 func_80800000_chufoextdoor(Actor *param_0, s32 param_1, UfoMessage1438 param_2)
 {
@@ -35,3 +35,16 @@ int *chufoextdoor_entrypoint_0()
 {
     return &D_80800148_chufoextdoor;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/ufoextdoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800148_chufoextdoor -> int[] */
+extern void func_80102EC0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+s32 D_80800100_chufoextdoor[5] = { 0x1304A0, 0xA00E6, 0x166D60, 0x2001B, 0x0 };
+s32 D_80800114_chufoextdoor[13] = { 0x1D09DD, 0x2B0300, 0x4000022, 0x1800200, 0x4800600, 0x150000, 0x990019, 0x7, 0x2D0032, 0x4B0020, -0x7F373F40, 0xE0050, 0x640000 };
+int D_80800148_chufoextdoor[18] = { 0x37C049A, 0x93C0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x3AB0000, 0x804, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFD400, (u32)func_80800000_chufoextdoor, 0x0 };

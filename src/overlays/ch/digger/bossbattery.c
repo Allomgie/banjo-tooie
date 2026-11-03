@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808002F0_chdiggerbossbattery;
+extern int D_808002F0_chdiggerbossbattery[];
 extern void func_800FFAB0();
 extern f32 func_800DC178(f32, f32);
 extern void func_800EE7F8(f32 *, f32 *);
@@ -76,3 +76,14 @@ s32 func_80800170_chdiggerbossbattery(Actor *param_0, s32 param_1, s32 param_2)
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/digger/bossbattery.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808002F0_chdiggerbossbattery -> int[] */
+extern void func_80102EC0();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_808002F0_chdiggerbossbattery[18] = { 0x15804F5, -0xFFFF, 0x0, (u32)func_80800090_chdiggerbossbattery, (u32)func_80102EC0, (u32)func_801018A4, 0x0, 0x0, 0x0, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chdiggerbossbattery, (u32)func_80107C2C, -0x7FFFFC00, (u32)func_80800170_chdiggerbossbattery, 0x0 };
+u8 D_80800338_chdiggerbossbattery[24] = { 0x0, 0x13, 0x5, 0xB7, 0x0, 0x1, 0x0, 0xC8, 0x3, 0xE8, 0x0, 0xA, 0x1, 0x66, 0x0, 0x16, 0x7D, 0x0, 0x0, 0x0, 0x9, 0x9, 0x9, 0xA };

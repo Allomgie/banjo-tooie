@@ -82,3 +82,6 @@ s32 ncbafly_entrypoint_4(param_0, param_1, param_2, param_3) s32 param_0; s32 pa
 s32 ncbafly_entrypoint_5(param_0) s32 param_0;{
     s32 local_0 = param_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/fly.data.s) is defined here in C.
+ * Values are taken from the ROM. */

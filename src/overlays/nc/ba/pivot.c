@@ -81,3 +81,6 @@ void ncbapivot_entrypoint_3(u8 *param_0)
         func_80111310(param_0);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/pivot.data.s) is defined here in C.
+ * Values are taken from the ROM. */

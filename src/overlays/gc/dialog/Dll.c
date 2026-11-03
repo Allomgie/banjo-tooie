@@ -52,3 +52,6 @@ void gcdialogDll_entrypoint_0(DialogInitState *param_0)
     param_0->local_11.local_5 = 1;
     param_0->local_20 = 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/dialog/Dll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -233,3 +233,11 @@ int chfog_entrypoint_0()
 {
   return &D_80800A90_chfog;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fog.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80107C2C();
+void *D_80800A90_chfog = (void *)0x025C0178;
+static u32 D_80800A90_chfog_rest[19] = { 0x68C0001, 0x0, (u32)func_8080032C_chfog, (u32)func_80105834, (u32)func_80800174_chfog, 0x0, 0x0, 0x0, 0x21404, (u32)func_80800000_chfog, 0x0, 0x0, (u32)func_80800020_chfog, (u32)func_80107C2C, 0x80000402, (u32)func_808009F0_chfog, 0x0, 0x0, 0x0 };

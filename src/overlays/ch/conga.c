@@ -1,6 +1,6 @@
 #include "ch/conga.h"
 
-extern int D_808006A0_chconga;
+extern int D_808006A0_chconga[];
 typedef union { s32 local_0; s16 local_1[2]; } CongaEvent;
 extern s32 D_808006E8_chconga[];
 extern void *func_80100094(Actor *, u32);
@@ -10,8 +10,8 @@ extern void func_80105A9C(Actor *, f32);
 extern s16 D_808006FE_chconga;
 extern s16 D_808006FC_chconga;
 extern u8 D_808006F8_chconga[];
-extern s32 D_80800714_chconga;
-extern s32 D_80800724_chconga;
+extern s32 D_80800714_chconga[];
+extern s32 D_80800724_chconga[];
 extern void _subaddieaudioquick_entrypoint_4(s32, s32, s32 *, s32 *);
 extern void _sudeflect_entrypoint_0(f32 *, f32, f32, s32);
 void func_80800374_chconga();
@@ -185,3 +185,19 @@ int func_80800618_chconga(s32 param_0)
   local_0 = param_0 + 4;
   _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_80800714_chconga, &D_80800724_chconga);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/conga.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808006FE_chconga = D_808006FC_chconga + 0x2
+ * extern declarations adjusted to the object (same addresses): D_808006A0_chconga -> int[], D_80800714_chconga -> s32[], D_80800724_chconga -> s32[] */
+extern void func_80101870();
+extern void func_80107C2C();
+u32 D_80800670_chconga[12] = { 0x0, 0x0, 0x40D66666, 0xFE0000, 0x40D66666, 0xFE0000, 0x40D66666, 0xFE0000, 0x3F4CCCCD, 0x3ED0000, 0x40D66666, 0xFE0000 };
+int D_808006A0_chconga[18] = { 0x1B50333, 0x6930001, (u32)&D_80800670_chconga, (u32)func_80800118_chconga, (u32)func_80800118_chconga, (u32)func_80101870, 0x0, 0x40400000, 0x0, 0x40120, (u32)func_80800280_chconga, 0x0, 0x140000, (u32)func_8080000C_chconga, (u32)func_80107C2C, -0x7FFFFBEE, (u32)func_808002A0_chconga, 0x0 };
+s32 D_808006E8_chconga[4] = { 0x43AB8000, 0x43AB8000, 0x43AB8000, 0x432B8000 };
+u8 D_808006F8_chconga[4] = { 0x0, 0xA1, 0x1, 0x90 };
+s16 D_808006FC_chconga = 0x0;
+static u32 D_808006FC_chconga_rest[5] = { 0x1, 0x120E0000, 0x520000, 0xC063C, 0x2000000 };
+s32 D_80800714_chconga[4] = { 0x130417, 0xD0166, 0x1800016, 0x2EE00000 };
+s32 D_80800724_chconga[7] = { 0x3ED70A3D, 0x3EF5C28F, 0x3F0A3D71, 0x3F2E147B, 0x3F400000, 0x3F4F5C29, -0x40800000 };

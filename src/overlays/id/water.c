@@ -93,3 +93,6 @@ void idwater_entrypoint_4(WaterState *param_0, s32 param_1, s32 param_2)
     }
     _glid_entrypoint_2(param_1, param_2, _idwater_entrypoint_0, param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/water.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800408_chdiggerground;
+extern int D_80800408_chdiggerground[];
 extern void *func_80100094(Actor *, u32);
 typedef struct { u8 pad[0x64]; u32 pad64:11; u32 flag:1; u32 r64:20; u8 pad68[4]; u32 f6C:11; u32 r6C:21; } DigS;
 extern void func_80101FDC(DigS *, s32);
@@ -97,3 +97,15 @@ void func_80800214_chdiggerground(param_0) Actor *param_0;
         func_800BABB8(local_3, local_0.f, local_2.f, 1.0f, D_80800450_chdiggerground);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/digger/ground.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800408_chdiggerground -> int[] */
+extern void func_80105834();
+extern void _sucoaster_entrypoint_1();
+extern void _sucoasterhit_entrypoint_0();
+extern void func_80107C2C();
+u32 D_80800370_chdiggerground[38] = { 0x0, 0x0, 0x40B00000, 0x1E70001, 0x40B00000, 0x1E70001, 0x3FC00000, 0x1E60001, 0x3F800000, 0x1E80001, 0x3FC00000, 0x1E60001, 0x3FC00000, 0x1E60001, 0x3F800000, 0x1E90002, 0x3F800000, 0x1E80001, 0x3F800000, 0x3DF0002, 0x3F800000, 0x1E80001, 0x3F000000, 0x3E00002, 0x3F8CCCCD, 0x1EA0002, 0x3F8CCCCD, 0x1EA0084, 0x40B00000, 0x1E70001, 0x3FC00000, 0x1E60020, 0x0, 0x0, 0x40B00000, 0x1E70001, 0x3F800000, 0x1E80001 };
+int D_80800408_chdiggerground[18] = { 0x1A20131, 0x6710004, (u32)&D_80800370_chdiggerground, (u32)func_8080000C_chdiggerground, (u32)func_80105834, (u32)func_808001C8_chdiggerground, 0xBB80000, 0x3F800000, 0x0, 0x43050320, (u32)_sucoaster_entrypoint_1, (u32)_sucoasterhit_entrypoint_0, 0x0, (u32)func_80800070_chdiggerground, (u32)func_80107C2C, -0x7BCDAFE1, (u32)func_80800168_chdiggerground, -0x7FEDBAB0 };
+s32 D_80800450_chdiggerground[12] = { 0x1D09E8, 0x2B0099, 0xCC0022, 0x4C0066, 0x190026, 0x150000, 0x800027, -0x630064, 0x640064, 0x2D00E1, 0x12C011A, 0x0 };

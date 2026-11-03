@@ -8,21 +8,21 @@ extern u8 D_80800920_chfactoryroofbits[];
 extern u8 D_80800968_chfactoryroofbits[];
 extern void _chexploder_entrypoint_6(Actor *, f32, f32);
 extern void func_800BABB8(s32, f32 *, f32 *, f32, void *);
-extern int D_80800974_chfactoryroofbits;
+extern int D_80800974_chfactoryroofbits[];
 extern u8 D_808009FC_chfactoryroofbits[];
 extern u8 D_808009BC_chfactoryroofbits[];
 extern void func_800DF500(f32, f32, s32);
 extern void func_80101870();
-extern int D_80800A08_chfactoryroofbits;
+extern int D_80800A08_chfactoryroofbits[];
 extern f32 func_80103EF4(Actor *);
 extern int _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
-extern int D_80800A50_chfactoryroofbits;
+extern int D_80800A50_chfactoryroofbits[];
 extern Vec3f D_80800A98_chfactoryroofbits;
 extern s32 D_80800AA4_chfactoryroofbits[];
-extern int D_80800AEC_chfactoryroofbits;
-extern int D_80800B34_chfactoryroofbits;
+extern int D_80800AEC_chfactoryroofbits[];
+extern int D_80800B34_chfactoryroofbits[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 void func_808000D4_chfactoryroofbits();
 s32 func_808001C0_chfactoryroofbits();
@@ -250,3 +250,27 @@ int *chfactoryroofbits_entrypoint_5()
 {
     return &D_80800B34_chfactoryroofbits;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/roofbits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800974_chfactoryroofbits -> int[], D_80800A08_chfactoryroofbits -> int[], D_80800A50_chfactoryroofbits -> int[], D_80800AEC_chfactoryroofbits -> int[], D_80800B34_chfactoryroofbits -> int[] */
+extern void func_80102EC0();
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+extern int _chdoor_entrypoint_1();
+extern void _chswitch_entrypoint_6();
+extern u8 D_8011A248[];
+u8 D_80800920_chfactoryroofbits[72] = { 0x5, 0x10, 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x2B, 0x6, 0x0, 0x8, 0x0, 0x0, 0x22, 0x2, 0x0, 0x2, 0x80, 0x6, 0x0, 0x8, 0x0, 0x0, 0x15, 0x0, 0x0, 0x0, 0x26, 0x0, 0x19, 0x0, 0x0, 0x0, 0x7, 0x0, 0x2C, 0xFF, 0xEC, 0x0, 0x14, 0xFF, 0xEC, 0x0, 0x14, 0x0, 0x28, 0x0, 0x14, 0x0, 0x20, 0x60, 0x60, 0x60, 0x80, 0x0, 0xA, 0xFF, 0xEC, 0xFF, 0xCE, 0xFF, 0xEC, 0x0, 0x14, 0x0, 0x32, 0x0, 0x14, 0x5, 0x1A, 0x0, 0x0 };
+u8 D_80800968_chfactoryroofbits[12] = { 0x0, 0x13, 0x4, 0xA0, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x0, 0x0, 0x0 };
+int D_80800974_chfactoryroofbits[18] = { 0x123028B, 0x7100001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x1960000, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chfactoryroofbits, (u32)func_80107C2C, -0x7FFFD400, (u32)func_8080003C_chfactoryroofbits, 0x0 };
+u8 D_808009BC_chfactoryroofbits[64] = { 0x0, 0x1D, 0x7, 0xF, 0x0, 0x16, 0x10, 0x0, 0x0, 0x2B, 0x4, 0x0, 0x6, 0x0, 0x0, 0x1B, 0xFE, 0x70, 0xFE, 0x70, 0x0, 0x22, 0x0, 0x66, 0x0, 0x80, 0x0, 0x66, 0x0, 0x80, 0x0, 0x27, 0xFE, 0x70, 0xFE, 0x70, 0x1, 0x90, 0x1, 0x90, 0x0, 0xA, 0xFF, 0xB5, 0x0, 0xF, 0xFF, 0xB5, 0x0, 0x4B, 0x0, 0x32, 0x0, 0x4B, 0x0, 0x15, 0x0, 0x0, 0x0, 0xCC, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808009FC_chfactoryroofbits[12] = { 0x0, 0x13, 0x4, 0x8D, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x0, 0x0, 0x0 };
+int D_80800A08_chfactoryroofbits[18] = { 0x13503F2, 0x70E0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_808005DC_chfactoryroofbits, 0x0, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808003C4_chfactoryroofbits, (u32)func_80107C2C, -0x7FFFD400, (u32)func_80800414_chfactoryroofbits, 0x0 };
+int D_80800A50_chfactoryroofbits[18] = { 0xAC03F3, 0x70D0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC04, 0x0, 0x0, 0x0, (u32)func_80800624_chfactoryroofbits, (u32)func_80107C2C, -0x7FFFDBFE, (u32)_chdoor_entrypoint_1, 0x0 };
+Vec3f D_80800A98_chfactoryroofbits = { -2.26e+03f, 5.5e+03f, -1139.0f };
+s32 D_80800AA4_chfactoryroofbits[18] = { 0x34303F4, 0x8890001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808006E8_chfactoryroofbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80800708_chfactoryroofbits, 0x0 };
+int D_80800AEC_chfactoryroofbits[18] = { 0x3430474, 0x86D0001, (u32)&D_8011A248, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000808, 0x0, 0x0, 0x0, (u32)func_808007B8_chfactoryroofbits, (u32)func_80107C2C, -0x7FFFD3EE, (u32)func_808007E4_chfactoryroofbits, 0x0 };
+int D_80800B34_chfactoryroofbits[19] = { 0xAC04D9, 0x8CD0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x40000C00, 0x0, 0x0, 0x0, (u32)func_80800840_chfactoryroofbits, (u32)func_80107C2C, -0x7FFFD3EE, (u32)func_80800890_chfactoryroofbits, 0x0, 0x0 };

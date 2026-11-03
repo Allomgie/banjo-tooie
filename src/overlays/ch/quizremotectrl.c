@@ -7,7 +7,7 @@ extern f32 func_800F10B4(f32 param_0, f32 param_1, f32 param_2, f32 param_3, f32
 extern f32 _suquiz_entrypoint_8(s32);
 extern void func_80102424(Actor *, s32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
-extern int D_80800668_chquizremotectrl;
+extern int D_80800668_chquizremotectrl[];
 typedef struct Mass45QuizDisplay { u8 local_0[0x24]; f32 local_1; u8 local_2[0x2C]; f32 local_3; } Mass45QuizDisplay;
 extern void func_800DE498(s32, void *, void *, f32, s32, void *);
 extern void *func_800D674C(s32);
@@ -232,3 +232,14 @@ int *chquizremotectrl_entrypoint_0()
 {
     return &D_80800668_chquizremotectrl;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/quizremotectrl.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800668_chquizremotectrl -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+u8 D_80800650_chquizremotectrl[12] = { 0x0, 0x0, 0x0, 0x0, 0x44, 0xC, 0xA0, 0x0, 0xC4, 0x8C, 0xA0, 0x0 };
+u8 D_8080065C_chquizremotectrl[8] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+f32 D_80800664_chquizremotectrl = 0.0f;
+int D_80800668_chquizremotectrl[18] = { 0x1580217, 0x9A00001, 0x0, (u32)func_808002C8_chquizremotectrl, (u32)func_80105834, (u32)func_80800410_chquizremotectrl, 0x0, 0x0, 0x0, 0x400404, (u32)func_808003A0_chquizremotectrl, 0x0, 0x0, (u32)func_808003A8_chquizremotectrl, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_808005E4_chquizremotectrl, 0x0 };

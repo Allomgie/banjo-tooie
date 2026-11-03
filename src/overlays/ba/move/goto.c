@@ -214,3 +214,6 @@ void bamovegoto_entrypoint_14(Actor *param_0)
         break;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/move/goto.data.s) is defined here in C.
+ * Values are taken from the ROM. */

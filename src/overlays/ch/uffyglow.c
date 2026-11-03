@@ -6,7 +6,7 @@ extern void *func_80100094();
 extern void func_800DE448(f32 *, f32 *, f32, s32, s32);
 typedef struct { f32 local_0[3]; } ChuffyVector40;
 extern void _subaddiefade_entrypoint_1(void *param_0, int param_1);
-extern int D_808005B0_chchuffyglow;
+extern int D_808005B0_chchuffyglow[];
 typedef struct { Vec3f local_0[5]; } ChuffyGlowVertices;
 extern ChuffyGlowVertices D_80800568_chchuffyglow;
 extern Vec3f D_808005A4_chchuffyglow;
@@ -131,3 +131,14 @@ int chchuffyglow_entrypoint_1()
 {
     return (int)&D_808005B0_chchuffyglow;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/uffyglow.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808005B0_chchuffyglow -> int[] */
+u8 D_80800530_chchuffyglow[32] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4B, 0x18, 0x96, 0x80, 0x2, 0xCA, 0x0, 0x0, 0x4B, 0x18, 0x96, 0x80, 0x2, 0xCA, 0x0, 0x0, 0x4B, 0x18, 0x96, 0x80, 0x2, 0xCA, 0x0, 0x0 };
+u8 D_80800550_chchuffyglow[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_8080055C_chchuffyglow[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+ChuffyGlowVertices D_80800568_chchuffyglow = { 0.0f, -0.052f, 7.84f, 0.0f, -0.035f, 1.66f, 0.0f, -0.519f, -4.74f, 0.0f, -0.26f, -10.82f, 0.0f, -0.474f, -17.03f };
+Vec3f D_808005A4_chchuffyglow = { 0.0f, 2.91f, 4.3f };
+int D_808005B0_chchuffyglow[20] = { 0x2D3030E, 0x7390001, (u32)&D_80800530_chchuffyglow, (u32)func_80800180_chchuffyglow, (u32)func_80105834, (u32)func_80800000_chchuffyglow, 0x0, 0x0, 0x0, 0x140C, (u32)func_80800484_chchuffyglow, 0x0, 0x980000, (u32)func_8080048C_chchuffyglow, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0, 0x0, 0x0 };

@@ -78,3 +78,6 @@ void ncbadolly_entrypoint_4(DollyCamera *param_0, s32 param_1)
     param_0->local_0->local_4 = 0;
     func_80112570(param_0, param_0->local_0->local_0, 150.0f);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/dolly.data.s) is defined here in C.
+ * Values are taken from the ROM. */

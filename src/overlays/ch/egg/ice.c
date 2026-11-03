@@ -13,7 +13,7 @@ extern s32 _suegg_entrypoint_13(Actor *);
 extern s32 _suegg_entrypoint_12(Actor *);
 extern void _sueggmisc_entrypoint_1(Actor *);
 extern void _suegg_entrypoint_3(Actor *);
-extern int D_808003E0_cheggice;
+extern int D_808003E0_cheggice[];
 extern Actor *_suegg_entrypoint_11(s32, s32, s32);
 extern void _suegg_entrypoint_1(Actor *, f32);
 extern void _sueggmove_entrypoint_5(Actor *, s32);
@@ -116,3 +116,16 @@ Actor *cheggice_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
     local_0->unk70_10 = 1;
     return local_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/egg/ice.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808003E0_cheggice -> int[] */
+extern void func_80105834();
+extern void _subaddiedraw25d_entrypoint_2();
+extern void _suegg_entrypoint_2();
+extern void _suegg_entrypoint_0();
+extern void _suegg_entrypoint_5();
+extern void func_80107C2C();
+extern void _suegg_entrypoint_17();
+int D_808003E0_cheggice[20] = { 0x26E015C, 0x9C00001, 0x0, (u32)func_80800114_cheggice, (u32)func_80105834, (u32)_subaddiedraw25d_entrypoint_2, 0x0, 0x3F800000, 0x0, 0x4, (u32)_suegg_entrypoint_2, (u32)_suegg_entrypoint_0, 0x4C0000, (u32)_suegg_entrypoint_5, (u32)func_80107C2C, -0x78000000, (u32)_suegg_entrypoint_17, 0x0, 0x0, 0x0 };

@@ -103,3 +103,15 @@ int chjadestatue_entrypoint_1()
 {
   return &D_80800358_chjadestatue;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jadestatue.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern int func_80101870();
+void *D_80800310_chjadestatue = (void *)0x015802B3;
+static u32 D_80800310_chjadestatue_rest[17] = { 0x9130001, 0x0, (u32)func_80800098_chjadestatue, (u32)func_80105834, (u32)func_80800104_chjadestatue, 0x0, 0x0, 0x0, 0x40000000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chjadestatue, (u32)func_80107C2C, 0x80002410, (u32)func_80800140_chjadestatue, 0x0 };
+void *D_80800358_chjadestatue = (void *)0x0158053C;
+static u32 D_80800358_chjadestatue_rest[17] = { 0x1, 0x0, (u32)func_808002A4_chjadestatue, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_8080026C_chjadestatue, (u32)func_80107C2C, 0x80000602, 0x0, 0x0 };

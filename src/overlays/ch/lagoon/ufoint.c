@@ -1,18 +1,18 @@
 #include "common.h"
 
-extern int D_80801948_chlagoonufoint;
-extern int D_808019C0_chlagoonufoint;
-extern int D_80801A28_chlagoonufoint;
+extern int D_80801948_chlagoonufoint[];
+extern int D_808019C0_chlagoonufoint[];
+extern int D_80801A28_chlagoonufoint[];
 extern s32 D_80801A90_chlagoonufoint[];
-extern s32 D_80801AF4_chlagoonufoint;
-extern s32 D_80801AD8_chlagoonufoint;
+extern s32 D_80801AF4_chlagoonufoint[];
+extern s32 D_80801AD8_chlagoonufoint[];
 extern f32 func_800DC0C0(void);
 extern void func_80101EE4(Actor *, f32);
 extern s16 D_80801B10_chlagoonufoint[];
 extern s32 func_800C4350(u8, f32 *, s16 *);
 extern void func_800C4104(s32, f32, s32, u8 *, f32, f32);
-extern s32 D_80801B58_chlagoonufoint;
-extern int D_80801B68_chlagoonufoint;
+extern s32 D_80801B58_chlagoonufoint[];
+extern int D_80801B68_chlagoonufoint[];
 extern void _glid_entrypoint_0(s32, s32, void *, void *);
 extern void func_800C8D4C(s32, f32 *);
 extern void func_800C8E84(s32, f32 *);
@@ -531,3 +531,34 @@ void chlagoonufoint_entrypoint_6(s32 param_0, Vtx *param_1, Vtx *param_2, s32 pa
         param_2->v.tc[1] = param_1->v.tc[1] + local_3;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lagoon/ufoint.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801948_chlagoonufoint -> int[], D_808019C0_chlagoonufoint -> int[], D_80801A28_chlagoonufoint -> int[], D_80801AD8_chlagoonufoint -> s32[], D_80801AF4_chlagoonufoint -> s32[], D_80801B58_chlagoonufoint -> s32[], D_80801B68_chlagoonufoint -> int[] */
+extern void func_80102EC0();
+extern void func_8010A730();
+extern void func_80107C2C();
+extern void func_80108ED0();
+s16 D_80801940_chlagoonufoint[4] = { 0x1, 0x1, 0x1, 0x1 };
+int D_80801948_chlagoonufoint[18] = { 0x15801C5, 0x1, 0x0, (u32)func_80800294_chlagoonufoint, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, (u32)func_80800240_chlagoonufoint, 0x0, 0x180000, (u32)func_808001A0_chlagoonufoint, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_808005D0_chlagoonufoint, 0x0 };
+u8 D_80801990_chlagoonufoint[16] = { 0x0, 0x13, 0x4, 0xA9, 0x0, 0x1E, 0x0, 0xA, 0x1, 0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0 };
+u32 D_808019A0_chlagoonufoint[8] = { 0x0, 0x0, 0x4120CCCD, 0x17C0009, 0x4120CCCD, 0x17C0009, 0x40351EB8, 0x17B0109 };
+int D_808019C0_chlagoonufoint[18] = { 0x15801C3, 0x6CD0001, (u32)&D_808019A0_chlagoonufoint, (u32)func_808008C8_chlagoonufoint, (u32)func_80102EC0, (u32)func_80800CD4_chlagoonufoint, 0x0, 0x3FC00000, 0x0, 0x100, 0x0, 0x0, 0x0, (u32)func_808007B4_chlagoonufoint, (u32)func_80107C2C, -0x7BFFFBFE, (u32)func_80800E00_chlagoonufoint, 0x0 };
+u32 D_80801A08_chlagoonufoint[8] = { 0x0, 0x0, 0x40A28F5C, 0x17A0009, 0x40A28F5C, 0x17A0009, 0x4017AE14, 0x1710109 };
+int D_80801A28_chlagoonufoint[18] = { 0x15801C6, 0x6CD0001, (u32)&D_80801A08_chlagoonufoint, (u32)func_808008C8_chlagoonufoint, (u32)func_80102EC0, (u32)func_80800CD4_chlagoonufoint, 0x0, 0x3FC00000, 0x0, 0x100, 0x0, 0x0, 0x0, (u32)func_808007B4_chlagoonufoint, (u32)func_80107C2C, -0x7BFFFBFE, (u32)func_80800E00_chlagoonufoint, 0x0 };
+u32 D_80801A70_chlagoonufoint[8] = { 0x0, 0x0, 0x40F00000, 0x1790009, 0x40F00000, 0x1790009, 0x40F00000, 0x1730109 };
+s32 D_80801A90_chlagoonufoint[18] = { 0x15801C7, 0x6CD0001, (u32)&D_80801A70_chlagoonufoint, (u32)func_808008C8_chlagoonufoint, (u32)func_80102EC0, (u32)func_80800CD4_chlagoonufoint, 0x0, 0x3FC00000, 0x0, 0x1140, 0x0, 0x0, 0x40000, (u32)func_808007B4_chlagoonufoint, (u32)func_80107C2C, -0x7BFFFBFE, (u32)func_80800E00_chlagoonufoint, 0x0 };
+s32 D_80801AD8_chlagoonufoint[7] = { 0x9ED012C, 0xFF10FF2, 0x1, 0x106A0000, 0x620000, 0x80628, 0x2000000 };
+s32 D_80801AF4_chlagoonufoint[7] = { 0x12C, 0x1069, -0x1, 0x0, 0x620000, 0x80628, 0x2000000 };
+s16 D_80801B10_chlagoonufoint[6] = { 0x206, 0x13, 0x50C, 0xA, 0x14C, 0x0 };
+u8 D_80801B1C_chlagoonufoint[16] = { 0x3D, 0xB8, 0x51, 0xEC, 0x3E, 0xDC, 0x28, 0xF6, 0x3F, 0xF, 0x5C, 0x29, 0xBF, 0x80, 0x0, 0x0 };
+u8 D_80801B2C_chlagoonufoint[12] = { 0x3E, 0xCC, 0xCC, 0xCD, 0x3F, 0x19, 0x99, 0x9A, 0xBF, 0x80, 0x0, 0x0 };
+u8 D_80801B38_chlagoonufoint[12] = { 0x3D, 0xA3, 0xD7, 0xA, 0x3E, 0xE6, 0x66, 0x66, 0xBF, 0x80, 0x0, 0x0 };
+u8 D_80801B44_chlagoonufoint[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80801B50_chlagoonufoint[8] = { 0x43, 0x96, 0x0, 0x0, 0x43, 0xC8, 0x0, 0x0 };
+s32 D_80801B58_chlagoonufoint[4] = { 0x43870000, 0x43160000, 0x43340000, 0x43340000 };
+int D_80801B68_chlagoonufoint[18] = { 0x1CB01C4, 0x6FB0001, 0x0, (u32)func_80800FD4_chlagoonufoint, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80108ED0, 0x40000, (u32)func_80800F48_chlagoonufoint, (u32)func_80107C2C, -0x7FFFFC00, (u32)func_8080135C_chlagoonufoint, 0x0 };
+s32 D_80801BB0_chlagoonufoint[3] = { 0x64, 0x64, 0x64 };
+s32 D_80801BBC_chlagoonufoint[3] = { 0xFF, 0xFF, 0xFF };
+static u32 D_80801BBC_chlagoonufoint_rest[2] = { 0x0, 0x0 };

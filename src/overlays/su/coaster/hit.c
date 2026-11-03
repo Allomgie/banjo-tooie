@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800CB0_sucoasterhit;
+extern int D_80800CB0_sucoasterhit[];
 extern u8 *func_80106790(void *);
 extern u8 *func_80100094(u8 *, s32);
 extern s32 func_800D9058(f32);
@@ -13,7 +13,7 @@ typedef struct { u8 pad[0x78]; u32 pad78:29; u32 flag:1; u32 rest:2; } CoasterHi
 extern int _sucoaster_entrypoint_9(CoasterHitState_808001C8_sucoasterhit *, s32, s32);
 typedef struct { u8 pad0[0x24]; u32 kind:10; u32 rest:22; } CoasterHitMsg;
 extern s32 func_800F0E28();
-extern s32 D_80800CC4_sucoasterhit;
+extern s32 D_80800CC4_sucoasterhit[];
 extern s32 _chbaddiesetup_entrypoint_10;
 extern s32 func_80108EF4;
 extern f32 func_800136E4(f32);
@@ -330,3 +330,13 @@ void sucoasterhit_entrypoint_2(s32 param_0) {
         func_8010108C(param_0, 0xB6, 0);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/coaster/hit.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800CB0_sucoasterhit -> int[], D_80800CC4_sucoasterhit -> s32[] */
+int D_80800CB0_sucoasterhit[5] = { (u32)func_8080000C_sucoasterhit, (u32)func_80800114_sucoasterhit, (u32)func_808001C8_sucoasterhit, (u32)func_80800294_sucoasterhit, 0x0 };
+s32 D_80800CC4_sucoasterhit[6] = { 0x130417, 0xD010C, 0x1260016, 0x65900001, 0x3201388, 0x0 };
+s16 D_80800CDC_sucoasterhit[6] = { 0x206, 0x1, 0x4E2, 0x9C4, 0x7, 0x0 };
+u8 D_80800CE8_sucoasterhit[44] = { 0x0, 0x1D, 0x9, 0xCD, 0x0, 0x15, 0x0, 0x0, 0x0, 0x4C, 0x0, 0x22, 0x0, 0x19, 0x0, 0x26, 0x0, 0x4C, 0x0, 0x59, 0x0, 0x16, 0x10, 0x0, 0x0, 0x18, 0x0, 0x0, 0x0, 0x4, 0x1E, 0x0, 0x23, 0x0, 0x0, 0x2B, 0x0, 0x40, 0x0, 0x59, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800D14_sucoasterhit[28] = { 0x0, 0x2D, 0x0, 0xAF, 0x0, 0xFA, 0x0, 0x17, 0x0, 0x80, 0x1, 0x1A, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

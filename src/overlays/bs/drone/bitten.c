@@ -224,3 +224,6 @@ void bsdronebitten_entrypoint_9(PlayerState *param_0)
     }
     bs_setState(param_0, local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/drone/bitten.data.s) is defined here in C.
+ * Values are taken from the ROM. */

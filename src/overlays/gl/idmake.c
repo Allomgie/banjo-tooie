@@ -172,3 +172,6 @@ u8 *glidmake_entrypoint_5(s32 param_0, f32 *param_1)
     }
     return local_11;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/idmake.data.s) is defined here in C.
+ * Values are taken from the ROM. */

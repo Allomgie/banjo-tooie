@@ -18,7 +18,7 @@ extern s32 _capod_entrypoint_14(void);
 extern Actor *_subaddiefind_entrypoint_2(s32, s32);
 typedef struct { f32 local_0[3]; } RainbowVector;
 extern RainbowVector D_80801004_chrainbow;
-extern char D_80801010_chrainbow;
+extern u32 D_80801010_chrainbow[];
 extern void _chrainbow_entrypoint_0();
 extern s32 func_800D91EC(f32 *, f32);
 typedef struct { u8 pad0[8]; f32 pos[3]; u8 pad14[0xC]; } RbEnt;
@@ -355,3 +355,14 @@ char *chrainbow_entrypoint_1()
 {
   return &D_80801010_chrainbow;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/rainbow.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801010_chrainbow -> u32[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_80800FD0_chrainbow[52] = { 0x0, 0x16, 0x12, 0x4, 0x0, 0x1B, 0xFE, 0x70, 0xFD, 0xA8, 0x0, 0x22, 0x0, 0x33, 0x0, 0x4C, 0x0, 0x0, 0x0, 0x0, 0x0, 0x15, 0x0, 0x0, 0x0, 0x99, 0x0, 0x2B, 0x0, 0x4C, 0x0, 0x99, 0x0, 0x2F, 0x0, 0x80, 0x0, 0x80, 0x0, 0x0, 0x0, 0x33, 0x0, 0x33, 0x0, 0x0, 0x0, 0xC0, 0x1, 0x1A, 0x0, 0x0 };
+RainbowVector D_80801004_chrainbow = { 0.0f, 0.0f, 0.0f };
+u32 D_80801010_chrainbow[20] = { 0x165040E, 0x8CE0001, 0x0, (u32)func_8080003C_chrainbow, (u32)func_80105834, (u32)func_80800EB4_chrainbow, 0x4E20, 0x0, 0x0, 0x21000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chrainbow, (u32)func_80107C2C, 0x80000402, (u32)func_80800D88_chrainbow, 0x0, 0x0, 0x0 };

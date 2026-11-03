@@ -264,3 +264,7 @@ void badust_entrypoint_13(u8 *param_0) {
         return;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/dust.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u32 D_80800CB0_badust[4] = { 0xFF, 0xFF, 0xFE, 0x0 };

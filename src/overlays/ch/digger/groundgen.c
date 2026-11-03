@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800500_chdiggergroundgen;
+extern int D_80800500_chdiggergroundgen[];
 extern void *func_80100094(Actor *, u32);
 typedef union { s32 local_0; void *local_1; } DiggerGeneratorEvent;
 extern f32 func_8010CD28(Actor *);
@@ -131,3 +131,14 @@ int func_8080035C_chdiggergroundgen(param_0) Actor *param_0;
         func_80101FDC(param_0, 1);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/digger/groundgen.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800500_chdiggergroundgen -> int[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+int D_80800500_chdiggergroundgen[18] = { 0x1A30132, 0x1, 0x0, (u32)func_80800034_chdiggergroundgen, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0x140000, (u32)func_8080000C_chdiggergroundgen, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_808000AC_chdiggergroundgen, 0x0 };
+u8 D_80800548_chdiggergroundgen[12] = { 0x0, 0x13, 0x4, 0xBE, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x0 };
+u8 D_80800554_chdiggergroundgen[12] = { 0x6E, 0x64, 0x50, 0xE0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

@@ -144,7 +144,7 @@ s32 func_808005A4_chjigsawcollect(s32 arg0, s32 arg1, s32 arg2)
 }
 int func_808005B8_chjigsawcollect(s32 param_0, s32 param_1)
 {
-  extern f32 D_808006D0_chjigsawcollect;
+  extern f32 D_808006D0_chjigsawcollect[];
   func_800BBCB8(param_1, 0, 0x3F800000, 1, &D_808006D0_chjigsawcollect);
 }
 
@@ -156,3 +156,13 @@ void chjigsawcollect_entrypoint_1(Actor **param_0, s32 param_1, s32 param_2)
     ((JiggyCollectFlags *)local_0)->collect = param_2;
     ((s32 *)func_80100094(local_0, 0))[3] = param_1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jigsaw/collect.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808006D0_chjigsawcollect -> f32[] */
+void *D_80800670_chjigsawcollect = (void *)0x015804EF;
+static u32 D_80800670_chjigsawcollect_rest[17] = { 0x6100001, 0x0, (u32)func_808000CC_chjigsawcollect, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, (u32)func_80800524_chjigsawcollect, 0x0, 0x140000, (u32)func_8080000C_chjigsawcollect, (u32)func_80107C2C, 0x80000002, (u32)func_808005A4_chjigsawcollect, 0x0 };
+u8 D_808006B8_chjigsawcollect[12] = { 0x0, 0x13, 0x6, 0x65, 0x0, 0x16, 0x65, 0x90, 0x0, 0x1B, 0x0, 0x0 };
+u8 D_808006C4_chjigsawcollect[12] = { 0x0, 0x13, 0x6, 0x64, 0x0, 0x1D, 0x0, 0x1B, 0x0, 0x0, 0x0, 0x0 };
+f32 D_808006D0_chjigsawcollect[12] = { 2.666775e-39f, 2.570833e-39f, -1.408986e+38f, 1.8734871e-38f, 3.12255e-39f, 9.36723e-39f, 6.42903e-40f, 3.78e-43f, 3.78e-43f, 0.0f, 0.0f, 0.0f };

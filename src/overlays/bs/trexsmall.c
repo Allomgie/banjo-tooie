@@ -867,3 +867,22 @@ int bstrexsmall_entrypoint_15(s32 param_0)
 {
   return D_80801BB8_bstrexsmall[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/trexsmall.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _basudie_entrypoint_11();
+extern void _bsdrone_entrypoint_3();
+u8 D_80801AF0_bstrexsmall[24] = { 0x3, 0x6, 0x0, 0x16, 0x6D, 0x60, 0x0, 0xE, 0x1, 0xCC, 0x1, 0xF3, 0x0, 0x80, 0x0, 0x13, 0x5, 0x6C, 0x0, 0x11, 0x0, 0x0, 0x0, 0x0 };
+int D_80801B08_bstrexsmall[4] = { (u32)func_80800364_bstrexsmall, (u32)func_80800384_bstrexsmall, (u32)func_808003D0_bstrexsmall, (u32)func_8080005C_bstrexsmall };
+int D_80801B18_bstrexsmall[4] = { (u32)func_8080070C_bstrexsmall, (u32)func_80800744_bstrexsmall, (u32)func_80800818_bstrexsmall, (u32)_basudie_entrypoint_11 };
+s32 D_80801B28_bstrexsmall[4] = { (u32)func_80800998_bstrexsmall, (u32)func_808009C0_bstrexsmall, (u32)func_808009E8_bstrexsmall, (u32)_bsdrone_entrypoint_3 };
+s32 D_80801B38_bstrexsmall[4] = { (u32)func_80800AF0_bstrexsmall, (u32)func_80800B10_bstrexsmall, (u32)func_80800B40_bstrexsmall, (u32)func_8080005C_bstrexsmall };
+s32 D_80801B48_bstrexsmall[4] = { (u32)func_80800E94_bstrexsmall, (u32)func_80800EC0_bstrexsmall, (u32)func_80800EF0_bstrexsmall, (u32)func_8080005C_bstrexsmall };
+s32 D_80801B58_bstrexsmall[4] = { (u32)func_80801004_bstrexsmall, (u32)func_8080102C_bstrexsmall, (u32)func_8080106C_bstrexsmall, (u32)func_8080005C_bstrexsmall };
+int D_80801B68_bstrexsmall[4] = { (u32)func_808010E8_bstrexsmall, (u32)func_80801110_bstrexsmall, (u32)func_80801150_bstrexsmall, (u32)func_8080005C_bstrexsmall };
+s32 D_80801B78_bstrexsmall[4] = { (u32)func_808011A8_bstrexsmall, (u32)func_808011D0_bstrexsmall, (u32)func_808011F8_bstrexsmall, (u32)func_8080005C_bstrexsmall };
+int D_80801B88_bstrexsmall[4] = { (u32)func_808013E8_bstrexsmall, (u32)func_80801414_bstrexsmall, (u32)func_80801438_bstrexsmall, (u32)func_8080007C_bstrexsmall };
+int D_80801B98_bstrexsmall[4] = { (u32)func_808015BC_bstrexsmall, (u32)func_808015DC_bstrexsmall, (u32)func_80801688_bstrexsmall, (u32)func_8080005C_bstrexsmall };
+s32 D_80801BA8_bstrexsmall[4] = { (u32)func_80801718_bstrexsmall, (u32)func_80801748_bstrexsmall, (u32)func_80801844_bstrexsmall, (u32)func_8080005C_bstrexsmall };
+s32 D_80801BB8_bstrexsmall[6] = { (u32)func_80801970_bstrexsmall, (u32)func_80801990_bstrexsmall, (u32)func_80801A3C_bstrexsmall, (u32)func_8080005C_bstrexsmall, 0x0, 0x0 };

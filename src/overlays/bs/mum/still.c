@@ -117,3 +117,10 @@ void func_80800300_bsmumstill(PlayerState *self) {
 s32 bsmumstill_entrypoint_1(s32 idx) {
     return D_80800414_bsmumstill[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/mum/still.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+u8 D_80800400_bsmumstill[4] = { 0x1, 0x2, 0x0, 0x0 };
+s32 D_80800404_bsmumstill[4] = { (u32)func_808001F0_bsmumstill, (u32)func_80800210_bsmumstill, (u32)func_8080024C_bsmumstill, (u32)_bsmum_entrypoint_0 };
+s32 D_80800414_bsmumstill[7] = { (u32)func_808002A4_bsmumstill, (u32)func_808002D0_bsmumstill, (u32)func_80800300_bsmumstill, (u32)_bsmum_entrypoint_0, 0x0, 0x0, 0x0 };

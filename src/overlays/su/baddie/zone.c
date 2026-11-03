@@ -23,3 +23,6 @@ void subaddiezone_entrypoint_1(Actor *param_0)
   new_var2 = new_var | new_var;
   _glzone_entrypoint_4(new_var2, param_0->unk78);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/zone.data.s) is defined here in C.
+ * Values are taken from the ROM. */

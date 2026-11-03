@@ -79,7 +79,6 @@ void func_80800FE0_gczoombox();
 void func_8080156C_gczoombox();
 extern f32 func_800F3780(f32, void *, s32);
 u8 *gczoombox_entrypoint_5();
-void *D_exp_gczoombox_entrypoint_5[] = { (void *)gczoombox_entrypoint_5 };
 
 void gczoombox_entrypoint_14(u8 *param_0);
 void gczoombox_entrypoint_20(u8 *param_0, f32 param_1, s32 param_2, s32 param_3, f32 param_4, s32 param_5, s32 param_6);
@@ -1704,3 +1703,8 @@ int gczoombox_entrypoint_45(u8 *param_0, s32 param_1)
     param_0[487] &= 65519;
   }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/zoombox.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u32 D_80803E30_gczoombox[5] = { 0xB580B59, 0xB5A0B5D, 0xB5C0B5B, 0xB5F0B5E, 0xB600000 };
+f32 D_80803E44_gczoombox[15] = { 0.0f, 1.4e+02f, 0.1666f, 7e+01f, 0.3333f, 35.0f, 0.5f, 18.0f, 0.6666f, 9.0f, 0.8333f, 4.0f, 1.0f, 0.0f, 0.0f };

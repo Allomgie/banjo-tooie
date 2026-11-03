@@ -1,11 +1,11 @@
 #include "common.h"
 
-extern int D_808008F4_choctopus;
+extern int D_808008F4_choctopus[];
 extern void _subaddieDll_entrypoint_4();
 extern void _subaddieaudioloop_entrypoint_5();
 extern void func_80102424();
 extern f32 D_808008D4_choctopus;
-extern s32 D_8080093C_choctopus;
+extern s32 D_8080093C_choctopus[];
 extern void *func_80100094();
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_80101CDC(Actor *, f32);
@@ -14,7 +14,7 @@ extern s32 D_80800980_choctopus[];
 extern void func_800F3214(s32 *, s32 *, s32 *, f32);
 extern u8 D_808008C0_choctopus[];
 extern u8 D_8080098C_choctopus[];
-extern int D_80800998_choctopus;
+extern int D_80800998_choctopus[];
 extern void func_80102FDC(u8 *, f32);
 extern s32 _subaddiesect_entrypoint_1();
 extern void _choctopus_entrypoint_1(void);
@@ -223,3 +223,22 @@ s32 func_808007E4_choctopus(s32 param_0) {
         _suexpression_entrypoint_8(param_0, 1);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/octopus.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808008F4_choctopus -> int[], D_8080093C_choctopus -> s32[], D_80800998_choctopus -> int[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_808008C0_choctopus[12] = { 0x0, 0x13, 0x5, 0x2B, 0x0, 0x2, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0 };
+u32 D_808008CC_choctopus[2] = { 0x0, 0x0 };
+f32 D_808008D4_choctopus = 1.0f;
+static u32 D_808008D4_choctopus_rest[7] = { 0x1720001, 0x3F800000, 0x1720001, 0x3F800000, 0x1720020, 0x3F800000, 0x1720001 };
+int D_808008F4_choctopus[18] = { 0x2F1035E, 0x6D00001, (u32)&D_808008CC_choctopus, (u32)func_80800054_choctopus, (u32)func_80105834, (u32)func_801018A4, 0x157C, 0x0, 0x0, 0x528, (u32)func_80800210_choctopus, (u32)func_80108ED0, 0x0, (u32)func_8080000C_choctopus, (u32)func_80107C2C, -0x7FCFDBFE, (u32)func_80800348_choctopus, 0x0 };
+s32 D_8080093C_choctopus[5] = { 0x13062C, 0xA0066, 0x167530, 0x105DC, 0x11940000 };
+s32 D_80800950_choctopus[4][3] = { 0x34, 0x83, 0x42, 0x3B, 0xB2, 0x9E, 0x4C, 0x7D, 0x96, 0x71, 0x75, 0x7A };
+s32 D_80800980_choctopus[3] = { 0x20, 0x80, 0xFF };
+u8 D_8080098C_choctopus[12] = { 0x0, 0x13, 0x4, 0xA4, 0x0, 0x2, 0x0, 0xA, 0x0, 0xCC, 0x0, 0x0 };
+int D_80800998_choctopus[6] = { 0x0, 0x0, 0x0, (u32)func_80800540_choctopus, 0x0, 0x0 };

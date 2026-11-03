@@ -14,7 +14,7 @@ extern void _chappearfx_entrypoint_1(Actor *, s32, s32, f32);
 
 int chcastleshockpadswitch_entrypoint_0()
 {
-    extern int D_80800170_chcastleshockpadswitch;
+    extern int D_80800170_chcastleshockpadswitch[];
     return (int)&D_80800170_chcastleshockpadswitch;
 }
 
@@ -55,3 +55,14 @@ s32 func_80800094_chcastleshockpadswitch(Actor *param_0, s32 param_1, s32 param_
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/castleshockpadswit.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800170_chcastleshockpadswitch -> int[] */
+extern u8 D_8011A270[];
+extern void _chswitch_entrypoint_6();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_80800170_chcastleshockpadswitch[20] = { 0x3430470, 0x7520001, (u32)&D_8011A270, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, 0x0, 0x0, (u32)func_8080000C_chcastleshockpadswitch, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80800094_chcastleshockpadswitch, 0x0, 0x0, 0x0 };

@@ -59,3 +59,12 @@ void func_808000C0_chfloater(Actor *param_0)
         func_80104E78(param_0);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/floater.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80107C2C();
+void *D_808002A0_chfloater = (void *)0x02AB0349;
+static u32 D_808002A0_chfloater_rest[19] = { 0xFFFF0001, 0x0, (u32)func_8080000C_chfloater, (u32)func_80102EC0, (u32)func_80101870, 0x28A0000, 0x0, 0x0, 0x4804, 0x0, 0x0, 0x540000, (u32)func_808000C0_chfloater, (u32)func_80107C2C, 0x80004412, 0x0, 0x0, 0x0, 0x0 };

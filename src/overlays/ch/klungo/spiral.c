@@ -12,8 +12,8 @@ extern u8 D_808005F0_chklungospiral[];
 extern u8 unk6A[];
 typedef struct { u8 pad[0x6C]; u32 pad6C:23; u32 f:9; } KlungoS;
 extern void _capod_entrypoint_3(s32, KlungoS *);
-extern s32 D_80800688_chklungospiral;
-extern s32 D_80800674_chklungospiral;
+extern s32 D_80800688_chklungospiral[];
+extern s32 D_80800674_chklungospiral[];
 extern s32 func_80101E4C(Actor *, void *);
 extern s32 func_80101E14(Actor *, f32);
 extern void func_80018820(s32, f32, f32);
@@ -183,3 +183,18 @@ void func_80800480_chklungospiral(param_0) Actor *param_0;
         _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800674_chklungospiral);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/klungo/spiral.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800674_chklungospiral -> s32[], D_80800688_chklungospiral -> s32[] */
+extern void func_80102EC0();
+extern void func_801018A4();
+extern void func_80107C2C();
+u8 D_808005F0_chklungospiral[16] = { 0x43, 0x34, 0x0, 0x0, 0x43, 0x48, 0x0, 0x0, 0x43, 0x48, 0x0, 0x0, 0x43, 0x2, 0x0, 0x0 };
+u32 D_80800600_chklungospiral[8] = { 0x0, 0x0, 0x40F570A4, 0x25C0001, 0x40F570A4, 0x25C0001, 0x3F333333, 0x2640001 };
+void *D_80800620_chklungospiral = (void *)0x015804EC;
+static u32 D_80800620_chklungospiral_rest[17] = { 0x7070001, (u32)&D_80800600_chklungospiral, (u32)func_80102EC0, (u32)func_80800060_chklungospiral, (u32)func_801018A4, 0x0, 0x40000000, 0x3C0000, 0x40040120, 0x0, 0x0, 0x0, (u32)func_8080000C_chklungospiral, (u32)func_80107C2C, 0x80001416, (u32)func_8080015C_chklungospiral, 0x0 };
+f32 D_80800668_chklungospiral[3] = { 0.0f, 0.5f, -1.0f };
+s32 D_80800674_chklungospiral[5] = { 0x130417, 0xD00F3, 0x10C0001, 0x3201D4C, 0x0 };
+s32 D_80800688_chklungospiral[6] = { 0x3D75C28F, 0x3E19999A, 0x3E75C28F, 0x3F07AE14, 0x3F1C28F6, -0x40800000 };

@@ -676,3 +676,6 @@ int ncpoducam_entrypoint_11(s32 param_0[3])
 {
   func_800EE7F8(&param_0[15]);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/pod/ucam.data.s) is defined here in C.
+ * Values are taken from the ROM. */

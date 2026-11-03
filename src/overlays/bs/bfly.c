@@ -851,3 +851,21 @@ int bsbfly_entrypoint_9(s32 param_0)
 {
   return D_80801DD8_bsbfly[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/bfly.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099AA8();
+extern int func_80099B94();
+extern void _bsdrone_entrypoint_3();
+u8 D_80801D20_bsbfly[40] = { 0x0, 0x1D, 0x9, 0xE4, 0x0, 0x15, 0x0, 0x19, 0x0, 0x99, 0x0, 0x22, 0x0, 0x66, 0x0, 0x59, 0x0, 0x19, 0x0, 0x19, 0x0, 0x27, 0x1, 0x90, 0x1, 0x90, 0x3, 0x20, 0x3, 0x20, 0x0, 0x2B, 0x0, 0x80, 0x0, 0x80, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80801D48_bsbfly[4] = { (u32)func_808003E0_bsbfly, (u32)func_80800248_bsbfly, (u32)func_80800320_bsbfly, (u32)func_80801BB4_bsbfly };
+s32 D_80801D58_bsbfly[4] = { (u32)func_80800454_bsbfly, (u32)func_8080050C_bsbfly, (u32)func_80800624_bsbfly, (u32)func_8080042C_bsbfly };
+s32 D_80801D68_bsbfly[4] = { (u32)func_80801138_bsbfly, (u32)func_80800D50_bsbfly, (u32)func_80800F10_bsbfly, (u32)func_80801BB4_bsbfly };
+s32 D_80801D78_bsbfly[4] = { (u32)func_80801178_bsbfly, (u32)func_80801208_bsbfly, (u32)func_80801334_bsbfly, (u32)func_80801BB4_bsbfly };
+s32 D_80801D88_bsbfly[4] = { (u32)func_8080183C_bsbfly, (u32)func_808014E8_bsbfly, (u32)func_808016B4_bsbfly, (u32)func_80099AA8 };
+s32 D_80801D98_bsbfly[4] = { (u32)func_808018F4_bsbfly, (u32)func_8080188C_bsbfly, (u32)func_808018D0_bsbfly, (u32)func_80801BB4_bsbfly };
+s32 D_80801DA8_bsbfly[4] = { (u32)func_808019A4_bsbfly, (u32)func_8080193C_bsbfly, (u32)func_80801980_bsbfly, (u32)func_80801BB4_bsbfly };
+s32 D_80801DB8_bsbfly[4] = { (u32)func_80801A44_bsbfly, (u32)func_808019EC_bsbfly, (u32)func_80801A1C_bsbfly, (u32)func_80099B94 };
+s32 D_80801DC8_bsbfly[4] = { (u32)func_80801B80_bsbfly, (u32)func_80801A80_bsbfly, (u32)func_80801AEC_bsbfly, (u32)func_80099B94 };
+s32 D_80801DD8_bsbfly[6] = { (u32)func_80801CBC_bsbfly, (u32)func_80801C58_bsbfly, (u32)func_80801C9C_bsbfly, (u32)_bsdrone_entrypoint_3, 0x0, 0x0 };

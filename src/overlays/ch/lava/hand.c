@@ -8,7 +8,7 @@ extern s32 D_80801330_chlavahand[];
 extern s32 func_800BABB8(s32, f32 *, f32 *, f32, s32 *);
 extern void func_80101870(Actor *, void *);
 extern Actor *func_80106790(Unk80132ED0 *);
-extern int D_808013D0_chlavahand;
+extern int D_808013D0_chlavahand[];
 typedef struct { u8 pad[0x7A]; u16 top : 2; u16 rest : 14; } LavaHandTop;
 extern void func_800DF830();
 extern void func_800DE498(f32 *, f32 *, s32, f32, s32, f32 *);
@@ -491,3 +491,20 @@ int chlavahand_entrypoint_1()
 {
   return &D_80801418_chlavahand;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lava/hand.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808013D0_chlavahand -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void func_8010A730();
+u32 D_808012C0_chlavahand[20] = { 0x0, 0x0, 0x400CCCCD, 0x4230044, 0x400CCCCD, 0x4230042, 0x400CCCCD, 0x4B40042, 0x3F99999A, 0x4240042, 0x3F99999A, 0x4B50042, 0x3F99999A, 0x4240084, 0x3F99999A, 0x4B50084, 0x3F99999A, 0x4240084, 0x400CCCCD, 0x4230044 };
+u32 D_80801310_chlavahand[5] = { 0x10000, 0x60000, 0x60003, 0x80000, 0x90000 };
+u8 D_80801324_chlavahand[12] = { 0x0, 0x13, 0x4, 0x83, 0x0, 0xA, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80801330_chlavahand[28] = { 0x110001D, 0x9DC0018, 0x13, 0x6000A00, 0x1B01C2, 0x2580020, -0x6991A538, 0x220033, 0x330200, 0x3000015, 0x660073, 0x2A0100, 0x1000200, 0x2800016, 0x1010011A, 0x110001D, 0x927001B, 0x1C20258, 0x20966E, 0x5AFF0022, 0x1000200, 0x0, 0x150019, 0x19002B, 0x1000180, 0x70001, 0x161010, 0x11A0000 };
+s32 D_808013A0_chlavahand[12] = { 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35 };
+int D_808013D0_chlavahand[18] = { 0x10903E9, 0x9250001, (u32)&D_808012C0_chlavahand, (u32)func_80800124_chlavahand, (u32)func_80105834, (u32)func_80800D8C_chlavahand, 0x5DC0000, 0x0, 0x0, 0x20068, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chlavahand, (u32)func_80107C2C, -0x7FDFFBFF, (u32)func_80800AAC_chlavahand, (u32)&D_80801310_chlavahand };
+void *D_80801418_chlavahand = (void *)0x01580400;
+static u32 D_80801418_chlavahand_rest[17] = { 0x9270001, 0x0, (u32)func_80800E0C_chlavahand, (u32)func_80105834, (u32)func_8010A730, 0x5DC0000, 0x0, 0x0, 0x21004, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, 0x80000002, 0x0, 0x0 };

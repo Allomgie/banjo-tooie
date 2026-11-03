@@ -1,10 +1,10 @@
 #include "common.h"
 
 #define AF(p, i) (*(f32 *)&(p)->actorData[i])
-extern int D_80800C00_chbeanstalkseed;
+extern int D_80800C00_chbeanstalkseed[];
 extern Vec3f D_80800C48_chbeanstalkseed;
 extern void func_800DE498(s32, f32 *, void *, f32, s32, s32);
-extern int D_80800C54_chbeanstalkseed;
+extern int D_80800C54_chbeanstalkseed[];
 typedef struct { f32 local_0[5]; } SeedAnimationWindows;
 extern SeedAnimationWindows D_80800BE0_chbeanstalkseed;
 extern Vec3f D_80800BF4_chbeanstalkseed;
@@ -241,3 +241,15 @@ int chbeanstalkseed_entrypoint_1()
 {
     return (int)&D_80800C54_chbeanstalkseed;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/beanstalkseed.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800C00_chbeanstalkseed -> int[], D_80800C54_chbeanstalkseed -> int[] */
+extern int func_80101870();
+u32 D_80800BD0_chbeanstalkseed[4] = { 0x0, 0x0, 0x407B851F, 0x1FC0001 };
+SeedAnimationWindows D_80800BE0_chbeanstalkseed = { 0.07f, 0.2f, 0.57f, 0.7f, -1.0f };
+Vec3f D_80800BF4_chbeanstalkseed = { 0.37f, 0.87f, -1.0f };
+int D_80800C00_chbeanstalkseed[18] = { 0x127040D, 0x8CF0001, (u32)&D_80800BD0_chbeanstalkseed, (u32)func_8080003C_chbeanstalkseed, (u32)func_80105834, (u32)func_80101870, 0x3E80000, 0x0, 0x0, 0x800000, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chbeanstalkseed, (u32)func_80107C2C, -0x7FFFDC00, (u32)func_8080026C_chbeanstalkseed, 0x0 };
+Vec3f D_80800C48_chbeanstalkseed = { 0.0f, 0.0f, 0.0f };
+int D_80800C54_chbeanstalkseed[19] = { 0x1580480, 0x8DD0001, 0x0, (u32)func_808003D8_chbeanstalkseed, (u32)func_80105834, (u32)func_80800950_chbeanstalkseed, 0x7D00000, 0x0, 0x0, 0x20421, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FDFDBFE, (u32)func_80800A0C_chbeanstalkseed, 0x0, 0x0 };

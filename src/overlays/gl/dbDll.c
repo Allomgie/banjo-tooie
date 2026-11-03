@@ -103,3 +103,6 @@ void gldbDll_entrypoint_2(void)
         func_800DA3B8(local_0 + 0x680, ((1 << local_0) & local_1) >> local_0);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/dbDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -44,3 +44,12 @@ s32 func_8080008C_chbigtopticket(Actor *param_0, s32 param_1, s32 param_2)
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bigtopticket.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+void *D_80800120_chbigtopticket = (void *)0x032903C6;
+static u32 D_80800120_chbigtopticket_rest[19] = { 0x7BF0001, 0x0, (u32)func_80800014_chbigtopticket, (u32)func_80105834, (u32)func_80800058_chbigtopticket, 0x0, 0x3F800000, 0x0, 0x40040004, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chbigtopticket, (u32)func_80107C2C, 0x80001814, (u32)func_8080008C_chbigtopticket, 0x0, 0x0, 0x0 };

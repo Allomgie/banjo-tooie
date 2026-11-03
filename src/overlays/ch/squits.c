@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808006D8_chsquits;
+extern int D_808006D8_chsquits[];
 typedef struct { u8 pad[0x2C]; f32 f2C; u8 pad30[0x3E]; u16 hi:7; u16 f6E:9; } SquitsState;
 extern f32 func_800DC178(f32, f32);
 extern s32 func_800D90A4(f32 *);
@@ -176,3 +176,21 @@ void func_80800564_chsquits(param_0) Actor *param_0;
     *(s32 *)((char *)param_0 + 0x28) = func_800DC128(0, 4);
     *(f32 *)((char *)param_0 + 0x2C) = 0.0f;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/squits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808006C6_chsquits = D_808006C4_chsquits + 0x2, D_808006CA_chsquits = D_808006C8_chsquits + 0x2
+ * extern declarations adjusted to the object (same addresses): D_808006D8_chsquits -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+u32 D_808005B0_chsquits[12] = { 0x42B55F0, 0x3F4CCCCD, 0x3E99999A, 0x42B55F0, 0x3F19999A, 0x3F4CCCCD, 0x55755F0, 0x3F99999A, 0x40400000, 0x4E455F0, 0x3FA66666, 0x40866666 };
+u32 D_808005E0_chsquits[6] = { 0x42B55F0, 0x3F266666, 0x3E99999A, 0x4E455F0, 0x3FA66666, 0x3F800000 };
+u32 D_808005F8_chsquits[9] = { 0x55955F0, 0x3FB33333, 0x0, 0x42B55F0, 0x3F333333, 0x3F19999A, 0x42B55F0, 0x3ECCCCCD, 0x40733333 };
+u32 D_8080061C_chsquits[30] = { 0x42B55F0, 0x3FCCCCCD, 0x3E4CCCCD, 0x42B55F0, 0x3FB33333, 0x3ECCCCCD, 0x42B55F0, 0x3F99999A, 0x3F19999A, 0x42B55F0, 0x3FCCCCCD, 0x3F4CCCCD, 0x42B55F0, 0x3FD9999A, 0x3F800000, 0x42B55F0, 0x3FE66666, 0x3F99999A, 0x42B55F0, 0x3F99999A, 0x3FB33333, 0x42B7D00, 0x3EB33333, 0x3FCCCCCD, 0x40955F0, 0x3F59999A, 0x4019999A, 0x4E455F0, 0x3FA66666, 0x404CCCCD };
+SquitsSequence37 D_80800694_chsquits[4] = { (void *)&D_808005B0_chsquits, 0x4, 8.0f, (void *)&D_808005E0_chsquits, 0x2, 6.0f, (void *)&D_808005F8_chsquits, 0x3, 6.0f, (void *)&D_8080061C_chsquits, 0xA, 8.0f };
+s16 D_808006C4_chsquits[2] = { 0x136A, 0x136B };
+u32 D_808006C8_chsquits[4] = { 0x136C136D, 0x136E136F, 0x13771378, 0x1379137A };
+int D_808006D8_chsquits[18] = { 0x15804E9, 0x1, 0x0, (u32)func_80800054_chsquits, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_8080000C_chsquits, (u32)func_80107C2C, -0x7FFFF9FE, (u32)func_80800108_chsquits, 0x0 };
+u8 D_80800720_chsquits[16] = { 0x0, 0x21, 0x0, 0x1E, 0x0, 0x1D, 0x0, 0x1, 0x1, 0xF4, 0x5, 0xDC, 0x0, 0x0, 0x0, 0x0 };

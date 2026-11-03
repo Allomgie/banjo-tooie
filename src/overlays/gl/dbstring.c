@@ -40,3 +40,6 @@ s32 gldbstring_entrypoint_2(Actor *this){
     func_800D70F8(this, 0);
     func_800D6CEC(this);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/dbstring.data.s) is defined here in C.
+ * Values are taken from the ROM. */

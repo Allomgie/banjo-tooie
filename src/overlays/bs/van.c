@@ -14,7 +14,7 @@ extern void bastick_setZoneMax(PlayerState *, s32, f32);
 extern void func_800959C8(PlayerState *, f32, f32);
 extern void func_8009590C(PlayerState *, f32);
 extern void func_8009E55C(PlayerState *, s32, f32);
-extern s32 D_80801B90_bsvan;
+extern s32 D_80801B90_bsvan[];
 extern void *baanim_getAnimCtrlPtr(PlayerState *);
 extern void _basudie_entrypoint_2(PlayerState *, f32, f32, f32);
 extern void anctrl_setSubrange(void *, f32, f32);
@@ -85,7 +85,7 @@ extern void baanim_playForDuration_loopSmooth(PlayerState *, s32, f32);
 extern void baanim_setDurationRange(PlayerState *, f32, f32);
 extern void func_8008C9F0(PlayerState *, f32, f32, f32, f32);
 extern void func_8008CA30(PlayerState *, f32);
-extern s32 D_80801D0C_bsvan;
+extern s32 D_80801D0C_bsvan[];
 extern s32 baanim_isAt(PlayerState *, f32);
 extern void func_8009C128(PlayerState *, f32 *);
 extern void func_80092C90(PlayerState *, f32 *, s32);
@@ -873,3 +873,25 @@ int bsvan_entrypoint_16(s32 param_0)
 {
   return D_80801D80_bsvan[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/van.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801B90_bsvan -> s32[], D_80801D0C_bsvan -> s32[] */
+extern void _basudie_entrypoint_11();
+extern void _bsvan_entrypoint_9();
+extern void _bsvan_entrypoint_8();
+extern void func_80099AA8();
+s32 D_80801B90_bsvan[44] = { 0x1D09DC, 0x2CFFD8, 0x32FFD8, 0x280064, 0x280015, 0x140066, 0x20F0F0, -0xFAFFFDE, 0x1800199, 0x2800300, 0x161000, 0x180000, 0x30000, 0x2B, 0x1800199, 0x210000, 0x0, 0xAFFB0, 0x3C0000, -0x4FFFC4, 0x11A, 0x2B0199, 0x1B30021, 0x0, 0x5A000A, 0x50003C, 0x50, 0x3C0000, 0x11A002B, 0x1B301CC, 0x210000, 0xB4, 0xA0000, 0x3CFFB0, 0x3C, -0x4FFEE6, 0x2B01CC, 0x1E60021, 0x0, 0x10E000A, 0x3C, 0x500000, 0x3C0050, 0x11A0000 };
+s32 D_80801C40_bsvan[19] = { 0x1D09DC, 0xA0000, 0x0, 0x0, 0x2C, -0x13FF06, -0x13FFEC, 0x15E0014, 0x150014, 0x660020, -0xF0F0FB0, 0x220033, 0x6600CC, 0x1330016, 0x10000018, 0x6, 0x0, 0x2B0099, 0xB30000 };
+s32 D_80801C8C_bsvan[4] = { (u32)func_808004F8_bsvan, (u32)func_80800520_bsvan, (u32)func_808005E4_bsvan, (u32)_basudie_entrypoint_11 };
+s32 D_80801C9C_bsvan[4] = { (u32)func_80800760_bsvan, (u32)func_80800788_bsvan, (u32)func_808007B0_bsvan, (u32)_bsvan_entrypoint_9 };
+s32 D_80801CAC_bsvan[4] = { (u32)func_808007EC_bsvan, (u32)func_80800824_bsvan, (u32)func_808008D4_bsvan, (u32)_bsvan_entrypoint_8 };
+s32 D_80801CBC_bsvan[4] = { (u32)func_80800E0C_bsvan, (u32)func_80800A5C_bsvan, (u32)func_80800BDC_bsvan, (u32)_bsvan_entrypoint_8 };
+s32 D_80801CCC_bsvan[4] = { (u32)func_80800F50_bsvan, (u32)func_80800F70_bsvan, (u32)func_80801034_bsvan, (u32)_bsvan_entrypoint_8 };
+s32 D_80801CDC_bsvan[4] = { (u32)func_80801118_bsvan, (u32)func_80801140_bsvan, (u32)func_80801198_bsvan, (u32)func_80099AA8 };
+s32 D_80801CEC_bsvan[4] = { (u32)func_80801224_bsvan, (u32)func_8080124C_bsvan, (u32)func_808012A4_bsvan, (u32)func_80099AA8 };
+s32 D_80801CFC_bsvan[4] = { (u32)func_8080130C_bsvan, (u32)func_80801334_bsvan, (u32)func_8080135C_bsvan, (u32)_bsvan_entrypoint_8 };
+s32 D_80801D0C_bsvan[25] = { 0x1D09DC, 0x150014, 0x660016, 0x1000000A, 0x0, 0x0, 0x0, 0x220019, 0x3300B3, 0xCC0020, -0x373700B0, 0x180000, 0x20000, 0x2B, 0xCC00E6, 0x11A0022, 0x33004C, 0x133014C, 0x20F0F0, -0xFAFFFE8, 0x30006, 0x0, 0x2B0119, 0x133011A, 0x0 };
+s32 D_80801D70_bsvan[4] = { (u32)func_808013BC_bsvan, (u32)func_808013E4_bsvan, (u32)func_8080145C_bsvan, (u32)_bsvan_entrypoint_8 };
+s32 D_80801D80_bsvan[4] = { (u32)func_80801770_bsvan, (u32)func_808017A0_bsvan, (u32)func_80801890_bsvan, (u32)_bsvan_entrypoint_8 };

@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern int D_80800240_chfantasytrashcanbits;
-extern int D_80800288_chfantasytrashcanbits;
+extern int D_80800240_chfantasytrashcanbits[];
+extern int D_80800288_chfantasytrashcanbits[];
 extern void _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern f32 func_800EFC7C(f32 *, f32 *);
@@ -62,3 +62,15 @@ int chfantasytrashcanbits_entrypoint_1()
 {
     return (int)&D_80800288_chfantasytrashcanbits;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fantasy/trashcanbits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800240_chfantasytrashcanbits -> int[], D_80800288_chfantasytrashcanbits -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_1();
+extern void _chswitch_entrypoint_6();
+int D_80800240_chfantasytrashcanbits[18] = { 0xAC040C, 0x8CC0001, 0x0, (u32)func_808000EC_chfantasytrashcanbits, (u32)func_80105834, (u32)func_80101870, 0x9C40000, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800000_chfantasytrashcanbits, (u32)func_80107C2C, -0x7FFFDBFE, (u32)_chdoor_entrypoint_1, 0x0 };
+int D_80800288_chfantasytrashcanbits[18] = { 0x343040B, 0x7B90001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, 0x0, 0x0, (u32)func_808001A8_chfantasytrashcanbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_808001D8_chfantasytrashcanbits, 0x0 };

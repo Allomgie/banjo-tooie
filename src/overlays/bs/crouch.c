@@ -283,3 +283,12 @@ s32 bscrouch_entrypoint_4(PlayerState *this, s32 next)
     }
     return next;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/crouch.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bscrouch_entrypoint_2();
+extern void _bscrouch_entrypoint_0();
+extern void _bscrouch_entrypoint_1();
+extern void func_8009AB78();
+s32 D_80800990_bscrouch[4] = { (u32)_bscrouch_entrypoint_2, (u32)_bscrouch_entrypoint_0, (u32)_bscrouch_entrypoint_1, (u32)func_8009AB78 };

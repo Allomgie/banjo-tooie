@@ -7,7 +7,7 @@ extern f32 func_800D8FF8(void);
 typedef struct { u8 pad[0x28]; s32 f28; s32 arr[10]; } SubS;
 extern void _basub_entrypoint_4(void);
 extern void func_8009DB04(PlayerState *, s32, f32, s32);
-extern s32 D_80800C10_basub;
+extern s32 D_80800C10_basub[];
 extern PlayerState *func_800F53D0(s32);
 extern s32 func_80092CDC(PlayerState *, f32 *, s32);
 extern s32 func_80092EB0(PlayerState *);
@@ -27,7 +27,7 @@ extern void _basub_entrypoint_7(void);
 extern void func_8009C128();
 extern void func_8010D930(s32, s32, f32 *, void *);
 extern void _chbaddiesetup_entrypoint_2(void (*)(void), s32, f32);
-extern s32 D_80800C30_basub;
+extern s32 D_80800C30_basub[];
 extern void func_800E0AF0(s32, f32);
 extern void func_800F1574(f32 *, f32);
 extern void func_800E0AFC(s32, s32, f32, f32, f32, f32);
@@ -346,3 +346,10 @@ int basub_entrypoint_15(param_0, param_1) u8 *param_0; s32 param_1; {
     (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x130)))) + (0x60))) = 0.8f;
     (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x130)))) + (0x64))) = 0.28f;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/sub.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800C10_basub -> s32[], D_80800C30_basub -> s32[] */
+s32 D_80800C10_basub[5] = { 0x130413, 0x167FFF, 0x1012C, 0x157C0011, 0x0 };
+u8 D_80800C24_basub[12] = { 0x0, 0x13, 0x5, 0x29, 0x0, 0x16, 0x7F, 0xFF, 0x0, 0x11, 0x0, 0x0 };
+s32 D_80800C30_basub[8] = { 0x2060013, 0x528001B, 0x1655F0, 0xA0100, 0x110000, 0x0, 0x0, 0x0 };

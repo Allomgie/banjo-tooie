@@ -61,3 +61,6 @@ void bamovehover_entrypoint_4(Actor *param_0, s32 param_1)
     func_800EE7F8(*(s32 *)((char *)param_0 + 0xC8) + 0xB8);
   }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/move/hover.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -4,7 +4,7 @@ extern void _suegg_entrypoint_16();
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800C4140(s32, f32 *, u32);
 typedef struct { u8 pad_0[0x38]; u32 pad_1 : 8; u32 local_0 : 1; u32 pad_2 : 23; } GoldenEggPendingFlags1041;
-extern int D_808003F0_chegggolden;
+extern int D_808003F0_chegggolden[];
 extern Actor *_suegg_entrypoint_11(s32, s32, s32);
 extern void _suegg_entrypoint_1(Actor *, f32);
 extern void _sueggmove_entrypoint_5(Actor *, s32);
@@ -100,3 +100,16 @@ Actor *chegggolden_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param
     local_0->unk70_10 = 1;
     return local_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/egg/golden.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808003F0_chegggolden -> int[] */
+extern void func_80105834();
+extern void _subaddiedraw25d_entrypoint_2();
+extern void _suegg_entrypoint_2();
+extern void _suegg_entrypoint_0();
+extern void _suegg_entrypoint_5();
+extern void func_80107C2C();
+extern void _suegg_entrypoint_17();
+int D_808003F0_chegggolden[20] = { 0x26C015F, 0x9C30001, 0x0, (u32)func_80800110_chegggolden, (u32)func_80105834, (u32)_subaddiedraw25d_entrypoint_2, 0x0, 0x3F800000, 0x0, 0x4, (u32)_suegg_entrypoint_2, (u32)_suegg_entrypoint_0, 0x4C0000, (u32)_suegg_entrypoint_5, (u32)func_80107C2C, -0x78000000, (u32)_suegg_entrypoint_17, 0x0, 0x0, 0x0 };

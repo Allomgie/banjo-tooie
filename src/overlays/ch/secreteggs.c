@@ -12,7 +12,7 @@ extern unkEggData D_80800494_chsecreteggs[0x3];
 extern s32 D_808004A8_chsecreteggs;
 extern f32 D_808004EC_chsecreteggs[5];
 extern f32 D_80800500_chsecreteggs[3];
-extern u32 D_8080050C_chsecreteggs;
+extern u32 D_8080050C_chsecreteggs[];
 
 void func_80800000_chsecreteggs(Actor* arg0)
 {
@@ -160,3 +160,18 @@ u32* chsecreteggs_entrypoint_0(void)
 {
     return &D_8080050C_chsecreteggs;
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/secreteggs.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808004A8_chsecreteggs = D_80800494_chsecreteggs + 0x14
+ * extern declarations adjusted to the object (same addresses): D_8080050C_chsecreteggs -> u32[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_80800490_chsecreteggs[1] = { 0x0 };
+unkEggData D_80800494_chsecreteggs[3] = { 0x0, 0x0, 0x40B0, 0x0, 0x1D4, 0x9, 0x3FC0, 0x0, 0x1D5, 0x4A, 0x1B, 0xFCE0 };
+static u32 D_80800494_chsecreteggs_rest[16] = { 0xFDA8002D, 0x1C2028A, 0xD003C, 0x161002, 0x270000, 0x12C0000, 0x2580022, 0x4C004C, 0xB3, 0x15000C, 0xD9002B, 0x4000500, 0x400B3, 0x70004, 0x31FF6A, 0xFF6A0000 };
+f32 D_808004EC_chsecreteggs[5] = { 0.0f, 0.08f, 0.38f, 0.45f, -1.0f };
+f32 D_80800500_chsecreteggs[3] = { 0.78f, 0.84f, -1.0f };
+u32 D_8080050C_chsecreteggs[21] = { 0x1580517, 0x9760001, (u32)&D_80800490_chsecreteggs, (u32)func_80800118_chsecreteggs, (u32)func_80105834, (u32)func_801018A4, 0x7D00000, 0x3F800000, 0x0, 0x808, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808000C0_chsecreteggs, (u32)func_80107C2C, 0x80000402, (u32)func_80800328_chsecreteggs, 0x0, 0x0, 0x0, 0x0 };

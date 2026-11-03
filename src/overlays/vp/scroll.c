@@ -82,3 +82,6 @@ void vpscroll_entrypoint_3(ScrollOffset1255 *param_0, s32 param_1,
         } while (param_2 < local_1);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/vp/scroll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -109,3 +109,11 @@ void bskazflamethrower_entrypoint_3(PlayerState *self) {
 s32 bskazflamethrower_entrypoint_4(s32 idx) {
     return D_808003B0_bskazflamethrower[idx];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/flamethrower.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bskazflamethrower_entrypoint_1();
+extern void _bskazflamethrower_entrypoint_2();
+extern void _bskazflamethrower_entrypoint_3();
+extern void func_80099B94();
+s32 D_808003B0_bskazflamethrower[4] = { (u32)_bskazflamethrower_entrypoint_1, (u32)_bskazflamethrower_entrypoint_2, (u32)_bskazflamethrower_entrypoint_3, (u32)func_80099B94 };

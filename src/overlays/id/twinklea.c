@@ -42,3 +42,6 @@ void idtwinklea_entrypoint_3(s32 param_0, u8 *param_1, u8 *param_2, s32 param_3,
         param_2[15] = (u32)(local_3 * 255.0f);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/twinklea.data.s) is defined here in C.
+ * Values are taken from the ROM. */

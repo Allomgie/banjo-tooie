@@ -2,8 +2,8 @@
 #include "types.h"
 #include "macros.h"
 
-extern int D_80801124_chbilldrillplate;
-extern int D_8080116C_chbilldrillplate;
+extern int D_80801124_chbilldrillplate[];
+extern int D_8080116C_chbilldrillplate[];
 extern s32 func_800DC298(f32);
 typedef union { s32 word; Unk80132ED0 *marker; } BillDrillPlateEventPayload;
 extern void _subaddiefade_entrypoint_14(void *arg);
@@ -16,7 +16,7 @@ extern void func_800EF04C(f32 *, f32 *);
 extern Actor *func_80108528(s32, f32 *, s32, Actor **);
 extern u8 D_80801220_chbilldrillplate[];
 extern void func_800EE7F8(f32 *, f32 *);
-extern u8 D_808010DC_chbilldrillplate[];
+extern u32 D_808010DC_chbilldrillplate[];
 typedef struct { u16 unk0; u16 unk2; u8 pad[16]; } BilldrillPlateEntry;
 extern BilldrillPlateEntry D_808010A0_chbilldrillplate[];
 extern s32 func_800EA05C(void);
@@ -24,7 +24,7 @@ typedef struct { u8 pad_0[0x78]; u32 pad_1 : 28; u32 bit : 1; u32 pad_2 : 3; } C
 extern void _chbounce_entrypoint_5();
 extern void _subaddiefade_entrypoint_3();
 extern void func_80101FDC();
-extern s32 D_808011B4_chbilldrillplate;
+extern s32 D_808011B4_chbilldrillplate[];
 extern f32 func_800D8FF8(void);
 extern f32 func_800136E4(f32);
 extern void _chbounce_entrypoint_3(f32);
@@ -37,8 +37,8 @@ extern void func_800EF1B8(f32 *, f32, f32);
 extern void func_800BABB8(s32, f32 *, f32 *, f32, void *);
 extern void func_800E15CC(s32, f32, f32);
 extern void func_80018820(s32, f32, f32);
-extern u32 D_80801234_chbilldrillplate;
-extern u32 D_80801244_chbilldrillplate;
+extern u32 D_80801234_chbilldrillplate[];
+extern u32 D_80801244_chbilldrillplate[];
 extern void *func_80101080(void);
 extern void *func_80106790(void *);
 extern void _chexploder_entrypoint_6(void *, f32, f32);
@@ -480,3 +480,24 @@ BilldrillPlateEntry *func_80801020_chbilldrillplate(void)
     }
     return NULL;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/billdrillplate.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808010DC_chbilldrillplate -> u32, D_80801124_chbilldrillplate -> int[], D_8080116C_chbilldrillplate -> int[], D_808011B4_chbilldrillplate -> s32[], D_80801234_chbilldrillplate -> u32[], D_80801244_chbilldrillplate -> u32[] */
+extern void func_80105834();
+extern int func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+BilldrillPlateEntry D_808010A0_chbilldrillplate[3] = { 0x106, 0x101, 0x3, 0xE8, 0x7, 0xA8, 0x0, 0x9, 0x0, 0x19, 0x1, 0xC2, 0x0, 0x3D, 0x0, 0x0, 0x1, 0x0, 0x10E, 0x10B, 0x1, 0xA4, 0x7, 0xA9, 0x0, 0x7, 0x0, 0x8, 0x1, 0xC3, 0x0, 0x3E, 0x2, 0x10, 0x0, 0x1, 0x109, 0x107, 0x2, 0xBC, 0x7, 0xA9, 0x0, 0xE, 0x0, 0xC, 0x1, 0xC4, 0x0, 0x3F, 0x2, 0xB0, 0x0, 0x0 };
+u32 D_808010DC_chbilldrillplate[18] = { 0xA203DC, 0x79F0001, 0x0, (u32)func_808000B0_chbilldrillplate, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800024_chbilldrillplate, (u32)func_80107C2C, 0x80080C10, (u32)func_80800240_chbilldrillplate, 0x0 };
+int D_80801124_chbilldrillplate[18] = { 0xA303DD, 0x7A90001, 0x0, (u32)func_80800408_chbilldrillplate, (u32)func_80105834, (u32)func_80800924_chbilldrillplate, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0xC0000, (u32)func_80800358_chbilldrillplate, (u32)func_80107C2C, -0x7FF7F3EE, (u32)func_80800738_chbilldrillplate, 0x0 };
+int D_8080116C_chbilldrillplate[18] = { 0xA403DE, 0x7AD0001, 0x0, (u32)func_80800DA4_chbilldrillplate, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800D5C_chbilldrillplate, (u32)func_80107C2C, -0x7FF7F3EE, (u32)func_80800F24_chbilldrillplate, 0x0 };
+s32 D_808011B4_chbilldrillplate[4] = { 0x130632, 0xD00F3, 0x10C0016, 0x61A80000 };
+u8 D_808011C4_chbilldrillplate[16] = { 0x0, 0x13, 0x6, 0x33, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x16, 0x61, 0xA8, 0x0, 0x0 };
+u8 D_808011D4_chbilldrillplate[12] = { 0x0, 0x13, 0x4, 0xA1, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x0 };
+u8 D_808011E0_chbilldrillplate[16] = { 0x0, 0x13, 0x4, 0xA0, 0x0, 0xD, 0x0, 0xC0, 0x0, 0xD9, 0x0, 0x18, 0x0, 0x2, 0x0, 0x0 };
+u8 D_808011F0_chbilldrillplate[48] = { 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x20, 0xC0, 0xC0, 0xC0, 0x80, 0x0, 0x16, 0x0, 0x8, 0x0, 0x22, 0x1, 0x33, 0x1, 0x66, 0x1, 0xCC, 0x2, 0x33, 0x0, 0x15, 0x0, 0x0, 0x0, 0x99, 0x0, 0x2B, 0x1, 0x0, 0x1, 0x33, 0x0, 0x2D, 0x0, 0xC8, 0x1, 0x2C, 0x1, 0x1A, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80801220_chbilldrillplate[20] = { 0x0, 0x13, 0x6, 0x28, 0x0, 0xD, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x2, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x0, 0x0, 0x0 };
+u32 D_80801234_chbilldrillplate[4] = { 0x1304C8, 0xD00D9, 0xF30018, 0x20000 };
+u32 D_80801244_chbilldrillplate[15] = { 0x1D09DD, 0x20C0C0, 0xC0800016, 0x80022, 0x1330166, 0x1CC0233, 0x150000, 0x99002B, 0x1000133, 0x2D00C8, 0x12C011A, 0x0, 0x0, 0x0, 0x0 };

@@ -632,3 +632,6 @@ f32 mlspline_entrypoint_13(s32 param_0, s32 param_1, f32 param_2, f32 param_3, f
   while ((!done) && (iter < 10));
   return t;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ml/spline.data.s) is defined here in C.
+ * Values are taken from the ROM. */

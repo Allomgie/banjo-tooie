@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800430_chdiggerbossdoor;
+extern int D_80800430_chdiggerbossdoor[];
 extern u8 D_80800478_chdiggerbossdoor[];
 extern f32 func_800F12D4(f32, f32, f32, f32, f32);
 extern u8 _chdiggerbossdoor_entrypoint_1[];
@@ -121,3 +121,13 @@ void chdiggerbossdoor_entrypoint_1(void *param_0, Vtx *param_1, Vtx *param_2,
         param_2->v.ob[1] = param_1->v.ob[1] + local_0;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/digger/bossdoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800430_chdiggerbossdoor -> int[] */
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_80800430_chdiggerbossdoor[18] = { 0xAC04F1, 0x1, 0x0, (u32)func_808000B0_chdiggerbossdoor, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x0, (u32)func_808002A8_chdiggerbossdoor, 0x0, 0x0, (u32)func_8080000C_chdiggerbossdoor, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_808002E8_chdiggerbossdoor, 0x0 };
+u8 D_80800478_chdiggerbossdoor[24] = { 0x0, 0x13, 0x4, 0xAD, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x1, 0x3, 0xE8, 0x1F, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

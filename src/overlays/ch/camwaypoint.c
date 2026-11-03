@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800130_chcamwaypoint;
+extern int D_80800130_chcamwaypoint[];
 extern void func_800EEBF0(f32 *, f32 *, f32);
 extern f32 func_800EEAA4(f32 *, f32 *);
 extern void *func_80110014(s32);
@@ -37,3 +37,12 @@ void func_8080005C_chcamwaypoint(Actor *param_0)
         _ncbawaypoint_entrypoint_2(local_0, param_0->position, (f32 *)param_0->actorData, *(f32 *)&param_0->actorData[3]);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/camwaypoint.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800130_chcamwaypoint -> int[] */
+extern void func_80102EC0();
+extern void func_8010A730();
+extern void func_80107C2C();
+int D_80800130_chcamwaypoint[20] = { 0x15801DD, 0x1, 0x0, (u32)func_8080005C_chcamwaypoint, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_8080000C_chcamwaypoint, (u32)func_80107C2C, -0x7FFFD9FE, 0x0, 0x0, 0x0, 0x0 };

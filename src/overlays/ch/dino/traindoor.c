@@ -4,7 +4,7 @@ extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
 extern void func_80103140(Actor *, u16, u16);
-extern int D_808001D0_chdinotraindoor;
+extern int D_808001D0_chdinotraindoor[];
 
 void func_80800000_chdinotraindoor(Actor *param_0)
 {
@@ -41,3 +41,13 @@ int *chdinotraindoor_entrypoint_0()
 {
     return &D_808001D0_chdinotraindoor;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/dino/traindoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808001D0_chdinotraindoor -> int[] */
+extern void _chdoor_entrypoint_0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_808001D0_chdinotraindoor[20] = { 0xAC049B, -0xFFFF, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_80800000_chdinotraindoor, (u32)func_80107C2C, -0x7FF7D3FE, (u32)func_80800120_chdinotraindoor, 0x0, 0x0, 0x0 };

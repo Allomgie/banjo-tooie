@@ -171,3 +171,6 @@ int gsworldDll_entrypoint_4(volatile u16 *param_0)
   new_var = 1;
   func_8080054C_gsworldDll(new_var, param_0[new_var], "world.gs");
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gs/worldDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

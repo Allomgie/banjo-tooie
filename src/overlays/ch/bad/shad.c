@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800A10_chbadshad;
+extern int D_80800A10_chbadshad[];
 typedef struct { u8 pad[0x78]; u32 pad1 : 16; u32 mode : 2; u32 pad2 : 14; } BadShadFlags97;
 extern void func_8010A800(Actor *, s32);
 extern Actor *func_80106790();
@@ -286,3 +286,11 @@ int func_8080086C_chbadshad(param_0, param_1, param_2, param_3) u8 *param_0; Act
         func_801045AC(param_1, local_2, (f32 *)(param_0 + 4), *(s32 *)(local_5 + 8));
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bad/shad.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800A10_chbadshad -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+int D_80800A10_chbadshad[20] = { 0x9B0243, 0x6370001, 0x0, (u32)func_80800090_chbadshad, (u32)func_80105834, (u32)func_808000E0_chbadshad, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_8080000C_chbadshad, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0, 0x0, 0x0 };

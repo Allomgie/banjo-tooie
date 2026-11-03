@@ -13,7 +13,7 @@ extern s32 _suegg_entrypoint_13(Actor *);
 extern s32 _suegg_entrypoint_12(Actor *);
 extern void _sueggmisc_entrypoint_1(Actor *);
 extern void _suegg_entrypoint_3(Actor *);
-extern int D_808004D0_cheggnormal;
+extern int D_808004D0_cheggnormal[];
 typedef struct { u8 pad_0[0x39]; u8 pad_1 : 3; u8 local_0 : 1; u8 pad_2 : 4; } NormalEggFlags;
 extern Actor *_suegg_entrypoint_11(s32, f32 *, s32);
 extern void _sueggmove_entrypoint_6(Actor *, f32, f32);
@@ -136,3 +136,16 @@ Actor *cheggnormal_entrypoint_2(void *param_0, f32 *param_1, s32 param_2, s32 pa
     else local_1->local_0 = 0;
     return local_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/egg/normal.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808004D0_cheggnormal -> int[] */
+extern void func_80105834();
+extern void _subaddiedraw25d_entrypoint_2();
+extern void _suegg_entrypoint_2();
+extern void _suegg_entrypoint_0();
+extern void _suegg_entrypoint_5();
+extern void func_80107C2C();
+extern void _suegg_entrypoint_17();
+int D_808004D0_cheggnormal[20] = { 0x26C015A, 0x9D70001, 0x0, (u32)func_80800194_cheggnormal, (u32)func_80105834, (u32)_subaddiedraw25d_entrypoint_2, 0x0, 0x3F800000, 0x0, 0x4, (u32)_suegg_entrypoint_2, (u32)_suegg_entrypoint_0, 0x4C0000, (u32)_suegg_entrypoint_5, (u32)func_80107C2C, -0x78000000, (u32)_suegg_entrypoint_17, 0x0, 0x0, 0x0 };

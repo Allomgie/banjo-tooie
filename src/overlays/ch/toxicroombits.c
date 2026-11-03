@@ -1,13 +1,13 @@
 #include "common.h"
 
 typedef struct { f32 local_0[3]; } Mass43ToxicVector_80800000_chtoxicroombits;
-extern s32 D_80800F00_chtoxicroombits;
-extern s32 D_80800F0C_chtoxicroombits;
-extern s32 D_80800F54_chtoxicroombits;
-extern s32 D_80800FA0_chtoxicroombits;
+extern s32 D_80800F00_chtoxicroombits[];
+extern s32 D_80800F0C_chtoxicroombits[];
+extern s32 D_80800F54_chtoxicroombits[];
+extern s32 D_80800FA0_chtoxicroombits[];
 extern void func_800BBCB8(f32 *, f32 *, f32, s32, void *);
 extern Actor *func_80108474(s32, f32 *, s32);
-extern int D_80800FB0_chtoxicroombits;
+extern int D_80800FB0_chtoxicroombits[];
 extern int D_80801004_chtoxicroombits[];
 extern u8 D_80801005_chtoxicroombits[];
 extern void func_800DA7A8();
@@ -16,7 +16,7 @@ extern void _chmrtannoy_entrypoint_0();
 extern Actor *func_80106790(Unk80132ED0 *);
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern f32 D_80801028_chtoxicroombits[];
-extern int D_80801034_chtoxicroombits;
+extern int D_80801034_chtoxicroombits[];
 extern void func_800E2588();
 extern void func_800E2AA4();
 extern f32 func_800138D0(f32);
@@ -334,3 +334,22 @@ int chtoxicroombits_entrypoint_1()
 {
     return (int)&D_80801034_chtoxicroombits;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/toxicroombits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80801005_chtoxicroombits = D_80801004_chtoxicroombits + 0x1
+ * extern declarations adjusted to the object (same addresses): D_80800F00_chtoxicroombits -> s32[], D_80800F0C_chtoxicroombits -> s32[], D_80800F54_chtoxicroombits -> s32[], D_80800FA0_chtoxicroombits -> s32[], D_80800FB0_chtoxicroombits -> int[], D_80801034_chtoxicroombits -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+s32 D_80800F00_chtoxicroombits[3] = { -0x3C380000, 0x43C80000, 0x44FA0000 };
+s32 D_80800F0C_chtoxicroombits[18] = { 0x1D09DD, 0x2B0800, 0xC000022, 0x2000280, 0x8000A00, 0x15000C, 0x990019, 0x7, 0x2C0000, 0xFF38, 0x64, -0x63FFE0, -0x5F5F5F80, 0xAFFEC, -0x310014, 0x140032, 0x140016, 0x40000 };
+s32 D_80800F54_chtoxicroombits[19] = { 0x1D09DD, 0x2B0500, 0x7000022, 0x2000280, 0x14001E00, 0x15000C, 0x990019, 0x7, 0x2C0000, 0xFF38, 0x64, -0x63FFE1, 0xFF0A00, 0x5002000A, -0x130032, -0x13FFEC, 0x320014, 0x160004, 0x0 };
+s32 D_80800FA0_chtoxicroombits[4] = { 0x1304A0, 0x166D60, 0x100C8, 0x17700000 };
+int D_80800FB0_chtoxicroombits[21] = { 0x10E03EA, 0x8840001, 0x0, 0x0, (u32)func_80105834, (u32)func_808001D4_chtoxicroombits, 0x0, 0x0, 0x0, 0x20800044, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFF800, (u32)func_80800000_chtoxicroombits, 0x0, 0x44B0344, 0x23D0236, 0x12F0128 };
+int D_80801004_chtoxicroombits[3] = { 0x130527, 0x103E8, 0xFA00000 };
+Mass43ToxicVector_80800A2C_chtoxicroombits D_80801010_chtoxicroombits = { -4e+02f, 395.0f, -2e+03f };
+Mass43ToxicVector_80800A2C_chtoxicroombits D_8080101C_chtoxicroombits = { 0.0f, 0.0f, 0.0f };
+f32 D_80801028_chtoxicroombits[3] = { -4e+02f, 397.0f, 2e+03f };
+int D_80801034_chtoxicroombits[19] = { 0x15803EB, -0xFFFF, 0x0, (u32)func_80800630_chtoxicroombits, (u32)func_80105834, (u32)func_80800A2C_chtoxicroombits, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_80800540_chtoxicroombits, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800CB0_chtoxicroombits, 0x0, 0x0 };

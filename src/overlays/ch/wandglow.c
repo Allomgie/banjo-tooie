@@ -111,3 +111,10 @@ int chwandglow_entrypoint_3()
 {
     return (int)D_80800410_chwandglow;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/wandglow.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80107C2C();
+s32 D_80800410_chwandglow[20] = { 0x2760164, 0x6B60001, 0x0, (u32)func_80800218_chwandglow, (u32)func_80105834, (u32)func_80800000_chwandglow, 0x7D00000, 0x0, 0x0, 0x20004, (u32)func_808000E8_chwandglow, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0, 0x0, 0x0 };

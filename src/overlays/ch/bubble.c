@@ -127,3 +127,6 @@ s32 chbubble_entrypoint_0(BubbleDrawContext *param_0, f32 *param_1, f32 *param_2
     param_0->local_2 = local_10;
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bubble.data.s) is defined here in C.
+ * Values are taken from the ROM. */

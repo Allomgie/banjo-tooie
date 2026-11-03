@@ -4,7 +4,7 @@
 #include "overlays/ba/playerstate.h"
 typedef struct { s32 local_0; u8 pad_0[0x10]; u8 local_1[1]; } FpsGamePlayers;
 
-extern int D_808021A0_chfpsgame;
+extern int D_808021A0_chfpsgame[];
 extern u8 unk4[];
 extern unsigned int func_80016BBC(s32, u16);
 extern void *func_80100094(Actor *, u32);
@@ -1034,3 +1034,11 @@ void func_80802020_chfpsgame(Actor *param_0, s32 param_1, s32 param_2)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fpsgame.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808021A0_chfpsgame -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+int D_808021A0_chfpsgame[20] = { 0x15802C4, -0xFFFF, 0x0, (u32)func_808008D4_chfpsgame, (u32)func_80105834, (u32)func_80801780_chfpsgame, 0x0, 0x0, 0x0, 0x8400400, (u32)func_8080090C_chfpsgame, 0x0, 0x6B80000, (u32)func_808002FC_chfpsgame, (u32)func_80107C2C, -0x7FFF7BFE, (u32)func_80800914_chfpsgame, 0x0, 0x0, 0x0 };

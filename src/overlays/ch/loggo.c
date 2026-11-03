@@ -1,11 +1,11 @@
 #include "common.h"
 
-extern int D_80800648_chloggo;
-extern int D_80800690_chloggo;
+extern int D_80800648_chloggo[];
+extern int D_80800690_chloggo[];
 extern f32 * _gccubesearch_entrypoint_0(s32, Actor *);
 extern void func_800EE88C(f32 *, f32 *);
-extern s32 D_80800610_chloggo;
-extern s32 D_808006D8_chloggo;
+extern s32 D_80800610_chloggo[];
+extern s32 D_808006D8_chloggo[];
 typedef struct { u8 pad[0x94]; u8 b7 : 1; u8 b6 : 1; u8 b5 : 1; u8 b4 : 1; u8 b3 : 1; u8 b2 : 1; u8 b1 : 1; u8 b0 : 1; } BitS148;
 typedef union { s32 local_0; s16 local_1; Unk80132ED0 *local_2; } Mass45LoggoEventArgs;
 extern u8 D_808006E8_chloggo[];
@@ -19,10 +19,10 @@ extern void _subaddiedialog_entrypoint_11(s32 param_0, s32 param_1, s32 param_2,
 extern void func_80102424(s32 param_0, s32 param_1);
 extern void func_8010A570(s32 param_0);
 extern void _capod_entrypoint_13(s32 param_0, s32 param_1, s32 param_2, s32 param_3);
-extern int D_808006F8_chloggo;
-extern int D_80800740_chloggo;
-extern int D_80800710_chloggo;
-extern int D_80800728_chloggo;
+extern int D_808006F8_chloggo[];
+extern int D_80800740_chloggo[];
+extern int D_80800710_chloggo[];
+extern int D_80800728_chloggo[];
 extern Unk80132ED0 *func_80101080(void);
 extern Actor *func_80106790(Unk80132ED0 *);
 void func_80800398_chloggo();
@@ -176,3 +176,25 @@ s32 func_80800528_chloggo(Actor *param_0, s32 param_1, s32 param_2)
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/loggo.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800610_chloggo -> s32[], D_80800648_chloggo -> int[], D_80800690_chloggo -> int[], D_808006D8_chloggo -> s32[], D_808006F8_chloggo -> int[], D_80800710_chloggo -> int[], D_80800728_chloggo -> int[], D_80800740_chloggo -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void func_80102EC0();
+extern void _bsbabykaz_entrypoint_11();
+u8 D_808005E0_chloggo[48] = { 0x0, 0x0, 0x0, 0x1, 0x13, 0x41, 0x1, 0x0, 0x0, 0x0, 0x4, 0x1, 0x13, 0x42, 0x2, 0x0, 0x0, 0x0, 0x2, 0x0, 0x13, 0x81, 0x1, 0x0, 0x0, 0x0, 0x2, 0x0, 0x13, 0x83, 0x2, 0x0, 0x0, 0x0, 0x4, 0x0, 0x13, 0x82, 0x1, 0x0, 0xFF, 0xFE, 0xDF, 0xFF, 0x12, 0xB, 0x3, 0x0 };
+s32 D_80800610_chloggo[4] = { 0x601, 0x13680200, -0x12001, 0x120B0300 };
+u32 D_80800620_chloggo[10] = { 0x0, 0x0, 0x3F4CCCCD, 0x2380000, 0x3F4CCCCD, 0x2380000, 0x3F4CCCCD, 0x2380000, 0x3F4CCCCD, 0x2380000 };
+int D_80800648_chloggo[18] = { 0xAD0435, 0x63E0001, (u32)&D_80800620_chloggo, (u32)func_808000AC_chloggo, (u32)func_80105834, (u32)func_80101870, 0x0, 0x40200000, 0x0, 0x4000090C, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800018_chloggo, (u32)func_80107C2C, -0x7FFFDB6E, (u32)func_808001B8_chloggo, 0x0 };
+int D_80800690_chloggo[18] = { 0x1560436, 0x7AF0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x1810000, 0x40000800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808004F8_chloggo, (u32)func_80107C2C, (u32)_bsbabykaz_entrypoint_11, (u32)func_80800528_chloggo, 0x0 };
+s32 D_808006D8_chloggo[4] = { 0x1690000, 0x12C00AD, 0xC, 0x23C0200 };
+u8 D_808006E8_chloggo[16] = { 0x0, 0x13, 0x4, 0x2B, 0x0, 0xA, 0x0, 0x80, 0x0, 0x18, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0 };
+int D_808006F8_chloggo[6] = { 0x130627, 0x10190, 0x3E8000D, 0xF3010C, 0x1655F0, 0x0 };
+int D_80800710_chloggo[6] = { 0x1305C1, 0x10190, 0x3E8000D, 0x1A601C0, 0x162EE0, 0x0 };
+int D_80800728_chloggo[6] = { 0x130555, 0x10190, 0x3E8000D, 0xF3010C, 0x161F40, 0x0 };
+int D_80800740_chloggo[8] = { 0x130556, 0x10190, 0x3E8000D, 0xF3010C, 0x161F40, 0x0, 0x0, 0x0 };

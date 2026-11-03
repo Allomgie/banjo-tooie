@@ -230,3 +230,7 @@ void baeggsetup_entrypoint_10(s32 param_0) {
     func_800C4B7C(0x4A5);
     func_8010D930(0xA, -1, local_0, ((s32 *) D_80800860_baeggsetup));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/egg/setup.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80800860_baeggsetup[16] = { 0x0, 0x21, 0x0, 0x1D, 0x0, 0x1E, 0x0, 0x14, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

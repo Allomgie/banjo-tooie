@@ -994,3 +994,26 @@ int bsbswim_entrypoint_14(s32 param_0)
 {
   return D_80801F98_bsbswim[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/wim.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern int func_80099B94();
+extern int func_80099AA8();
+extern void _bsdrone_entrypoint_3();
+s32 D_80801E60_bsbswim[4] = { (u32)func_808001A8_bsbswim, (u32)func_808001C8_bsbswim, (u32)func_80800288_bsbswim, (u32)func_80099B94 };
+s32 D_80801E70_bsbswim[4] = { (u32)func_808005F4_bsbswim, (u32)func_8080039C_bsbswim, (u32)func_80800440_bsbswim, (u32)func_80099B94 };
+s32 D_80801E80_bsbswim[4] = { (u32)func_808008CC_bsbswim, (u32)func_80800634_bsbswim, (u32)func_808006DC_bsbswim, (u32)func_80099B94 };
+s32 D_80801E90_bsbswim[4] = { (u32)func_80800AD0_bsbswim, (u32)func_8080090C_bsbswim, (u32)func_8080097C_bsbswim, (u32)func_80099B94 };
+s32 D_80801EA0_bsbswim[4] = { (u32)func_80800CE4_bsbswim, (u32)func_80800B10_bsbswim, (u32)func_80800C0C_bsbswim, (u32)func_80099AA8 };
+s32 D_80801EB0_bsbswim[4] = { (u32)func_80800D30_bsbswim, (u32)func_80800D58_bsbswim, (u32)func_80800D98_bsbswim, (u32)func_80099AA8 };
+s32 D_80801EC0_bsbswim[4] = { (u32)func_80800DFC_bsbswim, (u32)func_80800E30_bsbswim, (u32)func_80800E7C_bsbswim, (u32)func_80099AA8 };
+s32 D_80801ED0_bsbswim[4] = { (u32)func_80801084_bsbswim, (u32)func_80800EC8_bsbswim, (u32)func_80800F64_bsbswim, (u32)func_80099B94 };
+s32 D_80801EE0_bsbswim[4] = { (u32)func_808013C4_bsbswim, (u32)func_808010B8_bsbswim, (u32)func_808011C0_bsbswim, (u32)func_80099AA8 };
+s32 D_80801EF0_bsbswim[4] = { (u32)func_808014F8_bsbswim, (u32)func_80801428_bsbswim, (u32)func_808014A0_bsbswim, (u32)func_80099B94 };
+s32 D_80801F00_bsbswim[4] = { (u32)func_808017F8_bsbswim, (u32)func_80801538_bsbswim, (u32)func_808016B8_bsbswim, (u32)func_80099B94 };
+s32 D_80801F10_bsbswim[4] = { (u32)func_808018B0_bsbswim, (u32)func_8080182C_bsbswim, (u32)func_8080186C_bsbswim, (u32)_bsdrone_entrypoint_3 };
+u8 D_80801F20_bsbswim[88] = { 0x0, 0xC, 0x0, 0x23, 0x0, 0x2B, 0x2, 0x0, 0x2, 0x80, 0x0, 0x2D, 0x0, 0x14, 0x0, 0x28, 0x0, 0x22, 0x0, 0x14, 0x0, 0x1E, 0x0, 0x23, 0x0, 0x30, 0x4, 0x1A, 0x0, 0xC, 0x0, 0x2D, 0x0, 0x2B, 0x1, 0x80, 0x2, 0x0, 0x0, 0x2D, 0x0, 0x32, 0x0, 0x46, 0x0, 0x22, 0x0, 0x21, 0x0, 0x26, 0x0, 0x2E, 0x0, 0x3A, 0x6, 0x1A, 0x0, 0xC, 0x0, 0x37, 0x0, 0x2B, 0x1, 0x0, 0x1, 0x80, 0x0, 0x2D, 0x0, 0x46, 0x0, 0x50, 0x0, 0x22, 0x0, 0x28, 0x0, 0x35, 0x0, 0x40, 0x0, 0x4C, 0x4, 0x1A, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80801F78_bsbswim[4] = { (u32)func_80801930_bsbswim, (u32)func_8080196C_bsbswim, (u32)func_808019E0_bsbswim, (u32)func_808018EC_bsbswim };
+s32 D_80801F88_bsbswim[4] = { (u32)func_80801C0C_bsbswim, (u32)func_80801B84_bsbswim, (u32)func_80801C04_bsbswim, (u32)func_80801ACC_bsbswim };
+s32 D_80801F98_bsbswim[6] = { (u32)func_80801D30_bsbswim, (u32)func_80801C64_bsbswim, (u32)func_80801CE4_bsbswim, (u32)func_80099B94, 0x0, 0x0 };

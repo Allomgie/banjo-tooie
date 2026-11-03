@@ -110,3 +110,9 @@ void func_808002A0_bskazspring(PlayerState *self) {
 s32 bskazspring_entrypoint_0(s32 idx) {
     return D_80800430_bskazspring[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/spring.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099B94();
+s32 D_80800430_bskazspring[4] = { (u32)func_80800244_bskazspring, (u32)func_80800270_bskazspring, (u32)func_808002A0_bskazspring, (u32)func_80099B94 };

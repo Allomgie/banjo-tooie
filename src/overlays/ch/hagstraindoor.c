@@ -4,7 +4,7 @@ extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 typedef union { s32 word; void *pointer; } HagsTrainDoorEvent;
-extern int D_80800150_chhagstraindoor;
+extern int D_80800150_chhagstraindoor[];
 
 void func_80800000_chhagstraindoor(Actor *param_0)
 {
@@ -36,3 +36,13 @@ int chhagstraindoor_entrypoint_0()
 {
     return (int)&D_80800150_chhagstraindoor;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/hagstraindoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800150_chhagstraindoor -> int[] */
+extern void _chdoor_entrypoint_0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_80800150_chhagstraindoor[20] = { 0x371038C, -0xFFFF, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_80800000_chhagstraindoor, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_808000D4_chhagstraindoor, 0x0, 0x0, 0x0 };

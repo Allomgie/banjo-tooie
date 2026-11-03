@@ -124,3 +124,15 @@ void bskazshoessuckspline_entrypoint_7(PlayerState *self) {
 s32 bskazshoessuckspline_entrypoint_8(s32 idx) {
     return D_80800480_bskazshoessuckspline[idx];
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/shoessuckspline.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bskazshoessuckspline_entrypoint_1();
+extern void _bskazshoessuckspline_entrypoint_2();
+extern void _bskazshoessuckspline_entrypoint_3();
+extern void _bskazshoessuckspline_entrypoint_0();
+extern void _bskazshoessuckspline_entrypoint_7();
+extern void _bskazshoessuckspline_entrypoint_5();
+extern void _bskazshoessuckspline_entrypoint_6();
+s32 D_80800470_bskazshoessuckspline[4] = { (u32)_bskazshoessuckspline_entrypoint_1, (u32)_bskazshoessuckspline_entrypoint_2, (u32)_bskazshoessuckspline_entrypoint_3, (u32)_bskazshoessuckspline_entrypoint_0 };
+s32 D_80800480_bskazshoessuckspline[4] = { (u32)_bskazshoessuckspline_entrypoint_7, (u32)_bskazshoessuckspline_entrypoint_5, (u32)_bskazshoessuckspline_entrypoint_6, (u32)_bskazshoessuckspline_entrypoint_0 };

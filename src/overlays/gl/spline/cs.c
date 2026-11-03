@@ -453,3 +453,6 @@ void glsplinecs_entrypoint_1(SplineScriptContext *param_0, Actor *param_1)
         local_0->local_5 = 0;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/spline/cs.data.s) is defined here in C.
+ * Values are taken from the ROM. */

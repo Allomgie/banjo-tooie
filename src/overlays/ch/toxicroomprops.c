@@ -1,9 +1,10 @@
 #include "common.h"
 
 #define SPEED (*(f32 *)&this->actorData[3])
-extern int D_808009E8_chtoxicroomprops;
-extern int D_80800A30_chtoxicroomprops;
+extern int D_808009E8_chtoxicroomprops[];
+extern int D_80800A30_chtoxicroomprops[];
 extern void func_80101FDC();
+struct chtoxicroomprops { void *unk[19]; };
 extern struct chtoxicroomprops D_80800A84_chtoxicroomprops;
 extern Vec3f D_808009A0_chtoxicroomprops;
 extern u8 D_808009AC_chtoxicroomprops[];
@@ -122,7 +123,7 @@ void func_80800390_chtoxicroomprops(Actor *this, f32 delta)
 
 int chtoxicroomprops_entrypoint_0()
 {
-    return (int)&D_808009E8_chtoxicroomprops;
+    return (int)D_808009E8_chtoxicroomprops;
 }
 
 void func_80800650_chtoxicroomprops(void *param_0) {
@@ -152,7 +153,7 @@ void func_80800670_chtoxicroomprops(u8 *param_0)
 
 void *chtoxicroomprops_entrypoint_1()
 {
-    return &D_80800A30_chtoxicroomprops;
+    return D_80800A30_chtoxicroomprops;
 }
 
 void func_80800700_chtoxicroomprops(u8 *param_0) {
@@ -206,3 +207,20 @@ struct chtoxicroomprops *chtoxicroomprops_entrypoint_2()
 {
   return &D_80800A84_chtoxicroomprops;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/toxicroomprops.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808009E8_chtoxicroomprops -> int[] (uses written as NAME[0]), D_80800A30_chtoxicroomprops -> int[] (uses written as NAME[0]) */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void func_80108ED0();
+extern void func_8010A730();
+Vec3f D_808009A0_chtoxicroomprops = { 1.22e+03f, 4e+02f, 0.0f };
+u8 D_808009AC_chtoxicroomprops[52] = { 0x0, 0x1D, 0x9, 0xC9, 0x0, 0x18, 0x0, 0x0, 0x0, 0xC, 0x0, 0x0, 0x0, 0x2B, 0x0, 0xE, 0x0, 0xA, 0x0, 0x64, 0x0, 0x1F, 0x0, 0xFF, 0x4, 0x0, 0x19, 0x2, 0x0, 0x22, 0x1, 0x0, 0x1, 0x33, 0x0, 0x0, 0x0, 0x0, 0x0, 0x15, 0x0, 0x4C, 0x0, 0x4C, 0x0, 0x2B, 0x0, 0x80, 0x0, 0x80, 0x0, 0x0 };
+u8 D_808009E0_chtoxicroomprops[8] = { 0x0, 0x13, 0x4, 0xB4, 0x0, 0x0, 0x0, 0x0 };
+int D_808009E8_chtoxicroomprops[18] = { 0x15803EC, 0x8860001, 0x0, (u32)func_80800000_chtoxicroomprops, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x10802C00, 0x0, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_8080030C_chtoxicroomprops, 0x0 };
+int D_80800A30_chtoxicroomprops[18] = { 0x158047C, 0x0, 0x0, (u32)func_80800670_chtoxicroomprops, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800650_chtoxicroomprops, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };
+u8 D_80800A78_chtoxicroomprops[12] = { 0x0, 0x13, 0x4, 0xC7, 0x0, 0x18, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0 };
+struct chtoxicroomprops D_80800A84_chtoxicroomprops = { (void *)0x01580416, (void *)0x08300001, 0, (void *)func_80800758_chtoxicroomprops, (void *)func_80105834, (void *)func_8010A730, 0, 0, 0, (void *)0x00020C00, 0, 0, 0, (void *)func_80800700_chtoxicroomprops, (void *)func_80107C2C, (void *)0x80000402, 0, 0, 0 };

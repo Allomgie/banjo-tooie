@@ -1,13 +1,13 @@
 #include "ch/heggy.h"
 
-extern s32 D_80801E08_chheggy;
-extern s32 D_80801E38_chheggy;
-extern s32 D_80801E60_chheggy;
-extern u32 D_80801E8C_chheggy;
-extern s32 D_80801E9C_chheggy;
+extern s32 D_80801E08_chheggy[];
+extern s32 D_80801E38_chheggy[];
+extern s32 D_80801E60_chheggy[];
+extern u32 D_80801E8C_chheggy[];
+extern s32 D_80801E9C_chheggy[];
 extern s32 D_80801EE4_chheggy[14];
 extern s32 D_80801F1C_chheggy[15];
-extern s32 D_80801F58_chheggy;
+extern s32 D_80801F58_chheggy[];
 
 extern void* func_8010D5DC;
 
@@ -43,7 +43,7 @@ s32 func_808000C0_chheggy(Actor* arg0)
     f32 sp24;
 
     sp24 = arg0->rotation[1];
-    func_80105A9C(arg0, func_800F3780(func_80101F24(arg0), &D_80801E08_chheggy, 6) * 500.0f);
+    func_80105A9C(arg0, func_800F3780(func_80101F24(arg0), D_80801E08_chheggy, 6) * 500.0f);
     func_80105834(arg0);
     arg0->unk54 = arg0->rotation[1];
     arg0->rotation[1] = sp24;
@@ -115,9 +115,9 @@ void func_8080015C_chheggy(Actor* arg0)
         func_800EF334(sp3C, -0.5f);
         func_800BA450(sp58, (s16)sp48[0], -0xC8, (s16)sp48[2], sp3C[0], -0x190, sp3C[2]);
         func_800BA450(sp54, (s16)sp48[0], -0xC8, (s16)sp48[2], sp3C[0], -0x190, sp3C[2]);
-        func_800BABB8(sp58, sp6C, NULL, 1.0f, &D_80801E38_chheggy);
+        func_800BABB8(sp58, sp6C, NULL, 1.0f, D_80801E38_chheggy);
         func_800BA22C(sp58, 2);
-        func_800BABB8(sp54, sp6C, NULL, 1.0f, &D_80801E60_chheggy);
+        func_800BABB8(sp54, sp6C, NULL, 1.0f, D_80801E60_chheggy);
         func_800BA22C(sp54, 3);
         func_800C4140(0xA62FA404, arg0->position, 0x0FA00064);
     }
@@ -674,7 +674,7 @@ s32 func_80801570_chheggy(Actor* arg0, s32 arg1, s32 arg2)
         return 1;
     case 0x52:
         _gcdialogcamera_entrypoint_4(arg0->position);
-        _gcdialogcamera_entrypoint_3(&D_80801E8C_chheggy, arg0->scale);
+        _gcdialogcamera_entrypoint_3(D_80801E8C_chheggy, arg0->scale);
         return 3;
     case 0x57:
         temp_a0 = arg2 & 0xFFFF;
@@ -692,7 +692,7 @@ s32 func_80801570_chheggy(Actor* arg0, s32 arg1, s32 arg2)
 
 s32* chheggy_entrypoint_0(void) 
 {
-    return &D_80801E9C_chheggy;
+    return D_80801E9C_chheggy;
 }
 
 void func_808019CC_chheggy(Actor* arg0)
@@ -744,5 +744,21 @@ s32 func_80801A00_chheggy(Actor* arg0, s32 arg1, s32 arg2)
 
 s32* chheggy_entrypoint_1(void) 
 {
-    return &D_80801F58_chheggy;
+    return D_80801F58_chheggy;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/heggy.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801E08_chheggy -> s32[] (uses written as NAME[0]), D_80801E38_chheggy -> s32[] (uses written as NAME[0]), D_80801E60_chheggy -> s32[] (uses written as NAME[0]), D_80801E8C_chheggy -> u32[] (uses written as NAME[0]), D_80801E9C_chheggy -> s32[] (uses written as NAME[0]), D_80801F58_chheggy -> s32[] (uses written as NAME[0]) */
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_80801D60_chheggy[42] = { 0x0, 0x0, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x3F400000, 0x4A70009, 0x40B00000, 0x4A6000A, 0x40B00000, 0x4A6000A, 0x40B00000, 0x4A6000A, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009, 0x3F400000, 0x4A70009, 0x40800000, 0x4A50009, 0x40800000, 0x4A50009 };
+s32 D_80801E08_chheggy[12] = { 0x0, 0x3E4CCCCD, 0x3E4CCCCD, 0x3F000000, 0x3EE66666, 0x3F800000, 0x3F000000, 0x3E4CCCCD, 0x3F333333, 0x3F000000, 0x3F733333, 0x3F800000 };
+s32 D_80801E38_chheggy[10] = { 0x1D09C9, 0x2B0100, 0x1800022, 0x800100, 0x1800180, 0x150033, 0x330019, 0x7, 0x208C78, 0x288C0000 };
+s32 D_80801E60_chheggy[11] = { 0x1D08A2, 0x161404, 0x2B0180, 0x2000022, 0x2000180, 0x1000100, 0x150019, 0xE60027, 0x640064, 0xC800C8, 0x0 };
+u32 D_80801E8C_chheggy[4] = { 0x437A0000, 0x42F00000, 0x42F00000, 0x42C80000 };
+s32 D_80801E9C_chheggy[18] = { 0x1580514, 0x9140001, (u32)&D_80801D60_chheggy, (u32)func_808009DC_chheggy, (u32)func_808009DC_chheggy, (u32)func_80101870, 0x0, 0x40000000, 0x0, 0x840100, 0x0, (u32)func_80108ED0, 0x7C0000, (u32)func_808008C4_chheggy, (u32)func_80107C2C, -0x7FFFFBEE, (u32)func_80801570_chheggy, 0x0 };
+s32 D_80801EE4_chheggy[14] = { 0x1D0611, 0x140016, 0x1006002D, 0x2580320, 0x2B0100, 0x200001B, -0x3E70320, 0x220300, 0x4000100, 0x1000007, 0x3000D, 0x640031, -0x310019, 0x0 };
+s32 D_80801F1C_chheggy[15] = { 0x1D09DD, 0x2B0400, 0x5000016, 0x10000022, 0x1800200, 0x4800600, 0x150000, 0x260019, 0x7, 0x2D0032, 0x640020, -0x21588E40, 0xD0064, 0x31FFCE, -0x190000 };
+s32 D_80801F58_chheggy[18] = { 0x112052A, 0x9990001, 0x0, (u32)func_808019CC_chheggy, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x5810000, 0x800, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FF7F400, (u32)func_80801A00_chheggy, 0x0 };

@@ -17,3 +17,6 @@ s32 dbpalette_entrypoint_1(u32 *agrs1, int indx, s32 *argb){
     agrs1[indx] |= (u32)argb[2] << 0x10;
     agrs1[indx] |= (u32)argb[3] << 0x18;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/palette.data.s) is defined here in C.
+ * Values are taken from the ROM. */

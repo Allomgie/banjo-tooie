@@ -267,3 +267,17 @@ s32 func_80800800_chcheatomenu(void)
     }
     return local_1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/eatomenu.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_80107C2C();
+u8 D_80800880_chcheatomenu[16] = { 0x43, 0x7A, 0x0, 0x0, 0x43, 0x20, 0x0, 0x0, 0x42, 0x70, 0x0, 0x0, 0x42, 0x70, 0x0, 0x0 };
+u8 D_80800890_chcheatomenu[12] = { 0x44, 0xCE, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+void *D_8080089C_chcheatomenu = (void *)0x0221018A;
+static u32 D_8080089C_chcheatomenu_rest[17] = { 0xFFFF0001, 0x0, (u32)func_80800014_chcheatomenu, (u32)func_80105834, (u32)func_80800150_chcheatomenu, 0x0, 0x0, 0x0, 0x400000, 0x0, 0x0, 0x0, (u32)func_8080000C_chcheatomenu, (u32)func_80107C2C, 0x80000402, (u32)func_808000D4_chcheatomenu, 0x0 };
+Opt6 D_808008E4_chcheatomenu = { 0x0, 0xFF, 0x0 };
+Opt6 D_808008EC_chcheatomenu = { 0xFF, 0x0, 0x0 };
+Opt6 D_808008F4_chcheatomenu = { 0xFF, 0xFF, 0xFF };
+static u32 D_808008F4_chcheatomenu_rest[1] = { 0x0 };

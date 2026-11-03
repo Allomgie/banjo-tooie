@@ -193,3 +193,6 @@ void fxleaves_entrypoint_7(u8 *param_0)
         *(f32 *)(param_0 + 0x38) = 0.1f;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/leaves.data.s) is defined here in C.
+ * Values are taken from the ROM. */

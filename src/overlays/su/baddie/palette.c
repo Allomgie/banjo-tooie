@@ -93,3 +93,6 @@ void subaddiepalette_entrypoint_4(param_0, param_1) u8 *param_0; u8 *param_1;
     *((s16 *) (((u8 *) param_1) + 6)) = (s16) ((*((s16 *) (((u8 *) param_1) + 6))) + 1);
   }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/palette.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -3,8 +3,8 @@
 #define PLANT_ACTOR_FLAGS_DEFINED
 #define RF(i) (*(f32 *)&local_1[i])
 #define AF(p, i) (*(f32 *)&(p)->actorData[i])
-extern int D_80800EB4_chseaweedbaddy;
-extern int D_80800EFC_chseaweedbaddy;
+extern int D_80800EB4_chseaweedbaddy[];
+extern int D_80800EFC_chseaweedbaddy[];
 extern void _sudeflect_entrypoint_1(u8 *, f32, f32, f32, s32);
 typedef union { s32 local_0; Actor *local_1; } SeaweedMessage27;
 typedef struct { s16 a, b; } S16Pair;
@@ -15,9 +15,9 @@ extern s32 func_8010C9FC(void *, s32, s32, s32);
 extern s32 func_8010C668(Actor *, void *, f32, f32);
 extern void *_suchase_entrypoint_0(void);
 extern s32 func_801072A8(Actor *);
-extern s32 D_80800F5C_chseaweedbaddy;
-extern s32 D_80800F90_chseaweedbaddy;
-extern s32 D_80800F9C_chseaweedbaddy;
+extern s32 D_80800F5C_chseaweedbaddy[];
+extern s32 D_80800F90_chseaweedbaddy[];
+extern s32 D_80800F9C_chseaweedbaddy[];
 typedef struct { u8 pad[0x64]; u32 a : 2; u32 f : 1; u32 rest : 29; } WeedC;
 typedef struct { u8 pad[0x78]; u32 hi : 29; u32 b2 : 1; u32 lo : 2; } WeedB;
 typedef struct { u8 pad_0[0x72]; u16 st : 6; u16 rest : 10; } WeedState;
@@ -45,7 +45,7 @@ extern f32 mlAbsF(f32);
 extern s32 func_800DC128(s32, s32);
 extern void func_80103014(Actor *);
 extern f32 D_80800FAC_chseaweedbaddy[2];
-extern f32 D_80800FB4_chseaweedbaddy;
+extern f32 D_80800FB4_chseaweedbaddy[];
 extern f32 func_80013728(f32);
 extern void func_800C4B64(f32);
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
@@ -377,3 +377,19 @@ void func_80800CE0_chseaweedbaddy(Actor *param_0, f32 param_1)
         _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800FB4_chseaweedbaddy);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/seaweedbaddy.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800EB4_chseaweedbaddy -> int[], D_80800EFC_chseaweedbaddy -> int[], D_80800F5C_chseaweedbaddy -> s32[], D_80800F90_chseaweedbaddy -> s32[], D_80800F9C_chseaweedbaddy -> s32[], D_80800FB4_chseaweedbaddy -> f32[] */
+u8 D_80800E40_chseaweedbaddy[20] = { 0x0, 0x1, 0x0, 0x0, 0x0, 0x9, 0x0, 0x0, 0x0, 0x9, 0x0, 0x0, 0x0, 0x8, 0x0, 0x0, 0x0, 0xA, 0x0, 0x0 };
+u8 D_80800E54_chseaweedbaddy[96] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3F, 0x40, 0x0, 0x0, 0x1, 0xD3, 0x0, 0x1, 0x3F, 0x59, 0x99, 0x9A, 0x1, 0x77, 0x0, 0xA, 0x3F, 0x0, 0x0, 0x0, 0x1, 0x74, 0x0, 0x1, 0x3F, 0x59, 0x99, 0x9A, 0x1, 0x76, 0x0, 0x2, 0x3F, 0xD7, 0xA, 0x3D, 0x1, 0x75, 0x0, 0x2, 0x3F, 0x0, 0x0, 0x0, 0x1, 0x74, 0x0, 0x1, 0x3F, 0x59, 0x99, 0x9A, 0x1, 0x77, 0x0, 0x12, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3F, 0x40, 0x0, 0x0, 0x1, 0xD3, 0x4, 0x1, 0x3F, 0x40, 0x0, 0x0, 0x1, 0xD3, 0x0, 0x9, 0x3F, 0x40, 0x0, 0x0, 0x1, 0xD3, 0x0, 0x1 };
+int D_80800EB4_chseaweedbaddy[18] = { 0x2EF035C, 0x6CE0001, (u32)&D_80800E54_chseaweedbaddy, (u32)func_80800018_chseaweedbaddy, (u32)func_80105834, (u32)func_808006A8_chseaweedbaddy, 0xBB80000, 0x3FC00000, 0x0, 0x3050228, 0x0, (u32)func_80108ED0, 0x20, (u32)func_80800498_chseaweedbaddy, (u32)func_80107C2C, -0x7FDFBBE3, (u32)func_80800554_chseaweedbaddy, (u32)&D_80800E40_chseaweedbaddy };
+int D_80800EFC_chseaweedbaddy[18] = { 0x2F0035D, 0x6CF000B, (u32)&D_80800E54_chseaweedbaddy, (u32)func_8080043C_chseaweedbaddy, (u32)func_80105834, (u32)func_808006A8_chseaweedbaddy, 0x3200000, 0x3FC00000, 0x0, 0x8, 0x0, 0x0, 0x0, (u32)func_8080065C_chseaweedbaddy, (u32)func_80107C2C, -0x7FFFDBFE, 0x0, 0x0 };
+u8 D_80800F44_chseaweedbaddy[12] = { 0x0, 0x13, 0x4, 0xFF, 0x0, 0xD, 0x1, 0xF3, 0x2, 0x0, 0x0, 0x0 };
+u8 D_80800F50_chseaweedbaddy[12] = { 0x0, 0x13, 0x4, 0x9D, 0x0, 0xD, 0x1, 0x66, 0x1, 0x80, 0x0, 0x0 };
+s32 D_80800F5C_chseaweedbaddy[13] = { 0x1D09DD, 0x2201CC, 0x2000133, 0x1660015, 0x99, 0x190000, 0x7002D, 0x32003C, 0x2B0199, 0x1CC000E, 0x3C0050, 0x2080FF, -0x7F420000 };
+s32 D_80800F90_chseaweedbaddy[3] = { 0x1304FE, 0xD01F3, 0x2000000 };
+s32 D_80800F9C_chseaweedbaddy[4] = { 0x510053, 0x540055, 0x560057, 0x58FFFF };
+f32 D_80800FAC_chseaweedbaddy[2] = { -9e+01f, 9e+01f };
+f32 D_80800FB4_chseaweedbaddy[3] = { 1.746308e-39f, 2.66323e-39f, 0.0f };

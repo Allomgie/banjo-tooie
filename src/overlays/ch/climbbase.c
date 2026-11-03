@@ -95,3 +95,16 @@ int chclimbbase_entrypoint_1()
 {
   return &D_80800418_chclimbbase;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/climbbase.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808003B4_chclimbbase = D_808003B0_chclimbbase + 0x4 */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+ClimbBaseScalePreset D_808003B0_chclimbbase[4] = { 0x1, 1.01f, 0x2, 1.02f, 0x3, 1.03f, 0x4, 0.0f };
+void *D_808003D0_chclimbbase = (void *)0x003501F9;
+static u32 D_808003D0_chclimbbase_rest[17] = { 0x1, 0x0, (u32)func_80800200_chclimbbase, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80800128_chclimbbase, (u32)func_80107C2C, 0x80002602, 0x0, 0x0 };
+void *D_80800418_chclimbbase = (void *)0x0035016E;
+static u32 D_80800418_chclimbbase_rest[17] = { 0x1, 0x0, (u32)func_80800200_chclimbbase, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_80800128_chclimbbase, (u32)func_80107C2C, 0x80002602, 0x0, 0x0 };

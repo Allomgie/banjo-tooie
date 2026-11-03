@@ -14,9 +14,9 @@ extern void _basnowball_entrypoint_12(void *);
 extern void _basnowball_entrypoint_8(void *, s32);
 extern void _basnowball_entrypoint_9(void *, f32);
 extern s32 func_800A3274(void);
-extern s32 D_80800F30_bssnowball;
-extern s32 D_80800F84_bssnowball;
-extern s32 D_80801028_bssnowball;
+extern s32 D_80800F30_bssnowball[];
+extern s32 D_80800F84_bssnowball[];
+extern s32 D_80801028_bssnowball[];
 extern s32 D_80801054_bssnowball[];
 extern s32 D_80801064_bssnowball[];
 extern void func_8009BF5C(s32, f32);
@@ -522,3 +522,23 @@ int bssnowball_entrypoint_11(s32 param_0)
 {
   return D_808010D4_bssnowball[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/snowball.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800F30_bssnowball -> s32[], D_80800F84_bssnowball -> s32[], D_80801028_bssnowball -> s32[] */
+extern void _basudie_entrypoint_11();
+extern void _bsdrone_entrypoint_3();
+extern void func_80099AA8();
+s32 D_80800F30_bssnowball[21] = { 0x1D0963, 0x160002, 0x150000, 0xFD001E, 0x1E001E, 0x2EFFA4, 0x320, -0x5BFE99, 0x320001B, -0x5DB05DC, 0x30417, 0x36B00008, 0xE60119, 0x400B3, 0x7000F, 0x2B0500, 0x5000026, 0x38400C8, 0x384, 0xC80000, 0x0 };
+s32 D_80800F84_bssnowball[41] = { 0x1D0960, 0x160002, 0xB001E, 0x320050, 0x1E0015, 0xB3, 0x1BFA24, -0x5DBFFFC, 0x990007, 0x6002B, 0x38003CC, 0x26FE0C, -0x1F301F4, 0x1F401F4, 0x1F4002E, -0x3C0000, 0xC8FFD8, 0x1670190, 0x220280, 0x2B30280, 0x280041A, 0x2EFFBA, 0x190, -0x3BFE99, 0x1C20022, 0x18001B3, 0x1800180, 0x61A002E, -0x550000, 0x2BCFFB5, 0x1670352, 0x220100, 0x1330100, 0x100101A, 0x2EFFAB, 0x320, -0x13FE99, 0x44C0022, 0x990100, 0xCC00CC, 0x181A0000 };
+s32 D_80801028_bssnowball[11] = { 0x1D09D6, 0x150000, 0x4C0016, 0x1000001E, 0x1E001E, 0x190000, 0x22, 0x1000100, 0x4000400, 0x2B0080, 0x800000 };
+s32 D_80801054_bssnowball[4] = { (u32)func_808003B0_bssnowball, (u32)func_808003D8_bssnowball, (u32)func_808004AC_bssnowball, (u32)_basudie_entrypoint_11 };
+s32 D_80801064_bssnowball[4] = { (u32)func_808004E0_bssnowball, (u32)func_80800508_bssnowball, (u32)func_80800530_bssnowball, (u32)_bsdrone_entrypoint_3 };
+int D_80801074_bssnowball[4] = { (u32)func_8080056C_bssnowball, (u32)func_808005A4_bssnowball, (u32)func_80800614_bssnowball, (u32)func_808008F0_bssnowball };
+s32 D_80801084_bssnowball[4] = { (u32)func_8080089C_bssnowball, (u32)func_808006BC_bssnowball, (u32)func_808007D8_bssnowball, (u32)func_808008F0_bssnowball };
+s32 D_80801094_bssnowball[4] = { (u32)func_80800910_bssnowball, (u32)func_80800930_bssnowball, (u32)func_808009B0_bssnowball, (u32)func_808008F0_bssnowball };
+s32 D_808010A4_bssnowball[4] = { (u32)func_80800B44_bssnowball, (u32)func_80800B70_bssnowball, (u32)func_80800BBC_bssnowball, (u32)func_80099AA8 };
+s32 D_808010B4_bssnowball[4] = { (u32)func_80800C18_bssnowball, (u32)func_80800C40_bssnowball, (u32)func_80800C98_bssnowball, (u32)func_808008F0_bssnowball };
+s32 D_808010C4_bssnowball[4] = { (u32)func_80800D00_bssnowball, (u32)func_80800D28_bssnowball, (u32)func_80800D50_bssnowball, (u32)func_808008F0_bssnowball };
+s32 D_808010D4_bssnowball[7] = { (u32)func_80800DB0_bssnowball, (u32)func_80800DD8_bssnowball, (u32)func_80800E4C_bssnowball, (u32)func_808008F0_bssnowball, 0x0, 0x0, 0x0 };

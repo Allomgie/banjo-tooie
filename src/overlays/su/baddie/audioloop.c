@@ -109,3 +109,8 @@ f32 subaddieaudioloop_entrypoint_8(Actor *param_0, s32 param_1, s32 param_2, f32
     }
     return param_3;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/audioloop.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s16 D_808003C0_subaddieaudioloop[6] = { 0x206, 0x1, 0xC8, 0xBB8, 0x7, 0x0 };
+s16 D_808003CC_subaddieaudioloop[18] = { 0x306, 0x7, 0x13, 0x560, 0x1, 0x3E8, 0xFA0, 0x16, 0x61A8, 0x11, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

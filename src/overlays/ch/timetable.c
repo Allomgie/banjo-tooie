@@ -8,9 +8,9 @@ extern s32 D_8080076C_chtimetable[];
 typedef struct TimetableEntry { s32 local_0[5]; } TimetableEntry;
 extern s32 D_8080073C_chtimetable[];
 extern int D_80800738_chtimetable[];
-extern s32 D_8080080C_chtimetable;
+extern s32 D_8080080C_chtimetable[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
-extern int D_808007CC_chtimetable;
+extern int D_808007CC_chtimetable[];
 extern s32 _gccubesearch_entrypoint_1();
 extern void _gspropctrl_entrypoint_11(s32, f32 *);
 extern u8 D_808007BC_chtimetable[];
@@ -117,7 +117,7 @@ s32 func_80800308_chtimetable(void)
   }
 
   local_0 += 5;
-  if (local_0 == (&D_8080080C_chtimetable))
+  if (local_0 == (D_8080080C_chtimetable))
   {
     return -1;
   }
@@ -225,5 +225,24 @@ s32 func_808005B8_chtimetable(Actor *param_0, s32 param_1, s32 param_2)
 
 int chtimetable_entrypoint_0()
 {
-  return (int)&D_808007CC_chtimetable;
+  return (int)D_808007CC_chtimetable;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/timetable.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808007CC_chtimetable -> int[] (uses written as NAME[0]), D_8080080C_chtimetable -> s32[] (uses written as NAME[0]) */
+extern void func_80101870();
+extern void func_80107C2C();
+s32 D_80800730_chtimetable = 0xD7;
+static u32 D_80800730_chtimetable_rest[1] = { 0x4ED };
+int D_80800738_chtimetable[1] = { 0xCF5 };
+s32 D_8080073C_chtimetable[2] = { 0x669, -0x1 };
+s32 D_80800744_chtimetable = 0xEC;
+static u32 D_80800744_chtimetable_rest[4] = { 0x4EE, 0xCF6, 0x66A, 0x96 };
+s32 D_80800758_chtimetable = 0x155;
+static u32 D_80800758_chtimetable_rest[4] = { 0x4F3, 0xCFB, 0x6CC, 0x403 };
+s32 D_8080076C_chtimetable[20] = { 0x114, 0x4F0, 0xCF8, 0x6AA, 0x164, 0x102, 0x4EF, 0xCF7, 0x6A9, 0x163, 0x129, 0x4F2, 0xCF9, 0x6BC, 0x1D0, 0x12A, 0x4F1, 0xCFA, 0x6BB, 0x1CF };
+u8 D_808007BC_chtimetable[16] = { 0x43, 0x82, 0x0, 0x0, 0x43, 0x2F, 0x0, 0x0, 0x43, 0x2F, 0x0, 0x0, 0x42, 0x96, 0x0, 0x0 };
+int D_808007CC_chtimetable[16] = { 0x1580382, 0x9310001, 0x0, (u32)func_80800404_chtimetable, 0x0, (u32)func_80101870, 0x0, 0x3FC00000, 0x0, 0x40000800, 0x0, 0x0, 0x0, (u32)func_80800058_chtimetable, (u32)func_80107C2C, -0x7FFFDBAE };
+s32 D_8080080C_chtimetable[5] = { (u32)func_808005B8_chtimetable, 0x0, 0x0, 0x0, 0x0 };

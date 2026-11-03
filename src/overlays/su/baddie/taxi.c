@@ -22,8 +22,8 @@ extern s32 func_800EA05C(void);
 extern void func_800CB6B4();
 extern void _subaddieaudioquick_entrypoint_2(s32, s32, void *);
 extern void func_800BBCB8(s32, s32, f32, s32, void *);
-extern s32 D_80800D50_subaddietaxi;
-extern s32 D_80800D74_subaddietaxi;
+extern s32 D_80800D50_subaddietaxi[];
+extern s32 D_80800D74_subaddietaxi[];
 typedef struct { s32 local_0; s32 local_1; f32 local_2; f32 local_3[3]; } TaxiSpawn62;
 extern Actor *func_80108474(s32, f32 *, s32);
 extern void func_8010108C(Actor *, s32, s32);
@@ -386,3 +386,12 @@ s32 func_80800CF0_subaddietaxi(param_0) s32 param_0;
 {
   return D_80800DB4_subaddietaxi[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/taxi.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800D50_subaddietaxi -> s32[], D_80800D74_subaddietaxi -> s32[] */
+s32 D_80800D50_subaddietaxi[3] = { 0x130417, 0x164650, 0x0 };
+u8 D_80800D5C_subaddietaxi[12] = { 0x0, 0x13, 0x4, 0xED, 0x0, 0x1, 0x3, 0xE8, 0x13, 0x88, 0x0, 0x0 };
+u8 D_80800D68_subaddietaxi[12] = { 0x0, 0x13, 0x4, 0xEE, 0x0, 0x1, 0x3, 0xE8, 0x13, 0x88, 0x0, 0x0 };
+s32 D_80800D74_subaddietaxi[16] = { 0x1D09DD, 0x2B00CC, 0x1000022, 0x800099, 0xCC0100, 0x150000, 0x260019, 0x7, 0x2D0096, 0xC8001E, 0x1E001E, 0x208080, -0x7F3FFFF5, 0x140032, 0x50000, 0x0 };
+s16 D_80800DB4_subaddietaxi[22] = { -0x1, 0x142, 0x291, 0x28C, 0x28C, 0x28C, 0x28C, 0x3D6, 0x3D6, 0x3D6, 0x3D6, 0x346, 0x291, 0x486, 0x486, 0x486, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

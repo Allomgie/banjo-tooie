@@ -1031,3 +1031,8 @@ s32 gcmapsects_entrypoint_27(s32 param_0) {
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/mapsects.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+f32 D_808029B0_gcmapsects[3] = { 5e+01f, 5e+01f, 5e+01f };
+static u32 D_808029B0_gcmapsects_rest[1] = { 0x0 };

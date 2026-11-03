@@ -630,3 +630,6 @@ f32 func_8080183C_subaddierouteDll(Actor *param_0, f32 param_1)
     local_0 = func_800F13F0(param_1, func_800EFBFC(param_0->position, (f32 *)param_0->actorData));
     return func_800F0E00(local_0, (param_0->scale * 1.2f) * ((RouteClampFlags *)param_0)->local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/routeDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */

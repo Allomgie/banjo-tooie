@@ -88,3 +88,16 @@ int bstimeout_entrypoint_7(s32 param_0)
 {
   return D_80800340_bstimeout[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/timeout.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bstimeout_entrypoint_2();
+extern void _bstimeout_entrypoint_0();
+extern void _bstimeout_entrypoint_1();
+extern void func_80099AA8();
+extern void _bstimeout_entrypoint_6();
+extern void _bstimeout_entrypoint_4();
+extern void _bstimeout_entrypoint_5();
+s32 D_80800330_bstimeout[4] = { (u32)_bstimeout_entrypoint_2, (u32)_bstimeout_entrypoint_0, (u32)_bstimeout_entrypoint_1, (u32)func_80099AA8 };
+s32 D_80800340_bstimeout[4] = { (u32)_bstimeout_entrypoint_6, (u32)_bstimeout_entrypoint_4, (u32)_bstimeout_entrypoint_5, (u32)func_80099AA8 };

@@ -444,3 +444,6 @@ void susplinet_entrypoint_19(u8 *param_0, s32 param_1, s32 param_2, s32 param_3)
     }
     func_800DA524(0x644);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/splinet.data.s) is defined here in C.
+ * Values are taken from the ROM. */

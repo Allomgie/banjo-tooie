@@ -8,7 +8,7 @@ typedef struct { u16 local_0; u8 pad_0[6]; } BlubberStateRecord;
 extern BlubberStateRecord D_80801654_chcaptainblubber[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void _chbadshad_entrypoint_1(Actor *, f32 *, f32);
-extern int D_8080176C_chcaptainblubber;
+extern int D_8080176C_chcaptainblubber[];
 typedef struct { u8 pad_0[0x79]; u8 mode:4; u8 pad_1:4; } BlubberFlags30;
 extern u8 D_808016CC_chcaptainblubber[];
 extern void func_800EE7F8(f32 *, f32 *);
@@ -21,7 +21,7 @@ extern s32 func_80101E14(Actor *, f32);
 extern s32 func_80105998(Actor *, f32);
 extern void func_80105A9C(Actor *, f32);
 extern void func_8010C93C(Actor *, f32 *, f32);
-extern s32 D_808016D8_chcaptainblubber;
+extern s32 D_808016D8_chcaptainblubber[];
 extern void _suexpression_entrypoint_12(void *, f32, f32);
 extern s32 _capod_entrypoint_17(f32);
 extern Actor *func_80108528(s32, f32 *, s32, Actor **);
@@ -574,3 +574,24 @@ int chcaptainblubber_entrypoint_0()
 {
   return (int)&D_8080176C_chcaptainblubber;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/captainblubber.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808016D8_chcaptainblubber -> s32[], D_8080176C_chcaptainblubber -> int[] */
+extern void func_80101870();
+extern void func_80107C2C();
+u32 D_80801650_chcaptainblubber[1] = { 0x0 };
+BlubberStateRecord D_80801654_chcaptainblubber[13] = { 0x0, 0x0, 0x0, 0x41, 0x18, 0x0, 0x0, 0x159, 0x0, 0x1, 0x41, 0x18, 0x0, 0x0, 0x159, 0x0, 0x1, 0x41, 0x18, 0x0, 0x0, 0x159, 0x0, 0x1, 0x41, 0x18, 0x0, 0x0, 0x159, 0x0, 0x1, 0x41, 0x18, 0x0, 0x0, 0x159, 0x0, 0x1, 0x3F, 0x99, 0x99, 0x9A, 0x1C0, 0x0, 0x42, 0x3F, 0x99, 0x99, 0x9A, 0x15A, 0x2, 0x41, 0x3F, 0x33, 0x33, 0x33, 0x1BF, 0x0, 0x41, 0x3F, 0x99, 0x99, 0x9A, 0x15A, 0x0, 0x42, 0x3F, 0x33, 0x33, 0x33, 0x1BF, 0x0, 0x41, 0x3F, 0x99, 0x99, 0x9A, 0x15A, 0x0, 0x41, 0x40, 0x60, 0x0, 0x0, 0x17B, 0x1, 0x42, 0x40, 0x0, 0x0, 0x0 };
+static u32 D_80801654_chcaptainblubber_rest[1] = { 0x16D0142 };
+u8 D_808016C0_chcaptainblubber[12] = { 0x43, 0xB0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xC3, 0xD4, 0x80, 0x0 };
+u8 D_808016CC_chcaptainblubber[12] = { 0x44, 0x1F, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xC3, 0xAA, 0x0, 0x0 };
+s32 D_808016D8_chcaptainblubber[4] = { 0x438C0000, 0x42F00000, 0x43200000, 0x43160000 };
+BlubberTimes4 D_808016E8_chcaptainblubber = { 0.72f, 0.775f, 0.83f, -1.0f };
+BlubberTimes3 D_808016F8_chcaptainblubber = { 0.24f, 0.7f, -1.0f };
+BlubberTimes3 D_80801704_chcaptainblubber = { 0.43f, 0.98f, -1.0f };
+BlubberTimes3 D_80801710_chcaptainblubber = { 0.42f, 0.92f, -1.0f };
+BlubberTimes7 D_8080171C_chcaptainblubber = { 0.06f, 0.15f, 0.24f, 0.33f, 0.42f, 0.51f, -1.0f };
+BlubberTimes3 D_80801738_chcaptainblubber = { 0.66f, 0.77f, -1.0f };
+u8 D_80801744_chcaptainblubber[40] = { 0x0, 0x1D, 0x9, 0xC9, 0x0, 0x2B, 0x1, 0x0, 0x1, 0x80, 0x0, 0x22, 0x0, 0x80, 0x1, 0x0, 0x2, 0x0, 0x2, 0x0, 0x0, 0x15, 0x0, 0x33, 0x0, 0x33, 0x0, 0x19, 0x0, 0x0, 0x0, 0x7, 0x0, 0x20, 0x64, 0x64, 0x50, 0x78, 0x0, 0x0 };
+int D_8080176C_chcaptainblubber[21] = { 0x12C0294, 0x6DB0001, (u32)&D_80801650_chcaptainblubber, 0x0, (u32)func_808001F0_chcaptainblubber, (u32)func_80101870, 0x0, 0x0, 0x0, 0x100120, (u32)func_808014C8_chcaptainblubber, 0x0, 0x0, (u32)func_808000CC_chcaptainblubber, (u32)func_80107C2C, -0x7DFFFB7E, (u32)func_80800580_chcaptainblubber, 0x0, 0x0, 0x0, 0x0 };

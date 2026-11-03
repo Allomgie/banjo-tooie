@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800230_chdiggerbossinterior;
+extern int D_80800230_chdiggerbossinterior[];
 extern u8 D_80800278_chdiggerbossinterior[];
 extern Actor *_subaddiefind_entrypoint_2(s32, void *);
 extern Actor *_subaddiefind_entrypoint_3(s32, void *);
@@ -69,3 +69,13 @@ Actor *func_80800178_chdiggerbossinterior(param_0, param_1) Actor *param_0; s32 
     }
     return param_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/digger/bossinterior.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800230_chdiggerbossinterior -> int[] */
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_80800230_chdiggerbossinterior[18] = { 0x15804F7, 0x1, 0x0, (u32)func_8080002C_chdiggerbossinterior, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (u32)func_8080000C_chdiggerbossinterior, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_808000F4_chdiggerbossinterior, 0x0 };
+u8 D_80800278_chdiggerbossinterior[24] = { 0x0, 0x13, 0x5, 0xF0, 0x0, 0xE, 0x0, 0xE6, 0x1, 0x0, 0x0, 0x66, 0x0, 0x18, 0x0, 0x14, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

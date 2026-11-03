@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808003C0_chscorepoints;
+extern int D_808003C0_chscorepoints[];
 extern f32 func_800F12D4(f32, f32, f32, f32, f32);
 extern f32 func_80013970(f32);
 extern f32 func_800D8FF8(void);
@@ -103,3 +103,11 @@ void chscorepoints_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param
 void chscorepoints_entrypoint_2(s32 param_0, s32 param_1, u8 *param_2, s32 param_3) {
     _chbaddiesetup_entrypoint_6(&_chscorepoints_entrypoint_1, param_0, param_1, (s32) (*(f32 *)((s8 *)(param_2) + (0))), (s32) (*(f32 *)((s8 *)(param_2) + (4))), (s32) (*(f32 *)((s8 *)(param_2) + (8))), param_3);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/scorepoints.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808003C0_chscorepoints -> int[] */
+extern void func_80105834();
+extern void func_80107C2C();
+int D_808003C0_chscorepoints[20] = { 0x33D014E, -0xFFFF, 0x0, (u32)func_808000BC_chscorepoints, (u32)func_80105834, (u32)func_8080019C_chscorepoints, 0x0, 0x0, 0x0, 0x20004, 0x0, 0x0, 0x0, (u32)func_8080000C_chscorepoints, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0, 0x0, 0x0 };

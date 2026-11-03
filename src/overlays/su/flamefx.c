@@ -143,3 +143,6 @@ void func_80800428_suflamefx(FlameFxSettings *param_0, FlameFxParticle *param_1,
     local_1 = func_800F1DF4(param_1->local_0, local_0);
     func_800EFCD8(param_1->local_1, func_800DC178(-90.0f, 90.0f) + local_1, param_0->local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/flamefx.data.s) is defined here in C.
+ * Values are taken from the ROM. */

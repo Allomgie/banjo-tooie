@@ -1,12 +1,12 @@
 #include "common.h"
 
 #define OD(n) (((f32 *)param_0->actorData)[n])
-extern int D_80800920_chpotogoldbits;
+extern int D_80800920_chpotogoldbits[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern s32 func_800F54E4(void);
 extern void func_800F5A00(s32, f32 *);
 extern void func_80101FDC(Actor *, s32);
-extern int D_80800988_chpotogoldbits;
+extern int D_80800988_chpotogoldbits[];
 extern int _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_7(Actor *, f32);
@@ -244,3 +244,17 @@ s32 chpotogoldbits_entrypoint_3()
 {
   return (s32)D_808009D0_chpotogoldbits;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/potogoldbits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800920_chpotogoldbits -> int[], D_80800988_chpotogoldbits -> int[] */
+extern void _chswitch_entrypoint_6();
+extern void func_80108ED0();
+extern void _chdoor_entrypoint_0();
+extern void _chdoor_entrypoint_1();
+int D_80800920_chpotogoldbits[18] = { 0x3430407, 0x82D0001, -0x7FEE5DE0, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x808, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chpotogoldbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80800030_chpotogoldbits, 0x0 };
+u8 D_80800968_chpotogoldbits[16] = { 0x0, 0x13, 0x5, 0xB9, 0x0, 0x16, 0x61, 0xA8, 0x0, 0xA, 0x1, 0x0, 0x0, 0x2, 0x0, 0x0 };
+u8 D_80800978_chpotogoldbits[16] = { 0x0, 0x13, 0x5, 0xE7, 0x0, 0x16, 0x7F, 0xFF, 0x0, 0xA, 0x1, 0x0, 0x0, 0x2, 0x0, 0x0 };
+int D_80800988_chpotogoldbits[18] = { 0xAC0408, 0x82F0001, 0x0, (u32)func_80800188_chpotogoldbits, (u32)func_80105834, (u32)func_80101870, 0x0, 0x3F800000, 0x0, 0x24800, 0x0, 0x0, 0x0, (u32)func_8080007C_chpotogoldbits, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_80800618_chpotogoldbits, 0x0 };
+s32 D_808009D0_chpotogoldbits[20] = { 0xAC0409, 0x82E0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800810_chpotogoldbits, (u32)func_80107C2C, -0x7FFFDBFE, (u32)_chdoor_entrypoint_1, 0x0, 0x0, 0x0 };

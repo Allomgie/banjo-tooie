@@ -77,3 +77,9 @@ void bavan_entrypoint_8(PlayerState *self) {
     func_800C31DC(self->van->unk10, self->van->unk14);
     func_800C3BDC(self->van->unk10);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/van.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808002F0_bavan -> s32[] */
+s32 D_808002F0_bavan = 0x2060013;
+static u32 D_808002F0_bavan_rest[3] = { 0x506000A, 0x1000000, 0x0 };

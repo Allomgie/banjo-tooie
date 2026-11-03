@@ -2,9 +2,9 @@
 #include "types.h"
 #include "macros.h"
 
-extern int D_80800C20_chfactoryprop;
+extern int D_80800C20_chfactoryprop[];
 extern void *D_80800C68_chfactoryprop;
-extern int D_80800CB0_chfactoryprop;
+extern int D_80800CB0_chfactoryprop[];
 extern void _subaddiefade_entrypoint_14(void);
 extern void func_8010A63C(void *param_0);
 typedef struct { s32 unk0; int unk4; int unk8; int unkC; int unk10; int unk14; int unk18; int unk1C; int unk20; int unk24; f32 unk28; int unk2C; int unk30; int unk34; int unk38; int unk3C; int unk40; f32 unk44; int unk48; int unk4C; int unk50; int unk54; int unk58; int unk5C; int unk60; int unk64; int unk68; s32 unk6C; s16 unk70; u16 unk72; } ChFactoryProp;
@@ -307,3 +307,21 @@ void func_80800B44_chfactoryprop(Actor *param_0)
     }
     if (func_800DA298(0x18C) && !_glcutDll_entrypoint_19(0x45)) func_800FFAB0(param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/prop.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800C20_chfactoryprop -> int[], D_80800CB0_chfactoryprop -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+extern void _chdoor_entrypoint_1();
+int D_80800C20_chfactoryprop[18] = { 0x31703B2, 0x7440001, 0x0, (u32)func_80800070_chfactoryprop, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x1400, (u32)func_808001D8_chfactoryprop, 0x0, 0x0, (u32)func_80800024_chfactoryprop, (u32)func_80107C2C, -0x7FF7DBEE, (u32)func_80800214_chfactoryprop, 0x0 };
+void *D_80800C68_chfactoryprop = (void *)0x031803B3;
+static u32 D_80800C68_chfactoryprop_rest[17] = { 0x7450001, 0x0, (u32)func_80800070_chfactoryprop, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4400, 0x0, 0x0, 0x0, (u32)func_80800024_chfactoryprop, (u32)func_80107C2C, 0x80082412, (u32)func_80800214_chfactoryprop, 0x0 };
+int D_80800CB0_chfactoryprop[18] = { 0xAC04FE, 0x8870001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x400, 0x0, 0x0, 0x0, (u32)func_80800B44_chfactoryprop, (u32)func_80107C2C, -0x7FF7D3EE, (u32)_chdoor_entrypoint_1, 0x0 };
+u8 D_80800CF8_chfactoryprop[16] = { 0x0, 0x13, 0x4, 0xA3, 0x0, 0xA, 0x0, 0xCC, 0x0, 0x2, 0x0, 0x14, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80800D08_chfactoryprop[12] = { 0x2, 0x6, 0x0, 0x13, 0x6, 0x35, 0x0, 0x2, 0x0, 0x3, 0x0, 0x0 };
+u8 D_80800D14_chfactoryprop[16] = { 0x3, 0x6, 0x0, 0x13, 0x3, 0xFF, 0x0, 0x1D, 0x0, 0x1E, 0x0, 0x2, 0x0, 0x11, 0x0, 0x0 };
+u8 D_80800D24_chfactoryprop[28] = { 0x2, 0x6, 0x0, 0x13, 0x4, 0xBF, 0x0, 0xA, 0x0, 0xB3, 0x0, 0x2, 0x0, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

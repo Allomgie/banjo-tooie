@@ -71,3 +71,11 @@ int glglobaldata_entrypoint_4(param_0) u8 *param_0;
   }
 
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/obaldata.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_800DABF0();
+extern void func_800D21B0();
+GlobalDataQuery D_80800230_glglobaldata[2] = { (void *)func_800DABF0, (void *)func_800D21B0 };
+GlobalDataQuery D_80800238_glglobaldata[2] = { 0, 0 };

@@ -441,3 +441,18 @@ int bsbeefly_entrypoint_4(s32 param_0)
 {
   return D_80800E80_bsbeefly[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/beefly.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern int func_80099B94();
+extern void func_80099AA8();
+s32 D_80800DC0_bsbeefly[10] = { 0x1D09E2, 0x150019, 0x990022, 0x660059, 0x190019, 0x270190, 0x1900320, 0x320002B, 0x800080, 0x0 };
+s32 D_80800DE8_bsbeefly[12] = { 0x1D09E0, 0xE0014, 0x2D0015, 0x190099, 0x220066, 0x800014, 0x140027, 0x1900190, 0x3200320, 0x2B0073, 0x73021A, 0x0 };
+s32 D_80800E18_bsbeefly[4] = { (u32)func_808002B0_bsbeefly, (u32)func_8080010C_bsbeefly, (u32)func_808001C4_bsbeefly, (u32)func_80099B94 };
+f32 D_80800E28_bsbeefly[5] = { 0.38f, 0.3f, 0.24f, 0.18f, 0.14f };
+f32 D_80800E3C_bsbeefly[5] = { 0.0f, 0.2f, 0.3f, 0.4f, 0.5f };
+s32 D_80800E50_bsbeefly[4] = { (u32)func_80800B18_bsbeefly, (u32)func_80800600_bsbeefly, (u32)func_80800708_bsbeefly, (u32)func_808005B0_bsbeefly };
+s32 D_80800E60_bsbeefly[4] = { (u32)func_80800BE8_bsbeefly, (u32)func_80800B54_bsbeefly, (u32)func_80800BA4_bsbeefly, (u32)func_80099B94 };
+s32 D_80800E70_bsbeefly[4] = { (u32)func_80800C2C_bsbeefly, (u32)func_80800C5C_bsbeefly, (u32)func_80800C94_bsbeefly, (u32)func_80099AA8 };
+s32 D_80800E80_bsbeefly[4] = { (u32)func_80800CE0_bsbeefly, (u32)func_80800D10_bsbeefly, (u32)func_80800D50_bsbeefly, (u32)func_80099AA8 };

@@ -1542,3 +1542,6 @@ void gcnewoption_entrypoint_49(u8 *param_0, u32 param_1)
   new_var = param_0[0x1D] & 0xFFFF;
   param_0[0x1D] = (u8) (((param_1 << 1) & 2) | ((new_var & 0xFFFF) & 0xFFFD));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/newoption.data.s) is defined here in C.
+ * Values are taken from the ROM. */

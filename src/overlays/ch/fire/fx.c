@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void *D_80801200_chfirefx;
-extern int D_80801248_chfirefx;
+extern int D_80801248_chfirefx[];
 typedef struct { u8 pad_0[0x74]; u32 pad_1 : 25; u32 local_0 : 1; u32 pad_2 : 6; } FireFxSpawnFlags;
 extern void *func_80100094(Actor *, u32);
 typedef struct { u8 pad0[0x14]; u16 unk14; u16 unk16; } FireFxData_80800AA8_chfirefx;
@@ -72,7 +72,7 @@ int chfirefx_entrypoint_0()
 
 int chfirefx_entrypoint_1()
 {
-    return &D_80801248_chfirefx;
+    return D_80801248_chfirefx;
 }
 
 void func_80800018_chfirefx(Actor *param_0)
@@ -441,3 +441,21 @@ void func_8080116C_chfirefx(param_0, param_1) Actor *param_0; Actor *param_1;
     _subaddielink_entrypoint_1(local_0->links[local_0->count++], param_1->unk0);
     func_80103110(param_0, 1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fire/fx.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80801248_chfirefx -> int[] (uses written as NAME[0]) */
+extern void _chfirefx_entrypoint_3();
+extern void func_80105834();
+extern void _chfirefx_entrypoint_4();
+extern void func_80107C2C();
+extern u8 boot_thread_stack[];
+extern void _chfirefx_entrypoint_5();
+extern void func_80102EC0();
+extern void func_8010A730();
+void *D_80801200_chfirefx = (void *)0x031403AC;
+static u32 D_80801200_chfirefx_rest[17] = { 0xFFFF0002, 0x0, (u32)_chfirefx_entrypoint_3, (u32)func_80105834, (u32)_chfirefx_entrypoint_4, 0xED80000, 0x0, 0x0, 0x20000, 0x0, 0x0, 0x0, (u32)func_80800018_chfirefx, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0x1F22), (u32)_chfirefx_entrypoint_5, 0x0 };
+int D_80801248_chfirefx[18] = { 0x1580289, 0x1, 0x0, (u32)func_80800F7C_chfirefx, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x880000, (u32)func_80800F00_chfirefx, (u32)func_80107C2C, -0x7FFFD1FE, 0x0, 0x0 };
+s16 D_80801290_chfirefx[12] = { 0x13, 0x483, 0x206, 0x7, 0x16, 0x1F40, 0xE, 0x133, 0x170, 0x180, 0x3, 0x0 };
+u8 D_808012A8_chfirefx[24] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xC0, 0x0, 0x0, 0x0, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

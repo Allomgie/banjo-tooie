@@ -65,3 +65,5 @@ void func_80800164_gcgamefix(void)
         func_800D0C78(TDL_DIPPY, 1, 1);
     }
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/gamefix.data.s) is defined here in C.
+ * Values are taken from the ROM. */

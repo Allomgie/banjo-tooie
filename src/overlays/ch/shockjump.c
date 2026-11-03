@@ -1,12 +1,12 @@
 #include "common.h"
 
-extern int D_808002B0_chshockjump;
-extern int D_808002F8_chshockjump;
+extern int D_808002B0_chshockjump[];
+extern int D_808002F8_chshockjump[];
 extern void func_800F7B9C();
 extern void _chexploder_entrypoint_5(void *param_0, int param_1, void *param_2, int param_3, float param_4, int param_5);
 extern void _subaddieaudioquick_entrypoint_2(void *param_0, void *param_1, void *param_2);
 extern u8 *func_80106790();
-extern int D_80800340_chshockjump;
+extern int D_80800340_chshockjump[];
 extern f32 func_800F15F8(f32, f32, f32);
 
 int chshockjump_entrypoint_0()
@@ -98,3 +98,15 @@ void func_80800228_chshockjump(void *param_0)
   }
   func_8010A654(param_0, func_800DA298(0x661));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/shockjump.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808002B0_chshockjump -> int[], D_808002F8_chshockjump -> int[], D_80800340_chshockjump -> int[] */
+extern void func_80102EC0();
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_808002B0_chshockjump[18] = { 0xD40210, 0x6350001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80800148_chshockjump, 0x0, 0x0, 0x0, 0x40801800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800228_chshockjump, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_80800018_chshockjump, 0x0 };
+int D_808002F8_chshockjump[18] = { 0x450234, 0x6360001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80800148_chshockjump, 0x0, 0x0, 0x0, 0x40801800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800228_chshockjump, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_808000AC_chshockjump, 0x0 };
+int D_80800340_chshockjump[8] = { 0x13048D, 0xD00D9, 0xF30018, 0x11388, 0x2EE00000, 0x0, 0x0, 0x0 };

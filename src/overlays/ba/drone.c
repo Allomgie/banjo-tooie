@@ -223,3 +223,7 @@ void badrone_entrypoint_33(void *param_0)
 {
     func_800EE7F8(*(int *)((char *)param_0 + 0x54) + 0x24);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/drone.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80800630_badrone[16] = { 0x0, 0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0x1, 0x0 };

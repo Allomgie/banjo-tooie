@@ -1,22 +1,22 @@
 #include "common.h"
 
-extern int D_808008C8_chjiggytemple;
-extern u8 D_80800910_chjiggytemple;
+extern int D_808008C8_chjiggytemple[];
+extern u8 D_80800910_chjiggytemple[];
 void _subaddiedialog_entrypoint_7();
 extern f32 func_80103EAC(Actor *);
 extern void _gcdialogcamera_entrypoint_3(u32 *, f32);
-extern int D_8080092C_chjiggytemple;
+extern int D_8080092C_chjiggytemple[];
 extern f32 func_80103EF4(Actor *);
 extern void _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
 extern void _chdoormake_entrypoint_7(Actor *, f32);
-extern int D_80800974_chjiggytemple;
-extern s32 D_808009BC_chjiggytemple;
-extern s32 D_808009D0_chjiggytemple;
+extern int D_80800974_chjiggytemple[];
+extern s32 D_808009BC_chjiggytemple[];
+extern s32 D_808009D0_chjiggytemple[];
 extern void _subaddieaudioloop_entrypoint_4();
 extern u8 _subaddieaudioloop_entrypoint_7();
-extern s32 D_808009E0_chjiggytemple;
+extern s32 D_808009E0_chjiggytemple[];
 extern f32 D_80800A24_chjiggytemple[];
 extern f32 D_80800A30_chjiggytemple[];
 extern f32 func_800D8FF8(void);
@@ -259,3 +259,23 @@ s32 func_808007F4_chjiggytemple(Actor *param_0, s32 param_1, s32 param_2)
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jiggy/temple.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808008C8_chjiggytemple -> int[], D_80800910_chjiggytemple -> u8[], D_8080092C_chjiggytemple -> int[], D_80800974_chjiggytemple -> int[], D_808009BC_chjiggytemple -> s32[], D_808009D0_chjiggytemple -> s32[], D_808009E0_chjiggytemple -> s32[] */
+extern void func_80102EC0();
+extern int func_80101870();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+u32 D_808008B0_chjiggytemple[6] = { 0x0, 0x0, 0x418651EC, 0x4C90000, 0x418651EC, 0x4C90000 };
+int D_808008C8_chjiggytemple[18] = { 0x15801E6, 0x9370001, (u32)&D_808008B0_chjiggytemple, (u32)func_80800034_chjiggytemple, (u32)func_80102EC0, (u32)func_80101870, 0x3E80000, 0x0, 0x0, 0x128, (u32)func_808000A8_chjiggytemple, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_808000B0_chjiggytemple, 0x0 };
+u8 D_80800910_chjiggytemple[28] = { 0x3, 0xED, 0x1, 0x2C, 0x15, 0x5, 0x15, 0x6, 0xFF, 0xFF, 0xFF, 0xFF, 0x0, 0x0, 0x0, 0x0, 0x0, 0x98, 0x0, 0x0, 0x0, 0x8, 0x6, 0x28, 0x0, 0x0, 0x0, 0x0 };
+int D_8080092C_chjiggytemple[18] = { 0xAC01E7, 0x9680001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_80800320_chjiggytemple, (u32)func_80107C2C, -0x7FFFDBFE, (u32)func_80800438_chjiggytemple, 0x0 };
+int D_80800974_chjiggytemple[18] = { 0x15804B2, 0x81B0001, 0x0, (u32)func_808004D8_chjiggytemple, (u32)func_80102EC0, (u32)func_80800688_chjiggytemple, 0x4E20, 0x0, 0x0, 0x20400, (u32)func_80800784_chjiggytemple, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_808007F4_chjiggytemple, 0x0 };
+s32 D_808009BC_chjiggytemple[5] = { 0x130673, 0x200002, 0x1632C8, 0xA00D9, 0x0 };
+s32 D_808009D0_chjiggytemple[4] = { 0x1304A9, 0x165DC0, 0xA0100, 0x0 };
+s32 D_808009E0_chjiggytemple[17] = { 0x1D09E5, 0x1BFF38, -0x12BFFD3, 0x2BC04B0, 0xB0082, 0xBE0032, 0x16, 0x2020024, 0x330059, 0x150000, 0x4C001E, 0x640064, 0x2A0000, 0x190080, 0xC00004, 0x4C0007, 0x20000 };
+f32 D_80800A24_chjiggytemple[3] = { 0.0f, -3.3e+02f, 0.0f };
+f32 D_80800A30_chjiggytemple[8] = { 0.0f, 0.0f, 0.2f, 0.0f, 0.8f, 1.0f, 1.0f, 1.0f };
+u8 D_80800A50_chjiggytemple[16] = { 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x0 };

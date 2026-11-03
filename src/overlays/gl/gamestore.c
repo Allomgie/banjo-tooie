@@ -96,3 +96,6 @@ s32 glgamestore_entrypoint_5(void){
     out = func_80800030_glgamestore();
     func_808001E0_glgamestore(out);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/gamestore.data.s) is defined here in C.
+ * Values are taken from the ROM. */

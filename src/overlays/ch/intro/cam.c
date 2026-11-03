@@ -2,7 +2,7 @@
 
 extern void _capod_entrypoint_13(s32, s32, s32, s32);
 extern s32 func_800EA05C(void);
-extern int D_80800A20_chintrocam;
+extern int D_80800A20_chintrocam[];
 extern s32 _capod_entrypoint_17(f32);
 
 void func_80800000_chintrocam(void *param_0)
@@ -243,3 +243,12 @@ int chintrocam_entrypoint_0()
 {
     return (int)&D_80800A20_chintrocam;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/intro/cam.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800A20_chintrocam -> int[] */
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+int D_80800A20_chintrocam[20] = { 0x15801A0, 0x1, 0x0, (u32)func_8080005C_chintrocam, (u32)func_80105834, (u32)func_8010A730, 0x4, 0x0, 0x0, 0x4, (u32)func_80800054_chintrocam, 0x0, 0x0, (u32)func_80800000_chintrocam, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_808008EC_chintrocam, 0x0, 0x0, 0x0 };

@@ -171,3 +171,6 @@ void func_808005B0_glrtc(param_0, param_1, param_2, param_3, param_4) u8 *param_
         param_0 += param_2 << 2;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/rtc.data.s) is defined here in C.
+ * Values are taken from the ROM. */

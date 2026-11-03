@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void func_800DA544(s32);
-extern int D_80800374_chdodgemdoors;
+extern int D_80800374_chdodgemdoors[];
 extern void func_80103140();
 extern s16 D_80800360_chdodgemdoors[];
 extern f32 func_800D8FF8(void);
@@ -74,3 +74,13 @@ int *chdodgemdoors_entrypoint_0()
 {
     return &D_80800374_chdodgemdoors;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/dodgemdoors.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800374_chdodgemdoors -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+s16 D_80800360_chdodgemdoors[10] = { 0x13, 0x51C, 0xA, 0x100, 0x16, 0x6D60, 0x1, 0x1F4, 0x1388, 0x0 };
+int D_80800374_chdodgemdoors[19] = { 0xAC0307, 0x7670001, 0x0, (u32)func_8080026C_chdodgemdoors, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x81004, 0x0, 0x0, 0x0, (u32)func_80800000_chdodgemdoors, (u32)func_80107C2C, -0x7FF7FFEE, (u32)func_808000A0_chdodgemdoors, 0x0, 0x0 };

@@ -40,3 +40,6 @@ void *glpackvtx_entrypoint_0(s32 param_0, s32 param_1, s32 *param_2)
 s32 glpackvtx_entrypoint_1(void* param_0) {
     heap_free(param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/packvtx.data.s) is defined here in C.
+ * Values are taken from the ROM. */

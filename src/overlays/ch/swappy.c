@@ -10,7 +10,7 @@ extern u8 D_80800690_chswappy[];
 extern f32 func_800DC178(f32, f32);
 extern void func_800EEB9C(f32 *, f32, f32);
 extern s32 func_800BABB8(s32, f32 *, f32 *, f32, void *);
-extern int D_808006D4_chswappy;
+extern int D_808006D4_chswappy[];
 extern void func_80102FDC(Actor *, f32);
 typedef struct { u8 pad[0x7E]; u8 pad_0 : 1; u8 flag_40 : 1; u8 pad_1 : 1; u8 flag_10 : 1; u8 pad_2 : 4; } SwappyFlags;
 extern s32 func_800E3E8C(f32 *, f32);
@@ -173,3 +173,14 @@ int *chswappy_entrypoint_1()
 {
     return &D_808006D4_chswappy;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/swappy.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808006D4_chswappy -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_80800690_chswappy[60] = { 0x0, 0x2B, 0x0, 0x66, 0x0, 0x80, 0x0, 0x2C, 0x0, 0x0, 0x0, 0x32, 0x0, 0x0, 0x0, 0x0, 0x0, 0x64, 0x0, 0x0, 0x0, 0x27, 0xFF, 0x38, 0xFF, 0x38, 0x0, 0xC8, 0x0, 0xC8, 0x0, 0x22, 0x0, 0x4C, 0x0, 0x66, 0x0, 0x26, 0x0, 0x33, 0x0, 0x15, 0x0, 0x33, 0x0, 0xB3, 0x0, 0x16, 0x0, 0x4, 0x0, 0x33, 0x0, 0x2, 0x1, 0x1A, 0x0, 0x0, 0x0, 0x0 };
+u8 D_808006CC_chswappy[8] = { 0x9, 0xE4, 0x9, 0xE0, 0x9, 0xE2, 0x0, 0x0 };
+int D_808006D4_chswappy[19] = { 0x26A0158, 0x6FB0001, 0x0, (u32)func_80800108_chswappy, (u32)func_80105834, (u32)func_808003DC_chswappy, 0x0, 0x0, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chswappy, (u32)func_80107C2C, -0x7FFFBC00, (u32)func_80800300_chswappy, 0x0, 0x0 };

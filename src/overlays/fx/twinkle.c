@@ -1,6 +1,6 @@
 #include "fx/twinkle.h"
 
-extern s32 D_808000F0_fxtwinkle;
+extern s32 D_808000F0_fxtwinkle[];
 extern void *func_800B53A4(int param_0);
 extern void func_800BABB8(void *param_0, s32 param_1, int param_2, float param_3, void *param_4);
 extern void func_800BA3FC();
@@ -34,3 +34,10 @@ void fxtwinkle_entrypoint_2(param_0, param_1) s32 param_0; s16 param_1;
     func_800BA3FC(local_0, param_1);
     func_800BA22C(local_0, 1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/twinkle.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808000F0_fxtwinkle -> s32[] */
+s32 D_808000F0_fxtwinkle[7] = { 0x2B00B3, 0xB30022, 0x660066, 0x70007, 0x270000, 0x10E0000, 0x10E0000 };
+void *D_8080010C_fxtwinkle = (void *)0x002B00B3;
+static u32 D_8080010C_fxtwinkle_rest[8] = { 0xB30016, 0x10040022, 0x660066, 0x70007, 0x270000, 0x10E0000, 0x10E0000, 0x0 };

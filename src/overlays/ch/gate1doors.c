@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern int D_808004B8_chgate1doors;
-extern int D_80800500_chgate1doors;
+extern int D_808004B8_chgate1doors[];
+extern int D_80800500_chgate1doors[];
 extern u8 D_80800480_chgate1doors[];
 extern u8 D_80800494_chgate1doors[];
 extern u8 D_808004A8_chgate1doors[];
@@ -144,3 +144,17 @@ int chgate1doors_entrypoint_1()
 {
   return (int)&D_80800500_chgate1doors;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/gate1doors.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808004B8_chgate1doors -> int[], D_80800500_chgate1doors -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_80800480_chgate1doors[20] = { 0x0, 0x13, 0x4, 0x13, 0x0, 0xA, 0x0, 0xE6, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x1, 0x4, 0xE2, 0x13, 0x88, 0x0, 0x0 };
+u8 D_80800494_chgate1doors[20] = { 0x0, 0x13, 0x3, 0xF1, 0x0, 0xA, 0x1, 0x0, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x1, 0x4, 0xE2, 0x13, 0x88, 0x0, 0x0 };
+u8 D_808004A8_chgate1doors[16] = { 0x0, 0x13, 0x4, 0xAD, 0x0, 0x16, 0x61, 0xA8, 0x0, 0x1, 0x0, 0xFA, 0x13, 0x88, 0x0, 0x0 };
+int D_808004B8_chgate1doors[18] = { 0x560128, 0x6540001, 0x0, (u32)func_80800128_chgate1doors, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC04, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808000A4_chgate1doors, (u32)func_80107C2C, -0x7FFFD400, (u32)func_80800000_chgate1doors, 0x0 };
+int D_80800500_chgate1doors[20] = { 0x570129, 0x6550001, 0x0, (u32)func_80800334_chgate1doors, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC04, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808002B0_chgate1doors, (u32)func_80107C2C, -0x7FFFD400, (u32)func_80800000_chgate1doors, 0x0, 0x0, 0x0 };

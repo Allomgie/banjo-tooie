@@ -207,3 +207,6 @@ int func_8080076C_sucoasterplayer(Actor *param_0, void *param_1)
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/coaster/player.data.s) is defined here in C.
+ * Values are taken from the ROM. */

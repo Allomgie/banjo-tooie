@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern s32 D_808007D0_chstinger;
-extern s32 D_808007FC_chstinger;
-extern s32 D_80800844_chstinger;
+extern s32 D_808007D0_chstinger[];
+extern s32 D_808007FC_chstinger[];
+extern s32 D_80800844_chstinger[];
 extern f32 func_800DC178(f32, f32);
 extern void func_800EFA98(f32 *, f32 *, f32);
 extern void func_800EE780(f32 *, f32 *, f32 *);
@@ -18,7 +18,7 @@ extern void func_800F5A00(s32, f32 *);
 extern f32 func_800EEB40(f32 *, f32 *);
 extern s32 func_800F0734(f32 *, f32 *, f32 *, f32, f32, f32 *, f32 *);
 extern void func_800EE7F8(f32 *, f32 *);
-extern int D_80800870_chstinger;
+extern int D_80800870_chstinger[];
 extern void _sumissilehome_entrypoint_6();
 extern void func_800FFAB0();
 extern void func_80103014();
@@ -231,3 +231,16 @@ int chstinger_entrypoint_1()
 {
     return (int)&D_80800870_chstinger;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/stinger.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808007D0_chstinger -> s32[], D_808007FC_chstinger -> s32[], D_80800844_chstinger -> s32[], D_80800870_chstinger -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+s32 D_808007D0_chstinger[11] = { 0x1D09E4, 0x22004C, 0x4C0005, 0x50027, 0x0, 0x3200320, 0x2B004C, 0x4C000E, 0xF0028, 0x1BFCE0, -0x3200000 };
+s32 D_808007FC_chstinger[18] = { 0x1D09DC, 0x2CFFD8, 0x32FFD8, 0x280064, 0x280015, 0x140066, 0x20F0F0, -0xFAFFFDE, 0x800099, 0x14C0199, 0x161000, 0x180000, 0x30000, 0x2B, 0xE60100, 0x210000, 0x0, 0x11A0000 };
+s32 D_80800844_chstinger[11] = { 0x1D09E4, 0x150019, 0x4C0016, 0x10000022, 0xCC00CC, 0x70007, 0x270000, 0x3200000, 0x320002B, 0x260026, 0x0 };
+int D_80800870_chstinger[20] = { 0x27F016F, 0x8370001, 0x0, (u32)func_80800420_chstinger, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, (u32)func_8080025C_chstinger, (u32)func_80108ED0, 0x2C0000, 0x0, (u32)func_80107C2C, -0x7FFFE000, (u32)func_80800774_chstinger, 0x0, 0x0, 0x0 };

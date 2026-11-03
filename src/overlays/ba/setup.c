@@ -376,3 +376,6 @@ void basetup_entrypoint_3(s32 arg0)
 void basetup_entrypoint_4(s32 arg0) 
 {
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/setup.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800330_chlagoonbilldrillcover;
+extern int D_80800330_chlagoonbilldrillcover[];
 extern void func_800EE7F8(void *param_0, void *param_1);
 extern void _chexploder_entrypoint_3(Actor *param_0, void *param_1, int param_2);
 extern void func_800BBCB8(void *param_0, void *param_1, int param_2, int param_3, void *param_4);
@@ -8,8 +8,8 @@ extern void _subaddieaudioquick_entrypoint_2(Actor *param_0, void *param_1, void
 extern void func_8010A624(Actor *param_0);
 extern void func_80108B04(Actor *param_0, int param_1);
 extern void func_800DA544(int param_0);
-extern int D_80800378_chlagoonbilldrillcover;
-extern int D_808003B0_chlagoonbilldrillcover;
+extern int D_80800378_chlagoonbilldrillcover[];
+extern int D_808003B0_chlagoonbilldrillcover[];
 extern s32 func_80101080(void);
 extern void _chexploder_entrypoint_12();
 extern void func_800FFAB0();
@@ -91,3 +91,15 @@ void func_8080024C_chlagoonbilldrillcover(param_0) Actor *param_0;
   func_80108B04(param_0, 0);
   func_800DA544(((u32)((u16) *((u16 *) (((char *) param_0) + 0x76))) >> 7) + 0x3C2);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/lagoon/billdrillcover.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800330_chlagoonbilldrillcover -> int[], D_80800378_chlagoonbilldrillcover -> int[], D_808003B0_chlagoonbilldrillcover -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+int D_80800330_chlagoonbilldrillcover[18] = { 0x305036B, 0x7640001, 0x0, (u32)func_80800094_chlagoonbilldrillcover, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chlagoonbilldrillcover, (u32)func_80107C2C, -0x7FFFD400, (u32)func_808000DC_chlagoonbilldrillcover, 0x0 };
+int D_80800378_chlagoonbilldrillcover[14] = { 0x1D09DD, 0x2B0200, 0x3000022, 0x1800200, 0x4800600, 0x150000, 0x990019, 0x7, 0x2D0032, 0x4B0020, -0x1F7F88, 0xB0032, 0x50FFFB, 0x50000 };
+int D_808003B0_chlagoonbilldrillcover[8] = { 0x1304F4, 0xD0099, 0xB30016, 0x6D600001, 0x4E209C4, 0x0, 0x0, 0x0 };

@@ -419,3 +419,24 @@ int bsstand_entrypoint_12(s32 param_0)
 {
   return D_80800DB8_bsstand[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/stand.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _bsstand_entrypoint_2();
+extern void _bsstand_entrypoint_0();
+extern void _bsstand_entrypoint_1();
+extern void func_8009AB78();
+extern void _bsstand_entrypoint_6();
+extern void _bsstand_entrypoint_4();
+extern void _bsstand_entrypoint_5();
+extern void _bsstand_entrypoint_11();
+extern void _bsstand_entrypoint_9();
+extern void _bsstand_entrypoint_10();
+extern void _bsdrone_entrypoint_3();
+u32 D_80800D70_bsstand[2] = { 0x8080840, 0x8080000 };
+u32 D_80800D78_bsstand[6] = { 0x90A0C10, 0x9090A09, 0x20090A0C, 0x1009090A, 0x910090A, 0x20000000 };
+s32 D_80800D90_bsstand[2] = { (u32)&D_80800D70_bsstand, (u32)&D_80800D78_bsstand };
+s32 D_80800D98_bsstand[4] = { (u32)_bsstand_entrypoint_2, (u32)_bsstand_entrypoint_0, (u32)_bsstand_entrypoint_1, (u32)func_8009AB78 };
+s32 D_80800DA8_bsstand[4] = { (u32)_bsstand_entrypoint_6, (u32)_bsstand_entrypoint_4, (u32)_bsstand_entrypoint_5, (u32)func_8009AB78 };
+s32 D_80800DB8_bsstand[6] = { (u32)_bsstand_entrypoint_11, (u32)_bsstand_entrypoint_9, (u32)_bsstand_entrypoint_10, (u32)_bsdrone_entrypoint_3, 0x0, 0x0 };

@@ -2,8 +2,8 @@
 
 extern s32 D_80800140_bssilowait[];
 
-/* Auf Dateiebene, weil der erste Aufruf weiter unten sonst eine implizite
-   int-Deklaration erzeugt, die der blockgueltigen widerspricht. */
+/* At file scope: otherwise the first call further down creates an implicit int declaration that
+ * contradicts the block-scope one. */
 extern void func_80092880(Actor *a0, s32 a1);
 
 int func_80800000_bssilowait(Actor *param_0)
@@ -52,3 +52,8 @@ int bssilowait_entrypoint_0(s32 param_0)
 {
   return D_80800140_bssilowait[param_0];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/silowait.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_80800140_bssilowait[4] = { (u32)func_80800000_bssilowait, (u32)func_8080003C_bssilowait, (u32)func_80800120_bssilowait, (u32)func_808000D0_bssilowait };

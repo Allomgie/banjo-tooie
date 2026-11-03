@@ -206,3 +206,6 @@ void dbmorph_entrypoint_4(void *param_0, u8 *param_1, void *param_2, u32 param_3
         } while (local_6);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/morph.data.s) is defined here in C.
+ * Values are taken from the ROM. */

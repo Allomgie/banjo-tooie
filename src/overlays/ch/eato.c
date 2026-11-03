@@ -2,13 +2,13 @@
 #include "gc/newoption.h"
 #include "gc/newoption.h"
 
-extern int D_80800E98_chcheato;
-extern s32 D_80800E50_chcheato;
+extern int D_80800E98_chcheato[];
+extern s32 D_80800E50_chcheato[];
 extern int func_800EB854(void);
 extern void func_80101870(Actor *, s32);
-extern s32 D_80800EE0_chcheato;
+extern s32 D_80800EE0_chcheato[];
 extern s16 D_80800EE6_chcheato;
-extern s16 D_80800EF4_chcheato;
+extern s16 D_80800EF4_chcheato[];
 typedef struct { f32 local_0[2]; } CheatoSoundTimes;
 typedef struct { s16 local_0[2]; } CheatoSoundIds;
 extern CheatoSoundTimes D_80800EFC_chcheato;
@@ -147,7 +147,7 @@ void func_808003C4_chcheato(s32 param_0) {
 
     local_0 = 0xE;
     D_80800EE6_chcheato = func_80800824_chcheato(&local_0);
-    D_80800EF4_chcheato = (s16) local_0;
+    D_80800EF4_chcheato[0] = (s16) local_0;
     local_1 = _subaddiedialog_entrypoint_7(param_0, param_0 + 4, &D_80800EE0_chcheato);
     if ((local_1 != 0) && (local_1 != 0x1208)) {
         func_80800D08_chcheato(param_0, 3, 0);
@@ -426,3 +426,21 @@ void func_80800D08_chcheato(param_0, param_1, param_2) u8 *param_0; s32 param_1;
         return;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/eato.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800EE6_chcheato = D_80800EE0_chcheato + 0x6
+ * extern declarations adjusted to the object (same addresses): D_80800E50_chcheato -> s32[], D_80800E98_chcheato -> int[], D_80800EE0_chcheato -> s32[], D_80800EF4_chcheato -> s16[] (uses written as NAME[0]) */
+extern void func_80105834();
+extern void func_80107C2C();
+s32 D_80800E50_chcheato[4] = { 0x43A00000, 0x437A0000, 0x435C0000, 0x42F00000 };
+u32 D_80800E60_chcheato[14] = { 0x0, 0x0, 0x3F4CCCCD, 0x2200000, 0x3F4CCCCD, 0x2200000, 0x3F4CCCCD, 0x2200000, 0x3F4CCCCD, 0x2200000, 0x3F4CCCCD, 0x2200000, 0x3F4CCCCD, 0x2200000 };
+int D_80800E98_chcheato[18] = { 0x1860135, 0x7870001, (u32)&D_80800E60_chcheato, (u32)func_80800068_chcheato, (u32)func_80105834, (u32)func_8080035C_chcheato, 0x0, 0x40000000, 0x0, 0x100, 0x0, 0x0, 0x14, (u32)func_8080000C_chcheato, (u32)func_80107C2C, -0x7FFFFB7E, (u32)func_80800204_chcheato, 0x0 };
+s32 D_80800EE0_chcheato[5] = { 0x68015E, 0x11420000, 0x201, 0x12080000, 0x370000 };
+s16 D_80800EF4_chcheato[4] = { 0xE, 0x800, 0x200, 0x0 };
+CheatoSoundTimes D_80800EFC_chcheato = { 0.25f, 0.95f };
+CheatoSoundIds D_80800F04_chcheato = { 0x4C5, 0x4C6 };
+s16 D_80800F08_chcheato[12] = { 0x21, 0xD, 0xF3, 0x10C, 0x16, 0x36B0, 0x1, 0xC8, 0x5DC, 0x11, 0x0, 0x0 };
+CheatoOptionDescriptor D_80800F20_chcheato = { 0xFF, 0xFF, 0xFF };
+CheatoOptionDescriptor D_80800F28_chcheato = { 0xFF, 0xFF, 0x0 };

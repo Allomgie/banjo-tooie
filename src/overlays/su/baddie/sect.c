@@ -55,3 +55,6 @@ s32 subaddiesect_entrypoint_2(Actor *param_0, s32 param_1, s32 param_2)
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/sect.data.s) is defined here in C.
+ * Values are taken from the ROM. */

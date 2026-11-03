@@ -12,14 +12,14 @@ extern int func_8009EA70(void *param_0);
 extern struct ActorMarker { struct ActorMarker *marker; u8 unk10; };
 extern u32 *param_0;
 extern u8 param_1;
-extern s32 D_80800AD0_bashoes;
-extern s32 D_80800B4C_bashoes;
+extern s32 D_80800AD0_bashoes[];
+extern s32 D_80800B4C_bashoes[];
 extern s32 D_80800B90_bashoes[];
 extern s32 func_800B53A4(s32);
 extern void func_80092E08(PlayerState *, f32 *);
 extern s32 func_800BABB8(s32, f32 *, f32 *, f32, s32 *);
 extern void func_80092E2C(PlayerState *, f32 *);
-extern s32 D_80800BD4_bashoes;
+extern s32 D_80800BD4_bashoes[];
 extern void func_8009C128(PlayerState *, f32 *);
 extern f32 func_8009BB5C(PlayerState *);
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
@@ -328,3 +328,11 @@ void bashoes_entrypoint_20(PlayerState *param_0)
     local_1[1] += 6.0f;
     func_800BBCB8(local_1, 0, 1.0f, 1, &D_80800BD4_bashoes);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/shoes.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800AD0_bashoes -> s32[], D_80800B4C_bashoes -> s32[], D_80800BD4_bashoes -> s32[] */
+s32 D_80800AD0_bashoes[31] = { 0x1D09DF, 0x28020016, 0x2200015, 0x19001C, 0xE0014, 0x140022, 0x590066, 0x260026, 0x270190, 0x1900320, 0x320002B, 0x330040, 0x1BFF38, 0xC8011A, 0x5002000E, 0x180018, 0x2B004C, 0x4C0022, 0x40004C, 0x140014, 0x1B00C8, 0x190021A, -0x4BFDFFF2, 0x200020, 0x2B0066, 0x660022, 0x260026, 0xA000A, 0x1B0190, 0x3E8031A, 0x0 };
+s32 D_80800B4C_bashoes[17] = { 0x1D09DF, -0x37FDFFEA, 0x2200015, 0x190033, 0x2EFFD3, 0x1E0, -0x13FE99, 0x244001B, -0x3E703E8, 0x22004C, 0x59000C, 0x170027, 0x1900190, 0x3200320, 0x2B0073, 0x8C1E1A, 0x0 };
+s32 D_80800B90_bashoes[17] = { 0x1D09DF, -0x37FDFFEA, 0x2200015, 0x19001C, 0x2EFFE2, 0x12C, -0x1DFE99, 0x12C001B, -0x1F301F4, 0x220040, 0x40000C, 0xC0027, 0x1900190, 0x3200320, 0x2B005E, 0x5E0A1A, 0x0 };
+s32 D_80800BD4_bashoes[19] = { 0x1D09DE, 0x150019, 0x1C000A, -0xC0000, -0xBFFF4, 0x2000C, 0x1BFE70, -0x31FFFDE, 0x4C0059, 0x190019, 0x2CFFEC, 0x32FFEC, 0x1400FA, 0x140027, 0x1900190, 0x3200320, 0x2B0066, 0x800000, 0x0 };

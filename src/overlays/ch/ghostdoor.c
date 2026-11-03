@@ -1,7 +1,7 @@
 #include "ch/ghostdoor.h"
 
-extern int D_80800220_chghostdoor;
-extern int D_80800268_chghostdoor;
+extern int D_80800220_chghostdoor[];
+extern int D_80800268_chghostdoor[];
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
@@ -71,3 +71,16 @@ s32 func_808001BC_chghostdoor(Actor *param_0, s32 param_1, s32 param_2)
     }
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/ghostdoor.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800220_chghostdoor -> int[], D_80800268_chghostdoor -> int[] */
+extern void _chdoor_entrypoint_0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern u8 D_8011A248[];
+extern void _chswitch_entrypoint_6();
+int D_80800220_chghostdoor[18] = { 0xAC0344, -0xFFFF, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_80800018_chghostdoor, (u32)func_80107C2C, -0x7FF7D3FE, (u32)func_808000F4_chghostdoor, 0x0 };
+int D_80800268_chghostdoor[18] = { 0x3430348, 0x86D0001, (u32)&D_8011A248, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4000080C, 0x0, 0x0, 0x0, (u32)func_80800190_chghostdoor, (u32)func_80107C2C, -0x7FF7D3EE, (u32)func_808001BC_chghostdoor, 0x0 };

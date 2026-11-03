@@ -7,21 +7,21 @@ extern s16 D_80801368_chjinjo[];
 extern void func_800FC74C(s32);
 extern void _suexpression_entrypoint_8();
 typedef struct { s16 local_0; s16 local_1; } JinjoLookup;
-extern s16 D_80801300_chjinjo;
+extern s16 D_80801300_chjinjo[];
 extern s16 D_80801302_chjinjo;
 extern JinjoLookup D_80801304_chjinjo[8];
 extern void _subaddieaudioquick_entrypoint_3(void *, void *, void *, f32);
-extern s32 D_80801358_chjinjo;
+extern s32 D_80801358_chjinjo[];
 extern void _subaddieaudioquick_entrypoint_2(void *param_0, void *param_1, void *param_2);
 extern int func_80101E14(void *param_0, float param_1);
-extern float D_8080133C_chjinjo;
-extern float D_80801348_chjinjo;
+extern float D_8080133C_chjinjo[];
+extern float D_80801348_chjinjo[];
 typedef struct { u8 pad[0x6C]; u32 pad6C:11; u32 f:12; u32 rest:9; } JinjoState;
-extern s32 D_80801330_chjinjo;
+extern s32 D_80801330_chjinjo[];
 extern u16 D_80801390_chjinjo[];
 extern s32 func_800C05B8();
-extern int D_808013A4_chjinjo;
-extern int D_808013EC_chjinjo;
+extern int D_808013A4_chjinjo[];
+extern int D_808013EC_chjinjo[];
 extern f32 func_800D8FF8(void);
 extern f32 func_800DC0C0(void);
 extern f32 func_800DC178(f32, f32);
@@ -96,7 +96,7 @@ s16 chjinjo_entrypoint_2(param_0) s32 param_0;
     if (param_0 == -1) {
         param_0 = func_800EA05C();
     }
-    if (param_0 == D_80801300_chjinjo) {
+    if (param_0 == D_80801300_chjinjo[0]) {
         return D_80801302_chjinjo;
     }
     for (local_0 = 0; local_0 < 8; local_0++) {
@@ -110,7 +110,7 @@ s16 chjinjo_entrypoint_2(param_0) s32 param_0;
 s32 chjinjo_entrypoint_3(s32 param_0)
 {
     s32 local_0;
-    if (param_0 == D_80801302_chjinjo) return D_80801300_chjinjo;
+    if (param_0 == D_80801302_chjinjo) return D_80801300_chjinjo[0];
     for (local_0 = 0; local_0 < 8; local_0++) {
         if (param_0 == D_80801304_chjinjo[local_0].local_1) return D_80801304_chjinjo[local_0].local_0;
     }
@@ -449,3 +449,26 @@ int chjinjo_entrypoint_6(void)
 {
     return (int)&D_808013EC_chjinjo;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jinjo.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80801302_chjinjo = D_80801300_chjinjo + 0x2
+ * extern declarations adjusted to the object (same addresses): D_80801300_chjinjo -> s16[] (uses written as NAME[0]), D_80801330_chjinjo -> s32[], D_8080133C_chjinjo -> float[], D_80801348_chjinjo -> float[], D_80801358_chjinjo -> s32[], D_808013A4_chjinjo -> int[], D_808013EC_chjinjo -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_808012B0_chjinjo[20] = { 0x0, 0x0, 0x3FC00000, 0x2D0044, 0x3FC00000, 0x2D0042, 0x3FC00000, 0x2F0042, 0x3F400000, 0x310042, 0x3FC00000, 0x2D0044, 0x3ECCCCCD, 0x310041, 0x3FE00000, 0x1F0042, 0x4008887B, 0x240042, 0x0, 0x0 };
+s16 D_80801300_chjinjo[2] = { 0x145, 0x4 };
+JinjoLookup D_80801304_chjinjo[8] = { 0x146, 0x8, 0x147, 0x2, 0x148, 0x6, 0x14A, 0x3, 0x14B, 0x1, 0x14C, 0x7, 0x14D, 0x5, 0x14E, 0x0 };
+u8 D_80801324_chjinjo[12] = { 0x0, 0x13, 0x3, 0xEE, 0x0, 0x16, 0x65, 0x90, 0x0, 0x0, 0x0, 0x0 };
+s32 D_80801330_chjinjo[3] = { 0x13041A, 0x1655F0, 0x0 };
+float D_8080133C_chjinjo[3] = { 1.74633e-39f, 2.05121e-39f, 0.0f };
+float D_80801348_chjinjo[4] = { 1.74639e-39f, 9.18893e-40f, 2.066297e-39f, 0.0f };
+s32 D_80801358_chjinjo[4] = { 0x130404, 0xA01CC, 0x164650, 0x0 };
+s16 D_80801368_chjinjo[10] = { 0x72, 0x15, 0x11, 0x74, 0x12, 0x70, 0x13, 0x14, 0x73, 0x0 };
+u8 D_8080137C_chjinjo[20] = { 0x3, 0x6, 0x0, 0x1B, 0x0, 0x13, 0x4, 0x10, 0x0, 0x1, 0x1, 0xF4, 0x7, 0xD0, 0x0, 0x16, 0x27, 0x10, 0x0, 0x0 };
+u16 D_80801390_chjinjo[10] = { 0x1525, 0x1526, 0x1527, 0x1528, 0x1529, 0x152A, 0x152B, 0x152C, 0x152D, 0x0 };
+int D_808013A4_chjinjo[18] = { 0x5A01F4, 0x6430002, (u32)&D_808012B0_chjinjo, (u32)func_808002E0_chjinjo, (u32)func_80105834, (u32)func_80101870, 0x9C40000, 0x3F4CCCCD, 0x0, 0x800124, (u32)func_80800120_chjinjo, (u32)func_80108ED0, 0x0, (u32)func_80800000_chjinjo, (u32)func_80107C2C, -0x7BEFA000, (u32)func_80800C10_chjinjo, 0x0 };
+int D_808013EC_chjinjo[21] = { 0x374048F, 0x6430002, (u32)&D_808012B0_chjinjo, (u32)func_808002E0_chjinjo, (u32)func_80105834, (u32)func_80101870, 0x9C40000, 0x3F4CCCCD, 0x0, 0x800120, 0x0, 0x0, 0x0, (u32)func_80800000_chjinjo, (u32)func_80107C2C, -0x7BEF9BFE, (u32)func_80800C10_chjinjo, 0x0, 0x0, 0x0, 0x0 };

@@ -257,3 +257,6 @@ int capod_entrypoint_22()
     return 0;
   }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ca/pod.data.s) is defined here in C.
+ * Values are taken from the ROM. */

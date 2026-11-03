@@ -2,8 +2,8 @@
 
 #define CAULDRONENERGYBARS_DATA(arg0) ((CauldronEnergyBarsData*)(arg0->actorData))
 
-extern s32 D_808002C0_chcauldronenergybars;
-extern s32 D_808002D4_chcauldronenergybars;
+extern s32 D_808002C0_chcauldronenergybars[];
+extern s32 D_808002D4_chcauldronenergybars[];
 
 void func_80800000_chcauldronenergybars(Actor* arg0)
 {
@@ -101,3 +101,13 @@ s32* chcauldronenergybars_entrypoint_0(void)
 {
     return &D_808002D4_chcauldronenergybars;
 }
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/cauldronenergybars.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808002C0_chcauldronenergybars -> s32[], D_808002D4_chcauldronenergybars -> s32[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+s32 D_808002C0_chcauldronenergybars[5] = { 0x1305B7, 0x100C8, 0x7D0000A, 0x1660016, 0x7D000000 };
+s32 D_808002D4_chcauldronenergybars[19] = { 0x331048D, 0x9780001, 0x0, (u32)func_808000B8_chcauldronenergybars, (u32)func_80105834, (u32)func_80101870, 0x7D00000, 0x0, 0x0, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chcauldronenergybars, (u32)func_80107C2C, -0x7FFFDC00, (u32)func_808001C4_chcauldronenergybars, 0x0, 0x0 };

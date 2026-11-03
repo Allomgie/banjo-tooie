@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern int D_80800280_chicestationbits;
-extern int D_808002C8_chicestationbits;
+extern int D_80800280_chicestationbits[];
+extern int D_808002C8_chicestationbits[];
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
@@ -77,3 +77,16 @@ s32 func_808001E0_chicestationbits(Actor *param_0, s32 param_1, s32 param_2)
     }
     return _chdoor_entrypoint_1(param_0, param_1, param_2);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/icestationbits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800280_chicestationbits -> int[], D_808002C8_chicestationbits -> int[] */
+extern u8 D_8011A248[];
+extern void _chswitch_entrypoint_6();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+int D_80800280_chicestationbits[18] = { 0x343041A, 0x86D0001, (u32)&D_8011A248, (u32)_chswitch_entrypoint_6, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x80C, 0x0, 0x0, 0x0, (u32)func_80800018_chicestationbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_80800050_chicestationbits, 0x0 };
+int D_808002C8_chicestationbits[18] = { 0xAC041B, -0xFFFF, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_808000D4_chicestationbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)func_808001E0_chicestationbits, 0x0 };

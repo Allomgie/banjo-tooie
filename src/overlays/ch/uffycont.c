@@ -16,9 +16,9 @@ extern s32 _gcsectionDll_entrypoint_4(s32);
 extern void func_800A8230(void);
 extern void func_800DA3B8(s32, s32);
 typedef struct { s16 local_0; s16 local_1; s16 local_2[3]; } TrainStop62;
-extern int D_80800B78_chchuffycont;
-extern int D_80800B68_chchuffycont;
-extern int D_80800B84_chchuffycont;
+extern int D_80800B78_chchuffycont[];
+extern int D_80800B68_chchuffycont[];
+extern int D_80800B84_chchuffycont[];
 typedef struct { s16 a; s16 b; s16 pad[3]; } ChuffEnt;
 s32 func_8080046C_chchuffycont();
 
@@ -368,3 +368,13 @@ void chchuffycont_entrypoint_3(void) {
     }
     _gcsectionDll_entrypoint_4(((ChuffEnt *) D_80800B20_chchuffycont)[i].a);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/uffycont.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800B66_chchuffycont = D_80800B20_chchuffycont + 0x46
+ * extern declarations adjusted to the object (same addresses): D_80800B68_chchuffycont -> int[], D_80800B78_chchuffycont -> int[], D_80800B84_chchuffycont -> int[] */
+ChuffyStationRecord D_80800B20_chchuffycont[7] = { 0xD7, 0x4ED, 0x669, -0x1, 0x3F, 0xEC, 0x4EE, 0x66A, 0x96, 0x52, 0x155, 0x4F3, 0x6CC, 0x403, 0x7D, 0x114, 0x4F0, 0x6AA, 0x164, 0x57, 0x102, 0x4EF, 0x6A9, 0x163, 0xA3, 0x129, 0x4F2, 0x6BC, 0x1D0, 0xAA, 0x12A, 0x4F1, 0x6BB, 0x1CF, 0x47 };
+int D_80800B68_chchuffycont[4] = { 0x1304E9, 0x164E20, 0x101F4, 0x13880000 };
+int D_80800B78_chchuffycont[3] = { 0x0, 0x0, -0x3B448000 };
+int D_80800B84_chchuffycont[19] = { 0x20602A6, 0x9030001, 0x0, (u32)func_808002C4_chchuffycont, (u32)func_80105834, (u32)func_80800768_chchuffycont, 0x0, 0x0, 0x0, 0xA1804, 0x0, 0x0, 0x0, (u32)func_80800440_chchuffycont, (u32)func_80107C2C, -0x7FFFFBFE, (u32)func_808001F8_chchuffycont, 0x0, 0x0 };

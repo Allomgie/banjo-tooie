@@ -32,3 +32,6 @@ int gcwater_entrypoint_0()
   }
   func_800DA3B8(0x6B5, (local_0) ? (1) : (0));
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/water.data.s) is defined here in C.
+ * Values are taken from the ROM. */

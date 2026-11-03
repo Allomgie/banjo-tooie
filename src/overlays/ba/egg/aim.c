@@ -119,3 +119,6 @@ void baeggaim_entrypoint_3(s32 param_0) {
     }
     _baeggfire_entrypoint_6(param_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/egg/aim.data.s) is defined here in C.
+ * Values are taken from the ROM. */

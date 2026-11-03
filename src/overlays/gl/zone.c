@@ -52,3 +52,6 @@ int glzone_entrypoint_6(u8 *param_0, u8 *param_1, s32 param_2)
 
   return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/zone.data.s) is defined here in C.
+ * Values are taken from the ROM. */

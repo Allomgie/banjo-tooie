@@ -22,14 +22,14 @@ extern void func_800DA544(s32);
 extern void func_800D0BD4(s32, s32);
 extern void func_800FC660(s32);
 extern void func_800FCAE0(s32, s32, s32);
-extern int D_808009B8_chjigsawbitcont;
+extern int D_808009B8_chjigsawbitcont[];
 extern f32 func_800DC178(f32, f32);
 extern void func_800EE7F8(f32 *, f32 *);
 extern u8 D_808009A0_chjigsawbitcont[];
 extern f32 func_800D8FF8(void);
 extern Actor *func_801084B0(s32, Actor **);
-extern int D_80800A28_chjigsawbitcont;
-extern s32 D_80800A00_chjigsawbitcont;
+extern int D_80800A28_chjigsawbitcont[];
+extern s32 D_80800A00_chjigsawbitcont[];
 f32 func_800DC0C0(void);
 s32 func_800E3E8C(s32, s32);
 s32 func_8001211C(void);
@@ -280,3 +280,15 @@ int chjigsawbitcont_entrypoint_1()
 {
     return (int)&D_80800A28_chjigsawbitcont;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jigsaw/bitcont.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_808009AA_chjigsawbitcont = D_808009A8_chjigsawbitcont + 0x2, D_808009B6_chjigsawbitcont = D_808009A8_chjigsawbitcont + 0xE, D_808009B4_chjigsawbitcont = D_808009A8_chjigsawbitcont + 0xC
+ * extern declarations adjusted to the object (same addresses): D_808009B8_chjigsawbitcont -> int[], D_80800A00_chjigsawbitcont -> s32[], D_80800A28_chjigsawbitcont -> int[] */
+extern void func_80101870();
+u8 D_808009A0_chjigsawbitcont[8] = { 0x0, 0x13, 0x3, 0xE9, 0x0, 0x18, 0x0, 0x0 };
+JigsawBitSettings D_808009A8_chjigsawbitcont[1] = { 0x11, 0x3, 0.5f, 2.5f, 0x40F, 0x410 };
+int D_808009B8_chjigsawbitcont[18] = { 0x2640180, 0x1, 0x0, (u32)func_80800214_chjigsawbitcont, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x80004, 0x0, 0x0, 0x280000, (u32)func_808002E4_chjigsawbitcont, (u32)func_80107C2C, -0x7FFFFDFE, (u32)func_80800084_chjigsawbitcont, 0x0 };
+s32 D_80800A00_chjigsawbitcont[10] = { 0x1D09E2, 0xC0014, 0x22004C, 0x660019, 0xC002A, 0x2, 0x8000C0, 0x150000, 0x20016, 0x40000 };
+int D_80800A28_chjigsawbitcont[18] = { 0x263017F, 0x6A50001, 0x0, (u32)func_808006D8_chjigsawbitcont, (u32)func_80105834, (u32)func_80101870, 0x5DC0000, 0x3F4CCCCD, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_80800868_chjigsawbitcont, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };

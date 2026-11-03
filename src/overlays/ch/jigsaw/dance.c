@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800488_chjigsawdance;
+extern int D_80800488_chjigsawdance[];
 extern f32 func_80101F24(void);
 extern f32 func_80090010(void);
 extern void *func_8008FD20(void);
@@ -137,3 +137,13 @@ int *chjigsawdance_entrypoint_2()
 {
     return &D_80800488_chjigsawdance;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jigsaw/dance.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800488_chjigsawdance -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+u32 D_80800460_chjigsawdance[10] = { 0x0, 0x0, 0x40000000, 0x0, 0x3FC00000, 0x760000, 0x3FC00000, 0x760000, 0x40A00000, 0x300000 };
+int D_80800488_chjigsawdance[18] = { 0x68022C, 0x60F0001, (u32)&D_80800460_chjigsawdance, (u32)func_808000F0_chjigsawdance, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, (u32)func_808000AC_chjigsawdance, 0x0, 0x0, (u32)func_80800000_chjigsawdance, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0 };

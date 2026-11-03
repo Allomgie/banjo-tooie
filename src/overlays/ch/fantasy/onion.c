@@ -35,7 +35,7 @@ extern void func_800F8418(s32, f32 *);
 extern u8 D_80800748_chfantasyonion[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800DE498(s32, f32 *, void *, f32, s32, s32);
-extern int D_80800754_chfantasyonion;
+extern int D_80800754_chfantasyonion[];
 
 f32 func_80800000_chfantasyonion(Actor *param_0)
 {
@@ -186,3 +186,14 @@ int chfantasyonion_entrypoint_0()
 {
   return (int)&D_80800754_chfantasyonion;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/fantasy/onion.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800754_chfantasyonion -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_80800730_chfantasyonion[6] = { 0x0, 0x0, 0x3FA66666, 0x40A0001, 0x3FA66666, 0x40A0001 };
+u8 D_80800748_chfantasyonion[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+int D_80800754_chfantasyonion[19] = { 0x158047F, 0x89F0001, (u32)&D_80800730_chfantasyonion, (u32)func_80800254_chfantasyonion, (u32)func_80105834, (u32)func_80800624_chfantasyonion, 0x0, 0x0, 0x0, 0x800820, (u32)func_808006E0_chfantasyonion, (u32)func_80108ED0, 0x0, (u32)func_808000BC_chfantasyonion, (u32)func_80107C2C, -0x7FDFBBFE, 0x0, 0x0, 0x0 };

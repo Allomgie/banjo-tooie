@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern int D_80800788_chgobihailfire;
-extern int D_808007D0_chgobihailfire;
+extern int D_80800788_chgobihailfire[];
+extern int D_808007D0_chgobihailfire[];
 extern void func_80101EE4(Actor *, f32);
 extern u8 D_80800818_chgobihailfire[];
 extern Actor *func_801084B0(s32, Actor **);
@@ -189,3 +189,17 @@ int func_80800538_chgobihailfire(param_0, param_1) Actor *param_0; s32 param_1;
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/gobi/hailfire.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800788_chgobihailfire -> int[], D_808007D0_chgobihailfire -> int[] */
+extern void func_80102EC0();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u32 D_80800730_chgobihailfire[18] = { 0x0, 0x0, 0x3F07AE14, 0x2230001, 0x3F07AE14, 0x2230001, 0x40900000, 0x2220001, 0x40900000, 0x2220001, 0x40A3D70A, 0x49A0001, 0x3F19999A, 0x49C0002, 0x4057AE14, 0x49D0002, 0x3F19999A, 0x49C0002 };
+u32 D_80800778_chgobihailfire[4] = { 0x0, 0x0, 0x4057AE14, 0x4A00002 };
+int D_80800788_chgobihailfire[18] = { 0x18803E3, 0x7880001, (u32)&D_80800730_chgobihailfire, (u32)func_80102EC0, (u32)func_808000C8_chgobihailfire, (u32)func_80101870, 0x0, 0x4119999A, 0x0, 0x4004092C, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800018_chgobihailfire, (u32)func_80107C2C, -0x7FFFFBF0, (u32)func_8080032C_chgobihailfire, 0x0 };
+int D_808007D0_chgobihailfire[18] = { 0x1580500, 0x9120001, (u32)&D_80800778_chgobihailfire, (u32)func_80102EC0, (u32)func_80102EC0, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC, 0x0, (u32)func_80108ED0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFF7FE, 0x0, 0x0 };
+u8 D_80800818_chgobihailfire[24] = { 0x0, 0x13, 0x4, 0xCA, 0x0, 0xD, 0x0, 0xD9, 0x0, 0xF3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

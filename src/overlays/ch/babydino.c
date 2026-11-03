@@ -1,14 +1,14 @@
 #include "common.h"
 
 #define CODEX_PAIR_EVENT_PAYLOAD
-extern int D_80800770_chbabydino;
+extern int D_80800770_chbabydino[];
 typedef union { s32 word; s16 halves[2]; } PairEventPayload;
 extern void *_suexpression_entrypoint_20(Actor *);
 extern void _suexpression_entrypoint_12(void *, f32, f32);
 extern void _capod_entrypoint_22(void);
-extern s32 D_80800700_chbabydino;
-extern s32 D_808007D4_chbabydino;
-extern s32 D_808007B8_chbabydino;
+extern s32 D_80800700_chbabydino[];
+extern s32 D_808007D4_chbabydino[];
+extern s32 D_808007B8_chbabydino[];
 extern void _sudeflect_entrypoint_0(f32 *, f32, f32, s32);
 void func_808003BC_chbabydino();
 int func_808005F0_chbabydino();
@@ -211,3 +211,15 @@ int func_808005F0_chbabydino(param_0, param_1) Actor *param_0; s32 param_1;
 
   return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/babydino.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800700_chbabydino -> s32[], D_80800770_chbabydino -> int[], D_808007B8_chbabydino -> s32[], D_808007D4_chbabydino -> s32[] */
+extern void func_801018A4();
+extern void func_80107C2C();
+s32 D_80800700_chbabydino[10] = { 0x1, 0x107C0100, 0x601, -0xFE00, 0x200, 0x11140100, 0x400, 0x11150100, -0x12001, 0x120B0300 };
+u32 D_80800728_chbabydino[18] = { 0x0, 0x0, 0x40D00000, 0x14D0000, 0x40D00000, 0x14D0000, 0x3EE66666, 0x14C0000, 0x3EE66666, 0x14C0000, 0x40D00000, 0x14D0000, 0x3EE66666, 0x14C0000, 0x3EE66666, 0x14C0000, 0x40D00000, 0x14D0000 };
+int D_80800770_chbabydino[18] = { 0x1890138, 0x6CC0001, (u32)&D_80800728_chbabydino, (u32)func_8080011C_chbabydino, (u32)func_8080011C_chbabydino, (u32)func_801018A4, 0x0, 0x40200000, 0x0, 0x40040120, (u32)func_8080028C_chbabydino, 0x0, 0x0, (u32)func_8080000C_chbabydino, (u32)func_80107C2C, -0x7FFFFBAE, (u32)func_808002AC_chbabydino, 0x0 };
+s32 D_808007B8_chbabydino[7] = { 0x2BC, 0x1081, 0x601, 0x120B0000, 0x390000, 0xC0000, 0x1000000 };
+s32 D_808007D4_chbabydino[7] = { 0x890000, 0x2BC0039, 0xC, 0x100, 0x0, 0x0, 0x0 };

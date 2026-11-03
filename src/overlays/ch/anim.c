@@ -109,3 +109,6 @@ void chanim_entrypoint_9(Actor *param_0)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/anim.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -551,3 +551,6 @@ s32 ncpod_entrypoint_33(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 
     func_8010FD88(param_0);
     return 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/pod.data.s) is defined here in C.
+ * Values are taken from the ROM. */

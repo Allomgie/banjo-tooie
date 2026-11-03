@@ -278,3 +278,15 @@ void func_808009FC_bskazpaddle(PlayerState *self) {
 s32 bskazpaddle_entrypoint_5(s32 idx) {
     return D_80800AA0_bskazpaddle[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/paddle.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099B94();
+extern void _bsdrone_entrypoint_3();
+s32 D_80800A50_bskazpaddle[4] = { (u32)func_80800164_bskazpaddle, (u32)func_80800190_bskazpaddle, (u32)func_808002A0_bskazpaddle, (u32)func_80099B94 };
+s32 D_80800A60_bskazpaddle[4] = { (u32)func_80800448_bskazpaddle, (u32)func_80800468_bskazpaddle, (u32)func_80800518_bskazpaddle, (u32)func_80099B94 };
+s32 D_80800A70_bskazpaddle[4] = { (u32)func_80800664_bskazpaddle, (u32)func_8080068C_bskazpaddle, (u32)func_8080070C_bskazpaddle, (u32)func_80099B94 };
+s32 D_80800A80_bskazpaddle[4] = { (u32)func_80800818_bskazpaddle, (u32)func_80800838_bskazpaddle, (u32)func_80800894_bskazpaddle, (u32)func_80099B94 };
+s32 D_80800A90_bskazpaddle[4] = { (u32)func_808008EC_bskazpaddle, (u32)func_80800914_bskazpaddle, (u32)func_8080093C_bskazpaddle, (u32)func_80099B94 };
+s32 D_80800AA0_bskazpaddle[4] = { (u32)func_808009FC_bskazpaddle, (u32)func_80800990_bskazpaddle, (u32)func_808009B8_bskazpaddle, (u32)_bsdrone_entrypoint_3 };

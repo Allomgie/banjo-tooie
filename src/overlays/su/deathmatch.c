@@ -68,3 +68,6 @@ s32 sudeathmatch_entrypoint_0(s32 param_0, f32 *param_1, f32 *param_2)
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/deathmatch.data.s) is defined here in C.
+ * Values are taken from the ROM. */

@@ -43,3 +43,6 @@ s32 bsdronewaitbabykaz_entrypoint_3(void *arg){
     }
     bs_setState(arg, local_0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/drone/waitbabykaz.data.s) is defined here in C.
+ * Values are taken from the ROM. */

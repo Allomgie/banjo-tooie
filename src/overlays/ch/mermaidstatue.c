@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800354_chmermaidstatue;
+extern int D_80800354_chmermaidstatue[];
 extern void *D_8080039C_chmermaidstatue;
 extern s16 D_80800330_chmermaidstatue[][6];
 extern int _chdoormake_entrypoint_3(s32, f32, s32, s32, s32, s32);
@@ -109,3 +109,18 @@ void func_808002C8_chmermaidstatue(s32 param_0)
         _chdoormake_entrypoint_6(param_0, 0x40400000);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/mermaidstatue.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800354_chmermaidstatue -> int[] */
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+extern int func_80101870();
+extern void _chdoor_entrypoint_1();
+s16 D_80800330_chmermaidstatue[3][6] = { 0x0, 0x3, 0x0, 0x0, 0x1, 0x2, 0x1, 0x0, 0x2, 0x0, 0x3, 0x3, 0x2, 0x1, 0x3, 0x0, 0x2, 0x1 };
+int D_80800354_chmermaidstatue[18] = { 0x32403C0, 0x6E90001, 0x0, (u32)func_80800094_chmermaidstatue, (u32)func_80105834, (u32)func_8080009C_chmermaidstatue, 0x5DC0000, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800018_chmermaidstatue, (u32)func_80107C2C, -0x7FFFDBB0, (u32)func_808000E0_chmermaidstatue, 0x0 };
+void *D_8080039C_chmermaidstatue = (void *)0x00AC03C1;
+static u32 D_8080039C_chmermaidstatue_rest[20] = { 0x6FF0001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_808002C8_chmermaidstatue, (u32)func_80107C2C, 0x80002C02, (u32)_chdoor_entrypoint_1, 0x0, 0x0, 0x0, 0x0 };

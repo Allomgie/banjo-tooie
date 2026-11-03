@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808001A0_chproplighter;
+extern int D_808001A0_chproplighter[];
 extern void func_80103014();
 extern void func_80108944();
 extern f32 func_800136E4(f32);
@@ -40,3 +40,12 @@ s32 func_8080017C_chproplighter(s32 param_0){
     s32 local_0;
     local_0 = param_0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/proplighter.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808001A0_chproplighter -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+int D_808001A0_chproplighter[20] = { 0x158044B, -0xFFFF, 0x0, (u32)func_8080017C_chproplighter, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_8080000C_chproplighter, (u32)func_80107C2C, -0x7FF7D3EE, 0x0, 0x0, 0x0, 0x0 };

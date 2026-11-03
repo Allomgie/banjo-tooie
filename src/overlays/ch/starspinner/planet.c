@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void *D_80800260_chstarspinnerplanet;
-extern int D_808002A8_chstarspinnerplanet;
+extern int D_808002A8_chstarspinnerplanet[];
 extern f32 func_800D8FF8(void);
 extern f32 func_800F15F8(f32, f32, f32);
 extern f32 func_800136E4(f32);
@@ -70,3 +70,15 @@ void func_808001E8_chstarspinnerplanet(s32 param_0)
   }
   _subaddiefade_entrypoint_12(param_0, 0xA0, 0xA0, 0xA0);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/starspinner/planet.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808002A8_chstarspinnerplanet -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+void *D_80800260_chstarspinnerplanet = (void *)0x01AF0334;
+static u32 D_80800260_chstarspinnerplanet_rest[17] = { 0x7770001, 0x0, (u32)func_80800018_chstarspinnerplanet, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x30804C00, 0x0, 0x0, 0x0, (u32)func_808000E4_chstarspinnerplanet, (u32)func_80107C2C, 0x80080402, 0x0, 0x0 };
+int D_808002A8_chstarspinnerplanet[18] = { 0x1B60335, 0x7780001, 0x0, (u32)func_80800170_chstarspinnerplanet, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x30804C00, 0x0, 0x0, 0x0, (u32)func_808001E8_chstarspinnerplanet, (u32)func_80107C2C, -0x7FF7FBFE, 0x0, 0x0 };
+u8 D_808002F0_chstarspinnerplanet[32] = { 0x0, 0x13, 0x4, 0xCB, 0x0, 0x16, 0x75, 0x30, 0x0, 0x1, 0x5, 0xDC, 0xF, 0xA0, 0x0, 0xA, 0x0, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

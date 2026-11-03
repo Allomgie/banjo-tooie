@@ -1,7 +1,7 @@
 #include "ch/doubloon.h"
 
 extern u8 D_80800290_chdoubloon[];
-extern int D_808002A0_chdoubloon;
+extern int D_808002A0_chdoubloon[];
 extern f32 func_800D8FF8(void);
 extern f32 func_800DC0C0(void);
 extern f32 func_800DC178(f32, f32);
@@ -71,3 +71,14 @@ int *chdoubloon_entrypoint_2()
 {
     return &D_808002A0_chdoubloon;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/doubloon.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808002A0_chdoubloon -> int[] */
+extern void func_80105834();
+extern void _chdoubloon_entrypoint_0();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_80800290_chdoubloon[16] = { 0x0, 0x1B, 0x0, 0x13, 0x6, 0x34, 0x0, 0x2, 0x0, 0x14, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x0 };
+int D_808002A0_chdoubloon[20] = { 0x13404E5, 0x7C00001, 0x0, (u32)func_8080000C_chdoubloon, (u32)func_80105834, (u32)_chdoubloon_entrypoint_0, 0xBB8, 0x0, 0x0, 0x4, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chdoubloon, (u32)func_80107C2C, -0x7FFFE000, (u32)func_808001D4_chdoubloon, 0x0, 0x0, 0x0 };

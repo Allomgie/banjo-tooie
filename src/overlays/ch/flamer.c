@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_80800B20_chflamer;
+extern int D_80800B20_chflamer[];
 extern s32 func_800BF8E4(void);
 typedef struct { u8 pad_0[0x72]; u16 st : 6; u16 rest : 10; } FlamerState;
 typedef struct { f32 f0; s16 s4; s16 s6; s16 s8; s16 sA; s16 sC; s16 sE; u32 w10; } FlamerEnt;
@@ -20,7 +20,7 @@ extern f32 func_800DC178(f32, f32);
 extern void _subaddielink_entrypoint_0();
 typedef struct { u8 pad_0[0x16]; s16 current; s16 target; u8 pad_1[0x192]; s32 volume; } FlamerVolume29;
 extern s32 _subaddievolume_entrypoint_0(void *, f32 (*)[3], s32, s32, s32 *);
-extern s32 D_80800B68_chflamer;
+extern s32 D_80800B68_chflamer[];
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800EE88C();
@@ -304,3 +304,11 @@ void func_808009C0_chflamer(param_0, param_1) Actor *param_0; s32 param_1;
     }
     local_5[0x14] = 1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/flamer.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800B20_chflamer -> int[], D_80800B68_chflamer -> s32[] */
+int D_80800B20_chflamer[18] = { 0x30B03A2, -0xFFFF, 0x0, (u32)func_80800050_chflamer, (u32)func_80105834, (u32)func_80800434_chflamer, 0x0, 0x0, 0x0, 0x20000, 0x0, 0x0, 0x1BC0000, (u32)func_8080000C_chflamer, (u32)func_80107C2C, -0x7FFFFFFE, (u32)func_80800594_chflamer, 0x0 };
+s32 D_80800B68_chflamer[5] = { 0x130483, 0x1636B0, 0xE0133, 0x1700180, 0x0 };
+u8 D_80800B7C_chflamer[20] = { 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0xE0, 0x0, 0x0, 0x0, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

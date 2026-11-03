@@ -18,3 +18,6 @@ s32 dbvtxnormal_entrypoint_2(void *arg)
   aligned4_memcpy(dst, func_800B27A0(arg), size);
   return dst;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/vtxnormal.data.s) is defined here in C.
+ * Values are taken from the ROM. */

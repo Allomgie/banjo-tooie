@@ -30,3 +30,6 @@ void bamoveledge_entrypoint_3(PlayerState *param_0)
     func_800EF04C(local_1, local_0);
     func_8009B98C(param_0, local_1);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/move/ledge.data.s) is defined here in C.
+ * Values are taken from the ROM. */

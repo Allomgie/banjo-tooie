@@ -513,3 +513,10 @@ int func_80801484_gcboundDll(param_0, param_1, param_2, param_3, param_4) s32 pa
     }
     return 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/boundDll.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+BoundV2 D_808015B0_gcboundDll = { 0.0f, 0.0f };
+BoundV2 D_808015B8_gcboundDll = { 0.0f, 0.0f };
+BoundV2 D_808015C0_gcboundDll = { 0.0f, 0.0f };
+BoundV2 D_808015C8_gcboundDll = { 0.0f, 0.0f };

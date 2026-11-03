@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void func_800C8E54(s32, f32, f32);
-extern int D_808000F0_chjrinnlight;
+extern int D_808000F0_chjrinnlight[];
 
 int func_80800000_chjrinnlight(Actor *param_0)
 {
@@ -36,3 +36,13 @@ int chjrinnlight_entrypoint_0()
 {
     return (int)&D_808000F0_chjrinnlight;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/jrinnlight.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808000F0_chjrinnlight -> int[] */
+extern void func_80102EC0();
+extern void func_80105834();
+extern void func_8010A730();
+extern void func_80107C2C();
+int D_808000F0_chjrinnlight[20] = { 0x15804BD, 0x1, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, (u32)func_80800000_chjrinnlight, 0x0, 0x0, 0x0, (u32)func_80107C2C, -0x7FFFD9FE, (u32)func_80800038_chjrinnlight, 0x0, 0x0, 0x0 };

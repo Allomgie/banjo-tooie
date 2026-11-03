@@ -72,3 +72,6 @@ f32 ncbawaypoint_entrypoint_3(CameraWaypointOwner62 *this, f32 *pos, f32 *target
     }
     return sum;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/waypoint.data.s) is defined here in C.
+ * Values are taken from the ROM. */

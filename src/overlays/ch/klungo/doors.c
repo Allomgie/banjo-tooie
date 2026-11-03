@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808004C0_chklungodoors;
+extern int D_808004C0_chklungodoors[];
 extern void func_8010A800();
 typedef struct { s16 local_0; s16 local_1; s32 local_2; s32 local_3; u16 local_4; u8 local_5; u8 local_6; } KlungoDoorSettings48;
 extern KlungoDoorSettings48 D_80800490_chklungodoors[];
@@ -31,7 +31,7 @@ int chklungodoors_entrypoint_0()
 
 int chklungodoors_entrypoint_1()
 {
-    extern int D_80800508_chklungodoors;
+    extern int D_80800508_chklungodoors[];
     return (int)&D_80800508_chklungodoors;
 }
 
@@ -133,3 +133,17 @@ s32 func_80800300_chklungodoors(Actor *param_0, s32 param_1, s32 param_2)
     }
     return _chdoor_entrypoint_1(param_0, param_1, param_2);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/klungo/doors.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8080049A_chklungodoors = D_80800490_chklungodoors + 0xA, D_8080049E_chklungodoors = D_80800490_chklungodoors + 0xE, D_80800498_chklungodoors = D_80800490_chklungodoors + 0x8
+ * extern declarations adjusted to the object (same addresses): D_808004C0_chklungodoors -> int[], D_80800508_chklungodoors -> int[] */
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+KlungoDoorSettings48 D_80800490_chklungodoors[3] = { 0x141, 0x1F4, 0x3FC00000, 0x7AE07AE, 0x318, 0x0, 0x2, 0x15B, 0x1F4, 0x3FA00000, 0x7AE07AE, 0x319, 0x0, 0x2, 0x15E, 0x15E, 0x3F800000, 0x94D094C, 0x31A, 0x1, 0xB };
+int D_808004C0_chklungodoors[18] = { 0xAC041F, 0x7AE0004, 0x0, (u32)func_80800234_chklungodoors, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800018_chklungodoors, (u32)func_80107C2C, -0x7FF7D3FE, (u32)func_80800300_chklungodoors, 0x0 };
+int D_80800508_chklungodoors[18] = { 0xAC0420, 0x7AE0001, 0x0, (u32)func_80800234_chklungodoors, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800018_chklungodoors, (u32)func_80107C2C, -0x7FF7D3FE, (u32)func_80800300_chklungodoors, 0x0 };
+u8 D_80800550_chklungodoors[32] = { 0x0, 0x13, 0x5, 0xB7, 0x0, 0x1, 0x0, 0xC8, 0x7, 0xD0, 0x0, 0xA, 0x1, 0x66, 0x0, 0x16, 0x7D, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

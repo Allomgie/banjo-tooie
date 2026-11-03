@@ -267,3 +267,7 @@ void gztrace_entrypoint_1(OSThread *param_0, s32 param_1, s32 param_2, s32 param
     }
     func_808005C4_gztrace(local_0, local_1, local_4, param_2, param_3);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gz/trace.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u32 D_80800A30_gztrace[16] = { 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D2D2D2D, 0x2D000000 };

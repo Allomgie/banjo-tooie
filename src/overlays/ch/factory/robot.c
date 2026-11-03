@@ -1,8 +1,8 @@
 #include "common.h"
 
 #define W64(p) (((FRFlags *)(p))->b29)
-extern int D_80802928_chfactoryrobot;
-extern int D_80802970_chfactoryrobot;
+extern int D_80802928_chfactoryrobot[];
+extern int D_80802970_chfactoryrobot[];
 extern void *D_808029B8_chfactoryrobot;
 extern f32 _subaddieaudioloop_entrypoint_8(Actor *, f32 *, s32, f32);
 extern int func_80107070(Actor *, s32);
@@ -37,7 +37,7 @@ extern f32 func_800136E4(f32);
 extern void func_800E0AFC(s32, u8, f32, f32, f32, f32);
 typedef struct { u8 pad_0[0x18]; s16 local_0; u8 pad_1[6]; f32 local_1; } FactoryRobotDelayState;
 typedef struct { u8 pad_0[0x64]; u32 pad_1 : 2; u32 local_0 : 1; u32 pad_2 : 29; } FactoryRobotControl;
-extern s32 D_80802AD4_chfactoryrobot;
+extern s32 D_80802AD4_chfactoryrobot[];
 extern void func_800CD1E0(s32, f32 *, f32);
 extern u8 func_800D731C(s32);
 extern void *func_800E8C58(u8);
@@ -105,7 +105,7 @@ extern void _subaddieaudioquick_entrypoint_2();
 extern void func_800DA544(s32);
 extern void func_800D2498(s32, s32, s32);
 extern s32 func_800F1418(s32, s32);
-extern s32 D_80802AF4_chfactoryrobot;
+extern s32 D_80802AF4_chfactoryrobot[];
 extern void func_800E8D28(s32, f32);
 typedef union { s32 local_0; s16 local_1[2]; } FactoryRobotMessage36;
 void func_80800424_chfactoryrobot();
@@ -1062,3 +1062,32 @@ int func_808025D4_chfactoryrobot(param_0) Actor *param_0;
         func_800DA544(0x6A3);
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/factory/robot.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80802928_chfactoryrobot -> int[], D_80802970_chfactoryrobot -> int[], D_80802AD4_chfactoryrobot -> s32[], D_80802AF4_chfactoryrobot -> s32[] */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+u8 D_80802890_chfactoryrobot[2][12] = { 0x0, 0x0, 0x0, 0xC0, 0x0, 0x0, 0x0, 0xC0, 0x0, 0x0, 0x0, 0xFF, 0x0, 0x0, 0x0, 0x80, 0x0, 0x0, 0x0, 0x80, 0x0, 0x0, 0x0, 0xA0 };
+u32 D_808028A8_chfactoryrobot[5] = { 0x10000, 0x0, 0x0, 0x70000, 0x80000 };
+u32 D_808028BC_chfactoryrobot[5] = { 0x20000, 0x90000, 0x90000, 0x80000, 0xA0000 };
+u32 D_808028D0_chfactoryrobot[22] = { 0x0, 0x0, 0x3FC00000, 0x2B50101, 0x3F1126E9, 0x2B60002, 0x3F000000, 0x2B70001, 0x3F028F5C, 0x2B80002, 0x3FC00000, 0x2B50101, 0x3F000000, 0x2B70001, 0x0, 0x0, 0x0, 0x0, 0x3FC00000, 0x2B50001, 0x3FC00000, 0x2B50001 };
+int D_80802928_chfactoryrobot[18] = { 0x32103BD, 0x7E30001, 0x0, (u32)func_80800058_chfactoryrobot, (u32)func_80105834, (u32)func_801018A4, 0xDAC0000, 0x0, 0x0, 0x120, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800024_chfactoryrobot, (u32)func_80107C2C, -0x7FFFBBF0, (u32)func_80800360_chfactoryrobot, (u32)&D_808028A8_chfactoryrobot };
+int D_80802970_chfactoryrobot[18] = { 0x32203BE, 0x7D10001, (u32)&D_808028D0_chfactoryrobot, (u32)func_80800920_chfactoryrobot, (u32)func_80105834, (u32)func_80800FFC_chfactoryrobot, 0xDAC0000, 0x3FC00000, 0x0, 0x43A50320, (u32)func_80800DC4_chfactoryrobot, (u32)func_80108ED0, 0x400000, (u32)func_808007C4_chfactoryrobot, (u32)func_80107C2C, -0x7FDDABE1, (u32)func_80800E40_chfactoryrobot, (u32)&D_808028BC_chfactoryrobot };
+void *D_808029B8_chfactoryrobot = (void *)0x032303BF;
+static u32 D_808029B8_chfactoryrobot_rest[17] = { 0x8740001, 0x0, (u32)func_80801D7C_chfactoryrobot, (u32)func_80105834, (u32)func_801018A4, 0x0, 0x0, 0x0, 0x40000801, (u32)func_8080219C_chfactoryrobot, 0x0, 0x180000, (u32)func_80801D08_chfactoryrobot, (u32)func_80107C2C, 0x80085416, (u32)func_80802240_chfactoryrobot, 0x0 };
+u8 D_80802A00_chfactoryrobot[56] = { 0x0, 0x1D, 0x9, 0xE2, 0x0, 0x1B, 0xFD, 0xA9, 0xFE, 0x5F, 0x0, 0x2D, 0x1, 0x2C, 0x1, 0x90, 0x0, 0xE, 0x0, 0x14, 0x0, 0x14, 0x0, 0x1F, 0xFF, 0xFF, 0x60, 0x0, 0x0, 0x16, 0x11, 0x8, 0x0, 0x22, 0x0, 0x19, 0x0, 0x19, 0x0, 0xC, 0x0, 0xC, 0x0, 0x15, 0x0, 0x0, 0x0, 0xCC, 0x0, 0x2B, 0x1, 0x19, 0x1, 0x4C, 0x0, 0x0 };
+u8 D_80802A38_chfactoryrobot[52] = { 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x2D, 0x0, 0x96, 0x0, 0xFA, 0x0, 0xE, 0x0, 0x14, 0x0, 0x14, 0x0, 0x20, 0xC0, 0xC0, 0xC0, 0xC0, 0x0, 0x16, 0x0, 0x8, 0x0, 0x22, 0x0, 0x99, 0x0, 0xB3, 0x0, 0xD9, 0x0, 0xE6, 0x0, 0x15, 0x0, 0x0, 0x0, 0x99, 0x0, 0x2B, 0x1, 0x33, 0x1, 0x99, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80802A6C_chfactoryrobot[16] = { 0x0, 0x13, 0x4, 0x13, 0x0, 0xA, 0x1, 0x4C, 0x0, 0x1, 0x2, 0x26, 0x9, 0xC4, 0x0, 0x0 };
+u8 D_80802A7C_chfactoryrobot[16] = { 0x0, 0x13, 0x4, 0x8D, 0x0, 0xA, 0x0, 0xCC, 0x0, 0x1, 0x2, 0x26, 0x9, 0xC4, 0x0, 0x0 };
+f32 D_80802A8C_chfactoryrobot[4] = { 1.746943e-39f, 1.194202e-39f, 2.5714e-38f, 5.2452087e-06f };
+f32 D_80802A9C_chfactoryrobot[4] = { 1.746625e-39f, 9.18714e-40f, 2.031591e-39f, 0.0f };
+f32 D_80802AAC_chfactoryrobot[3] = { 1.746733e-39f, 1.194292e-39f, 4.2244328e-38f };
+u8 D_80802AB8_chfactoryrobot[20] = { 0x0, 0x13, 0x4, 0x13, 0x0, 0xD, 0x1, 0x19, 0x1, 0x33, 0x0, 0x1, 0x4, 0xE2, 0x9, 0xC4, 0x0, 0x0, 0x0, 0x0 };
+RobotSoundLimits D_80802ACC_chfactoryrobot = { 2.5e+02f, 4e+02f };
+s32 D_80802AD4_chfactoryrobot[6] = { 0x12, 0x40200000, 0xFF0000, 0x1, 0x400CCCCD, 0xFF0000 };
+u8 D_80802AEC_chfactoryrobot[8] = { 0x0, 0x13, 0x4, 0x6A, 0x0, 0x2, 0x0, 0x0 };
+s32 D_80802AF4_chfactoryrobot[7] = { 0x0, 0x0, 0x3F000000, 0x3F800000, 0x3F800000, 0x0, 0x0 };

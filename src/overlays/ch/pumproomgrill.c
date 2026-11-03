@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int D_808000E0_chpumproomgrill;
+extern int D_808000E0_chpumproomgrill[];
 extern void func_800EE7F8(f32 *, f32 *);
 extern void func_800EF1B8(f32 *, f32, f32);
 extern u8 D_80800128_chpumproomgrill[];
@@ -38,3 +38,16 @@ void func_808000AC_chpumproomgrill(param_0) u8 *param_0; {
     _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, D_80800128_chpumproomgrill);
     func_800DA544(0x162);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/pumproomgrill.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_808000E0_chpumproomgrill -> int[] */
+extern void func_80102EC0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _bsbtrot_entrypoint_10();
+int D_808000E0_chpumproomgrill[18] = { 0x19B034A, 0x8810001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x1620000, 0x40020C00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chpumproomgrill, (u32)func_80107C2C, (u32)_bsbtrot_entrypoint_10, (u32)func_80800014_chpumproomgrill, 0x0 };
+u8 D_80800128_chpumproomgrill[24] = { 0x0, 0x13, 0x4, 0xA0, 0x0, 0xA, 0x0, 0xE6, 0x0, 0x18, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

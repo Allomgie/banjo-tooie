@@ -36,3 +36,9 @@ void bsow_entrypoint_2(PlayerState *self) {
 s32 bsow_entrypoint_3(s32 idx) {
     return D_80800150_bsow[idx];
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ow.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80099AA8();
+s32 D_80800150_bsow[4] = { (u32)_bsow_entrypoint_2, (u32)_bsow_entrypoint_0, (u32)_bsow_entrypoint_1, (u32)func_80099AA8 };

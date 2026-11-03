@@ -122,3 +122,6 @@ next:
         vtx[0xE] = b;
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/light.data.s) is defined here in C.
+ * Values are taken from the ROM. */

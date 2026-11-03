@@ -1,9 +1,9 @@
 #include "common.h"
 
-extern char D_808002B4_chtalontorpedoboulder;
+extern u32 D_808002B4_chtalontorpedoboulder[];
 extern void func_80102FDC(Actor *, f32);
-extern s32 D_80800240_chtalontorpedoboulder;
-extern s32 D_808002FC_chtalontorpedoboulder;
+extern s32 D_80800240_chtalontorpedoboulder[];
+extern s32 D_808002FC_chtalontorpedoboulder[];
 typedef struct { u8 pad[0x76]; u16 f76:9; u16 pad76:7; } TalonState;
 typedef struct { s16 id; s16 val; } TalonEntry;
 extern TalonEntry D_80800314_chtalontorpedoboulder[];
@@ -84,3 +84,17 @@ s32 func_808001F8_chtalontorpedoboulder(param_0) TalonState *param_0; {
     }
     return -1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/talontorpedoboulder.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800240_chtalontorpedoboulder -> s32[], D_808002B4_chtalontorpedoboulder -> u32[], D_808002FC_chtalontorpedoboulder -> s32[] */
+extern void func_80102EC0();
+extern void func_80105834();
+extern void func_80108ED0();
+extern void func_80107C2C();
+s32 D_80800240_chtalontorpedoboulder[29] = { 0x4100016, -0x7FFFFFE3, 0x9DD002B, 0x8000A00, 0x220180, 0x2000480, 0x6000015, 0x26, 0x190000, 0x7002D, 0x320064, 0x20DEA7, 0x71C0000A, -0x63FFE7, -0x63FF9C, 0x4B0064, 0x41A0F10, 0x1D092F, 0x140016, -0x7A79FFD3, 0x1900258, 0x1BFCE0, -0x257FFDE, 0xB300CC, 0xB300B3, 0x1E0032, 0x32000D, 0x4B0F1A, 0x0 };
+u32 D_808002B4_chtalontorpedoboulder[18] = { 0x10B0472, 0x92A0001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80800194_chtalontorpedoboulder, 0x0, 0x0, 0x0, 0x40000800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_8080000C_chtalontorpedoboulder, (u32)func_80107C2C, 0x80080C10, (u32)func_80800070_chtalontorpedoboulder, 0x0 };
+s32 D_808002FC_chtalontorpedoboulder[6] = { 0x1B0013, 0x413000A, 0xE60016, 0x6D600001, 0x4E209C4, 0x0 };
+TalonEntry D_80800314_chtalontorpedoboulder[1] = { 0x0, 0x2 };
+TalonEntry D_80800318_chtalontorpedoboulder[2] = { 0x0, 0x0, 0x0, 0x0 };

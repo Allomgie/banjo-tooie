@@ -1,9 +1,9 @@
 #include "common.h"
 
 #define ACTOR_CALLBACK_DATA_DEFINED
-extern int D_80800380_chbigterrysbits;
-extern int D_808003C8_chbigterrysbits;
-extern int D_80800410_chbigterrysbits;
+extern int D_80800380_chbigterrysbits[];
+extern int D_808003C8_chbigterrysbits[];
+extern int D_80800410_chbigterrysbits[];
 extern void func_80101FDC(Actor *, s32);
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
@@ -118,3 +118,18 @@ void func_8080029C_chbigterrysbits(Actor *param_0)
         }
     }
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/bigterrysbits.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80800380_chbigterrysbits -> int[], D_808003C8_chbigterrysbits -> int[], D_80800410_chbigterrysbits -> int[] */
+extern void _chdoor_entrypoint_0();
+extern void func_80105834();
+extern void func_80101870();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_1();
+extern void func_80108ED0();
+int D_80800380_chbigterrysbits[18] = { 0xAC0461, 0x7C40004, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x752F, 0x0, 0x0, 0x400, 0x0, 0x0, 0x0, (u32)func_80800024_chbigterrysbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)_chdoor_entrypoint_1, 0x0 };
+int D_808003C8_chbigterrysbits[18] = { 0x2FF0365, 0x7530001, 0x0, (u32)func_80800160_chbigterrysbits, (u32)func_80105834, (u32)func_80101870, 0x752F, 0x0, 0x1730000, 0xC00, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800130_chbigterrysbits, (u32)func_80107C2C, -0x7FFFD400, (u32)func_808001A8_chbigterrysbits, 0x0 };
+int D_80800410_chbigterrysbits[18] = { 0xAC0469, 0x7C40001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x752F, 0x0, 0x0, 0xC00, 0x0, 0x0, 0x0, (u32)func_8080029C_chbigterrysbits, (u32)func_80107C2C, -0x7FFFD3FE, (u32)_chdoor_entrypoint_1, 0x0 };
+u8 D_80800458_chbigterrysbits[24] = { 0x0, 0x13, 0x4, 0xF4, 0x0, 0xA, 0x0, 0xCC, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x1, 0x4, 0xE2, 0x1F, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

@@ -195,3 +195,18 @@ int chwaspstatue_entrypoint_2()
 {
   return &D_80800788_chwaspstatue;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/waspstatue.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void func_80105834();
+extern void func_801018A4();
+extern void func_80108ED0();
+extern void func_80107C2C();
+extern void _chdoor_entrypoint_0();
+extern void func_80101870();
+extern void _chdoor_entrypoint_1();
+void *D_80800740_chwaspstatue = (void *)0x0352040F;
+static u32 D_80800740_chwaspstatue_rest[17] = { 0x8D00001, 0x0, (u32)func_8080003C_chwaspstatue, (u32)func_80105834, (u32)func_801018A4, 0x3E836B0, 0x0, 0x0, 0x400, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chwaspstatue, (u32)func_80107C2C, 0x80002400, (u32)func_80800350_chwaspstatue, 0x0 };
+void *D_80800788_chwaspstatue = (void *)0x03550411;
+static u32 D_80800788_chwaspstatue_rest[17] = { 0x8D10001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800544_chwaspstatue, (u32)func_80107C2C, 0x80002402, (u32)_chdoor_entrypoint_1, 0x0 };

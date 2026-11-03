@@ -71,3 +71,6 @@ int plsu_entrypoint_3(s32 param_0)
 
   return -1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/pl/su.data.s) is defined here in C.
+ * Values are taken from the ROM. */

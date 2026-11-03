@@ -41,3 +41,6 @@ s32 glcrc_entrypoint_1(u8 *param_0, s32 param_1)
     func_80800000_glcrc(param_0, local_0, local_1);
     return (local_0[0] != local_1[0] || local_0[1] != local_1[1]) ? 0x6E382 : 0;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/crc.data.s) is defined here in C.
+ * Values are taken from the ROM. */

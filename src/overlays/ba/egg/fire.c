@@ -210,3 +210,6 @@ int baeggfire_entrypoint_8(void *param_0)
 {
   return ((*((int **) (((char *) param_0) + 108)))[0x8 / 4] < 2) ^ 0x1;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/egg/fire.data.s) is defined here in C.
+ * Values are taken from the ROM. */

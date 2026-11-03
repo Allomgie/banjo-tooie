@@ -83,3 +83,6 @@ void bawasher_entrypoint_9(PlayerState *self) {
     func_800E0AFC(tmp_s1, 0x4F, 1.0f, self->washer->unk8, 0.0f, 0.0f);
     func_800E0AFC(tmp_s1, 0x51, 1.0f, self->washer->unk8, 0.0f, 0.0f);
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/washer.data.s) is defined here in C.
+ * Values are taken from the ROM. */

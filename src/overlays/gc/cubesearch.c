@@ -380,3 +380,6 @@ s32 gccubesearch_entrypoint_18(s32 param_0, s32 *param_1, s32 *param_2, s32 *par
     } while (local_2 == 0);
     return local_2;
 }
+
+/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/cubesearch.data.s) is defined here in C.
+ * Values are taken from the ROM. */
