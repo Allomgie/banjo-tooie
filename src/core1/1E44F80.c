@@ -1,8 +1,5 @@
 #include "common.h"
 
-/* func_8002D450: builds audio RSP commands (0x0A... / 0x05... acmds) with the pitch quantised to
- * 1/32768 and a fraction accumulator at 0x4C. 1.99996 is the f64 limit, 1.99996f the f32 clamp. */
-
 typedef struct {
     u32 w0;
     u32 w1;
@@ -10,11 +7,11 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x40];
-    void *unk40;           /* 0x40: Sample-Ptr */
-    f32 unk44;             /* 0x44: Pitch */
-    s32 unk48;             /* 0x48: Raw-Flag */
-    f32 unk4C;             /* 0x4C: Frac-Akkumulator */
-    s32 unk50;             /* 0x50: Startmode 0..3 */
+    void *unk40;
+    f32 unk44;
+    s32 unk48;
+    f32 unk4C;
+    s32 unk50;
 } TTVoiceD;
 
 extern TTAcmd2 *func_8002C5F8(TTVoiceD *, s16 *, s32, TTAcmd2 *);
@@ -39,21 +36,20 @@ TTAcmd2 *func_8002D450(TTVoiceD *v, s16 *arg1, TTAcmd2 *cmd)
         c1->w1 = ((*arg1 & 0xFFFF) << 16) | 0x170;
         if (1) {
         }
-    }
-    else {
+    } else {
         if (v->unk44 > 1.99996)
             v->unk44 = 1.99996f;
 
-        v->unk44 = (f32)(s32)(v->unk44 * 32768.0f);
+        v->unk44 = (f32) (s32) (v->unk44 * 32768.0f);
         v->unk44 = v->unk44 / 32768.0f;
 
         t = v->unk4C + v->unk44 * 184.0f;
-        ti = (s32)t;
-        v->unk4C = t - (f32)ti;
+        ti = (s32) t;
+        v->unk4C = t - (f32) ti;
 
         p = func_8002C5F8(v, &tmp, ti, cmd);
 
-        pitch = (s32)(v->unk44 * 32768.0f);
+        pitch = (s32) (v->unk44 * 32768.0f);
 
         c2 = p++;
         c2->w0 = (osVirtualToPhysical(v->unk40) & 0xFFFFFF) | 0x05000000;

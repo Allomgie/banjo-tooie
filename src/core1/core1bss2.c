@@ -1,4 +1,3 @@
-// These bss variables were migrated to this standalone file to make bss migration for other C files easier, but they all belong to other C files.
 #include "types.h"
 
 u8 D_8007E9C0[0x64];
@@ -12,7 +11,7 @@ u8 D_8007EA32;
 u8 D_8007EA33;
 u8 D_8007EA34;
 u8 D_8007EA35;
-u8 pad2_6; // Can't pad with an array because of automatic alignment
+u8 pad2_6;
 u8 pad2_7;
 u8 pad2_8;
 u8 pad2_9;

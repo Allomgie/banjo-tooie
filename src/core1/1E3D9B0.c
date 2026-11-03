@@ -1,7 +1,32 @@
 #include "common.h"
 
-typedef struct { u8 pad[0x48]; u8 evtq; /* 0x48 */ } TTCSPlayer;
-typedef struct { s16 type; /* 0x0 */ union { struct { void *seq; } spseq; /* ptr @4 */ struct { s16 vol; } spvol; /* s16 @4 */ struct { f32 a; f32 b; } fpair; /* @4,@8 */ struct { s32 ticks; u8 status; u8 chan; u8 ctrl; u8 val; s32 duration; } midi; /* @4,8,9,A,B */ } msg; } TTEvt;
+typedef struct {
+    u8 pad[0x48];
+    u8 evtq;
+} TTCSPlayer;
+typedef struct {
+    s16 type;
+    union {
+        struct {
+            void *seq;
+        } spseq;
+        struct {
+            s16 vol;
+        } spvol;
+        struct {
+            f32 a;
+            f32 b;
+        } fpair;
+        struct {
+            s32 ticks;
+            u8 status;
+            u8 chan;
+            u8 ctrl;
+            u8 val;
+            s32 duration;
+        } midi;
+    } msg;
+} TTEvt;
 extern void func_80026500(void *, TTEvt *, s32, s32);
 
 void func_80025E80(TTCSPlayer *seqp, void *seq)

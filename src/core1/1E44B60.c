@@ -1,11 +1,32 @@
 #include "common.h"
 
-typedef struct { u32 w0; u32 w1; } TTAcmd;
-typedef struct { u8 pad0[0x8C]; u8 unk8C; /* 0x8C */ u8 pad8D[5]; s16 unk92; /* 0x92 */ u8 pad94[0x24]; u32 unkB8; /* 0xB8 */ void *unkBC; /* 0xBC */ } TTRvb;
-typedef struct { s16 unk0; /* 0x0 */ } TTRParam;
+typedef struct {
+    u32 w0;
+    u32 w1;
+} TTAcmd;
+typedef struct {
+    u8 pad0[0x8C];
+    u8 unk8C;
+    u8 pad8D[5];
+    s16 unk92;
+    u8 pad94[0x24];
+    u32 unkB8;
+    void *unkBC;
+} TTRvb;
+typedef struct {
+    s16 unk0;
+} TTRParam;
 extern TTAcmd *func_8002D450(TTRvb *, TTRParam *, TTAcmd *);
 extern void func_80028C04(void *, f32);
-typedef struct { u8 pad0[0x8C]; u8 unk8C; /* 0x8C */ u8 pad8D[3]; s16 unk90; /* 0x90 */ s16 unk92; /* 0x92 */ u8 pad94[0x24]; s32 unkB8; /* 0xB8: Dirty-Flags */ } TTVoiceE;
+typedef struct {
+    u8 pad0[0x8C];
+    u8 unk8C;
+    u8 pad8D[3];
+    s16 unk90;
+    s16 unk92;
+    u8 pad94[0x24];
+    s32 unkB8;
+} TTVoiceE;
 extern void func_8002CC9C(TTVoiceE *, s32, s32);
 
 TTAcmd *func_8002D030(TTRvb *state, TTRParam *param, s32 arg2, TTAcmd *cmdBuf)
@@ -20,25 +41,25 @@ TTAcmd *func_8002D030(TTRvb *state, TTRParam *param, s32 arg2, TTAcmd *cmdBuf)
 
     if (state->unk8C != 0 && state->unk8C < 0x40) {
         if (state->unk8C >= 6)
-            pitch = 26755.0f / sqrtf((f32)state->unk8C + 1.0f);
+            pitch = 26755.0f / sqrtf((f32) state->unk8C + 1.0f);
         else
-            pitch = 65536.0f / ((f32)state->unk8C + 1.0f);
+            pitch = 65536.0f / ((f32) state->unk8C + 1.0f);
 
         if (pitch < 7723.0f)
             pitch = 7723.0f;
 
         p1 = cmd++;
         p1->w0 = param->unk0 & 0xFFFF;
-        p1->w1 = (((u32)pitch & 0xFFFF) << 16) | ((state->unk8C + 1) & 0xFFFF);
+        p1->w1 = (((u32) pitch & 0xFFFF) << 16) | ((state->unk8C + 1) & 0xFFFF);
     }
 
     if (state->unk92 > 0) {
         if (state->unkB8 != 0)
-            func_80028C04(&((u8 *)state)[0x90], 22050.0f);
+            func_80028C04(&((u8 *) state)[0x90], 22050.0f);
 
         p2 = cmd++;
         p2->w0 = 0x0B000020;
-        p2->w1 = osVirtualToPhysical(&((u8 *)state)[0x98]);
+        p2->w1 = osVirtualToPhysical(&((u8 *) state)[0x98]);
 
         if (state->unkB8 == 2)
             state->unkB8 = 0;
@@ -54,7 +75,7 @@ TTAcmd *func_8002D030(TTRvb *state, TTRParam *param, s32 arg2, TTAcmd *cmdBuf)
 
 s32 func_8002D328(TTVoiceE *v, s32 type, s32 val)
 {
-    f32 *fp = (f32 *)&val;
+    f32 *fp = (f32 *) &val;
 
     switch (type) {
         case 4:
@@ -66,7 +87,7 @@ s32 func_8002D328(TTVoiceE *v, s32 type, s32 val)
             v->unkB8 |= 2;
             break;
         case 0x13:
-            v->unk90 = (s32)*fp;
+            v->unk90 = (s32) *fp;
             v->unkB8 |= 2;
             break;
         case 0x11:

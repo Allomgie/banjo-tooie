@@ -1,6 +1,9 @@
 #include "common.h"
 
-typedef struct TTLink_s { struct TTLink_s *next; struct TTLink_s *prev; } TTLink;
+typedef struct TTLink_s {
+    struct TTLink_s *next;
+    struct TTLink_s *prev;
+} TTLink;
 
 void func_80020E40(TTLink *param_0, TTLink *param_1)
 {

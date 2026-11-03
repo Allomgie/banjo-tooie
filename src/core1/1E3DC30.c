@@ -1,7 +1,19 @@
 #include "common.h"
 
-typedef struct { u8 pad0[0x9]; u8 unk9; /* 0x9 */ u8 unkA; /* 0xA */ u8 padB[0x38 - 0xB]; /* stride 0x38 */ } TTVc38;
-typedef struct { u8 pad0[0x30]; s32 unk30; /* 0x30: Kanal-Bitmask */ u8 pad34[2]; u8 unk36; /* 0x36: Anzahl */ u8 pad37[0x60 - 0x37]; TTVc38 *unk60; /* 0x60 */ } TTSeqObj;
+typedef struct {
+    u8 pad0[0x9];
+    u8 unk9;
+    u8 unkA;
+    u8 padB[0x38 - 0xB];
+} TTVc38;
+typedef struct {
+    u8 pad0[0x30];
+    s32 unk30;
+    u8 pad34[2];
+    u8 unk36;
+    u8 pad37[0x60 - 0x37];
+    TTVc38 *unk60;
+} TTSeqObj;
 extern void func_8002ACE0(TTSeqObj *, s32, s32, s32, s32, s32);
 
 void func_80026100(TTSeqObj *obj)

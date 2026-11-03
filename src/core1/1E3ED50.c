@@ -1,17 +1,14 @@
 #include "common.h"
 
-/* func_80027220 (TU core1/1E3ED50): Voice-Param-Getter ueber globalen Audio-Manager
- * D_800411F4 (Array-Feld @0x34, Stride 0x48, Ziel-Feld @0x24). Axiom-Test TU #3. */
-
 typedef struct {
     u8 pad0[0x24];
-    s32 unk24;             /* 0x24 */
-    u8 pad28[0x20];        /* -> sizeof 0x48 */
+    s32 unk24;
+    u8 pad28[0x20];
 } TTVoice48;
 
 typedef struct {
     u8 pad0[0x34];
-    TTVoice48 *unk34;      /* 0x34 */
+    TTVoice48 *unk34;
 } TTAudioMgr;
 
 extern TTAudioMgr *D_800411F4;

@@ -1,16 +1,48 @@
 #include "common.h"
 
-typedef struct { u8 pad0[0x88]; s32 unk88; /* 0x88: Zeit-Offset */ } TTPlayer;
-typedef struct { u8 pad0[8]; TTPlayer *unk8; /* 0x8 */ u8 padC[0xE]; s16 unk1A; /* 0x1A (nur 26CB0) */ } TTWrap;
-typedef struct { u8 pad0[0x1C]; s32 unk1C; /* 0x1C: globale Zeit */ } TTAMgrT;
+typedef struct {
+    u8 pad0[0x88];
+    s32 unk88;
+} TTPlayer;
+typedef struct {
+    u8 pad0[8];
+    TTPlayer *unk8;
+    u8 padC[0xE];
+    s16 unk1A;
+} TTWrap;
+typedef struct {
+    u8 pad0[0x1C];
+    s32 unk1C;
+} TTAMgrT;
 extern TTAMgrT *D_800411F4;
 extern void *func_80021794(void);
-extern void func_80021884(TTPlayer *);
-extern s32 func_80021928(s32);
 extern void func_8002B684(TTPlayer *, s32, void *);
-typedef struct { s32 unk0; s32 unk4; s16 type; u8 padA[2]; s32 unkC; } TTQEvtG;
-typedef struct { u32 division; u32 nTracks; u32 trackOffset[32]; } TTCMidiHdr;
-typedef struct { TTCMidiHdr *base; /* 0x00 */ u32 validTracks; /* 0x04 */ f32 qnpt; /* 0x08 */ u32 lastTicks; /* 0x0C */ u32 lastDeltaTicks; /* 0x10 */ s32 deltaFlag; /* 0x14 */ u8 *curLoc[32]; /* 0x18 */ u8 *curBUPtr[32]; /* 0x98 */ u8 curBULen[32]; /* 0x118 */ u8 lastStatus[32]; /* 0x138 */ u32 evtDeltaTicks[32]; /* 0x158 */ } TTCSeq;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s16 type;
+    u8 padA[2];
+    s32 unkC;
+} TTQEvtG;
+typedef struct {
+    u32 division;
+    u32 nTracks;
+    u32 trackOffset[32];
+} TTCMidiHdr;
+typedef struct {
+    TTCMidiHdr *base;
+    u32 validTracks;
+    f32 qnpt;
+    u32 lastTicks;
+    u32 lastDeltaTicks;
+    s32 deltaFlag;
+    u8 *curLoc[32];
+    u8 *curBUPtr[32];
+    u8 curBULen[32];
+    u8 lastStatus[32];
+    u32 evtDeltaTicks[32];
+} TTCSeq;
 
 void func_8002AB30(TTWrap *w, u8 arg1)
 {

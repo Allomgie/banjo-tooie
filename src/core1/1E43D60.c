@@ -1,10 +1,35 @@
 #include "common.h"
 
-typedef struct { u32 w0; u32 w1; } TTAcmd;
-typedef struct TTChan_s { u8 pad0[2]; s16 unk2; /* 0x02 */ u8 pad4[4]; u32 unk8; /* 0x08 */ u8 padC[0x1C]; s32 unk28; /* 0x28 */ void *unk2C; /* 0x2C */ void *unk30; /* 0x30 */ } TTChan;
-typedef struct { u8 pad0[0x44]; TTChan *unk44; /* 0x44 */ } TTChSlot;
-typedef struct { u8 pad0[4]; TTAcmd *(*unk4)(void *, TTAcmd *, s32); /* 0x04 */ } TTSynthV;
-typedef struct { u8 pad0[0x30]; TTSynthV *unk30; /* 0x30 */ TTChSlot *unk34; /* 0x34 */ u8 pad38[4]; s32 unk3C; /* 0x3C */ s32 unk40; /* 0x40 */ } TTAMgrC;
+typedef struct {
+    u32 w0;
+    u32 w1;
+} TTAcmd;
+typedef struct TTChan_s {
+    u8 pad0[2];
+    s16 unk2;
+    u8 pad4[4];
+    u32 unk8;
+    u8 padC[0x1C];
+    s32 unk28;
+    void *unk2C;
+    void *unk30;
+} TTChan;
+typedef struct {
+    u8 pad0[0x44];
+    TTChan *unk44;
+} TTChSlot;
+typedef struct {
+    u8 pad0[4];
+    TTAcmd *(*unk4)(void *, TTAcmd *, s32);
+} TTSynthV;
+typedef struct {
+    u8 pad0[0x30];
+    TTSynthV *unk30;
+    TTChSlot *unk34;
+    u8 pad38[4];
+    s32 unk3C;
+    s32 unk40;
+} TTAMgrC;
 extern TTAMgrC *D_800411F4;
 extern u8 D_8007EA33[];
 extern u8 D_8007EA34[];
@@ -30,14 +55,15 @@ TTAcmd *func_8002C230(void *arg0, TTAcmd *cmdIn)
     p0->w1 = 0x2E0;
 
     for (i = 0; i < D_800411F4->unk3C; i++) {
-        cmd = (D_800411F4->unk30->unk4)(arg0, cmd, i);
+        cmd = D_800411F4->unk30->unk4(arg0, cmd, i);
 
         if (D_8007EA33[i]) {
             if (D_8007EA34[i]) {
                 p1 = cmd++;
                 p1->w0 = 0x0C008000;
                 p1->w1 = 0x07C004E0;
-                if (1) {}   /* wegkompilierter _DEBUG-Block */
+                if (1) {
+                }
             } else {
                 p2 = cmd++;
                 p2->w0 = 0x0C007FFF;
@@ -48,7 +74,8 @@ TTAcmd *func_8002C230(void *arg0, TTAcmd *cmdIn)
                 p3 = cmd++;
                 p3->w0 = 0x0C008000;
                 p3->w1 = 0x07C00650;
-                if (1) {}   /* wegkompilierter _DEBUG-Block */
+                if (1) {
+                }
             } else {
                 p4 = cmd++;
                 p4->w0 = 0x0C007FFF;
@@ -63,7 +90,7 @@ TTAcmd *func_8002C230(void *arg0, TTAcmd *cmdIn)
             chan = D_800411F4->unk34[i].unk44;
 
             if (chan->unk28) {
-                func_80028C04(chan, (f32)D_800411F4->unk40);
+                func_80028C04(chan, (f32) D_800411F4->unk40);
             }
 
             p6 = cmd++;
@@ -85,8 +112,7 @@ TTAcmd *func_8002C230(void *arg0, TTAcmd *cmdIn)
     return cmd;
 }
 
-/* TU-NOTE: the .rodata of this file holds constants that 1E42810 uses (formerly part of
- * asm/data/core1/1E42810.rodata.s). They follow the literals of 1E42810 in the ROM, so they cannot come from that
- * file: IDO places a file's const objects in front of its literals. This is the next file in link
- * order without .rodata of its own (1E440D0 and 1E440F0 would fit as well). */
-const struct { f32 x; f32 pad[3]; } D_80041D90 = { 26755.0f };
+const struct {
+    f32 x;
+    f32 pad[3];
+} D_80041D90 = {26755.0f};
