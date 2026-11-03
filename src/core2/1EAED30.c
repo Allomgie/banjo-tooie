@@ -418,3 +418,8 @@ s32 func_800D5FE8(s32 param_0) {
     }
     return ((s32 *) D_8012B450)[i];
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EAED30.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s32 D_8011B900 = 0x5188;
+static u32 D_8011B900_rest[3] = { 0x0, 0x0, 0x0 };

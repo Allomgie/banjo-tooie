@@ -213,3 +213,9 @@ void func_800A9D08(void)
         s0 += 2;
     } while (s0 != s1);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E831D0.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_8011A470[8] = { 0x40, 0x41, 0x42, 0x43, 0x44, 0x46, 0x47, 0x0 };
+u8 D_8011A478[4] = { 0x0, 0x35, 0x5, 0x9C };
+u8 D_8011A47C[4] = { 0x0, 0x0, 0x0, 0x0 };

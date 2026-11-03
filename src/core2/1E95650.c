@@ -164,3 +164,7 @@ void func_800BC5B0(Gfx **param_0, s32 param_1, s32 param_2, s32 param_3, s32 par
     gDPSetFillColor((*param_0)++, 0xFFFCFFFC);
     gDPFillRectangle((*param_0)++, LOCAL_MAX(param_1, 0), LOCAL_MAX(param_2, 0), LOCAL_MAX(param_1 + param_3 - 1, 0), LOCAL_MAX(param_2 + param_4 - 1, 0));
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E95650.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+Gfx D_8011A730[6] = { 0xE7000000, 0x0, 0xE3000800, 0x0, 0xE3000A01, 0x300000, 0xE200001C, 0x0, 0xDF000000, 0x0, 0x0, 0x0 };

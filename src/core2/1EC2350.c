@@ -8,7 +8,7 @@ extern void bzero(void *, int);
 extern void *freelist_new(int, int);
 extern void *freelist_next(void **, s32 *);
 extern void *func_800D674C(u32);
-extern int D_80123500;
+extern int D_80123500[];
 float func_800F3780(float arg0, s32 arg1, s32 arg2);
 extern u16 D_80132560[];
 extern u8 *D_80123524;
@@ -129,7 +129,7 @@ int func_800E8CDC(u8 volatile param_0)
   local_0 = func_800E8CB0(param_0);
   local_0[1] = 0.0f;
   func_800E8D28(param_0, 1.0f);
-  func_800E8D5C(param_0, &D_80123500, 2);
+  func_800E8D5C(param_0, D_80123500, 2);
 }
 
 void func_800E8D28(u8 param_0, f32 param_1) {
@@ -365,3 +365,13 @@ void func_800E95AC(param_0, param_1) u32 param_0; s32 param_1; {
 func_800E96B0(s32 param_0) {
     func_800E95AC(0xC8, param_0 | 0);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EC2350.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80123500 -> int[] (uses written as NAME[0]) */
+int D_80123500[4] = { 0x0, 0x0, 0x3F800000, 0x3F800000 };
+s32 D_80123510 = 0x0;
+s32 D_80123514[2] = { 0x4F, 0x2F };
+s32 D_8012351C[2] = { 0x2F, 0x0 };
+u8 *D_80123524 = 0;
+static u32 D_80123524_rest[6] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

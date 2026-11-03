@@ -14,7 +14,7 @@ extern f32 func_800F0E00(f32, f32);
 extern f32 func_800F13F0(f32, f32);
 extern u8 D_80119208[];
 f32 func_800DC0C0();
-extern s16 D_80119200[1];
+extern s16 D_80119200[];
 extern void func_800C35E8(u8, f32 *);
 extern void func_800C301C(u8, s32);
 extern void func_800C31DC(u8, f32);
@@ -381,3 +381,9 @@ void func_8009E0DC(PlayerState *param_0) {
 void func_8009E100(PlayerState *param_0) {
     func_800C3CE8(*(*(u8 **)((u8 *)param_0 + 0x104) + 3));
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E76CC0.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s16 D_80119200[4] = { 0x578, 0x579, 0x57A, 0x57B };
+u8 D_80119208[8] = { 0x5, 0x7C, 0x5, 0x7D, 0x5, 0x7E, 0x5, 0x7F };
+s32 D_80119210[4] = { 0x1060007, 0x0, 0x0, 0x0 };

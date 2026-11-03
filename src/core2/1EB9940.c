@@ -5,7 +5,6 @@ typedef struct { u16 local_0:12; u16 local_7:4; s16 local_1; } EntryE0170;
 typedef struct { s16 local_0; s16 local_1; s16 local_2; s16 pad; EntryE0170 local_3[1]; } StateE0170;
 extern f32 func_800E04C0(EntryE0170 *, f32, s32);
 extern void func_800E084C(s32, f32 *, s32);
-extern float D_80125D70;
 f32 func_800E0414(u8 *param_0, f32 param_1);
 
 void func_800E0050(u8 *param_0, f32 param_1, s32 param_2, f32 *param_3) {
@@ -130,7 +129,7 @@ float func_800E046C(u8 *param_0, s32 param_1)
   ;
   if (param_1 == (*((s16 *) (((char *) param_0) + 2))))
   {
-    return D_80125D70;
+    return 0.999999f;
   }
   temp_v1 = *((s16 *) (((char *) param_0) + 0));
   return ((float) (param_1 - temp_v1)) / ((float) ((*((s16 *) (((char *) param_0) + 2))) - temp_v1));

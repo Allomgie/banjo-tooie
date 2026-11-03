@@ -9,13 +9,12 @@ typedef struct { f32 angles[4], scale[3], rotation[3]; u8 angleActive, scaleActi
 extern void func_800EFA4C(f32 *,f32,f32,f32);
 extern u8 D_80117E9C[];
 extern u8 D_80117E90[];
-extern int D_80117EB0;
+extern int D_80117EB0[];
 typedef struct { u8 pad0[0x28]; f32 unk28; u8 unk2C; } S_987CC;
 extern f32 func_800D8FF8(void *);
 extern f32 func_800F0E00(f32, f32);
 extern s32 func_800C6E38(s32);
 extern void func_8009E7C8();
-extern f32 D_80124E20;
 void func_80098480();
 void func_80098494(u8 *param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4);
 void func_800984CC();
@@ -132,7 +131,7 @@ s32 func_800985C4(s32 param_0, s32 param_1)
 {
   s32 out;
   func_8009C128(param_0);
-  out = _gccubesearch_entrypoint_6(&D_80117EB0, param_1);
+  out = _gccubesearch_entrypoint_6(D_80117EB0, param_1);
   if (out == 0)
   {
     return 0;
@@ -213,5 +212,12 @@ void func_80098840(u8 *param_0) {
     (*(s8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0xE0)))) + (0x2C))) = 0;
     local_0 = (*(u8 **)((s8 *)(param_0) + (0xE0)));
     func_800EE7F8(local_0 + 0x1C, local_0, param_0);
-    (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0xE0)))) + (0x28))) = (f32) D_80124E20;
+    (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0xE0)))) + (0x28))) = (f32) 0.6f;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E71B00.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80117EB0 -> int[] (uses written as NAME[0]) */
+u8 D_80117E90[12] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+u8 D_80117E9C[20] = { 0x3F, 0x80, 0x0, 0x0, 0x3F, 0x80, 0x0, 0x0, 0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+int D_80117EB0[4] = { 0x161, -0x1, 0x0, 0x0 };

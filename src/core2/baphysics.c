@@ -511,3 +511,9 @@ int func_8009BD18(s32 param_0, f32 param_1)
   new_var = param_1;
   *((f32 *) ((*((s32 *) (param_0 + 0xC8))) + 0x50)) = new_var;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/baphysics.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+f32 D_80117EF0 = -2.7e+03f;
+f32 D_80117EF4 = -4e+03f;
+static u32 D_80117EF4_rest[2] = { 0x0, 0x0 };

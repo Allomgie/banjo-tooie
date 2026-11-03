@@ -2,7 +2,6 @@
 
 extern f32 func_800137F4(f32);
 extern f32 func_80013788(void);
-extern f32 D_80125EE0;
 f32 mlAbsF(f32);
 
 f32 func_800F2290(u8 *param_0, u8 *param_1)
@@ -33,7 +32,7 @@ f32 func_800F2320(f32 param_0[3]) {
   } else {
     local_2 = local_1;
   }
-  return local_0 + local_1 - local_2 * D_80125EE0;
+  return local_0 + local_1 - local_2 * 0.41421357f;
 }
 
 func_800F2388(f32 *param_0, f32 param_1[3], f32 param_2[3]){

@@ -475,3 +475,8 @@ int func_80016BDC(int param_0)
 {
   osContSetCh(param_0);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core1/1E2D890.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+s32 D_8003F5F0 = 0x0;
+static u32 D_8003F5F0_rest[3] = { 0x0, 0x0, 0x0 };

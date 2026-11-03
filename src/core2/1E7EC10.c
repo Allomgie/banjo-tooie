@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern u8 D_801255C0[];
+extern const u8 D_801255C0[];
 extern f32 D_801270A0[];
 extern f32 D_801270B0[];
 extern f32 D_801270C0[];
@@ -52,3 +52,7 @@ int func_800A5490()
   local_0 = func_8008FFE8();
   func_8010FFD8(local_0 | 0);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E7EC10.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+const u8 D_801255C0[16] = { 0x3F, 0xAA, 0xAA, 0xAB, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

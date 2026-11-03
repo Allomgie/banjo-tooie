@@ -165,3 +165,9 @@ int func_800D8F40()
 {
     return (int)&D_8012C030;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EB2130.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * Labels inside an object are linker symbols in undefined_syms.us.txt: D_8011B961 = D_8011B960 + 0x1 */
+u32 D_8011B960[1] = { 0x0 };
+float D_8011B964[11] = { 0.0f, 2.3509887e-38f, 0.07f, 9.477423e-38f, 0.29f, 3.8203566e-37f, 0.15f, 1.5163877e-36f, 0.05f, 0.0f, 0.0f };

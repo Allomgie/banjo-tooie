@@ -1,7 +1,8 @@
 #include "common.h"
 
 extern void *D_80127EF8;
-extern void (*D_80123590[])(void *);
+typedef void (*D_80123590Entry)(void *);
+extern D_80123590Entry D_80123590[];
 extern void *vector_begin();
 extern void *vector_defrag(void *);
 extern void *vector_end();
@@ -84,3 +85,8 @@ int func_800EE748()
     _idbounce_entrypoint_7();
   }
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EC7E20.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+D_80123590Entry D_80123590[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (void *)func_800EE55C, (void *)func_800EE530, 0, 0, (void *)func_800EE5AC };

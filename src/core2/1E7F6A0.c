@@ -85,7 +85,7 @@ extern f32 func_800F5628(s32);
 extern s32 func_800F8874(s32);
 typedef struct { u8 pad0[0x65]; u8 f0 : 7; u8 bit : 1; u8 pad66[0x10]; u16 hi : 9; u16 lo : 7; } S_A70D0;
 extern S_A70D0 *func_80106790(s32);
-extern s32 D_8011A3A0;
+extern s32 D_8011A3A0[];
 
 void func_800A5DB0(u8 *param_0) {
     s32 local_6;
@@ -468,5 +468,18 @@ void func_800A7130(s32 param_0, s32 param_1) {
 
 int func_800A7168()
 {
-    return (int)&D_8011A3A0;
+    return (int)D_8011A3A0;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E7F6A0.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_8011A3A0 -> s32[] (uses written as NAME[0]) */
+extern void func_80102EC0();
+extern void func_80107C2C();
+s16 D_8011A2E0[12] = { 0xDE, 0xDF, 0xE0, 0xC6, 0xC8, 0xC9, 0x12E, 0x12F, 0x130, -0x1, 0x0, 0x0 };
+Gfx D_8011A2F8[11] = { 0xE7000000, 0x0, 0xD9C0FFFA, 0x0, 0xD7000002, 0xFFFFFFFF, 0xE200001C, 0x504240, 0xE3000A01, 0x0, 0xFCFFE7FF, 0xFFCF9FCF, 0xE3001201, 0x0, 0xE3000C00, 0x0, 0xE3001801, 0xC0, 0xE2001E01, 0x1, 0xDF000000, 0x0 };
+Gfx D_8011A350[6] = { 0xE7000000, 0x0, 0xE3001201, 0x2000, 0xE3000C00, 0x80000, 0xE3001801, 0x0, 0xE2001E01, 0x0, 0xDF000000, 0x0 };
+struct __OSBlockInfo D_8011A380 = { 0x0, 0x0, 0x0, 0xFF };
+struct __OSBlockInfo D_8011A390 = { 0x0, 0x0, 0x0, 0x0 };
+s32 D_8011A3A0[20] = { 0x320215, -0xFFFF, 0x0, (u32)func_800A6FF0, (u32)func_80102EC0, (u32)func_800A6DAC, 0x0, 0x0, 0x0, 0x8000004, (u32)func_800A7088, 0x0, 0x0, (u32)func_800A6EF4, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0, 0x0, 0x0 };

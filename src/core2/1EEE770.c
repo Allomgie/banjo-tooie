@@ -10,13 +10,11 @@ extern void func_800C4B90(s32, f32, f32);
 typedef struct { u8 pad0[4]; s32 index; f32 value; u8 enabled, padD, active; } LocalState;
 typedef struct { u8 unused, color[3], value; } LocalEntry;
 extern LocalEntry D_80124A50[];
-extern f32 D_80126600, D_80126604, D_80126608;
 extern void func_800B99CC(s32,s32,s32 *);
-extern s16 D_80124A58;
+extern s16 D_80124A58[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern s32 func_800BEF00(f32 *, f32 *, f32 *, s32);
 typedef struct { s32 local_0; s32 pad; f32 local_1; u8 local_2; } State1151C4;
-extern f32 D_8012660C;
 extern s32 func_8010FF80(s32);
 extern void func_800CA7E4(s32, f32 *);
 extern s32 func_800BEAAC(f32 *, f32 *);
@@ -54,8 +52,8 @@ void func_80114FA4(s32 param_0, LocalState *param_1)
     s32 local_3[3];
     f32 local_4;
     if (param_1->enabled && param_1->active) {
-        local_0 = param_1->value > D_80126600 ? 1.0f : param_1->value * D_80126604;
-        local_1 = local_0 * D_80126608;
+        local_0 = param_1->value > 3e+03f ? 1.0f : param_1->value * 0.00033333333f;
+        local_1 = local_0 * 0.4f;
         for (local_2 = 0; local_2 < 3; local_2++) {
             local_3[local_2] = (u32)D_80124A50[param_1->index].color[local_2] + -(s32)D_80124A50[param_1->index].color[local_2] * local_1;
         }
@@ -88,7 +86,7 @@ u8 *func_80115118(s32 param_0) {
     (*(f32 *)((s8 *)(local_3) + (0x10))) = 0.0f;
     local_2 = func_800EA05C();
     local_1 = (s16)local_2;
-    local_0 = (s16 *)&D_80124A58;
+    local_0 = (s16 *)D_80124A58;
     while (*local_0 != 0) {
         if (*local_0 == local_1) {
             (*(s8 *)((s8 *)(local_3) + (0xE))) = 0;
@@ -111,7 +109,7 @@ void func_801151C4(State1151C4 *param_0) {
     local_5 = func_8010FF80(param_0->local_0);
     func_800CA7E4(local_5, local_1);
     if (!func_800BEAAC(local_1, &local_3)) {
-        func_800EFA4C(local_2, local_1[0], local_1[1] + D_8012660C, local_1[2]);
+        func_800EFA4C(local_2, local_1[0], local_1[1] + 1e+04f, local_1[2]);
         local_4 = func_800BEF00(local_1, local_2, local_0, 0x1F00);
         if (local_4) {
             local_4 = (*(u32 *)(local_4 + 8) & 0x20000) ? 1 : 0;
@@ -139,3 +137,9 @@ int func_80115324(s32 *param_0, s32 param_1)
   *param_0 = param_1;
   defrag();
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EEE770.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80124A58 -> s16[] (uses written as NAME[0]) */
+LocalEntry D_80124A50[1] = { 0x0, 0x1E, 0x50, 0xEF, 0x20 };
+s16 D_80124A58[12] = { 0x181, 0x1A7, 0x1A8, 0x1A9, 0xFC, 0x1A6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

@@ -48,7 +48,6 @@ typedef struct { u8 local_0[0x24]; u32 local_1:16; u32 local_2:1; u32 local_3:1;
 typedef struct { u8 pad0[0x10]; u32 flags; } LocalNode;
 typedef struct { s32 count; LocalNode nodes[1]; } LocalList;
 typedef struct { u8 pad0[0xC]; f32 position; u8 pad10[0x28]; f32 start, end; } LocalState_800D7E38;
-extern s32 D_8011B920;
 typedef struct { u32 pad0:21; s32 path:10; u32 initialized:1; u8 pad4[8]; f32 position,previous,speed; u32 pad18a:1,introSync:1,pad18b:30; u8 pad1C[4]; f32 wait; u32 pad24a:19,waitMode:4,pad24b:9; u32 pad28a:6,event:8,pad28b:2,sequence:9,resetSequence:1,pad28c:6; f32 cap; } LocalSpline_800D8070;
 extern u8 D_8012BE6F[];
 extern f32 func_800C8070(void *,f32,f32,s32 *);
@@ -412,6 +411,14 @@ void func_800D6E54(s32 param_0)
         }
     }
 }
+
+/* TU-NOTE: the rest of this file's .data (formerly asm/data/core2/1EF5210.data.s) is defined here in C;
+ * values from the ROM. They follow the function-scope static D_8011B914 of func_800D6E54, as in the ROM.
+ * D_8011B918 and D_8011B924 are not referenced by name anywhere. */
+s32 D_8011B918[2] = { 0, 0 };
+s32 D_8011B920 = 0;
+u32 D_8011B924[15] = { 0xFFFFFFFF, 0xFF, 0xFF, 0xFFFF00FF, 0xFF00FF, 0xFF808080, 0xFF8000FF, 0x808080,
+                       0x8080, 0xFF400000, 0x40800000, 0x40400000, 0x0, 0x0, 0x0 };
 
 void func_800D7050(s32 param_0, s32 param_1) {
     if (param_1 != 0) { D_8012B800.E_D7050[param_0].fld++; }

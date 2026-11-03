@@ -54,7 +54,7 @@ extern s32 D_80041268[];
 extern f32 D_80041D28;
 typedef struct { u8 pad0[0xC]; void *unkC; /* 0x0C */ void *unk10; /* 0x10 */ u8 pad14[0x14]; void *unk28; /* 0x28 */ u8 unk2C; /* 0x2C */ u8 pad2D[7]; s32 unk34; /* 0x34 */ s32 unk38; /* 0x38 */ s32 unk3C; /* 0x3C */ void *unk40; /* 0x40 */ f32 unk44; /* 0x44 */ s32 unk48; /* 0x48 */ f32 unk4C; /* 0x4C */ s32 unk50; /* 0x50 */ void *unk54; /* 0x54 */ s16 unk58; /* 0x58 */ s16 unk5A; /* 0x5A */ s16 unk5C; /* 0x5C */ s16 unk5E; /* 0x5E */ s16 unk60; /* 0x60 */ s16 unk62; /* 0x62 */ s16 unk64; /* 0x64 */ s16 unk66; /* 0x66 */ s16 unk68; /* 0x68 */ u8 pad6A[4]; s16 unk6E; /* 0x6E */ s32 unk70; /* 0x70 */ s32 unk74; /* 0x74 */ s32 unk78; /* 0x78 */ s32 unk7C; /* 0x7C */ s32 unk80; /* 0x80 */ s32 unk84; /* 0x84 */ u8 pad88[4]; u8 unk8C; /* 0x8C */ u8 pad8D[3]; s16 unk90; /* 0x90 */ s16 unk92; /* 0x92 */ u8 pad94[0x24]; s32 unkB8; /* 0xB8 */ void *unkBC; /* 0xBC */ } TTVceI2;
 
-/* Vorwaertsdeklarationen der Funktionen dieser TU. */
+/* Forward declarations of the functions in this file. */
 TTAcmd *func_80028010(TTBank *bank, TTReverb *r, s32 idx, s32 dmem, TTAcmd *cmdBuf);
 TTAcmd *func_80028328(TTDlyD *d, s32 idx, u8 *pos, s32 dmem, s32 len, TTAcmd *cmdIn);
 TTAcmd *func_80028520(TTDlyD *d, s32 idx, u8 *pos, s32 dmem, TTAcmd *cmdIn);
@@ -633,3 +633,8 @@ void func_800293B4(TTVceI2 *v, void *(*fn)(void *), void *heap)
     v->unkBC = func_80020EE4(0, 0, heap, 1, 8);
     v->unkB8 = 0;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core1/1E3EDE0.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u32 D_80041260[2] = { 0x0, 0x5000 };
+s32 D_80041268[10] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

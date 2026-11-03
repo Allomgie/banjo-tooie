@@ -45,10 +45,9 @@ extern Struct8001592C_0 D_80079718[];
 extern Struct8001592C_1 D_800797B8[];
 typedef struct { s16 f0, f2, f4, f6, f8, fA, fC, fE; } TileEntry;
 extern void func_800CA510(s32, f32);
-extern f32 D_80041710;
 extern s16 widescreen_enabled;
 
-/* Vorwaertsdeklarationen der Funktionen dieser TU. */
+/* Forward declarations of the functions in this file. */
 s32 func_80014F38();
 s16 func_80014F58();
 void func_80015178();
@@ -552,7 +551,18 @@ f32 func_80015D14(OSLogItem *param_0)
     var = (f32) (s16) param_0->argCount / (f32) (s16) param_0->eventID;
     if (widescreen_enabled)
     {
-        var *= D_80041710;
+        var *= 1.3333334f;
     }
     return var;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core1/1E2C940.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+void *D_8003F4E0 = 0;
+static u32 D_8003F4E0_rest[19] = { 0x320E, 0x130, 0x3E52239, 0x20D, 0xC15, 0xC150C15, 0x8002E0, 0x200, 0x0, 0x260, 0x400, 0x2F01F5, 0xE0204, 0x2, 0x260, 0x400, 0x2F01F5, 0xE0204, 0x2 };
+void *D_8003F530 = (void *)0x1C000000;
+static u32 D_8003F530_rest[39] = { 0x320E, 0x130, 0x4651E39, 0x20D, 0x40C11, 0xC190C1A, 0x8002E0, 0x200, 0x0, 0x260, 0x400, 0x2F01F5, 0xE0204, 0x2, 0x260, 0x400, 0x2F01F5, 0xE0204, 0x2, 0xE000000, 0x320E, 0x130, 0x4541E3A, 0x271, 0x170C69, 0xC6F0C6D, 0x9002F0, 0x200, 0x0, 0x260, 0x400, 0x3F0259, 0x9026B, 0x2, 0x260, 0x400, 0x3F0259, 0x9026B, 0x2 };
+s32 D_8003F5D0 = 0x1;
+static u32 D_8003F5D0_rest[3] = { 0x0, 0x0, 0x0 };
+s16 D_8003F5E0 = -0x1;
+static u32 D_8003F5E0_rest[3] = { 0x0, 0x0, 0x0 };

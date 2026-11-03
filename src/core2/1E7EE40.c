@@ -162,3 +162,10 @@ s32 func_800A5904()
   s32 ret = func_800A5854();
   return (ret != 0);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E7EE40.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u32 D_80119510[3] = { 0x3FCCCCCD, 0x3F800000, 0x3FA66666 };
+u32 D_8011951C[9] = { 0x3FA66666, 0x2C, 0x18, 0x34, 0x18, 0x2C, 0x34, 0x4, 0x30 };
+s32 D_80119540 = 0x0;
+static u32 D_80119540_rest[3] = { 0x0, 0x0, 0x0 };

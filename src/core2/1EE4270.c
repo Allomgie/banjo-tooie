@@ -715,3 +715,16 @@ f32 func_8010C4AC(param_0) u8 * param_0; {
     }
     return (*(f32 *)((s8 *)(param_0) + (0x24)));
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EE4270.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+extern void _subaddierouteDll_entrypoint_8();
+extern void _subaddierouteDll_entrypoint_9();
+u32 D_80124690[10] = { 0x0, (u32)func_8010B040, (u32)func_8010AFF8, (u32)func_8010B910, (u32)func_8010B8A4, (u32)func_8010B088, (u32)func_8010B0E0, (u32)func_8010B94C, (u32)func_8010B13C, (u32)func_8010B190 };
+u32 D_801246B8[5] = { 0x0, (u32)func_8010B800, 0x0, (u32)_subaddierouteDll_entrypoint_8, (u32)_subaddierouteDll_entrypoint_9 };
+u32 D_801246CC[3] = { 0x0, (u32)func_8010BDB0, (u32)func_8010C100 };
+u32 D_801246D8[7] = { 0x0, (u32)func_8010B1F4, (u32)func_8010B69C, (u32)func_8010B71C, (u32)func_8010B410, (u32)func_8010B514, (u32)func_8010B330 };
+u32 D_801246F4[8] = { 0x0, (u32)func_8010A980, (u32)func_8010AAC0, (u32)func_8010ACE0, (u32)func_8010AD4C, (u32)func_8010AE30, (u32)func_8010AE9C, (u32)func_8010AF8C };
+LocalCallback *D_80124714[6] = { (void *)&D_80124690, (void *)&D_801246CC, (void *)&D_801246B8, (void *)&D_801246D8, 0, (void *)&D_801246F4 };
+static u32 D_80124714_rest[1] = { 0x0 };

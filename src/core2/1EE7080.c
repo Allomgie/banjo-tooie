@@ -97,3 +97,7 @@ SoundEntry *func_8010DA70(param_0) s32 param_0; {
     }
     return local_0;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EE7080.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u8 D_80124730[13] = { 0x1, 0x1, 0x2, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x2, 0x1, 0x1, 0x1 };

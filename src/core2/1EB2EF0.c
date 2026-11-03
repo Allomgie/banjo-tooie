@@ -1,6 +1,5 @@
 #include "common.h"
 
-extern f32 D_80125D20;
 extern f32 func_80013A7C(f32);
 extern f32 func_80013970(f32);
 typedef struct { s32 unk0; s32 unk1; s32 unk2; f32 unk3; } UnkStruct;
@@ -67,8 +66,8 @@ int func_800D97E8(f32 param_0[4], f32 param_1[4])
 void func_800D9888(f32 *param_0, f32 *param_1, f32 *param_2, f32 param_3) {
     f32 local_0, local_1, local_2, local_3, local_4;
     local_0 = param_1[0] * param_2[0] + param_1[1] * param_2[1] + param_1[2] * param_2[2] + param_1[3] * param_2[3];
-    if (1.0f + local_0 > D_80125D20) {
-        if (1.0f - local_0 > D_80125D20) {
+    if (1.0f + local_0 > 1e-05f) {
+        if (1.0f - local_0 > 1e-05f) {
             local_4 = func_80013A7C(local_0);
             local_3 = func_80013970(local_4);
             if (local_3 != 0.0f) {

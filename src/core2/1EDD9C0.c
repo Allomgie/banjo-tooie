@@ -4,7 +4,7 @@ extern u8 D_80135AB8[];
 extern u8 D_80135AB0[];
 extern s32 D_80136BC0;
 extern s32 D_80136BE8;
-extern s32 D_80124400;
+extern s32 D_80124400[];
 extern s32 D_80136BF8;
 extern s32 D_80136D10;
 typedef struct { u8 pad[20]; } E20_104148;
@@ -29,7 +29,7 @@ int func_80104118()
 
 int func_80104124()
 {
-    return (int)&D_80124400;
+    return (int)D_80124400;
 }
 
 int func_80104130()
@@ -43,3 +43,8 @@ int func_8010413C()
 }
 
 E20_104148 *func_80104148(s32 param_0) { return &D_80136D88[param_0]; }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EDD9C0.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80124400 -> s32[] (uses written as NAME[0]) */
+s32 D_80124400[8] = { 0x0, 0x0, 0x0, 0x0, -0x1, 0x0, 0x0, 0x0 };

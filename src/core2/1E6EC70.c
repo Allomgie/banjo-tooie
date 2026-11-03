@@ -1,6 +1,6 @@
 #include "core2/1E6EC70.h"
 
-extern s32 D_80117E60;
+extern s32 D_80117E60[];
 typedef struct { u8 pad0[0xC]; u8 unkC; } P_95588;
 typedef struct { u8 pad0[0x7C]; P_95588 *unk7C; } S_95588;
 extern void func_8009C128(PlayerState *param_0, s32 param_1);
@@ -44,7 +44,7 @@ s32 func_800953E0(s32 param_0, s32 *param_1, s32 param_2) {
     switch (temp_v0) {
     case 10:
         if (func_8009E71C(param_0, 0x13) != 0) {
-            return func_80095388(param_1, param_2, &D_80117E60, 0x3E8);
+            return func_80095388(param_1, param_2, D_80117E60, 0x3E8);
         }
     default: ;
     case 2:
@@ -64,7 +64,7 @@ s32 func_800953E0(s32 param_0, s32 *param_1, s32 param_2) {
     case 17:
     case 18: ;
     case 19:
-        return func_80095388(param_1, param_2, &D_80117E60, 0);
+        return func_80095388(param_1, param_2, D_80117E60, 0);
     }
 }
 
@@ -153,3 +153,8 @@ void func_800956B8(param_0) PlayerState * param_0;
 {
   func_8009C128(param_0, *(s32 *)((char *)param_0 + 0x7c));
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E6EC70.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80117E60 -> s32[] (uses written as NAME[0]) */
+s32 D_80117E60[12] = { 0x3E80000, 0x5DC0000, 0x7D00000, 0x1B580802, 0x17700701, 0x13880601, 0xFA00501, 0xBB80401, 0x7D00301, 0x3E80201, 0x101, -0x10000 };

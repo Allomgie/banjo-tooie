@@ -3,7 +3,7 @@
 typedef struct { u8 pad0[6]; u16 f : 9; u16 rest : 7; } E_C71B0;
 typedef struct { u8 pad0[4]; E_C71B0 *unk4; } S_C71B0;
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
-extern u8 D_8011A8A0[];
+extern s32 D_8011A8A0[];
 extern void func_800FF000(s32);
 extern s32 _gccubesearch_entrypoint_14(s32, s32);
 extern unsigned char D_8012760D[7];
@@ -140,7 +140,7 @@ void func_800C7500(void) {
             }
         }
         local_0 = (u8 *)((char *)local_0 + 0x14);
-    } while (local_0 != (D_8011A8A0 + 0x64));
+    } while (local_0 != ((u8 *)D_8011A8A0 + 0x64));
     func_800C4308(0.0f, 1.0f);
 }
 
@@ -286,3 +286,10 @@ void func_800C7900(void)
         }
     }
 }
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EA0AA0.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+s32 D_8011A8A0[25] = { 0x2510000, 0x0, (u32)func_800C72C0, (u32)func_800C72E4, 0x0, 0x2160000, 0x0, (u32)func_800C72EC, (u32)func_800C7310, 0x0, 0x2540000, 0x0, (u32)func_800C7290, 0x0, 0x0, 0x2530000, 0x0, (u32)func_800C7230, 0x0, 0x0, 0x2520000, 0x0, (u32)func_800C725C, 0x0, 0x0 };
+u8 D_8011A904 = 0x1;
+static u32 D_8011A904_rest[2] = { 0x0, 0x0 };
+s16 D_8011A910[16] = { 0x0, 0x0, 0x20, 0x1F, 0x64, 0x65, 0x66, 0x7E, 0x82, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };

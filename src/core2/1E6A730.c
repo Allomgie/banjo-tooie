@@ -1,6 +1,6 @@
 #include "core2/1E6A730.h"
 
-extern s32 D_80117DB0;
+extern s32 D_80117DB0[];
 extern f32 func_800DC178(f32, f32);
 extern void func_8009DF94(s32, s32, f32, s32);
 extern s32 func_8008FD48();
@@ -44,7 +44,7 @@ void func_80090E48(u8 *param_0)
   {
     func_80092DE4(param_0, &local_0);
   }
-  func_800BABB8(func_8009FBB0(param_0, &local_0, 0.0f), ((*((f32 *) (((s8 *) local_1) + 0))) == 0.0f) * 0, 0, 0x3F800000, &D_80117DB0);
+  func_800BABB8(func_8009FBB0(param_0, &local_0, 0.0f), ((*((f32 *) (((s8 *) local_1) + 0))) == 0.0f) * 0, 0, 0x3F800000, D_80117DB0);
   local_1 = *((u8 **) (((s8 *) param_0) + 0x30));
   if (((*((u8 *) (((s8 *) local_1) + 0xF))) != 0) && ((*((f32 *) (((s8 *) local_1) + 0))) == 0.0f))
   {
@@ -201,3 +201,8 @@ void func_800914FC(s32 param_1, f32 param_2, s32 param_3)
 {
     func_80091290(param_1, param_2, param_3, 4);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E6A730.data.s) is defined here in C.
+ * Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_80117DB0 -> s32[] (uses written as NAME[0]) */
+s32 D_80117DB0[8] = { 0x2CFFF1, 0xFFF1, 0xF0032, 0xF011A, 0x0, 0x0, 0x0, 0x0 };

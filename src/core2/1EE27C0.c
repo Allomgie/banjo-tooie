@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern s32 D_801245D0;
-extern s32 D_801245E4;
-extern s32 D_801245F8;
+extern s32 D_801245D0[];
+extern s32 D_801245E4[];
+extern s32 D_801245F8[];
 typedef struct { u8 pad00[0x5C]; u8 health[3]; } LocalHealth;
 typedef struct { void *data; void *bones; u8 pad08[0x12]; u16 id : 11; u16 pad1A : 5; u8 pad1C[8]; u32 kind : 10; u32 pad24 : 22; } LocalMarker_80108F08;
 extern s32 _glhittableDll_entrypoint_10(s32);
@@ -38,7 +38,7 @@ extern u8 D_8012460C[];
 extern void _subaddiejoy_entrypoint_10(Actor *, f32, f32);
 extern void func_800BBCB8(s32, s32, f32, s32, void *);
 extern u8 D_8012461C[];
-extern s32 D_8012464C;
+extern s32 D_8012464C[];
 extern u8 D_801245A0[];
 typedef struct { u8 pad[0x24]; u32 kind:10, unused:22; } LocalMarker_80109538;
 extern s32 _subaddiecustomhits_entrypoint_4(void *, f32 *, s32);
@@ -95,17 +95,17 @@ int func_8010A610();
 
 int func_80108ED0()
 {
-  return (int)&D_801245D0;
+  return (int)D_801245D0;
 }
 
 int func_80108EDC()
 {
-  return (int)&D_801245E4;
+  return (int)D_801245E4;
 }
 
 int func_80108EE8()
 {
-  return (int)&D_801245F8;
+  return (int)D_801245F8;
 }
 
 func_80108EF4(u16 *param_0, u16 param_1) {
@@ -218,7 +218,7 @@ void func_801094E0(s32 param_0, f32 param_1) {
 
 int func_80109518()
 {
-    return (int)&D_8012464C;
+    return (int)D_8012464C;
 }
 
 int func_80109524(s32 param_0)
@@ -695,3 +695,16 @@ int func_8010A6B0(s32 param_0, s32 param_1)
   }
   return 1;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EE27C0.data.s) is defined here in C.
+ * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+ * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
+ * extern declarations adjusted to the object (same addresses): D_801245D0 -> s32[] (uses written as NAME[0]), D_801245E4 -> s32[] (uses written as NAME[0]), D_801245F8 -> s32[] (uses written as NAME[0]), D_8012464C -> s32[] (uses written as NAME[0]) */
+u8 D_801245A0[48] = { 0x9, 0xE4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x9, 0xE5, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x9, 0xE2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+s32 D_801245D0[5] = { (u32)func_80109F18, (u32)func_80109F40, (u32)func_80109F68, (u32)func_80108F08, 0x0 };
+s32 D_801245E4[5] = { (u32)func_80109F18, (u32)func_80109F40, (u32)func_80109F68, (u32)func_80108F08, (u32)func_80109F90 };
+s32 D_801245F8[5] = { (u32)func_80109F18, (u32)func_80109F40, (u32)func_80109F68, 0x0, 0x0 };
+u8 D_8012460C[16] = { 0x0, 0x21, 0x0, 0x16, 0x65, 0x90, 0x0, 0x1, 0x3, 0x20, 0x13, 0x88, 0x0, 0x0, 0x0, 0x0 };
+u8 D_8012461C[48] = { 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x2B, 0x0, 0x66, 0x0, 0x80, 0x0, 0x22, 0x0, 0xCC, 0x1, 0x33, 0x1, 0x66, 0x1, 0x99, 0x0, 0x15, 0x0, 0x19, 0x0, 0x99, 0x0, 0x19, 0x0, 0x0, 0x0, 0x7, 0x0, 0x2D, 0x0, 0x32, 0x0, 0x50, 0x80, 0x2, 0x0, 0xE, 0x0, 0xA, 0x0, 0x14, 0x0, 0x0 };
+s32 D_8012464C[15] = { 0x150066, 0xCC0027, 0xC8, 0xF0, 0x161000, 0x150019, 0x660022, 0x660080, 0x400059, 0x2B0066, 0x80002D, 0x12C0190, 0xE000A, 0x140A1A, 0x0 };
+f32 D_80124688[2] = { -2.0392256e-34f, 0.0f };

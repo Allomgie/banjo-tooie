@@ -10,7 +10,6 @@ extern f32 func_800137C4(void);
 extern f32 func_800136E4(f32);
 extern void func_800EE7F8(f32 param_0[3], f32 param_1[3]);
 extern f32 sqrtf(f32 x);
-extern f32 D_80125EA0;
 extern f32 func_800EEAA4(f32 *, f32 *);
 extern void func_800EF3DC(f32 *, f32 *);
 void func_800EF214(f32 param_0[3], f32 param_1, f32 param_2, f32 param_3);
@@ -594,7 +593,7 @@ f32 func_800EFBFC(f32 param_0[3], f32 param_1[3])
   local_0 = mlAbsF(param_1[0] - param_0[0]);
   local_1 = mlAbsF(param_1[2] - param_0[2]);
   local_2 = (local_0 < local_1) ? local_0 : local_1;
-  return local_0 + local_1 - local_2 * D_80125EA0;
+  return local_0 + local_1 - local_2 * 0.41421357f;
 }
 
 f32 func_800EFC7C(f32 param_0[3], f32 param_1[3])

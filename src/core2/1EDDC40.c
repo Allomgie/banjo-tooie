@@ -489,3 +489,8 @@ int func_801053D4()
   }
   return local_1;
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EDDC40.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+f32 D_80124420[3] = { 0.0f, 0.5f, -1.0f };
+f32 D_8012442C[5] = { 3.030612e-39f, 2.755066e-39f, 1.8369201e-38f, 0.0f, 0.0f };

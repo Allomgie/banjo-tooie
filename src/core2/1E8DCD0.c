@@ -66,3 +66,7 @@ void func_800B4470(f32 *param_0, f32 *param_1, s32 *param_2, s32 param_3, f32 pa
     else func_800BA5B0(local_4, 0, 12);
     func_800BA22C(local_4, 1);
 }
+
+/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E8DCD0.data.s) is defined here in C.
+ * Values are taken from the ROM. */
+u16 D_8011A5B0[8] = { 0x9C9, 0x9CA, 0x9DC, 0x0, 0x0, 0x0, 0x0, 0x0 };
