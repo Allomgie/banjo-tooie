@@ -4453,7 +4453,7 @@ segments:
     subsegments: 
       - [0x01F8E370, c, gameselect]
       - [0x01F95FB0, .rodata, gameselect]
-      - [0x01F96120, data, gameselect]
+      - [0x01F96120, .data, gameselect]
       - [0x01F968C0, bss, gameselect]
   - name: chjiggybeam_header
     dir: overlays/chjiggybeam
@@ -6334,7 +6334,7 @@ segments:
     subsegments: 
       - [0x01FE0180, c, dumbwaiterlift]
       - [0x01FE0D20, .rodata, dumbwaiterlift]
-      - [0x01FE0D40, data, dumbwaiterlift]
+      - [0x01FE0D40, .data, dumbwaiterlift]
       - [0x01FE0DD0, bss, dumbwaiterlift]
   - name: chmrsicecube_header
     dir: overlays/chmrsicecube
@@ -8671,7 +8671,7 @@ segments:
     subsegments: 
       - [0x020585B0, c, flysaucer]
       - [0x0205C3E0, .rodata, flysaucer]
-      - [0x0205C810, data, flysaucer]
+      - [0x0205C810, .data, flysaucer]
       - [0x0205CD10, bss, flysaucer]
   - name: chflysaucercrate_header
     dir: overlays/chflysaucercrate
@@ -9146,7 +9146,7 @@ segments:
     subsegments: 
       - [0x02076D90, c, eel]
       - [0x02078280, .rodata, eel]
-      - [0x020782F0, data, eel]
+      - [0x020782F0, .data, eel]
       - [0x02078420, bss, eel]
   - name: chblackeye_header
     dir: overlays/chblackeye
@@ -9431,7 +9431,7 @@ segments:
     subsegments: 
       - [0x02088320, c, dragonbrothers]
       - [0x0208D2F0, .rodata, dragonbrothers]
-      - [0x0208D6C0, data, dragonbrothers]
+      - [0x0208D6C0, .data, dragonbrothers]
       - [0x0208DDD0, bss, dragonbrothers]
   - name: chwallsnakebaddy_header
     dir: overlays/chwallsnakebaddy
@@ -12433,7 +12433,7 @@ segments:
     subsegments: 
       - [0x020ED950, c, quiz]
       - [0x020F3EA0, .rodata, quiz]
-      - [0x020F4650, data, quiz]
+      - [0x020F4650, .data, quiz]
       - [0x020F5020, bss, quiz]
   - name: chquizexitdoor_header
     dir: overlays/chquizexitdoor

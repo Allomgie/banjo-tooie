@@ -107,6 +107,7 @@ D_80135470 = 0x80135470;
 D_80135480 = 0x80135480;
 D_80135550 = 0x80135550;
 D_801275C0 = 0x801275C0;
+D_801275C8 = 0x801275C8;
 D_80127188 = 0x80127188;
 D_80127198 = 0x80127198;
 
@@ -134,3 +135,37 @@ func_80804158_chintrochar = func_80804054_chintrochar + 0x104;
 func_80804160_chintrochar = func_80804054_chintrochar + 0x10C;
 func_80804168_chintrochar = func_80804054_chintrochar + 0x114;
 func_8080416C_chintrochar = func_80804054_chintrochar + 0x118;
+D_808045DA_chflysaucer = D_808045A4_chflysaucer + 0x36;
+D_80800BC2_chdumbwaiterlift = D_80800BC0_chdumbwaiterlift + 0x2;
+D_80800BC6_chdumbwaiterlift = D_80800BC0_chdumbwaiterlift + 0x6;
+D_80800BC4_chdumbwaiterlift = D_80800BC0_chdumbwaiterlift + 0x4;
+D_808071B1_chquiz = D_808070E4_chquiz + 0xCD;
+D_80807004_chquiz = D_80807000_chquiz + 0x4;
+D_80807008_chquiz = D_80807000_chquiz + 0x8;
+D_8080700C_chquiz = D_80807000_chquiz + 0xC;
+D_80807010_chquiz = D_80807000_chquiz + 0x10;
+D_80807014_chquiz = D_80807000_chquiz + 0x14;
+D_80807DB2_chgameselect = D_80807DB0_chgameselect + 0x2;
+D_80807DC8_chgameselect = D_80807DB0_chgameselect + 0x18;
+D_808080AA_chgameselect = D_808080A8_chgameselect + 0x2;
+D_80808405_chgameselect = D_80808404_chgameselect + 0x1;
+D_80808406_chgameselect = D_80808404_chgameselect + 0x2;
+D_80808407_chgameselect = D_80808404_chgameselect + 0x3;
+D_80807DD4_chgameselect = D_80807DD0_chgameselect + 0x4;
+D_80807DD8_chgameselect = D_80807DD0_chgameselect + 0x8;
+D_80807DDC_chgameselect = D_80807DD0_chgameselect + 0xC;
+D_80807DE0_chgameselect = D_80807DD0_chgameselect + 0x10;
+D_80807DE4_chgameselect = D_80807DD0_chgameselect + 0x14;
+D_80807DE8_chgameselect = D_80807DD0_chgameselect + 0x18;
+D_80807DEC_chgameselect = D_80807DD0_chgameselect + 0x1C;
+D_80807DF0_chgameselect = D_80807DD0_chgameselect + 0x20;
+D_80807DF4_chgameselect = D_80807DD0_chgameselect + 0x24;
+D_80807DFC_chgameselect = D_80807DD0_chgameselect + 0x2C;
+D_80807E00_chgameselect = D_80807DD0_chgameselect + 0x30;
+
+/* Second names for functions that the overlay code calls with fewer arguments than the definition
+ * has (the call sites leave the argument registers untouched). The call sites declare the second name
+ * without a prototype; the definition keeps its full signature. */
+func_80800D3C_susplinet_2arg = func_80800D3C_susplinet;
+func_80013788_noarg = func_80013788;
+func_800137C4_noarg = func_800137C4;
