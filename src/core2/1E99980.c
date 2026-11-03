@@ -1,3 +1,4 @@
+// Dialog front end (gcdialog, gczoombox), pause menu glue (gcnewpause) and framebuffer copy.
 #include <ultra64.h>
 #include "gfx.h"
 #include "core2/1E99980.h"
@@ -10,22 +11,22 @@ extern void *D_801289DC;
 extern void _gcdialogexec_entrypoint_10(void *arg);
 extern void _gczoombox_entrypoint_4(void *arg);
 typedef struct {
-    u8 pad0[0x120];
+    u8 pad_0[0x120];
     void *box[2];
     s16 x[2];
-    u8 pad12C[0x30];
+    u8 pad_12C[0x30];
     u32 unused : 18;
     u32 busy : 1;
     u32 opening : 1;
     u32 unused2 : 12;
-    u8 pad160[6];
+    u8 pad_160[6];
     s8 step;
 } LocalDialog;
 extern s8 D_8011A7C0[];
 extern void _gczoombox_entrypoint_38(void *, s32);
 typedef struct {
     u32 f0 : 18;
-    u32 fX : 1;
+    u32 busy : 1;
     u32 f2 : 13;
 } G_C0438;
 extern G_C0438 D_80128A0C;
@@ -38,12 +39,12 @@ extern s16 D_80128A12;
 extern s32 _gcdialogexec_entrypoint_6(void *arg, s32 param_1);
 typedef struct {
     u8 pad_0[0x15E];
-    u8 local_0 : 2;
-    u8 local_1 : 1;
-    u8 local_2 : 1;
+    u8 unk_15E : 2;
+    u8 page_changed : 1;
+    u8 going_back : 1;
     u8 local_3 : 4;
     u8 pad_15F[7];
-    s8 local_4;
+    s8 page;
 } Struct800C06C4;
 extern u32 func_800C7150();
 extern u32 defrag();
@@ -56,17 +57,19 @@ int func_800C0F8C();
 void func_800C0FD8();
 int func_800C1044();
 
+// TU-NOTE: D_801288B0 is an object, not a pointer: the target materialises %hi/%lo of the
+// address everywhere. As an array, every form of access in this file means the same thing.
 extern u8 D_801288B0[];
 void func_800C0658();
 extern s32 D_80128AF4;
 
-s32 func_800C0090(s32 param_0, s32 param_1)
+s32 func_800C0090(s32 entry, s32 id)
 {
     s32 ret;
-    if (param_1 == -1) {
+    if (id == -1) {
         ret = 0;
     } else {
-        ret = (param_1 == ((u32) *(u16 *) (param_0 + 0x12) >> 1));
+        ret = (id == ((u32) *(u16 *) (entry + 0x12) >> 1));
     }
     return ret;
 }
@@ -87,25 +90,26 @@ void func_800C00E0(void)
     *(u8 *) ((u8 *) (s32 *) D_801288B0 + 0x180) = 0;
 }
 
-void func_800C0130(s32 param_0)
+// Matching: the line breaks in this function are needed for the match.
+void func_800C0130(s32 arg)
 {
-    s32 *s0;
-    s32 *s1;
-    s32 *s2;
-    s0 = (s32 *) D_801288B0; s1 = (s32 *) D_801288B8;
-    s2 = (s32 *) param_0;
+    s32 *cursor;
+    s32 *end;
+    s32 *arg_copy;
+    cursor = (s32 *) D_801288B0; end = (s32 *) D_801288B8;
+    arg_copy = (s32 *) arg;
     do
     {
-        if (s0[0x48] != 0)
+        if (cursor[0x48] != 0)
         {
-            _gczoombox_entrypoint_2(s0[0x48], (s32) s2);
+            _gczoombox_entrypoint_2(cursor[0x48], (s32) arg_copy);
         }
-        s0++;
+        cursor++;
     }
-    while (s0 != s1);
+    while (cursor != end);
     if ((s32) D_801289DC != 0)
     {
-        _gczoombox_entrypoint_2((s32) D_801289DC, (s32) s2);
+        _gczoombox_entrypoint_2((s32) D_801289DC, (s32) arg_copy);
     }
 }
 
@@ -113,9 +117,11 @@ int func_800C01A8(param_0, param_1)
 s16 param_0;
 s32 param_1;
 {
+    // Matching: `| 0` is needed for the match.
     _gcdialogcamera_entrypoint_10((s32 *) D_801288B0, param_0, param_1 | 0);
 }
 
+// Matching: the line breaks in this function are needed for the match.
 int func_800C01D8(s32 param_0, s32 param_1) { return _gcdialogexec_entrypoint_5((s32 *) D_801288B0, param_0, param_1); }
 
 int func_800C0208()
@@ -136,25 +142,25 @@ int func_800C0208()
 s16 func_800C0258(void)
 {
     u32 base = (u32) D_801288B0;
-    u32 var1 = *(u16 *) (base + 0x15E) & 0xFFFF;
-    u32 offset = (var1 >> 15) << 1;
+    u32 flags = *(u16 *) (base + 0x15E) & 0xFFFF;
+    u32 offset = (flags >> 15) << 1;
     return (s16) (*(s16 *) ((base + 0x118) + offset) + 0xC);
 }
 
 void func_800C0284()
 {
-    u8 *s0;
-    u8 *s1;
+    u8 *cursor;
+    u8 *end;
     if (*(u8 *) &D_80128A0C != 0) {
         _gcdialogexec_entrypoint_10(&D_801288B0);
     }
-    for (s0 = D_801288B0, s1 = D_801288B8;;) {
-        void *val = *(void **) (s0 + 0x120);
-        if (val != 0) {
-            _gczoombox_entrypoint_4(val);
+    for (cursor = D_801288B0, end = D_801288B8;;) {
+        void *box = *(void **) (cursor + 0x120);
+        if (box != 0) {
+            _gczoombox_entrypoint_4(box);
         }
-        s0 += 4;
-        if (s0 != s1) {
+        cursor += 4;
+        if (cursor != end) {
             continue;
         }
         break;
@@ -165,19 +171,20 @@ void func_800C0284()
     }
 }
 
+// Slide the two portrait boxes in or out by one step.
 void func_800C0308(void)
 {
-    s32 local_0;
+    s32 delta;
     if ((*(LocalDialog *) D_801288B0).opening) {
         (*(LocalDialog *) D_801288B0).step++;
-        local_0 = D_8011A7C0[(*(LocalDialog *) D_801288B0).step];
+        delta = D_8011A7C0[(*(LocalDialog *) D_801288B0).step];
         if ((*(LocalDialog *) D_801288B0).box[0]) {
-            (*(LocalDialog *) D_801288B0).x[0] -= local_0;
+            (*(LocalDialog *) D_801288B0).x[0] -= delta;
             _gczoombox_entrypoint_38((*(LocalDialog *) D_801288B0).box[0],
                                      (*(LocalDialog *) D_801288B0).x[0]);
         }
         if ((*(LocalDialog *) D_801288B0).box[1]) {
-            (*(LocalDialog *) D_801288B0).x[1] += local_0;
+            (*(LocalDialog *) D_801288B0).x[1] += delta;
             _gczoombox_entrypoint_38((*(LocalDialog *) D_801288B0).box[1],
                                      (*(LocalDialog *) D_801288B0).x[1]);
         }
@@ -185,14 +192,14 @@ void func_800C0308(void)
             (*(LocalDialog *) D_801288B0).busy = 0;
     } else {
         (*(LocalDialog *) D_801288B0).step--;
-        local_0 = D_8011A7C0[(*(LocalDialog *) D_801288B0).step];
+        delta = D_8011A7C0[(*(LocalDialog *) D_801288B0).step];
         if ((*(LocalDialog *) D_801288B0).box[0]) {
-            (*(LocalDialog *) D_801288B0).x[0] += local_0;
+            (*(LocalDialog *) D_801288B0).x[0] += delta;
             _gczoombox_entrypoint_38((*(LocalDialog *) D_801288B0).box[0],
                                      (*(LocalDialog *) D_801288B0).x[0]);
         }
         if ((*(LocalDialog *) D_801288B0).box[1]) {
-            (*(LocalDialog *) D_801288B0).x[1] -= local_0;
+            (*(LocalDialog *) D_801288B0).x[1] -= delta;
             _gczoombox_entrypoint_38((*(LocalDialog *) D_801288B0).box[1],
                                      (*(LocalDialog *) D_801288B0).x[1]);
         }
@@ -203,11 +210,11 @@ void func_800C0308(void)
 
 void func_800C0438(void)
 {
-    if (D_80128A0C.fX) {
+    if (D_80128A0C.busy) {
         func_800C0308();
     }
     if (func_800A819C() != 0) {
-        if (!D_80128A0C.fX) {
+        if (!D_80128A0C.busy) {
             if ((func_800C0638() == 0) && ((s32) ((u32) D_80128A11 >> 4) > 0)) {
                 _gcdialogexec_entrypoint_1(D_801288B0);
             } else {
@@ -219,50 +226,54 @@ void func_800C0438(void)
 
 s32 func_800C04C8(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4)
 {
-    s32 local_0;
+    s32 result;
 
     if (*(u8 *) (int *) D_80128A30 != 0) {
-        local_0 = _gcdialogexec_entrypoint_3((int *) D_801288B0, param_0, param_1, param_2, param_3,
+        result = _gcdialogexec_entrypoint_3((int *) D_801288B0, param_0, param_1, param_2, param_3,
                                              param_4);
     } else {
-        local_0 = 0;
+        result = 0;
     }
-    return local_0;
+    return result;
 }
 
 u32 func_800C0534(u32 param_0, u32 param_1, f32 *param_2, Unk80132ED0 *param_3, s32 param_4,
                   s32 param_5, s32 param_6, s32 param_7)
 {
-    u32 *local_0;
-    s32 local_1;
-    short local_2;
-    local_2 = param_7;
+    u32 *dialog;
+    s32 result;
+    short unk_0;
+    unk_0 = param_7;
+    // Matching: `0 & 0xFF` index is needed for the match.
     if (D_80128A30[0 & 0xFF] != 0) {
-        local_0 = (u32 *) D_801288B0;
-        local_1 = _gcdialogexec_entrypoint_0(local_0, param_0, param_1, param_2, param_3, param_4,
-                                             param_5, param_6, local_2);
+        dialog = (u32 *) D_801288B0;
+        result = _gcdialogexec_entrypoint_0(dialog, param_0, param_1, param_2, param_3, param_4,
+                                             param_5, param_6, unk_0);
     } else {
-        local_1 = 0;
+        result = 0;
     }
-    return local_1;
+    return result;
 }
 
 s32 func_800C05B8(s16 param_0, s32 param_1, f32 *param_2, Unk80132ED0 *param_3, s32 param_4,
                   s32 param_5, s32 param_6)
 {
-    s32 local_1;
+    s32 result;
     if (*(u8 *) D_80128A30 != 0) {
-        local_1 = _gcdialogexec_entrypoint_0((u32 *) D_801288B0, *(s32 *) ((u8 *) &param_0 - 2),
+        // Matching: reads the params back through their stack addresses; needed for the match.
+        result = _gcdialogexec_entrypoint_0((u32 *) D_801288B0, *(s32 *) ((u8 *) &param_0 - 2),
                                              param_1, param_2, param_3, param_4, param_5, 0,
                                              *(s16 *) ((u8 *) &param_6 + 2));
     } else {
-        local_1 = 0;
+        result = 0;
     }
-    return local_1;
+    return result;
 }
 
+// True while a dialog is active.
 s32 func_800C0638()
 {
+    // Matching: the float/long cast round trip is needed for the match.
     return D_80128A12 != (unsigned long) (float) -0x7FFF;
 }
 
@@ -276,49 +287,52 @@ void func_800C0658()
     _gcdialogexec_entrypoint_2(&D_801288B0);
 }
 
-s32 func_800C067C(s32 param_0)
+s32 func_800C067C(s32 id)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 result;
+    s32 current_id;
 
-    local_1 = func_800C064C();
-    if (local_1 != param_0) {
+    current_id = func_800C064C();
+    if (current_id != id) {
         return 0;
     }
     _gcdialogexec_entrypoint_6((void *) (void **) D_801288B0, 6);
-    local_0 = 1;
-    return local_0;
+    result = 1;
+    return result;
 }
 
+// Next page.
 void func_800C06C4(void)
 {
     if (func_800C0638() != 0) {
-        (*(Struct800C06C4 *) D_801288B0).local_1 = 1;
-        (*(Struct800C06C4 *) D_801288B0).local_2 = 0;
-        (*(Struct800C06C4 *) D_801288B0).local_4++;
+        (*(Struct800C06C4 *) D_801288B0).page_changed = 1;
+        (*(Struct800C06C4 *) D_801288B0).going_back = 0;
+        (*(Struct800C06C4 *) D_801288B0).page++;
     }
 }
 
+// Previous page.
 void func_800C0710(void)
 {
     if (func_800C0638()) {
-        (*(Struct800C06C4 *) D_801288B0).local_1 = 1;
-        (*(Struct800C06C4 *) D_801288B0).local_2 = 1;
-        (*(Struct800C06C4 *) D_801288B0).local_4--;
+        (*(Struct800C06C4 *) D_801288B0).page_changed = 1;
+        (*(Struct800C06C4 *) D_801288B0).going_back = 1;
+        (*(Struct800C06C4 *) D_801288B0).page--;
     }
 }
 
+// Defrag: refresh the stored handles.
 void func_800C075C(void)
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < 2; local_0++) {
-        if (((u32 *) D_801288B0)[0x48 + local_0])
-            ((u32 *) D_801288B0)[0x48 + local_0] =
-                func_800C7150(((u32 *) D_801288B0)[0x48 + local_0]);
+    s32 i;
+    for (i = 0; i < 2; i++) {
+        if (((u32 *) D_801288B0)[0x48 + i])
+            ((u32 *) D_801288B0)[0x48 + i] =
+                func_800C7150(((u32 *) D_801288B0)[0x48 + i]);
         if (((u32 *) D_801288B0)[0x4B])
             ((u32 *) D_801288B0)[0x4B] = func_800C7150(((u32 *) D_801288B0)[0x4B]);
-        if (((u32 *) D_801288B0)[0x41 + local_0])
-            ((u32 *) D_801288B0)[0x41 + local_0] = defrag(((u32 *) D_801288B0)[0x41 + local_0]);
+        if (((u32 *) D_801288B0)[0x41 + i])
+            ((u32 *) D_801288B0)[0x41 + i] = defrag(((u32 *) D_801288B0)[0x41 + i]);
     }
 }
 
@@ -334,8 +348,9 @@ void func_800C0808()
 
 void func_800C082C(unsigned int param_0)
 {
-    int new_var;
-    D_801288B0[0x15E] = (D_801288B0[0x15E] & 0xFFF7) | ((new_var = (param_0 & 0xFFFFu) * 8) & 8);
+    int bits;
+    // Matching: the `bits` temporary is needed for the match.
+    D_801288B0[0x15E] = (D_801288B0[0x15E] & 0xFFF7) | ((bits = (param_0 & 0xFFFFu) * 8) & 8);
 }
 
 void func_800C0850()
@@ -350,6 +365,7 @@ int func_800C0890(s32 param_0, s32 param_1)
     _gcdialogexec_entrypoint_9((s32 *) D_801288B0, param_0 | 0, param_1 | 0);
 }
 
+// Pause menu glue (gcnewpause): defrag, create, free, update.
 int func_800C08C0()
 {
     if (D_80128AF0 != 0) {
@@ -379,11 +395,11 @@ s32 func_800C0948()
     return local_0;
 }
 
-void func_800C0984(s32 param_0)
+void func_800C0984(s32 gfx)
 {
     if (func_800A8184() != 4) {
         if (D_8011A7D0 == 0) {
-            func_800C1044(param_0);
+            func_800C1044(gfx);
         }
         D_8011A7D0 = 1;
         return;
@@ -391,13 +407,13 @@ void func_800C0984(s32 param_0)
     if (func_800A8178() == 0) {
         if (D_8011A7D0 != 0) {
             func_800D58CC();
-            func_800C0F8C(param_0);
+            func_800C0F8C(gfx);
             D_8011A7D0 = 0;
         } else {
-            func_800C0FD8(param_0);
+            func_800C0FD8(gfx);
         }
         if (D_80128AF0 != 0) {
-            _gcnewpause_entrypoint_3(param_0, D_80128AF0);
+            _gcnewpause_entrypoint_3(gfx, D_80128AF0);
         }
     }
 }
@@ -406,40 +422,41 @@ void func_800C0A2C(void)
 {
 }
 
+// Returns 1 when Start opens the pause menu and stores the player index in D_80128AF4.
 s32 func_800C0A34(void)
 {
-    s32 local_4;
-    s32 local_2;
+    s32 can_pause;
+    s32 player;
     s32 Struct800C06C4;
-    s32 local_6;
-    local_4 = D_8012762C != 0 && func_800C95D4() != 0 && !func_800C9510() && !func_800C0638();
+    s32 flags_allow;
+    can_pause = D_8012762C != 0 && func_800C95D4() != 0 && !func_800C9510() && !func_800C0638();
     if (func_800D3948() == 0) {
-        local_2 = func_800F54E4();
-        Struct800C06C4 = func_800F6438(local_2) != 0 && !func_800DB9B0();
-        local_4 &= Struct800C06C4;
-        if ((local_4 && (func_800F6774(local_2) != 0)) && (func_80015FA0(0) == 1)) {
+        player = func_800F54E4();
+        Struct800C06C4 = func_800F6438(player) != 0 && !func_800DB9B0();
+        can_pause &= Struct800C06C4;
+        if ((can_pause && (func_800F6774(player) != 0)) && (func_80015FA0(0) == 1)) {
             D_80128AF4 = 0;
             return 1;
         }
         goto block_21;
     }
-    if (local_4 != 0) {
-        s32 local_0;
-        s32 local_3;
-        local_0 = _gcstatusDll_entrypoint_11();
-        local_6 = func_800DA298(0x6B6) != 0 && !func_800DA298(0x6E3);
-        local_3 = 0;
-        if (local_0 > 0) {
+    if (can_pause != 0) {
+        s32 player_count;
+        s32 i;
+        player_count = _gcstatusDll_entrypoint_11();
+        flags_allow = func_800DA298(0x6B6) != 0 && !func_800DA298(0x6E3);
+        i = 0;
+        if (player_count > 0) {
         loop_15:
-            if ((func_80015FA0(local_3) == 1) &&
-                ((local_6 != 0) ||
-                 ((func_800F6438(local_3) != 0) && (func_800F6774(local_3) != 0)))) {
-                D_80128AF4 = local_3;
+            if ((func_80015FA0(i) == 1) &&
+                ((flags_allow != 0) ||
+                 ((func_800F6438(i) != 0) && (func_800F6774(i) != 0)))) {
+                D_80128AF4 = i;
                 return 1;
             }
 
-            local_3 += 1;
-            if (local_3 == local_0) {
+            i += 1;
+            if (i == player_count) {
                 goto block_21;
             }
             goto loop_15;
@@ -454,9 +471,12 @@ s32 func_800C0BB4()
     return D_80128AF4;
 }
 
+// Probably a file split here based on bk decomp and bss (D_80128AF4).
+
 extern Gfx D_8011A7E0[];
 extern Gfx D_8011A840[];
 
+// copy_framebuffer: copies source to destination in 32x32 texture tiles (frozen pause background).
 #if 0
 
     void func_800C0BC0(Gfx** gfx, 0, 0) {
@@ -493,21 +513,22 @@ extern Gfx D_8011A840[];
     }
     #endif
 
-        int func_800C0F8C(param_0) s32 param_0;
+        int func_800C0F8C(gfx) s32 gfx;
     {
-        int new_var;
-        s32 local_0;
-        new_var = 0;
-        func_800EA34C(new_var);
+        // Matching: the `zero` temporary is needed for the match.
+        int zero;
+        s32 dest;
+        zero = 0;
+        func_800EA34C(zero);
         D_80128B00 = 2;
-        local_0 = func_8001A0A8();
-        func_800C0BC0(param_0, local_0, (void *) ((s32) func_80014F00() | 0));
+        dest = func_8001A0A8();
+        func_800C0BC0(gfx, dest, (void *) ((s32) func_80014F00() | 0));
     }
 
-    void func_800C0FD8(param_0) s32 param_0;
+    void func_800C0FD8(gfx) s32 gfx;
     {
         int pad;
-        s32 new_var;
+        s32 dest;
         if (!(s32) D_80128B00)
         {
             func_800D6E54(2);
@@ -517,15 +538,16 @@ extern Gfx D_8011A840[];
         {
             (s32) D_80128B00--;
         }
-        new_var = func_80014F00();
-        func_800C0BC0(param_0, new_var, func_8001A0A8());
+        dest = func_80014F00();
+        func_800C0BC0(gfx, dest, func_8001A0A8());
     }
 
-    int func_800C1044(param_0) s32 param_0;
+    int func_800C1044(gfx) s32 gfx;
     {
         func_800EA34C(1);
     }
 
+    // TU-NOTE: the .data of this file is defined here in C. Values are taken from the ROM.
     s8 D_8011A7C0[16] = { 0x1, 0x1E, 0x14, 0xF, 0xB, 0x8, 0x6, 0x4, 0x3, 0x2, -0x1, -0x1, 0x0, 0x0, 0x0, 0x0 };
     s32 D_8011A7D0 = 0x1;
     static u32 D_8011A7D0_rest[3] = { 0x0, 0x0, 0x0 };

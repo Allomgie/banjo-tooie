@@ -5,13 +5,13 @@ extern void func_8001608C(void);
 extern void func_800D3D28(void);
 extern void _glrecord_entrypoint_3();
 typedef struct {
-    u8 field_0;
-    u8 field_1;
-    u8 _pad0[2];
-    u8 field_2;
-    u8 _pad1[1];
-    s16 field_3;
-    s16 field_4;
+    u8 kind;
+    u8 next_kind;
+    u8 pad_2[2];
+    u8 unk_4;
+    u8 pad_5[1];
+    s16 map_id;
+    s16 exit_id;
 } Struct_80127760;
 extern s32 func_800EA05C();
 extern s32 func_800EA090(void);
@@ -38,8 +38,9 @@ void func_800A98E0()
     D_80127763 = 1;
 }
 
-void func_800A9924(param_0, param_1) s16 param_0;
-u8 param_1;
+// Called on warp type 3: activates the queued kind and starts recording.
+void func_800A9924(unk_0, unk_1) s16 unk_0;
+u8 unk_1;
 {
     ((u8 *) &D_80127760)[0] = ((u8 *) &D_80127760)[1];
     ((u8 *) &D_80127760)[1] = 0;
@@ -54,6 +55,7 @@ func_8001608C();
 
 }
 
+// Starts the active sequence kind (1 = Jiggywiggy, 2 = attract demo).
 void func_800A9998(void)
 {
     switch (((u8 *) &D_80127760)[0]) {
@@ -71,6 +73,7 @@ if (((u8 *) &D_80127760)[4] != 0) {
 func_800A1618(1);
 }
 
+// Per-frame update.
 void func_800A9A14()
 {
     func_8001211C();
@@ -91,6 +94,7 @@ switch (((u8 *) &D_80127760)[0]) {
 
 }
 
+// Per-frame draw.
 int func_800A9AA4()
 {
     switch (*(u8 *) &D_80127760) {
@@ -104,6 +108,7 @@ int func_800A9AA4()
 
 }
 
+// Ends the sequence and restores state.
 void func_800A9AF8(void)
 {
     switch (*(u8 *) ((s8 *) (u8 *) &D_80127760 + 0)) {
@@ -131,38 +136,42 @@ void func_800A9B84(void)
 {
 }
 
-void func_800A9B8C(s32 param_0, s32 param_1)
+// Stores the map/exit to return to after the sequence.
+void func_800A9B8C(s32 ret_map_id, s32 ret_exit_id)
 {
-    *(s16 *) ((char *) ((s16 *) &D_80127760) + 0xa) = (s16) param_0;
-    *(s16 *) ((char *) ((s16 *) &D_80127760) + 0xc) = (s16) param_1;
+    *(s16 *) ((char *) ((s16 *) &D_80127760) + 0xa) = (s16) ret_map_id;
+    *(s16 *) ((char *) ((s16 *) &D_80127760) + 0xc) = (s16) ret_exit_id;
 }
 
-void func_800A9BA0(s32 param_0, s32 param_1, s32 param_2)
+// Queues a special sequence of the given kind and warps to the map/exit (transition type 3).
+void func_800A9BA0(s32 kind, s32 map_id, s32 exit_id)
 {
-    (*((Struct_80127760 *) &D_80127760)).field_1 = param_0;
+    (*((Struct_80127760 *) &D_80127760)).next_kind = kind;
 
-if ((*(Struct_80127760 *) &D_80127760).field_0 != 0) {
-    (*(Struct_80127760 *) &D_80127760).field_2 = 1;
+if ((*(Struct_80127760 *) &D_80127760).kind != 0) {
+    (*(Struct_80127760 *) &D_80127760).unk_4 = 1;
 }
 
-(*((Struct_80127760 *) &D_80127760)).field_3 = param_1;
-(*((Struct_80127760 *) &D_80127760)).field_4 = param_2;
-func_800A79D4(param_1, param_2);
+(*((Struct_80127760 *) &D_80127760)).map_id = map_id;
+(*((Struct_80127760 *) &D_80127760)).exit_id = exit_id;
+func_800A79D4(map_id, exit_id);
 func_800A7A90(1);
 func_800A7B18(3);
 }
 
-void func_800A9BFC(s32 param_0, s32 param_1, s32 param_2)
+void func_800A9BFC(s32 kind, s32 map_id, s32 exit_id)
 {
-    volatile s32 local_1;
-    s32 local_0;
+    // Matching: needed for the match.
+    volatile s32 unk_0;
+    s32 ret_map_id;
     func_800A9B84();
-    local_0 = func_800EA05C();
-    func_800A9B8C(local_0, func_800EA090());
-    func_800A9BA0(param_0, param_1, param_2);
+    ret_map_id = func_800EA05C();
+    func_800A9B8C(ret_map_id, func_800EA090());
+    func_800A9BA0(kind, map_id, exit_id);
 
 }
 
+// Warps back to the stored return map/exit (transition type 1).
 void func_800A9C50()
 {
     if (func_800A8264() == 0) {
@@ -174,6 +183,7 @@ void func_800A9C50()
 
 }
 
+// Nonzero while a special sequence is active.
 s32 func_800A9C98()
 {
     return (s32) (*((u8 *) &D_80127760)) != 0;
@@ -202,27 +212,30 @@ void func_800A9D00(void)
 {
 }
 
+// Registers the state-restore commands for the flag lists.
 void func_800A9D08(void)
 {
-    u8 *s0;
-    u8 *s1;
+    u8 *cursor;
+    // Matching: bound is first a counter, then an end pointer.
+    u8 *bound;
     func_800D39A8();
     func_800D39DC(0);
     func_800D3A88();
-    s0 = D_8011A470;
-    s1 = 0;
+    cursor = D_8011A470;
+    bound = 0;
     do {
-        func_800D3AF0(*s0);
-        s0++;
-        s1++;
-    } while ((u32) s1 < 7);
-    s0 = D_8011A478, s1 = D_8011A47C;
+        func_800D3AF0(*cursor);
+        cursor++;
+        bound++;
+    } while ((u32) bound < 7);
+    cursor = D_8011A478, bound = D_8011A47C;
     do {
-        func_800D3A20(*(s16 *) s0);
-        s0 += 2;
-    } while (s0 != s1);
+        func_800D3A20(*(s16 *) cursor);
+        cursor += 2;
+    } while (cursor != bound);
 }
 
+// TU-NOTE: the data of this file is defined here in C; values are taken from the ROM.
 u8 D_8011A470[8] = {0x40, 0x41, 0x42, 0x43, 0x44, 0x46, 0x47, 0x0};
 u8 D_8011A478[4] = {0x0, 0x35, 0x5, 0x9C};
 u8 D_8011A47C[4] = {0x0, 0x0, 0x0, 0x0};

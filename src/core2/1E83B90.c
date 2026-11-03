@@ -2,6 +2,9 @@
 #include "core2/1EC8070.h"
 #include "core2/1ECB9F0.h"
 
+// Collision queries against a model's collision list: segment raycast, sphere sweep,
+// sphere overlap. The last hit triangle's vertices and colors are cached in D_80127938.
+// Wrappers transform the query into the local space of a rotated/scaled model.
 typedef struct {
     s16 local_0[3];
     u8 pad[6];
@@ -136,447 +139,470 @@ typedef struct {
 } VertexAD894;
 extern s32 func_800EED58(s32 *, s32 *);
 
-void func_800AA2A0(s16 *param_0, s32 *param_1, f32 *param_2)
+// Converts a position to clamped grid cell coordinates.
+void func_800AA2A0(s16 *grid, s32 *cell, f32 *pos)
 {
-    s32 local_0;
-    f32 local_4;
-    s16 *new_var;
-    s32 local_8;
-    if (!param_0[9]) {
-        param_1[2] = 0;
-        param_1[1] = 0;
-        param_1[0] = 0;
+    s32 i;
+    f32 coord;
+    s16 *hdr;
+    s32 whole;
+    if (!grid[9]) {
+        cell[2] = 0;
+        cell[1] = 0;
+        cell[0] = 0;
         return;
     }
-    for (local_0 = 0; local_0 < 3; local_0++) {
-        local_4 = param_2[local_0];
-        if (local_4 >= 0.0f) {
-            local_8 = (s32) local_4;
-            param_1[local_0] = local_8 / param_0[9];
+    for (i = 0; i < 3; i++) {
+        coord = pos[i];
+        if (coord >= 0.0f) {
+            whole = (s32) coord;
+            cell[i] = whole / grid[9];
         } else {
-            local_8 = (s32) local_4;
-            param_1[local_0] = (local_8 / param_0[9]) - 1;
+            whole = (s32) coord;
+            cell[i] = (whole / grid[9]) - 1;
         }
-        new_var = param_0;
-        if (param_1[local_0] < new_var[local_0]) {
-            param_1[local_0] = new_var[local_0];
+        // Matching: the extra copy of the grid pointer is needed for the match.
+        hdr = grid;
+        if (cell[i] < hdr[i]) {
+            cell[i] = hdr[i];
         }
-        if (param_1[local_0] > new_var[local_0 + 3]) {
-            param_1[local_0] = new_var[local_0 + 3];
+        if (cell[i] > hdr[i + 3]) {
+            cell[i] = hdr[i + 3];
         }
     }
 }
 
-void func_800AA3B4(u16 *param_0, u8 *param_1)
+// Caches the triangle's vertex positions and colors in D_80127938.
+void func_800AA3B4(u16 *tri, u8 *vtx_list)
 {
-    s32 local_0;
-    s32 local_2;
-    VertexAA3B4 *local_1;
-    VertexAA3B4 *local_3;
-    if (param_0 != 0) {
-        local_3 = (VertexAA3B4 *) (param_1 + 0x18);
-        for (local_0 = 0; local_0 < 3; local_0++) {
-            local_1 = local_3 + param_0[local_0];
-            func_800EE88C((*(BufferAA3B4 *) D_80127938).local_0[local_0], local_1->local_0);
-            for (local_2 = 0; local_2 < 4; local_2++) {
-                (*(BufferAA3B4 *) D_80127938).local_1[local_0][local_2] =
-                    (u32) local_1->local_1[local_2];
+    s32 i;
+    s32 j;
+    VertexAA3B4 *vertex;
+    VertexAA3B4 *vertices;
+    if (tri != 0) {
+        vertices = (VertexAA3B4 *) (vtx_list + 0x18);
+        for (i = 0; i < 3; i++) {
+            vertex = vertices + tri[i];
+            func_800EE88C((*(BufferAA3B4 *) D_80127938).local_0[i], vertex->local_0);
+            for (j = 0; j < 4; j++) {
+                (*(BufferAA3B4 *) D_80127938).local_1[i][j] =
+                    (u32) vertex->local_1[j];
             }
         }
     }
 }
 
-void func_800AA4D4(GridAA *param_0, f32 *param_1, f32 *param_2, u32 ***param_3, u32 ***param_4)
+// Lists the grid cells covered by a float bounding box (cell pointers go to D_801277A0).
+void func_800AA4D4(GridAA *grid, f32 *min_pos, f32 *max_pos, u32 ***out_begin, u32 ***out_end)
 {
-    s32 local_0[3];
-    s32 local_1[3];
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
-    if (!param_0->local_4) {
+    s32 cell_min[3];
+    s32 cell_max[3];
+    s32 axis;
+    s32 z;
+    s32 y;
+    s32 x;
+    s32 unk_0;
+    if (!grid->local_4) {
         D_801277A0.local_1 = D_801277A0.local_0;
-        *D_801277A0.local_1++ = param_0->local_5;
-        *param_3 = D_801277A0.local_0;
-        *param_4 = D_801277A0.local_1;
+        *D_801277A0.local_1++ = grid->local_5;
+        *out_begin = D_801277A0.local_0;
+        *out_end = D_801277A0.local_1;
         return;
     }
-    for (local_2 = 0; local_2 < 3; local_2++) {
-        if (param_1[local_2] >= 0.0f)
-            local_0[local_2] = (s32) param_1[local_2] / param_0->local_4;
+    for (axis = 0; axis < 3; axis++) {
+        if (min_pos[axis] >= 0.0f)
+            cell_min[axis] = (s32) min_pos[axis] / grid->local_4;
         else
-            local_0[local_2] = (s32) param_1[local_2] / param_0->local_4 - 1;
-        if (param_2[local_2] >= 0.0f)
-            local_1[local_2] = (s32) param_2[local_2] / param_0->local_4;
+            cell_min[axis] = (s32) min_pos[axis] / grid->local_4 - 1;
+        if (max_pos[axis] >= 0.0f)
+            cell_max[axis] = (s32) max_pos[axis] / grid->local_4;
         else
-            local_1[local_2] = (s32) param_2[local_2] / param_0->local_4 - 1;
-        if (local_0[local_2] < param_0->local_0[local_2])
-            local_0[local_2] = param_0->local_0[local_2];
-        if (local_0[local_2] > param_0->local_1[local_2])
-            local_0[local_2] = param_0->local_1[local_2];
-        if (local_1[local_2] < param_0->local_0[local_2])
-            local_1[local_2] = param_0->local_0[local_2];
-        if (local_1[local_2] > param_0->local_1[local_2])
-            local_1[local_2] = param_0->local_1[local_2];
-        local_0[local_2] -= param_0->local_0[local_2];
-        local_1[local_2] -= param_0->local_0[local_2];
+            cell_max[axis] = (s32) max_pos[axis] / grid->local_4 - 1;
+        if (cell_min[axis] < grid->local_0[axis])
+            cell_min[axis] = grid->local_0[axis];
+        if (cell_min[axis] > grid->local_1[axis])
+            cell_min[axis] = grid->local_1[axis];
+        if (cell_max[axis] < grid->local_0[axis])
+            cell_max[axis] = grid->local_0[axis];
+        if (cell_max[axis] > grid->local_1[axis])
+            cell_max[axis] = grid->local_1[axis];
+        cell_min[axis] -= grid->local_0[axis];
+        cell_max[axis] -= grid->local_0[axis];
     }
     D_801277A0.local_1 = D_801277A0.local_0;
-    for (local_3 = local_0[2]; local_3 <= local_1[2]; local_3++) {
-        for (local_4 = local_0[1]; local_4 <= local_1[1]; local_4++) {
-            for (local_5 = local_0[0]; local_5 <= local_1[0]; local_5++) {
+    for (z = cell_min[2]; z <= cell_max[2]; z++) {
+        for (y = cell_min[1]; y <= cell_max[1]; y++) {
+            for (x = cell_min[0]; x <= cell_max[0]; x++) {
                 if (D_801277A0.local_1 < D_80127930) {
-                    *D_801277A0.local_1 = (param_0->local_3 * local_3 + param_0->local_5) +
-                                          local_5 + local_4 * param_0->local_2;
+                    *D_801277A0.local_1 = (grid->local_3 * z + grid->local_5) +
+                                          x + y * grid->local_2;
                     D_801277A0.local_1++;
                 }
             }
         }
     }
-    *param_3 = D_801277A0.local_0;
-    *param_4 = D_801277A0.local_1;
+    *out_begin = D_801277A0.local_0;
+    *out_end = D_801277A0.local_1;
 }
 
-void func_800AA7FC(GridAA *param_0, s32 *param_1, s32 *param_2, u32 ***param_3, u32 ***param_4)
+// Same as func_800AA4D4 for an integer bounding box.
+void func_800AA7FC(GridAA *grid, s32 *min_pos, s32 *max_pos, u32 ***out_begin, u32 ***out_end)
 {
-    s32 local_0[3];
-    s32 local_1[3];
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
-    if (!param_0->local_4) {
+    s32 cell_min[3];
+    s32 cell_max[3];
+    s32 axis;
+    s32 z;
+    s32 y;
+    s32 x;
+    s32 unk_0;
+    if (!grid->local_4) {
         D_801277A0.local_1 = D_801277A0.local_0;
-        *D_801277A0.local_1++ = param_0->local_5;
-        *param_3 = D_801277A0.local_0;
-        *param_4 = D_801277A0.local_1;
+        *D_801277A0.local_1++ = grid->local_5;
+        *out_begin = D_801277A0.local_0;
+        *out_end = D_801277A0.local_1;
         return;
     }
-    for (local_2 = 0; local_2 < 3; local_2++) {
-        if (param_1[local_2] >= 0)
-            local_0[local_2] = (s32) param_1[local_2] / param_0->local_4;
+    for (axis = 0; axis < 3; axis++) {
+        if (min_pos[axis] >= 0)
+            cell_min[axis] = (s32) min_pos[axis] / grid->local_4;
         else
-            local_0[local_2] = (s32) param_1[local_2] / param_0->local_4 - 1;
-        if (param_2[local_2] >= 0)
-            local_1[local_2] = (s32) param_2[local_2] / param_0->local_4;
+            cell_min[axis] = (s32) min_pos[axis] / grid->local_4 - 1;
+        if (max_pos[axis] >= 0)
+            cell_max[axis] = (s32) max_pos[axis] / grid->local_4;
         else
-            local_1[local_2] = (s32) param_2[local_2] / param_0->local_4 - 1;
-        if (local_0[local_2] < param_0->local_0[local_2])
-            local_0[local_2] = param_0->local_0[local_2];
-        if (local_0[local_2] > param_0->local_1[local_2])
-            local_0[local_2] = param_0->local_1[local_2];
-        if (local_1[local_2] < param_0->local_0[local_2])
-            local_1[local_2] = param_0->local_0[local_2];
-        if (local_1[local_2] > param_0->local_1[local_2])
-            local_1[local_2] = param_0->local_1[local_2];
-        local_0[local_2] -= param_0->local_0[local_2];
-        local_1[local_2] -= param_0->local_0[local_2];
+            cell_max[axis] = (s32) max_pos[axis] / grid->local_4 - 1;
+        if (cell_min[axis] < grid->local_0[axis])
+            cell_min[axis] = grid->local_0[axis];
+        if (cell_min[axis] > grid->local_1[axis])
+            cell_min[axis] = grid->local_1[axis];
+        if (cell_max[axis] < grid->local_0[axis])
+            cell_max[axis] = grid->local_0[axis];
+        if (cell_max[axis] > grid->local_1[axis])
+            cell_max[axis] = grid->local_1[axis];
+        cell_min[axis] -= grid->local_0[axis];
+        cell_max[axis] -= grid->local_0[axis];
     }
     D_801277A0.local_1 = D_801277A0.local_0;
-    for (local_3 = local_0[2]; local_3 <= local_1[2]; local_3++) {
-        for (local_4 = local_0[1]; local_4 <= local_1[1]; local_4++) {
-            for (local_5 = local_0[0]; local_5 <= local_1[0]; local_5++) {
+    for (z = cell_min[2]; z <= cell_max[2]; z++) {
+        for (y = cell_min[1]; y <= cell_max[1]; y++) {
+            for (x = cell_min[0]; x <= cell_max[0]; x++) {
                 if (D_801277A0.local_1 < D_80127930) {
-                    *D_801277A0.local_1 = (param_0->local_3 * local_3 + param_0->local_5) +
-                                          local_5 + local_4 * param_0->local_2;
+                    *D_801277A0.local_1 = (grid->local_3 * z + grid->local_5) +
+                                          x + y * grid->local_2;
                     D_801277A0.local_1++;
                 }
             }
         }
     }
-    *param_3 = D_801277A0.local_0;
-    *param_4 = D_801277A0.local_1;
+    *out_begin = D_801277A0.local_0;
+    *out_end = D_801277A0.local_1;
 }
 
-void func_800AAAE0(u8 param_0[3][4])
+// Copies the cached vertex colors of the last hit triangle.
+void func_800AAAE0(u8 colors[3][4])
 {
-    s32 local_0;
-    s32 local_1;
-    for (local_0 = 0; local_0 < 3; local_0++) {
-        for (local_1 = 0; local_1 < 4; local_1++) {
-            param_0[local_0][local_1] =
-                (u32) (*(ColorAAAE0 *) D_80127938).local_0[local_0][local_1];
+    s32 i;
+    s32 j;
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 4; j++) {
+            colors[i][j] =
+                (u32) (*(ColorAAAE0 *) D_80127938).local_0[i][j];
         }
     }
 }
 
-void func_800AAD28(s32 param_0)
+// Copies the cached vertex positions of the last hit triangle.
+// Matching: the line breaks in this function are needed for the match.
+void func_800AAD28(s32 out)
 {
-    u8 *var_s0;
-    u8 *new_var;
-    s32 var_s1;
-    var_s0 = (u8 *) D_80127938; new_var = (u8 *) D_8012795C;
-    var_s1 = param_0;
+    u8 *src;
+    u8 *src_end;
+    s32 dst;
+    src = (u8 *) D_80127938; src_end = (u8 *) D_8012795C;
+    dst = out;
     do
     {
-        func_800EE7F8(var_s1, var_s0);
-        var_s0 += 0xC;
-        var_s1 += 0xC;
+        func_800EE7F8(dst, src);
+        src += 0xC;
+        dst += 0xC;
     }
-    while (var_s0 != new_var);
+    while (src != src_end);
 }
 
-int func_800AAD80(u16 *param_0)
+// Counts the triangles whose flags include 0x20020.
+int func_800AAD80(u16 *list)
 {
-    s32 local_0;
-    u32 local_1;
-    u32 local_2;
-    u32 *local_3;
-    local_0 = 0;
-    local_1 = ((u32) param_0 + (param_0[8] * 4)) + 0x18;
-    local_2 = local_1 + (param_0[10] * 0xC);
-    local_3 = (u32 *) local_1;
-    while (local_3 < (u32 *) local_2) {
-        if (local_3[2] & 0x20020) {
-            local_0++;
+    s32 count;
+    u32 tris;
+    u32 tris_end;
+    u32 *tri;
+    count = 0;
+    tris = ((u32) list + (list[8] * 4)) + 0x18;
+    tris_end = tris + (list[10] * 0xC);
+    tri = (u32 *) tris;
+    while (tri < (u32 *) tris_end) {
+        if (tri[2] & 0x20020) {
+            count++;
         }
-        local_3 = (u32 *) ((u32) local_3 + 12);
+        tri = (u32 *) ((u32) tri + 12);
     }
-    return local_0;
+    return count;
 }
 
-u16 func_800AADE4(u16 *arg0)
+// Returns the triangle count of a collision list.
+u16 func_800AADE4(u16 *list)
 {
-    return arg0[10];
+    return list[10];
 }
 
-int func_800AADEC(f32 *param_0, f32 *param_1, f32 *param_2, f32 param_3)
+// Tests whether a point is closer to a segment than sqrt(radius_sq).
+int func_800AADEC(f32 *seg_start, f32 *seg_end, f32 *point, f32 radius_sq)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3;
-    f32 local_4;
-    func_800EFB24(local_0, param_1, param_0);
-    local_3 = func_800EEFD4(local_0);
-    if (local_3 < 0.01f)
-        return func_800EEB40(param_0, param_2) < param_3;
-    local_4 = 1.0f / sqrtf(local_3);
-    local_0[0] *= local_4;
-    local_0[1] *= local_4;
-    local_0[2] *= local_4;
-    func_800EFB24(local_1, param_2, param_0);
-    func_800EE97C(local_2, local_1, local_0);
-    return func_800EEFD4(local_2) < param_3;
+    f32 dir[3];
+    f32 to_point[3];
+    f32 cross[3];
+    f32 len_sq;
+    f32 inv_len;
+    func_800EFB24(dir, seg_end, seg_start);
+    len_sq = func_800EEFD4(dir);
+    if (len_sq < 0.01f)
+        return func_800EEB40(seg_start, point) < radius_sq;
+    inv_len = 1.0f / sqrtf(len_sq);
+    dir[0] *= inv_len;
+    dir[1] *= inv_len;
+    dir[2] *= inv_len;
+    func_800EFB24(to_point, point, seg_start);
+    func_800EE97C(cross, to_point, dir);
+    return func_800EEFD4(cross) < radius_sq;
 }
 
-int func_800AAEF4(f32 *param_0, f32 param_1, f32 *param_2, f32 *param_3)
+int func_800AAEF4(f32 *point, f32 radius, f32 *seg_start, f32 *seg_end)
 {
-    f32 local_0[3];
-    f32 local_2;
-    f32 local_1;
-    f32 local_3;
-    local_3 = param_1 * param_1;
-    if (!func_800AADEC(param_2, param_3, param_0, local_3))
+    f32 mid[3];
+    f32 half_len_sq;
+    f32 dist_sq;
+    f32 radius_sq;
+    radius_sq = radius * radius;
+    if (!func_800AADEC(seg_start, seg_end, point, radius_sq))
         return 0;
-    func_800EFA4C(local_0, (param_2[0] + param_3[0]) * 0.5f, (param_2[1] + param_3[1]) * 0.5f,
-                  (param_2[2] + param_3[2]) * 0.5f);
-    local_1 = func_800EEB40(local_0, param_0);
-    local_2 = func_800EEB40(local_0, param_2);
-    if (local_2 + local_3 + (2.0f * local_3) * local_2 <= local_1)
+    func_800EFA4C(mid, (seg_start[0] + seg_end[0]) * 0.5f, (seg_start[1] + seg_end[1]) * 0.5f,
+                  (seg_start[2] + seg_end[2]) * 0.5f);
+    dist_sq = func_800EEB40(mid, point);
+    half_len_sq = func_800EEB40(mid, seg_start);
+    if (half_len_sq + radius_sq + (2.0f * radius_sq) * half_len_sq <= dist_sq)
         return 0;
     return 1;
 }
 
-int func_800AAFEC(f32 param_0[3], f32 param_1[3], s32 *param_2, s32 *param_3, f32 *param_4)
+// Integer bounding box of a segment (padded by 1) and the segment's delta.
+int func_800AAFEC(f32 start[3], f32 end[3], s32 *bbox_min, s32 *bbox_max, f32 *delta)
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < 3; local_0++) {
-        if (param_0[local_0] < param_1[local_0]) {
-            param_2[local_0] = param_0[local_0];
-            param_3[local_0] = param_1[local_0];
+    s32 i;
+    for (i = 0; i < 3; i++) {
+        if (start[i] < end[i]) {
+            bbox_min[i] = start[i];
+            bbox_max[i] = end[i];
         } else {
-            param_2[local_0] = param_1[local_0];
-            param_3[local_0] = param_0[local_0];
+            bbox_min[i] = end[i];
+            bbox_max[i] = start[i];
         }
-        param_2[local_0]--;
-        param_3[local_0]++;
+        bbox_min[i]--;
+        bbox_max[i]++;
     }
 
-    func_800EFB24(param_4, param_1, param_0);
+    func_800EFB24(delta, end, start);
 }
 
-ABTri *func_800AB0BC(u8 *param_0, u8 *param_1, f32 *param_2, f32 *param_3, f32 *param_4,
-                     u32 param_5)
+// Segment raycast: returns the nearest hit triangle, moves end to the hit point and writes
+// the unit hit normal to out_normal. Triangles with a flag in skip_mask are ignored.
+ABTri *func_800AB0BC(u8 *coll, u8 *vtx_list, f32 *start, f32 *end, f32 *out_normal,
+                     u32 skip_mask)
 {
-    s32 local_0;
-    ABGeo **local_2;
-    ABGeo **local_3;
-    ABGeo **local_4;
-    s32 local_33;
-    s32 local_5[3];
-    s32 local_6[3];
-    f32 local_7[3];
-    s32 local_34;
-    ABTri *local_8;
-    ABTri *local_9;
-    ABTri *local_11;
-    ABTri *local_10;
-    f32 local_12[3];
-    f32 local_13[3];
-    f32 local_14[3];
-    f32 local_15[3];
-    s32 local_35;
-    f32 local_16[3];
-    f32 local_17[3];
-    f32 local_18[3];
-    f32 local_19;
-    f32 local_20;
-    f32 local_21;
-    f32 local_22;
-    f32 local_23;
-    s32 local_36;
-    s32 local_37;
-    f32 local_24[3];
-    s32 local_38;
-    s32 local_39;
-    f32 local_25[3][3];
-    ABVertex *local_26;
-    ABVertex *local_27;
-    ABVertex *local_28;
-    ABVertex *local_29;
-    s32 local_30;
-    s32 local_31;
-    s32 local_32;
+    s32 i;
+    ABGeo **cell_begin;
+    ABGeo **cell;
+    ABGeo **cell_end;
+    s32 drop_axis;
+    s32 bbox_min[3];
+    s32 bbox_max[3];
+    f32 delta[3];
+    s32 unk_0;
+    ABTri *hit;
+    ABTri *tri_begin;
+    ABTri *tri;
+    ABTri *tri_end;
+    f32 edge1[3];
+    f32 edge2[3];
+    f32 rel_start[3];
+    f32 rel_end[3];
+    s32 unk_1;
+    f32 hit_pos[3];
+    f32 proj_a[3];
+    f32 proj_b[3];
+    f32 t;
+    f32 plane_d;
+    f32 inv_det;
+    f32 u;
+    f32 v;
+    s32 unk_2;
+    s32 unk_3;
+    f32 normal[3];
+    s32 unk_4;
+    s32 unk_5;
+    f32 verts[3][3];
+    ABVertex *vertices;
+    ABVertex *vtx0;
+    ABVertex *vtx1;
+    ABVertex *vtx2;
+    s32 c0;
+    s32 c1;
+    s32 c2;
 
-    local_8 = 0;
-    local_19 = (f32) (u32) *(u16 *) (param_1 + 0x14);
-    func_800AAFEC(param_2, param_3, local_5, local_6, local_7);
-    for (local_0 = 0; local_0 < 3; local_0++) {
-        if (local_6[local_0] <= -local_19 || local_19 <= local_5[local_0])
+    hit = 0;
+    // Reject segments outside the vertex-list extent before visiting cells.
+    t = (f32) (u32) *(u16 *) (vtx_list + 0x14);
+    func_800AAFEC(start, end, bbox_min, bbox_max, delta);
+    for (i = 0; i < 3; i++) {
+        if (bbox_max[i] <= -t || t <= bbox_min[i])
             return 0;
     }
-    func_800AA7FC(param_0, local_5, local_6, &local_2, &local_4);
-    for (local_3 = local_2; local_3 < local_4; local_3++) {
-        local_9 = (ABTri *) (param_0 + 0x18 + *(u16 *) (param_0 + 0x10) * 4) + (*local_3)->start;
-        local_10 = local_9 + (*local_3)->count;
-        for (local_11 = local_9; local_11 < local_10; local_11++) {
-            local_26 = (ABVertex *) (param_1 + 0x18);
-            if (local_11->flags & param_5)
+    func_800AA7FC(coll, bbox_min, bbox_max, &cell_begin, &cell_end);
+    for (cell = cell_begin; cell < cell_end; cell++) {
+        tri_begin = (ABTri *) (coll + 0x18 + *(u16 *) (coll + 0x10) * 4) + (*cell)->start;
+        tri_end = tri_begin + (*cell)->count;
+        for (tri = tri_begin; tri < tri_end; tri++) {
+            vertices = (ABVertex *) (vtx_list + 0x18);
+            if (tri->flags & skip_mask)
                 continue;
-            local_27 = &local_26[local_11->vertex[0]];
-            local_28 = &local_26[local_11->vertex[1]];
-            local_29 = &local_26[local_11->vertex[2]];
-            local_30 = local_27->pos[0];
-            local_31 = local_28->pos[0];
-            local_32 = local_29->pos[0];
-            if (local_30 < local_5[0] && local_31 < local_5[0] && local_32 < local_5[0])
+            vtx0 = &vertices[tri->vertex[0]];
+            vtx1 = &vertices[tri->vertex[1]];
+            vtx2 = &vertices[tri->vertex[2]];
+            // Reject on each axis before converting that axis to float.
+            c0 = vtx0->pos[0];
+            c1 = vtx1->pos[0];
+            c2 = vtx2->pos[0];
+            if (c0 < bbox_min[0] && c1 < bbox_min[0] && c2 < bbox_min[0])
                 continue;
-            if (local_6[0] < local_30 && local_6[0] < local_31 && local_6[0] < local_32)
+            if (bbox_max[0] < c0 && bbox_max[0] < c1 && bbox_max[0] < c2)
                 continue;
-            local_25[0][0] = local_30;
-            local_25[1][0] = local_31;
-            local_25[2][0] = local_32;
-            local_30 = local_27->pos[1];
-            local_31 = local_28->pos[1];
-            local_32 = local_29->pos[1];
-            if (local_30 < local_5[1] && local_31 < local_5[1] && local_32 < local_5[1])
+            verts[0][0] = c0;
+            verts[1][0] = c1;
+            verts[2][0] = c2;
+            c0 = vtx0->pos[1];
+            c1 = vtx1->pos[1];
+            c2 = vtx2->pos[1];
+            if (c0 < bbox_min[1] && c1 < bbox_min[1] && c2 < bbox_min[1])
                 continue;
-            if (local_6[1] < local_30 && local_6[1] < local_31 && local_6[1] < local_32)
+            if (bbox_max[1] < c0 && bbox_max[1] < c1 && bbox_max[1] < c2)
                 continue;
-            local_25[0][1] = local_30;
-            local_25[1][1] = local_31;
-            local_25[2][1] = local_32;
-            local_30 = local_27->pos[2];
-            local_31 = local_28->pos[2];
-            local_32 = local_29->pos[2];
-            if (local_30 < local_5[2] && local_31 < local_5[2] && local_32 < local_5[2])
+            verts[0][1] = c0;
+            verts[1][1] = c1;
+            verts[2][1] = c2;
+            c0 = vtx0->pos[2];
+            c1 = vtx1->pos[2];
+            c2 = vtx2->pos[2];
+            if (c0 < bbox_min[2] && c1 < bbox_min[2] && c2 < bbox_min[2])
                 continue;
-            if (local_6[2] < local_30 && local_6[2] < local_31 && local_6[2] < local_32)
+            if (bbox_max[2] < c0 && bbox_max[2] < c1 && bbox_max[2] < c2)
                 continue;
-            local_25[0][2] = local_30;
-            local_25[1][2] = local_31;
-            local_25[2][2] = local_32;
-            func_800EFB24(local_12, local_25[1], local_25[0]);
-            func_800EFB24(local_13, local_25[2], local_25[0]);
-            func_800EE97C(local_24, local_12, local_13);
-            if (mlAbsF(local_24[0]) > 100000.0f || mlAbsF(local_24[1]) > 100000.0f ||
-                mlAbsF(local_24[2]) > 100000.0f) {
-                local_24[0] *= 0.00001f;
-                local_24[1] *= 0.00001f;
-                local_24[2] *= 0.00001f;
+            verts[0][2] = c0;
+            verts[1][2] = c1;
+            verts[2][2] = c2;
+            func_800EFB24(edge1, verts[1], verts[0]);
+            func_800EFB24(edge2, verts[2], verts[0]);
+            func_800EE97C(normal, edge1, edge2);
+            // Rescaling a huge normal limits intermediate magnitudes.
+            if (mlAbsF(normal[0]) > 100000.0f || mlAbsF(normal[1]) > 100000.0f ||
+                mlAbsF(normal[2]) > 100000.0f) {
+                normal[0] *= 0.00001f;
+                normal[1] *= 0.00001f;
+                normal[2] *= 0.00001f;
             }
-            func_800EFB24(local_14, param_2, local_25[0]);
-            func_800EFB24(local_15, param_3, local_25[0]);
-            local_19 = func_800EEAA4(local_14, local_24);
-            local_20 = func_800EEAA4(local_15, local_24);
-            if (local_19 >= 0.0f && local_20 >= 0.0f)
+            func_800EFB24(rel_start, start, verts[0]);
+            func_800EFB24(rel_end, end, verts[0]);
+            t = func_800EEAA4(rel_start, normal);
+            plane_d = func_800EEAA4(rel_end, normal);
+            if (t >= 0.0f && plane_d >= 0.0f)
                 continue;
-            if (local_19 <= 0.0f && local_20 <= 0.0f)
+            if (t <= 0.0f && plane_d <= 0.0f)
                 continue;
-            if ((local_11->flags & 0x10000) && local_19 < 0.0f) {
-                local_24[0] = -local_24[0];
-                local_24[1] = -local_24[1];
-                local_24[2] = -local_24[2];
+            // Flag 0x10000 (two-sided) flips the normal toward the start point.
+            if ((tri->flags & 0x10000) && t < 0.0f) {
+                normal[0] = -normal[0];
+                normal[1] = -normal[1];
+                normal[2] = -normal[2];
             }
-            local_20 = -func_800EEAA4(local_25[0], local_24);
-            local_19 = func_800EEAA4(local_24, local_7);
-            if (local_19 >= 0.0f)
+            plane_d = -func_800EEAA4(verts[0], normal);
+            t = func_800EEAA4(normal, delta);
+            if (t >= 0.0f)
                 continue;
-            local_19 = -(func_800EEAA4(local_24, param_2) + local_20) / local_19;
-            if (local_19 <= 0.0f || 1.0f <= local_19)
+            t = -(func_800EEAA4(normal, start) + plane_d) / t;
+            if (t <= 0.0f || 1.0f <= t)
                 continue;
-            func_800EFA4C(local_16, param_2[0] + local_7[0] * local_19,
-                          param_2[1] + local_7[1] * local_19, param_2[2] + local_7[2] * local_19);
-            local_33 = mlAbsF(local_24[0]) > mlAbsF(local_24[1]) ? 0 : 1;
-            if (mlAbsF(local_24[2]) > mlAbsF(local_24[local_33]))
-                local_33 = 2;
-            local_0 = (local_33 + 1) % 3;
-            func_800EFA4C(local_17, local_16[local_0] - local_25[0][local_0], local_12[local_0],
-                          local_13[local_0]);
-            local_0 = (local_33 + 2) % 3;
-            func_800EFA4C(local_18, local_16[local_0] - local_25[0][local_0], local_12[local_0],
-                          local_13[local_0]);
-            local_21 = 1.0f / (local_17[1] * local_18[2] - local_18[1] * local_17[2]);
-            local_22 = (local_17[0] * local_18[2] - local_18[0] * local_17[2]) * local_21;
-            if (local_22 < 0.0f || 1.0f < local_22)
+            func_800EFA4C(hit_pos, start[0] + delta[0] * t,
+                          start[1] + delta[1] * t, start[2] + delta[2] * t);
+            // Drop the dominant normal axis and solve the 2D barycentric test.
+            drop_axis = mlAbsF(normal[0]) > mlAbsF(normal[1]) ? 0 : 1;
+            if (mlAbsF(normal[2]) > mlAbsF(normal[drop_axis]))
+                drop_axis = 2;
+            i = (drop_axis + 1) % 3;
+            func_800EFA4C(proj_a, hit_pos[i] - verts[0][i], edge1[i],
+                          edge2[i]);
+            i = (drop_axis + 2) % 3;
+            func_800EFA4C(proj_b, hit_pos[i] - verts[0][i], edge1[i],
+                          edge2[i]);
+            inv_det = 1.0f / (proj_a[1] * proj_b[2] - proj_b[1] * proj_a[2]);
+            u = (proj_a[0] * proj_b[2] - proj_b[0] * proj_a[2]) * inv_det;
+            if (u < 0.0f || 1.0f < u)
                 continue;
-            local_23 = (local_17[1] * local_18[0] - local_18[1] * local_17[0]) * local_21;
-            if (local_23 < 0.0f || 1.0f < local_23 || 1.0f < local_22 + local_23)
+            v = (proj_a[1] * proj_b[0] - proj_b[1] * proj_a[0]) * inv_det;
+            if (v < 0.0f || 1.0f < v || 1.0f < u + v)
                 continue;
-            local_8 = local_11;
-            func_800EE7F8(param_3, local_16);
-            func_800EE7F8(param_4, local_24);
-            func_800AAFEC(param_2, param_3, local_5, local_6, local_7);
+            // Shortening the segment makes later accepted hits nearer.
+            hit = tri;
+            func_800EE7F8(end, hit_pos);
+            func_800EE7F8(out_normal, normal);
+            func_800AAFEC(start, end, bbox_min, bbox_max, delta);
         }
     }
-    if (local_8)
-        func_800EF2A0(param_4);
-    func_800AA3B4(local_8, param_1);
-    return local_8;
+    if (hit)
+        func_800EF2A0(out_normal);
+    func_800AA3B4(hit, vtx_list);
+    return hit;
 }
 
-s32 func_800AB868(s32 param_0, s32 param_1, f32 *param_2, f32 *param_3, f32 param_4, s32 *param_5, s32 *param_6, s32 *param_7, s32 param_8)
+// Raycast against a model placed with pos/rot/scale; works in the model's local space.
+// Matching: the line breaks in this function are needed for the match.
+s32 func_800AB868(s32 coll, s32 vtx_list, f32 *pos, f32 *rot, f32 scale, s32 *start, s32 *end, s32 *out_normal, s32 skip_mask)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    s32 local_2;
+    f32 local_start[3];
+    f32 local_end[3];
+    s32 hit;
     s32 pad[2];
-    s32 *local_3;
+    s32 *vec;
 
     func_80019CD4();
-    func_8001980C(param_2, param_3, param_4, 0);
-    func_800193C4(local_0, param_5);
-    func_800193C4(local_1, param_6);
-    local_2 = func_800AB0BC(param_0, param_1, local_0, local_1, param_7, param_8);
-    if (local_2 == 0) {
+    func_8001980C(pos, rot, scale, 0);
+    func_800193C4(local_start, start);
+    func_800193C4(local_end, end);
+    hit = func_800AB0BC(coll, vtx_list, local_start, local_end, out_normal, skip_mask);
+    if (hit == 0) {
         return 0;
     }
     func_80019CD4();
-    func_80019750(param_2, param_3, param_4, 0);
-    func_800193C4(param_6, local_1);
-    local_3 = (s32 *) D_80127938; do {
-        func_80019224(local_3, local_3);
-        local_3 += 3;
-    } while (local_3 != (s32 *) D_8012795C);
+    func_80019750(pos, rot, scale, 0);
+    func_800193C4(end, local_end);
+    vec = (s32 *) D_80127938; do {
+        func_80019224(vec, vec);
+        vec += 3;
+    } while (vec != (s32 *) D_8012795C);
     func_80019CD4();
-    func_80019750(0, param_3, 1.0f, 0);
-    func_80019224(param_7, param_7);
-    return local_2;
+    func_80019750(0, rot, 1.0f, 0);
+    func_80019224(out_normal, out_normal);
+    return hit;
 }
 
+// Allocates the first block of the triangle scratch list.
 void func_800AB980()
 {
     D_8012798C = heap_alloc(0x484);
@@ -610,703 +636,727 @@ void func_800AB980()
         ->unk3 = 0x40000000;
 }
 
+// Frees every block of the scratch list.
 void func_800AB9D0()
 {
-    void *s0 = D_8012798C;
-    while (s0) {
-        void *s1 = *((void **) s0 + 1);
-        heap_free(s0);
-        s0 = s1;
+    void *block = D_8012798C;
+    while (block) {
+        void *next = *((void **) block + 1);
+        heap_free(block);
+        block = next;
     }
     D_8012798C = 0;
 }
 
+// Defragments the scratch blocks and relinks their neighbours.
 void func_800ABA20(void)
 {
-    NodeABA20 *local_0;
-    NodeABA20 *local_1;
-    local_0 = (NodeABA20 *) D_8012798C;
-    while (local_0 != 0) {
-        local_1 = local_0;
-        local_0 = defrag(local_0);
-        if (local_0 != local_1) {
-            if (local_0->local_0 != 0)
-                local_0->local_0->local_1 = local_0;
+    NodeABA20 *block;
+    NodeABA20 *old_block;
+    block = (NodeABA20 *) D_8012798C;
+    while (block != 0) {
+        old_block = block;
+        block = defrag(block);
+        if (block != old_block) {
+            if (block->local_0 != 0)
+                block->local_0->local_1 = block;
             else
-                D_8012798C = local_0;
-            if (local_0->local_1 != 0)
-                local_0->local_1->local_0 = local_0;
+                D_8012798C = block;
+            if (block->local_1 != 0)
+                block->local_1->local_0 = block;
         }
-        local_0 = local_0->local_1;
+        block = block->local_1;
     }
 }
 
+// Frees trailing blocks whose stamp is older than 0x28 frames.
 void func_800ABA9C()
 {
-    void *local_0;
+    void *block;
     void *next;
-    s32 local_1;
-    s32 local_2;
+    s32 cutoff;
+    s32 cutoff_copy;
     next = func_8001211C();
-    local_1 = (s32) next - 0x28;
-    local_2 = local_1;
-    local_0 = *(void **) ((char *) D_8012798C + 4);
-    if ((local_0 != 0) && (local_1 < *(s32 *) ((char *) local_0 + 8))) {
+    cutoff = (s32) next - 0x28;
+    // Matching: the second copy of the cutoff is needed for the match.
+    cutoff_copy = cutoff;
+    block = *(void **) ((char *) D_8012798C + 4);
+    if ((block != 0) && (cutoff < *(s32 *) ((char *) block + 8))) {
         do {
-            local_0 = *(void **) ((char *) local_0 + 4);
-            if (local_0 == 0) {
+            block = *(void **) ((char *) block + 4);
+            if (block == 0) {
                 break;
             }
-        } while (local_2 < *(s32 *) ((char *) local_0 + 8));
+        } while (cutoff_copy < *(s32 *) ((char *) block + 8));
     }
-    if (local_0 != 0) {
-        *(s32 *) ((char *) *(void **) ((char *) local_0 + 0) + 4) = 0;
-        if (local_0 != 0) {
+    if (block != 0) {
+        *(s32 *) ((char *) *(void **) ((char *) block + 0) + 4) = 0;
+        if (block != 0) {
             do {
-                next = *(void **) ((char *) local_0 + 4);
-                heap_free(local_0);
-                local_0 = next;
+                next = *(void **) ((char *) block + 4);
+                heap_free(block);
+                block = next;
             } while (next != 0);
         }
     }
 }
 
-void func_800ABB34(s32 **param_0, s32 **param_1)
+// Advances the entry cursor; moves to the next block (allocating it) when the block is full.
+void func_800ABB34(s32 **cursor, s32 **block)
 {
-    s32 *var_a0;
+    s32 *next_block;
 
-    *param_0 = (s32 *) ((s8 *) *param_0 + 0x4C);
-    if (((s32) *param_0 - (s32) *param_1 - 0x10) / 0x4C >= *(s32 *) ((s8 *) *param_1 + 0xC)) {
-        var_a0 = *(s32 **) ((s8 *) *param_1 + 4);
-        if (var_a0 == NULL) {
-            *(s32 **) ((s8 *) *param_1 + 4) = heap_alloc(0xEE8, param_1);
-            *(s32 **) (s8 *) *(s32 **) ((s8 *) *param_1 + 4) = *param_1;
-            *(s32 *) ((s8 *) *(s32 **) ((s8 *) *param_1 + 4) + 4) = 0;
-            *(s32 *) ((s8 *) *(s32 **) ((s8 *) *param_1 + 4) + 0xC) = 0x32;
-            var_a0 = *(s32 **) ((s8 *) *param_1 + 4);
+    *cursor = (s32 *) ((s8 *) *cursor + 0x4C);
+    if (((s32) *cursor - (s32) *block - 0x10) / 0x4C >= *(s32 *) ((s8 *) *block + 0xC)) {
+        next_block = *(s32 **) ((s8 *) *block + 4);
+        if (next_block == NULL) {
+            *(s32 **) ((s8 *) *block + 4) = heap_alloc(0xEE8, block);
+            *(s32 **) (s8 *) *(s32 **) ((s8 *) *block + 4) = *block;
+            *(s32 *) ((s8 *) *(s32 **) ((s8 *) *block + 4) + 4) = 0;
+            *(s32 *) ((s8 *) *(s32 **) ((s8 *) *block + 4) + 0xC) = 0x32;
+            next_block = *(s32 **) ((s8 *) *block + 4);
         }
-        *param_1 = var_a0;
-        *(s32 *) ((s8 *) *param_1 + 8) = func_8001211C(var_a0, param_1, param_0);
-        *param_0 = *param_1 + 4;
+        *block = next_block;
+        *(s32 *) ((s8 *) *block + 8) = func_8001211C(next_block, block, cursor);
+        *cursor = *block + 4;
     }
 }
 
-void func_800ABC0C(s32 *param_0, s32 **param_1)
+// Advances the entry cursor; moves to the next existing block when the block is exhausted.
+void func_800ABC0C(s32 *cursor, s32 **block)
 {
-    *param_0 = *param_0 + 0x4C;
-    if ((((*param_0 - (s32) *param_1) - 0x10) / 0x4C) >= (*param_1)[3]) {
-        *param_1 = (*param_1)[1];
-        *param_0 = (s32) *param_1 + 0x10;
+    *cursor = *cursor + 0x4C;
+    if ((((*cursor - (s32) *block) - 0x10) / 0x4C) >= (*block)[3]) {
+        *block = (*block)[1];
+        *cursor = (s32) *block + 0x10;
     }
 }
 
-func_800ABC58(f32 *param_0, f32 *param_1, f32 param_2, f32 *param_3, f32 *param_4)
+// Bounding box of a segment inflated by radius.
+func_800ABC58(f32 *start, f32 *end, f32 radius, f32 *bbox_min, f32 *bbox_max)
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < 3; local_0++) {
-        if (param_0[local_0] < param_1[local_0]) {
-            param_3[local_0] = param_0[local_0];
-            param_4[local_0] = param_1[local_0];
+    s32 i;
+    for (i = 0; i < 3; i++) {
+        if (start[i] < end[i]) {
+            bbox_min[i] = start[i];
+            bbox_max[i] = end[i];
         } else {
-            param_3[local_0] = param_1[local_0];
-            param_4[local_0] = param_0[local_0];
+            bbox_min[i] = end[i];
+            bbox_max[i] = start[i];
         }
-        param_3[local_0] -= param_2;
-        param_4[local_0] += param_2;
+        bbox_min[i] -= radius;
+        bbox_max[i] += radius;
     }
 }
 
-s32 func_800ABCE0(u8 *param_0, u8 *param_1, f32 *param_2, f32 *param_3, f32 *param_4, f32 param_5,
-                  u32 param_6, LocalEntry **param_7)
+// Sphere sweep broad phase: collects the triangles near the swept segment that face against dir
+// into the scratch list. out_end receives the end of the collected entries.
+s32 func_800ABCE0(u8 *coll, u8 *vtx_list, f32 *start, f32 *end, f32 *dir, f32 radius,
+                  u32 skip_mask, LocalEntry **out_end)
 {
-    LocalGeo **local_0;
-    LocalGeo **local_1;
-    LocalGeo **local_2;
-    f32 local_3[3];
-    s32 local_4;
-    s16 *local_17;
-    f32 local_5[3];
-    f32 local_6[3];
-    s32 local_7;
-    LocalTri_800ABCE0 *local_8;
-    LocalTri_800ABCE0 *local_9;
-    LocalTri_800ABCE0 *local_10;
-    u8 *local_11;
-    f32 local_12[3];
-    f32 local_13[3];
-    f32 local_14;
-    LocalBlock *local_15;
-    LocalEntry *local_16;
-    func_800ABC58(param_2, param_3, param_5, local_5, local_6);
-    local_14 = *(u16 *) (param_1 + 0x14);
-    for (local_4 = 0; local_4 < 3; local_4++) {
-        if (local_6[local_4] <= -local_14 || local_14 <= local_5[local_4])
+    LocalGeo **cell_begin;
+    LocalGeo **cell;
+    LocalGeo **cell_end;
+    f32 rel[3];
+    s32 i;
+    s16 *vtx;
+    f32 bbox_min[3];
+    f32 bbox_max[3];
+    s32 j;
+    LocalTri_800ABCE0 *tri_begin;
+    LocalTri_800ABCE0 *tri_end;
+    LocalTri_800ABCE0 *tri;
+    u8 *vertices;
+    f32 tri_min[3];
+    f32 tri_max[3];
+    f32 extent;
+    LocalBlock *block;
+    LocalEntry *entry;
+    func_800ABC58(start, end, radius, bbox_min, bbox_max);
+    extent = *(u16 *) (vtx_list + 0x14);
+    for (i = 0; i < 3; i++) {
+        if (bbox_max[i] <= -extent || extent <= bbox_min[i])
             return 0;
     }
-    func_800AA4D4(param_0, local_5, local_6, &local_0, &local_2);
-    local_15 = (LocalBlock *) D_8012798C;
-    local_16 = local_15->entries;
-    for (local_1 = local_0; local_1 < local_2; local_1++) {
-        local_8 = (LocalTri_800ABCE0 *) (param_0 + *(u16 *) (param_0 + 0x10) * 4 + 0x18) +
-                  (*local_1)->start;
-        local_9 = local_8 + (*local_1)->count;
-        for (local_10 = local_8; local_10 < local_9; local_10++) {
-            local_11 = param_1 + 0x18;
-            if (local_10->flags & param_6)
+    func_800AA4D4(coll, bbox_min, bbox_max, &cell_begin, &cell_end);
+    block = (LocalBlock *) D_8012798C;
+    entry = block->entries;
+    for (cell = cell_begin; cell < cell_end; cell++) {
+        tri_begin = (LocalTri_800ABCE0 *) (coll + *(u16 *) (coll + 0x10) * 4 + 0x18) +
+                  (*cell)->start;
+        tri_end = tri_begin + (*cell)->count;
+        for (tri = tri_begin; tri < tri_end; tri++) {
+            vertices = vtx_list + 0x18;
+            if (tri->flags & skip_mask)
                 continue;
-            for (local_4 = 0; local_4 < 3; local_4++) {
-                local_17 = (s16 *) (local_11 + local_10->vertex[local_4] * 0x10);
-                func_800EE88C(local_16->points[local_4], local_17);
+            for (i = 0; i < 3; i++) {
+                vtx = (s16 *) (vertices + tri->vertex[i] * 0x10);
+                func_800EE88C(entry->points[i], vtx);
             }
-            func_800EE7F8(local_12, local_16->points[0]);
-            func_800EE7F8(local_13, local_16->points[0]);
-            for (local_4 = 1; local_4 < 3; local_4++) {
-                for (local_7 = 0; local_7 < 3; local_7++) {
-                    if (local_16->points[local_4][local_7] < local_12[local_7])
-                        local_12[local_7] = local_16->points[local_4][local_7];
-                    if (local_13[local_7] < local_16->points[local_4][local_7])
-                        local_13[local_7] = local_16->points[local_4][local_7];
+            func_800EE7F8(tri_min, entry->points[0]);
+            func_800EE7F8(tri_max, entry->points[0]);
+            for (i = 1; i < 3; i++) {
+                for (j = 0; j < 3; j++) {
+                    if (entry->points[i][j] < tri_min[j])
+                        tri_min[j] = entry->points[i][j];
+                    if (tri_max[j] < entry->points[i][j])
+                        tri_max[j] = entry->points[i][j];
                 }
             }
-            if (local_6[0] < local_12[0] || local_13[0] < local_5[0])
+            if (bbox_max[0] < tri_min[0] || tri_max[0] < bbox_min[0])
                 continue;
-            if (local_6[1] < local_12[1] || local_13[1] < local_5[1])
+            if (bbox_max[1] < tri_min[1] || tri_max[1] < bbox_min[1])
                 continue;
-            if (local_6[2] < local_12[2] || local_13[2] < local_5[2])
+            if (bbox_max[2] < tri_min[2] || tri_max[2] < bbox_min[2])
                 continue;
-            func_800EFB24(local_16->edge0, local_16->points[1], local_16->points[0]);
-            func_800EFB24(local_16->edge1, local_16->points[2], local_16->points[0]);
-            func_800EE97C(local_16->normal, local_16->edge0, local_16->edge1);
-            func_800EF2A0(local_16->normal);
-            if (local_10->flags & 0x10000) {
-                func_800EFB24(local_3, param_2, local_16->points[0]);
-                if (func_800EEAA4(local_3, local_16->normal) < 0.0f) {
-                    local_16->normal[0] = -local_16->normal[0];
-                    local_16->normal[1] = -local_16->normal[1];
-                    local_16->normal[2] = -local_16->normal[2];
+            func_800EFB24(entry->edge0, entry->points[1], entry->points[0]);
+            func_800EFB24(entry->edge1, entry->points[2], entry->points[0]);
+            func_800EE97C(entry->normal, entry->edge0, entry->edge1);
+            func_800EF2A0(entry->normal);
+            if (tri->flags & 0x10000) {
+                func_800EFB24(rel, start, entry->points[0]);
+                if (func_800EEAA4(rel, entry->normal) < 0.0f) {
+                    entry->normal[0] = -entry->normal[0];
+                    entry->normal[1] = -entry->normal[1];
+                    entry->normal[2] = -entry->normal[2];
                 }
             }
-            if (func_800EEAA4(local_16->normal, param_4) > 0.0f)
+            if (func_800EEAA4(entry->normal, dir) > 0.0f)
                 continue;
-            local_16->tri = local_10;
-            func_800ABB34(&local_16, &local_15);
+            entry->tri = tri;
+            func_800ABB34(&entry, &block);
         }
     }
-    *param_7 = local_16;
-    return local_16 != ((LocalBlock *) D_8012798C)->entries;
+    *out_end = entry;
+    return entry != ((LocalBlock *) D_8012798C)->entries;
 }
 
-LocalTriangle *func_800AC100(LocalTriangle *param_0, f32 *param_1, f32 param_2, f32 *param_3)
+// Tests a sphere against the collected triangles. Returns the last one touched and sums the
+// normals of all touched triangles into out_normal. `end` marks the end of the entries.
+LocalTriangle *func_800AC100(LocalTriangle *end, f32 *center, f32 radius, f32 *out_normal)
 {
-    s32 local_0;
-    LocalTriangleBlock *local_1;
-    LocalTriangle *local_2;
-    f32 local_3[3][3];
-    f32 local_4[3][3];
-    f32 local_5;
-    f32 local_6;
-    f32 local_7;
-    f32 local_8;
-    f32 local_9;
-    f32 local_10;
-    f32 local_11[3];
-    f32 local_12[3];
-    u32 local_13;
-    s32 local_14;
-    s32 local_15;
-    f32 local_16[3];
-    LocalTriangle *local_17;
-    f32 local_18;
+    s32 i;
+    LocalTriangleBlock *block;
+    LocalTriangle *entry;
+    f32 edges[3][3];
+    f32 to_vert[3][3];
+    f32 radius_sq;
+    f32 along;
+    f32 v;
+    f32 u;
+    f32 plane_dist;
+    f32 edge_len_sq;
+    f32 proj_a[3];
+    f32 proj_b[3];
+    u32 unk_0;
+    s32 unk_1;
+    s32 drop_axis;
+    f32 proj_pt[3];
+    LocalTriangle *hit;
+    f32 inv_det;
 
-    local_17 = NULL;
-    local_5 = param_2 * param_2;
-    func_800EFD24(param_3);
-    local_1 = (LocalTriangleBlock *) D_8012798C;
-    for (local_2 = local_1->triangles; local_2 != param_0; func_800ABC0C(&local_2, &local_1)) {
-        func_800EFB24(local_4[0], param_1, local_2->vertices[0]);
-        local_9 = func_800EEAA4(local_4[0], local_2->normal);
-        if (param_2 - 0.5f <= mlAbsF(local_9))
+    hit = NULL;
+    radius_sq = radius * radius;
+    func_800EFD24(out_normal);
+    block = (LocalTriangleBlock *) D_8012798C;
+    for (entry = block->triangles; entry != end; func_800ABC0C(&entry, &block)) {
+        func_800EFB24(to_vert[0], center, entry->vertices[0]);
+        plane_dist = func_800EEAA4(to_vert[0], entry->normal);
+        if (radius - 0.5f <= mlAbsF(plane_dist))
             continue;
 
-        local_16[0] = param_1[0] - local_2->normal[0] * local_9;
-        local_16[1] = param_1[1] - local_2->normal[1] * local_9;
-        local_16[2] = param_1[2] - local_2->normal[2] * local_9;
-        local_15 = mlAbsF(local_2->normal[0]) > mlAbsF(local_2->normal[1]) ? 0 : 1;
-        if (mlAbsF(local_2->normal[2]) > mlAbsF(local_2->normal[local_15]))
-            local_15 = 2;
+        proj_pt[0] = center[0] - entry->normal[0] * plane_dist;
+        proj_pt[1] = center[1] - entry->normal[1] * plane_dist;
+        proj_pt[2] = center[2] - entry->normal[2] * plane_dist;
+        drop_axis = mlAbsF(entry->normal[0]) > mlAbsF(entry->normal[1]) ? 0 : 1;
+        if (mlAbsF(entry->normal[2]) > mlAbsF(entry->normal[drop_axis]))
+            drop_axis = 2;
 
-        func_800EFA4C(local_11,
-                      local_16[(local_15 + 1) % 3] - local_2->vertices[0][(local_15 + 1) % 3],
-                      local_2->edgeAB[(local_15 + 1) % 3], local_2->edgeAC[(local_15 + 1) % 3]);
-        func_800EFA4C(local_12,
-                      local_16[(local_15 + 2) % 3] - local_2->vertices[0][(local_15 + 2) % 3],
-                      local_2->edgeAB[(local_15 + 2) % 3], local_2->edgeAC[(local_15 + 2) % 3]);
-        local_18 = local_11[1] * local_12[2] - local_12[1] * local_11[2];
-        if (local_18 == 0.0f)
+        func_800EFA4C(proj_a,
+                      proj_pt[(drop_axis + 1) % 3] - entry->vertices[0][(drop_axis + 1) % 3],
+                      entry->edgeAB[(drop_axis + 1) % 3], entry->edgeAC[(drop_axis + 1) % 3]);
+        func_800EFA4C(proj_b,
+                      proj_pt[(drop_axis + 2) % 3] - entry->vertices[0][(drop_axis + 2) % 3],
+                      entry->edgeAB[(drop_axis + 2) % 3], entry->edgeAC[(drop_axis + 2) % 3]);
+        inv_det = proj_a[1] * proj_b[2] - proj_b[1] * proj_a[2];
+        if (inv_det == 0.0f)
             continue;
-        local_18 = 1.0f / local_18;
-        local_8 = (local_11[0] * local_12[2] - local_12[0] * local_11[2]) * local_18;
-        local_7 = (local_11[1] * local_12[0] - local_12[1] * local_11[0]) * local_18;
-        if (0.0f <= local_8 && local_8 <= 1.0f && 0.0f <= local_7 && local_7 <= 1.0f)
-            if (local_8 + local_7 <= 1.0f) {
-                local_17 = local_2;
-                func_800EF04C(param_3, local_2->normal);
+        inv_det = 1.0f / inv_det;
+        u = (proj_a[0] * proj_b[2] - proj_b[0] * proj_a[2]) * inv_det;
+        v = (proj_a[1] * proj_b[0] - proj_b[1] * proj_a[0]) * inv_det;
+        if (0.0f <= u && u <= 1.0f && 0.0f <= v && v <= 1.0f)
+            if (u + v <= 1.0f) {
+                hit = entry;
+                func_800EF04C(out_normal, entry->normal);
                 continue;
             }
-        for (local_0 = 0; local_0 < 3; local_0++) {
-            func_800EFB24(local_4[local_0], param_1, local_2->vertices[local_0]);
-            if (func_800EEFD4(local_4[local_0]) < local_5) {
-                local_17 = local_2;
-                func_800EF04C(param_3, local_2->normal);
+        for (i = 0; i < 3; i++) {
+            func_800EFB24(to_vert[i], center, entry->vertices[i]);
+            if (func_800EEFD4(to_vert[i]) < radius_sq) {
+                hit = entry;
+                func_800EF04C(out_normal, entry->normal);
                 break;
             }
         }
-        if (local_0 < 3)
+        if (i < 3)
             continue;
-        for (local_0 = 0; local_0 < 3; local_0++) {
-            func_800EFB24(local_3[local_0], local_2->vertices[(local_0 + 1) % 3],
-                          local_2->vertices[local_0]);
-            local_10 = func_800EEFD4(local_3[local_0]);
-            func_800EF2A0(local_3[local_0]);
-            local_6 = func_800EEAA4(local_3[local_0], local_4[local_0]);
-            if (0 <= local_6 && local_6 * local_6 <= local_10) {
-                local_16[0] = local_4[local_0][0] - local_3[local_0][0] * local_6;
-                local_16[1] = local_4[local_0][1] - local_3[local_0][1] * local_6;
-                local_16[2] = local_4[local_0][2] - local_3[local_0][2] * local_6;
-                if (func_800EEFD4(local_16) < local_5) {
-                    local_17 = local_2;
-                    func_800EF04C(param_3, local_2->normal);
+        for (i = 0; i < 3; i++) {
+            func_800EFB24(edges[i], entry->vertices[(i + 1) % 3],
+                          entry->vertices[i]);
+            edge_len_sq = func_800EEFD4(edges[i]);
+            func_800EF2A0(edges[i]);
+            along = func_800EEAA4(edges[i], to_vert[i]);
+            if (0 <= along && along * along <= edge_len_sq) {
+                proj_pt[0] = to_vert[i][0] - edges[i][0] * along;
+                proj_pt[1] = to_vert[i][1] - edges[i][1] * along;
+                proj_pt[2] = to_vert[i][2] - edges[i][2] * along;
+                if (func_800EEFD4(proj_pt) < radius_sq) {
+                    hit = entry;
+                    func_800EF04C(out_normal, entry->normal);
                     break;
                 }
             }
         }
     }
-    return local_17;
+    return hit;
 }
 
-void *func_800AC638(void *param_0, void *param_1, f32 *param_2, f32 *param_3, f32 param_4,
-                    f32 *param_5, s32 param_6, u32 param_7)
+// Sphere sweep from start to end: bisects the segment `steps` times to find the last free
+// position (written to end) and the touched triangle's normal (out_normal).
+void *func_800AC638(void *coll, void *vtx_list, f32 *start, f32 *end, f32 radius,
+                    f32 *out_normal, s32 steps, u32 skip_mask)
 {
-    void *local_0;
-    f32 local_1[3];
-    f32 local_2, local_3, local_4;
-    s32 local_5;
-    f32 local_6[3];
-    f32 local_7[3];
-    HitAC638 *local_8;
-    HitAC638 *local_9;
-    f32 local_10[3];
-    func_800EFB24(local_10, param_3, param_2);
-    if (!func_800ABCE0(param_0, param_1, param_2, param_3, local_10, param_4 + 0.5f, param_7,
-                       &local_0))
+    void *entries_end;
+    f32 delta[3];
+    f32 lo, hi, mid;
+    s32 i;
+    f32 mid_pos[3];
+    f32 normal[3];
+    HitAC638 *hit;
+    HitAC638 *mid_hit;
+    f32 dir[3];
+    func_800EFB24(dir, end, start);
+    if (!func_800ABCE0(coll, vtx_list, start, end, dir, radius + 0.5f, skip_mask,
+                       &entries_end))
         return 0;
-    local_8 = func_800AC100(local_0, param_3, param_4, local_7);
-    if (!local_8)
+    hit = func_800AC100(entries_end, end, radius, normal);
+    if (!hit)
         return 0;
-    func_800EE7F8(param_5, local_7);
-    func_800EFB24(local_1, param_3, param_2);
-    func_800EE7F8(param_3, param_2);
-    local_2 = 0.0f;
-    local_3 = 1.0f;
-    for (local_5 = 0; local_5 < param_6; local_5++) {
-        local_4 = (local_2 + local_3) * 0.5f;
-        local_6[0] = param_2[0] + local_1[0] * local_4;
-        local_6[1] = param_2[1] + local_1[1] * local_4;
-        local_6[2] = param_2[2] + local_1[2] * local_4;
-        local_9 = func_800AC100(local_0, local_6, param_4, local_7);
-        if (local_9) {
-            local_3 = local_4;
-            local_8 = local_9;
-            func_800EE7F8(param_5, local_7);
+    func_800EE7F8(out_normal, normal);
+    func_800EFB24(delta, end, start);
+    func_800EE7F8(end, start);
+    lo = 0.0f;
+    hi = 1.0f;
+    for (i = 0; i < steps; i++) {
+        mid = (lo + hi) * 0.5f;
+        mid_pos[0] = start[0] + delta[0] * mid;
+        mid_pos[1] = start[1] + delta[1] * mid;
+        mid_pos[2] = start[2] + delta[2] * mid;
+        mid_hit = func_800AC100(entries_end, mid_pos, radius, normal);
+        if (mid_hit) {
+            hi = mid;
+            hit = mid_hit;
+            func_800EE7F8(out_normal, normal);
         } else {
-            local_2 = local_4;
-            func_800EE7F8(param_3, local_6);
+            lo = mid;
+            func_800EE7F8(end, mid_pos);
         }
     }
-    if (!local_8)
+    if (!hit)
         return 0;
-    func_800EF2A0(param_5);
-    func_800AA3B4(local_8->local_0, param_1);
-    return local_8->local_0;
+    func_800EF2A0(out_normal);
+    func_800AA3B4(hit->local_0, vtx_list);
+    return hit->local_0;
 }
 
-s32 func_800AC848(s32 param_0, s32 param_1, f32 *param_2, f32 *param_3, f32 param_4, f32 *param_5,
-                  f32 *param_6, f32 param_7, f32 *param_8, s32 param_9, s32 param_10)
+// Sphere sweep against a model placed with pos/rot/scale; works in the model's local space.
+s32 func_800AC848(s32 coll, s32 vtx_list, f32 *pos, f32 *rot, f32 scale, f32 *start,
+                  f32 *end, f32 radius, f32 *out_normal, s32 steps, s32 skip_mask)
 {
-    f32 local_5[3];
-    f32 local_0[3];
-    s32 local_3;
-    s32 local_1;
+    f32 local_start[3];
+    f32 local_end[3];
+    s32 i;
+    s32 hit;
     func_80019CD4();
-    func_8001980C(param_2, param_3, param_4, 0);
-    func_80019224(local_5, param_5);
-    func_80019224(local_0, param_6);
-    local_1 = func_800AC638(param_0, param_1, local_5, local_0, param_7 / param_4, param_8, param_9,
-                            param_10);
-    if (!local_1)
+    func_8001980C(pos, rot, scale, 0);
+    func_80019224(local_start, start);
+    func_80019224(local_end, end);
+    hit = func_800AC638(coll, vtx_list, local_start, local_end, radius / scale, out_normal, steps,
+                            skip_mask);
+    if (!hit)
         return 0;
     func_80019CD4();
-    func_80019750(param_2, param_3, param_4, 0);
-    func_80019224(param_6, local_0);
-    for (local_3 = 0; local_3 < 3; local_3++)
-        func_80019224(D_80127938[local_3], D_80127938[local_3]);
+    func_80019750(pos, rot, scale, 0);
+    func_80019224(end, local_end);
+    for (i = 0; i < 3; i++)
+        func_80019224(D_80127938[i], D_80127938[i]);
     func_80019CD4();
-    func_80019750(0, param_3, 1.0f, 0);
-    func_80019224(param_8, param_8);
-    return local_1;
+    func_80019750(0, rot, 1.0f, 0);
+    func_80019224(out_normal, out_normal);
+    return hit;
 }
 
-ABTri *func_800AC978(u8 *param_0, u8 *param_1, f32 *param_2, f32 param_3, f32 *param_4, s32 param_5)
+// Sphere overlap: returns the last touched triangle and sums the touched normals into
+// out_normal.
+ABTri *func_800AC978(u8 *coll, u8 *vtx_list, f32 *center, f32 radius, f32 *out_normal, s32 skip_mask)
 {
-    ABGeo **local_0;
-    ABGeo **local_1;
-    ABGeo **local_2;
-    s32 local_3;
-    f32 local_4[3];
-    f32 local_5[3];
-    s32 local_6;
-    f32 local_7[3];
-    ABTri *local_8;
-    ABTri *local_32;
-    u8 *local_29;
-    u16 *local_30;
-    ABTri *local_9;
-    ABTri *local_10;
-    f32(*local_31)[3];
-    f32 local_20;
-    f32 local_21;
-    f32 local_11[3][3];
-    f32 local_12[3][3];
-    f32 local_22;
-    f32 local_23;
-    f32 local_24;
-    f32 local_13[3];
-    f32 local_14[3];
-    f32 local_15[3];
-    f32 local_25;
-    f32 local_26;
-    s32 local_27;
-    f32 local_17[3];
-    f32 local_18[3];
-    f32 local_16[3];
-    f32 local_19[3][3];
-    f32 local_28;
+    ABGeo **cell_begin;
+    ABGeo **cell;
+    ABGeo **cell_end;
+    s32 i;
+    f32 bbox_min[3];
+    f32 bbox_max[3];
+    s32 j;
+    f32 normal_sum[3];
+    ABTri *hit;
+    ABTri *tri_begin;
+    u8 *vertices;
+    u16 *vtx;
+    ABTri *tri;
+    ABTri *tri_end;
+    f32(*unk_0)[3];
+    f32 v;
+    f32 plane_dist;
+    f32 edges[3][3];
+    f32 to_vert[3][3];
+    f32 inv_det;
+    f32 u;
+    f32 unk_1;
+    f32 normal[3];
+    f32 proj_a[3];
+    f32 proj_b[3];
+    f32 edge_len_sq;
+    f32 along;
+    s32 drop_axis;
+    f32 tri_min[3];
+    f32 tri_max[3];
+    f32 proj_pt[3];
+    f32 verts[3][3];
+    f32 radius_sq;
 
-    for (local_3 = 0; local_3 < 3; local_3++) {
-        local_4[local_3] = param_2[local_3] - (param_3 + 0.5f);
-        local_5[local_3] = param_2[local_3] + (param_3 + 0.5f);
+    // Broad phase: expand the sphere bounds, then reject the entire model.
+    for (i = 0; i < 3; i++) {
+        bbox_min[i] = center[i] - (radius + 0.5f);
+        bbox_max[i] = center[i] + (radius + 0.5f);
     }
-    local_20 = *(u16 *) (param_1 + 0x14);
-    for (local_3 = 0; local_3 < 3; local_3++) {
-        if (local_5[local_3] <= -local_20 || local_20 <= local_4[local_3])
+    v = *(u16 *) (vtx_list + 0x14);
+    for (i = 0; i < 3; i++) {
+        if (bbox_max[i] <= -v || v <= bbox_min[i])
             return 0;
     }
-    local_8 = 0;
-    func_800EFD24(local_7);
-    func_800AA4D4(param_0, local_4, local_5, &local_0, &local_2);
-    for (local_1 = local_0; local_1 < local_2; local_1++) {
-        local_32 = (ABTri *) (param_0 + 0x18 + *(u16 *) (param_0 + 0x10) * 4) + (*local_1)->start;
-        local_10 = local_32 + (*local_1)->count;
-        for (local_9 = local_32; local_9 < local_10; local_9++) {
-            if (local_9->flags & param_5)
+    hit = 0;
+    func_800EFD24(normal_sum);
+    func_800AA4D4(coll, bbox_min, bbox_max, &cell_begin, &cell_end);
+    for (cell = cell_begin; cell < cell_end; cell++) {
+        tri_begin = (ABTri *) (coll + 0x18 + *(u16 *) (coll + 0x10) * 4) + (*cell)->start;
+        tri_end = tri_begin + (*cell)->count;
+        for (tri = tri_begin; tri < tri_end; tri++) {
+            if (tri->flags & skip_mask)
                 continue;
-            local_29 = param_1 + 0x18;
-            for (local_3 = 0; local_3 < 3; local_3++) {
-                local_30 = (u16 *) (local_29 + local_9->vertex[local_3] * 0x10);
-                func_800EE88C(local_19[local_3], (s16 *) local_30);
+            vertices = vtx_list + 0x18;
+            for (i = 0; i < 3; i++) {
+                vtx = (u16 *) (vertices + tri->vertex[i] * 0x10);
+                func_800EE88C(verts[i], (s16 *) vtx);
             }
-            func_800EE7F8(local_17, local_19[0]);
-            func_800EE7F8(local_18, local_19[0]);
-            for (local_3 = 1; local_3 < 3; local_3++) {
-                for (local_6 = 0; local_6 < 3; local_6++) {
-                    if (local_19[local_3][local_6] < local_17[local_6])
-                        local_17[local_6] = local_19[local_3][local_6];
-                    if (local_18[local_6] < local_19[local_3][local_6])
-                        local_18[local_6] = local_19[local_3][local_6];
+            func_800EE7F8(tri_min, verts[0]);
+            func_800EE7F8(tri_max, verts[0]);
+            for (i = 1; i < 3; i++) {
+                for (j = 0; j < 3; j++) {
+                    if (verts[i][j] < tri_min[j])
+                        tri_min[j] = verts[i][j];
+                    if (tri_max[j] < verts[i][j])
+                        tri_max[j] = verts[i][j];
                 }
             }
-            if (local_5[0] < local_17[0] || local_18[0] < local_4[0])
+            if (bbox_max[0] < tri_min[0] || tri_max[0] < bbox_min[0])
                 continue;
-            if (local_5[1] < local_17[1] || local_18[1] < local_4[1])
+            if (bbox_max[1] < tri_min[1] || tri_max[1] < bbox_min[1])
                 continue;
-            if (local_5[2] < local_17[2] || local_18[2] < local_4[2])
+            if (bbox_max[2] < tri_min[2] || tri_max[2] < bbox_min[2])
                 continue;
-            func_800EFB24(local_11[0], local_19[1], local_19[0]);
-            func_800EFB24(local_11[1], local_19[2], local_19[0]);
-            func_800EE97C(local_13, local_11[0], local_11[1]);
-            func_800EF2A0(local_13);
-            if (local_13[0] == 0.0f && local_13[1] == 0.0f && local_13[2] == 0.0f)
+            func_800EFB24(edges[0], verts[1], verts[0]);
+            func_800EFB24(edges[1], verts[2], verts[0]);
+            func_800EE97C(normal, edges[0], edges[1]);
+            func_800EF2A0(normal);
+            // Reject degenerate triangles; orient two-sided faces toward the center.
+            if (normal[0] == 0.0f && normal[1] == 0.0f && normal[2] == 0.0f)
                 continue;
-            func_800EFB24(local_12[0], param_2, local_19[0]);
-            if ((local_9->flags & 0x10000) && func_800EEAA4(local_12[0], local_13) < 0) {
-                local_13[0] = -local_13[0];
-                local_13[1] = -local_13[1];
-                local_13[2] = -local_13[2];
+            func_800EFB24(to_vert[0], center, verts[0]);
+            if ((tri->flags & 0x10000) && func_800EEAA4(to_vert[0], normal) < 0) {
+                normal[0] = -normal[0];
+                normal[1] = -normal[1];
+                normal[2] = -normal[2];
             }
-            local_21 = func_800EEAA4(local_12[0], local_13);
-            if (param_3 - 0.5f <= mlAbsF(local_21))
+            plane_dist = func_800EEAA4(to_vert[0], normal);
+            if (radius - 0.5f <= mlAbsF(plane_dist))
                 continue;
-            local_16[0] = param_2[0] - local_13[0] * local_21;
-            local_16[1] = param_2[1] - local_13[1] * local_21;
-            local_16[2] = param_2[2] - local_13[2] * local_21;
-            local_27 = mlAbsF(local_13[0]) > mlAbsF(local_13[1]) ? 0 : 1;
-            if (mlAbsF(local_13[2]) > mlAbsF(local_13[local_27]))
-                local_27 = 2;
-            local_3 = (local_27 + 1) % 3;
-            func_800EFA4C(local_14, local_16[local_3] - local_19[0][local_3], local_11[0][local_3],
-                          local_11[1][local_3]);
-            local_3 = (local_27 + 2) % 3;
-            func_800EFA4C(local_15, local_16[local_3] - local_19[0][local_3], local_11[0][local_3],
-                          local_11[1][local_3]);
-            local_22 = 1.0f / (local_14[1] * local_15[2] - local_15[1] * local_14[2]);
-            local_23 = (local_14[0] * local_15[2] - local_15[0] * local_14[2]) * local_22;
-            if (local_23 >= 0 && local_23 <= 1.0f) {
-                local_20 = local_15[0];
-                local_20 = (local_14[1] * local_20 - local_15[1] * local_14[0]) * local_22;
-                if (local_20 >= 0 && local_20 <= 1.0f && local_23 + local_20 <= 1.0f) {
-                    local_8 = local_9;
-                    func_800EF04C(local_7, local_13);
+            proj_pt[0] = center[0] - normal[0] * plane_dist;
+            proj_pt[1] = center[1] - normal[1] * plane_dist;
+            proj_pt[2] = center[2] - normal[2] * plane_dist;
+            drop_axis = mlAbsF(normal[0]) > mlAbsF(normal[1]) ? 0 : 1;
+            if (mlAbsF(normal[2]) > mlAbsF(normal[drop_axis]))
+                drop_axis = 2;
+            i = (drop_axis + 1) % 3;
+            func_800EFA4C(proj_a, proj_pt[i] - verts[0][i], edges[0][i],
+                          edges[1][i]);
+            i = (drop_axis + 2) % 3;
+            func_800EFA4C(proj_b, proj_pt[i] - verts[0][i], edges[0][i],
+                          edges[1][i]);
+            inv_det = 1.0f / (proj_a[1] * proj_b[2] - proj_b[1] * proj_a[2]);
+            u = (proj_a[0] * proj_b[2] - proj_b[0] * proj_a[2]) * inv_det;
+            if (u >= 0 && u <= 1.0f) {
+                // Matching: the copy through v is needed for the match.
+                v = proj_b[0];
+                v = (proj_a[1] * v - proj_b[1] * proj_a[0]) * inv_det;
+                if (v >= 0 && v <= 1.0f && u + v <= 1.0f) {
+                    hit = tri;
+                    func_800EF04C(normal_sum, normal);
                     continue;
                 }
             }
-            local_28 = param_3 * param_3;
-            for (local_3 = 0; local_3 < 3; local_3++) {
-                func_800EFB24(local_12[local_3], param_2, local_19[local_3]);
-                if (func_800EEFD4(local_12[local_3]) < local_28) {
-                    local_8 = local_9;
-                    func_800EF04C(local_7, local_13);
+            // Outside the face: test the three vertices, then the edge segments.
+            radius_sq = radius * radius;
+            for (i = 0; i < 3; i++) {
+                func_800EFB24(to_vert[i], center, verts[i]);
+                if (func_800EEFD4(to_vert[i]) < radius_sq) {
+                    hit = tri;
+                    func_800EF04C(normal_sum, normal);
                     break;
                 }
             }
-            if (local_3 < 3)
+            if (i < 3)
                 continue;
-            for (local_3 = 0; local_3 < 3; local_3++) {
-                func_800EFB24(local_11[local_3], local_19[(local_3 + 1) % 3], local_19[local_3]);
-                local_25 = func_800EEFD4(local_11[local_3]);
-                func_800EF2A0(local_11[local_3]);
-                local_26 = func_800EEAA4(local_11[local_3], local_12[local_3]);
-                if (local_26 >= 0.0f && local_26 * local_26 <= local_25) {
-                    local_16[0] = local_12[local_3][0] - local_11[local_3][0] * local_26;
-                    local_16[1] = local_12[local_3][1] - local_11[local_3][1] * local_26;
-                    local_16[2] = local_12[local_3][2] - local_11[local_3][2] * local_26;
-                    if (func_800EEFD4(local_16) < local_28) {
-                        local_8 = local_9;
-                        func_800EF04C(local_7, local_13);
+            for (i = 0; i < 3; i++) {
+                func_800EFB24(edges[i], verts[(i + 1) % 3], verts[i]);
+                edge_len_sq = func_800EEFD4(edges[i]);
+                func_800EF2A0(edges[i]);
+                along = func_800EEAA4(edges[i], to_vert[i]);
+                if (along >= 0.0f && along * along <= edge_len_sq) {
+                    proj_pt[0] = to_vert[i][0] - edges[i][0] * along;
+                    proj_pt[1] = to_vert[i][1] - edges[i][1] * along;
+                    proj_pt[2] = to_vert[i][2] - edges[i][2] * along;
+                    if (func_800EEFD4(proj_pt) < radius_sq) {
+                        hit = tri;
+                        func_800EF04C(normal_sum, normal);
                         break;
                     }
                 }
             }
         }
     }
-    if (local_8 != 0)
-        func_800EF410(param_4, local_7);
-    func_800AA3B4(local_8, param_1);
-    return local_8;
+    if (hit != 0)
+        func_800EF410(out_normal, normal_sum);
+    func_800AA3B4(hit, vtx_list);
+    return hit;
 }
 
-s32 func_800AD1AC(s32 param_0, s32 param_1, f32 *param_2, f32 *param_3, f32 param_4, f32 *param_5,
-                  f32 param_6, f32 *param_7, s32 param_8)
+// Sphere overlap against a model placed with pos/rot/scale; works in the model's local space.
+s32 func_800AD1AC(s32 coll, s32 vtx_list, f32 *pos, f32 *rot, f32 scale, f32 *center,
+                  f32 radius, f32 *out_normal, s32 skip_mask)
 {
-    f32 local_0[3];
-    s32 local_3;
-    s32 local_1;
-    s32 local_4;
+    f32 local_center[3];
+    s32 i;
+    s32 hit;
+    s32 unk_0;
     func_80019CD4();
-    func_8001980C(param_2, param_3, param_4, 0);
-    func_80019224(local_0, param_5);
-    local_1 = func_800AC978(param_0, param_1, local_0, param_6 / param_4, param_7, param_8);
-    if (!local_1)
+    func_8001980C(pos, rot, scale, 0);
+    func_80019224(local_center, center);
+    hit = func_800AC978(coll, vtx_list, local_center, radius / scale, out_normal, skip_mask);
+    if (!hit)
         return 0;
     func_80019CD4();
-    func_80019750(param_2, param_3, param_4, 0);
-    func_80019224(param_5, local_0);
-    for (local_3 = 0; local_3 < 3; local_3++)
-        func_80019224(D_80127938[local_3], D_80127938[local_3]);
+    func_80019750(pos, rot, scale, 0);
+    func_80019224(center, local_center);
+    for (i = 0; i < 3; i++)
+        func_80019224(D_80127938[i], D_80127938[i]);
     func_80019CD4();
-    func_80019750(0, param_3, 1.0f, 0);
-    func_80019224(param_7, param_7);
-    return local_1;
+    func_80019750(0, rot, 1.0f, 0);
+    func_80019224(out_normal, out_normal);
+    return hit;
 }
 
-s32 func_800AD2C8(LocalModel *param_0, void *param_1, f32 *param_2, f32 *param_3, f32 *param_4,
-                  LocalOutput **param_5, s32 param_6, f32 param_7)
+// Collects up-facing triangles inside the segment's bounds into out; returns how many were written.
+s32 func_800AD2C8(LocalModel *col_list, void *model, f32 *seg_start, f32 *seg_end, f32 *origin,
+                  LocalOutput **out, s32 max_count, f32 min_normal_y)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2 = 0;
-    LocalGroup **local_3;
-    LocalGroup **local_4;
-    LocalGroup **local_5;
-    LocalVertex *local_6;
-    LocalTri_800AD2C8 *local_7;
-    LocalTri_800AD2C8 *local_8;
-    s32 local_9[3];
-    s32 local_10[3];
-    s32 local_11[3];
-    s32 local_12[3];
-    s32 local_13[3];
-    s32 local_14[3][3];
-    s32 local_15[3];
-    s32 local_16[3];
-    LocalCachedTri *local_17;
-    LocalVertex *local_18;
-    LocalTri_800AD2C8 *local_20;
-    f32 local_19[3];
+    s32 i;
+    s32 j;
+    s32 num_out = 0;
+    LocalGroup **group_begin;
+    LocalGroup **group_end;
+    LocalGroup **group_it;
+    LocalVertex *vertices;
+    LocalTri_800AD2C8 *tri_end;
+    LocalTri_800AD2C8 *tri;
+    s32 box_min[3];
+    s32 box_max[3];
+    s32 origin_i[3];
+    s32 tri_min[3];
+    s32 tri_max[3];
+    s32 tri_pos[3][3];
+    s32 edge_ab[3];
+    s32 edge_ac[3];
+    LocalCachedTri *cached;
+    LocalVertex *vtx;
+    LocalTri_800AD2C8 *tri_start;
+    f32 normal[3];
 
-    for (local_0 = 0; local_0 < 3; local_0++) {
-        local_9[local_0] = param_2[local_0] - param_4[local_0];
-        local_10[local_0] = param_3[local_0] - param_4[local_0];
-        local_11[local_0] = param_4[local_0];
+    for (i = 0; i < 3; i++) {
+        box_min[i] = seg_start[i] - origin[i];
+        box_max[i] = seg_end[i] - origin[i];
+        origin_i[i] = origin[i];
     }
-    func_800AA7FC(param_0, local_9, local_10, &local_3, &local_4);
-    local_6 = func_800B2190(param_1);
+    func_800AA7FC(col_list, box_min, box_max, &group_begin, &group_end);
+    vertices = func_800B2190(model);
     D_80127990.end = D_80127990.triangles;
-    for (local_5 = local_3; local_5 < local_4; local_5++) {
-        local_20 = (LocalTri_800AD2C8 *) ((u8 *) param_0 + param_0->groupCount * 4 + 0x18) +
-                   (*local_5)->first;
-        local_7 = local_20 + (*local_5)->count;
-        for (local_8 = local_20; local_2 < param_6 && local_8 < local_7; local_8++) {
-            if (local_8->flags & 0x20020)
+    for (group_it = group_begin; group_it < group_end; group_it++) {
+        tri_start = (LocalTri_800AD2C8 *) ((u8 *) col_list + col_list->groupCount * 4 + 0x18) +
+                   (*group_it)->first;
+        tri_end = tri_start + (*group_it)->count;
+        for (tri = tri_start; num_out < max_count && tri < tri_end; tri++) {
+            if (tri->flags & 0x20020) // flags 0x20020 are skipped
                 continue;
-            local_18 = local_6 + local_8->index[0];
-            local_12[0] = local_13[0] = local_18->position[0];
-            local_12[1] = local_13[1] = local_18->position[1];
-            local_12[2] = local_13[2] = local_18->position[2];
-            func_800EE8CC(local_14[0], local_18->position);
-            for (local_0 = 1; local_0 < 3; local_0++) {
-                local_18 = local_6 + local_8->index[local_0];
-                for (local_1 = 0; local_1 < 3; local_1++) {
-                    if (local_18->position[local_1] < local_12[local_1])
-                        local_12[local_1] = local_18->position[local_1];
-                    if (local_13[local_1] < local_18->position[local_1])
-                        local_13[local_1] = local_18->position[local_1];
+            vtx = vertices + tri->index[0];
+            tri_min[0] = tri_max[0] = vtx->position[0];
+            tri_min[1] = tri_max[1] = vtx->position[1];
+            tri_min[2] = tri_max[2] = vtx->position[2];
+            func_800EE8CC(tri_pos[0], vtx->position);
+            for (i = 1; i < 3; i++) {
+                vtx = vertices + tri->index[i];
+                for (j = 0; j < 3; j++) {
+                    if (vtx->position[j] < tri_min[j])
+                        tri_min[j] = vtx->position[j];
+                    if (tri_max[j] < vtx->position[j])
+                        tri_max[j] = vtx->position[j];
                 }
-                func_800EE8CC(local_14[local_0], local_18->position);
+                func_800EE8CC(tri_pos[i], vtx->position);
             }
-            if (local_13[0] < local_9[0] || local_10[0] < local_12[0])
+            if (tri_max[0] < box_min[0] || box_max[0] < tri_min[0])
                 continue;
-            if (local_13[1] < local_9[1] || local_10[1] < local_12[1])
+            if (tri_max[1] < box_min[1] || box_max[1] < tri_min[1])
                 continue;
-            if (local_13[2] < local_9[2] || local_10[2] < local_12[2])
+            if (tri_max[2] < box_min[2] || box_max[2] < tri_min[2])
                 continue;
-            for (local_17 = D_80127990.triangles; local_17 < D_80127990.end; local_17++) {
-                if (local_14[0][0] == local_17->position[0][0] &&
-                    local_14[0][1] == local_17->position[0][1] &&
-                    local_14[0][2] == local_17->position[0][2] &&
-                    local_14[1][0] == local_17->position[1][0] &&
-                    local_14[1][1] == local_17->position[1][1] &&
-                    local_14[1][2] == local_17->position[1][2] &&
-                    local_14[2][0] == local_17->position[2][0] &&
-                    local_14[2][1] == local_17->position[2][1] &&
-                    local_14[2][2] == local_17->position[2][2])
+            // Skip triangles already in the shared cache.
+            for (cached = D_80127990.triangles; cached < D_80127990.end; cached++) {
+                if (tri_pos[0][0] == cached->position[0][0] &&
+                    tri_pos[0][1] == cached->position[0][1] &&
+                    tri_pos[0][2] == cached->position[0][2] &&
+                    tri_pos[1][0] == cached->position[1][0] &&
+                    tri_pos[1][1] == cached->position[1][1] &&
+                    tri_pos[1][2] == cached->position[1][2] &&
+                    tri_pos[2][0] == cached->position[2][0] &&
+                    tri_pos[2][1] == cached->position[2][1] &&
+                    tri_pos[2][2] == cached->position[2][2])
                     break;
             }
-            if (local_17 != D_80127990.end)
+            if (cached != D_80127990.end)
                 continue;
-            func_800EFB58(local_15, local_14[1], local_14[0]);
-            func_800EFB58(local_16, local_14[2], local_14[0]);
-            func_800EE9EC(local_19, local_15, local_16);
-            if (local_19[1] <= 0.0f)
+            func_800EFB58(edge_ab, tri_pos[1], tri_pos[0]);
+            func_800EFB58(edge_ac, tri_pos[2], tri_pos[0]);
+            func_800EE9EC(normal, edge_ab, edge_ac);
+            if (normal[1] <= 0.0f)
                 continue;
-            func_800EF2A0(local_19);
-            if (local_19[1] < param_7)
+            func_800EF2A0(normal);
+            if (normal[1] < min_normal_y) // too steep
                 continue;
             if (D_80127990.end - D_80127990.triangles < 64) {
-                D_80127990.end->position[0][0] = local_14[0][0];
-                D_80127990.end->position[0][1] = local_14[0][1];
-                D_80127990.end->position[0][2] = local_14[0][2];
-                D_80127990.end->position[1][0] = local_14[1][0];
-                D_80127990.end->position[1][1] = local_14[1][1];
-                D_80127990.end->position[1][2] = local_14[1][2];
-                D_80127990.end->position[2][0] = local_14[2][0];
-                D_80127990.end->position[2][1] = local_14[2][1];
-                D_80127990.end->position[2][2] = local_14[2][2];
+                D_80127990.end->position[0][0] = tri_pos[0][0];
+                D_80127990.end->position[0][1] = tri_pos[0][1];
+                D_80127990.end->position[0][2] = tri_pos[0][2];
+                D_80127990.end->position[1][0] = tri_pos[1][0];
+                D_80127990.end->position[1][1] = tri_pos[1][1];
+                D_80127990.end->position[1][2] = tri_pos[1][2];
+                D_80127990.end->position[2][0] = tri_pos[2][0];
+                D_80127990.end->position[2][1] = tri_pos[2][1];
+                D_80127990.end->position[2][2] = tri_pos[2][2];
                 D_80127990.end++;
             }
-            if (local_2 < param_6) {
-                for (local_0 = 0; local_0 < 3; local_0++) {
-                    for (local_1 = 0; local_1 < 3; local_1++) {
-                        (*param_5)->position[local_0][local_1] =
-                            local_14[local_0][local_1] + local_11[local_1];
+            if (num_out < max_count) {
+                for (i = 0; i < 3; i++) {
+                    for (j = 0; j < 3; j++) {
+                        (*out)->position[i][j] =
+                            tri_pos[i][j] + origin_i[j];
                     }
                 }
-                (*param_5)++;
-                local_2++;
+                (*out)++;
+                num_out++;
             }
         }
     }
-    return local_2;
+    return num_out;
 }
 
-s32 func_800AD894(ModelAD894 *param_0, void *param_1, f32 *param_2, f32 *param_3, f32 *param_4,
-                  f32 *param_5, f32 param_6)
+// Returns 0 if a triangle edge blocks the segment, 1 if the path is clear.
+s32 func_800AD894(ModelAD894 *col_list, void *model, f32 *seg_start, f32 *seg_end, f32 *dir,
+                  f32 *origin, f32 normal_y_limit)
 {
-    s32 local_18;
-    s32 local_19;
-    GroupAD894 **local_0;
-    GroupAD894 **local_1;
-    GroupAD894 **local_2;
-    VertexAD894 *local_3;
-    TriAD894 *local_4;
-    TriAD894 *local_5;
-    s32 local_6[3];
-    s32 local_7[3];
-    s32 local_8[3];
-    s32 local_9[3];
-    s32 local_10[3];
-    s32 local_11[3];
-    s32 local_12[3][3];
-    s32 local_13[3];
-    s32 local_14[3];
-    TriAD894 *local_21;
-    VertexAD894 *local_20;
-    f32 local_17[3];
-    for (local_18 = 0; local_18 < 3; local_18++) {
-        local_6[local_18] = param_2[local_18] - param_5[local_18];
-        local_7[local_18] = param_3[local_18] - param_5[local_18];
+    s32 i;
+    s32 j;
+    GroupAD894 **group_begin;
+    GroupAD894 **group_end;
+    GroupAD894 **group_it;
+    VertexAD894 *vertices;
+    TriAD894 *tri_end;
+    TriAD894 *tri;
+    s32 start_i[3];
+    s32 end_i[3];
+    s32 box_min[3];
+    s32 box_max[3];
+    s32 tri_min[3];
+    s32 tri_max[3];
+    s32 tri_pos[3][3];
+    s32 edge_ab[3];
+    s32 edge_ac[3];
+    TriAD894 *tri_start;
+    VertexAD894 *vtx;
+    f32 normal[3];
+    for (i = 0; i < 3; i++) {
+        start_i[i] = seg_start[i] - origin[i];
+        end_i[i] = seg_end[i] - origin[i];
     }
-    for (local_18 = 0; local_18 < 3; local_18++)
-        local_8[local_18] =
-            local_6[local_18] < local_7[local_18] ? local_6[local_18] : local_7[local_18];
-    for (local_18 = 0; local_18 < 3; local_18++)
-        local_9[local_18] =
-            local_7[local_18] < local_6[local_18] ? local_6[local_18] : local_7[local_18];
-    func_800AA7FC(param_0, local_8, local_9, &local_0, &local_1);
-    local_3 = func_800B2190(param_1);
-    for (local_2 = local_0; local_2 < local_1; local_2++) {
-        local_21 =
-            (TriAD894 *) ((u8 *) param_0 + param_0->local_0 * 4 + 0x18) + (*local_2)->local_0;
-        local_4 = local_21 + (*local_2)->local_1;
-        for (local_5 = local_21; local_5 < local_4; local_5++) {
-            local_20 = local_5->local_0[0] + local_3;
-            local_10[0] = local_11[0] = local_20->local_0[0];
-            local_10[1] = local_11[1] = local_20->local_0[1];
-            local_10[2] = local_11[2] = local_20->local_0[2];
-            func_800EE8CC(local_12[0], local_20->local_0);
-            for (local_18 = 1; local_18 < 3; local_18++) {
-                local_20 = local_5->local_0[local_18] + local_3;
-                for (local_19 = 0; local_19 < 3; local_19++) {
-                    if (local_20->local_0[local_19] < local_10[local_19])
-                        local_10[local_19] = local_20->local_0[local_19];
-                    if (local_11[local_19] < local_20->local_0[local_19])
-                        local_11[local_19] = local_20->local_0[local_19];
+    for (i = 0; i < 3; i++)
+        box_min[i] =
+            start_i[i] < end_i[i] ? start_i[i] : end_i[i];
+    for (i = 0; i < 3; i++)
+        box_max[i] =
+            end_i[i] < start_i[i] ? start_i[i] : end_i[i];
+    func_800AA7FC(col_list, box_min, box_max, &group_begin, &group_end);
+    vertices = func_800B2190(model);
+    for (group_it = group_begin; group_it < group_end; group_it++) {
+        tri_start =
+            (TriAD894 *) ((u8 *) col_list + col_list->local_0 * 4 + 0x18) + (*group_it)->local_0;
+        tri_end = tri_start + (*group_it)->local_1;
+        for (tri = tri_start; tri < tri_end; tri++) {
+            vtx = tri->local_0[0] + vertices;
+            tri_min[0] = tri_max[0] = vtx->local_0[0];
+            tri_min[1] = tri_max[1] = vtx->local_0[1];
+            tri_min[2] = tri_max[2] = vtx->local_0[2];
+            func_800EE8CC(tri_pos[0], vtx->local_0);
+            for (i = 1; i < 3; i++) {
+                vtx = tri->local_0[i] + vertices;
+                for (j = 0; j < 3; j++) {
+                    if (vtx->local_0[j] < tri_min[j])
+                        tri_min[j] = vtx->local_0[j];
+                    if (tri_max[j] < vtx->local_0[j])
+                        tri_max[j] = vtx->local_0[j];
                 }
-                func_800EE8CC(local_12[local_18], local_20->local_0);
+                func_800EE8CC(tri_pos[i], vtx->local_0);
             }
-            if (local_11[0] < local_8[0] || local_9[0] < local_10[0] || local_11[1] < local_8[1] ||
-                local_9[1] < local_10[1] || local_11[2] < local_8[2] || local_9[2] < local_10[2])
+            if (tri_max[0] < box_min[0] || box_max[0] < tri_min[0] || tri_max[1] < box_min[1] ||
+                box_max[1] < tri_min[1] || tri_max[2] < box_min[2] || box_max[2] < tri_min[2])
                 continue;
-            func_800EFB58(local_13, local_12[1], local_12[0]);
-            func_800EFB58(local_14, local_12[2], local_12[0]);
-            func_800EE9EC(local_17, local_13, local_14);
-            func_800EF2A0(local_17);
-            if (local_17[1] <= param_6 && func_800EEAA4(local_17, param_4) > 0.0f)
+            func_800EFB58(edge_ab, tri_pos[1], tri_pos[0]);
+            func_800EFB58(edge_ac, tri_pos[2], tri_pos[0]);
+            func_800EE9EC(normal, edge_ab, edge_ac);
+            func_800EF2A0(normal);
+            if (normal[1] <= normal_y_limit && func_800EEAA4(normal, dir) > 0.0f)
                 continue;
-            if (func_800EED58(local_7, local_12[0]) && func_800EED58(local_6, local_12[1]))
+            if (func_800EED58(end_i, tri_pos[0]) && func_800EED58(start_i, tri_pos[1]))
                 return 0;
-            if (func_800EED58(local_7, local_12[1]) && func_800EED58(local_6, local_12[2]))
+            if (func_800EED58(end_i, tri_pos[1]) && func_800EED58(start_i, tri_pos[2]))
                 return 0;
-            if (func_800EED58(local_7, local_12[2]) && func_800EED58(local_6, local_12[0]))
+            if (func_800EED58(end_i, tri_pos[2]) && func_800EED58(start_i, tri_pos[0]))
                 return 0;
         }
     }

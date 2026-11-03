@@ -5,6 +5,7 @@ extern void func_800F4EC8(s32, s32, s32, s32, f32);
 extern void func_800F4F34(u32, f32, f32, f32);
 int func_800903F8();
 
+// Wrappers that forward to the player manager with the active player id.
 void func_8008F8B0()
 {
     func_800F497C(func_800F54E4());
@@ -67,20 +68,20 @@ int func_8008FAC8(s32 param_0, s32 param_1, s32 param_2, f32 param_3)
 
 int func_8008FB10(s32 param_0, s32 param_1, s32 param_2, f32 param_3)
 {
-    u32 local_0;
-    local_0 = func_800F54E4();
-    func_800F4EC8(local_0 | 0, param_0, param_1, param_2, param_3);
+    u32 player_id;
+    player_id = func_800F54E4();
+    func_800F4EC8(player_id | 0, param_0, param_1, param_2, param_3); // Matching: the temp and `| 0` are needed for the match.
 }
 
-void func_8008FB58(f32 param_0[3], f32 param_1, f32 param_2)
+void func_8008FB58(f32 pos[3], f32 param_1, f32 param_2)
 {
-    f32(*new_var2)[3];
-    f32 *new_var;
-    s32 local_0;
-    new_var2 = &param_0;
-    new_var = *new_var2;
-    local_0 = func_800F54E4();
-    func_800F4F34(local_0 | (0 * 0), new_var[0], param_1, param_2);
+    f32(*pos_ref)[3];
+    f32 *pos_ptr;
+    s32 player_id;
+    pos_ref = &pos; // Matching: indirection through a pointer to the array is needed for the match.
+    pos_ptr = *pos_ref;
+    player_id = func_800F54E4();
+    func_800F4F34(player_id | (0 * 0), pos_ptr[0], param_1, param_2);
 }
 
 void func_8008FB94(s32 arg0)
@@ -230,10 +231,10 @@ f32 func_80090010()
 
 void func_80090038(s32 param_0, u8 *param_1)
 {
-    u8 local_0[0xC];
+    u8 pos[0xC];
 
-    func_800EE88C(local_0, param_0);
-    func_800F7CF4((u32) *(u16 *) ((char *) param_1 + 0x1A) >> 5, 0x58, local_0);
+    func_800EE88C(pos, param_0);
+    func_800F7CF4((u32) *(u16 *) ((char *) param_1 + 0x1A) >> 5, 0x58, pos);
 }
 
 void func_80090080()
@@ -313,9 +314,9 @@ void func_800902BC()
 
 int func_800902E4(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
 {
-    u32 local_0;
-    local_0 = func_800F54E4();
-    func_800F7200(local_0 | 0, param_0, param_1, param_2, param_3);
+    u32 player_id;
+    player_id = func_800F54E4();
+    func_800F7200(player_id | 0, param_0, param_1, param_2, param_3); // Matching: the temp and `| 0` are needed for the match.
 }
 
 void func_8009032C(s32 arg0)
@@ -345,9 +346,9 @@ s32 param_0;
 s32 param_1;
 s32 param_2;
 {
-    u32 local_0;
-    local_0 = func_800F54E4();
-    func_800F7844(local_0 | 0, param_0, param_1, param_2);
+    u32 player_id;
+    player_id = func_800F54E4();
+    func_800F7844(player_id | 0, param_0, param_1, param_2); // Matching: the temp and `| 0` are needed for the match.
 }
 
 void func_80090434(s32 arg0)
@@ -467,7 +468,7 @@ void func_80090840(s32 arg0)
 
 int func_8009086C(s32 param_0)
 {
-    s32 local_0;
-    local_0 = func_800F54E4();
-    func_800F8150(local_0 | 0, param_0);
+    s32 player_id;
+    player_id = func_800F54E4();
+    func_800F8150(player_id | 0, param_0); // Matching: the temp and `| 0` are needed for the match.
 }

@@ -20,24 +20,27 @@ extern f32 func_800139F8(f32);
 extern f32 func_80013B7C(f32, f32);
 extern void func_800A8A88(s32, f32);
 extern float D_8012AA04[10];
+// Letterbox bar state: 0 off, 1 opening, 2 open, 3 closing.
 typedef struct {
-    s32 value, duration, target;
+    s32 value, step, target;
     u8 state;
-    u8 pad[3];
+    u8 pad_D[3];
 } LocalView;
 extern void func_800A8A44(s32, s32 *, s32 *, s32 *, s32 *);
 typedef struct {
-    s32 local_0, local_1, local_2;
-    u8 local_3;
-    u8 pad[3];
+    s32 value, step, target;
+    u8 state;
+    u8 pad_D[3];
 } EntryC54F0;
 typedef struct {
-    EntryC54F0 e[5];
-    f32 unk50[5];
-    s32 unk64[5];
-    f32 f78;
-    f32 f7C;
+    EntryC54F0 bars[5];
+    f32 fov[5];
+    s32 zoom[5];
+    f32 aspect_offset;
+    f32 fov_offset;
 } State_8012A9A0;
+// TU-NOTE: per-view state for 5 views, also accessed through casts (LocalView, LocalEntry,
+// f32 index). D_8012AA04 is D_8012A9A0 + 0x64 (the zoom array).
 State_8012A9A0 D_8012A9A0;
 extern void func_80015CE8(s32, s32);
 extern void func_800CA6F0(s32, s32);
@@ -45,295 +48,321 @@ extern void func_800CA558(s32, f32);
 extern void func_800CA510(s32, f32);
 extern void func_800CAF34(s32);
 typedef struct {
-    s32 current, unused, maximum;
-    u8 mode, pad[3];
+    s32 current, step, maximum;
+    u8 mode, pad_D[3];
 } LocalEntry;
 extern u8 D_8011A880[];
-void func_800C54CC(s32 param_0, f32 param_1, f32 param_2);
+void func_800C54CC(s32 view_index, f32 fov, f32 zoom);
 
-void func_800C4B90(s32 param_0, f32 param_1, f32 param_2)
+// Adds camera-shake offsets to the per-frame FOV and aspect accumulators.
+void func_800C4B90(s32 view_index, f32 fov_delta, f32 aspect_delta)
 {
-    s32 sp18;
-    f32 sp20;
-    s32 sp1C;
-    s32 temp_v0;
-    f32 temp_f8;
-    sp1C = func_800A8984();
-    temp_v0 = func_800A89A0(param_0);
-    if ((temp_v0 != 0) && (sp1C != 0)) {
-        sp18 = temp_v0;
-        sp20 = func_800A8AD4(param_0);
-        temp_f8 = func_80015D14(sp18);
-        temp_f8 = param_2 * temp_f8;
-        *(f32 *) ((s8 *) (f32 *) &D_8012A9A0 + 0x7C) += (param_1 * sp20) / 40.0f;
-        *(f32 *) ((s8 *) (f32 *) &D_8012A9A0 + 0x78) += temp_f8 / 1.3333334f;
+    s32 viewport_copy;
+    f32 fov;
+    s32 view;
+    s32 viewport;
+    f32 aspect_shift;
+    view = func_800A8984();
+    viewport = func_800A89A0(view_index);
+    if ((viewport != 0) && (view != 0)) {
+        viewport_copy = viewport;
+        fov = func_800A8AD4(view_index);
+        aspect_shift = func_80015D14(viewport_copy);
+        aspect_shift = aspect_delta * aspect_shift;
+        // Matching: the offset casts are needed for the match.
+        *(f32 *) ((s8 *) (f32 *) &D_8012A9A0 + 0x7C) += (fov_delta * fov) / 40.0f;
+        *(f32 *) ((s8 *) (f32 *) &D_8012A9A0 + 0x78) += aspect_shift / 1.3333334f;
     }
 }
 
-s32 func_800C4C34(s32 param_0, f32 *param_1, f32 *param_2, s32 *param_3)
+// World to screen projection. Returns 1 if the point is on screen; *in_front tells whether it is
+// in front of the camera.
+s32 func_800C4C34(s32 view_index, f32 *world_pos, f32 *screen_pos, s32 *in_front)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2;
-    f32 local_3;
-    f32 local_4;
-    s32 local_5, local_6, local_7, local_8;
-    s32 local_9;
-    local_9 = func_800A8984(param_0);
-    func_800CA7E4(local_9, local_1);
-    func_800EFB24(local_0, param_1, local_1);
-    func_800F23D0(func_800CA7AC(local_9), local_0, local_0);
-    *param_3 = local_0[2] < (-1e-05f);
-    if (!*param_3) {
-        param_2[0] = param_2[1] = 0.0f;
+    f32 rel[3];
+    f32 cam_pos[3];
+    f32 focal;
+    f32 inv_depth;
+    f32 aspect;
+    s32 x, y, width, height;
+    s32 view;
+    view = func_800A8984(view_index);
+    func_800CA7E4(view, cam_pos);
+    func_800EFB24(rel, world_pos, cam_pos);
+    func_800F23D0(func_800CA7AC(view), rel, rel);
+    *in_front = rel[2] < (-1e-05f);
+    if (!*in_front) {
+        screen_pos[0] = screen_pos[1] = 0.0f;
         return 0;
     }
-    func_800A8A04(param_0, &local_5, &local_6, &local_7, &local_8);
-    local_2 = func_800CA79C(local_9) * local_8 * 0.5f;
-    local_3 = 1.0f / local_0[2];
-    local_4 = (f32) local_7 / local_8 / func_800CA6FC(local_9);
-    param_2[0] = local_7 * 0.5f - local_0[0] * local_2 * local_3 * local_4;
-    param_2[1] = local_0[1] * local_2 * local_3 + local_8 * 0.5f;
-    if (param_2[0] < 0 || local_7 < param_2[0] || param_2[1] < 0 || local_8 < param_2[1])
+    func_800A8A04(view_index, &x, &y, &width, &height);
+    focal = func_800CA79C(view) * height * 0.5f;
+    inv_depth = 1.0f / rel[2];
+    aspect = (f32) width / height / func_800CA6FC(view);
+    screen_pos[0] = width * 0.5f - rel[0] * focal * inv_depth * aspect;
+    screen_pos[1] = rel[1] * focal * inv_depth + height * 0.5f;
+    if (screen_pos[0] < 0 || width < screen_pos[0] || screen_pos[1] < 0 || height < screen_pos[1])
         return 0;
-    param_2[0] += local_5;
-    param_2[1] += local_6;
+    screen_pos[0] += x;
+    screen_pos[1] += y;
     return 1;
 }
 
-void func_800C4E58(s32 param_0, f32 *param_1, f32 *param_2)
+// Screen to world unprojection.
+void func_800C4E58(s32 view_index, f32 *screen_pos, f32 *world_pos)
 {
-    f32 local_0[3];
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
-    s32 local_7;
-    s32 local_8;
-    local_8 = func_800A8984(param_0);
-    func_800A8A04(param_0, &local_4, &local_5, &local_6, &local_7);
-    local_2 = func_800CA79C(local_8) * local_7 * 0.5f;
-    if (func_800F214C(local_2, 1e-05f) == 0.0f) {
-        func_800EFD24(param_2);
+    f32 cam_pos[3];
+    f32 inv_focal;
+    f32 focal;
+    f32 aspect;
+    s32 x;
+    s32 y;
+    s32 width;
+    s32 height;
+    s32 view;
+    view = func_800A8984(view_index);
+    func_800A8A04(view_index, &x, &y, &width, &height);
+    focal = func_800CA79C(view) * height * 0.5f;
+    if (func_800F214C(focal, 1e-05f) == 0.0f) {
+        func_800EFD24(world_pos);
         return;
     }
-    local_1 = 1.0f / local_2;
-    local_3 = (f32) local_6 / local_7 / func_800CA6FC(local_8);
-    param_2[2] = -func_800CA7B4(local_8) - param_1[2];
-    param_2[1] = (param_1[1] - local_7 * 0.5f) * param_2[2] * local_1;
-    param_2[0] = -(param_1[0] - local_6 * 0.5f) * param_2[2] * local_1 / local_3;
-    func_800F23D0(func_800CA7A4(local_8), param_2, param_2);
-    func_800CA7E4(local_8, local_0);
-    func_800EF04C(param_2, local_0);
+    inv_focal = 1.0f / focal;
+    aspect = (f32) width / height / func_800CA6FC(view);
+    world_pos[2] = -func_800CA7B4(view) - screen_pos[2];
+    world_pos[1] = (screen_pos[1] - height * 0.5f) * world_pos[2] * inv_focal;
+    world_pos[0] = -(screen_pos[0] - width * 0.5f) * world_pos[2] * inv_focal / aspect;
+    func_800F23D0(func_800CA7A4(view), world_pos, world_pos);
+    func_800CA7E4(view, cam_pos);
+    func_800EF04C(world_pos, cam_pos);
 }
 
-void func_800C5008(s32 param_0, f32 *param_1, f32 *param_2)
+// Scales a position from 304x228 screen units to the viewport size.
+void func_800C5008(s32 view_index, f32 *pos, f32 *scaled)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    func_800A8A04(param_0, &local_0, &local_1, &local_2, &local_3);
-    param_2[0] = param_1[0] * ((f32) local_2 / 304.0f);
-    param_2[1] = param_1[1] * ((f32) local_3 / 228.0f);
+    s32 x;
+    s32 y;
+    s32 width;
+    s32 height;
+    func_800A8A04(view_index, &x, &y, &width, &height);
+    scaled[0] = pos[0] * ((f32) width / 304.0f);
+    scaled[1] = pos[1] * ((f32) height / 228.0f);
 }
 
-void func_800C5094(s32 param_0, f32 param_1)
+// Sets the view FOV, compensating for a viewport height that differs from the full height.
+void func_800C5094(s32 view_index, f32 fov)
 {
-    f32 sp34;
-    f32 sp30;
-    f32 sp2C;
-    s32 sp28;
-    s32 sp24;
+    f32 x;
+    f32 y;
+    f32 width;
+    s32 full_height;
+    s32 height;
 
-    func_800A8A44(param_0, &sp34, &sp30, &sp2C, &sp28);
-    func_800A8A04(param_0, &sp34, &sp30, &sp2C, &sp24);
-    if (sp28 != sp24) {
-        param_1 = 2.0f * func_80013B7C((f32) sp24, (f32) sp28 / func_800139F8(param_1 * 0.5f));
+    func_800A8A44(view_index, &x, &y, &width, &full_height);
+    func_800A8A04(view_index, &x, &y, &width, &height);
+    if (full_height != height) {
+        fov = 2.0f * func_80013B7C((f32) height, (f32) full_height / func_800139F8(fov * 0.5f));
     }
-    func_800A8A88(param_0, param_1);
+    func_800A8A88(view_index, fov);
 }
 
-void func_800C5148(s32 param_0, f32 param_1)
+// Sets the base FOV of a view and applies it.
+void func_800C5148(s32 view_index, f32 fov)
 {
-    f32 new_var;
-    new_var = param_1;
-    D_8012A9A0.unk50[param_0] = param_1;
-    func_800C5094(param_0, new_var);
+    // Matching: extra copy of the parameter.
+    f32 fov_copy;
+    fov_copy = fov;
+    D_8012A9A0.fov[view_index] = fov;
+    func_800C5094(view_index, fov_copy);
 }
 
-float func_800C517C(s32 param_0)
+// Gets the base FOV.
+float func_800C517C(s32 view_index)
 {
-    return D_8012A9A0.unk50[param_0];
+    return D_8012A9A0.fov[view_index];
 }
 
-float func_800C5190(s32 param_0)
+// Gets the zoom.
+float func_800C5190(s32 view_index)
 {
-    return D_8012AA04[param_0];
+    return D_8012AA04[view_index];
 }
 
-void func_800C51A4(s32 param_0, f32 param_1)
+// Sets the zoom and re-applies the FOV.
+void func_800C51A4(s32 view_index, f32 zoom)
 {
-    f32 local_0 = param_1;
-    f32 f1;
-    f32 f2;
-    D_8012AA04[param_0] = local_0;
-    if (local_0 != 1.0f) {
-        f1 = func_800C517C(param_0);
-        f2 = func_80013B7C(func_800139F8(f1 * 0.5f), param_1);
-        func_800C5094(param_0, f2 + f2);
+    // Matching: extra copy of the parameter.
+    f32 zoom_copy = zoom;
+    f32 fov;
+    f32 half_fov;
+    D_8012AA04[view_index] = zoom_copy;
+    if (zoom_copy != 1.0f) {
+        fov = func_800C517C(view_index);
+        half_fov = func_80013B7C(func_800139F8(fov * 0.5f), zoom);
+        func_800C5094(view_index, half_fov + half_fov);
     } else {
-        f1 = func_800C517C(param_0);
-        func_800C5094(param_0, f1);
+        fov = func_800C517C(view_index);
+        func_800C5094(view_index, fov);
     }
 }
 
-void func_800C524C(s32 param_0, s32 param_1)
+// Shrinks the viewport by bar_height at the top and bottom, then re-applies the FOV.
+void func_800C524C(s32 view_index, s32 bar_height)
 {
-    s32 sp44;
-    s32 sp40;
-    s32 sp3C;
-    s32 sp38;
+    s32 x;
+    s32 y;
+    s32 width;
+    s32 height;
+    // Matching: stack padding needed for the match.
     s8 _sfpad[8];
-    s32 sp2C;
-    s32 sp28;
-    sp2C = func_800A89A0(param_0);
-    sp28 = func_800A8984(param_0);
-    func_800A8A44(param_0, &sp44, &sp40, &sp3C, &sp38);
-    func_80015B34(sp2C, sp44, sp40 + param_1, sp3C, sp38 - (param_1 * 2));
-    func_80015CE8(sp2C, sp28);
-    func_800C5148(param_0, D_8012A9A0.unk50[param_0]);
+    s32 viewport;
+    s32 view;
+    viewport = func_800A89A0(view_index);
+    view = func_800A8984(view_index);
+    func_800A8A44(view_index, &x, &y, &width, &height);
+    func_80015B34(viewport, x, y + bar_height, width, height - (bar_height * 2));
+    func_80015CE8(viewport, view);
+    func_800C5148(view_index, D_8012A9A0.fov[view_index]);
 }
 
-s32 func_800C52F4(s32 param_0, s32 param_1)
+// Starts opening the letterbox bars. Returns 0 if they are already opening or open. A step of 0
+// opens them immediately.
+s32 func_800C52F4(s32 view_index, s32 step)
 {
-    s32 local_4;
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    LocalView *local_5;
-    local_5 = &((LocalView *) &D_8012A9A0)[param_0];
-    if (local_5->state == 1 || local_5->state == 2)
+    s32 content_height;
+    s32 x;
+    s32 y;
+    s32 width;
+    s32 height;
+    LocalView *bars;
+    bars = &((LocalView *) &D_8012A9A0)[view_index];
+    if (bars->state == 1 || bars->state == 2)
         return 0;
-    local_5->state = 1;
-    local_5->value = 0;
-    local_5->duration = param_1;
-    func_800A8A44(param_0, &local_0, &local_1, &local_2, &local_3);
-    local_4 = local_2 * 0.5625f;
-    if (local_4 & 1)
-        local_4++;
-    local_5->target = (local_3 - local_4) / 2;
-    if (!param_1) {
-        local_5->value = local_5->target;
-        local_5->state = 2;
-        func_800C524C(param_0, local_5->target);
+    bars->state = 1;
+    bars->value = 0;
+    bars->step = step;
+    func_800A8A44(view_index, &x, &y, &width, &height);
+    content_height = width * 0.5625f;
+    if (content_height & 1)
+        content_height++;
+    bars->target = (height - content_height) / 2;
+    if (!step) {
+        bars->value = bars->target;
+        bars->state = 2;
+        func_800C524C(view_index, bars->target);
     }
     return 1;
 }
 
-s32 func_800C53EC(s32 param_0, s32 param_1)
+// Starts closing the letterbox bars. Returns 0 if they are already closed or closing.
+s32 func_800C53EC(s32 view_index, s32 step)
 {
-    u8 *temp_v0;
-    temp_v0 = (param_0 * 0x10) + (u8 *) (s32 *) &D_8012A9A0;
-    if ((*(u8 *) ((s8 *) temp_v0 + 0xC) == 0) || (3 == *(u8 *) ((s8 *) temp_v0 + 0xC))) {
+    u8 *bars;
+    // Matching: the offset casts are needed for the match.
+    bars = (view_index * 0x10) + (u8 *) (s32 *) &D_8012A9A0;
+    if ((*(u8 *) ((s8 *) bars + 0xC) == 0) || (3 == *(u8 *) ((s8 *) bars + 0xC))) {
         return 0;
     }
-    *(u8 *) ((s8 *) temp_v0 + 0xC) = 3U;
-    *(s32 *) ((s8 *) temp_v0 + 4) = param_1;
-    func_800C524C(param_0, 0);
-    if (param_1 == 0) {
-        *(s32 *) ((s8 *) temp_v0 + 0) = 0;
+    *(u8 *) ((s8 *) bars + 0xC) = 3U;
+    *(s32 *) ((s8 *) bars + 4) = step;
+    func_800C524C(view_index, 0);
+    if (step == 0) {
+        *(s32 *) ((s8 *) bars + 0) = 0;
     }
     return 1;
 }
 
+// Resets FOV to 40 and zoom to 1 for all 5 views.
 void func_800C5464(void)
 {
-    float var_f20;
-    float var_f22;
-    s32 var_s0;
-    s32 var_s1;
+    float fov;
+    float zoom;
+    s32 i;
+    s32 count;
 
-    var_f20 = 40.0f;
-    var_f22 = 1.0f;
-    var_s0 = 0;
-    var_s1 = 5;
+    fov = 40.0f;
+    zoom = 1.0f;
+    i = 0;
+    count = 5;
 
     do {
-        func_800C54CC(var_s0, var_f20, var_f22);
-        var_s0 += 1;
-    } while (var_s0 != var_s1);
+        func_800C54CC(i, fov, zoom);
+        i += 1;
+    } while (i != count);
 }
 
-void func_800C54CC(s32 param_0, f32 param_1, f32 param_2)
+// Sets FOV and zoom of a view without applying them.
+void func_800C54CC(s32 view_index, f32 fov, f32 zoom)
 {
-    float *local_0 = &((f32 *) &D_8012A9A0)[param_0];
-    local_0[20] = param_1;
-    local_0[25] = param_2;
+    float *base = &((f32 *) &D_8012A9A0)[view_index];
+    base[20] = fov;
+    base[25] = zoom;
 }
 
-void func_800C54F0(s32 param_0)
+// Per-frame update: advances the letterbox bars, then applies FOV and aspect including the
+// accumulated shake offsets.
+void func_800C54F0(s32 view_index)
 {
-    f32 local_0;
-    s32 local_1;
-    s32 local_2;
-    EntryC54F0 *local_3;
-    f32 local_4, local_5, local_6;
-    local_1 = func_800A89A0();
-    local_2 = func_800A8984(param_0);
-    local_3 = &D_8012A9A0.e[param_0];
-    switch (local_3->local_3) {
+    f32 aspect;
+    s32 viewport;
+    s32 view;
+    EntryC54F0 *bar;
+    f32 fov, aspect_fov, final_fov;
+    viewport = func_800A89A0();
+    view = func_800A8984(view_index);
+    bar = &D_8012A9A0.bars[view_index];
+    switch (bar->state) {
         case 1:
-            local_3->local_0 += local_3->local_1;
-            if (local_3->local_0 >= local_3->local_2) {
-                local_3->local_0 = local_3->local_2;
-                local_3->local_3 = 2;
-                func_800C524C(param_0, local_3->local_0);
+            bar->value += bar->step;
+            if (bar->value >= bar->target) {
+                bar->value = bar->target;
+                bar->state = 2;
+                func_800C524C(view_index, bar->value);
             }
             break;
         case 3:
-            local_3->local_0 -= local_3->local_1;
-            if (local_3->local_0 < 0) {
-                local_3->local_0 = 0;
-                local_3->local_3 = 0;
+            bar->value -= bar->step;
+            if (bar->value < 0) {
+                bar->value = 0;
+                bar->state = 0;
             }
     }
-    if (local_1 && local_2) {
-        func_80015CE8(local_1, local_2);
-        func_800CA6F0(local_2, ((s32 *) D_8012AA04)[param_0]);
-        local_4 = func_800A8AD4(param_0);
-        local_0 = func_800CA6FC(local_2);
-        local_6 = local_4 + D_8012A9A0.f7C;
-        local_5 = local_0 * local_4 + D_8012A9A0.f78;
-        func_800CA558(local_2, local_6);
-        func_800CA510(local_2, local_5 / local_6);
-        func_800CAF34(local_2);
+    if (viewport && view) {
+        func_80015CE8(viewport, view);
+        func_800CA6F0(view, ((s32 *) D_8012AA04)[view_index]);
+        fov = func_800A8AD4(view_index);
+        aspect = func_800CA6FC(view);
+        final_fov = fov + D_8012A9A0.fov_offset;
+        aspect_fov = aspect * fov + D_8012A9A0.aspect_offset;
+        func_800CA558(view, final_fov);
+        func_800CA510(view, aspect_fov / final_fov);
+        func_800CAF34(view);
     }
-    D_8012A9A0.f7C = 0.0f;
-    D_8012A9A0.f78 = D_8012A9A0.f7C;
+    D_8012A9A0.fov_offset = 0.0f;
+    D_8012A9A0.aspect_offset = D_8012A9A0.fov_offset;
 }
 
-void func_800C5668(s32 param_0, void *param_1)
+// Draws the top and bottom letterbox bars as fill rectangles.
+void func_800C5668(s32 view_index, void *gfx)
 {
-    f32 local_5;
-    LocalEntry *local_6;
-    s32 local_0, local_1, local_2, local_3;
-    s32 local_4;
-    s32 local_7;
-    local_6 = &((LocalEntry *) &D_8012A9A0)[param_0];
-    if (local_6->mode == 3 || local_6->mode == 1) {
-        func_800A8A04(param_0, &local_0, &local_1, &local_2, &local_3);
-        local_4 = local_6->current;
-        local_5 = (f32) local_6->current / local_6->maximum;
-        local_7 = local_5 * 255.0f;
-        func_800B9A24(param_1, local_7, D_8011A880, local_0, local_1, local_2, local_4);
-        func_800B9A24(param_1, local_7, D_8011A880, local_0, local_1 + local_3 - local_4, local_2,
-                      local_4);
+    f32 progress;
+    LocalEntry *bar;
+    s32 x, y, width, height;
+    s32 bar_height;
+    s32 alpha;
+    bar = &((LocalEntry *) &D_8012A9A0)[view_index];
+    if (bar->mode == 3 || bar->mode == 1) {
+        func_800A8A04(view_index, &x, &y, &width, &height);
+        bar_height = bar->current;
+        progress = (f32) bar->current / bar->maximum;
+        alpha = progress * 255.0f;
+        func_800B9A24(gfx, alpha, D_8011A880, x, y, width, bar_height);
+        func_800B9A24(gfx, alpha, D_8011A880, x, y + height - bar_height, width,
+                      bar_height);
     }
 }
 
+// TU-NOTE: this .data object (formerly asm/data/core2/1E9E480.data.s) is defined here in C;
+// values are taken from the ROM.
 u8 D_8011A880[16] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
                      0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};

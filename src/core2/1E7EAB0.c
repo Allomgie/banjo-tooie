@@ -2,6 +2,8 @@
 
 extern void _plcamera_entrypoint_6(s32, s32, s32, s32, f32);
 
+// Wrappers calling the pl/camera overlay with the current player.
+
 void func_800A51C0()
 {
     _plcamera_entrypoint_0(func_800F54E4());
@@ -34,7 +36,8 @@ int func_800A5298(s32 param_0, s32 param_1, s32 param_2, f32 param_3)
 
 int func_800A52E0(s32 param_0, s32 param_1, s32 param_2)
 {
-    u32 local_0;
-    local_0 = func_800F54E4();
-    _plcamera_entrypoint_7(local_0 | 0, param_0, param_1, param_2);
+    u32 player;
+    player = func_800F54E4();
+    // Matching: the no-op "| 0" is needed for the match.
+    _plcamera_entrypoint_7(player | 0, param_0, param_1, param_2);
 }

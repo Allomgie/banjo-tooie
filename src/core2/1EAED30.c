@@ -1,7 +1,8 @@
 #include "common.h"
     #include "vector.h"
 
-    typedef struct {s32 local_0, local_1;} local_type;
+    // Pending-release entry: reference count and asset pointer.
+    typedef struct {s32 count, asset;} local_type;
 extern Vector *D_8012B7F0;
 extern void *D_8012B7F8;
 extern s32 D_8012B7F4;
@@ -16,7 +17,8 @@ extern s32 D_8011B900;
 extern u32 D_8012B444;
 extern s32 D_8012B448;
 extern u8 D_8012B7E6;
-typedef struct { u32 local_0:26; u32 local_1:2; u32 local_2:4; } AssetD5B34;
+// ROM asset table word: offset, flags (bit 0 = compressed), type.
+typedef struct { u32 offset:26; u32 flags:2; u32 type:4; } AssetD5B34;
 extern s32 func_800E4AF0(s32);
 extern void *func_800E4BF4(s32);
 extern void *_gldbDll_entrypoint_0(s32, s32 *);
@@ -24,7 +26,7 @@ extern void *func_800E6950(s32, s32, s32);
 extern void *heap_alloc(s32);
 extern void rom_dma_read(void *, s32, s32);
 extern u8 assets_ROM_START[];
-typedef struct { u32 offset:26; u32 flags:2; u32 pad:4; } LocalRomEntry;
+typedef struct { u32 offset:26; u32 flags:2; u32 type:4; } LocalRomEntry;
 typedef union {
     AssetD5B34 AssetD5B34;
     LocalRomEntry LocalRomEntry;
@@ -36,62 +38,66 @@ s32 func_800D56C4();
 
 extern s32 D_8012B7E8;
 
-void func_800D5440(param_0) s32 param_0; {
-    local_type *local_0;
-    local_type *local_1;
-    local_1 = vector_end(D_8012B7F0);
-    for (local_0 = vector_begin(D_8012B7F0); local_0 < local_1 && param_0 != local_0->local_1; local_0++) {}
-    if (local_0 < local_1) local_0->local_0++;
+// Queues an asset for deferred release (counts repeated requests).
+void func_800D5440(asset) s32 asset; {
+    local_type *entry;
+    local_type *end;
+    end = vector_end(D_8012B7F0);
+    for (entry = vector_begin(D_8012B7F0); entry < end && asset != entry->asset; entry++) {}
+    if (entry < end) entry->count++;
     else {
-        local_0 = vector_push_back(&D_8012B7F0);
-        local_0->local_0 = 1;
-        local_0->local_1 = param_0;
+        entry = vector_push_back(&D_8012B7F0);
+        entry->count = 1;
+        entry->asset = asset;
     }
 }
 
-int func_800D54F0(param_0) s32 param_0;
+// Nonzero when the asset is queued for release in either vector.
+int func_800D54F0(asset) s32 asset;
 {
-    void *local_3;
-    void **local_2;
-    void *local_4;
-    void *local_5;
-    s32 *local_6;
-    local_2 = ((void * *) &D_8012B7F0); local_3 = &D_8012B7F8; loop_1: local_4 = vector_end(*local_2);
-    local_5 = vector_begin(*local_2);
-    local_6 = (s32 *) local_5;
+    void *vec_limit;
+    void **vec;
+    void *end;
+    void *begin;
+    s32 *it;
+    vec = ((void * *) &D_8012B7F0); vec_limit = &D_8012B7F8; loop_1: end = vector_end(*vec);
+    begin = vector_begin(*vec);
+    it = (s32 *) begin;
 
-if (local_5 < local_4) {
-    if (param_0 != *(s32 *) ((char *) local_5 + 4)) {
+if (begin < end) {
+    if (asset != *(s32 *) ((char *) begin + 4)) {
     loop_3:
-        local_6 += 2;
+        it += 2;
 
-        if (local_6 < (s32 *) local_4) {
-            if (param_0 != *(s32 *) ((char *) local_6 + 4)) {
+        if (it < (s32 *) end) {
+            if (asset != *(s32 *) ((char *) it + 4)) {
                 goto loop_3;
             }
         }
     }
 }
 
-local_2 += 1;
+vec += 1;
 
-if (local_6 < (s32 *) local_4) {
+if (it < (s32 *) end) {
     return 1;
 }
 
-if (local_2 == local_3) {
+if (vec == vec_limit) {
     return 0;
 }
 
 goto loop_1;
 }
 
+// Creates the two deferred-release vectors.
 void func_800D55A0()
 {
     D_8012B7F0 = vector_new(8, 0x10);
     D_8012B7F4 = vector_new(8, 0x10);
 }
 
+// Swaps the two release vectors and releases everything queued in the new first one.
 void func_800D55DC(void)
 {
     s32 i;
@@ -118,27 +124,29 @@ int func_800D5688()
     D_8012B7F4 = vector_defrag(*((((int *) &D_8012B7F0)) + 1));
 }
 
-s32 func_800D56C4(param_0) void *param_0;
+// Drops one reference; on the last one frees the asset and swap-removes its slot.
+// Returns 0 freed, 1 still referenced, 2 not found, 3 null.
+s32 func_800D56C4(asset) void *asset;
 {
-    s32 local_0;
-    u8 local_1;
+    s32 slot;
+    u8 last;
 
-    if (param_0) {
-        for (local_0 = 0; local_0 < D_8012B7E4 && param_0 != D_8012B450[local_0]; local_0++) {
+    if (asset) {
+        for (slot = 0; slot < D_8012B7E4 && asset != D_8012B450[slot]; slot++) {
         }
-        if (local_0 == D_8012B7E4)
+        if (slot == D_8012B7E4)
             return 2;
-        D_8012B7E5 = local_0;
-        if (D_8012B658[local_0] == 1) {
-            heap_free(param_0);
-            local_1 = D_8012B7E4 - 1;
-            D_8012B7E4 = local_1;
-            D_8012B658[local_0] = D_8012B658[local_1];
-            D_8012B450[local_0] = D_8012B450[D_8012B7E4];
-            D_8012B6E0[local_0] = D_8012B6E0[D_8012B7E4];
+        D_8012B7E5 = slot;
+        if (D_8012B658[slot] == 1) {
+            heap_free(asset);
+            last = D_8012B7E4 - 1;
+            D_8012B7E4 = last;
+            D_8012B658[slot] = D_8012B658[last];
+            D_8012B450[slot] = D_8012B450[D_8012B7E4];
+            D_8012B6E0[slot] = D_8012B6E0[D_8012B7E4];
             return 0;
         } else {
-            D_8012B658[local_0]--;
+            D_8012B658[slot]--;
             return 1;
         }
     }
@@ -146,22 +154,23 @@ s32 func_800D56C4(param_0) void *param_0;
     return 3;
 }
 
-s32 func_800D5804(s32 param_0, s32 *param_1)
+// Defragments an asset's heap block and updates its table entry if it moved.
+s32 func_800D5804(s32 asset, s32 *param_1)
 {
-    s32 var_v1;
-    s32 sp1C;
-    s32 temp_v0;
-    s32 *new_var;
-    var_v1 = 0;
-    new_var = ((s32 *) D_8012B450);
+    s32 i;
+    s32 slot;
+    s32 moved;
+    s32 *table;
+    i = 0;
+    table = ((s32 *) D_8012B450);
 
     if ((s32) D_8012B7E4 > 0) {
-        if (param_0 != *new_var) {
+        if (asset != *table) {
         loop_2:
-            var_v1 += 1;
+            i += 1;
 
-if (var_v1 < (s32) D_8012B7E4) {
-    if (param_0 != ((s32 *) D_8012B450)[var_v1]) {
+if (i < (s32) D_8012B7E4) {
+    if (asset != ((s32 *) D_8012B450)[i]) {
         goto loop_2;
     }
 }
@@ -169,18 +178,19 @@ if (var_v1 < (s32) D_8012B7E4) {
 }
 }
 
-if (var_v1 == D_8012B7E4) {
-    return param_0;
+if (i == D_8012B7E4) {
+    return asset;
 }
 
-sp1C = var_v1;
-temp_v0 = defrag(param_0);
+// Matching: the copy of the index is needed for the match.
+slot = i;
+moved = defrag(asset);
 
-if (temp_v0 != param_0) {
-    ((s32 *) D_8012B450)[sp1C] = temp_v0;
+if (moved != asset) {
+    ((s32 *) D_8012B450)[slot] = moved;
 }
 
-return temp_v0;
+return moved;
 }
 
 void func_800D58AC()
@@ -195,50 +205,58 @@ int func_800D58CC()
     func_800D55DC();
 }
 
-s32 func_800D58FC(s32 param_0)
+// Returns the asset type from the ROM table.
+s32 func_800D58FC(s32 id)
 {
-    s32 new_var;
-    new_var = param_0;
-    rom_read_word(((long) D_8011B900) + (new_var * 4), ((s32 *) &D_8012B440.raw));
+    s32 id_copy;
+    // Matching: the copy of the parameter is needed for the match.
+    id_copy = id;
+    rom_read_word(((long) D_8011B900) + (id_copy * 4), ((s32 *) &D_8012B440.raw));
     return ((s32) D_8012B440.raw) & 0xF;
 }
 
+// Number of assets in the ROM table.
 s32 func_800D593C()
 {
     return 0x3666;
 }
 
+// Size of the last asset that was loaded.
 s32 func_800D5944()
 {
     return D_8012B7E8;
 }
 
-s32 func_800D5950(s32 param_0)
+// Size of an asset in the ROM (distance to the next table entry).
+s32 func_800D5950(s32 id)
 {
-    rom_read_word((u32) D_8011B900 + param_0 * 4, &D_8012B440.raw);
-    rom_read_word((u32) D_8011B900 + param_0 * 4 + 4, &D_8012B444);
+    rom_read_word((u32) D_8011B900 + id * 4, &D_8012B440.raw);
+    rom_read_word((u32) D_8011B900 + id * 4 + 4, &D_8012B444);
     return ((u32) D_8012B444 >> 6) - ((u32) D_8012B440.raw >> 6);
 }
 
-s32 func_800D59C0(s32 param_0)
+// Nonzero when the asset is compressed.
+s32 func_800D59C0(s32 id)
 {
-    s32 *new_var;
-    new_var = &D_8011B900;
-    rom_read_word((*new_var) + (param_0 * 4), ((s32 *) &D_8012B440.raw));
+    s32 *rom_table;
+    // Matching: the pointer local is needed for the match.
+    rom_table = &D_8011B900;
+    rom_read_word((*rom_table) + (id * 4), ((s32 *) &D_8012B440.raw));
     return (((u32) (((s32) D_8012B440.raw) << 0x1A)) >> 0x1E) & 1;
 }
 
-s32 func_800D5A04(s32 param_0)
+// Nonzero when the asset is loaded.
+s32 func_800D5A04(s32 id)
 {
     s32 idx;
 
     idx = 0;
 
-    if (((s32) D_8012B7E4 > 0) && (param_0 != ((s16 *) D_8012B6E0)[idx])) {
+    if (((s32) D_8012B7E4 > 0) && (id != ((s16 *) D_8012B6E0)[idx])) {
     loop_2:
         idx += 1;
         if (idx < (s32) D_8012B7E4) {
-            if (param_0 != ((s16 *) D_8012B6E0)[idx]) {
+            if (id != ((s16 *) D_8012B6E0)[idx]) {
                 goto loop_2;
             }
 
@@ -252,29 +270,32 @@ if (idx < (s32) D_8012B7E4) {
 return 0;
 }
 
-s32 func_800D5A6C(s32 param_0)
+// ROM address of an asset's data.
+s32 func_800D5A6C(s32 id)
 {
-    int new_var;
-    s32 *new_var2;
-    new_var2 = &D_8011B900;
-    new_var = (*new_var2) + (param_0 * 4);
-    rom_read_word(new_var, &D_8012B440.raw);
+    int entry_addr;
+    s32 *rom_table;
+    // Matching: the pointer local is needed for the match.
+    rom_table = &D_8011B900;
+    entry_addr = (*rom_table) + (id * 4);
+    rom_read_word(entry_addr, &D_8012B440.raw);
     return D_8012B448 + (((u32) D_8012B440.raw) >> 6);
 }
 
-s32 func_800D5AB4(unsigned int param_0)
+// Finds the slot of an asset id; -1 when slot 0x82 is reached.
+s32 func_800D5AB4(unsigned int id)
 {
-    s16 *new_var;
-    s32 new_var2;
-    new_var = &D_8012B6E0[0];
-    new_var2 = 0;
+    s16 *first;
+    s32 slot;
+    first = &D_8012B6E0[0];
+    slot = 0;
 
-    if (((s32) D_8012B7E4 > 0) && (param_0 != *new_var)) {
+    if (((s32) D_8012B7E4 > 0) && (id != *first)) {
         do {
-            new_var2 += 1;
+            slot += 1;
 
-if (new_var2 < (s32) D_8012B7E4) {
-    if (param_0 != D_8012B6E0[new_var2]) {
+if (slot < (s32) D_8012B7E4) {
+    if (id != D_8012B6E0[slot]) {
         continue;
     }
 }
@@ -285,13 +306,13 @@ while (1)
     ;
 }
 
-D_8012B7E5 = new_var2;
+D_8012B7E5 = slot;
 
-if (new_var2 == 0x82) {
+if (slot == 0x82) {
     return -1;
 }
 
-return new_var2;
+return slot;
 }
 
 void func_800D5B24()
@@ -299,80 +320,86 @@ void func_800D5B24()
     D_8012B7E6 = 1;
 }
 
-void *func_800D5B34(s32 param_0)
+// Returns the asset for an id, loading it if needed; counts a reference.
+// Returns 0 when the table is full.
+void *func_800D5B34(s32 id)
 {
-    s32 local_0;
-    s32 local_1;
-    void *local_2;
-    s32 local_3;
-    local_3 = D_8012B7E6;
+    s32 size;
+    s32 idx;
+    void *asset;
+    s32 unk_0;
+    unk_0 = D_8012B7E6;
     D_8012B7E6 = 0;
-    local_1 = func_800D5AB4(param_0);
-    if (local_1 < 0)
+    idx = func_800D5AB4(id);
+    if (idx < 0)
         return 0;
 
-    if (local_1 < D_8012B7E4) {
-        D_8012B658[local_1]++;
-        return D_8012B450[local_1];
+    if (idx < D_8012B7E4) {
+        D_8012B658[idx]++;
+        return D_8012B450[idx];
     }
 
-    local_1 = param_0 * 4;
-    rom_read_word(D_8011B900 + local_1, ((AssetD5B34 *) &D_8012B440.raw));
-    if (!D_8012B440.AssetD5B34.local_2 && !local_3)
-        local_3 = 2;
+    idx = id * 4;
+    rom_read_word(D_8011B900 + idx, ((AssetD5B34 *) &D_8012B440.raw));
+    if (!D_8012B440.AssetD5B34.type && !unk_0)
+        unk_0 = 2;
 
-    if (func_800E4AF0(param_0)) {
-        local_2 = func_800E4BF4(param_0);
-    } else if (D_8012B440.AssetD5B34.local_2 == 10) {
-        local_2 = _gldbDll_entrypoint_0(param_0, &D_8012B7E8);
-    } else if (D_8012B440.AssetD5B34.local_1 & 1) {
-        local_2 = func_800E6950(param_0, local_3, 0);
+    if (func_800E4AF0(id)) {
+        asset = func_800E4BF4(id);
+    } else if (D_8012B440.AssetD5B34.type == 10) {
+        asset = _gldbDll_entrypoint_0(id, &D_8012B7E8);
+    } else if (D_8012B440.AssetD5B34.flags & 1) {
+        asset = func_800E6950(id, unk_0, 0);
     } else {
-        rom_read_word(D_8011B900 + local_1 + 4, ((AssetD5B34 *) &D_8012B444));
-        rom_read_word(D_8011B900 + local_1, ((AssetD5B34 *) &D_8012B440.raw));
-        local_0 = (*((AssetD5B34 *) &D_8012B444)).local_0 - D_8012B440.AssetD5B34.local_0;
-        D_8012B7E8 = local_0;
-        if (local_0 & 1)
-            local_0++;
-        local_2 = heap_alloc(local_0);
-        rom_dma_read(local_2, D_8012B448 + D_8012B440.AssetD5B34.local_0, local_0);
+        rom_read_word(D_8011B900 + idx + 4, ((AssetD5B34 *) &D_8012B444));
+        rom_read_word(D_8011B900 + idx, ((AssetD5B34 *) &D_8012B440.raw));
+        size = (*((AssetD5B34 *) &D_8012B444)).offset - D_8012B440.AssetD5B34.offset;
+        D_8012B7E8 = size;
+        if (size & 1)
+            size++;
+        asset = heap_alloc(size);
+        rom_dma_read(asset, D_8012B448 + D_8012B440.AssetD5B34.offset, size);
     }
     D_8012B7E5 = D_8012B7E4;
     D_8012B658[D_8012B7E4] = 1;
-    D_8012B450[D_8012B7E4] = local_2;
-    D_8012B6E0[D_8012B7E4] = param_0;
+    D_8012B450[D_8012B7E4] = asset;
+    D_8012B6E0[D_8012B7E4] = id;
     D_8012B7E4++;
-    return local_2;
+    return asset;
 }
 
+// Initializes the asset cache; D_8012B448 becomes the asset data base in the ROM.
 void func_800D5D70()
 {
-    long long new_var3;
-    u8 *new_var2;
-    u8 *new_var;
+    long long offset;
+    u8 *rom_start;
+    u8 *base;
     D_8012B7E6 = 0;
-    new_var2 = (u8 *) assets_ROM_START;
+    rom_start = (u8 *) assets_ROM_START;
     func_800D55A0();
     D_8012B7E4 = 0;
-    new_var3 = 0xD9A4;
-    new_var = new_var2;
-    ((void *) D_8012B448) = (void *) (new_var + new_var3);
+    // Matching: the extra locals are needed for the match.
+    offset = 0xD9A4;
+    base = rom_start;
+    ((void *) D_8012B448) = (void *) (base + offset);
     func_800E4CE8();
 }
 
-s32 func_800D5DB8(s32 param_0)
+// Size of an asset in the ROM (distance to the next table entry).
+s32 func_800D5DB8(s32 id)
 {
-    rom_read_word((u32) D_8011B900 + param_0 * 4, &D_8012B440.raw);
-    rom_read_word((u32) D_8011B900 + param_0 * 4 + 4, &D_8012B444);
+    rom_read_word((u32) D_8011B900 + id * 4, &D_8012B440.raw);
+    rom_read_word((u32) D_8011B900 + id * 4 + 4, &D_8012B444);
     return ((u32) D_8012B444 >> 6) - ((u32) D_8012B440.raw >> 6);
 }
 
-int func_800D5E28(s32 *param_0)
+// Queues the asset behind *ref for release and clears *ref.
+int func_800D5E28(s32 *ref)
 {
-    s32 local_0;
-    local_0 = *param_0;
-    func_800D5440(local_0);
-    param_0[0] = 0;
+    s32 asset;
+    asset = *ref;
+    func_800D5440(asset);
+    ref[0] = 0;
 }
 
 void func_800D5E54()
@@ -390,47 +417,51 @@ void func_800D5E94()
     func_800D54F0();
 }
 
-s32 func_800D5EB4(s32 param_0, void *param_1, s32 param_2)
+// Reads an asset into a caller buffer; returns its size (rounded up to 16 when
+// uncompressed) or 0 on failure.
+s32 func_800D5EB4(s32 id, void *buffer, s32 capacity)
 {
-    s32 local_1;
-    s32 local_2;
-    s32 local_0;
-    if (func_800D5AB4(param_0) < 0)
+    s32 size;
+    s32 rem;
+    s32 result;
+    if (func_800D5AB4(id) < 0)
         return 0;
-    local_0 = param_0 * 4;
-    rom_read_word(D_8011B900 + local_0, ((LocalRomEntry *) &D_8012B440.raw));
+    result = id * 4;
+    rom_read_word(D_8011B900 + result, ((LocalRomEntry *) &D_8012B440.raw));
     if (D_8012B440.LocalRomEntry.flags & 1) {
-        func_800E6950(param_0, 0, param_1);
-        local_0 = D_8012B7E8;
+        func_800E6950(id, 0, buffer);
+        result = D_8012B7E8;
     } else {
-        rom_read_word(D_8011B900 + local_0 + 4, ((LocalRomEntry *) &D_8012B444));
-        local_1 = (*((LocalRomEntry *) &D_8012B444)).offset - D_8012B440.LocalRomEntry.offset;
-        if (local_1 & 1)
-            local_1++;
-        local_2 = local_1 & 0xF;
-        local_0 = local_1;
-        if (local_2)
-            local_0 = local_1 - local_2 + 0x10;
-        if (param_2 >= local_1)
-            rom_dma_read(param_1, D_8012B440.LocalRomEntry.offset + ((u32) D_8012B448), local_1);
+        rom_read_word(D_8011B900 + result + 4, ((LocalRomEntry *) &D_8012B444));
+        size = (*((LocalRomEntry *) &D_8012B444)).offset - D_8012B440.LocalRomEntry.offset;
+        if (size & 1)
+            size++;
+        rem = size & 0xF;
+        result = size;
+        if (rem)
+            result = size - rem + 0x10;
+        if (capacity >= size)
+            rom_dma_read(buffer, D_8012B440.LocalRomEntry.offset + ((u32) D_8012B448), size);
         else
             return 0;
     }
-    return local_0;
+    return result;
 }
 
-int func_800D5FDC(s32 param_0)
+// Sets the size of the last loaded asset.
+int func_800D5FDC(s32 size)
 {
-    D_8012B7E8 = param_0;
+    D_8012B7E8 = size;
 }
 
-s32 func_800D5FE8(s32 param_0)
+// Returns the loaded asset for an id, or 0 if it is not loaded.
+s32 func_800D5FE8(s32 id)
 {
     s32 i;
     s32 count;
     count = D_8012B7E4;
     i = 0;
-    while (i < count && param_0 != D_8012B6E0[i]) {
+    while (i < count && id != D_8012B6E0[i]) {
         i++;
     }
     if (i >= count) {
@@ -439,4 +470,5 @@ s32 func_800D5FE8(s32 param_0)
     return ((s32 *) D_8012B450)[i];
 }
 
+// TU-NOTE: the .data of this file is defined here in C (values from the ROM).
 s32 D_8011B900 = 0x5188;

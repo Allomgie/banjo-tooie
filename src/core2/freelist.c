@@ -1,6 +1,7 @@
 #include "memory.h"
 #include "freelist.h"
 
+// Element 0 is the free-list head; each element starts with the index of the next free one.
 void freelist_clear(FreeList *list)
 {
     s32 i;
@@ -41,6 +42,7 @@ void *freelist_next(FreeList **list, s32 *index_out)
     cur_list = *list;
     cur_element = cur_list->data;
 
+    // No free elements left: grow the list.
     if (cur_element->next_free == 0) {
         prev_count = cur_list->capacity;
         new_count = prev_count + 10;
@@ -50,6 +52,7 @@ void *freelist_next(FreeList **list, s32 *index_out)
         cur_list->capacity = new_count;
         *list = cur_list;
 
+        // Walk backwards from the end and link every new element into the free chain.
         for (i = new_count - 1,
             next_element = (FreeListElement *) ((u8 *) cur_list->data + i * cur_list->element_size);
              i >= prev_count; i--) {

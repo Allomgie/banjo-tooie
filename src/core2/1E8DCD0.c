@@ -18,62 +18,69 @@ extern void func_800BA5BC(s32, f32, f32);
 extern void func_800BA5B0(s32, s32, s32);
 extern void func_800BA22C(s32, s32);
 
+// Reserves the three shared emitter slots in D_80127F00.
+// Matching: the line breaks in this function are needed for the match.
+// Matching: the no-op `++`/`--` pair and `^ 0` are needed for the match.
 void func_800B43E0()
 {
-    u8 *local_0 = (u8 *) D_80127F00;
-    local_0++; local_0--; do { *local_0++ = func_800B5758(0x20 ^ 0);
+    u8 *slot = (u8 *) D_80127F00;
+    slot++; slot--; do { *slot++ = func_800B5758(0x20 ^ 0);
     }
-    while (local_0 != &D_80127F03);
+    while (slot != &D_80127F03);
 }
 
+// Releases the three shared emitter slots.
+// Matching: the line breaks in this function are needed for the match.
 void func_800B4428()
 {
-    u8 *local_0;
-    u8 *local_1;
-    local_1 = &D_80127F03; local_0 = D_80127F00;
+    u8 *slot;
+    u8 *end;
+    end = &D_80127F03; slot = D_80127F00;
     do
     {
-        func_800B58D4(*local_0);
-        local_0 += 1;
+        func_800B58D4(*slot);
+        slot += 1;
     }
-    while (local_0 != local_1);
+    while (slot != end);
 }
 
-void func_800B4470(f32 *param_0, f32 *param_1, s32 *param_2, s32 param_3, f32 param_4, f32 param_5,
-                   s32 param_6, s32 param_7, s32 param_8)
+// Configures an emitter slot for a burst of debris/shards.
+void func_800B4470(f32 *pos, f32 *dir, s32 *unk_0, s32 unk_1, f32 scale, f32 unk_2,
+                   s32 lifetime, s32 lifetime_range, s32 index)
 {
-    f32 local_0;
-    f32 local_1;
-    s32 local_4;
-    f32 local_2[3];
-    s32 local_3 = 0x228;
-    u16 *local_5;
-    local_4 = func_800B56D0(D_80127F00[param_8]);
-    local_5 = &D_8011A5B0[param_8];
-    func_800BA3FC(local_4, *local_5);
-    func_800BA594(local_4, 0.075f, 0.4f);
-    func_800BA75C(local_4, param_0);
-    if (param_1)
-        func_800EFA20(local_2, param_1, 30.0f);
+    f32 unk_3; // Matching: unused local, needed for the match.
+    f32 unk_4; // Matching: unused local, needed for the match.
+    s32 emitter;
+    f32 velocity[3];
+    s32 flags = 0x228;
+    u16 *sprite;
+    emitter = func_800B56D0(D_80127F00[index]);
+    sprite = &D_8011A5B0[index];
+    func_800BA3FC(emitter, *sprite);
+    func_800BA594(emitter, 0.075f, 0.4f);
+    func_800BA75C(emitter, pos);
+    if (dir)
+        func_800EFA20(velocity, dir, 30.0f);
     else
-        local_2[0] = local_2[1] = local_2[2] = 0.0f;
-    if (param_5 != 0.0f)
-        local_2[1] += param_5 / param_4;
-    func_800BA930(local_4, (s16) local_2[0], (s16) local_2[1], (s16) local_2[2], (s16) local_2[0],
-                  (s16) local_2[1], (s16) local_2[2]);
-    if (param_2)
-        func_800BAB80(local_4, param_2);
-    if (!param_3)
-        local_3 = 0x238;
-    func_800BA5A8(local_4, local_3);
-    func_800BA8F8(local_4, param_4, param_4);
-    func_800BA7C4(local_4, param_6 / 175.0f, param_6 / 175.0f);
-    func_800BA7FC(local_4, (param_6 + param_7) / 175.0f, (param_6 + param_7) / 175.0f);
-    if (local_5 == D_8011A5B0)
-        func_800BA5BC(local_4, 15.0f / param_4, 15.0f / param_4);
+        velocity[0] = velocity[1] = velocity[2] = 0.0f;
+    if (unk_2 != 0.0f)
+        velocity[1] += unk_2 / scale;
+    func_800BA930(emitter, (s16) velocity[0], (s16) velocity[1], (s16) velocity[2], (s16) velocity[0],
+                  (s16) velocity[1], (s16) velocity[2]);
+    if (unk_0)
+        func_800BAB80(emitter, unk_0);
+    if (!unk_1)
+        flags = 0x238;
+    func_800BA5A8(emitter, flags);
+    func_800BA8F8(emitter, scale, scale);
+    func_800BA7C4(emitter, lifetime / 175.0f, lifetime / 175.0f);
+    func_800BA7FC(emitter, (lifetime + lifetime_range) / 175.0f, (lifetime + lifetime_range) / 175.0f);
+    if (sprite == D_8011A5B0)
+        func_800BA5BC(emitter, 15.0f / scale, 15.0f / scale);
     else
-        func_800BA5B0(local_4, 0, 12);
-    func_800BA22C(local_4, 1);
+        func_800BA5B0(emitter, 0, 12);
+    func_800BA22C(emitter, 1);
 }
 
+// TU-NOTE: .data of this file is defined here in C (values taken from the ROM).
 u16 D_8011A5B0[8] = {0x9C9, 0x9CA, 0x9DC, 0x0, 0x0, 0x0, 0x0, 0x0};

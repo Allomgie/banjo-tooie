@@ -11,26 +11,28 @@ s32 baroll_getStructSize(void)
     return sizeof(BaRoll);
 }
 
+// Moves roll toward ideal along the shortest arc, step clamped by limit (deg/s) and rate.
 void __baroll_update(PlayerState *self, f32 limit, f32 rate)
 {
     f32 diff;
-    f32 val;
+    f32 step;
     f32 dt;
-    f32 max;
+    f32 max_step;
 
     dt = func_800D8FF8();
-    max = limit * dt;
+    max_step = limit * dt;
     diff = self->roll->ideal - self->roll->value;
     if (180.0f < mlAbsF(diff)) {
         diff += (diff < 0.0f) ? 360.0f : -360.0f;
     }
-    val = diff * rate * dt;
-    val = (val < 0.0f) ? func_800F0D50(val, -max, -0.1f) : func_800F0D50(val, 0.1f, max);
-    if (mlAbsF(val) <= mlAbsF(diff)) {
-        self->roll->value = self->roll->value + val;
+    step = diff * rate * dt;
+    step = (step < 0.0f) ? func_800F0D50(step, -max_step, -0.1f) : func_800F0D50(step, 0.1f, max_step);
+    if (mlAbsF(step) <= mlAbsF(diff)) {
+        self->roll->value = self->roll->value + step;
     } else {
         self->roll->value = self->roll->ideal;
     }
+    // wrap to [0, 360)
     if (self->roll->value < 360.0f) {
         if (self->roll->value < 0.0f) {
             self->roll->value += 360.0f;
@@ -52,14 +54,14 @@ void baroll_update(PlayerState *self)
     __baroll_update(self, self->roll->limit, self->roll->rate);
 }
 
-void baroll_setIdeal(PlayerState *self, f32 arg1)
+void baroll_setIdeal(PlayerState *self, f32 angle)
 {
-    self->roll->ideal = func_800136E4(arg1);
+    self->roll->ideal = func_800136E4(angle);
 }
 
-void baroll_set(PlayerState *self, f32 arg1)
+void baroll_set(PlayerState *self, f32 angle)
 {
-    self->roll->value = func_800136E4(arg1);
+    self->roll->value = func_800136E4(angle);
 }
 
 void baroll_applyIdeal(PlayerState *self)
@@ -83,6 +85,7 @@ void baroll_setAngularVelocity(PlayerState *self, f32 limit, f32 rate)
     self->roll->rate = rate;
 }
 
+// Defaults: 700 deg/s limit, rate 7.5.
 void baroll_resetAngularVelocity(PlayerState *self)
 {
     baroll_setAngularVelocity(self, 700.0f, 7.5f);

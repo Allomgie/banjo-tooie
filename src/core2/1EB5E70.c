@@ -1,6 +1,7 @@
 #include "core2/1EB5E70.h"
 #include "types.h"
 
+// Model renderer: geometry node handlers, dispatched through the table at D_8012CF8C.
 typedef struct {
     s32 pad[2];
     s16 unk8;
@@ -274,913 +275,943 @@ void func_800DE2A4();
 extern s32 D_8012C824;
 extern s32 D_8012C940;
 
-void func_800DC580(f32 *param_0, f32 *param_1)
+void func_800DC580(f32 *dst, f32 *src)
 {
-    param_0[0] = param_1[0] * D_8012C948.raw;
-    param_0[1] = param_1[1] * D_8012C948.raw;
-    param_0[2] = param_1[2] * D_8012C948.raw;
+    dst[0] = src[0] * D_8012C948.raw;
+    dst[1] = src[1] * D_8012C948.raw;
+    dst[2] = src[2] * D_8012C948.raw;
 }
 
-void func_800DC5BC(u8 *param_0, u8 *param_1)
+void func_800DC5BC(u8 *dst, u8 *src)
 {
-    *(f32 *) ((s8 *) param_0 + 0) =
-        (f32) ((*(f32 *) ((s8 *) param_1 + 0) * *(f32 *) ((s8 *) (s32 *) &D_8012C948.raw + 0)) +
+    *(f32 *) ((s8 *) dst + 0) =
+        (f32) ((*(f32 *) ((s8 *) src + 0) * *(f32 *) ((s8 *) (s32 *) &D_8012C948.raw + 0)) +
                *(f32 *) ((s8 *) *(u8 **) ((s8 *) (s32 *) &D_8012C948.raw + 4) + 0));
-    *(f32 *) ((s8 *) param_0 + 4) =
-        (f32) ((*(f32 *) ((s8 *) param_1 + 4) * *(f32 *) ((s8 *) (s32 *) &D_8012C948.raw + 0)) +
+    *(f32 *) ((s8 *) dst + 4) =
+        (f32) ((*(f32 *) ((s8 *) src + 4) * *(f32 *) ((s8 *) (s32 *) &D_8012C948.raw + 0)) +
                *(f32 *) ((s8 *) *(u8 **) ((s8 *) (s32 *) &D_8012C948.raw + 4) + 4));
-    *(f32 *) ((s8 *) param_0 + 8) =
-        (f32) ((*(f32 *) ((s8 *) param_1 + 8) * *(f32 *) ((s8 *) (s32 *) &D_8012C948.raw + 0)) +
+    *(f32 *) ((s8 *) dst + 8) =
+        (f32) ((*(f32 *) ((s8 *) src + 8) * *(f32 *) ((s8 *) (s32 *) &D_8012C948.raw + 0)) +
                *(f32 *) ((s8 *) *(u8 **) ((s8 *) (s32 *) &D_8012C948.raw + 4) + 8));
 }
 
-void func_800DC61C(s32 arg0, s32 arg1)
+void func_800DC61C(s32 buffers, s32 node)
 {
 }
 
-void func_800DC628(s32 arg0, s32 arg1)
+void func_800DC628(s32 buffers, s32 node)
 {
 }
 
-void func_800DC634(void *param_0, void *param_1)
+// Billboard node: faces the camera.
+// Matching: the line breaks in this function are needed for the match.
+void func_800DC634(void *buffers, void *node)
 {
-    s16 *p1 = (s16 *) param_1;
-    f32 local_0[3];
-    u32 *p0 = (u32 *) param_0;
-    u32 *ptr;
-    if (p1[4] != 0)
+    s16 *node_s16 = (s16 *) node;
+    f32 pos[3];
+    u32 *buf_words = (u32 *) buffers;
+    u32 *gfx_cmd;
+    if (node_s16[4] != 0)
     {
-        func_800193C4(local_0, &p1[6]);
-        mlMtx_push_translation(local_0[0], local_0[1], local_0[2]);
+        func_800193C4(pos, &node_s16[6]);
+        mlMtx_push_translation(pos[0], pos[1], pos[2]);
         mlMtxRotYaw(D_8012CEAC);
-        if (p1[5] == 0)
+        if (node_s16[5] == 0)
         {
             mlMtxRotPitch(D_8012CEA8);
         }
         mlMtxScale(D_8012C948.raw);
-        mlMtxTranslate(-((f32 *) param_1)[3], -((f32 *) param_1)[4], -((f32 *) param_1)[5]);
-        mlMtxApply(p0[1]);
-        ptr = (u32 *) p0[0];
-        p0[0] += 8;
-        *ptr = 0xDA380002;
-        ptr[1] = p0[1];
-        p0[1] += 0x40;
-        func_800DE2A4(param_0, (char *) ((s32) param_1 + (s32) ((Knoten_800DC634 *) param_1)->unk8));
+        mlMtxTranslate(-((f32 *) node)[3], -((f32 *) node)[4], -((f32 *) node)[5]);
+        mlMtxApply(buf_words[1]);
+        gfx_cmd = (u32 *) buf_words[0];
+        buf_words[0] += 8;
+        *gfx_cmd = 0xDA380002;
+        gfx_cmd[1] = buf_words[1];
+        buf_words[1] += 0x40;
+        func_800DE2A4(buffers, (char *) ((s32) node + (s32) ((Knoten_800DC634 *) node)->unk8));
         mlMtxPop();
-        ptr = (u32 *) p0[0];
-        p0[0] += 8;
-        *ptr = 0xD8380002; ptr[1] = 0x40;
+        gfx_cmd = (u32 *) buf_words[0];
+        buf_words[0] += 8;
+        *gfx_cmd = 0xD8380002; gfx_cmd[1] = 0x40;
     }
 }
 
-void func_800DC740(void *param_0, void *param_1)
+// Billboard node: faces the camera.
+// Matching: the line breaks in this function are needed for the match.
+void func_800DC740(void *buffers, void *node)
 {
-    s16 *p1 = (s16 *) param_1;
-    f32 local_0[3];
-    u32 *p0 = (u32 *) param_0;
-    u32 *ptr;
-    if (p1[4] != 0)
+    s16 *node_s16 = (s16 *) node;
+    f32 pos[3];
+    u32 *buf_words = (u32 *) buffers;
+    u32 *gfx_cmd;
+    if (node_s16[4] != 0)
     {
-        func_800DC580(local_0, &p1[6]);
-        mlMtx_push_translation(local_0[0], local_0[1], local_0[2]);
+        func_800DC580(pos, &node_s16[6]);
+        mlMtx_push_translation(pos[0], pos[1], pos[2]);
         mlMtxRotYaw(D_8012CEAC);
-        if (p1[5] == 0)
+        if (node_s16[5] == 0)
         {
             mlMtxRotPitch(D_8012CEA8);
         }
         mlMtxScale(D_8012C948.raw);
-        mlMtxTranslate(-((f32 *) param_1)[3], -((f32 *) param_1)[4], -((f32 *) param_1)[5]);
-        mlMtxApply(p0[1]);
-        ptr = (u32 *) p0[0];
-        p0[0] += 8;
-        *ptr = 0xDA380002;
-        ptr[1] = p0[1];
-        p0[1] += 0x40;
-        func_800DE2A4(param_0, (char *) ((s32) param_1 + (s32) ((Knoten_800DC740 *) param_1)->unk8));
+        mlMtxTranslate(-((f32 *) node)[3], -((f32 *) node)[4], -((f32 *) node)[5]);
+        mlMtxApply(buf_words[1]);
+        gfx_cmd = (u32 *) buf_words[0];
+        buf_words[0] += 8;
+        *gfx_cmd = 0xDA380002;
+        gfx_cmd[1] = buf_words[1];
+        buf_words[1] += 0x40;
+        func_800DE2A4(buffers, (char *) ((s32) node + (s32) ((Knoten_800DC740 *) node)->unk8));
         mlMtxPop();
-        ptr = (u32 *) p0[0];
-        p0[0] += 8;
-        *ptr = 0xD8380002; ptr[1] = 0x40;
+        gfx_cmd = (u32 *) buf_words[0];
+        buf_words[0] += 8;
+        *gfx_cmd = 0xD8380002; gfx_cmd[1] = 0x40;
     }
 }
 
-void func_800DC84C(u8 *param_0, u8 *param_1)
+// Billboard node: faces the camera.
+// Matching: the line breaks in this function are needed for the match.
+void func_800DC84C(u8 *buffers, u8 *node)
 {
-    volatile s32 local_1;
-    f32 local_0[3];
-    u64 *temp_v1;
-    if (*(s16 *) (param_1 + 8) != 0)
+    volatile s32 unk_0;  // Matching: unused volatile local.
+    f32 pos[3];
+    u64 *push_cmd;
+    if (*(s16 *) (node + 8) != 0)
     {
-        u64 *temp_v1_2;
-        func_800DC5BC(local_0, param_1 + 0xC);
-        mlMtx_push_translation(local_0[0], local_0[1], local_0[2]);
+        u64 *pop_cmd;
+        func_800DC5BC(pos, node + 0xC);
+        mlMtx_push_translation(pos[0], pos[1], pos[2]);
         mlMtxRotYaw(D_8012CEAC);
-        if (*(s16 *) (param_1 + 0xA) == 0)
+        if (*(s16 *) (node + 0xA) == 0)
         {
             mlMtxRotPitch(D_8012CEA8);
         }
         mlMtxScale(D_8012C948.raw);
-        mlMtxTranslate(-*(f32 *) (param_1 + 0xC), -*(f32 *) (param_1 + 0x10), -*(f32 *) (param_1 + 0x14));
-        mlMtxApply(*(s32 *) (param_0 + 4));
-        temp_v1 = (*(u64 **) param_0)++;
-        ((s32 *) temp_v1)[0] = 0xDA380002;
-        ((s32 *) temp_v1)[1] = *(s32 *) (param_0 + 4);
-        *(s32 *) (param_0 + 4) = *(s32 *) (param_0 + 4) + 0x40;
-        func_800DE2A4(param_0, (u8 *) ((s32) param_1 + (s32) ((Knoten_800DC84C *) param_1)->unk8));
+        mlMtxTranslate(-*(f32 *) (node + 0xC), -*(f32 *) (node + 0x10), -*(f32 *) (node + 0x14));
+        mlMtxApply(*(s32 *) (buffers + 4));
+        push_cmd = (*(u64 **) buffers)++;
+        ((s32 *) push_cmd)[0] = 0xDA380002;
+        ((s32 *) push_cmd)[1] = *(s32 *) (buffers + 4);
+        *(s32 *) (buffers + 4) = *(s32 *) (buffers + 4) + 0x40;
+        func_800DE2A4(buffers, (u8 *) ((s32) node + (s32) ((Knoten_800DC84C *) node)->unk8));
         mlMtxPop();
-        temp_v1_2 = (*(u64 **) param_0)++;
-        ((s32 *) temp_v1_2)[0] = 0xD8380002; ((s32 *) temp_v1_2)[1] = 0x40;
+        pop_cmd = (*(u64 **) buffers)++;
+        ((s32 *) pop_cmd)[0] = 0xD8380002; ((s32 *) pop_cmd)[1] = 0x40;
     }
 }
 
-void func_800DC958(s32 param_0, u8 *param_1)
+// Sort node: draws its two children in an order that depends on the camera direction.
+void func_800DC958(s32 buffers, u8 *node)
 {
-    f32 local_0;
-    s16 local_1;
-    s16 local_2;
-    s16 local_3;
-    s32 local_4;
-    s8 *new_var;
-    s32 local_5;
-    s32 local_6;
-    if (*(u8 *) ((s8 *) param_1 + 0x21) & 2) {
+    f32 facing;
+    s16 offset_a;
+    s16 offset_a2;
+    s16 offset_a3;
+    s32 offset_b;
+    s8 *flags_ptr;
+    s32 offset_b2;
+    s32 offset_b3;
+    if (*(u8 *) ((s8 *) node + 0x21) & 2) {
         func_80019AA0(&D_8012CE58,
-                      func_800ADE2C((s32) D_8012C968, *(s8 *) ((s8 *) param_1 + 0x20)));
+                      func_800ADE2C((s32) D_8012C968, *(s8 *) ((s8 *) node + 0x20)));
     }
-    func_800193C4(&D_8012CEE0, param_1 + 8);
-    func_800193C4(&D_8012CEF0, param_1 + 0x14);
-    if (*(u8 *) ((s8 *) param_1 + 0x21) & 2) {
+    func_800193C4(&D_8012CEE0, node + 8);
+    func_800193C4(&D_8012CEF0, node + 0x14);
+    if (*(u8 *) ((s8 *) node + 0x21) & 2) {
         mlMtxPop();
     }
     func_800EFB24(&D_8012CED0, &D_8012CEF0, &D_8012CEE0);
     func_800EF3DC(&D_8012CEE0, &D_8012CE98);
+    // Matching: empty loop needed for the match.
     do {
     } while (0);
-    local_0 = -((*(f32 *) ((s8 *) &D_8012CED0 + 0) * *(f32 *) ((s8 *) &D_8012CEE0 + 0)) +
+    facing = -((*(f32 *) ((s8 *) &D_8012CED0 + 0) * *(f32 *) ((s8 *) &D_8012CEE0 + 0)) +
                 (*(f32 *) ((s8 *) &D_8012CED0 + 4) * *(f32 *) ((s8 *) &D_8012CEE0 + 4)) +
                 (*(f32 *) ((s8 *) &D_8012CED0 + 8) * *(f32 *) ((s8 *) &D_8012CEE0 + 8)));
-    new_var = (s8 *) param_1 + 0x21;
-    if (*(u8 *) new_var & 1) {
-        if (local_0 >= 0.0f) {
-            local_4 = *(s32 *) ((s8 *) param_1 + 0x24);
-            if (local_4 != 0) {
-                D_8012CEC8 = local_0;
-                func_800DE2A4(param_0, (s32) param_1 + local_4);
+    flags_ptr = (s8 *) node + 0x21;
+    if (*(u8 *) flags_ptr & 1) {
+        if (facing >= 0.0f) {
+            offset_b = *(s32 *) ((s8 *) node + 0x24);
+            if (offset_b != 0) {
+                D_8012CEC8 = facing;
+                func_800DE2A4(buffers, (s32) node + offset_b);
                 return;
             }
         }
-        D_8012CEC8 = local_0;
-        if (local_0 < 0.0f) {
-            local_1 = *(s16 *) ((s8 *) param_1 + 0x22);
-            if (local_1 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_1);
+        D_8012CEC8 = facing;
+        if (facing < 0.0f) {
+            offset_a = *(s16 *) ((s8 *) node + 0x22);
+            if (offset_a != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_a);
             }
         }
     } else {
-        D_8012CEC8 = local_0;
-        if (local_0 >= 0.0f) {
-            local_2 = *(s16 *) ((s8 *) param_1 + 0x22);
-            if (local_2 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_2);
+        D_8012CEC8 = facing;
+        if (facing >= 0.0f) {
+            offset_a2 = *(s16 *) ((s8 *) node + 0x22);
+            if (offset_a2 != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_a2);
             }
-            local_5 = *(s32 *) ((s8 *) param_1 + 0x24);
-            if (local_5 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_5);
+            offset_b2 = *(s32 *) ((s8 *) node + 0x24);
+            if (offset_b2 != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_b2);
             }
         } else {
-            local_6 = *(s32 *) ((s8 *) param_1 + 0x24);
-            if (local_6 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_6);
+            offset_b3 = *(s32 *) ((s8 *) node + 0x24);
+            if (offset_b3 != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_b3);
             }
-            local_3 = *(s16 *) ((s8 *) (0, param_1) + 0x22);
-            if (local_3 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_3);
+            // Matching: comma expression needed for the match.
+            offset_a3 = *(s16 *) ((s8 *) (0, node) + 0x22);
+            if (offset_a3 != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_a3);
             }
         }
     }
 }
 
-void func_800DCB58(s32 param_0, u8 *param_1)
+// Sort node: draws its two children in an order that depends on the camera direction.
+void func_800DCB58(s32 buffers, u8 *node)
 {
-    f32 local_0;
-    s16 local_1;
-    s16 local_2;
-    s16 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
+    f32 facing;
+    s16 offset_a;
+    s16 offset_a2;
+    s16 offset_a3;
+    s32 offset_b;
+    s32 offset_b2;
+    s32 offset_b3;
 
-    func_800DC580(&D_8012CF10, param_1 + 8);
-    func_800DC580(&D_8012CF20, param_1 + 0x14);
+    func_800DC580(&D_8012CF10, node + 8);
+    func_800DC580(&D_8012CF20, node + 0x14);
     func_800EFB24(&D_8012CF00, &D_8012CF20, &D_8012CF10);
     func_800EF3DC(&D_8012CF10, &D_8012CE98);
 
-    local_0 = -(((*(f32 *) ((s8 *) &D_8012CF00 + 0) * *(f32 *) ((s8 *) &D_8012CF10 + 0)) +
+    facing = -(((*(f32 *) ((s8 *) &D_8012CF00 + 0) * *(f32 *) ((s8 *) &D_8012CF10 + 0)) +
                  (*(f32 *) ((s8 *) &D_8012CF00 + 4) * *(f32 *) ((s8 *) &D_8012CF10 + 4))) +
                 (*(f32 *) ((s8 *) &D_8012CF00 + 8) * *(f32 *) ((s8 *) &D_8012CF10 + 8)));
 
-    if (*(u8 *) ((s8 *) param_1 + 0x21) & 1) {
-        if (local_0 >= 0.0f) {
-            local_4 = *(s32 *) ((s8 *) param_1 + 0x24);
-            if (local_4 != 0) {
-                D_8012CEFC = local_0;
-                func_800DE2A4(param_0, param_1 + local_4);
+    if (*(u8 *) ((s8 *) node + 0x21) & 1) {
+        if (facing >= 0.0f) {
+            offset_b = *(s32 *) ((s8 *) node + 0x24);
+            if (offset_b != 0) {
+                D_8012CEFC = facing;
+                func_800DE2A4(buffers, node + offset_b);
                 return;
             }
         }
-        D_8012CEFC = local_0;
-        if (local_0 < 0.0f) {
-            local_1 = *(s16 *) ((s8 *) param_1 + 0x22);
-            if (local_1 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_1);
+        D_8012CEFC = facing;
+        if (facing < 0.0f) {
+            offset_a = *(s16 *) ((s8 *) node + 0x22);
+            if (offset_a != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_a);
             }
         }
     } else {
-        D_8012CEFC = local_0;
-        if (local_0 >= 0.0f) {
-            local_2 = *(s16 *) ((s8 *) param_1 + 0x22);
-            if (local_2 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_2);
+        D_8012CEFC = facing;
+        if (facing >= 0.0f) {
+            offset_a2 = *(s16 *) ((s8 *) node + 0x22);
+            if (offset_a2 != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_a2);
             }
-            local_5 = *(s32 *) ((s8 *) param_1 + 0x24);
-            if (local_5 != 0) {
-                func_800DE2A4(param_0, param_1 + local_5);
+            offset_b2 = *(s32 *) ((s8 *) node + 0x24);
+            if (offset_b2 != 0) {
+                func_800DE2A4(buffers, node + offset_b2);
             }
         } else {
-            local_6 = *(s32 *) ((s8 *) param_1 + 0x24);
-            if (local_6 != 0) {
-                func_800DE2A4(param_0, param_1 + local_6);
+            offset_b3 = *(s32 *) ((s8 *) node + 0x24);
+            if (offset_b3 != 0) {
+                func_800DE2A4(buffers, node + offset_b3);
             }
-            local_3 = *(s16 *) ((s8 *) param_1 + 0x22);
-            if (local_3 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_3);
+            offset_a3 = *(s16 *) ((s8 *) node + 0x22);
+            if (offset_a3 != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_a3);
             }
         }
     }
 }
 
-void func_800DCD10(s32 param_0, u8 *param_1)
+// Sort node: draws its two children in an order that depends on the camera direction.
+void func_800DCD10(s32 buffers, u8 *node)
 {
-    f32 local_0;
-    s16 local_1;
-    s16 local_2;
-    s16 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
-    func_800DC5BC(&D_8012CF40, param_1 + 8);
-    func_800DC5BC(&D_8012CF50, param_1 + 0x14);
+    f32 facing;
+    s16 offset_a;
+    s16 offset_a2;
+    s16 offset_a3;
+    s32 offset_b;
+    s32 offset_b2;
+    s32 offset_b3;
+    func_800DC5BC(&D_8012CF40, node + 8);
+    func_800DC5BC(&D_8012CF50, node + 0x14);
     func_800EFB24(&D_8012CF30, &D_8012CF50, &D_8012CF40);
     func_800EF3DC(&D_8012CF40, (f32 *) &D_8012CE98);
-    local_0 = -(((*(f32 *) ((char *) &D_8012CF30 + 0) * *(f32 *) ((char *) &D_8012CF40 + 0)) +
+    facing = -(((*(f32 *) ((char *) &D_8012CF30 + 0) * *(f32 *) ((char *) &D_8012CF40 + 0)) +
                  (*(f32 *) ((char *) &D_8012CF30 + 4) * *(f32 *) ((char *) &D_8012CF40 + 4))) +
                 (*(f32 *) ((char *) &D_8012CF30 + 8) * *(f32 *) ((char *) &D_8012CF40 + 8)));
-    if (*(u8 *) ((char *) param_1 + 0x21) & 1) {
-        if (local_0 >= 0.0f) {
-            local_4 = *(s32 *) ((char *) param_1 + 0x24);
-            if (local_4 != 0) {
-                D_8012CF2C = local_0;
-                func_800DE2A4(param_0, param_1 + local_4);
+    if (*(u8 *) ((char *) node + 0x21) & 1) {
+        if (facing >= 0.0f) {
+            offset_b = *(s32 *) ((char *) node + 0x24);
+            if (offset_b != 0) {
+                D_8012CF2C = facing;
+                func_800DE2A4(buffers, node + offset_b);
                 return;
             }
         }
-        D_8012CF2C = local_0;
-        if (local_0 < 0.0f) {
-            local_1 = *(s16 *) ((char *) param_1 + (0x22 ^ 0));
-            if (local_1 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_1);
+        D_8012CF2C = facing;
+        if (facing < 0.0f) {
+            // Matching: the `^ 0` is needed for the match.
+            offset_a = *(s16 *) ((char *) node + (0x22 ^ 0));
+            if (offset_a != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_a);
             }
         }
     } else {
-        D_8012CF2C = local_0;
-        if (local_0 >= 0.0f) {
-            local_2 = *(s16 *) ((char *) param_1 + 0x22);
-            if (local_2 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_2);
+        D_8012CF2C = facing;
+        if (facing >= 0.0f) {
+            offset_a2 = *(s16 *) ((char *) node + 0x22);
+            if (offset_a2 != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_a2);
             }
-            local_5 = *(s32 *) ((char *) param_1 + 0x24);
-            if (local_5 != 0) {
-                func_800DE2A4(param_0, param_1 + local_5);
+            offset_b2 = *(s32 *) ((char *) node + 0x24);
+            if (offset_b2 != 0) {
+                func_800DE2A4(buffers, node + offset_b2);
             }
         } else {
-            local_6 = *(s32 *) ((char *) param_1 + 0x24);
-            if (local_6 != 0) {
-                func_800DE2A4(param_0, param_1 + local_6);
+            offset_b3 = *(s32 *) ((char *) node + 0x24);
+            if (offset_b3 != 0) {
+                func_800DE2A4(buffers, node + offset_b3);
             }
-            local_3 = *(s16 *) ((char *) param_1 + 0x22);
-            if (local_3 != 0) {
-                func_800DE2A4(param_0, (s32) param_1 + local_3);
+            offset_a3 = *(s16 *) ((char *) node + 0x22);
+            if (offset_a3 != 0) {
+                func_800DE2A4(buffers, (s32) node + offset_a3);
             }
         }
     }
 }
 
-void func_800DCEC8(u8 **param_0, u8 *param_1)
+void func_800DCEC8(u8 **buffers, u8 *node)
 {
-    switch (*(s32 *) ((char *) param_1 + 8)) {
-        s32 v1;
+    switch (*(s32 *) ((char *) node + 8)) {
+        s32 gfx_cmd;
         case 1:
-            v1 = *(s32 *) param_0;
-            *(s32 *) param_0 = *(s32 *) param_0 + 8;
-            *(s32 *) (v1 + 0) = 0xDE000000;
-            *(s32 *) (v1 + 4) = (s32) (D_8012C820 + 0x80000068);
+            gfx_cmd = *(s32 *) buffers;
+            *(s32 *) buffers = *(s32 *) buffers + 8;
+            *(s32 *) (gfx_cmd + 0) = 0xDE000000;
+            *(s32 *) (gfx_cmd + 4) = (s32) (D_8012C820 + 0x80000068);
             return;
 
         case 2:
-            v1 = *(s32 *) param_0;
-            *(s32 *) param_0 = *(s32 *) param_0 + 8;
-            *(s32 *) (v1 + 0) = 0xDE000000;
-            *(s32 *) (v1 + 4) = (s32) (D_8012C820 + 0x80000000);
+            gfx_cmd = *(s32 *) buffers;
+            *(s32 *) buffers = *(s32 *) buffers + 8;
+            *(s32 *) (gfx_cmd + 0) = 0xDE000000;
+            *(s32 *) (gfx_cmd + 4) = (s32) (D_8012C820 + 0x80000000);
     }
 }
 
-void func_800DCF48(void *param_0, void *param_1)
+// Bone node: pushes the bone's animation matrix around its child.
+// Matching: the line breaks in this function are needed for the match.
+void func_800DCF48(void *buffers, void *node)
 {
-    GeoCmd2 *cmd = (GeoCmd2 *) param_1;
-    u32 *p0 = (u32 *) param_0;
-    u32 *ptr;
+    GeoCmd2 *cmd = (GeoCmd2 *) node;
+    u32 *buf_words = (u32 *) buffers;
+    u32 *gfx_cmd;
 
     if (D_8012C968) {
         func_80019AA0(&D_8012CE58, func_800ADE2C(D_8012C968, cmd->unk9));
-        mlMtxApply(p0[1]);
-        ptr = (u32 *) p0[0];
-        p0[0] += 8;
-        *ptr = 0xDA380002;
-        ptr[1] = p0[1];
-        p0[1] += 0x40;
+        mlMtxApply(buf_words[1]);
+        gfx_cmd = (u32 *) buf_words[0];
+        buf_words[0] += 8;
+        *gfx_cmd = 0xDA380002;
+        gfx_cmd[1] = buf_words[1];
+        buf_words[1] += 0x40;
     }
     if (cmd->unk8) {
-        func_800DE2A4(param_0, (u8 *) cmd + cmd->unk8);
+        func_800DE2A4(buffers, (u8 *) cmd + cmd->unk8);
     }
     if (D_8012C968) {
         mlMtxPop();
-        ptr = (u32 *) p0[0];
-        p0[0] += 8;
-        *ptr = 0xD8380002; ptr[1] = 0x40;
+        gfx_cmd = (u32 *) buf_words[0];
+        buf_words[0] += 8;
+        *gfx_cmd = 0xD8380002; gfx_cmd[1] = 0x40;
     }
 }
 
-void func_800DD024(Gfx2 **gfx, u8 *arg2)
+void func_800DD024(Gfx2 **gfx, u8 *node)
 {
-    Gfx2 *_g;
-    Gfx2 *vptr;
-    vptr = &D_8012C960->list[*(s16 *) (arg2 + 8)];
+    Gfx2 *gfx_cmd;
+    Gfx2 *dl;
+    dl = &D_8012C960->list[*(s16 *) (node + 8)];
     {
-        Gfx2 *_h = (*gfx)++;
-        _g = _h;
+        Gfx2 *slot = (*gfx)++;
+        gfx_cmd = slot;
     }
-    _g->w0 = 0xDE000000;
-    _g->w1 = osVirtualToPhysical(vptr);
+    gfx_cmd->w0 = 0xDE000000;
+    gfx_cmd->w1 = osVirtualToPhysical(dl);
 }
 
-void func_800DD07C(void *param_0, void *param_1)
+void func_800DD07C(void *buffers, void *node)
 {
-    GeoCmd5 *cmd = (GeoCmd5 *) param_1;
-    u32 *p0 = (u32 *) param_0;
-    Gfx2 *gfx = (Gfx2 *) p0[0];
+    GeoCmd5 *cmd = (GeoCmd5 *) node;
+    u32 *buf_words = (u32 *) buffers;
+    Gfx2 *gfx = (Gfx2 *) buf_words[0];
     s32 i;
 
     {
-        Gfx2 *_g = gfx++;
-        _g->w0 = 0xDE000000;
-        _g->w1 = osVirtualToPhysical(D_8012C948.RenderCtx_800DD07C.dlist->list + cmd->unk8[0]);
+        Gfx2 *gfx_cmd = gfx++;
+        gfx_cmd->w0 = 0xDE000000;
+        gfx_cmd->w1 = osVirtualToPhysical(D_8012C948.RenderCtx_800DD07C.dlist->list + cmd->unk8[0]);
     }
-    mlMtxApply(p0[1]);
+    mlMtxApply(buf_words[1]);
     for (i = 1; cmd->unk8[i] != 0; i++) {
         {
-            Gfx2 *_g = gfx++;
-            _g->w0 = 0xDA380002;
-            _g->w1 = p0[1];
+            Gfx2 *gfx_cmd = gfx++;
+            gfx_cmd->w0 = 0xDA380002;
+            gfx_cmd->w1 = buf_words[1];
         }
         {
-            Gfx2 *_g = gfx++;
-            _g->w0 = 0xDE000000;
-            _g->w1 = osVirtualToPhysical(D_8012C948.RenderCtx_800DD07C.dlist->list + cmd->unk8[i]);
+            Gfx2 *gfx_cmd = gfx++;
+            gfx_cmd->w0 = 0xDE000000;
+            gfx_cmd->w1 = osVirtualToPhysical(D_8012C948.RenderCtx_800DD07C.dlist->list + cmd->unk8[i]);
         }
     }
-    p0[0] = (u32) gfx;
-    p0[1] = p0[1] + 0x40;
+    buf_words[0] = (u32) gfx;
+    buf_words[1] = buf_words[1] + 0x40;
 }
 
-void func_800DD19C(s32 param_0, u8 *param_1)
+void func_800DD19C(s32 buffers, u8 *node)
 {
     s32 offset;
-    offset = (unsigned long long) *(s32 *) ((char *) param_1 + 8);
-    func_800DE2A4(param_0, param_1 + offset);
+    // Matching: the 64-bit cast is needed for the match.
+    offset = (unsigned long long) *(s32 *) ((char *) node + 8);
+    func_800DE2A4(buffers, node + offset);
 }
 
-void func_800DD1C0(s32 **param_0, s16 *param_1)
+void func_800DD1C0(s32 **buffers, s16 *node)
 {
-    u8 *local_1;
-    int new_var;
-    u8 *new_var2;
-    local_1 = (u8 *) *param_0;
-    *param_0 = (s32 *) ((u8 *) *param_0 + 8);
-    *(s32 *) local_1 = 0xDE000000;
-    new_var2 = local_1;
-    *(s32 **) (new_var2 + 4) =
-        osVirtualToPhysical(((s32) D_8012C960 + (param_1[5] * 8)) + (new_var = 8));
+    u8 *gfx_cmd;
+    int header_size;
+    u8 *cmd_copy;
+    // Matching: the extra temporaries are needed for the match.
+    gfx_cmd = (u8 *) *buffers;
+    *buffers = (s32 *) ((u8 *) *buffers + 8);
+    *(s32 *) gfx_cmd = 0xDE000000;
+    cmd_copy = gfx_cmd;
+    *(s32 **) (cmd_copy + 4) =
+        osVirtualToPhysical(((s32) D_8012C960 + (node[5] * 8)) + (header_size = 8));
 }
 
-void func_800DD214(u8 *param_0, u8 *param_1)
+// LOD node: draws the child while min_dist < distance <= max_dist.
+void func_800DD214(u8 *buffers, u8 *node)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
+    f32 dist_sq;
+    f32 min_dist;
+    f32 max_dist;
 
-    if (*(s32 *) ((s8 *) param_1 + 0x1C) != 0) {
+    if (*(s32 *) ((s8 *) node + 0x1C) != 0) {
         if (*(s16 *) ((s8 *) &D_8012CA38 + 0) != 0) {
             *(s16 *) ((s8 *) &D_8012CA38 + 2) = (s16) (*(s16 *) ((s8 *) &D_8012CA38 + 2) + 1);
             if (*(s16 *) ((s8 *) &D_8012CA38 + 0) == *(s16 *) ((s8 *) &D_8012CA38 + 2)) {
-                func_800DE2A4(param_0,
-                              (u8 *) ((s32) param_1 + (s32) ((Knoten_800DD214 *) param_1)->unk1C),
-                              param_1);
+                func_800DE2A4(buffers,
+                              (u8 *) ((s32) node + (s32) ((Knoten_800DD214 *) node)->unk1C),
+                              node);
             }
         } else {
-            func_800193C4(&D_8012CF60, param_1 + 0x10);
-            local_0 = func_800EEB40(&D_8012CF60, &D_8012CE98);
-            local_1 = *(f32 *) ((s8 *) param_1 + 0xC);
-            if ((local_1 * local_1) < local_0) {
-                local_2 = *(f32 *) ((s8 *) param_1 + 8);
-                if (local_0 <= (local_2 * local_2)) {
+            func_800193C4(&D_8012CF60, node + 0x10);
+            dist_sq = func_800EEB40(&D_8012CF60, &D_8012CE98);
+            min_dist = *(f32 *) ((s8 *) node + 0xC);
+            if ((min_dist * min_dist) < dist_sq) {
+                max_dist = *(f32 *) ((s8 *) node + 8);
+                if (dist_sq <= (max_dist * max_dist)) {
                     func_800DE2A4(
-                        param_0,
-                        (u8 *) ((s32) param_1 + (s32) ((Knoten_800DD214 *) param_1)->unk1C),
-                        param_1);
+                        buffers,
+                        (u8 *) ((s32) node + (s32) ((Knoten_800DD214 *) node)->unk1C),
+                        node);
                 }
             }
         }
     }
 }
 
-void func_800DD2E8(s32 param_0, u8 *param_1)
+// LOD node: draws the child while min_dist < distance <= max_dist.
+void func_800DD2E8(s32 buffers, u8 *node)
 {
-    f32 temp_f0;
-    f32 temp_f2;
-    f32 temp_f2_2;
-    if (*(s32 *) ((s8 *) param_1 + 0x1C) != 0) {
-        func_800DC580(&D_8012CF70, param_1 + 0x10);
-        temp_f0 = func_800EEB40(&D_8012CF70, (u8 *) &D_8012CE98);
-        temp_f2 = *(f32 *) ((s8 *) param_1 + 0xC);
-        if ((temp_f2 * temp_f2) < temp_f0) {
-            temp_f2_2 = *(f32 *) ((s8 *) param_1 + 8);
-            if (temp_f0 <= (temp_f2_2 * temp_f2_2)) {
-                func_800DE2A4(param_0, *(s32 *) ((s8 *) param_1 + 0x1C) + (0, param_1), param_1);
+    f32 dist_sq;
+    f32 min_dist;
+    f32 max_dist;
+    if (*(s32 *) ((s8 *) node + 0x1C) != 0) {
+        func_800DC580(&D_8012CF70, node + 0x10);
+        dist_sq = func_800EEB40(&D_8012CF70, (u8 *) &D_8012CE98);
+        min_dist = *(f32 *) ((s8 *) node + 0xC);
+        if ((min_dist * min_dist) < dist_sq) {
+            max_dist = *(f32 *) ((s8 *) node + 8);
+            if (dist_sq <= (max_dist * max_dist)) {
+                // Matching: comma expression needed for the match.
+                func_800DE2A4(buffers, *(s32 *) ((s8 *) node + 0x1C) + (0, node), node);
             }
         }
     }
 }
 
-void func_800DD37C(s32 param_0, u8 *param_1)
+// LOD node: draws the child while min_dist < distance <= max_dist.
+void func_800DD37C(s32 buffers, u8 *node)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    u8 *local_3;
+    f32 dist_sq;
+    f32 min_dist;
+    f32 max_dist;
+    u8 *child;
 
-    if (*(s32 *) (param_1 + 0x1C) != 0) {
-        func_800DC5BC(&D_8012CF80, param_1 + 0x10);
-        local_0 = func_800EEB40(&D_8012CF80, &D_8012CE98);
-        local_1 = *(f32 *) (param_1 + 0xC);
-        if ((local_1 * local_1) < local_0) {
-            local_2 = *(f32 *) (param_1 + 8);
-            if (local_0 <= (local_2 * local_2)) {
-                local_3 = param_1;
-                local_3 += *(s32 *) (param_1 + 0x1C);
-                func_800DE2A4(param_0, local_3, param_1);
+    if (*(s32 *) (node + 0x1C) != 0) {
+        func_800DC5BC(&D_8012CF80, node + 0x10);
+        dist_sq = func_800EEB40(&D_8012CF80, &D_8012CE98);
+        min_dist = *(f32 *) (node + 0xC);
+        if ((min_dist * min_dist) < dist_sq) {
+            max_dist = *(f32 *) (node + 8);
+            if (dist_sq <= (max_dist * max_dist)) {
+                child = node;
+                child += *(s32 *) (node + 0x1C);
+                func_800DE2A4(buffers, child, node);
             }
         }
     }
 }
 
-void func_800DD410(void *param_0, s16 *param_1)
+// Model-point store node.
+void func_800DD410(void *buffers, s16 *node)
 {
-    s32 tot;
-    f32 sp20[3];
+    s32 unk_0;
+    f32 pos[3];
 
     if (D_8012C844 != 0) {
         if (D_8012C968 != 0) {
-            func_80019AA0(&D_8012CE58, func_800ADE2C(D_8012C968, param_1[5]));
-            func_800193C4(sp20, param_1 + 6);
+            func_80019AA0(&D_8012CE58, func_800ADE2C(D_8012C968, node[5]));
+            func_800193C4(pos, node + 6);
             mlMtxPop();
         } else {
-            func_800193C4(sp20, param_1 + 6);
+            func_800193C4(pos, node + 6);
         }
-        func_800DC028(D_8012C844, param_1[4], sp20);
+        func_800DC028(D_8012C844, node[4], pos);
     }
 }
 
-void func_800DD4AC(void *param_0, s16 *param_1)
+// Model-point store node.
+void func_800DD4AC(void *buffers, s16 *node)
 {
-    s32 tot;
-    f32 sp18[3];
+    s32 unk_0;
+    f32 pos[3];
 
     if (D_8012C844 != 0) {
-        func_800EFA20(sp18, param_1 + 6, D_8012C948.raw);
-        func_800DC028(D_8012C844, param_1[4], sp18);
+        func_800EFA20(pos, node + 6, D_8012C948.raw);
+        func_800DC028(D_8012C844, node[4], pos);
     }
 }
 
-void func_800DD504(void *param_0, s16 *param_1)
+// Model-point store node.
+void func_800DD504(void *buffers, s16 *node)
 {
-    s32 tot;
-    f32 sp18[3];
+    s32 unk_0;
+    f32 pos[3];
 
     if (D_8012C844 != 0) {
-        func_800EFA20(sp18, param_1 + 6, D_8012C948.raw);
-        func_800EF04C(sp18, D_8012C94C);
-        func_800DC028(D_8012C844, param_1[4], sp18);
+        func_800EFA20(pos, node + 6, D_8012C948.raw);
+        func_800EF04C(pos, D_8012C94C);
+        func_800DC028(D_8012C844, node[4], pos);
     }
 }
 
-void func_800DD56C(void *param_0, void *param_1)
+// Select node: a positive selector picks one child, a negative one is a bit mask of children.
+void func_800DD56C(void *buffers, void *node)
 {
-    GeoCmdC *cmd = (GeoCmdC *) param_1;
+    GeoCmdC *cmd = (GeoCmdC *) node;
     s32 sub_cmd;
-    s32 indx;
-    s32 s2;
-    s32 s1;
-    s32 *s0;
+    s32 selector;
+    s32 i;
+    s32 mask;
+    s32 *offsets;
 
-    indx = ((s32 *) D_8012C850)[cmd->unkA];
+    selector = ((s32 *) D_8012C850)[cmd->unkA];
 
     if (cmd->unkA == 0)
         return;
 
-    if (indx == 0)
+    if (selector == 0)
         return;
 
-    if (0 < indx) {
-        if (indx <= cmd->unk8) {
-            s0 = cmd->unkC;
+    if (0 < selector) {
+        if (selector <= cmd->unk8) {
+            offsets = cmd->unkC;
             sub_cmd = (s32) cmd;
-            sub_cmd += *(s32 *) (s0 + (indx - 1));
-            func_800DE2A4(param_0, (void *) sub_cmd);
+            sub_cmd += *(s32 *) (offsets + (selector - 1));
+            func_800DE2A4(buffers, (void *) sub_cmd);
         }
     } else {
-        s1 = indx * -1;
-        s0 = cmd->unkC;
-        for (s2 = 0; s2 < cmd->unk8; s2++) {
-            if (s1 & 1) {
+        mask = selector * -1;
+        offsets = cmd->unkC;
+        for (i = 0; i < cmd->unk8; i++) {
+            if (mask & 1) {
                 sub_cmd = (s32) cmd;
-                sub_cmd += s0[0];
-                func_800DE2A4(param_0, (void *) sub_cmd);
+                sub_cmd += offsets[0];
+                func_800DE2A4(buffers, (void *) sub_cmd);
             }
-            s1 >>= 1;
-            s0++;
+            mask >>= 1;
+            offsets++;
         }
     }
 }
 
-void func_800DD65C(Gfx2 **param_0, s16 *param_1)
+void func_800DD65C(Gfx2 **gfx, s16 *node)
 {
-    Gfx2 *_g;
-    s32 sp38;
-    s32 var_a0;
-    Gfx2 *vptr;
-    s32 sp2C;
-    sp38 = param_1[5];
-    var_a0 = mlMtx_get_stack_pointer();
-    if (param_1[7] != 0) {
-        sp2C = sp38;
-        if (param_1[7] & 1) {
-            func_8010F070(var_a0, &sp2C, param_1[6]);
+    Gfx2 *gfx_cmd;
+    s32 value;
+    s32 mtx;
+    Gfx2 *dl;
+    s32 value_copy;
+    value = node[5];
+    mtx = mlMtx_get_stack_pointer();
+    if (node[7] != 0) {
+        value_copy = value;
+        if (node[7] & 1) {
+            func_8010F070(mtx, &value_copy, node[6]);
         }
     }
     if (D_8012CEC4 != 0) {
-        D_8012CEC4(var_a0, &sp38, param_1[6]);
+        D_8012CEC4(mtx, &value, node[6]);
     }
-    vptr = &D_8012C960->list[param_1[4]];
+    dl = &D_8012C960->list[node[4]];
     {
-        Gfx2 *_h = (*param_0)++;
-        _g = _h;
+        Gfx2 *slot = (*gfx)++;
+        gfx_cmd = slot;
     }
-    _g->w0 = 0xDE000000;
-    _g->w1 = osVirtualToPhysical(vptr);
+    gfx_cmd->w0 = 0xDE000000;
+    gfx_cmd->w1 = osVirtualToPhysical(dl);
 }
 
-void func_800DD728(void *param_0, void *param_1)
+void func_800DD728(void *buffers, void *node)
 {
-    GeoCmdX *cmd = (GeoCmdX *) param_1;
+    GeoCmdX *cmd = (GeoCmdX *) node;
     s32 i;
-    s32 sp6C;
-    s32 sp68;
-    void *stapel;
-    void *zweit;
+    s32 value;
+    s32 value_copy;
+    void *mtx_stack;
+    void *mtx_second;
 
-    sp68 = sp6C = cmd->unk2C;
-    stapel = mlMtx_get_stack_pointer();
-    zweit = func_80018BB4();
-    mlMtxApply(((u32 *) param_0)[1]);
+    value_copy = value = cmd->unk2C;
+    mtx_stack = mlMtx_get_stack_pointer();
+    mtx_second = func_80018BB4();
+    mlMtxApply(((u32 *) buffers)[1]);
 
     if (cmd->unk2E != 0) {
         if (cmd->unk2E & 1) {
             if (cmd->unk20[0] != 0) {
-                func_8010F070(stapel, &sp68, cmd->unk20[0]);
+                func_8010F070(mtx_stack, &value_copy, cmd->unk20[0]);
             }
             if (cmd->unk14[0] != 0) {
-                func_8010F070(zweit, &sp68, cmd->unk14[0]);
+                func_8010F070(mtx_second, &value_copy, cmd->unk14[0]);
             }
         }
     }
     if (D_8012CEC4 != 0) {
         if (cmd->unk20[0] != 0) {
-            D_8012CEC4(stapel, &sp6C, cmd->unk20[0]);
+            D_8012CEC4(mtx_stack, &value, cmd->unk20[0]);
         }
         if (cmd->unk14[0] != 0) {
-            D_8012CEC4(zweit, &sp6C, cmd->unk14[0]);
+            D_8012CEC4(mtx_second, &value, cmd->unk14[0]);
         }
     }
     {
-        Gfx2 *_g = (Gfx2 *) ((u32 *) param_0)[0];
-        ((u32 *) param_0)[0] += 8;
-        _g->w0 = 0xDE000000;
-        _g->w1 = osVirtualToPhysical(D_8012C960->list + cmd->unk8[0]);
+        Gfx2 *gfx_cmd = (Gfx2 *) ((u32 *) buffers)[0];
+        ((u32 *) buffers)[0] += 8;
+        gfx_cmd->w0 = 0xDE000000;
+        gfx_cmd->w1 = osVirtualToPhysical(D_8012C960->list + cmd->unk8[0]);
     }
     for (i = 1; cmd->unk8[i] != 0; i++) {
         if (cmd->unk2E != 0) {
             if (cmd->unk2E & 1) {
                 if (cmd->unk20[i] != 0) {
-                    func_8010F070(stapel, &sp68, cmd->unk20[i]);
+                    func_8010F070(mtx_stack, &value_copy, cmd->unk20[i]);
                 }
                 if (cmd->unk14[i] != 0) {
-                    func_8010F070(zweit, &sp68, cmd->unk14[i]);
+                    func_8010F070(mtx_second, &value_copy, cmd->unk14[i]);
                 }
             }
         }
         if (D_8012CEC4 != 0) {
             if (cmd->unk20[i] != 0) {
-                D_8012CEC4(stapel, &sp6C, cmd->unk20[i]);
+                D_8012CEC4(mtx_stack, &value, cmd->unk20[i]);
             }
             if (cmd->unk14[i] != 0) {
-                D_8012CEC4(zweit, &sp6C, cmd->unk14[i]);
+                D_8012CEC4(mtx_second, &value, cmd->unk14[i]);
             }
         }
         {
-            Gfx2 *_g = (Gfx2 *) ((u32 *) param_0)[0];
-            ((u32 *) param_0)[0] += 8;
-            _g->w0 = 0xDA380002;
-            _g->w1 = ((u32 *) param_0)[1];
+            Gfx2 *gfx_cmd = (Gfx2 *) ((u32 *) buffers)[0];
+            ((u32 *) buffers)[0] += 8;
+            gfx_cmd->w0 = 0xDA380002;
+            gfx_cmd->w1 = ((u32 *) buffers)[1];
         }
         {
-            Gfx2 *_g = (Gfx2 *) ((u32 *) param_0)[0];
-            ((u32 *) param_0)[0] += 8;
-            _g->w0 = 0xDE000000;
-            _g->w1 = osVirtualToPhysical(D_8012C960->list + cmd->unk8[i]);
+            Gfx2 *gfx_cmd = (Gfx2 *) ((u32 *) buffers)[0];
+            ((u32 *) buffers)[0] += 8;
+            gfx_cmd->w0 = 0xDE000000;
+            gfx_cmd->w1 = osVirtualToPhysical(D_8012C960->list + cmd->unk8[i]);
         }
     }
-    ((u32 *) param_0)[1] = ((u32 *) param_0)[1] + 0x40;
+    ((u32 *) buffers)[1] = ((u32 *) buffers)[1] + 0x40;
 }
 
-void func_800DD998(void *param_0, void *param_1)
+void func_800DD998(void *buffers, void *node)
 {
-    GeoCmdX *cmd = (GeoCmdX *) param_1;
+    GeoCmdX *cmd = (GeoCmdX *) node;
     s32 i;
-    s32 sp64;
-    s32 sp60;
-    void *sp5C;
-    void *sp58;
+    s32 value;
+    s32 value_copy;
+    void *mtx_stack;
+    void *mtx_second;
 
-    sp60 = sp64 = cmd->unk2C;
-    sp5C = mlMtx_get_stack_pointer();
-    sp58 = func_80018BB4();
-    mlMtxApply(((u32 *) param_0)[1]);
+    value_copy = value = cmd->unk2C;
+    mtx_stack = mlMtx_get_stack_pointer();
+    mtx_second = func_80018BB4();
+    mlMtxApply(((u32 *) buffers)[1]);
     i = 0;
     do {
         if (cmd->unk2E != 0) {
             if (cmd->unk2E & 1) {
                 if (cmd->unk20[i] != 0) {
-                    func_8010F070(sp5C, &sp60, cmd->unk20[i]);
+                    func_8010F070(mtx_stack, &value_copy, cmd->unk20[i]);
                 }
                 if (cmd->unk14[i] != 0) {
-                    func_8010F070(sp58, &sp60, cmd->unk14[i]);
+                    func_8010F070(mtx_second, &value_copy, cmd->unk14[i]);
                 }
             }
         }
         if (D_8012CEC4 != 0) {
             if (cmd->unk20[i] != 0) {
-                D_8012CEC4(sp5C, &sp64, cmd->unk20[i]);
+                D_8012CEC4(mtx_stack, &value, cmd->unk20[i]);
             }
             if (cmd->unk14[i] != 0) {
-                D_8012CEC4(sp58, &sp64, cmd->unk14[i]);
+                D_8012CEC4(mtx_second, &value, cmd->unk14[i]);
             }
         }
         {
-            Gfx2 *_g = (Gfx2 *) ((u32 *) param_0)[0];
-            ((u32 *) param_0)[0] += 8;
-            _g->w0 = 0xDE000000;
-            _g->w1 = osVirtualToPhysical(D_8012C960->list + cmd->unk8[i]);
+            Gfx2 *gfx_cmd = (Gfx2 *) ((u32 *) buffers)[0];
+            ((u32 *) buffers)[0] += 8;
+            gfx_cmd->w0 = 0xDE000000;
+            gfx_cmd->w1 = osVirtualToPhysical(D_8012C960->list + cmd->unk8[i]);
         }
         {
-            Gfx2 *_g = (Gfx2 *) ((u32 *) param_0)[0];
-            ((u32 *) param_0)[0] += 8;
-            _g->w0 = 0xDA380002;
-            _g->w1 = ((u32 *) param_0)[1];
+            Gfx2 *gfx_cmd = (Gfx2 *) ((u32 *) buffers)[0];
+            ((u32 *) buffers)[0] += 8;
+            gfx_cmd->w0 = 0xDA380002;
+            gfx_cmd->w1 = ((u32 *) buffers)[1];
         }
         i++;
     } while (cmd->unk8[i] != 0);
-    ((u32 *) param_0)[1] = ((u32 *) param_0)[1] + 0x40;
+    ((u32 *) buffers)[1] = ((u32 *) buffers)[1] + 0x40;
 }
 
-void func_800DDB38(void *param_0, void *param_1)
+void func_800DDB38(void *buffers, void *node)
 {
-    GeoCmd5 *cmd = (GeoCmd5 *) param_1;
-    u32 *p0 = (u32 *) param_0;
+    GeoCmd5 *cmd = (GeoCmd5 *) node;
+    u32 *buf_words = (u32 *) buffers;
     s32 i;
 
-    mlMtxApply(p0[1]);
+    mlMtxApply(buf_words[1]);
     i = 0;
     do {
         {
-            Gfx2 *_g = (Gfx2 *) p0[0];
-            p0[0] += 8;
-            _g->w0 = 0xDE000000;
-            _g->w1 = osVirtualToPhysical(D_8012C948.RenderCtx_800DDB38.dlist->list + cmd->unk8[i]);
+            Gfx2 *gfx_cmd = (Gfx2 *) buf_words[0];
+            buf_words[0] += 8;
+            gfx_cmd->w0 = 0xDE000000;
+            gfx_cmd->w1 = osVirtualToPhysical(D_8012C948.RenderCtx_800DDB38.dlist->list + cmd->unk8[i]);
         }
         {
-            Gfx2 *_g = (Gfx2 *) p0[0];
-            p0[0] += 8;
-            _g->w0 = 0xDA380002;
-            _g->w1 = p0[1];
+            Gfx2 *gfx_cmd = (Gfx2 *) buf_words[0];
+            buf_words[0] += 8;
+            gfx_cmd->w0 = 0xDA380002;
+            gfx_cmd->w1 = buf_words[1];
         }
         i++;
     } while (cmd->unk8[i] != 0);
-    p0[1] = p0[1] + 0x40;
+    buf_words[1] = buf_words[1] + 0x40;
 }
 
-void func_800DDC28(int param_0, s16 *param_1)
+void func_800DDC28(int buffers, s16 *node)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    if (param_1[10]) {
-        s16 *src = param_1;
+    f32 box_min[3];
+    f32 box_max[3];
+    if (node[10]) {
+        s16 *node_s16 = node;
         int i;
         for (i = 0; i < 3; i++) {
-            local_0[i] = (f32) src[i + 4] * D_8012C948.raw;
-            local_1[i] = (f32) src[i + 7] * D_8012C948.raw;
+            box_min[i] = (f32) node_s16[i + 4] * D_8012C948.raw;
+            box_max[i] = (f32) node_s16[i + 7] * D_8012C948.raw;
         }
-        if (func_800E3D0C(local_0, local_1)) {
-            func_800DE2A4(param_0, (s16 *) ((u8 *) param_1 + ((Knoten_800DDC28 *) param_1)->unk14));
-        }
-    }
-}
-
-void func_800DDD14(s32 param_0, u8 *param_1)
-{
-    s32 local_0, local_1;
-    s32 sp34;
-    s32 local_2, local_3;
-    s32 sp28;
-
-    if (*(s16 *) ((u8 *) param_1 + 0x14) != 0) {
-        func_800EE88C(&sp34, param_1 + 8);
-        func_800EE88C(&sp28, param_1 + 0xE);
-        func_800EF334(&sp34, D_8012C948.raw);
-        func_800EF334(&sp28, D_8012C948.raw);
-        func_800EF04C(&sp34, D_8012C94C);
-        func_800EF04C(&sp28, D_8012C94C);
-        if (func_800E3D0C(&sp34, &sp28) != 0) {
-            u8 *addr = param_1;
-            addr += *(s16 *) (param_1 + 0x14);
-            func_800DE2A4(param_0, addr);
+        if (func_800E3D0C(box_min, box_max)) {
+            func_800DE2A4(buffers, (s16 *) ((u8 *) node + ((Knoten_800DDC28 *) node)->unk14));
         }
     }
 }
 
-void func_800DDDC4(void *param_0, void *param_1)
+void func_800DDD14(s32 buffers, u8 *node)
 {
-    f32 sp34[3];
-    f32 sp30;
-    GeoCmdE *cmd = (GeoCmdE *) param_1;
+    s32 unk_0, unk_1;
+    s32 box_min;
+    s32 unk_2, unk_3;
+    s32 box_max;
+
+    if (*(s16 *) ((u8 *) node + 0x14) != 0) {
+        func_800EE88C(&box_min, node + 8);
+        func_800EE88C(&box_max, node + 0xE);
+        func_800EF334(&box_min, D_8012C948.raw);
+        func_800EF334(&box_max, D_8012C948.raw);
+        func_800EF04C(&box_min, D_8012C94C);
+        func_800EF04C(&box_max, D_8012C94C);
+        if (func_800E3D0C(&box_min, &box_max) != 0) {
+            u8 *child = node;
+            child += *(s16 *) (node + 0x14);
+            func_800DE2A4(buffers, child);
+        }
+    }
+}
+
+// Sphere cull node: draws the child if the sphere is in the frustum.
+void func_800DDDC4(void *buffers, void *node)
+{
+    f32 pos[3];
+    f32 radius;
+    GeoCmdE *cmd = (GeoCmdE *) node;
 
     if (cmd->unk12 == -1) {
-        func_800EE88C(sp34, cmd->unk8);
-        func_800EF334(sp34, D_8012C948.RenderCtx_800DDDC4.scale);
-        sp30 = (f32) cmd->unkE * D_8012C948.RenderCtx_800DDDC4.scale;
-        if (func_800E3E8C(sp34, sp30) && cmd->unk10) {
-            func_800DE2A4(param_0, (void *) ((s32) cmd + cmd->unk10));
+        func_800EE88C(pos, cmd->unk8);
+        func_800EF334(pos, D_8012C948.RenderCtx_800DDDC4.scale);
+        radius = (f32) cmd->unkE * D_8012C948.RenderCtx_800DDDC4.scale;
+        if (func_800E3E8C(pos, radius) && cmd->unk10) {
+            func_800DE2A4(buffers, (void *) ((s32) cmd + cmd->unk10));
         }
     } else {
-        func_800EE88C(sp34, cmd->unk8);
-        sp30 = (f32) cmd->unkE * D_8012C948.RenderCtx_800DDDC4.scale;
+        func_800EE88C(pos, cmd->unk8);
+        radius = (f32) cmd->unkE * D_8012C948.RenderCtx_800DDDC4.scale;
         if (D_8012C948.RenderCtx_800DDDC4.animList) {
             func_80019AA0(&D_8012CE58,
                           func_800ADE2C(D_8012C948.RenderCtx_800DDDC4.animList, cmd->unk12));
-            func_80019224(sp34, sp34);
+            func_80019224(pos, pos);
             mlMtxPop();
         } else {
-            func_80019224(sp34, sp34);
+            func_80019224(pos, pos);
         }
-        if (func_800E3E8C(sp34, sp30) && cmd->unk10) {
-            func_800DE2A4(param_0, (void *) ((s32) cmd + cmd->unk10));
+        if (func_800E3E8C(pos, radius) && cmd->unk10) {
+            func_800DE2A4(buffers, (void *) ((s32) cmd + cmd->unk10));
         }
     }
 }
 
-void func_800DDF14(void *param_0, void *param_1)
+// Sphere cull node: draws the child if the sphere is in the frustum.
+void func_800DDF14(void *buffers, void *node)
 {
-    f32 sp2C[3];
-    f32 sp28;
-    GeoCmdE *cmd = (GeoCmdE *) param_1;
+    f32 pos[3];
+    f32 radius;
+    GeoCmdE *cmd = (GeoCmdE *) node;
 
-    func_800EE88C(sp2C, cmd->unk8);
-    func_800EF334(sp2C, D_8012C948.raw);
-    sp28 = (f32) cmd->unkE * D_8012C948.raw;
-    if (func_800E3E8C(sp2C, sp28) && cmd->unk10) {
-        func_800DE2A4(param_0, (void *) ((s32) cmd + cmd->unk10));
+    func_800EE88C(pos, cmd->unk8);
+    func_800EF334(pos, D_8012C948.raw);
+    radius = (f32) cmd->unkE * D_8012C948.raw;
+    if (func_800E3E8C(pos, radius) && cmd->unk10) {
+        func_800DE2A4(buffers, (void *) ((s32) cmd + cmd->unk10));
     }
 }
 
-void func_800DDFA0(void *param_0, void *param_1)
+// Sphere cull node: draws the child if the sphere is in the frustum.
+void func_800DDFA0(void *buffers, void *node)
 {
-    f32 sp2C[3];
-    f32 sp28;
-    GeoCmdE *cmd = (GeoCmdE *) param_1;
+    f32 pos[3];
+    f32 radius;
+    GeoCmdE *cmd = (GeoCmdE *) node;
 
-    func_800EE88C(sp2C, cmd->unk8);
-    func_800EF334(sp2C, D_8012C948.raw);
-    func_800EF04C(sp2C, D_8012C94C);
-    sp28 = (f32) cmd->unkE * D_8012C948.raw;
-    if (func_800E3E8C(sp2C, sp28) && cmd->unk10) {
-        func_800DE2A4(param_0, (void *) ((s32) cmd + cmd->unk10));
+    func_800EE88C(pos, cmd->unk8);
+    func_800EF334(pos, D_8012C948.raw);
+    func_800EF04C(pos, D_8012C94C);
+    radius = (f32) cmd->unkE * D_8012C948.raw;
+    if (func_800E3E8C(pos, radius) && cmd->unk10) {
+        func_800DE2A4(buffers, (void *) ((s32) cmd + cmd->unk10));
     }
 }
 
-void func_800DE03C(s32 param_0, s32 param_1)
+void func_800DE03C(s32 buffers, s32 node)
 {
-    int new_var;
-    u8 *local_1 = param_1;
-    s32 local_2;
-    local_2 = _dbzone_entrypoint_0(D_8012C970, local_1 + 0xD, local_1[0, 0xA]);
-    if (((local_2 == 0) && (local_1[0xB] & 1)) || ((local_2 != 0) && (local_1[0xB] & 2))) {
+    int child_offset;
+    u8 *node_u8 = node;
+    s32 in_zone;
+    // Matching: comma index needed for the match.
+    in_zone = _dbzone_entrypoint_0(D_8012C970, node_u8 + 0xD, node_u8[0, 0xA]);
+    if (((in_zone == 0) && (node_u8[0xB] & 1)) || ((in_zone != 0) && (node_u8[0xB] & 2))) {
         if ((int) D_8012C848 != 0) {
-            if (local_1[0xC]) {
-                _glzone_entrypoint_3((int) D_8012C848, local_1[0xC]);
+            if (node_u8[0xC]) {
+                _glzone_entrypoint_3((int) D_8012C848, node_u8[0xC]);
             }
         }
-        new_var = *(s16 *) (local_1 + 0x8) & 0xFFFFFFFFFFFFFFFFu;
-        func_800DE2A4(param_0, local_1 + new_var);
+        // Matching: the 64-bit mask is needed for the match.
+        child_offset = *(s16 *) (node_u8 + 0x8) & 0xFFFFFFFFFFFFFFFFu;
+        func_800DE2A4(buffers, node_u8 + child_offset);
     }
 }
 
-void func_800DE0D8(void *param_0, void *param_1)
+void func_800DE0D8(void *buffers, void *node)
 {
-    GeoCmdB *cmd = (GeoCmdB *) param_1;
-    s32 sp48;
+    GeoCmdB *cmd = (GeoCmdB *) node;
+    s32 value;
     s32 i;
 
-    sp48 = cmd->unkA;
+    value = cmd->unkA;
     if (D_8012CEC4 != 0) {
         for (i = 0; i < cmd->unk8; i++) {
             func_80019AA0(&D_8012CE58,
                           func_800ADE2C(D_8012C948.RenderCtx_800DE0D8.animList, cmd->unkC[i].unk0));
-            D_8012CEC4(mlMtx_get_stack_pointer(), &sp48, cmd->unkC[i].unk2);
+            D_8012CEC4(mlMtx_get_stack_pointer(), &value, cmd->unkC[i].unk2);
             mlMtxPop();
         }
     }
 }
 
-void func_800DE1C4(void *param_0, void *param_1)
+void func_800DE1C4(void *buffers, void *node)
 {
-    GeoCmdY *cmd = (GeoCmdY *) param_1;
-    s32 sp38;
-    void *sp34;
-    void *sp30;
-    s32 sp2C;
+    GeoCmdY *cmd = (GeoCmdY *) node;
+    s32 value;
+    void *mtx_stack;
+    void *mtx_second;
+    s32 value_copy;
 
-    sp38 = cmd->unk8;
-    sp34 = mlMtx_get_stack_pointer();
-    sp30 = func_80018BB4();
+    value = cmd->unk8;
+    mtx_stack = mlMtx_get_stack_pointer();
+    mtx_second = func_80018BB4();
     if (cmd->unkE != 0) {
-        sp2C = sp38;
+        value_copy = value;
         if (cmd->unkE & 1) {
             if (cmd->unkA != 0) {
-                func_8010F070(sp34, &sp2C, cmd->unkA);
+                func_8010F070(mtx_stack, &value_copy, cmd->unkA);
             }
             if (cmd->unkC != 0) {
-                func_8010F070(sp30, &sp2C, cmd->unkC);
+                func_8010F070(mtx_second, &value_copy, cmd->unkC);
             }
         }
     }
     if (D_8012CEC4 != 0) {
         if (cmd->unkA != 0) {
-            D_8012CEC4(sp34, &sp38, cmd->unkA);
+            D_8012CEC4(mtx_stack, &value, cmd->unkA);
         }
         if (cmd->unkC != 0) {
-            D_8012CEC4(sp30, &sp38, cmd->unkC);
+            D_8012CEC4(mtx_second, &value, cmd->unkC);
         }
     }
 }
 
-void func_800DE2A4(param_0, param_1) s32 param_0;
-struct SomeStruct *param_1;
+// Walks a node chain, calling the handler from the table at D_8012CF8C for each node.
+void func_800DE2A4(buffers, node) s32 buffers;
+struct SomeStruct *node;
 {
     while (1) {
-        D_8012CF8C[param_1->unk0](param_0, param_1);
-        if (param_1->unk4 == 0) {
+        D_8012CF8C[node->unk0](buffers, node);
+        if (node->unk4 == 0) {
             break;
         }
-        param_1 = (struct SomeStruct *) ((u8 *) param_1 + param_1->unk4);
+        node = (struct SomeStruct *) ((u8 *) node + node->unk4);
     }
 }
 
@@ -1233,17 +1264,21 @@ GraphicsBuffers *func_800A7180();
 
 int func_800DE498(RenderBuffers *, f32 *, f32 *, f32, f32 *, u8 *);
 
-void *func_800DE448(f32 *position, f32 *arg1, f32 scale, f32 *arg3, s32 arg4)
+// Public draw entry: draws the model with the current graphics buffers.
+void *func_800DE448(f32 *position, f32 *rotation, f32 scale, f32 *transform_arg5, s32 model_bin)
 {
-    return (void *) func_800DE498((RenderBuffers *) func_800A7180(), position, arg1, scale, arg3,
-                                  (u8 *) arg4);
+    return (void *) func_800DE498((RenderBuffers *) func_800A7180(), position, rotation, scale, transform_arg5,
+                                  (u8 *) model_bin);
 }
 
-int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f32 scale, f32 *transform_arg5, u8 *model_bin)
+// Draws a model: culls it, writes the render setup into the display list, then runs its geometry commands.
+// Matching: the line breaks in this function are needed for the match.
+// Matching: the carrier locals (cmd_or_*, color_cmd_or_callback) are shared across disjoint lifetimes, keep order and padding.
+int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f32 scale, f32 *extra_transform, u8 *model_bin)
 {
-    f32 camera_focus[3];
+    f32 view_pos[3];
     f32 object_position[3];
-    f32 camera_focus_distance;
+    f32 view_distance;
     f32 local_norm;
     f32 global_norm;
     s32 lookat_cmd_or_anim_matrices;
@@ -1285,8 +1320,8 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
         func_800EE7F8(object_position, position);
     else
         func_800EFD24(object_position);
-    func_800EFB24(camera_focus, object_position, &D_8012CE98);
-    if (3e+04f < mlAbsF(camera_focus[0]) || 3e+04f < mlAbsF(camera_focus[1]) || 3e+04f < mlAbsF(camera_focus[2]))
+    func_800EFB24(view_pos, object_position, &D_8012CE98);
+    if (3e+04f < mlAbsF(view_pos[0]) || 3e+04f < mlAbsF(view_pos[1]) || 3e+04f < mlAbsF(view_pos[2])) // reject far-away models
     {
         func_800DE318();
         return 0;
@@ -1308,8 +1343,8 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
         global_norm = D_8012CA20;
         local_norm = D_8012CA1C;
     }
-    tmp_f0 = func_800EEF94(camera_focus);
-    camera_focus_distance = tmp_f0;
+    tmp_f0 = func_800EEF94(view_pos);
+    view_distance = tmp_f0;
     if (tmp_f0 >= 4000.0f && D_8012C82C == 3e+04f)
     {
         scaled_draw_distance = local_norm * scale * D_8012C830 * 50.0f;
@@ -1318,12 +1353,12 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
     }
     tmp_f0 = func_800E42C0();
     D_8012C82C *= tmp_f0;
-    if (D_8012C82C <= camera_focus_distance)
+    if (D_8012C82C <= view_distance)
     {
         func_800DE318();
         return 0;
     }
-    D_8012C940 = D_8012C828 ? func_800E3E8C(object_position, global_norm * scale) : 1;
+    D_8012C940 = D_8012C828 ? func_800E3E8C(object_position, global_norm * scale) : 1; // sphere-in-frustum test
     if (D_8012C940 == 0)
     {
         func_800DE318();
@@ -1359,25 +1394,25 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
         else
             *(u8 **) ((char *) (s32 *) &D_8012C948.raw + 0x30) = model_bin + cmd_or_model_offset;
     }
-    if (D_8012C834)
+    if (D_8012C834) // fade out over the last 700 units of draw distance
     {
         tmp_f0 = D_8012C82C - 700.0f;
-        if (tmp_f0 < camera_focus_distance)
+        if (tmp_f0 < view_distance)
         {
-            cmd_or_model_offset = (s32) ((1 - ((camera_focus_distance - tmp_f0) / 700.0f)) * 256.0f);
+            cmd_or_model_offset = (s32) ((1 - ((view_distance - tmp_f0) / 700.0f)) * 256.0f);
             *(s32 *) ((u8 *) &D_8012C9A8 - 4) = (D_8012C9A4 * cmd_or_model_offset) / 256;
         }
     }
     gfx_cursor = (s32) render_buffers->gfx;
     vertex_segment_cmd = gfx_cursor;
     gfx_cursor = gfx_cursor + 8;
-    *(s32 *) vertex_segment_cmd = 0xDB060004;
+    *(s32 *) vertex_segment_cmd = 0xDB060004; // gSPSegment: vertices in segment 1
     *(s32 *) (vertex_segment_cmd + 4) = osVirtualToPhysical(*(u8 **) ((char *) (s32 *) &D_8012C948.raw + 0x1C) + 24);
     texture_cmd_or_callback_arg = gfx_cursor;
     gfx_cursor = texture_cmd_or_callback_arg + 8;
-    *(s32 *) texture_cmd_or_callback_arg = 0xDB060008;
+    *(s32 *) texture_cmd_or_callback_arg = 0xDB060008; // gSPSegment: textures in segment 2
     *(s32 *) (texture_cmd_or_callback_arg + 4) = osVirtualToPhysical(*(s16 *) (*(u8 **) ((char *) (s32 *) &D_8012C948.raw + 0x14) + 4) * 8 + *(u8 **) ((char *) (s32 *) &D_8012C948.raw + 0x14) + 8);
-    if (*(u8 *) ((char *) (s32 *) &D_8012C948.raw + 0x24))
+    if (*(u8 *) ((char *) (s32 *) &D_8012C948.raw + 0x24)) // animated textures: 7 slots
     {
         segment_index_or_cmd = 0;
         do
@@ -1402,7 +1437,7 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
     cmd_or_model_offset = gfx_cursor;
     gfx_cursor = cmd_or_model_offset + 8;
     *(s32 *) (cmd_or_model_offset + 4) = 0;
-    *(s32 *) cmd_or_model_offset = 0xE7000000;
+    *(s32 *) cmd_or_model_offset = 0xE7000000; // gDPPipeSync
     color_cmd_or_callback = gfx_cursor;
     gfx_cursor = color_cmd_or_callback + 8;
     *(s32 *) color_cmd_or_callback = 0xE3000800; *(s32 *) (color_cmd_or_callback + 4) = 8388608;
@@ -1416,11 +1451,11 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
     cmd_or_model_offset = gfx_cursor;
     texture_cmd_or_callback_arg = gfx_cursor;
     gfx_cursor = texture_cmd_or_callback_arg + 8;
-    *(s32 *) texture_cmd_or_callback_arg = 0xFA000000;
+    *(s32 *) texture_cmd_or_callback_arg = 0xFA000000; // gDPSetPrimColor
     *(s32 *) (texture_cmd_or_callback_arg + 4) = (((((s32 *) &D_8012C988)[1] & 255) << 16) | ((((s32 *) &D_8012C988)[2] & 255) << 8)) | (((((s32 *) &D_8012C988)[0] << 12) << 12) | (((s32 *) &D_8012C988)[3] & 255));
     cmd_or_animation_offset = gfx_cursor;
     gfx_cursor = cmd_or_animation_offset + 8;
-    *(s32 *) cmd_or_animation_offset = 0xFB000000;
+    *(s32 *) cmd_or_animation_offset = 0xFB000000; // gDPSetEnvColor
     *(s32 *) (cmd_or_animation_offset + 4) = (((((s32 *) &D_8012C988)[5] & 255) << 16) | ((((s32 *) &D_8012C988)[6] & 255) << 8)) | (((((s32 *) &D_8012C988)[4] << 18) << 6) | (((s32 *) &D_8012C988)[7] & 255));
     if (D_8012CA28)
     {
@@ -1468,11 +1503,11 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
         *(s32 *) cmd_or_animation_offset = 0xDE000000;
         *(u8 **) (cmd_or_animation_offset + 4) = (u8 *) D_8012C820 + 2147483648;
     }
-    if (*(s16 *) (model_bin + 10) & 4)
+    if (*(s16 *) (model_bin + 10) & 4) // environment mapping: build and emit lookat
     {
-        if (camera_focus[2] == 0.0f)
-            camera_focus[2] = -0.1f;
-        func_80013C80((s32) render_buffers->mtx, D_8012CA40[0x100], *(f32 *) &D_8012CA40[0x102], *(f32 *) &D_8012CA40[0x103], *(f32 *) &D_8012CA40[0x104], camera_focus[0], camera_focus[1], camera_focus[2], 0.0f, 1, 0.0f);
+        if (view_pos[2] == 0.0f)
+            view_pos[2] = -0.1f;
+        func_80013C80((s32) render_buffers->mtx, D_8012CA40[0x100], *(f32 *) &D_8012CA40[0x102], *(f32 *) &D_8012CA40[0x103], *(f32 *) &D_8012CA40[0x104], view_pos[0], view_pos[1], view_pos[2], 0.0f, 1, 0.0f);
         cmd_or_model_offset = gfx_cursor;
         color_cmd_or_callback = cmd_or_model_offset;
         gfx_cursor = cmd_or_model_offset + 8;
@@ -1519,7 +1554,7 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
         }
     }
     func_80019CD4();
-    func_80019750(object_position, rotation, scale, transform_arg5);
+    func_80019750(object_position, rotation, scale, extra_transform);
     switch (D_8012C9B8)
     {
         case 1:
@@ -1533,12 +1568,12 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
     }
     mlMtxGet(&D_8012CE58);
     mlMtxApply((s32) render_buffers->mtx);
-    if (*(s16 *) (model_bin + 10) & 64)
+    if (*(s16 *) (model_bin + 10) & 64) // skinned model
     {
         cmd_or_model_offset = gfx_cursor;
         color_cmd_or_callback = cmd_or_model_offset;
         gfx_cursor = cmd_or_model_offset + 8;
-        *(s32 *)color_cmd_or_callback = 0xDA380005;
+        *(s32 *)color_cmd_or_callback = 0xDA380005; // gSPMatrix (push)
         *(s32 *)(cmd_or_model_offset + 4) = (s32)render_buffers->mtx + 2147483648;
         render_buffers->mtx++;
         if (*(s32 *) ((char *) (s32 *) &D_8012C948.raw + 0x38) == 0)
@@ -1571,7 +1606,7 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
     *(s32 *) ((char *) (s32 *) &D_8012C948.raw + 0x4) = object_position;
     *(s32 *) ((char *) (s32 *) &D_8012C948.raw + 0x8) = rotation;
     *(f32 *) (s32 *) &D_8012C948.raw = scale;
-    *(s32 *) ((char *) (s32 *) &D_8012C948.raw + 0xC) = transform_arg5;
+    *(s32 *) ((char *) (s32 *) &D_8012C948.raw + 0xC) = extra_transform;
     if (D_8012C9B8 == 1)
         *(s32 *) ((char *) (s32 *) &D_8012C948.raw + 0x10) = &D_8012C9BC;
     else
@@ -1583,9 +1618,9 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
     render_buffers->gfx = (Gfx2 *) gfx_cursor;
     if (*(s16 *) (model_bin + 10) & 16)
         func_8010EF70((s32 *) &D_8012C948.raw, 0, 0, &D_8012CE98);
-    if (D_8012C838 == 1)
+    if (D_8012C838 == 1) // callback records are 12 bytes: begin, geometry callback, end
     {
-        render_callback_entry = (void *)((u8 *)D_80123030 + (12 * D_8012CA11));
+        render_callback_entry =(void *)((u8 *)D_80123030 + (12 * D_8012CA11));
         render_begin_callback = (void (*)(s32 *, s32, s32, s32 *))(color_cmd_or_callback = (s32)*render_callback_entry);
         if (render_begin_callback)
             render_begin_callback((s32 *) &D_8012C948.raw, *(s32 *) D_8012CA08, texture_cmd_or_callback_arg = D_8012CA0C, &D_8012CE98);
@@ -1600,7 +1635,7 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
     else
     {
         cmd_or_model_offset = (s32) render_buffers->gfx++;
-        *(s32 *) cmd_or_model_offset = 0xD8380002; *(s32 *) (cmd_or_model_offset + 4) = 64;
+        *(s32 *) cmd_or_model_offset = 0xD8380002; *(s32 *) (cmd_or_model_offset + 4) = 64; // gSPPopMatrix
     }
     if (386 & *(s16 *) (model_bin + 10))
     {
@@ -1619,7 +1654,7 @@ int func_800DE498(RenderBuffers *render_buffers, f32 *position, f32 *rotation, f
     if (D_8012C9B0)
         D_8012C9B0(D_8012C9B4);
     if (*(s16 *) (model_bin + 10) & 4)
-        if (D_8012CE40 >= (u8 *)&D_8012CA40 && D_8012CE40 < lookat_cursor_pair[1])
+        if (D_8012CE40 >= (u8 *)&D_8012CA40 && D_8012CE40 < lookat_cursor_pair[1]) // Matching: empty guard, needed for the match.
         ;
     func_800DE318();
     return model_bin;
@@ -1635,9 +1670,9 @@ int func_800DF330()
     return (int) &D_8012C840;
 }
 
-int func_800DF33C(s32 param_0)
+int func_800DF33C(s32 index)
 {
-    return ((s32 *) D_8012C850)[param_0];
+    return ((s32 *) D_8012C850)[index];
 }
 
 s32 func_800DF350()
@@ -1679,25 +1714,27 @@ void func_800DF41C(s32 param_0)
     D_8012C824 = param_0;
 }
 
-f32 func_800DF428(f32 param_0)
+// Sets the draw distance and returns the previous one.
+f32 func_800DF428(f32 distance)
 {
-    f32 local_0 = D_8012C82C;
-    D_8012C82C = param_0;
-    return local_0;
+    f32 old_distance = D_8012C82C;
+    D_8012C82C = distance;
+    return old_distance;
 }
 
-int func_800DF440(s32 param_0)
+// Enables or disables the frustum test in func_800DE498.
+int func_800DF440(s32 enable)
 {
-    if (param_0 != 0) {
+    if (enable != 0) {
         D_8012C828 = 1;
     } else {
         D_8012C828 = 0;
     }
 }
 
-void func_800DF464(f32 param_0)
+void func_800DF464(f32 scale)
 {
-    D_8012C830 = param_0;
+    D_8012C830 = scale;
 }
 
 int func_800DF470(s32 param_0)
@@ -1705,16 +1742,18 @@ int func_800DF470(s32 param_0)
     D_8012C834 = param_0;
 }
 
-void func_800DF47C(s32 param_0, s32 param_1)
+// Sets the pre-draw hook and its argument.
+void func_800DF47C(s32 callback, s32 arg)
 {
-    *(s32 *) &D_8012C9A8 = param_0;
-    *(s32 *) ((char *) &D_8012C9A8 + 4) = param_1;
+    *(s32 *) &D_8012C9A8 = callback;
+    *(s32 *) ((char *) &D_8012C9A8 + 4) = arg;
 }
 
-void func_800DF490(s32 param_0, s32 param_1)
+// Sets the post-draw hook and its argument.
+void func_800DF490(s32 callback, s32 arg)
 {
-    *(s32 *) ((s8 *) &D_8012C9A8 + 8) = param_0;
-    *(s32 *) ((s8 *) &D_8012C9A8 + 12) = param_1;
+    *(s32 *) ((s8 *) &D_8012C9A8 + 8) = callback;
+    *(s32 *) ((s8 *) &D_8012C9A8 + 12) = arg;
 }
 
 int func_800DF4A4(s32 param_0)
@@ -1722,27 +1761,30 @@ int func_800DF4A4(s32 param_0)
     D_8012C960 = param_0;
 }
 
-void func_800DF4B0(s32 param_0)
+void func_800DF4B0(s32 table_index)
 {
-    D_8012CF8C = (void (**)(s32, void *)) D_80123198[param_0];
+    D_8012CF8C = (void (**)(s32, void *)) D_80123198[table_index];
 }
 
-void func_800DF4CC(s32 param_0)
+// Extra model transform, mode 1: rotation.
+void func_800DF4CC(s32 rotation)
 {
     D_8012C9B8 = 1;
-    func_800EE7F8(&D_8012C9BC, param_0 | 0);
+    func_800EE7F8(&D_8012C9BC, rotation | 0); // Matching: needed for the match.
 }
 
-void func_800DF500(f32 x, f32 y, f32 w)
+// Extra model transform, mode 2: scale.
+void func_800DF500(f32 x, f32 y, f32 z)
 {
     D_8012C9B8 = 2;
-    func_800EFA4C((f32 *) &D_8012C9BC, x, y, w);
+    func_800EFA4C((f32 *) &D_8012C9BC, x, y, z);
 }
 
-void func_800DF540(s32 param_0)
+// Extra model transform, mode 3: matrix.
+void func_800DF540(s32 matrix)
 {
     D_8012C9B8 = 3;
-    func_800F293C(&D_8012C9C8, param_0 | 0);
+    func_800F293C(&D_8012C9C8, matrix | 0); // Matching: needed for the match.
 }
 
 void func_800DF574(s32 param_0)
@@ -1750,36 +1792,38 @@ void func_800DF574(s32 param_0)
     D_8012CA38 = param_0;
 }
 
-int func_800DF580(OSViCommonRegs *param_0, OSViCommonRegs *param_1)
+// Color mode 1: copies the 4 prim and 4 env color words.
+int func_800DF580(OSViCommonRegs *env_color, OSViCommonRegs *prim_color)
 {
     D_8012C83C = 1;
-    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x10) = *(s32 *) ((char *) param_0 + 0x0);
-    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x14) = *(s32 *) ((char *) param_0 + 0x4);
-    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x18) = *(s32 *) ((char *) param_0 + 0x8);
-    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x1C) = *(s32 *) ((char *) param_0 + 0xC);
-    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x0) = *(s32 *) ((char *) param_1 + 0x0);
-    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x4) = *(s32 *) ((char *) param_1 + 0x4);
-    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x8) = *(s32 *) ((char *) param_1 + 0x8);
-    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0xC) = *(s32 *) ((char *) param_1 + 0xC);
+    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x10) = *(s32 *) ((char *) env_color + 0x0);
+    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x14) = *(s32 *) ((char *) env_color + 0x4);
+    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x18) = *(s32 *) ((char *) env_color + 0x8);
+    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x1C) = *(s32 *) ((char *) env_color + 0xC);
+    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x0) = *(s32 *) ((char *) prim_color + 0x0);
+    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x4) = *(s32 *) ((char *) prim_color + 0x4);
+    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0x8) = *(s32 *) ((char *) prim_color + 0x8);
+    *(s32 *) ((char *) (u8 *) &D_8012C988 + 0xC) = *(s32 *) ((char *) prim_color + 0xC);
 }
 
-void func_800DF5D8(u32 param_0, u32 param_1, u32 param_2, s32 param_3)
+// Color mode 2: sets the env color from r, g, b clamped to 255.
+void func_800DF5D8(u32 red, u32 green, u32 blue, s32 param_3)
 {
     D_8012C83C = 2;
-    if ((s32) param_0 >= 0x100) {
+    if ((s32) red >= 0x100) {
         ((int *) &D_8012C988)[4] = 0xFF;
     } else {
-        ((int *) &D_8012C988)[4] = param_0;
+        ((int *) &D_8012C988)[4] = red;
     }
-    if ((s32) param_1 >= 0x100) {
+    if ((s32) green >= 0x100) {
         ((int *) &D_8012C988)[5] = 0xFF;
     } else {
-        ((int *) &D_8012C988)[5] = param_1;
+        ((int *) &D_8012C988)[5] = green;
     }
-    if ((s32) param_2 >= 0x100) {
+    if ((s32) blue >= 0x100) {
         ((int *) &D_8012C988)[6] = 0xFF;
     } else {
-        ((int *) &D_8012C988)[6] = param_2;
+        ((int *) &D_8012C988)[6] = blue;
     }
     func_800DF410(param_3);
 }
@@ -1799,18 +1843,18 @@ void func_800DF660(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
 
 void func_800DF6BC(s32 param_0, s32 param_1)
 {
-    s32 local_0;
+    s32 clamped;
 
     D_8012C83C = 3;
     if (param_0 >= 0x100) {
-        local_0 = 0xff;
+        clamped = 0xff;
     } else {
-        local_0 = param_0;
+        clamped = param_0;
     }
-    D_8012C988.field_0xc = local_0;
-    D_8012C988.field_0x8 = local_0;
-    D_8012C988.field_0x4 = local_0;
-    D_8012C988.field_0x0 = local_0;
+    D_8012C988.field_0xc = clamped;
+    D_8012C988.field_0x8 = clamped;
+    D_8012C988.field_0x4 = clamped;
+    D_8012C988.field_0x0 = clamped;
     func_800DF410(param_1);
 }
 
@@ -1834,22 +1878,22 @@ int func_800DF738(s32 param_0)
     D_8012C844 = param_0;
 }
 
-void func_800DF744(param_0, param_1) s32 param_0;
-s32 param_1;
+void func_800DF744(index, value) s32 index;
+s32 value;
 {
-    ((s32 *) D_8012C850)[param_0] = param_1;
+    ((s32 *) D_8012C850)[index] = value;
 }
 
-void func_800DF758(s32 *param_0)
+void func_800DF758(s32 *src)
 {
     s32 i;
     for (i = 1; i < 60; i++)
-        D_8012C850[i] = param_0[i];
+        D_8012C850[i] = src[i];
 }
 
-int func_800DF7C4(s32 param_0, s32 param_1)
+int func_800DF7C4(s32 index, s32 value)
 {
-    ((s32 *) D_8012C850)[param_0] = -param_1;
+    ((s32 *) D_8012C850)[index] = -value;
 }
 
 int func_800DF7DC(s32 param_0)
@@ -1863,9 +1907,9 @@ u8 param_0;
     D_8012C96C = param_0;
 }
 
-int func_800DF7F8(s32 param_0, f32 param_1, f32 param_2)
+int func_800DF7F8(s32 model_id, f32 param_1, f32 param_2)
 {
-    D_8012CA18 = param_0;
+    D_8012CA18 = model_id;
     *(f32 *) ((char *) &D_8012CA18 + 4) = param_1;
     *(f32 *) ((char *) &D_8012CA18 + 8) = param_2;
 }
@@ -1890,11 +1934,12 @@ int func_800DF83C(s32 param_0)
     D_8012C848 = param_0;
 }
 
-void func_800DF848(s32 param_0, s32 param_1)
+// Installs custom opaque/translucent render-mode entries in slot 4.
+void func_800DF848(s32 opaque_mode, s32 translucent_mode)
 {
     D_8012CA28 = 4;
-    (&D_80122DC8)[D_8012CA28 * 2] = param_0;
-    (&D_80122DC8)[D_8012CA28 * 2 + 1] = param_1;
+    (&D_80122DC8)[D_8012CA28 * 2] = opaque_mode;
+    (&D_80122DC8)[D_8012CA28 * 2 + 1] = translucent_mode;
 }
 
 int func_800DF874()
@@ -1925,12 +1970,12 @@ func_800DF8CC(param_0)
     return *(s32 *) ((char *) param_0 + 48);
 }
 
-s32 func_800DF8D4(char *param_0)
+s32 func_800DF8D4(char *model)
 {
-    s32 local_0;
-    local_0 = *(s32 *) (param_0 + 32) != 0;
-    if (local_0) {
-        return *(s32 *) (param_0 + 52) == 0;
+    s32 has_zones;
+    has_zones = *(s32 *) (model + 32) != 0;
+    if (has_zones) {
+        return *(s32 *) (model + 52) == 0;
     }
 }
 
@@ -1945,36 +1990,37 @@ int func_800DF900(s32 param_0[4])
     func_8001980C(param_0[1], param_0[2], param_0[0], param_0[3]);
 }
 
-ImageStruct *func_800DF944(u32 param_0, f32 *coords, f32 param_2, f32 param_3, f32 *param_4,
-                           s32 param_5, ImageStruct *param_6)
+// Draws a HUD 3D model at screen coords, scaling x for widescreen.
+ImageStruct *func_800DF944(u32 render_buffers, f32 *coords, f32 rot_z, f32 scale, f32 *offset_xy,
+                           s32 param_5, ImageStruct *model)
 {
-    f32 sp44[3];
-    f32 sp38[3];
-    f32 sp2C[3];
+    f32 position[3];
+    f32 rotation[3];
+    f32 extra_transform[3];
 
-    func_800E42F0(param_0, param_5);
+    func_800E42F0(render_buffers, param_5);
     if (coords != 0) {
-        func_800EFA4C(sp44, coords[0] * 4.0f - 608.0f, 456.0f - coords[1] * 4.0f, -10.0f);
+        func_800EFA4C(position, coords[0] * 4.0f - 608.0f, 456.0f - coords[1] * 4.0f, -10.0f);
     } else {
-        func_800EFA4C(sp44, 0.0f, 0.0f, -10.0f);
+        func_800EFA4C(position, 0.0f, 0.0f, -10.0f);
     }
     if (param_5 != 0) {
         if (widescreen_enabled != 0) {
-            sp44[0] = (func_800A8AF0(func_800A89F8()) / 1.3333334f) * sp44[0];
+            position[0] = (func_800A8AF0(func_800A89F8()) / 1.3333334f) * position[0];
         }
     }
-    func_800EFA4C(sp38, 0.0f, 0.0f, param_2);
-    if (param_4 != 0) {
-        func_800EFA4C(sp2C, param_4[0], param_4[1], 0.0f);
+    func_800EFA4C(rotation, 0.0f, 0.0f, rot_z);
+    if (offset_xy != 0) {
+        func_800EFA4C(extra_transform, offset_xy[0], offset_xy[1], 0.0f);
     } else {
-        func_800EFD24(sp2C);
+        func_800EFD24(extra_transform);
     }
     func_800DF830(0);
     func_800DF440(0);
-    param_6 = (ImageStruct *) func_800DE498((u8 *) param_0, sp44, sp38, 4.0f * param_3, sp2C,
-                                            (u8 *) param_6);
-    func_800E4640(param_0);
-    return param_6;
+    model = (ImageStruct *) func_800DE498((u8 *) render_buffers, position, rotation, 4.0f * scale, extra_transform,
+                                            (u8 *) model);
+    func_800E4640(render_buffers);
+    return model;
 }
 
 extern int func_8010EF70();

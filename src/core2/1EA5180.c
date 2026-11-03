@@ -1,51 +1,56 @@
 #include "common.h"
 
+// TU-NOTE: D_8012AE84/D_8012AE8C/D_8012AE94 are the group-array fields (+4/+0xC/+0x14) of
+// D_8012AE80; D_8012AE98 is its set_enabled table (+0x18).
+// TU-NOTE: several wrappers call their callee with an empty argument list, so the incoming
+// argument registers pass straight through.
+
 extern void func_800B42A0(void *, void *);
 extern s32 D_8012AF60;
 extern u8 D_8012AE98[];
 extern struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
+    s32 unk_0;
+    s32 unk_4;
+    s32 unk_8;
+    s32 unk_C;
+    s32 unk_10;
+    s32 unk_14;
+    s32 unk_18;
 } *D_8012AE8C;
 extern s32 D_8012AE94;
 typedef struct {
-    f32 local_0[3];
-    s16 pad;
-    s16 local_1;
-    f32 local_2;
-    s32 pad2;
+    f32 pos[3];
+    s16 pad_C;
+    s16 half_height;
+    f32 radius;
+    s32 pad_14;
 } EntryCBC3C;
 extern f32 func_800EFC7C(f32 *, f32 *);
 typedef struct {
-    f32 local_0[3];
-    s16 local_1, local_2;
-    f32 local_3;
-    u32 pad : 12;
-    u32 local_4 : 3;
-    u32 pad2 : 17;
+    f32 pos[3];
+    s16 unk_C, half_height;
+    f32 radius;
+    u32 pad_14 : 12;
+    u32 type_bits : 3;
+    u32 pad_14b : 17;
 } VolumeCB;
 typedef struct {
-    u8 pad[2];
-    u8 local_0;
-    u8 pad3;
-    f32 local_1[3];
-    f32 local_2;
-    s32 local_3;
-    s32 pad18;
+    u8 pad_0[2];
+    u8 flags;
+    u8 unk_3;
+    f32 pos[3];
+    f32 radius;
+    s32 set_idx;
+    s32 pad_18;
 } GroupCB;
 typedef struct {
-    s32 count0;
-    GroupCB *group0;
-    s32 local_0;
-    GroupCB *local_1;
-    s32 local_2;
-    GroupCB *local_3;
-    u8 local_4[1];
+    s32 group_count_0;
+    GroupCB *groups_0;
+    s32 group_count_1;
+    GroupCB *groups_1;
+    s32 group_count_2;
+    GroupCB *groups_2;
+    u8 set_enabled[1];
 } StateCB;
 extern s32 D_8012AE84;
 extern f32 func_800DC178(f32, f32);
@@ -54,22 +59,24 @@ s32 func_800CC4D4();
 
 extern StateCB D_8012AE80;
 
-int func_800CB890(param_0)
-s32 param_0;
+int func_800CB890(group)
+s32 group;
 {
-    s32 local_0;
-    local_0 = param_0;
-    func_800B42A0((void *) D_8012AF60, (void *) (local_0 + 0x18));
+    // Matching: copy of the parameter is needed for the match.
+    s32 group_copy;
+    group_copy = group;
+    func_800B42A0((void *) D_8012AF60, (void *) (group_copy + 0x18));
 }
 
-int func_800CB8BC(param_0)
-s32 param_0[3];
+int func_800CB8BC(group)
+s32 group[3];
 {
-    s32 *new_var;
-    char *new_var2;
-    new_var = param_0;
-    new_var2 = (char *) new_var;
-    return (*(s16 *) (new_var2 + 0x1A) * 0x18) + func_800CB890();
+    // Matching: the two pointer temporaries are needed for the match.
+    s32 *group_ptr;
+    char *group_bytes;
+    group_ptr = group;
+    group_bytes = (char *) group_ptr;
+    return (*(s16 *) (group_bytes + 0x1A) * 0x18) + func_800CB890();
 }
 
 int func_800CB8F0()
@@ -77,10 +84,10 @@ int func_800CB8F0()
     func_800CB890();
 }
 
-u32 func_800CB910(param_0)
-u32 *param_0;
+u32 func_800CB910(group)
+u32 *group;
 {
-    return ((param_0[0] >> 9) * 0x18) + func_800CB8F0();
+    return ((group[0] >> 9) * 0x18) + func_800CB8F0();
 }
 
 int func_800CB948()
@@ -145,115 +152,117 @@ int func_800CBB18(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_
                              param_5);
 }
 
-void func_800CBB70(s32 param_0, s32 param_1)
+void func_800CBB70(s32 set_idx, s32 enabled)
 {
-    D_8012AE98[param_0] = param_1;
+    D_8012AE98[set_idx] = enabled;
 }
 
-void func_800CBB80(s32 param_0, s32 param_1)
+void func_800CBB80(s32 group_idx, s32 enable)
 {
-    u8 *temp_v0;
-    temp_v0 = (param_0 * 0x1C) + (u8 *) D_8012AE8C;
-    if (param_1 != 0) {
-        *(u8 *) ((s8 *) temp_v0 + 2) = (u8) ((*(u8 *) ((s8 *) temp_v0 + 2) & 0xFFFFu) | 1);
+    u8 *group;
+    group = (group_idx * 0x1C) + (u8 *) D_8012AE8C;
+    if (enable != 0) {
+        *(u8 *) ((s8 *) group + 2) = (u8) ((*(u8 *) ((s8 *) group + 2) & 0xFFFFu) | 1);
         return;
     }
-    *(u8 *) ((s8 *) temp_v0 + 2) = (u8) (*(u8 *) ((s8 *) temp_v0 + 2) & 0xFFFE);
+    *(u8 *) ((s8 *) group + 2) = (u8) (*(u8 *) ((s8 *) group + 2) & 0xFFFE);
 }
 
-int func_800CBBC0(s32 param_0)
+int func_800CBBC0(s32 group_idx)
 {
     struct {
-        s32 unk0;
-        s32 unk4;
-        s32 unk8;
-        s32 unkC;
-        s32 unk10;
-        s32 unk14;
-    } *new_var;
-    new_var = &D_8012AE8C[param_0];
-    return (*new_var).unk14;
+        s32 unk_0;
+        s32 unk_4;
+        s32 unk_8;
+        s32 unk_C;
+        s32 unk_10;
+        s32 unk_14;
+    } *group;
+    group = &D_8012AE8C[group_idx];
+    return (*group).unk_14;
 }
 
-s32 func_800CBBE0(s32 param_0)
+s32 func_800CBBE0(s32 group_idx)
 {
-    int new_var;
-    new_var = (param_0 * 0x1C) + D_8012AE94;
-    return *(s32 *) ((s8 *) new_var + 0x14);
+    int group_addr;
+    group_addr = (group_idx * 0x1C) + D_8012AE94;
+    return *(s32 *) ((s8 *) group_addr + 0x14);
 }
 
-s32 func_800CBC00(s32 param_0)
+s32 func_800CBC00(s32 group_idx)
 {
-    return *(u16 *) ((s8 *) func_800CB8F0((param_0 * 0x1C) + D_8012AE94) + 0x14) & 1;
+    return *(u16 *) ((s8 *) func_800CB8F0((group_idx * 0x1C) + D_8012AE94) + 0x14) & 1;
 }
 
-s32 func_800CBC3C(param_0)
-f32 *param_0;
+// Returns the index of the first list 0 group with a volume containing pos, or -1.
+s32 func_800CBC3C(pos)
+f32 *pos;
 {
-    GroupCB *local_0;
-    EntryCBC3C *local_1, *local_2;
-    for (local_0 = D_8012AE80.group0; local_0 < D_8012AE80.count0 + D_8012AE80.group0; local_0++) {
-        local_2 = func_800CB910(local_0);
-        for (local_1 = func_800CB8F0(local_0); local_1 < local_2; local_1++) {
-            if (local_1->local_0[1] - local_1->local_1 < param_0[1] &&
-                param_0[1] < local_1->local_0[1] + local_1->local_1 &&
-                func_800EFC7C(local_1->local_0, param_0) < local_1->local_2)
-                return local_0 - D_8012AE80.group0;
+    GroupCB *group;
+    EntryCBC3C *volume, *volume_end;
+    for (group = D_8012AE80.groups_0; group < D_8012AE80.group_count_0 + D_8012AE80.groups_0; group++) {
+        volume_end = func_800CB910(group);
+        for (volume = func_800CB8F0(group); volume < volume_end; volume++) {
+            if (volume->pos[1] - volume->half_height < pos[1] &&
+                pos[1] < volume->pos[1] + volume->half_height &&
+                func_800EFC7C(volume->pos, pos) < volume->radius)
+                return group - D_8012AE80.groups_0;
         }
     }
     return -1;
 }
 
-int func_800CBD84(s32 param_0)
+int func_800CBD84(s32 pos)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = func_800CBC3C();
-    if (local_0 != -1) {
-        local_1 = func_800CC4D4(param_0, local_0);
-        if (local_1 != -1) {
+    s32 group_idx;
+    s32 volume_idx;
+    group_idx = func_800CBC3C();
+    if (group_idx != -1) {
+        volume_idx = func_800CC4D4(pos, group_idx);
+        if (volume_idx != -1) {
             return -1;
 
 }
 }
-return local_0;
+return group_idx;
 }
 
-s32 func_800CBDD4(f32 *param_0, s32 param_1, s32 param_2)
+// List 1: index of the group with a volume matching type_mask that contains pos, or -1.
+s32 func_800CBDD4(f32 *pos, s32 height, s32 type_mask)
 {
-    GroupCB *local_0;
-    VolumeCB *local_1;
-    VolumeCB *local_2;
-    f32 local_3;
-    f32 local_4;
-    GroupCB *local_5;
-    local_3 = param_0[1] + param_1 * 0.5f;
-    local_4 = param_0[1] - param_1 * 0.5f;
-    for (local_0 = D_8012AE80.local_1;
-         local_0 < (local_5 = D_8012AE80.local_1 + D_8012AE80.local_0); local_0++) {
-        if (!(local_0->local_0 & 1))
+    GroupCB *group;
+    VolumeCB *volume;
+    VolumeCB *volume_end;
+    f32 top;
+    f32 bottom;
+    GroupCB *group_end;
+    top = pos[1] + height * 0.5f;
+    bottom = pos[1] - height * 0.5f;
+    for (group = D_8012AE80.groups_1;
+         group < (group_end = D_8012AE80.groups_1 + D_8012AE80.group_count_1); group++) {
+        if (!(group->flags & 1))
             continue;
         {
-            if (func_800EFC7C(local_0->local_1, param_0) < local_0->local_2) {
-                local_2 = func_800CB910(local_0);
-                if (!D_8012AE80.local_4[local_0->local_3])
+            if (func_800EFC7C(group->pos, pos) < group->radius) {
+                volume_end = func_800CB910(group);
+                if (!D_8012AE80.set_enabled[group->set_idx])
                     continue;
-                if (param_2 & 1) {
-                    for (local_1 = func_800CB8F0(local_0); local_1 < local_2; local_1++) {
-                        if ((local_1->local_4 & param_2) && local_1->local_0[1] <= local_3 &&
-                            local_4 < local_1->local_0[1] &&
-                            func_800EFC7C(local_1->local_0, param_0) < local_1->local_3) {
-                            return local_0 - D_8012AE80.local_1;
+                if (type_mask & 1) {
+                    for (volume = func_800CB8F0(group); volume < volume_end; volume++) {
+                        if ((volume->type_bits & type_mask) && volume->pos[1] <= top &&
+                            bottom < volume->pos[1] &&
+                            func_800EFC7C(volume->pos, pos) < volume->radius) {
+                            return group - D_8012AE80.groups_1;
                         }
                     }
                 } else {
-                    for (local_1 = func_800CB8F0(local_0); local_1 < local_2; local_1++) {
-                        if ((local_1->local_4 & param_2) &&
-                            ((local_1->local_4 & 2) ||
-                             (local_1->local_0[1] - local_1->local_2 <= param_0[1] &&
-                              param_0[1] < local_1->local_0[1] + local_1->local_2)) &&
-                            func_800EFC7C(local_1->local_0, param_0) < local_1->local_3) {
-                            return local_0 - D_8012AE80.local_1;
+                    for (volume = func_800CB8F0(group); volume < volume_end; volume++) {
+                        if ((volume->type_bits & type_mask) &&
+                            ((volume->type_bits & 2) ||
+                             (volume->pos[1] - volume->half_height <= pos[1] &&
+                              pos[1] < volume->pos[1] + volume->half_height)) &&
+                            func_800EFC7C(volume->pos, pos) < volume->radius) {
+                            return group - D_8012AE80.groups_1;
                         }
                     }
                 }
@@ -264,37 +273,38 @@ s32 func_800CBDD4(f32 *param_0, s32 param_1, s32 param_2)
 return -1;
 }
 
-s32 func_800CC078(f32 *param_0)
+// List 2: index of the group with a volume containing pos, or -1. The volume type selects the height bounds.
+s32 func_800CC078(f32 *pos)
 {
-    GroupCB *local_0;
-    VolumeCB *local_1;
-    VolumeCB *local_2;
-    for (local_0 = D_8012AE80.local_3; local_0 < D_8012AE80.local_3 + D_8012AE80.local_2;
-         local_0++) {
-        if (func_800EFC7C(local_0->local_1, param_0) < local_0->local_2) {
-            local_2 = func_800CB910(local_0);
-            for (local_1 = func_800CB8F0(local_0); local_1 < local_2; local_1++) {
+    GroupCB *group;
+    VolumeCB *volume;
+    VolumeCB *volume_end;
+    for (group = D_8012AE80.groups_2; group < D_8012AE80.groups_2 + D_8012AE80.group_count_2;
+         group++) {
+        if (func_800EFC7C(group->pos, pos) < group->radius) {
+            volume_end = func_800CB910(group);
+            for (volume = func_800CB8F0(group); volume < volume_end; volume++) {
 
-switch (local_1->local_4) {
+switch (volume->type_bits) {
     case 0:
-        if (func_800EFC7C(local_1->local_0, param_0) < local_1->local_3)
-            return local_0 - D_8012AE80.local_3;
+        if (func_800EFC7C(volume->pos, pos) < volume->radius)
+            return group - D_8012AE80.groups_2;
         break;
     case 1:
-        if (local_1->local_0[1] - local_1->local_2 < param_0[1] &&
-            param_0[1] < local_1->local_0[1] + local_1->local_2 &&
-            func_800EFC7C(local_1->local_0, param_0) < local_1->local_3)
-            return local_0 - D_8012AE80.local_3;
+        if (volume->pos[1] - volume->half_height < pos[1] &&
+            pos[1] < volume->pos[1] + volume->half_height &&
+            func_800EFC7C(volume->pos, pos) < volume->radius)
+            return group - D_8012AE80.groups_2;
         break;
     case 2:
-        if (local_1->local_0[1] - local_1->local_2 < param_0[1] &&
-            func_800EFC7C(local_1->local_0, param_0) < local_1->local_3)
-            return local_0 - D_8012AE80.local_3;
+        if (volume->pos[1] - volume->half_height < pos[1] &&
+            func_800EFC7C(volume->pos, pos) < volume->radius)
+            return group - D_8012AE80.groups_2;
         break;
     case 3:
-        if (param_0[1] < local_1->local_0[1] + local_1->local_2 &&
-            func_800EFC7C(local_1->local_0, param_0) < local_1->local_3)
-            return local_0 - D_8012AE80.local_3;
+        if (pos[1] < volume->pos[1] + volume->half_height &&
+            func_800EFC7C(volume->pos, pos) < volume->radius)
+            return group - D_8012AE80.groups_2;
 }
 
 }
@@ -303,62 +313,66 @@ switch (local_1->local_4) {
 return -1;
 }
 
-s32 func_800CC338(f32 *param_0, s32 param_1, s32 param_2)
+// List 0: volume index in the group containing pos, trying volume_idx first; -1 if none.
+s32 func_800CC338(f32 *pos, s32 group_idx, s32 volume_idx)
 {
-    s32 local_4[1];
-    GroupCB *local_0;
-    EntryCBC3C *local_1, *local_2, *local_3;
-    local_0 = &D_8012AE80.group0[param_1];
-    if (func_800CC4D4(param_0) != -1)
+    // Matching: unused local, needed for the match.
+    s32 unk_0[1];
+    GroupCB *group;
+    EntryCBC3C *volumes, *volume, *volume_end;
+    group = &D_8012AE80.groups_0[group_idx];
+    if (func_800CC4D4(pos) != -1)
         return -1;
-    local_1 = func_800CB8F0(local_0);
-    local_2 = &local_1[param_2];
-    if (local_2->local_0[1] - local_2->local_1 < param_0[1] &&
-        param_0[1] < local_2->local_0[1] + local_2->local_1 &&
-        func_800EFC7C(local_2->local_0, param_0) < local_2->local_2)
-        return param_2;
-    local_3 = func_800CB910(local_0);
-    for (local_2 = local_1; local_2 < local_3; local_2++) {
-        if (local_2->local_0[1] - local_2->local_1 < param_0[1] &&
-            param_0[1] < local_2->local_0[1] + local_2->local_1 &&
-            func_800EFC7C(local_2->local_0, param_0) < local_2->local_2)
-            return local_2 - local_1;
+    volumes = func_800CB8F0(group);
+    volume = &volumes[volume_idx];
+    if (volume->pos[1] - volume->half_height < pos[1] &&
+        pos[1] < volume->pos[1] + volume->half_height &&
+        func_800EFC7C(volume->pos, pos) < volume->radius)
+        return volume_idx;
+    volume_end = func_800CB910(group);
+    for (volume = volumes; volume < volume_end; volume++) {
+        if (volume->pos[1] - volume->half_height < pos[1] &&
+            pos[1] < volume->pos[1] + volume->half_height &&
+            func_800EFC7C(volume->pos, pos) < volume->radius)
+            return volume - volumes;
     }
     return -1;
 }
 
-s32 func_800CC4D4(param_0, param_1)
-u8 *param_0;
-s32 param_1;
+// Returns the index of the group volume containing pos, or -1.
+s32 func_800CC4D4(pos, group_idx)
+u8 *pos;
+s32 group_idx;
 {
-    f32 local_1;
-    f32 local_2;
-    int new_var;
-    u32 local_0;
-    f32 local_3;
-    u32 local_4;
-    u32 local_5;
-    u8 *local_6;
-    local_6 = (param_1 * 0x1C) + D_8012AE84;
-    new_var = -1;
-    if ((*((u8 *) (((s8 *) local_6) + 3))) == 0) {
-        return new_var;
+    f32 centre_y;
+    f32 pos_y;
+    // Matching: the -1 result lives in a temporary.
+    int not_found;
+    u32 range_start;
+    f32 half_height;
+    u32 range_end;
+    u32 volume;
+    u8 *group;
+    group = (group_idx * 0x1C) + D_8012AE84;
+    not_found = -1;
+    if ((*((u8 *) (((s8 *) group) + 3))) == 0) {
+        return not_found;
     }
-    local_0 = func_800CB948(local_6);
-    local_4 = func_800CB968(local_6);
-    local_5 = local_0;
-    while (local_5 < local_4) {
-        local_1 = *((f32 *) (((s8 *) local_5) + 4));
-        local_3 = (f32) (*((s16 *) (((s8 *) local_5) + 0xE)));
-        local_2 = *((f32 *) (((s8 *) param_0) + 4));
-        if ((((local_1 - local_3) < local_2) && (local_2 < (local_1 + local_3))) &&
-            (func_800EFC7C((u8 *) local_5, param_0) < (*((f32 *) (((s8 *) local_5) + 0x10))))) {
-            return ((s32) (local_5 - local_0)) / 24;
+    range_start = func_800CB948(group);
+    range_end = func_800CB968(group);
+    volume = range_start;
+    while (volume < range_end) {
+        centre_y = *((f32 *) (((s8 *) volume) + 4));
+        half_height = (f32) (*((s16 *) (((s8 *) volume) + 0xE)));
+        pos_y = *((f32 *) (((s8 *) pos) + 4));
+        if ((((centre_y - half_height) < pos_y) && (pos_y < (centre_y + half_height))) &&
+            (func_800EFC7C((u8 *) volume, pos) < (*((f32 *) (((s8 *) volume) + 0x10))))) {
+            return ((s32) (volume - range_start)) / 24;
         }
-        local_5 += 0x18;
+        volume += 0x18;
     }
 
-    return new_var;
+    return not_found;
 }
 
 s32 func_800CC5E8()
@@ -366,207 +380,213 @@ s32 func_800CC5E8()
     return *(s32 *) &D_8012AE80;
 }
 
-u32 func_800CC5F4(s32 param_0)
+u32 func_800CC5F4(s32 group_idx)
 {
-    return *(u32 *) ((param_0 * 28) + (u8 *) D_8012AE84) >> 9;
+    return *(u32 *) ((group_idx * 28) + (u8 *) D_8012AE84) >> 9;
 }
 
-u8 func_800CC61C(s32 param_0)
+u8 func_800CC61C(s32 group_idx)
 {
-    return (*(u8 *) ((s8 *) (((param_0 * 0x1C) + D_8012AE84)) + (3)));
+    return (*(u8 *) ((s8 *) (((group_idx * 0x1C) + D_8012AE84)) + (3)));
 }
 
-s32 func_800CC63C(param_0, param_1)
-s32 param_0;
-s32 param_1;
+s32 func_800CC63C(group_idx, volume_idx)
+s32 group_idx;
+s32 volume_idx;
 {
-    return func_800CB8F0((param_0 * 0x1C) + D_8012AE84) + (param_1 * 0x18);
+    return func_800CB8F0((group_idx * 0x1C) + D_8012AE84) + (volume_idx * 0x18);
 }
 
-s32 func_800CC684(s32 param_0, s32 param_1)
+s32 func_800CC684(s32 group_idx, s32 volume_idx)
 {
-    return func_800CB948((param_0 * 0x1C) + D_8012AE84) + (param_1 * 0x18);
+    return func_800CB948((group_idx * 0x1C) + D_8012AE84) + (volume_idx * 0x18);
 }
 
 s32 func_800CC6CC(void)
 {
-    u16 *new_var;
-    new_var = (u16 *) (((char *) func_800CC63C()) + 0x14);
-    return (*new_var) & 1;
+    u16 *flags;
+    flags = (u16 *) (((char *) func_800CC63C()) + 0x14);
+    return (*flags) & 1;
 }
 
-s32 func_800CC6F4(f32 *param_0, s32 param_1, s32 param_2)
+// List 2: volume index in the group containing pos, trying volume_idx first; -1 if none.
+s32 func_800CC6F4(f32 *pos, s32 group_idx, s32 volume_idx)
 {
-    GroupCB *local_0;
-    s32 local_1;
-    VolumeCB *local_2;
-    VolumeCB *local_3;
-    VolumeCB *local_4;
-    local_0 = &D_8012AE80.local_3[param_1];
-    local_2 = func_800CB8F0(local_0);
-    local_4 = &local_2[param_2];
-    switch (local_4->local_4) {
+    GroupCB *group;
+    // Matching: unused local, needed for the match.
+    s32 unk_0;
+    VolumeCB *volumes;
+    VolumeCB *volume_end;
+    VolumeCB *volume;
+    group = &D_8012AE80.groups_2[group_idx];
+    volumes = func_800CB8F0(group);
+    volume = &volumes[volume_idx];
+    switch (volume->type_bits) {
         case 0:
-            if (func_800EFC7C(local_4->local_0, param_0) < local_4->local_3)
-                return param_2;
+            if (func_800EFC7C(volume->pos, pos) < volume->radius)
+                return volume_idx;
             break;
         case 1:
-            if (local_4->local_0[1] - local_4->local_2 < param_0[1] &&
-                param_0[1] < local_4->local_0[1] + local_4->local_2 &&
-                func_800EFC7C(local_4->local_0, param_0) < local_4->local_3)
-                return param_2;
+            if (volume->pos[1] - volume->half_height < pos[1] &&
+                pos[1] < volume->pos[1] + volume->half_height &&
+                func_800EFC7C(volume->pos, pos) < volume->radius)
+                return volume_idx;
             break;
         case 2:
-            if (local_4->local_0[1] - local_4->local_2 < param_0[1] &&
-                func_800EFC7C(local_4->local_0, param_0) < local_4->local_3)
-                return param_2;
+            if (volume->pos[1] - volume->half_height < pos[1] &&
+                func_800EFC7C(volume->pos, pos) < volume->radius)
+                return volume_idx;
             break;
         case 3:
-            if (param_0[1] < local_4->local_0[1] + local_4->local_2 &&
-                func_800EFC7C(local_4->local_0, param_0) < local_4->local_3)
-                return param_2;
+            if (pos[1] < volume->pos[1] + volume->half_height &&
+                func_800EFC7C(volume->pos, pos) < volume->radius)
+                return volume_idx;
     }
-    local_3 = func_800CB910(local_0);
-    for (local_4 = local_2; local_4 < local_3; local_4++) {
-        switch (local_4->local_4) {
+    volume_end = func_800CB910(group);
+    for (volume = volumes; volume < volume_end; volume++) {
+        switch (volume->type_bits) {
             case 0:
-                if (func_800EFC7C(local_4->local_0, param_0) < local_4->local_3)
-                    return local_4 - local_2;
+                if (func_800EFC7C(volume->pos, pos) < volume->radius)
+                    return volume - volumes;
                 break;
             case 1:
-                if (local_4->local_0[1] - local_4->local_2 < param_0[1] &&
-                    param_0[1] < local_4->local_0[1] + local_4->local_2 &&
-                    func_800EFC7C(local_4->local_0, param_0) < local_4->local_3)
-                    return local_4 - local_2;
+                if (volume->pos[1] - volume->half_height < pos[1] &&
+                    pos[1] < volume->pos[1] + volume->half_height &&
+                    func_800EFC7C(volume->pos, pos) < volume->radius)
+                    return volume - volumes;
                 break;
             case 2:
-                if (local_4->local_0[1] - local_4->local_2 < param_0[1] &&
-                    func_800EFC7C(local_4->local_0, param_0) < local_4->local_3)
-                    return local_4 - local_2;
+                if (volume->pos[1] - volume->half_height < pos[1] &&
+                    func_800EFC7C(volume->pos, pos) < volume->radius)
+                    return volume - volumes;
                 break;
             case 3:
-                if (param_0[1] < local_4->local_0[1] + local_4->local_2 &&
-                    func_800EFC7C(local_4->local_0, param_0) < local_4->local_3)
-                    return local_4 - local_2;
+                if (pos[1] < volume->pos[1] + volume->half_height &&
+                    func_800EFC7C(volume->pos, pos) < volume->radius)
+                    return volume - volumes;
         }
     }
     return -1;
 }
 
-s32 func_800CCAB0(f32 *param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4)
+// List 1: volume index in the group matching type_mask that contains pos, trying volume_idx first; -1 if none.
+s32 func_800CCAB0(f32 *pos, s32 group_idx, s32 volume_idx, s32 height, s32 type_mask)
 {
-    GroupCB *local_0;
-    VolumeCB *local_1;
-    VolumeCB *local_2;
-    VolumeCB *local_3;
-    f32 local_4;
-    f32 local_5;
-    local_0 = &D_8012AE80.local_1[param_1];
-    if (!(local_0->local_0 & 1))
+    GroupCB *group;
+    VolumeCB *volume;
+    VolumeCB *volumes;
+    VolumeCB *volume_end;
+    f32 top;
+    f32 bottom;
+    group = &D_8012AE80.groups_1[group_idx];
+    if (!(group->flags & 1))
         return -1;
-    if (!D_8012AE80.local_4[local_0->local_3])
+    if (!D_8012AE80.set_enabled[group->set_idx])
         return -1;
-    local_2 = func_800CB8F0(local_0);
-    local_1 = &local_2[param_2];
-    local_4 = param_0[1] + param_3 * 0.5f;
-    local_5 = param_0[1] - param_3 * 0.5f;
-    if (param_4 & 1) {
-        if ((local_1->local_4 & param_4) && local_1->local_0[1] <= local_4 &&
-            local_5 < local_1->local_0[1] &&
-            func_800EFC7C(local_1->local_0, param_0) < local_1->local_3)
-            return param_2;
+    volumes = func_800CB8F0(group);
+    volume = &volumes[volume_idx];
+    top = pos[1] + height * 0.5f;
+    bottom = pos[1] - height * 0.5f;
+    if (type_mask & 1) {
+        if ((volume->type_bits & type_mask) && volume->pos[1] <= top &&
+            bottom < volume->pos[1] &&
+            func_800EFC7C(volume->pos, pos) < volume->radius)
+            return volume_idx;
     } else {
-        if ((local_1->local_4 & param_4) &&
-            ((local_1->local_4 & 2) || (local_1->local_0[1] - local_1->local_2 <= param_0[1] &&
-                                        param_0[1] < local_1->local_0[1] + local_1->local_2)) &&
-            func_800EFC7C(local_1->local_0, param_0) < local_1->local_3)
-            return param_2;
+        if ((volume->type_bits & type_mask) &&
+            ((volume->type_bits & 2) || (volume->pos[1] - volume->half_height <= pos[1] &&
+                                        pos[1] < volume->pos[1] + volume->half_height)) &&
+            func_800EFC7C(volume->pos, pos) < volume->radius)
+            return volume_idx;
     }
-    local_3 = func_800CB910(local_0);
-    if (param_4 & 1) {
-        for (local_1 = local_2; local_1 < local_3; local_1++) {
-            if ((local_1->local_4 & param_4) && local_1->local_0[1] <= local_4 &&
-                local_5 < local_1->local_0[1] &&
-                func_800EFC7C(local_1->local_0, param_0) < local_1->local_3)
-                return local_1 - local_2;
+    volume_end = func_800CB910(group);
+    if (type_mask & 1) {
+        for (volume = volumes; volume < volume_end; volume++) {
+            if ((volume->type_bits & type_mask) && volume->pos[1] <= top &&
+                bottom < volume->pos[1] &&
+                func_800EFC7C(volume->pos, pos) < volume->radius)
+                return volume - volumes;
         }
     } else {
-        for (local_1 = local_2; local_1 < local_3; local_1++) {
-            if ((local_1->local_4 & param_4) &&
-                ((local_1->local_4 & 2) || (local_1->local_0[1] - local_1->local_2 <= param_0[1] &&
-                                            param_0[1] < local_1->local_0[1] + local_1->local_2)) &&
-                func_800EFC7C(local_1->local_0, param_0) < local_1->local_3)
-                return local_1 - local_2;
+        for (volume = volumes; volume < volume_end; volume++) {
+            if ((volume->type_bits & type_mask) &&
+                ((volume->type_bits & 2) || (volume->pos[1] - volume->half_height <= pos[1] &&
+                                            pos[1] < volume->pos[1] + volume->half_height)) &&
+                func_800EFC7C(volume->pos, pos) < volume->radius)
+                return volume - volumes;
         }
     }
     return -1;
 }
 
-s32 func_800CCDF4(s32 param_0, s32 *param_1, s32 *param_2, s32 param_3, s32 param_4)
+// List 1 point query using a cached group/volume pair, refreshed on a miss. Returns 1 if pos is inside.
+s32 func_800CCDF4(s32 pos, s32 *cached_group, s32 *cached_volume, s32 height, s32 type_mask)
 {
-    s32 temp_v0;
-    s32 temp_v0_3;
-    s32 temp_v0_4;
-    s32 temp_v0_5;
-    s32 var_a2;
+    s32 group;
+    s32 volume;
+    s32 group_retry;
+    s32 volume_retry;
+    s32 start_volume;
 
-    if (-1 == *param_1) {
-        temp_v0 = func_800CBDD4(param_0, param_3, param_4);
-        *param_1 = temp_v0;
-        if (temp_v0 == -1) {
-            *param_2 = -1;
+    if (-1 == *cached_group) {
+        group = func_800CBDD4(pos, height, type_mask);
+        *cached_group = group;
+        if (group == -1) {
+            *cached_volume = -1;
             return 0;
         }
     }
-    if (-1 == *param_2) {
-        var_a2 = 0;
+    if (-1 == *cached_volume) {
+        start_volume = 0;
     } else {
-        var_a2 = *param_2;
+        start_volume = *cached_volume;
     }
-    temp_v0_3 = func_800CCAB0(param_0, *param_1, var_a2, param_3, param_4);
-    *param_2 = temp_v0_3;
-    if (temp_v0_3 >= 0) {
+    volume = func_800CCAB0(pos, *cached_group, start_volume, height, type_mask);
+    *cached_volume = volume;
+    if (volume >= 0) {
         return 1;
     }
-    temp_v0_4 = func_800CBDD4(param_0, param_3, param_4);
-    *param_1 = temp_v0_4;
-    if (temp_v0_4 == -1) {
-        *param_2 = -1;
+    group_retry = func_800CBDD4(pos, height, type_mask);
+    *cached_group = group_retry;
+    if (group_retry == -1) {
+        *cached_volume = -1;
         return 0;
     }
-    temp_v0_5 = func_800CCAB0(param_0, *param_1, 0, param_3, param_4);
-    *param_2 = temp_v0_5;
-    if (temp_v0_5 >= 0) {
+    volume_retry = func_800CCAB0(pos, *cached_group, 0, height, type_mask);
+    *cached_volume = volume_retry;
+    if (volume_retry >= 0) {
         return 1;
     }
-    *param_1 = -1;
+    *cached_group = -1;
     return 0;
 }
 
-int func_800CCEF4(void *param_0, s32 *param_1, s32 *param_2, s32 param_3)
+// List 2 point query using a cached group/volume pair, refreshed on a miss. Returns 1 if pos is inside.
+int func_800CCEF4(void *pos, s32 *cached_group, s32 *cached_volume, s32 param_3)
 {
-    if (*param_1 == -1) {
-        *param_1 = func_800CC078(param_0);
-        if (*param_1 == -1) {
-            *param_2 = -1;
+    if (*cached_group == -1) {
+        *cached_group = func_800CC078(pos);
+        if (*cached_group == -1) {
+            *cached_volume = -1;
             return 0;
         }
     }
-    *param_2 = func_800CC6F4(param_0, *param_1, *param_2 == -1 ? 0 : *param_2);
-    if (*param_2 >= 0)
+    *cached_volume = func_800CC6F4(pos, *cached_group, *cached_volume == -1 ? 0 : *cached_volume);
+    if (*cached_volume >= 0)
         return 1;
-    *param_1 = func_800CC078(param_0);
-    if (*param_1 == -1) {
-        *param_2 = -1;
+    *cached_group = func_800CC078(pos);
+    if (*cached_group == -1) {
+        *cached_volume = -1;
         return 0;
     }
-    *param_2 = func_800CC6F4(param_0, *param_1, 0);
-    if (*param_2 >= 0)
+    *cached_volume = func_800CC6F4(pos, *cached_group, 0);
+    if (*cached_volume >= 0)
         return 1;
-    *param_1 = -1;
+    *cached_group = -1;
     return 0;
 }
 
+// Defrags the zone arrays.
 int func_800CCFEC()
 {
     if (((int *) &D_8012AE80)[1]) {
@@ -583,40 +603,42 @@ int func_800CCFEC()
     }
 }
 
-void func_800CD08C(param_0, param_1) s32 param_0;
-u8 *param_1;
+// Picks a random point inside a random volume of the group and writes it to out_pos.
+void func_800CD08C(group_idx, out_pos) s32 group_idx;
+u8 *out_pos;
 {
-    f32 local_0;
-    f32 local_1;
-    s16 local_2;
-    s32 local_3;
-    u32 *local_4;
-    u32 local_5;
-    u8 *local_6;
+    f32 angle;
+    f32 max_angle;
+    s16 half_height;
+    s32 volumes;
+    u32 *group;
+    u32 volume_count;
+    u8 *volume;
 
-    local_4 = (param_0 * 0x1C) + D_8012AE84;
-    local_5 = (u32) *local_4 >> 9;
-    local_3 = func_800CB8F0(local_4);
-    local_1 = 359.0f;
+    group = (group_idx * 0x1C) + D_8012AE84;
+    volume_count = (u32) *group >> 9;
+    volumes = func_800CB8F0(group);
+    max_angle = 359.0f;
     do {
-        local_6 = (func_800DC128(0, local_5) * 0x18) + local_3;
-        func_800EE7F8(param_1, local_6);
-        local_0 = func_800DC178(0.0f, local_1);
-        func_800EF1B8(param_1, local_0,
-                      func_800DC178(0.0f, (f32) (*(s16 *) ((char *) local_6 + 0xC) - 5)));
-        local_2 = *(s16 *) ((char *) local_6 + 0xE);
-        *(f32 *) ((char *) param_1 + 4) =
-            (f32) (func_800DC178((f32) (5 - local_2), (f32) (local_2 - 5)) +
-                   *(f32 *) ((char *) param_1 + 4));
-    } while (func_800CC4D4(param_1, param_0) != -1);
+        volume = (func_800DC128(0, volume_count) * 0x18) + volumes;
+        func_800EE7F8(out_pos, volume);
+        angle = func_800DC178(0.0f, max_angle);
+        func_800EF1B8(out_pos, angle,
+                      func_800DC178(0.0f, (f32) (*(s16 *) ((char *) volume + 0xC) - 5)));
+        half_height = *(s16 *) ((char *) volume + 0xE);
+        *(f32 *) ((char *) out_pos + 4) =
+            (f32) (func_800DC178((f32) (5 - half_height), (f32) (half_height - 5)) +
+                   *(f32 *) ((char *) out_pos + 4));
+    } while (func_800CC4D4(out_pos, group_idx) != -1);
 }
 
-void func_800CD1E0(s32 param_0, f32 *param_1, f32 param_2)
+void func_800CD1E0(s32 group_idx, f32 *pos, f32 min_y)
 {
-    func_800CD08C(param_0);
-    if (param_1[1] < param_2) {
-        param_1[1] = param_2;
+    func_800CD08C(group_idx);
+    if (pos[1] < min_y) {
+        pos[1] = min_y;
     }
-    if (!param_1) {
+    // Matching: empty block needed for the match.
+    if (!pos) {
     }
 }

@@ -1,11 +1,13 @@
 #include "memory.h"
 #include "vector.h"
 
-s16 func_8001B668(s32, s32);
-void *func_8001B798(s16);
-void *func_8001B710(s16, s32);
-void func_8001B754(s16);
+// Handle-table variants of the heap functions.
+s16 func_8001B668(s32, s32); // alloc
+void *func_8001B798(s16); // get
+void *func_8001B710(s16, s32); // realloc
+void func_8001B754(s16); // free
 
+// Handle-based getter.
 Vector *func_800B2890(s16 arg0)
 {
     return (Vector *) func_8001B798(arg0);
@@ -63,6 +65,7 @@ void *vector_push_back(Vector **vec_ptr)
     return new_element;
 }
 
+// Handle-based variant of vector_push_back.
 void *func_800B2A58(s16 arg0)
 {
     void *new_element;
@@ -99,6 +102,7 @@ void *vector_insert(Vector **vec_ptr, s32 index)
     return (u8 *) vec->begin + index * vec->element_size;
 }
 
+// Handle-based variant of vector_insert (unused).
 void *func_800B2C1C(s16 arg0, s32 index)
 {
     Vector *vec;
@@ -106,6 +110,7 @@ void *func_800B2C1C(s16 arg0, s32 index)
 
     vec = func_8001B798(arg0);
     func_800B2A58(arg0);
+    // BUG: func_800B2A58 may reallocate the vector, so `vec` can be stale here.
     i = ((u8 *) vec->end - (u8 *) vec->begin) / vec->element_size;
     while (index < --i) {
         aligned4_memcpy((u8 *) vec->begin + i * vec->element_size,
@@ -119,6 +124,7 @@ void vector_free(Vector *vec)
     heap_free(vec);
 }
 
+// Handle-based variant of vector_free, pairs with func_800B2DC0.
 void func_800B2D48(s16 arg0)
 {
     func_8001B754(arg0);
@@ -134,6 +140,7 @@ Vector *vector_new(u32 element_size, u32 count)
     vec->mem_end = (u8 *) vec->end + count * element_size;
 }
 
+// Handle-based variant of vector_new.
 s16 func_800B2DC0(u32 element_size, u32 count)
 {
     s16 ret = func_8001B668(5, count * element_size + sizeof(Vector));
@@ -146,6 +153,7 @@ s16 func_800B2DC0(u32 element_size, u32 count)
     return ret;
 }
 
+// Matching: the line breaks in this function are needed for the match.
 void vector_erase(Vector* vec, u32 index) {
     u8* cur_element = (u8*)vec->begin + index * vec->element_size;\
         u8* next_element = (u8*)vec->begin + (index + 1) * vec->element_size;\
@@ -155,6 +163,8 @@ void vector_erase(Vector* vec, u32 index) {
     vec->end = (u8*)vec->end - vec->element_size;
 }
 
+// Overwrite the element at index with the last one, then shrink by one element.
+// Matching: the line breaks in this function are needed for the match.
 void vector_erase_unordered(Vector *vec, u32 index) {
     u8* cur_element = (u8*)vec->begin + index * vec->element_size;\
         u8* last_element = (u8*)vec->end - vec->element_size;

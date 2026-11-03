@@ -21,113 +21,120 @@ s32 func_8009CF90()
     return 0x8;
 }
 
-void func_8009CF98(PlayerState *param_0)
+// TU-NOTE: PlayerState+0xFC points to the turn-control state: +0 mode, +4 angle threshold.
+void func_8009CF98(PlayerState *self)
 {
     yaw_init();
-    *(f32 *) ((u8 *) *(u8 **) ((u8 *) param_0 + 0xFC) + 4) = 0.0f;
-    *(s32 *) ((u8 *) *(u8 **) ((u8 *) param_0 + 0xFC) + 0) = 0;
-    func_8009D2D8(param_0, 1);
+    // Matching: raw pointer casts needed for the match.
+    *(f32 *) ((u8 *) *(u8 **) ((u8 *) self + 0xFC) + 4) = 0.0f;
+    *(s32 *) ((u8 *) *(u8 **) ((u8 *) self + 0xFC) + 0) = 0;
+    func_8009D2D8(self, 1);
 }
 
-void func_8009CFD8(PlayerState *param_0, f32 param_1)
+// Sets the angle threshold used by mode 7.
+void func_8009CFD8(PlayerState *self, f32 threshold)
 {
-    *(f32 *) (*(s32 *) ((s8 *) param_0 + 252) + 4) = param_1;
+    *(f32 *) (*(s32 *) ((s8 *) self + 252) + 4) = threshold;
 }
 
-void func_8009CFE8(PlayerState *param_0)
+// Steers ideal yaw by stick X.
+void func_8009CFE8(PlayerState *self)
 {
-    f32 x = bastick_getX(param_0);
-    f32 d;
+    f32 x = bastick_getX(self);
+    f32 delta;
     if (0.03f < mlAbsF(x)) {
-        d = func_800F1344(x, 0.0f, 1.0f, 1.0f, 6.0f);
+        delta = func_800F1344(x, 0.0f, 1.0f, 1.0f, 6.0f);
     } else {
-        d = 0.0f;
+        delta = 0.0f;
     }
-    yaw_setIdeal(param_0, yaw_getIdeal(param_0) + d);
+    yaw_setIdeal(self, yaw_getIdeal(self) + delta);
 }
 
-void func_8009D088(u8 *param_0)
+// Per-frame yaw control, by mode: 1 follow stick, 5 reversed, 3 keep ideal,
+// 6 stick-X steering, 4 snap, 7 follow stick past threshold, 8 follow or keep current.
+void func_8009D088(u8 *self)
 {
-    switch (**(u32 **) ((s8 *) param_0 + 0xFC)) {
+    switch (**(u32 **) ((s8 *) self + 0xFC)) {
         case 0:
             break;
         case 1:
-            if (bastick_distance(param_0) != 0.0f) {
-                yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
+            if (bastick_distance(self) != 0.0f) {
+                yaw_setIdeal(self, bastick_getAngleRelativeToBanjo(self));
             }
-            yaw_update(param_0);
+            yaw_update(self);
             return;
         case 5:
-            if (bastick_distance(param_0) != 0.0f) {
-                yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0) + 180.0f);
+            if (bastick_distance(self) != 0.0f) {
+                yaw_setIdeal(self, bastick_getAngleRelativeToBanjo(self) + 180.0f);
             }
-            yaw_update(param_0);
+            yaw_update(self);
             return;
         case 3:
-            yaw_update(param_0);
+            yaw_update(self);
             return;
         case 6:
-            func_8009CFE8(param_0);
-            yaw_update(param_0);
+            func_8009CFE8(self);
+            yaw_update(self);
             return;
         case 4:
-            if (bastick_distance(param_0) != 0.0f) {
-                yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
-                yaw_set(param_0, yaw_getIdeal(param_0));
+            if (bastick_distance(self) != 0.0f) {
+                yaw_setIdeal(self, bastick_getAngleRelativeToBanjo(self));
+                yaw_set(self, yaw_getIdeal(self));
             }
-            yaw_update(param_0);
+            yaw_update(self);
             return;
         case 7:
-            if (bastick_distance(param_0) != 0.0f) {
-                f32 sp24 = bastick_getAngleRelativeToBanjo(param_0);
-                if (*(f32 *) ((s8 *) *(u32 **) ((s8 *) param_0 + 0xFC) + 4) <=
-                    mlAbsF(func_800F1DCC(yaw_getIdeal(param_0), sp24))) {
-                    yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
+            if (bastick_distance(self) != 0.0f) {
+                f32 stick_angle = bastick_getAngleRelativeToBanjo(self);
+                if (*(f32 *) ((s8 *) *(u32 **) ((s8 *) self + 0xFC) + 4) <=
+                    mlAbsF(func_800F1DCC(yaw_getIdeal(self), stick_angle))) {
+                    yaw_setIdeal(self, bastick_getAngleRelativeToBanjo(self));
                 }
             }
-            yaw_update(param_0);
+            yaw_update(self);
             return;
         case 8:
-            if (bastick_distance(param_0) != 0.0f) {
-                yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
+            if (bastick_distance(self) != 0.0f) {
+                yaw_setIdeal(self, bastick_getAngleRelativeToBanjo(self));
             } else {
-                yaw_setIdeal(param_0, yaw_get(param_0));
+                yaw_setIdeal(self, yaw_get(self));
             }
-            yaw_update(param_0);
+            yaw_update(self);
             return;
         case 9:
-            yaw_update(param_0);
+            yaw_update(self);
     }
 }
 
-void func_8009D2D8(param_0, param_1) PlayerState *param_0;
-s32 param_1;
+void func_8009D2D8(self, mode) PlayerState *self;
+s32 mode;
 {
-    **(s32 **) ((u8 *) param_0 + 0xFC) = param_1;
+    **(s32 **) ((u8 *) self + 0xFC) = mode;
 }
 
-u32 func_8009D2E4(u8 *param_0)
+u32 func_8009D2E4(u8 *self)
 {
-    return **(s32 ***) (param_0 + 0xFC);
+    return **(s32 ***) (self + 0xFC);
 }
 
-void func_8009D2F0(PlayerState *param_0, s32 param_1, f32 param_2)
+// Aligns pitch and roll to the floor normal, relative to yaw (or yaw + 180 if reversed).
+void func_8009D2F0(PlayerState *self, s32 reversed, f32 unk_0)
 {
-    f32 in[3];
-    f32 out[3];
-    if ((func_80096628(param_0) & 2) == 0) {
-        func_800963C0(param_0, in);
-        if (param_1 != 0) {
-            func_800F1B78(out, in, func_800136E4(yaw_get(param_0) + 180.0f), param_2);
+    f32 normal[3];
+    f32 angles[3];
+    if ((func_80096628(self) & 2) == 0) {
+        func_800963C0(self, normal);
+        if (reversed != 0) {
+            func_800F1B78(angles, normal, func_800136E4(yaw_get(self) + 180.0f), unk_0);
         } else {
-            func_800F1B78(out, in, yaw_get(param_0), param_2);
+            func_800F1B78(angles, normal, yaw_get(self), unk_0);
         }
-        func_8009BF5C(param_0, out[0]);
-        baroll_setIdeal(param_0, out[2]);
+        func_8009BF5C(self, angles[0]);
+        baroll_setIdeal(self, angles[2]);
     }
 }
 
-void func_8009D3A8(PlayerState *param_0, s32 param_1)
+void func_8009D3A8(PlayerState *self, s32 reversed)
 {
-    func_8009D2F0(param_0, param_1, 1.0f);
+    func_8009D2F0(self, reversed, 1.0f);
 }

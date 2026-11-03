@@ -1,48 +1,54 @@
 #include "core2/1EA0690.h"
 #include "core2/1EB3750.h"
 
+// TU-NOTE: D_8012AAD0 holds the last frame each of 4 channels fired; D_8012AAE0 is the frame counter.
 extern s32 D_8012AAE0;
 s32 D_8012AAD0[4];
 
 extern void debug_call();
 
-void func_800C6DA0(s32 param_0)
+// First use of an ability: marks it used and plays music track 0xE.
+void func_800C6DA0(s32 ability_id)
 {
+    // Matching: always-zero flag guards an 8-arg call that IDO removes but whose
+    // outgoing-arg frame area stays. debug_call is a stand-in callee.
     s32 debug = 0;
-    s32 local_0;
-    local_0 = 1;
-    if (func_800C6E18(param_0)) {
+    s32 play_music;
+    play_music = 1;
+    if (func_800C6E18(ability_id)) {
         return;
     }
-    switch (param_0 - 0x3C) {
+    switch (ability_id - 0x3C) {
         case 0:
         case 1:
             break;
 
         case 6:
-            local_0 = 0;
+            play_music = 0;
 
         case 7:
         case 9:
             break;
     }
-    if (local_0) {
+    if (play_music) {
         func_800FC6B0(0xE);
     }
-    func_800C70D0(param_0, 1);
+    func_800C70D0(ability_id, 1);
     if (debug)
         debug_call(1, 2, 3, 4, 5, 6, 7, 8);
 }
 
-s32 func_800C6E18(param_0)
-s32 param_0;
+// Has the ability been used/seen.
+s32 func_800C6E18(ability_id)
+s32 ability_id;
 {
-    func_800DA298(param_0 + 0xEE);
+    func_800DA298(ability_id + 0xEE);
 }
 
-s32 func_800C6E38(s32 AbilityID)
+// Has the ability been learned.
+s32 func_800C6E38(s32 ability_id)
 {
-    return func_800DA298(AbilityID + FLAG_0ED_ABILITY_BK_BEAK_BARGE);
+    return func_800DA298(ability_id + FLAG_0ED_ABILITY_BK_BEAK_BARGE);
 }
 
 void func_800C6E58(void)
@@ -87,64 +93,69 @@ void func_800C6E60(void)
     func_800C70D0(0x48, 1);
 }
 
+// Give all abilities.
 void func_800C7010(void)
 {
-    s32 var_s0 = 0;
+    s32 id = 0;
 
-while (var_s0 < 0x3C) {
-    func_800C70B0(var_s0, 1);
-    var_s0++;
+while (id < 0x3C) {
+    func_800C70B0(id, 1);
+    id++;
 }
 
-var_s0 = 0x3C;
+id = 0x3C;
 
-while (var_s0 < 0x50) {
-    func_800C70D0(var_s0, 1);
-    var_s0 += 1;
+while (id < 0x50) {
+    func_800C70D0(id, 1);
+    id += 1;
 }
 
 }
 
-void func_800C7074(s32 arg0, s32 arg1)
+void func_800C7074(s32 ability_id, s32 set)
 {
-    func_800C70B0(arg0, arg1);
+    func_800C70B0(ability_id, set);
 
-if (arg1 != 0) {
-    func_80101238(0x1A, arg0);
+if (set != 0) {
+    func_80101238(0x1A, ability_id);
 }
 
 }
 
-void func_800C70B0(s32 arg0, s32 set)
+// Set the ability-learned flag.
+void func_800C70B0(s32 ability_id, s32 set)
 {
-    func_800DA3B8(arg0 + FLAG_0ED_ABILITY_BK_BEAK_BARGE, set);
+    func_800DA3B8(ability_id + FLAG_0ED_ABILITY_BK_BEAK_BARGE, set);
 }
 
-void func_800C70D0(s32 arg0, s32 set)
+// Set the ability-used flag.
+void func_800C70D0(s32 ability_id, s32 set)
 {
-    func_800DA3B8(arg0 + FLAG_0EE_ABILITY_BK_BEAK_BOMB, set);
+    func_800DA3B8(ability_id + FLAG_0EE_ABILITY_BK_BEAK_BOMB, set);
 }
 
-int func_800C70F0(s32 param_0)
+int func_800C70F0(s32 channel)
 {
-    ((s32 *) D_8012AAD0)[param_0] = D_8012AAE0;
+    ((s32 *) D_8012AAD0)[channel] = D_8012AAE0;
 }
 
-int func_800C710C(s32 param_0)
+// Returns 1 at most once every 5 frames per channel.
+int func_800C710C(s32 channel)
 {
-    s32 *ptr = (s32 *) (((char *) (((s32 *) D_8012AAD0))) + (param_0 << 2));
+    s32 *last_frame = (s32 *) (((char *) (((s32 *) D_8012AAD0))) + (channel << 2));
 
-if (((*ptr + 5) & 0xFFFFFFFFu) < D_8012AAE0) {
-    *ptr = D_8012AAE0;
+if (((*last_frame + 5) & 0xFFFFFFFFu) < D_8012AAE0) {
+    *last_frame = D_8012AAE0;
     return 1;
 }
 
 return 0;
 }
 
-void *func_800C7150(void *arg0)
+// Passthrough to defrag.
+void *func_800C7150(void *ptr)
 {
-    return defrag(arg0);
+    return defrag(ptr);
 }
 void func_800C7170(void)
 {

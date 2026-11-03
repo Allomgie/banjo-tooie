@@ -2,31 +2,37 @@
 #include "freelist.h"
 
 extern void *defrag(void *arg);
+// Scratch buffer slot (5 in D_801243A0): s16 elem_size and s16 count packed in unk_0,
+// frame of last use, heap pointer. Slots are also accessed through byte offsets.
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
+    s32 unk_0;
+    s32 last_frame;
+    s32 buffer;
 } D_801243A0_t;
 extern D_801243A0_t D_801243A0[];
 extern D_801243A0_t D_801243DC;
 extern FreeList *D_80135A60;
+// TU-NOTE: D_80135A60, D_80135A64 and D_80135A68 are one block {instances, variants,
+// next_anim_id}, also read through LocalPools, State100B4C and OSPiInfo.
 typedef struct {
     u8 pad_0[0x17];
-    u8 field_17;
+    u8 unk_17;
 } LocalObject_801007B8;
+// Per-actor model instance: up to 2 private vertex copies and an optional packed variant.
 typedef struct {
-    LocalObject_801007B8 *field_0[2];
-    u8 field_8, field_9, field_A;
+    LocalObject_801007B8 *vtx_copies[2];
+    u8 variant_id, active, release_timer;
 } LocalInstance;
+// Refcounted colour-tinted packed-vertex variant, keyed by (model_id, anim_id, rgb).
 typedef struct {
-    void *field_0;
-    s16 field_4, field_6;
-    u8 field_8;
-    u8 field_9[3];
+    void *packed_vtx;
+    s16 model_id, anim_id;
+    u8 refcount;
+    u8 rgb[3];
 } LocalCache;
 typedef struct {
-    FreeList *field_0, *field_4;
-    s32 field_8;
+    FreeList *instances, *variants;
+    s32 next_anim_id;
 } LocalPools;
 extern FreeList *D_80135A64;
 extern void *func_800B2840(void *);
@@ -38,91 +44,97 @@ extern void func_800F2F20();
 extern void func_800F31EC();
 extern s32 D_80135A68;
 typedef struct {
-    void *local_0, *local_1;
+    void *instances, *variants;
 } State100B4C;
 typedef struct {
     u8 pad_0[0x14];
     u32 pad_14 : 31;
-    u32 field_17 : 1;
+    u32 unk_17 : 1;
 } LocalObject_80100D24;
 struct OSPiInfo {
-    u32 field0;
-    u32 field4;
+    u32 unk_0;
+    u32 unk_4;
 };
 void func_80100C74();
 
-s32 func_80100480(s32 param_0, s32 param_1)
+// Returns the slot's scratch buffer, grown to hold count elements. Never shrinks.
+s32 func_80100480(s32 slot_id, s32 count)
 {
-    s32 local_0;
-    s32 local_1;
-    u8 *local_2;
+    s32 old_buf;
+    s32 new_buf;
+    u8 *slot;
 
-    local_2 = (u8 *) (s32 *) D_801243A0 + param_0 * 12;
-    local_0 = *(s32 *) ((s8 *) local_2 + 8);
-    if (local_0 == 0) {
-        *(s16 *) ((s8 *) local_2 + 2) = param_1;
-        local_1 = heap_alloc(*(s16 *) ((s8 *) local_2 + 2) * *(s16 *) ((s8 *) local_2 + 0));
-        *(s32 *) ((s8 *) local_2 + 8) = local_1;
-    } else if (*(s16 *) ((s8 *) local_2 + 2) < param_1) {
-        *(s16 *) ((s8 *) local_2 + 2) = param_1;
-        local_1 =
-            heap_realloc(local_0, *(s16 *) ((s8 *) local_2 + 2) * *(s16 *) ((s8 *) local_2 + 0));
-        *(s32 *) ((s8 *) local_2 + 8) = local_1;
+    slot = (u8 *) (s32 *) D_801243A0 + slot_id * 12;
+    old_buf = *(s32 *) ((s8 *) slot + 8);
+    if (old_buf == 0) {
+        *(s16 *) ((s8 *) slot + 2) = count;
+        new_buf = heap_alloc(*(s16 *) ((s8 *) slot + 2) * *(s16 *) ((s8 *) slot + 0));
+        *(s32 *) ((s8 *) slot + 8) = new_buf;
+    } else if (*(s16 *) ((s8 *) slot + 2) < count) {
+        *(s16 *) ((s8 *) slot + 2) = count;
+        new_buf =
+            heap_realloc(old_buf, *(s16 *) ((s8 *) slot + 2) * *(s16 *) ((s8 *) slot + 0));
+        *(s32 *) ((s8 *) slot + 8) = new_buf;
     }
-    *(s32 *) ((s8 *) local_2 + 4) = func_8001211C();
-    return *(s32 *) ((s8 *) local_2 + 8);
+    *(s32 *) ((s8 *) slot + 4) = func_8001211C();
+    return *(s32 *) ((s8 *) slot + 8);
 }
 
 void func_8010052C(void)
 {
 }
 
+// Frees scratch buffers unused for 31 frames or more.
+// Matching: the line breaks in this function are needed for the match.
 void func_80100534(void)
 {
-    s32 local_0;
-    ALBank *local_1;
-    local_0 = func_8001211C();
-    local_1 = (ALBank *) (u8 *) D_801243A0; do {
-        if ((*(s32 *) ((char *) local_1 + 0x8) != 0) && ((local_0 - *(s32 *) ((char *) local_1 + 0x4)) >= 0x1F))
+    s32 frame;
+    ALBank *slot;
+    frame = func_8001211C();
+    slot = (ALBank *) (u8 *) D_801243A0; do {
+        if ((*(s32 *) ((char *) slot + 0x8) != 0) && ((frame - *(s32 *) ((char *) slot + 0x4)) >= 0x1F))
         {
-            heap_free(*(s32 *) ((char *) local_1 + 0x8));
-            *(s32 *) ((char *) local_1 + 0x8) = 0;
-            *(s16 *) ((char *) local_1 + 0x2) = 0;
-            *(s32 *) ((char *) local_1 + 0x4) = 0;
+            heap_free(*(s32 *) ((char *) slot + 0x8));
+            *(s32 *) ((char *) slot + 0x8) = 0;
+            *(s16 *) ((char *) slot + 0x2) = 0;
+            *(s32 *) ((char *) slot + 0x4) = 0;
         }
-        local_1 = (ALBank *) ((char *) local_1 + 0xC);
+        slot = (ALBank *) ((char *) slot + 0xC);
     }
-    while (local_1 != (ALBank *) (u8 *) &D_801243DC);
+    while (slot != (ALBank *) (u8 *) &D_801243DC);
 }
 
+// Defragments the scratch buffers.
 void func_801005B8()
 {
-    D_801243A0_t *local_0 = D_801243A0, *local_1 = &D_801243DC;
+    D_801243A0_t *slot = D_801243A0, *end = &D_801243DC;
     do {
-        s32 new_var3 = local_0->unk8;
-        if (new_var3 != 0) {
-            local_0->unk8 = (s32) defrag((void *) new_var3);
+        s32 buffer = slot->buffer;
+        if (buffer != 0) {
+            slot->buffer = (s32) defrag((void *) buffer);
         }
-        local_0++;
-    } while (local_0 != local_1);
+        slot++;
+    } while (slot != end);
 }
 
+// Frees all scratch buffers.
+// Matching: the line breaks in this function are needed for the match.
 void func_80100610(void)
 {
-    s32 local_1;
-    s8 *local_0;
-    local_0 = (s8 *) D_801243A0; do {
-        local_1 = *(s32 *) ((0, (s8 *) local_0) - -8);
-        if (local_1 != 0)
+    s32 buffer;
+    s8 *slot;
+    slot = (s8 *) D_801243A0; do {
+        buffer = *(s32 *) ((0, (s8 *) slot) - -8); // Matching: comma operator and "- -8" are needed.
+        if (buffer != 0)
         {
-            heap_free(local_1);
-            *(s32 *) (8 + (s8 *) local_0) = 0;
-            *(s16 *) (local_0 + 2) = 0;
-            *(s32 *) ((s8 *) local_0 + 4) = 0;
+            heap_free(buffer);
+            *(s32 *) (8 + (s8 *) slot) = 0;
+            *(s16 *) (slot + 2) = 0;
+            *(s32 *) ((s8 *) slot + 4) = 0;
         }
-        local_0 += 0xC;
+        slot += 0xC;
     }
-    while (local_0 != (s8 *) &D_801243DC);
+    while (slot != (s8 *) &D_801243DC);
 }
 
 void func_80100670()
@@ -130,78 +142,84 @@ void func_80100670()
     func_80100610();
 }
 
-int func_80100690(s32 param_0)
+// Allocates an instance record, creating the freelist on first use.
+int func_80100690(s32 out_index)
 {
     if (!D_80135A60) {
         D_80135A60 = freelist_new(0xC, 2);
     }
-    freelist_next(&D_80135A60, param_0);
+    freelist_next(&D_80135A60, out_index);
 }
 
-int func_801006E0(s32 param_0)
+// Allocates a packed-variant record, creating the freelist on first use.
+int func_801006E0(s32 out_index)
 {
-    s32 *new_var;
+    s32 *unk_0;
+    // Matching: the do-while(0) wrapper and the pointer reuse are needed for the match.
     if (!(void *) D_80135A64) {
-        new_var = freelist_new(0xC, 2);
+        unk_0 = freelist_new(0xC, 2);
         do {
-            D_80135A64 = new_var;
+            D_80135A64 = unk_0;
         } while (0);
     }
-    new_var = &param_0;
-    freelist_next((void **) &D_80135A64, *new_var);
+    unk_0 = &out_index;
+    freelist_next((void **) &D_80135A64, *unk_0);
 }
 
-int func_8010072C(s32 *param_0, u8 *param_1)
+// Compares rgb with a cached tint; NULL rgb means white.
+int func_8010072C(s32 *rgb, u8 *cached_rgb)
 {
-    if (param_0 != 0)
-        return param_0[0] == param_1[0] && param_0[1] == param_1[1] && param_0[2] == param_1[2];
-    return 255 == param_1[0] && 255 == param_1[1] && 255 == param_1[2];
+    if (rgb != 0)
+        return rgb[0] == cached_rgb[0] && rgb[1] == cached_rgb[1] && rgb[2] == cached_rgb[2];
+    return 255 == cached_rgb[0] && 255 == cached_rgb[1] && 255 == cached_rgb[2];
 }
 
-s32 func_801007B8(void *param_0, s32 param_1, s32 param_2, u8 *param_3)
+// Returns the id of the packed variant for (model_id, anim_id, rgb); builds it if missing.
+s32 func_801007B8(void *model, s32 model_id, s32 anim_id, u8 *rgb)
 {
-    LocalCache *local_0;
-    void *local_1;
-    s32 local_2;
-    if ((*(LocalPools *) &D_80135A60).field_4) {
-        for (local_2 = 1; local_2 < freelist_capacity((*(LocalPools *) &D_80135A60).field_4);
-             local_2++) {
-            if (freelist_is_element_alive((*(LocalPools *) &D_80135A60).field_4, local_2)) {
-                local_0 = freelist_at((*(LocalPools *) &D_80135A60).field_4, local_2);
-                if (param_1 == local_0->field_4 && param_2 == local_0->field_6 &&
-                    func_8010072C(param_3, local_0->field_9)) {
-                    local_0->field_8++;
-                    return local_2;
+    LocalCache *entry;
+    void *anim_data;
+    s32 cache_id;
+    if ((*(LocalPools *) &D_80135A60).variants) {
+        for (cache_id = 1; cache_id < freelist_capacity((*(LocalPools *) &D_80135A60).variants);
+             cache_id++) {
+            if (freelist_is_element_alive((*(LocalPools *) &D_80135A60).variants, cache_id)) {
+                entry = freelist_at((*(LocalPools *) &D_80135A60).variants, cache_id);
+                if (model_id == entry->model_id && anim_id == entry->anim_id &&
+                    func_8010072C(rgb, entry->rgb)) {
+                    entry->refcount++;
+                    return cache_id;
                 }
             }
         }
     }
-    local_0 = func_801006E0(&local_2);
-    if (param_2)
-        local_1 = func_800D674C(param_2);
+    entry = func_801006E0(&cache_id);
+    if (anim_id)
+        anim_data = func_800D674C(anim_id);
     else
-        local_1 = NULL;
-    local_0->field_0 = _glpackvtx_entrypoint_0(func_800B2840(param_0), local_1, param_3);
-    local_0->field_4 = param_1;
-    local_0->field_6 = param_2;
-    local_0->field_8 = 1;
-    if (param_3)
-        func_800F2F20(local_0->field_9, param_3);
+        anim_data = NULL;
+    entry->packed_vtx = _glpackvtx_entrypoint_0(func_800B2840(model), anim_data, rgb);
+    entry->model_id = model_id;
+    entry->anim_id = anim_id;
+    entry->refcount = 1;
+    if (rgb)
+        func_800F2F20(entry->rgb, rgb);
     else
-        func_800F31EC(local_0->field_9, 0xFF, 0xFF, 0xFF);
-    return local_2;
+        func_800F31EC(entry->rgb, 0xFF, 0xFF, 0xFF);
+    return cache_id;
 }
 
-void func_80100938(s32 param_0)
+// Drops one reference to a packed variant and frees it at zero.
+void func_80100938(s32 cache_id)
 {
-    u8 *local_2;
-    local_2 = freelist_at(D_80135A64, param_0);
-    local_2[8]--;
-    if (local_2[8] == 0) {
-        _glpackvtx_entrypoint_1(*(s32 *) local_2);
-        *(s32 *) local_2 = 0;
-        *(s16 *) (local_2 + 4) = 0;
-        freelist_erase(D_80135A64, param_0);
+    u8 *entry;
+    entry = freelist_at(D_80135A64, cache_id);
+    entry[8]--;
+    if (entry[8] == 0) {
+        _glpackvtx_entrypoint_1(*(s32 *) entry);
+        *(s32 *) entry = 0;
+        *(s16 *) (entry + 4) = 0;
+        freelist_erase(D_80135A64, cache_id);
         if (freelist_used_count(D_80135A64) == 0) {
             freelist_free(D_80135A64);
             D_80135A64 = 0;
@@ -209,95 +227,102 @@ void func_80100938(s32 param_0)
     }
 }
 
-int func_801009C4(ALTempoEvent *param_0, s32 param_1)
+// Releases an instance: frees its vertex copies and packed variant, then the record.
+int func_801009C4(ALTempoEvent *instance, s32 instance_id)
 {
-    ALTempoEvent **local_0;
-    s32 var_s0;
-    s32 temp_v0;
-    var_s0 = 0;
-    local_0 = param_0;
+    ALTempoEvent **copy;
+    s32 offset;
+    s32 variant_id;
+    offset = 0;
+    copy = instance;
     do {
-        if (*local_0) {
-            func_800B23E0(*local_0);
+        if (*copy) {
+            func_800B23E0(*copy);
         }
-        var_s0 += 4;
-        local_0 += 1;
-    } while (var_s0 != 8);
-    temp_v0 = *(u8 *) ((char *) param_0 + 0x8);
-    if (temp_v0 != 0) {
-        func_80100938(temp_v0 ^ 0);
+        offset += 4;
+        copy += 1;
+    } while (offset != 8);
+    variant_id = *(u8 *) ((char *) instance + 0x8);
+    if (variant_id != 0) {
+        func_80100938(variant_id ^ 0); // Matching: "^ 0" is needed for the match.
     }
-    *(s8 *) ((char *) param_0 + 0x9) = 0;
-    freelist_erase(*(s32 *) (u8 *) &D_80135A60, param_1);
+    *(s8 *) ((char *) instance + 0x9) = 0;
+    freelist_erase(*(s32 *) (u8 *) &D_80135A60, instance_id);
     if (freelist_used_count(*(s32 *) (u8 *) &D_80135A60) == 0) {
         freelist_free(*(s32 *) (u8 *) &D_80135A60);
         *(s32 *) (u8 *) &D_80135A60 = 0;
     }
 }
 
-int func_80100A74(param_0, param_1)
-s16 param_0;
-s32 param_1;
+// Returns the instance's vertex buffer buf_index, or 0 if the instance is inactive.
+int func_80100A74(instance_id, buf_index)
+s16 instance_id;
+s32 buf_index;
 {
-    u8 *temp_v0;
-    int new_var;
-    temp_v0 = freelist_at((int) D_80135A60, (long) param_0);
-    return temp_v0[new_var = 9] ? *((s32 *) temp_v0 + param_1) : 0;
+    u8 *instance;
+    int offset;
+    instance = freelist_at((int) D_80135A60, (long) instance_id);
+    // Matching: the extra temporary holding the field offset is needed for the match.
+    return instance[offset = 9] ? *((s32 *) instance + buf_index) : 0;
 }
 
-s32 func_80100AC4(param_0)
-s16 param_0;
+// Returns the instance's packed vertex buffer, or 0 if it has none.
+s32 func_80100AC4(instance_id)
+s16 instance_id;
 {
-    u8 *local_0;
-    u8 *local_1;
-    local_0 = freelist_at(D_80135A60, param_0);
+    u8 *instance;
+    u8 *variant;
+    instance = freelist_at(D_80135A60, instance_id);
 
-    if (local_0[8] == 0) {
+    if (instance[8] == 0) {
         return 0;
     }
 
-    local_1 = freelist_at(((s32) D_80135A64), local_0[8]);
-    return local_1[8] ? *(s32 *) local_1 : 0;
+    variant = freelist_at(((s32) D_80135A64), instance[8]);
+    return variant[8] ? *(s32 *) variant : 0;
 }
 
+// Resets the counter for unique anim ids.
 void func_80100B3C()
 {
     D_80135A68 = 0x3667;
 }
 
+// Frees all instances and packed variants.
 void func_80100B4C(void)
 {
-    s32 local_0;
+    s32 i;
     func_80100C74();
     func_80100C74();
-    for (local_0 = 1; (*((State100B4C *) &D_80135A60)).local_0 &&
-                      local_0 < freelist_capacity((*((State100B4C *) &D_80135A60)).local_0);
-         local_0++) {
-        if (freelist_is_element_alive((*((State100B4C *) &D_80135A60)).local_0, local_0))
-            func_801009C4(freelist_at((*((State100B4C *) &D_80135A60)).local_0, local_0), local_0);
+    for (i = 1; (*((State100B4C *) &D_80135A60)).instances &&
+                      i < freelist_capacity((*((State100B4C *) &D_80135A60)).instances);
+         i++) {
+        if (freelist_is_element_alive((*((State100B4C *) &D_80135A60)).instances, i))
+            func_801009C4(freelist_at((*((State100B4C *) &D_80135A60)).instances, i), i);
     }
-    if ((*((State100B4C *) &D_80135A60)).local_0) {
-        freelist_free((*((State100B4C *) &D_80135A60)).local_0);
-        (*((State100B4C *) &D_80135A60)).local_0 = 0;
+    if ((*((State100B4C *) &D_80135A60)).instances) {
+        freelist_free((*((State100B4C *) &D_80135A60)).instances);
+        (*((State100B4C *) &D_80135A60)).instances = 0;
     }
 
-    if ((*(State100B4C *) &D_80135A60).local_1) {
-        for (local_0 = 1; local_0 < freelist_capacity((*(State100B4C *) &D_80135A60).local_1);
-             local_0++) {
-            if (freelist_is_element_alive((*(State100B4C *) &D_80135A60).local_1, local_0))
+    if ((*(State100B4C *) &D_80135A60).variants) {
+        for (i = 1; i < freelist_capacity((*(State100B4C *) &D_80135A60).variants);
+             i++) {
+            if (freelist_is_element_alive((*(State100B4C *) &D_80135A60).variants, i))
                 _glpackvtx_entrypoint_1(
-                    *(void **) freelist_at((*(State100B4C *) &D_80135A60).local_1, local_0));
+                    *(void **) freelist_at((*(State100B4C *) &D_80135A60).variants, i));
         }
-        freelist_free((*(State100B4C *) &D_80135A60).local_1);
-        (*(State100B4C *) &D_80135A60).local_1 = 0;
+        freelist_free((*(State100B4C *) &D_80135A60).variants);
+        (*(State100B4C *) &D_80135A60).variants = 0;
     }
 }
 
+// Counts down each instance's release timer and releases the instance at zero.
 void func_80100C74()
 {
-    s32 local_0;
-    u8 *local_1;
-    local_0 = 1;
+    s32 i;
+    u8 *instance;
+    i = 1;
 
     if (D_80135A60 == 0) {
         return;
@@ -308,127 +333,137 @@ void func_80100C74()
     }
 
     for (;;) {
-        if (!freelist_is_element_alive(D_80135A60, local_0)) {
+        if (!freelist_is_element_alive(D_80135A60, i)) {
             goto next;
         }
-        local_1 = freelist_at(D_80135A60, local_0);
-        if (local_1[0xA] == 0) {
+        instance = freelist_at(D_80135A60, i);
+        if (instance[0xA] == 0) {
             goto next;
         }
-        if (--local_1[0xA] != 0) {
+        if (--instance[0xA] != 0) {
             goto next;
         }
-        func_801009C4(local_1, local_0);
+        func_801009C4(instance, i);
     next:
-        local_0++;
+        i++;
 
-        if ((D_80135A60 == 0) || (local_0 >= freelist_capacity(D_80135A60))) {
+        if ((D_80135A60 == 0) || (i >= freelist_capacity(D_80135A60))) {
             break;
         }
     }
 }
 
-s16 func_80100D24(void *param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4, u8 *param_5)
+// Creates an instance with up to copy_count private vertex copies (max 2) and, if
+// with_variant is set, a packed variant. Returns the instance id.
+s16 func_80100D24(void *model, s32 model_id, s32 copy_count, s32 with_variant, s32 anim_id, u8 *rgb)
 {
-    LocalObject_80100D24 *local_4;
-    s32 local_0;
-    LocalInstance *local_1;
-    void *local_2;
-    s32 local_3;
-    local_1 = func_80100690(&local_0);
-    local_2 = func_800B2840(param_0);
-    for (local_3 = 0; local_3 < 2; local_3++) {
-        if (local_3 < param_2) {
-            local_4 = func_800B2400(local_2, 0);
-            local_1->field_0[local_3] = local_4;
-            local_4->field_17 = 1;
+    LocalObject_80100D24 *copy;
+    s32 instance_id;
+    LocalInstance *instance;
+    void *vtx_list;
+    s32 i;
+    instance = func_80100690(&instance_id);
+    vtx_list = func_800B2840(model);
+    for (i = 0; i < 2; i++) {
+        if (i < copy_count) {
+            copy = func_800B2400(vtx_list, 0);
+            instance->vtx_copies[i] = copy;
+            copy->unk_17 = 1;
         } else {
-            local_1->field_0[local_3] = NULL;
+            instance->vtx_copies[i] = NULL;
         }
     }
-    if (param_3)
-        local_1->field_8 = func_801007B8(param_0, param_1, param_4, param_5);
+    if (with_variant)
+        instance->variant_id = func_801007B8(model, model_id, anim_id, rgb);
     else
-        local_1->field_8 = 0;
-    local_1->field_9 = 1;
-    local_1->field_A = 0;
-    return local_0;
+        instance->variant_id = 0;
+    instance->active = 1;
+    instance->release_timer = 0;
+    return instance_id;
 }
 
-s32 func_80100E18(indx)
-s16 indx;
+// Starts the 2-frame release countdown for an instance.
+s32 func_80100E18(instance_id)
+s16 instance_id;
 {
-    s32 local_0 = freelist_at(D_80135A60, indx);
-    *(u8 *) (local_0 + 0xA) = 2;
+    s32 instance = freelist_at(D_80135A60, instance_id);
+    *(u8 *) (instance + 0xA) = 2;
 }
 
+// Defragments the instance freelist, the packed variants and the variant freelist.
 void func_80100E54()
 {
-    struct OSPiInfo *s0;
-    u32 new_var;
-    struct OSPiInfo *s1;
-    s1 = (struct OSPiInfo *) (*(struct OSPiInfo *) &D_80135A60).field0;
-    if (s1 != 0) {
-        (*(struct OSPiInfo *) &D_80135A60).field0 =
-            (new_var = (u32) freelist_defrag((void *) (*(struct OSPiInfo *) &D_80135A60).field0));
+    struct OSPiInfo *entry;
+    u32 defragged;
+    struct OSPiInfo *instances;
+    instances = (struct OSPiInfo *) (*(struct OSPiInfo *) &D_80135A60).unk_0;
+    if (instances != 0) {
+        (*(struct OSPiInfo *) &D_80135A60).unk_0 =
+            (defragged = (u32) freelist_defrag((void *) (*(struct OSPiInfo *) &D_80135A60).unk_0));
     }
-    s0 = (struct OSPiInfo *) (*(struct OSPiInfo *) &D_80135A60).field4;
-    if (s0 != 0) {
-        int local_1;
-        for (local_1 = 1;
-             local_1 < freelist_capacity((void *) (*(struct OSPiInfo *) &D_80135A60).field4);
-             local_1++) {
-            if (freelist_is_element_alive((void *) (*(struct OSPiInfo *) &D_80135A60).field4,
-                                          local_1)) {
-                s0 = (struct OSPiInfo *) freelist_at(
-                    (void *) (*(struct OSPiInfo *) &D_80135A60).field4, local_1);
-                if (((!(*(struct OSPiInfo *) &D_80135A60).field0 &&
-                      !(*(struct OSPiInfo *) &D_80135A60).field0) &&
-                     !(*(struct OSPiInfo *) &D_80135A60).field0) != 0) {
+    entry = (struct OSPiInfo *) (*(struct OSPiInfo *) &D_80135A60).unk_4;
+    if (entry != 0) {
+        int i;
+        for (i = 1;
+             i < freelist_capacity((void *) (*(struct OSPiInfo *) &D_80135A60).unk_4);
+             i++) {
+            if (freelist_is_element_alive((void *) (*(struct OSPiInfo *) &D_80135A60).unk_4,
+                                          i)) {
+                entry = (struct OSPiInfo *) freelist_at(
+                    (void *) (*(struct OSPiInfo *) &D_80135A60).unk_4, i);
+                // Matching: the empty if with a repeated test is needed for the match.
+                if (((!(*(struct OSPiInfo *) &D_80135A60).unk_0 &&
+                      !(*(struct OSPiInfo *) &D_80135A60).unk_0) &&
+                     !(*(struct OSPiInfo *) &D_80135A60).unk_0) != 0) {
                 }
-                s0->field0 = (u32) defrag((void *) s0->field0);
+                entry->unk_0 = (u32) defrag((void *) entry->unk_0);
             }
 
+            // Matching: empty do-while(0) and empty if below are needed for the match.
             do {
             } while (0);
         }
 
-        if (!s0) {
+        if (!entry) {
         }
-        (*((struct OSPiInfo *) &D_80135A60)).field4 =
-            (u32) freelist_defrag((void *) (*((struct OSPiInfo *) &D_80135A60)).field4);
+        (*((struct OSPiInfo *) &D_80135A60)).unk_4 =
+            (u32) freelist_defrag((void *) (*((struct OSPiInfo *) &D_80135A60)).unk_4);
     }
 }
 
-void func_80100F0C(s16 param_0, void *param_1)
+// Gives the instance its own packed variant built from anim_data, with a unique anim id.
+void func_80100F0C(s16 instance_id, void *anim_data)
 {
-    LocalInstance *local_0;
-    LocalCache *local_1;
-    void *local_4;
-    s32 local_2;
-    s32 local_3;
-    local_0 = freelist_at((*((LocalPools *) &D_80135A60)).field_0, param_0);
-    if (local_0->field_8) {
-        local_1 = freelist_at(D_80135A64, local_0->field_8);
-        if (local_1->field_8) {
-            local_2 = local_1->field_4;
+    LocalInstance *instance;
+    LocalCache *variant;
+    void *model;
+    s32 model_id;
+    s32 new_variant_id;
+    instance = freelist_at((*((LocalPools *) &D_80135A60)).instances, instance_id);
+    if (instance->variant_id) {
+        variant = freelist_at(D_80135A64, instance->variant_id);
+        if (variant->refcount) {
+            model_id = variant->model_id;
 
-            if (local_1->field_6 < 0x3666) {
-                func_80100938(local_0->field_8);
-                local_1 = func_801006E0(&local_3);
-                local_0->field_8 = local_3;
+            if (variant->anim_id < 0x3666) {
+                func_80100938(instance->variant_id);
+                variant = func_801006E0(&new_variant_id);
+                instance->variant_id = new_variant_id;
             } else {
-                _glpackvtx_entrypoint_1(local_1->field_0);
+                _glpackvtx_entrypoint_1(variant->packed_vtx);
             }
-            local_4 = func_800D674C(local_2);
-            local_1->field_0 = _glpackvtx_entrypoint_0(func_800B2840(local_4), param_1, NULL);
-            local_1->field_4 = local_2;
-            local_1->field_6 = (*((LocalPools *) &D_80135A60)).field_8;
-            (*((LocalPools *) &D_80135A60)).field_8++;
-            local_1->field_8 = 1;
+            model = func_800D674C(model_id);
+            variant->packed_vtx = _glpackvtx_entrypoint_0(func_800B2840(model), anim_data, NULL);
+            variant->model_id = model_id;
+            variant->anim_id = (*((LocalPools *) &D_80135A60)).next_anim_id;
+            (*((LocalPools *) &D_80135A60)).next_anim_id++;
+            variant->refcount = 1;
         }
     }
 }
 
+// TU-NOTE: the .data of this file is defined here in C (values from the ROM).
+// D_801243DC = D_801243A0 + 0x3C is a linker symbol (end of the 5 slots).
+// D_801243A0 is declared as D_801243A0_t[].
 D_801243A0_t D_801243A0[5] = {0x30000, 0x0,     0x0, 0x40000, 0x0,     0x0, 0xC0000, 0x0,
                               0x0,     0xC0000, 0x0, 0x0,     0x60000, 0x0, 0x0};

@@ -113,22 +113,26 @@ void bakey_func_80091C74(PlayerState *self, s32 arg1)
     self->key->unk9 = arg1;
 }
 
-s32 bakey_setState(PlayerState *self, ButtonId id, int arg2)
+// Per-button lock state: 0 free, 1 locked, 2 locked for one frame.
+// A lock of 1 is not overwritten by 2. unk4 has one bit per locked button.
+s32 bakey_setState(PlayerState *self, ButtonId id, int new_state)
 {
-    int value = self->key->state[id];
-    if (AS_BOOL(value == 1) && AS_BOOL(arg2 == 2)) {
+    int cur_state = self->key->state[id];
+    // Matching: the AS_BOOL wrappers are needed for the match.
+    if (AS_BOOL(cur_state == 1) && AS_BOOL(new_state == 2)) {
         return self->key->prev_state[id];
     }
 
-    if (arg2 != 0) {
+    if (new_state != 0) {
         self->key->unk4 |= (1 << id);
     } else {
         self->key->unk4 &= ~(1 << id);
     }
-    self->key->state[id] = arg2;
+    self->key->state[id] = new_state;
     return self->key->prev_state[id];
 }
 
+// True when all 14 buttons are locked.
 int bakey_getBitfield(PlayerState *self)
 {
     return (self->key->unk4 ^ 0x3FFF) == 0;
@@ -138,12 +142,14 @@ void bakey_update(PlayerState *self)
 {
     ButtonId id;
     func_800BD2D0(self->key->unk0);
+    // Input disabled (mask bit 0x40 off) or unk8/unk9 set: lock every button.
     if (!func_80091E80(self, 0x40) || self->key->unk9 || self->key->unk8) {
         self->key->unk8 = 0;
         for (id = 0; id < BUTTON_COUNT; id++) {
             bakey_setState(self, id, 2);
         }
     }
+    // Latch last frame's state; a lock of 2 is released here.
     for (id = 0; id < BUTTON_COUNT; id++) {
         self->key->prev_state[id] = self->key->state[id];
         if (self->key->state[id]) {

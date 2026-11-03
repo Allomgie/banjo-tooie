@@ -1,9 +1,11 @@
 #include "common.h"
 
+// Off-screen color buffer: D_8012D5F4 is the heap block, D_8012D5F0 its 64-byte-aligned address.
 extern s32 D_8012D5F0;
 extern s32 D_8012D5F4;
 extern void func_800A9828();
 
+// Allocate the 160x128 RGBA16 buffer and align it.
 void func_800E80A0()
 {
     if (!D_8012D5F4) {
@@ -24,6 +26,7 @@ int func_800E8104()
     func_800A9800();
 }
 
+// Switch the render target to the buffer (160x128).
 s32 func_800E8144(void)
 {
     if (D_8012D5F4) {
@@ -31,14 +34,15 @@ s32 func_800E8144(void)
     }
 }
 
-int func_800E817C(s32 param_0)
+// Set up color/depth target and clear while the buffer is active.
+int func_800E817C(s32 gfx)
 {
     if (D_8012D5F4 != 0) {
         func_800A9800();
-        func_800E7C28(param_0);
-        func_800E7CF4(param_0);
-        func_800E7D4C(param_0);
-        func_800A8B24(param_0, 0);
+        func_800E7C28(gfx);
+        func_800E7CF4(gfx);
+        func_800E7D4C(gfx);
+        func_800A8B24(gfx, 0);
     }
 }
 

@@ -13,11 +13,13 @@ s32 bastick_getStructSize(void)
     return sizeof(BaStick);
 }
 
-f32 bastick_calculateZonePosition(f32 arg0, f32 arg1, f32 arg2)
+// Normalized position of dist within [zone_min, zone_max].
+f32 bastick_calculateZonePosition(f32 dist, f32 zone_min, f32 zone_max)
 {
-    return (arg0 - arg1) / (arg2 - arg1);
+    return (dist - zone_min) / (zone_max - zone_min);
 }
 
+// Classifies the stick distance into one of 5 zones and sets the position inside it.
 void bastick_updateZone(PlayerState *self)
 {
     if (self->stick->distance <= self->stick->zone.markers[0]) {
@@ -93,6 +95,7 @@ void __bastick_zoneCopy(BaStickZone *dst, BaStickZone *source)
     aligned4_memcpy(dst, source, sizeof(BaStickZone));
 }
 
+// Zone threshold stack, used by player states.
 void bastick_popZone(PlayerState *self)
 {
     self->stick->unk66--;
@@ -108,6 +111,7 @@ void bastick_pushZone(PlayerState *self)
 void bastick_update(PlayerState *self)
 {
     bakey_getStick(self, self->stick->value);
+    // Zero the stick while input is locked.
     if (self->stick->unk64 || self->stick->unk65 || self->stick->unk67 ||
         !func_80091E80(self, 0x40)) {
         self->stick->unk67 = 0;
@@ -136,14 +140,14 @@ void bastick_reset(PlayerState *self)
     bastick_resetZones(self);
 }
 
-void bastick_func_8009F18C(PlayerState *self, s32 arg1)
+void bastick_func_8009F18C(PlayerState *self, s32 unk_0)
 {
-    self->stick->unk64 = arg1;
+    self->stick->unk64 = unk_0;
 }
 
-void bastick_func_8009F198(PlayerState *self, s32 arg1)
+void bastick_func_8009F198(PlayerState *self, s32 unk_0)
 {
-    self->stick->unk65 = arg1;
+    self->stick->unk65 = unk_0;
 }
 
 s32 bastick_func_8009F1A4(PlayerState *self)

@@ -19,9 +19,9 @@ void *heap_alloc(s32 size);
 s32 D_80117C60 = 0;
 s32 D_80117C64 = 0;
 
-int func_800815C0(s32 param_0)
+int func_800815C0(s32 value)
 {
-    D_80126CB8 = param_0;
+    D_80126CB8 = value;
 }
 
 void func_800815CC()
@@ -32,40 +32,41 @@ void func_800815CC()
     D_80126CB8 = 0;
 }
 
-void func_8008160C(s32 param_0)
+// Age loaded overlays (mode != 2) or unload aged ones (mode == 2).
+void func_8008160C(s32 mode)
 {
-    s32 var_s0;
-    u32 *var_s1;
-    s16 temp_v0;
-    s32 temp_s3;
-    u32 *temp_a0;
+    s32 i;
+    u32 *slot;
+    s16 age;
+    s32 unk_0;
+    u32 *ovl;
 
-    temp_s3 = func_800A9F30();
-    var_s0 = 0;
+    unk_0 = func_800A9F30();
+    i = 0;
     if (D_80117C60 > 0) {
-        var_s1 = D_80126738;
+        slot = D_80126738;
         do {
-            temp_a0 = *var_s1;
-            if (param_0 == 2) {
-                if (((*(s16 *) ((char *) temp_a0 + 0x32) >= 3) &&
-                     (*(u8 *) ((char *) temp_a0 + 0xF) & 2)) &&
-                    (ovl_unload(temp_a0, 0) != 0)) {
-                    var_s0 -= 1;
-                    var_s1 -= 1;
+            ovl = *slot;
+            if (mode == 2) {
+                if (((*(s16 *) ((char *) ovl + 0x32) >= 3) &&
+                     (*(u8 *) ((char *) ovl + 0xF) & 2)) &&
+                    (ovl_unload(ovl, 0) != 0)) {
+                    i -= 1;
+                    slot -= 1;
                 }
             } else {
-                *(s16 *) ((char *) temp_a0 + 0x32) = (s16) (*(s16 *) ((char *) temp_a0 + 0x32) + 1);
-                temp_v0 = *(s16 *) ((char *) temp_a0 + 0x32);
-                if (((temp_v0 >= 0x1F) &&
-                     (((temp_s3 == 0) && (temp_v0 >= 6)) || (temp_v0 >= 0x1F))) &&
-                    (ovl_unload(temp_a0, 0) != 0)) {
-                    var_s0 -= 1;
-                    var_s1 -= 1;
+                *(s16 *) ((char *) ovl + 0x32) = (s16) (*(s16 *) ((char *) ovl + 0x32) + 1);
+                age = *(s16 *) ((char *) ovl + 0x32);
+                if (((age >= 0x1F) &&
+                     (((unk_0 == 0) && (age >= 6)) || (age >= 0x1F))) &&
+                    (ovl_unload(ovl, 0) != 0)) {
+                    i -= 1;
+                    slot -= 1;
                 }
             }
-            var_s0 += 1;
-            var_s1 += 1;
-        } while (var_s0 < D_80117C60);
+            i += 1;
+            slot += 1;
+        } while (i < D_80117C60);
     }
 }
 
@@ -90,7 +91,7 @@ struct Overlay *ovl_load(s32 overlay_index, s32 arg1, s32 arg2)
     s32 overlay_rom_size;
     u32 overlay_end_offset;
     u32 overlay_start_offset;
-    u32 stack_padding_1;
+    u32 stack_padding_1; // unused
     s32 decompressed_size;
     struct Overlay *overlay;
     u32 header_word_3;
@@ -100,21 +101,23 @@ struct Overlay *ovl_load(s32 overlay_index, s32 arg1, s32 arg2)
     s32 crc2;
     volatile u32 compressed_first_word;
     u8 *compressed_buffer;
-    s32 stack_padding_2;
+    s32 stack_padding_2; // unused
 
     rom_addr = D_80126730 + (overlay_index * sizeof(u32)) - sizeof(u32);
-    rom_read_word(rom_addr + 0 * sizeof(u32), &overlay_start_offset);
-    rom_read_word(rom_addr + 1 * sizeof(u32), &overlay_end_offset);
+    rom_read_word(rom_addr + 0 * sizeof(u32), &overlay_start_offset); // start offset
+    rom_read_word(rom_addr + 1 * sizeof(u32), &overlay_end_offset); // end offset
 
     rom_addr = overlay_start_offset + D_80126730;
     overlay_rom_size = overlay_end_offset - overlay_start_offset;
-    rom_read_word(rom_addr + 1 * sizeof(u32), &header_word_1);
-    rom_read_word(rom_addr + 3 * sizeof(u32), &header_word_3);
+    rom_read_word(rom_addr + 1 * sizeof(u32), &header_word_1); // bss size
+    rom_read_word(rom_addr + 3 * sizeof(u32), &header_word_3); // flags
     bss_size = (s16) header_word_1 * 0x10;
 
+    // Compressed flag
     if ((u8) header_word_3 & 0x80) {
         rom_read_word(rom_addr + sizeof(struct OverlayHeader), &compressed_first_word);
 
+        // Decompressed size comes from the first word of the compressed data
         decompressed_size = compressed_first_word;
         decompressed_size = (decompressed_size & 0xFFFF0000) >> 0x10;
         decompressed_size = decompressed_size * 0x10;
@@ -124,6 +127,7 @@ struct Overlay *ovl_load(s32 overlay_index, s32 arg1, s32 arg2)
         overlay_size = overlay_rom_size + bss_size;
     }
 
+    // Allocate memory for the overlay
     if (D_80126CB8) {
         overlay = heap_alloc_sided(overlay_size, 1);
     } else if (arg2 || ((u8) header_word_3 & 8)) {
@@ -134,13 +138,16 @@ struct Overlay *ovl_load(s32 overlay_index, s32 arg1, s32 arg2)
 
     func_8001B3B0(overlay);
     if (decompressed_size != 0) {
+        // Load the compressed data from ROM
         compressed_buffer = heap_alloc(overlay_rom_size);
         rom_dma_read(compressed_buffer, rom_addr, overlay_rom_size);
 
+        // Copy the header as-is, decompress the rest
         bcopy(compressed_buffer, overlay, sizeof(struct OverlayHeader));
         func_8001C2AC(compressed_buffer + sizeof(struct OverlayHeader),
                       (u8 *) overlay + sizeof(struct OverlayHeader));
 
+        // Undo the XOR obfuscation of the header words with the decompressor CRCs
         crc1 = func_8001C26C();
         crc2 = func_8001C28C();
 
@@ -153,6 +160,7 @@ struct Overlay *ovl_load(s32 overlay_index, s32 arg1, s32 arg2)
     }
     ovl_clear_bss(0, overlay);
 
+    // Add to the loaded overlay list
     D_80126738[D_80117C60] = overlay;
     overlay->fields.load_index = D_80117C60;
     D_80117C60++;
@@ -175,80 +183,87 @@ s32 ovl_unload(struct Overlay *ovl, s32 arg1)
 {
     s16 load_index;
     struct Overlay *swapped_ovl;
-    s32 temp_t7;
+    s32 has_bss;
 
     if (ovl->header.flags & 4) {
         return 0;
     }
 
-    temp_t7 = (ovl->header.flags & 1) != 0;
-    if (temp_t7) {
-        temp_t7 = ovl->header.bss_size != 0;
+    has_bss = (ovl->header.flags & 1) != 0;
+    if (has_bss) {
+        has_bss = ovl->header.bss_size != 0;
     }
 
-    ovl_reset_syscalls(ovl, temp_t7);
+    // Turn the entrypoints of the unloaded overlay back into syscalls
+    ovl_reset_syscalls(ovl, has_bss);
 
     load_index = ovl->fields.load_index;
     D_80117C60--;
 
+    // Swap the last loaded overlay into the unloaded overlay's slot
     D_80126738[load_index] = D_80126738[D_80117C60];
     swapped_ovl = D_80126738[load_index];
     swapped_ovl->fields.load_index = load_index;
 
+    // Clean up the overlays list
     D_80126738[D_80117C60] = NULL;
 
+    // Free the unloaded overlay's memory
     heap_free(ovl);
     return 1;
 }
 
-u8 *func_80081A90(u8 *param_0)
+u8 *func_80081A90(u8 *data)
 {
-    int new_var;
-    u8 *new_var2;
-    new_var = 0x38;
-    new_var2 = (param_0 + (*(s16 *) (param_0 + 8) * 4)) + (0, new_var);
-    return new_var2;
+    int header_size;
+    u8 *end_ptr;
+    // Matching: the temporaries and the comma expression are needed for the match.
+    header_size = 0x38;
+    end_ptr = (data + (*(s16 *) (data + 8) * 4)) + (0, header_size);
+    return end_ptr;
 }
 
-struct Overlay *func_80081AA4(void *param_0)
+// Find the overlay owning addr: either decoded from its syscall stub or by heap range.
+struct Overlay *func_80081AA4(void *addr)
 {
-    u32 *local_0;
-    u32 local_2;
-    s32 local_3;
-    u32 *local_4;
-    u32 local_5;
-    local_2 = (u32) (u32 *) overlay_syscalls;
-    if (((u32) param_0 >= (u32) (u32 *) overlay_syscalls) &&
-        ((u32) param_0 < (u32) (u32 *) overlay_syscalls_end)) {
-        local_0 = (u32 *) ((((u32) param_0 - local_2) & ~7) + (u32) (u32 *) overlay_syscalls);
-        if ((*local_0 & 0xFC00003F) == 0xC) {
+    u32 *stub;
+    u32 value;
+    s32 i;
+    u32 *slot;
+    u32 alloc_end;
+    value = (u32) (u32 *) overlay_syscalls;
+    if (((u32) addr >= (u32) (u32 *) overlay_syscalls) &&
+        ((u32) addr < (u32) (u32 *) overlay_syscalls_end)) {
+        stub = (u32 *) ((((u32) addr - value) & ~7) + (u32) (u32 *) overlay_syscalls);
+        if ((*stub & 0xFC00003F) == 0xC) {
             return NULL;
         }
-        local_2 = *local_0;
-        return (struct Overlay *) (((((local_2 & 0x03FFFFFF) << 1) << 1) | 0x80000000) - 0x10);
+        value = *stub;
+        return (struct Overlay *) (((((value & 0x03FFFFFF) << 1) << 1) | 0x80000000) - 0x10);
     }
-    local_4 = (u32 *) D_80126738;
-    local_3 = 0;
+    slot = (u32 *) D_80126738;
+    i = 0;
     if ((s32) (u32) D_80117C60 > 0) {
     loop_6:
-        local_2 = *local_4;
+        value = *slot;
 
-        local_5 = heap_get_allocation_size(local_2) + local_2;
-        if (((u32) param_0 >= local_2) && (local_5 >= (u32) param_0)) {
-            return (struct Overlay *) local_2;
+        alloc_end = heap_get_allocation_size(value) + value;
+        if (((u32) addr >= value) && (alloc_end >= (u32) addr)) {
+            return (struct Overlay *) value;
         }
-        local_3 += 1;
-        local_4 += 1;
-        if (local_3 < (s32) (u32) D_80117C60) {
+        i += 1;
+        slot += 1;
+        if (i < (s32) (u32) D_80117C60) {
             goto loop_6;
         }
     }
     return 0U;
 }
 
-func_80081BC0(s32 *param_0)
+// Returns 0 while the stub is still a syscall instruction, 1 once it has been patched.
+func_80081BC0(s32 *instr)
 {
-    if ((*param_0 & 0xFC00003F) == 0xC) {
+    if ((*instr & 0xFC00003F) == 0xC) {
         return 0;
     } else {
         return 1;
@@ -275,8 +290,10 @@ void defragment_overlays(void)
                         ovl_unload(ovl, 0);
                     }
                 } else if (!(ovl->header.flags & 0x10)) {
+                    // Defragment the overlay
                     struct Overlay *defragged = defrag(ovl);
 
+                    // If it moved, update its location in the loaded list
                     if (defragged != ovl) {
                         ovl_shift(defragged, (u8 *) defragged - (u8 *) ovl);
                         D_80126738[defrag_index] = defragged;
@@ -293,40 +310,42 @@ s32 func_80081D28()
     return D_80126CBC;
 }
 
-s32 func_80081D34(s32 param_0)
+// Syscall stub index of addr, or 0 if out of range.
+s32 func_80081D34(s32 addr)
 {
-    s32 temp_t6;
+    s32 index;
 
-    temp_t6 = (param_0 - (s32) &overlay_syscalls) >> 3;
-    if (temp_t6 < 0) {
+    index = (addr - (s32) &overlay_syscalls) >> 3;
+    if (index < 0) {
         return 0;
     }
-    if (((s32) &overlay_syscalls_end - (s32) &overlay_syscalls) >> 3 < temp_t6) {
+    if (((s32) &overlay_syscalls_end - (s32) &overlay_syscalls) >> 3 < index) {
         return 0;
     }
-    return temp_t6;
+    return index;
 }
 
-s32 func_80081D80(s32 param_0)
+s32 func_80081D80(s32 index)
 {
-    s32 temp_v0;
-    s32 shifted;
-    s32 addr;
-    s16 *ptr;
-    temp_v0 = *(s32 *) ((u8 *) &overlay_syscalls + (param_0 * 8));
-    if ((temp_v0 & 0xFC00003F) == 0xC) {
-        if (((temp_v0 << 2) << 4) >= 0) {
+    s32 instr;
+    s32 target_bits;
+    s32 ovl_addr;
+    s16 *age_ptr;
+    instr = *(s32 *) ((u8 *) &overlay_syscalls + (index * 8));
+    if ((instr & 0xFC00003F) == 0xC) {
+        if (((instr << 2) << 4) >= 0) {
             return 0;
         }
         return 1;
     }
-    shifted = temp_v0 << 6;
-    shifted >>= 6;
-    addr = (shifted * 4) | 0x80000000;
-    addr -= 0x10;
-    temp_v0 = 0;
-    ptr = (s16 *) ((char *) addr + 0x32);
-    if (*ptr >= 2) {
+    target_bits = instr << 6;
+    target_bits >>= 6;
+    ovl_addr = (target_bits * 4) | 0x80000000;
+    ovl_addr -= 0x10;
+    // Matching: dead assignment needed for the match.
+    instr = 0;
+    age_ptr = (s16 *) ((char *) ovl_addr + 0x32);
+    if (*age_ptr >= 2) {
         return 2;
     }
     return 3;

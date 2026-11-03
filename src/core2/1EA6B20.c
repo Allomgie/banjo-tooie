@@ -57,94 +57,100 @@ extern u8 D_8012AFF0[];
 extern void func_800EF334(f32 *, f32);
 extern f32 func_800EEAD4(f32 *, f32 *);
 
+// TU-NOTE: the .rodata of this file starts with these constants. Each is a
+// 16-byte object; its zero words belong to it (see the ROM alignment).
 const struct {
     f32 x;
     f32 y;
     f32 pad[2];
 } D_801259A0 = {1.1f, 1.1f};
 
+// Sets the margin added to query radii.
 void func_800CD230(f32 param_0)
 {
     D_8012B010 = param_0;
 }
 
-s32 func_800CD23C(f32 *param_0, f32 *param_1, s32 param_2, s32 param_3)
+// Line test against the props of every cube the segment touches, plus the global cube.
+s32 func_800CD23C(f32 *start, f32 *end, s32 param_2, s32 param_3)
 {
-    s32 local_0[3];
-    s32 local_1[3];
-    s32 local_2[3];
-    s32 local_3;
-    s32 local_4;
-    local_4 = 0;
-    func_800BD708(local_1, local_2, param_0, param_1, D_8012B010);
-    local_1[1]--;
-    for (local_0[2] = local_1[2]; local_0[2] <= local_2[2]; local_0[2]++) {
-        for (local_0[1] = local_1[1]; local_0[1] <= local_2[1]; local_0[1]++) {
-            for (local_0[0] = local_1[0]; local_0[0] <= local_2[0]; local_0[0]++) {
-                local_3 = func_800EA628(func_800BDAD4(local_0), param_0, param_1, param_2, param_3);
-                if (local_3)
-                    local_4 = local_3;
+    s32 cube[3];
+    s32 cube_min[3];
+    s32 cube_max[3];
+    s32 hit;
+    s32 result;
+    result = 0;
+    func_800BD708(cube_min, cube_max, start, end, D_8012B010);
+    cube_min[1]--;
+    for (cube[2] = cube_min[2]; cube[2] <= cube_max[2]; cube[2]++) {
+        for (cube[1] = cube_min[1]; cube[1] <= cube_max[1]; cube[1]++) {
+            for (cube[0] = cube_min[0]; cube[0] <= cube_max[0]; cube[0]++) {
+                hit = func_800EA628(func_800BDAD4(cube), start, end, param_2, param_3);
+                if (hit)
+                    result = hit;
             }
         }
     }
-    local_3 = func_800EA628(func_800BDC44(), param_0, param_1, param_2, param_3);
-    if (local_3)
-        local_4 = local_3;
-    return local_4;
+    hit = func_800EA628(func_800BDC44(), start, end, param_2, param_3);
+    if (hit)
+        result = hit;
+    return result;
 }
 
-CollisionCD *func_800CD3A8(f32 *param_0, f32 *param_1, f32 param_2, f32 *param_3, s32 param_4,
+// Swept-sphere test over the same cube range.
+CollisionCD *func_800CD3A8(f32 *start, f32 *end, f32 radius, f32 *param_3, s32 param_4,
                            u32 param_5)
 {
-    s32 local_0[3];
-    s32 local_1[3];
-    s32 local_2[3];
-    void *local_5;
-    void *local_6;
-    CollisionCD *local_3;
-    CollisionCD *local_4 = 0;
-    func_800BD708(local_1, local_2, param_0, param_1, param_2 + D_8012B010);
-    local_1[1]--;
-    for (local_0[0] = local_1[0]; local_0[0] <= local_2[0]; local_0[0]++) {
-        for (local_0[1] = local_1[1]; local_0[1] <= local_2[1]; local_0[1]++) {
-            for (local_0[2] = local_1[2]; local_0[2] <= local_2[2]; local_0[2]++) {
-                local_6 = func_800BDAD4(local_0);
-                local_3 =
-                    func_800EAA2C(local_6, param_0, param_1, param_2, param_3, param_4, param_5);
-                local_4 = local_3 ? local_3 : local_4;
+    s32 cube[3];
+    s32 cube_min[3];
+    s32 cube_max[3];
+    void *global_cube;
+    void *cube_props;
+    CollisionCD *hit;
+    CollisionCD *result = 0;
+    func_800BD708(cube_min, cube_max, start, end, radius + D_8012B010);
+    cube_min[1]--;
+    for (cube[0] = cube_min[0]; cube[0] <= cube_max[0]; cube[0]++) {
+        for (cube[1] = cube_min[1]; cube[1] <= cube_max[1]; cube[1]++) {
+            for (cube[2] = cube_min[2]; cube[2] <= cube_max[2]; cube[2]++) {
+                cube_props = func_800BDAD4(cube);
+                hit =
+                    func_800EAA2C(cube_props, start, end, radius, param_3, param_4, param_5);
+                result = hit ? hit : result;
             }
         }
     }
-    local_5 = func_800BDC44();
-    local_3 = func_800EAA2C(local_5, param_0, param_1, param_2, param_3, param_4, param_5);
-    local_4 = local_3 ? local_3 : local_4;
-    return local_4;
+    global_cube = func_800BDC44();
+    hit = func_800EAA2C(global_cube, start, end, radius, param_3, param_4, param_5);
+    result = hit ? hit : result;
+    return result;
 }
 
-s32 func_800CD544(f32 *param_0, f32 param_1, s32 param_2, s32 param_3)
+// Sphere test over the same cube range.
+s32 func_800CD544(f32 *pos, f32 radius, s32 param_2, s32 param_3)
 {
-    s32 local_0[3];
-    s32 local_1[3];
-    s32 local_2[3];
-    s32 local_3;
-    s32 local_4;
+    s32 cube[3];
+    s32 cube_min[3];
+    s32 cube_max[3];
+    s32 hit;
+    s32 result;
     s32 local_5;
-    local_4 = 0;
-    func_800BD708(local_1, local_2, param_0, param_0, param_1 + D_8012B010);
-    local_1[1]--;
-    for (local_0[0] = local_1[0]; local_0[0] <= local_2[0]; local_0[0]++) {
-        for (local_0[1] = local_1[1]; local_0[1] <= local_2[1]; local_0[1]++) {
-            for (local_0[2] = local_1[2]; local_0[2] <= local_2[2]; local_0[2]++) {
-                local_3 = func_800EADFC(func_800BDAD4(local_0), param_0, param_1, param_2, param_3);
-                if (local_3)
-                    local_4 = local_3;
+    result = 0;
+    func_800BD708(cube_min, cube_max, pos, pos, radius + D_8012B010);
+    cube_min[1]--;
+    for (cube[0] = cube_min[0]; cube[0] <= cube_max[0]; cube[0]++) {
+        for (cube[1] = cube_min[1]; cube[1] <= cube_max[1]; cube[1]++) {
+            for (cube[2] = cube_min[2]; cube[2] <= cube_max[2]; cube[2]++) {
+                hit = func_800EADFC(func_800BDAD4(cube), pos, radius, param_2, param_3);
+                if (hit)
+                    result = hit;
             }
         }
     }
-    local_3 = func_800EADFC(func_800BDC44(), param_0, param_1, param_2, param_3);
-    if (local_3)
-        local_4 = local_3;
-    return local_4;
+    hit = func_800EADFC(func_800BDC44(), pos, radius, param_2, param_3);
+    if (hit)
+        result = hit;
+    return result;
 }
 
 struct LocalMarker {
@@ -154,30 +160,31 @@ struct LocalMarker {
     u32 pad_18 : 11, field_19 : 4, pad_19 : 12, field_1B : 4, pad_1B : 1;
 };
 
-s32 func_800CD6B4(LocalMarker *param_0, f32 *param_1, f32 param_2, f32 *param_3, s32 param_4)
+// Moves a sphere along step count times; true when the marker is hit by it.
+s32 func_800CD6B4(LocalMarker *marker, f32 *pos, f32 radius, f32 *step, s32 count)
 {
-    s32 local_6;
-    f32 local_0[3];
-    s32 local_1;
-    f32 local_2[3];
-    LocalCallbacks_800CD6B4 *local_3;
-    f32 local_4;
-    f32 local_5[3];
-    local_3 = param_0->field_C ? param_0->field_C() : 0;
-    func_800EE7F8(local_0, param_1);
-    for (local_6 = 0; local_6 < param_4; local_6++) {
-        if (local_3 && local_3->field_C) {
-            local_1 = local_3->field_C(param_0, local_0, param_2, local_2, param_0->field_1B);
-            if (local_1) {
-                param_0->field_19 = local_1;
+    s32 i;
+    f32 sphere_pos[3];
+    s32 hit;
+    f32 unk_0[3];
+    LocalCallbacks_800CD6B4 *callbacks;
+    f32 marker_radius;
+    f32 marker_pos[3];
+    callbacks = marker->field_C ? marker->field_C() : 0;
+    func_800EE7F8(sphere_pos, pos);
+    for (i = 0; i < count; i++) {
+        if (callbacks && callbacks->field_C) {
+            hit = callbacks->field_C(marker, sphere_pos, radius, unk_0, marker->field_1B);
+            if (hit) {
+                marker->field_19 = hit;
                 return 1;
             }
         } else {
-            local_4 = func_800EC75C(param_0, local_5);
-            if (func_800EEB40(local_0, local_5) < (local_4 + param_2) * (local_4 + param_2))
+            marker_radius = func_800EC75C(marker, marker_pos);
+            if (func_800EEB40(sphere_pos, marker_pos) < (marker_radius + radius) * (marker_radius + radius))
                 return 1;
         }
-        func_800EF04C(local_0, param_3);
+        func_800EF04C(sphere_pos, step);
     }
     return 0;
 }
@@ -192,87 +199,88 @@ struct LocalMarker_800CD820 {
     u32 pad_28 : 22, field_2A : 1, pad_2A : 9;
 };
 
-struct LocalMarker_800CD820 *func_800CD820(struct LocalMarker_800CD820 *param_0, f32 *param_1,
-                                           f32 *param_2, f32 param_3)
+// Sweeps a sphere from start to end through nearby actors; returns the closest actor hit.
+struct LocalMarker_800CD820 *func_800CD820(struct LocalMarker_800CD820 *self, f32 *start,
+                                           f32 *end, f32 radius)
 {
-    f32 local_17;
-    f32 local_18;
-    f32 local_19;
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_21;
-    f32 local_4[3];
-    f32 local_5[3];
-    void **local_6;
-    f32 local_7[3];
-    f32 local_22[2];
-    u32 local_8;
-    LocalEntry *local_10;
-    LocalEntry *local_11;
-    struct LocalMarker_800CD820 *local_12;
-    struct LocalMarker_800CD820 *local_13;
-    LocalActor *local_14;
-    LocalCallbacks_800CD820 *local_15;
-    f32 local_9[3];
-    s32 local_16;
-    f32 local_20;
+    f32 length;
+    f32 tmp_a;
+    f32 tmp_b;
+    f32 delta[3];
+    f32 dir[3];
+    f32 offset[3];
+    f32 stride[3];
+    f32 closest_dist;
+    f32 step[3];
+    f32 sphere_pos[3];
+    void **cube_list;
+    f32 center[3];
+    f32 unk_0[2];
+    u32 attack_mask;
+    LocalEntry *entry;
+    LocalEntry *entry_end;
+    struct LocalMarker_800CD820 *other;
+    struct LocalMarker_800CD820 *closest;
+    LocalActor *other_actor;
+    LocalCallbacks_800CD820 *other_callbacks;
+    f32 other_pos[3];
+    s32 steps;
+    f32 steps_floor;
     if (func_800CB854(0))
-        local_8 = 1 << (func_800CB854(0) + 31);
+        attack_mask = 1 << (func_800CB854(0) + 31);
     else
-        local_8 = 0;
-    func_800EFB24(local_0, param_2, param_1);
-    local_17 = func_800EEF94(local_0);
-    func_800EF410(local_1, local_0);
-    local_18 = param_3 + param_3;
-    local_19 = local_17 / local_18;
-    local_16 = (s32) local_19;
-    local_20 = (s32) local_19;
-    if (local_20 <= local_19)
-        local_16++;
-    func_800EFE50(local_7, param_1, param_2, 0.5f);
-    local_6 = func_800BE444(local_7);
-    local_13 = 0;
-    local_21 = 0.0f;
-    func_800EFA20(local_3, local_1, local_18);
-    func_800EFA20(local_2, local_3, (local_19 - local_20) * 0.5f);
-    func_800EE7F8(local_4, local_2);
-    func_800EE88C(local_5, param_0->field_1E);
-    func_800EF04C(local_5, param_1);
-    func_800EF04C(local_5, local_4);
-    func_800EE7F8(local_4, local_3);
-    while (*local_6) {
-        local_10 = func_800E9E88(*local_6);
-        local_11 = func_800E9EB4(*local_6);
-        for (; local_10 < local_11; local_10++) {
-            if (!local_10->field_B4 || !local_10->field_B0)
+        attack_mask = 0;
+    func_800EFB24(delta, end, start);
+    length = func_800EEF94(delta);
+    func_800EF410(dir, delta);
+    tmp_a = radius + radius;
+    tmp_b = length / tmp_a;
+    steps = (s32) tmp_b;
+    steps_floor = (s32) tmp_b;
+    if (steps_floor <= tmp_b)
+        steps++;
+    func_800EFE50(center, start, end, 0.5f);
+    cube_list = func_800BE444(center);
+    closest = 0;
+    closest_dist = 0.0f;
+    func_800EFA20(stride, dir, tmp_a);
+    func_800EFA20(offset, stride, (tmp_b - steps_floor) * 0.5f);
+    func_800EE7F8(step, offset);
+    func_800EE88C(sphere_pos, self->field_1E);
+    func_800EF04C(sphere_pos, start);
+    func_800EF04C(sphere_pos, step);
+    func_800EE7F8(step, stride);
+    while (*cube_list) {
+        entry = func_800E9E88(*cube_list);
+        entry_end = func_800E9EB4(*cube_list);
+        for (; entry < entry_end; entry++) {
+            if (!entry->field_B4 || !entry->field_B0)
                 continue;
-            local_12 = local_10->field_0;
-            if (!local_12->field_2A || param_0 == local_12 || !local_12->field_14 ||
-                local_12->field_14 == 0xFFFF || !local_12->field_19)
+            other = entry->field_0;
+            if (!other->field_2A || self == other || !other->field_14 ||
+                other->field_14 == 0xFFFF || !other->field_19)
                 continue;
-            local_14 = func_80106790(local_12);
-            if (local_14->field_65 || (local_14->field_66 & local_8))
+            other_actor = func_80106790(other);
+            if (other_actor->field_65 || (other_actor->field_66 & attack_mask))
                 continue;
-            local_18 = local_16 * param_3 * D_801259A0.x;
-            local_19 = _subaddiecustomhits_entrypoint_5(local_14, local_9);
-            if ((local_19 + local_18) * (local_19 + local_18) < func_800EEB40(local_9, local_7))
+            tmp_a = steps * radius * D_801259A0.x;
+            tmp_b = _subaddiecustomhits_entrypoint_5(other_actor, other_pos);
+            if ((tmp_b + tmp_a) * (tmp_b + tmp_a) < func_800EEB40(other_pos, center))
                 continue;
-            local_18 = func_800EEB40(local_9, local_5);
-            if (local_13 && local_21 < local_18)
+            tmp_a = func_800EEB40(other_pos, sphere_pos);
+            if (closest && closest_dist < tmp_a)
                 continue;
-            local_15 = func_800EC3C4(local_12);
-            if (local_15->field_10 && !local_15->field_10(local_12, param_0))
+            other_callbacks = func_800EC3C4(other);
+            if (other_callbacks->field_10 && !other_callbacks->field_10(other, self))
                 continue;
-            if (func_800CD6B4(local_12, local_5, param_3, local_4, local_16)) {
-                local_13 = local_12;
-                local_21 = local_18;
+            if (func_800CD6B4(other, sphere_pos, radius, step, steps)) {
+                closest = other;
+                closest_dist = tmp_a;
             }
         }
-        local_6++;
+        cube_list++;
     }
-    return local_13;
+    return closest;
 }
 
 struct LocalMarker_800CDBA8 {
@@ -285,91 +293,95 @@ struct LocalMarker_800CDBA8 {
     u32 pad_28 : 22, field_2A : 1, pad_2A : 9;
 };
 
-s32 func_800CDBA8(struct LocalMarker_800CDBA8 *param_0, f32 param_1[][3], f32 *param_2, s32 param_3)
+// Tests count spheres against nearby actors. Records hits in D_8012AF70 and returns
+// their number (at most 32).
+s32 func_800CDBA8(struct LocalMarker_800CDBA8 *self, f32 centers[][3], f32 *radii, s32 count)
 {
-    f32 local_16;
-    void **local_0;
-    f32 local_1[3];
-    f32 local_2;
-    f32 local_3;
-    f32 local_4[3];
-    s32 local_14;
-    u32 local_5;
-    LocalCallbacks_800CDBA8 *local_6;
-    struct LocalMarker_800CDBA8 *local_7;
-    LocalActor *local_8;
-    LocalEntry *local_9[1];
-    LocalEntry *local_10;
-    s32 local_11;
-    LocalCallbacks_800CDBA8 *local_12;
-    f32 local_13[3];
-    s32 local_15 = 0;
+    f32 sphere_radius;
+    void **cube_list;
+    f32 center[3];
+    f32 radius;
+    f32 other_radius;
+    f32 other_pos[3];
+    s32 i;
+    u32 attack_mask;
+    LocalCallbacks_800CDBA8 *other_callbacks;
+    struct LocalMarker_800CDBA8 *other;
+    LocalActor *other_actor;
+    // Matching: one-element array needed for the match.
+    LocalEntry *entry[1];
+    LocalEntry *entry_end;
+    s32 hit;
+    LocalCallbacks_800CDBA8 *hit_callbacks;
+    f32 unk_0[3];
+    s32 num_hits = 0;
     if (func_800CB854(0))
-        local_5 = 1 << (func_800CB854(0) + 31);
+        attack_mask = 1 << (func_800CB854(0) + 31);
     else
-        local_5 = 0;
-    func_800EE7F8(local_1, param_1[0]);
-    for (local_14 = 1; local_14 < param_3; local_14++)
-        func_800EF04C(local_1, param_1[local_14]);
-    func_800EF334(local_1, 1.0f / param_3);
-    local_2 = param_2[0] + func_800EEAD4(local_1, param_1[0]);
-    for (local_14 = 1; local_14 < param_3; local_14++) {
-        local_16 = param_2[local_14] + func_800EEAD4(local_1, param_1[local_14]);
-        if (local_2 < local_16)
-            local_2 = local_16;
+        attack_mask = 0;
+    func_800EE7F8(center, centers[0]);
+    for (i = 1; i < count; i++)
+        func_800EF04C(center, centers[i]);
+    func_800EF334(center, 1.0f / count);
+    radius = radii[0] + func_800EEAD4(center, centers[0]);
+    for (i = 1; i < count; i++) {
+        sphere_radius = radii[i] + func_800EEAD4(center, centers[i]);
+        if (radius < sphere_radius)
+            radius = sphere_radius;
     }
-    local_2 *= D_801259A0.y;
-    local_0 = func_800BE444(local_1);
-    while (*local_0) {
-        local_9[0] = func_800E9E88(*local_0);
-        local_10 = func_800E9EB4(*local_0);
-        for (; local_9[0] < local_10; local_9[0]++) {
-            if (!local_9[0]->field_B4 || !local_9[0]->field_B0)
+    radius *= D_801259A0.y;
+    cube_list = func_800BE444(center);
+    while (*cube_list) {
+        entry[0] = func_800E9E88(*cube_list);
+        entry_end = func_800E9EB4(*cube_list);
+        for (; entry[0] < entry_end; entry[0]++) {
+            if (!entry[0]->field_B4 || !entry[0]->field_B0)
                 continue;
-            local_7 = local_9[0]->field_0;
-            if (!local_7->field_2A || param_0 == local_7 || !local_7->field_14 ||
-                local_7->field_14 == 0xFFFF || !local_7->field_19b)
+            other = entry[0]->field_0;
+            if (!other->field_2A || self == other || !other->field_14 ||
+                other->field_14 == 0xFFFF || !other->field_19b)
                 continue;
-            local_8 = func_80106790(local_7);
-            if (local_8->field_65 || (local_8->field_66 & local_5))
+            other_actor = func_80106790(other);
+            if (other_actor->field_65 || (other_actor->field_66 & attack_mask))
                 continue;
-            local_3 = _subaddiecustomhits_entrypoint_5(local_8, local_4);
-            if ((local_3 + local_2) * (local_3 + local_2) < func_800EEB40(local_4, local_1))
+            other_radius = _subaddiecustomhits_entrypoint_5(other_actor, other_pos);
+            if ((other_radius + radius) * (other_radius + radius) < func_800EEB40(other_pos, center))
                 continue;
-            local_6 = func_800EC3C4(local_7);
-            if (local_6->field_10 && !local_6->field_10(local_7, param_0))
+            other_callbacks = func_800EC3C4(other);
+            if (other_callbacks->field_10 && !other_callbacks->field_10(other, self))
                 continue;
-            local_12 = local_7->field_C ? local_7->field_C() : 0;
-            for (local_14 = 0; local_14 < param_3; local_14++) {
-                if (local_12 && local_12->field_C) {
-                    local_11 = local_12->field_C(local_7, param_1[local_14], param_2[local_14],
-                                                 local_13, local_7->field_1B);
-                    if (local_11) {
-                        local_7->field_19 = local_11;
-                        D_8012AFF0[local_15] = local_14;
-                        D_8012AF70.field_0[local_15] = local_7;
-                        local_15++;
+            hit_callbacks = other->field_C ? other->field_C() : 0;
+            for (i = 0; i < count; i++) {
+                if (hit_callbacks && hit_callbacks->field_C) {
+                    hit = hit_callbacks->field_C(other, centers[i], radii[i],
+                                                 unk_0, other->field_1B);
+                    if (hit) {
+                        other->field_19 = hit;
+                        D_8012AFF0[num_hits] = i;
+                        D_8012AF70.field_0[num_hits] = other;
+                        num_hits++;
                         break;
                     }
                 } else {
-                    local_3 = func_800EC75C(local_7, local_4);
-                    if (func_800EEB40(param_1[local_14], local_4) <
-                        (param_2[local_14] + local_3) * (param_2[local_14] + local_3)) {
-                        D_8012AF70.field_80[local_15] = local_14;
-                        D_8012AF70.field_0[local_15] = local_7;
-                        local_15++;
+                    other_radius = func_800EC75C(other, other_pos);
+                    if (func_800EEB40(centers[i], other_pos) <
+                        (radii[i] + other_radius) * (radii[i] + other_radius)) {
+                        D_8012AF70.field_80[num_hits] = i;
+                        D_8012AF70.field_0[num_hits] = other;
+                        num_hits++;
                         break;
                     }
                 }
             }
         }
-        local_0++;
+        cube_list++;
     }
-    return local_15;
+    return num_hits;
 }
 
-int func_800CDFA8(s32 param_0, u8 *param_1)
+// Reads hit number index from D_8012AF70: returns the actor, stores the sphere index.
+int func_800CDFA8(s32 index, u8 *sphere_out)
 {
-    *(s32 *) param_1 = ((u8 *) &D_8012AF70)[param_0 + 0x80];
-    return ((s32 *) (u8 *) &D_8012AF70)[param_0];
+    *(s32 *) sphere_out = ((u8 *) &D_8012AF70)[index + 0x80];
+    return ((s32 *) (u8 *) &D_8012AF70)[index];
 }

@@ -1,18 +1,21 @@
 #include "common.h"
 
+// Fog setup: per-map fog ranges, then per-layer prop counts of the cube grid.
+
+// Per-map fog table entry; flags bit 0/1 enable fog range 0/1.
 typedef struct {
     s16 map;
     u8 flags;
-    u8 pad[13];
+    u8 pad_3[13];
 } LocalEntry;
 typedef struct {
-    u8 enabled, pad;
+    u8 enabled, pad_1;
     s16 color[4];
-    s16 pad2;
+    s16 pad_A;
     f32 near, far;
 } LocalRange;
 typedef struct {
-    u8 enabled, status, pad[2];
+    u8 enabled, status, pad_2[2];
     LocalRange range[2];
     s16 color[4];
 } LocalState;
@@ -29,19 +32,20 @@ extern s32 func_800F6BE4(void *);
 extern s32 func_8010FFD8(void *);
 extern s32 func_800F0D90(s32, s32, s32);
 extern void func_800E3CB8(f32 *, f32 *);
+// Overlay of LocalState: status flag and the fog color at +0x2C.
 typedef struct {
-    u8 local_0;
-    u8 local_1;
-    u8 local_2[42];
-    s16 local_3[4];
+    u8 enabled;
+    u8 status;
+    u8 pad_2[42];
+    s16 color[4];
 } local_type;
 extern u8 D_8012B321;
 typedef struct {
     s32 pad[2];
 } EntryD2CD0;
 typedef struct {
-    s16 *local_0;
-    s32 local_1;
+    s16 *counts;
+    s32 layer_count;
 } StateD2CD0;
 extern StateD2CD0 D_8012B360;
 extern void func_800BE58C(s32 *, s32 *);
@@ -52,18 +56,19 @@ extern s32 func_800E9DC4(EntryD2CD0 *);
 s32 defrag();
 int func_800D2CC4();
 
-void func_800D2910(s32 param_0, u8 *param_1)
+// Enable fog range range_idx from a table entry.
+void func_800D2910(s32 range_idx, u8 *entry)
 {
-    s32 idx = param_0 * 0x14;
+    s32 idx = range_idx * 0x14;
     u8 *ptr = &((u8 *) &D_8012B320)[idx];
 
     ptr[4] = 1;
-    *(s16 *) (ptr + 6) = *(u8 *) (param_1 + 0xC);
-    *(s16 *) (ptr + 8) = param_1[0xD];
-    *(s16 *) (ptr + 0xA) = param_1[0xE];
-    *(s16 *) (ptr + 0xC) = param_1[0xF];
-    *(f32 *) &ptr[0x10] = *(f32 *) &param_1[4];
-    *(f32 *) &ptr[0x14] = *(f32 *) &param_1[8];
+    *(s16 *) (ptr + 6) = *(u8 *) (entry + 0xC);
+    *(s16 *) (ptr + 8) = entry[0xD];
+    *(s16 *) (ptr + 0xA) = entry[0xE];
+    *(s16 *) (ptr + 0xC) = entry[0xF];
+    *(f32 *) &ptr[0x10] = *(f32 *) &entry[4];
+    *(f32 *) &ptr[0x14] = *(f32 *) &entry[8];
     ((u8 *) &D_8012B320)[0]++;
 }
 
@@ -76,94 +81,96 @@ void func_800D2970(void)
 
 void func_800D298C(void)
 {
-    LocalEntry *local_0;
-    s32 local_1;
-    local_0 = D_8011B530;
-    local_1 = func_800EA05C();
+    LocalEntry *entry;
+    s32 map_id;
+    entry = D_8011B530;
+    map_id = func_800EA05C();
     D_8012B320.range[1].enabled = D_8012B320.status = D_8012B320.enabled = 0;
     D_8012B320.range[0].enabled = 0;
-    while (local_0->map != -1) {
-        if (local_0->map == local_1) {
-            if (local_0->flags & 1)
-                func_800D2910(0, local_0);
-            if (local_0->flags & 2)
-                func_800D2910(1, local_0);
+    while (entry->map != -1) {
+        if (entry->map == map_id) {
+            if (entry->flags & 1)
+                func_800D2910(0, entry);
+            if (entry->flags & 2)
+                func_800D2910(1, entry);
         }
-        local_0++;
+        entry++;
     }
 }
 
-void func_800D2A44(LocalGfx **param_0)
+// Emit the RSP fog factor (multiplier/offset) for the active fog range.
+void func_800D2A44(LocalGfx **gfx)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
-    s32 local_4;
-    void *local_5;
-    s32 local_6;
-    f32 local_7;
-    f32 local_8;
-    s32 local_9;
-    f32 local_10;
-    f32 local_11;
-    LocalGfx *local_12;
-    s32 local_13;
-    f32 local_14[1];
+    f32 cam_near;
+    f32 cam_far;
+    f32 near_z;
+    f32 far_z;
+    s32 range_idx;
+    void *env;
+    s32 fog_mul;
+    f32 fog_at_near;
+    f32 fog_at_far;
+    s32 fog_offset;
+    f32 fog_near;
+    f32 fog_far;
+    LocalGfx *cmd;
+    s32 fog_mul_clamped;
+    f32 depth_range[1];
     if (D_8012B320.enabled) {
-        local_5 = func_800A9478(func_800A89F8());
-        if (func_800F6BE4(local_5)) {
-            local_4 = func_8010FFD8(func_800A93E4(local_5));
+        env = func_800A9478(func_800A89F8());
+        if (func_800F6BE4(env)) {
+            range_idx = func_8010FFD8(func_800A93E4(env));
         } else {
-            local_4 = 1;
+            range_idx = 1;
         }
-        if (D_8012B320.range[1].enabled && local_4) {
-            local_4 = 1;
-        } else if (D_8012B320.range[0].enabled && !local_4) {
-            local_4 = 0;
+        if (D_8012B320.range[1].enabled && range_idx) {
+            range_idx = 1;
+        } else if (D_8012B320.range[0].enabled && !range_idx) {
+            range_idx = 0;
         } else {
             return;
         }
-        func_800E3CB8(&local_0, &local_1);
-        local_2 = local_0;
-        local_3 = local_1;
-        local_14[0] = local_3 - local_2;
-        if (local_3 != local_2) {
-            D_8012B320.color[0] = D_8012B320.range[local_4].color[0];
-            D_8012B320.color[1] = D_8012B320.range[local_4].color[1];
-            D_8012B320.color[2] = D_8012B320.range[local_4].color[2];
-            D_8012B320.color[3] = D_8012B320.range[local_4].color[3];
-            local_10 = D_8012B320.range[local_4].near;
-            local_11 = D_8012B320.range[local_4].far;
-            local_9 = 0;
-            if (local_3 < local_10) {
-                local_6 = 0;
+        func_800E3CB8(&cam_near, &cam_far);
+        near_z = cam_near;
+        far_z = cam_far;
+        depth_range[0] = far_z - near_z;
+        if (far_z != near_z) {
+            D_8012B320.color[0] = D_8012B320.range[range_idx].color[0];
+            D_8012B320.color[1] = D_8012B320.range[range_idx].color[1];
+            D_8012B320.color[2] = D_8012B320.range[range_idx].color[2];
+            D_8012B320.color[3] = D_8012B320.range[range_idx].color[3];
+            fog_near = D_8012B320.range[range_idx].near;
+            fog_far = D_8012B320.range[range_idx].far;
+            fog_offset = 0;
+            if (far_z < fog_near) {
+                fog_mul = 0;
             } else {
-                local_3 = (2.0f * local_3) / local_14[0];
-                local_7 = (1.0f - local_2 / local_10) * local_3 - 1.0f;
-                local_8 = (1.0f - local_2 / local_11) * local_3 - 1.0f;
-                local_3 = 1.0f / (local_8 - local_7);
-                local_6 = (s32) (256.0f * local_3);
-                local_9 = (s32) (-256.0f * local_7 * local_3);
+                far_z = (2.0f * far_z) / depth_range[0];
+                fog_at_near = (1.0f - near_z / fog_near) * far_z - 1.0f;
+                fog_at_far = (1.0f - near_z / fog_far) * far_z - 1.0f;
+                far_z = 1.0f / (fog_at_far - fog_at_near);
+                fog_mul = (s32) (256.0f * far_z);
+                fog_offset = (s32) (-256.0f * fog_at_near * far_z);
             }
-            local_12 = (*param_0)++;
-            local_12->word0 = 0xDB080000;
-            local_13 = func_800F0D90(local_6, -0x7FFF, 0x7FFF);
-            local_12->word1 =
-                (func_800F0D90(local_9, -0x7FFF, 0x7FFF) & 0xFFFF) | ((local_13 & 0xFFFF) << 16);
+            cmd = (*gfx)++;
+            cmd->word0 = 0xDB080000;
+            fog_mul_clamped = func_800F0D90(fog_mul, -0x7FFF, 0x7FFF);
+            cmd->word1 =
+                (func_800F0D90(fog_offset, -0x7FFF, 0x7FFF) & 0xFFFF) | ((fog_mul_clamped & 0xFFFF) << 16);
             func_800D2CC4();
         }
     }
 }
 
-void func_800D2C54(Gfx **param_0)
+// Emit the fog color once until the status flag is cleared again.
+void func_800D2C54(Gfx **gfx)
 {
-    if (!(*(local_type *) &D_8012B320).local_1) {
-        gDPSetFogColor((*param_0)++, (*(local_type *) &D_8012B320).local_3[0],
-                       (*(local_type *) &D_8012B320).local_3[1],
-                       (*(local_type *) &D_8012B320).local_3[2],
-                       (*(local_type *) &D_8012B320).local_3[3]);
-        (*(local_type *) &D_8012B320).local_1 = 1;
+    if (!(*(local_type *) &D_8012B320).status) {
+        gDPSetFogColor((*gfx)++, (*(local_type *) &D_8012B320).color[0],
+                       (*(local_type *) &D_8012B320).color[1],
+                       (*(local_type *) &D_8012B320).color[2],
+                       (*(local_type *) &D_8012B320).color[3]);
+        (*(local_type *) &D_8012B320).status = 1;
     }
 }
 
@@ -172,29 +179,30 @@ int func_800D2CC4()
     D_8012B321 = 0;
 }
 
+// Count the props in each Y layer of the cube grid.
 void func_800D2CD0(void)
 {
-    s32 local_0[3];
-    s32 local_1[3];
-    s32 local_2[3];
-    EntryD2CD0 *local_3;
-    s32 local_4;
-    EntryD2CD0 *local_5;
-    s32 local_6;
-    func_800BE58C(local_1, local_2);
-    D_8012B360.local_1 = local_1[1];
-    D_8012B360.local_0 = heap_alloc(D_8012B360.local_1 * 2);
-    for (local_6 = 0; local_6 < D_8012B360.local_1; local_6++)
-        *(s16 *) ((u8 *) D_8012B360.local_0 + (local_6 << 1)) = 0;
-    func_800BE52C(&local_3, &local_4);
-    for (local_0[1] = 0; local_0[1] < local_1[1]; local_0[1]++) {
-        for (local_0[0] = 0; local_0[0] < local_1[0]; local_0[0]++) {
-            for (local_0[2] = 0; local_0[2] < local_1[2]; local_0[2]++) {
-                local_5 =
-                    (local_0[1] * local_2[0]) + (local_0[0] + (local_3 + local_0[2] * local_2[1]));
-                if (func_800E9D68(local_5)) {
-                    local_6 = func_800E9DC4(local_5);
-                    *(s16 *) ((local_0[1] << 1) + (u8 *) D_8012B360.local_0) += local_6;
+    s32 cell[3];
+    s32 dims[3];
+    s32 strides[3];
+    EntryD2CD0 *base;
+    s32 unk_0;
+    EntryD2CD0 *cube;
+    s32 count;
+    func_800BE58C(dims, strides);
+    D_8012B360.layer_count = dims[1];
+    D_8012B360.counts = heap_alloc(D_8012B360.layer_count * 2);
+    for (count = 0; count < D_8012B360.layer_count; count++)
+        *(s16 *) ((u8 *) D_8012B360.counts + (count << 1)) = 0;
+    func_800BE52C(&base, &unk_0);
+    for (cell[1] = 0; cell[1] < dims[1]; cell[1]++) {
+        for (cell[0] = 0; cell[0] < dims[0]; cell[0]++) {
+            for (cell[2] = 0; cell[2] < dims[2]; cell[2]++) {
+                cube =
+                    (cell[1] * strides[0]) + (cell[0] + (base + cell[2] * strides[1]));
+                if (func_800E9D68(cube)) {
+                    count = func_800E9DC4(cube);
+                    *(s16 *) ((cell[1] << 1) + (u8 *) D_8012B360.counts) += count;
                 }
             }
         }
@@ -210,19 +218,20 @@ int func_800D2E4C()
     ((void **) &D_8012B360)[1] = 0;
 }
 
-u32 func_800D2E90(int param_0)
+// Whether the given Y layer contains any props.
+u32 func_800D2E90(int layer)
 {
-    int local_0;
+    int has_props;
 
-    if (param_0 < 0 || param_0 >= ((int *) &D_8012B360)[1]) {
+    if (layer < 0 || layer >= ((int *) &D_8012B360)[1]) {
         return 0;
     }
-    if (*(s16 *) (((int *) &D_8012B360)[0] + param_0 * 2) != 0) {
-        local_0 = 1;
+    if (*(s16 *) (((int *) &D_8012B360)[0] + layer * 2) != 0) {
+        has_props = 1;
     } else {
-        local_0 = 0;
+        has_props = 0;
     }
-    return local_0;
+    return has_props;
 }
 
 void func_800D2EE4()
@@ -232,6 +241,8 @@ void func_800D2EE4()
     }
 }
 
+// TU-NOTE: the .data of this file (formerly asm/data/core2/1EAC200.data.s) is defined here in C.
+// Values are taken from the ROM.
 LocalEntry D_8011B530[3] = {0x181, 0x3,  0x0,  0x45, 0xCB, 0x20, 0x0,  0x46, 0x84, 0xD0, 0x0,  0x40,
                             0x40,  0x80, 0xC0, 0xFC, 0x3,  0x0,  0x45, 0x7A, 0x0,  0x0,  0x46, 0x8C,
                             0xA0,  0x0,  0xF,  0x3F, 0x53, 0x7F, -0x1, 0x0,  0x0,  0x0,  0x0,  0x0,

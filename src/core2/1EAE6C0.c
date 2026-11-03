@@ -4,63 +4,67 @@ extern s32 D_8012B420;
 extern u8 D_8011B641[];
 extern u8 D_8011B642[];
 typedef struct {
-    u8 unused, initial, count;
+    u8 unused, current, max;
 } LocalEntry;
 extern LocalEntry D_8011B640[];
 int func_800D4E7C();
 void func_800D4FB8();
 
-s32 func_800D4DD0(s32 param_0)
+// With the shared-health flag set, 10 maps to 1 and 4/11 map to 0.
+s32 func_800D4DD0(s32 character)
 {
     if (D_8012B420 != 0) {
-        switch (param_0) {
+        switch (character) {
             case 10:
-                param_0 = 1;
+                character = 1;
                 break;
             case 4:
             case 11:
-                param_0 = 0;
+                character = 0;
                 break;
         }
     }
-    return param_0;
+    return character;
 }
 
-void func_800D4E18(s32 param_0, s32 param_1)
+void func_800D4E18(s32 character, s32 delta)
 {
-    if (param_0 == 9) {
-        param_0 = 1;
+    if (character == 9) {
+        character = 1;
     }
-    if (param_1 < 0) {
+    if (delta < 0) {
         func_800FC660(0x74);
     }
-    func_800D4FB8(param_0, func_800D4E7C(param_0) + param_1);
+    func_800D4FB8(character, func_800D4E7C(character) + delta);
 }
 
-int func_800D4E7C(param_0)
-s32 param_0;
+// Current health.
+int func_800D4E7C(character)
+s32 character;
 {
     s32 idx;
-    if (param_0 == 9) {
-        param_0 = 1;
+    if (character == 9) {
+        character = 1;
     }
-    idx = func_800D4DD0(param_0);
+    idx = func_800D4DD0(character);
     return D_8011B641[idx * 3];
 }
 
-u8 func_800D4EB8(s32 param_0)
+// Max health.
+u8 func_800D4EB8(s32 character)
 {
     s32 idx;
-    if (param_0 == 9) {
-        param_0 = 1;
+    if (character == 9) {
+        character = 1;
     }
-    idx = func_800D4DD0(param_0);
+    idx = func_800D4DD0(character);
     return D_8011B642[idx * 3];
 }
 
-int func_800D4EF4(s32 param_0)
+// Base max health per character.
+int func_800D4EF4(s32 character)
 {
-    switch (param_0 - 1) {
+    switch (character - 1) {
         case 0:
             return 5;
         case 1:
@@ -95,43 +99,45 @@ int func_800D4EF4(s32 param_0)
     return 0;
 }
 
-func_800D4F9C(param_0)
+func_800D4F9C(character)
 {
-    if (param_0 == 2)
+    if (character == 2)
         return 0;
     return 1;
 }
 
-void func_800D4FB8(param_0, param_1) s32 param_0;
-s32 param_1;
+// Sets current health, clamped to 0..max.
+void func_800D4FB8(character, value) s32 character;
+s32 value;
 {
     s32 idx;
-    u8 *var_v1;
-    if (param_0 == 9) {
-        param_0 = 1;
+    u8 *entry;
+    if (character == 9) {
+        character = 1;
     }
-    idx = func_800D4DD0(param_0);
-    if (param_1 < 0) {
-        var_v1 = (u8 *) D_8011B640 + idx * 3;
-        param_1 = 0;
+    idx = func_800D4DD0(character);
+    if (value < 0) {
+        entry = (u8 *) D_8011B640 + idx * 3;
+        value = 0;
     } else {
-        var_v1 = (u8 *) D_8011B640 + idx * 3;
-        if (var_v1[2] < param_1) {
-            param_1 = var_v1[2];
+        entry = (u8 *) D_8011B640 + idx * 3;
+        if (entry[2] < value) {
+            value = entry[2];
         }
     }
-    var_v1[1] = param_1;
+    entry[1] = value;
 }
 
-void func_800D5034(s32 param_0, s32 param_1)
+// Refill policy when switching character; entries 10/11 split the health between them.
+void func_800D5034(s32 param_0, s32 character)
 {
-    s32 local_0;
-    s32 local_1;
-    if (param_1 == 9)
-        param_1 = 1;
-    local_0 = D_8011B640[param_1].initial;
-    local_1 = D_8011B640[param_1].count;
-    switch (param_1) {
+    s32 new_health;
+    s32 max_health;
+    if (character == 9)
+        character = 1;
+    new_health = D_8011B640[character].current;
+    max_health = D_8011B640[character].max;
+    switch (character) {
         case 1:
             switch (param_0) {
                 case 0:
@@ -144,16 +150,16 @@ void func_800D5034(s32 param_0, s32 param_1)
                 case 16:
                 case 18:
                 case 19:
-                    local_0 = local_1;
+                    new_health = max_health;
                     break;
                 case 10:
                 case 11:
-                    local_0 = D_8011B640[10].initial + D_8011B640[11].initial;
+                    new_health = D_8011B640[10].current + D_8011B640[11].current;
                     break;
             }
             break;
         case 2:
-            local_0 = 1;
+            new_health = 1;
             break;
         case 6:
         case 7:
@@ -166,63 +172,64 @@ void func_800D5034(s32 param_0, s32 param_1)
         case 17:
         case 18:
         case 19:
-            local_0 = local_1;
+            new_health = max_health;
             break;
         case 10:
         case 11:
             if ((param_0 == 0) != 0) {
-                local_0 = local_1;
-                func_800D4FB8(param_1 == 10 ? 11 : 10, local_1);
+                new_health = max_health;
+                func_800D4FB8(character == 10 ? 11 : 10, max_health);
             } else {
-                local_0 = (s32) D_8011B640[param_0].initial / 2;
-                if (param_1 == 10)
-                    local_0 += (s32) D_8011B640[param_0].initial % 2;
-                if (!local_0)
-                    local_0 = 1;
+                new_health = (s32) D_8011B640[param_0].current / 2;
+                if (character == 10)
+                    new_health += (s32) D_8011B640[param_0].current % 2;
+                if (!new_health)
+                    new_health = 1;
             }
     }
-    func_800D4FB8(param_1, local_0);
+    func_800D4FB8(character, new_health);
 }
 
+// Initializes every entry: base health per character plus the extra honeycomb amount.
 void func_800D517C()
 {
-    u8 *local_1;
-    u32 *local_2;
-    s32 local_0;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
+    u8 *entry;
+    u32 *shared;
+    s32 i;
+    s32 max_health;
+    s32 base;
+    s32 extra;
 
-    local_5 = _gcextra_entrypoint_0();
-    local_2 = (u32 *) &D_8012B420;
-    *local_2 = 0;
-    local_1 = (u8 *) D_8011B640;
-    local_0 = 0;
+    extra = _gcextra_entrypoint_0();
+    shared = (u32 *) &D_8012B420;
+    *shared = 0;
+    entry = (u8 *) D_8011B640;
+    i = 0;
     do {
-        local_4 = func_800D4EF4(local_0);
-        local_3 = local_4;
-        if ((local_4 != 0) && (func_800D4F9C(local_0) != 0)) {
-            local_3 += local_5;
+        base = func_800D4EF4(i);
+        max_health = base;
+        if ((base != 0) && (func_800D4F9C(i) != 0)) {
+            max_health += extra;
         }
-        local_0 += 1;
-        local_1 += 3;
-        local_1[-1] = local_3;
-        local_1[-2] = local_3;
-    } while (local_0 != 0x14);
+        i += 1;
+        entry += 3;
+        entry[-1] = max_health;
+        entry[-2] = max_health;
+    } while (i != 0x14);
 }
 
-int func_800D5210(param_0)
+int func_800D5210(character)
 {
-    if (param_0 == 9) {
-        param_0 = 1;
+    if (character == 9) {
+        character = 1;
     }
 
-    return ((char *) D_8011B640)[param_0 * 3];
+    return ((char *) D_8011B640)[character * 3];
 }
 
-void func_800D5234(s32 param_0)
+void func_800D5234(s32 enabled)
 {
-    D_8012B420 = param_0;
+    D_8012B420 = enabled;
 }
 
 int func_800D5240()
@@ -230,6 +237,9 @@ int func_800D5240()
     return D_8012B420;
 }
 
+// TU-NOTE: the .data of this file (formerly asm/data/core2/1EAE6C0.data.s) is defined here in C.
+// Values are taken from the ROM. D_8011B641 = D_8011B640 + 0x1 and D_8011B642 = D_8011B640 + 0x2
+// are linker symbols in undefined_syms.us.txt.
 LocalEntry D_8011B640[21] = {
     0x0,  0x0,  0x0,  0x1,  0x0,  0x0,  0x32, 0x0,  0x0,  0x0,  0x0,  0x0, 0x0, 0x0,  0x0,  0x0,
     0x0,  0x0,  0x31, 0x0,  0x0,  0x36, 0x0,  0x0,  0x2D, 0x0,  0x0,  0x0, 0x0, 0x0,  0x10, 0x0,

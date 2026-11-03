@@ -96,173 +96,176 @@ void func_800EFA4C(s32 a, f32 b, f32 c, f32 d);
 extern void func_800EE940();
 extern int func_800DC298(f32);
 s32 func_800B53A4(s32);
-void func_800BA4C4(f32 *param_0, f32 param_1);
+void func_800BA4C4(f32 *emitter, f32 unk_0);
 void func_800BA4D0();
 int func_800BA54C();
-int func_800BA554(f32 *param_0, f32 param_1, f32 param_2);
+int func_800BA554(f32 *emitter, f32 unk_0, f32 unk_1);
 void func_800BA568();
 void func_800BA7C4(s32 param_0, f32 param_1, f32 param_2);
 void func_800BA894(f32 param_0[3], f32 param_1, f32 param_2);
 void func_800BA8F8(s32 param_0, f32 param_1, f32 param_2);
 
-void func_800B9B50(Quelle *param_0, Ziel *param_1)
+// Initializes one particle from the emitter's spawn ranges.
+// Matching: the line breaks in this function are needed for the match.
+void func_800B9B50(Quelle *emitter, Ziel *particle)
 {
-    s32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_4[3];
-    f32 local_5[3];
-    f32 local_6[3];
-    f32 local_7[3];
-    s32 local_8;
-    f32 local_9;
-    f32 local_10;
-    s32 local_11;
-    for (local_11 = 0; local_11 < 3; local_11++)
+    s32 unk_0;
+    f32 pos_min[3];
+    f32 pos_max[3];
+    f32 pos_offset[3];
+    f32 sphere_pos[3];
+    f32 cylinder_pos[3];
+    f32 vec[3];
+    f32 dir[3];
+    s32 unk_1;
+    f32 angle_b;
+    f32 angle_a;
+    s32 i;
+    for (i = 0; i < 3; i++)
     {
-        param_1->unk0[local_11] = func_800DC128(param_0->unk34[local_11], param_0->unk3A[local_11]);
+        particle->unk0[i] = func_800DC128(emitter->unk34[i], emitter->unk3A[i]);
     }
 
-    param_1->unk38 = param_0->unkA8;
-    if (param_0->unk18 == 0)
+    particle->unk38 = emitter->unkA8;
+    if (emitter->unk18 == 0)
     {
-        param_1->unkC = 1.0f;
+        particle->unkC = 1.0f;
     }
     else
     {
-        param_1->unkC = 0.0f;
+        particle->unkC = 0.0f;
     }
-    param_1->unk2C = func_800DC178((f32) param_0->unk84, (f32) param_0->unk86) * 256.0f;
-    param_1->unk2E = func_800DC178(param_0->unk78, param_0->unk7C) * 256.0f;
-    switch (param_0->unk5)
+    particle->unk2C = func_800DC178((f32) emitter->unk84, (f32) emitter->unk86) * 256.0f;
+    particle->unk2E = func_800DC178(emitter->unk78, emitter->unk7C) * 256.0f;
+    switch (emitter->unk5) // spawn shape: 0 box, 1 sphere, 2 cylinder
     {
         case 0:
-        if (param_0->flags & 0x40)
+        if (emitter->flags & 0x40)
         {
-            func_800EE88C(local_1, param_0->unk28);
-            func_800EE88C(local_2, param_0->unk2E);
-            func_800EFE50(local_3, local_1, local_2, func_800DC0C0());
-            func_800EE940(param_1->unk6, local_3);
+            func_800EE88C(pos_min, emitter->unk28);
+            func_800EE88C(pos_max, emitter->unk2E);
+            func_800EFE50(pos_offset, pos_min, pos_max, func_800DC0C0());
+            func_800EE940(particle->unk6, pos_offset);
         }
         else
         {
-            for (local_11 = 0; local_11 < 3; local_11++)
+            for (i = 0; i < 3; i++)
             {
-                param_1->unk6[local_11] = param_0->unk12[local_11] + func_800DC128(param_0->unk28[local_11], param_0->unk2E[local_11]);
+                particle->unk6[i] = emitter->unk12[i] + func_800DC128(emitter->unk28[i], emitter->unk2E[i]);
             }
 
         }
         break;
-        case 1: func_800EE88C(local_4, param_0->unk12); local_10 = func_800DC178(0.0f, 359.0f); local_9 = func_800DC178(0.0f, 359.0f); func_800EF214(local_4, local_10, local_9, (f32) func_800DC128(param_0->unk28[0], param_0->unk28[1])); func_800EE940(param_1->unk6, local_4); break; case 2: func_800EE88C(local_5, param_0->unk12); local_9 = func_800DC178(0.0f, 359.9f); func_800EF1B8(local_5, local_9, (f32) func_800DC128(param_0->unk28[0], param_0->unk28[1])); func_800EE940(param_1->unk6, local_5); param_1->unk6[1] = func_800DC128(param_0->unk2E[0], param_0->unk28[2]) + param_1->unk6[1]; break;
+        case 1: func_800EE88C(sphere_pos, emitter->unk12); angle_a = func_800DC178(0.0f, 359.0f); angle_b = func_800DC178(0.0f, 359.0f); func_800EF214(sphere_pos, angle_a, angle_b, (f32) func_800DC128(emitter->unk28[0], emitter->unk28[1])); func_800EE940(particle->unk6, sphere_pos); break; case 2: func_800EE88C(cylinder_pos, emitter->unk12); angle_b = func_800DC178(0.0f, 359.9f); func_800EF1B8(cylinder_pos, angle_b, (f32) func_800DC128(emitter->unk28[0], emitter->unk28[1])); func_800EE940(particle->unk6, cylinder_pos); particle->unk6[1] = func_800DC128(emitter->unk2E[0], emitter->unk28[2]) + particle->unk6[1]; break;
 
     }
 
-    param_1->unk30 = func_800DC128(param_0->unk9A, param_0->unk9C);
-    param_1->unk32 = param_1->unk30;
-    if ((param_0->unk9E == 0) && (param_0->unkA0 == 0))
+    particle->unk30 = func_800DC128(emitter->unk9A, emitter->unk9C);
+    particle->unk32 = particle->unk30;
+    if ((emitter->unk9E == 0) && (emitter->unkA0 == 0))
     {
-        param_1->unk34 = 0;
+        particle->unk34 = 0;
     }
     else
     {
-        param_1->unk34 = func_800DC128(param_0->unk9E, param_0->unkA0) - param_1->unk32;
+        particle->unk34 = func_800DC128(emitter->unk9E, emitter->unkA0) - particle->unk32;
     }
-    if (param_0->flags & 0x400)
+    if (emitter->flags & 0x400)
     {
-        for (local_11 = 0; local_11 < 3; local_11++)
+        for (i = 0; i < 3; i++)
         {
-            param_1->unk10[local_11] = func_800DC178(0.0, 360.0f);
+            particle->unk10[i] = func_800DC178(0.0, 360.0f);
         }
 
     }
     else
     {
-        func_800EFA4C(param_1->unk10, (f32) param_0->unk4C[0], (f32) param_0->unk4C[1], (f32) param_0->unk4C[2]);
+        func_800EFA4C(particle->unk10, (f32) emitter->unk4C[0], (f32) emitter->unk4C[1], (f32) emitter->unk4C[2]);
     }
-    for (local_11 = 0; local_11 < 3; local_11++)
+    for (i = 0; i < 3; i++)
     {
-        param_1->unk20[local_11] = func_800DC128(param_0->unk40[local_11], param_0->unk46[local_11]);
+        particle->unk20[i] = func_800DC128(emitter->unk40[i], emitter->unk46[i]);
     }
 
-    param_1->unk1C = 0.0f;
-    param_1->unk36 = func_800DC128(param_0->unkA2, param_0->unkA4) + 1;
-    switch (param_0->unk4)
+    particle->unk1C = 0.0f;
+    particle->unk36 = func_800DC128(emitter->unkA2, emitter->unkA4) + 1;
+    switch (emitter->unk4)
     {
         case 0:
-        for (local_11 = 0; local_11 < 3; local_11++)
+        for (i = 0; i < 3; i++)
         {
-            param_1->unk26[local_11] = func_800DC128(param_0->unkC4[local_11], param_0->unkCA[local_11]);
+            particle->unk26[i] = func_800DC128(emitter->unkC4[i], emitter->unkCA[i]);
         }
 
         break;
 
         case 1:
         {
-            s32 local_12;
-            s32 local_13;
-            local_12 = func_800F0E44(param_0->unkC4[2] + func_800DC128(0, func_800F0E44(param_0->unkCA[0] - param_0->unkC4[2])));
-            local_13 = func_800F0E44(param_0->unkC4[0] + func_800DC128(0, func_800F0E44(param_0->unkC4[1] - param_0->unkC4[0])));
-            func_800EF4E4(local_6, (f32) local_12, (f32) local_13, 0.0f, 0.0f, (f32) func_800DC128(param_0->unkCA[1], param_0->unkCA[2]));
-            func_800EE940(param_1->unk26, local_6);
+            s32 angle_c;
+            s32 angle_d;
+            angle_c = func_800F0E44(emitter->unkC4[2] + func_800DC128(0, func_800F0E44(emitter->unkCA[0] - emitter->unkC4[2])));
+            angle_d = func_800F0E44(emitter->unkC4[0] + func_800DC128(0, func_800F0E44(emitter->unkC4[1] - emitter->unkC4[0])));
+            func_800EF4E4(vec, (f32) angle_c, (f32) angle_d, 0.0f, 0.0f, (f32) func_800DC128(emitter->unkCA[1], emitter->unkCA[2]));
+            func_800EE940(particle->unk26, vec);
         }
         break;
 
         case 2:
-        if (func_800EEDA0(param_1->unk6, param_0->unkC4 + 2) == 0)
+        if (func_800EEDA0(particle->unk6, emitter->unkC4 + 2) == 0)
         {
-            if (param_0->flags & 0x8000)
+            if (emitter->flags & 0x8000)
             {
-                local_7[0] = (f32) (param_0->unkC4[2] - param_1->unk6[0]);
-                local_7[1] = (f32) (param_0->unkCA[0] - param_1->unk6[1]);
-                local_7[2] = (f32) (param_0->unkCA[1] - param_1->unk6[2]);
+                dir[0] = (f32) (emitter->unkC4[2] - particle->unk6[0]);
+                dir[1] = (f32) (emitter->unkCA[0] - particle->unk6[1]);
+                dir[2] = (f32) (emitter->unkCA[1] - particle->unk6[2]);
             }
             else
             {
-                local_7[0] = (f32) (param_1->unk6[0] - param_0->unkC4[2]);
-                local_7[1] = (f32) (param_1->unk6[1] - param_0->unkCA[0]);
-                local_7[2] = (f32) (param_1->unk6[2] - param_0->unkCA[1]);
+                dir[0] = (f32) (particle->unk6[0] - emitter->unkC4[2]);
+                dir[1] = (f32) (particle->unk6[1] - emitter->unkCA[0]);
+                dir[2] = (f32) (particle->unk6[2] - emitter->unkCA[1]);
             }
-            func_800EF368(local_7, func_800DC178((f32) param_0->unkC4[0], (f32) param_0->unkC4[1]));
-            func_800EE940(param_1->unk26, local_7);
+            func_800EF368(dir, func_800DC178((f32) emitter->unkC4[0], (f32) emitter->unkC4[1]));
+            func_800EE940(particle->unk26, dir);
         }
         else
         {
-            param_1->unk26[2] = 0;
-            param_1->unk26[0] = param_1->unk26[2];
-            param_1->unk26[1] = func_800DC128(param_0->unkC4[0], param_0->unkC4[1]);
+            particle->unk26[2] = 0;
+            particle->unk26[0] = particle->unk26[2];
+            particle->unk26[1] = func_800DC128(emitter->unkC4[0], emitter->unkC4[1]);
         }
 
     }
 
-    param_1->active = 1;
-    if (param_0->flags & 8)
+    particle->active = 1;
+    if (emitter->flags & 8)
     {
-        param_0->unk52 = 0;
+        emitter->unk52 = 0;
     }
-    if (param_0->flags & 0x10)
+    if (emitter->flags & 0x10)
     {
-        param_0->unk53 = 0;
+        emitter->unk53 = 0;
     }
 }
 
-int func_800BA198(void *param_0)
+// Returns the number of spawned particles.
+int func_800BA198(void *emitter)
 {
-    int new_var;
-    new_var = 0x8C;
-    if ((param_0 != 0) && (*(s32 *) ((char *) param_0 + 0x90) != 0)) {
-        return (*(s32 *) ((char *) param_0 + 0x90) - *(s32 *) ((char *) param_0 + new_var)) / 0x3C;
+    int begin_offset;
+    begin_offset = 0x8C;
+    if ((emitter != 0) && (*(s32 *) ((char *) emitter + 0x90) != 0)) {
+        return (*(s32 *) ((char *) emitter + 0x90) - *(s32 *) ((char *) emitter + begin_offset)) / 0x3C;
     }
     return 0;
 }
 
-void func_800BA1D0(u8 *param_0, s32 param_1, u32 param_2, u32 param_3)
+void func_800BA1D0(u8 *emitter, s32 pos_min, u32 pos_max, u32 count)
 {
-    *(u16 *) param_0 |= 0x40;
-    func_800EE940(param_0 + 0x28, param_1);
-    func_800EE940(param_0 + 0x2E, param_2);
-    param_0[5] = 0;
-    func_800BA22C(param_0, param_3);
+    *(u16 *) emitter |= 0x40;
+    func_800EE940(emitter + 0x28, pos_min);
+    func_800EE940(emitter + 0x2E, pos_max);
+    emitter[5] = 0;
+    func_800BA22C(emitter, count);
 }
 
 void func_800BA22C(param_0, param_1) s32 param_0;
@@ -280,13 +283,13 @@ s32 param_1;
     }
 }
 
-s32 func_800BA28C(u8 *param_0)
+s32 func_800BA28C(u8 *emitter)
 {
-    s32 var_v0;
-    var_v0 =
-        ((s32) (*(s32 *) ((u8 *) param_0 + 0x90) - *(s32 *) ((u8 *) param_0 + 0x8C)) / 60) == 0;
-    if (var_v0 != 0) {
-        return *(u8 *) ((u8 *) param_0 + 7) == 2;
+    s32 is_empty;
+    is_empty =
+        ((s32) (*(s32 *) ((u8 *) emitter + 0x90) - *(s32 *) ((u8 *) emitter + 0x8C)) / 60) == 0;
+    if (is_empty != 0) {
+        return *(u8 *) ((u8 *) emitter + 7) == 2;
     }
 }
 
@@ -297,103 +300,107 @@ int func_800BA2C4()
     return 0;
 }
 
-Obj *func_800BA2E8(s32 param_0)
+// Allocates an emitter with room for count particles.
+Obj *func_800BA2E8(s32 count)
 {
-    Obj *p;
+    Obj *emitter;
 
-    p = heap_alloc(param_0 * 60 + 0xD4);
-    rare_memset(p, 0, param_0 * 60 + 0xD4);
-    p->unk7 = 2;
-    p->unk80 = p->unk81 = p->unk82 = p->unk83 = 0xFF;
-    p->unk1C = 1.0f;
-    func_800BA4D0(p, -0x8000);
-    func_800BA568(p, 0x7FFF);
-    func_800BA894(p, 0.0f, 5.0f);
-    func_800BA8F8(p, 0.0f, 5.0f);
-    func_800BA4C4(p, 0.9f);
-    func_800BA554(p, 1.0f, 1.0f);
-    func_800BA7C4(p, 1.0f, 1.0f);
-    p->unk8C = p->unkD4;
-    p->unk90 = p->unkD4;
-    p->unk94 = p->unk8C + param_0;
-    p->unk52 = 1;
-    p->unk53 = 1;
-    return p;
+    emitter = heap_alloc(count * 60 + 0xD4);
+    rare_memset(emitter, 0, count * 60 + 0xD4);
+    emitter->unk7 = 2;
+    emitter->unk80 = emitter->unk81 = emitter->unk82 = emitter->unk83 = 0xFF;
+    emitter->unk1C = 1.0f;
+    func_800BA4D0(emitter, -0x8000);
+    func_800BA568(emitter, 0x7FFF);
+    func_800BA894(emitter, 0.0f, 5.0f);
+    func_800BA8F8(emitter, 0.0f, 5.0f);
+    func_800BA4C4(emitter, 0.9f);
+    func_800BA554(emitter, 1.0f, 1.0f);
+    func_800BA7C4(emitter, 1.0f, 1.0f);
+    emitter->unk8C = emitter->unkD4;
+    emitter->unk90 = emitter->unkD4;
+    emitter->unk94 = emitter->unk8C + count;
+    emitter->unk52 = 1;
+    emitter->unk53 = 1;
+    return emitter;
 }
 
-void func_800BA3FC(s32 param_0, s32 param_1)
+void func_800BA3FC(s32 emitter, s32 asset_id)
 {
-    u8 *s0 = (u8 *) param_0;
-    if (((u16 *) param_0)[1] != param_1) {
-        *(u16 *) (param_0 + 2) = param_1;
-        s0[0xA] = func_800D738C((u16) param_1);
-        s0[0xB] = func_800AF5A0(func_800D674C(((u16 *) s0)[1]));
+    u8 *bytes = (u8 *) emitter;
+    if (((u16 *) emitter)[1] != asset_id) {
+        *(u16 *) (emitter + 2) = asset_id;
+        bytes[0xA] = func_800D738C((u16) asset_id);
+        bytes[0xB] = func_800AF5A0(func_800D674C(((u16 *) bytes)[1]));
     }
 }
 
-void func_800BA450(param_0, param_1, param_2, param_3, param_4, param_5, param_6) s32 param_0;
-s16 param_1;
-s16 param_2;
-s16 param_3;
-s16 param_4;
-s16 param_5;
-s16 param_6;
+void func_800BA450(emitter, min_x, min_y, min_z, max_x, max_y, max_z) s32 emitter;
+s16 min_x;
+s16 min_y;
+s16 min_z;
+s16 max_x;
+s16 max_y;
+s16 max_z;
 {
-    func_800EFA6C(param_0 + 0x34, param_1, param_2, param_3);
-    func_800EFA6C(param_0 + 0x3A, param_4, param_5, param_6);
+    func_800EFA6C(emitter + 0x34, min_x, min_y, min_z);
+    func_800EFA6C(emitter + 0x3A, max_x, max_y, max_z);
 }
 
-int func_800BA4B0(u8 *param_0, unsigned int param_1)
+int func_800BA4B0(u8 *emitter, unsigned int alpha)
 {
-    param_0[0x83] = param_1;
+    emitter[0x83] = alpha;
+    // Matching: empty block, needed for the match.
     {
     }
 }
 
-void func_800BA4B8(u8 *param_0, unsigned long param_1, s32 param_2)
+void func_800BA4B8(u8 *emitter, unsigned long unk_0, s32 unk_1)
 {
-    *((s16 *) (((u8 *) param_0) + 0xAA)) = param_1;
-    *((s32 *) (((u8 *) param_0) + 0xBC)) = param_2;
+    *((s16 *) (((u8 *) emitter) + 0xAA)) = unk_0;
+    *((s32 *) (((u8 *) emitter) + 0xBC)) = unk_1;
 }
 
-void func_800BA4C4(f32 *param_0, f32 param_1)
+void func_800BA4C4(f32 *emitter, f32 unk_0)
 {
-    param_0[44] = param_1;
+    emitter[44] = unk_0;
 }
 
-void func_800BA4D0(param_0, param_1) void *param_0;
-s16 param_1;
+// Sets the minimum Y, clamped to the plane height from func_800B5698.
+void func_800BA4D0(emitter, min_y) void *emitter;
+s16 min_y;
 {
-    s16 sp1E;
+    s16 plane_y;
 
-if (func_800B5698(&sp1E) != 0) {
-    if (param_1 < sp1E) {
-        param_1 = sp1E;
+if (func_800B5698(&plane_y) != 0) {
+    if (min_y < plane_y) {
+        min_y = plane_y;
     }
-    if (*(s16 *) ((s8 *) param_0 + 0xA8) == 0) {
-        func_800BA54C(param_0, 2);
+    if (*(s16 *) ((s8 *) emitter + 0xA8) == 0) {
+        func_800BA54C(emitter, 2);
     }
 }
 
-*(s16 *)((s8 *)param_0 + 0xAC) = param_1;
+*(s16 *)((s8 *)emitter + 0xAC) = min_y;
 }
 
-func_800BA544(void *param_0, s32 param_1){
-    s32 local_0;
-    local_0 = param_1;
-    *(s32 *)((char *)param_0 + 0xC0) = local_0;
+func_800BA544(void *emitter, s32 unk_0){
+    s32 unk_1;
+    unk_1 = unk_0;
+    *(s32 *)((char *)emitter + 0xC0) = unk_1;
 }
 
-int func_800BA54C(param_0, param_1) s32 param_0; unsigned int param_1;
+int func_800BA54C(emitter, unk_0) s32 emitter; unsigned int unk_0;
 {
-    *((s16 *) (param_0 + 0xA8)) = param_1;
+    *((s16 *) (emitter + 0xA8)) = unk_0;
 }
 
-int func_800BA554(f32 *param_0, f32 param_1, f32 param_2)
+int func_800BA554(f32 *emitter, f32 unk_0, f32 unk_1)
 {
-    unsigned int new_var;
-    param_0[new_var = 45] = param_1;
-    param_0[46] = param_2;
+    unsigned int index;
+    // Matching: index assignment inside the subscript is needed for the match.
+    emitter[index = 45] = unk_0;
+    emitter[46] = unk_1;
 }
 
 void func_800BA568(param_0, param_1) s32 param_0; s16 param_1; {

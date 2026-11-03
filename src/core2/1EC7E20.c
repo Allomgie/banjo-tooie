@@ -8,83 +8,91 @@ extern void *vector_defrag(void *);
 extern void *vector_end();
 extern u8 D_80135483;
 
-int func_800EE530(s32 *param_0)
+// Defrags the field at +0x2C of an idworld entry.
+int func_800EE530(s32 *entry)
 {
-    *(s32 *) ((char *) param_0 + 44) = defrag(*(s32 *) ((char *) param_0 + 44));
+    *(s32 *) ((char *) entry + 44) = defrag(*(s32 *) ((char *) entry + 44));
 }
 
-void func_800EE55C(Actor *param_0)
+// Defrags the block at +0x24 and re-bases the end pointer at +0x2C.
+// Matching: the line breaks in this function are needed for the match.
+void func_800EE55C(Actor *entry)
 {
-    unsigned long local_0;
-    s32 local_1;
-    s32 local_2;
-    local_1 = *(s32 *) ((char *) param_0 + 0x24); local_0 = (s32) (*(s32 *) ((char *) param_0 + 0x2C) - local_1) >> 2;
-    local_2 = defrag(local_1);
-    *(s32 *) ((char *) param_0 + 0x24) = local_2;
-    *(s32 *) ((char *) param_0 + 0x2C) = (s32) (local_2 + (local_0 * 4));
+    unsigned long count;
+    s32 old_start;
+    s32 new_start;
+    old_start = *(s32 *) ((char *) entry + 0x24); count = (s32) (*(s32 *) ((char *) entry + 0x2C) - old_start) >> 2;
+    new_start = defrag(old_start);
+    *(s32 *) ((char *) entry + 0x24) = new_start;
+    *(s32 *) ((char *) entry + 0x2C) = (s32) (new_start + (count * 4));
 }
 
-int func_800EE5AC(s32 *param_0)
+// Defrags the field at +0x24 of an idworld entry.
+int func_800EE5AC(s32 *entry)
 {
-    s32 *local_0;
-    local_0 = *(s32 **) ((char *) param_0 + 0x24);
-    *(s32 **) ((char *) param_0 + 0x24) = defrag(local_0);
+    s32 *block;
+    block = *(s32 **) ((char *) entry + 0x24);
+    *(s32 **) ((char *) entry + 0x24) = defrag(block);
 }
 
-s32 func_800EE5D8(s32 param_0)
+// Defrags a block and patches the matching references in the idworld entries.
+s32 func_800EE5D8(s32 old_block)
 {
-    s32 temp_v0;
-    int var_a3;
-    u8 *sp1C;
-    u8 *temp_v0_2;
-    u8 *var_v1;
-    u8 *new_var;
-    temp_v0 = defrag();
+    s32 defragged;
+    int new_block;
+    u8 *entries_end;
+    u8 *entries_begin;
+    u8 *entry;
+    u8 *limit;
+    defragged = defrag();
+    // Matching: the do-while(0), the empty if and the extra variable are needed for the match.
     do {
-        var_a3 = temp_v0;
-        if (((s32 *) D_80127EF8 != 0) && (temp_v0 != param_0)) {
-            sp1C = vector_end((s32 *) D_80127EF8);
-            temp_v0_2 = vector_begin((s32 *) D_80127EF8);
-            var_v1 = temp_v0_2;
-            if (temp_v0_2 < (new_var = sp1C)) {
+        new_block = defragged;
+        if (((s32 *) D_80127EF8 != 0) && (defragged != old_block)) {
+            entries_end = vector_end((s32 *) D_80127EF8);
+            entries_begin = vector_begin((s32 *) D_80127EF8);
+            entry = entries_begin;
+            if (entries_begin < (limit = entries_end)) {
                 do {
-                    if (var_v1) {
+                    if (entry) {
                     }
-                    if (param_0 == *(s32 *) var_v1) {
-                        *(s32 *) var_v1 = var_a3;
+                    if (old_block == *(s32 *) entry) {
+                        *(s32 *) entry = new_block;
                     }
-                    var_v1 += 0xA8;
-                } while (var_v1 < sp1C);
+                    entry += 0xA8;
+                } while (entry < entries_end);
             }
         }
     } while (0);
-    return var_a3;
+    return new_block;
 }
 
+// Runs the per-type defrag routine for each idworld entry, then defrags the vector.
 void func_800EE670(void)
 {
-    void (*local_3)(void *);
-    void *local_0;
-    void *local_1;
-    void *local_2;
+    void (*defrag_fn)(void *);
+    void *entries_end;
+    void *entries_begin;
+    void *entry;
 
     if (D_80127EF8 != 0) {
-        local_0 = vector_end(D_80127EF8);
-        local_1 = vector_begin(D_80127EF8);
-        local_2 = local_1;
-        if (local_1 < local_0) {
+        entries_end = vector_end(D_80127EF8);
+        entries_begin = vector_begin(D_80127EF8);
+        entry = entries_begin;
+        if (entries_begin < entries_end) {
             do {
-                local_3 = D_80123590[*(u8 *) ((char *) local_2 + 6)];
-                if (local_3 != NULL) {
-                    local_3((void *) ((char *) local_2 + 8));
+                defrag_fn = D_80123590[*(u8 *) ((char *) entry + 6)];
+                if (defrag_fn != NULL) {
+                    defrag_fn((void *) ((char *) entry + 8));
                 }
-                local_2 = (void *) ((char *) local_2 + 0xA8);
-            } while (local_2 < local_0);
+                entry = (void *) ((char *) entry + 0xA8);
+            } while (entry < entries_end);
         }
         D_80127EF8 = vector_defrag(D_80127EF8);
     }
 }
 
+// Per-frame hook: runs the idbounce overlay when D_80135483 is set.
 int func_800EE718()
 {
     if (D_80135483 != 0) {
@@ -92,6 +100,7 @@ int func_800EE718()
     }
 }
 
+// Per-frame hook: runs the idbounce overlay when D_80135483 is set.
 int func_800EE748()
 {
     if (D_80135483 != 0) {
@@ -99,6 +108,9 @@ int func_800EE748()
     }
 }
 
+// TU-NOTE: the .data of this file (formerly asm/data/core2/1EC7E20.data.s) is defined here in C.
+// Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+// functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
 D_80123590Entry D_80123590[16] = {0,
                                   0,
                                   0,

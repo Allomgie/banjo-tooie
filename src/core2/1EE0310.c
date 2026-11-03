@@ -54,38 +54,40 @@ void func_80106A60()
     }
 }
 
-void func_80106A98(LocalActor_80106A98 *param_0, s32 param_1)
+// Chooses the model lighting mode for the actor at draw time and sets its vertex buffer.
+void func_80106A98(LocalActor_80106A98 *actor, s32 unk_1)
 {
-    s32 local_0;
-    if (param_0->count) {
-        if (((s32) param_0->mode >> 15) != 0) {
-            func_800DF660(3, param_0->count, 0, param_0->alpha);
-            func_800DF720(func_80100AC4(param_0->id));
+    s32 lights;
+    if (actor->count) {
+        if (((s32) actor->mode >> 15) != 0) {
+            func_800DF660(3, actor->count, 0, actor->alpha);
+            func_800DF720(func_80100AC4(actor->id));
             return;
         }
-        if (param_0->flat) {
-            func_800DF660(2, param_0->count, 0, param_0->alpha);
-            func_800DF720(func_80100AC4(param_0->id));
+        if (actor->flat) {
+            func_800DF660(2, actor->count, 0, actor->alpha);
+            func_800DF720(func_80100AC4(actor->id));
             return;
         }
-        local_0 = func_80106C4C(param_0);
-        if (!func_800B27A0(param_1)) {
-            param_0->count = 0;
-            param_0->negative = 0;
+        lights = func_80106C4C(actor);
+        if (!func_800B27A0(unk_1)) {
+            actor->count = 0;
+            actor->negative = 0;
             return;
         }
-        if (local_0)
-            func_800DF660(1, 0, local_0, param_0->alpha);
+        if (lights)
+            func_800DF660(1, 0, lights, actor->alpha);
         else
-            func_800DF660(1, param_0->negative ? -(s32) param_0->count : (s32) param_0->count, 0,
-                          param_0->alpha);
-        func_800DF720(func_80100AC4(param_0->id));
+            func_800DF660(1, actor->negative ? -(s32) actor->count : (s32) actor->count, 0,
+                          actor->alpha);
+        func_800DF720(func_80100AC4(actor->id));
         return;
     }
-    if (param_0->active)
-        func_800DF5D8(param_0->red, param_0->green, param_0->blue, param_0->alpha);
+    if (actor->active)
+        func_800DF5D8(actor->red, actor->green, actor->blue, actor->alpha);
 }
 
+// Returns the light collector (6 lights), creating it on first use.
 int func_80106C08()
 {
     if (!D_80136EF0) {
@@ -94,47 +96,49 @@ int func_80106C08()
     return D_80136EF0;
 }
 
-s32 func_80106C4C(param_0)
-LocalActor_80106C4C *param_0;
+// Gathers the lights around the actor's model centre into the collector and returns it.
+s32 func_80106C4C(actor)
+LocalActor_80106C4C *actor;
 {
-    f32 local_0[3];
-    s32 local_1;
-    s32 local_2;
-    s32 local_3[3];
-    LocalLight *local_4;
-    s32 local_5;
-    s32 local_8;
-    s32 local_6[3];
-    s32 local_7[3];
-    s32 local_9;
-    if (!param_0->active)
+    f32 center[3];
+    s32 collector;
+    s32 light_count;
+    s32 color[3];
+    LocalLight *light;
+    s32 unk_0;
+    s32 unk_1; // Matching: unused local, needed for the match.
+    s32 unk_2[3];
+    s32 ambient[3];
+    s32 unk_3; // Matching: unused local, needed for the match.
+    if (!actor->active)
         return 0;
-    _subaddiefade_entrypoint_9(param_0, local_3);
-    local_1 = func_80106C08();
-    func_80106D60(param_0, local_1, local_3);
-    local_2 = func_800B3494(local_1, local_0, func_80103F38(param_0, local_0));
-    func_800B37A4(local_1, &local_4, &local_5);
-    if (local_2 < (s32) param_0->count && param_0->special) {
-        func_800C8960(local_7, local_6);
-        func_80106DA4(local_7, local_3);
-        func_800B36C0(local_1, local_6, local_7, local_2 ? local_4->radius : 500.0f);
+    _subaddiefade_entrypoint_9(actor, color);
+    collector = func_80106C08();
+    func_80106D60(actor, collector, color);
+    light_count = func_800B3494(collector, center, func_80103F38(actor, center));
+    func_800B37A4(collector, &light, &unk_0);
+    if (light_count < (s32) actor->count && actor->special) {
+        func_800C8960(ambient, unk_2);
+        func_80106DA4(ambient, color);
+        func_800B36C0(collector, unk_2, ambient, light_count ? light->radius : 500.0f);
     }
-    return local_1;
+    return collector;
 }
 
-int func_80106D60(s32 param_0, s32 param_1, f32 param_2[3])
+int func_80106D60(s32 actor, s32 collector, f32 color[3])
 {
-    f32 local_0[3];
-    func_800C87B8(local_0);
-    func_80106DA4(local_0, param_2);
-    func_800B38A8(param_1, local_0);
+    f32 ambient[3];
+    func_800C87B8(ambient);
+    func_80106DA4(ambient, color);
+    func_800B38A8(collector, ambient);
 }
 
-func_80106DA4(param_0, param_1) s32 *param_0;
-s32 *param_1;
+// Scales each channel of color by (scale / 256).
+func_80106DA4(color, scale) s32 *color;
+s32 *scale;
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < 3; local_0++) {
-        param_0[local_0] = param_0[local_0] * param_1[local_0] >> 8;
+    s32 i;
+    for (i = 0; i < 3; i++) {
+        color[i] = color[i] * scale[i] >> 8;
     }
 }

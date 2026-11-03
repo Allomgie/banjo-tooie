@@ -14,6 +14,7 @@ s32 bainput_getStructSize(void)
     return sizeof(BaInput);
 }
 
+// __enabled holds latch bits, separate from the public enabled bits.
 static s32 __bainput_isEnabled(PlayerState *self, BaInputId id)
 {
     return (self->input->__enabled & (1 << id));
@@ -28,6 +29,7 @@ static void __bainput_enable(PlayerState *self, BaInputId id, s32 value)
     }
 }
 
+// Held-button intent with a latch: cleared if the intent is disabled, re-armed on release.
 static int __bainput_func_800979D8(PlayerState *self, ButtonId button_id, BaInputId input_id)
 {
     if (bakey_held(self, button_id)) {
@@ -57,11 +59,13 @@ int bainput_should_enter_first_person(PlayerState *self)
            bainput_isEnabled(self, BA_INPUT_2_ENTER_FIRST_PERSON);
 }
 
+// R held for at least 7 frames.
 int bainput_func_80097B28(PlayerState *self)
 {
     return NOT(bakey_heldCount(self, BUTTON_R) < 7);
 }
 
+// R held for at least 9 frames.
 int bainput_func_80097B4C(PlayerState *self)
 {
     return NOT(bakey_heldCount(self, BUTTON_R) < 9);
@@ -93,6 +97,7 @@ int bainput_should_shoot_egg(PlayerState *self)
     return bakey_pressed(self, BUTTON_C_UP) && func_8008D280(self);
 }
 
+// R tap: released after a short hold (under 9 frames).
 int bainput_func_80097C7C(PlayerState *self)
 {
     if (!func_800F424C(self)) {
@@ -114,6 +119,7 @@ int bainput_func_80097C7C(PlayerState *self)
     return bakey_newlyReleased(self, BUTTON_R) && (bakey_func_80091940(self, BUTTON_R, 1) < 9);
 }
 
+// R tap: released after a short hold (under 7 frames).
 int bainput_func_80097D28(PlayerState *self)
 {
     if (!func_800F424C(self)) {
@@ -170,17 +176,17 @@ int bainput_func_80097FB8(PlayerState *self)
            baflag_isFalse(self, BA_FLAG_5_HAS_PECKED) && !func_8008E39C(self);
 }
 
-s32 bainput_isEnabled(PlayerState *self, BaInputId arg1)
+s32 bainput_isEnabled(PlayerState *self, BaInputId id)
 {
-    return self->input->enabled & (1 << arg1);
+    return self->input->enabled & (1 << id);
 }
 
 int bainput_func_8009803C(PlayerState *self)
 {
-    s32 sp24;
+    s32 result;
     if (bakey_pressed(self, BUTTON_Z) && func_8008D850(self)) {
-        _suinv_entrypoint_0(&sp24, 0, 1, 0x46, 5);
-        return sp24;
+        _suinv_entrypoint_0(&result, 0, 1, 0x46, 5);
+        return result;
     }
     return 0;
 }
@@ -218,6 +224,7 @@ void bainput_setDiveCooldown(PlayerState *self, s32 arg1, f32 cooldown)
 
 void bainput_update(PlayerState *self)
 {
+    // Count down the dive cooldown, clamped at 0.
     if (self->input->dive_cooldown != 0.0f) {
         self->input->dive_cooldown =
             func_800F0E00(self->input->dive_cooldown - func_800D8FF8(), 0.0f);

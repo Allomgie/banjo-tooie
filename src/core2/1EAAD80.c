@@ -2,8 +2,8 @@
 
 extern void *heap_alloc_sided(s32, s32);
 typedef struct {
-    s16 *unk0;
-    s32 unk4;
+    s16 *counts;
+    s32 side;
 } G_D154C;
 extern G_D154C D_8012B250;
 extern s32 func_8001210C(s32);
@@ -13,182 +13,191 @@ s32 defrag();
 extern u8 D_8011AF50[];
 extern void func_800D24E8(s32, s32, s32);
 typedef struct {
-    s16 a;
-    s16 b;
+    s16 hud_id;
+    s16 capacity;
 } S8011AF50;
 extern void func_800D2770(s32, s32);
 extern s16 D_8011AF52[][2];
 extern u8 D_8011AE50[11];
 
+// Item counts are stored XORed with code words of func_800D1A04.
 void func_800D1490(void)
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < 21; local_0++) {
-        D_8012B250.unk0[local_0] = ((s16 *) &func_800D1A04)[local_0 * 4];
+    s32 i;
+    for (i = 0; i < 21; i++) {
+        D_8012B250.counts[i] = ((s16 *) &func_800D1A04)[i * 4];
     }
 }
 
 s32 func_800D1510(void)
 {
-    D_8012B250.unk4 = 0;
-    D_8012B250.unk0 = heap_alloc_sided(42, D_8012B250.unk4);
+    D_8012B250.side = 0;
+    D_8012B250.counts = heap_alloc_sided(42, D_8012B250.side);
     func_800D1490();
 }
 
+// Every 0x200 frames or so, moves the counts to the next heap side.
 void func_800D154C(void)
 {
     void *old;
-    s32 n;
+    s32 new_side;
     if (func_8001210C(0x3FF) != 0x1FF) {
         return;
     }
-    old = D_8012B250.unk0;
-    D_8012B250.unk4++;
-    n = D_8012B250.unk4;
-    if (n == 3) {
-        D_8012B250.unk4 = 0;
-        n = 0;
+    old = D_8012B250.counts;
+    D_8012B250.side++;
+    new_side = D_8012B250.side;
+    if (new_side == 3) {
+        D_8012B250.side = 0;
+        new_side = 0;
     }
-    D_8012B250.unk0 = heap_alloc_sided(0x2A, n);
-    rare_memcpy(D_8012B250.unk0, old, 0x2A);
+    D_8012B250.counts = heap_alloc_sided(0x2A, new_side);
+    rare_memcpy(D_8012B250.counts, old, 0x2A);
     heap_free(old);
 }
 
 void func_800D15CC()
 {
-    if ((s32) D_8012B250.unk0 != 0) {
-        D_8012B250.unk0 = defrag((s32) D_8012B250.unk0);
+    if ((s32) D_8012B250.counts != 0) {
+        D_8012B250.counts = defrag((s32) D_8012B250.counts);
     }
 }
 
 void func_800D1604(void)
 {
-    heap_free((s32) D_8012B250.unk0);
-    D_8012B250.unk0 = 0;
+    heap_free((s32) D_8012B250.counts);
+    D_8012B250.counts = 0;
 }
 
+// Matching: the line breaks in this function are needed for the match.
 void func_800D162C(void)
 {
-    s32 local_0;
-    u8 *local_1;
-    s32 local_2;
-    do { local_1 = D_8011AF50; local_0 = 0; local_2 = 0; do { func_800D2770(*(s16 *) local_1, *(s16 *) ((u8 *) D_8012B250.unk0 + local_0) ^ *(s16 *) ((u8 *) &func_800D1A04 + local_2)); local_0 += 2; local_1 += 4; local_2 += 8; } while (local_0 != 0x2A); } while (0);
+    s32 counts_off;
+    u8 *entry;
+    s32 key_off;
+    do { entry = D_8011AF50; counts_off = 0; key_off = 0; do { func_800D2770(*(s16 *) entry, *(s16 *) ((u8 *) D_8012B250.counts + counts_off) ^ *(s16 *) ((u8 *) &func_800D1A04 + key_off)); counts_off += 2; entry += 4; key_off += 8; } while (counts_off != 0x2A); } while (0);
 }
 
-int func_800D16C4(param_0)
-s32 param_0;
+int func_800D16C4(item_id)
+s32 item_id;
 {
-    s32 local_0;
-    local_0 = param_0 - 0x40;
-    return local_0;
+    s32 index;
+    index = item_id - 0x40;
+    return index;
 }
 
-void func_800D16CC(s32 param_0, s32 param_1)
+// Stores a count, clamped to 0..capacity (-2 = infinite, stored as 999).
+void func_800D16CC(s32 index, s32 value)
 {
-    s16 local_0;
-    s32 local_1;
+    s16 capacity;
+    s32 entry_off;
 
-    local_1 = param_0 * 4;
-    local_0 = *(s16 *) ((u8 *) (u8 *) D_8011AF52 + local_1);
-    if (local_0 == -2) {
-        *(s16 *) ((u8 *) D_8012B250.unk0 + param_0 * 2) =
-            *(s16 *) ((u8 *) func_800D1A04 + local_1 * 2) ^ 0x3E7;
+    entry_off = index * 4;
+    // Matching: the doubled (u8 *) cast is needed for the match.
+    capacity = *(s16 *) ((u8 *) (u8 *) D_8011AF52 + entry_off);
+    if (capacity == -2) {
+        *(s16 *) ((u8 *) D_8012B250.counts + index * 2) =
+            *(s16 *) ((u8 *) func_800D1A04 + entry_off * 2) ^ 0x3E7;
         return;
     }
-    if (param_1 < 0) {
-        param_1 = 0;
+    if (value < 0) {
+        value = 0;
     }
-    if (local_0 >= 0 && local_0 < param_1) {
-        param_1 = local_0;
+    if (capacity >= 0 && capacity < value) {
+        value = capacity;
     }
-    *(s16 *) ((u8 *) D_8012B250.unk0 + param_0 * 2) =
-        *(s16 *) ((u8 *) func_800D1A04 + local_1 * 2) ^ param_1;
+    *(s16 *) ((u8 *) D_8012B250.counts + index * 2) =
+        *(s16 *) ((u8 *) func_800D1A04 + entry_off * 2) ^ value;
 }
 
-void func_800D175C(s32 param_0, s32 param_1)
+void func_800D175C(s32 item_id, s32 delta)
 {
-    s32 local_0;
-    local_0 = func_800D16C4(param_0);
-    func_800D16CC(local_0,
-                  (D_8012B250.unk0[local_0] ^ ((s16 *) &func_800D1A04)[local_0 * 4]) + param_1);
-    func_800D24E8(((s16(*)[2]) D_8011AF50)[local_0][0],
-                  D_8012B250.unk0[local_0] ^ ((s16 *) &func_800D1A04)[local_0 * 4], 0);
+    s32 index;
+    index = func_800D16C4(item_id);
+    func_800D16CC(index,
+                  (D_8012B250.counts[index] ^ ((s16 *) &func_800D1A04)[index * 4]) + delta);
+    func_800D24E8(((s16(*)[2]) D_8011AF50)[index][0],
+                  D_8012B250.counts[index] ^ ((s16 *) &func_800D1A04)[index * 4], 0);
 }
 
-void func_800D1804(s32 param_0)
+void func_800D1804(s32 item_id)
 {
-    func_800D175C(param_0, -1);
+    func_800D175C(item_id, -1);
 }
 
-void func_800D1824(s32 arg0)
+void func_800D1824(s32 item_id)
 {
-    func_800D175C(arg0, 0);
+    func_800D175C(item_id, 0);
 }
 
-void func_800D1844(s32 arg0)
+void func_800D1844(s32 item_id)
 {
-    func_800D175C(arg0, 1);
+    func_800D175C(item_id, 1);
 }
 
-void func_800D1864(u32 param_0, u32 param_1, u32 param_2)
+void func_800D1864(u32 item_id, u32 count, u32 unk_2)
 {
-    s32 idx;
-    idx = func_800D16C4(param_0);
-    func_800D16CC(idx, param_1);
-    if (param_2 != 0) {
-        func_800D2498(((S8011AF50 *) D_8011AF50)[idx].a,
-                      D_8012B250.unk0[idx] ^ ((s16 *) &func_800D1A04)[idx * 4],
-                      ((S8011AF50 *) D_8011AF50)[idx].b);
+    s32 index;
+    index = func_800D16C4(item_id);
+    func_800D16CC(index, count);
+    if (unk_2 != 0) {
+        func_800D2498(((S8011AF50 *) D_8011AF50)[index].hud_id,
+                      D_8012B250.counts[index] ^ ((s16 *) &func_800D1A04)[index * 4],
+                      ((S8011AF50 *) D_8011AF50)[index].capacity);
         return;
     }
-    func_800D2770(((S8011AF50 *) D_8011AF50)[idx].a,
-                  D_8012B250.unk0[idx] ^ ((s16 *) &func_800D1A04)[idx * 4]);
+    func_800D2770(((S8011AF50 *) D_8011AF50)[index].hud_id,
+                  D_8012B250.counts[index] ^ ((s16 *) &func_800D1A04)[index * 4]);
 }
 
-s32 func_800D192C(s32 param_0, s32 param_1)
+s32 func_800D192C(s32 item_id, s32 unk_1)
 {
-    s32 local_0 = func_800D1A04(param_0);
-    func_800D1864(param_0, local_0 | 0, param_1);
+    s32 count = func_800D1A04(item_id);
+    // Matching: `| 0` is needed for the match.
+    func_800D1864(item_id, count | 0, unk_1);
 }
 
-void func_800D1960(s32 param_0, s32 param_1, s32 param_2)
+// Sets the capacity of an item (-2 = infinite); fill also sets the count to the capacity.
+void func_800D1960(s32 item_id, s32 capacity, s32 fill)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = func_800D16C4();
-    if (param_1 > 0) {
-    } else if (param_1 != -2) {
-        param_1 = 1;
+    s32 index;
+    s32 count;
+    index = func_800D16C4();
+    // Matching: the empty block is needed for the match.
+    if (capacity > 0) {
+    } else if (capacity != -2) {
+        capacity = 1;
     }
-    *(s16 *) ((u8 *) D_8011AF52 + local_0 * 4) = param_1;
-    if (param_2 != 0) {
-        local_1 = func_800D1A6C(param_0);
+    *(s16 *) ((u8 *) D_8011AF52 + index * 4) = capacity;
+    if (fill != 0) {
+        count = func_800D1A6C(item_id);
     } else {
-        local_1 = D_8012B250.unk0[local_0] ^ ((s16 *) &func_800D1A04)[local_0 * 4];
+        count = D_8012B250.counts[index] ^ ((s16 *) &func_800D1A04)[index * 4];
     }
-    func_800D16CC(local_0, local_1);
+    func_800D16CC(index, count);
 }
 
-s32 func_800D1A04(param_0)
-s32 param_0;
+// Returns the current count of an item (999 if infinite).
+s32 func_800D1A04(item_id)
+s32 item_id;
 {
-    s32 local_0;
-    local_0 = func_800D16C4(param_0);
-    if (D_8011AF52[local_0][0] == -2)
+    s32 index;
+    index = func_800D16C4(item_id);
+    if (D_8011AF52[index][0] == -2)
         return 999;
-    return D_8012B250.unk0[local_0] ^ ((s16 *) &func_800D1A04)[local_0 * 4];
+    return D_8012B250.counts[index] ^ ((s16 *) &func_800D1A04)[index * 4];
 }
 
-u32 func_800D1A6C(param_0)
-u32 param_0;
+u32 func_800D1A6C(item_id)
+u32 item_id;
 {
-    u32 local_0;
-    s16 local_1;
-    local_0 = func_800D16C4(param_0);
-    local_1 = *((s16 *) ((((char *) D_8011AF50) + (local_0 * 4)) + 2));
+    u32 index;
+    s16 capacity;
+    index = func_800D16C4(item_id);
+    capacity = *((s16 *) ((((char *) D_8011AF50) + (index * 4)) + 2));
 
-if (local_1 != -2) {
-    if (local_1 == -1) {
+if (capacity != -2) {
+    if (capacity == -1) {
         return 0x32;
     }
 }
@@ -197,13 +206,14 @@ else
 {
     return 999;
 }
-return *((s16 *) ((((char *) D_8011AF50) + (local_0 * 4)) + 2));
+return *((s16 *) ((((char *) D_8011AF50) + (index * 4)) + 2));
 
 }
 
-int func_800D1ACC(s32 param_0)
+// Default capacity per item.
+int func_800D1ACC(s32 item_id)
 {
-    switch (param_0 - 0x40) {
+    switch (item_id - 0x40) {
         case 0:
             return 0x64;
 
@@ -231,9 +241,10 @@ int func_800D1ACC(s32 param_0)
 
 }
 
-int func_800D1B34(s32 param_0)
+// Maps an actor id to an item id.
+int func_800D1B34(s32 actor_id)
 {
-    switch (param_0) {
+    switch (actor_id) {
         case 0x29F:
             return 0x48;
 
@@ -279,16 +290,17 @@ int func_800D1B34(s32 param_0)
 
 }
 
-s32 func_800D1C38(s32 param_0)
+s32 func_800D1C38(s32 item_id)
 {
-    s32 local_0;
-    local_0 = func_800D1A04(param_0) == 0;
-    return local_0 | 0;
+    s32 is_empty;
+    is_empty = func_800D1A04(item_id) == 0;
+    // Matching: `| 0` is needed for the match.
+    return is_empty | 0;
 }
 
-s32 func_800D1C5C(u32 param_0)
+s32 func_800D1C5C(u32 index)
 {
-    return (s32) *(s16 *) &D_8011AE50[param_0 * 4];
+    return (s32) *(s16 *) &D_8011AE50[index * 4];
 }
 
 s32 func_800D1C70()
@@ -296,44 +308,46 @@ s32 func_800D1C70()
     return 0x2A;
 }
 
-void func_800D1C78(u8 *param_0, u32 param_1)
+// Loads counts from a big-endian save blob.
+void func_800D1C78(u8 *blob, u32 size)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
+    s32 i;
+    s32 count;
+    s32 value;
     func_800D1490();
-    local_1 = param_1 >> 1;
-    if (local_1 > 21)
-        local_1 = 21;
-    for (local_0 = 0; local_0 < local_1; local_0++) {
-        local_2 = (param_0[local_0 * 2] << 8) | param_0[local_0 * 2 + 1];
-        D_8012B250.unk0[local_0] = local_2 ^ ((s16 *) &func_800D1A04)[local_0 * 4];
+    count = size >> 1;
+    if (count > 21)
+        count = 21;
+    for (i = 0; i < count; i++) {
+        value = (blob[i * 2] << 8) | blob[i * 2 + 1];
+        D_8012B250.counts[i] = value ^ ((s16 *) &func_800D1A04)[i * 4];
     }
 }
 
-void func_800D1DFC(u8 *param_0)
+// Writes counts to a big-endian save blob.
+void func_800D1DFC(u8 *blob)
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < 21; local_0++) {
-        param_0[local_0 * 2] =
-            (D_8012B250.unk0[local_0] ^ ((s16 *) &func_800D1A04)[local_0 * 4]) >> 8 & 0xFF;
-        param_0[local_0 * 2 + 1] =
-            (D_8012B250.unk0[local_0] ^ ((s16 *) &func_800D1A04)[local_0 * 4]) & 0xFF;
+    s32 i;
+    for (i = 0; i < 21; i++) {
+        blob[i * 2] =
+            (D_8012B250.counts[i] ^ ((s16 *) &func_800D1A04)[i * 4]) >> 8 & 0xFF;
+        blob[i * 2 + 1] =
+            (D_8012B250.counts[i] ^ ((s16 *) &func_800D1A04)[i * 4]) & 0xFF;
     }
 }
 
-u32 func_800D1F34(s32 param_0, s32 param_1)
+u32 func_800D1F34(s32 blob, s32 item_id)
 {
-    u32 local_0;
-    u32 local_1;
-    if (_glgamedata_entrypoint_3(param_0, 4, &local_0, &local_1)) {
-        param_1 -= 0x40;
+    u32 offset;
+    u32 size;
+    if (_glgamedata_entrypoint_3(blob, 4, &offset, &size)) {
+        item_id -= 0x40;
 
-if ((s32) (local_1 >> 1) < param_1) {
+if ((s32) (size >> 1) < item_id) {
     return -1;
 }
 {
-    u32 addr = (u32) param_0 + local_0 + (u32) param_1 * 2;
+    u32 addr = (u32) blob + offset + (u32) item_id * 2;
     u32 result = ((u32) (*(u8 *) addr) << 8) | (*(u8 *) (addr + 1));
     return result;
 }
@@ -342,6 +356,9 @@ if ((s32) (local_1 >> 1) < param_1) {
 return -1;
 }
 
+// TU-NOTE: the .data of this file is defined here in C, values taken from the ROM.
+// Linker symbols (undefined_syms.us.txt): D_8011AE5B = D_8011AE50 + 0xB,
+// D_8011AE76 = D_8011AE74 + 0x2, D_8011AF52 = D_8011AF50 + 0x2.
 u8 D_8011AE50[11] = {0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 static u32 D_8011AE50_rest[1] = {0x1020304};
 u32 D_8011AE60[1] = {0x0};

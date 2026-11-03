@@ -15,8 +15,8 @@ extern s32 func_800F54E4(void);
 extern s32 func_800F5410(s32);
 extern s32 func_800F6D24(s32);
 typedef struct {
-    s32 local_0;
-    s32 (*local_1)(void);
+    s32 cached_size;
+    s32 (*size_fn)(void);
 } SizeF;
 extern SizeF D_801235D0[];
 extern void func_8009C128();
@@ -28,61 +28,65 @@ s32 func_800F3ED0();
 s32 func_800F40EC();
 void func_800F44DC();
 
-void func_800F3880(s32 arg0)
+// PlayerState lifecycle and queries. PlayerState is one heap block: a 0x19C-byte header
+// followed by 0x56 subsystem sub-blocks. Header: +0x17C active flag, +0x180 second flag,
+// +0x184 character index.
+void func_800F3880(s32 block)
 {
     func_80098E64();
-    heap_free(arg0);
+    heap_free(block);
 }
 
-int func_800F38A8(s32 param_0, s32 param_1)
+// class_mask bits: 4 and 2 match the airborne/swimming class (2 and 1), 1 matches movement mode 10.
+int func_800F38A8(s32 player, s32 class_mask)
 {
-    return (((param_1 & 4) != 0) && func_800F40EC(param_0) == 2) ||
-           (((param_1 & 2) != 0) && func_800F40EC(param_0) == 1) ||
-           (((param_1 & 1) != 0) && func_800F3ED0(param_0) == 10);
+    return (((class_mask & 4) != 0) && func_800F40EC(player) == 2) ||
+           (((class_mask & 2) != 0) && func_800F40EC(player) == 1) ||
+           (((class_mask & 1) != 0) && func_800F3ED0(player) == 10);
 }
 
-s32 func_800F3930(param_0, param_1, param_2)
-u8 *param_0;
-s32 param_1;
-s32 param_2;
+s32 func_800F3930(player, allowed_transform, class_mask)
+u8 *player;
+s32 allowed_transform;
+s32 class_mask;
 {
-    s32 sp24;
+    s32 class_match;
 
-    sp24 = func_800F38A8(param_0, param_2);
+    class_match = func_800F38A8(player, class_mask);
 
 if (func_800F9184() != 0) {
     return 0;
 }
 
-if (func_800F6774(*(s32 *) ((s8 *) param_0 + 0x184)) == 0) {
+if (func_800F6774(*(s32 *) ((s8 *) player + 0x184)) == 0) {
     return 0;
 }
 
-if (func_800F6CC8(*(s32 *) ((s8 *) param_0 + 0x184)) != 0) {
+if (func_800F6CC8(*(s32 *) ((s8 *) player + 0x184)) != 0) {
     return 0;
 }
 
-if (func_8008EF3C(param_0, 0) == 0x13) {
+if (func_8008EF3C(player, 0) == 0x13) {
     return 0;
 }
 
-if ((player_isStable(param_0) == 0) && (sp24 == 0)) {
+if ((player_isStable(player) == 0) && (class_match == 0)) {
     return 0;
 }
 
-if (func_800F64A4(*(s32 *) ((s8 *) param_0 + 0x184), 0x12000) != 0) {
+if (func_800F64A4(*(s32 *) ((s8 *) player + 0x184), 0x12000) != 0) {
     return 0;
 }
 
-if (func_800F64A4(*(s32 *) ((s8 *) param_0 + 0x184), param_1) == 0) {
+if (func_800F64A4(*(s32 *) ((s8 *) player + 0x184), allowed_transform) == 0) {
     return 0;
 }
 
-if (baflag_isTrue(param_0, 0x3F) != 0) {
+if (baflag_isTrue(player, 0x3F) != 0) {
     return 0;
 }
 
-if (func_8009CA70(param_0, bs_getCurrentState(param_0), 0x20) != 0) {
+if (func_8009CA70(player, bs_getCurrentState(player), 0x20) != 0) {
     return 0;
 }
 
@@ -93,27 +97,27 @@ if (func_800A9C98() != 0) {
 return 1;
 }
 
-int func_800F3A78(s32 param_0, s32 param_1, f32 param_2[3])
+int func_800F3A78(s32 player, s32 allowed_transform, f32 param_2[3])
 {
-    s32 local_1;
+    s32 class_match;
 
-if (func_800F3930(param_0, param_1) == 0) {
+if (func_800F3930(player, allowed_transform) == 0) {
     return 0;
 }
 
-if (func_8009E674(param_0, 0x8000) != 0) {
+if (func_8009E674(player, 0x8000) != 0) {
     return 0;
 }
 
-local_1 = func_800F38A8(param_0, param_2);
+class_match = func_800F38A8(player, param_2);
 
-if (bastick_distance(param_0) != 0.0f) {
-    if (local_1 == 0) {
+if (bastick_distance(player) != 0.0f) {
+    if (class_match == 0) {
         return 0;
     }
 }
 
-if (func_800F5FA8(*(s32 **) (param_0 + 0x184)) == 0) {
+if (func_800F5FA8(*(s32 **) (player + 0x184)) == 0) {
     return 0;
 }
 
@@ -124,18 +128,18 @@ if (func_800A9C98() != 0) {
 return 1;
 }
 
-f32 func_800F3B3C(s32 param_0, s32 param_1, s32 param_2)
+f32 func_800F3B3C(s32 player, s32 param_1, s32 index)
 {
-    s32 local_1C;
+    s32 values;
 
-    func_8009E154(param_0, param_2, param_1);
-    func_8008E9B8(param_0, &local_1C);
-    return (f32) ((s32 *) local_1C)[param_2];
+    func_8009E154(player, index, param_1);
+    func_8008E9B8(player, &values);
+    return (f32) ((s32 *) values)[index];
 }
 
-void func_800F3B90(s32 param_0, s32 param_1)
+void func_800F3B90(s32 player, s32 param_1)
 {
-    func_800F3B3C(param_0, param_1, 0);
+    func_800F3B3C(player, param_1, 0);
 }
 
 void func_800F3BB0()
@@ -144,139 +148,142 @@ void func_800F3BB0()
 
 }
 
-void func_800F3BD0(s32 param_0, s32 param_1, f32 *param_2)
+// Writes the position of the anchor point anchor_id; case 5 adds a per-transformation head height.
+void func_800F3BD0(s32 player, s32 anchor_id, f32 *out_pos)
 {
-    switch (param_1) {
+    switch (anchor_id) {
         case 1:
-            func_80092D44(param_0, param_2);
+            func_80092D44(player, out_pos);
             break;
         case 2:
-            func_80092E5C(param_0, param_2);
+            func_80092E5C(player, out_pos);
             break;
         case 3:
-            func_80092C00(param_0, param_2);
+            func_80092C00(player, out_pos);
             break;
         case 4:
-            func_80092C24(param_0, param_2);
+            func_80092C24(player, out_pos);
             break;
         case 6:
-            func_80092C48(param_0, param_2);
+            func_80092C48(player, out_pos);
             break;
         case 5:
-            func_8009C128(param_0, param_2);
-            switch (func_800A3274(param_0)) {
+            func_8009C128(player, out_pos);
+            switch (func_800A3274(player)) {
                 case 2:
-                    param_2[1] += 85.0f;
+                    out_pos[1] += 85.0f;
                     break;
                 case 15:
-                    param_2[1] += 90.0f;
+                    out_pos[1] += 90.0f;
                     break;
                 case 6:
-                    param_2[1] += 85.0f;
+                    out_pos[1] += 85.0f;
                     break;
                 case 7:
-                    param_2[1] += 130.0f;
+                    out_pos[1] += 130.0f;
                     break;
                 case 14:
-                    param_2[1] += 575.0f;
+                    out_pos[1] += 575.0f;
                     break;
                 case 16:
-                    param_2[1] += 130.0f;
+                    out_pos[1] += 130.0f;
                     break;
                 case 12:
-                    param_2[1] += 45.0f;
+                    out_pos[1] += 45.0f;
                     break;
                 case 17:
-                    param_2[1] += 40.0f;
+                    out_pos[1] += 40.0f;
                     break;
                 case 18:
-                    param_2[1] += 130.0f;
+                    out_pos[1] += 130.0f;
                     break;
                 case 19:
-                    param_2[1] += 400.0f;
+                    out_pos[1] += 400.0f;
                     break;
                 case 11:
-                    param_2[1] += 55.0f;
+                    out_pos[1] += 55.0f;
                     break;
                 case 1:
-                    if (func_800F40EC(param_0) == 2 ||
-                        func_800F6720(*(s32 *) ((u8 *) param_0 + 0x184)))
-                        param_2[1] += 70.0f;
+                    if (func_800F40EC(player) == 2 ||
+                        func_800F6720(*(s32 *) ((u8 *) player + 0x184)))
+                        out_pos[1] += 70.0f;
                     else
-                        param_2[1] += 100.0f;
+                        out_pos[1] += 100.0f;
                     break;
                 default:
-                    param_2[1] += 100.0f;
+                    out_pos[1] += 100.0f;
                     break;
             }
             break;
         case 7:
-            func_80092DC0(param_0, param_2);
+            func_80092DC0(player, out_pos);
             break;
         case 8:
-            func_8009C188(param_0, param_2);
+            func_8009C188(player, out_pos);
             break;
         case 9:
-            func_80092D9C(param_0, param_2);
+            func_80092D9C(player, out_pos);
             break;
         case 0:
         default:
-            func_800F3BB0(param_0, param_2);
+            func_800F3BB0(player, out_pos);
             break;
     }
 
 }
 
-void func_800F3E84(s32 param_0, f32 *param_1)
+// Reads the rotation as pitch, yaw, roll.
+void func_800F3E84(s32 player, f32 *out_rot)
 {
-    param_1[0] = func_8009BFCC(param_0);
-    param_1[1] = yaw_get(param_0);
-    param_1[2] = baroll_get(param_0);
+    out_rot[0] = func_8009BFCC(player);
+    out_rot[1] = yaw_get(player);
+    out_rot[2] = baroll_get(player);
 }
 
-s32 func_800F3ED0(param_0)
-s32 param_0;
+// Movement-mode classification, 0..0x10, from bs state, flags and shoes.
+s32 func_800F3ED0(player)
+s32 player;
 {
-    s32 local_0;
-    s32 local_1;
+    s32 bs_state;
+    s32 shoes;
 
-    local_0 = bs_getCurrentState(param_0);
+    bs_state = bs_getCurrentState(player);
 
-if (baflag_isTrue(param_0, 0x1B) != 0) {
+if (baflag_isTrue(player, 0x1B) != 0) {
     return 0xD;
 }
 
-if (baflag_isTrue(param_0, 0x17) != 0) {
+if (baflag_isTrue(player, 0x17) != 0) {
     return 4;
 }
 
-if (func_8009CBDC(param_0, local_0) == 9) {
+if (func_8009CBDC(player, bs_state) == 9) {
     return 0xA;
 }
 
-if (func_8009CBDC(param_0, local_0) == 0x12) {
+if (func_8009CBDC(player, bs_state) == 0x12) {
     return 0xC;
 }
 
-if (func_8009CBDC(param_0, local_0) == 0x13) {
+if (func_8009CBDC(player, bs_state) == 0x13) {
     return 0xE;
 }
 
-if (func_8009CBDC(param_0, local_0) == 8) {
+if (func_8009CBDC(player, bs_state) == 8) {
     return 9;
 }
 
-if (func_8009CBDC(param_0, local_0) == 0xA) {
+if (func_8009CBDC(player, bs_state) == 0xA) {
     return 5;
 }
 
-if (baflag_isTrue(param_0, 9) != 0) {
+if (baflag_isTrue(player, 9) != 0) {
     return 1;
 }
 
-if (func_8009E674(param_0, 0x80) != 0) {
-    local_1 = _bashoes_entrypoint_1(param_0);
-    switch (local_1) {
+if (func_8009E674(player, 0x80) != 0) {
+    shoes = _bashoes_entrypoint_1(player);
+    switch (shoes) {
         case 3:
             return 6;
         case 4:
@@ -286,7 +293,7 @@ if (func_8009E674(param_0, 0x80) != 0) {
     }
 }
 {
-    switch (local_0) {
+    switch (bs_state) {
         case 0xE:;
         case 0x34:
         case 0x3C:;
@@ -308,14 +315,14 @@ if (func_8009E674(param_0, 0x80) != 0) {
         case 0x16:;
         case 0x17:
         case 0x45:
-            if (bastatetimer_isActive(param_0, 3) != 0) {
+            if (bastatetimer_isActive(player, 3) != 0) {
                 return 6;
             }
             return 8;
         case 0xB:
             return 2;
         default:
-            if (func_8008EF3C(param_0, 0) != 0) {
+            if (func_8008EF3C(player, 0) != 0) {
                 return 0xB;
             }
             return 0;
@@ -324,24 +331,25 @@ if (func_8009E674(param_0, 0x80) != 0) {
 
 }
 
-s32 func_800F40EC(param_0)
-s32 param_0;
+// Airborne-or-swimming class: 0 none, 1 or 2.
+s32 func_800F40EC(player)
+s32 player;
 {
     s32 state;
     f32 val1;
     f32 val2;
     state = bs_getCurrentState();
 
-if (func_800A3274(param_0) != 0xC) {
+if (func_800A3274(player) != 0xC) {
     goto block_5;
 }
 
-if (func_80096544(param_0) == 0) {
+if (func_80096544(player) == 0) {
     return 0;
 }
 
-val1 = func_800964DC(param_0);
-val2 = func_80096364(param_0);
+val1 = func_800964DC(player);
+val2 = func_80096364(player);
 
 if ((val1 - val2) < 50.0f) {
     return 0;
@@ -350,77 +358,77 @@ if ((val1 - val2) < 50.0f) {
 goto block_5;
 
 block_5
-    : if ((func_8009CA70(param_0, state, 1) != 0) || (func_8009CA70(param_0, state, 0x40000) != 0))
+    : if ((func_8009CA70(player, state, 1) != 0) || (func_8009CA70(player, state, 0x40000) != 0))
 {
     return 1;
 }
 
 if (state == 5) {
-    if (_bsjump_entrypoint_16(param_0) != 0) {
+    if (_bsjump_entrypoint_16(player) != 0) {
         return 1;
     }
     return 0;
 }
 
-if (func_8009CA70(param_0, state, 2) != 0) {
+if (func_8009CA70(player, state, 2) != 0) {
     return 2;
 }
 
 return 0;
 }
 
-int func_800F4200(s32 param_0, s32 param_1)
+int func_800F4200(s32 player, s32 param_1)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    func_8009C128(param_0, local_0);
-    func_8009C1CC(param_0, local_1);
-    func_800EE780(param_1, local_0, local_1);
+    f32 pos[3];
+    f32 unk_1[3];
+    func_8009C128(player, pos);
+    func_8009C1CC(player, unk_1);
+    func_800EE780(param_1, pos, unk_1);
 }
 
-s32 func_800F4244(Actor *param_0)
+s32 func_800F4244(Actor *player)
 {
-    return (*(s32 *) ((s8 *) (param_0) + (0x17C)));
+    return (*(s32 *) ((s8 *) (player) + (0x17C)));
 }
 
-s32 func_800F424C(u8 *param_0)
+s32 func_800F424C(u8 *player)
 {
-    s32 temp_v0;
-    s32 sp24;
-    s32 sp1C;
-    s32 temp_v0_2;
+    s32 unk_0;
+    s32 unk_1;
+    s32 unk_2;
+    s32 unk_3;
 
-if (*(s32 *) ((s8 *) param_0 + 0x17C) == 0) {
+if (*(s32 *) ((s8 *) player + 0x17C) == 0) {
     return 0;
 }
 
-if (func_8009E674(param_0, 4) != 0) {
+if (func_8009E674(player, 4) != 0) {
     return 0;
 }
 
-if (func_8009E674(param_0, 0x2000) != 0) {
+if (func_8009E674(player, 0x2000) != 0) {
     return 0;
 }
 
-if (func_8008E124(param_0) != 0) {
+if (func_8008E124(player) != 0) {
     return 0;
 }
 
-if (func_8008E974(param_0) == 0) {
+if (func_8008E974(player) == 0) {
     return 0;
 }
 
-if (func_800F8004(*(s32 *) ((s8 *) param_0 + 0x184)) != 0) {
+if (func_800F8004(*(s32 *) ((s8 *) player + 0x184)) != 0) {
     return 0;
 }
 
-if (func_8008DAA8(param_0) == 0) {
-    temp_v0 = func_800F54E4();
-    if (temp_v0 != -1) {
-        sp24 = temp_v0;
-        sp1C = func_800F5410(temp_v0) == 0x11;
-        temp_v0_2 = func_800F6D24(sp24);
-        if ((sp1C != 0) && (temp_v0_2 != 0)) {
+if (func_8008DAA8(player) == 0) {
+    unk_0 = func_800F54E4();
+    if (unk_0 != -1) {
+        unk_1 = unk_0;
+        unk_2 = func_800F5410(unk_0) == 0x11;
+        unk_3 = func_800F6D24(unk_1);
+        if ((unk_2 != 0) && (unk_3 != 0)) {
             return 0;
         }
     }
@@ -429,97 +437,100 @@ if (func_8008DAA8(param_0) == 0) {
 return 1;
 }
 
-s32 func_800F4354(s32 param_0)
+// Size of sub-block index; computed lazily via the table and cached.
+s32 func_800F4354(s32 index)
 {
-    if (D_801235D0[param_0].local_0 >= 0)
-        return D_801235D0[param_0].local_0;
-    D_801235D0[param_0].local_0 = D_801235D0[param_0].local_1();
+    if (D_801235D0[index].cached_size >= 0)
+        return D_801235D0[index].cached_size;
+    D_801235D0[index].cached_size = D_801235D0[index].size_fn();
 }
 
-u8 *func_800F43A8(s32 param_0)
+// Allocates a PlayerState: header plus 4-aligned sub-blocks, with a pointer table at the start.
+u8 *func_800F43A8(s32 character_index)
 {
-    s32 local_1;
-    u8 *local_0;
-    unsigned int local_2;
-    s32 local_3;
-    s32 local_4;
+    s32 offset;
+    u8 *block;
+    unsigned int i;
+    s32 size;
+    s32 padding;
 
-    local_1 = 0x19C;
-    local_0 = heap_alloc(0x19C);
-    for (local_2 = 0; local_2 < 0x56; local_2++) {
-        local_3 = func_800F4354((s32) local_2);
-        local_4 = local_3 % 4;
+    offset = 0x19C;
+    block = heap_alloc(0x19C);
+    for (i = 0; i < 0x56; i++) {
+        size = func_800F4354((s32) i);
+        padding = size % 4;
 
-if (local_4 != 0) {
-    local_4 = 4 - local_4;
+if (padding != 0) {
+    padding = 4 - padding;
 } else {
 
-local_4 = 0;
+padding = 0;
 }
-local_1 = local_1 + local_3 + local_4;
-local_0 = heap_realloc(local_0, local_1);
+offset = offset + size + padding;
+block = heap_realloc(block, offset);
 }
-bzero(local_0, local_1);
-local_1 = 0x19C;
-for (local_2 = 0; local_2 < 0x56; local_2++) {
-    *(u8 **) (local_0 + (local_2 << 2)) = local_0 + local_1;
-    local_3 = func_800F4354((s32) local_2);
-    local_4 = local_3 % 4;
-    if (local_4 != 0) {
-        local_4 = 4 - local_4;
+bzero(block, offset);
+offset = 0x19C;
+for (i = 0; i < 0x56; i++) {
+    *(u8 **) (block + (i << 2)) = block + offset;
+    size = func_800F4354((s32) i);
+    padding = size % 4;
+    if (padding != 0) {
+        padding = 4 - padding;
     } else {
-        local_4 = 0;
+        padding = 0;
     }
-    local_1 = local_1 + local_3 + local_4;
+    offset = offset + size + padding;
 }
-((s32 *) local_0)[0x60] = 0;
-((s32 *) local_0)[0x61] = param_0;
-func_80098C48(local_0);
-func_800F44DC(local_0, 1);
-return local_0;
+((s32 *) block)[0x60] = 0;
+((s32 *) block)[0x61] = character_index;
+func_80098C48(block);
+func_800F44DC(block, 1);
+return block;
 }
 
-void func_800F44DC(param_0, param_1) s32 param_0;
-s32 param_1;
+void func_800F44DC(player, active) s32 player;
+s32 active;
 {
-    s32 local_0;
-    s32 local_1;
-    *(s32 *) (param_0 + 0x17c) = param_1;
-    local_1 = func_800A4C88(param_0);
-    if (param_1 != 0) {
-        local_0 = 2;
+    s32 unk_0;
+    s32 unk_1;
+    *(s32 *) (player + 0x17c) = active;
+    unk_1 = func_800A4C88(player);
+    if (active != 0) {
+        unk_0 = 2;
     } else {
-        local_0 = 1;
+        unk_0 = 1;
     }
-    func_8010F9C0(local_1, local_0);
+    func_8010F9C0(unk_1, unk_0);
 }
 
-void func_800F4524(s32 param_0, s32 param_1)
+void func_800F4524(s32 player, s32 value)
 {
-    s32 *local_0;
-    local_0 = (s32 *) (param_0 + 0x17C);
-    local_0++;
-    *local_0 = param_1;
+    s32 *flag;
+    flag = (s32 *) (player + 0x17C);
+    flag++;
+    *flag = value;
 }
 
-int func_800F452C(s32 param_0)
+int func_800F452C(s32 player)
 {
-    s32 local_0;
-    local_0 = param_0 | 0;
-    func_8009C0BC(local_0);
-    func_80095C94(local_0);
-    func_800A10A0(local_0);
-    func_800A4030(local_0);
-    func_800A4B08(local_0);
-    func_800A380C(local_0);
+    s32 player_alias;
+    // Matching: the "| 0" copy is needed for the match.
+    player_alias = player | 0;
+    func_8009C0BC(player_alias);
+    func_80095C94(player_alias);
+    func_800A10A0(player_alias);
+    func_800A4030(player_alias);
+    func_800A4B08(player_alias);
+    func_800A380C(player_alias);
 }
 
-int func_800F457C(s32 param_0, s32 param_1)
+int func_800F457C(s32 player, s32 param_1)
 {
     if (!param_1) {
-        func_8009CCA4(param_0);
+        func_8009CCA4(player);
     } else {
-        func_8009CCFC(param_0);
+        func_8009CCFC(player);
     }
 }
 
@@ -529,24 +540,24 @@ s32 func_800F45B0(Actor *this, Gfx **dl, Mtx **m)
     func_8009CD70(this, m);
 }
 
-void func_800F45E0(s32 param_0, s32 *param_1)
+void func_800F45E0(s32 player, s32 *rot)
 {
-    func_8009BF5C(param_0, param_1[0]);
-    yaw_setIdeal(param_0, param_1[1]);
-    baroll_setIdeal(param_0, param_1[2]);
-    func_8009BFBC(param_0);
-    yaw_applyIdeal(param_0);
-    baroll_applyIdeal(param_0);
+    func_8009BF5C(player, rot[0]);
+    yaw_setIdeal(player, rot[1]);
+    baroll_setIdeal(player, rot[2]);
+    func_8009BFBC(player);
+    yaw_applyIdeal(player);
+    baroll_applyIdeal(player);
 }
 
-s32 func_800F4648(s32 param_0, s32 param_1)
+s32 func_800F4648(s32 player, s32 param_1)
 {
-    f32 local_0[3];
-    f32 local_1[3];
+    f32 pos[3];
+    f32 unk_1[3];
 
-    func_8009C128(param_0, local_0);
-    func_800EFB24(local_1, param_1, local_0);
-    func_8009C1F8(param_0, local_1);
+    func_8009C128(player, pos);
+    func_800EFB24(unk_1, param_1, pos);
+    func_8009C1F8(player, unk_1);
 }
 
 s32 func_800F468C(Actor *this)
@@ -557,24 +568,28 @@ s32 func_800F468C(Actor *this)
     }
 }
 
-u8 *func_800F46D8(u8 *param_0)
+// Defrags the block and fixes up the sub-block pointers if it moved.
+u8 *func_800F46D8(u8 *block)
 {
-    u8 local_3[8];
-    u8 *local_0;
-    s32 local_1;
-    int local_2;
-    func_80099544(param_0);
-    local_0 = param_0;
-    param_0 = defrag(param_0);
-    if (local_0 == param_0)
-        return param_0;
-    local_1 = param_0 - local_0;
-    for (local_2 = 0; local_2 < 0x56; local_2++) {
-        *(u8 **) ((u32) param_0 + (local_2 << 2)) += local_1;
+    u8 unk_0[8];
+    u8 *old_block;
+    s32 delta;
+    int i;
+    func_80099544(block);
+    old_block = block;
+    block = defrag(block);
+    if (old_block == block)
+        return block;
+    delta = block - old_block;
+    for (i = 0; i < 0x56; i++) {
+        *(u8 **) ((u32) block + (i << 2)) += delta;
     }
-    return param_0;
+    return block;
 }
 
+// TU-NOTE: the data below (formerly asm/data/core2/1ECD170.data.s) is defined in C. The tables point
+// to functions of this file; IDO's assembler schedules some of them differently unless the tables
+// are in the same unit. Values are taken from the ROM.
 extern void _baalarm_get_size();
 extern void baanim_get_size();
 extern void _baattach_entrypoint_0();

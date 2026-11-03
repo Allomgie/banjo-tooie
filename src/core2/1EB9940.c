@@ -5,38 +5,42 @@ typedef struct {
     u16 type : 4;
     s16 n;
 } AnimTrack;
+// Animation header: frame range, track count, then the tracks.
+// Each track is a header followed by n 4-byte keyframes.
 typedef struct {
-    u16 local_0 : 12;
-    u16 local_7 : 4;
-    s16 local_1;
+    u16 id : 12;
+    u16 type : 4;
+    s16 n;
 } EntryE0170;
 typedef struct {
-    s16 local_0;
-    s16 local_1;
-    s16 local_2;
-    s16 pad;
-    EntryE0170 local_3[1];
+    s16 start;
+    s16 end;
+    s16 track_count;
+    s16 pad_6;
+    EntryE0170 tracks[1];
 } StateE0170;
 extern f32 func_800E04C0(EntryE0170 *, f32, s32);
 extern void func_800E084C(s32, f32 *, s32);
 f32 func_800E0414(u8 *param_0, f32 param_1);
 
-void func_800E0050(u8 *param_0, f32 param_1, s32 param_2, f32 *param_3)
+// Evaluates all tracks of one bone at normalized time into a 9-float transform
+// [rot xyz, scale xyz, trans xyz].
+void func_800E0050(u8 *anim, f32 norm_time, s32 bone_id, f32 *xform)
 {
-    f32 local_0;
+    f32 frame;
     s32 found;
     s32 i;
-    AnimTrack *p;
+    AnimTrack *track;
     s32 type;
-    local_0 = func_800E0414(param_0, param_1);
-    param_3[0] = param_3[1] = param_3[2] = 0.0f;
-    param_3[6] = param_3[7] = param_3[8] = 0.0f;
-    param_3[3] = param_3[4] = param_3[5] = 1.0f;
+    frame = func_800E0414(anim, norm_time);
+    xform[0] = xform[1] = xform[2] = 0.0f;
+    xform[6] = xform[7] = xform[8] = 0.0f;
+    xform[3] = xform[4] = xform[5] = 1.0f;
     found = 0;
-    p = (AnimTrack *) (param_0 + 8);
-    for (i = 0; i < *(s16 *) (param_0 + 4); i++) {
-        type = p->type;
-        if (param_2 != p->id) {
+    track = (AnimTrack *) (anim + 8);
+    for (i = 0; i < *(s16 *) (anim + 4); i++) {
+        type = track->type;
+        if (bone_id != track->id) {
             if (found) {
                 return;
             }
@@ -45,116 +49,126 @@ void func_800E0050(u8 *param_0, f32 param_1, s32 param_2, f32 *param_3)
             if (type >= 9) {
                 type -= 9;
             }
-            param_3[type] = func_800E04C0(p, local_0, 0);
+            xform[type] = func_800E04C0(track, frame, 0);
         }
-        p = (AnimTrack *) ((u8 *) p + p->n * 4 + 4);
+        track = (AnimTrack *) ((u8 *) track + track->n * 4 + 4);
     }
 }
 
-void func_800E0170(StateE0170 *param_0, f32 param_1, s32 param_2, s32 param_3)
+// Evaluates every bone of the animation at normalized time and stores each
+// bone's 9-float transform into the pose.
+void func_800E0170(StateE0170 *anim, f32 norm_time, s32 use_span, s32 pose)
 {
-    f32 local_1;
-    s32 local_2;
-    EntryE0170 *local_3;
-    s32 local_4;
-    f32 local_0[12];
-    s32 local_5;
-    s32 local_6;
-    local_1 = func_800E0414(param_0, param_1);
-    local_2 = param_2 ? param_0->local_1 - param_0->local_0 : 0;
-    local_3 = param_0->local_3;
-    local_4 = 0;
-    for (local_5 = 0; local_5 < param_0->local_2; local_5++) {
-        if (local_4 != local_3->local_0) {
-            if (local_4)
-                func_800E084C(param_3, local_0, local_4);
-            local_4 = local_3->local_0;
-            local_0[0] = local_0[1] = local_0[2] = 0.0f;
-            local_0[3] = local_0[4] = local_0[5] = 1.0f;
-            local_0[6] = local_0[7] = local_0[8] = 0.0f;
+    f32 frame;
+    s32 span;
+    EntryE0170 *entry;
+    s32 cur_id;
+    f32 values[12];
+    s32 i;
+    s32 channel;
+    frame = func_800E0414(anim, norm_time);
+    span = use_span ? anim->end - anim->start : 0;
+    entry = anim->tracks;
+    cur_id = 0;
+    for (i = 0; i < anim->track_count; i++) {
+        if (cur_id != entry->id) {
+            if (cur_id)
+                func_800E084C(pose, values, cur_id);
+            cur_id = entry->id;
+            values[0] = values[1] = values[2] = 0.0f;
+            values[3] = values[4] = values[5] = 1.0f;
+            values[6] = values[7] = values[8] = 0.0f;
         }
-        local_6 = local_3->local_7;
-        if (local_6 >= 9)
-            local_6 -= 9;
-        local_0[local_6] = func_800E04C0(local_3, local_1, local_2);
-        local_3 += local_3->local_1;
-        local_3++;
+        channel = entry->type;
+        if (channel >= 9)
+            channel -= 9;
+        values[channel] = func_800E04C0(entry, frame, span);
+        entry += entry->n;
+        entry++;
     }
-    func_800E084C(param_3, local_0, local_4);
+    func_800E084C(pose, values, cur_id);
 }
 
-void func_800E02F8(u8 *param_0, f32 param_1, s32 param_2, s32 param_3, s32 param_4, f32 *param_5)
+// Collects the channel-7 values of all tracks whose id is in [min_id, max_id].
+void func_800E02F8(u8 *anim, f32 norm_time, s32 use_span, s32 min_id, s32 max_id, f32 *out)
 {
-    f32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    u32 local_4;
-    u32 local_5;
-    u8 *local_6;
+    f32 frame;
+    s32 span;
+    s32 i;
+    s32 count;
+    u32 header;
+    u32 id;
+    u8 *track;
 
-    local_0 = func_800E0414(param_0, param_1);
-    local_3 = 0;
-    if (param_2 != 0) {
-        local_1 = *(s16 *) ((s8 *) param_0 + 2) - *(s16 *) ((s8 *) param_0 + 0);
+    frame = func_800E0414(anim, norm_time);
+    count = 0;
+    if (use_span != 0) {
+        span = *(s16 *) ((s8 *) anim + 2) - *(s16 *) ((s8 *) anim + 0);
     } else {
-        local_1 = 0;
+        span = 0;
     }
-    local_6 = param_0 + 8;
-    local_2 = 0;
-    if (*(s16 *) ((s8 *) param_0 + 4) > 0) {
+    track = anim + 8;
+    i = 0;
+    if (*(s16 *) ((s8 *) anim + 4) > 0) {
         do {
-            local_4 = *(u16 *) ((s8 *) local_6 + 0);
-            local_5 = local_4 >> 4;
-            if (((s32) local_5 >= param_3) && (param_4 >= (s32) local_5) &&
-                ((local_4 & 0xF) == 7)) {
-                *(param_5 + local_3) = func_800E04C0(local_6, local_0, local_1);
-                local_3 += 1;
+            header = *(u16 *) ((s8 *) track + 0);
+            id = header >> 4;
+            if (((s32) id >= min_id) && (max_id >= (s32) id) &&
+                ((header & 0xF) == 7)) {
+                *(out + count) = func_800E04C0(track, frame, span);
+                count += 1;
             }
-            local_2 += 1;
-            local_6 += (*(s16 *) ((s8 *) local_6 + 2) * 4) + 4;
-        } while (local_2 < *(s16 *) ((s8 *) param_0 + 4));
+            i += 1;
+            track += (*(s16 *) ((s8 *) track + 2) * 4) + 4;
+        } while (i < *(s16 *) ((s8 *) anim + 4));
     }
 }
 
-f32 func_800E0414(u8 *param_0, f32 param_1)
+// Maps normalized time (0..1) to a frame between start and end.
+f32 func_800E0414(u8 *anim, f32 norm_time)
 {
-    s16 new_var2;
-    s16 *new_var;
-    s16 temp_v0;
-    new_var = (s16 *) ((s8 *) param_0 + 0);
-    temp_v0 = *new_var;
-    return (param_1 * (f32) (*(s16 *) ((s8 *) param_0 + 2) - temp_v0)) + (f32) (new_var2 = temp_v0);
+    s16 start_copy;
+    s16 *start_ptr;
+    s16 start;
+    // Matching: the extra pointer and copy are needed for the match.
+    start_ptr = (s16 *) ((s8 *) anim + 0);
+    start = *start_ptr;
+    return (norm_time * (f32) (*(s16 *) ((s8 *) anim + 2) - start)) + (f32) (start_copy = start);
 }
 
-s16 func_800E0440(s32 param_0)
+// Returns the end frame.
+s16 func_800E0440(s32 anim)
 {
-    return *(s16 *) (param_0 + 2);
+    return *(s16 *) (anim + 2);
 }
 
-s16 func_800E0448(s16 *param_0)
+// Returns the start frame.
+s16 func_800E0448(s16 *anim)
 {
-    return param_0[0];
+    return anim[0];
 }
 
-func_800E0450(s16 *param_0)
+// Returns the frame count.
+func_800E0450(s16 *anim)
 {
-    return (param_0[1] - param_0[0]) + 1;
+    return (anim[1] - anim[0]) + 1;
 }
 
-func_800E0464(s16 *param_0)
+// Returns the track count.
+func_800E0464(s16 *anim)
 {
-    return param_0[2];
+    return anim[2];
 }
 
-float func_800E046C(u8 *param_0, s32 param_1)
+// Maps a frame to normalized time; the end frame gives just under 1.
+float func_800E046C(u8 *anim, s32 frame)
 {
-    s16 temp_v1;
-    if (param_1 == *(s16 *) ((char *) param_0 + 2)) {
+    s16 start;
+    if (frame == *(s16 *) ((char *) anim + 2)) {
         return 0.999999f;
     }
-    temp_v1 = *(s16 *) ((char *) param_0 + 0);
-    return (float) (param_1 - temp_v1) / (float) (*(s16 *) ((char *) param_0 + 2) - temp_v1);
+    start = *(s16 *) ((char *) anim + 0);
+    return (float) (frame - start) / (float) (*(s16 *) ((char *) anim + 2) - start);
 }
 
 func_800E04AC(void *param_0)

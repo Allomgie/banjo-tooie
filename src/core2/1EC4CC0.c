@@ -2,11 +2,11 @@
 
 typedef struct {
     s32 pad;
-    s16 local_0[3];
+    s16 pos[3];
 } MarkerEB;
 typedef struct {
-    MarkerEB *local_0;
-    s32 local_1;
+    MarkerEB *prop;
+    s32 dist_sq;
 } EntryEB;
 extern void *vector_new(s32, s32);
 extern void *vector_push_back(void **);
@@ -16,25 +16,28 @@ extern void _gspropprop_entrypoint_3(void *param_0, s32 param_1, void *param_2);
 typedef struct {
     u8 pad[0x28];
     u32 pad2 : 23;
-    u32 local_0 : 8;
+    u32 layer_mask : 8;
     u32 pad3 : 1;
 } ObjectEB5E0;
 typedef struct {
-    ObjectEB5E0 *local_0;
+    ObjectEB5E0 *object;
     s32 pad;
     u32 pad2 : 27;
     u32 local_1 : 1;
     u32 local_2 : 1;
     u32 pad3 : 1;
     u32 local_3 : 1;
-    u32 local_4 : 1;
+    u32 has_object : 1;
 } EntryEB5E0;
 extern void func_800E3A30(f32 *);
 extern void _gspropprop_entrypoint_2(EntryEB5E0 *);
 typedef struct {
-    void *w[7];
-    s16 unk1C;
+    void *lists[7];
+    s16 cur_layer;
 } G_EB70C;
+// TU-NOTE: D_80132E80 holds the 7 per-layer draw lists (vectors). D_80132E9C is the
+// address of its last field (cur_layer), which is read as an s16 and also serves as
+// the end marker of the list array.
 G_EB70C D_80132E80;
 extern void vector_free(void *vec);
 extern void *D_80132E9C;
@@ -42,30 +45,30 @@ extern void vector_clear(void *vec);
 extern s32 D_80132EC0;
 typedef struct {
     s32 pad;
-    s16 local_0[2];
+    s16 pos_xy[2];
     union {
         struct {
-            s16 local_0;
+            s16 z;
             u16 pad;
-        } local_0;
+        } zpos;
         struct {
             u32 pad : 30;
             u32 local_0 : 1;
             u32 local_1 : 1;
-        } local_1;
-    } local_1;
+        } bits;
+    } u;
 } EntryEB8C0;
 typedef struct {
-    s16 local_0[3];
+    s16 pos[3];
     u8 pad[14];
 } PropEB8C0;
 typedef struct {
-    s32 local_0[3];
-    s32 local_1, local_2;
-    void *local_3, *local_4;
-    s32 local_5;
-    s32 (*local_6)(PropEB8C0 *, void *);
-    void *local_7;
+    s32 pos[3];
+    s32 best_dist_sq, kind;
+    void *best_cube, *best_entry;
+    s32 best_kind;
+    s32 (*callback)(PropEB8C0 *, void *);
+    void *callback_data;
 } SearchEB8C0;
 extern SearchEB8C0 D_80132EA0;
 extern s32 func_800E9DCC(void *);
@@ -90,21 +93,23 @@ typedef struct {
 } G_EBB94;
 typedef struct MarkerEntry MarkerEntry;
 typedef struct {
-    MarkerEntry *field_0;
+    MarkerEntry *entry;
     u8 pad_4[0x18];
-    s16 field_1C;
+    s16 cube_id;
 } MarkerRef;
 extern MarkerEntry *func_800E99E0(void);
 extern s32 func_800DC214(s32, s32, s32 *);
 extern s32 func_800BD948(void *);
+// TU-NOTE: D_80132ED0 is the marker pool: 200 markers of 0x30 bytes (0x2580 bytes), a
+// 25-byte allocation bitmap at +0x2580 and the running marker id at +0x259C.
 extern u8 D_80132ED0[];
 extern u8 D_80135450;
 extern u8 D_80123554[];
 typedef struct {
     u8 pad_0[8];
-    void (*field_8)(void);
+    void (*draw_cb)(void);
     u8 pad_C[6];
-    u16 field_12 : 15;
+    u16 id : 15;
     u16 field_13 : 1;
     u8 pad_14[0x10];
     u32 field_24 : 10;
@@ -116,9 +121,9 @@ typedef struct {
 } MarkerCreate;
 typedef struct {
     u8 pad_0[0x10];
-    u32 field_10;
+    u32 flags;
     u8 pad_14[8];
-    s16 field_1C;
+    s16 cube_id;
     u8 pad_1E[10];
     u32 pad_28 : 21;
     u32 field_28 : 1;
@@ -151,9 +156,9 @@ typedef struct {
 extern s32 func_800B0CFC(void *);
 typedef struct {
     u8 pad[0x18];
-    u32 local_0 : 11;
+    u32 radius : 11;
     u32 pad_1 : 4;
-    u32 local_1 : 1;
+    u32 has_object : 1;
     u32 pad_2 : 16;
 } EntryEC5C0;
 typedef struct {
@@ -166,128 +171,137 @@ int func_800EC7D4();
 s32 func_800EC800();
 s32 func_800EC854();
 
-void func_800EB3D0(MarkerEB *param_0, s32 param_1, s16 *param_2)
+// Inserts the prop into the distance-sorted draw list of the given layer.
+void func_800EB3D0(MarkerEB *prop, s32 layer, s16 *ref_pos)
 {
-    s32 local_0, local_1, local_2;
-    EntryEB *local_4, *local_6, *local_5;
-    void *local_8;
-    if (!D_80132E80.w[param_1])
-        D_80132E80.w[param_1] = vector_new(8, 5);
-    vector_push_back(&D_80132E80.w[param_1]);
-    local_0 = param_0->local_0[0] - param_2[0];
-    local_1 = param_0->local_0[1] - param_2[1];
-    local_2 = param_0->local_0[2] - param_2[2];
-    local_0 = local_0 * local_0 + local_1 * local_1 + local_2 * local_2;
-    local_8 = D_80132E80.w[param_1];
-    local_6 = vector_begin(local_8);
-    local_5 = vector_end(local_8) - 1;
-    local_4 = local_5 - 1;
-    while (local_4 >= local_6) {
-        if (local_0 < local_4->local_1)
+    s32 dx, dy, dz;
+    EntryEB *slot, *begin, *last;
+    void *list;
+    if (!D_80132E80.lists[layer])
+        D_80132E80.lists[layer] = vector_new(8, 5);
+    vector_push_back(&D_80132E80.lists[layer]);
+    dx = prop->pos[0] - ref_pos[0];
+    dy = prop->pos[1] - ref_pos[1];
+    dz = prop->pos[2] - ref_pos[2];
+    dx = dx * dx + dy * dy + dz * dz;
+    list = D_80132E80.lists[layer];
+    begin = vector_begin(list);
+    last = vector_end(list) - 1;
+    slot = last - 1;
+    while (slot >= begin) {
+        if (dx < slot->dist_sq)
             break;
-        local_4--;
+        slot--;
     }
-    local_4++;
-    if (local_4 < local_5)
-        aligned4_memmove(local_4 + 1, local_4, (local_5 - local_4) * sizeof(EntryEB));
-    local_4->local_1 = local_0;
-    local_4->local_0 = param_0;
+    slot++;
+    if (slot < last)
+        aligned4_memmove(slot + 1, slot, (last - slot) * sizeof(EntryEB));
+    slot->dist_sq = dx;
+    slot->prop = prop;
 }
 
-void func_800EB51C(s32 param_0, s32 param_1)
+// Draws every entry of the given layer's list.
+void func_800EB51C(s32 layer, s32 param_1)
 {
+    // Matching: stack padding needed for the match.
     s8 _sfpad[8];
-    void *sp2C;
-    void *temp_s0;
-    void *temp_v0;
-    u8 *var_s0;
-    void *temp_a2;
-    temp_s0 = D_80132E80.w[param_0];
-    if (temp_s0 != 0) {
-        sp2C = vector_begin(temp_s0);
-        temp_v0 = vector_end(temp_s0);
-        if (temp_v0 != sp2C) {
-            *(s16 *) &D_80132E9C = (s16) param_0;
-            var_s0 = (u8 *) sp2C;
-            if (sp2C < temp_v0) {
+    void *begin;
+    void *list;
+    void *end;
+    u8 *cur;
+    void *entry;
+    list = D_80132E80.lists[layer];
+    if (list != 0) {
+        begin = vector_begin(list);
+        end = vector_end(list);
+        if (end != begin) {
+            *(s16 *) &D_80132E9C = (s16) layer;
+            cur = (u8 *) begin;
+            if (begin < end) {
                 do {
-                    temp_a2 = *(void **) var_s0;
-                    if (*(s32 *) ((u8 *) *(void **) var_s0 + 8) & 1) {
+                    entry = *(void **) cur;
+                    if (*(s32 *) ((u8 *) *(void **) cur + 8) & 1) {
+                        // Matching: the extra block and `^ 0` are needed for the match.
                         {
-                            func_800EC7D4(*(s32 *) *(void **) var_s0, param_1 ^ 0,
-                                          *(void **) var_s0);
+                            func_800EC7D4(*(s32 *) *(void **) cur, param_1 ^ 0,
+                                          *(void **) cur);
                         }
                     } else {
-                        _gspropprop_entrypoint_3(temp_a2, param_1, *(void **) var_s0);
+                        _gspropprop_entrypoint_3(entry, param_1, *(void **) cur);
                     }
-                    var_s0 += 8;
-                } while (var_s0 < (u8 *) temp_v0);
+                    cur += 8;
+                } while (cur < (u8 *) end);
             }
         }
     }
 }
 
-void func_800EB5E0(s32 param_0, s32 param_1)
+// Collects the props of one cube into the per-layer draw lists.
+void func_800EB5E0(s32 cube, s32 layer)
 {
-    EntryEB5E0 *local_1;
-    f32 local_0[3];
-    EntryEB5E0 *local_2;
-    ObjectEB5E0 *local_3;
-    func_800E3A30(local_0);
-    local_1 = func_800E9E88(param_0);
-    local_2 = func_800E9EB4(param_0);
-    for (; local_1 < local_2; local_1++) {
-        if (local_1->local_1) {
-            if (!local_1->local_3)
-                _gspropprop_entrypoint_2(local_1);
-            if (local_1->local_4) {
-                local_3 = local_1->local_0;
-                if (func_800EC800(local_3)) {
-                    for (param_1 = 0; param_1 < 7; param_1++) {
-                        if (local_3->local_0 & (1 << param_1))
-                            func_800EB3D0(local_1, param_1, local_0);
+    EntryEB5E0 *entry;
+    f32 ref_pos[3];
+    EntryEB5E0 *end;
+    ObjectEB5E0 *object;
+    func_800E3A30(ref_pos);
+    entry = func_800E9E88(cube);
+    end = func_800E9EB4(cube);
+    for (; entry < end; entry++) {
+        if (entry->local_1) {
+            if (!entry->local_3)
+                _gspropprop_entrypoint_2(entry);
+            if (entry->has_object) {
+                object = entry->object;
+                if (func_800EC800(object)) {
+                    for (layer = 0; layer < 7; layer++) {
+                        if (object->layer_mask & (1 << layer))
+                            func_800EB3D0(entry, layer, ref_pos);
                     }
                 }
             } else
-                func_800EB3D0(local_1, local_1->local_2 ? 1 : 0, local_0);
+                func_800EB3D0(entry, entry->local_2 ? 1 : 0, ref_pos);
         }
     }
 }
 
+// Resets the 7 draw lists.
 void func_800EB70C(void)
 {
     s32 i;
-    D_80132E80.unk1C = -1;
+    D_80132E80.cur_layer = -1;
     for (i = 0; i < 7; i++) {
-        D_80132E80.w[i] = 0;
+        D_80132E80.lists[i] = 0;
     }
 }
 
+// Matching: the line breaks in this function are needed for the match.
 void func_800EB750()
 {
-    void **local_0 = D_80132E80.w;
-    local_0 = local_0; do { void *local_1; do { local_1 = *local_0; if (0 != local_1) { vector_free(local_1); *local_0 = 0; } local_0 += 1; } while (local_0 != &D_80132E9C); } while (0);
+    void **slot = D_80132E80.lists;
+    slot = slot; do { void *list; do { list = *slot; if (0 != list) { vector_free(list); *slot = 0; } slot += 1; } while (slot != &D_80132E9C); } while (0); // Matching: self-assignment and do-while(0) wrapper needed for the match.
 }
 
+// Matching: the line breaks in this function are needed for the match.
 void func_800EB7A8(void)
 {
-    s32 *ptr;
-    s32 local_0;
-    ptr = (s32 *) &D_80132E80; do {
-        local_0 = *ptr;
-        if (local_0 != 0)
+    s32 *cur;
+    s32 list;
+    cur = (s32 *) &D_80132E80; do {
+        list = *cur;
+        if (list != 0)
         {
-            *ptr = vector_defrag(local_0);
+            *cur = vector_defrag(list);
         }
-        ptr += 1;
+        cur += 1;
     }
-    while (ptr != (s32 *) &D_80132E9C);
+    while (cur != (s32 *) &D_80132E9C);
 }
 
+// Matching: the line breaks in this function are needed for the match.
 void func_800EB800()
 {
-    void **local_0 = D_80132E80.w;
-    local_0 = local_0; do { void *local_1; do { local_1 = *local_0; if (0 != local_1) { vector_clear(local_1); } local_0 += 1; } while (local_0 != &D_80132E9C); } while (0);
+    void **slot = D_80132E80.lists;
+    slot = slot; do { void *list; do { list = *slot; if (0 != list) { vector_clear(list); } slot += 1; } while (slot != &D_80132E9C); } while (0); // Matching: self-assignment and do-while(0) wrapper needed for the match.
 }
 
 int func_800EB854()
@@ -295,10 +309,11 @@ int func_800EB854()
     return *(s16 *) &D_80132E9C;
 }
 
-void func_800EB860(s32 param_0, s32 param_1)
+// Sets the filter callback (and its argument) of the nearest-prop search.
+void func_800EB860(s32 callback, s32 callback_data)
 {
-    *(s32 *) ((char *) (s32 *) &D_80132EA0 + 0x20) = param_0;
-    *(s32 *) ((char *) (s32 *) &D_80132EA0 + 0x24) = param_1;
+    *(s32 *) ((char *) (s32 *) &D_80132EA0 + 0x20) = callback;
+    *(s32 *) ((char *) (s32 *) &D_80132EA0 + 0x24) = callback_data;
 }
 
 void func_800EB874()
@@ -306,74 +321,77 @@ void func_800EB874()
     D_80132EC0 = 0;
 }
 
-int func_800EB880(OSViCommonRegs *param_0, s32 param_1, u32 param_2)
+// Starts a nearest-prop search around pos.
+int func_800EB880(OSViCommonRegs *pos, s32 kind, u32 radius)
 {
-    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 0x0) = *(u32 *) ((char *) param_0 + 0x0);
-    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 4) = *(u32 *) ((char *) param_0 + 0x4);
-    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 8) = *(u32 *) ((char *) param_0 + 0x8);
-    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 0xC) = param_2 * param_2;
-    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 0x10) = param_1;
+    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 0x0) = *(u32 *) ((char *) pos + 0x0);
+    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 4) = *(u32 *) ((char *) pos + 0x4);
+    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 8) = *(u32 *) ((char *) pos + 0x8);
+    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 0xC) = radius * radius;
+    *(u32 *) ((char *) (u32 *) &D_80132EA0 + 0x10) = kind;
     *(u32 *) ((char *) (u32 *) &D_80132EA0 + 0x14) = 0;
     *(u32 *) ((char *) (u32 *) &D_80132EA0 + 0x18) = 0;
     *(u32 *) ((char *) (u32 *) &D_80132EA0 + 0x1C) = 0;
 }
 
-void func_800EB8C0(void *param_0)
+// Checks one cube's markers and props against the current nearest-prop search.
+void func_800EB8C0(void *cube)
 {
-    EntryEB8C0 *local_0, *local_1;
-    PropEB8C0 *local_2, *local_3;
-    s32 local_4;
-    if (func_800E9DCC(param_0) && (D_80132EA0.local_2 == 1 || D_80132EA0.local_2 == 2)) {
-        local_0 = func_800E9E88(param_0);
-        local_1 = func_800E9EB4(param_0);
-        for (; local_0 < local_1; local_0++) {
-            if (local_0->local_1.local_1.local_1)
+    EntryEB8C0 *marker, *markers_end;
+    PropEB8C0 *prop, *props_end;
+    s32 dist_sq;
+    if (func_800E9DCC(cube) && (D_80132EA0.kind == 1 || D_80132EA0.kind == 2)) {
+        marker = func_800E9E88(cube);
+        markers_end = func_800E9EB4(cube);
+        for (; marker < markers_end; marker++) {
+            if (marker->u.bits.local_1)
                 continue;
-            local_4 = (local_0->local_0[0] - D_80132EA0.local_0[0]) *
-                          (local_0->local_0[0] - D_80132EA0.local_0[0]) +
-                      (local_0->local_0[1] - D_80132EA0.local_0[1]) *
-                          (local_0->local_0[1] - D_80132EA0.local_0[1]) +
-                      (local_0->local_1.local_0.local_0 - D_80132EA0.local_0[2]) *
-                          (local_0->local_1.local_0.local_0 - D_80132EA0.local_0[2]);
-            if (local_4 < D_80132EA0.local_1 &&
-                (local_0->local_1.local_1.local_0 ? 2 : 1) == D_80132EA0.local_2) {
-                D_80132EA0.local_1 = local_4;
-                D_80132EA0.local_3 = param_0;
-                D_80132EA0.local_4 = local_0;
-                D_80132EA0.local_5 = D_80132EA0.local_2;
+            dist_sq = (marker->pos_xy[0] - D_80132EA0.pos[0]) *
+                          (marker->pos_xy[0] - D_80132EA0.pos[0]) +
+                      (marker->pos_xy[1] - D_80132EA0.pos[1]) *
+                          (marker->pos_xy[1] - D_80132EA0.pos[1]) +
+                      (marker->u.zpos.z - D_80132EA0.pos[2]) *
+                          (marker->u.zpos.z - D_80132EA0.pos[2]);
+            if (dist_sq < D_80132EA0.best_dist_sq &&
+                (marker->u.bits.local_0 ? 2 : 1) == D_80132EA0.kind) {
+                D_80132EA0.best_dist_sq = dist_sq;
+                D_80132EA0.best_cube = cube;
+                D_80132EA0.best_entry = marker;
+                D_80132EA0.best_kind = D_80132EA0.kind;
             }
         }
     }
-    if (func_800E9DC4(param_0) && D_80132EA0.local_2 == 3) {
-        local_2 = func_800E9D68(param_0);
-        local_3 = func_800E9D90(param_0);
-        for (; local_2 < local_3; local_2++) {
-            if ((local_2->local_0[0] - D_80132EA0.local_0[0]) *
-                            (local_2->local_0[0] - D_80132EA0.local_0[0]) +
-                        (local_2->local_0[1] - D_80132EA0.local_0[1]) *
-                            (local_2->local_0[1] - D_80132EA0.local_0[1]) +
-                        (local_2->local_0[2] - D_80132EA0.local_0[2]) *
-                            (local_2->local_0[2] - D_80132EA0.local_0[2]) <
-                    D_80132EA0.local_1 &&
-                (!D_80132EA0.local_6 || D_80132EA0.local_6(local_2, D_80132EA0.local_7))) {
-                D_80132EA0.local_1 = (local_2->local_0[0] - D_80132EA0.local_0[0]) *
-                                         (local_2->local_0[0] - D_80132EA0.local_0[0]) +
-                                     (local_2->local_0[1] - D_80132EA0.local_0[1]) *
-                                         (local_2->local_0[1] - D_80132EA0.local_0[1]) +
-                                     (local_2->local_0[2] - D_80132EA0.local_0[2]) *
-                                         (local_2->local_0[2] - D_80132EA0.local_0[2]);
-                D_80132EA0.local_3 = param_0;
-                D_80132EA0.local_4 = local_2;
-                D_80132EA0.local_5 = D_80132EA0.local_2;
+    if (func_800E9DC4(cube) && D_80132EA0.kind == 3) {
+        prop = func_800E9D68(cube);
+        props_end = func_800E9D90(cube);
+        for (; prop < props_end; prop++) {
+            if ((prop->pos[0] - D_80132EA0.pos[0]) *
+                            (prop->pos[0] - D_80132EA0.pos[0]) +
+                        (prop->pos[1] - D_80132EA0.pos[1]) *
+                            (prop->pos[1] - D_80132EA0.pos[1]) +
+                        (prop->pos[2] - D_80132EA0.pos[2]) *
+                            (prop->pos[2] - D_80132EA0.pos[2]) <
+                    D_80132EA0.best_dist_sq &&
+                (!D_80132EA0.callback || D_80132EA0.callback(prop, D_80132EA0.callback_data))) {
+                D_80132EA0.best_dist_sq = (prop->pos[0] - D_80132EA0.pos[0]) *
+                                         (prop->pos[0] - D_80132EA0.pos[0]) +
+                                     (prop->pos[1] - D_80132EA0.pos[1]) *
+                                         (prop->pos[1] - D_80132EA0.pos[1]) +
+                                     (prop->pos[2] - D_80132EA0.pos[2]) *
+                                         (prop->pos[2] - D_80132EA0.pos[2]);
+                D_80132EA0.best_cube = cube;
+                D_80132EA0.best_entry = prop;
+                D_80132EA0.best_kind = D_80132EA0.kind;
             }
         }
     }
 }
 
-int func_800EBB30(s32 *param_0, s32 *param_1)
+// Returns the best result of the search; cube and entry via the out parameters.
+int func_800EBB30(s32 *cube_out, s32 *entry_out)
 {
-    *param_0 = ((s32 *) &D_80132EA0)[5];
-    *param_1 = ((s32 *) &D_80132EA0)[6];
+    *cube_out = ((s32 *) &D_80132EA0)[5];
+    *entry_out = ((s32 *) &D_80132EA0)[6];
     return ((s32 *) &D_80132EA0)[7];
 }
 
@@ -382,6 +400,7 @@ int func_800EBB50()
     return (int) D_80123540;
 }
 
+// Resets the running marker id.
 void func_800EBB5C()
 {
     D_8013546C = 0x6B7;
@@ -396,6 +415,7 @@ int func_800EBB74()
     return (u8 *) D_80132ED0 ? 1 : 0;
 }
 
+// Frees all markers: clears the allocation bitmap and the marker ids.
 void func_800EBB94(void)
 {
     s32 i;
@@ -415,129 +435,133 @@ void func_800EBC04(void)
 }
 
 struct MarkerEntry {
-    MarkerRef *field_0;
-    s16 field_4[3];
+    MarkerRef *marker;
+    s16 pos[3];
     u16 field_A : 5;
-    u16 field_A_room : 5;
+    u16 room : 5;
     u16 field_B5 : 1;
     u16 pad_B : 3;
     u16 field_B1 : 1;
 };
 
-void func_800EBC0C(void *param_0, s32 *param_1, MarkerRef *param_2, s32 param_3)
+// Adds a cube entry for the marker and links both ways.
+void func_800EBC0C(void *cube, s32 *pos, MarkerRef *marker, s32 param_3)
 {
-    MarkerEntry *local_0;
-    local_0 = func_800E99E0();
-    local_0->field_4[0] = param_1[0];
-    local_0->field_4[1] = param_1[1];
-    local_0->field_4[2] = param_1[2];
-    local_0->field_0 = param_2;
-    local_0->field_B1 = param_3;
-    local_0->field_A = 0;
-    local_0->field_B5 = 0;
-    local_0->field_A_room = func_800DC214(0, 0x20, param_1);
-    param_2->field_0 = local_0;
-    param_2->field_1C = func_800BD948(param_0);
+    MarkerEntry *entry;
+    entry = func_800E99E0();
+    entry->pos[0] = pos[0];
+    entry->pos[1] = pos[1];
+    entry->pos[2] = pos[2];
+    entry->marker = marker;
+    entry->field_B1 = param_3;
+    entry->field_A = 0;
+    entry->field_B5 = 0;
+    entry->room = func_800DC214(0, 0x20, pos);
+    marker->entry = entry;
+    marker->cube_id = func_800BD948(cube);
 }
 
-void func_800EBCD0(s32 *param_0, s32 *param_1, u32 param_2, s32 param_3)
+// Moves the marker's entry from the old cube to the new one.
+void func_800EBCD0(s32 *marker, s32 *pos, u32 old_cube, s32 new_cube)
 {
-    u8 *local_1;
-    s32 local_2;
-    u16 local_0;
+    u8 *entry;
+    s32 unk_0;
+    u16 saved_bits;
 
-    local_1 = *param_0;
-    local_0 = *(u16 *) ((char *) local_1 + 0xA);
-    func_800EBC0C(param_3, param_1, param_0, func_800E9AC0(param_2, local_1));
-    *(u16 *) ((char *) *param_0 + 0xA) = local_0;
+    entry = *marker;
+    saved_bits = *(u16 *) ((char *) entry + 0xA);
+    func_800EBC0C(new_cube, pos, marker, func_800E9AC0(old_cube, entry));
+    *(u16 *) ((char *) *marker + 0xA) = saved_bits;
 }
 
-void func_800EBD2C(s32 arg0, s32 arg1, s32 arg2)
+void func_800EBD2C(s32 marker, s32 pos, s32 cube_id)
 {
-    func_800EBCD0(arg0, arg1, func_800BDB9C(*(s16 *) (arg0 + 0x1C)), func_800BDB9C(arg2));
+    func_800EBCD0(marker, pos, func_800BDB9C(*(s16 *) (marker + 0x1C)), func_800BDB9C(cube_id));
 }
 
+// Allocates a marker slot from the pool; returns 0 when the pool is full.
 u8 *func_800EBD78(void)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    u8 *local_6;
-    local_4 = 0;
+    s32 tmp_mask;
+    s32 test;
+    s32 mask;
+    s32 bit_idx;
+    s32 byte_idx;
+    s32 bits;
+    u8 *bitmap_byte;
+    byte_idx = 0;
     if (D_80135450 == 0xFF) {
     loop_2:
-        local_4 += 1;
+        byte_idx += 1;
 
-        if (local_4 < 0x19) {
-            if (*(u8 *) ((D_80132ED0 + local_4) + 0x2580) == 0xFF) {
+        if (byte_idx < 0x19) {
+            if (*(u8 *) ((D_80132ED0 + byte_idx) + 0x2580) == 0xFF) {
                 goto loop_2;
             }
         }
     }
-    if (local_4 == 0x19) {
+    if (byte_idx == 0x19) {
         return 0;
     }
-    local_6 = D_80132ED0 + local_4;
-    local_5 = *(u8 *) (local_6 + 0x2580);
-    local_2 = 0x80;
-    local_3 = 0;
-    if (local_5 & 0x80) {
+    bitmap_byte = D_80132ED0 + byte_idx;
+    bits = *(u8 *) (bitmap_byte + 0x2580);
+    mask = 0x80;
+    bit_idx = 0;
+    if (bits & 0x80) {
         do {
-            local_0 = (local_2 = local_2 >> 1);
-            local_1 = local_5 & local_0;
-            local_3 += 1;
-        } while (local_1 != 0);
+            tmp_mask = (mask = mask >> 1);
+            test = bits & tmp_mask;
+            bit_idx += 1;
+        } while (test != 0);
     }
-    *(u8 *) (local_6 + 0x2580) = (u8) (local_5 | local_2);
-    return (D_80132ED0 + (local_4 * 0x180)) + (local_3 * 0x30);
+    *(u8 *) (bitmap_byte + 0x2580) = (u8) (bits | mask);
+    return (D_80132ED0 + (byte_idx * 0x180)) + (bit_idx * 0x30);
 }
 
-void func_800EBE24(u8 *param_0)
+// Returns a marker slot to the pool.
+void func_800EBE24(u8 *marker)
 {
-    s32 local_0;
-    u8 *local_1;
-    s32 local_2;
+    s32 offset;
+    u8 *bitmap_byte;
+    s32 slot_idx;
 
-    local_0 = (s32) param_0 - (s32) &D_80132ED0;
-    *(u16 *) ((char *) param_0 + 0x12) = *(u16 *) ((char *) param_0 + 0x12) & 1;
-    local_2 = local_0 / 48;
-    local_1 = (u8 *) &D_80132ED0 + (local_2 >> 3);
-    local_1[0x2580] = local_1[0x2580] & ((u32 *) &D_80123554)[local_2 & 7];
+    offset = (s32) marker - (s32) &D_80132ED0;
+    *(u16 *) ((char *) marker + 0x12) = *(u16 *) ((char *) marker + 0x12) & 1;
+    slot_idx = offset / 48;
+    bitmap_byte = (u8 *) &D_80132ED0 + (slot_idx >> 3);
+    bitmap_byte[0x2580] = bitmap_byte[0x2580] & ((u32 *) &D_80123554)[slot_idx & 7];
 }
 
-int func_800EBE74(s32 param_0, s32 *param_1, s32 param_2)
+int func_800EBE74(s32 pos, s32 *marker, s32 param_2)
 {
-    u32 local_0;
-    if (param_1[4] & 1) {
-        local_0 = func_800BDC44() | 0;
+    u32 cube;
+    if (marker[4] & 1) {
+        cube = func_800BDC44() | 0;
     } else {
-        local_0 = func_800BDBC4(param_0) | 0;
+        cube = func_800BDBC4(pos) | 0;
     }
-    func_800EBC0C(local_0, param_0, param_1, param_2);
+    func_800EBC0C(cube, pos, marker, param_2);
 }
 
-MarkerCreate *func_800EBED4(s32 *param_0, s32 param_1, s32 param_2, s32 param_3)
+MarkerCreate *func_800EBED4(s32 *pos, s32 param_1, s32 param_2, s32 param_3)
 {
-    MarkerCreate *local_0;
-    local_0 = func_800EBD78();
-    bzero(local_0, 0x30);
-    local_0->field_12 = func_800EC854();
-    local_0->field_24 = param_2;
-    local_0->field_13 = param_3;
-    local_0->field_8 = func_800EBB50;
-    local_0->field_2A = 1;
-    func_800EBE74(param_0, local_0, param_1);
-    return local_0;
+    MarkerCreate *marker;
+    marker = func_800EBD78();
+    bzero(marker, 0x30);
+    marker->id = func_800EC854();
+    marker->field_24 = param_2;
+    marker->field_13 = param_3;
+    marker->draw_cb = func_800EBB50;
+    marker->field_2A = 1;
+    func_800EBE74(pos, marker, param_1);
+    return marker;
 }
 
 int func_800EBF8C(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
 {
-    f32 local_0[3];
-    func_800EE904(local_0, param_0 | 0);
-    func_800EBED4(local_0, param_1, param_2, param_3);
+    f32 pos[3];
+    func_800EE904(pos, param_0 | 0);
+    func_800EBED4(pos, param_1, param_2, param_3);
 }
 
 s32 func_800EBFD4(s32 map, s32 exit, s32 direction)
@@ -545,192 +569,197 @@ s32 func_800EBFD4(s32 map, s32 exit, s32 direction)
     func_800EBF8C(map, exit, direction, 0);
 }
 
-void func_800EBFF4(u8 *param_0)
+// Frees the marker: removes its cube entry and returns the slot to the pool.
+void func_800EBFF4(u8 *marker)
 {
-    func_800E9AC0(func_800BDB9C(*(s16 *) ((s8 *) param_0 + 0x1C)), *(s32 *) ((s8 *) param_0 + 0));
-    func_800EBE24(param_0);
+    func_800E9AC0(func_800BDB9C(*(s16 *) ((s8 *) marker + 0x1C)), *(s32 *) ((s8 *) marker + 0));
+    func_800EBE24(marker);
 }
 
-void func_800EC030(u8 **param_0, u8 *param_1)
+void func_800EC030(u8 **marker, u8 *pos)
 {
-    *(s16 *) ((s8 *) *param_0 + 4) = (s16) *(s32 *) ((s8 *) param_1 + 0);
-    *(s16 *) ((s8 *) *param_0 + 6) = (s16) *(s32 *) ((s8 *) param_1 + 4);
-    *(s16 *) ((s8 *) *param_0 + 8) = (s16) *(s32 *) ((s8 *) param_1 + 8);
+    *(s16 *) ((s8 *) *marker + 4) = (s16) *(s32 *) ((s8 *) pos + 0);
+    *(s16 *) ((s8 *) *marker + 6) = (s16) *(s32 *) ((s8 *) pos + 4);
+    *(s16 *) ((s8 *) *marker + 8) = (s16) *(s32 *) ((s8 *) pos + 8);
 }
 
-void func_800EC058(s32 *param_0, MarkerMove *param_1)
+// Moves the marker to pos; re-cubes it when the cube changed.
+void func_800EC058(s32 *pos, MarkerMove *marker)
 {
-    s32 local_0;
-    if (param_1->field_10 & 1)
-        local_0 = -1;
+    s32 cube_id;
+    if (marker->flags & 1)
+        cube_id = -1;
     else
-        local_0 = func_800BD97C(param_0);
-    if (local_0 == param_1->field_1C)
-        func_800EC030(param_1, param_0);
+        cube_id = func_800BD97C(pos);
+    if (cube_id == marker->cube_id)
+        func_800EC030(marker, pos);
     else
-        func_800EBD2C(param_1, param_0, local_0);
-    if (param_1->field_28)
-        func_800CDFD0(param_1);
+        func_800EBD2C(marker, pos, cube_id);
+    if (marker->field_28)
+        func_800CDFD0(marker);
 }
 
-int func_800EC0EC(s32 param_0, s32 param_1)
+int func_800EC0EC(s32 param_0, s32 marker)
 {
-    f32 local_0[3];
-    func_800EE904(local_0, param_0 | 0);
-    func_800EC058(local_0, param_1);
+    f32 pos[3];
+    func_800EE904(pos, param_0 | 0);
+    func_800EC058(pos, marker);
 }
 
-void func_800EC124(void *param_0, MarkerEC124 *param_1, f32 *param_2)
+void func_800EC124(void *param_0, MarkerEC124 *marker, f32 *param_2)
 {
-    param_1->local_0 = func_800136E4(param_2[0]);
-    param_1->local_1 = func_800136E4(param_2[1]);
-    param_1->local_2 = func_800136E4(param_2[2]);
-    func_800EC0EC(param_0, param_1);
+    marker->local_0 = func_800136E4(param_2[0]);
+    marker->local_1 = func_800136E4(param_2[1]);
+    marker->local_2 = func_800136E4(param_2[2]);
+    func_800EC0EC(param_0, marker);
 }
 
-void func_800EC340(u16 *a0, s32 a1)
+void func_800EC340(u16 *marker, s32 value)
 {
-    short new_var;
-    u16 temp = a0[13];
-    new_var = temp;
+    // Matching: extra copy and `if (1)` needed for the match.
+    short bits_copy;
+    u16 bits = marker[13];
+    bits_copy = bits;
     if (1) {
-        temp = new_var;
-        a0[13] = ((a1 << 3) << 2) | ((temp & 0x1F) & 0xFFFFFFFF);
+        bits = bits_copy;
+        marker[13] = ((value << 3) << 2) | ((bits & 0x1F) & 0xFFFFFFFF);
     }
 }
 
-func_800EC358(s32 param_0, s32 param_1)
+func_800EC358(s32 marker, s32 param_1)
 {
-    s32 local_0;
-    local_0 = param_1;
-    ((s32 *) param_0)[3] = local_0;
+    s32 value;
+    value = param_1;
+    ((s32 *) marker)[3] = value;
 }
 
-int func_800EC360(s32 param_0, unsigned long param_1)
+int func_800EC360(s32 marker, unsigned long param_1)
 {
-    *(s16 *) (param_0 + 0x14) = param_1;
+    *(s16 *) (marker + 0x14) = param_1;
 }
 
-int func_800EC368(s32 param_0, int param_1)
+int func_800EC368(s32 marker, int param_1)
 {
-    *(s16 *) ((char *) param_0 + 22) = param_1;
+    *(s16 *) ((char *) marker + 22) = param_1;
 }
 
-void func_800EC370(u8 **param_0, u8 *param_1)
+void func_800EC370(u8 **marker, u8 *pos_out)
 {
-    *(s16 *) (param_1 + 0) = *(s16 *) (*param_0 + 4);
-    *(s16 *) (param_1 + 2) = *(s16 *) (*param_0 + 6);
-    *(s16 *) (param_1 + 4) = *(s16 *) (*param_0 + 8);
+    *(s16 *) (pos_out + 0) = *(s16 *) (*marker + 4);
+    *(s16 *) (pos_out + 2) = *(s16 *) (*marker + 6);
+    *(s16 *) (pos_out + 4) = *(s16 *) (*marker + 8);
 }
 
-void func_800EC398(s32 *param_0, s32 param_1)
+void func_800EC398(s32 *marker, s32 out)
 {
-    func_800EE88C(param_1, *(s32 *) (param_0 + 0) + 0x4);
+    func_800EE88C(out, *(s32 *) (marker + 0) + 0x4);
 }
 
-void func_800EC3C4(u8 *param_0)
+// Calls the callback stored in the marker.
+void func_800EC3C4(u8 *marker)
 {
-    (*(s32(**)())((s8 *) param_0 + 8))();
+    (*(s32(**)())((s8 *) marker + 8))();
 }
 
-int func_800EC3E8(Actor *param_0)
+int func_800EC3E8(Actor *marker)
 {
-    if ((*(u16 *) ((char *) param_0 + 0x14) == 0) ||
-        (*(u16 *) ((char *) param_0 + 0x14) == 0xFFFF)) {
+    if ((*(u16 *) ((char *) marker + 0x14) == 0) ||
+        (*(u16 *) ((char *) marker + 0x14) == 0xFFFF)) {
         return 0;
     }
     {
-        return func_800D674C(*(u16 *) ((char *) param_0 + 0x14) | 0);
+        return func_800D674C(*(u16 *) ((char *) marker + 0x14) | 0);
     }
 }
 
-s32 func_800EC428(S_EC428 *param_0)
+s32 func_800EC428(S_EC428 *marker)
 {
-    if ((param_0->unk18 & 1) != 0) {
-        return func_801039E4(param_0);
+    if ((marker->unk18 & 1) != 0) {
+        return func_801039E4(marker);
     }
-    if ((param_0->unk14 == 0) || (param_0->unk14 == 0xFFFF)) {
+    if ((marker->unk14 == 0) || (marker->unk14 == 0xFFFF)) {
         return 0;
     }
-    return func_800D674C(param_0->unk14);
+    return func_800D674C(marker->unk14);
 }
 
-f32 func_800EC48C(S_EC48C *param_0)
+f32 func_800EC48C(S_EC48C *marker)
 {
-    f32 r;
-    if ((param_0->unk14 == 0) || (param_0->unk14 == 0xFFFF)) {
+    f32 radius;
+    if ((marker->unk14 == 0) || (marker->unk14 == 0xFFFF)) {
         return 0.0f;
     }
-    r = (f32) func_800B0CFC(func_800EC3E8(param_0)) * 0.5f;
-    param_0->unk20 = (s16) r;
-    return r;
+    radius = (f32) func_800B0CFC(func_800EC3E8(marker)) * 0.5f;
+    marker->unk20 = (s16) radius;
+    return radius;
 }
 
-f32 func_800EC504(u8 *param_0)
+f32 func_800EC504(u8 *marker)
 {
-    f32 sp3C;
-    s32 sp38;
-    s32 sp34;
-    s32 sp30;
-    s32 sp2C;
-    s32 sp28;
+    f32 radius;
+    s32 center_z;
+    s32 center_y;
+    s32 center_x;
+    s32 model;
+    s32 unk_0;
 
-    if (*(u16 *) (param_0 + 0x14) == 0 || *(u16 *) (param_0 + 0x14) == 0xFFFF) {
+    if (*(u16 *) (marker + 0x14) == 0 || *(u16 *) (marker + 0x14) == 0xFFFF) {
         return 1.0f;
     }
-    sp28 = func_800D73CC(*(u16 *) (param_0 + 0x14));
-    sp2C = func_800D674C(*(u16 *) (param_0 + 0x14));
-    if (sp2C == 0) {
+    unk_0 = func_800D73CC(*(u16 *) (marker + 0x14));
+    model = func_800D674C(*(u16 *) (marker + 0x14));
+    if (model == 0) {
         return 1.0f;
     }
-    func_800D62E4(*(u16 *) (param_0 + 0x14), sp2C);
-    func_800B237C(func_800B2840(sp2C), &sp30, &sp3C);
-    func_800EE940(param_0 + 0x1E, &sp30);
-    if (sp28 == 0) {
-        func_800D6CEC(*(u16 *) (param_0 + 0x14));
+    func_800D62E4(*(u16 *) (marker + 0x14), model);
+    func_800B237C(func_800B2840(model), &center_x, &radius);
+    func_800EE940(marker + 0x1E, &center_x);
+    if (unk_0 == 0) {
+        func_800D6CEC(*(u16 *) (marker + 0x14));
     }
-    return sp3C;
+    return radius;
 }
 
-f32 func_800EC5C0(EntryEC5C0 **param_0, f32 (*param_1)(EntryEC5C0 *))
+// Returns the marker's radius, cached in the marker and computed by calc on first use.
+f32 func_800EC5C0(EntryEC5C0 **marker_ref, f32 (*calc)(EntryEC5C0 *))
 {
-    EntryEC5C0 *local_0;
-    f32 local_1;
-    local_0 = *param_0;
-    local_1 = local_0->local_0;
-    if (local_1 == 0.0f) {
-        local_1 = local_0->local_0 = param_1(local_0);
+    EntryEC5C0 *marker;
+    f32 radius;
+    marker = *marker_ref;
+    radius = marker->radius;
+    if (radius == 0.0f) {
+        radius = marker->radius = calc(marker);
     }
-    if (local_0->local_1) {
-        local_1 *= ((f32 *) func_80106790((Unk80132ED0 *) local_0))[14];
+    if (marker->has_object) {
+        radius *= ((f32 *) func_80106790((Unk80132ED0 *) marker))[14];
     }
-    return local_1;
+    return radius;
 }
 
-f32 func_800EC708(S_EC708 **param_0)
+f32 func_800EC708(S_EC708 **marker_ref)
 {
-    S_EC708 *p = *param_0;
-    if (p->bit) {
-        return func_800EC5C0(p, func_800EC504);
+    S_EC708 *marker = *marker_ref;
+    if (marker->bit) {
+        return func_800EC5C0(marker, func_800EC504);
     } else {
-        return func_800EC5C0(p, func_800EC48C);
+        return func_800EC5C0(marker, func_800EC48C);
     }
 }
 
-f32 func_800EC75C(s32 param_0, s32 param_1)
+f32 func_800EC75C(s32 marker, s32 param_1)
 {
-    f32 local_1;
-    f32 local_0[3];
-    u8 *s0 = (u8 *) param_0;
-    local_1 = func_800EC708(param_0);
-    func_800EE88C(param_1, s0 + 0x1e);
-    if (*(u16 *) (s0 + 0x18) & 1) {
-        u8 *tmp = func_80106790(s0);
-        func_800EF334(param_1, *(s32 *) (tmp + 0x38));
+    f32 radius;
+    f32 pos[3];
+    u8 *bytes = (u8 *) marker;
+    radius = func_800EC708(marker);
+    func_800EE88C(param_1, bytes + 0x1e);
+    if (*(u16 *) (bytes + 0x18) & 1) {
+        u8 *object = func_80106790(bytes);
+        func_800EF334(param_1, *(s32 *) (object + 0x38));
     }
-    func_800EC398(s0, local_0);
-    func_800EF04C(param_1, local_0);
-    return local_1;
+    func_800EC398(bytes, pos);
+    func_800EF04C(param_1, pos);
+    return radius;
 }
 
 int func_800EC7D4(param_0, param_1)
@@ -740,16 +769,17 @@ s32 param_1;
     func_8010A79C(func_80106790(param_0) | 0, param_1);
 }
 
-s32 func_800EC800(param_0)
-u8 *param_0;
+s32 func_800EC800(marker)
+u8 *marker;
 {
-    s32 var_v0;
-    var_v0 = (*(u16 *) ((u8 *) param_0 + 0x18) & 1) != 0;
-    if (0 != var_v0) {
-        return *(u16 *) ((u8 *) param_0 + 0x14) != 0;
+    s32 has_object;
+    has_object = (*(u16 *) ((u8 *) marker + 0x18) & 1) != 0;
+    if (0 != has_object) {
+        return *(u16 *) ((u8 *) marker + 0x14) != 0;
     }
 }
 
+// Steps the running marker id back, wrapping to 0x7FFF below 0x6B7.
 int func_800EC828()
 {
     ((int *) D_80132ED0)[0x967]--;
@@ -758,17 +788,21 @@ int func_800EC828()
     }
 }
 
+// Returns the next marker id; wraps from 0x8000 to 0x6B7.
 s32 func_800EC854(void)
 {
-    s32 local_0;
+    s32 id;
 
-    local_0 = *(s32 *) ((s8 *) (s16 *) D_80132ED0 + 0x259c);
+    id = *(s32 *) ((s8 *) (s16 *) D_80132ED0 + 0x259c);
     if (++*(s32 *) ((s8 *) (s16 *) D_80132ED0 + 0x259c) >= 0x8000) {
         *(s32 *) ((s8 *) (s16 *) D_80132ED0 + 0x259c) = 0x6b7;
     }
-    return local_0;
+    return id;
 }
 
+// TU-NOTE: the .data of this file (formerly asm/data/core2/1EC4CC0.data.s) is defined
+// here in C, values taken from the ROM. D_80123540 is declared as s32[] (uses written
+// as NAME[0]).
 s32 D_80123540[5] = {0x0, 0x0, 0x0, 0x0, 0x0};
 u8 D_80123554[44] = {0x0,  0x0,  0x0, 0x7F, 0x0,  0x0,  0x0, 0xBF, 0x0,  0x0,  0x0,
                      0xDF, 0x0,  0x0, 0x0,  0xEF, 0x0,  0x0, 0x0,  0xF7, 0x0,  0x0,

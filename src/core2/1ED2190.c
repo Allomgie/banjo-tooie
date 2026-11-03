@@ -1,20 +1,26 @@
 #include "core2/1ECE0B0.h"
 #include "types.h"
 
+// Party swap: parked character records (0x3C bytes each, vector at D_801354F0),
+// party mode (D_801354F8) and the swap state machine (D_80135520).
+// TU-NOTE: second half of the former 1ECE0B0 range, from func_800F88A0 on. Functions
+// defined in 1ECE0B0 are declared here exactly as defined there (prototype for ANSI,
+// empty parameter list for K&R) so every call compiles as in the combined file.
+
 extern s32 func_800DB9B0(void);
 extern s32 _plsu_entrypoint_1(s32);
 extern s32 D_801354F0;
 typedef struct {
-    u8 local_0;
-    u8 local_1;
-    u8 local_2;
-    u8 pad3[0x19];
-    u8 local_1C;
-    u8 local_1D;
-    u8 pad1E[4];
-    s16 local_22;
-    u8 local_24[0xC];
-    u8 local_30[0xC];
+    u8 transform_id;
+    u8 is_controlled;
+    u8 form;
+    u8 pad_3[0x19];
+    u8 unk_1C;
+    u8 unk_1D;
+    u8 pad_1E[4];
+    s16 map_id;
+    u8 pos[0xC];
+    u8 rot[0xC];
 } EntryF8B94;
 extern u8 D_80135510[];
 extern u8 D_8013551C[];
@@ -56,59 +62,62 @@ void func_800F8128(s32 arg0);
 void func_800F8268(s32 arg0, s32 a1, s32 a2);
 void func_800F8358(s32 param_0, s32 param_1);
 
-u8 *func_800F88A0(param_0)
-s32 param_0;
+// Find the parked record with the given transformation id, or NULL.
+u8 *func_800F88A0(id)
+s32 id;
 {
-    u8 *local_0;
-    u8 *local_1;
-    local_0 = vector_begin((void *) D_801354F0, param_0);
-    local_1 = vector_end((void *) D_801354F0);
-    if (local_0 < local_1) {
+    u8 *entry;
+    u8 *end;
+    entry = vector_begin((void *) D_801354F0, id);
+    end = vector_end((void *) D_801354F0);
+    if (entry < end) {
         do {
-            if (param_0 == *local_0) {
-                return local_0;
+            if (id == *entry) {
+                return entry;
             }
-            local_0 += 0x3C;
-        } while (local_0 < local_1);
+            entry += 0x3C;
+        } while (entry < end);
     }
     return 0;
 }
 
-void func_800F8914(u8 *param_0, s32 param_1)
+// Fill a record from the current state of a character.
+void func_800F8914(u8 *record, s32 character)
 {
-    func_800F5A00(param_1, param_0 + 0x24);
-    func_800F5B38(param_1, param_0 + 0x30);
-    _plcamera_entrypoint_14(param_1, param_0 + 4, param_0 + 0x10);
-    *(s8 *) ((s8 *) param_0 + 2) = func_800F9214(param_1);
-    *(s8 *) ((s8 *) param_0 + 0) = func_800F5410(param_1);
-    *(s8 *) ((s8 *) param_0 + 1) = func_800F65D0(param_1);
-    *(s16 *) ((s8 *) param_0 + 0x22) = func_800EA05C();
-    *(s8 *) ((s8 *) param_0 + 0x21) = func_800EA090();
-    *(s8 *) ((s8 *) param_0 + 0x20) = 2;
-    *(s8 *) ((s8 *) param_0 + 0x1D) = func_800F58F8(param_1);
-    *(s8 *) ((s8 *) param_0 + 0x1C) = func_800F5924(param_1);
+    func_800F5A00(character, record + 0x24);
+    func_800F5B38(character, record + 0x30);
+    _plcamera_entrypoint_14(character, record + 4, record + 0x10);
+    *(s8 *) ((s8 *) record + 2) = func_800F9214(character);
+    *(s8 *) ((s8 *) record + 0) = func_800F5410(character);
+    *(s8 *) ((s8 *) record + 1) = func_800F65D0(character);
+    *(s16 *) ((s8 *) record + 0x22) = func_800EA05C();
+    *(s8 *) ((s8 *) record + 0x21) = func_800EA090();
+    *(s8 *) ((s8 *) record + 0x20) = 2;
+    *(s8 *) ((s8 *) record + 0x1D) = func_800F58F8(character);
+    *(s8 *) ((s8 *) record + 0x1C) = func_800F5924(character);
 }
 
 int func_800F89BC()
 {
-    u8 *local_0 = (u8 *) (s32 *) D_801354F8;
-    if (*local_0 == 2) {
+    u8 *mode = (u8 *) (s32 *) D_801354F8;
+    if (*mode == 2) {
         return 0xb;
     }
     return 1;
 }
 
-int func_800F89E4(s32 param_0, s32 param_1)
+int func_800F89E4(s32 id, s32 out_pos)
 {
-    s32 local_0;
-    if (param_0 == 0xA) {
-        func_800EE7F8(param_1 | 0, (s32 *) D_80135500);
-        local_0 = *(s32 *) D_8013551C;
-    } else if (param_0 == 0xB) {
-        func_800EE7F8(param_1 | 0, (s32 *) D_80135510);
-        local_0 = *(s32 *) D_8013551C;
+    s32 map_id;
+    if (id == 0xA) {
+        // Matching: the "| 0" operands are needed for the match.
+        func_800EE7F8(out_pos | 0, (s32 *) D_80135500);
+        map_id = *(s32 *) D_8013551C;
+    } else if (id == 0xB) {
+        func_800EE7F8(out_pos | 0, (s32 *) D_80135510);
+        map_id = *(s32 *) D_8013551C;
     }
-    return local_0;
+    return map_id;
 }
 
 f32 func_800F8A50(void)
@@ -123,38 +132,40 @@ int func_800F8A5C()
 
 int func_800F8A80()
 {
-    u8 *local_0;
-    local_0 = func_800F88A0();
-    return local_0[0x21];
+    u8 *record;
+    record = func_800F88A0();
+    return record[0x21];
 }
 
+// Transformation id of the first controlled record.
 u8 func_800F8AA4()
 {
-    u8 *local_0 = vector_begin((void *) D_801354F0);
-    u8 *local_1 = vector_end((void *) D_801354F0);
-    while (local_0 < local_1) {
-        u8 val = *(u8 *) ((char *) local_0 + 1) ^ 0;
-        if (val != 0) {
-            return *local_0;
+    u8 *entry = vector_begin((void *) D_801354F0);
+    u8 *end = vector_end((void *) D_801354F0);
+    while (entry < end) {
+        // Matching: "^ 0" is needed for the match.
+        u8 controlled = *(u8 *) ((char *) entry + 1) ^ 0;
+        if (controlled != 0) {
+            return *entry;
         }
-        local_0 += 0x3C;
+        entry += 0x3C;
     }
 
     return 0;
 }
 
-int func_800F8B0C(s32 param_0, s32 param_1)
+int func_800F8B0C(s32 id, s32 out_pos)
 {
-    s32 local_0;
-    local_0 = func_800F88A0(param_0);
-    func_800EE7F8(param_1, local_0 + 0x24);
+    s32 record;
+    record = func_800F88A0(id);
+    func_800EE7F8(out_pos, record + 0x24);
 }
 
-int func_800F8B38(s32 param_0, s32 param_1)
+int func_800F8B38(s32 id, s32 out_rot)
 {
-    s32 local_0;
-    local_0 = func_800F88A0(param_0);
-    func_800EE7F8(param_1, local_0 + 0x30);
+    s32 record;
+    record = func_800F88A0(id);
+    func_800EE7F8(out_rot, record + 0x30);
 }
 
 s32 func_800F8B64(void)
@@ -177,75 +188,78 @@ u8 func_800F8B88(void)
     return D_801354F8[0];
 }
 
+// Respawn every parked character whose record belongs to the current map.
 void func_800F8B94(void)
 {
-    s32 local_1;
-    EntryF8B94 *local_2;
-    EntryF8B94 *local_3;
-    EntryF8B94 *local_4;
-    s32 *local_0;
-    s32 local_5;
+    s32 character;
+    EntryF8B94 *begin;
+    EntryF8B94 *end;
+    EntryF8B94 *entry;
+    s32 *saved_pos;
+    s32 tmp;
 
-    local_2 = (EntryF8B94 *) vector_begin(D_801354F0);
-    local_3 = (EntryF8B94 *) vector_end(D_801354F0);
-    for (local_4 = local_2; local_4 < local_3; local_4++) {
-        if (func_800EA05C() == local_4->local_22) {
-            local_1 = func_800F6204(0);
-            func_800F7E64(local_1, local_5 = local_4->local_0);
-            func_800F8268(local_1, local_4->local_1D, local_4->local_1C);
-            if (D_801354F8[1] != 0 && (local_4->local_0 == 0xA || local_4->local_0 == 0xB)) {
-                if (local_4->local_0 == 0xA) {
-                    local_0 = (s32 *) D_80135500;
+    begin = (EntryF8B94 *) vector_begin(D_801354F0);
+    end = (EntryF8B94 *) vector_end(D_801354F0);
+    for (entry = begin; entry < end; entry++) {
+        if (func_800EA05C() == entry->map_id) {
+            character = func_800F6204(0);
+            func_800F7E64(character, tmp = entry->transform_id);
+            func_800F8268(character, entry->unk_1D, entry->unk_1C);
+            if (D_801354F8[1] != 0 && (entry->transform_id == 0xA || entry->transform_id == 0xB)) {
+                if (entry->transform_id == 0xA) {
+                    saved_pos = (s32 *) D_80135500;
                 } else {
-                    local_0 = (s32 *) D_80135510;
+                    saved_pos = (s32 *) D_80135510;
                 }
-                func_800F8294(local_1, local_0);
+                func_800F8294(character, saved_pos);
             } else {
-                func_800F8294(local_1, local_4->local_24);
+                func_800F8294(character, entry->pos);
             }
-            func_800F832C(local_1, local_4->local_30);
-            if (local_4->local_1 != 0) {
-                func_800F80D8(local_1);
+            func_800F832C(character, entry->rot);
+            if (entry->is_controlled != 0) {
+                func_800F80D8(character);
             }
-            if (D_801354F8[0] != 1 && (local_4->local_0 == 0xA || local_4->local_0 == 0xB)) {
-                func_800F8358(local_1, 1);
+            if (D_801354F8[0] != 1 && (entry->transform_id == 0xA || entry->transform_id == 0xB)) {
+                func_800F8358(character, 1);
             }
-            local_5 = local_4->local_2;
-            switch (local_5) {
+            tmp = entry->form;
+            switch (tmp) {
                 case 1:
                     break;
                 case 2:
-                    func_800F608C(local_1, 2);
+                    func_800F608C(character, 2);
             }
-            if (local_4->local_1 != 0) {
-                func_800F8D80(local_1, local_4);
+            if (entry->is_controlled != 0) {
+                func_800F8D80(character, entry);
             }
         }
     }
 }
 
-int func_800F8D50(s32 param_0, s32 param_1)
+int func_800F8D50(s32 character, s32 id)
 {
-    s32 local_0;
-    local_0 = func_800F88A0(param_1 | 0);
-    func_800F8D80(param_0, local_0 | 0);
+    s32 record;
+    // Matching: the "| 0" operands are needed for the match.
+    record = func_800F88A0(id | 0);
+    func_800F8D80(character, record | 0);
 }
 
-void func_800F8D80(param_0, param_1) s32 param_0;
-s32 param_1;
+void func_800F8D80(character, record) s32 character;
+s32 record;
 {
-    _plcamera_entrypoint_12(param_0, param_1 + 4, param_1 + 0x10);
+    _plcamera_entrypoint_12(character, record + 4, record + 0x10);
 }
 
 int func_800F8DA8()
 {
-    int local_0;
+    int found;
     if (func_800F88A0()) {
-        local_0 = 1;
+        found = 1;
     } else {
-        local_0 = 0;
+        found = 0;
     }
-    return local_0 | 0;
+    // Matching: the "| 0" is needed for the match.
+    return found | 0;
 }
 
 void func_800F8DD8(void)
@@ -269,106 +283,110 @@ void func_800F8E08(void)
     func_800F9A44();
 }
 
+// Remove the record of the given transformation id, if present.
 s32 func_800F8E78()
 {
-    s32 local_0 = func_800F88A0();
-    if (local_0 != 0) {
-        vector_erase((void *) D_801354F0, vector_index_of((void *) D_801354F0, local_0));
+    s32 record = func_800F88A0();
+    if (record != 0) {
+        vector_erase((void *) D_801354F0, vector_index_of((void *) D_801354F0, record));
     }
 }
 
-void func_800F8EBC(s32 a0)
+void func_800F8EBC(s32 character)
 {
-    func_800F8E78(func_800F5410(a0));
+    func_800F8E78(func_800F5410(character));
 }
 
-void func_800F8EE4(s32 param_0)
+// Park a character: update its record, or add a new one.
+void func_800F8EE4(s32 character)
 {
-    s32 temp_v0;
+    s32 record;
 
-    temp_v0 = func_800F88A0(func_800F5410());
-    if (temp_v0 != 0) {
-        func_800F8914(temp_v0, param_0);
+    record = func_800F88A0(func_800F5410());
+    if (record != 0) {
+        func_800F8914(record, character);
         return;
     }
-    func_800F8914(vector_push_back(&D_801354F0), param_0);
+    func_800F8914(vector_push_back(&D_801354F0), character);
 }
 
+// In split-up mode, move the parked Banjo/Kazooie records to the saved positions.
 void func_800F8F3C(void)
 {
-    u8 *temp_s2;
-    u8 *temp_v0;
-    u8 *var_s0;
+    u8 *begin;
+    u8 *end;
+    u8 *entry;
     if ((*(u8 *) ((s8 *) (u8 *) D_801354F8 + 0) == 2) && ((u8 *) D_801354F0 != 0)) {
-        temp_s2 = vector_begin((u8 *) D_801354F0);
-        temp_v0 = vector_end((u8 *) D_801354F0);
-        var_s0 = temp_s2;
-        if (temp_s2 < temp_v0) {
+        begin = vector_begin((u8 *) D_801354F0);
+        end = vector_end((u8 *) D_801354F0);
+        entry = begin;
+        if (begin < end) {
             do {
-                if (*(u8 *) ((s8 *) var_s0 + 0) == 0xA) {
-                    func_800EE7F8(var_s0 + 0x24, (u32 *) D_80135500);
-                    *(s16 *) ((s8 *) var_s0 + 0x22) =
+                if (*(u8 *) ((s8 *) entry + 0) == 0xA) {
+                    func_800EE7F8(entry + 0x24, (u32 *) D_80135500);
+                    *(s16 *) ((s8 *) entry + 0x22) =
                         (s16) *(s32 *) ((s8 *) (u8 *) D_801354F8 + 0x24);
-                    func_800EFA4C(var_s0 + 0x30, 0.0f, *(f32 *) ((s8 *) (u8 *) D_801354F8 + 0x14),
+                    func_800EFA4C(entry + 0x30, 0.0f, *(f32 *) ((s8 *) (u8 *) D_801354F8 + 0x14),
                                   0.0f);
-                } else if (*(u8 *) ((s8 *) var_s0 + 0) == 0xB) {
-                    func_800EE7F8(var_s0 + 0x24, (u32 *) D_80135510);
-                    *(s16 *) ((s8 *) var_s0 + 0x22) =
+                } else if (*(u8 *) ((s8 *) entry + 0) == 0xB) {
+                    func_800EE7F8(entry + 0x24, (u32 *) D_80135510);
+                    *(s16 *) ((s8 *) entry + 0x22) =
                         (s16) *(s32 *) ((s8 *) (u8 *) D_801354F8 + 0x24);
-                    func_800EFA4C(var_s0 + 0x30, 0.0f, *(f32 *) ((s8 *) (u8 *) D_801354F8 + 0x14),
+                    func_800EFA4C(entry + 0x30, 0.0f, *(f32 *) ((s8 *) (u8 *) D_801354F8 + 0x14),
                                   0.0f);
                 }
-                var_s0 += 0x3C;
-            } while (var_s0 < temp_v0);
+                entry += 0x3C;
+            } while (entry < end);
         }
     }
 }
 
-int func_800F9070(s32 param_0, s32 param_1)
+// Set the is-controlled flag of a record.
+int func_800F9070(s32 id, s32 controlled)
 {
-    u8 *local_0;
-    local_0 = func_800F88A0(param_0);
-    local_0++;
-    *local_0 = param_1;
+    u8 *flag;
+    flag = func_800F88A0(id);
+    flag++;
+    *flag = controlled;
 }
 
-void func_800F9098(s32 param_0)
+void func_800F9098(s32 id)
 {
-    if (param_0 == 0xA) {
+    if (id == 0xA) {
         func_800EE7F8((int *) D_80135500);
-    } else if (param_0 == 0xB) {
+    } else if (id == 0xB) {
         func_800EE7F8((int *) D_80135510);
     }
     *(int *) D_8013551C = func_800EA05C();
 }
 
-void func_800F90EC(f32 param_0)
+void func_800F90EC(f32 value)
 {
-    D_8013550C = param_0;
+    D_8013550C = value;
 }
 
-void func_800F90F8(s32 arg0)
+void func_800F90F8(s32 value)
 {
-    D_801354F9 = arg0;
+    D_801354F9 = value;
 }
 
-void func_800F9104(unsigned int param_0)
+void func_800F9104(unsigned int value)
 {
-    D_801354FC = param_0;
+    D_801354FC = value;
 }
 
-int func_800F9110(int param_0)
+int func_800F9110(int value)
 {
-    D_801354FD = param_0;
+    D_801354FD = value;
 }
 
-void func_800F911C(param_0) s32 param_0;
+void func_800F911C(mode) s32 mode;
 {
     if (*(u8 *) D_801354F8 == 3) {
         func_800CF840(0);
     }
 
-    (*((u8 *) D_801354F8)) = param_0;
+    (*((u8 *) D_801354F8)) = mode;
 
     if (*(u8 *) D_801354F8 == 3) {
         func_800CF840(1);
@@ -411,12 +429,13 @@ int func_800F9214()
     return 1;
 }
 
-void func_800F9240(f32 *param_0, s32 param_1)
+// Write a position offset by 200 on X and Z from the character's position.
+void func_800F9240(f32 *out_pos, s32 character)
 {
-    f32 sp1C[3];
-    func_800F5A00(param_1, sp1C);
-    sp1C[0] += 200.0f;
-    func_800EFA4C(param_0, sp1C[0], sp1C[1], sp1C[2] + 200.0f);
+    f32 pos[3];
+    func_800F5A00(character, pos);
+    pos[0] += 200.0f;
+    func_800EFA4C(out_pos, pos[0], pos[1], pos[2] + 200.0f);
 }
 
 int func_800F929C()
@@ -428,57 +447,61 @@ int func_800F929C()
     return 1;
 }
 
-void func_800F92CC(s32 *param_0, volatile s32 *param_1, s32 *param_2, s32 *param_3)
+// Outputs the current character, its id, the other character (Banjo <-> Kazooie)
+// and the other one's id.
+void func_800F92CC(s32 *out_character, volatile s32 *out_id, s32 *out_other, s32 *out_other_id)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 character;
+    s32 id;
 
-    local_0 = func_800F54E4();
-    *param_0 = local_0;
-    local_1 = func_800F5410(local_0);
-    *param_1 = local_1;
+    character = func_800F54E4();
+    *out_character = character;
+    id = func_800F5410(character);
+    *out_id = id;
 
-    switch (local_1) {
+    switch (id) {
         case 10:
-            *param_3 = 0xB;
+            *out_other_id = 0xB;
             break;
         case 11:
-            *param_3 = 0xA;
+            *out_other_id = 0xA;
     }
 
-    *param_2 = _plsu_entrypoint_1(*param_3);
+    *out_other = _plsu_entrypoint_1(*out_other_id);
 }
 
-void func_800F9354(s32 *param_0, s32 *param_1, s32 *param_2)
+void func_800F9354(s32 *out_character, s32 *out_id, s32 *out_other_id)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 character;
+    s32 id;
 
-    local_0 = func_800F54E4();
-    *param_0 = local_0;
-    local_1 = func_800F5410(local_0);
-    *param_1 = local_1;
+    character = func_800F54E4();
+    *out_character = character;
+    id = func_800F5410(character);
+    *out_id = id;
 
-    switch (local_1) {
+    switch (id) {
         case 10:
-            *param_2 = 0xB;
+            *out_other_id = 0xB;
             return;
         case 11:
-            *param_2 = 0xA;
+            *out_other_id = 0xA;
     }
 }
 
-int func_800F93C4(s32 *param_0, s32 *param_1)
+int func_800F93C4(s32 *out_character, s32 *out_id)
 {
-    s32 local_0;
-    local_0 = func_800F54E4();
-    *param_0 = local_0;
-    *param_1 = func_800F5410(local_0 | 0);
+    s32 character;
+    character = func_800F54E4();
+    *out_character = character;
+    // Matching: the "| 0" is needed for the match.
+    *out_id = func_800F5410(character | 0);
 }
 
-int func_800F9400(s32 param_0)
+// Start screen wipe 0xC or 0xE, depending on the character id.
+int func_800F9400(s32 id)
 {
-    if (param_0 == 0xA || param_0 == 1) {
+    if (id == 0xA || id == 1) {
         func_800C964C(0xC);
     }
 
@@ -487,9 +510,10 @@ int func_800F9400(s32 param_0)
     }
 }
 
-int func_800F9444(s32 param_0)
+// Start screen wipe 0xD or 0xF, depending on the character id.
+int func_800F9444(s32 id)
 {
-    if (param_0 == 0xA || param_0 == 1) {
+    if (id == 0xA || id == 1) {
         func_800C964C(0xD);
     }
 
@@ -498,86 +522,87 @@ int func_800F9444(s32 param_0)
     }
 }
 
-void func_800F9488(s32 param_0)
+// Enter swap state `state` (1..19), running the exit actions of the previous state first.
+void func_800F9488(s32 state)
 {
-    s32 sp5C;
-    s32 sp58;
-    s32 sp54;
-    s32 sp50;
-    f32 sp44[3];
-    f32 sp38[3];
-    f32 sp2C[3];
-    f32 sp20[3];
+    s32 id;
+    s32 character;
+    s32 other_id;
+    s32 other;
+    f32 offset_pos[3];
+    f32 spawn_pos[3];
+    f32 other_pos[3];
+    f32 character_pos[3];
 
     switch (D_80135520) {
         case 3:
-            if (param_0 == 1) {
-                func_800F92CC(&sp58, &sp5C, &sp50, &sp54);
-                func_800F82D4(sp58, 0);
-                func_800F8268(sp58, 1, 1);
+            if (state == 1) {
+                func_800F92CC(&character, &id, &other, &other_id);
+                func_800F82D4(character, 0);
+                func_800F8268(character, 1, 1);
             }
             break;
 
         case 6:
-            if (param_0 == 1) {
-                func_800F9354(&sp58, &sp5C, &sp54);
-                func_800F8EBC(sp58);
-                func_800F8268(sp58, 1, 1);
-                func_800F82D4(sp58, 0);
+            if (state == 1) {
+                func_800F9354(&character, &id, &other_id);
+                func_800F8EBC(character);
+                func_800F8268(character, 1, 1);
+                func_800F82D4(character, 0);
             }
             break;
 
         case 9:
-            if (param_0 == 1) {
-                func_800F93C4(&sp58, &sp5C);
-                func_800F8EBC(sp58);
-                func_800F8268(sp58, 1, 1);
-                func_800F82D4(sp58, 0);
+            if (state == 1) {
+                func_800F93C4(&character, &id);
+                func_800F8EBC(character);
+                func_800F8268(character, 1, 1);
+                func_800F82D4(character, 0);
             }
             break;
 
         case 15:
-            if (param_0 == 1) {
-                func_800F93C4(&sp58, &sp5C);
+            if (state == 1) {
+                func_800F93C4(&character, &id);
                 func_800F8E78(0xA);
             }
     }
 
-    switch (D_80135520 = param_0) {
+    switch (D_80135520 = state) {
         case 2:
-            func_800F92CC(&sp58, &sp5C, &sp50, &sp54);
-            func_800F82D4(sp58, 2);
-            func_800F8268(sp58, 0, 1);
-            func_800F9444(sp5C);
+            func_800F92CC(&character, &id, &other, &other_id);
+            func_800F82D4(character, 2);
+            func_800F8268(character, 0, 1);
+            func_800F9444(id);
             return;
 
         case 3:
-            func_800F92CC(&sp58, &sp5C, &sp50, &sp54);
-            func_800F8128(sp50);
-            func_800F8EE4(sp58);
-            func_800F8EBC(sp50);
-            func_800F9400(sp54);
+            func_800F92CC(&character, &id, &other, &other_id);
+            func_800F8128(other);
+            func_800F8EE4(character);
+            func_800F8EBC(other);
+            func_800F9400(other_id);
             return;
 
         case 4:
-            func_800F9354(&sp58, &sp5C, &sp54);
-            func_800F82D4(sp58, 2);
-            func_800F9444(sp5C);
+            func_800F9354(&character, &id, &other_id);
+            func_800F82D4(character, 2);
+            func_800F9444(id);
             return;
 
         case 5:
-            func_800F9354(&sp58, &sp5C, &sp54);
-            func_800F9070(sp54, 1);
-            func_800F8268(sp58, 0, 1);
-            func_800F8EE4(sp58);
-            func_800F9070(sp5C, 0);
-            func_800A7990(func_800F8A5C(sp54), 0, 0);
+            func_800F9354(&character, &id, &other_id);
+            func_800F9070(other_id, 1);
+            func_800F8268(character, 0, 1);
+            func_800F8EE4(character);
+            func_800F9070(id, 0);
+            func_800A7990(func_800F8A5C(other_id), 0, 0);
             return;
 
         case 6:
-            func_800F9354(&sp58, &sp5C, &sp54);
-            func_800F82D4(sp58, 2);
-            func_800F9400(sp5C);
+            func_800F9354(&character, &id, &other_id);
+            func_800F82D4(character, 2);
+            func_800F9400(id);
             return;
 
         case 7:
@@ -585,39 +610,39 @@ void func_800F9488(s32 param_0)
             return;
 
         case 8:
-            sp54 = func_800F929C();
-            func_800F9070(sp54, 1);
+            other_id = func_800F929C();
+            func_800F9070(other_id, 1);
             if (func_800DB9B0() == 0) {
-                func_800A7990(func_800F8A5C(sp54), 0, 0);
+                func_800A7990(func_800F8A5C(other_id), 0, 0);
             }
 
             return;
 
         case 9:
-            func_800F93C4(&sp58, &sp5C);
-            func_800F82D4(sp58, 2);
-            func_800F9400(sp5C);
+            func_800F93C4(&character, &id);
+            func_800F82D4(character, 2);
+            func_800F9400(id);
             return;
 
         case 10:
-            func_800F93C4(&sp58, &sp5C);
-            sp50 = _plsu_entrypoint_1(0x11);
-            func_800F8128(sp58);
-            func_800F759C(sp50);
-            func_800F8268(sp58, 1, 1);
+            func_800F93C4(&character, &id);
+            other = _plsu_entrypoint_1(0x11);
+            func_800F8128(character);
+            func_800F759C(other);
+            func_800F8268(character, 1, 1);
             return;
 
         case 11:
-            sp50 = D_80135522[0];
-            sp58 = D_80135521[0];
-            func_800F8128(sp50);
-            func_800F759C(sp58);
-            func_800F8268(sp50, 1, 1);
+            other = D_80135522[0];
+            character = D_80135521[0];
+            func_800F8128(other);
+            func_800F759C(character);
+            func_800F8268(other, 1, 1);
             return;
 
         case 13:
-            func_800F93C4(&sp58, &sp5C);
-            func_800F82D4(sp58, 2);
+            func_800F93C4(&character, &id);
+            func_800F82D4(character, 2);
             func_800F9444(0xB);
             return;
 
@@ -627,55 +652,55 @@ void func_800F9488(s32 param_0)
             return;
 
         case 15:
-            func_800F93C4(&sp58, &sp5C);
-            sp50 = func_800F6224(sp58);
-            func_800F7E64(sp50, 0xB);
-            func_800F608C(sp50, 1);
-            func_800F9240(sp44, sp58);
-            func_800F7CF4(sp50, 0x50, sp44);
+            func_800F93C4(&character, &id);
+            other = func_800F6224(character);
+            func_800F7E64(other, 0xB);
+            func_800F608C(other, 1);
+            func_800F9240(offset_pos, character);
+            func_800F7CF4(other, 0x50, offset_pos);
             func_800F9400(0xA);
             return;
 
         case 16:
-            sp58 = _plsu_entrypoint_1(0xB);
-            sp50 = _plsu_entrypoint_1(0xA);
-            func_800F5A00(sp58, sp20);
-            func_800F5A00(sp50, sp2C);
-            if (func_800EEB40(sp20, sp2C) < 4.84e+04f) {
-                func_800EE7F8(sp38, sp20);
+            character = _plsu_entrypoint_1(0xB);
+            other = _plsu_entrypoint_1(0xA);
+            func_800F5A00(character, character_pos);
+            func_800F5A00(other, other_pos);
+            if (func_800EEB40(character_pos, other_pos) < 4.84e+04f) {
+                func_800EE7F8(spawn_pos, character_pos);
             } else {
-                func_800F9240(sp38, sp50);
+                func_800F9240(spawn_pos, other);
             }
-            func_800F7CF4(sp58, 0x50, sp38);
-            func_800F8128(sp50);
-            func_800F8EBC(sp50);
-            func_800F8268(sp50, 1, 1);
+            func_800F7CF4(character, 0x50, spawn_pos);
+            func_800F8128(other);
+            func_800F8EBC(other);
+            func_800F8268(other, 1, 1);
             return;
 
         case 17:
-            sp58 = _plsu_entrypoint_1(0xB);
-            sp50 = _plsu_entrypoint_1(0xA);
-            func_800F759C(sp58);
+            character = _plsu_entrypoint_1(0xB);
+            other = _plsu_entrypoint_1(0xA);
+            func_800F759C(character);
             func_800D5234(0);
             func_800A16BC(0);
-            func_800F8128(sp50);
-            func_800F8EBC(sp50);
-            func_800F7B9C(sp50, 0x60);
-            func_800F8268(sp50, 1, 1);
+            func_800F8128(other);
+            func_800F8EBC(other);
+            func_800F7B9C(other, 0x60);
+            func_800F8268(other, 1, 1);
     }
 }
 
 int func_800F99E8()
 {
-    u8 *local_0 = (u8 *) ((s32 *) &D_80135520);
-    return *local_0 != 1;
+    u8 *state = (u8 *) ((s32 *) &D_80135520);
+    return *state != 1;
 }
 
 int func_800F99FC()
 {
-    u8 *local_0 = &D_80135520;
+    u8 *state = &D_80135520;
 
-    if (*local_0 == 0x0E) {
+    if (*state == 0x0E) {
         return 1;
     }
 
@@ -704,10 +729,11 @@ int func_800F9A6C()
     }
 }
 
-void func_800F9AAC(long param_0, int param_1)
+// Start the Clockwork Kazooie hand-over (state 11), passing two characters.
+void func_800F9AAC(long first, int second)
 {
-    *((s8 *) (((s8 *) (&D_80135520)) + 1)) = param_0;
-    *((s8 *) (((s8 *) (&D_80135520)) + 2)) = param_1;
+    *((s8 *) (((s8 *) (&D_80135520)) + 1)) = first;
+    *((s8 *) (((s8 *) (&D_80135520)) + 2)) = second;
     func_800F9488(0xB);
 }
 
@@ -718,25 +744,25 @@ void func_800F9ADC()
 
 void func_800F9AFC()
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    func_800F93C4(&local_1, &local_0);
-    local_2 = _plsu_entrypoint_1(func_800F929C());
-    func_800F8128(local_2);
-    func_800F8EBC(local_2);
-    func_800F8268(local_2, 1, 1);
+    s32 id;
+    s32 character;
+    s32 other;
+    func_800F93C4(&character, &id);
+    other = _plsu_entrypoint_1(func_800F929C());
+    func_800F8128(other);
+    func_800F8EBC(other);
+    func_800F8268(other, 1, 1);
 }
 
 int func_800F9B54()
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = func_800F54E4();
-    local_1 = _plsu_entrypoint_1(0x11);
-    func_800F8128(local_0);
-    func_800F8268(local_0, 1, 1);
-    func_800F82C0(local_1);
+    s32 character;
+    s32 clockwork;
+    character = func_800F54E4();
+    clockwork = _plsu_entrypoint_1(0x11);
+    func_800F8128(character);
+    func_800F8268(character, 1, 1);
+    func_800F82C0(clockwork);
 }
 
 void func_800F9BA4()
@@ -779,10 +805,11 @@ int func_800F9C38()
     }
 }
 
+// Per-frame update: advance the swap state machine once a wipe has finished.
 void func_800F9C6C(void)
 {
-    s32 local_1;
-    s32 local_0;
+    s32 unk_0;
+    s32 map_id;
 
     switch (D_80135520) {
         case 2:
@@ -845,15 +872,15 @@ void func_800F9C6C(void)
             func_800F9488(1);
             break;
         case 18:
-            local_0 = func_800F8A5C(10);
-            if (local_0 == func_800EA05C())
+            map_id = func_800F8A5C(10);
+            if (map_id == func_800EA05C())
                 func_800F9488(16);
             else
                 func_800F9488(13);
             break;
         case 19:
-            local_0 = func_800F8A5C(10);
-            if (local_0 == func_800EA05C())
+            map_id = func_800F8A5C(10);
+            if (map_id == func_800EA05C())
                 func_800F9488(17);
     }
 }

@@ -6,12 +6,14 @@
 #define AF614_TEXEL_WORDS(w, b) AF614_MAX(1, ((w) * (b) / 8))
 #define AF614_CALC_DXT(w, b) ((2048 + AF614_TEXEL_WORDS(w, b) - 1) / AF614_TEXEL_WORDS(w, b))
 #define AF614_CALC_DXT_4B(w) ((2048 + AF614_MAX(1, (w) / 16) - 1) / AF614_MAX(1, (w) / 16))
+// Matching: the line breaks in this macro are needed for the match.
 #define AF614_COMMAND(pkt, a, b)                                                                   \
     {                                                                                              \
         AF614Gfx *_g = (pkt);                                                                      \
         _g->w0 = (a);                                                                              \
         _g->w1 = (u32) (b);                                                                        \
     }
+// Matching: the line breaks in this macro are needed for the match.
 #define AF614_SYNC(pkt, a)                                                                         \
     {                                                                                              \
         AF614Gfx *_g = (pkt);                                                                      \
@@ -55,68 +57,88 @@ AF614_SYNC(pkt,0xE7000000); }
     #define AF614_SPRITE_IA4 0x80
     #define AF614_SPRITE_I4 0x20
 
+// Sprite asset accessors and the RDP texture-load emitter.
 typedef struct {
     u32 w0, w1;
 } AF614Gfx;
 
-func_800AF5A0(s16 *param_0)
+// Frame count.
+func_800AF5A0(s16 *sprite)
 {
-    return param_0[0];
+    return sprite[0];
 }
 
-func_800AF5A8(s16 *param_0)
+// Format flags (see AF614_SPRITE_*).
+func_800AF5A8(s16 *sprite)
 {
-    return param_0[1];
+    return sprite[1];
 }
 
-int func_800AF5B0(s16 param_0[3], s32 *param_1, s32 *param_2)
+// Outputs the s16 header fields at +4 and +6.
+int func_800AF5B0(s16 sprite[3], s32 *width, s32 *height)
 {
-    s16 *new_var;
-    int new_var3;
-    new_var = &(new_var = param_0)[1];
-    new_var++;
-    *param_1 = *new_var;
-    new_var--;
-    new_var3 = 2;
-    *param_2 = new_var[new_var3];
+    s16 *field;
+    int index;
+    // Matching: the pointer stepping and the index temporary are needed for the match.
+    field = &(field = sprite)[1];
+    field++;
+    *width = *field;
+    field--;
+    index = 2;
+    *height = field[index];
 }
 
-void func_800AF5C4(u8 *param_0, s32 *param_1, s32 *param_2)
+// Outputs width and height from the sprite header.
+void func_800AF5C4(u8 *sprite, s32 *width, s32 *height)
 {
-    *param_1 = (s32) *(s16 *) (param_0 + 8);
-    *param_2 = (s32) *(s16 *) (param_0 + 10);
+    *width = (s32) *(s16 *) (sprite + 8);
+    *height = (s32) *(s16 *) (sprite + 10);
 }
 
-int func_800AF5D8(s32 param_0)
+// Sprite base + s16 offset at +0x12 (image data base).
+int func_800AF5D8(s32 sprite)
 {
-    s16 *new_var;
-    new_var = (s16 *) ((int) param_0 + 0x12);
-    return *new_var + (0, param_0);
+    s16 *offset_ptr;
+    offset_ptr = (s16 *) ((int) sprite + 0x12);
+    // Matching: the comma expression is needed for the match.
+    return *offset_ptr + (0, sprite);
 }
 
-s32 func_800AF5E4(s32 param_0)
+// Sprite base + offset stored at +0x14.
+s32 func_800AF5E4(s32 sprite)
 {
-    s32 new_var;
-    s32 new_var2;
-    new_var2 = *(s32 *) (param_0 + 0x14) & 0xFFFFFFFFFFFFFFFF;
-    new_var = new_var2;
-    return param_0 + new_var;
+    s32 offset_copy;
+    s32 offset;
+    // Matching: the 64-bit mask and the extra copy are needed for the match.
+    offset = *(s32 *) (sprite + 0x14) & 0xFFFFFFFFFFFFFFFF;
+    offset_copy = offset;
+    return sprite + offset_copy;
 }
 
-s32 func_800AF5F0(s32 param_0)
+// Sprite base + offset stored at +0x18.
+s32 func_800AF5F0(s32 sprite)
 {
-    s32 new_var;
-    s32 new_var2;
-    new_var2 = *(s32 *) (param_0 + 0x18) & 0xFFFFFFFFFFFFFFFF;
-    new_var = new_var2;
-    return param_0 + new_var;
+    s32 offset_copy;
+    s32 offset;
+    // Matching: the 64-bit mask and the extra copy are needed for the match.
+    offset = *(s32 *) (sprite + 0x18) & 0xFFFFFFFFFFFFFFFF;
+    offset_copy = offset;
+    return sprite + offset_copy;
 }
 
-func_800AF5FC(s32 param_0, s32 param_1)
+// Frame directory entry: 12-byte entries starting at +0x1C.
+func_800AF5FC(s32 sprite, s32 frame)
 {
-    return (void *) ((char *) param_0 + 0x1C + param_1 * 0xC);
+    return (void *) ((char *) sprite + 0x1C + frame * 0xC);
 }
 
+// Emits the RDP commands that load one sprite frame as a texture (TLUT first for CI4/CI8).
+// Frame entry +8: image offset from the data base; +6: palette offset from the image.
+// Width and height come from the sprite header. Masks are ceil(log2(size)) for sizes
+// divisible by 8, else 0. Each format branch emits: set image, load tile, load sync,
+// load block, pipe sync, render tile, tile size (BK: rare_gDPLoadMultiBlock[_4b]).
+// TU-NOTE: the exact original macro form is unknown; reverify any reformat.
+// Matching: the line breaks in this function are needed for the match.
 void func_800AF614(AF614Gfx **gfx, u8 *sprite, s32 frame, s32 tmem, s32 rtile, s32 cms, s32 cmt, s32 *width, s32 *height)
 {
     u8 *sprite_frame;
@@ -292,13 +314,14 @@ void func_800AF614(AF614Gfx **gfx, u8 *sprite, s32 frame, s32 tmem, s32 rtile, s
     }
 }
 
-s32 func_800B0CFC(s16 *param_0)
+// Larger of the two header dimensions (at least 1); 1 if sprite is NULL.
+s32 func_800B0CFC(s16 *sprite)
 {
-    s32 wert;
+    s32 size;
 
-    if (param_0 == 0) {
+    if (sprite == 0) {
         return 1;
     }
-    wert = (param_0[7] < param_0[6]) ? param_0[6] : param_0[7];
-    return (wert <= 0) ? 1 : wert;
+    size = (sprite[7] < sprite[6]) ? sprite[6] : sprite[7];
+    return (size <= 0) ? 1 : size;
 }

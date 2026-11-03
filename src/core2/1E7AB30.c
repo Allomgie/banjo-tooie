@@ -1,5 +1,7 @@
 #include "core2/1E7AB30.h"
 
+// D_80127090 is a byte block of health HUD state; it decides when to show/hide HUD items
+// 0xCF/0xCD/0xC9.
 extern u8 D_80127090[];
 extern s32 func_800D5210(void);
 extern void func_800D2748();
@@ -25,17 +27,17 @@ void func_800A1240(s32 param_0)
 
 void func_800A1294(s32 param_0)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 character;
+    s32 max_health;
 
     if ((D_80127094 == 0) && (func_800D3948() == 0) && (func_800DA298(0x6B6) == 0) &&
         (func_800D3E40(9) == 0) && (D_80127097 == 0) &&
-        (local_0 = func_8008FD48(), local_1 = func_800D4EB8(local_0), (local_1 != 0))) {
+        (character = func_8008FD48(), max_health = func_800D4EB8(character), (max_health != 0))) {
         if (param_0 != 0) {
-            func_800D2498(0xCF, func_800D4E7C(local_0), local_1);
+            func_800D2498(0xCF, func_800D4E7C(character), max_health);
             return;
         }
-        func_800D24E8(0xCF, func_800D4E7C(local_0), local_1);
+        func_800D24E8(0xCF, func_800D4E7C(character), max_health);
     }
 }
 
@@ -72,14 +74,15 @@ void func_800A13B0(s32 param_0)
     *(s8 *) ((s8 *) (s32 *) D_80127090 + 5) = 0;
 }
 
+// Per-frame health HUD update: applies pending show/hide requests and auto-shows at low health.
 void func_800A1450(void)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    u8 local_3;
+    s32 show_hud;
+    s32 health;
+    s32 unk_2;
+    u8 pending;
 
-    local_0 = 0;
+    show_hud = 0;
     if (D_80127090[3] != 0) {
         func_800D5034(0, func_8008FD48());
         D_80127090[3] = 0;
@@ -96,29 +99,29 @@ void func_800A1450(void)
     }
     if (D_80127090[1] != 0) {
         if (func_800C95D4() != 0) {
-            local_0 = 1;
+            show_hud = 1;
             D_80127090[1] = 0;
         }
     } else {
-        local_1 = func_800D4E7C(func_8008FD48());
-        if (local_1 != 0 && local_1 < 3) {
-            local_0 = 1;
+        health = func_800D4E7C(func_8008FD48());
+        if (health != 0 && health < 3) {
+            show_hud = 1;
         }
     }
     if (D_80127090[7] != 0) {
-        local_0 = 0;
+        show_hud = 0;
         func_800A1624(0);
         func_800CE864(1);
         func_800CF7F4(0);
-        local_2 = func_800D2820(0xCF) || func_800D2820(0xCD);
+        unk_2 = func_800D2820(0xCF) || func_800D2820(0xCD);
         if (D_80127090[8] != 0x11) {
             func_800D284C(0xC9);
-            local_2 |= func_800D2820(0xC9);
+            unk_2 |= func_800D2820(0xC9);
         }
-        if (local_2 == 0) {
-            local_3 = D_80127090[7];
+        if (unk_2 == 0) {
+            pending = D_80127090[7];
             D_80127090[7] = 0;
-            if (local_3 == 1) {
+            if (pending == 1) {
                 func_800A1240(D_80127090[8]);
                 func_800A1294(1);
                 D_80127090[8] = 0;
@@ -127,7 +130,7 @@ void func_800A1450(void)
             }
         }
     }
-    if (func_80090128() != 0 && local_0 != 0 && D_80127090[5] == 0) {
+    if (func_80090128() != 0 && show_hud != 0 && D_80127090[5] == 0) {
         func_800A1294(0);
     }
 }
@@ -179,88 +182,94 @@ void func_800A16BC(s32 param_0)
     }
 }
 
-int func_800A16F4(int param_0)
+int func_800A16F4(int player)
 {
-    _batimer_set(param_0, 0xE, 3.0f);
+    _batimer_set(player, 0xE, 3.0f);
 }
 
-s32 func_800A1718(PlayerState *param_0)
+s32 func_800A1718(PlayerState *player)
 {
-    if (*(s32 *) ((char *) param_0 + 0x158) != 0) {
-        func_800F9F04(*(s32 *) ((char *) param_0 + 0x184));
+    if (*(s32 *) ((char *) player + 0x158) != 0) {
+        func_800F9F04(*(s32 *) ((char *) player + 0x184));
     } else {
-        func_800D4E7C(func_800A3274((s32) param_0));
+        func_800D4E7C(func_800A3274((s32) player));
     }
 }
 
-int func_800A1760(Actor *param_0)
+int func_800A1760(Actor *player)
 {
-    if (*(s32 *) ((char *) param_0 + 0x158)) {
-        func_800F9F18(*(s32 *) ((char *) param_0 + 0x184), param_0);
+    if (*(s32 *) ((char *) player + 0x158)) {
+        func_800F9F18(*(s32 *) ((char *) player + 0x184), player);
     } else {
-        func_800D4EB8(func_800A3274(param_0));
+        func_800D4EB8(func_800A3274(player));
     }
 }
 
-void func_800A17A8(PlayerState *param_0, s32 param_1)
+// Health change entry: delta is negative for damage (-0x3E7 kills). Cheat 9 forces full health.
+void func_800A17A8(PlayerState *player, s32 delta)
 {
-    s32 local_0;
-    if (*(s32 *) ((char *) param_0 + 0x158) != 0) {
-        func_800F9EC0(*(s32 *) ((char *) param_0 + 0x184), param_1);
+    s32 character;
+    if (*(s32 *) ((char *) player + 0x158) != 0) {
+        func_800F9EC0(*(s32 *) ((char *) player + 0x184), delta);
     } else {
-        local_0 = func_800A3274(param_0);
-        if (param_1 < 0 && D_80127092 != 0) {
+        character = func_800A3274(player);
+        if (delta < 0 && D_80127092 != 0) {
             return;
         }
-        if (func_800D4EB8(local_0)) {
+        if (func_800D4EB8(character)) {
             if (func_800D3E40(9)) {
-                param_1 = func_800D4EB8(local_0);
+                delta = func_800D4EB8(character);
             }
-            func_800D4E18(local_0, param_1);
+            func_800D4E18(character, delta);
             func_800A1294(0);
             if (func_800D3E40(4)) {
-                _batimer_set(param_0, 0xE, 3.0f);
+                _batimer_set(player, 0xE, 3.0f);
             }
         }
     }
 }
 
-int func_800A1870(Actor *param_0, s32 param_1)
+int func_800A1870(Actor *player, s32 param_1)
 {
-    s32 new_var;
-    if (*(s32 *) ((char *) param_0 + 0x158)) {
-        new_var = *(s32 *) ((char *) param_0 + 0x184);
-        func_800F9F2C(new_var);
+    s32 slot;
+    if (*(s32 *) ((char *) player + 0x158)) {
+        slot = *(s32 *) ((char *) player + 0x184);
+        func_800F9F2C(slot);
     } else {
-        func_800D4FB8(func_800A3274(param_0), param_1);
+        func_800D4FB8(func_800A3274(player), param_1);
+        // Matching: empty test steers IDO's register allocation.
         if ((!param_1 && !param_1) && !param_1) {
         }
         func_800A1294(1);
     }
 }
 
-int func_800A18C8(Actor *param_0)
+int func_800A18C8(Actor *player)
 {
-    func_800F9F74(*(s32 *) ((char *) param_0 + 0x184));
+    func_800F9F74(*(s32 *) ((char *) player + 0x184));
 }
 
-void func_800A18E8(s32 param_0)
+// Regeneration tick (cheat 4): heals 1 when below max.
+void func_800A18E8(s32 player)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 character;
+    s32 health;
 
-    if (_batimer_decrement(param_0, 0xE) != 0) {
-        local_0 = func_800A3274(param_0);
-        local_1 = func_800D4E7C(local_0);
-        if (local_1 != 0) {
-            if (local_1 < func_800D4EB8(local_0)) {
+    if (_batimer_decrement(player, 0xE) != 0) {
+        character = func_800A3274(player);
+        health = func_800D4E7C(character);
+        if (health != 0) {
+            if (health < func_800D4EB8(character)) {
                 func_800FC660(8);
-                func_800A17A8(param_0, 1);
+                func_800A17A8(player, 1);
             }
         }
     }
 }
 
+// TU-NOTE: this .rodata holds constants used by 1E79FD0 (formerly part of its rodata). They follow
+// that file's literals in the ROM, so they cannot live there: IDO places a file's const objects
+// before its literals. This is the next file in link order without .rodata of its own.
 const struct {
     f32 x;
     f32 pad[3];

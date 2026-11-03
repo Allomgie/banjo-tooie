@@ -4,189 +4,202 @@ extern f32 func_80013A7C(f32);
 extern f32 func_80013970(f32);
 
 typedef struct {
-    s32 unk0;
-    s32 unk1;
-    s32 unk2;
-    f32 unk3;
+    s32 unk_0;
+    s32 unk_4;
+    s32 unk_8;
+    f32 unk_C;
 } UnkStruct;
 
-func_800D9600(f32 param_0[4], f32 param_1[4])
+// Quaternion helpers: copy, conjugate, to matrix, compare, slerp, identity.
+// Quaternions are stored as (x, y, z, w).
+
+func_800D9600(f32 dst[4], f32 src[4])
 {
-    param_0[0] = param_1[0];
-    param_0[1] = param_1[1];
-    param_0[2] = param_1[2];
-    param_0[3] = param_1[3];
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+    dst[3] = src[3];
 }
 
-void func_800D9624(f32 *param_0, f32 *param_1)
+// Conjugate: negates x, y, z.
+void func_800D9624(f32 *dst, f32 *src)
 {
     s32 i;
     for (i = 0; i != 3; i++) {
-        param_0[i] = -param_1[i];
+        dst[i] = -src[i];
     }
-    param_0[3] = param_1[3];
+    dst[3] = src[3];
 }
 
-void func_800D965C(f32 *param_0, f32 param_1[][4])
+// Quaternion to 4x4 rotation matrix.
+void func_800D965C(f32 *q, f32 mtx[][4])
 {
-    f32 local_0, local_1, local_2, local_3;
-    f32 local_4, local_5, local_6;
-    f32 local_7, local_8, local_9, local_10, local_11, local_12;
-    if (param_0[0] == 0.0f && param_0[1] == 0.0f && param_0[2] == 0.0f && param_0[3] == 0.0f) {
+    f32 scale, wx, wy, wz;
+    f32 xs, ys, zs;
+    f32 xx, xy, xz, yy, yz, zz;
+    // Matching: empty block needed for the match.
+    if (q[0] == 0.0f && q[1] == 0.0f && q[2] == 0.0f && q[3] == 0.0f) {
     }
-    local_0 = 2.0f / (param_0[0] * param_0[0] + param_0[1] * param_0[1] + param_0[2] * param_0[2] +
-                      param_0[3] * param_0[3]);
-    local_4 = param_0[0] * local_0;
-    local_5 = param_0[1] * local_0;
-    local_6 = param_0[2] * local_0;
-    local_1 = param_0[3] * local_4;
-    local_2 = param_0[3] * local_5;
-    local_3 = param_0[3] * local_6;
-    local_7 = param_0[0] * local_4;
-    local_8 = param_0[0] * local_5;
-    local_9 = param_0[0] * local_6;
-    local_10 = param_0[1] * local_5;
-    local_11 = param_0[1] * local_6;
-    local_12 = param_0[2] * local_6;
-    param_1[0][0] = 1.0f - (local_10 + local_12);
-    param_1[0][1] = local_8 + local_3;
-    param_1[0][2] = local_9 - local_2;
-    param_1[1][0] = local_8 - local_3;
-    param_1[1][1] = 1.0f - (local_7 + local_12);
-    param_1[1][2] = local_11 + local_1;
-    param_1[2][0] = local_9 + local_2;
-    param_1[2][1] = local_11 - local_1;
-    param_1[2][2] = 1.0f - (local_7 + local_10);
-    param_1[3][3] = 1.0f;
-    param_1[0][3] = 0;
-    param_1[1][3] = 0;
-    param_1[2][3] = 0;
-    param_1[3][0] = 0;
-    param_1[3][1] = 0;
-    param_1[3][2] = 0;
+    scale = 2.0f / (q[0] * q[0] + q[1] * q[1] + q[2] * q[2] +
+                      q[3] * q[3]);
+    xs = q[0] * scale;
+    ys = q[1] * scale;
+    zs = q[2] * scale;
+    wx = q[3] * xs;
+    wy = q[3] * ys;
+    wz = q[3] * zs;
+    xx = q[0] * xs;
+    xy = q[0] * ys;
+    xz = q[0] * zs;
+    yy = q[1] * ys;
+    yz = q[1] * zs;
+    zz = q[2] * zs;
+    mtx[0][0] = 1.0f - (yy + zz);
+    mtx[0][1] = xy + wz;
+    mtx[0][2] = xz - wy;
+    mtx[1][0] = xy - wz;
+    mtx[1][1] = 1.0f - (xx + zz);
+    mtx[1][2] = yz + wx;
+    mtx[2][0] = xz + wy;
+    mtx[2][1] = yz - wx;
+    mtx[2][2] = 1.0f - (xx + yy);
+    mtx[3][3] = 1.0f;
+    mtx[0][3] = 0;
+    mtx[1][3] = 0;
+    mtx[2][3] = 0;
+    mtx[3][0] = 0;
+    mtx[3][1] = 0;
+    mtx[3][2] = 0;
 }
 
-int func_800D97E8(f32 param_0[4], f32 param_1[4])
+int func_800D97E8(f32 a[4], f32 b[4])
 {
-    return param_0[0] == param_1[0] && param_0[1] == param_1[1] && param_0[2] == param_1[2] &&
-           param_0[3] == param_1[3];
+    return a[0] == b[0] && a[1] == b[1] && a[2] == b[2] &&
+           a[3] == b[3];
 }
 
-void func_800D9888(f32 *param_0, f32 *param_1, f32 *param_2, f32 param_3)
+// Spherical linear interpolation from q1 to q2 by t.
+void func_800D9888(f32 *dst,f32 *q1, f32 *q2, f32 t)
 {
-    f32 local_0, local_1, local_2, local_3, local_4;
-    local_0 = param_1[0] * param_2[0] + param_1[1] * param_2[1] + param_1[2] * param_2[2] +
-              param_1[3] * param_2[3];
-    if (1.0f + local_0 > 1e-05f) {
-        if (1.0f - local_0 > 1e-05f) {
-            local_4 = func_80013A7C(local_0);
-            local_3 = func_80013970(local_4);
-            if (local_3 != 0.0f) {
-                local_1 = func_80013970((1.0f - param_3) * local_4) / local_3;
-                local_2 = func_80013970(param_3 * local_4) / local_3;
+    f32 dot, w1, w2, sin_theta, theta;
+    dot = q1[0] * q2[0] + q1[1] * q2[1] + q1[2] * q2[2] +
+              q1[3] * q2[3];
+    if (1.0f + dot > 1e-05f) {
+        if (1.0f - dot > 1e-05f) {
+            theta = func_80013A7C(dot);
+            sin_theta = func_80013970(theta);
+            if (sin_theta != 0.0f) {
+                w1 = func_80013970((1.0f - t) * theta) / sin_theta;
+                w2 = func_80013970(t * theta) / sin_theta;
             } else {
-                local_1 = 1.0f - param_3;
-                local_2 = param_3;
+                w1 = 1.0f - t;
+                w2 = t;
             }
         } else {
-            local_1 = 1.0f - param_3;
-            local_2 = param_3;
+            w1 = 1.0f - t;
+            w2 = t;
         }
-        param_0[0] = local_1 * param_1[0] + local_2 * param_2[0];
-        param_0[1] = local_1 * param_1[1] + local_2 * param_2[1];
-        param_0[2] = local_1 * param_1[2] + local_2 * param_2[2];
-        param_0[3] = local_1 * param_1[3] + local_2 * param_2[3];
+        dst[0] = w1 * q1[0] + w2 * q2[0];
+        dst[1] = w1 * q1[1] + w2 * q2[1];
+        dst[2] = w1 * q1[2] + w2 * q2[2];
+        dst[3] = w1 * q1[3] + w2 * q2[3];
     } else {
-        param_0[0] = -param_1[1];
-        param_0[1] = param_1[0];
-        param_0[2] = -param_1[3];
-        param_0[3] = param_1[2];
-        local_1 = func_80013970((1.0f - param_3) * 90.0f);
-        local_2 = func_80013970(param_3 * 90.0f);
-        param_0[0] = local_1 * param_1[0] + local_2 * param_0[0];
-        param_0[1] = local_1 * param_1[1] + local_2 * param_0[1];
-        param_0[2] = local_1 * param_1[2] + local_2 * param_0[2];
+        dst[0] = -q1[1];
+        dst[1] = q1[0];
+        dst[2] = -q1[3];
+        dst[3] = q1[2];
+        w1 = func_80013970((1.0f - t) * 90.0f);
+        w2 = func_80013970(t * 90.0f);
+        dst[0] = w1 * q1[0] + w2 * dst[0];
+        dst[1] = w1 * q1[1] + w2 * dst[1];
+        dst[2] = w1 * q1[2] + w2 * dst[2];
     }
 }
 
-void func_800D9AD4(f32 *param_0, f32 *param_1, f32 *param_2, f32 param_3)
+// Slerp along the shortest path: negates q2 if it lies on the far side of q1.
+void func_800D9AD4(f32 *dst,f32 *q1, f32 *q2, f32 t)
 {
-    f32 local_1;
-    f32 local_2;
-    f32 local_0[4];
+    f32 diff_sq;
+    f32 sum_sq;
+    f32 tmp[4];
 
-    local_0[0] = param_1[0] - param_2[0];
-    local_0[1] = param_1[1] - param_2[1];
-    local_0[2] = param_1[2] - param_2[2];
-    local_0[3] = param_1[3] - param_2[3];
+    tmp[0] = q1[0] - q2[0];
+    tmp[1] = q1[1] - q2[1];
+    tmp[2] = q1[2] - q2[2];
+    tmp[3] = q1[3] - q2[3];
 
-    local_1 = (local_0[0] * local_0[0]) + (local_0[1] * local_0[1]) + (local_0[2] * local_0[2]) +
-              (local_0[3] * local_0[3]);
+    diff_sq = (tmp[0] * tmp[0]) + (tmp[1] * tmp[1]) + (tmp[2] * tmp[2]) +
+              (tmp[3] * tmp[3]);
 
-    local_0[0] = param_1[0] + param_2[0];
-    local_0[1] = param_1[1] + param_2[1];
-    local_0[2] = param_1[2] + param_2[2];
-    local_0[3] = param_1[3] + param_2[3];
+    tmp[0] = q1[0] + q2[0];
+    tmp[1] = q1[1] + q2[1];
+    tmp[2] = q1[2] + q2[2];
+    tmp[3] = q1[3] + q2[3];
 
-    local_2 = (local_0[0] * local_0[0]) + (local_0[1] * local_0[1]) + (local_0[2] * local_0[2]) +
-              (local_0[3] * local_0[3]);
+    sum_sq = (tmp[0] * tmp[0]) + (tmp[1] * tmp[1]) + (tmp[2] * tmp[2]) +
+              (tmp[3] * tmp[3]);
 
-    if (local_1 <= local_2) {
-        func_800D9888(param_0, param_1, param_2, param_3);
+    if (diff_sq <= sum_sq) {
+        func_800D9888(dst, q1, q2, t);
         return;
     }
 
-    local_0[0] = -param_2[0];
-    local_0[1] = -param_2[1];
-    local_0[2] = -param_2[2];
-    local_0[3] = -param_2[3];
+    tmp[0] = -q2[0];
+    tmp[1] = -q2[1];
+    tmp[2] = -q2[2];
+    tmp[3] = -q2[3];
 
-    func_800D9888(param_0, param_1, local_0, param_3);
+    func_800D9888(dst, q1, tmp, t);
 }
 
-void func_800D9C34(UnkStruct *param_0)
+// Sets the identity quaternion (0, 0, 0, 1.0f).
+void func_800D9C34(UnkStruct *q)
 {
-    param_0->unk0 = 0;
-    param_0->unk1 = 0;
-    param_0->unk2 = 0;
-    ((s32 *) &param_0->unk3)[0] = 0x3F800000;
+    q->unk_0 = 0;
+    q->unk_4 = 0;
+    q->unk_8 = 0;
+    ((s32 *) &q->unk_C)[0] = 0x3F800000;
 }
 
-int func_800D9C4C(f32 param_0[4])
+// Returns whether q is the identity quaternion.
+int func_800D9C4C(f32 q[4])
 {
-    f32 local_1 = 0.0f;
-    return (((param_0[0] == local_1) && (param_0[1] == local_1)) && (param_0[2] == local_1)) &&
-           (param_0[3] == 1.0f);
+    // Matching: zero held in a local for the comparisons.
+    f32 zero = 0.0f;
+    return (((q[0] == zero) && (q[1] == zero)) && (q[2] == zero)) &&
+           (q[3] == 1.0f);
 }
 
-void func_800D9CE8(f32 *param_0, f32 param_1[][3])
+// Quaternion to 3x3 rotation matrix.
+void func_800D9CE8(f32 *q, f32 mtx[][3])
 {
-    f32 local_0, local_1, local_2, local_3;
-    f32 local_4, local_5, local_6;
-    f32 local_7, local_8, local_9, local_10, local_11, local_12;
-    if (param_0[0] == 0.0f && param_0[1] == 0.0f && param_0[2] == 0.0f && param_0[3] == 0.0f) {
+    f32 scale, wx, wy, wz;
+    f32 xs, ys, zs;
+    f32 xx, xy, xz, yy, yz, zz;
+    // Matching: empty block needed for the match.
+    if (q[0] == 0.0f && q[1] == 0.0f && q[2] == 0.0f && q[3] == 0.0f) {
     }
-    local_0 = 2.0f / (param_0[0] * param_0[0] + param_0[1] * param_0[1] + param_0[2] * param_0[2] +
-                      param_0[3] * param_0[3]);
-    local_4 = param_0[0] * local_0;
-    local_5 = param_0[1] * local_0;
-    local_6 = param_0[2] * local_0;
-    local_1 = param_0[3] * local_4;
-    local_2 = param_0[3] * local_5;
-    local_3 = param_0[3] * local_6;
-    local_7 = param_0[0] * local_4;
-    local_8 = param_0[0] * local_5;
-    local_9 = param_0[0] * local_6;
-    local_10 = param_0[1] * local_5;
-    local_11 = param_0[1] * local_6;
-    local_12 = param_0[2] * local_6;
-    param_1[0][0] = 1.0f - (local_10 + local_12);
-    param_1[0][1] = local_8 + local_3;
-    param_1[0][2] = local_9 - local_2;
-    param_1[1][0] = local_8 - local_3;
-    param_1[1][1] = 1.0f - (local_7 + local_12);
-    param_1[1][2] = local_11 + local_1;
-    param_1[2][0] = local_9 + local_2;
-    param_1[2][1] = local_11 - local_1;
-    param_1[2][2] = 1.0f - (local_7 + local_10);
+    scale = 2.0f / (q[0] * q[0] + q[1] * q[1] + q[2] * q[2] +
+                      q[3] * q[3]);
+    xs = q[0] * scale;
+    ys = q[1] * scale;
+    zs = q[2] * scale;
+    wx = q[3] * xs;
+    wy = q[3] * ys;
+    wz = q[3] * zs;
+    xx = q[0] * xs;
+    xy = q[0] * ys;
+    xz = q[0] * zs;
+    yy = q[1] * ys;
+    yz = q[1] * zs;
+    zz = q[2] * zs;
+    mtx[0][0] = 1.0f - (yy + zz);
+    mtx[0][1] = xy + wz;
+    mtx[0][2] = xz - wy;
+    mtx[1][0] = xy - wz;
+    mtx[1][1] = 1.0f - (xx + zz);
+    mtx[1][2] = yz + wx;
+    mtx[2][0] = xz + wy;
+    mtx[2][1] = yz - wx;
+    mtx[2][2] = 1.0f - (xx + yy);
 }

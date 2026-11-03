@@ -2,15 +2,16 @@
 
 extern s32 D_80127EF0[3];
 
+// Heap defrag hook for the three vectors of the lights overlay.
 void func_800B4380(void)
 {
-    s32 index;
-    s32 temp_a0;
+    s32 i;
+    s32 vec;
 
-    for (index = 0; index < 3; index++) {
-        temp_a0 = D_80127EF0[index];
-        if (temp_a0 != 0) {
-            D_80127EF0[index] = vector_defrag(temp_a0);
+    for (i = 0; i < 3; i++) {
+        vec = D_80127EF0[i];
+        if (vec != 0) {
+            D_80127EF0[i] = vector_defrag(vec);
         }
     }
 }

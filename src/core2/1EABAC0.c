@@ -2,23 +2,27 @@
 
 #define MAX_D2574(a, b) ((a) < (b) ? (b) : (a))
 #define MIN_D2574(a, b) ((a) < (b) ? (a) : (b))
+// Candidate infobar slots of one group.
 typedef struct {
-    s32 unk0;
-    u8 *unk4;
+    s32 count;
+    u8 *slots;
 } E_D21F0;
 extern E_D21F0 D_8011B45C[];
+// Item id shown in each of the 48 infobar slots, -1 if free.
 extern s16 D_8012B2C0[];
 extern u8 *D_8011B460[];
+// Same layout as EntryD2574, used to reset the entries.
 typedef struct {
-    u8 pad0[4];
-    s16 unk4;
-    s16 unk6;
-    f32 unk8;
+    u8 pad_0[4];
+    s16 target;
+    s16 extra;
+    f32 displayed;
 } A_D2438;
+// HUD counter of one item; D_8011AFB0[id - 0xC0].
 typedef struct {
-    u8 local_0, local_1;
-    s16 pad, local_2, pad2;
-    f32 local_3;
+    u8 group, sub_type;
+    s16 unk_2, target, extra;
+    f32 displayed; // rolls toward target
 } EntryD2574;
 extern EntryD2574 D_8011AFB0[];
 extern f32 func_800D8FF8(void);
@@ -26,251 +30,266 @@ extern s32 func_800FA8E8(s32, s32);
 extern s32 func_800FA874(s32, s32);
 extern s32 func_800FA818(s32, s32);
 
-s32 *func_800D21D0(param_0)
-s32 param_0;
+// Returns the counter entry of an item id (index is id - 0xC0).
+s32 *func_800D21D0(item_id)
+s32 item_id;
 {
-    s32 t6;
-    s32 t8;
-    s32 t7;
-    t6 = 3;
-    t6 = t6 << 2;
-    t6 = param_0 * t6;
-    t8 = &((s32 *) D_8011AFB0)[0];
-    t7 = t6;
-    t7 = t7 - 2304;
-    return t7 + t8;
+    s32 offset;
+    s32 table;
+    s32 entry_offset;
+    offset = 3;
+    offset = offset << 2;
+    offset = item_id * offset;
+    table = &((s32 *) D_8011AFB0)[0];
+    entry_offset = offset;
+    entry_offset = entry_offset - 2304;
+    return entry_offset + table;
 }
 
-s32 func_800D21F0(s32 param_0, s32 param_1)
+// Returns the slot showing an item among the candidate slots of a group, or -1.
+s32 func_800D21F0(s32 item_id, s32 group)
 {
-    u8 *p;
+    u8 *cand;
     u8 *end;
-    s32 c;
-    p = D_8011B45C[param_1].unk4;
-    end = p + D_8011B45C[param_1].unk0;
-    while (p < end) {
-        c = *p;
-        p++;
-        if (param_0 == D_8012B2C0[c]) {
-            return c;
+    s32 slot;
+    cand = D_8011B45C[group].slots;
+    end = cand + D_8011B45C[group].count;
+    while (cand < end) {
+        slot = *cand;
+        cand++;
+        if (item_id == D_8012B2C0[slot]) {
+            return slot;
         }
     }
     return -1;
 }
 
-int func_800D225C(param_0)
-s32 param_0;
+// Returns the first free candidate slot of a group, or -1.
+int func_800D225C(group)
+s32 group;
 {
-    u32 local_0;
-    u8 local_2;
-    u32 local_1;
-    u8 *local_3;
-    local_2 = *(u8 *) local_1;
-    local_3 = (param_0 * 8) + (u8 *) D_8011B45C;
-    local_1 = *(u32 *) (local_3 + 4);
-    local_0 = *(u32 *) local_3 + local_1;
-    if (local_1 < local_0) {
+    u32 end;
+    u8 slot;
+    u32 cand;
+    u8 *list;
+    // Matching: dead load through the uninitialized pointer, needed for the match.
+    slot = *(u8 *) cand;
+    list = (group * 8) + (u8 *) D_8011B45C;
+    cand = *(u32 *) (list + 4);
+    end = *(u32 *) list + cand;
+    if (cand < end) {
     loop_1:
-        local_2 = *(u8 *) local_1;
-
-        local_1 += 1;
-        if (D_8012B2C0[local_2] == -1) {
-            return local_2;
+        slot = *(u8 *) cand;
+        cand += 1;
+        if (D_8012B2C0[slot] == -1) {
+            return slot;
         }
-        if (local_1 < local_0) {
+        if (cand < end) {
             goto loop_1;
         }
     }
     return -1;
 }
 
-s32 func_800D22C8(param_0)
-s32 param_0;
+// Returns the first candidate slot of a group.
+s32 func_800D22C8(group)
+s32 group;
 {
-    return **(u8 **) ((char *) &D_8011B460 + (param_0 * 8));
+    return **(u8 **) ((char *) &D_8011B460 + (group * 8));
 }
 
-s32 func_800D22E0(u8 *param_0, s32 param_1)
+// Shows an entry's counter in the slot of its item (reused, free, or first of the group).
+// Returns nonzero if it was shown.
+s32 func_800D22E0(u8 *entry, s32 item_id)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
+    s32 result;
+    s32 shown;
+    s32 slot;
+    s32 found;
 
-    local_0 = 0;
-    local_3 = func_800D21F0(param_1, *(u8 *) ((s8 *) param_0 + 0));
-    local_2 = local_3;
-    if (local_3 < 0) {
-        local_3 = func_800D225C(*(u8 *) ((s8 *) param_0 + 0));
-        local_2 = local_3;
+    result = 0;
+    found = func_800D21F0(item_id, *(u8 *) ((s8 *) entry + 0));
+    slot = found;
+    if (found < 0) {
+        found = func_800D225C(*(u8 *) ((s8 *) entry + 0));
+        slot = found;
     }
-    if (local_3 < 0) {
-        local_3 = func_800D22C8(*(u8 *) ((s8 *) param_0 + 0));
-        local_2 = local_3;
+    if (found < 0) {
+        found = func_800D22C8(*(u8 *) ((s8 *) entry + 0));
+        slot = found;
     }
-    if (local_3 >= 0) {
-        local_1 = func_800FA708((s32) *(f32 *) ((s8 *) param_0 + 8), local_2,
-                                *(u8 *) ((s8 *) param_0 + 1), *(u8 *) ((s8 *) param_0 + 2));
-        local_0 = local_1;
-        if (local_1 != 0) {
-            func_800FA9B4(local_2, *(s16 *) ((s8 *) param_0 + 6));
-            D_8012B2C0[local_2] = (s16) param_1;
+    if (found >= 0) {
+        shown = func_800FA708((s32) *(f32 *) ((s8 *) entry + 8), slot,
+                              *(u8 *) ((s8 *) entry + 1), *(u8 *) ((s8 *) entry + 2));
+        result = shown;
+        if (shown != 0) {
+            func_800FA9B4(slot, *(s16 *) ((s8 *) entry + 6));
+            D_8012B2C0[slot] = (s16) item_id;
         }
     }
-    return local_0;
+    return result;
 }
 
-int func_800D2398(u8 *param_0, int param_1)
+int func_800D2398(u8 *entry, int item_id)
 {
-    int local_0 = func_800D21F0(param_1, param_0[0]);
-    return (local_0 >= 0) && (func_800FA8E8(local_0, param_0[1]) == 1);
+    int slot = func_800D21F0(item_id, entry[0]);
+    return (slot >= 0) && (func_800FA8E8(slot, entry[1]) == 1);
 }
 
-int func_800D23E8(u8 *param_0, int param_1)
+int func_800D23E8(u8 *entry, int item_id)
 {
-    int local_0 = func_800D21F0(param_1, param_0[0]);
-    return (local_0 >= 0) && (func_800FA874(local_0, param_0[1]) == 1);
+    int slot = func_800D21F0(item_id, entry[0]);
+    return (slot >= 0) && (func_800FA874(slot, entry[1]) == 1);
 }
 
+// Resets all counters and frees all slots.
 void func_800D2438(void)
 {
     s32 i;
     for (i = 0; i < 91; i++) {
-        ((A_D2438 *) D_8011AFB0)[i].unk4 = -1;
-        ((A_D2438 *) D_8011AFB0)[i].unk6 = 0;
-        ((A_D2438 *) D_8011AFB0)[i].unk8 = 0.0f;
+        ((A_D2438 *) D_8011AFB0)[i].target = -1;
+        ((A_D2438 *) D_8011AFB0)[i].extra = 0;
+        ((A_D2438 *) D_8011AFB0)[i].displayed = 0.0f;
     }
     for (i = 0; i < 48; i++) {
         ((s16 *) D_8012B2C0)[i] = -1;
     }
 }
 
-void func_800D2498(u32 param_0, u32 param_1, u32 param_2)
+// Initializes an unused counter with a value and extra, then shows it.
+void func_800D2498(u32 item_id, u32 value, u32 extra)
 {
-    u32 *local_0 = func_800D21D0();
-    *(u16 *) ((u8 *) local_0 + 4) = param_1;
-    *(float *) ((u8 *) local_0 + 8) = (s32) param_1;
-    *(u16 *) ((u8 *) local_0 + 6) = param_2;
-    func_800D22E0(local_0, param_0);
+    u32 *entry = func_800D21D0();
+    *(u16 *) ((u8 *) entry + 4) = value;
+    *(float *) ((u8 *) entry + 8) = (s32) value;
+    *(u16 *) ((u8 *) entry + 6) = extra;
+    func_800D22E0(entry, item_id);
 }
 
-s32 func_800D24E8(Gtexture *param_0, s32 param_1, s32 param_2)
+// Sets the target value and extra of a counter and shows it (unused entries have target -1).
+s32 func_800D24E8(Gtexture *item_id, s32 value, s32 extra)
 {
-    s32 local_1;
-    s16 *local_0;
-    local_0 = func_800D21D0(param_0);
-    if (local_0[2] < 0) {
-        func_800D2498((u32) param_0, param_1, param_2);
+    s32 result;
+    s16 *entry;
+    entry = func_800D21D0(item_id);
+    if (entry[2] < 0) {
+        func_800D2498((u32) item_id, value, extra);
     } else {
-        local_0[2] = param_1;
-        local_0[3] = param_2;
-        local_1 = func_800D22E0(local_0, param_0);
-        if (local_1 == 0) {
-            *(f32 *) &local_0[4] = local_0[2];
+        entry[2] = value;
+        entry[3] = extra;
+        result = func_800D22E0(entry, item_id);
+        if (result == 0) {
+            *(f32 *) &entry[4] = entry[2];
         }
-        return local_1;
+        return result;
     }
 }
 
+// Per frame: rolls the displayed value of each shown counter toward its target.
 void func_800D2574(void)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_5;
-    f32 local_2;
-    f32 local_3;
-    f32 local_4;
-    local_2 = func_800D8FF8();
-    for (local_0 = 0; local_0 < 91; local_0++) {
-        local_5 = local_0 + 0xC0;
-        local_1 = func_800D21F0(local_5, D_8011AFB0[local_0].local_0);
-        if (local_1 < 0)
+    s32 i;
+    s32 slot;
+    s32 item_id;
+    f32 dt;
+    f32 diff;
+    f32 dir;
+    dt = func_800D8FF8();
+    for (i = 0; i < 91; i++) {
+        item_id = i + 0xC0;
+        slot = func_800D21F0(item_id, D_8011AFB0[i].group);
+        if (slot < 0)
             continue;
-        if (func_800FA8E8(local_1, D_8011AFB0[local_0].local_1) != 1) {
-            D_8012B2C0[local_1] = -1;
+        if (func_800FA8E8(slot, D_8011AFB0[i].sub_type) != 1) {
+            D_8012B2C0[slot] = -1;
             continue;
         }
-        if (func_800FA874(local_1, D_8011AFB0[local_0].local_1)) {
-            if (D_8011AFB0[local_0].local_2 != (s32) D_8011AFB0[local_0].local_3) {
-                local_3 = D_8011AFB0[local_0].local_2 - D_8011AFB0[local_0].local_3;
-                local_4 = local_3 >= 0.0f ? 1.0f : -1.0f;
-                D_8011AFB0[local_0].local_3 +=
-                    local_4 * MIN_D2574(1.0f, MAX_D2574(local_3, 8.0f) * local_2);
-                func_800D22E0(&D_8011AFB0[local_0], local_5);
+        if (func_800FA874(slot, D_8011AFB0[i].sub_type)) {
+            if (D_8011AFB0[i].target != (s32) D_8011AFB0[i].displayed) {
+                diff = D_8011AFB0[i].target - D_8011AFB0[i].displayed;
+                dir = diff >= 0.0f ? 1.0f : -1.0f;
+                D_8011AFB0[i].displayed +=
+                    dir * MIN_D2574(1.0f, MAX_D2574(diff, 8.0f) * dt);
+                func_800D22E0(&D_8011AFB0[i], item_id);
             }
         }
     }
 }
 
-int func_800D2748(s32 param_0, s32 param_1)
+int func_800D2748(s32 item_id, s32 sub_type)
 {
-    u8 *local_0;
-    local_0 = func_800D21D0(param_0);
-    local_0++;
-    *local_0 = param_1;
+    u8 *field;
+    field = func_800D21D0(item_id);
+    field++;
+    *field = sub_type;
 }
 
-void func_800D2770(s32 param_0, s32 param_1)
+// Sets the value immediately, without rolling.
+void func_800D2770(s32 item_id, s32 value)
 {
-    void *local_0;
-    local_0 = func_800D21D0(param_0);
+    void *entry;
+    entry = func_800D21D0(item_id);
+    // Matching: the temporary in its own block is needed for the match.
     {
-        float f4;
-        f4 = (float) param_1;
-        *(float *) ((char *) local_0 + 8) = f4;
+        float value_f;
+        value_f = (float) value;
+        *(float *) ((char *) entry + 8) = value_f;
     }
-    *(s16 *) ((char *) local_0 + 4) = param_1;
+    *(s16 *) ((char *) entry + 4) = value;
 }
 
-s32 func_800D27A4(s32 param_0)
+s32 func_800D27A4(s32 item_id)
 {
-    u8 *local_0 = func_800D21D0(param_0);
-    return local_0[1];
+    u8 *entry = func_800D21D0(item_id);
+    return entry[1];
 }
 
-int func_800D27C8(u8 *param_0)
+// Returns the slot showing the item, or -1.
+int func_800D27C8(u8 *item_id)
 {
-    u8 *local_0;
-    local_0 = func_800D21D0();
-    func_800D21F0(param_0, *local_0);
+    u8 *entry;
+    entry = func_800D21D0();
+    func_800D21F0(item_id, *entry);
 }
 
-void func_800D27F4(s32 arg0)
+void func_800D27F4(s32 item_id)
 {
-    func_800D23E8(func_800D21D0(), arg0);
+    func_800D23E8(func_800D21D0(), item_id);
 }
 
-void func_800D2820(s32 arg0)
+void func_800D2820(s32 item_id)
 {
-    func_800D2398(func_800D21D0(), arg0);
+    func_800D2398(func_800D21D0(), item_id);
 }
 
-int func_800D284C(u32 param_0)
+int func_800D284C(u32 item_id)
 {
-    u8 *local_0 = func_800D21D0(param_0);
-    int local_1 = func_800D21F0(param_0, local_0[0]);
-    return (local_1 >= 0) && (func_800FA818(local_1, local_0[1]) == 1);
+    u8 *entry = func_800D21D0(item_id);
+    int slot = func_800D21F0(item_id, entry[0]);
+    return (slot >= 0) && (func_800FA818(slot, entry[1]) == 1);
 }
 
-int func_800D28A0(u8 *param_0)
+int func_800D28A0(u8 *item_id)
 {
-    u8 *local_0;
-    int local_1;
-    local_0 = func_800D21D0();
-    local_1 = func_800D21F0(param_0, *local_0);
-    if (local_1 >= 0) {
-        func_800FAA74(local_1);
+    u8 *entry;
+    int slot;
+    entry = func_800D21D0();
+    slot = func_800D21F0(item_id, *entry);
+    if (slot >= 0) {
+        func_800FAA74(slot);
         return 1;
     }
     return 0;
 }
 
-u32 func_800D28E8(s32 param_0)
+u32 func_800D28E8(s32 item_id)
 {
-    u8 *local_0 = func_800D21D0(param_0);
-    return local_0[2];
+    u8 *entry = func_800D21D0(item_id);
+    return entry[2];
 }
 
+// TU-NOTE: .data is defined here in C (values from the ROM). D_8011B460 is a linker
+// symbol for D_8011B45C + 0x4.
 EntryD2574 D_8011AFB0[91] = {
     0x9,  0x40, 0x0,   0x0,  0x0,  0.0f,  0x9,  0x5B, 0x0,   0x0,  0x0,  0.0f,  0x9,  0x58, 0x0,
     0x0,  0x0,  0.0f,  0xC,  0x0,  0x0,   0x0,  0x0,  0.0f,  0xD,  0x0,  0x0,   0x0,  0x0,  0.0f,

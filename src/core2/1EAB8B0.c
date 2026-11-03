@@ -1,21 +1,23 @@
 #include "common.h"
 
+// Minigame records (best times or scores), indexed by id - 0x80.
 s16 D_8012B260[23];
 extern s32 func_800D395C();
 extern s32 D_8012B290;
 
-u8 *func_800D1FC0(param_0)
-s32 param_0;
+// Address of record (id - 0x80); uses the alternate table (D_8012B290) in game mode 2.
+u8 *func_800D1FC0(index)
+s32 index;
 {
-    u8 *var_v1;
+    u8 *entry;
 
-    param_0 -= 0x80;
-    if (func_800D395C(param_0) != 0) {
-        var_v1 = (param_0 * 2) + (u8 *) &D_8012B290;
+    index -= 0x80;
+    if (func_800D395C(index) != 0) {
+        entry = (index * 2) + (u8 *) &D_8012B290;
     } else {
-        var_v1 = (param_0 * 2) + (u8 *) D_8012B260;
+        entry = (index * 2) + (u8 *) D_8012B260;
     }
-    return var_v1;
+    return entry;
 }
 
 void func_800D2014(void)
@@ -26,38 +28,40 @@ void func_800D2014(void)
     }
 }
 
-s32 func_800D2054(s32 param_0, s32 param_1, s32 param_2)
+// Stores value if it beats the record; mode selects the compare direction.
+// Returns 1 for a new record, 0 for a tie, -1 otherwise.
+s32 func_800D2054(s32 mode, s32 id, s32 value)
 {
-    s32 local_0;
-    s16 *local_1;
-    s32 local_2;
-    local_1 = func_800D1FC0(param_1);
-    if (*local_1 == 0)
-        local_0 = 1;
+    s32 result;
+    s16 *record;
+    s32 diff;
+    record = func_800D1FC0(id);
+    if (*record == 0)
+        result = 1;
     else {
-        switch (param_0) {
+        switch (mode) {
             case 0:
-                local_2 = param_2 - *local_1;
+                diff = value - *record;
                 break;
             case 1:
-                local_2 = *local_1 - param_2;
+                diff = *record - value;
                 break;
         }
-        local_0 = local_2 <= 0 ? (local_2 != 0 ? -1 : 0) : 1;
+        result = diff <= 0 ? (diff != 0 ? -1 : 0) : 1;
     }
-    if (local_0 == 1) {
+    if (result == 1) {
         if (func_800D395C())
             func_800DA544(0xD54);
-        *local_1 = param_2;
+        *record = value;
     }
-    return local_0;
+    return result;
 }
 
 int func_800D211C()
 {
-    s16 *local_0;
-    local_0 = func_800D1FC0();
-    return *local_0;
+    s16 *record;
+    record = func_800D1FC0();
+    return *record;
 }
 
 s32 func_800D2140()
@@ -65,24 +69,26 @@ s32 func_800D2140()
     return 0x2E;
 }
 
-int func_800D2148(u8 *param_0, u32 param_1)
+// Loads records from save data (at most 23 entries).
+int func_800D2148(u8 *src, u32 size)
 {
-    u32 local_0;
-    int local_1 = param_1 >> 1;
-    if (0x18 <= local_1) {
-        local_1 = 0x17;
+    u32 src_addr;
+    int count = size >> 1;
+    if (0x18 <= count) {
+        count = 0x17;
     }
-    local_0 = (u32) param_0;
-    rare_memcpy((s32 *) D_8012B260, local_0, local_1 << 1);
+    src_addr = (u32) src;
+    rare_memcpy((s32 *) D_8012B260, src_addr, count << 1);
 }
 
-s32 func_800D2188(void *param_0)
+// Saves records (0x2E bytes).
+s32 func_800D2188(void *dest)
 {
-    rare_memcpy(param_0, (s32 *) D_8012B260, 0x2E);
+    rare_memcpy(dest, (s32 *) D_8012B260, 0x2E);
 }
 
-int func_800D21B0(s32 *param_0, s32 **param_1)
+int func_800D21B0(s32 *size_out, s32 **data_out)
 {
-    *param_0 = 0x2E;
-    *param_1 = &D_8012B290;
+    *size_out = 0x2E;
+    *data_out = &D_8012B290;
 }

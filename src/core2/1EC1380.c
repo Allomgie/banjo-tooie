@@ -14,19 +14,24 @@ typedef struct {
 } ScissorRect;
 
 typedef struct {
+    // Scissor of the frame as a whole.
     ScissorRect frame_scissor;
+    // Current active scissor.
     ScissorRect active_scissor;
 } ScissorState;
 
 extern ScissorState D_8012D5D0;
 extern u32 D_8012D5E0;
 
+// get_depth_buffer
 void *func_8001A0A8();
+// get_framebuffer
 void *func_800A989C();
 
 void func_800E7FB0(s32 x, s32 y, s32 width, s32 height);
 void func_800E7FF8(Gfx **gfx, u32 geometry_mode);
 
+// Set the scissor, skipping redundant changes.
 void func_800E7A90(Gfx **gfx, s32 x, s32 y, s32 width, s32 height)
 {
     if ((x != D_8012D5D0.active_scissor.x) || (y != D_8012D5D0.active_scissor.y) ||
@@ -77,19 +82,21 @@ void func_800E7D4C(Gfx **gfx)
     func_800BC580(gfx, 0, 0, D_80127750, D_80127752);
 }
 
+// apply_frame_scissor_impl
 void func_800E7DAC(Gfx **gfx)
 {
     func_800E7A90(gfx, D_8012D5D0.frame_scissor.x, D_8012D5D0.frame_scissor.y,
                   D_8012D5D0.frame_scissor.width, D_8012D5D0.frame_scissor.height);
 }
 
-void func_800E7DE4(Gfx **gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
+// Clear a rectangle of the depth buffer.
+void func_800E7DE4(Gfx **gfx, s32 x, s32 y, s32 width, s32 height)
 {
     void *depth_buffer = func_8001A0A8();
     if (depth_buffer != NULL) {
         gDPSetColorImage((*gfx)++, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_80127750,
                          OS_K0_TO_PHYSICAL(depth_buffer));
-        func_800BC5B0(gfx, arg1, arg2, arg3, arg4);
+        func_800BC5B0(gfx, x, y, width, height);
         func_800E7CF4(gfx);
     }
 }
@@ -104,12 +111,14 @@ void func_800E7E70(Gfx **gfx)
     func_800E7DAC(gfx);
 }
 
+// apply_frame_scissor
 void func_800E7EC0(Gfx **gfx)
 {
     gDPPipeSync((*gfx)++);
     func_800E7DAC(gfx);
 }
 
+// end_frame_displaylist
 void func_800E7EF4(Gfx **gfx)
 {
     gDPFullSync((*gfx)++);
@@ -122,14 +131,17 @@ void func_800E7F40(Gfx **gfx)
     func_80014DD4(gfx);
 }
 
+// reset_scissor
 void func_800E7F60()
 {
+    // Matching: looks like a chained assignment for x and y in the codegen, but does not work as one.
     D_8012D5D0.active_scissor.width = D_8012D5D0.active_scissor.height = 0;
     D_8012D5D0.active_scissor.y = D_8012D5D0.active_scissor.height;
     D_8012D5D0.active_scissor.x = D_8012D5D0.active_scissor.height;
     func_800E7FB0(0, 0, D_80127750, D_80127752);
 }
 
+// set_frame_scissor
 void func_800E7FB0(s32 x, s32 y, s32 width, s32 height)
 {
     D_8012D5D0.frame_scissor.x = x;
@@ -138,17 +150,21 @@ void func_800E7FB0(s32 x, s32 y, s32 width, s32 height)
     D_8012D5D0.frame_scissor.height = height;
 }
 
-void func_800E7FCC(s32 *arg0)
+// get_active_scissor
+void func_800E7FCC(s32 *out)
 {
-    arg0[0] = D_8012D5D0.active_scissor.x;
-    arg0[1] = D_8012D5D0.active_scissor.y;
-    arg0[2] = D_8012D5D0.active_scissor.width;
-    arg0[3] = D_8012D5D0.active_scissor.height;
+    out[0] = D_8012D5D0.active_scissor.x;
+    out[1] = D_8012D5D0.active_scissor.y;
+    out[2] = D_8012D5D0.active_scissor.width;
+    out[3] = D_8012D5D0.active_scissor.height;
 }
 
+// backface_culling_dl
 extern Gfx D_80123418[];
+// frontface_culling_dl
 extern Gfx D_80123428[];
 
+// set_face_culling_mode
 void func_800E7FF8(Gfx **gfx, u32 geometry_mode)
 {
     D_8012D5E0 = geometry_mode;
@@ -157,11 +173,14 @@ void func_800E7FF8(Gfx **gfx, u32 geometry_mode)
                osVirtualToPhysical(geometry_mode == G_CULL_BACK ? D_80123418 : D_80123428));
 }
 
+// restore_face_culling_mode
 void func_800E8078(Gfx **gfx)
 {
     gSPDisplayList((*gfx)++, RSP_SEGMENT_FACE_CULLING << 24);
 }
 
+// TU-NOTE: the .data of this file (formerly asm/data/core2/1EC1380.data.s) is defined here in C.
+// Values are taken from the ROM.
 Gfx D_80123340[27] = {
     0xDB060000, 0x0,    0xD9C0F9FA, 0x0,      0xDB040004, 0x1,        0xDB04000C, 0x1,
     0xDB040014, 0xFFFF, 0xDB04001C, 0xFFFF,   0xE7000000, 0x0,        0xE2001E01, 0x0,

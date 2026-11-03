@@ -2,55 +2,55 @@
 
 typedef struct {
     u8 pad_0[0xB];
-    u8 pad_B : 6, field_B : 1, pad_B1 : 1;
+    u8 pad_B : 6, unk_B : 1, pad_B1 : 1;
 } LocalMarker;
 typedef struct {
-    LocalMarker *field_0;
-    void *field_4;
+    LocalMarker *unk_0;
+    void *unk_4;
     u8 pad_8[4];
-    s32 field_C;
-    s16 field_10;
+    s32 unk_C;
+    s16 unk_10;
     u8 pad_12[2];
-    u16 field_14, field_16;
-    u16 field_18 : 11, pad_18 : 5;
+    u16 model_id, anim_id;
+    u16 unk_18 : 11, pad_18 : 5;
     u8 pad_1A[4];
-    s16 field_1E[3];
+    s16 center[3];
 } LocalObject;
 typedef struct {
-    LocalObject *field_0;
+    LocalObject *marker;
     u8 pad_4[0x5C];
-    s16 field_60, field_62;
+    s16 model_instance, radius;
     u8 pad_64[4];
-    u16 field_68, field_6A;
+    u16 unk_68, unk_6A;
     u8 pad_6C[4];
-    u32 pad_70 : 28, field_73 : 1, pad_73 : 3;
-    u8 field_74 : 1, pad_74 : 7;
-    u8 field_75 : 1, pad_75 : 7;
+    u32 pad_70 : 28, has_resources : 1, pad_73 : 3;
+    u8 unk_74 : 1, pad_74 : 7;
+    u8 has_anim : 1, pad_75 : 7;
     u8 pad_76[0xA];
-    u16 field_80;
+    u16 unk_80;
     u8 pad_82[6];
-    s16 field_88, field_8A, field_8C, field_8E, field_90;
+    s16 min_y, max_y, anim_ctrl, floor_tint, glid;
 } LocalActor_80103140;
 typedef struct {
     u8 pad_0[0x12];
-    u16 field_12, field_14;
+    u16 unk_12, unk_14;
 } LocalModel;
 extern s32 func_800D58FC(s32);
 extern s16 func_80104328(void *param_0);
 typedef struct {
-    LocalObject *field_0;
+    LocalObject *marker;
     u8 pad_4[0x5C];
-    s16 field_60, field_62;
+    s16 model_instance, radius;
     u8 pad_64[4];
-    u16 field_68, field_6A;
+    u16 unk_68, unk_6A;
     u8 pad_6C[4];
-    u32 pad_70 : 28, field_73 : 1, pad_73 : 3;
-    u8 field_74 : 1, pad_74 : 7;
-    u8 field_75 : 1, pad_75 : 7;
+    u32 pad_70 : 28, has_resources : 1, pad_73 : 3;
+    u8 unk_74 : 1, pad_74 : 7;
+    u8 has_anim : 1, pad_75 : 7;
     u8 pad_76[0xA];
-    u16 field_80;
+    u16 unk_80;
     u8 pad_82[6];
-    s16 field_88, field_8A, field_8C, field_8E, field_90;
+    s16 min_y, max_y, anim_ctrl, floor_tint, glid;
 } LocalActor_80103328;
 extern LocalModel *func_800B2840(void *);
 extern s32 func_800B2248(LocalModel *);
@@ -60,24 +60,24 @@ extern void func_800EE940();
 extern s32 func_80106790();
 extern void func_800DF7F8(s32, f32, f32);
 typedef struct {
-    LocalObject *field_0;
+    LocalObject *marker;
     u8 pad_4[0x5C];
-    s16 field_60, field_62;
+    s16 model_instance, radius;
     u8 pad_64[4];
-    u16 field_68, field_6A;
+    u16 unk_68, unk_6A;
     u8 pad_6C[4];
-    u32 pad_70 : 7, field_70 : 1, pad_71 : 2, field_71 : 1, pad_71b : 5, field_72 : 6, pad_72 : 6,
-        field_73 : 1, pad_73 : 3;
-    u8 field_74 : 1, pad_74 : 7;
-    u8 field_75 : 1, pad_75 : 7;
+    u32 pad_70 : 7, unk_70 : 1, pad_71 : 2, unk_71 : 1, pad_71b : 5, init_anim : 6, pad_72 : 6,
+        has_resources : 1, pad_73 : 3;
+    u8 unk_74 : 1, pad_74 : 7;
+    u8 has_anim : 1, pad_75 : 7;
     u8 pad_76[5];
-    u8 field_7B : 2, pad_7B : 6;
+    u8 unk_7B : 2, pad_7B : 6;
     u8 pad_7C[4];
-    u16 field_80;
+    u16 unk_80;
     u8 pad_82[6];
-    s16 field_88, field_8A, field_8C, field_8E, field_90;
+    s16 min_y, max_y, anim_ctrl, floor_tint, glid;
     u8 pad_92[4];
-    u16 field_96 : 1, pad_96 : 15;
+    u16 unk_96 : 1, pad_96 : 15;
 } LocalActor_80103508;
 extern void *func_80100368(void);
 extern void *func_800D674C(s32);
@@ -94,19 +94,19 @@ extern void func_80102424(LocalActor_80103508 *, s32);
 extern void func_80104460(LocalActor_80103508 *);
 extern void func_8010108C(LocalActor_80103508 *, s32, void *);
 typedef struct {
-    LocalObject *field_0;
+    LocalObject *marker;
     u8 pad_4[0x5C];
-    s16 field_60, field_62;
+    s16 model_instance, radius;
     u8 pad_64[4];
-    u16 field_68, field_6A;
+    u16 unk_68, unk_6A;
     u8 pad_6C[4];
-    u32 pad_70 : 28, field_73 : 1, pad_73 : 3;
-    u8 field_74 : 1, pad_74 : 7;
-    u8 field_75 : 1, pad_75 : 7;
+    u32 pad_70 : 28, has_resources : 1, pad_73 : 3;
+    u8 unk_74 : 1, pad_74 : 7;
+    u8 has_anim : 1, pad_75 : 7;
     u8 pad_76[0xA];
-    u16 field_80;
+    u16 unk_80;
     u8 pad_82[6];
-    s16 field_88, field_8A, field_8C, field_8E, field_90;
+    s16 min_y, max_y, anim_ctrl, floor_tint, glid;
 } LocalActor_8010381C;
 extern void func_80100E18(s32);
 extern void func_800DBFD8(void *);
@@ -128,10 +128,10 @@ typedef struct {
 } S80103B24;
 extern s32 func_80100A74(s32, s32);
 typedef struct {
-    u8 local_0[0x70];
-    u32 local_1 : 10;
-    u32 local_2 : 1;
-    u32 local_3 : 21;
+    u8 pad_0[0x70];
+    u32 pad_70 : 10;
+    u32 unk_70_10 : 1;
+    u32 pad_70_11 : 21;
 } local_type;
 extern void func_800EE7F8(void *, void *);
 extern void func_800EE88C(s32, s32);
@@ -158,182 +158,187 @@ s32 func_80103D24();
 void func_80103D48();
 void func_80103D70();
 
-s32 func_80103140(LocalActor_80103140 *param_0, u16 param_1, u16 param_2)
+// Changes the actor's model and animation ids, releasing and reloading its resources.
+s32 func_80103140(LocalActor_80103140 *actor, u16 model_id, u16 anim_id)
 {
-    u16 local_3;
-    u32 local_0;
-    s32 local_1;
-    s32 local_2;
-    local_3 = param_0->field_0->field_14;
-    local_2 = local_3;
-    if (local_2 == param_1 && param_2 == param_0->field_0->field_16)
-        return local_3;
-    local_0 = param_0->field_73;
-    func_8010381C(param_0);
-    func_80103938(param_0);
-    param_0->field_74 = 0;
-    param_0->field_0->field_C = 0;
-    param_0->field_68 = 0;
-    param_0->field_6A = 0;
-    param_0->field_62 = 0;
-    param_0->field_0->field_18 = 0;
-    if (param_0->field_8C != 0)
-        func_80104328(param_0);
-    local_1 = func_800D58FC(param_1);
-    param_0->field_0->field_14 = param_1;
-    param_0->field_0->field_16 = param_2;
-    if (local_1 == 0)
-        param_0->field_0->field_0->field_B = 1;
+    u16 old_id;
+    u32 had_resources;
+    s32 unk_1;
+    s32 old_model_id;
+    old_id = actor->marker->model_id;
+    old_model_id = old_id;
+    if (old_model_id == model_id && anim_id == actor->marker->anim_id)
+        return old_id;
+    had_resources = actor->has_resources;
+    func_8010381C(actor);
+    func_80103938(actor);
+    actor->unk_74 = 0;
+    actor->marker->unk_C = 0;
+    actor->unk_68 = 0;
+    actor->unk_6A = 0;
+    actor->radius = 0;
+    actor->marker->unk_18 = 0;
+    if (actor->anim_ctrl != 0)
+        func_80104328(actor);
+    unk_1 = func_800D58FC(model_id);
+    actor->marker->model_id = model_id;
+    actor->marker->anim_id = anim_id;
+    if (unk_1 == 0)
+        actor->marker->unk_0->unk_B = 1;
     else
-        param_0->field_0->field_0->field_B = 0;
-    if (local_1 == 0)
-        func_80103328(param_0);
-    func_80103930(param_0);
-    if (local_0 && !param_0->field_73 && local_1 == 0) {
-        func_801039E4(param_0->field_0);
-        func_800D62E4(param_0->field_0->field_14);
+        actor->marker->unk_0->unk_B = 0;
+    if (unk_1 == 0)
+        func_80103328(actor);
+    func_80103930(actor);
+    if (had_resources && !actor->has_resources && unk_1 == 0) {
+        func_801039E4(actor->marker);
+        func_800D62E4(actor->marker->model_id);
     }
-    return local_2;
+    return old_model_id;
 }
 
-unsigned int func_801032B0(void *param_0, u16 param_1, u16 param_2)
+// Like func_80103140, but preserves the anim controller handle at +0x8C.
+unsigned int func_801032B0(void *actor, u16 model_id, u16 anim_id)
 {
-    s32 local_1;
-    s32 local_0;
-    local_0 = ((s16 *) param_0)[70];
-    ((s16 *) param_0)[70] = 0;
-    local_1 = func_80103140(param_0, param_1, param_2);
-    if (((s16 *) param_0)[70] != 0) {
-        func_80104328(param_0);
+    s32 result;
+    s32 saved;
+    saved = ((s16 *) actor)[70];
+    ((s16 *) actor)[70] = 0;
+    result = func_80103140(actor, model_id, anim_id);
+    if (((s16 *) actor)[70] != 0) {
+        func_80104328(actor);
     }
-    ((s16 *) param_0)[70] = local_0;
-    return local_1;
+    ((s16 *) actor)[70] = saved;
+    return result;
 }
 
-void func_80103328(param_0) LocalActor_80103328 *param_0;
+// Loads the model asset once and caches its bounding-box metrics in the actor.
+void func_80103328(actor) LocalActor_80103328 *actor;
 {
-    s32 local_0[3];
-    s32 local_1[3];
-    f32 local_2[3];
-    LocalModel *local_3;
-    f32 local_4;
-    void *local_5;
-    if (param_0->field_68 == 0) {
-        local_5 = func_80103964(param_0->field_0);
-        if (local_5 != 0) {
-            func_800D62E4(param_0->field_0->field_14);
-            local_3 = func_800B2840(local_5);
-            param_0->field_68 = local_3->field_12;
-            param_0->field_6A = local_3->field_14;
-            param_0->field_62 = func_800B2248(local_3);
-            func_800B2198(local_3, local_0, local_1);
-            param_0->field_88 = local_0[1];
-            param_0->field_8A = local_1[1];
-            func_800B237C(local_3, local_2, &local_4);
-            func_800EE940(param_0->field_0->field_1E, local_2);
-            param_0->field_0->field_18 = local_4;
+    s32 min_pos[3];
+    s32 max_pos[3];
+    f32 center[3];
+    LocalModel *model;
+    f32 unk_4;
+    void *asset;
+    if (actor->unk_68 == 0) {
+        asset = func_80103964(actor->marker);
+        if (asset != 0) {
+            func_800D62E4(actor->marker->model_id);
+            model = func_800B2840(asset);
+            actor->unk_68 = model->unk_12;
+            actor->unk_6A = model->unk_14;
+            actor->radius = func_800B2248(model);
+            func_800B2198(model, min_pos, max_pos);
+            actor->min_y = min_pos[1];
+            actor->max_y = max_pos[1];
+            func_800B237C(model, center, &unk_4);
+            func_800EE940(actor->marker->center, center);
+            actor->marker->unk_18 = unk_4;
         }
     }
 }
 
 int func_8010347C(s32 param_0)
 {
-    s32 local_0;
-    u16 local_1;
-    local_0 = func_80106790();
-    func_80103328(local_0);
-    local_1 = *(u16 *) (param_0 + 0x14);
-    func_800DF7F8(local_1, (f32) *(u16 *) (local_0 + 0x68), (f32) *(u16 *) (local_0 + 0x6A));
+    s32 actor;
+    u16 model_id;
+    actor = func_80106790();
+    func_80103328(actor);
+    model_id = *(u16 *) (param_0 + 0x14);
+    func_800DF7F8(model_id, (f32) *(u16 *) (actor + 0x68), (f32) *(u16 *) (actor + 0x6A));
     return 0;
 }
 
-void func_80103508(LocalActor_80103508 *param_0)
+// Acquires the actor's resources according to its ActorInfo flags, then sends message 0x29.
+void func_80103508(LocalActor_80103508 *actor)
 {
-    void *local_0;
-    LocalObject *local_1;
-    void *local_2;
-    void *local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6[3];
-    LocalModel *local_8;
-    void *local_7;
-    if (!param_0->field_73) {
-        local_1 = param_0->field_0;
-        local_0 = func_80100368();
-        local_3 = func_801039A4(local_1);
-        if (!local_3)
-            local_3 = func_801039E4(local_1);
-        func_80103328(param_0);
-        if (local_1->field_16)
-            local_2 = func_800D674C(local_1->field_16);
+    void *info;
+    LocalObject *marker;
+    void *anim_asset;
+    void *model_asset;
+    s32 unk_4;
+    s32 unk_5;
+    s32 unk_6[3];
+    LocalModel *model;
+    void *unk_7;
+    if (!actor->has_resources) {
+        marker = actor->marker;
+        info = func_80100368();
+        model_asset = func_801039A4(marker);
+        if (!model_asset)
+            model_asset = func_801039E4(marker);
+        func_80103328(actor);
+        if (marker->anim_id)
+            anim_asset = func_800D674C(marker->anim_id);
         else
-            local_2 = 0;
-        local_4 = param_0->field_7B ? 1 : 0;
-        local_5 = param_0->field_70 ? 2 : (param_0->field_71 ? 1 : 0);
-        if ((local_4 || local_5) && !param_0->field_60) {
-            if (param_0->field_96)
-                _subaddiefade_entrypoint_9(param_0, local_6);
-            param_0->field_60 = func_80100D24(local_3, local_1->field_14, local_5, local_4,
-                                              local_1->field_16, param_0->field_96 ? local_6 : 0);
+            anim_asset = 0;
+        unk_4 = actor->unk_7B ? 1 : 0;
+        unk_5 = actor->unk_70 ? 2 : (actor->unk_71 ? 1 : 0);
+        if ((unk_4 || unk_5) && !actor->model_instance) {
+            if (actor->unk_96)
+                _subaddiefade_entrypoint_9(actor, unk_6);
+            actor->model_instance = func_80100D24(model_asset, marker->model_id, unk_5, unk_4,
+                                              marker->anim_id, actor->unk_96 ? unk_6 : 0);
         }
-        if (local_2 && local_5 >= 2) {
-            local_7 = func_80103D24(param_0);
-            local_8 = func_800B2840(local_3);
-            func_800B25D8(local_7, local_8, local_2);
+        if (anim_asset && unk_5 >= 2) {
+            unk_7 = func_80103D24(actor);
+            model = func_800B2840(model_asset);
+            func_800B25D8(unk_7, model, anim_asset);
         }
-        if (local_2) {
-            local_7 = func_80103C94(param_0);
-            local_8 = func_800B2840(local_3);
-            func_800B25D8(local_7, local_8, local_2);
-            func_800D6CEC(local_1->field_16);
+        if (anim_asset) {
+            unk_7 = func_80103C94(actor);
+            model = func_800B2840(model_asset);
+            func_800B25D8(unk_7, model, anim_asset);
+            func_800D6CEC(marker->anim_id);
         }
-        if (!local_1->field_4 && func_80102FA0(local_0, 0x40))
-            local_1->field_4 = func_800DBFF8();
-        if (!param_0->field_90 && func_80102FA0(local_0, 0x1000))
-            func_80105DFC(param_0);
-        if (!local_1->field_10 && func_80102FA0(local_0, 0x20))
-            local_1->field_10 = func_800AE020();
-        if (!param_0->field_80 && func_80102FA0(local_0, 0x4000))
-            param_0->field_80 = func_800D88F8();
-        if (!param_0->field_8C && param_0->field_75)
-            func_80102424(param_0, param_0->field_72);
-        if (!param_0->field_8E && func_80102FA0(local_0, 0x40000))
-            func_80104460(param_0);
-        param_0->field_73 = 1;
-        func_8010108C(param_0, 0x29, local_3);
+        if (!marker->unk_4 && func_80102FA0(info, 0x40))
+            marker->unk_4 = func_800DBFF8();
+        if (!actor->glid && func_80102FA0(info, 0x1000))
+            func_80105DFC(actor);
+        if (!marker->unk_10 && func_80102FA0(info, 0x20))
+            marker->unk_10 = func_800AE020();
+        if (!actor->unk_80 && func_80102FA0(info, 0x4000))
+            actor->unk_80 = func_800D88F8();
+        if (!actor->anim_ctrl && actor->has_anim)
+            func_80102424(actor, actor->init_anim);
+        if (!actor->floor_tint && func_80102FA0(info, 0x40000))
+            func_80104460(actor);
+        actor->has_resources = 1;
+        func_8010108C(actor, 0x29, model_asset);
     }
 }
 
-void func_8010381C(param_0) LocalActor_8010381C *param_0;
+// Releases the resources acquired by func_80103508, then sends message 0x2A.
+void func_8010381C(actor) LocalActor_8010381C *actor;
 {
-    LocalObject *local_0;
-    local_0 = param_0->field_0;
-    if (param_0->field_73) {
-        if (param_0->field_60) {
-            func_80100E18(param_0->field_60);
-            param_0->field_60 = 0;
+    LocalObject *marker;
+    marker = actor->marker;
+    if (actor->has_resources) {
+        if (actor->model_instance) {
+            func_80100E18(actor->model_instance);
+            actor->model_instance = 0;
         }
-        if (local_0->field_4) {
-            func_800DBFD8(local_0->field_4);
-            local_0->field_4 = 0;
+        if (marker->unk_4) {
+            func_800DBFD8(marker->unk_4);
+            marker->unk_4 = 0;
         }
-        if (param_0->field_90)
-            func_80106138(param_0);
-        if (local_0->field_10) {
-            func_800ADFE0(local_0->field_10);
-            local_0->field_10 = 0;
+        if (actor->glid)
+            func_80106138(actor);
+        if (marker->unk_10) {
+            func_800ADFE0(marker->unk_10);
+            marker->unk_10 = 0;
         }
-        if (param_0->field_80) {
-            func_800D8954(param_0->field_80);
-            param_0->field_80 = 0;
+        if (actor->unk_80) {
+            func_800D8954(actor->unk_80);
+            actor->unk_80 = 0;
         }
-        if (param_0->field_75 && param_0->field_8C)
-            func_80104328(param_0);
-        if (param_0->field_8E)
-            func_80104504(param_0);
-        param_0->field_73 = 0;
-        func_8010108C(param_0, 0x2A, 0);
+        if (actor->has_anim && actor->anim_ctrl)
+            func_80104328(actor);
+        if (actor->floor_tint)
+            func_80104504(actor);
+        actor->has_resources = 0;
+        func_8010108C(actor, 0x2A, 0);
     }
 }
 
@@ -341,64 +346,67 @@ void func_80103930(s32 arg0)
 {
 }
 
-void func_80103938(param_0) u8 *param_0;
+void func_80103938(actor) u8 *actor;
 {
-    if (*(s16 *) (param_0 + 0x8E) != 0) {
+    if (*(s16 *) (actor + 0x8E) != 0) {
         func_80104504();
     }
 }
 
-int func_80103964(param_0)
-Actor *param_0;
+// Loads the model asset for marker+0x14; returns 0 for id 0 or 0xFFFF.
+int func_80103964(marker)
+Actor *marker;
 {
-    if ((*(u16 *) ((char *) param_0 + 0x14) == 0) ||
-        (*(u16 *) ((char *) param_0 + 0x14) == 0xFFFF)) {
+    if ((*(u16 *) ((char *) marker + 0x14) == 0) ||
+        (*(u16 *) ((char *) marker + 0x14) == 0xFFFF)) {
         return 0;
     }
     {
-        return func_800D674C(*(u16 *) ((char *) param_0 + 0x14) | 0);
+        // Matching: `| 0` needed for the match.
+        return func_800D674C(*(u16 *) ((char *) marker + 0x14) | 0);
     }
 }
 
-int func_801039A4(param_0)
-Actor *param_0;
+int func_801039A4(marker)
+Actor *marker;
 {
-    int local_0;
-    local_0 = *(u16 *) ((char *) param_0 + 0x14);
-    if ((*(u16 *) ((char *) param_0 + 0x14) == 0) || (local_0 == 0xFFFF)) {
+    int model_id;
+    model_id = *(u16 *) ((char *) marker + 0x14);
+    if ((*(u16 *) ((char *) marker + 0x14) == 0) || (model_id == 0xFFFF)) {
         return 0;
     }
     {
-        return func_800D6B0C(*(u16 *) ((char *) param_0 + 0x14) | 0);
+        // Matching: `| 0` needed for the match.
+        return func_800D6B0C(*(u16 *) ((char *) marker + 0x14) | 0);
     }
 }
 
-s32 func_801039E4(param_0)
-Actor *param_0;
+s32 func_801039E4(marker)
+Actor *marker;
 {
     typedef struct {
         u32 pad_0[2];
         u32 pad_8_2 : 30;
-        u32 local_0 : 1;
+        u32 unk_8_30 : 1;
     } Struct801039E4;
-    s32 local_0;
-    Actor *local_1;
-    local_0 = func_80103964();
-    if (local_0 == 0) {
+    s32 model_asset;
+    Actor *actor;
+    model_asset = func_80103964();
+    if (model_asset == 0) {
         return 0;
     }
-    local_1 = func_80106790(param_0);
-    func_80103D48(local_1);
-    func_80103508(local_1);
-    if ((((u32) *(u32 *) ((char *) local_1 + 0x74) >> 0x1F) == 0) &&
-        (*(s32 *) ((char *) param_0 + 0xC) == 0)) {
-        if ((((Struct801039E4 *) param_0->unk0)->local_0 != 0) && (func_800B2824(local_0) != 0)) {
-            _subaddiecustomhits_entrypoint_0(local_1, &_subaddiecustomhits_entrypoint_1);
+    actor = func_80106790(marker);
+    func_80103D48(actor);
+    func_80103508(actor);
+    if ((((u32) *(u32 *) ((char *) actor + 0x74) >> 0x1F) == 0) &&
+        (*(s32 *) ((char *) marker + 0xC) == 0)) {
+        if ((((Struct801039E4 *) marker->unk0)->unk_8_30 != 0) && (func_800B2824(model_asset) != 0)) {
+            _subaddiecustomhits_entrypoint_0(actor, &_subaddiecustomhits_entrypoint_1);
         }
-        local_1->pad74_31 = 1;
+        actor->pad74_31 = 1;
     }
-    func_80103D70(local_1);
-    return local_0;
+    func_80103D70(actor);
+    return model_asset;
 }
 
 void func_80103AA0()
@@ -406,201 +414,210 @@ void func_80103AA0()
     func_801039A4();
 }
 
-int func_80103AC0(void **param_0)
+int func_80103AC0(void **marker_ref)
 {
-    s32 new_var;
-    s32 local_0;
-    new_var = ((u16 *) param_0[0])[0xA];
-    local_0 = new_var;
-    func_800D6C34(local_0);
+    s32 raw_id;
+    s32 model_id;
+    raw_id = ((u16 *) marker_ref[0])[0xA];
+    model_id = raw_id;
+    func_800D6C34(model_id);
 }
 
-int func_80103AE4(Actor *param_0)
+int func_80103AE4(Actor *marker)
 {
-    if ((*(u16 *) ((char *) param_0 + 0x14) == 0) ||
-        (*(u16 *) ((char *) param_0 + 0x14) == 0xFFFF)) {
+    if ((*(u16 *) ((char *) marker + 0x14) == 0) ||
+        (*(u16 *) ((char *) marker + 0x14) == 0xFFFF)) {
         return 0;
     }
     {
-        return func_800D674C(*(u16 *) ((char *) param_0 + 0x14) | 0);
+        // Matching: `| 0` needed for the match.
+        return func_800D674C(*(u16 *) ((char *) marker + 0x14) | 0);
     }
 }
 
-s32 func_80103B24(S80103B24 *param_0, s32 param_1, s32 param_2)
+// Returns the vertex buffer: the instance's if one exists, otherwise the asset's.
+s32 func_80103B24(S80103B24 *actor, s32 flip, s32 asset)
 {
-    if (param_2 == 0) {
+    if (asset == 0) {
         return 0;
     }
-    if (param_0->flag70 && param_0->unk60 != 0) {
-        return func_80100A74(param_0->unk60, param_0->flag71 ^ param_1);
+    if (actor->flag70 && actor->unk60 != 0) {
+        return func_80100A74(actor->unk60, actor->flag71 ^ flip);
     }
-    if (param_0->flag71_2 && param_0->unk60 != 0) {
-        return func_80100A74(param_0->unk60, 0);
+    if (actor->flag71_2 && actor->unk60 != 0) {
+        return func_80100A74(actor->unk60, 0);
     }
-    return func_800B2840(param_2);
+    return func_800B2840(asset);
 }
 
-int func_80103BBC(s32 *param_0)
+int func_80103BBC(s32 *actor)
 {
-    s32 local_0;
-    local_0 = func_801039A4(*param_0);
-    func_80103B24(param_0, 0, local_0 | 0);
+    s32 asset;
+    asset = func_801039A4(*actor);
+    // Matching: `| 0` needed for the match.
+    func_80103B24(actor, 0, asset | 0);
 }
 
-int func_80103BF0(s32 *param_0, s32 param_1, s32 param_2)
+int func_80103BF0(s32 *actor, s32 flip, s32 asset)
 {
-    if (param_2 == 0)
-        param_2 = func_80103964(param_0[0]);
-    if (param_2 == 0)
+    if (asset == 0)
+        asset = func_80103964(actor[0]);
+    if (asset == 0)
         return 0;
-    if (*(u8 *) ((u8 *) param_0 + 0x70) & 1) {
-        return func_80100A74(*(s16 *) ((u8 *) param_0 + 0x60),
-                             ((u32) *(u8 *) ((u8 *) param_0 + 0x71) >> 7) ^ param_1);
+    if (*(u8 *) ((u8 *) actor + 0x70) & 1) {
+        return func_80100A74(*(s16 *) ((u8 *) actor + 0x60),
+                             ((u32) *(u8 *) ((u8 *) actor + 0x71) >> 7) ^ flip);
     }
-    if (((local_type *) param_0)->local_2)
-        return func_80100A74(*(s16 *) ((u8 *) param_0 + 0x60), 0);
-    return func_800B2840(param_2);
+    if (((local_type *) actor)->unk_70_10)
+        return func_80100A74(*(s16 *) ((u8 *) actor + 0x60), 0);
+    return func_800B2840(asset);
 }
 
-int func_80103C94(p0)
-s32 p0;
+int func_80103C94(actor)
+s32 actor;
 {
-    func_80103BF0(p0, 0, 0);
+    func_80103BF0(actor, 0, 0);
 }
 
-int func_80103CB8(s32 param_0, s32 param_1)
+int func_80103CB8(s32 actor, s32 asset)
 {
-    func_80103BF0(param_0, 0 | 0, param_1 | 0);
+    // Matching: `| 0` needed for the match.
+    func_80103BF0(actor, 0 | 0, asset | 0);
 }
 
-int func_80103CDC(s32 param_0, s32 param_1)
+int func_80103CDC(s32 actor, s32 asset)
 {
-    func_80103B24(param_0, 0 | 0, param_1 | 0);
+    // Matching: `| 0` needed for the match.
+    func_80103B24(actor, 0 | 0, asset | 0);
 }
 
-void func_80103D00(s32 arg0, s32 arg1)
+void func_80103D00(s32 actor, s32 asset)
 {
-    func_80103B24(arg0, 0x1, arg1);
+    func_80103B24(actor, 0x1, asset);
 }
 
-s32 func_80103D24(map)
-s32 map;
+s32 func_80103D24(actor)
+s32 actor;
 {
-    func_80103BF0(map, 1, 0);
+    func_80103BF0(actor, 1, 0);
 }
 
-void func_80103D48(param_0) void *param_0;
+void func_80103D48(actor) void *actor;
 {
-    func_800D70F8(*(u16 *) ((char *) *(s32 *) param_0 + 0x14), 1);
+    func_800D70F8(*(u16 *) ((char *) *(s32 *) actor + 0x14), 1);
 }
 
-void func_80103D70(param_0) int param_0;
+void func_80103D70(actor) int actor;
 {
-    func_800D70F8(*(u16 *) (*(int *) param_0 + 0x14), 0);
+    func_800D70F8(*(u16 *) (*(int *) actor + 0x14), 0);
 }
 
-s32 func_80103D98(void *param_0)
+s32 func_80103D98(void *marker)
 {
-    s32 local_0;
+    s32 model_asset;
 
-if (func_800AE0E8(*(s16 *) ((u8 *) param_0 + 0x10)) == 0) {
+if (func_800AE0E8(*(s16 *) ((u8 *) marker + 0x10)) == 0) {
     return 0;
 }
 
-local_0 = func_801039A4(param_0);
+model_asset = func_801039A4(marker);
 
-if (local_0 == 0) {
+if (model_asset == 0) {
     return 0;
 }
 
-func_800D62E4(*(u16 *) ((u8 *) param_0 + 0x14), local_0);
-return func_800B2824(local_0);
+func_800D62E4(*(u16 *) ((u8 *) marker + 0x14), model_asset);
+return func_800B2824(model_asset);
 
 }
 
-void func_80103DFC(Actor *param_0, f32 *param_1)
+// Writes the model centre in world space to out_pos.
+void func_80103DFC(Actor *actor, f32 *out_pos)
 {
-    if (*(u16 *) (*(u32 *) (u8 *) param_0 + 0x14) == 0xFFFF) {
-        func_800EE7F8(param_1, (u8 *) param_0 + 4);
+    if (*(u16 *) (*(u32 *) (u8 *) actor + 0x14) == 0xFFFF) {
+        func_800EE7F8(out_pos, (u8 *) actor + 4);
         return;
     }
 
-func_80103328(param_0);
-func_800EE7F8(param_1, (u8 *) param_0 + 4);
-*((f32 *) (param_1 + 1)) +=
-    *((f32 *) ((u8 *) param_0 + 0x38)) *
-    (*((s16 *) ((u8 *) param_0 + 0x88)) +
-     (*((s16 *) ((u8 *) param_0 + 0x8A)) - *((s16 *) ((u8 *) param_0 + 0x88))) * 0.5f);
+func_80103328(actor);
+func_800EE7F8(out_pos, (u8 *) actor + 4);
+*((f32 *) (out_pos + 1)) +=
+    *((f32 *) ((u8 *) actor + 0x38)) *
+    (*((s16 *) ((u8 *) actor + 0x88)) +
+     (*((s16 *) ((u8 *) actor + 0x8A)) - *((s16 *) ((u8 *) actor + 0x88))) * 0.5f);
 }
 
-f32 func_80103EAC(u8 *param_0)
+// Returns the model radius scaled by the actor's scale.
+f32 func_80103EAC(u8 *actor)
 {
-    f32 local_0;
-    u16 local_1;
-    int new_var;
+    f32 radius;
+    u16 radius_u16;
+    int raw_radius;
+    // Matching: do/while(0) and the repeated load are needed for the match.
     do {
         func_80103328();
-        local_1 = *((u16 *) (((s8 *) param_0) + 0x62));
-        new_var = *((u16 *) (((s8 *) param_0) + 0x62));
-        local_1 = new_var;
-        local_0 = (f32) local_1;
-        return (*((f32 *) (((s8 *) param_0) + 0x38))) * local_0;
+        radius_u16 = *((u16 *) (((s8 *) actor) + 0x62));
+        raw_radius = *((u16 *) (((s8 *) actor) + 0x62));
+        radius_u16 = raw_radius;
+        radius = (f32) radius_u16;
+        return (*((f32 *) (((s8 *) actor) + 0x38))) * radius;
     } while (0);
 }
 
-f32 func_80103EF4(u8 *param_0)
+// Returns the model height (max_y - min_y) scaled by the actor's scale.
+f32 func_80103EF4(u8 *actor)
 {
     func_80103328();
-    return (*((f32 *) (((s8 *) param_0) + 0x38))) *
-           ((f32) ((*((s16 *) (((s8 *) param_0) + 0x8A))) -
-                   (*((s16 *) (((s8 *) param_0) + 0x88)))));
+    return (*((f32 *) (((s8 *) actor) + 0x38))) *
+           ((f32) ((*((s16 *) (((s8 *) actor) + 0x8A))) -
+                   (*((s16 *) (((s8 *) actor) + 0x88)))));
 }
 
-f32 func_80103F38(u8 *param_0, s32 param_1)
+f32 func_80103F38(u8 *actor, s32 unk_1)
 {
-    func_80103328(param_0);
+    func_80103328(actor);
 
-if (param_1 != 0) {
-    func_800EE88C(param_1, *(s32 *) param_0 + 0x1E);
-    func_800EF334(param_1, *(f32 *) (param_0 + 0x38));
-    func_800EF04C(param_1, param_0 + 4);
+if (unk_1 != 0) {
+    func_800EE88C(unk_1, *(s32 *) actor + 0x1E);
+    func_800EF334(unk_1, *(f32 *) (actor + 0x38));
+    func_800EF04C(unk_1, actor + 4);
 }
 
-return *(f32 *) (param_0 + 0x38) * (u32) *(u16 *) (param_0 + 0x68);
+return *(f32 *) (actor + 0x38) * (u32) *(u16 *) (actor + 0x68);
 }
 
-f32 func_80103FB8(S_103FB8 *param_0)
+f32 func_80103FB8(S_103FB8 *actor)
 {
-    func_80103328(param_0);
-    return (f32) (u32) param_0->unk6A * param_0->unk38;
+    func_80103328(actor);
+    return (f32) (u32) actor->unk6A * actor->unk38;
 }
 
-int func_80104004(OSTask_t **param_0, s32 param_1, s32 param_2)
+int func_80104004(OSTask_t **actor, s32 unk_1, s32 unk_2)
 {
-    OSTask_t **new_var;
-    u32 local_1[2];
+    OSTask_t **marker_ref;
+    u32 min_pos[2];
     s32 pad0;
-    u32 local_2[2];
-    OSTask_t *new_var2;
-    u32 local_0;
-    local_0 = func_801039E4(*param_0);
+    u32 max_pos[2];
+    OSTask_t *model;
+    u32 model_asset;
+    model_asset = func_801039E4(*actor);
 
-if (!local_0) {
+if (!model_asset) {
     return 0;
 }
 
-new_var = &(*param_0);
-func_800D62E4(*((u16 *) (((u8 *) (*new_var)) + 0x14)), local_0);
-new_var2 = func_800B2840(local_0);
-func_800B2198(new_var2, &local_1, &local_2);
-func_800EE84C(param_1, &local_1);
-func_800EE84C(param_2, &local_2);
-func_800EF334(param_1, *((f32 *) (((char *) param_0) + 56)));
-func_800EF334(param_2, *((f32 *) (((char *) param_0) + 56)));
+marker_ref = &(*actor);
+func_800D62E4(*((u16 *) (((u8 *) (*marker_ref)) + 0x14)), model_asset);
+model = func_800B2840(model_asset);
+func_800B2198(model, &min_pos, &max_pos);
+func_800EE84C(unk_1, &min_pos);
+func_800EE84C(unk_2, &max_pos);
+func_800EF334(unk_1, *((f32 *) (((char *) actor) + 56)));
+func_800EF334(unk_2, *((f32 *) (((char *) actor) + 56)));
 return 1;
 }
 
-void func_801040A8(u8 **param_0)
+void func_801040A8(u8 **actor)
 {
-    func_800AE080(*(s16 *) ((u8 *) *param_0 + 0x10));
+    func_800AE080(*(s16 *) ((u8 *) *actor + 0x10));
 }

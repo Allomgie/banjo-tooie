@@ -1,60 +1,66 @@
 #include "common.h"
 
+// One zoom preset entry for (map, preset index).
 typedef struct {
-    s16 local_0;
-    s16 local_1;
-    s16 local_2[9];
+    s16 map_id;
+    s16 preset_idx;
+    s16 values[9]; // three zoom levels x three parameters
 } local_type_800A5930;
 extern local_type_800A5930 *D_801270F0;
+// Per-level table entry; terminated by level 0.
 typedef struct {
-    s32 local_0;
-    void *local_1;
+    s32 level;
+    void *presets;
 } local_type_800A5A4C;
 extern u8 D_8012762C;
 extern u8 D_80119BC0[];
 extern local_type_800A5A4C D_80119BD8[];
 
-local_type_800A5930 *func_800A5930(s32 param_0)
+// Find the entry for the current map and `preset_idx`; returns the terminator if none.
+local_type_800A5930 *func_800A5930(s32 preset_idx)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = func_800EA05C();
-    for (local_1 = 0; D_801270F0[local_1].local_0 != 0; local_1++) {
-        if (local_0 == D_801270F0[local_1].local_0 && param_0 == D_801270F0[local_1].local_1)
-            return &D_801270F0[local_1];
+    s32 map_id;
+    s32 i;
+    map_id = func_800EA05C();
+    for (i = 0; D_801270F0[i].map_id != 0; i++) {
+        if (map_id == D_801270F0[i].map_id && preset_idx == D_801270F0[i].preset_idx)
+            return &D_801270F0[i];
     }
-    return &D_801270F0[local_1];
+    return &D_801270F0[i];
 }
 
-void func_800A59B8(s32 param_0, s32 *param_1, s32 *param_2, s32 *param_3, s32 *param_4,
-                   s32 *param_5, s32 *param_6, s32 *param_7, s32 *param_8, s32 *param_9)
+// Copy the nine preset values out.
+void func_800A59B8(s32 preset_idx, s32 *out_0, s32 *out_1, s32 *out_2, s32 *out_3,
+                   s32 *out_4, s32 *out_5, s32 *out_6, s32 *out_7, s32 *out_8)
 {
-    u8 *temp_v0;
+    u8 *entry;
 
-    temp_v0 = func_800A5930(param_0);
-    *param_1 = (s32) *(s16 *) ((s8 *) temp_v0 + 4);
-    *param_2 = (s32) *(s16 *) ((s8 *) temp_v0 + 6);
-    *param_3 = (s32) *(s16 *) ((s8 *) temp_v0 + 8);
-    *param_4 = (s32) *(s16 *) ((s8 *) temp_v0 + 0xA);
-    *param_5 = (s32) *(s16 *) ((s8 *) temp_v0 + 0xC);
-    *param_6 = (s32) *(s16 *) ((s8 *) temp_v0 + 0xE);
-    *param_7 = (s32) *(s16 *) ((s8 *) temp_v0 + 0x10);
-    *param_8 = (s32) *(s16 *) ((s8 *) temp_v0 + 0x12);
-    *param_9 = (s32) *(s16 *) ((s8 *) temp_v0 + 0x14);
+    entry = func_800A5930(preset_idx);
+    *out_0 = (s32) *(s16 *) ((s8 *) entry + 4);
+    *out_1 = (s32) *(s16 *) ((s8 *) entry + 6);
+    *out_2 = (s32) *(s16 *) ((s8 *) entry + 8);
+    *out_3 = (s32) *(s16 *) ((s8 *) entry + 0xA);
+    *out_4 = (s32) *(s16 *) ((s8 *) entry + 0xC);
+    *out_5 = (s32) *(s16 *) ((s8 *) entry + 0xE);
+    *out_6 = (s32) *(s16 *) ((s8 *) entry + 0x10);
+    *out_7 = (s32) *(s16 *) ((s8 *) entry + 0x12);
+    *out_8 = (s32) *(s16 *) ((s8 *) entry + 0x14);
 }
 
+// Select the preset table for the current level (default D_80119BC0).
 void func_800A5A4C(void)
 {
     s32 i;
-    s32 local_1;
-    local_1 = D_8012762C;
+    s32 level;
+    level = D_8012762C;
     D_801270F0 = D_80119BC0;
-    for (i = 0; D_80119BD8[i].local_0; i++) {
-        if (local_1 == D_80119BD8[i].local_0)
-            D_801270F0 = D_80119BD8[i].local_1;
+    for (i = 0; D_80119BD8[i].level; i++) {
+        if (level == D_80119BD8[i].level)
+            D_801270F0 = D_80119BD8[i].presets;
     }
 }
 
+// TU-NOTE: the .data of this file is defined here in C; values are taken from the ROM.
 u32 D_80119550[17] = {0x1410000, 0x2260258, 0x640352,  0x38400C8, 0x47E04B0, 0x12C00AF,
                       0x10226,   0x258012C, 0x3520384, 0x2BC047E, 0x4B004B0, 0x0,
                       0x2260258, 0x960352,  0x384012C, 0x47E04B0, 0x1C20000};

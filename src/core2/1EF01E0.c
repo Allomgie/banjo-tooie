@@ -13,156 +13,160 @@ struct LocalHuft {
 extern struct LocalHuft *D_80124A80;
 extern u32 D_80137388;
 
+// Points the huft table storage at the shared static scratch buffers.
 void func_801168F0()
 {
     D_80124A8C = &D_80011000;
     D_80124A80 = &D_8000E800;
 }
 
-void func_80116914(u32 *param_0, u32 param_1, u32 param_2, u16 *param_3, u16 *param_4,
-                   struct LocalHuft **param_5, s32 *param_6)
+// huft_build from zlib inflate. Tables come from a linear pool (D_80124A80 + D_80137388), not malloc.
+void func_80116914(u32 *lengths, u32 n, u32 simple_count, u16 *base_values, u16 *extra_bits,
+                   struct LocalHuft **out_table, s32 *out_bits)
 {
-    unsigned local_0;
-    unsigned local_1[16 + 1];
-    unsigned local_2;
-    int local_3;
-    int local_4;
-    register unsigned local_5;
-    register unsigned local_6;
-    register int local_7;
-    int local_8;
-    register unsigned *local_9;
-    register struct LocalHuft *local_10;
-    struct LocalHuft local_11;
-    struct LocalHuft *local_12[16];
-    unsigned local_13[288];
-    register int local_14;
-    unsigned local_15[16 + 1];
-    unsigned *local_16;
-    int local_17;
-    unsigned local_18;
+    unsigned remaining;
+    unsigned counts[16 + 1];
+    unsigned fill;
+    int max_len;
+    int level;
+    register unsigned i;
+    register unsigned j;
+    register int len;
+    int table_bits;
+    register unsigned *ptr;
+    register struct LocalHuft *table;
+    struct LocalHuft entry;
+    struct LocalHuft *tables[16];
+    unsigned values[288];
+    register int shift;
+    unsigned offsets[16 + 1];
+    unsigned *offset_ptr;
+    int dummy;
+    unsigned table_size;
 
-    bzero(local_1, sizeof(local_1));
-    local_9 = param_0;
-    local_5 = param_1;
+    bzero(counts, sizeof(counts));
+    ptr = lengths;
+    i = n;
     do {
-        local_1[*local_9]++;
-        local_9++;
-    } while (--local_5);
-    if (local_1[0] == param_1) {
-        *param_5 = (struct LocalHuft *) NULL;
-        *param_6 = 0;
+        counts[*ptr]++;
+        ptr++;
+    } while (--i);
+    if (counts[0] == n) {
+        *out_table = (struct LocalHuft *) NULL;
+        *out_bits = 0;
         return;
     }
 
-    local_8 = *param_6;
-    for (local_6 = 1; local_6 <= 16; local_6++)
-        if (local_1[local_6])
+    table_bits = *out_bits;
+    for (j = 1; j <= 16; j++)
+        if (counts[j])
             break;
-    local_7 = local_6;
-    if ((unsigned) local_8 < local_6)
-        local_8 = local_6;
-    for (local_5 = 16; local_5; local_5--)
-        if (local_1[local_5])
+    len = j;
+    if ((unsigned) table_bits < j)
+        table_bits = j;
+    for (i = 16; i; i--)
+        if (counts[i])
             break;
-    local_3 = local_5;
-    if ((unsigned) local_8 > local_5)
-        local_8 = local_5;
-    *param_6 = local_8;
+    max_len = i;
+    if ((unsigned) table_bits > i)
+        table_bits = i;
+    *out_bits = table_bits;
 
-    for (local_17 = 1 << local_6; local_6 < local_5; local_6++, local_17 <<= 1) {
-        (local_17 -= local_1[local_6]);
+    for (dummy = 1 << j; j < i; j++, dummy <<= 1) {
+        (dummy -= counts[j]);
     }
-    local_17 -= local_1[local_5];
-    local_1[local_5] += local_17;
+    dummy -= counts[i];
+    counts[i] += dummy;
 
-    local_15[1] = local_6 = 0;
-    local_9 = local_1 + 1;
-    local_16 = local_15 + 2;
-    while (--local_5) {
-        *local_16++ = (local_6 += *local_9++);
+    offsets[1] = j = 0;
+    ptr = counts + 1;
+    offset_ptr = offsets + 2;
+    while (--i) {
+        *offset_ptr++ = (j += *ptr++);
     }
 
-    local_9 = param_0;
-    local_5 = 0;
+    ptr = lengths;
+    i = 0;
     do {
-        if ((local_6 = *local_9++) != 0)
-            local_13[local_15[local_6]++] = local_5;
-    } while (++local_5 < param_1);
+        if ((j = *ptr++) != 0)
+            values[offsets[j]++] = i;
+    } while (++i < n);
 
-    local_15[0] = local_5 = 0;
-    local_9 = local_13;
-    local_4 = -1;
-    local_14 = -local_8;
-    local_12[0] = (struct LocalHuft *) NULL;
-    local_10 = (struct LocalHuft *) NULL;
-    local_18 = 0;
+    offsets[0] = i = 0;
+    ptr = values;
+    level = -1;
+    shift = -table_bits;
+    tables[0] = (struct LocalHuft *) NULL;
+    table = (struct LocalHuft *) NULL;
+    table_size = 0;
 
-    for (; local_7 <= local_3; local_7++) {
-        local_0 = local_1[local_7];
-        while (local_0--) {
-            while (local_7 > local_14 + local_8) {
-                local_4++;
-                local_14 += local_8;
+    for (; len <= max_len; len++) {
+        remaining = counts[len];
+        while (remaining--) {
+            while (len > shift + table_bits) {
+                level++;
+                shift += table_bits;
 
-                local_18 =
-                    (local_18 = local_3 - local_14) > (unsigned) local_8 ? local_8 : local_18;
-                if ((local_2 = 1 << (local_6 = local_7 - local_14)) > local_0 + 1) {
-                    local_2 -= local_0 + 1;
-                    local_16 = local_1 + local_7;
-                    while (++local_6 < local_18) {
-                        if ((local_2 <<= 1) <= *++local_16)
+                table_size =
+                    (table_size = max_len - shift) > (unsigned) table_bits ? table_bits : table_size;
+                if ((fill = 1 << (j = len - shift)) > remaining + 1) {
+                    fill -= remaining + 1;
+                    offset_ptr = counts + len;
+                    while (++j < table_size) {
+                        if ((fill <<= 1) <= *++offset_ptr)
                             break;
-                        local_2 -= *local_16;
+                        fill -= *offset_ptr;
                     }
                 }
-                local_18 = 1 << local_6;
+                table_size = 1 << j;
 
-                local_10 = D_80124A80 + D_80137388;
+                table = D_80124A80 + D_80137388;
 
-                D_80137388 += local_18 + 1;
-                *param_5 = local_10 + 1;
-                *(param_5 = &local_10->v.t) = (struct LocalHuft *) NULL;
-                local_12[local_4] = ++local_10;
+                D_80137388 += table_size + 1;
+                *out_table = table + 1;
+                *(out_table = &table->v.t) = (struct LocalHuft *) NULL;
+                tables[level] = ++table;
 
-                if (local_4) {
-                    local_15[local_4] = local_5;
-                    local_11.b = (u8) local_8;
-                    local_11.e = (u8) (16 + local_6);
-                    local_11.v.t = local_10;
-                    local_6 = local_5 >> (local_14 - local_8);
-                    local_12[local_4 - 1][local_6] = local_11;
+                if (level) {
+                    offsets[level] = i;
+                    entry.b = (u8) table_bits;
+                    entry.e = (u8) (16 + j);
+                    entry.v.t = table;
+                    j = i >> (shift - table_bits);
+                    tables[level - 1][j] = entry;
                 }
             }
 
-            local_11.b = (u8) (local_7 - local_14);
-            if (local_9 >= local_13 + param_1)
-                local_11.e = 99;
-            else if (*local_9 < param_2) {
-                local_11.e = (u8) (*local_9 < 256 ? 16 : 15);
-                local_11.v.n = *local_9;
-                local_9++;
+            entry.b = (u8) (len - shift);
+            if (ptr >= values + n)
+                entry.e = 99; // invalid code
+            else if (*ptr < simple_count) {
+                entry.e = (u8) (*ptr < 256 ? 16 : 15);
+                entry.v.n = *ptr;
+                ptr++;
             } else {
-                local_11.e = *((u8 *) param_4 + (*local_9 - param_2));
-                local_11.v.n = param_3[*local_9++ - param_2];
+                entry.e = *((u8 *) extra_bits + (*ptr - simple_count));
+                entry.v.n = base_values[*ptr++ - simple_count];
             }
 
-            local_2 = 1 << (local_7 - local_14);
-            for (local_6 = local_5 >> local_14; local_6 < local_18; local_6 += local_2)
-                local_10[local_6] = local_11;
+            fill = 1 << (len - shift);
+            for (j = i >> shift; j < table_size; j += fill)
+                table[j] = entry;
 
-            for (local_6 = 1 << (local_7 - 1); local_5 & local_6; local_6 >>= 1)
-                local_5 ^= local_6;
-            local_5 ^= local_6;
+            for (j = 1 << (len - 1); i & j; j >>= 1)
+                i ^= j;
+            i ^= j;
 
-            while ((local_5 & ((1 << local_14) - 1)) != local_15[local_4]) {
-                local_4--;
-                local_14 -= local_8;
+            while ((i & ((1 << shift) - 1)) != offsets[level]) {
+                level--;
+                shift -= table_bits;
             }
         }
     }
 }
 
+// TU-NOTE: the .data of this file (formerly asm/data/core2/1EF01E0.data.s) is defined here in C;
+// values are taken from the ROM.
 struct LocalHuft *D_80124A80 = 0;
 static u32 D_80124A80_rest[2] = {0x0, 0x0};
 s32 *D_80124A8C = 0;

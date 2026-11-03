@@ -1,6 +1,8 @@
 #include "core2/1E8F430.h"
 #include <ultra64.h>
 
+// Hand-expanded SDK texture-tile and TEXRECT commands for func_800B62CC.
+// Matching: their statement boundaries steer IDO's scheduling.
 #define B62CC_RDPHALF_1 0xE1
 #define B62CC_RDPHALF_2 0xF1
 
@@ -121,22 +123,23 @@ extern void func_800E253C(f32);
 extern void func_800E7988(Gfx **, s32);
 extern void func_800E2E48(Gfx **, s32, s32, s32 *);
 extern void func_800E7A2C(Gfx **);
+// w/h describe the source texture, x/y the drawn extent.
 typedef struct {
     u8 w, h, x, y;
 } B62CCGlyph;
 typedef struct {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
+    s32 entries;
+    s32 font_loaded;
+    s32 gradient_rows; // vertical extent of the gradient texture strip
     u8 pad_C[0x12];
     u8 jitter;
-    u8 centered;
+    u8 centered; // half-advance adjustment already applied
     u8 font;
     u8 fixed_spacing;
-    s16 gradient_y;
+    s16 gradient_y; // -0x7FFF disables the gradient
     u8 pad_24[4];
-    s16 local_3;
-    s16 local_4;
+    s16 icon_id;
+    s16 unk_2A;
 } B62CCState;
 extern u8 D_801281A4[];
 extern s32 func_800D35BC();
@@ -287,6 +290,7 @@ typedef struct {
     s16 unk28;
     s16 unk2A;
 } PrintState_800B798C;
+// D_80128180 is the text print state; each function views it through its own struct.
 typedef union {
     PrintState_800B5C7C PrintState_800B5C7C;
     void *void_p;
@@ -320,59 +324,65 @@ int func_800B7B68();
 
 extern s32 D_801282B4;
 
+// Matching: the line breaks in this function are needed for the match.
+// Clear all 40 emitter slots.
 void func_800B5B40()
 {
-    u8 *s0;
-    u8 *s1;
-    do { s1 = D_80128179; s0 = D_80128151; do { func_800B58D4(*s0); s0++; *(s0 + -1) = 0; } while (s0 != s1); } while (0);
+    u8 *slot;
+    u8 *end;
+    do { end = D_80128179; slot = D_80128151; do { func_800B58D4(*slot); slot++; *(slot + -1) = 0; } while (slot != end); } while (0);
 }
 
+// Create the 40 emitter slots from the sprite-id table D_8011A5C2.
 void func_800B5B88()
 {
-    u8 *s0 = (u8 *) D_80128151, *s1 = &D_8011A5C2, *s2 = (u8 *) D_80128179;
+    u8 *slot = (u8 *) D_80128151, *entry = &D_8011A5C2, *end = (u8 *) D_80128179;
     do {
-        s32 res = func_800B5758(s1[1]);
-        s1 += 2;
-        *s0++ = res;
-    } while (s0 != s2);
+        s32 handle = func_800B5758(entry[1]);
+        entry += 2;
+        *slot++ = handle;
+    } while (slot != end);
 }
 
-s32 func_800B5BE4(s32 param_0)
+// Fetch emitter slot by index.
+s32 func_800B5BE4(s32 index)
 {
-    u8 *local_0 = &D_80128150;
-    local_0 += param_0;
-    func_800B56D0(*local_0);
+    u8 *slot = &D_80128150;
+    slot += index;
+    func_800B56D0(*slot);
 }
 
-u8 *func_800B5C10(s32 param_0, s32 param_1, s32 *param_2, s32 *param_3)
+// Look up a glyph: returns its entry, sets the texture format and image address.
+u8 *func_800B5C10(s32 font, s32 glyph_id, s32 *format, s32 *image)
 {
-    s32 local_0;
-    u8 *local_1;
-    local_0 = func_800D3524(param_0);
-    local_1 = func_800B0D6C(local_0, param_1);
-    *param_2 = func_800B0D58(local_0);
-    *param_3 = *(s32 *) ((s8 *) local_1 + 4) + func_800B0D60(local_0);
-    return local_1;
+    s32 tex;
+    u8 *glyph;
+    tex = func_800D3524(font);
+    glyph = func_800B0D6C(tex, glyph_id);
+    *format = func_800B0D58(tex);
+    *image = *(s32 *) ((s8 *) glyph + 4) + func_800B0D60(tex);
+    return glyph;
 }
 
+// Fill the gradient texture with count rows ramping 0..0xFF.
 void func_800B5C7C(s32 count)
 {
-    s8 *p;
+    s8 *row;
     s32 i;
     s32 j;
-    s32 offset;
+    s32 row_offset;
 
     D_80128180.PrintState_800B5C7C.gradientRows = count - 1;
 
     i = 0;
-    offset = 0;
+    row_offset = 0;
     while (i < count) {
-        p = offset + D_801281B0;
+        row = row_offset + D_801281B0;
         for (j = 0; j < 0x20; j++) {
-            p[j] = (s8) ((i * 0xFF) / D_80128180.PrintState_800B5C7C.gradientRows);
+            row[j] = (s8) ((i * 0xFF) / D_80128180.PrintState_800B5C7C.gradientRows);
         }
         i++;
-        offset += 0x20;
+        row_offset += 0x20;
     }
     osWritebackDCache(&D_801281B0, count * 0x20);
 }
@@ -405,6 +415,8 @@ int func_800B5E3C()
     }
 }
 
+// Print control codes: 0xFD starts an escape ('l','h','j','a','c','i','p'), 0xFE/0xFF set a flag.
+// Returns 1 when consumed, 0x21 for an ordinary character.
 s32 func_800B5E74(letter)
 u8 letter;
 {
@@ -482,56 +494,58 @@ u8 letter;
     return 1;
 }
 
-s32 func_800B5FE4(u8 param_0, f32 *param_1, s32 param_2, f32 param_3)
+// Returns the glyph index for ch, or -1 for spaces and control codes.
+s32 func_800B5FE4(u8 ch, f32 *cursor_x, s32 unk_2, f32 scale)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 glyph;
+    s32 advance;
     if (D_80128180.arr[0x1C] == 0) {
-        local_0 = func_800D35D0(D_80128180.arr[0x20], param_0);
-        if (local_0 != -1) {
-            return local_0;
+        glyph = func_800D35D0(D_80128180.arr[0x20], ch);
+        if (glyph != -1) {
+            return glyph;
         }
-        if (param_0 == 0x20) {
+        if (ch == 0x20) {
             if (D_80128180.arr[0x21] != 0) {
-                local_1 = func_800D35BC(D_80128180.arr[0x20], param_0);
+                advance = func_800D35BC(D_80128180.arr[0x20], ch);
             } else {
-                local_1 = func_800D3574(D_80128180.arr[0x20], param_0);
+                advance = func_800D3574(D_80128180.arr[0x20], ch);
             }
-            *param_1 += (f32) local_1 * param_3;
+            *cursor_x += (f32) advance * scale;
             return -1;
         }
     }
-    if (func_800B5E74(param_0) != 0)
+    if (func_800B5E74(ch) != 0)
         return -1;
     return -1;
 }
 
-void func_800B60C0(Gfx **gfx, f32 *xPtr, f32 *yPtr, f32 scale)
+// Draw an inline sprite icon at the cursor.
+void func_800B60C0(Gfx **gfx, f32 *cursor_x, f32 *cursor_y, f32 scale)
 {
     f32 x;
     f32 y;
-    s32 wq;
-    s32 hq;
+    s32 quarter_w;
+    s32 quarter_h;
     s32 w;
     s32 h;
-    s32 res;
+    s32 sprite;
     s32 pos[2];
 
-    res = func_800D674C(D_80128180.PrintState_800B60C0.unk28);
-    func_800AF5B0(res, &w, &h);
-    wq = w / 4;
-    hq = h / 4;
+    sprite = func_800D674C(D_80128180.PrintState_800B60C0.unk28);
+    func_800AF5B0(sprite, &w, &h);
+    quarter_w = w / 4;
+    quarter_h = h / 4;
     if (D_80128180.PrintState_800B60C0.centered == 0) {
-        *xPtr -= (f32) wq * 0.5f * scale;
+        *cursor_x -= (f32) quarter_w * 0.5f * scale;
         D_80128180.PrintState_800B60C0.centered = 1;
     }
-    x = *xPtr;
-    y = *yPtr;
+    x = *cursor_x;
+    y = *cursor_y;
     if (D_80128180.PrintState_800B60C0.jitter != 0) {
         x += func_800DC178(-1.0f, 1.0f) * scale;
         y += func_800DC178(-1.0f, 1.0f) * scale;
     }
-    y -= (f32) hq * 0.5f * scale;
+    y -= (f32) quarter_h * 0.5f * scale;
     pos[0] = (s32) (x * 4.0f);
     pos[1] = (s32) (y * 4.0f);
     func_800E257C(D_80128180.PrintState_800B60C0.unk27);
@@ -540,154 +554,159 @@ void func_800B60C0(Gfx **gfx, f32 *xPtr, f32 *yPtr, f32 scale)
     func_800E2568(w, h);
     func_800E253C(scale);
     func_800E7988(gfx, 0x80000);
-    func_800E2E48(gfx, res, D_80128180.PrintState_800B60C0.unk2A - 1, pos);
-    *xPtr += (f32) wq * scale;
+    func_800E2E48(gfx, sprite, D_80128180.PrintState_800B60C0.unk2A - 1, pos);
+    *cursor_x += (f32) quarter_w * scale;
     func_800E7A2C(gfx);
     func_800E7988(gfx, 0);
     D_80128180.PrintState_800B60C0.unk2A = 0;
     D_80128180.PrintState_800B60C0.unk28 = D_80128180.PrintState_800B60C0.unk2A;
 }
 
-void func_800B62CC(Gfx **param_0, u8 param_1, f32 *param_2, f32 *param_3, f32 param_4)
+// Matching: the line breaks in this function are needed for the match.
+// Matching: the local declaration order reproduces the target's stack homes.
+// Draw one character (glyph rectangle or inline icon) at the cursor and advance it.
+void func_800B62CC(Gfx **gfx, u8 ch, f32 *cursor_x, f32 *cursor_y, f32 scale)
 {
-    B62CCGlyph *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    f32 local_4;
-    f32 local_5;
-    f32 local_8;
-    f32 local_6;
-    Gfx *local_7;
+    B62CCGlyph *glyph;
+    s32 glyph_id;
+    s32 format;
+    s32 image;
+    f32 draw_x;
+    f32 draw_y;
+    f32 base_y;
+    f32 advance;
+    Gfx *dl;
 
-    local_1 = func_800B5FE4(param_1, param_2, param_3, param_4);
-    if (D_80128180.B62CCState.local_3 != 0 &&D_80128180.B62CCState.local_4 != 0) {
-        func_800B60C0(param_0, param_2, param_3, param_4);
-        D_80128180.B62CCState.local_1 = func_800D3724(D_80128180.B62CCState.font);
+    glyph_id = func_800B5FE4(ch, cursor_x, cursor_y, scale);
+    if (D_80128180.B62CCState.icon_id != 0 &&D_80128180.B62CCState.unk_2A != 0) {
+        func_800B60C0(gfx, cursor_x, cursor_y, scale);
+        D_80128180.B62CCState.font_loaded = func_800D3724(D_80128180.B62CCState.font);
         return;
     }
-    if (local_1 >= 0) {
-        func_800E7828(param_0, D_801281A4);
-        local_7 = *param_0;
-        local_0 = func_800B5C10(D_80128180.B62CCState.font, local_1, &local_2, &local_3);
+    if (glyph_id >= 0) {
+        func_800E7828(gfx, D_801281A4);
+        dl = *gfx;
+        glyph = func_800B5C10(D_80128180.B62CCState.font, glyph_id, &format, &image);
         if (D_80128180.B62CCState.fixed_spacing != 0) {
-            local_6 = func_800D35BC(D_80128180.B62CCState.font);
+            advance = func_800D35BC(D_80128180.B62CCState.font);
         } else {
-            local_6 = local_0->x;
+            advance = glyph->x;
         }
         if (D_80128180.B62CCState.centered == 0) {
-            *param_2 -= local_6 * 0.5f * param_4;
+            *cursor_x -= advance * 0.5f * scale;
             D_80128180.B62CCState.centered = 1;
         }
-        local_4 = *param_2;
-        local_5 = *param_3;
+        draw_x = *cursor_x;
+        draw_y = *cursor_y;
         if (D_80128180.B62CCState.jitter != 0) {
-            local_4 += func_800DC178(-1.0f, 1.0f) * param_4;
-            local_5 += func_800DC178(-1.0f, 1.0f) * param_4;
+            draw_x += func_800DC178(-1.0f, 1.0f) * scale;
+            draw_y += func_800DC178(-1.0f, 1.0f) * scale;
         }
-        local_8 = local_5;
-        local_4 += (local_6 - local_0->x) * 0.5f * param_4;
-        local_5 -= local_0->h * 0.5f * param_4;
+        base_y = draw_y; // jittered baseline, used for the gradient
+        draw_x += (advance - glyph->x) * 0.5f * scale;
+        draw_y -= glyph->h * 0.5f * scale;
 
-        if (local_2 == 0x800) {
-            gDPSetTextureImage(local_7++, G_IM_FMT_RGBA, G_IM_SIZ_32b, local_0->w, local_3 + 0x80000000);
-            gDPSetTile(local_7++, G_IM_FMT_RGBA, G_IM_SIZ_32b, (local_0->x * 2 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            gDPLoadSync(local_7++); B62CC_UPLOAD_TILE(local_7++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-            gDPPipeSync(local_7++);
-            gDPSetTile(local_7++, G_IM_FMT_RGBA, G_IM_SIZ_32b, (local_0->x * 2 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            B62CC_UPLOAD_TILE(local_7++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-        } else if (local_2 == 0x200) {
-            gDPSetTextureImage(local_7++, G_IM_FMT_IA, G_IM_SIZ_16b, local_0->w, local_3 + 0x80000000);
-            gDPSetTile(local_7++, G_IM_FMT_IA, G_IM_SIZ_16b, (local_0->x * 2 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            gDPLoadSync(local_7++); B62CC_UPLOAD_TILE(local_7++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-            gDPPipeSync(local_7++);
-            gDPSetTile(local_7++, G_IM_FMT_IA, G_IM_SIZ_16b, (local_0->x * 2 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            B62CC_UPLOAD_TILE(local_7++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-        } else if (local_2 == 0x100) {
-            gDPSetTextureImage(local_7++, G_IM_FMT_IA, G_IM_SIZ_8b, local_0->w, local_3 + 0x80000000);
-            gDPSetTile(local_7++, G_IM_FMT_IA, G_IM_SIZ_8b, (local_0->x * 1 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            gDPLoadSync(local_7++); B62CC_UPLOAD_TILE(local_7++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-            gDPPipeSync(local_7++);
-            gDPSetTile(local_7++, G_IM_FMT_IA, G_IM_SIZ_8b, (local_0->x * 1 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            B62CC_UPLOAD_TILE(local_7++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-        } else if (local_2 == 0x40) {
-            gDPSetTextureImage(local_7++, G_IM_FMT_I, G_IM_SIZ_8b, local_0->w, local_3 + 0x80000000);
-            gDPSetTile(local_7++, G_IM_FMT_I, G_IM_SIZ_8b, (local_0->x * 1 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            gDPLoadSync(local_7++); B62CC_UPLOAD_TILE(local_7++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-            gDPPipeSync(local_7++);
-            gDPSetTile(local_7++, G_IM_FMT_I, G_IM_SIZ_8b, (local_0->x * 1 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            B62CC_UPLOAD_TILE(local_7++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-        } else if (local_2 == 0x20) {
-            gDPSetTextureImage(local_7++, G_IM_FMT_I, G_IM_SIZ_8b, (local_0->w >> 1), local_3 + 0x80000000);
-            gDPSetTile(local_7++, G_IM_FMT_I, G_IM_SIZ_8b, ((local_0->x >> 1) + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            gDPLoadSync(local_7++); B62CC_UPLOAD_TILE(local_7++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (local_0->x - 1) << 1, (local_0->y - 1) << 2);
-            gDPPipeSync(local_7++);
-            gDPSetTile(local_7++, G_IM_FMT_I, G_IM_SIZ_4b, ((local_0->x >> 1) + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            B62CC_UPLOAD_TILE(local_7++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-        } else if (local_2 == 4) {
-            gDPSetTextureImage(local_7++, G_IM_FMT_CI, G_IM_SIZ_8b, local_0->w, local_3 + 0x80000000);
-            gDPSetTile(local_7++, G_IM_FMT_CI, G_IM_SIZ_8b, (local_0->x * 1 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            gDPLoadSync(local_7++); B62CC_UPLOAD_TILE(local_7++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
-            gDPPipeSync(local_7++);
-            gDPSetTile(local_7++, G_IM_FMT_CI, G_IM_SIZ_8b, (local_0->x * 1 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            B62CC_UPLOAD_TILE(local_7++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (local_0->x - 1) << 2, (local_0->y - 1) << 2);
+        if (format == 0x800) {
+            gDPSetTextureImage(dl++, G_IM_FMT_RGBA, G_IM_SIZ_32b, glyph->w, image + 0x80000000);
+            gDPSetTile(dl++, G_IM_FMT_RGBA, G_IM_SIZ_32b, (glyph->x * 2 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            gDPLoadSync(dl++); B62CC_UPLOAD_TILE(dl++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+            gDPPipeSync(dl++);
+            gDPSetTile(dl++, G_IM_FMT_RGBA, G_IM_SIZ_32b, (glyph->x * 2 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            B62CC_UPLOAD_TILE(dl++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+        } else if (format == 0x200) {
+            gDPSetTextureImage(dl++, G_IM_FMT_IA, G_IM_SIZ_16b, glyph->w, image + 0x80000000);
+            gDPSetTile(dl++, G_IM_FMT_IA, G_IM_SIZ_16b, (glyph->x * 2 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            gDPLoadSync(dl++); B62CC_UPLOAD_TILE(dl++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+            gDPPipeSync(dl++);
+            gDPSetTile(dl++, G_IM_FMT_IA, G_IM_SIZ_16b, (glyph->x * 2 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            B62CC_UPLOAD_TILE(dl++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+        } else if (format == 0x100) {
+            gDPSetTextureImage(dl++, G_IM_FMT_IA, G_IM_SIZ_8b, glyph->w, image + 0x80000000);
+            gDPSetTile(dl++, G_IM_FMT_IA, G_IM_SIZ_8b, (glyph->x * 1 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            gDPLoadSync(dl++); B62CC_UPLOAD_TILE(dl++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+            gDPPipeSync(dl++);
+            gDPSetTile(dl++, G_IM_FMT_IA, G_IM_SIZ_8b, (glyph->x * 1 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            B62CC_UPLOAD_TILE(dl++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+        } else if (format == 0x40) {
+            gDPSetTextureImage(dl++, G_IM_FMT_I, G_IM_SIZ_8b, glyph->w, image + 0x80000000);
+            gDPSetTile(dl++, G_IM_FMT_I, G_IM_SIZ_8b, (glyph->x * 1 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            gDPLoadSync(dl++); B62CC_UPLOAD_TILE(dl++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+            gDPPipeSync(dl++);
+            gDPSetTile(dl++, G_IM_FMT_I, G_IM_SIZ_8b, (glyph->x * 1 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            B62CC_UPLOAD_TILE(dl++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+        } else if (format == 0x20) {
+            gDPSetTextureImage(dl++, G_IM_FMT_I, G_IM_SIZ_8b, (glyph->w >> 1), image + 0x80000000);
+            gDPSetTile(dl++, G_IM_FMT_I, G_IM_SIZ_8b, ((glyph->x >> 1) + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            gDPLoadSync(dl++); B62CC_UPLOAD_TILE(dl++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (glyph->x - 1) << 1, (glyph->y - 1) << 2);
+            gDPPipeSync(dl++);
+            gDPSetTile(dl++, G_IM_FMT_I, G_IM_SIZ_4b, ((glyph->x >> 1) + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            B62CC_UPLOAD_TILE(dl++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+        } else if (format == 4) {
+            gDPSetTextureImage(dl++, G_IM_FMT_CI, G_IM_SIZ_8b, glyph->w, image + 0x80000000);
+            gDPSetTile(dl++, G_IM_FMT_CI, G_IM_SIZ_8b, (glyph->x * 1 + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            gDPLoadSync(dl++); B62CC_UPLOAD_TILE(dl++, G_LOADTILE, G_TX_LOADTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
+            gDPPipeSync(dl++);
+            gDPSetTile(dl++, G_IM_FMT_CI, G_IM_SIZ_8b, (glyph->x * 1 + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            B62CC_UPLOAD_TILE(dl++, G_SETTILESIZE, G_TX_RENDERTILE, 0, 0, (glyph->x - 1) << 2, (glyph->y - 1) << 2);
         }
-        if (D_80128180.B62CCState.gradient_y != -0x7FFF) {
-            s32 local_9;
-            s32 local_10;
-            local_9 = (D_80128180.B62CCState.gradient_y - local_8) - D_80128180.B62CCState.local_2;
-            local_10 = -local_9;
-            if (local_10 < 0) local_10 = 0;
-            if (D_80128180.B62CCState.local_2 < local_10) local_10 = D_80128180.B62CCState.local_2;
-            if (local_9 < 0) local_9 = 0;
-            gDPSetTextureImage(local_7++, G_IM_FMT_I, G_IM_SIZ_8b, 32, (u8 *) D_801281B0 - 0x80000000);
-            gDPSetTile(local_7++, G_IM_FMT_I, G_IM_SIZ_8b, (local_0->x + 8) >> 3, 0x100, 7, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-            gDPLoadSync(local_7++); B62CC_GRAD_TILE(local_7++, G_LOADTILE, 7, 0, local_10 << 2, local_0->x << 2, D_80128180.B62CCState.local_2 << 2);
-            gDPPipeSync(local_7++);
-            gDPSetTile(local_7++, G_IM_FMT_I, G_IM_SIZ_8b, (local_0->x + 8) >> 3, 0x100, 1, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0); B62CC_GRAD_TILE(local_7++, G_SETTILESIZE, 1, 0, (local_10 + local_9) << 2, local_0->x << 2, (D_80128180.B62CCState.local_2 + local_9) << 2);
+        if (D_80128180.B62CCState.gradient_y != -0x7FFF) { // load a strip of the gradient texture at TMEM 0x100
+            s32 dst_offset;
+            s32 src_start;
+            dst_offset = (D_80128180.B62CCState.gradient_y - base_y) - D_80128180.B62CCState.gradient_rows;
+            src_start = -dst_offset;
+            if (src_start < 0) src_start = 0;
+            if (D_80128180.B62CCState.gradient_rows < src_start) src_start = D_80128180.B62CCState.gradient_rows;
+            if (dst_offset < 0) dst_offset = 0;
+            gDPSetTextureImage(dl++, G_IM_FMT_I, G_IM_SIZ_8b, 32, (u8 *) D_801281B0 - 0x80000000);
+            gDPSetTile(dl++, G_IM_FMT_I, G_IM_SIZ_8b, (glyph->x + 8) >> 3, 0x100, 7, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+            gDPLoadSync(dl++); B62CC_GRAD_TILE(dl++, G_LOADTILE, 7, 0, src_start << 2, glyph->x << 2, D_80128180.B62CCState.gradient_rows << 2);
+            gDPPipeSync(dl++);
+            gDPSetTile(dl++, G_IM_FMT_I, G_IM_SIZ_8b, (glyph->x + 8) >> 3, 0x100, 1, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0); B62CC_GRAD_TILE(dl++, G_SETTILESIZE, 1, 0, (src_start + dst_offset) << 2, glyph->x << 2, (D_80128180.B62CCState.gradient_rows + dst_offset) << 2);
         }
-        { Gfx *_g = local_7++; _g->words.w0 = B62CC_RECT_W0((s32)((local_4 + local_0->x * param_4) * 4.0f), (s32)((local_5 + local_0->y * param_4) * 4.0f));
-            _g->words.w1 = B62CC_RECT_W1((s32)(local_4 * 4.0f), (s32)(local_5 * 4.0f));
-            { Gfx *_g = local_7++; _g->words.w0 = _SHIFTL(B62CC_RDPHALF_1, 24, 8); _g->words.w1 = (u32)B62CC_RECT_ST((s32)(local_4 * 4.0f), (s32)(local_5 * 4.0f), (s32)(1024.0f / param_4)); }
-            { Gfx *_g = local_7++;
-                _g->words.w0 = _SHIFTL(B62CC_RDPHALF_2, 24, 8); _g->words.w1 = (u32)(_SHIFTL((s32)(1024.0f / param_4), 16, 16) | _SHIFTL((s32)(1024.0f / param_4), 0, 16));
+        { Gfx *_g = dl++; _g->words.w0 = B62CC_RECT_W0((s32)((draw_x + glyph->x * scale) * 4.0f), (s32)((draw_y + glyph->y * scale) * 4.0f));
+            _g->words.w1 = B62CC_RECT_W1((s32)(draw_x * 4.0f), (s32)(draw_y * 4.0f));
+            { Gfx *_g = dl++; _g->words.w0 = _SHIFTL(B62CC_RDPHALF_1, 24, 8); _g->words.w1 = (u32)B62CC_RECT_ST((s32)(draw_x * 4.0f), (s32)(draw_y * 4.0f), (s32)(1024.0f / scale)); }
+            { Gfx *_g = dl++;
+                _g->words.w0 = _SHIFTL(B62CC_RDPHALF_2, 24, 8); _g->words.w1 = (u32)(_SHIFTL((s32)(1024.0f / scale), 16, 16) | _SHIFTL((s32)(1024.0f / scale), 0, 16));
             }
         }
-        *param_2 += local_6 * param_4;
-        *param_0 = local_7;
+        *cursor_x += advance * scale;
+        *gfx = dl;
         func_800E7694();
     }
 }
 
-void func_800B7174(PrintEntry_800B7174 *e)
+// Reset the per-string print state from the queued entry.
+void func_800B7174(PrintEntry_800B7174 *entry)
 {
     D_80128180.PrintState_800B7174.centered = D_80128180.PrintState_800B7174.unk1C =
         D_80128180.PrintState_800B7174.unk1D = 0;
-    D_80128180.PrintState_800B7174.font = e->font;
-    D_80128180.PrintState_800B7174.gradientY = e->gradientY;
-    D_80128180.PrintState_800B7174.fixedSpacing = e->fixedSpacing;
-    D_80128180.PrintState_800B7174.jitter = e->jitter;
+    D_80128180.PrintState_800B7174.font = entry->font;
+    D_80128180.PrintState_800B7174.gradientY = entry->gradientY;
+    D_80128180.PrintState_800B7174.fixedSpacing = entry->fixedSpacing;
+    D_80128180.PrintState_800B7174.jitter = entry->jitter;
     D_80128180.PrintState_800B7174.unk2A = 0;
     D_80128180.PrintState_800B7174.unk28 = D_80128180.PrintState_800B7174.unk2A;
-    func_800F2EBC(D_801281A4, e->rgba, e);
+    func_800F2EBC(D_801281A4, entry->rgba, entry);
 }
 
-void func_800B71F4(Gfx **gfx, PrintEntry_800B71F4 *e)
+// Set up render state (gradient, color, palette) for the entry's font.
+void func_800B71F4(Gfx **gfx, PrintEntry_800B71F4 *entry)
 {
     s32 tex;
     s32 fmt;
     void *pal;
 
-    func_800E78C8(gfx, (e->font == 1) ? 0x2000 : 0);
-    if (e->gradientY != -0x7FFF) {
+    func_800E78C8(gfx, (entry->font == 1) ? 0x2000 : 0);
+    if (entry->gradientY != -0x7FFF) {
         func_800E7778(gfx, 0x100000);
         func_800E76A4(gfx, 1);
     } else {
         func_800E7778(gfx, 0);
         func_800E76A4(gfx, 0);
     }
-    func_800E7828(gfx, e->rgba);
-    tex = func_800D3524(e->font);
+    func_800E7828(gfx, entry->rgba);
+    tex = func_800D3524(entry->font);
     fmt = func_800B0D58(tex);
     if (fmt & 5) {
         pal = func_800B0D60(tex);
@@ -702,16 +721,17 @@ void func_800B71F4(Gfx **gfx, PrintEntry_800B71F4 *e)
     }
 }
 
+// Draw all queued strings, then clear the queue and reset the style defaults.
 void func_800B7448(Gfx **gfx)
 {
     s32 i;
-    f32 _x;
-    f32 _y;
+    f32 x;
+    f32 y;
     f32 width;
-    s32 fw;
+    s32 font_width;
     PrintEntry_800B7448 *end;
     PrintEntry_800B7448 *start;
-    PrintEntry_800B7448 *e;
+    PrintEntry_800B7448 *entry;
 
     if (D_80128180.PrintState_800B7448.entries != NULL &&
         vector_size(D_80128180.PrintState_800B7448.entries) > 0) {
@@ -719,27 +739,27 @@ void func_800B7448(Gfx **gfx)
         func_800E7988(gfx, 0);
         start = vector_begin(D_80128180.PrintState_800B7448.entries);
         end = vector_end(D_80128180.PrintState_800B7448.entries);
-        for (e = start; e < end; e++) {
-            D_80128180.PrintState_800B7448.unk04 = func_800D3724(e->font);
+        for (entry = start; entry < end; entry++) {
+            D_80128180.PrintState_800B7448.unk04 = func_800D3724(entry->font);
             if (D_80128180.PrintState_800B7448.unk04 != 0) {
-                _x = (f32) e->x;
-                _y = (f32) e->y;
-                if (e->background) {
-                    fw = func_800D35BC(e->font);
-                    width = (f32) ((func_800E7188(e->string) - 1) * fw);
+                x = (f32) entry->x;
+                y = (f32) entry->y;
+                if (entry->background) { // filled box behind the text
+                    font_width = func_800D35BC(entry->font);
+                    width = (f32) ((func_800E7188(entry->string) - 1) * font_width);
                     func_800E7828(gfx, D_8011A620);
                     func_800E7778(gfx, 0);
                     func_800E76A4(gfx, 2);
-                    gDPScisFillRectangle((*gfx)++, _x - fw / 2 - 1.0f, _y - fw / 2 - 1.0f,
-                                         _x + width + fw / 2, fw / 2 + _y + 1.0f);
+                    gDPScisFillRectangle((*gfx)++, x - font_width / 2 - 1.0f, y - font_width / 2 - 1.0f,
+                                         x + width + font_width / 2, font_width / 2 + y + 1.0f);
                     func_800E7694();
                 }
-                func_800B71F4(gfx, e);
-                func_800B7174(e);
-                for (i = 0; e->string[i] != 0 || D_80128180.PrintState_800B7448.unk1D != 0 ||
+                func_800B71F4(gfx, entry);
+                func_800B7174(entry);
+                for (i = 0; entry->string[i] != 0 || D_80128180.PrintState_800B7448.unk1D != 0 ||
                             D_80128180.PrintState_800B7448.unk1C != 0;
                      i++) {
-                    func_800B62CC(gfx, e->string[i], &_x, &_y, e->scale);
+                    func_800B62CC(gfx, entry->string[i], &x, &y, entry->scale);
                     if (D_80128180.PrintState_800B7448.unk04 == 0) {
                         break;
                     }
@@ -752,36 +772,39 @@ void func_800B7448(Gfx **gfx)
     func_800B7A98();
 }
 
+// Queue a string at (x, y) with the current style defaults.
 void func_800B798C(s32 x, s32 y, u8 *string)
 {
-    PrintEntry_800B798C *e;
+    PrintEntry_800B798C *entry;
 
     if (string != NULL) {
         if (D_80128180.PrintState_800B798C.entries == NULL) {
             D_80128180.PrintState_800B798C.entries = vector_new(0x14, 8);
         }
-        e = vector_push_back((PrintState_800B798C *) D_80128180.arr);
-        e->x = x;
-        e->y = y;
-        e->string = string;
-        e->font = D_80128180.PrintState_800B798C.defFont;
-        e->fixedSpacing = D_80128180.PrintState_800B798C.defFixedSpacing;
-        e->unk6_10 = D_80128180.PrintState_800B798C.defUnk10;
-        e->jitter = D_80128180.PrintState_800B798C.defJitter;
-        e->gradientY = D_80128180.PrintState_800B798C.defGradientY;
-        e->scale = D_80128180.PrintState_800B798C.defScale;
-        e->rgba[0] = D_80128180.PrintState_800B798C.defRgba[0];
-        e->rgba[1] = D_80128180.PrintState_800B798C.defRgba[1];
-        e->rgba[2] = D_80128180.PrintState_800B798C.defRgba[2];
-        e->rgba[3] = D_80128180.PrintState_800B798C.defRgba[3];
+        entry = vector_push_back((PrintState_800B798C *) D_80128180.arr);
+        entry->x = x;
+        entry->y = y;
+        entry->string = string;
+        entry->font = D_80128180.PrintState_800B798C.defFont;
+        entry->fixedSpacing = D_80128180.PrintState_800B798C.defFixedSpacing;
+        entry->unk6_10 = D_80128180.PrintState_800B798C.defUnk10;
+        entry->jitter = D_80128180.PrintState_800B798C.defJitter;
+        entry->gradientY = D_80128180.PrintState_800B798C.defGradientY;
+        entry->scale = D_80128180.PrintState_800B798C.defScale;
+        entry->rgba[0] = D_80128180.PrintState_800B798C.defRgba[0];
+        entry->rgba[1] = D_80128180.PrintState_800B798C.defRgba[1];
+        entry->rgba[2] = D_80128180.PrintState_800B798C.defRgba[2];
+        entry->rgba[3] = D_80128180.PrintState_800B798C.defRgba[3];
     }
 }
 
+// Reset the style defaults: white, font 0, no jitter, no gradient, scale 1.
 void func_800B7A98()
 {
-    unsigned long long new_var;
-    new_var = (D_80128180.arr[0xE] = (D_80128180.arr[0xF] = 0xFF));
-    D_80128180.arr[0xD] = new_var;
+    // Matching: the 64-bit temporary is needed for the match.
+    unsigned long long max_channel;
+    max_channel = (D_80128180.arr[0xE] = (D_80128180.arr[0xF] = 0xFF));
+    D_80128180.arr[0xD] = max_channel;
     D_80128180.arr[0xC] = 0xFF;
     D_80128180.arr[0x13] = 0;
     D_80128180.arr[0x10] = 0;
@@ -791,64 +814,73 @@ void func_800B7A98()
     *(f32 *) &D_80128180.arr[0x18] = 1.0f;
 }
 
-void func_800B7ADC(s32 param_0)
+// Set the default text alpha.
+void func_800B7ADC(s32 alpha)
 {
-    D_8012818F = param_0;
+    D_8012818F = alpha;
 }
 
-int func_800B7AE8(s32 param_0)
+// Set the default background flag; enabling it also forces fixed spacing.
+int func_800B7AE8(s32 enabled)
 {
-    if (param_0 != 0) {
+    if (enabled != 0) {
         D_80128190 = 1;
     } else {
         D_80128190 = 0;
     }
-    if (param_0 != 0) {
+    if (enabled != 0) {
         func_800B7B68(1);
     }
 }
 
-void func_800B7B2C(s32 param_0)
+// Set the default gradient Y.
+void func_800B7B2C(s32 gradient_y)
 {
-    D_80128194 = param_0;
+    D_80128194 = gradient_y;
 }
 
-void func_800B7B38(s32 param_0)
+// Set the default font.
+void func_800B7B38(s32 font)
 {
-    D_80128191 = param_0;
+    D_80128191 = font;
 }
 
-int func_800B7B44(s32 param_0)
+// Set the default jitter flag.
+int func_800B7B44(s32 enabled)
 {
-    if (param_0 != 0) {
+    if (enabled != 0) {
         D_80128193 = 1;
     } else {
         D_80128193 = 0;
     }
 }
 
-int func_800B7B68(param_0)
-s32 param_0;
+// Set the default fixed-spacing flag.
+int func_800B7B68(enabled)
+s32 enabled;
 {
-    if (param_0 != 0) {
+    if (enabled != 0) {
         D_80128192 = 1;
     } else {
         D_80128192 = 0;
     }
 }
 
-void func_800B7B8C(s32 param_0, s32 param_1, s32 param_2)
+// Set the default text color (RGB).
+void func_800B7B8C(s32 r, s32 g, s32 b)
 {
-    ((u8 *) D_80128180.arr)[0xc] = param_0;
-    ((u8 *) D_80128180.arr)[0xd] = param_1;
-    ((u8 *) D_80128180.arr)[0xe] = param_2;
+    ((u8 *) D_80128180.arr)[0xc] = r;
+    ((u8 *) D_80128180.arr)[0xd] = g;
+    ((u8 *) D_80128180.arr)[0xe] = b;
 }
 
-void func_800B7BA4(f32 param_0)
+// Set the default text scale.
+void func_800B7BA4(f32 scale)
 {
-    D_80128198 = param_0;
+    D_80128198 = scale;
 }
 
+// Update the weather effects (fxleaves, fxrain and the in-core effect).
 void func_800B7BB0()
 {
     if (D_801282B0 != 0) {
@@ -862,6 +894,7 @@ void func_800B7BB0()
     }
 }
 
+// Create the fxleaves instance if needed and return its handle.
 int func_800B7C10()
 {
     if (!D_801282B0) {
@@ -870,6 +903,7 @@ int func_800B7C10()
     return D_801282B0;
 }
 
+// Create the fxrain instance if needed and return its handle.
 int func_800B7C54()
 {
     if (!D_801282B4) {
@@ -901,6 +935,7 @@ s32 func_800B7CC4(void)
     func_800B8FEC();
 }
 
+// Forget both overlay handles.
 void func_800B7D14(void)
 {
     ((s32 *) &D_801282B0)[0] = 0;
@@ -943,6 +978,7 @@ void func_800B7DC8()
     func_800B90E8();
 }
 
+// Draw the weather effects.
 void func_800B7E38()
 {
     if (D_801282B0) {
@@ -956,6 +992,8 @@ void func_800B7E38()
     }
 }
 
+// TU-NOTE: the .data of this file is defined here in C (values from the ROM).
+// D_8011A5C2 = D_8011A5C0 + 0x2 is a linker symbol in undefined_syms.us.txt.
 u32 D_8011A5C0[24] = {0x11E,      0x2500319,  0x4030514,  0x632071E,  0x81E0928,  0xA1E0B0F,
                       0xC0F0D23,  0xE320F1E,  0x100F1128, 0x12321328, 0x141E151E, 0x161E171E,
                       0x1850191E, 0x1A281B1E, 0x1C141D14, 0x1E141F14, 0x2014211E, 0x22282332,

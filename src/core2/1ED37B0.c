@@ -5,49 +5,56 @@ extern s16 D_80135532[];
 s16 func_800F9F04();
 void func_800F9F2C();
 
-int func_800F9EC0(s32 param_0, s32 param_1)
+// Adds delta to current health with clamping; damage plays jingle 0x74.
+int func_800F9EC0(s32 slot, s32 delta)
 {
-    if (param_1 < 0) {
+    if (delta < 0) {
         func_800FC660(0x74);
     }
-    func_800F9F2C(param_0, func_800F9F04(param_0) + param_1);
+    func_800F9F2C(slot, func_800F9F04(slot) + delta);
 }
 
-s16 func_800F9F04(param_0)
-s32 param_0;
+// Current health.
+s16 func_800F9F04(slot)
+s32 slot;
 {
-    unsigned int *new_var3;
-    int new_var;
-    unsigned int new_var2;
-    new_var2 = (param_0 ^ 0) * 2;
-    new_var3 = &new_var2;
-    new_var = *new_var3;
-    return D_80135530[new_var];
+    unsigned int *offset_ptr;
+    int offset;
+    unsigned int raw_offset;
+    // Matching: the round trip through a pointer to the local is needed for the match.
+    raw_offset = (slot ^ 0) * 2;
+    offset_ptr = &raw_offset;
+    offset = *offset_ptr;
+    return D_80135530[offset];
 }
 
-s16 func_800F9F18(s32 param_0)
+// Max health.
+s16 func_800F9F18(s32 slot)
 {
-    int new_var;
-    new_var = param_0 * 2;
-    if (new_var) {
+    int offset;
+    offset = slot * 2;
+    // Matching: empty test steers IDO's register allocation.
+    if (offset) {
     }
-    return D_80135532[new_var];
+    return D_80135532[offset];
 }
 
-void func_800F9F2C(param_0, param_1) s32 param_0;
-s32 param_1;
+// Sets current health, clamped to 0..max.
+void func_800F9F2C(slot, value) s32 slot;
+s32 value;
 {
-    s32 *local_0;
-    local_0 = &((s32 *) D_80135530)[param_0];
-    if (param_1 < 0) {
-        param_1 = 0;
-    } else if (*(s16 *) ((u8 *) local_0 + 2) < param_1) {
-        param_1 = *(s16 *) ((u8 *) local_0 + 2);
+    s32 *entry;
+    entry = &((s32 *) D_80135530)[slot];
+    if (value < 0) {
+        value = 0;
+    } else if (*(s16 *) ((u8 *) entry + 2) < value) {
+        value = *(s16 *) ((u8 *) entry + 2);
     }
-    *(s16 *) local_0 = param_1;
+    *(s16 *) entry = value;
 }
 
-int func_800F9F74(s32 param_0, int param_1)
+// Sets max health.
+int func_800F9F74(s32 slot, int max_value)
 {
-    *(short *) &((int *) D_80135532)[param_0] = param_1;
+    *(short *) &((int *) D_80135532)[slot] = max_value;
 }

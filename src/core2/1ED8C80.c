@@ -2,39 +2,39 @@
 
 extern s32 D_80135A50;
 typedef struct {
-    u8 pad0[0x28];
-    void (*unk28)(void *);
+    u8 pad_0[0x28];
+    void (*unk_28)(void *);
 } O_FF3EC;
 typedef struct {
-    u8 pad0[0x64];
-    u32 f0 : 5;
-    u32 flag : 1;
-    u32 f6 : 26;
+    u8 pad_0[0x64];
+    u32 pad_64 : 5;
+    u32 teardown_done : 1;
+    u32 pad_65 : 26;
 } S_FF3EC;
 extern int D_80127194;
 extern void func_800EBFF4(s32);
 typedef struct {
-    u8 pad[0x24];
-    u32 pad24 : 16, local_0 : 9, pad26 : 7;
-    u32 local_1 : 9, local_2 : 9, pad28 : 14;
+    u8 pad_0[0x24];
+    u32 pad_24 : 16, x : 9, pad_26 : 7;
+    u32 y : 9, z : 9, pad_28 : 14;
 } MarkerFF62C;
 typedef struct ActorFF62C {
-    MarkerFF62C *local_0;
-    u8 pad4[0x40];
-    f32 local_1[3];
-    u8 pad50[0x14];
-    u32 pad64 : 14, local_2 : 1, pad65 : 17;
-    u8 pad68[0xC];
-    u32 pad74 : 4, local_3 : 1, pad75 : 21, local_4 : 1, local_5 : 1, pad77 : 4;
-    u32 pad78 : 14, local_6 : 2, pad7a : 12, local_7 : 1, pad7b : 3;
-    u8 pad7c[0x10];
-    s16 local_8, local_9, local_10, pad92;
-    u32 pad94 : 2, local_11 : 10, pad95 : 20;
+    MarkerFF62C *marker;
+    u8 pad_4[0x40];
+    f32 pos[3];
+    u8 pad_50[0x14];
+    u32 pad_64 : 14, deleted : 1, pad_65 : 17;
+    u8 pad_68[0xC];
+    u32 pad_74 : 4, unk_74_4 : 1, pad_75 : 21, unk_74_26 : 1, unk_74_27 : 1, pad_77 : 4;
+    u32 pad_78 : 14, fade : 2, pad_7A : 12, bounce : 1, pad_7B : 3;
+    u8 pad_7C[0x10];
+    s16 anim, floor_tint, glid, pad_92;
+    u32 pad_94 : 2, unk_94_2 : 10, pad_95 : 20;
 } ActorFF62C;
 typedef struct {
-    u8 pad[0xC];
-    void (*local_0)(ActorFF62C *);
-    void (*local_1)(ActorFF62C *);
+    u8 pad_0[0xC];
+    void (*unk_C)(ActorFF62C *);
+    void (*unk_10)(ActorFF62C *);
 } DataFF62C;
 extern s32 func_800BEC1C(void);
 extern s32 func_800DB9B0(void);
@@ -56,23 +56,23 @@ extern void *func_80104248(ActorFF62C *);
 extern void func_8008ADE4(void *);
 extern f32 func_800136E4(f32);
 typedef struct {
-    u8 local_0[0x40];
-    Unk80132ED0 *local_1;
-    u8 local_2[0x20];
-    u32 local_3 : 14;
-    u32 local_4 : 1;
-    u32 local_5 : 17;
-    u32 local_6;
-    u32 local_7 : 11;
-    u32 local_8 : 12;
-    u32 local_9 : 9;
-    u32 local_10;
-    u32 local_11 : 7;
-    u32 local_12 : 1;
-    u32 local_13 : 24;
-    u32 local_14 : 29;
-    u32 local_15 : 1;
-    u32 local_16 : 2;
+    u8 pad_0[0x40];
+    Unk80132ED0 *link;
+    u8 pad_44[0x20];
+    u32 pad_64 : 14;
+    u32 deleted : 1;
+    u32 pad_65 : 17;
+    u32 unk_68;
+    u32 unk_6C_0 : 11;
+    u32 actor_id : 12;
+    u32 unk_6C_23 : 9;
+    u32 unk_70;
+    u32 unk_74_0 : 7;
+    u32 unk_74_7 : 1;
+    u32 pad_75 : 24;
+    u32 pad_78 : 29;
+    u32 unk_78_29 : 1;
+    u32 pad_7B : 2;
 } local_type_800FFAB0;
 typedef struct {
     u8 pad0[0x70];
@@ -99,51 +99,52 @@ extern void func_80106A60(void);
 extern void func_80106E50(void);
 extern void func_80107C10(void);
 typedef struct {
-    u8 pad[0x82];
-    s16 local_0[1];
+    u8 pad_0[0x82];
+    s16 data_handle[1];
 } ActorFFECC;
 extern s32 func_8001B7B8();
 extern u32 *func_8001B710();
 extern s16 func_8001B668(s32, s32);
 extern void func_8001B754();
 extern void *func_8001B798(s16);
+// Bit views of the actor flag words used by func_80100120.
 typedef struct {
-    u32 local_0 : 10;
-    u32 local_1 : 1;
-    u32 local_2 : 21;
+    u32 pre : 10;
+    u32 init_done : 1;
+    u32 post : 21;
 } local_flags_a;
 typedef struct {
-    u32 local_0 : 28;
-    u32 local_1 : 1;
-    u32 local_2 : 3;
+    u32 pre : 28;
+    u32 unk_70_28 : 1;
+    u32 post : 3;
 } local_flags_b;
 typedef struct {
-    u32 local_0 : 14;
-    u32 local_1 : 1;
-    u32 local_2 : 17;
+    u32 pre : 14;
+    u32 deleted : 1;
+    u32 post : 17;
 } local_flags_c;
 typedef struct {
-    u8 local_0 : 1;
-    u8 local_1 : 1;
-    u8 local_2 : 6;
+    u8 unk_7E_0 : 1;
+    u8 unk_7E_1 : 1;
+    u8 post : 6;
 } local_flags_d;
 typedef struct {
-    u8 local_0 : 2;
-    u8 local_1 : 1;
-    u8 local_2 : 5;
+    u8 pre : 2;
+    u8 init_done : 1;
+    u8 post : 5;
 } local_flags_e;
 typedef struct {
-    u8 local_0[0x34];
-    void (*local_1)(Actor *);
+    u8 pad_0[0x34];
+    void (*init)(Actor *);
 } local_type_80100120;
 extern s32 func_80102F74(Actor *, u32);
 extern void func_8010381C(Actor *);
 typedef struct {
-    u8 pad0[0x7C];
-    u32 val : 16;
-    u32 f1 : 1;
-    u32 flag : 1;
-    u32 f3 : 14;
+    u8 pad_0[0x7C];
+    u32 radius : 16;
+    u32 initialized : 1;
+    u32 active : 1;
+    u32 pad_7E : 14;
 } S_100230;
 extern f32 func_800EEB40(void *, void *);
 extern void func_800819B4(s32 *);
@@ -152,28 +153,29 @@ extern void _suautobaddies_entrypoint_1(void);
 extern s32 func_800F54E4(void);
 extern void func_800F5A00(s32, s32 *);
 typedef struct {
-    u8 pad0[0x10];
+    u8 pad_0[0x10];
     void *marker;
-    u8 pad1[0x50];
-    u32 unused0 : 14;
+    u8 pad_14[0x50];
+    u32 pad_64 : 14;
     u32 deleted : 1;
-    u32 unused1 : 17;
-    u8 pad2[0x10];
-    u32 unused2 : 26;
+    u32 pad_65 : 17;
+    u8 pad_68[0x10];
+    u32 pad_78 : 26;
     u32 release : 1;
-    u32 unused3 : 5;
+    u32 pad_7B : 5;
     u32 radius : 16;
     u32 initialized : 1;
     u32 active : 1;
-    u32 flag0 : 1;
-    u32 flag1 : 1;
-    u32 unused4 : 12;
+    u32 unk_7C_18 : 1;
+    u32 unk_7C_19 : 1;
+    u32 pad_7E : 12;
 } LocalActor;
 extern s32 func_800EFFB4(void *, f32, f32 *);
 extern void func_8010108C();
 DataFF62C *func_80100368();
 s32 func_8010038C();
 
+// Initialises all actor sub-pools.
 int func_800FF390()
 {
     D_80135A50 = 0;
@@ -187,82 +189,85 @@ int func_800FF390()
     func_80107BB0();
 }
 
-void func_800FF3EC(param_0) S_FF3EC *param_0;
+void func_800FF3EC(actor) S_FF3EC *actor;
 {
-    O_FF3EC *o;
+    O_FF3EC *info;
 
-if (param_0->flag) {
+if (actor->teardown_done) {
     return;
 }
 
-o = func_80100368(param_0);
+info = func_80100368(actor);
 
-if (o->unk28 != 0) {
-    o->unk28(param_0);
+if (info->unk_28 != 0) {
+    info->unk_28(actor);
 }
 
-param_0->flag = 1;
+actor->teardown_done = 1;
 }
 
+// Broadcasts message 0x93 (teardown) to all actors, then finalises each.
 void func_800FF44C(void)
 {
-    s32 sp24;
-    s32 var_a0;
+    s32 iter;
+    s32 actor;
 
     func_80101238(0x93, 0);
-    var_a0 = func_801067C4(&sp24);
+    actor = func_801067C4(&iter);
 
-while (var_a0 != 0) {
-    func_800FF3EC(var_a0);
-    var_a0 = func_8010682C(&sp24);
+while (actor != 0) {
+    func_800FF3EC(actor);
+    actor = func_8010682C(&iter);
 }
 
 }
 
-int func_800FF4A4(Actor *param_0)
+int func_800FF4A4(Actor *actor)
 {
-    u32 *local_0;
+    u32 *marker;
 
-    local_0 = *(u32 **) ((u8 *) param_0 + 0x0);
-    func_8010381C(param_0);
-    func_80103938(param_0);
+    marker = *(u32 **) ((u8 *) actor + 0x0);
+    func_8010381C(actor);
+    func_80103938(actor);
 
-if (*(s32 *) ((u8 *) param_0 + 0x7C) & 0xFFF) {
-    func_800D8808((*(u32 *) ((u8 *) func_80105494(param_0) + 0x24) << 23) >> 29);
-    func_80105634(param_0);
+if (*(s32 *) ((u8 *) actor + 0x7C) & 0xFFF) {
+    func_800D8808((*(u32 *) ((u8 *) func_80105494(actor) + 0x24) << 23) >> 29);
+    func_80105634(actor);
 }
 
-*(u16 *) ((u8 *) local_0 + 0x24) &= 0x3F;
-func_80104328(param_0);
-_subaddieaudioloop_entrypoint_2(param_0);
-func_80104504(param_0);
+*(u16 *) ((u8 *) marker + 0x24) &= 0x3F;
+func_80104328(actor);
+_subaddieaudioloop_entrypoint_2(actor);
+func_80104504(actor);
 
-func_80106EE0(param_0);
+func_80106EE0(actor);
+// Free the three local-data blocks.
 {
-    s32 local_1;
+    s32 i;
 
-    for (local_1 = 0; local_1 < 3; local_1++) {
-        func_80100074(param_0, local_1, 0);
+    for (i = 0; i < 3; i++) {
+        func_80100074(actor, i, 0);
     }
 }
 
 }
 
+// Tears down and frees all actors, then resets every actor sub-pool.
 void func_800FF564(void)
 {
-    s32 sp2C;
-    s32 *var_s0;
+    s32 iter;
+    s32 *actor;
 
     func_80101238(0x93, 0);
-    for (var_s0 = func_801067C4(&sp2C); var_s0 != NULL; var_s0 = func_8010682C(&sp2C)) {
-        func_800FF3EC(var_s0);
-        func_800FF4A4(var_s0);
+    for (actor = func_801067C4(&iter); actor != NULL; actor = func_8010682C(&iter)) {
+        func_800FF3EC(actor);
+        func_800FF4A4(actor);
 
-if (*var_s0 != 0) {
-    func_800EBFF4(*var_s0);
+if (*actor != 0) {
+    func_800EBFF4(*actor);
 }
 
-*var_s0 = 0;
+*actor = 0;
 }
 D_80135A50 = 0;
 D_80127194 = 0;
@@ -276,126 +281,133 @@ func_80106E18();
 func_8010DF98();
 }
 
+// Per-frame actor update: info callbacks, then the components of each actor.
 void func_800FF62C(void)
 {
-    s32 local_7, local_8;
-    s32 local_0;
-    f32 local_1[3];
-    s32 local_2;
-    MarkerFF62C *local_3;
-    DataFF62C *local_4;
-    ActorFF62C *local_5;
-    local_2 = func_800BEC1C();
-    if (local_2)
-        local_7 = 1;
+    s32 unk_0, unk_1;
+    s32 iter;
+    f32 ref_pos[3];
+    s32 unk_2;
+    MarkerFF62C *marker;
+    DataFF62C *info;
+    ActorFF62C *actor;
+    unk_2 = func_800BEC1C();
+    if (unk_2)
+        unk_0 = 1;
     else
-        local_7 = 0;
+        unk_0 = 0;
     func_8010D1E8();
     if (func_800DB9B0())
-        func_800E3980(local_1);
+        func_800E3980(ref_pos);
     else
-        func_8010D254(local_1);
-    for (local_5 = func_801067C4(&local_0); local_5 != 0; local_5 = func_8010682C(&local_0)) {
-        local_3 = local_5->local_0;
+        func_8010D254(ref_pos);
+    for (actor = func_801067C4(&iter); actor != 0; actor = func_8010682C(&iter)) {
+        marker = actor->marker;
 
-if (local_5->local_2)
+// Skip deleted actors.
+if (actor->deleted)
     continue;
 {
-    if (local_5->local_5) {
-        if (func_8010038C(local_5, local_1))
-            func_80100368(local_5)->local_1(local_5);
+    if (actor->unk_74_27) {
+        if (func_8010038C(actor, ref_pos))
+            func_80100368(actor)->unk_10(actor);
     } else {
-        func_80100120((Actor *) local_5);
-        if (func_8010038C(local_5, local_1)) {
-            local_4 = func_80100368(local_5);
-            if (local_4->local_0)
-                local_4->local_0(local_5);
+        func_80100120((Actor *) actor);
+        if (func_8010038C(actor, ref_pos)) {
+            info = func_80100368(actor);
+            if (info->unk_C)
+                info->unk_C(actor);
         }
     }
-    if (local_5->local_8 && local_5->local_3)
-        func_8008ADE4(func_80104248(local_5));
-    if (local_5->local_10)
-        func_801061D8(local_5);
-    if (local_5->local_6)
-        _subaddiefade_entrypoint_7(local_5);
-    if (local_5->local_11)
-        func_80106F70(local_5);
-    if (local_5->local_9)
-        func_80104780(local_5);
-    if (local_5->local_7) {
-        _chbounce_entrypoint_8(local_5);
-        func_80103014(local_5);
-        if (local_7)
-            _subaddiezone_entrypoint_0(local_5);
-    } else if (!local_5->local_4) {
-        func_80103014(local_5);
-        if (local_7)
-            _subaddiezone_entrypoint_0(local_5);
+    if (actor->anim && actor->unk_74_4)
+        func_8008ADE4(func_80104248(actor));
+    if (actor->glid)
+        func_801061D8(actor);
+    if (actor->fade)
+        _subaddiefade_entrypoint_7(actor);
+    if (actor->unk_94_2)
+        func_80106F70(actor);
+    if (actor->floor_tint)
+        func_80104780(actor);
+    if (actor->bounce) {
+        _chbounce_entrypoint_8(actor);
+        func_80103014(actor);
+        if (unk_0)
+            _subaddiezone_entrypoint_0(actor);
+    } else if (!actor->unk_74_26) {
+        func_80103014(actor);
+        if (unk_0)
+            _subaddiezone_entrypoint_0(actor);
     } else {
-        local_3->local_1 = func_800136E4(local_5->local_1[1]);
-        local_3->local_0 = func_800136E4(local_5->local_1[0]);
-        local_3->local_2 = func_800136E4(local_5->local_1[2]);
+        marker->y = func_800136E4(actor->pos[1]);
+        marker->x = func_800136E4(actor->pos[0]);
+        marker->z = func_800136E4(actor->pos[2]);
     }
-    func_80103040(local_5);
+    func_80103040(actor);
 }
 
 }
 func_8010DF3C();
 }
 
-int func_800FFA3C(s32 param_0[3])
+// Final removal of one deleted actor.
+int func_800FFA3C(s32 actor[3])
 {
-    s32 local_0;
+    s32 marker;
+    // Matching: the always-true if is needed for the match.
     if (1) {
-        local_0 = param_0[0];
+        marker = actor[0];
     }
     func_800FF3EC();
-    func_800FF4A4(param_0);
-    func_801066C0(((u32) (*((u16 *) (local_0 + 0x1A)))) >> 5);
-    func_800EBFF4(local_0);
+    func_800FF4A4(actor);
+    func_801066C0(((u32) (*((u16 *) (marker + 0x1A)))) >> 5);
+    func_800EBFF4(marker);
 }
 
-void func_800FFA88(Unk80132ED0 *a0)
+void func_800FFA88(Unk80132ED0 *link)
 {
-    func_800FFAB0(func_80106790(a0));
+    func_800FFAB0(func_80106790(link));
 }
 
-void func_800FFAB0(Actor *param_0)
+// Marks the actor and its linked actor as deleted; func_800FFB74 sweeps them.
+void func_800FFAB0(Actor *actor)
 {
-    local_type_800FFAB0 *local_0;
-    ((local_type_800FFAB0 *) param_0)->local_4 = 1;
+    local_type_800FFAB0 *linked;
+    ((local_type_800FFAB0 *) actor)->deleted = 1;
     D_80135A50++;
-    if (((local_type_800FFAB0 *) param_0)->local_1 &&
-        ((local_type_800FFAB0 *) param_0)->local_8 != 0x243) {
-        local_0 = (local_type_800FFAB0 *) func_80106790(((local_type_800FFAB0 *) param_0)->local_1);
-        local_0->local_4 = 1;
-        ((local_type_800FFAB0 *) param_0)->local_1 = 0;
-        local_0->local_1 = 0;
+    if (((local_type_800FFAB0 *) actor)->link &&
+        ((local_type_800FFAB0 *) actor)->actor_id != 0x243) {
+        linked = (local_type_800FFAB0 *) func_80106790(((local_type_800FFAB0 *) actor)->link);
+        linked->deleted = 1;
+        ((local_type_800FFAB0 *) actor)->link = 0;
+        linked->link = 0;
         D_80135A50++;
     }
-    ((local_type_800FFAB0 *) param_0)->local_15 = 0;
-    ((local_type_800FFAB0 *) param_0)->local_12 = ((local_type_800FFAB0 *) param_0)->local_15;
+    ((local_type_800FFAB0 *) actor)->unk_78_29 = 0;
+    ((local_type_800FFAB0 *) actor)->unk_74_7 = ((local_type_800FFAB0 *) actor)->unk_78_29;
 }
 
+// Removes all actors marked as deleted.
 void func_800FFB74()
 {
     typedef struct {
         u32 pad_0[0x19];
         u32 pad_64_18 : 14;
-        u32 local_17 : 1;
+        u32 deleted : 1;
     } Struct800FFB74;
-    s32 local_var;
-    u8 *var_v0;
+    s32 iter;
+    u8 *actor;
     if (D_80135A50 > 0) {
-        var_v0 = func_801067C4((&local_var) - 1);
+        // Matching: the iterator state is passed as &iter - 1.
+        actor = func_801067C4((&iter) - 1);
 
-if (var_v0 != 0) {
+if (actor != 0) {
     do {
-        if (((Struct800FFB74 *) var_v0)->local_17 != 0) {
-            func_800FFA3C(var_v0);
+        if (((Struct800FFB74 *) actor)->deleted != 0) {
+            func_800FFA3C(actor);
         }
-        var_v0 = func_8010682C(&local_var - 1);
-    } while (var_v0 != 0);
+        actor = func_8010682C(&iter - 1);
+    } while (actor != 0);
 }
 
 D_80135A50 = 0;
@@ -422,30 +434,30 @@ void func_800FFC14()
 
 void func_800FFC3C()
 {
-    void *local_1;
-    s32 local_0;
-    local_1 = func_801067C4(&local_0);
-    while (local_1 != 0) {
-        ((u8 *) local_1)[0x7E] &= 0xFFEF;
-        local_1 = func_8010682C(&local_0);
+    void *actor;
+    s32 iter;
+    actor = func_801067C4(&iter);
+    while (actor != 0) {
+        ((u8 *) actor)[0x7E] &= 0xFFEF;
+        actor = func_8010682C(&iter);
 
 }
 }
 
 void func_800FFC90(void)
 {
-    S800FFC90 *local_2;
-    s32 local_0;
-    local_2 = func_801067C4(&local_0);
-    if (local_2) {
+    S800FFC90 *actor;
+    s32 iter;
+    actor = func_801067C4(&iter);
+    if (actor) {
         do {
-            if (local_2->unk7C_19 && local_2->unk70_0) {
-                local_2->unk71_7 ^= 1;
+            if (actor->unk7C_19 && actor->unk70_0) {
+                actor->unk71_7 ^= 1;
             }
-            local_2 = func_8010682C(&local_0);
+            actor = func_8010682C(&iter);
         }
 
-while (local_2 != 0)
+while (actor != 0)
     ;
 }
 }
@@ -455,32 +467,33 @@ void func_800FFD10(s32 param_0)
     typedef struct {
         u32 pad_0[0x1C];
         u32 pad_70_4 : 28;
-        u32 local_3 : 1;
+        u32 unk_70_28 : 1;
     } Struct800FFD10;
-    s32 var_s1;
-    u8 *var_s0;
-    u8 *var_v0;
+    s32 remaining;
+    u8 *entry_copy;
+    u8 *entry;
     if (param_0 == 1) {
-        var_s1 = 0xA;
+        remaining = 0xA;
     } else {
-        var_s1 = func_80106730();
+        remaining = func_80106730();
 
 }
-var_v0 = func_801068A8(&D_80124390);
-var_s0 = var_v0;
-if ((var_v0 != 0) && (var_s1 > 0)) {
+entry = func_801068A8(&D_80124390);
+// Matching: entry_copy duplicates entry, needed for the match.
+entry_copy = entry;
+if ((entry != 0) && (remaining > 0)) {
 loop_5:
-    if (((Struct800FFD10 *) var_v0)->local_3 != 0) {
-        if (func_80103AC0(var_s0) == 0) {
-            func_8010381C(var_s0);
+    if (((Struct800FFD10 *) entry)->unk_70_28 != 0) {
+        if (func_80103AC0(entry_copy) == 0) {
+            func_8010381C(entry_copy);
         }
     }
 
-var_v0 = func_80106920(&D_80124390);
-var_s0 = var_v0;
-var_s1 -= 1;
+entry = func_80106920(&D_80124390);
+entry_copy = entry;
+remaining -= 1;
 
-if ((var_v0 != 0) && (var_s1 > 0)) {
+if ((entry != 0) && (remaining > 0)) {
     goto loop_5;
 }
 }
@@ -489,38 +502,40 @@ if ((var_v0 != 0) && (var_s1 > 0)) {
 
 void func_800FFDBC()
 {
-    s32 local_4;
-    s32 local_0;
-    local_4 = func_801067C4(&local_0);
+    s32 actor;
+    s32 iter;
+    actor = func_801067C4(&iter);
 
-while (local_4 != 0) {
-    func_8010381C(local_4);
-    local_4 = func_8010682C(&local_0);
+while (actor != 0) {
+    func_8010381C(actor);
+    actor = func_8010682C(&iter);
 }
 
 }
 
+// Defragments all actor sub-pools.
 void func_800FFE08()
 {
-    void **local_0;
-    void *local_1;
-    int local_2;
-    int local_3;
-    local_3 = 0;
-    local_0 = func_801068A8(&D_80124394);
+    void **entry;
+    void *block;
+    int data;
+    int count;
+    count = 0;
+    entry = func_801068A8(&D_80124394);
 
-if (local_0 != 0) {
+if (entry != 0) {
     do {
-        local_1 = *local_0;
-        local_2 = *(int *) ((char *) local_1 + 4);
-        if (local_2 != 0) {
-            *(int *) ((char *) local_1 + 4) = func_800DC060(local_2);
+        block = *entry;
+        data = *(int *) ((char *) block + 4);
+        if (data != 0) {
+            *(int *) ((char *) block + 4) = func_800DC060(data);
         }
+        // Matching: empty block needed for the match.
         if (0) {
         }
-        local_0 = func_80106920(&D_80124394);
-        local_3 += 1;
-    } while ((local_0 != 0) && (local_3 != 8));
+        entry = func_80106920(&D_80124394);
+        count += 1;
+    } while ((entry != 0) && (count != 8));
 }
 
 func_80106630();
@@ -533,162 +548,174 @@ func_80106E50();
 func_80107C10();
 }
 
-u32 *func_800FFECC(ActorFFECC *param_0, s32 param_1, s32 param_2)
+// Resizes local-data block `slot` of the actor to `size` bytes, allocating it if
+// missing; size 0 frees it. New memory is zeroed. Returns the block or NULL.
+u32 *func_800FFECC(ActorFFECC *actor, s32 slot, s32 size)
 {
-    u32 *local_1;
-    s32 local_2;
-    s32 local_3, local_4;
-    s32 local_0;
+    u32 *data;
+    s32 aligned_size;
+    s32 i, j;
+    s32 old_size;
 
-if (param_2) {
-    local_2 = (param_2 + 3) & 0x7FFFFFFC;
-    if (param_0->local_0[param_1]) {
-        local_0 = func_8001B7B8(param_0->local_0[param_1]);
-        local_1 = func_8001B710(param_0->local_0[param_1], local_2);
-        if (local_0 < local_2) {
-            for (local_3 = (local_2 >> 2) - 1; local_3 >= (local_0 >> 2); local_3--) {
-                local_1[local_3] = 0;
+if (size) {
+    aligned_size = (size + 3) & 0x7FFFFFFC;
+    if (actor->data_handle[slot]) {
+        old_size = func_8001B7B8(actor->data_handle[slot]);
+        data = func_8001B710(actor->data_handle[slot], aligned_size);
+        if (old_size < aligned_size) {
+            for (i = (aligned_size >> 2) - 1; i >= (old_size >> 2); i--) {
+                data[i] = 0;
             }
         }
     } else {
-        param_0->local_0[param_1] = func_8001B668(4, local_2);
-        local_1 = func_8001B798(param_0->local_0[param_1]);
-        for (local_3 = (local_2 >> 2) - 1; local_3 >= 0; local_3--) {
-            local_1[local_3] = 0;
+        actor->data_handle[slot] = func_8001B668(4, aligned_size);
+        data = func_8001B798(actor->data_handle[slot]);
+        for (i = (aligned_size >> 2) - 1; i >= 0; i--) {
+            data[i] = 0;
         }
     }
-} else if (param_0->local_0[param_1]) {
+} else if (actor->data_handle[slot]) {
 
-func_8001B754(param_0->local_0[param_1]);
-param_0->local_0[param_1] = 0;
+func_8001B754(actor->data_handle[slot]);
+actor->data_handle[slot] = 0;
 }
-if (param_0->local_0[param_1])
-    return func_8001B798(param_0->local_0[param_1]);
+if (actor->data_handle[slot])
+    return func_8001B798(actor->data_handle[slot]);
 return 0;
 }
 
-u32 *func_80100074(Actor *a0, u32 a1, u32 a2)
+u32 *func_80100074(Actor *actor, u32 slot, u32 size)
 {
-    return func_800FFECC(a0, a1, a2);
+    return func_800FFECC(actor, slot, size);
 }
 
-void *func_80100094(Actor *param_0, u32 param_1)
+// Returns local-data block `slot` of the actor, or NULL.
+void *func_80100094(Actor *actor, u32 slot)
 {
     void *rv = 0;
-    s16 v = *(s16 *) ((u8 *) param_0 + 0x82 + param_1 * 2);
-    if (v != 0) {
-        return func_8001B798(v);
+    s16 handle = *(s16 *) ((u8 *) actor + 0x82 + slot * 2);
+    if (handle != 0) {
+        return func_8001B798(handle);
     }
     return rv;
 
 }
 
-s32 func_801000D8(Actor *param_0, s32 param_1, s32 param_2)
+// Returns local-data block `slot`, allocating it with `size` bytes if missing.
+s32 func_801000D8(Actor *actor, s32 slot, s32 size)
 {
-    if (!func_80100094(param_0, param_1)) {
-        func_80100074(param_0, param_1, param_2);
+    if (!func_80100094(actor, slot)) {
+        func_80100074(actor, slot, size);
     }
 
-return func_80100094(param_0, param_1);
+return func_80100094(actor, slot);
 }
 
-void func_80100120(param_0) Actor *param_0;
+// Runs the actor type's init callback once.
+void func_80100120(actor) Actor *actor;
 {
-    void (*local_0)(Actor *);
+    void (*init)(Actor *);
 
-if (!((local_flags_a *) ((u8 *) param_0 + 0x74))->local_1) {
-    local_0 = ((local_type_80100120 *) func_80100368(param_0))->local_1;
-    if (local_0) {
-        if (((local_flags_b *) ((u8 *) param_0 + 0x70))->local_1 &&
-            func_80102F74(param_0, 0x80080000))
-            func_8010381C(param_0);
-        local_0(param_0);
-        if (((local_flags_c *) ((u8 *) param_0 + 0x64))->local_1) {
-            ((local_flags_d *) ((u8 *) param_0 + 0x7E))->local_0 = 1;
-            ((local_flags_d *) ((u8 *) param_0 + 0x7E))->local_1 = 0;
+if (!((local_flags_a *) ((u8 *) actor + 0x74))->init_done) {
+    init = ((local_type_80100120 *) func_80100368(actor))->init;
+    if (init) {
+        if (((local_flags_b *) ((u8 *) actor + 0x70))->unk_70_28 &&
+            func_80102F74(actor, 0x80080000))
+            func_8010381C(actor);
+        init(actor);
+        if (((local_flags_c *) ((u8 *) actor + 0x64))->deleted) {
+            ((local_flags_d *) ((u8 *) actor + 0x7E))->unk_7E_0 = 1;
+            ((local_flags_d *) ((u8 *) actor + 0x7E))->unk_7E_1 = 0;
         }
     }
-    ((local_flags_e *) ((u8 *) param_0 + 0x75))->local_1 = 1;
+    ((local_flags_e *) ((u8 *) actor + 0x75))->init_done = 1;
 }
 
 }
 
+// Runs the one-time init of every actor, then sweeps deleted actors.
 void func_801001D8()
 {
-    s32 local_0;
-    s32 local_1;
+    s32 iter;
+    s32 actor;
     func_8010D1E8();
-    local_1 = func_801067C4(&local_0);
+    actor = func_801067C4(&iter);
 
-while (local_1 != 0) {
-    func_80100120(local_1);
-    local_1 = func_8010682C(&local_0);
+while (actor != 0) {
+    func_80100120(actor);
+    actor = func_8010682C(&iter);
 }
 
 func_800FFB74();
 
 }
 
-s32 func_80100230(S_100230 *param_0, void *param_1)
+s32 func_80100230(S_100230 *actor, void *ref_pos)
 {
-    if (!param_0->flag) {
+    if (!actor->active) {
         return 0;
     }
 
-if (param_0->val == 0) {
+if (actor->radius == 0) {
     return 1;
 }
 
-return (f32) (s32) (param_0->val * param_0->val) < func_800EEB40(param_1, (u8 *) param_0 + 4);
+return (f32) (s32) (actor->radius * actor->radius) < func_800EEB40(ref_pos, (u8 *) actor + 4);
 }
 
+// Unloads the code overlays of out-of-range actors.
 void func_801002C0()
 {
-    s32 local_0;
-    s32 local_3;
-    s32 local_4[3];
+    s32 actor;
+    s32 iter;
+    s32 ref_pos[3];
     func_801001D8();
     _suautobaddies_entrypoint_1();
     func_800FFB74();
-    func_800F5A00(func_800F54E4(), local_4);
-    local_0 = func_801067C4(&local_3 + 1);
+    func_800F5A00(func_800F54E4(), ref_pos);
+    // Matching: the iterator state is passed as &iter + 1.
+    actor = func_801067C4(&iter + 1);
 
-while (local_0 != 0) {
-    if (func_80100230(local_0, &local_4) && func_80081D34(*(s32 **) (local_0 + 0x10))) {
-        func_800819B4(*(s32 **) (local_0 + 0x10));
+while (actor != 0) {
+    if (func_80100230(actor, &ref_pos) && func_80081D34(*(s32 **) (actor + 0x10))) {
+        func_800819B4(*(s32 **) (actor + 0x10));
     }
-    local_0 = func_8010682C(&local_3 + 1);
+    actor = func_8010682C(&iter + 1);
 }
 
 }
 
-DataFF62C *func_80100368(arg0) void *arg0;
+// Matching: there is no return statement; the callee's v0 passes through.
+DataFF62C *func_80100368(actor) void *actor;
 {
-    (*(s32(**)())((u8 *) arg0 + 0x10))();
+    (*(s32(**)())((u8 *) actor + 0x10))();
 
 }
 
-s32 func_8010038C(param_0, param_1)
-LocalActor *param_0;
-f32 *param_1;
+// Sends message 0x95 on first activation. Returns whether the actor is active
+// and within its radius of ref_pos.
+s32 func_8010038C(actor, ref_pos)
+LocalActor *actor;
+f32 *ref_pos;
 {
-    if (!param_0->initialized) {
-        param_0->initialized = 1;
-        func_8010108C(param_0, 0x95, 0);
-        if (param_0->deleted)
+    if (!actor->initialized) {
+        actor->initialized = 1;
+        func_8010108C(actor, 0x95, 0);
+        if (actor->deleted)
             return 0;
-        if (param_0->release)
-            func_80081D34(param_0->marker);
+        if (actor->release)
+            func_80081D34(actor->marker);
     }
 
-if (!param_0->active)
+if (!actor->active)
     return 0;
-if (!param_0->radius)
+if (!actor->radius)
     return 1;
-if (param_0->flag0 && param_0->flag1)
+if (actor->unk_7C_18 && actor->unk_7C_19)
     return 1;
-return func_800EFFB4((u8 *) param_0 + 4, (f32) (s32) param_0->radius, param_1);
+return func_800EFFB4((u8 *) actor + 4, (f32) (s32) actor->radius, ref_pos);
 }
 
+// TU-NOTE: the .data of this file is defined here in C; values are taken from the ROM.
 u8 D_80124390[4] = {0x0, 0x0, 0x0, 0x0};
 void *D_80124394 = 0;

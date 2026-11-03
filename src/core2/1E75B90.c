@@ -1,14 +1,16 @@
 #include "common.h"
 
+// TU-NOTE: D_80117F02 is a linker symbol (undefined_syms) = D_80117F00 + 0x2; data is defined below.
 extern s16 D_80117F02[][2];
 
-int func_8009C2A0(s32 param_0, int param_1)
+// Maps a player body-part index to a model bone and fetches that bone's position.
+int func_8009C2A0(s32 param_0, int part)
 {
-    s16 *new_var;
-    short new_var2;
-    new_var = D_80117F02[param_1];
-    new_var2 = *new_var;
-    func_800DBEFC(param_0, new_var2);
+    s16 *entry;
+    short bone;
+    entry = D_80117F02[part];
+    bone = *entry;
+    func_800DBEFC(param_0, bone);
 }
 
 u32 D_80117F00[12] = {0xFFFF,  0x10007, 0x20006, 0x30005, 0x40004, 0x50008,

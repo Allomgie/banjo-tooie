@@ -18,6 +18,7 @@ typedef struct {
     u8 local_1;
     u8 local_2[7];
 } local_type_800C145C;
+// TU-NOTE: D_80128B0C + 8 * n aliases D_80128B10[n - 1].local_1.
 extern s32 D_80128B0C[];
 typedef struct {
     s32 local_0;
@@ -135,6 +136,7 @@ typedef struct {
     u8 local_0;
     u8 pad79[7];
 } SoundSlotC;
+// TU-NOTE: D_80128C10 is D_80128B90 slot 1 (+0x80); D_80128C08 is the in-use byte (0x78) of slot 0.
 extern s32 D_80128C10;
 typedef struct {
     u8 local_0[0x54];
@@ -245,50 +247,51 @@ int func_800C42E0();
 int func_800C4B70();
 void func_800C4B7C();
 
-void func_800C1070(s32 param_0, s32 param_1)
+// Position of the listener (camera or nearest player) relative to a sound position.
+void func_800C1070(s32 listener, s32 pos)
 {
     s32 pad;
-    s32 local_0;
-    f32 local_1[3];
+    s32 unk_0;
+    f32 unk_1[3];
 
     if (func_800F5310() != 0) {
         if (func_800EA068(0x20) != 0) {
-            _plsu_entrypoint_0(param_0, param_1);
+            _plsu_entrypoint_0(listener, pos);
             return;
         }
-        local_0 = func_800F5EF8(_plsu_entrypoint_0(param_0, param_1));
-        if (func_8010FFA8(local_0) != 2) {
-            func_8010FFB0(local_0, param_0, local_1);
+        unk_0 = func_800F5EF8(_plsu_entrypoint_0(listener, pos));
+        if (func_8010FFA8(unk_0) != 2) {
+            func_8010FFB0(unk_0, listener, unk_1);
         }
     } else {
-        func_800E3980(param_0);
+        func_800E3980(listener);
     }
 }
 
-s32 func_800C1104(s32 param_0)
+s32 func_800C1104(s32 pos)
 {
-    f32 sp24[3];
-    s32 sp20;
-    s32 sp1C;
-    s32 sp18;
+    f32 listener[3];
+    s32 unk_0;
+    s32 unk_1;
+    s32 unk_2;
 
     if (func_800F5310() != 0) {
         if (func_800EA068(0x20) != 0) {
-            sp20 = _plsu_entrypoint_0(sp24, param_0);
-            if (func_800F5D18(sp20) == 2) {
+            unk_0 = _plsu_entrypoint_0(listener, pos);
+            if (func_800F5D18(unk_0) == 2) {
                 return 1;
             }
             return 0;
         }
-        sp1C = _plsu_entrypoint_0(sp24, param_0);
-        sp18 = func_800F5EF8(sp1C);
-        if (func_8010FFA8(sp18) == 2) {
-            if (func_800F5D18(sp1C) == 2) {
+        unk_1 = _plsu_entrypoint_0(listener, pos);
+        unk_2 = func_800F5EF8(unk_1);
+        if (func_8010FFA8(unk_2) == 2) {
+            if (func_800F5D18(unk_1) == 2) {
                 return 1;
             }
             return 0;
         }
-        if (func_8010FFD8(sp18) != 0) {
+        if (func_8010FFD8(unk_2) != 0) {
             return 1;
         }
         return 0;
@@ -299,58 +302,64 @@ s32 func_800C1104(s32 param_0)
     return 0;
 }
 
-void func_800C11F8(u8 *a0, s32 a1)
+// Set the release policy (bits 5-7 of byte 0x7A).
+// Matching: the extra temporaries are needed for the match.
+void func_800C11F8(u8 *slot, s32 policy)
 {
-    short new_var2;
-    s32 new_var;
-    new_var = a1;
-    a0[0x7A] = (a0[0x7A] & ~0xE0) | ((new_var2 = new_var) << 5);
+    short policy_short;
+    s32 policy_copy;
+    policy_copy = policy;
+    slot[0x7A] = (slot[0x7A] & ~0xE0) | ((policy_short = policy_copy) << 5);
 }
 
-int func_800C1210(volatile u8 *param_0, u32 param_1)
+// Set the slot state (bits 2-4 of byte 0x7A).
+// Matching: the extra temporaries and the volatile pointer are needed for the match.
+int func_800C1210(volatile u8 *slot, u32 state)
 {
-    u32 new_var;
-    unsigned short new_var3;
-    new_var3 = param_1;
-    param_0[0x7A] = (param_0[0x7A] & 0xFFE3) | (((new_var = new_var3) << 2) & 0x1C);
+    u32 state_copy;
+    unsigned short state_short;
+    state_short = state;
+    slot[0x7A] = (slot[0x7A] & 0xFFE3) | (((state_copy = state_short) << 2) & 0x1C);
 }
 
-s32 func_800C122C(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+s32 func_800C122C(s32 reverb, s32 unk_0, s32 unk_1, s32 unk_2)
 {
-    f32 local_0;
-    if (param_3) {
-        if (!param_1 || !param_2)
-            return param_0;
-        return param_0 + 128;
+    f32 value;
+    if (unk_2) {
+        if (!unk_0 || !unk_1)
+            return reverb;
+        return reverb + 128;
     }
-    if (!param_1 || !param_2) {
-        local_0 = (param_0 + (f32) D_8011A870 * 127.0f) * (f32) D_8011A874;
-        return MAX_C(0.0f, MIN_C(127.0f, local_0));
+    if (!unk_0 || !unk_1) {
+        value = (reverb + (f32) D_8011A870 * 127.0f) * (f32) D_8011A874;
+        return MAX_C(0.0f, MIN_C(127.0f, value));
     }
-    local_0 = (param_0 + (f32) D_8011A870 * 127.0f) * (f32) D_8011A874;
-    return MAX_C(0.0f, MIN_C(127.0f, local_0)) + 128.0f;
+    value = (reverb + (f32) D_8011A870 * 127.0f) * (f32) D_8011A874;
+    return MAX_C(0.0f, MIN_C(127.0f, value)) + 128.0f;
 }
 
-void func_800C13A0(u16 *param_0, unsigned int param_1)
+// Set, clear and test bits of the slot flag halfword (offset 0x7C).
+void func_800C13A0(u16 *slot, unsigned int mask)
 {
-    param_0[0x3E] |= param_1;
+    slot[0x3E] |= mask;
 }
 
-void func_800C13B0(u16 *param_0, unsigned long param_1)
+void func_800C13B0(u16 *slot, unsigned long mask)
 {
-    param_0[0x3E] &= ~param_1;
+    slot[0x3E] &= ~mask;
 }
 
-int func_800C13C4(u16 *param_0, unsigned long param_1)
+int func_800C13C4(u16 *slot, unsigned long mask)
 {
-    return param_0[0x3E] & param_1;
+    return slot[0x3E] & mask;
 }
 
-s32 func_800C13D0(u8 *param_0, s32 param_1)
+s32 func_800C13D0(u8 *slot, s32 mask)
 {
-    return (*(u16 *) ((s8 *) param_0 + 0x7C) & param_1) == 0;
+    return (*(u16 *) ((s8 *) slot + 0x7C) & mask) == 0;
 }
 
+// Mark all 60 slots as unused.
 void func_800C13E4(void)
 {
     s32 i;
@@ -362,522 +371,551 @@ void func_800C13E4(void)
     }
 }
 
-S_C3B8C *func_800C1414(u8 param_0)
+// Pointer to the 0x80-byte slot with the given id.
+S_C3B8C *func_800C1414(u8 id)
 {
-    return (param_0 << 7) + (u8 *) D_80128B90;
+    return (id << 7) + (u8 *) D_80128B90;
 }
 
-int func_800C1430(s32 param_0)
+// Address of the voice entry for a 1-based voice handle.
+int func_800C1430(s32 handle)
 {
-    return (int) &D_80128B10[param_0 - 1];
+    return (int) &D_80128B10[handle - 1];
 }
 
-int func_800C1448(param_0)
-s32 param_0;
+int func_800C1448(handle)
+s32 handle;
 {
-    return D_80128B10[param_0 - 1].local_0;
+    return D_80128B10[handle - 1].local_0;
 }
 
+// Allocate a free slot (ids 1..59); returns 0 if none is free.
 u8 func_800C145C(void)
 {
-    s32 local_0;
-    for (local_0 = 1; local_0 < 0x3C; local_0++) {
-        if (((local_type_800C145C *) D_80128B90)[local_0].local_1 == 0) {
-            ((local_type_800C145C *) D_80128B90)[local_0].local_1 = 1;
-            return local_0;
+    s32 i;
+    for (i = 1; i < 0x3C; i++) {
+        if (((local_type_800C145C *) D_80128B90)[i].local_1 == 0) {
+            ((local_type_800C145C *) D_80128B90)[i].local_1 = 1;
+            return i;
         }
     }
     return 0;
 }
 
-int func_800C1568(s32 param_0)
+// Release a voice handle.
+int func_800C1568(s32 handle)
 {
-    *(s32 *) ((char *) D_80128B0C + param_0 * 8) = 0;
+    *(s32 *) ((char *) D_80128B0C + handle * 8) = 0;
 }
 
+// Clear all 16 voice handles.
 void func_800C157C(void)
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < 16; local_0++) {
-        ((s32(*)[2]) D_80128B10)[local_0][0] = 0;
-        ((s32(*)[2]) D_80128B10)[local_0][1] = 0;
+    s32 i;
+    for (i = 0; i < 16; i++) {
+        ((s32(*)[2]) D_80128B10)[i][0] = 0;
+        ((s32(*)[2]) D_80128B10)[i][1] = 0;
     }
 }
 
+// Allocate a free voice handle (1-based); returns 0 if all 16 are in use.
 s32 func_800C15BC(void)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 used;
+    s32 i;
     do {
-        local_0 = 0;
-        for (local_1 = 0; local_1 < 16; local_1++) {
-            if (D_80128B10[local_1].local_1 != 0)
-                local_0++;
-            else if (D_80128B10[local_1].local_0 == 0) {
-                D_80128B10[local_1].local_1 = 1;
-                return local_1 + 1;
+        used = 0;
+        for (i = 0; i < 16; i++) {
+            if (D_80128B10[i].local_1 != 0)
+                used++;
+            else if (D_80128B10[i].local_0 == 0) {
+                D_80128B10[i].local_1 = 1;
+                return i + 1;
             }
         }
-    } while (local_0 < 16);
+    } while (used < 16);
     return 0;
 }
 
-void func_800C16A4(u8 param_0)
+// Free a slot and its voice handle.
+void func_800C16A4(u8 id)
 {
-    u8 *temp_v0;
+    u8 *slot;
 
-    temp_v0 = func_800C1414(param_0);
-    if (*(u8 *) ((char *) temp_v0 + 0x79) != 0) {
-        func_800C1568(*(u8 *) ((char *) temp_v0 + 0x79));
-        *(u8 *) ((char *) temp_v0 + 0x79) = 0;
+    slot = func_800C1414(id);
+    if (*(u8 *) ((char *) slot + 0x79) != 0) {
+        func_800C1568(*(u8 *) ((char *) slot + 0x79));
+        *(u8 *) ((char *) slot + 0x79) = 0;
     }
-    D_80128C08[param_0 << 7] = 0;
+    D_80128C08[id << 7] = 0;
 }
 
-void func_800C16F8(LocalSound_800C16F8 *param_0, s32 param_1)
+// Start the voice of a slot using the given voice handle.
+void func_800C16F8(LocalSound_800C16F8 *slot, s32 handle)
 {
-    s32 local_1;
-    s32 local_0;
+    s32 unk_0;
+    s32 reverb;
 
-    if (param_1) {
-        if (param_0->field79) {
-            func_800C1568(param_0->field79);
+    if (handle) {
+        if (slot->field79) {
+            func_800C1568(slot->field79);
         }
-        param_0->field79 = (u16) param_1;
-        func_800C1210(param_0, 1);
-        func_800C13A0(param_0, 4);
-        func_800C13A0(param_0, 8);
-        func_800C13A0(param_0, 16);
-        param_0->field20 = -1;
-        param_0->field24 = -1;
-        if (func_800CCEF4(param_0, &param_0->field20, &param_0->field24, 0, 0)) {
-            if (func_800CBC00(param_0->field20)) {
-                switch (func_800CBBE0(param_0->field20)) {
+        slot->field79 = (u16) handle;
+        func_800C1210(slot, 1);
+        func_800C13A0(slot, 4);
+        func_800C13A0(slot, 8);
+        func_800C13A0(slot, 16);
+        slot->field20 = -1;
+        slot->field24 = -1;
+        if (func_800CCEF4(slot, &slot->field20, &slot->field24, 0, 0)) {
+            if (func_800CBC00(slot->field20)) {
+                switch (func_800CBBE0(slot->field20)) {
                     case 2:
-                        param_0->field60 = 25;
+                        slot->field60 = 25;
                         break;
                     case 3:
-                        param_0->field60 = 20;
+                        slot->field60 = 20;
                         break;
                     case 4:
-                        param_0->field60 = 15;
+                        slot->field60 = 15;
                         break;
                     case 5:
-                        param_0->field60 = 10;
+                        slot->field60 = 10;
                         break;
                     case 6:
-                        param_0->field60 = 5;
+                        slot->field60 = 5;
                         break;
                 }
             }
         }
-        local_1 = func_800C13C4(param_0, 0x400);
-        local_0 = func_800C122C(param_0->field60, param_0->field1B, param_0->field1C, local_1);
-        func_800DC3D4(param_0->field58 - 1001, param_0->field6C, param_0->field5A, param_0->field61,
-                      local_0, func_800C1430(param_0->field79));
+        unk_0 = func_800C13C4(slot, 0x400);
+        reverb = func_800C122C(slot->field60, slot->field1B, slot->field1C, unk_0);
+        func_800DC3D4(slot->field58 - 1001, slot->field6C, slot->field5A, slot->field61,
+                      reverb, func_800C1430(slot->field79));
     }
 }
 
-void func_800C1860(u8 *param_0)
+// Stop the voice of a slot that is playing.
+// Matching: the dummy label is needed for the match.
+void func_800C1860(u8 *slot)
 {
-    u32 *new_var;
-    u32 val;
-    u8 temp_v0;
-    new_var = (u32 *) ((char *) param_0 + 0x78);
-    val = *new_var;
-    if ((((val << 7) << 12) >> 29) == 1) {
-        func_800C13B0(param_0, 0x20);
-        func_800C1210(param_0, 2);
+    u32 *flags_ptr;
+    u32 flags;
+    u8 handle;
+    flags_ptr = (u32 *) ((char *) slot + 0x78);
+    flags = *flags_ptr;
+    if ((((flags << 7) << 12) >> 29) == 1) {
+        func_800C13B0(slot, 0x20);
+        func_800C1210(slot, 2);
         goto dummy_label_658801;
     dummy_label_658801:;
-        temp_v0 = *(u8 *) ((char *) param_0 + 0x79);
-        if (temp_v0) {
-            func_800DC4D4(func_800C1448(temp_v0));
+        handle = *(u8 *) ((char *) slot + 0x79);
+        if (handle) {
+            func_800DC4D4(func_800C1448(handle));
         }
     }
 }
 
-void func_800C18C8(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4)
+// Set the reverb of a voice.
+void func_800C18C8(s32 handle, s32 reverb, s32 unk_0, s32 unk_1, s32 unk_2)
 {
-    if (param_0 != 0) {
-        func_800DC48C(func_800C1448(param_0), func_800C122C(param_1, param_2, param_3, param_4));
+    if (handle != 0) {
+        func_800DC48C(func_800C1448(handle), func_800C122C(reverb, unk_0, unk_1, unk_2));
     }
 }
 
-s32 func_800C191C(param_0, param_1)
-s32 param_0;
-s32 param_1;
+// Set the pan of a voice.
+s32 func_800C191C(handle, pan)
+s32 handle;
+s32 pan;
 {
 
-if (param_0) {
-    func_800DC4B0(func_800C1448(param_0), param_1);
+if (handle) {
+    func_800DC4B0(func_800C1448(handle), pan);
 }
 
 }
 
-int func_800C1950(param_0, param_1)
-s32 param_0;
-s32 param_1;
+// Set the pitch of a voice.
+// Matching: the "| 0" is needed for the match.
+int func_800C1950(handle, pitch)
+s32 handle;
+s32 pitch;
 {
-    if (param_0 != 0) {
-        func_800DC42C(func_800C1448(param_0) | 0, param_1);
+    if (handle != 0) {
+        func_800DC42C(func_800C1448(handle) | 0, pitch);
     }
 
 }
 
-void func_800C1984(s32 param_0, s32 param_1, s32 param_2)
+// Set the volume of a voice; scaled by the global volume factor unless unscaled.
+// Matching: "voice | voice" and reusing the local for the voice id are needed for the match.
+void func_800C1984(s32 handle, s32 volume, s32 unscaled)
 {
-    s32 local_0;
-    local_0 = param_0;
+    s32 voice;
+    voice = handle;
 
-if (local_0 != 0) {
-    if (param_2 == 0) {
-        param_1 *= D_8011A878;
+if (voice != 0) {
+    if (unscaled == 0) {
+        volume *= D_8011A878;
     }
-    local_0 = func_800C1448(local_0);
-    func_800DC454(local_0 | local_0, param_1 & 0xFFFF);
+    voice = func_800C1448(voice);
+    func_800DC454(voice | voice, volume & 0xFFFF);
 }
 
 }
 
-s32 func_800C19E4(u8 *param_0, s32 param_1)
+// Volume by distance to the listener: full inside the inner radius, fading to the
+// far volume (s16 at 0x18) at the outer radius. Radii are squared.
+// Matching: the delta vector is addressed through the neighbouring local; needed for the match.
+s32 func_800C19E4(u8 *slot, s32 volume)
 {
-    s8 local_1[8];
-    s32 local_0;
-    s32 local_2;
-    f32 temp_f0;
-    f32 temp_f12;
-    f32 temp_f2;
-    s16 temp_v0;
-    s32 var_v1;
+    s8 delta[8];
+    s32 listener;
+    s32 delta_tail;
+    f32 dist_sq;
+    f32 inner_sq;
+    f32 outer_sq;
+    s16 far_volume;
+    s32 result;
 
-    func_800C1070(&local_0, param_0);
-    func_800EFB24((u8 *) &local_2 - 8, param_0, &local_0);
-    temp_f0 = func_800EEFD4((u8 *) &local_2 - 8);
-    temp_f12 = (*(f32 *) ((s8 *) param_0 + 0xC));
+    func_800C1070(&listener, slot);
+    func_800EFB24((u8 *) &delta_tail - 8, slot, &listener);
+    dist_sq = func_800EEFD4((u8 *) &delta_tail - 8);
+    inner_sq = (*(f32 *) ((s8 *) slot + 0xC));
 
-if (temp_f0 < temp_f12) {
-    var_v1 = param_1;
+if (dist_sq < inner_sq) {
+    result = volume;
 } else {
 
-temp_f2 = (*(f32 *) ((s8 *) param_0 + 0x10));
+outer_sq = (*(f32 *) ((s8 *) slot + 0x10));
 
-if (temp_f0 < temp_f2) {
-    temp_v0 = *(s16 *) ((s8 *) param_0 + 0x18);
-    var_v1 = (s32) ((f32) temp_v0 +
-                    (((temp_f2 - temp_f0) / (temp_f2 - temp_f12)) * (f32) (param_1 - temp_v0)));
+if (dist_sq < outer_sq) {
+    far_volume = *(s16 *) ((s8 *) slot + 0x18);
+    result = (s32) ((f32) far_volume +
+                    (((outer_sq - dist_sq) / (outer_sq - inner_sq)) * (f32) (volume - far_volume)));
 } else {
 
-var_v1 = (s32) (*(s16 *) ((s8 *) param_0 + 0x18));
+result = (s32) (*(s16 *) ((s8 *) slot + 0x18));
 }
 }
-return var_v1;
+return result;
 }
 
-void func_800C1AA4(SoundC *param_0)
+// Compute the pan of a slot from its angle relative to the camera.
+void func_800C1AA4(SoundC *slot)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_4[3];
-    s32 local_5;
-    func_800E3980(local_0);
-    func_800EFB24(local_1, param_0->local_0, local_0);
-    if (local_1[0] * local_1[0] + local_1[1] * local_1[1] + local_1[2] * local_1[2] < 10.0f) {
-        param_0->local_3 = 64.0f;
+    f32 camera_pos[3];
+    f32 delta[3];
+    f32 angles[3];
+    f32 rotated[3];
+    f32 camera_rot[3];
+    s32 tmp;
+    func_800E3980(camera_pos);
+    func_800EFB24(delta, slot->local_0, camera_pos);
+    if (delta[0] * delta[0] + delta[1] * delta[1] + delta[2] * delta[2] < 10.0f) {
+        slot->local_3 = 64.0f;
     } else {
-        param_0->local_5[2] = param_0->local_5[3];
-        if (!param_0->local_5[2]) {
-            func_800E3A58(local_4);
-            local_4[1] = -local_4[1];
-            local_4[0] = -local_4[0];
-            local_4[2] = -local_4[2];
-            func_800EF7B0(local_3, local_4, local_1[0], local_1[1], local_1[2]);
-            func_800F1EA4(local_3, local_2);
-            local_2[0] = 180.0f - local_2[0];
+        slot->local_5[2] = slot->local_5[3];
+        if (!slot->local_5[2]) {
+            func_800E3A58(camera_rot);
+            camera_rot[1] = -camera_rot[1];
+            camera_rot[0] = -camera_rot[0];
+            camera_rot[2] = -camera_rot[2];
+            func_800EF7B0(rotated, camera_rot, delta[0], delta[1], delta[2]);
+            func_800F1EA4(rotated, angles);
+            angles[0] = 180.0f - angles[0];
 
-if (local_2[0] < -90.0f) {
-    local_2[0] = -180.0f - local_2[0];
-    if (param_0->local_5[1])
-        param_0->local_5[2] = 1;
-} else if (local_2[0] > 90.0f) {
+if (angles[0] < -90.0f) {
+    angles[0] = -180.0f - angles[0];
+    if (slot->local_5[1])
+        slot->local_5[2] = 1;
+} else if (angles[0] > 90.0f) {
 
-local_2[0] = 180.0f - local_2[0];
-if (param_0->local_5[1])
-    param_0->local_5[2] = 1;
+angles[0] = 180.0f - angles[0];
+if (slot->local_5[1])
+    slot->local_5[2] = 1;
 }
 }
-local_5 = func_800C13C4(param_0, 0x400);
-func_800C18C8(param_0->local_24.local_0.local_1, param_0->local_17, param_0->local_5[1],
-              param_0->local_5[2], local_5);
-local_5 = local_2[0] * 0.7f + 64.0f;
-if (param_0->local_5[0])
-    param_0->local_3 += 0.07f * (local_5 - param_0->local_3);
+tmp = func_800C13C4(slot, 0x400);
+func_800C18C8(slot->local_24.local_0.local_1, slot->local_17, slot->local_5[1],
+              slot->local_5[2], tmp);
+tmp = angles[0] * 0.7f + 64.0f;
+if (slot->local_5[0])
+    slot->local_3 += 0.07f * (tmp - slot->local_3);
 else
-    param_0->local_3 = local_5;
+    slot->local_3 = tmp;
 }
-func_800C191C(param_0->local_24.local_0.local_1, (s32) param_0->local_3);
+func_800C191C(slot->local_24.local_0.local_1, (s32) slot->local_3);
 }
 
-s32 func_800C1CCC(Struct_800C1CCC *param_0, s32 param_1)
+s32 func_800C1CCC(Struct_800C1CCC *slot, s32 volume)
 {
-    s32 a;
-    if (func_800C13C4(param_0, 0x40) != 0) {
-        a = func_800C1104(param_0);
-        if (func_800C13C4(param_0, 0x80) != 0) {
-            if (a == 1) {
-                param_1 = param_1 * param_0->unk74;
+    s32 unk_0;
+    if (func_800C13C4(slot, 0x40) != 0) {
+        unk_0 = func_800C1104(slot);
+        if (func_800C13C4(slot, 0x80) != 0) {
+            if (unk_0 == 1) {
+                volume = volume * slot->unk74;
             }
-        } else if (a == 0) {
-            param_1 = param_1 * param_0->unk70;
+        } else if (unk_0 == 0) {
+            volume = volume * slot->unk70;
         }
     }
-    return param_1;
+    return volume;
 }
 
-s32 func_800C1D80(u8 param_0)
+// Apply pending pitch, reverb, volume and pan changes to the voice of a slot.
+// Returns nonzero when the sound is nearly silent.
+s32 func_800C1D80(u8 id)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_5;
-    s32 local_2;
-    u8 *local_4;
+    s32 quiet;
+    s32 volume;
+    s32 unk_0;
+    s32 context_changed;
+    u8 *slot;
 
-    local_0 = 0;
-    local_4 = func_800C1414(param_0);
-    if ((((u32) (*(s32 *) ((s8 *) (local_4) + 0x78)) << 0x13) >> 0x1D == 1) &&
-        (*(u8 *) ((s8 *) (local_4) + 0x79) != 0)) {
-        local_2 = func_800EA05C() != (*(s16 *) ((s8 *) (local_4) + 0x5E));
-        if ((u32) (func_800C13C4(local_4, 4) - 0) > 0) {
-            func_800C1950((*(u8 *) ((s8 *) (local_4) + 0x79)),
-                          (*(s32 *) ((s8 *) (local_4) + 0x6C)));
+    quiet = 0;
+    slot = func_800C1414(id);
+    if ((((u32) (*(s32 *) ((s8 *) (slot) + 0x78)) << 0x13) >> 0x1D == 1) &&
+        (*(u8 *) ((s8 *) (slot) + 0x79) != 0)) {
+        context_changed = func_800EA05C() != (*(s16 *) ((s8 *) (slot) + 0x5E));
+        // Matching: the "- 0" and the unsigned compare are needed for the match.
+        if ((u32) (func_800C13C4(slot, 4) - 0) > 0) {
+            func_800C1950((*(u8 *) ((s8 *) (slot) + 0x79)),
+                          (*(s32 *) ((s8 *) (slot) + 0x6C)));
         }
-        if ((func_800C13C4(local_4, 0x10) != 0) && ((*(u8 *) ((s8 *) (local_4) + 0x1B)) == 0)) {
-            func_800C18C8((*(u8 *) ((s8 *) (local_4) + 0x79)), (*(u8 *) ((s8 *) (local_4) + 0x60)),
-                          (*(u8 *) ((s8 *) (local_4) + 0x1B)), (*(u8 *) ((s8 *) (local_4) + 0x1C)),
-                          func_800C13C4(local_4, 0x400));
+        if ((func_800C13C4(slot, 0x10) != 0) && ((*(u8 *) ((s8 *) (slot) + 0x1B)) == 0)) {
+            func_800C18C8((*(u8 *) ((s8 *) (slot) + 0x79)), (*(u8 *) ((s8 *) (slot) + 0x60)),
+                          (*(u8 *) ((s8 *) (slot) + 0x1B)), (*(u8 *) ((s8 *) (slot) + 0x1C)),
+                          func_800C13C4(slot, 0x400));
         }
-        if (func_800C13C4(local_4, 2) != 0) {
-            if (local_2 != 0) {
-                func_800C1984((*(u8 *) ((s8 *) (local_4) + 0x79)),
-                              (*(s16 *) ((s8 *) (local_4) + 0x5C)), func_800C13C4(local_4, 0x200));
+        if (func_800C13C4(slot, 2) != 0) {
+            if (context_changed != 0) {
+                func_800C1984((*(u8 *) ((s8 *) (slot) + 0x79)),
+                              (*(s16 *) ((s8 *) (slot) + 0x5C)), func_800C13C4(slot, 0x200));
 
 }
 else
 {
-    if (*(u8 *) ((s8 *) local_4 + 0x63) != 0) {
-        local_1 = func_800C19E4(local_4, *(s16 *) ((s8 *) local_4 + 0x5A));
+    if (*(u8 *) ((s8 *) slot + 0x63) != 0) {
+        volume = func_800C19E4(slot, *(s16 *) ((s8 *) slot + 0x5A));
     } else {
 
-local_1 = (*(s16 *) ((s8 *) (local_4) + 0x5A));
+volume = (*(s16 *) ((s8 *) (slot) + 0x5A));
 }
-if (local_1 < 0x64) {
-    local_0 = 1;
+if (volume < 0x64) {
+    quiet = 1;
 }
-local_1 = func_800C1CCC(local_4, local_1);
-(*(s16 *) ((s8 *) (local_4) + 0x5C)) = local_1;
-func_800C1984((*(u8 *) ((s8 *) (local_4) + 0x79)), local_1, func_800C13C4(local_4, 0x200));
+volume = func_800C1CCC(slot, volume);
+(*(s16 *) ((s8 *) (slot) + 0x5C)) = volume;
+func_800C1984((*(u8 *) ((s8 *) (slot) + 0x79)), volume, func_800C13C4(slot, 0x200));
 if (func_800EA068(0x20) == 0) {
-    func_800C1AA4(local_4);
+    func_800C1AA4(slot);
 }
 }
 }
 else
 {
-    if (func_800C13C4(local_4, 0x100) != 0) {
-        func_800C191C((*(u8 *) ((s8 *) (local_4) + 0x79)), (*(u8 *) ((s8 *) (local_4) + 0x61)));
+    if (func_800C13C4(slot, 0x100) != 0) {
+        func_800C191C((*(u8 *) ((s8 *) (slot) + 0x79)), (*(u8 *) ((s8 *) (slot) + 0x61)));
     }
-    if (local_2 != 0) {
-        func_800C1984((*(u8 *) ((s8 *) (local_4) + 0x79)), (*(s16 *) ((s8 *) (local_4) + 0x5C)),
-                      func_800C13C4(local_4, 0x200));
-    } else if (func_800C13C4(local_4, 8) != 0) {
-        local_1 = func_800C1CCC(local_4, (*(s16 *) ((s8 *) (local_4) + 0x5A)));
-        (*(s16 *) ((s8 *) (local_4) + 0x5C)) = local_1;
-        if (local_1 < 0x64) {
-            local_0 = 1;
+    if (context_changed != 0) {
+        func_800C1984((*(u8 *) ((s8 *) (slot) + 0x79)), (*(s16 *) ((s8 *) (slot) + 0x5C)),
+                      func_800C13C4(slot, 0x200));
+    } else if (func_800C13C4(slot, 8) != 0) {
+        volume = func_800C1CCC(slot, (*(s16 *) ((s8 *) (slot) + 0x5A)));
+        (*(s16 *) ((s8 *) (slot) + 0x5C)) = volume;
+        if (volume < 0x64) {
+            quiet = 1;
         }
-        func_800C1984((*(u8 *) ((s8 *) (local_4) + 0x79)), local_1, func_800C13C4(local_4, 0x200));
+        func_800C1984((*(u8 *) ((s8 *) (slot) + 0x79)), volume, func_800C13C4(slot, 0x200));
     }
 }
-func_800C13B0(local_4, 4);
-func_800C13B0(local_4, 8);
-func_800C13B0(local_4, 0x10);
+func_800C13B0(slot, 4);
+func_800C13B0(slot, 8);
+func_800C13B0(slot, 0x10);
 }
 if (func_800A8184() == 4) {
-    local_0 += 1;
+    quiet += 1;
 }
-return local_0;
+return quiet;
 }
 
-void func_800C2000(u8 param_0)
+// Per-frame update of a slot: volume envelope, pitch mode, release policy, voice start/stop.
+void func_800C2000(u8 id)
 {
-    LocalSound_800C2000 *local_0;
-    s32 local_1;
-    f32 local_2;
-    s32 local_3;
-    s32 local_5, local_6;
-    f32 local_4;
+    LocalSound_800C2000 *slot;
+    s32 quiet;
+    f32 dt;
+    s32 handle;
+    s32 bound, current;
+    f32 t;
 
-    local_2 = func_800D8FF8();
-    local_0 = func_800C1414(param_0);
-    local_0->elapsed += local_2;
-    if (local_0->flags.bits.stopping) {
-        if (local_0->decay == 0.0f) {
-            local_0->volume = 0;
+    dt = func_800D8FF8();
+    slot = func_800C1414(id);
+    slot->elapsed += dt;
+    if (slot->flags.bits.stopping) {
+        if (slot->decay == 0.0f) {
+            slot->volume = 0;
         } else {
-            local_0->volume -= (local_0->maximum / local_0->decay) * local_2;
-            local_0->volume = func_800F0E28(0, local_0->volume);
-            if (func_800EA05C() != local_0->context) {
-                local_0->limit = func_800F1418(local_0->limit, local_0->volume);
+            slot->volume -= (slot->maximum / slot->decay) * dt;
+            slot->volume = func_800F0E28(0, slot->volume);
+            if (func_800EA05C() != slot->context) {
+                slot->limit = func_800F1418(slot->limit, slot->volume);
             }
         }
-        if (local_0->volume <= 0) {
-            func_800C2FDC(param_0);
+        if (slot->volume <= 0) {
+            func_800C2FDC(id);
             return;
         }
-        func_800C13A0(local_0, 8);
-    } else if (local_0->flags.bits.envelope) {
-        if (local_0->elapsed < local_0->attack) {
-            local_0->volume =
-                (local_0->elapsed / local_0->attack) * (local_0->minimum + local_0->maximum) / 2;
-        } else if (local_0->elapsed <= local_0->attack + local_0->hold) {
-            if (local_0->volume < local_0->minimum || local_0->maximum < local_0->volume) {
-                local_0->volume = (local_0->minimum + local_0->maximum) / 2;
+        func_800C13A0(slot, 8);
+    } else if (slot->flags.bits.envelope) {
+        if (slot->elapsed < slot->attack) {
+            slot->volume =
+                (slot->elapsed / slot->attack) * (slot->minimum + slot->maximum) / 2;
+        } else if (slot->elapsed <= slot->attack + slot->hold) {
+            if (slot->volume < slot->minimum || slot->maximum < slot->volume) {
+                slot->volume = (slot->minimum + slot->maximum) / 2;
             }
-            local_0->volume += func_800DC264(-1.0f, 1.0f) * local_0->drift;
-            local_6 = local_0->volume;
-            local_5 = local_0->maximum;
-            local_0->volume = local_5 < local_6 ? local_5 : local_6;
-            local_6 = local_0->volume;
-            local_5 = local_0->minimum;
-            local_0->volume = local_6 < local_5 ? local_5 : local_6;
+            slot->volume += func_800DC264(-1.0f, 1.0f) * slot->drift;
+            // Matching: the clamp goes through temporaries instead of MIN_C/MAX_C.
+            current = slot->volume;
+            bound = slot->maximum;
+            slot->volume = bound < current ? bound : current;
+            current = slot->volume;
+            bound = slot->minimum;
+            slot->volume = current < bound ? bound : current;
         } else {
-            local_0->volume =
-                (1.0f - (local_0->elapsed - local_0->attack - local_0->hold) / local_0->decay) *
-                (local_0->minimum + local_0->maximum) / 2;
+            slot->volume =
+                (1.0f - (slot->elapsed - slot->attack - slot->hold) / slot->decay) *
+                (slot->minimum + slot->maximum) / 2;
         }
-        if (func_800EA05C() != local_0->context) {
-            local_0->limit = func_800F1418(local_0->limit, local_0->volume);
+        if (func_800EA05C() != slot->context) {
+            slot->limit = func_800F1418(slot->limit, slot->volume);
         }
-        func_800C13A0(local_0, 8);
+        func_800C13A0(slot, 8);
     }
-    if (local_0->flags.bits.timed &&
-        local_0->attack + local_0->hold + local_0->decay <= local_0->elapsed) {
-        if (local_0->flags.bits.release) {
-            func_800C2FDC(param_0);
+    if (slot->flags.bits.timed &&
+        slot->attack + slot->hold + slot->decay <= slot->elapsed) {
+        if (slot->flags.bits.release) {
+            func_800C2FDC(id);
             return;
         }
-        func_800C1860(local_0);
+        func_800C1860(slot);
     }
-    if (local_0->flags.bytes.handle && local_0->flags.bits.state == 1 &&
-        func_800C1448(local_0->flags.bytes.handle)) {
-        switch (local_0->flags.bits.mode) {
+    if (slot->flags.bytes.handle && slot->flags.bits.state == 1 &&
+        func_800C1448(slot->flags.bytes.handle)) {
+        // Pitch modes: 0 constant, 1 sweep, 2 random wobble, 3 and 4 curves.
+        switch (slot->flags.bits.mode) {
             case 0:
                 break;
             case 1:
-                local_0->pitch += local_0->field_28 * local_2;
-                if (local_0->field_28 > 0.0f) {
-                    local_0->pitch = func_800F13F0(local_0->pitch, local_0->field_2C);
+                slot->pitch += slot->field_28 * dt;
+                if (slot->field_28 > 0.0f) {
+                    slot->pitch = func_800F13F0(slot->pitch, slot->field_2C);
                 } else {
-                    local_0->pitch = func_800F0E00(local_0->pitch, local_0->field_2C);
+                    slot->pitch = func_800F0E00(slot->pitch, slot->field_2C);
                 }
-                func_800C13A0(local_0, 4);
+                func_800C13A0(slot, 4);
                 break;
             case 2:
-                local_0->pitch += func_800DC264(-local_0->field_30, local_0->field_30) * local_2;
-                local_0->pitch =
-                    func_800F0D50(local_0->pitch, local_0->field_2C, local_0->field_28);
-                func_800C13A0(local_0, 4);
+                slot->pitch += func_800DC264(-slot->field_30, slot->field_30) * dt;
+                slot->pitch =
+                    func_800F0D50(slot->pitch, slot->field_2C, slot->field_28);
+                func_800C13A0(slot, 4);
                 break;
             case 3:
-                local_0->pitch =
-                    func_800F10B4(local_0->elapsed, local_0->field_28, local_0->field_2C,
-                                  local_0->field_30, local_0->field_34);
-                func_800C13A0(local_0, 4);
+                slot->pitch =
+                    func_800F10B4(slot->elapsed, slot->field_28, slot->field_2C,
+                                  slot->field_30, slot->field_34);
+                func_800C13A0(slot, 4);
                 break;
             case 4:
-                local_4 = local_0->elapsed;
-                if (local_4 < local_0->field_28) {
-                    local_0->pitch = func_800F10B4(local_4, 0.0f, local_0->field_28,
-                                                   local_0->field_34, local_0->field_38);
-                } else if (local_4 < local_0->field_28 + local_0->field_2C) {
-                    local_0->pitch = local_0->field_38;
+                t = slot->elapsed;
+                if (t < slot->field_28) {
+                    slot->pitch = func_800F10B4(t, 0.0f, slot->field_28,
+                                                   slot->field_34, slot->field_38);
+                } else if (t < slot->field_28 + slot->field_2C) {
+                    slot->pitch = slot->field_38;
                 } else {
-                    local_0->pitch =
-                        func_800F10B4(local_4 - (local_0->field_28 + local_0->field_2C), 0.0f,
-                                      local_0->field_30, local_0->field_38, local_0->field_3C);
+                    slot->pitch =
+                        func_800F10B4(t - (slot->field_28 + slot->field_2C), 0.0f,
+                                      slot->field_30, slot->field_38, slot->field_3C);
                 }
-                func_800C13A0(local_0, 4);
+                func_800C13A0(slot, 4);
         }
     }
-    switch (local_0->flags.bits.policy) {
+    switch (slot->flags.bits.policy) {
         case 1:
-            if (local_0->flags.bits.state == 0 ||
-                (local_0->flags.bits.state == 1 && !local_0->flags.bytes.handle)) {
-                func_800C2FDC(param_0);
+            if (slot->flags.bits.state == 0 ||
+                (slot->flags.bits.state == 1 && !slot->flags.bytes.handle)) {
+                func_800C2FDC(id);
                 return;
             }
             break;
         case 2:
-            if (local_0->flags.bits.state == 1 && func_800C13D0(local_0, 1))
-                func_800C3CE8(param_0);
+            if (slot->flags.bits.state == 1 && func_800C13D0(slot, 1))
+                func_800C3CE8(id);
             else
-                func_800C13B0(local_0, 1);
+                func_800C13B0(slot, 1);
         case 3:
             break;
     }
-    local_1 = func_800C1D80(param_0);
-    if (local_0->flags.bits.state == 1 && func_800C42E0(local_0->sound)) {
-        if (func_800C13C4(local_0, 0x20)) {
-            if (!local_1) {
-                local_3 = func_800C15BC();
+    quiet = func_800C1D80(id);
+    if (slot->flags.bits.state == 1 && func_800C42E0(slot->sound)) {
+        if (func_800C13C4(slot, 0x20)) {
+            if (!quiet) {
+                handle = func_800C15BC();
                 osSetThreadPri(0, 0x33);
-                func_800C16F8(local_0, local_3);
-                func_800C13B0(local_0, 0x20);
-                func_800C1D80(param_0);
+                func_800C16F8(slot, handle);
+                func_800C13B0(slot, 0x20);
+                func_800C1D80(id);
                 osSetThreadPri(0, 0x14);
             }
-        } else if (local_1) {
-            func_800C1860(local_0);
-            func_800C1210(local_0, 1);
-            func_800C13A0(local_0, 0x20);
+        } else if (quiet) {
+            func_800C1860(slot);
+            func_800C1210(slot, 1);
+            func_800C13A0(slot, 0x20);
         }
     }
-    if (local_0->flags.bytes.handle && !func_800C1448(local_0->flags.bytes.handle)) {
-        func_800C1568(local_0->flags.bytes.handle);
-        local_0->flags.bytes.handle = 0;
+    if (slot->flags.bytes.handle && !func_800C1448(slot->flags.bytes.handle)) {
+        func_800C1568(slot->flags.bytes.handle);
+        slot->flags.bytes.handle = 0;
     }
 }
 
-s32 func_800C269C(u8 param_0)
+// Returns 1 when a finished slot (state 3) has no live voice left.
+// Matching: the constants held in locals are needed for the match.
+s32 func_800C269C(u8 id)
 {
-    int new_var2;
-    int new_var;
-    s32 new_var3;
-    u8 *local_0;
-    s32 local_1;
-    local_0 = func_800C1414(param_0);
-    new_var = 0x1D;
-    local_1 = *((s32 *) (((char *) local_0) + 0x78));
-    new_var2 = 0x79;
-    new_var3 = *((s32 *) (((char *) local_0) + 0x78));
-    if ((((u32) (local_1 << 0x13)) >> new_var) != 3) {
+    int handle_offset;
+    int shift;
+    s32 flags_copy;
+    u8 *slot;
+    s32 flags;
+    slot = func_800C1414(id);
+    shift = 0x1D;
+    flags = *((s32 *) (((char *) slot) + 0x78));
+    handle_offset = 0x79;
+    flags_copy = *((s32 *) (((char *) slot) + 0x78));
+    if ((((u32) (flags << 0x13)) >> shift) != 3) {
         return 0;
     }
-    if ((*((u8 *) (((char *) local_0) + new_var2))) == 0) {
+    if ((*((u8 *) (((char *) slot) + handle_offset))) == 0) {
         return 1;
     }
-    if (func_800C1448(*((u8 *) (((char *) local_0) + new_var2))) != 0) {
+    if (func_800C1448(*((u8 *) (((char *) slot) + handle_offset))) != 0) {
         return 0;
     }
     return 1;
 }
 
+// Per-frame update of all active slots; eases the global volume factor D_8011A878 between 0.5 and 1.
 void func_800C2718()
 {
-    s32 local_1, local_2, local_3;
-    local_type_800C2718 *local_0;
+    s32 id, unk_0, unk_1;
+    local_type_800C2718 *slot;
     if (func_800C0638()) {
         D_8011A878 -= func_800D8FF8();
         if (D_8011A878 < 0.5f) {
@@ -889,62 +927,65 @@ void func_800C2718()
             D_8011A878 = 1.0f;
         }
     }
-    local_0 = ((local_type_800C2718 *) &D_80128C10);
-    local_1 = 1;
+    slot = ((local_type_800C2718 *) &D_80128C10);
+    id = 1;
     do {
-        if (local_0->local_1 != 0) {
-            if (local_0->local_3 != 3) {
-                func_800C2000(local_1);
+        if (slot->local_1 != 0) {
+            if (slot->local_3 != 3) {
+                func_800C2000(id);
             }
-            if (func_800C269C(local_1)) {
-                func_800C16A4(local_1);
+            if (func_800C269C(id)) {
+                func_800C16A4(id);
             }
         }
-        local_0++;
-        local_1++;
-    } while (local_1 < 0x3C);
+        slot++;
+        id++;
+    } while (id < 0x3C);
 }
 
-void func_800C2840(s32 p0, f32 p1, s32 p2, s32 p3, s32 p4)
+// Allocate a slot and play a simple sound with the given parameters.
+void func_800C2840(s32 sfx_id, f32 pitch, s32 volume, s32 reverb, s32 unk_0)
 {
-    s32 r;
-    u8 id;
-    r = func_800C2E04();
-    id = r;
-    if (r != 0) {
-        func_800C301C(id, p0);
-        func_800C3058(id, p2);
-        func_800C31DC(id, p1);
-        func_800C32C4(id, p3);
-        func_800C330C(id, 1);
-        func_800C3418(id, p4);
-        func_800C36F4(id, 0);
-        func_800C3BDC(id);
+    s32 result;
+    u8 slot_id;
+    result = func_800C2E04();
+    slot_id = result;
+    if (result != 0) {
+        func_800C301C(slot_id, sfx_id);
+        func_800C3058(slot_id, volume);
+        func_800C31DC(slot_id, pitch);
+        func_800C32C4(slot_id, reverb);
+        func_800C330C(slot_id, 1);
+        func_800C3418(slot_id, unk_0);
+        func_800C36F4(slot_id, 0);
+        func_800C3BDC(slot_id);
     }
 }
 
+// Reset all voice handles and slots.
 void func_800C28D8()
 {
     func_800C157C();
     func_800C13E4();
 }
 
+// Stop all slots and update until none is active.
 void func_800C2900(void)
 {
-    s32 local_0;
-    s32 local_1;
-    for (local_0 = 1; local_0 < 60; local_0++) {
-        if (((SoundSlotC *) D_80128B90)[local_0].local_0)
-            func_800C2FDC(local_0);
+    s32 i;
+    s32 active;
+    for (i = 1; i < 60; i++) {
+        if (((SoundSlotC *) D_80128B90)[i].local_0)
+            func_800C2FDC(i);
     }
     do {
-        local_1 = 0;
+        active = 0;
         func_800C2718();
-        for (local_0 = 1; local_0 < 60; local_0++) {
-            if (((SoundSlotC *) D_80128B90)[local_0].local_0)
-                local_1++;
+        for (i = 1; i < 60; i++) {
+            if (((SoundSlotC *) D_80128B90)[i].local_0)
+                active++;
         }
-    } while (local_1);
+    } while (active);
 }
 
 int func_800C2A08()
@@ -956,7 +997,7 @@ int func_800C2A08()
     func_800C4B7C(-1);
 }
 
-void func_800C2A5C(s32 arg0, s32 arg1)
+void func_800C2A5C(s32 unk_0, s32 unk_1)
 {
 }
 void func_800C2A68()
@@ -971,694 +1012,723 @@ void func_800C2A90()
     func_800C2A68();
 }
 
+// Free all finished slots; repeats until none is waiting for its voice.
 void func_800C2AB8(void)
 {
-    s8 *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
+    s8 *slot;
+    s32 slot_id;
+    s32 index;
+    s32 pending;
     func_800C2B80();
     do {
-        local_0 = (s8 *) (&D_80128C10);
-        local_2 = 1;
-        local_3 = 0;
+        slot = (s8 *) (&D_80128C10);
+        index = 1;
+        pending = 0;
     loop_2:
-        if ((*((u8 *) (local_0 + 0x78))) != 0) {
-            local_1 = local_2 & 0xFF;
-            if ((((u32) (((s32) (*((s32 *) (local_0 + 0x78)))) << 0x13)) >> 0x1D) == 3) {
-                if (func_800C269C(local_2 & 0xFF) != 0) {
-                    func_800C16A4(local_1);
+        if ((*((u8 *) (slot + 0x78))) != 0) {
+            slot_id = index & 0xFF;
+            if ((((u32) (((s32) (*((s32 *) (slot + 0x78)))) << 0x13)) >> 0x1D) == 3) {
+                if (func_800C269C(index & 0xFF) != 0) {
+                    func_800C16A4(slot_id);
                 } else {
-                    local_3 += 1;
+                    pending += 1;
                 }
             }
         }
 
-        local_2 += 1;
-        local_0 += 0x80;
-        if (local_2 != 0x3C) {
+        index += 1;
+        slot += 0x80;
+        if (index != 0x3C) {
             goto loop_2;
         }
-    } while (local_3 != 0);
+    } while (pending != 0);
 }
 
+// Tick per-slot countdowns (255 means none); stop a slot at zero.
 void func_800C2B80(void)
 {
-    s32 local_0;
-    for (local_0 = 1; local_0 < 60; local_0++) {
-        if (!D_80128B90[local_0].local_5)
+    s32 i;
+    for (i = 1; i < 60; i++) {
+        if (!D_80128B90[i].local_5)
             continue;
-        if (D_80128B90[local_0].local_7 == 3)
+        if (D_80128B90[i].local_7 == 3)
             continue;
-        if (D_80128B90[local_0].local_3 == 255)
+        if (D_80128B90[i].local_3 == 255)
             continue;
         {
-            if (!D_80128B90[local_0].local_3)
-                func_800C2FDC(local_0);
-            else if (--D_80128B90[local_0].local_3 == 0) {
-                D_80128B90[local_0].local_1 = 0.0f;
-                D_80128B90[local_0].local_9 = 1;
+            if (!D_80128B90[i].local_3)
+                func_800C2FDC(i);
+            else if (--D_80128B90[i].local_3 == 0) {
+                D_80128B90[i].local_1 = 0.0f;
+                D_80128B90[i].local_9 = 1;
             }
         }
     }
 }
 
-void func_800C2C4C(u8 param_0)
+// Set a newly allocated slot to its default values.
+void func_800C2C4C(u8 id)
 {
-    SoundC *local_0;
-    local_0 = func_800C1414(param_0);
-    local_0->local_21 = 0;
-    local_0->local_13 = -1;
-    local_0->local_15 = 0;
-    local_0->local_14 = 0x55F0;
-    local_0->local_17 = 0;
-    local_0->local_18 = 0x3F;
-    local_0->local_24.local_0.local_1 = 0;
-    local_0->local_19 = 0xFF;
-    local_0->local_23 = 1.0f;
-    local_0->local_16 = func_800EA05C();
-    local_0->local_20 = 1;
-    local_0->local_24.local_1.local_3 = 0;
-    local_0->local_24.local_1.local_5 = 0;
-    local_0->local_8 = 3.0f;
-    local_0->local_24.local_1.local_8 = 1;
-    local_0->local_24.local_1.local_6 = 0;
-    local_0->local_24.local_1.local_4 = 0;
-    local_0->local_24.local_1.local_7 = 0;
-    local_0->local_6 = 1.0f;
-    local_0->local_7 = 1.0f;
-    local_0->local_12 = 0.0f;
-    func_800C1210(local_0, 0);
-    func_800C11F8(local_0, 0);
-    func_800C13A0(local_0, 1);
-    func_800C13A0(local_0, 4);
-    func_800C13A0(local_0, 8);
-    func_800C13A0(local_0, 0x10);
-    local_0->local_1 = 6.25e+04f;
-    local_0->local_2 = 1.44e+06f;
-    local_0->local_3 = 64.0f;
-    local_0->local_4 = 10;
-    local_0->local_5[0] = 0;
-    local_0->local_5[1] = 0;
-    local_0->local_5[2] = 0;
-    local_0->local_5[3] = 0;
-    func_800EFD24(local_0->local_0);
-    func_800C13B0(local_0, 2);
-    func_800C13B0(local_0, 0x20);
-    func_800C13B0(local_0, 0x200);
-    func_800C13B0(local_0, 0x400);
-    func_800C3418(param_0, 2);
-    func_800C3798(param_0, 0.2f, 0.1f);
+    SoundC *slot;
+    slot = func_800C1414(id);
+    slot->local_21 = 0;
+    slot->local_13 = -1;
+    slot->local_15 = 0;
+    slot->local_14 = 0x55F0;
+    slot->local_17 = 0;
+    slot->local_18 = 0x3F;
+    slot->local_24.local_0.local_1 = 0;
+    slot->local_19 = 0xFF;
+    slot->local_23 = 1.0f;
+    slot->local_16 = func_800EA05C();
+    slot->local_20 = 1;
+    slot->local_24.local_1.local_3 = 0;
+    slot->local_24.local_1.local_5 = 0;
+    slot->local_8 = 3.0f;
+    slot->local_24.local_1.local_8 = 1;
+    slot->local_24.local_1.local_6 = 0;
+    slot->local_24.local_1.local_4 = 0;
+    slot->local_24.local_1.local_7 = 0;
+    slot->local_6 = 1.0f;
+    slot->local_7 = 1.0f;
+    slot->local_12 = 0.0f;
+    func_800C1210(slot, 0);
+    func_800C11F8(slot, 0);
+    func_800C13A0(slot, 1);
+    func_800C13A0(slot, 4);
+    func_800C13A0(slot, 8);
+    func_800C13A0(slot, 0x10);
+    slot->local_1 = 6.25e+04f;
+    slot->local_2 = 1.44e+06f;
+    slot->local_3 = 64.0f;
+    slot->local_4 = 10;
+    slot->local_5[0] = 0;
+    slot->local_5[1] = 0;
+    slot->local_5[2] = 0;
+    slot->local_5[3] = 0;
+    func_800EFD24(slot->local_0);
+    func_800C13B0(slot, 2);
+    func_800C13B0(slot, 0x20);
+    func_800C13B0(slot, 0x200);
+    func_800C13B0(slot, 0x400);
+    func_800C3418(id, 2);
+    func_800C3798(id, 0.2f, 0.1f);
 }
 
+// Allocate and initialise a slot; returns 0 if none is free.
 u8 func_800C2E04()
 {
-    u8 local_0;
-    local_0 = func_800C145C();
-    if (!local_0) {
+    u8 id;
+    id = func_800C145C();
+    if (!id) {
         return 0;
     }
-    func_800C2C4C(local_0);
-    return local_0;
+    func_800C2C4C(id);
+    return id;
 }
 
-void func_800C2E40(u8 param_0)
+void func_800C2E40(u8 id)
 {
-    SoundC *local_0;
-    func_800C3CE8(param_0);
-    local_0 = func_800C1414(param_0);
-    local_0->local_21 = 0;
-    local_0->local_13 = -1;
-    local_0->local_15 = 0;
-    local_0->local_14 = 0x55F0;
-    local_0->local_17 = 0;
-    local_0->local_18 = 0x3F;
-    local_0->local_19 = 0xFF;
-    local_0->local_23 = 1.0f;
-    local_0->local_16 = func_800EA05C();
-    local_0->local_20 = 1;
-    local_0->local_24.local_1.local_3 = 0;
-    local_0->local_24.local_1.local_5 = 0;
-    local_0->local_8 = 3.0f;
-    local_0->local_24.local_1.local_8 = 1;
-    local_0->local_24.local_1.local_6 = 0;
-    local_0->local_24.local_1.local_4 = 0;
-    local_0->local_24.local_1.local_7 = 0;
-    local_0->local_6 = 1.0f;
-    local_0->local_7 = 1.0f;
-    local_0->local_12 = 0.0f;
-    func_800C1210(local_0, 0);
-    func_800C11F8(local_0, 0);
-    func_800C13A0(local_0, 1);
-    func_800C13A0(local_0, 4);
-    func_800C13A0(local_0, 8);
-    func_800C13A0(local_0, 0x10);
-    local_0->local_1 = 6.25e+04f;
-    local_0->local_2 = 1.44e+06f;
-    local_0->local_3 = 64.0f;
-    local_0->local_4 = 10;
-    local_0->local_5[0] = 0;
-    local_0->local_5[1] = 0;
-    func_800EFD24(local_0->local_0);
-    func_800C13B0(local_0, 2);
-    func_800C13B0(local_0, 0x20);
-    func_800C3418(param_0, 2);
-    func_800C3798(param_0, 0.2f, 0.1f);
+    SoundC *slot;
+    func_800C3CE8(id);
+    slot = func_800C1414(id);
+    slot->local_21 = 0;
+    slot->local_13 = -1;
+    slot->local_15 = 0;
+    slot->local_14 = 0x55F0;
+    slot->local_17 = 0;
+    slot->local_18 = 0x3F;
+    slot->local_19 = 0xFF;
+    slot->local_23 = 1.0f;
+    slot->local_16 = func_800EA05C();
+    slot->local_20 = 1;
+    slot->local_24.local_1.local_3 = 0;
+    slot->local_24.local_1.local_5 = 0;
+    slot->local_8 = 3.0f;
+    slot->local_24.local_1.local_8 = 1;
+    slot->local_24.local_1.local_6 = 0;
+    slot->local_24.local_1.local_4 = 0;
+    slot->local_24.local_1.local_7 = 0;
+    slot->local_6 = 1.0f;
+    slot->local_7 = 1.0f;
+    slot->local_12 = 0.0f;
+    func_800C1210(slot, 0);
+    func_800C11F8(slot, 0);
+    func_800C13A0(slot, 1);
+    func_800C13A0(slot, 4);
+    func_800C13A0(slot, 8);
+    func_800C13A0(slot, 0x10);
+    slot->local_1 = 6.25e+04f;
+    slot->local_2 = 1.44e+06f;
+    slot->local_3 = 64.0f;
+    slot->local_4 = 10;
+    slot->local_5[0] = 0;
+    slot->local_5[1] = 0;
+    func_800EFD24(slot->local_0);
+    func_800C13B0(slot, 2);
+    func_800C13B0(slot, 0x20);
+    func_800C3418(id, 2);
+    func_800C3798(id, 0.2f, 0.1f);
 }
 
-s32 func_800C2FDC(u8 param_0)
+// Stop a slot and mark it finished (state 3).
+// Matching: the volatile local is needed for the match.
+s32 func_800C2FDC(u8 id)
 {
-    volatile u8 *local_0;
-    local_0 = func_800C1414(param_0);
-    func_800C3CE8(param_0);
-    func_800C1210(local_0, 3);
+    volatile u8 *slot;
+    slot = func_800C1414(id);
+    func_800C3CE8(id);
+    func_800C1210(slot, 3);
     return 0;
 }
 
-void func_800C301C(u8 arg0, s32 arg1)
+void func_800C301C(u8 id, s32 sfx_id)
 {
-    if (arg0 != 0) {
-        s8 *ptr = func_800C1414(arg0);
-        *(s16 *) ((char *) ptr + 0x58) = arg1;
+    if (id != 0) {
+        s8 *slot = func_800C1414(id);
+        *(s16 *) ((char *) slot + 0x58) = sfx_id;
     }
 }
 
-int func_800C3058(u8 param_0, unsigned int param_1)
+// Set the volume; without an envelope the min/max volume follow it.
+int func_800C3058(u8 id, unsigned int volume)
 {
-    Actor *local_0;
-    if (param_0 != 0) {
-        local_0 = func_800C1414(param_0);
-        *((s16 *) (((char *) local_0) + 0x5A)) = param_1;
-        if ((((u32) (*(s32 *) (((char *) local_0) + 0x78) << 28) >> 31) == 0)) {
-            *((s16 *) (((char *) local_0) + 0x4C)) = param_1;
-            *((s16 *) (((char *) local_0) + 0x4E)) = param_1;
-            *((f32 *) (((char *) local_0) + 0x50)) = 0.0f;
+    Actor *slot;
+    if (id != 0) {
+        slot = func_800C1414(id);
+        *((s16 *) (((char *) slot) + 0x5A)) = volume;
+        if ((((u32) (*(s32 *) (((char *) slot) + 0x78) << 28) >> 31) == 0)) {
+            *((s16 *) (((char *) slot) + 0x4C)) = volume;
+            *((s16 *) (((char *) slot) + 0x4E)) = volume;
+            *((f32 *) (((char *) slot) + 0x50)) = 0.0f;
         }
-        func_800C13A0(local_0, 8);
+        func_800C13A0(slot, 8);
     }
 }
 
-void func_800C30B8(s32 param_0, s32 param_1, f32 *param_2, f32 param_3, f32 param_4)
+// Set the volume scaled by the distance to the listener: full up to near_dist, silent from far_dist.
+void func_800C30B8(s32 id, s32 volume, f32 *pos, f32 near_dist, f32 far_dist)
 {
-    f32 local_0[3];
-    f32 local_1;
-    f32 local_2;
-    func_800C1070(local_0, param_2);
-    local_2 = func_800EEAD4(param_2, local_0);
-    if (param_4 <= local_2)
-        local_1 = 0.0f;
-    else if (param_3 <= local_2)
-        local_1 = 1.0f - (local_2 - param_3) / (param_4 - param_3);
+    f32 listener[3];
+    f32 scale;
+    f32 dist;
+    func_800C1070(listener, pos);
+    dist = func_800EEAD4(pos, listener);
+    if (far_dist <= dist)
+        scale = 0.0f;
+    else if (near_dist <= dist)
+        scale = 1.0f - (dist - near_dist) / (far_dist - near_dist);
     else
-        local_1 = 1.0f;
-    func_800C3058((u8) param_0, (s32) (param_1 * local_1));
+        scale = 1.0f;
+    func_800C3058((u8) id, (s32) (volume * scale));
 }
 
-void func_800C316C(u8 param_0, s32 param_1, s32 param_2, f32 param_3)
+// Enable the volume envelope with the given min/max volume and drift.
+void func_800C316C(u8 id, s32 minimum, s32 maximum, f32 drift)
 {
-    S800C316C *s;
-    if (param_0 != 0) {
-        s = func_800C1414(param_0);
-        s->flag = 1;
-        s->unk4C = param_1;
-        s->unk4E = param_2;
-        s->unk50 = param_3;
-        s->unk5A = 0;
-        func_800C13A0(s, 8);
+    S800C316C *slot;
+    if (id != 0) {
+        slot = func_800C1414(id);
+        slot->flag = 1;
+        slot->unk4C = minimum;
+        slot->unk4E = maximum;
+        slot->unk50 = drift;
+        slot->unk5A = 0;
+        func_800C13A0(slot, 8);
     }
 }
 
-void func_800C31DC(u8 param_0, f32 param_1)
+// Set the pitch.
+void func_800C31DC(u8 id, f32 pitch)
 {
-    u8 *temp;
-    if (param_0 != 0) {
-        temp = func_800C1414(param_0);
-        *(f32 *) ((u8 *) temp + 0x6C) = param_1;
-        func_800C13A0(temp, 4);
+    u8 *slot;
+    if (id != 0) {
+        slot = func_800C1414(id);
+        *(f32 *) ((u8 *) slot + 0x6C) = pitch;
+        func_800C13A0(slot, 4);
     }
 }
 
-void func_800C3224(u8 param_0, f32 param_1, f32 param_2, f32 param_3)
+// Random-walk the pitch within [min_pitch, max_pitch]; step back into the range when outside.
+void func_800C3224(u8 id, f32 min_pitch, f32 max_pitch, f32 step)
 {
-    f32 local_0;
-    local_0 = func_800C395C(param_0);
-    if (local_0 < param_1)
-        local_0 += param_3;
-    else if (param_2 < local_0)
-        local_0 -= param_3;
+    f32 pitch;
+    pitch = func_800C395C(id);
+    if (pitch < min_pitch)
+        pitch += step;
+    else if (max_pitch < pitch)
+        pitch -= step;
     else {
-        local_0 += func_800DC264(-param_3, param_3);
-        local_0 = func_800F0D50(local_0, param_1, param_2);
+        pitch += func_800DC264(-step, step);
+        pitch = func_800F0D50(pitch, min_pitch, max_pitch);
     }
-    func_800C31DC(param_0, local_0);
+    func_800C31DC(id, pitch);
 }
 
-void func_800C32C4(u8 param_0, s32 param_1)
+// Set the reverb.
+void func_800C32C4(u8 id, s32 reverb)
 {
-    u8 *temp;
-    if (param_0 != 0) {
-        temp = func_800C1414(param_0);
-        *(u8 *) (temp + 0x60) = param_1;
-        func_800C13A0(temp, 0x10);
-    }
-}
-
-void func_800C330C(u8 param_0, s32 param_1)
-{
-    u8 *temp;
-    if (param_0 != 0) {
-        temp = func_800C1414(param_0);
-        func_800C11F8(temp, param_1);
+    u8 *slot;
+    if (id != 0) {
+        slot = func_800C1414(id);
+        *(u8 *) (slot + 0x60) = reverb;
+        func_800C13A0(slot, 0x10);
     }
 }
 
-void func_800C334C(u8 param_0, s32 param_1)
+// Set the release policy.
+void func_800C330C(u8 id, s32 policy)
 {
-    u8 *temp;
-    if (param_0 != 0) {
-        temp = func_800C1414(param_0);
-        *(u8 *) (temp + 97) = param_1;
-        func_800C13A0(temp, 0x100);
+    u8 *slot;
+    if (id != 0) {
+        slot = func_800C1414(id);
+        func_800C11F8(slot, policy);
     }
 }
 
-void func_800C3394(u8 param_0, s32 param_1, s32 param_2)
+// Set a fixed pan.
+void func_800C334C(u8 id, s32 pan)
 {
-    u8 *temp;
-    if (param_0 != 0) {
-        temp = func_800C1414(param_0);
-        *(s32 *) (temp + 0x64) = param_1;
-        *(s32 *) (temp + 0x68) = param_2;
+    u8 *slot;
+    if (id != 0) {
+        slot = func_800C1414(id);
+        *(u8 *) (slot + 97) = pan;
+        func_800C13A0(slot, 0x100);
     }
 }
 
-void func_800C33DC(u8 param_0, s32 param_1)
+void func_800C3394(u8 handle, s32 unk_0, s32 unk_1)
 {
-    if (param_0 != 0) {
-        s8 *ptr = func_800C1414(param_0);
-        ptr[0x1B] = (s8) param_1;
+    u8 *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        *(s32 *) (slot + 0x64) = unk_0;
+        *(s32 *) (slot + 0x68) = unk_1;
     }
 }
 
-void func_800C3418(u8 param_0, s32 param_1)
+void func_800C33DC(u8 handle, s32 positional)
 {
-    u8 *local_0;
-    if (param_0 != 0) {
-        local_0 = func_800C1414(param_0);
-        switch (param_1) {
+    if (handle != 0) {
+        s8 *slot = func_800C1414(handle);
+        slot[0x1B] = (s8) positional;
+    }
+}
+
+void func_800C3418(u8 handle, s32 mode)
+{
+    u8 *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        switch (mode) {
             case 0:
-                func_800C13B0(local_0, 0x40);
-                func_800C13B0(local_0, 0x80);
+                func_800C13B0(slot, 0x40);
+                func_800C13B0(slot, 0x80);
                 return;
 
             case 1:
-                func_800C13A0(local_0, 0x40);
-                func_800C13B0(local_0, 0x80);
+                func_800C13A0(slot, 0x40);
+                func_800C13B0(slot, 0x80);
                 return;
 
             case 2:
-                func_800C13A0(local_0, 0x40);
-                func_800C13A0(local_0, 0x80);
+                func_800C13A0(slot, 0x40);
+                func_800C13A0(slot, 0x80);
         }
     }
 }
 
-void func_800C34CC(u8 param_0, s32 param_1)
+void func_800C34CC(u8 handle, s32 flag)
 {
-    u8 *local_0;
-    if (param_0 != 0) {
-        local_0 = func_800C1414(param_0);
-        if (param_1 != 0) {
-            func_800C13B0(local_0, 0x200);
+    u8 *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        if (flag != 0) {
+            func_800C13B0(slot, 0x200);
         } else {
-            func_800C13A0(local_0, 0x200);
+            func_800C13A0(slot, 0x200);
         }
     }
 }
 
-void func_800C3528(u8 param_0, s32 param_1)
+void func_800C3528(u8 handle, s32 flag)
 {
-    u8 *local_0;
-    if (param_0 != 0) {
-        local_0 = func_800C1414(param_0);
-        if (param_1 != 0) {
-            func_800C13A0(local_0, 0x400);
+    u8 *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        if (flag != 0) {
+            func_800C13A0(slot, 0x400);
         } else {
-            func_800C13B0(local_0, 0x400);
+            func_800C13B0(slot, 0x400);
         }
     }
 }
 
-void func_800C3584(u8 param_0, f32 param_1, f32 param_2)
+void func_800C3584(u8 handle, f32 min_dist, f32 max_dist)
 {
-    void *local_0;
-    if (param_0) {
-        local_0 = func_800C1414(param_0);
-        *(f32 *) ((char *) local_0 + 0xc) = param_1 * param_1;
-        *(f32 *) ((char *) local_0 + 0x10) = param_2 * param_2;
-        func_800C368C(param_0, 1);
+    void *slot;
+    if (handle) {
+        slot = func_800C1414(handle);
+        *(f32 *) ((char *) slot + 0xc) = min_dist * min_dist;
+        *(f32 *) ((char *) slot + 0x10) = max_dist * max_dist;
+        func_800C368C(handle, 1);
     }
 }
 
-void func_800C35E8(u8 param_0, s32 param_1)
+void func_800C35E8(u8 handle, s32 pos)
 {
-    void *p;
-    if (param_0 != 0) {
-        p = func_800C1414(param_0);
-        func_800EE7F8(p, param_1);
-        func_800C368C(param_0, 1);
-        *(s16 *) ((u8 *) p + 0x5E) = func_800EA05C();
+    void *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        func_800EE7F8(slot, pos);
+        func_800C368C(handle, 1);
+        *(s16 *) ((u8 *) slot + 0x5E) = func_800EA05C();
     }
 }
 
-void func_800C3648(u8 param_0, s32 param_1)
+void func_800C3648(u8 handle, s32 unk_0)
 {
-    u8 *temp;
-    if (param_0 != 0) {
-        temp = func_800C1414(param_0);
-        *(u16 *) (temp + 0x5E) = func_800EA05C();
+    u8 *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        *(u16 *) (slot + 0x5E) = func_800EA05C();
     }
 }
 
-void func_800C368C(u8 param_0, s32 param_1)
+void func_800C368C(u8 handle, s32 positional)
 {
-    u8 *local_0;
-    if (param_0 != 0) {
-        local_0 = func_800C1414(param_0);
-        if (param_1 != 0) {
-            func_800C13A0(local_0, 0x2);
+    u8 *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        if (positional != 0) {
+            func_800C13A0(slot, 0x2);
         } else {
-            func_800C13B0(local_0, 0x2);
+            func_800C13B0(slot, 0x2);
         }
-        func_800C33DC(param_0, param_1);
+        func_800C33DC(handle, positional);
     }
 }
 
-void func_800C36F4(u8 param_0, s32 param_1)
+void func_800C36F4(u8 handle, s32 value)
 {
-    if (param_0 != 0) {
-        s8 *ptr = func_800C1414(param_0);
-        ptr[0x62] = (s8) param_1;
+    if (handle != 0) {
+        s8 *slot = func_800C1414(handle);
+        slot[0x62] = (s8) value;
     }
 }
 
-void func_800C3730(u8 param_0, f32 param_1, f32 param_2, f32 param_3)
+void func_800C3730(u8 handle, f32 pitch, f32 unk_0, f32 unk_1)
 {
-    s32 *local_0;
-    if (param_0 != 0) {
-        local_0 = func_800C1414(param_0);
-        *((u16 *) (((u8 *) local_0) + 0x7a)) =
-            ((*((u16 *) (((u8 *) local_0) + ((0, 0x7a))))) & 0xfc3f) | 0x40;
-        *((f32 *) (((u8 *) local_0) + 0x28)) = param_3;
-        *((f32 *) (((u8 *) local_0) + 0x2c)) = param_2;
-        func_800C31DC(param_0, param_1);
+    s32 *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        // Matching: the comma expression in the offset is needed for the match.
+        *((u16 *) (((u8 *) slot) + 0x7a)) =
+            ((*((u16 *) (((u8 *) slot) + ((0, 0x7a))))) & 0xfc3f) | 0x40;
+        *((f32 *) (((u8 *) slot) + 0x28)) = unk_1;
+        *((f32 *) (((u8 *) slot) + 0x2c)) = unk_0;
+        func_800C31DC(handle, pitch);
     }
 }
 
-void func_800C3798(u8 param_0, f32 param_1, f32 param_2)
+void func_800C3798(u8 handle, f32 unk_0, f32 unk_1)
 {
-    u8 *temp;
-    if (param_0 != 0) {
-        temp = func_800C1414(param_0);
-        *(f32 *) (temp + 0x70) = param_1;
-        *(f32 *) (temp + 0x74) = param_2;
+    u8 *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        *(f32 *) (slot + 0x70) = unk_0;
+        *(f32 *) (slot + 0x74) = unk_1;
     }
 }
 
-void func_800C37E0(u8 param_0, f32 param_1, f32 param_2, f32 param_3)
+void func_800C37E0(u8 handle, f32 pitch_a, f32 pitch_b, f32 unk_0)
 {
-    void *local_0;
-    if (param_0 != 0) {
-        local_0 = func_800C1414(param_0);
-        *((u16 *) (((u8 *) local_0) + 0x7A)) =
-            ((*((u16 *) (((u8 *) local_0) + 0x7A))) & 0xFC3F) | 0x80;
-        *((f32 *) (((u8 *) local_0) + 0x30)) = param_3;
-        *((f32 *) (((u8 *) local_0) + 0x2C)) = param_1;
-        *((f32 *) (((u8 *) local_0) + 0x28)) = param_2;
-        func_800C31DC(param_0, (param_1 + param_2) * 0.5f);
+    void *slot;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        *((u16 *) (((u8 *) slot) + 0x7A)) =
+            ((*((u16 *) (((u8 *) slot) + 0x7A))) & 0xFC3F) | 0x80;
+        *((f32 *) (((u8 *) slot) + 0x30)) = unk_0;
+        *((f32 *) (((u8 *) slot) + 0x2C)) = pitch_a;
+        *((f32 *) (((u8 *) slot) + 0x28)) = pitch_b;
+        func_800C31DC(handle, (pitch_a + pitch_b) * 0.5f);
     }
 }
 
-void func_800C3868(u8 param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4)
+void func_800C3868(u8 handle, f32 unk_0, f32 unk_1, f32 pitch, f32 unk_2)
 {
-    struct SomeStruct *local_0;
+    struct SomeStruct *slot;
 
-    if (param_0 != 0) {
-        local_0 = (struct SomeStruct *) func_800C1414(param_0);
-        local_0->unk7A = (local_0->unk7A & 0xFC3F) | 0xC0;
-        local_0->unk28 = param_1;
-        local_0->unk2C = param_2;
-        local_0->unk30 = param_3;
-        local_0->unk34 = param_4;
-        func_800C31DC(param_0, param_3);
+    if (handle != 0) {
+        slot = (struct SomeStruct *) func_800C1414(handle);
+        slot->unk7A = (slot->unk7A & 0xFC3F) | 0xC0;
+        slot->unk28 = unk_0;
+        slot->unk2C = unk_1;
+        slot->unk30 = pitch;
+        slot->unk34 = unk_2;
+        func_800C31DC(handle, pitch);
     }
 }
 
-s16 func_800C38E4(u8 param_0)
+// Returns the sfx id.
+s16 func_800C38E4(u8 handle)
 {
-    if (param_0 == 0) {
+    if (handle == 0) {
         return 0;
     }
-    return *(s16 *) ((u8 *) func_800C1414(param_0) + 0x58);
+    return *(s16 *) ((u8 *) func_800C1414(handle) + 0x58);
 }
 
-s16 func_800C3920(u8 param_0)
+// Returns the volume.
+s16 func_800C3920(u8 handle)
 {
-    if (param_0 == 0) {
+    if (handle == 0) {
         return 0;
     }
-    return *(s16 *) ((u8 *) func_800C1414(param_0) + 0x5A);
+    return *(s16 *) ((u8 *) func_800C1414(handle) + 0x5A);
 }
 
-f32 func_800C395C(u8 param_0)
+// Returns the pitch (1.0 when there is no source).
+f32 func_800C395C(u8 handle)
 {
-    if (param_0 == 0) {
+    if (handle == 0) {
         return 1.0f;
     }
-    return *(f32 *) ((u8 *) func_800C1414(param_0) + 0x6C);
+    return *(f32 *) ((u8 *) func_800C1414(handle) + 0x6C);
 }
 
-s32 func_800C39A0(u8 param_0)
+// Returns the release policy.
+s32 func_800C39A0(u8 handle)
 {
-    return (u32) *(u16 *) ((u8 *) func_800C1414(param_0) + 0x7A) >> 0xD;
+    return (u32) *(u16 *) ((u8 *) func_800C1414(handle) + 0x7A) >> 0xD;
 }
 
-s32 func_800C39D0(u8 *param_0)
+s32 func_800C39D0(u8 *slot)
 {
-    int var_v1;
-    if (func_800C13C4(param_0, 0x800) != 0) {
+    int volume;
+    if (func_800C13C4(slot, 0x800) != 0) {
         return 1;
     }
-    if (((*((u8 *) (((s8 *) param_0) + 0x63))) != 0) && (func_800C13C4(param_0, 2) != 0)) {
-        var_v1 = func_800C19E4(param_0, *((s16 *) (((s8 *) param_0) + 0x5A)));
+    if (((*((u8 *) (((s8 *) slot) + 0x63))) != 0) && (func_800C13C4(slot, 2) != 0)) {
+        volume = func_800C19E4(slot, *((s16 *) (((s8 *) slot) + 0x5A)));
     } else {
-        var_v1 = *((s16 *) (((s8 *) param_0) + 0x5A));
+        volume = *((s16 *) (((s8 *) slot) + 0x5A));
     }
-    return var_v1 >= 0x65;
+    return volume >= 0x65;
 }
 
-void func_800C3A40(u8 param_0, f32 param_1, f32 param_2, f32 param_3)
+// Starts a volume envelope from attack, hold and decay times.
+void func_800C3A40(u8 handle, f32 attack, f32 hold, f32 decay)
 {
-    SoundC *local_0;
-    if (!param_0)
+    SoundC *slot;
+    if (!handle)
         return;
-    local_0 = func_800C1414(param_0);
-    local_0->local_24.local_1.local_5 = 1;
-    local_0->local_24.local_1.local_8 = 1;
-    local_0->local_6 = param_1;
-    local_0->local_7 = param_3;
-    local_0->local_8 = param_2;
-    local_0->local_12 = 0;
-    if (!local_0->local_24.local_1.local_6) {
-        local_0->local_24.local_1.local_6 = 1;
-        local_0->local_9 = local_0->local_14;
-        local_0->local_10 = local_0->local_14;
-        local_0->local_14 = 0;
-        local_0->local_11 = 0.0f;
+    slot = func_800C1414(handle);
+    slot->local_24.local_1.local_5 = 1;
+    slot->local_24.local_1.local_8 = 1;
+    slot->local_6 = attack;
+    slot->local_7 = decay;
+    slot->local_8 = hold;
+    slot->local_12 = 0;
+    if (!slot->local_24.local_1.local_6) {
+        slot->local_24.local_1.local_6 = 1;
+        slot->local_9 = slot->local_14;
+        slot->local_10 = slot->local_14;
+        slot->local_14 = 0;
+        slot->local_11 = 0.0f;
     }
 }
 
-void func_800C3AE0(u8 param_0, f32 param_1)
+// Scales the source volume.
+void func_800C3AE0(u8 handle, f32 scale)
 {
-    SoundC *local_0;
-    if (!param_0)
+    SoundC *slot;
+    if (!handle)
         return;
-    local_0 = func_800C1414(param_0);
-    if (local_0->local_24.local_1.local_6) {
-        local_0->local_9 *= param_1;
-        local_0->local_10 *= param_1;
+    slot = func_800C1414(handle);
+    if (slot->local_24.local_1.local_6) {
+        slot->local_9 *= scale;
+        slot->local_10 *= scale;
     } else {
-        local_0->local_14 *= param_1;
+        slot->local_14 *= scale;
     }
 }
 
-void func_800C3B8C(u8 param_0, s32 param_1)
+void func_800C3B8C(u8 handle, s32 flag)
 {
-    if (param_0 != 0) {
-        func_800C1414(param_0)->bit = param_1;
+    if (handle != 0) {
+        func_800C1414(handle)->bit = flag;
     }
 }
 
-void func_800C3BDC(u8 param_0)
+// Starts playback of the source.
+void func_800C3BDC(u8 handle)
 {
-    local_type_800C3BDC *local_1;
-    u32 local_2;
-    if (param_0 != 0) {
-        local_1 = func_800C1414(param_0);
-        if (local_1->local_7) {
+    local_type_800C3BDC *slot;
+    u32 voice;
+    if (handle != 0) {
+        slot = func_800C1414(handle);
+        if (slot->local_7) {
             func_800FEC60(4);
         }
-        if ((func_800C39D0(local_1) != 0) ||
-            (func_800C42E0(*(s16 *) ((char *) local_1 + 0x58)) != 0)) {
-            if (local_1->local_4 == 2) {
-                func_800C13A0(local_1, 1);
-                if (local_1->local_5 == 1) {
+        if ((func_800C39D0(slot) != 0) ||
+            (func_800C42E0(*(s16 *) ((char *) slot + 0x58)) != 0)) {
+            if (slot->local_4 == 2) {
+                func_800C13A0(slot, 1);
+                if (slot->local_5 == 1) {
                     return;
                 }
                 goto block_10;
             }
-            if (local_1->local_5 == 1) {
-                func_800C3CE8(param_0);
+            if (slot->local_5 == 1) {
+                func_800C3CE8(handle);
             }
         block_10:
-            local_2 = func_800C15BC();
+            voice = func_800C15BC();
             osSetThreadPri(0, 0x33);
-            func_800C16F8(local_1, local_2);
-            func_800C1D80(param_0);
+            func_800C16F8(slot, voice);
+            func_800C1D80(handle);
             osSetThreadPri(0, 0x14);
         }
     }
 }
 
-void func_800C3CE8(u8 param_0)
+// Stops the voice and calls the stop callback.
+void func_800C3CE8(u8 handle)
 {
-    SoundC *local_0;
-    if (!param_0)
+    SoundC *slot;
+    if (!handle)
         return;
-    local_0 = func_800C1414(param_0);
-    if (local_0->local_24.local_1.local_2 != 1)
+    slot = func_800C1414(handle);
+    if (slot->local_24.local_1.local_2 != 1)
         return;
-    func_800C1860(local_0);
-    if (local_0->local_24.local_1.local_7)
+    func_800C1860(slot);
+    if (slot->local_24.local_1.local_7)
         func_800FECB8(4);
-    if (local_0->local_21)
-        local_0->local_21(param_0, local_0->local_22);
+    if (slot->local_21)
+        slot->local_21(handle, slot->local_22);
 }
 
-int func_800C3D78(u8 param_0)
+// Returns nonzero while the source's voice is playing.
+int func_800C3D78(u8 handle)
 {
-    SoundC *local_0;
-    if (!(param_0 != 0))
+    SoundC *slot;
+    if (!(handle != 0))
         return 0;
-    local_0 = func_800C1414(param_0);
-    return (param_0 != 0) && local_0->local_24.local_1.local_2 == 1 &&
-           local_0->local_24.local_0.local_1 && func_800C1448(local_0->local_24.local_0.local_1);
+    slot = func_800C1414(handle);
+    return (handle != 0) && slot->local_24.local_1.local_2 == 1 &&
+           slot->local_24.local_0.local_1 && func_800C1448(slot->local_24.local_0.local_1);
 }
 
-s32 func_800C3E00(s32 param_0)
+// Returns 1 if a playing source uses the sfx id.
+s32 func_800C3E00(s32 sfx_id)
 {
-    s32 *local_0;
-    s32 local_1;
-    local_0 = &D_80128C10;
-    local_1 = 1;
+    s32 *slot;
+    s32 handle;
+    slot = &D_80128C10;
+    handle = 1;
 loop_1:
-    if ((((*((u8 *) (((s8 *) local_0) + 0x78))) != 0) && (func_800C3D78(local_1) != 0)) &&
-        (param_0 == (*((s16 *) (((s8 *) local_0) + 0x58))))) {
+    if ((((*((u8 *) (((s8 *) slot) + 0x78))) != 0) && (func_800C3D78(handle) != 0)) &&
+        (sfx_id == (*((s16 *) (((s8 *) slot) + 0x58))))) {
         return 1;
     }
 
-    local_1 += 1;
-    local_0 += 0x20;
-    if (local_1 == 0x3C) {
-        local_1 = ((*((u8 *) (((s8 *) local_0) + 0x78))) != 0) * 0;
-        return local_1;
+    handle += 1;
+    slot += 0x20;
+    if (handle == 0x3C) {
+        // Matching: the "* 0" is needed for the match.
+        handle = ((*((u8 *) (((s8 *) slot) + 0x78))) != 0) * 0;
+        return handle;
     }
     goto loop_1;
 }
 
-void func_800C3E88(s32 param_0)
+void func_800C3E88(s32 sfx_id)
 {
-    func_800C2840(param_0, 1.0f, 0x55F0, 0, 2);
+    func_800C2840(sfx_id, 1.0f, 0x55F0, 0, 2);
 }
 
-void func_800C3EB8(int arg0)
+void func_800C3EB8(int sfx_id)
 {
-    func_800C2840(arg0, 1.0f, 0x55F0, 0, 0);
+    func_800C2840(sfx_id, 1.0f, 0x55F0, 0, 0);
 }
 
-void func_800C3EE4(s32 param_0, s32 param_1)
+void func_800C3EE4(s32 sfx_id, s32 volume)
 {
-    func_800C2840(param_0, 1.0f, param_1, 0, 2);
+    func_800C2840(sfx_id, 1.0f, volume, 0, 2);
 }
 
-void func_800C3F14(s32 param_0, f32 param_1)
+void func_800C3F14(s32 sfx_id, f32 pitch)
 {
-    func_800C2840(param_0, param_1, 0x55F0, 0, 2);
+    func_800C2840(sfx_id, pitch, 0x55F0, 0, 2);
 }
 
-void func_800C3F48(u32 param_0)
+// Packed sfx id: id in bits 0-10, volume in bits 11-20, pitch/1024 in bits 21-31.
+void func_800C3F48(u32 packed)
 {
-    u32 local_1 = param_0 & 0x7FF;
-    u32 local_2 = (param_0 >> 6) & 0x7FE0;
-    u32 local_3 = 0;
-    f32 local_0 = (f32) ((param_0 >> 21) & 0x7FF);
-    local_0 = local_0 / (f32) 1024;
-    func_800C2840(local_1, local_0, local_2, local_3, 2);
+    u32 sfx_id = packed & 0x7FF;
+    u32 volume = (packed >> 6) & 0x7FE0;
+    u32 unk_0 = 0;
+    f32 pitch = (f32) ((packed >> 21) & 0x7FF);
+    pitch = pitch / (f32) 1024;
+    func_800C2840(sfx_id, pitch, volume, unk_0, 2);
 }
 
-void func_800C3FC0(s32 param_0, f32 param_1, s32 param_2)
+void func_800C3FC0(s32 sfx_id, f32 pitch, s32 volume)
 {
-    func_800C2840(param_0, param_1, param_2, 0, 2);
+    func_800C2840(sfx_id, pitch, volume, 0, 2);
 }
 
-void func_800C3FF0(s32 p0, f32 p1, s32 p2)
+void func_800C3FF0(s32 sfx_id, f32 pitch, s32 volume)
 {
-    func_800C2840(p0, p1, p2, 0, 0);
+    func_800C2840(sfx_id, pitch, volume, 0, 0);
 }
 
-void func_800C401C(s32 param_0, f32 param_1, s32 param_2, f32 *param_3, f32 param_4, f32 param_5,
-                   s32 param_6)
+// Plays a positional sound unless it is farther than max_dist.
+void func_800C401C(s32 sfx_id, f32 pitch, s32 volume, f32 *pos, f32 min_dist, f32 max_dist,
+                   s32 mode)
 {
-    u8 local_0;
-    f32 local_1[3];
-    func_800C1070(local_1, param_3);
-    if (!(param_5 <= func_800EEAD4(local_1, param_3))) {
-        local_0 = func_800C2E04();
-        if (local_0) {
-            func_800C3418(local_0, param_6);
-            func_800C301C(local_0, param_0);
-            func_800C3058(local_0, param_2);
-            func_800C31DC(local_0, param_1);
-            func_800C3584(local_0, param_4, param_5);
-            func_800C35E8(local_0, param_3);
-            func_800C330C(local_0, 1);
-            func_800C33DC(local_0, 1);
-            func_800C36F4(local_0, 0);
-            func_800C3BDC(local_0);
+    u8 handle;
+    f32 ref_pos[3];
+    func_800C1070(ref_pos, pos);
+    if (!(max_dist <= func_800EEAD4(ref_pos, pos))) {
+        handle = func_800C2E04();
+        if (handle) {
+            func_800C3418(handle, mode);
+            func_800C301C(handle, sfx_id);
+            func_800C3058(handle, volume);
+            func_800C31DC(handle, pitch);
+            func_800C3584(handle, min_dist, max_dist);
+            func_800C35E8(handle, pos);
+            func_800C330C(handle, 1);
+            func_800C33DC(handle, 1);
+            func_800C36F4(handle, 0);
+            func_800C3BDC(handle);
         }
     }
 }
 
-void func_800C4104(s32 p0, f32 p1, s32 p2, s32 p3, f32 p4, f32 p5)
+void func_800C4104(s32 sfx_id, f32 pitch, s32 volume, s32 pos, f32 min_dist, f32 max_dist)
 {
-    func_800C401C(p0, p1, p2, p3, p4, p5, 2);
+    func_800C401C(sfx_id, pitch, volume, pos, min_dist, max_dist, 2);
 }
 
-void func_800C4140(s32 param_0, f32 *param_1, s32 param_2)
+// Packed sfx id as in func_800C3F48; packed_dist holds min_dist (low 16) and max_dist (high 16).
+void func_800C4140(s32 packed_sfx, f32 *pos, s32 packed_dist)
 {
-    func_800C401C((u32) param_0 & 0x7FF, (f32) (((u32) param_0 >> 21) & 0x7FF) / 1024,
-                  ((u32) param_0 >> 6) & 0x7FE0, param_1, (f32) ((u32) param_2 & 0xFFFF),
-                  (f32) (((u32) param_2 >> 16) & 0xFFFF), 2);
+    func_800C401C((u32) packed_sfx & 0x7FF, (f32) (((u32) packed_sfx >> 21) & 0x7FF) / 1024,
+                  ((u32) packed_sfx >> 6) & 0x7FE0, pos, (f32) ((u32) packed_dist & 0xFFFF),
+                  (f32) (((u32) packed_dist >> 16) & 0xFFFF), 2);
 }
 
-void func_800C4208(s32 p0, f32 p1, s32 p2, s32 p3, f32 p4, f32 p5)
+void func_800C4208(s32 sfx_id, f32 pitch, s32 volume, s32 pos, f32 min_dist, f32 max_dist)
 {
-    func_800C401C(p0, p1, p2, p3, p4, p5, 1);
+    func_800C401C(sfx_id, pitch, volume, pos, min_dist, max_dist, 1);
 }
 
-void func_800C4244(s32 p0, f32 p1, s32 p2, s32 p3, f32 p4, f32 p5)
+void func_800C4244(s32 sfx_id, f32 pitch, s32 volume, s32 pos, f32 min_dist, f32 max_dist)
 {
-    func_800C401C(p0, p1, p2, p3, p4, p5, 0);
+    func_800C401C(sfx_id, pitch, volume, pos, min_dist, max_dist, 0);
 }
 
 void func_800C427C()
@@ -1666,79 +1736,83 @@ void func_800C427C()
     func_800C2718();
 }
 
-int func_800C429C(s32 param_0, s32 param_1)
+// Allocates a source with the sfx id and returns its handle.
+int func_800C429C(s32 sfx_id, s32 unk_0)
 {
-    u8 local_0;
-    local_0 = func_800C2E04();
-    func_800C301C(local_0, param_0);
-    func_800C330C(local_0, param_1);
-    return local_0;
+    u8 handle;
+    handle = func_800C2E04();
+    func_800C301C(handle, sfx_id);
+    func_800C330C(handle, unk_0);
+    return handle;
 }
 
-int func_800C42E0(param_0)
-s32 param_0;
+int func_800C42E0(sfx_id)
+s32 sfx_id;
 {
-    s32 local_0;
-    local_0 = param_0 | 0;
-    func_800DC548(0, local_0 - 0x3E9);
+    s32 id;
+    // Matching: the no-op "| 0" is needed for the match.
+    id = sfx_id | 0;
+    func_800DC548(0, id - 0x3E9);
 }
 
-void func_800C4308(f32 param_0, f32 param_1)
+void func_800C4308(f32 unk_0, f32 unk_1)
 {
-    D_8011A870 = param_0;
-    D_8011A874 = param_1;
+    D_8011A870 = unk_0;
+    D_8011A874 = unk_1;
 }
 
-void func_800C431C(u8 param_0, s32 param_1)
+void func_800C431C(u8 handle, s32 value)
 {
-    *(u8 *) ((u8 *) func_800C1414(param_0) + 0x63) = param_1;
+    *(u8 *) ((u8 *) func_800C1414(handle) + 0x63) = value;
 }
 
-s32 func_800C4350(u8 param_0, f32 *param_1, s16 *param_2)
+// Interprets a sound script on a source; handle 0 allocates a new one.
+s32 func_800C4350(u8 handle, f32 *pos, s16 *script)
 {
     C4350State *local_1;
-    s16 local_14;
+    s16 sfx_id;
     s32 local_3;
-    s32 local_12;
-    s32 local_13;
-    f32 local_4;
-    f32 local_5;
-    f32 local_6;
-    f32 local_7;
-    f32 local_8;
-    f32 local_9;
-    s32 local_10 = 0;
-    if (!param_0) {
-        local_12 = func_800C2E04();
-        param_0 = local_12;
-        if (!local_12)
+    s32 unk_0;
+    s32 unk_1;
+    f32 operand_0;
+    f32 operand_1;
+    f32 operand_2;
+    f32 operand_3;
+    f32 operand_4;
+    f32 operand_5;
+    s32 play_at_end = 0; // Deferred play request, set by opcodes.
+    if (!handle) {
+        unk_0 = func_800C2E04();
+        handle = unk_0;
+        if (!unk_0)
             return 0;
-        local_1 = (C4350State *) func_800C1414(param_0);
+        local_1 = (C4350State *) func_800C1414(handle);
     } else
-        local_1 = (C4350State *) func_800C1414(param_0);
-    if (param_1) {
-        func_800EE7F8(local_1, param_1);
+        local_1 = (C4350State *) func_800C1414(handle);
+    // A position enables positional handling and records its context.
+    if (pos) {
+        func_800EE7F8(local_1, pos);
         func_800C13A0(local_1, 2);
         local_1->field1B = 1;
         local_1->field5E = func_800EA05C();
     }
-    if (!param_2) {
-        if (param_0)
-            func_800C3BDC(param_0);
-        return param_0;
+    if (!script) {
+        if (handle)
+            func_800C3BDC(handle);
+        return handle;
     }
-    while ((local_3 = *param_2++) != 0) {
+    while ((local_3 = *script++) != 0) {
         switch (local_3 & 0xFF) {
-            case 1:
-                local_4 = param_2[0];
-                local_5 = param_2[1];
-                if (param_1) {
+            case 1: // Two distance operands, stored squared.
+                operand_0 = script[0];
+                operand_1 = script[1];
+                if (pos) {
                     local_1->field1B = 1;
-                    local_1->radiusSquared[0] = local_4 * local_4;
-                    local_1->radiusSquared[1] = local_5 * local_5;
+                    local_1->radiusSquared[0] = operand_0 * operand_0;
+                    local_1->radiusSquared[1] = operand_1 * operand_1;
                     func_800C13A0(local_1, 2);
                 }
-                param_2 += 2;
+                script += 2;
                 break;
             case 2:
                 local_1->field63 = C4350_IMM;
@@ -1761,10 +1835,11 @@ s32 func_800C4350(u8 param_0, f32 *param_1, s16 *param_2)
                 else
                     func_800C13B0(local_1, 0x800);
                 break;
+            // These exits bypass the deferred play.
             case 3:
-                return param_0;
+                return handle;
             case 4:
-                func_800C2FDC(param_0);
+                func_800C2FDC(handle);
                 return 0;
             case 5:
                 local_1->field60 = C4350_IMM;
@@ -1787,85 +1862,86 @@ s32 func_800C4350(u8 param_0, f32 *param_1, s16 *param_2)
                     local_1->field1A = 0;
                 break;
             case 10:
-                local_4 = *param_2++ * 0.00390625f;
-                local_1->field6C = local_4;
+                operand_0 = *script++ * 0.00390625f;
+                local_1->field6C = operand_0;
                 func_800C13A0(local_1, 4);
                 break;
+            // Modes select different layouts for the fractional operands.
             case 11:
-                local_4 = param_2[0] * 0.00390625f;
-                local_5 = param_2[1] * 0.00390625f;
-                local_6 = param_2[2] * 0.00390625f;
-                param_2 += 3;
+                operand_0 = script[0] * 0.00390625f;
+                operand_1 = script[1] * 0.00390625f;
+                operand_2 = script[2] * 0.00390625f;
+                script += 3;
                 C4350_MODE(1);
-                local_1->field6C = local_4;
-                local_1->field2C = local_5;
-                local_1->field28 = local_6;
+                local_1->field6C = operand_0;
+                local_1->field2C = operand_1;
+                local_1->field28 = operand_2;
                 func_800C13A0(local_1, 4);
                 break;
             case 12:
-                local_4 = *param_2++ * 0.00390625f;
-                local_5 = *param_2++ * 0.00390625f;
-                local_6 = *param_2++ * 0.00390625f;
-                local_7 = *param_2++ * 0.00390625f;
+                operand_0 = *script++ * 0.00390625f;
+                operand_1 = *script++ * 0.00390625f;
+                operand_2 = *script++ * 0.00390625f;
+                operand_3 = *script++ * 0.00390625f;
                 C4350_MODE(3);
-                local_1->field28 = local_4;
-                local_1->field2C = local_5;
-                local_1->field30 = local_6;
-                local_1->field34 = local_7;
+                local_1->field28 = operand_0;
+                local_1->field2C = operand_1;
+                local_1->field30 = operand_2;
+                local_1->field34 = operand_3;
                 func_800C13A0(local_1, 4);
                 break;
-            case 13: {
-                f32 local_4, local_5;
-                local_4 = param_2[0] * 0.00390625f;
-                local_5 = param_2[1] * 0.00390625f;
-                param_2 += 2;
-                local_1->field6C = func_800DC264(local_4, local_5);
+            case 13: { // Random value between two /256 operands.
+                f32 operand_0, operand_1;
+                operand_0 = script[0] * 0.00390625f;
+                operand_1 = script[1] * 0.00390625f;
+                script += 2;
+                local_1->field6C = func_800DC264(operand_0, operand_1);
                 func_800C13A0(local_1, 4);
                 break;
             }
             case 29:
-                local_4 = (*((C4350Defaults *) &D_8012A990)).local_0;
-                local_1->field6C = local_4;
+                operand_0 = (*((C4350Defaults *) &D_8012A990)).local_0;
+                local_1->field6C = operand_0;
                 func_800C13A0(local_1, 4);
                 break;
             case 14:
-                local_4 = param_2[0] * 0.00390625f;
-                local_5 = param_2[1] * 0.00390625f;
-                local_6 = param_2[2] * 0.00390625f;
-                param_2 += 3;
+                operand_0 = script[0] * 0.00390625f;
+                operand_1 = script[1] * 0.00390625f;
+                operand_2 = script[2] * 0.00390625f;
+                script += 3;
                 C4350_MODE(2);
-                local_1->field2C = local_4;
-                local_1->field28 = local_5;
-                local_1->field30 = local_6;
-                local_1->field6C = (local_4 + local_5) * 0.5f;
+                local_1->field2C = operand_0;
+                local_1->field28 = operand_1;
+                local_1->field30 = operand_2;
+                local_1->field6C = (operand_0 + operand_1) * 0.5f;
                 func_800C13A0(local_1, 4);
                 break;
             case 15:
                 func_800C11F8(local_1, 1);
-                local_10 = 1;
+                play_at_end = 1;
                 local_1->field62 = 0;
                 break;
             case 16:
-                func_800C2E40(param_0);
+                func_800C2E40(handle);
                 break;
             case 17:
-                local_10 = 1;
+                play_at_end = 1;
                 break;
-            case 18:
-                local_10 = 0;
+            case 18: // Cancel the deferred play; call the stop callback if active.
+                play_at_end = 0;
                 if (((local_1->flags.word << 19) >> 29) == 1) {
                     func_800C1860(local_1);
                     if (local_1->callback) {
-                        (local_1->callback)(param_0, local_1->callbackArgument);
+                        (local_1->callback)(handle, local_1->callbackArgument);
                     }
                 }
                 break;
             case 19:
-                local_14 = *param_2++;
-                local_1->field58 = local_14;
+                sfx_id = *script++;
+                local_1->field58 = sfx_id;
                 break;
             case 20:
-                if (param_1) {
+                if (pos) {
                     local_1->field1B = C4350_IMM;
                     if (C4350_IMM)
                         func_800C13A0(local_1, 2);
@@ -1874,109 +1950,116 @@ s32 func_800C4350(u8 param_0, f32 *param_1, s16 *param_2)
                 }
                 break;
             case 21: {
-                local_4 = param_2[0] * 0.00390625f;
-                local_5 = param_2[1] * 0.00390625f;
-                local_6 = param_2[2] * 0.00390625f;
-                param_2 += 3;
-                func_800C3A40(param_0, local_4, local_5, local_6);
+                operand_0 = script[0] * 0.00390625f;
+                operand_1 = script[1] * 0.00390625f;
+                operand_2 = script[2] * 0.00390625f;
+                script += 3;
+                func_800C3A40(handle, operand_0, operand_1, operand_2);
                 break;
             }
             case 31:
                 local_1->field1D = 1;
                 break;
             case 22:
-                func_800C3058(param_0, *param_2++);
+                func_800C3058(handle, *script++);
                 break;
-            case 23:
-                local_12 = param_2[0];
-                local_13 = param_2[1];
-                local_4 = param_2[2];
-                param_2 += 3;
-                func_800C316C(param_0, local_12, local_13, local_4);
+            case 23: // Unlike the fractional opcodes, the third operand is unscaled.
+                unk_0 = script[0];
+                unk_1 = script[1];
+                operand_0 = script[2];
+                script += 3;
+                func_800C316C(handle, unk_0, unk_1, operand_0);
                 break;
             case 24:
-                func_800C3058(param_0, 0x7FFF);
+                func_800C3058(handle, 0x7FFF);
                 break;
             case 25:
-                func_800C3058(param_0, func_800DC214(param_2[0], param_2[1]));
-                param_2 += 2;
+                func_800C3058(handle, func_800DC214(script[0], script[1]));
+                script += 2;
                 break;
             case 30:
-                func_800C3058(param_0, (*((C4350Defaults *) &D_8012A990)).local_1);
+                func_800C3058(handle, (*((C4350Defaults *) &D_8012A990)).local_1);
                 break;
             case 26:
-                local_4 = param_2[0] * 0.00390625f;
-                local_5 = param_2[1] * 0.00390625f;
-                param_2 += 2;
-                local_1->field70 = local_4;
-                local_1->field74 = local_5;
+                operand_0 = script[0] * 0.00390625f;
+                operand_1 = script[1] * 0.00390625f;
+                script += 2;
+                local_1->field70 = operand_0;
+                local_1->field74 = operand_1;
                 break;
             case 27:
-                func_800C3418(param_0, C4350_IMM);
+                func_800C3418(handle, C4350_IMM);
                 break;
             case 28:
                 local_1->flags.bits.enabled = 1;
                 break;
             case 33:
-                func_800C301C(param_0, (*((C4350Defaults *) &D_8012A990)).local_2);
+                func_800C301C(handle, (*((C4350Defaults *) &D_8012A990)).local_2);
                 break;
             case 35:
-                local_4 = *param_2++ * 0.00390625f;
-                local_5 = *param_2++ * 0.00390625f;
-                local_6 = *param_2++ * 0.00390625f;
-                local_7 = *param_2++ * 0.00390625f;
-                local_8 = *param_2++ * 0.00390625f;
-                local_9 = *param_2++ * 0.00390625f;
+                operand_0 = *script++ * 0.00390625f;
+                operand_1 = *script++ * 0.00390625f;
+                operand_2 = *script++ * 0.00390625f;
+                operand_3 = *script++ * 0.00390625f;
+                operand_4 = *script++ * 0.00390625f;
+                operand_5 = *script++ * 0.00390625f;
                 C4350_MODE(4);
-                local_1->field28 = local_4;
-                local_1->field2C = local_5;
-                local_1->field30 = local_6;
-                local_1->field34 = local_7;
-                local_1->field38 = local_8;
-                local_1->field3C = local_9;
+                local_1->field28 = operand_0;
+                local_1->field2C = operand_1;
+                local_1->field30 = operand_2;
+                local_1->field34 = operand_3;
+                local_1->field38 = operand_4;
+                local_1->field3C = operand_5;
                 func_800C13A0(local_1, 4);
         }
     }
-    if (local_10)
-        func_800C3BDC(param_0);
-    return param_0;
+    // A zero terminator plays only when an opcode requested it.
+    if (play_at_end)
+        func_800C3BDC(handle);
+    return handle;
 }
 
-void func_800C4AF0(f32 *param_0, void *param_1)
+// Runs a script on a new source and plays it.
+void func_800C4AF0(f32 *pos, void *script)
 {
-    s32 r;
-    u8 h;
-    r = func_800C4350(0, param_0, param_1);
-    h = r;
-    if (r == 0) {
+    s32 result;
+    u8 handle;
+    result = func_800C4350(0, pos, script);
+    handle = result;
+    if (result == 0) {
         return;
     }
-    if (param_0 == 0) {
-        func_800C33DC(h, 0);
+    if (pos == 0) {
+        func_800C33DC(handle, 0);
     }
-    func_800C330C(h, 1);
-    func_800C36F4(h, 0);
-    func_800C3BDC(h);
+    func_800C330C(handle, 1);
+    func_800C36F4(handle, 0);
+    func_800C3BDC(handle);
 }
 
-void func_800C4B64(f32 param_0)
+// Sets the default pitch used by script opcode 29.
+void func_800C4B64(f32 pitch)
 {
-    D_8012A990 = param_0;
+    D_8012A990 = pitch;
 }
 
-int func_800C4B70(param_0)
-int param_0;
+// Sets the default volume used by script opcode 30.
+int func_800C4B70(volume)
+int volume;
 {
+    // Matching: the empty block is needed for the match.
     {
     }
-    D_8012A994 = param_0;
+    D_8012A994 = volume;
 }
 
-void func_800C4B7C(param_0) unsigned int param_0;
+// Sets the default sfx id used by script opcode 33.
+void func_800C4B7C(sfx_id) unsigned int sfx_id;
 {
-    D_8012A996 = param_0;
+    D_8012A996 = sfx_id;
 }
 
+// TU-NOTE: the .data of this file is defined here in C; values are taken from the ROM.
 float D_8011A870 = 0.0f;
 float D_8011A874 = 1.0f;
 f32 D_8011A878 = 1.0f;

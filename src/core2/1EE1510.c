@@ -225,260 +225,269 @@ int func_80107C20()
     return (int) D_80124580;
 }
 
-u8 *func_80107C2C(u8 *param_0, s32 param_1, u8 *param_2, s32 param_3, u8 *param_4)
+// Generic actor constructor: allocates an actor slot, creates its marker and fills it from an ActorInfo.
+u8 *func_80107C2C(u8 *pos, s32 yaw, u8 *info, s32 entry, u8 *node)
 {
-    u8 *local_11;
-    s32 local_0;
-    s32 local_1;
-    local_11 = func_80106668(&local_0);
-    ((CtorActor *) local_11)->entry = param_3;
-    ((ActorStateBits *) (local_11 + 0x72))->state = *(s16 *) (param_2 + 6);
-    ((CtorActor *) local_11)->position[0] = (f32) ((s32 *) param_0)[0];
-    ((CtorActor *) local_11)->position[1] = (f32) ((s32 *) param_0)[1];
-    ((CtorActor *) local_11)->position[2] = (f32) ((s32 *) param_0)[2];
-    ((CtorActor *) local_11)->yaw = (f32) param_1;
-    ((CtorActor *) local_11)->ideal_yaw = (f32) param_1;
-    ((CtorActor *) local_11)->flags64[1].bits.bit_0 = 1;
-    ((CtorActor *) local_11)->scale = 1.0f;
-    ((ActorIdBits *) (local_11 + 0x6C))->id = *(s16 *) (param_2 + 2);
-    ((CtorActor *) local_11)->value34 = 0.f;
-    ((ActorModeBits *) (local_11 + 0x77))->mode = 0;
-    ((ActorDrawBits *) (local_11 + 0x7A))->mode = 1;
-    ((CtorActor *) local_11)->flags64[1].bits.bit_2 = 1;
-    ((CtorActor *) local_11)->value7C = (u16) ((CtorInfo *) param_2)->value18;
-    if (((CtorInfo *) param_2)->scale != 0.0f) {
-        ((CtorFlagByte *) (local_11 + 0x75))->bits.bit_4 = 1;
+    u8 *actor;
+    s32 actor_index;
+    s32 i;
+    actor = func_80106668(&actor_index);
+    ((CtorActor *) actor)->entry = entry;
+    ((ActorStateBits *) (actor + 0x72))->state = *(s16 *) (info + 6);
+    ((CtorActor *) actor)->position[0] = (f32) ((s32 *) pos)[0];
+    ((CtorActor *) actor)->position[1] = (f32) ((s32 *) pos)[1];
+    ((CtorActor *) actor)->position[2] = (f32) ((s32 *) pos)[2];
+    ((CtorActor *) actor)->yaw = (f32) yaw;
+    ((CtorActor *) actor)->ideal_yaw = (f32) yaw;
+    ((CtorActor *) actor)->flags64[1].bits.bit_0 = 1;
+    ((CtorActor *) actor)->scale = 1.0f;
+    ((ActorIdBits *) (actor + 0x6C))->id = *(s16 *) (info + 2);
+    ((CtorActor *) actor)->value34 = 0.f;
+    ((ActorModeBits *) (actor + 0x77))->mode = 0;
+    ((ActorDrawBits *) (actor + 0x7A))->mode = 1;
+    ((CtorActor *) actor)->flags64[1].bits.bit_2 = 1;
+    ((CtorActor *) actor)->value7C = (u16) ((CtorInfo *) info)->value18;
+    if (((CtorInfo *) info)->scale != 0.0f) {
+        ((CtorFlagByte *) (actor + 0x75))->bits.bit_4 = 1;
     } else {
-        ((CtorFlagByte *) (local_11 + 0x75))->bits.bit_4 = 0;
+        ((CtorFlagByte *) (actor + 0x75))->bits.bit_4 = 0;
     }
-    ((CtorDestFlag *) (local_11 + 0x94))->flag = ((CtorCopyFlag *) (local_11 + 0x74))->flag;
-    func_80100074(local_11, 0, ((CtorInfo *) param_2)->value30);
-    func_80100074(local_11, 1, ((CtorInfo *) param_2)->value32);
-    if (((CtorInfo *) param_2)->model_id == 0xFFFF) {
-        *(u8 **) ((s8 *) local_11 + 0) =
-            func_800EBED4(param_0, 1, ((CtorInfo *) param_2)->marker_id,
-                          (((CtorInfo *) param_2)->flags & 0x400) ? 1 : 0);
+    ((CtorDestFlag *) (actor + 0x94))->flag = ((CtorCopyFlag *) (actor + 0x74))->flag;
+    func_80100074(actor, 0, ((CtorInfo *) info)->value30);
+    func_80100074(actor, 1, ((CtorInfo *) info)->value32);
+    // Select the marker representation from the model asset type.
+    if (((CtorInfo *) info)->model_id == 0xFFFF) {
+        *(u8 **) ((s8 *) actor + 0) =
+            func_800EBED4(pos, 1, ((CtorInfo *) info)->marker_id,
+                          (((CtorInfo *) info)->flags & 0x400) ? 1 : 0);
     } else {
-        *(u8 **) ((s8 *) local_11 + 0) = func_800EBED4(
-            param_0, (func_800D738C(((CtorInfo *) param_2)->model_id) == 7) ? 0 : 1,
-            ((CtorInfo *) param_2)->marker_id, (((CtorInfo *) param_2)->flags & 0x400) ? 1 : 0);
+        *(u8 **) ((s8 *) actor + 0) = func_800EBED4(
+            pos, (func_800D738C(((CtorInfo *) info)->model_id) == 7) ? 0 : 1,
+            ((CtorInfo *) info)->marker_id, (((CtorInfo *) info)->flags & 0x400) ? 1 : 0);
     }
-    ((CtorDestFlag *) (*(u8 **) local_11 + 0x18))->flag = 1;
-    if (*(s32 **) ((s8 *) param_2 + 0x2C) != 0) {
-        *(s32 **) ((s8 *) *(u8 **) ((s8 *) local_11 + 0) + 8) = *(s32 **) ((s8 *) param_2 + 0x2C);
+    ((CtorDestFlag *) (*(u8 **) actor + 0x18))->flag = 1;
+    if (*(s32 **) ((s8 *) info + 0x2C) != 0) {
+        *(s32 **) ((s8 *) *(u8 **) ((s8 *) actor + 0) + 8) = *(s32 **) ((s8 *) info + 0x2C);
     } else {
-        *(s32 **) ((s8 *) *(u8 **) ((s8 *) local_11 + 0) + 8) = &func_80107C20;
+        *(s32 **) ((s8 *) *(u8 **) ((s8 *) actor + 0) + 8) = &func_80107C20;
     }
-    func_800EC340(*(u8 **) ((s8 *) local_11 + 0), local_0);
-    func_800EC360(*(u8 **) ((s8 *) local_11 + 0), ((CtorInfo *) param_2)->model_id);
-    func_800EC368(*(u8 **) ((s8 *) local_11 + 0), ((CtorInfo *) param_2)->value22);
-    ((CtorFlagByte *) (local_11 + 0x75))->bits.bit_0 = 1;
-    ((CtorFlagByte *) (local_11 + 0x75))->bits.bit_3 = *(u16 *) (local_11 + 0x74);
-    if (func_80102FA0(param_2, 1) != 0) {
-        _subaddieDll_entrypoint_1(local_11);
+    func_800EC340(*(u8 **) ((s8 *) actor + 0), actor_index);
+    func_800EC360(*(u8 **) ((s8 *) actor + 0), ((CtorInfo *) info)->model_id);
+    func_800EC368(*(u8 **) ((s8 *) actor + 0), ((CtorInfo *) info)->value22);
+    ((CtorFlagByte *) (actor + 0x75))->bits.bit_0 = 1;
+    ((CtorFlagByte *) (actor + 0x75))->bits.bit_3 = *(u16 *) (actor + 0x74);
+    // Transfer ActorInfo options into actor and marker bitfields; high-bit selectors are
+    // passed to func_80102FA0 unchanged.
+    if (func_80102FA0(info, 1) != 0) {
+        _subaddieDll_entrypoint_1(actor);
     }
-    if (func_80102FA0(param_2, 0x800000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x71))->bits.bit_5 = 1;
+    if (func_80102FA0(info, 0x800000) != 0) {
+        ((CtorFlagByte *) (actor + 0x71))->bits.bit_5 = 1;
     }
-    if (func_80102FA0(param_2, 8) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x70))->bits.bit_0 = 1;
+    if (func_80102FA0(info, 8) != 0) {
+        ((CtorFlagByte *) (actor + 0x70))->bits.bit_0 = 1;
     }
-    if (func_80102FA0(param_2, 0x100) != 0) {
-        ((ActorModeBits *) (local_11 + 0x77))->mode = 1;
+    if (func_80102FA0(info, 0x100) != 0) {
+        ((ActorModeBits *) (actor + 0x77))->mode = 1;
     }
-    if (func_80102FA0(param_2, 0x200000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x64))->bits.bit_1 = 1;
+    if (func_80102FA0(info, 0x200000) != 0) {
+        ((CtorFlagByte *) (actor + 0x64))->bits.bit_1 = 1;
     }
-    if (func_80102FA0(param_2, 0x04000000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x71))->bits.bit_6 = 1;
+    if (func_80102FA0(info, 0x04000000) != 0) {
+        ((CtorFlagByte *) (actor + 0x71))->bits.bit_6 = 1;
     }
-    if (func_80102FA0(param_2, 4) == 0) {
-        ((CtorFlagByte *) (local_11 + 0x75))->bits.bit_1 = 1;
+    if (func_80102FA0(info, 4) == 0) {
+        ((CtorFlagByte *) (actor + 0x75))->bits.bit_1 = 1;
     }
-    if (func_80102FA0(param_2, 0x100000) == 0) {
-        ((CtorFlagByte *) (local_11 + 0x71))->bits.bit_4 = 1;
+    if (func_80102FA0(info, 0x100000) == 0) {
+        ((CtorFlagByte *) (actor + 0x71))->bits.bit_4 = 1;
     }
-    if (func_80102FA0(param_2, 0x08000000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x71))->bits.bit_2 = 1;
+    if (func_80102FA0(info, 0x08000000) != 0) {
+        ((CtorFlagByte *) (actor + 0x71))->bits.bit_2 = 1;
     }
-    if (func_80102FA0(param_2, 0x80000002) != 0) {
-        *(u8 *) ((s8 *) *(u8 **) ((s8 *) local_11 + 0) + 0x2A) =
-            (u8) (*(u8 *) ((s8 *) *(u8 **) ((s8 *) local_11 + 0) + 0x2A) & 0xFFFD);
+    if (func_80102FA0(info, 0x80000002) != 0) {
+        *(u8 *) ((s8 *) *(u8 **) ((s8 *) actor + 0) + 0x2A) =
+            (u8) (*(u8 *) ((s8 *) *(u8 **) ((s8 *) actor + 0) + 0x2A) & 0xFFFD);
     }
-    if (func_80102FA0(param_2, 0x80000004) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x64))->bits.bit_7 = 1;
+    if (func_80102FA0(info, 0x80000004) != 0) {
+        ((CtorFlagByte *) (actor + 0x64))->bits.bit_7 = 1;
     }
-    if (func_80102FA0(param_2, 0x80000008) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x64))->bits.bit_6 = 1;
+    if (func_80102FA0(info, 0x80000008) != 0) {
+        ((CtorFlagByte *) (actor + 0x64))->bits.bit_6 = 1;
     }
-    if (func_80102FA0(param_2, 0x80000400) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x71))->bits.bit_1 = 1;
+    if (func_80102FA0(info, 0x80000400) != 0) {
+        ((CtorFlagByte *) (actor + 0x71))->bits.bit_1 = 1;
     }
-    if (func_80102FA0(param_2, 0x80001000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x71))->bits.bit_0 = 1;
+    if (func_80102FA0(info, 0x80001000) != 0) {
+        ((CtorFlagByte *) (actor + 0x71))->bits.bit_0 = 1;
     }
-    if (func_80102FA0(param_2, 0x80002000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x77))->bits.bit_5 = 1;
+    if (func_80102FA0(info, 0x80002000) != 0) {
+        ((CtorFlagByte *) (actor + 0x77))->bits.bit_5 = 1;
     }
-    if (func_80102FA0(param_2, 0x80004000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x7E))->bits.bit_5 = 1;
+    if (func_80102FA0(info, 0x80004000) != 0) {
+        ((CtorFlagByte *) (actor + 0x7E))->bits.bit_5 = 1;
     }
-    if (func_80102FA0(param_2, 0x80000100) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x74))->bits.bit_2 = 1;
+    if (func_80102FA0(info, 0x80000100) != 0) {
+        ((CtorFlagByte *) (actor + 0x74))->bits.bit_2 = 1;
     }
-    if (func_80102FA0(param_2, 0x80100000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x75))->bits.bit_7 = 1;
+    if (func_80102FA0(info, 0x80100000) != 0) {
+        ((CtorFlagByte *) (actor + 0x75))->bits.bit_7 = 1;
     }
-    if (func_80102FA0(param_2, 0x80000001) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x64))->bits.bit_0 = 1;
+    if (func_80102FA0(info, 0x80000001) != 0) {
+        ((CtorFlagByte *) (actor + 0x64))->bits.bit_0 = 1;
     }
-    if (func_80102FA0(param_2, 0x80000010) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x7B))->bits.bit_1 = 1;
+    if (func_80102FA0(info, 0x80000010) != 0) {
+        ((CtorFlagByte *) (actor + 0x7B))->bits.bit_1 = 1;
     }
-    if (func_80102FA0(param_2, 0x80400000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x94))->bits.bit_7 = 1;
+    if (func_80102FA0(info, 0x80400000) != 0) {
+        ((CtorFlagByte *) (actor + 0x94))->bits.bit_7 = 1;
     }
-    if (func_80102FA0(param_2, 0x80800000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x94))->bits.bit_6 = 1;
+    if (func_80102FA0(info, 0x80800000) != 0) {
+        ((CtorFlagByte *) (actor + 0x94))->bits.bit_6 = 1;
     }
-    if (func_80102FA0(param_2, 0x80000040) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x73))->bits.bit_2 = 1;
+    if (func_80102FA0(info, 0x80000040) != 0) {
+        ((CtorFlagByte *) (actor + 0x73))->bits.bit_2 = 1;
     }
-    if (func_80102FA0(param_2, 0x80040000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x79))->bits.bit_3 = 1;
+    if (func_80102FA0(info, 0x80040000) != 0) {
+        ((CtorFlagByte *) (actor + 0x79))->bits.bit_3 = 1;
     }
-    if (func_80102FA0(param_2, 0x80200000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x95))->bits.bit_1 = 1;
+    if (func_80102FA0(info, 0x80200000) != 0) {
+        ((CtorFlagByte *) (actor + 0x95))->bits.bit_1 = 1;
     }
-    if (func_80102FA0(param_2, 0x84000000) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x96))->bits.bit_6 = 1;
+    if (func_80102FA0(info, 0x84000000) != 0) {
+        ((CtorFlagByte *) (actor + 0x96))->bits.bit_6 = 1;
     }
-    if (func_80102FA0(param_2, 0x80000080) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x71))->bits.bit_3 = 1;
+    if (func_80102FA0(info, 0x80000080) != 0) {
+        ((CtorFlagByte *) (actor + 0x71))->bits.bit_3 = 1;
     }
-    if (func_80102FA0(param_2, 0x82000000) != 0) {
-        ((CtorDestFlag *) (local_11 + 0x94))->flag = 0;
+    if (func_80102FA0(info, 0x82000000) != 0) {
+        ((CtorDestFlag *) (actor + 0x94))->flag = 0;
     }
-    func_8010A800(local_11, 0);
-    if (func_80102FA0(param_2, 0x800) != 0) {
-        func_8010A800(local_11, 1);
-        func_8010A63C(local_11);
+    func_8010A800(actor, 0);
+    if (func_80102FA0(info, 0x800) != 0) {
+        func_8010A800(actor, 1);
+        func_8010A63C(actor);
     }
-    if (func_80102FA0(param_2, 0x20000) != 0) {
-        func_8010A800(local_11, 2);
-    } else if (func_80102FA0(param_2, 0x400000) != 0) {
-        func_8010A800(local_11, 3);
-    } else if (func_80102FA0(param_2, 0x80008000) != 0) {
-        func_8010A800(local_11, 4);
+    if (func_80102FA0(info, 0x20000) != 0) {
+        func_8010A800(actor, 2);
+    } else if (func_80102FA0(info, 0x400000) != 0) {
+        func_8010A800(actor, 3);
+    } else if (func_80102FA0(info, 0x80008000) != 0) {
+        func_8010A800(actor, 4);
     }
-    if (func_80102FA0(param_2, 0x80000800) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x7E))->bits.bit_6 = 0;
+    if (func_80102FA0(info, 0x80000800) != 0) {
+        ((CtorFlagByte *) (actor + 0x7E))->bits.bit_6 = 0;
     } else {
-        ((CtorFlagByte *) (local_11 + 0x7E))->bits.bit_6 = 1;
+        ((CtorFlagByte *) (actor + 0x7E))->bits.bit_6 = 1;
     }
-    if (func_80102FA0(param_2, 0x80000200) != 0) {
-        ((CtorFlagByte *) (local_11 + 0x65))->bits.bit_0 = 0;
+    if (func_80102FA0(info, 0x80000200) != 0) {
+        ((CtorFlagByte *) (actor + 0x65))->bits.bit_0 = 0;
     } else {
-        ((CtorFlagByte *) (local_11 + 0x65))->bits.bit_0 = 1;
+        ((CtorFlagByte *) (actor + 0x65))->bits.bit_0 = 1;
     }
-    if (param_4 != 0) {
-        ((ActorIdBits *) (local_11 + 0x6C))->node = ((ActorIdBits *) (param_4 + 0x10))->node;
-        ((CtorFlagByte *) (local_11 + 0x73))->bits.bit_0 =
-            ((CtorTailSource *) (param_4 + 0x10))->flag;
+    // Placement node supplies an 11-bit node index and an extra flag.
+    if (node != 0) {
+        ((ActorIdBits *) (actor + 0x6C))->node = ((ActorIdBits *) (node + 0x10))->node;
+        ((CtorFlagByte *) (actor + 0x73))->bits.bit_0 =
+            ((CtorTailSource *) (node + 0x10))->flag;
     }
-    func_80108658(local_11, ((CtorInfo *) param_2)->flags, ((CtorInfo *) param_2)->flags3C,
-                  param_4);
-    ((CtorActor *) local_11)->render = 0x4A0021;
-    for (local_1 = 0; local_1 < 3; local_1++) {
-        ((CtorActor *) local_11)->color[local_1] = 0x63;
+    func_80108658(actor, ((CtorInfo *) info)->flags, ((CtorInfo *) info)->flags3C,
+                  node);
+    // Install render and color defaults.
+    ((CtorActor *) actor)->render = 0x4A0021;
+    for (i = 0; i < 3; i++) {
+        ((CtorActor *) actor)->color[i] = 0x63;
     }
-    func_800F31FC(local_11 + 0x98, 0xFF, 0xFF, 0xFF, 0xFF);
-    if (((CtorInfo *) param_2)->value40 != 0) {
-        ((CtorFlagByte *) (local_11 + 0x74))->bits.bit_4 = 1;
+    func_800F31FC(actor + 0x98, 0xFF, 0xFF, 0xFF, 0xFF);
+    if (((CtorInfo *) info)->value40 != 0) {
+        ((CtorFlagByte *) (actor + 0x74))->bits.bit_4 = 1;
     } else {
-        ((CtorFlagByte *) (local_11 + 0x74))->bits.bit_4 = 0;
+        ((CtorFlagByte *) (actor + 0x74))->bits.bit_4 = 0;
     }
-    ((CtorFlagByte *) (local_11 + 0x74))->bits.bit_3 = 1;
-    func_80102424(local_11, (u32) *(u16 *) ((s8 *) local_11 + 0x72) >> 0xA);
-    func_80103930(local_11);
-    func_8010A3E8(local_11, 1.0f);
-    func_80106E88(local_11);
-    func_80104F2C(local_11, func_80102FA0(param_2, 0x40000000), func_80102FA0(param_2, 0x10));
+    ((CtorFlagByte *) (actor + 0x74))->bits.bit_3 = 1;
+    func_80102424(actor, (u32) *(u16 *) ((s8 *) actor + 0x72) >> 0xA);
+    func_80103930(actor);
+    func_8010A3E8(actor, 1.0f);
+    func_80106E88(actor);
+    func_80104F2C(actor, func_80102FA0(info, 0x40000000), func_80102FA0(info, 0x10));
     if (func_800BEC1C() != 0) {
-        _subaddiezone_entrypoint_0(local_11);
+        _subaddiezone_entrypoint_0(actor);
     }
-    return local_11;
+    return actor;
 }
 
-s32 func_80108454(s32 map, s32 exit, s32 direction)
+s32 func_80108454(s32 actor_id, s32 pos, s32 yaw)
 {
-    func_80108C90(map, exit, direction, 0);
+    func_80108C90(actor_id, pos, yaw, 0);
 }
 
-int func_80108474(s32 param_0, s32 param_1, s32 param_2)
+int func_80108474(s32 actor_id, s32 src_pos, s32 yaw)
 {
-    f32 local_0[3];
-    func_800EE904(local_0, param_1);
-    func_80108C90(param_0, local_0, param_2, 0);
+    f32 pos[3];
+    func_800EE904(pos, src_pos);
+    func_80108C90(actor_id, pos, yaw, 0);
 }
 
-s32 func_801084B0(s32 param_0, s32 **param_1)
+s32 func_801084B0(s32 actor_id, s32 **ref)
 {
-    s32 ergebnis;
-    s32 gesichert;
-    f32 sp1C[3];
+    s32 result;
+    s32 saved;
+    f32 pos[3];
     s32 *p;
 
-    p = *param_1;
-    gesichert = *p;
-    func_800EE904(sp1C, p + 1);
-    ergebnis = func_80108C90(param_0, sp1C, (s32) *(f32 *) ((s8 *) *param_1 + 0x48), 0);
-    *param_1 = (s32 *) func_80106790(gesichert);
-    return ergebnis;
+    p = *ref;
+    saved = *p;
+    func_800EE904(pos, p + 1);
+    result = func_80108C90(actor_id, pos, (s32) *(f32 *) ((s8 *) *ref + 0x48), 0);
+    *ref = (s32 *) func_80106790(saved);
+    return result;
 }
 
-s32 func_80108528(s32 param_0, s32 param_1, s32 param_2, s32 **param_3)
+s32 func_80108528(s32 actor_id, s32 src_pos, s32 yaw, s32 **ref)
 {
-    s32 gesichert;
-    s32 ergebnis;
+    s32 saved;
+    s32 result;
 
-    gesichert = **param_3;
-    ergebnis = func_80108474(param_0, param_1, param_2);
-    *param_3 = (s32 *) func_80106790(gesichert);
-    return ergebnis;
+    saved = **ref;
+    result = func_80108474(actor_id, src_pos, yaw);
+    *ref = (s32 *) func_80106790(saved);
+    return result;
 }
 
-void func_8010856C(s32 param_0, u8 *param_1, u8 *param_2)
+void func_8010856C(s32 actor_id, u8 *src_pos, u8 *params)
 {
-    s8 local_1[8];
-    s32 local_0;
+    s8 unk_0[8];
+    s32 unk_1;
 
-    func_800EE904((s32 *) ((u8 *) &local_0 - 4), param_1);
-    *(f32 *) ((u8 *) func_80108DC0(param_0, (s32 *) ((u8 *) &local_0 - 4),
-                                   (s32) *(f32 *) (param_2 + 4), 0, 0, 0) +
-              0x44) = *(f32 *) param_2;
+    func_800EE904((s32 *) ((u8 *) &unk_1 - 4), src_pos);
+    *(f32 *) ((u8 *) func_80108DC0(actor_id, (s32 *) ((u8 *) &unk_1 - 4),
+                                   (s32) *(f32 *) (params + 4), 0, 0, 0) +
+              0x44) = *(f32 *) params;
 }
 
-int func_801085CC(enum actor_e param_0, s16 param_1[3], s32 param_2)
+int func_801085CC(enum actor_e actor_id, s16 src_pos[3], s32 yaw)
 {
-    s32 local_0[3];
-    int local_1;
-    for (local_1 = 0; local_1 < 3; local_1++) {
-        local_0[local_1] = param_1[local_1];
+    s32 pos[3];
+    int i;
+    for (i = 0; i < 3; i++) {
+        pos[i] = src_pos[i];
     }
 
-    return func_80108C90(param_0, &local_0, param_2, 0);
+    return func_80108C90(actor_id, &pos, yaw, 0);
 }
 
-int func_80108618(s32 param_0, s32 param_1)
+int func_80108618(s32 actor, s32 game_flag)
 {
-    if (func_800DA298(param_1 | 0)) {
-        func_800FFAB0(param_0);
+    // Matching: "| 0" needed for the match.
+    if (func_800DA298(game_flag | 0)) {
+        func_800FFAB0(actor);
         return 1;
     }
     return 0;
 }
 
+// Sets the f7B bits from the spawn flags and the placement node.
+// Matching: the line breaks in this function are needed for the match.
 void func_80108658(ObjE1510 *p, s32 flags, s32 flags2, NodeE1510 *np)
 {
     p->f96 = 0;
@@ -509,7 +518,7 @@ void func_80108658(ObjE1510 *p, s32 flags, s32 flags2, NodeE1510 *np)
     }
     if (np != NULL) {
         if ((flags & 0x30002000) != 0) {
-            if (np->unk10_3 != 0) {}
+            if (np->unk10_3 != 0) {}  // Matching: empty block needed for the match.
         } else {
             p->u78.b.f7B = np->unk10_3;
             p->u74.b.f77 = np->unk10_4;
@@ -525,16 +534,17 @@ void func_80108658(ObjE1510 *p, s32 flags, s32 flags2, NodeE1510 *np)
     }
 }
 
-void func_801088A8(ObjE1510 *param_0, s32 param_1, s32 param_2, s32 param_3)
+// Matching: the line breaks in this function are needed for the match.
+void func_801088A8(ObjE1510 *actor, s32 flags, s32 flags2, s32 node)
 {
-    param_0->f96 = 0;
-    param_0->u74.b.f74 = param_0->f96; param_0->u74.b.f77 = param_0->f96; param_0->u78.b.f7B = param_0->f96;
-    if (func_800BF8E4(param_0) != 0) {
-        func_80108658(param_0, param_1, param_2, param_3);
+    actor->f96 = 0;
+    actor->u74.b.f74 = actor->f96; actor->u74.b.f77 = actor->f96; actor->u78.b.f7B = actor->f96;
+    if (func_800BF8E4(actor) != 0) {
+        func_80108658(actor, flags, flags2, node);
     }
 }
 
-void func_80108944(ObjE1510 *param_0, ObjE1510 *param_1)
+void func_80108944(ObjE1510 *dst, ObjE1510 *src)
 {
     s32 mode;
     s32 extra;
@@ -542,7 +552,7 @@ void func_80108944(ObjE1510 *param_0, ObjE1510 *param_1)
 
     extra = 0;
     mode = 0;
-    switch (param_1->u78.b.f7B) {
+    switch (src->u78.b.f7B) {
         case 1:
             mode = 0x10000000;
             break;
@@ -552,157 +562,168 @@ void func_80108944(ObjE1510 *param_0, ObjE1510 *param_1)
         case 3:
             mode = 0x30000000;
     }
-    if (param_1->u74.w.f77) {
+    if (src->u74.w.f77) {
         mode |= 0x2000;
     }
-    if (param_1->u78.w.g7B) {
-        param_0->u78.b.g7B = 1;
-        _subaddiefade_entrypoint_9(param_1, tmp);
-        _subaddiefade_entrypoint_11(param_0, tmp);
+    if (src->u78.w.g7B) {
+        dst->u78.b.g7B = 1;
+        _subaddiefade_entrypoint_9(src, tmp);
+        _subaddiefade_entrypoint_11(dst, tmp);
     }
-    if (param_1->f96) {
+    if (src->f96) {
         extra = 0x80080000;
     }
-    func_80108658(param_0, mode, extra, 0);
+    func_80108658(dst, mode, extra, 0);
 }
 
-int func_80108A30(s32 param_0, s32 *param_1, s32 param_2, s32 param_3)
+int func_80108A30(s32 actor_id, s32 *pos, s32 yaw, s32 unk_0)
 {
-    _chbaddiesetup_entrypoint_6(&func_80108A8C, param_0 | 0, param_1[0], param_1[1], param_1[2],
-                                param_2, param_3);
+    // Matching: "| 0" needed for the match.
+    _chbaddiesetup_entrypoint_6(&func_80108A8C, actor_id | 0, pos[0], pos[1], pos[2],
+                                yaw, unk_0);
 }
 
-void func_80108A8C(param_0, x, y, z, yaw, param_5) s32 param_0;
+void func_80108A8C(actor_id, x, y, z, yaw, unk_0) s32 actor_id;
 s32 x;
 s32 y;
 s32 z;
 s32 yaw;
-s32 param_5;
+s32 unk_0;
 {
     f32 pos[3];
-    f32 s;
-    ActorA8C *a;
+    f32 yaw_f;
+    ActorA8C *actor;
     pos[0] = reinterpret_cast(f32, x);
     pos[1] = reinterpret_cast(f32, y);
     pos[2] = reinterpret_cast(f32, z);
-    s = reinterpret_cast(f32, yaw);
-    a = func_80108474(param_0, pos, (s32) s);
-    if (a != NULL) {
-        a->unk48 = s;
-        a->unk76 = param_5;
+    yaw_f = reinterpret_cast(f32, yaw);
+    actor = func_80108474(actor_id, pos, (s32) yaw_f);
+    if (actor != NULL) {
+        actor->unk48 = yaw_f;
+        actor->unk76 = unk_0;
     }
 }
 
-void func_80108B04(u8 **param_0, s32 param_1)
+void func_80108B04(u8 **setup, s32 arg)
 {
-    u8 **new_var;
-    new_var = param_0;
+    u8 **setup_copy;
+    setup_copy = setup;
+    // Matching: if (1) wrapper needed for the match.
     if (1) {
-        _chbaddiesetup_entrypoint_3(&func_80108B44, *new_var, param_1,
-                                    (u32) *(u16 *) (*param_0 + 0x12) >> 1);
+        _chbaddiesetup_entrypoint_3(&func_80108B44, *setup_copy, arg,
+                                    (u32) *(u16 *) (*setup + 0x12) >> 1);
     }
 }
 
-int func_80108B44(u16 *param_0, u32 param_1, int param_2)
+int func_80108B44(u16 *actor, u32 arg, int id)
 {
-    if (((u32) param_0[9] >> 1) == param_2 && func_801069A4(param_0)) {
-        func_8010114C(param_0, 0x3D, param_1);
+    if (((u32) actor[9] >> 1) == id && func_801069A4(actor)) {
+        func_8010114C(actor, 0x3D, arg);
     }
 }
 
-int func_80108B8C(u16 *param_0, u32 param_1, int param_2)
+int func_80108B8C(u16 *actor, u32 arg, int id)
 {
-    if (((u32) param_0[9] >> 1) == param_2 && func_801069A4(param_0)) {
-        func_8010114C(param_0, 0x59, param_1);
+    if (((u32) actor[9] >> 1) == id && func_801069A4(actor)) {
+        func_8010114C(actor, 0x59, arg);
     }
 }
 
-void func_80108BD4(u8 **param_0, s32 param_1)
+void func_80108BD4(u8 **setup, s32 arg)
 {
-    u8 **new_var;
-    new_var = param_0;
+    u8 **setup_copy;
+    setup_copy = setup;
+    // Matching: if (1) wrapper needed for the match.
     if (1) {
-        _chbaddiesetup_entrypoint_3(&func_80108B8C, *new_var, param_1,
-                                    (u32) *(u16 *) (*param_0 + 0x12) >> 1);
+        _chbaddiesetup_entrypoint_3(&func_80108B8C, *setup_copy, arg,
+                                    (u32) *(u16 *) (*setup + 0x12) >> 1);
     }
 }
 
+// Despawns every actor whose ActorInfo game flag is set.
 void func_80108C14(void)
 {
-    s32 local_0;
-    u16 local_1;
-    s32 *local_4;
-    local_4 = func_801067C4(&local_0);
-    if (local_4 != 0) {
+    s32 iter;
+    u16 flag_id;
+    s32 *actor;
+    actor = func_801067C4(&iter);
+    if (actor != 0) {
         do {
-            local_1 = *(u16 *) ((char *) func_80100368(local_4) + 0x20) ^ 0;
-            if ((local_1 != 0) && (func_800DA298(local_1 & 0xFFFF) != 0)) {
-                func_800FFAB0(local_4);
-                func_800819B4(*(s32 *) ((char *) local_4 + 0x10));
+            // Matching: ^ 0 needed for the match.
+            flag_id = *(u16 *) ((char *) func_80100368(actor) + 0x20) ^ 0;
+            if ((flag_id != 0) && (func_800DA298(flag_id & 0xFFFF) != 0)) {
+                func_800FFAB0(actor);
+                func_800819B4(*(s32 *) ((char *) actor + 0x10));
             }
-            local_4 = func_8010682C(&local_0);
-        } while (local_4 != 0);
+            actor = func_8010682C(&iter);
+        } while (actor != 0);
     }
 }
 
-int func_80108C90(s32 param_0, s32 param_1, s32 param_2, void *param_3)
+// Spawns an actor by id through the spawn callback (+0x38) of its descriptor.
+int func_80108C90(s32 actor_id, s32 pos, s32 yaw, void *arg)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = _gemarkersDll_entrypoint_0(param_0);
-    if (!local_0)
+    s32 info_getter;
+    s32 info;
+    info_getter = _gemarkersDll_entrypoint_0(actor_id);
+    if (!info_getter)
         return 0;
-    local_1 = ((s32(*)(void)) local_0)();
+    info = ((s32(*)(void)) info_getter)();
     return ((s32(*)(s32, s32, s32, s32, void *)) *
-            (s32 **) ((char *) local_1 + 0x38))(param_1, param_2, local_1, local_0, param_3);
+            (s32 **) ((char *) info + 0x38))(pos, yaw, info, info_getter, arg);
 }
 
-NodePropE1510 *func_80108CF4(s32 arg0)
+NodePropE1510 *func_80108CF4(s32 node_id)
 {
-    NodePropE1510 *var_v0;
-    u32 sp20;
-    u32 var_v1;
+    NodePropE1510 *node;
+    u32 first;
+    u32 next_id;
 
-    var_v0 = _gccubesearch_entrypoint_17(arg0, 0);
-    sp20 = 1;
-    while ((var_v0 != NULL) && ((sp20 == 1) || (var_v0->bit0 == 1)) && (var_v0->unk10_19 != 0)) {
-        var_v1 = var_v0->unk10_19;
-        var_v0 = _gccubesearch_entrypoint_17(var_v1, 0);
-        sp20 = 0;
+    node = _gccubesearch_entrypoint_17(node_id, 0);
+    first = 1;
+    while ((node != NULL) && ((first == 1) || (node->bit0 == 1)) && (node->unk10_19 != 0)) {
+        next_id = node->unk10_19;
+        node = _gccubesearch_entrypoint_17(next_id, 0);
+        first = 0;
     }
-    return ((sp20 == 1) || (var_v0 == NULL) || (var_v0->bit0 == 1)) ? NULL : var_v0;
+    return ((first == 1) || (node == NULL) || (node->bit0 == 1)) ? NULL : node;
 }
 
-ActorE1510 *func_80108DC0(s32 arg0, s32 *position, s32 yaw, s32 arg3, s32 arg4, s32 arg5)
+// Spawns an actor by id and attaches it to a spline.
+ActorE1510 *func_80108DC0(s32 actor_id, s32 *position, s32 yaw, s32 node_id, s32 unk_0, s32 arg)
 {
     ActorE1510 *actor;
     s32 index;
-    void *tmp;
-    s32 sp38[3];
-    f32 v[3];
-    PropE1510 *p;
+    void *node;
+    s32 node_pos[3];
+    f32 pos_f[3];
+    PropE1510 *prop;
 
-    actor = func_80108C90(arg0, position, yaw, arg5);
+    actor = func_80108C90(actor_id, position, yaw, arg);
     if (actor != NULL) {
-        tmp = func_80108CF4(arg3);
-        if (tmp != NULL) {
-            _gspropctrl_entrypoint_9(tmp, sp38);
-            index = _glsplinefind_entrypoint_4(position, sp38);
+        node = func_80108CF4(node_id);
+        if (node != NULL) {
+            _gspropctrl_entrypoint_9(node, node_pos);
+            index = _glsplinefind_entrypoint_4(position, node_pos);
         } else {
             index = _glsplinefind_entrypoint_2(position);
         }
         if (index >= 0) {
-            p = func_8010556C(actor);
-            p->index = index;
-            v[0] = (f32) position[0];
-            v[1] = (f32) position[1];
-            v[2] = (f32) position[2];
-            p->unk0C = func_800C82CC(func_800D7520(index), v);
+            prop = func_8010556C(actor);
+            prop->index = index;
+            pos_f[0] = (f32) position[0];
+            pos_f[1] = (f32) position[1];
+            pos_f[2] = (f32) position[2];
+            prop->unk0C = func_800C82CC(func_800D7520(index), pos_f);
             actor->unk77_4 = 1;
         }
     }
     return actor;
 }
 
+// TU-NOTE: the .data of this file is defined here in C (formerly asm/data/core2/1EE1510.data.s).
+// Its tables point to functions of this file; IDO schedules some of them differently unless the
+// tables are defined in the same unit. Values are taken from the ROM. D_80124580 is declared as
+// s32[] to match the object (same address).
 extern void func_80108F08();
 s32 D_80124580[8] = {0x0, 0x0, 0x0, (u32) func_80108F08, 0x0, 0x0, 0x0, 0x0};

@@ -66,18 +66,18 @@ extern u8 func_800DC128(s32, s32);
 extern void func_800B4470(f32 *, f32 *, f32 *, s32, f32, f32, s32, s32, s32);
 typedef struct local_marker local_marker;
 typedef struct {
-    u8 local_0[12];
-    s32 (*local_1)(local_marker *, f32 *, f32, f32 *, u32);
+    u8 pad_00[12];
+    s32 (*hit_test)(local_marker *, f32 *, f32, f32 *, u32);
 } local_info;
 struct local_marker {
-    u8 local_0[12];
-    local_info *(*local_1)(void);
-    u8 local_2[8];
-    u32 local_3 : 11;
-    u32 local_4 : 4;
-    u32 local_5 : 12;
-    u32 local_6 : 4;
-    u32 local_7 : 1;
+    u8 pad_00[12];
+    local_info *(*get_info)(void);
+    u8 pad_10[8];
+    u32 unk_18_a : 11;
+    u32 unk_18_b : 4;
+    u32 unk_18_c : 12;
+    u32 unk_18_d : 4;
+    u32 unk_18_e : 1;
 };
 extern f32 func_800EC75C(local_marker *, f32 *);
 extern void func_800EF3DC(f32 *, f32 *);
@@ -85,42 +85,42 @@ extern f32 func_800EEFD4(f32 *);
 typedef struct Marker1099D0 Marker1099D0;
 struct Marker1099D0 {
     u8 pad[0x14];
-    u16 local_0;
+    u16 id;
     u8 pad1[2];
-    u16 local_1;
+    u16 flags;
     u8 pad2[10];
-    u32 local_2;
+    u32 kind_word;
     u32 pad3 : 22;
-    u32 local_3 : 1;
+    u32 enabled : 1;
     u32 pad4 : 9;
 };
 typedef struct {
-    Marker1099D0 *local_0;
+    Marker1099D0 *marker;
     s32 pad;
     u32 pad1 : 27;
-    u32 local_1 : 1;
+    u32 selected : 1;
     u32 pad2 : 3;
-    u32 local_2 : 1;
+    u32 valid : 1;
 } Entry1099D0;
 typedef struct {
     u8 pad[0x64];
     union {
         struct {
             u32 pad : 14;
-            u32 local_0 : 1;
+            u32 disabled : 1;
             u32 pad1 : 17;
-        } local_0;
+        } bits;
         struct {
             u16 pad;
-            u16 local_0;
-        } local_1;
-    } local_0;
+            u16 mask;
+        } halves;
+    } flags;
     u8 pad1[11];
-    u8 local_1;
+    u8 unk_6F;
 } Actor1099D0_801099D0;
 typedef struct {
     u8 pad[0x10];
-    s32 (*local_0)(Marker1099D0 *, Marker1099D0 *);
+    s32 (*can_hit)(Marker1099D0 *, Marker1099D0 *);
 } Handler1099D0;
 extern void **func_800BE444();
 extern s32 func_800CB854(s32);
@@ -131,26 +131,26 @@ extern Handler1099D0 *func_800EC3C4(Marker1099D0 *);
 extern s32 _glhittableDll_entrypoint_1(Marker1099D0 *, Marker1099D0 *);
 extern void func_800EB210(Marker1099D0 *, Marker1099D0 *, s32);
 typedef struct {
-    u8 local_0[0x24];
-    u32 local_1 : 10;
-    u32 local_2 : 22;
+    u8 pad_00[0x24];
+    u32 kind : 10;
+    u32 pad_24 : 22;
 } local_type;
 typedef struct {
     u8 pad[0x64];
     union {
         struct {
             u32 pad : 14;
-            u32 local_0 : 1;
+            u32 disabled : 1;
             u32 pad1 : 17;
-        } local_0;
+        } bits;
         struct {
             u16 pad;
-            u16 local_0;
-        } local_1;
-    } local_0;
+            u16 mask;
+        } halves;
+    } flags;
     u8 pad1[11];
     u8 pad2 : 6;
-    u8 local_1 : 1;
+    u8 unk_6F : 1;
     u8 pad3 : 1;
 } Actor1099D0_80109CC4;
 typedef struct LocalMarker_8010A01C {
@@ -225,130 +225,132 @@ func_80108EF4(u16 *param_0, u16 param_1)
     return param_0[4] == 0x23A;
 }
 
-void func_80108F08(LocalMarker_80108F08 *param_0, LocalMarker_80108F08 *param_1, s32 param_2)
+// Applies a hit to one of three health counters at actor+0x5C; knockback, reactions, drop on death.
+void func_80108F08(LocalMarker_80108F08 *victim, LocalMarker_80108F08 *attacker, s32 hit)
 {
-    Actor *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    void *local_5;
-    s32 local_6;
-    s32 local_7;
-    s32 local_8;
-    f32 local_9;
-    f32 local_10[3];
-    s16 local_11[3];
-    f32 local_12;
-    f32 local_13[3];
-    void *local_14;
-    s32 *local_15;
-    s32 local_16[3];
-    f32 local_17;
-    f32 local_18;
+    Actor *actor;
+    s32 drop_type;
+    s32 knockback;
+    s32 damage;
+    s32 health_idx;
+    void *info;
+    s32 temp;
+    s32 attacker_id;
+    s32 amount;
+    f32 unk_0;
+    f32 attacker_pos[3];
+    s16 unk_1[3];
+    f32 unk_2;
+    f32 drop_pos[3];
+    void *unk_3;
+    s32 *unk_4;
+    s32 unk_5[3];
+    f32 drop_y;
+    f32 unk_6;
 
-    local_0 = func_80106790(param_0);
-    local_1 = _glhittableDll_entrypoint_10(param_2);
-    local_2 = _glhittableDll_entrypoint_7(param_2);
-    local_3 = _glhittableDll_entrypoint_9(param_2);
-    local_4 = _glhittableDll_entrypoint_6(param_2);
-    local_5 = func_80100368(local_0);
-    local_6 = param_1->kind == 0;
-    if (local_6) {
-        local_7 = param_1->id;
-        if (!func_800F70EC(local_7) || !func_800F6C1C(local_7)) {
-            if (_glhittableDll_entrypoint_8(param_2))
+    actor = func_80106790(victim);
+    drop_type = _glhittableDll_entrypoint_10(hit);
+    knockback = _glhittableDll_entrypoint_7(hit);
+    damage = _glhittableDll_entrypoint_9(hit);
+    health_idx = _glhittableDll_entrypoint_6(hit);
+    info = func_80100368(actor);
+    temp = attacker->kind == 0;
+    if (temp) {
+        attacker_id = attacker->id;
+        if (!func_800F70EC(attacker_id) || !func_800F6C1C(attacker_id)) {
+            if (_glhittableDll_entrypoint_8(hit))
                 return;
         }
     }
-    if (!local_4) {
-        if (!local_3 && param_1->kind)
+    if (!health_idx) {
+        if (!damage && attacker->kind)
             return;
-        if (local_3 <= 0)
-            local_3 = 1;
+        if (damage <= 0)
+            damage = 1;
     }
-    if (local_3) {
-        local_8 = func_80102FA0(local_5, 0x80000020) ? local_3 : 100 / local_3;
-        local_6 = ((LocalHealth *) local_0)->health[local_4] - local_8;
-        local_8 = local_6 < 0 ? 0 : local_6;
-        if ((((LocalHealth *) local_0)->health[local_4] = local_8) && local_3 >= 2)
-            local_2 /= 2;
+    if (damage) {
+        amount = func_80102FA0(info, 0x80000020) ? damage : 100 / damage;
+        temp = ((LocalHealth *) actor)->health[health_idx] - amount;
+        amount = temp < 0 ? 0 : temp;
+        if ((((LocalHealth *) actor)->health[health_idx] = amount) && damage >= 2)
+            knockback /= 2;
     }
-    if (local_2) {
-        func_800EC398(param_1, local_10);
-        local_9 = func_800F1DF4(local_10, local_0->position);
-        _chbounce_entrypoint_3(local_9);
-        _chbounce_entrypoint_2(local_9);
-        if (local_0->unk64_25)
-            _chbounce_entrypoint_5(local_2 + 10, local_0);
+    if (knockback) {
+        func_800EC398(attacker, attacker_pos);
+        unk_0 = func_800F1DF4(attacker_pos, actor->position);
+        _chbounce_entrypoint_3(unk_0);
+        _chbounce_entrypoint_2(unk_0);
+        if (actor->unk64_25)
+            _chbounce_entrypoint_5(knockback + 10, actor);
         else
-            _chbounce_entrypoint_5(local_2 + 5, local_0);
+            _chbounce_entrypoint_5(knockback + 5, actor);
     }
-    if (local_3) {
-        switch (local_4) {
+    if (damage) {
+        switch (health_idx) {
             case 2:
-                if (func_80102FA0(local_5, 0x2000000))
-                    func_80109600(local_0, param_1);
+                if (func_80102FA0(info, 0x2000000))
+                    func_80109600(actor, attacker);
                 break;
             case 1:
-                if (func_80102FA0(local_5, 0x1000000))
-                    func_80109600(local_0, param_1);
+                if (func_80102FA0(info, 0x1000000))
+                    func_80109600(actor, attacker);
         }
-        if (func_80102FA0(local_5, 0x80020000) && param_1->kind == 0x26D) {
-            _chflamer_entrypoint_1(local_0, param_1);
+        if (func_80102FA0(info, 0x80020000) && attacker->kind == 0x26D) {
+            _chflamer_entrypoint_1(actor, attacker);
         }
-        if (func_80102FA0(local_5, 0x200) && param_1->kind == 0x26E) {
-            func_800EC370(param_1, local_11);
-            _chfreezy_entrypoint_1(local_0, local_11);
+        if (func_80102FA0(info, 0x200) && attacker->kind == 0x26E) {
+            func_800EC370(attacker, unk_1);
+            _chfreezy_entrypoint_1(actor, unk_1);
         }
-        if (!((LocalHealth *) local_0)->health[local_4] ||
-            (local_4 && func_80102FA0(local_5, 0x10000))) {
-            if (((LocalHealth *) local_0)->health[local_4])
-                local_4--;
-            if (local_4 != 2)
-                ((LocalHealth *) local_0)->health[local_4] = 99;
-            if (local_4 == 2 && local_1 && func_8010A430(local_0)) {
-                local_12 = func_8010CD28(local_0) + 180.0f;
-                func_800EE904(local_16, local_0->position);
-                if (param_0->bones)
-                    func_800DBEFC(param_0->bones, 14, local_13);
-                func_800EB860(func_80108EF4, local_0);
-                if (param_0->bones &&
-                    !(local_13[0] == 0.0f && local_13[1] == 0.0f && local_13[2] == 0.0f)) {
-                    _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, local_1 + 2,
-                                                *(s32 *) &local_13[0], *(s32 *) &local_13[1],
-                                                *(s32 *) &local_13[2], *(s32 *) &local_12);
-                } else if (func_80102FA0(local_5, 0x81000000) &&
+        if (!((LocalHealth *) actor)->health[health_idx] ||
+            (health_idx && func_80102FA0(info, 0x10000))) {
+            if (((LocalHealth *) actor)->health[health_idx])
+                health_idx--;
+            if (health_idx != 2)
+                ((LocalHealth *) actor)->health[health_idx] = 99;
+            if (health_idx == 2 && drop_type && func_8010A430(actor)) {
+                unk_2 = func_8010CD28(actor) + 180.0f;
+                func_800EE904(unk_5, actor->position);
+                if (victim->bones)
+                    func_800DBEFC(victim->bones, 14, drop_pos);
+                func_800EB860(func_80108EF4, actor);
+                if (victim->bones &&
+                    !(drop_pos[0] == 0.0f && drop_pos[1] == 0.0f && drop_pos[2] == 0.0f)) {
+                    _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, drop_type + 2,
+                                                *(s32 *) &drop_pos[0], *(s32 *) &drop_pos[1],
+                                                *(s32 *) &drop_pos[2], *(s32 *) &unk_2);
+                } else if (func_80102FA0(info, 0x81000000) &&
+                           // Matching: the temporary assigned inside the argument is needed.
                            _gccubesearch_entrypoint_16(
-                               local_16, &local_14, &local_15, 3,
-                               (s32) (local_18 = func_800EC708(param_0) * 4.0f))) {
-                    func_800EE88C(local_13, local_15);
-                    _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, local_1 + 2,
-                                                *(s32 *) &local_13[0], *(s32 *) &local_13[1],
-                                                *(s32 *) &local_13[2], *(s32 *) &local_12);
+                               unk_5, &unk_3, &unk_4, 3,
+                               (s32) (unk_6 = func_800EC708(victim) * 4.0f))) {
+                    func_800EE88C(drop_pos, unk_4);
+                    _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, drop_type + 2,
+                                                *(s32 *) &drop_pos[0], *(s32 *) &drop_pos[1],
+                                                *(s32 *) &drop_pos[2], *(s32 *) &unk_2);
                 } else {
-                    local_17 = local_0->position[1] + func_800EC708(param_0);
-                    _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, local_1 + 2,
-                                                *(s32 *) &local_0->position[0], *(s32 *) &local_17,
-                                                *(s32 *) &local_0->position[2], *(s32 *) &local_12);
+                    drop_y = actor->position[1] + func_800EC708(victim);
+                    _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, drop_type + 2,
+                                                *(s32 *) &actor->position[0], *(s32 *) &drop_y,
+                                                *(s32 *) &actor->position[2], *(s32 *) &unk_2);
                 }
                 func_800EB874();
             }
-            func_800EB210(param_0, param_1, local_4);
+            func_800EB210(victim, attacker, health_idx);
         }
-        if (local_4 && local_2) {
-            func_800C4B7C(local_0->unk6C_9 == 0x31E ? 0x41F : 0x415);
-            func_8010D930(1, *(u32 *) ((u8 *) local_0 + 0x70) & 1, local_0->position, D_8012460C);
-            if (func_80102FA0(local_5, 0x2000000) || func_80102FA0(local_5, 0x1000000)) {
-                _subaddiejoy_entrypoint_10(local_0, 1.0f, 0.25f);
+        if (health_idx && knockback) {
+            func_800C4B7C(actor->unk6C_9 == 0x31E ? 0x41F : 0x415);
+            func_8010D930(1, *(u32 *) ((u8 *) actor + 0x70) & 1, actor->position, D_8012460C);
+            if (func_80102FA0(info, 0x2000000) || func_80102FA0(info, 0x1000000)) {
+                _subaddiejoy_entrypoint_10(actor, 1.0f, 0.25f);
             }
         }
     }
 }
 
-void func_801094E0(s32 param_0, f32 param_1)
+void func_801094E0(s32 pos, f32 unk_0)
 {
-    func_800BBCB8(param_0, param_0, param_1, 3, D_8012461C);
+    func_800BBCB8(pos, pos, unk_0, 3, D_8012461C);
 }
 
 int func_80109518()
@@ -356,408 +358,420 @@ int func_80109518()
     return (int) D_8012464C;
 }
 
-int func_80109524(s32 param_0)
+int func_80109524(s32 index)
 {
-    s16 *new_var;
-    new_var = &D_801245A0[param_0 << 4];
-    return *new_var;
+    s16 *entry;
+    entry = &D_801245A0[index << 4];
+    return *entry;
 }
 
-void func_80109538(void *param_0, f32 *param_1, LocalMarker_80109538 *param_2, s32 param_3)
+void func_80109538(void *actor, f32 *fallback_pos, LocalMarker_80109538 *attacker, s32 spawn_spark)
 {
-    f32 local_0[3];
-    s32 local_1;
-    s32 local_2;
-    if (!_subaddiecustomhits_entrypoint_4(param_0, local_0, 0))
-        func_800EE7F8(local_0, param_1);
-    if (param_2 != NULL) {
-        local_1 = param_2->kind == 0 ? 0 : 1;
+    f32 hit_pos[3];
+    s32 variant;
+    s32 emitter;
+    if (!_subaddiecustomhits_entrypoint_4(actor, hit_pos, 0))
+        func_800EE7F8(hit_pos, fallback_pos);
+    if (attacker != NULL) {
+        variant = attacker->kind == 0 ? 0 : 1;
     } else {
-        local_1 = 0;
+        variant = 0;
     }
-    if (param_3) {
-        local_2 = func_800B53A4(10, local_1);
-        func_800BA3FC(local_2, func_80109524(local_1));
-        func_800BABB8(local_2, local_0, local_0, 1.0f, func_80109518());
+    if (spawn_spark) {
+        emitter = func_800B53A4(10, variant);
+        func_800BA3FC(emitter, func_80109524(variant));
+        func_800BABB8(emitter, hit_pos, hit_pos, 1.0f, func_80109518());
     }
-    func_801094E0(local_0, 1.0f);
+    func_801094E0(hit_pos, 1.0f);
 }
 
-int func_80109600(param_0, param_1)
-s32 param_0;
-s32 param_1;
+int func_80109600(actor, attacker)
+s32 actor;
+s32 attacker;
 {
-    f32 local_0[3];
-    func_80103DFC(param_0, local_0);
-    func_80109538(param_0, local_0, param_1, 1);
+    f32 pos[3];
+    func_80103DFC(actor, pos);
+    func_80109538(actor, pos, attacker, 1);
 }
 
-s32 func_8010963C(s32 param_0, s32 param_1, s32 param_2)
+s32 func_8010963C(s32 actor, s32 pos, s32 attacker)
 {
-    func_80109538(param_0, param_1, param_2, 1);
+    func_80109538(actor, pos, attacker, 1);
 }
 
-void func_8010965C(s32 param_0)
+void func_8010965C(s32 actor)
 {
-    f32 local_1[3];
-    s32 local_0;
+    f32 hit_pos[3];
+    s32 result;
 
-    local_0 = _subaddiecustomhits_entrypoint_4(param_0, local_1, 0);
-    if (local_0 != 0) {
-        local_0 = func_800B53A4(0xA);
-        func_800BA3FC(local_0, func_80109524(2));
-        func_800BABB8(local_0, local_1, local_1, 1.0f, func_80109518());
-    }
-}
-
-int func_801096C8(s32 param_0, s32 param_1)
-{
-    f32 local_0[3];
-    func_80103DFC(param_0, local_0);
-    func_80109538(param_0, local_0, param_1, 0);
-}
-
-void func_80109704(s32 param_0, s32 param_1, s32 param_2, s32 param_3, f32 param_4, s32 param_5,
-                   s32 param_6, s32 param_7)
-{
-    func_80109748(param_0 + 4, param_1, param_2, param_3, param_4, param_5, param_6, param_7);
-}
-
-void func_80109748(f32 *param_0, s32 param_1, s32 param_2, s32 param_3, f32 param_4, s32 param_5,
-                   s32 param_6, s32 param_7)
-{
-    f32 local_0[3];
-    f32 local_1[3];
-    s32 local_2;
-    s32 local_3;
-    local_1[0] = param_0[0];
-    local_1[2] = param_0[2];
-    for (local_2 = 0; local_2 < param_1; local_2++) {
-        local_1[1] = param_0[1] + func_800DC178(param_2, param_3);
-        local_0[1] = func_800DC178(4.0f, 10.0f);
-        local_0[0] = func_800DC178(-8.0f, 8.0f);
-        local_0[2] = func_800DC178(-8.0f, 8.0f);
-        local_3 = func_800DC128(param_6, param_7);
-        func_800B4470(local_1, local_0, D_80124688, 1, param_4, 50.0f, param_5, local_3, 0);
+    result = _subaddiecustomhits_entrypoint_4(actor, hit_pos, 0);
+    if (result != 0) {
+        result = func_800B53A4(0xA);
+        func_800BA3FC(result, func_80109524(2));
+        func_800BABB8(result, hit_pos, hit_pos, 1.0f, func_80109518());
     }
 }
 
-s32 func_801098D0(f32 *param_0, f32 param_1, local_marker *param_2)
+int func_801096C8(s32 actor, s32 attacker)
 {
-    f32 local_0[3];
-    f32 local_1;
-    local_info *local_2;
-    f32 local_3[3];
-    s32 local_4;
-    if (param_2->local_1) {
-        local_2 = param_2->local_1();
-        if (local_2->local_1) {
-            local_4 = local_2->local_1(param_2, param_0, param_1, local_3, param_2->local_6);
-            if (local_4) {
-                param_2->local_4 = local_4;
+    f32 pos[3];
+    func_80103DFC(actor, pos);
+    func_80109538(actor, pos, attacker, 0);
+}
+
+void func_80109704(s32 base, s32 count, s32 y_min, s32 y_max, f32 unk_0, s32 unk_1,
+                   s32 rand_min, s32 rand_max)
+{
+    func_80109748(base + 4, count, y_min, y_max, unk_0, unk_1, rand_min, rand_max);
+}
+
+void func_80109748(f32 *base, s32 count, s32 y_min, s32 y_max, f32 unk_0, s32 unk_1,
+                   s32 rand_min, s32 rand_max)
+{
+    f32 velocity[3];
+    f32 pos[3];
+    s32 i;
+    s32 rand_val;
+    pos[0] = base[0];
+    pos[2] = base[2];
+    for (i = 0; i < count; i++) {
+        pos[1] = base[1] + func_800DC178(y_min, y_max);
+        velocity[1] = func_800DC178(4.0f, 10.0f);
+        velocity[0] = func_800DC178(-8.0f, 8.0f);
+        velocity[2] = func_800DC178(-8.0f, 8.0f);
+        rand_val = func_800DC128(rand_min, rand_max);
+        func_800B4470(pos, velocity, D_80124688, 1, unk_0, 50.0f, unk_1, rand_val, 0);
+    }
+}
+
+// Tests whether the marker lies within radius of pos (custom hit test if the marker has one).
+s32 func_801098D0(f32 *pos, f32 radius, local_marker *marker)
+{
+    f32 marker_pos[3];
+    f32 reach;
+    local_info *info;
+    f32 unk_0[3];
+    s32 result;
+    if (marker->get_info) {
+        info = marker->get_info();
+        if (info->hit_test) {
+            result = info->hit_test(marker, pos, radius, unk_0, marker->unk_18_d);
+            if (result) {
+                marker->unk_18_b = result;
                 return 1;
             }
             return 0;
         }
     }
-    local_1 = func_800EC75C(param_2, local_0) + param_1;
-    func_800EF3DC(local_0, param_0);
-    return func_800EEFD4(local_0) < local_1 * local_1 ? 1 : 0;
+    reach = func_800EC75C(marker, marker_pos) + radius;
+    func_800EF3DC(marker_pos, pos);
+    return func_800EEFD4(marker_pos) < reach * reach ? 1 : 0;
 }
 
-s32 func_801099D0(f32 *param_0, f32 param_1, s32 param_2,
-                  s32 (*param_3)(Actor1099D0_801099D0 *, void *), void *param_4,
-                  Marker1099D0 *param_5)
+s32 func_801099D0(f32 *pos, f32 radius, s32 hit_type,
+                  s32 (*filter)(Actor1099D0_801099D0 *, void *), void *filter_arg,
+                  Marker1099D0 *attacker)
 {
-    s32 local_8;
-    void **local_0;
-    Entry1099D0 *local_1, *local_2;
-    Marker1099D0 *local_3;
-    Actor1099D0_801099D0 *local_4;
-    Handler1099D0 *local_5;
-    s32 local_6 = 0;
-    u32 local_7;
-    local_0 = func_800BE444(param_0);
-    local_7 = func_800CB854(0) ? 1 << (func_800CB854(0) - 1) : 0;
-    for (; *local_0; local_0++) {
-        local_1 = func_800E9E88(*local_0);
-        local_2 = func_800E9EB4(*local_0);
-        for (; local_1 < local_2; local_1++) {
-            if (!local_1->local_1 || !local_1->local_2)
+    // Matching: unused local is needed for the match.
+    s32 unk_0;
+    void **cubes;
+    Entry1099D0 *entry, *end;
+    Marker1099D0 *marker;
+    Actor1099D0_801099D0 *actor;
+    Handler1099D0 *handler;
+    s32 hit_any = 0;
+    u32 mask;
+    cubes = func_800BE444(pos);
+    mask = func_800CB854(0) ? 1 << (func_800CB854(0) - 1) : 0;
+    for (; *cubes; cubes++) {
+        entry = func_800E9E88(*cubes);
+        end = func_800E9EB4(*cubes);
+        for (; entry < end; entry++) {
+            if (!entry->selected || !entry->valid)
                 continue;
-            local_3 = local_1->local_0;
-            if (local_3 == param_5 || !local_3->local_3 || !(local_3->local_1 & 1))
+            marker = entry->marker;
+            if (marker == attacker || !marker->enabled || !(marker->flags & 1))
                 continue;
-            if (local_3->local_0 == 0 || local_3->local_0 == 0xFFFF)
+            if (marker->id == 0 || marker->id == 0xFFFF)
                 continue;
-            local_4 = func_80106790(local_3);
-            if (local_4->local_0.local_0.local_0 || (local_4->local_0.local_1.local_0 & local_7))
+            actor = func_80106790(marker);
+            if (actor->flags.bits.disabled || (actor->flags.halves.mask & mask))
                 continue;
-            if (param_3 && !param_3(local_4, param_4))
+            if (filter && !filter(actor, filter_arg))
                 continue;
-            if (!func_801098D0(param_0, param_1, local_3))
+            if (!func_801098D0(pos, radius, marker))
                 continue;
-            local_5 = func_800EC3C4(local_3);
-            if (local_5->local_0 && !local_5->local_0(local_3, param_5))
+            handler = func_800EC3C4(marker);
+            if (handler->can_hit && !handler->can_hit(marker, attacker))
                 continue;
-            local_6 = 1;
-            if (!_glhittableDll_entrypoint_1(param_5, local_3))
-                func_800EB210(local_3, param_5, param_2);
+            hit_any = 1;
+            if (!_glhittableDll_entrypoint_1(attacker, marker))
+                func_800EB210(marker, attacker, hit_type);
         }
     }
-    return local_6;
+    return hit_any;
 }
 
-void func_80109BEC(s32 p0, f32 p1, s32 p2, s32 p3, s32 p4, s32 p5)
+void func_80109BEC(s32 pos, f32 radius, s32 hit_type, s32 filter, s32 filter_arg, s32 attacker)
 {
-    func_801099D0(p0, p1, p2, p3, p4, p5);
+    func_801099D0(pos, radius, hit_type, filter, filter_arg, attacker);
 }
 
-void func_80109C20(s32 p0, f32 p1, s32 p2, s32 p3)
+void func_80109C20(s32 pos, f32 radius, s32 hit_type, s32 filter)
 {
-    func_801099D0(p0, p1, p2, p3, 0, 0);
+    func_801099D0(pos, radius, hit_type, filter, 0, 0);
 }
 
-void func_80109C4C(s32 param_0, f32 param_1, s32 param_2, s32 param_3, s32 param_4,
-                   local_type *param_5, s32 param_6)
+void func_80109C4C(s32 pos, f32 radius, s32 hit_type, s32 filter, s32 filter_arg,
+                   local_type *attacker, s32 kind)
 {
-    f32 local_1 = param_1;
-    u32 local_0;
-    local_0 = param_5->local_1;
-    param_5->local_1 = param_6;
-    func_801099D0(param_0, local_1, param_2, param_3, param_4, param_5);
-    param_5->local_1 = local_0;
+    // Matching: the copy of the radius is needed for the match.
+    f32 radius_copy = radius;
+    u32 old_kind;
+    old_kind = attacker->kind;
+    attacker->kind = kind;
+    func_801099D0(pos, radius_copy, hit_type, filter, filter_arg, attacker);
+    attacker->kind = old_kind;
 }
 
-s32 func_80109CC4(f32 *param_0, f32 param_1, Marker1099D0 *param_2)
+s32 func_80109CC4(f32 *pos, f32 radius, Marker1099D0 *attacker)
 {
-    s32 local_8;
-    void **local_0;
-    Entry1099D0 *local_1, *local_2;
-    Marker1099D0 *local_3;
-    Actor1099D0_80109CC4 *local_4;
-    Handler1099D0 *local_5;
-    s32 local_6 = 0;
-    u32 local_7;
-    local_0 = func_800BE444(param_0);
-    local_7 = func_800CB854(0) ? 1 << (func_800CB854(0) - 1) : 0;
-    for (; *local_0; local_0++) {
-        local_1 = func_800E9E88(*local_0);
-        local_2 = func_800E9EB4(*local_0);
-        for (; local_1 < local_2; local_1++) {
-            if (!local_1->local_1 || !local_1->local_2)
+    // Matching: unused local is needed for the match.
+    s32 unk_0;
+    void **cubes;
+    Entry1099D0 *entry, *end;
+    Marker1099D0 *marker;
+    Actor1099D0_80109CC4 *actor;
+    Handler1099D0 *handler;
+    s32 hit_any = 0;
+    u32 mask;
+    cubes = func_800BE444(pos);
+    mask = func_800CB854(0) ? 1 << (func_800CB854(0) - 1) : 0;
+    for (; *cubes; cubes++) {
+        entry = func_800E9E88(*cubes);
+        end = func_800E9EB4(*cubes);
+        for (; entry < end; entry++) {
+            if (!entry->selected || !entry->valid)
                 continue;
-            local_3 = local_1->local_0;
-            if (local_3 == param_2 || !local_3->local_3 || !(local_3->local_1 & 1))
+            marker = entry->marker;
+            if (marker == attacker || !marker->enabled || !(marker->flags & 1))
                 continue;
-            if (local_3->local_0 == 0 || local_3->local_0 == 0xFFFF)
+            if (marker->id == 0 || marker->id == 0xFFFF)
                 continue;
-            if ((local_3->local_2 >> 22) == (param_2->local_2 >> 22))
+            if ((marker->kind_word >> 22) == (attacker->kind_word >> 22))
                 continue;
-            local_4 = func_80106790(local_3);
-            if (local_4->local_0.local_0.local_0 || (local_4->local_0.local_1.local_0 & local_7))
+            actor = func_80106790(marker);
+            if (actor->flags.bits.disabled || (actor->flags.halves.mask & mask))
                 continue;
-            if (!func_801098D0(param_0, param_1, local_3))
+            if (!func_801098D0(pos, radius, marker))
                 continue;
-            local_5 = func_800EC3C4(local_3);
-            if (local_5->local_0 && !local_5->local_0(local_3, param_2))
+            handler = func_800EC3C4(marker);
+            if (handler->can_hit && !handler->can_hit(marker, attacker))
                 continue;
-            local_6 = 1;
-            local_4->local_1 = 1;
-            if (!_glhittableDll_entrypoint_1(param_2, local_3))
-                func_800EB210(local_3, param_2, 1);
+            hit_any = 1;
+            actor->unk_6F = 1;
+            if (!_glhittableDll_entrypoint_1(attacker, marker))
+                func_800EB210(marker, attacker, 1);
         }
     }
-    return local_6;
+    return hit_any;
 }
 
-int func_80109EE0(u16 *param_0, unsigned long param_1)
+// Actor flags at actor+0x66: read, write, clear and set.
+int func_80109EE0(u16 *actor, unsigned long mask)
 {
-    return *(u16 *) ((s8 *) param_0 + 102) & param_1;
+    return *(u16 *) ((s8 *) actor + 102) & mask;
 }
 
-void func_80109EEC(void *param_0, unsigned int param_1)
+void func_80109EEC(void *actor, unsigned int flags)
 {
-    ((s16 *) param_0)[0x33] = param_1;
+    ((s16 *) actor)[0x33] = flags;
 }
 
-int func_80109EF4(u16 *param_0, unsigned long param_1)
+int func_80109EF4(u16 *actor, unsigned long mask)
 {
-    param_0[0x33] &= ~param_1;
+    actor[0x33] &= ~mask;
 }
 
-int func_80109F08(u16 *param_0, unsigned int param_1)
+int func_80109F08(u16 *actor, unsigned int mask)
 {
-    param_0[0x33] |= param_1;
+    actor[0x33] |= mask;
 }
 
-int func_80109F18(s32 param_0, s32 *param_1)
+int func_80109F18(s32 actor, s32 *arg)
 {
-    int new_var2;
-    s32 **new_var;
-    new_var = &param_1;
-    new_var2 = 0xFFFFFFFFFFFFFFFF;
+    // Matching: the all-ones mask chain and the address-taken parameter are needed for the match.
+    int all_ones;
+    s32 **arg_ptr;
+    arg_ptr = &arg;
+    all_ones = 0xFFFFFFFFFFFFFFFF;
     func_8010114C(
-        param_0,
-        ((((((0x3E & new_var2) & new_var2) & new_var2) & new_var2) & new_var2) & new_var2) &
-            new_var2,
-        *new_var);
+        actor,
+        ((((((0x3E & all_ones) & all_ones) & all_ones) & all_ones) & all_ones) & all_ones) &
+            all_ones,
+        *arg_ptr);
 }
 
-int func_80109F40(s32 param_0, s32 volatile param_1)
+int func_80109F40(s32 actor, s32 volatile arg)
 {
-    func_8010114C(param_0, 0x3F, param_1);
+    func_8010114C(actor, 0x3F, arg);
 }
 
-int func_80109F68(s32 param_0, s32 volatile param_1)
+int func_80109F68(s32 actor, s32 volatile arg)
 {
-    func_8010114C(param_0, 0x40, param_1);
+    func_8010114C(actor, 0x40, arg);
 }
 
-int func_80109F90(s32 param_0, s32 volatile param_1)
+int func_80109F90(s32 actor, s32 volatile arg)
 {
-    func_8010114C(param_0, 0x41, param_1);
+    func_8010114C(actor, 0x41, arg);
 }
 
-int func_80109FB8(s32 param_0, s32 param_1)
+int func_80109FB8(s32 value, s32 marker)
 {
     typedef struct {
         char pad[58];
         s32 unk3A;
     } Actor;
-    Actor *local_0;
-    local_0 = (Actor *) func_80106790((Marker1099D0 *) param_1);
-    if (!param_1) {
+    Actor *actor;
+    actor = (Actor *) func_80106790((Marker1099D0 *) marker);
+    // Matching: empty block is needed for the match.
+    if (!marker) {
     }
-    local_0->unk3A = param_0;
+    actor->unk3A = value;
 }
 
-void func_80109FE8(u8 **param_0, s32 param_1)
+// Matching: the redundant masks and casts are needed for the match.
+void func_80109FE8(u8 **handle, s32 clear_flag)
 {
-    u8 *new_var;
-    u8 *temp_v0;
-    u8 *temp_v0_2;
-    if (param_1 != 0) {
-        temp_v0 = *param_0;
-        new_var = (u8 *) ((s8 *) temp_v0 + 0x1B);
-        *(u8 *) ((s8 *) temp_v0 + 0x1B) = (u8) (*new_var & 0xFFFE);
+    u8 *flags_ptr;
+    u8 *data_clr;
+    u8 *data_set;
+    if (clear_flag != 0) {
+        data_clr = *handle;
+        flags_ptr = (u8 *) ((s8 *) data_clr + 0x1B);
+        *(u8 *) ((s8 *) data_clr + 0x1B) = (u8) (*flags_ptr & 0xFFFE);
         return;
     }
-    temp_v0_2 = *param_0;
-    *(u8 *) ((s8 *) temp_v0_2 + 0x1B) = (u8) ((*(u8 *) ((s8 *) temp_v0_2 + 0x1B) & 0xFFFF) | 1);
+    data_set = *handle;
+    *(u8 *) ((s8 *) data_set + 0x1B) = (u8) ((*(u8 *) ((s8 *) data_set + 0x1B) & 0xFFFF) | 1);
 }
 
-LocalMarker_8010A01C *func_8010A01C(f32 *param_0, f32 *param_1, f32 param_2, f32 param_3,
-                                    s32 param_4)
+// Nearest marker of the given kind (-1 = any) whose target point lies inside the cone.
+LocalMarker_8010A01C *func_8010A01C(f32 *origin, f32 *dir, f32 unk_0, f32 unk_1,
+                                    s32 kind)
 {
-    void **local_0;
-    s32 local_1;
-    f32 local_2;
-    f32 local_3;
-    f32 local_4[3];
-    s32 local_5;
-    LocalActor *local_6;
-    LocalEntry *local_7;
-    LocalEntry *local_8;
-    f32 *local_9;
-    f32 local_10;
-    LocalMarker_8010A01C *local_11;
-    LocalMarker_8010A01C *local_12;
-    f32 local_13[3];
-    f32 local_14[3];
-    f32 local_15[3];
-    u16 local_16;
+    void **cubes;
+    s32 mask;
+    f32 best_dist_sq;
+    f32 unk_2;
+    f32 dir_copy[3];
+    s32 count;
+    LocalActor *actor;
+    LocalEntry *entry;
+    LocalEntry *end;
+    f32 *point;
+    f32 dist_sq;
+    LocalMarker_8010A01C *marker;
+    LocalMarker_8010A01C *best;
+    f32 actor_pos[3];
+    f32 point_pos[3];
+    f32 offset[3];
+    u16 id;
 
-    local_0 = func_800BE444();
+    cubes = func_800BE444();
     if (func_800CB854(0))
-        local_1 = 1 << (func_800CB854(0) + 0x1F);
+        mask = 1 << (func_800CB854(0) + 0x1F);
     else
-        local_1 = 0;
-    func_800EE7F8(local_4, param_1);
-    local_3 = func_800F0C68(param_0, local_4, param_2, param_3);
-    local_2 = 1e+08f;
-    local_12 = 0;
-    while (*local_0) {
-        local_7 = func_800E9E88(*local_0);
-        local_8 = func_800E9EB4(*local_0);
-        for (; local_7 < local_8; local_7++) {
-            if (!(local_7->selected && local_7->valid))
+        mask = 0;
+    func_800EE7F8(dir_copy, dir);
+    unk_2 = func_800F0C68(origin, dir_copy, unk_0, unk_1);
+    best_dist_sq = 1e+08f;
+    best = 0;
+    while (*cubes) {
+        entry = func_800E9E88(*cubes);
+        end = func_800E9EB4(*cubes);
+        for (; entry < end; entry++) {
+            if (!(entry->selected && entry->valid))
                 continue;
-            local_11 = local_7->marker;
-            if (!(!(param_4 + 1) || param_4 == (s32) local_11->kind) || !local_11->enabled)
+            marker = entry->marker;
+            if (!(!(kind + 1) || kind == (s32) marker->kind) || !marker->enabled)
                 continue;
-            local_16 = local_11->id;
-            if (!(local_16 && local_16 != 0xFFFF && (local_11->flags18 & 1)))
+            id = marker->id;
+            if (!(id && id != 0xFFFF && (marker->flags18 & 1)))
                 continue;
-            local_6 = (LocalActor *) func_80106790((Unk80132ED0 *) local_11);
-            if (!local_6->enabled)
+            actor = (LocalActor *) func_80106790((Unk80132ED0 *) marker);
+            if (!actor->enabled)
                 continue;
-            if (local_6->flags.bits.disabled || (local_6->flags.halves.mask & local_1))
+            if (actor->flags.bits.disabled || (actor->flags.halves.mask & mask))
                 continue;
-            local_5 = func_8010108C((Actor *) local_6, 0xA2, 0);
-            if (local_5 > 0) {
-                local_9 = (f32 *) func_80101080();
+            count = func_8010108C((Actor *) actor, 0xA2, 0);
+            if (count > 0) {
+                point = (f32 *) func_80101080();
             } else {
-                func_80103DFC((Actor *) local_6, local_13);
-                local_9 = local_13;
-                local_5 = 1;
+                func_80103DFC((Actor *) actor, actor_pos);
+                point = actor_pos;
+                count = 1;
             }
-            while (local_5--) {
-                func_800EE7F8(local_14, local_9);
-                func_800EFB24(local_15, local_14, param_0);
-                local_10 = func_800EEFD4(local_15);
-                if (local_10 < local_2 && func_800F0BD0(local_15, local_4, param_2, local_3)) {
-                    local_2 = local_10;
-                    local_12 = local_11;
+            while (count--) {
+                func_800EE7F8(point_pos, point);
+                func_800EFB24(offset, point_pos, origin);
+                dist_sq = func_800EEFD4(offset);
+                if (dist_sq < best_dist_sq && func_800F0BD0(offset, dir_copy, unk_0, unk_2)) {
+                    best_dist_sq = dist_sq;
+                    best = marker;
                 }
-                local_9 += 3;
+                point += 3;
             }
         }
-        local_0++;
+        cubes++;
     }
-    return local_12;
+    return best;
 }
 
-void func_8010A2FC(void **param_0, f32 *param_1, f32 *param_2)
+// Finds the actor's point nearest to ref_pos; falls back to the marker position.
+void func_8010A2FC(void **actor, f32 *out_pos, f32 *ref_pos)
 {
-    s32 local_0;
-    f32 *local_2;
-    f32 local_3;
-    f32 local_1[3];
-    f32 local_4;
-    local_0 = func_8010108C(param_0, 0xA2, 0);
-    if (local_0 > 0) {
-        local_2 = func_80101080();
-        local_3 = 1e+08f;
-        while (local_0--) {
-            func_800EE7F8(local_1, local_2);
-            local_4 = func_800EEB40(local_1, param_2);
-            if (local_4 < local_3) {
-                func_800EE7F8(param_1, local_1);
-                local_3 = local_4;
+    s32 count;
+    f32 *point;
+    f32 best_dist_sq;
+    f32 point_pos[3];
+    f32 dist_sq;
+    count = func_8010108C(actor, 0xA2, 0);
+    if (count > 0) {
+        point = func_80101080();
+        best_dist_sq = 1e+08f;
+        while (count--) {
+            func_800EE7F8(point_pos, point);
+            dist_sq = func_800EEB40(point_pos, ref_pos);
+            if (dist_sq < best_dist_sq) {
+                func_800EE7F8(out_pos, point_pos);
+                best_dist_sq = dist_sq;
             }
-            local_2 += 3;
+            point += 3;
         }
     } else
-        func_800EC75C(*param_0, param_1);
+        func_800EC75C(*actor, out_pos);
 }
 
-void func_8010A3E8(Actor *param_0, f32 param_1)
+// Collision size scale, stored as 8.8 fixed point at actor+0x92.
+void func_8010A3E8(Actor *actor, f32 scale)
 {
-    s16 local_0;
-    local_0 = 256.0f * param_1;
-    *(s16 *) ((char *) param_0 + 0x92) = local_0;
+    s16 scale_fixed;
+    scale_fixed = 256.0f * scale;
+    *(s16 *) ((char *) actor + 0x92) = scale_fixed;
 }
 
-f32 func_8010A40C(u8 *param_0)
+f32 func_8010A40C(u8 *actor)
 {
-    return (f32) *(s16 *) (param_0 + 0x92) * 0.00390625f;
+    return (f32) *(s16 *) (actor + 0x92) * 0.00390625f;
 }
 
-int func_8010A430(param_0)
-int param_0;
+// Whether a drop spawns; the chance depends on the level (D_8012762C).
+int func_8010A430(actor)
+int actor;
 {
-    if (func_80102F74(param_0, 0x8000) != 0)
+    if (func_80102F74(actor, 0x8000) != 0)
         return 1;
     switch (D_8012762C - 0xF) {
         case 4:
@@ -788,105 +802,113 @@ int param_0;
 
 s32 func_8010A5B0();
 
-void func_8010A570(s32 arg0)
+void func_8010A570(s32 handle)
 {
-    func_8010A5B0(arg0, 0);
+    func_8010A5B0(handle, 0);
 }
 
-void func_8010A590(s32 arg0)
+void func_8010A590(s32 handle)
 {
-    func_8010A5B0(arg0, 1);
+    func_8010A5B0(handle, 1);
 }
 
-s32 func_8010A5B0(u8 **param_0, s32 param_1)
+// Sets or clears a flag (bit 1 of byte 0x2A) and returns its previous value.
+// Matching: the redundant masks and casts are needed for the match.
+s32 func_8010A5B0(u8 **handle, s32 set)
 {
-    s32 local_0;
-    u8 *local_1;
-    u8 *local_2;
-    u8 **new_var;
-    local_0 = func_8010A610();
-    new_var = &*param_0;
-    if (param_1 != 0) {
-        local_1 = *new_var;
-        *(u8 *) ((s8 *) local_1 + 0x2A) = (u8) (*(u8 *) ((s8 *) *param_0 + 0x2A) | 2);
+    s32 old;
+    u8 *data_set;
+    u8 *data_clr;
+    u8 **handle_alias;
+    old = func_8010A610();
+    handle_alias = &*handle;
+    if (set != 0) {
+        data_set = *handle_alias;
+        *(u8 *) ((s8 *) data_set + 0x2A) = (u8) (*(u8 *) ((s8 *) *handle + 0x2A) | 2);
     } else {
-        local_2 = *param_0;
-        *(u8 *) ((s8 *) local_2 + 0x2A) = (u8) (*(u8 *) ((s8 *) local_2 + 0x2A) & 0xFFFD);
+        data_clr = *handle;
+        *(u8 *) ((s8 *) data_clr + 0x2A) = (u8) (*(u8 *) ((s8 *) data_clr + 0x2A) & 0xFFFD);
     }
-    return local_0;
+    return old;
 }
 
-int func_8010A610(param_0) void *param_0;
+int func_8010A610(handle) void *handle;
 {
-    return ((u32) (*(s32 *) ((char *) ((*(s32 **) ((char *) param_0 + 0x0))) + 0x28)) << 0x16) >>
+    return ((u32) (*(s32 *) ((char *) ((*(s32 **) ((char *) handle + 0x0))) + 0x28)) << 0x16) >>
            31;
 }
 
-void func_8010A624(param_0) void *param_0;
+void func_8010A624(handle) void *handle;
 {
-    void *local_0;
-    local_0 = param_0;
-    ((u8 *) (*((void **) (*((void **) local_0)))))[0xb] &= ~8U;
+    // Matching: the copy of the parameter is needed for the match.
+    void *handle_copy;
+    handle_copy = handle;
+    ((u8 *) (*((void **) (*((void **) handle_copy)))))[0xb] &= ~8U;
 }
 
-void func_8010A63C(void *param_0)
+void func_8010A63C(void *handle)
 {
     typedef struct {
         u8 pad_0[0xB];
-        u8 local_1 : 4;
-        u8 local_0 : 1;
+        u8 unk_0B : 4;
+        u8 flag : 1;
     } Struct8010A63C_0;
     typedef struct {
-        Struct8010A63C_0 *local_0;
+        Struct8010A63C_0 *unk_0;
     } Struct8010A63C_1;
     typedef struct {
-        Struct8010A63C_1 *local_0;
+        Struct8010A63C_1 *unk_0;
     } Struct8010A63C_2;
 
-    ((Struct8010A63C_2 *) param_0)->local_0->local_0->local_0 = 1;
+    ((Struct8010A63C_2 *) handle)->unk_0->unk_0->flag = 1;
 }
 
-s32 func_8010A654(S1_10A654 **param_0, s32 param_1)
+s32 func_8010A654(S1_10A654 **handle, s32 set)
 {
-    S2_10A654 *p = (*param_0)->unk0;
-    s32 old = p->bit;
+    S2_10A654 *data = (*handle)->unk0;
+    s32 old = data->bit;
 
-if (param_1 != 0) {
-    p->bit = 1;
+if (set != 0) {
+    data->bit = 1;
 }
 
 else
 {
-    p->bit = 0;
+    data->bit = 0;
 }
 return old;
 }
 
-u32 func_8010A698(u8 ***param_0)
+u32 func_8010A698(u8 ***handle)
 {
-    return (u32) ((*(s32 *) ((s8 *) (**param_0) + (8))) << 0x1C) >> 0x1F;
+    return (u32) ((*(s32 *) ((s8 *) (**handle) + (8))) << 0x1C) >> 0x1F;
 }
 
-int func_8010A6B0(s32 param_0, s32 param_1)
+// Line of sight between the player and the actor.
+int func_8010A6B0(s32 actor, s32 player)
 {
-    f32 local_2[3];
-    f32 local_1[3];
-    f32 local_3[3];
+    f32 actor_pos[3];
+    f32 player_pos[3];
+    f32 hit_pos[3];
 
-if (!func_800F4B4C(param_1)) {
+if (!func_800F4B4C(player)) {
     return 0;
 }
 
-func_800F57F0(param_1, local_1);
-func_80103DFC(param_0, local_2);
+func_800F57F0(player, player_pos);
+func_80103DFC(actor, actor_pos);
 
-if (func_800C6A7C(local_1, local_2, local_3, 0x4A0021) != 0) {
+if (func_800C6A7C(player_pos, actor_pos, hit_pos, 0x4A0021) != 0) {
     return 0;
 }
 
 return 1;
 }
 
+// TU-NOTE: The .data of this file is defined here in C. The tables hold pointers to functions of
+// this file, and IDO's assembler schedules some of them differently unless the tables are in the
+// same unit. Values are taken from the ROM. The externs for D_801245D0, D_801245E4, D_801245F8 and
+// D_8012464C are declared as s32[] and used as NAME[0].
 u8 D_801245A0[48] = {0x9, 0xE4, 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0,
                      0x0, 0x0,  0x0, 0x0, 0x9, 0xE5, 0x0, 0x0, 0x0, 0x0,  0x0, 0x0,
                      0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x9, 0xE2, 0x0, 0x0,

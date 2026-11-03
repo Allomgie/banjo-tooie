@@ -7,43 +7,46 @@ s32 func_80114D90()
     return 0x8;
 }
 
-void func_80114D98(u8 *param_0, s32 param_1)
+// Counts a frame of held C-button rotate input (0 = left, 1 = right).
+void func_80114D98(u8 *camera, s32 dir)
 {
-    s16 *local_0;
-    s32 local_1;
+    s16 *counter;
+    s32 offset;
 
-    if ((param_1 == 0) || (param_1 == 1)) {
-        local_1 = param_1 * 2;
-        *(s16 *) ((s8 *) (*(s32 *) ((s8 *) param_0 + 8) + local_1) + 4) = 1;
-        local_0 = *(s32 *) ((s8 *) param_0 + 8) + local_1;
-        *local_0 += 1;
+    if ((dir == 0) || (dir == 1)) {
+        offset = dir * 2;
+        *(s16 *) ((s8 *) (*(s32 *) ((s8 *) camera + 8) + offset) + 4) = 1;
+        counter = *(s32 *) ((s8 *) camera + 8) + offset;
+        *counter += 1;
     }
 }
 
-void func_80114DD8(void *param_0)
+// On release after at least 5 frames, nudges the yaw rotation by -/+5 degrees.
+void func_80114DD8(void *camera)
 {
-    s16 *temp_v0;
-    s16 *var_v0;
-    var_v0 = *(s16 **) ((s8 *) param_0 + 8);
-    if (*(s16 *) ((s8 *) var_v0 + 4) == 0) {
-        if (*(s16 *) ((s8 *) var_v0 + 0) >= 5) {
-            func_80112E50(param_0, 0xC0A00000, 2);
-            var_v0 = *(s16 **) ((s8 *) param_0 + 8);
+    s16 *slot_final;
+    s16 *slot;
+    slot = *(s16 **) ((s8 *) camera + 8);
+    if (*(s16 *) ((s8 *) slot + 4) == 0) {
+        if (*(s16 *) ((s8 *) slot + 0) >= 5) {
+            func_80112E50(camera, 0xC0A00000, 2);
+            slot = *(s16 **) ((s8 *) camera + 8);
         }
-        *var_v0 = 0;
-        var_v0 = *(s16 **) ((s8 *) param_0 + 8);
+        *slot = 0;
+        slot = *(s16 **) ((s8 *) camera + 8);
     }
-    if (*(s16 *) ((s8 *) var_v0 + 6) == 0) {
-        if (*(s16 *) ((s8 *) var_v0 + 2) >= 5) {
-            func_80112E50(param_0, 0x40A00000, 2);
-            var_v0 = *(s16 **) ((s8 *) param_0 + 8);
+    if (*(s16 *) ((s8 *) slot + 6) == 0) {
+        if (*(s16 *) ((s8 *) slot + 2) >= 5) {
+            func_80112E50(camera, 0x40A00000, 2);
+            slot = *(s16 **) ((s8 *) camera + 8);
         }
-        *(s16 *) ((s8 *) var_v0 + 2) = 0;
-        var_v0 = *(s16 **) ((s8 *) param_0 + 8);
+        *(s16 *) ((s8 *) slot + 2) = 0;
+        slot = *(s16 **) ((s8 *) camera + 8);
     }
-    *(s16 *) ((s8 *) var_v0 + 6) = 0;
-    if (var_v0) {
+    *(s16 *) ((s8 *) slot + 6) = 0;
+    // Matching: empty block needed for the match.
+    if (slot) {
     }
-    temp_v0 = *(s16 **) ((s8 *) param_0 + 8);
-    *(s16 *) ((s8 *) temp_v0 + 4) = (s16) *(s16 *) ((s8 *) temp_v0 + 6);
+    slot_final = *(s16 **) ((s8 *) camera + 8);
+    *(s16 *) ((s8 *) slot_final + 4) = (s16) *(s16 *) ((s8 *) slot_final + 6);
 }

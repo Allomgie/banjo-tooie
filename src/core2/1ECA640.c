@@ -9,291 +9,321 @@ f32 func_800F13C4(f32 param_0, f32 param_1);
 f32 func_800F1434(f32 param_0);
 void func_800F14AC(f32 param_0);
 
-f32 func_800F0D50(f32 param_0, f32 param_1, f32 param_2)
+// Clamp value to [min, max].
+f32 func_800F0D50(f32 value, f32 min, f32 max)
 {
-    if (param_0 < param_1) {
-        return param_1;
-    } else if (param_2 < param_0) {
-        return param_2;
+    if (value < min) {
+        return min;
+    } else if (max < value) {
+        return max;
     } else {
-        return param_0;
+        return value;
     }
 }
 
-func_800F0D90(s32 param_0, s32 param_1, s32 param_2)
+// Clamp value to [min, max] (integer).
+func_800F0D90(s32 value, s32 min, s32 max)
 {
-    if (param_0 < param_1)
-        return param_1;
-    if (param_2 < param_0)
-        return param_2;
-    return param_0;
+    if (value < min)
+        return min;
+    if (max < value)
+        return max;
+    return value;
 }
 
-f32 func_800F0DC0(f32 param_0, f32 param_1)
+// Clamp value to [-limit, limit].
+f32 func_800F0DC0(f32 value, f32 limit)
 {
-    if (param_1 < param_0) {
-        return param_1;
+    if (limit < value) {
+        return limit;
     } else {
-        f32 neg_param1 = -param_1;
-        if (neg_param1 > param_0) {
-            return neg_param1;
+        f32 neg_limit = -limit;
+        if (neg_limit > value) {
+            return neg_limit;
         } else {
-            return param_0;
+            return value;
         }
     }
 }
 
-f32 func_800F0E00(f32 param_0, f32 param_1)
+// Float max.
+f32 func_800F0E00(f32 a, f32 b)
 {
-    f32 new_var3;
-    int new_var2;
-    f32 new_var;
-    f32 local_0;
-    new_var3 = param_1;
-    new_var = param_0;
-    new_var2 = new_var3 < (0, new_var);
-    if (new_var2) {
-        local_0 = new_var;
+    f32 second;
+    int is_less;
+    f32 first;
+    f32 result;
+    // Matching: the copies and the comma expression are needed for the match.
+    second = b;
+    first = a;
+    is_less = second < (0, first);
+    if (is_less) {
+        result = first;
     } else {
-        local_0 = new_var3;
+        result = second;
     }
-    return local_0;
+    return result;
 }
 
-func_800F0E28(s32 param_0, s32 param_1)
+// Integer max.
+func_800F0E28(s32 a, s32 b)
 {
-    return (param_1 < param_0) ? param_0 : param_1;
+    return (b < a) ? a : b;
 }
 
-func_800F0E44(param_0)
+// Wraps an angle in degrees into [0, 360).
+func_800F0E44(angle)
 {
-    while (param_0 < 0) {
-        param_0 += 0x168;
+    while (angle < 0) {
+        angle += 0x168;
     }
 
-    while (param_0 >= 0x168) {
-        param_0 -= 0x168;
+    while (angle >= 0x168) {
+        angle -= 0x168;
     }
 
-    return param_0 | 0;
+    // Matching: the no-op "| 0" is needed for the match.
+    return angle | 0;
 }
 
-f32 func_800F0E7C(f32 param_0, f32 param_1)
+// Wraps angle by 360 degree steps to within 180 degrees of reference.
+f32 func_800F0E7C(f32 angle, f32 reference)
 {
-    if (param_1 + 180.0f < param_0) {
+    if (reference + 180.0f < angle) {
         do {
-            param_0 -= 360.0f;
-        } while (param_1 + 180.0f < param_0);
+            angle -= 360.0f;
+        } while (reference + 180.0f < angle);
     }
-    if (param_0 < param_1 - 180.0f) {
+    if (angle < reference - 180.0f) {
         do {
-            param_0 += 360.0f;
-        } while (param_0 < param_1 - 180.0f);
+            angle += 360.0f;
+        } while (angle < reference - 180.0f);
     }
-    return param_0;
+    return angle;
 }
 
-void func_800F0EF0(s32 param_0, f32 *param_1)
+// Unwraps an array of keyframes (3 angles each) so every angle is within 180 degrees of the
+// same angle in the previous keyframe.
+void func_800F0EF0(s32 count, f32 *angles)
 {
-    f32 local_0;
-    s32 local_2;
-    f32 *local_3;
-    local_2 = 0;
-    if (((param_0 * 3) - 3) > 0) {
-        local_3 = param_1;
+    f32 prev;
+    s32 i;
+    f32 *cur;
+    i = 0;
+    if (((count * 3) - 3) > 0) {
+        cur = angles;
         do {
-            local_0 = local_3[0];
-            local_2 += 1;
-            if ((local_3[3] + 180.0f) <= local_0) {
+            prev = cur[0];
+            i += 1;
+            if ((cur[3] + 180.0f) <= prev) {
                 do {
-                    local_3[3] = (f32) (local_3[3] + 360.0f);
-                } while ((local_3[3] + 180.0f) <= local_0);
+                    cur[3] = (f32) (cur[3] + 360.0f);
+                } while ((cur[3] + 180.0f) <= prev);
             }
-            if (local_0 <= (local_3[3] - 180.0f)) {
+            if (prev <= (cur[3] - 180.0f)) {
                 do {
-                    local_3[3] = (f32) (local_3[3] - 360.0f);
-                } while (local_0 <= (local_3[3] - 180.0f));
+                    cur[3] = (f32) (cur[3] - 360.0f);
+                } while (prev <= (cur[3] - 180.0f));
             }
-            local_3 += 1;
-        } while (local_2 != ((param_0 * 3) - 3));
+            cur += 1;
+        } while (i != ((count * 3) - 3));
     }
 }
 
-f32 func_800F0F9C(f32 param_0, f32 param_1)
+// Position within the period as a fraction.
+f32 func_800F0F9C(f32 time, f32 period)
 {
-    f32 local_0;
-    local_0 = func_800F13C4(param_0, param_1);
-    return local_0 / param_1;
+    f32 rem;
+    rem = func_800F13C4(time, period);
+    return rem / period;
 }
 
-f32 func_800F0FC4(f32 param_0, f32 param_1)
+// Periodic wave over the period, scaled to 0..1.
+f32 func_800F0FC4(f32 time, f32 period)
 {
-    return (func_80013970(func_800F13C4(param_0, param_1) / param_1 * 360.0f) + 1.0f) * 0.5f;
+    return (func_80013970(func_800F13C4(time, period) / period * 360.0f) + 1.0f) * 0.5f;
 }
 
-f32 func_800F101C(f32 param_0, f32 param_1)
+// Periodic wave over the period, scaled to 0..1.
+f32 func_800F101C(f32 time, f32 period)
 {
-    return (func_800138D0(func_800F13C4(param_0, param_1) / param_1 * 360.0f) + 1.0f) * 0.5f;
+    return (func_800138D0(func_800F13C4(time, period) / period * 360.0f) + 1.0f) * 0.5f;
 }
 
-f32 func_800F1074(f32 param_0, f32 param_1)
+// Periodic wave over the period.
+f32 func_800F1074(f32 time, f32 period)
 {
-    return func_80013970(func_800F13C4(param_0, param_1) / param_1 * 360.0f);
+    return func_80013970(func_800F13C4(time, period) / period * 360.0f);
 }
 
-f32 func_800F10B4(f32 param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4)
+// Linear remap from [in_min, in_max] to [out_min, out_max], clamped to the output range.
+f32 func_800F10B4(f32 value, f32 in_min, f32 in_max, f32 out_min, f32 out_max)
 {
-    f32 local_0;
-    if (param_2 != param_1) {
-        if (param_3 < param_4) {
-            local_0 = (param_0 - param_1) / (param_2 - param_1) * (param_4 - param_3) + param_3;
-            if (local_0 > param_4) {
-                return param_4;
-            } else if (local_0 < param_3) {
-                return param_3;
+    f32 result;
+    if (in_max != in_min) {
+        if (out_min < out_max) {
+            result = (value - in_min) / (in_max - in_min) * (out_max - out_min) + out_min;
+            if (result > out_max) {
+                return out_max;
+            } else if (result < out_min) {
+                return out_min;
             }
         } else {
-            local_0 = (param_0 - param_1) / (param_2 - param_1) * (param_4 - param_3) + param_3;
-            if (local_0 < param_4) {
-                return param_4;
-            } else if (local_0 > param_3) {
-                return param_3;
+            result = (value - in_min) / (in_max - in_min) * (out_max - out_min) + out_min;
+            if (result < out_max) {
+                return out_max;
+            } else if (result > out_min) {
+                return out_min;
             }
         }
-        return local_0;
+        return result;
     }
-    return param_4;
+    return out_max;
 }
 
-f32 func_800F1198(f32 param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4)
+// Linear remap without clamping.
+f32 func_800F1198(f32 value, f32 in_min, f32 in_max, f32 out_min, f32 out_max)
 {
-    if (param_2 != param_1) {
-        return (((param_0 - param_1) / (param_2 - param_1)) * (param_4 - param_3)) + param_3;
+    if (in_max != in_min) {
+        return (((value - in_min) / (in_max - in_min)) * (out_max - out_min)) + out_min;
     }
-    return param_4;
+    return out_max;
 }
 
-f32 func_800F11E4(f32 param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4)
+// Linear remap without clamping or the zero-range check.
+f32 func_800F11E4(f32 value, f32 in_min, f32 in_max, f32 out_min, f32 out_max)
 {
-    f32 local_0;
-    f32 local_1;
+    f32 offset;
+    f32 range;
 
-    local_0 = param_0 - param_1;
-    local_1 = param_2 - param_1;
-    return ((local_0 / local_1) * (param_4 - param_3)) + param_3;
+    offset = value - in_min;
+    range = in_max - in_min;
+    return ((offset / range) * (out_max - out_min)) + out_min;
 }
 
-f32 func_800F1214(f32 value, f32 min, f32 max)
+// Lerp from min to max by t.
+f32 func_800F1214(f32 t, f32 min, f32 max)
 {
-    return ((max - min) * value) + min;
+    return ((max - min) * t) + min;
 }
 
 f32 func_800F122C(f32 param_0, f32 param_1, f32 param_2)
 {
-    f32 t = func_800F2108();
-    param_0 *= t;
-    t *= (param_2 - param_1) * param_0 + param_1;
-    return t;
+    f32 rnd = func_800F2108();
+    param_0 *= rnd;
+    rnd *= (param_2 - param_1) * param_0 + param_1;
+    return rnd;
 }
 
-f32 func_800F1274(f32 p0, f32 p1, f32 p2, f32 p3, f32 p4, f32 (*p5)(f32))
+// Remaps value to 0..1, applies the easing function, then maps the result to [out_min, out_max].
+f32 func_800F1274(f32 value, f32 in_min, f32 in_max, f32 out_min, f32 out_max, f32 (*ease)(f32))
 {
-    f32 r = func_800F10B4(p0, p1, p2, 0.0f, 1.0f);
-    r = p5(r);
-    func_800F10B4(r, 0.0f, 1.0f, p3, p4);
+    f32 t = func_800F10B4(value, in_min, in_max, 0.0f, 1.0f);
+    t = ease(t);
+    func_800F10B4(t, 0.0f, 1.0f, out_min, out_max);
 }
 
-f32 func_800F12D4(f32 p0, f32 p1, f32 p2, f32 p3, f32 p4)
+// Remap with cosine easing.
+f32 func_800F12D4(f32 value, f32 in_min, f32 in_max, f32 out_min, f32 out_max)
 {
-    return func_800F1274(p0, p1, p2, p3, p4, func_800F1434);
+    return func_800F1274(value, in_min, in_max, out_min, out_max, func_800F1434);
 }
 
-f32 func_800F130C(f32 p0, f32 p1, f32 p2, f32 p3, f32 p4)
+// Remap with the cosine easing applied twice.
+f32 func_800F130C(f32 value, f32 in_min, f32 in_max, f32 out_min, f32 out_max)
 {
-    return func_800F1274(p0, p1, p2, p3, p4, func_800F14AC);
+    return func_800F1274(value, in_min, in_max, out_min, out_max, func_800F14AC);
 }
 
-void func_800F1344(f32 param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4)
+// Clamped remap that mirrors the ranges for negative values.
+void func_800F1344(f32 value, f32 in_min, f32 in_max, f32 out_min, f32 out_max)
 {
-    if (param_0 < 0.0f) {
-        func_800F10B4(param_0, -param_1, -param_2, -param_3, -param_4);
+    if (value < 0.0f) {
+        func_800F10B4(value, -in_min, -in_max, -out_min, -out_max);
     } else {
-        func_800F10B4(param_0, param_1, param_2, param_3, param_4);
+        func_800F10B4(value, in_min, in_max, out_min, out_max);
     }
 }
 
-f32 func_800F13C4(f32 param_0, f32 param_1)
+// fmod
+f32 func_800F13C4(f32 value, f32 divisor)
 {
-    f32 temp_f2;
+    f32 quotient;
 
-    temp_f2 = param_0 / param_1;
-    return (temp_f2 - (f32) (s32) temp_f2) * param_1;
+    quotient = value / divisor;
+    return (quotient - (f32) (s32) quotient) * divisor;
 }
 
-f32 func_800F13F0(f32 param_0, f32 param_1)
+// Float min.
+f32 func_800F13F0(f32 a, f32 b)
 {
-    f32 local_0;
-    if (param_0 < param_1)
-        local_0 = param_0;
+    f32 result;
+    if (a < b)
+        result = a;
     else
-        local_0 = param_1;
+        result = b;
 
-    return local_0;
+    return result;
 }
 
-s32 func_800F1418(s32 param_0, s32 param_1)
+// Integer min.
+s32 func_800F1418(s32 a, s32 b)
 {
-    return param_0 < param_1 ? param_0 : param_1;
+    return a < b ? a : b;
 }
 
-f32 func_800F1434(f32 param_0)
+// Cosine ease in/out for t in 0..1.
+f32 func_800F1434(f32 t)
 {
-    return (func_8001395C(param_0 * 3.1415927f + -1.5707964f) + 1.0f) * 0.5f;
+    return (func_8001395C(t * 3.1415927f + -1.5707964f) + 1.0f) * 0.5f;
 }
 
-int func_800F1480(f32 param_0)
+int func_800F1480(f32 t)
 {
-    func_80013970(param_0 * 90.0f);
+    func_80013970(t * 90.0f);
 }
 
-void func_800F14AC(f32 param_0)
+void func_800F14AC(f32 t)
 {
-    f32 local_0;
-    local_0 = func_800F1434(param_0);
-    func_800F1434(local_0);
+    f32 eased;
+    eased = func_800F1434(t);
+    func_800F1434(eased);
 }
 
-f32 func_800F14D4(f32 param_0, f32 param_1)
+// Float min.
+f32 func_800F14D4(f32 a, f32 b)
 {
-    f32 local_0;
-    if (param_0 <= param_1) {
-        local_0 = param_0;
+    f32 result;
+    if (a <= b) {
+        result = a;
     } else {
-        local_0 = param_1;
+        result = b;
     }
-    return local_0;
+    return result;
 }
 
-f32 func_800F14FC(f32 param_0, f32 param_1, f32 param_2)
+// Smoothstep.
+f32 func_800F14FC(f32 edge_min, f32 edge_max, f32 x)
 {
-    f32 local_0;
-    if (param_2 < param_0) {
+    f32 t;
+    if (x < edge_min) {
         return 0.0f;
     }
-    if (param_1 <= param_2) {
+    if (edge_max <= x) {
         return 1.0f;
     }
-    local_0 = (param_2 - param_0) / (param_1 - param_0);
-    return (local_0 * local_0) * (3.0f - (2.0f * local_0));
+    t = (x - edge_min) / (edge_max - edge_min);
+    return (t * t) * (3.0f - (2.0f * t));
 }
 
-int func_800F1574(f32 *param_0, f32 param_1)
+// Counts the timer down by delta; returns TRUE once it reaches zero.
+int func_800F1574(f32 *timer, f32 delta)
 {
-    if (*param_0 > 0) {
-        *param_0 -= param_1;
+    if (*timer > 0) {
+        *timer -= delta;
 
-        if (*param_0 <= 0) {
-            *param_0 = 0;
+        if (*timer <= 0) {
+            *timer = 0;
             return TRUE;
         }
     }
@@ -301,70 +331,76 @@ int func_800F1574(f32 *param_0, f32 param_1)
     return FALSE;
 }
 
-f32 func_800F15C4(f32 param_0, u32 param_1)
+// Power by squaring.
+f32 func_800F15C4(f32 base, u32 power)
 {
-    f32 local_0;
-    local_0 = 1.0f;
-    while (param_1 != 0) {
-        if (param_1 & 1) {
-            local_0 *= param_0;
+    f32 result;
+    result = 1.0f;
+    while (power != 0) {
+        if (power & 1) {
+            result *= base;
         }
-        param_0 *= param_0;
-        (s32) param_1 >>= 1;
+        base *= base;
+        // Matching: the cast on the shift target is needed for the match.
+        (s32) power >>= 1;
     }
-    return local_0;
+    return result;
 }
 
-f32 func_800F15F8(f32 param_0, f32 param_1, f32 param_2)
+// Moves value toward target by at most step.
+f32 func_800F15F8(f32 value, f32 target, f32 step)
 {
-    if (param_0 < param_1) {
-        return func_800F13F0(param_0 + param_2, param_1);
+    if (value < target) {
+        return func_800F13F0(value + step, target);
     }
-    if (param_1 < param_0) {
-        return func_800F0E00(param_0 - param_2, param_1);
+    if (target < value) {
+        return func_800F0E00(value - step, target);
     }
-    return param_0;
+    return value;
 }
 
-s32 func_800F1660(f32 param_0, f32 param_1)
+// Returns whether |a| > |b|.
+s32 func_800F1660(f32 a, f32 b)
 {
-    if (param_0 < 0.0f)
-        param_0 = -param_0;
-    if (param_1 < 0.0f)
-        param_1 = -param_1;
-    return param_1 < param_0;
+    if (a < 0.0f)
+        a = -a;
+    if (b < 0.0f)
+        b = -b;
+    return b < a;
 }
 
-void func_800F16AC(f32 *param_0, f32 *param_1, f32 *param_2, f32 param_3)
+// Per-component angle interpolation from from_angles toward to_angles.
+void func_800F16AC(f32 *out, f32 *from_angles, f32 *to_angles, f32 factor)
 {
-    f32 *local_0 = param_1;
-    s32 local_1 = 0;
-    f32 *local_2 = param_2;
-    f32 *local_3 = param_0;
-    for (; local_1 < 3; local_1++) {
-        *local_3 = *local_0 - func_800F1DCC(*local_0, *local_2) * param_3;
-        local_0++;
-        local_2++;
-        local_3++;
+    f32 *src = from_angles;
+    s32 i = 0;
+    f32 *target = to_angles;
+    f32 *dst = out;
+    for (; i < 3; i++) {
+        *dst = *src - func_800F1DCC(*src, *target) * factor;
+        src++;
+        target++;
+        dst++;
     }
 }
 
-f32 func_800F1738(f32 param_0, f32 param_1, f32 param_2)
+// Clamps angle to the arc from range_start to range_end.
+f32 func_800F1738(f32 angle, f32 range_start, f32 range_end)
 {
-    f32 local_0;
-    f32 local_1;
-    local_0 = func_800F1DCC(param_0, param_1);
-    local_1 = func_800F1DCC(param_2, param_1);
-    if (local_1 > 0.0f) {
-        if (local_0 < 0.0f)
-            param_0 = param_1;
-        else if (local_1 < local_0)
-            param_0 = param_2;
+    f32 angle_offset;
+    f32 end_offset;
+    angle_offset = func_800F1DCC(angle, range_start);
+    end_offset = func_800F1DCC(range_end, range_start);
+    if (end_offset > 0.0f) {
+        if (angle_offset < 0.0f)
+            angle = range_start;
+        else if (end_offset < angle_offset)
+            angle = range_end;
     } else {
-        if (local_0 > 0.0f)
-            param_0 = param_1;
-        else if (local_0 < local_1)
-            param_0 = param_2;
+        if (angle_offset > 0.0f)
+            angle = range_start;
+        else if (angle_offset < end_offset)
+            angle = range_end;
     }
-    return param_0;
+    return angle;
 }

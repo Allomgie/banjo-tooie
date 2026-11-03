@@ -41,7 +41,7 @@ typedef struct {
     u32 unused2 : 19, disabled : 1, unused3 : 12;
 } LocalActor_80101A50;
 extern f32 func_800DC0C0(void);
-f32 *func_80101918(f32 param_0);
+f32 *func_80101918(f32 scale);
 void func_80101934();
 void func_80101970();
 
@@ -63,161 +63,169 @@ void func_801015C8(void)
 {
 }
 
-s32 func_801015D0(Actor *param_0)
+// Draw callback: sets up the model renderer from the actor state.
+s32 func_801015D0(Actor *actor)
 {
-    s32 local_7;
-    LocalDesc *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
-    local_2 = func_801039E4(ACT(param_0)->desc);
-    func_80103D48(param_0);
-    local_3 = func_80104248(param_0);
-    if (local_3) {
-        if (!ACT(param_0)->disabled)
-            func_8008B304(local_3);
-        func_800DF41C(func_8008C27C(func_8008AEDC(local_3)));
+    s32 unk_0;
+    LocalDesc *desc;
+    s32 expression;
+    s32 unk_1;
+    s32 anim_ctrl;
+    s32 unk_2;
+    s32 anim_ctrl_b;
+    s32 unk_3;
+    unk_1 = func_801039E4(ACT(actor)->desc);
+    func_80103D48(actor);
+    anim_ctrl = func_80104248(actor);
+    if (anim_ctrl) {
+        if (!ACT(actor)->disabled)
+            func_8008B304(anim_ctrl);
+        func_800DF41C(func_8008C27C(func_8008AEDC(anim_ctrl)));
     }
-    local_0 = ACT(param_0)->desc;
-    local_1 = _suexpression_entrypoint_20(param_0);
-    if (local_1)
-        _suexpression_entrypoint_19(local_1, param_0);
-    if (local_0->id) {
-        local_5 = func_80104248(param_0);
-        local_4 = func_800B27E0(local_2);
-        func_8010108C(param_0, 0x9C, local_2);
-        if (local_5) {
-            if (local_4) {
-                if (!ACT(param_0)->disabled)
-                    func_8008C200(local_0->id, local_4, func_8008AEDC(local_5));
-                func_800DF72C(func_800AE080(local_0->id));
+    desc = ACT(actor)->desc;
+    expression = _suexpression_entrypoint_20(actor);
+    if (expression)
+        _suexpression_entrypoint_19(expression, actor);
+    if (desc->id) {
+        anim_ctrl_b = func_80104248(actor);
+        unk_2 = func_800B27E0(unk_1);
+        func_8010108C(actor, 0x9C, unk_1);
+        if (anim_ctrl_b) {
+            if (unk_2) {
+                if (!ACT(actor)->disabled)
+                    func_8008C200(desc->id, unk_2, func_8008AEDC(anim_ctrl_b));
+                func_800DF72C(func_800AE080(desc->id));
             }
-        } else if (local_4)
-            func_800ADD80(local_0->id, local_4);
+        } else if (unk_2)
+            func_800ADD80(desc->id, unk_2);
     }
-    if (local_1)
-        _suexpression_entrypoint_11(local_1, param_0);
-    func_800DF410(ACT(param_0)->alpha);
-    func_800DF830(ACT(param_0)->mode);
-    func_800DF738(_subaddieskeleton_entrypoint_4(param_0));
-    if (ACT(param_0)->flag0 || ACT(param_0)->flag1)
-        func_800DF818(func_80103CDC(param_0, local_2));
-    func_80106A98(param_0, local_2);
-    func_80101934(param_0);
-    local_6 = func_800D731C(ACT(param_0)->desc->model);
-    local_7 = local_6 & 0xFF;
-    if (local_6)
-        func_800DF7E8(local_7);
-    func_80103D70(param_0);
-    ACT(param_0)->disabled = 1;
+    if (expression)
+        _suexpression_entrypoint_11(expression, actor);
+    func_800DF410(ACT(actor)->alpha);
+    func_800DF830(ACT(actor)->mode);
+    func_800DF738(_subaddieskeleton_entrypoint_4(actor));
+    if (ACT(actor)->flag0 || ACT(actor)->flag1)
+        func_800DF818(func_80103CDC(actor, unk_1));
+    func_80106A98(actor, unk_1);
+    func_80101934(actor);
+    unk_3 = func_800D731C(ACT(actor)->desc->model);
+    unk_0 = unk_3 & 0xFF;
+    if (unk_3)
+        func_800DF7E8(unk_0);
+    func_80103D70(actor);
+    ACT(actor)->disabled = 1;
 }
 
-s32 func_801017D0(s32 *param_0)
+s32 func_801017D0(s32 *actor)
 {
-    s32 *new_var;
-    s32 local_0;
-    local_0 = func_801039E4(*param_0);
-    new_var = &local_0;
-    return func_8010108C(param_0, 0x1F, *new_var);
+    // Matching: extra pointer temporary needed for the match.
+    s32 *unk_0;
+    s32 unk_1;
+    unk_1 = func_801039E4(*actor);
+    unk_0 = &unk_1;
+    return func_8010108C(actor, 0x1F, *unk_0);
 }
 
 s32 func_801018D8();
 
-void func_80101808(Actor *arg0, s32 (*arg1)(Actor *))
+// Registers the pre-draw callback and draws the actor model.
+void func_80101808(Actor *actor, s32 (*draw_fn)(Actor *))
 {
+    // Matching: padding reserves stack space.
     s32 pad[2];
-    f32 *sp2C;
-    f32 *sp28;
+    f32 *flip;
+    f32 *rotation;
 
-    func_800DF47C(arg1, arg0);
-    sp28 = func_801027F4(arg0);
-    sp2C = func_801018D8(arg0);
-    func_800DE448(arg0->position, sp28, arg0->scale, sp2C, func_8010347C(arg0->unk0));
+    func_800DF47C(draw_fn, actor);
+    rotation = func_801027F4(actor);
+    flip = func_801018D8(actor);
+    func_800DE448(actor->position, rotation, actor->scale, flip, func_8010347C(actor->unk0));
 }
 
-void func_80101870(Actor *arg0, void *arg1)
+void func_80101870(Actor *actor, void *arg1)
 {
-    func_80101970(arg0);
-    func_80101808(arg0, func_801015D0);
+    func_80101970(actor);
+    func_80101808(actor, func_801015D0);
 }
 
-void func_801018A4(s32 param_0, s32 param_1)
+void func_801018A4(s32 actor, s32 param_1)
 {
     func_80101970();
-    func_80101808(param_0, func_801017D0);
+    func_80101808(actor, func_801017D0);
 }
 
-s32 func_801018D8(u8 *param_0)
+s32 func_801018D8(u8 *actor)
 {
-    s32 local_0;
+    s32 flip;
 
-    local_0 = (*(u16 *) ((char *) param_0 + 0x94) & 1)
-                  ? func_80101918(*(f32 *) ((char *) param_0 + 0x38))
+    flip = (*(u16 *) ((char *) actor + 0x94) & 1)
+                  ? func_80101918(*(f32 *) ((char *) actor + 0x38))
                   : 0;
-    return local_0;
+    return flip;
 }
 
-f32 *func_80101918(f32 param_0)
+f32 *func_80101918(f32 scale)
 {
-    f32 *local_0 = D_801243E0;
-    local_0[1] = -4.0f / param_0;
-    return local_0;
+    f32 *flip = D_801243E0;
+    flip[1] = -4.0f / scale;
+    return flip;
 }
 
-void func_80101934(param_0) Actor *param_0;
+// Calls the draw-mode callback selected by the low bits of the actor flags.
+void func_80101934(actor) Actor *actor;
 {
-    u32 local_0;
-    local_0 = 0xF & *(s32 *) ((char *) param_0 + 0x74);
-    if (local_0 != 0) {
-        D_801243E8[local_0]();
+    u32 draw_mode;
+    draw_mode = 0xF & *(s32 *) ((char *) actor + 0x74);
+    if (draw_mode != 0) {
+        D_801243E8[draw_mode]();
     }
 }
 
-void func_80101970(param_0) S80101970 *param_0;
+// Sets the draw distance for the model renderer.
+void func_80101970(actor) S80101970 *actor;
 {
-    f32 var_f12;
-    func_800DF470(param_0->unk70_11);
-    var_f12 = (u32) *(u16 *) (func_80100368(param_0) + 0x1A);
-    if (var_f12 != 0.0f) {
-        func_800DF428(var_f12);
-    } else if (!(*(s32 *) (*(u8 **) param_0 + 0x10) & 1)) {
+    f32 draw_dist;
+    func_800DF470(actor->unk70_11);
+    draw_dist = (u32) *(u16 *) (func_80100368(actor) + 0x1A);
+    if (draw_dist != 0.0f) {
+        func_800DF428(draw_dist);
+    } else if (!(*(s32 *) (*(u8 **) actor + 0x10) & 1)) {
+        // Draw distance is fixed when flag 0x200 is set.
         if (func_800EA068(0x200) != 0) {
-            var_f12 = 29999.0f;
+            draw_dist = 29999.0f;
         } else {
-            var_f12 = (f32) func_800D2F20();
+            draw_dist = (f32) func_800D2F20();
         }
-        func_800DF428(var_f12);
+        func_800DF428(draw_dist);
     }
-    if (param_0->unk94_1) {
+    if (actor->unk94_1) {
         func_800DF440(0);
     }
 }
 
-void func_80101A50(LocalActor_80101A50 *param_0)
+// Eye-blink state machine.
+void func_80101A50(LocalActor_80101A50 *actor)
 {
-    if (!param_0->disabled) {
-        switch (param_0->state) {
+    if (!actor->disabled) {
+        switch (actor->state) {
             case 0:
                 if (func_800DC0C0() < 0.03f)
-                    param_0->state = 1;
+                    actor->state = 1;
                 break;
             case 1:
-                if (param_0->count == 3)
-                    param_0->state = 2;
+                if (actor->count == 3)
+                    actor->state = 2;
                 else
-                    param_0->count++;
+                    actor->count++;
                 break;
             case 2:
-                param_0->count--;
-                if (!param_0->count)
-                    param_0->state = 0;
+                actor->count--;
+                if (!actor->count)
+                    actor->state = 0;
         }
     }
-    func_800DF744(1, param_0->count + 1, param_0);
-    func_800DF744(2, param_0->count + 1, param_0);
+    func_800DF744(1, actor->count + 1, actor);
+    func_800DF744(2, actor->count + 1, actor);
 }
 
 int func_80101BA0(s32 param_0)
@@ -226,5 +234,6 @@ int func_80101BA0(s32 param_0)
     func_800DF744(2, 4);
 }
 
+// TU-NOTE: .data is defined here because IDO schedules functions of this file differently otherwise.
 f32 D_801243E0[2] = {0.0f, -4.0f};
 D_801243E8Entry D_801243E8[6] = {0, (void *) func_80101A50, (void *) func_80101BA0, 0, 0, 0};

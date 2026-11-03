@@ -1,9 +1,10 @@
 #include "common.h"
 
+// TU-NOTE: bone matrix list layout: {s32 count, s32 capacity, bone-transform handle at +8/+0xC, base matrix at +0x10, then count 0x40-byte matrices at +0x50}.
 typedef struct {
-    s32 local_0, local_1;
-    u8 local_2[72];
-    f32 local_3[][4][4];
+    s32 count, capacity;
+    u8 pad_8[72];
+    f32 mtxs[][4][4];
 } local_type;
 extern void *heap_realloc(void *, s32);
 extern void func_80019CD4(void);
@@ -38,21 +39,21 @@ struct UnkStruct {
 };
 typedef f32 MatrixAE40C[4][4];
 typedef struct {
-    s32 local_0;
-    s32 local_1;
+    s32 count;
+    s32 capacity;
     u8 pad[0x48];
-    MatrixAE40C local_2[1];
+    MatrixAE40C mtxs[1];
 } BufferAE40C;
 typedef struct {
     u8 pad[12];
-    s16 local_0;
-    s16 local_1;
+    s16 id;
+    s16 parent;
 } BoneAE40C;
 typedef struct {
     s16 pad[2];
-    s16 local_0;
+    s16 count;
     s16 pad_1;
-    BoneAE40C local_1[1];
+    BoneAE40C bones[1];
 } StateAE40C;
 extern BufferAE40C *func_8001B710(s16, s32);
 extern void func_800DFB7C(s32, s32, f32 *, f32 *, f32 *);
@@ -63,150 +64,158 @@ extern void func_80019BB8(f32[3][3]);
 extern void mlMtxScale_xyz(f32, f32, f32);
 struct UnkStruct *func_800AE080(s16);
 
-void func_800ADCD0(local_type **param_0, s16 *param_1)
+// Resizes the list to the skeleton's bone count.
+void func_800ADCD0(local_type **list_ptr, s16 *skeleton)
 {
-    local_type *local_0;
-    f32(*local_1)[4][4];
-    f32(*local_2)[4][4];
-    local_0 = *param_0;
-    if (local_0->local_1 < param_1[2]) {
-        local_0 = heap_realloc(local_0, param_1[2] * 64 + 0x50);
-        local_0->local_1 = param_1[2];
-        *param_0 = local_0;
+    local_type *list;
+    f32(*mtx)[4][4];
+    f32(*mtx_end)[4][4];
+    list = *list_ptr;
+    if (list->capacity < skeleton[2]) {
+        list = heap_realloc(list, skeleton[2] * 64 + 0x50);
+        list->capacity = skeleton[2];
+        *list_ptr = list;
     }
-    local_0->local_0 = param_1[2];
-    local_2 = local_0->local_0 + local_0->local_3;
+    list->count = skeleton[2];
+    mtx_end = list->count + list->mtxs;
     func_80019CD4();
-    for (local_1 = local_0->local_3; local_1 < local_2; local_1++)
-        mlMtxGet(*local_1);
+    for (mtx = list->mtxs; mtx < mtx_end; mtx++)
+        mlMtxGet(*mtx);
 }
 
-void func_800ADD80(s16 param_0, s16 *param_1)
+void func_800ADD80(s16 handle, s16 *skeleton)
 {
-    local_type *local_0;
-    f32(*local_1)[4][4];
-    f32(*local_2)[4][4];
-    local_0 = func_800AE080(param_0);
-    if (local_0->local_1 < param_1[2]) {
-        local_0 = func_8001B710(param_0, param_1[2] * 64 + 0x50);
-        local_0->local_1 = param_1[2];
+    local_type *list;
+    f32(*mtx)[4][4];
+    f32(*mtx_end)[4][4];
+    list = func_800AE080(handle);
+    if (list->capacity < skeleton[2]) {
+        list = func_8001B710(handle, skeleton[2] * 64 + 0x50);
+        list->capacity = skeleton[2];
     }
-    local_0->local_0 = param_1[2];
-    local_2 = local_0->local_0 + local_0->local_3;
+    list->count = skeleton[2];
+    mtx_end = list->count + list->mtxs;
     func_80019CD4();
-    for (local_1 = local_0->local_3; local_1 < local_2; local_1++)
-        mlMtxGet(*local_1);
+    for (mtx = list->mtxs; mtx < mtx_end; mtx++)
+        mlMtxGet(*mtx);
 }
 
-int func_800ADE2C(s32 param_0, s32 param_1)
+// Returns the base matrix for bone -1, else the matrix of the bone.
+int func_800ADE2C(s32 list, s32 bone)
 {
-    long new_var2;
-    s32 new_var;
-    if (param_1 == -1) {
-        return param_0 + 0x10;
+    long offset;
+    s32 bone_copy;
+    if (bone == -1) {
+        return list + 0x10;
     }
     {
-        new_var = param_1;
-        new_var2 = new_var * 0x40;
-        return (param_0 + new_var2) + 0x50;
+        bone_copy = bone;
+        offset = bone_copy * 0x40;
+        return (list + offset) + 0x50;
     }
 }
 
-int func_800ADE50(ObjA *param_0, ObjB *param_1, s32 param_2)
+// Returns the matrix of the bone with bone_id, or 0.
+int func_800ADE50(ObjA *list, ObjB *skeleton, s32 bone_id)
 {
-    EntB *q;
-    E40 *p;
-    q = param_1->e;
-    if (param_1->count != param_0->count) {
+    EntB *bone;
+    E40 *mtx;
+    bone = skeleton->e;
+    if (skeleton->count != list->count) {
         return 0;
     }
-    for (p = param_0->e; p < param_0->count + param_0->e; p++, q++) {
-        if (param_2 == q->id) {
-            return (int) p;
+    for (mtx = list->e; mtx < list->count + list->e; mtx++, bone++) {
+        if (bone_id == bone->id) {
+            return (int) mtx;
         }
     }
     return 0;
 }
 
-void func_800ADEC4(A800ADEC4 *param_0, u8 *param_1, s32 param_2, s32 param_3)
+// Calls func_800F293C on the matrix whose skeleton bone has bone_id.
+void func_800ADEC4(A800ADEC4 *list, u8 *skeleton, s32 bone_id, s32 param_3)
 {
-    E40 *e;
-    E40 *end;
-    u8 *q;
-    q = param_1 + 8;
-    if (param_0->count == *(s16 *) (param_1 + 4)) {
-        e = param_0->e;
-        end = (E40 *) (param_0->count * 0x40 + (u8 *) param_0 + 0x50);
-        for (; e < end; e++, q += 0x10) {
-            if (param_2 == *(s16 *) (q + 0xC)) {
-                func_800F293C(e, param_3);
+    E40 *mtx;
+    E40 *mtx_end;
+    u8 *bone;
+    bone = skeleton + 8;
+    if (list->count == *(s16 *) (skeleton + 4)) {
+        mtx = list->e;
+        mtx_end = (E40 *) (list->count * 0x40 + (u8 *) list + 0x50);
+        for (; mtx < mtx_end; mtx++, bone += 0x10) {
+            if (bone_id == *(s16 *) (bone + 0xC)) {
+                func_800F293C(mtx, param_3);
             }
         }
     }
 }
 
-int func_800ADF5C(Actor *param_0)
+// Frees the bone-transform list, then the matrix list.
+int func_800ADF5C(Actor *list)
 {
-    s32 local_0 = *(s32 *) ((char *) param_0 + 0x8);
-    s32 local_1;
-    if (local_0 != 0) {
-        local_1 = (s32) param_0;
-        func_800E0A50((Actor *) ((((local_0 & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) &
+    s32 bones = *(s32 *) ((char *) list + 0x8);
+    s32 list_addr;
+    if (bones != 0) {
+        list_addr = (s32) list;
+        // Matching: the repeated masks are needed for the match.
+        func_800E0A50((Actor *) ((((bones & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) &
                                   0xFFFFFFFFFFFFFFFF) &
                                  0xFFFFFFFFFFFFFFFF),
-                      (Actor *) local_0, (Actor *) local_1);
+                      (Actor *) bones, (Actor *) list_addr);
     }
-    heap_free((void *) param_0);
+    heap_free((void *) list);
 }
 
+// Allocates an empty matrix list with the current matrix as base.
 u8 *func_800ADF98(void)
 {
-    u8 *temp_v0;
+    u8 *list;
 
-    temp_v0 = heap_alloc(0x50);
-    *(s32 *) ((s8 *) temp_v0 + 0) = 0;
-    *(s32 *) ((s8 *) temp_v0 + 4) = 0;
-    *(s32 *) ((s8 *) temp_v0 + 8) = 0;
-    *(s16 *) ((s8 *) temp_v0 + 0xC) = 0;
+    list = heap_alloc(0x50);
+    *(s32 *) ((s8 *) list + 0) = 0;
+    *(s32 *) ((s8 *) list + 4) = 0;
+    *(s32 *) ((s8 *) list + 8) = 0;
+    *(s16 *) ((s8 *) list + 0xC) = 0;
     func_80019CD4();
-    mlMtxGet(temp_v0 + 0x10);
-    return temp_v0;
+    mlMtxGet(list + 0x10);
+    return list;
 }
 
-int func_800ADFE0(param_0)
-s16 param_0;
+int func_800ADFE0(handle)
+s16 handle;
 {
-    s16 *local_0;
-    local_0 = func_800AE080(param_0);
-    if (local_0[6] != 0) {
-        func_800E0A70(local_0[6]);
+    s16 *list;
+    list = func_800AE080(handle);
+    if (list[6] != 0) {
+        func_800E0A70(list[6]);
     }
-    func_8001B754(param_0);
+    func_8001B754(handle);
 }
 
+// Handle variant of func_800ADF98.
 s16 func_800AE020(void)
 {
-    s16 local_0;
-    Mtx *local_1;
+    s16 handle;
+    Mtx *list;
 
-    local_0 = func_8001B668(0, 0x50);
-    local_1 = func_800AE080(local_0);
-    local_1->m[0][0] = 0;
-    *(s32 *) ((char *) local_1 + 4) = 0;
-    *(s32 *) ((char *) local_1 + 8) = 0;
-    *(s16 *) ((char *) local_1 + 0xC) = 0;
+    handle = func_8001B668(0, 0x50);
+    list = func_800AE080(handle);
+    list->m[0][0] = 0;
+    *(s32 *) ((char *) list + 4) = 0;
+    *(s32 *) ((char *) list + 8) = 0;
+    *(s16 *) ((char *) list + 0xC) = 0;
     func_80019CD4();
-    mlMtxGet((char *) local_1 + 0x10);
-    return local_0;
+    mlMtxGet((char *) list + 0x10);
+    return handle;
 }
 
-struct UnkStruct *func_800AE080(s16 param_0)
+struct UnkStruct *func_800AE080(s16 handle)
 {
-    if (param_0 == 0) {
+    if (handle == 0) {
         return 0;
     }
     {
-        return func_8001B798(param_0);
+        return func_8001B798(handle);
     }
 }
 
@@ -230,194 +239,197 @@ func_800AE0D0(s32 *param_0)
     }
 }
 
-int func_800AE0E8(param_0)
-s16 param_0;
+int func_800AE0E8(handle)
+s16 handle;
 {
-    if (param_0 != 0) {
-        return func_800AE080(param_0)->unk0;
+    if (handle != 0) {
+        return func_800AE080(handle)->unk0;
     }
     return 1;
 }
 
-int func_800AE124(param_0)
-s16 param_0;
+int func_800AE124(handle)
+s16 handle;
 {
-    if (param_0 != 0) {
-        return func_800AE080(param_0)->unk0;
+    if (handle != 0) {
+        return func_800AE080(handle)->unk0;
     }
     return 0;
 }
 
-void func_800AE160(u8 **param_0, u8 *param_1, s32 param_2)
+void func_800AE160(u8 **list_ptr, u8 *skeleton, s32 param_2)
 {
-    s16 var_v1;
-    u8 *temp_v0;
-    u8 *var_s0;
+    s16 count;
+    u8 *new_list;
+    u8 *list;
 
-    var_s0 = *param_0;
-    var_v1 = (*(s16 *) ((s8 *) (param_1) + 4));
-    if ((*(s32 *) ((s8 *) (var_s0) + 4)) < var_v1) {
-        temp_v0 = heap_realloc(var_s0, (var_v1 << 6) + 0x50);
-        var_s0 = temp_v0;
-        (*(s32 *) ((s8 *) (temp_v0) + 4)) = (s32) (*(s16 *) ((s8 *) (param_1) + 4));
-        *param_0 = temp_v0;
-        var_v1 = (*(s16 *) ((s8 *) (param_1) + 4));
+    list = *list_ptr;
+    count = (*(s16 *) ((s8 *) (skeleton) + 4));
+    if ((*(s32 *) ((s8 *) (list) + 4)) < count) {
+        new_list = heap_realloc(list, (count << 6) + 0x50);
+        list = new_list;
+        (*(s32 *) ((s8 *) (new_list) + 4)) = (s32) (*(s16 *) ((s8 *) (skeleton) + 4));
+        *list_ptr = new_list;
+        count = (*(s16 *) ((s8 *) (skeleton) + 4));
     }
-    (*(s32 *) ((s8 *) (var_s0) + 0)) = (s32) var_v1;
-    func_800AE820(param_2, param_1, var_s0 + 0x50, (*(s32 *) ((s8 *) (var_s0) + 8)));
+    (*(s32 *) ((s8 *) (list) + 0)) = (s32) count;
+    func_800AE820(param_2, skeleton, list + 0x50, (*(s32 *) ((s8 *) (list) + 8)));
 }
 
-void func_800AE1E8(s16 param_0, u8 *param_1, s32 param_2)
+void func_800AE1E8(s16 handle, u8 *skeleton, s32 param_2)
 {
-    u8 *local_4;
-    int new_var2;
-    s16 local_1;
-    u8 *local_5;
-    int new_var3;
-    s8 *new_var;
-    local_5 = func_800AE080(param_0);
-    local_4 = local_5;
-    local_1 = *((s16 *) (((s8 *) param_1) + 4));
-    new_var3 = (local_1 << 6) + 0x50;
-    if ((*((s32 *) (((s8 *) local_5) + 4))) < local_1) {
-        new_var = ((s8 *) param_1) + 4;
-        new_var2 = new_var3;
-        local_5 = func_8001B710(param_0, new_var2);
-        local_4 = local_5;
-        *((s32 *) (((s8 *) local_5) + 4)) = (s32) (*((s16 *) new_var));
-        local_1 = *((s16 *) (((s8 *) param_1) + 4));
+    u8 *list_copy;
+    // Matching: extra temporaries needed for the match.
+    int size_copy;
+    s16 count;
+    u8 *list;
+    int size;
+    s8 *count_ptr;
+    list = func_800AE080(handle);
+    list_copy = list;
+    count = *((s16 *) (((s8 *) skeleton) + 4));
+    size = (count << 6) + 0x50;
+    if ((*((s32 *) (((s8 *) list) + 4))) < count) {
+        count_ptr = ((s8 *) skeleton) + 4;
+        size_copy = size;
+        list = func_8001B710(handle, size_copy);
+        list_copy = list;
+        *((s32 *) (((s8 *) list) + 4)) = (s32) (*((s16 *) count_ptr));
+        count = *((s16 *) (((s8 *) skeleton) + 4));
     }
-    *((s32 *) (((s8 *) local_5) + 0)) = (s32) local_1;
-    func_800AE820(param_2, param_1, local_4 + 0x50,
-                  ((*((s16 *) (((s8 *) local_5) + 0xC))) != 0)
-                      ? (func_800E0A28(*((s16 *) (((s8 *) local_4) + 0xC))))
+    *((s32 *) (((s8 *) list) + 0)) = (s32) count;
+    func_800AE820(param_2, skeleton, list_copy + 0x50,
+                  ((*((s16 *) (((s8 *) list) + 0xC))) != 0)
+                      ? (func_800E0A28(*((s16 *) (((s8 *) list_copy) + 0xC))))
                       : (0));
 }
 
-void func_800AE290(param_0, param_1, param_2) s16 param_0;
-StateAE40C *param_1;
+// Builds the per-bone matrices from the skeleton and pose.
+void func_800AE290(handle, skeleton, param_2) s16 handle;
+StateAE40C *skeleton;
 s32 param_2;
 {
-    BufferAE40C *local_4;
-    MatrixAE40C *local_11;
-    f32 local_0[3][3];
-    f32 local_1[4];
-    f32 local_2[3];
-    f32 local_3[3];
-    MatrixAE40C *local_5;
-    MatrixAE40C *local_6;
-    BoneAE40C *local_7;
-    local_4 = func_800AE080(param_0);
-    if (local_4->local_1 < param_1->local_0) {
-        local_4 = func_8001B710(param_0, param_1->local_0 * 64 + 0x50);
-        local_4->local_1 = param_1->local_0;
+    BufferAE40C *list;
+    MatrixAE40C *base;
+    f32 rot[3][3];
+    f32 quat[4];
+    f32 scale[3];
+    f32 trans[3];
+    MatrixAE40C *mtx;
+    MatrixAE40C *mtx_end;
+    BoneAE40C *bone;
+    list = func_800AE080(handle);
+    if (list->capacity < skeleton->count) {
+        list = func_8001B710(handle, skeleton->count * 64 + 0x50);
+        list->capacity = skeleton->count;
     }
-    local_4->local_0 = param_1->local_0;
-    local_6 = local_4->local_0 + local_4->local_2;
-    local_5 = local_4->local_2;
-    for (local_7 = param_1->local_1; local_5 < local_6; local_5++, local_7++) {
-        func_800DFB7C(param_2, local_7->local_0, local_1, local_2, local_3);
-        local_11 = local_4->local_2;
-        if (local_7->local_1 == -1)
+    list->count = skeleton->count;
+    mtx_end = list->count + list->mtxs;
+    mtx = list->mtxs;
+    for (bone = skeleton->bones; mtx < mtx_end; mtx++, bone++) {
+        func_800DFB7C(param_2, bone->id, quat, scale, trans);
+        base = list->mtxs;
+        if (bone->parent == -1)
             func_80019CD4();
-        else if (local_7->local_1 + 1 != local_5 - local_11)
-            mlMtxSet(*(MatrixAE40C *) ((local_7->local_1 << 6) + (u8 *) local_11));
+        else if (bone->parent + 1 != mtx - base)
+            mlMtxSet(*(MatrixAE40C *) ((bone->parent << 6) + (u8 *) base));
 
-if (!func_800D9C4C(local_1)) {
-    func_800D9CE8(local_1, local_0);
-    func_80019BB8(local_0);
+if (!func_800D9C4C(quat)) {
+    func_800D9CE8(quat, rot);
+    func_80019BB8(rot);
 }
 
-mlMtxGet(*local_5);
+mlMtxGet(*mtx);
 }
 }
 
-void func_800AE40C(param_0, param_1, param_2) s16 param_0;
-StateAE40C *param_1;
+// Like func_800AE290, with the pose scale applied as well.
+void func_800AE40C(handle, skeleton, param_2) s16 handle;
+StateAE40C *skeleton;
 s32 param_2;
 {
-    BufferAE40C *local_4;
-    MatrixAE40C *local_11;
-    f32 local_0[3][3];
-    f32 local_1[4];
-    f32 local_2[3];
-    f32 local_3[3];
-    MatrixAE40C *local_5;
-    MatrixAE40C *local_6;
-    BoneAE40C *local_7;
-    local_4 = func_800AE080(param_0);
-    if (local_4->local_1 < param_1->local_0) {
-        local_4 = func_8001B710(param_0, param_1->local_0 * 64 + 0x50);
-        local_4->local_1 = param_1->local_0;
+    BufferAE40C *list;
+    MatrixAE40C *base;
+    f32 rot[3][3];
+    f32 quat[4];
+    f32 scale[3];
+    f32 trans[3];
+    MatrixAE40C *mtx;
+    MatrixAE40C *mtx_end;
+    BoneAE40C *bone;
+    list = func_800AE080(handle);
+    if (list->capacity < skeleton->count) {
+        list = func_8001B710(handle, skeleton->count * 64 + 0x50);
+        list->capacity = skeleton->count;
     }
-    local_4->local_0 = param_1->local_0;
-    local_6 = local_4->local_0 + local_4->local_2;
-    local_5 = local_4->local_2;
-    for (local_7 = param_1->local_1; local_5 < local_6; local_5++, local_7++) {
-        func_800DFB7C(param_2, local_7->local_0, local_1, local_2, local_3);
-        local_11 = local_4->local_2;
-        if (local_7->local_1 == -1)
+    list->count = skeleton->count;
+    mtx_end = list->count + list->mtxs;
+    mtx = list->mtxs;
+    for (bone = skeleton->bones; mtx < mtx_end; mtx++, bone++) {
+        func_800DFB7C(param_2, bone->id, quat, scale, trans);
+        base = list->mtxs;
+        if (bone->parent == -1)
             func_80019CD4();
-        else if (local_7->local_1 + 1 != local_5 - local_11)
-            mlMtxSet(*(MatrixAE40C *) ((local_7->local_1 << 6) + (u8 *) local_11));
+        else if (bone->parent + 1 != mtx - base)
+            mlMtxSet(*(MatrixAE40C *) ((bone->parent << 6) + (u8 *) base));
 
-if (!func_800D9C4C(local_1)) {
-    func_800D9CE8(local_1, local_0);
-    func_80019BB8(local_0);
+if (!func_800D9C4C(quat)) {
+    func_800D9CE8(quat, rot);
+    func_80019BB8(rot);
 }
 
-mlMtxScale_xyz(local_2[0], local_2[1], local_2[2]);
-mlMtxGet(*local_5);
+mlMtxScale_xyz(scale[0], scale[1], scale[2]);
+mlMtxGet(*mtx);
 }
 }
 
-void func_800AE598(s32 *param_0, s32 *param_1)
+void func_800AE598(s32 *list, s32 *dst_cursor)
 {
-    s32 local_24;
-    s32 local_28;
-    local_24 = (s32) (param_0 + 4);
-    local_28 = *param_1;
-    func_80116684((s32 *) local_24, local_28, *param_0 + 1, param_0);
-    *param_1 += (*param_0 + 1) << 6;
+    s32 src;
+    s32 dst;
+    src = (s32) (list + 4);
+    dst = *dst_cursor;
+    func_80116684((s32 *) src, dst, *list + 1, list);
+    *dst_cursor += (*list + 1) << 6;
 }
 
-void func_800AE5F0(void *param_0)
+void func_800AE5F0(void *list)
 {
-    void *local_0;
-    local_0 = *(void **) ((char *) param_0 + 8);
-    if (local_0 != 0) {
-        *(void **) ((char *) param_0 + 8) = func_800E0A98(local_0, param_0);
+    void *bones;
+    bones = *(void **) ((char *) list + 8);
+    if (bones != 0) {
+        *(void **) ((char *) list + 8) = func_800E0A98(bones, list);
     }
-    defrag(param_0);
+    defrag(list);
 }
 
-s32 func_800AE630(s32 *param_0, u8 *param_1, s32 param_2, s32 param_3)
+s32 func_800AE630(s32 *list, u8 *skeleton, s32 bone_id, s32 param_3)
 {
-    s32 temp_t8;
-    u8 *var_s0;
-    u8 *var_a0;
-    u8 *temp_v0;
+    s32 list_addr;
+    u8 *bone;
+    u8 *mtx;
+    u8 *mtx_end;
 
-    temp_t8 = (s32) param_0;
-    var_s0 = param_1 + 8;
-    if (param_0[0] != (*((s16 *) (param_1 + 4)))) {
+    list_addr = (s32) list;
+    bone = skeleton + 8;
+    if (list[0] != (*((s16 *) (skeleton + 4)))) {
         return 0;
 
 }
-var_a0 = ((u8 *) temp_t8) + 0x50;
-temp_v0 = (u8 *) ((param_0[0] << 6) + temp_t8 + 0x50);
+mtx = ((u8 *) list_addr) + 0x50;
+mtx_end = (u8 *) ((list[0] << 6) + list_addr + 0x50);
 
-if (((u32) var_a0) < ((u32) temp_v0)) {
+if (((u32) mtx) < ((u32) mtx_end)) {
 loop_3:
-    if (param_2 == *(s16 *) (var_s0 + 12)) {
-        func_800F23D0((u32) var_a0, param_3, var_s0);
+    if (bone_id == *(s16 *) (bone + 12)) {
+        func_800F23D0((u32) mtx, param_3, bone);
         return 1;
     }
 
-var_a0 += 0x40;
-var_s0 += 0x10;
+mtx += 0x40;
+bone += 0x10;
 
-if ((u32) var_a0 >= (u32) temp_v0) {
+if ((u32) mtx >= (u32) mtx_end) {
     {
         goto block_6;
     }
@@ -428,14 +440,15 @@ goto loop_3;
 block_6 : return 0;
 }
 
-s32 func_800AE6BC(u8 *param_0)
+s32 func_800AE6BC(u8 *list)
 {
-    s16 new_var;
-    if ((*((s16 *) (((s8 *) param_0) + 0xC))) != 0) {
-        new_var = *((s16 *) (((s8 *) param_0) + 0xC));
-        return func_800E0A28(new_var, *((s16 *) (((s8 *) param_0) + 0xC)));
+    s16 bones_handle;
+    // Matching: extra temporary needed for the match.
+    if ((*((s16 *) (((s8 *) list) + 0xC))) != 0) {
+        bones_handle = *((s16 *) (((s8 *) list) + 0xC));
+        return func_800E0A28(bones_handle, *((s16 *) (((s8 *) list) + 0xC)));
     }
-    return *((s32 *) (((s8 *) param_0) + 0x8));
+    return *((s32 *) (((s8 *) list) + 0x8));
 }
 
 void func_800AE6FC(param_0, param_1) s32 param_0;
@@ -444,12 +457,12 @@ s16 param_1;
     *(s16 *) (param_0 + 0xc) = param_1;
 }
 
-s32 func_800AE708(s32 param_0, u8 *param_1, s32 *param_2, u8 *param_3)
+s32 func_800AE708(s32 list, u8 *param_1, s32 *param_2, u8 *param_3)
 {
-    s32 local_0;
-    s32 local_1;
-    u8 *local_2;
-    u8 *local_3;
+    s32 found;
+    s32 dst_mtx;
+    u8 *bones_end;
+    u8 *bone;
 
     if (func_800AE0B8() == 0) {
         return 0;
@@ -461,22 +474,22 @@ s32 func_800AE708(s32 param_0, u8 *param_1, s32 *param_2, u8 *param_3)
         return 0;
     }
     func_800ADCD0(param_2, param_3);
-    local_3 = param_3 + 8;
-    local_2 = ((*(s16 *) ((s8 *) (param_3) + (4))) * 0x10) + param_3 + 8;
-    local_1 = *param_2 + 0x50;
-    if ((u32) local_3 < (u32) local_2) {
+    bone = param_3 + 8;
+    bones_end = ((*(s16 *) ((s8 *) (param_3) + (4))) * 0x10) + param_3 + 8;
+    dst_mtx = *param_2 + 0x50;
+    if ((u32) bone < (u32) bones_end) {
     loop_7:
-        local_0 = func_800ADE50(param_0, param_1, (*(s16 *) ((s8 *) (local_3) + (0xC))));
+        found = func_800ADE50(list, param_1, (*(s16 *) ((s8 *) (bone) + (0xC))));
 
-if (local_0 == 0) {
+if (found == 0) {
     return 0;
 }
 
-func_800F293C(local_1, local_0);
-local_3 += 0x10;
-local_1 += 0x40;
+func_800F293C(dst_mtx, found);
+bone += 0x10;
+dst_mtx += 0x40;
 
-if ((u32) local_3 >= (u32) local_2) {
+if ((u32) bone >= (u32) bones_end) {
     goto block_10;
 }
 

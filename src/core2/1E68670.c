@@ -32,7 +32,7 @@ extern LocalObject *func_80108474(s32, f32 *, s32);
 typedef struct {
     u8 pad0[0x6C];
     u32 f1 : 11;
-    u32 fld : 12;
+    u32 item_id : 12;
     u32 f3 : 9;
 } S_8F6B8;
 extern void *_bahold_entrypoint_5();
@@ -48,36 +48,36 @@ s32 func_8008ED80(void)
 
 void func_8008ED88(u8 *param_0, s32 param_1, s32 param_2)
 {
-    s32 *local_0;
-    s8 *new_var;
-    new_var = (s8 *) param_0;
-    local_0 = func_80106790(param_2);
-    func_800F497C(*(s32 *) (new_var + 0x184));
+    s32 *actor;
+    s8 *base;
+    base = (s8 *) param_0;
+    actor = func_80106790(param_2);
+    func_800F497C(*(s32 *) (base + 0x184));
     func_800F49A8(*(s32 *) ((s8 *) param_0 + 0x184), 1);
-    func_800F49D4(*(s32 *) ((s8 *) param_0 + 0x184), &func_8010D5DC, *local_0);
-    new_var = local_0;
-    func_800F4A58(*(s32 *) ((s8 *) param_0 + 0x184), new_var + 4, 0x43FA0000);
+    func_800F49D4(*(s32 *) ((s8 *) param_0 + 0x184), &func_8010D5DC, *actor);
+    base = actor; // Matching: base is reused for a second pointer.
+    func_800F4A58(*(s32 *) ((s8 *) param_0 + 0x184), base + 4, 0x43FA0000);
 }
 
-func_8008EE04(s32 param_0, s32 param_1)
+func_8008EE04(s32 cond, s32 value)
 {
-    if (param_0 != 0)
-        return param_1 | 0;
+    if (cond != 0)
+        return value | 0; // Matching: needed for the match.
     return 0;
 }
 
-s32 func_8008EE1C(Actor *param_0, u32 param_1)
+s32 func_8008EE1C(Actor *actor, u32 player_id)
 {
-    struct ActorMarker *local_0;
-    s32 local_1;
+    struct ActorMarker *player;
+    s32 state;
 
-    local_0 = func_800F53D0(param_1);
-    local_1 = bs_getCurrentState(local_0);
-    switch (local_1) {
+    player = func_800F53D0(player_id);
+    state = bs_getCurrentState(player);
+    switch (state) {
         case 15:
-            return ((u32) (s32) (*(s32 *) ((char *) param_0 + 0x74) << 12) >> 31) == 0;
+            return ((u32) (s32) (*(s32 *) ((char *) actor + 0x74) << 12) >> 31) == 0;
         case 19:
-            return (*(u16 *) ((char *) param_0 + 0x74) & 1) == 0;
+            return (*(u16 *) ((char *) actor + 0x74) & 1) == 0;
         default:
             return 1;
     }
@@ -85,62 +85,64 @@ s32 func_8008EE1C(Actor *param_0, u32 param_1)
 
 int func_8008EE88(s32 param_0, s32 param_1)
 {
-    f32 local_0[3];
-    func_8009C128(param_0, local_0);
-    func_8008EEC4(param_0, local_0, param_1, 0x270);
+    f32 pos[3];
+    func_8009C128(param_0, pos);
+    func_8008EEC4(param_0, pos, param_1, 0x270);
 }
 
-void func_8008EEC4(param_0, param_1, param_2, param_3) void *param_0;
-s32 param_1;
+// Area damage around pos, filtered per player state.
+void func_8008EEC4(param_0, pos, param_2, param_3) void *param_0;
+s32 pos;
 s32 param_2;
 s32 param_3;
 {
     func_800CB840(1, *(s32 *) ((char *) param_0 + 0x184));
-    func_80109C4C(param_1, param_2, 2, &func_8008EE1C, *(s32 *) ((char *) param_0 + 0x184),
+    func_80109C4C(pos, param_2, 2, &func_8008EE1C, *(s32 *) ((char *) param_0 + 0x184),
                   func_8008E938(param_0), param_3);
     func_800CB870();
 }
 
-s32 func_8008EF3C(param_0, param_1)
-PlayerState *param_0;
-Unk80132ED0 *param_1;
+// Returns the current attack type of the player, 0 if none.
+s32 func_8008EF3C(player, target)
+PlayerState *player;
+Unk80132ED0 *target;
 {
     struct {
         s32 predicate, flag, state, result;
-    } local_4;
+    } info; // Matching: locals grouped in a struct.
 
-    local_4.state = bs_getCurrentState(param_0);
-    switch (func_800A3274(param_0)) {
+    info.state = bs_getCurrentState(player);
+    switch (func_800A3274(player)) {
         case 2:
-            return func_8008EE04(baflag_isTrue(param_0, 0x3C), 9);
+            return func_8008EE04(baflag_isTrue(player, 0x3C), 9);
         case 0xD:
-            if (local_4.state == 0xF7)
-                return func_8008EE04(baflag_isTrue(param_0, 0x2C), 0xF);
+            if (info.state == 0xF7)
+                return func_8008EE04(baflag_isTrue(player, 0x2C), 0xF);
             return 0;
         case 0xE:
-            if (local_4.state == 0xFC)
-                return func_8008EE04(baflag_isTrue(param_0, 0x2B), 0xE);
-            if (local_4.state == 0xFB)
-                return func_8008EE04(baflag_isTrue(param_0, 0x2D), 0x10);
+            if (info.state == 0xFC)
+                return func_8008EE04(baflag_isTrue(player, 0x2B), 0xE);
+            if (info.state == 0xFB)
+                return func_8008EE04(baflag_isTrue(player, 0x2D), 0x10);
             return 0;
         case 0xF:
-            if (local_4.state == 0x10E)
-                return func_8008EE04(baflag_isTrue(param_0, 0x32), 0x11);
+            if (info.state == 0x10E)
+                return func_8008EE04(baflag_isTrue(player, 0x32), 0x11);
             return 0;
         case 0x10:
             return 0x12;
         case 0xB:
-            switch (local_4.state) {
+            switch (info.state) {
                 case 0xC2:
                 case 0xC4:
-                    return func_8008EE04(baflag_isTrue(param_0, 0x36), 0x15);
+                    return func_8008EE04(baflag_isTrue(player, 0x36), 0x15);
                 case 0x18A:
                 case 0x18B:
                     return 0x19;
             }
-            if (baflag_isTrue(param_0, 0x35)) {
-                if (param_1) {
-                    if (func_8008DC90(param_0, func_80106790(param_1)->position, 90.0f))
+            if (baflag_isTrue(player, 0x35)) {
+                if (target) {
+                    if (func_8008DC90(player, func_80106790(target)->position, 90.0f))
                         return 0x14;
                     return 0;
                 }
@@ -148,51 +150,51 @@ Unk80132ED0 *param_1;
             }
             return 0;
         case 9:
-            local_4.flag = baflag_isTrue(param_0, 0x3B);
-            local_4.predicate = !func_8008E92C(param_0);
-            if (local_4.flag && local_4.predicate)
+            info.flag = baflag_isTrue(player, 0x3B);
+            info.predicate = !func_8008E92C(player);
+            if (info.flag && info.predicate)
                 return 0x16;
             return 0;
         case 0x12:
-            if (param_1 && _bstrexsmall_entrypoint_7(param_0, func_80106790(param_1)->position))
+            if (target && _bstrexsmall_entrypoint_7(player, func_80106790(target)->position))
                 return 0x18;
             return 0;
         case 0x13:
-            if (param_1 && _bstrexlarge_entrypoint_7(param_0, func_80106790(param_1)->position))
+            if (target && _bstrexlarge_entrypoint_7(player, func_80106790(target)->position))
                 return 0x17;
             return 0;
     }
 
-    if (**(u8 **) ((u8 *) param_0 + 0x18))
+    if (**(u8 **) ((u8 *) player + 0x18))
         return 3;
-    switch (local_4.state) {
+    switch (info.state) {
         case 0x189:
-            return func_8008EE04(baflag_isTrue(param_0, 0x3E), 0xD);
+            return func_8008EE04(baflag_isTrue(player, 0x3E), 0xD);
         case 0xE4:
-            return func_8008EE04(baflag_isTrue(param_0, 0x28), 0xC);
+            return func_8008EE04(baflag_isTrue(player, 0x28), 0xC);
         case 0xA9:
             return 5;
         case 0xB6:
-            return func_8008EE04(baflag_isTrue(param_0, 0x22), 0xB);
+            return func_8008EE04(baflag_isTrue(player, 0x22), 0xB);
         case 0xF:
-            return func_8008EE04(baflag_isTrue(param_0, 0x21), 1);
+            return func_8008EE04(baflag_isTrue(player, 0x21), 1);
         case 0x13:
-            return func_8008EE04(baflag_isTrue(param_0, 0x20), 2);
+            return func_8008EE04(baflag_isTrue(player, 0x20), 2);
         case 0xB4:
-            return func_8008EE04(baflag_isTrue(param_0, 0x20), 2);
+            return func_8008EE04(baflag_isTrue(player, 0x20), 2);
         case 0x2A:
-            return func_8008EE04(baflag_isTrue(param_0, 0x1C), 3);
+            return func_8008EE04(baflag_isTrue(player, 0x1C), 3);
         case 6:
-            if (param_1 && !func_8008DAE8(param_0, func_80106790(param_1)->position, 90.0f))
+            if (target && !func_8008DAE8(player, func_80106790(target)->position, 90.0f))
                 return 0;
-            local_4.result = func_8008EE04(baflag_isTrue(param_0, 0x1F), 4);
-            if (local_4.result)
-                return local_4.result;
+            info.result = func_8008EE04(baflag_isTrue(player, 0x1F), 4);
+            if (info.result)
+                return info.result;
             return 8;
         case 0x11:
-            if (param_1 && !func_8008DAE8(param_0, func_80106790(param_1)->position, 60.0f))
+            if (target && !func_8008DAE8(player, func_80106790(target)->position, 60.0f))
                 return 0;
-            return func_8008EE04(baflag_isTrue(param_0, 0x2A), 5);
+            return func_8008EE04(baflag_isTrue(player, 0x2A), 5);
         case 0x1A:
         case 0x1B:
         case 0x1C:
@@ -202,16 +204,16 @@ Unk80132ED0 *param_1;
         case 0xA5:
             return 6;
         case 0x31:
-            return func_8008EE04(baflag_isTrue(param_0, 0x29), 7);
+            return func_8008EE04(baflag_isTrue(player, 0x29), 7);
         case 5:
         case 0x3D:
-            if (baphysics_get_vertical_velocity(param_0) < 0.0f && !player_isStable(param_0))
+            if (baphysics_get_vertical_velocity(player) < 0.0f && !player_isStable(player))
                 return 0xA;
         case 0x2F:
-            if (baphysics_get_vertical_velocity(param_0) < -1400.0f && !player_isStable(param_0))
+            if (baphysics_get_vertical_velocity(player) < -1400.0f && !player_isStable(player))
                 return 0xA;
         case 0x124:
-            return func_8008EE04(baflag_isTrue(param_0, 0x33), 0x13);
+            return func_8008EE04(baflag_isTrue(player, 0x33), 0x13);
         case 0x18A:
             return 0x19;
     }
@@ -220,68 +222,68 @@ Unk80132ED0 *param_1;
 
 int func_8008F4F0(s32 param_0)
 {
-    s32 local_0;
-    local_0 = func_8008EF3C();
-    if (local_0 == 0xB && baflag_isTrue(param_0, 0x26)) {
-        return local_0 | 0;
+    s32 attack;
+    attack = func_8008EF3C();
+    if (attack == 0xB && baflag_isTrue(param_0, 0x26)) {
+        return attack | 0; // Matching: needed for the match.
     }
-    if (local_0 == 1 && baflag_isTrue(param_0, 0x27)) {
-        return local_0 | 0;
+    if (attack == 1 && baflag_isTrue(param_0, 0x27)) {
+        return attack | 0; // Matching: needed for the match.
     }
     return 0;
 }
 
-s32 func_8008F568(s32 param_0, s32 param_1, s32 **param_2)
+s32 func_8008F568(s32 param_0, s32 item_id, s32 **param_2)
 {
-    s32 local_24;
-    s32 local_20;
-    s32 *local_1C;
+    s32 saved_id;
+    s32 held;
+    s32 *held_actor;
 
-    local_24 = **param_2;
-    local_20 = _bahold_entrypoint_5();
-    if (local_20 != 0) {
-        local_1C = func_80106790(local_20);
+    saved_id = **param_2;
+    held = _bahold_entrypoint_5();
+    if (held != 0) {
+        held_actor = func_80106790(held);
     }
-    if ((local_20 != 0) && (param_1 != ((u32) (*(s32 *) ((char *) local_1C + 0x6C) << 11) >> 20))) {
+    if ((held != 0) && (item_id != ((u32) (*(s32 *) ((char *) held_actor + 0x6C) << 11) >> 20))) {
         return 0;
     }
-    func_8008E9A0(param_0, param_1);
-    if (func_800D1C38(func_800D1B34(param_1)) != 0) {
+    func_8008E9A0(param_0, item_id);
+    if (func_800D1C38(func_800D1B34(item_id)) != 0) {
         goto L_8008F600;
     }
     func_800904C8(0x12);
-    goto L_8008F608;
+    goto L_8008F608; // Matching: goto layout needed for the match.
 L_8008F600:
     return 0;
 L_8008F608:
-    *param_2 = func_80106790(local_24);
+    *param_2 = func_80106790(saved_id);
     return 1;
 }
 
 void func_8008F62C(s32 param_0, s32 param_1)
 {
-    s32 local_1;
-    LocalObject *local_2;
-    f32 local_0[3];
-    local_1 = func_800F53D0(param_0);
-    func_80092D44(local_1, local_0);
-    local_2 = func_80108474(param_1, local_0, (s32) yaw_get(local_1));
-    local_2->flag = 1;
-    _bahold_entrypoint_6(local_1, local_2->marker);
-    if (!func_8009E674(local_1, 0x400))
-        bs_setState(local_1, 0x3A);
+    s32 player;
+    LocalObject *held;
+    f32 pos[3];
+    player = func_800F53D0(param_0);
+    func_80092D44(player, pos);
+    held = func_80108474(param_1, pos, (s32) yaw_get(player));
+    held->flag = 1;
+    _bahold_entrypoint_6(player, held->marker);
+    if (!func_8009E674(player, 0x400))
+        bs_setState(player, 0x3A);
 }
 
-void func_8008F6B8(void *param_0, s32 param_1)
+void func_8008F6B8(void *param_0, s32 item_id)
 {
-    void *a;
-    S_8F6B8 *b;
-    a = _bahold_entrypoint_5(param_0);
-    if (a != 0) {
-        b = func_80106790(a);
+    void *held;
+    S_8F6B8 *held_actor;
+    held = _bahold_entrypoint_5(param_0);
+    if (held != 0) {
+        held_actor = func_80106790(held);
     }
-    if ((a != 0) && (param_1 == b->fld)) {
-        _bahold_entrypoint_6(param_0, a);
+    if ((held != 0) && (item_id == held_actor->item_id)) {
+        _bahold_entrypoint_6(param_0, held);
     } else {
         _chbaddiesetup_entrypoint_2(func_8008F62C, *(s32 *) ((u8 *) param_0 + 0x184),
                                     func_8008E9AC(param_0));
@@ -290,46 +292,46 @@ void func_8008F6B8(void *param_0, s32 param_1)
 
 void func_8008F748(s32 param_0, s32 param_1, s32 param_2)
 {
-    f32 sp1C[3];
+    f32 pos[3];
 
-    _gspropctrl_entrypoint_11(_gccubesearch_entrypoint_0(param_1, param_2), sp1C);
-    func_800A3514(param_0, sp1C);
+    _gspropctrl_entrypoint_11(_gccubesearch_entrypoint_0(param_1, param_2), pos);
+    func_800A3514(param_0, pos);
 }
 
-s32 func_8008F788(s32 param_0, s32 param_1)
+s32 func_8008F788(s32 param_0, s32 item_id)
 {
-    func_800D1844(func_800D1B34(param_1));
+    func_800D1844(func_800D1B34(item_id));
 }
 
-void func_8008F7B4(s32 param_0, s32 param_1)
+void func_8008F7B4(s32 param_0, s32 item_id)
 {
-    s32 local_3;
-    u8 *local_1;
+    s32 held;
+    u8 *held_actor;
 
-    local_3 = _bahold_entrypoint_5();
-    if (local_3 != 0) {
-        local_1 = func_80106790(local_3);
+    held = _bahold_entrypoint_5();
+    if (held != 0) {
+        held_actor = func_80106790(held);
     }
-    if ((local_3 != 0) && (param_1 == ((u32) (*(s32 *) ((s8 *) local_1 + 0x6C) << 0xB) >> 0x14))) {
+    if ((held != 0) && (item_id == ((u32) (*(s32 *) ((s8 *) held_actor + 0x6C) << 0xB) >> 0x14))) {
         _bahold_entrypoint_4(param_0);
     }
-    func_800D1804(func_800D1B34(param_1));
+    func_800D1804(func_800D1B34(item_id));
 }
 
-s32 func_8008F828(s32 param_0, s32 param_1)
+s32 func_8008F828(s32 param_0, s32 item_id)
 {
-    func_800D1A04(func_800D1B34(param_1));
+    func_800D1A04(func_800D1B34(item_id));
 }
 
-int func_8008F854(s32 param_0, s32 param_1)
+int func_8008F854(s32 param_0, s32 item_id)
 {
-    int new_var;
-    func_800D1824(func_800D1B34(new_var | (new_var = param_1)));
+    int item; // Matching: self-assignment inside the call needed for the match.
+    func_800D1824(func_800D1B34(item | (item = item_id)));
 }
 
 int func_8008F880(s32 param_0, s32 param_1)
 {
-    s32 local_0;
-    local_0 = func_80106790(param_0);
-    func_800EE7F8(param_1, local_0 + 4);
+    s32 actor;
+    actor = func_80106790(param_0);
+    func_800EE7F8(param_1, actor + 4);
 }

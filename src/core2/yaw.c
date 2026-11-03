@@ -10,27 +10,29 @@ s32 yaw_size(void)
     return sizeof(BaYaw);
 }
 
-void __yaw_update_limitless(PlayerState *self, f32 velocity_degPerSec)
+// Turns at a constant speed toward ideal yaw along the shortest arc.
+void __yaw_update_limitless(PlayerState *self, f32 speed)
 {
-    f32 dYaw_deg;
-    f32 sp20;
+    f32 diff;
+    f32 step;
 
-    velocity_degPerSec *= func_800D8FF8();
-    dYaw_deg = self->yaw->ideal - self->yaw->value;
-    if (mlAbsF(dYaw_deg) > 180.0f) {
-        dYaw_deg += (dYaw_deg < 0.0f) ? 360.0f : -360.0f;
+    speed *= func_800D8FF8();
+    diff = self->yaw->ideal - self->yaw->value;
+    if (mlAbsF(diff) > 180.0f) {
+        diff += (diff < 0.0f) ? 360.0f : -360.0f;
     }
 
-    sp20 = (mlAbsF(dYaw_deg) > 180.0f)
-               ? velocity_degPerSec
-               : ((dYaw_deg < 0.0f) ? -velocity_degPerSec : velocity_degPerSec);
+    step = (mlAbsF(diff) > 180.0f)
+               ? speed
+               : ((diff < 0.0f) ? -speed : speed);
 
-    if (mlAbsF(sp20) <= mlAbsF(dYaw_deg)) {
-        self->yaw->value += sp20;
+    if (mlAbsF(step) <= mlAbsF(diff)) {
+        self->yaw->value += step;
     } else {
         self->yaw->value = self->yaw->ideal;
     }
 
+    // wrap to [0, 360)
     if (self->yaw->value < 360.0f) {
         if (self->yaw->value < 0.0f) {
             self->yaw->value = (f32) (self->yaw->value + 360.0f);
@@ -40,25 +42,26 @@ void __yaw_update_limitless(PlayerState *self, f32 velocity_degPerSec)
     }
 }
 
-void __yaw_update_limited(PlayerState *self, f32 limit_degPerSec, f32 step_percent)
+// Turns toward ideal yaw proportionally to the remaining angle, speed clamped by limit.
+void __yaw_update_limited(PlayerState *self, f32 limit, f32 rate)
 {
-    BaYaw *pYaw;
-    f32 val_deg;
-    f32 dyaw_deg;
-    f32 dt_s;
+    BaYaw *yaw;
+    f32 speed;
+    f32 diff;
+    f32 dt;
 
-    dt_s = func_800D8FF8();
-    pYaw = self->yaw;
-    dyaw_deg = func_80013728(pYaw->ideal - pYaw->value);
+    dt = func_800D8FF8();
+    yaw = self->yaw;
+    diff = func_80013728(yaw->ideal - yaw->value);
 
-    val_deg = dyaw_deg * step_percent;
-    if (val_deg != 0) {
-        val_deg = (val_deg < 0) ? func_800F0D50(val_deg, -limit_degPerSec, -3.0f)
-                                : func_800F0D50(val_deg, 3.0f, limit_degPerSec);
+    speed = diff * rate;
+    if (speed != 0) {
+        speed = (speed < 0) ? func_800F0D50(speed, -limit, -3.0f)
+                            : func_800F0D50(speed, 3.0f, limit);
     }
-    pYaw->unk8 = val_deg;
-    pYaw->value += func_800F212C(val_deg * dt_s, dyaw_deg);
-    pYaw->value = func_800136E4(pYaw->value);
+    yaw->unk8 = speed;
+    yaw->value += func_800F212C(speed * dt, diff);
+    yaw->value = func_800136E4(yaw->value);
 }
 
 void yaw_init(PlayerState *self)
@@ -92,14 +95,14 @@ void yaw_setUpdateType(PlayerState *self, YawType type)
     self->yaw->update_type = type;
 }
 
-void yaw_setIdeal(PlayerState *self, f32 arg1)
+void yaw_setIdeal(PlayerState *self, f32 angle)
 {
-    self->yaw->ideal = func_800136E4(arg1);
+    self->yaw->ideal = func_800136E4(angle);
 }
 
-void yaw_set(PlayerState *self, f32 arg1)
+void yaw_set(PlayerState *self, f32 angle)
 {
-    self->yaw->value = func_800136E4(arg1);
+    self->yaw->value = func_800136E4(angle);
 }
 
 void yaw_applyIdeal(PlayerState *self)
@@ -117,23 +120,24 @@ f32 yaw_getIdeal(PlayerState *self)
     return self->yaw->ideal;
 }
 
-void yaw_setVelocityBounded(PlayerState *self, f32 limit_degPerSec, f32 step_percent)
+void yaw_setVelocityBounded(PlayerState *self, f32 limit, f32 rate)
 {
-    self->yaw->limit_degPerSec = limit_degPerSec;
-    self->yaw->step_percent = step_percent;
+    self->yaw->limit_degPerSec = limit;
+    self->yaw->step_percent = rate;
 }
 
-void yaw_setVelocityUnbounded(PlayerState *self, f32 velocity_degPerSec)
+void yaw_setVelocityUnbounded(PlayerState *self, f32 speed)
 {
-    self->yaw->velocity_degPerSec = velocity_degPerSec;
+    self->yaw->velocity_degPerSec = speed;
 }
 
-void yaw_rotateTimed(PlayerState *self, f32 time_sec)
+// Sets the unbounded speed so the turn to ideal yaw takes time seconds.
+void yaw_rotateTimed(PlayerState *self, f32 time)
 {
-    f32 dyaw_deg = self->yaw->ideal - self->yaw->value;
-    if (180.0f < mlAbsF(dyaw_deg)) {
-        dyaw_deg += (dyaw_deg < 0.0f) ? 360.0f : -360.0f;
+    f32 diff = self->yaw->ideal - self->yaw->value;
+    if (180.0f < mlAbsF(diff)) {
+        diff += (diff < 0.0f) ? 360.0f : -360.0f;
     }
 
-    self->yaw->velocity_degPerSec = mlAbsF(dyaw_deg / time_sec);
+    self->yaw->velocity_degPerSec = mlAbsF(diff / time);
 }

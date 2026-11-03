@@ -11,125 +11,135 @@ extern f32 mlAbsF(f32);
 extern void func_80013728(f32);
 f32 func_800136E4(f32 param_0);
 
-f32 func_800F1800(f32 param_0)
+// Absolute value of the arc function (func_80013AAC) of the input.
+f32 func_800F1800(f32 value)
 {
-    return mlAbsF(func_80013AAC(param_0));
+    return mlAbsF(func_80013AAC(value));
 }
 
-f32 func_800F1828(f32 *param_0, f32 *param_1)
+// Pitch from one point to another.
+f32 func_800F1828(f32 *from, f32 *to)
 {
-    float new_var;
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    local_1 = param_1[0] - param_0[0];
-    local_0 = param_1[1] - param_0[1];
-    local_2 = param_1[2] - param_0[2];
-    new_var = (local_1 * local_1) + (local_2 * local_2);
-    return func_80013B7C(local_0, sqrtf(new_var));
+    float xz_dist_sq;
+    f32 dy;
+    f32 dx;
+    f32 dz;
+    dx = to[0] - from[0];
+    dy = to[1] - from[1];
+    dz = to[2] - from[2];
+    xz_dist_sq = (dx * dx) + (dz * dz);
+    return func_80013B7C(dy, sqrtf(xz_dist_sq));
 }
 
-s32 func_800F1884(u8 *param_0, f32 *param_1)
+// Pitch of a vector; returns 0 (and pitch 0) when it has no XZ length.
+s32 func_800F1884(u8 *vec, f32 *out_pitch)
 {
-    f32 temp_f0;
-    f32 temp_f0_2;
-    f32 temp_f2;
-    temp_f0 = *(f32 *) ((s8 *) param_0 + 8);
-    temp_f2 = *(f32 *) ((s8 *) param_0 + 0);
-    temp_f0_2 = sqrtf((temp_f0 * temp_f0) + (temp_f2 * temp_f2));
-    if (temp_f0_2 == 0.0f) {
-        *param_1 = 0.0f;
+    f32 z;
+    f32 xz_len;
+    f32 x;
+    z = *(f32 *) ((s8 *) vec + 8);
+    x = *(f32 *) ((s8 *) vec + 0);
+    xz_len = sqrtf((z * z) + (x * x));
+    if (xz_len == 0.0f) {
+        *out_pitch = 0.0f;
         return 0;
     }
-    *param_1 = func_80013B7C(*(f32 *) ((s8 *) param_0 + 4), temp_f0_2);
+    *out_pitch = func_80013B7C(*(f32 *) ((s8 *) vec + 4), xz_len);
     return 1;
 }
 
-void func_800F18FC(f32 *param_0, f32 *param_1, f32 *param_2)
+// Pitch (angles[0]) and yaw (angles[1]) from one point to another.
+void func_800F18FC(f32 *from, f32 *to, f32 *angles)
 {
     f32 dx, dy, dz;
     f32 dist;
 
-    dx = param_1[0] - param_0[0];
-    dy = param_1[1] - param_0[1];
-    dz = param_1[2] - param_0[2];
+    dx = to[0] - from[0];
+    dy = to[1] - from[1];
+    dz = to[2] - from[2];
 
     dist = sqrtf(dx * dx + dz * dz);
 
-    param_2[1] = func_80013B70(dx, dz, dist);
-    param_2[0] = func_80013B7C(dy, dist);
+    angles[1] = func_80013B70(dx, dz, dist);
+    angles[0] = func_80013B7C(dy, dist);
 }
 
-int func_800F1988(f32 *param_0, f32 *param_1, f32 *param_2)
+// Splits a vector into yaw and magnitude; returns 0 when the XZ length is below 0.01.
+int func_800F1988(f32 *vec, f32 *out_mag, f32 *out_yaw)
 {
-    f32 local_0;
-    *param_1 = 0.0f;
-    *param_2 = 0.0f;
-    local_0 = sqrtf(param_0[2] * param_0[2] + param_0[0] * param_0[0]);
-    if (local_0 < 0.01f)
+    f32 xz_len;
+    *out_mag = 0.0f;
+    *out_yaw = 0.0f;
+    xz_len = sqrtf(vec[2] * vec[2] + vec[0] * vec[0]);
+    if (xz_len < 0.01f)
         return 0;
-    *param_2 = func_800F1800(param_0[0] / local_0);
-    if (param_0[2] < 0.0f)
-        *param_2 = 180.0f - *param_2;
-    if (param_0[0] < 0)
-        *param_2 = 360.0f - *param_2;
-    *param_1 = func_800F1800(local_0);
+    *out_yaw = func_800F1800(vec[0] / xz_len);
+    if (vec[2] < 0.0f)
+        *out_yaw = 180.0f - *out_yaw;
+    if (vec[0] < 0)
+        *out_yaw = 360.0f - *out_yaw;
+    *out_mag = func_800F1800(xz_len);
     return 1;
 }
 
-void func_800F1A88(f32 *param_0, f32 *param_1)
+// Yaw (angles[1]) and pitch (angles[0]) of a vector.
+void func_800F1A88(f32 *vec, f32 *angles)
 {
-    f32 len = sqrtf(param_0[0] * param_0[0] + param_0[2] * param_0[2]);
-    param_1[1] = func_80013B70(param_0[0], param_0[2], len);
-    param_1[0] = func_80013B7C(param_0[1], len);
+    f32 len = sqrtf(vec[0] * vec[0] + vec[2] * vec[2]);
+    angles[1] = func_80013B70(vec[0], vec[2], len);
+    angles[0] = func_80013B7C(vec[1], len);
 }
 
-void func_800F1AFC(f32 *param_0, f32 *param_1)
+// Same as func_800F1A88, and sets angles[2] to 0.
+void func_800F1AFC(f32 *vec, f32 *angles)
 {
-    f32 len = sqrtf(param_0[0] * param_0[0] + param_0[2] * param_0[2]);
-    param_1[1] = func_80013B70(param_0[0], param_0[2], len);
-    param_1[0] = func_80013B7C(param_0[1], len);
-    param_1[2] = 0.0f;
+    f32 len = sqrtf(vec[0] * vec[0] + vec[2] * vec[2]);
+    angles[1] = func_80013B70(vec[0], vec[2], len);
+    angles[0] = func_80013B7C(vec[1], len);
+    angles[2] = 0.0f;
 }
 
-int func_800F1B78(f32 *param_0, f32 *param_1, f32 param_2, f32 param_3)
+// Maps a stick-like vector into a velocity relative to the facing yaw.
+int func_800F1B78(f32 *out_vel, f32 *stick, f32 facing_yaw, f32 scale)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
-    s32 local_4;
-    func_800EFD24(param_0);
-    local_4 = func_800F1988(param_1, &local_0, &local_1);
-    local_0 *= param_3;
-    if (local_4) {
-        local_3 = func_800F1DCC(param_2, local_1);
-        local_2 = mlAbsF(local_3);
-        param_0[0] = func_800F10B4(local_2, 0.0f, 180.0f, local_0, -local_0);
-        if (local_2 < 90.0f)
-            param_0[2] = func_800F10B4(local_2, 0.0f, 90.0f, 0.0f, local_0);
+    f32 mag;
+    f32 stick_yaw;
+    f32 abs_diff;
+    f32 yaw_diff;
+    s32 has_dir;
+    func_800EFD24(out_vel);
+    has_dir = func_800F1988(stick, &mag, &stick_yaw);
+    mag *= scale;
+    if (has_dir) {
+        yaw_diff = func_800F1DCC(facing_yaw, stick_yaw);
+        abs_diff = mlAbsF(yaw_diff);
+        out_vel[0] = func_800F10B4(abs_diff, 0.0f, 180.0f, mag, -mag);
+        if (abs_diff < 90.0f)
+            out_vel[2] = func_800F10B4(abs_diff, 0.0f, 90.0f, 0.0f, mag);
         else
-            param_0[2] = func_800F10B4(local_2, 90.0f, 180.0f, local_0, 0.0f);
-        if (local_3 < 0.0f)
-            param_0[2] = -param_0[2];
+            out_vel[2] = func_800F10B4(abs_diff, 90.0f, 180.0f, mag, 0.0f);
+        if (yaw_diff < 0.0f)
+            out_vel[2] = -out_vel[2];
     }
-    return local_4;
+    return has_dir;
 }
 
-f32 func_800F1C98(s32 param_0, s32 *param_1)
+// Sine of the angle between two vectors.
+f32 func_800F1C98(s32 a, s32 *b)
 {
-    f32 sp2C;
-    f32 sp28;
+    f32 len_a;
+    f32 len_b;
     s8 _sfpad[8];
-    s32 sp1C;
+    s32 cross;
 
-    sp2C = func_800EEF94(param_0);
-    sp28 = func_800EEF94((s32) param_1);
-    func_800EE97C(&sp1C, param_0, param_1);
-    return func_800EEF94((s32) &sp1C) / (sp2C * sp28);
+    len_a = func_800EEF94(a);
+    len_b = func_800EEF94((s32) b);
+    func_800EE97C(&cross, a, b);
+    return func_800EEF94((s32) &cross) / (len_a * len_b);
 }
 
-f32 func_800F1CF0(f32 *param_0, f32 *param_1)
+// Sine of the angle between two vectors in the XZ plane (signed); 0 for near-zero lengths.
+f32 func_800F1CF0(f32 *a, f32 *b)
 {
     f32 prod;
     f32 cross_z;
@@ -137,12 +147,13 @@ f32 func_800F1CF0(f32 *param_0, f32 *param_1)
     f32 len0;
     f32 denom;
     f32 len1;
-    len0 = sqrtf((param_0[2] * param_0[2]) + (param_0[0] * param_0[0]));
-    len1 = sqrtf((param_1[0] * param_1[0]) + (param_1[2] * param_1[2]));
+    len0 = sqrtf((a[2] * a[2]) + (a[0] * a[0]));
+    len1 = sqrtf((b[0] * b[0]) + (b[2] * b[2]));
     prod = len1 * len0;
     if (1e-06f < prod) {
-        cross_z = (param_0[2] * param_1[0]) - (param_0[0] * param_1[2]);
+        cross_z = (a[2] * b[0]) - (a[0] * b[2]);
         abs_cross = mlAbsF(cross_z);
+        // Matching: the redundant assignments to denom are needed for the match.
         if (prod < abs_cross) {
             denom = (prod = abs_cross);
         }
@@ -152,94 +163,109 @@ f32 func_800F1CF0(f32 *param_0, f32 *param_1)
     return 0.0f;
 }
 
-f32 func_800F1DCC(f32 param_0, f32 param_1)
+// Signed shortest angle from `from` to `to`, wrapped by func_80013728.
+// Matching: no return statement, the callee's result is passed through; the copies and chained assignments are needed for the match.
+f32 func_800F1DCC(f32 to, f32 from)
 {
-    f32 new_var;
-    f32 new_var2;
-    f32 new_var3;
-    new_var2 = param_0;
-    new_var3 = param_1;
+    f32 delta;
+    f32 to_copy;
+    f32 from_copy;
+    to_copy = to;
+    from_copy = from;
 
-    new_var3 = (new_var = (1.0f * new_var2) - (new_var = (new_var = new_var3)));
-    func_80013728(new_var);
+    from_copy = (delta = (1.0f * to_copy) - (delta = (delta = from_copy)));
+    func_80013728(delta);
 }
 
-f32 func_800F1DF4(f32 param_0[3], f32 param_1[3])
+// Yaw from one point to another.
+// Matching: the line breaks in this function are needed for the match.
+f32 func_800F1DF4(f32 from[3], f32 to[3])
 {
-    f32 local_0;
-    float new_var;
-    f32 local_1;
-    new_var = param_1[0] - param_0[0]; local_0 = param_1[2] - param_0[2]; local_1 = new_var;
-    return func_80013B7C(local_1, local_0);
+    f32 dz;
+    float dx;
+    f32 dx_copy;
+    dx = to[0] - from[0]; dz = to[2] - from[2]; dx_copy = dx;
+    return func_80013B7C(dx_copy, dz);
 }
 
-void func_800F1E28(u8 *param_0, u8 *param_1)
+// Yaw between two s16 points (x at +0, z at +4).
+// Matching: no return statement, the callee's result is passed through.
+void func_800F1E28(u8 *from, u8 *to)
 {
-    func_80013B7C((f32) (*(s16 *) ((s8 *) param_1 + 0) - *(s16 *) ((s8 *) param_0 + 0)),
-                  (f32) (*(s16 *) ((s8 *) param_1 + 4) - *(s16 *) ((s8 *) param_0 + 4)));
+    func_80013B7C((f32) (*(s16 *) ((s8 *) to + 0) - *(s16 *) ((s8 *) from + 0)),
+                  (f32) (*(s16 *) ((s8 *) to + 4) - *(s16 *) ((s8 *) from + 4)));
 }
 
-s32 func_800F1E6C(f32 param_0[3], f32 param_1[3], f32 *param_2)
+// Yaw from one point to another; returns whether they differ in XZ.
+// Matching: no return statement, the callee's result is passed through.
+s32 func_800F1E6C(f32 from[3], f32 to[3], f32 *out_yaw)
 {
-    f32 local_0[3];
-    func_800EFB24(local_0, param_1, param_0);
-    func_800F1EA4(local_0, param_2);
+    f32 delta[3];
+    func_800EFB24(delta, to, from);
+    func_800F1EA4(delta, out_yaw);
 }
 
-s32 func_800F1EA4(f32 param_0[3], f32 *param_1)
+// Yaw of a vector in the XZ plane; yaw 0 and return 0 for a zero vector.
+s32 func_800F1EA4(f32 vec[3], f32 *out_yaw)
 {
-    if ((param_0[0] != 0.0f) || (param_0[2] != 0.0f)) {
-        *param_1 = func_80013B7C(param_0[0], param_0[2]);
+    if ((vec[0] != 0.0f) || (vec[2] != 0.0f)) {
+        *out_yaw = func_80013B7C(vec[0], vec[2]);
         return 1;
     } else {
-        *param_1 = 0.0f;
+        *out_yaw = 0.0f;
         return 0;
     }
 }
 
-void func_800F1F0C(s32 param_0, s32 param_1, f32 param_2)
+// Angle from `ref_yaw` to the yaw from one point to another.
+// Matching: no return statement, the callee's result is passed through.
+void func_800F1F0C(s32 from, s32 to, f32 ref_yaw)
 {
-    f32 new_var = func_800F1DF4(param_0, param_1);
-    func_800F1DCC(new_var, param_2);
+    f32 yaw = func_800F1DF4(from, to);
+    func_800F1DCC(yaw, ref_yaw);
 }
 
-f32 func_800F1F38(f32 param_0, f32 param_1, f32 param_2)
+// Turns `current` toward `target` by at most `max_step`.
+f32 func_800F1F38(f32 current, f32 target, f32 max_step)
 {
-    f32 local_0;
-    if (param_1 == param_0)
-        return param_1;
-    local_0 = func_800F1DCC(param_1, param_0);
-    local_0 = local_0 > 0.0f ? (local_0 < param_2 ? local_0 : param_2)
-                             : (-param_2 < local_0 ? local_0 : -param_2);
-    return func_800136E4(param_0 + local_0);
+    f32 delta;
+    if (target == current)
+        return target;
+    delta = func_800F1DCC(target, current);
+    delta = delta > 0.0f ? (delta < max_step ? delta : max_step)
+                         : (-max_step < delta ? delta : -max_step);
+    return func_800136E4(current + delta);
 }
 
-f32 func_800F1FF0(f32 param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4)
+// Turns `current` toward `target` by factor * difference, capped at `max_step`; snaps to `target` inside the dead zone.
+f32 func_800F1FF0(f32 current, f32 target, f32 factor, f32 dead_zone, f32 max_step)
 {
-    f32 var_f2;
-    f32 temp_f0;
+    f32 step;
+    f32 abs_step;
 
-    var_f2 = func_800F1DCC(param_1, param_0) * param_2;
-    temp_f0 = mlAbsF(var_f2);
-    if (temp_f0 < param_3) {
-        return param_1;
+    step = func_800F1DCC(target, current) * factor;
+    abs_step = mlAbsF(step);
+    if (abs_step < dead_zone) {
+        return target;
     }
-    if (param_4 < temp_f0) {
-        if (var_f2 < 0.0f) {
-            var_f2 = -param_4;
+    if (max_step < abs_step) {
+        if (step < 0.0f) {
+            step = -max_step;
         } else {
-            var_f2 = param_4;
+            step = max_step;
         }
     }
-    return func_800136E4(param_0 + var_f2);
+    return func_800136E4(current + step);
 }
 
-f32 func_800F2094(f32 param_0, f32 param_1)
+// Absolute angle difference.
+f32 func_800F2094(f32 to, f32 from)
 {
-    return mlAbsF(func_800F1DCC(param_0, param_1));
+    return mlAbsF(func_800F1DCC(to, from));
 }
 
-s32 func_800F20BC(f32 param_0, f32 param_1, f32 param_2)
+// True when the angle difference is below `tolerance`.
+s32 func_800F20BC(f32 to, f32 from, f32 tolerance)
 {
-    return func_800F2094(param_0, param_1) < param_2;
+    return func_800F2094(to, from) < tolerance;
 }

@@ -4,192 +4,207 @@ void func_800D9600(s32, s32);
 s32 func_800D97E8(void *param_0, void *param_1);
 void func_800D9AD4(s32 param_0, void *param_1, void *param_2, f32 param_3);
 
-void func_800DFAD0(u8 *param_0)
-{
-    u32 temp_v1;
-    u32 var_v0;
+// Bone pose: {s32 bones; s32 count; bone data[109]}, 0x28 bytes per bone:
+// quaternion rotation (0x00), scale vec3 (0x10), translation vec3 (0x1C).
 
-    var_v0 = *(u32 *) ((s8 *) param_0 + 0);
-    temp_v1 = (*(s32 *) ((s8 *) param_0 + 4) * 0x28) + var_v0;
-    if (var_v0 < temp_v1) {
+// Resets every bone to identity: rotation (0,0,0,1), scale (1,1,1), translation (0,0,0).
+void func_800DFAD0(u8 *pose)
+{
+    u32 end;
+    u32 bone;
+
+    bone = *(u32 *) ((s8 *) pose + 0);
+    end = (*(s32 *) ((s8 *) pose + 4) * 0x28) + bone;
+    if (bone < end) {
         do {
-            var_v0 += 0x28;
-            *(f32 *) (var_v0 - 0x28) = *(f32 *) (var_v0 - 0x24) = *(f32 *) (var_v0 - 0x20) = 0.0f;
-            *(f32 *) (var_v0 - 0x1C) = 1.0f;
-            *(f32 *) (var_v0 - 0x18) = *(f32 *) (var_v0 - 0x14) = *(f32 *) (var_v0 - 0x10) =
+            bone += 0x28;
+            *(f32 *) (bone - 0x28) = *(f32 *) (bone - 0x24) = *(f32 *) (bone - 0x20) = 0.0f;
+            *(f32 *) (bone - 0x1C) = 1.0f;
+            *(f32 *) (bone - 0x18) = *(f32 *) (bone - 0x14) = *(f32 *) (bone - 0x10) =
                 (f32) 1;
-            *(f32 *) (var_v0 - 0xC) = *(f32 *) (var_v0 - 0x8) = *(f32 *) (var_v0 - 0x4) = 0.0f;
-        } while (var_v0 < temp_v1);
+            *(f32 *) (bone - 0xC) = *(f32 *) (bone - 0x8) = *(f32 *) (bone - 0x4) = 0.0f;
+        } while (bone < end);
     }
 }
 
-void func_800DFB40(s32 param_0, s32 param_1, s32 param_2)
+// Copies the rotation of a bone to out.
+void func_800DFB40(s32 pose, s32 index, s32 out)
 {
-    s32 *local_0;
-    local_0 = (s32 *) param_0;
-    func_800D9600(param_2, *local_0 + param_1 * 40);
+    s32 *pose_ptr;
+    pose_ptr = (s32 *) pose;
+    func_800D9600(out, *pose_ptr + index * 40);
 }
 
-void func_800DFB7C(s32 *param_0, unsigned int param_1, unsigned long param_2, s32 param_3,
-                   s32 param_4)
+// Copies rotation, scale and translation of a bone to the three outputs.
+void func_800DFB7C(s32 *pose, unsigned int index, unsigned long rotation_out, s32 scale_out,
+                   s32 translation_out)
 {
-    volatile s32 local_1;
-    s32 local_0;
-    s32 new_var2;
-    s32 new_var;
-    new_var = *param_0;
-    local_0 = new_var + ((10 * param_1) * 4);
-    func_800D9600(param_2, local_0);
-    new_var = param_4;
-    new_var2 = local_0;
-    func_800EE7F8(param_3, new_var2 + 0x10);
-    func_800EE7F8(new_var, local_0 + 0x1C);
+    volatile s32 unk_0; // Matching: unused volatile local, needed for the match.
+    s32 bone;
+    s32 bone_copy;
+    s32 base_or_out; // Matching: reused for the pose base and the translation output.
+    base_or_out = *pose;
+    bone = base_or_out + ((10 * index) * 4);
+    func_800D9600(rotation_out, bone);
+    base_or_out = translation_out;
+    bone_copy = bone;
+    func_800EE7F8(scale_out, bone_copy + 0x10);
+    func_800EE7F8(base_or_out, bone + 0x1C);
 }
 
-void func_800DFBE0(s32 *param_0, s32 param_1, s32 param_2)
+// Copies the scale of a bone to out.
+void func_800DFBE0(s32 *pose, s32 index, s32 out)
 {
-    func_800EE7F8(param_2, *param_0 + (param_1 * 0x28) + 0x10, param_2, param_0);
+    func_800EE7F8(out, *pose + (index * 0x28) + 0x10, out, pose);
 }
 
-void func_800DFC20(s32 *param_0, s32 param_1, s32 param_2)
+// Copies the translation of a bone to out.
+void func_800DFC20(s32 *pose, s32 index, s32 out)
 {
-    func_800EE7F8(param_2, *param_0 + (param_1 * 0x28) + 0x1C, param_2, param_0);
+    func_800EE7F8(out, *pose + (index * 0x28) + 0x1C, out, pose);
 }
 
-void func_800DFC60(void *arg0)
+void func_800DFC60(void *pose)
 {
-    heap_free(arg0);
+    heap_free(pose);
 }
 
+// Allocates an identity pose on the heap.
 int func_800DFC80()
 {
-    s32 *local_0;
-    local_0 = heap_alloc(0x1110);
-    local_0[0] = &local_0[2];
-    local_0[1] = 0x6D;
-    func_800DFAD0(local_0);
-    return local_0;
+    s32 *pose;
+    pose = heap_alloc(0x1110);
+    pose[0] = &pose[2];
+    pose[1] = 0x6D;
+    func_800DFAD0(pose);
+    return pose;
 }
 
-int func_800DFCC0(param_0)
-s16 param_0;
+int func_800DFCC0(handle)
+s16 handle;
 {
-    func_8001B754(param_0);
+    func_8001B754(handle);
 }
 
-int func_800DFCE8(param_0)
-s16 param_0;
+int func_800DFCE8(handle)
+s16 handle;
 {
-    func_8001B798(param_0);
+    func_8001B798(handle);
 }
 
+// Allocates an identity pose through the handle table and returns its handle.
 s16 func_800DFD10(void)
 {
-    s16 local_1;
-    u8 *local_2;
+    s16 handle;
+    u8 *pose;
 
-    local_1 = func_8001B668(1, 0x1110);
-    local_2 = func_8001B798(local_1);
-    *(s32 *) ((s8 *) local_2 + 0) = (s32) (local_2 + 8);
-    *(s32 *) ((s8 *) local_2 + 4) = 0x6D;
-    func_800DFAD0(local_2);
-    return local_1;
+    handle = func_8001B668(1, 0x1110);
+    pose = func_8001B798(handle);
+    *(s32 *) ((s8 *) pose + 0) = (s32) (pose + 8);
+    *(s32 *) ((s8 *) pose + 4) = 0x6D;
+    func_800DFAD0(pose);
+    return handle;
 }
 
-void func_800DFD64(void *param_0, void **param_1, void **param_2, f32 param_3)
+// Blends two poses into dst: slerp rotation, lerp scale and translation.
+void func_800DFD64(void *dst, void **pose_a, void **pose_b, f32 blend)
 {
-    u32 var_s0;
-    u8 *var_s1, *var_s2;
-    s32 temp_s3;
+    u32 dst_bone;
+    u8 *bone_a, *bone_b;
+    s32 dst_end;
 
-    var_s0 = *(u32 *) param_0;
-    temp_s3 = ((s32) *((u32 *) param_0 + 1) * 40) + var_s0;
-    var_s1 = *(u8 **) param_1;
-    var_s2 = *(u8 **) param_2;
+    dst_bone = *(u32 *) dst;
+    dst_end = ((s32) *((u32 *) dst + 1) * 40) + dst_bone;
+    bone_a = *(u8 **) pose_a;
+    bone_b = *(u8 **) pose_b;
 
-    if (var_s0 < temp_s3) {
+    if (dst_bone < dst_end) {
         do {
-            if (func_800D97E8(var_s1, var_s2)) {
-                func_800D9600(var_s0, var_s1);
+            if (func_800D97E8(bone_a, bone_b)) {
+                func_800D9600(dst_bone, bone_a);
             } else {
-                func_800D9AD4(var_s0, var_s1, var_s2, param_3);
+                func_800D9AD4(dst_bone, bone_a, bone_b, blend);
             }
-            var_s0 += 0x28;
-            *(f32 *) (var_s0 - 0x18) =
-                *(f32 *) (var_s1 + 0x10) +
-                (*(f32 *) (var_s2 + 0x10) - *(f32 *) (var_s1 + 0x10)) * param_3;
-            var_s1 += 0x28;
-            var_s2 += 0x28;
-            *(f32 *) (var_s0 - 0x14) =
-                *(f32 *) (var_s1 - 0x14) +
-                (*(f32 *) (var_s2 - 0x14) - *(f32 *) (var_s1 - 0x14)) * param_3;
-            *(f32 *) (var_s0 - 0x10) =
-                *(f32 *) (var_s1 - 0x10) +
-                (*(f32 *) (var_s2 - 0x10) - *(f32 *) (var_s1 - 0x10)) * param_3;
-            *(f32 *) (var_s0 - 0xC) = *(f32 *) (var_s1 - 0xC) +
-                                      (*(f32 *) (var_s2 - 0xC) - *(f32 *) (var_s1 - 0xC)) * param_3;
-            *(f32 *) (var_s0 - 8) =
-                *(f32 *) (var_s1 - 8) + (*(f32 *) (var_s2 - 8) - *(f32 *) (var_s1 - 8)) * param_3;
-            *(f32 *) (var_s0 - 4) =
-                *(f32 *) (var_s1 - 4) + (*(f32 *) (var_s2 - 4) - *(f32 *) (var_s1 - 4)) * param_3;
-        } while (var_s0 < temp_s3);
+            dst_bone += 0x28;
+            *(f32 *) (dst_bone - 0x18) =
+                *(f32 *) (bone_a + 0x10) +
+                (*(f32 *) (bone_b + 0x10) - *(f32 *) (bone_a + 0x10)) * blend;
+            bone_a += 0x28;
+            bone_b += 0x28;
+            *(f32 *) (dst_bone - 0x14) =
+                *(f32 *) (bone_a - 0x14) +
+                (*(f32 *) (bone_b - 0x14) - *(f32 *) (bone_a - 0x14)) * blend;
+            *(f32 *) (dst_bone - 0x10) =
+                *(f32 *) (bone_a - 0x10) +
+                (*(f32 *) (bone_b - 0x10) - *(f32 *) (bone_a - 0x10)) * blend;
+            *(f32 *) (dst_bone - 0xC) = *(f32 *) (bone_a - 0xC) +
+                                      (*(f32 *) (bone_b - 0xC) - *(f32 *) (bone_a - 0xC)) * blend;
+            *(f32 *) (dst_bone - 8) =
+                *(f32 *) (bone_a - 8) + (*(f32 *) (bone_b - 8) - *(f32 *) (bone_a - 8)) * blend;
+            *(f32 *) (dst_bone - 4) =
+                *(f32 *) (bone_a - 4) + (*(f32 *) (bone_b - 4) - *(f32 *) (bone_a - 4)) * blend;
+        } while (dst_bone < dst_end);
     }
 }
 
-void func_800DFEA8(u8 *param_0, s32 *param_1)
+// Copies all bones of src to *dst.
+void func_800DFEA8(u8 *src, s32 *dst)
 {
-    int new_var;
-    s32 var_s1;
-    u32 temp_s2;
-    u32 var_s0;
-    var_s0 = *(u32 *) param_0;
-    var_s1 = *param_1;
-    temp_s2 = (*(u32 *) (param_0 + 4) * 0x28) + var_s0;
-    if (var_s0 < temp_s2) {
-        new_var = 0x10;
+    int scale_offset; // Matching: holds 0x10 in a register.
+    s32 dst_bone;
+    u32 src_end;
+    u32 src_bone;
+    src_bone = *(u32 *) src;
+    dst_bone = *dst;
+    src_end = (*(u32 *) (src + 4) * 0x28) + src_bone;
+    if (src_bone < src_end) {
+        scale_offset = 0x10;
         do {
-            func_800D9600(var_s1, var_s0);
-            func_800EE7F8(var_s1 + new_var, var_s0 + new_var);
-            func_800EE7F8(var_s1 + 0x1C, var_s0 + 0x1C);
-            var_s1 += 0x28;
-            var_s0 += 0x28;
-        } while (var_s0 < temp_s2);
+            func_800D9600(dst_bone, src_bone);
+            func_800EE7F8(dst_bone + scale_offset, src_bone + scale_offset);
+            func_800EE7F8(dst_bone + 0x1C, src_bone + 0x1C);
+            dst_bone += 0x28;
+            src_bone += 0x28;
+        } while (src_bone < src_end);
     }
 }
 
-void func_800DFF2C(s32 param_0, s32 param_1, f32 param_2[4])
+// Sets the rotation of a bone.
+void func_800DFF2C(s32 pose, s32 index, f32 rotation[4])
 {
-    func_800D9600(*(s32 *) param_0 + param_1 * 40, param_2);
+    func_800D9600(*(s32 *) pose + index * 40, rotation);
 }
 
-void func_800DFF64(s32 *param_0, s32 param_1, s32 param_2)
+// Sets the scale of a bone.
+void func_800DFF64(s32 *pose, s32 index, s32 scale)
 {
-    func_800EE7F8(param_0[0] + (param_1 * 0x28) + 0x10, param_2);
+    func_800EE7F8(pose[0] + (index * 0x28) + 0x10, scale);
 }
 
-void func_800DFFA0(s32 *param_0, unsigned int param_1, s32 param_2)
+// Sets the translation of a bone.
+void func_800DFFA0(s32 *pose, unsigned int index, s32 translation)
 {
-    unsigned int new_var;
-    new_var = param_1;
-    func_800EE7F8((*param_0 + (new_var * 0x28)) + 0x1C, param_2);
+    unsigned int bone_index;
+    bone_index = index;
+    func_800EE7F8((*pose + (bone_index * 0x28)) + 0x1C, translation);
 }
 
-int func_800DFFDC(s32 param_0, s32 param_1, s32 param_2)
+int func_800DFFDC(s32 pose, s32 index, s32 param_2)
 {
     s32 pad;
-    f32 local_0[3];
-    func_800D93A0(local_0, param_2 | 0);
-    func_800DFF2C(param_0, param_1, local_0);
+    f32 converted[3];
+    func_800D93A0(converted, param_2 | 0);
+    func_800DFF2C(pose, index, converted);
 }
 
 int func_800E0018()
 {
-    s32 *local_0;
-    local_0 = defrag();
-    local_0[0] = local_0 + 2;
+    s32 *pose;
+    pose = defrag();
+    pose[0] = pose + 2;
 }
 
-func_800E0040(param_0)
+func_800E0040(pose)
 {
-    *(s32 *) param_0 = (s32) (param_0 + 8);
+    *(s32 *) pose = (s32) (pose + 8);
 }
