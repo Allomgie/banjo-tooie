@@ -3,6 +3,19 @@
 #include "macros.h"
 
 #define OD(n) (((f32 *) param_0->actorData)[n])
+extern void func_800EF3DC(f32 *, f32 *);
+extern s32 func_800AA194(void);
+extern void _sumultiscore_entrypoint_1(s32 *, s32 *, s32);
+extern void func_800AA220(s32, s32);
+extern void _gczoombox_entrypoint_27(s32, void *);
+extern int func_80101E4C(Actor *, void *);
+extern s32 func_800D9078(f32 *);
+extern s32 func_80016B30(s32, s32);
+extern s32 func_800AA0D0(void);
+extern void func_8010114C(Unk80132ED0 *, s32, s32);
+extern void func_800FFAB0(Actor *);
+extern void func_800E39A8(f32 *, f32 *);
+extern void func_80102EC0(), func_80107C2C(), func_80800D74_chgameselect();
 typedef struct {
     s32 (*local_3)(Actor *);
     void (*local_4)(Actor *);
