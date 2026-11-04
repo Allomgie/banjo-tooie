@@ -1,5 +1,17 @@
 # Banjo Tooie Decomp
 
+![code Progress]
+![boot Progress]
+![core1 Progress]
+![core2 Progress]
+![overlays Progress]
+
+[code Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Fall.json
+[boot Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Fboot.json
+[core1 Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Fcore1.json
+[core2 Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Fcore2.json
+[overlays Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Foverlays.json
+
 This is a byte-matching decompilation of Banjo-Tooie (N64, USA): every function compiles
 to the original machine code, and `make check` rebuilds the ROM byte for byte. It is a
 hybrid project that has been in the works for a long time: part of the matching was done
@@ -19,17 +31,7 @@ other repositories.
 Anyone is welcome to build on this work. If you do, a link back to this repository is
 much appreciated.
 
-![code Progress]
-![boot Progress]
-![core1 Progress]
-![core2 Progress]
-![overlays Progress]
-
-[code Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Fall.json
-[boot Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Fboot.json
-[core1 Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Fcore1.json
-[core2 Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Fcore2.json
-[overlays Progress]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FAllomgie%2Fbanjo-tooie%2FHEAD%2Fprogress%2Fus%2Foverlays.json
+## Progress badges
 
 The badges read [`progress/us/`](progress/us/) in this repository rather than
 the shared upstream dataset, so they can be kept current from here. After a
