@@ -19,5 +19,5 @@
     { "label": "Based on Mr-Wiseguy/banjo-tooie", "url": "https://github.com/Mr-Wiseguy/banjo-tooie" }
   ],
   "tags": ["matching"],
-  "notes": "Forked from Mr-Wiseguy/banjo-tooie at 13.0 % matched code (upstream state of 2025-11-29); the remaining 87 % were matched in this fork. All code is matched (100 %), and .data, .rodata and .bss are defined in C except where they belong to handwritten asm. A hybrid project: part of the matching was done by hand, much of it was produced with different AI models as part of a research project on AI-assisted decompilation (more in the README). Every function is verified byte-identical against the ROM. Cleanup and documentation are under way."
+  "notes": "Forked from Mr-Wiseguy/banjo-tooie at 13.0 % matched code (upstream state of 2025-11-29); the remaining 87 % were matched in this fork. All code is matched (100 %), and .data, .rodata and .bss are defined in C except where they belong to handwritten asm. A hybrid project: part of the matching was done by hand, much of it was produced with different AI models as part of a research project on AI-assisted decompilation (more in the README). Every function is verified byte-identical against the ROM. The source is cleaned up: dead code removed, locals named, and a short summary heads every file."
 }
