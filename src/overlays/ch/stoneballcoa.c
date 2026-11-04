@@ -52,48 +52,48 @@ void func_80800100_chstoneballcoach(u8 *param_0)
     }
 }
 
-void func_80800140_chstoneballcoach(Actor *param_0)
+void func_80800140_chstoneballcoach(Actor *actor)
 {
-    s32 local_1;
-    s32 local_0;
+    s32 dialog_id;
+    s32 dialog_flags;
 
     if (func_80090128()) {
-        func_8010C820(param_0, 0x8C, 30);
-        func_80800100_chstoneballcoach(param_0);
+        func_8010C820(actor, 0x8C, 30);
+        func_80800100_chstoneballcoach(actor);
     }
-    if (param_0->unk70_10 == 1) {
+    if (actor->unk70_10 == 1) {
         if (func_80090178(0x80)) {
             if (func_8010CAC0(D_808003C8_chstoneballcoach, 150)) {
                 if (!func_800DA9E4(0x428, 1)) {
-                    func_80800090_chstoneballcoach(param_0, 0xF23, 6);
+                    func_80800090_chstoneballcoach(actor, 0xF23, 6);
                 }
-            } else if (func_8010CAC0(param_0->position, 200) && func_8008FA60(0x80, 0)) {
-                local_0 = 6;
-                local_1 = 0;
-                if (!func_800DA9E4(param_0->unk74_7 + 0x3F3, 1)) {
+            } else if (func_8010CAC0(actor->position, 200) && func_8008FA60(0x80, 0)) {
+                dialog_flags = 6;
+                dialog_id = 0;
+                if (!func_800DA9E4(actor->unk74_7 + 0x3F3, 1)) {
                     if (func_800DA298(0x5F)) {
-                        local_1 = param_0->unk74_7 + 0xEF8;
+                        dialog_id = actor->unk74_7 + 0xEF8;
                     } else if (func_800DA298(0x5E)) {
-                        local_1 = param_0->unk74_7 + 0xEF5;
+                        dialog_id = actor->unk74_7 + 0xEF5;
                     } else {
-                        local_1 = param_0->unk74_7 + 0xEF2;
+                        dialog_id = actor->unk74_7 + 0xEF2;
                     }
-                    local_0 = 0xE;
+                    dialog_flags = 0xE;
                 } else if (func_80090080() && func_80016B30(0, 1)) {
                     if (func_800DA298(0x5F)) {
-                        local_1 = param_0->unk74_7 + 0xF18;
+                        dialog_id = actor->unk74_7 + 0xF18;
                     } else if (func_800DA298(0x5E)) {
-                        local_1 = param_0->unk74_7 + 0xF15;
+                        dialog_id = actor->unk74_7 + 0xF15;
                     } else {
-                        local_1 = param_0->unk74_7 + 0xF12;
+                        dialog_id = actor->unk74_7 + 0xF12;
                     }
-                    local_0 = 0xE;
+                    dialog_flags = 0xE;
                 }
-                func_80800090_chstoneballcoach(param_0, local_1, local_0);
+                func_80800090_chstoneballcoach(actor, dialog_id, dialog_flags);
             }
-        } else if (_subaddiedialog_entrypoint_6(param_0->position, (s32) param_0->rotation[1], 150,
+        } else if (_subaddiedialog_entrypoint_6(actor->position, (s32) actor->rotation[1], 150,
                                                 70, 6)) {
-            func_80800090_chstoneballcoach(param_0, param_0->unk74_7 + 0xF21, 0xE);
+            func_80800090_chstoneballcoach(actor, actor->unk74_7 + 0xF21, 0xE);
         }
     }
 }
@@ -107,6 +107,8 @@ int *chstoneballcoach_entrypoint_0()
 {
     return &D_808003D4_chstoneballcoach;
 }
+// TU-NOTE: the .data of this overlay is defined in C. Its tables hold pointers to functions of
+// this file; IDO's assembler schedules some of them differently unless they share the unit.
 
 extern void func_80105834();
 extern void func_801018A4();

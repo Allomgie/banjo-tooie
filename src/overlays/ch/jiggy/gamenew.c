@@ -208,35 +208,35 @@ int chjiggygamenew_entrypoint_0()
 
 int func_8080000C_chjiggygamenew(Unk80132ED0 *param_0)
 {
-    int *local_0;
-    local_0 = (int *) func_80106790(param_0);
-    return local_0[8];
+    int *data;
+    data = (int *) func_80106790(param_0);
+    return data[8];
 }
 
-s32 func_80800030_chjiggygamenew(Unk80132ED0 *param_0, s32 param_1)
+s32 func_80800030_chjiggygamenew(Unk80132ED0 *param_0, s32 index)
 {
-    Actor *local_0;
-    JiggyMenuRecord *local_1;
+    Actor *actor;
+    JiggyMenuRecord *pieces;
 
-    local_0 = func_80106790(param_0);
-    local_1 = func_80100094(local_0, 0);
-    if (param_1 < 20) {
-        if (local_1[*(s8 *) ((u8 *) local_1 + 0x1F4 + param_1)].unk4 == 0x6B54 ||
-            local_1[*(s8 *) ((u8 *) local_1 + 0x1F4 + param_1)].unk4 == 0xC) {
-            local_1[*(s8 *) ((u8 *) local_1 + 0x1F4 + param_1)].unk8 = 0.0f;
-            func_808007E4_chjiggygamenew(local_1, 0x78, *(s8 *) ((u8 *) local_1 + 0x1F4 + param_1));
-            local_0->actorData[3] = *(s8 *) ((u8 *) local_1 + 0x1F4 + param_1);
-            *(s8 *) ((u8 *) local_1 + 0x1F4 + param_1) = -1;
+    actor = func_80106790(param_0);
+    pieces = func_80100094(actor, 0);
+    if (index < 20) {
+        if (pieces[*(s8 *) ((u8 *) pieces + 0x1F4 + index)].unk4 == 0x6B54 ||
+            pieces[*(s8 *) ((u8 *) pieces + 0x1F4 + index)].unk4 == 0xC) {
+            pieces[*(s8 *) ((u8 *) pieces + 0x1F4 + index)].unk8 = 0.0f;
+            func_808007E4_chjiggygamenew(pieces, 0x78, *(s8 *) ((u8 *) pieces + 0x1F4 + index));
+            actor->actorData[3] = *(s8 *) ((u8 *) pieces + 0x1F4 + index);
+            *(s8 *) ((u8 *) pieces + 0x1F4 + index) = -1;
             return 1;
         }
         return 0;
     }
-    param_1 -= 20;
-    if (*(s8 *) ((u8 *) local_1 + 0x208 + param_1) != -1) {
-        local_1[*(s8 *) ((u8 *) local_1 + 0x208 + param_1)].unk8 = 0.0f;
-        func_808007E4_chjiggygamenew(local_1, 0xF54, *(s8 *) ((u8 *) local_1 + 0x208 + param_1));
-        local_0->actorData[3] = *(s8 *) ((u8 *) local_1 + 0x208 + param_1);
-        *(s8 *) ((u8 *) local_1 + 0x208 + param_1) = -1;
+    index -= 20;
+    if (*(s8 *) ((u8 *) pieces + 0x208 + index) != -1) {
+        pieces[*(s8 *) ((u8 *) pieces + 0x208 + index)].unk8 = 0.0f;
+        func_808007E4_chjiggygamenew(pieces, 0xF54, *(s8 *) ((u8 *) pieces + 0x208 + index));
+        actor->actorData[3] = *(s8 *) ((u8 *) pieces + 0x208 + index);
+        *(s8 *) ((u8 *) pieces + 0x208 + index) = -1;
         return 2;
     }
     return 0;
@@ -244,46 +244,46 @@ s32 func_80800030_chjiggygamenew(Unk80132ED0 *param_0, s32 param_1)
 
 void func_80800158_chjiggygamenew(Unk80132ED0 *param_0)
 {
-    s32 *s0;
-    s32 local_0;
-    s32 local_1;
-    s0 = (s32 *) func_80106790(param_0);
-    local_0 = func_80100094(s0, 0);
-    *(f32 *) (((char *) local_0 + (*(s32 *) ((char *) s0 + 0x24) * 0x18)) + 8) = 0;
-    func_808007E4_chjiggygamenew(local_0, 0xEB0, *(s32 *) ((char *) s0 + 0x24));
-    func_808035C4_chjiggygamenew(*(s32 *) ((char *) s0 + 0x3C),
-                                 (local_0 + (*(s32 *) ((char *) s0 + 0x24) * 0x18)) +
-                                     (local_1 = 0xC));
+    s32 *actor;
+    s32 pieces;
+    s32 offset;
+    actor = (s32 *) func_80106790(param_0);
+    pieces = func_80100094(actor, 0);
+    *(f32 *) (((char *) pieces + (*(s32 *) ((char *) actor + 0x24) * 0x18)) + 8) = 0;
+    func_808007E4_chjiggygamenew(pieces, 0xEB0, *(s32 *) ((char *) actor + 0x24));
+    func_808035C4_chjiggygamenew(*(s32 *) ((char *) actor + 0x3C),
+                                 (pieces + (*(s32 *) ((char *) actor + 0x24) * 0x18)) +
+                                     (offset = 0xC));
 
-    *(s8 *) (((char *) local_0 +
-              *(s8 *) (((char *) local_0 + (*(s32 *) ((char *) s0 + 0x24) * 0x18)) + 1)) +
-             0x1F4) = (s8) *(s32 *) ((char *) s0 + 0x24);
-    *(s32 *) ((char *) s0 + 0x24) = -1;
+    *(s8 *) (((char *) pieces +
+              *(s8 *) (((char *) pieces + (*(s32 *) ((char *) actor + 0x24) * 0x18)) + 1)) +
+             0x1F4) = (s8) *(s32 *) ((char *) actor + 0x24);
+    *(s32 *) ((char *) actor + 0x24) = -1;
 }
 
-s32 func_8080020C_chjiggygamenew(Unk80132ED0 *param_0, s32 param_1)
+s32 func_8080020C_chjiggygamenew(Unk80132ED0 *param_0, s32 index)
 {
-    Actor *local_0;
-    JiggyGameData *local_1;
+    Actor *actor;
+    JiggyGameData *data;
 
-    local_0 = func_80106790(param_0);
-    local_1 = func_80100094(local_0, 0);
-    if (local_1->unk208[param_1] == -1) {
-        if (param_1 == *(s32 *) ((u8 *) local_0 + 0x24) &&
-            local_1->slots[*(s32 *) ((u8 *) local_0 + 0x24)].unk0 == 0) {
-            local_1->slots[*(s32 *) ((u8 *) local_0 + 0x24)].unk8 = 0.0f;
-            func_808007E4_chjiggygamenew(local_1, 0x2E4, *(s32 *) ((u8 *) local_0 + 0x24));
-            func_808035C4_chjiggygamenew(local_0->unk3C,
-                                         local_1->slots[*(s32 *) ((u8 *) local_0 + 0x24)].unkC);
+    actor = func_80106790(param_0);
+    data = func_80100094(actor, 0);
+    if (data->unk208[index] == -1) {
+        if (index == *(s32 *) ((u8 *) actor + 0x24) &&
+            data->slots[*(s32 *) ((u8 *) actor + 0x24)].unk0 == 0) {
+            data->slots[*(s32 *) ((u8 *) actor + 0x24)].unk8 = 0.0f;
+            func_808007E4_chjiggygamenew(data, 0x2E4, *(s32 *) ((u8 *) actor + 0x24));
+            func_808035C4_chjiggygamenew(actor->unk3C,
+                                         data->slots[*(s32 *) ((u8 *) actor + 0x24)].unkC);
             return 1;
         }
-        if (local_1->slots[param_1].type != 0x18 && local_1->unk208[param_1] == -1) {
-            local_1->slots[*(s32 *) ((u8 *) local_0 + 0x24)].unk8 = 0.0f;
-            func_808007E4_chjiggygamenew(local_1, 0x194, *(s32 *) ((u8 *) local_0 + 0x24));
-            func_808035C4_chjiggygamenew(local_0->unk3C,
-                                         local_1->slots[*(s32 *) ((u8 *) local_0 + 0x24)].unkC);
-            local_1->slots[*(s32 *) ((u8 *) local_0 + 0x24)].unk3 = param_1;
-            local_1->unk208[param_1] = *(s32 *) ((u8 *) local_0 + 0x24);
+        if (data->slots[index].type != 0x18 && data->unk208[index] == -1) {
+            data->slots[*(s32 *) ((u8 *) actor + 0x24)].unk8 = 0.0f;
+            func_808007E4_chjiggygamenew(data, 0x194, *(s32 *) ((u8 *) actor + 0x24));
+            func_808035C4_chjiggygamenew(actor->unk3C,
+                                         data->slots[*(s32 *) ((u8 *) actor + 0x24)].unkC);
+            data->slots[*(s32 *) ((u8 *) actor + 0x24)].unk3 = index;
+            data->unk208[index] = *(s32 *) ((u8 *) actor + 0x24);
             return 0;
         }
     }
@@ -292,194 +292,196 @@ s32 func_8080020C_chjiggygamenew(Unk80132ED0 *param_0, s32 param_1)
 
 void func_80800368_chjiggygamenew(Unk80132ED0 *param_0)
 {
-    Actor *local_0;
-    JiggyMenuRecord *local_1;
-    s32 local_2;
+    Actor *actor;
+    JiggyMenuRecord *pieces;
+    s32 index;
 
-    local_0 = func_80106790(param_0);
-    local_1 = func_80100094(local_0, 0);
-    local_2 = local_0->actorData[3];
-    if (local_1[local_2].unk4 != 0x800) {
-        if (local_1[local_2].unk4 == 0x1FFF) {
-            local_1[local_2].unk0--;
+    actor = func_80106790(param_0);
+    pieces = func_80100094(actor, 0);
+    index = actor->actorData[3];
+    if (pieces[index].unk4 != 0x800) {
+        if (pieces[index].unk4 == 0x1FFF) {
+            pieces[index].unk0--;
         }
     } else {
-        local_1[local_2].unk0++;
+        pieces[index].unk0++;
     }
-    if (local_1[local_2].unk0 < 0) {
-        local_1[local_2].unk0 += 4;
+    if (pieces[index].unk0 < 0) {
+        pieces[index].unk0 += 4;
     }
-    if (local_1[local_2].unk0 >= 4) {
-        local_1[local_2].unk0 -= 4;
+    if (pieces[index].unk0 >= 4) {
+        pieces[index].unk0 -= 4;
     }
-    local_1[local_2].unk8 = 0.0f;
-    func_808007E4_chjiggygamenew(local_1, 0x55C, local_2);
+    pieces[index].unk8 = 0.0f;
+    func_808007E4_chjiggygamenew(pieces, 0x55C, index);
 }
 
 void func_80800424_chjiggygamenew(Unk80132ED0 *param_0)
 {
-    Actor *local_0;
-    JiggyMenuRecord *local_1;
-    s32 local_2;
+    Actor *actor;
+    JiggyMenuRecord *pieces;
+    s32 index;
 
-    local_0 = func_80106790(param_0);
-    local_1 = func_80100094(local_0, 0);
-    local_2 = local_0->actorData[3];
-    if (local_1[local_2].unk4 != 0x800) {
-        if (local_1[local_2].unk4 == 0x1FFF) {
-            local_1[local_2].unk0--;
+    actor = func_80106790(param_0);
+    pieces = func_80100094(actor, 0);
+    index = actor->actorData[3];
+    if (pieces[index].unk4 != 0x800) {
+        if (pieces[index].unk4 == 0x1FFF) {
+            pieces[index].unk0--;
         }
     } else {
-        local_1[local_2].unk0++;
+        pieces[index].unk0++;
     }
-    if (local_1[local_2].unk0 < 0) {
-        local_1[local_2].unk0 += 4;
+    if (pieces[index].unk0 < 0) {
+        pieces[index].unk0 += 4;
     }
-    if (local_1[local_2].unk0 >= 4) {
-        local_1[local_2].unk0 -= 4;
+    if (pieces[index].unk0 >= 4) {
+        pieces[index].unk0 -= 4;
     }
-    local_1[local_2].unk8 = 0.0f;
-    func_808007E4_chjiggygamenew(local_1, 0x7F4, local_2);
+    pieces[index].unk8 = 0.0f;
+    func_808007E4_chjiggygamenew(pieces, 0x7F4, index);
 }
 
 void func_808004E0_chjiggygamenew(Unk80132ED0 *param_0)
 {
-    Actor *local_0;
-    s32 local_1;
-    u32 local_2;
+    Actor *actor;
+    s32 dialog_id;
+    u32 unk_0;
 
-    local_0 = func_80106790(param_0);
-    if (!local_0->unk64_20 && func_800CEAA8(4)) {
+    actor = func_80106790(param_0);
+    if (!actor->unk64_20 && func_800CEAA8(4)) {
         func_800CE88C(4, 0);
     }
-    func_80803598_chjiggygamenew(local_0->unk3C);
+    func_80803598_chjiggygamenew(actor->unk3C);
     if (_sujiggy_entrypoint_21()) {
-        local_2 = _sujiggy_entrypoint_24();
-        local_0->unk6C_0 =
-            (s32) (*(f32 *) &local_0->actorData[6] - *(f32 *) &local_0->actorData[0]);
-        if (local_2 == 0) {
+        unk_0 = _sujiggy_entrypoint_24();
+        actor->unk6C_0 =
+            (s32) (*(f32 *) &actor->actorData[6] - *(f32 *) &actor->actorData[0]);
+        if (unk_0 == 0) {
             func_800C9C34(0.25f, 0x83, 0, 2000);
             func_800C9DE4(0.3f, func_800FC6B0, 0x10);
-            local_1 = 0x1564;
-        } else if (local_2 < local_0->unk6C_0) {
+            dialog_id = 0x1564;
+        } else if (unk_0 < actor->unk6C_0) {
             func_800C9C34(0.25f, 0x83, 0, 2000);
             func_800C9DE4(0.3f, func_800FC6B0, 0x17);
-            local_1 = 0x1563;
-        } else if (local_2 == local_0->unk6C_0) {
+            dialog_id = 0x1563;
+        } else if (unk_0 == actor->unk6C_0) {
             func_800C9C34(0.25f, 0x83, 0, 2000);
             func_800C9DE4(0.3f, func_800FC6B0, 0x17);
-            local_1 = 0x1562;
+            dialog_id = 0x1562;
         } else {
             func_800C9C34(0.25f, 0x83, 0, 2000);
             func_800C9DE4(0.3f, func_800FC6B0, 0x10);
-            local_1 = 0x1561;
+            dialog_id = 0x1561;
         }
     } else {
         func_800C9C34(0.25f, 0x83, 0, 2000);
         func_800C9DE4(0.3f, func_800FC6B0, 0x10);
-        local_1 = 0x14FA;
+        dialog_id = 0x14FA;
     }
     func_800C082C(0);
-    _subaddiedialog_entrypoint_11(local_0->unk0, local_1, 0x4C6, 0, 0x97);
+    _subaddiedialog_entrypoint_11(actor->unk0, dialog_id, 0x4C6, 0, 0x97);
     func_800C082C(1);
-    local_0->actorData[4] = 6;
+    actor->actorData[4] = 6;
 }
 
-void func_808006E0_chjiggygamenew(Unk80132ED0 *param_0, s32 param_1, s32 param_2)
+void func_808006E0_chjiggygamenew(Unk80132ED0 *param_0, s32 param_1, s32 dialog_id)
 {
-    Actor *local_0;
-    local_0 = func_80106790(param_0);
-    if (!local_0->unk64_20 && func_800CEAA8(4))
+    Actor *actor;
+    actor = func_80106790(param_0);
+    if (!actor->unk64_20 && func_800CEAA8(4))
         func_800CE88C(4, 0);
-    func_8080356C_chjiggygamenew(local_0->unk3C);
+    func_8080356C_chjiggygamenew(actor->unk3C);
     func_800C9C34(0.25f, 0x83, 0, 2000);
     func_800C9DE4(0.3f, func_800FC6B0, 0x17);
-    local_0->actorData[4] = 6;
+    actor->actorData[4] = 6;
     if (_sujiggy_entrypoint_21())
-        param_2 = 0x155E;
+        dialog_id = 0x155E;
     func_800C082C(0);
-    _subaddiedialog_entrypoint_11(local_0->unk0, param_2, 0x4C6, 0, 0x97);
+    _subaddiedialog_entrypoint_11(actor->unk0, dialog_id, 0x4C6, 0, 0x97);
     func_800C082C(1);
-    func_80800B88_chjiggygamenew(local_0);
+    func_80800B88_chjiggygamenew(actor);
 }
 
 int func_808007BC_chjiggygamenew(Unk80132ED0 *param_0)
 {
-    int *local_0 = (int) func_80106790(param_0) ^ 0;
-    return local_0[10] == 5;
+    // Matching: "^ 0" is needed for the match.
+    int *data = (int) func_80106790(param_0) ^ 0;
+    return data[10] == 5;
 }
 
-void func_808007E4_chjiggygamenew(param_0, param_1, param_2) JiggyMenuRecord *param_0;
-s32 param_1;
-s32 param_2;
+void func_808007E4_chjiggygamenew(pieces, rom_addr, index) JiggyMenuRecord *pieces;
+s32 rom_addr;
+s32 index;
 {
-    u32 local_0;
-    rom_read_word(param_1 + 0xB0000000, &local_0);
-    param_0[param_2].unk4 = local_0 & 0xFFFF;
+    u32 word;
+    rom_read_word(rom_addr + 0xB0000000, &word);
+    pieces[index].unk4 = word & 0xFFFF;
 }
 
+// Resets the board and scatters pieces, rotations and slot ids randomly.
 void func_80800834_chjiggygamenew(Actor *param_0)
 {
-    s32 local_3;
-    s32 i4;
-    s32 local_0[20];
-    s32 local_1[20];
-    JiggyTile88 *local_6;
-    JiggyGameData88 *local_2;
-    s8 local_5;
-    s32 local_4;
-    s32 local_4_b;
+    s32 i;
+    s32 i4; // Matching: unused local, needed for the stack frame slot.
+    s32 taken[20];
+    s32 order[20];
+    JiggyTile88 *tile;
+    JiggyGameData88 *board;
+    s8 rotation;
+    s32 slot;
+    s32 pick;
 
-    local_2 = func_80100094(param_0, 0);
-    for (local_3 = 0; local_3 < 20; local_3++) {
-        local_2->local_0[local_3].local_1 = -1;
-        local_2->local_0[local_3].local_0 = 0;
-        local_2->local_0[local_3].local_2 = 0;
-        func_808007E4_chjiggygamenew((JiggyMenuRecord *) local_2, 0x934, local_3);
-        local_0[local_3] = 0;
-        local_2->local_1[local_3] = -1;
-        local_2->local_2[local_3] = -1;
+    board = func_80100094(param_0, 0);
+    for (i = 0; i < 20; i++) {
+        board->local_0[i].local_1 = -1;
+        board->local_0[i].local_0 = 0;
+        board->local_0[i].local_2 = 0;
+        func_808007E4_chjiggygamenew((JiggyMenuRecord *) board, 0x934, i);
+        taken[i] = 0;
+        board->local_1[i] = -1;
+        board->local_2[i] = -1;
 
 }
-for (local_3 = 0; local_3 < 20 - _sujiggy_entrypoint_6(param_0->actorData[5]); local_3++) {
+for (i = 0; i < 20 - _sujiggy_entrypoint_6(param_0->actorData[5]); i++) {
     do {
-        local_4_b = func_800DC214(0, 20);
-    } while (local_0[local_4_b]);
+        pick = func_800DC214(0, 20);
+    } while (taken[pick]);
 
-local_1[local_3] = local_4_b;
-local_0[local_4_b] = -1;
+order[i] = pick;
+taken[pick] = -1;
 
 }
-for (local_3 = 0; local_3 < 20 - _sujiggy_entrypoint_6(param_0->actorData[5]); local_3++) {
+for (i = 0; i < 20 - _sujiggy_entrypoint_6(param_0->actorData[5]); i++) {
     do {
-        local_4 = func_800DC214(0, 20);
-    } while (local_2->local_0[local_4].local_1 != -1);
+        slot = func_800DC214(0, 20);
+    } while (board->local_0[slot].local_1 != -1);
 
-local_6 = &local_2->local_0[local_4];
-local_6->local_1 = local_1[local_3];
-func_808007E4_chjiggygamenew((JiggyMenuRecord *) local_2, 0xA4, local_4);
-local_6->local_4 = 2.0f;
-local_2->local_1[local_1[local_3]] = local_4;
+tile = &board->local_0[slot];
+tile->local_1 = order[i];
+func_808007E4_chjiggygamenew((JiggyMenuRecord *) board, 0xA4, slot);
+tile->local_4 = 2.0f;
+board->local_1[order[i]] = slot;
 }
-for (local_3 = 0; local_3 < _sujiggy_entrypoint_7(param_0->actorData[5]); local_3++) {
-    local_5 = func_800DC214(1, 3);
+for (i = 0; i < _sujiggy_entrypoint_7(param_0->actorData[5]); i++) {
+    rotation = func_800DC214(1, 3);
 
 if (!(func_800DC1AC() < 0.5f)) {
-    local_5 = -local_5;
+    rotation = -rotation;
 }
 
 do {
-    local_4_b = func_800DC214(0, 20);
-} while (local_2->local_0[local_4_b].local_0);
-local_2->local_0[local_4_b].local_0 = local_5;
+    pick = func_800DC214(0, 20);
+} while (board->local_0[pick].local_0);
+board->local_0[pick].local_0 = rotation;
 
 }
-for (local_3 = 1; local_3 != 21; local_3++) {
+for (i = 1; i != 21; i++) {
     do {
-        local_4 = func_800DC214(0, 20);
-    } while (local_2->local_0[local_4].local_2);
+        slot = func_800DC214(0, 20);
+    } while (board->local_0[slot].local_2);
 
-local_2->local_0[local_4].local_2 = local_3;
+board->local_0[slot].local_2 = i;
 
 }
 *(s32 *) &param_0->actorData[3] = -1;
@@ -487,13 +489,13 @@ local_2->local_0[local_4].local_2 = local_3;
 
 void func_80800AF8_chjiggygamenew(Actor *param_0)
 {
-    JiggyGameCell *local_0;
-    s32 local_1;
-    local_0 = func_80100094(param_0, 0);
-    for (local_1 = 0; local_1 < 20; local_1++) {
-        if (local_0[local_1].local_0 == 0x3000) {
-            func_808007E4_chjiggygamenew(local_0, 0x844, local_1);
-            local_0[local_1].local_1 = 0.0f;
+    JiggyGameCell *cells;
+    s32 i;
+    cells = func_80100094(param_0, 0);
+    for (i = 0; i < 20; i++) {
+        if (cells[i].local_0 == 0x3000) {
+            func_808007E4_chjiggygamenew(cells, 0x844, i);
+            cells[i].local_1 = 0.0f;
         }
 
 }
@@ -501,406 +503,408 @@ void func_80800AF8_chjiggygamenew(Actor *param_0)
 
 void func_80800B88_chjiggygamenew(Actor *param_0)
 {
-    JiggyGameSlot_80800B88_chjiggygamenew *local_0;
+    JiggyGameSlot_80800B88_chjiggygamenew *pieces;
     s32 i;
 
-    local_0 = func_80100094(param_0, 0);
+    pieces = func_80100094(param_0, 0);
     for (i = 0; i < 20; i++) {
-        if (local_0[i].type != 0x18 && local_0[i].type != 0x2A1) {
-            switch (local_0[i].type) {
+        if (pieces[i].type != 0x18 && pieces[i].type != 0x2A1) {
+            switch (pieces[i].type) {
                 case 0:
                 case 0x800:
                 case 0x1FFF:
-                    func_808035C4_chjiggygamenew(*(s32 *) ((u8 *) param_0 + 0x3C), local_0[i].unkC);
+                    func_808035C4_chjiggygamenew(*(s32 *) ((u8 *) param_0 + 0x3C), pieces[i].unkC);
                     break;
                 case 0xA000:
-                    func_800EE7F8(local_0[i].unkC, D_80803AE0_chjiggygamenew[local_0[i].unk3]);
+                    func_800EE7F8(pieces[i].unkC, D_80803AE0_chjiggygamenew[pieces[i].unk3]);
                     break;
                 default:
-                    func_800EE7F8(local_0[i].unkC, D_80803BD0_chjiggygamenew[local_0[i].unk1]);
+                    func_800EE7F8(pieces[i].unkC, D_80803BD0_chjiggygamenew[pieces[i].unk1]);
             }
-            func_808007E4_chjiggygamenew(local_0, 0x9EC, i);
-            local_0[i].unk8 = 1.5f;
+            func_808007E4_chjiggygamenew(pieces, 0x9EC, i);
+            pieces[i].unk8 = 1.5f;
             return;
         }
 
 }
 }
 
+// Updates each piece's animation state and sets its model position, rotation and scale.
 void func_80800CC0_chjiggygamenew(Actor *param_0)
 {
     extern u8 D_80803CC0_chjiggygamenew[][4];
 
-    JiggyPieceRecord *local_0;
-    s32 local_5;
-    s32 local_4;
-    f32 local_15;
-    f32 local_14;
-    f32 local_8[3];
-    f32 local_13;
+    JiggyPieceRecord *pieces;
+    s32 i;
+    s32 handle;
+    f32 scale;
+    f32 rotation;
+    f32 pos[3];
+    f32 unk_0;
 
-    local_0 = func_80100094(param_0, 0);
-    local_4 = func_8010262C(param_0->unk0, 0x3C);
+    pieces = func_80100094(param_0, 0);
+    handle = func_8010262C(param_0->unk0, 0x3C);
 
-    if (local_4 == 0) {
+    if (handle == 0) {
         return;
     }
 
-    func_800E0ACC(local_4);
-    func_800E0AF0(local_4, 1.0f);
+    func_800E0ACC(handle);
+    func_800E0AF0(handle, 1.0f);
 
-    for (local_5 = 0; local_5 < 20; local_5++) {
-        JiggyPieceRecord *local_1 = &local_0[local_5];
-        f32 local_16;
+    for (i = 0; i < 20; i++) {
+        JiggyPieceRecord *piece = &pieces[i];
+        f32 progress;
 
-switch (local_1->unk4) {
+switch (piece->unk4) {
     case 0x18:
-        local_15 = 1;
-        local_14 = 0.0f;
-        local_13 = 0.0f;
+        scale = 1;
+        rotation = 0.0f;
+        unk_0 = 0.0f;
 
-        func_800EFA4C(local_8, 0.0f, 0.0f, 0.0f);
+        func_800EFA4C(pos, 0.0f, 0.0f, 0.0f);
         break;
 
     case 0x3000:
 
-        if (func_800D90A4(&local_1->unk8)) {
-            func_808007E4_chjiggygamenew(local_0, 0x844, local_5);
+        if (func_800D90A4(&piece->unk8)) {
+            func_808007E4_chjiggygamenew(pieces, 0x844, i);
         }
 
-        local_13 = func_800F12D4(local_1->unk8, 2.0f, 0.0f, 0.0f, 1.0f);
+        unk_0 = func_800F12D4(piece->unk8, 2.0f, 0.0f, 0.0f, 1.0f);
 
-        func_800EFB24(local_8, (char *) D_80803BD0_chjiggygamenew + local_1->unk1 * 12,
-                      (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, (char *) D_80803BD0_chjiggygamenew + piece->unk1 * 12,
+                      (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        local_8[0] -= func_80013970(local_13 * 180.0f) * (100.0f + 10.0f * (f32) local_1->unk2);
+        pos[0] -= func_80013970(unk_0 * 180.0f) * (100.0f + 10.0f * (f32) piece->unk2);
 
-        local_14 = (f32) local_1->unk0 * 90.0f;
-        local_15 = 0.75f;
+        rotation = (f32) piece->unk0 * 90.0f;
+        scale = 0.75f;
         break;
 
     case 0x6B54:
-        if (param_0->actorData[2] == (1 + ((s8 *) local_1)[1])) {
+        if (param_0->actorData[2] == (1 + ((s8 *) piece)[1])) {
             if (func_8080363C_chjiggygamenew(param_0->unk3C)) {
-                local_1->unk8 = 0.0f;
-                func_808007E4_chjiggygamenew(local_0, 0x12C, local_5);
+                piece->unk8 = 0.0f;
+                func_808007E4_chjiggygamenew(pieces, 0x12C, i);
             }
         }
 
-        local_15 = 0.75f;
-        local_13 = 1;
+        scale = 0.75f;
+        unk_0 = 1;
 
-        func_800EFB24(local_8, (char *) D_80803BD0_chjiggygamenew + local_1->unk1 * 12,
-                      (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, (char *) D_80803BD0_chjiggygamenew + piece->unk1 * 12,
+                      (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        local_14 = (f32) local_1->unk0 * 90.0f;
+        rotation = (f32) piece->unk0 * 90.0f;
         break;
 
     case 0x2A1: {
-        local_16 = local_1->unk8;
+        progress = piece->unk8;
 
-        if (func_800D90A4(&local_1->unk8)) {
-            func_808007E4_chjiggygamenew(local_0, 0x934, local_5);
+        if (func_800D90A4(&piece->unk8)) {
+            func_808007E4_chjiggygamenew(pieces, 0x934, i);
             func_80800B88_chjiggygamenew(param_0);
-        } else if (0.75f < local_16 && local_1->unk8 <= 0.75f) {
+        } else if (0.75f < progress && piece->unk8 <= 0.75f) {
             func_80800B88_chjiggygamenew(param_0);
         }
 
-        local_13 = func_800F12D4(local_1->unk8, 1.5f, 0.0f, 1.0f, 0.0f);
+        unk_0 = func_800F12D4(piece->unk8, 1.5f, 0.0f, 1.0f, 0.0f);
 
-        func_800EFB24(local_8, local_1->unkC, (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, piece->unkC, (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        local_16 = local_13 * 180.0f;
-        local_8[0] -= func_80013970(local_16) * 100.0f +
-                      func_80013970(local_16) * 10.0f * (f32) local_1->unk2;
+        progress = unk_0 * 180.0f;
+        pos[0] -= func_80013970(progress) * 100.0f +
+                      func_80013970(progress) * 10.0f * (f32) piece->unk2;
 
-        local_14 = (f32) local_1->unk0 * 90.0f;
-        local_15 = 0.75f;
+        rotation = (f32) piece->unk0 * 90.0f;
+        scale = 0.75f;
         break;
     }
 
     case 0xC: {
-        if (func_800D91EC(&local_1->unk8, 0.2f)) {
-            local_1->unk8 = 0.0f;
+        if (func_800D91EC(&piece->unk8, 0.2f)) {
+            piece->unk8 = 0.0f;
 
-            if (param_0->actorData[2] != (1 + ((s8 *) local_1)[1])) {
-                func_808007E4_chjiggygamenew(local_0, 0x844, local_5);
+            if (param_0->actorData[2] != (1 + ((s8 *) piece)[1])) {
+                func_808007E4_chjiggygamenew(pieces, 0x844, i);
             }
         }
 
-        local_13 = 1;
+        unk_0 = 1;
 
-        func_800EFB24(local_8, (char *) D_80803BD0_chjiggygamenew + local_1->unk1 * 12,
-                      (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, (char *) D_80803BD0_chjiggygamenew + piece->unk1 * 12,
+                      (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        local_14 = (f32) local_1->unk0 * 90.0f;
+        rotation = (f32) piece->unk0 * 90.0f;
 
-        local_15 =
-            func_80013970(func_800F10B4(local_1->unk8, 0.0f, 0.2f, 0.0f, 1.0f) * 360.0f) * 0.1f +
+        scale =
+            func_80013970(func_800F10B4(piece->unk8, 0.0f, 0.2f, 0.0f, 1.0f) * 360.0f) * 0.1f +
             0.75f;
         break;
     }
 
     case 0xF018: {
-        f32 local_9[3];
-        f32 local_16;
+        f32 dest[3];
+        f32 progress;
 
-        if (func_800D91EC(&local_1->unk8, 0.2f)) {
-            func_808007E4_chjiggygamenew(local_0, 0x470, local_5);
+        if (func_800D91EC(&piece->unk8, 0.2f)) {
+            func_808007E4_chjiggygamenew(pieces, 0x470, i);
         }
 
-        local_16 = func_800F10B4(local_1->unk8, 0.0f, 0.2f, 0.0f, 1.0f);
+        progress = func_800F10B4(piece->unk8, 0.0f, 0.2f, 0.0f, 1.0f);
 
-        local_13 = 1;
+        unk_0 = 1;
 
-        func_800EFB24(local_8, (char *) D_80803BD0_chjiggygamenew + local_1->unk1 * 12,
-                      (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, (char *) D_80803BD0_chjiggygamenew + piece->unk1 * 12,
+                      (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        func_808035C4_chjiggygamenew(param_0->unk3C, local_9);
+        func_808035C4_chjiggygamenew(param_0->unk3C, dest);
 
-        func_800EFB24(local_9, local_9, (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(dest, dest, (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        func_800EFE50(local_8, local_8, local_9, local_16);
+        func_800EFE50(pos, pos, dest, progress);
 
-        local_14 = (f32) local_1->unk0 * 90.0f;
+        rotation = (f32) piece->unk0 * 90.0f;
 
-        local_15 = func_800F1214(local_16, 0.75f, 1.1f);
+        scale = func_800F1214(progress, 0.75f, 1.1f);
         break;
     }
 
     case 0:
-        local_13 = 1;
+        unk_0 = 1;
 
-        func_808035C4_chjiggygamenew(param_0->unk3C, local_8);
+        func_808035C4_chjiggygamenew(param_0->unk3C, pos);
 
-        local_15 = 1.1f;
+        scale = 1.1f;
 
-        func_800EFB24(local_8, local_8, (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, pos, (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        local_14 = (f32) local_1->unk0 * 90.0f;
+        rotation = (f32) piece->unk0 * 90.0f;
         break;
 
     case 0x1FFF: {
-        f32 local_16;
+        f32 progress;
 
-        if (func_800D91EC(&local_1->unk8, 0.2f)) {
-            local_1->unk8 = 0.0f;
+        if (func_800D91EC(&piece->unk8, 0.2f)) {
+            piece->unk8 = 0.0f;
 
-            func_808007E4_chjiggygamenew(local_0, 0x470, local_5);
+            func_808007E4_chjiggygamenew(pieces, 0x470, i);
 
-            local_16 = 0.0f;
+            progress = 0.0f;
 
-            local_1->unk0 -= 1;
+            piece->unk0 -= 1;
 
-            if (local_1->unk0 >= 4) {
-                local_1->unk0 -= 4;
+            if (piece->unk0 >= 4) {
+                piece->unk0 -= 4;
             }
         } else {
-            local_16 = func_800F10B4(local_1->unk8, 0.0f, 0.2f, 0.0f, 1.0f);
+            progress = func_800F10B4(piece->unk8, 0.0f, 0.2f, 0.0f, 1.0f);
         }
 
-        local_13 = 1;
-        local_15 = 1.1f;
+        unk_0 = 1;
+        scale = 1.1f;
 
-        func_808035C4_chjiggygamenew(param_0->unk3C, local_8);
+        func_808035C4_chjiggygamenew(param_0->unk3C, pos);
 
-        func_800EFB24(local_8, local_8, (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, pos, (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        local_14 = (f32) local_1->unk0 * 90.0f - 90.0f * local_16;
+        rotation = (f32) piece->unk0 * 90.0f - 90.0f * progress;
         break;
     }
 
     case 0x800: {
-        f32 local_16;
+        f32 progress;
 
-        if (func_800D91EC(&local_1->unk8, 0.2f)) {
-            func_808007E4_chjiggygamenew(local_0, 0x470, local_5);
+        if (func_800D91EC(&piece->unk8, 0.2f)) {
+            func_808007E4_chjiggygamenew(pieces, 0x470, i);
 
-            local_16 = 0.0f;
+            progress = 0.0f;
 
-            local_1->unk0 += 1;
+            piece->unk0 += 1;
 
-            if (local_1->unk0 >= 4) {
-                local_1->unk0 -= 4;
+            if (piece->unk0 >= 4) {
+                piece->unk0 -= 4;
             }
         } else {
-            local_16 = func_800F10B4(local_1->unk8, 0.0f, 0.2f, 0.0f, 1.0f);
+            progress = func_800F10B4(piece->unk8, 0.0f, 0.2f, 0.0f, 1.0f);
         }
 
-        local_13 = 1;
-        local_15 = 1.1f;
+        unk_0 = 1;
+        scale = 1.1f;
 
-        func_808035C4_chjiggygamenew(param_0->unk3C, local_8);
+        func_808035C4_chjiggygamenew(param_0->unk3C, pos);
 
-        func_800EFB24(local_8, local_8, (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, pos, (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        local_14 = (f32) local_1->unk0 * 90.0f + 90.0f * local_16;
+        rotation = (f32) piece->unk0 * 90.0f + 90.0f * progress;
         break;
     }
 
     case 0x32D4: {
-        f32 local_9[3];
-        f32 local_16;
+        f32 dest[3];
+        f32 progress;
 
-        if (func_800D91EC(&local_1->unk8, 0.2f)) {
-            func_808007E4_chjiggygamenew(local_0, 0x844, local_5);
+        if (func_800D91EC(&piece->unk8, 0.2f)) {
+            func_808007E4_chjiggygamenew(pieces, 0x844, i);
         }
 
-        local_16 = func_800F10B4(local_1->unk8, 0.0f, 0.2f, 1.0f, 0.0f);
+        progress = func_800F10B4(piece->unk8, 0.0f, 0.2f, 1.0f, 0.0f);
 
-        local_13 = 1;
+        unk_0 = 1;
 
-        func_800EFB24(local_8, (char *) D_80803BD0_chjiggygamenew + local_1->unk1 * 12,
-                      (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, (char *) D_80803BD0_chjiggygamenew + piece->unk1 * 12,
+                      (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        func_800EFB24(local_9, local_1->unkC, (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(dest, piece->unkC, (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        func_800EFE50(local_8, local_8, local_9, local_16);
+        func_800EFE50(pos, pos, dest, progress);
 
-        local_14 = (f32) local_1->unk0 * 90.0f;
+        rotation = (f32) piece->unk0 * 90.0f;
 
-        local_15 = func_800F1214(local_16, 0.75f, 1.1f);
+        scale = func_800F1214(progress, 0.75f, 1.1f);
         break;
     }
 
     case 0xB825: {
-        f32 local_10[3];
-        f32 local_16;
+        f32 dest[3];
+        f32 progress;
 
-        if (func_800D91EC(&local_1->unk8, 0.2f)) {
-            func_808007E4_chjiggygamenew(local_0, 0x19C, local_5);
+        if (func_800D91EC(&piece->unk8, 0.2f)) {
+            func_808007E4_chjiggygamenew(pieces, 0x19C, i);
         }
 
-        local_16 = func_800F10B4(local_1->unk8, 0.0f, 0.2f, 0.0f, 1.0f);
+        progress = func_800F10B4(piece->unk8, 0.0f, 0.2f, 0.0f, 1.0f);
 
-        local_13 = 1;
+        unk_0 = 1;
 
-        func_800EFB24(local_10, (char *) D_80803AE0_chjiggygamenew + local_1->unk3 * 12,
-                      (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(dest, (char *) D_80803AE0_chjiggygamenew + piece->unk3 * 12,
+                      (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        local_10[0] -= local_16 * 20.0f;
+        dest[0] -= progress * 20.0f;
 
-        func_800EFB24(local_8, local_1->unkC, (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, piece->unkC, (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        func_800EFE50(local_8, local_8, local_10, local_16);
+        func_800EFE50(pos, pos, dest, progress);
 
-        local_14 = (f32) local_1->unk0 * 90.0f;
+        rotation = (f32) piece->unk0 * 90.0f;
 
-        local_15 = func_800F1214(local_16, 1.1f, 1.0f);
+        scale = func_800F1214(progress, 1.1f, 1.0f);
         break;
     }
 
     case 0xA000:
-        local_13 = 1;
-        func_800EFB24(local_8, D_80803AE0_chjiggygamenew[local_1->unk3],
-                      D_80803AE0_chjiggygamenew[local_5]);
-        local_15 = 1.0f;
-        local_8[0] -= 20.0f;
-        local_14 = (f32) local_1->unk0 * 90.0f;
+        unk_0 = 1;
+        func_800EFB24(pos, D_80803AE0_chjiggygamenew[piece->unk3],
+                      D_80803AE0_chjiggygamenew[i]);
+        scale = 1.0f;
+        pos[0] -= 20.0f;
+        rotation = (f32) piece->unk0 * 90.0f;
         break;
 
     case 0xB41D: {
-        f32 local_11[3];
+        f32 dest[3];
 
-        if (func_800D91EC(&local_1->unk8, 0.2f)) {
-            func_808007E4_chjiggygamenew(local_0, 0x470, local_5);
+        if (func_800D91EC(&piece->unk8, 0.2f)) {
+            func_808007E4_chjiggygamenew(pieces, 0x470, i);
         }
 
-        local_16 = func_800F10B4(local_1->unk8, 0.0f, 0.2f, 1.0f, 0.0f);
+        progress = func_800F10B4(piece->unk8, 0.0f, 0.2f, 1.0f, 0.0f);
 
-        local_13 = 1;
+        unk_0 = 1;
 
-        func_800EFB24(local_11, (char *) D_80803AE0_chjiggygamenew + local_1->unk3 * 12,
-                      (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(dest, (char *) D_80803AE0_chjiggygamenew + piece->unk3 * 12,
+                      (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        local_11[0] -= local_16 * 20.0f;
+        dest[0] -= progress * 20.0f;
 
-        func_808035C4_chjiggygamenew(param_0->unk3C, local_8);
+        func_808035C4_chjiggygamenew(param_0->unk3C, pos);
 
-        func_800EFB24(local_8, local_8, (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, pos, (f32 *) D_80803AE0_chjiggygamenew[i]);
 
-        func_800EFE50(local_8, local_8, local_11, local_16);
+        func_800EFE50(pos, pos, dest, progress);
 
-        local_14 = (f32) local_1->unk0 * 90.0f;
+        rotation = (f32) piece->unk0 * 90.0f;
 
-        local_15 = func_800F1214(local_16, 1.1f, 1.0f);
+        scale = func_800F1214(progress, 1.1f, 1.0f);
         break;
     }
 
     case 0xE825:
 
-        if (func_800D91EC(&local_1->unk8, 0.2f)) {
-            func_808007E4_chjiggygamenew(local_0, 0x934, local_5);
+        if (func_800D91EC(&piece->unk8, 0.2f)) {
+            func_808007E4_chjiggygamenew(pieces, 0x934, i);
         }
 
-        local_13 = func_800F10B4(local_1->unk8, 0.0f, 0.2f, 1.0f, 0.0f);
+        unk_0 = func_800F10B4(piece->unk8, 0.0f, 0.2f, 1.0f, 0.0f);
 
-        local_15 = 1;
-        local_14 = 0.0f;
+        scale = 1;
+        rotation = 0.0f;
 
-        func_800EFB24(local_8, local_1->unkC, (f32 *) D_80803AE0_chjiggygamenew[local_5]);
+        func_800EFB24(pos, piece->unkC, (f32 *) D_80803AE0_chjiggygamenew[i]);
 }
 
-func_800EF334(local_8, 0.01f);
+func_800EF334(pos, 0.01f);
 
-func_800E0C20(local_4, D_80803CC0_chjiggygamenew[local_5][3], local_13, local_8[0], local_8[1],
-              local_8[2]);
+func_800E0C20(handle, D_80803CC0_chjiggygamenew[i][3], unk_0, pos[0], pos[1],
+              pos[2]);
 
-func_800E0AFC(local_4, D_80803CC0_chjiggygamenew[local_5][3], local_13, local_14, 0.0f, 0.0f);
+func_800E0AFC(handle, D_80803CC0_chjiggygamenew[i][3], unk_0, rotation, 0.0f, 0.0f);
 
-func_800E0B8C(local_4, D_80803CC0_chjiggygamenew[local_5][3], local_13, local_15, local_15,
-              local_15);
+func_800E0B8C(handle, D_80803CC0_chjiggygamenew[i][3], unk_0, scale, scale,
+              scale);
 }
 }
 
+// local_0/local_1 are used by the JIGGY_DISTANCE49 macro.
 int func_808019E0_chjiggygamenew(Actor *param_0)
 {
     f32 local_1[2];
     f32 local_0[2];
-    f32 local_2;
+    f32 best_dist;
     f32 local_7;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
+    s32 best_index;
+    s32 table;
+    s32 i;
     f32 local_6;
-    local_2 = -1.0f;
-    local_3 = 0;
+    best_dist = -1.0f;
+    best_index = 0;
     func_808035FC_chjiggygamenew(param_0->unk3C, local_0);
-    local_4 = _glglobalsettings_entrypoint_3() ? 1 : 0;
-    if (local_0[0] >= D_80803D8C_chjiggygamenew[local_4][0] &&
-        local_0[0] <= D_80803D8C_chjiggygamenew[local_4][1] &&
-        local_0[1] >= D_80803D8C_chjiggygamenew[local_4][2] &&
-        local_0[1] <= D_80803D8C_chjiggygamenew[local_4][3]) {
-        for (local_5 = 0; local_5 != 20; local_5++) {
-            func_800E4140(((s32(*)[3]) D_80803AE0_chjiggygamenew)[local_5], local_1);
+    table = _glglobalsettings_entrypoint_3() ? 1 : 0;
+    if (local_0[0] >= D_80803D8C_chjiggygamenew[table][0] &&
+        local_0[0] <= D_80803D8C_chjiggygamenew[table][1] &&
+        local_0[1] >= D_80803D8C_chjiggygamenew[table][2] &&
+        local_0[1] <= D_80803D8C_chjiggygamenew[table][3]) {
+        for (i = 0; i != 20; i++) {
+            func_800E4140(((s32(*)[3]) D_80803AE0_chjiggygamenew)[i], local_1);
 
-if (local_2 == -1.0f || JIGGY_DISTANCE49 < local_2) {
-    local_3 = local_5;
-    local_2 = JIGGY_DISTANCE49;
+if (best_dist == -1.0f || JIGGY_DISTANCE49 < best_dist) {
+    best_index = i;
+    best_dist = JIGGY_DISTANCE49;
 }
 
 }
-return local_3 + 21;
+return best_index + 21;
 }
-for (local_5 = 0; local_5 != 20; local_5++) {
-    func_800E4140(((s32(*)[3]) D_80803BD0_chjiggygamenew)[local_5], local_1);
-    if (local_2 == -1.0f || JIGGY_DISTANCE49 < local_2) {
-        local_3 = local_5;
-        local_2 = JIGGY_DISTANCE49;
+for (i = 0; i != 20; i++) {
+    func_800E4140(((s32(*)[3]) D_80803BD0_chjiggygamenew)[i], local_1);
+    if (best_dist == -1.0f || JIGGY_DISTANCE49 < best_dist) {
+        best_index = i;
+        best_dist = JIGGY_DISTANCE49;
     }
 }
-if (local_2 < 625.0f)
-    return local_3 + 1;
+if (best_dist < 625.0f)
+    return best_index + 1;
 return 0;
 }
 
 int func_80801C20_chjiggygamenew(Actor *param_0)
 {
-    JiggyGameSolvedCell *local_0;
-    s32 local_1;
-    local_0 = func_80100094(param_0, 0);
-    for (local_1 = 0; local_1 < 20; local_1++) {
-        if (local_0[local_1].local_0 != 0x18)
+    JiggyGameSolvedCell *cells;
+    s32 i;
+    cells = func_80100094(param_0, 0);
+    for (i = 0; i < 20; i++) {
+        if (cells[i].local_0 != 0x18)
             return 0;
     }
     return 1;
@@ -908,56 +912,57 @@ int func_80801C20_chjiggygamenew(Actor *param_0)
 
 int func_80801CB0_chjiggygamenew(s32 param_0, s32 param_1, JiggyGameRecord *param_2)
 {
-    s32 local_0;
+    s32 type;
 
-    local_0 = param_2[param_1].unk4;
-    return (local_0 == 0x6B54) || (local_0 == 0xC);
+    type = param_2[param_1].unk4;
+    return (type == 0x6B54) || (type == 0xC);
 }
 
 void func_80801CE8_chjiggygamenew(Actor *param_0)
 {
-    u8 *local_1;
-    s32 local_0;
-    s32 local_2;
-    s32 local_3;
-    u8 local_4;
-    s32 local_7;
+    u8 *data;
+    s32 target;
+    s32 unk_0;
+    s32 i;
+    u8 prev_state;
+    s32 handle;
 
-    local_1 = func_80100094(param_0, 0);
-    local_0 = *(s32 *) ((u8 *) param_0 + 0x20) - 1;
-    local_2 = func_8080363C_chjiggygamenew(param_0->unk3C);
-    for (local_3 = 0; local_3 != 20; local_3++) {
-        local_4 = local_1[0x1E0 + local_3];
-        if (local_0 == *(s8 *) (local_1 + local_3 * 0x18 + 1) && local_2 &&
-            func_80801CB0_chjiggygamenew(param_0, local_3, local_1)) {
-            local_1[0x1E0 + local_3] = 1;
+    data = func_80100094(param_0, 0);
+    target = *(s32 *) ((u8 *) param_0 + 0x20) - 1;
+    unk_0 = func_8080363C_chjiggygamenew(param_0->unk3C);
+    for (i = 0; i != 20; i++) {
+        prev_state = data[0x1E0 + i];
+        if (target == *(s8 *) (data + i * 0x18 + 1) && unk_0 &&
+            func_80801CB0_chjiggygamenew(param_0, i, data)) {
+            data[0x1E0 + i] = 1;
         } else
-            local_1[0x1E0 + local_3] = 0;
-        if (local_4 != local_1[0x1E0 + local_3]) {
-            local_7 = func_8010649C(param_0, local_3 + 0x190);
+            data[0x1E0 + i] = 0;
+        if (prev_state != data[0x1E0 + i]) {
+            handle = func_8010649C(param_0, i + 0x190);
 
-switch (local_1[0x1E0 + local_3]) {
+switch (data[0x1E0 + i]) {
     case 1:
-        func_800EDE54(local_7, D_80803DAC_chjiggygamenew, D_80803DBC_chjiggygamenew, 0.1f);
+        func_800EDE54(handle, D_80803DAC_chjiggygamenew, D_80803DBC_chjiggygamenew, 0.1f);
         break;
     case 0:
-        func_800EDE54(local_7, D_80803DBC_chjiggygamenew, D_80803DAC_chjiggygamenew, 0.3f);
+        func_800EDE54(handle, D_80803DBC_chjiggygamenew, D_80803DAC_chjiggygamenew, 0.3f);
 }
 
 }
 }
 }
 
+// Starts the challenge: sets up the time limit and the timer in core slot 4.
 void func_80801E4C_chjiggygamenew(Actor *param_0, s32 param_1)
 {
-    f32 local_0;
+    f32 time_limit;
 
     func_800DA544(0xD49);
     if (param_1 == 0) {
-        local_0 = _sujiggy_entrypoint_3(param_0->actorData[5]);
-        *(f32 *) ((u8 *) param_0 + 0x18) = local_0;
-        *(f32 *) ((u8 *) param_0 + 0x30) = local_0;
-        func_800CE8D8(4, local_0, (s32) local_0);
+        time_limit = _sujiggy_entrypoint_3(param_0->actorData[5]);
+        *(f32 *) ((u8 *) param_0 + 0x18) = time_limit;
+        *(f32 *) ((u8 *) param_0 + 0x30) = time_limit;
+        func_800CE8D8(4, time_limit, (s32) time_limit);
         func_800CE88C(4, 1);
         param_0->actorData[1] = osGetCount();
     }
@@ -967,22 +972,22 @@ void func_80801E4C_chjiggygamenew(Actor *param_0, s32 param_1)
 
 void func_80801EE8_chjiggygamenew(param_0) Actor *param_0;
 {
-    u8 *local_0;
-    u8 *local_1;
+    u8 *text;
+    u8 *line;
     s32 i;
     s32 j;
     s32 k;
 
     *(s32 *) ((u8 *) param_0 + 0x2C) = _sujiggy_entrypoint_12();
     *(s32 *) ((u8 *) param_0 + 0x28) = 1;
-    local_0 = _gldbstring_entrypoint_1(_gldbstring_entrypoint_0(0, 0x186D),
+    text = _gldbstring_entrypoint_1(_gldbstring_entrypoint_0(0, 0x186D),
                                        *(s16 *) ((u8 *) param_0 + 0x2E));
-    for (i = 0, k = 0; local_0[k - 1] != 0 && i < 3; i++, k++) {
-        local_1 = func_80100094(param_0, 0) + i * 30 + 0x21C;
-        for (j = 0; local_0[k] != 0 && local_0[k] != 10; k++, j++) {
-            local_1[j] = local_0[k];
+    for (i = 0, k = 0; text[k - 1] != 0 && i < 3; i++, k++) {
+        line = func_80100094(param_0, 0) + i * 30 + 0x21C;
+        for (j = 0; text[k] != 0 && text[k] != 10; k++, j++) {
+            line[j] = text[k];
         }
-        local_1[j + 1] = 0;
+        line[j + 1] = 0;
     }
     for (; i < 3; i++) {
         (func_80100094(param_0, 0) + i * 30)[0x21C] = 0;
@@ -992,15 +997,15 @@ void func_80801EE8_chjiggygamenew(param_0) Actor *param_0;
 
 void func_80802030_chjiggygamenew(param_0) Actor *param_0;
 {
-    f32 local_0 = func_800D8FF8();
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
+    f32 dt = func_800D8FF8();
+    s32 now;
+    s32 start;
+    s32 elapsed;
 
     if (((JiggyGameEvent441 *) param_0)->local_0 != 0) {
         func_80801CE8_chjiggygamenew(param_0);
     }
-    param_0->unk58 += local_0;
+    param_0->unk58 += dt;
     switch ((s32) param_0->actorData[4]) {
         case 1:
             if (param_0->unk58 > 0.1f) {
@@ -1064,14 +1069,14 @@ if (func_80801C20_chjiggygamenew(param_0)) {
     func_808004E0_chjiggygamenew(param_0->unk0);
     func_80102424(func_80106790(param_0->unk3C), 7);
 } else if (!param_0->unk64_20) {
-    local_1 = osGetCount();
-    local_2 = (s32)param_0->actorData[1];
-    if (local_1 >= local_2) {
-        local_3 = local_1 - local_2;
+    now = osGetCount();
+    start = (s32)param_0->actorData[1];
+    if (now >= start) {
+        elapsed = now - start;
     } else {
-        local_3 = (0xFFFFFFFF - local_2) + local_1 + 1;
+        elapsed = (0xFFFFFFFF - start) + now + 1;
     }
-    *(f32 *)&param_0->actorData[0] -= (local_3 * 0.021333333f) / 1000000.0f;
+    *(f32 *)&param_0->actorData[0] -= (elapsed * 0.021333333f) / 1000000.0f;
     param_0->actorData[1] = osGetCount();
     if (param_0->unk58 > 2.0f) {
         func_800FCD14(0x83, (s32)((131538.0f * *(f32 *)&param_0->actorData[0]) / *(f32 *)&param_0->actorData[6] + 330000.0f));
@@ -1115,60 +1120,61 @@ void func_808024C8_chjiggygamenew(s32 arg0)
     func_800E4208();
     func_800E44FC(arg0);
 }
-void func_808024F0_chjiggygamenew(param_0, param_1) u8 *param_0; GfxW **param_1;
+// Matching: the line breaks in this function are needed for the match.
+void func_808024F0_chjiggygamenew(board, gfx) u8 *board; GfxW **gfx;
 {
-    f32 local_0;
-    f32 sp70[3];
-    f32 sp64[3];
-    void *local_1;
-    s32 m;
+    f32 scale;
+    f32 pos[3];
+    f32 rot[3];
+    void *offscreen_buf;
+    s32 model;
 
-    local_1 = func_800E81D0();
-    if ((local_1 != 0) && (func_800A9CD0() == 1)) {
-        local_0 = func_80802464_chjiggygamenew(param_1);
-        func_800EFA4C(sp70, 0, 0, 0);
-        func_800EFA4C(sp64, 0, 0, 0);
+    offscreen_buf = func_800E81D0();
+    if ((offscreen_buf != 0) && (func_800A9CD0() == 1)) {
+        scale = func_80802464_chjiggygamenew(gfx);
+        func_800EFA4C(pos, 0, 0, 0);
+        func_800EFA4C(rot, 0, 0, 0);
         func_800DF830(1);
-        m = func_800D674C(0x866);
-        func_800DE498(param_1, sp70, 0, 1.0f, sp64, m);
-        m = func_800D674C(0x865);
-        func_800DE498(param_1, sp70, 0, 1.0f, sp64, m);
+        model = func_800D674C(0x866);
+        func_800DE498(gfx, pos, 0, 1.0f, rot, model);
+        model = func_800D674C(0x865);
+        func_800DE498(gfx, pos, 0, 1.0f, rot, model);
         {
-            GfxW *_g = (*param_1)++;
+            GfxW *_g = (*gfx)++;
             _g->w1 = 0;
             _g->w0 = 0xE3001201;
-            _g = (*param_1)++;
+            _g = (*gfx)++;
             _g->w0 = 0xE3001801; _g->w1 = 0xC0;
         }
-        if (*(s32 *)(param_0 + 0x34) != 0) {
-            func_80803928_chjiggygamenew(*(s32 *)(param_0 + 0x34) ^ 0, param_1);
+        if (*(s32 *)(board + 0x34) != 0) {
+            func_80803928_chjiggygamenew(*(s32 *)(board + 0x34) ^ 0, gfx);
         }
-        func_800E7C28(param_1);
-        func_800E7CF4(param_1);
+        func_800E7C28(gfx);
+        func_800E7CF4(gfx);
         {
-            GfxW *_g = (*param_1)++;
+            GfxW *_g = (*gfx)++;
             _g->w0 = 0xDB060010;
-            _g->w1 = osVirtualToPhysical(local_1);
+            _g->w1 = osVirtualToPhysical(offscreen_buf);
         }
-        func_80102FDC(param_0, local_0);
-        func_80101870(param_0, param_1);
+        func_80102FDC(board, scale);
+        func_80101870(board, gfx);
         {
-            GfxW *_g = (*param_1)++;
+            GfxW *_g = (*gfx)++;
             _g->w1 = 0x2000;
             _g->w0 = 0xE3001201;
-            _g = (*param_1)++;
+            _g = (*gfx)++;
             _g->w1 = 0;
             _g->w0 = 0xE3001801;
         }
         {
-            s32 v;
+            s32 alpha;
             s32 j;
             s32 count;
-            s32 sp34;
-            func_80803668_chjiggygamenew(*(s32 *)(param_0 + 0x3C), param_1);
-            *(s32 *)(param_0 + 0x20) = func_808019E0_chjiggygamenew(param_0);
-            func_808024C8_chjiggygamenew(param_1);
-            switch (*(s32 *)(param_0 + 0x28)) {
+            s32 start_x;
+            func_80803668_chjiggygamenew(*(s32 *)(board + 0x3C), gfx);
+            *(s32 *)(board + 0x20) = func_808019E0_chjiggygamenew(board);
+            func_808024C8_chjiggygamenew(gfx);
+            switch (*(s32 *)(board + 0x28)) {
                 case 1:
                 case 2:
                 _fxkern_entrypoint_2();
@@ -1176,33 +1182,33 @@ void func_808024F0_chjiggygamenew(param_0, param_1) u8 *param_0; GfxW **param_1;
                 default:
                 return;
             }
-            if (*(s32 *)(param_0 + 0x28) == 1) {
-                v = 0xFF;
+            if (*(s32 *)(board + 0x28) == 1) {
+                alpha = 0xFF;
             } else {
-                v = (s32)func_800F10B4(*(f32 *)(param_0 + 0x18), 2.0f, 0.0f, 255.0f, 0.0f);
+                alpha = (s32)func_800F10B4(*(f32 *)(board + 0x18), 2.0f, 0.0f, 255.0f, 0.0f);
 
 }
-func_800B8C8C(v);
+func_800B8C8C(alpha);
 func_800B8CE0(0xC26);
 _fxkern_entrypoint_3(1.1f);
 
 count = 0;
 for (j = 0; j < 3; j++) {
-    if (func_80100094(param_0, 0)[j * 0x1E + 0x21C] != 0) {
+    if (func_80100094(board, 0)[j * 0x1E + 0x21C] != 0) {
         count++;
     }
 
 }
 
 j = 0;
-if (func_80100094(param_0, 0)[j * 0x1E + 0x21C] != 0) {
-    sp34 = 0x78 - (count / 2) * 25;
+if (func_80100094(board, 0)[j * 0x1E + 0x21C] != 0) {
+    start_x = 0x78 - (count / 2) * 25;
 
 do {
-    v = func_800E71B8((u8 *) &((ArrV1E *) func_80100094(param_0, 0))->arr[j] + 0x21C);
-    _fxkern_entrypoint_1(param_1, (u32) sp34 + j * 0x19, v);
+    alpha = func_800E71B8((u8 *) &((ArrV1E *) func_80100094(board, 0))->arr[j] + 0x21C);
+    _fxkern_entrypoint_1(gfx, (u32) start_x + j * 0x19, alpha);
     j++;
-    if (func_80100094(param_0, 0)[j * 0x1E + 0x21C] == 0) {
+    if (func_80100094(board, 0)[j * 0x1E + 0x21C] == 0) {
         return;
     }
 } while (j != 3);
@@ -1211,48 +1217,48 @@ do {
 }
 }
 
-s32 func_80802858_chjiggygamenew(param_0, param_1, param_2) void *param_0;
-s32 param_1;
-u32 param_2;
+s32 func_80802858_chjiggygamenew(obj, event, data) void *obj;
+s32 event;
+u32 data;
 {
-    JiggyGameDialogEvent *local_0 = (JiggyGameDialogEvent *) &param_2;
-    Actor *local_1 = param_0;
+    JiggyGameDialogEvent *dialog = (JiggyGameDialogEvent *) &data;
+    Actor *actor = obj;
 
-    switch (param_1) {
+    switch (event) {
         case 0x2E:
-            switch (local_0->local_1[0]) {
+            switch (dialog->local_1[0]) {
                 case 0x14F9:
                 case 0x155F:
                 case 0x1560:
-                    func_80801E4C_chjiggygamenew(local_1, 0);
+                    func_80801E4C_chjiggygamenew(actor, 0);
                     break;
                 case 0x1554:
-                    if (local_0->local_1[1] == 1) {
+                    if (dialog->local_1[1] == 1) {
                         if (!func_800DA298(0xD74)) {
-                            _subaddiedialog_entrypoint_11(local_1->unk0, 0x1555, 0x4C7, 0, 0x97);
+                            _subaddiedialog_entrypoint_11(actor->unk0, 0x1555, 0x4C7, 0, 0x97);
                             func_800DA544(0xD74);
                         } else {
 
-func_80801E4C_chjiggygamenew(local_1, 1);
+func_80801E4C_chjiggygamenew(actor, 1);
 }
 }
 else
 {
-    func_80801E4C_chjiggygamenew(local_1, 0);
+    func_80801E4C_chjiggygamenew(actor, 0);
 }
 break;
 case 0x1555:
-    func_80801E4C_chjiggygamenew(local_1, 1);
+    func_80801E4C_chjiggygamenew(actor, 1);
     break;
 case 0x14FA:
     _sujiggy_entrypoint_9();
-    func_80800B88_chjiggygamenew(local_1);
+    func_80800B88_chjiggygamenew(actor);
 case 0x150B:
 case 0x14FB:
-    if (local_0->local_1[1] == 1) {
-        local_1->actorData[4] = 7;
+    if (dialog->local_1[1] == 1) {
+        actor->actorData[4] = 7;
     } else {
-        local_1->actorData[4] = 8;
+        actor->actorData[4] = 8;
     }
     break;
 case 0x155E:
@@ -1260,31 +1266,31 @@ case 0x1561:
 case 0x1562:
 case 0x1563:
 case 0x1564:
-    func_80800B88_chjiggygamenew(local_1);
-    _sujiggy_entrypoint_25(local_1->unk6C_0);
-    if (local_0->local_1[1] == 1) {
-        local_1->actorData[4] = 7;
+    func_80800B88_chjiggygamenew(actor);
+    _sujiggy_entrypoint_25(actor->unk6C_0);
+    if (dialog->local_1[1] == 1) {
+        actor->actorData[4] = 7;
     } else {
-        local_1->actorData[4] = 8;
+        actor->actorData[4] = 8;
     }
     }
     break;
 case 0x30:
-    switch (local_0->local_1[0]) {
+    switch (dialog->local_1[0]) {
         case 0x14FA:
         case 0x14FB:
         case 0x14FC:
-            return local_1->actorData[5] + 1;
+            return actor->actorData[5] + 1;
         case 0x1554:
             return _sujiggy_entrypoint_19();
         case 0x14F9:
             return _sujiggy_entrypoint_24();
         case 0x1561:
         case 0x1564:
-            if (local_0->local_1[1] != 0) {
+            if (dialog->local_1[1] != 0) {
                 return _sujiggy_entrypoint_24();
             }
-            return local_1->unk6C_0;
+            return actor->unk6C_0;
         case 0x1563:
             return _sujiggy_entrypoint_24();
         case 0x1560:
@@ -1298,30 +1304,31 @@ default:
     return 1;
     }
 
+    // Spawns the board (0x1DF), the cursor (0x1E2) and the piece highlights (0x1DE).
     void chjiggygamenew_entrypoint_1(void)
     {
-        u8 *local_0;
-        u8 **local_3;
-        u8 **local_1;
+        u8 *board;
+        u8 **highlight;
+        u8 **cursor;
 
         (*(f32 *) ((s8 *) (&D_80803DCC_chjiggygamenew) + (8))) = 0.0f;
         (*(f32 *) ((s8 *) (&D_80803DCC_chjiggygamenew) + (4))) =
             (f32) (*(f32 *) ((s8 *) (&D_80803DCC_chjiggygamenew) + (8)));
         (*(f32 *) ((s8 *) (&D_80803DCC_chjiggygamenew) + (0))) =
             (f32) (*(f32 *) ((s8 *) (&D_80803DCC_chjiggygamenew) + (8)));
-        local_0 = func_80108474(0x1DF, &D_80803DCC_chjiggygamenew, 0);
-        local_1 = func_80108528(0x1E2, &D_80803DD8_chjiggygamenew, 0, &local_0);
-        (*(u8 **) ((s8 *) (local_0) + (0x3C))) = (u8 *) (*(u8 **) ((s8 *) (local_1) + (0)));
-        (*(u8 **) ((s8 *) (local_1) + (0x3C))) = (u8 *) (*(u8 **) ((s8 *) (local_0) + (0)));
-        local_3 = func_80108528(0x1DE, local_0 + 4, 0, &local_0);
-        (*(u8 **) ((s8 *) (local_0) + (0x34))) = (u8 *) (*(u8 **) ((s8 *) (local_3) + (0)));
-        (*(u8 **) ((s8 *) (local_3) + (0x3C))) = (u8 *) (*(u8 **) ((s8 *) (local_0) + (0)));
-        (*(u16 *) ((s8 *) (*(u8 **) local_0) + (0x12))) =
-            (u16) (((*(u16 *) ((s8 *) (*(u8 **) local_0) + (0x12))) & 1) | 2);
-        (*(u16 *) ((s8 *) (*local_1) + (0x12))) =
-            (u16) (((*(u16 *) ((s8 *) (*local_1) + (0x12))) & 1) | 2);
-        (*(u16 *) ((s8 *) (*local_3) + (0x12))) =
-            (u16) (((*(u16 *) ((s8 *) (*local_3) + (0x12))) & 1) | 2);
+        board = func_80108474(0x1DF, &D_80803DCC_chjiggygamenew, 0);
+        cursor = func_80108528(0x1E2, &D_80803DD8_chjiggygamenew, 0, &board);
+        (*(u8 **) ((s8 *) (board) + (0x3C))) = (u8 *) (*(u8 **) ((s8 *) (cursor) + (0)));
+        (*(u8 **) ((s8 *) (cursor) + (0x3C))) = (u8 *) (*(u8 **) ((s8 *) (board) + (0)));
+        highlight = func_80108528(0x1DE, board + 4, 0, &board);
+        (*(u8 **) ((s8 *) (board) + (0x34))) = (u8 *) (*(u8 **) ((s8 *) (highlight) + (0)));
+        (*(u8 **) ((s8 *) (highlight) + (0x3C))) = (u8 *) (*(u8 **) ((s8 *) (board) + (0)));
+        (*(u16 *) ((s8 *) (*(u8 **) board) + (0x12))) =
+            (u16) (((*(u16 *) ((s8 *) (*(u8 **) board) + (0x12))) & 1) | 2);
+        (*(u16 *) ((s8 *) (*cursor) + (0x12))) =
+            (u16) (((*(u16 *) ((s8 *) (*cursor) + (0x12))) & 1) | 2);
+        (*(u16 *) ((s8 *) (*highlight) + (0x12))) =
+            (u16) (((*(u16 *) ((s8 *) (*highlight) + (0x12))) & 1) | 2);
         func_800EC828();
         func_800EC828();
         func_800EC828();
@@ -1329,23 +1336,23 @@ default:
 
     void chjiggygamenew_entrypoint_2(void)
     {
-        u16 *local_0;
-        s32 local_1;
-        s32 local_2;
-        s32 local_3;
+        u16 *fb;
+        s32 i;
+        s32 pixel_a;
+        s32 pixel_b;
 
-        local_0 = func_80014F00();
+        fb = func_80014F00();
         if (_glglobalsettings_entrypoint_3()) {
-            for (local_1 = 0; local_1 < 7; local_1++) {
-                local_3 = D_80803DF8_chjiggygamenew[local_1 * 2] +
-                          D_80803DF8_chjiggygamenew[local_1 * 2 + 1] * 0x130;
-                local_0[local_3] = local_0[local_3 - 1];
+            for (i = 0; i < 7; i++) {
+                pixel_b = D_80803DF8_chjiggygamenew[i * 2] +
+                          D_80803DF8_chjiggygamenew[i * 2 + 1] * 0x130;
+                fb[pixel_b] = fb[pixel_b - 1];
             }
         } else {
-            for (local_1 = 0; local_1 < 10; local_1++) {
-                local_2 = D_80803DE4_chjiggygamenew[local_1 * 2] +
-                          D_80803DE4_chjiggygamenew[local_1 * 2 + 1] * 0x130;
-                local_0[local_2] = local_0[local_2 - 1];
+            for (i = 0; i < 10; i++) {
+                pixel_a = D_80803DE4_chjiggygamenew[i * 2] +
+                          D_80803DE4_chjiggygamenew[i * 2 + 1] * 0x130;
+                fb[pixel_a] = fb[pixel_a - 1];
             }
         }
     }
@@ -1355,229 +1362,233 @@ default:
         return D_80803E50_chjiggygamenew;
     }
 
-    void func_80802E80_chjiggygamenew(u8 *param_0)
+    // Sets up the cursor actor and its render state.
+    void func_80802E80_chjiggygamenew(u8 *actor)
     {
-        u16 *local_0;
-        u8 *local_1;
-        u8 *local_2;
-        local_0 = func_800169A8();
-        local_2 = func_80100094(param_0, 0);
-        local_1 = local_2;
+        u16 *input;
+        u8 *data2;
+        u8 *data;
+        input = func_800169A8();
+        data = func_80100094(actor, 0);
+        data2 = data;
         {
         }
-        func_800EE7F8(local_2, param_0 + 4);
-        *((f32 *) (((s8 *) param_0) + 0x38)) = 0.18f;
-        *((f32 *) (((s8 *) param_0) + 0x44)) = 59.0f;
-        *((f32 *) (((s8 *) param_0) + 0x4C)) = 63.0f;
-        *((f32 *) (((s8 *) param_0) + 0x48)) = -6.0f;
-        *((f32 *) (((s8 *) local_1) + 0x30)) = 1.0f;
-        *((f32 *) (((s8 *) local_1) + 0x34)) = 1.0f;
-        *((s32 *) (((s8 *) local_1) + 0x28)) = -1;
-        *((s32 *) (((s8 *) local_1) + 0x2C)) = -1;
-        *((s32 *) (((s8 *) local_1) + 0x38)) = (s32) (*local_0);
-        *((f32 *) (((s8 *) local_1) + 0x3C)) = 0.0f;
-        *((f32 *) (((s8 *) local_1) + 0x40)) = 0.0f;
-        _subaddiefade_entrypoint_1(param_0, 0xB9);
+        func_800EE7F8(data, actor + 4);
+        *((f32 *) (((s8 *) actor) + 0x38)) = 0.18f;
+        *((f32 *) (((s8 *) actor) + 0x44)) = 59.0f;
+        *((f32 *) (((s8 *) actor) + 0x4C)) = 63.0f;
+        *((f32 *) (((s8 *) actor) + 0x48)) = -6.0f;
+        *((f32 *) (((s8 *) data2) + 0x30)) = 1.0f;
+        *((f32 *) (((s8 *) data2) + 0x34)) = 1.0f;
+        *((s32 *) (((s8 *) data2) + 0x28)) = -1;
+        *((s32 *) (((s8 *) data2) + 0x2C)) = -1;
+        *((s32 *) (((s8 *) data2) + 0x38)) = (s32) (*input);
+        *((f32 *) (((s8 *) data2) + 0x3C)) = 0.0f;
+        *((f32 *) (((s8 *) data2) + 0x40)) = 0.0f;
+        _subaddiefade_entrypoint_1(actor, 0xB9);
     }
 
-    void func_80802F3C_chjiggygamenew(Actor *param_0)
+    // Handles the cursor: stick movement, piece select, rotate and drop.
+    void func_80802F3C_chjiggygamenew(Actor *actor)
     {
-        OSContPad *local_0;
-        f32 local_1;
-        f32 local_2;
-        f32 local_3;
-        JiggyCursorData *local_4;
-        s32 local_5;
-        s32 local_6;
+        OSContPad *pad;
+        f32 delta_time;
+        f32 axis_x;
+        f32 axis_y;
+        JiggyCursorData *cursor;
+        s32 result;
+        s32 value;
+        // Matching: z, lim and k are extra temporaries that shape the code.
         s32 z;
         s32 lim;
         s32 k = 0;
         s8 sx;
 
-        local_0 = func_800169A8();
-        local_1 = func_800D9004();
-        local_4 = func_80100094(param_0, 0);
+        pad = func_800169A8();
+        delta_time = func_800D9004();
+        cursor = func_80100094(actor, 0);
 
-        if (param_0->unk70_10 == 7 || param_0->unk70_10 == 8) {
+        if (actor->unk70_10 == 7 || actor->unk70_10 == 8) {
             return;
         }
-        if (func_808007BC_chjiggygamenew(param_0->unk3C)) {
-            z = local_0->button + k;
+        if (func_808007BC_chjiggygamenew(actor->unk3C)) {
+            z = pad->button + k;
             lim = 7 + k;
             k = 2;
-            if (param_0->unk70_10 != 6) {
-                sx = local_0->stick_x;
-                local_2 = func_80015D60(sx, lim, 0x3B);
-                local_3 = func_80015D60(local_0->stick_y, 7, 0x3D);
-                if (local_2 == 0 || local_4->previousX * local_2 < 0.0f) {
-                    local_4->accelerationX = 1;
+            if (actor->unk70_10 != 6) {
+                sx = pad->stick_x;
+                axis_x = func_80015D60(sx, lim, 0x3B);
+                axis_y = func_80015D60(pad->stick_y, 7, 0x3D);
+                if (axis_x == 0 || cursor->previousX * axis_x < 0.0f) {
+                    cursor->accelerationX = 1;
                 } else {
-                    local_4->accelerationX *= 1 + mlAbsF(local_2 * 0.1f);
+                    cursor->accelerationX *= 1 + mlAbsF(axis_x * 0.1f);
                 }
-                if (local_3 == 0 || local_4->previousY * local_3 < 0.0f) {
-                    local_4->accelerationY = 1;
+                if (axis_y == 0 || cursor->previousY * axis_y < 0.0f) {
+                    cursor->accelerationY = 1;
                 } else {
-                    local_4->accelerationY *= 1 + mlAbsF(local_3 * 0.1f);
+                    cursor->accelerationY *= 1 + mlAbsF(axis_y * 0.1f);
                 }
-                local_4->previousX = local_2;
-                local_4->previousY = local_3;
-                ((f32 *) param_0->actorData)[1] +=
-                    local_3 * local_1 * 150.0f * local_4->accelerationY;
-                ((f32 *) param_0->actorData)[2] +=
-                    local_2 * local_1 * 150.0f * local_4->accelerationX;
-                ((f32 *) param_0->actorData)[1] =
-                    MIN(((f32 *) param_0->actorData)[1], 110.0f) < -100.0f
+                cursor->previousX = axis_x;
+                cursor->previousY = axis_y;
+                ((f32 *) actor->actorData)[1] +=
+                    axis_y * delta_time * 150.0f * cursor->accelerationY;
+                ((f32 *) actor->actorData)[2] +=
+                    axis_x * delta_time * 150.0f * cursor->accelerationX;
+                ((f32 *) actor->actorData)[1] =
+                    MIN(((f32 *) actor->actorData)[1], 110.0f) < -100.0f
                         ? -100.0f
-                        : MIN(((f32 *) param_0->actorData)[1], 110.0f);
-                ((f32 *) param_0->actorData)[2] =
-                    MIN(((f32 *) param_0->actorData)[2], 154.0f) < -135.0f
+                        : MIN(((f32 *) actor->actorData)[1], 110.0f);
+                ((f32 *) actor->actorData)[2] =
+                    MIN(((f32 *) actor->actorData)[2], 154.0f) < -135.0f
                         ? -135.0f
-                        : MIN(((f32 *) param_0->actorData)[2], 154.0f);
-                func_800EE780(param_0->position, local_4->origin, (f32 *) param_0->actorData);
+                        : MIN(((f32 *) actor->actorData)[2], 154.0f);
+                func_800EE780(actor->position, cursor->origin, (f32 *) actor->actorData);
             }
-            if ((s32) param_0->unk70_10 >= 2 && (s32) param_0->unk70_10 < 5 &&
+            if ((s32) actor->unk70_10 >= 2 && (s32) actor->unk70_10 < 5 &&
                 _sujiggy_entrypoint_21()) {
-                if ((local_0->button & 2) && !(local_4->previousButtons & 2)) {
+                if ((pad->button & 2) && !(cursor->previousButtons & 2)) {
                     func_800C3F14(0x487, 0.9f);
-                    func_80102424(param_0, 3);
-                    func_80800368_chjiggygamenew(param_0->unk3C);
+                    func_80102424(actor, 3);
+                    func_80800368_chjiggygamenew(actor->unk3C);
                 }
-                if ((local_0->button & 1) && !(local_4->previousButtons & 1)) {
+                if ((pad->button & 1) && !(cursor->previousButtons & 1)) {
                     func_800C3F14(0x487, 1.0f);
-                    func_80102424(param_0, 4);
-                    func_80800424_chjiggygamenew(param_0->unk3C);
+                    func_80102424(actor, 4);
+                    func_80800424_chjiggygamenew(actor->unk3C);
                 }
             }
-            local_4->hovered = func_8080000C_chjiggygamenew(param_0->unk3C);
-            switch (param_0->unk70_10) {
+            cursor->hovered = func_8080000C_chjiggygamenew(actor->unk3C);
+            switch (actor->unk70_10) {
                 case 1:
-                    if (local_4->hovered > 0 && local_4->hovered < 41 &&
-                        (local_0->button & 0x8000) && !(local_4->previousButtons & 0x8000)) {
-                        local_5 =
-                            func_80800030_chjiggygamenew(param_0->unk3C, local_4->hovered - 1);
-                        if (local_5 != 0) {
-                            local_4->selected = local_4->hovered - 1;
+                    if (cursor->hovered > 0 && cursor->hovered < 41 &&
+                        (pad->button & 0x8000) && !(cursor->previousButtons & 0x8000)) {
+                        result =
+                            func_80800030_chjiggygamenew(actor->unk3C, cursor->hovered - 1);
+                        if (result != 0) {
+                            cursor->selected = cursor->hovered - 1;
 
-if (local_5 == 1) {
+if (result == 1) {
     func_800FC660(0x2F);
 } else {
 
 func_800C3E88(0x47F);
 }
-func_80102424(param_0, 2);
-func_80800030_chjiggygamenew(param_0->unk3C, local_4->hovered - 1);
+func_80102424(actor, 2);
+func_80800030_chjiggygamenew(actor->unk3C, cursor->hovered - 1);
 }
 }
 break;
 case 2:
-    if ((local_0->button & 0x4000) && !(local_4->previousButtons & 0x4000)) {
-        func_80102424(param_0, 5);
-        func_80800158_chjiggygamenew(param_0->unk3C);
+    if ((pad->button & 0x4000) && !(cursor->previousButtons & 0x4000)) {
+        func_80102424(actor, 5);
+        func_80800158_chjiggygamenew(actor->unk3C);
         func_800FC660(0x30);
-        local_4->selected = -1;
-    } else if (local_4->hovered >= 21 && local_4->hovered < 41 && (local_0->button & 0x8000) &&
-               !(local_4->previousButtons & 0x8000)) {
-        local_5 = func_8080020C_chjiggygamenew(param_0->unk3C, local_4->hovered - 21);
-        if (local_5 == 1) {
-            local_6 = 0xE;
-            local_4->selected = -1;
-            func_80102424(param_0, 6);
-        } else if (local_5 == 0) {
-            local_6 = 0xF;
-            local_4->selected = -1;
-            func_80102424(param_0, 1);
+        cursor->selected = -1;
+    } else if (cursor->hovered >= 21 && cursor->hovered < 41 && (pad->button & 0x8000) &&
+               !(cursor->previousButtons & 0x8000)) {
+        result = func_8080020C_chjiggygamenew(actor->unk3C, cursor->hovered - 21);
+        if (result == 1) {
+            value = 0xE;
+            cursor->selected = -1;
+            func_80102424(actor, 6);
+        } else if (result == 0) {
+            value = 0xF;
+            cursor->selected = -1;
+            func_80102424(actor, 1);
         } else {
-            local_6 = 0xF;
+            value = 0xF;
         }
-        func_800C9E20(0.25f, (u32 *) func_800FC63C, local_6, 0x6590);
+        func_800C9E20(0.25f, (u32 *) func_800FC63C, value, 0x6590);
     }
     break;
 case 3:
 case 4:
-    if (func_80101DDC(param_0)) {
-        func_80102424(param_0, 2);
+    if (func_80101DDC(actor)) {
+        func_80102424(actor, 2);
     }
     break;
 case 5:
-    func_80102424(param_0, 1);
+    func_80102424(actor, 1);
     break;
 case 6:
-    _subaddieaudioquick_entrypoint_3(param_0, NULL, D_80803E98_chjiggygamenew, 0.5f);
-    if (func_80101DDC(param_0)) {
-        func_80102424(param_0, 1);
+    _subaddieaudioquick_entrypoint_3(actor, NULL, D_80803E98_chjiggygamenew, 0.5f);
+    if (func_80101DDC(actor)) {
+        func_80102424(actor, 1);
     }
     break;
 case 8:
 default:
     break;
     }
-    local_4->previousButtons = local_0->button;
+    cursor->previousButtons = pad->button;
     }
     }
 
     void func_80803564_chjiggygamenew(s32 arg0)
     {
     }
-    void func_8080356C_chjiggygamenew(Unk80132ED0 *param_0)
+    void func_8080356C_chjiggygamenew(Unk80132ED0 *handle)
     {
-        s32 local_0 = (s32) func_80106790(param_0);
+        s32 actor = (s32) func_80106790(handle);
 
-        func_80102424(local_0 | 0, 8);
+        func_80102424(actor | 0, 8);
     }
 
-    void func_80803598_chjiggygamenew(Unk80132ED0 *param_0)
+    void func_80803598_chjiggygamenew(Unk80132ED0 *handle)
     {
-        s32 temp = (s32) func_80106790(param_0);
-        func_80102424(temp, 7);
+        s32 actor = (s32) func_80106790(handle);
+        func_80102424(actor, 7);
     }
 
-    void func_808035C4_chjiggygamenew(param_0, param_1) Unk80132ED0 *param_0;
-    f32 *param_1;
+    void func_808035C4_chjiggygamenew(handle, out) Unk80132ED0 *handle;
+    f32 *out;
     {
-        func_800EE7F8(param_1, (f32 *) ((u8 *) func_80100094(func_80106790(param_0), 0) + 0xC));
+        func_800EE7F8(out, (f32 *) ((u8 *) func_80100094(func_80106790(handle), 0) + 0xC));
     }
 
-    int func_808035FC_chjiggygamenew(s32 param_0, f32 *param_1)
+    int func_808035FC_chjiggygamenew(s32 handle, f32 *out)
     {
-        s32 local_0;
-        f32 *local_1;
-        local_0 = func_80106790(param_0);
-        local_1 = func_80100094(local_0 | 0, 0);
-        param_1[0] = local_1[6];
-        param_1[1] = local_1[7];
+        s32 actor;
+        f32 *data;
+        actor = func_80106790(handle);
+        data = func_80100094(actor | 0, 0);
+        out[0] = data[6];
+        out[1] = data[7];
     }
 
-    int func_8080363C_chjiggygamenew(Unk80132ED0 *param_0)
+    int func_8080363C_chjiggygamenew(Unk80132ED0 *handle)
     {
-        s32 *ptr = (s32 *) func_80106790(param_0);
-        u16 val = *((u16 *) (((char *) ptr) + 0x72));
-        unsigned long new_var;
-        new_var = *((u16 *) (((char *) ptr) + 0x72));
-        return (new_var >> 10) == 1;
+        s32 *actor = (s32 *) func_80106790(handle);
+        // Matching: val is an unused extra read.
+        u16 val = *((u16 *) (((char *) actor) + 0x72));
+        unsigned long bits;
+        bits = *((u16 *) (((char *) actor) + 0x72));
+        return (bits >> 10) == 1;
     }
 
-    void func_80803668_chjiggygamenew(param_0, param_1) Unk80132ED0 *param_0;
-    void *param_1;
+    void func_80803668_chjiggygamenew(handle, gfx) Unk80132ED0 *handle;
+    void *gfx;
     {
-        Actor *local_0;
-        f32 local_1;
-        u8 *local_4;
+        Actor *actor;
+        f32 size;
+        u8 *data;
 
-        local_0 = func_80106790(param_0);
-        local_4 = func_80100094(local_0, 0);
-        func_800E4140(local_0->position, (f32 *) (local_4 + 0x20));
-        local_1 = local_0->scale * 650.0f;
-        func_800E7DE4(param_1, (s32) (*(f32 *) (local_4 + 0x20) - local_1 / 2),
-                      (s32) (*(f32 *) (local_4 + 0x24) - local_1 / 2), (s32) local_1,
-                      (s32) local_1);
-        func_80101870(local_0, param_1);
-        if (local_0->unk70_10 == 1) {
-            func_800EE7F8((f32 *) (local_4 + 0xC), D_80803EA4_chjiggygamenew);
+        actor = func_80106790(handle);
+        data = func_80100094(actor, 0);
+        func_800E4140(actor->position, (f32 *) (data + 0x20));
+        size = actor->scale * 650.0f;
+        func_800E7DE4(gfx, (s32) (*(f32 *) (data + 0x20) - size / 2),
+                      (s32) (*(f32 *) (data + 0x24) - size / 2), (s32) size,
+                      (s32) size);
+        func_80101870(actor, gfx);
+        if (actor->unk70_10 == 1) {
+            func_800EE7F8((f32 *) (data + 0xC), D_80803EA4_chjiggygamenew);
         } else {
-            func_800EE7F8((f32 *) (local_4 + 0xC), D_80803EB0_chjiggygamenew);
+            func_800EE7F8((f32 *) (data + 0xC), D_80803EB0_chjiggygamenew);
         }
-        func_800EF04C((f32 *) (local_4 + 0xC), local_0->position);
-        func_800E4140((f32 *) (local_4 + 0xC), (f32 *) (local_4 + 0x18));
+        func_800EF04C((f32 *) (data + 0xC), actor->position);
+        func_800E4140((f32 *) (data + 0xC), (f32 *) (data + 0x18));
     }
 
     int *chjiggygamenew_entrypoint_4()
@@ -1585,39 +1596,39 @@ default:
         return &D_80803EBC_chjiggygamenew;
     }
 
-    void func_8080377C_chjiggygamenew(Actor *param_0)
+    void func_8080377C_chjiggygamenew(Actor *actor)
     {
-        u8 *local_0;
-        u8 *local_1;
-        s32 local_2;
-        s32 local_3;
-        u8 local_4;
-        void *local_5;
-        local_0 = func_80100094(param_0, 0);
-        if (param_0->unk7C_12 && *(s16 *) ((u8 *) param_0 + 0x90)) {
-            if (!param_0->unk64_20) {
-                for (local_2 = 0; local_2 < 20; local_2++) {
-                    func_800EDE54(func_8010649C(param_0, local_2 + 0x190),
+        u8 *states;
+        u8 *state;
+        s32 i;
+        s32 hovered_piece;
+        u8 prev;
+        void *piece;
+        states = func_80100094(actor, 0);
+        if (actor->unk7C_12 && *(s16 *) ((u8 *) actor + 0x90)) {
+            if (!actor->unk64_20) {
+                for (i = 0; i < 20; i++) {
+                    func_800EDE54(func_8010649C(actor, i + 0x190),
                                   D_80803F14_chjiggygamenew, D_80803F04_chjiggygamenew, 0.0f);
                 }
-                param_0->unk64_20 = 1;
+                actor->unk64_20 = 1;
             }
-            local_3 = func_8080000C_chjiggygamenew(param_0->unk3C) - 0x15;
-            for (local_2 = 0, local_1 = local_0; local_2 < 20; local_2++, local_1++) {
-                local_4 = *local_1;
-                if (local_2 == local_3)
-                    *local_1 = 1;
+            hovered_piece = func_8080000C_chjiggygamenew(actor->unk3C) - 0x15;
+            for (i = 0, state = states; i < 20; i++, state++) {
+                prev = *state;
+                if (i == hovered_piece)
+                    *state = 1;
                 else
-                    *local_1 = 0;
-                if (*local_1 != local_4) {
-                    local_5 = func_8010649C(param_0, local_2 + 0x190);
-                    switch (*local_1) {
+                    *state = 0;
+                if (*state != prev) {
+                    piece = func_8010649C(actor, i + 0x190);
+                    switch (*state) {
                         case 1:
-                            func_800EDE54(local_5, D_80803F04_chjiggygamenew,
+                            func_800EDE54(piece, D_80803F04_chjiggygamenew,
                                           D_80803F14_chjiggygamenew, 0.05f);
                             break;
                         case 0:
-                            func_800EDE54(local_5, D_80803F14_chjiggygamenew,
+                            func_800EDE54(piece, D_80803F14_chjiggygamenew,
                                           D_80803F04_chjiggygamenew, 0.2f);
                     }
                 }
@@ -1625,19 +1636,19 @@ default:
         }
     }
 
-    s32 func_80803928_chjiggygamenew(s32 param_0, s32 *param_1)
+    s32 func_80803928_chjiggygamenew(s32 handle, s32 *gfx)
     {
-        u32 local_0;
-        s32 *local_1;
-        u32 local_2;
-        if ((local_0 = func_800E81D0()) != 0) {
-            local_1 = *((s32 **) (((char *) param_1) + 0x0));
-            *((s32 **) (((char *) param_1) + 0x0)) =
-                (s32 *) (((s32) (*((s32 **) (((char *) param_1) + 0x0)))) + 8);
-            *((u32 *) local_1) = 0xDB060010;
-            local_2 = osVirtualToPhysical(local_0);
-            *((u32 *) (((char *) local_1) + 4)) = local_2;
-            func_80101870(func_80106790(param_0), param_1);
+        u32 offscreen_buf;
+        s32 *cmd;
+        u32 phys;
+        if ((offscreen_buf = func_800E81D0()) != 0) {
+            cmd = *((s32 **) (((char *) gfx) + 0x0));
+            *((s32 **) (((char *) gfx) + 0x0)) =
+                (s32 *) (((s32) (*((s32 **) (((char *) gfx) + 0x0)))) + 8);
+            *((u32 *) cmd) = 0xDB060010;
+            phys = osVirtualToPhysical(offscreen_buf);
+            *((u32 *) (((char *) cmd) + 4)) = phys;
+            func_80101870(func_80106790(handle), gfx);
         }
     }
 

@@ -7,11 +7,12 @@ void func_80800000_chTalTorpWall(s32 arg0)
 {
 }
 
-int func_80800008_chTalTorpWall(s32 param_0, s32 param_1, s32 param_2)
+int func_80800008_chTalTorpWall(s32 actor, s32 msg, s32 param_2)
 {
-    if (param_1 == 0x40) {
-        _chexploder_entrypoint_3(param_0, param_0 + 4, 0xE);
-        _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, &D_80800080_chTalTorpWall);
+    // 0x40: hit by the Talon Torpedo
+    if (msg == 0x40) {
+        _chexploder_entrypoint_3(actor, actor + 4, 0xE);
+        _subaddieaudioquick_entrypoint_2(actor, actor + 4, &D_80800080_chTalTorpWall);
         func_800DA544(0x3AA);
         return 1;
     }
@@ -23,6 +24,8 @@ u8 *chTalTorpWall_entrypoint_0(void)
     return D_80800098_chTalTorpWall;
 }
 
+// TU-NOTE: the overlay .data is defined here in C because its tables point to functions of this file;
+// IDO schedules some of them differently otherwise. Values are taken from the ROM.
 extern void func_80102EC0();
 extern void func_80105834();
 extern void func_80101870();

@@ -44,10 +44,10 @@ extern void baphysics_set_horizontal_velocity(PlayerState *, f32, f32);
 extern void baphysics_set_vertical_velocity(PlayerState *, f32);
 extern void baphysics_set_gravity(PlayerState *, f32);
 typedef struct {
-    u32 local_4;
-    f32 local_1;
-    f32 local_3;
-    void *local_0;
+    u32 state;
+    f32 yaw;
+    f32 velocity;
+    void *anim_ctrl;
 } StatueMotion61;
 extern void baanim_setDurationRange(PlayerState *, f32, f32);
 extern void func_8008C9F0(PlayerState *, f32, f32, f32, f32);
@@ -65,20 +65,21 @@ extern f32 func_800F1214(f32, f32, f32);
 void func_80800BEC_bsstatue();
 void func_8080147C_bsstatue();
 
-void func_80800000_bsstatue(s32 param_0, s32 param_1)
+// Starts or stops the gameplay countdown timer (slot 2).
+void func_80800000_bsstatue(s32 param_0, s32 enable)
 {
-    s32 local_0 = func_800CEAA8(2);
-    if (((local_0 != 0) && (param_1 == 0)) || ((local_0 == 0) && (param_1 != 0))) {
-        func_800CE88C(2, param_1);
+    s32 timer_active = func_800CEAA8(2);
+    if (((timer_active != 0) && (enable == 0)) || ((timer_active == 0) && (enable != 0))) {
+        func_800CE88C(2, enable);
     }
 }
 
 f32 func_80800050_bsstatue(param_0)
 s32 param_0;
 {
-    f32 local_0;
-    local_0 = (f32) func_800CEA84(2);
-    return local_0;
+    f32 time_left;
+    time_left = (f32) func_800CEA84(2);
+    return time_left;
 }
 
 int func_80800078_bsstatue(s32 arg0)
@@ -99,9 +100,9 @@ void func_808000C0_bsstatue(s32 param_0, f32 param_1)
 
 int func_80800104_bsstatue(Actor *param_0)
 {
-    s32 local_0;
-    local_0 = func_8001211C();
-    return *(s32 *) ((char *) param_0 + 0x168) == local_0;
+    s32 unk_0;
+    unk_0 = func_8001211C();
+    return *(s32 *) ((char *) param_0 + 0x168) == unk_0;
 }
 
 void func_80800130_bsstatue(param_0) PlayerState *param_0;
@@ -166,11 +167,11 @@ int bsstatue_entrypoint_1(long param_0)
 
 void func_808003B4_bsstatue(param_0) u8 *param_0;
 {
-    s32 local_0;
+    s32 interrupt;
 
-    local_0 = func_8009E6EC();
+    interrupt = func_8009E6EC();
 
-switch (local_0) {
+switch (interrupt) {
     case 0x20:;
     case 0x21:
     case 0x23:;
@@ -233,19 +234,19 @@ int bsstatue_entrypoint_2(s32 param_0)
 void func_8080054C_bsstatue(param_0, param_1) PlayerState *param_0;
 u32 param_1;
 {
-    StatueMotion61 local_2;
-    local_2.local_4 = param_1;
-    local_2.local_0 = baanim_getAnimCtrlPtr(param_0);
-    param_0->unk15C.bytes[0] = local_2.local_4;
+    StatueMotion61 motion;
+    motion.state = param_1;
+    motion.anim_ctrl = baanim_getAnimCtrlPtr(param_0);
+    param_0->unk15C.bytes[0] = motion.state;
 
-switch (local_2.local_4) {
+switch (motion.state) {
     case 1:
-        anctrl_reset(local_2.local_0);
-        anctrl_setIndex(local_2.local_0, 0x1EF);
-        anctrl_setDuration(local_2.local_0, 1.2f);
-        anctrl_setSubrange(local_2.local_0, 0.0f, 0.2833f);
-        anctrl_setPlaybackType(local_2.local_0, 1);
-        anctrl_start(local_2.local_0);
+        anctrl_reset(motion.anim_ctrl);
+        anctrl_setIndex(motion.anim_ctrl, 0x1EF);
+        anctrl_setDuration(motion.anim_ctrl, 1.2f);
+        anctrl_setSubrange(motion.anim_ctrl, 0.0f, 0.2833f);
+        anctrl_setPlaybackType(motion.anim_ctrl, 1);
+        anctrl_start(motion.anim_ctrl);
         func_8009FFD8(param_0, 1, 1, 3, 6);
         baphysics_set_target_horizontal_velocity(param_0, 0.0f);
         if (bastick_distance(param_0) != 0.0f)
@@ -255,9 +256,9 @@ switch (local_2.local_4) {
         baanim_setEndAndDuration(param_0, 0.4656f, 0.8f);
         baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
         func_80800BEC_bsstatue(param_0);
-        local_2.local_1 = yaw_getIdeal(param_0);
-        local_2.local_3 = baphysics_get_target_horizontal_velocity(param_0);
-        baphysics_set_horizontal_velocity(param_0, local_2.local_1, local_2.local_3);
+        motion.yaw = yaw_getIdeal(param_0);
+        motion.velocity = baphysics_get_target_horizontal_velocity(param_0);
+        baphysics_set_horizontal_velocity(param_0, motion.yaw, motion.velocity);
         baphysics_set_vertical_velocity(param_0, 710.0f);
         baphysics_set_gravity(param_0, -2400.0f);
         break;
@@ -319,13 +320,13 @@ void func_8080081C_bsstatue(Actor *param_0)
 
 void func_8080084C_bsstatue(u8 *arg0)
 {
-    s32 sp2C;
-    f32 sp20[3];
-    sp2C = 0;
+    s32 next_state;
+    f32 unk_0[3];
+    next_state = 0;
     bsstatue_entrypoint_0(arg0);
-    func_8009BB24(arg0, sp20);
+    func_8009BB24(arg0, unk_0);
 
-if (((bakey_released(arg0, 8) != 0) && (sp20[1] > 0.0f)) || (func_8008D544(arg0) == 0)) {
+if (((bakey_released(arg0, 8) != 0) && (unk_0[1] > 0.0f)) || (func_8008D544(arg0) == 0)) {
     baphysics_reset_gravity(arg0);
 }
 
@@ -359,11 +360,11 @@ switch (*(u8 *) ((char *) arg0 + 0x15C)) {
 
     case 5:
         if (baanim_isStopped(arg0) != 0) {
-            sp2C = 0xF9;
+            next_state = 0xF9;
         }
 }
 
-bs_setState(arg0, sp2C);
+bs_setState(arg0, next_state);
 }
 
 int bsstatue_entrypoint_3(s32 param_0)
@@ -382,20 +383,20 @@ void func_808009C0_bsstatue(PlayerState *param_0)
 
 int func_80800A24_bsstatue(Actor *param_0)
 {
-    Actor *local_0 = param_0;
+    Actor *actor = param_0;
     func_808001FC_bsstatue();
     func_8009E55C(param_0, 2, 1.1e+02f);
-    func_8009E5A4(local_0, 2, 3);
-    baanim_playForDuration_onceSmooth(local_0, 0x1F0, 1.3f);
-    func_8009FFD8(local_0, 1, 1, 2, 2);
-    baphysics_set_target_horizontal_velocity(local_0, 0.0f);
+    func_8009E5A4(actor, 2, 3);
+    baanim_playForDuration_onceSmooth(actor, 0x1F0, 1.3f);
+    func_8009FFD8(actor, 1, 1, 2, 2);
+    baphysics_set_target_horizontal_velocity(actor, 0.0f);
 }
 
 void func_80800AA8_bsstatue(Actor *param_0)
 {
-    s32 local_0;
+    s32 next_state;
 
-    local_0 = 0;
+    next_state = 0;
     bsstatue_entrypoint_0();
 
 if (baanim_isAt(param_0, 0.05f) != 0) {
@@ -419,10 +420,10 @@ if (baanim_isAt(param_0, 0.3597f) != 0) {
 }
 
 if (baanim_isStopped(param_0) != 0) {
-    local_0 = 0xF9;
+    next_state = 0xF9;
 }
 
-bs_setState(param_0, local_0);
+bs_setState(param_0, next_state);
 }
 
 int bsstatue_entrypoint_4(s32 param_0)
@@ -432,16 +433,16 @@ int bsstatue_entrypoint_4(s32 param_0)
 
 void func_80800BEC_bsstatue(param_0) PlayerState *param_0;
 {
-    f32 local_0;
+    f32 zone_pos;
 
-    local_0 = bastick_getZonePosition(param_0);
+    zone_pos = bastick_getZonePosition(param_0);
 
 switch (bastick_getZone(param_0)) {
     case 0:
         baphysics_set_target_horizontal_velocity(param_0, 0.0f);
         break;
     case 1:
-        baphysics_set_target_horizontal_velocity(param_0, func_800F1214(local_0, 100.0f, 650.0f));
+        baphysics_set_target_horizontal_velocity(param_0, func_800F1214(zone_pos, 100.0f, 650.0f));
 }
 
 }
@@ -462,14 +463,14 @@ s32 func_80800C98_bsstatue(s32 param_0)
 
 int func_80800CCC_bsstatue(Actor *param_0)
 {
-    s32 local_0;
-    local_0 = 0;
+    s32 next_state;
+    next_state = 0;
 
 if (_bsrest_entrypoint_20()) {
-    local_0 |= _bsrest_entrypoint_13(param_0);
+    next_state |= _bsrest_entrypoint_13(param_0);
 }
 
-bs_setState(param_0, local_0);
+bs_setState(param_0, next_state);
 }
 
 int bsstatue_entrypoint_5(s32 param_0)
@@ -491,6 +492,7 @@ void func_80800D20_bsstatue(u8 *param_0)
 func_808003B4_bsstatue(param_0);
 }
 
+// Timeout: returns the player to the previous character.
 s32 func_80800D84_bsstatue(s32 param_0)
 {
     func_800A05DC();
@@ -530,28 +532,28 @@ void func_80800EAC_bsstatue(PlayerState *arg0)
 }
 s32 func_80800ED4_bsstatue(void *param_0)
 {
-    s32 s0;
-    s0 = param_0;
-    func_808001FC_bsstatue(s0);
-    func_8008E944(s0);
+    s32 player;
+    player = param_0;
+    func_808001FC_bsstatue(player);
+    func_8008E944(player);
 
-if (_badialog_entrypoint_4(s0, 0x11E8, 4, 0x51) != 0) {
-    func_80800DB8_bsstatue(s0, 1);
+if (_badialog_entrypoint_4(player, 0x11E8, 4, 0x51) != 0) {
+    func_80800DB8_bsstatue(player, 1);
     return;
 }
 
-func_80800DB8_bsstatue(s0, 2);
+func_80800DB8_bsstatue(player, 2);
 }
 
 void func_80800F3C_bsstatue(u8 *param_0)
 {
-    u8 temp_v0;
+    u8 state;
     do {
         func_8080147C_bsstatue();
     } while (0);
-    temp_v0 = *((u8 *) (((u8 *) param_0) + 0x15C));
+    state = *((u8 *) (((u8 *) param_0) + 0x15C));
 
-switch (temp_v0) {
+switch (state) {
     case 1:
         if (*(s32 *) ((u8 *) param_0 + 0x164) != 0) {
             func_80800DB8_bsstatue(param_0, 2);
@@ -608,48 +610,48 @@ void func_808010B4_bsstatue()
 
 int func_808010D4_bsstatue(Actor *param_0)
 {
-    s32 local_0;
-    int new_var;
-    local_0 = param_0;
+    s32 actor;
+    int zero;
+    actor = param_0;
     func_808001FC_bsstatue(param_0);
-    baanim_playForDuration_loopSmooth(local_0, 0x1EE, 6.5f);
-    func_8009FFD8(local_0, 1, 3, 1, 2);
-    yaw_setVelocityBounded(local_0, 3e+02f, 3.5f);
-    new_var = 0;
-    baphysics_set_target_horizontal_velocity(local_0, new_var);
+    baanim_playForDuration_loopSmooth(actor, 0x1EE, 6.5f);
+    func_8009FFD8(actor, 1, 3, 1, 2);
+    yaw_setVelocityBounded(actor, 3e+02f, 3.5f);
+    zero = 0;
+    baphysics_set_target_horizontal_velocity(actor, zero);
 }
 
 int func_80801144_bsstatue(Actor *param_0)
 {
-    unsigned long local_1;
-    local_1 = 0;
+    unsigned long next_state;
+    next_state = 0;
     bsstatue_entrypoint_0(param_0);
 
 if (bainput_should_enter_first_person(param_0)) {
-    local_1 |= _badrone_entrypoint_24(param_0);
+    next_state |= _badrone_entrypoint_24(param_0);
 }
 
 if (bastick_getZone(param_0) == 1) {
-    local_1 = 0xFA;
+    next_state = 0xFA;
 }
 
 if (bakey_pressed(param_0, 9)) {
     if (func_80800104_bsstatue(param_0)) {
-        local_1 = 0xF8;
+        next_state = 0xF8;
     } else {
-        local_1 = 0xFC;
+        next_state = 0xFC;
     }
 }
 
 if (bakey_pressed(param_0, 8)) {
-    local_1 = 0xFB;
+    next_state = 0xFB;
 }
 
 if (func_80800078_bsstatue(param_0)) {
-    local_1 = 0xFD;
+    next_state = 0xFD;
 }
 
-bs_setState(param_0, local_1);
+bs_setState(param_0, next_state);
 }
 
 int bsstatue_entrypoint_8(s32 param_0)
@@ -676,8 +678,8 @@ void func_80801238_bsstatue(PlayerState *param_0)
 
 void func_808012E8_bsstatue(PlayerState *param_0)
 {
-    s32 local_0;
-    local_0 = 0;
+    s32 next_state;
+    next_state = 0;
     bsstatue_entrypoint_0();
     func_800A2D2C(param_0, 0.4917f, 3);
     func_800A2D2C(param_0, 0.9917f, 4);
@@ -692,20 +694,20 @@ if (baanim_isAt(param_0, 0.4917f) || baanim_isAt(param_0, 0.9917f)) {
 
 func_80800BEC_bsstatue(param_0);
 if (bastick_getZone(param_0) == 0 && func_8009BCD4(param_0, 0x40400000))
-    local_0 = 0xF9;
+    next_state = 0xF9;
 
 if (bakey_pressed(param_0, 9)) {
     if (func_80800104_bsstatue(param_0))
-        local_0 = 0xF8;
+        next_state = 0xF8;
     else
-        local_0 = 0xFC;
+        next_state = 0xFC;
 }
 
 if (bakey_pressed(param_0, 8))
-    local_0 = 0xFB;
+    next_state = 0xFB;
 if (func_80800078_bsstatue(param_0))
-    local_0 = 0xFD;
-bs_setState(param_0, local_0);
+    next_state = 0xFD;
+bs_setState(param_0, next_state);
 }
 
 int bsstatue_entrypoint_9(s32 param_0)
@@ -730,6 +732,8 @@ if (baanim_isAt(param_0, 0.74f) != 0) {
 
 }
 
+// TU-NOTE: the overlay .data (state function tables) is defined here in C. IDO's assembler
+// schedules some functions differently unless the tables are in the same unit.
 extern void _bsdrone_entrypoint_3();
 s32 D_808015A0_bsstatue[4] = {(u32) func_80800474_bsstatue, (u32) func_808004B4_bsstatue,
                               (u32) func_808004F4_bsstatue, (u32) _bsdrone_entrypoint_3};

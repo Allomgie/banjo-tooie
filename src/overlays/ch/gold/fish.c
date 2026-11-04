@@ -35,137 +35,139 @@ void func_808005F0_chgoldfish();
 extern void func_80101870(), func_80105834(), func_80107C2C(), func_80108ED0(),
     func_80800000_chgoldfish();
 
-void func_80800000_chgoldfish(param_0) ALCSPlayer *param_0;
+void func_80800000_chgoldfish(actor) ALCSPlayer *actor;
 {
     if (func_800DA298(0x1BF) != 0) {
-        func_800FFA88(*(void **) ((char *) param_0 + 0x0));
+        func_800FFA88(*(void **) ((char *) actor + 0x0));
         return;
     }
 
     if (func_800DA298(0x1DA) != 0) {
-        func_808005F0_chgoldfish(param_0, 6);
+        func_808005F0_chgoldfish(actor, 6);
     } else if (func_800DA298(0x51E) != 0) {
-        func_808005F0_chgoldfish(param_0, 3);
+        func_808005F0_chgoldfish(actor, 3);
     }
-    *(f32 *) ((char *) param_0 + 0x24) = *(f32 *) ((char *) param_0 + 0x38);
-    *(f32 *) ((char *) param_0 + 0x4C) = 90.0f;
-    func_80800BA8_chgoldfish(param_0, (char *) param_0 + 4);
+    *(f32 *) ((char *) actor + 0x24) = *(f32 *) ((char *) actor + 0x38);
+    *(f32 *) ((char *) actor + 0x4C) = 90.0f;
+    func_80800BA8_chgoldfish(actor, (char *) actor + 4);
 }
 
-f32 func_80800AB4_chgoldfish(Actor *param_0, f32 *param_1, f32 *param_2, f32 *param_3, f32 param_4,
-                             f32 param_5);
+f32 func_80800AB4_chgoldfish(Actor *actor, f32 *start, f32 *end, f32 *out_pos, f32 duration,
+                             f32 height);
 
 void func_80800964_chgoldfish();
 
 void func_80800924_chgoldfish();
 
-void func_8080009C_chgoldfish(Actor *param_0)
+// Roysten state machine; state 5 is being carried, 7 is thrown into water, 9 is the reward dialog.
+void func_8080009C_chgoldfish(Actor *actor)
 {
-    f32 local_0[1];
-    f32 local_2;
-    f32 local_1;
+    f32 blend[1];
+    f32 progress;
+    f32 prev_y;
 
-    switch (((GoldfishState *) param_0)->st) {
+    switch (((GoldfishState *) actor)->st) {
         case 2:
         case 6:
         case 7:
         case 8:
         case 9:
         case 10:
-            func_8010C964(param_0);
+            func_8010C964(actor);
+            // Matching: empty block steers IDO's codegen.
             if (1) {
             }
             break;
     }
-    switch (((GoldfishState *) param_0)->st) {
+    switch (((GoldfishState *) actor)->st) {
         case 1:
             if (func_800DA298(0x51E)) {
-                func_808005F0_chgoldfish(param_0, 2);
+                func_808005F0_chgoldfish(actor, 2);
                 return;
             }
 
-            _subaddiedialog_entrypoint_7(param_0, param_0->position, D_80800D20_chgoldfish);
+            _subaddiedialog_entrypoint_7(actor, actor->position, D_80800D20_chgoldfish);
             return;
 
         case 2:
             if (!func_800DA298(0x1DA)) {
                 func_800DA544(0x1DA);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x15BF, 0xE, param_0->position, 0x67);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x15BF, 0xE, actor->position, 0x67);
             }
 
             return;
 
         case 3:
-            if (func_800D90A4(&param_0->unk58)) {
-                param_0->unk54 = func_800DC178(0.0f, 360.0f);
-                param_0->unk50 = param_0->rotation[2] == 90.0f ? 270.0f : 90.0f;
-                func_800EE7F8((f32 *) &param_0->actorData[4], param_0->position);
-                func_800CD08C((*(u32 *) ((u8 *) param_0 + 0x70) >> 25) - 1, param_0->actorData);
-                if (func_80800BA8_chgoldfish(param_0, param_0->actorData)) {
-                    func_808005F0_chgoldfish(param_0, 4);
+            if (func_800D90A4(&actor->unk58)) {
+                actor->unk54 = func_800DC178(0.0f, 360.0f);
+                actor->unk50 = actor->rotation[2] == 90.0f ? 270.0f : 90.0f;
+                func_800EE7F8((f32 *) &actor->actorData[4], actor->position);
+                func_800CD08C((*(u32 *) ((u8 *) actor + 0x70) >> 25) - 1, actor->actorData);
+                if (func_80800BA8_chgoldfish(actor, actor->actorData)) {
+                    func_808005F0_chgoldfish(actor, 4);
                 }
             }
 
             break;
 
         case 4:
-            if (func_80800AB4_chgoldfish(param_0, &param_0->actorData[4], param_0->actorData,
-                                         param_0->position, 0.5f, 50.0f) == 1.0f) {
-                func_808005F0_chgoldfish(param_0, 3);
+            if (func_80800AB4_chgoldfish(actor, &actor->actorData[4], actor->actorData,
+                                         actor->position, 0.5f, 50.0f) == 1.0f) {
+                func_808005F0_chgoldfish(actor, 3);
             }
 
             return;
         case 5:
-            func_8008FE94(1, param_0->actorData);
-            local_0[0] =
-                func_80800AB4_chgoldfish(param_0, &param_0->actorData[4], param_0->actorData,
-                                         param_0->position, 1.0f, 150.0f);
+            func_8008FE94(1, actor->actorData);
+            blend[0] =
+                func_80800AB4_chgoldfish(actor, &actor->actorData[4], actor->actorData,
+                                         actor->position, 1.0f, 150.0f);
 
-            if (1.0f - local_0[0] == 0.0f) {
+            if (1.0f - blend[0] == 0.0f) {
                 func_80090708(0);
-                func_808005F0_chgoldfish(param_0, 6);
+                func_808005F0_chgoldfish(actor, 6);
             }
 
-            param_0->scale = AF(param_0, 3) * (1.0f - local_0[0] * 0.5f);
-            func_80800924_chgoldfish(param_0);
+            actor->scale = AF(actor, 3) * (1.0f - blend[0] * 0.5f);
+            func_80800924_chgoldfish(actor);
             return;
         case 6:
-            func_8008FE68(param_0->position);
-            param_0->position[1] += 200.0f;
+            func_8008FE68(actor->position);
+            actor->position[1] += 200.0f;
 
-            if (func_800D90A4(&param_0->unk58)) {
-                param_0->unk58 = 40.0f;
-                _subaddiedialog_entrypoint_11(param_0->unk0, func_800DC128(0x15C2, 0x15C5), 0xE,
-                                              param_0->position, 0x67);
+            if (func_800D90A4(&actor->unk58)) {
+                actor->unk58 = 40.0f;
+                _subaddiedialog_entrypoint_11(actor->unk0, func_800DC128(0x15C2, 0x15C5), 0xE,
+                                              actor->position, 0x67);
             }
 
             if (func_800F71D4(func_800F54E4())) {
-                func_808005F0_chgoldfish(param_0, 7);
+                func_808005F0_chgoldfish(actor, 7);
             }
 
             break;
         case 7:
-            local_1 = param_0->position[1];
-            local_2 = func_80800AB4_chgoldfish(param_0, &param_0->actorData[4], param_0->actorData,
-                                               param_0->position, 1.0f, 200.0f);
-            param_0->rotation[0] = func_80013970(func_800F1214(local_2, 270.0f, 540.0f)) * 70.0f;
+            prev_y = actor->position[1];
+            progress = func_80800AB4_chgoldfish(actor, &actor->actorData[4], actor->actorData,
+                                               actor->position, 1.0f, 200.0f);
+            actor->rotation[0] = func_80013970(func_800F1214(progress, 270.0f, 540.0f)) * 70.0f;
 
-            if (func_800D90A4(&param_0->unk58)) {
-                func_808005F0_chgoldfish(param_0, 8);
+            if (func_800D90A4(&actor->unk58)) {
+                func_808005F0_chgoldfish(actor, 8);
             }
 
-            if (param_0->position[1] <= AF(param_0, 7)) {
-                if (AF(param_0, 7) < local_1) {
-                    func_80800964_chgoldfish(param_0->position);
+            if (actor->position[1] <= AF(actor, 7)) {
+                if (AF(actor, 7) < prev_y) {
+                    func_80800964_chgoldfish(actor->position);
                 }
             }
 
-            param_0->scale = AF(param_0, 3) * local_2;
+            actor->scale = AF(actor, 3) * progress;
             break;
 
         case 8:
-            if (func_8010CE70(param_0, 6, -1)) {
-                func_808005F0_chgoldfish(param_0, 9);
+            if (func_8010CE70(actor, 6, -1)) {
+                func_808005F0_chgoldfish(actor, 9);
             }
 
         case 10:
@@ -173,174 +175,175 @@ void func_8080009C_chgoldfish(Actor *param_0)
     }
 }
 
-s32 func_808004AC_chgoldfish(param_0, param_1, param_2)
-Actor *param_0;
-s32 param_1;
-s32 param_2;
+s32 func_808004AC_chgoldfish(actor, msg, msg_data)
+Actor *actor;
+s32 msg;
+s32 msg_data;
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x2E:
-            switch (*(s16 *) &param_2) {
+            switch (*(s16 *) &msg_data) {
                 case 0x15BF:
-                    func_808005F0_chgoldfish(param_0, 3);
+                    func_808005F0_chgoldfish(actor, 3);
                     break;
                 case 0x15C0:
                     func_800C7074(0x30, !func_800DA298(0x648));
-                    func_808005F0_chgoldfish(param_0, 10);
+                    func_808005F0_chgoldfish(actor, 10);
             }
 
             return 1;
         case 0x2F:
-            if (*(s16 *) &param_2 == 0x15C0 && ((s16 *) &param_2)[1] == 1 && func_800DA298(0x649))
+            if (*(s16 *) &msg_data == 0x15C0 && ((s16 *) &msg_data)[1] == 1 && func_800DA298(0x649))
                 func_800CF700();
             return 1;
         case 0x52:
-            _gcdialogcamera_entrypoint_3(&D_80800D3C_chgoldfish, param_0->scale);
+            _gcdialogcamera_entrypoint_3(&D_80800D3C_chgoldfish, actor->scale);
             return 1;
         case 0x3E:
-            if ((param_0->unk70_10 == 3 || param_0->unk70_10 == 4) &&
+            if ((actor->unk70_10 == 3 || actor->unk70_10 == 4) &&
                 func_800F64A4(func_800F54E4(), 1))
-                func_808005F0_chgoldfish(param_0, 5);
+                func_808005F0_chgoldfish(actor, 5);
             return 1;
         default:
             return 0;
     }
 }
 
-void func_808005F0_chgoldfish(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_808005F0_chgoldfish(actor, state) Actor *actor;
+s32 state;
 {
-    Vec3f local_0;
-    Vec3f local_1;
-    s32 local_2;
-    u8 *local_7;
+    Vec3f ray_start;
+    Vec3f hit_normal;
+    s32 attempt;
+    u8 *hit;
 
-    switch (param_1) {
+    switch (state) {
         case 3:
-            param_0->unk58 = 1.0f;
-            func_80102424(param_0, 3);
+            actor->unk58 = 1.0f;
+            func_80102424(actor, 3);
             return;
         case 4:
-            param_0->unk58 = 0.5f;
-            func_80102424(param_0, 4);
+            actor->unk58 = 0.5f;
+            func_80102424(actor, 4);
             return;
         case 5:
             func_800FC6B0(0xE);
-            func_8008FE94(1, param_0->actorData);
-            func_800EE7F8((f32 *) &param_0->actorData[4], param_0->position);
-            param_0->unk58 = 1.0f;
-            param_0->unk54 = func_80090010();
-            param_0->unk50 = 0;
+            func_8008FE94(1, actor->actorData);
+            func_800EE7F8((f32 *) &actor->actorData[4], actor->position);
+            actor->unk58 = 1.0f;
+            actor->unk54 = func_80090010();
+            actor->unk50 = 0;
             func_80090708(1);
-            func_80102424(param_0, 5);
+            func_80102424(actor, 5);
             return;
         case 6:
-            param_0->unk64_16 = 0;
-            param_0->unk58 = 40.0f;
-            func_80102424(param_0, 6);
+            actor->unk64_16 = 0;
+            actor->unk58 = 40.0f;
+            func_80102424(actor, 6);
             return;
         case 7:
-            param_0->unk58 = 1.0f;
-            func_8008FE94(1, ((f32 *) &param_0->actorData[4]));
-            param_0->unk54 = func_80090010();
-            for (local_2 = 0; local_2 != 4; local_2++) {
-                func_800EFCD8(((f32 *) param_0->actorData), param_0->unk54, 300.0f);
-                func_800EF04C(((f32 *) param_0->actorData), ((f32 *) &param_0->actorData[4]));
-                func_800EE7F8(local_0.f, ((f32 *) param_0->actorData));
-                local_0.pos.y = ((f32 *) param_0->actorData)[5] + 500.0f;
-                param_0->rotation[2] = 0.0f;
-                param_0->unk50 = 0.0f;
-                ((f32 *) param_0->actorData)[1] = ((f32 *) param_0->actorData)[5] - 500.0f;
-                local_7 = func_800BEF00(local_0.f, ((f32 *) param_0->actorData), local_1.f, 0);
+            actor->unk58 = 1.0f;
+            func_8008FE94(1, ((f32 *) &actor->actorData[4]));
+            actor->unk54 = func_80090010();
+            for (attempt = 0; attempt != 4; attempt++) {
+                func_800EFCD8(((f32 *) actor->actorData), actor->unk54, 300.0f);
+                func_800EF04C(((f32 *) actor->actorData), ((f32 *) &actor->actorData[4]));
+                func_800EE7F8(ray_start.f, ((f32 *) actor->actorData));
+                ray_start.pos.y = ((f32 *) actor->actorData)[5] + 500.0f;
+                actor->rotation[2] = 0.0f;
+                actor->unk50 = 0.0f;
+                ((f32 *) actor->actorData)[1] = ((f32 *) actor->actorData)[5] - 500.0f;
+                hit = func_800BEF00(ray_start.f, ((f32 *) actor->actorData), hit_normal.f, 0);
 
-                if (local_7) {
-                    if (func_800C84B0(*(s32 *) (local_7 + 8)) == 4) {
-                        ((f32 *) param_0->actorData)[7] = ((f32 *) param_0->actorData)[1];
-                        func_800EE7F8(local_0.f, (f32 *) param_0->actorData);
-                        ((f32 *) param_0->actorData)[1] -= 3.0f * func_80103EF4(param_0);
-                        if (func_800BEF00(local_0.f, (f32 *) param_0->actorData, local_1.f, 0) ==
+                if (hit) {
+                    if (func_800C84B0(*(s32 *) (hit + 8)) == 4) {
+                        ((f32 *) actor->actorData)[7] = ((f32 *) actor->actorData)[1];
+                        func_800EE7F8(ray_start.f, (f32 *) actor->actorData);
+                        ((f32 *) actor->actorData)[1] -= 3.0f * func_80103EF4(actor);
+                        if (func_800BEF00(ray_start.f, (f32 *) actor->actorData, hit_normal.f, 0) ==
                             NULL) {
-                            param_0->unk64_16 = 1;
-                            func_80102424(param_0, 7);
+                            actor->unk64_16 = 1;
+                            func_80102424(actor, 7);
                             return;
                         }
                     }
-                    param_0->unk54 += 90.0f;
+                    actor->unk54 += 90.0f;
                 }
             }
             return;
         case 8:
             func_800FC6B0(0xE);
-            param_0->unk54 = func_8010CD28(param_0);
-            func_800F8300(func_800F54E4(), 1, param_0->position);
-            func_80102424(param_0, 8);
+            actor->unk54 = func_8010CD28(actor);
+            func_800F8300(func_800F54E4(), 1, actor->position);
+            func_80102424(actor, 8);
             return;
         case 9:
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x15C0, 0x4E, param_0->position, 0x67);
-            func_80102424(param_0, 9);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0x15C0, 0x4E, actor->position, 0x67);
+            func_80102424(actor, 9);
             return;
         case 10:
             func_800F82D4(func_800F54E4(), 0);
-            _subaddiefade_entrypoint_3(param_0);
-            func_80102424(param_0, 10);
+            _subaddiefade_entrypoint_3(actor);
+            func_80102424(actor, 10);
             return;
         default:
-            func_80102424(param_0, param_1);
+            func_80102424(actor, state);
     }
 }
 
-void func_80800924_chgoldfish(u8 *param_0)
+void func_80800924_chgoldfish(u8 *actor)
 {
-    func_800BBCB8(param_0 + 4, 0, *(s32 *) (param_0 + 0x38), 1, &D_80800D4C_chgoldfish);
+    func_800BBCB8(actor + 4, 0, *(s32 *) (actor + 0x38), 1, &D_80800D4C_chgoldfish);
 }
 
-void func_80800964_chgoldfish(f32 *param_0)
+// Splash, ripple and bubble effects when he lands in water.
+void func_80800964_chgoldfish(f32 *pos)
 {
-    f32 local_0[3];
-    f32 local_1;
-    s32 local_2;
-    local_1 = func_800BED50();
-    local_0[0] = param_0[0];
-    local_0[1] = local_1;
-    local_0[2] = param_0[2];
-    func_800C4140(0x7FFB5C09, param_0, 0x4B000FA);
-    local_2 = _fxsplash_entrypoint_2(local_0, 35.0f);
-    _fxripple_entrypoint_0(3, local_0);
-    func_800BA930(local_2, -350, 300, -350, 350, 500, 350);
-    func_800BA22C(local_2, 10);
-    func_800BA930(local_2, -150, 500, -150, 150, 800, 150);
-    func_800BA22C(local_2, 10);
-    _fxsplash25d_entrypoint_0(local_0);
-    local_0[1] -= 30.0f;
-    local_2 = _fxairbub_entrypoint_1(local_0, 20.0f, local_1, 1.0f);
-    func_800BA930(local_2, -60, -250, -60, 60, -150, 60);
-    func_800BA22C(local_2, 8);
+    f32 splash_pos[3];
+    f32 water_y;
+    s32 fx;
+    water_y = func_800BED50();
+    splash_pos[0] = pos[0];
+    splash_pos[1] = water_y;
+    splash_pos[2] = pos[2];
+    func_800C4140(0x7FFB5C09, pos, 0x4B000FA);
+    fx = _fxsplash_entrypoint_2(splash_pos, 35.0f);
+    _fxripple_entrypoint_0(3, splash_pos);
+    func_800BA930(fx, -350, 300, -350, 350, 500, 350);
+    func_800BA22C(fx, 10);
+    func_800BA930(fx, -150, 500, -150, 150, 800, 150);
+    func_800BA22C(fx, 10);
+    _fxsplash25d_entrypoint_0(splash_pos);
+    splash_pos[1] -= 30.0f;
+    fx = _fxairbub_entrypoint_1(splash_pos, 20.0f, water_y, 1.0f);
+    func_800BA930(fx, -60, -250, -60, 60, -150, 60);
+    func_800BA22C(fx, 8);
 }
 
-f32 func_80800AB4_chgoldfish(Actor *param_0, f32 *param_1, f32 *param_2, f32 *param_3, f32 param_4,
-                             f32 param_5)
+f32 func_80800AB4_chgoldfish(Actor *actor, f32 *start, f32 *end, f32 *out_pos, f32 duration,
+                             f32 height)
 {
-    f32 local_0;
+    f32 t;
 
-    func_800D90A4(&param_0->unk58);
-    local_0 = func_800F10B4(param_0->unk58, param_4, 0.0f, 0.0f, 1.0f);
-    func_800EFE50(param_3, param_1, param_2, local_0);
-    param_3[1] += func_80013970(local_0 * 180.0f) * param_5;
-    param_0->rotation[1] = func_800F1FF0(param_0->rotation[1], param_0->unk54, 0.5f, 0.1f, 10.0f);
-    param_0->rotation[2] = func_800F1FF0(param_0->rotation[2], param_0->unk50, 0.5f, 0.1f, 10.0f);
-    return local_0;
+    func_800D90A4(&actor->unk58);
+    t = func_800F10B4(actor->unk58, duration, 0.0f, 0.0f, 1.0f);
+    func_800EFE50(out_pos, start, end, t);
+    out_pos[1] += func_80013970(t * 180.0f) * height;
+    actor->rotation[1] = func_800F1FF0(actor->rotation[1], actor->unk54, 0.5f, 0.1f, 10.0f);
+    actor->rotation[2] = func_800F1FF0(actor->rotation[2], actor->unk50, 0.5f, 0.1f, 10.0f);
+    return t;
 }
 
-s32 func_80800BA8_chgoldfish(param_0, param_1)
-Actor *param_0;
-f32 *param_1;
+s32 func_80800BA8_chgoldfish(actor, pos)
+Actor *actor;
+f32 *pos;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    func_800EFA4C(local_0, param_1[0], param_1[1] + 300.0f, param_1[2]);
-    param_1[1] -= 300.0f;
-    if (func_800BEF00(local_0, param_1, local_1, 0)) {
-        param_1[1] += 20.0f;
+    f32 ray_start[3];
+    f32 hit_normal[3];
+    func_800EFA4C(ray_start, pos[0], pos[1] + 300.0f, pos[2]);
+    pos[1] -= 300.0f;
+    if (func_800BEF00(ray_start, pos, hit_normal, 0)) {
+        pos[1] += 20.0f;
         return 1;
     }
     return 0;

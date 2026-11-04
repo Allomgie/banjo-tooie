@@ -81,109 +81,110 @@ int chbouncycastle_entrypoint_3()
     return (int) D_80800A08_chbouncycastle;
 }
 
-void chbouncycastle_entrypoint_4(Actor *param_0)
+void chbouncycastle_entrypoint_4(Actor *actor)
 {
     s32 pad0;
-    u8 *local_0;
-    s32 *local_1;
-    void *local_2;
-    local_0 = func_801039E4(param_0->unk0);
-    local_1 = func_80100094(param_0, 0);
-    func_80103D48(param_0);
-    *local_1 = *(s32 *) (local_0 + 0x28);
-    if (*(s16 *) ((u8 *) param_0 + 0x8C) &&
-        (param_0->unk70_10 == 2 || ((BounceCastleFlags29 *) param_0)->kind)) {
-        local_2 = func_80104248(param_0, local_0);
-        func_8008B304(local_2);
-        func_800DF41C(func_8008B4D4(local_2));
+    u8 *model;
+    s32 *saved_ptr;
+    void *mesh;
+    model = func_801039E4(actor->unk0);
+    saved_ptr = func_80100094(actor, 0);
+    func_80103D48(actor);
+    *saved_ptr = *(s32 *) (model + 0x28);
+    if (*(s16 *) ((u8 *) actor + 0x8C) &&
+        (actor->unk70_10 == 2 || ((BounceCastleFlags29 *) actor)->kind)) {
+        mesh = func_80104248(actor, model);
+        func_8008B304(mesh);
+        func_800DF41C(func_8008B4D4(mesh));
     } else {
-        *(s32 *) (local_0 + 0x28) = 0;
+        *(s32 *) (model + 0x28) = 0;
     }
-    if (((BounceCastleFlags29 *) param_0)->kind != 1 &&
-        (((BounceCastleFlags29 *) param_0)->active || ((BounceCastleFlags29 *) param_0)->triggered))
-        func_800DF818(func_80103CDC(param_0, local_0));
+    if (((BounceCastleFlags29 *) actor)->kind != 1 &&
+        (((BounceCastleFlags29 *) actor)->active || ((BounceCastleFlags29 *) actor)->triggered))
+        func_800DF818(func_80103CDC(actor, model));
     func_800DF830(1);
-    func_80103D70(param_0);
-    ((BounceCastleFlags29 *) param_0)->done = 1;
+    func_80103D70(actor);
+    ((BounceCastleFlags29 *) actor)->done = 1;
 }
 
-void func_80800148_chbouncycastle(u8 **param_0)
+// Rebuilds the map-collision mesh from the model.
+void func_80800148_chbouncycastle(u8 **actor)
 {
-    s32 local_0;
+    s32 old_mesh;
 
-    local_0 = func_801065A4();
-    if (local_0 != 0) {
-        _glidmake_entrypoint_4(local_0);
+    old_mesh = func_801065A4();
+    if (old_mesh != 0) {
+        _glidmake_entrypoint_4(old_mesh);
     }
-    func_8010647C(param_0, _glidmake_entrypoint_5(*(u16 *) ((char *) *param_0 + 0x14), 0));
+    func_8010647C(actor, _glidmake_entrypoint_5(*(u16 *) ((char *) *actor + 0x14), 0));
 }
 
-void func_80800198_chbouncycastle(Actor *param_0, s32 param_1)
+void func_80800198_chbouncycastle(Actor *actor, s32 unk_1)
 {
-    BounceTransform *local_0;
-    local_0 = func_80100094(param_0, 0);
-    func_800DF47C(_chbouncycastle_entrypoint_4, param_0);
-    func_800DE448(0, 0, param_0->scale, 0, func_8010347C(param_0->unk0));
-    if (param_0->unk7C_12) {
-        ((BounceRenderTransform *) func_80103AA0(param_0->unk0))->local_0 = local_0->local_0;
-        if (param_0->unk79_4) {
-            param_0->unk79_4--;
-            if (!param_0->unk79_4)
-                func_80800148_chbouncycastle(param_0);
+    BounceTransform *transform;
+    transform = func_80100094(actor, 0);
+    func_800DF47C(_chbouncycastle_entrypoint_4, actor);
+    func_800DE448(0, 0, actor->scale, 0, func_8010347C(actor->unk0));
+    if (actor->unk7C_12) {
+        ((BounceRenderTransform *) func_80103AA0(actor->unk0))->local_0 = transform->local_0;
+        if (actor->unk79_4) {
+            actor->unk79_4--;
+            if (!actor->unk79_4)
+                func_80800148_chbouncycastle(actor);
         }
     }
 }
 
-void func_80800254_chbouncycastle(Actor *param_0)
+void func_80800254_chbouncycastle(Actor *actor)
 {
-    s32 local_0;
+    s32 state;
 
-    local_0 = param_0->unk70_10;
-    if (local_0 == 2) {
+    state = actor->unk70_10;
+    if (state == 2) {
         func_8080051C_chbouncycastle();
-        if (func_80101DDC(param_0)) {
-            func_80102424(param_0, 3);
+        if (func_80101DDC(actor)) {
+            func_80102424(actor, 3);
             func_800DA544(0xB2);
-            param_0->unk79_4 = 3;
+            actor->unk79_4 = 3;
         }
-        local_0 = param_0->unk70_10;
+        state = actor->unk70_10;
     }
-    if (local_0 == 2 || param_0->unk79_4) {
-        ((BounceCastleUpdateFlags *) param_0)->local_0 = 1;
+    if (state == 2 || actor->unk79_4) {
+        ((BounceCastleUpdateFlags *) actor)->local_0 = 1;
     } else {
-        ((BounceCastleUpdateFlags *) param_0)->local_0 = 0;
+        ((BounceCastleUpdateFlags *) actor)->local_0 = 0;
     }
 }
 
-s32 func_80800308_chbouncycastle(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800308_chbouncycastle(Actor *actor, s32 msg, s32 arg)
 {
-    u8 *local_0;
-    Actor *local_2;
+    u8 *checkpoint;
+    Actor *jump_pad;
 
-    switch (param_1) {
+    switch (msg) {
         case 0xB:
-            if (param_2 == 1) {
+            if (arg == 1) {
                 _capod_entrypoint_14();
-                _capod_entrypoint_13(param_0->unk0, 0, 0xA, 0x2910);
-                func_80108B04(param_0, 0x210);
+                _capod_entrypoint_13(actor->unk0, 0, 0xA, 0x2910);
+                func_80108B04(actor, 0x210);
                 return 4;
             }
             return 3;
         case 0x49:
-            if (param_2 == 0x20) {
-                func_80102424(param_0, 2);
-                func_80101EE4(param_0, 0.21590909f);
-                param_0->unk79_4 = 0;
-                _capod_entrypoint_13(param_0->unk0, 0, 1, 0x2830);
+            if (arg == 0x20) {
+                func_80102424(actor, 2);
+                func_80101EE4(actor, 0.21590909f);
+                actor->unk79_4 = 0;
+                _capod_entrypoint_13(actor->unk0, 0, 1, 0x2830);
                 break;
             }
             return 0;
         case 0x3D:
-            local_0 = func_80100094(param_0, 0);
-            local_2 = func_80108528(0x210, (f32 *) (local_0 + 4), (s32) *(f32 *) (local_0 + 0x14),
-                                    &param_0);
-            ((BccBits *) local_2)->hi = *(s32 *) (local_0 + 0x10);
-            _chappearfx_entrypoint_1(local_2, 0x22, 1, 1.0f);
+            checkpoint = func_80100094(actor, 0);
+            jump_pad = func_80108528(0x210, (f32 *) (checkpoint + 4), (s32) *(f32 *) (checkpoint + 0x14),
+                                    &actor);
+            ((BccBits *) jump_pad)->hi = *(s32 *) (checkpoint + 0x10);
+            _chappearfx_entrypoint_1(jump_pad, 0x22, 1, 1.0f);
             return 1;
         default:
             return 0;
@@ -191,86 +192,89 @@ s32 func_80800308_chbouncycastle(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_8080045C_chbouncycastle(Actor *param_0)
+void func_8080045C_chbouncycastle(Actor *actor)
 {
-    BounceCastleCheckpoint *local_0;
+    BounceCastleCheckpoint *checkpoint;
 
-    local_0 = (BounceCastleCheckpoint *) func_80100094(param_0, 0);
-    _subaddiemarker_entrypoint_0(param_0, 0x154, local_0->local_0, 1);
+    checkpoint = (BounceCastleCheckpoint *) func_80100094(actor, 0);
+    _subaddiemarker_entrypoint_0(actor, 0x154, checkpoint->local_0, 1);
     if (!func_800DA298(0xB2)) {
-        func_80102424(param_0, 1);
-        func_80101EE4(param_0, 0.2159091f);
+        func_80102424(actor, 1);
+        func_80101EE4(actor, 0.2159091f);
     } else {
-        func_80108A30(0x210, local_0->local_0, local_0->local_2, local_0->local_1);
-        func_80102424(param_0, 3);
+        func_80108A30(0x210, checkpoint->local_0, checkpoint->local_2, checkpoint->local_1);
+        func_80102424(actor, 3);
     }
-    param_0->unk79_4 = 3;
+    actor->unk79_4 = 3;
     if (func_800EA05C() != 0xE1)
-        func_8010A624(param_0);
+        func_8010A624(actor);
 }
 
-void func_8080051C_chbouncycastle(Actor *param_0)
+// Plays the inflation sounds, one per step.
+void func_8080051C_chbouncycastle(Actor *actor)
 {
-    s32 local_0;
-    s32 *local_1;
-    f32 local_2;
-    u8 local_3;
-    s32 local_4 = 4;
-    for (local_0 = 0, local_1 = D_80800A5C_chbouncycastle; local_0 < local_4;
-         local_0++, local_1++) {
-        if (func_80101E14(param_0, *local_1)) {
-            local_2 = func_800F10B4((f32) local_0, 0.0f, (f32) (local_4 - 1), 0.3f, 0.5f);
-            local_3 = _subaddieaudioquick_entrypoint_1(param_0, param_0->position);
-            func_800C3868(local_3, 0.15f, 0.25f, local_2, local_2 + 0.12f);
-            func_800C4350((u8) (s32) local_3, param_0->position, D_80800A50_chbouncycastle);
+    s32 i;
+    s32 *flag_ptr;
+    f32 pitch;
+    u8 sound;
+    s32 count = 4;
+    for (i = 0, flag_ptr = D_80800A5C_chbouncycastle; i < count;
+         i++, flag_ptr++) {
+        if (func_80101E14(actor, *flag_ptr)) {
+            pitch = func_800F10B4((f32) i, 0.0f, (f32) (count - 1), 0.3f, 0.5f);
+            sound = _subaddieaudioquick_entrypoint_1(actor, actor->position);
+            func_800C3868(sound, 0.15f, 0.25f, pitch, pitch + 0.12f);
+            func_800C4350((u8) (s32) sound, actor->position, D_80800A50_chbouncycastle);
         }
     }
 }
 
-void func_80800670_chbouncycastle(s32 param_0[3])
+void func_80800670_chbouncycastle(s32 data[3])
 {
-    s32 local_0;
-    local_0 = func_800CBDD4(&param_0[1], 0x64, 1);
-    param_0[10] = local_0;
-    if (local_0 != -1) {
-        func_800CBB80(param_0[10], func_800DA298(0xB2) | 0);
+    s32 handle;
+    handle = func_800CBDD4(&data[1], 0x64, 1);
+    data[10] = handle;
+    if (handle != -1) {
+        // Matching: "| 0" is needed for the match.
+        func_800CBB80(data[10], func_800DA298(0xB2) | 0);
     }
 }
 
-int func_808006C4_chbouncycastle(Actor *param_0)
+int func_808006C4_chbouncycastle(Actor *actor)
 {
-    u16 local_0;
-    local_0 = *(u16 *) ((char *) param_0 + 0x72);
-    switch ((local_0 & 0xFFFFu) >> 10) {
+    u16 bits;
+    bits = *(u16 *) ((char *) actor + 0x72);
+    switch ((bits & 0xFFFFu) >> 10) {
         case 2:
-            if (func_800D9078((void *) ((char *) param_0 + 0x58))) {
+            if (func_800D9078((void *) ((char *) actor + 0x58))) {
                 func_800D1000(0x19, 1, 0, 1, 0);
-                func_80101FDC(param_0, 1);
+                func_80101FDC(actor, 1);
             }
             break;
 
         case 3:
-            if (func_800D9078((void *) ((char *) param_0 + 0x58))) {
+            if (func_800D9078((void *) ((char *) actor + 0x58))) {
                 func_800D1000(0x15, 1, 0, 1, 0);
-                func_80101FDC(param_0, 1);
+                func_80101FDC(actor, 1);
             }
     }
 }
 
-int func_80800774_chbouncycastle(s32 param_0, s32 param_1, s32 param_2)
+// Pump cutscene start.
+int func_80800774_chbouncycastle(s32 param_0, s32 msg, s32 arg)
 {
-    Actor *local_1 = param_0;
-    if (param_1 == 0x49) {
+    Actor *actor = param_0;
+    if (msg == 0x49) {
         if (_glcutDll_entrypoint_19(0x22)) {
-            _capod_entrypoint_13(local_1->unk0, 0, 0xF, 0x2910);
-            func_80101FDC(local_1, 2);
-            local_1->unk58 = 0.15f;
+            _capod_entrypoint_13(actor->unk0, 0, 0xF, 0x2910);
+            func_80101FDC(actor, 2);
+            actor->unk58 = 0.15f;
             return 1;
         }
         if (_glcutDll_entrypoint_19(0x21)) {
-            _capod_entrypoint_13(local_1->unk0, 0, 0xC, 0x2910);
-            func_80101FDC(local_1, 3);
-            local_1->unk58 = 0.15f;
+            _capod_entrypoint_13(actor->unk0, 0, 0xC, 0x2910);
+            func_80101FDC(actor, 3);
+            actor->unk58 = 0.15f;
             return 1;
         }
     }

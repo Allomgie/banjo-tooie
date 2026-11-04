@@ -10,11 +10,12 @@ int chlagoonpirate_entrypoint_0()
     return (int) &D_808000F8_chlagoonpirate;
 }
 
-void func_8080000C_chlagoonpirate(u8 *param_0)
+// Update: runs the shared coaster baddie, then sets anim speed 1.5x and a 0.8 factor.
+void func_8080000C_chlagoonpirate(u8 *actor)
 {
-    _sucoaster_entrypoint_0(param_0, 0);
-    func_80102FDC(param_0, *(f32 *) (param_0 + 0x38) * 1.5f);
-    func_8010A3E8(param_0, 0.8f);
+    _sucoaster_entrypoint_0(actor, 0);
+    func_80102FDC(actor, *(f32 *) (actor + 0x38) * 1.5f);
+    func_8010A3E8(actor, 0.8f);
 }
 
 extern void _sucoaster_entrypoint_2();

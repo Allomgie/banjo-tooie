@@ -2,19 +2,20 @@
 
 extern int D_80800080_chhagstraindoorswitch[];
 
-s32 func_80800000_chhagstraindoorswitch(void *this, s32 next_state)
+// Pressed (7): tells the station door (actor 0x38C) to open.
+s32 func_80800000_chhagstraindoorswitch(void *this, s32 msg)
 {
-    if (next_state == 7) {
+    if (msg == 7) {
         func_80101180(0x38C, 7, 0);
         return 1;
     }
-    _chswitch_entrypoint_10(this, next_state);
+    _chswitch_entrypoint_10(this, msg);
 }
 
-void func_80800040_chhagstraindoorswitch(s32 arg0)
+void func_80800040_chhagstraindoorswitch(s32 actor)
 {
-    _chswitch_entrypoint_7(arg0, FLAG_403_STATION_UNLOCKED_IoH);
-    _chswitch_entrypoint_9(arg0);
+    _chswitch_entrypoint_7(actor, FLAG_403_STATION_UNLOCKED_IoH);
+    _chswitch_entrypoint_9(actor);
 }
 
 int chhagstraindoorswitch_entrypoint_0()

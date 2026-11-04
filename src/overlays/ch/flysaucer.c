@@ -158,29 +158,30 @@ void func_80801428_chflysaucer();
 void func_8080149C_chflysaucer();
 void func_80803AF0_chflysaucer(Actor *param_0, s32 param_1, s32 param_2, f32 param_3);
 
-u8 func_80800000_chflysaucer(Actor *param_0)
+u8 func_80800000_chflysaucer(Actor *actor)
 {
-    u8 *local_0;
+    u8 *data;
 
-    local_0 = func_80100094(param_0, 0);
-    local_0[0x26] = func_800DA564(0xA34, 3);
-    return local_0[0x26];
+    data = func_80100094(actor, 0);
+    data[0x26] = func_800DA564(0xA34, 3);
+    return data[0x26];
 }
 
-void func_8080003C_chflysaucer(s32 param_0, s32 param_1)
+void func_8080003C_chflysaucer(s32 actor, s32 stage)
 {
-    u8 *local_0 = func_80100094(param_0, 0);
-    func_800DA7A8(0xA34, param_1, 3);
-    local_0[0x26] = param_1;
+    u8 *data = func_80100094(actor, 0);
+    func_800DA7A8(0xA34, stage, 3);
+    data[0x26] = stage;
 }
 
+// Returns the event count for the current course and stores its event table in *table.
 s32 func_80800080_chflysaucer(param_0, param_1)
 Actor *param_0;
 void **param_1;
 {
-    SaucerCourse *local_1;
-    local_1 = func_80100094(param_0, 0);
-    switch (local_1->local_0) {
+    SaucerCourse *course;
+    course = func_80100094(param_0, 0);
+    switch (course->local_0) {
         case 1:
             *param_1 = D_808042D4_chflysaucer;
             return 10;
@@ -297,14 +298,15 @@ int func_808004F0_chflysaucer()
     func_808017D0_chflysaucer();
 }
 
+// Warps to the map for the current ride stage.
 void func_80800514_chflysaucer(Actor *param_0)
 {
-    u8 *local_0;
+    u8 *stage_data;
 
-    local_0 = func_80100094(param_0, 0);
+    stage_data = func_80100094(param_0, 0);
     param_0->unk64_19 = 1;
     func_800FE850();
-    switch (local_0[0x26]) {
+    switch (stage_data[0x26]) {
         case 1:
             _gcgoto_entrypoint_1(0x124, 8);
             break;
@@ -634,6 +636,7 @@ int func_80801034_chflysaucer(f32 param_0[3])
     f32 local_0 = -7800;
     f32 local_1 = 1700;
     f32 local_2 = -2900;
+    // Matching: empty block steers IDO's register allocation.
     {
     }
     param_0[1] = local_0;
@@ -831,6 +834,7 @@ if (*(s16 *) ((s8 *) temp_v0 + 2) != 0) {
 
 }
 
+// Matching: the line breaks in this function are needed for the match.
 void func_80801568_chflysaucer(param_0, param_1) Actor *param_0; s32 param_1;
 {   u8 *local_0; for (;;) {
         local_0 = func_80100094(param_0, 0);
@@ -1130,379 +1134,380 @@ case 0x0D:
 return 1;
 }
 
-void func_80801E98_chflysaucer(Actor *param_0)
+void func_80801E98_chflysaucer(Actor *actor)
 {
-    f32 local_0[3];
-    if (!param_0->unk74_30 && func_8010CAC0(param_0->position, 250) && !func_800DB9B0()) {
-        if (param_0->unk64_20) {
+    f32 check_pos[3];
+    if (!actor->unk74_30 && func_8010CAC0(actor->position, 250) && !func_800DB9B0()) {
+        if (actor->unk64_20) {
             if (!func_800DA298(0x414)) {
                 if (func_8008FA2C(1, 0)) {
                     func_800DA544(0x414);
-                    func_8080105C_chflysaucer(param_0, 0x10DB, 1);
+                    func_8080105C_chflysaucer(actor, 0x10DB, 1);
                 }
                 return;
             }
 
 if (!func_80090178(1))
     return;
-func_800EE7F8(local_0, param_0->position);
-local_0[1] += 150.0f;
-if (func_8010CAC0(local_0, 120))
-    func_808012A4_chflysaucer(param_0, 5);
+func_800EE7F8(check_pos, actor->position);
+check_pos[1] += 150.0f;
+if (func_8010CAC0(check_pos, 120))
+    func_808012A4_chflysaucer(actor, 5);
 else if (func_8008FA60(1, 0) && func_80016B30(0, 1) == 1)
-    func_8080105C_chflysaucer(param_0, 0x10DC, 1);
+    func_8080105C_chflysaucer(actor, 0x10DC, 1);
 }
 else
 {
     if (!func_800DA9E4(0x413, 1))
-        func_8080105C_chflysaucer(param_0, 0x10DD, 1);
+        func_8080105C_chflysaucer(actor, 0x10DD, 1);
     else if (func_80016B30(0, 1) == 1)
-        func_8080105C_chflysaucer(param_0, 0x10DE, 1);
+        func_8080105C_chflysaucer(actor, 0x10DE, 1);
 }
 }
 }
 
-int func_80802014_chflysaucer(s32 param_0)
+int func_80802014_chflysaucer(s32 actor)
 {
-    func_8008FB10(param_0 + 4, 65.0f, 0.0f, 90.0f);
+    func_8008FB10(actor + 4, 65.0f, 0.0f, 90.0f);
 }
 
-void func_80802044_chflysaucer(Actor *param_0)
+void func_80802044_chflysaucer(Actor *actor)
 {
-    SaucerCourse *local_0;
-    void *local_1;
-    s16 *local_2;
+    SaucerCourse *course;
+    void *spline;
+    s16 *dialog;
 
-    u8 local_4;
+    u8 course_id;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_80100094(param_0, 1);
-    local_4 = local_0->local_0;
-    local_2 = &D_80804624_chflysaucer[local_4];
-    if (D_80804274_chflysaucer[local_4] == -1.0f || *local_2 == -1)
+    course = func_80100094(actor, 0);
+    spline = func_80100094(actor, 1);
+    course_id = course->local_0;
+    dialog = &D_80804624_chflysaucer[course_id];
+    if (D_80804274_chflysaucer[course_id] == -1.0f || *dialog == -1)
         return;
-    if (_suspline_entrypoint_2(local_1, D_80804274_chflysaucer[local_4])) {
-        _capod_entrypoint_13(param_0->unk0, 0, *local_2, 0x4C21);
-        func_808012A4_chflysaucer(param_0, 1);
-        func_808009DC_chflysaucer(param_0, 1);
+    if (_suspline_entrypoint_2(spline, D_80804274_chflysaucer[course_id])) {
+        _capod_entrypoint_13(actor->unk0, 0, *dialog, 0x4C21);
+        func_808012A4_chflysaucer(actor, 1);
+        func_808009DC_chflysaucer(actor, 1);
     }
 }
 
-void func_80802114_chflysaucer(Actor *param_0, f32 param_1)
+void func_80802114_chflysaucer(Actor *actor, f32 speed)
 {
-    u8 local_0;
+    u8 handle;
 
-    local_0 = param_0->unk5F;
-    if (!local_0) {
-        param_0->unk5F = func_800C4350(0, param_0->position, D_80804634_chflysaucer);
+    handle = actor->unk5F;
+    if (!handle) {
+        actor->unk5F = func_800C4350(0, actor->position, D_80804634_chflysaucer);
         return;
     }
-    if (param_1 < 0.5f) {
-        param_1 = 0.5f;
+    if (speed < 0.5f) {
+        speed = 0.5f;
     }
-    if (param_1 > 1.5f) {
-        param_1 = 1.5f;
+    if (speed > 1.5f) {
+        speed = 1.5f;
     }
-    func_800C31DC(local_0, param_1);
-    func_800C4350(param_0->unk5F, param_0->position, NULL);
+    func_800C31DC(handle, speed);
+    func_800C4350(actor->unk5F, actor->position, NULL);
 }
 
-void func_808021C0_chflysaucer(Actor *param_0, SaucerSound1581 *param_1, s32 param_2)
+void func_808021C0_chflysaucer(Actor *actor, SaucerSound1581 *sound, s32 mode)
 {
-    if (param_2 == param_1->local_1) {
-        if (param_2 != 3)
-            func_800C4350(param_1->local_0, param_0->position, NULL);
+    if (mode == sound->local_1) {
+        if (mode != 3)
+            func_800C4350(sound->local_0, actor->position, NULL);
     } else {
-        switch (param_2) {
+        switch (mode) {
             case 3:
-                func_800C2FDC(param_1->local_0);
-                param_1->local_0 = 0;
+                func_800C2FDC(sound->local_0);
+                sound->local_0 = 0;
                 break;
             case 0:
             case 1:
             case 2:
-                func_800C4B64(D_8080465C_chflysaucer[param_2]);
-                param_1->local_0 =
-                    func_800C4350(param_1->local_0, param_0->position, D_80804648_chflysaucer);
+                func_800C4B64(D_8080465C_chflysaucer[mode]);
+                sound->local_0 =
+                    func_800C4350(sound->local_0, actor->position, D_80804648_chflysaucer);
 
 }
-param_1->local_1 = param_2;
+sound->local_1 = mode;
 }
 }
 
-void func_80802290_chflysaucer(Actor *param_0)
+// Maps stick movement to the flying animations.
+void func_80802290_chflysaucer(Actor *actor)
 {
-    SaucerControls *local_0;
-    s32 local_1;
-    s32 local_2;
-    f32 local_3[2];
-    f32 local_5;
-    f32 local_6;
-    f32 local_7;
-    f32 local_8;
-    s32 local_4;
+    SaucerControls *controls;
+    s32 anim_a;
+    s32 anim_b;
+    f32 stick[2];
+    f32 dx;
+    f32 dy;
+    f32 abs_dx;
+    f32 abs_dy;
+    s32 dir;
 
-    local_0 = func_80100094(param_0, 0);
-    if (local_0->local_3 == 2) {
-        local_1 = func_80104200(local_0->local_1);
-        local_2 = func_80104200(local_0->local_0);
-        local_4 = 0;
-        func_80016068(0, local_3);
-        local_5 = local_3[0] - local_0->local_2[0];
-        local_6 = local_3[1] - local_0->local_2[1];
-        local_7 = local_5 > 0.0f ? local_5 : -local_5;
-        local_8 = local_6 > 0.0f ? local_6 : -local_6;
-        if (local_7 > local_8) {
-            if (local_5 > 0.25f) {
-                local_4 = 4;
-            } else if (local_5 < -0.25f) {
+    controls = func_80100094(actor, 0);
+    if (controls->local_3 == 2) {
+        anim_a = func_80104200(controls->local_1);
+        anim_b = func_80104200(controls->local_0);
+        dir = 0;
+        func_80016068(0, stick);
+        dx = stick[0] - controls->local_2[0];
+        dy = stick[1] - controls->local_2[1];
+        abs_dx = dx > 0.0f ? dx : -dx;
+        abs_dy = dy > 0.0f ? dy : -dy;
+        if (abs_dx > abs_dy) {
+            if (dx > 0.25f) {
+                dir = 4;
+            } else if (dx < -0.25f) {
 
-local_4 = 3;
+dir = 3;
 }
 }
-else if (local_6 > 0.25f)
+else if (dy > 0.25f)
 {
-    local_4 = 2;
+    dir = 2;
 }
-else if (local_6 < -0.25f)
+else if (dy < -0.25f)
 {
-    local_4 = 1;
+    dir = 1;
 }
-if (local_4 != local_0->local_4) {
-    switch (local_4) {
+if (dir != controls->local_4) {
+    switch (dir) {
         case 0:
             break;
         case 3:
-            anctrl_setIndex(local_1, 0x484);
-            anctrl_setIndex(local_2, 0x489);
+            anctrl_setIndex(anim_a, 0x484);
+            anctrl_setIndex(anim_b, 0x489);
             break;
         case 4:
-            anctrl_setIndex(local_1, 0x485);
-            anctrl_setIndex(local_2, 0x48A);
+            anctrl_setIndex(anim_a, 0x485);
+            anctrl_setIndex(anim_b, 0x48A);
             break;
         case 1:
-            anctrl_setIndex(local_1, 0x482);
-            anctrl_setIndex(local_2, 0x487);
+            anctrl_setIndex(anim_a, 0x482);
+            anctrl_setIndex(anim_b, 0x487);
             break;
         case 2:
-            anctrl_setIndex(local_1, 0x483);
-            anctrl_setIndex(local_2, 0x488);
+            anctrl_setIndex(anim_a, 0x483);
+            anctrl_setIndex(anim_b, 0x488);
     }
-    if (local_4 != 0) {
-        anctrl_setPlaybackType(local_1, 1);
-        anctrl_start(local_1);
-        anctrl_setPlaybackType(local_2, 1);
-        anctrl_start(local_2);
+    if (dir != 0) {
+        anctrl_setPlaybackType(anim_a, 1);
+        anctrl_start(anim_a);
+        anctrl_setPlaybackType(anim_b, 1);
+        anctrl_start(anim_b);
     }
-    local_0->local_4 = local_4;
+    controls->local_4 = dir;
 }
-func_8008ADE4(local_1);
-func_8008ADE4(local_2);
+func_8008ADE4(anim_a);
+func_8008ADE4(anim_b);
 }
 }
 
-void func_808024E0_chflysaucer(param_0) Actor *param_0;
+void func_808024E0_chflysaucer(actor) Actor *actor;
 {
     extern u8 D_80804260_chflysaucer[];
 
-    char *local_0;
-    f32 local_3[3];
-    f32 local_2[3];
-    f32 local_5;
-    f32 local_8[3];
-    f32 local_4[3];
-    f32 local_6;
-    f32 local_7;
-    char *local_1;
-    s32 local_9;
-    s32 local_10;
+    char *data;
+    f32 player_pos[3];
+    f32 player_rot[3];
+    f32 yaw_diff;
+    f32 delta[3];
+    f32 target_pos[3];
+    f32 progress;
+    f32 spline_pos;
+    char *spline;
+    s32 course;
+    s32 phase;
 
-    local_0 = (char *) func_80100094(param_0, 0);
+    data = (char *) func_80100094(actor, 0);
 
-    if (!param_0->unk64_20 && func_800DA298(0xEB)) {
-        param_0->unk64_20 = 1;
+    if (!actor->unk64_20 && func_800DA298(0xEB)) {
+        actor->unk64_20 = 1;
     }
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            local_9 = *(u8 *) (local_0 + 0x26);
-            switch (local_9) {
+            course = *(u8 *) (data + 0x26);
+            switch (course) {
                 case 0:
-                    local_10 = *(u8 *) (local_0 + 0x25);
-                    switch (local_10) {
+                    phase = *(u8 *) (data + 0x25);
+                    switch (phase) {
                         case 0:
-                            func_80801E98_chflysaucer(param_0);
-                            func_80802014_chflysaucer(param_0);
+                            func_80801E98_chflysaucer(actor);
+                            func_80802014_chflysaucer(actor);
                             break;
                         case 5:
-                            func_808012A4_chflysaucer(param_0, 6);
-                            func_800904F4(0x27, *(s32 *) ((char *) param_0 + 0));
+                            func_808012A4_chflysaucer(actor, 6);
+                            func_800904F4(0x27, *(s32 *) ((char *) actor + 0));
                             break;
                         case 6:
-                            func_8008FF40(local_2);
+                            func_8008FF40(player_rot);
 
-                            local_5 = func_800F1DCC(*(f32 *) ((char *) param_0 + 0x48), local_2[1]);
+                            yaw_diff = func_800F1DCC(*(f32 *) ((char *) actor + 0x48), player_rot[1]);
 
-                            local_2[1] += local_5 * 0.45f;
+                            player_rot[1] += yaw_diff * 0.45f;
 
-                            func_800906DC(local_2);
-                            func_8010D254(local_3);
+                            func_800906DC(player_rot);
+                            func_8010D254(player_pos);
 
-                            func_800EE7F8(local_4, (char *) param_0 + 4);
+                            func_800EE7F8(target_pos, (char *) actor + 4);
 
-                            local_4[1] += 90.0f;
+                            target_pos[1] += 90.0f;
 
-                            func_800EFB24(local_8, local_4, local_3);
+                            func_800EFB24(delta, target_pos, player_pos);
 
-                            func_800EF334(local_8, 0.45f);
-                            func_800EF04C(local_3, local_8);
-                            func_800906B0(local_3);
+                            func_800EF334(delta, 0.45f);
+                            func_800EF04C(player_pos, delta);
+                            func_800906B0(player_pos);
 
-if (func_800EEB40(local_3, local_4) < 2500.0f && local_5 > -5.0f && local_5 < 5.0f) {
+if (func_800EEB40(player_pos, target_pos) < 2500.0f && yaw_diff > -5.0f && yaw_diff < 5.0f) {
     func_800904C8(0x28);
-    func_808005FC_chflysaucer(param_0);
+    func_808005FC_chflysaucer(actor);
 }
 
 }
 break;
 case 6:
-    func_80802014_chflysaucer(param_0);
+    func_80802014_chflysaucer(actor);
     }
     break;
 
 case 2:
-    local_6 = func_80101F24(param_0);
+    progress = func_80101F24(actor);
 
-    if (func_80101DDC(param_0)) {
-        func_80801568_chflysaucer(param_0, 3);
+    if (func_80101DDC(actor)) {
+        func_80801568_chflysaucer(actor, 3);
     }
 
-    if (local_6 > 0.05f && local_6 < 0.14f) {
-        if (*(f32 *) (local_0 + 0x18) < 0.4f) {
-            *(f32 *) (local_0 + 0x18) += 0.02f;
+    if (progress > 0.05f && progress < 0.14f) {
+        if (*(f32 *) (data + 0x18) < 0.4f) {
+            *(f32 *) (data + 0x18) += 0.02f;
         }
     }
 
-    if (local_6 > 0.14f && local_6 < 0.31f) {
-        if (*(f32 *) (local_0 + 0x18) > 0.2f) {
-            *(f32 *) (local_0 + 0x18) -= 0.03f;
+    if (progress > 0.14f && progress < 0.31f) {
+        if (*(f32 *) (data + 0x18) > 0.2f) {
+            *(f32 *) (data + 0x18) -= 0.03f;
         }
     }
 
-    if (local_6 > 0.31f && local_6 < 0.46f) {
-        if (*(f32 *) (local_0 + 0x18) < 0.55f) {
-            *(f32 *) (local_0 + 0x18) += 0.02f;
+    if (progress > 0.31f && progress < 0.46f) {
+        if (*(f32 *) (data + 0x18) < 0.55f) {
+            *(f32 *) (data + 0x18) += 0.02f;
         }
     }
 
-    if (local_6 > 0.46f && local_6 < 0.55f) {
-        if (*(f32 *) (local_0 + 0x18) > 0.45f) {
-            *(f32 *) (local_0 + 0x18) -= 0.03f;
+    if (progress > 0.46f && progress < 0.55f) {
+        if (*(f32 *) (data + 0x18) > 0.45f) {
+            *(f32 *) (data + 0x18) -= 0.03f;
         }
     }
 
-    if (local_6 > 0.55f && local_6 < 0.58f) {
-        if (*(f32 *) (local_0 + 0x18) < 0.7f) {
-            *(f32 *) (local_0 + 0x18) += 0.02f;
+    if (progress > 0.55f && progress < 0.58f) {
+        if (*(f32 *) (data + 0x18) < 0.7f) {
+            *(f32 *) (data + 0x18) += 0.02f;
         }
     }
 
-    if (local_6 > 0.58f && local_6 < 0.65f) {
-        if (*(f32 *) (local_0 + 0x18) > 0.6f) {
-            *(f32 *) (local_0 + 0x18) -= 0.03f;
+    if (progress > 0.58f && progress < 0.65f) {
+        if (*(f32 *) (data + 0x18) > 0.6f) {
+            *(f32 *) (data + 0x18) -= 0.03f;
         }
     }
 
-    if (local_6 > 0.65f && local_6 < 0.71f) {
-        if (*(f32 *) (local_0 + 0x18) < 0.85f) {
-            *(f32 *) (local_0 + 0x18) += 0.02f;
+    if (progress > 0.65f && progress < 0.71f) {
+        if (*(f32 *) (data + 0x18) < 0.85f) {
+            *(f32 *) (data + 0x18) += 0.02f;
         }
     }
 
-    if (local_6 > 0.71f && local_6 < 0.85f) {
-        if (*(f32 *) (local_0 + 0x18) > 0.8f) {
-            *(f32 *) (local_0 + 0x18) -= 0.03f;
+    if (progress > 0.71f && progress < 0.85f) {
+        if (*(f32 *) (data + 0x18) > 0.8f) {
+            *(f32 *) (data + 0x18) -= 0.03f;
         }
     }
 
-    func_80802CF0_chflysaucer(param_0);
+    func_80802CF0_chflysaucer(actor);
 
-    func_80802114_chflysaucer(param_0, *(f32 *) (local_0 + 0x18));
+    func_80802114_chflysaucer(actor, *(f32 *) (data + 0x18));
 
-    if (func_80101E14(param_0, 0.62f)) {
-        _subaddieaudioquick_entrypoint_2(param_0, (char *) param_0 + 4, D_80804260_chflysaucer);
+    if (func_80101E14(actor, 0.62f)) {
+        _subaddieaudioquick_entrypoint_2(actor, (char *) actor + 4, D_80804260_chflysaucer);
 
-        func_808021C0_chflysaucer(param_0, local_0, 3);
-    } else if (local_6 < 0.21f) {
-        func_808021C0_chflysaucer(param_0, local_0, 0);
-    } else if (local_6 > 0.3f && local_6 < 0.44f) {
-        func_808021C0_chflysaucer(param_0, local_0, 1);
-    } else if (local_6 > 0.5f && local_6 < 0.62f) {
-        func_808021C0_chflysaucer(param_0, local_0, 2);
+        func_808021C0_chflysaucer(actor, data, 3);
+    } else if (progress < 0.21f) {
+        func_808021C0_chflysaucer(actor, data, 0);
+    } else if (progress > 0.3f && progress < 0.44f) {
+        func_808021C0_chflysaucer(actor, data, 1);
+    } else if (progress > 0.5f && progress < 0.62f) {
+        func_808021C0_chflysaucer(actor, data, 2);
     }
     break;
 
 case 3:
-    if (*(f32 *) (local_0 + 0x18) <= 0.99f) {
-        *(f32 *) (local_0 + 0x18) += 0.01f;
+    if (*(f32 *) (data + 0x18) <= 0.99f) {
+        *(f32 *) (data + 0x18) += 0.01f;
     } else {
-        func_80801568_chflysaucer(param_0, 4);
+        func_80801568_chflysaucer(actor, 4);
     }
 
-    func_80802CF0_chflysaucer(param_0);
+    func_80802CF0_chflysaucer(actor);
 
-    func_80802114_chflysaucer(param_0, *(f32 *) (local_0 + 0x18));
+    func_80802114_chflysaucer(actor, *(f32 *) (data + 0x18));
     break;
 
 case 4:
-    func_80802CF0_chflysaucer(param_0);
+    func_80802CF0_chflysaucer(actor);
 
-    func_80802114_chflysaucer(param_0, *(f32 *) (local_0 + 0x18));
+    func_80802114_chflysaucer(actor, *(f32 *) (data + 0x18));
     break;
 
 case 5:
-    local_10 = *(u8 *) (local_0 + 0x25);
-    switch (local_10) {
+    phase = *(u8 *) (data + 0x25);
+    switch (phase) {
         case 3:
-            *(f32 *) ((char *) param_0 + 0x58) -= func_800D8FF8();
+            *(f32 *) ((char *) actor + 0x58) -= func_800D8FF8();
 
-            if (*(f32 *) ((char *) param_0 + 0x58) <= 0.0f) {
-                func_808005FC_chflysaucer(param_0);
+            if (*(f32 *) ((char *) actor + 0x58) <= 0.0f) {
+                func_808005FC_chflysaucer(actor);
             }
             break;
         default:
-            local_1 = (char *) func_80100094(param_0, 1);
+            spline = (char *) func_80100094(actor, 1);
 
-            _suspline_entrypoint_13(local_1);
+            _suspline_entrypoint_13(spline);
 
-            local_7 = _suspline_entrypoint_6(local_1);
+            spline_pos = _suspline_entrypoint_6(spline);
 
-            _suspline_entrypoint_9(local_1, local_7);
+            _suspline_entrypoint_9(spline, spline_pos);
 
-            if (!func_80800C3C_chflysaucer(param_0)) {
-                local_7 = _suspline_entrypoint_6(local_1);
+            if (!func_80800C3C_chflysaucer(actor)) {
+                spline_pos = _suspline_entrypoint_6(spline);
 
-                func_8080013C_chflysaucer(param_0, (s32) (65535.0f * local_7));
+                func_8080013C_chflysaucer(actor, (s32) (65535.0f * spline_pos));
             }
         case 4:
             break;
     }
 
-    func_80802CF0_chflysaucer(param_0);
+    func_80802CF0_chflysaucer(actor);
 
-    func_80802114_chflysaucer(param_0, *(f32 *) (local_0 + 0x18));
+    func_80802114_chflysaucer(actor, *(f32 *) (data + 0x18));
 
-    if (*(u8 *) (local_0 + 0x2E) == 0 && func_80800000_chflysaucer(param_0) == 1) {
+    if (*(u8 *) (data + 0x2E) == 0 && func_80800000_chflysaucer(actor) == 1) {
         func_800D2770(0xC0, 0);
-        *(u8 *) (local_0 + 0x2E) = 1;
+        *(u8 *) (data + 0x2E) = 1;
     } else {
         func_800D24E8(0xC0, D_80127194[0x21A], 0);
     }
 
-    func_80802044_chflysaucer(param_0);
+    func_80802044_chflysaucer(actor);
     }
 
-    func_80802290_chflysaucer(param_0);
+    func_80802290_chflysaucer(actor);
     }
 
     void func_80802CF0_chflysaucer(this) Actor *this;
@@ -1552,238 +1557,239 @@ case 5:
         func_800906DC(rot);
     }
 
-    void func_80802ED8_chflysaucer(param_0) Actor *param_0;
+    // Init: decides what to do from the ride course and the current map.
+    void func_80802ED8_chflysaucer(actor) Actor *actor;
     {
         extern void func_800EFA4C(f32 *, f32, f32, f32);
         extern s32 func_800DC298(f32);
-        u8 *local_0;
-        s32 local_1;
-        local_0 = (u8 *) func_80100094(param_0, 0);
-        local_1 = func_800EA05C();
-        local_0[0x2D] = 3;
+        u8 *data;
+        s32 map_id;
+        data = (u8 *) func_80100094(actor, 0);
+        map_id = func_800EA05C();
+        data[0x2D] = 3;
         if (func_800D211C(0x8D) < 0x226) {
             func_800D2054(0, 0x8D, 0x226);
         }
-        func_800EFA4C((f32 *) (local_0 + 0xC), 0.0f, 110.0f, 0.0f);
-        switch (func_80800000_chflysaucer(param_0)) {
+        func_800EFA4C((f32 *) (data + 0xC), 0.0f, 110.0f, 0.0f);
+        switch (func_80800000_chflysaucer(actor)) {
             case 0:
                 if (_glcutDll_entrypoint_20()) {
-                    func_80801568_chflysaucer(param_0, 6);
-                } else if (func_800D395C() && local_1 == 0x124) {
-                    func_80801034_chflysaucer(param_0);
-                    func_808005FC_chflysaucer(param_0);
-                    func_80801568_chflysaucer(param_0, 2);
-                } else if (local_1 == 0xD6 && func_800DA298(0x94)) {
-                    func_80801034_chflysaucer(param_0);
+                    func_80801568_chflysaucer(actor, 6);
+                } else if (func_800D395C() && map_id == 0x124) {
+                    func_80801034_chflysaucer(actor);
+                    func_808005FC_chflysaucer(actor);
+                    func_80801568_chflysaucer(actor, 2);
+                } else if (map_id == 0xD6 && func_800DA298(0x94)) {
+                    func_80801034_chflysaucer(actor);
                 } else {
-                    func_800FFAB0(param_0);
+                    func_800FFAB0(actor);
                 }
                 break;
             case 6:
-                if (local_1 == 0xD6) {
-                    func_80801034_chflysaucer(param_0);
-                    func_80801130_chflysaucer(param_0);
+                if (map_id == 0xD6) {
+                    func_80801034_chflysaucer(actor);
+                    func_80801130_chflysaucer(actor);
                 } else {
-                    func_800FFAB0(param_0);
+                    func_800FFAB0(actor);
                 }
                 break;
             case 2:
-                if (local_1 == 0x13C) {
-                    func_808017D0_chflysaucer(param_0);
+                if (map_id == 0x13C) {
+                    func_808017D0_chflysaucer(actor);
                 } else {
-                    func_800FFAB0(param_0);
+                    func_800FFAB0(actor);
                 }
                 break;
             case 3:
-                if (local_1 == 0x124) {
-                    func_808017D0_chflysaucer(param_0);
+                if (map_id == 0x124) {
+                    func_808017D0_chflysaucer(actor);
                 } else {
-                    func_800FFAB0(param_0);
+                    func_800FFAB0(actor);
                 }
                 break;
             case 4:
-                if (local_1 == 0x13B) {
-                    func_808017D0_chflysaucer(param_0);
+                if (map_id == 0x13B) {
+                    func_808017D0_chflysaucer(actor);
                 } else {
-                    func_800FFAB0(param_0);
+                    func_800FFAB0(actor);
                 }
                 break;
             case 5:
-                if (local_1 == 0x124) {
-                    func_808017D0_chflysaucer(param_0);
+                if (map_id == 0x124) {
+                    func_808017D0_chflysaucer(actor);
                 } else {
-                    func_800FFAB0(param_0);
+                    func_800FFAB0(actor);
                 }
                 break;
             case 1:
-                if (local_1 == 0x124) {
+                if (map_id == 0x124) {
                     func_800DA3B8(0x6E9, func_800DC298(0.001f) ? 1 : 0);
-                    func_80801568_chflysaucer(param_0, 2);
+                    func_80801568_chflysaucer(actor, 2);
                 }
         }
     }
 
-    void func_80803150_chflysaucer(param_0) Actor *param_0;
+    void func_80803150_chflysaucer(actor) Actor *actor;
     {
-        void *local_0;
-        local_0 = func_80100094(param_0, 0);
-        func_8080149C_chflysaucer(param_0);
-        func_80801534_chflysaucer(param_0);
-        if (!param_0->unk64_19)
-            func_808009DC_chflysaucer(param_0, 0);
-        func_808012A4_chflysaucer(param_0, 0);
-        func_808021C0_chflysaucer(param_0, local_0, 3);
+        void *sound;
+        sound = func_80100094(actor, 0);
+        func_8080149C_chflysaucer(actor);
+        func_80801534_chflysaucer(actor);
+        if (!actor->unk64_19)
+            func_808009DC_chflysaucer(actor, 0);
+        func_808012A4_chflysaucer(actor, 0);
+        func_808021C0_chflysaucer(actor, sound, 3);
     }
 
-    void func_808031C8_chflysaucer(u8 **param_0)
+    void func_808031C8_chflysaucer(u8 **actor)
     {
-        u8 local_0 = func_800D731C(*(u16 *) (*param_0 + 0x14));
-        if (local_0) {
-            func_800DBE60(local_0, 0, 0);
-            func_800DBE60(local_0, 1, 4);
-            func_800DBE60(local_0, 2, 8);
+        u8 slot = func_800D731C(*(u16 *) (*actor + 0x14));
+        if (slot) {
+            func_800DBE60(slot, 0, 0);
+            func_800DBE60(slot, 1, 4);
+            func_800DBE60(slot, 2, 8);
         }
     }
 
-    f32 func_80803224_chflysaucer(Actor *param_0)
+    f32 func_80803224_chflysaucer(Actor *actor)
     {
-        void *local_0;
-        f32 local_1[3];
-        f32 local_2[3];
-        f32 local_4;
-        void *local_3;
-        local_0 = func_800B27E0(func_801039E4(param_0->unk0));
-        local_3 = func_800AE080(*(s16 *) ((u8 *) param_0->unk0 + 0x10));
-        func_800AE630(local_3, local_0, 0x2A, local_1);
-        func_800AE630(local_3, local_0, 0x2B, local_2);
-        local_4 = func_800F1828(local_1, local_2);
+        void *model;
+        f32 left[3];
+        f32 right[3];
+        f32 dist;
+        void *skeleton;
+        model = func_800B27E0(func_801039E4(actor->unk0));
+        skeleton = func_800AE080(*(s16 *) ((u8 *) actor->unk0 + 0x10));
+        func_800AE630(skeleton, model, 0x2A, left);
+        func_800AE630(skeleton, model, 0x2B, right);
+        dist = func_800F1828(left, right);
     }
 
-    void func_8080329C_chflysaucer(Actor *param_0, f32 *param_1, f32 *param_2, f32 param_3)
+    void func_8080329C_chflysaucer(Actor *actor, f32 *pos, f32 *rot, f32 unk_3)
     {
-        u8 *local_0;
-        void *local_1;
-        void *local_2;
-        Vec3f local_3;
-        f32 local_4;
-        Vec3f local_5;
-        s32 local_6;
-        Vec3f local_7;
-        s32 local_8;
-        Vec3f local_9;
-        s32 local_10;
+        u8 *data;
+        void *shadow_a;
+        void *shadow_b;
+        Vec3f offset;
+        f32 height;
+        Vec3f pos_a;
+        s32 anim_a;
+        Vec3f pos_b;
+        s32 anim_b;
+        Vec3f pos_c;
+        s32 anim_c;
 
-        local_0 = func_80100094(param_0, 0);
-        local_1 = func_800D674C(0x829);
-        local_2 = func_800D674C(0x82A);
+        data = func_80100094(actor, 0);
+        shadow_a = func_800D674C(0x829);
+        shadow_b = func_800D674C(0x82A);
         func_800D70F8(0x829, 1);
         func_800D70F8(0x82A, 1);
-        local_4 = func_80803224_chflysaucer(param_0);
-        *(f32 *) (local_0 + 0x1C) = local_4;
-        func_800EE7F8(local_3.f, param_2);
-        local_3.pos.z += local_4;
-        switch (local_0[0x24]) {
+        height = func_80803224_chflysaucer(actor);
+        *(f32 *) (data + 0x1C) = height;
+        func_800EE7F8(offset.f, rot);
+        offset.pos.z += height;
+        switch (data[0x24]) {
             case 2:
-                if (local_2) {
-                    local_6 = func_80104200(*(s16 *) local_0);
-                    func_800EF6A8(local_5.f, param_2, 0.0f, 105.0f, 8.0f);
-                    func_800EF04C(local_5.f, param_1);
-                    func_8008B304(local_6);
-                    func_800DF41C(func_8008C27C(func_8008AEDC(local_6)));
+                if (shadow_b) {
+                    anim_a = func_80104200(*(s16 *) data);
+                    func_800EF6A8(pos_a.f, rot, 0.0f, 105.0f, 8.0f);
+                    func_800EF04C(pos_a.f, pos);
+                    func_8008B304(anim_a);
+                    func_800DF41C(func_8008C27C(func_8008AEDC(anim_a)));
                     func_800DF440(0);
-                    func_800DF830((u32) *(u16 *) ((u8 *) param_0 + 0x7A) >> 14);
-                    func_800DE448(local_5.f, local_3.f, param_0->scale * 0.95f, NULL,
-                                  (s32) local_2);
+                    func_800DF830((u32) *(u16 *) ((u8 *) actor + 0x7A) >> 14);
+                    func_800DE448(pos_a.f, offset.f, actor->scale * 0.95f, NULL,
+                                  (s32) shadow_b);
                 }
                 break;
             case 1:
             case 3:
-                if (local_2) {
-                    local_8 = func_80104200(*(s16 *) local_0);
-                    func_800EF6A8(local_7.f, param_2, 0.0f, *(f32 *) (local_0 + 0x10) + 35.0f,
+                if (shadow_b) {
+                    anim_b = func_80104200(*(s16 *) data);
+                    func_800EF6A8(pos_b.f, rot, 0.0f, *(f32 *) (data + 0x10) + 35.0f,
                                   15.0f);
-                    func_800EF04C(local_7.f, param_1);
-                    func_8008B304(local_8);
-                    func_800DF41C(func_8008C27C(func_8008AEDC(local_8)));
+                    func_800EF04C(pos_b.f, pos);
+                    func_8008B304(anim_b);
+                    func_800DF41C(func_8008C27C(func_8008AEDC(anim_b)));
                     func_800DF440(0);
-                    func_800DF830((u32) *(u16 *) ((u8 *) param_0 + 0x7A) >> 14);
-                    func_800DE448(local_7.f, local_3.f, param_0->scale * 0.95f, NULL,
-                                  (s32) local_2);
+                    func_800DF830((u32) *(u16 *) ((u8 *) actor + 0x7A) >> 14);
+                    func_800DE448(pos_b.f, offset.f, actor->scale * 0.95f, NULL,
+                                  (s32) shadow_b);
                 }
         }
-        if (local_0[0x24] == 2 && local_1) {
-            local_10 = func_80104200(*(s16 *) (local_0 + 2));
-            func_800EF6A8(local_9.f, param_2, 0.0f, 105.0f, 11.0f);
-            func_800EF04C(local_9.f, param_1);
-            func_8008B304(local_10);
-            func_800DF41C(func_8008C27C(func_8008AEDC(local_10)));
+        if (data[0x24] == 2 && shadow_a) {
+            anim_c = func_80104200(*(s16 *) (data + 2));
+            func_800EF6A8(pos_c.f, rot, 0.0f, 105.0f, 11.0f);
+            func_800EF04C(pos_c.f, pos);
+            func_8008B304(anim_c);
+            func_800DF41C(func_8008C27C(func_8008AEDC(anim_c)));
             func_800DF440(0);
-            func_800DF830((u32) *(u16 *) ((u8 *) param_0 + 0x7A) >> 14);
-            func_800DE448(local_9.f, local_3.f, param_0->scale * 0.95f, NULL, (s32) local_1);
+            func_800DF830((u32) *(u16 *) ((u8 *) actor + 0x7A) >> 14);
+            func_800DE448(pos_c.f, offset.f, actor->scale * 0.95f, NULL, (s32) shadow_a);
         }
         func_800D70F8(0x829, 0);
         func_800D70F8(0x82A, 0);
     }
 
-    void func_808035C4_chflysaucer(param_0, param_1) Actor *param_0;
-    u32 *param_1;
+    void func_808035C4_chflysaucer(actor, gfx) Actor *actor;
+    u32 *gfx;
     {
         extern void func_800EFA4C(f32 *, f32, f32, f32);
-        f32 local_1[3];
-        f32 local_2[3];
-        f32 local_3[3];
-        f32 local_4[3];
-        u8 *local_0;
-        f32 local_5[3];
-        s32 local_7;
-        local_0 = (u8 *) func_80100094(param_0, 0);
+        f32 pos[3];
+        f32 rot[3];
+        f32 focus[3];
+        f32 up[3];
+        u8 *data;
+        f32 mirror[3];
+        s32 model;
+        data = (u8 *) func_80100094(actor, 0);
         func_800DF744(1, 0);
         if (1) {
         }
-        switch (local_0[0x24]) {
+        switch (data[0x24]) {
             case 2:
                 func_800E41CC();
-                func_800EFA4C(local_3, 0.0f, 0.0f, 300.0f);
-                func_800EFD24(local_4);
-                func_800E3BAC(local_3);
-                func_800E3C30(local_4);
+                func_800EFA4C(focus, 0.0f, 0.0f, 300.0f);
+                func_800EFD24(up);
+                func_800E3BAC(focus);
+                func_800E3C30(up);
                 func_800E3CE8();
-                func_800E44FC(param_1);
-                func_800EFA4C(local_2, -10.0f, -180.0f, 0.0f);
-                func_800EFA4C(local_1, 0, -180.0f, 163.0f);
+                func_800E44FC(gfx);
+                func_800EFA4C(rot, -10.0f, -180.0f, 0.0f);
+                func_800EFA4C(pos, 0, -180.0f, 163.0f);
                 break;
             case 1:
-                func_800EE7F8(local_2, param_0->rotation);
-                func_800EE7F8(local_5, param_0->rotation);
-                local_5[2] = -local_5[2];
-                func_800EF6A8(local_1, local_5, 0, -180.0f, 0);
-                func_800EF04C(local_1, param_0->position);
-                local_2[2] = -local_2[2];
+                func_800EE7F8(rot, actor->rotation);
+                func_800EE7F8(mirror, actor->rotation);
+                mirror[2] = -mirror[2];
+                func_800EF6A8(pos, mirror, 0, -180.0f, 0);
+                func_800EF04C(pos, actor->position);
+                rot[2] = -rot[2];
                 break;
             case 0:
                 func_800DF744(1, 1);
             case 3:
-                func_800EE7F8(local_1, param_0->position);
-                func_800EE7F8(local_2, param_0->rotation);
-                local_2[2] = -local_2[2];
+                func_800EE7F8(pos, actor->position);
+                func_800EE7F8(rot, actor->rotation);
+                rot[2] = -rot[2];
         }
-        if (!param_0->unk64_20) {
-            func_808031C8_chflysaucer(param_0);
+        if (!actor->unk64_20) {
+            func_808031C8_chflysaucer(actor);
         }
-        func_80101970(param_0);
-        func_800DF47C(func_801015D0, param_0);
-        func_800DE448(local_1, local_2, param_0->scale, (f32 *) func_801018D8(param_0),
-                      func_8010347C(param_0->unk0));
-        local_2[0] -= 5.0f;
-        if (param_0->unk7C_12) {
-            local_7 = func_800B27E0(func_801039E4(param_0->unk0));
-            func_8080329C_chflysaucer(param_0, local_1, local_2, *(f32 *) &param_1);
-            func_800AE630(func_800AE080(*(s16 *) ((u8 *) param_0->unk0 + 0x10)), local_7, 3,
-                          local_0 + 0xC);
+        func_80101970(actor);
+        func_800DF47C(func_801015D0, actor);
+        func_800DE448(pos, rot, actor->scale, (f32 *) func_801018D8(actor),
+                      func_8010347C(actor->unk0));
+        rot[0] -= 5.0f;
+        if (actor->unk7C_12) {
+            model = func_800B27E0(func_801039E4(actor->unk0));
+            func_8080329C_chflysaucer(actor, pos, rot, *(f32 *) &gfx);
+            func_800AE630(func_800AE080(*(s16 *) ((u8 *) actor->unk0 + 0x10)), model, 3,
+                          data + 0xC);
         }
-        if (local_0[0x24] == 2) {
+        if (data[0x24] == 2) {
             func_800E4208();
-            func_800E44FC(param_1);
+            func_800E44FC(gfx);
         }
     }
 
@@ -1794,152 +1800,155 @@ case 5:
 
     s32 func_80803844_chflysaucer(void)
     {
-        f32 local_0;
+        f32 roll;
 
-        local_0 = func_800DC0C0();
+        roll = func_800DC0C0();
         if (func_800DA298(0x6E9))
             return 2;
-        if (local_0 < 0.5f)
+        if (roll < 0.5f)
             return 0;
-        if (local_0 < 0.8333333f)
+        if (roll < 0.8333333f)
             return 1;
         return 2;
     }
 
-    void func_808038C4_chflysaucer(Unk80132ED0 *param_0, f32 *param_1, f32 *param_2, s32 param_3,
-                                   s32 param_4, f32 param_5)
+    // Spawns a single target (actor 0x2A4) in front of the saucer.
+    void func_808038C4_chflysaucer(Unk80132ED0 *owner, f32 *origin, f32 *rot, s32 offset,
+                                   s32 tier, f32 timer)
     {
-        f32 local_0[3];
-        Actor *local_1;
+        f32 dir[3];
+        Actor *target;
 
-        local_1 = func_80108474(0x2A4, param_1, (s32) (param_2[1] + 180.0f));
-        local_0[0] = param_2[0];
-        local_0[1] = param_2[1];
-        local_0[2] = (f32) param_3 - param_2[2];
-        local_1->unk3C = param_0;
-        local_1->rotation[0] = -local_0[0];
-        local_1->unk79_4 = param_4;
-        func_800EF6A8(local_1->position, local_0, 0.0f, 150.0f, 1000.0f);
-        func_800EF04C(local_1->position, param_1);
-        func_800EE7F8((f32 *) ((u8 *) local_1 + 0x28), param_1);
-        local_1->unk58 = param_5;
+        target = func_80108474(0x2A4, origin, (s32) (rot[1] + 180.0f));
+        dir[0] = rot[0];
+        dir[1] = rot[1];
+        dir[2] = (f32) offset - rot[2];
+        target->unk3C = owner;
+        target->rotation[0] = -dir[0];
+        target->unk79_4 = tier;
+        func_800EF6A8(target->position, dir, 0.0f, 150.0f, 1000.0f);
+        func_800EF04C(target->position, origin);
+        func_800EE7F8((f32 *) ((u8 *) target + 0x28), origin);
+        target->unk58 = timer;
     }
 
-    void func_808039B8_chflysaucer(Unk80132ED0 *param_0, f32 *param_1, f32 *param_2, s32 *param_3,
-                                   s32 param_4, f32 param_5)
+    // Spawns one target per offset along the course.
+    void func_808039B8_chflysaucer(Unk80132ED0 *owner, f32 *origin, f32 *rot, s32 *offsets,
+                                   s32 mode, f32 timer)
     {
-        s32 *local_0;
-        s32 local_1;
+        s32 *unk_0;
+        s32 tier;
         s32 i;
 
-        for (i = 0; param_3[i] != -1; i++) {
-            switch (param_4) {
+        for (i = 0; offsets[i] != -1; i++) {
+            switch (mode) {
                 case 1:
-                    local_1 = func_80803844_chflysaucer();
+                    tier = func_80803844_chflysaucer();
                     break;
                 case 2:
-                    local_1 = 0;
+                    tier = 0;
                     break;
                 case 3:
-                    local_1 = 1;
+                    tier = 1;
                     break;
                 case 4:
-                    local_1 = 2;
+                    tier = 2;
                     break;
                 case 5:
-                    local_1 = D_808046B0_chflysaucer[i];
+                    tier = D_808046B0_chflysaucer[i];
                     break;
                 default:
                     break;
             }
-            func_808038C4_chflysaucer(param_0, param_1, param_2, param_3[i], local_1, param_5);
+            func_808038C4_chflysaucer(owner, origin, rot, offsets[i], tier, timer);
         }
     }
 
-    void func_80803AF0_chflysaucer(Actor *param_0, s32 param_1, s32 param_2, f32 param_3)
+    void func_80803AF0_chflysaucer(Actor *actor, s32 mode, s32 flags, f32 timer)
     {
-        f32 local_0[3];
-        f32 local_1[3];
-        s32 local_3;
-        void *local_2;
+        f32 pos[3];
+        f32 rot[3];
+        s32 dist;
+        void *owner;
 
-        local_2 = param_0->unk0;
-        local_3 = 0x447A0000;
-        func_80800DAC_chflysaucer(param_0, local_0, local_1, local_3);
-        local_1[0] = -local_1[0];
-        func_808039B8_chflysaucer(local_2, local_0, local_1, &D_808046C4_chflysaucer, param_1,
-                                  param_3);
+        owner = actor->unk0;
+        dist = 0x447A0000;
+        func_80800DAC_chflysaucer(actor, pos, rot, dist);
+        rot[0] = -rot[0];
+        func_808039B8_chflysaucer(owner, pos, rot, &D_808046C4_chflysaucer, mode,
+                                  timer);
     }
 
-    void func_80803B60_chflysaucer(Actor *param_0)
+    void func_80803B60_chflysaucer(Actor *actor)
     {
-        switch (param_0->unk79_4) {
+        switch (actor->unk79_4) {
             case 1:
-                func_80103140(param_0, 0x826, param_0->unk0->unk16);
+                func_80103140(actor, 0x826, actor->unk0->unk16);
                 break;
             case 2:
-                func_80103140(param_0, 0x827, param_0->unk0->unk16);
+                func_80103140(actor, 0x827, actor->unk0->unk16);
         }
-        param_0->scale = 0.3f;
-        ((f32 *) param_0->actorData)[3] = 100000000.0f;
+        actor->scale = 0.3f;
+        ((f32 *) actor->actorData)[3] = 100000000.0f;
     }
 
     void func_80803BE8_chflysaucer(s32 arg0)
     {
     }
-    void func_80803BF0_chflysaucer(Actor *param_0, s32 param_1)
+    void func_80803BF0_chflysaucer(Actor *actor, s32 state)
     {
-        unsigned short new_var;
-        s32 *local_0;
-        local_0 = (s32 *) (&param_0->unk0);
-        func_80102424(param_0, param_1);
-        if ((((new_var = local_0[0x72 / 4]) & 0xFFFFu) >> 10) == 2) {
-            _subaddiefade_entrypoint_3(param_0);
-            func_8010A800(param_0, 2);
+        unsigned short flags;
+        s32 *raw;
+        raw = (s32 *) (&actor->unk0);
+        func_80102424(actor, state);
+        if ((((flags = raw[0x72 / 4]) & 0xFFFFu) >> 10) == 2) {
+            _subaddiefade_entrypoint_3(actor);
+            func_8010A800(actor, 2);
         }
     }
 
-    void func_80803C3C_chflysaucer(Actor *param_0)
+    void func_80803C3C_chflysaucer(Actor *actor)
     {
-        switch (param_0->unk70_10) {
+        switch (actor->unk70_10) {
             case 1:
-                if (param_0->unk58 > 0.0f)
-                    param_0->unk58 -= func_800D8FF8();
+                if (actor->unk58 > 0.0f)
+                    actor->unk58 -= func_800D8FF8();
                 else
-                    func_80803BF0_chflysaucer(param_0, 2);
+                    func_80803BF0_chflysaucer(actor, 2);
                 break;
             case 2:
-                _subaddiefade_entrypoint_6(param_0, -60);
+                _subaddiefade_entrypoint_6(actor, -60);
         }
     }
 
-    int func_80803CC4_chflysaucer(s32 param_0, s32 param_1)
+    int func_80803CC4_chflysaucer(s32 actor, s32 effect_id)
     {
-        s32 local_0;
-        local_0 = func_800B53A4(6);
-        func_800BABB8(local_0, param_0 + 4, param_0 + 4, 0x3FB33333, &D_808046DC_chflysaucer);
-        func_800BA3FC(local_0, param_1);
-        func_800BA22C(local_0, 6);
+        s32 emitter;
+        emitter = func_800B53A4(6);
+        func_800BABB8(emitter, actor + 4, actor + 4, 0x3FB33333, &D_808046DC_chflysaucer);
+        func_800BA3FC(emitter, effect_id);
+        func_800BA22C(emitter, 6);
     }
 
-    s32 func_80803D30_chflysaucer(Actor *param_0, s32 param_1, u32 param_2)
+    // Handles a hit on a target: awards points and fades it out.
+    s32 func_80803D30_chflysaucer(Actor *actor, s32 msg, u32 data)
     {
-        Unk80132ED0 *local_0;
+        Unk80132ED0 *sender;
 
-        switch (param_1) {
+        switch (msg) {
             case 0x40: {
-                s16 *local_1;
-                local_0 = (Unk80132ED0 *) (*(u32 *) &param_2);
-                if (_subaddiefade_entrypoint_0(param_0) >= 0x61) {
-                    func_80803CC4_chflysaucer(param_0, D_80804704_chflysaucer[param_0->unk79_4]);
-                    _chscorepoints_entrypoint_2(param_0->unk79_4 + 1, 0, param_0->position, 1);
-                    local_1 = &D_801275C8;
-                    *local_1 = *local_1 + param_0->unk79_4 + 1;
-                    func_80803BF0_chflysaucer(param_0, 2);
-                    func_8010A570(param_0);
+                s16 *score;
+                sender = (Unk80132ED0 *) (*(u32 *) &data);
+                if (_subaddiefade_entrypoint_0(actor) >= 0x61) {
+                    func_80803CC4_chflysaucer(actor, D_80804704_chflysaucer[actor->unk79_4]);
+                    _chscorepoints_entrypoint_2(actor->unk79_4 + 1, 0, actor->position, 1);
+                    score = &D_801275C8;
+                    *score = *score + actor->unk79_4 + 1;
+                    func_80803BF0_chflysaucer(actor, 2);
+                    func_8010A570(actor);
                 }
-                if (*(u16 *) ((u8 *) local_0 + 0x18) & 1) {
-                    func_8010114C(local_0, 0x98, 0);
+                if (*(u16 *) ((u8 *) sender + 0x18) & 1) {
+                    func_8010114C(sender, 0x98, 0);
                 }
                 break;
             }

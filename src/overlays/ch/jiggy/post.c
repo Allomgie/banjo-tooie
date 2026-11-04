@@ -12,98 +12,100 @@ void func_8080000C_chjiggypost(s32 arg0)
 {
 }
 
-void func_80800014_chjiggypost(Actor *arg0, s32 arg1)
+// Starts Jiggywiggy dialog (speaker 0x97).
+void func_80800014_chjiggypost(Actor *actor, s32 text_id)
 {
-    u8 var_a2;
+    u8 unk_0;
 
-    if (arg1 == 0x1515) {
-        var_a2 = 0x4E;
+    if (text_id == 0x1515) {
+        unk_0 = 0x4E;
     } else {
-        var_a2 = 0xF;
+        unk_0 = 0xF;
     }
-    _subaddiedialog_entrypoint_11(arg0->unk0, arg1, var_a2, arg0->position, 0x97);
-    func_80101FDC(arg0, 2);
+    _subaddiedialog_entrypoint_11(actor->unk0, text_id, unk_0, actor->position, 0x97);
+    func_80101FDC(actor, 2);
 }
 
-void func_80800068_chjiggypost(Actor *param_0)
+// Shows the HUD jiggy counts and starts the requirement dialog when the player is near.
+void func_80800068_chjiggypost(Actor *actor)
 {
-    s32 local_2;
-    s32 local_1;
-    s32 local_0;
+    s32 text_id;
+    s32 missing;
+    s32 required;
 
     if (!func_800C0638()) {
         func_800D2498(0x10E, func_800D035C(1), 0);
-        if ((s32) (param_0->unk74_7 - 0x33) >= _sujiggy_entrypoint_0()) {
-            local_0 = _sujiggy_entrypoint_2(param_0->unk74_7 - 0x33);
-            local_1 = local_0 - func_800D035C(1);
-            if (local_1 > 0)
-                func_800D2498(0x106, local_1, 0);
+        if ((s32) (actor->unk74_7 - 0x33) >= _sujiggy_entrypoint_0()) {
+            required = _sujiggy_entrypoint_2(actor->unk74_7 - 0x33);
+            missing = required - func_800D035C(1);
+            if (missing > 0)
+                func_800D2498(0x106, missing, 0);
         }
     }
-    if (param_0->unk70_10 == 1) {
+    if (actor->unk70_10 == 1) {
         if (!func_800DA298(0x4E8)) {
-            func_80800014_chjiggypost(param_0, 0x1512);
+            func_80800014_chjiggypost(actor, 0x1512);
             return;
         }
-        if (_subaddiedialog_entrypoint_5(param_0->position, 250, 60, 0)) {
-            if ((s32) (param_0->unk74_7 - 0x33) < _sujiggy_entrypoint_0())
-                local_2 = 0x1517;
+        if (_subaddiedialog_entrypoint_5(actor->position, 250, 60, 0)) {
+            if ((s32) (actor->unk74_7 - 0x33) < _sujiggy_entrypoint_0())
+                text_id = 0x1517;
             else if (func_800D3E40(11))
-                local_2 = 0x155A;
+                text_id = 0x155A;
             else
-                local_2 = _sujiggy_entrypoint_2(param_0->unk74_7 - 0x33) == 1 ? 0x1513 : 0x1514;
-            func_80800014_chjiggypost(param_0, local_2);
+                text_id = _sujiggy_entrypoint_2(actor->unk74_7 - 0x33) == 1 ? 0x1513 : 0x1514;
+            func_80800014_chjiggypost(actor, text_id);
         }
     }
 }
 
-void func_808001C4_chjiggypost(Actor *arg0, s32 arg1, s32 arg2)
+void func_808001C4_chjiggypost(Actor *actor, s32 text_id, s32 response)
 {
-    s32 var_a1;
+    s32 next_text;
 
-    switch (arg1) {
+    switch (text_id) {
         case 0x1513:
         case 0x1514:
             if (func_800DA298(FLAG_35B_FTT_CS_JIGGYWIGGY) != 0) {
-                if (func_800D035C(1) >= _sujiggy_entrypoint_2(arg0->unk74_7 - 0x33)) {
+                if (func_800D035C(1) >= _sujiggy_entrypoint_2(actor->unk74_7 - 0x33)) {
                     if (func_8008FD48() == TRANSFORM_1_BK) {
-                        var_a1 = 0x1515;
+                        next_text = 0x1515;
                     } else {
-                        var_a1 = 0x152E;
+                        next_text = 0x152E;
                     }
                 } else {
-                    var_a1 = 0x1516;
+                    next_text = 0x1516;
                 }
-                func_80800014_chjiggypost(arg0, var_a1);
+                func_80800014_chjiggypost(actor, next_text);
             } else {
                 func_800C0850();
                 func_800C01A8(0x64, 0);
-                func_80101FDC(arg0, 1U);
+                func_80101FDC(actor, 1U);
             }
             break;
 
         case 0x1512:
             func_800DA544(FLAG_4E8_FTT_ALTAR_OF_KNOWLEDGE);
         default:
-            func_80101FDC(arg0, 1U);
+            func_80101FDC(actor, 1U);
     }
-    if ((arg1 == 0x1515) && (arg2 == 1)) {
+    if ((text_id == 0x1515) && (response == 1)) {
         _gcgoto_entrypoint_1(MAP_151_IOH_JIGGYWIGGY_TEMPLE, 4);
     }
 }
 
-s32 func_808002DC_chjiggypost(Actor *arg0, s32 arg1, s32 arg2)
+s32 func_808002DC_chjiggypost(Actor *actor, s32 msg, s32 data)
 {
-    splitS32 *split = (splitS32 *) &arg2;
-    switch (arg1) {
+    splitS32 *split = (splitS32 *) &data;
+    switch (msg) {
         case 0x2E:
-            func_808001C4_chjiggypost(arg0, split->upper, split->lower);
+            func_808001C4_chjiggypost(actor, split->upper, split->lower);
         case 0x95:
             break;
         case 0x30:
-            return _sujiggy_entrypoint_2(arg0->unk74_7 - 0x33);
+            return _sujiggy_entrypoint_2(actor->unk74_7 - 0x33);
         case 0x52:
-            _gcdialogcamera_entrypoint_3((u32 *) &D_808003C8_chjiggypost, arg0->scale);
+            _gcdialogcamera_entrypoint_3((u32 *) &D_808003C8_chjiggypost, actor->scale);
             break;
         default:
             return 0;

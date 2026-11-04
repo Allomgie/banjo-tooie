@@ -2,8 +2,8 @@
 
 extern int D_808006A0_chconga[];
 typedef union {
-    s32 local_0;
-    s16 local_1[2];
+    s32 word;
+    s16 half[2];
 } CongaEvent;
 extern s32 D_808006E8_chconga[];
 extern void *func_80100094(Actor *, u32);
@@ -26,95 +26,95 @@ int *chconga_entrypoint_0()
     return &D_808006A0_chconga;
 }
 
-void func_8080000C_chconga(Actor *param_0)
+void func_8080000C_chconga(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
+    s32 retry_flag;
+    s32 unk_0;
+    s32 unk_1;
 
-    local_0 = func_800DA298(0x17F);
-    local_1 = func_800F64A4(func_800F54E4(), 1);
-    local_2 = func_800D395C();
+    retry_flag = func_800DA298(0x17F);
+    unk_0 = func_800F64A4(func_800F54E4(), 1);
+    unk_1 = func_800D395C();
     if (_glcutDll_entrypoint_20() != 0) {
-        func_80102424(param_0, 5);
+        func_80102424(actor, 5);
         goto block_10;
     }
     if (func_800DA298(0x9C) != 0) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
         return;
     }
-    if ((local_2 != 0) && (local_0 == 0)) {
-        func_80102424(param_0, 4);
-        func_80105A9C(param_0, 4e+02f);
+    if ((unk_1 != 0) && (retry_flag == 0)) {
+        func_80102424(actor, 4);
+        func_80105A9C(actor, 4e+02f);
         goto block_10;
     }
-    if ((local_0 != 0) && (local_1 != 0)) {
-        func_800FFAB0(param_0);
+    if ((retry_flag != 0) && (unk_0 != 0)) {
+        func_800FFAB0(actor);
         return;
     }
 block_10:
-    _subaddieitem_entrypoint_0(func_80100094(param_0, 0), 0x4E2, -1, 3);
-    _subaddieitem_entrypoint_1(func_80100094(param_0, 0), 4);
+    _subaddieitem_entrypoint_0(func_80100094(actor, 0), 0x4E2, -1, 3);
+    _subaddieitem_entrypoint_1(func_80100094(actor, 0), 4);
 }
 
 void func_80800538_chconga();
 
-void func_80800118_chconga(Actor *param_0)
+void func_80800118_chconga(Actor *actor)
 {
-    f32 local_0[3];
+    f32 item_pos[3];
 
-    _suexpression_entrypoint_10(func_80100094(param_0, 1), param_0->unk0, 0);
-    switch (param_0->unk70_10) {
+    _suexpression_entrypoint_10(func_80100094(actor, 1), actor->unk0, 0);
+    switch (actor->unk70_10) {
         case 1:
             func_800D1824(0x4D);
-            func_80800538_chconga(param_0);
-            func_80800618_chconga(param_0);
+            func_80800538_chconga(actor);
+            func_80800618_chconga(actor);
             break;
         case 2:
             func_800D1824(0x4D);
-            func_80800618_chconga(param_0);
+            func_80800618_chconga(actor);
             break;
         case 3:
             func_800D1824(0x4D);
-            func_80103DFC(param_0, local_0);
-            if (_subaddieitem_entrypoint_3(param_0, local_0, func_80100094(param_0, 0))) {
+            func_80103DFC(actor, item_pos);
+            if (_subaddieitem_entrypoint_3(actor, item_pos, func_80100094(actor, 0))) {
                 func_800DA544(0x4A);
-                func_80102424(param_0, 2);
-                _subaddiedialog_entrypoint_11(param_0->unk0, *(s32 *) ((u8 *) param_0 + 0x28), 0xE,
-                                              param_0->position, 0x52);
+                func_80102424(actor, 2);
+                _subaddiedialog_entrypoint_11(actor->unk0, *(s32 *) ((u8 *) actor + 0x28), 0xE,
+                                              actor->position, 0x52);
                 if (func_800C6E38(0x1B) && func_800C6E38(0x2D))
                     func_80101180(0x46E, 7, 0);
             }
             break;
         case 4:
-            func_80105854(param_0);
+            func_80105854(actor);
             break;
         case 5:
-            func_80800618_chconga(param_0);
+            func_80800618_chconga(actor);
             break;
     }
-    _sudeflect_entrypoint_0(param_0->position, 150.0f, 175.0f, 0xA);
+    _sudeflect_entrypoint_0(actor->position, 150.0f, 175.0f, 0xA);
 }
 
-void func_80800280_chconga(Actor *arg0)
+void func_80800280_chconga(Actor *actor)
 {
-    _suexpression_entrypoint_8(arg0, 1);
+    _suexpression_entrypoint_8(actor, 1);
 }
 
-s32 func_808002A0_chconga(Actor *param_0, s32 param_1, CongaEvent param_2)
+s32 func_808002A0_chconga(Actor *actor, s32 msg, CongaEvent arg)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x2E:
-            func_80800374_chconga(param_0, param_2.local_1[0], param_2.local_1[1]);
+            func_80800374_chconga(actor, arg.half[0], arg.half[1]);
             break;
         case 0x30:
-            return func_80800478_chconga(param_0, param_2.local_1[0], param_2.local_1[1]);
+            return func_80800478_chconga(actor, arg.half[0], arg.half[1]);
         case 0x52:
-            _gcdialogcamera_entrypoint_3(D_808006E8_chconga, param_0->scale);
+            _gcdialogcamera_entrypoint_3(D_808006E8_chconga, actor->scale);
             break;
         case 0x95:
-            _suexpression_entrypoint_7(param_0, 1, 0x52);
-            _suexpression_entrypoint_12(func_80100094(param_0, 1), 45.0f, 15.0f);
+            _suexpression_entrypoint_7(actor, 1, 0x52);
+            _suexpression_entrypoint_12(func_80100094(actor, 1), 45.0f, 15.0f);
             break;
         default:
             return 0;
@@ -122,69 +122,70 @@ s32 func_808002A0_chconga(Actor *param_0, s32 param_1, CongaEvent param_2)
     return 1;
 }
 
-void func_80800374_chconga(param_0, param_1, param_2) Actor *param_0;
-s32 param_1;
+void func_80800374_chconga(actor, dialog_id, param_2) Actor *actor;
+s32 dialog_id;
 s32 param_2;
 {
-    switch (param_1) {
+    switch (dialog_id) {
         case 0x10B1:
-            param_0->actorData[4] = func_808004BC_chconga(param_0, 0x10F2);
-            _subaddieitem_entrypoint_2(func_80100094(param_0, 0));
-            func_80102424(param_0, 3);
+            actor->actorData[4] = func_808004BC_chconga(actor, 0x10F2);
+            _subaddieitem_entrypoint_2(func_80100094(actor, 0));
+            func_80102424(actor, 3);
             break;
         case 0x10B3:
-            param_0->actorData[4] = func_808004BC_chconga(param_0, 0x10F3);
-            _subaddieitem_entrypoint_2(func_80100094(param_0, 0));
-            func_80102424(param_0, 3);
+            actor->actorData[4] = func_808004BC_chconga(actor, 0x10F3);
+            _subaddieitem_entrypoint_2(func_80100094(actor, 0));
+            func_80102424(actor, 3);
             break;
         case 0x10F2:
         case 0x10F3:
         case 0x1101:
-            func_80102424(param_0, 4);
-            func_80105A9C(param_0, 400.0f);
+            func_80102424(actor, 4);
+            func_80105A9C(actor, 400.0f);
             func_80101180(0x13C, 10, 0);
             break;
         default:
-            func_80102424(param_0, 1);
+            func_80102424(actor, 1);
     }
 }
 
-int func_80800478_chconga(param_0, param_1, param_2)
+int func_80800478_chconga(param_0, dialog_id, param_2)
 s32 param_0;
-s32 param_1;
+s32 dialog_id;
 s32 param_2;
 {
-    s32 local_0;
+    s32 result;
 
-    if (param_1 == 0x10B0 || param_1 == 0x10B1) {
+    if (dialog_id == 0x10B0 || dialog_id == 0x10B1) {
         return func_800D1A04(0x4D);
     }
-    local_0 = 0;
-    return local_0;
+    result = 0;
+    return result;
 }
 
-int func_808004BC_chconga(param_0, param_1)
+// Picks a dialog from the Airborne Egg Aiming and Grenade Eggs abilities.
+int func_808004BC_chconga(param_0, default_dialog)
 s32 param_0;
-s32 param_1;
+s32 default_dialog;
 {
-    int local_0;
+    int dialog_id;
 
     if (func_800C6E38(0x1B) && func_800C6E38(0x2D)) {
-        local_0 = param_1;
+        dialog_id = default_dialog;
     } else if (func_800C6E38(0x1B)) {
-        local_0 = 0x1112;
+        dialog_id = 0x1112;
     } else if (func_800C6E38(0x2D)) {
-        local_0 = 0x10FF;
+        dialog_id = 0x10FF;
     } else {
-        local_0 = 0x1113;
+        dialog_id = 0x1113;
     }
-    return local_0;
+    return dialog_id;
 }
 
-void func_80800538_chconga(Actor *param_0)
+void func_80800538_chconga(Actor *actor)
 {
     if (func_800DA298(0x4A) && func_800F64A4(func_800F54E4(), 1)) {
-        D_808006FE_chconga = func_808004BC_chconga(param_0, 0x1101);
+        D_808006FE_chconga = func_808004BC_chconga(actor, 0x1101);
     } else {
         if (func_800D1A04(0x4D) >= 4)
             D_808006FC_chconga = 0x10B1;
@@ -195,15 +196,15 @@ void func_80800538_chconga(Actor *param_0)
         else
             D_808006FE_chconga = 0x10B2;
     }
-    if (_subaddiedialog_entrypoint_7(param_0, param_0->position, D_808006F8_chconga) == 0x1101)
+    if (_subaddiedialog_entrypoint_7(actor, actor->position, D_808006F8_chconga) == 0x1101)
         func_80101180(0x46E, 7, 0);
 }
 
-int func_80800618_chconga(s32 param_0)
+int func_80800618_chconga(s32 actor)
 {
-    s32 local_0;
-    local_0 = param_0 + 4;
-    _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_80800714_chconga, &D_80800724_chconga);
+    s32 pos;
+    pos = actor + 4;
+    _subaddieaudioquick_entrypoint_4(actor, pos, &D_80800714_chconga, &D_80800724_chconga);
 }
 
 extern void func_80101870();

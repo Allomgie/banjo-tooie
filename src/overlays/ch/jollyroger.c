@@ -155,48 +155,48 @@ int func_808002E8_chjollyroger(Actor *param_0)
     _subaddieitem_entrypoint_1(func_80100094(param_0, 0), 2);
 }
 
-s32 func_80800370_chjollyroger(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800370_chjollyroger(Actor *actor, s32 msg, s32 arg)
 {
-    s32 local_0;
-    void *local_1;
+    s32 dialog_id;
+    void *expr;
 
-    switch (param_1) {
+    switch (msg) {
         case 0xB:
-            switch (param_2) {
+            switch (arg) {
                 case 1:
                     func_800F7F98(func_800F54E4(), 0);
                     if (!func_800DA298(0xC2) && !func_800DA298(0x41)) {
-                        func_80800E6C_chjollyroger(param_0, 3, 1);
-                        _subaddiedialog_entrypoint_11(param_0->unk0, 0x1002, 0x4E,
-                                                      param_0->position, 0x55);
+                        func_80800E6C_chjollyroger(actor, 3, 1);
+                        _subaddiedialog_entrypoint_11(actor->unk0, 0x1002, 0x4E,
+                                                      actor->position, 0x55);
                         return 4;
                     }
-                    func_80800E30_chjollyroger(param_0);
-                    func_80102424(param_0, 3);
+                    func_80800E30_chjollyroger(actor);
+                    func_80102424(actor, 3);
                     return 4;
                 case 3:
-                    local_0 = func_800DA298(0xC0) ? 0x1043 : 0x1042;
-                    _subaddiedialog_entrypoint_11(param_0->unk0, local_0, 0xE, param_0->position,
+                    dialog_id = func_800DA298(0xC0) ? 0x1043 : 0x1042;
+                    _subaddiedialog_entrypoint_11(actor->unk0, dialog_id, 0xE, actor->position,
                                                   0x55);
                 default:
                     return 3;
             }
         case 0x2E:
-            func_80800624_chjollyroger(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_80800624_chjollyroger(actor, ((s16 *) &arg)[0], ((s16 *) &arg)[1]);
             return 1;
         case 0x52:
-            _gcdialogcamera_entrypoint_3((s32 *) D_808012A8_chjollyroger, param_0->scale);
+            _gcdialogcamera_entrypoint_3((s32 *) D_808012A8_chjollyroger, actor->scale);
             return 1;
         case 0x57:
-            return func_80800DD8_chjollyroger(param_0, param_2 & 0xFFFF,
-                                              (u32) (param_2 & 0xFFFF0000) >> 16);
+            return func_80800DD8_chjollyroger(actor, arg & 0xFFFF,
+                                              (u32) (arg & 0xFFFF0000) >> 16);
         case 0x95:
-            local_1 = _suexpression_entrypoint_7(param_0, 1, 0x55);
-            _suexpression_entrypoint_12(local_1, 60.0f, 20.0f);
-            _suexpression_entrypoint_17(local_1, 1000);
+            expr = _suexpression_entrypoint_7(actor, 1, 0x55);
+            _suexpression_entrypoint_12(expr, 60.0f, 20.0f);
+            _suexpression_entrypoint_17(expr, 1000);
             return 1;
         case 0x6E:
-            param_0->unk64_16 = !param_2;
+            actor->unk64_16 = !arg;
             break;
         default:
             return 0;
@@ -210,95 +210,95 @@ void func_8080056C_chjollyroger(s32 param_0)
                                      D_8080143C_chjollyroger);
 }
 
-s32 func_8080059C_chjollyroger(Actor *param_0, s32 param_1, s32 param_2, s32 param_3)
+s32 func_8080059C_chjollyroger(Actor *actor, s32 param_1, s32 param_2, s32 param_3)
 {
-    s32 local_0;
+    s32 result;
 
     D_80801456_chjollyroger = param_3;
-    local_0 = _subaddiedialog_entrypoint_8(param_0, param_0->position, D_80801448_chjollyroger,
+    result = _subaddiedialog_entrypoint_8(actor, actor->position, D_80801448_chjollyroger,
                                            param_1, param_2);
-    if (!local_0) {
+    if (!result) {
         return 0;
     }
-    if (_subaddiedialog_entrypoint_9(param_0, local_0, param_1, param_2) != 3) {
-        func_80800E6C_chjollyroger(param_0, 3, 0);
+    if (_subaddiedialog_entrypoint_9(actor, result, param_1, param_2) != 3) {
+        func_80800E6C_chjollyroger(actor, 3, 0);
     }
     return 1;
 }
 
-void func_80800624_chjollyroger(param_0, param_1, param_2) Actor *param_0;
-s32 param_1;
-s32 param_2;
+void func_80800624_chjollyroger(actor, dialog_id, answer) Actor *actor;
+s32 dialog_id;
+s32 answer;
 {
-    s32 local_0;
-    s32 local_1;
+    s32 state;
+    s32 choice;
 
-    switch (param_1) {
+    switch (dialog_id) {
         case 0x1002:
-            if (param_2 > 0) {
+            if (answer > 0) {
                 if (func_800D1A04(0x4E) < 2) {
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1005, 14, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1005, 14, actor->position,
                                                   0x55);
                     return;
                 }
                 if (func_800F64A4(func_800F54E4(), 0x201)) {
-                    func_80800FBC_chjollyroger(param_0, 13, 0);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1041, 14, param_0->position,
+                    func_80800FBC_chjollyroger(actor, 13, 0);
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1041, 14, actor->position,
                                                   0x55);
                     return;
                 }
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1225, 14, param_0->position, 0x55);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x1225, 14, actor->position, 0x55);
                 return;
             }
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1003, 14, param_0->position, 0x55);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0x1003, 14, actor->position, 0x55);
             return;
         case 0x1041:
-            _subaddieitem_entrypoint_2(func_80100094(param_0, 0));
-            local_0 = func_800DA298(0xC0) ? 8 : 7;
-            func_80102424(param_0, local_0);
+            _subaddieitem_entrypoint_2(func_80100094(actor, 0));
+            state = func_800DA298(0xC0) ? 8 : 7;
+            func_80102424(actor, state);
             return;
         case 0x1004:
             func_80101180(0x36A, 7, 0);
-            func_80800F3C_chjollyroger(param_0, 3, 16);
+            func_80800F3C_chjollyroger(actor, 3, 16);
             return;
         default:
             if (func_800DA298(0xC0)) {
-                local_1 = _subaddiedialog_entrypoint_9(param_0, param_1,
+                choice = _subaddiedialog_entrypoint_9(actor, dialog_id,
                                                        (s32) &D_80801238_chjollyroger, 7);
-                switch (local_1) {
+                switch (choice) {
                     case 1:
                         if (!func_800D0A9C(0x24, 1)) {
                             func_800F7F98(func_800F54E4(), 1);
-                            func_80800F3C_chjollyroger(param_0, 1, 32);
+                            func_80800F3C_chjollyroger(actor, 1, 32);
                             func_800D1000(0x24, 1, 0, 1, 0);
                             return;
                         }
                     case 2:
                         if (!func_800DA298(0xC2) && !func_800DA298(0x41)) {
-                            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1002, 0x4E,
-                                                          param_0->position, 0x55);
+                            _subaddiedialog_entrypoint_11(actor->unk0, 0x1002, 0x4E,
+                                                          actor->position, 0x55);
                             return;
                         }
                         func_800C01A8(100, 0);
                         func_800C0850();
                     default:
-                        func_80800E30_chjollyroger(param_0);
-                        func_80102424(param_0, 3);
+                        func_80800E30_chjollyroger(actor);
+                        func_80102424(actor, 3);
                 }
             } else {
-                local_1 = _subaddiedialog_entrypoint_9(param_0, param_1,
+                choice = _subaddiedialog_entrypoint_9(actor, dialog_id,
                                                        (s32) &D_80801200_chjollyroger, 7);
-                if (local_1 == 1 || local_1 == 2) {
+                if (choice == 1 || choice == 2) {
                     if (!func_800DA298(0xC2) && !func_800DA298(0x41)) {
-                        _subaddiedialog_entrypoint_11(param_0->unk0, 0x1002, 0x4E,
-                                                      param_0->position, 0x55);
+                        _subaddiedialog_entrypoint_11(actor->unk0, 0x1002, 0x4E,
+                                                      actor->position, 0x55);
                         return;
                     }
                     func_800C01A8(100, 0);
                     func_800C0850();
                 }
-                func_80800E30_chjollyroger(param_0);
-                func_80102424(param_0, 1);
+                func_80800E30_chjollyroger(actor);
+                func_80102424(actor, 1);
             }
     }
 }
@@ -342,48 +342,48 @@ void func_80800930_chjollyroger(Actor *this)
     }
 }
 
-void func_80800AEC_chjollyroger(Actor *param_0)
+void func_80800AEC_chjollyroger(Actor *actor)
 {
-    s32 local_0;
+    s32 rescued;
 
-    local_0 = func_800DA298(0xC0) || _glcutDll_entrypoint_20();
+    rescued = func_800DA298(0xC0) || _glcutDll_entrypoint_20();
     switch (func_800EA05C()) {
         case 0xED:
-            if (!local_0) {
-                func_800FFAB0(param_0);
+            if (!rescued) {
+                func_800FFAB0(actor);
             } else {
-                func_80102424(param_0, _glcutDll_entrypoint_20() ? 7 : 5);
+                func_80102424(actor, _glcutDll_entrypoint_20() ? 7 : 5);
             }
             break;
         case 0xF8:
-            if (local_0) {
-                func_800FFAB0(param_0);
+            if (rescued) {
+                func_800FFAB0(actor);
             }
     }
 }
 
-s32 func_80800BA0_chjollyroger(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800BA0_chjollyroger(Actor *actor, s32 msg, s32 arg)
 {
-    void *local_0;
+    void *expr;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x2E:
-            func_80800D28_chjollyroger(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_80800D28_chjollyroger(actor, ((s16 *) &arg)[0], ((s16 *) &arg)[1]);
             break;
         case 0x32:
-            param_0->unk64_20 = 1;
-            func_800F8300(func_800F54E4(), 1, param_0->position);
+            actor->unk64_20 = 1;
+            func_800F8300(func_800F54E4(), 1, actor->position);
             break;
         case 0x57:
-            return func_80800DD8_chjollyroger(param_0, param_2 & 0xFFFF,
-                                              (param_2 & 0xFFFF0000) >> 16);
+            return func_80800DD8_chjollyroger(actor, arg & 0xFFFF,
+                                              (arg & 0xFFFF0000) >> 16);
         case 0x52:
-            _gcdialogcamera_entrypoint_3((s32 *) D_808012B8_chjollyroger, param_0->scale);
+            _gcdialogcamera_entrypoint_3((s32 *) D_808012B8_chjollyroger, actor->scale);
             break;
         case 0x95:
-            local_0 = _suexpression_entrypoint_7(param_0, 1, 0x56);
-            _suexpression_entrypoint_12(local_0, 60.0f, 20.0f);
-            _suexpression_entrypoint_17(local_0, 1000);
+            expr = _suexpression_entrypoint_7(actor, 1, 0x56);
+            _suexpression_entrypoint_12(expr, 60.0f, 20.0f);
+            _suexpression_entrypoint_17(expr, 1000);
             break;
         default:
             return 0;
@@ -555,6 +555,9 @@ s32 param_0;
     func_800DA544(0x41);
 }
 
+// TU-NOTE: the .data of this overlay is defined in C. Tables holding function pointers must be in
+// the same unit, otherwise IDO's assembler schedules those functions differently.
+// D_80801456_chjollyroger is a label inside D_80801448_chjollyroger (see undefined_syms.us.txt).
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();

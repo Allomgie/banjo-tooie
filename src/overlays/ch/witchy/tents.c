@@ -3,10 +3,11 @@
 extern int D_80800050_chwitchytents[];
 extern int D_80800098_chwitchytents[];
 
-s32 func_80800000_chwitchytents(s32 param_0)
+// Saucer of Peril: clear the marker collidable bit.
+s32 func_80800000_chwitchytents(s32 actor)
 {
     if (func_800EA05C() == 0x124) {
-        func_8010A624(param_0);
+        func_8010A624(actor);
     }
 }
 

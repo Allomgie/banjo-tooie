@@ -72,51 +72,52 @@ void func_8080003C_chprisonbits()
     _chswitch_entrypoint_7();
 }
 
-void func_8080005C_chprisonbits(Actor *param_0, s32 param_1, s32 param_2)
+void func_8080005C_chprisonbits(Actor *actor, s32 unk_1, s32 x_offset)
 {
-    Actor *local_0;
+    Actor *anchor;
 
-    local_0 = _subaddiefind_entrypoint_2(0x120, NULL);
-    param_0->position[0] = local_0->position[0] + param_2;
-    param_0->position[2] = local_0->position[2];
-    func_8080003C_chprisonbits(param_0, param_1);
+    anchor = _subaddiefind_entrypoint_2(0x120, NULL);
+    actor->position[0] = anchor->position[0] + x_offset;
+    actor->position[2] = anchor->position[2];
+    func_8080003C_chprisonbits(actor, unk_1);
 }
 
-void func_808000C0_chprisonbits(Actor *param_0)
+// Chooses the random switch code (flag 0x32B) and places the switch.
+void func_808000C0_chprisonbits(Actor *actor)
 {
-    PrisonOrder30 local_0 = D_808010F0_chprisonbits;
-    u8 *local_1;
-    u8 *local_2;
-    s32 local_3;
-    local_1 = func_80100094(param_0, 1);
-    local_1[6] = 0;
-    local_1[0] = 0;
+    PrisonOrder30 orders = D_808010F0_chprisonbits;
+    u8 *state;
+    u8 *order;
+    s32 i;
+    state = func_80100094(actor, 1);
+    state[6] = 0;
+    state[0] = 0;
     if (!func_800DA564(0x32B, 2))
         func_800DA7A8(0x32B, func_800DC128(0, 3) + 1, 2);
-    local_2 = local_0.rows[func_800DA564(0x32B, 2) - 1];
-    for (local_3 = 0; local_3 < 5; local_3++)
-        local_1[local_3] = local_2[local_3];
-    local_1[5] = 0;
-    func_8080005C_chprisonbits(param_0, 0, -0xAF);
-    param_0->unk64_19 = func_800DA298(0xD5);
+    order = orders.rows[func_800DA564(0x32B, 2) - 1];
+    for (i = 0; i < 5; i++)
+        state[i] = order[i];
+    state[5] = 0;
+    func_8080005C_chprisonbits(actor, 0, -0xAF);
+    actor->unk64_19 = func_800DA298(0xD5);
 }
 
-void func_808001E0_chprisonbits(s32 arg0)
+void func_808001E0_chprisonbits(s32 actor)
 {
-    func_8080003C_chprisonbits(arg0, 1);
+    func_8080003C_chprisonbits(actor, 1);
 }
 
-void func_80800200_chprisonbits(s32 param_0)
+void func_80800200_chprisonbits(s32 actor)
 {
-    func_8080005C_chprisonbits(param_0, 2, 0xAF);
+    func_8080005C_chprisonbits(actor, 2, 0xAF);
 }
 
-int func_80800224_chprisonbits(Actor *param_0)
+int func_80800224_chprisonbits(Actor *actor)
 {
-    if (_chdoormake_entrypoint_0(param_0, 0x42B40000, 0x60, 0xD5)) {
-        _chdoormake_entrypoint_8(param_0, 5);
-        _chdoormake_entrypoint_5(param_0, 0x40400000);
-        _chdoormake_entrypoint_9(param_0, 0, 0, 0x10);
+    if (_chdoormake_entrypoint_0(actor, 0x42B40000, 0x60, 0xD5)) {
+        _chdoormake_entrypoint_8(actor, 5);
+        _chdoormake_entrypoint_5(actor, 0x40400000);
+        _chdoormake_entrypoint_9(actor, 0, 0, 0x10);
     }
 }
 
@@ -125,70 +126,71 @@ int func_80800280_chprisonbits()
     func_800DA298();
 }
 
-s32 func_808002A0_chprisonbits(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_808002A0_chprisonbits(Actor *actor, s32 msg, s32 data)
 {
-    switch (param_1) {
+    switch (msg) {
         case 7:
             func_80101180(0x11F, 10, 0);
             break;
         case 10:
-            func_80800344_chprisonbits(param_0);
+            func_80800344_chprisonbits(actor);
             break;
         case 0x91:
             if (func_800DA298(0xD5))
                 return 0;
         default:
-            return _chswitch_entrypoint_10(param_0, param_1, param_2);
+            return _chswitch_entrypoint_10(actor, msg, data);
     }
     return 1;
 }
 
-void func_80800344_chprisonbits(param_0) Actor *param_0;
+// Advances the code when the correct switch is pressed.
+void func_80800344_chprisonbits(actor) Actor *actor;
 {
-    PrisonCode *local_0;
-    s32 local_1;
+    PrisonCode *state;
+    s32 pressed;
 
-    local_0 = func_80100094(param_0, 1);
-    if (local_0->code[local_0->index]) {
-        local_1 = func_80800280_chprisonbits(local_0->code[local_0->index] - 1);
-        if (!local_1) {
-            local_1 = func_80800280_chprisonbits(local_0->code[0] - 1);
-            if (local_1) {
-                local_0->index = 0;
+    state = func_80100094(actor, 1);
+    if (state->code[state->index]) {
+        pressed = func_80800280_chprisonbits(state->code[state->index] - 1);
+        if (!pressed) {
+            pressed = func_80800280_chprisonbits(state->code[0] - 1);
+            if (pressed) {
+                state->index = 0;
             }
         }
-        if (local_1) {
+        if (pressed) {
             if (func_800DA298(0xD5)) {
-                local_0->index = 0;
+                state->index = 0;
             } else {
-                if (!local_0->code[++local_0->index]) {
+                if (!state->code[++state->index]) {
                     func_800DA544(0xD5);
                     func_80101180(0x11E, 7, 0);
                 }
             }
         } else if (func_80800280_chprisonbits(0) || func_80800280_chprisonbits(1) ||
                    func_80800280_chprisonbits(2)) {
-            local_0->index = 0;
+            state->index = 0;
         }
     }
 }
 
-void func_8080044C_chprisonbits(s32 param_0)
+void func_8080044C_chprisonbits(s32 actor)
 {
-    s32 local_0;
-    local_0 = func_80100094(param_0, 0);
-    _susubgame_entrypoint_0(param_0, local_0 + 0x1C, 1);
-    _susubgame_entrypoint_12(local_0 + 0x1C, (int *) D_80801098_chprisonbits);
+    s32 state;
+    state = func_80100094(actor, 0);
+    _susubgame_entrypoint_0(actor, state + 0x1C, 1);
+    _susubgame_entrypoint_12(state + 0x1C, (int *) D_80801098_chprisonbits);
     if (_glcutDll_entrypoint_20() != 0) {
-        func_80102424(param_0, 0xA);
+        func_80102424(actor, 0xA);
         return;
     }
     if ((func_800DA298(0x5C) != 0) && (func_800EA05C() == 0xB9)) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
         return;
     }
-    func_80800DAC_chprisonbits(param_0);
-    _gspropctrl_entrypoint_11(_gccubesearch_entrypoint_0(0x127, param_0), local_0 + 0x10);
+    func_80800DAC_chprisonbits(actor);
+    _gspropctrl_entrypoint_11(_gccubesearch_entrypoint_0(0x127, actor), state + 0x10);
 }
 
 s32 func_80800C84_chprisonbits();
@@ -197,145 +199,147 @@ void func_80800C18_chprisonbits();
 
 s32 func_80800BB4_chprisonbits();
 
-void func_80800518_chprisonbits(u8 *param_0)
+// Dilberta's main behaviour.
+void func_80800518_chprisonbits(u8 *actor)
 {
-    u8 *sp4C;
-    u8 *sp2C;
-    f32 sp3C[3];
+    u8 *state;
+    u8 *home;
+    f32 target[3];
 
-    sp4C = func_80100094(param_0, 0);
-    func_8010C820(param_0, 0x28, 0x1E);
-    if (func_80100094(param_0, 1) != 0) {
-        _suexpression_entrypoint_10(func_80100094(param_0, 1), *(s32 *) param_0, 0);
+    state = func_80100094(actor, 0);
+    func_8010C820(actor, 0x28, 0x1E);
+    if (func_80100094(actor, 1) != 0) {
+        _suexpression_entrypoint_10(func_80100094(actor, 1), *(s32 *) actor, 0);
     }
-    switch ((u32) *(u16 *) (param_0 + 0x72) >> 10) {
+    switch ((u32) *(u16 *) (actor + 0x72) >> 10) {
         case 3:
-            if (func_80800BB4_chprisonbits(param_0) == 0 &&
-                func_80800C84_chprisonbits(param_0) == 0) {
-                func_80102128(param_0, 0x1F, 0x11,
-                              func_80800DFC_chprisonbits(param_0) != 0 ? 1.0f : 0.4f, 2);
+            if (func_80800BB4_chprisonbits(actor) == 0 &&
+                func_80800C84_chprisonbits(actor) == 0) {
+                func_80102128(actor, 0x1F, 0x11,
+                              func_80800DFC_chprisonbits(actor) != 0 ? 1.0f : 0.4f, 2);
             }
             break;
         case 2:
-            if (func_80800DFC_chprisonbits(param_0) != 0) {
-                *(f32 *) (param_0 + 0x24) = 450.0f;
-                func_8010CE70(param_0, (s32) (func_800D8FF8() * 350.0f), -1);
-                func_8010B990(param_0, 0x300105);
-                func_80800BB4_chprisonbits(param_0);
+            if (func_80800DFC_chprisonbits(actor) != 0) {
+                *(f32 *) (actor + 0x24) = 450.0f;
+                func_8010CE70(actor, (s32) (func_800D8FF8() * 350.0f), -1);
+                func_8010B990(actor, 0x300105);
+                func_80800BB4_chprisonbits(actor);
                 break;
             }
-            if (func_80800BB4_chprisonbits(param_0) == 0 &&
-                func_80800C84_chprisonbits(param_0) == 0) {
-                func_80102128(param_0, 0x1F, 7, 0.3f, 3);
+            if (func_80800BB4_chprisonbits(actor) == 0 &&
+                func_80800C84_chprisonbits(actor) == 0) {
+                func_80102128(actor, 0x1F, 7, 0.3f, 3);
             }
-            if ((func_8010BF4C(param_0, sp4C, 420.0f, (s32) (func_800D8FF8() * 350.0f), 0x300105) &
+            if ((func_8010BF4C(actor, state, 420.0f, (s32) (func_800D8FF8() * 350.0f), 0x300105) &
                  0x24) &&
-                func_80102CF4(param_0, 20.0f) != 0) {
-                func_80800DAC_chprisonbits(param_0);
+                func_80102CF4(actor, 20.0f) != 0) {
+                func_80800DAC_chprisonbits(actor);
             }
-            if (func_800F0064((f32 *) (param_0 + 4), 100.0f, (f32 *) sp4C) != 0) {
-                func_80800DAC_chprisonbits(param_0);
+            if (func_800F0064((f32 *) (actor + 4), 100.0f, (f32 *) state) != 0) {
+                func_80800DAC_chprisonbits(actor);
             }
             break;
         case 5:
-            func_80800C84_chprisonbits(param_0);
-            func_8010CE70(param_0, 5, 6);
+            func_80800C84_chprisonbits(actor);
+            func_8010CE70(actor, 5, 6);
             break;
         case 6:
-            func_8010CE70(param_0, 6, -1);
+            func_8010CE70(actor, 6, -1);
             break;
         case 7:
-            *(f32 *) (param_0 + 0x24) = 350.0f;
-            func_80102844(param_0, func_800D8FF8() * 350.0f, -1, sp2C = sp4C + 0x10);
-            func_8010B990(param_0, 5);
-            if (func_800F0064((f32 *) sp2C, 120.0f, (f32 *) (param_0 + 4)) != 0) {
+            *(f32 *) (actor + 0x24) = 350.0f;
+            func_80102844(actor, func_800D8FF8() * 350.0f, -1, home = state + 0x10);
+            func_8010B990(actor, 5);
+            if (func_800F0064((f32 *) home, 120.0f, (f32 *) (actor + 4)) != 0) {
                 _capod_entrypoint_22();
                 func_800F7F98(func_800F54E4(), 0);
-                _susubgame_entrypoint_5(param_0, sp4C + 0x1C, 3, 1, 0x2000);
-                _subaddiedialog_entrypoint_11(*(s32 *) param_0, 0xF18, 0xE, (param_0 + 4), 0x32);
-                func_80102424(param_0, 4);
+                _susubgame_entrypoint_5(actor, state + 0x1C, 3, 1, 0x2000);
+                _subaddiedialog_entrypoint_11(*(s32 *) actor, 0xF18, 0xE, (actor + 4), 0x32);
+                func_80102424(actor, 4);
             }
             break;
         case 4:
-            func_80800C18_chprisonbits(param_0);
-            func_8010CE70(param_0, 9, -1);
+            func_80800C18_chprisonbits(actor);
+            func_8010CE70(actor, 9, -1);
         case 10:
             break;
         case 8:
-            sp2C = sp4C + 0x10;
-            func_80102844(param_0, 8.0f, -1, sp2C);
-            if (func_80102CF4(param_0, 60.0f) != 0) {
-                sp3C[0] = *(f32 *) (sp4C + 0x10);
-                sp3C[1] = *(f32 *) (param_0 + 8);
-                sp3C[2] = *(f32 *) (sp4C + 0x18);
-                *(f32 *) (param_0 + 0x24) = 300.0f;
-                func_8010BF4C(param_0, sp2C, 300.0f, 6, 0x1005);
-                if (func_800F0064((f32 *) (param_0 + 4), 100.0f, sp3C) != 0) {
-                    func_801058C4(param_0, _glsplinefind_entrypoint_1(0x127),
-                                  *(f32 *) (param_0 + 0x24), 1);
+            home = state + 0x10;
+            func_80102844(actor, 8.0f, -1, home);
+            if (func_80102CF4(actor, 60.0f) != 0) {
+                target[0] = *(f32 *) (state + 0x10);
+                target[1] = *(f32 *) (actor + 8);
+                target[2] = *(f32 *) (state + 0x18);
+                *(f32 *) (actor + 0x24) = 300.0f;
+                func_8010BF4C(actor, home, 300.0f, 6, 0x1005);
+                if (func_800F0064((f32 *) (actor + 4), 100.0f, target) != 0) {
+                    func_801058C4(actor, _glsplinefind_entrypoint_1(0x127),
+                                  *(f32 *) (actor + 0x24), 1);
                 }
             }
     }
 }
 
-void func_8080090C_chprisonbits(Actor *param_0)
+// Dilberta walking out along the spline; flag 0x5C is set at the end.
+void func_8080090C_chprisonbits(Actor *actor)
 {
-    u8 *local_0;
+    u8 *state;
 
-    func_80105834(param_0);
-    if (func_80105A5C(param_0)) {
-        local_0 = func_80100094(param_0, 0);
+    func_80105834(actor);
+    if (func_80105A5C(actor)) {
+        state = func_80100094(actor, 0);
         func_800DA544(0x5C);
-        _susubgame_entrypoint_4(param_0, local_0 + 0x1C);
-        func_800FFAB0(param_0);
+        _susubgame_entrypoint_4(actor, state + 0x1C);
+        func_800FFAB0(actor);
     }
 }
 
-int func_80800970_chprisonbits(Actor *param_0)
+int func_80800970_chprisonbits(Actor *actor)
 {
-    s32 local_0;
-    local_0 = func_80100094(param_0, 0);
-    if (func_80100094(param_0, 1)) {
-        _suexpression_entrypoint_8(param_0, 1);
+    s32 state;
+    state = func_80100094(actor, 0);
+    if (func_80100094(actor, 1)) {
+        _suexpression_entrypoint_8(actor, 1);
     }
-    _susubgame_entrypoint_4(param_0, local_0 + 0x1C);
+    _susubgame_entrypoint_4(actor, state + 0x1C);
 }
 
-s32 func_808009C4_chprisonbits(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_808009C4_chprisonbits(Actor *actor, s32 msg, s32 data)
 {
     s32 pad0;
-    void *local_0;
-    Vec3f local_1;
+    void *state;
+    Vec3f focus;
 
-    local_0 = func_80100094(param_0, 0);
-    switch (param_1) {
+    state = func_80100094(actor, 0);
+    switch (msg) {
         case 0x2E:
-            func_80800CC4_chprisonbits(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_80800CC4_chprisonbits(actor, ((s16 *) &data)[0], ((s16 *) &data)[1]);
             break;
         case 0x49:
-            if (param_2 == 0xC) {
-                _susubgame_entrypoint_6(param_0, (u8 *) func_80100094(param_0, 0) + 0x1C, 0x11,
+            if (data == 0xC) {
+                _susubgame_entrypoint_6(actor, (u8 *) func_80100094(actor, 0) + 0x1C, 0x11,
                                         0x2820, 0);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0xF42, 0x44, &param_0->position, 0x32);
-                func_80102424(param_0, 9);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0xF42, 0x44, &actor->position, 0x32);
+                func_80102424(actor, 9);
                 break;
             }
             return 0;
         case 0x29:
-            _suexpression_entrypoint_7(param_0, 1, 0x32);
-            _suexpression_entrypoint_12(func_80100094(param_0, 1), 45.0f, 15.0f);
-            _suexpression_entrypoint_14(func_80100094(param_0, 1), 1.0f, 1.0f);
+            _suexpression_entrypoint_7(actor, 1, 0x32);
+            _suexpression_entrypoint_12(func_80100094(actor, 1), 45.0f, 15.0f);
+            _suexpression_entrypoint_14(func_80100094(actor, 1), 1.0f, 1.0f);
             break;
         case 0x2A:
-            _suexpression_entrypoint_8(param_0, 1, param_1);
+            _suexpression_entrypoint_8(actor, 1, msg);
             break;
         case 0x57:
-            return _susubgame_entrypoint_3(param_0, (u8 *) local_0 + 0x1C, param_2 & 0xFFFF,
-                                           (u32) (param_2 & 0xFFFF0000) >> 16);
+            return _susubgame_entrypoint_3(actor, (u8 *) state + 0x1C, data & 0xFFFF,
+                                           (u32) (data & 0xFFFF0000) >> 16);
         case 0x52:
-            func_800EFA4C(&local_1, 0.0f, func_8010CD28(param_0), 0.0f);
-            _gcdialogcamera_entrypoint_3(D_80801098_chprisonbits, param_0->scale);
-            _gcdialogcamera_entrypoint_5(&local_1);
+            func_800EFA4C(&focus, 0.0f, func_8010CD28(actor), 0.0f);
+            _gcdialogcamera_entrypoint_3(D_80801098_chprisonbits, actor->scale);
+            _gcdialogcamera_entrypoint_5(&focus);
             break;
         default:
             return 0;
@@ -343,88 +347,89 @@ s32 func_808009C4_chprisonbits(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-s32 func_80800BB4_chprisonbits(Actor *param_0)
+s32 func_80800BB4_chprisonbits(Actor *actor)
 {
-    s32 local_0;
+    s32 dialog_result;
 
-    local_0 = _subaddiedialog_entrypoint_7(param_0, param_0->position, D_80801100_chprisonbits);
-    if (local_0 != 0 && local_0 != 0x1208) {
-        _susubgame_entrypoint_5(param_0, (u8 *) func_80100094(param_0, 0) + 0x1C, 4, 0, 0);
+    dialog_result = _subaddiedialog_entrypoint_7(actor, actor->position, D_80801100_chprisonbits);
+    if (dialog_result != 0 && dialog_result != 0x1208) {
+        _susubgame_entrypoint_5(actor, (u8 *) func_80100094(actor, 0) + 0x1C, 4, 0, 0);
     }
-    return local_0;
+    return dialog_result;
 }
 
-void func_80800C18_chprisonbits(Actor *param_0)
+void func_80800C18_chprisonbits(Actor *actor)
 {
-    _subaddieaudioquick_entrypoint_4(param_0, param_0->position, &D_8080111C_chprisonbits,
+    _subaddieaudioquick_entrypoint_4(actor, actor->position, &D_8080111C_chprisonbits,
                                      &D_80801144_chprisonbits);
-    _subaddieaudioquick_entrypoint_3(param_0, param_0->position, &D_8080112C_chprisonbits, 0.75f);
-    _subaddieaudioquick_entrypoint_3(param_0, param_0->position, &D_80801138_chprisonbits, 0.6f);
+    _subaddieaudioquick_entrypoint_3(actor, actor->position, &D_8080112C_chprisonbits, 0.75f);
+    _subaddieaudioquick_entrypoint_3(actor, actor->position, &D_80801138_chprisonbits, 0.6f);
 }
 
-s32 func_80800C84_chprisonbits(s32 param_0)
+s32 func_80800C84_chprisonbits(s32 actor)
 {
     if (func_800DA298(0x514) != 0) {
-        func_80102424(param_0, 7);
+        func_80102424(actor, 7);
         return 1;
     }
     return 0;
 }
 
-int func_80800CC4_chprisonbits(param_0, param_1, param_2)
-s32 param_0;
-s32 param_1;
-s32 param_2;
+int func_80800CC4_chprisonbits(actor, dialog_id, unk_2)
+s32 actor;
+s32 dialog_id;
+s32 unk_2;
 {
-    u32 local_0;
-    int new_var;
-    local_0 = (s32) func_80100094(param_0 | 0, 0) | 0;
-    switch (param_1) {
+    u32 state;
+    int state_copy;
+    state = (s32) func_80100094(actor | 0, 0) | 0;
+    switch (dialog_id) {
         case 0xF18:
-            new_var = local_0;
-            func_80102424(param_0 | 0, 8, param_1);
-            _susubgame_entrypoint_6(param_0 | 0, new_var + 0x1C, 0xE, 0x2030, 0);
+            state_copy = state;
+            func_80102424(actor | 0, 8, dialog_id);
+            _susubgame_entrypoint_6(actor | 0, state_copy + 0x1C, 0xE, 0x2030, 0);
             return;
 
         case 0xF42:
-            _susubgame_entrypoint_4(param_0 | 0, local_0 + 0x1C, param_1);
+            _susubgame_entrypoint_4(actor | 0, state + 0x1C, dialog_id);
             _glcutDll_entrypoint_17();
             return;
 
         case 0xF4F:
-            _susubgame_entrypoint_4(param_0 | 0, local_0 + 0x1C, param_1);
-            func_80102424(param_0 | 0, 3);
+            _susubgame_entrypoint_4(actor | 0, state + 0x1C, dialog_id);
+            func_80102424(actor | 0, 3);
             return;
 
         default:
-            _susubgame_entrypoint_4(param_0 | 0, local_0 + 0x1C, param_1);
-            func_80102424(param_0 | 0, 3);
+            _susubgame_entrypoint_4(actor | 0, state + 0x1C, dialog_id);
+            func_80102424(actor | 0, 3);
     }
 }
 
-int func_80800DAC_chprisonbits(param_0)
-Actor *param_0;
+int func_80800DAC_chprisonbits(actor)
+Actor *actor;
 {
-    s32 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    func_800CD08C(((u32) *(s32 *) ((char *) param_0 + 0x70) >> 25) - 1, local_0);
-    *(f32 *) ((char *) local_0 + 0x4) = *(f32 *) ((char *) param_0 + 0x8);
+    s32 *state;
+    state = func_80100094(actor, 0);
+    func_800CD08C(((u32) *(s32 *) ((char *) actor + 0x70) >> 25) - 1, state);
+    *(f32 *) ((char *) state + 0x4) = *(f32 *) ((char *) actor + 0x8);
 }
 
-int func_80800DFC_chprisonbits(s32 param_0)
+int func_80800DFC_chprisonbits(s32 actor)
 {
-    return func_800DA298(0x5B) == 0 && func_80090128() != 0 && func_8010C500(param_0) != 0;
+    return func_800DA298(0x5B) == 0 && func_80090128() != 0 && func_8010C500(actor) != 0;
 }
 
-void chprisonbits_entrypoint_5(s32 param_0, s32 param_1)
+// Starts the Dilberta dialog.
+void chprisonbits_entrypoint_5(s32 unk_0, s32 unk_1)
 {
-    s32 *local_0;
+    s32 *dilberta;
 
-    local_0 = _subaddiefind_entrypoint_2(0x117, 0);
-    if ((local_0 != NULL) && (func_800DA298(0x6A4) == 0)) {
-        _susubgame_entrypoint_6(local_0, (s32) func_80100094(local_0, 0) + 0x1C, 2, 0x430, 0);
-        _subaddiedialog_entrypoint_11(*local_0, 0xF4F, 0x44, local_0 + 1, 0x32);
-        func_80102424(local_0, 9);
+    dilberta = _subaddiefind_entrypoint_2(0x117, 0);
+    if ((dilberta != NULL) && (func_800DA298(0x6A4) == 0)) {
+        _susubgame_entrypoint_6(dilberta, (s32) func_80100094(dilberta, 0) + 0x1C, 2, 0x430, 0);
+        _subaddiedialog_entrypoint_11(*dilberta, 0xF4F, 0x44, dilberta + 1, 0x32);
+        func_80102424(dilberta, 9);
         func_800DA544(0x6A4);
     }
 }

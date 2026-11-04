@@ -7,22 +7,22 @@ int chjiggybeam_entrypoint_0()
     return (int) &D_80800070_chjiggybeam;
 }
 
-func_8080000C_chjiggybeam(f32 param_0[3])
+func_8080000C_chjiggybeam(f32 actor[3])
 {
-    f32 local_0 = 1.0f;
-    param_0[6] = local_0;
+    f32 scale = 1.0f;
+    actor[6] = scale;
 }
 
 void func_8080001C_chjiggybeam(void)
 {
 }
 
-s32 func_80800024_chjiggybeam(s32 param_0, s32 param_1)
+s32 func_80800024_chjiggybeam(s32 actor, s32 draw_arg)
 {
-    f32 local_0[3];
+    f32 rotation[3];
 
-    func_800E3A58(local_0);
-    func_80101870(param_0, param_1);
+    func_800E3A58(rotation);
+    func_80101870(actor, draw_arg);
 }
 
 s32 func_80800058_chjiggybeam(s32 arg0, u32 arg1, u32 arg2)

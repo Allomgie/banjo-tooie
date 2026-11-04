@@ -5,9 +5,9 @@ extern void *func_80100094(Actor *, u32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern u8 func_801017D0[];
 typedef struct {
-    s32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
+    s32 light;
+    f32 anchor[3];
+    f32 light_pos[3];
 } CodexSpotlightData;
 extern s32 D_80800998_chspotlight[];
 extern s32 D_808009A4_chspotlight[];
@@ -19,49 +19,49 @@ extern f32 D_80800990_chspotlight[];
 extern void func_800C8D4C(s32, f32 *);
 typedef struct {
     u8 pad_0[4];
-    f32 local_0[3];
-    u8 pad_1[0x18];
-    f32 local_1;
-    u8 pad_2[4];
-    f32 local_2;
-    u8 pad_3[4];
-    f32 local_3;
+    f32 target[3];
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[4];
+    f32 unk_30;
+    u8 pad_34[4];
+    f32 unk_38;
 } SpotlightAim;
 extern void func_800EF214(f32 *, f32, f32, f32);
 extern void func_80102B2C(Actor *, f32);
 extern void func_80102B6C(Actor *, f32);
 typedef struct {
-    s32 local_0;
-    u8 local_1[12];
-    f32 local_2[3];
-    f32 local_3;
-    f32 local_4;
-    s32 local_5;
-    f32 local_6;
-    f32 local_7;
-    f32 local_8;
-    f32 local_9;
-    f32 local_10;
+    s32 light;
+    u8 pad_4[12];
+    f32 light_pos[3];
+    f32 rest_yaw;
+    f32 brightness;
+    s32 lit;
+    f32 angle_a;
+    f32 speed_a;
+    f32 angle_b;
+    f32 speed_b;
+    f32 dist;
 } Mass47Spotlight;
 extern f32 func_800DC178(f32, f32);
 extern s32 func_800DC298(f32);
 extern f32 func_80102D78(Actor *, f32 *);
 typedef struct {
-    s32 local_0;
-    u8 pad_0[0x18];
-    f32 local_1;
-    f32 local_2;
-    s32 local_3;
+    s32 light;
+    u8 pad_4[0x18];
+    f32 rest_yaw;
+    f32 brightness;
+    s32 lit;
 } SpotlightState;
 extern s32 _sudeflect_entrypoint_1(f32 *, f32, f32, f32, s32);
 extern f32 func_800D8FF8(void);
 typedef struct {
     u8 pad_0[0x28];
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
-    f32 local_4;
+    f32 angle_a;
+    f32 speed_a;
+    f32 angle_b;
+    f32 speed_b;
+    f32 dist;
 } SpotlightMotion;
 int func_808008A4_chspotlight();
 extern void func_80105834(), func_80107C2C(), func_80800210_chspotlight();
@@ -71,189 +71,191 @@ int chspotlight_entrypoint_0()
     return (int) &D_808009B0_chspotlight;
 }
 
+// Finds the boss (actor 0x13C) and stores its id.
 s32 func_808008EC_chspotlight();
 
-void func_8080000C_chspotlight(Actor *param_0)
+// Init: creates the point light and randomizes the light motion.
+void func_8080000C_chspotlight(Actor *spotlight)
 {
-    Mass47Spotlight *local_3;
-    Actor *local_0;
-    s32 local_4;
-    f32 local_1;
-    f32 *local_2[1];
+    Mass47Spotlight *data;
+    Actor *boss;
+    s32 unk_0;
+    f32 rate;
+    f32 *pos_ptr[1];
 
-    local_3 = func_80100094(param_0, 0);
-    func_800EE7F8(local_3->local_2, param_0->position);
-    if (func_800DA298(0x9C) || !func_808008EC_chspotlight(param_0)) {
-        func_80101FDC(param_0, 5);
-    } else if (func_808008A4_chspotlight(param_0)) {
-        local_0 = func_80106790(param_0->unk3C);
-        func_800EE7F8(local_3->local_2, local_0->position);
-        param_0->rotation[1] = param_0->unk54 = func_80102D78(param_0, local_0->position);
+    data = func_80100094(spotlight, 0);
+    func_800EE7F8(data->light_pos, spotlight->position);
+    if (func_800DA298(0x9C) || !func_808008EC_chspotlight(spotlight)) {
+        func_80101FDC(spotlight, 5);
+    } else if (func_808008A4_chspotlight(spotlight)) {
+        boss = func_80106790(spotlight->unk3C);
+        func_800EE7F8(data->light_pos, boss->position);
+        spotlight->rotation[1] = spotlight->unk54 = func_80102D78(spotlight, boss->position);
     }
-    if ((s32) param_0->unk74_7 < 0x34) {
-        local_2[0] = local_3->local_2;
-        local_3->local_0 = func_800C8A98();
-        local_3->local_3 = param_0->rotation[1];
-        local_3->local_5 = 0;
-        local_3->local_4 = 0.0f;
-        func_800C8D4C(local_3->local_0, D_80800990_chspotlight);
-        func_800C8E84(local_3->local_0, (u8 *) D_80800998_chspotlight);
-        func_800C8CB8(local_3->local_0, local_2[0]);
-        func_800C8FE0(local_3->local_0, 0);
+    if ((s32) spotlight->unk74_7 < 0x34) {
+        pos_ptr[0] = data->light_pos;
+        data->light = func_800C8A98();
+        data->rest_yaw = spotlight->rotation[1];
+        data->lit = 0;
+        data->brightness = 0.0f;
+        func_800C8D4C(data->light, D_80800990_chspotlight);
+        func_800C8E84(data->light, (u8 *) D_80800998_chspotlight);
+        func_800C8CB8(data->light, pos_ptr[0]);
+        func_800C8FE0(data->light, 0);
     } else {
-        local_3->local_0 = 0;
+        data->light = 0;
     }
-    local_3->local_6 = func_800DC178(0.0f, 360.0f);
-    local_1 = func_800DC178(20.0f, 60.0f);
-    local_3->local_7 = (func_800DC298(0.5f) ? 1.0f : -1.0f) * local_1;
-    local_3->local_8 = func_800DC178(0.0f, 360.0f);
-    local_1 = func_800DC178(20.0f, 60.0f);
-    local_3->local_9 = (func_800DC298(0.5f) ? 1.0f : -1.0f) * local_1;
-    local_3->local_10 = 525.0f;
+    data->angle_a = func_800DC178(0.0f, 360.0f);
+    rate = func_800DC178(20.0f, 60.0f);
+    data->speed_a = (func_800DC298(0.5f) ? 1.0f : -1.0f) * rate;
+    data->angle_b = func_800DC178(0.0f, 360.0f);
+    rate = func_800DC178(20.0f, 60.0f);
+    data->speed_b = (func_800DC298(0.5f) ? 1.0f : -1.0f) * rate;
+    data->dist = 525.0f;
 }
 
-void func_808007F4_chspotlight(u8 *param_0, f32 param_1);
+void func_808007F4_chspotlight(u8 *spotlight, f32 level);
 
-void func_80800210_chspotlight(param_0) Actor *param_0;
+void func_80800210_chspotlight(spotlight) Actor *spotlight;
 {
-    SpotlightState *local_0;
+    SpotlightState *state;
     s32 pad0;
-    f32 local_1;
-    s32 local_2;
+    f32 level;
+    s32 flag;
 
-    local_0 = func_80100094(param_0, 0);
-    _sudeflect_entrypoint_1(param_0->position, param_0->scale * 200.0f, 0.0f,
-                            param_0->scale * 125.0f, 10);
-    switch (param_0->unk70_10) {
+    state = func_80100094(spotlight, 0);
+    _sudeflect_entrypoint_1(spotlight->position, spotlight->scale * 200.0f, 0.0f,
+                            spotlight->scale * 125.0f, 10);
+    switch (spotlight->unk70_10) {
         case 1:
-            local_2 = param_0->unk74_7 == 0x33 ? 2 : 4;
-            if (func_800DA298(local_2)) {
-                func_80101FDC(param_0, 2);
-                local_0->local_3 = 1;
-                if (local_0->local_0)
-                    func_800C8FE0(local_0->local_0, 1);
+            flag = spotlight->unk74_7 == 0x33 ? 2 : 4;
+            if (func_800DA298(flag)) {
+                func_80101FDC(spotlight, 2);
+                state->lit = 1;
+                if (state->light)
+                    func_800C8FE0(state->light, 1);
             }
             break;
         case 2:
-            local_1 = local_0->local_2;
-            local_1 += 0.06f;
-            if (local_1 > 1.0f) {
-                local_1 = 1.0f;
-                local_0->local_2 = local_1;
-                func_80101FDC(param_0, 3);
+            level = state->brightness;
+            level += 0.06f;
+            if (level > 1.0f) {
+                level = 1.0f;
+                state->brightness = level;
+                func_80101FDC(spotlight, 3);
             } else {
-                local_0->local_2 = local_1;
-                if (local_1 < 0.9f && func_800DC298(0.6f)) {
-                    local_1 *= func_800DC178(0.25f, 0.5f);
-                    local_0->local_3 = 0;
+                state->brightness = level;
+                if (level < 0.9f && func_800DC298(0.6f)) {
+                    level *= func_800DC178(0.25f, 0.5f);
+                    state->lit = 0;
                 } else {
-                    local_0->local_3 = 1;
+                    state->lit = 1;
                 }
             }
-            func_808007F4_chspotlight(param_0, local_1);
+            func_808007F4_chspotlight(spotlight, level);
             break;
         case 3:
-            func_808007F4_chspotlight(param_0, 1.0f);
+            func_808007F4_chspotlight(spotlight, 1.0f);
             break;
         case 4:
-            func_80102B2C(param_0, func_800D8FF8() * 60.0f);
-            func_80102B6C(param_0, func_800D8FF8() * 60.0f);
-            if (func_80102CCC(param_0) && func_80102CA4(param_0)) {
-                param_0->rotation[1] = local_0->local_1;
-                param_0->rotation[0] = 0.0f;
-                func_80101FDC(param_0, 5);
+            func_80102B2C(spotlight, func_800D8FF8() * 60.0f);
+            func_80102B6C(spotlight, func_800D8FF8() * 60.0f);
+            if (func_80102CCC(spotlight) && func_80102CA4(spotlight)) {
+                spotlight->rotation[1] = state->rest_yaw;
+                spotlight->rotation[0] = 0.0f;
+                func_80101FDC(spotlight, 5);
             }
     }
 }
 
-void func_8080047C_chspotlight(Actor *param_0)
+void func_8080047C_chspotlight(Actor *spotlight)
 {
-    u8 *local_0;
-    s32 local_1;
-    f32 local_2[3];
-    f32 local_3[4];
+    u8 *data;
+    s32 model;
+    f32 rot[3];
+    f32 matrix[4];
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_801040D0();
-    func_801015D0(param_0);
-    func_800DF41C(local_1);
-    func_800EFA4C(local_2, param_0->rotation[0] + 90.0f, 0.0f, 0.0f);
-    func_800D93A0(local_3, local_2);
-    func_800DFF2C(local_1, 1, local_3);
-    func_800DF744(1, *(s32 *) (local_0 + 0x24));
+    data = func_80100094(spotlight, 0);
+    model = func_801040D0();
+    func_801015D0(spotlight);
+    func_800DF41C(model);
+    func_800EFA4C(rot, spotlight->rotation[0] + 90.0f, 0.0f, 0.0f);
+    func_800D93A0(matrix, rot);
+    func_800DFF2C(model, 1, matrix);
+    func_800DF744(1, *(s32 *) (data + 0x24));
 }
 
-int func_80800518_chspotlight(param_0, param_1)
-s32 param_0;
-s32 param_1;
+int func_80800518_chspotlight(actor, unk_0)
+s32 actor;
+s32 unk_0;
 {
-    f32 local_0[3];
-    func_80102780(param_0, local_0);
-    local_0[0] = 0.0f;
-    func_800DF47C(&func_801017D0, param_0);
-    func_800DE448(param_0 + 4, local_0, *(s32 **) (param_0 + 0x38), 0,
-                  func_8010347C(*(s32 *) param_0));
+    f32 vec[3];
+    func_80102780(actor, vec);
+    vec[0] = 0.0f;
+    func_800DF47C(&func_801017D0, actor);
+    func_800DE448(actor + 4, vec, *(s32 **) (actor + 0x38), 0,
+                  func_8010347C(*(s32 *) actor));
 }
 
-void func_80800580_chspotlight(param_0) Actor *param_0;
+void func_80800580_chspotlight(spotlight) Actor *spotlight;
 {
-    SpotlightMotion *local_0;
-    Actor *local_1;
-    f32 local_2;
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_80106790(param_0->unk3C);
-    local_2 = func_800D8FF8();
-    local_0->local_0 += local_0->local_1 * local_2;
-    local_0->local_2 += local_0->local_3 * local_2;
-    local_0->local_4 = *(f32 *) ((u8 *) local_1 + 0x28) * 1500.0f;
+    SpotlightMotion *motion;
+    Actor *boss;
+    f32 dt;
+    motion = func_80100094(spotlight, 0);
+    boss = func_80106790(spotlight->unk3C);
+    dt = func_800D8FF8();
+    motion->angle_a += motion->speed_a * dt;
+    motion->angle_b += motion->speed_b * dt;
+    motion->dist = *(f32 *) ((u8 *) boss + 0x28) * 1500.0f;
 }
 
-void func_80800600_chspotlight(Actor *param_0, f32 param_1)
+void func_80800600_chspotlight(Actor *spotlight, f32 level)
 {
-    CodexSpotlightData *local_3;
-    s32 local_0[3];
+    CodexSpotlightData *data;
+    s32 color[3];
 
-    local_3 = func_80100094(param_0, 0);
-    func_800EEC30(local_3->local_2, -param_0->rotation[0], param_0->rotation[1],
-                  func_800EEAD4(param_0->position, local_3->local_1));
-    func_800EF04C(local_3->local_2, param_0->position);
-    if (local_3->local_0) {
-        func_800F3214(local_0, D_80800998_chspotlight, D_808009A4_chspotlight, param_1);
-        func_800C8E84(local_3->local_0, local_0);
-        func_800C8CB8(local_3->local_0, local_3->local_2);
+    data = func_80100094(spotlight, 0);
+    func_800EEC30(data->light_pos, -spotlight->rotation[0], spotlight->rotation[1],
+                  func_800EEAD4(spotlight->position, data->anchor));
+    func_800EF04C(data->light_pos, spotlight->position);
+    if (data->light) {
+        func_800F3214(color, D_80800998_chspotlight, D_808009A4_chspotlight, level);
+        func_800C8E84(data->light, color);
+        func_800C8CB8(data->light, data->light_pos);
     }
 }
 
-void func_808006B8_chspotlight(Actor *param_0)
+void func_808006B8_chspotlight(Actor *spotlight)
 {
-    s32 *local_0;
-    f32 local_1[2];
-    Actor *local_2;
-    local_0 = func_80100094(param_0, 0);
-    if (local_0[0]) {
-        local_2 = func_80106790(param_0->unk3C);
-        local_1[0] = D_80800990_chspotlight[0] * *(f32 *) &local_2->actorData[4];
-        local_1[1] = D_80800990_chspotlight[1] * *(f32 *) &local_2->actorData[4];
-        func_800C8D4C(local_0[0], local_1);
+    s32 *light;
+    f32 range[2];
+    Actor *boss;
+    light = func_80100094(spotlight, 0);
+    if (light[0]) {
+        boss = func_80106790(spotlight->unk3C);
+        range[0] = D_80800990_chspotlight[0] * *(f32 *) &boss->actorData[4];
+        range[1] = D_80800990_chspotlight[1] * *(f32 *) &boss->actorData[4];
+        func_800C8D4C(light[0], range);
     }
 }
 
-void func_80800730_chspotlight(Actor *param_0)
+void func_80800730_chspotlight(Actor *spotlight)
 {
-    f32 local_0[2];
-    SpotlightAim *local_1;
+    f32 angles[2];
+    SpotlightAim *aim;
 
-    local_1 = func_80100094(param_0, 0);
+    aim = func_80100094(spotlight, 0);
     if (!func_800DA298(0)) {
-        if (func_8010114C(param_0->unk3C, 6, 4))
-            func_80101038(local_1->local_0);
+        if (func_8010114C(spotlight->unk3C, 6, 4))
+            func_80101038(aim->target);
         if (func_800DA298(4))
-            func_800EF214(local_1->local_0, local_1->local_1, local_1->local_2, local_1->local_3);
-        func_800F18FC(param_0->position, local_1->local_0, local_0);
-        param_0->unk50 = -local_0[0];
-        param_0->unk54 = local_0[1];
-        func_80102B2C(param_0, 2.0f);
-        func_80102B6C(param_0, 2.0f);
+            func_800EF214(aim->target, aim->unk_28, aim->unk_30, aim->unk_38);
+        func_800F18FC(spotlight->position, aim->target, angles);
+        spotlight->unk50 = -angles[0];
+        spotlight->unk54 = angles[1];
+        func_80102B2C(spotlight, 2.0f);
+        func_80102B6C(spotlight, 2.0f);
     }
 }
 
@@ -304,13 +306,13 @@ s32 func_808008EC_chspotlight(Actor *this)
     return local_0;
 }
 
-int func_80800934_chspotlight(param_0, param_1, param_2)
-s32 param_0;
-s32 param_1;
-s32 param_2;
+int func_80800934_chspotlight(spotlight, msg, unk_0)
+s32 spotlight;
+s32 msg;
+s32 unk_0;
 {
-    if (param_1 == 0x1F) {
-        func_8080047C_chspotlight(param_0);
+    if (msg == 0x1F) {
+        func_8080047C_chspotlight(spotlight);
         return 1;
     }
     return 0;

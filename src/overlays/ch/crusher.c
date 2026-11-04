@@ -13,8 +13,8 @@ extern s32 func_80101E14(Actor *, f32);
 extern s32 func_800E1610(s32, f32, f32, f32 *);
 extern s32 func_80018820(s32, f32, f32);
 typedef struct CrusherBounds {
-    f32 local_0[3];
-    f32 local_1[3];
+    f32 p0[3];
+    f32 p1[3];
 } CrusherBounds;
 extern void func_8008FE94(s32, f32 *);
 extern int D_80800C40_chcrusher[];
@@ -22,7 +22,7 @@ extern s32 D_80800C88_chcrusher[3];
 extern s32 D_80800C94_chcrusher[3];
 extern s32 D_80800CA0_chcrusher[3];
 typedef struct {
-    s32 local_0[3];
+    s32 xyz[3];
 } local_struct;
 extern int D_80800CC8_chcrusher[];
 extern void func_800EFA4C(u8 *, f32, f32, f32);
@@ -42,14 +42,15 @@ void func_808003E4_chcrusher();
 void func_80800508_chcrusher();
 void func_80800394_chcrusher();
 
-s32 func_80800000_chcrusher(f32 *param_0, s32 param_1, S16Pair param_2)
+// On message 0x49 spawns actor 0x386.
+s32 func_80800000_chcrusher(f32 *params, s32 msg, S16Pair unk_2)
 {
-    f32 local_0[3];
-    if (param_1 == 0x49) {
-        local_0[0] = param_0[1];
-        local_0[2] = param_0[3];
-        local_0[1] = 0.0f;
-        func_80108474(0x386, local_0, -0x5A);
+    f32 spawn_pos[3];
+    if (msg == 0x49) {
+        spawn_pos[0] = params[1];
+        spawn_pos[2] = params[3];
+        spawn_pos[1] = 0.0f;
+        func_80108474(0x386, spawn_pos, -0x5A);
     } else {
         return 0;
     }
@@ -61,174 +62,177 @@ int *chcrusher_entrypoint_0()
     return D_80800B98_chcrusher;
 }
 
-int func_80800068_chcrusher(Actor *param_0)
+int func_80800068_chcrusher(Actor *actor)
 {
     func_80101870();
-    if (param_0->unk7C_12) {
-        func_800DBEFC(func_80104130(), 6, (u8 *) param_0 + 0x18);
-        func_800DBEFC(func_80104130(), 4, (u8 *) param_0 + 0x28);
+    if (actor->unk7C_12) {
+        func_800DBEFC(func_80104130(), 6, (u8 *) actor + 0x18);
+        func_800DBEFC(func_80104130(), 4, (u8 *) actor + 0x28);
     }
 }
 
-void func_808000D4_chcrusher(Actor *param_0)
+// Crusher state machine, keyed on flag 0x4FB (crusher on).
+void func_808000D4_chcrusher(Actor *actor)
 {
-    f32 *local_0;
+    f32 *pos;
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         default:
-            local_0 = param_0->position;
+            pos = actor->position;
             break;
         case 1:
             if (!func_800DA298(0x4FB)) {
-                func_80101FDC(param_0, 3);
+                func_80101FDC(actor, 3);
             }
-            local_0 = param_0->position;
+            pos = actor->position;
             break;
         case 2:
-            if (param_0->unk7C_12 && func_80101E14(param_0, 0.75f)) {
-                func_80800394_chcrusher(param_0);
+            if (actor->unk7C_12 && func_80101E14(actor, 0.75f)) {
+                func_80800394_chcrusher(actor);
             }
-            if (func_80101E14(param_0, 0.9f)) {
-                local_0 = param_0->position;
-                _subaddieaudioquick_entrypoint_2(param_0, local_0, D_80800B30_chcrusher);
-                func_800E1610(2, 80.0f, 0.85f, local_0);
+            // Slam: sound, camera shake, rumble.
+            if (func_80101E14(actor, 0.9f)) {
+                pos = actor->position;
+                _subaddieaudioquick_entrypoint_2(actor, pos, D_80800B30_chcrusher);
+                func_800E1610(2, 80.0f, 0.85f, pos);
                 func_80018820(0, 2.5f, 0.25f);
             }
-            local_0 = param_0->position;
-            if (func_80101E14(param_0, 0.48f)) {
+            pos = actor->position;
+            if (func_80101E14(actor, 0.48f)) {
                 if (func_800DA298(0x4FB)) {
-                    func_80101FDC(param_0, 1);
+                    func_80101FDC(actor, 1);
                 } else {
-                    func_80101FDC(param_0, 3);
-                    param_0->unk58 = 0.0f;
+                    func_80101FDC(actor, 3);
+                    actor->unk58 = 0.0f;
                 }
             }
             break;
         case 3:
-            param_0->unk64_20 = 0;
-            param_0->unk58 += func_800D8FF8();
-            if (D_80800B48_chcrusher[param_0->unk6C_0][(s32) ((f32 *) param_0->actorData)[7]] <=
-                param_0->unk58) {
-                if ((s32) ((f32 *) param_0->actorData)[7] < 3) {
-                    ((f32 *) param_0->actorData)[7] += 1.0f;
+            actor->unk64_20 = 0;
+            actor->unk58 += func_800D8FF8();
+            if (D_80800B48_chcrusher[actor->unk6C_0][(s32) ((f32 *) actor->actorData)[7]] <=
+                actor->unk58) {
+                if ((s32) ((f32 *) actor->actorData)[7] < 3) {
+                    ((f32 *) actor->actorData)[7] += 1.0f;
                 } else {
-                    ((f32 *) param_0->actorData)[7] = 0.0f;
+                    ((f32 *) actor->actorData)[7] = 0.0f;
                 }
                 if (func_800DA298(0x4FB)) {
-                    func_80101FDC(param_0, 1);
+                    func_80101FDC(actor, 1);
                 } else {
-                    func_80101FDC(param_0, 2);
+                    func_80101FDC(actor, 2);
                 }
             }
-            local_0 = param_0->position;
+            pos = actor->position;
     }
-    if (param_0->unk7C_12 && !param_0->unk64_20 && param_0->unk70_10 == 2) {
-        func_808003E4_chcrusher(param_0);
+    if (actor->unk7C_12 && !actor->unk64_20 && actor->unk70_10 == 2) {
+        func_808003E4_chcrusher(actor);
     }
-    if (param_0->unk7C_12) {
-        func_80800508_chcrusher(param_0);
+    if (actor->unk7C_12) {
+        func_80800508_chcrusher(actor);
     }
-    _subaddieaudioloop_entrypoint_4(param_0, local_0, ((f32 *) param_0->actorData)[3] > 0.0f,
+    _subaddieaudioloop_entrypoint_4(actor, pos, ((f32 *) actor->actorData)[3] > 0.0f,
                                     D_80800BE0_chcrusher);
-    if (((f32 *) param_0->actorData)[3] > 0.0f) {
-        ((f32 *) param_0->actorData)[3] -= func_800D8FF8();
+    if (((f32 *) actor->actorData)[3] > 0.0f) {
+        ((f32 *) actor->actorData)[3] -= func_800D8FF8();
     }
 }
 
-void func_80800394_chcrusher(param_0) void *param_0;
+void func_80800394_chcrusher(actor) void *actor;
 {
-    func_800BABB8(0, (void *) ((char *) param_0 + 0x28), 0, 1.0f, D_80800BF0_chcrusher);
-    *(f32 *) ((char *) param_0 + 0x24) = 0.3f;
+    func_800BABB8(0, (void *) ((char *) actor + 0x28), 0, 1.0f, D_80800BF0_chcrusher);
+    *(f32 *) ((char *) actor + 0x24) = 0.3f;
 }
 
-void func_808003E4_chcrusher(param_0) Actor *param_0;
+// Hurts the player if inside the crush box.
+void func_808003E4_chcrusher(actor) Actor *actor;
 {
-    CrusherBounds local_0;
-    f32 local_1;
-    f32 local_2;
-    f32 local_3[3];
+    CrusherBounds box;
+    f32 half_x;
+    f32 half_z;
+    f32 player_pos[3];
 
-    local_1 = param_0->position[0] - *(f32 *) param_0->actorData;
-    local_2 = *((f32 *) param_0->actorData + 2) - param_0->position[2];
-    local_1 += 25.0f;
-    local_2 += 25.0f;
-    func_8008FE94(5, local_3);
-    local_0.local_1[0] = param_0->position[0] + local_1;
-    local_0.local_0[0] = param_0->position[0] - local_1;
-    local_0.local_1[1] = *((f32 *) param_0->actorData + 1);
-    local_0.local_0[1] = *((f32 *) param_0->actorData + 1) + 100.0f;
-    local_0.local_1[2] = param_0->position[2] + local_2;
-    local_0.local_0[2] = param_0->position[2] - local_2;
-    if (local_3[2] < local_0.local_1[2] && *((f32 *) param_0->actorData + 1) < local_3[1] &&
-        local_3[0] < local_0.local_1[0] && local_0.local_0[0] < local_3[0]) {
-        param_0->unk64_20 = 1;
+    half_x = actor->position[0] - *(f32 *) actor->actorData;
+    half_z = *((f32 *) actor->actorData + 2) - actor->position[2];
+    half_x += 25.0f;
+    half_z += 25.0f;
+    func_8008FE94(5, player_pos);
+    box.p1[0] = actor->position[0] + half_x;
+    box.p0[0] = actor->position[0] - half_x;
+    box.p1[1] = *((f32 *) actor->actorData + 1);
+    box.p0[1] = *((f32 *) actor->actorData + 1) + 100.0f;
+    box.p1[2] = actor->position[2] + half_z;
+    box.p0[2] = actor->position[2] - half_z;
+    if (player_pos[2] < box.p1[2] && *((f32 *) actor->actorData + 1) < player_pos[1] &&
+        player_pos[0] < box.p1[0] && box.p0[0] < player_pos[0]) {
+        actor->unk64_20 = 1;
         if (func_80090150()) {
             func_800904C8(0x59);
         }
     }
 }
 
-void func_80800508_chcrusher(param_0) Actor *param_0;
+void func_80800508_chcrusher(actor) Actor *actor;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2;
-    f32 local_3;
-    f32 local_4[3];
+    f32 box_min[3];
+    f32 box_max[3];
+    f32 half_x;
+    f32 half_z;
+    f32 player_pos[3];
 
-    local_2 = param_0->position[0] - *(f32 *) &param_0->actorData[0];
-    local_3 = *(f32 *) &param_0->actorData[2] - param_0->position[2];
-    local_3 += 25.0f;
-    func_8010D254(local_4);
-    local_0[0] = param_0->position[0] - local_2;
-    local_1[0] = param_0->position[0] + local_2;
-    local_0[1] = *(f32 *) &param_0->actorData[1];
-    local_1[1] = *(f32 *) &param_0->actorData[1] + 1000.0f;
-    local_0[2] = param_0->position[2] - local_3;
-    local_1[2] = param_0->position[2] + local_3;
-    func_8008FA94(local_0, local_1);
+    half_x = actor->position[0] - *(f32 *) &actor->actorData[0];
+    half_z = *(f32 *) &actor->actorData[2] - actor->position[2];
+    half_z += 25.0f;
+    func_8010D254(player_pos);
+    box_min[0] = actor->position[0] - half_x;
+    box_max[0] = actor->position[0] + half_x;
+    box_min[1] = *(f32 *) &actor->actorData[1];
+    box_max[1] = *(f32 *) &actor->actorData[1] + 1000.0f;
+    box_min[2] = actor->position[2] - half_z;
+    box_max[2] = actor->position[2] + half_z;
+    func_8008FA94(box_min, box_max);
 }
 
 void func_808005C0_chcrusher(s32 arg0)
 {
 }
 
-void func_808005C8_chcrusher(u16 *param_0)
+void func_808005C8_chcrusher(u16 *actor)
 {
-    u32 temp_t6;
+    u32 variant;
 
-    temp_t6 = (u32) (u16) *(u16 *) ((s8 *) param_0 + 0x76) >> 7;
-    switch (temp_t6) {
+    variant = (u32) (u16) *(u16 *) ((s8 *) actor + 0x76) >> 7;
+    switch (variant) {
         default:
-            *(u16 *) ((s8 *) param_0 + 0x6E) = (u16) (*(u16 *) ((s8 *) param_0 + 0x6E) & 0xFE00);
+            *(u16 *) ((s8 *) actor + 0x6E) = (u16) (*(u16 *) ((s8 *) actor + 0x6E) & 0xFE00);
             break;
         case 0x32:
-            *(u16 *) ((s8 *) param_0 + 0x6E) = (u16) (*(u16 *) ((s8 *) param_0 + 0x6E) & 0xFE00);
+            *(u16 *) ((s8 *) actor + 0x6E) = (u16) (*(u16 *) ((s8 *) actor + 0x6E) & 0xFE00);
             break;
         case 0x33:
-            *(u16 *) ((s8 *) param_0 + 0x6E) =
-                (u16) ((*(u16 *) ((s8 *) param_0 + 0x6E) & 0xFE00) | 1);
+            *(u16 *) ((s8 *) actor + 0x6E) =
+                (u16) ((*(u16 *) ((s8 *) actor + 0x6E) & 0xFE00) | 1);
             break;
         case 0x34:
-            *(u16 *) ((s8 *) param_0 + 0x6E) =
-                (u16) ((*(u16 *) ((s8 *) param_0 + 0x6E) & 0xFE00) | 2);
+            *(u16 *) ((s8 *) actor + 0x6E) =
+                (u16) ((*(u16 *) ((s8 *) actor + 0x6E) & 0xFE00) | 2);
     }
-    *(f32 *) ((s8 *) param_0 + 0x34) = 0.0f;
-    *(f32 *) ((s8 *) param_0 + 0xC) = -365.0f;
-    *(f32 *) ((s8 *) param_0 + 8) = 10.0f;
-    func_80101FDC(param_0, 1);
-    func_80101EE4(param_0, 0x3EF5C28F);
+    *(f32 *) ((s8 *) actor + 0x34) = 0.0f;
+    *(f32 *) ((s8 *) actor + 0xC) = -365.0f;
+    *(f32 *) ((s8 *) actor + 8) = 10.0f;
+    func_80101FDC(actor, 1);
+    func_80101EE4(actor, 0x3EF5C28F);
 }
 
-int func_80800684_chcrusher(Actor *param_0, s32 param_1, s32 param_2)
+int func_80800684_chcrusher(Actor *actor, s32 msg, s32 unk_2)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x3E:
-            if (param_0->unk70_10 == 2) {
-                func_8010D254((f32 *) param_0->actorData);
-                if (*(f32 *) ((u8 *) param_0 + 0x20) < -50.0f) {
-                    *(f32 *) ((u8 *) param_0 + 0x18) -= 50.0f;
-                    func_80090494(6, (f32 *) param_0->actorData, param_0);
+            if (actor->unk70_10 == 2) {
+                func_8010D254((f32 *) actor->actorData);
+                if (*(f32 *) ((u8 *) actor + 0x20) < -50.0f) {
+                    *(f32 *) ((u8 *) actor + 0x18) -= 50.0f;
+                    func_80090494(6, (f32 *) actor->actorData, actor);
                 }
             }
             break;
@@ -243,46 +247,46 @@ int *chcrusher_entrypoint_1()
     return D_80800C40_chcrusher;
 }
 
-void func_80800734_chcrusher(u8 *param_0)
+void func_80800734_chcrusher(u8 *actor)
 {
-    s32 local_4;
-    local_struct local_1;
-    local_struct local_2;
+    s32 switch_on;
+    local_struct bounds_min;
+    local_struct bounds_max;
 
-    local_4 = func_800DA298(0x4FB);
-    if (((u32) (u16) *(u16 *) ((s8 *) param_0 + 0x76) >> 7) == 0x32) {
-        _subaddieaudioloop_entrypoint_4(param_0, param_0 + 4, local_4, D_80800CA0_chcrusher);
-        local_1 = *(local_struct *) D_80800C88_chcrusher;
-        local_2 = *(local_struct *) D_80800C94_chcrusher;
-        func_8008FA94(local_1.local_0, local_2.local_0);
+    switch_on = func_800DA298(0x4FB);
+    if (((u32) (u16) *(u16 *) ((s8 *) actor + 0x76) >> 7) == 0x32) {
+        _subaddieaudioloop_entrypoint_4(actor, actor + 4, switch_on, D_80800CA0_chcrusher);
+        bounds_min = *(local_struct *) D_80800C88_chcrusher;
+        bounds_max = *(local_struct *) D_80800C94_chcrusher;
+        func_8008FA94(bounds_min.xyz, bounds_max.xyz);
     }
-    switch ((u32) *(u16 *) ((s8 *) param_0 + 0x72) >> 0xA) {
+    switch ((u32) *(u16 *) ((s8 *) actor + 0x72) >> 0xA) {
         case 1:
-            if (local_4 != 0) {
-                func_80101FDC(param_0, 2, local_4);
+            if (switch_on != 0) {
+                func_80101FDC(actor, 2, switch_on);
             }
             return;
         case 2:
-            if (local_4 == 0) {
-                func_80101FDC(param_0, 1, local_4);
+            if (switch_on == 0) {
+                func_80101FDC(actor, 1, switch_on);
             }
-            *(f32 *) ((s8 *) param_0 + 0x4C) += *(f32 *) ((s8 *) param_0 + 0x54);
+            *(f32 *) ((s8 *) actor + 0x4C) += *(f32 *) ((s8 *) actor + 0x54);
     }
 }
 
-void func_80800838_chcrusher(Actor *param_0)
+void func_80800838_chcrusher(Actor *actor)
 {
-    if (param_0->unk74_7 != 0x32) {
-        param_0->unk54 = func_800D8FF8() * -240.0f;
-        param_0->position[1] = 350.0f;
-        param_0->rotation[2] += 22.5f;
-        param_0->position[2] = -635.0f;
+    if (actor->unk74_7 != 0x32) {
+        actor->unk54 = func_800D8FF8() * -240.0f;
+        actor->position[1] = 350.0f;
+        actor->rotation[2] += 22.5f;
+        actor->position[2] = -635.0f;
     } else {
-        param_0->unk54 = func_800D8FF8() * 240.0f;
-        param_0->position[1] = 100.0f;
-        param_0->position[2] = -660.0f;
+        actor->unk54 = func_800D8FF8() * 240.0f;
+        actor->position[1] = 100.0f;
+        actor->position[2] = -660.0f;
     }
-    param_0->position[0] = -2350.0f;
+    actor->position[0] = -2350.0f;
 }
 
 int *chcrusher_entrypoint_2()
@@ -290,45 +294,46 @@ int *chcrusher_entrypoint_2()
     return D_80800CC8_chcrusher;
 }
 
-void func_808008FC_chcrusher(Actor *param_0)
+// Conveyor belt: while switched on, pushes the player along -x.
+void func_808008FC_chcrusher(Actor *actor)
 {
-    s32 local_1;
-    f32 local_0[3];
-    local_1 = func_800DA298(0x4FB);
-    _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_1, D_80800D10_chcrusher);
-    switch (param_0->unk70_10) {
+    s32 switch_on;
+    f32 player_pos[3];
+    switch_on = func_800DA298(0x4FB);
+    _subaddieaudioloop_entrypoint_4(actor, actor->position, switch_on, D_80800D10_chcrusher);
+    switch (actor->unk70_10) {
         case 1:
-            if (local_1) {
-                func_80101FDC(param_0, 2);
-                ((CrusherFlagsView *) param_0)->local_2 = 1;
+            if (switch_on) {
+                func_80101FDC(actor, 2);
+                ((CrusherFlagsView *) actor)->local_2 = 1;
             }
             break;
         case 2:
-            if (!local_1) {
-                func_80101FDC(param_0, 1);
-                ((CrusherFlagsView *) param_0)->local_2 = 0;
+            if (!switch_on) {
+                func_80101FDC(actor, 1);
+                ((CrusherFlagsView *) actor)->local_2 = 0;
             }
-            func_8010D254(local_0);
-            if (func_80090248() && local_0[0] < 2000.0f && local_0[0] > -2300.0f &&
-                local_0[2] < 0.0f) {
+            func_8010D254(player_pos);
+            if (func_80090248() && player_pos[0] < 2000.0f && player_pos[0] > -2300.0f &&
+                player_pos[2] < 0.0f) {
                 if (func_800DA298(0)) {
-                    local_0[0] -= 144.0f * func_800D8FF8();
+                    player_pos[0] -= 144.0f * func_800D8FF8();
                 } else {
-                    local_0[0] -= 504.0f * func_800D8FF8();
+                    player_pos[0] -= 504.0f * func_800D8FF8();
                 }
-                func_800907C0(local_0);
+                func_800907C0(player_pos);
             }
             if (func_800DA298(0)) {
-                func_80101CDC(param_0, 33.0f);
+                func_80101CDC(actor, 33.0f);
             } else {
-                func_80101CDC(param_0, 9.4285717f);
+                func_80101CDC(actor, 9.4285717f);
             }
     }
 }
 
-void func_80800A98_chcrusher(u8 *param_0)
+void func_80800A98_chcrusher(u8 *actor)
 {
-    func_800EFA4C(param_0 + 4, 0.0f, -10.0f, 0.0f);
+    func_800EFA4C(actor + 4, 0.0f, -10.0f, 0.0f);
 }
 
 void func_80800ACC_chcrusher(s32 arg0)
@@ -356,6 +361,7 @@ extern int func_80101870();
 extern void func_80108ED0();
 extern void _chswitch_entrypoint_13();
 extern void _chswitch_entrypoint_0();
+// TU-NOTE: the overlay .data is defined here in C (values from the ROM); IDO schedules some functions differently unless the tables are in the same unit.
 s32 D_80800B30_chcrusher[6] = {0x1304CE, 0xD00E6, 0x1330016, 0x7D000001, 0x1F41388, 0x0};
 f32 D_80800B48_chcrusher[3][4] = {0.5f, 1.0f, 2.0f, 1.0f, 2.0f, 2.0f,
                                   2.0f, 2.0f, 1.0f, 2.0f, 0.5f, 2.0f};

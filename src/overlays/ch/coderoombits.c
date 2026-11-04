@@ -102,6 +102,8 @@ extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
 
+// TU-NOTE: the data tables below are defined in this file because they point to functions here;
+// IDO schedules some of these functions differently otherwise. Values come from the ROM.
 int D_80801170_chcoderoombits[18] = {0x32E03CE,
                                      0x1,
                                      0x0,
@@ -202,95 +204,97 @@ int chcoderoombits_entrypoint_0()
     return &D_80801170_chcoderoombits;
 }
 
-int func_8080000C_chcoderoombits(s32 param_0)
+int func_8080000C_chcoderoombits(s32 actor)
 {
-    s32 local_0;
-    local_0 = func_80100074(param_0, 0, 0x182);
-    _susubgame_entrypoint_0(param_0, local_0 | 0, 1);
-    _susubgame_entrypoint_12(local_0, &D_80801308_chcoderoombits);
+    s32 unk_0;
+    unk_0 = func_80100074(actor, 0, 0x182);
+    // Matching: the "| 0" is needed for the match.
+    _susubgame_entrypoint_0(actor, unk_0 | 0, 1);
+    _susubgame_entrypoint_12(unk_0, &D_80801308_chcoderoombits);
 }
 
-void func_80800058_chcoderoombits(Actor *param_0)
+// Code chamber podium state machine.
+void func_80800058_chcoderoombits(Actor *actor)
 {
-    f32 local_0[3];
-    u8 *local_1;
-    s32 local_2;
-    s32 local_3;
+    f32 player_pos[3];
+    u8 *state;
+    s32 player;
+    s32 dialog_id;
 
-    local_1 = func_80100094(param_0, 0);
-    local_2 = func_800F54E4();
-    func_800F5A00(local_2, local_0);
-    switch (param_0->unk70_10) {
+    state = func_80100094(actor, 0);
+    player = func_800F54E4();
+    func_800F5A00(player, player_pos);
+    switch (actor->unk70_10) {
         case 1:
             if (!func_800DA298(0x6A)) {
-                if (func_8010C9B0(param_0->position, 350) && func_800F64A4(local_2, 0x201)) {
+                if (func_8010C9B0(actor->position, 350) && func_800F64A4(player, 0x201)) {
                     if (func_800C6E38(0x16))
-                        local_3 = 0x1140;
+                        dialog_id = 0x1140;
                     else
-                        local_3 = 0x115C;
-                    _susubgame_entrypoint_5(param_0, local_1, 4, 0, 0);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, local_3, 0xE, param_0->position,
+                        dialog_id = 0x115C;
+                    _susubgame_entrypoint_5(actor, state, 4, 0, 0);
+                    _subaddiedialog_entrypoint_11(actor->unk0, dialog_id, 0xE, actor->position,
                                                   0);
                     func_800DA544(0x6A);
                 }
-            } else if (func_800C6E38(0x16) && func_800F6478(local_2)) {
-                if (func_800EEAD4(param_0->position, local_0) > 100.0f) {
-                    local_1[0x18] = 0;
-                } else if (!local_1[0x18] && func_800F6C5C(local_2) &&
-                           func_800F64A4(local_2, 0x201) && func_800F52B8(local_2, 0) != 6) {
-                    func_800F497C(local_2);
-                    func_800F49D4(local_2, func_8010D5DC, param_0->unk0);
-                    func_800F4A8C(local_2, param_0->position, 0.6f);
-                    func_800F4A00(local_2, 0);
-                    func_800F7F98(local_2, 1);
-                    func_808004B8_chcoderoombits(param_0);
-                    func_80101FDC(param_0, 2);
-                    local_1[0x18] = 1;
+            } else if (func_800C6E38(0x16) && func_800F6478(player)) {
+                if (func_800EEAD4(actor->position, player_pos) > 100.0f) {
+                    state[0x18] = 0;
+                } else if (!state[0x18] && func_800F6C5C(player) &&
+                           func_800F64A4(player, 0x201) && func_800F52B8(player, 0) != 6) {
+                    func_800F497C(player);
+                    func_800F49D4(player, func_8010D5DC, actor->unk0);
+                    func_800F4A8C(player, actor->position, 0.6f);
+                    func_800F4A00(player, 0);
+                    func_800F7F98(player, 1);
+                    func_808004B8_chcoderoombits(actor);
+                    func_80101FDC(actor, 2);
+                    state[0x18] = 1;
                 }
             }
             break;
         case 2:
-            if (func_800F5C94(local_2) == 4) {
+            if (func_800F5C94(player) == 4) {
                 if (!func_800DA298(0x6B)) {
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1141, 6, 0, 0);
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1141, 6, 0, 0);
                     func_800DA544(0x6B);
-                    func_80101FDC(param_0, 3);
+                    func_80101FDC(actor, 3);
                 } else {
-                    func_80101FDC(param_0, 4);
-                    func_800F7F98(local_2, 0);
+                    func_80101FDC(actor, 4);
+                    func_800F7F98(player, 0);
                 }
             }
         case 3:
             break;
         case 4:
-            if (func_800F5C94(local_2) != 4) {
-                func_80101FDC(param_0, 1);
-                func_800946C4(func_800F53D0(local_2), 0);
+            if (func_800F5C94(player) != 4) {
+                func_80101FDC(actor, 1);
+                func_800946C4(func_800F53D0(player), 0);
             }
             break;
         case 5:
             if (func_800C064C() == -1)
-                func_80101FDC(param_0, 4);
+                func_80101FDC(actor, 4);
     }
-    func_80800BF4_chcoderoombits(param_0);
+    func_80800BF4_chcoderoombits(actor);
 }
 
-s32 func_8080033C_chcoderoombits(Actor *param_0, s32 param_1, CodeRoomMessage param_2)
+s32 func_8080033C_chcoderoombits(Actor *actor, s32 msg, CodeRoomMessage msg_data)
 {
-    f32 local_0[3];
+    f32 pos[3];
 
-    switch (param_1) {
+    switch (msg) {
         case 0x2E:
-            func_8080040C_chcoderoombits(param_0, param_2.local_1[0], param_2.local_1[1]);
+            func_8080040C_chcoderoombits(actor, msg_data.local_1[0], msg_data.local_1[1]);
             break;
         case 0x32:
-            func_800DBEFC(func_800BEC10(), 4, local_0);
-            func_800F7CF4(func_800F54E4(), 0x39, local_0);
+            func_800DBEFC(func_800BEC10(), 4, pos);
+            func_800F7CF4(func_800F54E4(), 0x39, pos);
             func_800946C4(func_800F53D0(func_800F54E4()), 1);
             break;
         case 0x95:
-            func_808004B8_chcoderoombits(param_0);
-            func_80101FDC(param_0, 1);
+            func_808004B8_chcoderoombits(actor);
+            func_80101FDC(actor, 1);
             break;
         default:
             return 0;
@@ -298,109 +302,111 @@ s32 func_8080033C_chcoderoombits(Actor *param_0, s32 param_1, CodeRoomMessage pa
     return 1;
 }
 
-void func_8080040C_chcoderoombits(param_0, param_1, param_2) Actor *param_0;
-s32 param_1;
-s32 param_2;
+void func_8080040C_chcoderoombits(actor, dialog_id, unused) Actor *actor;
+s32 dialog_id;
+s32 unused;
 {
-    switch (param_1) {
+    switch (dialog_id) {
         case 0x1140:
         case 0x115C:
-            _susubgame_entrypoint_4(param_0, func_80100094(param_0, 0));
+            _susubgame_entrypoint_4(actor, func_80100094(actor, 0));
             break;
         case 0x1141:
             func_800F7F98(func_800F54E4(), 0);
-            func_80101FDC(param_0, 4);
+            func_80101FDC(actor, 4);
         case 0x115B:
             break;
         default:
             func_800F7F98(func_800F54E4(), 0);
-            func_80101FDC(param_0, 4);
+            func_80101FDC(actor, 4);
     }
 }
 
-int func_808004B8_chcoderoombits(param_0)
-Actor *param_0;
+int func_808004B8_chcoderoombits(actor)
+Actor *actor;
 {
-    u8 *local_0;
-    s16 *local_1;
-    s32 *local_2;
+    u8 *state;
+    s16 *progress;
+    s32 *seq;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = (s16 *) ((u8 *) func_80100094(param_0, 0) + 0x154);
-    local_2 = &D_808011F4_chcoderoombits;
-    if (local_2[0]) {
+    state = func_80100094(actor, 0);
+    progress = (s16 *) ((u8 *) func_80100094(actor, 0) + 0x154);
+    seq = &D_808011F4_chcoderoombits;
+    if (seq[0]) {
         do {
-            *local_1 = 0;
-            local_2 += 3;
-            local_1++;
-        } while (local_2[0]);
+            *progress = 0;
+            seq += 3;
+            progress++;
+        } while (seq[0]);
     }
-    local_0[0x19] = 0;
-    func_80800E28_chcoderoombits(param_0);
+    state[0x19] = 0;
+    func_80800E28_chcoderoombits(actor);
 }
 
-int func_8080052C_chcoderoombits(Actor *param_0, u8 *param_1)
+// Matches a hit letter against the code table.
+int func_8080052C_chcoderoombits(Actor *actor, u8 *cell)
 {
-    CodeSequence49 *local_0;
-    CodeProgress49 *local_1;
-    s16 *local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
+    CodeSequence49 *seq;
+    CodeProgress49 *progress;
+    s16 *step;
+    s32 plain_match;
+    s32 alt_match;
+    s32 glow_started;
+    s32 alt_mode;
     s32 idx;
-    local_2 = ((CodeProgress49 *) func_80100094(param_0, 0))->local_3;
-    local_3 = 0;
-    local_4 = 0;
-    local_5 = 0;
-    local_1 = func_80100094(param_0, 0);
-    for (local_0 = (CodeSequence49 *) &D_808011F4_chcoderoombits; local_0->local_0;
-         local_0++, local_2++) {
-        if (func_80800B40_chcoderoombits(param_0, local_0))
+    step = ((CodeProgress49 *) func_80100094(actor, 0))->local_3;
+    plain_match = 0;
+    alt_match = 0;
+    glow_started = 0;
+    progress = func_80100094(actor, 0);
+    for (seq = (CodeSequence49 *) &D_808011F4_chcoderoombits; seq->local_0;
+         seq++, step++) {
+        if (func_80800B40_chcoderoombits(actor, seq))
             continue;
-        idx = *local_2;
-        if (param_1[0] != local_0->local_0[idx]) {
-            *local_2 = 0;
-            continue;
-        }
-        if (local_0->local_2 && !local_1->local_1) {
-            *local_2 = 0;
+        idx = *step;
+        if (cell[0] != seq->local_0[idx]) {
+            *step = 0;
             continue;
         }
-        if (!local_0->local_2 && local_1->local_1) {
-            *local_2 = 0;
+        if (seq->local_2 && !progress->local_1) {
+            *step = 0;
             continue;
         }
-        if (local_0->local_2)
-            local_4 = 1;
+        if (!seq->local_2 && progress->local_1) {
+            *step = 0;
+            continue;
+        }
+        if (seq->local_2)
+            alt_match = 1;
         else
-            local_3 = 1;
-        (*local_2)++;
-        if (!local_0->local_0[*local_2 * 1]) {
-            func_808004B8_chcoderoombits(param_0);
-            func_8080077C_chcoderoombits(param_0, local_0);
+            plain_match = 1;
+        (*step)++;
+        // Matching: the "* 1" is needed for the match.
+        if (!seq->local_0[*step * 1]) {
+            func_808004B8_chcoderoombits(actor);
+            func_8080077C_chcoderoombits(actor, seq);
             return;
         }
-        if (!local_0->local_2 && !local_5) {
-            local_5 = 1;
-            func_80800D90_chcoderoombits(param_0, param_1[1] - 1);
+        if (!seq->local_2 && !glow_started) {
+            glow_started = 1;
+            func_80800D90_chcoderoombits(actor, cell[1] - 1);
             func_800FC660(0xE);
         }
     }
-    local_6 = local_1->local_1;
-    if (!local_4 && local_3 && local_1->local_1)
-        func_8080091C_chcoderoombits(param_0);
-    if (local_4 && !local_3) {
-        func_80800998_chcoderoombits(param_0);
-        func_80800E28_chcoderoombits(param_0);
+    alt_mode = progress->local_1;
+    if (!alt_match && plain_match && progress->local_1)
+        func_8080091C_chcoderoombits(actor);
+    if (alt_match && !plain_match) {
+        func_80800998_chcoderoombits(actor);
+        func_80800E28_chcoderoombits(actor);
     }
-    if (!local_3 && !local_4) {
-        func_808004B8_chcoderoombits(param_0);
-        if (!local_6) {
+    if (!plain_match && !alt_match) {
+        func_808004B8_chcoderoombits(actor);
+        if (!alt_mode) {
             func_800FC660(0xF);
             if (!func_800DA298(0x668)) {
                 func_800DA544(0x668);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x115A, 6, 0, 0);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x115A, 6, 0, 0);
                 func_800F7F98(func_800F54E4(), 1);
                 return 1;
             }
@@ -409,137 +415,140 @@ int func_8080052C_chcoderoombits(Actor *param_0, u8 *param_1)
     return 0;
 }
 
-int func_8080077C_chcoderoombits(param_0, param_1)
-Actor *param_0;
-Broad42CodeEntry *param_1;
+// Applies a finished code: toggles a cheat or unlocks frontend entries.
+int func_8080077C_chcoderoombits(actor, entry)
+Actor *actor;
+Broad42CodeEntry *entry;
 {
-    u8 *local_0;
-    s32 local_1;
+    u8 *state;
+    s32 i;
 
-    local_0 = func_80100094(param_0, 0);
-    if (param_1 == (Broad42CodeEntry *) &D_808011F4_chcoderoombits) {
+    state = func_80100094(actor, 0);
+    if (entry == (Broad42CodeEntry *) &D_808011F4_chcoderoombits) {
         func_800FC660(0xE);
-        local_0[0x19] = 1;
+        state[0x19] = 1;
         return 0;
     }
     func_800FC660(0x10);
-    switch (param_1->local_1) {
+    switch (entry->local_1) {
         case 1:
-            func_800D3F2C(param_1->local_2);
+            func_800D3F2C(entry->local_2);
             break;
         case 2:
-            _gcfrontend_entrypoint_9(param_1->local_2);
+            _gcfrontend_entrypoint_9(entry->local_2);
             break;
         case 3:
-            for (local_1 = 0x20; local_1 < 0x2D; local_1++) {
-                _gcfrontend_entrypoint_9(local_1);
+            for (i = 0x20; i < 0x2D; i++) {
+                _gcfrontend_entrypoint_9(i);
             }
-            for (local_1 = 0x60; local_1 < 0x77; local_1++) {
-                _gcfrontend_entrypoint_9(local_1);
+            for (i = 0x60; i < 0x77; i++) {
+                _gcfrontend_entrypoint_9(i);
             }
-            for (local_1 = 0x80; local_1 != 0x86; local_1++) {
-                _gcfrontend_entrypoint_9(local_1);
+            for (i = 0x80; i != 0x86; i++) {
+                _gcfrontend_entrypoint_9(i);
             }
             func_800DA544(0xC08);
             func_800DA544(0xC09);
             func_800DA544(0xC0A);
             func_800DA544(0xC0C);
     }
-    if (param_1->local_3) {
-        if (func_80800FDC_chcoderoombits() == 1 && param_1->local_4 == 0) {
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x115B, 6, 0, 0);
+    if (entry->local_3) {
+        if (func_80800FDC_chcoderoombits() == 1 && entry->local_4 == 0) {
+            _subaddiedialog_entrypoint_11(actor->unk0, 0x115B, 6, 0, 0);
         }
-        _subaddiedialog_entrypoint_11(param_0->unk0, param_1->local_3, 6, 0, 0);
+        _subaddiedialog_entrypoint_11(actor->unk0, entry->local_3, 6, 0, 0);
         func_800F7F98(func_800F54E4(), 1);
     }
     return 1;
 }
 
-void func_8080091C_chcoderoombits(param_0) Actor *param_0;
+void func_8080091C_chcoderoombits(actor) Actor *actor;
 {
-    u8 *local_0;
-    s16 *local_1;
-    s32 *local_2;
+    u8 *state;
+    s16 *progress;
+    s32 *seq;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = (s16 *) (local_0 + 0x154);
-    local_0 = func_80100094(param_0, 0);
-    *local_1 = 0;
-    local_0[0x19] = 0;
-    local_2 = &D_808011F4_chcoderoombits;
-    while (local_2[0]) {
-        if (((u8 *) local_2)[0xA]) {
-            *local_1 = 0;
+    state = func_80100094(actor, 0);
+    progress = (s16 *) (state + 0x154);
+    state = func_80100094(actor, 0);
+    *progress = 0;
+    state[0x19] = 0;
+    seq = &D_808011F4_chcoderoombits;
+    while (seq[0]) {
+        if (((u8 *) seq)[0xA]) {
+            *progress = 0;
         }
-        local_2 += 3;
-        local_1++;
+        seq += 3;
+        progress++;
     }
 }
 
-void func_80800998_chcoderoombits(param_0) s32 param_0;
+void func_80800998_chcoderoombits(actor) s32 actor;
 {
-    s16 *local_0 = (s16 *) ((u8 *) func_80100094(param_0, 0) + 0x154);
-    CodeEnt *local_1;
-    for (local_1 = ((CodeEnt *) &D_808011F4_chcoderoombits); local_1->f0 != 0;
-         local_1++, local_0++) {
+    s16 *progress = (s16 *) ((u8 *) func_80100094(actor, 0) + 0x154);
+    CodeEnt *seq;
+    for (seq = ((CodeEnt *) &D_808011F4_chcoderoombits); seq->f0 != 0;
+         seq++, progress++) {
 
-if (local_1->fA == 0) {
-    *local_0 = 0;
+if (seq->fA == 0) {
+    *progress = 0;
 }
 
 }
 }
 
-void chcoderoombits_entrypoint_1(s32 param_0, s32 param_1)
+// Egg hit: maps the hit position to the 6x5 letter grid.
+void chcoderoombits_entrypoint_1(s32 unused, s32 hit)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    s32 local_2;
-    s32 local_3;
-    s32 pad0;
-    Actor *local_4;
+    f32 base_pos[3];
+    f32 hit_pos[3];
+    s32 col;
+    s32 row;
+    s32 pad0; // Matching: padding local, the frame is 8 bytes too small without it.
+    Actor *chamber;
 
-    local_4 = _subaddiefind_entrypoint_2(0x3CE, 0);
-    if (local_4->unk70_10 == 4) {
-        func_800DBEFC(func_800BEC10(), 4, local_0);
-        local_0[0] -= 510.0f;
-        local_0[1] -= 425.0f;
-        func_800EC398(param_1, local_1);
-        local_2 = (s32) ((local_1[0] - local_0[0]) * 0.005882353f);
-        local_3 = (s32) ((local_1[1] - local_0[1]) * 0.005882353f);
+    chamber = _subaddiefind_entrypoint_2(0x3CE, 0);
+    if (chamber->unk70_10 == 4) {
+        func_800DBEFC(func_800BEC10(), 4, base_pos);
+        base_pos[0] -= 510.0f;
+        base_pos[1] -= 425.0f;
+        func_800EC398(hit, hit_pos);
+        col = (s32) ((hit_pos[0] - base_pos[0]) * 0.005882353f);
+        row = (s32) ((hit_pos[1] - base_pos[1]) * 0.005882353f);
 
-if (local_2 >= 0 && local_2 < 6 && local_3 >= 0 && local_3 < 5) {
-    if (((CodeRoomCell1805(*)[6]) D_808011B8_chcoderoombits)[local_3][local_2].local_0 != 0xFF &&
+if (col >= 0 && col < 6 && row >= 0 && row < 5) {
+    if (((CodeRoomCell1805(*)[6]) D_808011B8_chcoderoombits)[row][col].local_0 != 0xFF &&
         func_8080052C_chcoderoombits(
-            local_4, &((CodeRoomCell1805(*)[6]) D_808011B8_chcoderoombits)[local_3][local_2])) {
-        func_80101FDC(local_4, 5);
-        func_808004B8_chcoderoombits(local_4);
+            chamber, &((CodeRoomCell1805(*)[6]) D_808011B8_chcoderoombits)[row][col])) {
+        func_80101FDC(chamber, 5);
+        func_808004B8_chcoderoombits(chamber);
     }
 }
 
 }
 }
 
-int func_80800B40_chcoderoombits(param_0, param_1)
-Actor *param_0;
-CodexCodeRoomCondition *param_1;
+// Returns 1 to skip this table entry.
+int func_80800B40_chcoderoombits(actor, entry)
+Actor *actor;
+CodexCodeRoomCondition *entry;
 {
-    switch (param_1->local_1) {
+    switch (entry->local_1) {
         case 1:
-            if (param_1->local_4) {
-                if (func_800D3EC8(param_1->local_2) == 0) {
+            if (entry->local_4) {
+                if (func_800D3EC8(entry->local_2) == 0) {
                     return 1;
                 }
             } else {
 
-if (func_800D3E6C(param_1->local_2) == 0) {
+if (func_800D3E6C(entry->local_2) == 0) {
     return 1;
 }
 
 }
 break;
 case 2:
-    if (_gcfrontend_entrypoint_3(param_1->local_2)) {
+    if (_gcfrontend_entrypoint_3(entry->local_2)) {
         return 1;
     }
     break;
@@ -551,59 +560,61 @@ case 3:
     return 0;
     }
 
-    void func_80800BF4_chcoderoombits(param_0) Actor *param_0;
+// Updates per-letter glow and registers the vertex colour callback.
+    void func_80800BF4_chcoderoombits(actor) Actor *actor;
     {
-        Broad42CodeAnimation *local_0;
-        u8 *local_1;
-        s32 local_2;
-        s32 local_3;
-        s32 local_4;
+        Broad42CodeAnimation *cell;
+        u8 *state;
+        s32 i;
+        s32 glid;
+        s32 actor_id;
 
-        local_1 = func_80100094(param_0, 0);
-        local_4 = (s32) param_0->unk0;
-        local_3 = func_800BEA88(0);
-        for (local_2 = 0, local_0 = (Broad42CodeAnimation *) local_1; local_2 != 0x1A;
-             local_2++, local_0 = (Broad42CodeAnimation *) ((u8 *) local_0 + 0xC)) {
-            switch (local_0->local_3) {
+        state = func_80100094(actor, 0);
+        actor_id = (s32) actor->unk0;
+        glid = func_800BEA88(0);
+        for (i = 0, cell = (Broad42CodeAnimation *) state; i != 0x1A;
+             i++, cell = (Broad42CodeAnimation *) ((u8 *) cell + 0xC)) {
+            switch (cell->local_3) {
                 case 0:
-                    local_0->local_1 = 0.0f;
+                    cell->local_1 = 0.0f;
                     break;
 
 case 1:
-    if (func_800D91EC(&local_0->local_2, 0.2f)) {
-        local_0->local_3 = 2;
+    if (func_800D91EC(&cell->local_2, 0.2f)) {
+        cell->local_3 = 2;
     }
 
-local_0->local_1 = func_800F10B4(local_0->local_2, 0.0f, 0.2f, 0.0f, 1.0f);
+cell->local_1 = func_800F10B4(cell->local_2, 0.0f, 0.2f, 0.0f, 1.0f);
 break;
 case 2:
-    local_0->local_1 = 1.0f;
+    cell->local_1 = 1.0f;
     break;
 
 case 3:
-    if (func_800D91EC(&local_0->local_2, 0.6f)) {
-        local_0->local_3 = 0;
+    if (func_800D91EC(&cell->local_2, 0.6f)) {
+        cell->local_3 = 0;
     }
 
-local_0->local_1 = func_800F10B4(local_0->local_2, 0.0f, 0.6f, 1.0f, 0.0f);
+cell->local_1 = func_800F10B4(cell->local_2, 0.0f, 0.6f, 1.0f, 0.0f);
 }
-if (local_3) {
-    _glid_entrypoint_0(local_3, local_2 + 1, _chcoderoombits_entrypoint_2, local_4);
+if (glid) {
+    _glid_entrypoint_0(glid, i + 1, _chcoderoombits_entrypoint_2, actor_id);
 }
 }
 }
 
-void func_80800D90_chcoderoombits(param_0, param_1) u8 *param_0;
-s32 param_1;
+void func_80800D90_chcoderoombits(actor, index) u8 *actor;
+s32 index;
 {
     u8 *entry;
     s32 state;
     f32 q;
     int t;
-    entry = (u8 *) func_80100094(param_0, 0) + param_1 * 12;
+    entry = (u8 *) func_80100094(actor, 0) + index * 12;
     state = *((s32 *) (entry + 0x24));
     switch (state) {
         case 3:
+            // Matching: empty triple test keeps the constant 1 in a1 early.
             t = !entry;
             if (t && t && t) {
             }
@@ -620,56 +631,59 @@ s32 param_1;
     }
 }
 
-void func_80800E28_chcoderoombits(param_0) Actor *param_0;
+void func_80800E28_chcoderoombits(actor) Actor *actor;
 {
-    CodeRoomCells *local_0;
-    s32 local_1;
-    f32 local_2;
+    CodeRoomCells *cells;
+    s32 i;
+    f32 progress;
 
-    local_0 = (CodeRoomCells *) func_80100094(param_0, 0);
-    for (local_1 = 0; local_1 < 26; local_1++) {
-        switch (local_0->local_0[local_1].local_2) {
+    cells = (CodeRoomCells *) func_80100094(actor, 0);
+    for (i = 0; i < 26; i++) {
+        switch (cells->local_0[i].local_2) {
             case 0:
             case 3:
                 break;
             case 1:
-                local_2 = (0.2f - local_0->local_0[local_1].local_1) / 0.2f;
-                local_0->local_0[local_1].local_2 = local_2 * 0.6f;
+                progress = (0.2f - cells->local_0[i].local_1) / 0.2f;
+                cells->local_0[i].local_2 = progress * 0.6f;
                 break;
             case 2:
-                local_0->local_0[local_1].local_2 = 3;
-                local_0->local_0[local_1].local_1 = 0.0f;
+                cells->local_0[i].local_2 = 3;
+                cells->local_0[i].local_1 = 0.0f;
         }
     }
 }
-void chcoderoombits_entrypoint_2(s32 param_0, Vtx *param_1, Vtx *param_2, s32 param_3,
-                                 Unk80132ED0 *param_4)
+// Vertex colour callback: tints a letter by its glow value.
+void chcoderoombits_entrypoint_2(s32 index, Vtx *src, Vtx *dst, s32 count,
+                                 Unk80132ED0 *glid_ctx)
 {
     Actor *actor;
-    Vtx *local_1;
-    CodeRoomColors1482 *local_2;
-    u8 local_0[4];
+    Vtx *end;
+    CodeRoomColors1482 *colors;
+    u8 color[4];
 
-    actor = func_80106790(param_4);
-    local_2 = func_80100094(actor, 0);
-    func_800F3320(local_0, param_1->v.cn, D_80801318_chcoderoombits,
-                  local_2->local_0[param_0].local_0);
-    local_1 = param_3 + param_1;
-    while (param_1 < local_1) {
-        func_800F2EA0(param_2->v.cn, local_0);
-        param_1++;
-        param_2++;
+    actor = func_80106790(glid_ctx);
+    colors = func_80100094(actor, 0);
+    func_800F3320(color, src->v.cn, D_80801318_chcoderoombits,
+                  colors->local_0[index].local_0);
+    end = count + src;
+    while (src < end) {
+        func_800F2EA0(dst->v.cn, color);
+        src++;
+        dst++;
     }
 }
+// Counts unlocked cheats (ids 1..12).
 int func_80800FDC_chcoderoombits()
 {
-    s32 local_0;
-    s32 local_1 = 0;
-    for (local_0 = 1; local_0 < 0xD; local_0++) {
-        if (func_800D3E14(local_0 | 0)) {
-            local_1++;
+    s32 i;
+    s32 count = 0;
+    for (i = 1; i < 0xD; i++) {
+        // Matching: the "| 0" is needed for the match.
+        if (func_800D3E14(i | 0)) {
+            count++;
         }
     }
 
-    return local_1;
+    return count;
 }

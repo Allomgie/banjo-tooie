@@ -128,24 +128,26 @@ s32 param_2;
 
 void func_808002CC_chfaircoinbox(param_0) Actor *param_0;
 {
-    s32 local_0;
+    s32 dialog_id;
 
     D_80800494_chfaircoinbox = func_808003E4_chfaircoinbox[param_0->unk74_7];
-    local_0 = func_80800000_chfaircoinbox();
-    D_80800490_chfaircoinbox[0] = local_0;
+    dialog_id = func_80800000_chfaircoinbox();
+    D_80800490_chfaircoinbox[0] = dialog_id;
 
-if (func_800DA298((u16) local_0)) {
+if (func_800DA298((u16) dialog_id)) {
     return;
 }
 
-local_0 = _subaddiedialog_entrypoint_7((Actor *) ((s32) param_0 ^ 0), param_0->position,
+// Matching: `^ 0` makes the first argument a new value so param_0 stays in its own register for a3.
+dialog_id = _subaddiedialog_entrypoint_7((Actor *) ((s32) param_0 ^ 0), param_0->position,
                                        D_80800490_chfaircoinbox, param_0);
 
-if (local_0 != 0) {
-    if (local_0 == 0x10B5) {
-    } else if (local_0 == 0x10B6) {
-    } else if (local_0 == 0x10B7) {
-    } else if (local_0 == 0x10B4) {
+if (dialog_id != 0) {
+    // Matching: empty else-if chain keeps the beq test for 0x10B5 (probably removed debug code).
+    if (dialog_id == 0x10B5) {
+    } else if (dialog_id == 0x10B6) {
+    } else if (dialog_id == 0x10B7) {
+    } else if (dialog_id == 0x10B4) {
     }
     func_80090734(1, param_0->position);
 }
@@ -188,6 +190,8 @@ int chfaircoinbox_entrypoint_2(void)
     return (int) &D_808004C8_chfaircoinbox;
 }
 
+// TU-NOTE: the overlay .data is defined here in C; its tables point to functions of this file and
+// IDO's assembler schedules them differently otherwise. Values are taken from the ROM.
 extern void func_80101870();
 extern void func_80107C2C();
 CoinEnt D_80800470_chfaircoinbox[4] = {0x695, 0xA4, 0x696, 0xA5, 0x697, 0xA6, 0x9E309E4, 0x9E50000};

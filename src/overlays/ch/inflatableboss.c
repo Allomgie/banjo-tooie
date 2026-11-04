@@ -181,6 +181,7 @@ void func_80802264_chinflatableboss(Actor *param_0, f32 param_1, f32 param_2, s3
 extern void func_80105834(), func_80107C2C(), func_80108ED0(), func_80800408_chinflatableboss(),
     func_808004A0_chinflatableboss(), func_80801554_chinflatableboss();
 
+// Returns the actor class table.
 int chinflatableboss_entrypoint_0()
 {
     return &D_80802E50_chinflatableboss;
@@ -190,18 +191,18 @@ void func_8080183C_chinflatableboss();
 
 void func_80800F84_chinflatableboss();
 
-void func_8080000C_chinflatableboss(param_0) Actor *param_0;
+void func_8080000C_chinflatableboss(actor) Actor *actor;
 {
-    u8 *local_6;
-    s32 local_0;
-    InflatableMarker481 local_1[3];
-    s32 local_2;
-    s32 local_4;
-    s32 local_3;
-    f32 *local_7;
-    s32 local_5;
+    u8 *boss;
+    s32 i;
+    InflatableMarker481 markers[3];
+    s32 j;
+    s32 k;
+    s32 marker_count;
+    f32 *pos;
+    s32 player;
 
-    local_6 = func_80100094(param_0, 0);
+    boss = func_80100094(actor, 0);
     func_800DA524(1);
     func_800DA524(2);
     func_800DA524(4);
@@ -210,105 +211,105 @@ void func_8080000C_chinflatableboss(param_0) Actor *param_0;
     if (func_800DA298(0x9C) && !_glcutDll_entrypoint_20()) {
         func_800DA544(3);
         _chintrotext_entrypoint_2(1);
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
         return;
     }
-    func_80102FDC(param_0, 1.4f);
-    local_6[0x494] = 1;
-    local_6[0x495] = D_80802D8C_chinflatableboss[0];
-    *(f32 *) ((u8 *) param_0 + 0x28) = 0.35f;
-    func_80109FE8(param_0, 0);
-    local_7 = param_0->position;
-    func_800EE7F8((f32 *) (local_6 + 0x1C), local_7);
-    func_800EE7F8((f32 *) (local_6 + 0x28), local_7);
-    func_800EE7F8((f32 *) (local_6 + 0x34), local_7);
-    for (local_0 = 0; local_0 != 12; local_0++) {
-        func_80802AD8_chinflatableboss(param_0, local_0, 1);
+    func_80102FDC(actor, 1.4f);
+    boss[0x494] = 1;
+    boss[0x495] = D_80802D8C_chinflatableboss[0];
+    *(f32 *) ((u8 *) actor + 0x28) = 0.35f;
+    func_80109FE8(actor, 0);
+    pos = actor->position;
+    func_800EE7F8((f32 *) (boss + 0x1C), pos);
+    func_800EE7F8((f32 *) (boss + 0x28), pos);
+    func_800EE7F8((f32 *) (boss + 0x34), pos);
+    for (i = 0; i != 12; i++) {
+        func_80802AD8_chinflatableboss(actor, i, 1);
     }
-    _subaddieDll_entrypoint_10(0x154, local_6);
-    _subaddieDll_entrypoint_10(0x320, local_6 + 8);
-    func_8080183C_chinflatableboss(param_0);
-    func_8010A85C(param_0, 2);
-    _suexpression_entrypoint_7(param_0, 1, 0x3A);
-    *(s32 *) (local_6 + 0x6C) =
-        _subaddiemarker_entrypoint_1(param_0, 0x437, 0x32, local_6 + 0x70, 0x14);
-    *(s32 *) (local_6 + 0x250) =
-        _subaddiemarker_entrypoint_1(param_0, 0x437, 0x35, local_6 + 0x254, 0x14);
-    local_3 = _subaddiemarker_entrypoint_0(param_0, 0x3DA, local_1, 0x14);
-    for (local_2 = 0; local_2 < local_3; local_2++) {
-        for (local_4 = 0; local_4 < local_3; local_4++) {
-            if (local_1[local_4].local_1 - 0x32 == local_2) {
+    _subaddieDll_entrypoint_10(0x154, boss);
+    _subaddieDll_entrypoint_10(0x320, boss + 8);
+    func_8080183C_chinflatableboss(actor);
+    func_8010A85C(actor, 2);
+    _suexpression_entrypoint_7(actor, 1, 0x3A);
+    *(s32 *) (boss + 0x6C) =
+        _subaddiemarker_entrypoint_1(actor, 0x437, 0x32, boss + 0x70, 0x14);
+    *(s32 *) (boss + 0x250) =
+        _subaddiemarker_entrypoint_1(actor, 0x437, 0x35, boss + 0x254, 0x14);
+    marker_count = _subaddiemarker_entrypoint_0(actor, 0x3DA, markers, 0x14);
+    for (j = 0; j < marker_count; j++) {
+        for (k = 0; k < marker_count; k++) {
+            if (markers[k].local_1 - 0x32 == j) {
                 break;
             }
         }
-        func_800EE7F8(((Vec3f *) (local_6 + 0x48))[local_2].f, local_1[local_4].local_0);
+        func_800EE7F8(((Vec3f *) (boss + 0x48))[j].f, markers[k].local_0);
     }
     if (func_800DA298(0x17F)) {
-        local_6[0x498] = 5;
+        boss[0x498] = 5;
     } else {
-        local_6[0x498] = 1;
+        boss[0x498] = 1;
     }
     if (!func_800F64A4(func_800F54E4(), 1)) {
-        local_6[0x498] = 0;
+        boss[0x498] = 0;
     }
     if (_glcutDll_entrypoint_20()) {
-        func_8010A85C(param_0, 1);
-        func_80800F84_chinflatableboss(param_0, _chcredits_entrypoint_1() == 0x36 ? 0x12 : 0x13);
+        func_8010A85C(actor, 1);
+        func_80800F84_chinflatableboss(actor, _chcredits_entrypoint_1() == 0x36 ? 0x12 : 0x13);
         return;
     }
-    if (local_6[0x498] == 5) {
-        local_5 = func_800F54E4();
-        local_6[0x49C] = 1;
-        local_6[0x496] = 1;
-        func_800F608C(local_5, 1);
-        func_800F8294(local_5, local_6 + 0x54);
-        func_800F8300(local_5, 2, local_7);
-        func_800F497C(local_5);
-        _plcamera_entrypoint_8(local_5);
+    if (boss[0x498] == 5) {
+        player = func_800F54E4();
+        boss[0x49C] = 1;
+        boss[0x496] = 1;
+        func_800F608C(player, 1);
+        func_800F8294(player, boss + 0x54);
+        func_800F8300(player, 2, pos);
+        func_800F497C(player);
+        _plcamera_entrypoint_8(player);
         func_800DA544(2);
-        func_80802A00_chinflatableboss(param_0, 0x22, 0x20);
-        _subaddiedialog_entrypoint_11(param_0->unk0, 0x1087, 0x107, local_7, 0x3A);
-        func_80800F84_chinflatableboss(param_0, 3);
-        func_8010A85C(param_0, 1);
+        func_80802A00_chinflatableboss(actor, 0x22, 0x20);
+        _subaddiedialog_entrypoint_11(actor->unk0, 0x1087, 0x107, pos, 0x3A);
+        func_80800F84_chinflatableboss(actor, 3);
+        func_8010A85C(actor, 1);
         return;
     }
     if (func_800D395C()) {
-        param_0->unk64_16 = 1;
-        local_6[0x498] = 2;
+        actor->unk64_16 = 1;
+        boss[0x498] = 2;
         func_800F497C(func_800F54E4());
-        func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
-        func_800F4A58(func_800F54E4(), (f32 *) (local_6 + 0x48), 300.0f);
-        func_80802A00_chinflatableboss(param_0, 0x2F, 0x20);
+        func_800F49D4(func_800F54E4(), func_8010D5DC, actor->unk0);
+        func_800F4A58(func_800F54E4(), (f32 *) (boss + 0x48), 300.0f);
+        func_80802A00_chinflatableboss(actor, 0x2F, 0x20);
         return;
     }
-    ((u8 *) param_0)[0x65] &= ~1;
+    ((u8 *) actor)[0x65] &= ~1;
     _chintrotext_entrypoint_2(1);
 }
 
-void func_80800408_chinflatableboss(param_0) s32 param_0;
+void func_80800408_chinflatableboss(actor) s32 actor;
 {
-    u8 *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    u8 *local_4;
+    u8 *boss;
+    s32 patch_fx;
+    s32 jet_fx;
+    s32 offset;
+    u8 *cursor;
 
-    local_0 = func_80100094(param_0, 0);
-    _suexpression_entrypoint_8(param_0, 1);
-    local_3 = 0;
-    local_4 = local_0;
+    boss = func_80100094(actor, 0);
+    _suexpression_entrypoint_8(actor, 1);
+    offset = 0;
+    cursor = boss;
     do {
-        local_1 = (*(s32 *) ((s8 *) (local_4) + (0x43C)));
-        if (local_1 != 0) {
-            (*(s32 *) ((s8 *) (local_4) + (0x43C))) = func_800BA2C4(local_1);
+        patch_fx = (*(s32 *) ((s8 *) (cursor) + (0x43C)));
+        if (patch_fx != 0) {
+            (*(s32 *) ((s8 *) (cursor) + (0x43C))) = func_800BA2C4(patch_fx);
         }
-        local_3 += 4;
-        local_4 += 4;
-    } while (local_3 != 0x30);
-    local_2 = (*(s32 *) ((s8 *) (local_0) + (0x434)));
+        offset += 4;
+        cursor += 4;
+    } while (offset != 0x30);
+    jet_fx = (*(s32 *) ((s8 *) (boss) + (0x434)));
 
-    if (local_2 != 0) {
-        *(s32 *) ((s8 *) local_0 + 0x434) = func_800BA2C4(local_2);
+    if (jet_fx != 0) {
+        *(s32 *) ((s8 *) boss + 0x434) = func_800BA2C4(jet_fx);
     }
 }
 
@@ -324,148 +325,148 @@ int func_8080200C_chinflatableboss();
 
 void func_80801B04_chinflatableboss();
 
-void func_808004A0_chinflatableboss(param_0) u8 *param_0;
+void func_808004A0_chinflatableboss(actor) u8 *actor;
 {
-    u8 *local_0;
-    u8 *local_3;
+    u8 *boss;
+    u8 *dialog_pos;
     s32 pad2;
-    f32 sp30[3];
+    f32 bone_pos[3];
 
-    local_0 = func_80100094(param_0, 0);
-    func_80802058_chinflatableboss(param_0);
-    _suexpression_entrypoint_10(func_80100094(param_0, 1), *(s32 *) param_0, 0);
-    func_8080272C_chinflatableboss(param_0);
-    func_808029AC_chinflatableboss(param_0);
+    boss = func_80100094(actor, 0);
+    func_80802058_chinflatableboss(actor);
+    _suexpression_entrypoint_10(func_80100094(actor, 1), *(s32 *) actor, 0);
+    func_8080272C_chinflatableboss(actor);
+    func_808029AC_chinflatableboss(actor);
 
-    switch ((u32) *(u16 *) (param_0 + 0x72) >> 10) {
+    switch ((u32) *(u16 *) (actor + 0x72) >> 10) {
         case 2:
-            func_80802264_chinflatableboss(param_0, 0.3f, 0.3f, &D_80802E98_chinflatableboss, 2);
-            func_80802264_chinflatableboss(param_0, 0.3f, 0.5f, &D_80802EA0_chinflatableboss, 5);
-            if (func_80101DDC(param_0) != 0) {
-                _subaddiedialog_entrypoint_11(*(s32 *) param_0, 0x1082, 0x106, param_0 + 4, 0x3A);
-                func_80800F84_chinflatableboss(param_0, 3);
-                func_8008B1C8(func_80104248(param_0), 0.8f);
+            func_80802264_chinflatableboss(actor, 0.3f, 0.3f, &D_80802E98_chinflatableboss, 2);
+            func_80802264_chinflatableboss(actor, 0.3f, 0.5f, &D_80802EA0_chinflatableboss, 5);
+            if (func_80101DDC(actor) != 0) {
+                _subaddiedialog_entrypoint_11(*(s32 *) actor, 0x1082, 0x106, actor + 4, 0x3A);
+                func_80800F84_chinflatableboss(actor, 3);
+                func_8008B1C8(func_80104248(actor), 0.8f);
             }
             break;
         case 4:
-            func_80802264_chinflatableboss(param_0, 0.5f, 0.8f, &D_80802EB4_chinflatableboss, 4);
-            if (func_80101E14(param_0, 0x3F000000) != 0) {
+            func_80802264_chinflatableboss(actor, 0.5f, 0.8f, &D_80802EB4_chinflatableboss, 4);
+            if (func_80101E14(actor, 0x3F000000) != 0) {
                 func_800DA544(4);
             }
-            if (func_80101DDC(param_0) != 0) {
-                local_3 = param_0 + 4;
-                if (*(u8 *) (local_0 + 0x49C) != 0) {
-                    func_80802910_chinflatableboss(param_0);
+            if (func_80101DDC(actor) != 0) {
+                dialog_pos = actor + 4;
+                if (*(u8 *) (boss + 0x49C) != 0) {
+                    func_80802910_chinflatableboss(actor);
                 } else {
-                    _subaddiedialog_entrypoint_11(*(s32 *) param_0, 0x1083, 0x106, local_3, 0x3A);
-                    func_80800F84_chinflatableboss(param_0, 5);
-                    func_8008B1C8(func_80104248(param_0), 0.8f);
+                    _subaddiedialog_entrypoint_11(*(s32 *) actor, 0x1083, 0x106, dialog_pos, 0x3A);
+                    func_80800F84_chinflatableboss(actor, 5);
+                    func_8008B1C8(func_80104248(actor), 0.8f);
                 }
             }
             break;
         case 9:
-            *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
-            func_80102BF8(param_0, 0.1f, 3.0f, 90.0f);
-            if (func_800D9078(param_0 + 0x58) != 0) {
-                func_8080183C_chinflatableboss(param_0);
-                func_808024BC_chinflatableboss(param_0);
-                *(f32 *) (param_0 + 0x54) = func_80102D78(param_0, param_0 + 0x18);
+            *(f32 *) (actor + 0x54) = func_8010CD28(actor);
+            func_80102BF8(actor, 0.1f, 3.0f, 90.0f);
+            if (func_800D9078(actor + 0x58) != 0) {
+                func_8080183C_chinflatableboss(actor);
+                func_808024BC_chinflatableboss(actor);
+                *(f32 *) (actor + 0x54) = func_80102D78(actor, actor + 0x18);
             }
             break;
         case 10:
-            *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
-            func_80102BF8(param_0, 0.1f, 3.0f, 90.0f);
-            if (func_80102CF4(param_0, 8.0f) != 0) {
-                func_80800F84_chinflatableboss(param_0, 0xB);
+            *(f32 *) (actor + 0x54) = func_8010CD28(actor);
+            func_80102BF8(actor, 0.1f, 3.0f, 90.0f);
+            if (func_80102CF4(actor, 8.0f) != 0) {
+                func_80800F84_chinflatableboss(actor, 0xB);
             }
             break;
         case 6:
-            if (!((BF74 *) (param_0 + 0x74))->b) {
-                func_80801B04_chinflatableboss(param_0);
+            if (!((BF74 *) (actor + 0x74))->b) {
+                func_80801B04_chinflatableboss(actor);
             }
             break;
         case 7:
-            if (func_800D9078(param_0 + 0x58) != 0) {
-                func_808024BC_chinflatableboss(param_0);
+            if (func_800D9078(actor + 0x58) != 0) {
+                func_808024BC_chinflatableboss(actor);
             }
             break;
         case 8:
-            if (!((BF74 *) (param_0 + 0x74))->b) {
-                func_80801B04_chinflatableboss(param_0);
+            if (!((BF74 *) (actor + 0x74))->b) {
+                func_80801B04_chinflatableboss(actor);
             }
             break;
         case 11:
-            *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
-            func_80102BF8(param_0, 0.1f, 3.0f, 90.0f);
-            if (func_80101E14(param_0, 0x3E99999A) != 0) {
+            *(f32 *) (actor + 0x54) = func_8010CD28(actor);
+            func_80102BF8(actor, 0.1f, 3.0f, 90.0f);
+            if (func_80101E14(actor, 0x3E99999A) != 0) {
                 func_800C4B64(
-                    func_800F10B4(*(f32 *) (param_0 + 0x38), 1.4f, 0.19913846f, 0.9f, 1.2f));
-                _subaddieaudioquick_entrypoint_2(param_0, local_0 + 0x1C,
+                    func_800F10B4(*(f32 *) (actor + 0x38), 1.4f, 0.19913846f, 0.9f, 1.2f));
+                _subaddieaudioquick_entrypoint_2(actor, boss + 0x1C,
                                                  &D_80802EC4_chinflatableboss);
-            } else if (func_80101E14(param_0, 0x3EE66666) != 0) {
-                func_80108B04(param_0, 1);
-                *(f32 *) (param_0 + 0x58) = 1.0f;
-                *(u8 *) (local_0 + 0x495) = *(u8 *) (local_0 + 0x495) - 1;
-            } else if (func_80101E14(param_0, 0x3F7FBE77) != 0 && *(u8 *) (local_0 + 0x495) == 0) {
-                func_8080183C_chinflatableboss(param_0);
-                func_808024BC_chinflatableboss(param_0);
-                *(f32 *) (param_0 + 0x54) = func_80102D78(param_0, param_0 + 0x18);
+            } else if (func_80101E14(actor, 0x3EE66666) != 0) {
+                func_80108B04(actor, 1);
+                *(f32 *) (actor + 0x58) = 1.0f;
+                *(u8 *) (boss + 0x495) = *(u8 *) (boss + 0x495) - 1;
+            } else if (func_80101E14(actor, 0x3F7FBE77) != 0 && *(u8 *) (boss + 0x495) == 0) {
+                func_8080183C_chinflatableboss(actor);
+                func_808024BC_chinflatableboss(actor);
+                *(f32 *) (actor + 0x54) = func_80102D78(actor, actor + 0x18);
             }
             break;
         case 12:
-            if (func_80101E14(param_0, 0x3E800000) != 0) {
+            if (func_80101E14(actor, 0x3E800000) != 0) {
                 func_800C4B64(
-                    func_800F10B4(*(f32 *) (param_0 + 0x38), 1.4f, 0.19913846f, 1.0f, 1.4f) * 0.8f);
-                _subaddieaudioquick_entrypoint_2(param_0, local_0 + 0x1C,
+                    func_800F10B4(*(f32 *) (actor + 0x38), 1.4f, 0.19913846f, 1.0f, 1.4f) * 0.8f);
+                _subaddieaudioquick_entrypoint_2(actor, boss + 0x1C,
                                                  &D_80802ED0_chinflatableboss);
             }
-            if (func_80101DDC(param_0) != 0) {
-                func_80800F84_chinflatableboss(param_0, 0xD);
+            if (func_80101DDC(actor) != 0) {
+                func_80800F84_chinflatableboss(actor, 0xD);
             }
             break;
         case 13:
-            func_80802450_chinflatableboss(param_0);
-            if (func_80101DDC(param_0) != 0) {
-                if (func_80801CB4_chinflatableboss(param_0) == 0) {
-                    func_80800F84_chinflatableboss(param_0, 0xE);
+            func_80802450_chinflatableboss(actor);
+            if (func_80101DDC(actor) != 0) {
+                if (func_80801CB4_chinflatableboss(actor) == 0) {
+                    func_80800F84_chinflatableboss(actor, 0xE);
                 } else {
-                    func_808024BC_chinflatableboss(param_0);
+                    func_808024BC_chinflatableboss(actor);
                 }
             }
             break;
         case 15:
-            _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_80802EDC_chinflatableboss,
+            _subaddieaudioquick_entrypoint_3(actor, actor + 4, &D_80802EDC_chinflatableboss,
                                              0.03f);
-            if (func_80101E14(param_0, 0x3D75C28F) != 0) {
-                _subaddieskeleton_entrypoint_3(*(s32 *) param_0, 7, sp30);
-                *(s32 *) (local_0 + 0x434) =
-                    func_8080200C_chinflatableboss(param_0, sp30, local_0 + 0x28);
+            if (func_80101E14(actor, 0x3D75C28F) != 0) {
+                _subaddieskeleton_entrypoint_3(*(s32 *) actor, 7, bone_pos);
+                *(s32 *) (boss + 0x434) =
+                    func_8080200C_chinflatableboss(actor, bone_pos, boss + 0x28);
             }
-            if (func_80101E14(param_0, 0x3EDC28F6) != 0) {
-                func_800C4AF0(local_0 + 0x34, &D_80802EE8_chinflatableboss);
+            if (func_80101E14(actor, 0x3EDC28F6) != 0) {
+                func_800C4AF0(boss + 0x34, &D_80802EE8_chinflatableboss);
             }
-            if (func_80101DDC(param_0) != 0) {
+            if (func_80101DDC(actor) != 0) {
                 func_800FDC28(0);
                 func_800DA544(3);
                 if (func_800D395C() != 0) {
-                    func_80800F84_chinflatableboss(param_0, 0x10);
-                    func_80802A9C_chinflatableboss(param_0);
+                    func_80800F84_chinflatableboss(actor, 0x10);
+                    func_80802A9C_chinflatableboss(actor);
                     _gcfrontend_entrypoint_10();
                 } else {
                     func_800DA544(0x9C);
-                    func_80108B04(param_0, 3);
-                    func_80800F84_chinflatableboss(param_0, 0x10);
+                    func_80108B04(actor, 3);
+                    func_80800F84_chinflatableboss(actor, 0x10);
                 }
             }
             break;
         case 18:
-            func_80802264_chinflatableboss(param_0, 0.5f, 0.8f, &D_80802EB4_chinflatableboss, 4);
-            if (func_80101DDC(param_0) != 0) {
-                func_80800F84_chinflatableboss(param_0, 0x13);
+            func_80802264_chinflatableboss(actor, 0.5f, 0.8f, &D_80802EB4_chinflatableboss, 4);
+            if (func_80101DDC(actor) != 0) {
+                func_80800F84_chinflatableboss(actor, 0x13);
             }
     }
 
-    func_8080267C_chinflatableboss(param_0);
+    func_8080267C_chinflatableboss(actor);
 }
 
 void func_80801DE0_chinflatableboss();
@@ -482,110 +483,112 @@ void func_808010BC_chinflatableboss();
 
 BalloonEntry B_80803020_chinflatableboss[12];
 
-s32 func_80800A98_chinflatableboss(Actor *param_0, s32 param_1, BalloonArg param_2)
+s32 func_80800A98_chinflatableboss(Actor *actor, s32 msg, BalloonArg arg)
 {
-    BalloonData *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
+    BalloonData *boss;
+    s32 player;
+    s32 i;
+    s32 count;
 
-    local_0 = func_80100094(param_0, 0);
+    boss = func_80100094(actor, 0);
 
-    switch (param_1) {
+    switch (msg) {
         case 0xB:
-            switch (param_2.i) {
+            switch (arg.i) {
                 case 0x14:
-                    func_80800F84_chinflatableboss(param_0, 0x11);
-                    func_80802A00_chinflatableboss(param_0, 0x31, 0x10);
+                    func_80800F84_chinflatableboss(actor, 0x11);
+                    func_80802A00_chinflatableboss(actor, 0x31, 0x10);
                     func_80101180(0x46E, 7, 0);
                     return 4;
                 case 0x31:
-                    local_0->unk49D = 0;
-                    func_800FFAB0(param_0);
+                    boss->unk49D = 0;
+                    func_800FFAB0(actor);
                 default:
                 ret3:
                     return 3;
                 case 3:
-                    if (local_0->unk49C) {
+                    if (boss->unk49C) {
                         goto ret3;
                     }
-                    func_80802A00_chinflatableboss(param_0, 0xC, 0x20);
+                    func_80802A00_chinflatableboss(actor, 0xC, 0x20);
                     return 4;
                 case 0xA:
-                    local_0->unk49D = 0;
-                    if (param_0) {
+                    boss->unk49D = 0;
+                    // Matching: empty block steers IDO.
+                    if (actor) {
                     }
                     return 3;
                 case 0xC:
                 case 0x19:
                 case 0x22:
-                    local_0->unk49A = 1;
+                    boss->unk49A = 1;
+                    // Matching: empty block steers IDO.
                     if (1) {
                     }
                     return 3;
                 case 8:
-                    func_80108B04(param_0, 2);
-                    func_80802A00_chinflatableboss(param_0, 0xA, 0x10);
+                    func_80108B04(actor, 2);
+                    func_80802A00_chinflatableboss(actor, 0xA, 0x10);
                     return 4;
             }
         case 0x2E:
-            func_80801958_chinflatableboss(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_80801958_chinflatableboss(actor, ((s16 *) &arg)[0], ((s16 *) &arg)[1]);
             break;
         case 0x2F:
-            func_80801AD8_chinflatableboss(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_80801AD8_chinflatableboss(actor, ((s16 *) &arg)[0], ((s16 *) &arg)[1]);
             break;
         case 0x3D:
-            switch (param_2.i) {
+            switch (arg.i) {
                 case 0:
-                    func_80801DE0_chinflatableboss(param_0);
+                    func_80801DE0_chinflatableboss(actor);
                     return 1;
                 case 1:
-                    func_80801D38_chinflatableboss(param_0);
+                    func_80801D38_chinflatableboss(actor);
                     return 1;
                 case 2:
-                    func_80801EA0_chinflatableboss(param_0);
+                    func_80801EA0_chinflatableboss(actor);
                     return 1;
                 case 3:
-                    func_80801F4C_chinflatableboss(param_0);
+                    func_80801F4C_chinflatableboss(actor);
             }
             break;
         case 0x32:
-            if (local_0->unk498 == 2) {
-                local_0->unk498 = 3;
-                local_0->unk49A = 0;
+            if (boss->unk498 == 2) {
+                boss->unk498 = 3;
+                boss->unk49A = 0;
                 func_800F497C(func_800F54E4());
-                func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
-                func_800F4A58(func_800F54E4(), local_0->unk54, 300.0f);
-                func_80802A00_chinflatableboss(param_0, 0x19, 0x20);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x10CC, 0x44, param_0->position, 0x3A);
+                func_800F49D4(func_800F54E4(), func_8010D5DC, actor->unk0);
+                func_800F4A58(func_800F54E4(), boss->unk54, 300.0f);
+                func_80802A00_chinflatableboss(actor, 0x19, 0x20);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x10CC, 0x44, actor->position, 0x3A);
                 func_80101180(0x46E, 8, 0);
                 return 1;
             }
-            local_0->unk499 = 1;
-            func_800F8300(func_800F54E4(), 2, param_0->position);
+            boss->unk499 = 1;
+            func_800F8300(func_800F54E4(), 2, actor->position);
             break;
         case 0x3F:
-            func_808010BC_chinflatableboss(param_0, *(s32 *) &param_2);
+            func_808010BC_chinflatableboss(actor, *(s32 *) &arg);
             break;
         case 0x40:
-            func_80801164_chinflatableboss(param_0, *(s32 *) &param_2);
+            func_80801164_chinflatableboss(actor, *(s32 *) &arg);
             break;
         case 6:
-            func_80101010(local_0->unk1C);
+            func_80101010(boss->unk1C);
             break;
         case 0xA:
-            local_1 = func_800F54E4();
-            param_0->unk64_16 = 1;
-            local_0->unk498 = 2;
-            func_800F497C(local_1);
-            func_800F49A8(local_1, 1);
-            func_800F49D4(local_1, func_8010D5DC, param_0->unk0);
-            func_800F4A58(local_1, local_0->unk48, 300.0f);
-            func_80802A00_chinflatableboss(param_0, 0x2F, 0x20);
+            player = func_800F54E4();
+            actor->unk64_16 = 1;
+            boss->unk498 = 2;
+            func_800F497C(player);
+            func_800F49A8(player, 1);
+            func_800F49D4(player, func_8010D5DC, actor->unk0);
+            func_800F4A58(player, boss->unk48, 300.0f);
+            func_80802A00_chinflatableboss(actor, 0x2F, 0x20);
             break;
         case 0x95:
-            if (local_0->unk496) {
-                local_0->unk496 = 0;
+            if (boss->unk496) {
+                boss->unk496 = 0;
                 func_800FDC28(1);
             }
             break;
@@ -593,29 +596,29 @@ s32 func_80800A98_chinflatableboss(Actor *param_0, s32 param_1, BalloonArg param
             if (!func_800D395C()) {
                 return 0;
             }
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0xCEB, 0x146, param_0->position, 0x3A);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0xCEB, 0x146, actor->position, 0x3A);
             break;
         case 0x9F:
             func_800FDC28(0);
-            func_80800F84_chinflatableboss(param_0, 5);
+            func_80800F84_chinflatableboss(actor, 5);
             break;
         case 0x1F:
-            func_80801418_chinflatableboss(param_0, *(s32 *) &param_2);
+            func_80801418_chinflatableboss(actor, *(s32 *) &arg);
             break;
         case 0xA2:
-            local_3 = 0;
-            if (!param_0->unk7C_12) {
+            count = 0;
+            if (!actor->unk7C_12) {
                 return 0;
             }
-            for (local_2 = 0; local_2 != 12; local_2++) {
-                if (local_0->unk487[local_2] == 1) {
-                    func_80802590_chinflatableboss(param_0, &B_80803020_chinflatableboss[local_3],
-                                                   local_2 + 3);
-                    local_3++;
+            for (i = 0; i != 12; i++) {
+                if (boss->unk487[i] == 1) {
+                    func_80802590_chinflatableboss(actor, &B_80803020_chinflatableboss[count],
+                                                   i + 3);
+                    count++;
                 }
             }
             func_80101074(B_80803020_chinflatableboss);
-            return local_3;
+            return count;
         default:
             return 0;
     }
@@ -623,682 +626,686 @@ s32 func_80800A98_chinflatableboss(Actor *param_0, s32 param_1, BalloonArg param
     return 1;
 }
 
-void func_80800F84_chinflatableboss(Actor *param_0, s32 param_1)
+void func_80800F84_chinflatableboss(Actor *actor, s32 state)
 {
-    u8 *local_0;
+    u8 *boss;
 
-    local_0 = func_80100094(param_0, 0);
-    func_80102424(param_0, param_1);
+    boss = func_80100094(actor, 0);
+    func_80102424(actor, state);
 
-    switch (param_1) {
+    switch (state) {
         case 11:
-            func_8008B1C8(func_80104248(param_0), 0.8f);
-            local_0[0x495] = D_80802D8C_chinflatableboss[func_80801C7C_chinflatableboss(param_0)];
+            func_8008B1C8(func_80104248(actor), 0.8f);
+            boss[0x495] = D_80802D8C_chinflatableboss[func_80801C7C_chinflatableboss(actor)];
             break;
         case 13:
-            func_8008B1C8(func_80104248(param_0), 0.8f);
-            *(f32 *) (local_0 + 0x44) = param_0->scale;
+            func_8008B1C8(func_80104248(actor), 0.8f);
+            *(f32 *) (boss + 0x44) = actor->scale;
             break;
         case 14:
-            func_80802A00_chinflatableboss(param_0, 0x2B, 0x30);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1084, 0x10C, param_0->position, 0x3A);
-            func_8010A570(param_0);
-            func_8008B1C8(func_80104248(param_0), 0.8f);
+            func_80802A00_chinflatableboss(actor, 0x2B, 0x30);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0x1084, 0x10C, actor->position, 0x3A);
+            func_8010A570(actor);
+            func_8008B1C8(func_80104248(actor), 0.8f);
             break;
         case 16:
-            ((u8 *) param_0)[0x65] &= ~1;
+            ((u8 *) actor)[0x65] &= ~1;
     }
 }
 
-void func_808010BC_chinflatableboss(Actor *param_0, s32 param_1)
+void func_808010BC_chinflatableboss(Actor *actor, s32 arg)
 {
-    u8 *local_0;
-    s32 local_1;
+    u8 *boss;
+    s32 patch;
     u32 sec;
     s32 idx;
-    local_0 = func_80100094(param_0, 0);
+    boss = func_80100094(actor, 0);
 
     if (!func_800DA298(5)) {
-        sec = ((InflatableBossMarker *) param_0->unk0)->section;
-        local_1 = sec;
-        if (local_1 >= 3 && local_1 < 15) {
-            local_1 -= 3;
-            idx = 0x487 + local_1;
-            if (local_0[idx] != 2) {
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1086, 0x10E, param_0->position,
+        sec = ((InflatableBossMarker *) actor->unk0)->section;
+        patch = sec;
+        if (patch >= 3 && patch < 15) {
+            patch -= 3;
+            idx = 0x487 + patch;
+            if (boss[idx] != 2) {
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x1086, 0x10E, actor->position,
                                               0x3A);
                 func_800DA544(5);
-                param_0->unk74_30 = 1;
+                actor->unk74_30 = 1;
             }
         }
     }
 }
 
-void func_80801164_chinflatableboss(Actor *param_0, s32 param_1)
+void func_80801164_chinflatableboss(Actor *actor, s32 section)
 {
-    u8 *local_0;
-    s32 local_6;
-    f32 local_2[3];
-    f32 local_3[3];
-    s32 local_4;
-    u32 local_1;
-    s32 local_5;
+    u8 *boss;
+    s32 patch;
+    f32 hit_pos[3];
+    f32 anchor_pos[3];
+    s32 radius;
+    u32 unk_0;
+    s32 unk_1;
 
-    local_0 = func_80100094(param_0, 0);
-    param_1 = (*(u32 *) ((u8 *) param_0->unk0 + 0x18) << 11) >> 28;
+    boss = func_80100094(actor, 0);
+    section = (*(u32 *) ((u8 *) actor->unk0 + 0x18) << 11) >> 28;
 
-    if (param_1 >= 3) {
-        local_6 = param_1 - 3;
-        if (param_1 < 15 && (local_0 + 0x487)[local_6] != 2) {
-            local_4 = func_80802590_chinflatableboss(param_0, local_2, param_1);
-            _subaddieaudioquick_entrypoint_2(param_0, local_2, D_80802F08_chinflatableboss);
-            func_808012EC_chinflatableboss(param_0, local_2, local_4);
-            func_80801904_chinflatableboss(param_0, local_6, local_3);
-            *(s32 *) (local_0 + local_6 * 4 + 0x43C) =
-                func_80801FC0_chinflatableboss(param_0, local_2, local_3);
-            func_80802AD8_chinflatableboss(param_0, local_6, 2);
-            func_80800F84_chinflatableboss(param_0, 12);
-            local_5 = func_80104248(param_0);
-            func_8008B1C8(local_5, 0.8f);
-            local_0[0x493] = 1;
-            local_5 = func_80801CB4_chinflatableboss(param_0);
-            if (local_5 != 0) {
-                if (local_5 == 11) {
+    if (section >= 3) {
+        patch = section - 3;
+        if (section < 15 && (boss + 0x487)[patch] != 2) {
+            radius = func_80802590_chinflatableboss(actor, hit_pos, section);
+            _subaddieaudioquick_entrypoint_2(actor, hit_pos, D_80802F08_chinflatableboss);
+            func_808012EC_chinflatableboss(actor, hit_pos, radius);
+            func_80801904_chinflatableboss(actor, patch, anchor_pos);
+            *(s32 *) (boss + patch * 4 + 0x43C) =
+                func_80801FC0_chinflatableboss(actor, hit_pos, anchor_pos);
+            func_80802AD8_chinflatableboss(actor, patch, 2);
+            func_80800F84_chinflatableboss(actor, 12);
+            unk_1 = func_80104248(actor);
+            func_8008B1C8(unk_1, 0.8f);
+            boss[0x493] = 1;
+            unk_1 = func_80801CB4_chinflatableboss(actor);
+            if (unk_1 != 0) {
+                if (unk_1 == 11) {
                     func_800DA544(5);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1085, 0x10E, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1085, 0x10E, actor->position,
                                                   0x3A);
-                    func_80802A00_chinflatableboss(param_0, 0x2D, 0x20);
-                    param_0->unk74_30 = 1;
+                    func_80802A00_chinflatableboss(actor, 0x2D, 0x20);
+                    actor->unk74_30 = 1;
                 }
             } else {
                 func_800DA544(0);
-                func_80802A00_chinflatableboss(param_0, 0x29, 0x30);
+                func_80802A00_chinflatableboss(actor, 0x29, 0x30);
             }
         }
     }
 }
 
-void func_808012EC_chinflatableboss(param_0, param_1, param_2) Actor *param_0;
-f32 *param_1;
-s32 param_2;
+void func_808012EC_chinflatableboss(actor, pos, radius) Actor *actor;
+f32 *pos;
+s32 radius;
 {
-    f32 local_0[2][3];
-    s32 local_2;
+    f32 vec[2][3];
+    s32 particle;
 
-    func_80801904_chinflatableboss((s32) param_0,
-                                   ((*(u32 *) ((u8 *) param_0->unk0 + 0x18) << 11) >> 28) - 3,
-                                   (s32) local_0[0]);
-    func_800EFB24(local_0[1], param_1, local_0[0]);
-    func_800EF368(local_0[1], param_2 * 0.5f);
-    func_800EF04C(local_0[1], param_1);
-    local_2 = func_800BABB8(0, param_1, local_0[1], param_0->scale, D_80802F2C_chinflatableboss);
-    func_800BA714(local_2, (s16) (s32) (param_2 * 0.4f), (s16) (s32) (param_2 * 0.6f));
+    func_80801904_chinflatableboss((s32) actor,
+                                   ((*(u32 *) ((u8 *) actor->unk0 + 0x18) << 11) >> 28) - 3,
+                                   (s32) vec[0]);
+    func_800EFB24(vec[1], pos, vec[0]);
+    func_800EF368(vec[1], radius * 0.5f);
+    func_800EF04C(vec[1], pos);
+    particle = func_800BABB8(0, pos, vec[1], actor->scale, D_80802F2C_chinflatableboss);
+    func_800BA714(particle, (s16) (s32) (radius * 0.4f), (s16) (s32) (radius * 0.6f));
     func_800BA670(
-        local_2, D_80802F0E_chinflatableboss[(*(u32 *) ((u8 *) param_0->unk0 + 0x18) << 11) >> 28]);
-    func_800BA22C(local_2, 8);
+        particle, D_80802F0E_chinflatableboss[(*(u32 *) ((u8 *) actor->unk0 + 0x18) << 11) >> 28]);
+    func_800BA22C(particle, 8);
 }
 
-void func_80801418_chinflatableboss(Actor *param_0, void *param_1)
+void func_80801418_chinflatableboss(Actor *actor, void *arg)
 {
-    u8 *local_0;
-    u8 *local_1;
-    s32 local_2;
+    u8 *boss;
+    u8 *cursor;
+    s32 i;
 
-    local_0 = func_80100094(param_0, 0);
-    func_80103D48(param_0);
-    _suexpression_entrypoint_19(func_80100094(param_0, 1), param_0);
-    if (!param_0->unk64_20)
-        func_8080267C_chinflatableboss(param_0);
-    func_800DF72C(func_801040A8(param_0));
+    boss = func_80100094(actor, 0);
+    func_80103D48(actor);
+    _suexpression_entrypoint_19(func_80100094(actor, 1), actor);
+    if (!actor->unk64_20)
+        func_8080267C_chinflatableboss(actor);
+    func_800DF72C(func_801040A8(actor));
     func_800DF830(1);
     func_800DF738(func_80104130());
-    func_800DF818(func_80103CDC(param_0, param_1));
-    func_800DF660(2, (u32) ((u8 *) param_0)[0x7B] >> 6, 0, _subaddiefade_entrypoint_0(param_0));
-    func_800DF720(func_80100AC4(*(s16 *) ((u8 *) param_0 + 0x60)));
-    func_80101934(param_0);
-    func_80103D70(param_0);
-    for (local_2 = 0, local_1 = local_0; local_2 < 0xF; local_2++, local_1++) {
-        func_800DF744(local_2 + 3, local_1[0x478]);
+    func_800DF818(func_80103CDC(actor, arg));
+    func_800DF660(2, (u32) ((u8 *) actor)[0x7B] >> 6, 0, _subaddiefade_entrypoint_0(actor));
+    func_800DF720(func_80100AC4(*(s16 *) ((u8 *) actor + 0x60)));
+    func_80101934(actor);
+    func_80103D70(actor);
+    for (i = 0, cursor = boss; i < 0xF; i++, cursor++) {
+        func_800DF744(i + 3, cursor[0x478]);
     }
-    param_0->unk7C_12 = 1;
-    param_0->unk64_20 = 0;
+    actor->unk7C_12 = 1;
+    actor->unk64_20 = 0;
 }
 
-void func_80801554_chinflatableboss(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80801554_chinflatableboss(actor, arg) Actor *actor;
+s32 arg;
 {
-    u8 *local_0;
-    s32 local_10 = 0;
-    void *local_1;
-    void *local_2;
-    f32 local_3[3];
-    f32 local_4[3];
-    void *local_5;
-    void *local_6;
+    u8 *boss;
+    s32 i = 0;
+    void *unk_0;
+    void *unk_1;
+    f32 particle_vel[3];
+    f32 bone_pos[3];
+    void *unk_2;
+    void *unk_3;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_80101808(param_0, func_801017D0);
-    if (param_0->unk7C_12) {
-        local_2 = func_80104130();
-        func_800DBEFC(local_2, 4, (f32 *) (local_0 + 0x1C));
-        func_800DBEFC(local_2, 5, (f32 *) (local_0 + 0x28));
-        func_800DBEFC(local_2, 6, (f32 *) (local_0 + 0x34));
+    boss = func_80100094(actor, 0);
+    unk_0 = func_80101808(actor, func_801017D0);
+    if (actor->unk7C_12) {
+        unk_1 = func_80104130();
+        func_800DBEFC(unk_1, 4, (f32 *) (boss + 0x1C));
+        func_800DBEFC(unk_1, 5, (f32 *) (boss + 0x28));
+        func_800DBEFC(unk_1, 6, (f32 *) (boss + 0x34));
     }
-    if (local_1 && (s32) param_0->unk70_10 < 16) {
-        local_5 = func_800B27E0(local_1);
-        local_6 = func_800D674C(0x637);
-        func_800EFD24(local_3);
+    if (unk_0 && (s32) actor->unk70_10 < 16) {
+        unk_2 = func_800B27E0(unk_0);
+        unk_3 = func_800D674C(0x637);
+        func_800EFD24(particle_vel);
 
-        if (func_800AE630(func_801040A8(param_0), (u8 *) local_5, 12, local_4)) {
-            func_800EF334(local_4, *(f32 *) &param_0->actorData[4]);
-            func_800EF5A0(local_4, param_0->rotation, local_4[0], local_4[1], local_4[2]);
-            func_800EF04C(local_4, param_0->position);
-            local_4[1] = param_0->position[1];
-            func_800DF410(_subaddiefade_entrypoint_0(param_0));
+        if (func_800AE630(func_801040A8(actor), (u8 *) unk_2, 12, bone_pos)) {
+            func_800EF334(bone_pos, *(f32 *) &actor->actorData[4]);
+            func_800EF5A0(bone_pos, actor->rotation, bone_pos[0], bone_pos[1], bone_pos[2]);
+            func_800EF04C(bone_pos, actor->position);
+            bone_pos[1] = actor->position[1];
+            func_800DF410(_subaddiefade_entrypoint_0(actor));
             func_800DF830(3);
-            func_800DE448(local_4, local_3, *(f32 *) &param_0->actorData[4] * 9.0f, 0,
-                          (s32) local_6);
+            func_800DE448(bone_pos, particle_vel, *(f32 *) &actor->actorData[4] * 9.0f, 0,
+                          (s32) unk_3);
         }
 
-        if (func_800AE630(func_801040A8(param_0), (u8 *) local_5, 26, local_4)) {
-            func_800EF334(local_4, *(f32 *) &param_0->actorData[4]);
-            func_800EF5A0(local_4, param_0->rotation, local_4[0], local_4[1], local_4[2]);
-            func_800EF04C(local_4, param_0->position);
-            local_4[1] = param_0->position[1];
-            func_800DF410(_subaddiefade_entrypoint_0(param_0));
+        if (func_800AE630(func_801040A8(actor), (u8 *) unk_2, 26, bone_pos)) {
+            func_800EF334(bone_pos, *(f32 *) &actor->actorData[4]);
+            func_800EF5A0(bone_pos, actor->rotation, bone_pos[0], bone_pos[1], bone_pos[2]);
+            func_800EF04C(bone_pos, actor->position);
+            bone_pos[1] = actor->position[1];
+            func_800DF410(_subaddiefade_entrypoint_0(actor));
             func_800DF830(3);
-            func_800DE448(local_4, local_3, *(f32 *) &param_0->actorData[4] * 9.0f, 0,
-                          (s32) local_6);
+            func_800DE448(bone_pos, particle_vel, *(f32 *) &actor->actorData[4] * 9.0f, 0,
+                          (s32) unk_3);
         }
 
-        func_800DF410(_subaddiefade_entrypoint_0(param_0));
+        func_800DF410(_subaddiefade_entrypoint_0(actor));
         func_800DF830(3);
-        func_800DE448(param_0->position, local_3, *(f32 *) &param_0->actorData[4] * 1.4f * 9.0f, 0,
-                      (s32) local_6);
+        func_800DE448(actor->position, particle_vel, *(f32 *) &actor->actorData[4] * 1.4f * 9.0f, 0,
+                      (s32) unk_3);
     }
-    for (local_10 = 0; local_10 < 12; local_10++) {
-        if (((s32 *) (local_0 + 0x43C))[local_10]) {
-            func_800BC358(((s32 *) (local_0 + 0x43C))[local_10], param_1, 0);
+    for (i = 0; i < 12; i++) {
+        if (((s32 *) (boss + 0x43C))[i]) {
+            func_800BC358(((s32 *) (boss + 0x43C))[i], arg, 0);
         }
     }
-    if (*(s32 *) (local_0 + 0x434)) {
-        func_800BC358(*(s32 *) (local_0 + 0x434), param_1, 0);
+    if (*(s32 *) (boss + 0x434)) {
+        func_800BC358(*(s32 *) (boss + 0x434), arg, 0);
     }
 }
 
-void func_8080183C_chinflatableboss(Actor *param_0)
+void func_8080183C_chinflatableboss(Actor *actor)
 {
-    InflatableBossDestination *local_1;
-    s16 local_0[2];
+    InflatableBossDestination *boss;
+    s16 xz[2];
 
-    local_1 = func_80100094(param_0, 0);
-    local_1->local_2 ^= 1;
-    _subaddieDll_entrypoint_12(local_1->local_2 ? local_1->local_0 : local_1->local_0 + 8, local_0);
-    local_1->local_1[0] = local_0[0];
-    local_1->local_1[1] = param_0->position[1];
-    local_1->local_1[2] = local_0[1];
-    *(f32 *) &param_0->actorData[0] = func_800DC178(0.0f, 1000.0f);
-    *(f32 *) &param_0->actorData[1] = param_0->position[1];
-    *(f32 *) &param_0->actorData[2] = func_800DC178(0.0f, 1000.0f);
-    local_1->local_3 = 1;
+    boss = func_80100094(actor, 0);
+    boss->local_2 ^= 1;
+    _subaddieDll_entrypoint_12(boss->local_2 ? boss->local_0 : boss->local_0 + 8, xz);
+    boss->local_1[0] = xz[0];
+    boss->local_1[1] = actor->position[1];
+    boss->local_1[2] = xz[1];
+    *(f32 *) &actor->actorData[0] = func_800DC178(0.0f, 1000.0f);
+    *(f32 *) &actor->actorData[1] = actor->position[1];
+    *(f32 *) &actor->actorData[2] = func_800DC178(0.0f, 1000.0f);
+    boss->local_3 = 1;
 }
 
-int func_80801904_chinflatableboss(param_0, param_1, param_2)
-s32 param_0;
-s32 param_1;
-s32 param_2;
+int func_80801904_chinflatableboss(actor, patch, out_pos)
+s32 actor;
+s32 patch;
+s32 out_pos;
 {
-    s32 local_0;
-    local_0 = func_80100094(param_0, 0);
-    if (param_1 >= 3 && param_1 < 6) {
-        local_0 += 0x34;
+    s32 base;
+    base = func_80100094(actor, 0);
+    if (patch >= 3 && patch < 6) {
+        base += 0x34;
     } else {
-        local_0 += 0x28;
+        base += 0x28;
     }
-    func_800EE7F8(param_2, local_0);
+    func_800EE7F8(out_pos, base);
 }
 
-void func_80801958_chinflatableboss(param_0, param_1, param_2) Actor *param_0;
-s32 param_1;
-s32 param_2;
+void func_80801958_chinflatableboss(actor, dialog_id, choice) Actor *actor;
+s32 dialog_id;
+s32 choice;
 {
-    switch (param_1) {
+    switch (dialog_id) {
         case 0x10CC:
             return;
         case 0x1082:
             _chintrotext_entrypoint_1(0x18B9, 3, 1, 0);
         case 0x1087:
-            func_80800F84_chinflatableboss(param_0, 4);
-            func_8008B1C8(func_80104248(param_0), 0.8f);
-            func_80802A00_chinflatableboss(param_0, 3, 0x20);
+            func_80800F84_chinflatableboss(actor, 4);
+            func_8008B1C8(func_80104248(actor), 0.8f);
+            func_80802A00_chinflatableboss(actor, 3, 0x20);
             break;
         case 0x1083:
-            func_80802910_chinflatableboss(param_0);
+            func_80802910_chinflatableboss(actor);
             break;
         case 0x1085:
         case 0x1086:
-            *((u8 *) param_0 + 0x74) &= 0xFFBF;
+            *((u8 *) actor + 0x74) &= 0xFFBF;
             break;
         case 0x1084:
-            func_801020DC(param_0, 0);
-            func_80102FDC(param_0, param_0->scale * 4.0f);
-            func_80800F84_chinflatableboss(param_0, 15);
-            func_8080267C_chinflatableboss(param_0);
-            func_80802A00_chinflatableboss(param_0, 11, 0x38);
+            func_801020DC(actor, 0);
+            func_80102FDC(actor, actor->scale * 4.0f);
+            func_80800F84_chinflatableboss(actor, 15);
+            func_8080267C_chinflatableboss(actor);
+            func_80802A00_chinflatableboss(actor, 11, 0x38);
             break;
         case 0xCEB:
-            if (param_2 > 0)
+            if (choice > 0)
                 _gcfrontend_entrypoint_11();
             else
                 _gcfrontend_entrypoint_10();
     }
-    func_8008B1C8(func_80104248(param_0), 0.8f);
+    func_8008B1C8(func_80104248(actor), 0.8f);
 }
 
-s32 func_80801AD8_chinflatableboss(s32 param_0, s32 param_1, s32 param_2)
+s32 func_80801AD8_chinflatableboss(s32 actor, s32 dialog_id, s32 choice)
 {
-    if (param_1 == 0x1085) {
-        func_80108B04(param_0, 0);
+    if (dialog_id == 0x1085) {
+        func_80108B04(actor, 0);
     }
 }
 
-void func_80801B04_chinflatableboss(Actor *param_0)
+void func_80801B04_chinflatableboss(Actor *actor)
 {
-    u8 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    *(f32 *) ((u8 *) param_0 + 0x54) = func_80102D78(param_0, (f32 *) param_0->actorData);
-    *(f32 *) ((u8 *) param_0 + 0x24) = func_800F15F8(
-        *(f32 *) ((u8 *) param_0 + 0x24), *(f32 *) (local_0 + 0x40), func_800D8FF8() * 200.0f);
-    func_80102BF8(param_0, 0.1f, 3.0f, 60.0f);
-    func_8010C3A8(param_0, 5,
-                  func_800F3780(func_80101F24(param_0), &D_80802F68_chinflatableboss, 5));
-    if (func_800F0064((f32 *) param_0->actorData, 400.0f, param_0->position)) {
-        if (local_0[0x497]) {
-            func_80800F84_chinflatableboss(param_0, 7);
-            func_800EE7F8((f32 *) param_0->actorData, local_0 + 0x10);
-            local_0[0x497] = 0;
-            *(f32 *) ((u8 *) param_0 + 0x58) = func_800DC178(4.0f, 6.0f);
-        } else if (local_0[0x493] == 0) {
-            func_80800F84_chinflatableboss(param_0, 9);
-            *(f32 *) ((u8 *) param_0 + 0x58) = func_800DC178(6.0f, 8.0f);
+    u8 *boss;
+    boss = func_80100094(actor, 0);
+    *(f32 *) ((u8 *) actor + 0x54) = func_80102D78(actor, (f32 *) actor->actorData);
+    *(f32 *) ((u8 *) actor + 0x24) = func_800F15F8(
+        *(f32 *) ((u8 *) actor + 0x24), *(f32 *) (boss + 0x40), func_800D8FF8() * 200.0f);
+    func_80102BF8(actor, 0.1f, 3.0f, 60.0f);
+    func_8010C3A8(actor, 5,
+                  func_800F3780(func_80101F24(actor), &D_80802F68_chinflatableboss, 5));
+    if (func_800F0064((f32 *) actor->actorData, 400.0f, actor->position)) {
+        if (boss[0x497]) {
+            func_80800F84_chinflatableboss(actor, 7);
+            func_800EE7F8((f32 *) actor->actorData, boss + 0x10);
+            boss[0x497] = 0;
+            *(f32 *) ((u8 *) actor + 0x58) = func_800DC178(4.0f, 6.0f);
+        } else if (boss[0x493] == 0) {
+            func_80800F84_chinflatableboss(actor, 9);
+            *(f32 *) ((u8 *) actor + 0x58) = func_800DC178(6.0f, 8.0f);
         } else
-            func_80800F84_chinflatableboss(param_0, 10);
-        func_8008B1C8(func_80104248(param_0), 0.8f);
+            func_80800F84_chinflatableboss(actor, 10);
+        func_8008B1C8(func_80104248(actor), 0.8f);
     }
 }
 
+// Phase index (0-5) from the patches burst so far.
 s32 func_80801C7C_chinflatableboss()
 {
     return (s32) (0xC - func_80801CB4_chinflatableboss()) / 2;
 }
 
-s32 func_80801CB4_chinflatableboss(param_0)
-Actor *param_0;
+// Number of patches not yet burst.
+s32 func_80801CB4_chinflatableboss(actor)
+Actor *actor;
 {
-    u8 *local_0;
-    s32 local_1;
-    s32 local_2;
+    u8 *boss;
+    s32 remaining;
+    s32 i;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = 12;
-    for (local_2 = 0; local_2 < 12; local_2++) {
-        if (local_0[local_2 + 0x487] == 2) {
-            local_1--;
+    boss = func_80100094(actor, 0);
+    remaining = 12;
+    for (i = 0; i < 12; i++) {
+        if (boss[i + 0x487] == 2) {
+            remaining--;
         }
     }
-    return local_1;
+    return remaining;
 }
 
-void func_80801D38_chinflatableboss(Actor *param_0)
+void func_80801D38_chinflatableboss(Actor *actor)
 {
-    f32 *local_0;
-    Actor *local_1;
-    s32 local_2;
-    local_0 = func_80100094(param_0, 0);
-    local_2 = func_80801C7C_chinflatableboss(param_0);
-    local_1 = func_80108528(0x13D, &local_0[7], 0, &param_0);
-    func_80102FDC(local_1, param_0->scale);
-    local_1->unk3C = param_0->unk0;
-    local_1->unk6C_0 = func_80801CB4_chinflatableboss(param_0);
-    local_1->unk58 = D_80802D98_chinflatableboss[local_2];
+    f32 *boss;
+    Actor *ball;
+    s32 stage;
+    boss = func_80100094(actor, 0);
+    stage = func_80801C7C_chinflatableboss(actor);
+    ball = func_80108528(0x13D, &boss[7], 0, &actor);
+    func_80102FDC(ball, actor->scale);
+    ball->unk3C = actor->unk0;
+    ball->unk6C_0 = func_80801CB4_chinflatableboss(actor);
+    ball->unk58 = D_80802D98_chinflatableboss[stage];
 }
 
-void func_80801DE0_chinflatableboss(Actor *param_0)
+void func_80801DE0_chinflatableboss(Actor *actor)
 {
-    InflatableSpawnAnchor *local_0;
+    InflatableSpawnAnchor *anchor;
 
-    local_0 = func_80100094(param_0, 0);
+    anchor = func_80100094(actor, 0);
     _chappearfx_entrypoint_1(
-        func_80108528(0x13E, local_0->local_0, (s32) local_0->local_1, &param_0), 0x22, 0, 1.0f);
-    func_80108528(0x36E, local_0->local_0, (s32) local_0->local_1, &param_0);
+        func_80108528(0x13E, anchor->local_0, (s32) anchor->local_1, &actor), 0x22, 0, 1.0f);
+    func_80108528(0x36E, anchor->local_0, (s32) anchor->local_1, &actor);
     if (!func_800DA298(0x6AC)) {
         func_800DA544(0x6AC);
-        func_80802A00_chinflatableboss(param_0, 8, 0x30);
+        func_80802A00_chinflatableboss(actor, 8, 0x30);
     } else {
-        func_80802A9C_chinflatableboss(param_0);
-        func_80801EA0_chinflatableboss(param_0);
+        func_80802A9C_chinflatableboss(actor);
+        func_80801EA0_chinflatableboss(actor);
     }
 }
 
-void func_80801EA0_chinflatableboss(param_0) Actor *param_0;
+void func_80801EA0_chinflatableboss(actor) Actor *actor;
 {
-    InflatableBossSpawnList *local_0;
-    s32 local_1;
+    InflatableBossSpawnList *list;
+    s32 i;
 
-    local_0 = func_80100094(param_0, 0);
-    for (local_1 = 0; local_1 < local_0->count; local_1++) {
-        _chappearfx_entrypoint_2(func_80108474(0x234, local_0->spawns[local_1].position,
-                                               (s32) local_0->spawns[local_1].yaw),
+    list = func_80100094(actor, 0);
+    for (i = 0; i < list->count; i++) {
+        _chappearfx_entrypoint_2(func_80108474(0x234, list->spawns[i].position,
+                                               (s32) list->spawns[i].yaw),
                                  0x20, 2, 1.0f);
     }
 }
 
-void func_80801F4C_chinflatableboss(param_0) Actor *param_0;
+void func_80801F4C_chinflatableboss(actor) Actor *actor;
 {
-    f32 local_0[3];
-    s32 local_1;
-    Unk80132ED0 *local_2;
+    f32 spawn_pos[3];
+    s32 jiggy;
+    Unk80132ED0 *marker;
 
-    local_2 = param_0->unk0;
-    func_800EE7F8(local_0, param_0->position);
-    local_0[1] = 5000.0f;
-    local_1 = func_800D10D4(0x17, 1, local_0, 0, 0);
-    func_80802A2C_chinflatableboss(func_80106790(local_2), local_1, 0x14, 0x438);
+    marker = actor->unk0;
+    func_800EE7F8(spawn_pos, actor->position);
+    spawn_pos[1] = 5000.0f;
+    jiggy = func_800D10D4(0x17, 1, spawn_pos, 0, 0);
+    func_80802A2C_chinflatableboss(func_80106790(marker), jiggy, 0x14, 0x438);
 }
 
-int func_80801FC0_chinflatableboss(param_0, param_1, param_2)
-u8 *param_0;
-s32 param_1;
-s32 param_2;
+int func_80801FC0_chinflatableboss(actor, start, end)
+u8 *actor;
+s32 start;
+s32 end;
 {
-    func_800BABB8(0, param_1, param_2, *(f32 *) (param_0 + 0x38) * 0.75f,
+    func_800BABB8(0, start, end, *(f32 *) (actor + 0x38) * 0.75f,
                   &D_80802F90_chinflatableboss);
 }
 
-int func_8080200C_chinflatableboss(u8 *param_0, s32 param_1, s32 param_2)
+int func_8080200C_chinflatableboss(u8 *actor, s32 start, s32 end)
 {
-    func_800BABB8(0, param_1, param_2, *(f32 *) (param_0 + 0x38) * 0.75f,
+    func_800BABB8(0, start, end, *(f32 *) (actor + 0x38) * 0.75f,
                   &D_80802FC4_chinflatableboss);
 }
 
-void func_80802058_chinflatableboss(param_0) Actor *param_0;
+void func_80802058_chinflatableboss(actor) Actor *actor;
 {
-    u8 *local_5;
-    u8 *local_4;
-    s32 local_6;
-    s32 local_7;
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    s32 *local_3;
-    s32 local_8;
+    u8 *boss;
+    u8 *loop_ids;
+    s32 i;
+    s32 part;
+    f32 emit_pos[3];
+    f32 anchor_pos[3];
+    f32 bone_pos[3];
+    s32 *fx;
+    s32 active;
 
-    local_5 = func_80100094(param_0, 0);
-    local_3 = (s32 *) (local_5 + 0x43C);
-    local_4 = local_5 + 0x46C;
-    local_6 = 0;
+    boss = func_80100094(actor, 0);
+    fx = (s32 *) (boss + 0x43C);
+    loop_ids = boss + 0x46C;
+    i = 0;
     do {
-        local_7 = local_6 + 3;
-        if (*local_3 || *local_4) {
-            func_80801904_chinflatableboss(param_0, local_7, local_1);
-            func_80802590_chinflatableboss(param_0, local_0, local_7);
-            local_8 = *local_3 != 0;
+        part = i + 3;
+        if (*fx || *loop_ids) {
+            func_80801904_chinflatableboss(actor, part, anchor_pos);
+            func_80802590_chinflatableboss(actor, emit_pos, part);
+            active = *fx != 0;
 
-            if (local_8) {
-                local_8 = func_800BA198(*local_3) >= 8;
+            if (active) {
+                active = func_800BA198(*fx) >= 8;
             }
 
-            *local_4 = _subaddieaudioloop_entrypoint_7(*local_4, local_0, local_8,
+            *loop_ids = _subaddieaudioloop_entrypoint_7(*loop_ids, emit_pos, active,
                                                        &D_80802FF8_chinflatableboss,
-                                                       *(u32 *) ((u8 *) param_0 + 0x70) & 1);
+                                                       *(u32 *) ((u8 *) actor + 0x70) & 1);
 
-            if (*local_3) {
-                func_800BBD18(*local_3, local_0, local_1, param_0->scale, 0);
-                if (func_800BA28C(*local_3)) {
-                    ((s32 *) (local_5 + 0x43C))[local_6] = func_800BA2C4(*local_3);
+            if (*fx) {
+                func_800BBD18(*fx, emit_pos, anchor_pos, actor->scale, 0);
+                if (func_800BA28C(*fx)) {
+                    ((s32 *) (boss + 0x43C))[i] = func_800BA2C4(*fx);
                 }
             }
         }
-        local_6++;
-        local_3++;
-        local_4++;
-    } while (local_6 != 12);
-    if (*(s32 *) (local_5 + 0x434) || local_5[0x438]) {
-        _subaddieskeleton_entrypoint_3(param_0->unk0, 7, local_2);
-        local_8 = *(s32 *) (local_5 + 0x434) != 0;
-        if (local_8) {
-            local_8 = func_80101F24(param_0) < 0.43f;
+        i++;
+        fx++;
+        loop_ids++;
+    } while (i != 12);
+    if (*(s32 *) (boss + 0x434) || boss[0x438]) {
+        _subaddieskeleton_entrypoint_3(actor->unk0, 7, bone_pos);
+        active = *(s32 *) (boss + 0x434) != 0;
+        if (active) {
+            active = func_80101F24(actor) < 0.43f;
         }
-        local_5[0x438] = _subaddieaudioloop_entrypoint_7(local_5[0x438], local_2, local_8,
+        boss[0x438] = _subaddieaudioloop_entrypoint_7(boss[0x438], bone_pos, active,
                                                          &D_80802FF8_chinflatableboss,
-                                                         *(u32 *) ((u8 *) param_0 + 0x70) & 1);
-        if (*(s32 *) (local_5 + 0x434)) {
-            func_800BBD18(*(s32 *) (local_5 + 0x434), local_2, (f32 *) (local_5 + 0x28),
-                          param_0->scale, 0);
+                                                         *(u32 *) ((u8 *) actor + 0x70) & 1);
+        if (*(s32 *) (boss + 0x434)) {
+            func_800BBD18(*(s32 *) (boss + 0x434), bone_pos, (f32 *) (boss + 0x28),
+                          actor->scale, 0);
 
-            if (func_800BA28C(*(s32 *) (local_5 + 0x434))) {
-                *(s32 *) (local_5 + 0x434) = func_800BA2C4(*(s32 *) (local_5 + 0x434));
+            if (func_800BA28C(*(s32 *) (boss + 0x434))) {
+                *(s32 *) (boss + 0x434) = func_800BA2C4(*(s32 *) (boss + 0x434));
             }
         }
     }
 }
 
-void func_80802264_chinflatableboss(Actor *param_0, f32 param_1, f32 param_2, s32 *param_3,
-                                    s16 param_4)
+void func_80802264_chinflatableboss(Actor *actor, f32 low, f32 high, s32 *times,
+                                    s16 count)
 {
-    s32 local_0;
-    f32 local_1;
-    u8 local_2;
-    for (local_0 = 0; local_0 < param_4; local_0++) {
-        if (func_80101E14(param_0, param_3[local_0])) {
-            local_1 = func_800F10B4((f32) local_0, 0.0f, (f32) param_4, param_1, param_2);
-            local_2 = _subaddieaudioquick_entrypoint_1(param_0, param_0->position);
-            func_800C3868(local_2, 0.15f, 0.25f, local_1, local_1 + 0.12f);
-            func_800C4350(local_2, param_0->position, D_80803008_chinflatableboss);
+    s32 i;
+    f32 pitch;
+    u8 sound;
+    for (i = 0; i < count; i++) {
+        if (func_80101E14(actor, times[i])) {
+            pitch = func_800F10B4((f32) i, 0.0f, (f32) count, low, high);
+            sound = _subaddieaudioquick_entrypoint_1(actor, actor->position);
+            func_800C3868(sound, 0.15f, 0.25f, pitch, pitch + 0.12f);
+            func_800C4350(sound, actor->position, D_80803008_chinflatableboss);
         }
     }
 }
 
-f32 func_808023B0_chinflatableboss(param_0)
-Actor *param_0;
+f32 func_808023B0_chinflatableboss(actor)
+Actor *actor;
 {
-    InflatablePartStates *local_0;
-    f32 local_1;
-    s32 local_2;
-    local_0 = func_80100094(param_0, 0);
-    local_1 = 1.4f;
-    for (local_2 = 0; local_2 < 12; local_2++) {
-        if (local_0->states[local_2] == 2)
-            local_1 *= 0.85f;
+    InflatablePartStates *parts;
+    f32 scale;
+    s32 i;
+    parts = func_80100094(actor, 0);
+    scale = 1.4f;
+    for (i = 0; i < 12; i++) {
+        if (parts->states[i] == 2)
+            scale *= 0.85f;
     }
-    return local_1;
+    return scale;
 }
 
-void func_80802450_chinflatableboss(Actor *param_0)
+void func_80802450_chinflatableboss(Actor *actor)
 {
-    f32 *local_1;
-    f32 local_0;
-    local_1 = func_80100094(param_0, 0);
-    local_0 = local_1[0x11] - func_808023B0_chinflatableboss(param_0);
-    func_80102FDC(param_0, local_1[0x11] - local_0 * func_80101F24(param_0));
+    f32 *boss;
+    f32 shrink;
+    boss = func_80100094(actor, 0);
+    shrink = boss[0x11] - func_808023B0_chinflatableboss(actor);
+    func_80102FDC(actor, boss[0x11] - shrink * func_80101F24(actor));
 }
 
-void func_808024BC_chinflatableboss(Actor *param_0)
+void func_808024BC_chinflatableboss(Actor *actor)
 {
-    InflatableBossAttackDuration *local_0;
-    f32 local_1;
+    InflatableBossAttackDuration *boss;
+    f32 speed;
 
-    local_0 = func_80100094(param_0, 0);
-    local_0->local_0 = D_80802D80_chinflatableboss[func_80801C7C_chinflatableboss(param_0)];
-    ((f32 *) param_0->actorData)[3] = 0.0f;
-    func_80800F84_chinflatableboss(param_0, local_0->local_1 ? 6 : 8);
-    local_1 = ((f32) D_80802D80_chinflatableboss[0] / local_0->local_0) * 5.0f;
-    func_80101CDC(param_0, local_1);
-    func_8008B1C8(func_80104248(param_0), 0.8f);
+    boss = func_80100094(actor, 0);
+    boss->local_0 = D_80802D80_chinflatableboss[func_80801C7C_chinflatableboss(actor)];
+    ((f32 *) actor->actorData)[3] = 0.0f;
+    func_80800F84_chinflatableboss(actor, boss->local_1 ? 6 : 8);
+    speed = ((f32) D_80802D80_chinflatableboss[0] / boss->local_0) * 5.0f;
+    func_80101CDC(actor, speed);
+    func_8008B1C8(func_80104248(actor), 0.8f);
 }
 
-s32 func_80802590_chinflatableboss(param_0, param_1, param_2)
-Actor *param_0;
-f32 *param_1;
-s32 param_2;
+s32 func_80802590_chinflatableboss(actor, out_pos, patch_id)
+Actor *actor;
+f32 *out_pos;
+s32 patch_id;
 {
-    f32 local_0[3];
-    f32 local_1;
-    s32 local_2;
+    f32 rot[3];
+    f32 dist;
+    s32 model;
 
-    if (!func_800AE0B8(func_801040A8(param_0))) {
-        func_800EE7F8(param_1, param_0->position);
+    if (!func_800AE0B8(func_801040A8(actor))) {
+        func_800EE7F8(out_pos, actor->position);
         return 0;
     }
-    local_2 = func_801039E4(param_0->unk0);
-    func_800EFA4C(local_0, 0.0f, param_0->rotation[1], 0.0f);
-    if (!func_800B0D80(func_800B2824(local_2), param_2, param_0->position, local_0, param_0->scale,
-                       0, func_801040A8(param_0), param_1, &local_1)) {
-        func_800EE7F8(param_1, param_0->position);
+    model = func_801039E4(actor->unk0);
+    func_800EFA4C(rot, 0.0f, actor->rotation[1], 0.0f);
+    if (!func_800B0D80(func_800B2824(model), patch_id, actor->position, rot, actor->scale,
+                       0, func_801040A8(actor), out_pos, &dist)) {
+        func_800EE7F8(out_pos, actor->position);
         return 0;
     }
-    return (s32) local_1;
+    return (s32) dist;
 }
 
-void func_8080267C_chinflatableboss(param_0) Actor *param_0;
+void func_8080267C_chinflatableboss(actor) Actor *actor;
 {
-    s32 local_3;
-    s32 local_4;
-    s32 local_0;
-    f32 local_1[3];
-    s32 local_2;
+    s32 pose;
+    s32 model_id;
+    s32 anctrl;
+    f32 bone_pos[3];
+    s32 data;
 
-    local_0 = func_80104248(param_0);
-    if (param_0->unk64_16) {
-        local_4 = func_801039E4(param_0->unk0);
-        local_2 = func_800B27E0(local_4);
-        func_8008B304(local_0);
-        func_8008C200(*(s16 *) &param_0->unk0->unk10, local_2, func_8008AEDC(local_0));
-        local_3 = func_8008C27C(func_8008AEDC(local_0));
-        func_800DFBE0(local_3, 3, local_1);
-        ((f32 *) param_0->actorData)[4] = local_1[0] * param_0->scale;
-        param_0->unk64_20 = 1;
+    anctrl = func_80104248(actor);
+    if (actor->unk64_16) {
+        model_id = func_801039E4(actor->unk0);
+        data = func_800B27E0(model_id);
+        func_8008B304(anctrl);
+        func_8008C200(*(s16 *) &actor->unk0->unk10, data, func_8008AEDC(anctrl));
+        pose = func_8008C27C(func_8008AEDC(anctrl));
+        func_800DFBE0(pose, 3, bone_pos);
+        ((f32 *) actor->actorData)[4] = bone_pos[0] * actor->scale;
+        actor->unk64_20 = 1;
     }
 }
 
-s32 func_8080272C_chinflatableboss(Actor *param_0)
+s32 func_8080272C_chinflatableboss(Actor *boss)
 {
-    u8 *local_0;
+    u8 *data;
 
-    local_0 = func_80100094(param_0, 0);
-    switch (local_0[0x498]) {
+    data = func_80100094(boss, 0);
+    switch (data[0x498]) {
         case 1:
         case 6:
             break;
         case 3:
-            if (local_0[0x49A] && local_0[0x499]) {
-                if (!local_0[0x49B]) {
+            if (data[0x49A] && data[0x499]) {
+                if (!data[0x49B]) {
                     func_800DA544(2);
-                    func_80800F84_chinflatableboss(param_0, 2);
-                    func_8008B1C8(func_80104248(param_0), 0.8f);
-                    func_8010A85C(param_0, 1);
-                    func_80802A00_chinflatableboss(param_0, 1, 0x20);
-                    local_0[0x49B] = 1;
+                    func_80800F84_chinflatableboss(boss, 2);
+                    func_8008B1C8(func_80104248(boss), 0.8f);
+                    func_8010A85C(boss, 1);
+                    func_80802A00_chinflatableboss(boss, 1, 0x20);
+                    data[0x49B] = 1;
                     func_800FDC28(1);
                 }
 
-                if (param_0->unk70_10 == 4) {
-                    local_0[0x49A] = local_0[0x499] = 0;
+                if (boss->unk70_10 == 4) {
+                    data[0x49A] = data[0x499] = 0;
                     func_800F82D4(func_800F54E4(), 0);
                     func_800F497C(func_800F54E4());
-                    func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
-                    func_800F4A58(func_800F54E4(), (f32 *) (local_0 + 0x60), 400.0f);
-                    local_0[0x498] = 4;
+                    func_800F49D4(func_800F54E4(), func_8010D5DC, boss->unk0);
+                    func_800F4A58(func_800F54E4(), (f32 *) (data + 0x60), 400.0f);
+                    data[0x498] = 4;
                 }
             }
             break;
         case 5:
-            if (param_0->unk70_10 == 4) {
-                local_0[0x49A] = 0;
-                local_0[0x499] = 1;
+            if (boss->unk70_10 == 4) {
+                data[0x49A] = 0;
+                data[0x499] = 1;
                 func_800F82D4(func_800F54E4(), 0);
                 func_800F497C(func_800F54E4());
-                func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
-                func_800F4A58(func_800F54E4(), (f32 *) (local_0 + 0x60), 400.0f);
-                local_0[0x498] = 4;
+                func_800F49D4(func_800F54E4(), func_8010D5DC, boss->unk0);
+                func_800F4A58(func_800F54E4(), (f32 *) (data + 0x60), 400.0f);
+                data[0x498] = 4;
             }
     }
     return 0;
 }
 
-void func_80802910_chinflatableboss(Actor *param_0)
+// Defeat sequence: sets flags 1 and 0x17F (retry).
+void func_80802910_chinflatableboss(Actor *boss)
 {
-    u8 *local_0;
+    u8 *data;
 
-    local_0 = func_80100094(param_0, 0);
+    data = func_80100094(boss, 0);
     func_800FDC28(4);
-    func_80802A9C_chinflatableboss(param_0);
+    func_80802A9C_chinflatableboss(boss);
     func_800A51C0();
-    func_808024BC_chinflatableboss(param_0);
+    func_808024BC_chinflatableboss(boss);
     func_800DA544(1);
     func_800DA544(0x17F);
     _gcfrontend_entrypoint_9(0x25);
     func_800F82D4(func_800F54E4(), 0);
-    local_0[0x498] = 6;
-    func_8010A590(param_0);
-    func_80109FE8(param_0, 1);
+    data[0x498] = 6;
+    func_8010A590(boss);
+    func_80109FE8(boss, 1);
 }
 
-int func_808029AC_chinflatableboss(s32 param_0)
+// Updates the boss HUD counter with the patches left.
+int func_808029AC_chinflatableboss(s32 boss)
 {
     if (func_800DA298(1) != 0 && func_800DA298(3) == 0) {
-        func_800D2498(0xEC, func_80801CB4_chinflatableboss(param_0), 0);
+        func_800D2498(0xEC, func_80801CB4_chinflatableboss(boss), 0);
     }
 }
 
-void func_80802A00_chinflatableboss(param_0, param_1, param_2) s32 *param_0;
-s32 param_1;
-s32 param_2;
+void func_80802A00_chinflatableboss(actor, unk_0, unk_1) s32 *actor;
+s32 unk_0;
+s32 unk_1;
 {
-    func_80802A2C_chinflatableboss(param_0, *param_0, param_1, param_2);
+    func_80802A2C_chinflatableboss(actor, *actor, unk_0, unk_1);
 }
 
-int func_80802A2C_chinflatableboss(param_0, param_1, param_2, param_3)
-s32 param_0[3];
-s32 param_1;
-s32 param_2;
-s32 param_3;
+int func_80802A2C_chinflatableboss(actor, unk_0, unk_1, unk_2)
+s32 actor[3];
+s32 unk_0;
+s32 unk_1;
+s32 unk_2;
 {
-    u8 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    if (local_0[0x49D]) {
-        param_3 |= 0x2000;
+    u8 *data;
+    data = func_80100094(actor, 0);
+    if (data[0x49D]) {
+        unk_2 |= 0x2000;
         _capod_entrypoint_14();
     }
-    _capod_entrypoint_13(param_1, *param_0, param_2, param_3);
-    local_0[0x49D] = 1;
+    _capod_entrypoint_13(unk_0, *actor, unk_1, unk_2);
+    data[0x49D] = 1;
 }
 
-void func_80802A9C_chinflatableboss(param_0) s32 param_0;
+void func_80802A9C_chinflatableboss(boss) s32 boss;
 {
-    u8 *sp1C;
+    u8 *data;
 
-    sp1C = func_80100094(param_0, 0);
-    if (sp1C[0x49d] != 0) {
+    data = func_80100094(boss, 0);
+    if (data[0x49d] != 0) {
         _capod_entrypoint_14();
-        sp1C[0x49d] = 0;
+        data[0x49d] = 0;
     }
 }
 
-void func_80802AD8_chinflatableboss(param_0, param_1, param_2) Actor *param_0;
-s32 param_1;
-s32 param_2;
+void func_80802AD8_chinflatableboss(boss, index, value) Actor *boss;
+s32 index;
+s32 value;
 {
-    u8 *local_0;
+    u8 *data;
 
-    local_0 = func_80100094(param_0, 0);
-    local_0[0x487 + param_1] = param_2;
-    if (param_1 >= 9) {
-        param_1 = param_1 + param_1 - 9;
-        local_0[0x478 + param_1] = param_2;
-        local_0[0x479 + param_1] = param_2;
+    data = func_80100094(boss, 0);
+    data[0x487 + index] = value;
+    if (index >= 9) {
+        index = index + index - 9;
+        data[0x478 + index] = value;
+        data[0x479 + index] = value;
     } else {
-        local_0[0x478 + param_1] = param_2;
+        data[0x478 + index] = value;
     }
 }
 

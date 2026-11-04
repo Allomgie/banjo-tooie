@@ -82,50 +82,53 @@ int chballoonburst_entrypoint_2(void)
     return (int) &D_80801CD0_chballoonburst;
 }
 
-void func_80800024_chballoonburst(param_0) Actor *param_0;
+void func_80800024_chballoonburst(actor) Actor *actor;
 {
-    u8 *local_0;
+    u8 *state;
     u16 *field_0x6e;
-    local_0 = func_80100094(param_0, 0);
+    state = func_80100094(actor, 0);
     func_800DA524(0);
     func_800DA524(3);
     func_800DA524(2);
     func_800DA524(1);
+    // Matching: the always-true if steers IDO's code generation.
     if (1) {
-        field_0x6e = (u16 *) ((char *) param_0 + 0x6E);
+        field_0x6e = (u16 *) ((char *) actor + 0x6E);
         *field_0x6e &= 0xFE00 & 0xFFFFFFFFu;
-        *(s32 *) ((char *) local_0 + 0xC) = 0;
-        _susubgame_entrypoint_0(param_0, (char *) local_0 + 0x18, 0);
+        *(s32 *) ((char *) state + 0xC) = 0;
+        _susubgame_entrypoint_0(actor, (char *) state + 0x18, 0);
         _susubgame_entrypoint_11(0);
     }
 }
 
 s32 func_80800A7C_chballoonburst();
 
-void func_80800098_chballoonburst(param_0) Actor *param_0;
+// Single-player controller update: waits for the intro, then the end dialogs.
+void func_80800098_chballoonburst(actor) Actor *actor;
 {
-    u8 *local_0 = func_80100094(param_0, 0);
+    u8 *state = func_80100094(actor, 0);
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
+        // Matching: empty block before the first case is needed for the match.
         if (1) {
         }
         case 3:
-            func_800D24E8(0xC1, *(s32 *) (local_0 + 4), 0);
-            if (func_800D9154(&param_0->unk58, func_800DC178(0.5f, 1.0f)))
-                func_80108B04(param_0, -1);
-            if (func_800CEAD0(param_0->unk6C_0)) {
-                *(s32 *) (local_0 + 0x10) = func_80800A7C_chballoonburst(param_0, local_0 + 0x14);
+            func_800D24E8(0xC1, *(s32 *) (state + 4), 0);
+            if (func_800D9154(&actor->unk58, func_800DC178(0.5f, 1.0f)))
+                func_80108B04(actor, -1);
+            if (func_800CEAD0(actor->unk6C_0)) {
+                *(s32 *) (state + 0x10) = func_80800A7C_chballoonburst(actor, state + 0x14);
                 func_800F8300(func_800F54E4(), 2, 0);
                 func_800F7C0C(func_800F54E4(), 0x5F, 0.0f);
-                func_80101FDC(param_0, 4);
+                func_80101FDC(actor, 4);
             }
             break;
         case 4:
             if (_susubgame_entrypoint_9()) {
-                _susubgame_entrypoint_5(param_0, local_0 + 0x18, 5, 1, 0);
-                func_80101FDC(param_0, 5);
-                _subaddiedialog_entrypoint_11(param_0->unk0, *(s32 *) (local_0 + 0x10),
-                                              *(s32 *) (local_0 + 0x14), NULL, 0x22);
+                _susubgame_entrypoint_5(actor, state + 0x18, 5, 1, 0);
+                func_80101FDC(actor, 5);
+                _subaddiedialog_entrypoint_11(actor->unk0, *(s32 *) (state + 0x10),
+                                              *(s32 *) (state + 0x14), NULL, 0x22);
             }
         case 1:
         case 2:
@@ -143,37 +146,37 @@ u32 func_8080066C_chballoonburst();
 
 void func_808003C4_chballoonburst();
 
-s32 func_808001FC_chballoonburst(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_808001FC_chballoonburst(Actor *actor, s32 event, s32 arg)
 {
-    u8 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    switch (param_1) {
+    u8 *state;
+    state = func_80100094(actor, 0);
+    switch (event) {
         case 0x2E:
-            func_808003C4_chballoonburst(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_808003C4_chballoonburst(actor, ((s16 *) &arg)[0], ((s16 *) &arg)[1]);
             break;
         case 0x2F:
-            func_80800704_chballoonburst(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_80800704_chballoonburst(actor, ((s16 *) &arg)[0], ((s16 *) &arg)[1]);
             break;
         case 0x30:
-            return func_8080066C_chballoonburst(param_0, ((s16 *) &param_2)[0],
-                                                ((s16 *) &param_2)[1]);
+            return func_8080066C_chballoonburst(actor, ((s16 *) &arg)[0],
+                                                ((s16 *) &arg)[1]);
         case 0x3D:
-            func_80800BE8_chballoonburst(param_0, param_2);
+            func_80800BE8_chballoonburst(actor, arg);
             break;
         case 0xE:
-            if (param_2 == 4 && param_0->unk3C)
-                _capod_entrypoint_19(func_80106790(param_0->unk3C)->position);
+            if (arg == 4 && actor->unk3C)
+                _capod_entrypoint_19(func_80106790(actor->unk3C)->position);
             return 3;
         case 0x32:
-            _subaddiedialog_entrypoint_11(param_0->unk0, func_800D395C() ? 0x1118 : 0x10BE, 0x46, 0,
+            _subaddiedialog_entrypoint_11(actor->unk0, func_800D395C() ? 0x1118 : 0x10BE, 0x46, 0,
                                           0x22);
             func_800F82D4(func_800F54E4(), 2);
             break;
         case 0x57:
-            return _susubgame_entrypoint_3(param_0, local_0 + 0x18, param_2 & 0xFFFF,
-                                           (u32) (param_2 & 0xFFFF0000) >> 16);
+            return _susubgame_entrypoint_3(actor, state + 0x18, arg & 0xFFFF,
+                                           (u32) (arg & 0xFFFF0000) >> 16);
         case 0x95:
-            func_80800790_chballoonburst(param_0);
+            func_80800790_chballoonburst(actor);
             break;
         default:
             return 0;
@@ -181,31 +184,31 @@ s32 func_808001FC_chballoonburst(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_808003C4_chballoonburst(Actor *param_0, s32 param_1, s32 param_2)
+void func_808003C4_chballoonburst(Actor *actor, s32 dialog_id, s32 choice)
 {
-    u8 *local_0;
-    s32 local_1;
+    u8 *state;
+    s32 player;
 
-    local_0 = func_80100094(param_0, 0);
-    switch (param_1) {
+    state = func_80100094(actor, 0);
+    switch (dialog_id) {
         case 0x10BE:
 
         case 0x1118:
-            if (param_2 > 0) {
+            if (choice > 0) {
                 func_800DA544(0);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x10BF, 0x44, 0, 0x22);
-                func_80108B04(param_0, 0);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x10BF, 0x44, 0, 0x22);
+                func_80108B04(actor, 0);
             } else {
                 _plcamera_entrypoint_8(func_800F54E4());
-                _susubgame_entrypoint_5(param_0, local_0 + 0x18, 5, 1, 0);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0xCEC, 7, 0, 0x22);
+                _susubgame_entrypoint_5(actor, state + 0x18, 5, 1, 0);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0xCEC, 7, 0, 0x22);
             }
             _gcfrontend_entrypoint_9(0x68);
             return;
 
         case 0x10BF:
-            _susubgame_entrypoint_5(param_0, local_0 + 0x18, 5, 1, 0);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0xCEC, 7, 0, 0x22);
+            _susubgame_entrypoint_5(actor, state + 0x18, 5, 1, 0);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0xCEC, 7, 0, 0x22);
             return;
 
         case 0x10C0:
@@ -215,320 +218,321 @@ void func_808003C4_chballoonburst(Actor *param_0, s32 param_1, s32 param_2)
         case 0x10F9:
 
         case 0x10FA:
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0xCEB, 0x46, 0, 0x22);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0xCEB, 0x46, 0, 0x22);
             return;
 
         case 0xCEB:
-            local_1 = func_800F54E4();
-            func_800F82D4(local_1, 0);
-            func_80101FDC(param_0, 6);
+            player = func_800F54E4();
+            func_800F82D4(player, 0);
+            func_80101FDC(actor, 6);
             if (func_800D395C() != 0) {
-                if (param_2 > 0) {
+                if (choice > 0) {
                     _gcfrontend_entrypoint_11();
                     return;
                 }
                 _gcfrontend_entrypoint_10();
                 return;
             }
-            if (param_2 > 0) {
+            if (choice > 0) {
                 _gcgoto_entrypoint_1(0xE4, 1);
             } else {
-                func_800F4CC0(local_1);
-                _susubgame_entrypoint_4(param_0, local_0 + 0x18);
+                func_800F4CC0(player);
+                _susubgame_entrypoint_4(actor, state + 0x18);
             }
-            func_800F7C58(local_1, 0x5D, 0);
+            func_800F7C58(player, 0x5D, 0);
             return;
 
         case 0xCEC:
-            _susubgame_entrypoint_4(param_0, local_0 + 0x18);
-            func_80800970_chballoonburst(param_0, 0);
+            _susubgame_entrypoint_4(actor, state + 0x18);
+            func_80800970_chballoonburst(actor, 0);
             return;
 
         case 0x10D2:
-            _susubgame_entrypoint_4(param_0, local_0 + 0x18);
+            _susubgame_entrypoint_4(actor, state + 0x18);
             func_800F82D4(func_800F54E4(), 0);
             _glcutDll_entrypoint_6(0xE1, 0x22);
     }
 }
 
-u32 func_8080066C_chballoonburst(Actor *param_0, s32 param_1, s32 param_2)
+u32 func_8080066C_chballoonburst(Actor *actor, s32 dialog_id, s32 choice)
 {
-    u32 local_0;
+    u32 result;
 
-    switch (param_1) {
+    switch (dialog_id) {
         case 0x10BE:
-            return param_2 == 0 ? param_0->unk74_7 : 0x32;
+            return choice == 0 ? actor->unk74_7 : 0x32;
         case 0x10C0:
         case 0x10F9:
             return func_800D211C(0x80);
         case 0x1118:
-            if (param_2 == 0) {
-                local_0 = param_0->unk74_7;
+            if (choice == 0) {
+                result = actor->unk74_7;
             } else {
-                local_0 = func_800D211C(0x80);
+                result = func_800D211C(0x80);
             }
-            return local_0;
+            return result;
     }
     return 0;
 }
 
-void func_80800704_chballoonburst(s32 param_0, s32 param_1, s32 param_2)
+void func_80800704_chballoonburst(s32 actor, s32 unk_1, s32 arg)
 {
-    s32 local_0 = param_0;
-    switch (param_2) {
+    s32 actor_ref = actor;
+    switch (arg) {
         case 1:
-            func_80108B04(local_0, 1);
+            func_80108B04(actor_ref, 1);
             func_800DA544(3);
             break;
 
         case 2:
-            func_80108B04(local_0, 2);
+            func_80108B04(actor_ref, 2);
             func_800DA544(2);
             break;
 
         case 3:
             func_800DA544(1);
-            *(s32 *) ((char *) param_0 + 0x3c) = 0;
+            *(s32 *) ((char *) actor + 0x3c) = 0;
     }
 }
 
-void func_80800790_chballoonburst(void *param_0)
+void func_80800790_chballoonburst(void *actor)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_800F54E4();
+    s32 state;
+    s32 player;
+    state = func_80100094(actor, 0);
+    player = func_800F54E4();
     func_800BF744(1, 1);
     func_800BF744(2, 0);
-    func_800F4CEC(local_1, 0x77);
-    if ((((u32) ((u16 *) param_0)[0x39] >> 10) == 1)) {
-        if (_susubgame_entrypoint_10(param_0, 2, 0x320, 0x1AE) != 0) {
+    func_800F4CEC(player, 0x77);
+    if ((((u32) ((u16 *) actor)[0x39] >> 10) == 1)) {
+        if (_susubgame_entrypoint_10(actor, 2, 0x320, 0x1AE) != 0) {
             _chintrotext_entrypoint_2(1);
-            _susubgame_entrypoint_6(param_0, local_0 + 0x18, 0, 0x20, 0);
+            _susubgame_entrypoint_6(actor, state + 0x18, 0, 0x20, 0);
         } else {
-            _susubgame_entrypoint_5(param_0, local_0 + 0x18, 5, 1, 0);
-            _subaddiedialog_entrypoint_11(*(void **) param_0, 0xCEC, 5, 0, 0x22);
-            func_800F82D4(local_1, 2);
+            _susubgame_entrypoint_5(actor, state + 0x18, 5, 1, 0);
+            _subaddiedialog_entrypoint_11(*(void **) actor, 0xCEC, 5, 0, 0x22);
+            func_800F82D4(player, 2);
         }
-        func_800F7C58(local_1, 0x5D, 1);
-        func_80101FDC(param_0, 2);
+        func_800F7C58(player, 0x5D, 1);
+        func_80101FDC(actor, 2);
         return;
     }
-    func_800F8300(local_1, 2, 0);
-    _susubgame_entrypoint_5(param_0, local_0 + 0x18, 5, 1, 0);
-    _subaddiedialog_entrypoint_11(*(void **) param_0, 0xCEB, 0x46, 0, 0x22);
+    func_800F8300(player, 2, 0);
+    _susubgame_entrypoint_5(actor, state + 0x18, 5, 1, 0);
+    _subaddiedialog_entrypoint_11(*(void **) actor, 0xCEB, 0x46, 0, 0x22);
 }
 
-void func_808008F0_chballoonburst(param_0) s32 param_0;
+void func_808008F0_chballoonburst(actor) s32 actor;
 {
-    s32 local_0;
-    local_0 = func_80100094(param_0, 0);
-    if (func_800CEAA8(*(s32 *) ((char *) param_0 + 0x6C) & 0x1FF)) {
-        func_800CE88C(*(s32 *) ((char *) param_0 + 0x6C) & 0x1FF, 0);
+    s32 state;
+    state = func_80100094(actor, 0);
+    if (func_800CEAA8(*(s32 *) ((char *) actor + 0x6C) & 0x1FF)) {
+        func_800CE88C(*(s32 *) ((char *) actor + 0x6C) & 0x1FF, 0);
     }
-    if (_susubgame_entrypoint_2(param_0, local_0 + 0x18)) {
-        _susubgame_entrypoint_4(param_0, local_0 + 0x18);
+    if (_susubgame_entrypoint_2(actor, state + 0x18)) {
+        _susubgame_entrypoint_4(actor, state + 0x18);
     }
 }
 
-void func_80800970_chballoonburst(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800970_chballoonburst(actor, unk_1) Actor *actor;
+s32 unk_1;
 {
-    s32 local_0;
+    s32 i;
     _subaddiemulti_entrypoint_2();
-    func_80101FDC(param_0, 3);
+    func_80101FDC(actor, 3);
     func_800D2770(0xC1, 0);
-    func_800CE8D8(param_0->unk6C_0, (f32) param_0->unk74_7, param_0->unk74_7);
-    func_800CE88C(param_0->unk6C_0, 1);
+    func_800CE8D8(actor->unk6C_0, (f32) actor->unk74_7, actor->unk74_7);
+    func_800CE88C(actor->unk6C_0, 1);
     func_800DA524(0);
     func_800DA524(3);
     func_800DA524(2);
     func_800DA524(1);
     func_800FDC28(0xC);
-    for (local_0 = 0; local_0 < _gcstatusDll_entrypoint_11(); local_0++) {
-        func_800F7B9C(local_0, 0x69);
-        func_800F7C0C(local_0, 0x5F, -1.0f);
+    for (i = 0; i < _gcstatusDll_entrypoint_11(); i++) {
+        func_800F7B9C(i, 0x69);
+        func_800F7C0C(i, 0x5F, -1.0f);
     }
 }
 
-s32 func_80800A7C_chballoonburst(Actor *param_0, s32 *param_1)
+// Evaluates the final score (target 50 for the jiggy) and picks the result dialog.
+s32 func_80800A7C_chballoonburst(Actor *actor, s32 *dialog_arg)
 {
-    s32 *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    u32 local_5;
-    s32 local_6;
-    s32 local_7;
-    s32 local_8;
+    s32 *state;
+    s32 score;
+    s32 dialog_id;
+    s32 is_record;
+    s32 reached_target;
+    u32 earns_jiggy;
+    s32 has_jiggy;
+    s32 is_replay;
+    s32 record_result;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = local_0[1];
-    local_6 = func_800D0A9C(0x19, 1);
-    local_7 = func_800D395C();
-    local_8 = func_800D2054(0, 0x80, local_1);
-    local_3 = local_8 == 1 && (local_6 || local_7);
-    local_4 = local_1 >= 50;
-    local_5 = local_4 && !local_6 && !local_7;
+    state = func_80100094(actor, 0);
+    score = state[1];
+    has_jiggy = func_800D0A9C(0x19, 1);
+    is_replay = func_800D395C();
+    record_result = func_800D2054(0, 0x80, score);
+    is_record = record_result == 1 && (has_jiggy || is_replay);
+    reached_target = score >= 50;
+    earns_jiggy = reached_target && !has_jiggy && !is_replay;
     func_800FDC28(0);
-    func_800FC6B0((local_5 || local_3) ? 0x16 : 0x17);
-    *param_1 = 6;
-    if (local_5) {
-        local_2 = 0x10D2;
-    } else if (local_3) {
-        local_2 = 0x10C0;
+    func_800FC6B0((earns_jiggy || is_record) ? 0x16 : 0x17);
+    *dialog_arg = 6;
+    if (earns_jiggy) {
+        dialog_id = 0x10D2;
+    } else if (is_record) {
+        dialog_id = 0x10C0;
     } else if (!func_800D395C()) {
-        if (local_6) {
-            if (local_8 == 0)
-                local_2 = 0x10FA;
+        if (has_jiggy) {
+            if (record_result == 0)
+                dialog_id = 0x10FA;
             else
-                local_2 = 0x10F9;
+                dialog_id = 0x10F9;
         } else {
-            local_2 = 0x10F8;
+            dialog_id = 0x10F8;
         }
     } else {
-        local_2 = 0xCEB;
-        *param_1 = 0x46;
+        dialog_id = 0xCEB;
+        *dialog_arg = 0x46;
     }
-    return local_2;
+    return dialog_id;
 }
 
-void func_80800BE8_chballoonburst(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800BE8_chballoonburst(actor, forced_color) Actor *actor;
+s32 forced_color;
 {
-    f32 local_0[3];
-    Actor *local_5;
-    u8 *local_1;
-    f32 local_3;
-    s32 local_4;
-    s32 local_2;
-    s32 flag;
+    f32 pos[3];
+    Actor *balloon;
+    u8 *state;
+    f32 roll;
+    s32 color;
+    s32 unk_0;
+    s32 multi;
 
-    local_1 = func_80100094(param_0, 0);
-    local_2 = func_800DA298(0);
-    if (local_2) {
-        if (param_0->unk3C) {
-            func_800EE7F8(local_0, func_80106790(param_0->unk3C)->position);
+    state = func_80100094(actor, 0);
+    unk_0 = func_800DA298(0);
+    if (unk_0) {
+        if (actor->unk3C) {
+            func_800EE7F8(pos, func_80106790(actor->unk3C)->position);
         } else {
-            func_800EFA4C(local_0, 1400.0f, 350.0f, -1400.0f);
+            func_800EFA4C(pos, 1400.0f, 350.0f, -1400.0f);
         }
     } else {
-        local_0[0] = func_800DC178(-1800.0f, 1800.0f);
-        local_0[1] = func_800DC178(100.0f, 200.0f);
-        local_0[2] = func_800DC178(-1800.0f, 1800.0f);
+        pos[0] = func_800DC178(-1800.0f, 1800.0f);
+        pos[1] = func_800DC178(100.0f, 200.0f);
+        pos[2] = func_800DC178(-1800.0f, 1800.0f);
     }
-    local_5 = func_80108528(0x350, local_0, (s32) func_800DC178(0.0f, 360.0f), &param_0);
-    local_3 = func_800DC0C0();
-    if (local_3 < 0.1666f) {
-        local_4 = 0;
+    balloon = func_80108528(0x350, pos, (s32) func_800DC178(0.0f, 360.0f), &actor);
+    roll = func_800DC0C0();
+    if (roll < 0.1666f) {
+        color = 0;
     } else {
-        if (local_3 < 0.5f) {
-            local_4 = 1;
+        if (roll < 0.5f) {
+            color = 1;
         } else {
-            local_4 = 2;
+            color = 2;
         }
     }
-    if (param_1 != -1) {
-        local_4 = param_1;
+    if (forced_color != -1) {
+        color = forced_color;
     }
-    local_5->actorData[4] = 2 - local_4;
-    flag = *(s32 *) (local_1 + 0xC);
-    local_5->unk64_20 = (flag == 0);
-    switch (local_4) {
+    balloon->actorData[4] = 2 - color;
+    multi = *(s32 *) (state + 0xC);
+    balloon->unk64_20 = (multi == 0);
+    switch (color) {
         case 0:
-            func_80102424(local_5, 4);
-            func_801032B0(local_5, 0x78C, 0);
-            local_5->unk54 = 350.0f;
+            func_80102424(balloon, 4);
+            func_801032B0(balloon, 0x78C, 0);
+            balloon->unk54 = 350.0f;
             break;
         case 1:
-            func_80102424(local_5, 3);
-            func_801032B0(local_5, 0x78D, 0);
-            local_5->unk54 = 300.0f;
+            func_80102424(balloon, 3);
+            func_801032B0(balloon, 0x78D, 0);
+            balloon->unk54 = 300.0f;
             break;
         case 2:
-            func_80102424(local_5, 2);
-            func_801032B0(local_5, 0x796, 0);
-            local_5->unk54 = 250.0f;
+            func_80102424(balloon, 2);
+            func_801032B0(balloon, 0x796, 0);
+            balloon->unk54 = 250.0f;
     }
-    local_5->unk3C = param_0->unk0;
-    local_5->unk6C_0 = param_0->unk6C_0;
-    local_5->unk64_19 = *(s32 *) (local_1 + 0xC);
-    if (local_2) {
-        local_5->unk54 = 50.0f;
-        _susubgame_entrypoint_6(param_0, local_1 + 0x18, 4, 0xA0, 0);
-        if (param_1 != -1 && param_0->unk3C) {
-            func_80801B6C_chballoonburst(func_80106790(param_0->unk3C));
+    balloon->unk3C = actor->unk0;
+    balloon->unk6C_0 = actor->unk6C_0;
+    balloon->unk64_19 = *(s32 *) (state + 0xC);
+    if (unk_0) {
+        balloon->unk54 = 50.0f;
+        _susubgame_entrypoint_6(actor, state + 0x18, 4, 0xA0, 0);
+        if (forced_color != -1 && actor->unk3C) {
+            func_80801B6C_chballoonburst(func_80106790(actor->unk3C));
         }
-        param_0->unk3C = local_5->unk0;
+        actor->unk3C = balloon->unk0;
     }
 }
 
-void func_80800EDC_chballoonburst(Actor *param_0)
+void func_80800EDC_chballoonburst(Actor *actor)
 {
-    Actor *local_1;
-    local_1 = func_80100094(param_0, 0);
-    *(u16 *) ((char *) param_0 + 0x6E) = (*(u16 *) ((char *) param_0 + 0x6E) & 0xFE00) | 5;
-    *(s32 *) ((char *) local_1 + 0x0C) = 1;
+    Actor *state;
+    state = func_80100094(actor, 0);
+    *(u16 *) ((char *) actor + 0x6E) = (*(u16 *) ((char *) actor + 0x6E) & 0xFE00) | 5;
+    *(s32 *) ((char *) state + 0x0C) = 1;
     _subaddiemulti_entrypoint_3(0xA);
-    _sumultiscore_entrypoint_3((u8 *) local_1 + 0x30);
-    _sumultiscore_entrypoint_4((u8 *) local_1 + 0x30, 6, 0, 1);
+    _sumultiscore_entrypoint_3((u8 *) state + 0x30);
+    _sumultiscore_entrypoint_4((u8 *) state + 0x30, 6, 0, 1);
 }
 
-void func_80800F4C_chballoonburst(Actor *param_0)
+void func_80800F4C_chballoonburst(Actor *actor)
 {
-    u8 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    _sumultiscore_entrypoint_6(local_0 + 0x30);
-    switch (param_0->unk70_10) {
+    u8 *state;
+    state = func_80100094(actor, 0);
+    _sumultiscore_entrypoint_6(state + 0x30);
+    switch (actor->unk70_10) {
         case 1:
             if (!func_800C954C() && !func_800DA298(0x6AD)) {
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0xCEC, 7, 0, 0x22);
-                func_80101FDC(param_0, 2);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0xCEC, 7, 0, 0x22);
+                func_80101FDC(actor, 2);
             }
             return;
         case 3:
             if (_subaddiefind_entrypoint_9(0x350) < 8) {
-                if (func_800D9154(&param_0->unk58,
+                if (func_800D9154(&actor->unk58,
                                   func_800DC178(0.5f, 1.0f) / (f32) _gcstatusDll_entrypoint_11())) {
-                    func_80108B04(param_0, -1);
+                    func_80108B04(actor, -1);
                 }
             }
-            if (func_800CEAD0(param_0->unk6C_0)) {
-                func_80801338_chballoonburst(param_0);
+            if (func_800CEAD0(actor->unk6C_0)) {
+                func_80801338_chballoonburst(actor);
             }
             break;
         case 4:
             if (_susubgame_entrypoint_9()) {
-                _susubgame_entrypoint_5(param_0, local_0 + 0x18, 5, 1, 0);
-                _subaddiedialog_entrypoint_11(param_0->unk0, *(s32 *) (local_0 + 0x10),
-                                              *(s32 *) (local_0 + 0x14), 0, 0x22);
-                func_80101FDC(param_0, 5);
+                _susubgame_entrypoint_5(actor, state + 0x18, 5, 1, 0);
+                _subaddiedialog_entrypoint_11(actor->unk0, *(s32 *) (state + 0x10),
+                                              *(s32 *) (state + 0x14), 0, 0x22);
+                func_80101FDC(actor, 5);
             }
     }
 }
 
-s32 func_808010D8_chballoonburst(s32 param_0, s32 param_1)
+s32 func_808010D8_chballoonburst(s32 actor, s32 player)
 {
-    s32 local_0;
+    s32 state;
 
-    local_0 = func_80100094(param_0, 0);
-    _sumultiscore_entrypoint_12(local_0 + 0x30, param_1, 1);
+    state = func_80100094(actor, 0);
+    _sumultiscore_entrypoint_12(state + 0x30, player, 1);
 }
 
-s32 func_8080110C_chballoonburst(Actor *param_0, s32 param_1, PairEventPayload param_2)
+s32 func_8080110C_chballoonburst(Actor *actor, s32 event, PairEventPayload payload)
 {
-    switch (param_1) {
+    switch (event) {
         case 0x2E:
-            func_808011A8_chballoonburst(param_0, param_2.halves[0], param_2.halves[1]);
+            func_808011A8_chballoonburst(actor, payload.halves[0], payload.halves[1]);
             break;
         case 0x30:
-            return func_80801254_chballoonburst(param_0, param_2.halves[0], param_2.halves[1]);
+            return func_80801254_chballoonburst(actor, payload.halves[0], payload.halves[1]);
         case 0x3D:
-            func_80800BE8_chballoonburst(param_0, -1);
+            func_80800BE8_chballoonburst(actor, -1);
             break;
         case 0x95:
-            func_80801290_chballoonburst(param_0);
+            func_80801290_chballoonburst(actor);
             break;
         default:
             return 0;
@@ -536,241 +540,242 @@ s32 func_8080110C_chballoonburst(Actor *param_0, s32 param_1, PairEventPayload p
     return 1;
 }
 
-void func_808011A8_chballoonburst(param_0, param_1, param_2) s32 param_0;
-s32 param_1;
-s32 param_2;
+void func_808011A8_chballoonburst(actor, dialog_id, choice) s32 actor;
+s32 dialog_id;
+s32 choice;
 {
-    s32 local_0;
+    s32 i;
 
-switch (param_1) {
+switch (dialog_id) {
     case 0xCEC:
-        func_80800970_chballoonburst(param_0, 1);
+        func_80800970_chballoonburst(actor, 1);
         return;
     case 0x10CF:;
     case 0x10D0:
-        local_0 = 0;
+        i = 0;
         if (_gcstatusDll_entrypoint_11() > 0) {
             do {
-                func_800F7C58(local_0, 0x5D, 1);
-                local_0 += 1;
-            } while (local_0 < _gcstatusDll_entrypoint_11());
+                func_800F7C58(i, 0x5D, 1);
+                i += 1;
+            } while (i < _gcstatusDll_entrypoint_11());
         }
         _subaddiemulti_entrypoint_2();
-        func_80101FDC(param_0, 6);
+        func_80101FDC(actor, 6);
         _gcfrontend_entrypoint_10();
 }
 
 }
 
-s32 func_80801254_chballoonburst(param_0, param_1, param_2)
-s32 param_0;
-s32 param_1;
-s32 param_2;
+s32 func_80801254_chballoonburst(actor, dialog_id, choice)
+s32 actor;
+s32 dialog_id;
+s32 choice;
 {
-    s32 new_var;
-    new_var = param_1;
+    s32 id;
+    id = dialog_id;
 
-if (new_var == 0x10cf) {
-    s32 local_0;
-    local_0 = func_80100094(param_0, 0);
-    return *(s32 *) ((char *) local_0 + 8) + 1;
+if (id == 0x10cf) {
+    s32 state;
+    state = func_80100094(actor, 0);
+    return *(s32 *) ((char *) state + 8) + 1;
 }
 
 return 0;
 }
 
-int func_80801290_chballoonburst(param_0)
-Actor *param_0;
+int func_80801290_chballoonburst(actor)
+Actor *actor;
 {
-    s32 *local_0 = (s32 *) param_0;
-    s32 local_1;
+    s32 *base = (s32 *) actor;
+    s32 i;
 
     func_800BF744(1, 1);
     func_800BF744(2, 0);
     func_800BF544(0, 0, 0);
 
-if (((u32) *(u16 *) ((char *) local_0 + 0x72) >> 10) == 1) {
+if (((u32) *(u16 *) ((char *) base + 0x72) >> 10) == 1) {
     _subaddiemulti_entrypoint_1(2, 0);
 }
 
-local_1 = 0;
+i = 0;
 
 if (_gcstatusDll_entrypoint_11() > 0) {
     do {
-        func_800F7C58(local_1, 0x5D, 1);
-        func_800F4CEC(local_1, 0x77);
-        local_1 += 1;
-    } while (local_1 < _gcstatusDll_entrypoint_11());
+        func_800F7C58(i, 0x5D, 1);
+        func_800F4CEC(i, 0x77);
+        i += 1;
+    } while (i < _gcstatusDll_entrypoint_11());
 }
 
 }
 
-void func_80801338_chballoonburst(param_0) Actor *param_0;
+void func_80801338_chballoonburst(actor) Actor *actor;
 {
-    u8 *local_1;
-    s32 local_0[8];
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_8;
-    s32 local_5;
-    s32 local_7;
+    u8 *state;
+    s32 scores[8];
+    s32 best;
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 tmp;
+    s32 dialog_id;
 
-    local_1 = func_80100094(param_0, 0);
-    local_2 = -1;
-    for (local_3 = 0; local_3 < _gcstatusDll_entrypoint_11(); local_3++) {
-        local_0[local_3] = _sumultiscore_entrypoint_8(local_1 + 0x30, local_3, 6);
+    state = func_80100094(actor, 0);
+    best = -1;
+    for (i = 0; i < _gcstatusDll_entrypoint_11(); i++) {
+        scores[i] = _sumultiscore_entrypoint_8(state + 0x30, i, 6);
 
-if (local_2 < local_0[local_3]) {
-    local_2 = local_0[local_3];
+if (best < scores[i]) {
+    best = scores[i];
 }
 
-func_800AA20C(local_3, local_0[local_3]);
+func_800AA20C(i, scores[i]);
 
 }
-for (local_3 = 0; local_3 < _gcstatusDll_entrypoint_11(); local_3++) {
-    if (local_2 == local_0[local_3]) {
-        _sumultiscore_entrypoint_11(local_1 + 0x30, local_3, 6, 3.0f);
+for (i = 0; i < _gcstatusDll_entrypoint_11(); i++) {
+    if (best == scores[i]) {
+        _sumultiscore_entrypoint_11(state + 0x30, i, 6, 3.0f);
     }
 
 }
-for (local_4 = 1; local_4 < _gcstatusDll_entrypoint_11(); local_4++) {
-    for (local_8 = local_4; local_8 > 0 && local_0[local_8 - 1] < local_0[local_8]; local_8--) {
-        local_5 = local_0[local_8];
-        local_0[local_8] = local_0[local_8 - 1];
-        local_0[local_8 - 1] = local_5;
+for (j = 1; j < _gcstatusDll_entrypoint_11(); j++) {
+    for (k = j; k > 0 && scores[k - 1] < scores[k]; k--) {
+        tmp = scores[k];
+        scores[k] = scores[k - 1];
+        scores[k - 1] = tmp;
     }
 }
 func_800FC6B0(0x16);
-if (local_0[0] != local_0[1]) {
-    for (local_8 = 0; _sumultiscore_entrypoint_8(local_1 + 0x30, local_8, 6) != local_0[0];
-         local_8++) {
+if (scores[0] != scores[1]) {
+    // Matching: the empty loop body is needed for the match.
+    for (k = 0; _sumultiscore_entrypoint_8(state + 0x30, k, 6) != scores[0];
+         k++) {
     }
-    *(s32 *) (local_1 + 8) = local_8;
-    local_7 = 0x10CF;
+    *(s32 *) (state + 8) = k;
+    dialog_id = 0x10CF;
 } else {
-    local_7 = 0x10D0;
+    dialog_id = 0x10D0;
 }
 _subaddiemulti_entrypoint_1(0, 0);
-*(s32 *) (local_1 + 0x10) = local_7;
-*(s32 *) (local_1 + 0x14) = 6;
-func_80101FDC(param_0, 4);
+*(s32 *) (state + 0x10) = dialog_id;
+*(s32 *) (state + 0x14) = 6;
+func_80101FDC(actor, 4);
 }
 
-void func_8080154C_chballoonburst(Actor *param_0)
+void func_8080154C_chballoonburst(Actor *actor)
 {
-    f32 local_0;
-    local_0 = func_800DC298(0.5f) ? 1.0f : -1.0f;
-    param_0->unk50 = func_800DC178(100.0f, 200.0f) * local_0;
-    _subaddiefade_entrypoint_2(param_0);
-    func_8010A800(param_0, 2);
-    func_80801AFC_chballoonburst(param_0);
+    f32 dir;
+    dir = func_800DC298(0.5f) ? 1.0f : -1.0f;
+    actor->unk50 = func_800DC178(100.0f, 200.0f) * dir;
+    _subaddiefade_entrypoint_2(actor);
+    func_8010A800(actor, 2);
+    func_80801AFC_chballoonburst(actor);
 }
 
-void func_808015D4_chballoonburst(Actor *param_0)
+void func_808015D4_chballoonburst(Actor *actor)
 {
-    f32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    f32 local_5;
+    f32 dt;
+    s32 reached_top;
+    s32 unk_0;
+    s32 unk_1;
+    s32 can_burst;
+    f32 scale;
 
-    local_0 = func_800D8FF8();
-    local_1 = 0;
-    local_2 = func_800DA298(0);
-    local_3 = 0;
-    local_4 = 1;
-    if (func_800CEAD0(param_0->unk6C_0)) {
-        func_8010A570(param_0);
+    dt = func_800D8FF8();
+    reached_top = 0;
+    unk_0 = func_800DA298(0);
+    unk_1 = 0;
+    can_burst = 1;
+    if (func_800CEAD0(actor->unk6C_0)) {
+        func_8010A570(actor);
     }
-    param_0->rotation[1] = func_800136E4(param_0->rotation[1] + param_0->unk50 * local_0);
-    if (param_0->position[1] < 2800.0f) {
-        param_0->position[1] += local_0 * param_0->unk54;
+    actor->rotation[1] = func_800136E4(actor->rotation[1] + actor->unk50 * dt);
+    if (actor->position[1] < 2800.0f) {
+        actor->position[1] += dt * actor->unk54;
     } else {
-        local_1 = 1;
+        reached_top = 1;
     }
-    if (_subaddiefade_entrypoint_0(param_0) == 255) {
-        func_8010A800(param_0, 0);
+    if (_subaddiefade_entrypoint_0(actor) == 255) {
+        func_8010A800(actor, 0);
     }
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 4:
-            local_3 = func_800DA298(3);
+            unk_1 = func_800DA298(3);
             break;
         case 3:
-            local_3 = func_800DA298(2);
+            unk_1 = func_800DA298(2);
             break;
         case 2:
-            local_3 = func_800DA298(1);
+            unk_1 = func_800DA298(1);
             break;
         case 5:
-            local_5 = func_800F10B4(param_0->unk58, 0.0f, 1.4f, 0.2f, 1.0f);
-            local_4 = 0;
-            func_80102FDC(param_0, local_5);
-            if (func_800D90A4(&param_0->unk58)) {
-                func_8010A570(param_0);
-                func_800FFAB0(param_0);
+            scale = func_800F10B4(actor->unk58, 0.0f, 1.4f, 0.2f, 1.0f);
+            can_burst = 0;
+            func_80102FDC(actor, scale);
+            if (func_800D90A4(&actor->unk58)) {
+                func_8010A570(actor);
+                func_800FFAB0(actor);
                 return;
             }
     }
-    if (local_4 && ((!local_2 && local_1) || (local_2 && local_3))) {
-        func_80801B6C_chballoonburst(param_0);
+    if (can_burst && ((!unk_0 && reached_top) || (unk_0 && unk_1))) {
+        func_80801B6C_chballoonburst(actor);
     }
 }
 
-int func_808017A4_chballoonburst(Actor *param_0, s32 param_1, u8 *param_2)
+int func_808017A4_chballoonburst(Actor *actor, s32 event, u8 *arg)
 {
-    u8 *local_2;
-    u8 *local_3;
-    s32 local_0;
-    s32 local_1;
-    switch (param_1) {
+    u8 *state;
+    u8 *egg;
+    s32 player;
+    s32 points;
+    switch (event) {
         case 0x40:
-            if ((s32) param_0->unk70_10 >= 2 && (s32) param_0->unk70_10 < 6) {
-                local_3 = (*(u8 **) &param_2);
-                local_0 = _subaddiemulti_entrypoint_5(local_3);
-                local_1 = param_0->actorData[4] + 1;
-                local_2 = func_80100094(func_80106790(param_0->unk3C), 0);
+            if ((s32) actor->unk70_10 >= 2 && (s32) actor->unk70_10 < 6) {
+                egg = (*(u8 **) &arg);
+                player = _subaddiemulti_entrypoint_5(egg);
+                points = actor->actorData[4] + 1;
+                state = func_80100094(func_80106790(actor->unk3C), 0);
 
-if (*(s32 *) (local_2 + 0xC)) {
-    _sumultiscore_entrypoint_7(local_2 + 0x30, local_0, 6, local_1);
+if (*(s32 *) (state + 0xC)) {
+    _sumultiscore_entrypoint_7(state + 0x30, player, 6, points);
 } else {
-    *(s32 *) (local_2 + 4) += local_1;
+    *(s32 *) (state + 4) += points;
 }
 
-_chscorepoints_entrypoint_2(local_1, local_0, param_0->position, 1);
-func_80801948_chballoonburst(param_0);
-func_8010A570(param_0);
-func_800FFAB0(param_0);
+_chscorepoints_entrypoint_2(points, player, actor->position, 1);
+func_80801948_chballoonburst(actor);
+func_8010A570(actor);
+func_800FFAB0(actor);
 
-if (*(u16 *) (local_3 + 0x18) & 1) {
-    func_8010114C(local_3, 0x98, 0);
+if (*(u16 *) (egg + 0x18) & 1) {
+    func_8010114C(egg, 0x98, 0);
 }
 
 }
 break;
 case 0x29:
-    if (param_0->unk64_20) {
+    if (actor->unk64_20) {
         func_8010DC50(4);
     }
     break;
 
 case 0x2A:
-    if (param_0->unk64_20) {
+    if (actor->unk64_20) {
         func_8010DCB4(4);
     }
     break;
 
 case 0x1F:
-    local_3 = param_2;
+    egg = arg;
 
-if (param_0->unk64_20) {
-    func_8010DD20(param_0, 4, local_3);
+if (actor->unk64_20) {
+    func_8010DD20(actor, 4, egg);
 }
 
 else
 {
-    func_801015D0(param_0);
+    func_801015D0(actor);
 }
 break;
 default:
@@ -779,69 +784,70 @@ default:
     return 1;
     }
 
-    void func_80801948_chballoonburst(param_0) Actor *param_0;
+    void func_80801948_chballoonburst(actor) Actor *actor;
     {
-        func_8010D930(1, (*(s32 *) ((u8 *) param_0 + 0x70)) & 1, (u8 *) param_0 + 4,
+        func_8010D930(1, (*(s32 *) ((u8 *) actor + 0x70)) & 1, (u8 *) actor + 4,
                       &D_80801D18_chballoonburst);
-        if (param_0->unk64_20) {
-            func_80801A50_chballoonburst(param_0, 0x771, 2);
-            func_80801A50_chballoonburst(param_0, 0x772, 3);
-            func_80801A50_chballoonburst(param_0, 0x773, 4);
-            func_80801ABC_chballoonburst(param_0);
-            func_80801A10_chballoonburst(param_0);
+        if (actor->unk64_20) {
+            func_80801A50_chballoonburst(actor, 0x771, 2);
+            func_80801A50_chballoonburst(actor, 0x772, 3);
+            func_80801A50_chballoonburst(actor, 0x773, 4);
+            func_80801ABC_chballoonburst(actor);
+            func_80801A10_chballoonburst(actor);
             return;
         }
-        func_80801A50_chballoonburst(param_0, 0x771, 2);
-        func_80801A50_chballoonburst(param_0, 0x772, 2);
-        func_80801A50_chballoonburst(param_0, 0x773, 2);
+        func_80801A50_chballoonburst(actor, 0x771, 2);
+        func_80801A50_chballoonburst(actor, 0x772, 2);
+        func_80801A50_chballoonburst(actor, 0x773, 2);
     }
 
-    void func_80801A10_chballoonburst(param_0) s32 param_0;
+    void func_80801A10_chballoonburst(actor) s32 actor;
     {
-        int new_var;
-        new_var = param_0 + 4;
-        func_800BBCB8(new_var, new_var, *((f32 *) ((param_0 ^ 0) + 0x38)), 8,
+        int pos;
+        // Matching: `^ 0` below only exists to match.
+        pos = actor + 4;
+        func_800BBCB8(pos, pos, *((f32 *) ((actor ^ 0) + 0x38)), 8,
                       &D_80801D28_chballoonburst);
     }
 
-    void func_80801A50_chballoonburst(param_0, param_1, param_2) s32 param_0;
-    s32 param_1;
-    s32 param_2;
+    void func_80801A50_chballoonburst(actor, unk_1, unk_2) s32 actor;
+    s32 unk_1;
+    s32 unk_2;
     {
-        s32 local_0;
-        s32 local_1;
-        s32 local_2;
+        s32 handle_copy;
+        s32 handle;
+        s32 pos;
 
-        local_1 = func_800B53A4(param_2);
-        local_0 = local_1;
-        func_800BA670(local_1, param_1);
-        local_2 = param_0 + 4;
-        func_800BABB8(local_0, local_2, local_2, *(s32 **) ((char *) param_0 + 0x38),
+        handle = func_800B53A4(unk_2);
+        handle_copy = handle;
+        func_800BA670(handle, unk_1);
+        pos = actor + 4;
+        func_800BABB8(handle_copy, pos, pos, *(s32 **) ((char *) actor + 0x38),
                       &D_80801D5C_chballoonburst);
-        func_800BA22C(local_0, param_2);
+        func_800BA22C(handle_copy, unk_2);
     }
 
-    void func_80801ABC_chballoonburst(param_0) s32 param_0;
+    void func_80801ABC_chballoonburst(actor) s32 actor;
     {
-        func_800BBCB8(param_0 + 4, 0, *((f32 *) ((param_0 ^ 0) + 0x38)), 1,
+        func_800BBCB8(actor + 4, 0, *((f32 *) ((actor ^ 0) + 0x38)), 1,
                       &D_80801D98_chballoonburst);
     }
 
-    void func_80801AFC_chballoonburst(param_0) Actor *param_0;
+    void func_80801AFC_chballoonburst(actor) Actor *actor;
     {
-        if (param_0->unk64_20) {
-            func_800BBCB8(param_0->position, 0, param_0->scale, 0xE, D_80801DBC_chballoonburst);
+        if (actor->unk64_20) {
+            func_800BBCB8(actor->position, 0, actor->scale, 0xE, D_80801DBC_chballoonburst);
         }
-        func_8010D930(4, *(u32 *) ((u8 *) param_0 + 0x70) & 1, param_0->position,
+        func_8010D930(4, *(u32 *) ((u8 *) actor + 0x70) & 1, actor->position,
                       D_80801DF0_chballoonburst);
     }
 
-    void func_80801B6C_chballoonburst(param_0) Actor *param_0;
+    void func_80801B6C_chballoonburst(actor) Actor *actor;
     {
-        if (param_0->unk70_10 != 5) {
-            param_0->unk58 = 1.4f;
-            func_80102424(param_0, 5);
-            func_8010D930(5, *(u32 *) ((u8 *) param_0 + 0x70) & 1, param_0->position,
+        if (actor->unk70_10 != 5) {
+            actor->unk58 = 1.4f;
+            func_80102424(actor, 5);
+            func_8010D930(5, *(u32 *) ((u8 *) actor + 0x70) & 1, actor->position,
                           D_80801DFC_chballoonburst);
         }
     }

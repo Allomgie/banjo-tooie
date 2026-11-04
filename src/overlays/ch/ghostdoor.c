@@ -18,58 +18,61 @@ int chghostdoor_entrypoint_1()
     return (int) &D_80800268_chghostdoor;
 }
 
-void func_80800018_chghostdoor(Actor *param_0)
+// Witchyworld station door: two leaves, opens when flag 0x96 is set.
+void func_80800018_chghostdoor(Actor *actor)
 {
-    f32 local_0;
-    s32 local_1;
-    local_0 = param_0->rotation[1];
-    local_1 = 0;
-    if (((u32) *(u16 *) ((u8 *) param_0 + 0x76) >> 7) == 50) {
-        local_1 = 1;
-        local_0 += 180.0f;
+    f32 yaw;
+    s32 mirrored;
+    yaw = actor->rotation[1];
+    mirrored = 0;
+    if (((u32) *(u16 *) ((u8 *) actor + 0x76) >> 7) == 50) {
+        mirrored = 1;
+        yaw += 180.0f;
     }
-    func_800EFD24(param_0->position);
-    func_80103014(param_0);
-    if (_chdoormake_entrypoint_3(param_0, local_0, 0.0f, 650.0f, 0x20, 0x96)) {
-        _chdoormake_entrypoint_5(param_0, 3.5f);
-        _chdoormake_entrypoint_6(param_0, 2.0f);
-        if (local_1)
-            _chdoormake_entrypoint_8(param_0, 15);
+    func_800EFD24(actor->position);
+    func_80103014(actor);
+    if (_chdoormake_entrypoint_3(actor, yaw, 0.0f, 650.0f, 0x20, 0x96)) {
+        _chdoormake_entrypoint_5(actor, 3.5f);
+        _chdoormake_entrypoint_6(actor, 2.0f);
+        if (mirrored)
+            _chdoormake_entrypoint_8(actor, 15);
     }
     if (func_800DA298(0x96))
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
 }
 
-s32 func_808000F4_chghostdoor(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_808000F4_chghostdoor(Actor *actor, s32 msg, s32 payload)
 {
-    s32 local_0;
-    switch (param_1) {
+    s32 model_id;
+    switch (msg) {
         case 0x95:
-            local_0 = param_0->unk74_7 == 0x32 ? 0x782 : 0x783;
-            func_80103140(param_0, local_0, *(u16 *) ((u8 *) param_0->unk0 + 0x16));
+            model_id = actor->unk74_7 == 0x32 ? 0x782 : 0x783;
+            func_80103140(actor, model_id, *(u16 *) ((u8 *) actor->unk0 + 0x16));
             break;
         case 0x9D:
-            func_800FFAB0(param_0);
+            func_800FFAB0(actor);
             return 1;
     }
-    return _chdoor_entrypoint_1(param_0, param_1, param_2);
+    return _chdoor_entrypoint_1(actor, msg, payload);
 }
 
-void func_80800190_chghostdoor(s32 arg0)
+// Switch that sets FLAG_096_STATION_UNLOCKED_WW.
+void func_80800190_chghostdoor(s32 actor)
 {
-    _chswitch_entrypoint_7(arg0, FLAG_096_STATION_UNLOCKED_WW);
-    _chswitch_entrypoint_9(arg0);
+    _chswitch_entrypoint_7(actor, FLAG_096_STATION_UNLOCKED_WW);
+    _chswitch_entrypoint_9(actor);
 }
 
-s32 func_808001BC_chghostdoor(Actor *param_0, s32 param_1, s32 param_2)
+// Switch pressed: camera shot and tells the door (actor 0x344).
+s32 func_808001BC_chghostdoor(Actor *actor, s32 msg, s32 payload)
 {
-    switch (param_1) {
+    switch (msg) {
         case 7:
-            _capod_entrypoint_13(param_0->unk0, NULL, 5, 0x10);
+            _capod_entrypoint_13(actor->unk0, NULL, 5, 0x10);
             func_80101180(0x344, 7, 0);
             break;
         default:
-            return _chswitch_entrypoint_10(param_0, param_1, param_2);
+            return _chswitch_entrypoint_10(actor, msg, payload);
     }
     return 1;
 }

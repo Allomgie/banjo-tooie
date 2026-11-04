@@ -22,44 +22,45 @@ int chtalontorpedoboulder_entrypoint_0()
     return (int) &D_808002B4_chtalontorpedoboulder;
 }
 
-void func_8080000C_chtalontorpedoboulder(Actor *param_0)
+void func_8080000C_chtalontorpedoboulder(Actor *actor)
 {
-    s32 local_0;
+    s32 flag;
 
-    local_0 = func_808001CC_chtalontorpedoboulder(param_0);
-    if (local_0 != 0 && func_800DA298(local_0)) {
-        func_800FFAB0(param_0);
+    flag = func_808001CC_chtalontorpedoboulder(actor);
+    if (flag != 0 && func_800DA298(flag)) {
+        func_800FFAB0(actor);
     } else {
-        func_80102FDC(param_0, param_0->scale + param_0->scale);
+        func_80102FDC(actor, actor->scale + actor->scale);
     }
 }
 
-s32 func_80800070_chtalontorpedoboulder(u8 *param_0, s32 param_1, s32 param_2)
+// 0x40: hit by the Talon Torpedo; 0x90: debris.
+s32 func_80800070_chtalontorpedoboulder(u8 *actor, s32 msg, s32 param_2)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_3;
+    s32 flag;
+    s32 camera_id;
+    s32 exploder;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x40:
-            local_0 = func_808001CC_chtalontorpedoboulder(param_0);
-            local_1 = func_808001F8_chtalontorpedoboulder(param_0);
-            _chexploder_entrypoint_3(param_0, param_0 + 4, 0xF);
-            func_800BABB8(0, param_0 + 4, param_0 + 4, *(s32 *) ((s8 *) param_0 + 0x38),
+            flag = func_808001CC_chtalontorpedoboulder(actor);
+            camera_id = func_808001F8_chtalontorpedoboulder(actor);
+            _chexploder_entrypoint_3(actor, actor + 4, 0xF);
+            func_800BABB8(0, actor + 4, actor + 4, *(s32 *) ((s8 *) actor + 0x38),
                           &D_80800240_chtalontorpedoboulder);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4,
+            _subaddieaudioquick_entrypoint_2(actor, actor + 4,
                                              &D_808002FC_chtalontorpedoboulder);
-            if (local_0 != 0) {
-                func_800DA544(local_0);
+            if (flag != 0) {
+                func_800DA544(flag);
             }
-            if (local_1 != -1) {
-                _capod_entrypoint_13(*(s32 *) ((s8 *) param_0 + 0), 0, local_1, 0x10);
+            if (camera_id != -1) {
+                _capod_entrypoint_13(*(s32 *) ((s8 *) actor + 0), 0, camera_id, 0x10);
             }
             goto block_9;
         case 0x90:
-            local_3 = func_80106790(func_80101080());
-            _chexploder_entrypoint_9(local_3, 1, 2);
-            _chexploder_entrypoint_9(local_3, 2, 0);
+            exploder = func_80106790(func_80101080());
+            _chexploder_entrypoint_9(exploder, 1, 2);
+            _chexploder_entrypoint_9(exploder, 2, 0);
             goto block_9;
         default:
             return 0;
@@ -74,30 +75,34 @@ s32 func_80800194_chtalontorpedoboulder(s32 param_0, s32 param_1)
     func_80101870(param_0, param_1);
 }
 
-s32 func_808001CC_chtalontorpedoboulder(param_0) void *param_0;
+// Returns the game flag for this boulder variant, or 0 if the variant is out of range.
+s32 func_808001CC_chtalontorpedoboulder(actor) void *actor;
 {
-    s32 temp_v1;
-    temp_v1 = (((u16) *(u16 *) ((u8 *) param_0 + 0x76) & 0xFFFFFFFF) >> 7) - 0x32;
-    if ((temp_v1 < 0) || (temp_v1 >= 5)) {
+    s32 variant;
+    variant = (((u16) *(u16 *) ((u8 *) actor + 0x76) & 0xFFFFFFFF) >> 7) - 0x32;
+    if ((variant < 0) || (variant >= 5)) {
         return 0;
     }
-    return temp_v1 + 0x3EF;
+    return variant + 0x3EF;
 }
 
-s32 func_808001F8_chtalontorpedoboulder(param_0)
-TalonState *param_0;
+s32 func_808001F8_chtalontorpedoboulder(actor)
+TalonState *actor;
 {
     s32 i;
     for (i = 0; i < 1; i++) {
 
-if (D_80800314_chtalontorpedoboulder[i].id == param_0->f76 - 0x32) {
+if (D_80800314_chtalontorpedoboulder[i].id == actor->f76 - 0x32) {
     return D_80800314_chtalontorpedoboulder[i].val;
 }
+
 
 }
 return -1;
 }
 
+// TU-NOTE: the overlay .data is defined here in C because its tables point to functions of this file;
+// IDO schedules some of them differently otherwise. Values are taken from the ROM.
 extern void func_80102EC0();
 extern void func_80105834();
 extern void func_80108ED0();

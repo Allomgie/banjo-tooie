@@ -2,14 +2,14 @@
 
 extern int D_808000A0_chlavaentrancebridgeswitch[];
 
-int func_80800000_chlavaentrancebridgeswitch(s32 param_0[4], s32 param_1)
+int func_80800000_chlavaentrancebridgeswitch(s32 switch_data[4], s32 msg)
 {
-    if (param_1 == 7) {
+    if (msg == 7) {
         func_80101180(910, 96, 0);
-        _capod_entrypoint_13(param_0[0], 0, 5, 16);
+        _capod_entrypoint_13(switch_data[0], 0, 5, 16);
         return 1;
     }
-    return _chswitch_entrypoint_10(param_0);
+    return _chswitch_entrypoint_10(switch_data);
 }
 
 void func_8080005C_chlavaentrancebridgeswitch(s32 arg0)

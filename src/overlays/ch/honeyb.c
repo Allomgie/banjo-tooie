@@ -48,6 +48,9 @@ s32 func_80800C0C_chhoneyb();
 void func_80800680_chhoneyb();
 void func_80800744_chhoneyb();
 
+// TU-NOTE: the .data tables at the end of this file are defined in C so IDO schedules the functions that
+// they point to correctly. Values are taken from the ROM.
+
 int chhoneyb_entrypoint_0(void)
 {
     extern int D_80801020_chhoneyb[];
@@ -67,21 +70,21 @@ void func_80800018_chhoneyb(u8 *param_0, s32 param_1, s32 param_2)
 
 void func_80800058_chhoneyb(u8 *param_0)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 combs_owned;
+    s32 upgrade;
     *(s32 *) ((s8 *) param_0 + 0x28) = 0;
     *(s32 *) ((s8 *) param_0 + 0x2C) = 0;
-    local_1 = func_80800B78_chhoneyb() + 1;
-    if (_gcextra_entrypoint_1() >= local_1) {
+    upgrade = func_80800B78_chhoneyb() + 1;
+    if (_gcextra_entrypoint_1() >= upgrade) {
         do {
-            local_0 = func_80800B58_chhoneyb();
-            if ((local_0 - *(s32 *) ((s8 *) param_0 + 0x2C)) >= func_80800B98_chhoneyb(local_1)) {
+            combs_owned = func_80800B58_chhoneyb();
+            if ((combs_owned - *(s32 *) ((s8 *) param_0 + 0x2C)) >= func_80800B98_chhoneyb(upgrade)) {
                 *(s32 *) ((s8 *) param_0 + 0x28) = (s32) (*(s32 *) ((s8 *) param_0 + 0x28) + 1);
                 *(s32 *) ((s8 *) param_0 + 0x2C) =
-                    (s32) (func_80800B98_chhoneyb(local_1) + *(s32 *) ((s8 *) param_0 + 0x2C));
+                    (s32) (func_80800B98_chhoneyb(upgrade) + *(s32 *) ((s8 *) param_0 + 0x2C));
             }
-            local_1 += 1;
-        } while (_gcextra_entrypoint_1() >= local_1);
+            upgrade += 1;
+        } while (_gcextra_entrypoint_1() >= upgrade);
     }
     _subaddieitem_entrypoint_1((u8 *) func_80100094(param_0, 1) + 0x18,
                                *(s32 *) ((s8 *) param_0 + 0x2C));
@@ -104,10 +107,10 @@ int func_8080011C_chhoneyb(Actor *param_0)
 
 void func_80800194_chhoneyb(Actor *param_0)
 {
-    HoneyBMarkerPose local_0;
+    HoneyBMarkerPose marker;
 
-    if (_subaddiemarker_entrypoint_0(param_0, 0x1C1, &local_0, 1)) {
-        func_800EE7F8(param_0->actorData, local_0.position);
+    if (_subaddiemarker_entrypoint_0(param_0, 0x1C1, &marker, 1)) {
+        func_800EE7F8(param_0->actorData, marker.position);
     }
     _subaddieitem_entrypoint_0((u8 *) func_80100094(param_0, 1) + 0x18, 0x4B7, 0x258, 3);
     func_80800058_chhoneyb(param_0);
@@ -208,22 +211,22 @@ void func_8080062C_chhoneyb(param_0) u8 *param_0;
 
 void func_80800680_chhoneyb(param_0) Actor *param_0;
 {
-    void *local_0;
-    s32 local_1;
-    f32 local_2;
+    void *expression;
+    s32 blink;
+    f32 progress;
 
-    local_0 = _suexpression_entrypoint_20();
-    local_1 = 0;
-    if (local_0 != NULL) {
+    expression = _suexpression_entrypoint_20();
+    blink = 0;
+    if (expression != NULL) {
         if (func_801022E4(param_0) == 0x4AD &&
-            ((local_2 = func_80101F24(param_0)) < 0.12f || local_2 > 0.97f ||
+            ((progress = func_80101F24(param_0)) < 0.12f || progress > 0.97f ||
              func_80102320(param_0, 0.55f, 0.7f))) {
-            local_1 = 1;
+            blink = 1;
         }
-        if (local_1) {
-            _suexpression_entrypoint_18(local_0, 1);
+        if (blink) {
+            _suexpression_entrypoint_18(expression, 1);
         }
-        _suexpression_entrypoint_10(local_0, param_0->unk0, 0);
+        _suexpression_entrypoint_10(expression, param_0->unk0, 0);
     }
 }
 
@@ -231,30 +234,31 @@ void func_80800744_chhoneyb(param_0, param_1, param_2) u8 *param_0;
 s32 param_1;
 s32 param_2;
 {
-    s32 sp2C;
-    s32 sp28;
-    s32 temp_v0;
-    sp2C = 0;
-    sp28 = 0xF;
+    s32 next_dialog;
+    s32 next_arg;
+    s32 upgrades_taken;
+    next_dialog = 0;
+    next_arg = 0xF;
     switch (param_1) {
         case 0x1518:
             func_800DA544(0x4E9);
 
         case 0x1519:
             func_800DA544(0);
+            // Matching: empty block steers IDO's register allocation.
             if (0) {
             }
-            temp_v0 = *(s32 *) ((s8 *) param_0 + 0x28);
-            if (temp_v0 == 0) {
+            upgrades_taken = *(s32 *) ((s8 *) param_0 + 0x28);
+            if (upgrades_taken == 0) {
                 if (func_80800BD8_chhoneyb() == 1) {
-                    sp2C = 0x151F;
+                    next_dialog = 0x151F;
                 } else {
-                    sp2C = 0x1520;
+                    next_dialog = 0x1520;
                 }
-            } else if (temp_v0 == 1) {
-                sp2C = 0x151A;
+            } else if (upgrades_taken == 1) {
+                next_dialog = 0x151A;
             } else {
-                sp2C = 0x151B;
+                next_dialog = 0x151B;
             }
             _susubgame_entrypoint_5(param_0, func_80100094(param_0, 1), 3, 1, 0);
             break;
@@ -262,16 +266,16 @@ s32 param_2;
         case 0x151A:
 
         case 0x151B:
-            sp2C = 0x151C;
+            next_dialog = 0x151C;
             break;
 
         case 0x151C:
             if (param_2 == 1) {
-                sp2C = 0x151D;
+                next_dialog = 0x151D;
             } else {
-                sp2C = 0x151E;
+                next_dialog = 0x151E;
             }
-            sp28 = 0x4E;
+            next_arg = 0x4E;
             break;
 
         case 0x151D:
@@ -290,8 +294,8 @@ s32 param_2;
             func_80102424(param_0, 1);
     }
 
-    if (sp2C != 0) {
-        func_80800018_chhoneyb(param_0, sp2C, sp28);
+    if (next_dialog != 0) {
+        func_80800018_chhoneyb(param_0, next_dialog, next_arg);
     }
 }
 
@@ -431,6 +435,7 @@ s32 func_80800C78_chhoneyb(Actor *param_0, s32 param_1, s32 param_2)
 return 1;
 }
 
+// HUD info-bar renderer: draws the honeycomb health row, the newest segment sliding in.
 void chhoneyb_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
 {
     s32 local_0;
@@ -454,6 +459,7 @@ void chhoneyb_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
     frac = *(f32 *) &tmp;
     tmp = _scinfobar_entrypoint_19(param_1);
     cnt = _scinfobar_entrypoint_20(param_1);
+    // Matching: the `cnt * 0` is needed for the match.
     cap = (s32) (((f32) (cnt * 0 + 0x28)) * fv);
 
 if (n < cap) {

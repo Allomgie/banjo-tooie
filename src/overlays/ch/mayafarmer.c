@@ -16,9 +16,9 @@ extern f32 func_800F1DF4(f32 *, f32 *);
 extern void func_800EFCD8(f32 *, f32, f32);
 typedef struct {
     u8 pad_0[0x70];
-    u32 local_0 : 7;
+    u32 zone : 7;
     u32 pad_1 : 15;
-    u32 local_1 : 6;
+    u32 point : 6;
     u32 pad_2 : 4;
 } FarmerRouteKeys;
 extern void func_800EEC30(f32 *, f32, f32, f32);
@@ -29,8 +29,8 @@ extern s32 D_808012E8_chmayafarmer[];
 extern void _subaddieaudioloop_entrypoint_4();
 extern int D_808012FC_chmayafarmer[];
 typedef union {
-    s32 local_0;
-    s16 local_1[2];
+    s32 word;
+    s16 half[2];
 } MayaFarmerEvent;
 extern u8 D_8080125C_chmayafarmer[];
 extern Vec3f D_8080126C_chmayafarmer;
@@ -49,8 +49,8 @@ extern s32 func_800EFFB4(f32 *, f32, f32 *);
 extern void func_800EE7F8(f32 *, f32 *);
 extern void _chbadshad_entrypoint_1(Actor *, f32 *, f32);
 typedef struct {
-    f32 local_0[3];
-    s16 local_1;
+    f32 pos[3];
+    s16 radius;
 } FarmerScatterOrigin;
 extern FarmerScatterOrigin *func_800CC63C(s32, s32);
 extern void func_800EF1B8(f32 *, f32, f32);
@@ -62,136 +62,139 @@ extern void func_80102B6C(Actor *, f32);
 extern void func_800EF4E4(f32 *, f32, f32, f32, f32, f32);
 void func_80800D60_chmayafarmer();
 
-void func_80800000_chmayafarmer(u8 *param_0, s32 param_1, s32 param_2)
+// Bovina cutscene/dialog state machine; the case fall-through is intended.
+void func_80800000_chmayafarmer(u8 *actor, s32 arg1, s32 arg2)
 {
-    s32 local_0;
+    s32 unk_0;
 
-    local_0 = *(s32 *) ((s8 *) param_0 + 0x6C) & 0x1FF;
-    switch (local_0) {
+    unk_0 = *(s32 *) ((s8 *) actor + 0x6C) & 0x1FF;
+    switch (unk_0) {
         case 0:
-            _capod_entrypoint_2(*(s32 *) ((s8 *) param_0 + 0), 8, 0);
+            _capod_entrypoint_2(*(s32 *) ((s8 *) actor + 0), 8, 0);
 
         case 1:
             _capod_entrypoint_8(1);
-            *(u16 *) ((s8 *) param_0 + 0x6E) =
-                (u16) ((*(u16 *) ((s8 *) param_0 + 0x6E) & 0xFE00) | 2);
+            *(u16 *) ((s8 *) actor + 0x6E) =
+                (u16) ((*(u16 *) ((s8 *) actor + 0x6E) & 0xFE00) | 2);
             _gcdialogcamera_entrypoint_3(&D_8080124C_chmayafarmer,
-                                         *(f32 *) ((s8 *) param_0 + 0x38));
-            _gcdialogcamera_entrypoint_4(param_0 + 4);
-            _gcdialogcamera_entrypoint_5(param_0 + 0x44);
+                                         *(f32 *) ((s8 *) actor + 0x38));
+            _gcdialogcamera_entrypoint_4(actor + 4);
+            _gcdialogcamera_entrypoint_5(actor + 0x44);
             _gcdialogcamera_entrypoint_8();
 
         case 2:
-            _capod_entrypoint_7(param_1, param_2);
+            _capod_entrypoint_7(arg1, arg2);
     }
 }
 
-void func_808000B0_chmayafarmer(u8 *param_0, s32 param_1, s32 param_2, s32 param_3)
+void func_808000B0_chmayafarmer(u8 *actor, s32 arg1, s32 arg2, s32 arg3)
 {
-    s32 temp_t7;
+    s32 unk_0;
 
-    temp_t7 = *(s32 *) (param_0 + 0x6C) & 0x1FF;
-    switch (temp_t7) {
+    unk_0 = *(s32 *) (actor + 0x6C) & 0x1FF;
+    switch (unk_0) {
         case 0:
-            _capod_entrypoint_2(*(s32 *) param_0, 8, param_2);
+            _capod_entrypoint_2(*(s32 *) actor, 8, arg2);
 
         case 2:
-            *(u16 *) (param_0 + 0x6E) = (*(u16 *) (param_0 + 0x6E) & 0xFE00) | 1;
+            *(u16 *) (actor + 0x6E) = (*(u16 *) (actor + 0x6E) & 0xFE00) | 1;
 
         case 1:
-            _capod_entrypoint_6(param_3, param_1, param_2);
+            _capod_entrypoint_6(arg3, arg1, arg2);
     }
 }
 
-int func_80800138_chmayafarmer(Actor *param_0)
+int func_80800138_chmayafarmer(Actor *actor)
 {
-    if (*(s32 *) ((char *) param_0 + 0x6C) & 0x1FF) {
-        _capod_entrypoint_3(0, param_0);
-        *(u16 *) ((char *) param_0 + 0x6E) &= 0xFE00;
+    if (*(s32 *) ((char *) actor + 0x6C) & 0x1FF) {
+        _capod_entrypoint_3(0, actor);
+        *(u16 *) ((char *) actor + 0x6E) &= 0xFE00;
     }
 }
 
-void func_80800180_chmayafarmer(FarmerState *param_0, s32 param_1, s32 param_2)
+void func_80800180_chmayafarmer(FarmerState *farmer, s32 dialog_id, s32 flags)
 {
-    param_2 |= 4;
-    _subaddiedialog_entrypoint_11(param_0->f0, param_1, param_2, &param_0->f4, 0x2A);
-    param_0->flag = 1;
+    flags |= 4;
+    _subaddiedialog_entrypoint_11(farmer->f0, dialog_id, flags, &farmer->f4, 0x2A);
+    farmer->flag = 1;
 }
 
-int func_808001CC_chmayafarmer(param_0)
-Actor *param_0;
+int func_808001CC_chmayafarmer(actor)
+Actor *actor;
 {
     func_80102424();
-    if (((u32) *(u16 *) ((char *) param_0 + 0x72) >> 10) == 4) {
+    if (((u32) *(u16 *) ((char *) actor + 0x72) >> 10) == 4) {
         func_800FC660(0x10);
-        func_80800180_chmayafarmer(param_0, 0xF07, 0xB);
-        *(f32 *) ((char *) param_0 + 0x58) = 0.0f;
+        func_80800180_chmayafarmer(actor, 0xF07, 0xB);
+        *(f32 *) ((char *) actor + 0x58) = 0.0f;
     }
 }
 
-s32 func_80800228_chmayafarmer(Actor *param_0, s32 param_1, MayaFarmerEvent param_2)
+s32 func_80800228_chmayafarmer(Actor *actor, s32 event, MayaFarmerEvent data)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 zone_id;
+    s32 i;
 
-    switch (param_1) {
+    switch (event) {
         case 0x95:
-            _suexpression_entrypoint_7(param_0, 1, 0x2A);
-            _suexpression_entrypoint_12(func_80100094(param_0, 1), 80.0f, 30.0f);
-            func_80108B04(param_0, 0);
+            _suexpression_entrypoint_7(actor, 1, 0x2A);
+            _suexpression_entrypoint_12(func_80100094(actor, 1), 80.0f, 30.0f);
+            func_80108B04(actor, 0);
             break;
         case 0x11:
-            if (param_0->unk70_10 == 1) {
-                func_808001CC_chmayafarmer(param_0, 3);
+            if (actor->unk70_10 == 1) {
+                func_808001CC_chmayafarmer(actor, 3);
             }
             break;
         case 0x2E:
-            param_0->unk74_30 = 0;
-            switch (param_2.local_1[0]) {
+            actor->unk74_30 = 0;
+            switch (data.half[0]) {
                 case 0xF07:
                     func_800C01A8(0x64, 0);
-                    func_808000B0_chmayafarmer(param_0, 4, 0x2010, param_0->unk0);
+                    func_808000B0_chmayafarmer(actor, 4, 0x2010, actor->unk0);
                     func_800D1000(4, 1, 0, 1, 0);
                     break;
                 case 0xF06:
-                    func_80800138_chmayafarmer(param_0);
+                    func_80800138_chmayafarmer(actor);
             }
             break;
         case 0x2F:
-            if (param_2.local_1[0] == 0xF06 && !func_800C07F4()) {
+            if (data.half[0] == 0xF06 && !func_800C07F4()) {
                 func_800DA544(5);
             }
             break;
         case 0xB:
-            switch (param_2.local_0) {
+            switch (data.word) {
                 case 0xF:
-                    func_80800000_chmayafarmer(param_0, 2, 1);
+                    func_80800000_chmayafarmer(actor, 2, 1);
                     return 4;
                 case 4:
-                    func_80800138_chmayafarmer(param_0);
+                    func_80800138_chmayafarmer(actor);
                     return 4;
                 default:
                     return 3;
             }
         case 0x52:
-            _gcdialogcamera_entrypoint_3(D_8080125C_chmayafarmer, param_0->scale);
+            _gcdialogcamera_entrypoint_3(D_8080125C_chmayafarmer, actor->scale);
             break;
         case 0x40:
-            param_0->unk74_7--;
-            if ((s32) param_0->unk74_7 <= 0) {
-                func_808001CC_chmayafarmer(param_0, 4);
+            // A fly was shot.
+            actor->unk74_7--;
+            if ((s32) actor->unk74_7 <= 0) {
+                func_808001CC_chmayafarmer(actor, 4);
             }
             break;
         case 0x3D:
-            local_0 = func_800CBC3C(D_8080126C_chmayafarmer.f);
-            if ((s32) param_0->unk74_7 >= 9) {
-                param_0->unk74_7 = 8;
+            // Spawn up to 8 flies.
+            zone_id = func_800CBC3C(D_8080126C_chmayafarmer.f);
+            if ((s32) actor->unk74_7 >= 9) {
+                actor->unk74_7 = 8;
             }
-            for (local_1 = 0; local_1 < (s32) param_0->unk74_7; local_1++) {
-                func_800CD08C(local_0, D_8080126C_chmayafarmer.f);
+            for (i = 0; i < (s32) actor->unk74_7; i++) {
+                func_800CD08C(zone_id, D_8080126C_chmayafarmer.f);
                 func_80108528(0x2F8, D_8080126C_chmayafarmer.f, (s32) func_800DC178(0.0f, 360.0f),
-                              &param_0)
-                    ->unk3C = param_0->unk0;
+                              &actor)
+                    ->unk3C = actor->unk0;
             }
             break;
         default:
@@ -200,82 +203,83 @@ s32 func_80800228_chmayafarmer(Actor *param_0, s32 param_1, MayaFarmerEvent para
     return 1;
 }
 
-void func_80800520_chmayafarmer(Actor *arg0)
+void func_80800520_chmayafarmer(Actor *actor)
 {
-    _suexpression_entrypoint_8(arg0, 1);
+    _suexpression_entrypoint_8(actor, 1);
 }
 
-void func_80800540_chmayafarmer(Actor *param_0)
+// Bovina main loop: dialogs, task start and fly-shot handling.
+void func_80800540_chmayafarmer(Actor *actor)
 {
-    f32 local_0[3];
-    f32 *local_1;
+    f32 player_pos[3];
+    f32 *pos;
 
-    func_8010D254(local_0);
-    if (!param_0->unk64_19 && local_0[1] < 2000.0f) {
-        param_0->unk64_16 = 0;
+    func_8010D254(player_pos);
+    if (!actor->unk64_19 && player_pos[1] < 2000.0f) {
+        actor->unk64_16 = 0;
         return;
     }
-    param_0->unk64_16 = 1;
-    _suexpression_entrypoint_10(func_80100094(param_0, 1), param_0->unk0, 0);
-    local_1 = param_0->position;
-    _sudeflect_entrypoint_1(local_1, 140.0f, 0.0f, 110.0f, 14);
-    if (!param_0->unk74_30 && func_80090178(1) && !func_800D0A9C(4, 1)) {
-        if (_subaddiedialog_entrypoint_3(local_1, (s32) param_0->rotation[1], 0x15E, 0x46, 6) &&
+    actor->unk64_16 = 1;
+    _suexpression_entrypoint_10(func_80100094(actor, 1), actor->unk0, 0);
+    pos = actor->position;
+    _sudeflect_entrypoint_1(pos, 140.0f, 0.0f, 110.0f, 14);
+    if (!actor->unk74_30 && func_80090178(1) && !func_800D0A9C(4, 1)) {
+        if (_subaddiedialog_entrypoint_3(pos, (s32) actor->rotation[1], 0x15E, 0x46, 6) &&
             !func_800DA9E4(0x4D, 1)) {
-            func_80800000_chmayafarmer(param_0, 2, 0);
-            func_80800180_chmayafarmer(param_0, 0xF06, 11);
-        } else if (_subaddiedialog_entrypoint_6(local_1, (s32) param_0->rotation[1], 0x15E, 0x46,
+            func_80800000_chmayafarmer(actor, 2, 0);
+            func_80800180_chmayafarmer(actor, 0xF06, 11);
+        } else if (_subaddiedialog_entrypoint_6(pos, (s32) actor->rotation[1], 0x15E, 0x46,
                                                 6)) {
-            func_80800180_chmayafarmer(param_0, 0xF08, 11);
+            func_80800180_chmayafarmer(actor, 0xF08, 11);
         }
     }
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            if ((s32) param_0->unk74_7 <= 0) {
-                func_808001CC_chmayafarmer(param_0, 4);
+            if ((s32) actor->unk74_7 <= 0) {
+                func_808001CC_chmayafarmer(actor, 4);
             }
             return;
         case 3:
-            param_0->unk54 *= 0.9f;
-            if (func_80101E14(param_0, 0.06f) || func_80101E14(param_0, 0.8f)) {
-                _subaddieaudioquick_entrypoint_2(param_0, local_1, D_80801210_chmayafarmer);
+            actor->unk54 *= 0.9f;
+            if (func_80101E14(actor, 0.06f) || func_80101E14(actor, 0.8f)) {
+                _subaddieaudioquick_entrypoint_2(actor, pos, D_80801210_chmayafarmer);
             }
-            if (func_80101E14(param_0, 0.999f)) {
-                _suexpression_entrypoint_12((s32) func_80100094(param_0, 1), 80.0f, 30.0f);
-                if ((s32) param_0->unk74_7 <= 0) {
-                    func_808001CC_chmayafarmer(param_0, 4);
+            if (func_80101E14(actor, 0.999f)) {
+                _suexpression_entrypoint_12((s32) func_80100094(actor, 1), 80.0f, 30.0f);
+                if ((s32) actor->unk74_7 <= 0) {
+                    func_808001CC_chmayafarmer(actor, 4);
                     return;
                 }
-                func_808001CC_chmayafarmer(param_0, 1);
+                func_808001CC_chmayafarmer(actor, 1);
             }
             break;
         case 4:
-            param_0->unk58 += 1.0f;
-            if (param_0->unk58 > 120.0f) {
-                func_808001CC_chmayafarmer(param_0, 5);
+            actor->unk58 += 1.0f;
+            if (actor->unk58 > 120.0f) {
+                func_808001CC_chmayafarmer(actor, 5);
             }
-            if (func_80101E14(param_0, 0.75f)) {
-                _subaddieaudioquick_entrypoint_2(param_0, local_1, D_80801220_chmayafarmer);
+            if (func_80101E14(actor, 0.75f)) {
+                _subaddieaudioquick_entrypoint_2(actor, pos, D_80801220_chmayafarmer);
             }
             break;
         case 5:
-            if (func_80101E14(param_0, 0.75f)) {
-                _subaddieaudioquick_entrypoint_2(param_0, local_1, D_80801220_chmayafarmer);
+            if (func_80101E14(actor, 0.75f)) {
+                _subaddieaudioquick_entrypoint_2(actor, pos, D_80801220_chmayafarmer);
             }
     }
 }
 
-void func_8080085C_chmayafarmer(Actor *param_0)
+void func_8080085C_chmayafarmer(Actor *actor)
 {
-    param_0->scale = 0.375f;
+    actor->scale = 0.375f;
     if (func_800D0A9C(4, 1)) {
-        param_0->unk74_7 = 0;
-        func_808001CC_chmayafarmer(param_0, 5);
+        actor->unk74_7 = 0;
+        func_808001CC_chmayafarmer(actor, 5);
     }
     if (_glcutDll_entrypoint_20()) {
-        param_0->unk74_7 = 0;
-        func_808001CC_chmayafarmer(param_0, 5);
-        param_0->unk64_19 = 1;
+        actor->unk74_7 = 0;
+        func_808001CC_chmayafarmer(actor, 5);
+        actor->unk64_19 = 1;
     }
 }
 
@@ -284,18 +288,18 @@ int chmayafarmer_entrypoint_0()
     return &D_80801278_chmayafarmer;
 }
 
-s32 func_808008F8_chmayafarmer(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_808008F8_chmayafarmer(Actor *actor, s32 event, s32 data)
 {
-    f32 local_0[3];
-    switch (param_1) {
+    f32 hit_pos[3];
+    switch (event) {
         case 0x40:
-            func_800EC398(param_2, local_0);
-            func_800EFCD8((f32 *) &param_0->actorData[4], func_800F1DF4(local_0, param_0->position),
+            func_800EC398(data, hit_pos);
+            func_800EFCD8((f32 *) &actor->actorData[4], func_800F1DF4(hit_pos, actor->position),
                           25.0f);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80801230_chmayafarmer);
-            func_80102424(param_0, 3);
-            func_8010A570(param_0);
-            func_8010114C(param_0->unk3C, param_1, param_2);
+            _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80801230_chmayafarmer);
+            func_80102424(actor, 3);
+            func_8010A570(actor);
+            func_8010114C(actor->unk3C, event, data);
             break;
         default:
             return 0;
@@ -307,175 +311,177 @@ void func_808010DC_chmayafarmer();
 
 void func_80801040_chmayafarmer();
 
-void func_808009A0_chmayafarmer(Actor *param_0)
+// Fly actor main loop.
+void func_808009A0_chmayafarmer(Actor *actor)
 {
-    void *local_0;
-    f32 local_1[3];
-    f32 local_2[3];
+    void *bovina;
+    f32 player_pos[3];
+    f32 shadow_pos[3];
 
-    func_8010D254(local_1);
-    if (local_1[1] < 2000.0f) {
-        if (param_0->unk70_10 == 1 || param_0->unk70_10 == 2) {
-            func_808010DC_chmayafarmer(param_0);
+    func_8010D254(player_pos);
+    if (player_pos[1] < 2000.0f) {
+        if (actor->unk70_10 == 1 || actor->unk70_10 == 2) {
+            func_808010DC_chmayafarmer(actor);
         }
-        param_0->unk64_16 = 0;
+        actor->unk64_16 = 0;
     } else {
-        param_0->unk64_16 = 1;
-        local_0 = func_80106790(param_0->unk3C);
-        if (func_800EFFB4(param_0->position, 500.0f, (f32 *) ((u8 *) local_0 + 4))) {
-            func_8010114C(param_0->unk3C, 0x11, 0);
+        actor->unk64_16 = 1;
+        bovina = func_80106790(actor->unk3C);
+        if (func_800EFFB4(actor->position, 500.0f, (f32 *) ((u8 *) bovina + 4))) {
+            func_8010114C(actor->unk3C, 0x11, 0);
         }
-        switch (param_0->unk70_10) {
+        switch (actor->unk70_10) {
             case 1:
             case 2:
                 if (func_800DA9E4(5, 0)) {
-                    func_808000B0_chmayafarmer(local_0, 0xF, 0x418, param_0->unk0);
+                    func_808000B0_chmayafarmer(bovina, 0xF, 0x418, actor->unk0);
                 }
-                func_80800D60_chmayafarmer(param_0, local_0);
-                func_800EF04C(param_0->position, (f32 *) ((u8 *) param_0 + 0x28));
-                func_808010DC_chmayafarmer(param_0);
+                func_80800D60_chmayafarmer(actor, bovina);
+                func_800EF04C(actor->position, (f32 *) ((u8 *) actor + 0x28));
+                func_808010DC_chmayafarmer(actor);
                 break;
             case 3:
-                if (param_0->unk58 < param_0->position[1]) {
-                    func_80801040_chmayafarmer(param_0);
-                    func_808010DC_chmayafarmer(param_0);
+                if (actor->unk58 < actor->position[1]) {
+                    func_80801040_chmayafarmer(actor);
+                    func_808010DC_chmayafarmer(actor);
                 } else {
-                    ((f32 *) param_0->actorData)[5] = 0.0f;
-                    func_800EF04C(param_0->position, (f32 *) ((u8 *) param_0 + 0x28));
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                    ((f32 *) actor->actorData)[5] = 0.0f;
+                    func_800EF04C(actor->position, (f32 *) ((u8 *) actor + 0x28));
+                    _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                      D_8080123C_chmayafarmer);
-                    func_80102424(param_0, 4);
+                    func_80102424(actor, 4);
                 }
                 break;
             case 4:
-                if (func_80101E14(param_0, 0.75f)) {
-                    _subaddiefade_entrypoint_3(param_0);
+                if (func_80101E14(actor, 0.75f)) {
+                    _subaddiefade_entrypoint_3(actor);
                 }
         }
-        func_800EE7F8(local_2, param_0->position);
-        local_2[1] = 2608.0f;
-        _chbadshad_entrypoint_1(param_0, local_2, param_0->scale * 1.4f);
+        func_800EE7F8(shadow_pos, actor->position);
+        shadow_pos[1] = 2608.0f;
+        _chbadshad_entrypoint_1(actor, shadow_pos, actor->scale * 1.4f);
     }
 }
 
-void func_80800B9C_chmayafarmer(Actor *param_0)
+void func_80800B9C_chmayafarmer(Actor *actor)
 {
-    FarmerScatterOrigin *local_0;
-    f32 local_2;
-    f32 local_1;
-    local_0 = func_800CC63C(((FarmerRouteKeys *) param_0)->local_0 - 1,
-                            ((FarmerRouteKeys *) param_0)->local_1 - 1);
-    func_800EE7F8(param_0->position, local_0->local_0);
-    local_1 = func_800DC178(0.0f, 360.0f);
-    local_2 = func_800DC178(local_0->local_1 * 0.3f, local_0->local_1);
-    func_800EF1B8(param_0->position, local_1, local_2);
-    param_0->unk58 = 2605.0f;
-    param_0->scale = 0.5f;
+    FarmerScatterOrigin *origin;
+    f32 distance;
+    f32 angle;
+    origin = func_800CC63C(((FarmerRouteKeys *) actor)->zone - 1,
+                            ((FarmerRouteKeys *) actor)->point - 1);
+    func_800EE7F8(actor->position, origin->pos);
+    angle = func_800DC178(0.0f, 360.0f);
+    distance = func_800DC178(origin->radius * 0.3f, origin->radius);
+    func_800EF1B8(actor->position, angle, distance);
+    actor->unk58 = 2605.0f;
+    actor->scale = 0.5f;
 }
 
-s32 func_80800C58_chmayafarmer(Actor *param_0)
+s32 func_80800C58_chmayafarmer(Actor *actor)
 {
-    f32 local_0[3];
-    s32 local_1;
+    f32 target[3];
+    s32 point_idx;
 
-    func_800EEC30(local_0, param_0->rotation[0], param_0->rotation[1], 200.0f);
-    func_800EF04C(local_0, param_0->position);
-    if (local_0[1] < param_0->unk58 + 250.0f)
+    func_800EEC30(target, actor->rotation[0], actor->rotation[1], 200.0f);
+    func_800EF04C(target, actor->position);
+    if (target[1] < actor->unk58 + 250.0f)
         return 0;
-    local_1 = func_800CC338(local_0, ((FarmerRouteKeys *) param_0)->local_0 - 1,
-                            ((FarmerRouteKeys *) param_0)->local_1 - 1);
-    if (local_1 != -1) {
-        ((FarmerRouteKeys *) param_0)->local_1 = local_1 + 1;
+    point_idx = func_800CC338(target, ((FarmerRouteKeys *) actor)->zone - 1,
+                            ((FarmerRouteKeys *) actor)->point - 1);
+    if (point_idx != -1) {
+        ((FarmerRouteKeys *) actor)->point = point_idx + 1;
         return 1;
     }
     return 0;
 }
 
-void func_80800D18_chmayafarmer(u8 *param_0)
+void func_80800D18_chmayafarmer(u8 *actor)
 {
-    u32 local_0;
-    u32 local_1;
-    u32 local_2;
-    u32 local_3;
+    u32 keys;
+    u32 point_idx;
+    u32 zone_idx;
+    u32 pos;
 
-    local_0 = *(u32 *) (param_0 + 0x70);
-    local_1 = ((local_0 << 22) >> 26) - 1;
-    local_2 = (local_0 >> 25) - 1;
-    local_3 = func_800CC63C(local_2, local_1);
-    func_800EE7F8(param_0 + 0x18, local_3);
+    keys = *(u32 *) (actor + 0x70);
+    point_idx = ((keys << 22) >> 26) - 1;
+    zone_idx = (keys >> 25) - 1;
+    pos = func_800CC63C(zone_idx, point_idx);
+    func_800EE7F8(actor + 0x18, pos);
 }
 
-void func_80800D60_chmayafarmer(param_0, param_1) Actor *param_0;
-Actor *param_1;
+// Fly wandering movement around the cow.
+void func_80800D60_chmayafarmer(actor, bovina) Actor *actor;
+Actor *bovina;
 {
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            if (*(f32 *) &param_0->actorData[3] < 8.0f) {
-                *(f32 *) &param_0->actorData[3] += 1.0f;
+            if (*(f32 *) &actor->actorData[3] < 8.0f) {
+                *(f32 *) &actor->actorData[3] += 1.0f;
             }
-            if (!func_80800C58_chmayafarmer(param_0)) {
-                func_80800D18_chmayafarmer(param_0);
-                func_80102424(param_0, 2);
-            }
-            if (func_800DC0C0() < 0.05f) {
-                param_0->unk50 = func_800DC178(-25.0f, 25.0f);
+            if (!func_80800C58_chmayafarmer(actor)) {
+                func_80800D18_chmayafarmer(actor);
+                func_80102424(actor, 2);
             }
             if (func_800DC0C0() < 0.05f) {
-                param_0->unk54 += func_800DC178(-90.0f, 90.0f);
+                actor->unk50 = func_800DC178(-25.0f, 25.0f);
+            }
+            if (func_800DC0C0() < 0.05f) {
+                actor->unk54 += func_800DC178(-90.0f, 90.0f);
             }
             break;
         case 2:
-            if (func_80800C58_chmayafarmer(param_0)) {
-                func_80102424(param_0, 1);
+            if (func_80800C58_chmayafarmer(actor)) {
+                func_80102424(actor, 1);
             }
-            if (6.0f < *(f32 *) &param_0->actorData[3]) {
-                *(f32 *) &param_0->actorData[3] -= 2.0f;
+            if (6.0f < *(f32 *) &actor->actorData[3]) {
+                *(f32 *) &actor->actorData[3] -= 2.0f;
             }
-            param_0->unk54 = func_800F1DF4(param_0->position, (f32 *) &param_0->actorData[0]);
-            param_0->unk50 = -func_800F1828(param_0->position, (f32 *) &param_0->actorData[0]);
+            actor->unk54 = func_800F1DF4(actor->position, (f32 *) &actor->actorData[0]);
+            actor->unk50 = -func_800F1828(actor->position, (f32 *) &actor->actorData[0]);
     }
-    if (!func_80102CF4(param_0, 16.0f)) {
-        if (param_0->rotation[1] < param_0->unk54) {
-            if (param_0->rotation[2] < 15.0f) {
-                param_0->rotation[2] += 1.0f;
+    if (!func_80102CF4(actor, 16.0f)) {
+        if (actor->rotation[1] < actor->unk54) {
+            if (actor->rotation[2] < 15.0f) {
+                actor->rotation[2] += 1.0f;
             }
-        } else if (-15.0f < param_0->rotation[2]) {
-            param_0->rotation[2] -= 1.0f;
+        } else if (-15.0f < actor->rotation[2]) {
+            actor->rotation[2] -= 1.0f;
         }
     } else {
-        param_0->rotation[2] *= 0.75f;
+        actor->rotation[2] *= 0.75f;
     }
-    if (param_1->unk6C_0 == 1) {
-        *(f32 *) &param_0->actorData[3] = 2.0f;
-        param_0->rotation[1] += param_0->rotation[2] * 0.02f;
-        param_0->rotation[0] = 0.0f;
+    if (bovina->unk6C_0 == 1) {
+        *(f32 *) &actor->actorData[3] = 2.0f;
+        actor->rotation[1] += actor->rotation[2] * 0.02f;
+        actor->rotation[0] = 0.0f;
     } else {
-        if (!func_80102D4C(param_0, 2.0f)) {
-            func_80102B6C(param_0, 2.0f);
+        if (!func_80102D4C(actor, 2.0f)) {
+            func_80102B6C(actor, 2.0f);
         }
-        param_0->rotation[1] += param_0->rotation[2] * 0.2f;
+        actor->rotation[1] += actor->rotation[2] * 0.2f;
     }
-    func_800EF4E4((f32 *) &param_0->actorData[4], param_0->rotation[0], param_0->rotation[1], 0.0f,
-                  0.0f, *(f32 *) &param_0->actorData[3]);
+    func_800EF4E4((f32 *) &actor->actorData[4], actor->rotation[0], actor->rotation[1], 0.0f,
+                  0.0f, *(f32 *) &actor->actorData[3]);
 }
 
-void func_80801040_chmayafarmer(Actor *param_0)
+void func_80801040_chmayafarmer(Actor *actor)
 {
-    if (!func_80102EC8(param_0, param_0->position)) {
-        *(f32 *) &param_0->actorData[4] = 0.0f;
-        *(f32 *) &param_0->actorData[6] = 0.0f;
+    if (!func_80102EC8(actor, actor->position)) {
+        *(f32 *) &actor->actorData[4] = 0.0f;
+        *(f32 *) &actor->actorData[6] = 0.0f;
     }
-    func_800EF04C(param_0->position, (f32 *) &param_0->actorData[4]);
-    *(f32 *) &param_0->actorData[5] -= 5.0f;
-    if (param_0->position[1] < param_0->unk58)
-        param_0->position[1] = param_0->unk58;
-    if (!func_80102CF4(param_0, 6.0f))
-        func_80102B2C(param_0, 4.0f);
+    func_800EF04C(actor->position, (f32 *) &actor->actorData[4]);
+    *(f32 *) &actor->actorData[5] -= 5.0f;
+    if (actor->position[1] < actor->unk58)
+        actor->position[1] = actor->unk58;
+    if (!func_80102CF4(actor, 6.0f))
+        func_80102B2C(actor, 4.0f);
 }
 
-void func_808010DC_chmayafarmer(u8 *param_0)
+void func_808010DC_chmayafarmer(u8 *actor)
 {
-    _subaddieaudioloop_entrypoint_4(param_0, param_0 + 4, 1, &D_808012E8_chmayafarmer);
+    _subaddieaudioloop_entrypoint_4(actor, actor + 4, 1, &D_808012E8_chmayafarmer);
 }
 
 int *chmayafarmer_entrypoint_1()
@@ -487,6 +493,10 @@ extern void func_80101870();
 extern void func_80107C2C();
 extern void func_80105834();
 extern void func_80108ED0();
+// TU-NOTE: the .data of this overlay is defined here in C. Its tables hold pointers to
+// functions of this file; IDO's assembler schedules some of them differently unless the
+// tables are in the same unit. Values are taken from the ROM. The extern declarations at the
+// top use the object's types: D_8080124C -> s32[], D_808012E8 -> s32[], D_808012FC -> int[].
 u32 D_808011E0_chmayafarmer[12] = {0x0,        0x0,       0x3F400000, 0x1970001,
                                    0x3F400000, 0x1970001, 0x40DCCCCD, 0x19D0002,
                                    0x3F666666, 0x1980001, 0x3F666666, 0x1980001};

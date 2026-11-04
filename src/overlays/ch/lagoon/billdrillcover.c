@@ -21,61 +21,62 @@ int *chlagoonbilldrillcover_entrypoint_0()
     return &D_80800330_chlagoonbilldrillcover;
 }
 
-void func_8080000C_chlagoonbilldrillcover(u8 *param_0)
+void func_8080000C_chlagoonbilldrillcover(u8 *actor)
 {
-    if (func_800DA298(((u32) (u16) *(u16 *) ((s8 *) param_0 + 0x76) >> 7) + 0x3C2) != 0) {
-        if ((s32) ((u32) (u16) *(u16 *) ((s8 *) param_0 + 0x76) >> 7) >= 0x35) {
-            func_8010A570(param_0);
-            func_8010A624(param_0);
-            *(u8 *) ((s8 *) param_0 + 0x65) = (u8) (*(u8 *) ((s8 *) param_0 + 0x65) & 0xFFFE);
-            func_80108B04(param_0, 0);
+    if (func_800DA298(((u32) (u16) *(u16 *) ((s8 *) actor + 0x76) >> 7) + 0x3C2) != 0) {
+        if ((s32) ((u32) (u16) *(u16 *) ((s8 *) actor + 0x76) >> 7) >= 0x35) {
+            func_8010A570(actor);
+            func_8010A624(actor);
+            *(u8 *) ((s8 *) actor + 0x65) = (u8) (*(u8 *) ((s8 *) actor + 0x65) & 0xFFFE);
+            func_80108B04(actor, 0);
             return;
         }
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
     }
 }
 
-int func_80800094_chlagoonbilldrillcover(s32 param_0)
+int func_80800094_chlagoonbilldrillcover(s32 actor)
 {
-    if ((2 == ((*(u16 *) ((u8 *) param_0 + 0x72) & 0xFFFFFFFFu) >> 10)) &&
-        _subaddieDll_entrypoint_6(param_0, 11)) {
-        func_8080024C_chlagoonbilldrillcover(param_0);
+    if ((2 == ((*(u16 *) ((u8 *) actor + 0x72) & 0xFFFFFFFFu) >> 10)) &&
+        _subaddieDll_entrypoint_6(actor, 11)) {
+        func_8080024C_chlagoonbilldrillcover(actor);
     }
 }
 
-int func_808000DC_chlagoonbilldrillcover(Actor *param_0, s32 param_1, s32 param_2)
+int func_808000DC_chlagoonbilldrillcover(Actor *actor, s32 msg, s32 arg)
 {
     s32 pad[2];
-    f32 local_0[3];
-    u32 local_1;
+    f32 spawn_pos[3];
+    u32 variant;
 
-    switch (param_1) {
+    // msg 0x40: Bill Drill hit, 0x3D: release content
+    switch (msg) {
         case 0x40:
-            if (_subaddieDll_entrypoint_5(param_0, *(s32 *) &param_2)) {
-                func_80103110(param_0, 1);
-                func_80101FDC(param_0, 2);
+            if (_subaddieDll_entrypoint_5(actor, *(s32 *) &arg)) {
+                func_80103110(actor, 1);
+                func_80101FDC(actor, 2);
             } else
-                func_8080024C_chlagoonbilldrillcover(param_0);
+                func_8080024C_chlagoonbilldrillcover(actor);
             break;
         case 0x90:
             _chexploder_entrypoint_12(func_80106790(func_80101080()), 0x28);
             break;
         case 0x3D:
-            local_1 = param_0->unk74_7 - 0x32;
-            func_800EE7F8(local_0, param_0->position);
-            local_0[1] -= 100.0f;
-            func_800FFAB0(param_0);
-            switch (local_1) {
+            variant = actor->unk74_7 - 0x32;
+            func_800EE7F8(spawn_pos, actor->position);
+            spawn_pos[1] -= 100.0f;
+            func_800FFAB0(actor);
+            switch (variant) {
                 case 0:
                 case 1:
                 case 2:
-                    func_800D10D4(local_1 + 0x13, 7, local_0, 3, 0);
+                    func_800D10D4(variant + 0x13, 7, spawn_pos, 3, 0);
                     break;
                 case 3:
-                    func_80108474(0x210, local_0, 0x10E);
+                    func_80108474(0x210, spawn_pos, 0x10E);
                     break;
                 case 4:
-                    func_80108474(0x210, local_0, 0);
+                    func_80108474(0x210, spawn_pos, 0);
                     break;
             }
             break;
@@ -85,19 +86,19 @@ int func_808000DC_chlagoonbilldrillcover(Actor *param_0, s32 param_1, s32 param_
     return 1;
 }
 
-void func_8080024C_chlagoonbilldrillcover(param_0) Actor *param_0;
+void func_8080024C_chlagoonbilldrillcover(actor) Actor *actor;
 {
-    f32 local_0[3];
-    func_800EE7F8(local_0, (char *) param_0 + 4);
-    local_0[1] -= 200.0f;
-    _chexploder_entrypoint_3(param_0, local_0, 5);
-    func_800BBCB8((char *) param_0 + 4, local_0, 0x3F800000, 3, &D_80800378_chlagoonbilldrillcover);
-    _subaddieaudioquick_entrypoint_2(param_0, (char *) param_0 + 4,
+    f32 spawn_pos[3];
+    func_800EE7F8(spawn_pos, (char *) actor + 4);
+    spawn_pos[1] -= 200.0f;
+    _chexploder_entrypoint_3(actor, spawn_pos, 5);
+    func_800BBCB8((char *) actor + 4, spawn_pos, 0x3F800000, 3, &D_80800378_chlagoonbilldrillcover);
+    _subaddieaudioquick_entrypoint_2(actor, (char *) actor + 4,
                                      &D_808003B0_chlagoonbilldrillcover);
-    func_8010A624(param_0);
-    *(u8 *) ((char *) param_0 + 0x65) &= ~1;
-    func_80108B04(param_0, 0);
-    func_800DA544(((u32) (u16) *(u16 *) ((char *) param_0 + 0x76) >> 7) + 0x3C2);
+    func_8010A624(actor);
+    *(u8 *) ((char *) actor + 0x65) &= ~1;
+    func_80108B04(actor, 0);
+    func_800DA544(((u32) (u16) *(u16 *) ((char *) actor + 0x76) >> 7) + 0x3C2);
 }
 
 extern void func_80105834();

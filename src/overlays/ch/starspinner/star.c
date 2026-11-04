@@ -29,96 +29,97 @@ int chstarspinnerstar_entrypoint_0()
     return (int) &D_808006B0_chstarspinnerstar;
 }
 
-void func_8080000C_chstarspinnerstar(Actor *param_0)
+// Per-frame update: rise/spin when touched while powered, sink back otherwise.
+void func_8080000C_chstarspinnerstar(Actor *actor)
 {
-    f32 local_0;
-    s32 local_1;
-    s32 local_2;
-    f32 local_3;
+    f32 dt;
+    s32 powered;
+    s32 active;
+    f32 pitch;
 
-    local_0 = func_800D8FF8();
-    local_1 = func_800DA298(0xEA) || _glcutDll_entrypoint_20();
-    param_0->actorData[6] = _chstarspinnerctrl_entrypoint_4(
-        param_0, func_80800660_chstarspinnerstar(param_0), param_0->actorData[6]);
-    switch (param_0->unk70_10) {
+    dt = func_800D8FF8();
+    powered = func_800DA298(0xEA) || _glcutDll_entrypoint_20();
+    actor->actorData[6] = _chstarspinnerctrl_entrypoint_4(
+        actor, func_80800660_chstarspinnerstar(actor), actor->actorData[6]);
+    switch (actor->unk70_10) {
         case 1:
-            if (local_1 && param_0->unk64_20) {
-                func_80101FDC(param_0, 2);
-                param_0->unk58 = 1.5f;
+            if (powered && actor->unk64_20) {
+                func_80101FDC(actor, 2);
+                actor->unk58 = 1.5f;
             }
             break;
         case 2:
-            ((ADF_ *) param_0->actorData)->f7 =
-                (func_800DA298(0x679) ? 30 : 80) * ((ADF_ *) param_0->actorData)->f4;
-            param_0->rotation[1] =
-                func_800136E4(param_0->rotation[1] + local_0 * ((ADF_ *) param_0->actorData)->f7);
-            func_80800454_chstarspinnerstar(param_0, local_0);
-            if (!param_0->unk64_20 || !local_1) {
-                param_0->unk58 -= local_0;
-                if (param_0->unk58 < 0.0f || !local_1) {
-                    if (((ADF_ *) param_0->actorData)->f5 > 0) {
-                        ((ADF_ *) param_0->actorData)->f5 = -((ADF_ *) param_0->actorData)->f5;
+            ((ADF_ *) actor->actorData)->f7 =
+                (func_800DA298(0x679) ? 30 : 80) * ((ADF_ *) actor->actorData)->f4;
+            actor->rotation[1] =
+                func_800136E4(actor->rotation[1] + dt * ((ADF_ *) actor->actorData)->f7);
+            func_80800454_chstarspinnerstar(actor, dt);
+            if (!actor->unk64_20 || !powered) {
+                actor->unk58 -= dt;
+                if (actor->unk58 < 0.0f || !powered) {
+                    if (((ADF_ *) actor->actorData)->f5 > 0) {
+                        ((ADF_ *) actor->actorData)->f5 = -((ADF_ *) actor->actorData)->f5;
                     }
-                    func_80101FDC(param_0, 3);
+                    func_80101FDC(actor, 3);
                 }
             } else {
-                param_0->unk58 = 1.5f;
+                actor->unk58 = 1.5f;
             }
             break;
         case 3:
-            ((ADF_ *) param_0->actorData)->f7 =
-                (func_800DA298(0x679) ? 30 : 80) * ((ADF_ *) param_0->actorData)->f4;
-            param_0->rotation[1] =
-                func_800136E4(param_0->rotation[1] + local_0 * ((ADF_ *) param_0->actorData)->f7);
-            if (func_80800454_chstarspinnerstar(param_0, local_0)) {
-                param_0->position[1] = ((ADF_ *) param_0->actorData)->f1;
-                func_80101FDC(param_0, 1);
+            ((ADF_ *) actor->actorData)->f7 =
+                (func_800DA298(0x679) ? 30 : 80) * ((ADF_ *) actor->actorData)->f4;
+            actor->rotation[1] =
+                func_800136E4(actor->rotation[1] + dt * ((ADF_ *) actor->actorData)->f7);
+            if (func_80800454_chstarspinnerstar(actor, dt)) {
+                actor->position[1] = ((ADF_ *) actor->actorData)->f1;
+                func_80101FDC(actor, 1);
             }
-            if (param_0->unk64_20 && local_1) {
-                func_80101FDC(param_0, 2);
-                param_0->unk58 = 1.5f;
+            if (actor->unk64_20 && powered) {
+                func_80101FDC(actor, 2);
+                actor->unk58 = 1.5f;
             }
             break;
     }
-    param_0->unk64_20 = 0;
-    local_2 = local_1 && (s32) param_0->unk70_10 >= 2;
-    if (local_2 || (!local_2 && param_0->unk5F)) {
-        local_3 = func_800F10B4(param_0->position[1] - ((ADF_ *) param_0->actorData)->f1, 0,
+    actor->unk64_20 = 0;
+    active = powered && (s32) actor->unk70_10 >= 2;
+    if (active || (!active && actor->unk5F)) {
+        pitch = func_800F10B4(actor->position[1] - ((ADF_ *) actor->actorData)->f1, 0,
                                 1900.0f, 0.8f, 1.2f);
-        func_800C4B64(local_3);
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_2,
+        func_800C4B64(pitch);
+        _subaddieaudioloop_entrypoint_4(actor, actor->position, active,
                                         D_808006F8_chstarspinnerstar);
-        _subaddieaudioloop_entrypoint_0(param_0, local_3);
+        _subaddieaudioloop_entrypoint_0(actor, pitch);
     }
 }
 
-void func_80800320_chstarspinnerstar(param_0) Actor *param_0;
+void func_80800320_chstarspinnerstar(actor) Actor *actor;
 {
-    param_0->unk3C = _subaddiefind_entrypoint_0(param_0->position, 0x337, -1, 0)->unk0;
-    param_0->actorData[6] =
-        _chstarspinnerctrl_entrypoint_3(param_0, func_80800660_chstarspinnerstar(param_0));
-    param_0->unk54 = param_0->rotation[1];
-    func_800EE7F8((f32 *) param_0->actorData, param_0->position);
-    if (param_0->rotation[1] == 1.0f) {
-        *(f32 *) ((u8 *) param_0 + 0x28) = -1.0f;
+    actor->unk3C = _subaddiefind_entrypoint_0(actor->position, 0x337, -1, 0)->unk0;
+    actor->actorData[6] =
+        _chstarspinnerctrl_entrypoint_3(actor, func_80800660_chstarspinnerstar(actor));
+    actor->unk54 = actor->rotation[1];
+    func_800EE7F8((f32 *) actor->actorData, actor->position);
+    if (actor->rotation[1] == 1.0f) {
+        *(f32 *) ((u8 *) actor + 0x28) = -1.0f;
     } else {
-        *(f32 *) ((u8 *) param_0 + 0x28) = 1.0;
+        *(f32 *) ((u8 *) actor + 0x28) = 1.0;
     }
-    param_0->rotation[1] = 0.0f;
-    *(f32 *) ((u8 *) param_0 + 0x2C) = 1.0;
+    actor->rotation[1] = 0.0f;
+    *(f32 *) ((u8 *) actor + 0x2C) = 1.0;
     if (func_800EA05C() != 0xE6) {
-        func_8010A624(param_0);
+        func_8010A624(actor);
     }
 }
 
-s32 func_808003F8_chstarspinnerstar(Actor *param_0, s32 param_1, StarSpinnerEventPayload param_2)
+s32 func_808003F8_chstarspinnerstar(Actor *actor, s32 event, StarSpinnerEventPayload payload)
 {
-    switch (param_1) {
+    switch (event) {
         case 0x91:
-            param_0->unk64_20 = 1;
+            actor->unk64_20 = 1;
             break;
         case 0x1F:
-            func_808005F8_chstarspinnerstar(param_0, param_2.word);
+            func_808005F8_chstarspinnerstar(actor, payload.word);
             break;
         default:
             return 0;
@@ -126,33 +127,34 @@ s32 func_808003F8_chstarspinnerstar(Actor *param_0, s32 param_1, StarSpinnerEven
     return 1;
 }
 
-int func_80800454_chstarspinnerstar(Actor *param_0, f32 param_1)
+// Move vertically toward start or start+1900; returns 1 on reaching the end.
+int func_80800454_chstarspinnerstar(Actor *actor, f32 dt)
 {
-    s32 local_3;
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    local_0 =
-        ((((f32 *) param_0->actorData)[5] < 0.0f ? ((f32 *) param_0->actorData)[1]
-                                                 : ((f32 *) param_0->actorData)[1] + 1900.0f) -
-         param_0->position[1]) *
+    s32 slow;
+    f32 step;
+    f32 dist;
+    f32 max_step;
+    step =
+        ((((f32 *) actor->actorData)[5] < 0.0f ? ((f32 *) actor->actorData)[1]
+                                                 : ((f32 *) actor->actorData)[1] + 1900.0f) -
+         actor->position[1]) *
         0.05f;
-    local_1 = mlAbsF(local_0);
-    local_3 = func_800DA298(0x679);
-    local_2 = ((f32 *) param_0->actorData)[5] * (local_3 ? 400 : 1000) * param_1;
-    if (local_1 < 4.0f) {
-        local_0 = local_0 < 0.0f ? -4.0f : 4.0f;
-    } else if (local_1 > mlAbsF(local_2)) {
-        local_0 = local_2;
+    dist = mlAbsF(step);
+    slow = func_800DA298(0x679);
+    max_step = ((f32 *) actor->actorData)[5] * (slow ? 400 : 1000) * dt;
+    if (dist < 4.0f) {
+        step = step < 0.0f ? -4.0f : 4.0f;
+    } else if (dist > mlAbsF(max_step)) {
+        step = max_step;
     }
-    param_0->position[1] += local_0;
-    if (((f32 *) param_0->actorData)[5] < 0.0f) {
-        if (param_0->position[1] < ((f32 *) param_0->actorData)[1]) {
-            ((f32 *) param_0->actorData)[5] = -((f32 *) param_0->actorData)[5];
+    actor->position[1] += step;
+    if (((f32 *) actor->actorData)[5] < 0.0f) {
+        if (actor->position[1] < ((f32 *) actor->actorData)[1]) {
+            ((f32 *) actor->actorData)[5] = -((f32 *) actor->actorData)[5];
             return 1;
         }
-    } else if (((f32 *) param_0->actorData)[1] + 1900.0f < param_0->position[1]) {
-        ((f32 *) param_0->actorData)[5] = -((f32 *) param_0->actorData)[5];
+    } else if (((f32 *) actor->actorData)[1] + 1900.0f < actor->position[1]) {
+        ((f32 *) actor->actorData)[5] = -((f32 *) actor->actorData)[5];
         return 1;
     }
     return 0;
@@ -173,10 +175,10 @@ s32 param_1;
 
 u8 B_80800710_chstarspinnerstar[16];
 
-f32 *func_80800660_chstarspinnerstar(param_0)
-s32 param_0;
+f32 *func_80800660_chstarspinnerstar(actor_addr)
+s32 actor_addr;
 {
-    func_800EE7F8(B_80800710_chstarspinnerstar, (f32 *) (param_0 + 4));
+    func_800EE7F8(B_80800710_chstarspinnerstar, (f32 *) (actor_addr + 4));
     ((f32 *) B_80800710_chstarspinnerstar)[1] = ((f32 *) B_80800710_chstarspinnerstar)[1];
     return (f32 *) B_80800710_chstarspinnerstar;
 }

@@ -14,19 +14,20 @@ int chtemplelobbydoor_entrypoint_0()
     return &D_808003A0_chtemplelobbydoor;
 }
 
-void func_8080000C_chtemplelobbydoor(Actor *param_0)
+// Stays shut until 20 jade statues are broken and only opens for Banjo-Kazooie.
+void func_8080000C_chtemplelobbydoor(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 too_few_statues;
+    s32 not_banjo_kazooie;
     if (func_800EA090() == 1) {
-        local_0 = func_800D035C(5) < 20;
-        local_1 = func_800F5410(0) != 1;
-        if (local_0 || local_1)
-            func_80101FDC(param_0, 1);
+        too_few_statues = func_800D035C(5) < 20;
+        not_banjo_kazooie = func_800F5410(0) != 1;
+        if (too_few_statues || not_banjo_kazooie)
+            func_80101FDC(actor, 1);
     }
-    if (_chdoormake_entrypoint_3(param_0, 0.0f, 90.0f, 180.0f, 8, -1)) {
-        _chdoormake_entrypoint_5(param_0, 1.5f);
-        _chdoormake_entrypoint_8(param_0, 5);
+    if (_chdoormake_entrypoint_3(actor, 0.0f, 90.0f, 180.0f, 8, -1)) {
+        _chdoormake_entrypoint_5(actor, 1.5f);
+        _chdoormake_entrypoint_8(actor, 5);
     }
 }
 
@@ -38,6 +39,8 @@ void func_808000BC_chtemplelobbydoor();
 extern int func_80105834();
 extern int func_80101870();
 extern int func_80107C2C();
+// TU-NOTE: the overlay .data is defined here in C; the table precedes func_808000E4_chtemplelobbydoor,
+// whose static fills the rest of the .data (source order).
 s32 func_80800248_chtemplelobbydoor();
 void *D_808003A0_chtemplelobbydoor = (void *) 0x00AC02B5;
 static u32 D_808003A0_chtemplelobbydoor_rest[17] = {0x8490004,
@@ -66,7 +69,7 @@ void func_808000BC_chtemplelobbydoor(s32 arg0)
     _chdoor_entrypoint_0(arg0);
 }
 
-void func_808000E4_chtemplelobbydoor(s32 param_0)
+void func_808000E4_chtemplelobbydoor(s32 actor)
 {
     static struct {
         s32 w;
@@ -80,45 +83,46 @@ void func_808000E4_chtemplelobbydoor(s32 param_0)
         D_808003E8_chtemplelobbydoor.a = 0xF39;
         D_808003E8_chtemplelobbydoor.b = 0xF39;
     }
-    _subaddiedialog_entrypoint_7(param_0, param_0 + 4, &D_808003E8_chtemplelobbydoor);
+    _subaddiedialog_entrypoint_7(actor, actor + 4, &D_808003E8_chtemplelobbydoor);
 }
 
-void func_80800134_chtemplelobbydoor(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800134_chtemplelobbydoor(actor, msg_data) Actor *actor;
+s32 msg_data;
 {
-    u8 *local_0;
-    local_0 = (u8 *) func_80100094(param_0, 0);
-    *local_0 = 0;
+    u8 *state;
+    state = (u8 *) func_80100094(actor, 0);
+    *state = 0;
     switch (func_800EA090()) {
         case 1:
             if (func_800C6E38(0x15) && func_8009E958() == 1 && !func_800DA9E4(0x6B8, 1)) {
-                *local_0 = 1;
-                _capod_entrypoint_13(param_0->unk0, 0, 3, 0x2020);
+                *state = 1;
+                _capod_entrypoint_13(actor->unk0, 0, 3, 0x2020);
                 func_800F49D4(func_800F54E4(), _bsfirstp_entrypoint_18, 0);
             }
             break;
         case 2:
             if (!func_800DA298(0x36F)) {
-                func_800C9CD0(0.8f, param_0->unk0, 0xF50, 2, 0, 0xB2);
-                _capod_entrypoint_13(param_0->unk0, 0, 1, 0x2020);
+                func_800C9CD0(0.8f, actor->unk0, 0xF50, 2, 0, 0xB2);
+                _capod_entrypoint_13(actor->unk0, 0, 1, 0x2020);
             }
     }
 }
 
-s32 func_80800248_chtemplelobbydoor(Actor *param_0, s32 param_1, s32 param_2)
+// Message 0x49: setup; 0x2E: dialog finished; 0x77: first-person view ended.
+s32 func_80800248_chtemplelobbydoor(Actor *actor, s32 msg, s32 msg_data)
 {
-    u8 *local_0;
-    s32 h;
+    u8 *state;
+    s32 player;
 
-    local_0 = func_80100094(param_0, 0);
-    switch (param_1) {
+    state = func_80100094(actor, 0);
+    switch (msg) {
         case 0x49:
-            func_80800134_chtemplelobbydoor(param_0, param_2);
+            func_80800134_chtemplelobbydoor(actor, msg_data);
             return 1;
         case 0x2E:
-            switch (*(s16 *) &param_2) {
+            switch (*(s16 *) &msg_data) {
                 case 0xF39:
-                    func_8010108C(param_0, 7, 0);
+                    func_8010108C(actor, 7, 0);
                     return 1;
                 case 0xF50:
                     func_800F7B9C(func_800F54E4(), 0x73);
@@ -128,14 +132,14 @@ s32 func_80800248_chtemplelobbydoor(Actor *param_0, s32 param_1, s32 param_2)
                     return 1;
             }
         case 0x77:
-            if (local_0[0] == 1) {
-                h = param_2;
-                local_0[0] = 0;
-                func_800F7B9C(h, 0x73);
+            if (state[0] == 1) {
+                player = msg_data;
+                state[0] = 0;
+                func_800F7B9C(player, 0x73);
                 _capod_entrypoint_14();
                 func_800F7B9C(func_800F54E4(), 0x99);
                 return 1;
             }
     }
-    return _chdoor_entrypoint_1(param_0, param_1, param_2);
+    return _chdoor_entrypoint_1(actor, msg, msg_data);
 }

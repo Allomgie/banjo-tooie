@@ -13,13 +13,13 @@ void *chtntblockage_entrypoint_0()
     return &D_80800240_chtntblockage;
 }
 
-void func_8080000C_chtntblockage(Actor *param_0)
+void func_8080000C_chtntblockage(Actor *actor)
 {
-    if (param_0->unk70_10 == 2) {
-        param_0->unk58 += func_800D8FF8();
-        if (param_0->unk58 > 0.5f) {
-            func_800C4AF0(param_0->position, D_80800288_chtntblockage, param_0);
-            func_800FFAB0(param_0);
+    if (actor->unk70_10 == 2) {
+        actor->unk58 += func_800D8FF8();
+        if (actor->unk58 > 0.5f) {
+            func_800C4AF0(actor->position, D_80800288_chtntblockage, actor);
+            func_800FFAB0(actor);
         }
     }
 }
@@ -29,27 +29,31 @@ void func_80800088_chtntblockage()
     _subaddiefade_entrypoint_14();
 }
 
-s32 func_808000A8_chtntblockage(u8 *param_0)
+// Game flag for this variant (0x7E for the Canary Cave entrance).
+s32 func_808000A8_chtntblockage(u8 *actor)
 {
-    return ((u32) *(u16 *) (param_0 + 0x76) >> 7) + 0x4C;
+    return ((u32) *(u16 *) (actor + 0x76) >> 7) + 0x4C;
 }
 
-s32 func_808000B8_chtntblockage(Actor *param_0, s32 param_1, s32 param_2)
+// Message 5: the detonator fired.
+s32 func_808000B8_chtntblockage(Actor *actor, s32 msg, s32 param_2)
 {
-    f32 local_0[3];
+    f32 pos[3];
 
-    switch (param_1) {
+    switch (msg) {
         case 5:
-            func_800EE7F8(local_0, param_0->position);
-            func_800EF1B8(local_0, param_0->rotation[1], -300.0f);
-            local_0[1] -= 110.0f;
-            _chexploder_entrypoint_3(param_0, local_0, 0);
+            // Explode 300 units behind and 110 lower
+            func_800EE7F8(pos, actor->position);
+            func_800EF1B8(pos, actor->rotation[1], -300.0f);
+            pos[1] -= 110.0f;
+            _chexploder_entrypoint_3(actor, pos, 0);
             break;
         case 0x90:
-            func_80800184_chtntblockage(param_0);
+            func_80800184_chtntblockage(actor);
             break;
+        // 0x95 (on load): link to the nearest detonator
         case 0x95:
-            _chtntdetonator_entrypoint_1(param_0, func_808000A8_chtntblockage(param_0));
+            _chtntdetonator_entrypoint_1(actor, func_808000A8_chtntblockage(actor));
             break;
         default:
             return 0;
@@ -57,24 +61,27 @@ s32 func_808000B8_chtntblockage(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-int func_80800184_chtntblockage(param_0)
-Actor *param_0;
+// Message 0x90: debris, set the flag and disappear.
+int func_80800184_chtntblockage(actor)
+Actor *actor;
 {
-    s32 local_0;
-    u8 *local_1;
-    local_0 = func_80106790(func_80101080());
-    _chexploder_entrypoint_12(local_0, 0x32);
-    _chexploder_entrypoint_6(local_0, 0x44960000, 0x44AF0000);
-    _chexploder_entrypoint_13(local_0, 4);
-    _chexploder_entrypoint_15(local_0, 1, 0x3F99999A);
-    local_1 = &D_8080029C_chtntblockage;
-    func_800BABB8(0, (u8 *) param_0 + 4, local_0 + 0x18, *(s32 *) ((char *) param_0 + 0x38),
-                  local_1);
-    func_800DA544(func_808000A8_chtntblockage(param_0));
-    func_80101FDC(param_0, 2);
-    func_80103110(param_0, 1);
+    s32 exploder;
+    u8 *debris_data;
+    exploder = func_80106790(func_80101080());
+    _chexploder_entrypoint_12(exploder, 0x32);
+    _chexploder_entrypoint_6(exploder, 0x44960000, 0x44AF0000);
+    _chexploder_entrypoint_13(exploder, 4);
+    _chexploder_entrypoint_15(exploder, 1, 0x3F99999A);
+    debris_data = &D_8080029C_chtntblockage;
+    func_800BABB8(0, (u8 *) actor + 4, exploder + 0x18, *(s32 *) ((char *) actor + 0x38),
+                  debris_data);
+    func_800DA544(func_808000A8_chtntblockage(actor));
+    func_80101FDC(actor, 2);
+    func_80103110(actor, 1);
 }
 
+// TU-NOTE: the overlay .data is defined here in C because its tables point to functions of this file;
+// IDO schedules some of them differently otherwise. Values are taken from the ROM.
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();

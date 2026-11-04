@@ -14,6 +14,7 @@ extern f32 func_800D8FF8(void);
 extern void func_800C4B90(s32, f32, f32);
 extern void func_80109CC4(f32 *, f32, void *);
 
+// Draw three staggered expanding rings.
 void func_80800000_chping(Actor *this, s32 arg1)
 {
     f32 *data;
@@ -43,57 +44,59 @@ void func_80800000_chping(Actor *this, s32 arg1)
     }
 }
 
-void func_808001B8_chping(Actor *param_0)
+// Per-frame update: follow the sub, pan the sound, send the growing hit sphere, despawn at 4.2 s.
+void func_808001B8_chping(Actor *actor)
 {
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
-    f32 local_4;
-    f32 local_6;
-    f32 local_5;
-    f32 local_0[3];
-    s32 local_8;
-    u8 *local_7;
+    f32 phase;
+    f32 pan_left;
+    f32 pan_right;
+    f32 pan_scale;
+    f32 radius;
+    f32 age;
+    f32 pos[3];
+    s32 player;
+    u8 *data;
 
-    local_7 = func_80100094(param_0, 0);
-    local_8 = *(s32 *) local_7;
-    func_800F5A00(local_8, local_0);
-    local_0[1] += 60.0f;
-    func_800EE7F8(param_0->position, local_0);
-    local_5 = *(f32 *) (local_7 + 4);
-    local_1 = func_800F0F9C(local_5, 0.5f);
-    local_2 = func_80013970(local_1 * 360.0f);
-    local_3 = func_80013970(local_1 * 360.0f + 180.0f);
-    local_4 = func_800F10B4(local_5, 0.0f, 3.0f, 3.0f, 0.01f);
-    func_800C4B90(func_800A940C(local_8), local_2 * local_4, local_3 * local_4);
-    if (local_5 < 3.0f) {
-        local_6 = func_800F10B4(local_5, 0.0f, 3.0f, 14.0f, 840.0f);
-        func_8010A590(param_0);
-        func_800CB840(5, param_0);
-        func_80109CC4(param_0->position, local_6, param_0->unk0);
+    data = func_80100094(actor, 0);
+    player = *(s32 *) data;
+    func_800F5A00(player, pos);
+    pos[1] += 60.0f;
+    func_800EE7F8(actor->position, pos);
+    age = *(f32 *) (data + 4);
+    phase = func_800F0F9C(age, 0.5f);
+    pan_left = func_80013970(phase * 360.0f);
+    pan_right = func_80013970(phase * 360.0f + 180.0f);
+    pan_scale = func_800F10B4(age, 0.0f, 3.0f, 3.0f, 0.01f);
+    func_800C4B90(func_800A940C(player), pan_left * pan_scale, pan_right * pan_scale);
+    if (age < 3.0f) {
+        radius = func_800F10B4(age, 0.0f, 3.0f, 14.0f, 840.0f);
+        func_8010A590(actor);
+        func_800CB840(5, actor);
+        func_80109CC4(actor->position, radius, actor->unk0);
         func_800CB870();
-        func_8010A570(param_0);
+        func_8010A570(actor);
     }
-    *(f32 *) (local_7 + 4) += func_800D8FF8();
-    if (*(f32 *) (local_7 + 4) > 4.2f)
-        func_800FFA88(param_0->unk0);
+    *(f32 *) (data + 4) += func_800D8FF8();
+    if (*(f32 *) (data + 4) > 4.2f)
+        func_800FFA88(actor->unk0);
 }
 
-int chping_entrypoint_0(s32 param_0)
+// Spawn the ping actor (0x169) at the player.
+int chping_entrypoint_0(s32 player)
 {
-    s32 *local_0;
-    s32 local_1[3];
-    s32 *local_2;
-    u8 *local_3;
+    s32 *actor_out;
+    s32 pos[3];
+    s32 *actor;
+    u8 *data;
 
-    func_800F5A00(param_0, &local_1);
-    local_2 = func_80108474(0x169, &local_1, 0);
-    local_0 = local_2;
-    local_3 = func_80100094(local_2, 0);
-    *(f32 *) ((char *) local_3 + 4) = 0.0f;
-    *(s32 *) ((char *) local_3 + 0) = param_0;
-    func_8010A570(local_0);
-    return *local_0;
+    func_800F5A00(player, &pos);
+    actor = func_80108474(0x169, &pos, 0);
+    actor_out = actor;
+    data = func_80100094(actor, 0);
+    *(f32 *) ((char *) data + 4) = 0.0f;
+    *(s32 *) ((char *) data + 0) = player;
+    func_8010A570(actor_out);
+    return *actor_out;
 }
 
 int chping_entrypoint_1()
@@ -104,6 +107,7 @@ int chping_entrypoint_1()
 extern void func_80105834();
 extern void func_80108ED0();
 extern void func_80107C2C();
+// TU-NOTE: the .data of this overlay is defined here in C. Its tables hold pointers to functions of this file; IDO schedules some of them differently unless the tables are in the same unit. Values are taken from the ROM.
 void *D_80800410_chping = (void *) 0x027B0169;
 static u32 D_80800410_chping_rest[19] = {0x6DF0001,
                                          0x0,

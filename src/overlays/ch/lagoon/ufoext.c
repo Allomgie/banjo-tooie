@@ -11,32 +11,33 @@ extern void func_800DF428(f32);
 extern void func_801015D0(Actor *, void *);
 void func_808002A4_chlagoonufoext();
 
-int func_80800000_chlagoonufoext(Actor *param_0, s32 param_1, s32 param_2)
+// Actor message handler.
+int func_80800000_chlagoonufoext(Actor *actor, s32 msg, s32 arg)
 {
-    s32 local_0;
+    s32 handle;
 
-    switch (param_1) {
+    switch (msg) {
         case 0xB:
-            if (param_2 == 0x32) {
+            if (arg == 0x32) {
                 func_800DA544(0xB6);
-                _susubgame_entrypoint_4(param_0, func_80100094(param_0, 0));
+                _susubgame_entrypoint_4(actor, func_80100094(actor, 0));
                 if (_gclevel_entrypoint_3(0x17))
                     _glcutDll_entrypoint_6(0x128, 0x4A);
                 return 4;
             }
             return 3;
         case 0x32:
-            func_808002A4_chlagoonufoext(param_0);
+            func_808002A4_chlagoonufoext(actor);
             return 1;
         case 0x95:
             if (func_800DA298(0x9F0) && func_80090178(1) && func_800EA090() == 9) {
-                local_0 = func_800F54E4();
-                func_800F608C(local_0, 1);
-                func_800F497C(local_0);
-                func_800F49D4(local_0, func_8010D5DC, param_0->unk0);
-                func_800F4AC0(local_0, (f32 *) ((u8 *) param_0 + 0x28), 300.0f);
-                _susubgame_entrypoint_6(param_0, func_80100094(param_0, 0), 0x42, 0x60, 0);
-                func_80102424(param_0, 2);
+                handle = func_800F54E4();
+                func_800F608C(handle, 1);
+                func_800F497C(handle);
+                func_800F49D4(handle, func_8010D5DC, actor->unk0);
+                func_800F4AC0(handle, (f32 *) ((u8 *) actor + 0x28), 300.0f);
+                _susubgame_entrypoint_6(actor, func_80100094(actor, 0), 0x42, 0x60, 0);
+                func_80102424(actor, 2);
             }
             break;
         default:
@@ -45,11 +46,11 @@ int func_80800000_chlagoonufoext(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800168_chlagoonufoext(u8 *param_0)
+void func_80800168_chlagoonufoext(u8 *actor)
 {
-    param_0[0x34] = _subaddieaudioloop_entrypoint_3(param_0[0x34]);
-    if (_susubgame_entrypoint_2(param_0, func_80100094(param_0, 0)) != 0) {
-        _susubgame_entrypoint_4(param_0, func_80100094(param_0, 0));
+    actor[0x34] = _subaddieaudioloop_entrypoint_3(actor[0x34]);
+    if (_susubgame_entrypoint_2(actor, func_80100094(actor, 0)) != 0) {
+        _susubgame_entrypoint_4(actor, func_80100094(actor, 0));
     }
 }
 
@@ -58,84 +59,87 @@ int chlagoonufoext_entrypoint_0()
     return (int) &D_80800558_chlagoonufoext;
 }
 
-void func_808001D8_chlagoonufoext(u8 *param_0)
+void func_808001D8_chlagoonufoext(u8 *actor)
 {
     s8 _sfpad[16];
     u8 *new_var;
-    s32 local_0;
-    s32 local_1;
+    s32 marker;
+    s32 sound;
 
-    *(s32 *) (param_0 + 0x24) = func_800CBDD4(param_0 + 4, 0x64, 6);
+    *(s32 *) (actor + 0x24) = func_800CBDD4(actor + 4, 0x64, 6);
     if (func_800DA298(0xB6) != 0) {
-        local_1 = *(s32 *) (param_0 + 0x24);
-        if (local_1 != -1) {
-            func_800CBB80(local_1, 0);
+        sound = *(s32 *) (actor + 0x24);
+        if (sound != -1) {
+            func_800CBB80(sound, 0);
         }
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
     } else {
-        ((Actor *) param_0)->unk6C_0 = _subaddiesect_entrypoint_1(param_0);
+        ((Actor *) actor)->unk6C_0 = _subaddiesect_entrypoint_1(actor);
     }
-    if (_subaddiemarker_entrypoint_0(param_0, 0x1C0, &local_0, 1) != 0) {
-        func_800EE7F8(param_0 + 0x28, &local_0);
+    if (_subaddiemarker_entrypoint_0(actor, 0x1C0, &marker, 1) != 0) {
+        func_800EE7F8(actor + 0x28, &marker);
     }
-    _susubgame_entrypoint_0(param_0, func_80100094(param_0, 0), 0);
+    _susubgame_entrypoint_0(actor, func_80100094(actor, 0), 0);
 }
 
-void func_808002A4_chlagoonufoext(param_0) s32 *param_0;
+void func_808002A4_chlagoonufoext(actor) s32 *actor;
 {
-    func_80101FDC(param_0, 3);
-    func_80101D4C(param_0);
+    func_80101FDC(actor, 3);
+    func_80101D4C(actor);
     func_800D1000(0x28, 1, 0, 3, 0);
-    _susubgame_entrypoint_6(param_0, func_80100094(param_0, 0), 0x32, 0x30, 0);
-    _subaddiedialog_entrypoint_11(*param_0, 0x1047, 0x40, param_0 + 1, 0);
+    _susubgame_entrypoint_6(actor, func_80100094(actor, 0), 0x32, 0x30, 0);
+    _subaddiedialog_entrypoint_11(*actor, 0x1047, 0x40, actor + 1, 0);
 }
 
-void func_8080032C_chlagoonufoext(u8 *param_0)
+void func_8080032C_chlagoonufoext(u8 *actor)
 {
-    s32 sp34;
+    s32 active;
 
-switch ((u32) *(u16 *) (param_0 + 0x72) >> 0xA) {
+switch ((u32) *(u16 *) (actor + 0x72) >> 0xA) {
     case 1:
-        if (_subaddiesect_entrypoint_0(param_0, *(s32 *) (param_0 + 0x6C) & 0x1FF, 4) == 0) {
+        if (_subaddiesect_entrypoint_0(actor, *(s32 *) (actor + 0x6C) & 0x1FF, 4) == 0) {
         }
         return;
     case 3:
-        sp34 = 0;
-        if (func_80101E14(param_0, 0x3EFAE148) != 0) {
-            param_0[0x73] &= 0xFFFE;
+        active = 0;
+        if (func_80101E14(actor, 0x3EFAE148) != 0) {
+            actor[0x73] &= 0xFFFE;
         }
-        if (func_80102320(param_0, 0x3F07AE14, 0x3F333333) != 0) {
-            sp34 = 1;
+        if (func_80102320(actor, 0x3F07AE14, 0x3F333333) != 0) {
+            active = 1;
         } else {
-            _subaddieaudioloop_entrypoint_4(param_0, param_0 + 0x18, 1, D_80800510_chlagoonufoext);
+            _subaddieaudioloop_entrypoint_4(actor, actor + 0x18, 1, D_80800510_chlagoonufoext);
         }
-        param_0[0x34] = _subaddieaudioloop_entrypoint_7(param_0[0x34], param_0 + 0x18, sp34,
+        actor[0x34] = _subaddieaudioloop_entrypoint_7(actor[0x34], actor + 0x18, active,
                                                         D_80800500_chlagoonufoext,
-                                                        *(s32 *) (param_0 + 0x70) & 1);
-        _subaddieaudioquick_entrypoint_4(param_0, param_0 + 0x18, D_80800524_chlagoonufoext,
+                                                        *(s32 *) (actor + 0x70) & 1);
+        _subaddieaudioquick_entrypoint_4(actor, actor + 0x18, D_80800524_chlagoonufoext,
                                          D_808005A0_chlagoonufoext);
         if (func_800DA298(0xB6) != 0) {
-            if (*(s32 *) (param_0 + 0x24) != -1) {
-                func_800CBB80(*(s32 *) (param_0 + 0x24), 0);
+            if (*(s32 *) (actor + 0x24) != -1) {
+                func_800CBB80(*(s32 *) (actor + 0x24), 0);
             }
-            func_800FFAB0(param_0);
+            func_800FFAB0(actor);
         }
 }
 
 }
 
-void func_8080047C_chlagoonufoext(Actor *param_0, void *param_1)
+void func_8080047C_chlagoonufoext(Actor *actor, void *param_1)
 {
-    if (param_0->unk70_10 != 3) {
+    if (actor->unk70_10 != 3) {
         func_800DF428(9000.0f);
     } else {
 
 func_800DF440(0);
 }
-func_80101808(param_0, func_801015D0);
-_subaddieskeleton_entrypoint_3(param_0->unk0, 4, param_0->actorData);
+func_80101808(actor, func_801015D0);
+_subaddieskeleton_entrypoint_3(actor->unk0, 4, actor->actorData);
 }
 
+// TU-NOTE: .data of this overlay is defined here in C (values from the ROM). Its tables hold
+// pointers to functions of this file; IDO schedules some of these functions differently unless
+// the tables are in the same unit. D_80800558_chlagoonufoext is declared int[] to match the object.
 extern void func_80102EC0();
 extern void func_80107C2C();
 u8 D_80800500_chlagoonufoext[16] = {0x0, 0x13, 0x5,  0xF0, 0x0,  0x16, 0x46, 0x50,

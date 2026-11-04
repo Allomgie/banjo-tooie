@@ -54,144 +54,147 @@ void func_80800030_chstatuebossbits(s32 arg0)
 {
 }
 
-void func_80800038_chstatuebossbits(Actor *param_0)
+// Dart Targitzan shoots: spins, hits player or shield, then fades.
+void func_80800038_chstatuebossbits(Actor *dart)
 {
-    s32 local_0;
-    s32 local_1;
-    Actor *local_2;
-    s32 local_3;
-    s32 local_4;
+    s32 hit;
+    s32 shield_done;
+    Actor *target;
+    s32 finished;
+    s32 spin_dir;
 
-    switch (param_0->unk70_10) {
+    switch (dart->unk70_10) {
         case 1:
-            *(s32 *) &param_0->unk3C = 0;
-            func_800EA600(func_80109FB8, param_0->unk0);
-            local_0 = func_8010B990(param_0, 0x100005);
+            *(s32 *) &dart->unk3C = 0;
+            func_800EA600(func_80109FB8, dart->unk0);
+            hit = func_8010B990(dart, 0x100005);
             func_800EA614();
-            param_0->rotation[2] += func_800D8FF8() * 150.0f;
-            if (local_0) {
-                local_1 = 0;
-                if (*(void **) &param_0->unk3C) {
-                    local_2 = func_80106790(*(void **) &param_0->unk3C);
-                    if (local_2->unk6C_9 == 0x449) {
-                        func_8010108C(local_2, 0x40, param_0->unk0);
-                        if (*(s32 *) &local_2->unk54 >= 3) {
-                            local_1 = 1;
+            dart->rotation[2] += func_800D8FF8() * 150.0f;
+            if (hit) {
+                shield_done = 0;
+                if (*(void **) &dart->unk3C) {
+                    target = func_80106790(*(void **) &dart->unk3C);
+                    if (target->unk6C_9 == 0x449) {
+                        func_8010108C(target, 0x40, dart->unk0);
+                        if (*(s32 *) &target->unk54 >= 3) {
+                            shield_done = 1;
                         }
                     }
                 }
-                func_800EF1B8(param_0->position, param_0->rotation[1] + 180.0f, 100.0f);
-                func_80800270_chstatuebossbits(param_0);
-                func_8010A570(param_0);
-                if (local_1) {
-                    func_80101FDC(param_0, 3);
-                    _subaddiefade_entrypoint_3(param_0);
+                func_800EF1B8(dart->position, dart->rotation[1] + 180.0f, 100.0f);
+                func_80800270_chstatuebossbits(dart);
+                func_8010A570(dart);
+                if (shield_done) {
+                    func_80101FDC(dart, 3);
+                    _subaddiefade_entrypoint_3(dart);
                 } else {
-                    func_80101FDC(param_0, 2);
-                    param_0->unk58 = 1.4f;
+                    func_80101FDC(dart, 2);
+                    dart->unk58 = 1.4f;
                 }
             }
             break;
         case 2:
-            local_3 = func_800D9078(&param_0->unk58);
-            local_4 = func_8001210C(1) ? -1 : 1;
-            param_0->rotation[0] =
-                func_800F10B4(param_0->unk58, 0.0f, 1.4f, 0.0f, 10.0f) * (f32) local_4;
-            if (local_3) {
-                _subaddiefade_entrypoint_3(param_0);
+            finished = func_800D9078(&dart->unk58);
+            spin_dir = func_8001210C(1) ? -1 : 1;
+            dart->rotation[0] =
+                func_800F10B4(dart->unk58, 0.0f, 1.4f, 0.0f, 10.0f) * (f32) spin_dir;
+            if (finished) {
+                _subaddiefade_entrypoint_3(dart);
             }
     }
 }
 
-int func_80800224_chstatuebossbits(s32 *param_0, s32 param_1, s32 param_2)
+int func_80800224_chstatuebossbits(s32 *actor, s32 msg, s32 param_2)
 {
-    if (param_1 == 0x40) {
+    if (msg == 0x40) {
         func_80800270_chstatuebossbits();
-        func_800FFA88(param_0[0]);
+        func_800FFA88(actor[0]);
     } else {
         return 0;
     }
     return 1;
 }
 
-void func_80800270_chstatuebossbits(param_0) u8 *param_0;
+void func_80800270_chstatuebossbits(actor) u8 *actor;
 {
-    func_800BBCB8(param_0 + 4, 0, *(s32 *) (param_0 + 0x38), 2, &D_80800810_chstatuebossbits);
-    func_8010D930(4, -1, param_0 + 4, &D_8080084C_chstatuebossbits);
+    func_800BBCB8(actor + 4, 0, *(s32 *) (actor + 0x38), 2, &D_80800810_chstatuebossbits);
+    func_8010D930(4, -1, actor + 4, &D_8080084C_chstatuebossbits);
 }
 
-void func_808002CC_chstatuebossbits(Actor *param_0)
+// Shield init: rises from the floor unless the boss was already beaten/retried.
+void func_808002CC_chstatuebossbits(Actor *shield)
 {
-    s32 local_0;
-    local_0 = func_800DA298(0x88);
-    func_800EE7F8((f32 *) param_0->actorData, param_0->position);
-    func_800EE7F8((f32 *) (param_0->actorData + 4), param_0->position);
-    ((f32 *) param_0->actorData)[5] -= 180.0f;
-    *(s32 *) &param_0->unk54 = 0;
-    if (local_0) {
-        func_80101FDC(param_0, 1);
-        func_8010A590(param_0);
+    s32 retry;
+    retry = func_800DA298(0x88);
+    func_800EE7F8((f32 *) shield->actorData, shield->position);
+    func_800EE7F8((f32 *) (shield->actorData + 4), shield->position);
+    ((f32 *) shield->actorData)[5] -= 180.0f;
+    *(s32 *) &shield->unk54 = 0;
+    if (retry) {
+        func_80101FDC(shield, 1);
+        func_8010A590(shield);
     } else
-        param_0->position[1] = ((f32 *) param_0->actorData)[5];
+        shield->position[1] = ((f32 *) shield->actorData)[5];
 }
 
-void func_80800360_chstatuebossbits(Actor *param_0)
+// Shield update: rises to its home position.
+void func_80800360_chstatuebossbits(Actor *shield)
 {
-    s32 local_0;
+    s32 finished;
 
-    switch (param_0->unk70_10) {
+    switch (shield->unk70_10) {
         case 1:
         case 2:
             break;
         case 3:
-            local_0 = func_800D9078(&param_0->unk58);
-            func_800EFE50(param_0->position, &param_0->actorData[4], param_0->actorData,
-                          func_800F12D4(param_0->unk58, 0.0f, 3.0f, 1.0f, 0.0f));
-            if (local_0) {
-                func_80101FDC(param_0, 1);
-                func_80103110(param_0, 0);
-                func_8010A590(param_0);
+            finished = func_800D9078(&shield->unk58);
+            func_800EFE50(shield->position, &shield->actorData[4], shield->actorData,
+                          func_800F12D4(shield->unk58, 0.0f, 3.0f, 1.0f, 0.0f));
+            if (finished) {
+                func_80101FDC(shield, 1);
+                func_80103110(shield, 0);
+                func_8010A590(shield);
             }
     }
 }
 
-void func_8080040C_chstatuebossbits(Actor *param_0, s32 param_1)
+void func_8080040C_chstatuebossbits(Actor *shield, s32 param_1)
 {
-    func_800DF744(1, ((StatueBossSelector *) param_0)->local_0 == 0 ? 1 : 0);
-    func_800DF744(2, ((StatueBossSelector *) param_0)->local_0 == 1 ? 1 : 0);
-    func_800DF744(3, ((StatueBossSelector *) param_0)->local_0 == 2 ? 1 : 0);
-    func_800DF744(4, ((StatueBossSelector *) param_0)->local_0 == 3 ? 1 : 0);
+    func_800DF744(1, ((StatueBossSelector *) shield)->local_0 == 0 ? 1 : 0);
+    func_800DF744(2, ((StatueBossSelector *) shield)->local_0 == 1 ? 1 : 0);
+    func_800DF744(3, ((StatueBossSelector *) shield)->local_0 == 2 ? 1 : 0);
+    func_800DF744(4, ((StatueBossSelector *) shield)->local_0 == 3 ? 1 : 0);
     func_800DF744(5, 0);
-    func_80101870(param_0, param_1);
+    func_80101870(shield, param_1);
 }
 
-s32 func_808004D8_chstatuebossbits(Actor *param_0, s32 param_1, StatueBitsPayload31 param_2)
+s32 func_808004D8_chstatuebossbits(Actor *shield, s32 msg, StatueBitsPayload31 payload)
 {
-    s32 local_0;
+    s32 hit_info;
     s32 pad;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x40:
-            local_0 = *(s32 *) &param_2;
-            (*(s32 *) &param_0->unk54)++;
-            func_80800604_chstatuebossbits(param_0, local_0);
-            if (*(s32 *) &param_0->unk54 >= 3) {
-                func_800EC398(local_0, param_0->actorData);
-                *(f32 *) &param_0->actorData[1] = param_0->position[1];
-                _chexploder_entrypoint_3(param_0, param_0->actorData, 12);
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            hit_info = *(s32 *) &payload;
+            (*(s32 *) &shield->unk54)++;
+            func_80800604_chstatuebossbits(shield, hit_info);
+            if (*(s32 *) &shield->unk54 >= 3) {
+                func_800EC398(hit_info, shield->actorData);
+                *(f32 *) &shield->actorData[1] = shield->position[1];
+                _chexploder_entrypoint_3(shield, shield->actorData, 12);
+                _subaddieaudioquick_entrypoint_2(shield, shield->position,
                                                  D_8080085C_chstatuebossbits);
             }
             break;
         case 7:
-            func_80101FDC(param_0, 3);
-            func_80103110(param_0, 1);
-            param_0->unk58 = 3.0f;
+            func_80101FDC(shield, 3);
+            func_80103110(shield, 1);
+            shield->unk58 = 3.0f;
             break;
         case 0x90:
-            param_0 = func_80106790(func_80101080());
-            _chexploder_entrypoint_9(param_0, 2, 0);
-            _chexploder_entrypoint_9(param_0, 5, 1);
+            shield = func_80106790(func_80101080());
+            _chexploder_entrypoint_9(shield, 2, 0);
+            _chexploder_entrypoint_9(shield, 5, 1);
             return 1;
         default:
             return 0;
@@ -199,23 +202,23 @@ s32 func_808004D8_chstatuebossbits(Actor *param_0, s32 param_1, StatueBitsPayloa
     return 1;
 }
 
-void func_80800604_chstatuebossbits(param_0, param_1) s32 param_0;
-s32 param_1;
+void func_80800604_chstatuebossbits(unk_0, hit_info) s32 unk_0;
+s32 hit_info;
 {
-    f32 local_0[3];
-    func_800EC398(param_1, local_0);
-    func_800BBCB8(local_0, local_0, 0x3F800000, 4, &D_80800864_chstatuebossbits);
+    f32 pos[3];
+    func_800EC398(hit_info, pos);
+    func_800BBCB8(pos, pos, 0x3F800000, 4, &D_80800864_chstatuebossbits);
 }
 
-void func_8080064C_chstatuebossbits(Actor *param_0)
+void func_8080064C_chstatuebossbits(Actor *door)
 {
-    s32 local_0;
-    local_0 = func_800DA298(0x88) || _glcutDll_entrypoint_20();
-    if (local_0)
-        func_80101FDC(param_0, 1);
-    _chdoormake_entrypoint_3(param_0, 0.0f, 90.0f, 180.0f, 0x102, -1);
-    _chdoormake_entrypoint_5(param_0, 2.0f);
-    _chdoormake_entrypoint_8(param_0, 13);
+    s32 open;
+    open = func_800DA298(0x88) || _glcutDll_entrypoint_20();
+    if (open)
+        func_80101FDC(door, 1);
+    _chdoormake_entrypoint_3(door, 0.0f, 90.0f, 180.0f, 0x102, -1);
+    _chdoormake_entrypoint_5(door, 2.0f);
+    _chdoormake_entrypoint_8(door, 13);
 }
 
 extern void func_80105834();

@@ -2,14 +2,14 @@
 
 extern void func_800F10B4(f32, f32, s32, f32, f32);
 typedef struct {
-    u8 local_0;
+    u8 descending;
     u8 pad_0[3];
-    f32 local_1;
-    f32 local_2;
+    f32 period;
+    f32 value;
 } PlayerPulseState;
 typedef struct {
     u8 pad_0[0xE8];
-    PlayerPulseState *local_0;
+    PlayerPulseState *pulse;
 } PlayerPulseOwner;
 extern f32 func_800D8FF8(void);
 extern f32 func_800F13C4(f32, f32);
@@ -19,43 +19,46 @@ s32 bapulse_entrypoint_0()
     return 0xC;
 }
 
-void bapulse_entrypoint_1(u8 *param_0)
+// Normalised pulse value (0..1).
+void bapulse_entrypoint_1(u8 *player)
 {
-    u8 *local_0 = *(u8 **) (param_0 + 0xE8);
-    func_800F10B4(*(f32 *) (local_0 + 8), 0.0f, *(s32 *) (local_0 + 4), 0.0f, 1.0f);
+    u8 *state = *(u8 **) (player + 0xE8);
+    func_800F10B4(*(f32 *) (state + 8), 0.0f, *(s32 *) (state + 4), 0.0f, 1.0f);
 }
 
 void bapulse_entrypoint_2(s32 arg0)
 {
 }
 
-void bapulse_entrypoint_3(void *param_0, float param_1, float param_2)
+// Resets the pulse to ramp up from the given value.
+void bapulse_entrypoint_3(void *player, float value, float period)
 {
-    *(s8 *) ((char *) *(void **) ((char *) param_0 + 0xE8) + 0) = 0;
-    *(float *) ((char *) *(void **) ((char *) param_0 + 0xE8) + 8) = param_1;
-    *(float *) ((char *) *(void **) ((char *) param_0 + 0xE8) + 4) = param_2;
+    *(s8 *) ((char *) *(void **) ((char *) player + 0xE8) + 0) = 0;
+    *(float *) ((char *) *(void **) ((char *) player + 0xE8) + 8) = value;
+    *(float *) ((char *) *(void **) ((char *) player + 0xE8) + 4) = period;
 }
 
-void bapulse_entrypoint_4(PlayerPulseOwner *param_0)
+// Ramps the value between 0 and period, flipping direction at each end.
+void bapulse_entrypoint_4(PlayerPulseOwner *player)
 {
-    f32 local_0;
-    f32 local_1;
+    f32 dt;
+    f32 value;
 
-    local_0 = func_800D8FF8();
-    if (!param_0->local_0->local_0) {
-        param_0->local_0->local_2 += local_0;
-        local_1 = param_0->local_0->local_2;
-        if (local_1 >= param_0->local_0->local_1) {
-            param_0->local_0->local_2 =
-                param_0->local_0->local_1 - func_800F13C4(local_1, param_0->local_0->local_1);
-            param_0->local_0->local_0 = 1;
+    dt = func_800D8FF8();
+    if (!player->pulse->descending) {
+        player->pulse->value += dt;
+        value = player->pulse->value;
+        if (value >= player->pulse->period) {
+            player->pulse->value =
+                player->pulse->period - func_800F13C4(value, player->pulse->period);
+            player->pulse->descending = 1;
         }
     } else {
-        param_0->local_0->local_2 -= local_0;
-        local_1 = param_0->local_0->local_2;
-        if (local_1 < 0.0f) {
-            param_0->local_0->local_2 = func_800F13C4(-local_1, param_0->local_0->local_1);
-            param_0->local_0->local_0 = 0;
+        player->pulse->value -= dt;
+        value = player->pulse->value;
+        if (value < 0.0f) {
+            player->pulse->value = func_800F13C4(-value, player->pulse->period);
+            player->pulse->descending = 0;
         }
     }
 }

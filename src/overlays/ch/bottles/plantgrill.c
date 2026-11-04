@@ -10,18 +10,20 @@ int chbottlesplantgrill_entrypoint_0()
     return (int) &D_808000F0_chbottlesplantgrill;
 }
 
-void func_8080000C_chbottlesplantgrill(Actor *param_0)
+// Door-maker grille that opens in cutscene 0x65.
+void func_8080000C_chbottlesplantgrill(Actor *actor)
 {
-    if (_chdoormake_entrypoint_3(param_0, 0.0f, 90.0f, param_0->scale * 250.0f, 0, -1)) {
-        _chdoormake_entrypoint_6(param_0, 1.0f);
-        _chdoormake_entrypoint_5(param_0, 3.0f);
-        _chdoormake_entrypoint_8(param_0, 5);
-        _chdoormake_entrypoint_12(param_0, 0, 0x65);
-        _chdoormake_entrypoint_9(param_0, 0, 3, 0x2900);
+    if (_chdoormake_entrypoint_3(actor, 0.0f, 90.0f, actor->scale * 250.0f, 0, -1)) {
+        _chdoormake_entrypoint_6(actor, 1.0f);
+        _chdoormake_entrypoint_5(actor, 3.0f);
+        _chdoormake_entrypoint_8(actor, 5);
+        _chdoormake_entrypoint_12(actor, 0, 0x65);
+        _chdoormake_entrypoint_9(actor, 0, 3, 0x2900);
     }
-    func_8010A800(param_0, 0);
+    func_8010A800(actor, 0);
+    // Removed once the Tower of Tragedy is finished or flag 0x1A5 is set.
     if (!_glcutDll_entrypoint_19(0x65) && (func_800DA298(0x1A5) || func_800DA298(0x3B))) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
     }
 }
 

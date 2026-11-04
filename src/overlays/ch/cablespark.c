@@ -53,101 +53,102 @@ s32 func_80800970_chcablespark();
 
 void func_80800668_chcablespark();
 
-void func_8080000C_chcablespark(Actor *param_0)
+void func_8080000C_chcablespark(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    param_0->unk64_24 = 0;
+    s32 timer_done;
+    s32 out_of_range;
+    s32 shocked;
+    actor->unk64_24 = 0;
     if (func_80800828_chcablespark()) {
-        param_0->unk64_24 = 1;
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, param_0->unk70_10 == 3,
+        actor->unk64_24 = 1;
+        _subaddieaudioloop_entrypoint_4(actor, actor->position, actor->unk70_10 == 3,
                                         D_80800BD0_chcablespark);
-        local_0 = func_800D90A4(&param_0->unk58);
-        switch (param_0->unk70_10) {
+        timer_done = func_800D90A4(&actor->unk58);
+        switch (actor->unk70_10) {
             case 1:
-                if (((CableFlags49 *) param_0)->local_2) {
-                    if (local_0 && _subaddiejoy_entrypoint_6(param_0, 1) == 1) {
-                        func_80101FDC(param_0, 2);
-                        param_0->unk58 = 0.25f;
+                if (((CableFlags49 *) actor)->local_2) {
+                    if (timer_done && _subaddiejoy_entrypoint_6(actor, 1) == 1) {
+                        func_80101FDC(actor, 2);
+                        actor->unk58 = 0.25f;
                     }
-                } else if (local_0 && !func_808007B8_chcablespark(param_0)) {
-                    func_80101FDC(param_0, 3);
-                    param_0->unk58 = func_800DC178(0.8f, 1.2f);
-                    func_80800668_chcablespark(param_0);
-                    func_800C8FE0(param_0->actorData[6], 1);
+                } else if (timer_done && !func_808007B8_chcablespark(actor)) {
+                    func_80101FDC(actor, 3);
+                    actor->unk58 = func_800DC178(0.8f, 1.2f);
+                    func_80800668_chcablespark(actor);
+                    func_800C8FE0(actor->actorData[6], 1);
                 }
                 break;
             case 2:
-                if (local_0) {
-                    func_80101FDC(param_0, 3);
-                    param_0->unk58 = 1.0f;
-                    func_80800668_chcablespark(param_0);
-                    func_800C8FE0(param_0->actorData[6], 1);
+                if (timer_done) {
+                    func_80101FDC(actor, 3);
+                    actor->unk58 = 1.0f;
+                    func_80800668_chcablespark(actor);
+                    func_800C8FE0(actor->actorData[6], 1);
                 }
                 break;
             case 3:
-                if (((CableFlags49 *) param_0)->local_2)
-                    local_1 = 0;
+                if (((CableFlags49 *) actor)->local_2)
+                    out_of_range = 0;
                 else
-                    local_1 = func_808007B8_chcablespark(param_0);
-                local_2 = func_80800970_chcablespark(param_0);
-                func_800C8E84(param_0->actorData[6],
+                    out_of_range = func_808007B8_chcablespark(actor);
+                shocked = func_80800970_chcablespark(actor);
+                func_800C8E84(actor->actorData[6],
                               ((u32(*)[3]) D_80800B70_chcablespark)[func_800DC298(0.35f)]);
-                if (local_0 || local_1 || local_2) {
-                    func_80101FDC(param_0, 1);
-                    if (((CableFlags49 *) param_0)->local_2)
-                        param_0->unk58 = func_800DC178(1.2f, 1.4f);
+                if (timer_done || out_of_range || shocked) {
+                    func_80101FDC(actor, 1);
+                    if (((CableFlags49 *) actor)->local_2)
+                        actor->unk58 = func_800DC178(1.2f, 1.4f);
                     else
-                        param_0->unk58 = 2.0f;
-                    func_800C8FE0(param_0->actorData[6], 0);
+                        actor->unk58 = 2.0f;
+                    func_800C8FE0(actor->actorData[6], 0);
                 }
         }
     }
 }
 
-void func_8080024C_chcablespark(Actor *param_0)
+void func_8080024C_chcablespark(Actor *actor)
 {
-    *(u8 *) param_0->actorData = 0;
-    param_0->unk58 = func_800DC178(0.0f, 2.0f);
-    if (param_0->unk74_7 == 0x35 && func_80800828_chcablespark(param_0)) {
-        _subaddieDll_entrypoint_4(param_0, 1);
+    *(u8 *) actor->actorData = 0;
+    actor->unk58 = func_800DC178(0.0f, 2.0f);
+    if (actor->unk74_7 == 0x35 && func_80800828_chcablespark(actor)) {
+        _subaddieDll_entrypoint_4(actor, 1);
     }
-    func_808008BC_chcablespark(param_0);
+    func_808008BC_chcablespark(actor);
 }
 
-void func_808002BC_chcablespark(u8 *arg0)
+void func_808002BC_chcablespark(u8 *actor)
 {
-    int new_var2;
-    int new_var;
-    new_var2 = 0xFFFFFFFF;
-    if (arg0[24] != 0) {
-        new_var = (((arg0[24] & new_var2) & new_var2) & new_var2) & 0xFFFFFFFF;
-        func_800E87E0(((((new_var & new_var2) & 0xFF) & 0xFF) & 0xFF) & 0xFF);
+    // Matching: the redundant mask chain is needed for the match.
+    int mask;
+    int probe_id;
+    mask = 0xFFFFFFFF;
+    if (actor[24] != 0) {
+        probe_id = (((actor[24] & mask) & mask) & mask) & 0xFFFFFFFF;
+        func_800E87E0(((((probe_id & mask) & 0xFF) & 0xFF) & 0xFF) & 0xFF);
     }
 }
 
-s32 func_808002E8_chcablespark(Actor *param_0, s32 param_1, CableEvent30 param_2)
+s32 func_808002E8_chcablespark(Actor *actor, s32 msg, CableEvent30 event)
 {
-    f32 local_0[3];
-    f32 local_1;
-    switch (param_1) {
+    f32 offset[3];
+    f32 inv_scale;
+    switch (msg) {
         case 0xA:
-            param_0->unk64_24 = func_80800828_chcablespark(param_0);
-            if (param_0->unk74_7 == 0x35) {
-                param_0->unk64_24 = 0;
-                if (func_80800828_chcablespark(param_0))
-                    _subaddieDll_entrypoint_4(param_0, 1);
+            actor->unk64_24 = func_80800828_chcablespark(actor);
+            if (actor->unk74_7 == 0x35) {
+                actor->unk64_24 = 0;
+                if (func_80800828_chcablespark(actor))
+                    _subaddieDll_entrypoint_4(actor, 1);
             }
             break;
         case 0x95:
-            func_80800A48_chcablespark(param_0);
+            func_80800A48_chcablespark(actor);
             break;
         case 0x97:
-            local_1 = 1.0f / param_0->scale;
-            func_800EEB9C(local_0, param_0->rotation[1], 150.0f * local_1);
-            local_0[1] += 175.0f * local_1;
-            func_80101010(local_0);
+            inv_scale = 1.0f / actor->scale;
+            func_800EEB9C(offset, actor->rotation[1], 150.0f * inv_scale);
+            offset[1] += 175.0f * inv_scale;
+            func_80101010(offset);
             break;
         default:
             return 0;
@@ -155,89 +156,92 @@ s32 func_808002E8_chcablespark(Actor *param_0, s32 param_1, CableEvent30 param_2
     return 1;
 }
 
-void func_8080040C_chcablespark(Actor *param_0, s32 param_1)
+void func_8080040C_chcablespark(Actor *actor, s32 unk_1)
 {
-    f32 local_0[3];
-    param_0->unk64_20 = (s32) param_0->unk64_20 ^ 1;
+    f32 aim_rot[3];
+    actor->unk64_20 = (s32) actor->unk64_20 ^ 1;
     func_800DF830(1);
-    func_800DF744(4, func_80800828_chcablespark(param_0) ? 1 : 2);
-    func_800DE448(param_0->position, param_0->rotation, param_0->scale, 0,
+    func_800DF744(4, func_80800828_chcablespark(actor) ? 1 : 2);
+    func_800DE448(actor->position, actor->rotation, actor->scale, 0,
                   (void *) func_800D674C(0x6BC));
-    param_0->unk7C_12 = func_800DF350();
-    if (param_0->unk70_10 == 3) {
-        func_80800590_chcablespark(param_0, local_0);
+    actor->unk7C_12 = func_800DF350();
+    if (actor->unk70_10 == 3) {
+        func_80800590_chcablespark(actor, aim_rot);
         func_800DF744(1, func_800DC128(0, 4));
-        func_800DF47C(func_801015D0, param_0);
-        func_800DE448(param_0->position, local_0, param_0->scale, 0,
-                      (void *) func_8010347C(param_0->unk0));
-        if (func_800E88E4(((u8 *) param_0)[0x18]) == 1 && param_0->unk64_20 && param_0->unk7C_12) {
-            func_800E3A58(local_0);
+        func_800DF47C(func_801015D0, actor);
+        func_800DE448(actor->position, aim_rot, actor->scale, 0,
+                      (void *) func_8010347C(actor->unk0));
+        if (func_800E88E4(((u8 *) actor)[0x18]) == 1 && actor->unk64_20 && actor->unk7C_12) {
+            func_800E3A58(aim_rot);
             func_800DF830(0);
-            func_800DE448(param_0->position, local_0, param_0->scale, 0,
+            func_800DE448(actor->position, aim_rot, actor->scale, 0,
                           (void *) func_800D674C(0x6BB));
         }
     }
 }
 
-void func_80800590_chcablespark(param_0, param_1) Actor *param_0;
-f32 *param_1;
+// Computes the rotation that aims the spark.
+void func_80800590_chcablespark(actor, out_rot) Actor *actor;
+f32 *out_rot;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_4;
+    f32 unk_0[3];
+    f32 unk_1[3];
+    f32 unk_2[3];
+    f32 unk_3[3];
+    f32 yaw;
 
-    local_4 = 0.0f;
-    func_800E3980(local_0);
-    func_800EFB24(local_1, param_0->position, local_0);
-    func_800EEC30(local_2, ((f32 *) param_0->actorData)[5], ((f32 *) param_0->actorData)[4],
+    yaw = 0.0f;
+    func_800E3980(unk_0);
+    func_800EFB24(unk_1, actor->position, unk_0);
+    func_800EEC30(unk_2, ((f32 *) actor->actorData)[5], ((f32 *) actor->actorData)[4],
                   100.0f);
-    if (param_0->position[1] < local_0[1])
-        func_800EE97C(local_3, local_2, local_1);
+    if (actor->position[1] < unk_0[1])
+        func_800EE97C(unk_3, unk_2, unk_1);
     else
-        func_800EE97C(local_3, local_1, local_2);
-    func_800F1884(local_3, &local_4);
-    param_1[0] = ((f32 *) param_0->actorData)[5];
-    param_1[1] = ((f32 *) param_0->actorData)[4];
-    param_1[2] = func_800136E4(local_4 - 90.0f);
+        func_800EE97C(unk_3, unk_1, unk_2);
+    func_800F1884(unk_3, &yaw);
+    out_rot[0] = ((f32 *) actor->actorData)[5];
+    out_rot[1] = ((f32 *) actor->actorData)[4];
+    out_rot[2] = func_800136E4(yaw - 90.0f);
 }
 
-void func_80800668_chcablespark(Actor *param_0)
+void func_80800668_chcablespark(Actor *actor)
 {
-    f32 local_0[3];
-    f32 local_1[2];
-    f32 local_2;
-    f32 local_3;
+    f32 unk_0[3];
+    f32 unk_1[2];
+    f32 unk_2;
+    f32 unk_3;
 
-    func_800E3980(local_0);
-    func_800F18FC((*(Actor **) &param_0)->position, local_0, local_1);
-    local_1[1] = func_800F1DCC((*(Actor **) &param_0)->rotation[1], local_1[1]);
-    local_1[0] = -local_1[0];
-    local_3 = (mlAbsF(local_1[1]) > 45.0f) ? 0.0f : ((local_1[1] > 0.0f) ? 15.0f : -15.0f);
-    local_2 = (mlAbsF(local_1[0]) > 45.0f) ? 0 : ((local_1[0] < 0.0f) ? 15.0f : -15.0f);
-    *(f32 *) &*(Actor **) &param_0->actorData[4] =
-        func_800136E4((*(Actor **) &param_0)->rotation[1] + local_3);
-    *(f32 *) &*(Actor **) &param_0->actorData[5] = func_800136E4(local_2);
+    func_800E3980(unk_0);
+    func_800F18FC((*(Actor **) &actor)->position, unk_0, unk_1);
+    unk_1[1] = func_800F1DCC((*(Actor **) &actor)->rotation[1], unk_1[1]);
+    unk_1[0] = -unk_1[0];
+    unk_3 = (mlAbsF(unk_1[1]) > 45.0f) ? 0.0f : ((unk_1[1] > 0.0f) ? 15.0f : -15.0f);
+    unk_2 = (mlAbsF(unk_1[0]) > 45.0f) ? 0 : ((unk_1[0] < 0.0f) ? 15.0f : -15.0f);
+    *(f32 *) &*(Actor **) &actor->actorData[4] =
+        func_800136E4((*(Actor **) &actor)->rotation[1] + unk_3);
+    *(f32 *) &*(Actor **) &actor->actorData[5] = func_800136E4(unk_2);
 }
 
-s32 func_808007B8_chcablespark(param_0)
-Actor *param_0;
+// Returns 1 when the player is more than 1000 units away.
+s32 func_808007B8_chcablespark(actor)
+Actor *actor;
 {
-    f32 local_0[3];
-    if (param_0->unk74_7 == 0x35)
+    f32 player_pos[3];
+    if (actor->unk74_7 == 0x35)
         return 0;
-    func_8010D254(local_0);
-    return func_800EEB40(param_0->position, local_0) > 1000000.0f;
+    func_8010D254(player_pos);
+    return func_800EEB40(actor->position, player_pos) > 1000000.0f;
 }
 
-int func_80800828_chcablespark(param_0)
-Actor *param_0;
+// Returns 1 when the spark zone is powered.
+int func_80800828_chcablespark(actor)
+Actor *actor;
 {
-    s32 local_0;
-    local_0 = (u32) *(u16 *) ((char *) param_0 + 0x76) >> 7;
-    local_0 -= 0x32;
-    switch (local_0) {
+    s32 zone;
+    zone = (u32) *(u16 *) ((char *) actor + 0x76) >> 7;
+    zone -= 0x32;
+    switch (zone) {
         case 1:
             if (!func_800DA298(0xEB)) {
                 return 0;
@@ -256,67 +260,69 @@ Actor *param_0;
     return 1;
 }
 
-void func_808008BC_chcablespark(param_0) u8 *param_0;
+// Snaps the spark onto the surface found by the probe ray.
+void func_808008BC_chcablespark(actor) u8 *actor;
 {
-    f32 var_3C[3];
-    f32 var_30[3];
-    f32 var_24[3];
+    f32 ray_start[3];
+    f32 ray_end[3];
+    f32 hit_pos[3];
 
-    func_800EE7F8(var_3C, param_0 + 4);
-    func_800EF1B8(var_3C, *(f32 *) (param_0 + 0x48), 100.0f);
-    func_800EE7F8(var_30, param_0 + 4);
-    func_800EF1B8(var_30, *(f32 *) (param_0 + 0x48), -50.0f);
+    func_800EE7F8(ray_start, actor + 4);
+    func_800EF1B8(ray_start, *(f32 *) (actor + 0x48), 100.0f);
+    func_800EE7F8(ray_end, actor + 4);
+    func_800EF1B8(ray_end, *(f32 *) (actor + 0x48), -50.0f);
 
-if (func_800BEF00(var_3C, var_30, var_24, *(s32 *) (param_0 + 0x14)) != 0) {
-    func_800EE7F8(param_0 + 4, var_30);
-    func_800EF1B8(param_0 + 4, *(f32 *) (param_0 + 0x48), *(f32 *) (param_0 + 0x38) * 5.0f);
-    func_80103014(param_0);
+if (func_800BEF00(ray_start, ray_end, hit_pos, *(s32 *) (actor + 0x14)) != 0) {
+    func_800EE7F8(actor + 4, ray_end);
+    func_800EF1B8(actor + 4, *(f32 *) (actor + 0x48), *(f32 *) (actor + 0x38) * 5.0f);
+    func_80103014(actor);
 }
 
 }
 
-s32 func_80800970_chcablespark(Actor *param_0)
+// Shocks the player on contact; returns 1 when hit.
+s32 func_80800970_chcablespark(Actor *actor)
 {
-    f32 local_0[3];
-    f32 local_4;
-    f32 local_1[3];
-    f32 local_2;
-    s32 local_3;
+    f32 spark_pos[3];
+    f32 radius;
+    f32 player_pos[3];
+    f32 player_radius;
+    s32 player;
 
-    local_3 = func_800F54E4();
-    if (!func_800F6478(local_3))
+    player = func_800F54E4();
+    if (!func_800F6478(player))
         return 0;
-    local_2 = func_800F57F0(local_3, local_1);
-    func_800EE7F8(local_0, param_0->position);
-    func_800EF1B8(local_0, param_0->rotation[1], param_0->scale * 40.0f);
-    local_4 = param_0->scale * 50.0f;
+    player_radius = func_800F57F0(player, player_pos);
+    func_800EE7F8(spark_pos, actor->position);
+    func_800EF1B8(spark_pos, actor->rotation[1], actor->scale * 40.0f);
+    radius = actor->scale * 50.0f;
 
-if (func_800F0008(local_0, local_4, local_1, local_2) && func_800F7B9C(local_3, 0x51) == 2) {
-    _chelectricfence_entrypoint_1(param_0, local_1);
+if (func_800F0008(spark_pos, radius, player_pos, player_radius) && func_800F7B9C(player, 0x51) == 2) {
+    _chelectricfence_entrypoint_1(actor, player_pos);
     return 1;
 }
 
 return 0;
 }
 
-void func_80800A48_chcablespark(param_0) Actor *param_0;
+void func_80800A48_chcablespark(actor) Actor *actor;
 {
-    CableSparkRange26 local_0 = D_80800BDC_chcablespark;
+    CableSparkRange26 range = D_80800BDC_chcablespark;
 
-    local_0.local_0 *= param_0->scale;
-    local_0.local_1 *= param_0->scale;
-    param_0->actorData[6] = func_800C8A98();
-    func_800C8E84(param_0->actorData[6], D_80800B70_chcablespark);
-    func_800C8CB8(param_0->actorData[6], param_0->position);
-    func_800C8F64(param_0->actorData[6], 11);
-    func_800C8D4C(param_0->actorData[6], &local_0.local_0);
-    func_800C8FE0(param_0->actorData[6], param_0->unk70_10 == 3);
-    *(u8 *) &param_0->actorData[0] = func_800E8714(1);
-    func_800E8830(*(u8 *) &param_0->actorData[0], param_0->position);
-    param_0->unk64_24 = func_80800828_chcablespark(param_0);
+    range.local_0 *= actor->scale;
+    range.local_1 *= actor->scale;
+    actor->actorData[6] = func_800C8A98();
+    func_800C8E84(actor->actorData[6], D_80800B70_chcablespark);
+    func_800C8CB8(actor->actorData[6], actor->position);
+    func_800C8F64(actor->actorData[6], 11);
+    func_800C8D4C(actor->actorData[6], &range.local_0);
+    func_800C8FE0(actor->actorData[6], actor->unk70_10 == 3);
+    *(u8 *) &actor->actorData[0] = func_800E8714(1);
+    func_800E8830(*(u8 *) &actor->actorData[0], actor->position);
+    actor->unk64_24 = func_80800828_chcablespark(actor);
 
-if (param_0->unk74_7 == 0x35) {
-    param_0->unk64_24 = 0;
+if (actor->unk74_7 == 0x35) {
+    actor->unk64_24 = 0;
 }
 
 }

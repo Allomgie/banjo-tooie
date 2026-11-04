@@ -3,9 +3,10 @@
 extern s32 _chswitch_entrypoint_10(Actor *, s32, s32);
 extern void *D_808000C0_chminelightswitch;
 
-s32 func_80800000_chminelightswitch(Actor *param_0, s32 param_1, s32 param_2)
+// Plays cutscene 0x15 on switch press/release; the first time also sets FLAG2_673.
+s32 func_80800000_chminelightswitch(Actor *actor, s32 msg, s32 data)
 {
-    switch (param_1) {
+    switch (msg) {
         case 7:
             if (!func_800DA298(0x673))
                 _glcutDll_entrypoint_6(0xCF, 0x15);
@@ -17,7 +18,7 @@ s32 func_80800000_chminelightswitch(Actor *param_0, s32 param_1, s32 param_2)
             }
             break;
         default:
-            return _chswitch_entrypoint_10(param_0, param_1, param_2);
+            return _chswitch_entrypoint_10(actor, msg, data);
     }
     return 1;
 }

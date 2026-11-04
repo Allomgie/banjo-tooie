@@ -10,25 +10,26 @@ void func_80800000_chtemplebrokendoorpiece(s32 arg0)
 {
 }
 
-void func_80800008_chtemplebrokendoorpiece(Actor *param_0)
+void func_80800008_chtemplebrokendoorpiece(Actor *actor)
 {
-    func_800BABB8(0, (s32 *) ((char *) param_0 + 4), (s32 *) ((char *) param_0 + 4),
-                  *(s32 *) ((char *) param_0 + 0x38), &D_80800114_chtemplebrokendoorpiece);
-    _subaddieaudioquick_entrypoint_2(param_0, (s32 *) ((char *) param_0 + 4),
+    func_800BABB8(0, (s32 *) ((char *) actor + 4), (s32 *) ((char *) actor + 4),
+                  *(s32 *) ((char *) actor + 0x38), &D_80800114_chtemplebrokendoorpiece);
+    _subaddieaudioquick_entrypoint_2(actor, (s32 *) ((char *) actor + 4),
                                      &D_80800100_chtemplebrokendoorpiece);
     func_800DA544(0xC9);
 }
 
-int func_80800068_chtemplebrokendoorpiece(Actor *param_0, s32 param_1, s32 param_2)
+int func_80800068_chtemplebrokendoorpiece(Actor *actor, s32 msg, s32 param_2)
 {
-    f32 local_0[3];
-    switch (param_1) {
+    f32 pos[3];
+    // Explode 400 units ahead and 100 lower
+    switch (msg) {
         case 0x40:
-            func_800EE7F8(local_0, param_0->position);
-            func_800EF1B8(local_0, param_0->rotation[1], 400.0f);
-            local_0[1] -= 100.0f;
-            _chexploder_entrypoint_3(param_0, local_0, 12);
-            func_80800008_chtemplebrokendoorpiece(param_0);
+            func_800EE7F8(pos, actor->position);
+            func_800EF1B8(pos, actor->rotation[1], 400.0f);
+            pos[1] -= 100.0f;
+            _chexploder_entrypoint_3(actor, pos, 12);
+            func_80800008_chtemplebrokendoorpiece(actor);
             break;
         default:
             return 0;
@@ -41,6 +42,8 @@ int chtemplebrokendoorpiece_entrypoint_0()
     return (int) &D_8080015C_chtemplebrokendoorpiece;
 }
 
+// TU-NOTE: the overlay .data is defined here in C because its tables point to functions of this file;
+// IDO schedules some of them differently otherwise. Values are taken from the ROM.
 extern void func_80102EC0();
 extern void func_80105834();
 extern void func_80101870();

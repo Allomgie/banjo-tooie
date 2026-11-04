@@ -15,8 +15,8 @@ typedef struct {
     s16 a, b;
 } S16Pair;
 typedef union JadeSnakeEvent {
-    s32 local_0;
-    s16 local_1[2];
+    s32 word;
+    s16 halves[2];
 } JadeSnakeEvent;
 extern Actor *func_80106790(Unk80132ED0 *);
 extern Unk80132ED0 *func_80101080(void);
@@ -51,229 +51,231 @@ extern void func_80090708(s32);
 extern void func_800EF04C(f32 *, f32 *);
 extern void func_800EE7F8(f32 *, f32 *);
 
-void func_80800000_chjadesnake(Actor *param_0)
+void func_80800000_chjadesnake(Actor *actor)
 {
-    func_8010A85C(param_0, 2);
+    func_8010A85C(actor, 2);
     if (_glcutDll_entrypoint_20() != 0) {
-        func_80102424(param_0, 9);
-        func_8010A85C(param_0, 1);
+        func_80102424(actor, 9);
+        func_8010A85C(actor, 1);
     }
 }
 
-void func_80800048_chjadesnake(Actor *param_0)
+void func_80800048_chjadesnake(Actor *actor)
 {
-    func_800D1000(0xA, 1, (f32 *) &param_0->actorData[4], 3, param_0->unk0);
-    _subaddieaudioquick_entrypoint_2(param_0, (f32 *) &param_0->actorData[4],
+    func_800D1000(0xA, 1, (f32 *) &actor->actorData[4], 3, actor->unk0);
+    _subaddieaudioquick_entrypoint_2(actor, (f32 *) &actor->actorData[4],
                                      &D_80800938_chjadesnake);
 }
 
-int func_8080009C_chjadesnake(Actor *param_0)
+int func_8080009C_chjadesnake(Actor *actor)
 {
-    s32 local_4;
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_5;
+    s32 player;
+    s32 unk_0;
+    s32 unk_1;
+    s32 unk_2;
+    s32 unk_3;
+    s32 unk_4;
 
-    local_4 = func_800F54E4();
-    local_0 = func_800F651C(local_4);
-    local_1 = func_800F6C5C(local_4);
-    local_2 = func_800F72DC(local_4);
-    local_3 = func_800F56AC(local_4) == 0x10;
-    local_5 = func_800F6478(local_4);
-    if (!local_3)
+    player = func_800F54E4();
+    unk_0 = func_800F651C(player);
+    unk_1 = func_800F6C5C(player);
+    unk_2 = func_800F72DC(player);
+    unk_3 = func_800F56AC(player) == 0x10;
+    unk_4 = func_800F6478(player);
+    if (!unk_3)
         return 0;
-    return local_5 && (local_2 || (local_1 && !local_0));
+    return unk_4 && (unk_2 || (unk_1 && !unk_0));
 }
 
-void func_80800150_chjadesnake(Actor *param_0)
+// Ssslumber state machine; holds jiggy #10 and hands it over on message 13.
+void func_80800150_chjadesnake(Actor *actor)
 {
-    f32 local_0[3];
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    f32 local_4;
-    f32 local_5[3];
-    Actor *local_6;
+    f32 sound_pos[3];
+    s32 unk_1;
+    s32 unk_2;
+    s32 frame_event;
+    f32 anim_progress;
+    f32 player_pos[3];
+    Actor *jiggy;
 
-    local_1 = func_800D0B68(10, 1);
-    local_2 = func_800D0A9C(10, 1);
-    func_8010D254(local_0);
-    switch (param_0->unk70_10) {
+    unk_1 = func_800D0B68(10, 1);
+    unk_2 = func_800D0A9C(10, 1);
+    func_8010D254(sound_pos);
+    switch (actor->unk70_10) {
         case 1:
-            if (param_0->unk7C_12 && !local_1 && !local_2) {
-                func_800D1000(10, 1, (f32 *) &param_0->actorData[0], 3, param_0->unk0);
+            if (actor->unk7C_12 && !unk_1 && !unk_2) {
+                func_800D1000(10, 1, (f32 *) &actor->actorData[0], 3, actor->unk0);
             }
-            local_3 = func_80101E4C(param_0, D_808009C0_chjadesnake);
-            if (local_3) {
-                func_800C4B7C(local_3 & 1 ? 0x5C6 : 0x5C7);
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            frame_event = func_80101E4C(actor, D_808009C0_chjadesnake);
+            if (frame_event) {
+                func_800C4B7C(frame_event & 1 ? 0x5C6 : 0x5C7);
+                _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                  D_80800964_chjadesnake);
             }
-            if (!local_1 && local_2 && func_8080009C_chjadesnake(param_0)) {
-                _subaddieaudioquick_entrypoint_2(param_0, local_0, D_80800910_chjadesnake);
-                func_80090734(2, param_0->position);
-                func_8010A85C(param_0, 1);
-                func_80102424(param_0, 2);
+            if (!unk_1 && unk_2 && func_8080009C_chjadesnake(actor)) {
+                _subaddieaudioquick_entrypoint_2(actor, sound_pos, D_80800910_chjadesnake);
+                func_80090734(2, actor->position);
+                func_8010A85C(actor, 1);
+                func_80102424(actor, 2);
                 if (!func_800DA9E4(0x677, 1)) {
-                    param_0->unk64_20 = 1;
-                    _capod_entrypoint_13(param_0->unk0, 0, 2, 0x10);
+                    actor->unk64_20 = 1;
+                    _capod_entrypoint_13(actor->unk0, 0, 2, 0x10);
                 } else {
-                    param_0->unk64_20 = 0;
+                    actor->unk64_20 = 0;
                 }
             }
             break;
         case 2:
-            if (local_1) {
-                func_8010A85C(param_0, 2);
-                func_80102424(param_0, 1);
+            if (unk_1) {
+                func_8010A85C(actor, 2);
+                func_80102424(actor, 1);
                 func_80090708(0);
             }
-            if (func_80101E14(param_0, 0.73f)) {
+            if (func_80101E14(actor, 0.73f)) {
                 func_800D119C(10, 1);
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                  D_8080092C_chjadesnake);
             }
-            if (func_80101DDC(param_0)) {
+            if (func_80101DDC(actor)) {
                 if (func_800DA298(0x434)) {
-                    func_80102424(param_0, 3);
+                    func_80102424(actor, 3);
                     func_80090708(0);
                 } else {
                     func_800DA544(0x434);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0xF3C, 0xC, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0xF3C, 0xC, actor->position,
                                                   0x46);
-                    func_80102424(param_0, 5);
+                    func_80102424(actor, 5);
                 }
             }
             break;
         case 6:
             _capod_entrypoint_14();
             func_80090708(0);
-            func_80102424(param_0, 3);
+            func_80102424(actor, 3);
             break;
         case 3:
-            local_4 = func_80101F24(param_0);
-            func_8010D254(local_5);
-            if (func_800F56AC(func_800F54E4()) != 0x10 && local_5[1] < 1160.0f) {
-                func_80102424(param_0, 4);
-                if (param_0->unk64_20) {
-                    _capod_entrypoint_13(param_0->unk0, 0, 0, 0x10);
+            anim_progress = func_80101F24(actor);
+            func_8010D254(player_pos);
+            if (func_800F56AC(func_800F54E4()) != 0x10 && player_pos[1] < 1160.0f) {
+                func_80102424(actor, 4);
+                if (actor->unk64_20) {
+                    _capod_entrypoint_13(actor->unk0, 0, 0, 0x10);
                 }
             }
-            if (local_4 > 0.13f && local_4 < 0.64f) {
-                _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+            if (anim_progress > 0.13f && anim_progress < 0.64f) {
+                _subaddieaudioloop_entrypoint_4(actor, actor->position, 1,
                                                 D_80800948_chjadesnake);
             }
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80800958_chjadesnake,
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80800958_chjadesnake,
                                              D_808009DC_chjadesnake);
             break;
         case 4:
-            if (func_80101E14(param_0, 0.18f) && !local_2) {
+            if (func_80101E14(actor, 0.18f) && !unk_2) {
                 if (func_800DA298(0x435)) {
-                    func_80800048_chjadesnake(param_0);
+                    func_80800048_chjadesnake(actor);
                 } else {
                     func_800DA544(0x435);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0xF3D, 0xC, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0xF3D, 0xC, actor->position,
                                                   0x46);
-                    func_80102424(param_0, 7);
+                    func_80102424(actor, 7);
                 }
             }
-            if (func_80101DDC(param_0)) {
+            if (func_80101DDC(actor)) {
                 if (!func_800DA298(0x435)) {
-                    func_80102424(param_0, 7);
+                    func_80102424(actor, 7);
                 } else {
-                    func_8010A85C(param_0, 2);
-                    func_80102424(param_0, 1);
+                    func_8010A85C(actor, 2);
+                    func_80102424(actor, 1);
                 }
             }
-            if (!local_1 && local_2 && func_8080009C_chjadesnake(param_0)) {
-                _subaddieaudioquick_entrypoint_2(param_0, local_0, D_80800910_chjadesnake);
-                func_80090734(2, param_0->position);
-                func_8010A85C(param_0, 1);
-                func_80102424(param_0, 2);
-                func_80101EE4(param_0, 0.57f);
+            if (!unk_1 && unk_2 && func_8080009C_chjadesnake(actor)) {
+                _subaddieaudioquick_entrypoint_2(actor, sound_pos, D_80800910_chjadesnake);
+                func_80090734(2, actor->position);
+                func_8010A85C(actor, 1);
+                func_80102424(actor, 2);
+                func_80101EE4(actor, 0.57f);
             }
             break;
         case 7:
-            if (!local_2) {
-                func_80800048_chjadesnake(param_0);
+            if (!unk_2) {
+                func_80800048_chjadesnake(actor);
             }
             break;
         case 8:
-            if (func_80101DDC(param_0)) {
-                if (local_2) {
-                    func_8010A85C(param_0, 2);
-                    func_80102424(param_0, 1);
+            if (func_80101DDC(actor)) {
+                if (unk_2) {
+                    func_8010A85C(actor, 2);
+                    func_80102424(actor, 1);
                 } else {
-                    func_80800048_chjadesnake(param_0);
+                    func_80800048_chjadesnake(actor);
                     func_80090708(0);
-                    func_80102424(param_0, 4);
+                    func_80102424(actor, 4);
                 }
             }
     }
-    if (param_0->unk6C_0 && func_800D0634(10, 1)) {
-        local_6 = func_80106790((Unk80132ED0 *) func_800D0634(10, 1));
-        func_800EF04C(local_6->position, (f32 *) &local_6->actorData[4]);
-        param_0->unk6C_0--;
-        if (param_0->unk6C_0 == 2) {
-            _subaddieaudioquick_entrypoint_2(local_6, local_6->position, D_80800920_chjadesnake);
-        } else if (param_0->unk6C_0 == 0) {
-            func_800EE7F8(local_6->position, (f32 *) &param_0->actorData[0]);
-            func_80102FE8(local_6, 1);
-            func_80103014(local_6);
+    if (actor->unk6C_0 && func_800D0634(10, 1)) {
+        jiggy = func_80106790((Unk80132ED0 *) func_800D0634(10, 1));
+        func_800EF04C(jiggy->position, (f32 *) &jiggy->actorData[4]);
+        actor->unk6C_0--;
+        if (actor->unk6C_0 == 2) {
+            _subaddieaudioquick_entrypoint_2(jiggy, jiggy->position, D_80800920_chjadesnake);
+        } else if (actor->unk6C_0 == 0) {
+            func_800EE7F8(jiggy->position, (f32 *) &actor->actorData[0]);
+            func_80102FE8(jiggy, 1);
+            func_80103014(jiggy);
         }
     }
 }
 
-void func_80800728_chjadesnake(param_0, param_1, param_2) s32 param_0;
-s32 param_1;
-S16Pair param_2;
+void func_80800728_chjadesnake(actor, dialog_id, arg) s32 actor;
+s32 dialog_id;
+S16Pair arg;
 {
 
-if (param_1 != 0xF3C) {
-    if (param_1 == 0xF3D) {
-        func_80102424(param_0, 8);
+if (dialog_id != 0xF3C) {
+    if (dialog_id == 0xF3D) {
+        func_80102424(actor, 8);
     }
 } else {
 
-func_80102424(param_0, 6);
+func_80102424(actor, 6);
 }
 }
 
-int func_80800770_chjadesnake(Actor *param_0)
+int func_80800770_chjadesnake(Actor *actor)
 {
     func_80101870();
-    if (param_0->unk7C_12) {
-        func_800DBEFC(func_80104130(), 4, (u8 *) param_0 + 0x18);
-        func_800DBEFC(func_80104130(), 5, (u8 *) param_0 + 0x28);
+    if (actor->unk7C_12) {
+        func_800DBEFC(func_80104130(), 4, (u8 *) actor + 0x18);
+        func_800DBEFC(func_80104130(), 5, (u8 *) actor + 0x28);
 
 }
 }
 
-s32 func_808007DC_chjadesnake(Actor *param_0, s32 param_1, JadeSnakeEvent param_2)
+s32 func_808007DC_chjadesnake(Actor *actor, s32 msg, JadeSnakeEvent msg_data)
 {
-    Actor *local_0;
+    Actor *jiggy;
 
+    // Matching: empty block steers IDO's codegen.
     if (1) {
     }
-    switch (param_1) {
+    switch (msg) {
         case 13:
-            if (param_0->unk70_10 != 1) {
-                local_0 = func_80106790(func_80101080());
-                func_800EFB24((f32 *) &local_0->actorData[4], (f32 *) &param_0->actorData[0],
-                              (f32 *) &param_0->actorData[4]);
-                func_800EF334((f32 *) &local_0->actorData[4], 1.0f / 7.0f);
-                param_0->unk6C_0 = 7;
-                func_80102FE8(local_0, 0);
+            if (actor->unk70_10 != 1) {
+                jiggy = func_80106790(func_80101080());
+                func_800EFB24((f32 *) &jiggy->actorData[4], (f32 *) &actor->actorData[0],
+                              (f32 *) &actor->actorData[4]);
+                func_800EF334((f32 *) &jiggy->actorData[4], 1.0f / 7.0f);
+                actor->unk6C_0 = 7;
+                func_80102FE8(jiggy, 0);
             }
 
 break;
 case 0x2E:
-    func_80800728_chjadesnake(param_0, param_2.local_1[0], param_2.local_1[1]);
+    func_80800728_chjadesnake(actor, msg_data.halves[0], msg_data.halves[1]);
     break;
 case 0x52:
-    _gcdialogcamera_entrypoint_3(D_808009E4_chjadesnake, param_0->scale);
+    _gcdialogcamera_entrypoint_3(D_808009E4_chjadesnake, actor->scale);
     break;
 default:
     return 0;

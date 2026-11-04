@@ -93,12 +93,12 @@ typedef struct {
 } OneArmBanditFlags;
 extern u8 D_80801354_chonearmbandit[];
 typedef union {
-    f32 local_0[3];
-    s32 local_1[3];
+    f32 as_f32[3];
+    s32 as_s32[3];
 } DeferredPosition1864;
 typedef union {
-    f32 local_0;
-    s32 local_1;
+    f32 as_f32;
+    s32 as_s32;
 } DeferredAngle1864;
 extern s32 D_8080139C_chonearmbandit[];
 extern Actor *func_80106790(Unk80132ED0 *);
@@ -124,9 +124,9 @@ int chonearmbandit_entrypoint_1()
     return (int) &D_80801304_chonearmbandit;
 }
 
-void func_80800018_chonearmbandit(u8 *param_0)
+void func_80800018_chonearmbandit(u8 *actor)
 {
-    *(f32 *) (param_0 + 0x24) = 400.0f;
+    *(f32 *) (actor + 0x24) = 400.0f;
     func_80800040_chonearmbandit();
 }
 
@@ -139,148 +139,148 @@ s32 param_0;
     _subaddierouteDll_entrypoint_1(param_0);
 }
 
-void func_80800A14_chonearmbandit(Actor *param_0, f32 param_1);
+void func_80800A14_chonearmbandit(Actor *actor, f32 volume);
 
-s32 func_808008E0_chonearmbandit(Actor *param_0, f32 param_1);
+s32 func_808008E0_chonearmbandit(Actor *actor, f32 angle_offset);
 
-void func_80800740_chonearmbandit(Actor *param_0, f32 param_1);
+void func_80800740_chonearmbandit(Actor *actor, f32 angle_offset);
 
-void func_8080007C_chonearmbandit(Actor *param_0)
+void func_8080007C_chonearmbandit(Actor *actor)
 {
-    f32 *local_0;
+    f32 *pos;
 
-    if (((BanditBits *) param_0)->unk78_2) {
+    if (((BanditBits *) actor)->unk78_2) {
         return;
     }
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            if (((BanditBits *) param_0)->unk64_29) {
-                func_80800680_chonearmbandit(param_0, 2);
+            if (((BanditBits *) actor)->unk64_29) {
+                func_80800680_chonearmbandit(actor, 2);
                 return;
             }
-            if (func_8010C9B0(param_0->position, 1500)) {
-                func_80800680_chonearmbandit(param_0, 4);
+            if (func_8010C9B0(actor->position, 1500)) {
+                func_80800680_chonearmbandit(actor, 4);
             }
             break;
         case 2:
-            if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position,
+            if (_subaddieaudioquick_entrypoint_3(actor, actor->position,
                                                  D_808011F0_chonearmbandit, 0.75f)) {
-                _subaddiejoy_entrypoint_10(param_0, 0.8f, 0.2f);
+                _subaddiejoy_entrypoint_10(actor, 0.8f, 0.2f);
             }
-            func_808008E0_chonearmbandit(param_0, 0.0f);
-            if (_subaddiejoy_entrypoint_6(param_0, 1)) {
-                func_80800680_chonearmbandit(param_0, 3);
-            } else if (_subaddiejoy_entrypoint_6(param_0, 0)) {
-                func_80800680_chonearmbandit(param_0, 5);
+            func_808008E0_chonearmbandit(actor, 0.0f);
+            if (_subaddiejoy_entrypoint_6(actor, 1)) {
+                func_80800680_chonearmbandit(actor, 3);
+            } else if (_subaddiejoy_entrypoint_6(actor, 0)) {
+                func_80800680_chonearmbandit(actor, 5);
             }
-            if (!((BanditBits *) param_0)->unk64_29) {
-                func_80800680_chonearmbandit(param_0, 3);
+            if (!((BanditBits *) actor)->unk64_29) {
+                func_80800680_chonearmbandit(actor, 3);
             }
             break;
         case 3:
-            local_0 = param_0->position;
-            if (_subaddieaudioquick_entrypoint_3(param_0, local_0, D_808011F0_chonearmbandit,
+            pos = actor->position;
+            if (_subaddieaudioquick_entrypoint_3(actor, pos, D_808011F0_chonearmbandit,
                                                  0.75f)) {
-                _subaddiejoy_entrypoint_10(param_0, 0.8f, 0.2f);
+                _subaddiejoy_entrypoint_10(actor, 0.8f, 0.2f);
             }
-            func_80800A14_chonearmbandit(param_0, 0.7f);
-            func_808008E0_chonearmbandit(param_0, 0.0f);
-            if (func_80101E14(param_0, 0.999f)) {
-                if (((BanditBits *) param_0)->unk64_29) {
-                    if (!_subaddiejoy_entrypoint_6(param_0, 1)) {
-                        func_80800680_chonearmbandit(param_0, 2);
+            func_80800A14_chonearmbandit(actor, 0.7f);
+            func_808008E0_chonearmbandit(actor, 0.0f);
+            if (func_80101E14(actor, 0.999f)) {
+                if (((BanditBits *) actor)->unk64_29) {
+                    if (!_subaddiejoy_entrypoint_6(actor, 1)) {
+                        func_80800680_chonearmbandit(actor, 2);
                     }
-                } else if (!func_8010C9B0(local_0, 800)) {
-                    func_80800680_chonearmbandit(param_0, 4);
+                } else if (!func_8010C9B0(pos, 800)) {
+                    func_80800680_chonearmbandit(actor, 4);
                 }
             }
             break;
         case 4:
-            local_0 = param_0->position;
-            _subaddieaudioquick_entrypoint_3(param_0, local_0, D_808011F0_chonearmbandit, 0.75f);
-            if (func_80101E14(param_0, 0.999f)) {
-                if (((BanditBits *) param_0)->unk64_29) {
-                    func_80800680_chonearmbandit(param_0, 2);
+            pos = actor->position;
+            _subaddieaudioquick_entrypoint_3(actor, pos, D_808011F0_chonearmbandit, 0.75f);
+            if (func_80101E14(actor, 0.999f)) {
+                if (((BanditBits *) actor)->unk64_29) {
+                    func_80800680_chonearmbandit(actor, 2);
                     return;
                 }
-                if (!func_8010C9B0(local_0, 1500)) {
-                    func_80800680_chonearmbandit(param_0, 1);
+                if (!func_8010C9B0(pos, 1500)) {
+                    func_80800680_chonearmbandit(actor, 1);
                     return;
                 }
-                if (func_8010C9B0(local_0, 800)) {
-                    func_80800680_chonearmbandit(param_0, (func_8010D278() == 0x10) ? 6 : 2);
+                if (func_8010C9B0(pos, 800)) {
+                    func_80800680_chonearmbandit(actor, (func_8010D278() == 0x10) ? 6 : 2);
                 }
                 return;
             }
-            func_80800740_chonearmbandit(param_0, 0.0f);
-            if (func_8010C9B0(local_0, 1500)) {
-                if (func_80102CF4(param_0, 8.0f)) {
-                    func_80800680_chonearmbandit(param_0, 5);
+            func_80800740_chonearmbandit(actor, 0.0f);
+            if (func_8010C9B0(pos, 1500)) {
+                if (func_80102CF4(actor, 8.0f)) {
+                    func_80800680_chonearmbandit(actor, 5);
                 }
             } else {
-                func_80800680_chonearmbandit(param_0, 1);
+                func_80800680_chonearmbandit(actor, 1);
             }
             break;
         case 5:
-            local_0 = param_0->position;
-            _subaddieaudioquick_entrypoint_3(param_0, local_0, D_8080134C_chonearmbandit, 0.1f);
-            if (func_80101E14(param_0, 0.25f)) {
-                func_80108B04(param_0, 0);
+            pos = actor->position;
+            _subaddieaudioquick_entrypoint_3(actor, pos, D_8080134C_chonearmbandit, 0.1f);
+            if (func_80101E14(actor, 0.25f)) {
+                func_80108B04(actor, 0);
             }
-            if (func_80101DDC(param_0)) {
-                param_0->unk58 -= func_800D8FF8();
-                if (param_0->unk58 < 0.0f) {
-                    if (((BanditBits *) param_0)->unk64_29) {
-                        func_80800680_chonearmbandit(param_0, 2);
+            if (func_80101DDC(actor)) {
+                actor->unk58 -= func_800D8FF8();
+                if (actor->unk58 < 0.0f) {
+                    if (((BanditBits *) actor)->unk64_29) {
+                        func_80800680_chonearmbandit(actor, 2);
                         return;
                     }
-                    func_80800680_chonearmbandit(param_0, func_8010C9B0(local_0, 800)
+                    func_80800680_chonearmbandit(actor, func_8010C9B0(pos, 800)
                                                               ? ((func_8010D278() == 0x10) ? 6 : 2)
                                                               : 4);
                 }
             }
             break;
         case 7:
-            if (func_80101DDC(param_0)) {
-                func_80800680_chonearmbandit(param_0, 1);
+            if (func_80101DDC(actor)) {
+                func_80800680_chonearmbandit(actor, 1);
             }
             break;
         case 6:
-            local_0 = param_0->position;
-            _subaddieaudioquick_entrypoint_3(param_0, local_0, D_808011F0_chonearmbandit, 0.75f);
-            if (func_80101E14(param_0, 0.999f)) {
-                if (((BanditBits *) param_0)->unk64_29) {
-                    func_80800680_chonearmbandit(param_0, 2);
-                } else if (!func_8010C9B0(local_0, 800)) {
-                    func_80800680_chonearmbandit(param_0, 4);
+            pos = actor->position;
+            _subaddieaudioquick_entrypoint_3(actor, pos, D_808011F0_chonearmbandit, 0.75f);
+            if (func_80101E14(actor, 0.999f)) {
+                if (((BanditBits *) actor)->unk64_29) {
+                    func_80800680_chonearmbandit(actor, 2);
+                } else if (!func_8010C9B0(pos, 800)) {
+                    func_80800680_chonearmbandit(actor, 4);
                 }
             }
-            func_808008E0_chonearmbandit(param_0, 180.0f);
+            func_808008E0_chonearmbandit(actor, 180.0f);
     }
 }
 
-s32 func_80800520_chonearmbandit(Actor *param_0, s32 param_1, BanditMessage30 param_2)
+s32 func_80800520_chonearmbandit(Actor *actor, s32 event, BanditMessage30 payload)
 {
-    switch (param_1) {
+    switch (event) {
         case 0x3F:
-            func_808006F8_chonearmbandit(param_0, param_2.word);
+            func_808006F8_chonearmbandit(actor, payload.word);
             break;
         case 0x40:
-            _chexploder_entrypoint_4(param_0, (*param_2.actors)->position, 4);
+            _chexploder_entrypoint_4(actor, (*payload.actors)->position, 4);
             break;
         case 0x3D:
-            if (!func_801072A8(param_0))
-                func_80800AB8_chonearmbandit(param_0);
+            if (!func_801072A8(actor))
+                func_80800AB8_chonearmbandit(actor);
             break;
         case 0x90:
-            func_80800D00_chonearmbandit(param_0);
+            func_80800D00_chonearmbandit(actor);
             break;
         case 2:
-            if ((s32) param_0->unk70_10 > 0 && !_subaddieDll_entrypoint_3(param_0))
-                func_80107070(param_0, 1);
+            if ((s32) actor->unk70_10 > 0 && !_subaddieDll_entrypoint_3(actor))
+                func_80107070(actor, 1);
             break;
         case 0x95:
-            _subaddierouteDll_entrypoint_1(param_0);
+            _subaddierouteDll_entrypoint_1(actor);
             break;
         case 0x38:
             func_80101074(D_80801280_chonearmbandit);
@@ -291,11 +291,11 @@ s32 func_80800520_chonearmbandit(Actor *param_0, s32 param_1, BanditMessage30 pa
     return 1;
 }
 
-s32 func_8080063C_chonearmbandit(s32 param_0, s32 param_1)
+s32 func_8080063C_chonearmbandit(s32 actor, s32 unk_1)
 {
     func_800DF744(3, 1);
     func_800DF744(4, 0);
-    func_80101870(param_0, param_1);
+    func_80101870(actor, unk_1);
 }
 
 void func_80800680_chonearmbandit(param_0, param_1) Actor *param_0;
@@ -312,91 +312,91 @@ s32 param_1;
     }
 }
 
-void func_808006F8_chonearmbandit(BanditState *param_0, S16Pair param_1)
+void func_808006F8_chonearmbandit(BanditState *actor, S16Pair unk_1)
 {
-    if (!param_0->flag && param_0->f72 != 7) {
-        func_80800680_chonearmbandit(param_0, 7);
+    if (!actor->flag && actor->f72 != 7) {
+        func_80800680_chonearmbandit(actor, 7);
     }
 }
 
-void func_80800740_chonearmbandit(Actor *param_0, f32 param_1)
+void func_80800740_chonearmbandit(Actor *actor, f32 angle_offset)
 {
-    f32 local_0[3];
-    f32 local_3;
-    f32 local_1;
-    f32 local_2;
+    f32 target_pos[3];
+    f32 unk_3;
+    f32 turn;
+    f32 dt;
 
-    if (((BanditActor *) param_0)->unk64_29) {
-        _subaddiejoy_entrypoint_9(param_0, &param_0->unk54, 3);
-        func_80102BF8(param_0, 0.2f, 6.0f, 220.0f);
+    if (((BanditActor *) actor)->unk64_29) {
+        _subaddiejoy_entrypoint_9(actor, &actor->unk54, 3);
+        func_80102BF8(actor, 0.2f, 6.0f, 220.0f);
         return;
     }
-    local_2 = func_800D8FF8();
-    func_8010D09C(func_800F54E4(), local_0, 0.8f);
-    switch (param_0->unk70_10) {
+    dt = func_800D8FF8();
+    func_8010D09C(func_800F54E4(), target_pos, 0.8f);
+    switch (actor->unk70_10) {
         case 2:
         case 3:
         case 6:
-            if (_subaddierouteDll_entrypoint_4(param_0)) {
-                param_0->unk54 = func_800136E4(func_80102D78(param_0, local_0) + param_1);
-                _subaddierouteDll_entrypoint_7(param_0, func_80100094(param_0, 1),
-                                               param_0->rotation[1], param_0->unk54, 200.0f,
+            if (_subaddierouteDll_entrypoint_4(actor)) {
+                actor->unk54 = func_800136E4(func_80102D78(actor, target_pos) + angle_offset);
+                _subaddierouteDll_entrypoint_7(actor, func_80100094(actor, 1),
+                                               actor->rotation[1], actor->unk54, 200.0f,
                                                0x4000);
             }
             break;
         default:
-            param_0->unk54 = func_800136E4(func_80102D78(param_0, local_0) + param_1);
+            actor->unk54 = func_800136E4(func_80102D78(actor, target_pos) + angle_offset);
     }
-    local_1 = func_800F1DCC(func_800F1FF0(param_0->rotation[1], param_0->unk54, 0.15f,
-                                          local_2 * 4.0f, local_2 * 120.0f),
-                            param_0->rotation[1]);
-    local_1 *= func_800F3780(func_80101F24(param_0), (u8 *) D_808011FC_chonearmbandit, 3);
-    param_0->rotation[1] = func_800136E4(param_0->rotation[1] + local_1);
+    turn = func_800F1DCC(func_800F1FF0(actor->rotation[1], actor->unk54, 0.15f,
+                                          dt * 4.0f, dt * 120.0f),
+                            actor->rotation[1]);
+    turn *= func_800F3780(func_80101F24(actor), (u8 *) D_808011FC_chonearmbandit, 3);
+    actor->rotation[1] = func_800136E4(actor->rotation[1] + turn);
 }
 
-s32 func_808008E0_chonearmbandit(Actor *param_0, f32 param_1)
+s32 func_808008E0_chonearmbandit(Actor *actor, f32 angle_offset)
 {
-    f32 local_0;
-    f32 local_3;
-    f32 local_1;
-    s32 local_2;
+    f32 saved_speed;
+    f32 unk_3;
+    f32 stick;
+    s32 moving;
 
-    local_0 = *(f32 *) &param_0->actorData[3];
-    if (((OneArmBanditFlags *) param_0)->local_0) {
-        local_1 = _subaddiejoy_entrypoint_9(param_0, 0, 0);
-        local_3 = func_80101F24(param_0);
-        *(f32 *) &param_0->actorData[3] = func_800F3780(local_3, D_808011FC_chonearmbandit, 3) *
-                                          (param_0->scale * (local_1 * 400.0f));
+    saved_speed = *(f32 *) &actor->actorData[3];
+    if (((OneArmBanditFlags *) actor)->local_0) {
+        stick = _subaddiejoy_entrypoint_9(actor, 0, 0);
+        unk_3 = func_80101F24(actor);
+        *(f32 *) &actor->actorData[3] = func_800F3780(unk_3, D_808011FC_chonearmbandit, 3) *
+                                          (actor->scale * (stick * 400.0f));
     } else {
-        local_3 = func_80101F24(param_0);
-        *(f32 *) &param_0->actorData[3] =
-            func_800F3780(local_3, D_808011FC_chonearmbandit, 3) * (param_0->scale * 400.0f);
+        unk_3 = func_80101F24(actor);
+        *(f32 *) &actor->actorData[3] =
+            func_800F3780(unk_3, D_808011FC_chonearmbandit, 3) * (actor->scale * 400.0f);
     }
-    func_80800740_chonearmbandit(param_0, param_1);
-    if (((OneArmBanditFlags *) param_0)->local_0) {
-        func_8010B990(param_0, 0x205025);
+    func_80800740_chonearmbandit(actor, angle_offset);
+    if (((OneArmBanditFlags *) actor)->local_0) {
+        func_8010B990(actor, 0x205025);
     } else {
-        func_8010B990(param_0, 0x5425);
+        func_8010B990(actor, 0x5425);
     }
-    local_2 = 0;
-    if (*(f32 *) &param_0->actorData[3] > 0.0f) {
-        local_2 = 1;
+    moving = 0;
+    if (*(f32 *) &actor->actorData[3] > 0.0f) {
+        moving = 1;
     }
-    *(f32 *) &param_0->actorData[3] = local_0;
-    return local_2;
+    *(f32 *) &actor->actorData[3] = saved_speed;
+    return moving;
 }
 
-void func_80800A14_chonearmbandit(Actor *param_0, f32 param_1)
+void func_80800A14_chonearmbandit(Actor *actor, f32 volume)
 {
-    f32 local_0[3];
-    if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position,
-                                         (u8 *) D_808011F0_chonearmbandit, param_1)) {
-        if (_subaddieskeleton_entrypoint_2(param_0->unk0, 5, local_0)) {
-            if (param_0->position[1] < local_0[1])
-                local_0[1] = param_0->position[1];
-            func_800BBCB8(local_0, local_0, 0x3F333333, 6, D_80801364_chonearmbandit);
+    f32 bone_pos[3];
+    if (_subaddieaudioquick_entrypoint_3(actor, actor->position,
+                                         (u8 *) D_808011F0_chonearmbandit, volume)) {
+        if (_subaddieskeleton_entrypoint_2(actor->unk0, 5, bone_pos)) {
+            if (actor->position[1] < bone_pos[1])
+                bone_pos[1] = actor->position[1];
+            func_800BBCB8(bone_pos, bone_pos, 0x3F333333, 6, D_80801364_chonearmbandit);
         }
-        _subaddiejoy_entrypoint_10(param_0, 1.4f, 0.3f);
+        _subaddiejoy_entrypoint_10(actor, 1.4f, 0.3f);
     }
 }
 
@@ -445,101 +445,101 @@ Actor *param_0;
 
 s32 func_80800E78_chonearmbandit();
 
-int func_80800D00_chonearmbandit(Actor *param_0)
+int func_80800D00_chonearmbandit(Actor *actor)
 {
-    f32 local_0[3];
-    Actor *local_1;
-    s32 local_6;
-    DeferredPosition1864 local_2;
-    DeferredAngle1864 local_3;
-    s32 local_4;
-    local_1 = func_80106790(func_80101080(param_0));
-    _chexploder_entrypoint_9(local_1, 3, 0);
-    _chexploder_entrypoint_9(local_1, 4, 1);
-    _chexploder_entrypoint_6(local_1, 1000.0f, 1200.0f);
-    _subaddiefade_entrypoint_9(param_0, local_0);
-    _subaddiefade_entrypoint_11(local_1, local_0);
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_8080139C_chonearmbandit);
-    _subaddiejoy_entrypoint_10(param_0, 1.4f, 0.3f);
-    *((u8 *) param_0 + 0x64) &= ~1;
-    local_6 = func_80800E78_chonearmbandit(param_0);
-    if (local_6)
-        func_800D1000(local_6, 8, param_0->position, 1, 0);
-    else if (func_8010A430(param_0)) {
-        local_3.local_0 = func_800DC178(0.0f, 359.0f);
+    f32 pos[3];
+    Actor *exploder;
+    s32 slot;
+    DeferredPosition1864 drop_pos;
+    DeferredAngle1864 drop_angle;
+    s32 drop_id;
+    exploder = func_80106790(func_80101080(actor));
+    _chexploder_entrypoint_9(exploder, 3, 0);
+    _chexploder_entrypoint_9(exploder, 4, 1);
+    _chexploder_entrypoint_6(exploder, 1000.0f, 1200.0f);
+    _subaddiefade_entrypoint_9(actor, pos);
+    _subaddiefade_entrypoint_11(exploder, pos);
+    _subaddieaudioquick_entrypoint_2(actor, actor->position, &D_8080139C_chonearmbandit);
+    _subaddiejoy_entrypoint_10(actor, 1.4f, 0.3f);
+    *((u8 *) actor + 0x64) &= ~1;
+    slot = func_80800E78_chonearmbandit(actor);
+    if (slot)
+        func_800D1000(slot, 8, actor->position, 1, 0);
+    else if (func_8010A430(actor)) {
+        drop_angle.as_f32 = func_800DC178(0.0f, 359.0f);
         if (func_800DC298(0.5f))
-            local_4 = 0x18;
+            drop_id = 0x18;
         else
-            local_4 = 0x19;
-        func_80103DFC(param_0, local_2.local_0);
-        _chbaddiesetup_entrypoint_5(&_chbaddiesetup_entrypoint_10, local_4, local_2.local_1[0],
-                                    local_2.local_1[1], local_2.local_1[2], local_3.local_1);
+            drop_id = 0x19;
+        func_80103DFC(actor, drop_pos.as_f32);
+        _chbaddiesetup_entrypoint_5(&_chbaddiesetup_entrypoint_10, drop_id, drop_pos.as_s32[0],
+                                    drop_pos.as_s32[1], drop_pos.as_s32[2], drop_angle.as_s32);
     }
-    if (!func_80107070(param_0, 3))
-        func_800FFAB0(param_0);
+    if (!func_80107070(actor, 3))
+        func_800FFAB0(actor);
 }
 
-s32 func_80800E78_chonearmbandit(s32 param_0)
+s32 func_80800E78_chonearmbandit(s32 actor)
 {
-    s32 local_0;
+    s32 marker_idx;
 
-    local_0 = ((u32) *(u16 *) ((char *) param_0 + 0x76) >> 7) - 0x31;
-    if (func_800D0A9C(local_0, 8) != 0) {
+    marker_idx = ((u32) *(u16 *) ((char *) actor + 0x76) >> 7) - 0x31;
+    if (func_800D0A9C(marker_idx, 8) != 0) {
         return 0;
     }
-    return local_0;
+    return marker_idx;
 }
 
-void func_80800EBC_chonearmbandit(Actor *param_0)
+void func_80800EBC_chonearmbandit(Actor *actor)
 {
-    f32 local_0;
+    f32 dt;
 
-    local_0 = func_800D8FF8();
-    if (func_800D90A4(&param_0->unk58) && !param_0->unk7C_12 && !param_0->unk64_20) {
-        func_8010A570(param_0);
-        _subaddiefade_entrypoint_3(param_0);
-        param_0->unk64_20 = 1;
+    dt = func_800D8FF8();
+    if (func_800D90A4(&actor->unk58) && !actor->unk7C_12 && !actor->unk64_20) {
+        func_8010A570(actor);
+        _subaddiefade_entrypoint_3(actor);
+        actor->unk64_20 = 1;
     }
-    param_0->unk54 += local_0 * *(f32 *) &param_0->actorData[4];
+    actor->unk54 += dt * *(f32 *) &actor->actorData[4];
     if (func_8001210C(1))
-        func_80801114_chonearmbandit(param_0);
-    if (param_0->unk70_10 == 1)
-        func_80801154_chonearmbandit(param_0);
+        func_80801114_chonearmbandit(actor);
+    if (actor->unk70_10 == 1)
+        func_80801154_chonearmbandit(actor);
 }
 
-void func_80800F80_chonearmbandit(Actor *param_0)
+void func_80800F80_chonearmbandit(Actor *actor)
 {
-    f32 local_0;
+    f32 sign;
 
-    local_0 = func_800DC298(0.5f) ? -1.0f : 1.0f;
-    ((f32 *) param_0->actorData)[4] = func_800DC178(600.0f, 800.0f) * local_0;
-    param_0->unk58 = 4.0f;
-    ((f32 *) param_0->actorData)[3] = 1000.0f;
+    sign = func_800DC298(0.5f) ? -1.0f : 1.0f;
+    ((f32 *) actor->actorData)[4] = func_800DC178(600.0f, 800.0f) * sign;
+    actor->unk58 = 4.0f;
+    ((f32 *) actor->actorData)[3] = 1000.0f;
 }
 
-int func_80801008_chonearmbandit(unsigned long param_0, s32 param_1, s32 param_2)
+int func_80801008_chonearmbandit(unsigned long actor, s32 msg, s32 payload)
 {
-    s32 *new_var2;
-    s32 *new_var;
-    if (param_1 == 0x40) {
-        new_var = &param_2;
-        new_var2 = new_var;
-        func_808010AC_chonearmbandit(param_0, *new_var2 | 0);
+    s32 *payload_ref;
+    s32 *payload_ptr;
+    if (msg == 0x40) {
+        payload_ptr = &payload;
+        payload_ref = payload_ptr;
+        func_808010AC_chonearmbandit(actor, *payload_ref | 0);
         return 1;
     }
     return 0;
 }
 
-void func_80801040_chonearmbandit(ALSeqPlayer *param_0, s32 param_1)
+void func_80801040_chonearmbandit(ALSeqPlayer *actor, s32 unk_1)
 {
-    f32 local_0[3];
-    void *new_var;
-    func_800EFA4C(local_0, *(ALSeqMarker ***) ((char *) param_0 + 0x50),
-                  *(ALSeqMarker ***) ((char *) param_0 + 0x54), 0);
-    func_800DF47C(&func_801015D0, param_0);
-    new_var = func_8010347C(*(ALSeqMarker ***) param_0);
-    func_800DE448(&((ALSeqMarker ***) param_0)[1], local_0,
-                  *(ALVoiceState ***) ((char *) param_0 + 0x38), 0, new_var);
+    f32 vec[3];
+    void *anim;
+    func_800EFA4C(vec, *(ALSeqMarker ***) ((char *) actor + 0x50),
+                  *(ALSeqMarker ***) ((char *) actor + 0x54), 0);
+    func_800DF47C(&func_801015D0, actor);
+    anim = func_8010347C(*(ALSeqMarker ***) actor);
+    func_800DE448(&((ALSeqMarker ***) actor)[1], vec,
+                  *(ALVoiceState ***) ((char *) actor + 0x38), 0, anim);
 }
 
 void func_808010AC_chonearmbandit(param_0, param_1) void *param_0;

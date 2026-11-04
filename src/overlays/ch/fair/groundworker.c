@@ -48,6 +48,7 @@ void func_80800030_chfairgroundworker(Actor *param_0)
     ((FairgroundWorkerFlags *) param_0)->enabled = 1;
 }
 
+// Draws the blob shadow.
 void func_80800098_chfairgroundworker(Actor *param_0)
 {
     _sucoaster_entrypoint_2(param_0);
@@ -65,19 +66,20 @@ s32 func_808000FC_chfairgroundworker(s32 param_0, s32 param_1, s32 param_2)
     _sucoaster_entrypoint_21(param_0, param_1, param_2);
 }
 
+// Emits a ring of five particles in front of the worker.
 void func_8080013C_chfairgroundworker(param_0) Actor *param_0;
 {
-    s32 local_2;
-    f32 local_0[3];
-    f32 local_1[3];
-    s32 local_3;
-    func_800EE7F8(local_1, param_0->position);
-    func_800EF1B8(local_1, param_0->rotation[1], param_0->scale * 300.0f);
-    local_2 = func_800B53A4(5);
-    for (local_3 = 0; local_3 < 5; local_3++) {
-        func_800EEB9C(local_0, (f32) local_3 * 72.0f, 5.0f);
-        func_800EF04C(local_0, local_1);
-        func_800BABB8(local_2, local_0, local_1, 1.0f, D_80800430_chfairgroundworker);
+    s32 emitter;
+    f32 ring_pos[3];
+    f32 front[3];
+    s32 i;
+    func_800EE7F8(front, param_0->position);
+    func_800EF1B8(front, param_0->rotation[1], param_0->scale * 300.0f);
+    emitter = func_800B53A4(5);
+    for (i = 0; i < 5; i++) {
+        func_800EEB9C(ring_pos, (f32) i * 72.0f, 5.0f);
+        func_800EF04C(ring_pos, front);
+        func_800BABB8(emitter, ring_pos, front, 1.0f, D_80800430_chfairgroundworker);
     }
 }
 

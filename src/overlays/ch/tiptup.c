@@ -15,6 +15,7 @@ extern void *func_800F54E4();
 extern void func_80102424(Actor *param_0, s32 param_1);
 extern s32 func_800DA298(s32 param_0);
 extern s32 func_800BABB8(s32, f32 *, f32 *, f32, void *);
+// Spawn bubble effect of the given kind between two points.
 void func_80800614_chtiptup(f32 *, f32 *, s32, f32, void *);
 extern s32 D_80801580_chtiptup[];
 extern s32 D_808015B0_chtiptup[];
@@ -98,109 +99,109 @@ void func_80800694_chtiptup();
 
 void func_808004C4_chtiptup();
 
-void func_80800024_chtiptup(Actor *param_0)
+void func_80800024_chtiptup(Actor *actor)
 {
-    u8 *local_0;
-    f32 local_1[3];
+    u8 *sfx_table;
+    f32 bubble_pos[3];
 
-    _sudeflect_entrypoint_1(param_0->position, 250.0f, 0.0f, 70.0f, 0xE);
-    func_80800694_chtiptup(param_0);
-    switch (param_0->unk70_10) {
+    _sudeflect_entrypoint_1(actor->position, 250.0f, 0.0f, 70.0f, 0xE);
+    func_80800694_chtiptup(actor);
+    switch (actor->unk70_10) {
         case 1:
-            func_808004C4_chtiptup(param_0);
+            func_808004C4_chtiptup(actor);
             break;
         case 4:
-            if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801520_chtiptup,
+            if (_subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801520_chtiptup,
                                                  0.7f)) {
-                func_80800614_chtiptup(param_0->position, param_0->position, 8, 1.5f,
+                func_80800614_chtiptup(actor->position, actor->position, 8, 1.5f,
                                        D_8080152C_chtiptup);
             }
-            if (func_80101DDC(param_0)) {
-                func_80102424(param_0, 5);
-                _subaddieDll_entrypoint_4(param_0, 1);
+            if (func_80101DDC(actor)) {
+                func_80102424(actor, 5);
+                _subaddieDll_entrypoint_4(actor, 1);
             }
             break;
         case 5:
-            if (!func_80105A5C(param_0) && func_800D9154(&param_0->unk58, 2.4f)) {
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80801558_chtiptup);
+            if (!func_80105A5C(actor) && func_800D9154(&actor->unk58, 2.4f)) {
+                _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80801558_chtiptup);
             }
             if (!func_8001210C(3)) {
-                local_0 = (func_80105AE8(param_0) < 0.45f) ? NULL : D_80801568_chtiptup;
-                func_800EE7F8(local_1, param_0->position);
-                func_800EF1B8(local_1, param_0->rotation[1], 5e+01f);
-                local_1[1] -= 40.0f;
-                func_80800614_chtiptup(param_0->position, local_1, 3, 1.0f, local_0);
+                sfx_table = (func_80105AE8(actor) < 0.45f) ? NULL : D_80801568_chtiptup;
+                func_800EE7F8(bubble_pos, actor->position);
+                func_800EF1B8(bubble_pos, actor->rotation[1], 5e+01f);
+                bubble_pos[1] -= 40.0f;
+                func_80800614_chtiptup(actor->position, bubble_pos, 3, 1.0f, sfx_table);
             }
-            func_80105834(param_0);
-            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, func_80105A5C(param_0) == 0,
+            func_80105834(actor);
+            _subaddieaudioloop_entrypoint_4(actor, actor->position, func_80105A5C(actor) == 0,
                                             D_8080154C_chtiptup);
     }
 }
 
-void func_80800200_chtiptup(Actor *param_0)
+void func_80800200_chtiptup(Actor *actor)
 {
-    s32 *local_0;
+    s32 *found;
 
     if ((func_800D0A9C(0x20, 1) != 0) && (_glcutDll_entrypoint_20() == 0)) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
         return;
     }
-    param_0->unk6C_0 = _subaddiesect_entrypoint_1(param_0);
-    _subaddiesect_entrypoint_2(param_0, param_0->unk6C_0, 0);
-    local_0 = _subaddiefind_entrypoint_2(0x359, 0);
-    if (local_0 != 0) {
-        param_0->unk3C = (Unk80132ED0 *) *local_0;
+    actor->unk6C_0 = _subaddiesect_entrypoint_1(actor);
+    _subaddiesect_entrypoint_2(actor, actor->unk6C_0, 0);
+    found = _subaddiefind_entrypoint_2(0x359, 0);
+    if (found != 0) {
+        actor->unk3C = (Unk80132ED0 *) *found;
     }
-    func_80105A9C(param_0, 4e+02f);
+    func_80105A9C(actor, 4e+02f);
     if (_glcutDll_entrypoint_20() != 0) {
-        func_80102424(param_0, 6);
+        func_80102424(actor, 6);
     }
 }
 
 s32 func_808002C8_chtiptup(Actor *this)
 {
-    u8 local_0 = _subaddieaudioloop_entrypoint_3(*(u8 *) ((char *) this + 40));
-    *(u8 *) ((char *) this + 40) = local_0;
+    u8 value = _subaddieaudioloop_entrypoint_3(*(u8 *) ((char *) this + 40));
+    *(u8 *) ((char *) this + 40) = value;
 }
 
-int func_808002F4_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
+int func_808002F4_chtiptup(Actor *actor, s32 msg, s32 msg_data)
 {
-    s32 local_0;
-    s32 local_1;
-    switch (param_1) {
+    s32 stage;
+    s32 flag_set;
+    switch (msg) {
         case 0x2E:
-            func_80800578_chtiptup(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_80800578_chtiptup(actor, ((s16 *) &msg_data)[0], ((s16 *) &msg_data)[1]);
             break;
         case 0x2F:
-            func_80800534_chtiptup(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_80800534_chtiptup(actor, ((s16 *) &msg_data)[0], ((s16 *) &msg_data)[1]);
             break;
         case 0x52:
-            _gcdialogcamera_entrypoint_3(D_80801398_chtiptup, param_0->scale);
+            _gcdialogcamera_entrypoint_3(D_80801398_chtiptup, actor->scale);
             break;
         case 0x57:
-            return func_80800774_chtiptup(param_0, param_2 & 0xFFFF,
-                                          (u32) (param_2 & 0xFFFF0000) >> 16);
+            return func_80800774_chtiptup(actor, msg_data & 0xFFFF,
+                                          (u32) (msg_data & 0xFFFF0000) >> 16);
         case 0xB:
-            if (param_2 == 4) {
-                func_808007CC_chtiptup(param_0);
-                func_800FFA88(param_0->unk3C);
-                func_800FFAB0(param_0);
+            if (msg_data == 4) {
+                func_808007CC_chtiptup(actor);
+                func_800FFA88(actor->unk3C);
+                func_800FFAB0(actor);
                 return 4;
             }
             return 3;
         case 0x95:
-            ((u8 *) param_0)[0x28] = 0;
+            ((u8 *) actor)[0x28] = 0;
             break;
         case 0xB8:
-            local_0 = param_2 & 0xFFFF;
-            local_1 = func_800DA298(0xBD);
-            switch (local_0) {
+            stage = msg_data & 0xFFFF;
+            flag_set = func_800DA298(0xBD);
+            switch (stage) {
                 case 1:
-                    return local_1 ? 0xFF8 : 0xFF7;
+                    return flag_set ? 0xFF8 : 0xFF7;
                 case 2:
-                    return local_1 ? 0xFF8 : 0x104F;
+                    return flag_set ? 0xFF8 : 0x104F;
                 case 3:
-                    return local_1 ? 0xFF8 : 0xFF7;
+                    return flag_set ? 0xFF8 : 0xFF7;
             }
         default:
             return 0;
@@ -211,268 +212,269 @@ int func_808002F4_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_808004C4_chtiptup(Actor *param_0)
+void func_808004C4_chtiptup(Actor *actor)
 {
-    s32 local_0;
+    s32 choice;
 
-    local_0 = _subaddiedialog_entrypoint_8(param_0, param_0->position, &D_80801570_chtiptup,
+    choice = _subaddiedialog_entrypoint_8(actor, actor->position, &D_80801570_chtiptup,
                                            &D_80801360_chtiptup, 7);
-    if (local_0 != 0) {
-        if (_subaddiedialog_entrypoint_9(param_0, local_0, &D_80801360_chtiptup, 7) != 3) {
-            func_80800808_chtiptup(param_0, 2, 0);
+    if (choice != 0) {
+        if (_subaddiedialog_entrypoint_9(actor, choice, &D_80801360_chtiptup, 7) != 3) {
+            func_80800808_chtiptup(actor, 2, 0);
         }
     }
 }
 
-s32 func_80800534_chtiptup(s32 param_0, s32 param_1, s32 param_2)
+s32 func_80800534_chtiptup(s32 actor, s32 unk_1, s32 unk_2)
 {
-    func_80800934_chtiptup(param_0, 0x40, 0);
+    func_80800934_chtiptup(actor, 0x40, 0);
     func_800D1000(0x20, 1, 0, 0, 0);
 }
 
-int func_80800578_chtiptup(param_0, param_1, param_2)
-Actor *param_0;
-s32 param_1;
-s32 param_2;
+int func_80800578_chtiptup(actor, dialog_id, unk_2)
+Actor *actor;
+s32 dialog_id;
+s32 unk_2;
 {
-    if (param_1 == 0xFFA) {
-        func_800F82D4(func_800F54E4(param_0), 0);
-        func_80102424(param_0, 4);
-        func_808008B4_chtiptup(param_0, 4, 0x30);
+    if (dialog_id == 0xFFA) {
+        func_800F82D4(func_800F54E4(actor), 0);
+        func_80102424(actor, 4);
+        func_808008B4_chtiptup(actor, 4, 0x30);
     } else {
-        if (*(s32 *) ((char *) param_0 + 0x2C) != 0) {
-            func_808007CC_chtiptup(param_0);
+        if (*(s32 *) ((char *) actor + 0x2C) != 0) {
+            func_808007CC_chtiptup(actor);
         }
-        func_80102424(param_0, func_800DA298(0xBE) ? 3 : 1);
+        func_80102424(actor, func_800DA298(0xBE) ? 3 : 1);
     }
 }
 
-void func_80800614_chtiptup(f32 *param_0, f32 *param_1, s32 param_2, f32 param_3, void *param_4)
+// Spawn bubble effect of the given kind between two points.
+void func_80800614_chtiptup(f32 *start, f32 *end, s32 kind, f32 speed, void *extra)
 {
-    s32 local_0;
+    s32 handle;
 
-    local_0 = func_800B53A4(param_2);
-    func_800BABB8(local_0, param_0, param_1, param_3, &D_80801580_chtiptup);
-    if (param_4 != 0) {
-        func_800BABB8(local_0, param_0, param_1, param_3, param_4);
+    handle = func_800B53A4(kind);
+    func_800BABB8(handle, start, end, speed, &D_80801580_chtiptup);
+    if (extra != 0) {
+        func_800BABB8(handle, start, end, speed, extra);
     }
-    func_800BA22C(local_0, param_2);
+    func_800BA22C(handle, kind);
 }
 
-void func_80800694_chtiptup(u8 *param_0)
+void func_80800694_chtiptup(u8 *actor)
 {
     switch (func_801022E4()) {
         case 0x18A:
-            _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_808015B0_chtiptup, 0.7f);
-            _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_808015C0_chtiptup, 0.35f);
-            _subaddieaudioquick_entrypoint_4(param_0, param_0 + 4, &D_808015CC_chtiptup,
+            _subaddieaudioquick_entrypoint_3(actor, actor + 4, &D_808015B0_chtiptup, 0.7f);
+            _subaddieaudioquick_entrypoint_3(actor, actor + 4, &D_808015C0_chtiptup, 0.35f);
+            _subaddieaudioquick_entrypoint_4(actor, actor + 4, &D_808015CC_chtiptup,
                                              &D_808015DC_chtiptup);
             break;
         case 0x189:
-            if (func_80101E4C(param_0, &D_80801600_chtiptup) != 0) {
-                if (param_0[0x28] == 0) {
-                    param_0[0x28] = _subaddieaudioquick_entrypoint_1(param_0, param_0 + 4);
+            if (func_80101E4C(actor, &D_80801600_chtiptup) != 0) {
+                if (actor[0x28] == 0) {
+                    actor[0x28] = _subaddieaudioquick_entrypoint_1(actor, actor + 4);
                 }
-                func_800C4350(param_0[0x28], param_0 + 4, &D_808015EC_chtiptup);
+                func_800C4350(actor[0x28], actor + 4, &D_808015EC_chtiptup);
             }
     }
 }
 
-int func_80800774_chtiptup(param_0, param_1, param_2)
-Actor *param_0;
-s32 param_1;
-s32 param_2;
+int func_80800774_chtiptup(actor, unk_1, unk_2)
+Actor *actor;
+s32 unk_1;
+s32 unk_2;
 {
-    if (_gcdialogcamera_entrypoint_0(param_1 | 0, param_2 | 0)) {
-        if (*(s32 *) ((char *) param_0 + 0x2C) != 2) {
-            func_80800808_chtiptup(param_0, 2, 1);
+    if (_gcdialogcamera_entrypoint_0(unk_1 | 0, unk_2 | 0)) {
+        if (*(s32 *) ((char *) actor + 0x2C) != 2) {
+            func_80800808_chtiptup(actor, 2, 1);
         }
         return 2;
     }
     return 1;
 }
 
-int func_808007CC_chtiptup(param_0)
-Actor *param_0;
+int func_808007CC_chtiptup(actor)
+Actor *actor;
 {
-    s32 *ptr = (s32 *) ((char *) param_0 + 0x2C);
+    s32 *ptr = (s32 *) ((char *) actor + 0x2C);
     if (*ptr != 0) {
-        _capod_entrypoint_3(0, param_0);
+        _capod_entrypoint_3(0, actor);
         *ptr = 0;
     }
 }
 
-void func_80800808_chtiptup(param_0, param_1, param_2) Actor *param_0;
-s32 param_1;
-s32 param_2;
+void func_80800808_chtiptup(actor, unk_1, unk_2) Actor *actor;
+s32 unk_1;
+s32 unk_2;
 {
-    switch (param_0->actorData[5]) {
+    switch (actor->actorData[5]) {
         case 0:
-            _capod_entrypoint_2(param_0->unk0, 0x16, 0);
+            _capod_entrypoint_2(actor->unk0, 0x16, 0);
         case 1:
         case 3:
             _capod_entrypoint_8(1);
-            param_0->actorData[5] = 2;
-            _gcdialogcamera_entrypoint_3(D_80801398_chtiptup, param_0->scale);
-            _gcdialogcamera_entrypoint_4(param_0->position);
-            _gcdialogcamera_entrypoint_5(param_0->rotation);
+            actor->actorData[5] = 2;
+            _gcdialogcamera_entrypoint_3(D_80801398_chtiptup, actor->scale);
+            _gcdialogcamera_entrypoint_4(actor->position);
+            _gcdialogcamera_entrypoint_5(actor->rotation);
             _gcdialogcamera_entrypoint_8();
         case 2:
-            _capod_entrypoint_7(param_1, param_2);
+            _capod_entrypoint_7(unk_1, unk_2);
     }
 }
 
-int func_808008B4_chtiptup(param_0, param_1, param_2)
-Unk80132ED0 *param_0;
-s32 param_1;
-s32 param_2;
+int func_808008B4_chtiptup(actor, unk_1, unk_2)
+Unk80132ED0 *actor;
+s32 unk_1;
+s32 unk_2;
 {
-    Unk80132ED0 *local_0;
-    s32 local_1;
-    local_0 = param_0;
-    local_1 = *(s32 *) ((char *) param_0 + 0x2C);
-    switch (local_1) {
+    Unk80132ED0 *camera_owner;
+    s32 state;
+    camera_owner = actor;
+    state = *(s32 *) ((char *) actor + 0x2C);
+    switch (state) {
         case 0:
-            _capod_entrypoint_2(*(s32 *) ((char *) param_0 + 0x0), 0x16, param_2, param_0);
+            _capod_entrypoint_2(*(s32 *) ((char *) actor + 0x0), 0x16, unk_2, actor);
 
         case 2:
         case 3:
-            *(s32 *) ((char *) param_0 + 0x2C) = 1;
+            *(s32 *) ((char *) actor + 0x2C) = 1;
 
         case 1:
-            _capod_entrypoint_6(*(s32 *) ((char *) local_0 + 0x0), param_1, param_2, param_0);
+            _capod_entrypoint_6(*(s32 *) ((char *) camera_owner + 0x0), unk_1, unk_2, actor);
     }
 }
 
-void func_80800934_chtiptup(param_0, param_1, param_2) s32 *param_0;
-s32 param_1;
-s32 param_2;
+void func_80800934_chtiptup(actor, unk_1, unk_2) s32 *actor;
+s32 unk_1;
+s32 unk_2;
 {
-    s32 local_0;
+    s32 state;
 
-    local_0 = *(s32 *) ((char *) param_0 + 0x2C);
+    state = *(s32 *) ((char *) actor + 0x2C);
 
-switch (local_0) {
+switch (state) {
     case 0:
-        _capod_entrypoint_2(*(s32 *) ((char *) param_0 + 0), 0x16, param_2, param_0);
+        _capod_entrypoint_2(*(s32 *) ((char *) actor + 0), 0x16, unk_2, actor);
 
     case 1:;
     case 2:
-        *(s32 *) ((char *) param_0 + 0x2C) = 3;
+        *(s32 *) ((char *) actor + 0x2C) = 3;
 
     case 3:
-        _capod_entrypoint_20(*(s32 *) ((char *) param_0 + 0), param_1, param_2, param_0);
+        _capod_entrypoint_20(*(s32 *) ((char *) actor + 0), unk_1, unk_2, actor);
 }
 
 }
 
 void func_80800E9C_chtiptup();
 
-void func_808009B4_chtiptup(Actor *param_0)
+void func_808009B4_chtiptup(Actor *actor)
 {
-    Actor *local_0;
-    Actor *local_1;
+    Actor *partner;
+    Actor *partner_b;
 
-if (_subaddieskeleton_entrypoint_3(param_0->unk0, 4, (f32 *) param_0->actorData)) {
-    _chbadshad_entrypoint_1(param_0, (f32 *) param_0->actorData, 0.8f);
+if (_subaddieskeleton_entrypoint_3(actor->unk0, 4, (f32 *) actor->actorData)) {
+    _chbadshad_entrypoint_1(actor, (f32 *) actor->actorData, 0.8f);
 }
 
-switch (param_0->unk70_10) {
+switch (actor->unk70_10) {
     case 1:
         return;
     case 2:
-        func_80800E2C_chtiptup(param_0);
-        if (func_80101DDC(param_0)) {
-            func_80102424(param_0, 3);
-            func_8010A590(param_0);
-            local_0 = func_80106790(param_0->unk3C);
+        func_80800E2C_chtiptup(actor);
+        if (func_80101DDC(actor)) {
+            func_80102424(actor, 3);
+            func_8010A590(actor);
+            partner = func_80106790(actor->unk3C);
             func_800F82D4(func_800F54E4(), 0);
-            _subaddiedialog_entrypoint_11(local_0->unk0, 0xFF9, 0xC, local_0->position, 0x54);
+            _subaddiedialog_entrypoint_11(partner->unk0, 0xFF9, 0xC, partner->position, 0x54);
         }
         break;
     case 3:
     case 7:
-        if (func_80101E14(param_0, 0.2f)) {
-            param_0->unk64_19 = (param_0->unk64_19 ^ 1) & 1;
-            if (param_0->unk64_19) {
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80801620_chtiptup);
+        if (func_80101E14(actor, 0.2f)) {
+            actor->unk64_19 = (actor->unk64_19 ^ 1) & 1;
+            if (actor->unk64_19) {
+                _subaddieaudioquick_entrypoint_2(actor, actor->position, &D_80801620_chtiptup);
             }
         }
         break;
     case 4:
-        _subaddieaudioquick_entrypoint_3(param_0, param_0->position, &D_8080162C_chtiptup, 0.4f);
-        if (func_80101DDC(param_0)) {
-            func_80102424(param_0, 5);
-            _subaddieDll_entrypoint_4(param_0, 1);
+        _subaddieaudioquick_entrypoint_3(actor, actor->position, &D_8080162C_chtiptup, 0.4f);
+        if (func_80101DDC(actor)) {
+            func_80102424(actor, 5);
+            _subaddieDll_entrypoint_4(actor, 1);
             func_800DA544(0xBE);
-            local_1 = func_80106790(param_0->unk3C);
-            func_80102424(local_1, 3);
-            _subaddieaudioquick_entrypoint_2(local_1, local_1->position, &D_80801638_chtiptup);
-            func_80800808_chtiptup(local_1, 3, 1);
-            _subaddiedialog_entrypoint_11(local_1->unk0, 0xFFA, 0x46, local_1->position, 0x54);
-            _subaddieDll_entrypoint_4(local_1, 1);
+            partner_b = func_80106790(actor->unk3C);
+            func_80102424(partner_b, 3);
+            _subaddieaudioquick_entrypoint_2(partner_b, partner_b->position, &D_80801638_chtiptup);
+            func_80800808_chtiptup(partner_b, 3, 1);
+            _subaddiedialog_entrypoint_11(partner_b->unk0, 0xFFA, 0x46, partner_b->position, 0x54);
+            _subaddieDll_entrypoint_4(partner_b, 1);
         }
         break;
     case 5:
-        func_80800E9C_chtiptup(param_0);
-        func_80105A9C(param_0,
-                      func_800F3780(func_80101F24(param_0), D_80801644_chtiptup, 3) * 200.0f);
-        func_80105854(param_0);
+        func_80800E9C_chtiptup(actor);
+        func_80105A9C(actor,
+                      func_800F3780(func_80101F24(actor), D_80801644_chtiptup, 3) * 200.0f);
+        func_80105854(actor);
         break;
     case 6:
-        func_80800E2C_chtiptup(param_0);
-        if (func_80101DDC(param_0)) {
-            func_80102424(param_0, 7);
+        func_80800E2C_chtiptup(actor);
+        if (func_80101DDC(actor)) {
+            func_80102424(actor, 7);
         }
 }
 
-if (func_800F52B8(func_800F54E4(), param_0->unk0) != 1) {
-    func_800F4F34(func_800F54E4(), (f32 *) param_0->actorData, 0.0f, 30.0f);
+if (func_800F52B8(func_800F54E4(), actor->unk0) != 1) {
+    func_800F4F34(func_800F54E4(), (f32 *) actor->actorData, 0.0f, 30.0f);
 }
 
 }
 
-void func_80800C70_chtiptup(param_0) Actor *param_0;
+void func_80800C70_chtiptup(actor) Actor *actor;
 {
     if (func_800DA298(0xBE) && !_glcutDll_entrypoint_20()) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
     } else {
 
-param_0->unk6C_0 = _subaddiesect_entrypoint_1(param_0);
-_subaddiesect_entrypoint_2(param_0, param_0->unk6C_0, 0);
+actor->unk6C_0 = _subaddiesect_entrypoint_1(actor);
+_subaddiesect_entrypoint_2(actor, actor->unk6C_0, 0);
 
 if (_glcutDll_entrypoint_20()) {
-    func_80102424(param_0, 6);
+    func_80102424(actor, 6);
 } else if (func_800DA298(0xBD)) {
 
-func_80102424(param_0, 3);
-func_8010A590(param_0);
+func_80102424(actor, 3);
+func_8010A590(actor);
 } else {
-func_80102424(param_0, 1);
-func_80103110(param_0, 0);
-param_0->unk64_16 = 0;
+func_80102424(actor, 1);
+func_80103110(actor, 0);
+actor->unk64_16 = 0;
 }
-func_80105BAC(param_0);
-((TiptupFlags27 *)param_0)->local_1 = 1;
+func_80105BAC(actor);
+((TiptupFlags27 *)actor)->local_1 = 1;
 }
 }
 
-s32 func_80800D78_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800D78_chtiptup(Actor *actor, s32 msg, s32 msg_data)
 {
-    Actor *local_0;
+    Actor *found;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x40:
-        func_800F8300(func_800F54E4(), 2, param_0->position);
-        func_8010A570(param_0);
-        func_80102424(param_0, 4);
-        _subaddieDll_entrypoint_4(param_0, 1);
+        func_800F8300(func_800F54E4(), 2, actor->position);
+        func_8010A570(actor);
+        func_80102424(actor, 4);
+        _subaddieDll_entrypoint_4(actor, 1);
         func_800FC660(0xE);
         return 1;
         case 0x95:
-        local_0 = _subaddiefind_entrypoint_2(0x358, 0);
-        if (local_0) {
-            param_0->unk3C = local_0->unk0;
+        found = _subaddiefind_entrypoint_2(0x358, 0);
+        if (found) {
+            actor->unk3C = found->unk0;
         }
         break;
         default:
@@ -481,116 +483,117 @@ s32 func_80800D78_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-int func_80800E2C_chtiptup(s32 param_0)
+// Matching: the line breaks in this function are needed for the match.
+int func_80800E2C_chtiptup(s32 actor)
 {
-    s32 local_0;
-    local_0 = param_0 + 0x18; _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_8080165C_chtiptup, 0.02f);
-    _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80801668_chtiptup, 0.14f);
-    _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_80801674_chtiptup, &D_8080167C_chtiptup);
+    s32 pos;
+    pos = actor + 0x18; _subaddieaudioquick_entrypoint_3(actor, pos, &D_8080165C_chtiptup, 0.02f);
+    _subaddieaudioquick_entrypoint_3(actor, pos, &D_80801668_chtiptup, 0.14f);
+    _subaddieaudioquick_entrypoint_4(actor, pos, &D_80801674_chtiptup, &D_8080167C_chtiptup);
 }
 
-void func_80800E9C_chtiptup(Actor *param_0)
+void func_80800E9C_chtiptup(Actor *actor)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    if (func_800D9154(&param_0->unk58, 2.2f))
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->actorData, D_808016A0_chtiptup);
-    if (_subaddieaudioquick_entrypoint_3(param_0, param_0->actorData, D_80801690_chtiptup, 0.1f)) {
-        func_800EFA4C(local_0, *(f32 *)param_0->actorData, param_0->position[1], *(f32 *)(param_0->actorData + 2));
-        func_800EFA4C(local_1, *(f32 *)param_0->actorData, param_0->position[1], *(f32 *)(param_0->actorData + 2));
-        func_800EFA4C(local_2, *(f32 *)param_0->actorData, param_0->position[1], *(f32 *)(param_0->actorData + 2));
-        func_800EF1B8(local_0, param_0->rotation[1], 20.0f);
-        func_800EF1B8(local_1, param_0->rotation[1] + 70.0f, 10.0f);
-        func_800EF1B8(local_2, param_0->rotation[1] - 70.0f, 10.0f);
-        local_0[1] -= 10.0f;
-        func_80800614_chtiptup(local_1, local_0, 1, 0.5f, D_808016AC_chtiptup);
-        func_80800614_chtiptup(local_2, local_0, 1, 0.5f, D_808016AC_chtiptup);
+    f32 mid_pos[3];
+    f32 left_pos[3];
+    f32 right_pos[3];
+    if (func_800D9154(&actor->unk58, 2.2f))
+        _subaddieaudioquick_entrypoint_2(actor, actor->actorData, D_808016A0_chtiptup);
+    if (_subaddieaudioquick_entrypoint_3(actor, actor->actorData, D_80801690_chtiptup, 0.1f)) {
+        func_800EFA4C(mid_pos, *(f32 *)actor->actorData, actor->position[1], *(f32 *)(actor->actorData + 2));
+        func_800EFA4C(left_pos, *(f32 *)actor->actorData, actor->position[1], *(f32 *)(actor->actorData + 2));
+        func_800EFA4C(right_pos, *(f32 *)actor->actorData, actor->position[1], *(f32 *)(actor->actorData + 2));
+        func_800EF1B8(mid_pos, actor->rotation[1], 20.0f);
+        func_800EF1B8(left_pos, actor->rotation[1] + 70.0f, 10.0f);
+        func_800EF1B8(right_pos, actor->rotation[1] - 70.0f, 10.0f);
+        mid_pos[1] -= 10.0f;
+        func_80800614_chtiptup(left_pos, mid_pos, 1, 0.5f, D_808016AC_chtiptup);
+        func_80800614_chtiptup(right_pos, mid_pos, 1, 0.5f, D_808016AC_chtiptup);
     }
 }
 
-void func_80800FE8_chtiptup(u8 *param_0) {
-    s32 temp_v0;
+void func_80800FE8_chtiptup(u8 *actor) {
+    s32 player;
 
-    if (_subaddieskeleton_entrypoint_2(*(s32 *)((s8 *)param_0 + 0), 4, param_0 + 0x18) != 0) {
-        _chbadshad_entrypoint_1(param_0, param_0 + 0x18, 1.0f);
+    if (_subaddieskeleton_entrypoint_2(*(s32 *)((s8 *)actor + 0), 4, actor + 0x18) != 0) {
+        _chbadshad_entrypoint_1(actor, actor + 0x18, 1.0f);
     }
-    switch ((u32)(*(u16 *)((s8 *)param_0 + 0x72)) >> 0xA) {
+    switch ((u32)(*(u16 *)((s8 *)actor + 0x72)) >> 0xA) {
         case 1:
-        temp_v0 = _plsu_entrypoint_3(*(s32 *)((s8 *)param_0 + 0));
-        if (temp_v0 != -1) {
-            func_800F7BC8(temp_v0, 0x53, *(s32 *)((s8 *)param_0 + 0));
+        player = _plsu_entrypoint_3(*(s32 *)((s8 *)actor + 0));
+        if (player != -1) {
+            func_800F7BC8(player, 0x53, *(s32 *)((s8 *)actor + 0));
         }
         return;
         case 2:
-        if (func_80101DDC(param_0) != 0) {
-            func_80102424(param_0, 3);
+        if (func_80101DDC(actor) != 0) {
+            func_80102424(actor, 3);
             func_800DA544(0xBD);
         }
         break;
         case 3:
-        func_800F4F34(func_800F54E4(), param_0 + 0x18, 3e+01f, 8e+01f);
+        func_800F4F34(func_800F54E4(), actor + 0x18, 3e+01f, 8e+01f);
     }
 }
 
-void func_808010CC_chtiptup(Actor *param_0)
+void func_808010CC_chtiptup(Actor *actor)
 {
-    u16 local_0;
-    s32 local_1;
-    local_0 = ((*((u16 *) (((char *) param_0) + 0x6E))) & 0xFE00) | ((u16) (_subaddiesect_entrypoint_1() & 0x1FF));
-    *((u16 *) (((char *) param_0) + 0x6E)) = local_0;
-    local_1 = (*((s32 *) (((char *) param_0) + 0x6C))) & 0x1FF;
-    _subaddiesect_entrypoint_2(param_0, local_1, 0);
+    u16 sect_bits;
+    s32 sect;
+    sect_bits = ((*((u16 *) (((char *) actor) + 0x6E))) & 0xFE00) | ((u16) (_subaddiesect_entrypoint_1() & 0x1FF));
+    *((u16 *) (((char *) actor) + 0x6E)) = sect_bits;
+    sect = (*((s32 *) (((char *) actor) + 0x6C))) & 0x1FF;
+    _subaddiesect_entrypoint_2(actor, sect, 0);
     if (_glcutDll_entrypoint_20() != 0)
     {
-        func_80102424(param_0, 4);
+        func_80102424(actor, 4);
         return;
     }
     if (func_800DA298(0xBD) != 0)
     {
-        func_8010A570(param_0);
-        func_80102424(param_0, 3);
+        func_8010A570(actor);
+        func_80102424(actor, 3);
         return;
     }
-    func_8010A63C(param_0);
-    func_80102424(param_0, 1);
+    func_8010A63C(actor);
+    func_80102424(actor, 1);
 }
 
-s32 func_80801180_chtiptup(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80801180_chtiptup(Actor *actor, s32 msg, s32 msg_data)
 {
-    Actor *local_0;
-    Actor *local_1;
-    f32 local_2[3];
-    f32 *local_4;
-    Actor *local_3;
-    switch (param_1) {
+    Actor *partner;
+    Actor *partner_b;
+    f32 target_pos[3];
+    f32 *pos;
+    Actor *found;
+    switch (msg) {
         case 0x18:
-        local_4 = param_0->position;
-        func_800EE7F8(local_2, local_4);
-        func_800EF1B8(local_2, param_0->rotation[1] + 40.0f, 150.0f);
-        func_800F77E8(func_800F54E4(), local_2);
-        func_800F8300(func_800F54E4(), 2, local_4);
-        func_80102424(param_0, 2);
-        func_8010A570(param_0);
-        local_0 = (Actor *)func_80106790(param_0->unk3C);
-        local_1 = (Actor *)func_80106790(local_0->unk3C);
-        func_8010A624(param_0);
-        func_80102424(local_0, 2);
-        func_80103110(local_0, 1);
-        local_0->unk64_16 = 1;
+        pos = actor->position;
+        func_800EE7F8(target_pos, pos);
+        func_800EF1B8(target_pos, actor->rotation[1] + 40.0f, 150.0f);
+        func_800F77E8(func_800F54E4(), target_pos);
+        func_800F8300(func_800F54E4(), 2, pos);
+        func_80102424(actor, 2);
+        func_8010A570(actor);
+        partner = (Actor *)func_80106790(actor->unk3C);
+        partner_b = (Actor *)func_80106790(partner->unk3C);
+        func_8010A624(actor);
+        func_80102424(partner, 2);
+        func_80103110(partner, 1);
+        partner->unk64_16 = 1;
         func_800DA544(0xBC);
-        func_808008B4_chtiptup(local_1, 0xB, 0x820);
+        func_808008B4_chtiptup(partner_b, 0xB, 0x820);
         break;
         case 0x95:
-        local_3 = _subaddiefind_entrypoint_2(0x359, 0);
-        if (local_3) param_0->unk3C = local_3->unk0;
-        else param_0->unk3C = 0;
+        found = _subaddiefind_entrypoint_2(0x359, 0);
+        if (found) actor->unk3C = found->unk0;
+        else actor->unk3C = 0;
         break;
         case 0x40:
-        local_3 = _subaddiefind_entrypoint_2(0x358, 0);
-        if (local_3 && local_3->unk70_10 == 1) {
-            _subaddiedialog_entrypoint_11(local_3->unk0, 0x1045, 0xE, local_3->position, 0x54);
-            func_80102424(local_3, 2);
+        found = _subaddiefind_entrypoint_2(0x358, 0);
+        if (found && found->unk70_10 == 1) {
+            _subaddiedialog_entrypoint_11(found->unk0, 0x1045, 0xE, found->position, 0x54);
+            func_80102424(found, 2);
         }
         break;
         default: return 0;

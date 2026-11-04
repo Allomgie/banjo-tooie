@@ -76,67 +76,67 @@ int chfishshootgame_entrypoint_0()
     return (int) &D_808018C0_chfishshootgame;
 }
 
-void func_8080000C_chfishshootgame(Actor *param_0)
+void func_8080000C_chfishshootgame(Actor *actor)
 {
-    u8 *local_1;
-    s32 local_2;
-    s32 local_0[20];
+    u8 *data;
+    s32 i;
+    s32 cube_ids[20];
 
-    local_1 = func_80100094(param_0, 0);
+    data = func_80100094(actor, 0);
     _susubgame_entrypoint_11(0);
     if (func_800D0A9C(0x21, 1) && !_glcutDll_entrypoint_20()) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
         return;
     }
-    func_800EE7F8(local_1, param_0->position);
-    *(s16 *) (local_1 + 0x34) = _gccubesearch_entrypoint_9(0x1C0, local_0, 20);
-    *(s16 *) (local_1 + 0x32) = -1;
-    for (local_2 = 0; local_2 < *(s16 *) (local_1 + 0x34); local_2++) {
-        _gspropctrl_entrypoint_10(local_0[local_2], local_1 + 0x36 + local_2 * 6);
+    func_800EE7F8(data, actor->position);
+    *(s16 *) (data + 0x34) = _gccubesearch_entrypoint_9(0x1C0, cube_ids, 20);
+    *(s16 *) (data + 0x32) = -1;
+    for (i = 0; i < *(s16 *) (data + 0x34); i++) {
+        _gspropctrl_entrypoint_10(cube_ids[i], data + 0x36 + i * 6);
     }
-    local_0[0] = _gccubesearch_entrypoint_0(0x1C1, param_0);
-    _gspropctrl_entrypoint_11(local_0[0], local_1 + 0xC);
-    *(f32 *) (local_1 + 0x20) = func_800BED50(param_0->position);
-    *(f32 *) (local_1 + 0x28) =
-        _dbskeleton_entrypoint_1(func_800B27E0(func_801039E4(param_0->unk0)));
-    *(f32 *) (local_1 + 0x2C) = 32000.0f;
-    func_80108B04(param_0, 1);
-    _susubgame_entrypoint_0(param_0, local_1 + 0xB0, 0);
-    _susubgame_entrypoint_12(local_1 + 0xB0, D_808018B0_chfishshootgame);
+    cube_ids[0] = _gccubesearch_entrypoint_0(0x1C1, actor);
+    _gspropctrl_entrypoint_11(cube_ids[0], data + 0xC);
+    *(f32 *) (data + 0x20) = func_800BED50(actor->position);
+    *(f32 *) (data + 0x28) =
+        _dbskeleton_entrypoint_1(func_800B27E0(func_801039E4(actor->unk0)));
+    *(f32 *) (data + 0x2C) = 32000.0f;
+    func_80108B04(actor, 1);
+    _susubgame_entrypoint_0(actor, data + 0xB0, 0);
+    _susubgame_entrypoint_12(data + 0xB0, D_808018B0_chfishshootgame);
 }
 
-void func_80800178_chfishshootgame(Actor *param_0)
+void func_80800178_chfishshootgame(Actor *actor)
 {
-    u8 *local_0;
-    local_0 = func_80100094(param_0, 0);
+    u8 *data;
+    data = func_80100094(actor, 0);
     _susubgame_entrypoint_11(0);
     if (func_800FCCD4(0x53)) {
         func_800FCAE0(0x53, 0, 0xFA0);
         func_800FCA90(0x53);
     }
-    if (_susubgame_entrypoint_2(param_0, local_0 + 0xB0)) {
-        _susubgame_entrypoint_4(param_0, local_0 + 0xB0);
+    if (_susubgame_entrypoint_2(actor, data + 0xB0)) {
+        _susubgame_entrypoint_4(actor, data + 0xB0);
     }
 }
 
-void func_808001F0_chfishshootgame(Actor *param_0)
+void func_808001F0_chfishshootgame(Actor *actor)
 {
-    u8 *local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    s32 local_3;
+    u8 *data;
+    f32 splash_pos[3];
+    f32 bubble_end[3];
+    s32 effect;
 
-    local_0 = func_80100094(param_0, 0);
-    func_800EE7F8(local_1, param_0->position);
-    local_1[1] = *(f32 *) (local_0 + 0x20);
-    func_800BBCB8(local_1, 0, 1.0f, 1, D_80801910_chfishshootgame);
-    local_3 = func_800B5BE4(1);
-    func_800BA4D0(local_3, (s16) local_1[1]);
-    func_800BA544(local_3, _fxsplash_entrypoint_0);
-    func_800EE7F8(local_2, local_1);
-    local_2[1] -= 200.0f;
-    func_800BABB8(local_3, local_1, local_2, 1.0f, D_80801934_chfishshootgame);
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80801908_chfishshootgame);
+    data = func_80100094(actor, 0);
+    func_800EE7F8(splash_pos, actor->position);
+    splash_pos[1] = *(f32 *) (data + 0x20);
+    func_800BBCB8(splash_pos, 0, 1.0f, 1, D_80801910_chfishshootgame);
+    effect = func_800B5BE4(1);
+    func_800BA4D0(effect, (s16) splash_pos[1]);
+    func_800BA544(effect, _fxsplash_entrypoint_0);
+    func_800EE7F8(bubble_end, splash_pos);
+    bubble_end[1] -= 200.0f;
+    func_800BABB8(effect, splash_pos, bubble_end, 1.0f, D_80801934_chfishshootgame);
+    _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80801908_chfishshootgame);
 }
 
 void func_808002E8_chfishshootgame(s32 param_0, f32 param_1)
@@ -145,62 +145,62 @@ void func_808002E8_chfishshootgame(s32 param_0, f32 param_1)
     _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, &D_80801978_chfishshootgame);
 }
 
-void func_80800320_chfishshootgame(Actor *param_0)
+void func_80800320_chfishshootgame(Actor *actor)
 {
-    u8 *local_0;
-    f32 local_1[3];
-    local_0 = func_80100094(param_0, 0);
-    func_800EE7F8(local_1, (u32 *) param_0 + 1);
-    local_1[1] -= 100.0f;
-    func_800D1000(0x21, 1, (u32 *) param_0 + 1, 4, param_0->unk0);
-    _susubgame_entrypoint_6(param_0, local_0 + 0xB0, 0, 0x2090, 0);
+    u8 *data;
+    f32 pos[3];
+    data = func_80100094(actor, 0);
+    func_800EE7F8(pos, (u32 *) actor + 1);
+    pos[1] -= 100.0f;
+    func_800D1000(0x21, 1, (u32 *) actor + 1, 4, actor->unk0);
+    _susubgame_entrypoint_6(actor, data + 0xB0, 0, 0x2090, 0);
 }
 
 void func_80800A90_chfishshootgame();
 
-void func_808003B0_chfishshootgame(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_808003B0_chfishshootgame(actor, new_state) Actor *actor;
+s32 new_state;
 {
     extern u8 D_80801984_chfishshootgame[];
 
-    char *local_0;
-    s32 local_1;
+    char *data;
+    s32 dialog_id;
     s32 local_2;
-    f32 local_3[4];
+    f32 cam_pos[4];
     s32 current_state;
     void *temp;
 
-    local_0 = (char *) func_80100094(param_0, 0);
-    local_1 = 0;
+    data = (char *) func_80100094(actor, 0);
+    dialog_id = 0;
     local_2 = 0;
-    current_state = (u32) *(u16 *) ((char *) param_0 + 0x72) >> 10;
+    current_state = (u32) *(u16 *) ((char *) actor + 0x72) >> 10;
 
-    if (param_1 == current_state) {
+    if (new_state == current_state) {
         return;
     }
 
-    switch (param_1) {
+    switch (new_state) {
         case 13:
-            _susubgame_entrypoint_4(param_0, local_0 + 0xB0);
+            _susubgame_entrypoint_4(actor, data + 0xB0);
 
-            func_808002E8_chfishshootgame(param_0, 0.8f);
+            func_808002E8_chfishshootgame(actor, 0.8f);
 
-            func_800FFAB0(param_0);
+            func_800FFAB0(actor);
 
-            func_800FFA88(*(void **) ((char *) param_0 + 0x3C));
+            func_800FFA88(*(void **) ((char *) actor + 0x3C));
             return;
 
         case 2:
             if (current_state != 1) {
-                _susubgame_entrypoint_5(param_0, local_0 + 0xB0, 3, 1, 0);
-                local_1 = 0xFEF;
+                _susubgame_entrypoint_5(actor, data + 0xB0, 3, 1, 0);
+                dialog_id = 0xFEF;
             }
             break;
 
         case 10:
-            *(f32 *) (local_0 + 0x18) = 0.0f;
-            *(f32 *) (local_0 + 0x1C) = 0.05f;
-            *(u8 *) (local_0 + 0x30) = 0;
+            *(f32 *) (data + 0x18) = 0.0f;
+            *(f32 *) (data + 0x1C) = 0.05f;
+            *(u8 *) (data + 0x30) = 0;
 
             func_800DA3B8(0, 0);
             break;
@@ -212,33 +212,33 @@ s32 param_1;
                 func_800FCA90(0x53);
                 func_800DA3B8(0, 1);
 
-                local_1 = 0x1024;
+                dialog_id = 0x1024;
 
-                _susubgame_entrypoint_5(param_0, local_0 + 0xB0, 3, 1, 0);
+                _susubgame_entrypoint_5(actor, data + 0xB0, 3, 1, 0);
 
-                func_80800A90_chfishshootgame(param_0, local_3);
+                func_80800A90_chfishshootgame(actor, cam_pos);
 
-                local_3[1] -= 60.0f;
-                _gcdialogcamera_entrypoint_4(local_3);
+                cam_pos[1] -= 60.0f;
+                _gcdialogcamera_entrypoint_4(cam_pos);
             } else {
-                local_1 = 0x1023;
+                dialog_id = 0x1023;
 
-                func_808002E8_chfishshootgame(param_0, 1.2f);
+                func_808002E8_chfishshootgame(actor, 1.2f);
 
-                _susubgame_entrypoint_5(param_0, local_0 + 0xB0, 5, 1, 0);
+                _susubgame_entrypoint_5(actor, data + 0xB0, 5, 1, 0);
             }
             break;
 
         case 11:
-            _susubgame_entrypoint_6(param_0, local_0 + 0xB0, 0xB, 0x2090, 0);
+            _susubgame_entrypoint_6(actor, data + 0xB0, 0xB, 0x2090, 0);
 
             func_800DA3B8(0, 1);
             break;
 
         case 4:
-            _susubgame_entrypoint_4(param_0, local_0 + 0xB0);
+            _susubgame_entrypoint_4(actor, data + 0xB0);
 
-            *(f32 *) ((char *) param_0 + 0x58) = 0.0f;
+            *(f32 *) ((char *) actor + 0x58) = 0.0f;
 
             func_800CE8D8(0, 60.0f, 0x3C);
 
@@ -249,55 +249,55 @@ s32 param_1;
         case 5:
             func_800CE88C(0, 0);
 
-            _subaddieaudioquick_entrypoint_2(param_0, (char *) param_0 + 4,
+            _subaddieaudioquick_entrypoint_2(actor, (char *) actor + 4,
                                              D_80801984_chfishshootgame);
 
-            *(u8 *) (local_0 + 0x30) = 1;
+            *(u8 *) (data + 0x30) = 1;
             local_2 = 1;
             break;
 
         case 7:
             local_2 = 1;
-            func_808001F0_chfishshootgame(param_0);
+            func_808001F0_chfishshootgame(actor);
             break;
 
         case 3:
-            func_808002E8_chfishshootgame(param_0, 1.0f);
+            func_808002E8_chfishshootgame(actor, 1.0f);
             break;
 
         case 6:
-            *(f32 *) (local_0 + 0x1C) = 0.1f;
+            *(f32 *) (data + 0x1C) = 0.1f;
 
-            if (*(f32 *) (local_0 + 0x18) < 0.5f) {
-                *(f32 *) (local_0 + 0x18) = 1.0f - *(f32 *) (local_0 + 0x18);
+            if (*(f32 *) (data + 0x18) < 0.5f) {
+                *(f32 *) (data + 0x18) = 1.0f - *(f32 *) (data + 0x18);
             }
             break;
 
         case 8:
-            local_1 = 0xFEE;
+            dialog_id = 0xFEE;
 
-            _susubgame_entrypoint_5(param_0, local_0 + 0xB0, 3, 1, 0);
+            _susubgame_entrypoint_5(actor, data + 0xB0, 3, 1, 0);
             break;
 
         case 9:
-            *(f32 *) (local_0 + 0x18) = 0.5f;
-            *(f32 *) (local_0 + 0x10) = *(f32 *) (local_0 + 4);
-            *(f32 *) (local_0 + 4) += 900.0f;
-            *(f32 *) (local_0 + 0x1C) = 0.1f;
+            *(f32 *) (data + 0x18) = 0.5f;
+            *(f32 *) (data + 0x10) = *(f32 *) (data + 4);
+            *(f32 *) (data + 4) += 900.0f;
+            *(f32 *) (data + 0x1C) = 0.1f;
 
-            _susubgame_entrypoint_6(param_0, local_0 + 0xB0, 4, 0x2090, 0);
+            _susubgame_entrypoint_6(actor, data + 0xB0, 4, 0x2090, 0);
     }
 
-    func_80102424(param_0, param_1);
+    func_80102424(actor, new_state);
 
-    temp = (void *) func_80106790(*(void **) ((char *) param_0 + 0x3C));
+    temp = (void *) func_80106790(*(void **) ((char *) actor + 0x3C));
 
-    func_80102424(temp, param_1);
+    func_80102424(temp, new_state);
 
-    if (local_1 != 0) {
+    if (dialog_id != 0) {
         if (func_80090270() == 0) {
-            _subaddiedialog_entrypoint_11(*(s32 *) ((char *) param_0 + 0x0), local_1, 0xA,
-                                          (char *) param_0 + 4, 0x63);
+            _subaddiedialog_entrypoint_11(*(s32 *) ((char *) actor + 0x0), dialog_id, 0xA,
+                                          (char *) actor + 4, 0x63);
         }
     }
 
@@ -323,6 +323,7 @@ s32 param_2;
     local_c[0] = 0;
     s.b = 0;
     rec = func_80100094(param_0, 0);
+    // Dialog callback: maps dialog ids to follow-up dialogs and state changes.
     switch (param_1) {
         case 0xFEC:
             s.b = 0x105E;
@@ -450,25 +451,25 @@ void func_808009C0_chfishshootgame(s32 param_0)
     _subaddiedialog_entrypoint_7(param_0, param_0 + 4, &D_8080198C_chfishshootgame);
 }
 
-void func_80800A28_chfishshootgame(Actor *param_0)
+void func_80800A28_chfishshootgame(Actor *actor)
 {
     s32 pad0;
     s32 local_0;
-    u8 *local_1;
+    u8 *data;
     f32 local_2[3];
 
     local_0 = func_8008C27C(func_8008AEDC(func_80104248()));
-    local_1 = func_80100094(param_0, 0);
+    data = func_80100094(actor, 0);
     func_800DFC20((s32 *) local_0, 0x5D, local_2);
-    *(f32 *) (local_1 + 0x24) = *(f32 *) (local_1 + 0x28) * local_2[1];
+    *(f32 *) (data + 0x24) = *(f32 *) (data + 0x28) * local_2[1];
 }
 
-void func_80800A90_chfishshootgame(s32 param_0, f32 *param_1)
+void func_80800A90_chfishshootgame(s32 actor, f32 *out_pos)
 {
-    Actor *local_0;
-    local_0 = func_80100094(param_0, 0);
-    func_800EE7F8(param_1, param_0 + 4);
-    param_1[1] += *(f32 *) ((char *) local_0 + 0x24) + 60.0f;
+    Actor *data;
+    data = func_80100094(actor, 0);
+    func_800EE7F8(out_pos, actor + 4);
+    out_pos[1] += *(f32 *) ((char *) data + 0x24) + 60.0f;
 }
 
 void func_80800AF0_chfishshootgame(void *param_0)
@@ -478,24 +479,25 @@ void func_80800AF0_chfishshootgame(void *param_0)
     *(s32 *) ((char *) param_0 + 0x3C) = *temp;
 }
 
-void func_80800B30_chfishshootgame(Actor *param_0)
+// Spawns a fish target (actor 0x1BF) at a spawn point with randomized height.
+void func_80800B30_chfishshootgame(Actor *actor)
 {
-    f32 local_0[3];
-    Actor *local_1;
-    u8 *local_2;
+    f32 spawn_pos[3];
+    Actor *fish;
+    u8 *data;
 
-    local_2 = func_80100094(param_0, 0);
-    func_800EE88C(local_0, ((s16(*)[3])(local_2 + 0x36))[*(s16 *) (local_2 + 0x32)]);
-    local_0[1] = param_0->position[1] + func_800DC178(-200.0f, 0.0f);
-    if (local_0[1] < *(f32 *) (local_2 + 0x10)) {
-        local_0[1] = *(f32 *) (local_2 + 0x10);
-    } else if (*(f32 *) (local_2 + 4) < local_0[1]) {
-        local_0[1] = *(f32 *) (local_2 + 4);
+    data = func_80100094(actor, 0);
+    func_800EE88C(spawn_pos, ((s16(*)[3])(data + 0x36))[*(s16 *) (data + 0x32)]);
+    spawn_pos[1] = actor->position[1] + func_800DC178(-200.0f, 0.0f);
+    if (spawn_pos[1] < *(f32 *) (data + 0x10)) {
+        spawn_pos[1] = *(f32 *) (data + 0x10);
+    } else if (*(f32 *) (data + 4) < spawn_pos[1]) {
+        spawn_pos[1] = *(f32 *) (data + 4);
     }
-    local_1 = func_80108528(0x1BF, local_0, 0, &param_0);
-    local_1->unk3C = param_0->unk0;
-    local_1->unk58 = *(f32 *) (local_2 + 0x18) * 100.0f + 100.0f;
-    local_1->unk50 = *(f32 *) (local_2 + 0x20);
+    fish = func_80108528(0x1BF, spawn_pos, 0, &actor);
+    fish->unk3C = actor->unk0;
+    fish->unk58 = *(f32 *) (data + 0x18) * 100.0f + 100.0f;
+    fish->unk50 = *(f32 *) (data + 0x20);
 }
 
 int func_80800C24_chfishshootgame(Actor *param_0)
@@ -537,121 +539,122 @@ void func_80800C78_chfishshootgame(Actor *param_0, s32 param_1, f32 param_2)
     func_80800C24_chfishshootgame(param_0);
 }
 
-void func_80800D48_chfishshootgame(Actor *param_0)
+void func_80800D48_chfishshootgame(Actor *actor)
 {
-    f32 local_6;
-    f32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    FishShootRec *local_3;
-    s32 local_4;
+    f32 time_left;
+    f32 dt;
+    f32 target_pos[3];
+    f32 cam_pos[3];
+    FishShootRec *rec;
+    s32 spawn_idx;
 
-    local_3 = func_80100094(param_0, 0);
-    local_0 = func_800D8FF8();
-    func_80800A28_chfishshootgame(param_0);
-    func_80800A90_chfishshootgame(param_0, local_1);
-    local_1[1] -= 60.0f;
-    func_800EFA4C(local_2, local_1[0] - 1.0f, local_1[1], local_1[2] - 17.0f);
-    func_8010C788(local_2, 340.0f, 0.0f, 160.0f);
-    local_1[1] += 340.0f;
-    func_8008FB10(local_1, 2500.0f, 0.0f, 10.0f);
-    switch (((FishShootState *) param_0)->st) {
+    rec = func_80100094(actor, 0);
+    dt = func_800D8FF8();
+    func_80800A28_chfishshootgame(actor);
+    func_80800A90_chfishshootgame(actor, target_pos);
+    target_pos[1] -= 60.0f;
+    func_800EFA4C(cam_pos, target_pos[0] - 1.0f, target_pos[1], target_pos[2] - 17.0f);
+    func_8010C788(cam_pos, 340.0f, 0.0f, 160.0f);
+    target_pos[1] += 340.0f;
+    func_8008FB10(target_pos, 2500.0f, 0.0f, 10.0f);
+    // Per-state update of Chris P. Bacon.
+    switch (((FishShootState *) actor)->st) {
         case 1:
-            func_808009C0_chfishshootgame(param_0);
+            func_808009C0_chfishshootgame(actor);
             break;
         case 4:
             if (func_800CEAD0(0)) {
-                func_808003B0_chfishshootgame(param_0, 0xC);
+                func_808003B0_chfishshootgame(actor, 0xC);
                 break;
             }
-            param_0->unk58 = param_0->unk58 - local_0;
-            if (param_0->unk58 < 0.0f) {
+            actor->unk58 = actor->unk58 - dt;
+            if (actor->unk58 < 0.0f) {
                 do {
-                    local_4 = func_800DC128(0, local_3->s34);
-                } while (local_4 == local_3->s32);
-                local_3->s32 = local_4;
-                func_80108B04(param_0, 0);
-                local_6 = func_800CEA60(0);
-                param_0->unk58 = (1.0f - local_6 / 60.0f) * -1.5f + 4.0f;
+                    spawn_idx = func_800DC128(0, rec->s34);
+                } while (spawn_idx == rec->s32);
+                rec->s32 = spawn_idx;
+                func_80108B04(actor, 0);
+                time_left = func_800CEA60(0);
+                actor->unk58 = (1.0f - time_left / 60.0f) * -1.5f + 4.0f;
             }
             break;
         case 5:
-            if (func_80101E14(param_0, 0.999f)) {
+            if (func_80101E14(actor, 0.999f)) {
                 func_800FC6B0(0x17);
                 func_800FCAE0(0x53, 0, 0xFA0);
                 func_800FCA90(0x53);
-                func_808003B0_chfishshootgame(param_0, 6);
+                func_808003B0_chfishshootgame(actor, 6);
             }
             break;
         case 6:
         case 11:
-            func_80800C78_chfishshootgame(param_0, 7, 1.0f);
+            func_80800C78_chfishshootgame(actor, 7, 1.0f);
             break;
         case 9:
-            func_80800C78_chfishshootgame(param_0, 0xD, 1.0f);
+            func_80800C78_chfishshootgame(actor, 0xD, 1.0f);
         case 8:
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_808019C8_chfishshootgame,
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_808019C8_chfishshootgame,
                                              D_808019B8_chfishshootgame);
             break;
         case 3:
-            if (func_80101E14(param_0, 0.02f)) {
-                func_808001F0_chfishshootgame(param_0);
+            if (func_80101E14(actor, 0.02f)) {
+                func_808001F0_chfishshootgame(actor);
             }
-            if (func_80101E14(param_0, 0.8f)) {
-                func_808002E8_chfishshootgame(param_0, 1.1f);
+            if (func_80101E14(actor, 0.8f)) {
+                func_808002E8_chfishshootgame(actor, 1.1f);
             }
-            if (func_80101F24(param_0) > 0.2f && func_80101F24(param_0) < 0.8f) {
-                func_80800C24_chfishshootgame(param_0);
+            if (func_80101F24(actor) > 0.2f && func_80101F24(actor) < 0.8f) {
+                func_80800C24_chfishshootgame(actor);
             }
-            if (func_80101E14(param_0, 0.999f)) {
-                func_808003B0_chfishshootgame(param_0, 0xA);
+            if (func_80101E14(actor, 0.999f)) {
+                func_808003B0_chfishshootgame(actor, 0xA);
             }
             break;
         case 10:
-            func_80800C78_chfishshootgame(param_0, 0xC, 0.5f);
+            func_80800C78_chfishshootgame(actor, 0xC, 0.5f);
             break;
         case 7:
-            if (func_80101F24(param_0) < 0.8f) {
-                func_80800C24_chfishshootgame(param_0);
+            if (func_80101F24(actor) < 0.8f) {
+                func_80800C24_chfishshootgame(actor);
             }
-            if (func_80101E14(param_0, 0.9f)) {
-                func_808002E8_chfishshootgame(param_0, 1.0f);
+            if (func_80101E14(actor, 0.9f)) {
+                func_808002E8_chfishshootgame(actor, 1.0f);
             }
-            if (func_80101E14(param_0, 0.999f)) {
-                func_808003B0_chfishshootgame(param_0, local_3->flag30 ? 2 : 8);
+            if (func_80101E14(actor, 0.999f)) {
+                func_808003B0_chfishshootgame(actor, rec->flag30 ? 2 : 8);
             }
     }
-    if (param_0->unk3C) {
-        func_800EE7F8(func_80106790(param_0->unk3C)->position, param_0->position);
+    if (actor->unk3C) {
+        func_800EE7F8(func_80106790(actor->unk3C)->position, actor->position);
     }
 }
 
-int func_80801110_chfishshootgame(Actor *param_0, s32 param_1, s32 param_2)
+int func_80801110_chfishshootgame(Actor *actor, s32 msg, s32 arg)
 {
-    u8 *local_0;
+    u8 *data;
     f32 local_1[3];
     f32 *local_2;
     s32 local_3;
-    local_0 = func_80100094(*(Actor **) &param_0, 0);
-    switch (param_1) {
+    data = func_80100094(*(Actor **) &actor, 0);
+    switch (msg) {
         case 0x95:
-            func_8080000C_chfishshootgame(param_0);
+            func_8080000C_chfishshootgame(actor);
             if (_glcutDll_entrypoint_20())
-                func_80102424(param_0, 8);
+                func_80102424(actor, 8);
             break;
         case 0x3D:
-            if (param_2) {
-                if (param_2 == 1)
-                    func_80800AF0_chfishshootgame(param_0);
+            if (arg) {
+                if (arg == 1)
+                    func_80800AF0_chfishshootgame(actor);
             } else
-                func_80800B30_chfishshootgame(param_0);
+                func_80800B30_chfishshootgame(actor);
             break;
         case 0x2E:
-            func_8080076C_chfishshootgame(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_8080076C_chfishshootgame(actor, ((s16 *) &arg)[0], ((s16 *) &arg)[1]);
             break;
         case 0xE:
-            if (param_2 == 0) {
-                local_2 = func_80100094(param_0, 0);
+            if (arg == 0) {
+                local_2 = func_80100094(actor, 0);
                 local_3 = func_800D0634(0x21, 1);
                 if (local_3) {
                     func_800EE7F8(local_1, func_80106790(local_3)->position);
@@ -659,26 +662,26 @@ int func_80801110_chfishshootgame(Actor *param_0, s32 param_1, s32 param_2)
                         local_2[11] = local_1[1];
                     local_1[1] = local_2[11];
                 } else
-                    func_800EE7F8(local_1, param_0->position);
+                    func_800EE7F8(local_1, actor->position);
                 _capod_entrypoint_19(local_1);
                 return 3;
             }
-            func_80800A90_chfishshootgame(param_0, local_1);
+            func_80800A90_chfishshootgame(actor, local_1);
             _capod_entrypoint_19(local_1);
             return 3;
         case 0xB:
-            if (!param_2) {
-                _susubgame_entrypoint_5(param_0, local_0 + 0xB0, 3, 1, 0);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0xFF0, 0xE, param_0->position, 0x63);
+            if (!arg) {
+                _susubgame_entrypoint_5(actor, data + 0xB0, 3, 1, 0);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0xFF0, 0xE, actor->position, 0x63);
                 return 4;
             }
             return 3;
         case 0x52:
-            _gcdialogcamera_entrypoint_3(D_808018B0_chfishshootgame, *(s32 *) &param_0->scale);
+            _gcdialogcamera_entrypoint_3(D_808018B0_chfishshootgame, *(s32 *) &actor->scale);
             break;
         case 0x57:
-            return _susubgame_entrypoint_3(param_0, local_0 + 0xB0, param_2 & 0xFFFF,
-                                           (u32) (param_2 & 0xFFFF0000) >> 16);
+            return _susubgame_entrypoint_3(actor, data + 0xB0, arg & 0xFFFF,
+                                           (u32) (arg & 0xFFFF0000) >> 16);
         default:
             return 0;
     }
@@ -713,6 +716,7 @@ void func_80801424_chfishshootgame(u8 *param_0, s32 param_1)
 {
     s32 flag;
     u8 *s0;
+    // Matching: empty block steers IDO's register allocation.
     if (1) {
     }
 

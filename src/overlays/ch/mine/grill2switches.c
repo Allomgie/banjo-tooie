@@ -3,36 +3,37 @@
 extern int D_80800150_chminegrill2switches[];
 extern void *D_80800198_chminegrill2switches;
 
-s32 func_80800000_chminegrill2switches(Actor *this, s32 param_1, s32 param_2)
+s32 func_80800000_chminegrill2switches(Actor *actor, s32 flag, s32 mask)
 {
-    _chswitch_entrypoint_7(this, param_1);
-    _chswitch_entrypoint_8(this, param_2);
+    _chswitch_entrypoint_7(actor, flag);
+    _chswitch_entrypoint_8(actor, mask);
 }
 
-s32 func_80800030_chminegrill2switches(param_0, param_1, param_2, param_3)
-s32 param_0;
-s32 param_1;
-s32 param_2;
-s32 param_3;
+// Forwards the switch message and, on message 7, tells the grill door (actor 0x4C2).
+s32 func_80800030_chminegrill2switches(actor, msg, arg, door_msg)
+s32 actor;
+s32 msg;
+s32 arg;
+s32 door_msg;
 {
 
-if (param_1 == 7) {
-    func_80101180(0x4C2, param_3, 0);
-    _chswitch_entrypoint_10(param_0, param_1, param_2);
+if (msg == 7) {
+    func_80101180(0x4C2, door_msg, 0);
+    _chswitch_entrypoint_10(actor, msg, arg);
 } else {
 
-_chswitch_entrypoint_10(param_0, param_1, param_2);
+_chswitch_entrypoint_10(actor, msg, arg);
 }
 }
 
-void func_80800094_chminegrill2switches(s32 param_0)
+void func_80800094_chminegrill2switches(s32 actor)
 {
-    func_80800000_chminegrill2switches(param_0, 0xA26, 0x200);
+    func_80800000_chminegrill2switches(actor, 0xA26, 0x200);
 }
 
-void func_808000B8_chminegrill2switches(s32 param_0, s32 param_1, s32 param_2)
+void func_808000B8_chminegrill2switches(s32 actor, s32 msg, s32 arg)
 {
-    func_80800030_chminegrill2switches(param_0, param_1, param_2, 0x7A, 0x79);
+    func_80800030_chminegrill2switches(actor, msg, arg, 0x7A, 0x79);
 }
 
 int *chminegrill2switches_entrypoint_0()
@@ -40,17 +41,18 @@ int *chminegrill2switches_entrypoint_0()
     return &D_80800150_chminegrill2switches;
 }
 
-int func_808000EC_chminegrill2switches(int param_0)
+int func_808000EC_chminegrill2switches(int actor)
 {
-    int new_var2;
-    int new_var;
-    new_var2 = (new_var = 0xA28);
-    func_80800000_chminegrill2switches(param_0, new_var2, 0x400);
+    // Matching: the temporary chain is needed for the match.
+    int flag;
+    int flag_value;
+    flag = (flag_value = 0xA28);
+    func_80800000_chminegrill2switches(actor, flag, 0x400);
 }
 
-void func_80800110_chminegrill2switches(s32 param_0, s32 param_1, s32 param_2)
+void func_80800110_chminegrill2switches(s32 actor, s32 msg, s32 arg)
 {
-    func_80800030_chminegrill2switches(param_0, param_1, param_2, 0x7c, 0x7b);
+    func_80800030_chminegrill2switches(actor, msg, arg, 0x7c, 0x7b);
 }
 
 int chminegrill2switches_entrypoint_1()

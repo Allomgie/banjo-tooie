@@ -3,9 +3,10 @@
 extern int D_808000C0_chbottlesdead[];
 extern void func_80102FDC(u8 *, f32);
 
-void func_80800000_chbottlesdead(u8 *param_0)
+// Scales the model to 15% of its current scale.
+void func_80800000_chbottlesdead(u8 *actor)
 {
-    func_80102FDC(param_0, *(f32 *) (param_0 + 0x38) * 0.15f);
+    func_80102FDC(actor, *(f32 *) (actor + 0x38) * 0.15f);
 }
 
 void func_80800034_chbottlesdead()
@@ -13,6 +14,7 @@ void func_80800034_chbottlesdead()
     func_8010C964();
 }
 
+// Draw: hides model part 3, then the default draw.
 s32 func_80800054_chbottlesdead(s32 param_0, s32 param_1)
 {
     func_800DF744(3, 0);

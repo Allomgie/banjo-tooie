@@ -14,32 +14,34 @@ void func_8080000C_chbigtopticket(s32 arg0)
 {
 }
 
-void func_80800014_chbigtopticket(u8 *param_0)
+// Slowly sinks.
+void func_80800014_chbigtopticket(u8 *actor)
 {
-    *(f32 *) (param_0 + 0x48) -= func_800D8FF8() * 175.0f;
-    func_80103110(param_0, 0);
+    *(f32 *) (actor + 0x48) -= func_800D8FF8() * 175.0f;
+    func_80103110(actor, 0);
 }
 
-void func_80800058_chbigtopticket(Actor *param_0)
+void func_80800058_chbigtopticket(Actor *actor)
 {
     func_80101870();
-    func_80103110(param_0, (*(u32 *) ((char *) param_0 + 0x7C) << 19) >> 31);
+    func_80103110(actor, (*(u32 *) ((char *) actor + 0x7C) << 19) >> 31);
 }
 
-s32 func_8080008C_chbigtopticket(Actor *param_0, s32 param_1, s32 param_2)
+// Message 0x3E: touched, collect the ticket. 0x13: store registry index.
+s32 func_8080008C_chbigtopticket(Actor *actor, s32 msg, s32 data)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x3E:
             _sudialog_entrypoint_0(0x19F, 4);
-            func_800D0BD4(*(s32 *) &param_0->unk54, 8);
+            func_800D0BD4(*(s32 *) &actor->unk54, 8);
             func_800D1844(0x4D);
             func_800FC6B0(0x73);
-            _fxsparkle_entrypoint_1(param_0->position, 0x11);
-            func_8010A570(param_0);
-            func_800FFAB0(param_0);
+            _fxsparkle_entrypoint_1(actor->position, 0x11);
+            func_8010A570(actor);
+            func_800FFAB0(actor);
             return 1;
         case 0x13:
-            *(s32 *) &param_0->unk54 = param_2;
+            *(s32 *) &actor->unk54 = data;
             break;
         default:
             return 0;

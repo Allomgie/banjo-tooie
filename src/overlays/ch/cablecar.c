@@ -107,140 +107,140 @@ void func_8080069C_chcablecar();
 
 void func_80800598_chcablecar();
 
-void func_80800018_chcablecar(Actor *param_0)
+void func_80800018_chcablecar(Actor *actor)
 {
-    u8 *local_0;
-    f32 local_1;
-    s32 local_2;
-    f32 local_3[3];
-    f32 local_4[3];
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_800D8FF8();
-    local_2 = 0;
-    func_80800598_chcablecar(param_0);
-    func_8080069C_chcablecar(param_0);
-    switch (param_0->unk70_10) {
+    u8 *car;
+    f32 frame_time;
+    s32 riding;
+    f32 player_pos[3];
+    f32 car_pos[3];
+    car = func_80100094(actor, 0);
+    frame_time = func_800D8FF8();
+    riding = 0;
+    func_80800598_chcablecar(actor);
+    func_8080069C_chcablecar(actor);
+    switch (actor->unk70_10) {
         case 1:
             if (func_800DA298(0xD4) != 0) {
-                func_808007C8_chcablecar(param_0, 1, 4);
+                func_808007C8_chcablecar(actor, 1, 4);
             }
-            func_808005E0_chcablecar(param_0);
+            func_808005E0_chcablecar(actor);
             break;
 
         case 2:
-            if (func_80800BD0_chcablecar(param_0) != 0) {
-                func_808007C8_chcablecar(param_0, 2, 5);
+            if (func_80800BD0_chcablecar(actor) != 0) {
+                func_808007C8_chcablecar(actor, 2, 5);
             }
-            func_808005E0_chcablecar(param_0);
+            func_808005E0_chcablecar(actor);
             break;
 
         case 3:
-            if (!((Mass63CableMarker *) param_0->unk0)->local_0) {
-                func_8010D254(local_3);
-                func_800EE7F8(local_4, param_0->position);
-                local_4[1] -= 400.0f;
-                if (func_800EEB40(local_4, local_3) > 3062500.0f) {
+            if (!((Mass63CableMarker *) actor->unk0)->local_0) {
+                func_8010D254(player_pos);
+                func_800EE7F8(car_pos, actor->position);
+                car_pos[1] -= 400.0f;
+                if (func_800EEB40(car_pos, player_pos) > 3062500.0f) {
                     func_800DA524(0x67E);
-                    func_80101FDC(param_0, 6);
+                    func_80101FDC(actor, 6);
                 }
-            } else if (func_80800BD0_chcablecar(param_0) != 0) {
-                func_808007C8_chcablecar(param_0, 4, 4);
+            } else if (func_80800BD0_chcablecar(actor) != 0) {
+                func_808007C8_chcablecar(actor, 4, 4);
             }
-            func_808005E0_chcablecar(param_0);
+            func_808005E0_chcablecar(actor);
             break;
 
         case 4:
-            local_2 = 1;
-            if (func_8080070C_chcablecar(param_0, *(f32 *) ((s8 *) local_0 + 0xC) -
-                                                      (local_1 * 0.045f)) != 0) {
-                _susubgame_entrypoint_4(param_0, local_0 + 0x2C);
+            riding = 1;
+            if (func_8080070C_chcablecar(actor, *(f32 *) ((s8 *) car + 0xC) -
+                                                      (frame_time * 0.045f)) != 0) {
+                _susubgame_entrypoint_4(actor, car + 0x2C);
                 func_800DA524(0x67E);
-                func_80800AF4_chcablecar(param_0, 2);
+                func_80800AF4_chcablecar(actor, 2);
             }
             break;
 
         case 5:
-            local_2 = 1;
-            if (func_8080070C_chcablecar(param_0, *(f32 *) (local_0 + 0xC) + (local_1 * 0.045f)) !=
+            riding = 1;
+            if (func_8080070C_chcablecar(actor, *(f32 *) (car + 0xC) + (frame_time * 0.045f)) !=
                 0) {
-                _susubgame_entrypoint_4(param_0, local_0 + 0x2C);
+                _susubgame_entrypoint_4(actor, car + 0x2C);
                 func_800DA544(0x67E);
-                func_80800AF4_chcablecar(param_0, 3);
-                _subaddieDll_entrypoint_4(param_0, 1);
+                func_80800AF4_chcablecar(actor, 3);
+                _subaddieDll_entrypoint_4(actor, 1);
             }
             break;
 
         case 6:
-            local_2 = 1;
-            if (func_8080070C_chcablecar(param_0, *(f32 *) ((s8 *) local_0 + 0xC) -
-                                                      (local_1 * 0.045f)) != 0) {
-                _subaddieDll_entrypoint_4(param_0, 0);
-                func_80101FDC(param_0, 2);
+            riding = 1;
+            if (func_8080070C_chcablecar(actor, *(f32 *) ((s8 *) car + 0xC) -
+                                                      (frame_time * 0.045f)) != 0) {
+                _subaddieDll_entrypoint_4(actor, 0);
+                func_80101FDC(actor, 2);
             }
             break;
 
         case 7:
-            func_808005E0_chcablecar(param_0);
+            func_808005E0_chcablecar(actor);
     }
 
-    func_80800D14_chcablecar(param_0, local_2);
-    func_80800914_chcablecar(param_0);
-    ((u8 *) param_0->unk0)[0x2A] &= ~0x10;
+    func_80800D14_chcablecar(actor, riding);
+    func_80800914_chcablecar(actor);
+    ((u8 *) actor->unk0)[0x2A] &= ~0x10;
 }
 
-void func_808002E0_chcablecar(Actor *param_0)
+void func_808002E0_chcablecar(Actor *actor)
 {
-    u8 *local_0;
-    s32 local_1;
-    s32 local_2;
+    u8 *car;
+    s32 at_top;
+    s32 powered;
 
-    local_0 = func_80100094(param_0, 0);
-    _susubgame_entrypoint_0(param_0, local_0 + 0x2C, 0);
+    car = func_80100094(actor, 0);
+    _susubgame_entrypoint_0(actor, car + 0x2C, 0);
     if (func_800EA05C() == 0x124) {
-        func_8010A624(param_0);
-        ((u8 *) param_0)[0x7E] &= ~0x40;
+        func_8010A624(actor);
+        ((u8 *) actor)[0x7E] &= ~0x40;
     }
-    func_800EE940(local_0, param_0->position);
-    func_800EFA6C(local_0 + 6, -8300, 2675, 0);
-    *(s32 *) ((u8 *) param_0 + 0x28) = 0;
-    local_1 = func_800DA298(0x67E);
-    local_2 = func_800DA298(0xD4);
-    if (!local_1 && local_2) {
-        *(f32 *) (local_0 + 0xC) = 0.0f;
-        func_8080070C_chcablecar(param_0, 0.0f);
-        func_80101FDC(param_0, 2);
-    } else if (local_1) {
-        *(f32 *) (local_0 + 0xC) = 1.0f;
-        func_8080070C_chcablecar(param_0, 1.0f);
-        func_80101FDC(param_0, 3);
-        _subaddieDll_entrypoint_4(param_0, 1);
+    func_800EE940(car, actor->position);
+    func_800EFA6C(car + 6, -8300, 2675, 0);
+    *(s32 *) ((u8 *) actor + 0x28) = 0;
+    at_top = func_800DA298(0x67E);
+    powered = func_800DA298(0xD4);
+    if (!at_top && powered) {
+        *(f32 *) (car + 0xC) = 0.0f;
+        func_8080070C_chcablecar(actor, 0.0f);
+        func_80101FDC(actor, 2);
+    } else if (at_top) {
+        *(f32 *) (car + 0xC) = 1.0f;
+        func_8080070C_chcablecar(actor, 1.0f);
+        func_80101FDC(actor, 3);
+        _subaddieDll_entrypoint_4(actor, 1);
     } else {
-        *(f32 *) (local_0 + 0xC) = 0.1f;
-        func_8080070C_chcablecar(param_0, 0.1f);
+        *(f32 *) (car + 0xC) = 0.1f;
+        func_8080070C_chcablecar(actor, 0.1f);
     }
-    _mlwave_entrypoint_0(local_0 + 0x10, 100.0f, 15.0f);
+    _mlwave_entrypoint_0(car + 0x10, 100.0f, 15.0f);
 }
 
 s32 func_80800B74_chcablecar();
 
-s32 func_80800424_chcablecar(Actor *param_0, s32 param_1, CableCarEvent param_2)
+s32 func_80800424_chcablecar(Actor *actor, s32 msg, CableCarEvent event)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x3D:
-            func_80800DC8_chcablecar(param_0);
+            func_80800DC8_chcablecar(actor);
             break;
         case 0x2E:
-            func_80800B74_chcablecar(param_0, param_2.local_0, param_2.local_1);
+            func_80800B74_chcablecar(actor, event.local_0, event.local_1);
             break;
         case 0x1F:
-            func_808004EC_chcablecar(param_0);
+            func_808004EC_chcablecar(actor);
             break;
         case 0x95:
             if (func_800EA05C() == 0xD6)
-                func_80108B04(param_0, 0);
+                func_80108B04(actor, 0);
             break;
         case 0x91:
-            ((CableCarMarker *) param_0->unk0)->local_0 = 1;
+            ((CableCarMarker *) actor->unk0)->local_0 = 1;
             break;
         default:
             return 0;
@@ -248,12 +248,12 @@ s32 func_80800424_chcablecar(Actor *param_0, s32 param_1, CableCarEvent param_2)
     return 1;
 }
 
-void func_808004EC_chcablecar(param_0) Actor *param_0;
+void func_808004EC_chcablecar(actor) Actor *actor;
 {
     CableCarProgress *local_0;
     s32 local_1;
 
-    local_0 = func_80100094(param_0, 0);
+    local_0 = func_80100094(actor, 0);
     if (local_0->progress < 0.4f) {
         local_1 = 0;
     } else if (local_0->progress > 0.6f) {
@@ -261,157 +261,157 @@ void func_808004EC_chcablecar(param_0) Actor *param_0;
     } else {
         local_1 = (s32) func_800F10B4(local_0->progress, 0.4f, 0.6f, 0.0f, 255.0f);
     }
-    func_801015D0(param_0);
+    func_801015D0(actor);
     func_800DF6BC(local_1, 255);
 }
 
-void func_80800598_chcablecar(Actor *param_0)
+void func_80800598_chcablecar(Actor *actor)
 {
-    u8 *local_1 = (u8 *) func_80100094(param_0, 0);
-    u8 *local_0 = local_1 + 0x10;
-    _mlwave_entrypoint_1(local_0);
-    *(f32 *) ((u8 *) param_0 + 0x44) = _mlwave_entrypoint_5(local_0, -5.0f, 5.0f);
+    u8 *car = (u8 *) func_80100094(actor, 0);
+    u8 *wave = car + 0x10;
+    _mlwave_entrypoint_1(wave);
+    *(f32 *) ((u8 *) actor + 0x44) = _mlwave_entrypoint_5(wave, -5.0f, 5.0f);
 }
 
-void func_808005E0_chcablecar(Actor *arg0)
+void func_808005E0_chcablecar(Actor *actor)
 {
-    void *temp_a0;
-    cablecarMemory *temp_v0;
+    void *wave;
+    cablecarMemory *car;
 
-    temp_v0 = func_80100094(arg0, 0);
-    temp_a0 = &temp_v0->unk10;
-    if (temp_v0->unkC < 0.5f) {
-        if ((_mlwave_entrypoint_9(temp_a0, D_80800F40_chcablecar) != 0) &&
+    car = func_80100094(actor, 0);
+    wave = &car->unk10;
+    if (car->unkC < 0.5f) {
+        if ((_mlwave_entrypoint_9(wave, D_80800F40_chcablecar) != 0) &&
             (func_800DC298(0.8f) != 0)) {
-            _subaddieaudioquick_entrypoint_2(arg0, arg0->position, D_80800F4C_chcablecar);
+            _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80800F4C_chcablecar);
         }
-    } else if ((_mlwave_entrypoint_9(temp_a0, D_80800F40_chcablecar) != 0) &&
+    } else if ((_mlwave_entrypoint_9(wave, D_80800F40_chcablecar) != 0) &&
                (func_800DC298(0.8f) != 0)) {
-        _subaddieaudioquick_entrypoint_2(arg0, arg0->position, D_80800F58_chcablecar);
+        _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80800F58_chcablecar);
     }
 }
 
-void func_8080069C_chcablecar(Actor *param_0)
+void func_8080069C_chcablecar(Actor *actor)
 {
-    s32 local_0;
+    s32 moving;
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 4:
         case 5:
         case 6:
-            local_0 = 1;
+            moving = 1;
             break;
         default:
-            local_0 = 0;
+            moving = 0;
             break;
     }
-    if (local_0 || (!local_0 && param_0->unk5F)) {
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_0, D_80800F68_chcablecar);
+    if (moving || (!moving && actor->unk5F)) {
+        _subaddieaudioloop_entrypoint_4(actor, actor->position, moving, D_80800F68_chcablecar);
     }
 }
 
-s32 func_8080070C_chcablecar(Actor *param_0, f32 param_1)
+s32 func_8080070C_chcablecar(Actor *actor, f32 progress)
 {
-    CableCarPath *local_0;
-    s32 local_1;
-    f32 local_2[3];
-    f32 local_3[3];
-    local_0 = func_80100094(param_0, 0);
-    local_1 = 0;
-    if (param_1 < 0.0f) {
-        param_1 = 0.0f;
-        local_1 = 1;
-    } else if (param_1 > 1.0f) {
-        param_1 = 1.0f;
-        local_1 = 1;
+    CableCarPath *path;
+    s32 clamped;
+    f32 end[3];
+    f32 start[3];
+    path = func_80100094(actor, 0);
+    clamped = 0;
+    if (progress < 0.0f) {
+        progress = 0.0f;
+        clamped = 1;
+    } else if (progress > 1.0f) {
+        progress = 1.0f;
+        clamped = 1;
     }
-    func_800EE88C(local_2, local_0->local_1);
-    func_800EE88C(local_3, local_0->local_0);
-    func_800EFE50(param_0->position, local_3, local_2, param_1);
-    local_0->local_2 = param_1;
-    return local_1;
+    func_800EE88C(end, path->local_1);
+    func_800EE88C(start, path->local_0);
+    func_800EFE50(actor->position, start, end, progress);
+    path->local_2 = progress;
+    return clamped;
 }
 
-void func_808007C8_chcablecar(Actor *param_0, s32 param_1, s32 param_2)
+void func_808007C8_chcablecar(Actor *actor, s32 mode, s32 next_state)
 {
-    u8 *local_0;
-    s32 local_1;
+    u8 *car;
+    s32 subgame_id;
 
-    local_0 = func_80100094(param_0, 0);
-    _subaddieDll_entrypoint_4(param_0, 1);
-    func_801039E4(param_0->unk0);
-    func_80103D48(param_0);
-    if (*(s32 *) &param_1 == 2 && func_800DA9E4(0xBF, 1)) {
-        param_1 = 3;
+    car = func_80100094(actor, 0);
+    _subaddieDll_entrypoint_4(actor, 1);
+    func_801039E4(actor->unk0);
+    func_80103D48(actor);
+    if (*(s32 *) &mode == 2 && func_800DA9E4(0xBF, 1)) {
+        mode = 3;
     }
-    switch (param_1) {
+    switch (mode) {
         case 3:
-            _susubgame_entrypoint_8(param_0, local_0 + 0x2C, 0x2F, 0x10010, 0);
+            _susubgame_entrypoint_8(actor, car + 0x2C, 0x2F, 0x10010, 0);
             break;
         case 4:
-            _susubgame_entrypoint_8(param_0, local_0 + 0x2C, 0x2E, 0x10010, 0);
+            _susubgame_entrypoint_8(actor, car + 0x2C, 0x2E, 0x10010, 0);
             break;
         default:
-            local_1 = (param_1 == 1) ? 0x1D : 0x21;
+            subgame_id = (mode == 1) ? 0x1D : 0x21;
             func_80015178(3);
-            ((CcarS *) param_0->unk0)->b5 = 1;
-            _susubgame_entrypoint_6(param_0, local_0 + 0x2C, local_1, 0x10070, 0);
+            ((CcarS *) actor->unk0)->b5 = 1;
+            _susubgame_entrypoint_6(actor, car + 0x2C, subgame_id, 0x10070, 0);
     }
-    *(s32 *) ((u8 *) param_0 + 0x28) = param_1;
-    func_80101FDC(param_0, param_2);
+    *(s32 *) ((u8 *) actor + 0x28) = mode;
+    func_80101FDC(actor, next_state);
 }
 
-void func_80800914_chcablecar(param_0) Actor *param_0;
+void func_80800914_chcablecar(actor) Actor *actor;
 {
-    u8 *local_0;
-    s32 local_1;
+    u8 *car;
+    s32 subgame_id;
     f32 local_2[3];
     f32 local_3[3];
     f32 local_4[3];
     f32 local_5[3];
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_800F54E4();
-    switch (param_0->actorData[4]) {
+    car = func_80100094(actor, 0);
+    subgame_id = func_800F54E4();
+    switch (actor->actorData[4]) {
         case 3:
-            if (*(f32 *) (local_0 + 0xC) > 0.15f &&
-                !((Mass45CableFlags *) ((u8 *) param_0 + 0x64))->local_1) {
-                func_8080070C_chcablecar(param_0, 0.85f);
-                param_0->unk64_19 = 1;
-                _susubgame_entrypoint_8(param_0, local_0 + 0x2C, 0x2E, 0x12010, 0);
+            if (*(f32 *) (car + 0xC) > 0.15f &&
+                !((Mass45CableFlags *) ((u8 *) actor + 0x64))->local_1) {
+                func_8080070C_chcablecar(actor, 0.85f);
+                actor->unk64_19 = 1;
+                _susubgame_entrypoint_8(actor, car + 0x2C, 0x2E, 0x12010, 0);
                 func_800EFA4C(local_2, -80.0f, -425.0f, 0.0f);
-                func_800EF04C(local_2, param_0->position);
-                func_800F8294(local_1, local_2);
+                func_800EF04C(local_2, actor->position);
+                func_800F8294(subgame_id, local_2);
                 func_800EFA4C(local_3, 0.0f, 270.0f, 0.0f);
-                func_800F8444(local_1, local_3);
+                func_800F8444(subgame_id, local_3);
             }
             break;
         case 4:
-            if (*(f32 *) (local_0 + 0xC) < 0.85f &&
-                !((Mass45CableFlags *) ((u8 *) param_0 + 0x64))->local_1) {
-                func_8080070C_chcablecar(param_0, 0.15f);
-                param_0->unk64_19 = 1;
-                _susubgame_entrypoint_8(param_0, local_0 + 0x2C, 0x2F, 0x12010, 0);
+            if (*(f32 *) (car + 0xC) < 0.85f &&
+                !((Mass45CableFlags *) ((u8 *) actor + 0x64))->local_1) {
+                func_8080070C_chcablecar(actor, 0.15f);
+                actor->unk64_19 = 1;
+                _susubgame_entrypoint_8(actor, car + 0x2C, 0x2F, 0x12010, 0);
                 func_800EFA4C(local_4, 60.0f, -425.0f, 0.0f);
-                func_800EF04C(local_4, param_0->position);
-                func_800F8294(local_1, local_4);
+                func_800EF04C(local_4, actor->position);
+                func_800F8294(subgame_id, local_4);
                 func_800EFA4C(local_5, 0.0f, 90.0f, 0.0f);
-                func_800F8444(local_1, local_5);
+                func_800F8444(subgame_id, local_5);
             }
     }
 }
 
-void func_80800AF4_chcablecar(Actor *param_0, void *param_1)
+void func_80800AF4_chcablecar(Actor *actor, void *state)
 {
-    _subaddieDll_entrypoint_4(param_0, 0);
-    func_80103D70(param_0);
-    func_80101FDC(param_0, param_1);
-    if (((CableCarMarkerFlags *) param_0->unk0)->local_0) {
+    _subaddieDll_entrypoint_4(actor, 0);
+    func_80103D70(actor);
+    func_80101FDC(actor, state);
+    if (((CableCarMarkerFlags *) actor->unk0)->local_0) {
         func_80015178(2);
-        ((CableCarMarkerFlags *) param_0->unk0)->local_0 = 0;
+        ((CableCarMarkerFlags *) actor->unk0)->local_0 = 0;
     }
-    param_0->actorData[4] = 0;
-    param_0->unk64_19 = 0;
+    actor->actorData[4] = 0;
+    actor->unk64_19 = 0;
 }
 
 s32 func_80800B74_chcablecar(Actor *this, enum asset_e text_id, s32 param_2)
@@ -424,62 +424,62 @@ s32 func_80800B74_chcablecar(Actor *this, enum asset_e text_id, s32 param_2)
     }
 }
 
-s32 func_80800BD0_chcablecar(Actor *param_0)
+s32 func_80800BD0_chcablecar(Actor *actor)
 {
-    s32 local_0;
+    s32 player;
 
-    local_0 = func_800F54E4();
-    if (!func_800F6438(local_0) || !((CableCarInfo *) param_0->unk0)->unk28_12 ||
-        !func_800F6C5C(local_0))
+    player = func_800F54E4();
+    if (!func_800F6438(player) || !((CableCarInfo *) actor->unk0)->unk28_12 ||
+        !func_800F6C5C(player))
         return 0;
     if (!func_800DA298(0x67F)) {
-        _subaddiedialog_entrypoint_11(param_0->unk0, 0x10BA, 0xE, 0, 0x22);
-        func_80101FDC(param_0, 7);
+        _subaddiedialog_entrypoint_11(actor->unk0, 0x10BA, 0xE, 0, 0x22);
+        func_80101FDC(actor, 7);
         func_800DA544(0x67F);
         return 0;
     }
     if (func_80016B30(0, 1) != 1)
         return 0;
-    if (func_800F6B40(local_0))
+    if (func_800F6B40(player))
         return 0;
-    if (!func_800F4BB8(local_0, -1, 0))
+    if (!func_800F4BB8(player, -1, 0))
         return 0;
-    if (func_800F5410(local_0) != 1) {
-        _subaddiedialog_entrypoint_11(param_0->unk0, 0x10B9, 0xF, 0, 0x22);
-        func_80101FDC(param_0, 7);
+    if (func_800F5410(player) != 1) {
+        _subaddiedialog_entrypoint_11(actor->unk0, 0x10B9, 0xF, 0, 0x22);
+        func_80101FDC(actor, 7);
         return 0;
     }
     return 1;
 }
 
-void func_80800D14_chcablecar(Actor *param_0, s32 param_1)
+void func_80800D14_chcablecar(Actor *actor, s32 riding)
 {
-    Actor *local_1;
-    s32 local_0;
+    Actor *passenger;
+    s32 player;
 
-    if (param_0->unk3C) {
-        local_0 = func_800F54E4();
-        local_1 = func_80106790(param_0->unk3C);
-        local_1->rotation[0] = param_0->rotation[0];
-        func_800EE7F8(local_1->position, param_0->position);
-        func_80103014(local_1);
-        _subaddieDll_entrypoint_4(local_1, *(u16 *) ((u8 *) param_0 + 0x7C));
-        if (func_800F6C88(local_0) && func_800F4F34(local_0, local_1->position, 0.0f, 80.0f) &&
-            param_1) {
-            func_800F76B0(local_0, 0xA, local_1->unk0);
+    if (actor->unk3C) {
+        player = func_800F54E4();
+        passenger = func_80106790(actor->unk3C);
+        passenger->rotation[0] = actor->rotation[0];
+        func_800EE7F8(passenger->position, actor->position);
+        func_80103014(passenger);
+        _subaddieDll_entrypoint_4(passenger, *(u16 *) ((u8 *) actor + 0x7C));
+        if (func_800F6C88(player) && func_800F4F34(player, passenger->position, 0.0f, 80.0f) &&
+            riding) {
+            func_800F76B0(player, 0xA, passenger->unk0);
         }
     }
 }
 
-void func_80800DC8_chcablecar(param_0) Actor *param_0;
+void func_80800DC8_chcablecar(actor) Actor *actor;
 {
-    u8 *local_0;
+    u8 *player;
 
-    local_0 = func_801084B0(0x33F, &param_0);
-    func_80102FDC(local_0, *(s32 *) ((u8 *) param_0 + 0x38));
-    _subaddieDll_entrypoint_4(local_0, *(u16 *) ((u8 *) param_0 + 0x7C));
-    *(f32 *) (local_0 + 0x44) = *(f32 *) ((u8 *) param_0 + 0x44);
-    *(s32 *) ((u8 *) param_0 + 0x3C) = *(s32 *) (local_0 + 0);
+    player = func_801084B0(0x33F, &actor);
+    func_80102FDC(player, *(s32 *) ((u8 *) actor + 0x38));
+    _subaddieDll_entrypoint_4(player, *(u16 *) ((u8 *) actor + 0x7C));
+    *(f32 *) (player + 0x44) = *(f32 *) ((u8 *) actor + 0x44);
+    *(s32 *) ((u8 *) actor + 0x3C) = *(s32 *) (player + 0);
 }
 
 s32 func_80800E30_chcablecar(Actor *this)
@@ -488,6 +488,8 @@ s32 func_80800E30_chcablecar(Actor *this)
     _chswitch_entrypoint_9(this);
 }
 
+// TU-NOTE: the overlay .data is defined in this file. Its tables point to functions here, and
+// IDO's assembler schedules some of them differently unless the tables are in the same unit.
 extern void func_80105834();
 extern void func_801018A4();
 extern void func_80107C2C();

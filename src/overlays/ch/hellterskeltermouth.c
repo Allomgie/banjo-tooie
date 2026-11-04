@@ -14,82 +14,84 @@ int chhellterskeltermouth_entrypoint_0()
 
 void func_808002E4_chhellterskeltermouth();
 
-void func_8080000C_chhellterskeltermouth(Actor *param_0)
+// Opens and closes the mouth in a loop: states 2/4 lerp the position, 3/5 wait.
+void func_8080000C_chhellterskeltermouth(Actor *actor)
 {
-    s32 local_0;
-    f32 local_1;
-    s32 local_2;
-    f32 *local_3;
-    switch (param_0->unk70_10) {
+    s32 open_done;
+    f32 t;
+    s32 close_done;
+    f32 *pos;
+    switch (actor->unk70_10) {
         case 1:
             break;
         case 2:
-            local_0 = func_800D9078(&param_0->unk58);
-            local_3 = param_0->position;
-            local_1 = func_800F12D4(param_0->unk58, 0.0f, 2.5f, 1.0f, 0.0f);
-            func_800EFE50(local_3, (f32 *) param_0->actorData + 4, (f32 *) param_0->actorData,
-                          local_1);
-            if (local_0) {
-                param_0->unk58 = 0.7f;
-                func_80101FDC(param_0, 3);
-                _subaddieaudioquick_entrypoint_2(param_0, local_3,
+            open_done = func_800D9078(&actor->unk58);
+            pos = actor->position;
+            t = func_800F12D4(actor->unk58, 0.0f, 2.5f, 1.0f, 0.0f);
+            func_800EFE50(pos, (f32 *) actor->actorData + 4, (f32 *) actor->actorData,
+                          t);
+            if (open_done) {
+                actor->unk58 = 0.7f;
+                func_80101FDC(actor, 3);
+                _subaddieaudioquick_entrypoint_2(actor, pos,
                                                  D_80800378_chhellterskeltermouth);
             }
-            func_808002E4_chhellterskeltermouth(param_0);
+            func_808002E4_chhellterskeltermouth(actor);
             break;
         case 3:
-            if (func_800D9078(&param_0->unk58)) {
-                param_0->unk58 = 2.5f;
-                func_80101FDC(param_0, 4);
+            if (func_800D9078(&actor->unk58)) {
+                actor->unk58 = 2.5f;
+                func_80101FDC(actor, 4);
             }
             break;
         case 4:
-            local_2 = func_800D9078(&param_0->unk58);
-            local_3 = param_0->position;
-            local_1 = func_800F12D4(param_0->unk58, 0.0f, 2.5f, 0.0f, 1.0f);
-            func_800EFE50(local_3, (f32 *) param_0->actorData + 4, (f32 *) param_0->actorData,
-                          local_1);
-            if (local_2) {
-                param_0->unk58 = 0.7f;
-                func_80101FDC(param_0, 5);
-                _subaddieaudioquick_entrypoint_2(param_0, local_3,
+            close_done = func_800D9078(&actor->unk58);
+            pos = actor->position;
+            t = func_800F12D4(actor->unk58, 0.0f, 2.5f, 0.0f, 1.0f);
+            func_800EFE50(pos, (f32 *) actor->actorData + 4, (f32 *) actor->actorData,
+                          t);
+            if (close_done) {
+                actor->unk58 = 0.7f;
+                func_80101FDC(actor, 5);
+                _subaddieaudioquick_entrypoint_2(actor, pos,
                                                  D_80800378_chhellterskeltermouth);
             }
-            func_808002E4_chhellterskeltermouth(param_0);
+            func_808002E4_chhellterskeltermouth(actor);
             break;
         case 5:
-            if (func_800D9078(&param_0->unk58)) {
-                param_0->unk58 = 2.5f;
-                func_80101FDC(param_0, 2);
+            if (func_800D9078(&actor->unk58)) {
+                actor->unk58 = 2.5f;
+                func_80101FDC(actor, 2);
             }
     }
 }
 
-void func_808001BC_chhellterskeltermouth(u8 *param_0)
+// Stays open for good if flag 0xA4 is set.
+void func_808001BC_chhellterskeltermouth(u8 *actor)
 {
-    func_800EE7F8(param_0 + 0x18, param_0 + 4);
-    func_800EE7F8(param_0 + 0x28, param_0 + 4);
-    *(f32 *) ((char *) param_0 + 0x2C) = *(f32 *) ((char *) param_0 + 0x2C) - 350.0f;
+    func_800EE7F8(actor + 0x18, actor + 4);
+    func_800EE7F8(actor + 0x28, actor + 4);
+    *(f32 *) ((char *) actor + 0x2C) = *(f32 *) ((char *) actor + 0x2C) - 350.0f;
     if (func_800DA298(0xA4) != 0) {
-        func_8010A590(param_0);
-        func_80102FE8(param_0, 0);
-        func_80101FDC(param_0, 4);
-        *(f32 *) ((char *) param_0 + 0x58) = 2.5f;
+        func_8010A590(actor);
+        func_80102FE8(actor, 0);
+        func_80101FDC(actor, 4);
+        *(f32 *) ((char *) actor + 0x58) = 2.5f;
         return;
     }
-    func_80103110(param_0, 0);
+    func_80103110(actor, 0);
 }
 
-int func_80800258_chhellterskeltermouth(Actor *param_0, s32 param_1, s32 param_2)
+int func_80800258_chhellterskeltermouth(Actor *actor, s32 msg, s32 arg)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0xA:
-            _capod_entrypoint_13(param_0->unk0, 0, 0x1A, 0x2010);
-            func_8010A590(param_0);
-            func_80103110(param_0, 1);
-            func_80102FE8(param_0, 0);
-            func_80101FDC(param_0, 4);
-            param_0->unk58 = 2.5f;
+            _capod_entrypoint_13(actor->unk0, 0, 0x1A, 0x2010);
+            func_8010A590(actor);
+            func_80103110(actor, 1);
+            func_80102FE8(actor, 0);
+            func_80101FDC(actor, 4);
+            actor->unk58 = 2.5f;
             break;
         default:
             return 0;
@@ -97,11 +99,14 @@ int func_80800258_chhellterskeltermouth(Actor *param_0, s32 param_1, s32 param_2
     return 1;
 }
 
-void func_808002E4_chhellterskeltermouth(u8 *param_0)
+void func_808002E4_chhellterskeltermouth(u8 *actor)
 {
-    _subaddieaudioloop_entrypoint_4(param_0, param_0 + 4, 1, &D_80800384_chhellterskeltermouth);
+    _subaddieaudioloop_entrypoint_4(actor, actor + 4, 1, &D_80800384_chhellterskeltermouth);
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C. Its tables hold pointers to
+// functions of this file; IDO assembler schedules some of them differently unless the
+// tables are in the same unit. Values are taken from the ROM.
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();

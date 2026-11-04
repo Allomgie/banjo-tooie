@@ -12,19 +12,19 @@ int chcoderoomdoor_entrypoint_0()
     return (int) &D_808000E0_chcoderoomdoor;
 }
 
-s32 func_8080000C_chcoderoomdoor(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_8080000C_chcoderoomdoor(Actor *actor, s32 msg, s32 data)
 {
-    f32 local_0[3];
+    f32 pos[3];
 
-    switch (param_1) {
+    switch (msg) {
         case 0x40:
-            func_800EE7F8(local_0, param_0->position);
-            func_800EF1B8(local_0, param_0->rotation[1], -100.0f);
-            _chexploder_entrypoint_3(param_0, local_0, 0xF);
+            func_800EE7F8(pos, actor->position);
+            func_800EF1B8(pos, actor->rotation[1], -100.0f);
+            _chexploder_entrypoint_3(actor, pos, 0xF);
             break;
         case 0x90:
-            func_800BABB8(0, param_0->position, param_0->position, 1.0f, D_80800128_chcoderoomdoor);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800170_chcoderoomdoor);
+            func_800BABB8(0, actor->position, actor->position, 1.0f, D_80800128_chcoderoomdoor);
+            _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80800170_chcoderoomdoor);
             func_800DA544(0x366);
             break;
         default:
@@ -33,6 +33,8 @@ s32 func_8080000C_chcoderoomdoor(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
+// TU-NOTE: the overlay .data is defined in this file. Its tables point to functions here, and
+// IDO's assembler schedules some of them differently unless the tables are in the same unit.
 extern void func_80102EC0();
 extern void func_80105834();
 extern void func_80101870();

@@ -1,5 +1,8 @@
 #include "common.h"
 
+// Power Hut basement lighting: fades nine point lights and map part 0x1AA when
+// FLAG3_9E0 (lights on) changes.
+
 typedef union {
     s32 word;
     void *pointer;
@@ -21,33 +24,33 @@ extern f32 func_800DC178(f32, f32);
 extern void func_800C8800(s32, u32 *);
 extern void func_800C8E84(s32, s32 *);
 
-s32 func_80800000_chminelight(Actor *param_0, s32 param_1, MineLightMessage29 param_2)
+s32 func_80800000_chminelight(Actor *actor, s32 msg, MineLightMessage29 data)
 {
-    void *local_0;
-    f32 local_1[4];
-    void *local_2;
-    switch (param_1) {
+    void *world_part;
+    f32 brightness[4];
+    void *entry;
+    switch (msg) {
         case 0x95:
-            local_0 = _idworld_entrypoint_3(0x1AA);
-            if (local_0) {
-                local_1[0] = *(f32 *) ((u8 *) param_0 + 0x30);
-                local_1[1] = *(f32 *) ((u8 *) param_0 + 0x30);
-                local_1[2] = *(f32 *) ((u8 *) param_0 + 0x30);
-                local_1[3] = *(f32 *) ((u8 *) param_0 + 0x30);
-                local_2 = func_800BEA88(0);
-                if (local_2)
-                    _idworldmake_entrypoint_1(local_2, 0x69, 0x1AA, 1);
-                local_2 = func_800BEA88(1);
-                if (local_2)
-                    _idworldmake_entrypoint_1(local_2, 0x69, 0x1AA, 1);
-                func_800EDDDC(local_0, local_1, local_1, 0.0f);
+            world_part = _idworld_entrypoint_3(0x1AA);
+            if (world_part) {
+                brightness[0] = *(f32 *) ((u8 *) actor + 0x30);
+                brightness[1] = *(f32 *) ((u8 *) actor + 0x30);
+                brightness[2] = *(f32 *) ((u8 *) actor + 0x30);
+                brightness[3] = *(f32 *) ((u8 *) actor + 0x30);
+                entry = func_800BEA88(0);
+                if (entry)
+                    _idworldmake_entrypoint_1(entry, 0x69, 0x1AA, 1);
+                entry = func_800BEA88(1);
+                if (entry)
+                    _idworldmake_entrypoint_1(entry, 0x69, 0x1AA, 1);
+                func_800EDDDC(world_part, brightness, brightness, 0.0f);
             }
             if (_glcutDll_entrypoint_19(0x15)) {
                 if (func_800DA298(0x9E0))
-                    _capod_entrypoint_13(param_0->unk0, 0, 0, 0x6910);
+                    _capod_entrypoint_13(actor->unk0, 0, 0, 0x6910);
                 else
-                    _capod_entrypoint_13(param_0->unk0, 0, 2, 0x6910);
-                param_0->unk64_20 = 1;
+                    _capod_entrypoint_13(actor->unk0, 0, 2, 0x6910);
+                actor->unk64_20 = 1;
             }
             break;
         default:
@@ -56,72 +59,72 @@ s32 func_80800000_chminelight(Actor *param_0, s32 param_1, MineLightMessage29 pa
     return 1;
 }
 
-void func_8080011C_chminelight(param_0) Actor *param_0;
+void func_8080011C_chminelight(actor) Actor *actor;
 {
-    u8 *local_0;
-    f32 local_1;
-    s32 local_3[3];
-    s32 local_5;
-    s32 local_2;
-    f32 local_4[4];
+    u8 *base_colors;
+    f32 scale;
+    s32 color[3];
+    s32 i;
+    s32 world_part;
+    f32 brightness[4];
 
-    local_0 = func_80100094(param_0, 0);
-    switch (((MineLightState *) param_0)->st) {
+    base_colors = func_80100094(actor, 0);
+    switch (((MineLightState *) actor)->st) {
         case 2:
-            if (*(f32 *) &param_0->actorData[6] <= 0.975f) {
+            if (*(f32 *) &actor->actorData[6] <= 0.975f) {
                 if (func_8001210C(3)) {
-                    *(f32 *) &param_0->actorData[6] += 0.025f;
+                    *(f32 *) &actor->actorData[6] += 0.025f;
                 }
             } else {
-                param_0->unk70_10 = 3;
+                actor->unk70_10 = 3;
             }
             break;
         case 4:
-            if (0.02f <= *(f32 *) &param_0->actorData[6]) {
+            if (0.02f <= *(f32 *) &actor->actorData[6]) {
                 if (func_8001210C(3)) {
-                    *(f32 *) &param_0->actorData[6] -= 0.02f;
+                    *(f32 *) &actor->actorData[6] -= 0.02f;
                 }
             } else {
-                param_0->unk70_10 = 1;
+                actor->unk70_10 = 1;
             }
     }
-    if (param_0->unk54 != *(f32 *) &param_0->actorData[6]) {
-        local_1 = *(f32 *) &param_0->actorData[6];
-        if (local_1 < 0.9f && func_800DC0C0() < 0.8f) {
-            local_1 *= func_800DC178(0.25f, 0.5f);
-            func_800C8800(D_80800688_chminelight[param_0->unk6C_0], param_0->actorData);
-            if (((MineLightState *) param_0)->st == 2) {
+    if (actor->unk54 != *(f32 *) &actor->actorData[6]) {
+        scale = *(f32 *) &actor->actorData[6];
+        if (scale < 0.9f && func_800DC0C0() < 0.8f) {
+            scale *= func_800DC178(0.25f, 0.5f);
+            func_800C8800(D_80800688_chminelight[actor->unk6C_0], actor->actorData);
+            if (((MineLightState *) actor)->st == 2) {
                 if (func_800DC0C0() < 0.3f) {
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                    _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                      D_80800660_chminelight);
                 }
             } else {
                 if (func_800DC0C0() < 0.15f) {
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                    _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                      D_80800674_chminelight);
                 }
             }
         }
-        for (local_5 = 0; local_5 != 2; local_5++) {
-            local_3[0] = (u32) *(u8 *) ((s32) local_0 + param_0->unk6C_0 * 3) * local_1;
-            local_3[1] = (u32) *(u8 *) ((s32) local_0 + param_0->unk6C_0 * 3 + 1) * local_1;
-            local_3[2] = (u32) *(u8 *) ((s32) local_0 + param_0->unk6C_0 * 3 + 2) * local_1;
-            func_800C8E84(D_80800688_chminelight[param_0->unk6C_0], local_3);
-            if (param_0->unk6C_0 >= 8) {
-                param_0->unk6C_0 = 0;
-                param_0->unk54 = *(f32 *) &param_0->actorData[6];
+        for (i = 0; i != 2; i++) {
+            color[0] = (u32) *(u8 *) ((s32) base_colors + actor->unk6C_0 * 3) * scale;
+            color[1] = (u32) *(u8 *) ((s32) base_colors + actor->unk6C_0 * 3 + 1) * scale;
+            color[2] = (u32) *(u8 *) ((s32) base_colors + actor->unk6C_0 * 3 + 2) * scale;
+            func_800C8E84(D_80800688_chminelight[actor->unk6C_0], color);
+            if (actor->unk6C_0 >= 8) {
+                actor->unk6C_0 = 0;
+                actor->unk54 = *(f32 *) &actor->actorData[6];
             } else {
-                param_0->unk6C_0++;
+                actor->unk6C_0++;
             }
         }
     }
-    local_2 = _idworld_entrypoint_3(0x1AA);
-    if (local_2) {
-        local_4[0] = *(f32 *) &param_0->actorData[6];
-        local_4[1] = *(f32 *) &param_0->actorData[6];
-        local_4[2] = *(f32 *) &param_0->actorData[6];
-        local_4[3] = *(f32 *) &param_0->actorData[6];
-        func_800EDDDC(local_2, local_4, local_4, 0.0f);
+    world_part = _idworld_entrypoint_3(0x1AA);
+    if (world_part) {
+        brightness[0] = *(f32 *) &actor->actorData[6];
+        brightness[1] = *(f32 *) &actor->actorData[6];
+        brightness[2] = *(f32 *) &actor->actorData[6];
+        brightness[3] = *(f32 *) &actor->actorData[6];
+        func_800EDDDC(world_part, brightness, brightness, 0.0f);
     }
 }
 
@@ -129,34 +132,34 @@ void func_808004CC_chminelight(s32 arg0)
 {
 }
 
-void func_808004D4_chminelight(Actor *param_0)
+void func_808004D4_chminelight(Actor *actor)
 {
-    u8(*local_0)[3];
-    s32 local_2[4];
-    s32 local_1;
+    u8(*colors)[3];
+    s32 color[4];
+    s32 i;
 
-    local_0 = func_80100094(param_0, 0);
+    colors = func_80100094(actor, 0);
 
-    for (local_1 = 0; local_1 < 9; local_1++) {
-        func_800C8900(D_80800688_chminelight[local_1], local_2);
-        local_0[local_1][0] = local_2[0];
-        local_0[local_1][1] = local_2[1];
-        local_0[local_1][2] = local_2[2];
+    for (i = 0; i < 9; i++) {
+        func_800C8900(D_80800688_chminelight[i], color);
+        colors[i][0] = color[0];
+        colors[i][1] = color[1];
+        colors[i][2] = color[2];
     }
     if (func_800DA298(0x9E0)) {
-        if (param_0->unk70_10 != 3) {
-            ((u8 *) param_0)[0x72] = (((u8 *) param_0)[0x72] & ~0xFC) | 8;
-            param_0->unk54 = -1.0f;
-            *(f32 *) &param_0->actorData[6] = !_glcutDll_entrypoint_19(0x15) ? 1.0f : 0.0f;
+        if (actor->unk70_10 != 3) {
+            ((u8 *) actor)[0x72] = (((u8 *) actor)[0x72] & ~0xFC) | 8;
+            actor->unk54 = -1.0f;
+            *(f32 *) &actor->actorData[6] = !_glcutDll_entrypoint_19(0x15) ? 1.0f : 0.0f;
         }
     } else {
-        if (param_0->unk70_10 != 1) {
-            ((u8 *) param_0)[0x72] = (((u8 *) param_0)[0x72] & ~0xFC) | 0x10;
-            param_0->unk54 = -1.0f;
-            *(f32 *) &param_0->actorData[6] = !_glcutDll_entrypoint_19(0x15) ? 0.0f : 1.0f;
+        if (actor->unk70_10 != 1) {
+            ((u8 *) actor)[0x72] = (((u8 *) actor)[0x72] & ~0xFC) | 0x10;
+            actor->unk54 = -1.0f;
+            *(f32 *) &actor->actorData[6] = !_glcutDll_entrypoint_19(0x15) ? 0.0f : 1.0f;
         }
     }
-    func_8080011C_chminelight(param_0);
+    func_8080011C_chminelight(actor);
 }
 
 int *chminelight_entrypoint_0()

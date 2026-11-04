@@ -6,14 +6,14 @@ extern int D_80800D48_chcactusofstrength[];
 extern int D_80800D90_chcactusofstrength[];
 extern s32 func_800D9058(f32);
 typedef union {
-    s32 local_0;
-    void *local_1;
+    s32 strength;
+    void *unk_0;
 } CactusStrengthEvent;
 typedef struct {
-    u8 pad0[0x24];
-    f32 vel;
-    f32 minY;
-    f32 maxY;
+    u8 pad_0[0x24];
+    f32 velocity;
+    f32 min_y;
+    f32 max_y;
 } CactusData;
 extern void func_800EE7F8();
 extern void func_800EF1B8(f32 *, f32, f32);
@@ -66,24 +66,24 @@ int *chcactusofstrength_entrypoint_2()
     return &D_80800D90_chcactusofstrength;
 }
 
-void func_80800024_chcactusofstrength(Actor *param_0)
+void func_80800024_chcactusofstrength(Actor *actor)
 {
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 2:
-            if (func_80101DDC(param_0)) {
-                if (param_0->unk6C_0 != 0) {
-                    param_0->unk6C_0--;
+            if (func_80101DDC(actor)) {
+                if (actor->unk6C_0 != 0) {
+                    actor->unk6C_0--;
                 } else {
-                    func_80102424(param_0, 3);
-                    param_0->unk6C_0 = func_800D9058(0.5f);
+                    func_80102424(actor, 3);
+                    actor->unk6C_0 = func_800D9058(0.5f);
                 }
             }
             break;
         case 3:
-            if (func_80101DDC(param_0)) {
-                func_80102424(param_0, 1);
+            if (func_80101DDC(actor)) {
+                func_80102424(actor, 1);
                 _gcaudiolist_entrypoint_0(0);
-                func_80103110(param_0, 0);
+                func_80103110(actor, 0);
             }
     }
 }
@@ -92,37 +92,38 @@ void func_80800108_chcactusofstrength(s32 arg0)
 {
 }
 
-void func_80800110_chcactusofstrength(Actor *param_0, s32 param_1)
+// Pad hit: strength 1/2/4 depending on the player's move.
+void func_80800110_chcactusofstrength(Actor *actor, s32 param_1)
 {
-    s32 local_0;
+    s32 strength;
 
-    if (param_0->unk70_10 == 1) {
-        switch (func_8008FCC8(param_0->unk0)) {
+    if (actor->unk70_10 == 1) {
+        switch (func_8008FCC8(actor->unk0)) {
             case 1:
-                local_0 = 1;
+                strength = 1;
                 break;
             case 0xB:
-                local_0 = 2;
+                strength = 2;
                 break;
             default:
-                local_0 = 4;
+                strength = 4;
                 break;
         }
-        if (local_0 != -1) {
-            func_80102424(param_0, 2, local_0);
+        if (strength != -1) {
+            func_80102424(actor, 2, strength);
             _gcaudiolist_entrypoint_0(0);
-            func_80103110(param_0, 1);
-            param_0->unk6C_0 = 8;
-            func_80101180(0x13B, 0xA, local_0);
+            func_80103110(actor, 1);
+            actor->unk6C_0 = 8;
+            func_80101180(0x13B, 0xA, strength);
         }
     }
 }
 
-s32 func_808001C4_chcactusofstrength(Actor *param_0, s32 param_1, CactusStrengthEvent param_2)
+s32 func_808001C4_chcactusofstrength(Actor *actor, s32 msg, CactusStrengthEvent event)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x40:
-            func_80800110_chcactusofstrength(param_0, param_2.local_0);
+            func_80800110_chcactusofstrength(actor, event.strength);
             break;
         default:
             return 0;
@@ -146,18 +147,19 @@ void func_80800200_chcactusofstrength(Actor *this)
         case 2:
             func_80800824_chcactusofstrength(this, 20.0f);
             if (0.0f < this->unk58) {
+                // Matching: empty block steers IDO's code generation.
                 if (func_800D9078(&this->unk58)) {
                 }
             } else {
-                this->position[1] += D->vel;
-                if (D->maxY <= this->position[1]) {
-                    this->position[1] = D->maxY;
+                this->position[1] += D->velocity;
+                if (D->max_y <= this->position[1]) {
+                    this->position[1] = D->max_y;
                     func_80800718_chcactusofstrength(this);
                     this->unk64_16 = 0;
                     func_80101FDC(this, 4);
                 } else {
-                    D->vel -= 5.0f;
-                    if (D->vel <= 0.0f) {
+                    D->velocity -= 5.0f;
+                    if (D->velocity <= 0.0f) {
                         func_80101FDC(this, 1);
                     }
                 }
@@ -165,54 +167,54 @@ void func_80800200_chcactusofstrength(Actor *this)
             break;
         case 3:
             func_80800824_chcactusofstrength(this, -20.0f);
-            this->position[1] += D->vel;
-            if (0 < D->vel) {
+            this->position[1] += D->velocity;
+            if (0 < D->velocity) {
                 dec = 10.0f;
             } else {
                 dec = 5.0f;
             }
-            D->vel -= dec;
-            if (D->vel < -50.0f) {
-                D->vel = -50.0f;
+            D->velocity -= dec;
+            if (D->velocity < -50.0f) {
+                D->velocity = -50.0f;
             }
-            if (this->position[1] <= D->minY) {
-                this->position[1] = D->minY;
+            if (this->position[1] <= D->min_y) {
+                this->position[1] = D->min_y;
                 func_80800780_chcactusofstrength(this);
             }
     }
 }
 
-int func_808003EC_chcactusofstrength(f32 param_0[3])
+int func_808003EC_chcactusofstrength(f32 pos[3])
 {
-    Actor *local_0;
-    local_0 = param_0;
-    *(s32 *) ((char *) local_0 + 0x50) = 0;
-    *(f32 *) ((char *) local_0 + 0x28) = param_0[2];
-    *(f32 *) ((char *) local_0 + 0x2C) = 1200.0f;
-    if (func_800D0A9C(0x1E, 1, local_0)) {
-        func_800FFAB0(local_0);
+    Actor *actor;
+    actor = pos;
+    *(s32 *) ((char *) actor + 0x50) = 0;
+    *(f32 *) ((char *) actor + 0x28) = pos[2];
+    *(f32 *) ((char *) actor + 0x2C) = 1200.0f;
+    if (func_800D0A9C(0x1E, 1, actor)) {
+        func_800FFAB0(actor);
     }
 }
 
-int func_80800440_chcactusofstrength(Actor *param_0, s32 param_1, s32 param_2)
+int func_80800440_chcactusofstrength(Actor *actor, s32 msg, s32 arg)
 {
-    Actor *local_var;
-    switch (param_1) {
+    Actor *found;
+    switch (msg) {
         case 0xA:
-            func_808004F8_chcactusofstrength(param_0, param_2);
+            func_808004F8_chcactusofstrength(actor, arg);
             return 1;
 
         case 0xB:
-            if (param_2 == 2) {
-                func_800FFAB0(param_0);
+            if (arg == 2) {
+                func_800FFAB0(actor);
             }
             func_800F7F98(func_800F54E4(), 0);
             return 3;
 
         case 0x95:
-            local_var = _subaddiefind_entrypoint_0((u8 *) param_0 + 4, 0x13A, -1, 0);
-            if (local_var != 0) {
-                param_0->unk3C = local_var->unk0;
+            found = _subaddiefind_entrypoint_0((u8 *) actor + 4, 0x13A, -1, 0);
+            if (found != 0) {
+                actor->unk3C = found->unk0;
             }
             goto block_11;
         default:
@@ -222,187 +224,188 @@ block_11:
     return 1;
 }
 
-int func_808004F8_chcactusofstrength(param_0, param_1)
-ALSeqPlayer *param_0;
-s32 param_1;
+int func_808004F8_chcactusofstrength(actor, strength)
+ALSeqPlayer *actor;
+s32 strength;
 {
-    f32 local_0;
-    f32 local_1;
-    s32 local_2;
-    s32 *local_3;
+    f32 height;
+    f32 range;
+    s32 old_flags;
+    s32 *flags_ptr;
 
-    local_0 = 0.0f;
-    local_2 = *(s32 *) ((char *) param_0 + 0x50);
-    local_3 = (s32 *) ((char *) param_0 + 0x50);
-    local_1 = *(f32 *) ((char *) param_0 + 0x2C) - *(f32 *) ((char *) param_0 + 0x28);
-    if ((local_2 == 0) || (0, 0, (func_800CEAA8(0) != 0))) {
-        if ((*local_3 & param_1) == 0) {
-            switch (param_1) {
+    height = 0.0f;
+    old_flags = *(s32 *) ((char *) actor + 0x50);
+    flags_ptr = (s32 *) ((char *) actor + 0x50);
+    range = *(f32 *) ((char *) actor + 0x2C) - *(f32 *) ((char *) actor + 0x28);
+    // Matching: the comma expression is needed for the match.
+    if ((old_flags == 0) || (0, 0,(func_800CEAA8(0) != 0))) {
+        if ((*flags_ptr & strength) == 0) {
+            switch (strength) {
                 case 1:
-                    *(s32 *) ((char *) param_0 + 0x50) = *local_3 | 1;
-                    local_0 = local_1 * 0.25f;
+                    *(s32 *) ((char *) actor + 0x50) = *flags_ptr | 1;
+                    height = range * 0.25f;
                     break;
                 case 2:
-                    *(s32 *) ((char *) param_0 + 0x50) = *local_3 | 2;
-                    local_0 = local_1 * 0.25f;
+                    *(s32 *) ((char *) actor + 0x50) = *flags_ptr | 2;
+                    height = range * 0.25f;
                     break;
                 case 4:
-                    *(s32 *) ((char *) param_0 + 0x50) = *local_3 | 4;
-                    local_0 = local_1 * 0.5000100136f;
+                    *(s32 *) ((char *) actor + 0x50) = *flags_ptr | 4;
+                    height = range * 0.5000100136f;
             }
-            if (local_2 == 0) {
+            if (old_flags == 0) {
                 func_800CE8D8(0, 0x41A00000, 0x14);
                 func_800CE88C(0, 1);
-                _subaddieDll_entrypoint_4(param_0, 1);
+                _subaddieDll_entrypoint_4(actor, 1);
             }
-            func_80101FDC(param_0, 2);
-            *(f32 *) ((char *) param_0 + 0x24) = sqrtf(10.0f * local_0);
-            if ((*(s32 *) ((char *) param_0 + 0x50) & 7) != 7) {
+            func_80101FDC(actor, 2);
+            *(f32 *) ((char *) actor + 0x24) = sqrtf(10.0f * height);
+            if ((*(s32 *) ((char *) actor + 0x50) & 7) != 7) {
                 func_800FC618(0xE, -1);
-                *(f32 *) ((char *) param_0 + 0x58) = 0.200000003f;
-                _capod_entrypoint_13(*(s32 **) param_0, 0, 0xAA, 0x800);
+                *(f32 *) ((char *) actor + 0x58) = 0.200000003f;
+                _capod_entrypoint_13(*(s32 **) actor, 0, 0xAA, 0x800);
                 func_800F7F98(func_800F54E4(), 1);
                 return;
             }
             func_800FC618(0x10, -1);
-            _capod_entrypoint_13(*(s32 **) param_0, 0, 2, 0x800);
+            _capod_entrypoint_13(*(s32 **) actor, 0, 2, 0x800);
             func_800F7F98(func_800F54E4(), 1);
         }
     }
 }
 
-void func_808006BC_chcactusofstrength(param_0) Actor *param_0;
+void func_808006BC_chcactusofstrength(actor) Actor *actor;
 {
-    if (*(s32 *) ((char *) param_0 + 0x50)) {
+    if (*(s32 *) ((char *) actor + 0x50)) {
         if (func_800CEAD0(0) != 0) {
             if (func_800CEAA8(0) != 0) {
                 func_800CE88C(0, 0);
             }
-            func_80101FDC(param_0, 3);
+            func_80101FDC(actor, 3);
         }
     }
 }
 
-void func_80800718_chcactusofstrength(param_0) u8 *param_0;
+void func_80800718_chcactusofstrength(actor) u8 *actor;
 {
-    u8 *local_0;
-    u8 *local_1;
+    u8 *target;
+    u8 *found;
 
-    local_1 = func_80106790((*(s32 *) ((s8 *) (param_0) + (0x3C))));
-    local_0 = local_1;
-    func_80101FDC(local_1, 2);
-    func_80103110(local_0, 1);
-    (*(f32 *) ((s8 *) (local_0) + (0x58))) = 2.5f;
-    _mlwave_entrypoint_0(func_80100074(local_0, 1, 0x1C), 0x42C80000, 0x42A00000);
+    found = func_80106790((*(s32 *) ((s8 *) (actor) + (0x3C))));
+    target = found;
+    func_80101FDC(found, 2);
+    func_80103110(target, 1);
+    (*(f32 *) ((s8 *) (target) + (0x58))) = 2.5f;
+    _mlwave_entrypoint_0(func_80100074(target, 1, 0x1C), 0x42C80000, 0x42A00000);
 }
 
-void func_80800780_chcactusofstrength(param_0) Actor *param_0;
+void func_80800780_chcactusofstrength(actor) Actor *actor;
 {
-    func_800B4470(param_0->position, NULL, NULL, 1, 0.5f, 0.0f, 125, 250, 0);
-    func_800C4104(0x417, 1.0f, 0x7D00, param_0->position, 1250.0f, 2500.0f);
-    func_80101FDC(param_0, 1);
-    *(s32 *) &param_0->unk50 = 0;
-    _subaddieDll_entrypoint_4(param_0, 1);
+    func_800B4470(actor->position, NULL, NULL, 1, 0.5f, 0.0f, 125, 250, 0);
+    func_800C4104(0x417, 1.0f, 0x7D00, actor->position, 1250.0f, 2500.0f);
+    func_80101FDC(actor, 1);
+    *(s32 *) &actor->unk50 = 0;
+    _subaddieDll_entrypoint_4(actor, 1);
 }
 
-void func_80800824_chcactusofstrength(Actor *param_0, f32 param_1)
+void func_80800824_chcactusofstrength(Actor *actor, f32 y_offset)
 {
-    s32 local_3;
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    s32 local_4;
+    s32 emitter;
+    f32 jitter[3];
+    f32 origin[3];
+    f32 target[3];
+    s32 i;
 
-    func_800EE7F8(local_1, param_0->position);
-    func_800EE7F8(local_2, local_1);
-    local_2[1] += param_1;
-    local_3 = func_800B53A4(2);
-    for (local_4 = 0; local_4 < 2; local_4++) {
-        func_800EEB9C(local_0, func_800DC178(0.0f, 270.0f), 20.0f);
-        func_800EF04C(local_0, local_1);
-        func_800BABB8(local_3, local_0, local_2, 1.0f, &D_80800DD8_chcactusofstrength);
+    func_800EE7F8(origin, actor->position);
+    func_800EE7F8(target, origin);
+    target[1] += y_offset;
+    emitter = func_800B53A4(2);
+    for (i = 0; i < 2; i++) {
+        func_800EEB9C(jitter, func_800DC178(0.0f, 270.0f), 20.0f);
+        func_800EF04C(jitter, origin);
+        func_800BABB8(emitter, jitter, target, 1.0f, &D_80800DD8_chcactusofstrength);
 
 }
 }
 
-void func_8080094C_chcactusofstrength(param_0) Actor *param_0;
+void func_8080094C_chcactusofstrength(actor) Actor *actor;
 {
-    f32 local_1;
-    f32 local_0;
-    f32 local_2;
+    f32 ratio;
+    f32 pitch;
+    f32 speed;
 
-    if (param_0->unk70_10 == 2 || param_0->unk70_10 == 3) {
-        if (param_0->unk5F == 0) {
-            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+    if (actor->unk70_10 == 2 || actor->unk70_10 == 3) {
+        if (actor->unk5F == 0) {
+            _subaddieaudioloop_entrypoint_4(actor, actor->position, 1,
                                             D_80800E08_chcactusofstrength);
         }
 
-if (param_0->unk5F != 0) {
-    local_2 = mlAbsF(((f32 *) param_0->actorData)[3]);
-    local_1 = func_800F13F0(local_2, 20.0f);
-    local_1 = func_800F0E00(5.0f, local_1);
-    local_0 = func_800F10B4(local_1, 5.0f, 20.0f, 1.1f, 1.4f);
-    func_800C4350(param_0->unk5F, param_0->position, 0);
-    func_800C31DC(param_0->unk5F, local_0);
-    func_800C3BDC(param_0->unk5F);
+if (actor->unk5F != 0) {
+    speed = mlAbsF(((f32 *) actor->actorData)[3]);
+    ratio = func_800F13F0(speed, 20.0f);
+    ratio = func_800F0E00(5.0f, ratio);
+    pitch = func_800F10B4(ratio, 5.0f, 20.0f, 1.1f, 1.4f);
+    func_800C4350(actor->unk5F, actor->position, 0);
+    func_800C31DC(actor->unk5F, pitch);
+    func_800C3BDC(actor->unk5F);
 }
 
 }
 else
 {
-    _subaddieaudioloop_entrypoint_2(param_0);
+    _subaddieaudioloop_entrypoint_2(actor);
 }
 }
 
-void func_80800A44_chcactusofstrength(Actor *param_0)
+void func_80800A44_chcactusofstrength(Actor *actor)
 {
-    f32 local_2;
-    void *local_0;
-    f32 local_1[3];
+    f32 sway;
+    void *wave;
+    f32 spawn_pos[3];
 
-    if (param_0->unk70_10 == 2) {
-        local_0 = (void *) func_80100094(param_0, 1);
-        _mlwave_entrypoint_1(local_0);
-        local_2 = _mlwave_entrypoint_5(local_0, -2e+01f, 20.0f);
-        param_0->rotation[2] = local_2;
+    if (actor->unk70_10 == 2) {
+        wave = (void *) func_80100094(actor, 1);
+        _mlwave_entrypoint_1(wave);
+        sway = _mlwave_entrypoint_5(wave, -2e+01f, 20.0f);
+        actor->rotation[2] = sway;
 
-if (_mlwave_entrypoint_8(local_0, 0.75f) || _mlwave_entrypoint_8(local_0, 0.25f)) {
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800E18_chcactusofstrength);
+if (_mlwave_entrypoint_8(wave, 0.75f) || _mlwave_entrypoint_8(wave, 0.25f)) {
+    _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80800E18_chcactusofstrength);
 }
 
-if (func_800D9078(&param_0->unk58)) {
-    func_800EE7F8(local_1, param_0->actorData);
-    func_800EF1B8(local_1, param_0->rotation[1], -60.0f);
-    local_1[1] -= 40.0f;
-    _chexploder_entrypoint_3(param_0, local_1, 3);
+if (func_800D9078(&actor->unk58)) {
+    func_800EE7F8(spawn_pos, actor->actorData);
+    func_800EF1B8(spawn_pos, actor->rotation[1], -60.0f);
+    spawn_pos[1] -= 40.0f;
+    _chexploder_entrypoint_3(actor, spawn_pos, 3);
 }
 
 }
 }
 
-int func_80800B24_chcactusofstrength(s32 param_0)
+int func_80800B24_chcactusofstrength(s32 actor)
 {
-    s32 *local_1 = (s32 *) ((char *) param_0 + 0x0);
+    s32 *unk_0 = (s32 *) ((char *) actor + 0x0);
     if (func_800D0A9C(0x1E, 1)) {
-        func_800FFAB0(local_1);
+        func_800FFAB0(unk_0);
     } else {
-        func_800EE7F8((s32 *) ((char *) param_0 + 0x18), (s32 *) ((char *) param_0 + 0x4));
-        *(f32 *) ((char *) param_0 + 8) += 225.0f;
+        func_800EE7F8((s32 *) ((char *) actor + 0x18), (s32 *) ((char *) actor + 0x4));
+        *(f32 *) ((char *) actor + 8) += 225.0f;
     }
 }
 
-int func_80800B90_chcactusofstrength(Actor *param_0, s32 param_1, s32 param_2)
+int func_80800B90_chcactusofstrength(Actor *actor, s32 msg, s32 arg)
 {
-    Actor *local_0;
-    switch (param_1) {
+    Actor *found;
+    switch (msg) {
         case 0x90:
-            func_80800C18_chcactusofstrength(param_0);
-            func_800FFAB0(param_0);
+            func_80800C18_chcactusofstrength(actor);
+            func_800FFAB0(actor);
             return 1;
         case 0x95:
-            local_0 = _subaddiefind_entrypoint_0(param_0->position, 0x13B, -1, 0);
-            if (local_0)
-                param_0->unk3C = local_0->unk0;
+            found = _subaddiefind_entrypoint_0(actor->position, 0x13B, -1, 0);
+            if (found)
+                actor->unk3C = found->unk0;
             break;
         default:
             return 0;
@@ -410,15 +413,15 @@ int func_80800B90_chcactusofstrength(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800C18_chcactusofstrength(param_0) Actor *param_0;
+void func_80800C18_chcactusofstrength(actor) Actor *actor;
 {
-    void *local_0;
-    local_0 = func_80106790(*(int **) ((char *) param_0 + 0x3C));
-    func_800BABB8(0, (char *) param_0 + 4, (char *) param_0 + 4, *(f32 *) ((char *) param_0 + 0x38),
+    void *linked;
+    linked = func_80106790(*(int **) ((char *) actor + 0x3C));
+    func_800BABB8(0, (char *) actor + 4, (char *) actor + 4, *(f32 *) ((char *) actor + 0x38),
                   &D_80800E24_chcactusofstrength);
-    _subaddieaudioquick_entrypoint_2(param_0, (char *) param_0 + 4, &D_80800E64_chcactusofstrength);
+    _subaddieaudioquick_entrypoint_2(actor, (char *) actor + 4, &D_80800E64_chcactusofstrength);
     func_800D1000(0x1E, 1, 0, 1, 0);
-    *((int *) (((char *) local_0) + 0x50)) = 0;
+    *((int *) (((char *) linked) + 0x50)) = 0;
     if (func_800CEAA8(0) != 0) {
         func_800CE88C(0, 0);
     }

@@ -13,21 +13,22 @@ void *chpumproomgrill_entrypoint_0()
     return (void *) &D_808000E0_chpumproomgrill;
 }
 
-void func_8080000C_chpumproomgrill(s32 arg0)
+void func_8080000C_chpumproomgrill(s32 unk_0)
 {
 }
 
-s32 func_80800014_chpumproomgrill(Actor *param_0, s32 param_1, s32 param_2)
+// Message 0x40: blown back by the exploder; 0x90: destroyed.
+s32 func_80800014_chpumproomgrill(Actor *actor, s32 msg, s32 data)
 {
-    f32 local_0[3];
-    switch (param_1) {
+    f32 pos[3];
+    switch (msg) {
         case 0x40:
-            func_800EE7F8(local_0, param_0->position);
-            func_800EF1B8(local_0, param_0->rotation[1], -400.0f);
-            _chexploder_entrypoint_3(param_0, local_0, 0xF);
+            func_800EE7F8(pos, actor->position);
+            func_800EF1B8(pos, actor->rotation[1], -400.0f);
+            _chexploder_entrypoint_3(actor, pos, 0xF);
             break;
         case 0x90:
-            func_808000AC_chpumproomgrill(param_0);
+            func_808000AC_chpumproomgrill(actor);
             break;
         default:
             return 0;
@@ -35,9 +36,10 @@ s32 func_80800014_chpumproomgrill(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_808000AC_chpumproomgrill(param_0) u8 *param_0;
+void func_808000AC_chpumproomgrill(actor) u8 *actor;
 {
-    _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, D_80800128_chpumproomgrill);
+    // Destroyed: play sound, set flag 0x162.
+    _subaddieaudioquick_entrypoint_2(actor, actor + 4, D_80800128_chpumproomgrill);
     func_800DA544(0x162);
 }
 

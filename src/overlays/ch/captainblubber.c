@@ -56,220 +56,222 @@ extern void func_800C3F48(s32);
 extern void func_800BBCB8(f32 *, s32, f32, s32, void *);
 void func_80800A1C_chcaptainblubber();
 
-void func_80800000_chcaptainblubber(Actor *param_0)
+void func_80800000_chcaptainblubber(Actor *actor)
 {
-    if (!param_0->unk64_20) {
+    if (!actor->unk64_20) {
         func_8008F8B0();
         func_8008F8D8(1);
-        func_8008F904(func_8010D5DC, param_0->unk0);
+        func_8008F904(func_8010D5DC, actor->unk0);
         func_8008F938(1);
         func_8008F990(D_808016C0_chcaptainblubber, 500.0f);
-        param_0->unk64_20 = 1;
+        actor->unk64_20 = 1;
     }
 }
 
+// Hands the item over to the player.
 s32 func_80800078_chcaptainblubber(Actor *this)
 {
-    s32 local_0 = func_801000D8(this, 0, 0x14);
-    _subaddieitem_entrypoint_0(local_0, 0x4E4, 0x3E8, 3);
-    _subaddieitem_entrypoint_2(local_0);
+    s32 item = func_801000D8(this, 0, 0x14);
+    _subaddieitem_entrypoint_0(item, 0x4E4, 0x3E8, 3);
+    _subaddieitem_entrypoint_2(item);
     func_80102424(this, 5);
 }
 
-void func_808000CC_chcaptainblubber(Actor *param_0)
+void func_808000CC_chcaptainblubber(Actor *actor)
 {
-    void *local_0;
+    void *prop;
     if (_glcutDll_entrypoint_20()) {
-        func_800EE7F8(param_0->position, (f32 *) D_808016CC_chcaptainblubber);
-        func_80102424(param_0, 11);
+        func_800EE7F8(actor->position, (f32 *) D_808016CC_chcaptainblubber);
+        func_80102424(actor, 11);
         return;
     }
-    local_0 = _gccubesearch_entrypoint_1(0x299, param_0->position);
-    if (!local_0) {
-        func_800FFA88(param_0->unk0);
+    prop = _gccubesearch_entrypoint_1(0x299, actor->position);
+    if (!prop) {
+        func_800FFA88(actor->unk0);
         return;
     }
-    _gspropctrl_entrypoint_11(local_0, param_0->actorData);
-    *(f32 *) ((u8 *) param_0 + 0x54) = _gspropctrl_entrypoint_12(local_0);
-    ((BlubberFlags30 *) param_0)->mode = 0;
-    if (func_800EEAD4(param_0->position, (f32 *) param_0->actorData) > 1000000.0f) {
-        func_800FFA88(param_0->unk0);
+    _gspropctrl_entrypoint_11(prop, actor->actorData);
+    *(f32 *) ((u8 *) actor + 0x54) = _gspropctrl_entrypoint_12(prop);
+    ((BlubberFlags30 *) actor)->mode = 0;
+    if (func_800EEAD4(actor->position, (f32 *) actor->actorData) > 1000000.0f) {
+        func_800FFA88(actor->unk0);
         return;
     }
-    *(f32 *) ((u8 *) param_0 + 0x34) = 0.0f;
-    param_0->position[0] += 175.0f;
-    param_0->position[2] += -33.0f;
+    *(f32 *) ((u8 *) actor + 0x34) = 0.0f;
+    actor->position[0] += 175.0f;
+    actor->position[2] += -33.0f;
     if (func_800DA298(0xE0))
-        func_80108B04(param_0, 1);
+        func_80108B04(actor, 1);
 }
 
 void func_8080143C_chcaptainblubber();
 
-void func_808001F0_chcaptainblubber(Actor *param_0)
+void func_808001F0_chcaptainblubber(Actor *actor)
 {
-    f32 local_2[3];
-    char *local_1;
-    s32 local_3;
+    f32 bone_pos[3];
+    char *expression;
+    s32 unk_0;
 
-    func_8010C93C(param_0, param_0->position, 0.75f);
+    func_8010C93C(actor, actor->position, 0.75f);
 
-    if (((BlubberFlags70 *) param_0)->bit3) {
-        local_1 = (char *) func_80100094(param_0, 1);
-        _suexpression_entrypoint_10(local_1, *(s32 *) ((char *) param_0 + 0), 0);
+    if (((BlubberFlags70 *) actor)->bit3) {
+        expression = (char *) func_80100094(actor, 1);
+        _suexpression_entrypoint_10(expression, *(s32 *) ((char *) actor + 0), 0);
     }
 
     func_800D1824(0x4E);
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
         case 2:
-            local_3 = func_800F54E4();
+            unk_0 = func_800F54E4();
 
-            if (func_800F64A4(local_3, 0x201)) {
+            if (func_800F64A4(unk_0, 0x201)) {
                 if (func_800DA298(0xDF)) {
-                    if (_subaddiedialog_entrypoint_6(param_0->position,
-                                                     (s32) *(f32 *) ((char *) param_0 + 0x48),
+                    if (_subaddiedialog_entrypoint_6(actor->position,
+                                                     (s32) *(f32 *) ((char *) actor + 0x48),
                                                      0x12C, 0x3C, 0)) {
-                        func_80800000_chcaptainblubber(param_0);
+                        func_80800000_chcaptainblubber(actor);
                     }
                 } else {
-                    if (_subaddiedialog_entrypoint_3(param_0->position,
-                                                     (s32) *(f32 *) ((char *) param_0 + 0x48),
+                    if (_subaddiedialog_entrypoint_3(actor->position,
+                                                     (s32) *(f32 *) ((char *) actor + 0x48),
                                                      0x12C, 0x3C, 0)) {
-                        func_80800000_chcaptainblubber(param_0);
+                        func_80800000_chcaptainblubber(actor);
                     }
                 }
             } else {
-                if (_subaddiedialog_entrypoint_6(param_0->position,
-                                                 (s32) *(f32 *) ((char *) param_0 + 0x48), 0x12C,
+                if (_subaddiedialog_entrypoint_6(actor->position,
+                                                 (s32) *(f32 *) ((char *) actor + 0x48), 0x12C,
                                                  0x3C, 0)) {
-                    _subaddiedialog_entrypoint_11(*(s32 *) ((char *) param_0 + 0), 0x1208, 0xE,
-                                                  param_0->position, 0x64);
+                    _subaddiedialog_entrypoint_11(*(s32 *) ((char *) actor + 0), 0x1208, 0xE,
+                                                  actor->position, 0x64);
                 }
             }
             break;
 
         case 5:
-            local_1 = (char *) func_80100094(param_0, 0);
+            expression = (char *) func_80100094(actor, 0);
 
-            _subaddieskeleton_entrypoint_0(param_0, 0x1E, local_2);
+            _subaddieskeleton_entrypoint_0(actor, 0x1E, bone_pos);
 
-            if (_subaddieitem_entrypoint_3(param_0, local_2, local_1)) {
-                func_80102424(param_0, 6);
-                func_80100074(param_0, 0, 0);
+            if (_subaddieitem_entrypoint_3(actor, bone_pos, expression)) {
+                func_80102424(actor, 6);
+                func_80100074(actor, 0, 0);
 
-                local_3 = func_800F54E4();
-                func_800F82D4(local_3, 1);
+                unk_0 = func_800F54E4();
+                func_800F82D4(unk_0, 1);
             }
             break;
 
         case 6:
-            if (func_80101DDC(param_0)) {
-                _subaddiedialog_entrypoint_11(*(s32 *) ((char *) param_0 + 0), 0x100B, 0xE,
-                                              param_0->position, 0x64);
+            if (func_80101DDC(actor)) {
+                _subaddiedialog_entrypoint_11(*(s32 *) ((char *) actor + 0), 0x100B, 0xE,
+                                              actor->position, 0x64);
 
-                *(u8 *) ((char *) param_0 + 0x65) &= ~8;
+                *(u8 *) ((char *) actor + 0x65) &= ~8;
 
-                func_80102424(param_0, 7);
+                func_80102424(actor, 7);
 
-                *(f32 *) ((char *) param_0 + 4) -= 175.0f;
-                *(f32 *) ((char *) param_0 + 0xC) -= -33.0f;
+                *(f32 *) ((char *) actor + 4) -= 175.0f;
+                *(f32 *) ((char *) actor + 0xC) -= -33.0f;
             }
             break;
 
         case 7:
-            if (func_80101E14(param_0, 0.999f)) {
-                if (param_0->unk64_19) {
-                    local_3 = func_800F54E4();
-                    func_800F82D4(local_3, 0);
+            if (func_80101E14(actor, 0.999f)) {
+                if (actor->unk64_19) {
+                    unk_0 = func_800F54E4();
+                    func_800F82D4(unk_0, 0);
 
-                    func_80102424(param_0, 8);
-                    func_80105A9C(param_0, 500.0f);
+                    func_80102424(actor, 8);
+                    func_80105A9C(actor, 500.0f);
                 }
             }
             break;
 
         case 8:
-            func_80105834(param_0);
-            func_800A54C0(param_0->position);
+            func_80105834(actor);
+            func_800A54C0(actor->position);
 
-            if (func_80105998(param_0, 0.84f)) {
-                func_80102424(param_0, 9);
+            if (func_80105998(actor, 0.84f)) {
+                func_80102424(actor, 9);
             }
             break;
 
         case 9:
-            func_800A54C0(param_0->position);
+            func_800A54C0(actor->position);
 
-            if (func_80101DDC(param_0)) {
-                func_80102424(param_0, 0xA);
+            if (func_80101DDC(actor)) {
+                func_80102424(actor, 0xA);
             }
             break;
 
         case 10:
-            func_80105834(param_0);
+            func_80105834(actor);
 
-            if (func_80105A5C(param_0)) {
+            if (func_80105A5C(actor)) {
                 _capod_entrypoint_22();
-                func_800FFA88(*(s32 *) ((char *) param_0 + 0));
+                func_800FFA88(*(s32 *) ((char *) actor + 0));
             }
             break;
 
         case 12:
-            if (func_80101DDC(param_0)) {
-                func_80102424(param_0, 0xD);
+            if (func_80101DDC(actor)) {
+                func_80102424(actor, 0xD);
             }
             break;
 
         case 13:
-            if (func_80101DDC(param_0)) {
-                func_80102424(param_0, 0xC);
+            if (func_80101DDC(actor)) {
+                func_80102424(actor, 0xC);
             }
     }
 
-    func_80800A1C_chcaptainblubber(param_0);
-    func_8080143C_chcaptainblubber(param_0);
+    func_80800A1C_chcaptainblubber(actor);
+    func_8080143C_chcaptainblubber(actor);
 }
 
-s32 func_80800580_chcaptainblubber(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800580_chcaptainblubber(Actor *actor, s32 event, s32 arg)
 {
-    Actor *local_0;
-    s32 local_1;
-    s32 local_2;
+    Actor *spawned;
+    s32 dialog_id;
+    s32 dialog_arg;
 
-    switch (param_1) {
+    switch (event) {
         case 0x95:
-            _suexpression_entrypoint_7(param_0, 1, 0x64);
-            _suexpression_entrypoint_12(func_80100094(param_0, 1), 30.0f, 15.0f);
+            _suexpression_entrypoint_7(actor, 1, 0x64);
+            _suexpression_entrypoint_12(func_80100094(actor, 1), 30.0f, 15.0f);
             return 1;
         case 0x2E:
-            switch (((s16 *) &param_2)[0]) {
+            switch (((s16 *) &arg)[0]) {
                 case 0x1006:
                 case 0x1007:
                 case 0x106B:
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1008, 0x4E, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1008, 0x4E, actor->position,
                                                   0x64);
-                    func_80102424(param_0, 2);
+                    func_80102424(actor, 2);
                     return 1;
                 case 0x1008:
-                    if (((s16 *) &param_2)[1] > 0) {
+                    if (((s16 *) &arg)[1] > 0) {
                         if (func_800D1A04(0x4E) <= 0) {
-                            _subaddiedialog_entrypoint_11(param_0->unk0, 0x100A, 0xE,
-                                                          param_0->position, 0x64);
+                            _subaddiedialog_entrypoint_11(actor->unk0, 0x100A, 0xE,
+                                                          actor->position, 0x64);
                             return 1;
                         }
-                        func_80800078_chcaptainblubber(param_0);
+                        func_80800078_chcaptainblubber(actor);
                         return 1;
                     }
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1009, 0xE, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1009, 0xE, actor->position,
                                                   0x64);
                     return 1;
                 case 0x1009:
                 case 0x100A:
-                    func_80102424(param_0, 2);
+                    func_80102424(actor, 2);
                     return 1;
                 case 0x100B:
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x103F, 0x4E, param_0->position,
+                    // Unlocks the reward flag 0xE0.
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x103F, 0x4E, actor->position,
                                                   0x64);
                     func_800DA544(0xE0);
                     func_800D175C(0x4E, -1);
@@ -279,81 +281,82 @@ s32 func_80800580_chcaptainblubber(Actor *param_0, s32 param_1, s32 param_2)
             }
             return 0;
         case 0x30:
-            if (((s16 *) &param_2)[0] == 0x1006 || ((s16 *) &param_2)[0] == 0x1007 ||
-                ((s16 *) &param_2)[0] == 0x1008 || ((s16 *) &param_2)[0] == 0x106B) {
+            if (((s16 *) &arg)[0] == 0x1006 || ((s16 *) &arg)[0] == 0x1007 ||
+                ((s16 *) &arg)[0] == 0x1008 || ((s16 *) &arg)[0] == 0x106B) {
                 return 1;
             }
             return 0;
         case 0xE:
             if (_capod_entrypoint_17(0.3f)) {
-                func_80108B04(param_0, 0);
+                func_80108B04(actor, 0);
             }
             return 3;
         case 0xB:
             _capod_entrypoint_14();
             if (func_800C064C()) {
                 func_800C01A8(0x6B, 0);
-                _capod_entrypoint_21(param_0->unk0, param_0->unk0, 4, 0x2011);
+                _capod_entrypoint_21(actor->unk0, actor->unk0, 4, 0x2011);
             }
             return 4;
         case 0x2F:
-            switch (((s16 *) &param_2)[0]) {
+            switch (((s16 *) &arg)[0]) {
                 case 0x100B:
                     func_800C01A8(0x6B, 0);
-                    _capod_entrypoint_13(param_0->unk0, param_0->unk0, 0, 0x6010);
+                    _capod_entrypoint_13(actor->unk0, actor->unk0, 0, 0x6010);
                     func_800FC6B0(0xE);
                     break;
                 case 0x103F:
-                    param_0->unk64_19 = 1;
+                    actor->unk64_19 = 1;
             }
             return 1;
         case 0x52:
-            _gcdialogcamera_entrypoint_3(&D_808016D8_chcaptainblubber, param_0->scale);
+            _gcdialogcamera_entrypoint_3(&D_808016D8_chcaptainblubber, actor->scale);
             return 1;
         case 0x3D:
-            local_0 =
-                func_80108528(0x1F0, (f32 *) param_0->actorData, (s32) param_0->unk54, &param_0);
-            local_0->unk74_7 = 0x33;
+            spawned =
+                func_80108528(0x1F0, (f32 *) actor->actorData, (s32) actor->unk54, &actor);
+            spawned->unk74_7 = 0x33;
             if (func_800DB9B0()) {
-                _chappearfx_entrypoint_1(local_0, 0x20, 0, 1.0f);
+                _chappearfx_entrypoint_1(spawned, 0x20, 0, 1.0f);
             }
-            if (param_2) {
-                func_800FFA88(param_0->unk0);
+            if (arg) {
+                func_800FFA88(actor->unk0);
             }
             return 1;
         case 0x32:
-            local_2 = 0xE;
-            local_1 = 0;
-            switch (param_0->unk70_10) {
+            dialog_arg = 0xE;
+            dialog_id = 0;
+            switch (actor->unk70_10) {
                 case 1:
                     if (func_800DA298(0xDF)) {
-                        local_1 = 0x1007;
+                        dialog_id = 0x1007;
                     } else {
                         func_800DA544(0xDF);
                         switch (func_800F5410(func_800F54E4())) {
                             case 1:
-                                local_1 = 0x1006;
+                                dialog_id = 0x1006;
                                 break;
                             case 10:
-                                local_1 = 0x106B;
+                                dialog_id = 0x106B;
                         }
                     }
                     break;
                 case 2:
-                    local_1 = 0x1008;
-                    local_2 = 0x4E;
+                    dialog_id = 0x1008;
+                    dialog_arg = 0x4E;
             }
-            if (local_1) {
-                _subaddiedialog_entrypoint_11(param_0->unk0, local_1, local_2, param_0->position,
+            if (dialog_id) {
+                _subaddiedialog_entrypoint_11(actor->unk0, dialog_id, dialog_arg, actor->position,
                                               0x64);
             }
-            param_0->unk64_20 = 0;
+            actor->unk64_20 = 0;
             return 1;
     }
     return 0;
 }
 
-void func_80800A1C_chcaptainblubber(param_0) Actor *param_0;
+// Plays animation-driven sounds and footstep particles.
+void func_80800A1C_chcaptainblubber(actor) Actor *actor;
 {
     extern BlubberTimes4 D_808016E8_chcaptainblubber;
     extern BlubberTimes3 D_808016F8_chcaptainblubber;
@@ -363,139 +366,140 @@ void func_80800A1C_chcaptainblubber(param_0) Actor *param_0;
     extern BlubberTimes3 D_80801738_chcaptainblubber;
     extern u8 D_80801744_chcaptainblubber[];
 
-    s32 local_0;
-    BlubberTimes4 local_1;
-    BlubberTimes3 local_2;
-    BlubberTimes3 local_3;
-    BlubberTimes3 local_4;
-    BlubberTimes7 local_5;
-    BlubberTimes3 local_6;
-    f32 local_8[3];
-    f32 local_7[3];
+    s32 emit_particles;
+    BlubberTimes4 times_a;
+    BlubberTimes3 times_b;
+    BlubberTimes3 times_c;
+    BlubberTimes3 times_d;
+    BlubberTimes7 times_e;
+    BlubberTimes3 times_f;
+    f32 pos_b[3];
+    f32 pos_a[3];
 
-    local_0 = 0;
+    emit_particles = 0;
 
-    switch (D_80801654_chcaptainblubber[param_0->unk70_10].local_0) {
+    switch (D_80801654_chcaptainblubber[actor->unk70_10].local_0) {
         case 0x159:
-            local_1 = D_808016E8_chcaptainblubber;
+            times_a = D_808016E8_chcaptainblubber;
 
-            if (func_80101E4C(param_0, local_1.times)) {
+            if (func_80101E4C(actor, times_a.times)) {
                 func_800C4140(((u16) (u32) (func_800DC178(0.9f, 1.1f) * 1023.0f) << 21) + 0x119564,
-                              (char *) param_0 + 4, 0x04B000FA);
+                              (char *) actor + 4, 0x04B000FA);
 
                 func_800C4140(((u16) (u32) (func_800DC178(0.9f, 1.1f) * 1023.0f) << 21) + 0x119614,
-                              (char *) param_0 + 4, 0x04B000FA);
+                              (char *) actor + 4, 0x04B000FA);
             }
 
-            if (func_80101E14(param_0, 0.22f)) {
-                func_800C4140(0x4CB194E3, (char *) param_0 + 4, 0x04B000FA);
-            } else if (func_80101E14(param_0, 0.4f)) {
-                func_800C4140(0x4CB194E4, (char *) param_0 + 4, 0x04B000FA);
+            if (func_80101E14(actor, 0.22f)) {
+                func_800C4140(0x4CB194E3, (char *) actor + 4, 0x04B000FA);
+            } else if (func_80101E14(actor, 0.4f)) {
+                func_800C4140(0x4CB194E4, (char *) actor + 4, 0x04B000FA);
             }
             break;
 
         case 0x1C0:
-            if (func_80101E14(param_0, 0.14f)) {
-                func_800C4140(0x7FF19612, (char *) param_0 + 4, 0x04B000FA);
-            } else if (func_80101E14(param_0, 0.55f)) {
-                local_0 = 1;
+            if (func_80101E14(actor, 0.14f)) {
+                func_800C4140(0x7FF19612, (char *) actor + 4, 0x04B000FA);
+            } else if (func_80101E14(actor, 0.55f)) {
+                emit_particles = 1;
 
                 func_800C4140(((u16) (u32) (func_800DC178(0.95f, 1.05f) * 1023.0f) << 21) +
                                   0x1B5C50,
-                              (char *) param_0 + 4, 0x04B000FA);
+                              (char *) actor + 4, 0x04B000FA);
             }
             break;
         case 0x15A:
-            local_2 = D_808016F8_chcaptainblubber;
+            times_b = D_808016F8_chcaptainblubber;
 
-            local_3 = D_80801704_chcaptainblubber;
+            times_c = D_80801704_chcaptainblubber;
 
-            if (param_0->unk70_10 == 0xB) {
-                if (func_80101E14(param_0, 0.24f)) {
+            if (actor->unk70_10 == 0xB) {
+                if (func_80101E14(actor, 0.24f)) {
                     func_800C3F48(((u16) (u32) (func_800DC178(0.95f, 1.05f) * 1023.0f) << 21) +
                                   0x09C612);
                 }
-            } else if (func_80101E4C(param_0, local_2.times)) {
-                if (param_0->unk70_10 == 9) {
+            } else if (func_80101E4C(actor, times_b.times)) {
+                if (actor->unk70_10 == 9) {
                     func_800C3F48(0x7FE7D612);
                 } else {
-                    func_800C4140(0x7FE7D612, (char *) param_0 + 4, 0x04B000FA);
+                    func_800C4140(0x7FE7D612, (char *) actor + 4, 0x04B000FA);
                 }
             }
 
-            if (func_80101E4C(param_0, local_3.times)) {
-                local_0 = 1;
+            if (func_80101E4C(actor, times_c.times)) {
+                emit_particles = 1;
 
                 func_800C4140(((u16) (u32) (func_800DC178(0.95f, 1.05f) * 1023.0f) << 21) +
                                   0x177450,
-                              (char *) param_0 + 4, 0x04B000FA);
+                              (char *) actor + 4, 0x04B000FA);
             }
             break;
 
         case 0x1BF:
-            local_4 = D_80801710_chcaptainblubber;
+            times_d = D_80801710_chcaptainblubber;
 
-            if (func_80101E4C(param_0, local_4.times)) {
-                local_0 = 1;
+            if (func_80101E4C(actor, times_d.times)) {
+                emit_particles = 1;
 
                 func_800C4140(((u16) (u32) (func_800DC178(0.95f, 1.05f) * 1023.0f) << 21) +
                                   0x119451,
-                              (char *) param_0 + 4, 0x04B000FA);
+                              (char *) actor + 4, 0x04B000FA);
             }
             break;
 
         case 0x17B:
-            local_5 = D_8080171C_chcaptainblubber;
+            times_e = D_8080171C_chcaptainblubber;
 
-            local_6 = D_80801738_chcaptainblubber;
+            times_f = D_80801738_chcaptainblubber;
 
-            if (func_80101E4C(param_0, local_5.times)) {
-                local_0 = 1;
+            if (func_80101E4C(actor, times_e.times)) {
+                emit_particles = 1;
 
                 func_800C4140((((func_800DC128(0x36B0, 0x3E81) >> 5) & 0x3FF) << 11) +
                                   ((u16) (u32) (func_800DC178(0.95f, 1.05f) * 1023.0f) << 21) +
                                   0x451,
-                              (char *) param_0 + 4, 0x04B000FA);
+                              (char *) actor + 4, 0x04B000FA);
             }
             break;
 
         case 0x16D:
-            if (func_80101E14(param_0, 0.07f)) {
-                func_800C4140(0x7FF19612, (char *) param_0 + 4, 0x04B000FA);
-            } else if (func_80101E14(param_0, 0.9f)) {
-                local_0 = 1;
+            if (func_80101E14(actor, 0.07f)) {
+                func_800C4140(0x7FF19612, (char *) actor + 4, 0x04B000FA);
+            } else if (func_80101E14(actor, 0.9f)) {
+                emit_particles = 1;
 
                 func_800C4140(((u16) (u32) (func_800DC178(0.95f, 1.05f) * 1023.0f) << 21) +
                                   0x09C451,
-                              (char *) param_0 + 4, 0x04B000FA);
+                              (char *) actor + 4, 0x04B000FA);
             }
     }
 
-    if (local_0 != 0) {
-        _subaddieskeleton_entrypoint_0(param_0, 0x14, local_7);
+    if (emit_particles != 0) {
+        _subaddieskeleton_entrypoint_0(actor, 0x14, pos_a);
 
-        _subaddieskeleton_entrypoint_0(param_0, 6, local_8);
+        _subaddieskeleton_entrypoint_0(actor, 6, pos_b);
 
-        func_800BBCB8(local_7, 0, 1.0f, 1, D_80801744_chcaptainblubber);
+        func_800BBCB8(pos_a, 0, 1.0f, 1, D_80801744_chcaptainblubber);
 
-        func_800BBCB8(local_8, 0, 1.0f, 1, D_80801744_chcaptainblubber);
+        func_800BBCB8(pos_b, 0, 1.0f, 1, D_80801744_chcaptainblubber);
     }
 }
 
-void func_8080143C_chcaptainblubber(Actor *param_0)
+// Draws Blubber's shadow.
+void func_8080143C_chcaptainblubber(Actor *actor)
 {
-    f32 local_0[3];
-    if (D_80801654_chcaptainblubber[param_0->unk70_10].local_0 == 0x1C0) {
-        _subaddieskeleton_entrypoint_0(param_0, 3, local_0);
-        local_0[1] = 0.0f;
+    f32 shadow_pos[3];
+    if (D_80801654_chcaptainblubber[actor->unk70_10].local_0 == 0x1C0) {
+        _subaddieskeleton_entrypoint_0(actor, 3, shadow_pos);
+        shadow_pos[1] = 0.0f;
     } else
-        func_800EFA4C(local_0, param_0->position[0], 0.0f, param_0->position[2]);
-    _chbadshad_entrypoint_1(param_0, local_0, param_0->scale + param_0->scale);
+        func_800EFA4C(shadow_pos, actor->position[0], 0.0f, actor->position[2]);
+    _chbadshad_entrypoint_1(actor, shadow_pos, actor->scale + actor->scale);
 }
 
-void func_808014C8_chcaptainblubber(Actor *arg0)
+void func_808014C8_chcaptainblubber(Actor *actor)
 {
-    _suexpression_entrypoint_8(arg0, 1);
+    _suexpression_entrypoint_8(actor, 1);
 }
 
 int chcaptainblubber_entrypoint_0()

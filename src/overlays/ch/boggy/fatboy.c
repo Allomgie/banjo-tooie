@@ -59,6 +59,7 @@ int func_80800FE0_chboggyfatboy();
 extern void func_80101870(), func_80107C2C(), func_80108ED0(), func_8080052C_chboggyfatboy(),
     func_80800978_chboggyfatboy();
 
+// Groggy, Boggy's son, lost in Witchyworld: wants food (item 0x3CA), eats it, then follows the player home like a taxi passenger.
 int chboggyfatboy_entrypoint_0()
 {
     return (int) &D_80801120_chboggyfatboy;
@@ -69,13 +70,13 @@ int chboggyfatboy_entrypoint_1()
     return &D_808011DC_chboggyfatboy;
 }
 
-s32 func_80800018_chboggyfatboy(u8 *param_0)
+s32 func_80800018_chboggyfatboy(u8 *actor)
 {
-    if (!_chboggykids_entrypoint_0(param_0)) {
-        func_800FFAB0(param_0);
+    if (!_chboggykids_entrypoint_0(actor)) {
+        func_800FFAB0(actor);
         return 0;
     }
-    *(f32 *) (param_0 + 0x24) = 270.0f;
+    *(f32 *) (actor + 0x24) = 270.0f;
     if (func_800DA298(0x8E)) {
         return 0;
     } else {
@@ -83,9 +84,9 @@ s32 func_80800018_chboggyfatboy(u8 *param_0)
     }
 }
 
-void func_80800078_chboggyfatboy(s32 param_0)
+void func_80800078_chboggyfatboy(s32 actor)
 {
-    _subaddieitem_entrypoint_0((s32) func_80100094(param_0, 0) + 0xC, 0x3CA, 0x190, 1);
+    _subaddieitem_entrypoint_0((s32) func_80100094(actor, 0) + 0xC, 0x3CA, 0x190, 1);
 }
 
 void func_80800E80_chboggyfatboy();
@@ -94,122 +95,122 @@ void func_80800D84_chboggyfatboy();
 
 void func_80800998_chboggyfatboy();
 
-void func_808000AC_chboggyfatboy(param_0) Actor *param_0;
+void func_808000AC_chboggyfatboy(actor) Actor *actor;
 {
-    u8 *local_0;
-    s32 local_1;
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_5[4];
-    s32 local_4;
+    u8 *fatboy_data;
+    s32 use_deflect;
+    f32 target_pos[3];
+    f32 home_pos[3];
+    f32 unk_0[4];
+    s32 dialog_id;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = 1;
-    if (func_80100094(param_0, 1)) {
-        _suexpression_entrypoint_10(func_80100094(param_0, 1), param_0->unk0, 0);
+    fatboy_data = func_80100094(actor, 0);
+    use_deflect = 1;
+    if (func_80100094(actor, 1)) {
+        _suexpression_entrypoint_10(func_80100094(actor, 1), actor->unk0, 0);
     }
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
             if (func_800DA298(0xBA)) {
                 if (func_800DA298(0xBB)) {
-                    param_0->unk74_30 = 1;
+                    actor->unk74_30 = 1;
                 } else if (func_80800FE0_chboggyfatboy(0x3CA) &&
-                           !func_8010CAC0(param_0->position, 800)) {
-                    param_0->unk74_30 = 0;
+                           !func_8010CAC0(actor->position, 800)) {
+                    actor->unk74_30 = 0;
                 }
             }
-            _subaddiedialog_entrypoint_8(param_0, param_0->position, &D_80801224_chboggyfatboy,
+            _subaddiedialog_entrypoint_8(actor, actor->position, &D_80801224_chboggyfatboy,
                                          D_80801128_chboggyfatboy, 4);
             break;
         case 5:
-            func_800EE88C(local_2, local_0);
-            if (func_801028C4(param_0, local_2, 0.2f, 30.0f, 180.0f) < 40.0f) {
-                func_80102424(param_0, 6);
+            func_800EE88C(target_pos, fatboy_data);
+            if (func_801028C4(actor, target_pos, 0.2f, 30.0f, 180.0f) < 40.0f) {
+                func_80102424(actor, 6);
             }
             break;
         case 6:
-            func_800EE88C(local_3, local_0);
-            param_0->unk54 = func_80102D78(param_0, local_3);
-            func_80102BF8(param_0, 0.2f, 30.0f, 180.0f);
-            func_8010B990(param_0, 0x1005);
-            if (func_800F0064(param_0->position, 100.0f, local_3)) {
-                func_801058C4(param_0, *(s16 *) (local_0 + 6), param_0->actorData[3], 1);
-                func_80105BAC(param_0);
-                func_80102424(param_0, 7);
+            func_800EE88C(home_pos, fatboy_data);
+            actor->unk54 = func_80102D78(actor, home_pos);
+            func_80102BF8(actor, 0.2f, 30.0f, 180.0f);
+            func_8010B990(actor, 0x1005);
+            if (func_800F0064(actor->position, 100.0f, home_pos)) {
+                func_801058C4(actor, *(s16 *) (fatboy_data + 6), actor->actorData[3], 1);
+                func_80105BAC(actor);
+                func_80102424(actor, 7);
             }
             break;
         case 9:
-            local_1 = 0;
+            use_deflect = 0;
             break;
         case 10:
-            param_0->unk54 = func_80102D78(param_0, func_80106790(param_0->unk3C)->position);
-            func_80102BF8(param_0, 0.2f, 30.0f, 180.0f);
-            local_1 = 0;
-            if (_subaddietaxi_entrypoint_1(param_0, 1)) {
+            actor->unk54 = func_80102D78(actor, func_80106790(actor->unk3C)->position);
+            func_80102BF8(actor, 0.2f, 30.0f, 180.0f);
+            use_deflect = 0;
+            if (_subaddietaxi_entrypoint_1(actor, 1)) {
                 func_800DA544(0x8E);
-                func_80102424(param_0, 12);
+                func_80102424(actor, 12);
             }
             break;
         case 11:
-            if (_subaddietaxi_entrypoint_11(param_0, 1) && _subaddietaxi_entrypoint_5(param_0, 1)) {
-                _subaddietaxi_entrypoint_14(param_0, 1);
-                func_80102424(param_0, 13);
+            if (_subaddietaxi_entrypoint_11(actor, 1) && _subaddietaxi_entrypoint_5(actor, 1)) {
+                _subaddietaxi_entrypoint_14(actor, 1);
+                func_80102424(actor, 13);
             }
-            local_1 = _subaddietaxi_entrypoint_12(param_0, 1);
+            use_deflect = _subaddietaxi_entrypoint_12(actor, 1);
             break;
         case 12:
-            param_0->unk54 = func_80102D78(param_0, func_80106790(param_0->unk3C)->position);
-            func_80102BF8(param_0, 0.2f, 30.0f, 180.0f);
-            if (!param_0->unk64_20 &&
-                func_8010108C(func_80106790(param_0->unk3C), 0x31, param_0->unk6C_9) > 0) {
-                param_0->unk64_20 = 1;
+            actor->unk54 = func_80102D78(actor, func_80106790(actor->unk3C)->position);
+            func_80102BF8(actor, 0.2f, 30.0f, 180.0f);
+            if (!actor->unk64_20 &&
+                func_8010108C(func_80106790(actor->unk3C), 0x31, actor->unk6C_9) > 0) {
+                actor->unk64_20 = 1;
             }
             break;
         case 13:
-            if (_subaddietaxi_entrypoint_15(param_0, 1)) {
-                func_80102424(param_0, 1);
-                func_8010A590(param_0);
+            if (_subaddietaxi_entrypoint_15(actor, 1)) {
+                func_80102424(actor, 1);
+                func_8010A590(actor);
             }
             break;
         case 14:
-            func_80800D84_chboggyfatboy(param_0);
-            if (func_80101DDC(param_0)) {
-                func_80800998_chboggyfatboy(param_0);
-                func_80102424(param_0, 5);
-                _subaddieDll_entrypoint_4(param_0, 1);
+            func_80800D84_chboggyfatboy(actor);
+            if (func_80101DDC(actor)) {
+                func_80800998_chboggyfatboy(actor);
+                func_80102424(actor, 5);
+                _subaddieDll_entrypoint_4(actor, 1);
             }
             break;
         case 15:
-            if (_subaddieitem_entrypoint_3(param_0, 0, local_0 + 0xC)) {
-                local_4 = func_800F64A4(func_800F54E4(), 0x200) ? 0x1111 : 0x1095;
+            if (_subaddieitem_entrypoint_3(actor, 0, fatboy_data + 0xC)) {
+                dialog_id = func_800F64A4(func_800F54E4(), 0x200) ? 0x1111 : 0x1095;
                 func_800DA544(0xBB);
-                _subaddiedialog_entrypoint_11(param_0->unk0, local_4, 0xE, param_0->position, 0x3B);
-                func_80102424(param_0, 4);
+                _subaddiedialog_entrypoint_11(actor->unk0, dialog_id, 0xE, actor->position, 0x3B);
+                func_80102424(actor, 4);
             }
     }
-    if ((*(u32 *) (local_0 + 8) >> 31) && func_800D9154((f32 *) (local_0 + 0x20), 1.4f)) {
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80801148_chboggyfatboy);
+    if ((*(u32 *) (fatboy_data + 8) >> 31) && func_800D9154((f32 *) (fatboy_data + 0x20), 1.4f)) {
+        _subaddieaudioquick_entrypoint_2(actor, actor->position, &D_80801148_chboggyfatboy);
     }
-    func_80800E80_chboggyfatboy(param_0);
-    _subaddietaxi_entrypoint_9(param_0, 1);
-    if (local_1) {
-        _sudeflect_entrypoint_1(param_0->position, 100.0f, 0.0f, 70.0f, 10);
+    func_80800E80_chboggyfatboy(actor);
+    _subaddietaxi_entrypoint_9(actor, 1);
+    if (use_deflect) {
+        _sudeflect_entrypoint_1(actor->position, 100.0f, 0.0f, 70.0f, 10);
     }
 }
 
-void func_8080052C_chboggyfatboy(param_0) s32 param_0;
+void func_8080052C_chboggyfatboy(actor) s32 actor;
 {
-    s32 local_0 = param_0;
+    s32 actor_addr = actor;
     func_80105834();
-    func_80105230(local_0, 0);
-    _sudeflect_entrypoint_0(local_0 + 4, 0x42C80000, 0x42480000, 10);
-    if (func_80105A5C(local_0) != 0) {
-        if ((local_0 && local_0) && local_0) {
+    func_80105230(actor_addr, 0);
+    _sudeflect_entrypoint_0(actor_addr + 4, 0x42C80000, 0x42480000, 10);
+    if (func_80105A5C(actor_addr) != 0) {
+        if ((actor_addr && actor_addr) && actor_addr) {
         }
         if (func_800DA980(0x8C, 3) != 3) {
             func_80101180(0x13F, 0x4F, 0);
         }
-        func_800FFAB0(local_0);
+        func_800FFAB0(actor_addr);
     }
 }
 
@@ -223,36 +224,36 @@ void func_808009E0_chboggyfatboy();
 
 void func_80800808_chboggyfatboy();
 
-s32 func_808005AC_chboggyfatboy(param_0, param_1, param_2)
-Actor *param_0;
-s32 param_1;
-s32 param_2;
+s32 func_808005AC_chboggyfatboy(actor, msg, arg)
+Actor *actor;
+s32 msg;
+s32 arg;
 {
-    f32 local_0[1];
-    s32 pad_x;
-    switch (param_1) {
+    f32 unk_0[1];
+    s32 event_arg;
+    switch (msg) {
         case 0x3E:
-            func_80800AF0_chboggyfatboy(param_0, param_2);
+            func_80800AF0_chboggyfatboy(actor, arg);
             break;
         case 0x44:
-            func_80800C5C_chboggyfatboy(param_0, param_2);
+            func_80800C5C_chboggyfatboy(actor, arg);
             break;
         case 0x52:
-            _gcdialogcamera_entrypoint_3((u32 *) D_80801234_chboggyfatboy, param_0->scale);
+            _gcdialogcamera_entrypoint_3((u32 *) D_80801234_chboggyfatboy, actor->scale);
             break;
         case 0x29:
-            func_80800F40_chboggyfatboy(param_0);
+            func_80800F40_chboggyfatboy(actor);
             break;
         case 0x95:
-            func_808009E0_chboggyfatboy(param_0);
-            param_0->unk74_30 = func_800DA298(0xBA);
+            func_808009E0_chboggyfatboy(actor);
+            actor->unk74_30 = func_800DA298(0xBA);
             break;
         case 0x2E:
-            func_80800808_chboggyfatboy(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_80800808_chboggyfatboy(actor, ((s16 *) &arg)[0], ((s16 *) &arg)[1]);
             break;
         case 0xB8:
-            pad_x = param_2 & 0xFFFF;
-            switch (pad_x) {
+            event_arg = arg & 0xFFFF;
+            switch (event_arg) {
                 case 1:
                     if (func_800DA298(0xBA)) {
                         return func_80800FE0_chboggyfatboy(0x3CA) ? 0x1093 : 0x1092;
@@ -265,14 +266,14 @@ s32 param_2;
             }
             break;
         case 0x2D:
-            _subaddieaudioquick_entrypoint_2(param_0, &param_0->position[0],
+            _subaddieaudioquick_entrypoint_2(actor, &actor->position[0],
                                              D_80801244_chboggyfatboy);
-            func_800C9C70(1.0f, 0x525, 1.05f, 22000, &param_0->position[0], 200.0f, 3000.0f);
+            func_800C9C70(1.0f, 0x525, 1.05f, 22000, &actor->position[0], 200.0f, 3000.0f);
             break;
         case 0x30:
             return 3 - func_800DA980(0x8C, 3);
         case 0x2A:
-            func_80800FAC_chboggyfatboy(param_0);
+            func_80800FAC_chboggyfatboy(actor);
             break;
         default:
             return 0;
@@ -280,40 +281,40 @@ s32 param_2;
     return 1;
 }
 
-void func_80800808_chboggyfatboy(Actor *param_0, s32 param_1, s32 param_2)
+void func_80800808_chboggyfatboy(Actor *actor, s32 dialog_id, s32 arg)
 {
-    u8 *local_0;
+    u8 *fatboy_data;
 
-    local_0 = func_80100094(param_0, 0);
-    switch (param_1) {
+    fatboy_data = func_80100094(actor, 0);
+    switch (dialog_id) {
         case 0x1093:
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x108B, 0x4E, param_0->position, 0x3D);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0x108B, 0x4E, actor->position, 0x3D);
             break;
         case 0x1095:
         case 0x1111:
-            func_80102424(param_0, 1);
+            func_80102424(actor, 1);
             break;
         case 0x108B:
-            if (param_2 > 0) {
-                func_80102424(param_0, 0xF);
-                _subaddieitem_entrypoint_2(local_0 + 0xC);
+            if (arg > 0) {
+                func_80102424(actor, 0xF);
+                _subaddieitem_entrypoint_2(fatboy_data + 0xC);
             } else {
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1094, 0xE, param_0->position, 0x3D);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x1094, 0xE, actor->position, 0x3D);
             }
             break;
         default:
-            if (_subaddiedialog_entrypoint_9(param_0, param_1, D_80801128_chboggyfatboy, 4) == 1) {
+            if (_subaddiedialog_entrypoint_9(actor, dialog_id, D_80801128_chboggyfatboy, 4) == 1) {
                 func_800DA544(0xBA);
                 if (func_80800FE0_chboggyfatboy(0x3CA)) {
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1093, 0xE, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1093, 0xE, actor->position,
                                                   0x3D);
                 } else {
                     func_800C01A8(0x64, 0);
                     func_800C0850();
-                    func_80102424(param_0, 1);
+                    func_80102424(actor, 1);
                 }
             } else
-                func_80102424(param_0, 1);
+                func_80102424(actor, 1);
     }
 }
 
@@ -322,43 +323,43 @@ void func_80800978_chboggyfatboy(Actor *arg0)
     func_80800FAC_chboggyfatboy(arg0);
 }
 
-void func_80800998_chboggyfatboy(Actor *param_0)
+void func_80800998_chboggyfatboy(Actor *actor)
 {
-    u8 *local_0 = (u8 *) func_80100094(param_0, 0);
-    u8 *local_1 = (u8 *) func_80106790(*(void **) ((u8 *) param_0 + 0x3C));
-    *(s16 *) (local_0 + 6) = *(s32 *) (local_1 + 0x2C);
-    func_800EE940(local_0, local_1 + 0x18);
+    u8 *data = (u8 *) func_80100094(actor, 0);
+    u8 *boggy = (u8 *) func_80106790(*(void **) ((u8 *) actor + 0x3C));
+    *(s16 *) (data + 6) = *(s32 *) (boggy + 0x2C);
+    func_800EE940(data, boggy + 0x18);
 }
 
-void func_808009E0_chboggyfatboy(Actor *param_0)
+void func_808009E0_chboggyfatboy(Actor *actor)
 {
-    Actor *local_0;
-    if (!func_80800018_chboggyfatboy(param_0)) {
-        func_800FFAB0(param_0);
+    Actor *boggy;
+    if (!func_80800018_chboggyfatboy(actor)) {
+        func_800FFAB0(actor);
         return;
     }
-    if (_subaddietaxi_entrypoint_13(param_0, 1, _chboggyfatboy_entrypoint_0, 7)) {
-        func_80800078_chboggyfatboy(param_0);
-        func_80102FDC(param_0, 1.0f);
+    if (_subaddietaxi_entrypoint_13(actor, 1, _chboggyfatboy_entrypoint_0, 7)) {
+        func_80800078_chboggyfatboy(actor);
+        func_80102FDC(actor, 1.0f);
     } else {
-        if (((BoggyFatBoyFlags *) param_0)->local_0) {
-            func_800FFAB0(param_0);
+        if (((BoggyFatBoyFlags *) actor)->local_0) {
+            func_800FFAB0(actor);
             return;
         }
-        func_80800078_chboggyfatboy(param_0);
-        func_80102FDC(param_0, 1.0f);
+        func_80800078_chboggyfatboy(actor);
+        func_80102FDC(actor, 1.0f);
     }
-    local_0 = _subaddiefind_entrypoint_2(0x13F, 0);
-    param_0->unk3C = local_0 ? local_0->unk0 : 0;
+    boggy = _subaddiefind_entrypoint_2(0x13F, 0);
+    actor->unk3C = boggy ? boggy->unk0 : 0;
     if (func_80800FE0_chboggyfatboy(0x3CA) && !func_800DA298(0xBB))
         func_800DA524(0xBA);
-    func_801088A8(param_0, 0x10002000, 0, 0);
+    func_801088A8(actor, 0x10002000, 0, 0);
 }
 
-s32 func_80800AF0_chboggyfatboy(s32 param_0, s32 param_1)
+s32 func_80800AF0_chboggyfatboy(s32 actor, s32 unk_0)
 {
-    if (func_800DA298(0xBB) && _subaddietaxi_entrypoint_2(param_0, 1)) {
-        func_80102424(param_0, 0x9);
+    if (func_800DA298(0xBB) && _subaddietaxi_entrypoint_2(actor, 1)) {
+        func_80102424(actor, 0x9);
     }
 }
 
@@ -371,15 +372,15 @@ void func_80800B38_chboggyfatboy(s32 param_0, u8 *param_1, s32 param_2, s32 para
     }
 }
 
-s32 func_80800BA0_chboggyfatboy(s32 param_0, s32 param_1, f32 *param_2)
+s32 func_80800BA0_chboggyfatboy(s32 unk_0, s32 unk_1, f32 *out_pos)
 {
-    Actor *local_0;
+    Actor *boggy;
 
-    local_0 = _subaddiefind_entrypoint_2(0x13F, 0);
-    if (local_0 != NULL) {
-        if (func_800CBC3C(param_1) + 1 == (*(u32 *) ((u8 *) local_0 + 0x70) >> 25)) {
-            func_800EE7F8(param_2, local_0->position);
-            func_800EF1B8(param_2, local_0->rotation[1] - 45.0f, 180.0f);
+    boggy = _subaddiefind_entrypoint_2(0x13F, 0);
+    if (boggy != NULL) {
+        if (func_800CBC3C(unk_1) + 1 == (*(u32 *) ((u8 *) boggy + 0x70) >> 25)) {
+            func_800EE7F8(out_pos, boggy->position);
+            func_800EF1B8(out_pos, boggy->rotation[1] - 45.0f, 180.0f);
             return 2;
         }
     }
@@ -387,69 +388,69 @@ s32 func_80800BA0_chboggyfatboy(s32 param_0, s32 param_1, f32 *param_2)
     return 1;
 }
 
-void func_80800C5C_chboggyfatboy(Actor *param_0, s32 param_1)
+void func_80800C5C_chboggyfatboy(Actor *actor, s32 unk_0)
 {
-    f32 local_0[3];
-    Actor *local_1;
+    f32 pos[3];
+    Actor *boggy;
 
-    func_80102FDC(param_0, 1.0f);
-    switch (func_800CB3E0(param_1)) {
+    func_80102FDC(actor, 1.0f);
+    switch (func_800CB3E0(unk_0)) {
         case 1:
-            func_80102424(param_0, 1);
-            func_8010A590(param_0);
+            func_80102424(actor, 1);
+            func_8010A590(actor);
             break;
         case 3:
-            _subaddietaxi_entrypoint_10(param_0, param_1, 11);
+            _subaddietaxi_entrypoint_10(actor, unk_0, 11);
             break;
         case 4:
-            local_1 = _subaddiefind_entrypoint_2(0x13F, 0);
-            func_800EE7F8(local_0, local_1->position);
-            func_800EF1B8(local_0, local_1->rotation[1] - 45.0f, 180.0f);
-            func_8010A570(param_0);
-            _subaddietaxi_entrypoint_0(param_0, param_1, local_0, 10);
+            boggy = _subaddiefind_entrypoint_2(0x13F, 0);
+            func_800EE7F8(pos, boggy->position);
+            func_800EF1B8(pos, boggy->rotation[1] - 45.0f, 180.0f);
+            func_8010A570(actor);
+            _subaddietaxi_entrypoint_0(actor, unk_0, pos, 10);
             break;
         case 6:
             _subaddiefind_entrypoint_2(0x13F, 0);
-            func_80102424(param_0, 12);
-            func_8010A570(param_0);
-            param_0->unk64_20 = 1;
+            func_80102424(actor, 12);
+            func_8010A570(actor);
+            actor->unk64_20 = 1;
     }
 }
 
-void func_80800D84_chboggyfatboy(Actor *param_0)
+void func_80800D84_chboggyfatboy(Actor *actor)
 {
-    BoggyMealState *local_0;
-    f32 local_1[3];
-    f32 local_2[3];
+    BoggyMealState *meal_state;
+    f32 start_pos[3];
+    f32 end_pos[3];
 
-    local_0 = func_80100094(param_0, 0);
-    if (func_80101E14(param_0, 0.8f)) {
-        local_0->local_0 = 1;
+    meal_state = func_80100094(actor, 0);
+    if (func_80101E14(actor, 0.8f)) {
+        meal_state->local_0 = 1;
     }
-    if (_subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801250_chboggyfatboy,
+    if (_subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801250_chboggyfatboy,
                                          D_80801290_chboggyfatboy) ||
-        _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_8080125C_chboggyfatboy,
+        _subaddieaudioquick_entrypoint_3(actor, actor->position, D_8080125C_chboggyfatboy,
                                          0.64f)) {
-        func_800EE7F8(local_1, param_0->position);
-        local_1[1] += 120.0f;
-        func_800EE7F8(local_2, local_1);
-        local_2[1] -= 30.0f;
-        func_800BBCB8(local_1, local_2, 1.0f, 8, D_80801264_chboggyfatboy);
+        func_800EE7F8(start_pos, actor->position);
+        start_pos[1] += 120.0f;
+        func_800EE7F8(end_pos, start_pos);
+        end_pos[1] -= 30.0f;
+        func_800BBCB8(start_pos, end_pos, 1.0f, 8, D_80801264_chboggyfatboy);
     }
 }
 
-void func_80800E80_chboggyfatboy(Actor *param_0)
+void func_80800E80_chboggyfatboy(Actor *actor)
 {
-    if (func_801022E4(param_0) == 0x246) {
-        if (func_80101E14(param_0, 0.0f)) {
+    if (func_801022E4(actor) == 0x246) {
+        if (func_80101E14(actor, 0.0f)) {
             func_800C4B7C(D_808012A0_chboggyfatboy[func_800DC128(0, 5)]);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808012BC_chboggyfatboy);
+            _subaddieaudioquick_entrypoint_2(actor, actor->position, D_808012BC_chboggyfatboy);
         }
-        if (func_80101E14(param_0, 0.5f)) {
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808012CC_chboggyfatboy);
+        if (func_80101E14(actor, 0.5f)) {
+            _subaddieaudioquick_entrypoint_2(actor, actor->position, D_808012CC_chboggyfatboy);
         }
-        if (func_80101E4C(param_0, D_808012AC_chboggyfatboy)) {
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808012E8_chboggyfatboy);
+        if (func_80101E4C(actor, D_808012AC_chboggyfatboy)) {
+            _subaddieaudioquick_entrypoint_2(actor, actor->position, D_808012E8_chboggyfatboy);
         }
     }
 }
@@ -470,16 +471,16 @@ void func_80800FAC_chboggyfatboy(Actor *arg0)
     }
 }
 
-int func_80800FE0_chboggyfatboy(param_0)
-s32 param_0;
+int func_80800FE0_chboggyfatboy(item_id)
+s32 item_id;
 {
-    s32 local_0;
-    local_0 = func_800F54E4();
-    if (!func_800F64A4(local_0 | 0, 0x201)) {
+    s32 inventory;
+    inventory = func_800F54E4();
+    if (!func_800F64A4(inventory | 0, 0x201)) {
         return 0;
     }
     {
-        return 0 < func_800F640C(local_0, param_0) | 0;
+        return 0 < func_800F640C(inventory, item_id) | 0;
     }
 }
 

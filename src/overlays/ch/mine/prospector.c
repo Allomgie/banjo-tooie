@@ -166,15 +166,15 @@ void func_80800024_chmineprospector(Actor *param_0)
 
 void func_8080029C_chmineprospector(param_0) s32 param_0;
 {
-    f32 sp28[6];
-    f32 *sp24;
+    f32 marker_pos[6];
+    f32 *state;
 
-    sp24 = func_80100094(param_0, 0);
+    state = func_80100094(param_0, 0);
     func_800EE7F8(param_0 + 0x28, param_0 + 4);
 
-if (_subaddiemarker_entrypoint_0(param_0, 0x152, sp28, 1) != 0) {
-    func_800EE7F8(sp24, sp28);
-    sp24[3] = sp28[4];
+if (_subaddiemarker_entrypoint_0(param_0, 0x152, marker_pos, 1) != 0) {
+    func_800EE7F8(state, marker_pos);
+    state[3] = marker_pos[4];
 }
 
 if (_glcutDll_entrypoint_20() != 0) {
@@ -385,13 +385,13 @@ return 1;
 
 void func_80800970_chmineprospector(param_0) s32 param_0;
 {
-    void *sp1C;
+    void *state;
 
-    sp1C = func_80100094(param_0, 0);
+    state = func_80100094(param_0, 0);
 
-if (*(s32 *) ((char *) sp1C + 0x10) != 0) {
+if (*(s32 *) ((char *) state + 0x10) != 0) {
     _capod_entrypoint_3(0);
-    *(s32 *) ((char *) sp1C + 0x10) = 0;
+    *(s32 *) ((char *) state + 0x10) = 0;
 }
 
 }
@@ -524,6 +524,9 @@ s32 func_80800E00_chmineprospector(this) Actor *this;
     }
 }
 
+// TU-NOTE: .data is defined in this file; tables holding function pointers must be in the same unit,
+// otherwise IDO's assembler schedules those functions differently.
+// D_8080111A_chmineprospector is a label inside D_8080110C_chmineprospector (see undefined_syms.us.txt).
 extern void func_80102EC0();
 u8 D_80800F20_chmineprospector[56] = {
     0x0, 0x0,  0x0, 0x1,  0xF, 0x8B, 0x1,  0x0,  0x0,  0x0,  0x0,  0x1, 0xF, 0x8D,

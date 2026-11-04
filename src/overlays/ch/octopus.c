@@ -19,8 +19,8 @@ extern void func_80102FDC(u8 *, f32);
 extern s32 _subaddiesect_entrypoint_1();
 extern void _choctopus_entrypoint_1(void);
 typedef union {
-    s32 local_0;
-    void *local_1;
+    s32 value;
+    void *ptr;
 } OctopusEventPayload;
 extern Actor *func_80106790(Unk80132ED0 *);
 extern f32 func_80103F38(Actor *, f32 *);
@@ -37,52 +37,53 @@ int choctopus_entrypoint_0()
     return (int) &D_808008F4_choctopus;
 }
 
-void func_8080000C_choctopus(u8 *param_0)
+void func_8080000C_choctopus(u8 *actor)
 {
-    func_80102FDC(param_0, *(f32 *) (param_0 + 0x38) * 0.8f);
-    *(s32 *) (param_0 + 0x30) = _subaddiesect_entrypoint_1(param_0);
+    func_80102FDC(actor, *(f32 *) (actor + 0x38) * 0.8f);
+    *(s32 *) (actor + 0x30) = _subaddiesect_entrypoint_1(actor);
 }
 
-void func_80800054_choctopus(Actor *param_0)
+// Update: hit -> fade out (1.25 s), hidden (8 s), fade back in (3.75 s).
+void func_80800054_choctopus(Actor *actor)
 {
-    void *local_0;
-    f32 *local_1;
-    local_0 = func_80100094(param_0, 1);
-    _subaddiesect_entrypoint_0(param_0, param_0->actorData[6], 2);
-    if (local_0) {
-        _suexpression_entrypoint_10(local_0, param_0->unk0, 0);
+    void *expression;
+    f32 *pos;
+    expression = func_80100094(actor, 1);
+    _subaddiesect_entrypoint_0(actor, actor->actorData[6], 2);
+    if (expression) {
+        _suexpression_entrypoint_10(expression, actor->unk0, 0);
     }
-    local_1 = param_0->position;
-    _subaddieaudioloop_entrypoint_5(param_0, local_1, param_0->unk70_10 == 1, 0x1194,
+    pos = actor->position;
+    _subaddieaudioloop_entrypoint_5(actor, pos, actor->unk70_10 == 1, 0x1194,
                                     &D_8080093C_choctopus);
-    switch ((int) param_0->unk70_10) {
+    switch ((int) actor->unk70_10) {
         case 1:
             break;
         case 2:
-            func_80101CDC(param_0,
-                          func_800F10B4(param_0->unk58, 0.0f, 1.25f, 30.0f, D_808008D4_choctopus));
-            if (func_800D9078(&param_0->unk58)) {
-                func_80102424(param_0, 3);
-                param_0->unk58 = 8.0f;
+            func_80101CDC(actor,
+                          func_800F10B4(actor->unk58, 0.0f, 1.25f, 30.0f, D_808008D4_choctopus));
+            if (func_800D9078(&actor->unk58)) {
+                func_80102424(actor, 3);
+                actor->unk58 = 8.0f;
             }
             break;
         case 3:
-            if (func_800D9078(&param_0->unk58)) {
-                _subaddieaudioquick_entrypoint_2(param_0, local_1, (s32 *) D_808008C0_choctopus);
-                func_80102424(param_0, 4);
-                func_80101CDC(param_0, 30.0f);
-                param_0->unk58 = 3.75f;
+            if (func_800D9078(&actor->unk58)) {
+                _subaddieaudioquick_entrypoint_2(actor, pos, (s32 *) D_808008C0_choctopus);
+                func_80102424(actor, 4);
+                func_80101CDC(actor, 30.0f);
+                actor->unk58 = 3.75f;
             }
             break;
         case 4:
-            func_80101CDC(param_0,
-                          func_800F10B4(param_0->unk58, 0.0f, 3.75f, D_808008D4_choctopus, 30.0f));
-            if (func_800D9078(&param_0->unk58)) {
-                func_80102424(param_0, 1);
-                if (local_0) {
-                    _suexpression_entrypoint_18(local_0, 0);
+            func_80101CDC(actor,
+                          func_800F10B4(actor->unk58, 0.0f, 3.75f, D_808008D4_choctopus, 30.0f));
+            if (func_800D9078(&actor->unk58)) {
+                func_80102424(actor, 1);
+                if (expression) {
+                    _suexpression_entrypoint_18(expression, 0);
                 }
-                _subaddieDll_entrypoint_4(param_0, 0);
+                _subaddieDll_entrypoint_4(actor, 0);
             }
     }
 }
@@ -94,55 +95,56 @@ void func_80800210_choctopus()
     func_808007E4_choctopus();
 }
 
-void func_80800230_choctopus(Actor *param_0, s32 param_1)
+// Tints the model towards the background colour by the current fade amount.
+void func_80800230_choctopus(Actor *actor, s32 unk_1)
 {
-    s32 local_1;
-    s32 local_0[3];
-    func_801015D0(param_0);
-    switch (param_0->unk70_10) {
+    s32 fade;
+    s32 color[3];
+    func_801015D0(actor);
+    switch (actor->unk70_10) {
         case 2:
-            local_1 = (s32) func_800F10B4(param_0->unk58, 0.0f, 1.25f, 255.0f, 0);
+            fade = (s32) func_800F10B4(actor->unk58, 0.0f, 1.25f, 255.0f, 0);
             break;
         case 3:
-            local_1 = 255;
+            fade = 255;
             break;
         case 4:
-            local_1 = (s32) func_800F10B4(param_0->unk58, 0.0f, 3.75f, 0, 255.0f);
+            fade = (s32) func_800F10B4(actor->unk58, 0.0f, 3.75f, 0, 255.0f);
             break;
         default:
-            local_1 = 0;
+            fade = 0;
             break;
     }
-    func_800F3214(local_0, D_80800950_choctopus[param_0->unk74_7 - 50], D_80800980_choctopus,
-                  (f32) local_1 / 255.0f);
-    func_800DF5D8(local_0[0], local_0[1], local_0[2], 255);
+    func_800F3214(color, D_80800950_choctopus[actor->unk74_7 - 50], D_80800980_choctopus,
+                  (f32) fade / 255.0f);
+    func_800DF5D8(color[0], color[1], color[2], 255);
 }
 
 void func_80800790_choctopus();
 
 void func_80800428_choctopus();
 
-s32 func_80800348_choctopus(Actor *param_0, s32 param_1, OctopusEventPayload param_2)
+s32 func_80800348_choctopus(Actor *actor, s32 event, OctopusEventPayload payload)
 {
-    switch (param_1) {
+    switch (event) {
         case 0x40:
-            func_80800428_choctopus(param_0, param_2.local_0);
+            func_80800428_choctopus(actor, payload.value);
             break;
         case 0x1F:
-            func_80800230_choctopus(param_0, param_2.local_0);
+            func_80800230_choctopus(actor, payload.value);
             break;
         case 0x29:
-            func_80800790_choctopus(param_0);
+            func_80800790_choctopus(actor);
             break;
         case 0x2A:
-            func_808007E4_choctopus(param_0);
+            func_808007E4_choctopus(actor);
             break;
         case 0x1C:
-            if (param_0->unk70_10 == 1)
+            if (actor->unk70_10 == 1)
                 return 2;
             return 1;
         case 0x95:
-            _subaddiecustomhits_entrypoint_0(param_0, _choctopus_entrypoint_1);
+            _subaddiecustomhits_entrypoint_0(actor, _choctopus_entrypoint_1);
             break;
         default:
             return 0;
@@ -150,85 +152,86 @@ s32 func_80800348_choctopus(Actor *param_0, s32 param_1, OctopusEventPayload par
     return 1;
 }
 
-void func_80800428_choctopus(Actor *param_0, s32 param_1)
+// Hit handler: only variant 1 or collision mode 5 starts the camouflage.
+void func_80800428_choctopus(Actor *actor, s32 unk_1)
 {
-    s32 local_0;
-    s32 local_5;
-    u8 *local_4;
-    local_0 = (*(s32 *) ((char *) param_0 + 0x6C) & 0x1FF) == 1;
-    local_5 = func_800CB854(0) == 5;
-    if ((local_0 != 0) || (local_5 != 0)) {
-        local_4 = func_80100094(param_0, 1);
-        switch ((u32) *(u16 *) ((char *) param_0 + 0x72) >> 0xA) {
+    s32 is_variant_1;
+    s32 is_mode_5;
+    u8 *expression;
+    is_variant_1 = (*(s32 *) ((char *) actor + 0x6C) & 0x1FF) == 1;
+    is_mode_5 = func_800CB854(0) == 5;
+    if ((is_variant_1 != 0) || (is_mode_5 != 0)) {
+        expression = func_80100094(actor, 1);
+        switch ((u32) *(u16 *) ((char *) actor + 0x72) >> 0xA) {
             case 1:
-                func_80102424(param_0, 2, local_4);
-                _subaddieDll_entrypoint_4(param_0, 1);
-                *(f32 *) ((char *) param_0 + 0x58) = 1.25f;
-                if (local_4 != 0) {
-                    _suexpression_entrypoint_18(local_4, 2);
+                func_80102424(actor, 2, expression);
+                _subaddieDll_entrypoint_4(actor, 1);
+                *(f32 *) ((char *) actor + 0x58) = 1.25f;
+                if (expression != 0) {
+                    _suexpression_entrypoint_18(expression, 2);
                 }
-                _subaddieaudioquick_entrypoint_2(param_0, (u8 *) param_0 + 4,
+                _subaddieaudioquick_entrypoint_2(actor, (u8 *) actor + 4,
                                                  &D_808008C0_choctopus);
-                if (local_5 == 0) {
-                    _subaddieaudioquick_entrypoint_2(param_0, (u8 *) param_0 + 4,
+                if (is_mode_5 == 0) {
+                    _subaddieaudioquick_entrypoint_2(actor, (u8 *) actor + 4,
                                                      &D_8080098C_choctopus);
                 }
                 break;
 
             case 3:
-                *(f32 *) ((char *) param_0 + 0x58) = 8.0f;
+                *(f32 *) ((char *) actor + 0x58) = 8.0f;
         }
     }
 }
 
-s32 func_80800540_choctopus(Unk80132ED0 *param_0, f32 *param_1, f32 param_2, s32 param_3,
-                            s32 param_4)
+s32 func_80800540_choctopus(Unk80132ED0 *hit, f32 *hit_pos, f32 radius, s32 unk_3,
+                            s32 hit_flags)
 {
-    Actor *local_6;
-    s32 local_0;
-    f32 local_8;
-    f32 local_1[3];
-    s32 local_7;
-    f32 local_2[3];
-    s32 local_9;
-    f32 local_3;
-    f32 *local_5;
-    void *local_4;
-    local_6 = func_80106790(param_0);
-    if (_subaddiecustomhits_entrypoint_3(local_6, param_1, param_2))
+    Actor *actor;
+    s32 unk_0;
+    f32 abs_angle;
+    f32 box_a[3];
+    s32 result;
+    f32 box_b[3];
+    s32 unk_9;
+    f32 value;
+    f32 *actor_pos;
+    void *unk_4;
+    actor = func_80106790(hit);
+    if (_subaddiecustomhits_entrypoint_3(actor, hit_pos, radius))
         return 0;
-    switch (func_800CB854(&local_0)) {
+    switch (func_800CB854(&unk_0)) {
         case 2:
-            local_3 = func_80103F38(local_6, local_1) * 0.8f;
-            return func_800EFFB4(local_1, param_2 + local_3, param_1);
+            value = func_80103F38(actor, box_a) * 0.8f;
+            return func_800EFFB4(box_a, radius + value, hit_pos);
         case 5:
-            local_3 = func_80103F38(local_6, local_2) * 0.8f;
-            local_7 = func_800EFFB4(local_2, param_2 + local_3, param_1);
+            value = func_80103F38(actor, box_b) * 0.8f;
+            result = func_800EFFB4(box_b, radius + value, hit_pos);
             break;
         default:
-            local_4 = (void *) func_80103D98(param_0);
-            if (!local_4)
+            unk_4 = (void *) func_80103D98(hit);
+            if (!unk_4)
                 return 0;
-            local_5 = local_6->position;
-            local_3 = func_800F1DCC(local_6->rotation[1], func_800F1DF4(local_5, param_1));
-            local_8 = mlAbsF(local_3);
-            param_4 = 0;
-            if (local_8 < 90.0f)
-                param_4 = 8;
-            if (local_8 > 35.0f)
-                param_4 |= 2;
-            if (local_3 < 35.0f)
-                param_4 |= 0x10;
-            if (local_3 > -35.0f)
-                param_4 |= 4;
-            if (func_800EFC7C(local_5, param_1) > SQ(local_6->scale * 800.0f))
-                param_4 |= 0x201;
-            local_7 = func_800B1F8C(local_4, local_5, local_6->rotation, local_6->scale, 0,
-                                    func_801040A8(local_6), param_1, param_2, param_3, param_4);
+            actor_pos = actor->position;
+            value = func_800F1DCC(actor->rotation[1], func_800F1DF4(actor_pos, hit_pos));
+            abs_angle = mlAbsF(value);
+            hit_flags = 0;
+            if (abs_angle < 90.0f)
+                hit_flags = 8;
+            if (abs_angle > 35.0f)
+                hit_flags |= 2;
+            if (value < 35.0f)
+                hit_flags |= 0x10;
+            if (value > -35.0f)
+                hit_flags |= 4;
+            if (func_800EFC7C(actor_pos, hit_pos) > SQ(actor->scale * 800.0f))
+                hit_flags |= 0x201;
+            result = func_800B1F8C(unk_4, actor_pos, actor->rotation, actor->scale, 0,
+                                    func_801040A8(actor), hit_pos, radius, unk_3, hit_flags);
     }
-    if (local_7)
-        local_6->unk6C_0 = local_7;
-    return local_7;
+    if (result)
+        actor->unk6C_0 = result;
+    return result;
 }
 
 int choctopus_entrypoint_1()
@@ -236,18 +239,18 @@ int choctopus_entrypoint_1()
     return (int) &D_80800998_choctopus;
 }
 
-void func_80800790_choctopus(Actor *param_0)
+void func_80800790_choctopus(Actor *actor)
 {
-    if (!func_80100094(param_0, 1)) {
-        _suexpression_entrypoint_7(param_0, 1, 0xB6);
-        _suexpression_entrypoint_12(func_80100094(param_0, 1), 0x42A00000, 0x41F00000);
+    if (!func_80100094(actor, 1)) {
+        _suexpression_entrypoint_7(actor, 1, 0xB6);
+        _suexpression_entrypoint_12(func_80100094(actor, 1), 0x42A00000, 0x41F00000);
     }
 }
 
-s32 func_808007E4_choctopus(s32 param_0)
+s32 func_808007E4_choctopus(s32 actor)
 {
-    if (func_80100094(param_0, 1)) {
-        _suexpression_entrypoint_8(param_0, 1);
+    if (func_80100094(actor, 1)) {
+        _suexpression_entrypoint_8(actor, 1);
     }
 }
 

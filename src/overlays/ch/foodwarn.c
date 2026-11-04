@@ -5,57 +5,60 @@ extern u8 D_80800270_chfoodwarn[];
 extern u8 D_8080028C_chfoodwarn[];
 extern int D_808002A8_chfoodwarn[];
 
-int func_80800000_chfoodwarn(s32 param_0, s32 param_1, s32 param_2)
+// Fetches the position of marker prop 0x521 + side into out_pos.
+int func_80800000_chfoodwarn(s32 actor, s32 side, s32 out_pos)
 {
-    _gspropctrl_entrypoint_11(_gccubesearch_entrypoint_1(param_1 + 0x521, param_0 + 4) | 0,
-                              param_2);
+    _gspropctrl_entrypoint_11(_gccubesearch_entrypoint_1(side + 0x521, actor + 4) | 0,
+                              out_pos);
 }
 
-int func_8080003C_chfoodwarn(s32 param_0)
+int func_8080003C_chfoodwarn(s32 actor)
 {
-    func_80800000_chfoodwarn(param_0, 0, param_0 + 0x28);
-    func_80800000_chfoodwarn(param_0, 1, param_0 + 0x18);
+    func_80800000_chfoodwarn(actor, 0, actor + 0x28);
+    func_80800000_chfoodwarn(actor, 1, actor + 0x18);
 }
 
-s32 func_80800074_chfoodwarn(u8 *param_0, f32 *param_1)
+// Returns 1 when the player is closer to the first marker.
+s32 func_80800074_chfoodwarn(u8 *actor, f32 *player_pos)
 {
-    f32 local_0 = func_800EFC7C(param_1, param_0 + 0x28);
-    if (local_0 < func_800EFC7C(param_1, param_0 + 0x18)) {
+    f32 dist = func_800EFC7C(player_pos, actor + 0x28);
+    if (dist < func_800EFC7C(player_pos, actor + 0x18)) {
         return 1;
     }
     return 0;
 }
 
-void func_808000D4_chfoodwarn(Actor *param_0)
+// Warns when the player carries burgers or fries towards an exit.
+void func_808000D4_chfoodwarn(Actor *actor)
 {
-    f32 local_0[3];
-    s32 local_1;
-    s32 local_2;
-    local_2 = func_800D1A04(0x4B) != 0 || func_800D1A04(0x4C) != 0;
-    func_8010D254(local_0);
-    local_1 = func_8010C500(param_0);
-    if (local_1 && !param_0->unk6C_0)
-        param_0->unk64_20 = func_80800074_chfoodwarn(param_0, local_0);
-    if (local_1) {
-        if (param_0->unk64_20 && !param_0->unk6C_0 && local_2) {
-            *(u16 *) D_80800270_chfoodwarn = param_0->unk74_7 + 0x541;
-            _subaddiedialog_entrypoint_7(param_0, param_0->position, D_80800270_chfoodwarn);
+    f32 player_pos[3];
+    s32 in_range;
+    s32 has_food;
+    has_food = func_800D1A04(0x4B) != 0 || func_800D1A04(0x4C) != 0;
+    func_8010D254(player_pos);
+    in_range = func_8010C500(actor);
+    if (in_range && !actor->unk6C_0)
+        actor->unk64_20 = func_80800074_chfoodwarn(actor, player_pos);
+    if (in_range) {
+        if (actor->unk64_20 && !actor->unk6C_0 && has_food) {
+            *(u16 *) D_80800270_chfoodwarn = actor->unk74_7 + 0x541;
+            _subaddiedialog_entrypoint_7(actor, actor->position, D_80800270_chfoodwarn);
         } else
-            _subaddiedialog_entrypoint_7(param_0, param_0->position, D_8080028C_chfoodwarn);
+            _subaddiedialog_entrypoint_7(actor, actor->position, D_8080028C_chfoodwarn);
     }
-    param_0->unk6C_0 = (u16) local_1;
+    actor->unk6C_0 = (u16) in_range;
 }
 
-int func_808001F4_chfoodwarn(Actor *param_0, s32 param_1, s32 param_2)
+int func_808001F4_chfoodwarn(Actor *actor, s32 msg, s32 data)
 {
-    if (param_1 != 0x2E) {
-        if (param_1 == 0x95) {
-            if ((!(param_1 & 0xFF) && !param_1) && !param_1) {
+    if (msg != 0x2E) {
+        if (msg == 0x95) {
+            if ((!(msg & 0xFF) && !msg) && !msg) {
             }
             func_80105010();
-            *(u16 *) ((char *) param_0 + 0x6E) =
-                (u16) ((*(u16 *) ((char *) param_0 + 0x6E) & 0xFE00) |
-                       (func_8010C500(param_0) & 0x1FF));
+            *(u16 *) ((char *) actor + 0x6E) =
+                (u16) ((*(u16 *) ((char *) actor + 0x6E) & 0xFE00) |
+                       (func_8010C500(actor) & 0x1FF));
             goto block_4;
         }
         return 0;

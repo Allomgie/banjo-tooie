@@ -26,37 +26,37 @@ int chbottlesparty_entrypoint_1()
     return &D_80800458_chbottlesparty;
 }
 
-s32 func_80800018_chbottlesparty(s32 param_0)
+s32 func_80800018_chbottlesparty(s32 actor)
 {
     if (func_800DA298(0x3B) == 0) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
     } else {
-        func_8010A800(param_0, 0);
+        func_8010A800(actor, 0);
     }
 }
 
 void func_8080022C_chbottlesparty();
 
-void func_8080005C_chbottlesparty(u8 *param_0)
+void func_8080005C_chbottlesparty(u8 *actor)
 {
     func_8080022C_chbottlesparty();
-    if (((u32) (u16) *(u16 *) ((char *) param_0 + 0x72) >> 0xA) == 1) {
-        func_80800170_chbottlesparty(param_0);
+    if (((u32) (u16) *(u16 *) ((char *) actor + 0x72) >> 0xA) == 1) {
+        func_80800170_chbottlesparty(actor);
     }
 }
 
-s32 func_8080009C_chbottlesparty(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_8080009C_chbottlesparty(Actor *actor, s32 msg, s32 param_2)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x2E:
-            *(f32 *) &param_0->actorData[4] = 6.0f;
-            func_80101FDC(param_0, 1);
+            *(f32 *) &actor->actorData[4] = 6.0f;
+            func_80101FDC(actor, 1);
             break;
         case 0x52:
-            _gcdialogcamera_entrypoint_3(D_808004A0_chbottlesparty, *(s32 *) &param_0->scale);
+            _gcdialogcamera_entrypoint_3(D_808004A0_chbottlesparty, *(s32 *) &actor->scale);
             break;
         case 0x95:
-            func_80800138_chbottlesparty(param_0);
+            func_80800138_chbottlesparty(actor);
             break;
         default:
             return 0;
@@ -64,23 +64,25 @@ s32 func_8080009C_chbottlesparty(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-int func_80800138_chbottlesparty(param_0)
-Actor *param_0;
+// Message 0x95 (init): only for guests with world index 0x32 (unk74_7).
+int func_80800138_chbottlesparty(actor)
+Actor *actor;
 {
-    if (((u32) *(u16 *) ((char *) param_0 + 0x76) >> 7) == 0x32) {
-        func_80103140(param_0, 0x653, 0);
+    if (((u32) *(u16 *) ((char *) actor + 0x76) >> 7) == 0x32) {
+        func_80103140(actor, 0x653, 0);
     }
 }
 
-void func_80800170_chbottlesparty(param_0) Actor *param_0;
+// Guest dialog: before the quiz (FLAG2_67C unset) starts the idle dialog; afterwards triggers 0x154F when the player is near.
+void func_80800170_chbottlesparty(actor) Actor *actor;
 {
     if (!func_800DA298(0x43)) {
         if (!func_800DA298(0x67C))
-            _subaddiedialog_entrypoint_7(param_0, param_0->position, D_808004B0_chbottlesparty);
-        else if (func_800F64A4(func_800F54E4(), 0x601) && func_8010CAC0(param_0->position, 500) &&
-                 func_800D90A4((f32 *) &param_0->actorData[4])) {
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x154F, 4, 0, 15);
-            func_80101FDC(param_0, 2);
+            _subaddiedialog_entrypoint_7(actor, actor->position, D_808004B0_chbottlesparty);
+        else if (func_800F64A4(func_800F54E4(), 0x601) && func_8010CAC0(actor->position, 500) &&
+                 func_800D90A4((f32 *) &actor->actorData[4])) {
+            _subaddiedialog_entrypoint_11(actor->unk0, 0x154F, 4, 0, 15);
+            func_80101FDC(actor, 2);
         }
     }
 }
@@ -89,41 +91,43 @@ void func_8080022C_chbottlesparty(s32 arg0)
 {
 }
 
-void func_80800234_chbottlesparty(Actor *param_0)
+// Despawns unless the Tower of Tragedy is finished and Hag 1 is alive; otherwise creates the point light.
+void func_80800234_chbottlesparty(Actor *actor)
 {
     if (!func_800DA298(0x3B) || func_800DA298(0x43)) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
     } else {
-        *(f32 *) &param_0->actorData[5] = func_800DC178(0.4f, 0.6f);
-        param_0->unk58 = func_800DC178(0.0f, *(f32 *) &param_0->actorData[5]);
-        param_0->unk6C_0 = param_0->unk74_7 - 0x32;
-        if (param_0->unk6C_0 >= 5) {
-            param_0->unk6C_0 = 0;
+        *(f32 *) &actor->actorData[5] = func_800DC178(0.4f, 0.6f);
+        actor->unk58 = func_800DC178(0.0f, *(f32 *) &actor->actorData[5]);
+        actor->unk6C_0 = actor->unk74_7 - 0x32;
+        if (actor->unk6C_0 >= 5) {
+            actor->unk6C_0 = 0;
         }
-        param_0->actorData[4] = func_800C8A98();
-        func_800C8E54(param_0->actorData[4], param_0->scale * 300.0f, param_0->scale * 600.0f);
-        func_800C8CB8(param_0->actorData[4], param_0->position);
+        actor->actorData[4] = func_800C8A98();
+        func_800C8E54(actor->actorData[4], actor->scale * 300.0f, actor->scale * 600.0f);
+        func_800C8CB8(actor->actorData[4], actor->position);
     }
 }
 
-void func_80800330_chbottlesparty(Actor *param_0)
+// Cycles the light colour through the palette indexed by the actor param.
+void func_80800330_chbottlesparty(Actor *actor)
 {
-    s32 local_0[3];
-    Vec3f local_1;
+    s32 color[3];
+    Vec3f light_pos;
     s32 pad0;
-    f32 local_2;
-    if (param_0->actorData[4] != 0) {
-        local_2 = func_800F3780(func_800F0F9C(param_0->unk58, *(f32 *) &param_0->actorData[5]),
+    f32 blend;
+    if (actor->actorData[4] != 0) {
+        blend = func_800F3780(func_800F0F9C(actor->unk58, *(f32 *) &actor->actorData[5]),
                                 D_80800508_chbottlesparty, 3);
-        func_80103DFC(param_0, local_1.f);
-        func_800F3214(local_0, D_808004FC_chbottlesparty,
-                      D_808004CC_chbottlesparty[param_0->unk6C_0], local_2);
-        func_800C8E84(param_0->actorData[4], local_0);
-        param_0->unk58 += func_800D8FF8();
+        func_80103DFC(actor, light_pos.f);
+        func_800F3214(color, D_808004FC_chbottlesparty,
+                      D_808004CC_chbottlesparty[actor->unk6C_0], blend);
+        func_800C8E84(actor->actorData[4], color);
+        actor->unk58 += func_800D8FF8();
     }
 }
 
-s32 func_808003E4_chbottlesparty(s32 param_0, s32 param_1, s32 param_2)
+s32 func_808003E4_chbottlesparty(s32 actor, s32 msg, s32 param_2)
 {
     return 0;
 }

@@ -1,13 +1,13 @@
 #include "common.h"
 
 typedef struct {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    s16 local_3;
-    s16 local_4;
-    s16 local_5;
-    s16 pad_0;
+    f32 pos[3];
+    f32 aabb_min[3];
+    f32 aabb_max[3];
+    s16 water_height;
+    s16 model_a;
+    s16 model_b;
+    s16 pad_2A;
 } LagoonSector1180;
 extern LagoonSector1180 D_80800630_gcmapsects_lagoontop[5];
 extern s16 D_8080070C_gcmapsects_lagoontop[4][2];
@@ -85,108 +85,113 @@ extern f32 D_8080072C_gcmapsects_lagoontop[];
 extern f32 D_80800738_gcmapsects_lagoontop[];
 extern f32 D_80800744_gcmapsects_lagoontop[];
 
+// Registers the 5 map sections, their neighbour pairs and flags, and the per-frame visibility callback.
 void gcmapsects_lagoontop_entrypoint_0(void)
 {
-    u32 local_0;
-    s16(*local_1)[2];
+    u32 i;
+    s16(*pair)[2];
 
     _gcmapsects_entrypoint_10(5);
-    for (local_0 = 0; local_0 < 5; local_0++) {
-        _gcmapsects_entrypoint_0(D_80800630_gcmapsects_lagoontop[local_0].local_4,
-                                 D_80800630_gcmapsects_lagoontop[local_0].local_5,
-                                 D_80800630_gcmapsects_lagoontop[local_0].local_0,
-                                 D_80800630_gcmapsects_lagoontop[local_0].local_1,
-                                 D_80800630_gcmapsects_lagoontop[local_0].local_2,
-                                 D_80800630_gcmapsects_lagoontop[local_0].local_3);
+    for (i = 0; i < 5; i++) {
+        _gcmapsects_entrypoint_0(D_80800630_gcmapsects_lagoontop[i].model_a,
+                                 D_80800630_gcmapsects_lagoontop[i].model_b,
+                                 D_80800630_gcmapsects_lagoontop[i].pos,
+                                 D_80800630_gcmapsects_lagoontop[i].aabb_min,
+                                 D_80800630_gcmapsects_lagoontop[i].aabb_max,
+                                 D_80800630_gcmapsects_lagoontop[i].water_height);
     }
-    local_1 = D_8080070C_gcmapsects_lagoontop;
-    local_0 = 0;
+    pair = D_8080070C_gcmapsects_lagoontop;
+    i = 0;
     do {
-        _gcmapsects_entrypoint_3(*local_1[0], (*local_1)[1]);
-        local_1++;
-    } while (++local_0 < 4);
-    for (local_0 = 0; local_0 < 2; local_0++) {
-        _gcmapsects_entrypoint_1(D_8080071C_gcmapsects_lagoontop[local_0], 0);
-        _gcmapsects_entrypoint_2(D_8080071C_gcmapsects_lagoontop[local_0], 0);
+        _gcmapsects_entrypoint_3(*pair[0], (*pair)[1]);
+        pair++;
+    } while (++i < 4);
+    for (i = 0; i < 2; i++) {
+        _gcmapsects_entrypoint_1(D_8080071C_gcmapsects_lagoontop[i], 0);
+        _gcmapsects_entrypoint_2(D_8080071C_gcmapsects_lagoontop[i], 0);
     }
     _gcmapsects_entrypoint_12(_gcmapsects_lagoontop_entrypoint_1);
 }
 
-void gcmapsects_lagoontop_entrypoint_1(LagoonCtx *param_0)
+// Per-frame callback: hides sections from camera position, angles and frustum tests.
+void gcmapsects_lagoontop_entrypoint_1(LagoonCtx *ctx)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    u8 local_2;
+    f32 cam_pos[3];
+    f32 cam_rot[3];
+    u8 visible;
 
-    func_800E39A8(local_0, local_1);
-    local_1[0] = func_80013728(local_1[0]);
-    local_1[1] = func_800136E4(local_1[1]);
+    func_800E39A8(cam_pos, cam_rot);
+    cam_rot[0] = func_80013728(cam_rot[0]);
+    cam_rot[1] = func_800136E4(cam_rot[1]);
 
-    if ((*(u32 *) (param_0->obj + 0xA4) >> 31) != 0) {
-        if (local_0[1] < 5100.0f) {
-            ((BitS164 *) param_0->obj)->b7 = 0;
-            ((BitS164 *) param_0->obj)->b6 = 0;
+    if ((*(u32 *) (ctx->obj + 0xA4) >> 31) != 0) {
+        if (cam_pos[1] < 5100.0f) {
+            ((BitS164 *) ctx->obj)->b7 = 0;
+            ((BitS164 *) ctx->obj)->b6 = 0;
         }
-        if (-5800.0f < local_0[2] && 95.0f < local_1[1] && local_1[1] < 240.0f) {
-            ((BitS164 *) param_0->obj)->b7 = 0;
-            ((BitS164 *) param_0->obj)->b6 = 0;
+        if (-5800.0f < cam_pos[2] && 95.0f < cam_rot[1] && cam_rot[1] < 240.0f) {
+            ((BitS164 *) ctx->obj)->b7 = 0;
+            ((BitS164 *) ctx->obj)->b6 = 0;
         }
     }
-    if ((*(u32 *) (param_0->obj + 0x4C) >> 31) != 0) {
-        if (local_0[1] < 4200.0f && local_1[0] < 0.0f) {
-            ((BitS76 *) param_0->obj)->b7 = 0;
-        } else if (local_0[1] < 5050.0f &&
+    if ((*(u32 *) (ctx->obj + 0x4C) >> 31) != 0) {
+        if (cam_pos[1] < 4200.0f && cam_rot[0] < 0.0f) {
+            ((BitS76 *) ctx->obj)->b7 = 0;
+        } else if (cam_pos[1] < 5050.0f &&
                    !func_800E3E8C(D_80800720_gcmapsects_lagoontop, 1250.0f)) {
-            ((BitS76 *) param_0->obj)->b7 = 0;
-            ((BitS76 *) param_0->obj)->b6 = 0;
+            ((BitS76 *) ctx->obj)->b7 = 0;
+            ((BitS76 *) ctx->obj)->b6 = 0;
         }
     }
-    if ((*(u32 *) (param_0->obj + 0x1AC) >> 31) != 0) {
-        if (4300.0f < local_0[1]) {
-            ((BitS428 *) param_0->obj)->b7 = 0;
-            ((BitS428 *) param_0->obj)->b6 = 0;
+    if ((*(u32 *) (ctx->obj + 0x1AC) >> 31) != 0) {
+        if (4300.0f < cam_pos[1]) {
+            ((BitS428 *) ctx->obj)->b7 = 0;
+            ((BitS428 *) ctx->obj)->b6 = 0;
         }
     }
-    if ((*(u32 *) (param_0->obj + 0xFC) >> 31) != 0) {
-        if (0.0f < local_0[2] && 160.0f < local_1[1] && local_1[1] < 320.0f) {
-            ((BitS252 *) param_0->obj)->b7 = 0;
-            ((BitS252 *) param_0->obj)->b6 = 0;
-        } else if (5150.0f < local_0[1] &&
+    if ((*(u32 *) (ctx->obj + 0xFC) >> 31) != 0) {
+        if (0.0f < cam_pos[2] && 160.0f < cam_rot[1] && cam_rot[1] < 320.0f) {
+            ((BitS252 *) ctx->obj)->b7 = 0;
+            ((BitS252 *) ctx->obj)->b6 = 0;
+        } else if (5150.0f < cam_pos[1] &&
                    !func_800E3E8C(D_8080072C_gcmapsects_lagoontop, 1000.0f)) {
-            ((BitS252 *) param_0->obj)->b7 = 0;
-            ((BitS252 *) param_0->obj)->b6 = 0;
-        } else if (-4700.0f < local_0[0] && local_0[1] < 10000.0f) {
-            ((BitS252 *) param_0->obj)->b7 = 0;
-            ((BitS252 *) param_0->obj)->b6 = 0;
+            ((BitS252 *) ctx->obj)->b7 = 0;
+            ((BitS252 *) ctx->obj)->b6 = 0;
+        } else if (-4700.0f < cam_pos[0] && cam_pos[1] < 10000.0f) {
+            ((BitS252 *) ctx->obj)->b7 = 0;
+            ((BitS252 *) ctx->obj)->b6 = 0;
         }
     }
-    if (*(u32 *) (param_0->obj + 0x1AC) >> 31) {
-        if (4000.0f < local_0[2]) {
-            if (90.0f < local_1[1]) {
-                if (local_1[1] < 270.0f) {
-                    ((BitS428 *) param_0->obj)->b7 = 0;
-                    ((BitS428 *) param_0->obj)->b6 = 0;
+    if (*(u32 *) (ctx->obj + 0x1AC) >> 31) {
+        if (4000.0f < cam_pos[2]) {
+            if (90.0f < cam_rot[1]) {
+                if (cam_rot[1] < 270.0f) {
+                    ((BitS428 *) ctx->obj)->b7 = 0;
+                    ((BitS428 *) ctx->obj)->b6 = 0;
                 }
             }
-        } else if (!((W428 *) param_0->obj)->b30 &&
+        } else if (!((W428 *) ctx->obj)->b30 &&
                    !func_800E3E8C(D_80800738_gcmapsects_lagoontop, 450.0f)) {
-            ((BitS428 *) param_0->obj)->b7 = 0;
-            ((BitS428 *) param_0->obj)->b6 = 0;
+            ((BitS428 *) ctx->obj)->b7 = 0;
+            ((BitS428 *) ctx->obj)->b6 = 0;
         }
     }
-    local_2 = param_0->f7E;
-    if (local_2 && ((local_0[1] < 8000.0f && local_1[0] < -20.0f) ||
-                    (local_0[1] < 6000.0f && local_1[0] < 0.0f))) {
-        local_2 = param_0->f7E = 0;
+    visible = ctx->f7E;
+    if (visible && ((cam_pos[1] < 8000.0f && cam_rot[0] < -20.0f) ||
+                    (cam_pos[1] < 6000.0f && cam_rot[0] < 0.0f))) {
+        visible = ctx->f7E = 0;
     }
-    if (local_2 && local_0[1] < 4000.0f && local_1[0] >= 0.0f) {
-        param_0->f7E = func_800E3E8C(D_80800744_gcmapsects_lagoontop, 982.0f);
+    if (visible && cam_pos[1] < 4000.0f && cam_rot[0] >= 0.0f) {
+        ctx->f7E = func_800E3E8C(D_80800744_gcmapsects_lagoontop, 982.0f);
     }
-    if (((W76 *) param_0->obj)->b30) {
-        ((BitS164 *) param_0->obj)->b6 = 1;
+    if (((W76 *) ctx->obj)->b30) {
+        ((BitS164 *) ctx->obj)->b6 = 1;
     }
 }
 
+// TU-NOTE: .data of this overlay is defined here in C (values from the ROM).
+// D_8080063C_gcmapsects_lagoontop = D_80800630_gcmapsects_lagoontop + 0xC and
+// D_80800648_gcmapsects_lagoontop = D_80800630_gcmapsects_lagoontop + 0x18 are linker symbols (undefined_syms.us.txt).
 LagoonSector1180 D_80800630_gcmapsects_lagoontop[5] = {
     -9e+03f,    9e+03f,    -8e+03f,    -17203.0f, 5.2e+03f,  -1.43e+04f, 2632.0f,   1.195e+04f,
     361.0f,     -0x1,      0x727,      0x0,       0x0,       -9e+03f,    9e+03f,    -9.2e+03f,

@@ -86,102 +86,103 @@ int *chbottlesfamily_entrypoint_2()
     return &D_80800E70_chbottlesfamily;
 }
 
-void func_80800024_chbottlesfamily(BottlesS *param_0)
+void func_80800024_chbottlesfamily(BottlesS *actor)
 {
-    func_80102FDC(param_0, param_0->f38 / 3.0f);
-    param_0->flag = 1;
-    if (_glcutDll_entrypoint_20(param_0)) {
-        func_80102424(param_0, 5);
+    func_80102FDC(actor, actor->f38 / 3.0f);
+    actor->flag = 1;
+    if (_glcutDll_entrypoint_20(actor)) {
+        func_80102424(actor, 5);
     }
 }
 
-void func_80800080_chbottlesfamily(Actor *param_0)
+void func_80800080_chbottlesfamily(Actor *actor)
 {
-    _sudeflect_entrypoint_0(param_0->position, param_0->scale * 50.0f, param_0->scale * 50.0f, 10);
-    _subaddieaudioquick_entrypoint_4(param_0, param_0->position, &D_80800EB8_chbottlesfamily,
+    _sudeflect_entrypoint_0(actor->position, actor->scale * 50.0f, actor->scale * 50.0f, 10);
+    _subaddieaudioquick_entrypoint_4(actor, actor->position, &D_80800EB8_chbottlesfamily,
                                      &D_80800ECC_chbottlesfamily);
-    _suexpression_entrypoint_10(_suexpression_entrypoint_20(param_0), param_0->unk0, 0);
-    if (param_0->unk70_10 == 1)
-        func_808009F0_chbottlesfamily(param_0, &D_80800EDC_chbottlesfamily);
+    _suexpression_entrypoint_10(_suexpression_entrypoint_20(actor), actor->unk0, 0);
+    if (actor->unk70_10 == 1)
+        func_808009F0_chbottlesfamily(actor, &D_80800EDC_chbottlesfamily);
 }
 
-void func_80800124_chbottlesfamily(Actor *param_0)
+void func_80800124_chbottlesfamily(Actor *actor)
 {
-    f32 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    _subaddierouteDll_entrypoint_3(param_0, local_0, param_0->position);
-    local_0[3] = func_800DC178(2.5f, 5.0f);
-    param_0->unk58 = func_800DC178(5.0f, 10.0f);
+    f32 *route;
+    route = func_80100094(actor, 0);
+    _subaddierouteDll_entrypoint_3(actor, route, actor->position);
+    route[3] = func_800DC178(2.5f, 5.0f);
+    actor->unk58 = func_800DC178(5.0f, 10.0f);
     if (_glcutDll_entrypoint_20())
-        func_80102424(param_0, 5);
+        func_80102424(actor, 5);
 }
 
 void func_808005D0_chbottlesfamily();
 
 void func_80800520_chbottlesfamily();
 
-void func_808001B0_chbottlesfamily(Actor *param_0)
+void func_808001B0_chbottlesfamily(Actor *actor)
 {
-    u8 *local_0;
+    u8 *route;
 
-    local_0 = func_80100094(param_0, 0);
-    _sudeflect_entrypoint_0(param_0->position, (param_0->scale * 50.0f), (param_0->scale * 50.0f),
+    route = func_80100094(actor, 0);
+    _sudeflect_entrypoint_0(actor->position, (actor->scale * 50.0f), (actor->scale * 50.0f),
                             0xA);
-    _suexpression_entrypoint_10(_suexpression_entrypoint_20(param_0), param_0->unk0, 0);
-    switch (param_0->unk70_10) {
+    _suexpression_entrypoint_10(_suexpression_entrypoint_20(actor), actor->unk0, 0);
+    switch (actor->unk70_10) {
         case 1:
-            func_808005D0_chbottlesfamily(param_0);
-            if (!func_808004B4_chbottlesfamily(param_0) && func_800D90A4(&param_0->unk58))
-                func_80800520_chbottlesfamily(param_0);
+            func_808005D0_chbottlesfamily(actor);
+            if (!func_808004B4_chbottlesfamily(actor) && func_800D90A4(&actor->unk58))
+                func_80800520_chbottlesfamily(actor);
             break;
         case 2:
-            param_0->unk54 = func_8010CD28(param_0);
-            func_80102BF8(param_0, 0.1f, 4.0f, 120.0f);
+            actor->unk54 = func_8010CD28(actor);
+            func_80102BF8(actor, 0.1f, 4.0f, 120.0f);
             break;
         case 3:
-            if (func_800D9078((f32 *) (local_0 + 0xC))) {
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            if (func_800D9078((f32 *) (route + 0xC))) {
+                _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                  D_80800EF8_chbottlesfamily);
-                *(f32 *) (local_0 + 0xC) = func_800DC178(2.5f, 5.0f);
+                *(f32 *) (route + 0xC) = func_800DC178(2.5f, 5.0f);
             }
-            func_80105230(param_0, 0);
-            _subaddierouteDll_entrypoint_7(param_0, local_0, param_0->rotation[1], param_0->unk54,
+            func_80105230(actor, 0);
+            _subaddierouteDll_entrypoint_7(actor, route, actor->rotation[1], actor->unk54,
                                            200.0f, 0x401);
-            _subaddierouteDll_entrypoint_6(param_0, local_0, *(u16 *) (local_0 + 6), 7, 0.7f, 8,
+            _subaddierouteDll_entrypoint_6(actor, route, *(u16 *) (route + 6), 7, 0.7f, 8,
                                            0xC);
-            _subaddierouteDll_entrypoint_5(param_0, local_0, *(u16 *) (local_0 + 6), 0.1f, 4.0f,
+            _subaddierouteDll_entrypoint_5(actor, route, *(u16 *) (route + 6), 0.1f, 4.0f,
                                            120.0f);
-            ((f32 *) param_0->actorData)[3] =
-                func_800F15F8(((f32 *) param_0->actorData)[3], 200.0f, func_800D8FF8() * 300.0f);
-            func_8010B990(param_0, 0x1305);
-            if (!func_808004B4_chbottlesfamily(param_0) && func_800D90A4(&param_0->unk58)) {
-                func_80102424(param_0, 1);
-                param_0->unk58 = func_800DC178(5.0f, 10.0f);
+            ((f32 *) actor->actorData)[3] =
+                func_800F15F8(((f32 *) actor->actorData)[3], 200.0f, func_800D8FF8() * 300.0f);
+            func_8010B990(actor, 0x1305);
+            if (!func_808004B4_chbottlesfamily(actor) && func_800D90A4(&actor->unk58)) {
+                func_80102424(actor, 1);
+                actor->unk58 = func_800DC178(5.0f, 10.0f);
             }
             break;
         case 4:
-            func_80105230(param_0, 0);
-            func_80102BF8(param_0, 0.1f, 4.0f, 120.0f);
-            if (!func_808004B4_chbottlesfamily(param_0) && func_80102CF4(param_0, 10.0f))
-                func_80102424(param_0, 3);
+            func_80105230(actor, 0);
+            func_80102BF8(actor, 0.1f, 4.0f, 120.0f);
+            if (!func_808004B4_chbottlesfamily(actor) && func_80102CF4(actor, 10.0f))
+                func_80102424(actor, 3);
             break;
         case 5:
-            func_808005D0_chbottlesfamily(param_0);
+            func_808005D0_chbottlesfamily(actor);
     }
 }
 
-s32 func_8080046C_chbottlesfamily(void *param_0, s32 param_1)
+s32 func_8080046C_chbottlesfamily(void *actor, s32 param_1)
 {
     if (param_1 == 0x95) {
-        func_80800720_chbottlesfamily(param_0);
-        _subaddierouteDll_entrypoint_1(param_0);
+        func_80800720_chbottlesfamily(actor);
+        _subaddierouteDll_entrypoint_1(actor);
     } else {
-        return func_80800720_chbottlesfamily(param_0);
+        return func_80800720_chbottlesfamily(actor);
     }
     return 1;
 }
 
-int func_808004B4_chbottlesfamily(Actor *param_0)
+// Starts Bottles' family dialog unless the Tower of Tragedy is finished (flag 0x3B).
+int func_808004B4_chbottlesfamily(Actor *actor)
 {
     if (func_800DA298(0x3B)) {
         return 0;
@@ -191,87 +192,87 @@ int func_808004B4_chbottlesfamily(Actor *param_0)
     } else {
         D_80800F08_chbottlesfamily[0] = 0x1501;
     }
-    func_808009F0_chbottlesfamily(param_0, &D_80800F04_chbottlesfamily);
+    func_808009F0_chbottlesfamily(actor, &D_80800F04_chbottlesfamily);
 }
 
-void func_80800520_chbottlesfamily(void *param_0)
+void func_80800520_chbottlesfamily(void *actor)
 {
-    f32 temp_f0;
-    s32 temp_v0;
+    f32 rot_y;
+    s32 route;
 
-    temp_v0 = func_80100094(param_0, 0);
-    temp_f0 = *(f32 *) ((char *) param_0 + 0x48);
-    *(f32 *) ((char *) param_0 + 0x54) = temp_f0;
-    if (_subaddierouteDll_entrypoint_7(param_0, temp_v0, temp_f0, temp_f0 + 180.0f, 200.0f,
+    route = func_80100094(actor, 0);
+    rot_y = *(f32 *) ((char *) actor + 0x48);
+    *(f32 *) ((char *) actor + 0x54) = rot_y;
+    if (_subaddierouteDll_entrypoint_7(actor, route, rot_y, rot_y + 180.0f, 200.0f,
                                        0x401) == 0) {
-        func_80102424(param_0, 3);
+        func_80102424(actor, 3);
     } else {
-        func_80102424(param_0, 4);
+        func_80102424(actor, 4);
     }
-    *(f32 *) ((char *) param_0 + 0x58) = func_800DC178(5.0f, 10.0f);
-    *(f32 *) ((char *) param_0 + 0x24) = 0.0f;
+    *(f32 *) ((char *) actor + 0x58) = func_800DC178(5.0f, 10.0f);
+    *(f32 *) ((char *) actor + 0x24) = 0.0f;
 }
 
-void func_808005D0_chbottlesfamily(s32 param_0)
+void func_808005D0_chbottlesfamily(s32 actor)
 {
-    _subaddieaudioquick_entrypoint_3(param_0, param_0 + 0x4, D_80800F20_chbottlesfamily, 0.08f);
+    _subaddieaudioquick_entrypoint_3(actor, actor + 0x4, D_80800F20_chbottlesfamily, 0.08f);
 }
 
-s32 func_80800600_chbottlesfamily(s32 param_0)
+s32 func_80800600_chbottlesfamily(s32 actor)
 {
     if (_glcutDll_entrypoint_20()) {
-        func_80102424(param_0, 5);
+        func_80102424(actor, 5);
     }
 }
 
-void func_80800630_chbottlesfamily(Actor *param_0)
+void func_80800630_chbottlesfamily(Actor *actor)
 {
-    f32 *local_0;
-    u8 local_1;
+    f32 *pos;
+    u8 sound_id;
 
-    local_0 = param_0->position;
-    _sudeflect_entrypoint_0(local_0, param_0->scale * 50.0f, param_0->scale * 50.0f, 10);
-    _suexpression_entrypoint_10(_suexpression_entrypoint_20(param_0), param_0->unk0, 0);
-    if (param_0->unk70_10 == 1)
-        func_808009F0_chbottlesfamily(param_0, &D_80800F2C_chbottlesfamily);
-    if (func_80101E4C(param_0, D_80800F68_chbottlesfamily)) {
-        local_1 = param_0->unk5F;
-        if (local_1 == 0)
-            local_1 = param_0->unk5F = _subaddieaudioquick_entrypoint_1(param_0, local_0);
-        func_800C4350(local_1, local_0, &D_80800F48_chbottlesfamily);
+    pos = actor->position;
+    _sudeflect_entrypoint_0(pos, actor->scale * 50.0f, actor->scale * 50.0f, 10);
+    _suexpression_entrypoint_10(_suexpression_entrypoint_20(actor), actor->unk0, 0);
+    if (actor->unk70_10 == 1)
+        func_808009F0_chbottlesfamily(actor, &D_80800F2C_chbottlesfamily);
+    if (func_80101E4C(actor, D_80800F68_chbottlesfamily)) {
+        sound_id = actor->unk5F;
+        if (sound_id == 0)
+            sound_id = actor->unk5F = _subaddieaudioquick_entrypoint_1(actor, pos);
+        func_800C4350(sound_id, pos, &D_80800F48_chbottlesfamily);
     }
-    _subaddieaudioquick_entrypoint_4(param_0, local_0, &D_80800F58_chbottlesfamily,
+    _subaddieaudioquick_entrypoint_4(actor, pos, &D_80800F58_chbottlesfamily,
                                      &D_80800F78_chbottlesfamily);
 }
 
-s32 func_80800720_chbottlesfamily(param_0, param_1, param_2)
-Actor *param_0;
+s32 func_80800720_chbottlesfamily(actor, param_1, param_2)
+Actor *actor;
 s32 param_1;
 s32 param_2;
 {
-    s32 local_0;
+    s32 expr;
     switch (param_1) {
         case 0x2E:
-            func_8080088C_chbottlesfamily(param_0, *(s16 *) &param_2, ((s16 *) &param_2)[1]);
+            func_8080088C_chbottlesfamily(actor, *(s16 *) &param_2, ((s16 *) &param_2)[1]);
             break;
         case 0x2F:
-            func_8080099C_chbottlesfamily(param_0, *(s16 *) &param_2, ((s16 *) &param_2)[1]);
+            func_8080099C_chbottlesfamily(actor, *(s16 *) &param_2, ((s16 *) &param_2)[1]);
             break;
         case 0x52:
-            func_80800A84_chbottlesfamily(param_0);
+            func_80800A84_chbottlesfamily(actor);
             break;
         case 0x57:
-            return func_80800B64_chbottlesfamily(param_0, param_2 & 0xFFFF,
+            return func_80800B64_chbottlesfamily(actor, param_2 & 0xFFFF,
                                                  (u32) (param_2 & 0xFFFF0000) >> 16);
         case 0x95:
-            local_0 = _suexpression_entrypoint_7(param_0, 1,
-                                                 (s16) func_80800A44_chbottlesfamily(param_0));
-            _suexpression_entrypoint_12(local_0, 60.0f, 20.0f);
-            _suexpression_entrypoint_17(local_0, 1000);
+            expr = _suexpression_entrypoint_7(actor, 1,
+                                                 (s16) func_80800A44_chbottlesfamily(actor));
+            _suexpression_entrypoint_12(expr, 60.0f, 20.0f);
+            _suexpression_entrypoint_17(expr, 1000);
             break;
         case 0x1F:
-            func_800DF744(3, param_0->unk64_20);
-            func_801015D0(param_0);
+            func_800DF744(3, actor->unk64_20);
+            func_801015D0(actor);
             break;
         default:
             return 0;
@@ -284,38 +285,39 @@ void func_8080086C_chbottlesfamily(Actor *arg0)
     _suexpression_entrypoint_8(arg0, 1);
 }
 
-void func_8080088C_chbottlesfamily(param_0, param_1, param_2) Actor *param_0;
+void func_8080088C_chbottlesfamily(actor, param_1, param_2) Actor *actor;
 s32 param_1;
 s32 param_2;
 {
     switch (param_1) {
         case 0x1503:
-            func_80800BC0_chbottlesfamily(param_0);
+            func_80800BC0_chbottlesfamily(actor);
             func_8009032C(0x2B);
             func_800FC6B0(0xE);
             break;
         case 0x1501:
-            func_80800BC0_chbottlesfamily(param_0);
+            func_80800BC0_chbottlesfamily(actor);
+            // Hand off to the Tower of Tragedy quiz cutscene (MAP_142_JV_JINJO_VILLAGE).
             _glcutDll_entrypoint_6(0x142, 0x66);
             break;
         default:
-            if (param_0->unk6C_0)
-                func_80800BC0_chbottlesfamily(param_0);
+            if (actor->unk6C_0)
+                func_80800BC0_chbottlesfamily(actor);
     }
-    if (param_0->unk6C_9 == 0x43C) {
+    if (actor->unk6C_9 == 0x43C) {
         if (func_800DC298(0.5f))
-            func_80800520_chbottlesfamily(param_0);
+            func_80800520_chbottlesfamily(actor);
         else {
-            func_80101FDC(param_0, 1);
-            param_0->unk58 = func_800DC178(5.0f, 10.0f) * 0.5f;
+            func_80101FDC(actor, 1);
+            actor->unk58 = func_800DC178(5.0f, 10.0f) * 0.5f;
         }
     } else {
-        func_80101FDC(param_0, 1);
+        func_80101FDC(actor, 1);
     }
 }
 
-s32 func_8080099C_chbottlesfamily(param_0, param_1, param_2)
-s32 param_0;
+s32 func_8080099C_chbottlesfamily(actor, param_1, param_2)
+s32 actor;
 s32 param_1;
 s32 param_2;
 {
@@ -325,31 +327,31 @@ if ((param_1 != 0x1501) && (param_1 != 0x1539)) {
 }
 
 if ((param_2 == 1) && !func_800C07F4()) {
-    func_80800CA4_chbottlesfamily(param_0, 4, 0x2020);
+    func_80800CA4_chbottlesfamily(actor, 4, 0x2020);
 }
 
 }
 
-int func_808009F0_chbottlesfamily(param_0, param_1)
-s32 param_0[3];
+int func_808009F0_chbottlesfamily(actor, param_1)
+s32 actor[3];
 s32 param_1;
 {
-    s32 local_0;
-    local_0 = _subaddiedialog_entrypoint_7(param_0, param_0 + 1, param_1 | 0);
+    s32 result;
+    result = _subaddiedialog_entrypoint_7(actor, actor + 1, param_1 | 0);
 
-if (local_0 && local_0 != 0x1208) {
-    func_80800C08_chbottlesfamily(param_0, 3, 0);
+if (result && result != 0x1208) {
+    func_80800C08_chbottlesfamily(actor, 3, 0);
 }
 
-return local_0 != 0;
+return result != 0;
 }
 
-s32 func_80800A44_chbottlesfamily(param_0) void *param_0;
+s32 func_80800A44_chbottlesfamily(actor) void *actor;
 {
-    u32 temp_t7;
-    temp_t7 = (u32) ((*(u32 *) ((char *) param_0 + 0x6C)) << 0xB) >> 0x14;
+    u32 actor_id;
+    actor_id = (u32) ((*(u32 *) ((char *) actor + 0x6C)) << 0xB) >> 0x14;
 
-switch (temp_t7) {
+switch (actor_id) {
     case 0x43C:
         return 0xB0;
     case 0x43D:
@@ -360,37 +362,37 @@ switch (temp_t7) {
 
 }
 
-void func_80800A84_chbottlesfamily(param_0) Actor *param_0;
+void func_80800A84_chbottlesfamily(actor) Actor *actor;
 {
-    f32 local_0[3];
+    f32 rot[3];
 
-switch (param_0->unk6C_9) {
+switch (actor->unk6C_9) {
     case 0x43D:
-        _gcdialogcamera_entrypoint_3(D_80800F88_chbottlesfamily, param_0->scale);
-        _gcdialogcamera_entrypoint_5(param_0->rotation);
+        _gcdialogcamera_entrypoint_3(D_80800F88_chbottlesfamily, actor->scale);
+        _gcdialogcamera_entrypoint_5(actor->rotation);
         break;
     case 0x43C:
-        func_800EFA4C(local_0, 0.0f, func_8010CD28(param_0), 0.0f);
-        _gcdialogcamera_entrypoint_3(D_80800F98_chbottlesfamily, param_0->scale);
-        _gcdialogcamera_entrypoint_5(local_0);
+        func_800EFA4C(rot, 0.0f, func_8010CD28(actor), 0.0f);
+        _gcdialogcamera_entrypoint_3(D_80800F98_chbottlesfamily, actor->scale);
+        _gcdialogcamera_entrypoint_5(rot);
         break;
     case 0x43B:
-        _gcdialogcamera_entrypoint_3(D_80800FA8_chbottlesfamily, param_0->scale * 3.0f);
-        _gcdialogcamera_entrypoint_5(param_0->rotation);
+        _gcdialogcamera_entrypoint_3(D_80800FA8_chbottlesfamily, actor->scale * 3.0f);
+        _gcdialogcamera_entrypoint_5(actor->rotation);
 }
 
-_gcdialogcamera_entrypoint_4(param_0->position);
+_gcdialogcamera_entrypoint_4(actor->position);
 
 }
 
-int func_80800B64_chbottlesfamily(param_0, param_1, param_2)
-Actor *param_0;
+int func_80800B64_chbottlesfamily(actor, param_1, param_2)
+Actor *actor;
 s32 param_1;
 s32 param_2;
 {
     if (_gcdialogcamera_entrypoint_0(param_1 | 0, param_2 | 0)) {
-        if ((*(s32 *) ((char *) param_0 + 0x6C) & 0x1FF) != 2) {
-            func_80800C08_chbottlesfamily(param_0, 2, 1);
+        if ((*(s32 *) ((char *) actor + 0x6C) & 0x1FF) != 2) {
+            func_80800C08_chbottlesfamily(actor, 2, 1);
         }
         return 2;
     }
@@ -399,31 +401,31 @@ return 1;
 
 }
 
-void func_80800BC0_chbottlesfamily(param_0) void *param_0;
+void func_80800BC0_chbottlesfamily(actor) void *actor;
 {
-    if ((*(u32 *) ((char *) param_0 + 0x6C) & 0x1FF) != 0) {
-        _capod_entrypoint_3(0, param_0);
-        *(u16 *) ((char *) param_0 + 0x6E) &= 0xFE00;
+    if ((*(u32 *) ((char *) actor + 0x6C) & 0x1FF) != 0) {
+        _capod_entrypoint_3(0, actor);
+        *(u16 *) ((char *) actor + 0x6E) &= 0xFE00;
     }
 
 }
 
-void func_80800C08_chbottlesfamily(param_0, param_1, param_2) u8 *param_0;
+void func_80800C08_chbottlesfamily(actor, param_1, param_2) u8 *actor;
 s32 param_1;
 s32 param_2;
 {
-    s32 local_0;
+    s32 state;
 
-    local_0 = (*(s32 *) ((s8 *) (param_0) + (0x6C))) & 0x1FF;
+    state = (*(s32 *) ((s8 *) (actor) + (0x6C))) & 0x1FF;
 
-switch (local_0) {
+switch (state) {
     case 0:
-        _capod_entrypoint_2(*(s32 *) ((s8 *) param_0 + 0), 0x18, 0, param_0);
+        _capod_entrypoint_2(*(s32 *) ((s8 *) actor + 0), 0x18, 0, actor);
 
     case 1:
         _capod_entrypoint_8(1);
-        *(u16 *) ((s8 *) param_0 + 0x6E) = (u16) ((*(u16 *) ((s8 *) param_0 + 0x6E) & 0xFE00) | 2);
-        func_80800A84_chbottlesfamily(param_0);
+        *(u16 *) ((s8 *) actor + 0x6E) = (u16) ((*(u16 *) ((s8 *) actor + 0x6E) & 0xFE00) | 2);
+        func_80800A84_chbottlesfamily(actor);
         _gcdialogcamera_entrypoint_8();
 
     case 2:
@@ -432,21 +434,21 @@ switch (local_0) {
 
 }
 
-void func_80800CA4_chbottlesfamily(param_0, param_1, param_2) s32 *param_0;
+void func_80800CA4_chbottlesfamily(actor, param_1, param_2) s32 *actor;
 s32 param_1;
 s32 param_2;
 {
-    s32 temp_t6;
+    s32 state;
 
-    temp_t6 = (*(s32 *) ((s8 *) param_0 + 0x6C)) & 0x1FF;
+    state = (*(s32 *) ((s8 *) actor + 0x6C)) & 0x1FF;
 
-switch (temp_t6) {
+switch (state) {
     case 0:
-        _capod_entrypoint_2(*(s32 *) ((s8 *) param_0 + 0), 0x18, param_2, param_0);
+        _capod_entrypoint_2(*(s32 *) ((s8 *) actor + 0), 0x18, param_2, actor);
     case 2:
-        *(u16 *) ((s8 *) param_0 + 0x6E) = (u16) ((*(u16 *) ((s8 *) param_0 + 0x6E) & 0xFE00) | 1);
+        *(u16 *) ((s8 *) actor + 0x6E) = (u16) ((*(u16 *) ((s8 *) actor + 0x6E) & 0xFE00) | 1);
     case 1:
-        _capod_entrypoint_6(*(s32 *) ((s8 *) param_0 + 0), param_1, param_2, param_0);
+        _capod_entrypoint_6(*(s32 *) ((s8 *) actor + 0), param_1, param_2, actor);
 }
 
 }

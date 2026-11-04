@@ -22,72 +22,75 @@ int chpumproomswitch_entrypoint_1()
     return (int) &D_808003C8_chpumproomswitch;
 }
 
-int func_80800018_chpumproomswitch(s32 param_0)
+// Marker byte 0x32 is the Kazooie switch (flag 0x9E6), else Banjo (0x9E7).
+int func_80800018_chpumproomswitch(s32 actor)
 {
     if (func_800DA298(0xB2)) {
-        func_800DA544(func_8080016C_chpumproomswitch(param_0));
+        func_800DA544(func_8080016C_chpumproomswitch(actor));
     }
-    _chswitch_entrypoint_7(param_0, func_8080016C_chpumproomswitch(param_0));
+    _chswitch_entrypoint_7(actor, func_8080016C_chpumproomswitch(actor));
     _chswitch_entrypoint_8(
-        param_0, ((u32) *(u16 *) ((char *) param_0 + 0x76) >> 7) == 0x32 ? 0x400 : 0x200);
+        actor, ((u32) *(u16 *) ((char *) actor + 0x76) >> 7) == 0x32 ? 0x400 : 0x200);
     if (func_800DA298(0xB2)) {
-        _chswitch_entrypoint_9(param_0);
-        func_80103110(param_0, 0);
+        _chswitch_entrypoint_9(actor);
+        func_80103110(actor, 0);
     }
 }
 
-void func_808000BC_chpumproomswitch(Actor *param_0, s32 param_1, s32 param_2)
+void func_808000BC_chpumproomswitch(Actor *actor, s32 msg, s32 data)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x95:
-            func_801032B0(param_0, param_0->unk74_7 == 0x32 ? 0x7B9 : 0x7B8, param_0->unk0->unk16);
+            func_801032B0(actor, actor->unk74_7 == 0x32 ? 0x7B9 : 0x7B8, actor->unk0->unk16);
             if (func_800DA298(0xB2))
-                func_80103110(param_0, 0);
+                func_80103110(actor, 0);
             break;
         case 7:
             func_80101180(0x3D2, 10, 0);
     }
-    _chswitch_entrypoint_10(param_0, param_1, param_2);
+    _chswitch_entrypoint_10(actor, msg, data);
 }
 
-func_8080016C_chpumproomswitch(param_0)
+func_8080016C_chpumproomswitch(actor)
 {
-    return (((u32) (u16) *(u16 *) ((char *) param_0 + 0x76) >> 7) == 0x32) ? 0x9E6 : 0x9E7;
+    return (((u32) (u16) *(u16 *) ((char *) actor + 0x76) >> 7) == 0x32) ? 0x9E6 : 0x9E7;
 }
 
-int func_80800194_chpumproomswitch(Actor *param_0)
+int func_80800194_chpumproomswitch(Actor *actor)
 {
-    param_0->unk58 = 0.0f;
+    actor->unk58 = 0.0f;
     if (func_800DA298(0xB2) != 0 || _glcutDll_entrypoint_19(0x20) != 0) {
-        func_80101FDC(param_0, 2);
+        func_80101FDC(actor, 2);
     }
 }
 
-void func_808001E4_chpumproomswitch(Actor *param_0)
+// Plays the slowing pump sound.
+void func_808001E4_chpumproomswitch(Actor *actor)
 {
-    s16 *local_0;
-    if (param_0->unk70_10 == 2) {
-        if (!param_0->unk5F) {
+    s16 *sound_table;
+    if (actor->unk70_10 == 2) {
+        if (!actor->unk5F) {
             if (func_800EA05C() == 0xE3)
-                local_0 = D_80800410_chpumproomswitch;
+                sound_table = D_80800410_chpumproomswitch;
             else
-                local_0 = D_80800424_chpumproomswitch;
-            param_0->unk5F = func_800C4350(0, param_0->position, local_0);
+                sound_table = D_80800424_chpumproomswitch;
+            actor->unk5F = func_800C4350(0, actor->position, sound_table);
         }
-        func_800D9078(&param_0->unk58);
-        func_800C31DC(param_0->unk5F, func_800F12D4(param_0->unk58, 0.0f, 3.5f, 1.0f, 0.3f));
-        func_800C4350(param_0->unk5F, 0, 0);
+        func_800D9078(&actor->unk58);
+        func_800C31DC(actor->unk5F, func_800F12D4(actor->unk58, 0.0f, 3.5f, 1.0f, 0.3f));
+        func_800C4350(actor->unk5F, 0, 0);
     }
 }
 
-s32 func_808002A0_chpumproomswitch(Actor *param_0, s32 param_1, s32 param_2)
+// Message 10 starts the pump when both switches are set; 11 runs the cutscene.
+s32 func_808002A0_chpumproomswitch(Actor *actor, s32 msg, s32 data)
 {
-    switch (param_1) {
+    switch (msg) {
         case 10:
-            if (param_0->unk70_10 == 1 && func_800DA298(0x9E6) && func_800DA298(0x9E7)) {
-                param_0->unk58 = 3.5f;
-                func_80101FDC(param_0, 2);
-                _capod_entrypoint_13(param_0->unk0, 0, 0, 0x10);
+            if (actor->unk70_10 == 1 && func_800DA298(0x9E6) && func_800DA298(0x9E7)) {
+                actor->unk58 = 3.5f;
+                func_80101FDC(actor, 2);
+                _capod_entrypoint_13(actor->unk0, 0, 0, 0x10);
             }
             break;
         case 11:

@@ -161,7 +161,6 @@ s32 sudeflect_entrypoint_3(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s
 }
 
 // Pushes back the players caught by the last keep-out call, unless in certain states.
-// Pushes back the players caught by the last keep-out call, unless in certain states.
 void sudeflect_entrypoint_4(s32 param_0, s32 param_1)
 {
     s32 i;

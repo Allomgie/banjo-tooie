@@ -3,8 +3,8 @@
 extern int D_80800B50_chmadamegrunty[];
 extern int D_80800B98_chmadamegrunty[];
 typedef union {
-    s32 local_0;
-    s16 local_1[2];
+    s32 word;
+    s16 halves[2];
 } MadameMessage1417;
 extern void func_800EEB9C(f32 *, f32, f32);
 extern void func_800F4AC0(s32, f32 *, f32);
@@ -23,9 +23,9 @@ extern MadameReward D_80800AF0_chmadamegrunty[8];
 extern f32 func_800DC178(f32, f32);
 extern s32 func_800C6E38(s32);
 typedef struct {
-    s32 unk0;
-    f32 unk4;
-    f32 unk8;
+    s32 sound_id;
+    f32 time;
+    f32 pitch;
 } MadameEntry;
 extern MadameEntry D_80800BE0_chmadamegrunty[9];
 extern s32 func_800D9078();
@@ -41,7 +41,7 @@ extern void func_800C3BDC();
 void func_80800460_chmadamegrunty();
 void func_80800784_chmadamegrunty();
 void func_8080082C_chmadamegrunty();
-void func_808009AC_chmadamegrunty(Actor *param_0, s32 param_1, f32 param_2);
+void func_808009AC_chmadamegrunty(Actor *actor, s32 pitch_id, f32 pitch);
 
 int chmadamegrunty_entrypoint_0()
 {
@@ -53,11 +53,11 @@ int chmadamegrunty_entrypoint_1()
     return (int) &D_80800B98_chmadamegrunty;
 }
 
-int func_80800018_chmadamegrunty(Actor *param_0)
+int func_80800018_chmadamegrunty(Actor *actor)
 {
     if (func_800DA298(0xA02)) {
-        func_80101FDC(param_0, 7);
-        param_0->unk58 = 20.0f;
+        func_80101FDC(actor, 7);
+        actor->unk58 = 20.0f;
     }
 }
 
@@ -67,43 +67,43 @@ void func_808003B0_chmadamegrunty();
 
 void func_80800200_chmadamegrunty();
 
-void func_8080005C_chmadamegrunty(Actor *param_0)
+void func_8080005C_chmadamegrunty(Actor *actor)
 {
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            func_80800200_chmadamegrunty(param_0);
+            func_80800200_chmadamegrunty(actor);
         case 4:
             break;
         case 5:
-            if (!func_808008D4_chmadamegrunty(param_0)) {
+            if (!func_808008D4_chmadamegrunty(actor)) {
                 func_800F4924(func_800F54E4(), -1);
-                func_808003B0_chmadamegrunty(param_0);
+                func_808003B0_chmadamegrunty(actor);
             }
             break;
         case 6:
-            if (func_800D9078(&param_0->unk58)) {
-                func_8080082C_chmadamegrunty(param_0, param_0->unk64_20 ? 7 : 1);
-                param_0->unk64_20 = 0;
+            if (func_800D9078(&actor->unk58)) {
+                func_8080082C_chmadamegrunty(actor, actor->unk64_20 ? 7 : 1);
+                actor->unk64_20 = 0;
             }
             break;
         case 7:
-            if (func_800D90A4(&param_0->unk58) && _subaddiedialog_entrypoint_16() &&
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x10CB, 0, 0, 0x43)) {
-                func_8080082C_chmadamegrunty(param_0, 1);
+            if (func_800D90A4(&actor->unk58) && _subaddiedialog_entrypoint_16() &&
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x10CB, 0, 0, 0x43)) {
+                func_8080082C_chmadamegrunty(actor, 1);
                 func_80101180(0x3D4, 7, 0);
-                _subaddieDll_entrypoint_4(param_0, 0);
+                _subaddieDll_entrypoint_4(actor, 0);
             }
     }
 }
 
-int func_80800198_chmadamegrunty(Actor *param_0, s32 param_1, MadameMessage1417 param_2)
+int func_80800198_chmadamegrunty(Actor *actor, s32 msg, MadameMessage1417 arg)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x2E:
-            func_80800784_chmadamegrunty(param_0, param_2.local_1[0], param_2.local_1[1]);
+            func_80800784_chmadamegrunty(actor, arg.halves[0], arg.halves[1]);
             break;
         case 0x32:
-            func_80800460_chmadamegrunty(param_0);
+            func_80800460_chmadamegrunty(actor);
             break;
         default:
             return 0;
@@ -111,92 +111,92 @@ int func_80800198_chmadamegrunty(Actor *param_0, s32 param_1, MadameMessage1417 
     return 1;
 }
 
-void func_80800200_chmadamegrunty(s32 *param_0)
+void func_80800200_chmadamegrunty(s32 *actor)
 {
-    s32 temp_v0;
+    s32 player;
 
-    temp_v0 = func_800F54E4();
-    if ((func_800F6438(temp_v0) != 0) && (func_800F6478(temp_v0) != 0) &&
-        (func_8010C500(param_0) != 0) && (func_800F64A4(temp_v0, 0x10000) == 0)) {
-        func_800F497C(temp_v0);
-        func_800F49D4(temp_v0, &func_8010D5DC, *param_0);
-        func_800F4AC0(temp_v0, param_0 + 1, 1.7e+02f);
-        func_8080082C_chmadamegrunty(param_0, 2);
-        _capod_entrypoint_13(*param_0, 0, 0xAE, 0x20);
+    player = func_800F54E4();
+    if ((func_800F6438(player) != 0) && (func_800F6478(player) != 0) &&
+        (func_8010C500(actor) != 0) && (func_800F64A4(player, 0x10000) == 0)) {
+        func_800F497C(player);
+        func_800F49D4(player, &func_8010D5DC, *actor);
+        func_800F4AC0(player, actor + 1, 1.7e+02f);
+        func_8080082C_chmadamegrunty(actor, 2);
+        _capod_entrypoint_13(*actor, 0, 0xAE, 0x20);
     }
 }
 
-void func_808002BC_chmadamegrunty(param_0) Actor *param_0;
+void func_808002BC_chmadamegrunty(actor) Actor *actor;
 {
-    f32 local_0[3];
+    f32 offset[3];
 
-    func_800EEB9C(local_0, param_0->rotation[1], 400.0f);
-    func_800EF04C(local_0, param_0->position);
+    func_800EEB9C(offset, actor->rotation[1], 400.0f);
+    func_800EF04C(offset, actor->position);
     func_800F82D4(func_800F54E4(), 0);
     func_800F497C(func_800F54E4());
-    func_800F49D4(func_800F54E4(), func_8010D5DC, param_0->unk0);
-    func_800F4AC0(func_800F54E4(), local_0, 170.0f);
-    func_8080082C_chmadamegrunty(param_0, 4);
-    param_0->unk64_20 = func_800DC298(0.25f);
-    if (param_0->unk64_20) {
+    func_800F49D4(func_800F54E4(), func_8010D5DC, actor->unk0);
+    func_800F4AC0(func_800F54E4(), offset, 170.0f);
+    func_8080082C_chmadamegrunty(actor, 4);
+    actor->unk64_20 = func_800DC298(0.25f);
+    if (actor->unk64_20) {
         func_80101180(0x3D4, 8, 0);
     }
     _capod_entrypoint_14();
 }
 
-void func_808003B0_chmadamegrunty(Actor *param_0)
+void func_808003B0_chmadamegrunty(Actor *actor)
 {
     func_800F82D4(func_800F54E4(), 0);
-    func_800F7C0C(func_800F54E4(), 0x44, param_0->rotation[1]);
-    func_8080082C_chmadamegrunty(param_0, 6);
-    param_0->unk58 = 1.5f;
-    param_0->unk64_20 = func_800DC298(0.25f);
-    if (param_0->unk64_20)
+    func_800F7C0C(func_800F54E4(), 0x44, actor->rotation[1]);
+    func_8080082C_chmadamegrunty(actor, 6);
+    actor->unk58 = 1.5f;
+    actor->unk64_20 = func_800DC298(0.25f);
+    if (actor->unk64_20)
         func_80101180(0x3D4, 8, 0);
     _capod_entrypoint_14();
 }
 
-void func_80800460_chmadamegrunty(param_0) Actor *param_0;
+void func_80800460_chmadamegrunty(actor) Actor *actor;
 {
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 2:
             if (!func_800F64A4(func_800F54E4(), 0x201)) {
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x10A0, 15, 0, 0x43);
-                func_8080082C_chmadamegrunty(param_0, 3);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x10A0, 15, 0, 0x43);
+                func_8080082C_chmadamegrunty(actor, 3);
             } else {
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x109F, 15, 0, 0x43);
-                func_8080082C_chmadamegrunty(param_0, 3);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x109F, 15, 0, 0x43);
+                func_8080082C_chmadamegrunty(actor, 3);
             }
             func_800F82D4(func_800F54E4(), 2);
             break;
         case 4:
-            func_8080082C_chmadamegrunty(param_0, param_0->unk64_20 ? 7 : 1);
-            param_0->unk64_20 = 0;
+            func_8080082C_chmadamegrunty(actor, actor->unk64_20 ? 7 : 1);
+            actor->unk64_20 = 0;
     }
 }
 
-s32 func_80800564_chmadamegrunty(param_0)
-Actor *param_0;
+s32 func_80800564_chmadamegrunty(actor)
+Actor *actor;
 {
-    f32 local_0;
-    f32 local_1;
+    f32 roll;
+    f32 sum;
     s32 i;
 
-    local_0 = 0.0f;
-    local_1 = 0.0f;
+    roll = 0.0f;
+    sum = 0.0f;
     for (i = 0; i < 8; i++) {
         if (D_80800AF0_chmadamegrunty[i].flag == -1 ||
             func_800C6E38(D_80800AF0_chmadamegrunty[i].flag)) {
-            local_0 += D_80800AF0_chmadamegrunty[i].weight;
+            roll += D_80800AF0_chmadamegrunty[i].weight;
         }
     }
-    local_0 = func_800DC178(0.0f, local_0);
+    roll = func_800DC178(0.0f, roll);
     for (i = 0; i < 8; i++) {
         if (D_80800AF0_chmadamegrunty[i].flag == -1 ||
             func_800C6E38(D_80800AF0_chmadamegrunty[i].flag)) {
-            local_1 += D_80800AF0_chmadamegrunty[i].weight;
-            if (local_0 <= local_1) {
-                *(s32 *) &param_0->unk50 = i;
+            sum += D_80800AF0_chmadamegrunty[i].weight;
+            if (roll <= sum) {
+                *(s32 *) &actor->unk50 = i;
                 return i + 0x10A1;
             }
         }
@@ -204,45 +204,45 @@ Actor *param_0;
     return 0;
 }
 
-void func_80800670_chmadamegrunty(param_0) Actor *param_0;
+void func_80800670_chmadamegrunty(actor) Actor *actor;
 {
-    f32 local_0[3];
-    s32 local_1;
-    local_1 = *(s32 *) &param_0->unk50;
-    func_800EE7F8(local_0, param_0->position);
-    func_800EF1B8(local_0, param_0->rotation[1], 400.0f);
-    switch (local_1) {
+    f32 pos[3];
+    s32 reward_idx;
+    reward_idx = *(s32 *) &actor->unk50;
+    func_800EE7F8(pos, actor->position);
+    func_800EF1B8(pos, actor->rotation[1], 400.0f);
+    switch (reward_idx) {
         case 0:
             func_800D3EF4(6);
             func_800FC660(0xE);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x10A9, 0xE, 0, 0x43);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0x10A9, 0xE, 0, 0x43);
             break;
         case 1:
         case 2:
         case 3:
         case 4:
         case 5:
-            func_800D175C((MadameReward *) D_80800AF0_chmadamegrunty[local_1].reward,
-                          (MadameReward *) D_80800AF0_chmadamegrunty[local_1].count);
-            func_808002BC_chmadamegrunty(param_0);
+            func_800D175C((MadameReward *) D_80800AF0_chmadamegrunty[reward_idx].reward,
+                          (MadameReward *) D_80800AF0_chmadamegrunty[reward_idx].count);
+            func_808002BC_chmadamegrunty(actor);
             break;
         case 6:
             func_800F4924(func_800F54E4(), 1);
-            func_808002BC_chmadamegrunty(param_0);
+            func_808002BC_chmadamegrunty(actor);
             break;
         case 7:
-            func_80101FDC(param_0, 5);
-            param_0->unk58 = 4.0f;
+            func_80101FDC(actor, 5);
+            actor->unk58 = 4.0f;
     }
 }
 
-void func_80800784_chmadamegrunty(arg0, arg1, arg2) s32 *arg0;
-s32 arg1;
-s32 arg2;
+void func_80800784_chmadamegrunty(actor_ref, dialog_id, unused) s32 *actor_ref;
+s32 dialog_id;
+s32 unused;
 {
-    switch (arg1) {
+    switch (dialog_id) {
         case 0x109F:
-            _subaddiedialog_entrypoint_11(*arg0, func_80800564_chmadamegrunty(), 0xE, 0, 0x43);
+            _subaddiedialog_entrypoint_11(*actor_ref, func_80800564_chmadamegrunty(), 0xE, 0, 0x43);
             return;
 
         case 0x10A9:
@@ -254,7 +254,7 @@ s32 arg2;
             return;
 
         default:
-            if (!arg0 && !arg0) {
+            if (!actor_ref && !actor_ref) {
             }
             func_80800670_chmadamegrunty();
 
@@ -265,68 +265,68 @@ s32 arg2;
     }
 }
 
-void func_8080082C_chmadamegrunty(param_0, param_1) u8 *param_0;
-s32 param_1;
+void func_8080082C_chmadamegrunty(actor, state) u8 *actor;
+s32 state;
 {
     func_80101FDC();
 
-if (param_1 == 7) {
-    _subaddieDll_entrypoint_4(param_0, 1);
-    *(f32 *) ((s8 *) param_0 + 0x58) = 60.0f;
-    _subaddiedialog_entrypoint_11(*(s32 *) ((s8 *) param_0 + 0), 0x10CA, 4, 0, 0x43);
+if (state == 7) {
+    _subaddieDll_entrypoint_4(actor, 1);
+    *(f32 *) ((s8 *) actor + 0x58) = 60.0f;
+    _subaddiedialog_entrypoint_11(*(s32 *) ((s8 *) actor + 0), 0x10CA, 4, 0, 0x43);
 }
 
 }
 
-int func_80800898_chmadamegrunty(f32 param_0, f32 param_1, f32 param_2)
+int func_80800898_chmadamegrunty(f32 low, f32 high, f32 value)
 {
-    s32 local_0;
-    local_0 = 0;
+    s32 result;
+    result = 0;
 
-if (param_0 <= param_2 && param_2 < param_1) {
+if (low <= value && value < high) {
     return 1;
 }
 
-return local_0;
+return result;
 }
 
-s32 func_808008D4_chmadamegrunty(Actor *param_0)
+s32 func_808008D4_chmadamegrunty(Actor *actor)
 {
-    f32 local_0;
-    s32 local_1;
+    f32 prev_timer;
+    s32 running;
     s32 i;
 
-    local_0 = *(f32 *) ((u8 *) param_0 + 0x58);
-    local_1 = func_800D9078((f32 *) ((u8 *) param_0 + 0x58));
+    prev_timer = *(f32 *) ((u8 *) actor + 0x58);
+    running = func_800D9078((f32 *) ((u8 *) actor + 0x58));
     for (i = 0; i < 9; i++) {
 
 if (func_80800898_chmadamegrunty(
-        *(f32 *) ((u8 *) param_0 + 0x58), local_0,
-        func_800F10B4(D_80800BE0_chmadamegrunty[i].unk4, 0.0f, 1.0f, 4.0f, 0.0f))) {
-    func_808009AC_chmadamegrunty(param_0, D_80800BE0_chmadamegrunty[i].unk0,
-                                 D_80800BE0_chmadamegrunty[i].unk8);
+        *(f32 *) ((u8 *) actor + 0x58), prev_timer,
+        func_800F10B4(D_80800BE0_chmadamegrunty[i].time, 0.0f, 1.0f, 4.0f, 0.0f))) {
+    func_808009AC_chmadamegrunty(actor, D_80800BE0_chmadamegrunty[i].sound_id,
+                                 D_80800BE0_chmadamegrunty[i].pitch);
 }
 
 }
-return local_1 == 0;
+return running == 0;
 }
 
-void func_808009AC_chmadamegrunty(Actor *param_0, s32 param_1, f32 param_2)
+void func_808009AC_chmadamegrunty(Actor *actor, s32 pitch_id, f32 pitch)
 {
-    u8 local_0;
+    u8 sfx;
 
-    local_0 = _subaddieaudioquick_entrypoint_1(param_0, param_0->position);
-    func_800C4350(local_0, param_0->position, D_80800C4C_chmadamegrunty);
-    func_800C301C(local_0, param_1);
-    func_800C31DC(local_0, func_800DC178(-0.05f, 0.05f) + param_2);
-    func_800C3BDC(local_0);
+    sfx = _subaddieaudioquick_entrypoint_1(actor, actor->position);
+    func_800C4350(sfx, actor->position, D_80800C4C_chmadamegrunty);
+    func_800C301C(sfx, pitch_id);
+    func_800C31DC(sfx, func_800DC178(-0.05f, 0.05f) + pitch);
+    func_800C3BDC(sfx);
 }
 
-void func_80800A30_chmadamegrunty(Actor *param_0)
+void func_80800A30_chmadamegrunty(Actor *actor)
 {
-    if (_chdoormake_entrypoint_3(param_0, 0.0f, 90.0f, 200.0f * param_0->scale, 0x2812, 0xA02)) {
-        _chdoormake_entrypoint_5(param_0, 1.0f);
-        _chdoormake_entrypoint_7(param_0, 1.0f);
+    if (_chdoormake_entrypoint_3(actor, 0.0f, 90.0f, 200.0f * actor->scale, 0x2812, 0xA02)) {
+        _chdoormake_entrypoint_5(actor, 1.0f);
+        _chdoormake_entrypoint_7(actor, 1.0f);
     }
 }
 
@@ -336,6 +336,8 @@ extern void func_80107C2C();
 extern void _chdoor_entrypoint_0();
 extern void func_80101870();
 extern void _chdoor_entrypoint_1();
+// TU-NOTE: the .data of this overlay is defined in this file; IDO schedules some of the
+// functions differently unless the tables live in the same unit. Values are from the ROM.
 MadameReward D_80800AF0_chmadamegrunty[8] = {
     -0x1,  -0x1,  0x0,  0x0,  0.01f, 0x40,  0x31,  0x14, 0x0,  0.11f, 0x41,  0x2C, 0x5,  0x0,
     0.11f, 0x43,  0x2D, 0x5,  0x0,   0.11f, 0x46,  0x9,  0xA,  0x0,   0.11f, 0x47, 0x12, 0x5,

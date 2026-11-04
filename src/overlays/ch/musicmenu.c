@@ -90,419 +90,422 @@ extern void func_8008F990(f32 *, f32);
 extern s32 func_800FCCD4(s32);
 void func_80800930_chmusicmenu();
 
-void func_80800000_chmusicmenu(u8 *param_0)
+// Jukebox in Jolly's bar: toggles the dance state and tells listeners (message 0x6E).
+void func_80800000_chmusicmenu(u8 *actor)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 unk_0;
+    s32 unk_1;
 
     if (func_800DA298(0xC0) != 0) {
-        if (*(s32 *) ((char *) param_0 + 0x28) != 0) {
-            *(f32 *) ((char *) param_0 + 0x58) = 10.0f;
+        if (*(s32 *) ((char *) actor + 0x28) != 0) {
+            *(f32 *) ((char *) actor + 0x58) = 10.0f;
             _capod_entrypoint_22();
-            local_0 = *(s32 *) ((char *) param_0 + 0);
-            _capod_entrypoint_21(local_0, local_0, 0x11, 4);
-            *(s32 *) ((char *) param_0 + 0x28) = 0;
+            unk_0 = *(s32 *) ((char *) actor + 0);
+            _capod_entrypoint_21(unk_0, unk_0, 0x11, 4);
+            *(s32 *) ((char *) actor + 0x28) = 0;
             func_80101238(0x6E, 0);
             return;
         }
-        *(f32 *) ((char *) param_0 + 0x58) = 15.0f;
+        *(f32 *) ((char *) actor + 0x58) = 15.0f;
         _capod_entrypoint_22();
-        local_1 = *(s32 *) ((char *) param_0 + 0);
-        _capod_entrypoint_21(local_1, local_1, 0x12, 4);
-        *(s32 *) ((char *) param_0 + 0x28) = 1;
+        unk_1 = *(s32 *) ((char *) actor + 0);
+        _capod_entrypoint_21(unk_1, unk_1, 0x12, 4);
+        *(s32 *) ((char *) actor + 0x28) = 1;
         func_80101238(0x6E, 1);
     }
 }
 
-s32 func_808000B4_chmusicmenu(s32 param_0)
+// Maps a category index to its menu title string id.
+s32 func_808000B4_chmusicmenu(s32 category)
 {
-    if (param_0 < 9) {
-        return param_0 + 0x1851;
+    if (category < 9) {
+        return category + 0x1851;
     }
-    return param_0 + 0x1860;
+    return category + 0x1860;
 }
 
-void func_808000D0_chmusicmenu(u8 *param_0, s32 param_1)
+void func_808000D0_chmusicmenu(u8 *actor, s32 menu)
 {
     s32 i;
 
-    switch ((u32) *(u16 *) (param_0 + 0x72) >> 10) {
+    switch ((u32) *(u16 *) (actor + 0x72) >> 10) {
         case 1:
-            _gcnewoption_entrypoint_32(param_1, 0x6F);
+            _gcnewoption_entrypoint_32(menu, 0x6F);
             for (i = 0; i < 12; i++) {
                 if (((MusicCat76 *) D_808014F4_chmusicmenu)[i].id == 0x50 && func_800DC298(0.5f)) {
-                    _gcnewoption_entrypoint_31(param_1, i, 0x51);
+                    _gcnewoption_entrypoint_31(menu, i, 0x51);
                 } else {
-                    _gcnewoption_entrypoint_31(param_1, i,
+                    _gcnewoption_entrypoint_31(menu, i,
                                                ((MusicCat76 *) D_808014F4_chmusicmenu)[i].id);
                 }
             }
             return;
         case 2:
-            _gcnewoption_entrypoint_32(param_1, 0x6F);
-            _gcnewoption_entrypoint_33(param_1);
+            _gcnewoption_entrypoint_32(menu, 0x6F);
+            _gcnewoption_entrypoint_33(menu);
             for (i = 0;
-                 i < ((MusicCat76 *) D_808014F4_chmusicmenu)[*(s32 *) (param_0 + 0x30)].count;
+                 i < ((MusicCat76 *) D_808014F4_chmusicmenu)[*(s32 *) (actor + 0x30)].count;
                  i++) {
                 _gcnewoption_entrypoint_31(
-                    param_1, i,
-                    ((MusicCat76 *) D_808014F4_chmusicmenu)[*(s32 *) (param_0 + 0x30)].id);
+                    menu, i,
+                    ((MusicCat76 *) D_808014F4_chmusicmenu)[*(s32 *) (actor + 0x30)].id);
             }
     }
 }
 
-void func_8080021C_chmusicmenu(Actor *param_0, void *param_1)
+void func_8080021C_chmusicmenu(Actor *actor, void *menu)
 {
-    s32 local_0;
-    MusicStyle62 local_1;
-    MusicStyle62 local_2;
+    s32 i;
+    MusicStyle62 style_on;
+    MusicStyle62 style_off;
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            for (local_0 = 0; local_0 < 12; local_0++)
-                _gcnewoption_entrypoint_12(param_1, local_0, (s16) (local_0 + 10));
-            if ((s32) param_0->actorData[1] != -1) {
-                _gcnewoption_entrypoint_27(param_1, param_0->actorData[1], 1);
-                _gcnewoption_entrypoint_41(param_1, param_0->actorData[1]);
+            for (i = 0; i < 12; i++)
+                _gcnewoption_entrypoint_12(menu, i, (s16) (i + 10));
+            if ((s32) actor->actorData[1] != -1) {
+                _gcnewoption_entrypoint_27(menu, actor->actorData[1], 1);
+                _gcnewoption_entrypoint_41(menu, actor->actorData[1]);
             }
             break;
         case 2:
-            local_1 = D_80801554_chmusicmenu;
-            local_2 = D_8080155C_chmusicmenu;
-            for (local_0 = 0;
-                 local_0 <
-                 ((MusicCategory62 *) D_808014F4_chmusicmenu)[param_0->actorData[6]].local_1;
-                 local_0++) {
-                _gcnewoption_entrypoint_12(param_1, local_0, (s16) (local_0 + 10));
-                if (func_800FCF50((MusicCategory62 *) D_808014F4_chmusicmenu[param_0->actorData[6]]
-                                      .local_0[local_0]
+            style_on = D_80801554_chmusicmenu;
+            style_off = D_8080155C_chmusicmenu;
+            for (i = 0;
+                 i <
+                 ((MusicCategory62 *) D_808014F4_chmusicmenu)[actor->actorData[6]].local_1;
+                 i++) {
+                _gcnewoption_entrypoint_12(menu, i, (s16) (i + 10));
+                if (func_800FCF50((MusicCategory62 *) D_808014F4_chmusicmenu[actor->actorData[6]]
+                                      .local_0[i]
                                       .local_0))
-                    _gcnewoption_entrypoint_13(param_1, local_0, &local_1);
+                    _gcnewoption_entrypoint_13(menu, i, &style_on);
                 else
-                    _gcnewoption_entrypoint_13(param_1, local_0, &local_2);
+                    _gcnewoption_entrypoint_13(menu, i, &style_off);
             }
-            if (param_0->actorData[1] == param_0->actorData[6] &&
-                (s32) param_0->actorData[0] != -1) {
-                _gcnewoption_entrypoint_27(param_1, param_0->actorData[0], 1);
-                _gcnewoption_entrypoint_41(param_1, param_0->actorData[0]);
+            if (actor->actorData[1] == actor->actorData[6] &&
+                (s32) actor->actorData[0] != -1) {
+                _gcnewoption_entrypoint_27(menu, actor->actorData[0], 1);
+                _gcnewoption_entrypoint_41(menu, actor->actorData[0]);
             }
     }
 }
 
-void func_80800400_chmusicmenu(Actor *param_0)
+void func_80800400_chmusicmenu(Actor *actor)
 {
-    MusicEntry *local_3;
-    s32 local_0;
-    s16 local_1;
-    s32 local_2;
+    MusicEntry *entries;
+    s32 unk_0;
+    s16 unk_1;
+    s32 track_id;
 
-    if ((s32) param_0->actorData[0] >= 0 && (!param_0->unk74_30 || !param_0->unk74_29)) {
-        local_3 = ((MusicSet *) D_808014F4_chmusicmenu)[param_0->actorData[6]].entries;
-        if (local_3[param_0->actorData[0]].unk3 != -1) {
-            local_0 = -1;
-            local_1 = -1;
-            local_2 = local_3[param_0->actorData[0]].id;
-            func_800FEF94(4, local_3[param_0->actorData[0]].unk3,
-                          local_3[param_0->actorData[0]].unk2, &local_0, &local_1);
-            if (!param_0->unk74_30) {
-                param_0->unk74_30 = func_800FCDE0(local_2, local_0, param_0->actorData[3]);
+    if ((s32) actor->actorData[0] >= 0 && (!actor->unk74_30 || !actor->unk74_29)) {
+        entries = ((MusicSet *) D_808014F4_chmusicmenu)[actor->actorData[6]].entries;
+        if (entries[actor->actorData[0]].unk3 != -1) {
+            unk_0 = -1;
+            unk_1 = -1;
+            track_id = entries[actor->actorData[0]].id;
+            func_800FEF94(4, entries[actor->actorData[0]].unk3,
+                          entries[actor->actorData[0]].unk2, &unk_0, &unk_1);
+            if (!actor->unk74_30) {
+                actor->unk74_30 = func_800FCDE0(track_id, unk_0, actor->actorData[3]);
             }
-            if (!param_0->unk74_29) {
-                param_0->unk74_29 =
-                    func_800FCED0(local_2, 60000000 / local_1, param_0->actorData[3]);
+            if (!actor->unk74_29) {
+                actor->unk74_29 =
+                    func_800FCED0(track_id, 60000000 / unk_1, actor->actorData[3]);
             }
         }
     }
 }
 
-void func_80800560_chmusicmenu(Actor *param_0, s32 param_1, f32 param_2)
+void func_80800560_chmusicmenu(Actor *actor, s32 unk_1, f32 unk_2)
 {
-    MusicItem62 *local_0;
+    MusicItem62 *items;
 
-    local_0 = D_808014F4_chmusicmenu[param_0->actorData[6]].local_0;
-    if (param_2 == 0.0f) {
-        func_800FC660(local_0[param_0->actorData[0]].local_0);
+    items = D_808014F4_chmusicmenu[actor->actorData[6]].local_0;
+    if (unk_2 == 0.0f) {
+        func_800FC660(items[actor->actorData[0]].local_0);
     } else {
-        func_800FCAE0(local_0[param_0->actorData[0]].local_0, -1, 0x14D);
+        func_800FCAE0(items[actor->actorData[0]].local_0, -1, 0x14D);
     }
-    param_0->unk74_30 = 0;
-    param_0->unk74_29 = 0;
-    ((f32 *) param_0->actorData)[3] = param_2;
-    func_80800400_chmusicmenu(param_0);
+    actor->unk74_30 = 0;
+    actor->unk74_29 = 0;
+    ((f32 *) actor->actorData)[3] = unk_2;
+    func_80800400_chmusicmenu(actor);
 }
 
-void func_80800610_chmusicmenu(Actor *param_0)
+void func_80800610_chmusicmenu(Actor *actor)
 {
-    s16 local_0;
-    s16 *local_1;
-    MusicTrack *local_2;
+    s16 track_id;
+    s16 *unk_1;
+    MusicTrack *tracks;
 
-    if (!param_0->unk64_20) {
+    if (!actor->unk64_20) {
         func_800FEC60(5);
-        param_0->unk64_20 = 1;
+        actor->unk64_20 = 1;
         func_800DA544(0);
     }
-    local_1 = &local_0;
-    local_2 = ((MusicMenuEntry *) D_808014F4_chmusicmenu)[*(s32 *) ((u8 *) param_0 + 0x30)].unk0;
-    local_0 = local_2[*(s32 *) ((u8 *) param_0 + 0x18)].id;
-    if (param_0->unk74_7 != 0) {
-        func_800FCAE0(param_0->unk74_7, 0, 0x14D);
-        func_800FCA90(param_0->unk74_7);
+    unk_1 = &track_id;
+    tracks = ((MusicMenuEntry *) D_808014F4_chmusicmenu)[*(s32 *) ((u8 *) actor + 0x30)].unk0;
+    track_id = tracks[*(s32 *) ((u8 *) actor + 0x18)].id;
+    if (actor->unk74_7 != 0) {
+        func_800FCAE0(actor->unk74_7, 0, 0x14D);
+        func_800FCA90(actor->unk74_7);
     }
-    if (param_0->unk74_7 == local_0) {
-        func_80800560_chmusicmenu(param_0, local_0, 1.5f);
+    if (actor->unk74_7 == track_id) {
+        func_80800560_chmusicmenu(actor, track_id, 1.5f);
     } else {
-        param_0->unk64_19 = 1;
-        *(f32 *) ((u8 *) param_0 + 0x2C) = 2.0f;
+        actor->unk64_19 = 1;
+        *(f32 *) ((u8 *) actor + 0x2C) = 2.0f;
     }
-    param_0->unk74_7 = local_0;
+    actor->unk74_7 = track_id;
 }
 
-void func_80800714_chmusicmenu(Actor *param_0)
+void func_80800714_chmusicmenu(Actor *actor)
 {
-    if (param_0->unk64_20) {
+    if (actor->unk64_20) {
         func_800FECB8(5);
-        param_0->unk64_20 = 0;
+        actor->unk64_20 = 0;
         func_800FE8AC();
-        func_800FCAE0(param_0->unk74_7, 0, 0x14D);
-        func_800FCA90(param_0->unk74_7);
-        param_0->unk74_7 = 0;
+        func_800FCAE0(actor->unk74_7, 0, 0x14D);
+        func_800FCA90(actor->unk74_7);
+        actor->unk74_7 = 0;
         func_800DA524(0);
     }
 }
 
-void func_8080079C_chmusicmenu(param_0, param_1, param_2, param_3) Actor *param_0;
-s32 param_1;
-s32 param_2;
-s32 param_3;
+void func_8080079C_chmusicmenu(actor, menu, index, event) Actor *actor;
+s32 menu;
+s32 index;
+s32 event;
 {
-    s32 local_0;
+    s32 prev_index;
 
-    switch (param_3) {
+    switch (event) {
         case 4:
             if (func_800FCF50(
-                    D_808014F4_chmusicmenu[param_0->actorData[6]].local_0[param_2].local_0)) {
-                if (!param_0->unk64_19 && param_2 != param_0->actorData[0]) {
-                    _gcnewoption_entrypoint_27(param_1, param_2, 1);
-                    local_0 = param_0->actorData[0];
-                    if (local_0 != -1) {
-                        _gcnewoption_entrypoint_27(param_1, local_0, 0);
+                    D_808014F4_chmusicmenu[actor->actorData[6]].local_0[index].local_0)) {
+                if (!actor->unk64_19 && index != actor->actorData[0]) {
+                    _gcnewoption_entrypoint_27(menu, index, 1);
+                    prev_index = actor->actorData[0];
+                    if (prev_index != -1) {
+                        _gcnewoption_entrypoint_27(menu, prev_index, 0);
                     }
-                    param_0->actorData[2] = param_2;
-                    param_0->actorData[0] = param_2;
-                    param_0->actorData[1] = param_0->actorData[6];
-                    func_80800610_chmusicmenu(param_0);
+                    actor->actorData[2] = index;
+                    actor->actorData[0] = index;
+                    actor->actorData[1] = actor->actorData[6];
+                    func_80800610_chmusicmenu(actor);
                 }
             } else {
                 func_800FC660(0xF);
             }
             break;
         case 3:
-            param_0->actorData[6] = param_2;
-            func_80800930_chmusicmenu(param_0, 2);
+            actor->actorData[6] = index;
+            func_80800930_chmusicmenu(actor, 2);
             break;
         case 0:
-            func_8080021C_chmusicmenu(param_0, param_1);
+            func_8080021C_chmusicmenu(actor, menu);
             break;
         case 5:
-            if (!param_0->unk64_19) {
-                _gcnewoption_entrypoint_37(func_80100094(param_0, 1), 1);
+            if (!actor->unk64_19) {
+                _gcnewoption_entrypoint_37(func_80100094(actor, 1), 1);
             }
             break;
         case 2:
-            switch (param_0->unk70_10) {
+            switch (actor->unk70_10) {
                 case 1:
-                    func_80800930_chmusicmenu(param_0, 3);
+                    func_80800930_chmusicmenu(actor, 3);
                     break;
                 case 2:
-                    func_80800930_chmusicmenu(param_0, 1);
+                    func_80800930_chmusicmenu(actor, 1);
             }
     }
 }
 
-void func_80800930_chmusicmenu(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800930_chmusicmenu(actor, mode) Actor *actor;
+s32 mode;
 {
-    void *local_0;
-    void *local_1;
-    f32 local_2[3];
+    void *menu;
+    void *track_menu;
+    f32 pos[3];
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 2:
-            _gcnewoption_entrypoint_6(param_0, 1);
+            _gcnewoption_entrypoint_6(actor, 1);
             break;
         case 1:
-            _gcnewoption_entrypoint_6(param_0, 1);
-            param_0->actorData[0] = -1;
-            param_0->unk64_19 = 0;
-            if (param_1 == 3) {
+            _gcnewoption_entrypoint_6(actor, 1);
+            actor->actorData[0] = -1;
+            actor->unk64_19 = 0;
+            if (mode == 3) {
                 _capod_entrypoint_22();
                 func_80101238(0x6E, 0);
             }
             break;
         case 5:
-            func_800F8300(func_800F54E4(), 2, param_0->position);
-            _capod_entrypoint_21(param_0->unk0, param_0->unk0, 0x11, 4);
-            param_0->actorData[4] = 0;
-            param_0->unk58 = 10.0f;
+            func_800F8300(func_800F54E4(), 2, actor->position);
+            _capod_entrypoint_21(actor->unk0, actor->unk0, 0x11, 4);
+            actor->actorData[4] = 0;
+            actor->unk58 = 10.0f;
     }
-    func_80102424(param_0, param_1);
-    switch (param_0->unk70_10) {
+    func_80102424(actor, mode);
+    switch (actor->unk70_10) {
         case 1:
-            _gcnewoption_entrypoint_4(param_0, 1, _gcnewoption_entrypoint_35, 0, 0x1850);
-            local_0 = func_80100094(param_0, 1);
-            _gcnewoption_entrypoint_40(local_0, 0x41, 0x22, 0x20, 0.8f, 1.0f);
-            _gcnewoption_entrypoint_8(local_0, 5);
-            _gcnewoption_entrypoint_9(local_0, 12);
-            _gcnewoption_entrypoint_10(local_0, 0);
-            func_808000D0_chmusicmenu(param_0, local_0);
-            _gcnewoption_entrypoint_14(local_0, 0, 1, 3, 4.0f);
-            _gcnewoption_entrypoint_11(local_0);
+            _gcnewoption_entrypoint_4(actor, 1, _gcnewoption_entrypoint_35, 0, 0x1850);
+            menu = func_80100094(actor, 1);
+            _gcnewoption_entrypoint_40(menu, 0x41, 0x22, 0x20, 0.8f, 1.0f);
+            _gcnewoption_entrypoint_8(menu, 5);
+            _gcnewoption_entrypoint_9(menu, 12);
+            _gcnewoption_entrypoint_10(menu, 0);
+            func_808000D0_chmusicmenu(actor, menu);
+            _gcnewoption_entrypoint_14(menu, 0, 1, 3, 4.0f);
+            _gcnewoption_entrypoint_11(menu);
             return;
         case 2:
-            _gcnewoption_entrypoint_4(param_0, 1, _gcnewoption_entrypoint_35, 0,
-                                      func_808000B4_chmusicmenu(param_0->actorData[6]));
-            local_1 = func_80100094(param_0, 1);
-            _gcnewoption_entrypoint_40(local_1, 0x41, 0x22, 0x20, 0.8f, 1.0f);
-            _gcnewoption_entrypoint_8(local_1,
-                                      D_808014F8_chmusicmenu[param_0->actorData[6]].local_0 < 5
-                                          ? D_808014F8_chmusicmenu[param_0->actorData[6]].local_0
+            _gcnewoption_entrypoint_4(actor, 1, _gcnewoption_entrypoint_35, 0,
+                                      func_808000B4_chmusicmenu(actor->actorData[6]));
+            track_menu = func_80100094(actor, 1);
+            _gcnewoption_entrypoint_40(track_menu, 0x41, 0x22, 0x20, 0.8f, 1.0f);
+            _gcnewoption_entrypoint_8(track_menu,
+                                      D_808014F8_chmusicmenu[actor->actorData[6]].local_0 < 5
+                                          ? D_808014F8_chmusicmenu[actor->actorData[6]].local_0
                                           : 5);
-            _gcnewoption_entrypoint_9(local_1,
-                                      D_808014F8_chmusicmenu[param_0->actorData[6]].local_0);
-            _gcnewoption_entrypoint_10(local_1, 2);
-            func_808000D0_chmusicmenu(param_0, local_1);
-            _gcnewoption_entrypoint_14(local_1, 0, 1, 3, 4.0f);
-            if (param_0->actorData[1] == param_0->actorData[6]) {
-                if ((s32) param_0->actorData[2] != -1) {
-                    param_0->actorData[0] = param_0->actorData[2];
+            _gcnewoption_entrypoint_9(track_menu,
+                                      D_808014F8_chmusicmenu[actor->actorData[6]].local_0);
+            _gcnewoption_entrypoint_10(track_menu, 2);
+            func_808000D0_chmusicmenu(actor, track_menu);
+            _gcnewoption_entrypoint_14(track_menu, 0, 1, 3, 4.0f);
+            if (actor->actorData[1] == actor->actorData[6]) {
+                if ((s32) actor->actorData[2] != -1) {
+                    actor->actorData[0] = actor->actorData[2];
                 }
             }
-            _gcnewoption_entrypoint_11(local_1);
+            _gcnewoption_entrypoint_11(track_menu);
             return;
         case 4:
-            param_0->actorData[1] = param_0->actorData[2] = -1;
+            actor->actorData[1] = actor->actorData[2] = -1;
             break;
         case 3:
             func_800F82D4(func_800F54E4(), 0);
-            func_80800714_chmusicmenu(param_0);
-            param_0->actorData[2] = -1;
-            param_0->actorData[1] = -1;
-            param_0->actorData[6] = -1;
+            func_80800714_chmusicmenu(actor);
+            actor->actorData[2] = -1;
+            actor->actorData[1] = -1;
+            actor->actorData[6] = -1;
             break;
         case 5:
-            _gccubesearch_entrypoint_12(local_2, 0x299, param_0->position);
+            _gccubesearch_entrypoint_12(pos, 0x299, actor->position);
             func_8008F8B0();
             func_8008F8D8(1);
-            func_8008F904(func_8010D5DC, param_0->unk0);
+            func_8008F904(func_8010D5DC, actor->unk0);
             func_8008F938(1);
-            func_8008F990(local_2, 400.0f);
+            func_8008F990(pos, 400.0f);
     }
 }
 
-void func_80800CBC_chmusicmenu(Actor *param_0)
+void func_80800CBC_chmusicmenu(Actor *actor)
 {
-    s32 local_0;
+    s32 i;
 
-    *(s32 *) ((u8 *) param_0 + 0x30) = -1;
-    param_0->unk74_7 = 0;
-    *(s32 *) ((u8 *) param_0 + 0x18) = -1;
-    local_0 = 0;
-    func_8010A828(param_0, 9);
+    *(s32 *) ((u8 *) actor + 0x30) = -1;
+    actor->unk74_7 = 0;
+    *(s32 *) ((u8 *) actor + 0x18) = -1;
+    i = 0;
+    func_8010A828(actor, 9);
     if (func_800D3E40(5)) {
-        func_80800930_chmusicmenu(param_0, 4);
+        func_80800930_chmusicmenu(actor, 4);
     } else if (func_800DA298(0x344)) {
-        func_80800930_chmusicmenu(param_0, 6);
+        func_80800930_chmusicmenu(actor, 6);
     } else {
-        func_80800930_chmusicmenu(param_0, 7);
+        func_80800930_chmusicmenu(actor, 7);
     }
-    while (D_808012A0_chmusicmenu[local_0] != 0x9A) {
-        local_0++;
+    while (D_808012A0_chmusicmenu[i] != 0x9A) {
+        i++;
     }
-    func_800DA3B8(local_0 + 0x53E, func_800DA298(0x43));
+    func_800DA3B8(i + 0x53E, func_800DA298(0x43));
 }
 
-void func_80800DA4_chmusicmenu(Actor *param_0)
+// Jukebox main update: dialog, menu updates and music playback.
+void func_80800DA4_chmusicmenu(Actor *actor)
 {
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 4:
-            if (func_8010C500(param_0)) {
+            if (func_8010C500(actor)) {
                 if (!func_800DA298(0x3E1)) {
-                    func_80800930_chmusicmenu(param_0, 5);
+                    func_80800930_chmusicmenu(actor, 5);
                     func_800DA544(0x3E1);
                     return;
                 }
                 if (func_80016B30(0, 1)) {
-                    func_80800930_chmusicmenu(param_0, 5);
+                    func_80800930_chmusicmenu(actor, 5);
                 }
             }
             break;
         case 2:
-            if (param_0->unk64_19 && func_800D90A4((f32 *) param_0->actorData + 5)) {
-                func_80800560_chmusicmenu(param_0, param_0->unk74_7, 0.0f);
-                param_0->unk64_19 = 0;
+            if (actor->unk64_19 && func_800D90A4((f32 *) actor->actorData + 5)) {
+                func_80800560_chmusicmenu(actor, actor->unk74_7, 0.0f);
+                actor->unk64_19 = 0;
             }
         case 1:
-            if (param_0->unk74_7) {
-                if (func_800FCCD4(param_0->unk74_7) && !param_0->unk64_19) {
-                    func_80800400_chmusicmenu(param_0);
+            if (actor->unk74_7) {
+                if (func_800FCCD4(actor->unk74_7) && !actor->unk64_19) {
+                    func_80800400_chmusicmenu(actor);
                 }
-                if (func_800D90A4(&param_0->unk58)) {
-                    func_80800000_chmusicmenu(param_0);
+                if (func_800D90A4(&actor->unk58)) {
+                    func_80800000_chmusicmenu(actor);
                 }
             }
-            _gcnewoption_entrypoint_0(func_80100094(param_0, 1));
+            _gcnewoption_entrypoint_0(func_80100094(actor, 1));
             break;
         case 3:
-            func_80800930_chmusicmenu(param_0, 4);
+            func_80800930_chmusicmenu(actor, 4);
             break;
         case 7:
-            if (func_8010C500(param_0)) {
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1048, 0xF, param_0->position, 0x6F);
+            if (func_8010C500(actor)) {
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x1048, 0xF, actor->position, 0x6F);
                 func_800DA544(0x344);
-                func_80800930_chmusicmenu(param_0, 6);
+                func_80800930_chmusicmenu(actor, 6);
             }
     }
 }
 
-void func_80800F50_chmusicmenu(u8 *param_0)
+void func_80800F50_chmusicmenu(u8 *actor)
 {
-    unsigned int new_var;
-    func_80800714_chmusicmenu(param_0);
-    new_var = (unsigned int) *(u16 *) ((char *) param_0 + 0x72) >> 10;
-    if ((new_var == 1) || (new_var == 2)) {
-        _gcnewoption_entrypoint_6(param_0, 1);
+    unsigned int state;
+    func_80800714_chmusicmenu(actor);
+    state = (unsigned int) *(u16 *) ((char *) actor + 0x72) >> 10;
+    if ((state == 1) || (state == 2)) {
+        _gcnewoption_entrypoint_6(actor, 1);
     }
 }
 
-void func_80800F98_chmusicmenu(Actor *param_0, void *param_1)
+void func_80800F98_chmusicmenu(Actor *actor, void *unk_1)
 {
-    void *local_0;
-    if (!func_800EB854(param_0)) {
-        if ((s32) param_0->unk70_10 < 6) {
+    void *menu;
+    if (!func_800EB854(actor)) {
+        if ((s32) actor->unk70_10 < 6) {
             func_800DF744(1, 0);
             func_800DF744(2, 1);
         } else {
             func_800DF744(1, 1);
             func_800DF744(2, 0);
         }
-        func_80101870(param_0, param_1);
+        func_80101870(actor, unk_1);
     } else {
-        local_0 = func_80100094(param_0, 1);
-        if (local_0 != NULL)
-            _gcnewoption_entrypoint_1(local_0, param_1);
+        menu = func_80100094(actor, 1);
+        if (menu != NULL)
+            _gcnewoption_entrypoint_1(menu, unk_1);
     }
 }
 
-s32 func_80801040_chmusicmenu(Actor *param_0, s32 param_1, MusicMenuEvent param_2)
+s32 func_80801040_chmusicmenu(Actor *actor, s32 msg, MusicMenuEvent data)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x20:
-            func_8080079C_chmusicmenu(param_0, func_80101080(param_0), param_2.local_3.local_1,
-                                      param_2.local_3.local_2);
+            func_8080079C_chmusicmenu(actor, func_80101080(actor), data.local_3.local_1,
+                                      data.local_3.local_2);
             return 1;
         case 0x32:
-            func_80800930_chmusicmenu(param_0, 1);
+            func_80800930_chmusicmenu(actor, 1);
             return 1;
     }
     return 0;
@@ -518,40 +521,41 @@ int chmusicmenu_entrypoint_1()
     return &D_808015C4_chmusicmenu;
 }
 
-int func_808010C4_chmusicmenu(Actor *param_0, s32 param_1, s32 param_2)
+// Dancer actor: on message 0x6E picks one of 14 dance animations at random, without repeats.
+int func_808010C4_chmusicmenu(Actor *actor, s32 msg, s32 data)
 {
-    s32 local_0[14];
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    switch (param_1) {
+    s32 candidates[14];
+    s32 anim_id;
+    s32 i;
+    s32 count;
+    s32 active;
+    switch (msg) {
         case 0x95:
             if (!func_800D3E40(5) || !func_800DA298(0xC0) || _glcutDll_entrypoint_20())
-                func_800FFAB0(param_0);
+                func_800FFAB0(actor);
             else
-                ((ByteBf65 *) param_0)->f &= ~1;
+                ((ByteBf65 *) actor)->f &= ~1;
             return 1;
         case 0x6E:
-            local_4 = param_2 & 1;
-            ((ByteBf65 *) param_0)->f = (local_4 & 1) | (((ByteBf65 *) param_0)->f & ~1);
-            if (local_4) {
-                local_3 = 0;
-                if ((u32) *(u16 *) ((u8 *) param_0 + 0x76) >> 7 != 0x33) {
-                    for (local_2 = 0; local_2 < 14; local_2++) {
-                        if (!func_800DA298(local_2 + 1))
-                            local_0[local_3++] = local_2;
+            active = data & 1;
+            ((ByteBf65 *) actor)->f = (active & 1) | (((ByteBf65 *) actor)->f & ~1);
+            if (active) {
+                count = 0;
+                if ((u32) *(u16 *) ((u8 *) actor + 0x76) >> 7 != 0x33) {
+                    for (i = 0; i < 14; i++) {
+                        if (!func_800DA298(i + 1))
+                            candidates[count++] = i;
                     }
-                    if (local_3 == 0) {
-                        for (local_2 = 0; local_2 < 14; local_2++) {
-                            func_800DA524(local_2 + 1);
+                    if (count == 0) {
+                        for (i = 0; i < 14; i++) {
+                            func_800DA524(i + 1);
                         }
-                        local_2 = func_800DC128(0, 14);
+                        i = func_800DC128(0, 14);
                     } else
-                        local_2 = local_0[func_800DC128(0, local_3)];
-                    local_1 = local_2 + 1;
-                    func_800DA544(local_1);
-                    func_80102424(param_0, local_1);
+                        i = candidates[func_800DC128(0, count)];
+                    anim_id = i + 1;
+                    func_800DA544(anim_id);
+                    func_80102424(actor, anim_id);
                 }
             }
             return 1;

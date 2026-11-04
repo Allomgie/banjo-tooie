@@ -176,6 +176,7 @@ void func_8080016C_chhoopswoop(param_0) Actor *param_0;
                 func_80101FDC(param_0, 5);
                 _subaddiedialog_entrypoint_11(param_0->unk0, *(s32 *) (local_0 + 0xC),
                                               *(s32 *) (local_0 + 0x10), NULL, 0x22);
+                // Matching: empty block needed for the match.
                 if (param_0) {
                 }
             }
@@ -272,6 +273,7 @@ void func_808006A0_chhoopswoop(param_0) Actor *param_0;
     f32 local_2;
 
     local_0 = func_80100094(param_0, 0);
+    // Matching: empty block steers IDO's register allocation.
     if (1) {
     }
     local_2 = param_0->unk74_7;
@@ -288,47 +290,48 @@ void func_808006A0_chhoopswoop(param_0) Actor *param_0;
     func_800FDC28(12);
 }
 
+// Decides the result dialog from the score; param_1 receives the dialog parameter.
 s32 func_808007A4_chhoopswoop(Actor *param_0, s32 *param_1)
 {
-    s32 *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    u32 local_5;
-    s32 local_6;
-    s32 local_7;
-    s32 local_8;
+    s32 *data;
+    s32 score;
+    s32 dialog;
+    s32 new_record_bonus;
+    s32 reached_goal;
+    u32 won;
+    s32 jiggy_collected;
+    s32 replay_mode;
+    s32 record_result;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = local_0[1];
-    local_6 = func_800D0A9C(0x15, 1);
-    local_7 = func_800D395C();
-    local_8 = func_800D2054(0, 0x81, local_1);
-    local_3 = local_8 == 1 && (local_6 || local_7);
-    local_4 = local_1 >= 30;
-    local_5 = local_4 && !local_6 && !local_7;
+    data = func_80100094(param_0, 0);
+    score = data[1];
+    jiggy_collected = func_800D0A9C(0x15, 1);
+    replay_mode = func_800D395C();
+    record_result = func_800D2054(0, 0x81, score);
+    new_record_bonus = record_result == 1 && (jiggy_collected || replay_mode);
+    reached_goal = score >= 30;
+    won = reached_goal && !jiggy_collected && !replay_mode;
     func_800FDC28(0);
-    func_800FC6B0((local_5 || local_3) ? 0x16 : 0x17);
+    func_800FC6B0((won || new_record_bonus) ? 0x16 : 0x17);
     *param_1 = 6;
-    if (local_5) {
-        local_2 = 0x10D1;
-    } else if (local_3) {
-        local_2 = 0x10C3;
+    if (won) {
+        dialog = 0x10D1;
+    } else if (new_record_bonus) {
+        dialog = 0x10C3;
     } else if (!func_800D395C()) {
-        if (local_6) {
-            if (local_8 == 0)
-                local_2 = 0x10F7;
+        if (jiggy_collected) {
+            if (record_result == 0)
+                dialog = 0x10F7;
             else
-                local_2 = 0x10F6;
+                dialog = 0x10F6;
         } else {
-            local_2 = 0x10F5;
+            dialog = 0x10F5;
         }
     } else {
-        local_2 = 0xCEB;
+        dialog = 0xCEB;
         *param_1 = 0x46;
     }
-    return local_2;
+    return dialog;
 }
 
 void func_80800910_chhoopswoop(Actor *param_0, s32 param_1, s32 param_2)
@@ -528,6 +531,7 @@ void func_80800D28_chhoopswoop(Actor *param_0, s32 param_1)
         }
         param_0->unk3C = actor->unk0;
     }
+    // Matching: three empty tests raise the block count and steer IDO's register allocation.
     if (actor) {
     }
     if (1) {
@@ -639,6 +643,7 @@ s32 param_2;
 
         case 0x10CE:
             _subaddiemulti_entrypoint_2(param_0);
+            // Matching: empty block needed for the match.
             if (param_0 && param_0) {
             }
             func_80101FDC(param_0, 6);
@@ -820,6 +825,7 @@ Actor *param_0;
         return 0;
     local_6 = func_80100094(param_0, 0);
     for (local_5 = 0; local_5 < _gcstatusDll_entrypoint_11(); local_5++) {
+        // Matching: empty block needed for the match.
         if (1) {
         }
         if (func_800F6438(local_5)) {
@@ -886,6 +892,8 @@ Actor *param_0;
     }
 }
 
+// TU-NOTE: the overlay .data is defined here in C; the tables point to functions of this file, and
+// IDO's assembler schedules some of them differently unless the tables are in the same unit.
 int D_80801EC0_chhoopswoop[18] = {0x2B70355,
                                   0x1,
                                   0x0,

@@ -104,153 +104,154 @@ void *chseaweedbaddy_entrypoint_1()
 
 s32 func_80800910_chseaweedbaddy();
 
+// Seaweed baddy states: 1 hidden, 2 emerge, 3 chase, 4 recoil, 5 recover, 6 return home, 7 retract.
 s32 func_8080082C_chseaweedbaddy();
 
-void func_80800018_chseaweedbaddy(Actor *param_0)
+void func_80800018_chseaweedbaddy(Actor *actor)
 {
-    f32 local_2;
-    f32 local_0;
+    f32 delta_time;
+    f32 target_turn;
     s32 *local_1;
     f32 speed;
-    s32 fill1;
-    u32 *local_4;
-    f32 local_3;
-    local_0 = 0.0f;
-    local_1 = func_80100094(param_0, 1);
-    if (((WeedB *) param_0)->b2) {
+    s32 pad;
+    u32 *route_entry;
+    f32 heading;
+    target_turn = 0.0f;
+    local_1 = func_80100094(actor, 1);
+    if (((WeedB *) actor)->b2) {
         return;
     }
-    local_2 = func_800D8FF8();
-    func_800D9078(&param_0->unk58);
-    switch (((WeedState *) param_0)->st) {
+    delta_time = func_800D8FF8();
+    func_800D9078(&actor->unk58);
+    switch (((WeedState *) actor)->st) {
         case 1:
-            if (func_8080082C_chseaweedbaddy(param_0)) {
-                func_80800710_chseaweedbaddy(param_0, 2);
+            if (func_8080082C_chseaweedbaddy(actor)) {
+                func_80800710_chseaweedbaddy(actor, 2);
             }
             break;
         case 2:
-            local_0 = 700.0f;
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80800F44_chseaweedbaddy,
+            target_turn = 700.0f;
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80800F44_chseaweedbaddy,
                                              0x3E4CCCCD);
-            if (func_80101DDC(param_0)) {
-                func_80800710_chseaweedbaddy(param_0, 3);
+            if (func_80101DDC(actor)) {
+                func_80800710_chseaweedbaddy(actor, 3);
             }
             break;
         case 3:
-            local_0 = 700.0f;
-            func_8010D254(param_0->actorData);
-            if (((WeedC *) param_0)->f) {
-                speed = _subaddiejoy_entrypoint_9(param_0, &param_0->unk54, 3) * 350.0f;
-                RF(3) = param_0->unk54;
-                func_800EEB9C((f32 *) &param_0->actorData[4], RF(3), speed);
-                func_8010B990(param_0, 0x205027);
+            target_turn = 700.0f;
+            func_8010D254(actor->actorData);
+            if (((WeedC *) actor)->f) {
+                speed = _subaddiejoy_entrypoint_9(actor, &actor->unk54, 3) * 350.0f;
+                RF(3) = actor->unk54;
+                func_800EEB9C((f32 *) &actor->actorData[4], RF(3), speed);
+                func_8010B990(actor, 0x205027);
             } else {
-                if (_subaddierouteDll_entrypoint_4(param_0)) {
-                    local_3 = func_80102D78(param_0, param_0->actorData);
-                    param_0->unk54 = local_3;
-                    _subaddierouteDll_entrypoint_7(param_0, local_4 = &local_1[5], RF(3), local_3,
+                if (_subaddierouteDll_entrypoint_4(actor)) {
+                    heading = func_80102D78(actor, actor->actorData);
+                    actor->unk54 = heading;
+                    _subaddierouteDll_entrypoint_7(actor, route_entry = &local_1[5], RF(3), heading,
                                                    100.0f, 0x5000);
-                    local_1[4] = ((u16 *) local_4)[3];
+                    local_1[4] = ((u16 *) route_entry)[3];
                 }
-                RF(3) = func_800F1FF0(RF(3), param_0->unk54, 0.2f, 2.0f, func_800D8FF8() * 450.0f);
-                func_800EEB9C((f32 *) &param_0->actorData[4], RF(3), 350.0f);
-                func_8010B990(param_0, 0x5307);
+                RF(3) = func_800F1FF0(RF(3), actor->unk54, 0.2f, 2.0f, func_800D8FF8() * 450.0f);
+                func_800EEB9C((f32 *) &actor->actorData[4], RF(3), 350.0f);
+                func_8010B990(actor, 0x5307);
             }
-            if (func_80800910_chseaweedbaddy(param_0)) {
-                func_80800710_chseaweedbaddy(param_0, 6);
+            if (func_80800910_chseaweedbaddy(actor)) {
+                func_80800710_chseaweedbaddy(actor, 6);
             }
             break;
         case 4:
-            if (func_80101DDC(param_0)) {
-                func_80800710_chseaweedbaddy(param_0, 5);
+            if (func_80101DDC(actor)) {
+                func_80800710_chseaweedbaddy(actor, 5);
             }
             break;
         case 5:
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80800F50_chseaweedbaddy,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80800F50_chseaweedbaddy,
                                              0x3E4CCCCD);
-            if (func_80101DDC(param_0)) {
-                func_80800710_chseaweedbaddy(param_0, 6);
+            if (func_80101DDC(actor)) {
+                func_80800710_chseaweedbaddy(actor, 6);
             }
             break;
         case 6:
-            local_0 = 300.0f;
-            if (_subaddierouteDll_entrypoint_4(param_0)) {
-                local_3 = func_80102D78(param_0, param_0->actorData);
-                param_0->unk54 = local_3;
-                _subaddierouteDll_entrypoint_7(param_0, local_4 = &local_1[5], RF(3), local_3,
+            target_turn = 300.0f;
+            if (_subaddierouteDll_entrypoint_4(actor)) {
+                heading = func_80102D78(actor, actor->actorData);
+                actor->unk54 = heading;
+                _subaddierouteDll_entrypoint_7(actor, route_entry = &local_1[5], RF(3), heading,
                                                100.0f, 0x5000);
-                local_1[4] = ((u16 *) local_4)[3];
+                local_1[4] = ((u16 *) route_entry)[3];
             }
-            local_4 = param_0->actorData;
-            RF(3) = func_800F1FF0(RF(3), param_0->unk54, 0.2f, 2.0f, func_800D8FF8() * 450.0f);
-            func_800EEB9C((f32 *) &param_0->actorData[4], RF(3), 350.0f);
-            func_8010B990(param_0, 0x5307);
-            if (func_800EEB40(param_0->position, local_4) < 6.4e+03f) {
-                func_80800710_chseaweedbaddy(param_0, 7);
-            } else if (func_8080082C_chseaweedbaddy(param_0)) {
-                func_80800710_chseaweedbaddy(param_0, 3);
+            route_entry = actor->actorData;
+            RF(3) = func_800F1FF0(RF(3), actor->unk54, 0.2f, 2.0f, func_800D8FF8() * 450.0f);
+            func_800EEB9C((f32 *) &actor->actorData[4], RF(3), 350.0f);
+            func_8010B990(actor, 0x5307);
+            if (func_800EEB40(actor->position, route_entry) < 6.4e+03f) {
+                func_80800710_chseaweedbaddy(actor, 7);
+            } else if (func_8080082C_chseaweedbaddy(actor)) {
+                func_80800710_chseaweedbaddy(actor, 3);
             }
             break;
         case 7:
-            if (func_80101DDC(param_0)) {
-                func_80800710_chseaweedbaddy(param_0, 1);
+            if (func_80101DDC(actor)) {
+                func_80800710_chseaweedbaddy(actor, 1);
             }
     }
-    local_3 = param_0->rotation[1];
-    param_0->unk50 = func_800F15F8(param_0->unk50, local_0, local_2 * 800.0f);
-    param_0->rotation[1] = func_800136E4(param_0->rotation[1] + param_0->unk50 * local_2);
-    func_80800CE0_chseaweedbaddy(param_0, local_3);
+    heading = actor->rotation[1];
+    actor->unk50 = func_800F15F8(actor->unk50, target_turn, delta_time * 800.0f);
+    actor->rotation[1] = func_800136E4(actor->rotation[1] + actor->unk50 * delta_time);
+    func_80800CE0_chseaweedbaddy(actor, heading);
 }
 
-void func_8080043C_chseaweedbaddy(u8 *param_0)
+void func_8080043C_chseaweedbaddy(u8 *actor)
 {
-    _sudeflect_entrypoint_1(param_0 + 4, *(f32 *) (param_0 + 0x38) * 120.0f,
-                            *(f32 *) (param_0 + 0x38) * 100.0f, 0.0f, 0xA);
+    _sudeflect_entrypoint_1(actor + 4, *(f32 *) (actor + 0x38) * 120.0f,
+                            *(f32 *) (actor + 0x38) * 100.0f, 0.0f, 0xA);
 }
 
-void func_80800498_chseaweedbaddy(param_0) Actor *param_0;
+void func_80800498_chseaweedbaddy(actor) Actor *actor;
 {
-    SeaweedRouteState *local_0;
+    SeaweedRouteState *route_data;
     if (func_800DC298(0.4f))
-        func_808009BC_chseaweedbaddy(param_0);
-    _subaddieDll_entrypoint_1(param_0);
-    func_80107200(param_0);
-    local_0 = func_80100094(param_0, 1);
-    _subaddierouteDll_entrypoint_3(param_0, local_0->local_2, param_0->position);
-    local_0->local_1 = 0;
-    func_800EE7F8(local_0->local_0, param_0->position);
-    func_80102FDC(param_0, param_0->scale * 0.7f);
-    param_0->unk50 = 0.0f;
-    func_80101EE4(param_0, func_800DC0C0());
+        func_808009BC_chseaweedbaddy(actor);
+    _subaddieDll_entrypoint_1(actor);
+    func_80107200(actor);
+    route_data = func_80100094(actor, 1);
+    _subaddierouteDll_entrypoint_3(actor, route_data->local_2, actor->position);
+    route_data->local_1 = 0;
+    func_800EE7F8(route_data->local_0, actor->position);
+    func_80102FDC(actor, actor->scale * 0.7f);
+    actor->unk50 = 0.0f;
+    func_80101EE4(actor, func_800DC0C0());
 }
 
-s32 func_80800554_chseaweedbaddy(Actor *param_0, s32 param_1, SeaweedMessage27 param_2)
+s32 func_80800554_chseaweedbaddy(Actor *actor, s32 message_id, SeaweedMessage27 data)
 {
-    switch (param_1) {
+    switch (message_id) {
         case 0x3F:
-            func_808007E4_chseaweedbaddy(param_0, param_2.local_1);
+            func_808007E4_chseaweedbaddy(actor, data.local_1);
             return 1;
         case 0x40:
-            _chexploder_entrypoint_3(param_0, param_0->position, 4);
+            _chexploder_entrypoint_3(actor, actor->position, 4);
             return 1;
         case 0x90:
-            func_80800BCC_chseaweedbaddy(param_0);
+            func_80800BCC_chseaweedbaddy(actor);
             return 1;
         case 0x95:
-            _subaddierouteDll_entrypoint_1(param_0);
+            _subaddierouteDll_entrypoint_1(actor);
             return 1;
         case 0x8F:
-            if (!param_2.local_0) {
-                func_80800710_chseaweedbaddy(param_0, 1);
+            if (!data.local_0) {
+                func_80800710_chseaweedbaddy(actor, 1);
             }
             break;
         case 2:
-            if (!_subaddieDll_entrypoint_3(param_0)) {
-                if (!func_80107070(param_0, 1)) {
-                    _subaddiefade_entrypoint_3(param_0);
+            if (!_subaddieDll_entrypoint_3(actor)) {
+                if (!func_80107070(actor, 1)) {
+                    _subaddiefade_entrypoint_3(actor);
                 }
             } else {
-                func_80800710_chseaweedbaddy(param_0, 6);
+                func_80800710_chseaweedbaddy(actor, 6);
             }
             break;
         default:
@@ -259,14 +260,14 @@ s32 func_80800554_chseaweedbaddy(Actor *param_0, s32 param_1, SeaweedMessage27 p
     return 1;
 }
 
-void func_8080065C_chseaweedbaddy(u8 *param_0)
+void func_8080065C_chseaweedbaddy(u8 *actor)
 {
-    func_80102FDC(param_0, *(f32 *) (param_0 + 0x38) * 0.7f);
-    func_80101EE4(param_0, func_800DC0C0());
+    func_80102FDC(actor, *(f32 *) (actor + 0x38) * 0.7f);
+    func_80101EE4(actor, func_800DC0C0());
 }
 
-s32 func_808006A8_chseaweedbaddy(param_0, param_1)
-s32 param_0;
+s32 func_808006A8_chseaweedbaddy(actor, param_1)
+s32 actor;
 s32 param_1;
 {
     func_800DF744(1, 0);
@@ -274,96 +275,96 @@ s32 param_1;
     func_800DF744(3, 1);
     func_800DF744(4, 0);
     func_800DF744(5, 1);
-    func_80101870(param_0, param_1);
+    func_80101870(actor, param_1);
 }
 
-void func_80800710_chseaweedbaddy(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800710_chseaweedbaddy(actor, state) Actor *actor;
+s32 state;
 {
-    f32 *local_0;
+    f32 *state_data;
 
-    local_0 = func_80100094(param_0, 1);
+    state_data = func_80100094(actor, 1);
 
-switch (param_1) {
+switch (state) {
     case 1:
-        _subaddieDll_entrypoint_4(param_0, 0);
+        _subaddieDll_entrypoint_4(actor, 0);
         break;
     case 2:
-        _subaddieDll_entrypoint_4(param_0, 1);
+        _subaddieDll_entrypoint_4(actor, 1);
         break;
     case 3:
-        func_8010D254(param_0->actorData, local_0);
-        local_0[3] = func_8010CD28(param_0);
+        func_8010D254(actor->actorData, state_data);
+        state_data[3] = func_8010CD28(actor);
         break;
     case 6:
-        func_800EE7F8(param_0->actorData, local_0);
-        param_0->unk58 = 1.4f;
+        func_800EE7F8(actor->actorData, state_data);
+        actor->unk58 = 1.4f;
         break;
     case 7:
-        param_0->unk58 = 1.4f;
+        actor->unk58 = 1.4f;
 }
 
-func_80102424(param_0, param_1);
+func_80102424(actor, state);
 
 }
 
-void func_808007E4_chseaweedbaddy(BanditState *param_0, S16Pair param_1)
+void func_808007E4_chseaweedbaddy(BanditState *actor, S16Pair param_1)
 {
-    if (!param_0->flag && param_0->f72 != 4) {
-        func_80800710_chseaweedbaddy(param_0, 4);
+    if (!actor->flag && actor->f72 != 4) {
+        func_80800710_chseaweedbaddy(actor, 4);
     }
 
 }
 
-s32 func_8080082C_chseaweedbaddy(Actor *param_0)
+s32 func_8080082C_chseaweedbaddy(Actor *actor)
 {
-    if (param_0->unk58 > 0.0f) {
+    if (actor->unk58 > 0.0f) {
         return 0;
     }
 
-if (((PlantActorFlags *) param_0)->flag_64_29) {
+if (((PlantActorFlags *) actor)->flag_64_29) {
     return 1;
 }
 
-if (func_801072A8(param_0)) {
+if (func_801072A8(actor)) {
     return 0;
 }
 
-if (!_subaddierouteDll_entrypoint_4(param_0)) {
+if (!_subaddierouteDll_entrypoint_4(actor)) {
     return 0;
 }
 
-if (!func_8010C9FC(param_0->position, 1000, 500, -50)) {
+if (!func_8010C9FC(actor->position, 1000, 500, -50)) {
     return 0;
 }
 
-if (!func_8010C668(param_0, param_0->position, 1000.0f, -200.0f)) {
+if (!func_8010C668(actor, actor->position, 1000.0f, -200.0f)) {
     return 0;
 }
 
-return _suchase_entrypoint_0() == param_0->unk0;
+return _suchase_entrypoint_0() == actor->unk0;
 
 }
 
-s32 func_80800910_chseaweedbaddy(Actor *param_0)
+s32 func_80800910_chseaweedbaddy(Actor *actor)
 {
-    if (((PlantActorFlags *) param_0)->flag_64_29) {
+    if (((PlantActorFlags *) actor)->flag_64_29) {
         return 0;
     }
 
-if (!_subaddierouteDll_entrypoint_4(param_0)) {
+if (!_subaddierouteDll_entrypoint_4(actor)) {
     return 0;
 }
 
-if (!func_8010C9FC(param_0->position, 1000, 500, -50)) {
+if (!func_8010C9FC(actor->position, 1000, 500, -50)) {
     return 1;
 }
 
-if (!func_8010C668(param_0, param_0->position, 1000.0f, -200.0f)) {
+if (!func_8010C668(actor, actor->position, 1000.0f, -200.0f)) {
     return 1;
 }
 
-return _suchase_entrypoint_0() != param_0->unk0;
+return _suchase_entrypoint_0() != actor->unk0;
 }
 
 void func_808009BC_chseaweedbaddy(Actor *this)
@@ -404,49 +405,49 @@ other->unk74_7 = t;
 func_80103014(other);
 }
 
-void func_80800BCC_chseaweedbaddy(param_0) u8 *param_0;
+void func_80800BCC_chseaweedbaddy(actor) u8 *actor;
 {
-    s32 local_1;
-    f32 local_0[3];
+    s32 exploder;
+    f32 pos[3];
 
-    local_1 = func_80106790(func_80101080());
-    _chexploder_entrypoint_9(local_1, 1, 0);
-    _chexploder_entrypoint_9(local_1, 2, 0);
-    _chexploder_entrypoint_9(local_1, 3, 0);
-    _chexploder_entrypoint_9(local_1, 4, 1);
-    _chexploder_entrypoint_9(local_1, 5, 0);
-    _chexploder_entrypoint_10(local_1, &D_80800F9C_chseaweedbaddy);
-    _chexploder_entrypoint_6(local_1, 0x43FA0000, 0x44160000);
-    _chexploder_entrypoint_14(local_1, 3);
-    func_80103DFC(param_0, local_0);
-    func_800BBCB8(local_0, local_0, (*(s32 *) ((s8 *) (param_0) + (0x38))), 4,
+    exploder = func_80106790(func_80101080());
+    _chexploder_entrypoint_9(exploder, 1, 0);
+    _chexploder_entrypoint_9(exploder, 2, 0);
+    _chexploder_entrypoint_9(exploder, 3, 0);
+    _chexploder_entrypoint_9(exploder, 4, 1);
+    _chexploder_entrypoint_9(exploder, 5, 0);
+    _chexploder_entrypoint_10(exploder, &D_80800F9C_chseaweedbaddy);
+    _chexploder_entrypoint_6(exploder, 0x43FA0000, 0x44160000);
+    _chexploder_entrypoint_14(exploder, 3);
+    func_80103DFC(actor, pos);
+    func_800BBCB8(pos, pos, (*(s32 *) ((s8 *) (actor) + (0x38))), 4,
                   &D_80800F5C_chseaweedbaddy);
-    _subaddieaudioquick_entrypoint_2(param_0, param_0 + 4, &D_80800F90_chseaweedbaddy);
+    _subaddieaudioquick_entrypoint_2(actor, actor + 4, &D_80800F90_chseaweedbaddy);
 
-if (func_80107070(param_0, 3) == 0) {
-    func_800FFAB0(param_0);
+if (func_80107070(actor, 3) == 0) {
+    func_800FFAB0(actor);
 }
 
 }
 
-void func_80800CE0_chseaweedbaddy(Actor *param_0, f32 param_1)
+void func_80800CE0_chseaweedbaddy(Actor *actor, f32 prev_yaw)
 {
     s32 i;
-    s32 local_0;
+    s32 crossed;
 
-    local_0 = 0;
+    crossed = 0;
     for (i = 0; i < 2; i++) {
 
-if (func_80013728(param_1) <= D_80800FAC_chseaweedbaddy[i] &&
-    D_80800FAC_chseaweedbaddy[i] < func_80013728(*(f32 *) ((u8 *) param_0 + 0x48))) {
-    local_0 = 1;
+if (func_80013728(prev_yaw) <= D_80800FAC_chseaweedbaddy[i] &&
+    D_80800FAC_chseaweedbaddy[i] < func_80013728(*(f32 *) ((u8 *) actor + 0x48))) {
+    crossed = 1;
     break;
 }
 
 }
-if (local_0 && *(f32 *) ((u8 *) param_0 + 0x50) > 100.0f) {
-    func_800C4B64(func_800F10B4(*(f32 *) ((u8 *) param_0 + 0x50), 100.0f, 700.0f, 1.0f, 1.15f));
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800FB4_chseaweedbaddy);
+if (crossed && *(f32 *) ((u8 *) actor + 0x50) > 100.0f) {
+    func_800C4B64(func_800F10B4(*(f32 *) ((u8 *) actor + 0x50), 100.0f, 700.0f, 1.0f, 1.15f));
+    _subaddieaudioquick_entrypoint_2(actor, actor->position, &D_80800FB4_chseaweedbaddy);
 }
 }
 

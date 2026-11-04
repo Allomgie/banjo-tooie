@@ -2,12 +2,13 @@
 
 extern u32 D_80800090_chwaterfallgrillswitch[];
 
-int func_80800000_chwaterfallgrillswitch(s32 param_0, s32 param_1, s32 param_2)
+// Message 7: tell the grille (actor kind 0x11B) to open.
+int func_80800000_chwaterfallgrillswitch(s32 actor, s32 message, s32 unk_2)
 {
-    if (param_1 == 7) {
+    if (message == 7) {
         func_80101180(0x11B, 7, 0);
     }
-    _chswitch_entrypoint_10(param_0, param_1 | param_1, param_2);
+    _chswitch_entrypoint_10(actor, message | message, unk_2); // Matching: `| message` needed for the match.
 }
 
 s32 func_80800054_chwaterfallgrillswitch(Actor *this)
@@ -21,6 +22,7 @@ int chwaterfallgrillswitch_entrypoint_0()
     return (int) &D_80800090_chwaterfallgrillswitch;
 }
 
+// TU-NOTE: the overlay .data is defined here in C; its tables point to functions of this file, and IDO schedules them differently otherwise.
 extern u8 D_8011A248[];
 extern void _chswitch_entrypoint_6();
 extern void func_80102EC0();

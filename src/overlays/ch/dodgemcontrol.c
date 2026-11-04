@@ -1,5 +1,8 @@
 #include "common.h"
 
+// Witchyworld Dodgems minigame: game controller, target lights and cars.
+// Controller functions are in this section (maps 0xDE-0xE0, 0x186).
+
 #define OD(n) (((f32 *) param_0->actorData)[n])
 extern int D_80804DB4_chdodgemcontrol[];
 extern void *func_80100094(Actor *, u32);
@@ -214,28 +217,29 @@ int *chdodgemcontrol_entrypoint_0()
     return &D_80804DB4_chdodgemcontrol;
 }
 
-Actor *func_8080000C_chdodgemcontrol(Actor *param_0, s32 param_1)
+Actor *func_8080000C_chdodgemcontrol(Actor *actor, s32 index)
 {
-    return func_80106790(((Unk80132ED0 **) func_80100094(param_0, 0))[param_1]);
+    return func_80106790(((Unk80132ED0 **) func_80100094(actor, 0))[index]);
 }
 
-void func_80800044_chdodgemcontrol(Actor *param_0)
+// Sets the player's ride position/rotation relative to the actor.
+void func_80800044_chdodgemcontrol(Actor *actor)
 {
-    f32 local_0[3];
-    f32 local_1[3];
+    f32 offset[3];
+    f32 rot[3];
 
-    func_800EFA4C(local_0, 0.0f, 20.0f, 5.0f);
-    func_800EF934(local_0, local_0, param_0->rotation[1]);
-    func_800EF04C(local_0, param_0->position);
-    func_800EE7F8(local_1, param_0->rotation);
-    func_800906B0(local_0);
-    func_800906DC(local_1);
+    func_800EFA4C(offset, 0.0f, 20.0f, 5.0f);
+    func_800EF934(offset, offset, actor->rotation[1]);
+    func_800EF04C(offset, actor->position);
+    func_800EE7F8(rot, actor->rotation);
+    func_800906B0(offset);
+    func_800906DC(rot);
 }
 
-void func_808000B8_chdodgemcontrol(s32 param_0)
+void func_808000B8_chdodgemcontrol(s32 index)
 {
-    Quad local_0 = D_80804DFC_chdodgemcontrol;
-    func_800904C8(local_0.v[param_0]);
+    Quad table = D_80804DFC_chdodgemcontrol;
+    func_800904C8(table.v[index]);
 }
 
 void func_8080010C_chdodgemcontrol(this) Actor *this;
@@ -258,6 +262,7 @@ void func_8080010C_chdodgemcontrol(this) Actor *this;
                 func_80800CA0_chdodgemcontrol(this);
             }
             alive = 0;
+            // Matching: empty block steers IDO's register allocation.
             if (0) {
             }
             for (i = 0; i < local->unkC5; i++) {
@@ -299,71 +304,72 @@ void func_8080010C_chdodgemcontrol(this) Actor *this;
 
 s32 func_80800350_chdodgemcontrol(void)
 {
-    f32 local_0 = func_800DC0C0();
+    f32 roll = func_800DC0C0();
 
-    if (local_0 < 0.5f) {
+    if (roll < 0.5f) {
         return 0;
     }
-    if (local_0 < 0.8333333135f) {
+    if (roll < 0.8333333135f) {
         return 1;
     }
     return 2;
 }
 
-void func_808003B0_chdodgemcontrol(param_0) f32 *param_0;
+void func_808003B0_chdodgemcontrol(pos) f32 *pos;
 {
-    param_0[0] = func_800DC178(-645.0f, 645.0f);
-    param_0[1] = 0.0f;
-    param_0[2] = func_800DC178(-645.0f, 645.0f);
+    pos[0] = func_800DC178(-645.0f, 645.0f);
+    pos[1] = 0.0f;
+    pos[2] = func_800DC178(-645.0f, 645.0f);
 }
 
-s32 func_8080040C_chdodgemcontrol(param_0, param_1, param_2)
-Actor *param_0;
-f32 *param_1;
-s32 param_2;
+s32 func_8080040C_chdodgemcontrol(actor, pos, skip_index)
+Actor *actor;
+f32 *pos;
+s32 skip_index;
 {
-    DodgemOccupiedPositions *local_0;
-    s32 local_1;
+    DodgemOccupiedPositions *data;
+    s32 i;
 
-    local_0 = func_80100094(param_0, 0);
-    for (local_1 = 0; local_1 < local_0->local_2; local_1++) {
-        if (local_1 != param_2 && local_0->local_1[local_1] == 1 &&
-            func_800EEB40(local_0->local_0[local_1], param_1) < 40000.0f)
+    data = func_80100094(actor, 0);
+    for (i = 0; i < data->local_2; i++) {
+        if (i != skip_index && data->local_1[i] == 1 &&
+            func_800EEB40(data->local_0[i], pos) < 40000.0f)
             return 0;
 
 }
 return 1;
 }
 
-void func_808004E4_chdodgemcontrol(s32 *param_0, s32 param_1)
+void func_808004E4_chdodgemcontrol(s32 *actor, s32 index)
 {
-    u8 *local_1;
-    f32 local_2[3];
-    u8 *local_0;
-    s32 new_var;
+    u8 *data;
+    f32 pos[3];
+    u8 *light;
+    s32 flag;
 
-    local_0 = func_801084B0(0x37F, &param_0);
-    local_1 = func_80100094(param_0, 0);
-    *(s32 *) (local_0 + 0x3C) = *param_0;
-    local_1[param_1 + 0xAC] = 1;
-    local_1[param_1 + 0xB6] = func_80800350_chdodgemcontrol();
-    ((Actor *) local_0)->unk6C_0 = param_1;
-    new_var = 1;
+    light = func_801084B0(0x37F, &actor);
+    data = func_80100094(actor, 0);
+    *(s32 *) (light + 0x3C) = *actor;
+    data[index + 0xAC] = 1;
+    data[index + 0xB6] = func_80800350_chdodgemcontrol();
+    ((Actor *) light)->unk6C_0 = index;
+    // Matching: extra temporary and if (1) shape the code.
+    flag = 1;
     if (1) {
-        if (new_var) {
+        if (flag) {
             do {
-                func_808003B0_chdodgemcontrol(local_2);
-            } while (func_8080040C_chdodgemcontrol(param_0, local_2, param_1) == 0);
+                func_808003B0_chdodgemcontrol(pos);
+            } while (func_8080040C_chdodgemcontrol(actor, pos, index) == 0);
         }
 
 }
-func_800EE7F8(local_0 + 4, local_2);
-func_800EE7F8(local_1 + 0x34 + param_1 * 12, local_0 + 4);
+func_800EE7F8(light + 4, pos);
+func_800EE7F8(data + 0x34 + index * 12, light + 4);
 }
 
-int func_808005CC_chdodgemcontrol(s32 param_0)
+int func_808005CC_chdodgemcontrol(s32 mode)
 {
-    switch (param_0) {
+    switch (mode) {
         case 0:
             return 0x2D;
         case 1:
@@ -377,11 +383,11 @@ int func_808005CC_chdodgemcontrol(s32 param_0)
     }
 }
 
-int func_8080061C_chdodgemcontrol(param_0, param_1, param_2)
-s32 *param_0;
+int func_8080061C_chdodgemcontrol(args, dialog_id, flags)
+s32 *args;
 {
-    param_2 |= 6;
-    switch (param_1) {
+    flags |= 6;
+    switch (dialog_id) {
         case 0x10D9:
         case 0x10DA:
             func_800FC6B0(0x10);
@@ -403,31 +409,31 @@ s32 *param_0;
             func_800FC6B0(0x17);
             func_800FDC28(0);
     }
-    _subaddiedialog_entrypoint_11(param_0[0], param_1, param_2, &param_0[1], 0x22);
+    _subaddiedialog_entrypoint_11(args[0], dialog_id, flags, &args[1], 0x22);
 }
 
-void func_808006CC_chdodgemcontrol(Actor *param_0, s32 param_1, s32 param_2)
+void func_808006CC_chdodgemcontrol(Actor *actor, s32 dialog_id, s32 choice)
 {
     s32 pad[2];
-    s32 local_0;
-    u8 *local_1;
+    s32 time;
+    u8 *data;
 
-    local_1 = func_80100094(param_0, 0);
-    switch (param_1) {
+    data = func_80100094(actor, 0);
+    switch (dialog_id) {
         case 0x10D9:
         case 0x10DA:
             _gcfrontend_entrypoint_10();
             return;
         case 0x10FC:
-            func_8080061C_chdodgemcontrol(param_0, 0x10D3, 0, param_1);
+            func_8080061C_chdodgemcontrol(actor, 0x10D3, 0, dialog_id);
             return;
         case 0x10D3:
         case 0x10EB:
-            local_0 = func_808005CC_chdodgemcontrol(param_0->unk79_4);
-            func_800CE8D8(0, (f32) local_0, func_808005CC_chdodgemcontrol(param_0->unk79_4));
+            time = func_808005CC_chdodgemcontrol(actor->unk79_4);
+            func_800CE8D8(0, (f32) time, func_808005CC_chdodgemcontrol(actor->unk79_4));
             func_800CE88C(0, 1);
-            func_808019C4_chdodgemcontrol(param_0, 0);
-            param_0->unk70_10 = 3;
+            func_808019C4_chdodgemcontrol(actor, 0);
+            actor->unk70_10 = 3;
             func_800FDC28(12);
             return;
         case 0x10D4:
@@ -445,7 +451,7 @@ void func_808006CC_chdodgemcontrol(Actor *param_0, s32 param_1, s32 param_2)
 
 case 0xCEB:
     if (func_800D395C()) {
-        if (param_2 == 1) {
+        if (choice == 1) {
             _gcfrontend_entrypoint_11();
             return;
         }
@@ -453,7 +459,7 @@ case 0xCEB:
         return;
     }
 
-if (param_2 == 1) {
+if (choice == 1) {
     _gcgoto_entrypoint_1(func_800EA05C(), 1);
     return;
 }
@@ -467,21 +473,21 @@ case 0x10EE:
 case 0x10EF:
 case 0x10F0:
 case 0x10F1:
-    func_8080061C_chdodgemcontrol(param_0, 0xCEB, 0x40, param_1);
+    func_8080061C_chdodgemcontrol(actor, 0xCEB, 0x40, dialog_id);
     return;
 case 0x10BB:
 case 0x10BC:
 case 0x10BD:
-    local_1[0xC4] = 1;
+    data[0xC4] = 1;
     }
     }
 
-    s32 func_808008EC_chdodgemcontrol(u8 *param_0)
+    s32 func_808008EC_chdodgemcontrol(u8 *actor)
     {
-        u32 temp_t6;
-        temp_t6 = (unsigned short) param_0[0x79];
-        temp_t6 = temp_t6 >> 4;
-        switch (temp_t6) {
+        u32 mode;
+        mode = (unsigned short) actor[0x79];
+        mode = mode >> 4;
+        switch (mode) {
             case 0:
                 return 0x3C;
 
@@ -496,97 +502,97 @@ case 0x10BD:
         }
     }
 
-    s32 func_80800938_chdodgemcontrol(param_0, param_1, param_2)
-    Actor *param_0;
-    s32 param_1;
-    s32 param_2;
+    s32 func_80800938_chdodgemcontrol(actor, msg, msg_data)
+    Actor *actor;
+    s32 msg;
+    s32 msg_data;
     {
-        DodgemData_80800938_chdodgemcontrol *local_0;
-        s32 local_1;
+        DodgemData_80800938_chdodgemcontrol *data;
+        s32 map_id;
         s32 i;
 
-        local_0 = func_80100094(param_0, 0);
-        switch (param_1) {
+        data = func_80100094(actor, 0);
+        switch (msg) {
             case 0x0B:
-                local_0->unkC3 = 1;
+                data->unkC3 = 1;
                 return 3;
 
 case 0x0E:
-    switch (param_0->unk79_4) {
+    switch (actor->unk79_4) {
         case 0:
             if (_capod_entrypoint_17(0.5f)) {
-                func_80801A3C_chdodgemcontrol(param_0, 1, 2);
+                func_80801A3C_chdodgemcontrol(actor, 1, 2);
             }
             break;
         case 1:
             if (_capod_entrypoint_17(0.5f)) {
-                func_80801A3C_chdodgemcontrol(param_0, 2, 2);
+                func_80801A3C_chdodgemcontrol(actor, 2, 2);
             }
             break;
         case 2:
             if (_capod_entrypoint_17(0.5f)) {
-                func_80801A3C_chdodgemcontrol(param_0, 3, 2);
+                func_80801A3C_chdodgemcontrol(actor, 3, 2);
             }
     }
 
 return 3;
 case 0x49:
-    param_0 = func_80801844_chdodgemcontrol(param_0);
-    local_1 = func_800EA05C();
+    actor = func_80801844_chdodgemcontrol(actor);
+    map_id = func_800EA05C();
 
-if (local_1 == 0xDE) {
-} else if (local_1 == 0xDF) {
+if (map_id == 0xDE) {
+} else if (map_id == 0xDF) {
 
 }
-else if (local_1 == 0xE0)
+else if (map_id == 0xE0)
 {
 }
-else if (local_1 == 0xE1)
+else if (map_id == 0xE1)
 {
 }
-else if (local_1 == 0xE2)
+else if (map_id == 0xE2)
 {
 }
-switch (param_0->unk79_4) {
+switch (actor->unk79_4) {
     case 0:
     case 1:
     case 2:
-        if (!func_800DA9E4(param_0->unk79_4 + 0x419, 1) && !func_800D395C()) {
-            _capod_entrypoint_13(param_0->unk0, 0, 1, 0x2020);
-            local_0->unkC6 = 1;
+        if (!func_800DA9E4(actor->unk79_4 + 0x419, 1) && !func_800D395C()) {
+            _capod_entrypoint_13(actor->unk0, 0, 1, 0x2020);
+            data->unkC6 = 1;
         } else {
 
-local_0->unkC4 = 1;
-local_0->unkC3 = 1;
+data->unkC4 = 1;
+data->unkC3 = 1;
 func_800A54F8(0);
 }
 break;
 case 3:
-    local_0->unkC4 = 1;
-    local_0->unkC3 = 1;
+    data->unkC4 = 1;
+    data->unkC3 = 1;
     _subaddiemulti_entrypoint_4(0);
     }
     break;
 case 0x2E:
-    func_808006CC_chdodgemcontrol(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+    func_808006CC_chdodgemcontrol(actor, ((s16 *) &msg_data)[0], ((s16 *) &msg_data)[1]);
     break;
 case 0x30:
-    switch (((s16 *) &param_2)[0]) {
+    switch (((s16 *) &msg_data)[0]) {
         case 0x10FC:
-            if (((s16 *) &param_2)[1] == 0) {
-                return func_808008EC_chdodgemcontrol(param_0);
+            if (((s16 *) &msg_data)[1] == 0) {
+                return func_808008EC_chdodgemcontrol(actor);
 
 }
-return func_808005CC_chdodgemcontrol(param_0->unk79_4);
+return func_808005CC_chdodgemcontrol(actor->unk79_4);
 case 0x10D9:
-    return local_0->unkC1;
+    return data->unkC1;
 case 0x10D4:
 case 0x10D5:
 case 0x10D6:
 case 0x10EC:
 case 0x10EE:
 case 0x10F0:
-    return local_0->unk10;
+    return data->unk10;
 case 0x10ED:
     return func_800D211C(0x8A);
 case 0x10EF:
@@ -594,14 +600,14 @@ case 0x10EF:
 case 0x10F1:
     return func_800D211C(0x8C);
 case 0x10D7:
-    return func_808008EC_chdodgemcontrol(param_0);
+    return func_808008EC_chdodgemcontrol(actor);
     }
     break;
 case 0x3D:
-    if (param_2 == -1) {
-        for (i = 0; i < local_0->unkC5; i++) {
-            if (!local_0->unkAC[i]) {
-                func_808004E4_chdodgemcontrol(param_0, i);
+    if (msg_data == -1) {
+        for (i = 0; i < data->unkC5; i++) {
+            if (!data->unkAC[i]) {
+                func_808004E4_chdodgemcontrol(actor, i);
                 break;
             }
 
@@ -614,169 +620,169 @@ default:
     return 1;
     }
 
-    void func_80800CA0_chdodgemcontrol(Actor *param_0)
+    void func_80800CA0_chdodgemcontrol(Actor *actor)
     {
-        u8 *local_0;
-        s16 local_1;
-        s32 local_2[4];
-        s32 local_3[4];
-        s32 local_4;
-        s32 local_5;
+        u8 *data;
+        s16 dialog_id;
+        s32 won[4];
+        s32 unk_0[4];
+        s32 winner;
+        s32 i;
 
-        local_0 = func_80100094(param_0, 0);
-        param_0->unk70_10 = 4;
-        func_808019C4_chdodgemcontrol((s32) param_0, 1);
-        if (param_0->unk64_19) {
-            switch (param_0->unk79_4) {
+        data = func_80100094(actor, 0);
+        actor->unk70_10 = 4;
+        func_808019C4_chdodgemcontrol((s32) actor, 1);
+        if (actor->unk64_19) {
+            switch (actor->unk79_4) {
                 case 0:
-                    local_1 =
-                        func_800D2054(0, 0x8A, *(s32 *) (local_0 + 0x10)) == 1 ? 0x10EC : 0x10ED;
-                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+                    dialog_id =
+                        func_800D2054(0, 0x8A, *(s32 *) (data + 0x10)) == 1 ? 0x10EC : 0x10ED;
+                    func_8080061C_chdodgemcontrol(actor, dialog_id, 0);
                     break;
                 case 1:
-                    local_1 =
-                        func_800D2054(0, 0x8B, *(s32 *) (local_0 + 0x10)) == 1 ? 0x10EE : 0x10EF;
-                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+                    dialog_id =
+                        func_800D2054(0, 0x8B, *(s32 *) (data + 0x10)) == 1 ? 0x10EE : 0x10EF;
+                    func_8080061C_chdodgemcontrol(actor, dialog_id, 0);
                     break;
                 case 2:
-                    local_1 =
-                        func_800D2054(0, 0x8C, *(s32 *) (local_0 + 0x10)) == 1 ? 0x10F0 : 0x10F1;
-                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+                    dialog_id =
+                        func_800D2054(0, 0x8C, *(s32 *) (data + 0x10)) == 1 ? 0x10F0 : 0x10F1;
+                    func_8080061C_chdodgemcontrol(actor, dialog_id, 0);
             }
         } else {
-            switch (param_0->unk79_4) {
+            switch (actor->unk79_4) {
                 case 0:
-                    if (*(s32 *) (local_0 + 0x10) >= func_808008EC_chdodgemcontrol(param_0)) {
-                        local_1 = 0x10D4;
-                        func_800D2054(0, 0x8A, *(s32 *) (local_0 + 0x10));
+                    if (*(s32 *) (data + 0x10) >= func_808008EC_chdodgemcontrol(actor)) {
+                        dialog_id = 0x10D4;
+                        func_800D2054(0, 0x8A, *(s32 *) (data + 0x10));
                     } else {
-                        local_1 = 0x10D7;
+                        dialog_id = 0x10D7;
                     }
-                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+                    func_8080061C_chdodgemcontrol(actor, dialog_id, 0);
                     break;
                 case 1:
-                    if (*(s32 *) (local_0 + 0x10) >= func_808008EC_chdodgemcontrol(param_0)) {
-                        local_1 = 0x10D5;
-                        func_800D2054(0, 0x8B, *(s32 *) (local_0 + 0x10));
+                    if (*(s32 *) (data + 0x10) >= func_808008EC_chdodgemcontrol(actor)) {
+                        dialog_id = 0x10D5;
+                        func_800D2054(0, 0x8B, *(s32 *) (data + 0x10));
                     } else {
-                        local_1 = 0x10D7;
+                        dialog_id = 0x10D7;
                     }
-                    func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+                    func_8080061C_chdodgemcontrol(actor, dialog_id, 0);
                     break;
                 case 2:
-                    if (*(s32 *) (local_0 + 0x10) >= func_808008EC_chdodgemcontrol(param_0)) {
-                        local_1 = 0x10D6;
-                        func_800D2054(0, 0x8C, *(s32 *) (local_0 + 0x10));
+                    if (*(s32 *) (data + 0x10) >= func_808008EC_chdodgemcontrol(actor)) {
+                        dialog_id = 0x10D6;
+                        func_800D2054(0, 0x8C, *(s32 *) (data + 0x10));
                     } else {
-                        local_1 = 0x10D7;
+                        dialog_id = 0x10D7;
 
 }
-func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+func_8080061C_chdodgemcontrol(actor, dialog_id, 0);
 break;
 case 3:
-    local_4 =
-        _sumultiscore_entrypoint_2((s32 *) (local_0 + 0x10), local_2, local_3, 0, local_0[0xC2]);
-    for (local_5 = 0; local_5 < local_0[0xC2]; local_5++) {
-        if (local_2[local_5] == 1) {
-            ((s32 *) (local_0 + 0x20))[local_5] = 1;
+    winner =
+        _sumultiscore_entrypoint_2((s32 *) (data + 0x10), won, unk_0, 0, data[0xC2]);
+    for (i = 0; i < data[0xC2]; i++) {
+        if (won[i] == 1) {
+            ((s32 *) (data + 0x20))[i] = 1;
         } else {
 
-((s32 *) (local_0 + 0x20))[local_5] = 0;
+((s32 *) (data + 0x20))[i] = 0;
 }
 }
-if (local_4) {
-    local_1 = 0x10D9;
-    local_0[0xC1] = local_4;
+if (winner) {
+    dialog_id = 0x10D9;
+    data[0xC1] = winner;
     func_800FC6B0(0x16);
 } else {
-    local_1 = 0x10DA;
+    dialog_id = 0x10DA;
     func_800FC6B0(0x17);
 }
-func_8080061C_chdodgemcontrol(param_0, local_1, 0);
+func_8080061C_chdodgemcontrol(actor, dialog_id, 0);
 }
 }
 }
 
-void func_80800FC4_chdodgemcontrol(Actor *param_0, s32 param_1, s32 param_2)
+void func_80800FC4_chdodgemcontrol(Actor *actor, s32 car, s32 delta)
 {
-    DodgemScores *local_0;
+    DodgemScores *scores;
 
-    local_0 = func_80100094(param_0, 0);
-    if (param_0->unk70_10 == 3 && (param_2 >= 0 || local_0->local_0[param_1] >= -param_2)) {
-        local_0->local_0[param_1] += param_2;
-        if (param_2 > 0) {
-            if (param_1 == 0)
-                func_8010D930(4, 0, param_0->position, &D_80804D34_chdodgemcontrol);
+    scores = func_80100094(actor, 0);
+    if (actor->unk70_10 == 3 && (delta >= 0 || scores->local_0[car] >= -delta)) {
+        scores->local_0[car] += delta;
+        if (delta > 0) {
+            if (car == 0)
+                func_8010D930(4, 0, actor->position, &D_80804D34_chdodgemcontrol);
         } else {
-            if (param_1 == 0)
-                func_8010D930(5, 0, param_0->position, &D_80804D20_chdodgemcontrol);
+            if (car == 0)
+                func_8010D930(5, 0, actor->position, &D_80804D20_chdodgemcontrol);
         }
     }
 }
 
-s32 func_80801084_chdodgemcontrol(f32 *param_0, f32 *param_1, f32 param_2)
+s32 func_80801084_chdodgemcontrol(f32 *pos_a, f32 *pos_b, f32 radius)
 {
-    DodgemVector local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3;
-    f32 local_4;
-    if (func_800F0064(param_0, param_2, param_1)) {
-        local_0 = *(DodgemVector *) D_80804E0C_chdodgemcontrol;
-        local_3 = param_1[1];
-        local_4 = param_0[1];
-        func_800EE7F8(local_1, param_0);
-        func_800EE7F8(local_2, param_1);
-        if (param_1[0] == param_0[0] && param_1[2] == param_0[2]) {
-            param_1[0] += func_800DC178(-5.0f, 5.0f);
-            param_1[2] += func_800DC178(-5.0f, 5.0f);
+    DodgemVector push;
+    f32 orig_a[3];
+    f32 orig_b[3];
+    f32 y_b;
+    f32 y_a;
+    if (func_800F0064(pos_a, radius, pos_b)) {
+        push = *(DodgemVector *) D_80804E0C_chdodgemcontrol;
+        y_b = pos_b[1];
+        y_a = pos_a[1];
+        func_800EE7F8(orig_a, pos_a);
+        func_800EE7F8(orig_b, pos_b);
+        if (pos_b[0] == pos_a[0] && pos_b[2] == pos_a[2]) {
+            pos_b[0] += func_800DC178(-5.0f, 5.0f);
+            pos_b[2] += func_800DC178(-5.0f, 5.0f);
         }
-        local_0.value[0] = param_0[0] - param_1[0];
-        local_0.value[1] = param_0[1] - param_1[1];
-        local_0.value[2] = param_0[2] - param_1[2];
-        func_800EF368(local_0.value, func_800EEF94(local_0.value) + 5.0f);
-        func_800EFB24(param_1, local_1, local_0.value);
-        func_800EE780(param_0, local_2, local_0.value);
-        param_1[1] = local_3;
-        param_0[1] = local_4;
+        push.value[0] = pos_a[0] - pos_b[0];
+        push.value[1] = pos_a[1] - pos_b[1];
+        push.value[2] = pos_a[2] - pos_b[2];
+        func_800EF368(push.value, func_800EEF94(push.value) + 5.0f);
+        func_800EFB24(pos_b, orig_a, push.value);
+        func_800EE780(pos_a, orig_b, push.value);
+        pos_b[1] = y_b;
+        pos_a[1] = y_a;
         return 1;
     }
     return 0;
 }
 
-f32 func_80801214_chdodgemcontrol(s32 param_0)
+f32 func_80801214_chdodgemcontrol(s32 index)
 {
-    DodgemF4 local_0 = D_80804E18_chdodgemcontrol;
-    return local_0.v[param_0];
+    DodgemF4 table = D_80804E18_chdodgemcontrol;
+    return table.v[index];
 }
 
-void func_80801258_chdodgemcontrol(s32 param_0, f32 *param_1)
+void func_80801258_chdodgemcontrol(s32 index, f32 *out_pos)
 {
-    DodgemPositions local_0 = D_80804E28_chdodgemcontrol;
-    func_800EE7F8(param_1, local_0.local_0[param_0]);
+    DodgemPositions table = D_80804E28_chdodgemcontrol;
+    func_800EE7F8(out_pos, table.local_0[index]);
 }
 
-void func_808012C8_chdodgemcontrol(Actor *param_0, s32 param_1)
+void func_808012C8_chdodgemcontrol(Actor *actor, s32 flag)
 {
-    if (param_1 || func_800D395C()) {
-        param_0->unk64_19 = 1;
-        _chintrotext_entrypoint_1(0x18B1, param_0->unk79_4 + 0x12, 0, 0);
+    if (flag || func_800D395C()) {
+        actor->unk64_19 = 1;
+        _chintrotext_entrypoint_1(0x18B1, actor->unk79_4 + 0x12, 0, 0);
     } else {
-        param_0->unk64_19 = 0;
+        actor->unk64_19 = 0;
         _chintrotext_entrypoint_2(1);
     }
 }
 
-int func_80801344_chdodgemcontrol(Actor *param_0)
+int func_80801344_chdodgemcontrol(Actor *actor)
 {
-    char *new_var;
-    unsigned int local_0;
-    u32 local_1;
-    new_var = ((char *) param_0) + 0x79;
-    local_0 = *((u8 *) new_var);
-    local_0 = local_0 >> 4;
-    local_1 = local_0;
-    switch (local_1) {
+    char *mode_ptr;
+    unsigned int mode;
+    u32 mode_switch;
+    mode_ptr = ((char *) actor) + 0x79;
+    mode = *((u8 *) mode_ptr);
+    mode = mode >> 4;
+    mode_switch = mode;
+    switch (mode_switch) {
         case 0:
 
         case 1:
@@ -794,12 +800,12 @@ int func_80801344_chdodgemcontrol(Actor *param_0)
     func_800D2748(0xC6, 0x26);
 }
 
-void func_808013D0_chdodgemcontrol(param_0) Actor *param_0;
+void func_808013D0_chdodgemcontrol(actor) Actor *actor;
 {
-    u8 *local_0;
-    s32 local_1;
+    u8 *data;
+    s32 i;
 
-    local_0 = func_80100094(param_0, 0);
+    data = func_80100094(actor, 0);
     if (!func_800D211C(0x8A)) {
         func_800D2054(0, 0x8A, 3);
         func_800D2054(0, 0x8B, 3);
@@ -807,69 +813,69 @@ void func_808013D0_chdodgemcontrol(param_0) Actor *param_0;
     }
     switch (func_800EA05C()) {
         case 0xDE:
-            param_0->unk79_4 = 0;
-            local_0[0xC5] = 3;
-            func_808012C8_chdodgemcontrol(param_0, func_800DA298(0xAC));
-            local_0[0xC2] = D_80804D00_chdodgemcontrol[param_0->unk79_4];
+            actor->unk79_4 = 0;
+            data[0xC5] = 3;
+            func_808012C8_chdodgemcontrol(actor, func_800DA298(0xAC));
+            data[0xC2] = D_80804D00_chdodgemcontrol[actor->unk79_4];
             break;
         case 0xDF:
-            param_0->unk79_4 = 1;
-            local_0[0xC5] = 3;
-            func_808012C8_chdodgemcontrol(param_0, func_800DA298(0xAD));
-            local_0[0xC2] = D_80804D00_chdodgemcontrol[param_0->unk79_4];
+            actor->unk79_4 = 1;
+            data[0xC5] = 3;
+            func_808012C8_chdodgemcontrol(actor, func_800DA298(0xAD));
+            data[0xC2] = D_80804D00_chdodgemcontrol[actor->unk79_4];
             break;
         case 0xE0:
-            param_0->unk79_4 = 2;
-            local_0[0xC5] = 3;
-            func_808012C8_chdodgemcontrol(param_0, func_800D0A9C(0x16, 1));
-            local_0[0xC2] = D_80804D00_chdodgemcontrol[param_0->unk79_4];
+            actor->unk79_4 = 2;
+            data[0xC5] = 3;
+            func_808012C8_chdodgemcontrol(actor, func_800D0A9C(0x16, 1));
+            data[0xC2] = D_80804D00_chdodgemcontrol[actor->unk79_4];
             break;
         case 0x186:
-            for (local_1 = 0; local_1 < 8; local_1++) {
-                if (func_800F6438(local_1)) {
-                    func_800F4CEC(local_1, 0);
+            for (i = 0; i < 8; i++) {
+                if (func_800F6438(i)) {
+                    func_800F4CEC(i, 0);
                 }
             }
-            param_0->unk79_4 = 3;
-            local_0[0xC2] = _gcstatusDll_entrypoint_11();
-            local_0[0xC5] = 3;
+            actor->unk79_4 = 3;
+            data[0xC2] = _gcstatusDll_entrypoint_11();
+            data[0xC5] = 3;
     }
-    if (local_0[0xC5] >= 11) {
-        local_0[0xC5] = 10;
+    if (data[0xC5] >= 11) {
+        data[0xC5] = 10;
     }
-    local_0[0xC3] = 0;
-    func_808017F0_chdodgemcontrol(param_0);
+    data[0xC3] = 0;
+    func_808017F0_chdodgemcontrol(actor);
     func_800BF744(1, 1);
-    func_80801344_chdodgemcontrol(param_0);
+    func_80801344_chdodgemcontrol(actor);
 }
 
-void func_808015E8_chdodgemcontrol(param_0) u8 *param_0;
+void func_808015E8_chdodgemcontrol(actor) u8 *actor;
 {
-    u32 t = (u32) param_0[0x79] >> 4;
+    u32 t = (u32) actor[0x79] >> 4;
     if (t != 0 && t != 1) {
         if (t && t) {
         }
     }
 }
 
-void func_8080160C_chdodgemcontrol(Actor *param_0)
+void func_8080160C_chdodgemcontrol(Actor *actor)
 {
-    u8 *local_0;
-    s32 local_1;
-    s32 local_2;
+    u8 *data;
+    s32 i;
+    s32 dialog_id;
 
-    local_0 = func_80100094(param_0, 0);
+    data = func_80100094(actor, 0);
     if (!func_800DA298(0x6AD)) {
-        for (local_1 = 0; local_1 < local_0[0xC2]; local_1++) {
-            if (!local_0[0x30 + local_1]) {
+        for (i = 0; i < data[0xC2]; i++) {
+            if (!data[0x30 + i]) {
                 return;
             }
         }
-        if (local_0[0xC3] && local_0[0xC4]) {
-            if (local_0[0xC6]) {
-                _capod_entrypoint_14(local_0[0xC2], local_0);
+        if (data[0xC3] && data[0xC4]) {
+            if (data[0xC6]) {
+                _capod_entrypoint_14(data[0xC2], data);
             }
-            switch (param_0->unk79_4) {
+            switch (actor->unk79_4) {
                 case 0:
                 case 1:
                 case 2:
@@ -878,267 +884,267 @@ void func_8080160C_chdodgemcontrol(Actor *param_0)
                     break;
             }
             func_800BF744(1, 0);
-            if (param_0->unk79_4 == 3) {
-                local_2 = 0x10EB;
+            if (actor->unk79_4 == 3) {
+                dialog_id = 0x10EB;
             } else {
-                local_2 = !param_0->unk64_19 ? 0x10FC : 0x10D3;
+                dialog_id = !actor->unk64_19 ? 0x10FC : 0x10D3;
             }
-            func_8080061C_chdodgemcontrol(param_0, local_2, 0);
-            param_0->unk70_10 = 2;
+            func_8080061C_chdodgemcontrol(actor, dialog_id, 0);
+            actor->unk70_10 = 2;
         }
     }
 }
 
-void func_80801744_chdodgemcontrol(Actor *param_0, Actor *param_1)
+void func_80801744_chdodgemcontrol(Actor *controller, Actor *car)
 {
-    switch (param_0->unk79_4) {
+    switch (controller->unk79_4) {
         case 0:
         case 1:
         case 2:
-            switch (param_1->unk6C_0) {
+            switch (car->unk6C_0) {
                 case 0:
-                    ((DodgemFlags *) param_1)->flag_20 = 1;
-                    ((DodgemFlags *) param_1)->mode = 0;
+                    ((DodgemFlags *) car)->flag_20 = 1;
+                    ((DodgemFlags *) car)->mode = 0;
                     break;
                 case 1:
-                    ((DodgemFlags *) param_1)->flag_1 = 1;
+                    ((DodgemFlags *) car)->flag_1 = 1;
             }
             break;
         case 3:
-            ((DodgemFlags *) param_1)->flag_20 = 0;
-            ((DodgemFlags *) param_1)->mode = param_1->unk6C_0;
+            ((DodgemFlags *) car)->flag_20 = 0;
+            ((DodgemFlags *) car)->mode = car->unk6C_0;
     }
 }
 
-void func_808017F0_chdodgemcontrol(param_0) Actor *param_0;
+void func_808017F0_chdodgemcontrol(actor) Actor *actor;
 {
-    DodgeS *local_0 = func_80100094(param_0, 0);
+    DodgeS *data = func_80100094(actor, 0);
     s32 i;
-    for (i = 0; i < local_0->count; i++) {
-        local_0->b[i] = 0;
-        local_0->a[i] = 0;
+    for (i = 0; i < data->count; i++) {
+        data->b[i] = 0;
+        data->a[i] = 0;
     }
 }
 
-Actor *func_80801844_chdodgemcontrol(Actor *param_0)
+Actor *func_80801844_chdodgemcontrol(Actor *actor)
 {
-    u32 local_0;
-    s32 local_1;
-    Unk80132ED0 **local_2;
-    s32 local_3;
-    Actor *local_4;
-    void *local_5;
+    u32 mode;
+    s32 i;
+    Unk80132ED0 **car_ids;
+    s32 car_count;
+    Actor *car;
+    void *data;
 
-    local_0 = param_0->unk79_4;
-    local_5 = func_80100094(param_0, 0);
-    local_3 = *(u8 *) ((u8 *) local_5 + 0xC2);
-    local_1 = 0;
-    local_2 = local_5;
-    for (; local_1 < local_3; local_1++, local_2++) {
-        local_4 = func_801084B0(0x305, &param_0);
-        local_4->unk3C = param_0->unk0;
-        *local_2 = local_4->unk0;
-        local_4->unk79_4 = local_0;
-        func_80801928_chdodgemcontrol(param_0, local_1);
-        func_80108944(local_4, param_0);
-        func_80801744_chdodgemcontrol(param_0, local_4);
+    mode = actor->unk79_4;
+    data = func_80100094(actor, 0);
+    car_count = *(u8 *) ((u8 *) data + 0xC2);
+    i = 0;
+    car_ids = data;
+    for (; i < car_count; i++, car_ids++) {
+        car = func_801084B0(0x305, &actor);
+        car->unk3C = actor->unk0;
+        *car_ids = car->unk0;
+        car->unk79_4 = mode;
+        func_80801928_chdodgemcontrol(actor, i);
+        func_80108944(car, actor);
+        func_80801744_chdodgemcontrol(actor, car);
     }
-    return param_0;
+    return actor;
 }
 
-int func_80801928_chdodgemcontrol(param_0, param_1)
-Actor *param_0;
-s32 param_1;
+int func_80801928_chdodgemcontrol(actor, index)
+Actor *actor;
+s32 index;
 {
-    DodgemRacers61 *local_0;
-    Actor *local_1;
+    DodgemRacers61 *data;
+    Actor *car;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_80106790(local_0->local_0[param_1]);
-    func_80801258_chdodgemcontrol(param_1, local_1->position);
-    local_1->rotation[1] = func_80801214_chdodgemcontrol(param_1);
-    local_1->unk54 = local_1->rotation[1];
-    local_1->unk6C_0 = param_1;
-    local_0->local_1[param_1] = 0;
-    local_0->local_2[param_1] = 1;
+    data = func_80100094(actor, 0);
+    car = func_80106790(data->local_0[index]);
+    func_80801258_chdodgemcontrol(index, car->position);
+    car->rotation[1] = func_80801214_chdodgemcontrol(index);
+    car->unk54 = car->rotation[1];
+    car->unk6C_0 = index;
+    data->local_1[index] = 0;
+    data->local_2[index] = 1;
 }
 
-void func_808019C4_chdodgemcontrol(param_0, param_1) s32 param_0;
-s32 param_1;
+void func_808019C4_chdodgemcontrol(actor, arg) s32 actor;
+s32 arg;
 {
-    s32 var_s0;
-    u8 *temp_v0;
+    s32 i;
+    u8 *data;
 
-    temp_v0 = func_80100094(param_0, 0);
-    var_s0 = 0;
-    if ((s32) (*(u8 *) ((s8 *) (temp_v0) + (0xC2))) > 0) {
+    data = func_80100094(actor, 0);
+    i = 0;
+    if ((s32) (*(u8 *) ((s8 *) (data) + (0xC2))) > 0) {
         do {
-            func_80801A3C_chdodgemcontrol(param_0, var_s0, param_1);
-            var_s0 += 1;
-        } while (var_s0 < (s32) (*(u8 *) ((s8 *) (temp_v0) + (0xC2))));
+            func_80801A3C_chdodgemcontrol(actor, i, arg);
+            i += 1;
+        } while (i < (s32) (*(u8 *) ((s8 *) (data) + (0xC2))));
     }
 }
 
-void func_80801A3C_chdodgemcontrol(param_0, param_1, param_2) s32 param_0;
-s32 param_1;
-s32 param_2;
+void func_80801A3C_chdodgemcontrol(actor, index, arg) s32 actor;
+s32 index;
+s32 arg;
 {
-    s32 *local_0;
-    local_0 = (s32 *) func_80100094(param_0, 0);
-    if (local_0[param_1] != 0) {
-        func_808042A4_chdodgemcontrol((void *) local_0[param_1], param_2);
+    s32 *cars;
+    cars = (s32 *) func_80100094(actor, 0);
+    if (cars[index] != 0) {
+        func_808042A4_chdodgemcontrol((void *) cars[index], arg);
     }
 }
 
-void func_80801A8C_chdodgemcontrol(Actor *param_0, s32 param_1)
+void func_80801A8C_chdodgemcontrol(Actor *actor, s32 flag)
 {
-    u8 *local_1;
-    s32 local_0;
-    s32 local_2;
-    s32 local_3;
+    u8 *data;
+    s32 hud_count;
+    s32 i;
+    s32 slot;
 
-    local_1 = func_80100094(param_0, 0);
-    switch (param_0->unk79_4) {
+    data = func_80100094(actor, 0);
+    switch (actor->unk79_4) {
         case 0:
         case 1:
         case 2:
-            local_0 = 1;
+            hud_count = 1;
             break;
         case 3:
-            local_0 = local_1[0xC2];
+            hud_count = data[0xC2];
     }
-    for (local_2 = 0; local_2 < local_0; local_2++) {
-        local_3 = local_2 + 0xC3;
-        if (!local_1[0xC0]) {
-            func_800D2770(local_3, 0);
+    for (i = 0; i < hud_count; i++) {
+        slot = i + 0xC3;
+        if (!data[0xC0]) {
+            func_800D2770(slot, 0);
         } else {
-            func_800D24E8(local_3, ((s32 *) (local_1 + 0x10))[local_2], 0);
+            func_800D24E8(slot, ((s32 *) (data + 0x10))[i], 0);
         }
-        if (param_1 && ((s32 *) (local_1 + 0x20))[local_2]) {
-            func_800D28A0(local_3);
+        if (flag && ((s32 *) (data + 0x20))[i]) {
+            func_800D28A0(slot);
         }
     }
-    local_1[0xC0] = 1;
+    data[0xC0] = 1;
 }
 
 void func_80801B94_chdodgemcontrol(s32 param_0, s32 param_1)
 {
-    s32 local_1;
-    f32 local_0[3];
+    s32 handle;
+    f32 pos[3];
 
-    local_1 = func_800B53A4(0xC);
-    func_80103DFC(param_0, &local_0);
-    func_800BABB8(local_1, &local_0, &local_0, 0x3F800000, &D_80804E78_chdodgemcontrol);
-    func_800BA3FC(local_1, param_1);
-    func_800BA22C(local_1, 0xC);
-    _subaddieaudioquick_entrypoint_2(param_0, &local_0, &D_80804EA4_chdodgemcontrol);
+    handle = func_800B53A4(0xC);
+    func_80103DFC(param_0, &pos);
+    func_800BABB8(handle, &pos, &pos, 0x3F800000, &D_80804E78_chdodgemcontrol);
+    func_800BA3FC(handle, param_1);
+    func_800BA22C(handle, 0xC);
+    _subaddieaudioquick_entrypoint_2(param_0, &pos, &D_80804EA4_chdodgemcontrol);
 }
 
-void func_80801C18_chdodgemcontrol(param_0, param_1, param_2) DodgemState *param_0;
+void func_80801C18_chdodgemcontrol(light, param_1, param_2) DodgemState *light;
 S16Pair param_1;
 s32 param_2;
 {
-    func_80102424(param_0, param_2);
-    if (param_0->f72 == 3) {
-        _subaddiefade_entrypoint_5(param_0);
+    func_80102424(light, param_2);
+    if (light->f72 == 3) {
+        _subaddiefade_entrypoint_5(light);
     }
 }
 
-void func_80801C60_chdodgemcontrol(Actor *param_0)
+void func_80801C60_chdodgemcontrol(Actor *light)
 {
-    Actor *local_0;
-    u8 *local_1;
-    u32 local_2[3];
-    u32 local_3[3];
-    u8 *local_4;
+    Actor *controller;
+    u8 *data;
+    u32 colors_a[3];
+    u32 colors_b[3];
+    u8 *slot;
 
-    local_0 = func_80106790(param_0->unk3C);
-    local_1 = func_80100094(local_0, 0);
-    switch (param_0->unk70_10) {
+    controller = func_80106790(light->unk3C);
+    data = func_80100094(controller, 0);
+    switch (light->unk70_10) {
         case 1:
-            _subaddiefade_entrypoint_6(param_0, 7);
-            if (_subaddiefade_entrypoint_0(param_0) == 255) {
-                func_80801C18_chdodgemcontrol(param_0, local_0, 2);
+            _subaddiefade_entrypoint_6(light, 7);
+            if (_subaddiefade_entrypoint_0(light) == 255) {
+                func_80801C18_chdodgemcontrol(light, controller, 2);
             }
             break;
         case 2:
-            if (param_0->unk58 > 0.0f) {
-                param_0->unk58 -= func_800D8FF8();
+            if (light->unk58 > 0.0f) {
+                light->unk58 -= func_800D8FF8();
             } else {
-                func_80801C18_chdodgemcontrol(param_0, local_0, 3);
+                func_80801C18_chdodgemcontrol(light, controller, 3);
             }
             break;
         case 3:
-            _subaddiefade_entrypoint_6(param_0, -7);
+            _subaddiefade_entrypoint_6(light, -7);
     }
-    switch (param_0->unk70_10) {
+    switch (light->unk70_10) {
         case 3:
-            *(Vec3f *) local_2 = *(Vec3f *) D_80804EB4_chdodgemcontrol;
-            local_2[local_1[param_0->unk6C_0 + 0xB6]] = _subaddiefade_entrypoint_0(param_0);
-            func_800C8E84(((s32 *) param_0)[0x50 / 4], local_2);
-            if (_subaddiefade_entrypoint_0(param_0) == 0) {
-                local_1[param_0->unk6C_0 + 0xAC] = 0;
-                func_800FFAB0(param_0);
+            *(Vec3f *) colors_a = *(Vec3f *) D_80804EB4_chdodgemcontrol;
+            colors_a[data[light->unk6C_0 + 0xB6]] = _subaddiefade_entrypoint_0(light);
+            func_800C8E84(((s32 *) light)[0x50 / 4], colors_a);
+            if (_subaddiefade_entrypoint_0(light) == 0) {
+                data[light->unk6C_0 + 0xAC] = 0;
+                func_800FFAB0(light);
             }
             break;
         case 1:
-            *(Vec3f *) local_3 = *(Vec3f *) D_80804EC0_chdodgemcontrol;
-            local_3[local_1[param_0->unk6C_0 + 0xB6]] = _subaddiefade_entrypoint_0(param_0);
-            func_800C8E84(((s32 *) param_0)[0x50 / 4], local_3);
+            *(Vec3f *) colors_b = *(Vec3f *) D_80804EC0_chdodgemcontrol;
+            colors_b[data[light->unk6C_0 + 0xB6]] = _subaddiefade_entrypoint_0(light);
+            func_800C8E84(((s32 *) light)[0x50 / 4], colors_b);
     }
-    if ((s32) param_0->unk70_10 < 3) {
-        local_4 = (u8 *) ((s32) local_1 + param_0->unk6C_0);
-        switch (local_4[0xAC]) {
+    if ((s32) light->unk70_10 < 3) {
+        slot = (u8 *) ((s32) data + light->unk6C_0);
+        switch (slot[0xAC]) {
             case 2:
-                func_80801B94_chdodgemcontrol(param_0, D_80804ECC_chdodgemcontrol[local_4[0xB6]]);
-                local_1[param_0->unk6C_0 + 0xAC] = 0;
-                func_800FFAB0(param_0);
+                func_80801B94_chdodgemcontrol(light, D_80804ECC_chdodgemcontrol[slot[0xB6]]);
+                data[light->unk6C_0 + 0xAC] = 0;
+                func_800FFAB0(light);
                 break;
             case 3:
-                local_4[0xAC] = 0;
-                func_800FFAB0(param_0);
+                slot[0xAC] = 0;
+                func_800FFAB0(light);
         }
     }
 }
 
-void func_80801F00_chdodgemcontrol(Actor *param_0)
+void func_80801F00_chdodgemcontrol(Actor *light)
 {
-    s32 var;
-    var = *((s32 *) (((char *) param_0) + 0x50));
-    if (var != 0) {
-        func_800C8B84(var, *((s32 *) (((char *) param_0) + 0x50)));
+    s32 handle;
+    handle = *((s32 *) (((char *) light) + 0x50));
+    if (handle != 0) {
+        func_800C8B84(handle, *((s32 *) (((char *) light) + 0x50)));
     }
 }
 
-void func_80801F2C_chdodgemcontrol(Actor *param_0)
+void func_80801F2C_chdodgemcontrol(Actor *light)
 {
     s32 pad0;
-    u8 *local_0;
-    local_0 = func_80100094(func_80106790(param_0->unk3C), 0);
-    param_0->scale = 0.8f;
-    func_801032B0(param_0, D_80804ED4_chdodgemcontrol[((0, local_0))[0xB6 + param_0->unk6C_0]],
-                  *((u16 *) (((u8 *) param_0->unk0) + 0x16)));
-    *((s32 *) (((u8 *) param_0) + 0x50)) = func_800C8A98();
-    func_800C8E54(*((s32 *) (((u8 *) param_0) + 0x50)), param_0->scale * 500.0f,
-                  param_0->scale * 800.0f);
-    func_800C8FB0(*((s32 *) (((u8 *) param_0) + 0x50)), 0, 0, 0);
-    func_800C8CB8(*((s32 *) (((u8 *) param_0) + 0x50)), param_0->position);
-    _subaddiefade_entrypoint_2(param_0);
-    switch (param_0->unk6C_0) {
+    u8 *data;
+    data = func_80100094(func_80106790(light->unk3C), 0);
+    light->scale = 0.8f;
+    func_801032B0(light, D_80804ED4_chdodgemcontrol[((0, data))[0xB6 + light->unk6C_0]],
+                  *((u16 *) (((u8 *) light->unk0) + 0x16)));
+    *((s32 *) (((u8 *) light) + 0x50)) = func_800C8A98();
+    func_800C8E54(*((s32 *) (((u8 *) light) + 0x50)), light->scale * 500.0f,
+                  light->scale * 800.0f);
+    func_800C8FB0(*((s32 *) (((u8 *) light) + 0x50)), 0, 0, 0);
+    func_800C8CB8(*((s32 *) (((u8 *) light) + 0x50)), light->position);
+    _subaddiefade_entrypoint_2(light);
+    switch (light->unk6C_0) {
         case 0:
-            *((f32 *) (((u8 *) param_0) + 0x58)) = 6.0f;
+            *((f32 *) (((u8 *) light) + 0x58)) = 6.0f;
             break;
 
         case 1:
-            *((f32 *) (((u8 *) param_0) + 0x58)) = 5.0f;
+            *((f32 *) (((u8 *) light) + 0x58)) = 5.0f;
             break;
 
         case 2:
-            *((f32 *) (((u8 *) param_0) + 0x58)) = 4.0f;
+            *((f32 *) (((u8 *) light) + 0x58)) = 4.0f;
     }
 
-    local_0[0xC4] = 0;
-    local_0[0xC6] = 0;
+    data[0xC4] = 0;
+    data[0xC6] = 0;
 }
 
 int chdodgemcontrol_entrypoint_1()
@@ -1146,16 +1152,16 @@ int chdodgemcontrol_entrypoint_1()
     return (int) &D_80804EDC_chdodgemcontrol;
 }
 
-int func_8080207C_chdodgemcontrol(param_0, param_1, param_2)
-Actor *param_0;
-s32 param_1;
-s32 param_2;
+int func_8080207C_chdodgemcontrol(car, msg, msg_data)
+Actor *car;
+s32 msg;
+s32 msg_data;
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x1F:
-            func_801015D0(param_0);
-            func_800DF744(3, D_80804F64_chdodgemcontrol[param_0->unk6C_0]);
-            func_800DF744(4, D_80804F64_chdodgemcontrol[param_0->unk6C_0]);
+            func_801015D0(car);
+            func_800DF744(3, D_80804F64_chdodgemcontrol[car->unk6C_0]);
+            func_800DF744(4, D_80804F64_chdodgemcontrol[car->unk6C_0]);
             break;
         default:
             return 0;
@@ -1163,15 +1169,15 @@ s32 param_2;
     return 1;
 }
 
-void func_80802104_chdodgemcontrol(Actor *param_0)
+void func_80802104_chdodgemcontrol(Actor *car)
 {
-    DodgemTimer1312 *local_0;
+    DodgemTimer1312 *state;
 
-    local_0 = func_80100094(param_0, 0);
-    if (!(local_0->local_0 > 0.0f)) {
-        local_0->local_0 = 1.5f;
-        if (param_0->unk6C_0 == 0 || ((DodgemFlags1312 *) param_0)->local_0) {
-            func_80018820(param_0->unk6C_0, 0.5f, 1.0f);
+    state = func_80100094(car, 0);
+    if (!(state->local_0 > 0.0f)) {
+        state->local_0 = 1.5f;
+        if (car->unk6C_0 == 0 || ((DodgemFlags1312 *) car)->local_0) {
+            func_80018820(car->unk6C_0, 0.5f, 1.0f);
         }
     }
 }

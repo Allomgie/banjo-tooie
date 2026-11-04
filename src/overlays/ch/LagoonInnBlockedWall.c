@@ -18,24 +18,25 @@ extern u8 D_80800514_chLagoonInnBlockedWall[];
 extern void func_800BBCB8(f32 *, f32 *, f32, s32, void *);
 extern void func_80109704(Actor *, s32, s32, s32, f32, s32, s32, s32);
 
-void func_80800000_chLagoonInnBlockedWall(Actor *param_0)
+// Wall update: explodes and sets the destroyed flag; inside Jolly's warps to the lagoon.
+void func_80800000_chLagoonInnBlockedWall(Actor *actor)
 {
-    f32 local_0[3];
+    f32 pos[3];
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 3:
-            if (func_800D9078(&param_0->unk58)) {
-                func_800EE7F8(local_0, param_0->position);
-                func_800EF1B8(local_0, param_0->rotation[1], -100.0f);
-                _chexploder_entrypoint_3(param_0, local_0, 3);
+            if (func_800D9078(&actor->unk58)) {
+                func_800EE7F8(pos, actor->position);
+                func_800EF1B8(pos, actor->rotation[1], -100.0f);
+                _chexploder_entrypoint_3(actor, pos, 3);
                 func_800DA544(0x3A9);
             }
             break;
         case 2:
-            if (func_800D9078(&param_0->unk58)) {
+            if (func_800D9078(&actor->unk58)) {
                 func_800F82D4(func_800F54E4(), 0);
                 _glcutDll_entrypoint_6(0x1A7, 0x32);
-                func_800FFAB0(param_0);
+                func_800FFAB0(actor);
             }
     }
 }
@@ -45,37 +46,37 @@ void func_808000C0_chLagoonInnBlockedWall()
     func_8010A63C();
 }
 
-int func_808000E0_chLagoonInnBlockedWall(Actor *param_0, s32 param_1, LagoonWallEvent param_2)
+int func_808000E0_chLagoonInnBlockedWall(Actor *actor, s32 msg, LagoonWallEvent arg)
 {
-    f32 local_0[3];
+    f32 pos[3];
 
-    switch (param_1) {
+    switch (msg) {
         case 0x49:
             if (_glcutDll_entrypoint_19(0x32)) {
-                param_0->unk58 = 0.4f;
-                func_80103110(param_0, 1);
-                func_80101FDC(param_0, 3);
-                _capod_entrypoint_13(param_0->unk0, 0, 0x1C, 0x910);
+                actor->unk58 = 0.4f;
+                func_80103110(actor, 1);
+                func_80101FDC(actor, 3);
+                _capod_entrypoint_13(actor->unk0, 0, 0x1C, 0x910);
                 return 1;
             }
             break;
         case 5:
-            func_8010A570(param_0);
-            func_800EE7F8(local_0, param_0->position);
-            func_800EF1B8(local_0, *(f32 *) ((u8 *) param_0 + 0x48), 100.0f);
-            _chexploder_entrypoint_3(param_0, local_0, 3);
-            func_800F8300(func_800F54E4(), 2, param_0->position);
+            func_8010A570(actor);
+            func_800EE7F8(pos, actor->position);
+            func_800EF1B8(pos, *(f32 *) ((u8 *) actor + 0x48), 100.0f);
+            _chexploder_entrypoint_3(actor, pos, 3);
+            func_800F8300(func_800F54E4(), 2, actor->position);
             return 1;
         case 0x90:
             if (func_800EA05C() == 0xED) {
-                func_80101FDC(param_0, 2);
-                func_80103110(param_0, 1);
-                param_0->unk58 = 0.8f;
+                func_80101FDC(actor, 2);
+                func_80103110(actor, 1);
+                actor->unk58 = 0.8f;
             } else
-                func_800FFAB0(param_0);
-            func_800BABB8(0, param_0->position, param_0->position, param_0->scale,
+                func_800FFAB0(actor);
+            func_800BABB8(0, actor->position, actor->position, actor->scale,
                           D_80800400_chLagoonInnBlockedWall);
-            func_800C4AF0(param_0->position, D_8080046C_chLagoonInnBlockedWall);
+            func_800C4AF0(actor->position, D_8080046C_chLagoonInnBlockedWall);
             return 1;
     }
     return 0;
@@ -86,27 +87,29 @@ int chLagoonInnBlockedWall_entrypoint_0()
     return &D_80800480_chLagoonInnBlockedWall;
 }
 
-void func_8080025C_chLagoonInnBlockedWall(param_0, param_1) Actor *param_0;
-s32 param_1;
+// Wall destroyed: spawns particles and debris, plays sound 0x488.
+void func_8080025C_chLagoonInnBlockedWall(actor, msg) Actor *actor;
+s32 msg;
 {
-    f32 local_0[3];
+    f32 pos[3];
 
-    func_800EE7F8(local_0, param_0->position);
-    local_0[1] += 80.0f;
-    func_800BBCB8(local_0, 0, param_0->scale * 1.2f, 8, D_80800528_chLagoonInnBlockedWall);
-    func_800BBCB8(local_0, 0, param_0->scale * 1.2f, 0x10, D_808004C8_chLagoonInnBlockedWall);
-    func_800BBCB8(local_0, local_0, param_0->scale, 0xF, D_8080054C_chLagoonInnBlockedWall);
-    func_80109704(param_0, 8, -0x28, 0xC8, 1.85f, 0xB4, 0x3C, 0x50);
-    _subaddieaudioquick_entrypoint_2(param_0, local_0, D_80800514_chLagoonInnBlockedWall);
-    func_800FFAB0(param_0);
+    func_800EE7F8(pos, actor->position);
+    pos[1] += 80.0f;
+    func_800BBCB8(pos, 0, actor->scale * 1.2f, 8, D_80800528_chLagoonInnBlockedWall);
+    func_800BBCB8(pos, 0, actor->scale * 1.2f, 0x10, D_808004C8_chLagoonInnBlockedWall);
+    func_800BBCB8(pos, pos, actor->scale, 0xF, D_8080054C_chLagoonInnBlockedWall);
+    func_80109704(actor, 8, -0x28, 0xC8, 1.85f, 0xB4, 0x3C, 0x50);
+    _subaddieaudioquick_entrypoint_2(actor, pos, D_80800514_chLagoonInnBlockedWall);
+    func_800FFAB0(actor);
     func_80101180(0x488, 5, 0);
 }
 
-s32 func_80800398_chLagoonInnBlockedWall(s32 param_0, s32 param_1, s32 param_2)
+s32 func_80800398_chLagoonInnBlockedWall(s32 actor, s32 msg, s32 arg)
 {
-    if ((param_1 == 0x40) ^ 0) {
-        func_8080025C_chLagoonInnBlockedWall(*&param_0, param_2 | 0);
-        if (!param_2) {
+    if ((msg == 0x40) ^ 0) {
+        func_8080025C_chLagoonInnBlockedWall(*&actor, arg | 0);
+        // Matching: empty block needed for the match.
+        if (!arg) {
         }
         return 1;
     }

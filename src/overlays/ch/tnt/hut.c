@@ -19,32 +19,32 @@ void func_8080000C_chtnthut(s32 arg0)
 {
 }
 
-void func_80800014_chtnthut(Actor *param_0)
+void func_80800014_chtnthut(Actor *actor)
 {
-    if (param_0->unk70_10 == 2) {
-        param_0->unk58 += func_800D8FF8();
-        if (param_0->unk58 > 0.5f) {
-            func_800C4104(0x43F, 0.9f, 0x6D60, param_0->position, 1250.0f, 2500.0f);
-            func_800FFAB0(param_0);
+    if (actor->unk70_10 == 2) {
+        actor->unk58 += func_800D8FF8();
+        if (actor->unk58 > 0.5f) {
+            func_800C4104(0x43F, 0.9f, 0x6D60, actor->position, 1250.0f, 2500.0f);
+            func_800FFAB0(actor);
         }
     }
 }
 
-s32 func_808000B0_chtnthut(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_808000B0_chtnthut(Actor *actor, s32 message, s32 unk_2)
 {
-    f32 local_0[3];
-    switch (param_1) {
-        case 5:
-            func_800EE7F8(local_0, param_0->position);
-            func_800EF1B8(local_0, param_0->rotation[1], -100.0f);
-            local_0[1] += 75.0f;
-            _chexploder_entrypoint_3(param_0, local_0, 0);
+    f32 pos[3];
+    switch (message) {
+        case 5: // explosion spawns debris
+            func_800EE7F8(pos, actor->position);
+            func_800EF1B8(pos, actor->rotation[1], -100.0f);
+            pos[1] += 75.0f;
+            _chexploder_entrypoint_3(actor, pos, 0);
             break;
         case 0x90:
-            func_80800170_chtnthut(param_0);
+            func_80800170_chtnthut(actor);
             break;
         case 0x95:
-            _chtntdetonator_entrypoint_1(param_0, 0x84);
+            _chtntdetonator_entrypoint_1(actor, 0x84);
             break;
         default:
             return 0;
@@ -52,20 +52,22 @@ s32 func_808000B0_chtnthut(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800170_chtnthut(param_0) Actor *param_0;
+void func_80800170_chtnthut(actor) Actor *actor;
 {
-    s32 local_0;
-    local_0 = func_80106790(func_80101080());
-    _chexploder_entrypoint_12(local_0, 0x3C);
-    _chexploder_entrypoint_13(local_0, 4);
-    _chexploder_entrypoint_10(local_0, &D_808002D8_chtnthut);
-    func_800BABB8(0, (u8 *) param_0 + 4, local_0 + 0x18, *(s32 **) ((u8 *) param_0 + 0x38),
+    s32 exploder;
+
+    exploder =func_80106790(func_80101080());
+    _chexploder_entrypoint_12(exploder, 0x3C);
+    _chexploder_entrypoint_13(exploder, 4);
+    _chexploder_entrypoint_10(exploder, &D_808002D8_chtnthut);
+    func_800BABB8(0, (u8 *) actor + 4, exploder + 0x18, *(s32 **) ((u8 *) actor + 0x38),
                   &D_80800268_chtnthut);
-    func_80101FDC(param_0, 2);
-    func_80103110(param_0, 1);
+    func_80101FDC(actor, 2);
+    func_80103110(actor, 1);
     func_800DA544(0x84);
 }
 
+// TU-NOTE: the overlay .data is defined here in C; its tables point to functions of this file, and IDO schedules them differently otherwise.
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
