@@ -1,28 +1,24 @@
+// Spend-item helper for player moves (eggs, feathers, ...): subtracts the amount if the player
+// has enough, otherwise gives feedback and fails.
 #include "su/inv.h"
 
-void suinv_entrypoint_0(s32* arg0, s32 failure, s32 success, s32 itemType, s32 amountToRemove)
+// Spends amount_to_remove of item_type and sets the success state; otherwise plays the
+// "not enough" jingle, flashes the counter and sets the failure state (-1 = leave unchanged).
+void suinv_entrypoint_0(s32 *state, s32 failure, s32 success, s32 item_type, s32 amount_to_remove)
 {
-    //If we have negative amount of items or the amount we are trying to remove is too much
-    if ((func_800D1C38(itemType) != 0) || ((func_800D1A04(itemType) - amountToRemove) < 0))
-    {
-        func_800D1824(itemType);
+    // Not enough of the item (negative count or amount too large)
+    if ((func_800D1C38(item_type) != 0) || ((func_800D1A04(item_type) - amount_to_remove) < 0)) {
+        func_800D1824(item_type);
         func_800FC63C(0xF, 0x55F0);
-        if (failure != -1)
-        {
-            *arg0 = failure;
+        if (failure != -1) {
+            *state = failure;
         }
-    }
-    else
-    {
-        if (amountToRemove != 0)
-        {
-            func_800D175C(itemType, -amountToRemove);
+    } else {
+        if (amount_to_remove != 0) {
+            func_800D175C(item_type, -amount_to_remove);
         }
-        if (success != -1)
-        {
-            *arg0 = success;
+        if (success != -1) {
+            *state = success;
         }
     }
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/inv.data.s) is defined here in C.
- * Values are taken from the ROM. */

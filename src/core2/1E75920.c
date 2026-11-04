@@ -1,112 +1,140 @@
+// Player position block (PlayerState+0xE4): current, previous and two-frames-ago position
+// plus a pending displacement applied once per frame, with getters and setters.
+
 #include "core2/1E75920.h"
 
 extern void func_800EFD24();
-typedef struct { u8 pad0[0xE4]; s32 unkE4; } ActorLocal_CC_510;
-typedef struct { ActorLocal_CC_510 local; } Actor_8009C08C;
-typedef struct { /* 0x00 */ u8 pad0[0xE4]; /* 0xE4 */ void* unkE4; } Actor_8009C0BC;
+// Position block at +0xE4: position, previous, two frames ago, pending delta (+0x24).
+typedef struct {
+    u8 pad_0[0xE4];
+    s32 pos_block;
+} ActorLocal_CC_510;
+typedef struct {
+    ActorLocal_CC_510 local;
+} Actor_8009C08C;
+typedef struct {
+    u8 pad_0[0xE4];
+    void *pos_block;
+} Actor_8009C0BC;
 extern void func_800EE7F8();
-typedef struct { /* 0x00 */ u8 pad0[0xE4]; /* 0xE4 */ void* unkE4; } Actor_8009C0F8;
+
+typedef struct {
+    u8 pad_0[0xE4];
+    void *pos_block;
+} Actor_8009C0F8;
 s32 func_8009C030()
 {
     return 0x30;
 }
 
-void func_8009C038(void *param_0)
+void func_8009C038(void *player)
 {
-    func_800EFD24(*(s32 *)((char *)param_0 + 0xe4) + 0x24);
-    func_800EFD24(*(s32 *)((char *)param_0 + 0xe4));
-    func_800EFD24(*(s32 *)((char *)param_0 + 0xe4) + 0xc);
-    func_800EFD24(*(s32 *)((char *)param_0 + 0xe4) + 0x18);
+    func_800EFD24(*(s32 *) ((char *) player + 0xe4) + 0x24);
+    func_800EFD24(*(s32 *) ((char *) player + 0xe4));
+    func_800EFD24(*(s32 *) ((char *) player + 0xe4) + 0xc);
+    func_800EFD24(*(s32 *) ((char *) player + 0xe4) + 0x18);
 }
 
-void func_8009C08C(Actor_8009C08C *param_0)
+void func_8009C08C(Actor_8009C08C *player)
 {
-    ActorLocal_CC_510 *local_0;
-    local_0 = &param_0->local;
+    ActorLocal_CC_510 *local;
+    local = &player->local;
     func_8009C21C();
-    func_800EFD24((void*)(local_0->unkE4 + 0x24));
-    return;
+    func_800EFD24((void *) (local->pos_block + 0x24));
 }
 
-void func_8009C0BC(Actor_8009C0BC *param_0, s32 param_1)
+void func_8009C0BC(Actor_8009C0BC *player, s32 pos)
 {
-    func_800EE7F8(param_0->unkE4);
-    func_800EE7F8((void*)((char*)param_0->unkE4 + 0xC), param_1);
+    func_800EE7F8(player->pos_block);
+    func_800EE7F8((void *) ((char *) player->pos_block + 0xC), pos);
 }
 
-void func_8009C0F8(Actor_8009C0F8 *param_0)
+void func_8009C0F8(Actor_8009C0F8 *player)
 {
-    func_800EE7F8(param_0->unkE4);
+    func_800EE7F8(player->pos_block);
 }
 
-int func_8009C118(s32 param_0, f32 param_1)
+// Sets the Y coordinate of the position.
+int func_8009C118(s32 player, f32 y)
 {
-  int new_var2;
-  unsigned int new_var;
-  int new_var3;
- do { new_var = 0xE4; new_var2 = (param_0 ^ 0) + new_var; new_var3 = new_var2; *((f32 *) ((*((s32 *) new_var3)) + 4)) = param_1; new_var = 0x50; } while (0);
+    // Matching: the do-while, the temporaries and the `^ 0` are needed for the match.
+    int addr;
+    unsigned int offset;
+    int addr_copy;
+    do {
+        offset = 0xE4;
+        addr = (player ^ 0) + offset;
+        addr_copy = addr;
+        *(f32 *) (*(s32 *) addr_copy + 4) = y;
+        0;
+    } while (0);
 }
 
-void func_8009C128(PlayerState *param_0, f32 param_1[3])
+void func_8009C128(PlayerState *player, f32 pos[3])
 {
-  func_800EE7F8(param_1, *(s32 *)((char *)param_0 + 0xE4));
+    func_800EE7F8(pos, *(s32 *) ((char *) player + 0xE4));
 }
 
-f32 func_8009C150(PlayerState *param_0)
+f32 func_8009C150(PlayerState *player)
 {
-  return *(f32 *)(*(s32 *)((char *)param_0 + 0xE4) + 0x4);
+    return *(f32 *) (*(s32 *) ((char *) player + 0xE4) + 0x4);
 }
 
-void func_8009C15C(PlayerState *player, f32 *param_1)
+void func_8009C15C(PlayerState *player, f32 *out)
 {
-  char *new_var;
-  if (1)
-  {
-    new_var = param_1;
-  }
-  func_800EE7F8(new_var, new_var = ((char *) (*((struct ba_unknown_C0_s **) (((char *) player) + 0xE4)))) + 12);
+    char *ptr;
+    // Matching: `if (1)` and the reused temporary are needed for the match.
+    if (1) {
+        ptr = out;
+    }
+    func_800EE7F8(ptr,
+                  ptr = (char *) *(struct ba_unknown_C0_s **) ((char *) player + 0xE4) + 12);
 }
 
-s32 func_8009C188(s32 param_0, s32 param_1)
+s32 func_8009C188(s32 player, s32 out)
 {
-    func_800EE7F8(param_1, *(s32 *)(param_0 + 228) + 0x18);
+    func_800EE7F8(out, *(s32 *) (player + 228) + 0x18);
 }
 
-void func_8009C1B4(s32 param_0, f32 param_1)
+// Adds dy to the Y coordinate of the position.
+void func_8009C1B4(s32 player, f32 dy)
 {
-  f32 *local_0 = *(f32 **)(param_0 + 0xE4);
-  local_0[1] += param_1;
+    f32 *pos = *(f32 **) (player + 0xE4);
+    pos[1] += dy;
 }
 
-int func_8009C1CC(s32 param_0, s32 param_1)
+int func_8009C1CC(s32 player, s32 out)
 {
-    func_800EE7F8(param_1, *(s32 *)(param_0 + 228) + 0x24);
+    func_800EE7F8(out, *(s32 *) (player + 228) + 0x24);
 }
 
-void func_8009C1F8(struct Actor *param_0)
+void func_8009C1F8(struct Actor *player)
 {
-
-    func_800EE7F8((void *)((s32)((void *) (*(s32 *)((char *)param_0 + 0xE4))) + 0x24));
+    func_800EE7F8((void *) ((s32) (void *) *(s32 *) ((char *) player + 0xE4) + 0x24));
 }
 
-/* Old style and int, so that this matches the implicit declaration the call
-   further up creates: that call passes no arguments and s32 is long here. */
-int func_8009C21C(param_0) s32 *param_0;
+// Shifts position -> previous -> two frames ago.
+// Old-style declaration and int return so it matches the implicit declaration
+// of the earlier call (no arguments; s32 is long here).
+int func_8009C21C(player)
+s32 *player;
 {
-  s32 *new_var;
-  s32 local_0;
-  s32 local_1;
-  new_var = &param_0[57];
-  local_0 = *new_var;
-  func_800EE7F8(local_0 + 0x18, local_0 + 0xC, local_0);
-  local_1 = param_0[57];
-  func_800EE7F8(local_1 + 0xC, local_1 ^ 0, local_1);
+    s32 *block_ptr;
+    s32 block;
+    s32 block2;
+    block_ptr = &player[57];
+    block = *block_ptr;
+    func_800EE7F8(block + 0x18, block + 0xC, block);
+    block2 = player[57];
+    func_800EE7F8(block2 + 0xC, block2 ^ 0, block2);
 }
 
-void func_8009C25C(u8 *param_0) {
-    s32 local_0;
+// Adds the pending displacement (+0x24) to the position, then clears it.
+void func_8009C25C(u8 *player)
+{
+    s32 block;
 
-    local_0 = (*(s32 *)((s8 *)(param_0) + (0xE4)));
-    func_800EF04C(local_0, local_0 + 0x24);
-    func_800EFD24((*(s32 *)((s8 *)(param_0) + (0xE4))) + 0x24);
+    block = *(s32 *) ((s8 *) player + 0xE4);
+    func_800EF04C(block, block + 0x24);
+    func_800EFD24(*(s32 *) ((s8 *) player + 0xE4) + 0x24);
 }

@@ -1,3 +1,5 @@
+// Possibly a window of the tower outside Gruntilda's lair: it breaks apart on message 0x40 and
+// emits a particle burst and sound on message 0x90; no update logic of its own.
 #include "common.h"
 
 extern u8 D_808000D0_chgruntylairexttowerwindow[];
@@ -5,44 +7,73 @@ extern u8 D_8080013C_chgruntylairexttowerwindow[];
 extern int D_80800150_chgruntylairexttowerwindow[];
 int func_80800070_chgruntylairexttowerwindow();
 
-void func_80800000_chgruntylairexttowerwindow(s32 arg0) 
+void func_80800000_chgruntylairexttowerwindow(s32 arg0)
 {
 }
-s32 func_80800008_chgruntylairexttowerwindow(Actor *param_0, s32 param_1, s32 param_2)
+
+// Message 0x40 blows the window apart; 0x90 emits a particle burst and a sound.
+s32 func_80800008_chgruntylairexttowerwindow(Actor *actor, s32 message, s32 unk_2)
 {
-    switch (param_1) {
-    case 0x40:
-        _chexploder_entrypoint_3(param_0, param_0->position, 0xC);
-        break;
-    case 0x90:
-        func_80800070_chgruntylairexttowerwindow(param_0);
-        break;
-    default:
-        return 0;
+    switch (message) {
+        case 0x40:
+            _chexploder_entrypoint_3(actor, actor->position, 0xC);
+            break;
+        case 0x90:
+            func_80800070_chgruntylairexttowerwindow(actor);
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
 
-int func_80800070_chgruntylairexttowerwindow(param_0) Actor *param_0;
+// Particle burst and sound at the window position.
+int func_80800070_chgruntylairexttowerwindow(actor)
+Actor *actor;
 {
-    func_800BABB8(0, (s32 *)((char *)param_0 + 0x4), (s32 *)((char *)param_0 + 0x4), (*(s32 *)((char *)(param_0) + 0x38)), &D_808000D0_chgruntylairexttowerwindow);
-    func_800C4AF0((s32 *)((char *)param_0 + 0x4), &D_8080013C_chgruntylairexttowerwindow);
+    func_800BABB8(0, (s32 *) ((char *) actor + 0x4), (s32 *) ((char *) actor + 0x4),
+                  *(s32 *) ((char *) actor + 0x38), &D_808000D0_chgruntylairexttowerwindow);
+    func_800C4AF0((s32 *) ((char *) actor + 0x4), &D_8080013C_chgruntylairexttowerwindow);
 }
 
 int chgruntylairexttowerwindow_entrypoint_0()
 {
-  return &D_80800150_chgruntylairexttowerwindow;
+    return &D_80800150_chgruntylairexttowerwindow;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/grunty/lairexttowerwindow.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800150_chgruntylairexttowerwindow -> int[] */
 extern void func_80102EC0();
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
-u8 D_808000D0_chgruntylairexttowerwindow[108] = { 0x6, 0x10, 0x0, 0x1D, 0x9, 0xDD, 0x0, 0x2B, 0x2, 0x0, 0x3, 0x0, 0x0, 0x22, 0x1, 0x80, 0x2, 0x0, 0x4, 0x80, 0x6, 0x0, 0x0, 0x15, 0x0, 0x0, 0x0, 0x26, 0x0, 0x19, 0x0, 0x0, 0x0, 0x7, 0x0, 0x2D, 0x0, 0x32, 0x0, 0x64, 0x0, 0x20, 0xDE, 0xA7, 0x71, 0xC0, 0x0, 0xA, 0xFF, 0x9C, 0x0, 0x19, 0xFF, 0x9C, 0x0, 0x64, 0x0, 0x4B, 0x0, 0x64, 0x6, 0x1A, 0x19, 0x10, 0x0, 0x1D, 0x6, 0xA0, 0x0, 0x14, 0x0, 0x2D, 0x1, 0x90, 0x2, 0x58, 0x0, 0x1B, 0xFC, 0xE0, 0xFD, 0xA8, 0x0, 0x22, 0x0, 0xB3, 0x0, 0xCC, 0x0, 0xB3, 0x0, 0xB3, 0x0, 0x1E, 0x0, 0x32, 0x0, 0x32, 0x0, 0xD, 0x0, 0x4B, 0x19, 0x1A, 0x0, 0x0, 0x0, 0x0 };
-u8 D_8080013C_chgruntylairexttowerwindow[20] = { 0x0, 0x13, 0x4, 0x13, 0x0, 0xA, 0x0, 0xE6, 0x0, 0x16, 0x6D, 0x60, 0x0, 0x1, 0x4, 0xE2, 0x9, 0xC4, 0x0, 0x0 };
-int D_80800150_chgruntylairexttowerwindow[20] = { 0xAC038B, 0x6820001, 0x0, (u32)func_80102EC0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chgruntylairexttowerwindow, (u32)func_80107C2C, -0x7FFFD800, (u32)func_80800008_chgruntylairexttowerwindow, 0x0, 0x0, 0x0 };
+u8 D_808000D0_chgruntylairexttowerwindow[108] = {
+    0x6,  0x10, 0x0, 0x1D, 0x9,  0xDD, 0x0,  0x2B, 0x2, 0x0,  0x3,  0x0,  0x0,  0x22, 0x1,  0x80,
+    0x2,  0x0,  0x4, 0x80, 0x6,  0x0,  0x0,  0x15, 0x0, 0x0,  0x0,  0x26, 0x0,  0x19, 0x0,  0x0,
+    0x0,  0x7,  0x0, 0x2D, 0x0,  0x32, 0x0,  0x64, 0x0, 0x20, 0xDE, 0xA7, 0x71, 0xC0, 0x0,  0xA,
+    0xFF, 0x9C, 0x0, 0x19, 0xFF, 0x9C, 0x0,  0x64, 0x0, 0x4B, 0x0,  0x64, 0x6,  0x1A, 0x19, 0x10,
+    0x0,  0x1D, 0x6, 0xA0, 0x0,  0x14, 0x0,  0x2D, 0x1, 0x90, 0x2,  0x58, 0x0,  0x1B, 0xFC, 0xE0,
+    0xFD, 0xA8, 0x0, 0x22, 0x0,  0xB3, 0x0,  0xCC, 0x0, 0xB3, 0x0,  0xB3, 0x0,  0x1E, 0x0,  0x32,
+    0x0,  0x32, 0x0, 0xD,  0x0,  0x4B, 0x19, 0x1A, 0x0, 0x0,  0x0,  0x0};
+u8 D_8080013C_chgruntylairexttowerwindow[20] = {0x0,  0x13, 0x4,  0x13, 0x0,  0xA, 0x0,
+                                                0xE6, 0x0,  0x16, 0x6D, 0x60, 0x0, 0x1,
+                                                0x4,  0xE2, 0x9,  0xC4, 0x0,  0x0};
+int D_80800150_chgruntylairexttowerwindow[20] = {0xAC038B,
+                                                 0x6820001,
+                                                 0x0,
+                                                 (u32) func_80102EC0,
+                                                 (u32) func_80105834,
+                                                 (u32) func_80101870,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0,
+                                                 0x800,
+                                                 0x0,
+                                                 (u32) func_80108ED0,
+                                                 0x0,
+                                                 (u32) func_80800000_chgruntylairexttowerwindow,
+                                                 (u32) func_80107C2C,
+                                                 -0x7FFFD800,
+                                                 (u32) func_80800008_chgruntylairexttowerwindow,
+                                                 0x0,
+                                                 0x0,
+                                                 0x0};

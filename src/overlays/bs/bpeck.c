@@ -1,5 +1,6 @@
+// Rat-a-tat Rap, Banjo-Kazooie's mid-air peck attack: hovers, opens two hit spheres on each peck,
+// then lands to idle, falls or enters water.
 #include "common.h"
-#include "overlays/ba/playerstate.h"
 #include "overlays/ba/playerstate.h"
 #include <types.h>
 
@@ -31,137 +32,140 @@ extern void bs_setState(void *, int);
 extern float baphysics_get_target_horizontal_velocity(void *);
 extern void baphysics_set_target_horizontal_velocity(void *, float);
 
-void bsbpeck_entrypoint_0(PlayerState *param_0)
+// Rat-a-tat Rap: start of the mid-air peck attack.
+void bsbpeck_entrypoint_0(PlayerState *player)
 {
-    s32 local_0;
+    s32 prev_state;
 
-    param_0->unk164.word = 0;
-    local_0 = bs_getPreviousState(param_0);
-    if (local_0 != 5 && (local_0 == 8 || (local_0 != 0x2F &&
-        local_0 != 0x3D && local_0 != 0x57 && local_0 == 0x95))) {
-        param_0->unk164.word++;
+    player->unk164.word = 0;
+    prev_state = bs_getPreviousState(player);
+    if (prev_state != 5 && (prev_state == 8 || (prev_state != 0x2F && prev_state != 0x3D && prev_state != 0x57 &&
+                                          prev_state == 0x95))) {
+        player->unk164.word++;
     }
-    if (func_8009557C(param_0) == 1) func_80095588(param_0, 2);
-    baanim_playForDuration_once(param_0, 0x1A, 0.2f);
-    func_8009FFD8(param_0, 1, 3, 1, 6);
-    yaw_setVelocityBounded(param_0, 1200.0f, 10.0f);
-    func_800A0CF4(param_0, 1);
-    baphysics_set_gravity(param_0, -1400.0f);
-    baphysics_set_vertical_velocity(param_0, 120.0f);
-    func_8009E4AC(param_0);
-    func_8009E55C(param_0, 0, 35.0f);
-    func_8009E55C(param_0, 1, 42.0f);
-    func_8009E4FC(param_0, 1, -38.0f, 0.0f, 105.0f);
-    func_8009E4FC(param_0, 0, -38.0f, 0.0f, -7.0f);
-    param_0->unk160.word = 0;
-    param_0->unk15C.word = 0;
-    baflag_set(param_0, 0x2A);
+    if (func_8009557C(player) == 1)
+        func_80095588(player, 2);
+    baanim_playForDuration_once(player, 0x1A, 0.2f);
+    func_8009FFD8(player, 1, 3, 1, 6);
+    yaw_setVelocityBounded(player, 1200.0f, 10.0f);
+    func_800A0CF4(player, 1);
+    baphysics_set_gravity(player, -1400.0f);
+    baphysics_set_vertical_velocity(player, 120.0f);
+    func_8009E4AC(player);
+    func_8009E55C(player, 0, 35.0f);
+    func_8009E55C(player, 1, 42.0f);
+    func_8009E4FC(player, 1, -38.0f, 0.0f, 105.0f);
+    func_8009E4FC(player, 0, -38.0f, 0.0f, -7.0f);
+    player->unk160.word = 0;
+    player->unk15C.word = 0;
+    baflag_set(player, 0x2A);
 }
 
-void func_80800168_bsbpeck(PlayerState *param_0)
+// One peck: sfx pitch depends on the peck count, then re-apply the vertical boost.
+void func_80800168_bsbpeck(PlayerState *player)
 {
-    f32 local_0 = 1.0f;
+    f32 pitch = 1.0f;
 
-    switch (param_0->unk160.word) {
-    case 0: local_0 = 1.13f; break;
-    case 1: local_0 = 1.1f; break;
-    case 2: local_0 = 1.32f; break;
+    switch (player->unk160.word) {
+        case 0:
+            pitch = 1.13f;
+            break;
+        case 1:
+            pitch = 1.1f;
+            break;
+        case 2:
+            pitch = 1.32f;
+            break;
     }
-    baflag_set(param_0, 5);
-    func_8009DE38(param_0, 0x442C, local_0);
-    baphysics_set_vertical_velocity(param_0, 120.0f);
-    param_0->unk160.word++;
+    baflag_set(player, 5);
+    func_8009DE38(player, 0x442C, pitch);
+    baphysics_set_vertical_velocity(player, 120.0f);
+    player->unk160.word++;
 }
 
-void bsbpeck_entrypoint_1(void *param_0)
+void bsbpeck_entrypoint_1(void *player)
 {
-  int local_0;
-  void *s0;
-  int local_1;
-  float local_2;
+    int next_state;
+    void *anim_ctrl;
+    int phase;
+    float min_timer;
 
-  local_0 = 0;
-  s0 = baanim_getAnimCtrlPtr();
-  _bswalk_entrypoint_1(param_0);
-  if (*((int *) (((char *) param_0) + 0x164)))
-  {
-    baphysics_set_target_horizontal_velocity(param_0, baphysics_get_target_horizontal_velocity(param_0) * 0.1f);
-  }
-  local_1 = *((int *) (((char *) param_0) + 0x15C));
-  switch (local_1)
-  {
-    case 0:
-      if (anctrl_isAt(s0, 0x3F69A027))
-      {
-        anctrl_setIndex(s0, 0x19);
-        anctrl_setStart(s0, 0.0f);
-        anctrl_setDuration(s0, 0.35f);
-        anctrl_setPlaybackType(s0, 2);
-        anctrl_start(s0);
-        *((int *) (((char *) param_0) + 0x15C)) = 1;
-        *((float *) (((char *) param_0) + 0x16C)) = 0.5f;
-      }
-      break;
-    case 1:
-      if (anctrl_isAt(s0, 0x3E25FD8B))
-      {
-        func_80800168_bsbpeck(param_0);
-      }
-      if (anctrl_isAt(s0, 0x3F333333))
-      {
-        func_80800168_bsbpeck(param_0);
-      }
-      local_2 = 0.0f;
-      *((float *) (((char *) param_0) + 0x16C)) = (*((float *) (((char *) param_0) + 0x16C))) - func_800D8FF8();
-      if (*((float *) (((char *) param_0) + 0x16C)) < local_2)
-      {
-        anctrl_reset(s0);
-        anctrl_setSmoothTransition(s0, 0);
-        anctrl_setIndex(s0, 0x1A);
-        func_8008B188(s0, 0);
-        anctrl_setDuration(s0, 0.2f);
-        anctrl_setPlaybackType(s0, 1);
-        anctrl_start(s0);
-        *((int *) (((char *) param_0) + 0x15C)) = 2;
-      }
-      break;
-    case 2:
-      if (anctrl_isStopped(s0))
-      {
-        local_0 = 0x2F;
-      }
-      break;
-  }
-  if (player_isStable(param_0))
-  {
-    func_8009FE58(param_0);
-    local_0 = 1;
-  }
-  if (player_inWater(param_0))
-  {
-    local_0 = 0x4C;
-  }
-  bs_setState(param_0, local_0);
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr();
+    _bswalk_entrypoint_1(player);
+    if (*(int *) ((char *) player + 0x164)) {
+        baphysics_set_target_horizontal_velocity(
+            player, baphysics_get_target_horizontal_velocity(player) * 0.1f);
+    }
+    phase = *(int *) ((char *) player + 0x15C);
+    switch (phase) {
+        case 0:
+            if (anctrl_isAt(anim_ctrl, 0x3F69A027)) {
+                anctrl_setIndex(anim_ctrl, 0x19);
+                anctrl_setStart(anim_ctrl, 0.0f);
+                anctrl_setDuration(anim_ctrl, 0.35f);
+                anctrl_setPlaybackType(anim_ctrl, 2);
+                anctrl_start(anim_ctrl);
+                *(int *) ((char *) player + 0x15C) = 1;
+                *(float *) ((char *) player + 0x16C) = 0.5f;
+            }
+            break;
+        case 1:
+            if (anctrl_isAt(anim_ctrl, 0x3E25FD8B)) {
+                func_80800168_bsbpeck(player);
+            }
+            if (anctrl_isAt(anim_ctrl, 0x3F333333)) {
+                func_80800168_bsbpeck(player);
+            }
+            min_timer = 0.0f;
+            *(float *) ((char *) player + 0x16C) =
+                *(float *) ((char *) player + 0x16C) - func_800D8FF8();
+            if (*(float *) ((char *) player + 0x16C) < min_timer) {
+                anctrl_reset(anim_ctrl);
+                anctrl_setSmoothTransition(anim_ctrl, 0);
+                anctrl_setIndex(anim_ctrl, 0x1A);
+                func_8008B188(anim_ctrl, 0);
+                anctrl_setDuration(anim_ctrl, 0.2f);
+                anctrl_setPlaybackType(anim_ctrl, 1);
+                anctrl_start(anim_ctrl);
+                *(int *) ((char *) player + 0x15C) = 2;
+            }
+            break;
+        case 2:
+            if (anctrl_isStopped(anim_ctrl)) {
+                next_state = 0x2F;
+            }
+    }
+    if (player_isStable(player)) {
+        func_8009FE58(player);
+        next_state = 1;
+    }
+    if (player_inWater(player)) {
+        next_state = 0x4C;
+    }
+    bs_setState(player, next_state);
 }
 
-void bsbpeck_entrypoint_2(s32 param_0) {
-    baflag_clear(param_0, 0x2A);
+void bsbpeck_entrypoint_2(s32 player)
+{
+    baflag_clear(player, 0x2A);
     func_800C6DA0(0x46);
-    func_8009E474(param_0);
-    func_800A0CF4(param_0, 0);
-    baphysics_reset_gravity(param_0);
+    func_8009E474(player);
+    func_800A0CF4(player, 0);
+    baphysics_reset_gravity(player);
 }
 
-int bsbpeck_entrypoint_3(s32 param_0)
+int bsbpeck_entrypoint_3(s32 idx)
 {
-  return D_808004A0_bsbpeck[param_0];
+    return D_808004A0_bsbpeck[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/bpeck.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+// TU-NOTE: the overlay's .data is defined here in C. The table holds pointers to functions of
+// this file, and IDO's assembler schedules some of them differently unless it is in the same
+// unit. Values are taken from the ROM.
 extern void _bsbpeck_entrypoint_2();
 extern void _bsbpeck_entrypoint_0();
 extern void _bsbpeck_entrypoint_1();
 extern void func_80099B94();
-s32 D_808004A0_bsbpeck[4] = { (u32)_bsbpeck_entrypoint_2, (u32)_bsbpeck_entrypoint_0, (u32)_bsbpeck_entrypoint_1, (u32)func_80099B94 };
+s32 D_808004A0_bsbpeck[4] = {(u32) _bsbpeck_entrypoint_2, (u32) _bsbpeck_entrypoint_0,
+                             (u32) _bsbpeck_entrypoint_1, (u32) func_80099B94};

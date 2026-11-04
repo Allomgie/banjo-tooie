@@ -1,98 +1,125 @@
+// Wave map-mesh effect: travelling sine/cosine waves in X and Z move vertex heights, shade
+// the colours by height (205..255) and scroll the UVs.
 #include "common.h"
 
 extern f32 func_800136D0(f32);
 extern f32 func_8001395C(f32);
 extern f32 func_800138BC(f32);
-typedef struct { f32 strength; f32 pad_0[2]; f32 center[3]; u8 pad_1[8]; f32 amplitude; f32 diameter; s16 state; s16 counter; f32 phase; } IdWave30;
-typedef struct { f32 local_0; f32 local_1; f32 local_2; u8 local_3[0x1C]; s16 local_4; s16 local_5; f32 local_6; } WaveState48;
+typedef struct {
+    f32 strength;
+    f32 pad_0[2];
+    f32 center[3];
+    u8 pad_1[8];
+    f32 amplitude;
+    f32 diameter;
+    s16 state;
+    s16 counter;
+    f32 phase;
+} IdWave30;
+typedef struct {
+    f32 strength;
+    f32 phase_x;
+    f32 phase_z;
+    u8 pad_0[0x1C];
+    s16 uv_s;
+    s16 uv_t;
+    f32 time;
+} WaveState48;
 extern f32 func_800D8FF8(void);
 extern f32 func_800138D0(f32);
 extern f32 func_80013970(f32);
 extern void _idwave_entrypoint_0(void);
 
-void idwave_entrypoint_0(s32 param_0, Vtx *param_1, Vtx *param_2, s32 param_3, u8 *param_4)
+// Vertex kernel: travelling sine/cosine waves in X and Z displace Y and shade the
+// vertex colour by wave height (BK water-wave effect); the UV offsets are added to tc.
+void idwave_entrypoint_0(s32 unk_0, Vtx *src, Vtx *dst, s32 count, u8 *state)
 {
-    f32 local_3;
-    f32 local_4;
-    f32 local_2;
-    f32 local_0;
-    f32 local_1;
-    f32 local_5;
-    f32 local_6;
-    f32 local_7;
-    f32 local_8;
-    s16 local_9;
-    s16 local_10;
-    s32 local_11;
-    Vtx *local_12;
-    Vtx *local_13;
-    Vtx *local_14;
+    f32 sin_x;
+    f32 angle_z;
+    f32 angle_x;
+    f32 center_z;
+    f32 base_y;
+    f32 phase_x;
+    f32 phase_z;
+    f32 height;
+    f32 center_x;
+    s16 uv_s;
+    s16 uv_t;
+    s32 shade;
+    Vtx *end;
+    Vtx *in;
+    Vtx *out;
 
-    local_5 = *(f32 *)(param_4 + 4);
-    local_6 = *(f32 *)(param_4 + 8);
-    local_8 = *(f32 *)(param_4 + 0x10);
-    local_0 = *(f32 *)(param_4 + 0x14);
-    local_1 = *(f32 *)(param_4 + 0xC);
-    local_14 = param_2;
-    local_13 = param_1;
-    local_9 = *(s16 *)(param_4 + 0x28);
-    local_10 = *(s16 *)(param_4 + 0x2A);
-    local_12 = param_1 + param_3;
+    phase_x = *(f32 *) (state + 4);
+    phase_z = *(f32 *) (state + 8);
+    center_x = *(f32 *) (state + 0x10);
+    center_z = *(f32 *) (state + 0x14);
+    base_y = *(f32 *) (state + 0xC);
+    out = dst;
+    in = src;
+    uv_s = *(s16 *) (state + 0x28);
+    uv_t = *(s16 *) (state + 0x2A);
+    end = src + count;
 
-    while (local_13 < local_12) {
-        local_2 = func_800136D0((local_14->v.ob[0] - local_8) * 200.0f + local_5);
-        local_4 = func_800136D0((local_14->v.ob[2] - local_0) * 200.0f + local_6);
-        local_3 = func_8001395C(local_2);
-        local_7 = *(f32 *)(param_4 + 0x20) * (func_800138BC(local_4) + local_3);
-        local_14->v.ob[1] = local_1 + local_7;
-        local_11 = (local_7 / *(f32 *)(param_4 + 0x24)) * 50.0f + 205.0f;
-        local_14->v.cn[0] = (s32)(local_13->v.cn[0] * local_11) / 255;
-        local_14->v.cn[1] = (s32)(local_13->v.cn[1] * local_11) / 255;
-        local_14->v.cn[2] = (s32)(local_13->v.cn[2] * local_11) / 255;
-        local_14->v.tc[0] = local_13->v.tc[0] + local_9;
-        local_14->v.tc[1] = local_13->v.tc[1] + local_10;
-        local_13++;
-        local_14++;
+    while (in < end) {
+        angle_x = func_800136D0((out->v.ob[0] - center_x) * 200.0f + phase_x);
+        angle_z = func_800136D0((out->v.ob[2] - center_z) * 200.0f + phase_z);
+        sin_x = func_8001395C(angle_x);
+        height = *(f32 *) (state + 0x20) * (func_800138BC(angle_z) + sin_x);
+        out->v.ob[1] = base_y + height;
+        shade = (height / *(f32 *) (state + 0x24)) * 50.0f + 205.0f;
+        out->v.cn[0] = (s32) (in->v.cn[0] * shade) / 255;
+        out->v.cn[1] = (s32) (in->v.cn[1] * shade) / 255;
+        out->v.cn[2] = (s32) (in->v.cn[2] * shade) / 255;
+        out->v.tc[0] = in->v.tc[0] + uv_s;
+        out->v.tc[1] = in->v.tc[1] + uv_t;
+        in++;
+        out++;
     }
 }
 
-void idwave_entrypoint_1(s32 arg0) 
+void idwave_entrypoint_1(s32 unk_0)
 {
 }
-void idwave_entrypoint_2(IdWave30 *param_0, s32 param_1, s32 param_2, s32 param_3)
+
+// Init from the mesh bounding box; param 0..10 sets the wave strength (param * 0.1).
+void idwave_entrypoint_2(IdWave30 *wave, s32 param, s32 unk_0, s32 unk_1)
 {
-    s16 local_0[3];
-    s16 local_1[3];
-    _glidmake_entrypoint_2(param_2, param_3, local_0, local_1);
-    param_0->pad_0[0] = 0.0f;
-    param_0->pad_0[1] = 0.0f;
-    param_0->strength = 1.0f;
-    param_0->center[0] = local_0[1] + (local_1[1] - local_0[1]) * 0.5f;
-    param_0->center[1] = local_0[0];
-    param_0->center[2] = local_0[2];
-    param_0->amplitude = (local_1[1] - local_0[1]) * 0.25f;
-    param_0->state = 0;
-    param_0->counter = 0;
-    param_0->phase = 0.0f;
-    param_0->diameter = param_0->amplitude + param_0->amplitude;
-    if (param_1 >= 0 && param_1 < 11) param_0->strength = param_1 * 0.1f;
+    s16 bb_min[3];
+    s16 bb_max[3];
+    _glidmake_entrypoint_2(unk_0, unk_1, bb_min, bb_max);
+    wave->pad_0[0] = 0.0f;
+    wave->pad_0[1] = 0.0f;
+    wave->strength = 1.0f;
+    wave->center[0] = bb_min[1] + (bb_max[1] - bb_min[1]) * 0.5f;
+    wave->center[1] = bb_min[0];
+    wave->center[2] = bb_min[2];
+    wave->amplitude = (bb_max[1] - bb_min[1]) * 0.25f;
+    wave->state = 0;
+    wave->counter = 0;
+    wave->phase = 0.0f;
+    wave->diameter = wave->amplitude + wave->amplitude;
+    if (param >= 0 && param < 11)
+        wave->strength = param * 0.1f;
 }
 
-void idwave_entrypoint_3(WaveState48 *arg0, s32 arg1, s32 arg2)
+// Advances the wave phases and the UV scroll (same formula as id/water.c).
+void idwave_entrypoint_3(WaveState48 *wave, s32 unk_0, s32 unk_1)
 {
-    f32 temp_f0;
-    f32 sp2C[2];
+    f32 dt;
+    f32 uv[2];
 
-    temp_f0 = func_800D8FF8();
-    arg0->local_6 += temp_f0;
-    arg0->local_1 += temp_f0 * arg0->local_0 * 3;
-    arg0->local_2 += temp_f0 * (arg0->local_0 + 0.01f) * 3;
-    sp2C[0] = ((150.0f * func_800138D0(arg0->local_6 * 0.2f * 180.0f)) + (func_80013970(arg0->local_6 * 0.08f * 180.0f) * 100.0f)) * 0.8f;
-    sp2C[1] = ((50.0f * func_80013970(arg0->local_6 * 0.5f * 180.0f)) + (func_800138D0(arg0->local_6 * 0.22f * 180.0f) * 100.0f)) * 0.8f;
-    arg0->local_4 = (sp2C[0] >= 0.0f) ? (sp2C[0] + 0.5f) : (sp2C[0] - 0.5f);
-    arg0->local_5 = (sp2C[1] >= 0.0f) ? (sp2C[1] + 0.5f) : (sp2C[1] - 0.5f);
-    _glid_entrypoint_0(arg1, arg2, _idwave_entrypoint_0, arg0);
+    dt = func_800D8FF8();
+    wave->time += dt;
+    wave->phase_x += dt * wave->strength * 3;
+    wave->phase_z += dt * (wave->strength + 0.01f) * 3;
+    uv[0] = ((150.0f * func_800138D0(wave->time * 0.2f * 180.0f)) +
+             (func_80013970(wave->time * 0.08f * 180.0f) * 100.0f)) *
+            0.8f;
+    uv[1] = ((50.0f * func_80013970(wave->time * 0.5f * 180.0f)) +
+             (func_800138D0(wave->time * 0.22f * 180.0f) * 100.0f)) *
+            0.8f;
+    wave->uv_s = (uv[0] >= 0.0f) ? (uv[0] + 0.5f) : (uv[0] - 0.5f);
+    wave->uv_t = (uv[1] >= 0.0f) ? (uv[1] + 0.5f) : (uv[1] - 0.5f);
+    _glid_entrypoint_0(unk_0, unk_1, _idwave_entrypoint_0, wave);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/wave.data.s) is defined here in C.
- * Values are taken from the ROM. */

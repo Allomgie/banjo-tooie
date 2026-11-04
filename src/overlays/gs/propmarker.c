@@ -1,92 +1,119 @@
+// Searches the node props of one cube for kind-6 props by id, and gives a prop's scale.
 #include "common.h"
 
-typedef struct { u8 pad_0[4]; u32 pad_1 : 25; u32 local_0 : 6; u32 local_1 : 1; u16 local_2; u8 pad_2[8]; u8 pad_3 : 7; u8 local_3 : 1; u8 pad_4; } PropMarkerRecord;
+// Node prop record in a cube (0x14 bytes); the first three halfwords are the position.
+typedef struct {
+    u8 pad_0[4];
+    u32 pad_4 : 25;
+    u32 kind : 6;
+    u32 enabled : 1;
+    u16 id;
+    u8 pad_A[8];
+    u8 pad_12 : 7;
+    u8 enabled_12 : 1;
+    u8 pad_13;
+} PropMarkerRecord;
 extern PropMarkerRecord *func_800E9D68(s32);
 extern PropMarkerRecord *func_800E9D90(s32);
-typedef struct { s32 word0; u32 pad4:25; u32 kind:6; u32 enabled:1; u16 id; u8 padA[8]; u8 pad12:7; u8 enabled12:1; u8 pad13; } PropMarkerRecord32;
 
-PropMarkerRecord *gspropmarker_entrypoint_0(s32 param_0, s32 param_1)
+typedef struct {
+    s32 unk_0;
+    u32 pad_4 : 25;
+    u32 kind : 6;
+    u32 enabled : 1;
+    u16 id;
+    u8 pad_A[8];
+    u8 pad_12 : 7;
+    u8 enabled_12 : 1;
+    u8 pad_13;
+} PropMarkerRecord32;
+
+// Group: find kind-6 node props by id inside a cube.
+// First enabled kind-6 prop with the given id in the cube.
+PropMarkerRecord *gspropmarker_entrypoint_0(s32 cube, s32 id)
 {
-    PropMarkerRecord *local_0;
-    PropMarkerRecord *local_1;
+    PropMarkerRecord *prop;
+    PropMarkerRecord *end;
 
-    if (param_0 && func_800E9DC4(param_0)) {
-        local_0 = func_800E9D68(param_0);
-        local_1 = func_800E9D90(param_0);
-        for (; local_0 < local_1; local_0++) {
-            if ((local_0->local_1 == 1 || (local_0->local_1 == 0 && local_0->local_3 == 1)) &&
-                local_0->local_0 == 6 && param_1 == local_0->local_2) return local_0;
+    if (cube && func_800E9DC4(cube)) {
+        prop = func_800E9D68(cube);
+        end = func_800E9D90(cube);
+        for (; prop < end; prop++) {
+            if ((prop->enabled == 1 || (prop->enabled == 0 && prop->enabled_12 == 1)) &&
+                prop->kind == 6 && id == prop->id)
+                return prop;
         }
     }
     return 0;
 }
 
-s32 gspropmarker_entrypoint_1(s32 param_0, s32 *param_1, PropMarkerRecord32 **param_2, s32 param_3)
+// Collects enabled kind-6 props whose id is in the -1 terminated list; returns the count.
+s32 gspropmarker_entrypoint_1(s32 cube, s32 *ids, PropMarkerRecord32 **out, s32 max)
 {
-    s32 local_0;
-  s32 pad0;
-    PropMarkerRecord32 *local_1;
-    PropMarkerRecord32 *local_2;
-    s32 *local_3;
+    s32 count;
+    s32 pad0;
+    PropMarkerRecord32 *prop;
+    PropMarkerRecord32 *end;
+    s32 *id_ptr;
 
-    local_0 = 0;
-    if (!param_3) {
+    count = 0;
+    if (!max) {
         return 0;
     }
-    if (param_0 && func_800E9DC4(param_0)) {
-        local_1 = (PropMarkerRecord32 *)func_800E9D68(param_0);
-        local_2 = (PropMarkerRecord32 *)func_800E9D90(param_0);
-        for (; local_1 < local_2 && local_0 < param_3; local_1++) {
-            if ((local_1->enabled == 1 || local_1->enabled == 0 &&
-                 local_1->enabled12 == 1) && local_1->kind == 6) {
-                for (local_3 = param_1; *local_3 != -1; local_3++) {
-                    if (local_1->id == *local_3) {
-                        param_2[local_0++] = local_1;
+    if (cube && func_800E9DC4(cube)) {
+        prop = (PropMarkerRecord32 *) func_800E9D68(cube);
+        end = (PropMarkerRecord32 *) func_800E9D90(cube);
+        for (; prop < end && count < max; prop++) {
+            if ((prop->enabled == 1 || prop->enabled == 0 && prop->enabled_12 == 1) &&
+                prop->kind == 6) {
+                for (id_ptr = ids; *id_ptr != -1; id_ptr++) {
+                    if (prop->id == *id_ptr) {
+                        out[count++] = prop;
                         break;
                     }
                 }
             }
         }
     }
-    return local_0;
+    return count;
 }
 
-s32 gspropmarker_entrypoint_2(s32 param_0, s32 param_1, f32 param_2[][3], s32 param_3)
+// Writes the positions of enabled kind-6 props with the given id; returns the count.
+s32 gspropmarker_entrypoint_2(s32 cube, s32 id, f32 out[][3], s32 max)
 {
-    s32 local_0;
-    PropMarkerRecord *local_1;
-    PropMarkerRecord *local_2;
+    s32 count;
+    PropMarkerRecord *prop;
+    PropMarkerRecord *end;
 
-    local_0 = 0;
-    if (param_0 && func_800E9DC4(param_0)) {
-        local_1 = func_800E9D68(param_0);
-        local_2 = func_800E9D90(param_0);
-        while (local_1 < local_2 && local_0 < param_3) {
-            if ((local_1->local_1 == 1 || (local_1->local_1 == 0 && local_1->local_3 == 1)) &&
-                local_1->local_0 == 6 && param_1 == local_1->local_2) {
-                param_2[local_0][0] = ((s16 *)local_1)[0];
-                param_2[local_0][1] = ((s16 *)local_1)[1];
-                param_2[local_0][2] = ((s16 *)local_1)[2];
-                local_0++;
+    count = 0;
+    if (cube && func_800E9DC4(cube)) {
+        prop = func_800E9D68(cube);
+        end = func_800E9D90(cube);
+        while (prop < end && count < max) {
+            if ((prop->enabled == 1 || (prop->enabled == 0 && prop->enabled_12 == 1)) &&
+                prop->kind == 6 && id == prop->id) {
+                out[count][0] = ((s16 *) prop)[0];
+                out[count][1] = ((s16 *) prop)[1];
+                out[count][2] = ((s16 *) prop)[2];
+                count++;
             }
-            local_1++;
+            prop++;
         }
     }
-    return local_0;
+    return count;
 }
 
-f32 gspropmarker_entrypoint_3(u32 *param_0)
+// Group: prop scale from the parameter word.
+// Prop scale from the 23-bit parameter (x0.01, 0 = 1.0).
+f32 gspropmarker_entrypoint_3(u32 *prop)
 {
-    u32 local_0 = param_0[3] & 0x7FFFFF;
-    f32 local_1;
+    u32 param = prop[3] & 0x7FFFFF;
+    f32 scale;
 
-    if (local_0 != 0) {
-        local_1 = local_0 * 0.01f;
+    if (param != 0) {
+        scale = param * 0.01f;
     } else {
-        local_1 = 1.0f;
+        scale = 1.0f;
     }
-    return local_1;
+    return scale;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gs/propmarker.data.s) is defined here in C.
- * Values are taken from the ROM. */

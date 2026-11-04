@@ -1,35 +1,36 @@
+// Per-state heap scratch slot for the drone transformation state: allocated and freed on demand.
 #include "common.h"
 
 extern void *heap_alloc();
 extern void heap_free(void *ptr);
-typedef struct { int unk18C; } BadRonemem;
 
-void badronemem_entrypoint_0(void *param_0, s32 param_1)
+typedef struct {
+    int scratch;
+} BadRonemem;
+
+// Allocates the scratch buffer at PlayerState+0x18C.
+void badronemem_entrypoint_0(void *player_state, s32 size)
 {
-    ((void **)param_0)[0x18C / 4] = heap_alloc(param_1 | 0);
+    ((void **) player_state)[0x18C / 4] = heap_alloc(size | 0); // Matching: needed for the match.
 }
 
-void badronemem_entrypoint_1(BadRonemem *param_0)
+// Frees the scratch buffer and clears the slot.
+void badronemem_entrypoint_1(BadRonemem *player_state)
 {
-  BadRonemem *new_var2;
-  int new_var;
-  int new_var3;
-  new_var2++;
-  new_var = 0 ^ 0;
-  new_var3 = (*(s32 *)((char *)(param_0) + 396));
-  heap_free(new_var3);
-  new_var2 = param_0;
-  new_var2--;
-  (*(s32 *)((char *)(param_0) + 396)) = new_var;
+    int cleared;
+    int buffer;
+    cleared = 0 ^ 0; // Matching: needed for the match.
+    buffer = *(s32 *) ((char *) player_state + 396);
+    heap_free(buffer);
+    *(s32 *) ((char *) player_state + 396) = cleared;
 }
 
-void badronemem_entrypoint_2(s32 arg0) 
+void badronemem_entrypoint_2(s32 arg0)
 {
-}
-void badronemem_entrypoint_3(void *param_0)
-{
-    *(u32 *)((char *)param_0 + 0x18C) = 0;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/dronemem.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// Clears the scratch slot without freeing it.
+void badronemem_entrypoint_3(void *player_state)
+{
+    *(u32 *) ((char *) player_state + 0x18C) = 0;
+}

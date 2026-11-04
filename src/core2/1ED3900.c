@@ -1,11 +1,76 @@
+// HUD item-counter slot manager: 48 slots with slide-in/out, 2 s auto-hide, update, draw, defrag,
+// free, and setters forwarding the value and style to the scinfobar overlay object.
 #include "core2/1ED3900.h"
 
-typedef struct { s16 unk0; s16 unk2; u8 unk4; u8 unk5; s16 unk12; s16 unk13; s8 unkA; s8 unkB; u8 unkF; u8 unkD; u8 unkE2; u8 unkF2; u8 unkE; u8 unk10; u8 unk11; u8 unk14; u8 unk15; u8 unk16; u8 unk17; u8 unk18; u8 unk19; u8 unk1A; u8 unk1B; } D_80123880_t;
+// The 48 slots of D_80123880 are accessed through several overlapping views.
+// Layout of a slot (28 bytes):
+//   0x00 target_x, 0x02 target_y, 0x04 side (slide direction), 0x06 pos_x, 0x08 pos_y,
+//   0x0A dx, 0x0B dy (slide direction signs), 0x0C state (0 hidden, 1 sliding in, 2 shown,
+//   3 sliding out), 0x0D step (0..10), 0x0E sub_type, 0x10 active, 0x14 auto-hide timer,
+//   0x18 handle of the scinfobar overlay object.
+typedef struct {
+    s16 target_x;
+    s16 target_y;
+    u8 side;
+    u8 unk_5;
+    s16 pos_x;
+    s16 pos_y;
+    s8 dx;
+    s8 dy;
+    u8 state;
+    u8 step;
+    u8 sub_type;
+    u8 unk_F;
+    u8 active;
+    u8 hidden;
+    u8 unk_12;
+    u8 pad_13;
+    u8 pad_14;
+    u8 pad_15;
+    u8 pad_16;
+    u8 pad_17;
+    u8 pad_18;
+    u8 pad_19;
+    u8 pad_1A;
+} D_80123880_t;
 extern u8 D_801357B0;
 extern s32 _scinfobar_entrypoint_0(s32, s32, s32);
 extern void _scinfobar_entrypoint_6(s32, s32);
-typedef struct { s16 local_0; s16 local_1; u8 local_2; u8 local_3; s16 local_4; s16 local_5; u8 local_6; u8 local_7; u8 local_8; u8 local_9; s8 local_10; u8 local_11; u8 local_12; u8 local_13; u8 local_14; u8 local_15; u8 local_16; u8 local_17; u8 local_18; u8 local_19; s32 local_20; } D_80123880_type;
-typedef struct { u8 pad[6]; s16 local_0, local_1; s8 local_2, local_3; u8 local_4; s8 local_5, local_6; u8 padF; u8 local_7, local_8; u8 pad12[2]; f32 local_9; void *local_10; } EntryFA2C0;
+typedef struct {
+    s16 target_x;
+    s16 target_y;
+    u8 side;
+    u8 unk_5;
+    s16 pos_x;
+    s16 pos_y;
+    u8 dx;
+    u8 dy;
+    u8 state;
+    u8 step;
+    s8 sub_type;
+    u8 unk_F;
+    u8 active;
+    u8 hidden;
+    u8 unk_12;
+    u8 pad_13;
+    u8 pad_14;
+    u8 pad_15;
+    u8 pad_16;
+    u8 pad_17;
+    s32 handle;
+} D_80123880_type;
+typedef struct {
+    u8 pad_0[6];
+    s16 pos_x, pos_y;
+    s8 dx, dy;
+    u8 state;
+    s8 step, sub_type;
+    u8 pad_F;
+    u8 active, hidden;
+    u8 pad_12[2];
+    f32 timer; // auto-hide countdown in seconds
+    void *handle;
+} EntryFA2C0;
 extern f32 func_800D8FF8(void);
 extern void _scinfobar_entrypoint_2(void *);
 extern s32 _scinfobar_entrypoint_21(void *);
@@ -13,18 +78,69 @@ extern s32 D_801239B4;
 extern s32 D_80123998;
 extern s32 D_80123D6C;
 extern s8 D_80123DC0[10];
-typedef struct { s16 field_0, field_2; u8 field_4, field_5; s16 field_6, field_8; s8 field_A, field_B; u8 field_C, field_D; s8 field_E; u8 field_F, field_10, field_11, field_12, field_13; f32 field_14; s32 field_18; } InfobarState;
+typedef struct {
+    s16 target_x, target_y;
+    u8 side, unk_5;
+    s16 pos_x, pos_y;
+    s8 dx, dy;
+    u8 state, step;
+    s8 sub_type;
+    u8 unk_F, active, hidden, unk_12, pad_13;
+    f32 timer;
+    s32 handle;
+} InfobarState;
 extern s32 defrag(s32);
 extern void _scinfobar_entrypoint_1(s32);
-typedef struct { u8 pad[24]; int unk18; } local_struct;
-typedef struct { s32 f0; s32 f4; s32 f8; s32 fC; s32 f10; s32 f14; s32 f18; } Struct_80123880;
-typedef struct { s16 local_0; s16 local_1; u8 local_2; u8 local_3; s16 local_4; s16 local_5; u8 local_6[4]; s8 local_7; u8 local_8[2]; u8 local_9; u8 local_10; u8 local_11; f32 local_12; s32 local_13; } local_type;
+typedef struct {
+    u8 pad_0[24];
+    int handle;
+} local_struct;
+typedef struct {
+    s32 unk_0;
+    s32 unk_4;
+    s32 unk_8;
+    s32 unk_C;
+    s32 unk_10;
+    s32 unk_14;
+    s32 handle;
+} Struct_80123880;
+typedef struct {
+    s16 target_x;
+    s16 target_y;
+    u8 side;
+    u8 unk_5;
+    s16 pos_x;
+    s16 pos_y;
+    u8 pad_A[4];
+    s8 sub_type;
+    u8 pad_F[2];
+    u8 hidden;
+    u8 unk_12;
+    u8 pad_13;
+    f32 timer;
+    s32 handle;
+} local_type;
 extern int _scinfobar_entrypoint_23(s32);
 extern int _scinfobar_entrypoint_7(s32, s32);
 extern s32 _scinfobar_entrypoint_16(s32);
 extern int _scinfobar_entrypoint_22(s32);
-typedef struct { s32 pad0[3]; s8 pad0C[2]; s8 unkE; s8 padF; s32 pad10[2]; s32 unk18; } S80123880;
-typedef struct { u8 pad[0xC]; u8 local_0; u8 pad1; s8 local_1; u8 pad2[9]; s32 local_2; } EntryFA;
+typedef struct {
+    s32 pad_0[3];
+    s8 pad_C[2];
+    s8 sub_type;
+    s8 pad_F;
+    s32 pad_10[2];
+    s32 handle;
+} S80123880;
+typedef struct {
+    u8 pad_0[0xC];
+    u8 state;
+    u8 pad_D;
+    s8 sub_type;
+    u8 pad_F[9];
+    s32 handle;
+} EntryFA;
+// One slot, viewed through the struct each function needs.
 typedef union {
     InfobarState i;
     D_80123880_t t;
@@ -34,363 +150,439 @@ typedef union {
     S80123880 s;
     Struct_80123880 st;
     local_type lt;
-    local_struct ls;
 } Elem80123880;
 extern Elem80123880 D_80123880[48];
 extern u8 D_80123898[];
 extern void _scinfobar_entrypoint_5(s32, s32);
 int func_800FA874();
 
+// Resets all slots; each starts off its target position, one full slide away.
 void func_800FA010()
 {
-    s32 local_0;
-    f32 local_2 = 0.0f;
-    for (local_0 = 0; local_0 < 48; local_0++)
-    {
-        D_80123880[local_0].t.unkE = 0;
+    s32 i;
+    f32 slide_len = 0.0f;
+    for (i = 0; i < 48; i++) {
+        D_80123880[i].t.active = 0;
     }
 
-    for (local_0 = 0; local_0 < sizeof(D_80123DC0); local_0++)
-    {
-        local_2 += D_80123DC0[local_0];
+    // Total distance covered by the 10 easing steps.
+    for (i = 0; i < sizeof(D_80123DC0); i++) {
+        slide_len += D_80123DC0[i];
     }
 
-    for (local_0 = 0; local_0 < 48; local_0++)
-    {
-        if (D_80123880[local_0].t.unk4 & 1)
-        {
-            D_80123880[local_0].t.unkA = 0;
+    for (i = 0; i < 48; i++) {
+        if (D_80123880[i].t.side & 1) {
+            D_80123880[i].t.dx = 0;
+        } else {
+            D_80123880[i].t.dx = 1 - D_80123880[i].t.side;
         }
-        else
-        {
-            D_80123880[local_0].t.unkA = 1 - D_80123880[local_0].t.unk4;
+        if (D_80123880[i].t.side & 1) {
+            D_80123880[i].t.dy = D_80123880[i].t.side - 2;
+        } else {
+            D_80123880[i].t.dy = 0;
         }
-        if (D_80123880[local_0].t.unk4 & 1)
-        {
-            D_80123880[local_0].t.unkB = D_80123880[local_0].t.unk4 - 2;
-        }
-        else
-        {
-            D_80123880[local_0].t.unkB = 0;
-        }
-        D_80123880[local_0].t.unkF = 0;
-        D_80123880[local_0].t.unk10 = 0;
-        D_80123880[local_0].t.unk11 = 0;
-        D_80123880[local_0].t.unk12 = (s16)(D_80123880[local_0].t.unk0 - (D_80123880[local_0].t.unkA * local_2));
-        D_80123880[local_0].t.unk13 = (s16)(D_80123880[local_0].t.unk2 - (D_80123880[local_0].t.unkB * local_2));
+        D_80123880[i].t.state = 0;
+        D_80123880[i].t.hidden = 0;
+        D_80123880[i].t.unk_12 = 0;
+        D_80123880[i].t.pos_x =
+            (s16) (D_80123880[i].t.target_x - (D_80123880[i].t.dx * slide_len));
+        D_80123880[i].t.pos_y =
+            (s16) (D_80123880[i].t.target_y - (D_80123880[i].t.dy * slide_len));
     }
 
     D_801357B0 = 1;
 }
 
-void func_800FA130(s32 param_0, s32 param_1)
+// Moves a slot to a new state (0 hidden, 1 sliding in, 2 shown, 3 sliding out) and
+// creates, shows, hides or frees its overlay object accordingly.
+void func_800FA130(s32 slot, s32 new_state)
 {
-    if (param_1 != D_80123880[param_0].ty.local_8)
-    {
-        D_80123880[param_0].ty.local_8 = param_1;
-        switch (param_1)
-        {
+    if (new_state != D_80123880[slot].ty.state) {
+        D_80123880[slot].ty.state = new_state;
+        switch (new_state) {
             case 1:
-                if (D_80123880[param_0].ty.local_20)
-                {
+                if (D_80123880[slot].ty.handle) {
                     break;
                 }
-                D_80123880[param_0].ty.local_20 = _scinfobar_entrypoint_0(D_80123880[param_0].ty.local_10, D_80123880[param_0].ty.local_3, D_80123880[param_0].ty.local_14);
+                D_80123880[slot].ty.handle = _scinfobar_entrypoint_0(
+                    D_80123880[slot].ty.sub_type, D_80123880[slot].ty.unk_5,
+                    D_80123880[slot].ty.unk_12);
                 break;
             case 2:
-                if (D_80123880[param_0].ty.local_4 != D_80123880[param_0].ty.local_0 || D_80123880[param_0].ty.local_5 != (*(s16 *)((char *)(&D_80123880[param_0].ty) + 2)))
-                {
-                    D_80123880[param_0].ty.local_4 = D_80123880[param_0].ty.local_0;
-                    D_80123880[param_0].ty.local_5 = D_80123880[param_0].ty.local_1;
+                if (D_80123880[slot].ty.pos_x != D_80123880[slot].ty.target_x ||
+                    D_80123880[slot].ty.pos_y !=
+                        *(s16 *) ((char *) &D_80123880[slot].ty + 2)) {
+                    D_80123880[slot].ty.pos_x = D_80123880[slot].ty.target_x;
+                    D_80123880[slot].ty.pos_y = D_80123880[slot].ty.target_y;
                 }
-                if (D_80123880[param_0].ty.local_13)
-                {
+                if (D_80123880[slot].ty.hidden) {
                     break;
                 }
-                _scinfobar_entrypoint_6(D_80123880[param_0].ty.local_20, 1);
+                _scinfobar_entrypoint_6(D_80123880[slot].ty.handle, 1);
                 break;
             case 3:
-                _scinfobar_entrypoint_6(D_80123880[param_0].ty.local_20, 0);
+                _scinfobar_entrypoint_6(D_80123880[slot].ty.handle, 0);
                 break;
             case 0:
-                if (D_80123880[param_0].ty.local_20)
-                {
-                    _scinfobar_entrypoint_1(D_80123880[param_0].ty.local_20);
-                    D_80123880[param_0].ty.local_20 = 0;
+                if (D_80123880[slot].ty.handle) {
+                    _scinfobar_entrypoint_1(D_80123880[slot].ty.handle);
+                    D_80123880[slot].ty.handle = 0;
                 }
-                break;
-            default:
-                break;
         }
     }
 }
 
-void func_800FA240(s32 param_0, long param_1)
+// Requests slide-in (show = 1) or slide-out (show = 0) for a slot.
+void func_800FA240(s32 slot, long show)
 {
-  u8 *temp_v0;
-  temp_v0 = ((u8 *) ((u8 *) D_80123880)) + (param_0 * 28);
-  temp_v0[0x10] = param_1;
-  switch (param_1)
-  {
-    case 0:
-      if (temp_v0[0xC] != 0)
-    {
-      func_800FA130(param_0, 3);
-      return;
+    u8 *entry;
+    entry = (u8 *) (u8 *) D_80123880 + (slot * 28);
+    entry[0x10] = show;
+    switch (show) {
+        case 0:
+            if (entry[0xC] != 0) {
+                func_800FA130(slot, 3);
+            }
+            return;
+
+        case 1:
+            if (entry[0xC] != 2) {
+                func_800FA130(slot, 1);
+            }
     }
-      return;
-
-    case 1:
-      if (temp_v0[0xC] != 2)
-    {
-      func_800FA130(param_0, 1);
-    }
-      break;
-
-  }
-
 }
 
+// Per frame: counts down the auto-hide timers, then advances the slide animations.
 void func_800FA2C0(void)
 {
-    s32 local_0;
-    f32 local_1[1];
-    s32 local_2;
-    local_1[0] = func_800D8FF8();
-    for (local_0 = 0; local_0 < 48; local_0++) {
-        if (D_80123880[local_0].e2.local_7 == 1 && func_800FA874(local_0, D_80123880[local_0].e2.local_6)) {
-            if (D_80123880[local_0].e2.local_9 >= 0.0f) {
-                D_80123880[local_0].e2.local_9 -= local_1[0];
-                if (D_80123880[local_0].e2.local_9 < 0.0f) {
-                    D_80123880[local_0].e2.local_9 = 0.0f;
-                    func_800FA240(local_0, 0);
+    s32 i;
+    // Matching: one-element array for the frame delta, needed for the match.
+    f32 dt[1];
+    s32 dist;
+    dt[0] = func_800D8FF8();
+    for (i = 0; i < 48; i++) {
+        if (D_80123880[i].e2.active == 1 &&
+            func_800FA874(i, D_80123880[i].e2.sub_type)) {
+            if (D_80123880[i].e2.timer >= 0.0f) {
+                D_80123880[i].e2.timer -= dt[0];
+                if (D_80123880[i].e2.timer < 0.0f) {
+                    D_80123880[i].e2.timer = 0.0f;
+                    func_800FA240(i, 0);
                 }
             }
         }
     }
-    for (local_0 = 0; local_0 < 48; local_0++) {
-        if (D_80123880[local_0].e2.local_10) _scinfobar_entrypoint_2(D_80123880[local_0].e2.local_10);
-        switch (D_80123880[local_0].e2.local_4) {
-        case 1:
-            if ((u32)D_80123880[local_0].e2.local_5 < 10) {
-                local_2 = D_80123DC0[D_80123880[local_0].e2.local_5];
-                D_80123880[local_0].e2.local_0 += D_80123880[local_0].e2.local_2 * local_2;
-                D_80123880[local_0].e2.local_1 += D_80123880[local_0].e2.local_3 * local_2;
-                D_80123880[local_0].e2.local_5++;
-            }
-            if ((u32)D_80123880[local_0].e2.local_5 >= 10) {
-                D_80123880[local_0].e2.local_5 = 10;
-                func_800FA130(local_0, 2);
-            }
-            break;
-        case 2:
-            if (_scinfobar_entrypoint_21(D_80123880[local_0].e2.local_10) && !D_80123880[local_0].e2.local_8) {
-                _scinfobar_entrypoint_6(D_80123880[local_0].e2.local_10, 1);
-            }
-            break;
-        case 3:
-            if (_scinfobar_entrypoint_21(D_80123880[local_0].e2.local_10)) {
-                if (D_80123880[local_0].e2.local_5 > 0) {
-                    D_80123880[local_0].e2.local_5--;
-                    local_2 = D_80123DC0[D_80123880[local_0].e2.local_5];
-                    D_80123880[local_0].e2.local_0 -= D_80123880[local_0].e2.local_2 * local_2;
-                    D_80123880[local_0].e2.local_1 -= D_80123880[local_0].e2.local_3 * local_2;
+    for (i = 0; i < 48; i++) {
+        if (D_80123880[i].e2.handle)
+            _scinfobar_entrypoint_2(D_80123880[i].e2.handle);
+        switch (D_80123880[i].e2.state) {
+            case 1: // sliding in
+                if ((u32) D_80123880[i].e2.step < 10) {
+                    dist = D_80123DC0[D_80123880[i].e2.step];
+                    D_80123880[i].e2.pos_x += D_80123880[i].e2.dx * dist;
+                    D_80123880[i].e2.pos_y += D_80123880[i].e2.dy * dist;
+                    D_80123880[i].e2.step++;
                 }
-                if (D_80123880[local_0].e2.local_5 <= 0) {
-                    D_80123880[local_0].e2.local_5 = 0;
-                    func_800FA130(local_0, 0);
+                if ((u32) D_80123880[i].e2.step >= 10) {
+                    D_80123880[i].e2.step = 10;
+                    func_800FA130(i, 2);
                 }
-            }
-            break;
+                break;
+            case 2: // shown
+                if (_scinfobar_entrypoint_21(D_80123880[i].e2.handle) &&
+                    !D_80123880[i].e2.hidden) {
+                    _scinfobar_entrypoint_6(D_80123880[i].e2.handle, 1);
+                }
+                break;
+            case 3: // sliding out
+                if (_scinfobar_entrypoint_21(D_80123880[i].e2.handle)) {
+                    if (D_80123880[i].e2.step > 0) {
+                        D_80123880[i].e2.step--;
+                        dist = D_80123DC0[D_80123880[i].e2.step];
+                        D_80123880[i].e2.pos_x -= D_80123880[i].e2.dx * dist;
+                        D_80123880[i].e2.pos_y -= D_80123880[i].e2.dy * dist;
+                    }
+                    if (D_80123880[i].e2.step <= 0) {
+                        D_80123880[i].e2.step = 0;
+                        func_800FA130(i, 0);
+                    }
+                }
         }
     }
 }
 
-void func_800FA508(s32 param_0) {
-    InfobarState *local_0;
-    s32 local_1;
-    s32 local_3;
+// Draws all live slots. While func_800A9C98() or func_800DB9B0() is set, only slots
+// 10, 11 and 45 are drawn.
+void func_800FA508(s32 gfx)
+{
+    InfobarState *info;
+    s32 restricted;
+    s32 i;
     if (D_801357B0) {
-        local_1 = func_800A9C98() || func_800DB9B0();
-        for (local_3 = 0; local_3 < 48; local_3++) {
-            local_0 = &D_80123880[local_3];
-            if (local_0->field_18) {
-                s32 local_2 = local_0 != (InfobarState *)&D_801239B4 && local_0 != (InfobarState *)&D_80123998 && local_0 != (InfobarState *)&D_80123D6C;
-                if (!local_1 || !local_2) _scinfobar_entrypoint_24(param_0, local_0->field_18, local_0->field_6, local_0->field_8);
+        restricted = func_800A9C98() || func_800DB9B0();
+        for (i = 0; i < 48; i++) {
+            info = &D_80123880[i];
+            if (info->handle) {
+                s32 hideable = info != (InfobarState *) &D_801239B4 &&
+                               info != (InfobarState *) &D_80123998 &&
+                               info != (InfobarState *) &D_80123D6C;
+                if (!restricted || !hideable)
+                    _scinfobar_entrypoint_24(gfx, info->handle, info->pos_x,
+                                             info->pos_y);
             }
         }
     }
 }
 
+// Matching: the line breaks in this function are needed for the match.
+// Runs defrag() on the overlay handle of every slot.
 void func_800FA608(void)
 {
-  s32 *s0;
-  s32 temp_a0;
- s0 = ((s32 *) D_80123880); do {
-    temp_a0 = s0[6];
-    if (temp_a0 != 0)
-    {
-      s0[6] = defrag(temp_a0);
+    s32 *cur;
+    s32 handle;
+    cur = (s32 *) D_80123880; do {
+        handle = cur[6];
+        if (handle != 0)
+        {
+            cur[6] = defrag(handle);
+        }
+        cur += 7;
     }
-    s0 += 7;
-  }
-  while (s0 != ((s32 *) &D_80123DC0));
+    while (cur != (s32 *) &D_80123DC0);
 }
 
+// Matching: the line breaks in this function are needed for the match.
+// Frees the overlay object of every slot.
 void func_800FA660()
 {
-  int new_var;
-  local_struct *local_0;
-  u8 *local_1;
- local_1 = ((u8 *) &D_80123DC0); local_0 = ((local_struct *) D_80123880);
-  do
-  {
-    new_var = local_0->unk18;
-    if (new_var != 0)
+    int handle;
+    local_struct *slot;
+    u8 *end;
+    end = (u8 *) &D_80123DC0; slot = (local_struct *) D_80123880;
+    do
     {
-      _scinfobar_entrypoint_1((void *) new_var);
-      local_0->unk18 = 0;
+        handle = slot->handle;
+        if (handle != 0)
+        {
+            _scinfobar_entrypoint_1((void *) handle);
+            slot->handle = 0;
+        }
+        slot += 1;
     }
-    local_0 += 1;
-  }
-  while (((u8 *) local_0) != local_1);
+    while ((u8 *) slot != end);
 }
 
-void func_800FA6B8(s32 param_0, s32 param_1, s32 param_2)
+void func_800FA6B8(s32 slot, s32 unk_0, s32 value)
 {
-    _scinfobar_entrypoint_3(D_80123880[param_0].st.f18, param_1);
-    _scinfobar_entrypoint_8(D_80123880[param_0].st.f18, param_2);
+    _scinfobar_entrypoint_3(D_80123880[slot].st.handle, unk_0);
+    _scinfobar_entrypoint_8(D_80123880[slot].st.handle, value);
 }
 
-int func_800FA708(u32 param_0, s32 param_1, s32 param_2, u32 param_3) {
-    local_type *local_0 = &D_80123880[param_1].lt;
-    if (param_2 != local_0->local_7 || param_3 != local_0->local_10) {
-        if (local_0->local_13 && _scinfobar_entrypoint_23(local_0->local_13)) return 0;
-        if (local_0->local_13 && !_scinfobar_entrypoint_7(local_0->local_13, param_2)) return 0;
+// Shows a slot's counter with a value and restarts its 2.0 s auto-hide timer.
+// Returns 1 on success, 0 if the overlay object does not accept the change.
+int func_800FA708(u32 value, s32 slot, s32 sub_type, u32 unk_0)
+{
+    local_type *info = &D_80123880[slot].lt;
+    if (sub_type != info->sub_type || unk_0 != info->unk_12) {
+        if (info->handle && _scinfobar_entrypoint_23(info->handle))
+            return 0;
+        if (info->handle && !_scinfobar_entrypoint_7(info->handle, sub_type))
+            return 0;
     }
-    D_80123880[param_1].lt.local_7 = param_2;
-    D_80123880[param_1].lt.local_9 = 0;
-    D_80123880[param_1].lt.local_10 = param_3;
-    func_800FA240(param_1, 1);
-    local_0->local_12 = 2.0f;
-    if (_scinfobar_entrypoint_16(local_0->local_13) != param_2 && _scinfobar_entrypoint_22(local_0->local_13)) {
-        _scinfobar_entrypoint_6(local_0->local_13, 0);
+    D_80123880[slot].lt.sub_type = sub_type;
+    D_80123880[slot].lt.hidden = 0;
+    D_80123880[slot].lt.unk_12 = unk_0;
+    func_800FA240(slot, 1);
+    info->timer = 2.0f;
+    if (_scinfobar_entrypoint_16(info->handle) != sub_type &&
+        _scinfobar_entrypoint_22(info->handle)) {
+        _scinfobar_entrypoint_6(info->handle, 0);
     }
-    func_800FA6B8(param_1, param_3, param_0);
+    func_800FA6B8(slot, unk_0, value);
     return 1;
 }
 
-s32 func_800FA818(s32 param_0, s32 param_1) {
-    S80123880 *local_0;
-    local_0 = &D_80123880[param_0].s;
-    if (local_0->unk18 == 0 || param_1 != local_0->unkE) {
+// Slides out the slot if it holds this sub-type. Returns 1 if it did.
+s32 func_800FA818(s32 slot, s32 sub_type)
+{
+    S80123880 *info;
+    info = &D_80123880[slot].s;
+    if (info->handle == 0 || sub_type != info->sub_type) {
         return 0;
     }
-    func_800FA240(param_0, 0);
+    func_800FA240(slot, 0);
     return 1;
 }
 
-int func_800FA874(param_0, param_1) s32 param_0; s32 param_1; {
-    InfobarState *local_0 = &D_80123880[param_0];
-    if (!local_0->field_18 || param_1 != local_0->field_E) return 0;
-    return local_0->field_C == 2 && _scinfobar_entrypoint_22(local_0->field_18);
+// Returns nonzero if the slot holds this sub-type and is fully slid in.
+int func_800FA874(slot, sub_type)
+s32 slot;
+s32 sub_type;
+{
+    InfobarState *info = &D_80123880[slot];
+    if (!info->handle || sub_type != info->sub_type)
+        return 0;
+    return info->state == 2 && _scinfobar_entrypoint_22(info->handle);
 }
 
-s32 func_800FA8E8(s32 param_0, s32 param_1)
+// Returns -1 if the slot does not hold this sub-type, else whether it is not hidden.
+s32 func_800FA8E8(s32 slot, s32 sub_type)
 {
-  s8 *new_var;
-  u8 *local_0;
-  local_0 = ((s32 *) D_80123880);
-  local_0 = (param_0 * 0x1C) + local_0;
-  new_var = (s8 *) local_0;
-  if (((*((s32 *) (((s8 *) local_0) + 0x18))) == 0) || (param_1 != (*((s8 *) (new_var + 0xE)))))
-  {
+    // Matching: the second pointer to the same slot is needed for the match.
+    s8 *entry_s8;
+    u8 *entry;
+    entry = ((s32 *) D_80123880);
+    entry = (slot * 0x1C) + entry;
+    entry_s8 = (s8 *) entry;
+
+if ((*(s32 *) ((s8 *) entry + 0x18) == 0) || (sub_type != *(s8 *) (entry_s8 + 0xE))) {
     return -1;
-  }
-  return (*((u8 *) (((s8 *) local_0) + 0xC))) != 0;
 }
 
-int func_800FA934(s32 param_0, s32 param_1) {
-    /* HEADER DEPENDENCY: Also push data/header/include/core2/1ED3900.h; this function returns int, not s32 (long). */
-    EntryFA *local_0 = &D_80123880[param_0].ea;
-    s32 local_1 = local_0->local_2;
-    if (!local_1 || param_1 != local_0->local_1) return -1;
-    return local_0->local_0 == 2 && _scinfobar_entrypoint_21(local_1) != 0;
+return (*((u8 *) (((s8 *) entry) + 0xC))) != 0;
 }
 
-int func_800FA9A8(int param_0)
+// Returns -1 if the slot is not live or holds another sub-type, else whether it is fully
+// slid in. Returns int, not s32; the header declaration must match.
+int func_800FA934(s32 slot, s32 sub_type)
 {
-  if (1)
-  {
-    D_801357B0 = param_0;
-  }
-  do
-  {
-  }
-  while (0);
+    EntryFA *info = &D_80123880[slot].ea;
+    s32 handle = info->handle;
+    if (!handle || sub_type != info->sub_type)
+        return -1;
+    return info->state == 2 && _scinfobar_entrypoint_21(handle) != 0;
+
 }
 
-void func_800FA9B4(s32 param_0, s32 param_1)
+// Enables or disables drawing of the counters.
+int func_800FA9A8(int enabled)
 {
-    s32 local_0;
-    void *local_1;
-
-    local_0 = param_0 * 28;
-    local_1 = *(void **)((char *)&D_80123898 + local_0);
-    if (local_1 != NULL)
     {
-        _scinfobar_entrypoint_9((s32)local_1, param_1);
+        D_801357B0 = enabled;
     }
+
 }
 
-void func_800FA9F4(s32 param_0, s32 param_1)
+void func_800FA9B4(s32 slot, s32 extra)
 {
-    s32 local_0;
-    void *local_1;
+    s32 offset;
+    void *handle;
 
-    local_0 = param_0 * 28;
-    local_1 = *(void **)((char *)&D_80123898 + local_0);
-    if (local_1 != NULL)
-    {
-        _scinfobar_entrypoint_4((s32)local_1, param_1);
-    }
+    offset = slot * 28;
+    handle = *(void **) ((char *) &D_80123898 + offset);
+
+if (handle != NULL) {
+    _scinfobar_entrypoint_9((s32) handle, extra);
 }
 
-void func_800FAA34(s32 param_0)
+}
+
+void func_800FA9F4(s32 slot, s32 unk_0)
 {
-  s32 local_0;
-  local_0 = *(s32*)&((s8 *) D_80123898)[param_0 * 0x1C];
-  if (local_0 != 0)
-  {
-    _scinfobar_entrypoint_5(local_0, 1);
-  }
+    s32 offset;
+    void *handle;
+
+    offset = slot * 28;
+    handle = *(void **) ((char *) &D_80123898 + offset);
+
+if (handle != NULL) {
+    _scinfobar_entrypoint_4((s32) handle, unk_0);
 }
 
-void func_800FAA74(s32 param_0)
+}
+
+void func_800FAA34(s32 slot)
 {
-  s32 local_0;
-  local_0 = *(s32*)&((s8 *) D_80123898)[param_0 * 0x1C];
-  if (local_0 != 0)
-  {
-    _scinfobar_entrypoint_5(local_0, 2);
-  }
+    s32 handle;
+    handle = *(s32 *) &((s8 *) D_80123898)[slot * 0x1C];
+
+if (handle != 0) {
+    _scinfobar_entrypoint_5(handle, 1);
 }
 
-int func_800FAAB4(s32 param_0, s32 param_1) {
-    InfobarState *local_0 = &D_80123880[param_0];
-    if (!local_0->field_18) return 0;
-    local_0->field_E = param_1;
-    func_800FA240(param_0, 1);
-    if (!_scinfobar_entrypoint_7(local_0->field_18, param_1)) return 0;
-    local_0->field_14 = 2.0f;
-    _scinfobar_entrypoint_6(local_0->field_18, 0);
-    local_0->field_11 = 1;
+}
+
+void func_800FAA74(s32 slot)
+{
+    s32 handle;
+    handle = *(s32 *) &((s8 *) D_80123898)[slot * 0x1C];
+
+if (handle != 0) {
+    _scinfobar_entrypoint_5(handle, 2);
+}
+
+}
+
+// Switches a live slot to another sub-type and restarts its 2.0 s timer.
+// Returns 1 on success.
+int func_800FAAB4(s32 slot, s32 sub_type)
+{
+    InfobarState *info = &D_80123880[slot];
+    if (!info->handle)
+        return 0;
+    info->sub_type = sub_type;
+    func_800FA240(slot, 1);
+    if (!_scinfobar_entrypoint_7(info->handle, sub_type))
+        return 0;
+    info->timer = 2.0f;
+    _scinfobar_entrypoint_6(info->handle, 0);
+    info->hidden = 1;
     return 1;
 }
 
-/* TU-NOTE: the .data of this file (formerly asm/data/core2/1ED3900.data.s) is defined here in C.
- * Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80123898 = D_80123880 + 0x18, D_80123998 = D_80123880 + 0x118, D_801239B4 = D_80123880 + 0x134, D_80123D6C = D_80123880 + 0x4EC */
-Elem80123880 D_80123880[48] = { 0x16, 0x18, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0x18, 0x3, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x18, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x32, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x4C, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x66, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x80, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x9A, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0xB4, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0xCE, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x87, 0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0xCE, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0x18, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x61, 0x18, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0xAC, 0x18, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0xF7, 0x18, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x86, 0x73, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0x3F, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0x59, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0x73, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0x8D, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0xA7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x3F, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x59, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x73, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0x8D, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0xA7, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x1C, 0x3F, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x1C, 0x63, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x1C, 0x87, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x1C, 0xAB, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x114, 0x3F, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x114, 0x63, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x114, 0x87, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x114, 0xAB, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0xF7, 0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x86, 0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0xF7, 0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x61, 0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0xAC, 0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x116, 0xAA, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0xCE, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x11A, 0xCE, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0xAA, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x16, 0xB4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0, 0x87, 0x73, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0 };
-s8 D_80123DC0[10] = { 0x15, 0x11, 0xD, 0xA, 0x7, 0x5, 0x3, 0x2, -0x1, -0x1 };
-static u32 D_80123DC0_rest[5] = { 0x0, 0x0, 0x0, 0x0, 0x0 };
+// TU-NOTE: .data is defined here in C (values from the ROM). Linker symbols inside
+// D_80123880: D_80123898 = +0x18, D_80123998 = +0x118, D_801239B4 = +0x134,
+// D_80123D6C = +0x4EC.
+Elem80123880 D_80123880[48] = {
+    0x16,  0x18, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0x18, 0x3, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x18, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x32, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x4C, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x66, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x80, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x9A, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0xB4, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0xCE, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x87,  0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0xCE, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0x18, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x61,  0x18, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0xAC,  0x18, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0xF7,  0x18, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x86,  0x73, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0x3F, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0x59, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0x73, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0x8D, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0xA7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x3F, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x59, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x73, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0x8D, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0xA7, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x1C,  0x3F, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x1C,  0x63, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x1C,  0x87, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x1C,  0xAB, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x114, 0x3F, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x114, 0x63, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x114, 0x87, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x114, 0xAB, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0xF7,  0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x86,  0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0xF7,  0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x61,  0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0xAC,  0xCE, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x116, 0xAA, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0xCE, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x11A, 0xCE, 0x2, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0xAA, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x16,  0xB4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0,
+    0x87,  0x73, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0x0};
+// Easing: distance moved per slide step.
+s8 D_80123DC0[10] = {0x15, 0x11, 0xD, 0xA, 0x7, 0x5, 0x3, 0x2, -0x1, -0x1};
+// TU-NOTE: zero padding after D_80123DC0.
+static u32 D_80123DC0_rest[5] = {0x0, 0x0, 0x0, 0x0, 0x0};

@@ -1,5 +1,5 @@
+// Banjo-solo Pack Whack: swings the backpack with an attack sphere, particles and sounds.
 #include "common.h"
-
 #include "overlays/ba/anim.h"
 #include "overlays/ba/flag.h"
 #include "overlays/ba/key.h"
@@ -8,7 +8,6 @@
 #include "overlays/ba/yaw.h"
 #include "bs.h"
 #include "overlays/bs/state.h"
-
 #include "core2/1E76CC0.h"
 #include "core2/1E77A20.h"
 #include "core2/1E8F430.h"
@@ -21,19 +20,22 @@ extern BsScript D_8080050C_bsbanpackwhack[4];
 extern void _babackpack_entrypoint_5(PlayerState *);
 extern void func_800F1574(f32 *, f32);
 
-
-s32 func_80800000_bsbanpackwhack(s32 arg0, f32 arg1) {
-    s32 sp24 = func_800B5BE4(0xA);
-    func_800BA77C(sp24, 0, (s16)arg1, 0);
-    return func_800BABB8(sp24, arg0, 0, 1.0f, &D_808004D0_bsbanpackwhack);
+// Spawns the impact particles at pos.
+s32 func_80800000_bsbanpackwhack(s32 pos, f32 yaw)
+{
+    s32 particle = func_800B5BE4(0xA);
+    func_800BA77C(particle, 0, (s16) yaw, 0);
+    return func_800BABB8(particle, pos, 0, 1.0f, &D_808004D0_bsbanpackwhack);
 }
 
-void func_80800074_bsbanpackwhack(PlayerState * self, s32 arg1) {
-    s32 tmp_v0 = func_80800000_bsbanpackwhack(arg1, yaw_get(self));
-    func_800BA22C(tmp_v0, 1);
+void func_80800074_bsbanpackwhack(PlayerState *self, s32 pos)
+{
+    s32 particle = func_80800000_bsbanpackwhack(pos, yaw_get(self));
+    func_800BA22C(particle, 1);
 }
 
-void bsbanpackwhack_entrypoint_0(PlayerState *self) {
+void bsbanpackwhack_entrypoint_0(PlayerState *self)
+{
     baflag_clear(self, BA_FLAG_28);
     _babackpack_set_state(self, 1);
     func_800A0CD0(self, 1);
@@ -41,7 +43,8 @@ void bsbanpackwhack_entrypoint_0(PlayerState *self) {
     func_8009E474(self);
 }
 
-void bsbanpackwhack_entrypoint_1(PlayerState *self) {
+void bsbanpackwhack_entrypoint_1(PlayerState *self)
+{
     baanim_playForDuration_onceSmooth(self, 0xAF, 1.7f);
     func_8009FFD8(self, 1, 1, 3, 6);
     self->unk16C = baphysics_get_target_horizontal_velocity(self);
@@ -56,11 +59,12 @@ void bsbanpackwhack_entrypoint_1(PlayerState *self) {
     self->unk170 = 0.0f;
 }
 
-void bsbanpackwhack_entrypoint_2(PlayerState *self) {
+void bsbanpackwhack_entrypoint_2(PlayerState *self)
+{
     BanjoStateId next_state = BS_STATE_0_INVALID;
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
-    f32 tmp_f0;
-    f32 sp28[3];
+    f32 anim_time;
+    f32 pos[3];
 
     if (player_isStable(self)) {
         func_800F1574(&self->unk16C, func_800F0E00(self->unk16C * 0.08f, 3.0f));
@@ -82,10 +86,10 @@ void bsbanpackwhack_entrypoint_2(PlayerState *self) {
     }
 
     if (_babackpack_get_state(self) == 2) {
-        tmp_f0 = anctrl_getAnimTimer(anctrl);
-        if ((0.23f < tmp_f0) && (tmp_f0 < 0.695f)){
-            _babackpack_entrypoint_6(self, sp28, 0);
-            func_80800074_bsbanpackwhack(self, sp28);
+        anim_time = anctrl_getAnimTimer(anctrl);
+        if ((0.23f < anim_time) && (anim_time < 0.695f)) {
+            _babackpack_entrypoint_6(self, pos, 0);
+            func_80800074_bsbanpackwhack(self, pos);
         }
     }
 
@@ -128,18 +132,21 @@ void bsbanpackwhack_entrypoint_2(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-BsScript bsbanpackwhack_entrypoint_3(BsScriptType type) {
+BsScript bsbanpackwhack_entrypoint_3(BsScriptType type)
+{
     return D_8080050C_bsbanpackwhack[type];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/ban/packwhack.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808004D0_bsbanpackwhack -> s32[] */
+// TU-NOTE: the overlay .data is defined here in C. Its tables point to functions of this
+// file, and IDO's assembler schedules some of them differently unless the tables are in
+// the same unit. Values are taken from the ROM.
 extern void _bsbanpackwhack_entrypoint_0();
 extern void _bsbanpackwhack_entrypoint_1();
 extern void _bsbanpackwhack_entrypoint_2();
 extern void func_80099B94();
-s32 D_808004D0_bsbanpackwhack[15] = { 0x1D0622, 0x7802002C, 0x14, 0x0, 0x140000, 0x150000, 0x20026, 0x190, 0x0, 0x1900000, 0x220200, 0x2000100, 0x100002B, 0x330033, 0x0 };
-BsScript D_8080050C_bsbanpackwhack[4] = { (void *)_bsbanpackwhack_entrypoint_0, (void *)_bsbanpackwhack_entrypoint_1, (void *)_bsbanpackwhack_entrypoint_2, (void *)func_80099B94 };
-static u32 D_8080050C_bsbanpackwhack_rest[1] = { 0x0 };
+s32 D_808004D0_bsbanpackwhack[15] = {0x1D0622, 0x7802002C, 0x14,      0x0,      0x140000,
+                                     0x150000, 0x20026,    0x190,     0x0,      0x1900000,
+                                     0x220200, 0x2000100,  0x100002B, 0x330033, 0x0};
+BsScript D_8080050C_bsbanpackwhack[4] = {
+    (void *) _bsbanpackwhack_entrypoint_0, (void *) _bsbanpackwhack_entrypoint_1,
+    (void *) _bsbanpackwhack_entrypoint_2, (void *) func_80099B94};

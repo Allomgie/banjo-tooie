@@ -1,47 +1,55 @@
+// Probably the alpha companion of twinkle: shows only vertices that match the sparkle points
+// of the twinkle entry 200 ids lower and makes the rest transparent.
 #include "common.h"
 
 extern u8 _idtwinklea_entrypoint_3[];
 
-s32 idtwinklea_entrypoint_0(s32 *ret, s32 param_1, s32 param_2, s32 param_3){
+// Init: clears the point range.
+s32 idtwinklea_entrypoint_0(s32 *ret, s32 unk_1, s32 unk_2, s32 unk_3)
+{
     *ret = 0;
     *(ret + 1) = 0;
 }
 
-void idtwinklea_entrypoint_1(s32 arg0) 
+void idtwinklea_entrypoint_1(s32 arg0)
 {
 }
-void idtwinklea_entrypoint_2(s32 param_0, s32 param_1, s32 param_2) {
-    s32 local_0;
 
-    local_0 = _idworld_entrypoint_2(param_2 - 0xC8);
-    if (local_0 != 0) {
-        _idtwinkle_entrypoint_6(local_0, param_0, param_0 + 4);
-        _glid_entrypoint_0(param_1, param_2, &_idtwinklea_entrypoint_3, param_0);
+// Update: reads the sparkle points of the twinkle entry 200 ids lower.
+void idtwinklea_entrypoint_2(s32 range, s32 unk_1, s32 mesh_id)
+{
+    s32 twinkle;
+
+    twinkle = _idworld_entrypoint_2(mesh_id - 0xC8);
+    if (twinkle != 0) {
+        _idtwinkle_entrypoint_6(twinkle, range, range + 4);
+        _glid_entrypoint_0(unk_1, mesh_id, &_idtwinklea_entrypoint_3, range);
     }
 }
 
-void idtwinklea_entrypoint_3(s32 param_0, u8 *param_1, u8 *param_2, s32 param_3, u8 *param_4)
+// Kernel: vertices that match a sparkle point get alpha 255, the others 0.
+void idtwinklea_entrypoint_3(s32 unk_0, u8 *src, u8 *dst, s32 count, u8 *range)
 {
-    u8 *local_0;
-    u8 *local_1;
-    u8 *local_2 = param_1 + param_3 * 0x10;
-    f32 local_3;
+    u8 *point;
+    u8 *points_end;
+    u8 *end = src + count * 0x10;
+    f32 alpha;
 
-    for (; param_1 < local_2; param_1 += 0x10, param_2 += 0x10) {
-        local_0 = *(u8 **)param_4;
-        local_1 = *(u8 **)(param_4 + 4);
-        for (; local_0 < local_1; local_0 += 0x10) {
-            if (*(s16 *)param_1 == *(s16 *)(local_0 + 8) &&
-                *(s16 *)(param_1 + 2) == *(s16 *)(local_0 + 10) &&
-                *(s16 *)(param_1 + 4) == *(s16 *)(local_0 + 12)) {
+    for (; src < end; src += 0x10, dst += 0x10) {
+        point = *(u8 **) range;
+        points_end = *(u8 **) (range + 4);
+        for (; point < points_end; point += 0x10) {
+            if (*(s16 *) src == *(s16 *) (point + 8) &&
+                *(s16 *) (src + 2) == *(s16 *) (point + 10) &&
+                *(s16 *) (src + 4) == *(s16 *) (point + 12)) {
                 break;
             }
         }
-        local_3 = local_0 == local_1 ? 0.0f : 1.0f;
-        if (local_3 > 1.0f) local_3 = 1.0f;
-        param_2[15] = (u32)(local_3 * 255.0f);
+        alpha = point == points_end ? 0.0f : 1.0f;
+        if (alpha > 1.0f)
+            alpha = 1.0f;
+        dst[15] = (u32) (alpha * 255.0f);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/twinklea.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: this overlay's .data is defined here in C; values are taken from the ROM.

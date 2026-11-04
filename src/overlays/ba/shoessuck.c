@@ -1,3 +1,5 @@
+// Claw clamber boots wall attach: probes for steep walls, finds the clamber marker spline,
+// snaps the player onto it and orients the player to the wall normal.
 #include "common.h"
 #include "playerstate.h"
 
@@ -24,196 +26,202 @@ extern void *_glsplinefind_entrypoint_3(f32 *);
 extern void func_800C7A68(void *, f32, f32 *);
 extern s32 func_800F1E6C(f32 *, f32 *, f32 *);
 
-s32 bashoessuck_entrypoint_0(void *param_0, void *param_1)
+// Probe 8 directions for a steep wall; returns 1 and its normal
+s32 bashoessuck_entrypoint_0(void *player, void *normal_out)
 {
-    s32 pad1; /* unused, but it carries the stack frame (without it the frame is wrong); original variable unknown */
-    f32 local_A[3];
-    f32 local_B[3];
-    f32 local_C[3];
-    f32 local_D[3];
+    s32 pad1; // Matching: unused, but it carries the stack frame
+    f32 pos[3];
+    f32 start[3];
+    f32 end[3];
+    f32 normal[3];
     s32 j;
     s32 i;
 
-    func_8009C128(param_0, local_A);
+    func_8009C128(player, pos);
     for (j = 0; j < 8; j++) {
         for (i = 0; i < 3; i++) {
-            local_B[i] = local_A[i] + D_80800740_bashoessuck[j * 6 + i];
+            start[i] = pos[i] + D_80800740_bashoessuck[j * 6 + i];
         }
         for (i = 0; i < 3; i++) {
-            local_C[i] = local_A[i] + D_80800740_bashoessuck[j * 6 + i + 3];
+            end[i] = pos[i] + D_80800740_bashoessuck[j * 6 + i + 3];
         }
-        if (func_800C6A7C(local_B, local_C, local_D, 0x20020) != 0) {
-            if (local_D[1] < 0.8f) {
-                func_800EE7F8(param_1, local_D);
+        if (func_800C6A7C(start, end, normal, 0x20020) != 0) {
+            if (normal[1] < 0.8f) {
+                func_800EE7F8(normal_out, normal);
                 return 1;
             }
         }
     }
-    func_800EFA4C(param_1, 0.0f, 1.0f, 0.0f);
+    func_800EFA4C(normal_out, 0.0f, 1.0f, 0.0f);
     return 0;
 }
 
-s32 bashoessuck_entrypoint_1(s32 param_0, s32 param_1){
-    s32 out;
-    func_8009C128(param_0);
-    out = _gccubesearch_entrypoint_1(0x16D, param_1);
-    if(out){
-        _gspropctrl_entrypoint_11(out, param_1);
-    }
-}
-
-void bashoessuck_entrypoint_2(s32 param_0) {
-    func_800932CC(param_0, 0);
-    func_8009BF5C(param_0, 0);
-    baroll_setIdeal(param_0, 0);
-    func_800961AC(param_0, 1);
-}
-
-void bashoessuck_entrypoint_3(s32 arg0)
+s32 bashoessuck_entrypoint_1(s32 player, s32 pos)
 {
-    func_800961AC(arg0,0xA);
+    s32 prop;
+    func_8009C128(player);
+    prop = _gccubesearch_entrypoint_1(0x16D, pos);
+    if (prop) {
+        _gspropctrl_entrypoint_11(prop, pos);
+    }
 }
 
-void bashoessuck_entrypoint_4(s32 param_0)
+void bashoessuck_entrypoint_2(s32 player)
 {
-  extern f32 func_8009BB18(s32);
-  extern f32 func_800EEAA4(f32 *, f32 *);
-  extern f32 func_800F1C98(f32 *, f32 *);
-  extern f32 func_80013AAC(f32);
-  extern void func_800EFA20(f32 *, f32 *, f32);
-  extern void func_800EFA4C(f32 *, f32, f32, f32);
-  extern void func_800EF934(f32 *, f32 *, f32);
-  extern void _bashoes_entrypoint_10(s32, f32);
-  extern void func_800932BC(s32, f32);
-  extern void func_8009BF5C(s32, f32);
-  extern void yaw_setIdeal(s32, f32);
-  extern void baroll_setIdeal(s32, f32);
-  f32 local_0;
-  f32 *new_var2;
-  f32 local_1;
-  f32 *new_var;
-  f32 local_2;
-  f32 local_3[3];
-  f32 local_4[3];
-  f32 local_5[3];
-  f32 local_6[3];
-  f32 local_7[3];
-  f32 local_8[3];
-  f32 local_9[3];
-  f32 local_10[3];
-  s32 local_11;
-  f32 local_12[3];
-  local_11 = func_80092BC4();
-  func_800932CC(param_0, 0);
-  if (!_bamovespline_entrypoint_4(param_0))
-  {
-    func_800EFA4C(local_12, 0.0f, func_8009BB18(param_0), 0.0f);
-    yaw_setIdeal(param_0, local_12[1]);
-    return;
-  }
-  _bamovespline_entrypoint_0(param_0, local_5);
-  if (bashoessuck_entrypoint_0(param_0, local_9))
-  {
-    func_800932CC(param_0, 1);
- dummy_label_104098: ;
-    _bashoes_entrypoint_10(param_0, 1.0f);
-    new_var2 = local_3;
-    func_800EFA20(local_6, local_9, func_800EEAA4(local_5, local_9));
-    func_800EFB24(local_7, local_5, local_6);
-    func_800EFA4C(local_8, 0.0f, 1.0f, 0.0f);
-    new_var = &local_2;
-    if (local_9[1] > 0.99f)
-    {
-      local_2 = 0.0f;
-      local_1 = 0.0f;
-      local_0 = 0.0f;
-    }
-    else
-    {
-      func_800EFA4C(local_10, local_9[0], 0.0f, local_9[2]);
-      func_800F1EA4(local_10, new_var);
-      local_1 = func_80013AAC(func_800F1C98(local_8, local_9));
-      func_800EE97C(local_3, local_8, local_10);
-      local_0 = (func_80013AAC(func_800F1C98(local_7, new_var2)) - 90.0f) + 180.0f;
-      if (local_7[1] < 0.0f)
-      {
-        local_0 = 180.0f - local_0;
-      }
-      func_800EF934(local_4, local_7, -local_2);
-      if (local_4[0] < 0.0f)
-      {
-        local_0 = 360.0f - local_0;
-      }
-    }
-    if (local_11 && (func_8009BB18(param_0) > 180.0f))
-    {
-      local_0 += 180.0f;
-    }
-    func_800932BC(param_0, local_2);
-    func_8009BF5C(param_0, local_1);
-    yaw_setIdeal(param_0, local_0);
-    baroll_setIdeal(param_0, 0.0f);
-    if (!local_11)
-    {
-      yaw_applyIdeal(param_0);
-    }
-  }
+    func_800932CC(player, 0);
+    func_8009BF5C(player, 0);
+    baroll_setIdeal(player, 0);
+    func_800961AC(player, 1);
 }
 
-s32 bashoessuck_entrypoint_5(PlayerState *param_0, f32 *param_1)
+void bashoessuck_entrypoint_3(s32 player)
 {
-    f32 local_2c;
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
-    f32 local_4[3];
-    f32 local_5[3];
-    f32 local_6[3];
-    f32 local_7[3];
-    void *local_8;
-    f32 local_2b;
-    u8 *local_10;
-    void *local_9;
+    func_800961AC(player, 0xA);
+}
 
-    if (_bashoes_entrypoint_9()) return 0;
-    func_8009BB24(param_0, local_4);
-    local_4[1] = 0.0f;
-    if (func_800EEFD4(local_4) < 1.0f) return 0;
-    local_2 = yaw_get(param_0);
-    local_10 = _gccubesearch_entrypoint_5(((void * *) D_80800800_bashoessuck), param_1);
-    if (!local_10) return 0;
-    _gspropctrl_entrypoint_11(local_10, local_7);
-    local_9 = _glsplinefind_entrypoint_3(local_7);
-    func_800C7A68(func_800D7520(local_9), 1.0f, param_1);
-    local_10 = _gccubesearch_entrypoint_5(((void * *) D_80800800_bashoessuck), param_1);
-    if (!local_10) return 0;
-    switch (*(u16 *)(local_10 + 8)) {
-    case 0x16B: _bashoes_entrypoint_11(param_0, 1); break;
-    case 0x16C: _bashoes_entrypoint_11(param_0, 2); break;
+void bashoessuck_entrypoint_4(s32 player)
+{
+    extern f32 func_8009BB18(s32);
+    extern f32 func_800EEAA4(f32 *, f32 *);
+    extern f32 func_800F1C98(f32 *, f32 *);
+    extern f32 func_80013AAC(f32);
+    extern void func_800EFA20(f32 *, f32 *, f32);
+    extern void func_800EF934(f32 *, f32 *, f32);
+    extern void _bashoes_entrypoint_10(s32, f32);
+    extern void func_800932BC(s32, f32);
+    extern void yaw_setIdeal(s32, f32);
+    f32 yaw;
+    // Matching: the two pointer temporaries are needed for the match.
+    f32 *axis_ptr;
+    f32 pitch;
+    f32 *unk_0_ptr;
+    f32 unk_0;
+    f32 axis[3];
+    f32 rotated[3];
+    f32 pos[3];
+    f32 along_normal[3];
+    f32 offset[3];
+    f32 up[3];
+    f32 normal[3];
+    f32 flat_normal[3];
+    s32 unk_1;
+    f32 yaw_vec[3];
+    unk_1 = func_80092BC4();
+    func_800932CC(player, 0);
+    if (!_bamovespline_entrypoint_4(player)) {
+        func_800EFA4C(yaw_vec, 0.0f, func_8009BB18(player), 0.0f);
+        yaw_setIdeal(player, yaw_vec[1]);
+        return;
     }
-    func_8009C128(param_0, local_5);
-    local_8 = func_800D7520(local_9);
-    local_1 = func_800C82CC(local_8, local_5);
-    func_800C7A68(local_8, local_1, local_6);
-    if (func_800EEB40(local_5, local_6) < 1764.0f) {
-        baphysics_set_type(param_0, 0x12);
-        _bamovespline_entrypoint_7(param_0, local_9);
-        _bamovespline_entrypoint_9(param_0, local_1);
+    _bamovespline_entrypoint_0(player, pos);
+    if (bashoessuck_entrypoint_0(player, normal)) {
+        func_800932CC(player, 1);
+        _bashoes_entrypoint_10(player, 1.0f);
+        axis_ptr = axis;
+        func_800EFA20(along_normal, normal, func_800EEAA4(pos, normal));
+        func_800EFB24(offset, pos, along_normal);
+        func_800EFA4C(up, 0.0f, 1.0f, 0.0f);
+        unk_0_ptr = &unk_0;
+        if (normal[1] > 0.99f) {
+            unk_0 = 0.0f;
+            pitch = 0.0f;
+            yaw = 0.0f;
+        } else {
+            func_800EFA4C(flat_normal, normal[0], 0.0f, normal[2]);
+            func_800F1EA4(flat_normal, unk_0_ptr);
+            pitch = func_80013AAC(func_800F1C98(up, normal));
+            func_800EE97C(axis, up, flat_normal);
+            yaw = (func_80013AAC(func_800F1C98(offset, axis_ptr)) - 90.0f) + 180.0f;
+            if (offset[1] < 0.0f) {
+                yaw = 180.0f - yaw;
+            }
+            func_800EF934(rotated, offset, -unk_0);
+            if (rotated[0] < 0.0f) {
+                yaw = 360.0f - yaw;
+            }
+        }
+        if (unk_1 && (func_8009BB18(player) > 180.0f)) {
+            yaw += 180.0f;
+        }
+        func_800932BC(player, unk_0);
+        func_8009BF5C(player, pitch);
+        yaw_setIdeal(player, yaw);
+        baroll_setIdeal(player, 0.0f);
+        if (!unk_1) {
+            yaw_applyIdeal(player);
+        }
+    }
+}
+
+// Try to attach to a claw clamber marker and its spline
+s32 bashoessuck_entrypoint_5(PlayerState *player, f32 *pos)
+{
+    f32 unk_0;
+    f32 height_diff;
+    f32 spline_t;
+    f32 yaw;
+    f32 marker_yaw;
+    f32 velocity[3];
+    f32 player_pos[3];
+    f32 spline_pos[3];
+    f32 marker_pos[3];
+    void *spline_data;
+    f32 unk_1;
+    u8 *marker;
+    void *spline;
+
+    if (_bashoes_entrypoint_9())
+        return 0;
+    func_8009BB24(player, velocity);
+    velocity[1] = 0.0f;
+    if (func_800EEFD4(velocity) < 1.0f)
+        return 0;
+    yaw = yaw_get(player);
+    marker = _gccubesearch_entrypoint_5((void **) D_80800800_bashoessuck, pos);
+    if (!marker)
+        return 0;
+    _gspropctrl_entrypoint_11(marker, marker_pos);
+    spline = _glsplinefind_entrypoint_3(marker_pos);
+    func_800C7A68(func_800D7520(spline), 1.0f, pos);
+    marker = _gccubesearch_entrypoint_5((void **) D_80800800_bashoessuck, pos);
+    if (!marker)
+        return 0;
+    switch (*(u16 *) (marker + 8)) {
+        case 0x16B:
+            _bashoes_entrypoint_11(player, 1);
+            break;
+        case 0x16C:
+            _bashoes_entrypoint_11(player, 2);
+            break;
+    }
+    func_8009C128(player, player_pos);
+    spline_data = func_800D7520(spline);
+    spline_t = func_800C82CC(spline_data, player_pos);
+    func_800C7A68(spline_data, spline_t, spline_pos);
+    if (func_800EEB40(player_pos, spline_pos) < 1764.0f) {
+        baphysics_set_type(player, 0x12);
+        _bamovespline_entrypoint_7(player, spline);
+        _bamovespline_entrypoint_9(player, spline_t);
         return 1;
     }
-    func_800F1E6C(local_5, local_7, &local_3);
-    if (mlAbsF(func_800F1DCC(local_3, local_2)) > 45.0f) return 0;
-    local_0 = local_5[1] - local_7[1];
-    if (mlAbsF(local_0) > 20.0f) return 0;
-    if (func_800EFB8C(local_5, local_7) < local_0) return 0;
-    baphysics_set_type(param_0, 0x12);
-    _bamovespline_entrypoint_7(param_0, local_9);
-    _bamovespline_entrypoint_8(param_0);
+    func_800F1E6C(player_pos, marker_pos, &marker_yaw);
+    if (mlAbsF(func_800F1DCC(marker_yaw, yaw)) > 45.0f)
+        return 0;
+    height_diff = player_pos[1] - marker_pos[1];
+    if (mlAbsF(height_diff) > 20.0f)
+        return 0;
+    if (func_800EFB8C(player_pos, marker_pos) < height_diff)
+        return 0;
+    baphysics_set_type(player, 0x12);
+    _bamovespline_entrypoint_7(player, spline);
+    _bamovespline_entrypoint_8(player);
     return 1;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/shoessuck.data.s) is defined here in C.
- * Values are taken from the ROM. */
-f32 D_80800740_bashoessuck[48] = { -24.0f, 8.0f, 0.0f, 24.0f, 8.0f, 0.0f, 24.0f, 8.0f, 0.0f, -24.0f, 8.0f, 0.0f, 0.0f, 8.0f, -24.0f, 0.0f, 8.0f, 24.0f, 0.0f, 8.0f, 24.0f, 0.0f, 8.0f, -24.0f, -24.0f, -8.0f, 0.0f, 24.0f, -8.0f, 0.0f, 24.0f, -8.0f, 0.0f, -24.0f, -8.0f, 0.0f, 0.0f, -8.0f, -24.0f, 0.0f, -8.0f, 24.0f, 0.0f, -8.0f, 24.0f, 0.0f, -8.0f, -24.0f };
-u32 D_80800800_bashoessuck[4] = { 0x16B, 0x16C, 0xFFFFFFFF, 0x0 };
+// TU-NOTE: the .data of this overlay is defined here in C, values taken from the ROM.
+f32 D_80800740_bashoessuck[48] = {
+    -24.0f, 8.0f,  0.0f,   24.0f, 8.0f,  0.0f,  24.0f, 8.0f,  0.0f,  -24.0f, 8.0f,  0.0f,
+    0.0f,   8.0f,  -24.0f, 0.0f,  8.0f,  24.0f, 0.0f,  8.0f,  24.0f, 0.0f,   8.0f,  -24.0f,
+    -24.0f, -8.0f, 0.0f,   24.0f, -8.0f, 0.0f,  24.0f, -8.0f, 0.0f,  -24.0f, -8.0f, 0.0f,
+    0.0f,   -8.0f, -24.0f, 0.0f,  -8.0f, 24.0f, 0.0f,  -8.0f, 24.0f, 0.0f,   -8.0f, -24.0f};
+u32 D_80800800_bashoessuck[4] = {0x16B, 0x16C, 0xFFFFFFFF, 0x0};

@@ -1,8 +1,13 @@
+// Most likely the Grunty Industries dumbwaiter lift between five floors, usable only by the
+// washing machine, with a floor menu; it warps to the chosen floor's map and entrance.
 #include "common.h"
 #include "gc/newoption.h"
 
 extern int D_80800BE8_chdumbwaiterlift[];
-typedef struct { s16 first; s16 second; } DumbwaiterEvent;
+typedef struct {
+    s16 first;
+    s16 second;
+} DumbwaiterEvent;
 extern Unk80132ED0 *func_80101080(void);
 extern s16 D_80800BC2_chdumbwaiterlift[][4];
 extern u8 D_80800BC6_chdumbwaiterlift[][8];
@@ -17,11 +22,18 @@ extern void _capod_entrypoint_21(Unk80132ED0 *, s32, s32, s32);
 extern void *func_80100094(Actor *, s32);
 extern void _gcnewoption_entrypoint_16(void);
 extern void _gcnewoption_entrypoint_35(void);
-typedef struct { s16 local_0; u8 pad_0[6]; } LiftMapRecord;
+typedef struct {
+    s16 map;
+    u8 pad_2[6];
+} LiftMapRecord;
 extern void func_800EFA4C(f32 *, f32, f32, f32);
-typedef struct { s16 local_0; s16 local_1; s16 local_2; s16 local_3; } DumbwaiterDestination48;
+typedef struct {
+    s16 map;
+    s16 entrance;
+    s16 flag;
+    s16 unk_6;
+} DumbwaiterDestination48;
 extern DumbwaiterDestination48 D_80800BC0_chdumbwaiterlift[];
-extern s16 D_80800BC4_chdumbwaiterlift[];
 extern u8 D_80800C30_chdumbwaiterlift[];
 extern u8 D_80800C40_chdumbwaiterlift[];
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
@@ -31,331 +43,353 @@ void func_80800608_chdumbwaiterlift();
 s32 func_808009B8_chdumbwaiterlift();
 int func_80800A8C_chdumbwaiterlift();
 void func_80800B40_chdumbwaiterlift();
-void func_808004E8_chdumbwaiterlift();
 extern void func_80105834(), func_80107C2C();
 
-int chdumbwaiterlift_entrypoint_0();
-void func_80800044_chdumbwaiterlift(Actor *param_0);
-s32 func_808002C0_chdumbwaiterlift(Actor *param_0, s32 param_1, DumbwaiterEvent param_2);
-void func_80800560_chdumbwaiterlift(s32 param_0);
 void func_80800770_chdumbwaiterlift(Actor *param_0);
 void func_80800804_chdumbwaiterlift(Actor *param_0);
 s32 func_808008B4_chdumbwaiterlift(void);
 s32 func_8080094C_chdumbwaiterlift(void);
+
 int chdumbwaiterlift_entrypoint_0()
 {
-  return &D_80800BE8_chdumbwaiterlift;
+    return &D_80800BE8_chdumbwaiterlift;
 }
 
-int func_8080000C_chdumbwaiterlift(param_0) s32 param_0;
+int func_8080000C_chdumbwaiterlift(actor_addr)
+s32 actor_addr;
 {
-  s32 local_0;
-  local_0 = param_0 | 0;
-  func_800EE7F8(local_0 + 0x28, local_0 + 4);
-  func_8010A828(local_0, 2);
+    s32 actor;
+    actor = actor_addr | 0; // Matching: `| 0` is needed for the match.
+    func_800EE7F8(actor + 0x28, actor + 4);
+    func_8010A828(actor, 2);
 }
 
-void func_80800044_chdumbwaiterlift(Actor *param_0)
+void func_80800044_chdumbwaiterlift(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
-    DumbwaiterDestination48 *local_2;
-    s32 local_3;
-    local_0 = param_0->unk70_10 == 2 || param_0->unk70_10 == 6;
-    if (local_0 || (!local_0 && param_0->unk5F)) {
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_0, D_80800C30_chdumbwaiterlift);
+    s32 is_moving;
+    s32 arrive_done;
+    DumbwaiterDestination48 *dest;
+    s32 depart_done;
+    is_moving = actor->unk70_10 == 2 || actor->unk70_10 == 6;
+    if (is_moving || (!is_moving && actor->unk5F)) {
+        _subaddieaudioloop_entrypoint_4(actor, actor->position, is_moving,
+                                        D_80800C30_chdumbwaiterlift);
     }
-    switch (param_0->unk70_10) {
-    case 1:
-        func_80800770_chdumbwaiterlift(param_0);
-        return;
-    case 2:
-        local_1 = func_800D9078(&param_0->unk58);
-        func_800EFE50(param_0->position, (f32 *)&param_0->actorData[4], (f32 *)&param_0->actorData[0],
-                     func_800F10B4(param_0->unk58, 0.0f, 3.0f, 1.0f, 0.0f));
-        if (local_1) {
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800C40_chdumbwaiterlift);
-            func_80101FDC(param_0, 1);
-            _subaddieDll_entrypoint_4(param_0, 0);
-            _capod_entrypoint_22();
+    switch (actor->unk70_10) {
+        case 1:
+            func_80800770_chdumbwaiterlift(actor);
             return;
-        }
-        break;
-    case 3:
-        func_80800804_chdumbwaiterlift(param_0);
-        return;
-    case 4:
-        _gcnewoption_entrypoint_0(func_80100094(param_0, 0));
-        return;
-    case 5:
-        _gcnewoption_entrypoint_6(param_0, 0);
-        func_80101FDC(param_0, 1);
-        func_8010A828(param_0, 2);
-        return;
-    case 6:
-        local_3 = func_800D9078(&param_0->unk58);
-        func_800EFE50(param_0->position, (f32 *)&param_0->actorData[4], (f32 *)&param_0->actorData[0],
-                     func_800F10B4(param_0->unk58, 0.0f, 3.0f, 1.0f, 0.0f));
-        if (local_3) {
-            func_800DA544(D_80800BC0_chdumbwaiterlift[func_808008B4_chdumbwaiterlift()].local_2);
-            _subaddieDll_entrypoint_4(param_0, 0);
-            if (1) {} /* PROBE (agV11): empty if(1) block, load-bearing for t-register numbering */
-            local_2 = &D_80800BC0_chdumbwaiterlift[param_0->unk6C_0];
-            _gcgoto_entrypoint_1(local_2->local_0, local_2->local_1);
-        }
-        break;
+        case 2:
+            arrive_done = func_800D9078(&actor->unk58);
+            func_800EFE50(actor->position, (f32 *) &actor->actorData[4],
+                          (f32 *) &actor->actorData[0],
+                          func_800F10B4(actor->unk58, 0.0f, 3.0f, 1.0f, 0.0f));
+            if (arrive_done) {
+                _subaddieaudioquick_entrypoint_2(actor, actor->position,
+                                                 D_80800C40_chdumbwaiterlift);
+                func_80101FDC(actor, 1);
+                _subaddieDll_entrypoint_4(actor, 0);
+                _capod_entrypoint_22();
+            }
+            break;
+        case 3:
+            func_80800804_chdumbwaiterlift(actor);
+            return;
+        case 4:
+            _gcnewoption_entrypoint_0(func_80100094(actor, 0));
+            return;
+        case 5:
+            _gcnewoption_entrypoint_6(actor, 0);
+            func_80101FDC(actor, 1);
+            func_8010A828(actor, 2);
+            return;
+        case 6:
+            depart_done = func_800D9078(&actor->unk58);
+            func_800EFE50(actor->position, (f32 *) &actor->actorData[4],
+                          (f32 *) &actor->actorData[0],
+                          func_800F10B4(actor->unk58, 0.0f, 3.0f, 1.0f, 0.0f));
+            if (depart_done) {
+                func_800DA544(
+                    D_80800BC0_chdumbwaiterlift[func_808008B4_chdumbwaiterlift()].flag);
+                _subaddieDll_entrypoint_4(actor, 0);
+                dest = &D_80800BC0_chdumbwaiterlift[actor->unk6C_0];
+                _gcgoto_entrypoint_1(dest->map, dest->entrance);
+            }
     }
 }
 
-s32 func_80800268_chdumbwaiterlift(param_0) s32 param_0;
+s32 func_80800268_chdumbwaiterlift(actor)
+s32 actor;
 {
-    if (((u32) *(u16 *)(param_0 + 0x72) >> 0xA) == 6)
-    {
+    if (((u32) *(u16 *) (actor + 0x72) >> 0xA) == 6) {
         func_800C53EC(0, 0);
     }
-    if (func_80100094(param_0, 0) != 0)
-    {
-        _gcnewoption_entrypoint_6(param_0, 0);
+    if (func_80100094(actor, 0) != 0) {
+        _gcnewoption_entrypoint_6(actor, 0);
     }
 }
 
-s32 func_808002C0_chdumbwaiterlift(Actor *param_0, s32 param_1, DumbwaiterEvent param_2)
+s32 func_808002C0_chdumbwaiterlift(Actor *actor, s32 msg, DumbwaiterEvent args)
 {
-    switch (param_1) {
-    case 0x2E:
-        func_80800B40_chdumbwaiterlift(param_0);
-        func_80101FDC(param_0, 1);
-        break;
-    case 0x95:
-        func_808003C4_chdumbwaiterlift(param_0);
-        break;
-    case 0x20:
-        func_80800608_chdumbwaiterlift(param_0, func_80101080(), param_2.first, param_2.second);
-        break;
-    default: return 0;
+    switch (msg) {
+        case 0x2E:
+            func_80800B40_chdumbwaiterlift(actor);
+            func_80101FDC(actor, 1);
+            break;
+        case 0x95:
+            func_808003C4_chdumbwaiterlift(actor);
+            break;
+        case 0x20:
+            func_80800608_chdumbwaiterlift(actor, func_80101080(), args.first, args.second);
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
 
-void func_8080035C_chdumbwaiterlift(param_0, param_1) u8 *param_0; s32 param_1;
+void func_8080035C_chdumbwaiterlift(actor, arg) u8 *actor;
+s32 arg;
 {
-  if (func_800EB854() == 3)
-  {
-    if ((((unsigned int) ((u16) (*((u16 *) (((s8 *) param_0) + 0x72))))) >> 0xA) == 4)
-    {
-      _gcnewoption_entrypoint_1(func_80100094(param_0, 0), param_1);
-    }
-  }
-  else
-  {
-    func_80101870(param_0, param_1);
-  }
-}
-
-void func_808003C4_chdumbwaiterlift(param_0) Actor *param_0;
-{
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    f32 local_4;
-
-    local_0 = func_800F54E4();
-    local_1 = func_800EA090();
-    local_2 = func_808008B4_chdumbwaiterlift();
-    if (local_1 == D_80800BC2_chdumbwaiterlift[local_2][0]) {
-        local_3 = func_8080094C_chdumbwaiterlift();
-        func_800EE7F8((f32 *)param_0->actorData, param_0->position);
-        if (local_3 < local_2) local_4 = -150.0f;
-        else local_4 = 150.0f;
-        param_0->position[1] += local_4;
-        func_800EE7F8((f32 *)((u8 *)param_0 + 0x28), param_0->position);
-        param_0->unk58 = 3.0f;
-        func_80101FDC(param_0, 2);
-        _subaddieDll_entrypoint_4(param_0, 1);
-        func_800F608C(local_0, 1);
-        func_800F8294(local_0, param_0->position);
-        func_800F832C(local_0, param_0->rotation);
-        _capod_entrypoint_21(param_0->unk0, 0, D_80800BC6_chdumbwaiterlift[local_2][0], 0x2010);
+    if (func_800EB854() == 3) {
+        if (((unsigned int) (u16) *(u16 *) ((s8 *) actor + 0x72) >> 0xA) == 4) {
+            _gcnewoption_entrypoint_1(func_80100094(actor, 0), arg);
+        }
+    } else {
+        func_80101870(actor, arg);
     }
 }
 
-void func_808004E8_chdumbwaiterlift(param_0, param_1) Actor *param_0; OptionState *param_1;
+void func_808003C4_chdumbwaiterlift(actor) Actor *actor;
 {
-    _gcnewoption_entrypoint_14(param_1, 0, 1, 4, 4.0f);
-    _gcnewoption_entrypoint_40(param_1, 0x41, 0x22, 0x20, 0.8f, 1.0f);
-    _gcnewoption_entrypoint_32(param_1, 0xA3);
-}
+    s32 player;
+    s32 entrance;
+    s32 cur_floor;
+    s32 dest_floor;
+    f32 offset_y;
 
-void func_80800560_chdumbwaiterlift(s32 param_0)
-{
-  s32 new_var;
-  s32 local_0 = 0;
-  u8 *local_3 = ((u8 *) D_80800BC0_chdumbwaiterlift);
-  s32 local_1 = 0;
-  s32 local_2;
-  do
-  {
-    if (func_800EA05C() != (*((s16 *) (local_3 + 0))))
-    {
-      new_var = local_0;
-      _gcnewoption_entrypoint_12(param_0, new_var, (s16) (local_1 + 0xA));
-      _gcnewoption_entrypoint_21(param_0, local_0);
-      _gcnewoption_entrypoint_31(param_0, (long) local_0, *((u8 *) (local_3 + 7)));
-      local_0 += 1;
-    }
-    local_1 += 1;
-    local_3 += 8;
-  }
-  while (local_1 != 5);
-  if (local_1)
-  {
-  }
-}
-
-void func_80800608_chdumbwaiterlift(param_0, param_1, param_2, param_3) Actor *param_0; s32 param_1; s32 param_2; s32 param_3;
-{
-    s32 local_0;
-    s32 local_1;
-    f32 local_2;
-
-    switch (param_3) {
-    case 0:
-        func_80800560_chdumbwaiterlift(param_1);
-        break;
-    case 2:
-        func_80800B40_chdumbwaiterlift(param_0);
-        func_80101FDC(param_0, 5);
-        break;
-    case 3:
-        local_0 = func_808009B8_chdumbwaiterlift(param_2);
-        local_1 = func_808008B4_chdumbwaiterlift();
-        param_0->unk6C_0 = local_0;
-        func_800EE7F8((u8 *)param_0 + 0x28, param_0->position);
-        func_800EE7F8(param_0->actorData, param_0->position);
-        local_2 = local_0 < local_1 ? -150.0f : 150.0f;
-        *(f32 *)&param_0->actorData[1] += local_2;
-        param_0->unk58 = 3.0f;
-        func_80101FDC(param_0, 6);
-        func_800F8418(func_800F54E4(), param_0->position);
-        func_800F8444(func_800F54E4(), (u8 *)param_0 + 0x44);
-        func_80800B40_chdumbwaiterlift(param_0);
-        _capod_entrypoint_21(param_0->unk0, 0, ((u8 *) D_80800BC6_chdumbwaiterlift)[local_1 * 8], 0x2010);
-        _subaddieDll_entrypoint_4(param_0, 1);
-        break;
+    player = func_800F54E4();
+    entrance = func_800EA090();
+    cur_floor = func_808008B4_chdumbwaiterlift();
+    if (entrance == D_80800BC2_chdumbwaiterlift[cur_floor][0]) {
+        dest_floor = func_8080094C_chdumbwaiterlift();
+        func_800EE7F8((f32 *) actor->actorData, actor->position);
+        if (dest_floor < cur_floor)
+            offset_y = -150.0f;
+        else
+            offset_y = 150.0f;
+        actor->position[1] += offset_y;
+        func_800EE7F8((f32 *) ((u8 *) actor + 0x28), actor->position);
+        actor->unk58 = 3.0f;
+        func_80101FDC(actor, 2);
+        _subaddieDll_entrypoint_4(actor, 1);
+        func_800F608C(player, 1);
+        func_800F8294(player, actor->position);
+        func_800F832C(player, actor->rotation);
+        _capod_entrypoint_21(actor->unk0, 0, D_80800BC6_chdumbwaiterlift[cur_floor][0], 0x2010);
     }
 }
 
-void func_80800770_chdumbwaiterlift(Actor *param_0)
+void func_808004E8_chdumbwaiterlift(actor, options) Actor *actor;
+OptionState *options;
 {
-    if (_subaddiedialog_entrypoint_4(param_0->position, 0x50, 0)) {
+    _gcnewoption_entrypoint_14(options, 0, 1, 4, 4.0f);
+    _gcnewoption_entrypoint_40(options, 0x41, 0x22, 0x20, 0.8f, 1.0f);
+    _gcnewoption_entrypoint_32(options, 0xA3);
+}
+
+void func_80800560_chdumbwaiterlift(s32 menu)
+{
+    s32 slot;
+    s32 item = 0;
+    u8 *row = (u8 *) D_80800BC0_chdumbwaiterlift;
+    s32 floor = 0;
+    do {
+        if (func_800EA05C() != *(s16 *) (row + 0)) {
+            slot = item;
+            _gcnewoption_entrypoint_12(menu, slot, (s16) (floor + 0xA));
+            _gcnewoption_entrypoint_21(menu, item);
+            _gcnewoption_entrypoint_31(menu, (long) item, *(u8 *) (row + 7));
+            item += 1;
+        }
+        floor += 1;
+        row += 8;
+    } while (floor != 5);
+    // Matching: empty block steers IDO's register allocation.
+    if (floor) {
+    }
+}
+
+void func_80800608_chdumbwaiterlift(actor, menu, selection, event) Actor *actor;
+s32 menu;
+s32 selection;
+s32 event;
+{
+    s32 dest_floor;
+    s32 cur_floor;
+    f32 offset_y;
+
+    switch (event) {
+        case 0:
+            func_80800560_chdumbwaiterlift(menu);
+            break;
+        case 2:
+            func_80800B40_chdumbwaiterlift(actor);
+            func_80101FDC(actor, 5);
+            break;
+        case 3:
+            dest_floor = func_808009B8_chdumbwaiterlift(selection);
+            cur_floor = func_808008B4_chdumbwaiterlift();
+            actor->unk6C_0 = dest_floor;
+            func_800EE7F8((u8 *) actor + 0x28, actor->position);
+            func_800EE7F8(actor->actorData, actor->position);
+            offset_y = dest_floor < cur_floor ? -150.0f : 150.0f;
+            *(f32 *) &actor->actorData[1] += offset_y;
+            actor->unk58 = 3.0f;
+            func_80101FDC(actor, 6);
+            func_800F8418(func_800F54E4(), actor->position);
+            func_800F8444(func_800F54E4(), (u8 *) actor + 0x44);
+            func_80800B40_chdumbwaiterlift(actor);
+            _capod_entrypoint_21(actor->unk0, 0,
+                                 ((u8 *) D_80800BC6_chdumbwaiterlift)[cur_floor * 8], 0x2010);
+            _subaddieDll_entrypoint_4(actor, 1);
+    }
+}
+
+// Only the washing machine may use the lift; otherwise Mr. Tannoy refuses.
+void func_80800770_chdumbwaiterlift(Actor *actor)
+{
+    if (_subaddiedialog_entrypoint_4(actor->position, 0x50, 0)) {
         if (!func_80090178(0x40)) {
             _chmrtannoy_entrypoint_0();
-            func_80800A8C_chdumbwaiterlift(param_0);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x133F, 0xF, NULL, 0xA3);
-            func_80101FDC(param_0, 7);
-        } else func_80101FDC(param_0, 3);
+            func_80800A8C_chdumbwaiterlift(actor);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0x133F, 0xF, NULL, 0xA3);
+            func_80101FDC(actor, 7);
+        } else
+            func_80101FDC(actor, 3);
     }
 }
 
-void func_80800804_chdumbwaiterlift(Actor *param_0)
+void func_80800804_chdumbwaiterlift(Actor *actor)
 {
-    void *local_0;
+    void *menu;
 
-    _gcnewoption_entrypoint_4(param_0, 0, _gcnewoption_entrypoint_16, _gcnewoption_entrypoint_35, 0x184E);
-    local_0 = func_80100094(param_0, 0);
-    _gcnewoption_entrypoint_8(local_0, 4);
-    _gcnewoption_entrypoint_9(local_0, 4);
-    _gcnewoption_entrypoint_10(local_0, 0);
-    func_808004E8_chdumbwaiterlift(param_0, local_0);
-    _gcnewoption_entrypoint_11(local_0);
-    func_80101FDC(param_0, 4);
-    func_80800A8C_chdumbwaiterlift(param_0);
-    func_8010A828(param_0, 0xA);
+    _gcnewoption_entrypoint_4(actor, 0, _gcnewoption_entrypoint_16, _gcnewoption_entrypoint_35,
+                              0x184E);
+    menu = func_80100094(actor, 0);
+    _gcnewoption_entrypoint_8(menu, 4);
+    _gcnewoption_entrypoint_9(menu, 4);
+    _gcnewoption_entrypoint_10(menu, 0);
+    func_808004E8_chdumbwaiterlift(actor, menu);
+    _gcnewoption_entrypoint_11(menu);
+    func_80101FDC(actor, 4);
+    func_80800A8C_chdumbwaiterlift(actor);
+    func_8010A828(actor, 0xA);
 }
 
+// Index of the floor matching the current map, or -1.
 s32 func_808008B4_chdumbwaiterlift(void)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = func_800EA05C();
-    for (local_1 = 0; local_1 < 5; local_1++) {
-        if (local_0 == ((LiftMapRecord *) D_80800BC0_chdumbwaiterlift)[local_1].local_0) return local_1;
+    s32 map;
+    s32 i;
+    map = func_800EA05C();
+    for (i = 0; i < 5; i++) {
+        if (map == ((LiftMapRecord *) D_80800BC0_chdumbwaiterlift)[i].map)
+            return i;
     }
     return -1;
 }
 
+// Finds the floor whose flag is set (destination) and clears it; -1 if none.
 s32 func_8080094C_chdumbwaiterlift(void)
 {
-    s8 *var_s0;
-    s32 var_s1;
+    s8 *row;
+    s32 i;
 
-    var_s0 = ((s8 *) D_80800BC0_chdumbwaiterlift);
-    var_s1 = 0;
+    row = (s8 *) D_80800BC0_chdumbwaiterlift;
+    i = 0;
 loop_1:
-    if (func_800DA298((*(s16 *)((s8 *)(var_s0) + (4)))) != 0)
-    {
-        func_800DA524((*(s16 *)((s8 *)(var_s0) + (4))));
-        return var_s1;
+    if (func_800DA298(*(s16 *) ((s8 *) row + 4)) != 0) {
+        func_800DA524(*(s16 *) ((s8 *) row + 4));
+        return i;
     }
-    var_s1 += 1;
-    var_s0 += 8;
-    if (var_s1 == 5)
-    {
+    i += 1;
+    row += 8;
+    if (i == 5) {
         return -1;
     }
     goto loop_1;
 }
 
-s32 func_808009B8_chdumbwaiterlift(param_0) s32 param_0;
+s32 func_808009B8_chdumbwaiterlift(selection)
+s32 selection;
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
+    s32 map;
+    s32 i;
+    s32 count;
 
-    local_0 = func_800EA05C();
-    local_2 = 0;
-    for (local_1 = 0; local_1 < 5; local_1++) {
-        if (local_0 != D_80800BC0_chdumbwaiterlift[local_1].local_0) {
-            if (param_0 == local_2) return local_1;
-            local_2++;
+    map = func_800EA05C();
+    count = 0;
+    for (i = 0; i < 5; i++) {
+        if (map != D_80800BC0_chdumbwaiterlift[i].map) {
+            if (selection == count)
+                return i;
+            count++;
         }
     }
     return -1;
 }
 
-int func_80800A8C_chdumbwaiterlift(param_0) Actor *param_0;
+int func_80800A8C_chdumbwaiterlift(actor)
+Actor *actor;
 {
-    f32 local_0[3];
+    f32 rotation[3];
 
-    if (!param_0->unk64_20) {
-        func_800EFA4C(local_0, 0.0f, param_0->rotation[1], 0.0f);
-        func_800F8444(func_800F54E4(), local_0);
-        _capod_entrypoint_2(param_0->unk0, 0x1B, 0x10);
+    if (!actor->unk64_20) {
+        func_800EFA4C(rotation, 0.0f, actor->rotation[1], 0.0f);
+        func_800F8444(func_800F54E4(), rotation);
+        _capod_entrypoint_2(actor->unk0, 0x1B, 0x10);
         _capod_entrypoint_8(1);
         _gcdialogcamera_entrypoint_8();
-        _capod_entrypoint_11(1, local_0);
+        _capod_entrypoint_11(1, rotation);
         _capod_entrypoint_7(5, 0);
-        _subaddieDll_entrypoint_4(param_0, 1);
-        param_0->unk64_20 = 1;
+        _subaddieDll_entrypoint_4(actor, 1);
+        actor->unk64_20 = 1;
     }
 }
 
-void func_80800B40_chdumbwaiterlift(param_0) Actor *param_0;
+void func_80800B40_chdumbwaiterlift(actor) Actor *actor;
 {
-    if (param_0->unk64_20) {
+    if (actor->unk64_20) {
         _capod_entrypoint_3(0);
-        _subaddieDll_entrypoint_4(param_0, 0);
-        param_0->unk64_20 = 0;
+        _subaddieDll_entrypoint_4(actor, 0);
+        actor->unk64_20 = 0;
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/dumbwaiterlift.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800BC2_chdumbwaiterlift = D_80800BC0_chdumbwaiterlift + 0x2, D_80800BC6_chdumbwaiterlift = D_80800BC0_chdumbwaiterlift + 0x6, D_80800BC4_chdumbwaiterlift = D_80800BC0_chdumbwaiterlift + 0x4
- * extern declarations adjusted to the object (same addresses): D_80800BE8_chdumbwaiterlift -> int[] */
-DumbwaiterDestination48 D_80800BC0_chdumbwaiterlift[5] = { 0x101, 0xF, 0xA09, 0x1C8E, 0x106, 0xF, 0xA0A, 0x540, 0x108, 0x9, 0xA0B, 0x210, 0x10B, 0x9, 0xA0C, 0x304, 0x10E, 0x9, 0xA0D, 0x10C };
-int D_80800BE8_chdumbwaiterlift[18] = { 0xA603E0, 0x7AB0001, 0x0, (u32)func_80800044_chdumbwaiterlift, (u32)func_80105834, (u32)func_8080035C_chdumbwaiterlift, 0x1F40000, 0x0, 0x0, 0x20000804, (u32)func_80800268_chdumbwaiterlift, 0x0, 0x0, (u32)func_8080000C_chdumbwaiterlift, (u32)func_80107C2C, -0x7FF7FBEE, (u32)func_808002C0_chdumbwaiterlift, 0x0 };
-u8 D_80800C30_chdumbwaiterlift[16] = { 0x0, 0x13, 0x5, 0xB9, 0x0, 0x2, 0x0, 0xE, 0x0, 0xF3, 0x1, 0xC, 0x0, 0x19, 0x0, 0x0 };
-u8 D_80800C40_chdumbwaiterlift[16] = { 0x0, 0x13, 0x4, 0xC7, 0x0, 0x18, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+// Floor table rows: {map, entrance, flag, unk_6}.
+DumbwaiterDestination48 D_80800BC0_chdumbwaiterlift[5] = {
+    0x101, 0xF,   0xA09, 0x1C8E, 0x106, 0xF,   0xA0A, 0x540, 0x108, 0x9,
+    0xA0B, 0x210, 0x10B, 0x9,    0xA0C, 0x304, 0x10E, 0x9,   0xA0D, 0x10C};
+int D_80800BE8_chdumbwaiterlift[18] = {0xA603E0,
+                                       0x7AB0001,
+                                       0x0,
+                                       (u32) func_80800044_chdumbwaiterlift,
+                                       (u32) func_80105834,
+                                       (u32) func_8080035C_chdumbwaiterlift,
+                                       0x1F40000,
+                                       0x0,
+                                       0x0,
+                                       0x20000804,
+                                       (u32) func_80800268_chdumbwaiterlift,
+                                       0x0,
+                                       0x0,
+                                       (u32) func_8080000C_chdumbwaiterlift,
+                                       (u32) func_80107C2C,
+                                       -0x7FF7FBEE,
+                                       (u32) func_808002C0_chdumbwaiterlift,
+                                       0x0};
+u8 D_80800C30_chdumbwaiterlift[16] = {0x0, 0x13, 0x5, 0xB9, 0x0, 0x2,  0x0, 0xE,
+                                      0x0, 0xF3, 0x1, 0xC,  0x0, 0x19, 0x0, 0x0};
+u8 D_80800C40_chdumbwaiterlift[16] = {0x0, 0x13, 0x4, 0xC7, 0x0, 0x18, 0x0, 0x2,
+                                      0x0, 0x0,  0x0, 0x0,  0x0, 0x0,  0x0, 0x0};

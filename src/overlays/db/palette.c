@@ -1,22 +1,23 @@
+// Colour palette helpers: unpack a packed RGBA palette entry into four channels and pack back.
 #include "common.h"
 
-void dbpalette_entrypoint_0(s32 param_0, s32 param_1, u8 *param_2)
+// Unpacks palette entry idx (R in bits 0-7 ... A in bits 24-31) into four s32 channels.
+void dbpalette_entrypoint_0(s32 palette, s32 idx, u8 *channels)
 {
-  u32 *local_0;
-  local_0 = param_0 + (((unsigned long) param_1) * 4);
-  *((s32 *) (((s8 *) param_2) + 0)) = (s32) ((*local_0) & 0xFF);
-  *((s32 *) (param_2 - -4)) = (s32) ((((u32) (*local_0)) >> 8) & 0xFF);
-  *((s32 *) (((s8 *) param_2) + 8)) = (s32) ((((u32) (*local_0)) >> 0x10) & 0xFF);
-  *((s32 *) (((s8 *) param_2) + 0xC)) = (s32) ((((u32) (*local_0)) >> 0x18) & 0xFF);
+    u32 *entry;
+    entry = palette + ((unsigned long) idx * 4);
+    *(s32 *) ((s8 *) channels + 0) = (s32) (*entry & 0xFF);
+    *(s32 *) (channels - -4) = (s32) (((u32) *entry >> 8) & 0xFF);
+    *(s32 *) ((s8 *) channels + 8) = (s32) (((u32) *entry >> 0x10) & 0xFF);
+    *(s32 *) ((s8 *) channels + 0xC) = (s32) (((u32) *entry >> 0x18) & 0xFF);
 }
 
-s32 dbpalette_entrypoint_1(u32 *agrs1, int indx, s32 *argb){
-    agrs1[indx] = 0;
-    agrs1[indx] = (u32)argb[0];
-    agrs1[indx] |= (u32)argb[1] << 8;
-    agrs1[indx] |= (u32)argb[2] << 0x10;
-    agrs1[indx] |= (u32)argb[3] << 0x18;
+// Packs four s32 channels into palette entry idx.
+s32 dbpalette_entrypoint_1(u32 *palette, int idx, s32 *channels)
+{
+    palette[idx] = 0;
+    palette[idx] = (u32) channels[0];
+    palette[idx] |= (u32) channels[1] << 8;
+    palette[idx] |= (u32) channels[2] << 0x10;
+    palette[idx] |= (u32) channels[3] << 0x18;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/palette.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -1,6 +1,11 @@
+// Game init and shutdown: ep0 initializes about 20 subsystems in a fixed order (and sets up a new
+// game), ep1 shuts them down. Called by the in-game core.
 #include "gc/game.h"
 
-void gcgame_entrypoint_0(s32 arg0) 
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
+
+// Initializes the game subsystems in a fixed order.
+void gcgame_entrypoint_0(s32 arg0)
 {
     func_80016864();
     func_800DC310();
@@ -27,6 +32,7 @@ void gcgame_entrypoint_0(s32 arg0)
     func_800D162C();
 }
 
+// Shuts the subsystems down again.
 void gcgame_entrypoint_1(void)
 {
     func_800FE4E4();
@@ -37,5 +43,3 @@ void gcgame_entrypoint_1(void)
     func_800F8DD8();
     func_800DA188();
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/game.data.s) is defined here in C.
- * Values are taken from the ROM. */

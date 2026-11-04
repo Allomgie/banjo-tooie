@@ -1,14 +1,16 @@
+// Constant getters for the fixed start maps: Spiral Mountain (0xAF) and the boot intro (0x18B).
 #include "common.h"
 
-s32 cosection_entrypoint_0() 
+// Start map for a new game: Spiral Mountain.
+s32 cosection_entrypoint_0()
 {
     return 0xAF;
 }
 
-s32 cosection_entrypoint_1() 
+// Start map of the boot intro cutscene.
+s32 cosection_entrypoint_1()
 {
     return 0x18B;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/co/section.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.

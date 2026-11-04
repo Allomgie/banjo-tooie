@@ -1,46 +1,61 @@
+// Small 2D (vec2f) helpers: cross product, unit vector from angle, length, octagonal distance
+// approximation, subtraction and perpendicular.
 #include "common.h"
 
 extern f32 func_800137F4(f32);
 extern f32 func_80013788(void);
 f32 mlAbsF(f32);
 
-f32 func_800F2290(u8 *param_0, u8 *param_1)
+// 2D cross product (x at +0, y at +4).
+f32 func_800F2290(u8 *a, u8 *b)
 {
-  return ((*((f32 *) (((s8 *) param_0) + 0))) * (*((f32 *) (((s8 *) param_1) + 4)))) - ((*((f32 *) (((s8 *) param_0) + 4))) * (*((f32 *) (((s8 *) param_1) + 0))));
+    return (*(f32 *) ((s8 *) a + 0) * *(f32 *) ((s8 *) b + 4)) -
+           (*(f32 *) ((s8 *) a + 4) * *(f32 *) ((s8 *) b + 0));
 }
 
-void func_800F22B4(f32 *param_0, f32 param_1) {
-    param_0[0] = func_800137F4(param_1);
-    param_0[1] = func_80013788();
+// Unit vector from an angle.
+void func_800F22B4(f32 *out, f32 angle)
+{
+    out[0] = func_800137F4(angle);
+    out[1] = func_80013788();
 }
 
-void func_800F22EC(u8 *param_0) {
-    f32 temp_f0;
-    f32 temp_f2;
+// Length of a 2D vector.
+// Matching: no return statement, the callee's result is passed through.
+void func_800F22EC(u8 *vec)
+{
+    f32 y;
+    f32 x;
 
-    temp_f0 = (*(f32 *)((s8 *)(param_0) + (4)));
-    temp_f2 = (*(f32 *)((s8 *)(param_0) + (0)));
-    sqrtf((temp_f0 * temp_f0) + (temp_f2 * temp_f2));
+    y = *(f32 *) ((s8 *) vec + 4);
+    x = *(f32 *) ((s8 *) vec + 0);
+    sqrtf((y * y) + (x * x));
 }
 
-f32 func_800F2320(f32 param_0[3]) {
-  f32 local_0 = mlAbsF(param_0[0]);
-  f32 local_1 = mlAbsF(param_0[1]);
-  f32 local_2;
-  if (local_0 < local_1) {
-    local_2 = local_0;
-  } else {
-    local_2 = local_1;
-  }
-  return local_0 + local_1 - local_2 * 0.41421357f;
+// Octagonal approximation of the length of a 2D vector.
+f32 func_800F2320(f32 vec[3])
+{
+    f32 abs_x = mlAbsF(vec[0]);
+    f32 abs_y = mlAbsF(vec[1]);
+    f32 min;
+    if (abs_x < abs_y) {
+        min = abs_x;
+    } else {
+        min = abs_y;
+    }
+    return abs_x + abs_y - min * 0.41421357f;
 }
 
-func_800F2388(f32 *param_0, f32 param_1[3], f32 param_2[3]){
-    param_0[0] = param_1[0]-param_2[0];
-    param_0[1] = param_1[1]-param_2[1];
+// out = a - b
+func_800F2388(f32 *out, f32 a[3], f32 b[3])
+{
+    out[0] = a[0] - b[0];
+    out[1] = a[1] - b[1];
 }
 
-func_800F23AC(f32 *param_0, f32 param_1[3]){
-    param_0[0] = param_1[1];
-    param_0[1] = -param_1[0];
+// Perpendicular vector: (y, -x).
+func_800F23AC(f32 *out, f32 vec[3])
+{
+    out[0] = vec[1];
+    out[1] = -vec[0];
 }

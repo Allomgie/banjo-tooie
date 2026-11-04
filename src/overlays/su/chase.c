@@ -1,10 +1,25 @@
+// Chase token: each frame finds the chasing actor nearest the player, so only one baddie at a
+// time (the nearest chaser, or anyone if nobody is chasing) is allowed to hunt the player.
 #include "common.h"
 
-typedef struct { s32 frame; s32 count; } ChaseCache;
+typedef struct {
+    s32 frame;
+    s32 marker;
+} ChaseCache;
 extern ChaseCache D_808001D0_suchase;
 extern void func_8010D254(f32 *);
-typedef struct { u8 pad_0[0x64]; u32 pad_1 : 1; u32 local_0 : 1; u32 local_1 : 1; u32 pad_2 : 29; } ChaseActorFlags;
-typedef struct { Unk80132ED0 *local_0; u32 pad_0; u32 local_1; } ChaseActorEntry;
+typedef struct {
+    u8 pad_0[0x64];
+    u32 pad_1 : 1;
+    u32 chasing : 1;
+    u32 dead : 1;
+    u32 pad_2 : 29;
+} ChaseActorFlags;
+typedef struct {
+    Unk80132ED0 *obj;
+    u32 pad_4;
+    u32 flags;
+} ChaseActorEntry;
 extern s32 *func_800BE444(f32 *);
 extern ChaseActorEntry *func_800E9E88(s32);
 extern ChaseActorEntry *func_800E9EB4(s32);
@@ -12,62 +27,65 @@ extern Actor *func_80106790(Unk80132ED0 *);
 extern f32 func_800EEB40(f32 *, f32 *);
 void func_808000A8_suchase();
 
+// Returns the nearest chaser (0 if none); refreshed once per frame.
 s32 suchase_entrypoint_0(void)
 {
-    s32 local_1;
-    f32 local_0[3];
+    s32 frame;
+    f32 player_pos[3];
 
-    local_1 = func_8001211C();
-    if (local_1 != D_808001D0_suchase.frame) {
-        func_8010D254(local_0);
-        D_808001D0_suchase.frame = local_1;
-        D_808001D0_suchase.count = 0;
-        func_808000A8_suchase(&D_808001D0_suchase, local_0);
+    frame = func_8001211C();
+    if (frame != D_808001D0_suchase.frame) {
+        func_8010D254(player_pos);
+        D_808001D0_suchase.frame = frame;
+        D_808001D0_suchase.marker = 0;
+        func_808000A8_suchase(&D_808001D0_suchase, player_pos);
     }
-    return D_808001D0_suchase.count;
+    return D_808001D0_suchase.marker;
 }
 
-int suchase_entrypoint_1(s32 *param_0) {
-    s32 local_0 = suchase_entrypoint_0();
-    return local_0 == 0 || local_0 == *param_0;
-}
-
-void func_808000A8_suchase(param_0, param_1) ChaseCache *param_0; f32 *param_1;
+// An actor may chase only if nobody chases or it is the nearest chaser.
+int suchase_entrypoint_1(s32 *self)
 {
-    f32 local_0;
-    s32 *local_1;
-    ChaseActorEntry *local_2;
-    ChaseActorEntry *local_3;
-    Unk80132ED0 *local_4;
-    Actor *local_5;
-    f32 local_6;
+    s32 nearest = suchase_entrypoint_0();
+    return nearest == 0 || nearest == *self;
+}
 
-    local_0 = 1e10f;
-    local_1 = func_800BE444(param_1);
-    while (*local_1) {
-        local_2 = func_800E9E88(*local_1);
-        local_3 = func_800E9EB4(*local_1);
-        for (; local_2 < local_3; local_2++) {
-            if (local_2->local_1 & 1) {
-                local_4 = local_2->local_0;
-                if (*(u16 *)((u8 *)local_4 + 0x18) & 1) {
-                    local_5 = func_80106790(local_4);
-                    if (!((ChaseActorFlags *)local_5)->local_1 &&
-                        ((ChaseActorFlags *)local_5)->local_0) {
-                        local_6 = func_800EEB40(local_5->position, param_1);
-                        if (local_6 < local_0) {
-                            param_0->count = (s32)local_4;
-                            local_0 = local_6;
+// Find the chasing actor nearest to pos in the cube cells around it.
+void func_808000A8_suchase(cache, pos) ChaseCache *cache;
+f32 *pos;
+{
+    f32 best_dist;
+    s32 *cell;
+    ChaseActorEntry *entry;
+    ChaseActorEntry *end;
+    Unk80132ED0 *obj;
+    Actor *actor;
+    f32 dist;
+
+    best_dist = 1e10f;
+    cell = func_800BE444(pos);
+    while (*cell) {
+        entry = func_800E9E88(*cell);
+        end = func_800E9EB4(*cell);
+        for (; entry < end; entry++) {
+            if (entry->flags & 1) {
+                obj = entry->obj;
+                if (*(u16 *) ((u8 *) obj + 0x18) & 1) {
+                    actor = func_80106790(obj);
+                    if (!((ChaseActorFlags *) actor)->dead &&
+                        ((ChaseActorFlags *) actor)->chasing) {
+                        dist = func_800EEB40(actor->position, pos);
+                        if (dist < best_dist) {
+                            cache->marker = (s32) obj;
+                            best_dist = dist;
                         }
                     }
                 }
             }
         }
-        local_1++;
+        cell++;
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/chase.data.s) is defined here in C.
- * Values are taken from the ROM. */
-ChaseCache D_808001D0_suchase = { -0x1, 0x0 };
-static u32 D_808001D0_suchase_rest[2] = { 0x0, 0x0 };
+// TU-NOTE: the overlay .data is defined here in C (values from the ROM).
+ChaseCache D_808001D0_suchase = {-0x1, 0x0};

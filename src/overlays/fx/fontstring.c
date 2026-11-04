@@ -1,93 +1,102 @@
+// Helpers that append inline text control codes (switch, color, alpha, icon) to a string
+// and return the new end.
 #include "common.h"
 
-
-s32 func_80800000_fxfontstring(char *str){
-    while(*str){
+s32 func_80800000_fxfontstring(char *str)
+{
+    while (*str) {
         str++;
     }
     return str;
 }
 
-void fxfontstring_entrypoint_0(s32 param_0, s32 param_1)
+// Appends text control code 0xFD 'h' (high != 0) or 0xFD 'l' to str.
+// Matching: the line breaks in this function are needed for the match.
+void fxfontstring_entrypoint_0(s32 str, s32 high)
 {
-  u8 *local_0;
- do { do { local_0 = func_80800000_fxfontstring(param_0); *local_0 = 0xFD; local_0++; if (param_1 != 0) { *local_0 = 0x68; } else { *local_0 = 0x6C; } local_0++; *local_0 = 0; } while (0); } while (0);
+    u8 *end;
+    do { do { end = func_80800000_fxfontstring(str); *end = 0xFD; end++; if (high != 0) { *end = 0x68; } else { *end = 0x6C; } end++; *end = 0; } while (0); } while (0);
 }
 
-void fxfontstring_entrypoint_1(u8 *param_0, s32 param_1)
+// Appends text control code 0xFD 'a' n, with n clamped to 1..255.
+void fxfontstring_entrypoint_1(u8 *str, s32 n)
 {
-    u8 *local_0;
-    u8 *local_1;
-    s32 local_2;
+    u8 *end;
+    u8 *p;
+    s32 clamped;
 
-    local_0 = func_80800000_fxfontstring(param_0);
-    local_0[0] = 0xFD;
-    local_0[1] = 0x61;
-    local_1 = local_0 + 2;
-    if (param_1 <= 0) {
-        *local_1 = 1;
+    end = func_80800000_fxfontstring(str);
+    end[0] = 0xFD;
+    end[1] = 0x61;
+    p = end + 2;
+    if (n <= 0) {
+        *p = 1;
     } else {
-        local_2 = param_1 >= 256 ? 255 : param_1;
-        *local_1 = local_2;
+        clamped = n >= 256 ? 255 : n;
+        *p = clamped;
     }
-    local_1++;
-    *local_1 = 0;
+    p++;
+    *p = 0;
 }
 
-u8 *fxfontstring_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+// Appends text control code 0xFD 'c' r g b, each clamped to 1..255.
+u8 *fxfontstring_entrypoint_2(s32 str, s32 r, s32 g, s32 b)
 {
     u8 *p;
     s32 v;
 
-    p = func_80800000_fxfontstring(param_0);
+    p = func_80800000_fxfontstring(str);
     *p++ = 0xFD;
     *p++ = 0x63;
-    if (param_1 <= 0) {
+    if (r <= 0) {
         *p = 1;
     } else {
-        if (param_1 >= 0x100) {
+        if (r >= 0x100) {
             v = 0xFF;
         } else {
-            v = param_1;
+            v = r;
         }
         *p = v;
     }
     p++;
-    if (param_2 <= 0) {
+    if (g <= 0) {
         *p = 1;
     } else {
-        if (param_2 >= 0x100) {
+        if (g >= 0x100) {
             v = 0xFF;
         } else {
-            v = param_2;
+            v = g;
         }
         *p = v;
     }
     p++;
-    if (param_3 <= 0) {
+    if (b <= 0) {
         *p = 1;
     } else {
-        if (param_3 >= 0x100) {
+        if (b >= 0x100) {
             v = 0xFF;
         } else {
-            v = param_3;
+            v = b;
         }
         *p = v;
     }
     *++p = 0;
 }
 
-int fxfontstring_entrypoint_3(s32 param_0, u32 param_1, s32 param_2)
+// Appends inline icon code 0xFD 'i' id_lo id_hi (size + 1).
+int fxfontstring_entrypoint_3(s32 str, u32 icon_id, s32 size)
 {
-  u8 *local_0;
-  unsigned short new_var;
-  local_0 = func_80800000_fxfontstring(param_0);
-  new_var = param_1;
-  *(local_0++) = 0xFD;
-  *(local_0++) = 0x69;
-  *(local_0++) = param_1 & 0xFF;
- *(local_0++) = new_var >> 8; *(local_0++) = param_2 + 1; *(local_0++) = 0;
+    u8 *p;
+    // Matching: the u16 temporary is needed for the match.
+    unsigned short id;
+    p = func_80800000_fxfontstring(str);
+    id = icon_id;
+    *p++ = 0xFD;
+    *p++ = 0x69;
+    *p++ = icon_id & 0xFF;
+    *p++ = id >> 8;
+    *p++ = size + 1;
+    *p++ = 0;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/fx/fontstring.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: .data is defined here in C; values are taken from the ROM.

@@ -1,98 +1,120 @@
+// Probably an animated texture-palette swap for an actor: copies a palette asset into a per-actor
+// buffer, cross-fades between two palettes over a duration, and uploads it to the actor's model.
 #include "common.h"
 
-typedef struct { u16 local_0; u16 pad_0; u16 local_1; u8 pad_1[10]; u8 local_2[0x800]; } BaddiePalette;
+typedef struct {
+    u16 to_id;
+    u16 from_id;
+    u16 state;
+    u8 pad_6[10];
+    u8 colors[0x800];
+} BaddiePalette;
 extern void *func_800D674C(s32);
 extern void func_801032B0(Actor *, s32, u16);
 extern f32 func_800F12D4(f32, f32, f32, f32, f32);
 extern void func_800F3214(s32 *, s32 *, s32 *, f32);
-typedef struct { u16 cur; u16 prev; s16 f4; s16 pad; f32 f8; f32 fC; } PalS;
+typedef struct {
+    u16 to_id;
+    u16 from_id;
+    s16 state;
+    s16 pad_6;
+    f32 timer;
+    f32 duration;
+} PalS;
 extern void func_800B25D8();
 extern void func_80100F0C();
 extern void *func_80103C94(Actor *);
 extern void *func_800B2840(void *);
 void subaddiepalette_entrypoint_4();
 
-void subaddiepalette_entrypoint_0(Actor *param_0, BaddiePalette *param_1, u16 param_2)
+// Load palette asset id into the buffer and upload it.
+void subaddiepalette_entrypoint_0(Actor *actor, BaddiePalette *palette, u16 id)
 {
-    rare_memcpy(param_1->local_2, func_800D674C(param_2), 0x800);
-    func_800D6CEC(param_2);
-    param_1->local_0 = param_2;
-    param_1->local_1 = 0;
-    subaddiepalette_entrypoint_4(param_0, param_1);
-    func_801032B0(param_0, param_0->unk0->unk14, param_2);
+    rare_memcpy(palette->colors, func_800D674C(id), 0x800);
+    func_800D6CEC(id);
+    palette->to_id = id;
+    palette->state = 0;
+    subaddiepalette_entrypoint_4(actor, palette);
+    func_801032B0(actor, actor->unk0->unk14, id);
 }
 
-void subaddiepalette_entrypoint_1(Actor *param_0, BaddiePalette *param_1)
+// Per-frame update: cross-fade between two palettes and re-upload.
+void subaddiepalette_entrypoint_1(Actor *actor, BaddiePalette *palette)
 {
-    s32 local_0[4];
-    s32 local_1[4];
-    s32 local_2[4];
-    f32 local_4;
-    int local_3;
-    void *local_5;
-    void *local_6;
-    s32 local_7;
-    switch (*(s16 *)&param_1->local_1) {
-    case 0:
-        break;
-    case 1:
-    {
-        local_3 = func_800D9078((u8 *)param_1 + 8);
-        local_4 = func_800F12D4(*(f32 *)((u8 *)param_1 + 8), 0.0f,
-            *(f32 *)((u8 *)param_1 + 12), 1.0f, 0.0f);
-        local_5 = func_800D674C(param_1->pad_0);
-        local_6 = func_800D674C(param_1->local_0);
-        for (local_7 = 0; local_7 != 512; local_7++) {
-            _dbpalette_entrypoint_0(local_5, local_7, local_0);
-            _dbpalette_entrypoint_0(local_6, local_7, local_1);
-            func_800F3214(local_2, local_0, local_1, local_4);
-            _dbpalette_entrypoint_1(param_1->local_2, local_7, local_2);
+    s32 from_color[4];
+    s32 to_color[4];
+    s32 blend[4];
+    f32 factor;
+    int done;
+    void *from_data;
+    void *to_data;
+    s32 i;
+    switch (*(s16 *) &palette->state) {
+        case 0:
+            break;
+        case 1: {
+            done = func_800D9078((u8 *) palette + 8);
+            factor = func_800F12D4(*(f32 *) ((u8 *) palette + 8), 0.0f,
+                                    *(f32 *) ((u8 *) palette + 12), 1.0f, 0.0f);
+            from_data = func_800D674C(palette->from_id);
+            to_data = func_800D674C(palette->to_id);
+            for (i = 0; i != 512; i++) {
+                _dbpalette_entrypoint_0(from_data, i, from_color);
+                _dbpalette_entrypoint_0(to_data, i, to_color);
+                func_800F3214(blend, from_color, to_color, factor);
+                _dbpalette_entrypoint_1(palette->colors, i, blend);
+            }
+            subaddiepalette_entrypoint_4(actor, palette);
+            if (done)
+                palette->state = 0;
         }
-        subaddiepalette_entrypoint_4(param_0, param_1);
-        if (local_3) param_1->local_1 = 0;
-        break;
-    }
     }
 }
 
-s32 subaddiepalette_entrypoint_2(u8 **param_0, PalS *param_1, u16 param_2, f32 param_3) {
-    if (param_1->cur == param_2) {
+// Start a fade to palette id; returns 0 if it is already current.
+s32 subaddiepalette_entrypoint_2(u8 **unk_0, PalS *fade, u16 id, f32 duration)
+{
+    if (fade->to_id == id) {
         return 0;
     }
-    param_1->f4 = 1;
-    param_1->fC = param_3;
-    param_1->f8 = param_3;
-    param_1->prev = param_1->cur;
-    param_1->cur = param_2;
-    *(u16 *)(*param_0 + 0x16) = param_2;
+    fade->state = 1;
+    fade->duration = duration;
+    fade->timer = duration;
+    fade->from_id = fade->to_id;
+    fade->to_id = id;
+    *(u16 *) (*unk_0 + 0x16) = id;
     return 1;
 }
 
-void subaddiepalette_entrypoint_3(Actor *param_0, u8 *param_1, void *param_2)
+// Upload the palette to the model or vertex instance and count down the frames.
+void subaddiepalette_entrypoint_3(Actor *actor, u8 *palette, void *model)
 {
-    s16 local_1;
+    s16 frames;
 
-    local_1 = *(s16 *)(param_1 + 6);
-    if (local_1 != 0) {
-        if (*(s16 *)&param_0->pad60 != 0 && (u32)((u8 *)param_0)[0x7B] >> 6) {
-            func_80100F0C(*(s16 *)&param_0->pad60, param_1 + 0x10);
-            func_800DF720(func_80100AC4(*(s16 *)&param_0->pad60));
+    frames = *(s16 *) (palette + 6);
+    if (frames != 0) {
+        if (*(s16 *) &actor->pad60 != 0 && (u32) ((u8 *) actor)[0x7B] >> 6) {
+            func_80100F0C(*(s16 *) &actor->pad60, palette + 0x10);
+            func_800DF720(func_80100AC4(*(s16 *) &actor->pad60));
         } else {
-            func_800B25D8(func_80103C94(param_0), func_800B2840(param_2), param_1 + 0x10);
+            func_800B25D8(func_80103C94(actor), func_800B2840(model), palette + 0x10);
         }
-        local_1 = *(s16 *)(param_1 + 6);
+        frames = *(s16 *) (palette + 6);
     }
-    if (local_1) *(s16 *)(param_1 + 6) = local_1 - 1;
+    if (frames)
+        *(s16 *) (palette + 6) = frames - 1;
 }
 
-void subaddiepalette_entrypoint_4(param_0, param_1) u8 *param_0; u8 *param_1;
+// Request a palette upload for one or two frames.
+void subaddiepalette_entrypoint_4(actor, palette) u8 *actor;
+u8 *palette;
 {
-  *((s16 *) (((u8 *) param_1) + 6)) = 1;
-  if ((((*((s16 *) (((u8 *) param_0) + 0x60))) == 0) || ((((unsigned long) ((u8) (*((u8 *) (((u8 *) param_0) + 0x7B))))) >> 6) == 0)) && ((*((u8 *) (((u8 *) param_0) + 0x70))) & 1))
-  {
-    *((s16 *) (((u8 *) param_1) + 6)) = (s16) ((*((s16 *) (((u8 *) param_1) + 6))) + 1);
-  }
+    *(s16 *) ((u8 *) palette + 6) = 1;
+    if (((*(s16 *) ((u8 *) actor + 0x60) == 0) ||
+         (((unsigned long) (u8) *(u8 *) ((u8 *) actor + 0x7B) >> 6) == 0)) &&
+        (*(u8 *) ((u8 *) actor + 0x70) & 1)) {
+        *(s16 *) ((u8 *) palette + 6) = (s16) (*(s16 *) ((u8 *) palette + 6) + 1);
+    }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/palette.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.

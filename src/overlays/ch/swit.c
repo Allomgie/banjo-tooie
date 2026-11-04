@@ -1,3 +1,6 @@
+// Generic switch library (chswitch): press, ground-pound and egg-hit switches, toggles, timed
+// resets and flag-backed switches that open linked actors. Plus three collision-callback tables.
+// Reused by about 40 world-specific switch, door and machine overlays.
 #include "common.h"
 
 extern int D_80800DB0_chswitch[];
@@ -6,7 +9,10 @@ extern void *D_80800DD8_chswitch;
 extern Actor *func_80106790();
 extern void func_80103110(Actor *, s32);
 extern void _gcaudiolist_entrypoint_0(s32);
-typedef struct { u8 pad_0[0x50]; void *local_0; } SwitchPlayerOwner;
+typedef struct {
+    u8 pad_0[0x50];
+    void *unk_50;
+} SwitchPlayerOwner;
 extern void *func_800F5410(s32);
 extern s32 func_80101E14(Actor *, f32);
 extern void func_80101EE4(Actor *, f32);
@@ -17,12 +23,12 @@ int func_8080093C_chswitch();
 
 int chswitch_entrypoint_0()
 {
-    return (int)&D_80800DB0_chswitch;
+    return (int) &D_80800DB0_chswitch;
 }
 
 int chswitch_entrypoint_1()
 {
-  return &D_80800DC4_chswitch;
+    return &D_80800DC4_chswitch;
 }
 
 void *chswitch_entrypoint_2(void)
@@ -30,269 +36,279 @@ void *chswitch_entrypoint_2(void)
     return &D_80800DD8_chswitch;
 }
 
-void func_80800024_chswitch(Unk80132ED0 *param_0, s32 param_1)
+// Toggle on player contact; ignored while the cooldown runs.
+void func_80800024_chswitch(Unk80132ED0 *handle, s32 unk_0)
 {
-    Actor *local_0;
+    Actor *actor;
 
-    local_0 = func_80106790(param_0);
-    if (!(local_0->unk58 > 0.0f) && func_8008FCC8(param_0) == 2) {
-        local_0->unk64_20 = (s32)local_0->unk64_20 ^ 1;
-        local_0->unk58 = 2.0f;
-        func_80103110(local_0, 1);
+    actor = func_80106790(handle);
+    if (!(actor->unk58 > 0.0f) && func_8008FCC8(handle) == 2) {
+        actor->unk64_20 = (s32) actor->unk64_20 ^ 1;
+        actor->unk58 = 2.0f;
+        func_80103110(actor, 1);
     }
 }
 
-void func_808000B8_chswitch(Unk80132ED0 *param_0, s32 param_1)
+// Toggle (any hit); ignored while the cooldown runs.
+void func_808000B8_chswitch(Unk80132ED0 *handle, s32 unk_0)
 {
-    Actor *local_0;
+    Actor *actor;
 
-    local_0 = func_80106790(param_0);
-    if (!(local_0->unk58 > 0.0f)) {
-        local_0->unk64_20 = (s32)local_0->unk64_20 ^ 1;
-        local_0->unk58 = 2.0f;
-        func_80103110(local_0, 1);
+    actor = func_80106790(handle);
+    if (!(actor->unk58 > 0.0f)) {
+        actor->unk64_20 = (s32) actor->unk64_20 ^ 1;
+        actor->unk58 = 2.0f;
+        func_80103110(actor, 1);
     }
 }
 
-void func_8080012C_chswitch(Unk80132ED0 *param_0, u8 *param_1)
+// Switch pressed: remember the touching player and lock it.
+void func_8080012C_chswitch(Unk80132ED0 *handle, u8 *contact)
 {
-    Actor *local_0;
-    local_0 = func_80106790(param_0);
-    if (func_8008FCC8(param_0) == 1 && (int)local_0->unk70_10 == 1) {
+    Actor *actor;
+    actor = func_80106790(handle);
+    if (func_8008FCC8(handle) == 1 && (int) actor->unk70_10 == 1) {
         _gcaudiolist_entrypoint_0(0);
-        func_80102424(local_0, 2);
-        local_0->actorData[4] = (u32)*(u16 *)(param_1 + 0x1A) >> 5;
-        func_800F7F98(local_0->actorData[4], 1);
+        func_80102424(actor, 2);
+        actor->actorData[4] = (u32) *(u16 *) (contact + 0x1A) >> 5;
+        func_800F7F98(actor->actorData[4], 1);
     }
 }
 
-int chswitch_entrypoint_3(void *param_0, s32 param_1)
+int chswitch_entrypoint_3(void *actor, s32 flag)
 {
-  s32 local_0;
-  local_0 = func_800DA298(param_1 | 0);
-  *((s32 *) (((char *) param_0) + 0x34)) = param_1;
-  func_80103110(param_0, 0);
-  if (!param_0) { }
-  *((float *) (((char *) param_0) + 0x54)) = 0.75f;
-  if (1)
-  {
-    func_80102E08();
-    return local_0;
-  }
-}
-
-void chswitch_entrypoint_4(Actor *param_0)
-{
-    if (param_0->unk70_10 == 2 && func_80101DDC() &&
-        !param_0->unk64_20 && func_800D9078(&param_0->unk54)) {
-        param_0->unk64_20 = 1;
-        func_80102424(param_0, 3);
-        func_80103110(param_0, 0);
-        func_800F7F98(param_0->actorData[4], 0);
-        func_800DA544(param_0->actorData[7]);
-        func_8010108C(param_0, 7, 0);
+    s32 is_set;
+    // Matching: the "| 0" and the empty "if" are needed for the match.
+    is_set = func_800DA298(flag | 0);
+    *(s32 *) ((char *) actor + 0x34) = flag;
+    func_80103110(actor, 0);
+    if (!actor) {
+    }
+    *(float *) ((char *) actor + 0x54) = 0.75f;
+    {
+        func_80102E08();
+        return is_set;
     }
 }
 
-void func_808002B4_chswitch(s32 param_0, u8 *param_1)
+// Sets the game flag and sends message 7 to the linked actor.
+void chswitch_entrypoint_4(Actor *actor)
 {
-  u16 new_var4;
-  u8 *local_0;
-  u8 *new_var3;
-  u32 local_1;
-  char *new_var;
-  char *new_var2;
-  local_0 = func_80106790();
-  if (func_8008FCF4(param_0) == 1)
-  {
-    new_var2 = ((char *) param_1) + 0x1A;
-    _gcaudiolist_entrypoint_0(0);
-    new_var = ((char *) local_0) + 0x28;
-    new_var3--;
-    new_var3++;
-    func_80102424(local_0, 2);
-    new_var3 = local_0;
-    func_8010A570(new_var3);
-    func_80103110(local_0, 1);
-    *((u32 *) new_var) = (local_1 = ((u32) (new_var4 = (*((u16 *) new_var2)) ^ 0)) >> 5);
-    func_800F7F98(local_1, 1);
-  }
+    if (actor->unk70_10 == 2 && func_80101DDC() && !actor->unk64_20 &&
+        func_800D9078(&actor->unk54)) {
+        actor->unk64_20 = 1;
+        func_80102424(actor, 3);
+        func_80103110(actor, 0);
+        func_800F7F98(actor->actorData[4], 0);
+        func_800DA544(actor->actorData[7]);
+        func_8010108C(actor, 7, 0);
+    }
 }
 
-s32 chswitch_entrypoint_5(Actor *param_0, s32 param_1, s32 param_2)
+void func_808002B4_chswitch(s32 handle, u8 *contact)
 {
-    switch (param_1) {
-    case 0x29:
-        return func_8080093C_chswitch(param_0);
-    case 0x91:
-        if (param_0->unk70_10 == 1) {
-            _gcaudiolist_entrypoint_0(0);
-            func_80102424(param_0, 2);
-            func_8010A570(param_0);
-            func_80103110(param_0, 1);
-            param_0->actorData[4] = param_2;
-            func_800F7F98(param_2, 1);
-            return 1;
-        }
-        return 0;
-    case 0x95:
-        if (func_800DA298(param_0->actorData[7])) {
-            func_80102424(param_0, 3);
-            param_0->unk64_20 = 1;
-            func_8010A570(param_0);
-        } else {
-            func_80102424(param_0, 1);
-        }
-        break;
-    default:
-        return 0;
+    u16 raw_player;
+    u8 *actor;
+    u8 *actor_copy;
+    u32 player;
+    char *owner_slot;
+    char *contact_field;
+    // Matching: the extra temporaries and the "^ 0" are needed for the match.
+    actor = func_80106790();
+    if (func_8008FCF4(handle) == 1) {
+        contact_field = (char *) contact + 0x1A;
+        _gcaudiolist_entrypoint_0(0);
+        owner_slot = (char *) actor + 0x28;
+        func_80102424(actor, 2);
+        actor_copy = actor;
+        func_8010A570(actor_copy);
+        func_80103110(actor, 1);
+        *(u32 *) owner_slot = (player = (u32) (raw_player = *(u16 *) contact_field ^ 0) >> 5);
+        func_800F7F98(player, 1);
+    }
+}
+
+s32 chswitch_entrypoint_5(Actor *actor, s32 msg, s32 arg)
+{
+    switch (msg) {
+        case 0x29:
+            return func_8080093C_chswitch(actor);
+        case 0x91:
+            if (actor->unk70_10 == 1) {
+                _gcaudiolist_entrypoint_0(0);
+                func_80102424(actor, 2);
+                func_8010A570(actor);
+                func_80103110(actor, 1);
+                actor->actorData[4] = arg;
+                func_800F7F98(arg, 1);
+                return 1;
+            }
+            return 0;
+        case 0x95:
+            if (func_800DA298(actor->actorData[7])) {
+                func_80102424(actor, 3);
+                actor->unk64_20 = 1;
+                func_8010A570(actor);
+            } else {
+                func_80102424(actor, 1);
+            }
+            break;
+        default:
+            return 0;
     }
     return 1;
 }
 
-void chswitch_entrypoint_6(Actor *param_0)
+void chswitch_entrypoint_6(Actor *actor)
 {
-    s32 local_0;
-    switch (param_0->unk70_10) {
-    case 1: break;
-    case 2:
-        if (func_80101DDC(param_0)) func_80102424(param_0, 3);
-        break;
-    case 3:
-        local_0 = _plsu_entrypoint_1(*(s32 *)&param_0->unk50);
-        if (!param_0->unk64_20 && (local_0 + 1)) {
-            if (func_800D9078(&param_0->unk54)) {
-                func_800F7F98(local_0, 0);
-                func_800DA544(param_0->actorData[7]);
-                param_0->unk64_20 = 1;
-                if (param_0->actorData[6]) func_80103110(param_0, 0);
-                func_8010108C(param_0, 7, 0);
+    s32 player;
+    switch (actor->unk70_10) {
+        case 1:
+            break;
+        case 2:
+            if (func_80101DDC(actor))
+                func_80102424(actor, 3);
+            break;
+        case 3:
+            player = _plsu_entrypoint_1(*(s32 *) &actor->unk50);
+            if (!actor->unk64_20 && (player + 1)) {
+                if (func_800D9078(&actor->unk54)) {
+                    func_800F7F98(player, 0);
+                    func_800DA544(actor->actorData[7]);
+                    actor->unk64_20 = 1;
+                    if (actor->actorData[6])
+                        func_80103110(actor, 0);
+                    func_8010108C(actor, 7, 0);
+                }
+            } else if (!actor->unk6C_0 || !(player + 1)) {
+                if (func_800D90A4(&actor->unk58)) {
+                    _gcaudiolist_entrypoint_0(0);
+                    func_80102424(actor, 4);
+                    actor->unk64_20 = 0;
+                    actor->unk54 = 0.375f;
+                }
+            } else
+                actor->unk58 = 0.15f;
+            break;
+        case 4:
+            if (func_80101DDC(actor)) {
+                func_80103110(actor, 0);
+                func_80102424(actor, 1);
+                func_800DA524(actor->actorData[7]);
+                *(s32 *) &actor->unk50 = 0;
+                func_8010108C(actor, 8, 0);
             }
-        } else if (!param_0->unk6C_0 || !(local_0 + 1)) {
-            if (func_800D90A4(&param_0->unk58)) {
-                _gcaudiolist_entrypoint_0(0);
-                func_80102424(param_0, 4);
-                param_0->unk64_20 = 0;
-                param_0->unk54 = 0.375f;
-            }
-        } else param_0->unk58 = 0.15f;
-        break;
-    case 4:
-        if (func_80101DDC(param_0)) {
-            func_80103110(param_0, 0);
-            func_80102424(param_0, 1);
-            func_800DA524(param_0->actorData[7]);
-            *(s32 *)&param_0->unk50 = 0;
-            func_8010108C(param_0, 8, 0);
-        }
-        break;
     }
-    param_0->unk6C_0 = 0;
+    actor->unk6C_0 = 0;
 }
 
-s32 chswitch_entrypoint_7(s32 param_0, s32 param_1)
+s32 chswitch_entrypoint_7(s32 actor, s32 flag)
 {
-    s32 local_1;
+    s32 is_set;
 
-    local_1 = func_800DA298(param_1);
-    *(s32 *)((char *)param_0 + 0x34) = param_1;
-    if (local_1 != 0)
-    {
-        *(f32 *)((char *)param_0 + 0x54) = 0.0f;
-        func_80102424(param_0, 3);
+    is_set = func_800DA298(flag);
+    *(s32 *) ((char *) actor + 0x34) = flag;
+    if (is_set != 0) {
+        *(f32 *) ((char *) actor + 0x54) = 0.0f;
+        func_80102424(actor, 3);
+    } else {
+        *(f32 *) ((char *) actor + 0x54) = 0.375f;
+        func_80102424(actor, 1);
     }
-    else
-    {
-        *(f32 *)((char *)param_0 + 0x54) = 0.375f;
-        func_80102424(param_0, 1);
+    *(s32 *) ((char *) actor + 0x2C) = -1;
+    *(s32 *) ((char *) actor + 0x50) = 0;
+    *(s32 *) ((char *) actor + 0x30) = 0;
+    func_80102E08(actor);
+    return is_set;
+}
+
+void chswitch_entrypoint_8(u8 *actor, s32 value)
+{
+    *(s32 *) ((u8 *) actor + 0x2C) = value;
+}
+
+void chswitch_entrypoint_9(void *actor)
+{
+    int slot;
+    s32 *words;
+    void *base;
+    void *actor_copy;
+    // Matching: the if (1) block, the bare "0;", the copies and the "^ 0" are needed for the match.
+    actor_copy = actor;
+    if (1) {
+        base = actor_copy;
+        0;
+        words = (s32 *) base;
+        slot = 0xC;
+        ((s32 *) base)[slot] = 1;
+        ((s32 *) base)[slot] = words[slot] ^ 0;
     }
-    *(s32 *)((char *)param_0 + 0x2C) = -1;
-    *(s32 *)((char *)param_0 + 0x50) = 0;
-    *(s32 *)((char *)param_0 + 0x30) = 0;
-    func_80102E08(param_0);
-    return local_1;
 }
 
-void chswitch_entrypoint_8(u8 *param_0, s32 param_1) {
-    *(s32 *)((u8 *)param_0 + 0x2C) = param_1;
-}
-
-void chswitch_entrypoint_9(void *param_0)
+void func_80800694_chswitch(Actor *actor)
 {
-  int new_var4;
-  s32 *new_var5;
-  int new_var3;
-  void *new_var2;
-  void *new_var;
- new_var = param_0; if (1) { new_var2 = new_var; new_var4 = 5; new_var5 = (s32 *) new_var2; new_var4 = 0xC; ((s32 *) new_var2)[new_var4] = 1; ((s32 *) new_var2)[new_var4] = new_var5[new_var4] ^ 0;
-  }
-}
+    f32 player_pos[3];
+    s32 player;
+    s32 unk_0;
 
-void func_80800694_chswitch(Actor *param_0)
-{
-    f32 local_0[3];
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-
-    if (func_800DA298(param_0->actorData[7])) {
-        local_1 = _plsu_entrypoint_0(local_0, param_0->position);
-        func_80103110(param_0, param_0->actorData[6] == 0);
-        if (!param_0->unk6C_0) {
-            func_80102424(param_0, 3);
-            if (param_0->actorData[6] == 0 && local_1 != -1) {
-                param_0->unk64_20 = 1;
-                ((SwitchPlayerOwner *)param_0)->local_0 = func_800F5410(local_1);
-                param_0->unk6C_0 = 1;
+    if (func_800DA298(actor->actorData[7])) {
+        player = _plsu_entrypoint_0(player_pos, actor->position);
+        func_80103110(actor, actor->actorData[6] == 0);
+        if (!actor->unk6C_0) {
+            func_80102424(actor, 3);
+            if (actor->actorData[6] == 0 && player != -1) {
+                actor->unk64_20 = 1;
+                ((SwitchPlayerOwner *) actor)->unk_50 = func_800F5410(player);
+                actor->unk6C_0 = 1;
             }
         } else {
-            ((SwitchPlayerOwner *)param_0)->local_0 = func_800F5410(local_1);
+            ((SwitchPlayerOwner *) actor)->unk_50 = func_800F5410(player);
         }
     }
 }
 
-s32 chswitch_entrypoint_10(Actor *param_0, s32 param_1, s32 param_2)
+s32 chswitch_entrypoint_10(Actor *actor, s32 msg, s32 arg)
 {
-    f32 local_3[4];
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
+    f32 unk_0[4];
+    s32 other_on_pad;
+    s32 unk_1;
+    s32 i;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x29:
-            return func_8080093C_chswitch(param_0);
+            return func_8080093C_chswitch(actor);
         case 0x32:
-            *(s32 *)&param_0->unk50 = func_800F5410(param_2);
-            param_0->unk58 = 0.15f;
+            *(s32 *) &actor->unk50 = func_800F5410(arg);
+            actor->unk58 = 0.15f;
             _gcaudiolist_entrypoint_0(0);
-            param_0->unk54 = 0.375f;
-            func_80102424(param_0, 2);
-            func_80103110(param_0, 1);
-            func_800F7F98(param_2, 1);
+            actor->unk54 = 0.375f;
+            func_80102424(actor, 2);
+            func_80103110(actor, 1);
+            func_800F7F98(arg, 1);
             break;
         case 0x91:
-            local_1 = func_800F55FC(param_2) & 0x08000000;
-            param_0->unk6C_0 = func_800DA298(0x9D4);
-            *(s32 *)&param_0->unk50 = func_800F5410(param_2);
-            if (!local_1 && param_0->unk70_10 == 1 &&
-                func_800F64A4(param_2, param_0->actorData[5]) && func_800DA298(0x9D4)) {
-                if (func_800F54E4() == param_2) {
-                    local_0 = 0;
-                    for (local_2 = 0; local_2 != 8; local_2++) {
-                        if (func_800F6438(local_2) && local_2 != param_2 &&
-                            func_800F6C5C(local_2) && func_800F55D0(local_2) == param_0->unk0) {
-                            local_0 = 1;
+            unk_1 = func_800F55FC(arg) & 0x08000000;
+            actor->unk6C_0 = func_800DA298(0x9D4);
+            *(s32 *) &actor->unk50 = func_800F5410(arg);
+            if (!unk_1 && actor->unk70_10 == 1 &&
+                func_800F64A4(arg, actor->actorData[5]) && func_800DA298(0x9D4)) {
+                if (func_800F54E4() == arg) {
+                    other_on_pad = 0;
+                    for (i = 0; i != 8; i++) {
+                        if (func_800F6438(i) && i != arg &&
+                            func_800F6C5C(i) && func_800F55D0(i) == actor->unk0) {
+                            other_on_pad = 1;
                             break;
                         }
                     }
-                    if (!local_0) {
-                        func_800F7874(param_2, param_0->unk0, param_0->position);
+                    if (!other_on_pad) {
+                        func_800F7874(arg, actor->unk0, actor->position);
                     }
                 }
             }
             return 1;
         case 0x95:
-            func_80800694_chswitch(param_0);
+            func_80800694_chswitch(actor);
             return 1;
         default:
             return 0;
@@ -300,134 +316,134 @@ s32 chswitch_entrypoint_10(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-int func_8080093C_chswitch(param_0) Actor *param_0;
+int func_8080093C_chswitch(actor)
+Actor *actor;
 {
-    s32 local_0;
-    if (func_800CB854(&local_0) == 1) {
-        func_80100120(param_0);
-        if (!param_0->unk64_17 && func_800DA298(param_0->actorData[7])) {
-            func_80102424(param_0, 3);
-            func_80102204(param_0);
-            param_0->unk64_20 = 1;
-            param_0->unk6C_0 = 1;
+    s32 unk_0;
+    if (func_800CB854(&unk_0) == 1) {
+        func_80100120(actor);
+        if (!actor->unk64_17 && func_800DA298(actor->actorData[7])) {
+            func_80102424(actor, 3);
+            func_80102204(actor);
+            actor->unk64_20 = 1;
+            actor->unk6C_0 = 1;
         }
     }
     return 1;
 }
 
-void chswitch_entrypoint_11(u8 *param_0) {
-    u32 local_0;
-
-    local_0 = (u32)((u16) (*(u16 *)((s8 *)(param_0) + (0x72)))) >> 0xA;
-    switch (local_0) {                              
-    case 2:
-        if (func_80101DDC(param_0) != 0) {
-            func_800DA544((*(s32 *)((s8 *)(param_0) + (0x34))));
-            func_80102424(param_0, 3);
-            func_800F7F98((*(s32 *)((s8 *)(param_0) + (0x28))), 0);
-            func_8010108C(param_0, 7, 0);
-            return;
-        }
-    case 1:
-        return;
-    case 3:
-        if (func_800DA298((*(s32 *)((s8 *)(param_0) + (0x2C)))) != 0) {
-            func_800DA524((*(s32 *)((s8 *)(param_0) + (0x2C))));
-            _gcaudiolist_entrypoint_0(0);
-            func_80102424(param_0, 4);
-            return;
-        }
-        break;
-    case 4:
-        if (func_80101DDC(param_0) != 0) {
-            func_800DA524((*(s32 *)((s8 *)(param_0) + (0x34))));
-            func_80102424(param_0, 1);
-            func_8010108C(param_0, 8, 0);
-        }
-        break;
-    }
-}
-
-void chswitch_entrypoint_12(Actor *param_0, s32 param_1, s32 param_2)
+void chswitch_entrypoint_11(u8 *actor)
 {
-    s32 local_0;
-    local_0 = func_800DA298(param_1);
-    *(s32 *)((u8 *)param_0 + 0x34) = param_1;
-    *(s32 *)((u8 *)param_0 + 0x2C) = param_2;
-    if (param_2 != -1) {
-        func_800DA524(param_2);
-    }
-    func_80102424(param_0, local_0 ? 3 : 1);
-    func_80102E08(param_0);
-}
+    u32 state;
 
-void chswitch_entrypoint_13(Actor *param_0)
-{
-    f32 local_0 = func_800D8FF8();
-    switch (param_0->unk70_10) {
-    case 1:
-        if (param_0->unk64_20) {
-            _gcaudiolist_entrypoint_0(0);
-            func_80102424(param_0, 2);
-        }
-        if (param_0->unk58 <= 0.0f) {
-            func_80103110(param_0, 0);
-            return;
-        }
-        param_0->unk58 -= local_0;
-        break;
-    case 2:
-        if (func_80101E14(param_0, 0.5f)) {
-            func_80102424(param_0, 3);
-            func_80101EE4(param_0, 0.5f);
-            if (!func_800F6CC8(func_800F54E4())) {
-                func_800DA544(param_0->actorData[7]);
-                func_8010108C(param_0, 7, 0);
+    state = (u32) (u16) *(u16 *) ((s8 *) actor + 0x72) >> 0xA;
+    switch (state) {
+        case 2:
+            if (func_80101DDC(actor) != 0) {
+                func_800DA544(*(s32 *) ((s8 *) actor + 0x34));
+                func_80102424(actor, 3);
+                func_800F7F98(*(s32 *) ((s8 *) actor + 0x28), 0);
+                func_8010108C(actor, 7, 0);
             }
-        }
-        break;
-    case 3:
-        if (!param_0->unk64_20) {
-            _gcaudiolist_entrypoint_0(0);
-            func_80102424(param_0, 4);
-        }
-        if (param_0->unk58 <= 0.0f) {
-            func_80103110(param_0, 0);
+        case 1:
             return;
-        }
-        param_0->unk58 -= local_0;
-        break;
-    case 4:
-        if (func_80101DDC(param_0)) {
-            func_800DA524(param_0->actorData[7]);
-            func_80102424(param_0, 1);
-            func_8010108C(param_0, 8, 0);
-        }
-        break;
+        case 3:
+            if (func_800DA298(*(s32 *) ((s8 *) actor + 0x2C)) != 0) {
+                func_800DA524(*(s32 *) ((s8 *) actor + 0x2C));
+                _gcaudiolist_entrypoint_0(0);
+                func_80102424(actor, 4);
+            }
+            break;
+        case 4:
+            if (func_80101DDC(actor) != 0) {
+                func_800DA524(*(s32 *) ((s8 *) actor + 0x34));
+                func_80102424(actor, 1);
+                func_8010108C(actor, 8, 0);
+            }
     }
 }
 
-s32 chswitch_entrypoint_14(Actor *param_0, s32 param_1)
+void chswitch_entrypoint_12(Actor *actor, s32 flag, s32 reset_flag)
 {
-    s32 local_0;
-    local_0 = func_800DA298(param_1);
-    param_0->actorData[7] = param_1;
-    if (local_0) {
-        func_80102424(param_0, 3);
-        func_80101EE4(param_0, 0.5f);
-    } else func_80102424(param_0, 1);
-    param_0->unk64_20 = local_0;
-    func_80103110(param_0, 0);
-    return local_0;
+    s32 is_set;
+    is_set = func_800DA298(flag);
+    *(s32 *) ((u8 *) actor + 0x34) = flag;
+    *(s32 *) ((u8 *) actor + 0x2C) = reset_flag;
+    if (reset_flag != -1) {
+        func_800DA524(reset_flag);
+    }
+    func_80102424(actor, is_set ? 3 : 1);
+    func_80102E08(actor);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/swit.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800DB0_chswitch -> int[] */
+// Timed switch: resets itself when the timer runs out.
+void chswitch_entrypoint_13(Actor *actor)
+{
+    f32 delta_time = func_800D8FF8();
+    switch (actor->unk70_10) {
+        case 1:
+            if (actor->unk64_20) {
+                _gcaudiolist_entrypoint_0(0);
+                func_80102424(actor, 2);
+            }
+            if (actor->unk58 <= 0.0f) {
+                func_80103110(actor, 0);
+                return;
+            }
+            actor->unk58 -= delta_time;
+            break;
+        case 2:
+            if (func_80101E14(actor, 0.5f)) {
+                func_80102424(actor, 3);
+                func_80101EE4(actor, 0.5f);
+                if (!func_800F6CC8(func_800F54E4())) {
+                    func_800DA544(actor->actorData[7]);
+                    func_8010108C(actor, 7, 0);
+                }
+            }
+            break;
+        case 3:
+            if (!actor->unk64_20) {
+                _gcaudiolist_entrypoint_0(0);
+                func_80102424(actor, 4);
+            }
+            if (actor->unk58 <= 0.0f) {
+                func_80103110(actor, 0);
+                return;
+            }
+            actor->unk58 -= delta_time;
+            break;
+        case 4:
+            if (func_80101DDC(actor)) {
+                func_800DA524(actor->actorData[7]);
+                func_80102424(actor, 1);
+                func_8010108C(actor, 8, 0);
+            }
+    }
+}
+
+s32 chswitch_entrypoint_14(Actor *actor, s32 flag)
+{
+    s32 is_set;
+    is_set = func_800DA298(flag);
+    actor->actorData[7] = flag;
+    if (is_set) {
+        func_80102424(actor, 3);
+        func_80101EE4(actor, 0.5f);
+    } else
+        func_80102424(actor, 1);
+    actor->unk64_20 = is_set;
+    func_80103110(actor, 0);
+    return is_set;
+}
+
 extern void func_80108F08();
-int D_80800DB0_chswitch[5] = { (u32)func_80800024_chswitch, 0x0, (u32)func_808000B8_chswitch, (u32)func_80108F08, 0x0 };
-void *D_80800DC4_chswitch = (void *)func_808002B4_chswitch;
-static u32 D_80800DC4_chswitch_rest[4] = { 0x0, 0x0, 0x0, 0x0 };
-void *D_80800DD8_chswitch = (void *)func_8080012C_chswitch;
-static u32 D_80800DD8_chswitch_rest[5] = { 0x0, 0x0, 0x0, 0x0, 0x0 };
+// TU-NOTE: the overlay .data is defined here in C. The tables hold pointers to functions of this
+// file, and IDO's assembler schedules some of them differently unless they are in the same unit.
+// Values are taken from the ROM; D_80800DB0_chswitch is declared as int[] (same address).
+int D_80800DB0_chswitch[5] = {(u32) func_80800024_chswitch, 0x0, (u32) func_808000B8_chswitch,
+                              (u32) func_80108F08, 0x0};
+void *D_80800DC4_chswitch = (void *) func_808002B4_chswitch;
+static u32 D_80800DC4_chswitch_rest[4] = {0x0, 0x0, 0x0, 0x0};
+void *D_80800DD8_chswitch = (void *) func_8080012C_chswitch;
+static u32 D_80800DD8_chswitch_rest[5] = {0x0, 0x0, 0x0, 0x0, 0x0};

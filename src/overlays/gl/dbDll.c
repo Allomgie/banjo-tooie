@@ -1,3 +1,5 @@
+// Two hidden mechanisms: a key stream derived from the CIC chip that decrypts type-10 assets,
+// and entry points that copy anti-tamper result bits into game flags.
 #include "common.h"
 
 extern OSMesgQueue *func_80016928(void);
@@ -7,102 +9,111 @@ extern void cic_read_response(OSMesgQueue *);
 extern void *heap_alloc(s32);
 extern u8 D_80079D70[];
 
-void func_80800000_gldbDll(u8 *param_0, s32 param_1)
+// CIC challenge/response key stream and XOR decryption of type-10 assets.
+// Sends a 14-byte challenge built from the 16-bit seed to the CIC and reads the
+// 16-byte response into response.
+void func_80800000_gldbDll(u8 *response, s32 seed)
 {
-    s32 local_1;
-    u8 local_0[16];
-    OSMesgQueue *local_3;
-    u16 local_2;
+    s32 i;
+    u8 challenge[16];
+    OSMesgQueue *queue;
+    u16 word;
 
-    local_3 = func_80016928();
-    for (local_1 = 0; local_1 < 14; local_1 += 2) {
-        local_2 = (param_1 >> local_1) | (param_1 << (16 - local_1));
-        local_0[local_1] = local_2;
-        local_0[local_1 + 1] = local_2 & 0xFF00;
+    queue = func_80016928();
+    for (i = 0; i < 14; i += 2) {
+        word = (seed >> i) | (seed << (16 - i));
+        challenge[i] = word;
+        challenge[i + 1] = word & 0xFF00;
     }
-    local_0[14] = 0;
-    local_0[15] = 2;
-    for (local_1 = 0; local_1 < 16; local_1++) {
-        param_0[local_1] = 0;
+    challenge[14] = 0;
+    challenge[15] = 2;
+    for (i = 0; i < 16; i++) {
+        response[i] = 0;
     }
     func_80016934(5);
-    cic_send_challenge(local_0, local_3);
-    osRecvMesg(local_3, NULL, OS_MESG_BLOCK);
-    cic_read_response(local_3);
-    osRecvMesg(local_3, NULL, OS_MESG_BLOCK);
-    func_8001E170(param_0);
+    cic_send_challenge(challenge, queue);
+    osRecvMesg(queue, NULL, OS_MESG_BLOCK);
+    cic_read_response(queue);
+    osRecvMesg(queue, NULL, OS_MESG_BLOCK);
+    func_8001E170(response);
     func_80016934(0);
 }
 
-void func_808000E8_gldbDll(u8 *param_0, s32 param_1, s32 param_2)
+// XORs buf with the 14-byte key stream derived from seed.
+void func_808000E8_gldbDll(u8 *buf, s32 seed, s32 size)
 {
-    u8 local_0[14];
-    s32 local_1;
-    func_80800000_gldbDll(local_0, param_1);
-    for (local_1 = 0; local_1 < param_2; local_1++) param_0[local_1] = param_0[local_1] ^ local_0[local_1 % 14];
+    u8 key[14];
+    s32 i;
+    func_80800000_gldbDll(key, seed);
+    for (i = 0; i < size; i++)
+        buf[i] = buf[i] ^ key[i % 14];
 }
 
-void *gldbDll_entrypoint_0(s32 param_0, s32 *param_1)
+// Asset loader for encrypted assets: reads and decrypts the asset, unpacks it into
+// a new heap buffer and stores the unpacked size in *out_size.
+void *gldbDll_entrypoint_0(s32 asset_id, s32 *out_size)
 {
-    s32 *local_2;
-    s32 local_1;
-    s32 local_0;
+    s32 *data;
+    s32 aligned_size;
+    s32 size;
 
-    local_1 = func_800D5DB8(param_0);
-    local_0 = local_1;
-    if (local_1 & 1) {
-        local_1++;
+    aligned_size = func_800D5DB8(asset_id);
+    size = aligned_size;
+    if (aligned_size & 1) {
+        aligned_size++;
     }
-    local_2 = heap_alloc(local_1);
-    rom_dma_read(local_2, func_800D5A6C(param_0), local_1);
-    func_808000E8_gldbDll(local_2, param_0 - 0x955, local_0);
-    local_0 = *local_2;
-    local_0 = (local_0 >> 16) * 0x10;
-    *param_1 = local_0;
-    local_0 = (s32)heap_alloc(local_0);
-    func_8001C2AC(local_2, local_0);
-    heap_free(local_2);
-    return (void *)local_0;
+    data = heap_alloc(aligned_size);
+    rom_dma_read(data, func_800D5A6C(asset_id), aligned_size);
+    func_808000E8_gldbDll(data, asset_id - 0x955, size);
+    size = *data;
+    size = (size >> 16) * 0x10;
+    *out_size = size;
+    size = (s32) heap_alloc(size);
+    func_8001C2AC(data, size);
+    heap_free(data);
+    return (void *) size;
 }
 
+// Periodically write anti-tamper result bits into game flags.
+// Passes each byte of the eeprom and reflight tamper values, plus 0x9C4, to func_800DA544.
 int gldbDll_entrypoint_1()
 {
-  int local_0;
-  int new_var;
-  for (local_0 = 0; local_0 < 4; local_0++) {
-    new_var = local_0 * 8;
-    func_800DA544(((int) (_gleeprom_entrypoint_0() & (0xFF << new_var)) >> new_var) + 0x9C4);
-  }
+    int i;
+    int shift;
+    // Matching: the shift temporary is needed for the match.
+    for (i = 0; i < 4; i++) {
+        shift = i * 8;
+        func_800DA544(((int) (_gleeprom_entrypoint_0() & (0xFF << shift)) >> shift) + 0x9C4);
+    }
 
-  for (local_0 = 0; local_0 < 4; local_0++)
-  {
-    new_var = local_0 * 8;
-    func_800DA544(((int) (_glreflight_entrypoint_0() & (0xFF << new_var)) >> new_var) + 0x9C4);
-  }
-
+    for (i = 0; i < 4; i++) {
+        shift = i * 8;
+        func_800DA544(((int) (_glreflight_entrypoint_0() & (0xFF << shift)) >> shift) + 0x9C4);
+    }
 }
 
+// Copies the bits of the combined tamper value into game flags 0x648..0x64F,
+// 0x660..0x667, 0x688..0x68F and 0x6A0..0x6A7.
 void gldbDll_entrypoint_2(void)
 {
-    s32 local_0;
-    u32 local_1;
-    u32 local_2;
+    s32 bit;
+    u32 tamper;
+    u32 eeprom;
 
-    local_2 = _gleeprom_entrypoint_0();
-    local_1 = (*(u32 *)(D_80079D70 + 0x1EC) | _glreflight_entrypoint_0()) | local_2;
-    for (local_0 = 0; local_0 < 8; local_0++) {
-        func_800DA3B8(local_0 + 0x648, ((1 << local_0) & local_1) >> local_0);
+    eeprom = _gleeprom_entrypoint_0();
+    tamper = (*(u32 *) (D_80079D70 + 0x1EC) | _glreflight_entrypoint_0()) | eeprom;
+    for (bit = 0; bit < 8; bit++) {
+        func_800DA3B8(bit + 0x648, ((1 << bit) & tamper) >> bit);
     }
-    for (local_0 = 8; local_0 < 16; local_0++) {
-        func_800DA3B8(local_0 + 0x658, ((1 << local_0) & local_1) >> local_0);
+    for (bit = 8; bit < 16; bit++) {
+        func_800DA3B8(bit + 0x658, ((1 << bit) & tamper) >> bit);
     }
-    for (local_0 = 16; local_0 < 24; local_0++) {
-        func_800DA3B8(local_0 + 0x670, ((1 << local_0) & local_1) >> local_0);
+    for (bit = 16; bit < 24; bit++) {
+        func_800DA3B8(bit + 0x670, ((1 << bit) & tamper) >> bit);
     }
-    for (local_0 = 24; local_0 < 32; local_0++) {
-        func_800DA3B8(local_0 + 0x680, ((1 << local_0) & local_1) >> local_0);
+    for (bit = 24; bit < 32; bit++) {
+        func_800DA3B8(bit + 0x680, ((1 << bit) & tamper) >> bit);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/dbDll.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: .data is defined here in C; values are taken from the ROM.

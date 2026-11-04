@@ -1,3 +1,5 @@
+// Player "throw" state: plays the throw animation facing the target and releases the held actor
+// partway through; on exit it arms two state timers when returning to idle.
 #include "common.h"
 
 extern void anctrl_reset(void *local_0);
@@ -19,100 +21,104 @@ extern s32 anctrl_isAt(void *, f32);
 extern Actor *func_80106790(void *);
 extern s32 D_808002F0_bsthrow[];
 
-void bsthrow_entrypoint_0(Actor *param_0)
+void bsthrow_entrypoint_0(Actor *player)
 {
-    void *local_0;
-    
-    local_0 = baanim_getAnimCtrlPtr();
-    anctrl_reset(local_0);
-    anctrl_setIndex(local_0, 0x11B);
-    anctrl_setDuration(local_0, 1.0f);
-    anctrl_setPlaybackType(local_0, 1);
-    anctrl_start(local_0);
-    func_8008CA4C(param_0, 1);
-    yaw_setUpdateType(param_0, 1);
-    func_8009D2D8(param_0, 3);
-    baphysics_set_type(param_0, 3);
-    baphysics_set_target_horizontal_velocity(param_0, 0);
-    func_8009BA9C(param_0, 0);
-    *(int *)((char *)param_0 + 0x15c) = 0;
+    void *anim_ctrl;
+
+    anim_ctrl = baanim_getAnimCtrlPtr();
+    anctrl_reset(anim_ctrl);
+    anctrl_setIndex(anim_ctrl, 0x11B);
+    anctrl_setDuration(anim_ctrl, 1.0f);
+    anctrl_setPlaybackType(anim_ctrl, 1);
+    anctrl_start(anim_ctrl);
+    func_8008CA4C(player, 1);
+    yaw_setUpdateType(player, 1);
+    func_8009D2D8(player, 3);
+    baphysics_set_type(player, 3);
+    baphysics_set_target_horizontal_velocity(player, 0);
+    func_8009BA9C(player, 0);
+    *(int *) ((char *) player + 0x15c) = 0;
 }
 
-void bsthrow_entrypoint_1(void *param_0)
+void bsthrow_entrypoint_1(void *player)
 {
-    s32 local_0;
-    void *local_1;
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_4;
-    void *local_5;
+    s32 next_state;
+    void *anim_ctrl;
+    f32 target_pos[3];
+    f32 player_pos[3];
+    f32 yaw;
+    void *held;
 
-    local_0 = 0;
-    local_1 = baanim_getAnimCtrlPtr(param_0);
-    local_5 = _bahold_entrypoint_5(param_0);
-    if (*(s32 *)((u8 *)param_0 + 0x15C) == 0 && local_5 != NULL) {
-        _bahold_entrypoint_6(param_0, local_5);
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    held = _bahold_entrypoint_5(player);
+    if (*(s32 *) ((u8 *) player + 0x15C) == 0 && held != NULL) {
+        _bahold_entrypoint_6(player, held);
     }
-    func_8009C128(param_0, local_3);
-    func_800A33CC(param_0, local_2);
-    func_800F1E6C(local_3, local_2, &local_4);
-    yaw_setIdeal(param_0, local_4);
-    if (anctrl_isAt(local_1, 0.35f) && local_5 != NULL) {
-        *(s32 *)((u8 *)param_0 + 0x15C) = 1;
-        func_80106790(local_5)->unk64_22 = 1;
+    func_8009C128(player, player_pos);
+    func_800A33CC(player, target_pos);
+    func_800F1E6C(player_pos, target_pos, &yaw);
+    yaw_setIdeal(player, yaw);
+    // Release the held actor at 35% of the animation.
+    if (anctrl_isAt(anim_ctrl, 0.35f) && held != NULL) {
+        *(s32 *) ((u8 *) player + 0x15C) = 1;
+        func_80106790(held)->unk64_22 = 1;
     }
-    if (anctrl_isStopped(local_1)) {
-        local_0 = 1;
+    if (anctrl_isStopped(anim_ctrl)) {
+        next_state = 1;
     }
-    bs_setState(param_0, local_0);
+    bs_setState(player, next_state);
 }
 
-void bsthrow_entrypoint_2(u8 *param_0)
+void bsthrow_entrypoint_2(u8 *player)
 {
-  if (!param_0)
-  {
-  }
- *((s32 *) (((s8 *) param_0) + 0x15C)) = 0; if (bs_getNextState() == 1) {
-    bastatetimer_set(param_0, 0, 0x3E0F5C29);
-    bastatetimer_set(param_0, 1, 0x3E8F5C29);
-  }
+    // Matching: empty block steers IDO's code generation.
+    if (!player) {
+    }
+    *(s32 *) ((s8 *) player + 0x15C) = 0;
+    if (bs_getNextState() == 1) {
+        bastatetimer_set(player, 0, 0x3E0F5C29);
+        bastatetimer_set(player, 1, 0x3E8F5C29);
+    }
 }
 
-int bsthrow_entrypoint_3(s32 param_0)
+int bsthrow_entrypoint_3(s32 index)
 {
-  return D_808002F0_bsthrow[param_0];
+    return D_808002F0_bsthrow[index];
 }
 
-void bsthrow_entrypoint_4(u8 *param_0) {
-    s32 local_0;
+void bsthrow_entrypoint_4(u8 *player)
+{
+    s32 interrupt;
 
-    local_0 = func_8009E6EC();
-    switch (local_0) {
-    case 18:
-        if ((*(s32 *)((s8 *)(param_0) + (0x15C))) == 0) {
-            func_8008F6B8(param_0, func_8008E9AC(param_0));
+    interrupt = func_8009E6EC();
+    switch (interrupt) {
+        case 18:
+            // Not released yet: drop the held actor.
+            if (*(s32 *) ((s8 *) player + 0x15C) == 0) {
+                func_8008F6B8(player, func_8008E9AC(player));
+                return;
+            }
+            func_8009E830(player, 1);
             return;
-        }
-        func_8009E830(param_0, 1);
-        return;
-    case 21: ;
-    case 28:
-    case 29: ;
-    case 30:
-    case 37:
-        func_8009E830(param_0, 1);
-        return;
-    default:
-        func_80099B94(param_0);
-        return;
+        case 21:;
+        case 28:
+        case 29:;
+        case 30:
+        case 37:
+            func_8009E830(player, 1);
+            return;
+        default:
+            func_80099B94(player);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/throw.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+// TU-NOTE: the overlay .data is defined here in C. The table holds pointers to functions of this
+// file; IDO's assembler schedules some of them differently unless it is in the same unit. Values
+// are taken from the ROM.
 extern void _bsthrow_entrypoint_2();
 extern void _bsthrow_entrypoint_0();
 extern void _bsthrow_entrypoint_1();
 extern void _bsthrow_entrypoint_4();
-s32 D_808002F0_bsthrow[4] = { (u32)_bsthrow_entrypoint_2, (u32)_bsthrow_entrypoint_0, (u32)_bsthrow_entrypoint_1, (u32)_bsthrow_entrypoint_4 };
+s32 D_808002F0_bsthrow[4] = {(u32) _bsthrow_entrypoint_2, (u32) _bsthrow_entrypoint_0,
+                             (u32) _bsthrow_entrypoint_1, (u32) _bsthrow_entrypoint_4};

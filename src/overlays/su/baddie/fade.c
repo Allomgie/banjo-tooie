@@ -1,152 +1,202 @@
+// Actor fade and tint: get/set alpha, request fade-in/out (or out and delete), per-frame fade
+// update (fixed step or timed), and set/get the RGB tint, including from the ambient colour.
 #include "su/baddiefade.h"
 
-typedef struct { u8 local_0[0x74]; u32 local_1:27; u32 local_2:1; u32 local_3:4; } FadeFlags49;
+// TU-NOTE: the .data of this overlay is defined in C here; values come from the ROM.
+typedef struct {
+    u8 pad_0[0x74];
+    u32 unk_74 : 27;
+    u32 timed : 1; // fade runs over a duration instead of a fixed step
+    u32 unk_74b : 4;
+} FadeFlags49;
 extern f32 func_800D8FF8(void);
-typedef struct { u8 pad[0x70]; u32 pad70:29; u32 flag:1; u32 rest:2; } FadeS;
+typedef struct {
+    u8 pad[0x70];
+    u32 pad70 : 29;
+    u32 flag : 1;
+    u32 rest : 2;
+} FadeS;
 extern void func_800F2F20();
 extern void func_800F2F3C();
 extern void func_800EFA88();
 extern void func_800C87DC();
 int func_80800450_subaddiefade();
 
-subaddiefade_entrypoint_0(u8 *param_0) {
-    return param_0[0x9B];
-}
-
-void subaddiefade_entrypoint_1(u8 *param_0, unsigned int param_1)
+// Returns the actor's alpha.
+subaddiefade_entrypoint_0(u8 *actor)
 {
-  param_0[0x9B] = param_1;
-  param_0[0x79] &= ~3U;
+    return actor[0x9B];
 }
 
-void subaddiefade_entrypoint_2(u8 *param_0)
+// Sets alpha and cancels any running fade.
+void subaddiefade_entrypoint_1(u8 *actor, unsigned int alpha)
 {
-  param_0[0x9B] = 0;
-  param_0[0x79] = (param_0[0x79] & 0xFFFC) | 1;
+    actor[0x9B] = alpha;
+    actor[0x79] &= ~3U;
 }
 
-void subaddiefade_entrypoint_3(u8 *param_0)
+// Starts a fade-in from alpha 0.
+void subaddiefade_entrypoint_2(u8 *actor)
 {
-  param_0[0x79] = (param_0[0x79] & 0xFFFC) | 2;
+    actor[0x9B] = 0;
+    actor[0x79] = (actor[0x79] & 0xFFFC) | 1;
 }
 
-void subaddiefade_entrypoint_4(u8 *param_0)
+// Starts a fade-out and deletes the actor at alpha 0.
+void subaddiefade_entrypoint_3(u8 *actor)
 {
-  param_0[0x79] = (param_0[0x79] & 0xFFFC) | 1;
+    actor[0x79] = (actor[0x79] & 0xFFFC) | 2;
 }
 
-void subaddiefade_entrypoint_5(u8 *param_0)
+// Starts a fade-in from the current alpha.
+void subaddiefade_entrypoint_4(u8 *actor)
 {
-  param_0[121] = (param_0[121] & 0xFFFFu) | 3;
+    actor[0x79] = (actor[0x79] & 0xFFFC) | 1;
 }
 
-void subaddiefade_entrypoint_6(u8 *param_0, s32 param_1) {
-    s32 local_0 = param_0[0x9B] + param_1;
-    param_0[0x9B] = (((local_0 > 0xFF) ? 0xFF : local_0) < 0) ? 0 : ((local_0 > 0xFF) ? 0xFF : local_0);
-}
-
-void subaddiefade_entrypoint_7(Actor *param_0)
+// Starts a fade-out without deleting the actor.
+void subaddiefade_entrypoint_5(u8 *actor)
 {
+    // Matching: the 0xFFFFu mask is needed for the match.
+    actor[121] = (actor[121] & 0xFFFFu) | 3;
+}
 
-    s32 local_1;
-    if (((FadeFlags49 *)param_0)->local_2) {
-        *(f32 *)&param_0->actorData[1] += func_800D8FF8();
-        if ((*(f32 *)&param_0->actorData[0]) < *(f32 *)&param_0->actorData[1]) *(f32 *)&param_0->actorData[1] = (*(f32 *)&param_0->actorData[0]);
-        switch (*(u16 *)((u8 *)param_0 + 0x78) & 3) {
-        case 1:
-            if ((*(f32 *)&param_0->actorData[0]) != 0.0f) param_0->alpha = (s32)((*(f32 *)&param_0->actorData[1] / (*(f32 *)&param_0->actorData[0])) * 255.0f);
-            else param_0->alpha = 255;
-            if (param_0->alpha == 255) *((u8 *)param_0 + 0x79) &= ~3;
-            break;
-        case 2:
-            if ((*(f32 *)&param_0->actorData[0]) != 0.0f) param_0->alpha = 255 - (s32)((*(f32 *)&param_0->actorData[1] / (*(f32 *)&param_0->actorData[0])) * 255.0f);
-            else param_0->alpha = 0;
-            if (param_0->alpha == 0) *((u8 *)param_0 + 0x79) &= ~3;
-            break;
+// Adds delta to alpha, clamped to 0..255.
+void subaddiefade_entrypoint_6(u8 *actor, s32 delta)
+{
+    s32 sum = actor[0x9B] + delta;
+    // Matching: the repeated clamp expression is needed for the match.
+    actor[0x9B] =
+        (((sum > 0xFF) ? 0xFF : sum) < 0) ? 0 : ((sum > 0xFF) ? 0xFF : sum);
+}
+
+// Per-frame fade update. Fade mode is in the low 2 bits at +0x78:
+// 1 = in, 2 = out and delete, 3 = out.
+// Timed mode: actorData[0] is the duration, actorData[1] the elapsed time.
+void subaddiefade_entrypoint_7(Actor *actor)
+{
+    s32 new_alpha;
+    if (((FadeFlags49 *) actor)->timed) {
+        *(f32 *) &actor->actorData[1] += func_800D8FF8();
+        if (*(f32 *) &actor->actorData[0] < *(f32 *) &actor->actorData[1])
+            *(f32 *) &actor->actorData[1] = *(f32 *) &actor->actorData[0];
+        switch (*(u16 *) ((u8 *) actor + 0x78) & 3) {
+            case 1:
+                if (*(f32 *) &actor->actorData[0] != 0.0f)
+                    actor->alpha =
+                        (s32) ((*(f32 *) &actor->actorData[1] / *(f32 *) &actor->actorData[0]) *
+                               255.0f);
+                else
+                    actor->alpha = 255;
+                if (actor->alpha == 255)
+                    *((u8 *) actor + 0x79) &= ~3;
+                break;
+            case 2:
+                if (*(f32 *) &actor->actorData[0] != 0.0f)
+                    actor->alpha =
+                        255 -
+                        (s32) ((*(f32 *) &actor->actorData[1] / *(f32 *) &actor->actorData[0]) *
+                               255.0f);
+                else
+                    actor->alpha = 0;
+                if (actor->alpha == 0)
+                    *((u8 *) actor + 0x79) &= ~3;
         }
     } else {
-        switch (*(u16 *)((u8 *)param_0 + 0x78) & 3) {
-        case 1:
-            local_1 = param_0->alpha + 7;
-            if (local_1 >= 256) param_0->alpha = 255;
-            else param_0->alpha = local_1;
-            if (param_0->alpha == 255) *((u8 *)param_0 + 0x79) &= ~3;
-            break;
-        case 2:
-            local_1 = param_0->alpha - 7;
-            if (local_1 < 0) param_0->alpha = 0;
-            else param_0->alpha = local_1;
-            if (param_0->alpha == 0 && !func_80107070(param_0, 3)) func_800FFAB0(param_0);
-            break;
-        case 3:
-            local_1 = param_0->alpha - 7;
-            if (local_1 < 0) param_0->alpha = 0;
-            else param_0->alpha = local_1;
-            if (param_0->alpha == 0) *((u8 *)param_0 + 0x79) &= ~3;
-            break;
+        switch (*(u16 *) ((u8 *) actor + 0x78) & 3) {
+            case 1:
+                new_alpha = actor->alpha + 7;
+                if (new_alpha >= 256)
+                    actor->alpha = 255;
+                else
+                    actor->alpha = new_alpha;
+                if (actor->alpha == 255)
+                    *((u8 *) actor + 0x79) &= ~3;
+                break;
+            case 2:
+                new_alpha = actor->alpha - 7;
+                if (new_alpha < 0)
+                    actor->alpha = 0;
+                else
+                    actor->alpha = new_alpha;
+                if (actor->alpha == 0 && !func_80107070(actor, 3))
+                    func_800FFAB0(actor);
+                break;
+            case 3:
+                new_alpha = actor->alpha - 7;
+                if (new_alpha < 0)
+                    actor->alpha = 0;
+                else
+                    actor->alpha = new_alpha;
+                if (actor->alpha == 0)
+                    *((u8 *) actor + 0x79) &= ~3;
         }
     }
 }
 
-void subaddiefade_entrypoint_8(u8 *param_0, s32 param_1)
+// Sets alpha, clamped to 0..255.
+void subaddiefade_entrypoint_8(u8 *actor, s32 alpha)
 {
-    s32 local_0;
-    local_0 = func_800F0D90(param_1, 0, 0xFF);
-    param_0[0x9B] = (u8)local_0;
+    s32 clamped;
+    clamped = func_800F0D90(alpha, 0, 0xFF);
+    actor[0x9B] = (u8) clamped;
 }
 
-s32 subaddiefade_entrypoint_9(s32 param_0, s32 param_1)
+s32 subaddiefade_entrypoint_9(s32 actor, s32 tint)
 {
-  s32 local_0;
-  s32 local_1 = param_1;
-  func_800F2EE0(local_1, param_0 + 0x98);
+    // Matching: the extra copy is needed for the match.
+    s32 tint_copy = tint;
+    func_800F2EE0(tint_copy, actor + 0x98);
 }
 
-void subaddiefade_entrypoint_10(s32 param_0, s32 param_1)
+void subaddiefade_entrypoint_10(s32 actor, s32 tint)
 {
-  func_800F2EFC(param_1, param_0 + 0x98);
+    func_800F2EFC(tint, actor + 0x98);
 }
 
-void subaddiefade_entrypoint_11(FadeS *param_0, f32 *param_1) {
-    f32 local_0[3];
-    if (param_0->flag) {
-        func_80800450_subaddiefade(local_0);
-        func_800F2F20((u8 *)param_0 + 0x98, local_0);
+void subaddiefade_entrypoint_11(FadeS *actor, f32 *color)
+{
+    f32 rgb[3];
+    if (actor->flag) {
+        func_80800450_subaddiefade(rgb);
+        func_800F2F20((u8 *) actor + 0x98, rgb);
     } else {
-        func_800F2F20((u8 *)param_0 + 0x98, param_1);
+        func_800F2F20((u8 *) actor + 0x98, color);
     }
 }
 
-s32 subaddiefade_entrypoint_12(Actor *this){
-    f32 local_0[3];
+s32 subaddiefade_entrypoint_12(Actor *actor)
+{
+    f32 rgb[3];
 
-    func_800EFA88(local_0);
-    subaddiefade_entrypoint_11(this, &local_0);
+    func_800EFA88(rgb);
+    subaddiefade_entrypoint_11(actor, &rgb);
 }
 
-void subaddiefade_entrypoint_13(FadeS *param_0, f32 *param_1) {
-    f32 local_0[3];
-    if (param_0->flag) {
-        func_80800450_subaddiefade(local_0);
-        func_800F2F20((u8 *)param_0 + 0x98, local_0);
+void subaddiefade_entrypoint_13(FadeS *actor, f32 *color)
+{
+    f32 rgb[3];
+    if (actor->flag) {
+        func_80800450_subaddiefade(rgb);
+        func_800F2F20((u8 *) actor + 0x98, rgb);
     } else {
-        func_800F2F3C((u8 *)param_0 + 0x98, param_1);
+        func_800F2F3C((u8 *) actor + 0x98, color);
     }
 }
 
-int func_80800450_subaddiefade(param_0, param_1) s32 param_0[3]; s32 param_1[3];
+// Writes the average of src to all three dst channels.
+int func_80800450_subaddiefade(dst, src)
+s32 dst[3];
+s32 src[3];
 {
-  f32 local_0;
-  local_0 = ((param_1[0] + param_1[1]) + param_1[2]) / 3.0f;
-  param_0[2] = (param_0[1] = (param_0[0] = ((param_1[0] + param_1[1]) + param_1[2]) / 3.0f));
+    dst[2] = (dst[1] = (dst[0] = ((src[0] + src[1]) + src[2]) / 3.0f));
 }
 
-s32 subaddiefade_entrypoint_14(Actor *this){
-    f32 local_0[3];
+// Tints from the ambient colour.
+s32 subaddiefade_entrypoint_14(Actor *actor)
+{
+    f32 rgb[3];
 
-    func_800C87DC(local_0);
-    subaddiefade_entrypoint_11(this, &local_0);
+    func_800C87DC(rgb);
+    subaddiefade_entrypoint_11(actor, &rgb);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/fade.data.s) is defined here in C.
- * Values are taken from the ROM. */

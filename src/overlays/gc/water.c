@@ -1,37 +1,32 @@
+// Map-load hook: checks the map model for water triangles and stores the result in game flag 0x6B5.
 #include "common.h"
 
+// Map-load hook: sets game flag 0x6B5 if the map model has water triangles
+// (translucent layer checked first, then opaque).
 int gcwater_entrypoint_0()
 {
-  s32 local_0;
-  s32 local_1;
-  s32 local_2;
-  s32 local_3;
-  s32 local_4;
+    s32 found;
+    s32 translucent;
+    s32 translucent_coll;
+    s32 opaque;
+    s32 opaque_coll;
 
-  local_0 = 0;
-  local_1 = func_800BEB28(1);
-  if (local_1 != 0)
-  {
-    local_2 = func_800B2720(local_1);
-    if (local_2 != 0)
-    {
-      local_0 = func_800AAD80(local_2);
+    found = 0;
+    translucent = func_800BEB28(1);
+    if (translucent != 0) {
+        translucent_coll = func_800B2720(translucent);
+        if (translucent_coll != 0) {
+            found = func_800AAD80(translucent_coll);
+        }
     }
-  }
-  if (local_0 == 0)
-  {
-    local_3 = func_800BEB28(0);
-    if (local_3 != 0)
-    {
-      local_4 = func_800B2720(local_3);
-      if (local_4 != 0)
-      {
-        local_0 = func_800AAD80(local_4);
-      }
+    if (found == 0) {
+        opaque = func_800BEB28(0);
+        if (opaque != 0) {
+            opaque_coll = func_800B2720(opaque);
+            if (opaque_coll != 0) {
+                found = func_800AAD80(opaque_coll);
+            }
+        }
     }
-  }
-  func_800DA3B8(0x6B5, (local_0) ? (1) : (0));
+    func_800DA3B8(0x6B5, found ? 1 : 0);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/water.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -1,16 +1,20 @@
+// Banjo-Kazooie rebound: the stronger knock-back from bouncing off something.
 #include "overlays/bs/rebound.h"
 
-void func_80800000_bsrebound(PlayerState *self) {
+// Rebound: stronger knock-back from bouncing off something (anim 0xF).
+void func_80800000_bsrebound(PlayerState *self)
+{
     _babounce_entrypoint_4(self, 2);
     _babounce_entrypoint_5(self, 0xF, 0.5823f);
 }
 
-void func_80800038_bsrebound(PlayerState *self) {
+void func_80800038_bsrebound(PlayerState *self)
+{
     enum bs_state_e next_state;
-    AnimCtrl *animCtrl;
+    AnimCtrl *anim_ctrl;
 
     next_state = BS_STATE_0_INVALID;
-    animCtrl = baanim_getAnimCtrlPtr(self);
+    anim_ctrl = baanim_getAnimCtrlPtr(self);
     if (_babounce_entrypoint_2(self) != 0) {
         _bswalk_entrypoint_1(self);
     }
@@ -23,7 +27,7 @@ void func_80800038_bsrebound(PlayerState *self) {
         if (func_8008E260(self) != 0) {
             next_state = BS_STATE_3D_FALL_TUMBLING;
         }
-        if ((anctrl_isStopped(animCtrl) != 0) && (func_8008DD04(self) != 0)) {
+        if ((anctrl_isStopped(anim_ctrl) != 0) && (func_8008DD04(self) != 0)) {
             next_state = BS_STATE_2F_FALL;
         }
     }
@@ -31,15 +35,19 @@ void func_80800038_bsrebound(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void func_808000EC_bsrebound(PlayerState *self) {
+void func_808000EC_bsrebound(PlayerState *self)
+{
     _babounce_entrypoint_3(self);
 }
 
-s32 bsrebound_entrypoint_0(s32 idx) {
+s32 bsrebound_entrypoint_0(s32 idx)
+{
     return D_80800120_bsrebound[idx];
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/rebound.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+
+// TU-NOTE: the overlay's .data is defined here in C. The table holds pointers to functions of
+// this file, and IDO's assembler schedules some of them differently unless it is in the same
+// unit. Values are taken from the ROM.
 extern void func_80099AA8();
-s32 D_80800120_bsrebound[4] = { (u32)func_808000EC_bsrebound, (u32)func_80800000_bsrebound, (u32)func_80800038_bsrebound, (u32)func_80099AA8 };
+s32 D_80800120_bsrebound[4] = {(u32) func_808000EC_bsrebound, (u32) func_80800000_bsrebound,
+                               (u32) func_80800038_bsrebound, (u32) func_80099AA8};

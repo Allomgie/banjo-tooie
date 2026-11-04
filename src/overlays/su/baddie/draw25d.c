@@ -1,85 +1,109 @@
+// Most likely "2.5D" actor drawing: draws an actor's sprite model as a billboard, or rotated with
+// yaw/pitch, using the actor's alpha/fade mode, optional RGB tint and environment light.
 #include "common.h"
 
 extern void _subaddiedraw25d_entrypoint_0(void);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800E24E4(void (*)(), Actor *);
-typedef struct { u32 pad : 30; u32 flag : 1; u32 pad2 : 1; } BitTest30;
-typedef struct { u8 pad_0[0x78]; u32 pad_1 : 30; u32 colored : 1; u32 pad_2 : 1; } Draw25dFlags;
-typedef struct { u8 pad_0[8]; u32 pad_1 : 26; u32 flipped : 1; u32 pad_2 : 5; } Draw25dMarkerInfo;
+typedef struct {
+    u32 pad : 30;
+    u32 flag : 1;
+    u32 pad2 : 1;
+} BitTest30;
+typedef struct {
+    u8 pad_0[0x78];
+    u32 pad_1 : 30;
+    u32 colored : 1;
+    u32 pad_2 : 1;
+} Draw25dFlags;
+typedef struct {
+    u8 pad_0[8];
+    u32 pad_1 : 26;
+    u32 flipped : 1;
+    u32 pad_2 : 5;
+} Draw25dMarkerInfo;
 void subaddiedraw25d_entrypoint_3();
 
-int subaddiedraw25d_entrypoint_0(u8 *param_0)
+// Draw callback: sets a flag on the actor.
+int subaddiedraw25d_entrypoint_0(u8 *actor)
 {
-  param_0[0x7E] = (param_0[0x7E] & 0xFFFFu) | 0x10;
+    actor[0x7E] = (actor[0x7E] & 0xFFFFu) | 0x10;
 }
 
-void subaddiedraw25d_entrypoint_1(Actor *param_0, s32 param_1)
+// Draw the actor's sprite model as a rotated billboard.
+void subaddiedraw25d_entrypoint_1(Actor *actor, s32 unk_0)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    Unk80132ED0 *local_2;
-    s32 local_3;
-    u8 *local_4;
+    f32 scale[3];
+    f32 rot[3];
+    Unk80132ED0 *obj;
+    s32 model;
+    u8 *info;
 
-    local_2 = param_0->unk0;
-    local_3 = func_80103AE4(local_2);
-    local_0[0] = local_0[1] = local_0[2] = param_0->scale;
-    func_800EFA4C(local_1, param_0->rotation[0], param_0->rotation[1], 0.0f);
-    if (*(u16 *)((u8 *)param_0 + 0x78) & 3) {
-        func_800E257C(*((u8 *)param_0 + 0x9B));
+    obj = actor->unk0;
+    model = func_80103AE4(obj);
+    scale[0] = scale[1] = scale[2] = actor->scale;
+    func_800EFA4C(rot, actor->rotation[0], actor->rotation[1], 0.0f);
+    if (*(u16 *) ((u8 *) actor + 0x78) & 3) {
+        func_800E257C(*((u8 *) actor + 0x9B));
         func_800E2588(1);
-    } else if (func_800AF5A8(local_3) & 0xB00) {
+    } else if (func_800AF5A8(model) & 0xB00) {
         func_800E2588(1);
     } else {
         func_800E2588(3);
     }
-    if (((BitTest30 *)((u8 *)param_0 + 0x78))->flag) {
-        func_800E24F8(*((u8 *)param_0 + 0x98), *((u8 *)param_0 + 0x99), *((u8 *)param_0 + 0x9A));
+    if (((BitTest30 *) ((u8 *) actor + 0x78))->flag) {
+        func_800E24F8(*((u8 *) actor + 0x98), *((u8 *) actor + 0x99), *((u8 *) actor + 0x9A));
     }
-    subaddiedraw25d_entrypoint_3(param_0);
-    func_800E24E4(_subaddiedraw25d_entrypoint_0, param_0);
-    local_4 = *(u8 **)local_2;
-    func_800E2C54(param_1, local_3, (u32)*(u16 *)(local_4 + 0xA) >> 11,
-        (*(u32 *)(local_4 + 8) << 26) >> 31, param_0->position, local_1, local_0);
+    subaddiedraw25d_entrypoint_3(actor);
+    func_800E24E4(_subaddiedraw25d_entrypoint_0, actor);
+    info = *(u8 **) obj;
+    func_800E2C54(unk_0, model, (u32) *(u16 *) (info + 0xA) >> 11,
+                  (*(u32 *) (info + 8) << 26) >> 31, actor->position, rot, scale);
 }
 
-void subaddiedraw25d_entrypoint_2(Actor *param_0, s32 param_1)
+// Draw the actor's sprite model as a plain billboard.
+void subaddiedraw25d_entrypoint_2(Actor *actor, s32 unk_0)
 {
-    f32 local_0[3];
-    Unk80132ED0 *local_1;
-    s32 local_2;
-    u8 *local_3;
-    local_1 = param_0->unk0;
-    local_2 = func_80103AE4(local_1);
-    local_0[0] = local_0[1] = local_0[2] = param_0->scale;
-    if (*(u16 *)((u8 *)param_0 + 0x78) & 3) {
-        func_800E257C(param_0->alpha);
+    f32 scale[3];
+    Unk80132ED0 *obj;
+    s32 model;
+    u8 *info;
+    obj = actor->unk0;
+    model = func_80103AE4(obj);
+    scale[0] = scale[1] = scale[2] = actor->scale;
+    if (*(u16 *) ((u8 *) actor + 0x78) & 3) {
+        func_800E257C(actor->alpha);
         func_800E2588(1);
     } else {
-        if (func_800AF5A8(local_2) & 0xB00) func_800E2588(1);
-        else func_800E2588(3);
+        if (func_800AF5A8(model) & 0xB00)
+            func_800E2588(1);
+        else
+            func_800E2588(3);
     }
-    if (((Draw25dFlags *)param_0)->colored) func_800E24F8(param_0->pad98, param_0->pad99, param_0->pad9A);
-    subaddiedraw25d_entrypoint_3(param_0);
-    func_800E24E4(_subaddiedraw25d_entrypoint_0, param_0);
-    local_3 = *(u8 **)local_1;
-    func_800E2AA4(param_1, local_2, (u32)*(u16 *)(local_3 + 0xA) >> 11,
-        ((Draw25dMarkerInfo *)local_3)->flipped, param_0->position, local_0);
+    if (((Draw25dFlags *) actor)->colored)
+        func_800E24F8(actor->pad98, actor->pad99, actor->pad9A);
+    subaddiedraw25d_entrypoint_3(actor);
+    func_800E24E4(_subaddiedraw25d_entrypoint_0, actor);
+    info = *(u8 **) obj;
+    func_800E2AA4(unk_0, model, (u32) *(u16 *) (info + 0xA) >> 11,
+                  ((Draw25dMarkerInfo *) info)->flipped, actor->position, scale);
 }
 
-void subaddiedraw25d_entrypoint_3(param_0) u8 *param_0; {
-    u16 local_0;
+// Set the environment light from the ActorInfo (+0x1A) or the default.
+void subaddiedraw25d_entrypoint_3(actor) u8 *actor;
+{
+    u16 light;
 
-    func_800E24C0((u32) ((*(s32 *)((s8 *)(param_0) + (0x70))) << 0xB) >> 0x1F);
-    local_0 = (*(u16 *)((s8 *)(func_80100368(param_0)) + (0x1A)));
-    if (local_0 != 0) {
-        func_800E249C(local_0);
-        return;
-    }
-    if (!((*(s32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0)))) + (0x10))) & 1)) {
-        func_800E249C(func_800D2F20(local_0));
-    }
+    func_800E24C0((u32) ((*(s32 *) ((s8 *) (actor) + (0x70))) << 0xB) >> 0x1F);
+    light = (*(u16 *) ((s8 *) (func_80100368(actor)) + (0x1A)));
+
+if (light != 0) {
+    func_800E249C(light);
+    return;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/draw25d.data.s) is defined here in C.
- * Values are taken from the ROM. */
+if (!(*(s32 *) ((s8 *) *(u8 **) ((s8 *) actor + 0) + 0x10) & 1)) {
+    func_800E249C(func_800D2F20(light));
+}
+
+}

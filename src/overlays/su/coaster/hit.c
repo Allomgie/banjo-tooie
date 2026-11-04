@@ -1,3 +1,5 @@
+// Hit and stun reactions of the walking baddie: hurt/knock/freeze touch callbacks, the dizzy
+// state with a particle ring, a looped hit sound and a heavy-stomp effect.
 #include "common.h"
 
 extern int D_80800CB0_sucoasterhit[];
@@ -5,13 +7,42 @@ extern u8 *func_80106790(void *);
 extern u8 *func_80100094(u8 *, s32);
 extern s32 func_800D9058(f32);
 extern void _subaddierouteDll_entrypoint_6(Actor *, void *, s32, s32, f32, s32, s32);
-typedef struct { u8 pad_0[0x78]; u32 pad_1:29; u32 local_0:1; u32 pad_2:2; } CoasterHitFlags27;
-typedef struct { u8 pad_0[0x64]; u32 pad_1:2; u32 local_0:1; u32 pad_2:29; } CoasterHitActive27;
-typedef struct { u8 pad_0[0x18]; u8 pad_1 : 4; u8 local_0 : 1; u8 pad_2 : 3; } CoasterHitState_80800114_sucoasterhit;
-typedef struct { u8 pad_0[0x78]; u32 pad_1 : 29; u32 local_0 : 1; u32 pad_2 : 2; } CoasterHitActor;
-typedef struct { u8 pad[0x78]; u32 pad78:29; u32 flag:1; u32 rest:2; } CoasterHitState_808001C8_sucoasterhit;
+typedef struct {
+    u8 pad_0[0x78];
+    u32 pad_1 : 29;
+    u32 unk_78 : 1;
+    u32 pad_2 : 2;
+} CoasterHitFlags27;
+typedef struct {
+    u8 pad_0[0x64];
+    u32 pad_1 : 2;
+    u32 player_controlled : 1;
+    u32 pad_2 : 29;
+} CoasterHitActive27;
+typedef struct {
+    u8 pad_0[0x18];
+    u8 pad_1 : 4;
+    u8 stunned : 1;
+    u8 pad_2 : 3;
+} CoasterHitState_80800114_sucoasterhit;
+typedef struct {
+    u8 pad_0[0x78];
+    u32 pad_1 : 29;
+    u32 unk_78 : 1;
+    u32 pad_2 : 2;
+} CoasterHitActor;
+typedef struct {
+    u8 pad[0x78];
+    u32 pad78 : 29;
+    u32 unk_78 : 1;
+    u32 rest : 2;
+} CoasterHitState_808001C8_sucoasterhit;
 extern int _sucoaster_entrypoint_9(CoasterHitState_808001C8_sucoasterhit *, s32, s32);
-typedef struct { u8 pad0[0x24]; u32 kind:10; u32 rest:22; } CoasterHitMsg;
+typedef struct {
+    u8 pad0[0x24];
+    u32 kind : 10;
+    u32 rest : 22;
+} CoasterHitMsg;
 extern s32 func_800F0E28();
 extern s32 D_80800CC4_sucoasterhit[];
 extern s32 _chbaddiesetup_entrypoint_10;
@@ -28,14 +59,28 @@ extern void _chbounce_entrypoint_5(s32, u8 *);
 extern void _chbaddiesetup_entrypoint_5(s32 *, s32, s32, f32, s32, s32);
 extern void func_800EEB9C(f32 *, f32, f32);
 extern void _subaddiejoy_entrypoint_10(u8 *, f32, f32);
-typedef struct { u8 pad[0x19]; u8 b7 : 1; u8 b6 : 1; u8 b5 : 1; u8 rest : 5; } HitFlags;
+typedef struct {
+    u8 pad[0x19];
+    u8 b7 : 1;
+    u8 b6 : 1;
+    u8 b5 : 1;
+    u8 rest : 5;
+} HitFlags;
 extern u8 D_80800CE8_sucoasterhit[];
 extern u8 D_80800D14_sucoasterhit[];
 extern s32 _subaddievolume_entrypoint_0(void *, f32 (*)[3], s32, s32, s32 *);
 extern void func_800BABB8(s32, f32 *, f32 *, f32, void *);
 extern void func_80103F38(Actor *, f32 *);
-typedef struct { s16 sound; s16 volume; s16 pitch; s16 pad; } CoasterHitSoundEntry;
-typedef struct { u32 header; CoasterHitSoundEntry entries[1]; } CoasterHitSoundTable;
+typedef struct {
+    s16 sound;
+    s16 volume;
+    s16 pitch;
+    s16 pad;
+} CoasterHitSoundEntry;
+typedef struct {
+    u32 header;
+    CoasterHitSoundEntry entries[1];
+} CoasterHitSoundTable;
 extern s16 D_80800CDC_sucoasterhit[];
 extern void func_800C31DC(u8, f32);
 extern s32 func_800C4350(u8, f32 *, s16 *);
@@ -46,297 +91,336 @@ extern void func_800C2FDC(u8);
 
 int sucoasterhit_entrypoint_0()
 {
-    return (int)&D_80800CB0_sucoasterhit;
+    return (int) &D_80800CB0_sucoasterhit;
 }
 
-void func_8080000C_sucoasterhit(Unk80132ED0 *param_0, u8 *param_1)
+void func_8080000C_sucoasterhit(Unk80132ED0 *collider, u8 *other)
 {
-    Actor *local_1;
-    u8 *local_0;
+    Actor *actor;
+    u8 *state;
 
-    local_1 = func_80106790(param_0);
-    local_0 = func_80100094(local_1, 0);
-    if (!((CoasterHitFlags27 *)local_1)->local_0 && !( *((u8 *)local_1 + 0x74) & 1)) {
-        local_1->unk6C_0 = func_800D9058(2.0f);
-        if (local_1->unk70_10 != 2 && local_1->unk70_10 != 9 && local_1->unk70_10 != 0xE && !((CoasterHitActive27 *)local_1)->local_0) {
-            if (_sucoaster_entrypoint_9(local_1, 3, 3) && !(*(u32 *)(param_1 + 0x24) >> 22)) {
-                _subaddierouteDll_entrypoint_6(local_1, local_0, local_0[0x16], 0, 1.0f, 0x46, 0x78);
+    actor = func_80106790(collider);
+    state = func_80100094(actor, 0);
+    if (!((CoasterHitFlags27 *) actor)->unk_78 && !(*((u8 *) actor + 0x74) & 1)) {
+        actor->unk6C_0 = func_800D9058(2.0f);
+        if (actor->unk70_10 != 2 && actor->unk70_10 != 9 && actor->unk70_10 != 0xE &&
+            !((CoasterHitActive27 *) actor)->player_controlled) {
+            if (_sucoaster_entrypoint_9(actor, 3, 3) && !(*(u32 *) (other + 0x24) >> 22)) {
+                _subaddierouteDll_entrypoint_6(actor, state, state[0x16], 0, 1.0f, 0x46,
+                                               0x78);
             }
         }
     }
 }
 
-void func_80800114_sucoasterhit(Unk80132ED0 *param_0, Unk80132ED0 *param_1)
+void func_80800114_sucoasterhit(Unk80132ED0 *collider, Unk80132ED0 *other)
 {
-    Actor *local_0;
-    CoasterHitState_80800114_sucoasterhit *local_1;
+    Actor *actor;
+    CoasterHitState_80800114_sucoasterhit *state;
 
-    local_0 = func_80106790(param_0);
-    if (!((CoasterHitActor *)local_0)->local_0) {
-        local_1 = func_80100094(local_0, 0);
-        if (param_1->unk24 >> 22 == 0x27D) {
-            if (local_0->unk70_10 != 0xF) _sucoaster_entrypoint_9(local_0, 0xF, 4);
-            local_1->local_0 = 1;
-        } else if (func_801021BC(local_0, 0xB)) {
-            _sucoaster_entrypoint_9(local_0, 0xB, 4);
+    actor = func_80106790(collider);
+    if (!((CoasterHitActor *) actor)->unk_78) {
+        state = func_80100094(actor, 0);
+        if (other->unk24 >> 22 == 0x27D) {
+            if (actor->unk70_10 != 0xF)
+                _sucoaster_entrypoint_9(actor, 0xF, 4);
+            state->stunned = 1;
+        } else if (func_801021BC(actor, 0xB)) {
+            _sucoaster_entrypoint_9(actor, 0xB, 4);
         }
     }
 }
 
-void func_808001C8_sucoasterhit(s32 param_0, s32 param_1) {
-    CoasterHitState_808001C8_sucoasterhit *local_0 = func_80106790(param_0);
-    if (!local_0->flag) {
-        _sucoaster_entrypoint_9(local_0, 0xC, 5);
+void func_808001C8_sucoasterhit(s32 collider, s32 other)
+{
+    CoasterHitState_808001C8_sucoasterhit *actor = func_80106790(collider);
+    if (!actor->unk_78) {
+        _sucoaster_entrypoint_9(actor, 0xC, 5);
     }
 }
 
-s32 func_80800208_sucoasterhit(s32 param_0, CoasterHitMsg *param_1, s32 param_2, s32 *param_3, s32 *param_4)
+// Returns 7 and doubles the damage for actor 0x27D.
+s32 func_80800208_sucoasterhit(s32 actor, CoasterHitMsg *other, s32 unk_2, s32 *damage,
+                               s32 *unk_4)
 {
-    s32 local_0 = param_1->kind != 0x27D;
-    s32 local_1 = param_1->kind == 0;
+    s32 normal = other->kind != 0x27D;
+    s32 unk_1 = other->kind == 0;
 
-    if (!local_0) {
-        *param_3 *= 2;
+    if (!normal) {
+        *damage *= 2;
         return 7;
     }
-    if (*param_4 == 0) {
-        if (*param_3 != 0 || local_1) {
-            *param_3 = func_800F0E28(1, *param_3, local_1);
+    if (*unk_4 == 0) {
+        if (*damage != 0 || unk_1) {
+            *damage = func_800F0E28(1, *damage, unk_1);
         } else {
-            *param_3 = 0;
+            *damage = 0;
         }
     }
     return 0;
 }
 
-void func_80800294_sucoasterhit(void *param_0, u8 *param_1, s32 param_2)
+void func_80800294_sucoasterhit(void *collider, u8 *other, s32 hit)
 {
-    u8 *sp9C;
-    s32 sp98;
-    s32 sp94;
-    s32 sp90;
-    s32 sp8C;
-    s32 sp88;
-    s32 sp84;
-    s32 sp80;
-    s32 sp7C;
-    s32 sp78;
-    u8 *sp74;
-    u32 sp70;
-    f32 sp6C;
-    f32 sp60[3];
-    f32 sp54[3];
-    f32 sp50;
-    f32 sp4C;
-    u8 *sp48;
-    f32 sp3C[3];
-    f32 sp34[2];
-    u8 *a0;
+    u8 *actor;
+    s32 unk_1;
+    s32 knockback;
+    s32 damage;
+    s32 hit_type;
+    s32 flags;
+    s32 unk_6;
+    s32 unk_7;
+    s32 health_loss;
+    s32 unk_9;
+    u8 *state;
+    u32 unk_11;
+    f32 knock_angle;
+    f32 src_pos[3];
+    f32 src_vel[3];
+    f32 vel_angle;
+    f32 pos_angle;
+    u8 *other_actor;
+    f32 hit_pos[3];
+    f32 spawn[2];
+    u8 *entry;
 
-    sp9C = func_80106790(param_0);
-    sp98 = _glhittableDll_entrypoint_10(param_2);
-    sp94 = _glhittableDll_entrypoint_7(param_2);
-    sp90 = _glhittableDll_entrypoint_9(param_2);
-    sp8C = _glhittableDll_entrypoint_6(param_2);
-    sp78 = (*(u32 *)(param_1 + 0x24) >> 22) == 0;
-    sp74 = func_80100094(sp9C, 0);
-    if (sp78 == 0 || ((sp70 = (u32)*(u16 *)(param_1 + 0x1A) >> 5, func_800F70EC(sp70) != 0) && func_800F6C1C(sp70) != 0) || _glhittableDll_entrypoint_8(param_2) == 0) {
-        sp88 = func_80800208_sucoasterhit(sp9C, param_1, &sp94, &sp90, &sp8C);
-        if (sp90 != 0) {
-            if (1) {}
-            if (sp88 & 1) sp7C = sp90; else sp7C = 100 / sp90;
-            *(u8 *)(sp9C + sp8C + 0x5C) = func_800F0E28(0, *(u8 *)(sp9C + sp8C + 0x5C) - sp7C);
-            a0 = sp9C + sp8C;
-            if (a0[0x5C] != 0 && !(sp88 & 1) && sp90 >= 2) {
-                sp94 = sp94 / 2;
+    actor = func_80106790(collider);
+    unk_1 = _glhittableDll_entrypoint_10(hit);
+    knockback = _glhittableDll_entrypoint_7(hit);
+    damage = _glhittableDll_entrypoint_9(hit);
+    hit_type = _glhittableDll_entrypoint_6(hit);
+    unk_9 = (*(u32 *) (other + 0x24) >> 22) == 0;
+    state = func_80100094(actor, 0);
+    if (unk_9 == 0 ||
+        ((unk_11 = (u32) *(u16 *) (other + 0x1A) >> 5, func_800F70EC(unk_11) != 0) &&
+         func_800F6C1C(unk_11) != 0) ||
+        _glhittableDll_entrypoint_8(hit) == 0) {
+        flags = func_80800208_sucoasterhit(actor, other, &knockback, &damage, &hit_type);
+        if (damage != 0) {
+            // Matching: empty block needed for the match.
+            if (1) {
             }
-            sp84 = sp8C == 2 && a0[0x5C] == 0;
-            if ((sp88 & 4) && sp84 == 0) {
-                sp94 = 0;
+            if (flags & 1)
+                health_loss = damage;
+            else
+                health_loss = 100 / damage;
+            *(u8 *) (actor + hit_type + 0x5C) = func_800F0E28(0, *(u8 *) (actor + hit_type + 0x5C) - health_loss);
+            entry = actor + hit_type;
+            if (entry[0x5C] != 0 && !(flags & 1) && damage >= 2) {
+                knockback = knockback / 2;
             }
-            if (sp94 != 0) {
-                if (_sueggmisc_entrypoint_0(param_1) != 0) {
-                    sp48 = func_80106790(param_1);
-                    _suegg_entrypoint_18(sp48, sp60);
-                    _suegg_entrypoint_19(sp48, sp54);
-                } else if (sp78 != 0) {
-                    func_800F57F0((u32)*(u16 *)(param_1 + 0x1A) >> 5, sp60);
-                    func_800F5D70((u32)*(u16 *)(param_1 + 0x1A) >> 5, sp54);
-                    if (func_800EEFD4(sp54) < 100.0f) {
-                        func_800EEB9C(sp54, func_800F5F24((u32)*(u16 *)(param_1 + 0x1A) >> 5), 200.0f);
+            unk_6 = hit_type == 2 && entry[0x5C] == 0;
+            if ((flags & 4) && unk_6 == 0) {
+                knockback = 0;
+            }
+            if (knockback != 0) {
+                if (_sueggmisc_entrypoint_0(other) != 0) {
+                    other_actor = func_80106790(other);
+                    _suegg_entrypoint_18(other_actor, src_pos);
+                    _suegg_entrypoint_19(other_actor, src_vel);
+                } else if (unk_9 != 0) {
+                    func_800F57F0((u32) *(u16 *) (other + 0x1A) >> 5, src_pos);
+                    func_800F5D70((u32) *(u16 *) (other + 0x1A) >> 5, src_vel);
+                    if (func_800EEFD4(src_vel) < 100.0f) {
+                        func_800EEB9C(src_vel, func_800F5F24((u32) *(u16 *) (other + 0x1A) >> 5),
+                                      200.0f);
                     }
                 } else {
-                    func_800EC398(param_1, sp60);
-                    func_800EFD24(sp54);
+                    func_800EC398(other, src_pos);
+                    func_800EFD24(src_vel);
                 }
-                sp4C = func_800F1DF4(sp60, sp9C + 4);
-                if (func_800F1EA4(sp54, &sp50) == 0) {
-                    sp50 = sp4C;
+                pos_angle = func_800F1DF4(src_pos, actor + 4);
+                if (func_800F1EA4(src_vel, &vel_angle) == 0) {
+                    vel_angle = pos_angle;
                 }
-                sp50 += func_800DC178(-30.0f, 30.0f);
-                sp6C = func_800136E4(sp50);
-                _chbounce_entrypoint_3(sp6C);
-                _chbounce_entrypoint_2(sp6C);
-                _chbounce_entrypoint_5(sp94 + 0xF, sp9C);
-                *(f32 *)(sp9C + 0x54) = func_800136E4(sp6C + 180.0f);
-                *(f32 *)(sp9C + 0x48) = *(f32 *)(sp9C + 0x54);
+                vel_angle += func_800DC178(-30.0f, 30.0f);
+                knock_angle = func_800136E4(vel_angle);
+                _chbounce_entrypoint_3(knock_angle);
+                _chbounce_entrypoint_2(knock_angle);
+                _chbounce_entrypoint_5(knockback + 0xF, actor);
+                *(f32 *) (actor + 0x54) = func_800136E4(knock_angle + 180.0f);
+                *(f32 *) (actor + 0x48) = *(f32 *) (actor + 0x54);
             }
-            a0 = sp9C; /* Claude 28.10. (Permuter-Idee, von Hand): a0 frueh, vor sp80 */
-            sp80 = (sp88 & 2) == 0 || sp84 != 0;
-            if (sp80 != 0) {
-                switch (sp8C) {
+            // Matching: entry is set early, before unk_7.
+            entry = actor;
+            unk_7 = (flags & 2) == 0 || unk_6 != 0;
+            if (unk_7 != 0) {
+                switch (hit_type) {
                     case 2:
-                        func_80109600(sp9C, param_1);
-                        if ((*(u32 *)(param_1 + 0x24) >> 22) == 0x26D) {
-                            if (1) {}
-                            _chflamer_entrypoint_1(sp9C, param_1);
+                        func_80109600(actor, other);
+                        if ((*(u32 *) (other + 0x24) >> 22) == 0x26D) {
+                            // Matching: another empty block.
+                            if (1) {
+                            }
+                            _chflamer_entrypoint_1(actor, other);
                         }
                         break;
                     case 1:
-                        func_80109600(sp9C, param_1);
-                        if ((*(u32 *)(param_1 + 0x24) >> 22) == 0x26E) {
-                            if (1) {}
-                            func_800EC370(param_1, sp3C);
-                            _chfreezy_entrypoint_1(sp9C, sp3C);
+                        func_80109600(actor, other);
+                        if ((*(u32 *) (other + 0x24) >> 22) == 0x26E) {
+                            // Matching: empty block, same trick as above.
+                            if (1) {
+                            }
+                            func_800EC370(other, hit_pos);
+                            _chfreezy_entrypoint_1(actor, hit_pos);
                         }
-                        break;
                 }
             }
-            if (sp90 != 0 && ((u32)*(u16 *)(sp9C + 0x72) >> 10) == 9 && ((u32)(*(s32 *)(*(u8 **)sp9C + 0x18) << 11) >> 28) == 1) {
-                func_8010965C(sp9C);
-                ((HitFlags *)sp74)->b5 = 1;
+            if (damage != 0 && ((u32) *(u16 *) (actor + 0x72) >> 10) == 9 &&
+                ((u32) (*(s32 *) (*(u8 **) actor + 0x18) << 11) >> 28) == 1) {
+                func_8010965C(actor);
+                ((HitFlags *) state)->b5 = 1;
             }
-            a0 += sp8C;
-            if (a0[0x5C] == 0 || sp8C != 0) {
-                if (a0[0x5C] != 0) {
-                    sp8C -= 1;
-                    a0 -= 1;
+            entry += hit_type;
+            if (entry[0x5C] == 0 || hit_type != 0) {
+                if (entry[0x5C] != 0) {
+                    hit_type -= 1;
+                    entry -= 1;
                 }
-                if (sp8C != 2) {
-                    a0[0x5C] = 0x63;
+                if (hit_type != 2) {
+                    entry[0x5C] = 0x63;
                 }
-                if (sp8C == 2 && sp98 != 0 && func_8010A430(sp9C) != 0) {
-                    sp34[1] = func_800F5F24(func_800F54E4());
-                    func_800EB860(&func_80108EF4, sp9C);
-                    sp34[0] = *(f32 *)(sp9C + 8) + func_800EC708(param_0);
-                    _chbaddiesetup_entrypoint_5(&_chbaddiesetup_entrypoint_10, sp98 + 2, *(s32 *)(sp9C + 4), sp34[0], *(s32 *)(sp9C + 0xC), *(s32 *)&sp34[1]);
+                if (hit_type == 2 && unk_1 != 0 && func_8010A430(actor) != 0) {
+                    spawn[1] = func_800F5F24(func_800F54E4());
+                    func_800EB860(&func_80108EF4, actor);
+                    spawn[0] = *(f32 *) (actor + 8) + func_800EC708(collider);
+                    _chbaddiesetup_entrypoint_5(&_chbaddiesetup_entrypoint_10, unk_1 + 2,
+                                                *(s32 *) (actor + 4), spawn[0], *(s32 *) (actor + 0xC),
+                                                *(s32 *) &spawn[1]);
                     func_800EB874();
                 }
-                switch (sp8C) {
+                switch (hit_type) {
                     case 0:
-                        func_8080000C_sucoasterhit(*(u8 **)sp9C, param_1);
+                        func_8080000C_sucoasterhit(*(u8 **) actor, other);
                         break;
                     case 1:
-                        func_80800114_sucoasterhit(*(u8 **)sp9C, param_1);
+                        func_80800114_sucoasterhit(*(u8 **) actor, other);
                         break;
                     case 2:
-                        func_808001C8_sucoasterhit(*(u8 **)sp9C, param_1);
-                        break;
+                        func_808001C8_sucoasterhit(*(u8 **) actor, other);
                 }
             }
-            if (sp80 != 0) {
-                func_8010D930(1, *(s32 *)(sp9C + 0x70) & 1, sp9C + 4, &D_80800CC4_sucoasterhit);
-                _subaddiejoy_entrypoint_10(sp9C, 1.0f, 0.25f);
+            if (unk_7 != 0) {
+                func_8010D930(1, *(s32 *) (actor + 0x70) & 1, actor + 4, &D_80800CC4_sucoasterhit);
+                _subaddiejoy_entrypoint_10(actor, 1.0f, 0.25f);
             }
         }
     }
 }
 
-void func_80800870_sucoasterhit(Actor *param_0, u32 *param_1, s32 param_2, s32 param_3)
+void func_80800870_sucoasterhit(Actor *actor, u32 *state, s32 sound_idx, s32 play)
 {
-    CoasterHitSoundTable *local_0;
-    f32 local_1;
+    CoasterHitSoundTable *table;
+    f32 pitch;
 
-    local_0 = (CoasterHitSoundTable *)_sucoasterdata_entrypoint_1(param_1[6] >> 28);
-    if (local_0->entries[param_2].sound) {
-        if (param_3) {
-            if (!param_0->unk5F) {
-                param_0->unk5F = func_800C4350(param_0->unk5F, param_0->position, D_80800CDC_sucoasterhit);
-                local_1 = func_800DC178(-0.05f, 0.05f);
-                local_1 += (f32)local_0->entries[param_2].pitch * 0.00390625f;
-                func_800C301C(param_0->unk5F, local_0->entries[param_2].sound);
-                func_800C3058(param_0->unk5F, local_0->entries[param_2].volume);
-                func_800C31DC(param_0->unk5F, local_1);
+    table = (CoasterHitSoundTable *) _sucoasterdata_entrypoint_1(state[6] >> 28);
+    if (table->entries[sound_idx].sound) {
+        if (play) {
+            if (!actor->unk5F) {
+                actor->unk5F =
+                    func_800C4350(actor->unk5F, actor->position, D_80800CDC_sucoasterhit);
+                pitch = func_800DC178(-0.05f, 0.05f);
+                pitch += (f32) table->entries[sound_idx].pitch * 0.00390625f;
+                func_800C301C(actor->unk5F, table->entries[sound_idx].sound);
+                func_800C3058(actor->unk5F, table->entries[sound_idx].volume);
+                func_800C31DC(actor->unk5F, pitch);
             }
-            if (param_0->unk5F) {
-                func_800C4350(param_0->unk5F, param_0->position, 0);
-                func_800C3BDC(param_0->unk5F);
+            if (actor->unk5F) {
+                func_800C4350(actor->unk5F, actor->position, 0);
+                func_800C3BDC(actor->unk5F);
             }
-        } else if (param_0->unk5F) {
-            func_800C2FDC(param_0->unk5F);
-            param_0->unk5F = 0;
+        } else if (actor->unk5F) {
+            func_800C2FDC(actor->unk5F);
+            actor->unk5F = 0;
         }
     }
 }
 
 s32 func_80800AEC_sucoasterhit();
 
-s32 sucoasterhit_entrypoint_1(Actor *param_0)
+// Update of the stunned (dizzy) state.
+s32 sucoasterhit_entrypoint_1(Actor *actor)
 {
-    u8 *local_0;
-    s32 local_1;
-    s32 local_1_c;
-    s32 local_2;
-    u32 t;
-    local_0 = func_80100094(param_0, 0);
-    t = (*(u32 *)(local_0 + 0x18) << 4) >> 31;
-    local_1 = t != 0;
-    local_1_c = local_1;
-    local_2 = local_1;
-    if (!local_1) {
-        local_2 = 0;
-        if (param_0->unk58 > 0.0f) local_2 = 1;
+    u8 *state;
+    s32 stunned;
+    s32 stunned_copy;
+    s32 dizzy;
+    u32 stun_bit;
+    state = func_80100094(actor, 0);
+    stun_bit = (*(u32 *) (state + 0x18) << 4) >> 31;
+    stunned = stun_bit != 0;
+    // Matching: extra copies of the flag needed for the match.
+    stunned_copy = stunned;
+    dizzy = stunned;
+    if (!stunned) {
+        dizzy = 0;
+        if (actor->unk58 > 0.0f)
+            dizzy = 1;
     }
-    if (local_1_c) param_0->unk58 = 0.7f;
-    local_0[0x18] &= ~8;
-    func_80800870_sucoasterhit(param_0, local_0, 4, local_2);
-    if (!local_2) {
-        func_80102190(param_0, 0);
-        _sucoaster_entrypoint_9(param_0, 3, 9);
+    if (stunned_copy)
+        actor->unk58 = 0.7f;
+    state[0x18] &= ~8;
+    func_80800870_sucoasterhit(actor, state, 4, dizzy);
+    if (!dizzy) {
+        func_80102190(actor, 0);
+        _sucoaster_entrypoint_9(actor, 3, 9);
         return 1;
     }
-    param_0->position[0] += func_8001210C(1) ? -10.0f : 10.0f;
-    param_0->position[2] += func_8001210C(1) ? 10.0f : -10.0f;
-    _sucoaster_entrypoint_22(param_0);
-    func_80800AEC_sucoasterhit(param_0, local_0);
+    actor->position[0] += func_8001210C(1) ? -10.0f : 10.0f;
+    actor->position[2] += func_8001210C(1) ? 10.0f : -10.0f;
+    _sucoaster_entrypoint_22(actor);
+    func_80800AEC_sucoasterhit(actor, state);
     return 0;
 }
 
-s32 func_80800AEC_sucoasterhit(Actor *param_0, u8 *param_1)
+// Spawns a particle ring around the baddie volume.
+s32 func_80800AEC_sucoasterhit(Actor *actor, u8 *state)
 {
-    f32 local_0[20][3];
-    f32 local_1[3];
-    s32 local_2;
-    s32 local_5;
-    s32 local_4;
-    s32 local_3;
-    local_3 = param_1[0x14];
-    local_2 = _subaddievolume_entrypoint_0(param_0, local_0, 1, 5, &local_3);
-    param_1[0x14] = local_3;
-    if (local_2 > 0) {
-        func_80103F38(param_0, local_1);
-        local_4 = func_800B5BE4(0x12);
-        func_800BABB8(local_4, 0, 0, 1.0f, D_80800CE8_sucoasterhit);
+    f32 points[20][3];
+    f32 center[3];
+    s32 count;
+    s32 i;
+    s32 particle;
+    s32 unk_5;
+    unk_5 = state[0x14];
+    count = _subaddievolume_entrypoint_0(actor, points, 1, 5, &unk_5);
+    state[0x14] = unk_5;
+    if (count > 0) {
+        func_80103F38(actor, center);
+        particle = func_800B5BE4(0x12);
+        func_800BABB8(particle, 0, 0, 1.0f, D_80800CE8_sucoasterhit);
     }
-    for (local_5 = 0; local_5 < local_2; local_5++) func_800BABB8(local_4, local_0[local_5], local_1, 1.0f, D_80800D14_sucoasterhit);
-    return local_2 >= 0;
+    for (i = 0; i < count; i++)
+        func_800BABB8(particle, points[i], center, 1.0f, D_80800D14_sucoasterhit);
+    return count >= 0;
 }
 
-void sucoasterhit_entrypoint_2(s32 param_0) {
-    if ((*(s32 *)((s8 *)(_sucoasterdata_entrypoint_1((u32) (*(u32 *)((s8 *)(func_80100094(param_0, 0)) + (0x18))) >> 0x1C)) + (0x44))) & 2) {
-        func_800E1610(0, 0x41400000, 0x3F59999A, param_0 + 4);
+// Heavy stomp: camera shake, rumble and message 0xB6.
+void sucoasterhit_entrypoint_2(s32 actor)
+{
+    if (*(s32 *) ((s8 *) _sucoasterdata_entrypoint_1(
+                      (u32) *(u32 *) ((s8 *) func_80100094(actor, 0) + 0x18) >> 0x1C) +
+                  0x44) &
+        2) {
+        func_800E1610(0, 0x41400000, 0x3F59999A, actor + 4);
         func_80018820(0, 0x3FC00000, 0x3ECCCCCD);
-        _subaddiejoy_entrypoint_10(param_0, 1.5f, 0.6f);
-        func_8010108C(param_0, 0xB6, 0);
+        _subaddiejoy_entrypoint_10(actor, 1.5f, 0.6f);
+        func_8010108C(actor, 0xB6, 0);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/coaster/hit.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800CB0_sucoasterhit -> int[], D_80800CC4_sucoasterhit -> s32[] */
-int D_80800CB0_sucoasterhit[5] = { (u32)func_8080000C_sucoasterhit, (u32)func_80800114_sucoasterhit, (u32)func_808001C8_sucoasterhit, (u32)func_80800294_sucoasterhit, 0x0 };
-s32 D_80800CC4_sucoasterhit[6] = { 0x130417, 0xD010C, 0x1260016, 0x65900001, 0x3201388, 0x0 };
-s16 D_80800CDC_sucoasterhit[6] = { 0x206, 0x1, 0x4E2, 0x9C4, 0x7, 0x0 };
-u8 D_80800CE8_sucoasterhit[44] = { 0x0, 0x1D, 0x9, 0xCD, 0x0, 0x15, 0x0, 0x0, 0x0, 0x4C, 0x0, 0x22, 0x0, 0x19, 0x0, 0x26, 0x0, 0x4C, 0x0, 0x59, 0x0, 0x16, 0x10, 0x0, 0x0, 0x18, 0x0, 0x0, 0x0, 0x4, 0x1E, 0x0, 0x23, 0x0, 0x0, 0x2B, 0x0, 0x40, 0x0, 0x59, 0x0, 0x0, 0x0, 0x0 };
-u8 D_80800D14_sucoasterhit[28] = { 0x0, 0x2D, 0x0, 0xAF, 0x0, 0xFA, 0x0, 0x17, 0x0, 0x80, 0x1, 0x1A, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+// TU-NOTE: the .data of this overlay is defined here in C; its tables hold pointers to functions
+// of this file, and IDO's assembler schedules some of them differently otherwise. Values are taken
+// from the ROM.
+int D_80800CB0_sucoasterhit[5] = {
+    (u32) func_8080000C_sucoasterhit, (u32) func_80800114_sucoasterhit,
+    (u32) func_808001C8_sucoasterhit, (u32) func_80800294_sucoasterhit, 0x0};
+s32 D_80800CC4_sucoasterhit[6] = {0x130417, 0xD010C, 0x1260016, 0x65900001, 0x3201388, 0x0};
+s16 D_80800CDC_sucoasterhit[6] = {0x206, 0x1, 0x4E2, 0x9C4, 0x7, 0x0};
+u8 D_80800CE8_sucoasterhit[44] = {0x0,  0x1D, 0x9,  0xCD, 0x0,  0x15, 0x0,  0x0, 0x0,  0x4C, 0x0,
+                                  0x22, 0x0,  0x19, 0x0,  0x26, 0x0,  0x4C, 0x0, 0x59, 0x0,  0x16,
+                                  0x10, 0x0,  0x0,  0x18, 0x0,  0x0,  0x0,  0x4, 0x1E, 0x0,  0x23,
+                                  0x0,  0x0,  0x2B, 0x0,  0x40, 0x0,  0x59, 0x0, 0x0,  0x0,  0x0};
+u8 D_80800D14_sucoasterhit[28] = {0x0, 0x2D, 0x0, 0xAF, 0x0, 0xFA, 0x0, 0x17, 0x0, 0x80,
+                                  0x1, 0x1A, 0x0, 0x0,  0x0, 0x0,  0x0, 0x0,  0x0, 0x0,
+                                  0x0, 0x0,  0x0, 0x0,  0x0, 0x0,  0x0, 0x0};

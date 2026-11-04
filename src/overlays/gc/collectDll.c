@@ -1,3 +1,5 @@
+// Most likely the map-level glue of the collectible registry: jiggy ranges per world, resetting
+// collected/spawned flags, spawning uncollected jiggies, saving/restoring jiggy positions.
 #include "gc/collectDLL.h"
 
 extern s16 D_80800BE2_gccollectDll;
@@ -13,68 +15,62 @@ extern s32 D_80800C0C_gccollectDll[3];
 extern u32 D_80800C18_gccollectDll[10];
 extern u8 D_8012762C;
 
+// First jiggy index of the current level (SM: 0x5B), -1 if none.
 s32 func_80800000_gccollectDll(void)
 {
-    s32 var_s0;
-    u32 temp_s1;
+    s32 jiggy;
+    u32 level;
 
-    //Seems to be some indicator for which level you are in
-    temp_s1 = D_8012762C;
-    if (temp_s1 == 0x13) //If we are in SM
-    {
+    level = D_8012762C;
+    // SM
+    if (level == 0x13) {
         return 0x5B;
     }
-    var_s0 = func_800D0820(1); //This will always return 1 since 1(Jiggy) is a valid item
-    //If the number of Jiggies is greater than or equal to 1 (Always true)
-    if (func_800D0894(1) >= var_s0)
-    {
-        //Loop through all Jiggies
-        do
-        {
-            if (func_800D06D4(var_s0, 1) == temp_s1) //Return the index of the first jiggy found associated with the level
-            {
-                return var_s0;
+    jiggy = func_800D0820(1);
+    if (func_800D0894(1) >= jiggy) {
+        do {
+            if (func_800D06D4(jiggy, 1) == level) {
+                return jiggy;
             }
-            var_s0 += 1;
-        } while (func_800D0894(1) >= var_s0);
+            jiggy += 1;
+        } while (func_800D0894(1) >= jiggy);
     }
     return -1;
 }
 
-void gccollectDll_entrypoint_0(s32 arg0) 
+// Clears the collected and spawned flags of a category.
+void gccollectDll_entrypoint_0(s32 category)
 {
-    s32 temp_v0;
-    s32 temp_v0_2;
-    s32 var_s0;
+    s32 flag;
+    s32 flag_2;
+    s32 i;
 
-    var_s0 = func_800D0820(arg0);
-    if (var_s0 < func_800D0894(arg0)) 
-    {
+    i = func_800D0820(category);
+    if (i < func_800D0894(category)) {
         do {
-            temp_v0 = func_800D0A80(var_s0, arg0);
-            if (temp_v0 != 0) 
-            {
-                func_800DA524(temp_v0);
+            flag = func_800D0A80(i, category);
+            if (flag != 0) {
+                func_800DA524(flag);
             }
-            temp_v0_2 = func_800D0908(var_s0, arg0);
-            if (temp_v0_2 != 0) 
-            {
-                func_800DA524(temp_v0_2);
+            flag_2 = func_800D0908(i, category);
+            if (flag_2 != 0) {
+                func_800DA524(flag_2);
             }
-            var_s0 += 1;
-        } while (var_s0 < func_800D0894(arg0));
+            i += 1;
+        } while (i < func_800D0894(category));
     }
 }
 
+// Clears the flags of all 9 categories.
 void gccollectDll_entrypoint_1(void)
 {
-    s32 var_s0;
+    s32 category;
 
-    var_s0 = 0;
+    category = 0;
     do {
-        gccollectDll_entrypoint_0(var_s0);
-        var_s0 += 1;
-    } while (var_s0 != 9);
+        gccollectDll_entrypoint_0(category);
+        category += 1;
+    } while (category != 9);
 }
 
 void gccollectDll_entrypoint_2(void)
@@ -82,317 +78,303 @@ void gccollectDll_entrypoint_2(void)
     gccollectDll_entrypoint_1();
 }
 
-void gccollectDll_entrypoint_3(void) {
+void gccollectDll_entrypoint_3(void)
+{
 }
 
+// Map start: registers the level's 10 jiggies and runs the save fix.
 void gccollectDll_entrypoint_4(void)
 {
     s32 pad1;
     s32 pad2;
-    s32 sp2C;
-    s32 var_s0;
-    //Get First Jiggy Index for current level
-    s32 temp_v0 = func_80800000_gccollectDll();
-    s32 iterator;
+    s32 fix_arg;
+    s32 first_jiggy = func_80800000_gccollectDll();
+    s32 i;
 
-    //Store Jiggy Index in 8011AE60
-    func_800CF870(temp_v0);
-    if (temp_v0 != -1) //If we found a jiggy
-    {
-        sp2C = func_800CFA90();
-        for (iterator = temp_v0; iterator < temp_v0 + 0xA; iterator++)
-        {
-            func_800D0778(iterator, 1, D_80800C0C_gccollectDll);
-            func_800D05E4(iterator, 1, 0);
-            func_800D0594(iterator, 1, 0);
+    func_800CF870(first_jiggy);
+    if (first_jiggy != -1) {
+        fix_arg = func_800CFA90();
+        for (i = first_jiggy; i < first_jiggy + 0xA; i++) {
+            func_800D0778(i, 1, D_80800C0C_gccollectDll);
+            func_800D05E4(i, 1, 0);
+            func_800D0594(i, 1, 0);
         }
-        //If we are not in a cutscene
-        if (func_800DB9B0() == 0)
-        {
-            _gcgamefix_entrypoint_1(sp2C);
+        // Outside a cutscene.
+        if (func_800DB9B0() == 0) {
+            _gcgamefix_entrypoint_1(fix_arg);
         }
     }
 }
 
+// Clears the spawned flag of virtual (non-placed) collectibles that are not collected.
 void gccollectDll_entrypoint_5(void)
 {
-    u32 var_s0 = 0;
+    u32 i = 0;
 
-    if (func_800CF87C() != -1)
-    {
-        //Iterate through the list of collectables that are virtual objects e.g. they do not exist in the map file
-        for (var_s0 = 0; var_s0 < 0x16; var_s0 += 2)
-        {
-            //If the item hasn't been collected but has been spawned
-            if ((func_800D0B68((u32)D_80800BE0_gccollectDll[var_s0], (u32)D_80800BE0_gccollectDll[var_s0 + 1]) == 0) && (func_800D0A9C((u32)D_80800BE0_gccollectDll[var_s0], (u32)D_80800BE0_gccollectDll[var_s0 + 1]) != 0))
-            {
-                //Set Spawned Flag False
-                func_800D0B38(D_80800BE0_gccollectDll[var_s0], D_80800BE0_gccollectDll[var_s0 + 1]);
+    if (func_800CF87C() != -1) {
+        for (i = 0; i < 0x16; i += 2) {
+            if ((func_800D0B68((u32) D_80800BE0_gccollectDll[i],
+                               (u32) D_80800BE0_gccollectDll[i + 1]) == 0) &&
+                (func_800D0A9C((u32) D_80800BE0_gccollectDll[i],
+                               (u32) D_80800BE0_gccollectDll[i + 1]) != 0)) {
+                func_800D0B38(D_80800BE0_gccollectDll[i], D_80800BE0_gccollectDll[i + 1]);
             }
         }
     }
 }
 
-s32 func_808002C4_gccollectDll(s32 param_0, s32 param_1)
+// 1 if (jiggy, category) is in the pair tables.
+s32 func_808002C4_gccollectDll(s32 jiggy, s32 category)
 {
-  s8 *local_0;
-  int new_var;
-  if ((param_0 == D_80800BE0_gccollectDll[0]) && (param_1 == D_80800BE2_gccollectDll))
-  {
-    return 1;
-  }
-  if ((param_0 == D_80800BE4_gccollectDll[0]) && (param_1 == D_80800BE6_gccollectDll))
-  {
-    return 1;
-  }
-  local_0 = &D_80800BEC_gccollectDll;
-  if ((param_0 == D_80800BE8_gccollectDll[0]) && (param_1 == D_80800BEA_gccollectDll))
-  {
-    return 1;
-  }
-  new_var = 1;
-  loop_10:
-  if ((param_0 == (*((s16 *) (((s8 *) local_0) + 0)))) && (param_1 == (*((s16 *) (((s8 *) local_0) + 2)))))
-  {
-    return 1;
-  }
+    s8 *entry;
+    int one;
+    if ((jiggy == D_80800BE0_gccollectDll[0]) && (category == D_80800BE2_gccollectDll)) {
+        return 1;
+    }
+    if ((jiggy == D_80800BE4_gccollectDll[0]) && (category == D_80800BE6_gccollectDll)) {
+        return 1;
+    }
+    entry = &D_80800BEC_gccollectDll;
+    if ((jiggy == D_80800BE8_gccollectDll[0]) && (category == D_80800BEA_gccollectDll)) {
+        return 1;
+    }
+    // Matching: extra temporary needed for the match.
+    one = 1;
+loop_10:
+    if ((jiggy == *(s16 *) ((s8 *) entry + 0)) && (category == *(s16 *) ((s8 *) entry + 2))) {
+        return 1;
+    }
 
-  if ((param_0 == (*((s16 *) (((s8 *) local_0) + 4)))) && (param_1 == (*((s16 *) (((s8 *) local_0) + 6)))))
-  {
-    return 1;
-  }
-  if ((param_0 == (*((s16 *) (((s8 *) local_0) + 8)))) && (param_1 == (*((s16 *) (((s8 *) local_0) + 0xA)))))
-  {
-    return 1;
-  }
-  if ((param_0 == (*((s16 *) (((s8 *) local_0) + 0xC)))) && (param_1 == (*((s16 *) (((s8 *) local_0) + 0xE)))))
-  {
-    return new_var;
-  }
-  local_0 += 0x10;
-  if (local_0 == (s8 *)&D_80800C0C_gccollectDll)
-  {
-    return (param_0 == (*((s16 *) (((s8 *) local_0) + 0)))) * 0;
-  }
-  goto loop_10;
+    if ((jiggy == *(s16 *) ((s8 *) entry + 4)) && (category == *(s16 *) ((s8 *) entry + 6))) {
+        return 1;
+    }
+    if ((jiggy == *(s16 *) ((s8 *) entry + 8)) &&
+        (category == *(s16 *) ((s8 *) entry + 0xA))) {
+        return 1;
+    }
+    if ((jiggy == *(s16 *) ((s8 *) entry + 0xC)) &&
+        (category == *(s16 *) ((s8 *) entry + 0xE))) {
+        return one;
+    }
+    entry += 0x10;
+    if (entry == (s8 *) &D_80800C0C_gccollectDll) {
+        // Matching: "* 0" is needed for the match.
+        return (jiggy == *(s16 *) ((s8 *) entry + 0)) * 0;
+    }
+    goto loop_10;
 }
 
-s32 func_808003E0_gccollectDll(void *param_0, void *param_1)
+// Serialises positions of flag-triggered jiggies that are spawned but not collected.
+s32 func_808003E0_gccollectDll(void *buffer, void *word_pos)
 {
-    s32 local_0;
-    s32 local_1;
-    void *local_6;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_9;
-    s32 local_11;
-    f32 local_8[3];
-    u8 *local_7;
-    s32 local_12;
+    s32 first_jiggy;
+    s32 i;
+    void *new_buffer;
+    s32 flag;
+    s32 map;
+    s32 n;
+    s32 flag_2;
+    s32 j;
+    f32 pos[3];
+    u8 *cursor;
+    s32 size;
 
-    local_4 = 0;
-    local_0 = func_800CF87C();
-    for (local_1 = local_0; local_1 < local_0 + 10; local_1++) {
-        if (!func_800D0B68(local_1, 1) && (local_2 = func_800D0908(local_1, 1))) {
-            local_3 = func_800D0684(local_1, 1);
-            if (func_800EA05C() == local_3 && !func_808002C4_gccollectDll(local_1, 1) && func_800DA298(local_2)) local_4++;
+    n = 0;
+    first_jiggy = func_800CF87C();
+    for (i = first_jiggy; i < first_jiggy + 10; i++) {
+        if (!func_800D0B68(i, 1) && (flag = func_800D0908(i, 1))) {
+            map = func_800D0684(i, 1);
+            if (func_800EA05C() == map && !func_808002C4_gccollectDll(i, 1) &&
+                func_800DA298(flag))
+                n++;
         }
     }
-    local_12 = local_4 * 8 + 2; local_4 *= 1; /* probe: reassigning local_4 blocks the propagation of local_12, so the size is its own live range in v0 and the +2 is not reassociated */
-    local_6 = heap_realloc(param_0, *(s32 *)param_1 + local_12);
-    local_7 = (u8 *)local_6 + *(s32 *)param_1 * 4;
-    *(s16 *)local_7 = local_4;
-    local_7 += 4;
-    for (local_11 = local_0, local_4 = 0; local_11 < local_0 + 10; local_11++, local_4++) {
-        if (!func_800D0B68(local_11, 1) && (local_9 = func_800D0908(local_11, 1))) {
-            local_3 = func_800D0684(local_11, 1);
-            if (func_800EA05C() == local_3 && !func_808002C4_gccollectDll(local_11, 1) && func_800DA298(local_9)) {
-                *(s16 *)local_7 = local_4;
-                local_7 += 2;
-                func_800D07CC(local_11, 1, local_8);
-                func_800EE940(local_7, local_8);
-                local_7 += 6;
+    // Matching: reassigning n blocks propagation of size, so the +2 is not reassociated.
+    size = n * 8 + 2;
+    n *= 1;
+    new_buffer = heap_realloc(buffer, *(s32 *) word_pos + size);
+    cursor = (u8 *) new_buffer + *(s32 *) word_pos * 4;
+    *(s16 *) cursor = n;
+    cursor += 4;
+    for (j = first_jiggy, n = 0; j < first_jiggy + 10; j++, n++) {
+        if (!func_800D0B68(j, 1) && (flag_2 = func_800D0908(j, 1))) {
+            map = func_800D0684(j, 1);
+            if (func_800EA05C() == map && !func_808002C4_gccollectDll(j, 1) &&
+                func_800DA298(flag_2)) {
+                *(s16 *) cursor = n;
+                cursor += 2;
+                func_800D07CC(j, 1, pos);
+                func_800EE940(cursor, pos);
+                cursor += 6;
             }
         }
     }
-    *(s32 *)param_1 = (local_7 - (u8 *)local_6) >> 2;
-    return (s32)local_6;
+    *(s32 *) word_pos = (cursor - (u8 *) new_buffer) >> 2;
+    return (s32) new_buffer;
 }
 
-void func_808005BC_gccollectDll(u32 arg0, Prop* arg1)
+// Spawns a jiggy actor (0x21F) at the stored position.
+void func_808005BC_gccollectDll(u32 jiggy, Prop *prop)
 {
-    Actor* sp24;
-    s32 sp18[3];
+    Actor *actor;
+    s32 pos[3];
 
-    sp18[0] = (s32)arg1->position[0];
-    sp18[1] = (s32)arg1->position[1];
-    sp18[2] = (s32)arg1->position[2];
-    sp24 = func_80108C90(0x21F, sp18, 0U, NULL);
-    func_800D053C(arg0, 1);
-    func_800D05E4((s32)arg0, 1, (s32)sp24->unk0);
-    func_800CFBC8(sp24, arg0, 1, 0);
-    if ((_glreflight_entrypoint_0() & 0xFF) != 0xFE) 
-    {
-        func_8010A570(sp24);
+    pos[0] = (s32) prop->position[0];
+    pos[1] = (s32) prop->position[1];
+    pos[2] = (s32) prop->position[2];
+    actor = func_80108C90(0x21F, pos, 0U, NULL);
+    func_800D053C(jiggy, 1);
+    func_800D05E4((s32) jiggy, 1, (s32) actor->unk0);
+    func_800CFBC8(actor, jiggy, 1, 0);
+    if ((_glreflight_entrypoint_0() & 0xFF) != 0xFE) {
+        func_8010A570(actor);
     }
 }
 
-s32 func_80800660_gccollectDll(void *param_0, void *param_1)
+// Restores the positions written by the serialiser above.
+s32 func_80800660_gccollectDll(void *buffer, void *word_pos)
 {
-    s16 *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
+    s16 *cursor;
+    s32 count;
+    s32 i;
+    s32 rel_jiggy;
+    s32 jiggy;
 
-    local_0 = (s16 *)((s32 *)param_0 + *(s32 *)param_1);
-    local_1 = *local_0;
-    local_0 += 2;
-    for (local_2 = 0; local_2 < local_1; local_2++) {
-        local_3 = *local_0++;
-        local_4 = func_800CF87C() + local_3;
-        if (func_800D0A9C(local_4, 1) && !func_800D0B68(local_4, 1)) {
-            func_808005BC_gccollectDll(local_4, local_0);
+    cursor = (s16 *) ((s32 *) buffer + *(s32 *) word_pos);
+    count = *cursor;
+    cursor += 2;
+    for (i = 0; i < count; i++) {
+        rel_jiggy = *cursor++;
+        jiggy = func_800CF87C() + rel_jiggy;
+        if (func_800D0A9C(jiggy, 1) && !func_800D0B68(jiggy, 1)) {
+            func_808005BC_gccollectDll(jiggy, cursor);
         }
-        local_0 += 3;
+        cursor += 3;
     }
-    *(s32 *)param_1 = (s32 *)local_0 - (s32 *)param_0;
-    return (s32)param_0;
+    *(s32 *) word_pos = (s32 *) cursor - (s32 *) buffer;
+    return (s32) buffer;
 }
 
-s32 gccollectDll_entrypoint_6(void* arg0, void* arg1)
+s32 gccollectDll_entrypoint_6(void *buffer, void *word_pos)
 {
-    if (func_800CF87C() == -1)
-    {
-        return arg0;
+    if (func_800CF87C() == -1) {
+        return buffer;
     }
-    if (func_800CF87C() == 0x5B)
-    {
-        return arg0;
+    if (func_800CF87C() == 0x5B) {
+        return buffer;
     }
-    return func_808003E0_gccollectDll(arg0, arg1);
+    return func_808003E0_gccollectDll(buffer, word_pos);
 }
 
-s32 gccollectDll_entrypoint_7(void* arg0, void* arg1) {
-    if (func_800CF87C() == -1) 
-    {
-        return arg0;
-    }
-    if (func_800CF87C() == 0x5B) 
-    {
-        return arg0;
-    }
-    return func_80800660_gccollectDll(arg0, arg1);
-}
-
-void func_808007D8_gccollectDll(Prop* arg0) 
+s32 gccollectDll_entrypoint_7(void *buffer, void *word_pos)
 {
-    f32 sp24[3];
+    if (func_800CF87C() == -1) {
+        return buffer;
+    }
+    if (func_800CF87C() == 0x5B) {
+        return buffer;
+    }
+    return func_80800660_gccollectDll(buffer, word_pos);
+}
 
-    if ((func_800D0A9C((u32)arg0->FlagOrRotation, 1U) != 0) && (func_800D0B68((u32)arg0->FlagOrRotation, 1U) == 0) && (func_800D0634((u32)arg0->FlagOrRotation, 1) == 0))
-    {
-        func_808005BC_gccollectDll((u32)arg0->FlagOrRotation, arg0);
+void func_808007D8_gccollectDll(Prop *prop)
+{
+    f32 pos[3];
+
+    if ((func_800D0A9C((u32) prop->FlagOrRotation, 1U) != 0) &&
+        (func_800D0B68((u32) prop->FlagOrRotation, 1U) == 0) &&
+        (func_800D0634((u32) prop->FlagOrRotation, 1) == 0)) {
+        func_808005BC_gccollectDll((u32) prop->FlagOrRotation, prop);
         return;
     }
-    func_800EE88C(sp24, arg0->position);
-    func_800D0778(arg0->FlagOrRotation, 1, &sp24);
+    func_800EE88C(pos, prop->position);
+    func_800D0778(prop->FlagOrRotation, 1, &pos);
 }
 
-Actor* func_80800890_gccollectDll(Prop* arg0, u32 arg1)
+// Spawns the collectible actor if it is spawned but not collected.
+Actor *func_80800890_gccollectDll(Prop *prop, u32 category)
 {
-    s32 sp1C[3];
-    s32 sp18;
-    //If Item is spawned but not collected
-    if ((func_800D0A9C(arg0->FlagOrRotation, arg1) != 0) && (func_800D0B68(arg0->FlagOrRotation, arg1) == 0))
-    {
-        sp1C[0] = (s32)arg0->position[0];
-        sp1C[1] = (s32)arg0->position[1];
-        sp1C[2] = (s32)arg0->position[2];
-        sp18 = func_80108C90(D_80800C18_gccollectDll[arg1], sp1C, arg0->FlagOrRotation, arg0);
-        if ((_glreflight_entrypoint_0() & 0xFF) != 0xFE) 
-        {
-            func_8010A570(sp18);
+    s32 pos[3];
+    s32 actor;
+    if ((func_800D0A9C(prop->FlagOrRotation, category) != 0) &&
+        (func_800D0B68(prop->FlagOrRotation, category) == 0)) {
+        pos[0] = (s32) prop->position[0];
+        pos[1] = (s32) prop->position[1];
+        pos[2] = (s32) prop->position[2];
+        actor = func_80108C90(D_80800C18_gccollectDll[category], pos, prop->FlagOrRotation, prop);
+        if ((_glreflight_entrypoint_0() & 0xFF) != 0xFE) {
+            func_8010A570(actor);
         }
-        return sp18;
+        return actor;
     }
     return 0;
 }
 
-void gccollectDll_entrypoint_8(s16* arg0)
+// Cube setup: spawns the collectible props of the cube.
+void gccollectDll_entrypoint_8(s16 *setup)
 {
-    u32 sp34 = D_8012762C;
-    Prop* var_s1;
-    Prop* temp_v0;
-    u32 var_s0;
-    u32 temp_v0_2;
-    Actor* var_s2;
+    u32 level = D_8012762C;
+    Prop *prop;
+    Prop *end;
+    u32 category;
+    u32 value;
+    Actor *actor;
 
-    if ((func_800CF87C() != -1) && (arg0 != 0) && (func_800E9DC4(arg0) != 0))
-    {
-        var_s1 = func_800E9D68(arg0);
-        temp_v0 = func_800E9D90(arg0);
-        for (var_s1; var_s1 < temp_v0; var_s1++)
-        {
-            if (var_s1->unk6_1 == 6)
-            {
-                temp_v0_2 = var_s1->ItemID;
-                var_s2 = NULL;
-                switch (temp_v0_2)
-                {
-                case 0x1F5:
-                    var_s0 = 0;
-                    break;
-                case 0x1F6:                     /* switch 3 */
-                    var_s0 = 1;
-                    break;
-                case 0x1F7:                     /* switch 3 */
-                    var_s0 = 2;
-                    break;
-                case 0x1F8:                     /* switch 3 */
-                    var_s0 = 3;
-                    break;
-                case 0x201:                     /* switch 3 */
-                    var_s0 = 4;
-                    break;
-                case 0x29D:                     /* switch 3 */
-                    var_s0 = 7;
-                    break;
-                case 0x4E6:                     /* switch 3 */
-                    var_s0 = 8;
-                    break;
-                default:
-                    continue;
+    if ((func_800CF87C() != -1) && (setup != 0) && (func_800E9DC4(setup) != 0)) {
+        prop = func_800E9D68(setup);
+        end = func_800E9D90(setup);
+        for (prop; prop < end; prop++) {
+            if (prop->unk6_1 == 6) {
+                value = prop->ItemID;
+                actor = NULL;
+                switch (value) {
+                    case 0x1F5:
+                        category = 0;
+                        break;
+                    case 0x1F6:
+                        category = 1;
+                        break;
+                    case 0x1F7:
+                        category = 2;
+                        break;
+                    case 0x1F8:
+                        category = 3;
+                        break;
+                    case 0x201:
+                        category = 4;
+                        break;
+                    case 0x29D:
+                        category = 7;
+                        break;
+                    case 0x4E6:
+                        category = 8;
+                        break;
+                    default:
+                        continue;
                 }
 
-                if (func_800CFFBC(var_s1->FlagOrRotation, var_s0) != 0)
-                {
-                    temp_v0_2 = func_800D06D4(var_s1->FlagOrRotation, var_s0);
-                    if (temp_v0_2 == sp34 || temp_v0_2 == -1)
-                    {
-                        switch (var_s0)
-                        {
-                        case 1:
-                            func_808007D8_gccollectDll(var_s1);
-                            break;
-                        case 3:
-                            var_s2 = func_80800890_gccollectDll(var_s1, var_s0);
-                            if (var_s2 != NULL)
-                            {
-                                var_s2->unk74_7 = var_s1->unk6_7;
-                            }
-                            break;
-                        case 0:
-                        case 2:
-                        case 4:
-                        case 7:
-                        case 8:
-                            var_s2 = func_80800890_gccollectDll(var_s1, var_s0);
-                            break;
+                if (func_800CFFBC(prop->FlagOrRotation, category) != 0) {
+                    value = func_800D06D4(prop->FlagOrRotation, category);
+                    if (value == level || value == -1) {
+                        switch (category) {
+                            case 1:
+                                func_808007D8_gccollectDll(prop);
+                                break;
+                            case 3:
+                                actor = func_80800890_gccollectDll(prop, category);
+                                if (actor != NULL) {
+                                    actor->unk74_7 = prop->unk6_7;
+                                }
+                                break;
+                            case 0:
+                            case 2:
+                            case 4:
+                            case 7:
+                            case 8:
+                                actor = func_80800890_gccollectDll(prop, category);
                         }
-                        if (var_s2 != NULL)
-                        {
-                            func_800CFBC8(var_s2, var_s1->FlagOrRotation, var_s0, 0);
+                        if (actor != NULL) {
+                            func_800CFBC8(actor, prop->FlagOrRotation, category, 0);
                         }
                     }
                 }
@@ -400,13 +382,16 @@ void gccollectDll_entrypoint_8(s16* arg0)
         }
     }
 }
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gc/collectDll.data.s) is defined here in C.
- * Values are taken from the ROM.
- * Labels inside an object are linker symbols in undefined_syms.us.txt: D_80800BE2_gccollectDll = D_80800BE0_gccollectDll + 0x2, D_80800BE6_gccollectDll = D_80800BE4_gccollectDll + 0x2, D_80800BEA_gccollectDll = D_80800BE8_gccollectDll + 0x2
- * extern declarations adjusted to the object (same addresses): D_80800BE4_gccollectDll -> s16[] (uses written as NAME[0]), D_80800BE8_gccollectDll -> s16[] (uses written as NAME[0]), D_80800BEC_gccollectDll -> s32[] */
-s16 D_80800BE0_gccollectDll[2] = { 0x31, 0x1 };
-s16 D_80800BE4_gccollectDll[2] = { 0x26, 0x1 };
-s16 D_80800BE8_gccollectDll[2] = { 0xB, 0x4 };
-s32 D_80800BEC_gccollectDll[8] = { 0xA0001, 0x160002, 0x3D0001, 0x4C0001, 0xA0002, 0x140000, 0x360001, 0x60002 };
-s32 D_80800C0C_gccollectDll[3] = { 0x0, 0x0, 0x0 };
-u32 D_80800C18_gccollectDll[10] = { 0x1F4, 0x21F, 0x220, 0x21B, 0x136, 0x0, 0x0, 0x4E5, 0x3C6, 0x0 };
+
+// TU-NOTE: the overlay .data is defined here in C; values are taken from the ROM.
+// TU-NOTE: D_80800BE2 = D_80800BE0 + 0x2, D_80800BE6 = D_80800BE4 + 0x2, D_80800BEA = D_80800BE8 + 0x2
+// (linker symbols in undefined_syms.us.txt).
+// TU-NOTE: externs are typed to the objects: D_80800BE4 and D_80800BE8 s16[] (used as NAME[0]),
+// D_80800BEC s32[].
+s16 D_80800BE0_gccollectDll[2] = {0x31, 0x1};
+s16 D_80800BE4_gccollectDll[2] = {0x26, 0x1};
+s16 D_80800BE8_gccollectDll[2] = {0xB, 0x4};
+s32 D_80800BEC_gccollectDll[8] = {0xA0001, 0x160002, 0x3D0001, 0x4C0001,
+                                  0xA0002, 0x140000, 0x360001, 0x60002};
+s32 D_80800C0C_gccollectDll[3] = {0x0, 0x0, 0x0};
+u32 D_80800C18_gccollectDll[10] = {0x1F4, 0x21F, 0x220, 0x21B, 0x136, 0x0, 0x0, 0x4E5, 0x3C6, 0x0};

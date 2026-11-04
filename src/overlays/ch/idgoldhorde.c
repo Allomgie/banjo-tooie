@@ -1,70 +1,109 @@
+// Gold hoard sparkle effect: probably spawns a sparkle at a random vertex of a treasure pile,
+// offset by its normal.
 #include "common.h"
 
 extern int D_808001F0_chidgoldhorde[];
-typedef struct { s16 local_0; s16 local_1; s16 local_2; s16 local_3; f32 local_4; } GoldHordeState59;
+typedef struct {
+    s16 marker_id;
+    s16 vertex_count;
+    s16 counter;
+    s16 target;
+    f32 chance;
+} GoldHordeState59;
 extern void *func_80100094(Actor *, u32);
 extern f32 func_800DC0C0(void);
 extern void _chidgoldhorde_entrypoint_1(void);
-typedef struct { s16 local_0; s16 local_1; u8 pad_0[4]; f32 local_2; } GoldHordeState;
+typedef struct {
+    s16 marker_id;
+    s16 vertex_count;
+    u8 pad_0[4];
+    f32 chance;
+} GoldHordeState;
 extern s32 func_800BEA88(s32);
-typedef struct { u32 pad_0; s16 local_0; s16 local_1; } GoldHordeSparkles;
+typedef struct {
+    u32 pad_0;
+    s16 counter;
+    s16 target;
+} GoldHordeSparkles;
 extern Actor *func_80106790(s32);
 extern void func_800EE88C();
 
 int chidgoldhorde_entrypoint_0()
 {
-  return &D_808001F0_chidgoldhorde;
+    return &D_808001F0_chidgoldhorde;
 }
 
-void func_8080000C_chidgoldhorde(Actor *param_0)
+void func_8080000C_chidgoldhorde(Actor *actor)
 {
-    GoldHordeState *local_0;
-    s32 local_1;
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_800BEA88(0);
-    local_0->local_0 = param_0->unk74_7;
-    local_0->local_1 = _glidmake_entrypoint_3(local_1, local_0->local_0);
-    local_0->local_2 = param_0->rotation[1] * (1.0f / 360.0f);
-    param_0->unk64_16 = 0;
+    GoldHordeState *state;
+    s32 model;
+    state = func_80100094(actor, 0);
+    model = func_800BEA88(0);
+    state->marker_id = actor->unk74_7;
+    state->vertex_count = _glidmake_entrypoint_3(model, state->marker_id);
+    state->chance = actor->rotation[1] * (1.0f / 360.0f);
+    actor->unk64_16 = 0;
 }
 
-void chidgoldhorde_entrypoint_1(param_0, param_1, param_2, param_3) s32 param_0; s32 param_1; s32 param_2; s8 param_3[3];
+// Callback per vertex: counts up and spawns a sparkle at the chosen vertex, offset along its normal.
+void chidgoldhorde_entrypoint_1(vertex, unk_0, actor_ref, normal) s32 vertex;
+s32 unk_0;
+s32 actor_ref;
+s8 normal[3];
 {
-    s32 local_2;
-    GoldHordeSparkles *local_3;
-    f32 local_0[3];
-    f32 local_1[3];
+    s32 i;
+    GoldHordeSparkles *state;
+    f32 pos[3];
+    f32 offset[3];
 
-    local_3 = func_80100094(func_80106790(param_2), 0);
-    if (local_3->local_0++ == local_3->local_1) {
-        func_800EE88C(local_0, param_0);
-        for (local_2 = 0; local_2 < 3; local_2++) {
-            local_1[local_2] = param_3[local_2] * 0.39370078f;
+    state = func_80100094(func_80106790(actor_ref), 0);
+    if (state->counter++ == state->target) {
+        func_800EE88C(pos, vertex);
+        for (i = 0; i < 3; i++) {
+            offset[i] = normal[i] * 0.39370078f;
         }
-        func_800EF04C(local_0, local_1);
-        _fxsparkle_entrypoint_1(local_0, 9);
+        func_800EF04C(pos, offset);
+        _fxsparkle_entrypoint_1(pos, 9);
     }
 }
 
-void func_8080015C_chidgoldhorde(Actor *param_0)
+// Randomly picks a vertex of the group and walks the vertices to it.
+void func_8080015C_chidgoldhorde(Actor *actor)
 {
-    GoldHordeState59 *local_0;
-    s32 local_1;
+    GoldHordeState59 *state;
+    s32 model;
 
-    local_0 = func_80100094(param_0, 0);
-    if (func_800DC0C0() < local_0->local_4) {
-        local_1 = func_800BEA88(0);
-        local_0->local_2 = 0;
-        local_0->local_3 = func_800DC128(0, local_0->local_1);
-        _glid_entrypoint_3(local_1, local_0->local_0, _chidgoldhorde_entrypoint_1, param_0->unk0);
+    state = func_80100094(actor, 0);
+    if (func_800DC0C0() < state->chance) {
+        model = func_800BEA88(0);
+        state->counter = 0;
+        state->target = func_800DC128(0, state->vertex_count);
+        _glid_entrypoint_3(model, state->marker_id, _chidgoldhorde_entrypoint_1, actor->unk0);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/idgoldhorde.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808001F0_chidgoldhorde -> int[] */
+// TU-NOTE: this overlay data is defined here in C; its tables point to functions of this file,
+// and IDO schedules some of them differently unless the tables are in the same unit.
 extern void func_80102EC0();
 extern void func_8010A730();
 extern void func_80107C2C();
-int D_808001F0_chidgoldhorde[20] = { 0x15801BD, 0x1, 0x0, (u32)func_8080015C_chidgoldhorde, (u32)func_80102EC0, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0xC0000, (u32)func_8080000C_chidgoldhorde, (u32)func_80107C2C, -0x7FFFDDFE, 0x0, 0x0, 0x0, 0x0 };
+int D_808001F0_chidgoldhorde[20] = {0x15801BD,
+                                    0x1,
+                                    0x0,
+                                    (u32) func_8080015C_chidgoldhorde,
+                                    (u32) func_80102EC0,
+                                    (u32) func_8010A730,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x4,
+                                    0x0,
+                                    0x0,
+                                    0xC0000,
+                                    (u32) func_8080000C_chidgoldhorde,
+                                    (u32) func_80107C2C,
+                                    -0x7FFFDDFE,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0};

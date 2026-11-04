@@ -1,3 +1,5 @@
+// Camera shake: a pool of 10 shake slots (decaying oscillation or curve-driven, optional world
+// position with falloff). func_800E1804 ticks them, func_800E1A58 applies the sum to the camera.
 #include "common.h"
 #include "types.h"
 
@@ -9,20 +11,56 @@ extern float D_8012CFB8[12];
 extern u8 D_8012D004[1124];
 extern float D_8012CFAC[16];
 extern float D_8012CFA4[16];
-typedef struct { u8 pad[0x74]; u8 state, type, distance, phase; u8 tail[4]; } LocalEffect;
-typedef union { u8 raw[1]; LocalEffect fx[1]; } Union_D_8012CF90;
+typedef struct {
+    u8 pad[0x74];
+    u8 state, type, has_pos, phase;
+    u8 tail[4];
+} LocalEffect;
+typedef union {
+    u8 raw[1];
+    LocalEffect fx[1];
+} Union_D_8012CF90;
 extern Union_D_8012CF90 D_8012CF90;
 extern s32 func_800DC128(s32, s32);
-typedef struct { u8 pad0[0x18]; f32 unk18; u8 pad1C[4]; f32 unk20; u8 pad24[8]; f32 unk2C; f32 unk30; u8 pad34[0x40]; u8 unk74; u8 pad75[7]; } S8012CF90;
-typedef struct { u8 pad0[0x74]; u8 unk74; u8 pad75; u8 unk76; u8 pad77[5]; } E124_E1720;
-typedef struct { f32 local_0[3], local_1[3]; f32 local_2, local_3, local_4, local_5, local_6, local_7, local_8; f32 local_9[16]; u8 local_10, local_11, local_12, local_13, local_14, pad[3]; } EffectE1804;
+// One shake slot is 0x7C bytes; the structs below are partial views of it.
+typedef struct {
+    u8 pad0[0x18];
+    f32 duration;
+    u8 pad1C[4];
+    f32 peak;
+    u8 pad24[8];
+    f32 sign;
+    f32 timer;
+    u8 pad34[0x40];
+    u8 state;
+    u8 pad75[7];
+} S8012CF90;
+typedef struct {
+    u8 pad0[0x74];
+    u8 state;
+    u8 pad75;
+    u8 has_pos;
+    u8 pad77[5];
+} E124_E1720;
+typedef struct {
+    f32 pos[3], falloff[3];
+    f32 duration, decay, peak, amp_end, amplitude, sign, timer;
+    f32 curve[16];
+    u8 state, axis, unk_76, phase, curve_count, pad[3];
+} EffectE1804;
 extern f32 func_800D8FF8(void);
 extern f32 func_800F0E00(f32, f32);
 extern f32 func_800F13F0(f32, f32);
 extern f32 mlAbsF(f32);
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern f32 func_800F3780(f32, f32 *, s32);
-typedef struct { f32 local_0[3], local_1, local_2, local_3; u8 pad0[16]; f32 local_4, local_5; u8 pad1[0x44]; u8 local_6, local_7, local_8, pad2[5]; } EntryE1A58;
+typedef struct {
+    f32 pos[3], near_dist, far_dist, min_scale;
+    u8 pad0[16];
+    f32 amplitude, sign;
+    u8 pad1[0x44];
+    u8 state, axis, has_pos, pad2[5];
+} EntryE1A58;
 extern void func_800EE7F8(f32 *, f32 *);
 extern f32 func_800EEAD4(f32 *, f32 *);
 void func_800E13F0(s32 param_0, f32 param_1);
@@ -30,272 +68,299 @@ void func_800E144C(s32 param_0, f32 param_1);
 void func_800E146C(s32 param_0, f32 param_1);
 void func_800E148C(s32 param_0, f32 param_1, f32 param_2);
 
-void func_800E1120(f32 *param_0, f32 *param_1, f32 param_2)
+// Shake offset along the rotated Y axis.
+void func_800E1120(f32 *out, f32 *rot, f32 amount)
 {
-    f32 local_0[3];
-    func_800EFA4C(local_0, 0.0f, param_2, 0.0f);
-    func_800EF8BC(local_0, local_0, param_1[0]);
-    func_800EF934(local_0, local_0, param_1[1]);
-    func_800EF04C(param_0, local_0);
+    f32 vec[3];
+    func_800EFA4C(vec, 0.0f, amount, 0.0f);
+    func_800EF8BC(vec, vec, rot[0]);
+    func_800EF934(vec, vec, rot[1]);
+    func_800EF04C(out, vec);
 }
 
-void func_800E119C(f32 *param_0, f32 *param_1, f32 param_2) {
-    f32 sp24[3];
-    func_800EFA4C(sp24, 0.0f, 0.0f, param_2);
-    func_800EF8BC(sp24, sp24, param_1[0]);
-    func_800EF934(sp24, sp24, param_1[1]);
-    func_800EF04C(param_0, sp24);
-}
-
-void func_800E1218(f32 *param_0, f32 *param_1, f32 param_2)
+// Shake offset along the rotated Z axis.
+void func_800E119C(f32 *out, f32 *rot, f32 amount)
 {
-    f32 local_0[3];
-    func_800EFA4C(local_0, param_2, 0.0f, 0.0f);
-    func_800EF8BC(local_0, local_0, param_1[0]);
-    func_800EF934(local_0, local_0, param_1[1]);
-    func_800EF04C(param_0, local_0);
+    f32 vec[3];
+    func_800EFA4C(vec, 0.0f, 0.0f, amount);
+    func_800EF8BC(vec, vec, rot[0]);
+    func_800EF934(vec, vec, rot[1]);
+    func_800EF04C(out, vec);
 }
 
-void func_800E1294(s32 param_0, f32 *param_1, f32 *param_2, f32 param_3) {
-    switch (param_0) {
+// Shake offset along the rotated X axis.
+void func_800E1218(f32 *out, f32 *rot, f32 amount)
+{
+    f32 vec[3];
+    func_800EFA4C(vec, amount, 0.0f, 0.0f);
+    func_800EF8BC(vec, vec, rot[0]);
+    func_800EF934(vec, vec, rot[1]);
+    func_800EF04C(out, vec);
+}
+
+void func_800E1294(s32 axis, f32 *out, f32 *rot, f32 amount)
+{
+    switch (axis) {
         case 1:
-            func_800E1218(param_1, param_2, param_3);
+            func_800E1218(out, rot, amount);
             break;
         case 0:
-            func_800E1120(param_1, param_2, param_3);
+            func_800E1120(out, rot, amount);
             break;
         case 2:
-            func_800E119C(param_1, param_2, param_3);
+            func_800E119C(out, rot, amount);
             break;
         case 3:
-            param_1[1] += param_3;
+            out[1] += amount;
+    }
+}
+
+f32 func_800E1338(s32 slot)
+{
+    return *(f32 *) ((u8 *) D_8012CFB8 + slot * 124);
+}
+
+int func_800E1354(s32 slot)
+{
+    return D_8012D004[slot * 124] != 1;
+}
+
+void func_800E1378(s32 slot)
+{
+    func_800E13F0(slot, 30.0f);
+    func_800E144C(slot, 0.65f);
+    func_800E148C(slot, 1000.0f, 2000.0f);
+    if (func_800EA068(0x20) != 0) {
+        func_800E146C(slot, 0.0f);
+        return;
+    }
+    func_800E146C(slot, 0.5f);
+}
+
+void func_800E13F0(s32 slot, f32 amplitude)
+{
+    *(f32 *) ((u8 *) D_8012CFB8 + slot * 124) = amplitude;
+}
+
+void func_800E1410(s32 slot, f32 amp_delta, f32 duration)
+{
+    float target;
+    f32 current;
+    u8 *entry;
+    f32 *amp_ptr;
+    entry = (u8 *) ((slot * 0x7C) + D_8012CF90.raw);
+    amp_ptr = (f32 *) (entry + 0x28);
+    current = *amp_ptr;
+    target = current + amp_delta;
+    *(f32 *) (entry + 0x24) = current;
+    *(f32 *) (entry + 0x30) = duration;
+    *(f32 *) (entry + 0x20) = target;
+    *(f32 *) (entry + 0x18) = duration;
+}
+
+void func_800E144C(s32 slot, f32 decay)
+{
+    *(f32 *) ((u8 *) D_8012CFAC + slot * 124) = decay;
+}
+
+void func_800E146C(s32 slot, f32 min_scale)
+{
+    *(f32 *) ((u8 *) D_8012CFA4 + slot * 124) = min_scale;
+}
+
+// Sets the near/far distances for position-based falloff.
+void func_800E148C(s32 slot, f32 near_dist, f32 far_dist)
+{
+    f32 *entry = (f32 *) ((char *) (f32 *) D_8012CF90.raw + slot * 124);
+    entry[3] = near_dist;
+    entry[4] = far_dist;
+}
+
+void func_800E14B8(s32 slot, f32 *pos)
+{
+    func_800EE7F8((f32 *) &D_8012CF90.raw[slot * 124], pos);
+    D_8012CF90.raw[slot * 124 + 0x76] = 1;
+}
+
+void func_800E14F8(s32 slot, u8 *curve, s16 count)
+{
+    u8 *entry = (u8 *) (int *) D_8012CF90.raw;
+    entry += slot * 124;
+    entry[120] = count;
+    rare_memcpy(entry + 52, curve, (u32) count << 3);
+}
+
+// Picks a free slot (random one if all are in use) and starts it.
+s32 func_800E1540(s32 axis)
+{
+    s32 i;
+    LocalEffect *entry;
+    for (i = 0; i < 10; i++) {
+        if (D_8012CF90.fx[i].state == 1)
             break;
     }
-}
-
-f32 func_800E1338(s32 param_0)
-{
-  return *(f32 *)((u8 *)D_8012CFB8 + param_0 * 124);
-}
-
-int func_800E1354(s32 param_0)
-{
-  return D_8012D004[param_0 * 124] != 1;
-}
-
-void func_800E1378(s32 param_0)
-{
-  func_800E13F0(param_0, 30.0f);
-  func_800E144C(param_0, 0.65f);
-  func_800E148C(param_0, 1000.0f, 2000.0f);
-  if (func_800EA068(0x20) != 0)
-  {
-    func_800E146C(param_0, 0.0f);
-    return;
-  }
-  func_800E146C(param_0, 0.5f);
-}
-
-void func_800E13F0(s32 param_0, f32 param_1)
-{
-  *(f32 *)((u8 *)D_8012CFB8 + param_0 * 124) = param_1;
-}
-
-void func_800E1410(s32 param_0, f32 param_1, f32 param_2)
-{
-  float new_var2;
-  f32 local_0;
-  u8 *local_1;
-  f32 *new_var;
-  local_1 = (u8 *) ((param_0 * 0x7C) + D_8012CF90.raw);
-  new_var = (f32 *) (local_1 + 0x28);
-  local_0 = *new_var;
-  new_var2 = local_0 + param_1;
-  *((f32 *) (local_1 + 0x24)) = local_0;
-  *((f32 *) (local_1 + 0x30)) = param_2;
-  *((f32 *) (local_1 + 0x20)) = new_var2;
-  *((f32 *) (local_1 + 0x18)) = param_2;
-}
-
-void func_800E144C(s32 param_0, f32 param_1)
-{
-  *(f32 *)((u8 *)D_8012CFAC + param_0 * 124) = param_1;
-}
-
-void func_800E146C(s32 param_0, f32 param_1)
-{
-  *(f32 *)((u8 *)D_8012CFA4 + param_0 * 124) = param_1;
-}
-
-void func_800E148C(s32 param_0, f32 param_1, f32 param_2)
-{
-  f32 *local_0 = (f32 *)((char *)((f32 *) D_8012CF90.raw) + param_0 * 124);
-  local_0[3] = param_1;
-  local_0[4] = param_2;
-}
-
-void func_800E14B8(s32 param_0, f32 *param_1)
-{
-    func_800EE7F8((f32 *) &D_8012CF90.raw[param_0 * 124], param_1);
-    D_8012CF90.raw[param_0 * 124 + 0x76] = 1;
-}
-
-void func_800E14F8(s32 param_0, u8 *param_1, s16 param_2)
-{
-  u8 *new_var;
-  u8 *local_0 = (u8 *) (((int *) D_8012CF90.raw));
-  local_0 += param_0 * 124;
-  new_var = local_0;
-  new_var = local_0;
-  local_0[120] = param_2;
-  rare_memcpy(local_0 + 52, param_1, ((u32) param_2) << 3);
-}
-
-s32 func_800E1540(s32 param_0) {
-    s32 local_0;
-    LocalEffect *local_1;
-    for (local_0 = 0; local_0 < 10; local_0++) {
-        if (D_8012CF90.fx[local_0].state == 1) break;
+    if (i == 10) {
+        i = func_800DC128(0, 10);
     }
-    if (local_0 == 10) {
-        local_0 = func_800DC128(0, 10);
-    }
-    local_1 = &D_8012CF90.fx[local_0];
-    local_1->type = param_0;
-    local_1->state = 2;
-    local_1->phase = 0;
-    return local_0;
+    entry = &D_8012CF90.fx[i];
+    entry->type = axis;
+    entry->state = 2;
+    entry->phase = 0;
+    return i;
 }
 
-s32 func_800E15CC(s32 param_0, f32 param_1, f32 param_2)
+s32 func_800E15CC(s32 axis, f32 amplitude, f32 decay)
 {
-  s32 local_0;
+    s32 slot;
 
-  local_0 = func_800E1540(param_0);
-  func_800E13F0(local_0, param_1);
-  func_800E144C(local_0, param_2);
-  return local_0;
+    slot = func_800E1540(axis);
+    func_800E13F0(slot, amplitude);
+    func_800E144C(slot, decay);
+    return slot;
 }
 
-s32 func_800E1610(s32 param_0, f32 param_1, f32 param_2, f32 *param_3)
+s32 func_800E1610(s32 axis, f32 amplitude, f32 decay, f32 *pos)
 {
-  s32 local_0;
-  local_0 = func_800E1540(param_0);
-  func_800E13F0(local_0, param_1);
-  func_800E144C(local_0, param_2);
-  func_800E14B8(local_0, param_3);
-  return local_0;
+    s32 slot;
+    slot = func_800E1540(axis);
+    func_800E13F0(slot, amplitude);
+    func_800E144C(slot, decay);
+    func_800E14B8(slot, pos);
+    return slot;
 }
 
-s32 func_800E1664(s32 param_0, f32 param_1, f32 param_2, s32 param_3, s32 param_4, s16 param_5) {
-    s32 idx;
-    S8012CF90 *e;
-    idx = func_800E1540(param_0);
-    func_800E14F8(idx, param_4, param_5);
-    e = &((S8012CF90 *) D_8012CF90.raw)[idx];
-    e->unk74 = 4;
-    e->unk20 = param_1;
-    e->unk30 = 0.0f;
-    e->unk18 = param_2;
-    if (param_1 >= 0.0f) {
-        e->unk2C = 1.0f;
+// Starts a curve-driven shake (state 4).
+s32 func_800E1664(s32 axis, f32 peak, f32 duration, s32 pos, s32 curve, s16 count)
+{
+    s32 slot;
+    S8012CF90 *entry;
+    slot = func_800E1540(axis);
+    func_800E14F8(slot, curve, count);
+    entry = &((S8012CF90 *) D_8012CF90.raw)[slot];
+    entry->state = 4;
+    entry->peak = peak;
+    entry->timer = 0.0f;
+    entry->duration = duration;
+    if (peak >= 0.0f) {
+        entry->sign = 1.0f;
     } else {
-        e->unk2C = -1.0f;
+        entry->sign = -1.0f;
     }
-    if (param_3 != 0) {
-        func_800E14B8(idx, param_3);
+    if (pos != 0) {
+        func_800E14B8(slot, pos);
     }
-    return idx;
+    return slot;
 }
 
-void func_800E1720(s32 param_0) {
-    ((E124_E1720 *) D_8012CF90.raw)[param_0].unk74 = 1;
-    ((E124_E1720 *) D_8012CF90.raw)[param_0].unk76 = 0;
+// Stops a shake slot.
+void func_800E1720(s32 slot)
+{
+    ((E124_E1720 *) D_8012CF90.raw)[slot].state = 1;
+    ((E124_E1720 *) D_8012CF90.raw)[slot].has_pos = 0;
 }
 
 int func_800E1748()
 {
-  s32 local_0;
-  for (local_0 = 0; local_0 < 10; local_0++)
-  {
-    func_800E1720(local_0);
-  }
-
+    s32 i;
+    for (i = 0; i < 10; i++) {
+        func_800E1720(i);
+    }
 }
 
-void func_800E1788(void) {
-    s8 *local_0;
-    s32 local_1;
+void func_800E1788(void)
+{
+    s8 *entry;
+    s32 i;
 
-    local_0 = ((s32 *) D_8012CF90.raw);
-    local_1 = 0;
+    entry = (s32 *) D_8012CF90.raw;
+    i = 0;
     do {
-        (*(s8 *)((s8 *)(local_0) + (0x74))) = 1;
-        (*(f32 *)((s8 *)(local_0) + (0x30))) = 0.0f;
-        (*(s8 *)((s8 *)(local_0) + (0x76))) = 0;
-        func_800EFD24(local_0);
-        func_800E1378(local_1);
-        local_1 += 1;
-        local_0 += 0x7C;
-    } while (local_1 != 0xA);
+        *(s8 *) ((s8 *) entry + 0x74) = 1;
+        *(f32 *) ((s8 *) entry + 0x30) = 0.0f;
+        *(s8 *) ((s8 *) entry + 0x76) = 0;
+        func_800EFD24(entry);
+        func_800E1378(i);
+        i += 1;
+        entry += 0x7C;
+    } while (i != 0xA);
 }
 
-void func_800E1804(void) {
-    EffectE1804 *local_0;
-    s32 local_1;
-    f32 local_2;
-    local_2 = func_800D8FF8();
-    for (local_1 = 0; local_1 < 10; local_1++) {
-        local_0 = &((EffectE1804 *) D_8012CF90.raw)[local_1];
-        switch (local_0->local_10) {
-        case 2:
-            if (local_0->local_6 >= 0.0f) local_0->local_7 = 1.0f;
-            else local_0->local_7 = -1.0f;
-            local_0->local_10 = 3;
-            local_0->local_13 = 0;
-            break;
-        case 3:
-            if (local_0->local_8 != 0.0f) {
-                local_0->local_8 = func_800F0E00(0.0f, local_0->local_8 - local_2);
-                if (local_0->local_13) local_0->local_6 = func_800F10B4(local_0->local_8, local_0->local_2, 0.0f, local_0->local_5, local_0->local_4);
-            } else if (local_0->local_13) {
-                local_0->local_6 *= local_0->local_3 * local_0->local_3;
-            }
-            local_0->local_13 ^= 1;
-            local_0->local_7 = -local_0->local_7;
-            if (local_0->local_3 != 1 && mlAbsF(local_0->local_6) < 0.001f) func_800E1720(local_1);
-            break;
-        case 4:
-            if (local_0->local_8 < local_0->local_2) {
-                local_0->local_8 = func_800F13F0(local_0->local_2, local_0->local_8 + local_2);
-                local_0->local_6 = func_800F3780(local_0->local_8 / local_0->local_2, local_0->local_9, local_0->local_14) * local_0->local_4;
-                local_0->local_7 = -local_0->local_7;
-            } else func_800E1720(local_1);
-            break;
+// Per-frame update of all shake slots.
+void func_800E1804(void)
+{
+    EffectE1804 *entry;
+    s32 i;
+    f32 dt;
+    dt = func_800D8FF8();
+    for (i = 0; i < 10; i++) {
+        entry = &((EffectE1804 *) D_8012CF90.raw)[i];
+        switch (entry->state) {
+            case 2:
+                if (entry->amplitude >= 0.0f)
+                    entry->sign = 1.0f;
+                else
+                    entry->sign = -1.0f;
+                entry->state = 3;
+                entry->phase = 0;
+                break;
+            case 3:
+                if (entry->timer != 0.0f) {
+                    entry->timer = func_800F0E00(0.0f, entry->timer - dt);
+                    if (entry->phase)
+                        entry->amplitude = func_800F10B4(entry->timer, entry->duration, 0.0f,
+                                                         entry->amp_end, entry->peak);
+                } else if (entry->phase) {
+                    entry->amplitude *= entry->decay * entry->decay;
+                }
+                entry->phase ^= 1;
+                entry->sign = -entry->sign;
+                if (entry->decay != 1 && mlAbsF(entry->amplitude) < 0.001f)
+                    func_800E1720(i);
+                break;
+            case 4:
+                if (entry->timer < entry->duration) {
+                    entry->timer = func_800F13F0(entry->duration, entry->timer + dt);
+                    entry->amplitude = func_800F3780(entry->timer / entry->duration,
+                                                     entry->curve, entry->curve_count) *
+                                       entry->peak;
+                    entry->sign = -entry->sign;
+                } else
+                    func_800E1720(i);
         }
     }
 }
 
-void func_800E1A58(f32 *param_0, f32 *param_1) {
-    f32 local_1;
-    f32 local_0[3];
-    s32 local_3;
-    func_800EE7F8(local_0, param_0);
-    for (local_3 = 0; local_3 < 10; local_3++) {
-        local_1 = 1;
-        if (((EntryE1A58 *) D_8012CF90.raw)[local_3].local_6 == 1) continue;
-        if (((EntryE1A58 *) D_8012CF90.raw)[local_3].local_8) {
-            local_1 = func_800F0E00(func_800F10B4(func_800EEAD4(local_0, ((EntryE1A58 *) D_8012CF90.raw)[local_3].local_0), ((EntryE1A58 *) D_8012CF90.raw)[local_3].local_1, ((EntryE1A58 *) D_8012CF90.raw)[local_3].local_2, 1.0f, 0.0f), ((EntryE1A58 *) D_8012CF90.raw)[local_3].local_3);
-            if (local_1 == 0) continue;
+// Applies the summed shake of all active slots to the camera position/rotation.
+void func_800E1A58(f32 *pos, f32 *rot)
+{
+    f32 scale;
+    f32 cam_pos[3];
+    s32 i;
+    func_800EE7F8(cam_pos, pos);
+    for (i = 0; i < 10; i++) {
+        scale = 1;
+        if (((EntryE1A58 *) D_8012CF90.raw)[i].state == 1)
+            continue;
+        if (((EntryE1A58 *) D_8012CF90.raw)[i].has_pos) {
+            scale = func_800F0E00(
+                func_800F10B4(
+                    func_800EEAD4(cam_pos, ((EntryE1A58 *) D_8012CF90.raw)[i].pos),
+                    ((EntryE1A58 *) D_8012CF90.raw)[i].near_dist,
+                    ((EntryE1A58 *) D_8012CF90.raw)[i].far_dist, 1.0f, 0.0f),
+                ((EntryE1A58 *) D_8012CF90.raw)[i].min_scale);
+            if (scale == 0)
+                continue;
         }
-        switch (((EntryE1A58 *) D_8012CF90.raw)[local_3].local_6) {
-        case 2:
-            func_800E1294(((EntryE1A58 *) D_8012CF90.raw)[local_3].local_7, param_0, param_1, ((EntryE1A58 *) D_8012CF90.raw)[local_3].local_4 * local_1);
-            break;
-        case 3:
-        case 4:
-            func_800E1294(((EntryE1A58 *) D_8012CF90.raw)[local_3].local_7, param_0, param_1, ((EntryE1A58 *) D_8012CF90.raw)[local_3].local_5 * ((EntryE1A58 *) D_8012CF90.raw)[local_3].local_4 * local_1);
-            break;
+        switch (((EntryE1A58 *) D_8012CF90.raw)[i].state) {
+            case 2:
+                func_800E1294(((EntryE1A58 *) D_8012CF90.raw)[i].axis, pos, rot,
+                              ((EntryE1A58 *) D_8012CF90.raw)[i].amplitude * scale);
+                break;
+            case 3:
+            case 4:
+                func_800E1294(((EntryE1A58 *) D_8012CF90.raw)[i].axis, pos, rot,
+                              ((EntryE1A58 *) D_8012CF90.raw)[i].sign *
+                                  ((EntryE1A58 *) D_8012CF90.raw)[i].amplitude * scale);
         }
     }
 }

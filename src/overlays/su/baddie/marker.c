@@ -1,51 +1,55 @@
+// Probably a map-marker search: collects up to 40 level-setup markers near a position (optionally
+// of one type), returning each one's position, type, yaw and scale/radius.
 #include "common.h"
+// TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 
-#define MARKER_SEARCH_RESULT_DEFINED
-typedef struct MarkerSearchResult { f32 local_0[3]; s32 local_1; f32 local_2; f32 local_3; } MarkerSearchResult;
-extern u8 *B_808001E0_subaddiemarker[];
+typedef struct MarkerSearchResult {
+    f32 pos[3];
+    s32 type;
+    f32 yaw;
+    f32 scale;
+} MarkerSearchResult;
 extern f32 _gspropmarker_entrypoint_3(void *);
 
-/* TU-NOTE: the .bss of this file (formerly asm/data/overlays/su/baddie/marker.bss.s) is defined here in C, ahead of
- * its first use: IDO places .bss objects used before their definition first, the rest in definition
- * order. */
+// TU-NOTE: this .bss object is defined ahead of its first use because IDO places
+// .bss objects used before their definition first, the rest in definition order.
 u8 *B_808001E0_subaddiemarker[40];
 
-
-s32 subaddiemarker_entrypoint_0(s32 param_0, void *param_1, MarkerSearchResult *param_2, s32 param_3)
+// Collects up to 40 markers near search_pos into out; returns the count.
+s32 subaddiemarker_entrypoint_0(s32 unk_0, void *search_pos, MarkerSearchResult *out,
+                                s32 unk_3)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = _gccubesearch_entrypoint_9(param_1, B_808001E0_subaddiemarker, 40);
-    for (local_1 = 0; local_1 < local_0; local_1++) {
-        param_2->local_3 = _gspropmarker_entrypoint_3(B_808001E0_subaddiemarker[local_1]);
-        param_2->local_2 = (f32)(*(u32 *)(B_808001E0_subaddiemarker[local_1] + 0xC) >> 23);
-        param_2->local_1 = (u32)*(u16 *)(B_808001E0_subaddiemarker[local_1] + 6) >> 7;
-        func_800EE88C(param_2->local_0, B_808001E0_subaddiemarker[local_1]);
-        param_2++;
+    s32 count;
+    s32 i;
+    count = _gccubesearch_entrypoint_9(search_pos, B_808001E0_subaddiemarker, 40);
+    for (i = 0; i < count; i++) {
+        out->scale = _gspropmarker_entrypoint_3(B_808001E0_subaddiemarker[i]);
+        out->yaw = (f32) (*(u32 *) (B_808001E0_subaddiemarker[i] + 0xC) >> 23);
+        out->type = (u32) *(u16 *) (B_808001E0_subaddiemarker[i] + 6) >> 7;
+        func_800EE88C(out->pos, B_808001E0_subaddiemarker[i]);
+        out++;
     }
-    return local_0;
+    return count;
 }
 
-s32 subaddiemarker_entrypoint_1(s32 param_0, f32 *param_1, s32 param_2, MarkerSearchResult *param_3)
+// Like entry 0, but only markers of the given type.
+s32 subaddiemarker_entrypoint_1(s32 unk_0, f32 *search_pos, s32 type, MarkerSearchResult *out)
 {
-    s32 local_1;
-    s32 local_2;
-    s32 local_0;
+    s32 found;
+    s32 count;
+    s32 i;
 
-    local_2 = _gccubesearch_entrypoint_9(param_1, B_808001E0_subaddiemarker, 40);
-    local_1 = 0;
-    for (local_0 = 0; local_0 < local_2; local_0++) {
-            if (((u32)*(u16 *)(B_808001E0_subaddiemarker[local_0] + 6) >> 7) == param_2) {
-                param_3->local_3 = _gspropmarker_entrypoint_3(B_808001E0_subaddiemarker[local_0]);
-                param_3->local_2 = (f32)(*(u32 *)(B_808001E0_subaddiemarker[local_0] + 0xC) >> 23);
-                param_3->local_1 = (u32)*(u16 *)(B_808001E0_subaddiemarker[local_0] + 6) >> 7;
-                func_800EE88C(param_3->local_0, B_808001E0_subaddiemarker[local_0]);
-                param_3++;
-                local_1++;
-            }
+    count = _gccubesearch_entrypoint_9(search_pos, B_808001E0_subaddiemarker, 40);
+    found = 0;
+    for (i = 0; i < count; i++) {
+        if (((u32) *(u16 *) (B_808001E0_subaddiemarker[i] + 6) >> 7) == type) {
+            out->scale = _gspropmarker_entrypoint_3(B_808001E0_subaddiemarker[i]);
+            out->yaw = (f32) (*(u32 *) (B_808001E0_subaddiemarker[i] + 0xC) >> 23);
+            out->type = (u32) *(u16 *) (B_808001E0_subaddiemarker[i] + 6) >> 7;
+            func_800EE88C(out->pos, B_808001E0_subaddiemarker[i]);
+            out++;
+            found++;
+        }
     }
-    return local_1;
+    return found;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/marker.data.s) is defined here in C.
- * Values are taken from the ROM. */

@@ -1,169 +1,223 @@
+// Dynamic light vertex effect: applies core2 world point lights to map-mesh vertex colours
+// with a linear falloff; init bakes the static lights into the base colours.
 #include "common.h"
 
-typedef struct { u8 pad_0[0x10]; u16 local_0; u8 pad_1[2]; s32 local_1; u8 pad_2[4]; s32 local_2; } LightGridDefinition;
-typedef struct { u16 local_0; u16 local_1; } LightGridSourceState;
-typedef struct { u8 pad_0[0x14]; LightGridSourceState local_0[1]; } LightGridSource;
-typedef struct { u8 pad_0[0x10]; s32 local_0; } LightGridRecord;
-typedef struct { u8 local_0; u8 local_1; u8 pad_0[14]; } LightGridState;
-typedef struct { s16 local_0[3]; s16 local_1[3]; u8 pad_0[12]; f32 local_2; } LightGridBounds;
-typedef struct { u8 used; u8 n; u8 h[14]; } VpCell;
-typedef struct { u8 pad0[3]; u8 dirty; u8 pad4[16]; } VpCellOut;
-typedef struct { u8 pad0[0xC]; u16 w; u16 plane; u8 pad10[4]; s32 count; u8 pad18[4]; s32 outOffset; } VpGrid;
+typedef struct {
+    u8 pad_0[0x10];
+    u16 cell_count;
+    u8 pad_12[2];
+    s32 group_count;
+    u8 pad_18[4];
+    s32 record_offset;
+} LightGridDefinition;
+typedef struct {
+    u16 id;
+    u16 enabled;
+} LightGridSourceState;
+typedef struct {
+    u8 pad_0[0x14];
+    LightGridSourceState groups[1];
+} LightGridSource;
+typedef struct {
+    u8 pad_0[0x10];
+    s32 cell;
+} LightGridRecord;
+typedef struct {
+    u8 used;
+    u8 n;
+    u8 pad_2[14];
+} LightGridState;
+typedef struct {
+    s16 grid_min[3];
+    s16 grid_max[3];
+    u8 pad_C[12];
+    f32 scale;
+} LightGridBounds;
+typedef struct {
+    u8 used;
+    u8 n;
+    u8 h[14];
+} VpCell;
+typedef struct {
+    u8 pad_0[3];
+    u8 dirty;
+    u8 pad_4[16];
+} VpCellOut;
+typedef struct {
+    u8 pad_0[0xC];
+    u16 width;
+    u16 plane;
+    u8 pad_10[4];
+    s32 count;
+    u8 pad_18[4];
+    s32 out_offset;
+} VpGrid;
 extern s32 func_800C8760(s32, s32);
 extern s32 func_800C89D8(s32);
 extern s32 func_800C8800(s32, f32 *);
 extern void func_800C883C(s32, f32 *);
 extern s32 func_800C878C(s32, s32, s32);
 extern void func_800C8898(s32, f32[3]);
-typedef struct { u8 local_0; u8 local_1; u8 local_2[14]; } VpLightGroup62;
+typedef struct {
+    u8 used;
+    u8 n;
+    u8 h[14];
+} VpLightGroup62;
 extern void func_800C8900(s32, s32 *);
-extern f32 sqrtf(f32);
 
-void *vplight_entrypoint_0(LightGridDefinition *param_0, LightGridSource *param_1)
+// Create: allocates the per-group light state and the grid cell -> group table (-1 = none).
+void *vplight_entrypoint_0(LightGridDefinition *def, LightGridSource *src)
 {
-    LightGridState *local_0;
-    LightGridState *local_1;
-    LightGridRecord *local_2;
-    LightGridSourceState *local_3;
-    LightGridSourceState *local_4;
-    s16 *local_5;
-    s16 *local_6;
-    s16 *local_7;
-    LightGridSourceState *local_9;
-    s32 local_8;
+    LightGridState *states;
+    LightGridState *state;
+    LightGridRecord *record;
+    LightGridSourceState *src_group;
+    LightGridSourceState *src_end;
+    s16 *cell_table;
+    s16 *entry;
+    s16 *table_end;
+    LightGridSourceState *src_first;
+    s32 size;
 
-    local_8 = param_0->local_0 * sizeof(s16) + param_0->local_1 * sizeof(LightGridState);
-    local_0 = heap_alloc(local_8);
-    rare_memset(local_0, 0, local_8);
-    if (1) {}
-    local_5 = (s16 *)((u8 *)local_0 + param_0->local_1 * sizeof(LightGridState));
-    local_7 = local_5 + param_0->local_0;
-    for (local_6 = local_5; local_6 < local_7;) {
-        *local_6++ = -1;
+    size = def->cell_count * sizeof(s16) + def->group_count * sizeof(LightGridState);
+    states = heap_alloc(size);
+    rare_memset(states, 0, size);
+    // Matching: empty block steers IDO's register allocation.
+    if (1) {
     }
-    local_4 = param_0->local_1 + param_1->local_0;
-    local_2 = (LightGridRecord *)((u8 *)param_0 + param_0->local_2);
-    local_9 = param_1->local_0;
-    local_1 = local_0;
-    local_3 = local_9;
-    for (; local_3 < local_4; local_3++, local_1++) {
-        if (local_3->local_1) {
-            local_1->local_0 = 1;
-            local_1->local_1 = 0;
-            local_5[((local_3 - local_9) + local_2)->local_0] = local_3 - local_9;
+    cell_table = (s16 *) ((u8 *) states + def->group_count * sizeof(LightGridState));
+    table_end = cell_table + def->cell_count;
+    for (entry = cell_table; entry < table_end;) {
+        *entry++ = -1;
+    }
+    src_end = def->group_count + src->groups;
+    record = (LightGridRecord *) ((u8 *) def + def->record_offset);
+    src_first = src->groups;
+    state = states;
+    src_group = src_first;
+    for (; src_group < src_end; src_group++, state++) {
+        if (src_group->enabled) {
+            state->used = 1;
+            state->n = 0;
+            cell_table[((src_group - src_first) + record)->cell] = src_group - src_first;
         }
     }
-    return local_0;
+    return states;
 }
 
-void vplight_entrypoint_1(void* arg0) 
+void vplight_entrypoint_1(void *state)
 {
-    heap_free(arg0);
+    heap_free(state);
 }
-void func_80800134_vplight(LightGridBounds *param_0, f32 param_1[3],
-    f32 param_2, s32 param_3[3], s32 param_4[3])
-{
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    f32 local_3;
-    f32 local_4;
-    s32 local_5;
-    s32 local_6;
 
-    for (local_0 = 0; local_0 < 3; local_0++) {
-        local_3 = param_1[local_0] - param_2;
-        local_4 = param_1[local_0] + param_2;
-        local_1 = param_0->local_2 * local_3;
-        local_2 = param_0->local_2 * local_4;
-        if (local_3 < 0.0f) {
-            local_1--;
+// Converts a sphere (pos, radius) into the min/max grid cell range per axis, clamped to the grid.
+void func_80800134_vplight(LightGridBounds *grid, f32 pos[3], f32 radius, s32 cell_lo[3],
+                           s32 cell_hi[3])
+{
+    s32 axis;
+    s32 lo;
+    s32 hi;
+    f32 pos_lo;
+    f32 pos_hi;
+    s32 grid_lo;
+    s32 grid_hi;
+
+    for (axis = 0; axis < 3; axis++) {
+        pos_lo = pos[axis] - radius;
+        pos_hi = pos[axis] + radius;
+        lo = grid->scale * pos_lo;
+        hi = grid->scale * pos_hi;
+        if (pos_lo < 0.0f) {
+            lo--;
         }
-        if (local_4 < 0.0f) {
-            local_2--;
+        if (pos_hi < 0.0f) {
+            hi--;
         }
-        local_5 = param_0->local_0[local_0];
-        local_6 = param_0->local_1[local_0];
-        if (local_1 < local_5) {
-            local_1 = local_5;
+        grid_lo = grid->grid_min[axis];
+        grid_hi = grid->grid_max[axis];
+        if (lo < grid_lo) {
+            lo = grid_lo;
         }
-        if (local_1 > local_6) {
-            local_1 = local_6;
+        if (lo > grid_hi) {
+            lo = grid_hi;
         }
-        if (local_2 < local_5) {
-            local_2 = local_5;
+        if (hi < grid_lo) {
+            hi = grid_lo;
         }
-        if (local_2 > local_6) {
-            local_2 = local_6;
+        if (hi > grid_hi) {
+            hi = grid_hi;
         }
-        param_3[local_0] = local_1 - local_5;
-        param_4[local_0] = local_2 - local_5;
+        cell_lo[axis] = lo - grid_lo;
+        cell_hi[axis] = hi - grid_lo;
     }
 }
 
-void vplight_entrypoint_2(VpCell *param_0, VpGrid *param_1)
+// Update: re-bins changed lights into the groups their outer radius overlaps and marks those
+// groups dirty.
+void vplight_entrypoint_2(VpCell *list, VpGrid *grid)
 {
     VpCellOut *out;
-    VpCell *fp;
+    VpCell *group;
     VpCell *end;
-    s16 *tbl;
+    s16 *cell_table;
     s32 handle;
-    s32 flag;
+    s32 changed;
     f32 pos[3];
     f32 range[2];
     s32 lo[3];
     s32 hi[3];
-    VpCell *rec;
+    VpCell *target;
     s32 k;
     s32 x;
     s32 y;
     s32 z;
-    s32 i;
-    s32 idx;
+    s32 group_idx;
+    s32 cell_idx;
     s32 j;
-    VpCell *cells;
+    VpCell *groups;
 
-    cells = param_0;
-    end = cells + param_1->count;
-    tbl = (s16 *)(cells + param_1->count);
-    out = (VpCellOut *)((u8 *)param_1 + param_1->outOffset);
+    groups = list;
+    end = groups + grid->count;
+    cell_table = (s16 *) (groups + grid->count);
+    out = (VpCellOut *) ((u8 *) grid + grid->out_offset);
     handle = func_800C8760(2, 2);
     if (handle == 0) {
         return;
     }
     do {
-        flag = func_800C89D8(handle);
-        for (fp = cells; fp < end; fp++) {
-            if (fp->used != 0 && fp->n != 0) {
+        changed = func_800C89D8(handle);
+        // Marks groups holding the light dirty; drops the light from them if it changed.
+        for (group = groups; group < end; group++) {
+            if (group->used != 0 && group->n != 0) {
                 for (k = 0; k != 14; k++) {
-                    if (fp->h[k] == handle) {
-                        if (flag) {
-                            fp->h[k] = 0;
-                            fp->n--;
+                    if (group->h[k] == handle) {
+                        if (changed) {
+                            group->h[k] = 0;
+                            group->n--;
                         }
-                        out[fp - cells].dirty = 1;
+                        out[group - groups].dirty = 1;
                         break;
                     }
                 }
             }
         }
-        if (flag) {
+        if (changed) {
             func_800C8800(handle, pos);
             func_800C883C(handle, range);
-            func_80800134_vplight(param_1, pos, range[1], lo, hi);
+            func_80800134_vplight(grid, pos, range[1], lo, hi);
             for (z = lo[2]; z <= hi[2]; z++) {
                 for (y = lo[1]; y <= hi[1]; y++) {
                     for (x = lo[0]; x <= hi[0]; x++) {
-                        idx = param_1->plane * z + x + y * param_1->w;
-                        i = tbl[idx];
-                        if (i >= 0) {
-                            rec = cells + i;
-                            if (rec->used != 0) {
+                        cell_idx = grid->plane * z + x + y * grid->width;
+                        group_idx = cell_table[cell_idx];
+                        if (group_idx >= 0) {
+                            target = groups + group_idx;
+                            if (target->used != 0) {
                                 for (j = 0; j != 14; j++) {
-                                    if (rec->h[j] == 0) {
-                                        rec->h[j] = handle;
-                                        rec->n++;
-                                        ((VpCellOut *)(i * 20 + (s32)out))->dirty = 1;
+                                    if (target->h[j] == 0) {
+                                        target->h[j] = handle;
+                                        target->n++;
+                                        ((VpCellOut *) (group_idx * 20 + (s32) out))->dirty = 1;
                                         break;
                                     }
                                 }
@@ -177,79 +231,96 @@ void vplight_entrypoint_2(VpCell *param_0, VpGrid *param_1)
     } while (handle != 0);
 }
 
-s32 func_808004B0_vplight(s32 param_0, s32 *param_1) {
-    f32 local_0[3];
+// Writes the integer light position to out.
+s32 func_808004B0_vplight(s32 light, s32 *out)
+{
+    f32 pos[3];
 
-    func_800C8800(param_0, local_0);
-    param_1[0] = (s32)local_0[0];
-    param_1[1] = (s32)local_0[1];
-    param_1[2] = (s32)local_0[2];
+    func_800C8800(light, pos);
+    out[0] = (s32) pos[0];
+    out[1] = (s32) pos[1];
+    out[2] = (s32) pos[2];
 }
 
-void func_80800518_vplight(s32 param_0, s32 *param_1)
+// Writes inner radius * 256, outer radius squared and the 16384 inverse-range fixed point.
+void func_80800518_vplight(s32 light, s32 *out)
 {
-    f32 local_0[3];
+    f32 radii[3];
 
-    func_800C8898(param_0, local_0);
-    param_1[0] = (s32)(local_0[0] * 256.0f);
-    param_1[1] = (s32)(local_0[1] * local_0[1]);
-    param_1[2] = (s32)(local_0[2] * 16384.0f);
+    func_800C8898(light, radii);
+    out[0] = (s32) (radii[0] * 256.0f);
+    out[1] = (s32) (radii[1] * radii[1]);
+    out[2] = (s32) (radii[2] * 16384.0f);
 }
 
-void vplight_entrypoint_3(VpLightGroup62 *param_0, s32 param_1, Vtx *param_2, s32 param_3)
+// Apply: adds the colour of each light in the group to the vertex colours, with a linear
+// falloff between the inner and outer radius.
+void vplight_entrypoint_3(VpLightGroup62 *groups, s32 group_idx, Vtx *vtx, s32 count)
 {
-    VpLightGroup62 *local_3;
-    s32 local_0[5];
-    s32 local_1[3];
-    s32 local_2[3];
-    Vtx *local_4;
-    Vtx *local_5;
-    s32 local_6;
-    s32 local_7;
-    s32 local_8;
-    s32 local_9;
-    s32 local_10;
-    s32 local_11; /* unused, holds a frame slot (removing it: metric 16) */
-    s32 local_12;
+    VpLightGroup62 *group;
+    s32 pos[5];
+    s32 radii[3];
+    s32 color[3];
+    Vtx *v;
+    Vtx *end;
+    s32 slot;
+    s32 dx;
+    s32 dy;
+    s32 dz;
+    s32 dist;
+    // Matching: unused local, needed for the frame layout.
+    s32 unk_0;
+    s32 channel;
 
-    local_3 = &(param_0 + 0)[param_1];
-    if (local_3->local_1) {
-        local_5 = param_2 + param_3;
-        local_6 = 0;
+    // Matching: the `+ 0` is needed for the match.
+    group = &(groups + 0)[group_idx];
+    if (group->n) {
+        end = vtx + count;
+        slot = 0;
         do {
-            if (local_3->local_2[local_6]) break;
-            local_6++;
-        } while (local_6 < 14);
-        if (param_2) {} /* PROBE: empty test, raises param_2 priority (s7 vs fp) */
-        for (; local_6 < 14; local_6++) {
-            if (local_3->local_2[local_6]) {
-                func_808004B0_vplight(local_3->local_2[local_6], local_0);
-                func_80800518_vplight(local_3->local_2[local_6], local_1);
-                func_800C8900(local_3->local_2[local_6], local_2);
-                if (local_5) {} /* PROBE: empty test after the 3 calls, splits end ptr into fp + s4 copy */
-                for (local_4 = param_2; local_4 < local_5; local_4++) {
-                    local_7 = local_0[0] - local_4->v.ob[0];
-                    local_8 = local_0[1] - local_4->v.ob[1];
-                    local_9 = local_0[2] - local_4->v.ob[2];
-                    local_10 = local_7 * local_7 + local_8 * local_8 + local_9 * local_9;
-                    if (local_10 < local_1[1]) {
-                        if (local_10 != 0) local_10 = sqrtf((f32)local_10) * 256.0f;
-                        local_9 = local_1[0];
-                        if (local_9 < local_10) {
-                            local_7 = 0x4000 - (((local_10 - local_9) * local_1[2]) >> 8);
-                            local_8 = local_7 << 2;
+            if (group->h[slot])
+                break;
+            slot++;
+        } while (slot < 14);
+        // Matching: empty test steers IDO's register allocation.
+        if (vtx) {
+        }
+        for (; slot < 14; slot++) {
+            if (group->h[slot]) {
+                func_808004B0_vplight(group->h[slot], pos);
+                func_80800518_vplight(group->h[slot], radii);
+                func_800C8900(group->h[slot], color);
+                // Matching: empty test steers IDO's register allocation.
+                if (end) {
+                }
+                for (v = vtx; v < end; v++) {
+                    dx = pos[0] - v->v.ob[0];
+                    dy = pos[1] - v->v.ob[1];
+                    dz = pos[2] - v->v.ob[2];
+                    dist = dx * dx + dy * dy + dz * dz;
+                    if (dist < radii[1]) {
+                        if (dist != 0)
+                            dist = sqrtf((f32) dist) * 256.0f;
+                        // dz, dx and dy are reused for the falloff (0x10000 = full strength).
+                        dz = radii[0];
+                        if (dz < dist) {
+                            dx = 0x4000 - (((dist - dz) * radii[2]) >> 8);
+                            dy = dx << 2;
                         } else {
-                            local_8 = 0x10000;
+                            dy = 0x10000;
                         }
-                        local_12 = local_4->v.cn[0] + ((local_2[0] * local_8) >> 16);
-                        if (local_12 >= 256) local_12 = 255;
-                        local_4->v.cn[0] = local_12;
-                        local_12 = local_4->v.cn[1] + ((local_2[1] * local_8) >> 16);
-                        if (local_12 >= 256) local_12 = 255;
-                        local_4->v.cn[1] = local_12;
-                        local_12 = local_4->v.cn[2] + ((local_2[2] * local_8) >> 16);
-                        if (local_12 >= 256) local_12 = 255;
-                        local_4->v.cn[2] = local_12;
+                        channel = v->v.cn[0] + ((color[0] * dy) >> 16);
+                        if (channel >= 256)
+                            channel = 255;
+                        v->v.cn[0] = channel;
+                        channel = v->v.cn[1] + ((color[1] * dy) >> 16);
+                        if (channel >= 256)
+                            channel = 255;
+                        v->v.cn[1] = channel;
+                        channel = v->v.cn[2] + ((color[2] * dy) >> 16);
+                        if (channel >= 256)
+                            channel = 255;
+                        v->v.cn[2] = channel;
                     }
                 }
             }
@@ -257,64 +328,67 @@ void vplight_entrypoint_3(VpLightGroup62 *param_0, s32 param_1, Vtx *param_2, s3
     }
 }
 
-void vplight_entrypoint_4(Vtx *param_0, s32 param_1)
+// Init: bakes the static lights into the base vertex colours.
+void vplight_entrypoint_4(Vtx *vtx, s32 count)
 {
-    Vtx *local_0;
-    s32 local_5;
-    s32 local_6;
-    s32 local_7;
-    s32 local_8;
-    s32 local_9;
-    s32 local_10;
-    s32 local_11;
-    s32 local_12;
-    s32 local_13;
-    s32 local_3[3];
-    s32 local_2[3];
-    s32 local_1[3];
-    s32 local_4;
-    s32 dz; /* intermediate value for local_10: splits local_10's live ranges */
-    local_0 = param_0 + param_1;
-    for (; param_0 < local_0; param_0++) {
-        local_4 = param_0->v.cn[0];
-        local_5 = param_0->v.cn[1];
-        local_6 = param_0->v.cn[2];
-        local_7 = func_800C8760(0, 4);
-        while (local_7) {
-            func_808004B0_vplight(local_7, local_3);
-            func_80800518_vplight(local_7, local_2);
-            func_800C8900(local_7, local_1);
-            if (1) {} /* PROBE: empty block; without it 21 words differ (register allocation) */
-            local_8 = local_3[0] - param_0->v.ob[0];
-            local_9 = local_3[1] - param_0->v.ob[1];
-            dz = local_3[2] - param_0->v.ob[2];
-            local_10 = dz;
-            local_11 = local_8 * local_8 + local_9 * local_9 + local_10 * local_10;
-            local_12 = local_11;
-            if (local_11 < local_2[1]) {
-                /* Bedingung = wiederholter Ausdruck statt local_11 (CSE, Permuter-Fund 26.10.) */
-                if (local_8 * local_8 + local_9 * local_9 + local_10 * local_10) local_12 = sqrtf((f32)local_11) * 256.0f;
-                local_10 = local_2[0];
-                if (local_10 < local_12) {
-                    local_9 = 0x4000 - (((local_12 - local_10) * local_2[2]) >> 8);
-                    local_13 = local_9 << 2;
+    Vtx *end;
+    s32 green;
+    s32 blue;
+    s32 handle;
+    s32 dx;
+    s32 dy;
+    s32 dz;
+    s32 dist_sq;
+    s32 dist;
+    s32 falloff;
+    s32 pos[3];
+    s32 radii[3];
+    s32 color[3];
+    s32 red;
+    // Matching: extra temporary splits the live ranges of dz.
+    s32 dz_tmp;
+    end = vtx + count;
+    for (; vtx < end; vtx++) {
+        red = vtx->v.cn[0];
+        green = vtx->v.cn[1];
+        blue = vtx->v.cn[2];
+        handle = func_800C8760(0, 4);
+        while (handle) {
+            func_808004B0_vplight(handle, pos);
+            func_80800518_vplight(handle, radii);
+            func_800C8900(handle, color);
+            dx = pos[0] - vtx->v.ob[0];
+            dy = pos[1] - vtx->v.ob[1];
+            dz_tmp = pos[2] - vtx->v.ob[2];
+            dz = dz_tmp;
+            dist_sq = dx * dx + dy * dy + dz * dz;
+            dist = dist_sq;
+            if (dist_sq < radii[1]) {
+                // Matching: the repeated expression instead of dist_sq is needed for the match.
+                if (dx * dx + dy * dy + dz * dz)
+                    dist = sqrtf((f32) dist_sq) * 256.0f;
+                // dz and dy are reused for the falloff (0x10000 = full strength).
+                dz = radii[0];
+                if (dz < dist) {
+                    dy = 0x4000 - (((dist - dz) * radii[2]) >> 8);
+                    falloff = dy << 2;
                 } else {
-                    local_13 = 0x10000;
+                    falloff = 0x10000;
                 }
-                local_4 += (local_1[0] * local_13) >> 16;
-                local_5 += (local_1[1] * local_13) >> 16;
-                local_6 += (local_1[2] * local_13) >> 16;
+                red += (color[0] * falloff) >> 16;
+                green += (color[1] * falloff) >> 16;
+                blue += (color[2] * falloff) >> 16;
             }
-            local_7 = func_800C878C(local_7, 0, 4);
+            handle = func_800C878C(handle, 0, 4);
         }
-        if (local_4 >= 256) local_4 = 255;
-        if (local_5 >= 256) local_5 = 255;
-        if (local_6 >= 256) local_6 = 255;
-        param_0->v.cn[0] = local_4;
-        param_0->v.cn[1] = local_5;
-        param_0->v.cn[2] = local_6;
+        if (red >= 256)
+            red = 255;
+        if (green >= 256)
+            green = 255;
+        if (blue >= 256)
+            blue = 255;
+        vtx->v.cn[0] = red;
+        vtx->v.cn[1] = green;
+        vtx->v.cn[2] = blue;
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/vp/light.data.s) is defined here in C.
- * Values are taken from the ROM. */

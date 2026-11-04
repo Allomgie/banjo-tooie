@@ -1,3 +1,5 @@
+// Probably the camera mode for the Bee transformation: chase camera behind the player with pitch
+// from the player pitch, wide distance limits and collision push-out.
 #include "nc/ba/bee.h"
 
 extern f32 func_800F5AE0(s32);
@@ -8,58 +10,58 @@ extern f32 func_80115750(void *, f32);
 extern f32 func_801112B0(void *);
 extern void func_800EEBF0(f32 *, f32 *, f32);
 
-int ncbabee_entrypoint_0(Actor *param_0)
+int ncbabee_entrypoint_0(Actor *cam)
 {
-  extern void func_80115870(Actor *a0, f32 a1);
-  int new_var;
-  func_801120CC(param_0, 0x44FA0000, 0x457A0000, 0xC57A0000);
-  func_80111B8C(param_0, 0x40800000, 0x41000000);
-  new_var = 0;
-  func_80115858(param_0, new_var);
-  func_80115870(param_0, 0);
-  func_801124D0(param_0, 1);
+    extern void func_80115870(Actor * a0, f32 a1);
+    int zero;
+    func_801120CC(cam, 0x44FA0000, 0x457A0000, 0xC57A0000);
+    func_80111B8C(cam, 0x40800000, 0x41000000);
+    // Matching: extra temporary needed for the match.
+    zero = 0;
+    func_80115858(cam, zero);
+    func_80115870(cam, 0);
+    func_801124D0(cam, 1);
 }
 
-void ncbabee_entrypoint_1(s32 arg0) 
+void ncbabee_entrypoint_1(s32 arg0)
 {
 }
-void func_80800070_ncbabee(PlayerState* arg0, f32* arg1)
+
+void func_80800070_ncbabee(PlayerState *arg0, f32 *arg1)
 {
-    func_80112550(arg0,arg1);
+    func_80112550(arg0, arg1);
 }
 
-void ncbabee_entrypoint_2(void *param_0)
+// Bee chase camera: behind the player (yaw + 180), pitch from the player, with collision push-out.
+void ncbabee_entrypoint_2(void *cam)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3;
-    f32 local_4[3];
-    s32 local_5;
-    f32 local_6[3];
-    s32 local_7;
-    f32 local_8;
+    f32 target[3];
+    f32 cam_pos[3];
+    f32 rotation[3];
+    f32 distance;
+    f32 angles[3];
+    s32 unk_0;
+    f32 offset[3];
+    s32 player;
+    f32 pitch;
 
-    local_7 = func_80110840();
-    func_8011607C(param_0, 1);
-    func_801107F0(param_0, local_1);
-    func_80800070_ncbabee(param_0, local_0);
-    func_80115444(param_0, &local_3, &local_5);
-    local_8 = func_80013728(func_800F5AE0(local_7));
-    func_80115828(param_0, local_8, local_8);
-    func_800EFB24(local_6, local_1, local_0);
-    func_800F1A88(local_6, local_4);
-    local_4[0] = func_80115750(param_0, local_4[0]);
-    local_4[1] = func_800136E4(func_801112B0(param_0) + 180.0f);
-    func_800EEBF0(local_6, local_4, local_3);
-    func_800EE780(local_1, local_0, local_6);
-    if (func_80111FD4(param_0, local_1)) {
-        func_801138F4(param_0);
+    player = func_80110840();
+    func_8011607C(cam, 1);
+    func_801107F0(cam, cam_pos);
+    func_80800070_ncbabee(cam, target);
+    func_80115444(cam, &distance, &unk_0);
+    pitch = func_80013728(func_800F5AE0(player));
+    func_80115828(cam, pitch, pitch);
+    func_800EFB24(offset, cam_pos, target);
+    func_800F1A88(offset, angles);
+    angles[0] = func_80115750(cam, angles[0]);
+    angles[1] = func_800136E4(func_801112B0(cam) + 180.0f);
+    func_800EEBF0(offset, angles, distance);
+    func_800EE780(cam_pos, target, offset);
+    if (func_80111FD4(cam, cam_pos)) {
+        func_801138F4(cam);
     }
-    func_80112524(param_0, local_0);
-    func_80110A68(param_0, local_2, local_0);
-    func_80110790(param_0, local_2);
+    func_80112524(cam, target);
+    func_80110A68(cam, rotation, target);
+    func_80110790(cam, rotation);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/bee.data.s) is defined here in C.
- * Values are taken from the ROM. */

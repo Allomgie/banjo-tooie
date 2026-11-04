@@ -1,5 +1,6 @@
+// Banjo-Kazooie Feathery Flap: Kazooie flaps to slow the fall (low gravity, timed), then moves
+// on to fall, beak buster, walk or water landing.
 #include "common.h"
-
 #include "core2/anctrl.h"
 #include "overlays/ba/anim.h"
 #include "overlays/ba/assets.h"
@@ -20,7 +21,8 @@
 #include "core2/1EB5980.h"
 #include "bs.h"
 
-void bsbflap_init(PlayerState *self) {
+void bsbflap_init(PlayerState *self)
+{
     baanim_playForDuration_once(self, ASSET_18_ANIM_BSBFLAP_ENTER, 0.3f);
     func_8009FFD8(self, 1, 1, 1, 2);
     if (bastick_distance(self) != 0.0f) {
@@ -28,7 +30,8 @@ void bsbflap_init(PlayerState *self) {
     }
     baphysics_set_target_yaw(self, yaw_getIdeal(self));
     _bswalk_entrypoint_1(self);
-    baphysics_set_horizontal_velocity(self, yaw_getIdeal(self), baphysics_get_target_horizontal_velocity(self));
+    baphysics_set_horizontal_velocity(self, yaw_getIdeal(self),
+                                      baphysics_get_target_horizontal_velocity(self));
     baphysics_set_vertical_velocity(self, 0.0f);
     baphysics_set_gravity(self, -1100.0f);
     func_800A0CF4(self, 1);
@@ -40,7 +43,8 @@ void bsbflap_init(PlayerState *self) {
     self->unk170 = 0.0f;
 }
 
-void func_80800120_bsbflap(PlayerState *self) {
+void func_80800120_bsbflap(PlayerState *self)
+{
     AnimCtrl *anctrl;
     anctrl = baanim_getAnimCtrlPtr(self);
     if (anctrl_isAt(anctrl, 0.9f)) {
@@ -48,7 +52,9 @@ void func_80800120_bsbflap(PlayerState *self) {
     }
 }
 
-f32 func_80800168_bsbflap(PlayerState *self) {
+// Flap animation duration, depends on the number of completed flaps.
+f32 func_80800168_bsbflap(PlayerState *self)
+{
     switch (self->unk160.word) {
         case 0:
             return 0.15f;
@@ -64,22 +70,28 @@ f32 func_80800168_bsbflap(PlayerState *self) {
             return 0.7f;
     }
 }
-void func_808001D8_bsbflap(PlayerState *self) {
+
+void func_808001D8_bsbflap(PlayerState *self)
+{
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
     anctrl_setDuration(anctrl, func_80800168_bsbflap(self));
 }
 
-void func_80800210_bsbflap(PlayerState *self) {
+void func_80800210_bsbflap(PlayerState *self)
+{
     self->unk16C = self->unk170;
     self->unk170 += func_800D8FF8();
 }
 
-int func_80800248_bsbflap(PlayerState *self, f32 value) {
-    return ((self->unk16C <= value) && (value < self->unk170));
+// True if time was crossed between the previous and current flap timer.
+int func_80800248_bsbflap(PlayerState *self, f32 time)
+{
+    return ((self->unk16C <= time) && (time < self->unk170));
 }
 
-
-void func_80800294_bsbflap(PlayerState *self) {
+// Plays the flap sound effects.
+void func_80800294_bsbflap(PlayerState *self)
+{
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
     if (func_80800248_bsbflap(self, 0.08f)) {
         func_8009DB04(self, 0x4435, 1.24f, 0x4e20);
@@ -93,20 +105,22 @@ void func_80800294_bsbflap(PlayerState *self) {
     }
 }
 
-void bsbflap_update(PlayerState *self) {
+void bsbflap_update(PlayerState *self)
+{
     BanjoStateId next_state = BS_STATE_0_INVALID;
     AnimCtrl *anctrl = baanim_getAnimCtrlPtr(self);
     _bswalk_entrypoint_1(self);
+    // unk15C.word is the flap phase (0 = enter animation, 4 = released).
     switch (self->unk15C.word) {
         case 0:
-            func_800956B8(self); //bafalldamage_start
+            func_800956B8(self); // bafalldamage_start
             func_80800210_bsbflap(self);
             func_80800294_bsbflap(self);
-            if(anctrl_isAt(anctrl, 0.9f)){
+            if (anctrl_isAt(anctrl, 0.9f)) {
                 anctrl_setSmoothTransition(anctrl, 0);
                 anctrl_setIndex(anctrl, ASSET_17_ANIM_BSBFLAP);
                 anctrl_setDuration(anctrl, func_80800168_bsbflap(self));
-                anctrl_setPlaybackType(anctrl, 2); //anctrl_setPlaybackType;
+                anctrl_setPlaybackType(anctrl, 2);
                 anctrl_setStart(anctrl, 0);
                 anctrl_start(anctrl);
                 baphysics_set_vertical_velocity(self, 280.0f);
@@ -122,7 +136,7 @@ void bsbflap_update(PlayerState *self) {
             func_80800120_bsbflap(self);
             func_808001D8_bsbflap(self);
             func_80800294_bsbflap(self);
-            if (0.67f <= self->unk170){
+            if (0.67f <= self->unk170) {
                 self->unk15C.word = 2;
             }
             break;
@@ -157,8 +171,8 @@ void bsbflap_update(PlayerState *self) {
                 func_80095588(self, 2);
                 self->unk15C.word = 4;
             } else {
-                baphysics_set_target_horizontal_velocity(self, baphysics_get_target_horizontal_velocity(self) * 0.35f);
-
+                baphysics_set_target_horizontal_velocity(
+                    self, baphysics_get_target_horizontal_velocity(self) * 0.35f);
             }
             break;
 
@@ -166,7 +180,6 @@ void bsbflap_update(PlayerState *self) {
             if (func_8008E260(self)) {
                 next_state = BS_STATE_3D_FALL_TUMBLING;
             }
-            break;
     }
     _batimer_decrement(self, 0);
     if (_batimer_isZero(self, 0)) {
@@ -176,7 +189,7 @@ void bsbflap_update(PlayerState *self) {
     if (bainput_should_beak_bust(self)) {
         next_state = BS_STATE_F_BBUSTER;
     }
-    
+
     if (func_8008DA24(self)) {
         next_state = BS_STATE_A8;
     }
@@ -193,7 +206,8 @@ void bsbflap_update(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-void bsbflap_end(PlayerState *self) {
+void bsbflap_end(PlayerState *self)
+{
     func_800C6DA0(0x3D);
     baphysics_reset_gravity(self);
     baphysics_reset_terminal_velocity(self);
@@ -206,6 +220,7 @@ extern void _bsbflap_end(PlayerState *self);
 
 BsScript D_80800750_bsbflap[4] = {_bsbflap_end, _bsbflap_init, _bsbflap_update, func_80099B94};
 
-BsScript bsbflap_entrypoint_3(BsScriptType type) {
+BsScript bsbflap_entrypoint_3(BsScriptType type)
+{
     return D_80800750_bsbflap[type];
 }

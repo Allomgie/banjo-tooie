@@ -1,3 +1,6 @@
+// Probably the choking death: Banjo-Kazooie cough and collapse, then the shared death sequence.
+// TU-NOTE: the .data of this overlay is defined in this file; its table points to functions here,
+// and IDO schedules some of them differently unless they share a unit. Values come from the ROM.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 
@@ -11,71 +14,73 @@ extern void baroll_setIdeal(s32, f32);
 extern void func_800A4E30(s32);
 extern s32 D_808002B0_bschokedie[];
 
-void bschokedie_entrypoint_0(PlayerState *param_0)
+// Init: cough animation, death camera zoom, 3.8 s until the death sequence.
+void bschokedie_entrypoint_0(PlayerState *player)
 {
-    baanim_playForDuration_onceSmooth(param_0, 0xF0, 4.2f);
-    func_8009FFD8(param_0, 1, 1, 2, 3);
-    func_8009BA9C(param_0, 0);
-    baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-    func_800A4DFC(param_0, 10);
-    _ncbadie_entrypoint_3(func_800A4CA8(param_0), 30.0f);
-    func_800A0180(param_0);
-    _batimer_set(param_0, 0, 3.8f);
-    func_8008E944(param_0);
-    func_80090A0C(param_0);
-    _basudie_entrypoint_1(param_0);
+    baanim_playForDuration_onceSmooth(player, 0xF0, 4.2f);
+    func_8009FFD8(player, 1, 1, 2, 3);
+    func_8009BA9C(player, 0);
+    baphysics_set_target_horizontal_velocity(player, 0.0f);
+    func_800A4DFC(player, 10);
+    _ncbadie_entrypoint_3(func_800A4CA8(player), 30.0f);
+    func_800A0180(player);
+    _batimer_set(player, 0, 3.8f);
+    func_8008E944(player);
+    func_80090A0C(player);
+    _basudie_entrypoint_1(player);
 }
 
-void bschokedie_entrypoint_1(s32 param_0) {
-    if (baanim_isAt(param_0, 0x3ECCCCCD) != 0) {
-        func_80090A2C(param_0);
-    }
-    if (baanim_isAt(param_0, 0x3F147AE1) != 0) {
-        func_8009514C(param_0);
-    }
-    if (baanim_isAt(param_0, 0x3D4CCCCD) != 0) {
-        func_8009DF18(param_0, 0x574, 0x3F800000, 0x7FFF);
-    }
-    if (baanim_isAt(param_0, 0x3E4CCCCD) != 0) {
-        func_8009DF18(param_0, 0x575, 0x3F800000, 0x7FFF);
-    }
-    if (baanim_isAt(param_0, 0x3ECCCCCD) != 0) {
-        func_8009DF18(param_0, 0x576, 0x3F800000, 0x7FFF);
-    }
-    if (baanim_isAt(param_0, 0x3F28F5C3) != 0) {
-        func_8009DF18(param_0, 0x577, 0x3F800000, 0x7FFF);
-    }
-    if (baanim_isAt(param_0, 0x3F19930C) != 0) {
-        func_8009DF94(param_0, 0x417, 0x3F99999A, 0x3E80);
-    }
-    if (baanim_isAt(param_0, 0x3F4A0275) != 0) {
-        func_8009DF94(param_0, 0x417, 0x3F666666, 0x4E20);
-    }
-    if (baanim_isAt(param_0, 0x3F6DD97F) != 0) {
-        func_8009DF94(param_0, 0x417, 0x3FB33333, 0x2328);
-    }
-    if (_batimer_decrement(param_0, 0) != 0) {
-        _basudie_entrypoint_0(param_0);
-    }
-}
-
-void bschokedie_entrypoint_2(s32 param_0) {
-    func_800951B4(param_0);
-    func_8009BF5C(param_0, 0.0f);
-    baroll_setIdeal(param_0, 0.0f);
-    func_800A4E30(param_0);
-}
-
-int bschokedie_entrypoint_3(s32 param_0)
+// Update: sounds and component toggles on anim marks, then the death sequence.
+void bschokedie_entrypoint_1(s32 player)
 {
-  return D_808002B0_bschokedie[param_0];
+    if (baanim_isAt(player, 0x3ECCCCCD) != 0) {
+        func_80090A2C(player);
+    }
+    if (baanim_isAt(player, 0x3F147AE1) != 0) {
+        func_8009514C(player);
+    }
+    if (baanim_isAt(player, 0x3D4CCCCD) != 0) {
+        func_8009DF18(player, 0x574, 0x3F800000, 0x7FFF);
+    }
+    if (baanim_isAt(player, 0x3E4CCCCD) != 0) {
+        func_8009DF18(player, 0x575, 0x3F800000, 0x7FFF);
+    }
+    if (baanim_isAt(player, 0x3ECCCCCD) != 0) {
+        func_8009DF18(player, 0x576, 0x3F800000, 0x7FFF);
+    }
+    if (baanim_isAt(player, 0x3F28F5C3) != 0) {
+        func_8009DF18(player, 0x577, 0x3F800000, 0x7FFF);
+    }
+    if (baanim_isAt(player, 0x3F19930C) != 0) {
+        func_8009DF94(player, 0x417, 0x3F99999A, 0x3E80);
+    }
+    if (baanim_isAt(player, 0x3F4A0275) != 0) {
+        func_8009DF94(player, 0x417, 0x3F666666, 0x4E20);
+    }
+    if (baanim_isAt(player, 0x3F6DD97F) != 0) {
+        func_8009DF94(player, 0x417, 0x3FB33333, 0x2328);
+    }
+    if (_batimer_decrement(player, 0) != 0) {
+        _basudie_entrypoint_0(player);
+    }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/chokedie.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+void bschokedie_entrypoint_2(s32 player)
+{
+    func_800951B4(player);
+    func_8009BF5C(player, 0.0f);
+    baroll_setIdeal(player, 0.0f);
+    func_800A4E30(player);
+}
+
+int bschokedie_entrypoint_3(s32 index)
+{
+    return D_808002B0_bschokedie[index];
+}
+
 extern void _bschokedie_entrypoint_2();
 extern void _bschokedie_entrypoint_0();
 extern void _bschokedie_entrypoint_1();
 extern void _basudie_entrypoint_11();
-s32 D_808002B0_bschokedie[4] = { (u32)_bschokedie_entrypoint_2, (u32)_bschokedie_entrypoint_0, (u32)_bschokedie_entrypoint_1, (u32)_basudie_entrypoint_11 };
+s32 D_808002B0_bschokedie[4] = {(u32) _bschokedie_entrypoint_2, (u32) _bschokedie_entrypoint_0,
+                                (u32) _bschokedie_entrypoint_1, (u32) _basudie_entrypoint_11};

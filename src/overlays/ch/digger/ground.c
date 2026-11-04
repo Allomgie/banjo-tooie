@@ -1,8 +1,18 @@
+// Most likely the walking digger minion (actor 0x131): shared walking-baddie AI once active,
+// random attack mode 2 or 3, and on message 0xB6 it kicks up a ring of 8 dust particles.
 #include "common.h"
 
 extern int D_80800408_chdiggerground[];
 extern void *func_80100094(Actor *, u32);
-typedef struct { u8 pad[0x64]; u32 pad64:11; u32 flag:1; u32 r64:20; u8 pad68[4]; u32 f6C:11; u32 r6C:21; } DigS;
+typedef struct {
+    u8 pad[0x64];
+    u32 pad64 : 11;
+    u32 flag : 1;
+    u32 r64 : 20;
+    u8 pad68[4];
+    u32 f6C : 11;
+    u32 r6C : 21;
+} DigS;
 extern void func_80101FDC(DigS *, s32);
 extern void func_8010A3E8(DigS *, f32);
 extern void func_80101870(Actor *, s32);
@@ -20,92 +30,112 @@ void func_808000C4_chdiggerground();
 
 int chdiggerground_entrypoint_0()
 {
-  return (int)&D_80800408_chdiggerground;
+    return (int) &D_80800408_chdiggerground;
 }
 
-void func_8080000C_chdiggerground(Actor *param_0)
+void func_8080000C_chdiggerground(Actor *actor)
 {
-    if (param_0->unk64_20) {
-        if (func_80100094(param_0, 0) == NULL) {
-            func_808000C4_chdiggerground(param_0);
-            func_8010108C(param_0, 0x95, 0);
+    if (actor->unk64_20) {
+        if (func_80100094(actor, 0) == NULL) {
+            func_808000C4_chdiggerground(actor);
+            func_8010108C(actor, 0x95, 0);
         }
-        _sucoaster_entrypoint_2(param_0);
+        _sucoaster_entrypoint_2(actor);
     }
 }
 
-void func_80800070_chdiggerground(DigS *param_0) {
-    if (param_0->f6C != 0) {
-        func_80101FDC(param_0, 1);
-        func_808000C4_chdiggerground(param_0);
-        param_0->flag = 1;
-    }
-    func_8010A3E8(param_0, 0.75f);
-}
-
-void func_808000C4_chdiggerground(param_0) Actor *param_0;
+void func_80800070_chdiggerground(DigS *actor)
 {
-    _subaddieDll_entrypoint_1(param_0);
-    if (_sucoaster_entrypoint_0(param_0, 0)) {
-        _sucoaster_entrypoint_10(param_0, func_800DC298(0.65f) ? 3 : 2);
-        if (param_0->pad6C_21 == 0) param_0->unk6C_0 = func_800D9058(1.5f);
-        param_0->unk64_24 = 1;
-        func_8010A590(param_0);
+    if (actor->f6C != 0) {
+        func_80101FDC(actor, 1);
+        func_808000C4_chdiggerground(actor);
+        actor->flag = 1;
+    }
+    func_8010A3E8(actor, 0.75f);
+}
+
+// Activates the walking AI; attack mode 3 or 2 at random.
+void func_808000C4_chdiggerground(actor) Actor *actor;
+{
+    _subaddieDll_entrypoint_1(actor);
+    if (_sucoaster_entrypoint_0(actor, 0)) {
+        _sucoaster_entrypoint_10(actor, func_800DC298(0.65f) ? 3 : 2);
+        if (actor->pad6C_21 == 0)
+            actor->unk6C_0 = func_800D9058(1.5f);
+        actor->unk64_24 = 1;
+        func_8010A590(actor);
     }
 }
 
-int func_80800168_chdiggerground(s32 param_0, s32 param_1, s32 param_2)
+int func_80800168_chdiggerground(s32 actor, s32 msg, s32 data)
 {
-  s32 local_0;
-  if (!func_80100094(param_0, 0))
-  {
-    return 0;
-  }
-  else
-  {
-    if (param_1 == 0xB6)
+    if (!func_80100094(actor, 0)) {
+        return 0;
+    }
     {
-      func_80800214_chdiggerground(param_0);
-    }
-    _sucoaster_entrypoint_21(param_0, param_1, param_2);
-  }
-}
-
-void func_808001C8_chdiggerground(Actor *param_0, s32 param_1) {
-    if (func_80100094(param_0, 0) == NULL) {
-        func_80101870(param_0, param_1);
-    } else {
-        _sucoaster_entrypoint_20(param_0, param_1);
+        if (msg == 0xB6) {
+            func_80800214_chdiggerground(actor);
+        }
+        _sucoaster_entrypoint_21(actor, msg, data);
     }
 }
 
-void func_80800214_chdiggerground(param_0) Actor *param_0;
+void func_808001C8_chdiggerground(Actor *actor, s32 arg)
 {
-    s32 local_3;
-    Vec3f local_0;
-    Vec3f local_1;
-    Vec3f local_2;
-    s32 local_4;
-    func_800EE7F8(local_1.f, param_0->position);
-    func_800EF1B8(local_1.f, param_0->rotation[1], param_0->scale * 80.0f);
-    func_800EE7F8(local_2.f, local_1.f);
-    local_2.f[1] -= 10.0f;
-    local_3 = func_800B53A4(8);
-    for (local_4 = 0; local_4 != 8; local_4++) {
-        func_800EEB9C(local_0.f, local_4 * 45.0f, 20.0f);
-        func_800EF04C(local_0.f, local_1.f);
-        func_800BABB8(local_3, local_0.f, local_2.f, 1.0f, D_80800450_chdiggerground);
+    if (func_80100094(actor, 0) == NULL) {
+        func_80101870(actor, arg);
+    } else {
+        _sucoaster_entrypoint_20(actor, arg);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/digger/ground.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800408_chdiggerground -> int[] */
+// Kicks up a ring of 8 dust particles in front of the actor.
+void func_80800214_chdiggerground(actor) Actor *actor;
+{
+    s32 particle_type;
+    Vec3f offset;
+    Vec3f center;
+    Vec3f spread;
+    s32 i;
+    func_800EE7F8(center.f, actor->position);
+    func_800EF1B8(center.f, actor->rotation[1], actor->scale * 80.0f);
+    func_800EE7F8(spread.f, center.f);
+    spread.f[1] -= 10.0f;
+    particle_type = func_800B53A4(8);
+    for (i = 0; i != 8; i++) {
+        func_800EEB9C(offset.f, i * 45.0f, 20.0f);
+        func_800EF04C(offset.f, center.f);
+        func_800BABB8(particle_type, offset.f, spread.f, 1.0f, D_80800450_chdiggerground);
+    }
+}
+
 extern void func_80105834();
 extern void _sucoaster_entrypoint_1();
 extern void _sucoasterhit_entrypoint_0();
 extern void func_80107C2C();
-u32 D_80800370_chdiggerground[38] = { 0x0, 0x0, 0x40B00000, 0x1E70001, 0x40B00000, 0x1E70001, 0x3FC00000, 0x1E60001, 0x3F800000, 0x1E80001, 0x3FC00000, 0x1E60001, 0x3FC00000, 0x1E60001, 0x3F800000, 0x1E90002, 0x3F800000, 0x1E80001, 0x3F800000, 0x3DF0002, 0x3F800000, 0x1E80001, 0x3F000000, 0x3E00002, 0x3F8CCCCD, 0x1EA0002, 0x3F8CCCCD, 0x1EA0084, 0x40B00000, 0x1E70001, 0x3FC00000, 0x1E60020, 0x0, 0x0, 0x40B00000, 0x1E70001, 0x3F800000, 0x1E80001 };
-int D_80800408_chdiggerground[18] = { 0x1A20131, 0x6710004, (u32)&D_80800370_chdiggerground, (u32)func_8080000C_chdiggerground, (u32)func_80105834, (u32)func_808001C8_chdiggerground, 0xBB80000, 0x3F800000, 0x0, 0x43050320, (u32)_sucoaster_entrypoint_1, (u32)_sucoasterhit_entrypoint_0, 0x0, (u32)func_80800070_chdiggerground, (u32)func_80107C2C, -0x7BCDAFE1, (u32)func_80800168_chdiggerground, -0x7FEDBAB0 };
-s32 D_80800450_chdiggerground[12] = { 0x1D09E8, 0x2B0099, 0xCC0022, 0x4C0066, 0x190026, 0x150000, 0x800027, -0x630064, 0x640064, 0x2D00E1, 0x12C011A, 0x0 };
+u32 D_80800370_chdiggerground[38] = {
+    0x0,        0x0,       0x40B00000, 0x1E70001, 0x40B00000, 0x1E70001, 0x3FC00000, 0x1E60001,
+    0x3F800000, 0x1E80001, 0x3FC00000, 0x1E60001, 0x3FC00000, 0x1E60001, 0x3F800000, 0x1E90002,
+    0x3F800000, 0x1E80001, 0x3F800000, 0x3DF0002, 0x3F800000, 0x1E80001, 0x3F000000, 0x3E00002,
+    0x3F8CCCCD, 0x1EA0002, 0x3F8CCCCD, 0x1EA0084, 0x40B00000, 0x1E70001, 0x3FC00000, 0x1E60020,
+    0x0,        0x0,       0x40B00000, 0x1E70001, 0x3F800000, 0x1E80001};
+int D_80800408_chdiggerground[18] = {0x1A20131,
+                                     0x6710004,
+                                     (u32) &D_80800370_chdiggerground,
+                                     (u32) func_8080000C_chdiggerground,
+                                     (u32) func_80105834,
+                                     (u32) func_808001C8_chdiggerground,
+                                     0xBB80000,
+                                     0x3F800000,
+                                     0x0,
+                                     0x43050320,
+                                     (u32) _sucoaster_entrypoint_1,
+                                     (u32) _sucoasterhit_entrypoint_0,
+                                     0x0,
+                                     (u32) func_80800070_chdiggerground,
+                                     (u32) func_80107C2C,
+                                     -0x7BCDAFE1,
+                                     (u32) func_80800168_chdiggerground,
+                                     -0x7FEDBAB0};
+s32 D_80800450_chdiggerground[12] = {0x1D09E8, 0x2B0099,  0xCC0022, 0x4C0066, 0x190026,  0x150000,
+                                     0x800027, -0x630064, 0x640064, 0x2D00E1, 0x12C011A, 0x0};

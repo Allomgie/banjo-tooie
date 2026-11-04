@@ -1,50 +1,55 @@
+// Player roster queries over the 8 slots: nearest player to a point, find by character id,
+// check that both Banjo and Kazooie exist (split-up), find by controlled marker.
+
 #include "common.h"
 
 extern f32 func_800EEB40(f32 *, f32 *);
 extern void func_800EE7F8(f32 *, f32 *);
 
-s32 plsu_entrypoint_0(f32 *param_0, f32 *param_1)
+// Returns the index of the live player nearest to point; copies its position to out_pos.
+s32 plsu_entrypoint_0(f32 *out_pos, f32 *point)
 {
-    f32 local_0[3];
-    f32 local_2;
-    f32 local_3;
-    s32 local_4;
-    s32 local_1;
+    f32 player_pos[3];
+    f32 dist_sq;
+    f32 min_dist_sq;
+    s32 i;
+    s32 nearest;
 
-    local_3 = 3.402823466e38f;
-    for (local_4 = 0; local_4 < func_800F5898(); local_4++) {
-        if (func_800F6BE4(local_4)) {
-            func_800F5A00(local_4, local_0);
-            local_2 = func_800EEB40(local_0, param_1);
-            if (local_2 < local_3) {
-                local_3 = local_2;
-                local_1 = local_4;
-                func_800EE7F8(param_0, local_0);
+    min_dist_sq = 3.402823466e38f;
+    for (i = 0; i < func_800F5898(); i++) {
+        if (func_800F6BE4(i)) {
+            func_800F5A00(i, player_pos);
+            dist_sq = func_800EEB40(player_pos, point);
+            if (dist_sq < min_dist_sq) {
+                min_dist_sq = dist_sq;
+                nearest = i;
+                func_800EE7F8(out_pos, player_pos);
             }
         }
     }
-    return local_1;
+    return nearest;
 }
 
-int plsu_entrypoint_1(s32 param_0)
+// Returns the slot of the live player whose character id equals char_id, or -1.
+int plsu_entrypoint_1(s32 char_id)
 {
-  s32 local_0;
-  s32 local_1;
-  local_1 = param_0 | 0;
-  local_0 = 0;
-  while (local_0 < func_800F5898())
-  {
-    if (func_800F6BE4(local_0) && func_800F5410(local_0) == local_1)
-    {
-      return local_0;
+    s32 i;
+    s32 id;
+    id = char_id | 0; // Matching: needed for the match.
+    i = 0;
+    while (i < func_800F5898()) {
+        if (func_800F6BE4(i) && func_800F5410(i) == id) {
+            return i;
+        }
+        i++;
     }
-    local_0++;
-  }
 
-  return -1;
+    return -1;
 }
 
-s32 plsu_entrypoint_2(void) {
+// Nonzero when both Banjo (0xA) and Kazooie (0xB) exist (split-up).
+s32 plsu_entrypoint_2(void)
+{
     if ((plsu_entrypoint_1(0xA) == -1)) {
         return 0;
     }
@@ -54,23 +59,19 @@ s32 plsu_entrypoint_2(void) {
     return 1;
 }
 
-int plsu_entrypoint_3(s32 param_0)
+// Returns the slot of the live, stable player controlling the given marker, or -1.
+int plsu_entrypoint_3(s32 marker)
 {
-  s32 local_0;
-  s32 local_1;
-  local_1 = param_0 | 0;
-  local_0 = 0;
-  while (local_0 < func_800F5898())
-  {
-    if (func_800F6BE4(local_0) && func_800F6C5C(local_0) && func_800F55D0(local_0) == local_1)
-    {
-      return local_0;
+    s32 i;
+    s32 target;
+    target = marker | 0; // Matching: needed for the match.
+    i = 0;
+    while (i < func_800F5898()) {
+        if (func_800F6BE4(i) && func_800F6C5C(i) && func_800F55D0(i) == target) {
+            return i;
+        }
+        i++;
     }
-    local_0++;
-  }
 
-  return -1;
+    return -1;
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/pl/su.data.s) is defined here in C.
- * Values are taken from the ROM. */

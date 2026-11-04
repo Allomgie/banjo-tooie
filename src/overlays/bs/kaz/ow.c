@@ -1,26 +1,32 @@
+// Kazooie-alone hurt knockback states (light and heavy bounce): hurt animation, blinking, steering
+// while airborne, then back to idle or a water landing.
 #include "common.h"
-
 #include "overlays/bs/kaz/ow.h"
 
 extern s32 D_808002D0_bskazow[];
 extern s32 D_808002E0_bskazow[];
 
-void func_80800000_bskazow(PlayerState *self) {
+void func_80800000_bskazow(PlayerState *self)
+{
     _babounce_entrypoint_3(self);
     _bskaz_entrypoint_2(self);
 }
 
-void func_80800028_bskazow(PlayerState *self) {
-    AnimCtrl *animCtrl;
+// Light knockback: enter.
+void func_80800028_bskazow(PlayerState *self)
+{
+    AnimCtrl *anim_ctrl;
 
-    animCtrl = baanim_getAnimCtrlPtr(self);
+    anim_ctrl = baanim_getAnimCtrlPtr(self);
     _bskaz_entrypoint_1(self);
     _babounce_entrypoint_4(self, 1);
     _babounce_entrypoint_6(self, 0xC9, 0.4692, 2.1, 1.2f);
-    func_8008B10C(animCtrl, 0.1792);
+    func_8008B10C(anim_ctrl, 0.1792);
 }
 
-void func_80800098_bskazow(PlayerState *self) {
+// Light knockback update: blink, steer, then idle or water.
+void func_80800098_bskazow(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -39,26 +45,32 @@ void func_80800098_bskazow(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskazow_entrypoint_0(s32 idx) {
+s32 bskazow_entrypoint_0(s32 idx)
+{
     return D_808002D0_bskazow[idx];
 }
 
-void func_8080015C_bskazow(PlayerState *self) {
+void func_8080015C_bskazow(PlayerState *self)
+{
     _babounce_entrypoint_3(self);
     _bskaz_entrypoint_2(self);
 }
 
-void func_80800184_bskazow(PlayerState *self) {
-    AnimCtrl *animCtrl;
+// Heavy knockback: enter.
+void func_80800184_bskazow(PlayerState *self)
+{
+    AnimCtrl *anim_ctrl;
 
-    animCtrl = baanim_getAnimCtrlPtr(self);
+    anim_ctrl = baanim_getAnimCtrlPtr(self);
     _bskaz_entrypoint_1(self);
     _babounce_entrypoint_4(self, 2);
     _babounce_entrypoint_6(self, 0xC9, 0.4692, 2.5, 1.8f);
-    func_8008B10C(animCtrl, 0.1792);
+    func_8008B10C(anim_ctrl, 0.1792);
 }
 
-void func_808001F0_bskazow(PlayerState *self) {
+// Heavy knockback update: blink, steer, then idle or water.
+void func_808001F0_bskazow(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = BS_STATE_0_INVALID;
@@ -77,14 +89,16 @@ void func_808001F0_bskazow(PlayerState *self) {
     bs_setState(self, next_state);
 }
 
-s32 bskazow_entrypoint_1(s32 idx) {
+s32 bskazow_entrypoint_1(s32 idx)
+{
     return D_808002E0_bskazow[idx];
 }
 
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/ow.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+// TU-NOTE: the overlay .data is defined here in C. The tables point to functions of this file;
+// IDO's assembler schedules some of them differently unless the tables are in the same unit.
+// Values are taken from the ROM.
 extern void func_80099AA8();
-s32 D_808002D0_bskazow[4] = { (u32)func_80800000_bskazow, (u32)func_80800028_bskazow, (u32)func_80800098_bskazow, (u32)func_80099AA8 };
-s32 D_808002E0_bskazow[4] = { (u32)func_8080015C_bskazow, (u32)func_80800184_bskazow, (u32)func_808001F0_bskazow, (u32)func_80099AA8 };
+s32 D_808002D0_bskazow[4] = {(u32) func_80800000_bskazow, (u32) func_80800028_bskazow,
+                             (u32) func_80800098_bskazow, (u32) func_80099AA8};
+s32 D_808002E0_bskazow[4] = {(u32) func_8080015C_bskazow, (u32) func_80800184_bskazow,
+                             (u32) func_808001F0_bskazow, (u32) func_80099AA8};

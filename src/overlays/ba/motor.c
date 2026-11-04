@@ -1,27 +1,31 @@
+// Per-player rumble: maps a player to its controller and forwards start/pulse/stop requests.
 #include "common.h"
 
-extern void func_80018854(s32 param_0, s32 param_1, s32 param_2, s32 param_3, f32 param_4, f32 param_5, f32 param_6);
+extern void func_80018854(s32 param_0, s32 param_1, s32 param_2, s32 param_3, f32 param_4,
+                          f32 param_5, f32 param_6);
 
-int bamotor_entrypoint_0(s32 param_0, s32 param_1, s32 param_2)
+// Each entrypoint maps the player to its controller index and forwards the rumble request.
+int bamotor_entrypoint_0(s32 player, s32 unk_0, s32 unk_1)
 {
-  func_80018820(bakey_getControllerIndex(param_0) | 0, param_1, param_2);
+    // Matching: "| 0" is needed for the match.
+    func_80018820(bakey_getControllerIndex(player) | 0, unk_0, unk_1);
 }
 
-int bamotor_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+int bamotor_entrypoint_1(s32 player, s32 unk_0, s32 unk_1, s32 unk_2)
 {
-  func_800187B4(bakey_getControllerIndex(param_0) | 0, param_1, param_2, param_3);
+    // Matching: needed for the match.
+    func_800187B4(bakey_getControllerIndex(player) | 0, unk_0, unk_1, unk_2);
 }
 
-int bamotor_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+int bamotor_entrypoint_2(s32 player, s32 unk_0, s32 unk_1, s32 unk_2)
 {
-  func_800187E8(bakey_getControllerIndex(param_0) | 0, param_1, param_2, param_3);
+    // Matching: "| 0" is needed for the match.
+    func_800187E8(bakey_getControllerIndex(player) | 0, unk_0, unk_1, unk_2);
 }
 
-void bamotor_entrypoint_3(s32 param_0, s32 param_1, s32 param_2, s32 param_3, f32 param_4, f32 param_5, f32 param_6)
+void bamotor_entrypoint_3(s32 player, s32 unk_0, s32 unk_1, s32 unk_2, f32 unk_3,
+                          f32 unk_4, f32 unk_5)
 {
-    func_80018854(bakey_getControllerIndex(param_0), param_1, param_2, param_3,
-                  param_4, param_5, param_6);
+    func_80018854(bakey_getControllerIndex(player), unk_0, unk_1, unk_2, unk_3, unk_4,
+                  unk_5);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/motor.data.s) is defined here in C.
- * Values are taken from the ROM. */

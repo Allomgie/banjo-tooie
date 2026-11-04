@@ -1,10 +1,13 @@
+// Player shadow: a blob shadow and a real-time projected shadow rendered to an offscreen image,
+// plus the shadow actor (init, update, draw gate) and the setters the player model code uses.
 #include "common.h"
 
-#define A6250_CMD(head, first, second) { \
-    A6250Command *local_command = (*(head))++; \
-    local_command->word0 = (first); \
-    local_command->word1 = (second); \
-}
+#define A6250_CMD(head, first, second)                                                             \
+    {                                                                                              \
+        A6250Command *local_command = (*(head))++;                                                 \
+        local_command->word0 = (first);                                                            \
+        local_command->word1 = (second);                                                           \
+    }
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800EF334(f32 *, f32);
 extern void func_800EE780(f32 *, f32 *, f32 *);
@@ -15,21 +18,28 @@ extern int func_800F1988(f32 *, f32 *, f32 *);
 extern void func_800DF830(s32);
 extern Gfx D_8011A2F8[];
 extern Gfx D_8011A350[];
-struct __OSBlockInfo { u32 field0; u32 field4; u32 field8; u32 fieldC; };
+struct __OSBlockInfo {
+    u32 field0;
+    u32 field4;
+    u32 field8;
+    u32 fieldC;
+};
 extern struct __OSBlockInfo D_8011A380;
 extern struct __OSBlockInfo D_8011A390;
 extern void func_800DF580(struct __OSBlockInfo *, struct __OSBlockInfo *);
-typedef struct { u32 word0, word1; } A6250Command;
+typedef struct {
+    u32 word0, word1;
+} A6250Command;
 extern s32 func_800F53D0(u32);
 extern s32 func_800F5410(u32);
 extern s32 _bapreload_entrypoint_1(s32, s32 *);
 extern void *func_80092B04(s32, s32);
-extern void func_800F274C(f32 [4][4]);
+extern void func_800F274C(f32[4][4]);
 extern f32 func_800EEAA4(f32 *, f32 *);
 extern f32 func_80013A7C(f32);
 extern void func_800EE97C(f32 *, f32 *, f32 *);
-extern void func_800F254C(f32 [4][4], f32 *, f32);
-extern void func_800F23D0(f32 [4][4], f32 *, f32 *);
+extern void func_800F254C(f32[4][4], f32 *, f32);
+extern void func_800F23D0(f32[4][4], f32 *, f32 *);
 extern void func_80019CD4(void);
 extern f32 func_80092BE8(s32);
 extern f32 func_8009BFCC(s32);
@@ -37,8 +47,8 @@ extern f32 baroll_get(s32);
 extern void mlMtxRotYaw(f32);
 extern void mlMtxRotPitch(f32);
 extern void mlMtxRotRoll(f32);
-extern void mlMtxGet(f32 [4][4]);
-extern void func_800F27D4(f32 [4][4], f32 [4][4], f32 [4][4]);
+extern void mlMtxGet(f32[4][4]);
+extern void func_800F27D4(f32[4][4], f32[4][4], f32[4][4]);
 extern void *func_8008CA74(s32);
 extern void func_800DF41C(void *);
 extern void **func_800DF330(void);
@@ -47,7 +57,7 @@ extern void *func_80092E80(s32);
 extern void func_800AE708(void *, void *, void **, void *);
 extern void func_800DF72C(void *);
 extern void func_800A06E8(s32);
-extern void func_800DF540(f32 [4][4]);
+extern void func_800DF540(f32[4][4]);
 extern A6250Command **func_800A7180(void);
 extern void *func_8001575C(void);
 extern f32 func_80092BDC(s32);
@@ -65,10 +75,21 @@ extern void func_800EE7F8();
 extern void func_800F5680(s32 param_0, f32 *param_1);
 extern f32 mlAbsF(f32 param_0);
 extern void func_800EF174();
-typedef struct { u8 pad_0[0x7E]; u8 local_0 : 3; u8 local_1 : 1; u8 local_2 : 4; } Struct800A69F0;
-typedef struct { s32 pad; f32 local_0[3]; u8 pad1[0x14]; f32 local_1; u8 pad2[0x4E]; u16 local_2; } ActorA6B24;
+typedef struct {
+    u8 pad_0[0x7E];
+    u8 unk_7E_a : 3;
+    u8 unk_7E_b : 1;
+    u8 unk_7E_c : 4;
+} Struct800A69F0;
+typedef struct {
+    s32 pad_0;
+    f32 pos[3];
+    u8 pad_10[0x14];
+    f32 floor_y;
+    u8 pad_28[0x4E];
+    u16 owner_bits;
+} ActorA6B24;
 extern f32 func_800F5BC4(s32, f32 *);
-extern f32 sqrtf(f32);
 extern void func_800EFB24(f32 *, f32 *, f32 *);
 extern void func_800EFD24(f32 *);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
@@ -77,373 +98,434 @@ extern void *func_800C878C(void *, s32, s32);
 extern s32 func_800C89A8(void *);
 extern void func_800C8800(void *, f32 *);
 extern void func_800C8898(void *, f32 *);
-typedef struct { u8 pad[0x58]; f32 scale; u8 pad1[0x18]; u32 unused:2, blocked:1, rest:29; } LocalActor;
+typedef struct {
+    u8 pad[0x58];
+    f32 scale;
+    u8 pad1[0x18];
+    u32 unk_74 : 2, blocked : 1, pad_74 : 29;
+} LocalActor;
 extern s16 D_8011A2E0[];
-typedef struct { u8 pad0[4]; f32 unk4[3]; u8 pad10[0x14]; f32 unk24; u8 pad28[0x3C]; u32 pad64 : 11; u32 flag64 : 1; u32 pad64b : 20; u8 pad68[0xC]; u32 pad74 : 1; u32 flag74_1 : 1; u32 flag74_2 : 1; u32 pad74b : 13; u16 id : 9; u16 pad76 : 7; } S800A6FF0;
+typedef struct {
+    u8 pad0[4];
+    f32 pos[3];
+    u8 pad10[0x14];
+    f32 floor_y;
+    u8 pad28[0x3C];
+    u32 pad64 : 11;
+    u32 flag64 : 1;
+    u32 pad64b : 20;
+    u8 pad68[0xC];
+    u32 pad74 : 1;
+    u32 flag74_1 : 1;
+    u32 flag74_2 : 1;
+    u32 pad74b : 13;
+    u16 owner_idx : 9;
+    u16 pad76 : 7;
+} S800A6FF0;
 extern void func_800F5A00(s32, f32 *);
 extern f32 func_800F5628(s32);
 extern s32 func_800F8874(s32);
-typedef struct { u8 pad0[0x65]; u8 f0 : 7; u8 bit : 1; u8 pad66[0x10]; u16 hi : 9; u16 lo : 7; } S_A70D0;
+typedef struct {
+    u8 pad0[0x65];
+    u8 unk_65 : 7;
+    u8 enabled : 1;
+    u8 pad66[0x10];
+    u16 owner_idx : 9;
+    u16 unk_76 : 7;
+} S_A70D0;
 extern S_A70D0 *func_80106790(s32);
 extern s32 D_8011A3A0[];
 
-void func_800A5DB0(u8 *param_0) {
-    s32 local_6;
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2;
-    f32 local_3;
-    f32 local_4[3];
-    f32 local_5;
-    func_800EE7F8(local_0, (f32 *)(param_0 + 4));
-    local_3 = *(f32 *)(param_0 + 0x24);
-    local_5 = func_800F10B4(local_0[1] - local_3, 0.0f, 300.0f, 0.43f, 0.28f);
-    local_2 = func_800F554C((u32)*(u16 *)(param_0 + 0x76) >> 7);
-    local_2 *= local_5 * *(f32 *)(param_0 + 0x58);
-    local_0[1] = local_3;
-    func_800F5680((u32)*(u16 *)(param_0 + 0x76) >> 7, local_4);
-    func_800F1988(local_4, (f32 *)(param_0 + 0x44), (f32 *)(param_0 + 0x48));
-    local_1[0] = *(f32 *)(param_0 + 0x44);
-    local_1[1] = *(f32 *)(param_0 + 0x48);
-    local_1[2] = 0.0f;
-    func_800EF334(local_4, 0);
-    func_800EE780((f32 *)(param_0 + 4), local_0, local_4);
+// Blob and projected (render-to-texture) shadow drawing, light-based shadow direction.
+// Cheap blob shadow: model 0x637 scaled by the height above the floor.
+void func_800A5DB0(u8 *shadow)
+{
+    s32 unk_0;
+    f32 pos[3];
+    f32 rot[3];
+    f32 scale;
+    f32 floor_y;
+    f32 floor_normal[3];
+    f32 height_scale;
+    func_800EE7F8(pos, (f32 *) (shadow + 4));
+    floor_y = *(f32 *) (shadow + 0x24);
+    height_scale = func_800F10B4(pos[1] - floor_y, 0.0f, 300.0f, 0.43f, 0.28f);
+    scale = func_800F554C((u32) *(u16 *) (shadow + 0x76) >> 7);
+    scale *= height_scale * *(f32 *) (shadow + 0x58);
+    pos[1] = floor_y;
+    func_800F5680((u32) *(u16 *) (shadow + 0x76) >> 7, floor_normal);
+    func_800F1988(floor_normal, (f32 *) (shadow + 0x44), (f32 *) (shadow + 0x48));
+    rot[0] = *(f32 *) (shadow + 0x44);
+    rot[1] = *(f32 *) (shadow + 0x48);
+    rot[2] = 0.0f;
+    func_800EF334(floor_normal, 0);
+    func_800EE780((f32 *) (shadow + 4), pos, floor_normal);
     func_800DF830(3);
-    func_800DE448((f32 *)(param_0 + 4), local_1, local_2, 0, (s32)func_800D674C(0x637));
+    func_800DE448((f32 *) (shadow + 4), rot, scale, 0, (s32) func_800D674C(0x637));
 }
 
-void func_800A5EC4(Gfx **param_0, void *param_1, s32 param_2, s32 param_3, s32 param_4, s32 param_5, s32 param_6)
+// Blits a rectangle of the offscreen shadow image to the screen with alpha, in texrect strips.
+// Matching: the line breaks in this function are needed for the match.
+void func_800A5EC4(Gfx **gfx, void *image, s32 x, s32 y, s32 width, s32 height, s32 alpha)
 {
-    Gfx *local_0;
-    s32 local_1;
-    s32 local_2;
+    Gfx *dl;
+    s32 strip_h;
+    s32 y_end;
 
-    local_0 = *param_0;
-    if (param_4) {
-        param_4 = (param_4 + 15) & 0xFFF0;
-        if (param_5) {
-            local_1 = 4096 / param_4;
-            /* SPDisplayList, DPSetBlendColor, DPSetPrimColor */
+    dl = *gfx;
+    if (width) {
+        width = (width + 15) & 0xFFF0;
+        if (height) {
+            strip_h = 4096 / width;
             do {
-                { Gfx *_g = local_0++; _g->words.w0 = 0xDE000000; _g->words.w1 = (u32)((u8 *)D_8011A2F8 - 0x80000000); } { Gfx *_g = local_0++; _g->words.w0 = 0xF9000000; _g->words.w1 = 1; }
-                { Gfx *_g = local_0++; _g->words.w0 = 0xFA000000; _g->words.w1 = ((param_6 << 7) / 255) & 0xFF; }
+                { Gfx *_g = dl++; _g->words.w0 = 0xDE000000; _g->words.w1 = (u32)((u8 *)D_8011A2F8 - 0x80000000); } { Gfx *_g = dl++; _g->words.w0 = 0xF9000000; _g->words.w1 = 1; }
+                { Gfx *_g = dl++; _g->words.w0 = 0xFA000000; _g->words.w1 = ((alpha << 7) / 255) & 0xFF; }
             } while (0);
-            local_2 = param_3 + param_5;
-            /* DPSetTextureImage (CI, 8b, Breite 304), DPSetTile 7 und 0 */
-            { Gfx *_g = local_0++; _g->words.w0 = 0xFD48012F; _g->words.w1 = osVirtualToPhysical(param_1); }
-            { Gfx *_g = local_0++; _g->words.w0 = 0xF5480000 | ((((param_4 + 7) >> 3) & 0x1FF) << 9); _g->words.w1 = 0x07080200; }
-            { Gfx *_g = local_0++; _g->words.w0 = 0xF5480000 | ((((param_4 + 7) >> 3) & 0x1FF) << 9); _g->words.w1 = 0x00080200; }
-            for (; param_3 < local_2; param_3 += local_1) {
-                if (local_2 - param_3 < local_1) {
-                    local_1 = local_2 - param_3;
+            y_end = y + height;
+            { Gfx *_g = dl++; _g->words.w0 = 0xFD48012F; _g->words.w1 = osVirtualToPhysical(image); }
+            { Gfx *_g = dl++; _g->words.w0 = 0xF5480000 | ((((width + 7) >> 3) & 0x1FF) << 9); _g->words.w1 = 0x07080200; }
+            { Gfx *_g = dl++; _g->words.w0 = 0xF5480000 | ((((width + 7) >> 3) & 0x1FF) << 9); _g->words.w1 = 0x00080200; }
+            for (; y < y_end; y += strip_h) {
+                if (y_end - y < strip_h) {
+                    strip_h = y_end - y;
                 }
-                /* DPLoadSync, DPLoadTile 7, DPSetTileSize 0 */
-                { Gfx *_g = local_0++; _g->words.w0 = 0xE6000000; _g->words.w1 = 0; } { Gfx *_g = local_0++; _g->words.w0 = 0xF4000000 | (((param_2 << 2) & 0xFFF) << 12) | ((param_3 << 2) & 0xFFF); _g->words.w1 = (7 << 24) | ((((param_2 + param_4 - 1) << 2) & 0xFFF) << 12) | (((param_3 + local_1 - 1) << 2) & 0xFFF); } { Gfx *_g = local_0++; _g->words.w0 = 0xF2000000 | (((param_2 << 2) & 0xFFF) << 12) | ((param_3 << 2) & 0xFFF); _g->words.w1 = (0 << 24) | ((((param_2 + param_4 - 1) << 2) & 0xFFF) << 12) | (((param_3 + local_1 - 1) << 2) & 0xFFF); }
-                /* SPTextureRectangle: TEXRECT, RDPHALF_1 (s, t), RDPHALF_2 (dsdx, dtdy = 1.0) */
-                { Gfx *_g = local_0++; _g->words.w0 = 0xE4000000 | ((((param_2 + param_4) * 4) & 0xFFF) << 12) | (((param_3 + local_1) * 4) & 0xFFF);
-                  _g->words.w1 = (((param_2 * 4) & 0xFFF) << 12) | ((param_3 * 4) & 0xFFF); }
-                { Gfx *_g = local_0++; _g->words.w0 = 0xE1000000; _g->words.w1 = (((param_2 << 5) & 0xFFFF) << 16) | ((param_3 << 5) & 0xFFFF); }
-                { Gfx *_g = local_0++; _g->words.w0 = 0xF1000000; _g->words.w1 = 0x04000400; }
+                { Gfx *_g = dl++; _g->words.w0 = 0xE6000000; _g->words.w1 = 0; } { Gfx *_g = dl++; _g->words.w0 = 0xF4000000 | (((x << 2) & 0xFFF) << 12) | ((y << 2) & 0xFFF); _g->words.w1 = (7 << 24) | ((((x + width - 1) << 2) & 0xFFF) << 12) | (((y + strip_h - 1) << 2) & 0xFFF); } { Gfx *_g = dl++; _g->words.w0 = 0xF2000000 | (((x << 2) & 0xFFF) << 12) | ((y << 2) & 0xFFF); _g->words.w1 = (0 << 24) | ((((x + width - 1) << 2) & 0xFFF) << 12) | (((y + strip_h - 1) << 2) & 0xFFF); }
+                { Gfx *_g = dl++; _g->words.w0 = 0xE4000000 | ((((x + width) * 4) & 0xFFF) << 12) | (((y + strip_h) * 4) & 0xFFF);
+                    _g->words.w1 = (((x * 4) & 0xFFF) << 12) | ((y * 4) & 0xFFF); }
+                { Gfx *_g = dl++; _g->words.w0 = 0xE1000000; _g->words.w1 = (((x << 5) & 0xFFFF) << 16) | ((y << 5) & 0xFFFF); }
+                { Gfx *_g = dl++; _g->words.w0 = 0xF1000000; _g->words.w1 = 0x04000400; }
             }
-            /* SPDisplayList */
-            { Gfx *_g = local_0++; _g->words.w0 = 0xDE000000; _g->words.w1 = (u32)((u8 *)D_8011A350 - 0x80000000); }
-            *param_0 = local_0;
+            { Gfx *_g = dl++; _g->words.w0 = 0xDE000000; _g->words.w1 = (u32)((u8 *)D_8011A350 - 0x80000000); }
+            *gfx = dl;
         }
     }
 }
 
-void func_800A61D4(void) {
-    struct __OSBlockInfo local_0 = D_8011A380;
-    struct __OSBlockInfo local_1 = D_8011A390;
-    func_800DF580(&local_0, &local_1);
+void func_800A61D4(void)
+{
+    struct __OSBlockInfo unk_0 = D_8011A380;
+    struct __OSBlockInfo unk_1 = D_8011A390;
+    func_800DF580(&unk_0, &unk_1);
     func_800DF830(3);
 }
 
-void func_800A6250(u8 *param_0, f32 *param_1, f32 *param_2, f32 *param_3, s32 param_4)
+// Renders the projected shadow of the player (and backpack) into the offscreen image, then blits its screen bounds.
+void func_800A6250(u8 *shadow, f32 *pos, f32 *normal, f32 *light_dir, s32 alpha)
 {
-    f32 local_0[4][4];
-    f32 local_1[4][4];
-    s32 local_2;
-    void *local_3;
-    void *local_4;
-    f32 local_6;
-    s32 local_5;
-    f32 local_28;
-    f32 local_7[3];
-    union { f32 matrix[4][4]; u64 alignment; } local_8;
-    void **local_9;
-    void *local_10;
-    void *local_11;
-    s32 local_25, local_26, local_27;
+    f32 proj[4][4];
+    f32 rot_mtx[4][4];
+    s32 owner;
+    void *model;
+    void *base_model;
+    f32 dot;
+    s32 unk_0;
+    f32 angle;
+    f32 axis[3];
+    union {
+        f32 matrix[4][4];
+        u64 alignment;
+    } tilt;
+    void **unk_1;
+    void *base_data;
+    void *model_data;
+    s32 i, j, k;
 
-    local_2 = func_800F53D0((u32)*(u16 *)(param_0 + 0x76) >> 7);
-    /* Keep this call separate: nesting it creates a hidden frontend stack home. */
-    local_25 = func_800F5410((u32)*(u16 *)(param_0 + 0x76) >> 7);
-    local_3 = func_800D674C(_bapreload_entrypoint_1(local_25, &local_5));
-    local_4 = func_80092B04(local_2, 0);
-    func_800F274C(local_0);
-    local_6 = func_800EEAA4(param_3, param_2);
-    /* Reject the degenerate/back-facing direction and limit shallow angles. */
-    if (local_6 < 0.01f) return;
-    if (local_6 < 0.4f) {
-        local_28 = func_80013A7C(0.4f);
-        func_800EE97C(local_7, param_2, param_3);
-        func_800F254C(local_8.matrix, local_7, local_28);
-        func_800F23D0(local_8.matrix, param_3, param_2);
-        local_6 = func_800EEAA4(param_3, param_2);
+    owner = func_800F53D0((u32) *(u16 *) (shadow + 0x76) >> 7);
+    // Matching: kept as a separate call; nesting it creates a hidden stack temp.
+    i = func_800F5410((u32) *(u16 *) (shadow + 0x76) >> 7);
+    model = func_800D674C(_bapreload_entrypoint_1(i, &unk_0));
+    base_model = func_80092B04(owner, 0);
+    func_800F274C(proj);
+    dot = func_800EEAA4(light_dir, normal);
+    // Reject a degenerate direction; limit shallow angles.
+    if (dot < 0.01f)
+        return;
+    if (dot < 0.4f) {
+        angle = func_80013A7C(0.4f);
+        func_800EE97C(axis, normal, light_dir);
+        func_800F254C(tilt.matrix, axis, angle);
+        func_800F23D0(tilt.matrix, light_dir, normal);
+        dot = func_800EEAA4(light_dir, normal);
     }
-    /* Oblique projection: subtract the scaled outer product from identity.
-     * Preserve the operand order used by the engine's matrix convention. */
-    local_6 = 1.0f / local_6;
-    local_0[0][0] = 1.0f - param_2[0] * param_3[0] * local_6;
-    local_0[0][1] = -param_2[0] * param_3[1] * local_6;
-    local_0[0][2] = -param_2[0] * param_3[2] * local_6;
-    local_0[1][0] = -param_2[1] * param_3[0] * local_6;
-    local_0[1][1] = 1.0f - param_2[1] * param_3[1] * local_6;
-    local_0[1][2] = -param_2[1] * param_3[2] * local_6;
-    local_0[2][0] = -param_2[2] * param_3[0] * local_6;
-    local_0[2][1] = -param_2[2] * param_3[1] * local_6;
-    local_0[2][2] = 1.0f - param_2[2] * param_3[2] * local_6;
+    // Oblique projection onto the floor: I - normal * light_dir^T / dot.
+    dot = 1.0f / dot;
+    proj[0][0] = 1.0f - normal[0] * light_dir[0] * dot;
+    proj[0][1] = -normal[0] * light_dir[1] * dot;
+    proj[0][2] = -normal[0] * light_dir[2] * dot;
+    proj[1][0] = -normal[1] * light_dir[0] * dot;
+    proj[1][1] = 1.0f - normal[1] * light_dir[1] * dot;
+    proj[1][2] = -normal[1] * light_dir[2] * dot;
+    proj[2][0] = -normal[2] * light_dir[0] * dot;
+    proj[2][1] = -normal[2] * light_dir[1] * dot;
+    proj[2][2] = 1.0f - normal[2] * light_dir[2] * dot;
     func_80019CD4();
-    mlMtxRotYaw(func_80092BE8(local_2));
-    mlMtxRotPitch(func_8009BFCC(local_2));
-    mlMtxRotRoll(baroll_get(local_2));
-    mlMtxGet(local_1);
-    func_800F27D4(local_1, local_0, local_0);
-    /* Select or transfer render data when the requested model is not current. */
-    if (local_3 != local_4) {
-        if (local_5) func_800DF41C(func_8008CA74(local_2));
+    mlMtxRotYaw(func_80092BE8(owner));
+    mlMtxRotPitch(func_8009BFCC(owner));
+    mlMtxRotRoll(baroll_get(owner));
+    mlMtxGet(rot_mtx);
+    func_800F27D4(rot_mtx, proj, proj);
+    // Select or transfer render data when the model differs from the base model.
+    if (model != base_model) {
+        if (unk_0)
+            func_800DF41C(func_8008CA74(owner));
         else {
-            local_9 = func_800DF330();
-            local_10 = func_800B27E0(local_4);
-            local_11 = func_800B27E0(local_3);
-            if (*local_9) {
-                func_800AE708(func_80092E80(local_2), local_10, local_9, local_11);
-                func_800DF72C(*local_9);
+            unk_1 = func_800DF330();
+            base_data = func_800B27E0(base_model);
+            model_data = func_800B27E0(model);
+            if (*unk_1) {
+                func_800AE708(func_80092E80(owner), base_data, unk_1, model_data);
+                func_800DF72C(*unk_1);
             }
         }
-    } else func_800DF72C(func_80092E80(local_2));
-    func_800A06E8(local_2);
-    func_800DF540(local_0);
+    } else
+        func_800DF72C(func_80092E80(owner));
+    func_800A06E8(owner);
+    func_800DF540(proj);
     func_800A61D4();
     {
-    A6250Command **local_12;
-    local_12 = func_800A7180();
-    /* Synchronize, select the offscreen image, and configure its fill pass. */
-    A6250_CMD(local_12, 0xE7000000, 0);
-    A6250_CMD(local_12, 0xFF48012F, (u32)func_8001575C() + 0x80000000);
-    A6250_CMD(local_12, 0xE3000800, 0);
-    A6250_CMD(local_12, 0xE3000A01, 0x00300000);
-    A6250_CMD(local_12, 0xF7000000, 0xFFFEFFFE);
-    A6250_CMD(local_12, 0xE200001C, 0);
-    A6250_CMD(local_12, 0xF64BC38C, 0);
-    func_800DE448(param_1, 0, func_80092BDC(local_2), 0, local_3);
-    /* Render the optional backpack through the same projection. */
-    if (func_80092738(local_2)) {
-        _babackpack_entrypoint_2(local_2);
-        func_800DF540(local_0);
-        func_800A61D4();
-        func_800DE448(param_1, 0, _babackpack_get_scale(local_2), 0, _babackpack_entrypoint_1(local_2));
-    }
-    }
-    {
-    A6250Command **local_13;
-    local_13 = func_800A7180();
-    A6250_CMD(local_13, 0xE7000000, 0);
-    func_800E7CF4(local_13);
-    {
-    f32 local_14[8][3];
-    f32 local_15[8][2];
-    s32 local_32;
-    f32 local_min[2];
-    f32 local_max[2];
-    f32 local_30;
-    f32 (*local_31)[2]; /* Retained unused frontend stack home. */
-    f32 local_29;
-    s32 local_imin[2];
-    s32 local_imax[2];
-    s32 local_33; /* Retained home: keeps the visibility output at sp+0x50. */
-    s32 local_24;
-    /* Build eight model-bound corners: x/z span +/-radius, y spans 0..radius. */
-    local_29 = func_800B2354(func_800B2840(local_3)) * func_80092BDC(local_2);
-    for (local_25 = 0; local_25 < 2; local_25++) {
-        for (local_26 = 0; local_26 < 2; local_26++) {
-            for (local_27 = 0; local_27 < 2; local_27++) {
-                local_32 = local_25 * 4 + local_26 * 2 + local_27;
-                local_14[local_32][0] = (local_25 ? -1.0f : 1.0f) * local_29;
-                local_14[local_32][1] = (local_26 ? 0 : 1.0f) * local_29;
-                local_14[local_32][2] = (local_27 ? -1.0f : 1.0f) * local_29;
-            }
+        A6250Command **dl;
+        dl = func_800A7180();
+        // Pipe sync, select the offscreen image as color image, set up the fill pass.
+        A6250_CMD(dl, 0xE7000000, 0);
+        A6250_CMD(dl, 0xFF48012F, (u32) func_8001575C() + 0x80000000);
+        A6250_CMD(dl, 0xE3000800, 0);
+        A6250_CMD(dl, 0xE3000A01, 0x00300000);
+        A6250_CMD(dl, 0xF7000000, 0xFFFEFFFE);
+        A6250_CMD(dl, 0xE200001C, 0);
+        A6250_CMD(dl, 0xF64BC38C, 0);
+        func_800DE448(pos, 0, func_80092BDC(owner), 0, model);
+        // Render the optional backpack through the same projection.
+        if (func_80092738(owner)) {
+            _babackpack_entrypoint_2(owner);
+            func_800DF540(proj);
+            func_800A61D4();
+            func_800DE448(pos, 0, _babackpack_get_scale(owner), 0,
+                          _babackpack_entrypoint_1(owner));
         }
     }
-    for (local_25 = 0; local_25 < 8; local_25++) {
-        func_800F23D0(local_0, local_14[local_25], local_14[local_25]);
-        func_800EF04C(local_14[local_25], param_1);
-    }
-    for (local_25 = 0; local_25 < 8; local_25++) {
-        /* Abort if any corner cannot supply a valid projected screen point. */
-        func_800E4190(local_14[local_25], local_15[local_25], &local_24);
-        if (!local_24) return;
-    }
-    /* Bound the projected corners, clip to 304x228, then truncate to pixels. */
-    local_min[0] = local_max[0] = local_15[0][0];
-    local_min[1] = local_max[1] = local_15[0][1];
-    for (local_25 = 1; local_25 < 8; local_25++) {
-        local_30 = local_15[local_25][0];
-        if (local_30 < local_min[0]) local_min[0] = local_30;
-        else if (local_max[0] < local_30) local_max[0] = local_30;
-        local_30 = local_15[local_25][1];
-        if (local_30 < local_min[1]) local_min[1] = local_30;
-        else if (local_max[1] < local_30) local_max[1] = local_30;
-    }
-    if (local_min[0] < 0.0f) local_min[0] = 0.0f;
-    if (local_min[0] > 304.0f) local_min[0] = 304.0f;
-    if (local_max[0] < 0.0f) local_max[0] = 0.0f;
-    if (local_max[0] > 304.0f) local_max[0] = 304.0f;
-    if (local_min[1] < 0.0f) local_min[1] = 0.0f;
-    if (local_min[1] > 228.0f) local_min[1] = 228.0f;
-    if (local_max[1] < 0.0f) local_max[1] = 0.0f;
-    if (local_max[1] > 228.0f) local_max[1] = 228.0f;
-    local_imin[0] = local_min[0];
-    local_imin[1] = local_min[1];
-    local_imax[0] = local_max[0];
-    local_imax[1] = local_max[1];
-    /* Submit the resulting rectangle; the last two dimensions are extents. */
-    func_800A5EC4(local_13, func_8001575C(), local_imin[0], local_imin[1], local_imax[0] - local_imin[0], local_imax[1] - local_imin[1], param_4);
-    }
+    {
+        A6250Command **dl;
+        dl = func_800A7180();
+        A6250_CMD(dl, 0xE7000000, 0);
+        func_800E7CF4(dl);
+        {
+            f32 corners[8][3];
+            f32 screen[8][2];
+            s32 idx;
+            f32 screen_min[2];
+            f32 screen_max[2];
+            f32 val;
+            f32(*unk_2)[2]; // Matching: unused local keeps the stack layout.
+            f32 radius;
+            s32 min_px[2];
+            s32 max_px[2];
+            s32 unk_3; // Matching: unused local keeps the visibility output at sp+0x50.
+            s32 valid;
+            // Eight corners of the model bounds: x/z span +/-radius, y spans 0..radius.
+            radius = func_800B2354(func_800B2840(model)) * func_80092BDC(owner);
+            for (i = 0; i < 2; i++) {
+                for (j = 0; j < 2; j++) {
+                    for (k = 0; k < 2; k++) {
+                        idx = i * 4 + j * 2 + k;
+                        corners[idx][0] = (i ? -1.0f : 1.0f) * radius;
+                        corners[idx][1] = (j ? 0 : 1.0f) * radius;
+                        corners[idx][2] = (k ? -1.0f : 1.0f) * radius;
+                    }
+                }
+            }
+            for (i = 0; i < 8; i++) {
+                func_800F23D0(proj, corners[i], corners[i]);
+                func_800EF04C(corners[i], pos);
+            }
+            for (i = 0; i < 8; i++) {
+                // Abort if a corner has no valid screen point.
+                func_800E4190(corners[i], screen[i], &valid);
+                if (!valid)
+                    return;
+            }
+            // Bound the projected corners, clamp to 304x228, truncate to pixels.
+            screen_min[0] = screen_max[0] = screen[0][0];
+            screen_min[1] = screen_max[1] = screen[0][1];
+            for (i = 1; i < 8; i++) {
+                val = screen[i][0];
+                if (val < screen_min[0])
+                    screen_min[0] = val;
+                else if (screen_max[0] < val)
+                    screen_max[0] = val;
+                val = screen[i][1];
+                if (val < screen_min[1])
+                    screen_min[1] = val;
+                else if (screen_max[1] < val)
+                    screen_max[1] = val;
+            }
+            if (screen_min[0] < 0.0f)
+                screen_min[0] = 0.0f;
+            if (screen_min[0] > 304.0f)
+                screen_min[0] = 304.0f;
+            if (screen_max[0] < 0.0f)
+                screen_max[0] = 0.0f;
+            if (screen_max[0] > 304.0f)
+                screen_max[0] = 304.0f;
+            if (screen_min[1] < 0.0f)
+                screen_min[1] = 0.0f;
+            if (screen_min[1] > 228.0f)
+                screen_min[1] = 228.0f;
+            if (screen_max[1] < 0.0f)
+                screen_max[1] = 0.0f;
+            if (screen_max[1] > 228.0f)
+                screen_max[1] = 228.0f;
+            min_px[0] = screen_min[0];
+            min_px[1] = screen_min[1];
+            max_px[0] = screen_max[0];
+            max_px[1] = screen_max[1];
+            // The last two arguments are extents, not corners.
+            func_800A5EC4(dl, func_8001575C(), min_px[0], min_px[1],
+                          max_px[0] - min_px[0], max_px[1] - min_px[1], alpha);
+        }
     }
 }
 
-s32 func_800A69F0(u8 *param_0, s32 *param_1, u8 *param_2, s32 param_3) {
-    f32 local_0[3];
-    f32 temp_f0;
-    f32 local_2[3];
-    f32 local_1;
+// Draws one projected shadow along light_dir; raycasts for the floor normal unless the actor is on the floor.
+s32 func_800A69F0(u8 *shadow, s32 *pos, u8 *light_dir, s32 alpha)
+{
+    f32 normal[3];
+    f32 floor_y;
+    f32 start[3];
 
-    func_800EE7F8(param_1, param_0 + 4);
-    temp_f0 = (*(f32 *)((s8 *)(param_0) + (0x24)));
-    local_1 = temp_f0;
-    if ((mlAbsF((*(f32 *)((s8 *)(param_1) + (4))) - temp_f0)
-        < 0.1f)
-        || (0.99f < (*(f32 *)((s8 *)(param_2) + (4))))) {
-        func_800F5680((u32) (*(u16 *)((s8 *)(param_0) + (0x76))) >> 7, local_0);
-        (*(f32 *)((s8 *)(param_1) + (4))) = temp_f0;
-        func_800A6250(param_0, param_1, local_0, param_2, param_3);
+    func_800EE7F8(pos, shadow + 4);
+    floor_y = *(f32 *) ((s8 *) shadow + 0x24);
+    if ((mlAbsF(*(f32 *) ((s8 *) pos + 4) - floor_y) < 0.1f) ||
+        (0.99f < *(f32 *) ((s8 *) light_dir + 4))) {
+        func_800F5680((u32) *(u16 *) ((s8 *) shadow + 0x76) >> 7, normal);
+        *(f32 *) ((s8 *) pos + 4) = floor_y;
+        func_800A6250(shadow, pos, normal, light_dir, alpha);
         goto block_6;
     }
-    func_800EE7F8(local_2, param_1);
-    func_800EF174(param_1, param_2, 0xC4FA0000);
-    if (func_800C6A7C(local_2, param_1, local_0, 0x20020) == 0) {
+    func_800EE7F8(start, pos);
+    func_800EF174(pos, light_dir, 0xC4FA0000);
+    if (func_800C6A7C(start, pos, normal, 0x20020) == 0) {
         return 1;
     }
-    func_800A6250(param_0, param_1, local_0, param_2, param_3);
+    func_800A6250(shadow, pos, normal, light_dir, alpha);
 block_6:
-    ((Struct800A69F0 *)param_0)->local_1 = 1;
+    ((Struct800A69F0 *) shadow)->unk_7E_b = 1;
     return 1;
 }
 
-void func_800A6B24(ActorA6B24 *param_0) {
-    void *local_11;
-    s32 local_12;
-    f32 local_0[3];
-    f32 local_8, local_9, local_10;
-    f32 local_2[3], local_3[3], local_4[3];
-    s32 local_14;
-    s32 local_13;
-    f32 local_6[3], local_7[3];
-    if (param_0->local_0[1] - param_0->local_1 > 2000.0f) return;
-    local_8 = func_800F5BC4((u32)param_0->local_2 >> 7, local_0);
-    func_800EF04C(local_0, param_0->local_0);
-    local_12 = 0;
-    for (local_11 = func_800C8760(0, 1); local_11 && local_12 < 2; local_11 = func_800C878C(local_11, 0, 1)) {
-        local_13 = 255;
-        if (func_800C89A8(local_11) & 8) continue;
-        func_800C8800(local_11, local_3);
-        func_800C8898(local_11, local_4);
-        func_800EFB24(local_2, local_3, local_0);
-        local_9 = sqrtf(local_2[0] * local_2[0] + local_2[1] * local_2[1] + local_2[2] * local_2[2]);
-        if (local_9 == 0.0f || local_9 >= local_4[1] + local_8) continue;
-        local_10 = -1.0f / local_9;
-        local_2[0] *= local_10;
-        local_2[2] *= local_10;
-        local_2[1] *= -local_10;
-        local_2[0] = -local_2[0];
-        local_2[2] = -local_2[2];
-        local_9 -= local_8;
-        if (local_9 > local_4[0]) {
-            local_10 = 1.0f - (local_9 - local_4[0]) * local_4[2];
-            local_13 = 255.0f * local_10;
+// Draws up to two shadows from nearby point lights (distance fade), else one from the default light.
+void func_800A6B24(ActorA6B24 *shadow)
+{
+    void *light;
+    s32 count;
+    f32 center[3];
+    f32 radius, dist, factor;
+    f32 dir[3], light_pos[3], light_range[3];
+    s32 unk_0;
+    s32 alpha;
+    f32 default_pos[3], default_dir[3];
+    if (shadow->pos[1] - shadow->floor_y > 2000.0f)
+        return;
+    radius = func_800F5BC4((u32) shadow->owner_bits >> 7, center);
+    func_800EF04C(center, shadow->pos);
+    count = 0;
+    for (light = func_800C8760(0, 1); light && count < 2;
+         light = func_800C878C(light, 0, 1)) {
+        alpha = 255;
+        if (func_800C89A8(light) & 8)
+            continue;
+        func_800C8800(light, light_pos);
+        func_800C8898(light, light_range);
+        func_800EFB24(dir, light_pos, center);
+        dist =
+            sqrtf(dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2]);
+        if (dist == 0.0f || dist >= light_range[1] + radius)
+            continue;
+        factor = -1.0f / dist;
+        dir[0] *= factor;
+        dir[2] *= factor;
+        dir[1] *= -factor;
+        dir[0] = -dir[0];
+        dir[2] = -dir[2];
+        dist -= radius;
+        if (dist > light_range[0]) {
+            factor = 1.0f - (dist - light_range[0]) * light_range[2];
+            alpha = 255.0f * factor;
         }
-        func_800A69F0(param_0, local_3, local_2, local_13);
-        local_12++;
+        func_800A69F0(shadow, light_pos, dir, alpha);
+        count++;
     }
-    if (!local_12) {
-        func_800EFD24(local_6);
-        func_800EFA4C(local_7, 0, 1.0f, 0);
-        func_800A69F0(param_0, local_6, local_7, 255);
+    if (!count) {
+        func_800EFD24(default_pos);
+        func_800EFA4C(default_dir, 0, 1.0f, 0);
+        func_800A69F0(shadow, default_pos, default_dir, 255);
     }
 }
 
-void func_800A6DAC(u8 *param_0, s32 param_1)
+// Player shadow actor: init, update, draw gate, owner/scale/flag setters, despawn, descriptor.
+// Draw: updates position/floor from the owner, then draws the blob or projected shadow.
+void func_800A6DAC(u8 *shadow, s32 unk_0)
 {
-    if ((func_800F6438(((u32)((u16) (*(u16 *)((s8 *)(param_0) + 0x76)))) >> 7) != 0) &&
-        (func_800F6640(((u32)((u16) (*(u16 *)((s8 *)(param_0) + 0x76)))) >> 7) != 0) &&
-        (func_800F6E80(((u32)((u16) (*(u16 *)((s8 *)(param_0) + 0x76)))) >> 7) != 0) &&
-        !(func_800F55FC(((u32)((u16) (*(u16 *)((s8 *)(param_0) + 0x76)))) >> 7) & 0x80000000) &&
-        ((func_800F65D0(((u32)((u16) (*(u16 *)((s8 *)(param_0) + 0x76)))) >> 7) != 0) ||
-         (((u32)(*(s32 *)((s8 *)(param_0) + 0x74) << 1) >> 31) &&
+    if ((func_800F6438((u32) (u16) *(u16 *) ((s8 *) shadow + 0x76) >> 7) != 0) &&
+        (func_800F6640((u32) (u16) *(u16 *) ((s8 *) shadow + 0x76) >> 7) != 0) &&
+        (func_800F6E80((u32) (u16) *(u16 *) ((s8 *) shadow + 0x76) >> 7) != 0) &&
+        !(func_800F55FC((u32) (u16) *(u16 *) ((s8 *) shadow + 0x76) >> 7) & 0x80000000) &&
+        ((func_800F65D0((u32) (u16) *(u16 *) ((s8 *) shadow + 0x76) >> 7) != 0) ||
+         (((u32) (*(s32 *) ((s8 *) shadow + 0x74) << 1) >> 31) &&
           ((func_800F8B88() < 2) ||
-           ((func_800F5410(((u32)((u16) (*(u16 *)((s8 *)(param_0) + 0x76)))) >> 7) == 0xB) &&
-            (_plsu_entrypoint_1(0x11) != -1))))))
-    {
-        func_800F5A00(((u32)((u16) (*(u16 *)((s8 *)(param_0) + 0x76)))) >> 7, param_0 + 4);
-        (*(f32 *)((s8 *)(param_0) + 0x24)) =
-            func_800F5628(((u32)((u16) (*(u16 *)((s8 *)(param_0) + 0x76)))) >> 7);
-        if (((u32)(*(s32 *)((s8 *)(param_0) + 0x64) << 11) >> 31))
-        {
-            func_800A5DB0(param_0);
+           ((func_800F5410((u32) (u16) *(u16 *) ((s8 *) shadow + 0x76) >> 7) == 0xB) &&
+            (_plsu_entrypoint_1(0x11) != -1)))))) {
+        func_800F5A00((u32) (u16) *(u16 *) ((s8 *) shadow + 0x76) >> 7, shadow + 4);
+        *(f32 *) ((s8 *) shadow + 0x24) =
+            func_800F5628((u32) (u16) *(u16 *) ((s8 *) shadow + 0x76) >> 7);
+        if (((u32) (*(s32 *) ((s8 *) shadow + 0x64) << 11) >> 31)) {
+            func_800A5DB0(shadow);
             return;
         }
-        func_800A6B24(param_0);
+        func_800A6B24(shadow);
     }
 }
 
-void func_800A6EF4(LocalActor *param_0)
+// Init: the shadow is blocked on maps in D_8011A2E0, in some demo/challenge modes and with 2+ cameras.
+void func_800A6EF4(LocalActor *actor)
 {
-    s32 local_1;
-    s32 local_0;
-    local_0 = func_800EA05C();
-    func_8010A800(param_0, 5);
-    param_0->blocked = 0;
-    param_0->scale = 1.0f;
-    for (local_1 = 0; D_8011A2E0[local_1] != -1; local_1++) {
-        if (local_0 == D_8011A2E0[local_1]) {
-            param_0->blocked = 1;
+    s32 i;
+    s32 map_id;
+    map_id = func_800EA05C();
+    func_8010A800(actor, 5);
+    actor->blocked = 0;
+    actor->scale = 1.0f;
+    for (i = 0; D_8011A2E0[i] != -1; i++) {
+        if (map_id == D_8011A2E0[i]) {
+            actor->blocked = 1;
             break;
         }
     }
-    if ((func_800A9C98() && func_800A9CD0() != 2) || func_800BCC84() || func_800D3948() || func_800A946C() >= 2) param_0->blocked = 1;
+    if ((func_800A9C98() && func_800A9CD0() != 2) || func_800BCC84() || func_800D3948() ||
+        func_800A946C() >= 2)
+        actor->blocked = 1;
 }
 
-void func_800A6FF0(S800A6FF0 *param_0) {
-    func_800F5A00(param_0->id, param_0->unk4);
-    param_0->unk24 = func_800F5628(param_0->id);
-    param_0->flag64 = param_0->flag74_2;
-    param_0->flag74_1 = func_800F8874(param_0->id);
-}
-
-int func_800A7088(Actor *param_0)
+// Update: copies the owner position and floor.
+void func_800A6FF0(S800A6FF0 *shadow)
 {
-  Actor *new_var3;
-  int new_var2;
-  s32 local_0;
-  Actor *new_var;
- do { } while (0);
-  new_var2 = 2;
-  new_var3 = param_0;
-  new_var = new_var3;
-  local_0 = (((u16 *) new_var)[0x76 / new_var2] & 0xFFFFFFFFu) >> 7;
-  func_800F7364(local_0);
+    func_800F5A00(shadow->owner_idx, shadow->pos);
+    shadow->floor_y = func_800F5628(shadow->owner_idx);
+    shadow->flag64 = shadow->flag74_2;
+    shadow->flag74_1 = func_800F8874(shadow->owner_idx);
+}
+
+int func_800A7088(Actor *actor)
+{
+    // Matching: the copies of actor and the divisor 2 are needed for the match.
+    Actor *actor_copy;
+    int divisor;
+    s32 owner;
+    Actor *actor_alias;
+    divisor = 2;
+    actor_copy = actor;
+    actor_alias = actor_copy;
+    owner = (((u16 *) actor_alias)[0x76 / divisor] & 0xFFFFFFFFu) >> 7;
+    func_800F7364(owner);
 }
 
 void func_800A70B0()
@@ -451,35 +533,62 @@ void func_800A70B0()
     func_800FFA88();
 }
 
-void func_800A70D0(s32 param_0, s32 param_1) {
-    func_80106790(param_0)->hi = param_1;
-}
-
-int func_800A7108(s32 param_0, f32 param_1)
+// Setter: owner index.
+void func_800A70D0(s32 handle, s32 owner)
 {
-  Actor *local_0;
-  local_0 = func_80106790(param_0);
-  local_0->unk58 = param_1;
+    func_80106790(handle)->owner_idx = owner;
 }
 
-void func_800A7130(s32 param_0, s32 param_1) {
-    func_80106790(param_0)->bit = param_1;
+// Setter: scale.
+int func_800A7108(s32 handle, f32 scale)
+{
+    Actor *actor;
+    actor = func_80106790(handle);
+    actor->unk58 = scale;
+}
+
+// Setter: enable bit.
+void func_800A7130(s32 handle, s32 enable)
+{
+    func_80106790(handle)->enabled = enable;
 }
 
 int func_800A7168()
 {
-    return (int)D_8011A3A0;
+    return (int) D_8011A3A0;
 }
 
-/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E7F6A0.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_8011A3A0 -> s32[] (uses written as NAME[0]) */
+// TU-NOTE: the .data of this file is defined here in C (formerly asm/data/core2/1E7F6A0.data.s).
+// Its tables hold pointers to functions of this file; IDO's assembler schedules some of them
+// differently unless the tables are in the same unit. D_8011A3A0 is declared s32[] (uses written as NAME[0]).
 extern void func_80102EC0();
 extern void func_80107C2C();
-s16 D_8011A2E0[12] = { 0xDE, 0xDF, 0xE0, 0xC6, 0xC8, 0xC9, 0x12E, 0x12F, 0x130, -0x1, 0x0, 0x0 };
-Gfx D_8011A2F8[11] = { 0xE7000000, 0x0, 0xD9C0FFFA, 0x0, 0xD7000002, 0xFFFFFFFF, 0xE200001C, 0x504240, 0xE3000A01, 0x0, 0xFCFFE7FF, 0xFFCF9FCF, 0xE3001201, 0x0, 0xE3000C00, 0x0, 0xE3001801, 0xC0, 0xE2001E01, 0x1, 0xDF000000, 0x0 };
-Gfx D_8011A350[6] = { 0xE7000000, 0x0, 0xE3001201, 0x2000, 0xE3000C00, 0x80000, 0xE3001801, 0x0, 0xE2001E01, 0x0, 0xDF000000, 0x0 };
-struct __OSBlockInfo D_8011A380 = { 0x0, 0x0, 0x0, 0xFF };
-struct __OSBlockInfo D_8011A390 = { 0x0, 0x0, 0x0, 0x0 };
-s32 D_8011A3A0[20] = { 0x320215, -0xFFFF, 0x0, (u32)func_800A6FF0, (u32)func_80102EC0, (u32)func_800A6DAC, 0x0, 0x0, 0x0, 0x8000004, (u32)func_800A7088, 0x0, 0x0, (u32)func_800A6EF4, (u32)func_80107C2C, -0x7FFFFFFE, 0x0, 0x0, 0x0, 0x0 };
+s16 D_8011A2E0[12] = {0xDE, 0xDF, 0xE0, 0xC6, 0xC8, 0xC9, 0x12E, 0x12F, 0x130, -0x1, 0x0, 0x0};
+Gfx D_8011A2F8[11] = {0xE7000000, 0x0,      0xD9C0FFFA, 0x0, 0xD7000002, 0xFFFFFFFF,
+                      0xE200001C, 0x504240, 0xE3000A01, 0x0, 0xFCFFE7FF, 0xFFCF9FCF,
+                      0xE3001201, 0x0,      0xE3000C00, 0x0, 0xE3001801, 0xC0,
+                      0xE2001E01, 0x1,      0xDF000000, 0x0};
+Gfx D_8011A350[6] = {0xE7000000, 0x0, 0xE3001201, 0x2000, 0xE3000C00, 0x80000,
+                     0xE3001801, 0x0, 0xE2001E01, 0x0,    0xDF000000, 0x0};
+struct __OSBlockInfo D_8011A380 = {0x0, 0x0, 0x0, 0xFF};
+struct __OSBlockInfo D_8011A390 = {0x0, 0x0, 0x0, 0x0};
+s32 D_8011A3A0[20] = {0x320215,
+                      -0xFFFF,
+                      0x0,
+                      (u32) func_800A6FF0,
+                      (u32) func_80102EC0,
+                      (u32) func_800A6DAC,
+                      0x0,
+                      0x0,
+                      0x0,
+                      0x8000004,
+                      (u32) func_800A7088,
+                      0x0,
+                      0x0,
+                      (u32) func_800A6EF4,
+                      (u32) func_80107C2C,
+                      -0x7FFFFFFE,
+                      0x0,
+                      0x0,
+                      0x0,
+                      0x0};

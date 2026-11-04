@@ -1,44 +1,52 @@
+// Probably the model "vpl" section: record lookup by id, and a vertex copier into the map
+// vertex buffer that tints the colors.
 #include "common.h"
 
-typedef struct { s16 position[3]; u16 flags; s16 uv[2]; u8 color[4]; } DbVplVertex;
+typedef struct {
+    s16 position[3];
+    u16 flags;
+    s16 uv[2];
+    u8 color[4];
+} DbVplVertex;
 
-s32 *dbvpl_entrypoint_0(u8 *param_0, s32 param_1) {
+// Find the record with the given id in the offset table (count at +0x2C, offsets at +0x30).
+s32 *dbvpl_entrypoint_0(u8 *model, s32 id)
+{
     s32 i;
-    s32 *local_0;
-    for (i = 0; i < *(s32 *)(param_0 + 0x2C); i++) {
-        local_0 = (s32 *)(param_0 + ((s32 *)(param_0 + 0x30))[i]);
-        if (*local_0 == param_1) {
-            return local_0;
+    s32 *rec;
+    for (i = 0; i < *(s32 *) (model + 0x2C); i++) {
+        rec = (s32 *) (model + ((s32 *) (model + 0x30))[i]);
+        if (*rec == id) {
+            return rec;
         }
     }
     return 0;
 }
 
-void dbvpl_entrypoint_1(s32 param_0, DbVplVertex *param_1, s32 param_2, s32 *param_3)
+// Copy the vertices of a module into the map vertex buffer at their stored index,
+// scaling RGB by tint (0..255) and re-tagging the index.
+void dbvpl_entrypoint_1(s32 unk_0, DbVplVertex *map_vtx, s32 module, s32 *tint)
 {
-    DbVplVertex *local_0;
-    DbVplVertex *local_2;
-    DbVplVertex *local_1;
-    DbVplVertex *local_3;
-    s32 local_6;
-    u32 local_7;
+    DbVplVertex *first;
+    DbVplVertex *src;
+    DbVplVertex *end;
+    DbVplVertex *dst;
+    s32 c;
+    u32 index;
 
-    func_800B2324(param_2, &local_0, &local_1);
-    for (local_2 = local_0; local_2 < local_1; local_2++) {
-        local_7 = local_2->flags & 0x7FFF;
-        if (local_7 != 0x7FFF) {
-            local_3 = &param_1[local_7];
-            if (param_3[0] != 255 || param_3[1] != 255 || param_3[2] != 255) {
-                for (local_6 = 0; local_6 < 3; local_6++) {
-                    local_2->color[local_6] = (local_2->color[local_6] * param_3[local_6]) >> 8;
+    func_800B2324(module, &first, &end);
+    for (src = first; src < end; src++) {
+        index = src->flags & 0x7FFF;
+        if (index != 0x7FFF) {
+            dst = &map_vtx[index];
+            if (tint[0] != 255 || tint[1] != 255 || tint[2] != 255) {
+                for (c = 0; c < 3; c++) {
+                    src->color[c] = (src->color[c] * tint[c]) >> 8;
                 }
             }
-            aligned8_memcpy(local_3, local_2, sizeof(DbVplVertex));
-            local_3->flags &= 0x8000;
-            local_3->flags |= (local_2 - local_0) & 0x7FFF;
+            aligned8_memcpy(dst, src, sizeof(DbVplVertex));
+            dst->flags &= 0x8000;
+            dst->flags |= (src - first) & 0x7FFF;
         }
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/vpl.data.s) is defined here in C.
- * Values are taken from the ROM. */

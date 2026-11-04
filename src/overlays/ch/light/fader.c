@@ -1,3 +1,5 @@
+// Shared point-light fade-out service: entrypoint_1(light, duration, flags) spawns a helper actor
+// that interpolates the light's colour/radius to zero (optional flicker) while in view, then frees both.
 #include "common.h"
 
 extern int D_808003A0_chlightfader[];
@@ -5,8 +7,19 @@ extern s32 func_800C954C(void);
 extern void _chbaddiesetup_entrypoint_3(void (*)(void), s32, s32, s32);
 extern void _chlightfader_entrypoint_2(void);
 extern void func_800C8B84(s32);
-typedef struct LightFadeSample { f32 local_0[2]; f32 local_1[3]; } LightFadeSample;
-typedef struct LightFadeState { s32 local_0; f32 local_1; s32 local_2; s32 local_3; f32 local_4; LightFadeSample local_5[2]; } LightFadeState;
+typedef struct LightFadeSample {
+    f32 radius[2];
+    f32 color[3];
+} LightFadeSample;
+// Helper actor data; samples are {start, current}.
+typedef struct LightFadeState {
+    s32 light;
+    f32 duration;
+    s32 flags;
+    s32 unk_C;
+    f32 cull_radius;
+    LightFadeSample samples[2];
+} LightFadeState;
 extern void func_800C8800(s32, f32 *);
 extern Actor *func_80108474(u32, f32 *, s32);
 extern void *func_80100094(Actor *, u32);
@@ -27,127 +40,162 @@ extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800F2F60(f32 *, f32 *, f32);
 extern s32 func_800F6438(s32);
 extern void func_800FFA88(s32);
-typedef struct { s32 h; f32 f04; u32 flags; u8 pad0C[4]; f32 f10; f32 in[2]; f32 v1C[3]; f32 out[2]; f32 v30[3]; } LF;
+// Same layout as LightFadeState, as seen by the update function.
+typedef struct {
+    s32 light;
+    f32 duration;
+    u32 flags;
+    u8 pad_C[4];
+    f32 cull_radius;
+    f32 radius_start[2];
+    f32 color_start[3];
+    f32 radius[2];
+    f32 color[3];
+} LF;
 extern void func_80105834(), func_80107C2C(), func_8010A730(), func_8080000C_chlightfader();
 
 int chlightfader_entrypoint_0()
 {
-  return &D_808003A0_chlightfader;
+    return &D_808003A0_chlightfader;
 }
 
-void func_8080000C_chlightfader(s32 arg0) 
+void func_8080000C_chlightfader(s32 arg0)
 {
 }
-void func_80800014_chlightfader(Actor *param_0)
+
+// Fades the light's radius and colour until the timer ends, then frees the light and the actor.
+// Only updates the light while it is inside some player's view.
+void func_80800014_chlightfader(Actor *actor)
 {
-    s32 local_1;
-    f32 f;
+    s32 done;
+    f32 fade;
     s32 i;
     s32 j;
-    LF *s1;
-    f32 local_2[3];
-    s32 has;
-    s32 found;
-    f32 g;
-    void *p;
-    f32 inv;
+    LF *state;
+    f32 tint[3];
+    s32 resize;
+    s32 visible;
+    f32 flicker;
+    void *viewport;
+    f32 scale;
 
-    s1 = func_80100094(param_0, 0);
-    has = 0;
-    local_1 = func_800D9078(&param_0->unk58);
-    f = func_800F10B4(param_0->unk58, 0, s1->f04, 1.0f, 0.1f);
-    inv = 1.0f - f;
-    if (s1->flags & 1) {
+    state = func_80100094(actor, 0);
+    resize = 0;
+    done = func_800D9078(&actor->unk58);
+    fade = func_800F10B4(actor->unk58, 0, state->duration, 1.0f, 0.1f);
+    scale = 1.0f - fade;
+    if (state->flags & 1) {
         for (j = 0; j < 2; j++) {
-            s1->out[j] = s1->in[j] * inv;
+            state->radius[j] = state->radius_start[j] * scale;
         }
-        has = 1;
+        resize = 1;
     }
-    if (s1->flags & 2) {
-        func_800F2F60(s1->v30, s1->v1C, 1.0f - f);
+    if (state->flags & 2) {
+        func_800F2F60(state->color, state->color_start, 1.0f - fade);
     }
-    func_800F2E60(local_2, s1->v30);
-    if (s1->flags & 4) {
+    func_800F2E60(tint, state->color);
+    if (state->flags & 4) {
         if (func_8001210C(1)) {
-            g = 1.0f;
+            flicker = 1.0f;
         } else {
-            g = 0.6f;
+            flicker = 0.6f;
         }
-        func_800F2F60(local_2, local_2, g);
+        func_800F2F60(tint, tint, flicker);
     }
     if (func_800A946C() >= 2) {
-        found = 0;
+        visible = 0;
         for (i = 0; i != 8; i++) {
             if (func_800F6438(i) && func_800A9420(i)) {
-                p = func_800A93F8(i);
-                if (p != 0 && func_800CACEC(p, &param_0->position, s1->f10)) {
-                    found = 1;
+                viewport = func_800A93F8(i);
+                if (viewport != 0 && func_800CACEC(viewport, &actor->position, state->cull_radius)) {
+                    visible = 1;
                     break;
                 }
             }
         }
     } else {
-        found = func_800E3E8C(&param_0->position, s1->f10);
+        visible = func_800E3E8C(&actor->position, state->cull_radius);
     }
-    if (found != 0) {
-        s1->f10 = s1->out[1];
-        func_800C8E84(s1->h, local_2);
-        if (has != 0) {
-            func_800C8D4C(s1->h, s1->out);
+    if (visible != 0) {
+        state->cull_radius = state->radius[1];
+        func_800C8E84(state->light, tint);
+        if (resize != 0) {
+            func_800C8D4C(state->light, state->radius);
         }
     }
-    if (local_1 != 0) {
-        func_800C8B84(s1->h);
-        func_800FFA88(*(s32 *)param_0);
+    if (done != 0) {
+        func_800C8B84(state->light);
+        func_800FFA88(*(s32 *) actor);
     }
 }
 
-s32 chlightfader_entrypoint_1(s32 param_0, s32 param_1, s32 param_2) {
+s32 chlightfader_entrypoint_1(s32 light, s32 duration, s32 flags)
+{
     if (func_800C954C() == 0) {
-        _chbaddiesetup_entrypoint_3(_chlightfader_entrypoint_2, param_0, param_1, param_2);
+        _chbaddiesetup_entrypoint_3(_chlightfader_entrypoint_2, light, duration, flags);
     } else {
-        func_800C8B84(param_0);
+        func_800C8B84(light);
     }
     return 0;
 }
 
-void chlightfader_entrypoint_2(s32 param_0, f32 param_1, s32 param_2)
+// Spawns helper actor 0x33C that copies the light's position, colour and radius.
+void chlightfader_entrypoint_2(s32 light, f32 duration_arg, s32 flags)
 {
-    Actor *local_0;
-    f32 *local_8;
-    f32 local_1;
-    f32 local_2[3];
-    f32 local_7;
-    LightFadeState *local_3;
-    s32 local_4;
-    f32 *local_5;
-    f32 *local_6;
+    Actor *fader;
+    f32 *pos_ptr;
+    f32 duration;
+    f32 pos[3];
+    f32 unk_0;
+    LightFadeState *state;
+    s32 offset;
+    f32 *color_ptr;
+    f32 *radius_ptr;
 
-    local_1 = *(f32 *)&param_1;
-    local_8 = local_2;
-    func_800C8800(param_0, local_8);
-    local_0 = func_80108474(0x33C, local_8, 0);
-    local_3 = func_80100094(local_0, 0);
-    local_3->local_3 = func_800C89A8(param_0);
-    local_4 = 0;
-    local_5 = local_3->local_5[0].local_1;
-    local_6 = local_3->local_5[0].local_0;
+    // Matching: the f32 reinterpret cast is needed for the match.
+    duration = *(f32 *) &duration_arg;
+    pos_ptr = pos;
+    func_800C8800(light, pos_ptr);
+    fader = func_80108474(0x33C, pos_ptr, 0);
+    state = func_80100094(fader, 0);
+    state->unk_C = func_800C89A8(light);
+    offset = 0;
+    color_ptr = state->samples[0].color;
+    radius_ptr = state->samples[0].radius;
     do {
-        func_800C8900(param_0, local_5);
-        func_800C883C(param_0, local_6);
-        local_4 += 0x14;
-        local_5 += 5;
-        local_6 += 5;
-    } while (local_4 != 0x28);
-    local_3->local_0 = param_0;
-    local_3->local_1 = local_1;
-    local_3->local_2 = param_2;
-    local_3->local_4 = local_3->local_5[1].local_0[1];
-    local_0->unk58 = local_1;
+        func_800C8900(light, color_ptr);
+        func_800C883C(light, radius_ptr);
+        offset += 0x14;
+        color_ptr += 5;
+        radius_ptr += 5;
+    } while (offset != 0x28);
+    state->light = light;
+    state->duration = duration;
+    state->flags = flags;
+    state->cull_radius = state->samples[1].radius[1];
+    fader->unk58 = duration;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/light/fader.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808003A0_chlightfader -> int[] */
-int D_808003A0_chlightfader[20] = { 0x334033C, 0x1, 0x0, (u32)func_80800014_chlightfader, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x3C0000, (u32)func_8080000C_chlightfader, (u32)func_80107C2C, -0x7FFFDDFE, 0x0, 0x0, 0x0, 0x0 };
+// TU-NOTE: the overlay's .data is defined here in C; its table points to functions of this
+// file, and IDO's assembler schedules them differently otherwise. Values taken from the ROM.
+// The extern of D_808003A0_chlightfader is adjusted to int[] (same address).
+int D_808003A0_chlightfader[20] = {0x334033C,
+                                   0x1,
+                                   0x0,
+                                   (u32) func_80800014_chlightfader,
+                                   (u32) func_80105834,
+                                   (u32) func_8010A730,
+                                   0x0,
+                                   0x0,
+                                   0x0,
+                                   0x4,
+                                   0x0,
+                                   0x0,
+                                   0x3C0000,
+                                   (u32) func_8080000C_chlightfader,
+                                   (u32) func_80107C2C,
+                                   -0x7FFFDDFE,
+                                   0x0,
+                                   0x0,
+                                   0x0,
+                                   0x0};

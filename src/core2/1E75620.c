@@ -1,48 +1,52 @@
+// Probably the per-player damage vulnerability mode: vulnerable, or temporarily invulnerable until
+// a state timer (default 0.6 s) expires, after which an update reverts it.
 #include "core2/1E75620.h"
 #include <ultra64.h>
 #include "types.h"
 
 extern void bastatetimer_set(void *, int, f32);
 extern s32 bastatetimer_isDone(void *, s32);
-void func_8009BDAC(PlayerState *param_0, f32 param_1);
 
-s32 func_8009BD30() 
+s32 func_8009BD30()
 {
     return 0x1;
 }
 
-void func_8009BD38(void *arg, s32 v)
+// Damage-vulnerability mode byte at player+0xD4: 1 = vulnerable, 3 = temporarily invulnerable.
+// Invulnerability ends when state timer 4 expires.
+void func_8009BD38(void *player, s32 mode)
 {
-    ((s8 *)(*(void **)((char *)arg + 0xD4)))[0] = v;
+    ((s8 *) *(void **) ((char *) player + 0xD4))[0] = mode;
 }
 
-s32 func_8009BD44(void *arg)
+s32 func_8009BD44(void *player)
 {
-    return ((u8 *)(*(void **)((char *)arg + 0xD4)))[0];
+    return ((u8 *) *(void **) ((char *) player + 0xD4))[0];
 }
 
-void func_8009BD50(void *param_0)
+void func_8009BD50(void *player)
 {
-  void *local_0;
-  ;
-  *((u8 *) (*((void **) (((char *) param_0) + 0xD4)))) = 0;
-  func_8009BD38(param_0, 1);
-  bastatetimer_clear(param_0, 4);
+    *(u8 *) *(void **) ((char *) player + 0xD4) = 0;
+    func_8009BD38(player, 1);
+    bastatetimer_clear(player, 4);
 }
 
-void func_8009BD88(PlayerState *param_0) {
-    func_8009BDAC(param_0, 0.6f);
+// Invulnerable for the default 0.6 s.
+void func_8009BD88(PlayerState *player)
+{
+    func_8009BDAC(player, 0.6f);
 }
 
-void func_8009BDAC(PlayerState *param_0, f32 param_1)
+void func_8009BDAC(PlayerState *player, f32 duration)
 {
-  bastatetimer_set(param_0, 4, param_1);
-  func_8009BD38(param_0, 3);
+    bastatetimer_set(player, 4, duration);
+    func_8009BD38(player, 3);
 }
 
-void func_8009BDE4(void *param_0)
+// Called every frame; reverts to vulnerable once the timer is done.
+void func_8009BDE4(void *player)
 {
-    if (bastatetimer_isDone(param_0, 4)) {
-        func_8009BD38(param_0, 1);
+    if (bastatetimer_isDone(player, 4)) {
+        func_8009BD38(player, 1);
     }
 }

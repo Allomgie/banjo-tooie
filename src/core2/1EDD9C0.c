@@ -1,3 +1,5 @@
+// Possibly accessors for static actor buffers: a bone transform scratch buffer set to identity,
+// and anim-slot records shared with 1EE73D0. Not fully understood.
 #include "core2/1EDD9C0.h"
 
 extern u8 D_80135AB8[];
@@ -7,44 +9,54 @@ extern s32 D_80136BE8;
 extern s32 D_80124400[];
 extern s32 D_80136BF8;
 extern s32 D_80136D10;
-typedef struct { u8 pad[20]; } E20_104148;
+typedef struct {
+    u8 unk_0[20];
+} E20_104148;
 extern E20_104148 D_80136D88[];
 
-s32 func_801040D0(void) {
-    *(u32*)((char*)&D_80135AB0 + 0x0) = (u32)&D_80135AB8;
-    *(s32*)((char*)&D_80135AB0 + 0x4) = 0x6D;
+// TU-NOTE: static buffer accessors. D_80124400 is defined at the bottom of this file
+// (.data values taken from the ROM, declared above as s32[]).
+
+// Identity-initialised bone transform scratch buffer (0x6D bones).
+// Initialises the 0x6D-entry bone transform buffer to identity and returns it.
+s32 func_801040D0(void)
+{
+    *(u32 *) ((char *) &D_80135AB0 + 0x0) = (u32) &D_80135AB8;
+    *(s32 *) ((char *) &D_80135AB0 + 0x4) = 0x6D;
     func_800DFAD0(&D_80135AB0);
-    return (s32)&D_80135AB0;
+    return (s32) &D_80135AB0;
 }
 
+// Static shared actor buffers and anim-slot records (used by 1EE73D0).
 int func_8010410C()
 {
-  return (int)&D_80136BC0;
+    return (int) &D_80136BC0;
 }
 
 int func_80104118()
 {
-  return (int)&D_80136BE8;
+    return (int) &D_80136BE8;
 }
 
 int func_80104124()
 {
-    return (int)D_80124400;
+    return (int) D_80124400;
 }
 
 int func_80104130()
 {
-  return (int)&D_80136BF8;
+    return (int) &D_80136BF8;
 }
 
 int func_8010413C()
 {
-    return (int)&D_80136D10;
+    return (int) &D_80136D10;
 }
 
-E20_104148 *func_80104148(s32 param_0) { return &D_80136D88[param_0]; }
+// Returns the shared anim slot record for the index.
+E20_104148 *func_80104148(s32 index)
+{
+    return &D_80136D88[index];
+}
 
-/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EDD9C0.data.s) is defined here in C.
- * Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80124400 -> s32[] (uses written as NAME[0]) */
-s32 D_80124400[8] = { 0x0, 0x0, 0x0, 0x0, -0x1, 0x0, 0x0, 0x0 };
+s32 D_80124400[8] = {0x0, 0x0, 0x0, 0x0, -0x1, 0x0, 0x0, 0x0};

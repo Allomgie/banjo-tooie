@@ -1,148 +1,201 @@
+// Probably a small flame/smoke effect kept in an actor's data: sprite particles rise with random
+// speed, size and drift, shrink and fade, respawn, and are drawn as billboards when in view.
 #include "common.h"
 
 extern void func_80100074(s32, s32, s32);
 extern u8 *func_80100094(s32, s32);
-typedef struct FlameFxSettings { f32 local_0; f32 local_1; f32 local_2; s16 local_3; s16 local_4; u8 pad_0[0xA]; u8 local_5; u8 pad_1[2]; u8 local_6; } FlameFxSettings;
-typedef struct FlameFxParticle { f32 local_0[3]; f32 local_1[3]; u8 pad_0[0xC]; f32 local_2; f32 local_3; u8 local_4; } FlameFxParticle;
+// Component data layout: 0x20-byte header (settings), then particles of 0x30 bytes each.
+typedef struct FlameFxSettings {
+    f32 spread;
+    f32 max_scale;
+    f32 min_scale;
+    s16 rise_min;
+    s16 rise_max;
+    u8 pad_10[0xA];
+    u8 frame; // 0xFF: random frame in 0..max_frame
+    u8 pad_1B[2];
+    u8 max_frame;
+} FlameFxSettings;
+typedef struct FlameFxParticle {
+    f32 origin[3];
+    f32 offset[3];
+    u8 pad_18[0xC];
+    f32 rise_accel;
+    f32 scale;
+    u8 frame;
+} FlameFxParticle;
 extern f32 func_800DC178(f32, f32);
 extern f32 func_800F1DF4(f32 *, f32 *);
 extern void func_800EFCD8(f32 *, f32, f32);
 extern f32 func_800D8FF8(void);
-typedef struct FlameEffectNode { u8 pad_0[0x18]; f32 local_0[3]; u8 pad_1[4]; f32 local_1; u8 local_2; u8 pad_2[3]; } FlameEffectNode;
-typedef struct FlameEffectDrawState { u8 pad_0[0x18]; s16 local_0; u8 pad_1; u8 local_1; u8 pad_2[4]; FlameEffectNode local_2[1]; } FlameEffectDrawState;
+typedef struct FlameEffectNode {
+    u8 pad_0[0x18];
+    f32 pos[3];
+    u8 pad_24[4];
+    f32 scale;
+    u8 frame;
+    u8 pad_2D[3];
+} FlameEffectNode;
+typedef struct FlameEffectDrawState {
+    u8 pad_0[0x18];
+    s16 sprite_id;
+    u8 pad_1A;
+    u8 count;
+    u8 pad_1C[4];
+    FlameEffectNode particles[1];
+} FlameEffectDrawState;
 extern s32 func_800E3E8C(f32 *, f32);
 extern void *func_800D674C(s32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800E2720(void *, s32, s32, f32 *, f32 *, s32);
 
-void suflamefx_entrypoint_0(param_0, param_1, param_2, param_3) s32 param_0; s32 param_1; s32 param_2; s16 param_3; {
-    u8 *local_0;
-    func_80100074(param_0, param_1, param_2 * 0x30 + 0x20);
-    local_0 = func_80100094(param_0, param_1);
-    *(s16 *)(local_0 + 0x18) = param_3;
-    local_0[0x1B] = param_2;
+void suflamefx_entrypoint_0(actor, unk_1, count, sprite_id) s32 actor;
+s32 unk_1;
+s32 count;
+s16 sprite_id;
+{
+    u8 *fx;
+    func_80100074(actor, unk_1, count * 0x30 + 0x20);
+    fx = func_80100094(actor, unk_1);
+    *(s16 *) (fx + 0x18) = sprite_id;
+    fx[0x1B] = count;
 }
 
-void suflamefx_entrypoint_1(s32 p0, s32 p1) {
-    func_80100074(p0, p1, 0);
+void suflamefx_entrypoint_1(s32 actor, s32 unk_1)
+{
+    func_80100074(actor, unk_1, 0);
 }
 
 void func_80800428_suflamefx();
 
-void suflamefx_entrypoint_2(u8 *param_0, s32 param_1)
+// Per-frame update: moves and shrinks particles, respawns dead ones, advances frames.
+void suflamefx_entrypoint_2(u8 *fx, s32 pos)
 {
-    f32 local_1;
-    s32 local_2;
-    s32 local_3;
-    u8 *local_4;
+    f32 dt;
+    s32 i;
+    s32 frame;
+    u8 *particle;
 
-    local_1 = func_800D8FF8();
-    local_4 = param_0 + 0x20;
-    for (local_2 = 0; local_2 < param_0[0x1B]; local_2++, local_4 += 0x30) {
-        if (*(f32 *)(local_4 + 0x28) > 0.05f) {
-            *(f32 *)(local_4 + 0x10) += *(f32 *)(local_4 + 0x24) * local_1;
-            *(f32 *)(local_4 + 0xC) *= *(f32 *)(param_0 + 0x10);
-            *(f32 *)(local_4 + 0x14) *= *(f32 *)(param_0 + 0x10);
-            *(f32 *)(local_4 + 0x28) += *(f32 *)(param_0 + 0x14);
-        } else if (param_0[0x1C] == 1) {
-            *(f32 *)(local_4 + 0x28) = 0.0f;
-        } else {
-            func_80800428_suflamefx((struct FlameFxSettings *)param_0,
-                (struct FlameFxParticle *)local_4, (f32 *)param_1);
-        }
-        if (param_0[0x1A] == 0xFF) {
-            local_3 = local_4[0x2C];
-            if (local_3 >= param_0[0x1D]) local_4[0x2C] = 0;
-            else local_4[0x2C] = local_3 + 1;
-        }
-        func_800EE780(local_4 + 0x18, local_4, local_4 + 0xC);
-    }
+    dt = func_800D8FF8();
+    particle = fx + 0x20;
+    for (i = 0; i < fx[0x1B]; i++, particle += 0x30) {
+
+if (*(f32 *) (particle + 0x28) > 0.05f) {
+    *(f32 *) (particle + 0x10) += *(f32 *) (particle + 0x24) * dt;
+    *(f32 *) (particle + 0xC) *= *(f32 *) (fx + 0x10);
+    *(f32 *) (particle + 0x14) *= *(f32 *) (fx + 0x10);
+    *(f32 *) (particle + 0x28) += *(f32 *) (fx + 0x14);
+} else if (fx[0x1C] == 1) {
+
+*(f32 *) (particle + 0x28) = 0.0f;
+}
+else
+{
+    func_80800428_suflamefx((struct FlameFxSettings *) fx, (struct FlameFxParticle *) particle,
+                            (f32 *) pos);
+}
+if (fx[0x1A] == 0xFF) {
+    frame = particle[0x2C];
+    if (frame >= fx[0x1D])
+        particle[0x2C] = 0;
+    else
+        particle[0x2C] = frame + 1;
+
+}
+func_800EE780(particle + 0x18, particle, particle + 0xC);
+}
 }
 
-void suflamefx_entrypoint_3(FlameEffectDrawState *param_0, void *param_1)
+// Draws the particles as billboards when the emitter is in view.
+void suflamefx_entrypoint_3(FlameEffectDrawState *fx, void *gfx)
 {
-    f32 local_0[3];
-    FlameEffectNode *local_1;
-    s32 local_2;
-    void *local_3;
+    f32 scale_vec[3];
+    FlameEffectNode *particle;
+    s32 i;
+    void *sprite;
 
-    local_1 = param_0->local_2;
-    if (func_800E3E8C(local_1->local_0, 250.0f)) {
-        local_3 = func_800D674C(param_0->local_0);
+    particle = fx->particles;
+    if (func_800E3E8C(particle->pos, 250.0f)) {
+        sprite = func_800D674C(fx->sprite_id);
         func_800E2588(1);
-        func_800E2594(param_1, local_3);
-        for (local_2 = 0; local_2 < param_0->local_1; local_2++, local_1++) {
-            if (local_1->local_1 > 0.05f) {
-                func_800EFA4C(local_0, local_1->local_1, local_1->local_1, local_1->local_1);
-                func_800E2720(param_1, local_1->local_2, 0, local_1->local_0, local_0, 255);
+        func_800E2594(gfx, sprite);
+        for (i = 0; i < fx->count; i++, particle++) {
+            if (particle->scale > 0.05f) {
+                func_800EFA4C(scale_vec, particle->scale, particle->scale, particle->scale);
+                func_800E2720(gfx, particle->frame, 0, particle->pos, scale_vec, 255);
             }
-        }
-        func_800E2A14(param_1);
+
+}
+func_800E2A14(gfx);
+}
+}
+
+// Stops respawning; particles disappear as they shrink away.
+void suflamefx_entrypoint_4(s32 fx)
+{
+    ((u8 *) fx)[0x1C] = 1;
+}
+
+void suflamefx_entrypoint_5(s32 *fx, f32 rise_min, f32 rise_max)
+{
+    // Matching: dead store and empty block are needed for the match.
+    int unk_0;
+    unk_0 = 3;
+    if (0) {
     }
+    *(s16 *) ((char *) fx + 0xC) = (s16) rise_min;
+    *(s16 *) ((char *) fx + 0xE) = (s16) rise_max;
 }
 
-void suflamefx_entrypoint_4(s32 param_0)
+void suflamefx_entrypoint_6(Actor *fx, f32 scale_rate)
 {
-    ((u8 *)param_0)[0x1C] = 1;
+    *(f32 *) ((char *) fx + 0x14) = scale_rate;
 }
 
-void suflamefx_entrypoint_5(s32 *param_0, f32 param_1, f32 param_2)
+void suflamefx_entrypoint_7(u8 *fx, f32 *pos, f32 min_scale, f32 max_scale, f32 spread,
+                            u8 frame, f32 drag)
 {
-  int new_var;
-  char new_var2;
- new_var = 3; if (0) { } *(s16*)((char*)param_0 + 0xC) = (s16)param_1; *(s16*)((char*)param_0 + 0xE) = (s16)param_2;
-}
+    u8 *particle;
+    s32 i;
 
-void suflamefx_entrypoint_6(Actor *param_0, f32 param_1)
-{
-    *(f32 *)((char *)param_0 + 0x14) = param_1;
-}
-
-void suflamefx_entrypoint_7(u8 *param_0, f32 *param_1, f32 param_2, f32 param_3, f32 param_4, u8 param_5, f32 param_6)
-{
-    u8 *local_0;
-    s32 local_1;
-
-    *(f32 *)(param_0 + 8) = param_2;
-    *(f32 *)(param_0 + 4) = param_3;
-    *(f32 *)(param_0 + 0) = param_4;
-    param_0[0x1A] = param_5;
-    *(f32 *)(param_0 + 0x10) = param_6;
-    *(s16 *)(param_0 + 0xC) = 100;
-    *(s16 *)(param_0 + 0xE) = 200;
-    *(f32 *)(param_0 + 0x14) = -0.03f;
-    param_0[0x1C] = 0;
-    if (param_0[0x1A] == 0xFF) {
-        param_0[0x1D] = func_800AF5A0(func_800D674C(*(s16 *)(param_0 + 0x18))) - 1;
+    *(f32 *) (fx + 8) = min_scale;
+    *(f32 *) (fx + 4) = max_scale;
+    *(f32 *) (fx + 0) = spread;
+    fx[0x1A] = frame;
+    *(f32 *) (fx + 0x10) = drag;
+    *(s16 *) (fx + 0xC) = 100;
+    *(s16 *) (fx + 0xE) = 200;
+    *(f32 *) (fx + 0x14) = -0.03f;
+    fx[0x1C] = 0;
+    if (fx[0x1A] == 0xFF) {
+        fx[0x1D] = func_800AF5A0(func_800D674C(*(s16 *) (fx + 0x18))) - 1;
     } else {
-        param_0[0x1D] = 0xFF;
+        fx[0x1D] = 0xFF;
     }
-    local_0 = param_0 + 0x20;
-    for (local_1 = 0; local_1 < param_0[0x1B]; local_1++, local_0 += 0x30) {
-        func_80800428_suflamefx((struct FlameFxSettings *)param_0,
-            (struct FlameFxParticle *)local_0, param_1);
-        *(f32 *)(local_0 + 0x28) = func_800DC178(0.0f, *(f32 *)(param_0 + 4));
+    particle = fx + 0x20;
+    for (i = 0; i < fx[0x1B]; i++, particle += 0x30) {
+        func_80800428_suflamefx((struct FlameFxSettings *) fx,
+                                (struct FlameFxParticle *) particle, pos);
+        *(f32 *) (particle + 0x28) = func_800DC178(0.0f, *(f32 *) (fx + 4));
     }
 }
 
-void func_80800428_suflamefx(FlameFxSettings *param_0, FlameFxParticle *param_1, f32 *param_2)
+// Spawns a particle at pos with random rise, scale, frame and drift direction.
+void func_80800428_suflamefx(FlameFxSettings *fx, FlameFxParticle *particle, f32 *pos)
 {
-    f32 local_0[3];
-    f32 local_1;
+    f32 cam_pos[3];
+    f32 angle;
 
-    param_1->local_1[1] = func_800DC178(0.0f, 20.0f);
-    param_1->local_2 = func_800DC178(param_0->local_3, param_0->local_4);
-    param_1->local_3 = func_800DC178(param_0->local_2, param_0->local_1);
-    if (param_0->local_5 == 0xFF) {
-        param_1->local_4 = func_800DC128(0, param_0->local_6);
+    particle->offset[1] = func_800DC178(0.0f, 20.0f);
+    particle->rise_accel = func_800DC178(fx->rise_min, fx->rise_max);
+    particle->scale = func_800DC178(fx->min_scale, fx->max_scale);
+    if (fx->frame == 0xFF) {
+        particle->frame = func_800DC128(0, fx->max_frame);
     } else {
-        param_1->local_4 = param_0->local_5;
+        particle->frame = fx->frame;
     }
-    func_800EE7F8(param_1->local_0, param_2);
-    func_800E3980(local_0);
-    local_1 = func_800F1DF4(param_1->local_0, local_0);
-    func_800EFCD8(param_1->local_1, func_800DC178(-90.0f, 90.0f) + local_1, param_0->local_0);
+    func_800EE7F8(particle->origin, pos);
+    func_800E3980(cam_pos);
+    angle = func_800F1DF4(particle->origin, cam_pos);
+    func_800EFCD8(particle->offset, func_800DC178(-90.0f, 90.0f) + angle, fx->spread);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/flamefx.data.s) is defined here in C.
- * Values are taken from the ROM. */

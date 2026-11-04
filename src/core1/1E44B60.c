@@ -1,79 +1,105 @@
+// Synth voice filter stage: resample pull plus per-voice low-pass and pole filters, param handler.
 #include "common.h"
 
-typedef struct { u32 w0; u32 w1; } TTAcmd;
-typedef struct { u8 pad0[0x8C]; u8 unk8C; /* 0x8C */ u8 pad8D[5]; s16 unk92; /* 0x92 */ u8 pad94[0x24]; u32 unkB8; /* 0xB8 */ void *unkBC; /* 0xBC */ } TTRvb;
-typedef struct { s16 unk0; /* 0x0 */ } TTRParam;
+typedef struct {
+    u32 w0;
+    u32 w1;
+} TTAcmd;
+typedef struct {
+    u8 pad0[0x8C];
+    u8 delay; // 0x8C: reverb/filter delay amount
+    u8 pad8D[5];
+    s16 filter_gain;
+    u8 pad94[0x24];
+    u32 dirty;
+    void *pole_state;
+} TTRvb;
+typedef struct {
+    s16 unk_0;
+} TTRParam;
 extern TTAcmd *func_8002D450(TTRvb *, TTRParam *, TTAcmd *);
 extern void func_80028C04(void *, f32);
-typedef struct { u8 pad0[0x8C]; u8 unk8C; /* 0x8C */ u8 pad8D[3]; s16 unk90; /* 0x90 */ s16 unk92; /* 0x92 */ u8 pad94[0x24]; s32 unkB8; /* 0xB8: Dirty-Flags */ } TTVoiceE;
+typedef struct {
+    u8 pad0[0x8C];
+    u8 delay; // 0x8C: reverb/filter delay amount
+    u8 pad8D[3];
+    s16 filter_cutoff;
+    s16 filter_gain;
+    u8 pad94[0x24];
+    s32 dirty;
+} TTVoiceE;
 extern void func_8002CC9C(TTVoiceE *, s32, s32);
 
-TTAcmd *func_8002D030(TTRvb *state, TTRParam *param, s32 arg2, TTAcmd *cmdBuf)
+// Resample pull, then per-voice low-pass/delay and pole filter commands.
+TTAcmd *func_8002D030(TTRvb *state, TTRParam *param, s32 arg2, TTAcmd *list)
 {
-    TTAcmd *cmd = cmdBuf;
+    TTAcmd *cmd = list;
     f32 pitch;
-    TTAcmd *p1;
-    TTAcmd *p2;
-    TTAcmd *p3;
+    TTAcmd *lowpass;
+    TTAcmd *coef;
+    TTAcmd *polef;
 
-    cmd = func_8002D450(state, param, cmdBuf);
+    cmd = func_8002D450(state, param, list);
 
-    if (state->unk8C != 0 && state->unk8C < 0x40) {
-        if (state->unk8C >= 6)
-            pitch = 26755.0f / sqrtf((f32)state->unk8C + 1.0f);
+    if (state->delay != 0 && state->delay < 0x40) {
+        if (state->delay >= 6)
+            pitch = 26755.0f / sqrtf((f32) state->delay + 1.0f);
         else
-            pitch = 65536.0f / ((f32)state->unk8C + 1.0f);
+            pitch = 65536.0f / ((f32) state->delay + 1.0f);
 
         if (pitch < 7723.0f)
             pitch = 7723.0f;
 
-        p1 = cmd++;
-        p1->w0 = param->unk0 & 0xFFFF;
-        p1->w1 = (((u32)pitch & 0xFFFF) << 16) | ((state->unk8C + 1) & 0xFFFF);
+        lowpass = cmd++;
+        lowpass->w0 = param->unk_0 & 0xFFFF;
+        lowpass->w1 = (((u32) pitch & 0xFFFF) << 16) | ((state->delay + 1) & 0xFFFF);
     }
 
-    if (state->unk92 > 0) {
-        if (state->unkB8 != 0)
-            func_80028C04(&((u8 *)state)[0x90], 22050.0f);
+    if (state->filter_gain > 0) {
+        // Recompute the filter coefficients at 22050 Hz when dirty.
+        if (state->dirty != 0)
+            func_80028C04(&((u8 *) state)[0x90], 22050.0f);
 
-        p2 = cmd++;
-        p2->w0 = 0x0B000020;
-        p2->w1 = osVirtualToPhysical(&((u8 *)state)[0x98]);
+        coef = cmd++;
+        coef->w0 = 0x0B000020;
+        coef->w1 = osVirtualToPhysical(&((u8 *) state)[0x98]);
 
-        if (state->unkB8 == 2)
-            state->unkB8 = 0;
+        if (state->dirty == 2)
+            state->dirty = 0;
 
-        p3 = cmd++;
-        p3->w0 = (param->unk0 & 0xFFFF) | (((state->unkB8 & 0xFF) << 16) | 0x0E000000);
-        p3->w1 = (osVirtualToPhysical(state->unkBC) & 0xFFFFFF) & 0xFFFFFF;
-        state->unkB8 = 0;
+        polef = cmd++;
+        polef->w0 = (param->unk_0 & 0xFFFF) | (((state->dirty & 0xFF) << 16) | 0x0E000000);
+        polef->w1 = (osVirtualToPhysical(state->pole_state) & 0xFFFFFF) & 0xFFFFFF;
+        state->dirty = 0;
     }
 
     return cmd;
 }
 
-s32 func_8002D328(TTVoiceE *v, s32 type, s32 val)
+// Param handler: types 4 (reset), 0x11 (delay), 0x12 (filter gain), 0x13 (filter cutoff);
+// others go to the ADPCM loader.
+s32 func_8002D328(TTVoiceE *voice, s32 type, s32 val)
 {
-    f32 *fp = (f32 *)&val;
+    f32 *as_float = (f32 *) &val;
 
     switch (type) {
         case 4:
-            v->unk92 = 0;
-            func_8002CC9C(v, 4, val);
+            voice->filter_gain = 0;
+            func_8002CC9C(voice, 4, val);
             break;
         case 0x12:
-            v->unk92 = val;
-            v->unkB8 |= 2;
+            voice->filter_gain = val;
+            voice->dirty |= 2;
             break;
         case 0x13:
-            v->unk90 = (s32)*fp;
-            v->unkB8 |= 2;
+            voice->filter_cutoff = (s32) *as_float;
+            voice->dirty |= 2;
             break;
         case 0x11:
-            v->unk8C = val;
+            voice->delay = val;
             break;
         default:
-            func_8002CC9C(v, type, val);
+            func_8002CC9C(voice, type, val);
             break;
     }
 

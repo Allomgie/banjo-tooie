@@ -1,23 +1,37 @@
+// Piecewise-linear curve lookup: binary search in a sorted (x, y) f32 table, then a clamped
+// linear remap between the bracketing points.
 #include "core2/1ECD070.h"
 
-typedef struct { f32 x, y; } LocalEntry;
-extern f32 func_800F10B4(f32,f32,f32,f32,f32);
+typedef struct {
+    f32 x, y;
+} LocalEntry;
+extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 
-f32 func_800F3780(f32 param_0, LocalEntry *param_1, s16 param_2)
+// Evaluates a piecewise-linear curve: binary search in a sorted (x, y) table, then a
+// clamped remap between the bracketing points. Outside the table it uses the last and
+// first points, which clamps to the end values.
+f32 func_800F3780(f32 x, LocalEntry *table, s16 count)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    local_1 = param_2 - 1;
-    local_0 = 0;
-    if (param_0 < param_1[0].x) { local_0 = param_2-1; local_1 = 0; }
-    else if ((param_2 + param_1 - 1)->x < param_0) { local_0 = param_2-1; local_1 = 0; }
-    else {
-        while (local_0 + 1 < local_1) {
-            local_2 = (local_1 - local_0) / 2 + local_0;
-            if ((local_2 + param_1)->x <= param_0) local_0 = local_2;
-            else local_1 = local_2;
+    s32 lo;
+    s32 hi;
+    s32 mid;
+    hi = count - 1;
+    lo = 0;
+    if (x < table[0].x) {
+        lo = count - 1;
+        hi = 0;
+    } else if ((count + table - 1)->x < x) {
+        lo = count - 1;
+        hi = 0;
+    } else {
+        while (lo + 1 < hi) {
+            mid = (hi - lo) / 2 + lo;
+            if ((mid + table)->x <= x)
+                lo = mid;
+            else
+                hi = mid;
         }
     }
-    return func_800F10B4(param_0, (local_0 + param_1)->x, (local_1 + param_1)->x, (local_0 + param_1)->y, (local_1 + param_1)->y);
+    return func_800F10B4(x, (lo + table)->x, (hi + table)->x,
+                         (lo + table)->y, (hi + table)->y);
 }

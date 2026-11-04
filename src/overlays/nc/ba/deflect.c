@@ -1,3 +1,5 @@
+// Camera deflection helpers: push the camera out of a vertical cylinder or a sphere plus a margin,
+// so it does not enter large actors or objects.
 #include "common.h"
 
 extern void func_80111094(void *, f32 *);
@@ -8,66 +10,72 @@ extern f32 func_800F13F0(f32, f32);
 extern f32 func_800DC0C0(void);
 extern void func_800EF368(f32 *, f32);
 extern void func_800EF04C(f32 *, f32 *);
-extern f32 sqrtf(f32);
 extern void func_800EFB24(f32 *, f32 *, f32 *);
 
-void ncbadeflect_entrypoint_0(void *param_0, f32 *param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5)
+// Push the camera out of a vertical cylinder (plus an 80-unit margin).
+void ncbadeflect_entrypoint_0(void *camera, f32 *center, f32 top, f32 bottom, f32 radius,
+                              f32 speed)
 {
-    f32 local_2;
-    f32 local_3;
-    f32 local_5;
-    f32 local_4;
-    f32 local_6;
-    f32 local_0[3];
-    f32 local_1[3];
-  s32 pad0;
-    func_80111094(param_0, local_0);
-    if (local_0[1] + 40.0f < param_1[1] + param_3) return;
-    if (param_1[1] + param_2 < local_0[1] - 40.0f) return;
-    func_800EFA4C(local_1, local_0[0] - param_1[0], 0.0f, local_0[2] - param_1[2]);
-    local_2 = local_1[0] * local_1[0] + local_1[1] * local_1[1] + local_1[2] * local_1[2];
-    local_3 = param_4 + 80.0f;
-    if (local_3 * local_3 < local_2) return;
-    local_2 = sqrtf(local_2);
-    local_4 = func_800F13F0(func_800D8FF8() * param_5, local_3 - local_2);
-    if (local_2 == 0.0f) {
-        local_2 = func_800DC0C0();
-        func_800EFA4C(local_1, local_2, 0.0f, func_800DC0C0());
+    f32 dist;
+    f32 reach;
+    f32 unk_0;
+    f32 push;
+    f32 unk_1;
+    f32 cam_pos[3];
+    f32 offset[3];
+    s32 pad0;
+    func_80111094(camera, cam_pos);
+    if (cam_pos[1] + 40.0f < center[1] + bottom)
+        return;
+    if (center[1] + top < cam_pos[1] - 40.0f)
+        return;
+    func_800EFA4C(offset, cam_pos[0] - center[0], 0.0f, cam_pos[2] - center[2]);
+    dist = offset[0] * offset[0] + offset[1] * offset[1] + offset[2] * offset[2];
+    reach = radius + 80.0f;
+    if (reach * reach < dist)
+        return;
+    dist = sqrtf(dist);
+    push = func_800F13F0(func_800D8FF8() * speed, reach - dist);
+    // exactly at the centre: push in a random direction
+    if (dist == 0.0f) {
+        dist = func_800DC0C0();
+        func_800EFA4C(offset, dist, 0.0f, func_800DC0C0());
     }
-    func_800EF368(local_1, local_4);
-    func_800EF04C(local_0, local_1);
-    func_801110C4(param_0, local_0);
+    func_800EF368(offset, push);
+    func_800EF04C(cam_pos, offset);
+    func_801110C4(camera, cam_pos);
 }
 
-void ncbadeflect_entrypoint_1(s32 param_0, f32 *param_1, f32 param_2, f32 param_3, f32 param_4)
+// Push the camera out of a sphere (plus an 80-unit margin).
+void ncbadeflect_entrypoint_1(s32 camera, f32 *center, f32 height, f32 radius, f32 speed)
 {
     s32 pad[2];
-    f32 local_4;
-    f32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_5;
-    f32 local_6;
+    f32 dist;
+    f32 push;
+    f32 cam_pos[3];
+    f32 offset[3];
+    f32 center_pos[3];
+    f32 reach;
+    f32 rand_y;
 
-    func_800EFA4C(local_3, param_1[0], param_1[1] + param_2, param_1[2]);
-    func_80111094(param_0, local_1);
-    func_800EFB24(local_2, local_1, local_3);
-    local_4 = (local_2[0] * local_2[0] + local_2[1] * local_2[1]) + local_2[2] * local_2[2];
-    local_5 = param_3 + 80.0f;
-    if (!(local_5 * local_5 < local_4)) {
-        local_4 = sqrtf(local_4);
-        local_0 = func_800F13F0(func_800D8FF8() * param_4, local_5 - local_4);
-        if (local_4 == 0.0f) {
-            local_4 = func_800DC0C0();
-            local_6 = func_800DC0C0();
-            func_800EFA4C(local_2, local_4, local_6, func_800DC0C0());
+    func_800EFA4C(center_pos, center[0], center[1] + height, center[2]);
+    func_80111094(camera, cam_pos);
+    func_800EFB24(offset, cam_pos, center_pos);
+    dist = (offset[0] * offset[0] + offset[1] * offset[1]) + offset[2] * offset[2];
+    reach = radius + 80.0f;
+    if (!(reach * reach < dist)) {
+        dist = sqrtf(dist);
+        push = func_800F13F0(func_800D8FF8() * speed, reach - dist);
+        // exactly at the centre: push in a random direction
+        if (dist == 0.0f) {
+            dist = func_800DC0C0();
+            rand_y = func_800DC0C0();
+            func_800EFA4C(offset, dist, rand_y, func_800DC0C0());
         }
-        func_800EF368(local_2, local_0);
-        func_800EF04C(local_1, local_2);
-        func_801110C4(param_0, local_1);
+        func_800EF368(offset, push);
+        func_800EF04C(cam_pos, offset);
+        func_801110C4(camera, cam_pos);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/deflect.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.

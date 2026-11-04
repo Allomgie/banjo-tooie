@@ -1,3 +1,5 @@
+// Most likely the Cloud Cuckooland wasp statue puzzle: hitting it starts a 10 s countdown, enough
+// hits in time set flag 0x35A. A second actor is a door that then opens for Bee Banjo.
 #include "common.h"
 
 extern void *D_80800740_chwaspstatue;
@@ -9,87 +11,83 @@ extern s32 _chwaspstatue_entrypoint_0;
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 void func_80800134_chwaspstatue();
 
-int func_80800000_chwaspstatue(Actor *param_0)
+// Start in the done state if flag 0x35A is set.
+int func_80800000_chwaspstatue(Actor *actor)
 {
-  s32 local_0;
-  local_0 = func_800DA298(0x35A);
-  if (local_0 != 0)
-  {
-    local_0 = 6;
-  }
-  else
-  {
-    local_0 = 1;
-  }
-  func_80800134_chwaspstatue(param_0, local_0);
+    s32 state;
+    state = func_800DA298(0x35A);
+    if (state != 0) {
+        state = 6;
+    } else {
+        state = 1;
+    }
+    func_80800134_chwaspstatue(actor, state);
 }
 
-void func_8080003C_chwaspstatue(u8 *param_0)
+void func_8080003C_chwaspstatue(u8 *actor)
 {
-  u16 new_var2;
-  u32 temp_t7;
-  temp_t7 = *((u16 *) (param_0 + 0x72));
-  new_var2 = temp_t7;
-  temp_t7 = (u16) new_var2;
-  temp_t7 = temp_t7 >> 0xA;
-  switch (temp_t7)
-  {
-    u8 *new_var;
-    case 1:
-      ;
-      ;
-      ;
+// Matching: extra temporaries needed for the match.
+    u16 raw_state;
+    u32 state;
+    state = *(u16 *) (actor + 0x72);
+    raw_state = state;
+    state = (u16) raw_state;
+    state = state >> 0xA;
+    switch (state) {
+        u8 *timer;
+        case 1:
 
-    case 6:
-      break;
+        case 6:
+            break;
 
-    case 2:
-      new_var = param_0 + 0x58;
-      if ((func_800D91EC(new_var, 0x40000000) != 0) && (func_800DA298(0x6D8) != 0))
-    {
-      func_80800134_chwaspstatue(param_0, 3);
+        case 2:
+            timer = actor + 0x58;
+            if ((func_800D91EC(timer, 0x40000000) != 0) && (func_800DA298(0x6D8) != 0)) {
+                func_80800134_chwaspstatue(actor, 3);
+            }
+            func_800D2498(0xFF, *(s32 *) (actor + 0x6C) & 0x1FF, 0);
+            break;
+
+        case 3:
+            func_800D2498(0xFF, *(s32 *) (actor + 0x6C) & 0x1FF, 0);
+            break;
+
+        case 4:
+            if (func_800D90A4(actor + 0x58) != (long) 0) {
+                func_80800134_chwaspstatue(actor, 1);
+            }
+            break;
+
+        case 5:
+            func_80800134_chwaspstatue(actor, 6);
     }
-      func_800D2498(0xFF, (*((s32 *) (param_0 + 0x6C))) & 0x1FF, 0);
-      break;
 
-    case 3:
-      func_800D2498(0xFF, (*((s32 *) (param_0 + 0x6C))) & 0x1FF, 0);
-      break;
-
-    case 4:
-      if (func_800D90A4(param_0 + 0x58) != ((long) 0))
-    {
-      func_80800134_chwaspstatue(param_0, 1);
-    }
-      break;
-
-    case 5:
-      func_80800134_chwaspstatue(param_0, 6);
-      break;
-
-  }
-
-  func_8010C93C(param_0, param_0 + 4, 0x3F400000);
+    func_8010C93C(actor, actor + 4, 0x3F400000);
 }
 
-void func_80800134_chwaspstatue(param_0, param_1) u8 *param_0; s32 param_1; {
-    s32 local_0;
-    s32 local_1;
+// Enter a state: 1 idle, 2 countdown started, 3 waiting for hits, 4 time expired, 5 solved, 6 done.
+void func_80800134_chwaspstatue(actor, new_state) u8 *actor;
+s32 new_state;
+{
+    s32 actor_id;
+    s32 actor_id2;
 
-    switch (param_1) {
+switch (new_state) {
     case 1:
-        _subaddieDll_entrypoint_4(param_0, 0);
+        _subaddieDll_entrypoint_4(actor, 0);
         break;
     case 2:
-        _subaddieDll_entrypoint_4(param_0, 1);
+        _subaddieDll_entrypoint_4(actor, 1);
         func_800CE8D8(0, 0x41200000, 0xA);
-        func_800CE928(0, &_chwaspstatue_entrypoint_0, (*(s32 *)((s8 *)(param_0) + (0))));
-        (*(u16 *)((s8 *)(param_0) + (0x6E))) = (u16) (((*(u16 *)((s8 *)(param_0) + (0x6E))) & 0xFE00) | 0x14);
-        (*(f32 *)((s8 *)(param_0) + (0x58))) = 0.0f;
+        func_800CE928(0, &_chwaspstatue_entrypoint_0, *(s32 *) ((s8 *) actor + 0));
+        *(u16 *) ((s8 *) actor + 0x6E) =
+            (u16) ((*(u16 *) ((s8 *) actor + 0x6E) & 0xFE00) | 0x14);
+        *(f32 *) ((s8 *) actor + 0x58) = 0.0f;
         if (func_800DA298(0x6D8) == 0) {
-            local_0 = (*(s32 *)((s8 *)(param_0) + (0)));
-            _capod_entrypoint_13(local_0, local_0, 0x15, 0x810);
-            _subaddiedialog_entrypoint_11((*(s32 *)((s8 *)(param_0) + (0))), 0x1416, 0xF, param_0 + 4, 0x6D);
+            actor_id = *(s32 *) ((s8 *) actor + 0);
+            _capod_entrypoint_13(actor_id, actor_id, 0x15, 0x810);
+            _subaddiedialog_entrypoint_11(*(s32 *) ((s8 *) actor + 0), 0x1416, 0xF, actor + 4,
+                                          0x6D);
         } else {
             func_800CE88C(0, 1);
         }
@@ -98,77 +96,86 @@ void func_80800134_chwaspstatue(param_0, param_1) u8 *param_0; s32 param_1; {
         if (func_800DA298(0x6D8) == 0) {
             func_800CE88C(0, 1);
         }
-        (*(f32 *)((s8 *)(param_0) + (0x58))) = 2.0f;
+        *(f32 *) ((s8 *) actor + 0x58) = 2.0f;
         break;
     case 4:
         if (func_800DA298(0x6D9) == 0) {
             func_800DA544(0x6D9);
-            _subaddiedialog_entrypoint_11((*(s32 *)((s8 *)(param_0) + (0))), 0x1419, 0xF, param_0 + 4, 0x6D);
-            local_1 = (*(s32 *)((s8 *)(param_0) + (0)));
-            _capod_entrypoint_13(local_1, local_1, 0x1B, 0x810);
+            _subaddiedialog_entrypoint_11(*(s32 *) ((s8 *) actor + 0), 0x1419, 0xF, actor + 4,
+                                          0x6D);
+            actor_id2 = *(s32 *) ((s8 *) actor + 0);
+            _capod_entrypoint_13(actor_id2, actor_id2, 0x1B, 0x810);
         }
         func_800FC6B0(0x19);
-        (*(f32 *)((s8 *)(param_0) + (0x58))) = 2.0f;
+        *(f32 *) ((s8 *) actor + 0x58) = 2.0f;
         break;
     case 5:
         func_800FC6B0(0x10);
         func_800D2498(0xFF, 0, 0);
-        _subaddiedialog_entrypoint_11((*(s32 *)((s8 *)(param_0) + (0))), 0x1418, 0xF, param_0 + 4, 0x6D);
+        _subaddiedialog_entrypoint_11(*(s32 *) ((s8 *) actor + 0), 0x1418, 0xF, actor + 4,
+                                      0x6D);
         func_80101180(0x411, 7, 0);
         func_800DA544(0x35A);
-        (*(f32 *)((s8 *)(param_0) + (0x58))) = 2.0f;
+        *(f32 *) ((s8 *) actor + 0x58) = 2.0f;
         func_800CE88C(0, 0);
         break;
     case 6:
-        _subaddieDll_entrypoint_4(param_0, 0);
-        (*(f32 *)((s8 *)(param_0) + (0x58))) = 2.0f;
-        break;
-    }
-    func_80101FDC(param_0, param_1);
+        _subaddieDll_entrypoint_4(actor, 0);
+        *(f32 *) ((s8 *) actor + 0x58) = 2.0f;
 }
 
-int func_80800350_chwaspstatue(Actor *param_0, s32 param_1, s32 param_2)
+func_80101FDC(actor, new_state);
+
+}
+
+// Message handler; 0x40 counts statue hits.
+int func_80800350_chwaspstatue(Actor *actor, s32 msg, s32 arg)
 {
-    switch (param_1) {
-    case 0x3F:
-        if (!func_800DA298(0x6DA)) {
-            func_800DA544(0x6DA);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1417, 15, param_0->position, 0x6D);
-        }
-        return 1;
-    case 0x40:
-        if (param_0->unk70_10 == 1) {
-            func_80800134_chwaspstatue(param_0, 2);
-            func_800FC660(14);
-        } else if (param_0->unk70_10 == 3) {
-            param_0->unk6C_0--;
-            if (!param_0->unk6C_0) func_80800134_chwaspstatue(param_0, 5);
-            func_800FC660(14);
-        }
-        return 1;
-    case 0xB:
-        if (param_2 == 21) {
-            func_80800134_chwaspstatue(param_0, 3);
-            func_800DA544(0x6D8);
-        }
-        return 3;
-    case 0x1F:
-        func_801015D0(param_0);
-        func_800DF6BC((s32)func_800F10B4(param_0->unk58, 0.0f, 2.0f, 0, 255.0f), 255);
-        return 1;
-    case 0x30:
-        if (((s16 *)&param_2)[0] == 0x1416) {
-            if (((s16 *)&param_2)[1]) return 20;
-            return 10;
-        }
-        return 0;
-    default: return 0;
+    switch (msg) {
+        case 0x3F:
+            if (!func_800DA298(0x6DA)) {
+                func_800DA544(0x6DA);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x1417, 15, actor->position, 0x6D);
+            }
+            return 1;
+        case 0x40:
+            if (actor->unk70_10 == 1) {
+                func_80800134_chwaspstatue(actor, 2);
+                func_800FC660(14);
+            } else if (actor->unk70_10 == 3) {
+                actor->unk6C_0--;
+                if (!actor->unk6C_0)
+                    func_80800134_chwaspstatue(actor, 5);
+                func_800FC660(14);
+            }
+            return 1;
+        case 0xB:
+            if (arg == 21) {
+                func_80800134_chwaspstatue(actor, 3);
+                func_800DA544(0x6D8);
+            }
+            return 3;
+        case 0x1F:
+            func_801015D0(actor);
+            func_800DF6BC((s32) func_800F10B4(actor->unk58, 0.0f, 2.0f, 0, 255.0f), 255);
+            return 1;
+        case 0x30:
+            if (((s16 *) &arg)[0] == 0x1416) {
+                if (((s16 *) &arg)[1])
+                    return 20;
+                return 10;
+            }
+            return 0;
+        default:
+            return 0;
     }
+
 }
 
-s32 chwaspstatue_entrypoint_0(s32 param_0, Actor *param_1){
-    Actor *local_0 = func_80106790(param_1);
-    func_80800134_chwaspstatue(local_0, 4);
+s32 chwaspstatue_entrypoint_0(s32 param_0, Actor *param_1)
+{
+    Actor *statue = func_80106790(param_1);
+    func_80800134_chwaspstatue(statue, 4);
 }
 
 void *chwaspstatue_entrypoint_1()
@@ -176,29 +183,29 @@ void *chwaspstatue_entrypoint_1()
     return &D_80800740_chwaspstatue;
 }
 
-void func_80800544_chwaspstatue(Actor *param_0)
+// Door that opens once flag 0x35A is set and the player is Bee Banjo.
+void func_80800544_chwaspstatue(Actor *actor)
 {
-    s32 local_0;
+    s32 can_open;
 
-    local_0 = func_800F64A4(func_800F54E4(), 0x20) != 0;
-    if (local_0) local_0 = func_800DA298(0x35A) != 0;
-    func_800DA3B8(0x9FD, local_0);
-    _chdoormake_entrypoint_3(param_0, param_0->rotation[1], param_0->rotation[0] + 90.0f, param_0->scale * 346.0f, 0x83, 0x9FD);
-    _chdoormake_entrypoint_5(param_0, 2.0f);
-    _chdoormake_entrypoint_6(param_0, 0.5f);
-    _chdoormake_entrypoint_8(param_0, 5);
-    _chdoormake_entrypoint_9(param_0, 0, 0x1D, 0x810);
-    _chdoormake_entrypoint_10(param_0, 0, 0x3DF);
+    can_open = func_800F64A4(func_800F54E4(), 0x20) != 0;
+    if (can_open)
+        can_open = func_800DA298(0x35A) != 0;
+    func_800DA3B8(0x9FD, can_open);
+    _chdoormake_entrypoint_3(actor, actor->rotation[1], actor->rotation[0] + 90.0f,
+                             actor->scale * 346.0f, 0x83, 0x9FD);
+    _chdoormake_entrypoint_5(actor, 2.0f);
+    _chdoormake_entrypoint_6(actor, 0.5f);
+    _chdoormake_entrypoint_8(actor, 5);
+    _chdoormake_entrypoint_9(actor, 0, 0x1D, 0x810);
+    _chdoormake_entrypoint_10(actor, 0, 0x3DF);
 }
 
 int chwaspstatue_entrypoint_2()
 {
-  return &D_80800788_chwaspstatue;
+    return &D_80800788_chwaspstatue;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/waspstatue.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
 extern void func_80105834();
 extern void func_801018A4();
 extern void func_80108ED0();
@@ -206,7 +213,40 @@ extern void func_80107C2C();
 extern void _chdoor_entrypoint_0();
 extern void func_80101870();
 extern void _chdoor_entrypoint_1();
-void *D_80800740_chwaspstatue = (void *)0x0352040F;
-static u32 D_80800740_chwaspstatue_rest[17] = { 0x8D00001, 0x0, (u32)func_8080003C_chwaspstatue, (u32)func_80105834, (u32)func_801018A4, 0x3E836B0, 0x0, 0x0, 0x400, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800000_chwaspstatue, (u32)func_80107C2C, 0x80002400, (u32)func_80800350_chwaspstatue, 0x0 };
-void *D_80800788_chwaspstatue = (void *)0x03550411;
-static u32 D_80800788_chwaspstatue_rest[17] = { 0x8D10001, 0x0, (u32)_chdoor_entrypoint_0, (u32)func_80105834, (u32)func_80101870, 0x0, 0x0, 0x0, 0x800, 0x0, (u32)func_80108ED0, 0x0, (u32)func_80800544_chwaspstatue, (u32)func_80107C2C, 0x80002402, (u32)_chdoor_entrypoint_1, 0x0 };
+// TU-NOTE: the .data tables below are defined in C so IDO schedules the functions as in the original.
+void *D_80800740_chwaspstatue = (void *) 0x0352040F;
+static u32 D_80800740_chwaspstatue_rest[17] = {0x8D00001,
+                                               0x0,
+                                               (u32) func_8080003C_chwaspstatue,
+                                               (u32) func_80105834,
+                                               (u32) func_801018A4,
+                                               0x3E836B0,
+                                               0x0,
+                                               0x0,
+                                               0x400,
+                                               0x0,
+                                               (u32) func_80108ED0,
+                                               0x0,
+                                               (u32) func_80800000_chwaspstatue,
+                                               (u32) func_80107C2C,
+                                               0x80002400,
+                                               (u32) func_80800350_chwaspstatue,
+                                               0x0};
+void *D_80800788_chwaspstatue = (void *) 0x03550411;
+static u32 D_80800788_chwaspstatue_rest[17] = {0x8D10001,
+                                               0x0,
+                                               (u32) _chdoor_entrypoint_0,
+                                               (u32) func_80105834,
+                                               (u32) func_80101870,
+                                               0x0,
+                                               0x0,
+                                               0x0,
+                                               0x800,
+                                               0x0,
+                                               (u32) func_80108ED0,
+                                               0x0,
+                                               (u32) func_80800544_chwaspstatue,
+                                               (u32) func_80107C2C,
+                                               0x80002402,
+                                               (u32) _chdoor_entrypoint_1,
+                                               0x0};

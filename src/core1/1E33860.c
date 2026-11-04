@@ -1,153 +1,184 @@
+// Main heap inspection and free-block search helpers: fragmentation test, free-chain walk and
+// first-fit searches over the block list.
 #include "memory.h"
 
 extern int heap_largest_free();
 extern int heap_bytes_free();
 
-struct HeapBlock_8001BDAC { struct HeapBlock_8001BDAC *prev; struct HeapBlock_8001BDAC *next; int field8; int fieldC; struct HeapBlock_8001BDAC *prev_free; };
-struct HeapHeader_8001BE94 { struct HeapHeader_8001BE94 *prev; struct HeapHeader_8001BE94 *next; int field8; unsigned int allocation_overhead : 24; unsigned int state : 2; unsigned int fieldC_26 : 2; unsigned int fieldC_28 : 1; unsigned int fieldC_29 : 1; unsigned int fieldC_30 : 2; };
+struct HeapBlock_8001BDAC {
+    struct HeapBlock_8001BDAC *prev;
+    struct HeapBlock_8001BDAC *next;
+    int unk_8;
+    int unk_C;
+    struct HeapBlock_8001BDAC *prev_free;
+};
+struct HeapHeader_8001BE94 {
+    struct HeapHeader_8001BE94 *prev;
+    struct HeapHeader_8001BE94 *next;
+    int unk_8;
+    unsigned int allocation_overhead : 24;
+    unsigned int state : 2;
+    unsigned int unk_C_26 : 2;
+    unsigned int unk_C_28 : 1;
+    unsigned int unk_C_29 : 1;
+    unsigned int unk_C_30 : 2;
+};
 typedef struct Struct8001BF80 Struct8001BF80;
-struct Struct8001BF80 { Struct8001BF80 *local_0; Struct8001BF80 *local_4; signed int local_8; unsigned int local_C; Struct8001BF80 *local_10; Struct8001BF80 *local_14; long long local_18; };
+struct Struct8001BF80 {
+    Struct8001BF80 *prev;
+    Struct8001BF80 *next;
+    signed int unk_8;
+    unsigned int unk_C;
+    Struct8001BF80 *prev_free;
+    Struct8001BF80 *next_free;
+    long long unk_18;
+};
 typedef struct Struct8001C0A0 Struct8001C0A0;
-struct Struct8001C0A0 { Struct8001C0A0 *local_0; Struct8001C0A0 *local_4; signed int local_8; unsigned int local_C_0 : 24; unsigned int local_C_24 : 2; unsigned int local_C_26 : 6; };
 
-// round_up_16
-u32 func_8001BD30(u32 param_0)
+struct Struct8001C0A0 {
+    Struct8001C0A0 *prev;
+    Struct8001C0A0 *next;
+    signed int unk_8;
+    unsigned int allocation_overhead : 24;
+    unsigned int state : 2;
+    unsigned int unk_C_26 : 6;
+};
+
+// Rounds up to a multiple of 16.
+u32 func_8001BD30(u32 value)
 {
-    return (param_0 & 0xF) ? (param_0 - (param_0 & 0xF) + 0x10) : param_0;
+    return (value & 0xF) ? (value - (value & 0xF) + 0x10) : value;
 }
 
-int func_8001BD50(float param_0)
+// Fragmentation test: largest free block is smaller than the given fraction of all free bytes.
+int func_8001BD50(float fraction)
 {
-    int local_0;
-    int local_1;
-    heap_largest_free(&local_0);
+    int largest;
+    heap_largest_free(&largest);
 
-    return local_0 < param_0 * heap_bytes_free();
+    return largest < fraction * heap_bytes_free();
 }
 
-int func_8001BDAC(int *param_0, int param_1)
+// Walks the free-block chain backwards from the end sentinel by `count` blocks.
+// Returns the block body (size in *out_size), or 0 at the start of the heap.
+int func_8001BDAC(int *out_size, int count)
 {
-    struct HeapBlock_8001BDAC *local_0;
+    struct HeapBlock_8001BDAC *block;
 
-    local_0 = (struct HeapBlock_8001BDAC *)(D_8007E990 + heap_bytes_allocated() - 0x20);
-    for (; param_1 != 0; param_1--) {
-        local_0 = local_0->prev_free;
-        if (local_0 == (struct HeapBlock_8001BDAC *)D_8007E990) {
+    block = (struct HeapBlock_8001BDAC *) (D_8007E990 + heap_bytes_allocated() - 0x20);
+    for (; count != 0; count--) {
+        block = block->prev_free;
+        if (block == (struct HeapBlock_8001BDAC *) D_8007E990) {
             return 0;
         }
     }
 
-    *param_0 = (char *)local_0->next - (char *)local_0 - 0x10;
-    return (int)((char *)local_0 + 0x10);
+    *out_size = (char *) block->next - (char *) block - 0x10;
+    return (int) ((char *) block + 0x10);
 }
 
-signed int func_8001BE94(signed int param_0)
+// First-fit search walking backwards by prev from the end; returns a free block or 0.
+signed int func_8001BE94(signed int size)
 {
-  struct HeapHeader_8001BE94 *local_0;
-  signed int local_1;
-  unsigned int local_2;
-  signed int local_3;
-  local_0 = *((struct HeapHeader_8001BE94 **) ((D_8007E990 + heap_bytes_allocated()) - 0x20));
-  if (param_0 > 0)
-  {
-    local_3 = param_0;
-  }
-  else
-  {
-    local_3 = 1;
-  }
-  local_2 = func_8001BD30(local_3);
-  if ((((unsigned int) ((((char *) local_0->next) - ((char *) local_0)) - 0x10)) < local_2) || (local_0->state != 0))
-  {
-    local_1 = (signed int) D_8007E990;
-    while (((signed int) local_0->prev) != local_1)
-    {
-      local_0 = local_0->prev;
-      if ((((unsigned int) ((((char *) local_0->next) - ((char *) local_0)) - 0x10)) >= local_2) && (local_0->state == 0))
-      {
-        break;
-      }
-    }
-
-  }
-  if (local_0->state != 0)
-  {
-    return 0;
-  }
-  if ((local_1 = (unsigned int) ((((char *) local_0->next) - ((char *) local_0)) - 0x10)) < local_2)
-  {
-    return 0;
-  }
-  return (signed int) local_0;
-}
-
-signed int func_8001BF80(param_0) signed int param_0;
-{
-    Struct8001BF80 *local_0;
-    unsigned int local_1;
-    signed int local_2;
-
-    local_0 = ((Struct8001BF80 *)D_8007E990)->local_14;
-    if (param_0 > 0) {
-        local_2 = param_0;
+    struct HeapHeader_8001BE94 *block;
+    signed int unk_0;
+    unsigned int aligned_size;
+    signed int req_size;
+    block = *(struct HeapHeader_8001BE94 **) ((D_8007E990 + heap_bytes_allocated()) - 0x20);
+    if (size > 0) {
+        req_size = size;
     } else {
-        local_2 = 1;
+        req_size = 1;
     }
-    local_1 = func_8001BD30(local_2);
-    if ((unsigned int)((char *)local_0->local_4 - (char *)local_0 - 0x10) < local_1) {
-        while ((char *)local_0->local_14 + 0x20 != D_8007E990 + heap_bytes_allocated()) {
-            local_0 = local_0->local_14;
-            if ((unsigned int)((char *)local_0->local_4 - (char *)local_0 - 0x10) >= local_1) {
+    aligned_size = func_8001BD30(req_size);
+    if (((unsigned int) (((char *) block->next - (char *) block) - 0x10) < aligned_size) ||
+        (block->state != 0)) {
+        unk_0 = (signed int) D_8007E990;
+        while ((signed int) block->prev != unk_0) {
+            block = block->prev;
+            if (((unsigned int) (((char *) block->next - (char *) block) - 0x10) >= aligned_size) &&
+                (block->state == 0)) {
                 break;
             }
         }
     }
-    local_2 = (unsigned int)((char *)local_0->local_4 - (char *)local_0 - 0x10) < local_1 ? 0 : (signed int)local_0;
-    return local_2;
+    if (block->state != 0) {
+        return 0;
+    }
+    if ((unk_0 = (unsigned int) (((char *) block->next - (char *) block) - 0x10)) < aligned_size) {
+        return 0;
+    }
+    return (signed int) block;
+}
+
+// First-fit search along the free-list link (+0x14); returns a block or 0.
+signed int func_8001BF80(size) signed int size;
+{
+    Struct8001BF80 *block;
+    unsigned int aligned_size;
+    signed int tmp;
+
+    block = ((Struct8001BF80 *) D_8007E990)->next_free;
+    if (size > 0) {
+        tmp = size;
+    } else {
+        tmp = 1;
+    }
+    aligned_size = func_8001BD30(tmp);
+    if ((unsigned int) ((char *) block->next - (char *) block - 0x10) < aligned_size) {
+        while ((char *) block->next_free + 0x20 != D_8007E990 + heap_bytes_allocated()) {
+            block = block->next_free;
+            if ((unsigned int) ((char *) block->next - (char *) block - 0x10) >= aligned_size) {
+                break;
+            }
+        }
+    }
+    tmp = (unsigned int) ((char *) block->next - (char *) block - 0x10) < aligned_size
+              ? 0
+              : (signed int) block;
+    return tmp;
 }
 
 int func_8001C070()
 {
-  int local_0;
-  if (func_8001BF80())
-  {
-    local_0 = 1;
-  }
-  else
-  {
-    local_0 = 0;
-  }
-  return local_0 | 0;
+    int found;
+    if (func_8001BF80()) {
+        found = 1;
+    } else {
+        found = 0;
+    }
+    return found | 0; // Matching: the `| 0` is needed for the match.
 }
 
-Struct8001C0A0 *func_8001C0A0(signed int param_0)
+// First-fit search forward by next over blocks with state 0; returns a block or 0.
+Struct8001C0A0 *func_8001C0A0(signed int size)
 {
-    Struct8001C0A0 *local_0;
-    unsigned int local_1;
-    signed int local_2;
+    Struct8001C0A0 *block;
+    unsigned int aligned_size;
+    signed int req_size;
 
-    local_0 = ((Struct8001C0A0 *)D_8007E990)->local_4;
-    if (param_0 > 0) {
-        local_2 = param_0;
+    block = ((Struct8001C0A0 *) D_8007E990)->next;
+    if (size > 0) {
+        req_size = size;
     } else {
-        local_2 = 1;
+        req_size = 1;
     }
-    local_1 = func_8001BD30(local_2);
-    if ((unsigned int)((char *)local_0->local_4 - (char *)local_0 - 0x10) < local_1 ||
-        local_0->local_C_24 != 0) {
-        while ((char *)local_0->local_4 + 0x20 != D_8007E990 + heap_bytes_allocated()) {
-            local_0 = local_0->local_4;
-            if ((unsigned int)((char *)local_0->local_4 - (char *)local_0 - 0x10) >= local_1 &&
-                local_0->local_C_24 == 0) {
+    aligned_size = func_8001BD30(req_size);
+    if ((unsigned int) ((char *) block->next - (char *) block - 0x10) < aligned_size ||
+        block->state != 0) {
+        while ((char *) block->next + 0x20 != D_8007E990 + heap_bytes_allocated()) {
+            block = block->next;
+            if ((unsigned int) ((char *) block->next - (char *) block - 0x10) >= aligned_size &&
+                block->state == 0) {
                 break;
             }
         }
     }
-    if (local_0->local_C_24 != 0) {
+    if (block->state != 0) {
         return 0;
     }
-    if ((unsigned int)((char *)local_0->local_4 - (char *)local_0 - 0x10) < local_1) {
+    if ((unsigned int) ((char *) block->next - (char *) block - 0x10) < aligned_size) {
         return 0;
     }
-    return local_0;
+    return block;
 }

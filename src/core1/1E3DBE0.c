@@ -1,11 +1,21 @@
+// alCSPGetTempo: tempo of the current sequence, or 0 without one.
 #include "common.h"
 
-typedef struct { u8 pad0[8]; f32 unk8; } TTInner;
-typedef struct { u8 pad0[0x18]; TTInner *unk18; u8 pad1C[8]; s32 unk24; } TTOuter;
+typedef struct {
+    u8 pad0[8];
+    f32 qnpt; // 0x8, quarter notes per tick
+} TTInner;
+typedef struct {
+    u8 pad0[0x18];
+    TTInner *target; // 0x18, current sequence
+    u8 pad1C[8];
+    s32 uspt; // 0x24, microseconds per tick
+} TTOuter;
 
-s32 func_800260B0(TTOuter *param_0)
+// alCSPGetTempo: 0 without a target sequence.
+s32 func_800260B0(TTOuter *seqp)
 {
-    if (!param_0->unk18)
+    if (!seqp->target)
         return 0;
-    return (s32)((f32)param_0->unk24 / param_0->unk18->unk8);
+    return (s32) ((f32) seqp->uspt / seqp->target->qnpt);
 }

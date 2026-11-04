@@ -1,9 +1,10 @@
+// Egg movement: gravity with a terminal speed, swept-sphere map collision that either sticks the
+// egg to the surface or bounces it, and accessors for owner, surface type, flags and velocity.
 #include "common.h"
 
 extern f32 func_800D8FF8(void);
 extern void func_800EFA20(f32 *, f32 *, f32);
 extern void func_800EE780(f32 *, f32 *, f32 *);
-extern void func_800DA298(void);
 extern void *func_80100094();
 extern void _sueggmove_entrypoint_0();
 extern void *func_800FAB50(f32 *, f32 *, f32 *, u32, f32);
@@ -11,146 +12,156 @@ extern f32 func_800136E4(f32);
 extern f32 func_800F0E00(f32, f32);
 extern void func_800EE7F8();
 void sueggmove_entrypoint_8();
-void func_8080012C_sueggmove();
 
-void func_80800000_sueggmove(Actor *param_0, f32 *param_1, f32 *param_2)
+// Integrates gravity into the vertical speed and writes the stepped position to new_pos.
+void func_80800000_sueggmove(Actor *actor, f32 *pos, f32 *new_pos)
 {
-    f32 local_1;
-    f32 local_0[3];
+    f32 dt;
+    f32 step[3];
 
-    local_1 = func_800D8FF8();
-    *(f32 *)&param_0->actorData[5] += *(f32 *)&param_0->actorData[7] * local_1;
-    if (*(f32 *)&param_0->actorData[5] < param_0->unk54 * local_1) {
-        *(f32 *)&param_0->actorData[5] = param_0->unk54 * local_1;
+    dt = func_800D8FF8();
+    *(f32 *) &actor->actorData[5] += *(f32 *) &actor->actorData[7] * dt;
+    if (*(f32 *) &actor->actorData[5] < actor->unk54 * dt) {
+        *(f32 *) &actor->actorData[5] = actor->unk54 * dt;
     }
-    func_800EFA20(local_0, (f32 *)&param_0->actorData[4], local_1);
-    func_800EE780(param_2, param_1, local_0);
+    func_800EFA20(step, (f32 *) &actor->actorData[4], dt);
+    func_800EE780(new_pos, pos, step);
 }
 
-int sueggmove_entrypoint_0(s32 param_0, s32 param_1)
+// Sets the owner link.
+int sueggmove_entrypoint_0(s32 owner, s32 unk_1)
 {
-  Actor *local_0;
-  local_0 = func_80106790(param_1 | 0);
-  if (param_1)
-  {
-  }
-  local_0->unk3C = param_0;
+    Actor *actor;
+    // Matching: the no-op `| 0` and the empty block are needed for the match.
+    actor = func_80106790(unk_1 | 0);
+    if (unk_1) {
+    }
+    actor->unk3C = owner;
 }
 
+// Returns the owner link.
 int sueggmove_entrypoint_1()
 {
-  Actor *local_0 = func_80106790();
-  return local_0->unk3C;
+    Actor *actor = func_80106790();
+    return actor->unk3C;
 }
 
-s32 sueggmove_entrypoint_2(void) {
-    return (*(s32 *)((s8 *)(func_80100094(func_80106790(), 0)) + (0x34)));
+// Returns the last surface type.
+s32 sueggmove_entrypoint_2(void)
+{
+    return *(s32 *) ((s8 *) func_80100094(func_80106790(), 0) + 0x34);
 }
 
-func_80800108_sueggmove(u8 *param_0) {
-    if (!param_0[0xD]) {
-        param_0[0xC] = 1;
-        param_0[0xD] = 8;
+// Marks contact and starts the bounce timer.
+func_80800108_sueggmove(u8 *state)
+{
+    if (!state[0xD]) {
+        state[0xC] = 1;
+        state[0xD] = 8;
     }
 }
 
-void func_8080012C_sueggmove(param_0) Actor *param_0;
+// Moves the egg one step; on a hit it aligns to the surface or bounces.
+void func_8080012C_sueggmove(actor) Actor *actor;
 {
-    u8 *local_3;
-    f32 local_0[3];
-    f32 local_1[3];
-    u8 *local_2;
-    local_3 = func_80100094(param_0, 0);
-    local_3[0xC] = 0;
-    func_80800000_sueggmove(param_0, param_0->position, local_1);
-    func_800EA600(_sueggmove_entrypoint_0, param_0->unk0);
-    local_2 = func_800FAB50(param_0->position, local_1, local_0, 0x24200A0, 15.0f);
+    u8 *state;
+    f32 normal[3];
+    f32 new_pos[3];
+    u8 *hit;
+    state = func_80100094(actor, 0);
+    state[0xC] = 0;
+    func_80800000_sueggmove(actor, actor->position, new_pos);
+    func_800EA600(_sueggmove_entrypoint_0, actor->unk0);
+    hit = func_800FAB50(actor->position, new_pos, normal, 0x24200A0, 15.0f);
     func_800EA614();
-    if (local_2) {
-        if (!local_3[0xE]) {
-            func_800EFD24((f32 *)((u8 *)param_0 + 0x28));
-            func_800F1988(local_0, &param_0->rotation[0], &param_0->rotation[1]);
-            param_0->rotation[0] = func_800136E4(param_0->rotation[0] - 90.0f);
+    if (hit) {
+        if (!state[0xE]) {
+            func_800EFD24((f32 *) ((u8 *) actor + 0x28));
+            func_800F1988(normal, &actor->rotation[0], &actor->rotation[1]);
+            actor->rotation[0] = func_800136E4(actor->rotation[0] - 90.0f);
         } else {
-            func_800F059C((f32 *)((u8 *)param_0 + 0x28), (f32 *)((u8 *)param_0 + 0x28), local_0);
-            *(f32 *)((u8 *)param_0 + 0x2C) = func_800F0E00(*(f32 *)((u8 *)param_0 + 0x2C), 250.0f);
-            func_80800108_sueggmove(local_3);
+            func_800F059C((f32 *) ((u8 *) actor + 0x28), (f32 *) ((u8 *) actor + 0x28),
+                          normal);
+            *(f32 *) ((u8 *) actor + 0x2C) =
+                func_800F0E00(*(f32 *) ((u8 *) actor + 0x2C), 250.0f);
+            func_80800108_sueggmove(state);
         }
-        *(s32 *)(local_3 + 0x34) = *(s32 *)(local_2 + 8);
+        *(s32 *) (state + 0x34) = *(s32 *) (hit + 8);
     }
-    func_800EE7F8(param_0->position, local_1);
-    *(f32 *)(local_3 + 0x10) = -9000.0f;
+    func_800EE7F8(actor->position, new_pos);
+    *(f32 *) (state + 0x10) = -9000.0f;
 }
 
-int sueggmove_entrypoint_3(s32 param_0)
+int sueggmove_entrypoint_3(s32 actor)
 {
-  u8 *local_0;
-  {
-    local_0--;
-  }
-  local_0 = func_80100094(param_0, 0);
-  return local_0[12];
-  local_0++;
+    u8 *state;
+
+    state = func_80100094(actor, 0);
+    return state[12];
 }
 
-void sueggmove_entrypoint_4(u8 *param_0) {
-    u8 *sp1C;
-    u8 *temp_v0;
-
-    temp_v0 = func_80100094(param_0, 0);
-    (*(f32 *)((s8 *)(param_0) + (0x54))) = 0.0f;
-    (*(f32 *)((s8 *)(param_0) + (0x34))) = 0.0f;
-    sp1C = temp_v0;
-    func_800EFD24(param_0 + 0x18);
-    (*(s8 *)((s8 *)(sp1C) + (0xC))) = 0;
-    (*(s8 *)((s8 *)(sp1C) + (0xE))) = 0;
-    (*(s8 *)((s8 *)(sp1C) + (0xF))) = 0;
-    (*(s8 *)((s8 *)(sp1C) + (0xD))) = 0;
-    sueggmove_entrypoint_8(param_0, 1);
-}
-
-void sueggmove_entrypoint_5(s32 param_0, s32 param_1)
+void sueggmove_entrypoint_4(u8 *actor)
 {
-  s32 *local_0;
-  ;
-  *((s8 *) ((s32)func_80100094(param_0, 0) + 0xE)) = param_1;
+    u8 *state;
+    u8 *data;
+
+    data = func_80100094(actor, 0);
+    *(f32 *) ((s8 *) actor + 0x54) = 0.0f;
+    *(f32 *) ((s8 *) actor + 0x34) = 0.0f;
+    // Matching: extra temporary needed for the match.
+    state = data;
+    func_800EFD24(actor + 0x18);
+    *(s8 *) ((s8 *) state + 0xC) = 0;
+    *(s8 *) ((s8 *) state + 0xE) = 0;
+    *(s8 *) ((s8 *) state + 0xF) = 0;
+    *(s8 *) ((s8 *) state + 0xD) = 0;
+    sueggmove_entrypoint_8(actor, 1);
 }
 
-void sueggmove_entrypoint_6(Actor *param_0, f32 param_1, f32 param_2)
+void sueggmove_entrypoint_5(s32 actor, s32 bounce)
 {
-  *(f32 *)((char *)param_0 + 0x34) = param_1;
-  *(f32 *)((char *)param_0 + 0x54) = param_2;
+    *(s8 *) ((s32) func_80100094(actor, 0) + 0xE) = bounce;
 }
 
-s32 sueggmove_entrypoint_7(s32 param_0) {
-    func_800EE7F8(param_0 + 0x28);
-}
-
-void sueggmove_entrypoint_8(unused, param_1) s32 unused; s32 param_1; {
-    *(s8 *)((s32)func_80100094(unused, 0) + 0xF) = (s8) param_1;
-}
-
-int sueggmove_entrypoint_9(Actor *param_0)
+void sueggmove_entrypoint_6(Actor *actor, f32 gravity, f32 terminal_speed)
 {
-  u8 *local_0;
-  f32 local_1[3];
-  local_0 = func_80100094(param_0, 0);
-  if (local_0[0xD] != 0)
-  {
-    local_0[0xD]--;
-  }
-  func_800EE7F8(local_1, (u8 *)param_0 + 4, local_0);
-  if (local_0[0xF] == 1)
-  {
-    func_8080012C_sueggmove(param_0);
-  }
-  func_800EFB24((u8 *)param_0 + 0x18, (u8 *)param_0 + 4, local_1);
+    *(f32 *) ((char *) actor + 0x34) = gravity;
+    *(f32 *) ((char *) actor + 0x54) = terminal_speed;
 }
 
-void sueggmove_entrypoint_10(s32 param_0, s32 param_1) {
-    f32 local_0[3];
-    func_800FAB50(param_0, param_1, local_0, 0x24200A0, 15.0f);
+s32 sueggmove_entrypoint_7(s32 actor)
+{
+    func_800EE7F8(actor + 0x28);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/eggmove.data.s) is defined here in C.
- * Values are taken from the ROM. */
+void sueggmove_entrypoint_8(actor, active) s32 actor;
+s32 active;
+{
+    *(s8 *) ((s32) func_80100094(actor, 0) + 0xF) = (s8) active;
+}
+
+int sueggmove_entrypoint_9(Actor *actor)
+{
+    u8 *state;
+    f32 unk_0[3];
+    state = func_80100094(actor, 0);
+
+if (state[0xD] != 0) {
+    state[0xD]--;
+}
+
+func_800EE7F8(unk_0, (u8 *) actor + 4, state);
+
+if (state[0xF] == 1) {
+    func_8080012C_sueggmove(actor);
+}
+
+func_800EFB24((u8 *) actor + 0x18, (u8 *) actor + 4, unk_0);
+}
+
+// Swept-sphere probe from `from` to `to`; the result is discarded.
+void sueggmove_entrypoint_10(s32 from, s32 to)
+{
+    f32 normal[3];
+    func_800FAB50(from, to, normal, 0x24200A0, 15.0f);
+}

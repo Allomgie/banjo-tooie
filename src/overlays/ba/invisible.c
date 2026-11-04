@@ -1,48 +1,22 @@
+// Probably the player invisibility effect: two fade channels with fade in/out states, alpha
+// that rises with movement, a timer and on/off sounds; plus a sort of players by distance.
 #include "common.h"
 #include "playerstate.h"
 #include "yaw.h"
 
-#define INVISIBLE_PLAYER_VIEW_DEFINED
-typedef struct { u8 pad0[0x30]; } InvisiblePart;
-typedef struct { u8 pad0[0x1C]; InvisiblePart unk1C[2]; } InvisibleState;
-typedef struct { u8 pad0[0xA8]; InvisibleState *unkA8; } InvisiblePlayerView;
+typedef struct {
+    u8 pad0[0x30];
+} InvisiblePart;
+typedef struct {
+    u8 pad0[0x1C];
+    InvisiblePart unk1C[2];
+} InvisibleState;
+typedef struct {
+    u8 pad0[0xA8];
+    InvisibleState *unkA8;
+} InvisiblePlayerView;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void bainvisible_entrypoint_1(void *param_0, f32 param_1, f32 param_2);
+void bainvisible_entrypoint_1(void *player, f32 max_speed, f32 max_turn_rate);
 
 extern void bastatetimer_clear(InvisiblePlayerView *, s32);
 extern void bastatetimer_set(InvisiblePlayerView *, s32, f32);
@@ -54,282 +28,294 @@ extern f32 func_800EFB8C(f32 *, f32 *);
 extern f32 func_80013728(f32);
 extern f32 mlAbsF(f32);
 extern f32 func_800F214C(f32, f32);
-void func_80800000_bainvisible();
 void func_808001BC_bainvisible();
-s32 func_808003AC_bainvisible();
 
-void func_80800000_bainvisible(param_0, param_1, param_2) PlayerState *param_0; u8 *param_1; s32 param_2;
+// Sets a part's state: 0 visible, 1 fading in, 2 start delay, 3 invisible, 4 forced alpha.
+void func_80800000_bainvisible(player, part, new_state) PlayerState *player;
+u8 *part;
+s32 new_state;
 {
-    u8 *local_1;
-    u8 *local_0;
-    param_1[0] = param_2;
-    local_0 = *(u8 **)((u8 *)param_0 + 0xA8) + 0x4C;
-    local_1 = *(u8 **)((u8 *)param_0 + 0xA8) + 0x1C;
-    switch (param_2) {
-    case 0:
-        if (!local_1[0] && !local_0[0]) func_8009ADF0(param_0, 0xC, 0);
-        break;
-    case 2:
-        if (!func_8009AD78(param_0, 0xC)) {
-            func_8009ADF0(param_0, 0xC, 1);
-            bainvisible_entrypoint_1(param_0, 750.0f, 135.0f);
-            func_8009BC08(param_0, *(f32 **)((u8 *)param_0 + 0xA8));
-            *(f32 *)(*(u8 **)((u8 *)param_0 + 0xA8) + 0xC) = yaw_get(param_0);
-            local_0[0x1C] = 0;
-            *(f32 *)(local_0 + 0xC) = 1.0f;
-            *(f32 *)(local_0 + 4) = 0.67f;
-            local_1[0x1C] = 0;
-            *(f32 *)(local_1 + 0xC) = 1.0f;
-            *(f32 *)(local_1 + 4) = 0.67f;
-            *(f32 *)(*(u8 **)((u8 *)param_0 + 0xA8) + 0x10) = 0.0f;
-            func_808001BC_bainvisible(param_0);
-        }
-        break;
-    case 3:
-        if (param_1 == local_1) func_8009DBF0(param_0, 0x65E, 1.0f);
-        break;
-    case 4:
-        if (!func_8009AD78(param_0, 0xC)) {
-            func_8009ADF0(param_0, 0xC, 1);
-            *(f32 *)(local_0 + 0xC) = 1.0f;
-            *(f32 *)(local_1 + 0xC) = 1.0f;
-        }
-        *(f32 *)(param_1 + 0x24) = *(f32 *)(param_1 + 0xC);
-        *(f32 *)(param_1 + 0x28) = 0.0f;
-        break;
-    case 1:
-        param_1[0x1C] = 0;
-        *(f32 *)(param_1 + 8) = 1.0f;
-        break;
+    u8 *main_part;
+    u8 *second_part;
+    part[0] = new_state;
+    second_part = *(u8 **) ((u8 *) player + 0xA8) + 0x4C;
+    main_part = *(u8 **) ((u8 *) player + 0xA8) + 0x1C;
+    switch (new_state) {
+        case 0:
+            if (!main_part[0] && !second_part[0])
+                func_8009ADF0(player, 0xC, 0);
+            break;
+        case 2:
+            if (!func_8009AD78(player, 0xC)) {
+                func_8009ADF0(player, 0xC, 1);
+                bainvisible_entrypoint_1(player, 750.0f, 135.0f);
+                func_8009BC08(player, *(f32 **) ((u8 *) player + 0xA8));
+                *(f32 *) (*(u8 **) ((u8 *) player + 0xA8) + 0xC) = yaw_get(player);
+                second_part[0x1C] = 0;
+                *(f32 *) (second_part + 0xC) = 1.0f;
+                *(f32 *) (second_part + 4) = 0.67f;
+                main_part[0x1C] = 0;
+                *(f32 *) (main_part + 0xC) = 1.0f;
+                *(f32 *) (main_part + 4) = 0.67f;
+                *(f32 *) (*(u8 **) ((u8 *) player + 0xA8) + 0x10) = 0.0f;
+                func_808001BC_bainvisible(player);
+            }
+            break;
+        case 3:
+            if (part == main_part)
+                func_8009DBF0(player, 0x65E, 1.0f);
+            break;
+        case 4:
+            if (!func_8009AD78(player, 0xC)) {
+                func_8009ADF0(player, 0xC, 1);
+                *(f32 *) (second_part + 0xC) = 1.0f;
+                *(f32 *) (main_part + 0xC) = 1.0f;
+            }
+            *(f32 *) (part + 0x24) = *(f32 *) (part + 0xC);
+            *(f32 *) (part + 0x28) = 0.0f;
+            break;
+        case 1:
+            part[0x1C] = 0;
+            *(f32 *) (part + 8) = 1.0f;
     }
 }
 
-void func_808001BC_bainvisible(param_0) u8 *param_0;
+// While invisible, raises the target alpha with movement speed and turn rate.
+void func_808001BC_bainvisible(player) u8 *player;
 {
-    u8 *local_0;
-    f32 local_1;
-    f32 local_5;
-    f32 local_2;
-    f32 local_3[3];
-    f32 local_4;
-    f32 local_6;
-    f32 local_7;
-    s32 local_8;
-    u8 *local_9;
+    u8 *part;
+    f32 speed_frac;
+    f32 turn_frac;
+    f32 inv_dt;
+    f32 pos[3];
+    f32 yaw;
+    f32 activity;
+    f32 max_turn_rate;
+    s32 offset;
+    u8 *part_iter;
 
-    local_0 = *(u8 **)(param_0 + 0xA8) + 0x1C;
-    local_2 = 1.0f / func_800D8FF8();
-    func_8009BC08(param_0, &local_3);
-    local_1 = func_800EFB8C(&local_3, *(f32 **)(param_0 + 0xA8)) * local_2;
-    func_800EE7F8(*(f32 **)(param_0 + 0xA8), &local_3);
-    local_5 = *(f32 *)(*(u8 **)(param_0 + 0xA8) + 0x14);
-    if (local_5 < local_1) {
-        local_1 = 1.0f;
+    part = *(u8 **) (player + 0xA8) + 0x1C;
+    inv_dt = 1.0f / func_800D8FF8();
+    func_8009BC08(player, &pos);
+    speed_frac = func_800EFB8C(&pos, *(f32 **) (player + 0xA8)) * inv_dt;
+    func_800EE7F8(*(f32 **) (player + 0xA8), &pos);
+    turn_frac = *(f32 *) (*(u8 **) (player + 0xA8) + 0x14);
+    if (turn_frac < speed_frac) {
+        speed_frac = 1.0f;
     } else {
-        local_1 /= local_5;
+        speed_frac /= turn_frac;
     }
-    local_4 = yaw_get(param_0);
-    local_5 = mlAbsF(func_80013728(local_4 - *(f32 *)(*(u8 **)(param_0 + 0xA8) + 0xC)));
-    *(f32 *)(*(u8 **)(param_0 + 0xA8) + 0xC) = local_4;
-    local_6 = local_5 * local_2;
-    local_7 = *(f32 *)(*(u8 **)(param_0 + 0xA8) + 0x18);
-    local_5 = local_7 < local_6 ? 1.0f : local_6 / local_7;
-    *(f32 *)(*(u8 **)(param_0 + 0xA8) + 0x10) = local_5 < local_1 ? local_1 : local_5;
-    local_6 = local_5 < local_1 ? local_1 : local_5;
-    if (local_0[0] == 3) {
-        *(f32 *)(local_0 + 8) = 0.255f * local_6 + 0.07499999553f;
+    yaw = yaw_get(player);
+    turn_frac = mlAbsF(func_80013728(yaw - *(f32 *) (*(u8 **) (player + 0xA8) + 0xC)));
+    *(f32 *) (*(u8 **) (player + 0xA8) + 0xC) = yaw;
+    activity = turn_frac * inv_dt;
+    max_turn_rate = *(f32 *) (*(u8 **) (player + 0xA8) + 0x18);
+    turn_frac = max_turn_rate < activity ? 1.0f : activity / max_turn_rate;
+    *(f32 *) (*(u8 **) (player + 0xA8) + 0x10) = turn_frac < speed_frac ? speed_frac : turn_frac;
+    activity = turn_frac < speed_frac ? speed_frac : turn_frac;
+    if (part[0] == 3) {
+        *(f32 *) (part + 8) = 0.255f * activity + 0.07499999553f;
     }
-    if (local_0[0x30] == 3) {
-        *(f32 *)(local_0 + 0x38) = 0.1999999881f * local_6 + 0.3999999762f;
+    if (part[0x30] == 3) {
+        *(f32 *) (part + 0x38) = 0.1999999881f * activity + 0.3999999762f;
     }
-    local_9 = local_0;
-    local_8 = 0;
+    part_iter = part;
+    offset = 0;
     do {
-        if (local_9[0x1C]) {
-            if (*(f32 *)(local_9 + 8) < *(f32 *)(local_9 + 0x10)) {
-                *(f32 *)(local_9 + 8) = *(f32 *)(local_9 + 0x10);
+        if (part_iter[0x1C]) {
+            if (*(f32 *) (part_iter + 8) < *(f32 *) (part_iter + 0x10)) {
+                *(f32 *) (part_iter + 8) = *(f32 *) (part_iter + 0x10);
             }
-            if (*(f32 *)(local_9 + 0x14) < *(f32 *)(local_9 + 8)) {
-                *(f32 *)(local_9 + 8) = *(f32 *)(local_9 + 0x14);
+            if (*(f32 *) (part_iter + 0x14) < *(f32 *) (part_iter + 8)) {
+                *(f32 *) (part_iter + 8) = *(f32 *) (part_iter + 0x14);
             }
         }
-        local_8 += 0x30;
-        local_9 += 0x30;
-    } while (local_8 != 0x60);
-    if (local_0) {}
+        offset += 0x30;
+        part_iter += 0x30;
+    } while (offset != 0x60);
+    // Matching: empty block needed for the match.
+    if (part) {
+    }
 }
 
-s32 func_808003AC_bainvisible(param_0) f32 *param_0;
+// Eases the alpha toward its target; true once close enough.
+s32 func_808003AC_bainvisible(part)
+f32 *part;
 {
-    f32 local_0;
+    f32 diff;
 
-    local_0 = param_0[2] - param_0[3];
-    param_0[3] += local_0 * 0.25f;
-    return func_800F214C(local_0, 0.01f) == 0.0f;
+    diff = part[2] - part[3];
+    part[3] += diff * 0.25f;
+    return func_800F214C(diff, 0.01f) == 0.0f;
 }
 
-s32 bainvisible_entrypoint_0() 
+// State size.
+s32 bainvisible_entrypoint_0()
 {
     return 0x7C;
 }
 
-void bainvisible_entrypoint_1(void *param_0, f32 param_1, f32 param_2)
+// Sets the speed and turn rate at which the alpha is fully raised.
+void bainvisible_entrypoint_1(void *player, f32 max_speed, f32 max_turn_rate)
 {
-  f32 *ptr;
-  ptr = *((void **) (((u8 *) param_0) + 0xA8));
-  *((f32 *) (((u8 *) (*((void **) (((u8 *) param_0) + 0xA8)))) + 0x14)) = param_1;
-  ;
-  *((f32 *) (((u8 *) (*((void **) (((u8 *) param_0) + 0xA8)))) + 0x18)) = param_2;
+    *(f32 *) ((u8 *) *(void **) ((u8 *) player + 0xA8) + 0x14) = max_speed;
+    *(f32 *) ((u8 *) *(void **) ((u8 *) player + 0xA8) + 0x18) = max_turn_rate;
 }
 
-f32 bainvisible_entrypoint_2(u8 *param_0, s32 param_1) {
-    return (*(f32 *)((s8 *)(((*(s32 *)((s8 *)(param_0) + (0xA8))) + (param_1 * 0x30))) + (0x28)));
+// Current alpha of a part.
+f32 bainvisible_entrypoint_2(u8 *player, s32 part_index)
+{
+    return *(f32 *) ((s8 *) (*(s32 *) ((s8 *) player + 0xA8) + (part_index * 0x30)) + 0x28);
 }
 
-void bainvisible_entrypoint_3(InvisiblePlayerView *param_0)
+// Fades both parts in and clears the timer.
+void bainvisible_entrypoint_3(InvisiblePlayerView *player)
 {
-    InvisiblePart *local_0;
+    InvisiblePart *part;
 
-    local_0 = &param_0->unkA8->unk1C[0];
-    func_80800000_bainvisible(param_0, local_0, 1);
-    func_80800000_bainvisible(param_0, ++local_0, 1);
-    bastatetimer_clear(param_0, 9);
+    part = &player->unkA8->unk1C[0];
+    func_80800000_bainvisible(player, part, 1);
+    func_80800000_bainvisible(player, ++part, 1);
+    bastatetimer_clear(player, 9);
 }
 
-void bainvisible_entrypoint_4(InvisiblePlayerView *param_0)
+// Makes both parts visible and clears the timer.
+void bainvisible_entrypoint_4(InvisiblePlayerView *player)
 {
-    InvisiblePart *local_0;
+    InvisiblePart *part;
 
-    local_0 = &param_0->unkA8->unk1C[0];
-    func_80800000_bainvisible(param_0, local_0, 0);
-    func_80800000_bainvisible(param_0, ++local_0, 0);
-    bastatetimer_clear(param_0, 9);
+    part = &player->unkA8->unk1C[0];
+    func_80800000_bainvisible(player, part, 0);
+    func_80800000_bainvisible(player, ++part, 0);
+    bastatetimer_clear(player, 9);
 }
 
-void bainvisible_entrypoint_5(InvisiblePlayerView *param_0, f32 param_1)
+// Turns both parts invisible and starts the timer.
+void bainvisible_entrypoint_5(InvisiblePlayerView *player, f32 duration)
 {
-    InvisiblePart *local_0;
+    InvisiblePart *part;
 
-    local_0 = &param_0->unkA8->unk1C[0];
-    func_80800000_bainvisible(param_0, local_0, 2);
-    func_80800000_bainvisible(param_0, ++local_0, 2);
-    bastatetimer_set(param_0, 9, param_1);
+    part = &player->unkA8->unk1C[0];
+    func_80800000_bainvisible(player, part, 2);
+    func_80800000_bainvisible(player, ++part, 2);
+    bastatetimer_set(player, 9, duration);
 }
 
-void bainvisible_entrypoint_6(void *param_0)
+// Per-frame update of both parts.
+void bainvisible_entrypoint_6(void *player)
 {
-    s32 local_0;
-    u8 *local_1;
-    f32 local_2;
+    s32 offset;
+    u8 *part;
+    f32 progress;
 
-    if (*(*(u8 **)((u8 *)param_0 + 0xA8) + 0x1C) == 3) {
+    if (*(*(u8 **) ((u8 *) player + 0xA8) + 0x1C) == 3) {
         func_808001BC_bainvisible();
     }
-    for (local_0 = 0; local_0 != 0x60; local_0 += 0x30) {
-        local_1 = *(u8 **)((u8 *)param_0 + 0xA8) + local_0 + 0x1C;
-        switch (*local_1) {
-        case 2:
-            *(f32 *)(local_1 + 4) -= func_800D8FF8();
-            if (*(f32 *)(local_1 + 4) < 0.0f) {
-                func_80800000_bainvisible(param_0, local_1, 3);
-            }
-            break;
-        case 3:
-            func_808003AC_bainvisible(local_1);
-            if (bastatetimer_isDone(param_0, 9)) {
-                func_80800000_bainvisible(param_0, local_1, 1);
-                func_8009DBF0(param_0, 0x65D, 1.0f);
-            }
-            if (local_1[0x1C]) {
-                *(f32 *)(local_1 + 0x18) -= func_800D8FF8();
-                if (*(f32 *)(local_1 + 0x18) <= 0.0f) {
-                    local_1[0x1C] = 0;
+    for (offset = 0; offset != 0x60; offset += 0x30) {
+        part = *(u8 **) ((u8 *) player + 0xA8) + offset + 0x1C;
+        switch (*part) {
+            case 2:
+                *(f32 *) (part + 4) -= func_800D8FF8();
+                if (*(f32 *) (part + 4) < 0.0f) {
+                    func_80800000_bainvisible(player, part, 3);
                 }
-            }
-            break;
-        case 4:
-            *(f32 *)(local_1 + 0x28) += func_800D8FF8();
-            local_2 = *(f32 *)(local_1 + 0x28) < *(f32 *)(local_1 + 0x2C) ?
-                *(f32 *)(local_1 + 0x28) / *(f32 *)(local_1 + 0x2C) : 1.0f;
-            *(f32 *)(local_1 + 0xC) =
-                (*(f32 *)(local_1 + 0x20) - *(f32 *)(local_1 + 0x24)) * local_2 +
-                *(f32 *)(local_1 + 0x24);
-            break;
-        case 1:
-            if (func_808003AC_bainvisible(local_1)) {
-                func_80800000_bainvisible(param_0, local_1, 0);
-            }
-            break;
+                break;
+            case 3:
+                func_808003AC_bainvisible(part);
+                if (bastatetimer_isDone(player, 9)) {
+                    func_80800000_bainvisible(player, part, 1);
+                    func_8009DBF0(player, 0x65D, 1.0f);
+                }
+                if (part[0x1C]) {
+                    *(f32 *) (part + 0x18) -= func_800D8FF8();
+                    if (*(f32 *) (part + 0x18) <= 0.0f) {
+                        part[0x1C] = 0;
+                    }
+                }
+                break;
+            case 4:
+                *(f32 *) (part + 0x28) += func_800D8FF8();
+                progress = *(f32 *) (part + 0x28) < *(f32 *) (part + 0x2C)
+                              ? *(f32 *) (part + 0x28) / *(f32 *) (part + 0x2C)
+                              : 1.0f;
+                *(f32 *) (part + 0xC) =
+                    (*(f32 *) (part + 0x20) - *(f32 *) (part + 0x24)) * progress +
+                    *(f32 *) (part + 0x24);
+                break;
+            case 1:
+                if (func_808003AC_bainvisible(part)) {
+                    func_80800000_bainvisible(player, part, 0);
+                }
         }
     }
 }
 
-void bainvisible_entrypoint_7(u8 *param_0, s32 param_1, f32 param_2, f32 param_3, f32 param_4)
+// Sets the alpha limits of the selected parts, with an optional duration.
+void bainvisible_entrypoint_7(u8 *player, s32 part_mask, f32 min_alpha, f32 max_alpha, f32 duration)
 {
-    int local_0;
-    u8 *local_1;
-    if (param_4 != 0.0f) {
-        local_0 = 1;
+    int limit_active;
+    u8 *state;
+    if (duration != 0.0f) {
+        limit_active = 1;
     } else {
-        local_0 = 0;
+        limit_active = 0;
     }
-    if (param_1 & 1) {
-        local_1 = *(u8 **)(param_0 + 0xA8);
-        local_1[0x38] = local_0;
-        *(f32 *)(local_1 + 0x34) = param_4;
-        *(f32 *)(local_1 + 0x2C) = param_2;
-        local_1 += 0x1C;
-        *(f32 *)(local_1 + 0x14) = param_3;
+    if (part_mask & 1) {
+        state = *(u8 **) (player + 0xA8);
+        state[0x38] = limit_active;
+        *(f32 *) (state + 0x34) = duration;
+        *(f32 *) (state + 0x2C) = min_alpha;
+        state += 0x1C;
+        *(f32 *) (state + 0x14) = max_alpha;
     }
-    if (param_1 & 2) {
-        local_1 = *(u8 **)(param_0 + 0xA8);
-        local_1[0x68] = local_0;
-        *(f32 *)(local_1 + 0x64) = param_4;
-        *(f32 *)(local_1 + 0x5C) = param_2;
-        local_1 += 0x4C;
-        *(f32 *)(local_1 + 0x14) = param_3;
+    if (part_mask & 2) {
+        state = *(u8 **) (player + 0xA8);
+        state[0x68] = limit_active;
+        *(f32 *) (state + 0x64) = duration;
+        *(f32 *) (state + 0x5C) = min_alpha;
+        state += 0x4C;
+        *(f32 *) (state + 0x14) = max_alpha;
     }
 }
 
-int func_808007CC_bainvisible(f32 param_0[3], f32 param_1[3], f32 param_2, f32 param_3)
+// Forces a part to an alpha over a duration.
+int func_808007CC_bainvisible(f32 player[3], f32 part[3], f32 alpha, f32 duration)
 {
-  func_80800000_bainvisible(param_0, param_1, 4);
-  param_1[8] = param_2;
-  param_1[11] = param_3;
+    func_80800000_bainvisible(player, part, 4);
+    part[8] = alpha;
+    part[11] = duration;
 }
 
-int bainvisible_entrypoint_8(Actor *param_0, s32 param_1, f32 param_2, f32 param_3)
+int bainvisible_entrypoint_8(Actor *player, s32 part_mask, f32 alpha, f32 duration)
 {
-  if (param_1 & 1)
-  {
-    func_808007CC_bainvisible(param_0, *(s32 *)((char *)param_0 + 0xA8) + 0x1C, param_2, param_3);
-  }
-  if (param_1 & 2)
-  {
-    func_808007CC_bainvisible(param_0, *(s32 *)((char *)param_0 + 0xA8) + 0x4C, param_2, param_3);
-  }
+    if (part_mask & 1) {
+        func_808007CC_bainvisible(player, *(s32 *) ((char *) player + 0xA8) + 0x1C, alpha,
+                                  duration);
+    }
+    if (part_mask & 2) {
+        func_808007CC_bainvisible(player, *(s32 *) ((char *) player + 0xA8) + 0x4C, alpha,
+                                  duration);
+    }
 }
 
-void bainvisible_entrypoint_9(PlayerState **param_0, s32 param_1, f32 *param_2)
+// Sorts the players by distance to a point, farthest first.
+void bainvisible_entrypoint_9(PlayerState **players, s32 count, f32 *point)
 {
-    f32 local_0[3];
-    f32 local_1[8];
-    f32 local_2;
-    PlayerState *local_3;
-    s32 local_4;
-    s32 local_5;
-    for (local_4 = 0; local_4 < param_1; local_4++) {
-        func_8009BC08(param_0[local_4], local_0);
-        local_2 = func_800EFC7C(local_0, param_2);
-        local_3 = param_0[local_4];
-        for (local_5 = local_4; local_5 > 0 && local_1[local_5 - 1] < local_2; local_5--) {
-            param_0[local_5] = param_0[local_5 - 1];
-            local_1[local_5] = local_1[local_5 - 1];
+    f32 pos[3];
+    f32 dist[8];
+    f32 d;
+    PlayerState *current;
+    s32 i;
+    s32 j;
+    for (i = 0; i < count; i++) {
+        func_8009BC08(players[i], pos);
+        d = func_800EFC7C(pos, point);
+        current = players[i];
+        for (j = i; j > 0 && dist[j - 1] < d; j--) {
+            players[j] = players[j - 1];
+            dist[j] = dist[j - 1];
         }
-        param_0[local_5] = local_3;
-        local_1[local_5] = local_2;
+        players[j] = current;
+        dist[j] = d;
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/invisible.data.s) is defined here in C.
- * Values are taken from the ROM. */

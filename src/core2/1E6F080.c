@@ -1,25 +1,13 @@
-/*
- * 1E6F080 -- split into two translation units (1E6F080 and 1E700B0).
- *
- * The yaml treated 0x1E6F080..0x1E71260 as one file, but the ROM's .rodata
- * shows two objects: the jump table of func_80095C94 ends at 0x1EFE6D8 and
- * is padded to 0x1EFE6E0, where the constants of the following functions
- * start. IDO aligns every object's .rodata to 16 bytes and never pads inside
- * an object, so this gap is an object boundary. The text shows none because
- * this object happens to end on a 16-byte boundary.
- *
- * The second object starts at func_800967C0 (ROM 0x1E700B0): func_80096768
- * is only called from func_80095C94, the self->unk94 wrappers run up to
- * func_8009679C, and func_800967C0 is the only 16-byte aligned function
- * start before func_800967C8.
- */
-
+// Player collision component: per-frame sweep against world geometry by mode, current medium
+// (air/ground/water), water-surface clamping, stood-on notification, and floor/water getters.
+// TU-NOTE: 0x1E6F080..0x1E71260 is two objects. This one ends with func_8009679C; the second
+// (1E700B0) starts at func_800967C0. The .rodata gap after the func_80095C94 jump table marks the
+// boundary, since IDO aligns each object's .rodata to 16 bytes.
 #include "core2/1E6F080.h"
 #include "types.h"
 #include "macros.h"
 
-#define LOCAL_COLLISION(p) (*(LocalCollision **)((u8 *)(p) + 0x94))
-#define STATE(p) (*(LocalState **)((u8 *)(p)+0x98))
+#define LOCAL_COLLISION(p) (*(LocalCollision **) ((u8 *) (p) + 0x94))
 extern f32 func_800985B8(void);
 extern f32 func_8009864C();
 extern void func_80098590();
@@ -30,10 +18,31 @@ extern f32 yaw_get();
 extern void yaw_setIdeal(void *, f32);
 extern void yaw_applyIdeal();
 void func_800C68A0(s32 param_0, f32 param_1);
-struct UnkStruct { char pad0[0x50]; s32 unk50; };
+struct UnkStruct {
+    char pad_0[0x50];
+    s32 unk_50;
+};
 extern s32 func_800C5BA4(s32);
 extern f32 func_800F13F0(f32, f32);
-typedef struct { void *floor; f32 value04, value08; u8 pad0C[12]; u8 previous18; u8 pad19[3]; void *triangle1C; u8 pad20[0x30]; Actor *actor50; u8 hit54, hit55, stable56, pad57; f32 delta58[3]; f32 target64, target68; u8 triangle6C[12]; f32 position78[3]; f32 previous84[3]; f32 delta90[3]; s32 mode9C; u8 belowA0, clampedA1, restoreA2, countA3, activeA4; } LocalCollision;
+typedef struct {
+    void *floor;
+    f32 radius, height;
+    u8 pad_0C[12];
+    u8 prev_stable;
+    u8 pad_19[3];
+    void *triangle;
+    u8 pad_20[0x30];
+    Actor *stood_actor;
+    u8 hit, unk_55, stable, pad_57;
+    f32 sweep_delta[3];
+    f32 target_radius, target_height;
+    u8 triangle_copy[12];
+    f32 position[3];
+    f32 prev_position[3];
+    f32 frame_delta[3];
+    s32 mode;
+    u8 below_water, clamped, restore, hit_count, active;
+} LocalCollision;
 extern s32 func_80091E80(PlayerState *, s32);
 extern s32 func_8008E454(PlayerState *);
 extern void func_8009C128(PlayerState *, f32 *);
@@ -63,629 +72,656 @@ f32 func_800C67D8(s32);
 f32 func_800F0E00(f32, f32);
 extern void func_800C675C(s32, f32 *);
 extern void func_80013A7C(f32);
-extern u8 unk94[];
-struct unk_struct_94 { u8 pad[0x50]; s32 *unk50; u8 pad2[0x40]; struct unk_struct_94 *unk94; };
-typedef struct { f32 local_0; f32 local_1[3], local_2[3], local_3[3], local_4[3]; } Hit967C8;
-typedef struct { s32 local_0; Hit967C8 local_1[1]; } Hits967C8;
+struct unk_struct_94 {
+    u8 pad_0[0x50];
+    s32 *unk_50;
+    u8 pad_54[0x40];
+    struct unk_struct_94 *unk_94;
+};
 extern void func_800EE7F8(f32 *, f32 *);
-typedef s16 Triangle96ACC[3][3];
-typedef struct { s32 local_0; Hit967C8 local_1[1]; } Result96ACC;
-typedef struct { u8 pad[0x98]; f32 *local_0; } State97104;
-typedef struct { f32 direction[3], position[3], offset[3]; u8 active, state; } LocalState;
-typedef struct { f32 local_0[3], local_1[3]; } Motion97530;
-typedef struct { u8 pad[0x98]; Motion97530 *local_0; } Actor97530;
 extern void *func_800C6C94(f32 *, f32, f32 *, u32);
-typedef struct { f32 local_0[3]; u8 pad_0[0x18]; f32 local_1[3]; f32 local_2[3]; f32 local_3[3]; f32 local_4; f32 local_5; } local_0;
 void func_80095A08();
-void func_800961AC();
 int func_80096254();
 void func_80096260();
 s32 func_80096530();
-s32 func_80096628();
 int func_80096768();
 void func_80097858();
 void func_8009788C();
 void func_800978A4();
 
-s32 func_80095790() 
+s32 func_80095790()
 {
     return 0xAC;
 }
 
-void func_80095798(u8 *param_0) {
-    f32 local_0[3];
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
-    local_1 = func_800985B8();
-    local_2 = func_8009864C(param_0);
-    if (local_2 < *(f32 *)(*(u8 **)(param_0 + 0x94) + 0x7C)) {
-        *(f32 *)(*(u8 **)(param_0 + 0x94) + 0x7C) = local_2;
-    }
-    if (*(f32 *)(*(u8 **)(param_0 + 0x94) + 0x7C) < local_1) {
-        *(f32 *)(*(u8 **)(param_0 + 0x94) + 0x7C) = local_1;
-    }
-    func_80098590(param_0, local_0);
-    func_800F1E6C(*(u8 **)(param_0 + 0x94) + 0x78, local_0, &local_3);
-    if (mlAbsF(func_800F1DCC(local_3, yaw_get(param_0))) > 1.0f) {
-        yaw_setIdeal(param_0, local_3);
-        yaw_applyIdeal(param_0);
-    }
-}
-
-void func_80095870(u8 *param_0, f32 *param_1, f32 *param_2) {
-
-    *param_1 = (*(f32 **)(param_0 + 0x94))[1];
-    *param_2 = (*(f32 **)(param_0 + 0x94))[2];
-}
-
-s32 func_8009588C(u8 *param_0) {
-    return (*(s32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x94)))) + (0x14)));
-}
-
-s32 func_80095898(void *arg)
+// Mode 5 (climbing): clamp the collision Y to the climb range and update yaw.
+void func_80095798(u8 *player)
 {
-    return ((u8 *)(*(void **)((char *)arg + 0x94)))[162];
+    f32 dir[3];
+    f32 min_y;
+    f32 max_y;
+    f32 target_yaw;
+    min_y = func_800985B8();
+    max_y = func_8009864C(player);
+    if (max_y < *(f32 *) (*(u8 **) (player + 0x94) + 0x7C)) {
+        *(f32 *) (*(u8 **) (player + 0x94) + 0x7C) = max_y;
+    }
+    if (*(f32 *) (*(u8 **) (player + 0x94) + 0x7C) < min_y) {
+        *(f32 *) (*(u8 **) (player + 0x94) + 0x7C) = min_y;
+    }
+    func_80098590(player, dir);
+    func_800F1E6C(*(u8 **) (player + 0x94) + 0x78, dir, &target_yaw);
+    if (mlAbsF(func_800F1DCC(target_yaw, yaw_get(player))) > 1.0f) {
+        yaw_setIdeal(player, target_yaw);
+        yaw_applyIdeal(player);
+    }
 }
 
-int func_800958A4(Actor *param_0, f32 param_1, f32 param_2) {
-    f32 local_0[4];
-    f32 local_1[3];
-    s32 local_2;
-    func_8009C128(param_0, local_0);
-    local_0[1] += param_1;
-    if (func_800C6C94(local_0, param_2, local_1, (*(s32 **)((u8 *)param_0 + 0x94))[5]) != 0) {
-        local_2 = 1;
+void func_80095870(u8 *player, f32 *out_radius, f32 *out_height)
+{
+    *out_radius = (*(f32 **) (player + 0x94))[1];
+    *out_height = (*(f32 **) (player + 0x94))[2];
+}
+
+s32 func_8009588C(u8 *player)
+{
+    return *(s32 *) ((s8 *) *(u8 **) ((s8 *) player + 0x94) + 0x14);
+}
+
+s32 func_80095898(void *player)
+{
+    return ((u8 *) *(void **) ((char *) player + 0x94))[162];
+}
+
+int func_800958A4(Actor *player, f32 y_offset, f32 unk_0)
+{
+    f32 pos[4];
+    f32 out[3];
+    s32 result;
+    func_8009C128(player, pos);
+    pos[1] += y_offset;
+    if (func_800C6C94(pos, unk_0, out, (*(s32 **) ((u8 *) player + 0x94))[5]) != 0) {
+        result = 1;
     } else {
-        local_2 = 0;
+        result = 0;
     }
-    return local_2;
+    return result;
 }
 
-void func_8009590C(s32 *param_0, f32 param_1) {
-    if (param_1 == 0.0f) {
-        func_800C68A0(*(s32 *)param_0[0x25], 56.0f);
+void func_8009590C(s32 *player, f32 unk_0)
+{
+    if (unk_0 == 0.0f) {
+        func_800C68A0(*(s32 *) player[0x25], 56.0f);
     } else {
-        func_800C68A0(*(s32 *)param_0[0x25], param_1);
+        func_800C68A0(*(s32 *) player[0x25], unk_0);
     }
 }
 
-s32 func_80095964(Actor *this, s32 param_1){
-    
-    if(param_1){
-        func_80095A08(this, 8, 1);
-        func_80095A08(this, 4, 0);
-    }
-    else{
-        func_80095A08(this, 8, 0);
-        func_80095A08(this, 4, 1);
-    }
-}
-
-void func_800959C8(PlayerState *param_0, f32 param_1, f32 param_2)
+s32 func_80095964(Actor *player, s32 enable)
 {
-  f32 *new_var;
-  *((f32 *) (((u8 *) ((u8 **) param_0)[37]) + 0x64)) = param_1;
-  new_var = (f32 *) (((u8 **) param_0)[37]);
-  (*(f32 *)((char *)(new_var) + 4)) = *(f32 *) (((u8 *) new_var) + 0x64);
-  new_var++;
-  new_var--;
-  *((f32 *) (((u8 *) ((u8 **) param_0)[37]) + 0x68)) = param_2;
-  new_var = (f32 *) (((u8 **) param_0)[37]);
-  (*(f32 *)((char *)(new_var) + 8)) = *(f32 *) (((u8 *) new_var) + 0x68);
-}
-
-func_800959FC(s32 param_0, s32 param_1){
-    *(s32*)(*(s32*)(param_0 + 0x94) + 0x14) = param_1;
-}
-
-void func_80095A08(param_0, param_1, param_2) PlayerState * param_0; s32 param_1; s32 param_2; {
-    if (param_2 != 0) {
-        *(s32 *)((*(u8 **)((u8 *)param_0 + 0x94)) + 0x14) |= param_1;
+    if (enable) {
+        func_80095A08(player, 8, 1);
+        func_80095A08(player, 4, 0);
     } else {
-        *(s32 *)((*(u8 **)((u8 *)param_0 + 0x94)) + 0x14) &= ~param_1;
+        func_80095A08(player, 8, 0);
+        func_80095A08(player, 4, 1);
     }
 }
 
-void func_80095A40(PlayerState *param_0)
+// Set the target and current radius/height.
+void func_800959C8(PlayerState *player, f32 radius, f32 height)
 {
-  float new_var;
-  PlayerState *new_var2;
-  new_var2 = param_0;
-  func_800959C8(new_var2, new_var = (unsigned long) 80.0f, 35.0f);
+    f32 *collision;
+    // Matching: the temporary pointer is needed for the match.
+    *(f32 *) ((u8 *) ((u8 **) player)[37] + 0x64) = radius;
+    collision = (f32 *) ((u8 **) player)[37];
+    *(f32 *) ((char *) collision + 4) = *(f32 *) ((u8 *) collision + 0x64);
+    *(f32 *) ((u8 *) ((u8 **) player)[37] + 0x68) = height;
+    collision = (f32 *) ((u8 **) player)[37];
+    *(f32 *) ((char *) collision + 8) = *(f32 *) ((u8 *) collision + 0x68);
 }
 
-func_80095A64(void *param_0){
-    ((struct UnkStruct *)param_0)->unk50 = 0;
-}
-
-int func_80095A6C(s32 param_0, s32 *param_1)
+func_800959FC(s32 player, s32 flags)
 {
-  param_1[20] = param_0;
- ;
+    *(s32 *) (*(s32 *) (player + 0x94) + 0x14) = flags;
 }
 
-void func_80095A74(s32 param_0, s32 param_1)
+void func_80095A08(player, mask, enable) PlayerState *player;
+s32 mask;
+s32 enable;
 {
-  if (func_800EA05C() == 0xB8)
-  {
-    if (param_1 != 0)
-    {
-      func_80095A08(param_0, 8, 1);
-    }
-    else
-    {
-      func_80095A08(param_0, 8, 0);
-    }
-  }
-}
-
-void func_80095AD0(u8 *param_0)
-{
-    u8 local_0;
-
-    *(u8*)(*(u8**)(param_0 + 0x94) + 0xa3) = 0;
-    local_0 = *(u8*)(*(u8**)(param_0 + 0x94) + 0xa3);
-    *(u8*)(*(u8**)(param_0 + 0x94) + 0x54) = local_0;
-    *(u8*)(*(u8**)(param_0 + 0x94) + 0xa1) = local_0;
-    *(u8*)(*(u8**)(param_0 + 0x94) + 0x18) = local_0;
-    *(u8*)(*(u8**)(param_0 + 0x94) + 0x56) = local_0;
-    *(u8*)(*(u8**)(param_0 + 0x94) + 0xa0) = local_0;
-    func_800959FC(param_0, 0x400005);
-    *(s32*)(*(u8**)(param_0 + 0x94)) = func_800C5A38();
-    func_800EFD24(*(u8**)(param_0 + 0x94) + 0x90);
-    func_800EFD24(*(u8**)(param_0 + 0x94) + 0x78);
-    func_800EFD24(*(u8**)(param_0 + 0x94) + 0x84);
-    func_800EFD24(*(u8**)(param_0 + 0x94) + 0x44);
-    *(s32*)(*(u8**)(param_0 + 0x94) + 0x1c) = 0;
-    *(u8*)(*(u8**)(param_0 + 0x94) + 0xa2) = 0;
-    func_80095A40(param_0);
-    *(f32*)(*(u8**)(param_0 + 0x94) + 4) = *(f32*)(*(u8**)(param_0 + 0x94) + 0x64);
-    *(f32*)(*(u8**)(param_0 + 0x94) + 8) = *(f32*)(*(u8**)(param_0 + 0x94) + 0x68);
-    func_80096254(param_0, 1);
-    func_8009590C(param_0, 0);
-    *(s32*)(*(u8**)(param_0 + 0x94) + 0x9c) = 0;
-    func_800961AC(param_0, 1);
-    baflag_clear(param_0, 1);
-    baflag_clear(param_0, 2);
-    *(void (**)(s32, void *))(*(u8**)(param_0 + 0x94) + 0xc) = func_80095A6C;
-    *(void (**)(void *))(*(u8**)(param_0 + 0x94) + 0x10) = func_80095A64;
-    *(u8*)(*(u8**)(param_0 + 0x94) + 0xa4) = 0;
-}
-
-s32 func_80095C10(s32 param_0) {
-    return func_800C5BA4(*(s32 *)(*(s32 *)(param_0 + 0x94)));
-}
-
-f32 func_80095C34(f32 param_0, f32 param_1, f32 param_2) {
-    if (param_1 < param_0) param_1 = func_800F13F0(param_0, param_1 + param_2);
-    else if (param_0 < param_1) param_1 = func_800F0E00(param_0, param_1 - param_2);
-    return param_1;
-}
-
-void func_80095C94(PlayerState *param_0)
-{
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3;
-    f32 local_7;
-
-    LOCAL_COLLISION(param_0)->activeA4 = 1;
-    LOCAL_COLLISION(param_0)->actor50 = NULL;
-    if (!func_80091E80(param_0, 4)) return;
-    if (!func_8008E454(param_0)) return;
-
-    func_8009C128(param_0, local_0);
-    if (func_800BEAAC(local_0, &local_3)) {
-        func_800C68E8(LOCAL_COLLISION(param_0)->floor, 1, local_3);
+    if (enable != 0) {
+        *(s32 *) (*(u8 **) ((u8 *) player + 0x94) + 0x14) |= mask;
     } else {
-        func_800C68E8(LOCAL_COLLISION(param_0)->floor, 0, local_3);
+        *(s32 *) ((*(u8 **) ((u8 *) player + 0x94)) + 0x14) &= ~mask;
     }
-    LOCAL_COLLISION(param_0)->clampedA1 = 0;
-    LOCAL_COLLISION(param_0)->hit54 = 0;
-    LOCAL_COLLISION(param_0)->hit55 = 0;
-    LOCAL_COLLISION(param_0)->triangle1C = NULL;
-    LOCAL_COLLISION(param_0)->previous18 = LOCAL_COLLISION(param_0)->stable56;
-    func_800CB840(1, param_0->unk184);
-    LOCAL_COLLISION(param_0)->value04 = func_80095C34(LOCAL_COLLISION(param_0)->target64, LOCAL_COLLISION(param_0)->value04, 1.0f);
-    LOCAL_COLLISION(param_0)->value08 = func_80095C34(LOCAL_COLLISION(param_0)->target68, LOCAL_COLLISION(param_0)->value08, 1.0f);
+}
 
-    switch (LOCAL_COLLISION(param_0)->mode9C) {
-    case 1:
-    case 3:
-    case 4:
-    case 9:
-        func_8009C128(param_0, LOCAL_COLLISION(param_0)->position78);
-        func_8009C15C(param_0, LOCAL_COLLISION(param_0)->previous84);
-        if (LOCAL_COLLISION(param_0)->mode9C == 3) {
-            void *local_4 = LOCAL_COLLISION(param_0)->floor;
-            if (func_800C670C(local_4)) {
-                f32 local_5 = func_800C67D8(local_4);
-                f32 local_6 = func_800A0E58(param_0);
-                if (local_5 - local_6 < LOCAL_COLLISION(param_0)->position78[1]) {
-                    LOCAL_COLLISION(param_0)->position78[1] = local_5 - local_6;
-                    LOCAL_COLLISION(param_0)->clampedA1 = 1;
-                    baphysics_set_vertical_velocity(param_0, 1.0f);
+// Reset radius/height to the defaults (80, 35).
+// Matching: the cast and the extra temporaries are needed for the match.
+void func_80095A40(PlayerState *player)
+{
+    float radius;
+    PlayerState *state;
+    state = player;
+    func_800959C8(state, radius = (unsigned long) 80.0f, 35.0f);
+}
+
+func_80095A64(void *collision)
+{
+    ((struct UnkStruct *) collision)->unk_50 = 0;
+}
+
+int func_80095A6C(s32 actor, s32 *collision)
+{
+    collision[20] = actor;
+}
+
+void func_80095A74(s32 player, s32 enable)
+{
+    if (func_800EA05C() == 0xB8) {
+        if (enable != 0) {
+            func_80095A08(player, 8, 1);
+        }
+
+        else {
+            func_80095A08(player, 8, 0);
+        }
+    }
+}
+
+// Initialize the collision component.
+void func_80095AD0(u8 *player)
+{
+    u8 zero;
+
+    *(u8 *) (*(u8 **) (player + 0x94) + 0xa3) = 0;
+    // Matching: the zero is reloaded from the stored field and reused.
+    zero = *(u8 *) (*(u8 **) (player + 0x94) + 0xa3);
+    *(u8 *) (*(u8 **) (player + 0x94) + 0x54) = zero;
+    *(u8 *) (*(u8 **) (player + 0x94) + 0xa1) = zero;
+    *(u8 *) (*(u8 **) (player + 0x94) + 0x18) = zero;
+    *(u8 *) (*(u8 **) (player + 0x94) + 0x56) = zero;
+    *(u8 *) (*(u8 **) (player + 0x94) + 0xa0) = zero;
+    func_800959FC(player, 0x400005);
+    *(s32 *) (*(u8 **) (player + 0x94)) = func_800C5A38();
+    func_800EFD24(*(u8 **) (player + 0x94) + 0x90);
+    func_800EFD24(*(u8 **) (player + 0x94) + 0x78);
+    func_800EFD24(*(u8 **) (player + 0x94) + 0x84);
+    func_800EFD24(*(u8 **) (player + 0x94) + 0x44);
+    *(s32 *) (*(u8 **) (player + 0x94) + 0x1c) = 0;
+    *(u8 *) (*(u8 **) (player + 0x94) + 0xa2) = 0;
+    func_80095A40(player);
+    *(f32 *) (*(u8 **) (player + 0x94) + 4) = *(f32 *) (*(u8 **) (player + 0x94) + 0x64);
+    *(f32 *) (*(u8 **) (player + 0x94) + 8) = *(f32 *) (*(u8 **) (player + 0x94) + 0x68);
+    func_80096254(player, 1);
+    func_8009590C(player, 0);
+    *(s32 *) (*(u8 **) (player + 0x94) + 0x9c) = 0;
+    func_800961AC(player, 1);
+    baflag_clear(player, 1);
+    baflag_clear(player, 2);
+    *(void (**)(s32, void *))(*(u8 **) (player + 0x94) + 0xc) = func_80095A6C;
+    *(void (**)(void *))(*(u8 **) (player + 0x94) + 0x10) = func_80095A64;
+    *(u8 *) (*(u8 **) (player + 0x94) + 0xa4) = 0;
+}
+
+s32 func_80095C10(s32 player)
+{
+    return func_800C5BA4(*(s32 *) (*(s32 *) (player + 0x94)));
+}
+
+// Move current toward target by at most step.
+f32 func_80095C34(f32 target, f32 current, f32 step)
+{
+    if (current < target)
+        current = func_800F13F0(target, current + step);
+    else if (target < current)
+        current = func_800F0E00(target, current - step);
+    return current;
+}
+
+// Per-frame update: sweep the player against the world, derive the medium, notify the stood-on actor.
+void func_80095C94(PlayerState *player)
+{
+    f32 saved_pos[3];
+    f32 pos[3];
+    f32 prev_pos[3];
+    f32 unk_0;
+    f32 water_level;
+
+    LOCAL_COLLISION(player)->active = 1;
+    LOCAL_COLLISION(player)->stood_actor = NULL;
+    if (!func_80091E80(player, 4))
+        return;
+    if (!func_8008E454(player))
+        return;
+
+    func_8009C128(player, saved_pos);
+    if (func_800BEAAC(saved_pos, &unk_0)) {
+        func_800C68E8(LOCAL_COLLISION(player)->floor, 1, unk_0);
+    } else {
+        func_800C68E8(LOCAL_COLLISION(player)->floor, 0, unk_0);
+    }
+    LOCAL_COLLISION(player)->clamped = 0;
+    LOCAL_COLLISION(player)->hit = 0;
+    LOCAL_COLLISION(player)->unk_55 = 0;
+    LOCAL_COLLISION(player)->triangle = NULL;
+    LOCAL_COLLISION(player)->prev_stable = LOCAL_COLLISION(player)->stable;
+    func_800CB840(1, player->unk184);
+    LOCAL_COLLISION(player)->radius =
+        func_80095C34(LOCAL_COLLISION(player)->target_radius, LOCAL_COLLISION(player)->radius, 1.0f);
+    LOCAL_COLLISION(player)->height =
+        func_80095C34(LOCAL_COLLISION(player)->target_height, LOCAL_COLLISION(player)->height, 1.0f);
+
+    // Dispatch on collision mode.
+    switch (LOCAL_COLLISION(player)->mode) {
+        // Normal sweep (modes 1, 3, 4, 9); mode 3 also clamps below the water surface.
+        case 1:
+        case 3:
+        case 4:
+        case 9:
+            func_8009C128(player, LOCAL_COLLISION(player)->position);
+            func_8009C15C(player, LOCAL_COLLISION(player)->prev_position);
+
+            if (LOCAL_COLLISION(player)->mode == 3) {
+                void *floor_info = LOCAL_COLLISION(player)->floor;
+                if (func_800C670C(floor_info)) {
+                    f32 water_y = func_800C67D8(floor_info);
+                    f32 offset = func_800A0E58(player);
+                    if (water_y - offset < LOCAL_COLLISION(player)->position[1]) {
+                        LOCAL_COLLISION(player)->position[1] = water_y - offset;
+                        LOCAL_COLLISION(player)->clamped = 1;
+                        baphysics_set_vertical_velocity(player, 1.0f);
+                    }
                 }
             }
-        }
-        func_800EFB24(LOCAL_COLLISION(param_0)->delta58, LOCAL_COLLISION(param_0)->position78, LOCAL_COLLISION(param_0)->previous84);
-        func_800D4584(LOCAL_COLLISION(param_0), LOCAL_COLLISION(param_0)->previous84, LOCAL_COLLISION(param_0)->position78, LOCAL_COLLISION(param_0)->delta58);
-        func_8009C0F8(param_0, LOCAL_COLLISION(param_0)->position78);
-        break;
-    case 5:
-        func_8009C128(param_0, LOCAL_COLLISION(param_0)->position78);
-        func_8009C15C(param_0, LOCAL_COLLISION(param_0)->previous84);
-        func_800EFB24(LOCAL_COLLISION(param_0)->delta58, LOCAL_COLLISION(param_0)->position78, LOCAL_COLLISION(param_0)->previous84);
-        func_800D4584(LOCAL_COLLISION(param_0), LOCAL_COLLISION(param_0)->previous84, LOCAL_COLLISION(param_0)->position78, LOCAL_COLLISION(param_0)->delta58);
-        func_80095798(param_0);
-        func_8009C0F8(param_0, LOCAL_COLLISION(param_0)->position78);
-        break;
-    case 7:
-        func_800978A4(param_0);
-        break;
-    case 8:
-        func_80096768(param_0);
-        break;
-    case 10:
-        _bahitspline_entrypoint_2(param_0);
-    case 2:
-    case 6:
-        LOCAL_COLLISION(param_0)->hit54 = 0;
-        LOCAL_COLLISION(param_0)->hit55 = 0;
-        LOCAL_COLLISION(param_0)->stable56 = 0;
-        break;
+
+            func_800EFB24(LOCAL_COLLISION(player)->sweep_delta, LOCAL_COLLISION(player)->position,
+                          LOCAL_COLLISION(player)->prev_position);
+            func_800D4584(LOCAL_COLLISION(player), LOCAL_COLLISION(player)->prev_position,
+                          LOCAL_COLLISION(player)->position, LOCAL_COLLISION(player)->sweep_delta);
+            func_8009C0F8(player, LOCAL_COLLISION(player)->position);
+            break;
+        // Climbing clamp.
+        case 5:
+            func_8009C128(player, LOCAL_COLLISION(player)->position);
+            func_8009C15C(player, LOCAL_COLLISION(player)->prev_position);
+            func_800EFB24(LOCAL_COLLISION(player)->sweep_delta, LOCAL_COLLISION(player)->position,
+                          LOCAL_COLLISION(player)->prev_position);
+            func_800D4584(LOCAL_COLLISION(player), LOCAL_COLLISION(player)->prev_position,
+                          LOCAL_COLLISION(player)->position, LOCAL_COLLISION(player)->sweep_delta);
+            func_80095798(player);
+            func_8009C0F8(player, LOCAL_COLLISION(player)->position);
+            break;
+        // Ledge.
+        case 7:
+            func_800978A4(player);
+            break;
+        // Alternate.
+        case 8:
+            func_80096768(player);
+            break;
+        // Hit spline (falls through to clear the hit flags).
+        case 10:
+            _bahitspline_entrypoint_2(player);
+        case 2:
+        case 6:
+            LOCAL_COLLISION(player)->hit = 0;
+            LOCAL_COLLISION(player)->unk_55 = 0;
+            LOCAL_COLLISION(player)->stable = 0;
     }
-    if (func_800C670C(LOCAL_COLLISION(param_0)->floor)) {
-        local_7 = func_800C67D8(LOCAL_COLLISION(param_0)->floor);
-        LOCAL_COLLISION(param_0)->belowA0 = LOCAL_COLLISION(param_0)->position78[1] < local_7;
+    if (func_800C670C(LOCAL_COLLISION(player)->floor)) {
+        water_level = func_800C67D8(LOCAL_COLLISION(player)->floor);
+        LOCAL_COLLISION(player)->below_water = LOCAL_COLLISION(player)->position[1] < water_level;
     }
-    if (func_80096530(param_0)) LOCAL_COLLISION(param_0)->stable56 = 1;
-    if (LOCAL_COLLISION(param_0)->belowA0 && LOCAL_COLLISION(param_0)->position78[1] < func_800C67D8(LOCAL_COLLISION(param_0)->floor) - func_800A0E58(param_0)) {
-        func_80096254(param_0, 3);
-        if (LOCAL_COLLISION(param_0)->stable56 && baphysics_get_vertical_velocity(param_0) < 0.0f) {
-            baphysics_set_vertical_velocity(param_0, -1.0f);
+    if (func_80096530(player))
+        LOCAL_COLLISION(player)->stable = 1;
+    if (LOCAL_COLLISION(player)->below_water &&
+        LOCAL_COLLISION(player)->position[1] <
+            func_800C67D8(LOCAL_COLLISION(player)->floor) - func_800A0E58(player)) {
+        func_80096254(player, 3);
+
+        if (LOCAL_COLLISION(player)->stable && baphysics_get_vertical_velocity(player) < 0.0f) {
+            baphysics_set_vertical_velocity(player, -1.0f);
         }
-    } else if (LOCAL_COLLISION(param_0)->stable56) {
-        func_80096260(param_0);
-        if (baphysics_get_vertical_velocity(param_0) < 0.0f) {
-            if (!(func_80096628(param_0) & 0x8000)) baphysics_set_vertical_velocity(param_0, -1.0f);
+
+    } else if (LOCAL_COLLISION(player)->stable) {
+        func_80096260(player);
+
+        if (baphysics_get_vertical_velocity(player) < 0.0f) {
+            if (!(func_80096628(player) & 0x8000))
+                baphysics_set_vertical_velocity(player, -1.0f);
         }
+
     } else {
-        func_80096254(param_0, 1);
+        func_80096254(player, 1);
     }
-    if (LOCAL_COLLISION(param_0)->restoreA2) func_8009C0F8(param_0, local_0);
+    if (LOCAL_COLLISION(player)->restore)
+        func_8009C0F8(player, saved_pos);
     func_800CB870();
-    if (LOCAL_COLLISION(param_0)->hit54) {
-        LOCAL_COLLISION(param_0)->countA3 = func_800F1418(LOCAL_COLLISION(param_0)->countA3 + 1, 3);
+    if (LOCAL_COLLISION(player)->hit) {
+        LOCAL_COLLISION(player)->hit_count = func_800F1418(LOCAL_COLLISION(player)->hit_count + 1, 3);
     } else {
-        LOCAL_COLLISION(param_0)->countA3 = 0;
+        LOCAL_COLLISION(player)->hit_count = 0;
     }
-    func_8009C15C(param_0, local_2);
-    func_8009C128(param_0, local_1);
-    func_800EFB24(LOCAL_COLLISION(param_0)->delta90, local_1, local_2);
-    if (LOCAL_COLLISION(param_0)->triangle1C) {
-        func_800FB508(LOCAL_COLLISION(param_0)->triangle6C, LOCAL_COLLISION(param_0)->triangle1C);
-        LOCAL_COLLISION(param_0)->triangle1C = LOCAL_COLLISION(param_0)->triangle6C;
+    func_8009C15C(player, prev_pos);
+    func_8009C128(player, pos);
+    func_800EFB24(LOCAL_COLLISION(player)->frame_delta, pos, prev_pos);
+    if (LOCAL_COLLISION(player)->triangle) {
+        func_800FB508(LOCAL_COLLISION(player)->triangle_copy, LOCAL_COLLISION(player)->triangle);
+        LOCAL_COLLISION(player)->triangle = LOCAL_COLLISION(player)->triangle_copy;
     }
-    baflag_clear(param_0, 1);
-    baflag_clear(param_0, 2);
-    if (LOCAL_COLLISION(param_0)->actor50 && player_isStable(param_0)) {
-        func_8010114C(LOCAL_COLLISION(param_0)->actor50, 0x91, param_0->unk184);
+    baflag_clear(player, 1);
+    baflag_clear(player, 2);
+    if (LOCAL_COLLISION(player)->stood_actor && player_isStable(player)) {
+        func_8010114C(LOCAL_COLLISION(player)->stood_actor, 0x91, player->unk184);
     }
 }
 
-void func_800961A0(void *arg, s32 v)
+void func_800961A0(void *player, s32 restore)
 {
-    ((s8 *)(*(void **)((char *)arg + 0x94)))[162] = v;
+    ((s8 *) (*(void **) ((char *) player + 0x94)))[162] = restore;
 }
 
-void func_800961AC(param_0, param_1) PlayerState * param_0; s32 param_1;
+// Switch collision mode, running the leave/enter hooks for modes 7 and 10.
+void func_800961AC(player, mode) PlayerState *player;
+s32 mode;
 {
-  s32 temp_v1;
-  u8 *var_v0;
-  var_v0 = *((u8 **) (((char *) param_0) + 0x94));
-  temp_v1 = *((s32 *) (((char *) var_v0) + 0x9C));
-  switch (temp_v1)
-  {
-    case 7:
-      func_80097858();
-      break;
+    s32 old_mode;
+    u8 *collision;
+    collision = *((u8 **) (((char *) player) + 0x94));
+    old_mode = *((s32 *) (((char *) collision) + 0x9C));
+    switch (old_mode) {
+        case 7:
+            func_80097858();
+            break;
 
-    case 10:
-      _bahitspline_entrypoint_0();
-      goto block_5;
+        case 10:
+            _bahitspline_entrypoint_0();
+    }
 
-  }
+    collision = *((u8 **) (((char *) player) + 0x94));
 
-  block_5:
-  var_v0 = *((u8 **) (((char *) param_0) + 0x94));
+    *((s32 *) (((char *) collision) + 0x9C)) = mode;
+    switch (mode) {
+        case 7:
+            func_8009788C(player, mode);
+            return;
 
-  *((s32 *) (((char *) var_v0) + 0x9C)) = param_1;
-  switch (param_1)
-  {
-    case 7:
-      func_8009788C(param_0, param_1);
-      return;
-
-    case 10:
-      _bahitspline_entrypoint_1(param_0, param_1);
-      return;
-
-  }
-
+        case 10:
+            _bahitspline_entrypoint_1(player, mode);
+    }
 }
 
-func_80096254(param_0, param_1) s32 param_0; s32 param_1;{
-    *(s32*)(*(s32*)(param_0 + 0x94) + 0xA8) = param_1;
-}
-
-void func_80096260(param_0) PlayerState * param_0;
+// Set the medium: 1 air, 2 ground, 3 water, 4 surface type 0x18.
+func_80096254(player, medium) s32 player;
+s32 medium;
 {
-  s32 ret;
-  ret = func_80096628(param_0);
-  if (func_800C84B0(ret) == 0x18)
-  {
-    func_80096254(param_0, 4);
-    return;
-  }
-  func_80096254(param_0, 2);
+    *(s32 *) (*(s32 *) (player + 0x94) + 0xA8) = medium;
 }
 
-void func_800962B0(PlayerState *param_0, s32 param_1) {
-    func_800C68D4(*(*(PlayerState***)((u8*)param_0 + 0x94)), param_1);
-}
-
-f32 func_800962D4(void *param_0)
+// Set the ground medium from the floor surface type.
+void func_80096260(player) PlayerState *player;
 {
-    f32 sp1C;
-    sp1C = func_8009C150();
-    return sp1C - func_800C6784(*(*(s32 **)((s8 *)param_0 + 0x94)));
+    s32 surface;
+    surface = func_80096628(player);
+    if (func_800C84B0(surface) == 0x18) {
+        func_80096254(player, 4);
+        return;
+    }
+    func_80096254(player, 2);
 }
 
-f32 func_8009630C(PlayerState *param_0)
+void func_800962B0(PlayerState *player, s32 unk_0)
 {
-  f32 sp1C;
-  f32 sp20;
-  f32 new_var;
-  s8 _sfpad[8];
-  new_var = func_8009C150();
-  if (new_var)
-  {
-  }
-  sp1C = new_var;
-  sp20 = func_800C6784(*(*((s32 **) (((char *) param_0) + 0x94))));
-  return sp1C - func_800F0E00(sp20, func_800C67D8(*(*((s32 **) (((char *) param_0) + 0x94)))));
+    func_800C68D4(*(*(PlayerState ***) ((u8 *) player + 0x94)), unk_0);
 }
 
-f32 func_80096364(PlayerState *param_0) {
-    return func_800C6784(*(s32 *)(*(s32 **)((u8 *)param_0 + 0x94)));
-}
-
-s32 func_80096388(PlayerState *param_0){
-
-    return *(s32 *)((char *)(*(struct ba_unk_9C **)((char *)param_0 + 0x94)) + 156);
-}
-
-void func_80096394(u8 *param_0, s32 param_1) {
-    func_800EE7F8(param_1, *(u32 *)(param_0 + 0x94) + 0x90);
-}
-
-void func_800963C0(PlayerState *param_0, f32 param_1[3]) {
-    func_800C675C(*(s32 *)(*(s32 **)((u8 *)param_0 + 0x94)), param_1);
-}
-
-int func_800963E4(f32 param_0[3]) {
-    f32 local_0[3];
-    func_800963C0(param_0, local_0);
-    func_80013A7C(local_0[1]);
-}
-
-s32 func_8009640C(u8 *param_0)
+f32 func_800962D4(void *player)
 {
-  s32 temp_t6;
-  s32 var_v0;
-  u8 *temp_v1;
-  u8 *new_var;
-  temp_v1 = *((u8 **) (param_0 + 0x94));
-  temp_t6 = (*(new_var = temp_v1 + 0x18)) == 0;
-  var_v0 = temp_t6;
-  if (temp_t6 != (temp_t6 * 0))
-  {
-    ;
-    return (*((u8 *) (temp_v1 + 0x56))) != 0;
-  }
+    f32 player_y;
+    player_y = func_8009C150();
+    return player_y - func_800C6784(*(*(s32 **) ((s8 *) player + 0x94)));
 }
 
-s32 func_80096434(PlayerState *param_0) {
-
-    return *(s32 *)((char *)(*(struct ba_flag_s **)((char *)param_0 + 0x94)) + 0x74);
-}
-
-void func_80096440(PlayerState *param_0, f32 *param_1)
+// Matching: the empty block steers IDO's register allocation.
+f32 func_8009630C(PlayerState *player)
 {
-  func_800EE7F8(param_1, *(s32 *)((char *)param_0 + 0x94) + 0x44);
+    f32 player_y;
+    f32 floor_y;
+    f32 y;
+    y = func_8009C150();
+    if (y) {
+    }
+    player_y = y;
+    floor_y = func_800C6784(*(*((s32 **) (((char *) player) + 0x94))));
+    return player_y - func_800F0E00(floor_y, func_800C67D8(*(*((s32 **) (((char *) player) + 0x94)))));
 }
 
-void func_8009646C(s32 *param_0, s32 param_1)
+f32 func_80096364(PlayerState *player)
 {
-    s32 local_0;
-    s32 local_1;
+    return func_800C6784(*(s32 *) (*(s32 **) ((u8 *) player + 0x94)));
+}
 
-    local_0 = 0;
-    local_1 = param_1;
+s32 func_80096388(PlayerState *player)
+{
+    return *(s32 *) ((char *) (*(struct ba_unk_9C **) ((char *) player + 0x94)) + 156);
+}
+
+void func_80096394(u8 *player, s32 out)
+{
+    func_800EE7F8(out, *(u32 *) (player + 0x94) + 0x90);
+}
+
+void func_800963C0(PlayerState *player, f32 out[3])
+{
+    func_800C675C(*(s32 *) (*(s32 **) ((u8 *) player + 0x94)), out);
+}
+
+int func_800963E4(f32 player[3])
+{
+    f32 vec[3];
+    func_800963C0(player, vec);
+    func_80013A7C(vec[1]);
+}
+
+// Matching: the `* 0` comparison and the extra pointer are needed for the match.
+s32 func_8009640C(u8 *player)
+{
+    s32 was_unstable;
+    u8 *collision;
+    u8 *prev_stable;
+    collision = *((u8 **) (player + 0x94));
+    was_unstable = (*(prev_stable = collision + 0x18)) == 0;
+    if (was_unstable != (was_unstable * 0)) {
+        return (*((u8 *) (collision + 0x56))) != 0;
+    }
+}
+
+s32 func_80096434(PlayerState *player)
+{
+    return *(s32 *) ((char *) (*(struct ba_flag_s **) ((char *) player + 0x94)) + 0x74);
+}
+
+void func_80096440(PlayerState *player, f32 *out)
+{
+    func_800EE7F8(out, *(s32 *) ((char *) player + 0x94) + 0x44);
+}
+
+void func_8009646C(s32 *player, s32 out)
+{
+    s32 offset;
+    s32 dst;
+
+    offset = 0;
+    dst = out;
     do {
-        func_800EE7F8(local_1, param_0[37] + local_0 + 0x20);
-        local_0 += 0xC;
-        local_1 += 0xC;
-    } while (local_0 != 0x24);
+        func_800EE7F8(dst, player[37] + offset + 0x20);
+        offset += 0xC;
+        dst += 0xC;
+    } while (offset != 0x24);
 }
 
-s32 func_800964D0(void *arg)
+// Current medium.
+s32 func_800964D0(void *player)
 {
-    return ((s32 *)(*(void **)((char *)arg + 0x94)))[42];
+    return ((s32 *) *(void **) ((char *) player + 0x94))[42];
 }
 
-f32 func_800964DC(PlayerState *param_0) {
-    return func_800C67D8(*(s32 *)(*(s32 **)((u8 *)param_0 + 0x94)));
-}
-
-s32 func_80096500(PlayerState *param_0)
+f32 func_800964DC(PlayerState *player)
 {
-  s32 local_0;
-  ;
-  return *(((char *) (*((s32 *) (((char *) param_0) + 0x94)))) + 0xA1);
+    return func_800C67D8(*(s32 *) *(s32 **) ((u8 *) player + 0x94));
 }
 
-s32 func_8009650C(PlayerState *param_0)
+s32 func_80096500(PlayerState *player)
 {
-  s32 local_0;
-  local_0 = *((s32 *) (((char *) param_0) + 0x94));
-  return *(((char *) (*((s32 *) (((char *) param_0) + 0x94)))) + 0x55);
+    return *((char *) *(s32 *) ((char *) player + 0x94) + 0xA1);
 }
 
-s32 func_80096518(void *arg)
+s32 func_8009650C(PlayerState *player)
 {
-    return ((u8 *)(*(void **)((char *)arg + 0x94)))[86];
+    return *((char *) *(s32 *) ((char *) player + 0x94) + 0x55);
 }
 
-u8 func_80096524(u8 *arg0) {
-    return ((u8 **)arg0)[37][0xA0];
-}
-
-s32 func_80096530(param_0) struct SomeStruct * param_0;
+s32 func_80096518(void *player)
 {
-  u8 *local_0;
-  local_0 = (*((s32 *) (((char *) param_0) + 0x94))) & 0xFFFFFFFFFFFFFFFFu;
-  return local_0[0xA3] == 3;
+    return ((u8 *) *(void **) ((char *) player + 0x94))[86];
 }
 
-s32 func_80096544(PlayerState *param_0)
+u8 func_80096524(u8 *player)
 {
-    func_800C670C(*(*(s32 **)((s8 *)param_0 + 0x94)));
+    return ((u8 **) player)[37][0xA0];
 }
 
-s32 func_80096568(s32 *param_0, s32 param_1)
+// True once the hit count has saturated at 3.
+// Matching: the no-op mask is needed for the match.
+s32 func_80096530(player)
+struct SomeStruct *player;
 {
-  s32 local_0;
-  s32 local_1;
-  s32 local_2;
-  s32 local_3;
-  s32 new_var;
-  s32 local_4;
-  s32 local_5;
-  local_5 = param_1;
-  local_2 = param_0[0x25];
-  new_var = param_0[0x25];
-  local_0 = *((s32 **) (local_2 + 0));
-  local_2 = new_var;
-  local_1 = func_800C6744(local_0);
-  local_3 = local_5;
-  local_5 = local_5;
-  local_4 = local_1 & 0x1F00;
-  return local_4 == local_5;
+    u8 *collision;
+    collision = *(s32 *) ((char *) player + 0x94) & 0xFFFFFFFFFFFFFFFFu;
+    return collision[0xA3] == 3;
 }
 
-s32 func_8009659C(u8 *param_0, s32 param_1)
+s32 func_80096544(PlayerState *player)
 {
-  s32 *var_t6;
-  s32 var_a0;
-  s32 *new_var2;
-  s32 var_v0;
-  s32 new_var;
-  new_var2 = *((s32 **) (((u8 *) param_0) + 0x94));
-  var_t6 = *((s32 **) (((u8 *) param_0) + 0x94));
-  var_t6 = new_var2;
-  new_var = *var_t6;
-  var_a0 = new_var;
-  ;
-  return func_800C6744(var_a0) & param_1;
+    func_800C670C(**(s32 **) ((s8 *) player + 0x94));
 }
 
-s32 func_800965C8(s32 param_0)
+// Compare the floor flags (mask 0x1F00) against expected.
+// Matching: the redundant copies are needed for the match.
+s32 func_80096568(s32 *player, s32 expected)
 {
-    return ((u8 **)(param_0 + 0x94))[0][0xA4];
+    s32 floor_info;
+    s32 flags;
+    s32 collision;
+    s32 collision_copy;
+    s32 masked;
+    s32 expected_copy;
+    expected_copy = expected;
+    collision = player[0x25];
+    collision_copy = player[0x25];
+    floor_info = *(s32 **) (collision + 0);
+    flags = func_800C6744(floor_info);
+    masked = flags & 0x1F00;
+    return masked == expected_copy;
 }
 
-struct unk_struct_94 *func_800965D4(struct unk_struct_94 *param_0)
+// Floor flags masked by mask.
+// Matching: the redundant copies are needed for the match.
+s32 func_8009659C(u8 *player, s32 mask)
 {
-    return param_0->unk94->unk50;
+    s32 *collision;
+    s32 floor_copy;
+    s32 *collision_copy;
+    s32 floor_info;
+    collision_copy = *(s32 **) ((u8 *) player + 0x94);
+    collision = *(s32 **) ((u8 *) player + 0x94);
+    floor_info = *collision;
+    floor_copy = floor_info;
+    return func_800C6744(floor_copy) & mask;
 }
 
-void func_800965E0(u8 *param_0) {
-    func_800C67F8(*(*(s32 **)((s8 *)(param_0) + (0x94))));
-}
-
-void func_80096604(u8 *param_0) {
-    func_800C6840(*(*(s32 **)((s8 *)(param_0) + (0x94))));
-}
-
-s32 func_80096628(param_0) PlayerState * param_0;
+s32 func_800965C8(s32 player)
 {
-  s32 local_0;
-  s32 local_1;
-  local_0 = local_1;
-  ;
-  local_1 = *((s32 **) local_0);
-  func_800C6744(*((void **) (*((s32 *) (((char *) param_0) + 0x94)))));
+    return ((u8 **) (player + 0x94))[0][0xA4];
 }
 
-void func_8009664C(void *param_0) {
-    func_800C674C(*(*(s32 **)((u8 *)param_0 + 0x94)));
-}
-
-void func_80096670(void *param_0)
+struct unk_struct_94 *func_800965D4(struct unk_struct_94 *player)
 {
-  s32 **new_var;
-  s32 *t6;
-  if (((param_0 && param_0) && param_0) != 0)
-  {
- do { } while (0);
-  }
-  new_var = &(*((s32 **) (((char *) param_0) + 0x94)));
-  ;
-  func_800C67C8(*(*new_var));
+    return player->unk_94->unk_50;
 }
 
-void func_80096694(PlayerState* a0)
+void func_800965E0(u8 *player)
 {
-    func_800C84B0(func_80096628(a0));
+    func_800C67F8(**(s32 **) ((s8 *) player + 0x94));
 }
 
-void func_800966BC(u8 *param_0) {
-    func_800C67E0(*(*(s32 **)((s8 *)(param_0) + (0x94))));
-}
-
-void func_800966E0(void *param_0)
+void func_80096604(u8 *player)
 {
-    func_800C67E8(*(*(s32 **)((s8 *)param_0 + 0x94)));
+    func_800C6840(**(s32 **) ((s8 *) player + 0x94));
 }
 
-void func_80096704(void *param_0)
+s32 func_80096628(player)
+PlayerState *player;
 {
-  s32 *t6;
-  ;
-  func_800C5B84(*(*((s32 **) (((char *) param_0) + 0x94))));
+    func_800C6744(*(void **) *(s32 *) ((char *) player + 0x94));
 }
 
-void func_80096728(u8 *param_0)
+void func_8009664C(void *player)
 {
-  s32 temp_a1;
-  temp_a1 = *(*((s32 **) (((u8 *) param_0) + 0x94)));
-  if (temp_a1 != 0)
-  {
-    *(*((s32 **) (((u8 *) param_0) + 0x94))) = func_800C5BC4(temp_a1 ^ 0, temp_a1, param_0);
-  }
+    func_800C674C(**(s32 **) ((u8 *) player + 0x94));
 }
 
-int func_80096768(param_0) Actor * param_0;
+// Matching: the empty block and the temporary pointer are needed for the match.
+void func_80096670(void *player)
 {
-  f32 local_0[3];
-  func_8009C128(param_0, local_0);
-  func_800D4D5C(local_0, *(s32*)((char*)param_0 + 0x94));
+    s32 **collision;
+    {
+    }
+    collision = &(*((s32 **) (((char *) player) + 0x94)));
+    func_800C67C8(*(*collision));
 }
 
-void func_8009679C(u8 *param_0) {
-    func_800C68DC(*(*(s32 **)((s8 *)(param_0) + (0x94))));
+void func_80096694(PlayerState *player)
+{
+    func_800C84B0(func_80096628(player));
+}
+
+void func_800966BC(u8 *player)
+{
+    func_800C67E0(*(*(s32 **) ((s8 *) (player) + (0x94))));
+}
+
+void func_800966E0(void *player)
+{
+    func_800C67E8(*(*(s32 **) ((s8 *) player + 0x94)));
+}
+
+void func_80096704(void *player)
+{
+    func_800C5B84(*(*((s32 **) (((char *) player) + 0x94))));
+}
+
+// Matching: `^ 0` is needed for the match.
+void func_80096728(u8 *player)
+{
+    s32 floor;
+    floor = *(*((s32 **) (((u8 *) player) + 0x94)));
+    if (floor != 0) {
+        *(*((s32 **) (((u8 *) player) + 0x94))) = func_800C5BC4(floor ^ 0, floor, player);
+    }
+}
+
+int func_80096768(player)
+Actor *player;
+{
+    f32 pos[3];
+    func_8009C128(player, pos);
+    func_800D4D5C(pos, *(s32 *) ((char *) player + 0x94));
+}
+
+void func_8009679C(u8 *player)
+{
+    func_800C68DC(*(*(s32 **) ((s8 *) (player) + (0x94))));
 }

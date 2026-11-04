@@ -1,3 +1,5 @@
+// Player dust and smoke puffs (PlayerState+0x5C): running/skid trails, landing rings, slide
+// dust and generic puffs with configurable velocity, scale and alpha.
 #include "common.h"
 #include "playerstate.h"
 #include "core2/1E93440.h"
@@ -13,12 +15,18 @@ extern void func_800BA7C4(s32, f32, f32);
 extern void func_800BA7FC(s32, f32, f32);
 extern void func_800BA8F8(s32, f32, f32);
 extern void func_800BA5BC(s32, f32, f32);
-typedef struct { s32 local_0; u8 pad_0[5]; u8 local_1; } DustState;
-typedef struct { u8 pad_0[0x5C]; DustState *local_0; } DustPlayer;
+typedef struct {
+    s32 mode;
+    u8 pad_4[5];
+    u8 unk_9;
+} DustState;
+typedef struct {
+    u8 pad_0[0x5C];
+    DustState *dust;
+} DustPlayer;
 extern void func_8009C128(PlayerState *, f32 *);
 extern void func_800EFCD8(f32 *, f32, f32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
-extern void func_800BA930(s32, s32, s32, s32, s32, s32, s32);
 extern f32 yaw_get(PlayerState *);
 extern f32 func_800DC178(f32, f32);
 extern f32 func_800DC0C0(void);
@@ -26,245 +34,251 @@ extern f32 func_800136E4(f32);
 extern void func_800EF334(f32 *, f32);
 extern int func_800EF04C(f32 *, f32 *);
 void badust_entrypoint_12();
-void badust_entrypoint_4(PlayerState *param_0, f32 param_1, f32 param_2);
-void badust_entrypoint_5(PlayerState *param_0, f32 param_1, f32 param_2);
+void badust_entrypoint_4(PlayerState *player, f32 yaw, f32 dist);
 
-s32 badust_entrypoint_0() 
+s32 badust_entrypoint_0()
 {
     return 0xC;
 }
 
-void func_80800008_badust(arg0) s32 arg0; 
+void func_80800008_badust(arg0) s32 arg0;
 {
 }
-void func_80800010_badust(param_0) PlayerState *param_0;
+
+void func_80800010_badust(player) PlayerState *player;
 {
-    if (_batimer_decrement(param_0, 8)) {
-        func_800A2EEC(param_0, 0);
-        _batimer_set(param_0, 8, 0.12f);
+    if (_batimer_decrement(player, 8)) {
+        func_800A2EEC(player, 0);
+        _batimer_set(player, 8, 0.12f);
     }
-    ((u8 *)*(u8 **)((u8 *)param_0 + 0x5C))[9] = (((u8 *)*(u8 **)((u8 *)param_0 + 0x5C))[9] + 1) % 2;
-    switch (((u8 *)*(u8 **)((u8 *)param_0 + 0x5C))[9]) {
-    case 0:
-        badust_entrypoint_4(param_0, func_8009BB18(param_0) + 180.0f - 70.0f, 20.0f);
-        return;
-    case 1:
-        badust_entrypoint_4(param_0, func_8009BB18(param_0) + 180.0f - 10.0f, 20.0f);
-        return;
-    case 2:
-        badust_entrypoint_4(param_0, func_8009BB18(param_0) + 180.0f + 50.0f, 20.0f);
-        return;
-    }
-}
-
-void badust_entrypoint_1(void *param_0)
-{
-  f32 sp24;
-  u8 *temp_v0;
-  if ((func_80096544() == 0) || ((sp24 = func_800964DC(param_0), !(func_8009C150(param_0) < sp24))))
-  {
-    temp_v0 = *((u8 **) (((u8 *) param_0) + 0x5C));
-    if ((*((s32 *) (((u8 *) temp_v0) + 4))) != 0)
-    {
-      *((s32 *) (((u8 *) temp_v0) + 4)) = 0;
-    }
-    else
-    {
-      *((s32 *) (((u8 *) temp_v0) + 4)) = 1;
-    }
-    if (func_8009BB5C(param_0) > 100.0f)
-    {
-      if ((*((s32 *) (((u8 *) (*((u8 **) (((u8 *) param_0) + 0x5C)))) + 4))) != 0)
-      {
-        badust_entrypoint_4(param_0, func_8009BB18(param_0) - 20.0f, 20.0f);
-        return;
-      }
-      badust_entrypoint_4(param_0, func_8009BB18(param_0) + 20.0f, 20.0f);
-    }
-  }
-}
-
-void badust_entrypoint_2(PlayerState *param_0, f32 *param_1, f32 *param_2, f32 param_3, f32 param_4, f32 param_5)
-{
-    s32 local_0;
-    s16 local_1;
-    s16 local_2;
-    s16 local_3;
-    local_0 = _fxdlsmoke_entrypoint_0(param_1);
-    local_1 = (s16)param_2[0];
-    local_2 = (s16)param_2[1];
-    local_3 = (s16)param_2[2];
-    func_800BA930(local_0, local_1, local_2, local_3, local_1, local_2, local_3);
-    func_800BA450(local_0, 0, 0, 0, 0, 0, 0);
-    func_800BA7C4(local_0, param_3, param_3);
-    func_800BA7FC(local_0, param_4, param_4);
-    func_800BA8F8(local_0, param_5, param_5);
-    func_800BA5BC(local_0, 19.0f / param_5, 19.0f / param_5);
-    func_800BA22C(local_0, 1);
-}
-
-void badust_entrypoint_3(PlayerState *param_0, f32 param_1, f32 param_2)
-{
-    f32 local_1[3];
-    f32 local_0[3];
-
-    param_2 *= 0.51f;
-    func_8009C128(param_0, local_0);
-    local_0[1] += 12.0f;
-    func_800EFCD8(local_1, param_1, param_2);
-    local_1[1] = 50.0f;
-    badust_entrypoint_2(param_0, local_0, local_1, 0.1f, 0.8f, 1.0f);
-}
-
-void badust_entrypoint_4(PlayerState *param_0, f32 param_1, f32 param_2)
-{
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    s32 local_3;
-
-    func_800EFA4C(local_2, 0.0f, 40.0f, 0.0f);
-    func_8009C128(param_0, local_1);
-    func_800EFCD8(local_0, param_1, param_2);
-    local_0[1] = 15.0f;
-    func_800EF04C(local_1, local_0);
-    local_3 = _fxdlsmoke_entrypoint_0(local_1);
-    func_800BA930(local_3, (s16)local_2[0], (s16)local_2[1], (s16)local_2[2],
-        (s16)local_2[0], (s16)local_2[1], (s16)local_2[2]);
-    func_800BA450(local_3, 0, 0, 0, 0, 0, 0);
-    func_800BA7C4(local_3, 0.2f, 0.2f);
-    func_800BA7FC(local_3, 0.7f, 0.75f);
-    func_800BA8F8(local_3, 0.6f, 0.7f);
-    func_800BA5BC(local_3, 19.0f, 19.0f);
-    func_800BA22C(local_3, 1);
-}
-
-void badust_entrypoint_5(PlayerState *param_0, f32 param_1, f32 param_2)
-{
-    f32 local_1[3];
-    f32 local_0[3];
-
-    param_2 *= 0.51f;
-    func_8009C128(param_0, local_0);
-    local_0[1] += 2.0f;
-    func_800EFCD8(local_1, param_1, param_2);
-    local_1[1] = 50.0f;
-    badust_entrypoint_2(param_0, local_0, local_1, 0.1f, 0.8f, 1.0f);
-}
-
-void badust_entrypoint_6(PlayerState *param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4)
-{
-    f32 local_0[3];
-    f32 local_1[3];
-    param_3 *= 0.51f;
-    func_8009C128(param_0, local_1);
-    local_1[1] += 12.0f + param_1;
-    func_800EFCD8(local_0, param_2, param_3);
-    local_0[1] = param_4;
-    badust_entrypoint_2(param_0, local_1, local_0, 0.1f, 0.8f, 0.7f);
-}
-
-void badust_entrypoint_7(PlayerState *param_0)
-{
-    f32 local_2[3];
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_3;
-    func_8009C128(param_0, local_0);
-    local_0[1] += 20.0f;
-    ((u8 *)(*(void **)((u8 *)param_0 + 0x5C)))[8]++;
-    if (((u8 *)(*(void **)((u8 *)param_0 + 0x5C)))[8] > 2) ((u8 *)(*(void **)((u8 *)param_0 + 0x5C)))[8] = 0;
-    if (((u8 *)(*(void **)((u8 *)param_0 + 0x5C)))[8]) {
-        local_3 = func_800136E4(yaw_get(param_0) + func_800DC178(70.0f, 90.0f));
-        func_800EFCD8(local_1, local_3, func_800DC0C0() * 15.0f + 20.0f);
-        local_1[1] = 0.0f;
-    }
-    switch (((u8 *)(*(void **)((u8 *)param_0 + 0x5C)))[8]) {
-    case 0: break;
-    case 1: func_800EF334(local_1, -1.0f); func_800EF04C(local_0, local_1); break;
-    case 2: func_800EF04C(local_0, local_1); break;
-    }
-    func_800EFCD8(local_2, yaw_get(param_0), 40.0f);
-    local_2[1] = func_800DC178(50.0f, 90.0f);
-    badust_entrypoint_2(param_0, local_0, local_2, func_800DC178(0.4f, 0.5f),
-        func_800DC178(0.7f, 0.9f), func_800DC178(0.8f, 1.3f));
-}
-
-void badust_entrypoint_8(s32 param_0) {
-    f32 local_0;
-
-    for (local_0 = 0.0f; local_0 < 360.0f; local_0 += 45.0f) {
-        badust_entrypoint_5(param_0, local_0, 230.0f);
-    }
-}
-
-void badust_entrypoint_9(PlayerState *param_0)
-{
-    switch (*(s32 *)(*(u8 **)((u8 *)param_0 + 0x5C) + 4)) {
+    ((u8 *) *(u8 **) ((u8 *) player + 0x5C))[9] =
+        (((u8 *) *(u8 **) ((u8 *) player + 0x5C))[9] + 1) % 2;
+    switch (((u8 *) *(u8 **) ((u8 *) player + 0x5C))[9]) {
         case 0:
-            badust_entrypoint_4(param_0, func_8009BB18(param_0) - 20.0f, 40.0f);
+            badust_entrypoint_4(player, func_8009BB18(player) + 180.0f - 70.0f, 20.0f);
+            return;
+        case 1:
+            badust_entrypoint_4(player, func_8009BB18(player) + 180.0f - 10.0f, 20.0f);
+            return;
+        case 2:
+            badust_entrypoint_4(player, func_8009BB18(player) + 180.0f + 50.0f, 20.0f);
+    }
+}
+
+void badust_entrypoint_1(void *player)
+{
+    f32 unk_0;
+    u8 *dust;
+    if ((func_80096544() == 0) ||
+        (unk_0 = func_800964DC(player), !(func_8009C150(player) < unk_0))) {
+        dust = *(u8 **) ((u8 *) player + 0x5C);
+        if (*(s32 *) ((u8 *) dust + 4) != 0) {
+            *(s32 *) ((u8 *) dust + 4) = 0;
+        } else {
+            *(s32 *) ((u8 *) dust + 4) = 1;
+        }
+        if (func_8009BB5C(player) > 100.0f) {
+            if (*(s32 *) ((u8 *) *(u8 **) ((u8 *) player + 0x5C) + 4) != 0) {
+                badust_entrypoint_4(player, func_8009BB18(player) - 20.0f, 20.0f);
+                return;
+            }
+            badust_entrypoint_4(player, func_8009BB18(player) + 20.0f, 20.0f);
+        }
+    }
+}
+
+// Spawns one smoke puff at pos with the given velocity.
+void badust_entrypoint_2(PlayerState *player, f32 *pos, f32 *velocity, f32 unk_0, f32 unk_1,
+                         f32 unk_2)
+{
+    s32 emitter;
+    s16 vx;
+    s16 vy;
+    s16 vz;
+    emitter = _fxdlsmoke_entrypoint_0(pos);
+    vx = (s16) velocity[0];
+    vy = (s16) velocity[1];
+    vz = (s16) velocity[2];
+    func_800BA930(emitter, vx, vy, vz, vx, vy, vz);
+    func_800BA450(emitter, 0, 0, 0, 0, 0, 0);
+    func_800BA7C4(emitter, unk_0, unk_0);
+    func_800BA7FC(emitter, unk_1, unk_1);
+    func_800BA8F8(emitter, unk_2, unk_2);
+    func_800BA5BC(emitter, 19.0f / unk_2, 19.0f / unk_2);
+    func_800BA22C(emitter, 1);
+}
+
+void badust_entrypoint_3(PlayerState *player, f32 yaw, f32 speed)
+{
+    f32 velocity[3];
+    f32 pos[3];
+
+    speed *= 0.51f;
+    func_8009C128(player, pos);
+    pos[1] += 12.0f;
+    func_800EFCD8(velocity, yaw, speed);
+    velocity[1] = 50.0f;
+    badust_entrypoint_2(player, pos, velocity, 0.1f, 0.8f, 1.0f);
+}
+
+// Spawns a puff behind the feet: offset from the player by (yaw, dist).
+void badust_entrypoint_4(PlayerState *player, f32 yaw, f32 dist)
+{
+    f32 offset[3];
+    f32 pos[3];
+    f32 velocity[3];
+    s32 emitter;
+
+    func_800EFA4C(velocity, 0.0f, 40.0f, 0.0f);
+    func_8009C128(player, pos);
+    func_800EFCD8(offset, yaw, dist);
+    offset[1] = 15.0f;
+    func_800EF04C(pos, offset);
+    emitter = _fxdlsmoke_entrypoint_0(pos);
+    func_800BA930(emitter, (s16) velocity[0], (s16) velocity[1], (s16) velocity[2], (s16) velocity[0],
+                  (s16) velocity[1], (s16) velocity[2]);
+    func_800BA450(emitter, 0, 0, 0, 0, 0, 0);
+    func_800BA7C4(emitter, 0.2f, 0.2f);
+    func_800BA7FC(emitter, 0.7f, 0.75f);
+    func_800BA8F8(emitter, 0.6f, 0.7f);
+    func_800BA5BC(emitter, 19.0f, 19.0f);
+    func_800BA22C(emitter, 1);
+}
+
+void badust_entrypoint_5(PlayerState *player, f32 yaw, f32 speed)
+{
+    f32 velocity[3];
+    f32 pos[3];
+
+    speed *= 0.51f;
+    func_8009C128(player, pos);
+    pos[1] += 2.0f;
+    func_800EFCD8(velocity, yaw, speed);
+    velocity[1] = 50.0f;
+    badust_entrypoint_2(player, pos, velocity, 0.1f, 0.8f, 1.0f);
+}
+
+void badust_entrypoint_6(PlayerState *player, f32 y_offset, f32 yaw, f32 speed, f32 velocity_y)
+{
+    f32 velocity[3];
+    f32 pos[3];
+    speed *= 0.51f;
+    func_8009C128(player, pos);
+    pos[1] += 12.0f + y_offset;
+    func_800EFCD8(velocity, yaw, speed);
+    velocity[1] = velocity_y;
+    badust_entrypoint_2(player, pos, velocity, 0.1f, 0.8f, 0.7f);
+}
+
+void badust_entrypoint_7(PlayerState *player)
+{
+    f32 velocity[3];
+    f32 pos[3];
+    f32 offset[3];
+    f32 side_yaw;
+    func_8009C128(player, pos);
+    pos[1] += 20.0f;
+    ((u8 *) *(void **) ((u8 *) player + 0x5C))[8]++;
+    if (((u8 *) *(void **) ((u8 *) player + 0x5C))[8] > 2)
+        ((u8 *) *(void **) ((u8 *) player + 0x5C))[8] = 0;
+    if (((u8 *) *(void **) ((u8 *) player + 0x5C))[8]) {
+        side_yaw = func_800136E4(yaw_get(player) + func_800DC178(70.0f, 90.0f));
+        func_800EFCD8(offset, side_yaw, func_800DC0C0() * 15.0f + 20.0f);
+        offset[1] = 0.0f;
+    }
+    switch (((u8 *) *(void **) ((u8 *) player + 0x5C))[8]) {
+        case 0:
             break;
         case 1:
-            badust_entrypoint_4(param_0, func_8009BB18(param_0) + 20.0f, 40.0f);
+            func_800EF334(offset, -1.0f);
+            func_800EF04C(pos, offset);
             break;
         case 2:
-            badust_entrypoint_4(param_0, func_8009BB18(param_0), 30.0f);
+            func_800EF04C(pos, offset);
             break;
     }
-    (*(s32 *)(*(u8 **)((u8 *)param_0 + 0x5C) + 4))++;
-    if (*(s32 *)(*(u8 **)((u8 *)param_0 + 0x5C) + 4) >= 3) {
-        *(s32 *)(*(u8 **)((u8 *)param_0 + 0x5C) + 4) = 0;
-    }
+    func_800EFCD8(velocity, yaw_get(player), 40.0f);
+    velocity[1] = func_800DC178(50.0f, 90.0f);
+    badust_entrypoint_2(player, pos, velocity, func_800DC178(0.4f, 0.5f),
+                        func_800DC178(0.7f, 0.9f), func_800DC178(0.8f, 1.3f));
 }
 
-void badust_entrypoint_10(PlayerState *param_0, f32 param_1)
+void badust_entrypoint_8(s32 player)
 {
-    f32 local_0;
-    for (local_0 = 0.0f; local_0 < 359.0f; local_0 += 60.0f)
-        badust_entrypoint_6(param_0, param_1, local_0, 730.0f, 100.0f);
-    for (local_0 = 0.0f; local_0 < 359.0f; local_0 += 60.0f)
-        badust_entrypoint_6(param_0, param_1, func_800136E4(local_0 + 30.0f), 430.0f, 40.0f);
+    f32 angle;
+
+    for (angle = 0.0f; angle < 360.0f; angle += 45.0f) {
+        badust_entrypoint_5(player, angle, 230.0f);
+    }
 }
 
-void badust_entrypoint_11(u8 *param_0) {
-    (*(s32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x5C)))) + (4))) = 0;
-    (*(s8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x5C)))) + (8))) = 0;
-    (*(s32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x5C)))) + (0))) = 0;
-    badust_entrypoint_12(param_0, 1);
-}
-
-void badust_entrypoint_12(param_0, param_1) PlayerState *param_0; s32 param_1;
+void badust_entrypoint_9(PlayerState *player)
 {
-    ((DustPlayer *)param_0)->local_0->local_0 = param_1;
-    switch (param_1) {
-    case 2:
-        func_8009ADF0(param_0, 3, 1);
-        ((DustPlayer *)param_0)->local_0->local_1 = 0;
-        _batimer_set(param_0, 8, 0.01f);
-        break;
-    case 3:
-        func_8009ADF0(param_0, 3, 1);
-        break;
-    case 1:
-        func_8009ADF0(param_0, 3, 0);
-        break;
+    switch (*(s32 *) (*(u8 **) ((u8 *) player + 0x5C) + 4)) {
+        case 0:
+            badust_entrypoint_4(player, func_8009BB18(player) - 20.0f, 40.0f);
+            break;
+        case 1:
+            badust_entrypoint_4(player, func_8009BB18(player) + 20.0f, 40.0f);
+            break;
+        case 2:
+            badust_entrypoint_4(player, func_8009BB18(player), 30.0f);
+    }
+    (*(s32 *) (*(u8 **) ((u8 *) player + 0x5C) + 4))++;
+    if (*(s32 *) (*(u8 **) ((u8 *) player + 0x5C) + 4) >= 3) {
+        *(s32 *) (*(u8 **) ((u8 *) player + 0x5C) + 4) = 0;
     }
 }
 
-void badust_entrypoint_13(u8 *param_0) {
-    s32 local_0;
+// Landing ring: two rings of 6 puffs, the second rotated by 30 degrees.
+void badust_entrypoint_10(PlayerState *player, f32 y_offset)
+{
+    f32 angle;
+    for (angle = 0.0f; angle < 359.0f; angle += 60.0f)
+        badust_entrypoint_6(player, y_offset, angle, 730.0f, 100.0f);
+    for (angle = 0.0f; angle < 359.0f; angle += 60.0f)
+        badust_entrypoint_6(player, y_offset, func_800136E4(angle + 30.0f), 430.0f, 40.0f);
+}
 
-    local_0 = *(*(s32 **)((s8 *)(param_0) + (0x5C)));
-    switch (local_0) {                              
-    case 2:
-        func_80800010_badust();
-        return;
-    case 3:
-        func_80800008_badust();
-        return;
+void badust_entrypoint_11(u8 *player)
+{
+    *(s32 *) ((s8 *) *(u8 **) ((s8 *) player + 0x5C) + 4) = 0;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x5C) + 8) = 0;
+    *(s32 *) ((s8 *) *(u8 **) ((s8 *) player + 0x5C) + 0) = 0;
+    badust_entrypoint_12(player, 1);
+}
+
+void badust_entrypoint_12(player, mode) PlayerState *player;
+s32 mode;
+{
+    ((DustPlayer *) player)->dust->mode = mode;
+    switch (mode) {
+        case 2:
+            func_8009ADF0(player, 3, 1);
+            ((DustPlayer *) player)->dust->unk_9 = 0;
+            _batimer_set(player, 8, 0.01f);
+            break;
+        case 3:
+            func_8009ADF0(player, 3, 1);
+            break;
+        case 1:
+            func_8009ADF0(player, 3, 0);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/dust.data.s) is defined here in C.
- * Values are taken from the ROM. */
-u32 D_80800CB0_badust[4] = { 0xFF, 0xFF, 0xFE, 0x0 };
+void badust_entrypoint_13(u8 *player)
+{
+    s32 mode;
+
+    mode = **(s32 **) ((s8 *) player + 0x5C);
+    switch (mode) {
+        case 2:
+            func_80800010_badust();
+            return;
+        case 3:
+            func_80800008_badust();
+    }
+}
+
+// TU-NOTE: the overlay .data is defined here in C; values are taken from the ROM.
+u32 D_80800CB0_badust[4] = {0xFF, 0xFF, 0xFE, 0x0};

@@ -1,23 +1,26 @@
+// Model vertex-normal array helpers: index into the array, copy it to the heap, free the copy.
 #include "common.h"
 
-s32 dbvtxnormal_entrypoint_0(s32 param_0, s32 param_1){
-    return param_0 + (param_1 * 4);
-}
-
-void dbvtxnormal_entrypoint_1(void* arg0) 
+// Address of the normal of vertex `index` (4 bytes each).
+s32 dbvtxnormal_entrypoint_0(s32 normals, s32 index)
 {
-    heap_free(arg0);
+    return normals + (index * 4);
 }
-s32 dbvtxnormal_entrypoint_2(void *arg)
+
+// Free a normal array copy.
+void dbvtxnormal_entrypoint_1(void *normals)
 {
-  s32 dst;
-  s32 size;
-
-  size = func_800B2344(func_800B2840()) * 4;
-  dst = heap_alloc(size);
-  aligned4_memcpy(dst, func_800B27A0(arg), size);
-  return dst;
+    heap_free(normals);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/vtxnormal.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// Heap copy of the model's normal array.
+s32 dbvtxnormal_entrypoint_2(void *model)
+{
+    s32 dst;
+    s32 size;
+
+    size = func_800B2344(func_800B2840()) * 4;
+    dst = heap_alloc(size);
+    aligned4_memcpy(dst, func_800B27A0(model), size);
+    return dst;
+}

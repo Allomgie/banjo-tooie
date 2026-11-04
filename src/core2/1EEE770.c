@@ -1,145 +1,183 @@
+// Probably the per-camera underwater effect: detects a submerged camera via a ray to the water
+// surface, wobbles the view and draws a per-map full-screen tint.
 #include "common.h"
 
-typedef struct { s32 local_0; u8 pad[9]; u8 local_1; u8 pad2[2]; f32 local_2; } State114EEC;
+typedef struct {
+    s32 camera;
+    u8 pad_4[9];
+    u8 unk_D;
+    u8 pad_E[2];
+    f32 phase;
+} State114EEC;
 extern f32 func_80013970(f32);
 extern s32 func_800EA068(s32);
 extern s32 func_80110014(s32);
 extern s32 func_80110840(s32);
 extern s32 func_800A940C(s32);
 extern void func_800C4B90(s32, f32, f32);
-typedef struct { u8 pad0[4]; s32 index; f32 value; u8 enabled, padD, active; } LocalState;
-typedef struct { u8 unused, color[3], value; } LocalEntry;
+typedef struct {
+    u8 pad_0[4];
+    s32 table_index;
+    f32 depth;
+    u8 submerged, pad_D, active;
+} LocalState;
+typedef struct {
+    u8 map, color[3], alpha;
+} LocalEntry;
 extern LocalEntry D_80124A50[];
-extern void func_800B99CC(s32,s32,s32 *);
+extern void func_800B99CC(s32, s32, s32 *);
 extern s16 D_80124A58[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern s32 func_800BEF00(f32 *, f32 *, f32 *, s32);
-typedef struct { s32 local_0; s32 pad; f32 local_1; u8 local_2; } State1151C4;
+typedef struct {
+    s32 camera;
+    s32 pad_4;
+    f32 depth;
+    u8 submerged;
+} State1151C4;
 extern s32 func_8010FF80(s32);
 extern void func_800CA7E4(s32, f32 *);
 extern s32 func_800BEAAC(f32 *, f32 *);
 
-s32 func_80114E80(s32 param_0)
+// Underwater state: allocation, per-map table lookup, submerged detection.
+// Returns the index of map_id in the per-map tint table D_80124A50.
+// Matching: the line breaks in this function are needed for the match.
+s32 func_80114E80(s32 map_id)
 {
-  u8 *local_0;
- local_0 = ((u8 *) D_80124A50); while ((*local_0) != 0) {
-    if (param_0 == (*local_0))
-    {
-      return ((local_0 - (((u8 *) D_80124A50))) ^ 0) / 5;
-    }
-    local_0 += 5;
-  }
-
-  return (local_0 - (((u8 *) D_80124A50))) / 5;
-}
-
-void func_80114EEC(State114EEC *param_0, s32 param_1) {
-    f32 local_3[3];
-    local_3[0] = func_80013970(param_0->local_2) * 1.5f;
-    local_3[1] = func_80013970(param_0->local_2 * 1.5f) * 1.5f;
-    if (!func_800EA068(0x20)) {
-        func_800C4B90(func_800A940C(func_80110840(func_80110014(param_0->local_0))), local_3[0], local_3[1]);
-        param_0->local_2 += 2.0f;
-        param_0->local_1 = 1;
-    }
-}
-
-void func_80114FA4(s32 param_0, LocalState *param_1)
-{
-    f32 local_0;
-    f32 local_1;
-    s32 local_2;
-    s32 local_3[3];
-    f32 local_4;
-    if (param_1->enabled && param_1->active) {
-        local_0 = param_1->value > 3e+03f ? 1.0f : param_1->value * 0.00033333333f;
-        local_1 = local_0 * 0.4f;
-        for (local_2 = 0; local_2 < 3; local_2++) {
-            local_3[local_2] = (u32)D_80124A50[param_1->index].color[local_2] + -(s32)D_80124A50[param_1->index].color[local_2] * local_1;
+    u8 *entry;
+    entry = (u8 *) D_80124A50; while (*entry != 0) {
+        if (map_id == *entry)
+        {
+            return ((entry - (u8 *) D_80124A50) ^ 0) / 5; // Matching: ^ 0 needed for the match.
         }
-        local_4 = (u32)D_80124A50[param_1->index].value;
-        func_800B99CC(param_0, local_4 * local_0 + local_4, local_3);
+        entry += 5;
+    }
+
+    return (entry - (u8 *) D_80124A50) / 5;
+}
+
+// Visual side: view wobble and full-screen underwater tint.
+// Applies the sine-based view wobble and advances its phase.
+void func_80114EEC(State114EEC *state, s32 cam)
+{
+    f32 wobble[3];
+    wobble[0] = func_80013970(state->phase) * 1.5f;
+    wobble[1] = func_80013970(state->phase * 1.5f) * 1.5f;
+    if (!func_800EA068(0x20)) {
+        func_800C4B90(func_800A940C(func_80110840(func_80110014(state->camera))), wobble[0],
+                      wobble[1]);
+        state->phase += 2.0f;
+        state->unk_D = 1;
     }
 }
 
-func_801150F0(u8 *param_0) {
-    return param_0[0xC];
-}
-
-void func_801150F8(void* arg0) 
+// Draws the full-screen underwater tint.
+void func_80114FA4(s32 gfx, LocalState *state)
 {
-    heap_free(arg0);
+    f32 frac;
+    f32 fade;
+    s32 i;
+    s32 rgb[3];
+    f32 alpha;
+    if (state->submerged && state->active) {
+        frac = state->depth > 3e+03f ? 1.0f : state->depth * 0.00033333333f;
+        fade = frac * 0.4f;
+        for (i = 0; i < 3; i++) {
+            rgb[i] = (u32) D_80124A50[state->table_index].color[i] +
+                               -(s32) D_80124A50[state->table_index].color[i] * fade;
+        }
+        alpha = (u32) D_80124A50[state->table_index].alpha;
+        func_800B99CC(gfx, alpha * frac + alpha, rgb);
+    }
 }
-u8 *func_80115118(s32 param_0) {
-    s16 *local_0;
-    s16 local_1;
-    s32 local_2;
-    u8 *local_3;
 
-    local_3 = heap_alloc(0x14);
-    (*(s32 *)((s8 *)(local_3) + (0))) = param_0;
-    local_2 = func_800EA05C();
-    (*(s32 *)((s8 *)(local_3) + (4))) = func_80114E80(local_2);
-    (*(s8 *)((s8 *)(local_3) + (0xC))) = 0;
-    (*(s8 *)((s8 *)(local_3) + (0xD))) = 0;
-    (*(s8 *)((s8 *)(local_3) + (0xE))) = 1;
-    (*(f32 *)((s8 *)(local_3) + (0x10))) = 0.0f;
-    local_2 = func_800EA05C();
-    local_1 = (s16)local_2;
-    local_0 = (s16 *)D_80124A58;
-    while (*local_0 != 0) {
-        if (*local_0 == local_1) {
-            (*(s8 *)((s8 *)(local_3) + (0xE))) = 0;
+// Returns whether the camera is submerged.
+func_801150F0(u8 *state)
+{
+    return state[0xC];
+}
+
+void func_801150F8(void *state)
+{
+    heap_free(state);
+}
+
+// Allocates the effect state; inactive on the maps listed in D_80124A58.
+u8 *func_80115118(s32 camera)
+{
+    s16 *excluded;
+    s16 map_id;
+    s32 cur_map;
+    u8 *state;
+
+    state = heap_alloc(0x14);
+    *(s32 *) ((s8 *) state + 0) = camera;
+    cur_map = func_800EA05C();
+    *(s32 *) ((s8 *) state + 4) = func_80114E80(cur_map);
+    *(s8 *) ((s8 *) state + 0xC) = 0;
+    *(s8 *) ((s8 *) state + 0xD) = 0;
+    *(s8 *) ((s8 *) state + 0xE) = 1;
+    *(f32 *) ((s8 *) state + 0x10) = 0.0f;
+    cur_map = func_800EA05C();
+    map_id = (s16) cur_map;
+    excluded = (s16 *) D_80124A58;
+    while (*excluded != 0) {
+        if (*excluded == map_id) {
+            *(s8 *) ((s8 *) state + 0xE) = 0;
             break;
         }
-        local_0++;
+        excluded++;
     }
-    return local_3;
+    return state;
 }
 
-void func_801151C4(State1151C4 *param_0) {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
-    s32 local_7;
-    local_5 = func_8010FF80(param_0->local_0);
-    func_800CA7E4(local_5, local_1);
-    if (!func_800BEAAC(local_1, &local_3)) {
-        func_800EFA4C(local_2, local_1[0], local_1[1] + 1e+04f, local_1[2]);
-        local_4 = func_800BEF00(local_1, local_2, local_0, 0x1F00);
-        if (local_4) {
-            local_4 = (*(u32 *)(local_4 + 8) & 0x20000) ? 1 : 0;
-            param_0->local_2 = local_4;
+// Casts a ray up from the camera to decide whether it is below the water surface.
+void func_801151C4(State1151C4 *state)
+{
+    f32 hit_pos[3];
+    f32 cam_pos[3];
+    f32 ray_end[3];
+    f32 water_y;
+    s32 hit;
+    s32 cam;
+    s32 unk_0;
+    cam = func_8010FF80(state->camera);
+    func_800CA7E4(cam, cam_pos);
+    if (!func_800BEAAC(cam_pos, &water_y)) {
+        func_800EFA4C(ray_end, cam_pos[0], cam_pos[1] + 1e+04f, cam_pos[2]);
+        hit = func_800BEF00(cam_pos, ray_end, hit_pos, 0x1F00);
+        if (hit) {
+            hit = (*(u32 *) (hit + 8) & 0x20000) ? 1 : 0;
+            state->submerged = hit;
         } else {
-            param_0->local_2 = 0;
+            state->submerged = 0;
         }
     } else {
-        local_2[0] = local_1[0];
-        local_2[2] = local_1[2];
-        local_2[1] = local_1[1] + 1000.0f;
-        local_4 = func_800BEF00(local_1, local_2, local_0, 0x1F00);
-        if (!local_4 || !(*(u32 *)(local_4 + 8) & 0x20000)) local_2[1] = local_3;
-        if (local_1[1] <= local_2[1]) param_0->local_2 = 1;
-        else param_0->local_2 = 0;
+        ray_end[0] = cam_pos[0];
+        ray_end[2] = cam_pos[2];
+        ray_end[1] = cam_pos[1] + 1000.0f;
+        hit = func_800BEF00(cam_pos, ray_end, hit_pos, 0x1F00);
+        if (!hit || !(*(u32 *) (hit + 8) & 0x20000))
+            ray_end[1] = water_y;
+        if (cam_pos[1] <= ray_end[1])
+            state->submerged = 1;
+        else
+            state->submerged = 0;
     }
-    if (param_0->local_2) {
-        param_0->local_1 = local_2[1] - local_1[1];
-        func_80114EEC(param_0, local_5);
+    if (state->submerged) {
+        state->depth = ray_end[1] - cam_pos[1];
+        func_80114EEC(state, cam);
     }
 }
 
-int func_80115324(s32 *param_0, s32 param_1)
+int func_80115324(s32 *slot, s32 state)
 {
-  *param_0 = param_1;
-  defrag();
+    *slot = state;
+    defrag();
 }
 
-/* TU-NOTE: the .data of this file (formerly asm/data/core2/1EEE770.data.s) is defined here in C.
- * Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80124A58 -> s16[] (uses written as NAME[0]) */
-LocalEntry D_80124A50[1] = { 0x0, 0x1E, 0x50, 0xEF, 0x20 };
-s16 D_80124A58[12] = { 0x181, 0x1A7, 0x1A8, 0x1A9, 0xFC, 0x1A6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+// TU-NOTE: the .data of this file (D_80124A50, D_80124A58) is defined here in C, values taken from the ROM.
+// D_80124A58 is declared s16[] to match the object (uses are written as NAME[0]).
+// D_80124A50: per-map tint entries {map, r, g, b, alpha}; D_80124A58: maps where the effect is off.
+LocalEntry D_80124A50[1] = {0x0, 0x1E, 0x50, 0xEF, 0x20};
+s16 D_80124A58[12] = {0x181, 0x1A7, 0x1A8, 0x1A9, 0xFC, 0x1A6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};

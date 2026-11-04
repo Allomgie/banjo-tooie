@@ -1,3 +1,5 @@
+// Probably custom hit volumes for actors: marks an actor as using model-based hit detection and
+// tests spheres against it, with the result cached per frame, and gives the hit centre and radius.
 #include "common.h"
 
 extern void func_800EC358(Unk80132ED0 *, void *);
@@ -8,16 +10,31 @@ extern s32 func_800B1F8C(s32, f32 *, s32, f32, s32, s32, f32 *, f32, s32, s32);
 extern u8 *func_80104124(void);
 extern void func_80103DFC(Actor *, f32 *);
 extern s32 func_800EFFB4(f32 *, f32, void *);
-typedef struct { f32 position[3]; f32 radius; s32 id; s32 tick; } CustomHitSnapshot;
-typedef struct { u8 pad_0[0x12]; u16 id : 15; u16 pad_1 : 1; } CustomHitMarker;
+typedef struct {
+    f32 position[3];
+    f32 radius;
+    s32 id;
+    s32 tick;
+} CustomHitSnapshot;
+typedef struct {
+    u8 pad_0[0x12];
+    u16 id : 15;
+    u16 pad_1 : 1;
+} CustomHitMarker;
 extern f32 func_80103F38(Actor *, f32 *);
-typedef struct { u8 pad_0[8]; u32 pad_1 : 30; u32 custom : 1; u32 pad_2 : 1; } CustomHitFlags;
+typedef struct {
+    u8 pad_0[8];
+    u32 pad_1 : 30;
+    u32 custom : 1;
+    u32 pad_2 : 1;
+} CustomHitFlags;
 extern f32 func_800EC75C(Unk80132ED0 *, f32 *);
 
-void subaddiecustomhits_entrypoint_0(Actor *param_0, void *param_1)
+// Mark the actor as using model-based hit detection.
+void subaddiecustomhits_entrypoint_0(Actor *actor, void *unk_0)
 {
-    func_800EC358(param_0->unk0, param_1);
-    param_0->pad74_31 = 1;
+    func_800EC358(actor->unk0, unk_0);
+    actor->pad74_31 = 1;
 }
 
 int *subaddiecustomhits_entrypoint_1()
@@ -25,71 +42,79 @@ int *subaddiecustomhits_entrypoint_1()
     return &D_80800350_subaddiecustomhits;
 }
 
-s32 subaddiecustomhits_entrypoint_2(Unk80132ED0 *param_0, f32 *param_1, f32 param_2, s32 param_3, s32 param_4)
+// Test a sphere against the actor's model collision; the result is cached for the frame.
+s32 subaddiecustomhits_entrypoint_2(Unk80132ED0 *obj, f32 *center, f32 radius, s32 unk_0,
+                                    s32 unk_1)
 {
-    Actor *local_5;
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    u8 *local_6;
+    Actor *actor;
+    s32 model;
+    s32 collision;
+    s32 hit;
+    s32 anim;
+    u8 *cache;
 
-    local_5 = func_80106790();
-    local_0 = func_80103AA0(param_0);
-    local_3 = func_801040A8(local_5);
-    if (!local_0 || !func_800AE0B8(local_3)) {
+    actor = func_80106790();
+    model = func_80103AA0(obj);
+    anim = func_801040A8(actor);
+    if (!model || !func_800AE0B8(anim)) {
         return 0;
     }
-    local_1 = func_800B2824(local_0);
-    if (local_5->scale == 0.0f) {
-        local_2 = 0;
+    collision = func_800B2824(model);
+    if (actor->scale == 0.0f) {
+        hit = 0;
     } else {
-        local_2 = func_800B1F8C(local_1, local_5->position, func_801027F4(local_5), local_5->scale,
-                              0, local_3, param_1, param_2, param_3, param_4);
+        hit = func_800B1F8C(collision, actor->position, func_801027F4(actor), actor->scale,
+                            0, anim, center, radius, unk_0, unk_1);
     }
-    if (local_2) {
-        local_6 = func_80104124();
-        func_800EE7F8(local_6, param_1);
-        *(f32 *)(local_6 + 0xC) = param_2;
-        *(u32 *)(local_6 + 0x10) = (u32)(*(u16 *)((u8 *)param_0 + 0x12)) >> 1;
-        *(s32 *)(local_6 + 0x14) = func_8001211C();
+    if (hit) {
+        cache = func_80104124();
+        func_800EE7F8(cache, center);
+        *(f32 *) (cache + 0xC) = radius;
+        *(u32 *) (cache + 0x10) = (u32) *(u16 *) ((u8 *) obj + 0x12) >> 1;
+        *(s32 *) (cache + 0x14) = func_8001211C();
     }
-    return local_2;
+    return hit;
 }
 
-s32 subaddiecustomhits_entrypoint_3(Actor *param_0, void *param_1, f32 param_2)
+// Sphere vs. actor radius test.
+s32 subaddiecustomhits_entrypoint_3(Actor *actor, void *unk_0, f32 margin)
 {
-    f32 local_0[3];
-    func_80103DFC(param_0, local_0);
-    return !func_800EFFB4(local_0, (f32)(u32)*(u16 *)((u8 *)param_0 + 0x6A) * param_0->scale + param_2, param_1);
+    f32 center[3];
+    func_80103DFC(actor, center);
+    return !func_800EFFB4(
+        center, (f32) (u32) *(u16 *) ((u8 *) actor + 0x6A) * actor->scale + margin, unk_0);
 }
 
-s32 subaddiecustomhits_entrypoint_4(Actor *param_0, f32 *param_1, f32 *param_2)
+// Get the hit centre and radius: the cached custom hit, else the default actor sphere.
+s32 subaddiecustomhits_entrypoint_4(Actor *actor, f32 *out_center, f32 *out_radius)
 {
-    CustomHitSnapshot *local_0;
-    f32 local_1;
-    local_0 = (CustomHitSnapshot *)func_80104124();
-    if (local_0->id == ((CustomHitMarker *)param_0->unk0)->id && func_8001211C() == local_0->tick) {
-        func_800EE7F8(param_1, local_0->position);
-        if (param_2 != NULL) *param_2 = local_0->radius;
+    CustomHitSnapshot *cache;
+    f32 radius;
+    cache = (CustomHitSnapshot *) func_80104124();
+    if (cache->id == ((CustomHitMarker *) actor->unk0)->id &&
+        func_8001211C() == cache->tick) {
+        func_800EE7F8(out_center, cache->position);
+        if (out_radius != NULL)
+            *out_radius = cache->radius;
         return 1;
     }
-    local_1 = func_80103F38(param_0, param_1);
-    if (param_2 != NULL) *param_2 = local_1;
+    radius = func_80103F38(actor, out_center);
+    if (out_radius != NULL)
+        *out_radius = radius;
     return 0;
 }
 
-f32 subaddiecustomhits_entrypoint_5(Actor *param_0, f32 *param_1)
+// Hit centre and radius: custom hit if set, else the actor sphere * 1.15.
+f32 subaddiecustomhits_entrypoint_5(Actor *actor, f32 *out_center)
 {
-    if (!((CustomHitFlags *)param_0->unk0->unk0)->custom) return func_800EC75C(param_0->unk0, param_1);
-    func_80103328(param_0);
-    func_800EE7F8(param_1, param_0->position);
-    return (f32)(u32)*(u16 *)((u8 *)param_0 + 0x6A) * param_0->scale * 1.15f;
+    if (!((CustomHitFlags *) actor->unk0->unk0)->custom)
+        return func_800EC75C(actor->unk0, out_center);
+    func_80103328(actor);
+    func_800EE7F8(out_center, actor->position);
+    return (f32) (u32) *(u16 *) ((u8 *) actor + 0x6A) * actor->scale * 1.15f;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/customhits.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800350_subaddiecustomhits -> int[] */
+// TU-NOTE: the overlay .data is defined here in C (values from the ROM); the extern of
+// D_80800350_subaddiecustomhits is declared as int[] to match the object.
 extern void _subaddiecustomhits_entrypoint_2();
-int D_80800350_subaddiecustomhits[4] = { 0x0, 0x0, 0x0, (u32)_subaddiecustomhits_entrypoint_2 };
+int D_80800350_subaddiecustomhits[4] = {0x0, 0x0, 0x0, (u32) _subaddiecustomhits_entrypoint_2};

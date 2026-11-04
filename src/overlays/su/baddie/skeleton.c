@@ -1,3 +1,5 @@
+// Bone queries for actors: world position of a bone (animated pose, else bind pose) scaled and
+// rotated by the actor transform, and bone matrix/position from the actor's skeleton cache.
 #include "common.h"
 
 extern void *func_801040A8(Actor *);
@@ -11,75 +13,80 @@ extern int func_80102F74(Actor *, s32);
 extern void *func_80104130(void);
 void *subaddieskeleton_entrypoint_4();
 
-s32 subaddieskeleton_entrypoint_0(Actor *param_0, s32 param_1, f32 *param_2)
+// World position of a bone: animated pose if present, else bind pose; scaled and rotated by the actor.
+s32 subaddieskeleton_entrypoint_0(Actor *actor, s32 bone, f32 *out_pos)
 {
-    f32 local_0[3];
-    void *local_1;
-    local_1 = func_801040A8(param_0);
-    if (func_800AE0D0(local_1)) {
-        if (func_800AE630(local_1, func_800B27E0(func_801039E4(param_0->unk0)), param_1, local_0)) {
-            func_800EF334(local_0, param_0->scale);
-            func_800EF5A0(local_0, param_0->rotation, local_0[0], local_0[1], local_0[2]);
-            func_800EE780(param_2, local_0, param_0->position);
+    f32 bone_pos[3];
+    void *anim;
+    anim = func_801040A8(actor);
+    if (func_800AE0D0(anim)) {
+        if (func_800AE630(anim, func_800B27E0(func_801039E4(actor->unk0)), bone, bone_pos)) {
+            func_800EF334(bone_pos, actor->scale);
+            func_800EF5A0(bone_pos, actor->rotation, bone_pos[0], bone_pos[1], bone_pos[2]);
+            func_800EE780(out_pos, bone_pos, actor->position);
             return 1;
         }
-    } else if (_dbskeleton_entrypoint_2(func_800B27E0(func_801039E4(param_0->unk0)), param_1, local_0)) {
-        func_800EF334(local_0, param_0->scale);
-        func_800EF5A0(local_0, param_0->rotation, local_0[0], local_0[1], local_0[2]);
-        func_800EE780(param_2, local_0, param_0->position);
+    } else if (_dbskeleton_entrypoint_2(func_800B27E0(func_801039E4(actor->unk0)), bone,
+                                        bone_pos)) {
+        func_800EF334(bone_pos, actor->scale);
+        func_800EF5A0(bone_pos, actor->rotation, bone_pos[0], bone_pos[1], bone_pos[2]);
+        func_800EE780(out_pos, bone_pos, actor->position);
         return 1;
     }
     return 0;
 }
 
-void subaddieskeleton_entrypoint_1(u8 **param_0)
+void subaddieskeleton_entrypoint_1(u8 **inst)
 {
-    func_800DBEFC((*(s32 *)((s8 *)(*param_0) + (4))));
+    func_800DBEFC(*(s32 *) ((s8 *) *inst + 4));
 }
 
-int subaddieskeleton_entrypoint_2(Unk80132ED0 *param_0, s32 param_1, s32 param_2)
+// Bone matrix from the actor's bone cache.
+int subaddieskeleton_entrypoint_2(Unk80132ED0 *obj, s32 bone, s32 out)
 {
-    Actor *local_0;
-    void *local_1;
-    local_0 = func_80106790(param_0);
-    if (local_0->unk7C_12) {
-        local_1 = subaddieskeleton_entrypoint_4(local_0);
-        if (local_1) {
-            func_800DBEFC(local_1, param_1, param_2);
+    Actor *actor;
+    void *bone_cache;
+    actor = func_80106790(obj);
+    if (actor->unk7C_12) {
+        bone_cache = subaddieskeleton_entrypoint_4(actor);
+        if (bone_cache) {
+            func_800DBEFC(bone_cache, bone, out);
             return 1;
         }
     }
     return 0;
 }
 
-int subaddieskeleton_entrypoint_3(Unk80132ED0 *param_0, s32 param_1, f32 *param_2)
+// Like entrypoint_2, but falls back to the actor position.
+int subaddieskeleton_entrypoint_3(Unk80132ED0 *obj, s32 bone, f32 *out_pos)
 {
-    Actor *local_0;
-    void *local_1;
+    Actor *actor;
+    void *bone_cache;
 
-    local_0 = func_80106790(param_0);
-    if (local_0->unk7C_12) {
-        local_1 = subaddieskeleton_entrypoint_4(local_0);
-        if (local_1) {
-            func_800DBEFC(local_1, param_1, param_2);
+    actor = func_80106790(obj);
+    if (actor->unk7C_12) {
+        bone_cache = subaddieskeleton_entrypoint_4(actor);
+        if (bone_cache) {
+            func_800DBEFC(bone_cache, bone, out_pos);
             return 1;
         }
     }
-    func_800EE7F8(param_2, local_0->position);
+    func_800EE7F8(out_pos, actor->position);
     return 0;
 }
 
-void *subaddieskeleton_entrypoint_4(param_0) Actor *param_0;
+// Skeleton/bone cache of the actor, or NULL.
+void *subaddieskeleton_entrypoint_4(actor)
+Actor *actor;
 {
-    void *local_0;
+    void *cache;
 
-    local_0 = param_0->unk0->unk4;
-    if (local_0) {
-        return local_0;
+    cache = actor->unk0->unk4;
+    if (cache) {
+        return cache;
     }
-    local_0 = func_80102F74(param_0, 2) ? func_80104130() : NULL;
-    return local_0;
+    cache = func_80102F74(actor, 2) ? func_80104130() : NULL;
+    return cache;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/su/baddie/skeleton.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: the .data of this overlay is defined in C; values are taken from the ROM.

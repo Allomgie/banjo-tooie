@@ -1,94 +1,125 @@
+// Spline lookups: find the spline path through a point, two consecutive points, or the nearest
+// spline node of a position or actor.
 #include "common.h"
 
-typedef struct { u8 pad_0[0x184]; s16 local_0; u16 pad_1; s32 local_1; } SplineFindList;
-typedef struct { u8 pad_0[2]; u8 local_0; u8 pad_1[0x11]; f32 local_1[1][3]; } SplineFindPath;
+typedef struct {
+    u8 pad_0[0x184];
+    s16 spline_list;
+    u16 pad_1;
+    s32 count;
+} SplineFindList;
+typedef struct {
+    u8 pad_0[2];
+    u8 count;
+    u8 pad_1[0x11];
+    f32 positions[1][3];
+} SplineFindPath;
 extern void *func_800D7400(void);
 extern void *func_8001B798();
-typedef struct { u8 pad_0[0x184]; s16 spline_list; s16 pad_1; s32 count; } SplineLevelData;
-typedef struct { u8 pad_0[2]; u8 count; u8 pad_1[0x11]; f32 positions[1][3]; } SplinePointList;
+typedef struct {
+    u8 pad_0[0x184];
+    s16 spline_list;
+    s16 pad_1;
+    s32 count;
+} SplineLevelData;
+typedef struct {
+    u8 pad_0[2];
+    u8 count;
+    u8 pad_1[0x11];
+    f32 positions[1][3];
+} SplinePointList;
 s32 glsplinefind_entrypoint_2();
 s32 glsplinefind_entrypoint_3();
 
-s32 glsplinefind_entrypoint_0(f32 param_0[3], f32 param_1[3]) {
-    f32 local_0[3];
-    s32 out;
+// Find the spline through the spline node nearest to a position; also returns that node position.
+s32 glsplinefind_entrypoint_0(f32 pos[3], f32 node_pos_out[3])
+{
+    f32 node_pos[3];
+    s32 found;
 
-    out = _gccubesearch_entrypoint_2(param_0, local_0);
-    if (out == 0) {
+    found = _gccubesearch_entrypoint_2(pos, node_pos);
+    if (found == 0) {
         return -1;
     }
-    func_800EE84C(param_1, local_0);
-    return glsplinefind_entrypoint_2(local_0);
+    func_800EE84C(node_pos_out, node_pos);
+    return glsplinefind_entrypoint_2(node_pos);
 }
 
-int glsplinefind_entrypoint_1(s32 param_0)
+int glsplinefind_entrypoint_1(s32 pos)
 {
-  s32 local_0[3];
-  if (!_gccubesearch_entrypoint_2(param_0, local_0))
-  {
-    return -1;
-  }
-  return glsplinefind_entrypoint_2(local_0);
+    s32 node_pos[3];
+    if (!_gccubesearch_entrypoint_2(pos, node_pos)) {
+        return -1;
+    }
+    return glsplinefind_entrypoint_2(node_pos);
 }
 
-s32 glsplinefind_entrypoint_2(this) Actor *this;{
-    f32 local_0[3];
-    func_800EE84C(local_0, this);
-    return glsplinefind_entrypoint_3(local_0);
-}
-
-s32 glsplinefind_entrypoint_3(param_0) f32 param_0[3];
+s32 glsplinefind_entrypoint_2(actor) Actor *actor;
 {
-    SplineFindList *local_0;
-    SplineFindPath *local_1;
-    f32 (*local_2)[3];
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
-    s16 *local_7;
+    f32 pos[3];
+    func_800EE84C(pos, actor);
+    return glsplinefind_entrypoint_3(pos);
+}
 
-    local_0 = func_800D7400();
-    for (local_3 = 0, local_4 = 0; local_3 < local_0->local_1; local_3++, local_4 += 2) {
-        local_7 = func_8001B798(local_0->local_0);
-        local_5 = 0;
-        local_1 = func_8001B798(*(s16 *)((u8 *)local_7 + local_4));
-        local_6 = local_1->local_0;
-        local_2 = local_1->local_1;
-        if (local_6 > 0) {
-            do {
-                if (func_800EECE0(param_0, *local_2)) return local_3;
-                local_5++;
-                local_2++;
-            } while (local_5 != local_6);
+// Find the spline with a node exactly at pos.
+s32 glsplinefind_entrypoint_3(pos)
+f32 pos[3];
+{
+    SplineFindList *level;
+    SplineFindPath *path;
+    f32(*point)[3];
+    s32 i;
+    s32 offset;
+    s32 j;
+    s32 point_count;
+    s16 *spline_ids;
+
+    level = func_800D7400();
+    for (i = 0, offset = 0; i < level->count; i++, offset += 2) {
+        spline_ids = func_8001B798(level->spline_list);
+        j = 0;
+        path = func_8001B798(*(s16 *) ((u8 *) spline_ids + offset));
+        point_count = path->count;
+        point = path->positions;
+
+if (point_count > 0) {
+    do {
+        if (func_800EECE0(pos, *point))
+            return i;
+        j++;
+        point++;
+    } while (j != point_count);
+}
+
+}
+return -1;
+}
+
+// Find the spline with two consecutive nodes at from and to.
+s32 glsplinefind_entrypoint_4(f32 *from, f32 *to)
+{
+    s32 i;
+    s32 point_count;
+    s32 j;
+    f32 from_pos[3];
+    f32 to_pos[3];
+    SplineLevelData *level;
+    SplinePointList *path;
+    f32 *point;
+    level = func_800D7400();
+    func_800EE84C(from_pos, from);
+    func_800EE84C(to_pos, to);
+    for (i = 0; i < level->count; i++) {
+        path = func_8001B798(((s16 *) func_8001B798(level->spline_list))[i]);
+        point_count = path->count;
+        point = path->positions[0];
+        for (j = 0; j < point_count; j++, point += 3) {
+            if (func_800EECE0(from_pos, point) && func_800EECE0(to_pos, point + 3))
+                return i;
         }
     }
     return -1;
 }
 
-s32 glsplinefind_entrypoint_4(f32 *param_0, f32 *param_1)
-{
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    f32 local_6[3];
-    f32 local_7[3];
-    SplineLevelData *local_3;
-    SplinePointList *local_4;
-    f32 *local_5;
-    local_3 = func_800D7400();
-    func_800EE84C(local_6, param_0);
-    func_800EE84C(local_7, param_1);
-    for (local_0 = 0; local_0 < local_3->count; local_0++) {
-        local_4 = func_8001B798(((s16 *)func_8001B798(local_3->spline_list))[local_0]);
-        local_1 = local_4->count;
-        local_5 = local_4->positions[0];
-        for (local_2 = 0; local_2 < local_1; local_2++, local_5 += 3) {
-            if (func_800EECE0(local_6, local_5) && func_800EECE0(local_7, local_5 + 3)) return local_0;
-        }
-    }
-    return -1;
-}
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/spline/find.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/spline/find.data.s) is defined here in C.
+// Values are taken from the ROM.

@@ -1,3 +1,5 @@
+// Dive camera mode: the look-at point blends from a stored point toward the player over time,
+// with long distance limits. Keeps a 16-byte state (point and timer).
 #include "nc/ba/dive.h"
 
 extern void func_800EF410(int param_0);
@@ -6,60 +8,61 @@ extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern f32 func_800D8FF8(void);
 extern void func_800EFA20(f32 *, f32 *, f32);
 
-s32 ncbadive_entrypoint_0() 
+s32 ncbadive_entrypoint_0()
 {
     return 0x10;
 }
 
-void ncbadive_entrypoint_1(u8 *param_0) {
-    func_800EFD24(*(u8 **)(param_0 + 0x18));
-    *(f32 *)((u8 *)(*(u8 **)(param_0 + 0x18)) + 0xC) = 0.0f;
-    func_801120CC(param_0, 0x45834000, 0x46034000, 0xC6034000);
+void ncbadive_entrypoint_1(u8 *camera)
+{
+    func_800EFD24(*(u8 **) (camera + 0x18));
+    *(f32 *) ((u8 *) *(u8 **) (camera + 0x18) + 0xC) = 0.0f;
+    func_801120CC(camera, 0x45834000, 0x46034000, 0xC6034000);
 }
 
-void ncbadive_entrypoint_2(int param_0)
+void ncbadive_entrypoint_2(int camera)
 {
-  int new_var;
-  new_var = new_var & 0xFF;
-  func_801120CC(param_0, 0x44FA0000, 0x457A0000, 0xC57A0000);
+    func_801120CC(camera, 0x44FA0000, 0x457A0000, 0xC57A0000);
 }
 
-void func_80800080_ncbadive(PlayerState* arg0, f32* arg1)
+void func_80800080_ncbadive(PlayerState *camera, f32 *target)
 {
-    func_80112524(arg0,arg1);
+    func_80112524(camera, target);
 }
 
-void ncbadive_entrypoint_3(u8 *param_0)
+// Per-frame update: the look-at point blends from the stored point toward the player.
+void ncbadive_entrypoint_3(u8 *camera)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_4[3];
-    f32 local_5[3];
-    f32 local_6;
-    f32 local_7;
+    f32 target[3];
+    f32 offset[3];
+    f32 to_player[3];
+    f32 look_at[3];
+    f32 cam_pos[3];
+    f32 rotation[3];
+    f32 distance;
+    f32 blend;
 
-    func_801107F0(param_0, local_4);
-    func_80800080_ncbadive(param_0, local_0);
-    func_800EFB24(local_2, local_4, local_0);
-    local_6 = func_800EEF94(local_2);
-    local_7 = func_800F10B4(*(f32 *)(*(u8 **)(param_0 + 0x18) + 0xC), 0.2f, 0.5f, local_6, 300.0f);
-    *(f32 *)(*(u8 **)(param_0 + 0x18) + 0xC) += func_800D8FF8();
-    func_800EFA20(local_3, *(f32 **)(param_0 + 0x18), local_7);
-    func_800EFB24(local_1, local_0, local_3);
-    if (func_80111FD4(param_0, local_1)) {
-        func_8011309C(param_0, 0);
+    func_801107F0(camera, cam_pos);
+    func_80800080_ncbadive(camera, target);
+    func_800EFB24(to_player, cam_pos, target);
+    distance = func_800EEF94(to_player);
+    blend =
+        func_800F10B4(*(f32 *) (*(u8 **) (camera + 0x18) + 0xC), 0.2f, 0.5f, distance, 300.0f);
+    *(f32 *) (*(u8 **) (camera + 0x18) + 0xC) += func_800D8FF8();
+    func_800EFA20(look_at, *(f32 **) (camera + 0x18), blend);
+    func_800EFB24(offset, target, look_at);
+    if (func_80111FD4(camera, offset)) {
+        func_8011309C(camera, 0);
     }
-    func_80800080_ncbadive(param_0, local_0);
-    func_80110A68(param_0, local_5, local_0);
-    func_80110790(param_0, local_5);
+    func_80800080_ncbadive(camera, target);
+    func_80110A68(camera, rotation, target);
+    func_80110790(camera, rotation);
 }
 
-void ncbadive_entrypoint_4(int param_0)
+// Resets the stored point.
+void ncbadive_entrypoint_4(int camera)
 {
-    func_800EF410(*(int *)(param_0 + 0x18));
+    func_800EF410(*(int *) (camera + 0x18));
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/nc/ba/dive.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.

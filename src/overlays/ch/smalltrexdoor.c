@@ -1,3 +1,5 @@
+// Terrydactyland door for the small T-Rex: opens when he is within 500 units, a roar turns the
+// open message into a timed open, and it closes when he is away or behind it.
 #include "common.h"
 
 extern void func_800F5A00(s32, f32 *);
@@ -11,57 +13,60 @@ extern f32 func_800F1DF4(f32 *, f32 *);
 extern f32 func_800F2094(f32, f32);
 extern int D_808002E0_chsmalltrexdoor[];
 
-void func_80800000_chsmalltrexdoor(Actor *param_0)
+// Setup: opens for the small T-Rex within 500 units.
+void func_80800000_chsmalltrexdoor(Actor *door)
 {
-    f32 local_0[3];
-    f32 local_1[3];
+    f32 player_pos[3];
+    f32 unk_0[3];
     if (func_800F5410(func_800F54E4()) == 0x12) {
-        func_800F5A00(func_800F54E4(), local_0);
-        if (func_800EEAD4(local_0, param_0->position) < 500.0f) {
-            param_0->unk64_20 = 1;
-            func_80101FDC(param_0, 4);
+        func_800F5A00(func_800F54E4(), player_pos);
+        if (func_800EEAD4(player_pos, door->position) < 500.0f) {
+            door->unk64_20 = 1;
+            func_80101FDC(door, 4);
         }
     }
-    func_800EE7F8(local_0, param_0->position);
-    local_0[1] += 100.0f;
-    param_0->position[1] -= 100.0f;
-    func_800BEF00(local_0, param_0->position, local_1, 0);
-    param_0->position[1] += func_80103EAC(param_0);
-    _chdoormake_entrypoint_2(param_0, param_0->rotation[1] + 90.0f, 0.0f, param_0->scale * 200.0f, 10, -1);
-    _chdoormake_entrypoint_5(param_0, 1.0f);
-    _chdoormake_entrypoint_6(param_0, 0.5f);
-    _chdoormake_entrypoint_8(param_0, 5);
+    func_800EE7F8(player_pos, door->position);
+    player_pos[1] += 100.0f;
+    door->position[1] -= 100.0f;
+    func_800BEF00(player_pos, door->position, unk_0, 0);
+    door->position[1] += func_80103EAC(door);
+    _chdoormake_entrypoint_2(door, door->rotation[1] + 90.0f, 0.0f, door->scale * 200.0f,
+                             10, -1);
+    _chdoormake_entrypoint_5(door, 1.0f);
+    _chdoormake_entrypoint_6(door, 0.5f);
+    _chdoormake_entrypoint_8(door, 5);
 }
 
-void func_80800150_chsmalltrexdoor(Actor *param_0)
+void func_80800150_chsmalltrexdoor(Actor *door)
 {
-    f32 local_0[3];
-    f32 local_1;
+    f32 player_pos[3];
+    f32 yaw_to_player;
 
-    if (param_0->unk70_10 == 4 && func_800D90A4((f32 *)((u8 *)param_0 + 0x34))) {
-        func_800F5A00(func_800F54E4(), local_0);
-        local_1 = func_800F1DF4(param_0->position, local_0);
-        if (func_800EEAD4(local_0, param_0->position) < 400.0f) {
-            if (func_800F2094(param_0->rotation[1] - 90.0f, local_1) > 30.0f) {
-                func_8010108C(param_0, 8, 0);
+    if (door->unk70_10 == 4 && func_800D90A4((f32 *) ((u8 *) door + 0x34))) {
+        func_800F5A00(func_800F54E4(), player_pos);
+        yaw_to_player = func_800F1DF4(door->position, player_pos);
+        if (func_800EEAD4(player_pos, door->position) < 400.0f) {
+            if (func_800F2094(door->rotation[1] - 90.0f, yaw_to_player) > 30.0f) {
+                func_8010108C(door, 8, 0);
             }
         } else {
-            func_8010108C(param_0, 8, 0);
+            func_8010108C(door, 8, 0);
         }
     }
-    _chdoor_entrypoint_0(param_0);
+    _chdoor_entrypoint_0(door);
 }
 
-void func_80800244_chsmalltrexdoor(Actor *param_0, s32 param_1, s32 param_2)
+// A roar turns the open message into a timed open.
+void func_80800244_chsmalltrexdoor(Actor *door, s32 msg, s32 msg_arg)
 {
-    if (param_1 == 0x1D || param_1 == 0x1E) {
-        if (func_800F52B8(func_800F54E4(), param_0->unk0) == 0x18) {
-            ((f32 *)param_0->actorData)[7] = 4.0f;
-            _chdoor_entrypoint_1(param_0, 7, 0);
+    if (msg == 0x1D || msg == 0x1E) {
+        if (func_800F52B8(func_800F54E4(), door->unk0) == 0x18) {
+            ((f32 *) door->actorData)[7] = 4.0f;
+            _chdoor_entrypoint_1(door, 7, 0);
             return;
         }
     }
-    _chdoor_entrypoint_1(param_0, param_1, param_2);
+    _chdoor_entrypoint_1(door, msg, msg_arg);
 }
 
 int *chsmalltrexdoor_entrypoint_0()
@@ -69,12 +74,27 @@ int *chsmalltrexdoor_entrypoint_0()
     return D_808002E0_chsmalltrexdoor;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/smalltrexdoor.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_808002E0_chsmalltrexdoor -> int[] (uses written as NAME[0]) */
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
 extern u8 boot_thread_stack[];
-int D_808002E0_chsmalltrexdoor[20] = { 0xAC028F, 0x8880001, 0x0, (u32)func_80800150_chsmalltrexdoor, (u32)func_80105834, (u32)func_80101870, 0x13880000, 0x0, 0x0, 0x800, 0x0, 0x0, 0x0, (u32)func_80800000_chsmalltrexdoor, (u32)func_80107C2C, (u32)((u8 *)boot_thread_stack + 0x1F22), (u32)func_80800244_chsmalltrexdoor, 0x0, 0x0, 0x0 };
+int D_808002E0_chsmalltrexdoor[20] = {0xAC028F,
+                                      0x8880001,
+                                      0x0,
+                                      (u32) func_80800150_chsmalltrexdoor,
+                                      (u32) func_80105834,
+                                      (u32) func_80101870,
+                                      0x13880000,
+                                      0x0,
+                                      0x0,
+                                      0x800,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      (u32) func_80800000_chsmalltrexdoor,
+                                      (u32) func_80107C2C,
+                                      (u32) ((u8 *) boot_thread_stack + 0x1F22),
+                                      (u32) func_80800244_chsmalltrexdoor,
+                                      0x0,
+                                      0x0,
+                                      0x0};

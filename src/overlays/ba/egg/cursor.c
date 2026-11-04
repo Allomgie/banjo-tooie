@@ -1,223 +1,219 @@
+// Egg aiming cursor: position, mode, blink/alpha and scale state; draws the crosshair sprite each
+// frame and handles mode changes when firing or leaving aim.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 
 extern s32 D_80800690_baeggcursor[];
 extern void func_800E253C(f32);
 extern void func_800E257C(s32);
-typedef struct { f32 local_0; f32 local_1; } EggCursorCurvePoint;
-typedef struct { u8 pad_0[9]; u8 local_0; u8 pad_1[2]; f32 local_1; u8 local_2; u8 pad_2[3]; s32 local_3; f32 local_4; } EggCursorUpdateState;
+typedef struct {
+    f32 time;
+    f32 value;
+} EggCursorCurvePoint;
+typedef struct {
+    u8 pad_0[9];
+    u8 mode;
+    u8 pad_1[2];
+    f32 timer;
+    u8 curve;
+    u8 pad_2[3];
+    s32 alpha;
+    f32 scale;
+} EggCursorUpdateState;
 int baeggcursor_entrypoint_7();
 
-int func_80800000_baeggcursor(s32 param_0)
+int func_80800000_baeggcursor(s32 index)
 {
-  return D_80800690_baeggcursor[param_0];
+    return D_80800690_baeggcursor[index];
 }
 
-s32 baeggcursor_entrypoint_0() 
+s32 baeggcursor_entrypoint_0()
 {
     return 0x1C;
 }
 
-void baeggcursor_entrypoint_1(PlayerState *param_0)
+// Draw the crosshair sprite (asset 0x64E) for the local viewport.
+void baeggcursor_entrypoint_1(PlayerState *player)
 {
-    s32 local_0[2];
-    s32 local_1;
-    s32 local_2;
+    s32 screen_pos[2];
+    s32 viewport;
+    s32 unk_0;
 
-    local_1 = func_800A89F8(param_0);
-    if (func_800A4C68(param_0) == local_1 && (*(u8 **)((u8 *)param_0 + 0x68))[8] != 0 && (*(u8 **)((u8 *)param_0 + 0x68))[0xA] != 0 && !func_800A9C98()) {
-        func_800E253C(*(f32 *)(*(u8 **)((u8 *)param_0 + 0x68) + 0x18));
-        func_800E257C(*(s32 *)(*(u8 **)((u8 *)param_0 + 0x68) + 0x14));
+    viewport = func_800A89F8(player);
+    if (func_800A4C68(player) == viewport && (*(u8 **) ((u8 *) player + 0x68))[8] != 0 &&
+        (*(u8 **) ((u8 *) player + 0x68))[0xA] != 0 && !func_800A9C98()) {
+        func_800E253C(*(f32 *) (*(u8 **) ((u8 *) player + 0x68) + 0x18));
+        func_800E257C(*(s32 *) (*(u8 **) ((u8 *) player + 0x68) + 0x14));
         func_800E2434(1);
         func_800E24CC(1);
-        local_0[0] = *(f32 *)(*(u8 **)((u8 *)param_0 + 0x68)) * 4.0f;
-        local_0[1] = *(f32 *)(*(u8 **)((u8 *)param_0 + 0x68) + 4) * 4.0f;
-        local_2 = func_800A7180();
-        func_800E30E0(local_2, func_800D674C(0x64E), 0, local_0);
+        screen_pos[0] = *(f32 *) *(u8 **) ((u8 *) player + 0x68) * 4.0f;
+        screen_pos[1] = *(f32 *) (*(u8 **) ((u8 *) player + 0x68) + 4) * 4.0f;
+        unk_0 = func_800A7180();
+        func_800E30E0(unk_0, func_800D674C(0x64E), 0, screen_pos);
     }
 }
 
-s32 baeggcursor_entrypoint_2(s32 param_0)
+s32 baeggcursor_entrypoint_2(s32 player)
 {
-  if (!param_0)
-  {
-  }
-  return ((u8 *) (*((u8 **) (param_0 + 104))))[9];
+    return ((u8 *) *(u8 **) (player + 104))[9];
 }
 
-void baeggcursor_entrypoint_3(u8 *param_0, f32 *param_1, f32 *param_2) {
-    *param_1 = (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x68)))) + (0)));
-    *param_2 = (*(f32 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x68)))) + (4)));
-}
-
-void baeggcursor_entrypoint_4(s32 arg0)
+void baeggcursor_entrypoint_3(u8 *player, f32 *out_x, f32 *out_y)
 {
-    baeggcursor_entrypoint_7(arg0,0);
+    *out_x = *(f32 *) ((s8 *) *(u8 **) ((s8 *) player + 0x68) + 0);
+    *out_y = *(f32 *) ((s8 *) *(u8 **) ((s8 *) player + 0x68) + 4);
 }
 
-void baeggcursor_entrypoint_5(void *param_0)
+void baeggcursor_entrypoint_4(s32 player)
 {
-  *(s8 *)(*(s32 *)((char *)param_0 + 0x68) + 0x9) = 0;
-  baeggcursor_entrypoint_7(param_0, 1);
+    baeggcursor_entrypoint_7(player, 0);
 }
 
-void baeggcursor_entrypoint_6(Actor *param_0, int param_1) {
-    *(*(s8 **)((u8 *)param_0 + 0x68) + 0xA) = param_1;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void baeggcursor_entrypoint_10(s32 param_0, f32 param_1, f32 param_2);
-
-int baeggcursor_entrypoint_7(param_0, param_1) u8 *param_0; s32 param_1;
+void baeggcursor_entrypoint_5(void *player)
 {
+    *(s8 *) (*(s32 *) ((char *) player + 0x68) + 0x9) = 0;
+    baeggcursor_entrypoint_7(player, 1);
+}
 
-    switch ((*(u8 **)(param_0 + 0x68))[9]) {
+void baeggcursor_entrypoint_6(Actor *player, int enable)
+{
+    *(*(s8 **) ((u8 *) player + 0x68) + 0xA) = enable;
+}
+
+void baeggcursor_entrypoint_10(s32 player, f32 x, f32 y);
+
+// Switch the cursor mode (0 off ... 5).
+int baeggcursor_entrypoint_7(player, mode)
+u8 *player;
+s32 mode;
+{
+    switch ((*(u8 **) (player + 0x68))[9]) {
         case 0:
-            (*(u8 **)(param_0 + 0x68))[8] = 0;
-            (*(u8 **)(param_0 + 0x68))[0xA] = 1;
+            (*(u8 **) (player + 0x68))[8] = 0;
+            (*(u8 **) (player + 0x68))[0xA] = 1;
             break;
         case 1:
-            (*(u8 **)(param_0 + 0x68))[8] = 1;
-            *(s32 *)(*(u8 **)(param_0 + 0x68) + 0x14) = 0x78;
-            break;
-        case 3: *(s32 *)((*(u8 **)(param_0 + 0x68)) + 0x14) = 0x78; break;
-    }
-    (*(u8 **)(param_0 + 0x68))[9] = param_1;
-    switch (param_1) {
-        case 0:
-        case 1:
-            func_8009ADF0(param_0, 8, 0);
-            if ((*(u8 **)(param_0 + 0x68))[8]) { (*(u8 **)(param_0 + 0x68))[8] = 0; }
-            break;
-        case 2:
-            func_8009ADF0(param_0, 8, 1);
-            *(f32 *)(*(u8 **)(param_0 + 0x68) + 0x18) = 1.0f;
-            *(s32 *)(*(u8 **)(param_0 + 0x68) + 0x14) = 0x78;
+            (*(u8 **) (player + 0x68))[8] = 1;
+            *(s32 *) (*(u8 **) (player + 0x68) + 0x14) = 0x78;
             break;
         case 3:
-            func_8009ADF0(param_0, 8, 1);
-            *(f32 *)(*(u8 **)(param_0 + 0x68) + 0xC) = 0.3f;
-            baeggcursor_entrypoint_10(param_0, 152.0f, 114.0f);
-            *(f32 *)(*(u8 **)(param_0 + 0x68) + 0x18) = 16.0f;
-            *(s32 *)(*(u8 **)(param_0 + 0x68) + 0x14) = 0;
+            *(s32 *) (*(u8 **) (player + 0x68) + 0x14) = 0x78;
+            break;
+    }
+    (*(u8 **) (player + 0x68))[9] = mode;
+    switch (mode) {
+        case 0:
+        case 1:
+            func_8009ADF0(player, 8, 0);
+            if ((*(u8 **) (player + 0x68))[8]) {
+                (*(u8 **) (player + 0x68))[8] = 0;
+            }
+            break;
+        case 2:
+            func_8009ADF0(player, 8, 1);
+            *(f32 *) (*(u8 **) (player + 0x68) + 0x18) = 1.0f;
+            *(s32 *) (*(u8 **) (player + 0x68) + 0x14) = 0x78;
+            break;
+        case 3:
+            func_8009ADF0(player, 8, 1);
+            *(f32 *) (*(u8 **) (player + 0x68) + 0xC) = 0.3f;
+            baeggcursor_entrypoint_10(player, 152.0f, 114.0f);
+            *(f32 *) (*(u8 **) (player + 0x68) + 0x18) = 16.0f;
+            *(s32 *) (*(u8 **) (player + 0x68) + 0x14) = 0;
             break;
         case 4:
-            func_8009ADF0(param_0, 8, 1);
-            *(f32 *)(*(u8 **)(param_0 + 0x68) + 0xC) = 0.2f;
+            func_8009ADF0(player, 8, 1);
+            *(f32 *) (*(u8 **) (player + 0x68) + 0xC) = 0.2f;
             break;
         case 5:
-            func_8009ADF0(param_0, 8, 1);
-            *(f32 *)(*(u8 **)(param_0 + 0x68) + 0xC) = 0.0f;
-            (*(u8 **)(param_0 + 0x68))[0x10] = 0;
-            break;
+            func_8009ADF0(player, 8, 1);
+            *(f32 *) (*(u8 **) (player + 0x68) + 0xC) = 0.0f;
+            (*(u8 **) (player + 0x68))[0x10] = 0;
     }
 }
 
-void baeggcursor_entrypoint_8(u8 *param_0) {
-    u8 local_0;
+void baeggcursor_entrypoint_8(u8 *player)
+{
+    u8 mode;
 
-    local_0 = (*(u8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x68)))) + (9)));
-    if ((local_0 != 0) && (local_0 != 1) && (local_0 != 4)) {
-        baeggcursor_entrypoint_7(param_0, 5);
+    mode = *(u8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x68) + 9);
+    if ((mode != 0) && (mode != 1) && (mode != 4)) {
+        baeggcursor_entrypoint_7(player, 5);
     }
 }
 
-s32 baeggcursor_entrypoint_9(u8 *param_0) {
-    u8 local_0;
+s32 baeggcursor_entrypoint_9(u8 *player)
+{
+    u8 mode;
 
-    local_0 = (*(u8 *)((s8 *)((*(u8 **)((s8 *)(param_0) + (0x68)))) + (9)));
-    if ((local_0 != 0) && (local_0 != 1) && (local_0 != 4)) {
+    mode = *(u8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x68) + 9);
+    if ((mode != 0) && (mode != 1) && (mode != 4)) {
         return 1;
     }
     return 0;
 }
 
-void baeggcursor_entrypoint_10(s32 param_0, f32 param_1, f32 param_2) {
-    *(f32 *)(*(s32 *)(param_0 + 0x68) + 0x0) = param_1;
-    *(f32 *)(*(s32 *)(param_0 + 0x68) + 0x4) = param_2;
+void baeggcursor_entrypoint_10(s32 player, f32 x, f32 y)
+{
+    *(f32 *) (*(s32 *) (player + 0x68) + 0x0) = x;
+    *(f32 *) (*(s32 *) (player + 0x68) + 0x4) = y;
 }
 
-void baeggcursor_entrypoint_11(u8 *param_0)
+// Per-frame cursor animation (scale and alpha); changes mode when an animation ends.
+void baeggcursor_entrypoint_11(u8 *player)
 {
     extern f32 func_800F10B4(f32, f32, f32, f32, f32);
     extern u8 func_800D9078(f32 *);
-    f32 local_3;
-    f32 local_4;
-    s32 local_2;
-    EggCursorCurvePoint *local_1;
-    EggCursorUpdateState *local_0;
-    local_0 = *(EggCursorUpdateState **)(param_0 + 0x68);
-    if (1) {}
-    if (1) {}
-    switch (local_0->local_0) {
-    case 3:
-        if (local_0->local_1 < 0.1f) {
-            local_3 = func_800F10B4(local_0->local_1, 0.0f, 0.1f, 1.0f, 0.8f);
-        } else {
-            local_3 = func_800F10B4(local_0->local_1, 0.1f, 0.3f, 0.8f, 16.0f);
-        }
-        (*(EggCursorUpdateState **)(param_0 + 0x68))->local_4 = local_3;
-        (*(EggCursorUpdateState **)(param_0 + 0x68))->local_3 = func_800F10B4(
-            (*(EggCursorUpdateState **)(param_0 + 0x68))->local_1, 0.0f, 0.3f, 120.0f, 0.0f);
-        if (func_800D9078(&(*(EggCursorUpdateState **)(param_0 + 0x68))->local_1)) {
-            baeggcursor_entrypoint_7(param_0, 2);
-        }
-        break;
-    case 4:
-        (*(EggCursorUpdateState **)(param_0 + 0x68))->local_4 = func_800F10B4(local_0->local_1, 0.0f, 0.2f, 16.0f, 1.0f);
-        (*(EggCursorUpdateState **)(param_0 + 0x68))->local_3 = func_800F10B4(
-            (*(EggCursorUpdateState **)(param_0 + 0x68))->local_1, 0.0f, 0.2f, 0, 120.0f);
-        if (func_800D9078(&(*(EggCursorUpdateState **)(param_0 + 0x68))->local_1)) {
-            baeggcursor_entrypoint_7(param_0, 1);
-        }
-        break;
-    case 5:
-        local_4 = local_0->local_1;
-        local_1 = func_80800000_baeggcursor(local_0->local_2);
-        for (local_2 = 0; local_1[local_2].local_0 <= local_4; local_2++) {
-            if (local_1[local_2].local_1 == 0) {
-                baeggcursor_entrypoint_7(param_0, 2);
-                break;
+    f32 scale;
+    f32 timer;
+    s32 i;
+    EggCursorCurvePoint *curve;
+    EggCursorUpdateState *cursor;
+    cursor = *(EggCursorUpdateState **) (player + 0x68);
+    // Matching: the two empty if (1) blocks are needed for the match.
+    if (1) {
+    }
+    if (1) {
+    }
+    switch (cursor->mode) {
+        case 3:
+            if (cursor->timer < 0.1f) {
+                scale = func_800F10B4(cursor->timer, 0.0f, 0.1f, 1.0f, 0.8f);
+            } else {
+                scale = func_800F10B4(cursor->timer, 0.1f, 0.3f, 0.8f, 16.0f);
             }
-        }
-        (*(EggCursorUpdateState **)(param_0 + 0x68))->local_4 = func_800F10B4(local_4,
-            local_1[local_2 - 1].local_0, local_1[local_2].local_0,
-            local_1[local_2 - 1].local_1, local_1[local_2].local_1);
-        func_800D91B8(&(*(EggCursorUpdateState **)(param_0 + 0x68))->local_1);
-        break;
+            (*(EggCursorUpdateState **) (player + 0x68))->scale = scale;
+            (*(EggCursorUpdateState **) (player + 0x68))->alpha = func_800F10B4(
+                (*(EggCursorUpdateState **) (player + 0x68))->timer, 0.0f, 0.3f, 120.0f, 0.0f);
+            if (func_800D9078(&(*(EggCursorUpdateState **) (player + 0x68))->timer)) {
+                baeggcursor_entrypoint_7(player, 2);
+            }
+            break;
+        case 4:
+            (*(EggCursorUpdateState **) (player + 0x68))->scale =
+                func_800F10B4(cursor->timer, 0.0f, 0.2f, 16.0f, 1.0f);
+            (*(EggCursorUpdateState **) (player + 0x68))->alpha = func_800F10B4(
+                (*(EggCursorUpdateState **) (player + 0x68))->timer, 0.0f, 0.2f, 0, 120.0f);
+            if (func_800D9078(&(*(EggCursorUpdateState **) (player + 0x68))->timer)) {
+                baeggcursor_entrypoint_7(player, 1);
+            }
+            break;
+        case 5:
+            timer = cursor->timer;
+            curve = func_80800000_baeggcursor(cursor->curve);
+            for (i = 0; curve[i].time <= timer; i++) {
+                if (curve[i].value == 0) {
+                    baeggcursor_entrypoint_7(player, 2);
+                    break;
+                }
+            }
+            (*(EggCursorUpdateState **) (player + 0x68))->scale =
+                func_800F10B4(timer, curve[i - 1].time, curve[i].time,
+                              curve[i - 1].value, curve[i].value);
+            func_800D91B8(&(*(EggCursorUpdateState **) (player + 0x68))->timer);
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ba/egg/cursor.data.s) is defined here in C.
- * Values are taken from the ROM. */
-u32 D_80800670_baeggcursor[8] = { 0x0, 0x3F800000, 0x3DA3D70A, 0x3F000000, 0x3E99999A, 0x3F800000, 0x0, 0x0 };
-s32 D_80800690_baeggcursor[4] = { (u32)&D_80800670_baeggcursor, 0x0, 0x0, 0x0 };
+u32 D_80800670_baeggcursor[8] = {0x0,        0x3F800000, 0x3DA3D70A, 0x3F000000,
+                                 0x3E99999A, 0x3F800000, 0x0,        0x0};
+s32 D_80800690_baeggcursor[4] = {(u32) &D_80800670_baeggcursor, 0x0, 0x0, 0x0};

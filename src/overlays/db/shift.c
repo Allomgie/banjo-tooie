@@ -1,42 +1,48 @@
+// Possibly planar texture-coordinate projection: projects listed vertices onto a plane around a
+// moving point and writes their S/T. Perhaps a scrolling or shifted texture, such as a light spot.
 #include "common.h"
 
 extern f32 func_800F2290(f32 *, f32 *);
 extern void func_800F2388(f32 *, f32 *, f32 *);
 
-void func_80800000_dbshift(f32 *param_0, f32 *param_1, f32 *param_2, f32 *param_3, f32 *param_4)
+// Computes S and T of point relative to entry along the two axes.
+void func_80800000_dbshift(f32 *entry, f32 *axis_u, f32 *point, f32 *axis_v, f32 *out)
 {
-    f32 local_0;
-    f32 local_1[2];
-    local_0 = func_800F2290(param_1, param_3);
-    func_800F2388(local_1, param_2, param_0);
-    param_4[0] = func_800F2290(local_1, param_3) / local_0;
-    param_4[1] = func_800F2290(local_1, param_1) / local_0;
+    f32 denom;
+    f32 rel[2];
+    denom = func_800F2290(axis_u, axis_v);
+    func_800F2388(rel, point, entry);
+    out[0] = func_800F2290(rel, axis_v) / denom;
+    out[1] = func_800F2290(rel, axis_u) / denom;
 }
 
-int dbshift_entrypoint_0(s32 param_0[1])
+// Returns the record count.
+int dbshift_entrypoint_0(s32 section[1])
 {
-  return param_0[0];
+    return section[0];
 }
 
-void dbshift_entrypoint_1(s32 *param_0, s32 param_1, s32 param_2, s32 param_3)
+// Writes projected S/T coordinates (x64 fixed point) for the vertices of one shift record.
+void dbshift_entrypoint_1(s32 *section, s32 model, s32 record_idx, s32 point)
 {
-    u8 *local_1;
-    u8 *local_2;
-    s32 local_3;
-    u8 *local_0;
-    f32 local_4[2];
-    if (param_2 >= 0 && param_2 < *param_0) {
-        local_0 = (u8 *)param_0 + 4;
-        for (local_3 = 0; local_3 < param_2; local_3++) local_0 += *(s16 *)(local_0 + 0x1A) * 8 + 0x1C;
-        local_1 = *(s16 *)(local_0 + 0x18) * 0x10 + (u8 *)func_800B2190(param_1);
-        local_2 = local_0 + 0x1C;
-        for (local_3 = 0; local_3 < *(s16 *)(local_0 + 0x1A); local_3++, local_2 += 8, local_1 += 0x10) {
-            func_80800000_dbshift(local_2, local_0, param_3, local_0 + 8, local_4);
-            *(s16 *)(local_1 + 8) = (s32)((-local_4[0] * *(f32 *)(local_0 + 0x10) - 0.5f) * 64.0f);
-            *(s16 *)(local_1 + 0xA) = (s32)((local_4[1] * *(f32 *)(local_0 + 0x14) - 0.5f) * 64.0f);
+    u8 *vtx;
+    u8 *entry;
+    s32 i;
+    u8 *record;
+    f32 st[2];
+    if (record_idx >= 0 && record_idx < *section) {
+        record = (u8 *) section + 4;
+        for (i = 0; i < record_idx; i++)
+            record += *(s16 *) (record + 0x1A) * 8 + 0x1C;
+        vtx = *(s16 *) (record + 0x18) * 0x10 + (u8 *) func_800B2190(model);
+        entry = record + 0x1C;
+        for (i = 0; i < *(s16 *) (record + 0x1A);
+             i++, entry += 8, vtx += 0x10) {
+            func_80800000_dbshift(entry, record, point, record + 8, st);
+            *(s16 *) (vtx + 8) =
+                (s32) ((-st[0] * *(f32 *) (record + 0x10) - 0.5f) * 64.0f);
+            *(s16 *) (vtx + 0xA) =
+                (s32) ((st[1] * *(f32 *) (record + 0x14) - 0.5f) * 64.0f);
         }
     }
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/db/shift.data.s) is defined here in C.
- * Values are taken from the ROM. */

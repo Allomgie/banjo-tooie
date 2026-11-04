@@ -1,18 +1,73 @@
+// Particle drawing (model and sprite particles) plus emitter defrag, followed by screen
+// fill-rectangle helpers (colored fill, black fill, depth buffer clear).
 #include "common.h"
 #include <PR/gbi.h>
 
 #define LOCAL_MAX(a, b) ((a) > (b) ? (a) : (b))
-typedef struct { u8 pad[6]; s16 local_0[3]; f32 local_1; f32 local_2[8]; s16 local_3; u8 pad_1[7]; u8 local_4:1; u8 pad_2:7; u8 pad_3[2]; } EntryBBD60;
-typedef struct { s16 pad_0; u16 local_0; u8 pad_1[8]; s16 local_1[3]; u8 pad_2[0x41]; u8 local_2; u8 pad_3[0x2C]; u8 local_3[4]; u8 pad_4[8]; EntryBBD60 *local_4; EntryBBD60 *local_5; } StateBBD60;
+typedef struct {
+    u8 pad_0[6];
+    s16 pos[3];
+    f32 alpha;
+    f32 rot[8];
+    s16 size;
+    u8 pad_32[7];
+    u8 active : 1;
+    u8 pad_39 : 7;
+    u8 pad_3A[2];
+} EntryBBD60;
+typedef struct {
+    s16 pad_0;
+    u16 asset_id;
+    u8 pad_4[8];
+    s16 origin[3];
+    u8 pad_12[0x41];
+    u8 unk_53;
+    u8 pad_54[0x2C];
+    u8 color[4];
+    u8 pad_84[8];
+    EntryBBD60 *particle_begin;
+    EntryBBD60 *particle_end;
+} StateBBD60;
 extern void func_800DF5D8(u32, u32, u32, s32);
 extern void func_800DF830(s32);
 extern s32 func_800DE448(f32 *, f32 *, f32, s32, s32);
-typedef struct { u8 pad[0x5C]; f32 period, phase[3], amplitude[3]; } LocalPulse;
+typedef struct {
+    u8 pad_0[0x5C];
+    f32 period, phase[3], amplitude[3];
+} LocalPulse;
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern f32 func_800F13C4(f32, f32);
 extern f32 mlAbsF(f32);
-typedef struct { u8 pad[6]; s16 local_0[3]; f32 local_1; f32 pad10[2]; f32 local_2; f32 local_3; u8 pad20[12]; s16 local_4; u16 pad2E; s16 local_5; u8 pad32[7]; u8 local_6:1; u8 pad39:7; u8 pad3A[2]; } EntryBF;
-typedef struct { u16 local_0; u16 local_1; u8 pad4[8]; s16 local_2[3]; u8 pad12[0x41]; u8 local_3; u8 pad54[8]; f32 local_4; u8 pad60[0x20]; u8 local_5[4]; u8 pad84[8]; EntryBF *local_6, *local_7; } StateBF;
+typedef struct {
+    u8 pad_0[6];
+    s16 pos[3];
+    f32 alpha;
+    f32 pad_10[2];
+    f32 rot_z;
+    f32 age;
+    u8 pad_20[12];
+    s16 frame;
+    u16 pad_2E;
+    s16 size;
+    u8 pad_32[7];
+    u8 active : 1;
+    u8 pad_39 : 7;
+    u8 pad_3A[2];
+} EntryBF;
+typedef struct {
+    u16 flags;
+    u16 asset_id;
+    u8 pad_4[8];
+    s16 origin[3];
+    u8 pad_12[0x41];
+    u8 unk_53;
+    u8 pad_54[8];
+    f32 pulse_period;
+    u8 pad_60[0x20];
+    u8 color[4];
+    u8 pad_84[8];
+    EntryBF *particle_begin, *particle_end;
+} StateBF;
 extern void *func_800D674C(s32);
 extern void func_800E2588(u32);
 extern void func_800E24F8(s32, s32, s32);
@@ -28,143 +83,177 @@ extern void func_800E2A14(s32);
 extern Gfx D_8011A730[];
 void func_800BC474();
 
-void func_800BBD60(param_0, param_1) StateBBD60 * param_0; s32 param_1; {
-    s32 local_0;
-    f32 local_1[3];
-    EntryBBD60 *local_2;
-    local_0 = func_800D674C(param_0->local_0);
-    for (local_2 = param_0->local_4; local_2 < param_0->local_5; local_2++) {
-        local_1[0] = local_2->local_0[0] + param_0->local_1[0];
-        local_1[1] = local_2->local_0[1] + param_0->local_1[1];
-        local_1[2] = local_2->local_0[2] + param_0->local_1[2];
-        func_800DF5D8(param_0->local_3[0], param_0->local_3[1], param_0->local_3[2], (s32)((f32)(u32)param_0->local_3[3] * local_2->local_1));
-        func_800DF830(param_0->local_2);
-        local_2->local_4 |= func_800DE448(local_1, local_2->local_2, local_2->local_3 * 0.00390625f, 0, local_0) ? 1 : 0;
+// Particle rendering: model and sprite particles, pulse scale, draw dispatch by asset type, defrag.
+// Draws the emitter's model particles.
+void func_800BBD60(emitter, gfx) StateBBD60 *emitter;
+s32 gfx;
+{
+    s32 model;
+    f32 world_pos[3];
+    EntryBBD60 *particle;
+    model = func_800D674C(emitter->asset_id);
+    for (particle = emitter->particle_begin; particle < emitter->particle_end; particle++) {
+        world_pos[0] = particle->pos[0] + emitter->origin[0];
+        world_pos[1] = particle->pos[1] + emitter->origin[1];
+        world_pos[2] = particle->pos[2] + emitter->origin[2];
+        func_800DF5D8(emitter->color[0], emitter->color[1], emitter->color[2],
+                      (s32) ((f32) (u32) emitter->color[3] * particle->alpha));
+        func_800DF830(emitter->unk_53);
+        particle->active |=
+            func_800DE448(world_pos, particle->rot, particle->size * 0.00390625f, 0, model)
+                ? 1
+                : 0;
     }
 }
 
-void func_800BBED8(LocalPulse *param_0, f32 param_1, f32 *param_2)
+// Pulses the per-axis scale with a triangle wave.
+void func_800BBED8(LocalPulse *emitter, f32 time, f32 *scale)
 {
-    s32 local_0;
-    f32 local_1;
-    f32 local_2;
-    local_1 = param_0->period * 0.5f;
-    for (local_0 = 0; local_0 < 3; local_0++) {
-        if (param_0->amplitude[local_0] != 0.0f) {
-            local_2 = func_800F13C4(param_0->phase[local_0] + param_1, param_0->period);
-            local_2 = mlAbsF(local_2 - local_1);
-            local_2 = func_800F10B4(local_2, 0.0f, local_1, 1.0f - param_0->amplitude[local_0], param_0->amplitude[local_0] + 1.0f);
-            param_2[local_0] *= local_2;
+    s32 i;
+    f32 half_period;
+    f32 factor;
+    half_period = emitter->period * 0.5f;
+    for (i = 0; i < 3; i++) {
+        if (emitter->amplitude[i] != 0.0f) {
+            factor = func_800F13C4(emitter->phase[i] + time, emitter->period);
+            factor = mlAbsF(factor - half_period);
+            factor = func_800F10B4(factor, 0.0f, half_period, 1.0f - emitter->amplitude[i],
+                                    emitter->amplitude[i] + 1.0f);
+            scale[i] *= factor;
         }
     }
 }
 
-void func_800BBFDC(param_0, param_1) StateBF * param_0; s32 param_1;
+// Draws the emitter's sprite particles.
+void func_800BBFDC(emitter, gfx) StateBF *emitter;
+s32 gfx;
 {
-    void *local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    EntryBF *local_4;
-    s32 local_5;
-    local_0 = func_800D674C(param_0->local_1);
-    local_5 = (param_0->local_0 & 0x800) ? 1 : 0;
-    if (!(param_0->local_0 & 0x20) && (param_0->local_5[0] != 255 || param_0->local_5[1] != 255 || param_0->local_5[2] != 255 || param_0->local_5[3] != 255)) {
-        func_800E2588(param_0->local_3);
-        func_800E24F8(param_0->local_5[0], param_0->local_5[1], param_0->local_5[2]);
-        func_800E2440(param_0->local_5[0] < 8 ? 0 : param_0->local_5[0] - 8,
-        param_0->local_5[1] < 8 ? 0 : param_0->local_5[1] - 8,
-        param_0->local_5[2] < 8 ? 0 : param_0->local_5[2] - 8);
+    void *sprite;
+    f32 world_pos[3];
+    f32 rot[3];
+    f32 scale[3];
+    EntryBF *particle;
+    s32 unk_0;
+    sprite = func_800D674C(emitter->asset_id);
+    unk_0 = (emitter->flags & 0x800) ? 1 : 0;
+    if (!(emitter->flags & 0x20) && (emitter->color[0] != 255 || emitter->color[1] != 255 ||
+                                       emitter->color[2] != 255 || emitter->color[3] != 255)) {
+        func_800E2588(emitter->unk_53);
+        func_800E24F8(emitter->color[0], emitter->color[1], emitter->color[2]);
+        func_800E2440(emitter->color[0] < 8 ? 0 : emitter->color[0] - 8,
+                      emitter->color[1] < 8 ? 0 : emitter->color[1] - 8,
+                      emitter->color[2] < 8 ? 0 : emitter->color[2] - 8);
         func_800E24B4(0);
     } else {
-        func_800E2588(param_0->local_3 ? 2 : 0);
+        func_800E2588(emitter->unk_53 ? 2 : 0);
     }
-    func_800E24D8(param_0->local_0 & 0x200 ? 1 : 0);
-    func_800E2594(param_1, local_0);
-    if (param_0->local_0 & 1) func_800EFA4C(local_2, 90.0f, 0.0f, 0.0f);
-    for (local_4 = param_0->local_6; local_4 < param_0->local_7; local_4++) {
-        local_1[0] = local_4->local_0[0] + param_0->local_2[0];
-        local_1[1] = local_4->local_0[1] + param_0->local_2[1];
-        local_1[2] = local_4->local_0[2] + param_0->local_2[2];
-        local_3[0] = local_3[1] = local_3[2] = local_4->local_5 * 0.00390625f;
-        if (param_0->local_4 != 0.0f) func_800BBED8(param_0, local_4->local_3, local_3);
-        if (param_0->local_0 & 1) {
-            local_4->local_6 |= func_800E28A4(param_1, local_4->local_4 >> 8, local_5, local_1, local_2, local_3,
-            (s32)((u32)param_0->local_5[3] * local_4->local_1));
+    func_800E24D8(emitter->flags & 0x200 ? 1 : 0);
+    func_800E2594(gfx, sprite);
+    if (emitter->flags & 1)
+        func_800EFA4C(rot, 90.0f, 0.0f, 0.0f);
+    for (particle = emitter->particle_begin; particle < emitter->particle_end; particle++) {
+        world_pos[0] = particle->pos[0] + emitter->origin[0];
+        world_pos[1] = particle->pos[1] + emitter->origin[1];
+        world_pos[2] = particle->pos[2] + emitter->origin[2];
+        scale[0] = scale[1] = scale[2] = particle->size * 0.00390625f;
+        if (emitter->pulse_period != 0.0f)
+            func_800BBED8(emitter, particle->age, scale);
+
+        if (emitter->flags & 1) {
+            particle->active |=
+                func_800E28A4(gfx, particle->frame >> 8, unk_0, world_pos, rot, scale,
+                              (s32) ((u32) emitter->color[3] * particle->alpha));
         } else {
-            func_800E2530(local_4->local_2);
-            local_4->local_6 |= func_800E2720(param_1, local_4->local_4 >> 8, local_5, local_1, local_3,
-            (s32)((u32)param_0->local_5[3] * local_4->local_1));
+            func_800E2530(particle->rot_z);
+            particle->active |=
+                func_800E2720(gfx, particle->frame >> 8, unk_0, world_pos, scale,
+                              (s32) ((u32) emitter->color[3] * particle->alpha));
         }
     }
-    func_800E2A14(param_1);
+    func_800E2A14(gfx);
 }
 
-void func_800BC358(void *param_0, s32 param_1, s32 param_2)
+// Draws the emitter if its pass bit (flag 4) equals pass.
+void func_800BC358(void *emitter, s32 gfx, s32 pass)
 {
-  int new_var2;
-  void *new_var;
-  u16 field0;
-  char *new_var3;
-  u8 field10;
-  (void) param_1;
-  if (!param_1)
-  {
-  }
-  field0 = (new_var2 = *((u16 *) param_0));
-  new_var = param_0;
-  new_var = new_var;
-  new_var2 = field0 & 4;
-  if (new_var2 == param_2)
-  {
-    field10 = *((u8 *) (new_var3 = ((char *) new_var) + 0xA));
-    switch (field10)
-    {
-      case 0:
-        func_800BBD60();
-        return;
-
-      case 7:
-        func_800BBFDC();
-        break;
-
+    int pass_bit;
+    void *base;
+    u16 flags;
+    char *type_field;
+    u8 asset_type;
+    // Matching: the empty block and the extra temporaries are needed for the match.
+    if (!gfx) {
     }
+    flags = (pass_bit = *((u16 *) emitter));
+    base = emitter;
+    pass_bit = flags & 4;
+    if (pass_bit == pass) {
+        asset_type = *((u8 *) (type_field = ((char *) base) + 0xA));
+        switch (asset_type) {
+            case 0:
+                func_800BBD60();
+                return;
 
-  }
+            case 7:
+                func_800BBFDC();
+        }
+    }
 }
 
-int func_800BC3B8(s32 param_0, s32 param_1)
+// Draws the emitter in both passes.
+int func_800BC3B8(s32 emitter, s32 gfx)
 {
-  func_800BC358(param_0, param_1, 4);
-  func_800BC358(param_0, param_1, 0);
+    func_800BC358(emitter, gfx, 4);
+    func_800BC358(emitter, gfx, 0);
 }
 
-void* func_800BC3F0(void* arg0) 
+void *func_800BC3F0(void *emitter)
 {
-    return defrag(arg0);
-}
-void func_800BC410(s32 param_0, s32 param_1, s32 param_2, s32 param_3) {
-    s32 local_1[4];
-    func_800E7FCC(local_1);
-    func_800BC474(param_0, local_1[0], local_1[1], local_1[2], local_1[3], param_1, param_2, param_3);
+    return defrag(emitter);
 }
 
-void func_800BC474(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7) Gfx ** param_0; s32 param_1; s32 param_2; s32 param_3; s32 param_4; s32 param_5; s32 param_6; s32 param_7; {
-    gDma1p((*param_0)++, 0xDE, (u8 *)D_8011A730 - 0x80000000, 0, G_DL_PUSH);
-    gDPSetFillColor((*param_0)++, (GPACK_RGBA5551(param_5, param_6, param_7, 1) << 16) | GPACK_RGBA5551(param_5, param_6, param_7, 1));
-    gDPFillRectangle((*param_0)++, LOCAL_MAX(param_1, 0), LOCAL_MAX(param_2, 0), LOCAL_MAX(param_1 + param_3 - 1, 0), LOCAL_MAX(param_2 + param_4 - 1, 0));
+// Fill-rectangle helpers: colored fill, clear to black, clear the depth buffer.
+void func_800BC410(s32 gfx, s32 r, s32 g, s32 b)
+{
+    s32 rect[4];
+    func_800E7FCC(rect);
+    func_800BC474(gfx, rect[0], rect[1], rect[2], rect[3], r, g,
+                  b);
 }
 
-void func_800BC580(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4) {
-    func_800BC474(param_0, param_1, param_2, param_3, param_4, 0, 0, 0);
+// Fills a rectangle with the given RGB color.
+void func_800BC474(gfx, x, y, width, height, r, g,
+                   b) Gfx **gfx;
+s32 x;
+s32 y;
+s32 width;
+s32 height;
+s32 r;
+s32 g;
+s32 b;
+{
+    gDma1p((*gfx)++, 0xDE, (u8 *) D_8011A730 - 0x80000000, 0, G_DL_PUSH);
+    gDPSetFillColor((*gfx)++, (GPACK_RGBA5551(r, g, b, 1) << 16) |
+                                      GPACK_RGBA5551(r, g, b, 1));
+    gDPFillRectangle((*gfx)++, LOCAL_MAX(x, 0), LOCAL_MAX(y, 0),
+                     LOCAL_MAX(x + width - 1, 0), LOCAL_MAX(y + height - 1, 0));
 }
 
-void func_800BC5B0(Gfx **param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4) {
-    gDma1p((*param_0)++, 0xDE, (u8 *)D_8011A730 - 0x80000000, 0, G_DL_PUSH);
-    gDPSetFillColor((*param_0)++, 0xFFFCFFFC);
-    gDPFillRectangle((*param_0)++, LOCAL_MAX(param_1, 0), LOCAL_MAX(param_2, 0), LOCAL_MAX(param_1 + param_3 - 1, 0), LOCAL_MAX(param_2 + param_4 - 1, 0));
+// Fills a rectangle with black.
+void func_800BC580(s32 gfx, s32 x, s32 y, s32 width, s32 height)
+{
+    func_800BC474(gfx, x, y, width, height, 0, 0, 0);
 }
 
-/* TU-NOTE: the .data of this file (formerly asm/data/core2/1E95650.data.s) is defined here in C.
- * Values are taken from the ROM. */
-Gfx D_8011A730[6] = { 0xE7000000, 0x0, 0xE3000800, 0x0, 0xE3000A01, 0x300000, 0xE200001C, 0x0, 0xDF000000, 0x0, 0x0, 0x0 };
+// Fills a rectangle with 0xFFFC, used to clear the depth buffer.
+void func_800BC5B0(Gfx **gfx, s32 x, s32 y, s32 width, s32 height)
+{
+    gDma1p((*gfx)++, 0xDE, (u8 *) D_8011A730 - 0x80000000, 0, G_DL_PUSH);
+    gDPSetFillColor((*gfx)++, 0xFFFCFFFC);
+    gDPFillRectangle((*gfx)++, LOCAL_MAX(x, 0), LOCAL_MAX(y, 0),
+                     LOCAL_MAX(x + width - 1, 0), LOCAL_MAX(y + height - 1, 0));
+}
+
+// RDP setup for fill-mode rectangles.
+Gfx D_8011A730[6] = {0xE7000000, 0x0, 0xE3000800, 0x0, 0xE3000A01, 0x300000,
+                     0xE200001C, 0x0, 0xDF000000, 0x0, 0x0,        0x0};

@@ -1,3 +1,5 @@
+// Probably helpers for drawing static cube props by asset id: model props, sprite props,
+// asset acquire/release wrappers and a few empty stubs.
 #include "common.h"
 s32 func_800BFC34(s32);
 s32 func_800BFC94(s32);
@@ -9,43 +11,51 @@ extern s32 func_800D2F20(void);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800E2AA4(s32, s32, s32, s32, s32, f32 *);
 
-void func_800BFAD0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4)
+// Draw a model prop or a sprite prop by asset id.
+// Draws a static model prop.
+void func_800BFAD0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 asset_id)
 {
-    s32 sp24;
+    s32 asset;
 
-    sp24 = func_800BFC34(param_4);
-    func_800DF428((f32)func_800D2F20());
+    asset = func_800BFC34(asset_id);
+    func_800DF428((f32) func_800D2F20());
     func_800DF470(1);
     func_800DF830(1);
     func_800DF3E0();
-    func_800DF7E8(func_800D731C(param_4) & 0xFF);
-    func_800DE448(param_1, param_2, param_3, 0, sp24);
+    func_800DF7E8(func_800D731C(asset_id) & 0xFF);
+    func_800DE448(param_1, param_2, param_3, 0, asset);
 }
 
-void func_800BFB58(s32 param_0, s32 param_1, f32 param_2, s32 param_3, s32 param_4, s32 param_5, s32 param_6, s32 param_7, s32 param_8) {
-    f32 sp2C[3];
-    s32 sp28;
-    s32 var_a0;
+// Draws a static sprite prop.
+void func_800BFB58(s32 param_0, s32 param_1, f32 scale_factor, s32 asset_id, s32 tint_r, s32 tint_g,
+                   s32 tint_b, s32 param_7, s32 param_8)
+{
+    f32 scale[3];
+    s32 asset;
+    s32 blend_mode;
 
-    sp28 = func_800BFC94(param_3);
-    func_800EFA4C(sp2C, param_2, param_2, param_2);
+    asset = func_800BFC94(asset_id);
+    func_800EFA4C(scale, scale_factor, scale_factor, scale_factor);
     func_800E249C(func_800D2F20());
     func_800E24C0(1);
-    func_800E24F8(0xFF - (param_4 * 0x10), 0xFF - (param_5 * 0x10), 0xFF - (param_6 * 0x10));
-    if (func_800AF5A8(sp28) & 0xB00) {
-        var_a0 = 1;
+    func_800E24F8(0xFF - (tint_r * 0x10), 0xFF - (tint_g * 0x10), 0xFF - (tint_b * 0x10));
+    if (func_800AF5A8(asset) & 0xB00) {
+        blend_mode = 1;
     } else {
-        var_a0 = 3;
+        blend_mode = 3;
     }
-    func_800E2588(var_a0);
-    func_800E2AA4(param_0, sp28, param_8, param_7, param_1, sp2C);
+    func_800E2588(blend_mode);
+    func_800E2AA4(param_0, asset, param_8, param_7, param_1, scale);
 }
 
+// Asset get / touch / release wrappers used by prop rendering.
+// Acquires the asset.
 s32 func_800BFC34(s32 arg0)
 {
     return func_800D674C(arg0);
 }
 
+// Releases the asset (pair of func_800BFC34).
 void func_800BFC54()
 {
     func_800D6B0C();
@@ -61,11 +71,16 @@ s32 func_800BFC94(s32 arg0)
     return func_800D674C(arg0);
 }
 
-void func_800BFCB4(void) {
+// Empty stubs (func_800BFCC4 still has call sites in 1EC3810.c and 1E83680.c).
+// Empty stub.
+void func_800BFCB4(void)
+{
 }
 
-void func_800BFCBC(void) {
+void func_800BFCBC(void)
+{
 }
 
-func_800BFCC4(s32 param_0){
+func_800BFCC4(s32 param_0)
+{
 }

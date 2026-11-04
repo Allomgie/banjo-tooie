@@ -1,3 +1,4 @@
+// Ordinary death of Banjo-Kazooie (three variants): knocked back, bounces, slides, then leaves.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
@@ -29,243 +30,259 @@ extern void baanim_setEndAndDuration(PlayerState *, f32, f32);
 extern s32 D_80800970_bsdie[];
 extern s32 D_80800980_bsdie[];
 
-void func_80800000_bsdie(s32 param_0) {
-    f32 local_0;
+// Spawns a ring of 8 dust puffs around the player.
+void func_80800000_bsdie(s32 player)
+{
+    f32 angle;
 
-    for (local_0 = 0.0f; local_0 < 360.0f; local_0 += 45.0f) {
-        _badust_entrypoint_5(param_0, local_0, 230.0f);
+    for (angle = 0.0f; angle < 360.0f; angle += 45.0f) {
+        _badust_entrypoint_5(player, angle, 230.0f);
     }
 }
 
-void bsdie_entrypoint_0(PlayerState *param_0)
+// Death variant 1 (anim 9): knocked up and back.
+void bsdie_entrypoint_0(PlayerState *player)
 {
-    void *local_0;
+    void *anim_ctrl;
 
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    anctrl_reset(local_0);
-    anctrl_setSmoothTransition(local_0, 0);
-    anctrl_setIndex(local_0, 9);
-    anctrl_setSubrange(local_0, 0.0f, 0.3356f);
-    anctrl_setDuration(local_0, 2.0f);
-    anctrl_setPlaybackType(local_0, 1);
-    anctrl_start(local_0);
-    param_0->unk16C = 250.0f;
-    _basudie_entrypoint_4(param_0, 250.0f, 510.0f, -1400.0f, 25.0f, 3.5f);
-    func_800A0CF4(param_0, 1);
-    func_8009D820(param_0, 1.0f);
-    func_8009BFE4(param_0, 1000.0f, 12.0f);
-    param_0->unk15C.word = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    anctrl_reset(anim_ctrl);
+    anctrl_setSmoothTransition(anim_ctrl, 0);
+    anctrl_setIndex(anim_ctrl, 9);
+    anctrl_setSubrange(anim_ctrl, 0.0f, 0.3356f);
+    anctrl_setDuration(anim_ctrl, 2.0f);
+    anctrl_setPlaybackType(anim_ctrl, 1);
+    anctrl_start(anim_ctrl);
+    player->unk16C = 250.0f;
+    _basudie_entrypoint_4(player, 250.0f, 510.0f, -1400.0f, 25.0f, 3.5f);
+    func_800A0CF4(player, 1);
+    func_8009D820(player, 1.0f);
+    func_8009BFE4(player, 1000.0f, 12.0f);
+    player->unk15C.word = 0;
 }
 
-void bsdie_entrypoint_1(PlayerState *this)
+void bsdie_entrypoint_1(PlayerState *player)
 {
-    void *aCtrl;
-    s32 next;
+    void *anim_ctrl;
+    s32 next_state;
 
-    aCtrl = baanim_getAnimCtrlPtr(this);
-    next = 0;
-    _basudie_entrypoint_5(this);
-    baphysics_set_target_horizontal_velocity(this, this->unk16C);
-    switch (this->unk15C.word) {
-    case 0:
-        if (player_isStable(this)) {
-            anctrl_setSubrange(aCtrl, 0.0f, 1.0f);
-            anctrl_setPlaybackType(aCtrl, 1);
-            baphysics_set_vertical_velocity(this, 400.0f);
-            func_8009E058(this);
-            func_8009DF18(this, 0x428, 1.0f, 18000);
-            _bamotor_entrypoint_1(this, 1.0, 1.0, 0.4f);
-            func_80800000_bsdie(this);
-            this->unk15C.word = 1;
-        }
-        break;
-    case 1:
-        if (player_isStable(this)) {
-            func_8009E084(this);
-            func_8009DF18(this, 0x427, 1.0f, 18000);
-            _bamotor_entrypoint_1(this, 1.0f, 0.5f, 0.4f);
-            this->unk15C.word = 2;
-        }
-        break;
-    case 2:
-        this->unk16C = func_800F0E00(this->unk16C - 12.0f, 0.0f);
-        if (140.0f < this->unk16C) {
-            _badust_entrypoint_9(this);
-        }
-        if (anctrl_isAt(aCtrl, 0.6538f)) {
-            anctrl_setDuration(aCtrl, 4.0f);
-        }
-        if (anctrl_isStopped(aCtrl)) {
-            this->unk16C = 0.0f;
-            this->unk15C.word = 3;
-        }
-        break;
-    case 3:
-        break;
-    }
-    if (_basudie_entrypoint_7(this)) {
-        next = 0x54;
-    }
-    bs_setState(this, next);
-}
-
-void bsdie_entrypoint_2(s32 param_0) {
-    _basudie_entrypoint_6();
-    func_800A0CF4(param_0, 0);
-    func_8009BF5C(param_0, 0.0f);
-    baroll_setIdeal(param_0, 0.0f);
-}
-
-int bsdie_entrypoint_3(s32 param_0)
-{
-  return D_80800960_bsdie[param_0];
-}
-
-void bsdie_entrypoint_4(PlayerState *param_0)
-{
-    AnimCtrl *local_0;
-
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    anctrl_reset(local_0);
-    anctrl_setSmoothTransition(local_0, 0);
-    anctrl_setIndex(local_0, 0xD8);
-    anctrl_setSubrange(local_0, 0.0f, 0.0932f);
-    anctrl_setDuration(local_0, 4.7f);
-    anctrl_setPlaybackType(local_0, 1);
-    anctrl_start(local_0);
-    *(f32 *)((u8 *)param_0 + 0x16C) = 250.0f;
-    _basudie_entrypoint_4(param_0, *(f32 *)((u8 *)param_0 + 0x16C), 510.0f, -1400.0f, 30.0f, 4.0f);
-    func_800A0CF4(param_0, 1);
-    func_8009BFE4(param_0, 1000.0f, 12.0f);
-    func_8009D820(param_0, 1.0f);
-    *(s32 *)((u8 *)param_0 + 0x15C) = 0;
-}
-
-void bsdie_entrypoint_5(PlayerState *param_0)
-{
-    AnimCtrl *local_0;
-    s32 local_1;
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    local_1 = 0;
-    _basudie_entrypoint_5(param_0);
-    baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
-    switch (param_0->unk15C.word) {
-        case 3: break;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    next_state = 0;
+    _basudie_entrypoint_5(player);
+    baphysics_set_target_horizontal_velocity(player, player->unk16C);
+    switch (player->unk15C.word) {
         case 0:
-            if (func_8008DF8C(param_0, 0x96)) {
-                baanim_setEnd(param_0, 0.1863f);
-                param_0->unk15C.word = 1;
+            if (player_isStable(player)) {
+                anctrl_setSubrange(anim_ctrl, 0.0f, 1.0f);
+                anctrl_setPlaybackType(anim_ctrl, 1);
+                baphysics_set_vertical_velocity(player, 400.0f);
+                func_8009E058(player);
+                func_8009DF18(player, 0x428, 1.0f, 18000);
+                _bamotor_entrypoint_1(player, 1.0, 1.0, 0.4f);
+                func_80800000_bsdie(player);
+                player->unk15C.word = 1;
             }
             break;
         case 1:
-            if (player_isStable(param_0)) {
-                func_8009DF18(param_0, 0x428, 1.0f, 0x4650);
-                _bamotor_entrypoint_1(param_0, 1.0f, 1.0f, 0.4f);
-                func_80800000_bsdie(param_0);
-                func_8009E058(param_0);
-                baanim_setEnd(param_0, 0.3333f);
-                param_0->unk15C.word = 2;
+            if (player_isStable(player)) {
+                func_8009E084(player);
+                func_8009DF18(player, 0x427, 1.0f, 18000);
+                _bamotor_entrypoint_1(player, 1.0f, 0.5f, 0.4f);
+                player->unk15C.word = 2;
             }
             break;
         case 2:
-            param_0->unk16C = func_800F0E00(param_0->unk16C - 12.0f, 0.0f);
-            if (param_0->unk16C > 140.0f) { _badust_entrypoint_9(param_0); }
-            if (anctrl_isStopped(local_0)) {
-                baanim_setEnd(param_0, 1.0f);
-                param_0->unk15C.word = 3;
-                param_0->unk16C = 0.0f;
+            player->unk16C = func_800F0E00(player->unk16C - 12.0f, 0.0f);
+            if (140.0f < player->unk16C) {
+                _badust_entrypoint_9(player);
             }
+            if (anctrl_isAt(anim_ctrl, 0.6538f)) {
+                anctrl_setDuration(anim_ctrl, 4.0f);
+            }
+            if (anctrl_isStopped(anim_ctrl)) {
+                player->unk16C = 0.0f;
+                player->unk15C.word = 3;
+            }
+        case 3:
             break;
     }
-    if (_basudie_entrypoint_7(param_0)) { local_1 = 0x54; }
-    bs_setState(param_0, local_1);
+    if (_basudie_entrypoint_7(player)) {
+        next_state = 0x54;
+    }
+    bs_setState(player, next_state);
 }
 
-void bsdie_entrypoint_6(s32 param_0) {
+void bsdie_entrypoint_2(s32 player)
+{
     _basudie_entrypoint_6();
-    func_8009BF5C(param_0, 0.0f);
-    baroll_setIdeal(param_0, 0.0f);
-    func_800A0CF4(param_0, 0);
+    func_800A0CF4(player, 0);
+    func_8009BF5C(player, 0.0f);
+    baroll_setIdeal(player, 0.0f);
 }
 
-int bsdie_entrypoint_7(s32 param_0)
+int bsdie_entrypoint_3(s32 index)
 {
-  return D_80800970_bsdie[param_0];
+    return D_80800960_bsdie[index];
 }
 
-void bsdie_entrypoint_8(PlayerState *param_0)
+// Death variant 2 (anim 0xD8).
+void bsdie_entrypoint_4(PlayerState *player)
 {
-    void *local_0;
+    AnimCtrl *anim_ctrl;
 
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    param_0->unk16C = 250.0f;
-    anctrl_reset(local_0);
-    anctrl_setSmoothTransition(local_0, 0);
-    anctrl_setIndex(local_0, 0xD7);
-    anctrl_setSubrange(local_0, 0.0f, 0.0981f);
-    anctrl_setDuration(local_0, 3.8f);
-    anctrl_setPlaybackType(local_0, 1);
-    anctrl_start(local_0);
-    _basudie_entrypoint_4(param_0, param_0->unk16C, 510.0f, -1400.0f, 30.0f, 3.8f - 0.4f);
-    func_8009BFE4(param_0, 1000.0f, 12.0f);
-    func_8009D820(param_0, 1.0f);
-    param_0->unk15C.word = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    anctrl_reset(anim_ctrl);
+    anctrl_setSmoothTransition(anim_ctrl, 0);
+    anctrl_setIndex(anim_ctrl, 0xD8);
+    anctrl_setSubrange(anim_ctrl, 0.0f, 0.0932f);
+    anctrl_setDuration(anim_ctrl, 4.7f);
+    anctrl_setPlaybackType(anim_ctrl, 1);
+    anctrl_start(anim_ctrl);
+    // Matching: raw offset accesses are needed for the match.
+    *(f32 *) ((u8 *) player + 0x16C) = 250.0f;
+    _basudie_entrypoint_4(player, *(f32 *) ((u8 *) player + 0x16C), 510.0f, -1400.0f, 30.0f,
+                          4.0f);
+    func_800A0CF4(player, 1);
+    func_8009BFE4(player, 1000.0f, 12.0f);
+    func_8009D820(player, 1.0f);
+    *(s32 *) ((u8 *) player + 0x15C) = 0;
 }
 
-void bsdie_entrypoint_9(PlayerState *param_0)
+void bsdie_entrypoint_5(PlayerState *player)
 {
-    AnimCtrl *local_0;
-    s32 local_1;
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    local_1 = 0;
-    _basudie_entrypoint_5(param_0);
-    baphysics_set_target_horizontal_velocity(param_0, param_0->unk16C);
-    switch (param_0->unk15C.word) {
-        case 3: break;
+    AnimCtrl *anim_ctrl;
+    s32 next_state;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    next_state = 0;
+    _basudie_entrypoint_5(player);
+    baphysics_set_target_horizontal_velocity(player, player->unk16C);
+    switch (player->unk15C.word) {
+        case 3:
+            break;
         case 0:
-            if (func_8008DF8C(param_0, 0xC8)) {
-                baanim_setEndAndDuration(param_0, 0.1961f, 3.1f);
-                param_0->unk15C.word = 1;
+            if (func_8008DF8C(player, 0x96)) {
+                baanim_setEnd(player, 0.1863f);
+                player->unk15C.word = 1;
             }
             break;
         case 1:
-            if (player_isStable(param_0)) {
-                func_8009DF18(param_0, 0x428, 1.0f, 0x4650);
-                _bamotor_entrypoint_1(param_0, 1.0f, 1.0f, 0.4f);
-                func_80800000_bsdie(param_0);
-                func_8009E058(param_0);
-                baanim_setEnd(param_0, 0.75f);
-                param_0->unk15C.word = 2;
+            if (player_isStable(player)) {
+                func_8009DF18(player, 0x428, 1.0f, 0x4650);
+                _bamotor_entrypoint_1(player, 1.0f, 1.0f, 0.4f);
+                func_80800000_bsdie(player);
+                func_8009E058(player);
+                baanim_setEnd(player, 0.3333f);
+                player->unk15C.word = 2;
             }
             break;
         case 2:
-            param_0->unk16C = func_800F0E00(param_0->unk16C - 7.0f, 0.0f);
-            if (param_0->unk16C > 140.0f) { _badust_entrypoint_9(param_0); }
-            if (anctrl_isStopped(local_0)) {
-                baanim_setEnd(param_0, 1.0f);
-                param_0->unk15C.word = 3;
-                param_0->unk16C = 0.0f;
+            player->unk16C = func_800F0E00(player->unk16C - 12.0f, 0.0f);
+            if (player->unk16C > 140.0f) {
+                _badust_entrypoint_9(player);
+            }
+            if (anctrl_isStopped(anim_ctrl)) {
+                baanim_setEnd(player, 1.0f);
+                player->unk15C.word = 3;
+                player->unk16C = 0.0f;
+            }
+    }
+    if (_basudie_entrypoint_7(player)) {
+        next_state = 0x54;
+    }
+    bs_setState(player, next_state);
+}
+
+void bsdie_entrypoint_6(s32 player)
+{
+    _basudie_entrypoint_6();
+    func_8009BF5C(player, 0.0f);
+    baroll_setIdeal(player, 0.0f);
+    func_800A0CF4(player, 0);
+}
+
+int bsdie_entrypoint_7(s32 index)
+{
+    return D_80800970_bsdie[index];
+}
+
+// Death variant 3 (anim 0xD7).
+void bsdie_entrypoint_8(PlayerState *player)
+{
+    void *anim_ctrl;
+
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    player->unk16C = 250.0f;
+    anctrl_reset(anim_ctrl);
+    anctrl_setSmoothTransition(anim_ctrl, 0);
+    anctrl_setIndex(anim_ctrl, 0xD7);
+    anctrl_setSubrange(anim_ctrl, 0.0f, 0.0981f);
+    anctrl_setDuration(anim_ctrl, 3.8f);
+    anctrl_setPlaybackType(anim_ctrl, 1);
+    anctrl_start(anim_ctrl);
+    _basudie_entrypoint_4(player, player->unk16C, 510.0f, -1400.0f, 30.0f, 3.8f - 0.4f);
+    func_8009BFE4(player, 1000.0f, 12.0f);
+    func_8009D820(player, 1.0f);
+    player->unk15C.word = 0;
+}
+
+void bsdie_entrypoint_9(PlayerState *player)
+{
+    AnimCtrl *anim_ctrl;
+    s32 next_state;
+    anim_ctrl = baanim_getAnimCtrlPtr(player);
+    next_state = 0;
+    _basudie_entrypoint_5(player);
+    baphysics_set_target_horizontal_velocity(player, player->unk16C);
+    switch (player->unk15C.word) {
+        case 3:
+            break;
+        case 0:
+            if (func_8008DF8C(player, 0xC8)) {
+                baanim_setEndAndDuration(player, 0.1961f, 3.1f);
+                player->unk15C.word = 1;
             }
             break;
+        case 1:
+            if (player_isStable(player)) {
+                func_8009DF18(player, 0x428, 1.0f, 0x4650);
+                _bamotor_entrypoint_1(player, 1.0f, 1.0f, 0.4f);
+                func_80800000_bsdie(player);
+                func_8009E058(player);
+                baanim_setEnd(player, 0.75f);
+                player->unk15C.word = 2;
+            }
+            break;
+        case 2:
+            player->unk16C = func_800F0E00(player->unk16C - 7.0f, 0.0f);
+            if (player->unk16C > 140.0f) {
+                _badust_entrypoint_9(player);
+            }
+            if (anctrl_isStopped(anim_ctrl)) {
+                baanim_setEnd(player, 1.0f);
+                player->unk15C.word = 3;
+                player->unk16C = 0.0f;
+            }
     }
-    if (_basudie_entrypoint_7(param_0)) { local_1 = 0x54; }
-    bs_setState(param_0, local_1);
+    if (_basudie_entrypoint_7(player)) {
+        next_state = 0x54;
+    }
+    bs_setState(player, next_state);
 }
 
-void bsdie_entrypoint_10(s32 param_0) {
-    _basudie_entrypoint_6();
-    func_8009BF5C(param_0, 0);
-    baroll_setIdeal(param_0, 0);
-}
-
-int bsdie_entrypoint_11(int param_0)
+void bsdie_entrypoint_10(s32 player)
 {
-  return D_80800980_bsdie[param_0];
+    _basudie_entrypoint_6();
+    func_8009BF5C(player, 0);
+    baroll_setIdeal(player, 0);
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/die.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+int bsdie_entrypoint_11(int index)
+{
+    return D_80800980_bsdie[index];
+}
+
+// TU-NOTE: the overlay's .data is defined here, taken from the ROM. The tables point to functions
+// of this file; IDO schedules some of them differently unless the tables are in the same unit.
 extern void _bsdie_entrypoint_2();
 extern void _bsdie_entrypoint_0();
 extern void _bsdie_entrypoint_1();
@@ -276,6 +293,9 @@ extern void _bsdie_entrypoint_5();
 extern void _bsdie_entrypoint_10();
 extern void _bsdie_entrypoint_8();
 extern void _bsdie_entrypoint_9();
-s32 D_80800960_bsdie[4] = { (u32)_bsdie_entrypoint_2, (u32)_bsdie_entrypoint_0, (u32)_bsdie_entrypoint_1, (u32)_basudie_entrypoint_11 };
-s32 D_80800970_bsdie[4] = { (u32)_bsdie_entrypoint_6, (u32)_bsdie_entrypoint_4, (u32)_bsdie_entrypoint_5, (u32)_basudie_entrypoint_11 };
-s32 D_80800980_bsdie[4] = { (u32)_bsdie_entrypoint_10, (u32)_bsdie_entrypoint_8, (u32)_bsdie_entrypoint_9, (u32)_basudie_entrypoint_11 };
+s32 D_80800960_bsdie[4] = {(u32) _bsdie_entrypoint_2, (u32) _bsdie_entrypoint_0,
+                           (u32) _bsdie_entrypoint_1, (u32) _basudie_entrypoint_11};
+s32 D_80800970_bsdie[4] = {(u32) _bsdie_entrypoint_6, (u32) _bsdie_entrypoint_4,
+                           (u32) _bsdie_entrypoint_5, (u32) _basudie_entrypoint_11};
+s32 D_80800980_bsdie[4] = {(u32) _bsdie_entrypoint_10, (u32) _bsdie_entrypoint_8,
+                           (u32) _bsdie_entrypoint_9, (u32) _basudie_entrypoint_11};

@@ -1,24 +1,29 @@
+// Most likely Kazooie's feathery flap: a wind-up, one strong flap, then a hovering flap loop
+// with reduced fall speed while A is held; Z queues an air attack.
 #include "common.h"
-
 #include "overlays/bs/kaz/spring.h"
 
 extern s32 D_80800430_bskazspring[];
 
-void func_80800000_bskazspring(PlayerState *self) {
-    f32 sp1C;
+// Sets the horizontal speed from the stick position.
+void func_80800000_bskazspring(PlayerState *self)
+{
+    f32 stick_pos;
 
-    sp1C = bastick_getZonePosition(self);
+    stick_pos = bastick_getZonePosition(self);
     if (bastick_getZone(self) != BS_STICK_ZONE_ID_0) {
-        baphysics_set_target_horizontal_velocity(self, func_800F1214(sp1C, 80, 200));
+        baphysics_set_target_horizontal_velocity(self, func_800F1214(stick_pos, 80, 200));
         return;
     }
     baphysics_set_target_horizontal_velocity(self, 0.0f);
 }
 
-void func_80800064_bskazspring(PlayerState *self, s32 arg1) {
-    f32 sp2C[3];
+// Enters a phase: 0 exit, 1 wind-up, 2 strong flap, 3 hovering flap loop.
+void func_80800064_bskazspring(PlayerState *self, s32 phase)
+{
+    f32 ideal_yaw[3];
 
-    switch (arg1) {
+    switch (phase) {
         case 0:
             bastick_popZone(self);
             baphysics_reset_gravity(self);
@@ -27,7 +32,8 @@ void func_80800064_bskazspring(PlayerState *self, s32 arg1) {
         case 1:
             baanim_playForDuration_onceSmooth(self, ASSET_142_ANIM_BSKAZSPRING_UNKNOWN, 1.4);
             func_8009FFD8(self, 1, 1, 1, 2);
-            baphysics_set_target_horizontal_velocity(self, baphysics_get_target_horizontal_velocity(self) * 0.7f);
+            baphysics_set_target_horizontal_velocity(
+                self, baphysics_get_target_horizontal_velocity(self) * 0.7f);
             baphysics_set_gravity(self, -1200);
             baphysics_set_terminal_velocity(self, -533.3);
             bastick_pushZone(self);
@@ -39,37 +45,40 @@ void func_80800064_bskazspring(PlayerState *self, s32 arg1) {
             yaw_setUpdateType(self, 2);
             func_8009D2D8(self, 3);
             yaw_rotateTimed(self, 1);
+            // Matching: tests the function address, not a call; needed for the match.
             if (bastick_distance) {
-            // if (bastick_distance(self) != 0) {
                 yaw_setIdeal(self, bastick_getAngleRelativeToBanjo(self));
             }
             baphysics_set_target_yaw(self, yaw_getIdeal(self));
-            sp2C[0] = yaw_getIdeal(self);
-            baphysics_set_horizontal_velocity(self, sp2C[0], baphysics_get_target_horizontal_velocity(self));
+            ideal_yaw[0] = yaw_getIdeal(self);
+            baphysics_set_horizontal_velocity(self, ideal_yaw[0],
+                                              baphysics_get_target_horizontal_velocity(self));
             func_80800000_bskazspring(self);
             baphysics_set_vertical_velocity(self, 1293);
             func_8009DF18(self, 0x45A5, 1, 22000);
             break;
         case 3:
             baanim_playForDuration_loopSmooth(self, ASSET_288_ANIM_BSKAZFLY_UNKNOWN, 00.18);
-            break;
     }
 
-    self->unk15C.bytes[0] = (s8) arg1;
+    self->unk15C.bytes[0] = (s8) phase;
 }
 
-void func_80800244_bskazspring(s32 self) {
-    func_80800064_bskazspring(self,(s8) 0);
+void func_80800244_bskazspring(s32 self)
+{
+    func_80800064_bskazspring(self, (s8) 0);
     _bskaz_entrypoint_2(self);
 }
 
-void func_80800270_bskazspring(PlayerState *self) {
+void func_80800270_bskazspring(PlayerState *self)
+{
     _bskaz_entrypoint_1(self);
     self->unk15C.bytes[0] = 0;
     func_80800064_bskazspring(self, 1);
 }
 
-void func_808002A0_bskazspring(PlayerState *self) {
+void func_808002A0_bskazspring(PlayerState *self)
+{
     BanjoStateId next_state;
 
     next_state = 0;
@@ -96,23 +105,26 @@ void func_808002A0_bskazspring(PlayerState *self) {
             if (player_isStable(self) != 0) {
                 next_state = BS_STATE_DF;
             }
-            break;
     }
+    // Z queues an air attack, started once falling.
     if (bakey_pressed(self, BUTTON_Z) != 0) {
         self->unk160.word = 1;
     }
-    if ((self->unk160.word != 0) && (baphysics_get_vertical_velocity(self) < 0.0f) && (bainput_func_80097E74(self) != 0)) {
+    if ((self->unk160.word != 0) && (baphysics_get_vertical_velocity(self) < 0.0f) &&
+        (bainput_func_80097E74(self) != 0)) {
         next_state = BS_STATE_BE;
     }
     bs_setState(self, next_state);
 }
 
-s32 bskazspring_entrypoint_0(s32 idx) {
+s32 bskazspring_entrypoint_0(s32 idx)
+{
     return D_80800430_bskazspring[idx];
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/bs/kaz/spring.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM. */
+// TU-NOTE: the overlay .data (formerly spring.data.s) is defined here in C. The table holds
+// function pointers from this file; IDO's assembler schedules these functions differently
+// unless the table is in the same unit. Values are taken from the ROM.
 extern void func_80099B94();
-s32 D_80800430_bskazspring[4] = { (u32)func_80800244_bskazspring, (u32)func_80800270_bskazspring, (u32)func_808002A0_bskazspring, (u32)func_80099B94 };
+s32 D_80800430_bskazspring[4] = {(u32) func_80800244_bskazspring, (u32) func_80800270_bskazspring,
+                                 (u32) func_808002A0_bskazspring, (u32) func_80099B94};

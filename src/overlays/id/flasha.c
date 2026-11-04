@@ -1,106 +1,118 @@
+// Probably the flash source map-mesh effect: a random lightning-flash timer that idles, then fires
+// bursts of quick flashes and writes the level into the mesh's vertex alpha for other effects.
+
 #include "common.h"
 
-typedef struct { s16 local_0; s16 local_1; s32 local_2; s32 local_3; s32 local_4; f32 local_5; f32 local_6; } FlashCycleState;
+typedef struct {
+    s16 level;
+    s16 peak;
+    s32 flash_count;
+    s32 burst_size;
+    s32 state;
+    f32 timer;
+    f32 duration;
+} FlashCycleState;
 extern f32 func_800DC264(f32, f32);
 extern f32 func_800D8FF8(void);
 extern s32 func_800F1574(f32 *, f32);
 extern void _idflasha_entrypoint_0(void);
-void func_80800038_idflasha();
 
-void idflasha_entrypoint_0(s32 param_0, u32 param_1, u8 *param_2, s32 param_3, s16 *param_4)
+// Kernel: writes the flash level into the alpha byte of each vertex.
+void idflasha_entrypoint_0(s32 param_0, u32 src, u8 *dst, s32 count, s16 *level_ptr)
 {
-    u32 local_0;
-    s32 local_1;
+    u32 end;
+    s32 alpha;
 
-    local_1 = *param_4;
-    local_0 = param_1 + param_3 * 0x10;
-    while (param_1 < local_0) {
-        param_1 += 0x10;
-        param_2 += 0x10;
-        param_2[-1] = local_1;
+    alpha = *level_ptr;
+    end = src + count * 0x10;
+    while (src < end) {
+        src += 0x10;
+        dst += 0x10;
+        dst[-1] = alpha;
     }
 }
 
-void func_80800038_idflasha(param_0, param_1) FlashCycleState *param_0; s32 param_1;
+// State 1 starts a flash with a random peak; state 0 schedules the next flash or burst.
+void func_80800038_idflasha(flash, new_state) FlashCycleState *flash;
+s32 new_state;
 {
-    f32 local_0;
+    f32 time;
 
-    if (param_1 == 1) {
-        param_0->local_0 = 0;
-        param_0->local_1 = func_800DC214(200, 255);
-        param_0->local_2++;
-        local_0 = func_800DC264(0.08f, 0.12f);
-        param_0->local_5 = local_0;
-        param_0->local_6 = local_0;
+    if (new_state == 1) {
+        flash->level = 0;
+        flash->peak = func_800DC214(200, 255);
+        flash->flash_count++;
+        time = func_800DC264(0.08f, 0.12f);
+        flash->timer = time;
+        flash->duration = time;
     }
-    if (param_1 == 0) {
-        param_0->local_0 = 0;
-        if (param_0->local_2 > 0 && param_0->local_2 < param_0->local_3) {
-            param_0->local_5 = func_800DC264(0.1f, 0.2f);
+    if (new_state == 0) {
+        flash->level = 0;
+        if (flash->flash_count > 0 && flash->flash_count < flash->burst_size) {
+            flash->timer = func_800DC264(0.1f, 0.2f);
         } else {
-            param_0->local_2 = 0;
-            param_0->local_3 = func_800DC214(1, 4);
-            param_0->local_5 = func_800DC264(4.0f, 6.0f);
+            flash->flash_count = 0;
+            flash->burst_size = func_800DC214(1, 4);
+            flash->timer = func_800DC264(4.0f, 6.0f);
         }
     }
-    param_0->local_4 = param_1;
+    flash->state = new_state;
 }
 
-s32 idflasha_entrypoint_1(s16 *param_0){
-    s16 out;
-    out = *param_0;
-    return out;
+// Returns the current flash level.
+s32 idflasha_entrypoint_1(s16 *state)
+{
+    s16 level;
+    level = *state;
+    return level;
 }
 
-void idflasha_entrypoint_2(s32 arg0) 
+void idflasha_entrypoint_2(s32 arg0)
 {
 }
-void idflasha_entrypoint_3(void *param_0, s32 param_1, s32 param_2, s32 param_3)
+
+void idflasha_entrypoint_3(void *state, s32 param_1, s32 param_2, s32 param_3)
 {
-  int new_var;
-  void *new_var2;
-  *(u16 *)((char *)(param_0) + 0x0) = 0;
+    int idx;
+    void *self;
+    *(u16 *) ((char *) state + 0x0) = 0;
 
- goto dummy_label_240018;
-  ((s32 *) param_0)[0] = 0;
-  dummy_label_240018:
-  ;
-
-  ((s32 *) param_0)[1] = 0;
-  new_var = 2;
-  ((s32 *) param_0)[new_var] = new_var;
-  ((s32 *) param_0)[3] = 0;
-  new_var2 = param_0;
-  func_80800038_idflasha(new_var2, 0);
+    ((s32 *) state)[1] = 0;
+    // Matching: idx is used both as value and as index.
+    idx = 2;
+    ((s32 *) state)[idx] = idx;
+    ((s32 *) state)[3] = 0;
+    self = state;
+    func_80800038_idflasha(self, 0);
 }
 
-void idflasha_entrypoint_4(u8 *param_0, s32 param_1, s32 param_2)
+// Counts down the idle/flash timers, fades the level in and out, then runs the kernel.
+void idflasha_entrypoint_4(u8 *state, s32 param_1, s32 param_2)
 {
-    f32 local_0;
+    f32 dt;
 
-    f32 local_2;
+    f32 duration;
 
-    local_0 = func_800D8FF8();
-    if (*(s32 *)(param_0 + 0xC) == 0 && func_800F1574((f32 *)(param_0 + 0x10), local_0)) {
-        func_80800038_idflasha(param_0, 1);
+    dt = func_800D8FF8();
+    if (*(s32 *) (state + 0xC) == 0 && func_800F1574((f32 *) (state + 0x10), dt)) {
+        func_80800038_idflasha(state, 1);
     }
-    if (*(s32 *)(param_0 + 0xC) == 1) {
-        if ((*(f32 *)(param_0 + 0x10)) <= 0.04f) {
-            *(s16 *)param_0 = (s32)((f32)*(s16 *)(param_0 + 2) * ((*(f32 *)(param_0 + 0x10)) / 0.04f));
+    if (*(s32 *) (state + 0xC) == 1) {
+        if (*(f32 *) (state + 0x10) <= 0.04f) {
+            *(s16 *) state =
+                (s32) ((f32) *(s16 *) (state + 2) * (*(f32 *) (state + 0x10) / 0.04f));
         } else {
-            local_2 = *(f32 *)(param_0 + 0x14);
-            if ((*(f32 *)(param_0 + 0x10)) < local_2 - 0.04f) {
-                *(s16 *)param_0 = *(s16 *)(param_0 + 2);
+            duration = *(f32 *) (state + 0x14);
+            if (*(f32 *) (state + 0x10) < duration - 0.04f) {
+                *(s16 *) state = *(s16 *) (state + 2);
             } else {
-                *(s16 *)param_0 = (s32)((f32)*(s16 *)(param_0 + 2) * ((local_2 - (*(f32 *)(param_0 + 0x10))) / 0.04f));
+                *(s16 *) state = (s32) ((f32) *(s16 *) (state + 2) *
+                                          ((duration - *(f32 *) (state + 0x10)) / 0.04f));
             }
         }
-        if (func_800F1574((f32 *)(param_0 + 0x10), local_0)) {
-            func_80800038_idflasha(param_0, 0);
+        if (func_800F1574((f32 *) (state + 0x10), dt)) {
+            func_80800038_idflasha(state, 0);
         }
     }
-    _glid_entrypoint_0(param_1, param_2, _idflasha_entrypoint_0, param_0);
+    _glid_entrypoint_0(param_1, param_2, _idflasha_entrypoint_0, state);
 }
-
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/id/flasha.data.s) is defined here in C.
- * Values are taken from the ROM. */

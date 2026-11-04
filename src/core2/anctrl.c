@@ -1,438 +1,560 @@
+// AnimCtrl, the animation playback controller (as in Banjo-Kazooie): advances the timer per
+// frame, handles playback types, subranges and transition blending, with start/reset/queries.
 #include "core2/anctrl.h"
+
+// TU-NOTE: AnimCtrl layout (the header struct is unpopulated): +0x00 timer, +0x04 subrange
+// start, +0x08 subrange end, +0x0C duration, +0x10 transition duration, +0x14 start timer,
+// +0x18 u16 anim index, +0x1A playback type (1 once, 2 loop, 3 stopped, 4 subrange loop),
+// +0x1B flag bits (7 direction, 6 smooth transition, 5 default start, 4-3 timing mode),
+// +0x1C embedded Animation.
 
 extern f32 func_800D8FF8(void);
 extern f32 _glintrosyncDll_entrypoint_5(void);
-typedef struct { u32 local_0 : 25; u32 local_1 : 1; u32 local_2 : 6; } local_type_8008AA0C;
+typedef struct {
+    u32 pad_18 : 25;
+    u32 smooth : 1;
+    u32 pad_1B : 6;
+} local_type_8008AA0C;
 extern f32 func_8008C0D0(s32);
 extern void func_8008C1F0(s32, s32);
-typedef struct {u8 local_0[0x18]; u32 local_1:24; u32 local_2:1; u32 local_3:7;} local_type_8008AAC0;
+typedef struct {
+    u8 pad_0[0x18];
+    u32 pad_18 : 24;
+    u32 direction : 1;
+    u32 pad_1B : 7;
+} local_type_8008AAC0;
 extern f32 func_8008C0C8(void *);
 extern void func_8008C1C0(void *, f32);
-typedef struct { f32 unk0; f32 unk4; f32 unk8; u8 padC[0xC]; u16 unk18; u8 unk1A; u8 b7 : 1; u8 rest : 7; } S8008AB84;
-typedef struct { u8 pad[0x18]; u32 pad0:24, local_0:1, pad1:7; } LocalState;
-typedef struct { char pad[0x1B]; u8 b7 : 1; u8 b6 : 1; u8 default_start : 1; u8 rest : 5; } AcBf_anctrl_reset;
-typedef struct { f32 unk0; u8 pad4[0x10]; f32 unk14; u16 unk18; u8 unk1A; u8 b7 : 1; u8 b6 : 1; u32 f5 : 1; u32 rest : 5; u8 unk1C[4]; } S8008AFCC;
-typedef struct { u8 local_0[0x18]; u32 local_1:25; u32 local_2:1; u32 local_3:6; } local_type_anctrl_start;
+typedef struct {
+    f32 timer;
+    f32 start;
+    f32 end;
+    u8 pad_C[0xC];
+    u16 index;
+    u8 playback_type;
+    u8 direction : 1;
+    u8 pad_1B : 7;
+} S8008AB84;
+typedef struct {
+    u8 pad_0[0x18];
+    u32 pad_18 : 24, direction : 1, pad_1B : 7;
+} LocalState;
+typedef struct {
+    char pad_0[0x1B];
+    u8 direction : 1;
+    u8 smooth : 1;
+    u8 default_start : 1;
+    u8 pad_1B : 5;
+} AcBf_anctrl_reset;
+typedef struct {
+    f32 timer;
+    u8 pad_4[0x10];
+    f32 start;
+    u16 index;
+    u8 playback_type;
+    u8 direction : 1;
+    u8 smooth : 1;
+    u32 default_start : 1;
+    u32 pad_1B : 5;
+    u8 animation[4];
+} S8008AFCC;
+typedef struct {
+    u8 pad_0[0x18];
+    u32 pad_18 : 25;
+    u32 smooth : 1;
+    u32 pad_1B : 6;
+} local_type_anctrl_start;
 extern void func_8008C0AC(void *);
 extern void func_8008C1B8(void *, s32);
 extern void func_8008C1E4(void *, f32);
 extern void func_8008C270(void *);
-typedef struct { f32 unk0; u8 pad4[0x10]; f32 unk14; u16 unk18; u8 unk1A; u8 b7 : 1; u8 b6 : 1; u8 f5 : 1; u8 f34 : 2; u8 f2 : 1; u8 b1 : 1; u8 b0 : 1; } S8008B134;
-typedef struct { char pad[0x1B]; u8 bit7 : 1; u8 smooth : 1; u8 rest : 6; } AcBf_anctrl_setSmoothTransition;
+typedef struct {
+    f32 timer;
+    u8 pad_4[0x10];
+    f32 start;
+    u16 index;
+    u8 playback_type;
+    u8 direction : 1;
+    u8 smooth : 1;
+    u8 default_start : 1;
+    u8 timing_mode : 2;
+    u8 unk_1B_2 : 1;
+    u8 unk_1B_1 : 1;
+    u8 unk_1B_0 : 1;
+} S8008B134;
+typedef struct {
+    char pad_0[0x1B];
+    u8 direction : 1;
+    u8 smooth : 1;
+    u8 pad_1B : 6;
+} AcBf_anctrl_setSmoothTransition;
 extern AssetId func_8008C0C0(void *);
-extern u8 unk18[];
-typedef struct { f32 timer; u8 pad_4[0x17]; u8 direction:1, pad_1B:7; } LocalAnimCtrl;
-extern struct SomeStruct { u32 unk18; };
+typedef struct {
+    f32 timer;
+    u8 pad_4[0x17];
+    u8 direction : 1, pad_1B : 7;
+} LocalAnimCtrl;
+extern struct SomeStruct {
+    u32 unk_18;
+};
 extern void func_8008C124(void *, s32);
 extern s32 func_800E6A00(void);
 s32 func_8008AEDC();
-void anctrl_setPlaybackType();
-void func_8008B188();
-void anctrl_setSmoothTransition();
-void anctrl_setDuration(AnimCtrl *param_0, f32 param_1);
-void func_8008B1C8(AnimCtrl *param_0, f32 param_1);
-void anctrl_setSubrange(AnimCtrl *param_0, f32 param_1, f32 param_2);
 f32 func_8008B2AC(f32 param_0[3]);
-void func_8008B2E8();
 void func_8008B518();
 
-f32 func_8008A990(u8 *param_0) {
-    u32 local_0;
-
-    local_0 = (u32) (*(s32 *)((char *)param_0 + 0x18) << 0x1B) >> 0x1E;
-    switch (local_0) {
-    case 0:
-        return func_800D8FF8();
-    case 1:
-        return 0.033333f;
-    case 2:
-        return _glintrosyncDll_entrypoint_5();
-    default:
-        return func_800D8FF8();
-    }
-}
-
-void func_8008AA0C(u8 *param_0)
+// Frame delta in seconds for the controller's timing mode (0 normal, 1 fixed 1/30, 2 intro sync).
+f32 func_8008A990(u8 *ctrl)
 {
-  s32 v0;
-  f32 f0;
-  u8 *local_0 = param_0;
-  if (((local_type_8008AA0C *)(param_0 + 0x18))->local_1)
-  {
-    if (!local_0)
-    {
+    u32 timing_mode;
+
+    timing_mode = (u32) (*(s32 *) ((char *) ctrl + 0x18) << 0x1B) >> 0x1E;
+    switch (timing_mode) {
+        case 0:
+            return func_800D8FF8();
+        case 1:
+            return 0.033333f;
+        case 2:
+            return _glintrosyncDll_entrypoint_5();
+        default:
+            return func_800D8FF8();
     }
-    v0 = func_8008AEDC();
-    f0 = func_8008C0D0(v0);
-    if (f0 < 1.0f)
-    {
-      f0 += func_8008A990(local_0) / (*((f32 *) (((s8 *) local_0) + 0x10)));
-      if (f0 >= 1.0f)
-      {
-        func_8008C1F0(v0, 1);
-        f0 = 1.0f;
-      }
-      func_8008C1E4(v0, f0);
-    }
-  }
 }
 
-void func_8008AAC0(AnimCtrl *param_0) {
-    void *local_0;
-    f32 local_2;
-    f32 local_3;
-    local_0 = func_8008AEDC(param_0);
-    func_8008AA0C(param_0);
-    *(f32 *)param_0 = func_8008C0C8(local_0);
-    local_2 = func_8008A990(param_0) / func_8008B2AC(param_0);
-    if (!((local_type_8008AAC0 *)param_0)->local_2) local_2 = -local_2;
-    local_3 = *(f32 *)param_0 + local_2;
-    if (local_3 < 0.0f) local_3 += 1.0f;
-    local_3 -= (s32)local_3;
-    func_8008C1C0(local_0, local_3);
+// Advances the smooth-transition blend of the embedded animation.
+void func_8008AA0C(u8 *ctrl)
+{
+    s32 animation;
+    f32 blend;
+    // Matching: extra copy of the parameter.
+    u8 *ctrl_copy = ctrl;
+    if (((local_type_8008AA0C *) (ctrl + 0x18))->smooth) {
+        // Matching: empty block steers IDO's register allocation.
+        if (!ctrl_copy) {
+        }
+        animation = func_8008AEDC();
+        blend = func_8008C0D0(animation);
+        if (blend < 1.0f) {
+            blend += func_8008A990(ctrl_copy) / *(f32 *) ((s8 *) ctrl_copy + 0x10);
+            if (blend >= 1.0f) {
+                func_8008C1F0(animation, 1);
+                blend = 1.0f;
+            }
+            func_8008C1E4(animation, blend);
+        }
+    }
 }
 
-void func_8008AB84(AnimCtrl *param_0) {
-    s32 local_0;
-    S8008AB84 *p = (S8008AB84 *)param_0;
+// Playback type 2: loops over the full range.
+void func_8008AAC0(AnimCtrl *ctrl)
+{
+    void *animation;
+    f32 step;
+    f32 new_timer;
+    animation = func_8008AEDC(ctrl);
+    func_8008AA0C(ctrl);
+    *(f32 *) ctrl = func_8008C0C8(animation);
+    step = func_8008A990(ctrl) / func_8008B2AC(ctrl);
+    if (!((local_type_8008AAC0 *) ctrl)->direction)
+        step = -step;
+    new_timer = *(f32 *) ctrl + step;
+    if (new_timer < 0.0f)
+        new_timer += 1.0f;
+    new_timer -= (s32) new_timer;
+    func_8008C1C0(animation, new_timer);
+}
+
+// Playback type 4: loops over the subrange.
+void func_8008AB84(AnimCtrl *ctrl)
+{
+    s32 animation;
+    S8008AB84 *state = (S8008AB84 *) ctrl;
+    // Matching: stack padding needed for the match.
     s8 _sfpad[12];
-    f32 local_1;
-    f32 d;
+    f32 delta;
+    f32 step;
     f32 pos;
     f32 range;
-    f32 t;
+    f32 phase;
 
-    local_0 = func_8008AEDC();
-    func_8008AA0C(param_0);
-    p->unk0 = func_8008C0C8(local_0);
-    local_1 = func_8008A990(param_0);
-    d = local_1 / func_8008B2AC(param_0);
-    if (!p->b7) {
-        d = -d;
+    animation = func_8008AEDC();
+    func_8008AA0C(ctrl);
+    state->timer = func_8008C0C8(animation);
+    delta = func_8008A990(ctrl);
+    step = delta / func_8008B2AC(ctrl);
+    if (!state->direction) {
+        step = -step;
     }
-    pos = p->unk0 + d;
-    if (p->unk8 <= pos) {
-        range = p->unk8 - p->unk4;
-        t = (pos - p->unk4) / range;
-        pos = p->unk4 + (t - (s32)t) * range;
+    pos = state->timer + step;
+    if (state->end <= pos) {
+        range = state->end - state->start;
+        phase = (pos - state->start) / range;
+        pos = state->start + (phase - (s32) phase) * range;
     }
-    func_8008C1C0(local_0, pos);
+    func_8008C1C0(animation, pos);
 }
 
-void func_8008AC4C(u8 *param_0)
+// Playback type 1: plays once, then switches to stopped (3).
+void func_8008AC4C(u8 *ctrl)
 {
-    s32 local_0;
-    f32 local_1;
-    f32 local_3;
+    s32 animation;
+    f32 new_timer;
+    f32 step;
 
-    local_0 = func_8008AEDC(param_0);
-    func_8008AA0C(param_0);
-    *((f32 *)param_0) = func_8008C0C8(local_0);
-    local_3 = func_8008A990(param_0) / func_8008B2AC(param_0);
-    if (!((LocalState *)param_0)->local_0) {
-        local_3 = -local_3;
+    animation = func_8008AEDC(ctrl);
+    func_8008AA0C(ctrl);
+    *(f32 *) ctrl = func_8008C0C8(animation);
+    step = func_8008A990(ctrl) / func_8008B2AC(ctrl);
+    if (!((LocalState *) ctrl)->direction) {
+        step = -step;
     }
-    local_1 = *((f32 *)param_0) + local_3;
-    if (local_1 < 0.0f) {
-        local_1 = 0.0f;
-        anctrl_setPlaybackType((AnimCtrl *)param_0, 3);
-    } else if (local_1 > *(f32 *)(param_0 + 8) || local_1 > 0.999999f) {
-        if (local_1 > *(f32 *)(param_0 + 8)) local_1 = *(f32 *)(param_0 + 8);
-        if (local_1 > 0.999999f) local_1 = 0.999999f;
-        anctrl_setPlaybackType((AnimCtrl *)param_0, 3);
+    new_timer = *(f32 *) ctrl + step;
+    if (new_timer < 0.0f) {
+        new_timer = 0.0f;
+        anctrl_setPlaybackType((AnimCtrl *) ctrl, 3);
+    } else if (new_timer > *(f32 *) (ctrl + 8) || new_timer > 0.999999f) {
+        if (new_timer > *(f32 *) (ctrl + 8))
+            new_timer = *(f32 *) (ctrl + 8);
+        if (new_timer > 0.999999f)
+            new_timer = 0.999999f;
+        anctrl_setPlaybackType((AnimCtrl *) ctrl, 3);
     } else {
-        local_1 -= (f32)(s32)local_1;
+        new_timer -= (f32) (s32) new_timer;
     }
-    func_8008C1C0(local_0, local_1);
+    func_8008C1C0(animation, new_timer);
 }
 
-AnimCtrl * func_8008AD80(s32 param_0)
+// Allocates and initializes a controller.
+AnimCtrl *func_8008AD80(s32 unk_0)
 {
-  s32 *local_1;
+    s32 *ctrl;
 
-  local_1 = heap_alloc(func_8008C0B8() + 0x1C);
-  func_8008B518(local_1, param_0);
-  return local_1;
+    ctrl = heap_alloc(func_8008C0B8() + 0x1C);
+    func_8008B518(ctrl, unk_0);
+    return ctrl;
 }
 
-void func_8008ADBC(s32 arg0)
+void func_8008ADBC(s32 ctrl)
 {
     func_8008B5E8();
-    heap_free(arg0);
+    heap_free(ctrl);
 }
-void func_8008ADE4(u8 *param_0) {
-    struct {
-        u8 pad[0x18];
-        unsigned int pad2 : 29;
-        unsigned int f : 1;
-        unsigned int pad_bits : 2;
-    } *p = (void *)param_0;
 
-    switch (param_0[0x1A]) {
+// Per-frame update: dispatches on the playback type.
+void func_8008ADE4(u8 *ctrl)
+{
+    struct {
+        u8 pad_0[0x18];
+        unsigned int pad_18 : 29;
+        unsigned int unk_1B_2 : 1;
+    } *bits = (void *) ctrl;
+
+    switch (ctrl[0x1A]) {
         case 1:
-            func_8008AC4C(param_0);
-            func_8008C1CC(&param_0[0x1C], p->f);
+            func_8008AC4C(ctrl);
+            func_8008C1CC(&ctrl[0x1C], bits->unk_1B_2);
             break;
         case 2:
-            func_8008AAC0(param_0);
-            func_8008C1CC(&param_0[0x1C], p->f);
+            func_8008AAC0(ctrl);
+            func_8008C1CC(&ctrl[0x1C], bits->unk_1B_2);
             break;
         case 4:
-            func_8008AB84(param_0);
-            func_8008C1CC(&param_0[0x1C], p->f);
+            func_8008AB84(ctrl);
+            func_8008C1CC(&ctrl[0x1C], bits->unk_1B_2);
             break;
         case 3:
-            func_8008AA0C(param_0);
-            func_8008C1CC(&param_0[0x1C], p->f);
-            break;
+            func_8008AA0C(ctrl);
+            func_8008C1CC(&ctrl[0x1C], bits->unk_1B_2);
         case 0:
             break;
     }
 }
 
-AnimCtrl* func_8008AEB4(AnimCtrl* arg0)
+AnimCtrl *func_8008AEB4(AnimCtrl *ctrl)
 {
-    return defrag(arg0);
-}
-void anctrl_setIndex(AnimCtrl *param_0, AssetId param_1) {
-    *(s16 *)((u8 *)param_0 + 0x18) = param_1;
+    return defrag(ctrl);
 }
 
-s32 func_8008AEDC(param_0) s32 param_0; {
-    return param_0 + 0x1C;
-}
-
-int func_8008AEE4(s32 param_0)
+void anctrl_setIndex(AnimCtrl *ctrl, AssetId anim_id)
 {
-  func_8008C1D4(param_0 + 0x1C);
+    *(s16 *) ((u8 *) ctrl + 0x18) = anim_id;
 }
 
-int func_8008AF04(s32 param_0)
+s32 func_8008AEDC(ctrl)
+s32 ctrl;
 {
-  func_8008C1DC(param_0 + 0x1C);
+    return ctrl + 0x1C;
 }
 
-void anctrl_reset(AnimCtrl *param_0)
+int func_8008AEE4(s32 ctrl)
 {
-    *(u8 *)((char *)param_0 + 0x1A) = 2;
-    ((AcBf_anctrl_reset *)param_0)->default_start = 1;
-    *(f32 *)((char *)param_0 + 0x0) = 0.0f;
-    *(f32 *)((char *)param_0 + 0x14) = 0.0f;
-    anctrl_setSmoothTransition(param_0, 1);
-    anctrl_setSubrange(param_0, 0, 1.0f);
-    anctrl_setDuration(param_0, 2.5678000450134277f);
-    func_8008B1C8(param_0, 0.2f);
-    func_8008B188(param_0, 1);
-    func_8008B2E8(param_0, func_800E6A00() ? 2 : 0);
+    func_8008C1D4(ctrl + 0x1C);
 }
 
-void func_8008AFCC(AnimCtrl *param_0) {
-    S8008AFCC *p = (S8008AFCC *)param_0;
-    if (p->f5) {
-        if (p->b7 == 1) {
-            func_8008C1C0(p->unk1C, 0.0f);
-        } else {
-            func_8008C1C0(p->unk1C, 0.999999f);
-        }
+int func_8008AF04(s32 ctrl)
+{
+    func_8008C1DC(ctrl + 0x1C);
+}
+
+void anctrl_reset(AnimCtrl *ctrl)
+{
+    *(u8 *) ((char *) ctrl + 0x1A) = 2;
+    ((AcBf_anctrl_reset *) ctrl)->default_start = 1;
+    *(f32 *) ((char *) ctrl + 0x0) = 0.0f;
+    *(f32 *) ((char *) ctrl + 0x14) = 0.0f;
+    anctrl_setSmoothTransition(ctrl, 1);
+    anctrl_setSubrange(ctrl, 0, 1.0f);
+    anctrl_setDuration(ctrl, 2.5678000450134277f);
+    func_8008B1C8(ctrl, 0.2f);
+    func_8008B188(ctrl, 1);
+    func_8008B2E8(ctrl, func_800E6A00() ? 2 : 0);
+}
+
+// Puts the animation timer at the start position.
+void func_8008AFCC(AnimCtrl *ctrl)
+{
+    S8008AFCC *state = (S8008AFCC *) ctrl;
+
+if (state->default_start) {
+    if (state->direction == 1) {
+        func_8008C1C0(state->animation, 0.0f);
     } else {
-        func_8008C1C0(p->unk1C, p->unk14);
+        func_8008C1C0(state->animation, 0.999999f);
     }
-    p->unk0 = func_8008C0C8(p->unk1C);
+} else {
+
+func_8008C1C0(state->animation, state->start);
+}
+state->timer = func_8008C0C8(state->animation);
 }
 
-void anctrl_start(AnimCtrl *param_0) {
-    if (((local_type_anctrl_start *)param_0)->local_2 && func_8008C0C0((u8 *)param_0 + 0x1C)) {
-        func_8008C0AC((u8 *)param_0 + 0x1C);
-        func_8008C1B8((u8 *)param_0 + 0x1C, *(s16 *)((u8 *)param_0 + 0x18));
-        func_8008AFCC(param_0);
-        func_8008C1E4((u8 *)param_0 + 0x1C, 0.0f);
-    } else {
-        func_8008C270((u8 *)param_0 + 0x1C);
-        func_8008C1B8((u8 *)param_0 + 0x1C, *(s16 *)((u8 *)param_0 + 0x18));
-        func_8008AFCC(param_0);
-        func_8008C1E4((u8 *)param_0 + 0x1C, 1.0f);
-    }
-}
-
-void func_8008B10C(AnimCtrl *param_0, f32 param_1) {
-    func_8008C1C0((u8 *)param_0 + 0x1C, param_1);
-}
-
-void anctrl_setPlaybackType(param_0, param_1) AnimCtrl * param_0; s32 param_1;
+void anctrl_start(AnimCtrl *ctrl)
 {
-    S8008B134 *p = (S8008B134 *) param_0;
-    p->unk1A = param_1 & 0xFFu;
-    switch (param_1)
-    {
+    if (((local_type_anctrl_start *) ctrl)->smooth && func_8008C0C0((u8 *) ctrl + 0x1C)) {
+        func_8008C0AC((u8 *) ctrl + 0x1C);
+        func_8008C1B8((u8 *) ctrl + 0x1C, *(s16 *) ((u8 *) ctrl + 0x18));
+        func_8008AFCC(ctrl);
+        func_8008C1E4((u8 *) ctrl + 0x1C, 0.0f);
+    } else {
+        func_8008C270((u8 *) ctrl + 0x1C);
+        func_8008C1B8((u8 *) ctrl + 0x1C, *(s16 *) ((u8 *) ctrl + 0x18));
+        func_8008AFCC(ctrl);
+        func_8008C1E4((u8 *) ctrl + 0x1C, 1.0f);
+    }
+}
+
+void func_8008B10C(AnimCtrl *ctrl, f32 timer)
+{
+    func_8008C1C0((u8 *) ctrl + 0x1C, timer);
+}
+
+void anctrl_setPlaybackType(ctrl, type) AnimCtrl *ctrl;
+s32 type;
+{
+    S8008B134 *state = (S8008B134 *) ctrl;
+    state->playback_type = type & 0xFFu;
+    switch (type) {
         case 1:
         case 3:
-            p->f2 = 0;
+            state->unk_1B_2 = 0;
             break;
         case 2:
         case 4:
-            p->f2 = 1;
-            break;
+            state->unk_1B_2 = 1;
     }
 }
 
-void func_8008B188(param_0, param_1) AnimCtrl * param_0; s32 param_1;
+void func_8008B188(ctrl, direction) AnimCtrl *ctrl;
+s32 direction;
 {
-  unsigned short new_var;
-  unsigned char new_var2;
-  new_var2 = param_1;
-  *((u8 *) (((char *) param_0) + 0x1B)) = ((*((u8 *) (((char *) param_0) + 0x1B))) & 0xFF7F) | (new_var = new_var2 << 7);
+    // Matching: the two temporaries are needed for the match.
+    unsigned short shifted;
+    unsigned char value;
+    value = direction;
+    *((u8 *) (((char *) ctrl) + 0x1B)) =
+        ((*((u8 *) (((char *) ctrl) + 0x1B))) & 0xFF7F) | (shifted = value << 7);
 }
 
-void anctrl_setSmoothTransition(param_0, param_1) AnimCtrl * param_0; s32 param_1;
+void anctrl_setSmoothTransition(ctrl, smooth) AnimCtrl *ctrl;
+s32 smooth;
 {
-    ((AcBf_anctrl_setSmoothTransition *)param_0)->smooth = param_1;
+    ((AcBf_anctrl_setSmoothTransition *) ctrl)->smooth = smooth;
 }
 
-void anctrl_setDuration(AnimCtrl *param_0, f32 param_1) {
-    *(f32 *)((u8 *)param_0 + 0xC) = param_1;
+void anctrl_setDuration(AnimCtrl *ctrl, f32 duration)
+{
+    *(f32 *) ((u8 *) ctrl + 0xC) = duration;
 }
 
-void func_8008B1C8(AnimCtrl *param_0, f32 param_1) {
-    *(f32 *)((char *)param_0 + 0x10) = param_1;
+void func_8008B1C8(AnimCtrl *ctrl, f32 transition_duration)
+{
+    *(f32 *) ((char *) ctrl + 0x10) = transition_duration;
 }
 
-void anctrl_setSubrange(AnimCtrl *param_0, f32 param_1, f32 param_2) {
-    f32 local_1;
-
-    *(f32 *)((char *)param_0 + 0x4) = param_1 - (s32) param_1;
-    if (param_2 != 1.0f) {
-        *(f32 *)((char *)param_0 + 0x8) = param_2 - (s32) param_2;
+void anctrl_setSubrange(AnimCtrl *ctrl, f32 start, f32 end)
+{
+    *(f32 *) ((char *) ctrl + 0x4) = start - (s32) start;
+    if (end != 1.0f) {
+        *(f32 *) ((char *) ctrl + 0x8) = end - (s32) end;
     } else {
-        *(f32 *)((char *)param_0 + 0x8) = param_2;
+        *(f32 *) ((char *) ctrl + 0x8) = end;
     }
 }
 
-func_8008B238(f32 param_0[3], f32 *param_1, f32 *param_2){
-    *param_1 = param_0[1];
-    *param_2 = param_0[2];
-}
-
-void anctrl_setStart(AnimCtrl *param_0, f32 param_1)
+// Gets the subrange start and end.
+func_8008B238(f32 ctrl[3], f32 *start, f32 *end)
 {
-    (*(u8 *)((char *)(param_0) + 27)) &= ~0x20;
-    *(f32 *)((char *)param_0 + 0x14) = param_1;
+    *start = ctrl[1];
+    *end = ctrl[2];
 }
 
-AssetId anctrl_getIndex(AnimCtrl *param_0) {
-    return func_8008C0C0((u8 *)param_0 + 0x1C);
-}
-
-s32 anctrl_getPlaybackType(AnimCtrl *param_0) {
-    return *(u8 *)((u8 *)param_0 + 0x1A);
-}
-
-s32 func_8008B28C(AnimCtrl *param_0)
+void anctrl_setStart(AnimCtrl *ctrl, f32 start)
 {
-  u8 *new_var;
-  new_var = &((u8 *) param_0)[0x1B];
-  return (((((((((*new_var) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) >> 7;
+    // Clears the default-start flag.
+    (*(u8 *) ((char *) (ctrl) + 27)) &= ~0x20;
+    *(f32 *) ((char *) ctrl + 0x14) = start;
 }
 
-u32 func_8008B29C(struct SomeStruct *param_0)
+AssetId anctrl_getIndex(AnimCtrl *ctrl)
 {
-  u32 local_0;
-  u32 new_var;
-  new_var = *((s32 *) (((char *) param_0) + 0x18));
-  local_0 = new_var;
-  if ((!local_0) && (!local_0))
-  {
-  }
-  local_0 = local_0 << 0x19;
-  new_var = local_0 >> 0x1F;
-  return new_var;
+    return func_8008C0C0((u8 *) ctrl + 0x1C);
 }
 
-f32 func_8008B2AC(f32 param_0[3]){
-    return param_0[3];
-}
-
-f32 anctrl_getAnimTimer(AnimCtrl *param_0) {
-    return func_8008C0C8((u8 *)param_0 + 0x1C);
-}
-
-f32 func_8008B2D4(f32 param_0[3]){
-    return param_0[0];
-}
-
-func_8008B2DC(f32 *param_0, f32 param_1){
-    *param_0 = param_1;
-}
-
-void func_8008B2E8(param_0, param_1) AnimCtrl * param_0; s32 param_1;
+s32 anctrl_getPlaybackType(AnimCtrl *ctrl)
 {
-  typedef struct {
-    u8 pad_0[0x1B];
-    u8 local_0 : 3;
-    u8 local_1 : 2;
-    u8 local_2 : 3;
-  } Struct8008B2E8;
-
-  ((Struct8008B2E8 *)param_0)->local_1 = param_1;
+    return *(u8 *) ((u8 *) ctrl + 0x1A);
 }
 
-int func_8008B304(s32 param_0)
+// Gets the direction flag.
+s32 func_8008B28C(AnimCtrl *ctrl)
 {
-  func_8008C038(param_0 + 0x1C);
+    u8 *flags;
+    flags = &((u8 *) ctrl)[0x1B];
+    // Matching: the repeated masks are needed for the match.
+    return (((((((((*flags) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) &
+               0xFFFFFFFF) &
+              0xFFFFFFFF) &
+             0xFFFFFFFF) &
+            0xFFFFFFFF) >>
+           7;
 }
 
-s32 anctrl_isStopped(AnimCtrl *param_0) {
-    return anctrl_getPlaybackType(param_0) == 3;
-}
-
-int anctrl_isAt(AnimCtrl *param_0, f32 param_1)
+// Gets the smooth-transition flag.
+u32 func_8008B29C(struct SomeStruct *ctrl)
 {
-    f32 local_0;
-    local_0 = func_8008C0C8((u8 *)param_0 + 0x1C);
-    if (local_0 == ((LocalAnimCtrl *)param_0)->timer) return 0;
-    if (((LocalAnimCtrl *)param_0)->direction == 1) {
-        if (((LocalAnimCtrl *)param_0)->timer < local_0) {
-            return ((LocalAnimCtrl *)param_0)->timer <= param_1 && param_1 < local_0;
+    u32 bits;
+    u32 result;
+    result = *((s32 *) (((char *) ctrl) + 0x18));
+    bits = result;
+    // Matching: empty block steers IDO's register allocation.
+    if ((!bits) && (!bits)) {
+    }
+    bits = bits << 0x19;
+    result = bits >> 0x1F;
+    return result;
+}
+
+// Gets the duration.
+f32 func_8008B2AC(f32 ctrl[3])
+{
+    return ctrl[3];
+}
+
+f32 anctrl_getAnimTimer(AnimCtrl *ctrl)
+{
+    return func_8008C0C8((u8 *) ctrl + 0x1C);
+}
+
+// Gets the controller's own timer.
+f32 func_8008B2D4(f32 ctrl[3])
+{
+    return ctrl[0];
+}
+
+// Sets the controller's own timer.
+func_8008B2DC(f32 *ctrl, f32 timer)
+{
+    *ctrl = timer;
+}
+
+// Sets the timing mode read by func_8008A990.
+void func_8008B2E8(ctrl, timing_mode) AnimCtrl *ctrl;
+s32 timing_mode;
+{
+    typedef struct {
+        u8 pad_0[0x1B];
+        u8 pad_1B : 3;
+        u8 timing_mode : 2;
+
+}
+Struct8008B2E8;
+
+((Struct8008B2E8 *) ctrl)->timing_mode = timing_mode;
+}
+
+int func_8008B304(s32 ctrl)
+{
+    func_8008C038(ctrl + 0x1C);
+}
+
+s32 anctrl_isStopped(AnimCtrl *ctrl)
+{
+    return anctrl_getPlaybackType(ctrl) == 3;
+}
+
+// True if `target` was crossed between the controller timer and the animation timer.
+int anctrl_isAt(AnimCtrl *ctrl, f32 target)
+{
+    f32 anim_timer;
+    anim_timer = func_8008C0C8((u8 *) ctrl + 0x1C);
+    if (anim_timer == ((LocalAnimCtrl *) ctrl)->timer)
+        return 0;
+    if (((LocalAnimCtrl *) ctrl)->direction == 1) {
+        if (((LocalAnimCtrl *) ctrl)->timer < anim_timer) {
+            return ((LocalAnimCtrl *) ctrl)->timer <= target && target < anim_timer;
         } else {
-            return ((LocalAnimCtrl *)param_0)->timer <= param_1 || param_1 < local_0;
-        }
+
+return ((LocalAnimCtrl *) ctrl)->timer <= target || target < anim_timer;
+}
+}
+else
+{
+    if (anim_timer < ((LocalAnimCtrl *) ctrl)->timer) {
+        return target <= ((LocalAnimCtrl *) ctrl)->timer && anim_timer < target;
     } else {
-        if (local_0 < ((LocalAnimCtrl *)param_0)->timer) {
-            return param_1 <= ((LocalAnimCtrl *)param_0)->timer && local_0 < param_1;
-        } else {
-            return param_1 <= ((LocalAnimCtrl *)param_0)->timer || local_0 < param_1;
-        }
+        return target <= ((LocalAnimCtrl *) ctrl)->timer || anim_timer < target;
+    }
+}
+}
+
+// Sets the flag at bit 2 of byte 0x1B.
+// Matching: the temporaries and the empty block are needed for the match.
+void func_8008B4A8(u8 *ctrl, u32 value)
+{
+    int offset;
+    char shifted;
+    ctrl[offset = 0x1B] = (u8) ((ctrl[offset] & 0xFFFB) | ((shifted = value * 4) & 4));
+    {
     }
 }
 
-void func_8008B4A8(u8 *param_0, u32 param_1)
+// Gets the flag at bit 2 of byte 0x1B.
+// Matching: the temporary, the empty if and the comma expression are needed for the match.
+int func_8008B4C4(ctrl)
 {
-  int new_var;
-  char new_var2;
-  param_0[new_var = 0x1B] = (u8) ((param_0[new_var] & 0xFFFB) | ((new_var2 = param_1 * 4) & 4));
-  if (!param_0)
-  {
-  }
+    u32 saved;
+    u32 bits;
+    bits = (*((s32 *) (((char *) ctrl) + 24))) << 29;
+    saved = bits;
+    if (((bits && bits) & 0xFFFFFFFF) && bits) {
+    }
+    bits = (0, saved >> 31);
+    return bits;
 }
 
-int func_8008B4C4(param_0)
-struct SomeStruct *param_0;
+s32 func_8008B4D4(AnimCtrl *ctrl)
 {
-  u32 new_var;
-  u32 local_0;
-  u32 new_var2;
-  local_0 = (*((s32 *) (((char *) param_0) + 24))) << 29;
-  new_var = local_0;
-  ;
-  if (((local_0 && local_0) & 0xFFFFFFFF) && local_0)
-  {
-  }
-  local_0 = (0, new_var >> 31);
-  return local_0;
-}
-
-s32 func_8008B4D4(AnimCtrl *param_0)
-{
-  func_8008C27C(param_0 + 0x1C);
+    func_8008C27C(ctrl + 0x1C);
 }
 
 int func_8008B4F4()
@@ -440,28 +562,30 @@ int func_8008B4F4()
     return func_8008C0B8() + 0x1C;
 }
 
-void func_8008B518(param_0, param_1) AnimCtrl * param_0; s32 param_1;
+// Initializes a controller with default settings.
+void func_8008B518(ctrl, unk_0) AnimCtrl *ctrl;
+s32 unk_0;
 {
-    func_8008C124((u8 *)param_0 + 0x1C, 1);
-    ((S8008B134 *)param_0)->unk1A = 0;
-    ((S8008B134 *)param_0)->unk18 = 0;
-    ((S8008B134 *)param_0)->f5 = 1;
-    ((S8008B134 *)param_0)->unk0 = 0.0f;
-    ((S8008B134 *)param_0)->unk14 = 0.0f;
+    func_8008C124((u8 *) ctrl + 0x1C, 1);
+    ((S8008B134 *) ctrl)->playback_type = 0;
+    ((S8008B134 *) ctrl)->index = 0;
+    ((S8008B134 *) ctrl)->default_start = 1;
+    ((S8008B134 *) ctrl)->timer = 0.0f;
+    ((S8008B134 *) ctrl)->start = 0.0f;
     if (func_800E6A00() != 0) {
-        ((S8008B134 *)param_0)->f34 = 2;
+        ((S8008B134 *) ctrl)->timing_mode = 2;
     } else {
-        ((S8008B134 *)param_0)->f34 = 0;
+        ((S8008B134 *) ctrl)->timing_mode = 0;
     }
-    ((S8008B134 *)param_0)->f2 = 1;
-    anctrl_setSubrange(param_0, 0.0f, 1.0f);
-    anctrl_setDuration(param_0, 2.1234f);
-    func_8008B1C8(param_0, 0.2f);
-    anctrl_setSmoothTransition(param_0, 1);
-    func_8008B188(param_0, 1);
+    ((S8008B134 *) ctrl)->unk_1B_2 = 1;
+    anctrl_setSubrange(ctrl, 0.0f, 1.0f);
+    anctrl_setDuration(ctrl, 2.1234f);
+    func_8008B1C8(ctrl, 0.2f);
+    anctrl_setSmoothTransition(ctrl, 1);
+    func_8008B188(ctrl, 1);
 }
 
-int func_8008B5E8(s32 param_0)
+int func_8008B5E8(s32 ctrl)
 {
-  func_8008C0D8(param_0 + 0x1C);
+    func_8008C0D8(ctrl + 0x1C);
 }

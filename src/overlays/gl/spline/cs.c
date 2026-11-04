@@ -1,15 +1,102 @@
+// Most likely the spline "cutscene script" interpreter: each actor on a spline runs a timed
+// command list of about 40 opcodes (animation, movement, spawns, flags, sound, camera, waits).
+// A script is { type, (time, opcode << 16 | arg, extra words...)..., 2 }.
+// type 0x10005: times in frames, type 0x10006: times in 1/4000000 units.
 #include "common.h"
 
-typedef struct { u8 pad_0[0x40]; u32 local_0 : 9; u32 local_1 : 9; u32 local_2 : 9; u32 pad_1 : 5; u32 pad_2 : 3; u32 local_3 : 9; u32 pad_3 : 20; } SplineCsBits;
+typedef struct {
+    u8 pad_0[0x40];
+    u32 unk_40_0 : 9;
+    u32 unk_40_9 : 9;
+    u32 unk_40_18 : 9;
+    u32 pad_1 : 5;
+    u32 pad_2 : 3;
+    u32 unk_44_3 : 9;
+    u32 pad_3 : 20;
+} SplineCsBits;
 extern void *func_80105494(Actor *);
-typedef struct { u32 pad_0 : 8; u32 local_0 : 13; u32 pad_1 : 11; u8 pad_2[8]; f32 local_1; u8 pad_3[0x28]; f32 local_2; f32 local_3; u8 pad_4[4]; u8 local_4 : 1; u8 local_5 : 2; u8 pad_5 : 5; } SplineCameraTransition;
-typedef struct { s32 pad_0:21; s32 local_0:10; s32 pad_1:1; u8 pad_2[0x10]; f32 local_1; u8 pad_3[0x18]; f32 local_2; f32 local_3; } SplineCameraDuration;
+typedef struct {
+    u32 pad_0 : 8;
+    u32 cmd_index : 13;
+    u32 pad_1 : 11;
+    u8 pad_2[8];
+    f32 path_t;
+    u8 pad_3[0x28];
+    f32 start;
+    f32 end;
+    u8 pad_4[4];
+    u8 in_frames : 1;
+    u8 mode : 2;
+    u8 pad_5 : 5;
+} SplineCameraTransition;
+typedef struct {
+    s32 pad_0 : 21;
+    s32 path_index : 10;
+    s32 pad_1 : 1;
+    u8 pad_2[0x10];
+    f32 unk_14;
+    u8 pad_3[0x18];
+    f32 unk_30;
+    f32 unk_34;
+} SplineCameraDuration;
 extern void *func_800D7520(s32);
 extern f32 func_800C7AE4(void *, f32, f32);
-typedef struct { u32 local_0:8; u32 local_1:13; s32 local_2:10; u32 local_3:1; f32 local_4; f32 local_5; f32 local_6; f32 local_7; f32 local_8; f32 local_9; f32 local_10; f32 local_11; u32 local_12:15; u32 pad_0:1; u32 local_13:1; u32 local_14:1; u32 local_15:1; u32 local_16:4; u32 local_17:3; u32 pad_1:6; u32 local_18:3; u32 pad_2:3; u32 local_19:8; u32 pad_3:2; u32 local_20:9; u32 local_21:1; u32 local_22:6; f32 local_23; } SplineScriptState;
-typedef struct { s32 local_0:1; s32 local_1:1; u32 pad_0:14; s16 local_2[3]; void *local_3; } SplineScriptSlot;
-typedef struct { u8 local_0[0x80]; u8 local_1[0x80]; void *local_2[0x24]; f32 local_3; u8 pad_0[4]; s32 local_4; s32 *local_5; u8 pad_1[4]; SplineScriptSlot *local_6; } SplineScriptContext;
-typedef struct { u8 pad_0[0x77]; u8 pad_1:4; u8 local_0:4; u8 pad_2; u8 pad_3:6; u8 local_1:2; } SplineScriptActorFlags;
+typedef struct {
+    u32 script_id : 8;
+    u32 cmd_index : 13;
+    s32 path_index : 10;
+    u32 unk_0_31 : 1;
+    f32 start_time;
+    f32 saved_elapsed;
+    f32 path_t;
+    f32 unk_10;
+    f32 unk_14;
+    f32 unk_18;
+    f32 anim_duration;
+    f32 wait_time;
+    u32 anim_index : 15;
+    u32 pad_0 : 1;
+    u32 unk_24_16 : 1;
+    u32 unk_24_17 : 1;
+    u32 unk_24_18 : 1;
+    u32 unk_24_19 : 4;
+    u32 target_slot : 3;
+    u32 pad_1 : 6;
+    u32 unk_28_0 : 3;
+    u32 pad_2 : 3;
+    u32 wait_counter : 8;
+    u32 pad_3 : 2;
+    u32 unk_28_16 : 9;
+    u32 unk_28_25 : 1;
+    u32 unk_28_26 : 6;
+    f32 unk_2C;
+} SplineScriptState;
+typedef struct {
+    s32 in_use : 1;
+    s32 is_prop : 1;
+    u32 pad_0 : 14;
+    s16 unk_2[3];
+    void *handle;
+} SplineScriptSlot;
+typedef struct {
+    u8 counters[0x80];
+    u8 counter_init[0x80];
+    void *actors[0x24];
+    f32 time;
+    u8 pad_0[4];
+    s32 script_asset;
+    s32 *script_offsets;
+    u8 pad_1[4];
+    SplineScriptSlot *slots;
+} SplineScriptContext;
+typedef struct {
+    u8 pad_0[0x77];
+    u8 pad_1 : 4;
+    u8 unk_77 : 4;
+    u8 pad_2;
+    u8 pad_3 : 6;
+    u8 unk_79 : 2;
+} SplineScriptActorFlags;
 extern void anctrl_setDuration(s32, f32);
 extern void func_8008B10C(s32, f32);
 extern void func_8008B1C8(s32, f32);
@@ -22,437 +109,460 @@ extern s32 _gspropctrl_entrypoint_10();
 extern void _glsplinecs_entrypoint_0();
 extern void _glsplinefuncs_entrypoint_1();
 
-s32 glsplinecs_entrypoint_0(s32 param_0, s32 param_1, s32 param_2){
+// Callback for func_800C04C8 (opcode 41): returns the jiggy count.
+s32 glsplinecs_entrypoint_0(s32 unk_0, s32 unk_1, s32 unk_2)
+{
     func_800D035C(1);
 }
 
-void func_8080002C_glsplinecs(s32 param_0, u8 *param_1, s32 param_2)
+void func_8080002C_glsplinecs(s32 ctx, u8 *actor, s32 arg)
 {
-    SplineCsBits *local_0;
+    SplineCsBits *state;
 
-    local_0 = func_80105494(param_1);
-    local_0->local_1 = (u32)*(f32 *)(param_1 + 0x48);
-    local_0->local_0 = (param_2 >> 16) & 0x1FF;
-    local_0->local_2 = (u32)*(f32 *)(param_1 + 0x44);
-    local_0->local_3 = param_2 & 0x1FF;
-    *(f32 *)(param_1 + 0x54) = local_0->local_1;
-    *(f32 *)(param_1 + 0x50) = local_0->local_2;
+    state = func_80105494(actor);
+    state->unk_40_9 = (u32) *(f32 *) (actor + 0x48);
+    state->unk_40_0 = (arg >> 16) & 0x1FF;
+    state->unk_40_18 = (u32) *(f32 *) (actor + 0x44);
+    state->unk_44_3 = arg & 0x1FF;
+    *(f32 *) (actor + 0x54) = state->unk_40_9;
+    *(f32 *) (actor + 0x50) = state->unk_40_18;
 }
 
-void func_80800228_glsplinecs(void *param_0, Actor *param_1, s32 param_2, s32 param_3, s32 *param_4)
+void func_80800228_glsplinecs(void *ctx, Actor *actor, s32 end_time, s32 mode, s32 *script)
 {
-    SplineCameraTransition *local_0;
+    SplineCameraTransition *state;
 
-    local_0 = (SplineCameraTransition *)func_80105494(param_1);
-    local_0->local_5 = param_3;
-    if (param_4[0] == 0x10006) {
-        local_0->local_2 = local_0->local_1;
-        local_0->local_3 = (f32)param_2 / 4000000.0f;
-        local_0->local_4 = 0;
-    }
-    else if (param_4[0] == 0x10005) {
-        local_0->local_2 = *(f32 *)((u8 *)param_0 + 0x190);
-        local_0->local_3 = *(f32 *)((u8 *)param_0 + 0x190) + param_4[local_0->local_0];
-        local_0->local_4 = 1;
+    state = (SplineCameraTransition *) func_80105494(actor);
+    state->mode = mode;
+    if (script[0] == 0x10006) {
+        state->start = state->path_t;
+        state->end = (f32) end_time / 4000000.0f;
+        state->in_frames = 0;
+    } else if (script[0] == 0x10005) {
+        state->start = *(f32 *) ((u8 *) ctx + 0x190);
+        state->end = *(f32 *) ((u8 *) ctx + 0x190) + script[state->cmd_index];
+        state->in_frames = 1;
     }
 }
 
-void func_80800310_glsplinecs(s32 param_0, Actor *param_1, s32 param_2, s32 param_3)
+void func_80800310_glsplinecs(s32 ctx, Actor *actor, s32 end_time, s32 unk_0)
 {
-    SplineCameraDuration *local_0;
-    f32 local_1;
-    local_0 = func_80105494(param_1);
-    local_0->local_2 = local_0->local_1;
-    local_1 = func_800C7AE4(func_800D7520(local_0->local_0), param_2 / 4000000.0f, 1.0f);
-    local_0->local_3 = local_1 / (param_3 * 0.25f);
+    SplineCameraDuration *state;
+    f32 unk_1;
+    state = func_80105494(actor);
+    state->unk_30 = state->unk_14;
+    unk_1 = func_800C7AE4(func_800D7520(state->path_index), end_time / 4000000.0f, 1.0f);
+    state->unk_34 = unk_1 / (unk_0 * 0.25f);
 }
 
 s32 func_808003A8_glsplinecs(Actor *this)
 {
-  s32 local_0;
-  s32 new_var;
-  local_0 = func_80104248(this);
-  if (local_0 == 0)
-  {
-    local_0 = func_801042B8(this);
-    anctrl_reset(local_0);
-  }
-  new_var = local_0;
-  return new_var;
+    s32 anctrl;
+    s32 result;
+    anctrl = func_80104248(this);
+    if (anctrl == 0) {
+        anctrl = func_801042B8(this);
+        anctrl_reset(anctrl);
+    }
+    // Matching: extra temporary for the return value.
+    result = anctrl;
+    return result;
 }
 
-void glsplinecs_entrypoint_1(SplineScriptContext *param_0, Actor *param_1)
+// Runs the commands of the actor's spline script that are due. Stops at the first command that
+// is not due yet, at a wait, or at the end marker.
+void glsplinecs_entrypoint_1(SplineScriptContext *ctx, Actor *actor)
 {
-    SplineScriptState *local_0;
-    s32 *local_1;
-    s32 local_2;
+    SplineScriptState *state;
+    s32 *script;
+    s32 base;
 
-    local_0 = func_80105494(param_1);
-    local_2 = (s32)func_800D674C(param_0->local_4);
-    local_1 = (s32 *)(param_0->local_5[local_0->local_0 - 1] + local_2);
-    if (local_0->local_1 == 0) {
-        local_0->local_1 = 1;
+    state = func_80105494(actor);
+    base = (s32) func_800D674C(ctx->script_asset);
+    script = (s32 *) (ctx->script_offsets[state->script_id - 1] + base);
+    if (state->cmd_index == 0) {
+        state->cmd_index = 1;
     }
-    if (local_0->local_11 != 0.0f || local_0->local_16 != 0 ||
-        local_0->local_20 != 0 || local_0->local_19 != 0 ||
-        local_0->local_23 > 0.0f) {
+    if (state->wait_time != 0.0f || state->unk_24_19 != 0 || state->unk_28_16 != 0 ||
+        state->wait_counter != 0 || state->unk_2C > 0.0f) {
         return;
     }
-    if (local_0->local_5 != 0.0f) {
-        if (local_1[0] == 0x10005) {
-            local_0->local_4 = param_0->local_3 - local_0->local_5;
+    // Resuming after a wait: restore the elapsed time.
+    if (state->saved_elapsed != 0.0f) {
+        if (script[0] == 0x10005) {
+            state->start_time = ctx->time - state->saved_elapsed;
         }
-        local_0->local_5 = 0;
+        state->saved_elapsed = 0;
     }
-    while (local_1[local_0->local_1 + 1] != 2 &&
-           ((local_1[0] == 0x10005 && local_1[local_0->local_1] <= param_0->local_3 - local_0->local_4) ||
-            (local_1[0] == 0x10006 && local_1[local_0->local_1] / 4000000.0f <= local_0->local_6)) &&
-           local_0->local_11 == 0.0f && local_0->local_16 == 0 &&
-           local_0->local_20 == 0 && local_0->local_19 == 0 &&
-           !(local_0->local_23 > 0.0f)) {
-        switch (local_1[local_0->local_1 + 1] >> 16) {
-        case 9:
-            func_800D7754(param_1, local_1[local_0->local_1 + 1] & 0xFFFF);
-            break;
-        case 7:
-            if (!local_0->local_15 && !local_0->local_22 && !local_0->local_17 && local_0->local_13) {
-                param_1->unk54 = (f32)(local_1[local_0->local_1 + 1] & 0xFFFF);
-            }
-            break;
-        case 8:
-            if (!local_0->local_15 && !local_0->local_22 && !local_0->local_17 && local_0->local_14) {
-                param_1->unk50 = (f32)(local_1[local_0->local_1 + 1] & 0xFFFF);
-            }
-            break;
-        case 14:
-        {
-            s32 local_3;
-            local_3 = func_808003A8_glsplinecs(param_1);
-            local_0->local_10 = local_1[local_0->local_1 + 2] / 4000000.0f;
-            local_0->local_12 = _seqdat_entrypoint_0(local_1[local_0->local_1 + 1] & 0xFFFF, 0);
-            anctrl_setIndex(local_3, local_0->local_12);
-            anctrl_setDuration(local_3, local_0->local_10);
-            func_8008B188(local_3, 1);
-            anctrl_start(local_3);
-            func_8008B10C(local_3, 0.00001f);
-            local_0->local_1++;
-            break;
-        }
-        case 15:
-        {
-            s32 local_4;
-            f32 local_40;
-            local_4 = func_808003A8_glsplinecs(param_1);
-            local_40 = local_1[local_0->local_1 + 2] / 4000000.0f;
-            func_8008B1C8(local_4, local_40);
-            local_0->local_1++;
-            break;
-        }
-        case 16:
-        {
-            s32 local_41;
-            local_41 = func_808003A8_glsplinecs(param_1);
-            anctrl_setPlaybackType(local_41, 1);
-            break;
-        }
-        case 17:
-        {
-            s32 local_42;
-            local_42 = func_808003A8_glsplinecs(param_1);
-            anctrl_setPlaybackType(local_42, 2);
-            break;
-        }
-        case 48:
-            param_1->unk64_19 = local_1[local_0->local_1 + 1] & 0xFFFF;
-            break;
-        case 56:
-            func_80105BE0(param_1, local_1[local_0->local_1 + 1] & 0xFFFF);
-            break;
-        case 54:
-            param_1->unk7A_11 = local_1[local_0->local_1 + 1] & 0xFFFF;
-            break;
-        case 55:
-            ((SplineScriptActorFlags *)param_1)->local_0 = local_1[local_0->local_1 + 1] & 0xFFFF;
-            break;
-        case 53:
-        {
-            f32 local_5;
-            local_5 = 0;
-            if (local_1[local_0->local_1 + 1] & 0xFFFF) {
-                local_5 = 5.0f;
-            }
-            func_8010FD38(func_8008FFE8(), local_5);
-            break;
-        }
-        case 52:
-            func_800DA544(0);
-            break;
-        case 18:
-            local_0->local_8 = func_800D7708(local_0->local_2, local_0->local_6, local_1[local_0->local_1 + 1] & 0xFFFF);
-            break;
-        case 21:
-        {
-            s32 local_6;
-            f32 local_7;
-            f32 local_8[3];
-            s32 local_9;
-            s32 local_10;
-            _glsplinefuncs_entrypoint_0(local_1[local_0->local_1 + 1] & 0xFFFF, &local_6, &local_7, local_8, local_0->local_2, &local_9, &local_10);
-            local_0->local_2 = local_6;
-            local_0->local_6 = local_7;
-            param_1->position[0] = local_8[0];
-            param_1->position[1] = local_8[1];
-            param_1->position[2] = local_8[2];
-            break;
-        }
-        case 40:
-        {
-            int local_11;
-            int local_12;
-            local_11 = ((local_1[local_0->local_1 + 1] & 0xFFFF) & 0x8000) ? (local_1[local_0->local_1 + 1] & 0xFFFF) | 0xFFFF0000 : (local_1[local_0->local_1 + 1] & 0xFFFF);
-            local_12 = local_11 >= 0 ? local_11 : -local_11;
-            ((SplineScriptActorFlags *)param_1)->local_1 = local_11 < 0 ? 2 : (local_11 > 0 ? 1 : 0);
-            if (local_12) {
-                ((f32 *)param_1->actorData)[0] = local_12 * 0.25f;
-            } else {
-                ((f32 *)param_1->actorData)[0] = 0;
-            }
-            ((f32 *)param_1->actorData)[1] = 0;
-            break;
-        }
-        case 49:
-            _subaddiefade_entrypoint_1(param_1, local_1[local_0->local_1 + 1] & 0xFFFF);
-            break;
-        case 41:
-        {
-            func_800C04C8(local_1[local_0->local_1 + 1] & 0xFFFF, ((local_1[local_0->local_1 + 2]) >> 24) & 0x3F, (local_1[local_0->local_1 + 2]) & 0xFFFF, ((local_1[local_0->local_1 + 2]) >> 16) & 0xF, _glsplinecs_entrypoint_0);
-            local_0->local_1++;
-            break;
-        }
-        case 27:
-        {
-            func_800DA3B8(_seqdefine_entrypoint_0((local_1[local_0->local_1 + 1] & 0xFFFF) & 0x3FFF), (local_1[local_0->local_1 + 1] & 0xFFFF) & 0x4000 ? 1 : 0);
-            break;
-        }
-        case 34:
-        {
-            func_800FFA88((local_1[local_0->local_1 + 1] & 0xFFFF) == 0 ? param_1->unk0 : param_0->local_2[(local_1[local_0->local_1 + 1] & 0xFFFF)]);
-            break;
-        }
-        case 35:
-        {
-            func_800FFA88((local_1[local_0->local_1 + 1] & 0xFFFF) == 0 ? param_1->unk0 : param_0->local_2[(local_1[local_0->local_1 + 1] & 0xFFFF)]);
-            func_800A50B0(2);
-            break;
-        }
-        case 36:
-            _chbaddiesetup_entrypoint_3(_glsplinefuncs_entrypoint_1, local_1[local_0->local_1 + 1] & 0xFFFF, local_1[local_0->local_1 + 2], local_0->local_2);
-            local_0->local_1++;
-            break;
-        case 19:
-            local_0->local_11 = (local_1[local_0->local_1 + 1] & 0xFFFF) * 0.25f;
-            if (local_1[0] == 0x10005) {
-                local_0->local_5 = param_0->local_3 - local_0->local_4;
-            }
-            break;
-        case 20:
-            local_0->local_16 = (local_1[local_0->local_1 + 1] & 0xFFFF) - 0x69;
-            if (local_1[0] == 0x10005) {
-                local_0->local_5 = param_0->local_3 - local_0->local_4;
-            }
-            break;
-        case 31:
-            local_0->local_23 = (f32)(local_1[local_0->local_1 + 1] & 0xFFFF);
-            break;
-        case 28:
-            local_0->local_20 = (local_1[local_0->local_1 + 1] & 0xFFFF) + 1;
-            local_0->local_21 = 0;
-            if (local_1[0] == 0x10005) {
-                local_0->local_5 = param_0->local_3 - local_0->local_4;
-            }
-            break;
-        case 29:
-            local_0->local_20 = (local_1[local_0->local_1 + 1] & 0xFFFF) + 1;
-            local_0->local_21 = 1;
-            if (local_1[0] == 0x10005) {
-                local_0->local_5 = param_0->local_3 - local_0->local_4;
-            }
-            break;
-        case 30:
-            func_800DA544(0x644);
-            break;
-        case 42:
-        {
-            s32 local_17;
-            s32 local_18;
-            SplineScriptState *local_19;
-            Actor *local_36;
-            local_18 = ((local_1[local_0->local_1 + 1] & 0xFFFF) >> 12) & 0x3F;
-            local_17 = (local_1[local_0->local_1 + 1] & 0xFFFF) & 0xFFF;
-            if (local_18 == 0) {
-                local_36 = param_1;
-            } else {
-                local_36 = func_80106790(param_0->local_2[local_18]);
-            }
-            local_19 = func_80105494(local_36);
-            local_19->local_0 = local_17;
-            local_19->local_4 = param_0->local_3;
-            local_19->local_1 = 0;
-            local_19->local_5 = 0;
-            break;
-        }
-        case 37:
-            param_0->local_2[local_1[local_0->local_1 + 1] & 0xFFFF] = param_1->unk0;
-            break;
-        case 43:
-        {
-            SplineScriptState *local_21;
-            Actor *local_37;
-            if ((local_1[local_0->local_1 + 1] & 0xFFFF) == 0) {
-                local_37 = param_1;
-            } else {
-                local_37 = func_80106790(param_0->local_2[(local_1[local_0->local_1 + 1] & 0xFFFF)]);
-            }
-            local_21 = func_80105494(local_37);
-            local_21->local_11 = 1700000.0f;
-            if (local_1[0] == 0x10005) {
-                local_21->local_5 = param_0->local_3 - local_0->local_4;
-            }
-            break;
-        }
-        case 44:
-        {
-            SplineScriptState *local_23;
-            Actor *local_38;
-            if ((local_1[local_0->local_1 + 1] & 0xFFFF) == 0) {
-                local_38 = param_1;
-            } else {
-                local_38 = func_80106790(param_0->local_2[(local_1[local_0->local_1 + 1] & 0xFFFF)]);
-            }
-            local_23 = func_80105494(local_38);
-            local_23->local_11 = 0;
-            break;
-        }
-        case 10:
-        {
-            u32 local_24;
-            s32 local_25;
-            Actor *local_39;
-            SplineScriptState *local_26;
-            local_25 = ((local_1[local_0->local_1 + 1] & 0xFFFF) >> 6) & 0x3F;
-            local_24 = (local_1[local_0->local_1 + 1] & 0xFFFF) & 0x3F;
-            if (local_24 == 0) {
-                local_39 = param_1;
-            } else {
-                local_39 = func_80106790(param_0->local_2[local_24]);
-            }
-            local_26 = func_80105494(local_39);
-            local_26->local_22 = local_25;
-            local_26->local_17 = 0;
-            local_26->local_15 = 0;
-            local_26->local_13 = 0;
-            local_26->local_14 = 0;
-            break;
-        }
-        case 47:
-            func_80090708(local_1[local_0->local_1 + 1] & 0xFFFF ? 0 : 2);
-            break;
-        case 11:
-        {
-            s32 local_27;
-            Actor *local_28;
-            s16 *local_29;
-            s32 local_30;
-            local_27 = local_1[local_0->local_1 + 1] & 0xFFFF;
-            if (local_27 != 0) {
-                local_28 = _subaddiefind_entrypoint_12(local_27);
-                local_29 = 0;
-                if (local_28 == 0) {
-                    local_29 = _gccubesearch_entrypoint_17(local_27, 0);
+    while (
+        script[state->cmd_index + 1] != 2 &&
+        ((script[0] == 0x10005 &&
+          script[state->cmd_index] <= ctx->time - state->start_time) ||
+         (script[0] == 0x10006 && script[state->cmd_index] / 4000000.0f <= state->path_t)) &&
+        state->wait_time == 0.0f && state->unk_24_19 == 0 && state->unk_28_16 == 0 &&
+        state->wait_counter == 0 && !(state->unk_2C > 0.0f)) {
+        switch (script[state->cmd_index + 1] >> 16) {
+            case 9:
+                func_800D7754(actor, script[state->cmd_index + 1] & 0xFFFF);
+                break;
+            case 7:
+                if (!state->unk_24_18 && !state->unk_28_26 && !state->target_slot &&
+                    state->unk_24_16) {
+                    actor->unk54 = (f32) (script[state->cmd_index + 1] & 0xFFFF);
                 }
-                local_0->local_22 = 0;
-                local_0->local_15 = 0;
-                local_0->local_13 = 0;
-                local_0->local_14 = 0;
-                for (local_30 = 0; local_30 < 7; local_30++) {
-                    if (!(param_0->local_6 + local_30)->local_0) {
-                        SplineScriptSlot *local_31 = param_0->local_6 + local_30;
-                        local_0->local_17 = local_30 + 1;
-                        if (local_28 != 0) {
-                            local_31->local_0 = 1;
-                            local_31->local_1 = 0;
-                            local_31->local_3 = local_28->unk0;
-                        } else if (local_29 != 0) {
-                            local_31->local_0 = 1;
-                            local_31->local_1 = 1;
-                            _gspropctrl_entrypoint_10(local_29, local_31->local_2);
-                        }
-                        local_30 = 7;
+                break;
+            case 8:
+                if (!state->unk_24_18 && !state->unk_28_26 && !state->target_slot &&
+                    state->unk_24_17) {
+                    actor->unk50 = (f32) (script[state->cmd_index + 1] & 0xFFFF);
+                }
+                break;
+            case 14: {
+                s32 anctrl;
+                anctrl = func_808003A8_glsplinecs(actor);
+                state->anim_duration = script[state->cmd_index + 2] / 4000000.0f;
+                state->anim_index = _seqdat_entrypoint_0(script[state->cmd_index + 1] & 0xFFFF, 0);
+                anctrl_setIndex(anctrl, state->anim_index);
+                anctrl_setDuration(anctrl, state->anim_duration);
+                func_8008B188(anctrl, 1);
+                anctrl_start(anctrl);
+                func_8008B10C(anctrl, 0.00001f);
+                state->cmd_index++;
+                break;
+            }
+            case 15: {
+                s32 anctrl;
+                f32 seconds;
+                anctrl = func_808003A8_glsplinecs(actor);
+                seconds = script[state->cmd_index + 2] / 4000000.0f;
+                func_8008B1C8(anctrl, seconds);
+                state->cmd_index++;
+                break;
+            }
+            case 16: {
+                s32 anctrl;
+                anctrl = func_808003A8_glsplinecs(actor);
+                anctrl_setPlaybackType(anctrl, 1);
+                break;
+            }
+            case 17: {
+                s32 anctrl;
+                anctrl = func_808003A8_glsplinecs(actor);
+                anctrl_setPlaybackType(anctrl, 2);
+                break;
+            }
+            case 48:
+                actor->unk64_19 = script[state->cmd_index + 1] & 0xFFFF;
+                break;
+            case 56:
+                func_80105BE0(actor, script[state->cmd_index + 1] & 0xFFFF);
+                break;
+            case 54:
+                actor->unk7A_11 = script[state->cmd_index + 1] & 0xFFFF;
+                break;
+            case 55:
+                ((SplineScriptActorFlags *) actor)->unk_77 =
+                    script[state->cmd_index + 1] & 0xFFFF;
+                break;
+            case 53: {
+                f32 value;
+                value = 0;
+                if (script[state->cmd_index + 1] & 0xFFFF) {
+                    value = 5.0f;
+                }
+                func_8010FD38(func_8008FFE8(), value);
+                break;
+            }
+            case 52:
+                func_800DA544(0);
+                break;
+            case 18:
+                state->unk_14 = func_800D7708(state->path_index, state->path_t,
+                                                 script[state->cmd_index + 1] & 0xFFFF);
+                break;
+            // Move the actor to the node with this event id.
+            case 21: {
+                s32 path;
+                f32 t;
+                f32 pos[3];
+                s32 extra_a;
+                s32 extra_b;
+                _glsplinefuncs_entrypoint_0(script[state->cmd_index + 1] & 0xFFFF, &path,
+                                            &t, pos, state->path_index, &extra_a,
+                                            &extra_b);
+                state->path_index = path;
+                state->path_t = t;
+                actor->position[0] = pos[0];
+                actor->position[1] = pos[1];
+                actor->position[2] = pos[2];
+                break;
+            }
+            case 40: {
+                int value;
+                int abs_value;
+                value = ((script[state->cmd_index + 1] & 0xFFFF) & 0x8000)
+                               ? (script[state->cmd_index + 1] & 0xFFFF) | 0xFFFF0000
+                               : (script[state->cmd_index + 1] & 0xFFFF);
+                abs_value = value >= 0 ? value : -value;
+                ((SplineScriptActorFlags *) actor)->unk_79 =
+                    value < 0 ? 2 : (value > 0 ? 1 : 0);
+                if (abs_value) {
+                    ((f32 *) actor->actorData)[0] = abs_value * 0.25f;
+                } else {
+                    ((f32 *) actor->actorData)[0] = 0;
+                }
+                ((f32 *) actor->actorData)[1] = 0;
+                break;
+            }
+            case 49:
+                _subaddiefade_entrypoint_1(actor, script[state->cmd_index + 1] & 0xFFFF);
+                break;
+            case 41: {
+                func_800C04C8(script[state->cmd_index + 1] & 0xFFFF,
+                              (script[state->cmd_index + 2] >> 24) & 0x3F,
+                              script[state->cmd_index + 2] & 0xFFFF,
+                              (script[state->cmd_index + 2] >> 16) & 0xF,
+                              _glsplinecs_entrypoint_0);
+                state->cmd_index++;
+                break;
+            }
+            case 27: {
+                func_800DA3B8(
+                    _seqdefine_entrypoint_0((script[state->cmd_index + 1] & 0xFFFF) & 0x3FFF),
+                    (script[state->cmd_index + 1] & 0xFFFF) & 0x4000 ? 1 : 0);
+                break;
+            }
+            case 34: {
+                func_800FFA88((script[state->cmd_index + 1] & 0xFFFF) == 0
+                                  ? actor->unk0
+                                  : ctx->actors[(script[state->cmd_index + 1] & 0xFFFF)]);
+                break;
+            }
+            case 35: {
+                func_800FFA88((script[state->cmd_index + 1] & 0xFFFF) == 0
+                                  ? actor->unk0
+                                  : ctx->actors[(script[state->cmd_index + 1] & 0xFFFF)]);
+                func_800A50B0(2);
+                break;
+            }
+            // Spawn a baddie that follows the spline (glsplinefuncs_entrypoint_1).
+            case 36:
+                _chbaddiesetup_entrypoint_3(_glsplinefuncs_entrypoint_1,
+                                            script[state->cmd_index + 1] & 0xFFFF,
+                                            script[state->cmd_index + 2], state->path_index);
+                state->cmd_index++;
+                break;
+            // Wait for arg / 4 time units.
+            case 19:
+                state->wait_time = (script[state->cmd_index + 1] & 0xFFFF) * 0.25f;
+                if (script[0] == 0x10005) {
+                    state->saved_elapsed = ctx->time - state->start_time;
+                }
+                break;
+            case 20:
+                state->unk_24_19 = (script[state->cmd_index + 1] & 0xFFFF) - 0x69;
+                if (script[0] == 0x10005) {
+                    state->saved_elapsed = ctx->time - state->start_time;
+                }
+                break;
+            case 31:
+                state->unk_2C = (f32) (script[state->cmd_index + 1] & 0xFFFF);
+                break;
+            case 28:
+                state->unk_28_16 = (script[state->cmd_index + 1] & 0xFFFF) + 1;
+                state->unk_28_25 = 0;
+                if (script[0] == 0x10005) {
+                    state->saved_elapsed = ctx->time - state->start_time;
+                }
+                break;
+            case 29:
+                state->unk_28_16 = (script[state->cmd_index + 1] & 0xFFFF) + 1;
+                state->unk_28_25 = 1;
+                if (script[0] == 0x10005) {
+                    state->saved_elapsed = ctx->time - state->start_time;
+                }
+                break;
+            case 30:
+                func_800DA544(0x644);
+                break;
+            // Start script script_id on an actor (0 = this actor).
+            case 42: {
+                s32 script_id;
+                s32 actor_id;
+                SplineScriptState *target_state;
+                Actor *target;
+                actor_id = ((script[state->cmd_index + 1] & 0xFFFF) >> 12) & 0x3F;
+                script_id = (script[state->cmd_index + 1] & 0xFFFF) & 0xFFF;
+                if (actor_id == 0) {
+                    target = actor;
+                } else {
+                    target = func_80106790(ctx->actors[actor_id]);
+                }
+                target_state = func_80105494(target);
+                target_state->script_id = script_id;
+                target_state->start_time = ctx->time;
+                target_state->cmd_index = 0;
+                target_state->saved_elapsed = 0;
+                break;
+            }
+            // Store this actor's handle in actor slot arg.
+            case 37:
+                ctx->actors[script[state->cmd_index + 1] & 0xFFFF] = actor->unk0;
+                break;
+            // Pause an actor's script with a huge wait time.
+            case 43: {
+                SplineScriptState *target_state;
+                Actor *target;
+                if ((script[state->cmd_index + 1] & 0xFFFF) == 0) {
+                    target = actor;
+                } else {
+                    target =
+                        func_80106790(ctx->actors[(script[state->cmd_index + 1] & 0xFFFF)]);
+                }
+                target_state = func_80105494(target);
+                target_state->wait_time = 1700000.0f;
+                if (script[0] == 0x10005) {
+                    target_state->saved_elapsed = ctx->time - state->start_time;
+                }
+                break;
+            }
+            // Resume an actor's script.
+            case 44: {
+                SplineScriptState *target_state;
+                Actor *target;
+                if ((script[state->cmd_index + 1] & 0xFFFF) == 0) {
+                    target = actor;
+                } else {
+                    target =
+                        func_80106790(ctx->actors[(script[state->cmd_index + 1] & 0xFFFF)]);
+                }
+                target_state = func_80105494(target);
+                target_state->wait_time = 0;
+                break;
+            }
+            case 10: {
+                u32 actor_id;
+                s32 unk_0;
+                Actor *target;
+                SplineScriptState *target_state;
+                unk_0 = ((script[state->cmd_index + 1] & 0xFFFF) >> 6) & 0x3F;
+                actor_id = (script[state->cmd_index + 1] & 0xFFFF) & 0x3F;
+                if (actor_id == 0) {
+                    target = actor;
+                } else {
+                    target = func_80106790(ctx->actors[actor_id]);
+                }
+                target_state = func_80105494(target);
+                target_state->unk_28_26 = unk_0;
+                target_state->target_slot = 0;
+                target_state->unk_24_18 = 0;
+                target_state->unk_24_16 = 0;
+                target_state->unk_24_17 = 0;
+                break;
+            }
+            case 47:
+                func_80090708(script[state->cmd_index + 1] & 0xFFFF ? 0 : 2);
+                break;
+            // Register the actor or prop with this id in a free slot (id 0 frees the current slot).
+            case 11: {
+                s32 id;
+                Actor *target;
+                s16 *prop;
+                s32 i;
+                id = script[state->cmd_index + 1] & 0xFFFF;
+                if (id != 0) {
+                    target = _subaddiefind_entrypoint_12(id);
+                    prop = 0;
+                    if (target == 0) {
+                        prop = _gccubesearch_entrypoint_17(id, 0);
                     }
+                    state->unk_28_26 = 0;
+                    state->unk_24_18 = 0;
+                    state->unk_24_16 = 0;
+                    state->unk_24_17 = 0;
+                    for (i = 0; i < 7; i++) {
+                        if (!(ctx->slots + i)->in_use) {
+                            SplineScriptSlot *slot = ctx->slots + i;
+                            state->target_slot = i + 1;
+                            if (target != 0) {
+                                slot->in_use = 1;
+                                slot->is_prop = 0;
+                                slot->handle = target->unk0;
+                            } else if (prop != 0) {
+                                slot->in_use = 1;
+                                slot->is_prop = 1;
+                                _gspropctrl_entrypoint_10(prop, slot->unk_2);
+                            }
+                            i = 7;
+                        }
+                    }
+                } else {
+                    ctx->slots[state->target_slot - 1].in_use = 0;
+                    state->target_slot = 0;
                 }
-            } else {
-                param_0->local_6[local_0->local_17 - 1].local_0 = 0;
-                local_0->local_17 = 0;
+                break;
             }
-            break;
-        }
-        case 13:
-            if (local_1[local_0->local_1 + 1] & 0xFFFF) {
-                param_1->unk64_18 = 1;
-            } else {
-                param_1->unk64_18 = 0;
+            case 13:
+                if (script[state->cmd_index + 1] & 0xFFFF) {
+                    actor->unk64_18 = 1;
+                } else {
+                    actor->unk64_18 = 0;
+                }
+                break;
+            // Decrement counter arg (if nonzero) and wait on it.
+            case 32: {
+                s32 count;
+                count = ctx->counters[script[state->cmd_index + 1] & 0xFFFF];
+                if (count != 0) {
+                    ctx->counters[script[state->cmd_index + 1] & 0xFFFF] = count - 1;
+                }
+                state->wait_counter = (script[state->cmd_index + 1] & 0xFFFF) + 1;
+                if (script[0] == 0x10005) {
+                    state->saved_elapsed = ctx->time - state->start_time;
+                }
+                break;
             }
-            break;
-        case 32:
-        {
-            s32 local_32;
-            local_32 = param_0->local_0[local_1[local_0->local_1 + 1] & 0xFFFF];
-            if (local_32 != 0) {
-                param_0->local_0[local_1[local_0->local_1 + 1] & 0xFFFF] = local_32 - 1;
+            // Reset counter arg to its initial value.
+            case 33: {
+                ctx->counters[(script[state->cmd_index + 1] & 0xFFFF)] =
+                    ctx->counter_init[(script[state->cmd_index + 1] & 0xFFFF)];
+                break;
             }
-            local_0->local_19 = (local_1[local_0->local_1 + 1] & 0xFFFF) + 1;
-            if (local_1[0] == 0x10005) {
-                local_0->local_5 = param_0->local_3 - local_0->local_4;
-            }
-            break;
+            case 12:
+                state->unk_28_0 = script[state->cmd_index + 1] & 0xFFFF;
+                break;
+            case 45:
+                func_800C84A4(func_800D7520(state->path_index),
+                              script[state->cmd_index + 1] & 0xFFFF ? 1 : 0);
+                break;
+            case 46:
+                func_8009086C(script[state->cmd_index + 1] & 0xFFFF);
+                break;
+            case 38:
+                func_80800228_glsplinecs(ctx, actor, script[state->cmd_index + 3], 1,
+                                         script);
+                func_8080002C_glsplinecs(ctx, actor, script[state->cmd_index + 2]);
+                state->cmd_index += 2;
+                break;
+            case 39:
+                func_80800228_glsplinecs(ctx, actor, script[state->cmd_index + 3], 2,
+                                         script);
+                func_80800310_glsplinecs((s32) ctx, actor, script[state->cmd_index + 3],
+                                         script[state->cmd_index + 2]);
+                state->cmd_index += 2;
+                break;
+            case 51:
+                _chintrotext_entrypoint_1(0x18BC, script[state->cmd_index + 1] & 0xFFFF, 2, 2);
         }
-        case 33:
-        {
-            param_0->local_0[(local_1[local_0->local_1 + 1] & 0xFFFF)] = param_0->local_1[(local_1[local_0->local_1 + 1] & 0xFFFF)];
-            break;
-        }
-        case 12:
-            local_0->local_18 = local_1[local_0->local_1 + 1] & 0xFFFF;
-            break;
-        case 45:
-            func_800C84A4(func_800D7520(local_0->local_2), local_1[local_0->local_1 + 1] & 0xFFFF ? 1 : 0);
-            break;
-        case 46:
-            func_8009086C(local_1[local_0->local_1 + 1] & 0xFFFF);
-            break;
-        case 38:
-            func_80800228_glsplinecs(param_0, param_1, local_1[local_0->local_1 + 3], 1, local_1);
-            func_8080002C_glsplinecs(param_0, param_1, local_1[local_0->local_1 + 2]);
-            local_0->local_1 += 2;
-            break;
-        case 39:
-            func_80800228_glsplinecs(param_0, param_1, local_1[local_0->local_1 + 3], 2, local_1);
-            func_80800310_glsplinecs((s32)param_0, param_1, local_1[local_0->local_1 + 3], local_1[local_0->local_1 + 2]);
-            local_0->local_1 += 2;
-            break;
-        case 51:
-            _chintrotext_entrypoint_1(0x18BC, local_1[local_0->local_1 + 1] & 0xFFFF, 2, 2);
-            break;
-        }
-        local_0->local_1 += 2;
+        // Commands with extra words skip them inside their case.
+        state->cmd_index += 2;
     }
-    if (local_1[local_0->local_1 + 1] == 2) {
-        local_0->local_0 = 0;
-        local_0->local_1 = 0;
-        local_0->local_4 = 0;
-        local_0->local_5 = 0;
+    if (script[state->cmd_index + 1] == 2) {
+        state->script_id = 0;
+        state->cmd_index = 0;
+        state->start_time = 0;
+        state->saved_elapsed = 0;
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/spline/cs.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/spline/cs.data.s) is defined here in C; values taken from the ROM.

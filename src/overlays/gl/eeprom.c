@@ -1,31 +1,36 @@
+// EEPROM access: whole 8-byte block writes and reads under the SI bus lock, plus an
+// anti-tamper value used by the ch/nests and gldb overlays.
 #include "common.h"
 
 extern s32 D_8007DA60;
 
-s32 gleeprom_entrypoint_0(void) {
-    return (*(s32 *)((s8 *)&D_8007DA60 + 0xF0)) ^ 0xBD1F0416;
-}
-
-int gleeprom_entrypoint_1(s32 param_0, s32 param_1, u32 *param_2)
+// Obfuscated anti-tamper value.
+// Anti-tamper value; the top byte is 0x10 when untouched.
+s32 gleeprom_entrypoint_0(void)
 {
-  s32 local_1;
-  s32 local_0;
-
-  func_80016934(3);
-  local_0 = osEepromLongWrite(func_80016928(), (param_0 / 8) & 0xFF, param_1, param_2);
-  func_80016934(0);
-  return local_0;
+    return *(s32 *) ((s8 *) &D_8007DA60 + 0xF0) ^ 0xBD1F0416;
 }
 
-int gleeprom_entrypoint_2(s32 param_0, s32 param_1, s32 param_2)
+// 16 Kbit EEPROM block write and read.
+// Writes one 8-byte EEPROM block; the address is offset / 8.
+int gleeprom_entrypoint_1(s32 offset, s32 data, u32 *length)
 {
-  s32 pad0;
-  u32 local_0;
-  func_80016934(3);
-  local_0 = osEepromLongRead(func_80016928(), (param_0 / 8) & 0xFF, param_1, param_2);
-  func_80016934(0);
-  return local_0;
+    s32 unk_0;
+    s32 result;
+
+    func_80016934(3);
+    result = osEepromLongWrite(func_80016928(), (offset / 8) & 0xFF, data, length);
+    func_80016934(0);
+    return result;
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/gl/eeprom.data.s) is defined here in C.
- * Values are taken from the ROM. */
+// Reads one 8-byte EEPROM block; the address is offset / 8.
+int gleeprom_entrypoint_2(s32 offset, s32 data, s32 length)
+{
+    s32 pad0;
+    u32 result;
+    func_80016934(3);
+    result = osEepromLongRead(func_80016928(), (offset / 8) & 0xFF, data, length);
+    func_80016934(0);
+    return result;
+}

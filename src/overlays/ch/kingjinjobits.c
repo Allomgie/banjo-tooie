@@ -1,7 +1,13 @@
+// Most likely the story director of the Jingaling plot: picks a script by current map
+// (Jinjo Village, Jinjo houses, Wooded Hollow, temple drain/repair, Cauldron Keep gun chamber).
+// A vertex callback fades map layers by distance during the drain and repair sequences.
 #include "common.h"
 
 extern int D_80800A80_chkingjinjobits[];
-typedef union { s32 local_0; u8 local_1[4]; } KingJinjoEvent;
+typedef union {
+    s32 local_0;
+    u8 local_1[4];
+} KingJinjoEvent;
 extern s32 _chkingjinjobits_entrypoint_1;
 extern void func_8010D5DC(void);
 extern s32 func_800EA364(void);
@@ -21,263 +27,269 @@ void func_80800354_chkingjinjobits();
 
 int chkingjinjobits_entrypoint_0()
 {
-    return (int)&D_80800A80_chkingjinjobits;
+    return (int) &D_80800A80_chkingjinjobits;
 }
 
-void func_8080000C_chkingjinjobits(s32 arg0) 
+void func_8080000C_chkingjinjobits(s32 arg0)
 {
 }
-void func_80800014_chkingjinjobits(Actor *param_0)
+
+// State machine per script: 2/3 Wooded Hollow, 4-7 temple drain and repair.
+void func_80800014_chkingjinjobits(Actor *actor)
 {
-  s32 local_0;
-  s32 local_1;
-  switch (param_0->unk70_10)
-  {
-    case 2:
-      if ((func_8010D23C() != 0) && (func_8010C500(param_0) != 0))
-    {
-      func_800DA544(0x367);
-      _subaddiedialog_entrypoint_11(*((s32 *) (((s8 *) param_0) + 0)), 0x1537, 0x44, 0, 0x97);
-      _capod_entrypoint_13(*((s32 *) (((s8 *) param_0) + 0)), 0, 9, 0x10);
-      func_80101FDC(param_0, 1);
-      return;
+    s32 unk_0;
+    s32 unk_1;
+    switch (actor->unk70_10) {
+        case 2:
+            if ((func_8010D23C() != 0) && (func_8010C500(actor) != 0)) {
+                func_800DA544(0x367);
+                _subaddiedialog_entrypoint_11(*(s32 *) ((s8 *) actor + 0), 0x1537, 0x44, 0, 0x97);
+                _capod_entrypoint_13(*(s32 *) ((s8 *) actor + 0), 0, 9, 0x10);
+                func_80101FDC(actor, 1);
+            }
+
+            return;
+
+        case 3:
+            if (actor->unk64_19 && actor->unk64_20) {
+                func_800F82D4(func_800F54E4(), 0);
+                _capod_entrypoint_14();
+                _glcutDll_entrypoint_0();
+                _glcutDll_entrypoint_7(0x18E);
+                _glcutDll_entrypoint_22(0x68);
+                _glcutDll_entrypoint_12(1);
+                _glcutDll_entrypoint_16();
+            }
+            break;
+
+        case 4:
+            if (func_800DA298(0x67A) != 0) {
+                func_800BF744(3, 1);
+                func_800DA544(0x360);
+                func_80101FDC(actor, 5);
+            }
+            break;
+
+        case 5:
+            unk_0 = func_800D9078(&actor->unk58);
+            _glid_entrypoint_0(func_800BEA88(0), 1, &_chkingjinjobits_entrypoint_1,
+                               *(s32 *) ((s8 *) actor + 0));
+            if (unk_0 != 0) {
+                func_800BF744(3, 0);
+                func_800FFAB0(actor);
+            }
+            break;
+
+        case 6:
+            if (func_800DA298(0x67B) != 0) {
+                func_80101FDC(actor, 7);
+                func_800BF744(3, 1);
+            }
+            _glid_entrypoint_0(func_800BEA88(0), 1, &_chkingjinjobits_entrypoint_1,
+                               *(s32 *) ((s8 *) actor + 0));
+            return;
+
+        case 7:
+            unk_1 = func_800D9078(&actor->unk58);
+            _glid_entrypoint_0(func_800BEA88(0), 1, &_chkingjinjobits_entrypoint_1,
+                               *(s32 *) ((s8 *) actor + 0));
+            if (unk_1 != 0) {
+                func_800BF744(1, 1);
+                func_800BF744(2, 0);
+                func_800BF744(3, 0);
+                func_800DA524(0x360);
+                func_800DA544(0x3B);
+                func_800DA524(0x1A5);
+                func_800FFAB0(actor);
+            }
     }
-
-    default:
-      return;
-
-    case 3:
-      if (param_0->unk64_19 && param_0->unk64_20)
-    {
-      func_800F82D4(func_800F54E4(), 0);
-      _capod_entrypoint_14();
-      _glcutDll_entrypoint_0();
-      _glcutDll_entrypoint_7(0x18E);
-      _glcutDll_entrypoint_22(0x68);
-      _glcutDll_entrypoint_12(1);
-      _glcutDll_entrypoint_16();
-      return;
-    }
-      break;
-
-    case 4:
-      if (func_800DA298(0x67A) != 0)
-    {
-      func_800BF744(3, 1);
-      func_800DA544(0x360);
-      func_80101FDC(param_0, 5);
-      return;
-    }
-      break;
-
-    case 5:
-      local_0 = func_800D9078(&param_0->unk58);
-      _glid_entrypoint_0(func_800BEA88(0), 1, &_chkingjinjobits_entrypoint_1, *((s32 *) (((s8 *) param_0) + 0)));
-      if (local_0 != 0)
-    {
-      func_800BF744(3, 0);
-      func_800FFAB0(param_0);
-      return;
-    }
-      break;
-
-    case 6:
-      if (func_800DA298(0x67B) != 0)
-    {
-      func_80101FDC(param_0, 7);
-      func_800BF744(3, 1);
-    }
-      _glid_entrypoint_0(func_800BEA88(0), 1, &_chkingjinjobits_entrypoint_1, *((s32 *) (((s8 *) param_0) + 0)));
-      return;
-
-    case 7:
-      local_1 = func_800D9078(&param_0->unk58);
-      _glid_entrypoint_0(func_800BEA88(0), 1, &_chkingjinjobits_entrypoint_1, *((s32 *) (((s8 *) param_0) + 0)));
-      if (local_1 != 0)
-    {
-      func_800BF744(1, 1);
-      func_800BF744(2, 0);
-      func_800BF744(3, 0);
-      func_800DA524(0x360);
-      func_800DA544(0x3B);
-      func_800DA524(0x1A5);
-      func_800FFAB0(param_0);
-    }
-      break;
-
-  }
-
 }
 
-int func_8080029C_chkingjinjobits(Actor *param_0, s32 param_1, s32 param_2)
+int func_8080029C_chkingjinjobits(Actor *actor, s32 msg, s32 msg_data)
 {
-    switch (param_1) {
-    case 0x95:
-        func_80800354_chkingjinjobits(param_0);
-        break;
-    case 0x2E:
-        func_80800744_chkingjinjobits(param_0, ((s16 *)&param_2)[0], ((s16 *)&param_2)[1]);
-        break;
-    case 0x32:
-        param_0->unk64_20 = 1;
-        func_800F82D4(func_800F54E4(), 1);
-        break;
-    case 0xB:
-        if (func_800EA05C() == 0x14F) {
-            func_800FFAB0(param_0);
-        }
-        return 3;
-    default:
-        return 0;
+    switch (msg) {
+        case 0x95:
+            func_80800354_chkingjinjobits(actor);
+            break;
+        case 0x2E:
+            func_80800744_chkingjinjobits(actor, ((s16 *) &msg_data)[0], ((s16 *) &msg_data)[1]);
+            break;
+        case 0x32:
+            actor->unk64_20 = 1;
+            func_800F82D4(func_800F54E4(), 1);
+            break;
+        case 0xB:
+            if (func_800EA05C() == 0x14F) {
+                func_800FFAB0(actor);
+            }
+            return 3;
+        default:
+            return 0;
     }
     return 1;
 }
 
-void func_80800354_chkingjinjobits(param_0) Actor *param_0;
+// Picks the script for the current map; the actor is removed if none applies.
+void func_80800354_chkingjinjobits(actor) Actor *actor;
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    f32 local_5[6];
-    s32 local_6;
+    s32 keep;
+    s32 life_sapped;
+    s32 unk_2;
+    s32 has_jiggy;
+    s32 unk_4;
+    f32 marker_pos[6];
+    s32 unk_6;
 
-    local_0 = 0;
-    local_1 = func_800DA298(0x360);
-    local_2 = func_800DA298(0x3B);
-    local_3 = func_800D0B68(0x5A, 1);
+    keep = 0;
+    life_sapped = func_800DA298(0x360);
+    unk_2 = func_800DA298(0x3B);
+    has_jiggy = func_800D0B68(0x5A, 1);
     switch (func_800EA05C()) {
-    case 0x142:
-        if (_glcutDll_entrypoint_19(0x66)) {
-            local_4 = 0x900;
-            if (func_800EA364() == 0x143) {
-                local_4 = 0x2900;
+        case 0x142:
+            if (_glcutDll_entrypoint_19(0x66)) {
+                unk_4 = 0x900;
+                if (func_800EA364() == 0x143) {
+                    unk_4 = 0x2900;
+                }
+                _capod_entrypoint_13(actor->unk0, 0, 0x4B, unk_4);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x154D, 0x44, 0, 0xAE);
+                keep = 1;
+            } else if (!func_800DB9B0() && !life_sapped && !unk_2 && func_800EA090() == 1 &&
+                       has_jiggy) {
+                unk_6 = func_800F54E4();
+                _subaddiemarker_entrypoint_1(actor, 0x154, 0x32, marker_pos, 1);
+                func_800F497C(unk_6);
+                func_800F49A8(unk_6, 1);
+                func_800F49D4(unk_6, func_8010D5DC, actor->unk0);
+                func_800F4A58(unk_6, marker_pos, 200.0f);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x154C, 0x44, 0, 0xAE);
+                func_80101FDC(actor, 3);
+                _capod_entrypoint_13(actor->unk0, 0, 0x4C, 0x2030);
+                keep = 1;
             }
-            _capod_entrypoint_13(param_0->unk0, 0, 0x4B, local_4);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x154D, 0x44, 0, 0xAE);
-            local_0 = 1;
-        } else if (!func_800DB9B0() && !local_1 && !local_2 && func_800EA090() == 1 && local_3) {
-            local_6 = func_800F54E4();
-            _subaddiemarker_entrypoint_1(param_0, 0x154, 0x32, local_5, 1);
-            func_800F497C(local_6);
-            func_800F49A8(local_6, 1);
-            func_800F49D4(local_6, func_8010D5DC, param_0->unk0);
-            func_800F4A58(local_6, local_5, 200.0f);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x154C, 0x44, 0, 0xAE);
-            func_80101FDC(param_0, 3);
-            _capod_entrypoint_13(param_0->unk0, 0, 0x4C, 0x2030);
-            local_0 = 1;
-        }
-        func_800BF744(1, !local_1);
-        func_800BF744(2, local_1);
-        func_800BF744(3, 0);
-        break;
-    case 0x145:
-    case 0x146:
-    case 0x147:
-    case 0x148:
-    case 0x149:
-    case 0x14A:
-    case 0x14B:
-    case 0x14C:
-    case 0x14D:
-    case 0x14E:
-        if (!local_3 && !func_800DB9B0() && !func_800DA9E4(0x67D, 1)) {
-            local_0 = 1;
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x1536, 0xE, 0, 0xAE);
-        }
-        break;
-    case 0x14F:
-        local_0 = !func_800DA298(0x367);
-        func_80101FDC(param_0, 2);
-        _subaddieDll_entrypoint_1(param_0);
-        break;
-    case 0x190:
-        local_0 = 1;
-        func_80101FDC(param_0, 4);
-        param_0->unk6C_0 = 0;
-        param_0->unk58 = 12.0f;
-        func_800BF744(1, 0);
-        func_800BF744(2, 1);
-        func_800BF744(3, 1);
-        break;
-    case 0x198:
-        local_0 = 1;
-        func_80101FDC(param_0, 6);
-        param_0->unk6C_0 = 1;
-        param_0->unk58 = 12.0f;
-        func_800BF744(1, 0);
-        func_800BF744(2, 1);
-        func_800BF744(3, 1);
-        break;
-    case 0x160:
-        if (func_800EA090() == 4) {
-            local_0 = 1;
-            _capod_entrypoint_2(param_0->unk0, 0x15, 0x2000);
-            _capod_entrypoint_8(1);
-            _gcdialogcamera_entrypoint_8();
-            _capod_entrypoint_7(5, 1);
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0x14D7, 0xC, 0, 0x22);
-            func_80101FDC(param_0, 8);
-        }
-        break;
+            func_800BF744(1, !life_sapped);
+            func_800BF744(2, life_sapped);
+            func_800BF744(3, 0);
+            break;
+        case 0x145:
+        case 0x146:
+        case 0x147:
+        case 0x148:
+        case 0x149:
+        case 0x14A:
+        case 0x14B:
+        case 0x14C:
+        case 0x14D:
+        case 0x14E:
+            if (!has_jiggy && !func_800DB9B0() && !func_800DA9E4(0x67D, 1)) {
+                keep = 1;
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x1536, 0xE, 0, 0xAE);
+            }
+            break;
+        case 0x14F:
+            keep = !func_800DA298(0x367);
+            func_80101FDC(actor, 2);
+            _subaddieDll_entrypoint_1(actor);
+            break;
+        case 0x190:
+            keep = 1;
+            func_80101FDC(actor, 4);
+            actor->unk6C_0 = 0;
+            actor->unk58 = 12.0f;
+            func_800BF744(1, 0);
+            func_800BF744(2, 1);
+            func_800BF744(3, 1);
+            break;
+        case 0x198:
+            keep = 1;
+            func_80101FDC(actor, 6);
+            actor->unk6C_0 = 1;
+            actor->unk58 = 12.0f;
+            func_800BF744(1, 0);
+            func_800BF744(2, 1);
+            func_800BF744(3, 1);
+            break;
+        case 0x160:
+            if (func_800EA090() == 4) {
+                keep = 1;
+                _capod_entrypoint_2(actor->unk0, 0x15, 0x2000);
+                _capod_entrypoint_8(1);
+                _gcdialogcamera_entrypoint_8();
+                _capod_entrypoint_7(5, 1);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x14D7, 0xC, 0, 0x22);
+                func_80101FDC(actor, 8);
+            }
+            break;
     }
-    if (!local_0) {
-        func_800FFAB0(param_0);
+    if (!keep) {
+        func_800FFAB0(actor);
     }
 }
 
-int func_80800744_chkingjinjobits(Actor *param_0, s32 param_1, KingJinjoEvent param_2)
+int func_80800744_chkingjinjobits(Actor *actor, s32 msg, KingJinjoEvent event)
 {
-    switch (param_1) {
-    case 0x1536:
-        _glcutDll_entrypoint_6(0x142, 0x66, param_0);
-        break;
-    case 0x154C:
-        param_0->unk64_19 = 1;
-        break;
-    case 0x14D7:
-        _capod_entrypoint_3(0);
-        func_800FFAB0(param_0);
-        break;
+    switch (msg) {
+        case 0x1536:
+            _glcutDll_entrypoint_6(0x142, 0x66, actor);
+            break;
+        case 0x154C:
+            actor->unk64_19 = 1;
+            break;
+        case 0x14D7:
+            _capod_entrypoint_3(0);
+            func_800FFAB0(actor);
     }
 }
 
-void chkingjinjobits_entrypoint_1(s32 arg0, Vtx *src, Vtx *dst, s32 count, Unk80132ED0 *marker)
+// Glid vertex callback: sets vertex alpha from the distance to a centre point.
+void chkingjinjobits_entrypoint_1(s32 unk_0, Vtx *src, Vtx *dst, s32 count, Unk80132ED0 *marker)
 {
-    Actor *a;
-    f32 r;
-    f32 d;
-    f32 v[3];
-    s32 pad[2];
+    Actor *actor;
+    f32 radius;
+    f32 dist;
+    f32 vertex_pos[3];
+    s32 pad[2]; // Matching: needed for the match.
     Vtx *end;
 
-    a = func_80106790(marker);
-    if (a->unk6C_0) {
-        r = func_800F12D4(a->unk58, 0.0f, 12.0f, 10.0f, 3000.0f);
+    actor = func_80106790(marker);
+    if (actor->unk6C_0) {
+        radius = func_800F12D4(actor->unk58, 0.0f, 12.0f, 10.0f, 3000.0f);
     } else {
-        r = func_800F12D4(a->unk58, 0.0f, 12.0f, 3000.0f, 10.0f);
+        radius = func_800F12D4(actor->unk58, 0.0f, 12.0f, 3000.0f, 10.0f);
     }
     for (end = src + count; src < end; src++, dst++) {
-        func_800EE88C(v, src);
-        d = func_800EEAD4(v, D_80800AC8_chkingjinjobits);
-        if (d < r) {
+        func_800EE88C(vertex_pos, src);
+        dist = func_800EEAD4(vertex_pos, D_80800AC8_chkingjinjobits);
+        if (dist < radius) {
             dst->v.cn[3] = 0;
-        } else if (r + 200.0f < d) {
+        } else if (radius + 200.0f < dist) {
             dst->v.cn[3] = 0xFF;
         } else {
-            dst->v.cn[3] = func_800F10B4(d - r, 0.0f, 200.0f, 0, 255.0f);
+            dst->v.cn[3] = func_800F10B4(dist - radius, 0.0f, 200.0f, 0, 255.0f);
         }
     }
 }
 
-/* TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/kingjinjobits.data.s) is defined here in C.
- * Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
- * functions differently unless the tables are defined in the same unit. Values are taken from the ROM.
- * extern declarations adjusted to the object (same addresses): D_80800A80_chkingjinjobits -> int[] */
 extern void func_80105834();
 extern void func_8010A730();
 extern void func_80107C2C();
-int D_80800A80_chkingjinjobits[18] = { 0x15804EB, 0x1, 0x0, (u32)func_80800014_chkingjinjobits, (u32)func_80105834, (u32)func_8010A730, 0x0, 0x0, 0x0, 0x4, 0x0, 0x0, 0x0, (u32)func_8080000C_chkingjinjobits, (u32)func_80107C2C, -0x7FFFD9FE, (u32)func_8080029C_chkingjinjobits, 0x0 };
-f32 D_80800AC8_chkingjinjobits[6] = { 0.0f, 1.8e+03f, 0.0f, 0.0f, 0.0f, 0.0f };
+// TU-NOTE: the overlay .data is defined here in C.
+int D_80800A80_chkingjinjobits[18] = {0x15804EB,
+                                      0x1,
+                                      0x0,
+                                      (u32) func_80800014_chkingjinjobits,
+                                      (u32) func_80105834,
+                                      (u32) func_8010A730,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      0x4,
+                                      0x0,
+                                      0x0,
+                                      0x0,
+                                      (u32) func_8080000C_chkingjinjobits,
+                                      (u32) func_80107C2C,
+                                      -0x7FFFD9FE,
+                                      (u32) func_8080029C_chkingjinjobits,
+                                      0x0};
+f32 D_80800AC8_chkingjinjobits[6] = {0.0f, 1.8e+03f, 0.0f, 0.0f, 0.0f, 0.0f};
