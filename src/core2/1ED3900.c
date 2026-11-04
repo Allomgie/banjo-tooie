@@ -1,3 +1,5 @@
+// HUD item-counter slot manager: 48 slots with slide-in/out, 2 s auto-hide, update, draw, defrag,
+// free, and setters forwarding the value and style to the scinfobar overlay object.
 #include "core2/1ED3900.h"
 
 // The 48 slots of D_80123880 are accessed through several overlapping views.

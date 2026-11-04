@@ -1,3 +1,5 @@
+// Most likely the breakable door in front of the Mayahem Temple Code Chamber: a hit spawns an
+// explosion, destruction emits debris, plays a sound and sets a game flag.
 #include "common.h"
 
 extern int D_808000E0_chcoderoomdoor[];

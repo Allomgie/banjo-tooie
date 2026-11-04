@@ -1,3 +1,6 @@
+// First-person "Breegull Blaster" player state family: Banjo raises Kazooie as an egg gun and
+// the player walks, aims and fires eggs in first person. Probably covers about 22 states that
+// share one 0x2A8-byte state block, plus the first-person mover and per-character tables.
 #include "bs/firstp.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"
@@ -555,6 +558,7 @@ s32 func_80809D24_bsfirstp();
 s32 func_80809D6C_bsfirstp();
 void func_80809DA0_bsfirstp();
 
+// State family root: shared state block, enter/exit, data-table getters, per-state handlers.
 // Allocates and clears the 0x2A8-byte first-person state block.
 s32 func_80800000_bsfirstp(u8 *player)
 {
@@ -573,6 +577,7 @@ void func_80800040_bsfirstp()
     _bastatemem_entrypoint_1();
 }
 
+// First-person weapon/arms model: anim helpers, bone tweaks, sway, tints, model swap.
 void bsfirstp_entrypoint_0(PlayerState *player, f32 *out_pos, f32 *out_vec)
 {
     f32 *kazfly;
@@ -1151,6 +1156,7 @@ func_800C5148(func_800A4C68(player), current);
 }
 }
 
+// Camera glue: position and rotation from the player, FOV blending, start/stop, death camera.
 void func_8080175C_bsfirstp(u8 *player)
 {
     u8 *fp = *(u8 **) (player + 0x188);
@@ -1252,6 +1258,7 @@ int func_80801A98_bsfirstp(Actor *actor)
     return _ncba1p_entrypoint_10(camera | 0) == 2;
 }
 
+// Aiming input: egg cursor, stick/C-button filters, yaw/pitch limits, auto-centre.
 int func_80801AC4_bsfirstp(s32 player)
 {
     s32 *fp = *(s32 **) ((char *) player + 0x188);
@@ -2114,6 +2121,7 @@ int bsfirstp_entrypoint_9(s32 index)
     return D_8080B484_bsfirstp[index];
 }
 
+// Egg firing and ammo, hit spheres, player-vs-player contact, damage, knockback, freeze egg.
 // Egg spawn callback.
 void bsfirstp_entrypoint_10(s32 egg)
 {
@@ -3008,6 +3016,7 @@ int bsfirstp_entrypoint_24(s32 index)
     return D_8080B550_bsfirstp[index];
 }
 
+// First-person mover (called by baphysics): walk/strafe velocity, braking, walk-cycle anim choice.
 void bsfirstp_entrypoint_25(void *player, f32 speed)
 {
     s32 pad0;

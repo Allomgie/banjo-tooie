@@ -1,3 +1,5 @@
+// Eyeballus Jiggium plants of Cloud Cuckooland: track the player, spit seeds at them, wilt when
+// hit; the last one releases a jiggy. The second actor is the arcing seed projectile.
 #include "common.h"
 
 extern void _subaddielink_entrypoint_0(void *);

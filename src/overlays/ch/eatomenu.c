@@ -1,3 +1,5 @@
+// Probably the Code Chamber cheat menu podium: a button press opens a toggle list of known cheats.
+// Toggling writes each cheat's active state and re-applies inventory capacities.
 #include "common.h"
 
 extern void *D_8080089C_chcheatomenu;

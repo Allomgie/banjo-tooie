@@ -1,3 +1,5 @@
+// Probably the stun ("dizzy ring") effect: two counter-rotating rings of 4 particles around an
+// actor, with one shared, reference-counted loop sound that stops when the last user leaves.
 #include "common.h"
 
 extern s32 D_808004E0_subaddiefx[];
@@ -28,6 +30,7 @@ typedef struct {
     s16 phase_b;
 } FxState;
 
+// Group: per-frame "dizzy ring" effect on a stunned actor, with a shared loop sound.
 // Per-frame stun effect: two counter-rotating rings of 4 particles around the bone (or above the
 // actor); keeps one shared loop sound at the user nearest the camera.
 void subaddiefx_entrypoint_0(u8 *actor, s32 bone, FxState *state)
@@ -104,6 +107,7 @@ void subaddiefx_entrypoint_0(u8 *actor, s32 bone, FxState *state)
     }
 }
 
+// Group: stop of a shared, reference-counted actor effect loop.
 // Stop the effect; the shared loop sound stops when the last user leaves.
 void subaddiefx_entrypoint_1(s32 unk_0, u8 *state)
 {

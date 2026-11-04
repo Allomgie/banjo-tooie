@@ -1,3 +1,5 @@
+// Probably the actor draw path: sets up the model renderer from actor state and calls
+// modelRender_draw. Also holds the eye-blink texture state machine (func_80101A50).
 #include "core2/1EDAEA0.h"
 
 #define ACT(p) ((LocalActor_801015D0 *) (p))

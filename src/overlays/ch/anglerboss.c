@@ -1,3 +1,5 @@
+// Lord Woo Fak Fak, the anglerfish boss of Jolly Roger's Lagoon: a ~29-state machine (intro, swims
+// between 5 waypoints, 6 boils, then the eye phase and defeat), plus the glowing lure-light actor.
 #include "common.h"
 
 extern int D_80802EB4_changlerboss[];
@@ -151,12 +153,14 @@ int func_80802430_changlerboss();
 extern void func_80105834(), func_80107C2C(), func_80108ED0(), func_80800018_changlerboss(),
     func_808002E0_changlerboss(), func_80800FEC_changlerboss();
 
+// Boss actor: state machine, boil/eye hit counting, projectile spawning, dialogs, HUD, death.
 // TU-NOTE: Lord Woo Fak Fak (Jolly Roger's Lagoon boss) and its lure light actor.
 int *changlerboss_entrypoint_0()
 {
     return &D_80802EB4_changlerboss;
 }
 
+// Lure light actor: dynamic light that grows and fades with state, fades out on message 0x2C.
 int *changlerboss_entrypoint_1()
 {
     return &D_80802EFC_changlerboss;

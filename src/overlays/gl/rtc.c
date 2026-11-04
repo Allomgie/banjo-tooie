@@ -1,3 +1,4 @@
+// Block texture decompressor: 4x4 tiles of two endpoints plus 2-bit indices, S3TC-like.
 #include "common.h"
 
 void func_80800170_glrtc();

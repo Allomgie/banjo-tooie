@@ -1,3 +1,6 @@
+// Player drone controller: takes requests to drive the player through scripted states (goto,
+// bitten, bubbled, fall-die, transform, vanish, look, wait), stores their parameters and picks
+// the form-specific state; also answers "is in drone mode X" queries.
 #include "common.h"
 #include "playerstate.h"
 

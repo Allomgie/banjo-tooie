@@ -1,3 +1,5 @@
+// Replay front-end (game mode 2): four replay groups (bosses, minigames, cutscenes, ...) with
+// unlock flags, maps and setup scripts. Bosses unlock their entry; ep7 starts an item by warping.
 #include "common.h"
 
 typedef struct {

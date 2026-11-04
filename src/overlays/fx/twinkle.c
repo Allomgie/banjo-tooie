@@ -1,3 +1,5 @@
+// Twinkle (star glint) preset: spawns one sprite glint at a position (default gold sparkle or a given
+// sprite), two presets. Used by jiggies, honeycombs, glowbos, doubloons, Jinjos and more.
 #include "fx/twinkle.h"
 
 extern s32 D_808000F0_fxtwinkle[];

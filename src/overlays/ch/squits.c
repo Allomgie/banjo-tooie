@@ -1,3 +1,5 @@
+// Possibly "Squits", an ambient chattering critter that shows up only 20% of the time, plays
+// random sound cues and speaks one of 10 lines when the player comes close.
 #include "common.h"
 
 extern int D_808006D8_chsquits[];

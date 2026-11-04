@@ -1,3 +1,4 @@
+// Drone mode "jump": a scripted jump to a target point along a path with a sine height arc.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

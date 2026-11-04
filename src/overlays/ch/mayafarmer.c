@@ -1,3 +1,5 @@
+// Bovina, the cow farmer of Mayahem Temple, and the pest flies bothering her cow: Bovina talks,
+// starts the task and gives the Jiggy once all flies are shot.
 #include "common.h"
 
 extern s32 D_8080124C_chmayafarmer[];
@@ -62,6 +64,7 @@ extern void func_80102B6C(Actor *, f32);
 extern void func_800EF4E4(f32 *, f32, f32, f32, f32, f32);
 void func_80800D60_chmayafarmer();
 
+// Bovina NPC: dialogs, dialog camera, fly spawning, Jiggy.
 // Bovina cutscene/dialog state machine; the case fall-through is intended.
 void func_80800000_chmayafarmer(u8 *actor, s32 arg1, s32 arg2)
 {
@@ -288,6 +291,7 @@ int chmayafarmer_entrypoint_0()
     return &D_80801278_chmayafarmer;
 }
 
+// Pest flies: wander in zone volumes, get shot down by eggs, report back to Bovina.
 s32 func_808008F8_chmayafarmer(Actor *actor, s32 event, s32 data)
 {
     f32 hit_pos[3];

@@ -1,3 +1,4 @@
+// Demo input playback for attract mode: loads a recorded input stream, feeds one record per frame.
 #include "common.h"
 
 typedef struct {

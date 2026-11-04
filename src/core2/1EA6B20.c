@@ -1,3 +1,5 @@
+// Collision queries over the map's cube grid: segment/sphere tests against props in each cube,
+// and swept-sphere / multi-sphere hit tests of actors against nearby actor props.
 #include "common.h"
 
 extern float D_8012B010;

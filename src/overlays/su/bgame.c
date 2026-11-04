@@ -1,3 +1,5 @@
+// Probably the shared "sub-game" harness of minigames and challenges: sets up player camera
+// views and intro dialogs, runs and closes camera scripts, and places the player at a start marker.
 #include "common.h"
 
 #define SG ((SubGameView *) sg)

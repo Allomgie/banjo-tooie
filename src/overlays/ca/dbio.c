@@ -1,3 +1,5 @@
+// Parser for the camera database section of a map's setup file: reads tagged records through
+// the stream reader and stores them via the ca/dbfunc setters.
 #include "common.h"
 
 extern s32 _gsmaker_entrypoint_16(s32, s32);

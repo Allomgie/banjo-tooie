@@ -1,3 +1,6 @@
+// Jolly Roger's Lagoon mermaid statue puzzle: hit six statues with eggs in one of four
+// random orders. Wrong hits reset the count; the sixth correct hit sets FLAG_18D, plays a
+// jingle and opens the door.
 #include "common.h"
 
 extern int D_80800354_chmermaidstatue[];
@@ -7,11 +10,13 @@ extern int _chdoormake_entrypoint_3(s32, f32, s32, s32, s32, s32);
 int func_80800150_chmermaidstatue();
 void func_808001B0_chmermaidstatue();
 
+// Statues: sequence check, randomised order, hint mesh part.
 int chmermaidstatue_entrypoint_0()
 {
     return (int) &D_80800354_chmermaidstatue;
 }
 
+// The door opened by the puzzle (doormake, FLAG_18D).
 int chmermaidstatue_entrypoint_1()
 {
     return &D_8080039C_chmermaidstatue;

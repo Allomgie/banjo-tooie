@@ -1,3 +1,5 @@
+// Sprite asset accessors and func_800AF614, which builds the RDP commands that load one sprite
+// frame as a texture, per pixel format.
 #include "common.h"
 
 #define AF614_FIELD(v, s, n) (((u32) (v) & ((1U << (n)) - 1)) << (s))
@@ -62,6 +64,7 @@ typedef struct {
     u32 w0, w1;
 } AF614Gfx;
 
+// Sprite header and frame directory accessors.
 // Frame count.
 func_800AF5A0(s16 *sprite)
 {
@@ -132,6 +135,7 @@ func_800AF5FC(s32 sprite, s32 frame)
     return (void *) ((char *) sprite + 0x1C + frame * 0xC);
 }
 
+// Builds the texture-load display list for one sprite frame.
 // Emits the RDP commands that load one sprite frame as a texture (TLUT first for CI4/CI8).
 // Frame entry +8: image offset from the data base; +6: palette offset from the image.
 // Width and height come from the sprite header. Masks are ceil(log2(size)) for sizes

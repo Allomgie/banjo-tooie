@@ -1,3 +1,5 @@
+// Probably the camera mode for the Bee transformation: chase camera behind the player with pitch
+// from the player pitch, wide distance limits and collision push-out.
 #include "nc/ba/bee.h"
 
 extern f32 func_800F5AE0(s32);

@@ -1,3 +1,5 @@
+// Ground states of the Bee transformation: idle, walk, jump, fall, landing, bounces, death,
+// rest and drone, with buzz sounds and first-person entry.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

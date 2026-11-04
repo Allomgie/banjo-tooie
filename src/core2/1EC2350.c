@@ -1,3 +1,5 @@
+// Two unrelated parts: a looping curve-driven sprite frame animator (used for pause menu icons)
+// and an audio instrument/wave cache loaded from ROM on demand with LRU eviction.
 #include "core2/1EC2350.h"
 
 extern f32 func_800D8FF8(void);
@@ -57,6 +59,7 @@ int func_800E8DE4(f32 param_0[3], f32 param_1);
 void func_800E8E3C();
 void func_800E95AC();
 
+// Looping curve-driven sprite frame animators: create, set keys and speed, tick, get frame index.
 void func_800E8A60(void)
 {
 }
@@ -197,6 +200,7 @@ void func_800E8E3C(anim) s32 anim;
     *(f32 *) (anim + 0xc) = func_800F3780(*(float *) (anim + 4), anim + 0x10, *(s16 *) (anim + 2));
 }
 
+// Blocking PI DMA from ROM into RAM on one of two channels, with cache writeback and invalidate.
 // Blocking PI DMA from ROM into RAM; pool selects the PI handle.
 void func_800E8E70(void *dst, s32 rom_addr, void *size, s32 pool)
 {
@@ -219,6 +223,7 @@ osRecvMesg(func_80012EE8(), 0, 1);
 osInvalDCache(dst, size);
 }
 
+// Instrument table load, on-demand wave-record cache in two pools with LRU eviction.
 func_800E8F68(addr)
 {
     s32 *words = (s32 *) addr;

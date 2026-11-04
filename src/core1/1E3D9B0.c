@@ -1,3 +1,4 @@
+// Compact sequence player API: set sequence, set volume and play, posted as queue events.
 #include "common.h"
 
 typedef struct {

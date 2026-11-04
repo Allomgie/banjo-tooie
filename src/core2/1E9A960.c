@@ -1,3 +1,5 @@
+// SFX source system: a pool of positional sound sources with volume envelopes, pitch modes,
+// distance falloff and panning, plus sfx id helpers and a small sound-script interpreter.
 #include "core2/1E9A960.h"
 
 #define MIN_C(a, b) ((a) < (b) ? (a) : (b))

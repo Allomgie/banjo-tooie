@@ -1,3 +1,5 @@
+// Most likely the door from the Targitzan temple lobby to the boss: shut until 20 jade statues
+// are broken and only opens for Banjo-Kazooie, with a dialog and camera while Targitzan lives.
 #include "common.h"
 
 extern void *D_808003A0_chtemplelobbydoor;

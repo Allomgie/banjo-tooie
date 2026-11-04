@@ -1,3 +1,5 @@
+// Most likely the per-player-slot health table used in the alternative health mode: current/max
+// pairs with clamped add, get and set. Damage triggers the hurt jingle.
 #include "common.h"
 
 extern s16 D_80135530[];

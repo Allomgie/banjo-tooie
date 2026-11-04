@@ -1,3 +1,5 @@
+// Clockwork Kazooie egg: keeps a short position history in flight; on landing it becomes a
+// Clockwork Kazooie player, on message or timeout it explodes.
 #include "common.h"
 
 extern void *func_80100094(Actor *, u32);

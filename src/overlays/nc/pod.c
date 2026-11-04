@@ -1,3 +1,5 @@
+// The scripted "pod" camera (controller mode 8): owns one sub-camera (dialog, ucam or fixed),
+// applies its view and FOV, handles letterbox, player freeze and skip hooks; backend of ca/pod.
 #include "common.h"
 
 extern void _glcutDll_entrypoint_6(int a, int b);

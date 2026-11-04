@@ -1,3 +1,5 @@
+// Probably the game-side wrapper around the core1 sound player: init, play with
+// volume/pitch/pan, parameter setters, stop-if-playing and sfx table queries.
 #include "common.h"
 
 extern u8 D_8012C800[];

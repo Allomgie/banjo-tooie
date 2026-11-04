@@ -1,3 +1,5 @@
+// Possibly a light beam effect of the Jiggywiggy temple: draw-only actor, empty update,
+// and draw reads the camera rotation first, perhaps to billboard the beam.
 #include "common.h"
 
 extern u32 D_80800070_chjiggybeam[];

@@ -1,3 +1,4 @@
+// Compact sequence player API: channel controller events (CC 0x5B, 0x5C) and a two-float event.
 #include "common.h"
 
 typedef struct {

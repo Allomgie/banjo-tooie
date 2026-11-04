@@ -1,3 +1,5 @@
+// Particle-effect driver for the story cutscenes: maps effect ids to emitter descriptors and
+// spawns the particles at a cutscene actor or one of its bones.
 #include "common.h"
 
 extern Actor *func_80106790(Unk80132ED0 *);

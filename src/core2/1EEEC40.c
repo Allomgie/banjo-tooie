@@ -1,3 +1,5 @@
+// Camera distance component of the dynamic camera: preset near/far distance and height, derived
+// min/max radial distances, and clamping of the current distance.
 #include "core2/1EEEC40.h"
 
 typedef struct {

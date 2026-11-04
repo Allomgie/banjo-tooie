@@ -1,3 +1,5 @@
+// Laundry projectile of the Washing Machine (actor 0x162): spawned by ba/washer.c, flies a
+// ballistic arc toward a target, then sparkles and deletes itself on landing.
 #include "common.h"
 
 extern int D_80800400_chlaundry[];

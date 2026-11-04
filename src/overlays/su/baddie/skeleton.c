@@ -1,3 +1,5 @@
+// Bone queries for actors: world position of a bone (animated pose, else bind pose) scaled and
+// rotated by the actor transform, and bone matrix/position from the actor's skeleton cache.
 #include "common.h"
 
 extern void *func_801040A8(Actor *);

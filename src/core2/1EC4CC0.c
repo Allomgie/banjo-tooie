@@ -1,3 +1,5 @@
+// Probably the prop/marker layer on top of the cube prop lists: a pool of 200 markers, per-layer
+// distance-sorted draw lists and a nearest-prop search.
 #include "common.h"
 
 typedef struct {
@@ -171,6 +173,7 @@ int func_800EC7D4();
 s32 func_800EC800();
 s32 func_800EC854();
 
+// Per-frame prop draw ordering: distance-sorted draw lists for 7 layers, and their drawing.
 // Inserts the prop into the distance-sorted draw list of the given layer.
 void func_800EB3D0(MarkerEB *prop, s32 layer, s16 *ref_pos)
 {
@@ -309,6 +312,7 @@ int func_800EB854()
     return *(s16 *) &D_80132E9C;
 }
 
+// Nearest-prop query over the cube prop lists (state in D_80132EA0).
 // Sets the filter callback (and its argument) of the nearest-prop search.
 void func_800EB860(s32 callback, s32 callback_data)
 {
@@ -395,6 +399,7 @@ int func_800EBB30(s32 *cube_out, s32 *entry_out)
     return ((s32 *) &D_80132EA0)[7];
 }
 
+// Marker pool and API: alloc/free, create, move between cubes, accessors and draw callback.
 int func_800EBB50()
 {
     return (int) D_80123540;

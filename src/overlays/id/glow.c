@@ -1,3 +1,5 @@
+// Glow map-mesh effect: pulses the mesh's vertex brightness between 0.3 and 1.0 at a rate
+// from the mesh id.
 #include "common.h"
 
 extern f32 func_800D8FF8(void);

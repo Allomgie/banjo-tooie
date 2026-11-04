@@ -1,3 +1,5 @@
+// Small 2D (vec2f) helpers: cross product, unit vector from angle, length, octagonal distance
+// approximation, subtraction and perpendicular.
 #include "common.h"
 
 extern f32 func_800137F4(f32);

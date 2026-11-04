@@ -1,3 +1,5 @@
+// Chris P. Bacon's fish-shooting minigame in Jolly Roger's Lagoon: he bobs out of the water,
+// talks, and spawns fish targets under a timer; the jiggy is awarded on success.
 #include "common.h"
 
 extern int D_808018C0_chfishshootgame[];

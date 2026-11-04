@@ -1,3 +1,5 @@
+// Probably the Stony transformation (Mayahem Temple kickball): idle, walk, dash, jump, fall,
+// ball kick, death, drone, spin, bounce, rest and a dizzy spin-out state.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

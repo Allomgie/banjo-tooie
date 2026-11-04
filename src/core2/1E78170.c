@@ -1,3 +1,5 @@
+// Probably the global (not per-player) player session state in bss 0x80127040-0x80127080:
+// misc floats/flags with simple accessors, plus a stack of (map, entrance) return points.
 #include "core2/1E78170.h"
 
 // TU-NOTE: bss of this unit, in address order (0x80127040-0x80127080). The (map, entrance)
@@ -28,6 +30,7 @@ void func_8009EC60();
 
 extern s32 D_80127080;
 
+// Global player session variables with init and level reset.
 // Resets the per-session floats and flags.
 void func_8009E880(void)
 {
@@ -233,6 +236,7 @@ void func_8009EB18(int unk_0)
     D_80127075 = (value = unk_0) ^ 0;
 }
 
+// Stack of (map, entrance) return points for leaving transformations and sub-areas.
 // Pushes a (map, entrance) return point.
 void func_8009EB24(map_id, entrance_id) s16 map_id;
 s16 entrance_id;

@@ -1,3 +1,5 @@
+// Probably getters for static particle-preset lists (generic debris/spark emitter configs)
+// shared by several actors: stone pillar, jiggy, balloon bomb, Hag 1 shell, TNT, volcano bits.
 #include "common.h"
 
 extern int D_80800030_fxgenlist[];

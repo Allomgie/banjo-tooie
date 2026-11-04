@@ -1,3 +1,5 @@
+// Float 4x4 matrix helpers (transform, rotate, scale, translate, multiply, euler angles),
+// a guLookAtReflectF-style LookAt builder, and small int / u8 RGBA colour vector helpers.
 #include <ultra64.h>
 #include "core1/mlmtx.h"
 
@@ -25,6 +27,7 @@ extern f32 func_80013AAC(f32);
 extern f32 func_800138D0(f32);
 extern f32 func_80013A7C(f32, f32);
 
+// Matrix ops, euler extraction, and int / u8 colour vector copy, lerp and clamp.
 // Transforms a point by a matrix (row-vector convention, with translation).
 void func_800F23D0(f32 *mtx, f32 *out, s32 in)
 {
@@ -172,6 +175,7 @@ void func_800F293C(R_F293C *dst, R_F293C *src)
     }
 }
 
+// Look-at view matrix plus the reflection-mapping LookAt light struct.
 // LookAt matrix from eye/at/up, like libultra's guLookAtReflectF, plus the two LookAt
 // light directions. `up` is overwritten with the matrix y axis.
 void func_800F2984(f32 mtx[4][4], LightF2984 *lights, f32 *eye, f32 *at, f32 *up)

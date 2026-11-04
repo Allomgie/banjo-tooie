@@ -1,3 +1,5 @@
+// Probably Kazooie-alone airborne states: normal jump (with spring-pad variant), fall, an
+// uncontrolled drop and a pitch-spinning somersault launch.
 #include "common.h"
 #include "overlays/bs/kaz/jump.h"
 

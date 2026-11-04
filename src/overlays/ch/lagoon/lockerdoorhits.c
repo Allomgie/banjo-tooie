@@ -1,3 +1,5 @@
+// Davy Jones' Locker puzzle in JRL: on spawn it picks a random correct locker and nameplates;
+// hitting the right door sets a flag, hides the door and plays particles and a sound.
 #include "common.h"
 
 extern s32 func_800BABB8(s32, f32 *, f32 *, f32, s32 *);

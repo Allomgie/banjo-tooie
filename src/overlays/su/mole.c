@@ -1,3 +1,5 @@
+// Shared Jamjars (move-teaching mole) logic: talks at his molehill, checks who may learn the
+// move and whether the player has enough notes, teaches it, runs tutorials and the dialog camera.
 #include "su/mole.h"
 
 #define MOLE_DATA(arg0) ((MoleActorData *) (arg0->actorData))

@@ -1,8 +1,8 @@
-#include "common.h"
-
-// Per-actor floor info: a freelist of 0x2C-byte records (handle in the s16 at actor+0x8E)
+// Probably per-actor floor info: a freelist of 0x2C-byte records (handle in the s16 at actor+0x8E)
 // with the floor triangle, vertex colours, packed normal and collision flags. Used to
 // tint actors by the floor colour and to play footsteps.
+#include "common.h"
+
 extern s32 D_80136E80;
 extern s32 D_80136EB0;
 extern u8 D_80136E88[];
@@ -83,6 +83,7 @@ int func_80104E24();
 int func_80105390(s32 param_0[3], s32 param_1[3]);
 int func_801053D4();
 
+// Floor record pool, floor raycast, ground vertex-colour tint and floor normal/height getters.
 void func_80104350()
 {
     D_80136E80 = freelist_new(0x2C, 8);
@@ -515,6 +516,7 @@ int func_801051C8(s32 param_0, s32 param_1)
     return 1;
 }
 
+// Anim-frame-triggered footstep sfx chosen by floor material.
 // Plays a footstep sfx when the animation is at a frame of the -1.0 terminated list
 // (default D_80124420). Only within 1500 units of the player.
 s32 func_80105230(Actor105230 *actor, f32 *frames)

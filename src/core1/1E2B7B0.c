@@ -1,3 +1,4 @@
+// Probably a guLookAtReflect equivalent: builds a reflection look-at from eye/at/up vectors.
 #include "common.h"
 #include "core2/1EC8070.h"
 

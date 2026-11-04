@@ -1,3 +1,5 @@
+// Most likely Kazooie's feathery flap: a wind-up, one strong flap, then a hovering flap loop
+// with reduced fall speed while A is held; Z queues an air attack.
 #include "common.h"
 #include "overlays/bs/kaz/spring.h"
 

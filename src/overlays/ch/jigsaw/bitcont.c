@@ -1,3 +1,6 @@
+// Probably a Jiggy assembled from pieces: the container reads a per-puzzle table, finds piece
+// positions from markers and spawns piece actors that bounce, spin and are collected on contact.
+// When all pieces are in, the container hands out the jiggy.
 #include "common.h"
 
 typedef struct {

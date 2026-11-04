@@ -1,3 +1,4 @@
+// Reader for a model's vertex-id groups: find a group, count its runs and indices, test membership.
 #include "common.h"
 
 // Vertex-id group section: s16 group count, then records {id, count, indices[count]}.

@@ -1,3 +1,5 @@
+// Kazooie-alone water states: entry, surface paddling with bubbles and sounds, floating idle, a
+// one-shot surface action, rest and drone wrappers, and the shared water enter/exit setup.
 #include "common.h"
 #include "overlays/bs/kaz/paddle.h"
 

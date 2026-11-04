@@ -1,3 +1,5 @@
+// Most likely the floating onion platforms of Cloud Cuckooland. They move along a spline, carry and
+// turn the player, bob when landed on, change VI pacing while ridden and draw a z-probed shadow.
 #include "common.h"
 
 // Actor data slots: 3 move timer, 4 ground height, 5 rider, 6 bob timer, 7 spline index.

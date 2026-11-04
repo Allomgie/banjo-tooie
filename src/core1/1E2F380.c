@@ -1,3 +1,6 @@
+// Two parts: music helpers for the six sequence players (per-player channel mask with optional
+// volume fade, and a per-frame ramp of a sequence parameter, probably tempo or volume), and the
+// Rumble Pak manager (motor thread, intensity envelopes, start/stop API for overlays/ba/motor.c).
 #include "core2/1E2F380.h"
 #include "common.h"
 #define MIN(a, b) ((b) < (a) ? (b) : (a))
@@ -44,13 +47,14 @@ extern Union8007B2D0 D_8007B2D0[];
 typedef struct { s32 local_0; u8 pad_4[0x80]; } Struct80018854;
 extern void func_800C9EAC(f32, void *, s32, s32, s32, s32);
 
-/* Forward declarations for this translation unit. */
+// Forward declarations for this translation unit.
 void func_800187B4(s32 param_0, f32 param_1, f32 param_2, f32 param_3);
 
 #pragma GLOBAL_ASM("src/core1/1E2F380_head.inc")
 
-/* TU-NOTE: the .rodata of this file starts with these constants (formerly asm/data/core1/1E2F380.rodata.s);
- * each is a 16-byte object whose zero words belong to it, as the alignment in the ROM shows. */
+// TU-NOTE: the .rodata of this file starts with these constants (formerly
+// asm/data/core1/1E2F380.rodata.s); each is a 16-byte object whose zero words belong to it,
+// as the alignment in the ROM shows.
 const struct { f32 x; f32 pad[3]; } D_80041720 = { 1e+06f };
 const struct { f32 x; f32 pad[3]; } D_80041730 = { 0.1f };
 

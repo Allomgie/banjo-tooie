@@ -1,3 +1,5 @@
+// EEPROM save layout: two 0x80-byte settings copies, then four 0x1C0-byte game slots.
+// Reads blocks with checksum check, writes them (EEPROM type 2 only) and erases them.
 #include "common.h"
 
 extern s32 _glglobaldata_entrypoint_1(s32);

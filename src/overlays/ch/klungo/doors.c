@@ -1,3 +1,5 @@
+// Arena doors of the three Klungo fights (actors 0x41F, 0x420): locked during the fight, hum, spark
+// when touched, and open on messages 7/8. A 3-entry table keyed by map id sets model and motion.
 #include "common.h"
 
 extern int D_808004C0_chklungodoors[];

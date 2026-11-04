@@ -1,3 +1,7 @@
+// Probably the player's stack of external hold/lock requests (up to 8, PlayerState+0xF0),
+// each with a type and optional target position; each frame the effective type is compared
+// with the active one and an interrupt is sent. Popping the last one grants 1.2 s invulnerability.
+
 #include "core2/1E76500.h"
 
 s32 func_8009CC10()

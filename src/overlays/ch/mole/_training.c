@@ -1,3 +1,5 @@
+// Most likely Bottles' move training in Spiral Mountain: opens a move-category menu, checks the
+// chosen move is known and runs the practice through the mole entrypoints.
 #include "common.h"
 
 typedef struct {

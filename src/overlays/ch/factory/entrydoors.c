@@ -1,3 +1,6 @@
+// Most likely the Grunty Industries entrance doors on Isle o' Hags: two mirrored door halves
+// (variant 0x33 swings -75 degrees, the other +75), plus a small lock actor that vanishes once
+// the world is open and plays particles and a sound on message 7.
 #include "ch/factory/entrydoors.h"
 
 extern void _chdoormake_entrypoint_0(Actor *, f32, s32, s32);

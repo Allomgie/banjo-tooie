@@ -1,3 +1,5 @@
+// Shared point-light fade-out service: entrypoint_1(light, duration, flags) spawns a helper actor
+// that interpolates the light's colour/radius to zero (optional flicker) while in view, then frees both.
 #include "common.h"
 
 extern int D_808003A0_chlightfader[];

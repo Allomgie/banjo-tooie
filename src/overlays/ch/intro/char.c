@@ -1,3 +1,5 @@
+// Data-driven character actor for the story cutscenes: a per-subtype table sets model, animation,
+// blink and expression; plays an/seq sequences with sound cues, shadows and texture scrolling.
 #include "common.h"
 
 typedef struct {

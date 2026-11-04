@@ -1,3 +1,6 @@
+// Probably the target of Mumbo's Enlarge spell: small swamp platforms that grow from scale
+// 2 to 7 with a wobble. At the end it spawns the spent Glowbo prop and sets flags 0x160
+// and 0x9DF.
 #include "common.h"
 
 typedef struct {

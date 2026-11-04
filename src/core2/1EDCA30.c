@@ -1,3 +1,5 @@
+// Actor model and resource lifecycle: changes model/animation ids, caches model bounds, and
+// acquires and releases per-actor resources (vertices, collision, skeleton, sfx, anim ctrl).
 #include "common.h"
 
 typedef struct {

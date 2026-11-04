@@ -1,3 +1,6 @@
+// The star platforms of the Witchyworld Star Spinner: when powered they rise and spin while touched
+// and sink back otherwise; the egg target slows them down. Each star gets a controller light.
+
 #include "common.h"
 
 extern int D_808006B0_chstarspinnerstar[];

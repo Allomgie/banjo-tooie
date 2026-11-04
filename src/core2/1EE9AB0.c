@@ -1,3 +1,5 @@
+// Core of the player-following dynamic camera: allocates it with 25 components, runs the mode
+// table (enter/update/exit) and per-frame update, and owns the damped position spring.
 #include "core2/1EE9AB0.h"
 #include "types.h"
 
@@ -104,6 +106,7 @@ const struct {
     f32 pad[3];
 } D_80126540 = {0.2f};
 
+// Dynamic camera object: allocation, modes, per-frame update, accessors, spring, 1p hooks.
 // Computes the size of every camera component and the total block size.
 void func_801101C0(void)
 {
@@ -782,6 +785,7 @@ void func_80111590(u8 *dyn_cam, f32 param_1, f32 param_2, f32 param_3, f32 param
     (*(f32 **) (dyn_cam + 0x34))[3] = param_4;
 }
 
+// Pure helpers: segment/plane crossing fraction and a frame-time 1D damped spring.
 // Segment/plane test: plane normal and distance, segment start and end. On a crossing stores
 // the crossing fraction in out_t and returns 1.
 s32 func_801115C8(f32 *normal, f32 plane_dist, f32 *start, f32 *end, f32 *out_t)

@@ -1,3 +1,5 @@
+// Two hidden mechanisms: a key stream derived from the CIC chip that decrypts type-10 assets,
+// and entry points that copy anti-tamper result bits into game flags.
 #include "common.h"
 
 extern OSMesgQueue *func_80016928(void);
@@ -7,6 +9,7 @@ extern void cic_read_response(OSMesgQueue *);
 extern void *heap_alloc(s32);
 extern u8 D_80079D70[];
 
+// CIC challenge/response key stream and XOR decryption of type-10 assets.
 // Sends a 14-byte challenge built from the 16-bit seed to the CIC and reads the
 // 16-byte response into response.
 void func_80800000_gldbDll(u8 *response, s32 seed)
@@ -71,6 +74,7 @@ void *gldbDll_entrypoint_0(s32 asset_id, s32 *out_size)
     return (void *) size;
 }
 
+// Periodically write anti-tamper result bits into game flags.
 // Passes each byte of the eeprom and reflight tamper values, plus 0x9C4, to func_800DA544.
 int gldbDll_entrypoint_1()
 {

@@ -1,3 +1,6 @@
+// Hover mover (baphysics): springs the player toward a hover anchor with clamped per-axis
+// acceleration and integrates position; also setters for the anchor used by the taxi state.
+
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

@@ -1,3 +1,5 @@
+// Probably the Grunty Industries oil-drum enemies: they wake near the player, roll toward them,
+// attack, get knocked, break apart (message 0x40) and respawn. Possessable in game mode 1.
 #include "common.h"
 
 extern s32 _subaddiefind_entrypoint_4(s32, Actor **, s32);

@@ -1,3 +1,5 @@
+// Probably the three alien kids of Hailfire Peaks plus a helper actor: each has a rescue
+// sequence with dialog, camera and beam-up, then sets its saved flag and notifies Dad and the UFO.
 #include "ch/alienkids.h"
 
 extern int D_808020DC_chalienkids[];

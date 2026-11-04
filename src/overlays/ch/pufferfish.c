@@ -1,3 +1,5 @@
+// Probably the underwater pufferfish baddie: swims around its home, blows bubbles and inflates
+// when the player is near. A hit while inflated (or message 0x40) makes it burst into particles.
 #include "common.h"
 
 // TU-NOTE: The .data of this overlay is defined here in C (values taken from the ROM). Its tables

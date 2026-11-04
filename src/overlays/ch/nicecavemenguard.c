@@ -1,3 +1,5 @@
+// Probably the Oogle Boogle guard at their cave entrance in Terrydactyland: blocks the way and
+// talks, then walks off along a path and sets flag 0x186 so he is gone for good.
 #include "ch/nicecavemenguard.h"
 
 extern int D_80800920_chnicecavemenguard[];

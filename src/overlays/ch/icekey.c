@@ -1,3 +1,4 @@
+// Probably the Ice Key collectible (a Stop 'n' Swop item).
 #include "common.h"
 
 extern int D_808000A0_chicekey[];

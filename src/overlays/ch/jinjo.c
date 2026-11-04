@@ -1,3 +1,5 @@
+// Jinjo collectible (45 Jinjos in 9 colour families): idles and waves, dances when collected
+// and triggers the family cutscene once its family is complete. Also has map/colour lookups.
 #include "common.h"
 
 extern void func_800FFAB0(Actor *);

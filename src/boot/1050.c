@@ -1,3 +1,4 @@
+// Boot entry: loads and inflates core1, records its CRCs, then jumps to the core1 entry point.
 #include "buffers.h"
 
 void func_80012030();

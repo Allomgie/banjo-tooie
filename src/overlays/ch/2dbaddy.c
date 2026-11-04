@@ -1,3 +1,5 @@
+// Possibly a flat "2D" baddie variant: a route-following enemy on the coaster framework that
+// idles, notices and chases the player, reacts to hits and plays random attack sounds.
 #include "common.h"
 
 #define DATA ((f32 *) this->actorData)

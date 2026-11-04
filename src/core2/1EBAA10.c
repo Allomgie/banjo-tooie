@@ -1,3 +1,5 @@
+// Camera shake: a pool of 10 shake slots (decaying oscillation or curve-driven, optional world
+// position with falloff). func_800E1804 ticks them, func_800E1A58 applies the sum to the camera.
 #include "common.h"
 #include "types.h"
 

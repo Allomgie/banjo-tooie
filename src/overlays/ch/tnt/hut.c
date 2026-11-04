@@ -1,3 +1,5 @@
+// Hut in Glitter Gulch Mine blown up by a linked TNT detonator: explodes with debris and a big
+// sound, and sets flag 0x84.
 #include "common.h"
 
 extern int D_80800220_chtnthut[];

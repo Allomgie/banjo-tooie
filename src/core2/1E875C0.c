@@ -1,3 +1,5 @@
+// Bone matrix list for skinned models: per-bone 4x4 matrices built from the skeleton and the
+// animation pose, with pointer and handle variants, bone lookup, GPU conversion and defrag.
 #include "common.h"
 
 // TU-NOTE: bone matrix list layout: {s32 count, s32 capacity, bone-transform handle at +8/+0xC, base matrix at +0x10, then count 0x40-byte matrices at +0x50}.
@@ -64,6 +66,7 @@ extern void func_80019BB8(f32[3][3]);
 extern void mlMtxScale_xyz(f32, f32, f32);
 struct UnkStruct *func_800AE080(s16);
 
+// Bone matrix list: alloc/free (pointer and handle), resize, compute from pose, lookup, copy-out.
 // Resizes the list to the skeleton's bone count.
 void func_800ADCD0(local_type **list_ptr, s16 *skeleton)
 {
@@ -393,6 +396,7 @@ void func_800AE598(s32 *list, s32 *dst_cursor)
     *dst_cursor += (*list + 1) << 6;
 }
 
+// Heap defrag of the list and its bone transform list.
 void func_800AE5F0(void *list)
 {
     void *bones;

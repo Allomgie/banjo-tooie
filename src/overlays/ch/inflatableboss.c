@@ -1,3 +1,6 @@
+// Mr. Patch, the inflatable boss of Witchyworld's Big Top. Init picks the intro phase; 12 patches
+// burst on hits (message 0x40), each shrinking and speeding him up. He wanders, throws balls and
+// summons helpers, and deflates when all are gone (jiggy 0x17), with retry flags and replay exit.
 #include "common.h"
 
 extern void *D_80802E50_chinflatableboss;

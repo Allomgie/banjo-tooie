@@ -1,3 +1,5 @@
+// Probably the Grunty Industries "nuts and bolts" enemies (actors 0x43E-0x440): they drop in, patrol
+// or chase, attack, can be steered in multiplayer, can be fired out (0x8E), die and respawn.
 #include "common.h"
 
 extern int D_80800E28_chnutsnbolts[];

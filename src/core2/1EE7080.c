@@ -1,3 +1,5 @@
+// Pooled positional sound-effect channels: per-category slots, reuse of the oldest slot,
+// per-frame cleanup of finished sources.
 #include "common.h"
 
 typedef struct {

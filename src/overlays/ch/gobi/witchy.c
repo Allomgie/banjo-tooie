@@ -1,3 +1,5 @@
+// Gobi in Witchyworld: once freed he talks to the player (dialog 0x107B), then walks off
+// along a path and triggers the cutscene to Hailfire Peaks. Before that he only idles.
 #include "common.h"
 
 extern int D_80800410_chgobiwitchy[];

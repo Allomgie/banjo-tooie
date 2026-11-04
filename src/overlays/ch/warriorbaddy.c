@@ -1,3 +1,5 @@
+// Most likely the "warrior" baddie: data plus a tiny init that hands the actor to the shared
+// su/coaster walking AI with scale 1.5 and a speed factor of 0.4.
 #include "common.h"
 
 // TU-NOTE: the overlay's .data is defined in C below, values taken from the ROM. The tables point to

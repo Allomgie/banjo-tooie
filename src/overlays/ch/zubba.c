@@ -1,3 +1,5 @@
+// Probably the free-flying Zubba enemy of Cloud Cuckooland: a thin wrapper around the shared
+// su/coaster/fly AI with a 0.65 collision scale.
 #include "common.h"
 
 extern int D_80800178_chzubba[];

@@ -1,3 +1,5 @@
+// Probably an animation-synchronised event sequence: a vector of timed calls that fire once the
+// owner's animation reaches their time (or every frame for time -1).
 #include "seq.h"
 
 void anseq_entrypoint_1(s16 *pSeqIndx, s32 arg1);

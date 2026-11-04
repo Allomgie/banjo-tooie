@@ -1,3 +1,5 @@
+// Terrydactyland door for the small T-Rex: opens when he is within 500 units, a roar turns the
+// open message into a timed open, and it closes when he is away or behind it.
 #include "common.h"
 
 extern void func_800F5A00(s32, f32 *);

@@ -1,3 +1,5 @@
+// RSP/RDP task scheduler thread: queues audio and graphics tasks, picks the microcode, handles
+// RCP events with watchdog timeouts, and blanks the display on PRE-NMI. Also holds the VI modes.
 #include "threads.h"
 #include "types.h"
 #include "buffers.h"
@@ -99,6 +101,7 @@ extern __OSThreadOddFpStorage D_80078E48;
 extern s32 D_80078F58;
 extern s32 D_80078F5C;
 
+// Scheduler thread, task queues, microcode selection, event dispatch, watchdog, PRE-NMI handling.
 // Sends msg to the scheduler thread. Msg 3 also waits for the frame handshake (D_80078438),
 // guarded by a watchdog timeout.
 void func_80013D10(OSMesg msg)
@@ -533,6 +536,7 @@ void func_80014DC4(void)
     D_80078F58 = 1;
 }
 
+// Appends gDPPipeSync and gSPEndDisplayList.
 // Ends a display list.
 void func_80014DD4(Gfx **gfx)
 {

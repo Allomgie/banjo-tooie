@@ -1,3 +1,6 @@
+// Player states of the small (baby) T-Rex in Terrydactyland: idle, walk, run, jump, fall, landing,
+// roar (needs the Roar ability; short or long by B hold), death, bounce, rest, drone wrappers.
+// Also the roar-range test that the core attack classifier uses.
 #include "bs/trexsmall.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

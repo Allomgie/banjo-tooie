@@ -1,3 +1,6 @@
+// Drone mode "bubbled": the player is trapped in a bubble held by an actor. Most likely the
+// bubbled anim speeds up as the player struggles, and the actor is notified when it ends.
+// The second mode (entrypoints 4-7) is a passive bubble float with a double-speed anim.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

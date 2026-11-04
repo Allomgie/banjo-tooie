@@ -1,3 +1,6 @@
+// Probably the map ('section') property table: a record per map with flags and level id, lookups
+// for them, and the per-map enter/leave hooks.
+
 #include "common.h"
 
 extern u8 D_8012762C;
@@ -13,6 +16,7 @@ extern SectionFlagsRecord D_80800212_gcsectionDll[];
 int gcsectionDll_entrypoint_2();
 s32 gcsectionDll_entrypoint_3();
 
+// Map enter/leave hooks: per-player gfx buffers, party and HUD state, music, session restore.
 // Map load hook: sizes the per-player buffers and re-inits state.
 void gcsectionDll_entrypoint_0(s32 map_id, s32 param_1)
 {
@@ -46,6 +50,7 @@ void gcsectionDll_entrypoint_1(s32 param_0)
     func_800C0A2C();
 }
 
+// Per-map record lookup, flag test, map to level id, and the 'map known' test.
 // Returns the record for a map id (NULL if not found).
 SectionRecord *func_808000F0_gcsectionDll(s32 map_id, s32 param_1)
 {

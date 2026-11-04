@@ -1,3 +1,5 @@
+// This seems to be Mumbo Jumbo in his skull: asks for a Glowbo once per world, then offers the
+// character swap and stands in for Banjo while the player is Mumbo.
 #include "common.h"
 
 extern void func_8010D5DC(void);

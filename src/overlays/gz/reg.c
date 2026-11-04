@@ -1,3 +1,4 @@
+// gz crash screen register pages: CPU registers and decoded Cause/SR/FPCSR, RDP/RSP status, heap.
 #include "common.h"
 #define R(i) ((u32) ctx->gpr[i])
 #define F(i) ((s32) ctx->fpr[1 + (i) * 2])

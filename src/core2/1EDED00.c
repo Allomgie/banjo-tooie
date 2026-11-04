@@ -1,3 +1,5 @@
+// Probably two per-actor components: a spline path follower and model vertex-group ("glid")
+// effects that are created per vertex-group id and applied to the actor's vertex buffers.
 #include "common.h"
 #include <vector.h>
 
@@ -120,6 +122,7 @@ int func_801063C0();
 void func_801063EC();
 extern s32 D_80136ED8;
 
+// Per-actor spline path-follow component.
 int func_80105410()
 {
     D_80136EC0 = freelist_new(0x48, 8);
@@ -389,6 +392,7 @@ if (rec != 0) {
 
 }
 
+// Per-actor model vertex-group (glid) effect instances with a type callback table.
 void func_80105C20()
 {
     D_80136ED0 = freelist_new(8, 0);

@@ -1,3 +1,5 @@
+// Probably the intro/story animation cue table: for a cutscene character and animation it registers
+// timed events (lights, particles, sounds, layer switches, camera shakes) on the anim sequence.
 #include "common.h"
 
 extern Actor *func_80106790(Unk80132ED0 *);

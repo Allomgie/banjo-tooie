@@ -1,3 +1,5 @@
+// Player collision component: per-frame sweep against world geometry by mode, current medium
+// (air/ground/water), water-surface clamping, stood-on notification, and floor/water getters.
 // TU-NOTE: 0x1E6F080..0x1E71260 is two objects. This one ends with func_8009679C; the second
 // (1E700B0) starts at func_800967C0. The .rodata gap after the func_80095C94 jump table marks the
 // boundary, since IDO aligns each object's .rodata to 16 bytes.

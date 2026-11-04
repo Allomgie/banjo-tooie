@@ -1,3 +1,5 @@
+// Probably the ambient fish school of Jolly Roger's Lagoon: one actor owns a buffer of fish that
+// steer toward random targets and flee the player, while the actor wanders inside its zone.
 #include "common.h"
 
 extern void func_80102B6C(Actor *, f32);

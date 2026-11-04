@@ -1,3 +1,4 @@
+// Binary stream reader/writer for level setup files: tag matching and typed value/array reads.
 #include "common.h"
 
 // Level setup stream. Modes: 2 = asset, 3 = memory, 4 = growable write buffer.

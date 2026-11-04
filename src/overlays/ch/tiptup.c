@@ -1,3 +1,5 @@
+// Most likely Tiptup and his family in Jolly Roger's Lagoon: Tiptup himself (dialog camera,
+// singing, swimming with bubbles), the egg Kazooie hatches and the baby turtle that emerges.
 #include "common.h"
 
 extern int D_80801448_chtiptup[];

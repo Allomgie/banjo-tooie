@@ -1,3 +1,5 @@
+// Probably a decorative dummy Jiggy: spins, emits random twinkles when visible and deletes itself
+// on touch if collectable. It never touches the jiggy registry or flags, so it seems to be a prop.
 #include "common.h"
 
 extern void *D_80800190_chdummyjigsaw;

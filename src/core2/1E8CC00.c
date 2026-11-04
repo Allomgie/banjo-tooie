@@ -1,3 +1,5 @@
+// This seems to be a per-object light set: a distance-sorted heap block of light entries that can
+// gather nearby scene lights with falloff, add the global light, be copied and defragmented.
 #include "common.h"
 void func_800B38C8();
 
@@ -51,6 +53,7 @@ typedef struct {
 extern void *defrag(void *);
 int func_800B3784();
 
+// Light set alloc/free, sorted insert, gather nearby lights, global light, copy, count, ambient.
 // Allocates a light set with room for capacity entries; ambient starts as the global one.
 struct Actor_800B3310 *func_800B3310(s32 capacity)
 {
@@ -225,6 +228,7 @@ void func_800B38C8()
     func_800C87B8();
 }
 
+// Defrag with pointer re-basing.
 // Defragments the set's heap block and fixes the pointers if it moved.
 local_type *func_800B38E8(local_type *set)
 {

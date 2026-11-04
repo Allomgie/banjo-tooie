@@ -1,3 +1,5 @@
+// Probably Chuffy's timetable board: tells where Chuffy is and, if the station is unlocked,
+// offers to call the train and starts the arrival cutscene; also speaks when you enter the tracks.
 #include "common.h"
 
 extern void func_80102FDC(f32 *, f32);

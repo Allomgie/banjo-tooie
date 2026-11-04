@@ -1,3 +1,5 @@
+// Most likely the Angler's model lighting callback: point-light vertex lighting like core2/1EE8100,
+// but one pinned world light (its lure) is always kept and never evicted by nearer lights.
 #include "common.h"
 
 extern f32 func_800DF8C4(s32);

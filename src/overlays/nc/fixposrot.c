@@ -1,3 +1,5 @@
+// Fixed position and rotation camera (controller mode 3): set from explicit values, a look-at
+// target or a camera-database node; on exit it restores the dynamic camera and the letterbox.
 #include "common.h"
 
 extern void func_800EFD24(void *);

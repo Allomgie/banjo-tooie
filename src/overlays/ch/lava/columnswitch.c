@@ -1,3 +1,4 @@
+// Switch for the Hailfire Peaks rising columns (FLAG_390): when pressed it plays cutscene 0x4E.
 #include "ch/lavacolumnswitch.h"
 
 extern int D_80800080_chlavacolumnswitch[];

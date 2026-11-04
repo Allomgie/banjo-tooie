@@ -1,3 +1,5 @@
+// Probably a Hailfire Peaks falling-lava hazard: on touch (message 0x3E) it sends the player
+// lava-damage interrupt 4 unless invulnerable.
 #include "common.h"
 
 extern int D_808000B0_chlavafall[];

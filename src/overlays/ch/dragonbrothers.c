@@ -1,3 +1,5 @@
+// Probably the Hailfire Peaks dragon brothers Chilli Billi (fire) and Chilly Willy (ice): the
+// boss, four egg-launcher pods, its fire/ice ball, the large egg projectile and a sinking platform.
 #include "common.h"
 
 extern void *func_800F5EF8(void *);
@@ -280,6 +282,7 @@ extern u8 D_80805694_chdragonbrothers[];
 extern u8 D_80805424_chdragonbrothers[];
 extern u8 D_808053A0_chdragonbrothers[];
 
+// Dragon boss: init per brother, state machine, attacks, camera, music, defeat and jiggy.
 void func_80800000_chdragonbrothers(Actor *actor, s32 value)
 {
     u8 *pod_cmd;
@@ -1657,6 +1660,7 @@ int chdragonbrothers_entrypoint_0()
     return (int) &D_808056A8_chdragonbrothers;
 }
 
+// Four pods around the arena: react to the player's eggs and launch the large egg on message 0x3D.
 void func_80803574_chdragonbrothers(actor) Actor *actor;
 {
     s32 unk_0;
@@ -1950,6 +1954,7 @@ int chdragonbrothers_entrypoint_1()
     return (int) &D_8080574C_chdragonbrothers;
 }
 
+// Fire/ice ball aimed at the player: flight, floor impact with debris, player damage.
 void func_80803F4C_chdragonbrothers(Actor *actor)
 {
     Actor *dragon = func_80106790(actor->unk3C);
@@ -2080,6 +2085,7 @@ void *chdragonbrothers_entrypoint_2(void)
     return &D_808058A8_chdragonbrothers;
 }
 
+// Large egg projectile: ballistic flight, egg-type trails, hit test against the dragon, impact.
 void func_8080449C_chdragonbrothers(Actor *actor)
 {
     Actor *dragon;
@@ -2286,6 +2292,7 @@ s32 chdragonbrothers_entrypoint_3()
     return D_80805A08_chdragonbrothers;
 }
 
+// Platform that lowers and raises with the dragon's phase byte (+0x58).
 void func_80804CD0_chdragonbrothers(Actor *actor)
 {
     func_800EFA4C(actor->position, 0.0f, -500.0f, 3150.0f);

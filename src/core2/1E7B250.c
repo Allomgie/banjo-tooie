@@ -1,3 +1,5 @@
+// Probably the player model tint: samples the floor triangle's vertex colors under the player,
+// fades with height, applies fade and darkness flags, and smooths the stored color per frame.
 #include "core2/1E7B250.h"
 
 extern s32 func_80091E80(PlayerState *, s32);

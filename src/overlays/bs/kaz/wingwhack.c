@@ -1,3 +1,5 @@
+// Kazooie-alone Wing Whack: an air version (slow fall, wing hit spheres) and a ground version
+// (three timed swings), both with trail particles and the attack flag set during hit windows.
 #include "common.h"
 #include "overlays/bs/kaz/wingwhack.h"
 

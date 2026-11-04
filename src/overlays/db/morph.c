@@ -1,3 +1,5 @@
+// Probably the model morph-target section: finds morph records by id, transforms flagged
+// vertices with a bone matrix and applies weighted blend shapes (position, UV, colour).
 #include "common.h"
 
 typedef struct {

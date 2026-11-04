@@ -1,3 +1,5 @@
+// Map model manager: draws the opaque and translucent map layers, exposes layer state and bounds,
+// and implements the global map collision queries combined with the map sections overlay.
 #include "common.h"
 
 extern f32 func_800DC178(f32, f32);
@@ -102,6 +104,7 @@ extern s32 D_80128728;
 extern s32 D_8012872C;
 extern s32 D_80128760;
 
+// Group: map geometry collision queries (floor probe, ray hit, sphere tests, provider setup).
 // Probes the floor below pos with jittered rays up to 51000 units down; returns its y.
 f32 func_800BE600(f32 *pos, s32 flags)
 {
@@ -139,6 +142,7 @@ f32 func_800BE600(f32 *pos, s32 flags)
     return 0.0f;
 }
 
+// Group: map model state and rendering (layer draw, getters, flags, bounds, hooks, defrag).
 // Draws one map layer (0 opaque, 1 translucent) and flips its vertex set.
 void func_800BE7F8(s32 actor, s32 layer)
 {

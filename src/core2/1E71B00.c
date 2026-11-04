@@ -1,3 +1,5 @@
+// Most likely two player subsystems: bone pose overrides for the Banjo-Kazooie models, and
+// the climb target (pole or tree) with its re-grab cooldown and climb interrupt.
 #include "common.h"
 
 #define STATE(p) (*(LocalState **) ((u8 *) (p) + 0xAC))
@@ -29,6 +31,7 @@ void func_800984CC();
 void func_800984F0();
 int func_80098520(s32 player, f32 scale_factor);
 
+// Bone pose override hook for the player models (called from baanim).
 // Returns the size of the PlayerState+0xAC block.
 s32 func_80098210()
 {
@@ -129,6 +132,7 @@ func_80098520(s32 player, f32 scale_factor)
     *(f32 *) (*(s32 *) (player + 172) + 44) = scale_factor;
 }
 
+// Climb target: pole or tree bottom, top, radius, type, cooldown and climb interrupt.
 // Returns the size of the PlayerState+0xE0 block.
 s32 func_80098530()
 {

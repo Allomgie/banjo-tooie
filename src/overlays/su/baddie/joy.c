@@ -1,3 +1,5 @@
+// Controller helpers for player-controlled actors: stick direction as a camera-relative world yaw,
+// stick magnitude, button pressed/held/edge tests and rumble for the actor's controller.
 #include "common.h"
 // TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 

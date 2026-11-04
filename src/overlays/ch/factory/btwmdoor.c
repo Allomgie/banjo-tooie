@@ -1,3 +1,5 @@
+// Probably the Grunty Industries door that only the Washing Machine form can use: it slides open
+// near a washer, otherwise stays shut, and Mr Tannoy comments on the first approach.
 #include "common.h"
 
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);

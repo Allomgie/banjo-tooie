@@ -1,3 +1,5 @@
+// Most likely Lil Terry, a small flying Terrydactyland baddie on the generic su/coaster/fly engine.
+// Its update runs variant 0 and sets a factor of 0.5.
 #include "common.h"
 
 extern int D_808000C8_chlilterry[];

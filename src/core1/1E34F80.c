@@ -1,3 +1,4 @@
+// Framebuffer debug text console: character ring buffer with scrolling and a 5x7 glyph renderer.
 #include "common.h"
 
 extern u16 D_8003F778[];

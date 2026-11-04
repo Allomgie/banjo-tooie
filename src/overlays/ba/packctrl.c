@@ -1,3 +1,5 @@
+// Backpack pose control: sets the backpack bone swing mode for walking, swimming, climbing and
+// other states, and enlarges the backpack while something rides in it (Taxi Pack).
 #include "common.h"
 #include "playerstate.h"
 

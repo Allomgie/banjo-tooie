@@ -1,3 +1,5 @@
+// Probably "Chompa's lunch", a prop that exists only during the end credits: picks one of 4 colour
+// variants, plays a 3-state animation with sound cues and sets model render channels when drawn.
 #include "common.h"
 
 extern int D_808003E0_chchompaslunch[];

@@ -1,3 +1,5 @@
+// Most likely the session state D_8012B3F0: save slot, game mode byte and flags, a snapshot/restore
+// of game data, and a queue of deferred commands run later by func_800D37FC.
 #include "common.h"
 
 extern u8 D_8012762C;

@@ -1,3 +1,5 @@
+// Probably the electric fence: crackles with random spark arcs and shocks the player on contact.
+// Its zap effect and spark-arc helper are reused by about nine other actors.
 #include "common.h"
 
 extern int D_808004C0_chelectricfence[];
@@ -24,6 +26,7 @@ extern void func_800BA8F8(s32, f32, f32);
 extern u8 D_80800508_chelectricfence[];
 extern f32 func_800EC75C(void *, f32 *);
 
+// Fence actor: init, update and hit/visibility messages.
 int *chelectricfence_entrypoint_0()
 {
     return &D_808004C0_chelectricfence;
@@ -80,6 +83,7 @@ s32 func_8080010C_chelectricfence(Actor *actor, s32 message, u32 *data)
     return 1;
 }
 
+// Reusable zap burst (particles, sound, light) and spark arc between two box corners.
 // Shared electric zap effect: spark bursts, sound and a fading light.
 void chelectricfence_entrypoint_1(s32 actor, s32 pos)
 {

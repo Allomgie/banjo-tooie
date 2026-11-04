@@ -1,3 +1,5 @@
+// Level music theme controller: picks a track variation (channel mask, BPM) from the map zone,
+// section and progress flags, runs aux music tracks and ambient loops, and tracks volume ducks.
 #include "core2/1ED68A0.h"
 
 // Per-slot fade time recorded when the aux track started.
@@ -158,6 +160,7 @@ extern void func_800C3BDC(u8);
 void func_800FE914();
 void func_800FEDC4(s32 slot, s32 sound_id, f32 volume, f32 fade_time);
 
+// Theme state: zone/section track variations, aux track slots, ambient loops, duck requests, fades.
 // Applies the entry to track_id in aux slot, starting the track if the slot is empty.
 void func_800FCFB0(s32 slot, s32 track_id, u8 *entry, s32 variant, f32 fade_time)
 {
@@ -1035,6 +1038,7 @@ int func_800FF038(s32 param_0)
     _cothemedll_entrypoint_2(&D_801359C0, unk_0);
 }
 
+// 1D trapezoidal motion profile (accel, max speed, decel limits).
 // Steps an accel/cruise/decel motion profile by dt; returns the distance moved and updates *velocity.
 f32 func_800FF060(f32 distance, f32 *velocity, f32 accel, f32 decel, f32 max_speed, f32 dt)
 {

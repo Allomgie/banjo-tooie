@@ -1,3 +1,5 @@
+// Probably the big falling icicles: placement and flag come from a table by marker id. When hit
+// (message 0x40) one shakes, falls, lands with rumble and sound and sets its flag.
 #include "common.h"
 
 extern void *D_808003A0_chiciclebits;

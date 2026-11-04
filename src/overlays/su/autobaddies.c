@@ -1,3 +1,5 @@
+// Probably the map-load "auto baddies": spawns the always-present system actors (intro text, quiz,
+// lens flare, Jiggywiggy etc.) when their conditions hold; entrypoint_1 broadcasts message 0x49.
 #include "common.h"
 
 extern u8 _chjiggygamenew_entrypoint_1[];

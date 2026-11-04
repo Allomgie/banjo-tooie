@@ -1,3 +1,5 @@
+// Jolly Roger's Lagoon doubloon: a spinning gold coin with random twinkles. On collection it
+// shows the first-time dialog, marks its registry slot, bumps the counter, plays sound and sparkle.
 #include "ch/doubloon.h"
 
 extern u8 D_80800290_chdoubloon[];

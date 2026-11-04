@@ -1,3 +1,5 @@
+// Per-controller button history buffer: timestamp and pressed state per button plus stick values,
+// with queries for pressed now, time since pressed/released, and a per-frame update.
 #include "core2/1E965B0.h"
 #include "overlays/ba/playerstate.h"
 #include "memory.h"

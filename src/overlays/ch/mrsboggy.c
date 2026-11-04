@@ -1,3 +1,5 @@
+// Mrs. Boggy in Witchyworld: walks a path, talks, counts her three returned children and then
+// gives the Witchyworld Mrs. Boggy jiggy (0x1B).
 #include "ch/mrsboggy.h"
 
 extern int D_80800AD8_chmrsboggy[];

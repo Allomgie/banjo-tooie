@@ -1,3 +1,5 @@
+// Water states of the Van transformation: sink, float, paddle, rest and drone wrappers.
+// Built on the van form hooks of bs/van.c; leaving the water returns to van idle.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

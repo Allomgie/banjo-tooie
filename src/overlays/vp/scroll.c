@@ -1,3 +1,5 @@
+// Probably the scroll vertex effect (water, lava): an offset advances at an id-derived speed,
+// wraps at 8192 and is added to each vertex's T coordinate.
 #include "common.h"
 
 typedef struct {

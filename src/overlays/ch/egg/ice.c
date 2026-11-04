@@ -1,3 +1,5 @@
+// Ice egg projectile: leaves a random two-sprite frost trail and uses the shared egg update and
+// impact code.
 #include "common.h"
 
 typedef struct {

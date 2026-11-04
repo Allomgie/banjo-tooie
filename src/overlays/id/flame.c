@@ -1,3 +1,6 @@
+// Flame map-mesh effect for fire and torch meshes: scrolls the texture V coordinate and sways
+// vertices sideways with a sine of their height, using up to 8 height bands.
+
 #include "common.h"
 
 typedef struct FlameModifier {

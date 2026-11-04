@@ -1,3 +1,6 @@
+// Player states of the Submarine transformation: idle, cruise (stick yaw/pitch/roll, buoyancy),
+// death (debris and bubbles, or spin-death), knockback spins, bounce, rest and drone wrappers.
+// B/Z/C fire torpedo, sonar ping and eggs through the basub subsystem.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

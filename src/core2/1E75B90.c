@@ -1,3 +1,4 @@
+// Probably a single helper: maps a player body part to a model bone and fetches its position.
 #include "common.h"
 
 // TU-NOTE: D_80117F02 is a linker symbol (undefined_syms) = D_80117F00 + 0x2; data is defined below.

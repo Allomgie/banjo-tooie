@@ -1,3 +1,5 @@
+// Bubble elevator between Isle o' Hags' Wasteland and Cloud Cuckooland: only Banjo and Kazooie may
+// enter; it captures the player, rises with a camera and warps to the other map.
 #include "ch/bubbleelevator.h"
 
 #define ELEVATOR_DATA(arg0) ((BubbleElevatorActorData *) (arg0->actorData))

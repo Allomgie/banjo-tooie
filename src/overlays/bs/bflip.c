@@ -1,3 +1,5 @@
+// Banjo-Kazooie Flap Flip: crouch, high backflip, hold pose and landing; can chain into beak
+// buster or go to fall/walk/water landing.
 #include "common.h"
 #include "core2/anctrl.h"
 #include "overlays/ba/anim.h"

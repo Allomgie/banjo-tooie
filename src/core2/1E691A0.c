@@ -1,3 +1,4 @@
+// Facade of one-line wrappers that call the player-manager API for the currently active player.
 #include "core2/1E691A0.h"
 
 extern void func_800F4D74(s32, s32, s32, s32, f32);

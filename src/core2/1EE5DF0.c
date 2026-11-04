@@ -1,3 +1,5 @@
+// Most likely the actor-side view of the players: cached main player state, AI perception queries
+// (distance, zone, angle, cone) and pushing players out of an actor's collision cylinder.
 #include "common.h"
 
 typedef struct {
@@ -74,6 +76,7 @@ void func_8010D6E0(s32 param_0, s32 param_1, f32 param_2, f32 param_3);
 extern s32 D_80136F60;
 extern s32 D_80136F64;
 
+// Cached player state and AI perception queries (distance, zone, angle, cone, segment hit, lead).
 // Cached player vs the actor's zone/section.
 s32 func_8010C500(u8 *actor)
 {
@@ -137,6 +140,7 @@ int func_8010C754()
     return sqrtf(dist_sq);
 }
 
+// Push players out of an actor's solid cylinder or sphere.
 // Pushes the players out of a collision cylinder at pos.
 void func_8010C788(f32 *pos, f32 unk_0, f32 unk_1, f32 radius)
 {

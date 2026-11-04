@@ -1,3 +1,5 @@
+// Lifecycle hooks of the baddie population (chbaddie DLL, called from core2/1E7F4D0): init, map
+// start (zone bounds, cube props, actor pools, auto-baddies), free, and the deferred-call flush.
 #include "common.h"
 
 // TU-NOTE: the overlay's .data is defined in C here, values taken from the ROM.

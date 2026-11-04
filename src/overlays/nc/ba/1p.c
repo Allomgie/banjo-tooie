@@ -1,3 +1,5 @@
+// First-person camera mode: keeps current/target position and rotation, blends in from and out to
+// the third-person camera, and exposes look-angle and sub-state accessors to the first-person code.
 #include "common.h"
 
 extern f32 func_800EEAD4(f32 *, f32 *);

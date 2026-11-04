@@ -1,3 +1,5 @@
+// Shared bouncing-object physics: gravity, collision, reflection and damping with bounce sounds,
+// despawn below the map; also picks a random enemy drop.
 #include "common.h"
 
 // TU-NOTE: the overlay .data is defined here in C (values taken from the ROM). D_80800FE2_chbounce

@@ -1,3 +1,5 @@
+// Submarine torpedo: a homing missile with a bubble or smoke trail, spawned by ba/sub.c.
+// It explodes on contact or after 3 s with a light flash, area damage and a callback to its owner.
 #include "common.h"
 
 extern s32 D_808008F4_chtorpedo[];

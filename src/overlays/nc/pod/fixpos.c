@@ -1,3 +1,5 @@
+// Fixed-position pod sub-camera: placed at a camera-database node, looking at a tracked actor,
+// the player or a fixed point, with optional smoothing and FOV.
 #include "common.h"
 
 extern void func_8001B754();

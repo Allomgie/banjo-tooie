@@ -1,3 +1,5 @@
+// Water-splash preset: spawns a splash (emitter slot 1) in a box around a position, sets the water
+// height and a ripple callback; a variant adds a second burst. Used by the player, fish, pool kids.
 #include "common.h"
 
 extern int D_80800130_fxsplash[];

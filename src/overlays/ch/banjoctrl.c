@@ -1,3 +1,5 @@
+// Probably a multi-purpose map actor with 12 modes: kill plane, keeping the player in a box,
+// camera push, forcing player states out of hot water, height-driven music crossfade and the like.
 #include "common.h"
 
 #define BOX ((f32 *) this->actorData)

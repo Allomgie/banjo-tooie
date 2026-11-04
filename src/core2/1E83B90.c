@@ -1,10 +1,10 @@
+// Collision queries against a model's collision list: segment raycast, sphere sweep,
+// sphere overlap. The last hit triangle's vertices and colors are cached in D_80127938.
+// Wrappers transform the query into the local space of a rotated/scaled model.
 #include "common.h"
 #include "core2/1EC8070.h"
 #include "core2/1ECB9F0.h"
 
-// Collision queries against a model's collision list: segment raycast, sphere sweep,
-// sphere overlap. The last hit triangle's vertices and colors are cached in D_80127938.
-// Wrappers transform the query into the local space of a rotated/scaled model.
 typedef struct {
     s16 local_0[3];
     u8 pad[6];
@@ -139,6 +139,7 @@ typedef struct {
 } VertexAD894;
 extern s32 func_800EED58(s32 *, s32 *);
 
+// Group: grid cell lookup, triangle ray/sphere/sweep/ground queries, local wrappers, hit cache.
 // Converts a position to clamped grid cell coordinates.
 void func_800AA2A0(s16 *grid, s32 *cell, f32 *pos)
 {
@@ -355,6 +356,7 @@ u16 func_800AADE4(u16 *list)
     return list[10];
 }
 
+// Group: pure geometry (point-to-line distance test, sphere-vs-segment test).
 // Tests whether a point is closer to a segment than sqrt(radius_sq).
 int func_800AADEC(f32 *seg_start, f32 *seg_end, f32 *point, f32 radius_sq)
 {
@@ -602,6 +604,7 @@ s32 func_800AB868(s32 coll, s32 vtx_list, f32 *pos, f32 *rot, f32 scale, s32 *st
     return hit;
 }
 
+// Group: chunked candidate-triangle scratch list used by the sweep query.
 // Allocates the first block of the triangle scratch list.
 void func_800AB980()
 {
@@ -648,6 +651,7 @@ void func_800AB9D0()
     D_8012798C = 0;
 }
 
+// Group: defrag of the scratch chunk list and freeing chunks unused for 40 frames.
 // Defragments the scratch blocks and relinks their neighbours.
 void func_800ABA20(void)
 {

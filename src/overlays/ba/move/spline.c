@@ -1,3 +1,6 @@
+// Spline mover (baphysics type 0x12): snaps the player to a spline path (claw-clamber walls),
+// moves along it with the stick or approaches its start, and exposes progress and end queries.
+
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

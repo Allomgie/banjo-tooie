@@ -1,3 +1,5 @@
+// Most likely the panning camera mode: orbits with a stored yaw that only changes when
+// collision or clamping moves the camera, otherwise it keeps the yaw and pans to follow.
 #include "nc/ba/pan.h"
 
 extern void func_801107F0();

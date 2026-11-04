@@ -1,3 +1,5 @@
+// Most likely the player's attack and hold helpers: current attack type from form and state,
+// area damage around the player, carried-object handling, item counter changes.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

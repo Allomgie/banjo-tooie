@@ -1,3 +1,5 @@
+// Jamjars' warp silos on the Isle o' Hags (7 of them): opened by an egg hit or approach; stepping
+// in shows a menu of the other opened silos and warps the player to the chosen one.
 #include "common.h"
 #include <types.h>
 

@@ -1,3 +1,5 @@
+// Most likely the Cloud Cuckooland trash can: a lid (chdoormake door, opens at entrance 0x11) and
+// the chswitch that opens it, setting flag 0x9FF and notifying actor 0x40C.
 #include "common.h"
 
 extern int D_80800240_chfantasytrashcanbits[];

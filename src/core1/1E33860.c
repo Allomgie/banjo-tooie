@@ -1,3 +1,5 @@
+// Main heap inspection and free-block search helpers: fragmentation test, free-chain walk and
+// first-fit searches over the block list.
 #include "memory.h"
 
 extern int heap_largest_free();

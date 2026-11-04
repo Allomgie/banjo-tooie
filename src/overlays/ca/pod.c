@@ -1,3 +1,5 @@
+// Actor-facing facade of the scripted "pod" camera: 23 thin wrappers that find the active player's
+// camera and forward to nc/pod (look-at, fixed position, dialog, release, timing queries).
 #include "common.h"
 
 extern f32 _ncpod_entrypoint_30(s32);

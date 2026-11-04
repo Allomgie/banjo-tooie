@@ -1,3 +1,4 @@
+// Frame delta time: VI frames elapsed (clamped 1..15), delta in seconds, and timer helpers.
 #include "core2/1EB2840.h"
 
 extern s32 func_800F1574(f32 *param_0, f32 param_1);

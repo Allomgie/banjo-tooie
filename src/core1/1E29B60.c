@@ -1,3 +1,4 @@
+// core1 entry and main game thread: subsystem init, per-frame loop, game mode, frame counter.
 #include "core1/1E29B60.h"
 
 extern char core1_BSS_START;
@@ -21,6 +22,7 @@ extern u8 D_80045788[];
 
 int func_80012520();
 
+// core1 entry, main thread, RAM-layout queries.
 // core1 entry: clears BSS and creates the idle thread.
 void func_80012030(s32 unk_0)
 {
@@ -30,6 +32,7 @@ void func_80012030(s32 unk_0)
     func_80013620();
 }
 
+// Game init sequence, main loop body, game-mode switching, start map.
 void func_8001207C(void)
 {
     func_800D5E74();
@@ -56,6 +59,7 @@ void func_8001209C(s32 new_mode)
     }
 }
 
+// Global frame counter: get, masked get, reset.
 // Frame counter masked with `mask`; used as a timer by other TUs.
 s32 func_8001210C(s32 mask)
 {

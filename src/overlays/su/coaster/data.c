@@ -1,3 +1,5 @@
+// Probably the parameter tables of the coaster baddie: actor kind to one of 9 records, plus
+// per-kind attack, notice and give-up distances and animation/sound lists.
 #include "common.h"
 
 extern s32 D_8080041C_sucoasterdata[];

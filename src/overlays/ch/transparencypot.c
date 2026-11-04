@@ -1,3 +1,5 @@
+// Probably an invisibility pot: touching or hitting it sends the player the invisibility interrupt,
+// with sparkle and sound; the pot then vanishes and reappears after a random delay.
 #include "common.h"
 
 extern int D_808001B0_chtransparencypot[];

@@ -1,3 +1,6 @@
+// Probably Witchyworld tent scenery props: static, except on the Saucer of Peril map where the
+// marker's collision bit is cleared.
+
 #include "common.h"
 
 extern int D_80800050_chwitchytents[];

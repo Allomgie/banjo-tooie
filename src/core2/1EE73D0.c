@@ -1,3 +1,5 @@
+// Probably shared animation slots: eleven refcounted anctrl slots that many actors of one kind
+// (e.g. nests) share, applied to an actor's skeleton before drawing.
 #include "common.h"
 
 typedef struct {

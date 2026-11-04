@@ -1,3 +1,5 @@
+// Probably Rare's extensions to the sequence player: channel mask and state reset, and
+// helpers that send custom MIDI controller messages (0xFC, 0xFF, 0x41) to a channel.
 #include "common.h"
 
 typedef struct {

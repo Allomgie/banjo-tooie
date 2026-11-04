@@ -1,3 +1,6 @@
+// Fake wall panel inside Mumbo's skull (Hailfire Peaks, Jolly Roger's Lagoon). When hit it
+// explodes and sets the map's wall-smashed flag (0x39C / 0x39D); it then no longer spawns.
+// Entrypoint 1 is a helper prop that only snaps a vector.
 #include "common.h"
 
 extern s32 D_80800160_chmumboskullfakearchpanellava[];

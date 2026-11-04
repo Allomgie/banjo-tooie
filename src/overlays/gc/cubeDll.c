@@ -1,3 +1,5 @@
+// Cube-grid set-up for a map: sizes and allocates the grid from the map bounds, reads node and
+// actor props from the setup file, frees the grid, and runs per-cube passes (zones, counts).
 #include "common.h"
 
 typedef struct CubeListView {

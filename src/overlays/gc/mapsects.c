@@ -1,3 +1,5 @@
+// Map-sections manager for maps split into streamed sections (Jolly Roger's Lagoon): activates,
+// loads, draws and queries sections by player position and camera frustum.
 #include "common.h"
 #include "maps.h"
 
@@ -376,6 +378,7 @@ typedef struct {
     u8 count;
 } MapSectsData;
 
+// Group: section setup, streaming, per-frame activation, draw passes, init/free, accessors.
 // Appends a section record with its AABB and bounding sphere.
 void gcmapsects_entrypoint_0(s16 opaque_model, s16 translucent_model, f32 *origin, f32 *box_min, f32 *box_max,
                              f32 unk_0)
@@ -660,6 +663,7 @@ int func_80800C54_gcmapsects(u8 *manager)
     }
 }
 
+// Group: geometry queries on the active section models (point lookup, ray, sweep, sphere).
 // Returns the index of the section whose AABB contains point, or -1.
 s32 gcmapsects_entrypoint_4(f32 *point)
 {

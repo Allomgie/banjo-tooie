@@ -1,3 +1,5 @@
+// Scalar math helpers: clamps, angle wrapping, remap and lerp, easing, periodic waves,
+// power, approach-by-step and countdown timer.
 #include "core2/1ECA640.h"
 
 extern f32 func_80013970(f32);
@@ -9,6 +11,7 @@ f32 func_800F13C4(f32 param_0, f32 param_1);
 f32 func_800F1434(f32 param_0);
 void func_800F14AC(f32 param_0);
 
+// Clamp/min/max, angle wrapping, remap/lerp/ease/smoothstep, fmod, pow, approach.
 // Clamp value to [min, max].
 f32 func_800F0D50(f32 value, f32 min, f32 max)
 {
@@ -316,6 +319,7 @@ f32 func_800F14FC(f32 edge_min, f32 edge_max, f32 x)
     return (t * t) * (3.0f - (2.0f * t));
 }
 
+// Generic countdown.
 // Counts the timer down by delta; returns TRUE once it reaches zero.
 int func_800F1574(f32 *timer, f32 delta)
 {

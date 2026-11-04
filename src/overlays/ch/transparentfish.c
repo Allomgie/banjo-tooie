@@ -1,3 +1,6 @@
+// Probably Seemee, the see-through fish of Jolly Roger's Lagoon: each fish carries an item (such as
+// a Jiggy) inside its body, assigned by a seeded shuffle. It wanders its territory and pushes the
+// player away unless hit with the Talon Torpedo.
 #include "ch/transparentfish.h"
 
 #define TRANSPARENT_FISH_ITEM_271(param_0)                                                         \

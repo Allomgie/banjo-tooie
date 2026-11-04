@@ -1,3 +1,5 @@
+// Most likely Cheato, the spell book NPC: plays his theme near the player, talks, trades
+// 5 Cheato Pages per cheat and opens a menu listing the cheats already given.
 #include "common.h"
 #include "gc/newoption.h"
 

@@ -1,3 +1,5 @@
+// Cloud Cuckooland rainbow made by Mumbo's rain dance: starts rain, plays a camera sequence,
+// fades in a 6-segment rainbow with particles, then stops the rain and sets the spawned flag.
 #include "common.h"
 
 typedef struct {

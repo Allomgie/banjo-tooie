@@ -1,3 +1,5 @@
+// Feather-use effect: when the player spends a red or gold feather, spawns a small falling,
+// fading feather with sparkles beside the player (not in multiplayer).
 #include "common.h"
 
 extern f32 func_800DC0C0(void);

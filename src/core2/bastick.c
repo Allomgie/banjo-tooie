@@ -1,3 +1,5 @@
+// Player analog-stick view: reads the stick (zero while input is locked), computes distance,
+// angle and camera-relative angle, and classifies it into 5 zones with push/pop thresholds.
 #include "common.h"
 
 #include "overlays/ba/stick.h"

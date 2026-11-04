@@ -1,3 +1,5 @@
+// Probably the slab door opened by flag 0x38F: generic door setup, slides sideways; variant
+// 0x33 opens faster.
 #include "common.h"
 
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);

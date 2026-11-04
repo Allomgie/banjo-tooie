@@ -1,3 +1,4 @@
+// Audio manager (heap, synth, sample DMA cache, audio thread) plus cartridge ROM PI-DMA helpers.
 #include "common.h"
 
 extern s32 D_80046A88;
@@ -107,6 +108,7 @@ s32 func_80012EA0();
 void func_80012F0C();
 void func_80012F34();
 
+// Audio manager: audio heap, synth init, sample DMA cache, audio thread and frame building, volume.
 // Audio manager init: clears the heap, sets the VI clock, starts the audio thread.
 void func_800125B0(void)
 {
@@ -434,6 +436,7 @@ void func_80012F34(bus, mode) s32 bus; long mode;
     func_80021AD0();
 }
 
+// Blocking and stacked-async PI DMA reads from cartridge ROM, PI manager init.
 int *func_80012F60()
 {
     return ((int *) &D_8007695C);

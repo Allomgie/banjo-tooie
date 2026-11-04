@@ -1,3 +1,5 @@
+// Swimming camera mode: follows the player underwater with waypoint support, tilting pitch/yaw
+// by swim speed and direction.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

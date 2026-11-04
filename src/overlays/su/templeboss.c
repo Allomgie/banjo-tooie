@@ -1,3 +1,5 @@
+// Warp routing inside Targitzan's temple: decides whether a warp leads to the boss room or to
+// the Slightly Sacred Chamber, depending on the map and exit used.
 #include "common.h"
 
 extern f32 func_800EEB40(f32 *, f32 *);

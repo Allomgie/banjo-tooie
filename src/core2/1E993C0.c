@@ -1,3 +1,5 @@
+// Probably helpers for drawing static cube props by asset id: model props, sprite props,
+// asset acquire/release wrappers and a few empty stubs.
 #include "common.h"
 s32 func_800BFC34(s32);
 s32 func_800BFC94(s32);
@@ -9,6 +11,7 @@ extern s32 func_800D2F20(void);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800E2AA4(s32, s32, s32, s32, s32, f32 *);
 
+// Draw a model prop or a sprite prop by asset id.
 // Draws a static model prop.
 void func_800BFAD0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 asset_id)
 {
@@ -45,6 +48,7 @@ void func_800BFB58(s32 param_0, s32 param_1, f32 scale_factor, s32 asset_id, s32
     func_800E2AA4(param_0, asset, param_8, param_7, param_1, scale);
 }
 
+// Asset get / touch / release wrappers used by prop rendering.
 // Acquires the asset.
 s32 func_800BFC34(s32 arg0)
 {
@@ -67,6 +71,7 @@ s32 func_800BFC94(s32 arg0)
     return func_800D674C(arg0);
 }
 
+// Empty stubs (func_800BFCC4 still has call sites in 1EC3810.c and 1E83680.c).
 // Empty stub.
 void func_800BFCB4(void)
 {

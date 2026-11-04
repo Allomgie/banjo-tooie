@@ -1,3 +1,5 @@
+// Probably the Spiral Mountain Jinjo wall: a Talon Torpedo hit makes it explode with a sound
+// and sets FLAG_3AA_PHYSICAL_SM_JinjoDoorSmashed.
 #include "common.h"
 
 extern int D_80800080_chTalTorpWall[];

@@ -1,3 +1,5 @@
+// Possibly a flying digger minion: two ActorInfos whose only own code is an init that sets up
+// the shared flying-baddie AI (sucoasterfly) at 0.75x scale.
 #include "common.h"
 
 extern int D_808000F8_chdiggerfly[];

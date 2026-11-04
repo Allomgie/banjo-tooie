@@ -1,3 +1,5 @@
+// Idle thread: sets up the PI manager, creates and starts the main game thread, then spins
+// forever at the lowest priority.
 #include <ultra64.h>
 #include "threads.h"
 

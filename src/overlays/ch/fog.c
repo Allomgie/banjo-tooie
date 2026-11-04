@@ -1,3 +1,5 @@
+// Most likely a hazardous gas-fog volume: drains the player's air meter while it exists and
+// draws a slowly drifting, fading fog layer.
 #include "common.h"
 
 typedef struct {

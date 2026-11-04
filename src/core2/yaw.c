@@ -1,3 +1,6 @@
+// Player yaw (facing): value and ideal, update modes NONE/DEFAULT(700, 7.5)/UNBOUNDED/BOUNDED,
+// timed rotation, and getters and setters.
+
 #include "common.h"
 #include "overlays/ba/yaw.h"
 #include "core2/1E2B200.h"

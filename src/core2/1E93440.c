@@ -1,3 +1,5 @@
+// Particle emitter core: emitter alloc/free, particle spawning with randomized parameters in box,
+// sphere and cylinder shapes, parameter setters, and a bytecode interpreter that configures emitters.
 #include "core2/1E93440.h"
 
 typedef struct {

@@ -1,3 +1,5 @@
+// Boggy's daughter (Soggy), lost in Witchyworld: walks a spline route, asks for a food item,
+// is sent home and tells Boggy.
 #include "ch/boggy/girl.h"
 
 extern int D_80800CF0_chboggygirl[];

@@ -1,3 +1,5 @@
+// Seems to mix actor-triggered prop volumes, a 9-slot gameplay timer table with HUD display,
+// and the underwater air meter built on timer slot 1 (water types, drain, refill, drowning).
 #include "core2/1EA78C0.h"
 
 typedef struct {
@@ -162,6 +164,7 @@ const struct {
     f32 pad[3];
 } D_801259B0 = {1.4142135f};
 
+// Group: actor-in-trigger-prop detection and per-map trigger-type presence bitset.
 // Dispatches to func_800D5318 for each trigger prop whose area contains the actor.
 void func_800CDFD0(ActorCDFD0 *actor)
 {
@@ -277,6 +280,7 @@ void func_800CE308()
 }
 }
 
+// Group: 9 countdown timer/meter slots with HUD display, expiry callbacks, gating and tick sfx.
 // Timer table D_8012B030: 9 slots of 0x20 bytes. Slot 1 is the underwater air meter.
 u8 *func_800CE3E0(slot)
 s32 slot;
@@ -632,6 +636,7 @@ timer->sfx_active = tick_sfx || alarm_sfx;
 }
 }
 
+// Group: air meter (capacity, water-type stack, drain/refill, drowning damage).
 // Full air value for a water type.
 f32 func_800CEF00(s32 water_type)
 {

@@ -1,3 +1,5 @@
+// The missing Styracosaurus kid: appears at the Terrydactyland train station, walks home through
+// the family cave, then stays as a talking family member.
 #include "common.h"
 
 extern s32 D_808006AC_chdinofamilymissing[];

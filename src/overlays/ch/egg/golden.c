@@ -1,3 +1,5 @@
+// Golden egg projectile (cheat egg): leaves a gold trail when few views are active and plays a
+// bounce sound on ground contact.
 #include "common.h"
 
 extern void _suegg_entrypoint_16();

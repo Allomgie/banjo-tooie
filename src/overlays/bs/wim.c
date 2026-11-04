@@ -1,3 +1,5 @@
+// Probably the underwater swimming states of Banjo & Kazooie: idle, paddle, fast stroke, glide,
+// hurt, spin, bounce, dive, drowning, plunge, first-person look and underwater split-up.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 extern void _baswim_entrypoint_10(PlayerState *, f32);
@@ -64,6 +66,7 @@ extern s32 D_80801F98_bsbswim[];
 extern f32 mlAbsF(f32);
 extern f32 baphysics_get_vertical_velocity(void *);
 
+// Shared underwater enter/exit: air bar, zero gravity, terminal velocity, roll, collision mode.
 void func_80800000_bsbswim(int player)
 {
     func_8009FFD8(player, 1, 3, 3, 9);
@@ -126,6 +129,7 @@ void func_808001A8_bsbswim()
     func_80800104_bsbswim();
 }
 
+// Idle tread state.
 void func_808001C8_bsbswim(s32 player)
 {
     s32 anim_ctrl;
@@ -189,6 +193,7 @@ int bsbswim_entrypoint_0(s32 index)
     return D_80801E60_bsbswim[index];
 }
 
+// Slow paddle state with stroke sound.
 void func_8080039C_bsbswim(Actor *player)
 {
     void *anim_ctrl;
@@ -271,6 +276,7 @@ int bsbswim_entrypoint_1(s32 index)
     return D_80801E70_bsbswim[index];
 }
 
+// Fast stroke state with a bubble trail.
 void func_80800634_bsbswim(Actor *player)
 {
     void *anim_ctrl;
@@ -359,6 +365,7 @@ int bsbswim_entrypoint_2(s32 index)
     return D_80801E80_bsbswim[index];
 }
 
+// Glide/drift state.
 void func_8080090C_bsbswim(PlayerState *player)
 {
     baanim_playForDuration_loopSmooth(player, 0x71, 0.75f);
@@ -426,6 +433,7 @@ int bsbswim_entrypoint_3(s32 index)
     return D_80801E90_bsbswim[index];
 }
 
+// Hurt knockback state.
 void func_80800B10_bsbswim(PlayerState *player)
 {
     f32 yaw;
@@ -482,6 +490,7 @@ int bsbswim_entrypoint_4(s32 index)
     return D_80801EA0_bsbswim[index];
 }
 
+// Spin state.
 void func_80800D30_bsbswim(s32 player)
 {
     _baspin_entrypoint_1();
@@ -510,6 +519,7 @@ int bsbswim_entrypoint_5(s32 index)
     return D_80801EB0_bsbswim[index];
 }
 
+// Bounce state.
 s32 func_80800DFC_bsbswim(s32 player)
 {
     _babounce_entrypoint_3();
@@ -543,6 +553,7 @@ int bsbswim_entrypoint_6(s32 index)
     return D_80801EC0_bsbswim[index];
 }
 
+// Dive from the surface; first use of the move is recorded.
 // Matching: the extra pointer temporaries and the empty statement are needed for the match.
 void func_80800EC8_bsbswim(u8 *player)
 {
@@ -618,6 +629,7 @@ int bsbswim_entrypoint_7(s32 index)
     return D_80801ED0_bsbswim[index];
 }
 
+// Drowning death with die camera.
 void func_808010B8_bsbswim(PlayerState *player)
 {
     player->unk15C.word = func_8009E6C4(player, 4) || func_800F8B64();
@@ -694,6 +706,7 @@ int bsbswim_entrypoint_8(s32 index)
     return D_80801EE0_bsbswim[index];
 }
 
+// Locked state: held by a lock request, back to idle when released.
 void func_80801428_bsbswim(PlayerState *player)
 {
     baanim_playForDuration_loopSmooth(player, 0x70, 2.0f);
@@ -731,6 +744,7 @@ int bsbswim_entrypoint_9(s32 index)
     return D_80801EF0_bsbswim[index];
 }
 
+// Plunge into the water from a fall: vertical speed from the fall height, then decelerate.
 void func_80801538_bsbswim(PlayerState *player)
 {
     void *anim_ctrl;
@@ -802,6 +816,7 @@ int bsbswim_entrypoint_10(s32 index)
     return D_80801F00_bsbswim[index];
 }
 
+// First-person look underwater.
 int func_8080182C_bsbswim(Actor *player)
 {
     func_80800030_bsbswim();
@@ -832,6 +847,7 @@ int bsbswim_entrypoint_11(s32 index)
     return D_80801F10_bsbswim[index];
 }
 
+// Underwater split-up: switches to Banjo alone, then continues in the follow-up state.
 s32 func_808018EC_bsbswim(s32 player)
 {
     if (func_8009E6EC() == 0x11) {
@@ -887,6 +903,7 @@ int bsbswim_entrypoint_12(s32 index)
     return D_80801F78_bsbswim[index];
 }
 
+// Passive idle with an interrupt filter.
 void func_80801ACC_bsbswim(u8 *player)
 {
     s32 interrupt_id;
@@ -950,6 +967,7 @@ int bsbswim_entrypoint_13(s32 index)
     return D_80801F88_bsbswim[index];
 }
 
+// One-shot animation, back to idle when it ends or on swim input.
 s32 func_80801C64_bsbswim(s32 player)
 {
     func_80800030_bsbswim();

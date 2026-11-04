@@ -1,3 +1,5 @@
+// Possibly a small Boggy fish prop: it animates its textures and, on message 0x3E, gives the
+// player an item with a jingle and sets flag 0x438. Despawns at init once that flag is set.
 #include "common.h"
 
 extern u8 func_800D731C(s32);

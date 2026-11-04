@@ -1,3 +1,5 @@
+// Flickering light map-mesh effect: vertex brightness takes a random +-0.04 step per frame,
+// kept within 0.8..1.0.
 #include "common.h"
 
 extern void _glid_entrypoint_0(s32, s32, void *, f32 *);

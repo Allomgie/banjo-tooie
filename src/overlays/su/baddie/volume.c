@@ -1,3 +1,5 @@
+// Random points on an actor's hit volumes: picks N points on the surfaces of its model-defined
+// boxes, cylinders and spheres, falling back to its bounding sphere.
 #include "common.h"
 
 typedef struct {

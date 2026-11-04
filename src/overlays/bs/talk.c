@@ -1,3 +1,4 @@
+// Player "talk" state: stop, face the conversation partner, idle until the dialog ends.
 #include "common.h"
 
 void baphysics_set_target_horizontal_velocity(s32, f32);

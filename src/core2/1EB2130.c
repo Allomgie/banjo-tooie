@@ -1,3 +1,5 @@
+// Most likely per-actor surface attachments: barycentric points on triangles of a deforming mesh,
+// so a player standing on it can be repositioned next frame. Also a small static table lookup.
 #include "common.h"
 
 // TU-NOTE: the .data of this file is defined at the end in C, values taken from the ROM.
@@ -55,6 +57,7 @@ extern f32 func_800EEF94(f32 *);
 extern s32 D_8012C030;
 s32 func_800D8988();
 
+// Static per-index default float / flag table lookup.
 // Accessors into a static table with an 8-byte stride.
 float func_800D8840(s32 index)
 {
@@ -66,6 +69,7 @@ int func_800D8854(s32 index)
     return D_8011B961[index * 8] & 1;
 }
 
+// Attachment block pool and barycentric recording / reconstruction of positions on mesh triangles.
 void func_800D8870()
 {
     D_8012C020 = freelist_new(0x70, 0);

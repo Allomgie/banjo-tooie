@@ -1,3 +1,5 @@
+// First-person egg aiming: moves the cursor toward the stick position with smoothing, turns the
+// camera at the screen edge and fires the selected egg on B (hold for golden/auto eggs).
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

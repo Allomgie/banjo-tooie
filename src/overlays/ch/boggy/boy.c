@@ -1,3 +1,5 @@
+// Probably Moggy, one of Boggy's kids lost in Witchyworld: follows a spline path and, once
+// found and talked to, sets the kid-returned flag and counts the kids that are back.
 #include "common.h"
 extern u8 D_80800C00_chboggyboy[];
 

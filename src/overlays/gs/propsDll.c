@@ -1,3 +1,5 @@
+// Most likely the cube prop loader: stores a cube's props, keeps its node props sorted and
+// spawns actors from the actor-spawn props.
 #include "common.h"
 
 typedef struct {
@@ -49,6 +51,7 @@ typedef struct {
     u32 rest : 1;
 } PropState;
 
+// Inserting props into cubes, sorting them and spawning actors from spawn props.
 // Collects the actor-spawn props (kind 6) of a cube.
 void gspropsDll_entrypoint_0(s16 *cube, s32 props[3], s32 *count)
 {
@@ -106,6 +109,7 @@ void gspropsDll_entrypoint_1(GsProp62 **props, s32 count)
     }
 }
 
+// Registering a cube's zone-bound volumes (node props of kinds 7, 9, 12) in two passes.
 // Registers the zone-bound props (kinds 7, 9, 12) of a cube with the bound lists.
 void gspropsDll_entrypoint_2(u8 *cube, s32 pass)
 {

@@ -1,3 +1,5 @@
+// Probably Gruntilda's big fireball: like the small one but homes in on the target player,
+// can be told to drop and despawn (message 0x9B), and shakes the screen harder.
 #include "common.h"
 
 extern int D_80800680_chgruntyfireballbig[];

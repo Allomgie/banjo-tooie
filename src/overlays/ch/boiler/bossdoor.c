@@ -1,3 +1,5 @@
+// Probably the door to Old King Coal's arena: a doormake door that opens when the boss
+// retry flag is set or in a cutscene, and otherwise messages itself to open.
 #include "common.h"
 
 extern int D_808000F0_chboilerbossdoor[];

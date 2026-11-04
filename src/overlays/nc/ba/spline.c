@@ -1,3 +1,5 @@
+// Spline (rail) camera mode: a trigger prop attaches the camera to a level path, and it slides
+// along the rail to stay 500..550 units from the player with eased speed and blend-in.
 #include "common.h"
 
 extern s32 func_800D5424(s32);

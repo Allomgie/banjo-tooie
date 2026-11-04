@@ -1,3 +1,5 @@
+// Spline node events, called by the path follower for every node an actor passes: event nodes
+// start scripts, set flags or open dialogs; control nodes change speed, animation or direction.
 #include "common.h"
 
 typedef struct {

@@ -1,3 +1,5 @@
+// Most likely the GI flight-pad unlock: a floor switch plays a cutscene, and the flight pad
+// actor stays hidden until the switch was used or the cutscene runs.
 #include "ch/factory/flypad.h"
 
 extern void *D_80800250_chfactoryflypad;

@@ -1,3 +1,5 @@
+// HUD item-counter layer: per-item state (group, target, rolling displayed value) and a slot
+// allocator; shows, updates, hides and queries an item's HUD element via the infobar layer.
 #include "core2/1EABAC0.h"
 
 #define MAX_D2574(a, b) ((a) < (b) ? (b) : (a))

@@ -1,3 +1,5 @@
+// Deferred-call queue API (chbaddiesetup): entrypoints 0-6 queue a call with 0..6 int args so
+// actors spawn after the update loop; 7-10 are by-value spawn wrappers.
 #include "common.h"
 
 // Deferred-call queue: each record holds a function pointer, up to 6 int args and the arg count.

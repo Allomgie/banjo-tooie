@@ -1,3 +1,5 @@
+// Run pool: stores many small variable-length arrays in one heap block, with push, remove,
+// compaction and tail shrinking.
 #include "common.h"
 
 // TU-NOTE: run_pool. One heap block {s16 element_size, s16 capacity, s16 free_head}

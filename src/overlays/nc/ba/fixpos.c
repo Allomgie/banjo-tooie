@@ -1,3 +1,5 @@
+// Fixed-position camera mode from a camera-database volume (type 1): the camera sits at the node
+// position, optionally following the player or ground height, and looks at the player.
 #include "common.h"
 
 extern void func_801124D0();

@@ -1,3 +1,5 @@
+// Jiggywiggy's jigsaw challenge: a board of 20 pieces rotated in 90-degree steps with a cursor,
+// a time limit, and result dialogs that open the next world.
 #include "common.h"
 extern s32 D_80803BD0_chjiggygamenew[][3];
 extern s32 D_80803AE0_chjiggygamenew[][3];

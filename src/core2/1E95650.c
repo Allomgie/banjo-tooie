@@ -1,3 +1,5 @@
+// Particle drawing (model and sprite particles) plus emitter defrag, followed by screen
+// fill-rectangle helpers (colored fill, black fill, depth buffer clear).
 #include "common.h"
 #include <PR/gbi.h>
 
@@ -81,6 +83,7 @@ extern void func_800E2A14(s32);
 extern Gfx D_8011A730[];
 void func_800BC474();
 
+// Particle rendering: model and sprite particles, pulse scale, draw dispatch by asset type, defrag.
 // Draws the emitter's model particles.
 void func_800BBD60(emitter, gfx) StateBBD60 *emitter;
 s32 gfx;
@@ -209,6 +212,7 @@ void *func_800BC3F0(void *emitter)
     return defrag(emitter);
 }
 
+// Fill-rectangle helpers: colored fill, clear to black, clear the depth buffer.
 void func_800BC410(s32 gfx, s32 r, s32 g, s32 b)
 {
     s32 rect[4];

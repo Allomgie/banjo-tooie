@@ -1,3 +1,5 @@
+// Egg explosion actor used by grenade, proximity and clockwork eggs: grows a blast sphere, spawns
+// particles, light, camera shake and rumble, and damages actors and players in range.
 #include "common.h"
 
 extern int D_80800994_cheggsplode[];

@@ -1,3 +1,5 @@
+// Ambient water-drip emitter: at random intervals releases a drop from a drip point; on landing it
+// makes a ripple and drip sound in water, or a small splash and sound on the floor.
 #include "common.h"
 
 extern int D_80800610_chdrips[];

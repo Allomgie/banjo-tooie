@@ -1,3 +1,6 @@
+// Receiving side of the player interrupt system: payload setters and getters (PlayerState+0xC0),
+// a 5-slot deferred queue, and the default dispatcher func_80099B94 for ~90 interrupt codes.
+
 #include "core2/1E72EA0.h"
 
 f32 func_80090010(void);

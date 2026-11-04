@@ -1,3 +1,5 @@
+// Ledge-hang camera mode: orbit with the yaw limited to +-45 degrees around the player facing
+// while the player hangs from or climbs onto a ledge.
 #include "nc/ba/ledge.h"
 
 extern f32 func_800EEF94(f32 *);

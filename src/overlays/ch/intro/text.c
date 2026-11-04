@@ -1,3 +1,5 @@
+// Intro text (title card) actor: fetches a string, splits it into up to 9 lines and draws it
+// with the kerned font, fading in, holding and fading out. Spawned by id or for the current map.
 #include "ch/introtext.h"
 
 extern u32 D_808007D0_chintrotext[];

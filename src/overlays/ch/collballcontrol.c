@@ -1,3 +1,5 @@
+// Hailfire Peaks Colosseum kickball, built on su/kickball: the match controller, the kickball
+// actors, and the AI kickers that chase and kick balls toward a goal.
 #include "common.h"
 
 extern void _subaddieaudioquick_entrypoint_2(Actor *, f32 *, void *);
@@ -230,6 +232,7 @@ Actor *func_8080451C_chcollballcontrol();
 extern void func_80105834(), func_80107C2C(), func_8010A730(), func_808006FC_chcollballcontrol(),
     func_80800DD8_chcollballcontrol();
 
+// Match controller: difficulty tables, ball spawning, round flow, scores, end-of-round warp.
 void func_80800000_chcollballcontrol(s32 *actor, s32 text_id, s32 flags)
 {
     _subaddiedialog_entrypoint_11(actor[0], text_id, flags | 0xE, actor + 1, 0x33);
@@ -920,6 +923,7 @@ int chcollballcontrol_entrypoint_0()
     return &D_80804DA8_chcollballcontrol;
 }
 
+// Kickball actor: rises in, is carried and kicked, bursts in goal particles.
 void func_80801764_chcollballcontrol(Actor *actor, s32 new_state)
 {
     u8 *data;
@@ -1564,6 +1568,7 @@ int chcollballcontrol_entrypoint_4()
     return (int) &D_80804FE8_chcollballcontrol;
 }
 
+// AI kicker: wanders the arena, finds the nearest ball, chases it and kicks it toward a goal.
 void func_8080324C_chcollballcontrol(actor, new_state) Actor *actor;
 s32 new_state;
 {

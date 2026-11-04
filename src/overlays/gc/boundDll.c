@@ -1,3 +1,5 @@
+// Builder side of the map zone-volume system (core2/1EA5180): sets up and frees three zone lists,
+// adds volumes from the map setup (merging into close groups) and recomputes centres and radii.
 #include "common.h"
 
 typedef struct {

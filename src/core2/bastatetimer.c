@@ -1,3 +1,6 @@
+// Per-player list of 10 countdown timers (PlayerState+0x3C) with a pause-when-not-controllable
+// flag: get, set, clear, edge tests, and a per-frame update that counts down and clamps at 0.
+
 #include "common.h"
 #include "overlays/ba/statetimer.h"
 #include "core2/1EB2840.h"

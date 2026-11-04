@@ -1,3 +1,5 @@
+// World-entrance door of Mayahem Temple: sets FLAG_392_PROGRESS_OPENED_WORLD_MT once the world is
+// opened (or with the open-all-worlds cheat); otherwise a doormake door guarded by that flag.
 #include "ch/mayaentrydoor.h"
 
 extern u32 D_808000E0_chmayaentrydoor[];

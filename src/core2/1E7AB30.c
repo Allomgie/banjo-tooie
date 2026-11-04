@@ -1,3 +1,5 @@
+// Probably the player health front-end and the auto-show logic of the health HUD. Health get, max,
+// add and refill go to per-player or per-transformation storage; damage honors no-damage and cheats.
 #include "core2/1E7AB30.h"
 
 // D_80127090 is a byte block of health HUD state; it decides when to show/hide HUD items
@@ -17,6 +19,7 @@ extern void func_800D4E18(s32, s32);
 extern void _batimer_set(PlayerState *, s32, f32);
 int func_800A1624();
 
+// Health HUD visibility: show on damage, low health or level entry, with suppression counters.
 void func_800A1240(s32 param_0)
 {
     D_80127090[9] = func_800D5210();
@@ -135,6 +138,7 @@ void func_800A1450(void)
     }
 }
 
+// Player health get/max/damage/heal, no-damage flag and regeneration.
 s32 func_800A1618(s32 param_0)
 {
     D_80127092 = param_0;

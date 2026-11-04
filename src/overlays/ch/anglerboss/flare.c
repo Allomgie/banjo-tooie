@@ -1,3 +1,5 @@
+// Homing flare fired by Lord Woo Fak Fak (actor 0x45F): carries a dynamic light, leaves a ring of
+// particles, homes on the player and explodes on contact, message 0x40 or within 1200 units.
 #include "common.h"
 
 extern int D_80800480_changlerbossflare[];

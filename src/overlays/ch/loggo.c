@@ -1,3 +1,5 @@
+// Probably Loggo, the talking toilet of Grunty Industries: talks depending on whether its Jiggy
+// was taken, reacts to touch and egg hits, and hands out the Jiggy. Also a breakable object.
 #include "common.h"
 
 extern int D_80800648_chloggo[];
@@ -43,11 +45,13 @@ extern Actor *func_80106790(Unk80132ED0 *);
 void func_80800398_chloggo();
 int func_80800460_chloggo();
 
+// Loggo NPC: dialogs, jiggy reward, sounds.
 void *chloggo_entrypoint_0()
 {
     return &D_80800648_chloggo;
 }
 
+// Breakable object next to Loggo (explodes on an egg hit, FLAG_181).
 int chloggo_entrypoint_1()
 {
     return (int) &D_80800690_chloggo;

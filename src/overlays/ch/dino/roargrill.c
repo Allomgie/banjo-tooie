@@ -1,3 +1,5 @@
+// Most likely the TDL grill that opens when the T-Rex roars the right small/big roar sequence
+// at it; a wrong roar resets, the right one plays a jingle and sets flag 0xA22.
 #include "common.h"
 
 extern u8 D_80800250_chdinoroargrill[];

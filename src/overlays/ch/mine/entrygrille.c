@@ -1,3 +1,5 @@
+// World-entrance grille of Glitter Gulch Mine: removed once the world is opened
+// (FLAG_393_PROGRESS_OPENED_WORLD_GGM); explodes with particles during the opening cutscene.
 #include "ch/mineentrygrill.h"
 
 extern s32 D_80800140_chmineentrygrille[];

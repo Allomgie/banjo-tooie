@@ -1,3 +1,5 @@
+// Probably a small Jolly Roger's Lagoon pirate enemy on the generic su/coaster walking engine.
+// Its update runs variant 0 with animation speed 1.5 and a factor of 0.8.
 #include "common.h"
 
 extern int D_808000F8_chlagoonpirate[];

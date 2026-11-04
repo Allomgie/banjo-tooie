@@ -1,3 +1,5 @@
+// Surface swimming states: treading water and paddle swimming, plus rest and first-person
+// wrappers. Enter/exit set water gravity and terminal velocity and tell the backpack about water.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

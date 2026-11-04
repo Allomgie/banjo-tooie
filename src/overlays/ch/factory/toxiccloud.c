@@ -1,3 +1,5 @@
+// Probably the toxic gas cloud baddie (actor 0x3FF) of the GI waste areas: drifts in its zone and
+// the nearest cloud chases the player on entry. Attacks destroy it; drawn as nine billboard puffs.
 #include "common.h"
 
 typedef struct ToxicCloudFlags {

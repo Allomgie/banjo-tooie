@@ -1,3 +1,5 @@
+// Probably a Terrydactyland dinosaur baddie on the shared su/coaster walking AI (scale 1.25). It
+// tilts to the ground slope and can talk; finishing text 0x17B8 grants the T-Rex Roar.
 #include "common.h"
 
 extern int D_808004E0_chdinocoaster[];

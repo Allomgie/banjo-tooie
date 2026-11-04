@@ -1,3 +1,6 @@
+// Goto mover (baphysics type 0xC): moves the player to a target by timed interpolation or at
+// constant speed with optional gravity, and reports arrival.
+
 #include "common.h"
 
 #define GD (*(GotoData **) ((u8 *) param_0 + 0xC8))

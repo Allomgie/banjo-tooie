@@ -1,3 +1,5 @@
+// Chompa's Belly shooting minigame (Terrydactyland) and its multiplayer variant: a controller
+// runs the 60-second game and scoring, and spawns ulcer targets of three sizes to shoot.
 #include "common.h"
 
 extern void *D_80801E80_chmonsterinterior;
@@ -79,6 +81,7 @@ void func_8080078C_chmonsterinterior();
 extern void func_80101870(), func_80105834(), func_80107C2C(), func_8080003C_chmonsterinterior(),
     func_808000BC_chmonsterinterior();
 
+// Controller: sub-game set-up, countdown, dialogs, result evaluation, jiggy, ulcer spawning.
 int chmonsterinterior_entrypoint_0()
 {
     return &D_80801E80_chmonsterinterior;
@@ -388,6 +391,7 @@ void func_80800A44_chmonsterinterior(Actor *controller, s32 size)
     }
 }
 
+// Ulcer target: model by size, rise, move along a route or steered by a player, sink, hit scoring.
 void func_80800BC8_chmonsterinterior(actor, size) u8 **actor;
 s32 size;
 {
@@ -447,6 +451,7 @@ s32 func_80800C38_chmonsterinterior(Actor *actor, s32 *out_arg)
     return dialog_id;
 }
 
+// Multiplayer mode: score board for up to 8 players, ranking with tie detection, winner dialogs.
 void func_80800DA4_chmonsterinterior(actor) Actor *actor;
 {
     u8 *data;

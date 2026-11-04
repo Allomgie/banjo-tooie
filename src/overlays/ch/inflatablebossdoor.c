@@ -1,3 +1,5 @@
+// Door to Mr. Patch's arena (Big Top), scaled 1.4x. Opens via chdoormake when flag 0x9C is set;
+// its state depends on the boss retry flag, whether Banjo-Kazooie are allowed, and replay mode.
 #include "ch/inflatablebossdoor.h"
 
 extern s32 D_80800140_chinflatablebossdoor[];

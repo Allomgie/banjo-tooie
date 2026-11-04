@@ -1,3 +1,5 @@
+// Probably the actors of Jolly's inn in Jolly Roger's Lagoon: Jolly Roger the innkeeper (rooms for
+// doubloons, a jiggy), a rescued frog NPC, and the inn's room door that can be blown open.
 #include "common.h"
 
 #define F94 ((ActorFlags94 *) ((u8 *) this + 0x94))
@@ -60,16 +62,19 @@ int func_80800F3C_chjollyroger();
 void func_80800FBC_chjollyroger();
 s32 func_80801194_chjollyroger();
 
+// Jolly Roger NPC plus the dialog and camera-pod helpers both NPCs share.
 int chjollyroger_entrypoint_0()
 {
     return (int) &D_80801358_chjollyroger;
 }
 
+// Rescued frog NPC (at Jolly's or inside the big fish).
 int chjollyroger_entrypoint_1()
 {
     return (int) &D_808013A0_chjollyroger;
 }
 
+// Inn room door that can be blown open.
 int chjollyroger_entrypoint_2(void)
 {
     return (int) &D_808013E8_chjollyroger;

@@ -1,3 +1,5 @@
+// Most likely Chompa, the Terrydactyland lake monster that swallows the player and warps them
+// into its belly; also holds a platform that rises from the lake and its switch.
 #include "common.h"
 
 extern void _subaddieaudioquick_entrypoint_2(Actor *, f32 *, void *);
@@ -123,6 +125,7 @@ extern u8 D_808020BC_chlakemonster[];
 extern u8 D_808022C8_chlakemonster[];
 void func_80801494_chlakemonster();
 
+// Chompa: lurk/leap/swallow state machine, warp into its belly, splash particles.
 void func_80800000_chlakemonster(Actor *actor)
 {
     func_800EFA4C(actor->position, 0.0f, -3050.0f, 0.0f);
@@ -729,6 +732,7 @@ int chlakemonster_entrypoint_0()
     return &D_80802204_chlakemonster;
 }
 
+// Platform rising from the lake (bubbles, ripples, loop sound) and the switch that raises it.
 void func_80801790_chlakemonster(Actor *actor, s32 new_state)
 {
     s32 *raw = (s32 *) actor;

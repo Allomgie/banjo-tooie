@@ -1,3 +1,5 @@
+// Probably the player's fall-height tracker: remembers the last stable position and computes the
+// fall distance against a threshold table to give the fall damage read by landing code.
 #include "core2/1E6EC70.h"
 
 extern s32 D_80117E60[];

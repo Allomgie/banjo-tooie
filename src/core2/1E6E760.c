@@ -1,3 +1,6 @@
+// Most likely the player's per-medium traction override (PlayerState+0x74, 5 ground media):
+// func_80094E98 returns the override for the current medium if enabled, else the global default.
+
 #include "common.h"
 
 s32 func_80094E70(void)

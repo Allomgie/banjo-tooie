@@ -1,3 +1,5 @@
+// Runtime overlay manager: loads, decompresses, relocates (defragments) and unloads overlays,
+// ages them, and finds the overlay that owns an address.
 #include "types.h"
 #include "overlays.h"
 

@@ -1,3 +1,5 @@
+// Two unrelated parts: the asset cache's free-memory threshold and age cutoff, and the
+// multiplayer minigame tournament state (selected games, rounds, scores, next round).
 #include "common.h"
 
 extern s32 D_8011A480[];
@@ -17,6 +19,7 @@ extern s16 D_80127784[];
 extern s16 D_8012778C[];
 extern u8 D_80127782;
 
+// Memory budget: free-memory threshold and age cutoff used when trimming the asset cache.
 // Looks up the free-memory threshold for an id in D_8011A480 (default 0x3E800).
 // Matching: the line breaks in this function are needed for the match.
 void func_800A9EC0(s32 id)
@@ -49,6 +52,7 @@ int func_800A9F30()
     return D_80127770 < largest_free;
 }
 
+// Multiplayer minigame tournament: selected games, round counter, scores, starting the next round.
 // Sets the game flag of a minigame.
 int func_800A9F60(minigame)
 s32 minigame;

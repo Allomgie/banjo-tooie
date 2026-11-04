@@ -1,8 +1,9 @@
+// Party swap: parked character records (0x3C bytes each, vector at D_801354F0) so a left-behind
+// character respawns on its map, a party mode byte (D_801354F8), and the swap state machine
+// (D_80135520) that switches control between characters through screen transitions.
 #include "core2/1ECE0B0.h"
 #include "types.h"
 
-// Party swap: parked character records (0x3C bytes each, vector at D_801354F0),
-// party mode (D_801354F8) and the swap state machine (D_80135520).
 // TU-NOTE: second half of the former 1ECE0B0 range, from func_800F88A0 on. Functions
 // defined in 1ECE0B0 are declared here exactly as defined there (prototype for ANSI,
 // empty parameter list for K&R) so every call compiles as in the combined file.
@@ -62,6 +63,7 @@ void func_800F8128(s32 arg0);
 void func_800F8268(s32 arg0, s32 a1, s32 a2);
 void func_800F8358(s32 param_0, s32 param_1);
 
+// Group: parked character records (create, free, find, save, respawn) and party mode accessors.
 // Find the parked record with the given transformation id, or NULL.
 u8 *func_800F88A0(id)
 s32 id;
@@ -447,6 +449,7 @@ int func_800F929C()
     return 1;
 }
 
+// Group: character-swap state machine (wipe transitions, switch control, spawn partner, regroup).
 // Outputs the current character, its id, the other character (Banjo <-> Kazooie)
 // and the other one's id.
 void func_800F92CC(s32 *out_character, volatile s32 *out_id, s32 *out_other, s32 *out_other_id)

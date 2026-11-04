@@ -1,3 +1,6 @@
+// Targitzan, the Mayahem Temple boss: a spinning five-section totem. 26 states; eggs hit the
+// weak spots, sections explode, darts and minions come between phases; at the end a ring of
+// 10 darts, the final explosion, the jiggy and the defeated flag.
 #include "common.h"
 
 extern void *D_80802748_chstatueboss;

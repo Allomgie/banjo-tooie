@@ -1,3 +1,5 @@
+// Probably a stone dart-gun head trap: a rotating head that aims at the player and fires stone
+// darts (actor 0x123). An egg hit (message 0x40) crumbles it.
 #include "common.h"
 
 #define SDF(p) (((SDFlag *) (p)->unk0)->f)
@@ -93,6 +95,7 @@ extern u8 D_80800FA0_chstonedartgunhead[];
 extern void func_80105834(), func_80107C2C(), func_80108ED0(), func_80800000_chstonedartgunhead(),
     func_80800B6C_chstonedartgunhead();
 
+// Turret head: base lookup, rotation, state changes, firing, destruction and draw.
 void func_80800000_chstonedartgunhead(actor) Actor *actor;
 {
     s32 base;
@@ -357,6 +360,7 @@ int chstonedartgunhead_entrypoint_0()
     return &D_80800F10_chstonedartgunhead;
 }
 
+// Dart projectile: straight flight, timeout, collision and burst.
 void func_80800BE8_chstonedartgunhead(struct Actor *actor)
 {
     int dst;

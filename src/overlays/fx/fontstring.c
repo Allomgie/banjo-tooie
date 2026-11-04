@@ -1,3 +1,5 @@
+// Helpers that append inline text control codes (switch, color, alpha, icon) to a string
+// and return the new end.
 #include "common.h"
 
 s32 func_80800000_fxfontstring(char *str)

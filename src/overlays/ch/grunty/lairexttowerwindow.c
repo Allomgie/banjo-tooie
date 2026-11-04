@@ -1,3 +1,5 @@
+// Possibly a window of the tower outside Gruntilda's lair: it breaks apart on message 0x40 and
+// emits a particle burst and sound on message 0x90; no update logic of its own.
 #include "common.h"
 
 extern u8 D_808000D0_chgruntylairexttowerwindow[];

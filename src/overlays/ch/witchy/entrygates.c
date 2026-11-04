@@ -1,3 +1,5 @@
+// The two Witchyworld entrance gates on Isle o' Hags (left/right by variant 0x33). They open when
+// the world is unlocked (flag 0x394) with creak sounds, and start open unless the cutscene runs.
 #include "ch/witchyentrygates.h"
 
 extern void func_80103140();

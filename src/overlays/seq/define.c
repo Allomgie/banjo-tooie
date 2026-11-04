@@ -1,3 +1,4 @@
+// Data-only overlay; most likely the table from cutscene sequence number to its game flag id.
 #include "common.h"
 
 extern s16 D_80800020_seqdefine[];

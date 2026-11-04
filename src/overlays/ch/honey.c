@@ -1,3 +1,5 @@
+// Most likely the honeycomb energy pickups: placed honeycomb and level-dependent drops. Collecting
+// shows first-time tutorials and the HUD health refill, and the number of live drops is capped.
 #include "common.h"
 
 #define AF(p, i) (*(f32 *) &(p)->actorData[i])

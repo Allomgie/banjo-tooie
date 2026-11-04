@@ -1,3 +1,4 @@
+// Synth voice filter stage: resample pull plus per-voice low-pass and pole filters, param handler.
 #include "common.h"
 
 typedef struct {

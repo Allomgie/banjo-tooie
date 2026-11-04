@@ -1,3 +1,5 @@
+// Probably the camera mode for the Submarine transformation: follows the sub and tilts pitch/yaw
+// by thrust speed and swim direction; near the surface (under 200 units) it stops the pitch tilt.
 #include "common.h"
 
 extern void func_80115870(s32, f32);

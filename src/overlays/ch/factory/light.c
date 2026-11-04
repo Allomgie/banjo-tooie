@@ -1,3 +1,6 @@
+// Rotating warning beacon of Grunty Industries, in 8 colours: the model spins and two point
+// lights orbit it. Snaps to the wall, fades with intensity, switched by message 0xA.
+// In Quality Control it starts on with flag 0x1BD, powers up over 5 s and plays an alarm.
 #include "common.h"
 
 extern int D_80800B90_chfactorylight[];

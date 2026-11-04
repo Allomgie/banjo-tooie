@@ -1,3 +1,5 @@
+// Player spawn on map entry: picks the transformation, finds the entrance marker or spawn
+// point, places the player and restores the initial state, with a few map-specific fixes.
 #include "common.h"
 #include "playerstate.h"
 

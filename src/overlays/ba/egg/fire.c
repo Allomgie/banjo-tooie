@@ -1,3 +1,5 @@
+// Egg firing logic: per-egg-type fire-rate state machine, shot queue with delayed follow-up shots,
+// shot ray from the cursor through the camera, egg spawn, shot sound and usage count.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

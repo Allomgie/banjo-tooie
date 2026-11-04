@@ -1,3 +1,5 @@
+// Player-started dialog helper: opens a dialog at the player whose close callback sends interrupt
+// 0x81 to the player, plus a variant that sets a game flag once the dialog actually started.
 #include "common.h"
 
 extern s32 _badialog_entrypoint_0;

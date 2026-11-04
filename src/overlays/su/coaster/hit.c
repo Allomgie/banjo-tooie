@@ -1,3 +1,5 @@
+// Hit and stun reactions of the walking baddie: hurt/knock/freeze touch callbacks, the dizzy
+// state with a particle ring, a looped hit sound and a heavy-stomp effect.
 #include "common.h"
 
 extern int D_80800CB0_sucoasterhit[];

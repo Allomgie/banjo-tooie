@@ -1,3 +1,5 @@
+// In-game pause menu on top of the newoption menu: main page, per-level totals, items and moves
+// overview, confirmation popups, game over page, Return / Exit / Restart, music ducking, drawing.
 #include "gc/newpause.h"
 #include "gl/dbstring.h"
 #include "fx/kern.h"

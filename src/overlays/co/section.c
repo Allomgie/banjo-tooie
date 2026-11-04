@@ -1,3 +1,4 @@
+// Constant getters for the fixed start maps: Spiral Mountain (0xAF) and the boot intro (0x18B).
 #include "common.h"
 
 // Start map for a new game: Spiral Mountain.

@@ -1,3 +1,4 @@
+// Dust/smoke puff preset (shared emitter slot 8); used by player dust, Bill Drill, torpedo, fx/egg.
 #include "common.h"
 
 extern int D_80800050_fxdlsmoke[];

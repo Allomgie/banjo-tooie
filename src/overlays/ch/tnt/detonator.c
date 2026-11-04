@@ -1,3 +1,6 @@
+// TNT charge for the Detonator transformation in Glitter Gulch Mine: shows its linked target,
+// counts down with a flashing glow, explodes, and tells the target (blockage, hut, cell door).
+// Entrypoint 1 is the link helper the targets call.
 #include "common.h"
 
 extern void *D_808006A8_chtntdetonator;

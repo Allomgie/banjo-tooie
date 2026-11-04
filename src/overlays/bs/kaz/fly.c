@@ -1,3 +1,6 @@
+// Kazooie-alone flight states: take-off, free flight with boost and feather use, beak bomb dive,
+// crash/damage and hurt states, a locked hover and a drone variant. Shared enter/exit set up the
+// 0x20-byte flight state memory.
 #include "overlays/bs/kaz/fly.h"
 
 void func_80800000_bskazfly(PlayerState *self)

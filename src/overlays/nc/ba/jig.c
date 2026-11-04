@@ -1,3 +1,5 @@
+// Probably the camera for the jiggy celebration dance: orbit around the player at a fixed
+// maximum distance and pitch.
 #include "nc/ba/jig.h"
 
 typedef struct {

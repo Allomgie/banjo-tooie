@@ -1,7 +1,7 @@
+// Piglets' pool (Jolly Roger's Lagoon): two piglet NPCs plus a pool controller that fades the
+// water layers. Flag 0x166 = toxic pools fixed, 0x167 = HFP hot pool drained; both give jiggy 0x22.
 #include "common.h"
 
-// Piglets' pool (Jolly Roger's Lagoon): two piglet NPCs (0x3A3, 0x3A4) plus a pool controller.
-// Flag 0x166 = toxic pools fixed, flag 0x167 = HFP hot pool drained; both done gives jiggy 0x22.
 
 extern int D_808013F0_chpoolkids[];
 extern int D_80801438_chpoolkids[];
@@ -63,6 +63,7 @@ void func_80800D74_chpoolkids();
 void func_808008DC_chpoolkids();
 void func_808011A8_chpoolkids();
 
+// Piglets: proximity dialogs per pool state, swim effects, jiggy hand-out.
 int chpoolkids_entrypoint_0()
 {
     return (int) &D_808013F0_chpoolkids;
@@ -73,6 +74,7 @@ int chpoolkids_entrypoint_1()
     return (int) &D_80801438_chpoolkids;
 }
 
+// Pool controller: fades two mesh layers, runs the change cutscenes, steam and water sound.
 int chpoolkids_entrypoint_2()
 {
     return &D_80801480_chpoolkids;

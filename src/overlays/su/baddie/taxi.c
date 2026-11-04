@@ -1,3 +1,5 @@
+// Most likely Taxi Pack passenger logic: pickup tests, flights into and out of the backpack,
+// restoring passengers after a map change, falling to the floor, and the drop-off.
 #include "common.h"
 
 extern void func_8010D254(f32 *);

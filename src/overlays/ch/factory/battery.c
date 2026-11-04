@@ -1,3 +1,5 @@
+// Grunty Industries batteries and battery doors: a carriable battery must be brought to its
+// floor's door, which opens once the floor's battery flag is set.
 #include "common.h"
 
 extern int D_80801B34_chfactorybattery[];
@@ -102,6 +104,7 @@ void func_8080130C_chfactorybattery();
 extern void func_801018A4(), func_80105834(), func_80107C2C(), func_80108ED0();
 extern u8 D_80801AB0_chfactorybattery[], D_80801AC4_chfactorybattery[], boot_thread_stack[];
 
+// Carriable battery: carry/route, sparks, sounds, delivery sets the floor flag.
 int *chfactorybattery_entrypoint_0()
 {
     return D_80801B34_chfactorybattery;
@@ -683,6 +686,7 @@ s32 actor;
     }
 }
 
+// Floor battery doors (two actor infos) built on the generic door code.
 int chfactorybattery_entrypoint_1()
 {
     return (int) D_80801BA8_chfactorybattery;

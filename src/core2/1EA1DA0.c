@@ -1,3 +1,5 @@
+// Probably four unrelated subsystems: collision flags to surface type, the point-light list,
+// screen transition objects, and the timed-function queue with delayed sound/dialog wrappers.
 #include "core2/1EA1DA0.h"
 #include <ultra64.h>
 
@@ -88,6 +90,7 @@ void func_800C9EF8(f32, s32, s32);
 
 extern u8 *D_8012AB00;
 
+// Collision flags to surface type lookup, used by player physics.
 // Maps collision flags (material bits 0x1F00, bit 17) to a surface type.
 int func_800C84B0(s32 flags)
 {
@@ -129,6 +132,7 @@ loop_7:
     goto loop_7;
 }
 
+// Dynamic point lights plus ambient and direction light state (front end of gclightsDll).
 s32 func_800C8560(u8 *light, s32 mask)
 {
     u8 *light_alias;
@@ -548,6 +552,7 @@ int func_800C9128(s32 arg)
     _gclightsDll_entrypoint_3(&D_8012AB00, arg_copy);
 }
 
+// Screen transition objects (front end of gctransitionDll): create, draw, start in/out, query.
 // Returns the transition object with this id, creating it if needed.
 s32 func_800C9150(s32 id)
 {
@@ -788,6 +793,7 @@ int func_800C9714()
     return 1;
 }
 
+// Timed function queue: sorted insert, arity dispatch, per-frame run, flush, clear, defrag.
 // Inserts a deferred call into the time-sorted queue.
 int func_800C9750(f32 delay, s32 kind, s32 callback, s32 arg0, s32 arg1, s32 arg2,
                   s32 arg3, s32 arg4)
@@ -853,6 +859,7 @@ void func_800C986C(u8 *entry)
     }
 }
 
+// Game-side delayed actions: music, (positional) sfx, dialog, actor messages, player/camera modes.
 void func_800C9974()
 {
     func_800FC63C();

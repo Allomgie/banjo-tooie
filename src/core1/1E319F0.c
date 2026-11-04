@@ -1,3 +1,5 @@
+// Loader for the non-relocatable core2 overlay: DMAs the compressed image, inflates text and
+// data with rarezip, clears bss and stores the CRC words of the decompressed parts in its bss.
 #include "buffers.h"
 
 void rom_dma_read(u8 *, u8 *, u32);

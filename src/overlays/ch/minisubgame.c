@@ -1,3 +1,5 @@
+// Probably the mini-sub challenge in Jolly Roger's Lagoon: a host starts a 60-second game in
+// which the sub shoots homing mines for points; 60 points earns the jiggy.
 #include "common.h"
 
 extern int D_80801424_chminisubgame[];

@@ -1,3 +1,5 @@
+// Probably two unrelated model-data units: model hitbox volume tests (sphere, box, cylinder), and
+// vertex list helpers (bounds, clone, free, colour tint and palette recolor).
 #include "common.h"
 
 typedef struct {
@@ -113,6 +115,7 @@ typedef struct {
 } local_type;
 extern void _dbpalette_entrypoint_0(s32, s32, s32 *);
 
+// Model hitbox volume tests: sphere vs box/cylinder/sphere, in model space and per bone.
 // Finds sphere hit_id and returns its world-space center and radius.
 s32 func_800B0D80(LocalModel_800B0D80 *model, s32 hit_id, f32 *pos, f32 *rot,
                   f32 scale, s32 unk_0, void *anim_list, f32 *out_pos, f32 *out_radius)
@@ -477,6 +480,7 @@ s32 func_800B1F8C(void *model, f32 *pos, f32 *rot, f32 scale, s32 unk_0,
     return result;
 }
 
+// Vertex list accessors (vertices, bounds, extent, count, center+radius), clone and free.
 // Returns the vertex array.
 func_800B2190(vtx_list)
 {
@@ -600,6 +604,7 @@ void *func_800B2400(u16 *vtx_list, u32 side_flag)
     return clone;
 }
 
+// Vertex colour tint, set vertex colours, and recolor via the palette overlay.
 // Vertex colors = src color * tint / 256; skipped if tint is 0xFF,0xFF,0xFF.
 void func_800B2464(u8 *vtx_list, s32 *tint, s32 src_list)
 {
@@ -696,6 +701,7 @@ void func_800B25D8(local_type *dst_list, local_type *src_list, s32 unk_0)
     osWritebackDCache(dst_verts, (dst_end - dst_verts) * sizeof(local_entry));
 }
 
+// Defrag wrapper.
 int func_800B26C8()
 {
     defrag();

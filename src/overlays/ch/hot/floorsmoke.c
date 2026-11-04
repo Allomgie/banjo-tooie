@@ -1,3 +1,5 @@
+// Most likely a floor smoke/steam emitter: emits rising smoke and sometimes a hiss at a random
+// on-screen point of its zone; interval and variant depend on the map.
 #include "common.h"
 
 // TU-NOTE: the overlay .data (tables below) is defined in this file because IDO's assembler

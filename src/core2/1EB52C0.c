@@ -1,3 +1,5 @@
+// Animated-texture state for models: freelist blocks of 7 entries (stride, frame count, speed)
+// with a current frame each, advanced by delta time; the renderer queries the texture offset.
 #include <ultra64.h>
 #include "memory.h"
 #include "freelist.h"

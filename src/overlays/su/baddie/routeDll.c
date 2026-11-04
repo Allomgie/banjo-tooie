@@ -1,3 +1,5 @@
+// Most likely zone-graph navigation for walking and flying actors: builds a refcounted neighbour
+// graph of a zone group's volumes, picks nodes, and steers actors to a goal inside the zones.
 #include "common.h"
 
 typedef struct {

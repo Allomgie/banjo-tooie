@@ -1,3 +1,5 @@
+// Per-player buttons (PlayerState+0x40): pressed/held/released, hold counts, stick and a
+// per-button lock that suppresses input after state changes or when control is masked off.
 #include "common.h"
 #include "overlays/ba/key.h"
 

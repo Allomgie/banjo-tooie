@@ -1,3 +1,5 @@
+// Most likely a low-res off-screen render target: a 160x128 RGBA16 color buffer that is
+// allocated, freed and, while active, set up as the frame's color/depth target.
 #include "common.h"
 
 // Off-screen color buffer: D_8012D5F4 is the heap block, D_8012D5F0 its 64-byte-aligned address.

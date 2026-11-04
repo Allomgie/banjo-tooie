@@ -1,3 +1,5 @@
+// Probably exploding chain links: a camera-facing prop that, when broken, spawns a dust burst
+// and shatters through the exploder.
 #include "common.h"
 
 extern Unk80132ED0 *func_80101080(void);

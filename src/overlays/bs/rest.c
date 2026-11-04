@@ -1,3 +1,6 @@
+// The "held by an external lock" states: while a cutscene, dialog or actor holds the player, the
+// player stands in a hold animation and faces the lock's target. Exports helpers that other
+// character families wrap as their own rest states, plus three Banjo-Kazooie rest states.
 #include "overlays/bs/rest.h"
 
 extern enum bs_state_e bsrest_entrypoint_13(PlayerState *self);

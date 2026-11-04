@@ -1,3 +1,5 @@
+// Banjo-Kazooie forward egg firing ("egg head"): Kazooie shoots the selected egg out of her
+// mouth at the right anim time, then returns to crouch/idle or falls.
 #include "overlays/ba/physics.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

@@ -1,7 +1,10 @@
+// Actor-kind registry: maps a placed marker/prop id to its actor kind's ActorInfo getter,
+// and an entrance number to its entrance marker id.
 #include "ge/markersDll.h"
 
 extern s32 *D_80800090_gemarkersDll[490];
 
+// Marker/prop id to ActorInfo getter table lookup (base id 0xB6).
 // Maps a placed marker/prop id (0xB6..0x545) to the ActorInfo getter of its actor kind.
 s32 gemarkersDll_entrypoint_0(s32 id)
 {
@@ -11,6 +14,7 @@ s32 gemarkersDll_entrypoint_0(s32 id)
     return D_80800090_gemarkersDll[id - 0xB6];
 }
 
+// Entrance number to entrance marker id (offset 0x7F during the special sequence).
 // Maps an entrance number to the id of its entrance marker (0 if out of range).
 s32 gemarkersDll_entrypoint_1(s32 entrance)
 {

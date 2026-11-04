@@ -1,3 +1,5 @@
+// Probably the camera sway component: smooths a lateral offset from the player's turn relative to
+// the camera heading, and holds a rotation override and a scale factor.
 #include "core2/1EEF790.h"
 
 // Camera sway component. State at camera+0x04, size 0x5C.
@@ -35,12 +37,14 @@ extern f32 func_800137AC(f32);
 extern f32 func_800137C4(void);
 void func_80116218();
 
+// Camera sway/offset component.
 // Component size.
 s32 func_80115EA0()
 {
     return 0x5C;
 }
 
+// Scalar and 2D damped approach helpers, vec3 zero.
 // Spring *value toward target; snaps and zeroes velocity on overshoot.
 void func_80115EA8(f32 target, f32 *value, f32 *velocity, f32 unk_3, f32 unk_4, f32 unk_5)
 {

@@ -1,3 +1,5 @@
+// Water-ripple preset: finds the water surface near a position (or uses a given height) and spawns a
+// ripple ring of one of several sizes (emitter slot 3); also a height-only variant.
 #include "common.h"
 
 extern s32 func_800FB2AC(f32 *, f32);

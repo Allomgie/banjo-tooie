@@ -1,3 +1,6 @@
+// The Jiggy collectible actor: spins, twinkles, carries a light and is registered in the
+// collectible registry. On collection it spawns the jiggy-collect sequence and deletes itself.
+// A second small actor shows a one-shot text and unlocks a front-end entry.
 #include "common.h"
 
 extern s32 func_8010A6B0(Actor *, s32);
@@ -21,6 +24,7 @@ typedef struct {
     u32 pad_1 : 3;
 } CodexJigsawFlags65;
 
+// Jiggy actor: registry, spin, twinkle, light, collect message.
 // Message 0x3E handler: calls suautobaddies unless flag 0x665 is set.
 void func_80800000_chjigsaw(Actor *actor, void *msg)
 {
@@ -189,6 +193,7 @@ int chjigsaw_entrypoint_0()
     return (int) &D_80800770_chjigsaw;
 }
 
+// One-shot text and front-end unlock (skipped in replay mode).
 // Second actor: shows text 0xD0A once and unlocks replay entry 0x85, except in replay mode.
 int func_808006CC_chjigsaw(s32 actor)
 {

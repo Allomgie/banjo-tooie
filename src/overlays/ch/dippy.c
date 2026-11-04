@@ -1,3 +1,5 @@
+// Dippy, the thirsty Diplodocus of Terrydactyland: talks, drinks, sprays water, awards a jiggy.
+// A second actor animates the water level of his pool (map-mesh vertices) during cutscene 0x36.
 #include "common.h"
 
 #define AF(p, i) (*(f32 *) &(p)->actorData[i])
@@ -89,11 +91,13 @@ void func_80800800_chdippy();
 void func_808009D8_chdippy();
 void func_80801200_chdippy();
 
+// Dippy NPC: state machine, dialogs, jiggy award, drinking and spraying effects, camera pod.
 int chdippy_entrypoint_0()
 {
     return (int) &D_80801580_chdippy;
 }
 
+// Pool water actor: water-level animation of the pool vertices, falling-water particles, splash.
 int chdippy_entrypoint_1()
 {
     return (int) &D_808015C8_chdippy;

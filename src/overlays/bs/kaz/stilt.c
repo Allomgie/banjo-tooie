@@ -1,3 +1,5 @@
+// Probably Kazooie-alone wading-boots (long-leg) states: put on, idle, walk, jump, take off when
+// the timer runs out, slide, rest and drone; shared enter/exit set collision spheres and timer.
 #include "common.h"
 #include "overlays/bs/kaz/stilt.h"
 

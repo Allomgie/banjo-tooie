@@ -1,3 +1,5 @@
+// Banjo-Kazooie backwards egg firing ("egg ass"): crouched poop-egg anim that fires the
+// selected egg behind the player at the right time, then returns to crouch/idle or falls.
 #include "overlays/ba/physics.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

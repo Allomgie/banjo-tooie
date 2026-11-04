@@ -1,3 +1,4 @@
+// Respawn location after a transformed character dies or the form resets: map and entrance table.
 #include "su/restart.h"
 
 typedef struct {

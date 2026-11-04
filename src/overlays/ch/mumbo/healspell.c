@@ -1,3 +1,5 @@
+// Probably the visual and scripted part of Mumbo's heal spell: sparkle phases, then a later
+// cutscene aims the healing beam at the sick dinosaur and sets the completion flags.
 #include "common.h"
 
 typedef struct {

@@ -1,3 +1,5 @@
+// Drone mode "transform": the generic form-change sequence (e.g. Humba Wumba). Sparkles spiral
+// around the player, the model squashes and stretches, the form switches, then control returns.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

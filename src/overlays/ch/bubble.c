@@ -1,3 +1,5 @@
+// Draws a refractive bubble: copies the framebuffer area behind it as a texture onto a
+// camera-facing quad with a bubble mask, using raw GBI commands.
 #include "common.h"
 
 #define BUBBLE_COMMAND(pkt, first, second)                                                         \

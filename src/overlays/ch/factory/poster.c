@@ -1,3 +1,5 @@
+// Probably a tearable GI wall poster: when the player passes it, it plays a sound, switches the
+// map model variant, sets flag 0x3D and despawns (immediately if the flag is already set).
 #include "common.h"
 
 extern void *D_80800110_chfactoryposter;

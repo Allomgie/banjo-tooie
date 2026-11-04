@@ -1,3 +1,5 @@
+// Rubble blockage in Glitter Gulch Mine blown up by a linked TNT detonator: it explodes, emits
+// debris, sets its flag (0x7E + variant) and disappears.
 #include "common.h"
 
 extern int D_80800240_chtntblockage[];

@@ -1,3 +1,5 @@
+// Cloud Cuckooland bean seeds and planting spots: a collectible seed (flag, bean item, first-time
+// dialog), and a spot where the right form plants a seed and the beanstalk grows.
 #include "common.h"
 
 #define AF(p, i) (*(f32 *) &(p)->actorData[i])
@@ -32,6 +34,7 @@ extern void func_80101180();
 void func_80800804_chbeanstalkseed();
 extern void func_80105834(), func_80107C2C(), func_80108ED0(), func_80800950_chbeanstalkseed();
 
+// Seed pickup: collected flag, inventory item, first-time dialog, sounds.
 // Kind 1 (seed): despawn if this seed's flag (0x33D + index) is already set.
 void func_80800000_chbeanstalkseed(void *param_0)
 {
@@ -80,6 +83,7 @@ int chbeanstalkseed_entrypoint_0()
     return (int) &D_80800C00_chbeanstalkseed;
 }
 
+// Planting spot and beanstalk: plant condition, grow sequence, flags, draw.
 // Can the player plant a seed here (has item 0x50, right form).
 s32 func_80800328_chbeanstalkseed()
 {

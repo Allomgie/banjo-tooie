@@ -1,3 +1,5 @@
+// Probably the multiplayer setup block D_8012B3FC: player count, per-player character and team
+// bytes, game type and options, and a map id (default 0x173), with getters, setters and defaults.
 #include "common.h"
 
 typedef struct {

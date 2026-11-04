@@ -1,3 +1,5 @@
+// Light animation manager: a pool of tween slots that fade, move or flicker point lights over
+// time. Updated once per frame, cancellable per light, freed on world unload.
 #include "common.h"
 
 // Tween slot, kind 0 = free. Kinds: 1 colour fade, 2 radii fade, 3 colour flicker,

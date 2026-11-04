@@ -1,3 +1,4 @@
+// Banjo-Kazooie rebound: the stronger knock-back from bouncing off something.
 #include "overlays/bs/rebound.h"
 
 // Rebound: stronger knock-back from bouncing off something (anim 0xF).

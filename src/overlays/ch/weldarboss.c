@@ -1,3 +1,5 @@
+// Weldar, the Grunty Industries boss: a ~49-state fight (suck-in, fire, electric floor, hits),
+// plus the linked torch-light actor.
 #include "common.h"
 
 extern void *func_80100094(Actor *, u32);
@@ -228,11 +230,13 @@ void func_80803D64_chweldarboss();
 s32 func_80803D98_chweldarboss(s32 param_0);
 void func_80804230_chweldarboss();
 
+// Weldar body: init, update state machine, draw, dialogs, spawns, shock check, helpers.
 void *chweldarboss_entrypoint_0()
 {
     return &D_808047C4_chweldarboss;
 }
 
+// Linked torch light actor: a point light with an intensity ramp and scaled draw.
 s32 chweldarboss_entrypoint_1(void)
 {
     return (s32) &D_8080480C_chweldarboss;

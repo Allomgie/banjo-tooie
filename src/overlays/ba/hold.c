@@ -1,3 +1,5 @@
+// Carried-object component: holds the actor the player carries and each frame moves it to the
+// player's carry bone with the player's yaw, setting and clearing the carrying flag.
 #include "ba/hold.h"
 #include "playerstate.h"
 

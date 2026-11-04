@@ -1,3 +1,5 @@
+// Controller manager: joy thread, per-frame button hold counters, edge masks, normalised sticks,
+// getters, demo record/playback hook, and the SI bus mutex shared with EEPROM and rumble code.
 #include "threads.h"
 #include "types.h"
 #include "core1/1E2D890.h"
@@ -68,6 +70,7 @@ void func_80016A48(void);
 void func_80016864(void);
 void func_80016A04(void);
 
+// Group: controller polling, hold counters, edge masks, stick normalisation, getters, demo hook.
 // Normalises a raw stick axis (dead zone to upper) to +-80, scaled by a float derived from D_8007DB54.
 f32 func_80015D60(s32 stick, s32 dead_zone, s32 upper)
 {
@@ -388,6 +391,7 @@ void func_8001690C(s32 pad, s32 value)
     D_800799E0[pad].frames[6] = value;
 }
 
+// Group: SI bus mutex shared by controller, rumble pak and EEPROM code.
 OSMesgQueue *func_80016928(void)
 {
     return &D_80079B78;

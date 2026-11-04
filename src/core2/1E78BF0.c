@@ -1,3 +1,6 @@
+// Probably a grab-bag of player-state helpers: input-driven state selection, a combined mode
+// setup helper, push-out-of-volume routines, effect spawns at the player, and the return warp.
+
 #include "core2/1E78BF0.h"
 #include "common.h"
 
@@ -52,6 +55,7 @@ extern void func_800FC660(s32);
 s32 func_800A0064();
 int func_800A055C();
 
+// Group: common bs helpers (input-driven state selection, mode setup, look-at, death jingle).
 s32 func_8009F300()
 {
     return 0x4;
@@ -95,6 +99,7 @@ f32 func_8009F3BC(PlayerState *player, f32 height, f32 target_height, f32 veloci
     return time;
 }
 
+// Group: push the player out of solid actor volumes (rotated box, box, cylinder, sphere).
 // Pushes the player out of a rotated box; returns 1 if pushed.
 s32 func_8009F440(PlayerState *player, f32 *box_pos, f32 *box_rot, f32 *box_min, f32 *box_max,
                   f32 push_speed)
@@ -245,6 +250,7 @@ s32 func_8009FA20(s32 player, f32 *center, f32 y_offset, f32 radius, f32 push_sp
     return 1;
 }
 
+// Group: spawn air bubbles, ripples, sparkles and splashes at the player.
 // Spawns an air bubble.
 s32 func_8009FBB0(PlayerState *player, f32 pos[3], f32 unk_0)
 {
@@ -549,6 +555,7 @@ if (func_8008D1B0() != 0) {
 return state;
 }
 
+// Group: warp the player to the stored return map and entrance.
 // Warps to the stored return point.
 void func_800A05DC(s32 player)
 {

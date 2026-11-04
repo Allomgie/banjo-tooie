@@ -1,3 +1,5 @@
+// Handle table for movable heap blocks (up to 249 handles): alloc, realloc, free, get, plus
+// incremental defragmentation that fixes up pointers of blocks that moved.
 #include "common.h"
 
 typedef struct {

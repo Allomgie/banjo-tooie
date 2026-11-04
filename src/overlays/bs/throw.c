@@ -1,3 +1,5 @@
+// Player "throw" state: plays the throw animation facing the target and releases the held actor
+// partway through; on exit it arms two state timers when returning to idle.
 #include "common.h"
 
 extern void anctrl_reset(void *local_0);

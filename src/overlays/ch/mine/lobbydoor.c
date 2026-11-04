@@ -1,3 +1,6 @@
+// Entrance door of Glitter Gulch Mine's Ordnance Storage; may start open on entry via exit 1.
+// Its approach dialog depends on the learned Breegull Blaster / Beak Bayonet moves, and
+// finishing the last one opens the door.
 #include "common.h"
 
 extern int D_808001F0_chminelobbydoor[];

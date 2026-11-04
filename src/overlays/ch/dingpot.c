@@ -1,3 +1,5 @@
+// Most likely Dingpot, the living cauldron NPC: bubbles, talks, and once unlocked refills the
+// player's egg and feather counters and shoots them out in a launch arc.
 #include "common.h"
 
 extern int D_80800500_chdingpot[];

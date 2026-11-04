@@ -1,3 +1,5 @@
+// Alpha glow map-mesh effect: fades vertex alpha up to 1 and down to 0, then waits before
+// the next pulse.
 #include "common.h"
 
 extern f32 func_800D8FF8(void);

@@ -1,3 +1,5 @@
+// Probably Bottles' dead body in his house after Grunty kills him: a scaled model with one
+// part hidden and no logic beyond a callback.
 #include "common.h"
 
 extern int D_808000C0_chbottlesdead[];

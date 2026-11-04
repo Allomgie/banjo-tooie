@@ -1,3 +1,6 @@
+// Player roll angle: value, ideal, limit and rate, approached at a limited, wrap-aware rate
+// (default 700 deg/s, 7.5), with getters and setters.
+
 #include "overlays/ba/roll.h"
 #include "common.h"
 #include "overlays/ba/playerstate.h"

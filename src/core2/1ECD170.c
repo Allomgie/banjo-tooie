@@ -1,3 +1,5 @@
+// PlayerState object: allocates one heap block with 86 lazily sized subsystem blocks, frees and
+// defrags it, and answers queries (movement mode, can-interact, anchor position, rotation).
 #include "core2/1ECD170.h"
 
 extern f32 bastick_distance(s32);

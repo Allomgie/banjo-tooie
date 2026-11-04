@@ -1,3 +1,5 @@
+// Shared Kickball minigame logic: arena setup per map, goals, wall clamping, ball separation,
+// team scores with HUD, player placement, and ball model drawing.
 #include "common.h"
 
 extern Vec3f D_80801200_sukickball;

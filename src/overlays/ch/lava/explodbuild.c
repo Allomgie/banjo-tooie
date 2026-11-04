@@ -1,3 +1,5 @@
+// Stone building on Hailfire Peaks (lava side) that an egg hit blows up with dust, sound and
+// camera shake, setting a broken flag. A second callback tracks whether the player is nearby.
 #include "ch/lavaexplodbuild.h"
 
 extern int D_80800290_chlavaexplodbuild[];

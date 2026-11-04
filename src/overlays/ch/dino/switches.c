@@ -1,3 +1,5 @@
+// Probably TDL's switch-and-door set: a table configures several switch kinds built on the
+// generic switch, and the doors they open. One switch runs a 35 s countdown before re-closing.
 #include "common.h"
 
 extern int D_80800C30_chdinoswitches[];

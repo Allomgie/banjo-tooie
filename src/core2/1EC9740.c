@@ -1,3 +1,5 @@
+// 3D geometry helpers on top of vec3: containment and overlap tests, closest points, plane
+// projection, and ray/segment intersections.
 #include "common.h"
 
 f32 func_800EFC7C(f32 *param_0, f32 *param_1);

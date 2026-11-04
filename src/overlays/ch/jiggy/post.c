@@ -1,3 +1,5 @@
+// Jiggy requirement post in front of a world entrance: shows the jiggy count and the number
+// needed, Jiggywiggy explains, and a Banjo-Kazooie player with enough jiggies can go to his temple.
 #include "ch/jiggypost.h"
 
 extern void *D_80800380_chjiggypost;

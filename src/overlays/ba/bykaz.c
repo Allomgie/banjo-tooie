@@ -1,3 +1,5 @@
+// Clockwork Kazooie egg fuse: a 20 s countdown shown on the HUD, music/zone switch, and the
+// explode flag on timeout or when too deep underwater; also locks input while the egg launches.
 #include "common.h"
 #include "overlays/ba/babykaz.h"
 #include "overlays/ba/flag.h"

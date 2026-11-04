@@ -1,3 +1,5 @@
+// Facade over the current viewport: position, rotation and FOV accessors, frustum tests,
+// world-to-screen projection, and perspective and ortho matrix builders.
 #include <ultra64.h>
 #include <PR/gbi.h>
 #include "core1/mlmtx.h"
@@ -61,6 +63,7 @@ MtxF *func_800CA7AC(s32);
 void func_800CA7E4(s32, f32[3]);
 u16 func_800CB124(s32, MtxF *);
 
+// AABB helpers: corner projection along a direction, floor-division of integer bounds.
 // Largest projection onto `dir` of the vectors from `origin` to the 8 box corners.
 int func_800E36D0(s32 corner_a[3], s32 corner_b[3], f32 origin[3], f32 dir[3])
 {
@@ -111,6 +114,7 @@ func_800E37E8(s32 *lo, s32 *hi, s32 divisor)
     }
 }
 
+// Viewport accessors, frustum culling, world-to-screen, projection and ortho matrix setup.
 void func_800E3900(f32 param_0)
 {
     func_800CA3A4((void *) D_8012D500, param_0);

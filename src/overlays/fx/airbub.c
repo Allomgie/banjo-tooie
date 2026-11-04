@@ -1,3 +1,5 @@
+// Air-bubble preset: spawns bubbles from shared emitter slot 2 inside a box; a pop callback spawns a
+// ripple when a bubble reaches the surface. Used by the player underwater, submarine, fish, torpedo.
 #include "common.h"
 
 extern void func_800BA568();

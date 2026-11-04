@@ -1,3 +1,5 @@
+// Pre-lights vertex colours at map load: entrypoint_0 applies a per-map tint, entrypoint_1 bakes
+// the static point lights (N.L, linear falloff, clamped to 255) into the same vertices.
 #include "common.h"
 
 typedef struct {

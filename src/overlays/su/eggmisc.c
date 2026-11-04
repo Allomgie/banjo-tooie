@@ -1,3 +1,5 @@
+// Small egg helpers: an "is this an egg" predicate, egg collection that refunds one egg with
+// sparkle and jingle, and a setter that turns homing eggs off.
 #include "common.h"
 
 extern Actor *func_80106790(Unk80132ED0 *);

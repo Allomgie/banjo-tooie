@@ -1,3 +1,5 @@
+// Warp pads: activating one sets its flag (0x379 + level*5 + index); standing on it and pressing B
+// opens a menu of the other unlocked pads of the world, and the chosen one warps the player.
 #include "ch/warppad.h"
 
 #define WARPPAD_DATA(arg0) ((WarppadActorData *) (arg0->actorData))

@@ -1,3 +1,5 @@
+// Wave map-mesh effect: travelling sine/cosine waves in X and Z move vertex heights, shade
+// the colours by height (205..255) and scroll the UVs.
 #include "common.h"
 
 extern f32 func_800136D0(f32);

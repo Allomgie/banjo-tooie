@@ -1,3 +1,5 @@
+// This seems to be the Targitzan temple doors that open after enough jade statues are broken
+// (10 or 20). While closed they explain the requirement in a dialog; removed with a camera later.
 #include "common.h"
 
 extern int D_808001C0_chtemplebossdoor[];

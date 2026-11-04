@@ -1,3 +1,5 @@
+// Shared enter/exit/update hooks of the Bee states: set bee flags, stick zones, collision size and
+// roll/pitch rates on enter, restore them on exit, and forward updates to the bee subsystem.
 #include "common.h"
 
 extern void func_8009BF5C(void *, f32);

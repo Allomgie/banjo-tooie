@@ -1,3 +1,5 @@
+// Generic fire effect actor: a pool of flame sprites, a flickering point light and a fire sound
+// loop. A second descriptor limits fire sounds to the fires nearest the camera.
 #include "common.h"
 
 extern void *D_80801200_chfirefx;

@@ -1,3 +1,5 @@
+// Zoombox: the dialog text box with a character portrait. Types out up to 8 strings with mouth
+// animation and voice blips, handles input, slide and fade, line wrapping, and draws it all.
 #include "common.h"
 
 #define ZB_LIM(z) ((z)->b5 ? 0xAA : 0xFF)

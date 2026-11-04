@@ -1,3 +1,5 @@
+// Camera mode while climbing poles and walls: orbit with limited pitch and, for climb type 2,
+// a yaw window of +-45 degrees around the player facing.
 #include "nc/ba/climb.h"
 
 void func_80115870(s32, f32);

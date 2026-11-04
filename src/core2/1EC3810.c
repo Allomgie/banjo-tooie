@@ -1,3 +1,5 @@
+// Most likely the core in-game world driver: world draw pass, per-frame world update, map getters,
+// gsworld DLL wrappers, carrying the player on moving actors, and per-cube prop collision queries.
 #include "core2/1EC3810.h"
 
 extern s16 D_80132DCC;
@@ -150,6 +152,7 @@ s32 func_800EB350();
 extern u16 D_80132DC2;
 extern s32 D_80132DC0;
 
+// Group: world draw pass ordering (projection, sky, cubes, actors, layers, fade).
 // World draw pass: projection, environment, props, actors and layers, then fade.
 int func_800E9F20(s32 param_0, s32 param_1)
 {
@@ -187,6 +190,7 @@ int func_800E9F20(s32 param_0, s32 param_1)
     func_800F51CC();
 }
 
+// Group: map id and section queries, gsworld DLL wrappers, per-frame update, update/draw flags.
 // Get World Section
 MapId func_800EA05C(void)
 {
@@ -326,6 +330,7 @@ u16 func_800EA364()
 
 void func_800EA3A0();
 
+// Group: moving-platform carry; moves the player along with the actor it stands on.
 void func_800EA370()
 {
     func_800EA3A0();
@@ -404,6 +409,7 @@ void func_800EA51C(void)
     } while (i != 8);
 }
 
+// Group: per-cube prop collision queries (segment, swept sphere, sphere) and the on-hit callback.
 // Set the callback (and its argument) called on a marker hit.
 void func_800EA600(s32 callback, s32 arg)
 {
@@ -696,6 +702,7 @@ s32 func_800EADFC(void *cube, f32 *center, f32 radius, f32 *param_3, s32 param_4
     return result;
 }
 
+// Group: marker collision-callback eligibility check and dispatch.
 // Whether a marker's collision callbacks may run.
 s32 func_800EB15C(u8 *marker)
 {

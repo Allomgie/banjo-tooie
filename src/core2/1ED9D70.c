@@ -1,3 +1,5 @@
+// Probably two unrelated parts: a 5-slot cache of grow-only heap scratch buffers freed after
+// 31 idle frames, and a pool of per-actor model vertex-buffer instances with tinted variants.
 #include "common.h"
 #include "freelist.h"
 
@@ -57,6 +59,7 @@ struct OSPiInfo {
 };
 void func_80100C74();
 
+// Frame-aged scratch buffer cache (5 slots, heap alloc/realloc/free, defrag).
 // Returns the slot's scratch buffer, grown to hold count elements. Never shrinks.
 s32 func_80100480(s32 slot_id, s32 count)
 {
@@ -142,6 +145,7 @@ void func_80100670()
     func_80100610();
 }
 
+// Per-actor model vertex-buffer instances and tinted vertex cache, with delayed release and defrag.
 // Allocates an instance record, creating the freelist on first use.
 int func_80100690(s32 out_index)
 {

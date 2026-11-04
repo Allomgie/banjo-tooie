@@ -1,3 +1,5 @@
+// Glowbo collectible (normal and Mega): a wandering Glowbo following a route with a pulsing light.
+// Other entrypoints are probably the Glowbo props shown when paying Mumbo or Humba, plus helpers.
 #include "ch/glowbo.h"
 
 #define GLOWBO_DATA(arg0) ((GlowboActorData *) (arg0->actorData))

@@ -1,3 +1,5 @@
+// Most likely thin cutscene glue: puts all player slots under cutscene control, releases them or
+// forces a player state, and hands the current player to the cutscene camera.
 #include "core2/1EB2B30.h"
 
 int func_800D9240()

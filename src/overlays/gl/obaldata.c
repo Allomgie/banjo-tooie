@@ -1,3 +1,5 @@
+// Global-settings block serializer: a 0x80-byte image with a version byte and the data of two
+// providers; build with CRC, apply, version check, clear and size.
 #include "common.h"
 
 typedef void (*GlobalDataQuery)(s32 *, void **);

@@ -1,3 +1,5 @@
+// Banjo-Kazooie fire breath (Dragon Kazooie): probably a flame stream from the mouth while B
+// is held, with wind-up, loop and wind-down; a quick B re-press chains into state 0x189.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

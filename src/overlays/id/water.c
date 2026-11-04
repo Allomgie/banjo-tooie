@@ -1,3 +1,5 @@
+// Water-surface map-mesh effect: scrolls UVs with sine/cosine motion, bobs the surface and can
+// ramp the water level over time; exposes the water height (a splash floor for particles).
 #include "common.h"
 
 typedef struct {

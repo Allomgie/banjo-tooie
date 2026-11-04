@@ -1,3 +1,5 @@
+// Character move-and-slide collision resolver: up to 5 passes of ground snapping and swept-sphere
+// tests, sliding along contact normals with wall push-out and a "stuck" flag.
 #include "common.h"
 
 typedef struct {

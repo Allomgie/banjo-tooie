@@ -1,3 +1,5 @@
+// Klungo's thrown potion bottle: aimed at the player's predicted position, tumbles, breaks on
+// impact with particles and sound. A helper actor 0x423 draws the trail/splash sprites.
 #include "common.h"
 
 extern int D_80800C30_chklungophial[];

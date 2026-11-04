@@ -1,3 +1,5 @@
+// Probably screen-space drawing helpers for HUD and dialog boxes: a 2D origin and scale, a model
+// drawn at a screen position (90-degree rotations), and a sprite with mirroring.
 #include "common.h"
 
 extern f32 B_808002A0_fxdialog;

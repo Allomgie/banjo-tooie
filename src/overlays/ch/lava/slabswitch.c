@@ -1,3 +1,5 @@
+// Probably the switch for the slab door: generic switch on flag 0x38F that tells the slab
+// (actor 0x250) to open and starts camera pod 0x16.
 #include "ch/lavaslabswitch.h"
 
 extern int D_808000A0_chlavaslabswitch[];

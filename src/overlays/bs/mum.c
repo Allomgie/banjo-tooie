@@ -1,13 +1,17 @@
+// Mumbo Jumbo as a playable character: shared enter/exit hooks and interrupt handler,
+// plus the basic states (die, drone, fall, jump, hurt bounces, rest, somersault launch).
 #include "overlays/bs/mum.h"
 
 // Maps stick zone and position to the target horizontal speed.
 void bsmum_entrypoint_13(PlayerState *self);
 
+// Jump state (710 up, gravity -1350, voice clip).
 void func_80800000_bsmum(PlayerState *self)
 {
     func_8009DE38(self, 0x511, func_800DC178(0.8f, 1.1f));
 }
 
+// Death state (knock-back, bounces, landing sounds).
 void func_80800040_bsmum(PlayerState *self)
 {
     if (func_800DC0C0() < 0.5f) {
@@ -18,6 +22,7 @@ void func_80800040_bsmum(PlayerState *self)
     func_8009DE38(self, 0x510, 1.0f);
 }
 
+// Common enter/exit hooks, interrupt handlers and the stick-to-speed helper.
 // Default interrupt handler: Mumbo pad interrupt (0x43) starts the cast state.
 void bsmum_entrypoint_0(PlayerState *self)
 {
@@ -156,6 +161,7 @@ s32 bsmum_entrypoint_3(s32 idx)
     return D_80801140_bsmum[idx];
 }
 
+// Drone (scripted/cutscene-driven) wrapper.
 void func_80800560_bsmum(PlayerState *self)
 {
     _bsdrone_entrypoint_2(self);
@@ -178,6 +184,7 @@ s32 bsmum_entrypoint_4(s32 idx)
     return D_80801150_bsmum[idx];
 }
 
+// Fall state.
 void func_808005E4_bsmum(PlayerState *self)
 {
     bsmum_entrypoint_1(self);
@@ -353,6 +360,7 @@ s32 bsmum_entrypoint_6(s32 idx)
     return D_80801170_bsmum[idx];
 }
 
+// Weak and strong hurt-bounce states.
 void func_80800BC4_bsmum(PlayerState *self)
 {
     _babounce_entrypoint_3(self);
@@ -420,6 +428,7 @@ s32 bsmum_entrypoint_11(s32 idx)
     return D_80801190_bsmum[idx];
 }
 
+// Rest wrapper.
 void func_80800DC0_bsmum(PlayerState *self)
 {
     _bsrest_entrypoint_14(self);
@@ -483,6 +492,7 @@ void bsmum_entrypoint_13(PlayerState *self)
     }
 }
 
+// Pitch-spinning launch state that ends in state 0xFF.
 void func_80800FA4_bsmum(PlayerState *self)
 {
     bsmum_entrypoint_1(self);

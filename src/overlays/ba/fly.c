@@ -1,3 +1,7 @@
+// Shared flight helpers (PlayerState+0x8C) for Banjo-Kazooie, Kazooie, bee flight and glide:
+// aiming, height-dependent physics, stick steering, take-off and crash launches, landing,
+// red-feather check and first-person toggle.
+
 #include "common.h"
 #include "playerstate.h"
 #include "core2/anctrl.h"

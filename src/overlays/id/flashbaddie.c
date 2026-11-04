@@ -1,3 +1,6 @@
+// Probably the actor-model version of the flash effect: brightens an actor model's vertex colours
+// by the level of the matching flasha entry, e.g. for enemies lit by lightning.
+
 #include "common.h"
 
 extern int _idflashbaddie_entrypoint_0[];

@@ -1,3 +1,5 @@
+// Switch for the Hailfire Peaks entrance bridge (FLAG_391): on press it sends message 0x60 to
+// the bridge and starts camera pod 5.
 #include "ch/lavaentrancebridgeswitch.h"
 
 extern int D_808000A0_chlavaentrancebridgeswitch[];

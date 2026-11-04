@@ -1,3 +1,5 @@
+// Homing-missile steering: tracks a linked actor or a searched player and turns the velocity
+// toward it each frame, instantly or limited by a turn rate.
 #include "common.h"
 
 extern f32 func_800EEF94();

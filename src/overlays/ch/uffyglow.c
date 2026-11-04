@@ -1,3 +1,5 @@
+// Probably the magic glow on Chuffy while Mumbo levitates him: copies five of Chuffy's bone
+// positions and draws a fading additive glow model over them.
 #include "common.h"
 
 extern u8 D_80800550_chchuffyglow[];

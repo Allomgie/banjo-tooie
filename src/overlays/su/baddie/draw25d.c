@@ -1,3 +1,5 @@
+// Most likely "2.5D" actor drawing: draws an actor's sprite model as a billboard, or rotated with
+// yaw/pitch, using the actor's alpha/fade mode, optional RGB tint and environment light.
 #include "common.h"
 
 extern void _subaddiedraw25d_entrypoint_0(void);

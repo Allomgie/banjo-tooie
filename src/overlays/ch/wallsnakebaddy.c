@@ -1,3 +1,5 @@
+// Probably a wall-dwelling snake baddie: lunges out of its hole (up or down, by player height)
+// when the player is close, and dies with particles and an item drop when hit.
 #include "common.h"
 
 extern u8 D_8080079C_chwallsnakebaddy[];

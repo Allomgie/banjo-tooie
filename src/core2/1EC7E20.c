@@ -1,3 +1,5 @@
+// Most likely heap-defrag glue for the idworld list D_80127EF8 (map-mesh effect entries of
+// the id overlays), plus per-frame hooks that run the idbounce overlay while it is active.
 #include "common.h"
 
 extern void *D_80127EF8;
@@ -8,6 +10,7 @@ extern void *vector_defrag(void *);
 extern void *vector_end();
 extern u8 D_80135483;
 
+// Heap defrag and pointer fixup of the id-effect entries and the blocks they reference.
 // Defrags the field at +0x2C of an idworld entry.
 int func_800EE530(s32 *entry)
 {
@@ -92,6 +95,7 @@ void func_800EE670(void)
     }
 }
 
+// Per-frame hooks into the idbounce map-mesh effect overlay while it is active.
 // Per-frame hook: runs the idbounce overlay when D_80135483 is set.
 int func_800EE718()
 {

@@ -1,3 +1,5 @@
+// Looping sound helpers for actors: start/stop/update a loop kept in the actor's sound handle,
+// optionally only within a distance of the camera, set volume/pitch, and a fade-in variant.
 #include "common.h"
 
 extern void func_800C31DC(u8, f32);

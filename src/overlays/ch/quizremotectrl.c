@@ -1,3 +1,5 @@
+// Possibly a quiz presentation actor: it shows model 0x9A1 in front of the quiz camera, spins it
+// in, holds it until the round time ends or an answer comes, spins it out and advances the quiz.
 #include "common.h"
 #include "types.h"
 

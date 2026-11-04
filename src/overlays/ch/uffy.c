@@ -1,3 +1,5 @@
+// Chuffy the train engine: Mumbo's levitation, the running engine with smoke and sounds,
+// arrival/departure cutscenes per station, the cab door actor and the station table lookups.
 #include "common.h"
 
 extern int D_80802434_chchuffy[];
@@ -142,11 +144,13 @@ void func_80800FBC_chchuffy();
 void func_8080115C_chchuffy();
 void func_808017D4_chchuffy();
 
+// Chuffy engine actor, its smoke/sound effects, Mumbo levitation and the cab door actor.
 int chchuffy_entrypoint_0()
 {
     return (int) &D_80802434_chchuffy;
 }
 
+// Station table: decodes station map ids, finds the current/target station, sets "here" flags.
 // Station index to map id: sum of two ROM halfwords from the table, plus 0xA0.
 s32 func_8080000C_chchuffy(s32 station_idx)
 {

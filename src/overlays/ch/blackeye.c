@@ -1,3 +1,5 @@
+// Probably Captain Blackeye, a pirate NPC in Jolly Roger's Lagoon: idle expressions, sounds and
+// particles, dialog, and taking two doubloon items when the player accepts his offer.
 #include "common.h"
 
 extern s16 D_80800EA0_chblackeye[];

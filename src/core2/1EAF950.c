@@ -1,3 +1,5 @@
+// Two unrelated halves: a frame-aged level-2 asset cache (sorted by id, GC and defrag), and
+// the spline path system with per-actor spline following.
 #include "core2/1EAF950.h"
 
 typedef struct {
@@ -215,6 +217,7 @@ extern u8 D_8012BFF4[];
 
 extern u8 D_8012BE70[];
 
+// Frame-aged asset cache on top of the level-1 loader: get, touch, free, GC by age, defrag.
 // Returns the sorted insert position for id and opens a gap there.
 s32 func_800D6060(s32 id)
 {
@@ -847,6 +850,7 @@ int func_800D73CC()
     return found | 0;
 }
 
+// Spline paths: path/node registry, per-actor spline following and orientation, spline clock.
 // Spline path system starts here.
 int func_800D7400()
 {

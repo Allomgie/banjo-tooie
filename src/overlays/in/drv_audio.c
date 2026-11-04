@@ -1,3 +1,5 @@
+// Sound-cue driver for the story cutscenes: plays all table entries matching an actor and cue id,
+// positionally (actor or bone) or not, optionally only if visible or if a game flag is set.
 #include "common.h"
 
 typedef struct {

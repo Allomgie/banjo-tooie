@@ -1,3 +1,5 @@
+// Hailfire Peaks alien family, most likely: Alien Dad (NPC), the UFO that lands and takes off
+// once all kids are saved, and a small pulsing glow effect.
 #include "common.h"
 
 extern s32 func_800D90A4(f32 *);
@@ -108,17 +110,20 @@ void func_80801868_chaliendad();
 extern void func_80105834(), func_80107C2C(), func_80800024_chaliendad(),
     func_808000AC_chaliendad(), func_80800918_chaliendad();
 
+// Alien Dad NPC: dialogs, dialog camera, blink/expression timers, kid counting, progress flags.
 // Alien Dad (NPC 0x45A), the UFO (0x45B) and a small glow effect (0x467).
 u8 *chaliendad_entrypoint_0(void)
 {
     return D_80802674_chaliendad;
 }
 
+// The UFO: path landing, spin, take-off when all kids are saved, hum sound loop.
 int chaliendad_entrypoint_1()
 {
     return (int) &D_808026BC_chaliendad;
 }
 
+// The glow effect: grows, pulses and fades.
 int chaliendad_entrypoint_2()
 {
     return (int) &D_80802704_chaliendad;

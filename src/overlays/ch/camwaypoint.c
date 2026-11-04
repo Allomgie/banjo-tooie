@@ -1,3 +1,5 @@
+// Placed camera waypoint actor: when the player is in range and the camera is in mode 2, it feeds
+// its position and direction into the waypoint camera mode (nc/ba/waypoint).
 #include "common.h"
 
 extern int D_80800130_chcamwaypoint[];

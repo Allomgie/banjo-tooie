@@ -1,3 +1,5 @@
+// Fire egg projectile: leaves a flame trail (skipped on odd frames) and uses the shared egg
+// burn/impact routine on impact.
 #include "common.h"
 
 typedef struct {

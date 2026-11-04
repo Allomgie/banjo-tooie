@@ -1,3 +1,5 @@
+// Pot O' Gold minigame of Cloud Cuckooland: a 45-second game where eggs shot into the pot light
+// up its 100 cells; keeps records, awards the jiggy and a Cheato page, supports replay.
 #include "common.h"
 
 extern void func_800D1000();

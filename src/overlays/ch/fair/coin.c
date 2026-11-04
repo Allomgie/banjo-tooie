@@ -1,3 +1,5 @@
+// Witchyworld van coin (actor 0x166), spawned by bs/van.c: flies in an arc from the van to a
+// target, plays a jingle on arrival and despawns.
 #include "common.h"
 
 extern s32 D_80800150_chfaircoin[];

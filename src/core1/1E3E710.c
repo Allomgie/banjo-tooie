@@ -1,3 +1,4 @@
+// alSynSetVol: queues a volume change with ramp time for a synth voice.
 #include "common.h"
 
 typedef struct {

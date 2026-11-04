@@ -1,3 +1,5 @@
+// Probably the hit/interaction table: one row per hittable actor kind, one column per attack rule.
+// Finds the rule matching an (attacker, target) pair, reads its packed fields and dispatches hits.
 #include "common.h"
 
 typedef struct {

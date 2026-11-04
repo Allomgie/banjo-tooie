@@ -1,3 +1,5 @@
+// Animation pose cache (a pool of bone-transform buffers with time-to-live) and the Animation
+// object embedded in AnimCtrl, which evaluates, cross-fades and post-processes poses per frame.
 #include "common.h"
 
 // TU-NOTE: D_80126CC0 is the pose-buffer pool, defined here and viewed as a struct,
@@ -34,6 +36,7 @@ void func_8008C1C0(f32 *param_0, f32 param_1);
 int func_8008C1D4();
 int func_8008C1E4(f32 *param_0, f32 param_1);
 
+// Pose (bone-transform) buffer cache with TTL: init, free, flush, defrag.
 void func_8008B610(void)
 {
     s32 pool_end;
@@ -232,6 +235,7 @@ u32 end;
     }
 }
 
+// Animation object: evaluate at timer, cross-fade previous pose, post-process callback, accessors.
 // Get a slot's pose buffer; initialise it to identity transforms when newly allocated.
 void func_8008BBF0(s32 anim, s32 index)
 {

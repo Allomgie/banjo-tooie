@@ -1,3 +1,5 @@
+// This seems to be the string (leash) camera mode: it keeps the entry distance as min and max,
+// follows the player with waypoint support, and reacts to obstruction only beyond 1.5x min.
 #include "nc/ba/string.h"
 
 extern f32 _ncbawaypoint_entrypoint_3(void *, f32 *, f32 *);

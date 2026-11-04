@@ -1,3 +1,5 @@
+// Per-form data for the shared drone states: classifies the player into one of 0x24 form profiles
+// and returns the animations, sounds and state ids to use for each drone situation.
 #include "overlays/ba/data.h"
 
 // Classifies the current form/situation into one of the 0x24 profile indices.

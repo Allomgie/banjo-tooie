@@ -1,3 +1,4 @@
+// Most likely the switch for the GGM waterfall grille: a chswitch that opens the grille on press.
 #include "common.h"
 
 extern u32 D_80800090_chwaterfallgrillswitch[];

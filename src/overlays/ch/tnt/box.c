@@ -1,3 +1,5 @@
+// Possibly a TNT box baddie: pops open near the player, throws a lit TNT stick (actor 0x200) in an
+// arc, and explodes with damage when hit (message 0x40). The stick explodes on ground contact.
 #include "common.h"
 
 extern int D_80800988_chtntbox[];

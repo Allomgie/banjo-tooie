@@ -1,3 +1,5 @@
+// End-credits and character-parade director: steps through a table of shots, warps between maps,
+// fades name/role text in and out, draws a rotating logo and allows skipping.
 #include "common.h"
 
 extern u8 D_80127611;

@@ -1,3 +1,5 @@
+// Most likely the three Hailfire Peaks Colosseum kickball doors: when its flag is set, a door
+// waits 1.5 s, unlocks a frontend entry and slides up (already open if set at load).
 #include "common.h"
 
 extern s32 D_80800270_chcolldoors[];

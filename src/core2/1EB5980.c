@@ -1,3 +1,4 @@
+// Random number generator: two LCG streams, int/float helpers, probability tests, seed save/restore.
 // TU-NOTE: not including core2/1EB5980.h; it declares func_800DC128 as returning u8
 // (what callers were compiled against), but the definition returns the full word.
 #include "common.h"

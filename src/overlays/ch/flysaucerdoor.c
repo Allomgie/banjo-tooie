@@ -1,3 +1,6 @@
+// Probably the door that blocks the Saucer of Peril crate, built on chdoormake and opened by a
+// switch; on first opening it sets a flag, plays a cutscene and lets the crate continue.
+
 #include "ch/flysaucerdoor.h"
 
 extern int D_80800160_chflysaucerdoor[];

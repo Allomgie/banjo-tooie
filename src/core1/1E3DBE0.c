@@ -1,3 +1,4 @@
+// alCSPGetTempo: tempo of the current sequence, or 0 without one.
 #include "common.h"
 
 typedef struct {

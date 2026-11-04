@@ -1,3 +1,5 @@
+// Banjo-Kazooie Feathery Flap: Kazooie flaps to slow the fall (low gravity, timed), then moves
+// on to fall, beak buster, walk or water landing.
 #include "common.h"
 #include "core2/anctrl.h"
 #include "overlays/ba/anim.h"

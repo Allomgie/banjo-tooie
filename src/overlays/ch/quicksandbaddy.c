@@ -1,3 +1,5 @@
+// Most likely the quicksand/sludge baddie: lurks submerged, grabs the player and spits them out
+// toward a landing point (or swallows them at 1 health), then relocates inside its zone.
 #include "common.h"
 
 extern f32 func_800C6920(f32[3], f32, f32, s32);

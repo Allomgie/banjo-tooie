@@ -1,3 +1,5 @@
+// Probably the controller for the inside-of-the-digger section of the Hag 1 fight: shows the
+// remaining-count HUD item and spawns digger ground minions (actor 0x131) on message 0x49.
 #include "common.h"
 
 extern int D_80800230_chdiggerbossinterior[];

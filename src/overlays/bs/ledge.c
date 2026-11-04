@@ -1,3 +1,5 @@
+// Ledge hang for Banjo-Kazooie and Banjo alone: grab, idle with random fidgets, shimmy left/right,
+// pull up, drop, Kazooie attack exit and a rest wrapper.
 #include "overlays/bs/ledge.h"
 #include "overlays/ba/playerstate.h"
 

@@ -1,3 +1,5 @@
+// Player-side component of the Washing Machine transformation: fires laundry projectiles along
+// the aim direction and animates the legs and feet (steering and spinning).
 #include "common.h"
 #include "overlays/ba/washer.h"
 #include "core2/1E6A730.h"

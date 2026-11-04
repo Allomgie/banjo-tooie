@@ -1,3 +1,4 @@
+// Colour palette helpers: unpack a packed RGBA palette entry into four channels and pack back.
 #include "common.h"
 
 // Unpacks palette entry idx (R in bits 0-7 ... A in bits 24-31) into four s32 channels.

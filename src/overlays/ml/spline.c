@@ -1,3 +1,5 @@
+// Spline maths (mlspline): linear and quadratic evaluators, Catmull-Rom and clamped cubic
+// B-spline positions with derivatives, plus Simpson and Newton arc-length stepping.
 #include "common.h"
 
 extern f32 func_800F0D50(f32, f32, f32);

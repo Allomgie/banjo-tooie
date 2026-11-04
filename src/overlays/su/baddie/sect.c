@@ -1,3 +1,5 @@
+// Probably map-section awareness for actors: hides, disables or restores an actor depending on
+// whether its map section is loaded, and snaps an actor onto the section mesh below it.
 #include "common.h"
 
 typedef struct {

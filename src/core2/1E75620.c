@@ -1,3 +1,5 @@
+// Probably the per-player damage vulnerability mode: vulnerable, or temporarily invulnerable until
+// a state timer (default 0.6 s) expires, after which an update reverts it.
 #include "core2/1E75620.h"
 #include <ultra64.h>
 #include "types.h"

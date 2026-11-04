@@ -1,3 +1,4 @@
+// Per-level play-time statistics with save/load, an h:mm:ss formatter and a cutscene-active query.
 #include "core2/1EB45C0.h"
 
 s16 func_800A8184(void);
@@ -10,6 +11,7 @@ extern f32 D_8012C768[];
 // D_8012C7A0 holds play time in seconds per level, level ids 0xF..0x1B.
 f32 D_8012C7A0[14];
 
+// Per-level play time: reset, totals, per-frame accumulation, save/load.
 // Reset all level times.
 void func_800DACD0(void)
 {
@@ -132,6 +134,7 @@ s32 func_800DB83C(u8 *save, s32 level_id)
 void func_800E6A10(char *, const char *);
 void func_800E6DB4(char *, s32);
 
+// Seconds to "h:mm:ss" string.
 // Formats seconds as h:mm:ss.
 void func_800DB8BC(char *out, s32 time)
 {
@@ -155,6 +158,7 @@ void func_800DB8BC(char *out, s32 time)
     func_800E6A10(out, "");
 }
 
+// Is-in-cutscene query.
 // Is a cutscene active.
 int func_800DB9B0(void)
 {

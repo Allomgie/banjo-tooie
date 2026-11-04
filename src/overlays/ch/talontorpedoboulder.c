@@ -1,3 +1,6 @@
+// Most likely a boulder that only the Talon Torpedo can smash: it explodes with debris and sound,
+// sets a per-variant game flag (0x3EF + variant), optionally shows a camera shot, and is
+// deleted on load once its flag is set.
 #include "common.h"
 
 extern u32 D_808002B4_chtalontorpedoboulder[];

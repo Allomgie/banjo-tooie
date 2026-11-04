@@ -1,3 +1,5 @@
+// Probably Banjo's Taxi Pack states: take a passenger in, walk/idle/jump while carrying, drop it,
+// plus a timed hover with HUD countdown that unloads the passenger when it ends.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

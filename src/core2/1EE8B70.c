@@ -1,3 +1,5 @@
+// This seems to be additive point-light vertex lighting for models: the brightest lights are
+// ranked in a sorted buffer and added onto vertex colours; original colours are restored later.
 #include "common.h"
 
 typedef struct {

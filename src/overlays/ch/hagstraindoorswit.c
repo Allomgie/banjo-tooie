@@ -1,3 +1,5 @@
+// Switch that unlocks the Isle o' Hags train station: sets FLAG_403_STATION_UNLOCKED_IoH and
+// on message 7 (pressed) tells the station door (actor 0x38C) to open.
 #include "ch/hagstraindoorswit.h"
 
 extern int D_80800080_chhagstraindoorswitch[];

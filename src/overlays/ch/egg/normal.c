@@ -1,3 +1,5 @@
+// Blue (normal) egg projectile, shot from the beak or laid from the rear: leaves a random blue
+// sparkle trail and breaks on impact via the shared egg code.
 #include "common.h"
 
 typedef struct {

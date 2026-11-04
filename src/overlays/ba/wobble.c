@@ -1,3 +1,5 @@
+// Player body wobble: an off/ramp-in/ramp-out state machine that scales bone 3 with three
+// phase-shifted sine waves between a min and max scale.
 #include "common.h"
 #include "overlays/ba/wobble.h"
 #include "core2/1E6A730.h"

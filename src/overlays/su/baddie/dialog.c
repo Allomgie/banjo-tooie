@@ -1,3 +1,5 @@
+// Actor-side dialog triggers: "can talk" tests (distance, facing, player state, B button),
+// data-driven approach dialogs, starting dialog with a camera target, and sending dialog replies.
 #include "su/baddiedialog.h"
 
 // Distance test to the player; flags & 7 selects the check, else a 150-unit box.

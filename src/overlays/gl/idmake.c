@@ -1,3 +1,5 @@
+// Builder for mesh-group instances (see gl/id): creates the per-model group structure from the
+// model's id section, and computes a group's bounding box, centre and vertex count.
 #include "common.h"
 
 extern void *func_800D674C(s32);

@@ -1,3 +1,5 @@
+// Probably an API over path/spline objects: picks the evaluator by point count, evaluates
+// position and direction at t, steps by arc length, and finds the parameter of a point.
 #include "core2/1EA1270.h"
 
 extern void _mlspline_entrypoint_6(void);
@@ -33,6 +35,7 @@ extern f32 func_800F0E00(f32, f32);
 extern f32 func_800F13F0(f32, f32);
 extern f32 func_800EEB40(f32 *, f32 *);
 
+// Spline evaluation and dispatch, direction angles, arc-length stepping, nearest-parameter search.
 // Pick the evaluator by point count: linear (2), quadratic (3), cubic or closed cubic.
 FN_C810C func_800C7980(path)
 u8 *path;
@@ -162,6 +165,7 @@ f32 func_800C7E28(LocalSpline *path)
     return path->loop_t = 1.0f;
 }
 
+// Advance along a path with game time or intro-sync time.
 // Advance t by speed * frame time; the flag at +4 selects intro-sync time over game time.
 f32 func_800C7FD4(unsigned char *path, f32 t, float speed)
 {

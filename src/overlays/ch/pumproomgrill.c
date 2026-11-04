@@ -1,3 +1,6 @@
+// Probably the destructible grill in the Witchyworld castle pump room: when hit it is blown back,
+// and when destroyed it plays a sound and sets flag 0x162.
+
 #include "common.h"
 
 extern int D_808000E0_chpumproomgrill[];

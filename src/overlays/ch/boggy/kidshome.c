@@ -1,3 +1,5 @@
+// Probably Boggy's three kids at home in his igloo once returned: idle NPCs with dialog,
+// camera presets, expressions and footstep sounds.
 #include "common.h"
 
 extern int D_80800468_chboggykidshome[];

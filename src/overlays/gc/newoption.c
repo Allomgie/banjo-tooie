@@ -1,3 +1,5 @@
+// Generic option/choice menu built from zoomboxes: title box, up to 5 visible items over a list
+// of up to 30, wrap-around selection, open/close animations and callbacks. Used by many menus.
 #include "gc/newoption.h"
 
 extern s16 _gczoombox_entrypoint_29();

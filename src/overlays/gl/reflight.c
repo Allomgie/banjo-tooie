@@ -1,3 +1,4 @@
+// Returns an anti-tamper value, used as data by other overlays and copied into game flags by gldb.
 #include "common.h"
 
 extern s32 D_8007DB54;

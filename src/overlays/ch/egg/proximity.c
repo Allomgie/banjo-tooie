@@ -1,3 +1,5 @@
+// Proximity egg (mine): lands, arms, waits for a player or actor to come near (with rumble), then
+// explodes; messages can detonate or remove it.
 #include "common.h"
 
 extern int D_80800CE0_cheggproximity[];

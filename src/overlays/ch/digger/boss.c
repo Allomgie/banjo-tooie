@@ -1,7 +1,7 @@
+// Final boss fight: Gruntilda (dialog-driven phase state machine, ~72 states, timed questions)
+// riding the Hag 1 drilling machine (lamps, deflectors, drill sounds). The two actors point at
+// each other via actor->unk3C. Touching Hag 1 bone 7 in one phase warps the player inside.
 #include "common.h"
-
-// hag1: final boss fight. Gruntilda (dialog-driven phase state machine) rides the Hag 1 drilling
-// machine; the two actors point at each other via actor->unk3C.
 
 #define CODEX_VERTEX_SHIFT_RECORD
 extern int D_80809E44_chdiggerboss[];

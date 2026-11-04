@@ -1,3 +1,5 @@
+// Possibly a cutscene stand-in for Jamjars: a model (three variants) that fades in, waits for temp
+// flag 0x9F1 or a 5 s timeout, then fades out and deletes itself.
 #include "common.h"
 
 extern f32 func_800D8FF8(void);

@@ -1,3 +1,5 @@
+// Shared flying-baddie AI: patrols a route, chases and swoops at the player, gets knocked down
+// by eggs and fades on death. Per-kind speeds and sounds come from flydata.
 #include "su/coasterfly.h"
 
 // OD(n): float n of the actor data; the macro hardcodes the name param_0.

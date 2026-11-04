@@ -1,3 +1,6 @@
+// Most likely the story director of the Jingaling plot: picks a script by current map
+// (Jinjo Village, Jinjo houses, Wooded Hollow, temple drain/repair, Cauldron Keep gun chamber).
+// A vertex callback fades map layers by distance during the drain and repair sequences.
 #include "common.h"
 
 extern int D_80800A80_chkingjinjobits[];

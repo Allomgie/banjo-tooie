@@ -1,3 +1,5 @@
+// The sick Styracosaurus child: lies ill at the train station, is taken home by Chuffy through the
+// wagon and healed in the family cave. Three actors: child, wagon passenger, cutscene variant.
 #include "common.h"
 
 #define SFX (*(s32 *) &this->unk54)

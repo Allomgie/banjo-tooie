@@ -1,3 +1,5 @@
+// Core 3D vector library (vec3): arithmetic, conversions, dot/cross, length and distance,
+// normalise, reflection, and rotation about axes or by yaw/pitch/roll.
 #include "core2/1EC8070.h"
 
 extern f32 func_800137F4(f32);

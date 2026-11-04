@@ -1,3 +1,5 @@
+// Probably the special "side-trip" sequences under game mode 5: the Jiggywiggy challenge (160x128
+// off-screen picture) and the attract-mode demo. Stores the return map, warps, and restores state.
 #include "core2/1E831D0.h"
 
 extern s8 D_80127763;

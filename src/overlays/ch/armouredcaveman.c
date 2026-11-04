@@ -1,3 +1,5 @@
+// Armoured caveman of Terrydactyland: chases the player and ground-pounds; only an egg from
+// behind beats it. Beating all 5 sets a flag and spawns the Rocknut tribe jiggy.
 #include "common.h"
 
 extern u32 D_80800B20_charmouredcaveman[];

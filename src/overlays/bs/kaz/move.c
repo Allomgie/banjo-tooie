@@ -1,3 +1,5 @@
+// Kazooie-alone walking and running: the shared stick-to-target-speed helper (shoe-dependent), the
+// slow-walk and run states with shoe animations, dust and sounds, and a run-boost flag helper.
 #include "common.h"
 #include "overlays/bs/kaz/move.h"
 

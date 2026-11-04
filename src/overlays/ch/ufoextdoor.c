@@ -1,3 +1,5 @@
+// Outer UFO door in Jolly Roger's Lagoon: only Kazooie's Talon Torpedo smashes it, spawning
+// debris, particles and a sound, and setting FLAG_3AB_PHYSICAL_JRL_UfoDoorSmashed.
 #include "common.h"
 
 typedef union {

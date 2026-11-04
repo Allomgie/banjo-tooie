@@ -1,3 +1,5 @@
+// Floating score popup used by minigames: prints a number at a world position, bobs briefly,
+// then rises and fades while a jingle plays.
 #include "common.h"
 
 extern int D_808003C0_chscorepoints[];

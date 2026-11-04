@@ -1,3 +1,5 @@
+// Game init and shutdown: ep0 initializes about 20 subsystems in a fixed order (and sets up a new
+// game), ep1 shuts them down. Called by the in-game core.
 #include "gc/game.h"
 
 // TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.

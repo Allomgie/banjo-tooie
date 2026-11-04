@@ -1,3 +1,5 @@
+// Most likely Ssslumber, the giant jade snake in Mayahem Temple's Jade Snake Grove: a state machine
+// (idle, rising, talking, sinking) that holds a jiggy and moves it out of its mouth on message 13.
 #include "common.h"
 
 extern void func_8010A85C(Actor *, s32);

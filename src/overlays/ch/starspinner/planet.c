@@ -1,3 +1,6 @@
+// The rotating planets of the Witchyworld Star Spinner: they spin only while the ride is powered,
+// and are tinted grey and culled outside the Star Spinner map.
+
 #include "common.h"
 
 extern void *D_80800260_chstarspinnerplanet;

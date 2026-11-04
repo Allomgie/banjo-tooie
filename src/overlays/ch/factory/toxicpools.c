@@ -1,3 +1,6 @@
+// Probably the toxic water of Waste Disposal: a switch lowers the water over 8 s, a valve drops it
+// further and plays the clean-water cutscene, and a hazard controller knocks the player back to
+// the last safe spot on contact.
 #include "common.h"
 
 extern int D_80800940_chfactorytoxicpools[];

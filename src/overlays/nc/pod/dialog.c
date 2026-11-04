@@ -1,3 +1,5 @@
+// Conversation camera of the pod system: frames player and NPC from their bounding boxes in one of
+// shot types 0..9, refines framing iteratively, keeps line of sight and moves along an eased arc.
 #include "common.h"
 
 typedef struct {

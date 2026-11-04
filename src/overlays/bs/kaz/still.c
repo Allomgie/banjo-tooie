@@ -1,3 +1,5 @@
+// Kazooie-alone idle: random idle animations, idle on shoes, turning in place, the shared
+// "what can Kazooie do from standing" check, a landing state, and drone and rest wrappers.
 #include "common.h"
 #include "overlays/bs/kaz/still.h"
 #include "overlays/ba/playerstate.h"

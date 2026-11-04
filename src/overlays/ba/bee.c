@@ -1,3 +1,5 @@
+// Bee stinger weapon: keeps stinger parameter sets and a cooldown, aims at a lock-on target or
+// along the egg-aim direction, and fires the stinger projectile with a muzzle particle.
 #include "common.h"
 #include "overlays/ba/bee.h"
 #include "overlays/ba/yaw.h"

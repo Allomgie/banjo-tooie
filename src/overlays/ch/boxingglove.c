@@ -1,3 +1,5 @@
+// Possibly a spring-loaded boxing-glove trap: waits under the floor, rises near the player,
+// punches, then retracts, driving a linked partner actor in step.
 #include "common.h"
 
 extern int D_80800708_chboxingglove[];

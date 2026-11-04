@@ -1,3 +1,5 @@
+// Probably a walking beehive: a breakable hive with legs that wanders along routes and flees the
+// player; destroyed by an explosion or egg, it bursts into particles and drops honeycomb.
 #include "common.h"
 
 #define AF(p, i) (*(f32 *) &(p)->actorData[i])

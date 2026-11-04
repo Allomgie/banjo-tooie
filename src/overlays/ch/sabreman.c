@@ -1,3 +1,5 @@
+// Sabreman, the frozen explorer in Hailfire Peaks: carried by Banjo with the Taxi Pack, revived
+// with Mumbo's life-force spell, then gives jiggy 0x3F (progress in the 2-bit flag 0x1CA).
 #include "common.h"
 
 extern int D_80801BE0_chsabreman[];

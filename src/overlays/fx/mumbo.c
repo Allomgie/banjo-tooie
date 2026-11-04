@@ -1,3 +1,4 @@
+// Most likely the particle preset for Mumbo's magic: sparkles from shared emitter slot 0xD.
 #include "common.h"
 
 extern void *func_800B5BE4(int);

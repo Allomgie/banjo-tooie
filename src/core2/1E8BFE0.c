@@ -1,3 +1,4 @@
+// Accessors for the model binary header: each returns the model base plus a section offset.
 #include "common.h"
 
 // Model header accessors.

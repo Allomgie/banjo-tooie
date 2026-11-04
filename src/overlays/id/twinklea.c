@@ -1,3 +1,5 @@
+// Probably the alpha companion of twinkle: shows only vertices that match the sparkle points
+// of the twinkle entry 200 ids lower and makes the rest transparent.
 #include "common.h"
 
 extern u8 _idtwinklea_entrypoint_3[];

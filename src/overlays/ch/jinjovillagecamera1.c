@@ -1,3 +1,5 @@
+// Controller of the Jinjo family return cutscene: in Jinjo Village it frames the family's house,
+// inside a family house it plays the thank-you dialog and spawns the returning Jinjos.
 #include "common.h"
 
 extern u8 D_80800470_chjinjovillagecamera1[];

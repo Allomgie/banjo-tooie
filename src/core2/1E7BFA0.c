@@ -1,3 +1,5 @@
+// Two player subsystems: footsteps (sounds, shake and splashes per terrain) and the common
+// player state block (transformation, size tables, fall/slide tracking, hurt sounds).
 #include "core2/1E7BFA0.h"
 
 extern s32 D_80119320[];
@@ -65,6 +67,7 @@ void func_800A2EEC();
 void func_800A2FCC();
 void func_800A3148();
 
+// Footsteps (PlayerState+0x124): fxstep effect, per-surface step callbacks, anim-frame steps.
 // Size of the footstep block (PlayerState+0x124).
 s32 func_800A26B0()
 {
@@ -356,6 +359,7 @@ void func_800A300C(u8 *player)
         func_800BC3F0(*(*(s32 **) ((s8 *) (player) + (0x124))));
 }
 
+// Common player state (PlayerState+0xA0): transformation, size tables, fall, slide, hurt sound.
 // Size of the common player state block (PlayerState+0xA0).
 s32 func_800A3040()
 {

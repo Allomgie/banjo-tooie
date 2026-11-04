@@ -1,3 +1,5 @@
+// Most likely electric sparks on Witchyworld's power cables: active only when their zone is
+// powered, flickering with a coloured point light, and shocking the player on contact.
 #include "common.h"
 
 extern int D_80800B88_chcablespark[];

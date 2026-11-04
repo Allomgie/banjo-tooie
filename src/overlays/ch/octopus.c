@@ -1,3 +1,5 @@
+// Possibly the Jolly Roger's Lagoon octopus: when hit it appears to fade its tint into the
+// background, stay hidden for 8 s and fade back. Not fully understood.
 #include "common.h"
 
 extern int D_808008F4_choctopus[];

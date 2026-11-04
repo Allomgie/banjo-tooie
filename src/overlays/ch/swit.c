@@ -1,3 +1,6 @@
+// Generic switch library (chswitch): press, ground-pound and egg-hit switches, toggles, timed
+// resets and flag-backed switches that open linked actors. Plus three collision-callback tables.
+// Reused by about 40 world-specific switch, door and machine overlays.
 #include "common.h"
 
 extern int D_80800DB0_chswitch[];

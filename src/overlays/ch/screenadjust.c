@@ -1,3 +1,5 @@
+// Screen-adjust option: lets the player shift the picture with the stick, stores the offset in
+// the global settings and draws two nested sets of corner brackets as guides.
 #include "common.h"
 
 extern int D_80800430_chscreenadjust[];

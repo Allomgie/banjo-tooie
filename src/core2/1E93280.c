@@ -1,3 +1,4 @@
+// Draws a screen-space translucent colored rectangle, and fills the current scissor rectangle.
 #include "common.h"
 
 extern u8 D_8011A6E0[];

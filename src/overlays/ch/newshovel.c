@@ -1,3 +1,5 @@
+// Possibly a hopping "shovel" enemy: waits at home, notices the player and hops toward them in
+// parabolic jumps with dust and thud, then hops back home. Can also be steered in multiplayer.
 #include "common.h"
 
 extern int D_80800FB4_chnewshovel[];

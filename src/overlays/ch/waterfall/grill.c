@@ -1,3 +1,5 @@
+// Probably the timed grille in Glitter Gulch Mine's waterfall area: opens when its switch is shot,
+// closes after 35 s, unless the player reached the area behind it (flag 0x503).
 #include "common.h"
 
 extern void _chwaterfallgrill_entrypoint_0(void);

@@ -1,3 +1,5 @@
+// Mumbo's wand attack (B): swing, wand glow and a growing point light while B is held (up to 3 s),
+// then recovery to idle.
 #include "overlays/bs/mum/attack.h"
 
 // Releases the effect slot and the light.

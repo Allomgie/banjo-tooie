@@ -1,3 +1,5 @@
+// Generic door behaviour shared by about 25 door/gate/grill actors: a state machine that moves
+// the door between two poses (rotate, slide, fade), with sounds, camera shots, flags, messages.
 #include "common.h"
 
 typedef struct {

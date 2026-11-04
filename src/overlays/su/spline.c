@@ -1,3 +1,5 @@
+// Spline path follower component: several vec3 and scalar channels of control points sharing
+// one point count, progress with speed and looping, sampled via ml/spline.
 #include "common.h"
 
 extern f32 func_800EEAD4();

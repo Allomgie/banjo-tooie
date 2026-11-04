@@ -1,3 +1,5 @@
+// Probably assorted actor helpers: ActorInfo flag tests, actor flag bit set/clear, zone test,
+// marker position/rotation sync and the blob shadow draw.
 #include "common.h"
 
 typedef struct {

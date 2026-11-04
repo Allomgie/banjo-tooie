@@ -1,3 +1,5 @@
+// Grunty Industries wall crusher: two wall halves slam together while the player is in the
+// corridor, with shake, rumble and sound, until FLAG_329 is set. A second actor is the chswitch.
 #include "common.h"
 
 extern int D_80800A50_chfactorycrusher[];
@@ -22,11 +24,13 @@ s32 func_80800898_chfactorycrusher();
 s32 func_80800738_chfactorycrusher();
 
 // TU-NOTE: the .data tables below are defined in C so IDO schedules the functions as in the original.
+// Crusher wall pair: cycle, player squash/eject, collision boxes.
 int chfactorycrusher_entrypoint_0()
 {
     return &D_80800A50_chfactorycrusher;
 }
 
+// Switch that sets FLAG_329 (crusher off) and announces it.
 int chfactorycrusher_entrypoint_1()
 {
     return (int) &D_80800A98_chfactorycrusher;

@@ -1,3 +1,5 @@
+// Solo Kazooie death: knock-back from the damage source, bounce with dust ring and rumble,
+// death camera, and the shared "player died" sequence after 3.5 s.
 #include "common.h"
 #include "overlays/bs/kaz/die.h"
 

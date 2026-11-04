@@ -1,3 +1,6 @@
+// Probably two things in one file: map-marker-driven environment settings (music volume,
+// sfx reverb, frame rate), and a zone music layer state machine that cross-fades tracks.
+
 #include "core2/1EA0AA0.h"
 
 typedef struct {
@@ -28,6 +31,7 @@ extern s16 D_8011A910[];
 extern u8 D_8012760C;
 extern u8 D_8012AAF0;
 
+// Per-map environment settings found from cube markers (frame rate, music volume, sfx reverb).
 // Scale from the marker parameter (0..100); 50 returns the default.
 f32 func_800C71B0(s32 marker, f32 default_scale)
 {
@@ -177,6 +181,7 @@ void func_800C7574(s32 unk_0, s32 unk_1)
     D_8012AAF0 = 0;
 }
 
+// Zone music layers: track selection, cross-fade, suspend and resume (warp pad, cutscene).
 // Track id for a zone music state.
 s32 func_800C75A0(s32 state)
 {

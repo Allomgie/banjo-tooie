@@ -1,3 +1,5 @@
+// Probably the flicker vertex effect (fire or candle light): a brightness factor random-walks
+// by +-0.04 within 0.8..1.0 and scales the vertex RGB of its groups.
 #include "common.h"
 
 // Definition entry: one per vertex group.

@@ -1,3 +1,5 @@
+// Most likely a generic "prop lighter" actor: takes over the nearest static prop (position, yaw,
+// model, scale) and becomes an actor with floor-tint lighting; removes itself if none is found.
 #include "common.h"
 
 extern int D_808001A0_chproplighter[];

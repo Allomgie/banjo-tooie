@@ -1,3 +1,5 @@
+// Player squash and stretch: when crushed the model is flattened for 5 s via per-bone scales,
+// then springs back with a wobble and sounds.
 #include "common.h"
 
 typedef struct {

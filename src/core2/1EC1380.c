@@ -1,3 +1,5 @@
+// Per-frame framebuffer setup: scissor tracking, depth and color image, z-buffer and framebuffer
+// clears, initial geometry mode, and ending the frame display list.
 #include "core2/1EC1380.h"
 
 s16 func_800A8184(void);

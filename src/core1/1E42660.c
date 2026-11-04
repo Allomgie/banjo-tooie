@@ -1,3 +1,4 @@
+// Two synth helpers: posts a per-voice delay param event, finds the next compact-MIDI delta.
 #include "common.h"
 
 typedef struct {
@@ -44,6 +45,7 @@ typedef struct {
     u32 evtDeltaTicks[32];
 } TTCSeq;
 
+// Synth API: posts param event 0x11 to a voice.
 // Posts a synth param event (type 0x11, per-voice delay byte) to the voice's player.
 void func_8002AB30(TTWrap *voice, u8 delay)
 {
@@ -61,6 +63,7 @@ void func_8002AB30(TTWrap *voice, u8 delay)
     }
 }
 
+// Compact MIDI sequence: next delta across tracks.
 // __n_alCSeqNextDelta: smallest pending delta tick over the valid tracks.
 s32 func_8002ABE0(TTCSeq *seq, s32 *out_delta)
 {

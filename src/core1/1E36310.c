@@ -1,3 +1,4 @@
+// Boot-time main heap setup: end 0x80400000, size 0x2C8800, start = end - size.
 #include "common.h"
 
 extern s32 D_8007E998;

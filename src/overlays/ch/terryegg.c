@@ -1,3 +1,5 @@
+// Probably Terry's eggs in Terrydactyland: four eggs the player carries back to Terry's nest,
+// their drop-off points, Terry's dialog about them, and the hatching sequence.
 #include "common.h"
 #include <types.h>
 // TU-NOTE: .data tables (below) are defined in C so IDO schedules the functions they point to as in the original; .bss B_80801460_chterryegg is defined before its first use for IDO placement.

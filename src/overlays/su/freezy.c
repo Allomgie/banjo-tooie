@@ -1,3 +1,5 @@
+// Ice-block helpers: random thaw time, releasing the frozen victim, shatter sound and particles
+// with radial damage, deflecting eggs and passing hits on to the victim.
 #include "common.h"
 
 extern f32 func_800DC178(f32, f32);

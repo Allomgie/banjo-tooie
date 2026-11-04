@@ -1,3 +1,5 @@
+// Kazooie-alone "egg from the mouth" state: shoots an egg forward while crouched, can repeat
+// while eggs remain, then returns to crouch or idle.
 #include "common.h"
 #include "overlays/bs/kaz/egghead.h"
 

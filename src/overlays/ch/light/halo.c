@@ -1,3 +1,5 @@
+// Coloured light halo actor: the spawn variant picks the colour (variants below 60 also create a
+// point light). A z-buffer occlusion probe draws the glow only when its centre is visible.
 #include "common.h"
 
 extern void *D_808006A8_chlighthalo;

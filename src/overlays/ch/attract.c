@@ -1,3 +1,5 @@
+// Probably the attract-mode (title/demo) actor 0x4B5, one per scripted step. A data table gives
+// model, start position, scale, spin and fade timings; the actor plays that and despawns.
 #include "common.h"
 
 extern void *D_808004F4_chattract;

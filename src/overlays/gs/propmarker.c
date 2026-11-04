@@ -1,3 +1,4 @@
+// Searches the node props of one cube for kind-6 props by id, and gives a prop's scale.
 #include "common.h"
 
 // Node prop record in a cube (0x14 bytes); the first three halfwords are the position.
@@ -27,6 +28,7 @@ typedef struct {
     u8 pad_13;
 } PropMarkerRecord32;
 
+// Group: find kind-6 node props by id inside a cube.
 // First enabled kind-6 prop with the given id in the cube.
 PropMarkerRecord *gspropmarker_entrypoint_0(s32 cube, s32 id)
 {
@@ -101,6 +103,7 @@ s32 gspropmarker_entrypoint_2(s32 cube, s32 id, f32 out[][3], s32 max)
     return count;
 }
 
+// Group: prop scale from the parameter word.
 // Prop scale from the 23-bit parameter (x0.01, 0 = 1.0).
 f32 gspropmarker_entrypoint_3(u32 *prop)
 {

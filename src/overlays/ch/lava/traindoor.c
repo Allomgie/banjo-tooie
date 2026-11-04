@@ -1,3 +1,5 @@
+// Door of the Hailfire Peaks fire-side train station: bound to FLAG_1D0_STATION_UNLOCKED_HFPL
+// and opened during cutscene 0x4D; variant 0x32 is slower and has its own camera pod.
 #include "common.h"
 
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);

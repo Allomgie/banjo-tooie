@@ -1,3 +1,5 @@
+// Sun lens flare actor: checks that the map has a flare and an active sky, registers a z-buffer
+// occlusion probe and draws the flare while the sun point is visible.
 #include "common.h"
 
 typedef struct {

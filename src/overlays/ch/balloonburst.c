@@ -1,3 +1,5 @@
+// Witchyworld Balloon Burst minigame: single-player and multiplayer controllers (dialogs, scoring,
+// results) and the balloon actor that rises, pops on egg hit and awards points by colour.
 #include "common.h"
 
 extern int D_80801C40_chballoonburst[];
@@ -67,6 +69,7 @@ void func_80801B6C_chballoonburst();
 extern void func_80105834(), func_80107C2C(), func_8010A730(), func_80800024_chballoonburst(),
     func_80800098_chballoonburst(), func_808008F0_chballoonburst();
 
+// Minigame controllers (single-player and multiplayer): flow, dialogs, scoring, results, rewards.
 int *chballoonburst_entrypoint_0()
 {
     return &D_80801C40_chballoonburst;
@@ -77,6 +80,7 @@ int chballoonburst_entrypoint_1()
     return (int) &D_80801C88_chballoonburst;
 }
 
+// Balloon actor: rise and spin, colour-dependent lifetime, pop on egg hit, score points and particles.
 int chballoonburst_entrypoint_2(void)
 {
     return (int) &D_80801CD0_chballoonburst;

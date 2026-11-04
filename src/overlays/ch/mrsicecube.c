@@ -1,3 +1,6 @@
+// Most likely the ice cubes of Hailfire Peaks that encase another actor or prop. A cube holds
+// its captive, absorbs hits and frees it on destruction. Variant 0 is Mildred; breaking her
+// sets flag 0x378.
 #include "common.h"
 
 extern int D_8080099C_chmrsicecube[];

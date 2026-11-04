@@ -1,3 +1,5 @@
+// Probably Mayan Kickball in Mayahem Temple, built on su/kickball: the match controller, the
+// three kinds of ball actors, and the stony kickers that chase and kick balls into goals.
 #include "common.h"
 
 extern s32 func_800EA05C(void);
@@ -239,6 +241,7 @@ Actor *func_80804810_chstoneballcontrol();
 extern void func_80105834(), func_80107C2C(), func_8010A730(), func_8080079C_chstoneballcontrol(),
     func_80800F9C_chstoneballcontrol();
 
+// Match controller: round tables, ball spawning, team setup, intro text, scoring, round end.
 int func_80800000_chstoneballcontrol(s32 param_0[4], s32 param_1, s32 param_2)
 {
     u32 local_0;
@@ -248,6 +251,7 @@ int func_80800000_chstoneballcontrol(s32 param_0[4], s32 param_1, s32 param_2)
     return _subaddiedialog_entrypoint_11(local_0, param_1, local_1, param_0 + 1, 0x33);
 }
 
+// Stony team members: speed by difficulty, AI chase and kick, controller mode, knock-back, spin.
 f32 func_80800040_chstoneballcontrol(Actor *param_0)
 {
     return D_80804FFC_chstoneballcontrol[((u8 *) func_80100094(param_0, 0))[0x14]];
@@ -630,6 +634,7 @@ void func_80800D20_chstoneballcontrol(param_0) Actor *param_0;
     param_0->unk64_20 = 1;
 }
 
+// Kickball actors (three kinds): spawn, physics, kicked or scored, burst effects.
 void func_80800DB4_chstoneballcontrol(Actor *param_0, f32 *center)
 {
     u8 *state;

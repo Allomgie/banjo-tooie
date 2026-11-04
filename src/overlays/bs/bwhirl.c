@@ -1,3 +1,5 @@
+// Wonderwing: while held, Kazooie wraps Banjo in her wings for invulnerability, using up a golden
+// feather every 2 s. Has a glow emitter, sparkles and ignores damage interrupts.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 extern void baanim_playForDuration_loopSmooth(Actor *a0, s32 a1, f32 a2);

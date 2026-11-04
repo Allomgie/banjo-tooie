@@ -1,3 +1,4 @@
+// Most likely seven one-line wrappers calling the pl/camera overlay with the current player.
 #include "common.h"
 
 extern void _plcamera_entrypoint_6(s32, s32, s32, s32, f32);

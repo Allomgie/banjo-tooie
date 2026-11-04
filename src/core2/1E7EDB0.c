@@ -1,3 +1,4 @@
+// Most likely three wrappers driving the fixed position+rotation camera overlay for the player.
 #include "common.h"
 
 // Wrappers for the ncfixposrot camera overlay, applied to the current player's camera.

@@ -1,3 +1,5 @@
+// Seems to hold two per-player blocks: model appearance parameters (expression and part
+// variants) and water-surface tracking with the water-entry splash.
 #include "core2/1E79FD0.h"
 extern f32 D_80125490;
 
@@ -42,6 +44,7 @@ void func_800A0D74(s32 player, f32 value);
 void func_800A0D84(s32 player, f32 value);
 int func_800A0DB8();
 
+// Model appearance parameters: expression and part variants per player model asset.
 s32 func_800A06E0()
 {
     return 0x18;
@@ -288,6 +291,7 @@ void func_800A0DDC(void *player)
 
 }
 
+// Water-surface state and the water-entry splash.
 s32 func_800A0E50()
 {
     return 0x14;

@@ -1,3 +1,5 @@
+// Controller of the multiplayer first-person shooting game: player setup per game type, scores,
+// kills, respawns, team and timed modes, placed eggs, round clock, and end-of-round states.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 typedef struct {

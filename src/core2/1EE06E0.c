@@ -1,3 +1,5 @@
+// Actor respawn system: a freelist of home-position records and a per-frame state machine
+// (fade out, countdown, wait for players to leave, restore home pose, particle burst, fade in).
 #include "common.h"
 
 extern s32 D_80136F00;

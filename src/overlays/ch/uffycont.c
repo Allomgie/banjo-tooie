@@ -1,3 +1,5 @@
+// Chuffy's cab controls: the actor that opens the station selection menu, plus hooks that resolve
+// the map the player arrives in when leaving the cab or the wagon.
 #include "common.h"
 
 typedef union {

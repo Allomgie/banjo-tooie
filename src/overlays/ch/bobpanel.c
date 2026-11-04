@@ -1,3 +1,5 @@
+// Not fully understood; it appears to be a static panel prop that deflects projectiles within its
+// model radius and sets three model texture frames when drawn.
 #include "common.h"
 
 void _sudeflect_entrypoint_1(s32, f32, f32, f32, s32);

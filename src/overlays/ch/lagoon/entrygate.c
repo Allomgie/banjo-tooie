@@ -1,3 +1,5 @@
+// World-entrance gate of Jolly Roger's Lagoon: sets FLAG_395_PROGRESS_OPENED_WORLD_JRL once the
+// world is opened (or by the open-all-worlds cheat); plays gate sounds while opening.
 #include "ch/lagoonentrygate.h"
 
 extern s32 _chdoormake_entrypoint_0(Actor *, f32, s32, s32);

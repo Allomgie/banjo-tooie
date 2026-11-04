@@ -1,3 +1,5 @@
+// Player animation (BK's baanim): owns the player's AnimCtrl, update modes, playForDuration
+// helpers, and a pose hook for cheat bone scaling and per-transformation bone tweaks.
 #include "common.h"
 #include "core2/anctrl.h"
 #include "overlays/ba/anim.h"

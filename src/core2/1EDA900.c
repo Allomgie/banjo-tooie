@@ -1,3 +1,5 @@
+// Actor message dispatch: sends a message to one actor, all actors, by type id, by radius or to
+// prop-attached actors near a point, plus small global mailbox registers for replies.
 #include "core2/1EDA900.h"
 
 extern s32 D_80135A70;

@@ -1,3 +1,5 @@
+// Most likely the map-level glue of the collectible registry: jiggy ranges per world, resetting
+// collected/spawned flags, spawning uncollected jiggies, saving/restoring jiggy positions.
 #include "gc/collectDLL.h"
 
 extern s16 D_80800BE2_gccollectDll;

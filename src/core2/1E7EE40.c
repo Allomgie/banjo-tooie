@@ -1,3 +1,5 @@
+// Probably the camera database of the current map (via the cadbmgr overlay): loaded node data,
+// a node table with the current node, init/free/defrag/reset, lookups and two spline callbacks.
 #include "common.h"
 
 extern s32 _cadbmgrDll_entrypoint_0(void *, s32);

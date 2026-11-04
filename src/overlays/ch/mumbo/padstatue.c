@@ -1,3 +1,5 @@
+// Possibly a breakable statue next to a Mumbo pad: a static prop that explodes into pieces
+// (ch/exploder) with particles and a sound when hit (message 0x40).
 #include "common.h"
 
 typedef union {

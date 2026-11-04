@@ -1,3 +1,5 @@
+// Static (always lit) torch: probably a placed torch with a flame, a fire sound loop and a sphere
+// around the flame registered through the player API, possibly a hurt zone.
 #include "common.h"
 
 extern void *func_80100094(Actor *, u32);

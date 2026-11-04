@@ -1,3 +1,6 @@
+// Klungo, Gruntilda's minion, as a three-fight boss. A per-fight table picked by map id drives his
+// route, potion throwing and taunts; on defeat it sets the progress flag, unlocks the replay entry
+// and after the third fight starts the Cauldron Keep cutscene (replay mode returns to the menu).
 #include "common.h"
 
 // TU-NOTE: the overlay's .data is defined in this file; tables holding function pointers must

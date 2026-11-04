@@ -1,3 +1,5 @@
+// Gold hoard sparkle effect: probably spawns a sparkle at a random vertex of a treasure pile,
+// offset by its normal.
 #include "common.h"
 
 extern int D_808001F0_chidgoldhorde[];

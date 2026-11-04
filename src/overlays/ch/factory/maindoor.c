@@ -1,3 +1,6 @@
+// GI main entrance: the big door rises once both entrance switches (flags 0xA00/0xA01) are
+// pressed, with camera and sounds, setting FLAG_1AB. A third switch (flag 0x188) starts
+// cutscene 0x86 on MAP_100.
 #include "ch/factory/maindoor.h"
 
 extern int D_808004D4_chfactorymaindoor[];

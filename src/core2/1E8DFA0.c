@@ -1,3 +1,5 @@
+// Particle emitter manager and particle simulation: emitter list with new/free/update/draw/defrag,
+// per-particle aging, fading, animation, physics, floor bounce with sound, and particle spawning.
 #include "common.h"
 #include "memory.h"
 #include "core2/1EC8070.h"
@@ -70,6 +72,7 @@ extern u8 D_80127F1D;
 extern s16 D_80127F1A;
 void func_800B5450();
 
+// Emitter list lifecycle, per-frame update, draw passes, particle physics and floor bounce.
 // Collision test for a particle moving from probe to pos: raycasts the map, or clamps
 // pos[1] to the emitter's optional height limits. Returns nonzero on a hit.
 int func_800B46B0(s16 *emitter, f32 *particle, f32 *probe, f32 *pos)
@@ -450,6 +453,7 @@ void func_800B553C(int *emitter)
     *flag = 1;
 }
 
+// Defrag of emitters and of the emitter array.
 // Defrag: moves the emitter and fixes up its pointers at +0x8C/+0x90/+0x94.
 u8 *func_800B5548(u8 *emitter)
 {

@@ -1,3 +1,5 @@
+// Most likely the mole that pops out of the molehill (actor 0x18F): plays emerge, talk, idle and
+// hide animations with expressions and sounds, and hands state changes back to the hill.
 #include "common.h"
 
 extern void *func_80100094(Actor *, u32);

@@ -1,3 +1,5 @@
+// Weak actor links (marker pointer plus marker id): clear, set, validate, re-resolve by id after
+// the marker moved, get the actor, and copy.
 #include "common.h"
 // TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 

@@ -1,3 +1,6 @@
+// Map-mesh effect registry, creation side: makes one entry per mesh id (type chosen by id
+// range) and calls its init; also removes, frees and enables/disables entries by owner,
+// mesh or type mask.
 #include "common.h"
 
 typedef struct {

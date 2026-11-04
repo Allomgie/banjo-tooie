@@ -1,3 +1,5 @@
+// Probably the start-camera lookup: finds the camera-start marker prop for an entrance index and
+// returns its position and a rotation facing yaw-180, so the camera is placed on map entry.
 #include "common.h"
 
 extern void *_gccubesearch_entrypoint_14(s32, s32);

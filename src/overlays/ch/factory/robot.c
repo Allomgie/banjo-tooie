@@ -1,7 +1,6 @@
+// Probably the Grunty Industries robots: a scanning head turret (entrypoint_0), a route-walking
+// robot that zaps the player and explodes when hit (1), and a group controller of up to four (2).
 #include "common.h"
-
-// Grunty Industries robots: scanning head turret (entrypoint_0), route-walking robot that
-// zaps the player and explodes when hit (entrypoint_1), and the group controller (entrypoint_2).
 
 #define W64(p) (((FRFlags *) (p))->b29)
 extern int D_80802928_chfactoryrobot[];

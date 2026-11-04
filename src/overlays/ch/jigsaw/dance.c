@@ -1,3 +1,5 @@
+// Jiggy shown during the player's jiggy dance: mirrors the player's position, yaw and animation
+// and keeps its light at the player's hand. Driven by bs/jig.c via entrypoint_1.
 #include "common.h"
 
 extern int D_80800488_chjigsawdance[];

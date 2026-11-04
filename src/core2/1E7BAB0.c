@@ -1,3 +1,5 @@
+// Most likely the player's dynamic lighting: collects nearby point lights plus the floor-tinted
+// ambient light each frame, smooths the colors and hands them to the model renderer.
 #include "common.h"
 
 #define STATE(p) (*(LocalState **) ((u8 *) (p) + 0xB4))

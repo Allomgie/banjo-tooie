@@ -1,3 +1,4 @@
+// Mumbo idle: random idle animations with sounds, standing-transition checks, short landing.
 #include "overlays/bs/mum/still.h"
 
 // Standing transition checks (walk, run, jump, attack, first person, water); returns the next state.

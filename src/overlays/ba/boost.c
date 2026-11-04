@@ -1,3 +1,6 @@
+// Flight boost queue (PlayerState+0x24): up to 5 running boosts plus one pending request.
+// A new boost is accepted only if no running one is within 0.25 s of its start.
+
 #include "common.h"
 #include "overlays/ba/boost.h"
 #include "playerstate.h"

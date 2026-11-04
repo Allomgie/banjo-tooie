@@ -1,3 +1,5 @@
+// Cube grid accessors: world position to cube, cube lookup with an outside sentinel, neighbourhood
+// gathering, iteration, bounds getters and thin wrappers into the gccube overlay.
 #include "common.h"
 
 // TU-NOTE: D_80128410 is the cube grid: cubes +0x00, min +0x04, max +0x10, strides +0x1C,

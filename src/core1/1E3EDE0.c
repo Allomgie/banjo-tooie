@@ -1,3 +1,4 @@
+// Reverb/FX unit (n_reverb): multi-tap delay and filter command generation, FX and voice setup.
 #include "common.h"
 #define CMD_MIX(param_0, param_1, param_2, param_3, param_4)                                       \
     {                                                                                              \
@@ -248,6 +249,7 @@ TTAcmd *func_800286FC(TTRvbF *r, s32 idx, s32 vol, TTAcmd *cmdIn);
 f32 func_800287FC(TTOscT *p, s32 step);
 void func_80028A24(TTEnvA *p);
 
+// Reverb/FX DSP command generation, FX params, filters, FX and voice construction.
 // n_alFxPull: emit RSP audio commands for one FX bus (multi-tap delay lines, optional stereo reverb)
 Acmd *func_800272B0(s32 unk_0, Acmd *cmd_start, s32 bus)
 {
@@ -660,6 +662,7 @@ void func_80028A24(TTEnvA *lp)
     }
 }
 
+// Pitch ratio helper (power by squaring), used only by the sequence player.
 // Semitone/cents ratio helper: raises a base constant to the power by repeated squaring
 f32 func_80028B74(s32 power)
 {

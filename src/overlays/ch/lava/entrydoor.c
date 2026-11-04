@@ -1,3 +1,5 @@
+// World-entrance door of Hailfire Peaks: removes itself once the world is opened, sets
+// FLAG_398_PROGRESS_OPENED_WORLD_HFP, and explodes with particles during the opening cutscene.
 #include "ch/lavaentrydoor.h"
 
 extern s32 D_80800150_chlavaentrydoor[];

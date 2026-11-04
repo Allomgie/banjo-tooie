@@ -1,3 +1,7 @@
+// Underwater swim control (PlayerState+0x134: forward speed and decay): depth tests, paddle
+// button selection, stick steering for roll, yaw and pitch, and per-frame propulsion.
+// Also toggles first-person Sub-Aqua Egg Aim.
+
 #include "common.h"
 #include "playerstate.h"
 

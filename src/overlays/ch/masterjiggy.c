@@ -1,3 +1,5 @@
+// Master Jiggywiggy in his Isle o' Hags temple: picks the first-meeting cutscene, a pending
+// world-opening or idle dialog, and runs the world-opening flow. A second actor is the glow effect.
 #include "common.h"
 
 extern int D_8080164C_chmasterjiggy[];
@@ -45,6 +47,7 @@ void func_80800E58_chmasterjiggy();
 extern void func_80101870(), func_80102EC0(), func_80107C2C(), func_8080000C_chmasterjiggy(),
     func_808001A8_chmasterjiggy(), func_808004FC_chmasterjiggy();
 
+// Master Jiggywiggy NPC: podium, dialogs, world-opening flow, HUD jiggy counters.
 int chmasterjiggy_entrypoint_0()
 {
     return (int) &D_8080164C_chmasterjiggy;
@@ -336,6 +339,7 @@ switch (message) {
 return 1;
 }
 
+// World-opening glow sequence: mesh tint, fade, shake, music, opening the next world.
 int chmasterjiggy_entrypoint_1()
 {
     return (int) &D_808016F8_chmasterjiggy;

@@ -1,3 +1,5 @@
+// Probably the generic waterfall effect actor: builds a line segment along its yaw and spawns
+// falling-water particles along it (rate by length) while visible, with a looping water sound.
 #include "common.h"
 
 extern void *D_80800410_chwaterfallfx;

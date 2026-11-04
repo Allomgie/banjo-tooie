@@ -1,3 +1,5 @@
+// Most likely a placed actor that makes the camera wobble: every frame it applies a sine-driven
+// roll/tilt to view 0, with its amplitude and speed taken from the actor.
 #include "common.h"
 
 extern int D_808000E0_chcamerawibble[];

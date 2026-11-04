@@ -1,3 +1,5 @@
+// The three doors of the Witchyworld Dodgem lobby leading to the 1v1, 1v2 and 1v3 domes; each
+// rises after the previous win. After the 1v3 win the third door also spawns the Dodgems jiggy.
 #include "common.h"
 
 extern void func_800DA544(s32);

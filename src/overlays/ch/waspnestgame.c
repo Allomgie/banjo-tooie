@@ -1,3 +1,5 @@
+// Zubbas' Nest minigame in Cloud Cuckooland: the game controller (dialogs, 60 s timer, score,
+// spawning, rewards) and the Zubba actor that flies, dives and falls when shot.
 #include "common.h"
 
 extern void *D_80801F80_chwaspnestgame;
@@ -88,11 +90,13 @@ void func_80800C7C_chwaspnestgame();
 s32 func_80800EB8_chwaspnestgame();
 void func_80800F98_chwaspnestgame();
 
+// Minigame controller: state changes, update (timer, spawn waves), messages, dialogs, scoring.
 void *chwaspnestgame_entrypoint_0()
 {
     return &D_80801F80_chwaspnestgame;
 }
 
+// Spawned Zubba actor: fly, dive, hit and fall, land and fade state machine.
 void *chwaspnestgame_entrypoint_1()
 {
     return &D_80801FC8_chwaspnestgame;

@@ -1,3 +1,5 @@
+// Most likely Clinker's Cavern timed shooting minigame in Grunty Industries: a controller with
+// HUD counters, timer, records and jiggy reward, plus target actors that report hits.
 #include "common.h"
 
 extern int D_808014D4_chclinker[];

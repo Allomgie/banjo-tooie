@@ -1,3 +1,5 @@
+// Probably the drone "bitten" modes: the player is snapped up, launched or thrown to a target,
+// lands with shake and dust, then dies or gets back up.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

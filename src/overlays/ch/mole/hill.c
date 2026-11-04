@@ -1,3 +1,5 @@
+// Probably the molehill of the move-teaching mole: spawns the mole actor and runs the hill
+// state machine (wait for the player, walk him in, hand over); exposes its state to su/mole.
 #include "common.h"
 
 extern f32 func_8010CD28(Actor *);

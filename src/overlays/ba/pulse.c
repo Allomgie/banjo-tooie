@@ -1,3 +1,5 @@
+// Probably the blinking-fuse pulse of the Detonator (TNT) state: a timer ramping up and down
+// between 0 and a period, plus a normalised 0..1 getter.
 #include "common.h"
 
 extern void func_800F10B4(f32, f32, s32, f32, f32);

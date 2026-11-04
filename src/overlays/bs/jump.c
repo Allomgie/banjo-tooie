@@ -1,3 +1,5 @@
+// Banjo-Kazooie jump and related airborne states: normal jump, short hop/ledge jump-off,
+// forced-direction jump, hover/held jump, and a fall-landing bounce with fall-damage feedback.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

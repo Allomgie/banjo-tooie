@@ -1,3 +1,5 @@
+// Attract-mode demo sequencer: demo playlists (map/exit plus demo index), started through the
+// special-sequence mode, with a timer firing ch/attract events at 0.5/1/6 s. A button press ends it.
 #include "common.h"
 
 typedef struct {

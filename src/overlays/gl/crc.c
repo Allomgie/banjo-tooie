@@ -1,3 +1,5 @@
+// Save-data checksum: hashes a byte range forward and backward; one entry writes the 8-byte
+// checksum into the end of a save block, the other verifies it.
 #include "common.h"
 
 extern u32 func_801168AC(u64 *);

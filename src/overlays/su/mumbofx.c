@@ -1,3 +1,5 @@
+// Magic-spell effect for Mumbo's spells and Humba's transformations: swirling ring of sparkles,
+// coloured point light, distance-scaled screen tint and the magic music track (0x1C).
 #include "common.h"
 
 extern void *func_80100094(Actor *, u32);

@@ -1,3 +1,5 @@
+// Probably a grab-bag of baddie utilities: one-time actor freeze, zone route/node choice, a
+// "player is standing on this actor" test, despawn helpers, and random points in a rectangle.
 #include "common.h"
 
 typedef struct {

@@ -1,3 +1,5 @@
+// Snowball transformation states (Hailfire Peaks): idle, roll, jump, fall, death, drone, spin,
+// bounce and rest; enter/exit hooks update the size via the ba snowball code.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

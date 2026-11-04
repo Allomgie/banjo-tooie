@@ -1,3 +1,5 @@
+// Probably an eye-blink helper for scripted characters: steps a blink sequence table with random
+// delays and writes the interpolated values as eye texture frames before drawing.
 #include "common.h"
 
 extern f32 func_800DC178(f32, f32);

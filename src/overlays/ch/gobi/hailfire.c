@@ -1,3 +1,5 @@
+// Gobi in Hailfire Peaks: walks from the lava side to the fire train station, where the player can
+// ride him so he spits water into Chuffy's boiler and cools the engine. Handles the map cutscenes.
 #include "common.h"
 
 extern int D_80800788_chgobihailfire[];

@@ -1,3 +1,5 @@
+// Most likely Gruntilda's small fireball: launched by message 0xA at a player, flies straight
+// with fire particles and a flickering light, and explodes into a particle ring on contact.
 #include "common.h"
 
 extern int D_80800480_chgruntyfireball[];

@@ -1,3 +1,5 @@
+// Most likely the props of the Quality Control room: a big fan that spins up after a cutscene
+// trigger and clears the gas, a rotor that spins down, and a stamping piston.
 #include "common.h"
 
 #define SPEED (*(f32 *) &this->actorData[3])

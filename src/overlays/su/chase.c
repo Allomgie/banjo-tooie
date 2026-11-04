@@ -1,3 +1,5 @@
+// Chase token: each frame finds the chasing actor nearest the player, so only one baddie at a
+// time (the nearest chaser, or anyone if nobody is chasing) is allowed to hunt the player.
 #include "common.h"
 
 typedef struct {

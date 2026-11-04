@@ -1,3 +1,5 @@
+// Shared effects for the Styracosaurus family and baby dinos: footstep sounds and dust particles
+// at the feet on set animation frames, with variants for the family cave and train station.
 #include "common.h"
 
 extern void func_800EEC30(f32 *, f32, f32, f32);

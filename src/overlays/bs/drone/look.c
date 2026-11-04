@@ -1,3 +1,5 @@
+// Drone mode "look": forced first-person look with a per-form anim until first-person ends.
+// entrypoint_2 is the shared first-person pitch clamp (also used by egg aiming).
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

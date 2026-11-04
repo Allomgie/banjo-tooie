@@ -1,3 +1,5 @@
+// Most likely Bottles' family in Jinjo Village (Mrs Bottles, Speccy, Goggles): they wander,
+// play idle sounds and expressions and run their dialog, incl. the hand-off to the quiz cutscene.
 #include "common.h"
 
 extern int D_80800DE0_chbottlesfamily[];

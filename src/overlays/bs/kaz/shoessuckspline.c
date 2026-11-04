@@ -1,3 +1,5 @@
+// Kazooie-alone Claw Clamber Boots: probably catches the wall-path interrupt and enters the
+// clamber state, then walks or stands on the spline path up walls.
 #include "common.h"
 #include "overlays/bs/kaz/shoessuckspline.h"
 

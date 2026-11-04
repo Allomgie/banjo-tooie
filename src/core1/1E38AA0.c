@@ -1,3 +1,4 @@
+// Synth driver core: synth setup, per-frame audio command list building, params, output-mode flags.
 #include "common.h"
 #ifndef M2C_MACROS_H
 #define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr) ((s8 *) (expr) + (offset)))

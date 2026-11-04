@@ -1,3 +1,5 @@
+// Camera collision component of the dynamic camera: line-of-sight tests against map collision,
+// push-out of geometry, alternative position search, side-wall probes and auto-rotation.
 // TU-NOTE: second of three units split from the former 1EEC090 (func_80112E90..func_80113D30).
 // Its .rodata (0x1EFFEA0..0x1EFFEC4) holds the constants and jump table of func_8011309C and
 // the constants of func_801134F0, func_80113688 and func_80113978.

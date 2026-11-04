@@ -1,3 +1,4 @@
+// Probably the shared player-death helpers: death sequence, death camera and game-over trigger.
 #include "common.h"
 #include "playerstate.h"
 

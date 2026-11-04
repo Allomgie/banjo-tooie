@@ -1,3 +1,4 @@
+// alCSPStop: posts a stop event to the compact sequence player's event queue.
 #include "common.h"
 
 typedef struct {

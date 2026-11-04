@@ -1,3 +1,5 @@
+// Jamjars, move teacher in Mayahem Temple: a wrapper around the shared mole logic (su/mole.c),
+// plus a trigger that plays his first-meeting introduction.
 #include "ch/mole.h"
 
 // TU-NOTE: D_80800258_chmole_maya is a linker alias for D_80800210_chmole_maya + 0x48.
@@ -6,6 +8,7 @@ extern void *D_80800258_chmole_maya;
 extern MoveData D_808001E0_chmole_maya[];
 extern D_808000D0 D_80800210_chmole_maya;
 
+// Jamjars move table and ActorInfo.
 void func_80800000_chmole_maya(Actor *actor, u32 message, u32 arg)
 {
     _sumole_entrypoint_3(actor, message, arg, D_808001E0_chmole_maya);
@@ -29,6 +32,7 @@ void *chmole_maya_entrypoint_0()
     return &D_80800210_chmole_maya;
 }
 
+// First-meeting intro trigger (sets FLAG_506).
 // Intro trigger: first time the player is near, plays the Jamjars introduction and sets the flag.
 void func_808000C0_chmole_maya(u8 *trigger)
 {

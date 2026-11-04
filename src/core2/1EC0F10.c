@@ -1,6 +1,6 @@
+// Render-state cache for 2D/translucent drawing: remembers combiner, cycle type, colors and
+// texture settings, and emits GBI commands only when one changes.
 #include <ultra64.h>
-
-// Render-state cache: GBI commands are only emitted when a value changes.
 
 // compare_vec4i
 int func_800F371C(u32[4], u32[4]);

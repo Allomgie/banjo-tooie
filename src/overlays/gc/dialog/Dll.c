@@ -1,3 +1,5 @@
+// Resets the global dialog state block: both speaker slots, the pending-dialog ring buffer,
+// phase bitfields and callbacks, and sets defaults.
 #include "common.h"
 
 typedef struct {

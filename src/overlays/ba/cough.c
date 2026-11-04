@@ -1,3 +1,5 @@
+// Player cough effect (PlayerState+0x44): once enabled, plays random per-form cough sounds at
+// random pitch and 0.3-4.5 s intervals while the player can act.
 #include "common.h"
 #include "overlays/ba/cough.h"
 #include "core2/1E76CC0.h"

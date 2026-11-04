@@ -1,3 +1,5 @@
+// Probably the GI lobby door: stays shut on entry unless conditions hold, triggers a Mr. Tannoy
+// announcement on approach, and opens (message 7) when dialog 0x1370 ends.
 #include "common.h"
 
 extern int D_80800160_chfactorylobbydoor[];

@@ -1,3 +1,5 @@
+// Spiral camera mode (camera-database volume type 7): keeps the yaw within +-10 degrees of the
+// direction from a centre prop to the player, for spiral paths around towers.
 #include "nc/ba/spiral.h"
 
 extern f32 func_800EEF94(f32 *);

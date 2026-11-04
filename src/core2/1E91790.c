@@ -1,3 +1,5 @@
+// Probably two unrelated parts: a bitmap-font text printer (style state, glyph upload, string width,
+// centered printing) and a falling-weather particle system of up to 100 model particles.
 #include "core2/1E91790.h"
 #include "common.h"
 #include <ultra64.h>
@@ -160,6 +162,7 @@ extern s32 D_80127160;
 extern s32 D_8012716C;
 s32 func_800B97A4();
 
+// Bitmap font text drawing: style state, glyph upload and texrect, string width, print.
 void func_800B7EA0(void *dl, s32 asset_id)
 {
     s32 pad;
@@ -443,6 +446,7 @@ void func_800B8F88(s32 dl, s32 pos_y, s32 str)
     func_800B8E28(dl, (s32) (0x130 - func_800B8CFC(str)) / 2, pos_y, str);
 }
 
+// Falling weather particles: alloc/free, start/stop, simulation, per-particle model draw.
 int func_800B8FE0()
 {
     D_8012712C = 0;

@@ -1,3 +1,5 @@
+// Most likely an icy gust zone: near the player it emits gust particles with a looping sound and
+// pushes the player away, less for heavy forms. Gone once Jinjo #33 is collected.
 #include "common.h"
 
 extern int D_80800300_chicywind[];

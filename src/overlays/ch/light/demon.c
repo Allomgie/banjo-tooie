@@ -1,3 +1,5 @@
+// Possibly small light-carrying actors: one follows a spline path at speed 650 and moves a point
+// light with it; another checks a player state bit and then sends the player interrupt 3.
 #include "common.h"
 
 extern void *D_80800140_chlightdemon;

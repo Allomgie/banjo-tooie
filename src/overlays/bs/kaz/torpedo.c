@@ -1,3 +1,5 @@
+// Talon Torpedo: Kazooie launched from Banjo's backpack as a controllable torpedo, with launch,
+// cruise, rest, drone, auto-return to Banjo, spin and hurt states and an interrupt dispatcher.
 #include "common.h"
 #include "overlays/bs/kaz/torpedo.h"
 #include "overlays/ba/playerstate.h"

@@ -1,3 +1,5 @@
+// Most likely weather zone controllers (8 actor kinds): when the player enters or leaves the zone
+// the global weather switches between none, falling leaves, rain and in-core falling particles.
 #include "common.h"
 
 extern void *D_80800440_chweather;

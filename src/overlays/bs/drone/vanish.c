@@ -1,3 +1,5 @@
+// Drone mode "vanish": most likely the player dissolves in sparkles, fades out, and control
+// returns after 2 s (used for teleports/warps out of sight).
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

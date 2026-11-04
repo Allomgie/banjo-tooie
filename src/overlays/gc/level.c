@@ -1,3 +1,6 @@
+// Level (world) change handling: on a change it resets per-map storage, timers, triggers and
+// flags, records 'level entered' flags and updates the return point. Also per-level feature queries.
+
 #include "gc/level.h"
 
 typedef struct {

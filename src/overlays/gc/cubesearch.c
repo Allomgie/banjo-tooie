@@ -1,3 +1,5 @@
+// Prop search over the cube grid: finds node props (markers) by type id near a point or anywhere,
+// returns the nearest one, its position and counts; used by actors and cameras.
 #include "common.h"
 
 extern void func_800EE84C();

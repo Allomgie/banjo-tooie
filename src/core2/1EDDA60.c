@@ -1,3 +1,5 @@
+// Pool of per-actor animation controllers (AnimCtrl freelist, s16 handle at actor+0x8C):
+// init, free, defrag, get, acquire and release.
 #include "common.h"
 
 extern s32 D_80136E70;

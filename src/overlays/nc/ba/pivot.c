@@ -1,3 +1,5 @@
+// Probably the pivot camera mode: orbits the player with an extra yaw offset and routes the
+// view through up to 4 camera waypoints when present.
 #include "nc/ba/pivot.h"
 
 extern f32 _ncbawaypoint_entrypoint_3(void *, Vec3f *, Vec3f *);

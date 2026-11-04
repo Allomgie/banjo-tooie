@@ -1,3 +1,6 @@
+// Probably the big propeller fans of the Grunty Industries basement and repair depot: the rotor
+// spins up and down, one variant blows the player along +x, with engine and whoosh sound loops.
+// Also a door opened by flag 0x18C and a vertex-alpha callback.
 #include "common.h"
 #include "types.h"
 #include "macros.h"

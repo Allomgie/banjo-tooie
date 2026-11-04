@@ -1,3 +1,5 @@
+// "2.5D" water splash preset: snaps a position to the water surface, moves it 20 units towards the
+// camera and spawns a camera-facing splash sprite (emitter slot 4).
 #include "common.h"
 
 extern void func_800EF368(f32 *, f32);

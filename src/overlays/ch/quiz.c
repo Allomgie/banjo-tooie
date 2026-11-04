@@ -1,6 +1,6 @@
+// Probably Tower of Tragedy, Grunty's quiz show in Cauldron Keep and the multiplayer quiz: the
+// quiz-master controller plus contestants, podiums, a punishment prop and podium lights.
 #include "common.h"
-
-// Tower of Tragedy: Grunty's quiz show (Cauldron Keep and the multiplayer quiz).
 #define QUIZ_FLAG_VIEW_1214
 extern void *func_800A89F8(void);
 extern void *func_800A9478(void *);
@@ -243,6 +243,7 @@ void func_80804110_chquiz(u8 *param_0);
 s32 func_8080414C_chquiz(u8 *param_0);
 s32 func_808058F0_chquiz(Actor *param_0, s32 param_1, s32 param_2);
 int * chquiz_entrypoint_4();
+// Quiz-master controller: answer menu, question text, camera, timer and score HUD, round states.
 s32 func_80800000_chquiz(s32 idx)
 {
     if (idx == 2) {
@@ -1108,6 +1109,7 @@ s32 func_80801C08_chquiz(s32 scores, s32 threshold)
     return -1;
 }
 
+// Punishment prop: falls onto a losing contestant with shadow, particles, rumble and shake.
 s32 func_80801C7C_chquiz(s32 actor)
 {
     u8 *prop;
@@ -1188,6 +1190,7 @@ int chquiz_entrypoint_0()
     return (int) &D_808072CC_chquiz;
 }
 
+// Contestant actor: setup per index, blink and expression, buzz, answer, right, wrong, lose states.
 void func_80802004_chquiz(Actor *actor)
 {
     f32 pos[3];
@@ -1759,6 +1762,7 @@ default:
         podium->unk3C = prop;
     }
 
+    // Podium and buzzer actor: buzz animation with point light and particles, lighting per index.
     void func_80803368_chquiz(Actor *index, s32 flag)
     {
         Actor *podium;
@@ -1931,6 +1935,7 @@ default:
         return &D_80807480_chquiz;
     }
 
+    // Podium light actor: flashes a point light on right or wrong answers, switches light groups.
     void func_80803954_chquiz(Actor *actor)
     {
         switch (actor->unk70_10) {

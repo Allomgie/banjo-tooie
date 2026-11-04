@@ -1,3 +1,4 @@
+// Crash handler: records the fault reason, then starts a crash thread that enters the gz debugger.
 #include "common.h"
 
 extern s32 D_8007E950;

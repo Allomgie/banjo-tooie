@@ -1,3 +1,4 @@
+// Quaternion math: copy, conjugate, conversion to rotation matrices, slerp.
 #include "common.h"
 
 extern f32 func_80013A7C(f32);

@@ -1,3 +1,5 @@
+// Map warp requests: warp to a (map, exit) with a lock against double requests, JRL map remapping,
+// and warp-pad transitions that place player and camera at a nearby warp marker.
 #include "gc/goto.h"
 
 extern s16 D_80800710_gcgoto[];

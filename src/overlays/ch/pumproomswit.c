@@ -1,3 +1,6 @@
+// Witchyworld castle pump room: split Banjo and Kazooie switches that must both be pressed,
+// and the pump actor that then runs a cutscene, sets the pumped flag and plays a slowing pump sound
+
 #include "common.h"
 
 extern void *D_80800380_chpumproomswitch;

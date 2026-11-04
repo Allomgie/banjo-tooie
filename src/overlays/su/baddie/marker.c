@@ -1,3 +1,5 @@
+// Probably a map-marker search: collects up to 40 level-setup markers near a position (optionally
+// of one type), returning each one's position, type, yaw and scale/radius.
 #include "common.h"
 // TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 

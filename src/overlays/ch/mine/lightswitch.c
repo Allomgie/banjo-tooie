@@ -1,3 +1,5 @@
+// Light switch of the GGM Power Hut basement: a generic switch on FLAG3_9E0 that plays
+// cutscene 0x15 on press and release.
 #include "ch/minelightswitch.h"
 
 extern s32 _chswitch_entrypoint_10(Actor *, s32, s32);

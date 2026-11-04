@@ -1,3 +1,5 @@
+// Probably the health (honeycomb energy) of each playable character: base and extra-honeycomb max,
+// clamped damage and heal with a hurt sound, and the refill policy when switching character.
 #include "core2/1EAE6C0.h"
 
 extern s32 D_8012B420;

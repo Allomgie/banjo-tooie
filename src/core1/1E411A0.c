@@ -1,3 +1,5 @@
+// libultra n_audio sequence player internals (voice and channel handling) plus a few
+// synth driver setters.
 #include "common.h"
 #define M127(v) ((v) >= 0x80 ? 0x7F : (v))
 
@@ -365,6 +367,7 @@ extern void func_80028C04(void *, f32);
 void func_8002A150(SeqPlayer_8002A150 *seq, s32 chan);
 void func_8002A318(TTSeqI *seq, s32 bank, s32 chan);
 
+// Sequence player internals: voice mapping and lookup, voice volume/pan math, channel setup.
 // Unlinks the voice with the given handle and puts it on the free list.
 void func_80029670(TTSeqV *seq, void *handle)
 {
@@ -739,6 +742,7 @@ void func_8002A6A4(TTSeqE2 *seq, TTHdl2 *handle)
     }
 }
 
+// Synth driver API: voice parameter events and aux effect buffer/parameter access.
 // Posts param event 0x13 (float value) to the handle's voice.
 void func_8002A7E0(TTHdlV *handle, f32 val)
 {

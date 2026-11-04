@@ -1,3 +1,5 @@
+// Probably the breakable doors of Witchyworld's Cave of Horrors: each has its own broken flag;
+// a hit spawns debris, destruction plays a sound, sets the flag and despawns the door.
 #include "common.h"
 
 extern int D_808001C0_chcaveofhorrorsdoors[];

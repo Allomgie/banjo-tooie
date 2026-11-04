@@ -1,3 +1,5 @@
+// Map sections of the Jolly Roger's Lagoon surface (map 0x1A7): registers 5 sections with water
+// heights and a per-frame callback that hides some sections and the base layer from the camera.
 #include "common.h"
 
 typedef struct {

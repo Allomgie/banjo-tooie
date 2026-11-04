@@ -1,3 +1,5 @@
+// Probably Bullion Bill, the prospector of Glitter Gulch Mine, who talks, hands out a Jiggy and
+// spawns Dilberta, plus Dilberta's own appearance walking to him.
 #include "common.h"
 extern void _subaddieaudioquick_entrypoint_3(Actor *, f32[3], void *, f32);
 
@@ -84,11 +86,13 @@ void func_80800D34_chmineprospector();
 extern void func_80105834(), func_80107C2C(), func_8080029C_chmineprospector(),
     func_80800340_chmineprospector();
 
+// Bullion Bill NPC: dialogs, Jiggy, dialog camera, spawning Dilberta.
 int chmineprospector_entrypoint_0()
 {
     return (int) &D_8080102C_chmineprospector;
 }
 
+// Dilberta's appearance in GGM: walks a path to Bill, dialog 0xF91.
 int chmineprospector_entrypoint_1()
 {
     return (int) &D_80801074_chmineprospector;

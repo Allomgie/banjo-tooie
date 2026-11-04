@@ -1,3 +1,5 @@
+// Probably the screen transition behavior: per-map entry/exit transition choice, transition
+// descriptors, start, per-frame update, state queries and drawing (asm-only).
 #include "common.h"
 
 extern int D_80800CB0_gctransitionDll[];

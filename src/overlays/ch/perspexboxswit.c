@@ -1,3 +1,5 @@
+// Probably the switch that opens the perspex boxes: only Banjo or Banjo-Kazooie can press it
+// (flag 0x43A); it then shatters all perspex boxes (actor 0x4C0) and plays a short camera pod.
 #include "common.h"
 
 extern void *D_808000D0_chperspexboxswitch;

@@ -1,3 +1,5 @@
+// Spend-item helper for player moves (eggs, feathers, ...): subtracts the amount if the player
+// has enough, otherwise gives feedback and fails.
 #include "su/inv.h"
 
 // Spends amount_to_remove of item_type and sets the success state; otherwise plays the

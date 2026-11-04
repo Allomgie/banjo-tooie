@@ -1,3 +1,4 @@
+// libultra audio: the delta-time ordered event queue and synth client/voice allocation.
 #include "common.h"
 
 typedef struct TTLink_s {
@@ -90,6 +91,7 @@ typedef struct {
 
 s32 func_80026AA4(TTPlayerA **out, s16 prio);
 
+// Delta-time ordered event queue shared by the sound and sequence players.
 // alEvtqNew: all items start on the free list.
 void func_800263C0(TTEvtq *evtq, TTItem *items, s32 item_count)
 {
@@ -214,6 +216,7 @@ void func_800266B0(TTEvtq *evtq, s16 type)
     osSetIntMask(mask);
 }
 
+// Synth client registration and voice allocation/stealing.
 // alSynAddPlayer: push the client onto the synth list with the current time.
 void func_80026780(TTPNode *client)
 {

@@ -1,3 +1,5 @@
+// Accessors for placed prop records in the cube grid: position, radius, control type, ids, and
+// the per-prop parameter word.
 #include "common.h"
 
 extern s16 D_80800140_gspropctrl[];

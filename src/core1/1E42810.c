@@ -1,3 +1,5 @@
+// Core of Rare's modified n_audio envelope mixer: voice parameter queue, volume/pan ramps
+// and RSP command generation, plus a helper that posts a raw MIDI event to a sequence player.
 #include "common.h"
 
 typedef struct {
@@ -170,6 +172,7 @@ TTAcmd *func_8002B7C8(void *voice_in, s16 *dmem_off, s32 out_pos, s32 samples, T
 s16 func_8002BAAC(f32 cur, f32 tgt, s32 steps, u16 *out_frac);
 s16 func_8002BCBC();
 
+// Sequence player send-MIDI: queues a MIDI event with a delta.
 // Posts a raw MIDI event into a sequence player's event queue.
 void func_8002ACE0(TTCSPq *seqp, s32 delta, u8 status, u8 chan, u8 byte2, u8 byte3)
 {
@@ -189,6 +192,7 @@ void func_8002ACE0(TTCSPq *seqp, s32 delta, u8 status, u8 chan, u8 byte2, u8 byt
     func_80026500(&seqp->evtq, &evt, ticks, 0);
 }
 
+// Envelope mixer: voice pull, parameter handler, volume ramp math, bus pull over voices.
 // Drains the voice's timestamped update queue, emitting mixer commands per 184-sample sub-frame.
 TTAcmd *func_8002AD60(TTVceE *voice_in, void *start_time, TTAcmd *cmd_in)
 {

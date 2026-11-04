@@ -1,3 +1,5 @@
+// Probably the Bill Drill breakable stone covers of Jolly Roger's Lagoon: breaking one saves
+// a flag and releases its content (doubloons or an actor); high-index covers stay as rubble.
 #include "common.h"
 
 extern int D_80800330_chlagoonbilldrillcover[];

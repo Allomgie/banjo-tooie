@@ -1,3 +1,5 @@
+// Most likely a perspex (glass) box that shatters on message 7: glass particles, smash sound,
+// music cue 0x18, then despawns. Opened by the perspex box switch (perspexboxswit.c).
 #include "common.h"
 
 extern s32 D_80800090_chperspexbox[];

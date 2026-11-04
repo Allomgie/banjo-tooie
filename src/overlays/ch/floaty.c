@@ -1,3 +1,5 @@
+// Not fully understood; it appears to be a floating Cloud Cuckooland creature that the player
+// carries through the shared taxi passenger helper. It comments, wobbles, rewards on delivery.
 #include "common.h"
 
 extern int D_80800E00_chfloaty[];

@@ -1,3 +1,5 @@
+// Probably Terry's phlegm attack: a controller warns the player, then drops a phlegm ball
+// (actor 0x398) every 3-4 s. It splats into goo and spawns a blob (0x399) that chases the player.
 #include "common.h"
 
 extern int D_80800B58_chphlegm[];
@@ -65,6 +67,7 @@ extern void func_800EF368(f32 *, f32);
 void func_80800748_chphlegm(Actor *actor, f32 y_offset, s32 particle_id);
 void func_80800A58_chphlegm();
 
+// Phlegm ball and goo blob (max 4 active, burst when hit), with shared splat/trail particles.
 int chphlegm_entrypoint_0()
 {
     return (int) &D_80800B58_chphlegm;
@@ -75,6 +78,7 @@ int chphlegm_entrypoint_1()
     return (int) &D_80800BA0_chphlegm;
 }
 
+// Spitter controller: warning dialogs, 3-4 s spit timer, spawns a ball aimed at the player.
 void *chphlegm_entrypoint_2(void)
 {
     extern void *D_80800BE8_chphlegm;

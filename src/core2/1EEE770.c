@@ -1,3 +1,5 @@
+// Probably the per-camera underwater effect: detects a submerged camera via a ray to the water
+// surface, wobbles the view and draws a per-map full-screen tint.
 #include "common.h"
 
 typedef struct {
@@ -37,6 +39,7 @@ extern s32 func_8010FF80(s32);
 extern void func_800CA7E4(s32, f32 *);
 extern s32 func_800BEAAC(f32 *, f32 *);
 
+// Underwater state: allocation, per-map table lookup, submerged detection.
 // Returns the index of map_id in the per-map tint table D_80124A50.
 // Matching: the line breaks in this function are needed for the match.
 s32 func_80114E80(s32 map_id)
@@ -53,6 +56,7 @@ s32 func_80114E80(s32 map_id)
     return (entry - (u8 *) D_80124A50) / 5;
 }
 
+// Visual side: view wobble and full-screen underwater tint.
 // Applies the sine-based view wobble and advances its phase.
 void func_80114EEC(State114EEC *state, s32 cam)
 {

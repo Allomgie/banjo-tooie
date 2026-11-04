@@ -1,3 +1,4 @@
+// No code: a bss-only file holding audio variables that belong to other core1 files.
 #include "types.h"
 
 // TU-NOTE: These bss variables were moved here to ease bss migration of other files;

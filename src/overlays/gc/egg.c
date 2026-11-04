@@ -1,3 +1,5 @@
+// Probably the egg type table: 14-byte records per egg kind (item, actor, model, ability, flags)
+// with lookups by actor or projectile id, field getters and an "egg unlocked" check.
 #include "common.h"
 
 extern u8 D_80800200_gcegg[];

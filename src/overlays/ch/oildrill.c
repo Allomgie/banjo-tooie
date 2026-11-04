@@ -1,3 +1,5 @@
+// Most likely the Hailfire Peaks Oil Drill puzzle: the drill (bit in Waste Disposal, rig
+// elsewhere) and the switch that starts it. A hit stops the drill and releases the Jiggy.
 #include "common.h"
 
 extern s32 D_80801404_choildrill[];
@@ -75,6 +77,7 @@ void func_808007DC_choildrill(Actor *param_0, f32 param_1, s32 param_2);
 int func_808009F8_choildrill();
 void func_80800CF0_choildrill(Actor *param_0, u8 param_1, f32 param_2);
 
+// Oil drill actor: init, state machine (spin-up, running, bounces, spin-down), sounds, particles.
 // Init: in map 0x111 the drill bit, elsewhere the oil rig.
 void func_80800000_choildrill(Actor *actor)
 {
@@ -417,6 +420,7 @@ int choildrill_entrypoint_1()
     return (int) &D_808014A8_choildrill;
 }
 
+// Drill switch (flag 0x351): starts the drill and gives two hint dialogs.
 // Switch init, tied to flag 0x351.
 void func_808010C0_choildrill(DrillS *switch_actor)
 {

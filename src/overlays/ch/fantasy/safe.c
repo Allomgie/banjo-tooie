@@ -1,3 +1,5 @@
+// The Superstash safe in Cloud Cuckooland: its dial follows how many of the four numbered
+// switches were hit; a full code turns the handle and swings the door open (FLAG_38D).
 #include "common.h"
 
 extern f32 D_80800998_chfantasysafe[];

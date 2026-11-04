@@ -1,3 +1,5 @@
+// Glitter Gulch Mine grill door that needs both switches (messages 0x79..0x7C set/clear two bits).
+// When both are on it sets FLAG_43B, starts camera pod 8 and opens as a doormake door.
 #include "ch/minegrilldoor.h"
 
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);

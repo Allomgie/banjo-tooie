@@ -1,3 +1,5 @@
+// Drone mode "suck under": probably the player is pulled down while a per-form anim plays
+// (e.g. sinking into a hazard); only a few interrupts get through.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

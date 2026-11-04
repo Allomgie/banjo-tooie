@@ -1,3 +1,5 @@
+// Kazooie-alone glide states: gliding with steering, transitions to flutter/flap and wing whack,
+// knock-back, a flapping descent that eases its fall speed, a locked hover and a drone variant.
 #include "common.h"
 #include "overlays/bs/kaz/glide.h"
 

@@ -1,3 +1,5 @@
+// Probably pieces of Terry's nest arena in Terrydactyland: two doors/blockers (ch/doormake)
+// that open by boss state and cutscenes, and a breakable piece an egg or Bill Drill blows up.
 #include "common.h"
 
 extern int D_80800380_chbigterrysbits[];

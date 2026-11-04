@@ -1,3 +1,5 @@
+// Multiplayer respawn-point picker: finds spawn props and randomly picks one that is far from
+// all other players and was not the last one used.
 #include "common.h"
 
 extern f32 func_800DC0C0(void);

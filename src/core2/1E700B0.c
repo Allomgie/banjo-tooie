@@ -1,3 +1,5 @@
+// Player ledge grab: finds the nearest wall edge ahead, checks headroom and floor, stores the
+// ledge position, and keeps the player attached to it in collision mode 7.
 // TU-NOTE: second half of the former 1E6F080, from func_800967C0 on.
 #include "core2/1E6F080.h"
 #include "types.h"

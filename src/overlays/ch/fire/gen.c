@@ -1,3 +1,5 @@
+// Probably fire torches lit by a specific projectile that burn for a limited time, with flare-ups,
+// smoke and sound. Paired light and mesh-glow actors fade with each torch's flag.
 #include "common.h"
 
 extern void func_800DBE60(u8, s32, s32);

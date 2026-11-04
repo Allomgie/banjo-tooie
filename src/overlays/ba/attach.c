@@ -1,3 +1,5 @@
+// Probably the player's link to an external controller (PlayerState+0x08): one id plus a
+// callback that player states forward events to, e.g. Stony kicks to the stone-ball controller.
 #include "common.h"
 #include "overlays/ba/attach.h"
 

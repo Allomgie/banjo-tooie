@@ -1,3 +1,5 @@
+// ROM asset decompression: a 4-slot streaming loader, a full DEFLATE decoder and a synchronous
+// load-and-inflate by asset id; also holds a stray getter for an unrelated global byte.
 #include "common.h"
 // TU-NOTE: ROM asset inflate: a 4-slot streaming loader (D_8012D560) driving a DEFLATE decoder.
 // TU-NOTE: D_8012D564, D_8012D568 and D_8012D56C are slots 1-3 of D_8012D560, declared separately.
@@ -130,6 +132,7 @@ s32 func_800E5EC0();
 s32 func_800E659C();
 s32 func_800E6728();
 
+// Asynchronous 4-slot asset streaming state machine, slot lookup/free/defrag, load by asset id.
 // Returns the slot streaming asset_id, or -1.
 int func_800E4730(asset_id)
 s32 asset_id;
@@ -403,6 +406,7 @@ for (i = 0; i < 4; i++) {
 
 }
 
+// DEFLATE core: block header, Huffman table build, stored/fixed/dynamic block decoding.
 // Reads the 3-bit block header: stores the final-block flag and returns the block type
 // (0 stored, 1 fixed, 2 dynamic). stream is a LocalStream: +0 input, +4 cursor, +0xC bits,
 // +0x10 bit_count, +0x30 rom, +0x39 final.
@@ -999,6 +1003,7 @@ void *func_800E6950(s32 asset_id, s32 heap_side, void *dest)
     return target.buffer;
 }
 
+// Getter of a global byte used as the default animation playback mode.
 s32 func_800E6A00(void)
 {
     return D_801275E0;

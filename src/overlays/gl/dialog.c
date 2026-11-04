@@ -1,3 +1,5 @@
+// Dialog asset front end: loads a dialog text asset through the cache and returns its string
+// block, releases it, checks the text-format marker, and resets per-world dialog state.
 #include "common.h"
 
 extern s32 D_80127600[];

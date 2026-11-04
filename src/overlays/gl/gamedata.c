@@ -1,3 +1,5 @@
+// Game-slot serializer: a 0x1C0-byte save image with magic 'KHJC' and tagged sections from a
+// provider table; build with CRC, apply, find section, version check, validate, clear, size.
 #include "common.h"
 
 // Section provider table entry. Length callbacks take no arguments.

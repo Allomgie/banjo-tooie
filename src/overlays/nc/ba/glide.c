@@ -1,3 +1,5 @@
+// Gliding camera mode: the same chase-behind-player logic as the fly camera,
+// with its own setup values.
 #include "nc/ba/glide.h"
 
 extern void func_80111590(void *, f32, f32, f32, f32);

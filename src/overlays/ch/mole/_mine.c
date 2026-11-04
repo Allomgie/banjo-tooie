@@ -1,3 +1,5 @@
+// Jamjars, move teacher in Glitter Gulch Mine: a wrapper around the shared mole logic (su/mole.c)
+// with this world's move table and ActorInfo.
 #include "ch/mole.h"
 
 extern MoveData D_808000C0_chmole_mine[];

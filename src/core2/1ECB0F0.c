@@ -1,3 +1,5 @@
+// Degree-based yaw/pitch math: angles from vectors, shortest signed angle difference,
+// turning toward a target (max step or damped), XZ cross/sin, and a facing-relative velocity map.
 #include "core2/1ECB0F0.h"
 
 extern f32 func_80013AAC(f32);

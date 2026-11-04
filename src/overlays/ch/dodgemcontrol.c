@@ -1,7 +1,6 @@
+// Witchyworld Dodgems minigame (1v1 to 1v3 and multiplayer): the game controller, the coloured
+// target lights collected by driving into them, and the dodgem cars with physics and AI.
 #include "common.h"
-
-// Witchyworld Dodgems minigame: game controller, target lights and cars.
-// Controller functions are in this section (maps 0xDE-0xE0, 0x186).
 
 #define OD(n) (((f32 *) param_0->actorData)[n])
 extern int D_80804DB4_chdodgemcontrol[];
@@ -212,6 +211,7 @@ f32 func_8080458C_chdodgemcontrol(Actor *param_0);
 f32 func_8080460C_chdodgemcontrol(Actor *param_0);
 f32 func_808046EC_chdodgemcontrol(u8 *param_0);
 
+// Game controller: per-map setup, car spawning, countdown, scoring, HUD, result dialogs, exit.
 int *chdodgemcontrol_entrypoint_0()
 {
     return &D_80804DB4_chdodgemcontrol;
@@ -222,6 +222,7 @@ Actor *func_8080000C_chdodgemcontrol(Actor *actor, s32 index)
     return func_80106790(((Unk80132ED0 **) func_80100094(actor, 0))[index]);
 }
 
+// Dodgem car: drive physics, wall bounces, AI steering, animations, player riding.
 // Sets the player's ride position/rotation relative to the actor.
 void func_80800044_chdodgemcontrol(Actor *actor)
 {
@@ -1027,6 +1028,7 @@ void func_80801A8C_chdodgemcontrol(Actor *actor, s32 flag)
     data[0xC0] = 1;
 }
 
+// Coloured target light: fades in and out, point light, timeout, collect burst.
 void func_80801B94_chdodgemcontrol(s32 param_0, s32 param_1)
 {
     s32 handle;

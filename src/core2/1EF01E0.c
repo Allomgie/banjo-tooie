@@ -1,3 +1,5 @@
+// core2 copy of the Huffman table builder (huft_build) used by rarezip inflate, plus the setup
+// that points the table storage at the shared scratch buffers.
 #include "common.h"
 
 extern s32 D_80011000;

@@ -1,3 +1,5 @@
+// Egg spawning: stores spawn position, velocity and egg type, then spawns the right egg actor
+// (deferred); variants for beak shots, rear laying and first person, plus shot/lay sounds.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

@@ -1,3 +1,6 @@
+// This seems to be King Jingaling in his Jinjo Village throne room: greets the player and offers
+// dialogs leading to Bottles' house or back to the village; after his life is sapped he wanders as
+// a zombie. A second actor is the throne-room prop with ambient sounds.
 #include "common.h"
 
 extern int D_808011A8_chkingjinjo[];
@@ -73,11 +76,13 @@ void func_808009FC_chkingjinjo();
 extern void func_801018A4(), func_80105834(), func_80107C2C(), func_80108ED0(),
     func_80800018_chkingjinjo();
 
+// King Jingaling NPC (normal and zombie) with dialog camera pods.
 int chkingjinjo_entrypoint_0()
 {
     return (int) &D_808011A8_chkingjinjo;
 }
 
+// Throne-room prop with ambient sounds and a flag-dependent model variant.
 int *chkingjinjo_entrypoint_1()
 {
     return &D_808011F0_chkingjinjo;

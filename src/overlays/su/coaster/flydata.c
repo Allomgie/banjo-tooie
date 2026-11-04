@@ -1,3 +1,5 @@
+// Data tables of the flying baddie: actor id to one of 5 flyer kinds, with per-kind records,
+// message replies and patrol, chase and swoop speeds.
 #include "common.h"
 
 // Per-kind flyer record (0x28 bytes); id is the actor id that selects the kind.

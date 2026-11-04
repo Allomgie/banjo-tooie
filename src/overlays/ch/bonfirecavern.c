@@ -1,3 +1,5 @@
+// Bonfire in Terrydactyland's Bonfire Caverns, built on the shared fire effect: a hit puts it out
+// for 6 seconds, then it relights.
 #include "common.h"
 
 extern int D_80800200_chbonfirecavern[];

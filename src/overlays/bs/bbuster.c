@@ -1,3 +1,4 @@
+// Banjo-Kazooie Beak Buster: stop mid-air, slam down, impact effects, optional Bill Drill chain.
 #include "common.h"
 #include "core2/anctrl.h"
 #include "overlays/ba/anim.h"

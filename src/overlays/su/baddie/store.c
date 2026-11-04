@@ -1,3 +1,6 @@
+// Actor state snapshot for per-map storage: entrypoint_0 serialises the live actors into a blob
+// (full records, or unique ids only); entrypoint_1 restores it at map start, matching actors by
+// unique id, despawning those without an entry and respawning stored ones that no longer exist.
 #include "common.h"
 
 extern Actor *func_801067C4(int *);
@@ -197,6 +200,7 @@ s32 func_80800F98_subaddiestore();
 u8 *func_80800FD0_subaddiestore();
 int func_80801054_subaddiestore();
 
+// Group: serialise actors and look up their records for save-and-restore.
 // Serialises the live actors into the blob.
 u8 *subaddiestore_entrypoint_0(u8 *blob, u8 *blob_end)
 {
@@ -263,6 +267,7 @@ subaddiestore_entrypoint_1(s32 unk_0, s16 *blob)
     }
 }
 
+// Group: restore a snapshot onto the map (match, apply, despawn, respawn).
 // Classifies an actor: 0 skip, 1 store fully, 2 store id only.
 s32 func_80800260_subaddiestore(actor)
 Actor *actor;

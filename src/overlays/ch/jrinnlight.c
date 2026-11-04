@@ -1,3 +1,4 @@
+// White point light that lights the room behind the secret wall at Jolly's inn.
 #include "common.h"
 
 extern void func_800C8E54(s32, f32, f32);

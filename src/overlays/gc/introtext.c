@@ -1,3 +1,5 @@
+// Intro text data: a 199-entry table from map id to text id and style, an exclusion list of
+// maps, and the progress flag (0x6CB) that disables the title cards, with a query for it.
 #include "gc/introtext.h"
 
 typedef struct {

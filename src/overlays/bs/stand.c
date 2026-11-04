@@ -1,3 +1,5 @@
+// Banjo-Kazooie idle ("stand") state: idle fidget sequences with sound and rumble cues, turning
+// in place, transitions to walk/run/crouch/jump/swim, a landing recovery state and drone wrappers.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

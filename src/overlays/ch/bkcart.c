@@ -1,3 +1,5 @@
+// Probably the BK cart: a cartridge creature holding a Stop 'n' Swop item (ice key or mystery egg).
+// It introduces itself once, runs from the player along routes and drops its item when hit.
 #include "common.h"
 
 extern void func_80102424(Actor *, s32);

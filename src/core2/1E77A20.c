@@ -1,3 +1,4 @@
+// Player collision spheres and the player state machine core (transitions, queries, interrupts).
 #include "core2/1E77A20.h"
 
 // Two units: collision spheres (PlayerState+0x114, three entries of 0x28 bytes)
@@ -51,6 +52,7 @@ typedef struct {
 } F8009E7C8;
 extern void *func_8009CB44();
 
+// Player collision spheres: radius and bone-anchored world position, with snapshot/restore.
 s32 func_8009E130()
 {
     return 0xF4;
@@ -195,6 +197,7 @@ s32 bone;
     *(u16 *) ((char *) (*(s32 **) ((char *) player + 0x114)) + offset + 4) = bone;
 }
 
+// Player state machine: transitions, queries, interrupt send/result, per-frame dispatch.
 s32 func_8009E5C0()
 {
     return 0x14;

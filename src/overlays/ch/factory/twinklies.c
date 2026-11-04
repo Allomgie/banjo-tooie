@@ -1,7 +1,6 @@
-#include "common.h"
-
-// Twinkly Packing minigame (GI packing room and its multiplayer map).
+// Twinkly Packing minigame (GI packing room and its multiplayer map), single and multiplayer.
 // Twinklies come in three colours (0..2); delivering one to its box scores 3 - colour points.
+#include "common.h"
 
 extern int D_80802218_chfactorytwinklies[];
 extern int D_80802260_chfactorytwinklies[];

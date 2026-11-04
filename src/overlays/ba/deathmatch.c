@@ -1,3 +1,5 @@
+// Probably the egg ammo of the multiplayer shoot-out: ammo and maximum per egg type, current egg
+// with cycling, timed unlimited mode, pickup messages, plus setters for the controller and HUD.
 #include "common.h"
 #include "playerstate.h"
 

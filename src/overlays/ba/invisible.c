@@ -1,3 +1,5 @@
+// Probably the player invisibility effect: two fade channels with fade in/out states, alpha
+// that rises with movement, a timer and on/off sounds; plus a sort of players by distance.
 #include "common.h"
 #include "playerstate.h"
 #include "yaw.h"

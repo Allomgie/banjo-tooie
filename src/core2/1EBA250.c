@@ -1,3 +1,5 @@
+// Bone transform override list: entries of rotation, scale or translation for a set of bones,
+// applied per bone during pose evaluation. Lives on the heap or in core1's handle pool.
 #include "types.h"
 #include "memory.h"
 #include "core2/1EBA250.h"

@@ -1,3 +1,5 @@
+// Probably the Mayahem Temple treasure-chamber official ("gold horde"): patrols, talks to
+// the player and takes back the Golden Relic, then opens the chamber and starts the transition.
 #include "common.h"
 
 extern int D_80801240_chamazongoldhordeofficial[];

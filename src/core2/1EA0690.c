@@ -1,3 +1,5 @@
+// Ability (learned move) flags on top of game flags: has/used checks, set and unlock helpers,
+// plus a 4-channel frame-count throttle.
 #include "core2/1EA0690.h"
 #include "core2/1EB3750.h"
 
@@ -7,6 +9,7 @@ s32 D_8012AAD0[4];
 
 extern void debug_call();
 
+// Learned/used ability flags and the first-use jingle.
 // First use of an ability: marks it used and plays music track 0xE.
 void func_800C6DA0(s32 ability_id)
 {
@@ -134,6 +137,7 @@ void func_800C70D0(s32 ability_id, s32 set)
     func_800DA3B8(ability_id + FLAG_0EE_ABILITY_BK_BEAK_BOMB, set);
 }
 
+// 4-slot frame-count throttle.
 int func_800C70F0(s32 channel)
 {
     ((s32 *) D_8012AAD0)[channel] = D_8012AAE0;
@@ -152,6 +156,7 @@ if (((*last_frame + 5) & 0xFFFFFFFFu) < D_8012AAE0) {
 return 0;
 }
 
+// defrag() passthrough used by another file.
 // Passthrough to defrag.
 void *func_800C7150(void *ptr)
 {

@@ -1,3 +1,5 @@
+// Wibble vertex effect: radial sine ripple (water wobble) from an id-keyed preset table;
+// moves vertex Y, modulates RGB and shifts S/T along the radial direction.
 #include "common.h"
 
 typedef struct {

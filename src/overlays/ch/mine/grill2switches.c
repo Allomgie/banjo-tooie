@@ -1,3 +1,5 @@
+// Two switch variants (FLAG3_A26, FLAG3_A28) for a Glitter Gulch Mine grill door.
+// They send messages 0x7A/0x79 and 0x7C/0x7B to the grill door actor (type 0x4C2).
 #include "common.h"
 
 extern int D_80800150_chminegrill2switches[];

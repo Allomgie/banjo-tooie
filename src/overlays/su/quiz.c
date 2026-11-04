@@ -1,6 +1,6 @@
+// State of Grunty's quiz (Tower of Tragedy): quiz block, which contestant or player buzzes in,
+// the answer timer on the HUD, round and progress flags, and the cutscene calls.
 #include "su/quiz.h"
-
-// Grunty's quiz (Tower of Tragedy): quiz state, buzz-in selection, answer timer, round flags.
 
 extern f32 D_80801050_suquiz[][3][2];
 extern f32 D_80801054_suquiz[][3][2];

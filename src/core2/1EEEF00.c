@@ -1,3 +1,5 @@
+// Camera pitch component of the dynamic camera: pitch limits (custom, fixed or derived from
+// distance and height), floor-slope lower limit, request clamping and timed pitch rotation.
 #include "core2/1EEEF00.h"
 
 // Camera pitch component. State slot at camera+0x3C, size 0x38.
@@ -39,6 +41,7 @@ typedef struct {
     LocalTurn *turn;
 } LocalActor;
 
+// Camera pitch limits and timed pitch rotation.
 // Component size.
 s32 func_80115610()
 {
@@ -147,6 +150,7 @@ void func_801158CC(PlayerState *camera, f32 *out)
     func_80112550(camera, out);
 }
 
+// Angular approach helper; a byte-for-byte duplicate of func_801128D4 (1EEC090).
 // Move *current toward target with a speed limit, easing out near the target.
 void func_801158EC(f32 target, f32 *current, f32 *velocity, f32 accel, f32 max_speed, f32 slow_range)
 {

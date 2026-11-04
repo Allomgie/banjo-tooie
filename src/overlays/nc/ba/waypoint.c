@@ -1,3 +1,5 @@
+// Camera waypoint list (up to 4 point+plane entries): waypoints are added, sorted by distance to
+// the player, and when player->camera crosses a plane the look-at is routed through it.
 #include "common.h"
 
 // Waypoint: a point plus a plane (normal and offset).

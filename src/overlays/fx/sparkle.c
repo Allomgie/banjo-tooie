@@ -1,3 +1,5 @@
+// Collectible sparkle presets: spawns one of several sparkle kinds from the shared gold-sparkle
+// emitter (owned by fx/spgold), plus init/release helpers. Used by almost every collectible.
 #include "common.h"
 
 extern u32 D_808003AC_fxsparkle[];

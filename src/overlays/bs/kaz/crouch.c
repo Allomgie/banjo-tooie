@@ -1,3 +1,5 @@
+// Solo Kazooie crouch (Z held): slides to a stop with dust, turns in place, plays idle fidgets,
+// and offers the transitions to idle, jump, wing whack and egg states.
 #include "common.h"
 #include "overlays/bs/kaz/crouch.h"
 

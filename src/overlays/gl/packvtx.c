@@ -1,3 +1,5 @@
+// Builds a packed per-vertex colour buffer for a model (optionally palette-remapped and tinted),
+// and frees it. Used by the per-actor model instance cache for tinted models.
 #include "common.h"
 
 extern void _dbpalette_entrypoint_0();

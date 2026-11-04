@@ -1,3 +1,5 @@
+// Humba Wumba in her wigwam (one actor for all ten wigwam maps): dialog, Glowbo payment, and the
+// magic pool where the player transforms or turns back, with splash and sparkle effects.
 #include "common.h"
 
 extern s32 func_800EA05C(void);

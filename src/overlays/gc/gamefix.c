@@ -1,6 +1,7 @@
+// Save-data consistency fix-ups run at game start: set follow-up progress flags, award jiggies
+// that are missing, reset two inventory items.
 #include "gc/gamefix.h"
 
-// Save-data fix-ups run at game start.
 void gcgamefix_entrypoint_0(void)
 {
     func_808000D0_gcgamefix();

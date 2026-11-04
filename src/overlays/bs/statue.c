@@ -1,3 +1,5 @@
+// Golden Goliath transformation (Mayahem Temple): countdown timer hooks, idle, walk, jump, kicks,
+// a timeout state that returns the player to the previous character, plus drone and rest.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

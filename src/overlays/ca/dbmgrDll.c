@@ -1,3 +1,5 @@
+// Storage manager of the camera node database: allocates and frees the header (8 per-kind node
+// arrays), inserts nodes at a slot with re-indexing and gives them per-kind default fields.
 #include "common.h"
 
 typedef struct {

@@ -1,3 +1,5 @@
+// Texture-scroll map-mesh effect: scrolls the mesh's V coordinate (speed from mesh id,
+// wraps at 8192).
 #include "common.h"
 
 typedef struct {

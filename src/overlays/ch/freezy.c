@@ -1,3 +1,5 @@
+// Ice block that encases an enemy frozen by an Ice Egg: links to the victim, deflects shots,
+// and on melt, touch or hit releases or destroys the enemy via su/freezy.
 #include "common.h"
 
 extern void *D_80800700_chfreezy;

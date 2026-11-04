@@ -1,7 +1,6 @@
+// Most likely the Crushing Shed puzzle boulder: lifted by Mumbo's levitate magic outside (map
+// 0xC7), then dropped onto and ground down by the crusher inside (map 0xCB), ending in a reward.
 #include "common.h"
-
-// Crushing Shed boulder: lifted by Mumbo's levitate magic outside (map 0xC7), then
-// dropped onto and ground down by the crusher inside (map 0xCB).
 
 extern void func_800EE7F8(f32 *, f32 *);
 extern void func_800EF5A0(f32 *, f32 *, f32, f32, f32);

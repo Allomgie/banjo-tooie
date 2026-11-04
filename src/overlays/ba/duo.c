@@ -1,3 +1,6 @@
+// Banjo/Kazooie duo controller (PlayerState+0x58): split-up pad state machine and rejoin with
+// camera handover, plus helpers that spawn or hand over a second player (Mumbo, statue, etc.).
+
 #include "common.h"
 #include "playerstate.h"
 

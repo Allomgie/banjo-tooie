@@ -1,3 +1,5 @@
+// Probably custom hit volumes for actors: marks an actor as using model-based hit detection and
+// tests spheres against it, with the result cached per frame, and gives the hit centre and radius.
 #include "common.h"
 
 extern void func_800EC358(Unk80132ED0 *, void *);

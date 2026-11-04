@@ -1,3 +1,5 @@
+// Mayahem Temple Code Chamber controller: explains the chamber, locks the player into egg-aim mode,
+// matches letters hit on the 6x5 grid against cheat codes and toggles or unlocks cheats.
 #include "common.h"
 
 typedef union {

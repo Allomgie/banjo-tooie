@@ -1,3 +1,4 @@
+// Model vertex-normal array helpers: index into the array, copy it to the heap, free the copy.
 #include "common.h"
 
 // Address of the normal of vertex `index` (4 bytes each).

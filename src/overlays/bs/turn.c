@@ -1,3 +1,5 @@
+// Banjo-Kazooie skid-turn state: brakes from the previous speed, kicks up dust and snaps the yaw
+// by 180 degrees on exit; jump, crouch and attack inputs can cancel it.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

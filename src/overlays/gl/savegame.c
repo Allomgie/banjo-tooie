@@ -1,3 +1,5 @@
+// Save-slot manager: caches the three visible save files and maps them onto the EEPROM slots.
+// Loads (with retry), saves crash-safely via a spare slot, copies, erases and frees files.
 #include "common.h"
 
 extern s8 D_80127618[];

@@ -1,3 +1,4 @@
+// Per-player boolean flag array (0x42 bytes at PlayerState+0x80): set, clear, test, clear all.
 #include "common.h"
 #include "overlays/ba/flag.h"
 

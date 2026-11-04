@@ -1,3 +1,6 @@
+// Furnace fire map-mesh effect: most likely animates colour, UV and height of map layers
+// 0x3C-0x3F with three wave oscillators, plays a loop, and switches calm/raging/cooling
+// (Old King Coal).
 #include "common.h"
 
 extern int D_80800D5C_chboilerid[];

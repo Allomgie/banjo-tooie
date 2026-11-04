@@ -1,3 +1,5 @@
+// Dolly camera mode from a camera-database volume (type 3): slides on a horizontal track while
+// keeping its distance to the player between limits; the height is fixed from the node.
 #include "common.h"
 
 extern void func_801124D0();

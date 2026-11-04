@@ -1,3 +1,5 @@
+// Cutscene light driver: one cue sets, fades or switches a scene light's colour and range,
+// or attaches it to a cutscene actor or one of its bones.
 #include "common.h"
 
 extern Actor *func_80106790(Unk80132ED0 *);

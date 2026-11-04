@@ -1,9 +1,9 @@
+// Cube-grid visibility culling around the camera with draw of visible cubes, and the 4-font table
+// with charset-to-glyph mapping and glyph metrics.
 #include "common.h"
 
 extern f32 func_800E42C0(void);
 extern s32 func_800E3D0C(f32 *, f32 *);
-// Cube-grid visibility culling (func_800D2F20 to func_800D3104), then the font table and
-// glyph lookup.
 typedef struct {
     s16 pad_0[4];
 } CellD31;
@@ -56,6 +56,7 @@ const struct {
     f32 pad_4[3];
 } D_80125B00 = {1.4142135f};
 
+// Cube visibility culling and draw dispatch of the visible cubes.
 // Far distance: cube size * 4.
 int func_800D2F20()
 {
@@ -154,6 +155,7 @@ void func_800D3104(void *unk_0, GridD31 *grid)
     }
 }
 
+// Font descriptors, charset mapping and glyph metrics.
 // Builds D_8012B370: char to glyph index in the custom charset, -1 if absent.
 void func_800D34A0()
 {

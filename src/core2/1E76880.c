@@ -1,3 +1,7 @@
+// Player turn control (PlayerState+0xFC): maps the camera-relative stick direction to the
+// ideal yaw per mode (follow, reversed, snap, threshold, keep, stick-X steer), then updates yaw.
+// Also helpers that align pitch and roll to the floor normal.
+
 #include "core2/1E76880.h"
 
 extern f32 bastick_getX(PlayerState *);

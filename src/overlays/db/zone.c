@@ -1,3 +1,5 @@
+// Model zone section: s16 boxes in model space. Updates inside flags for a point, tests whether
+// zones are active, and finds the first or all zones containing a point.
 #include "common.h"
 
 // Zone list layout: u8 count, u8 pad, then 14-byte entries (6 s16 box bounds, inside flag at 0xC).

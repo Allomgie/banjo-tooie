@@ -1,3 +1,5 @@
+// Probably collision query helpers on top of the map-collision dispatcher: raycasts, ground snap,
+// sphere push-out, wall-slide responses, line-of-sight test and a collision-triangle copy.
 #include "common.h"
 void func_800EF368(f32 vec[3], f32 target_length);
 

@@ -1,3 +1,4 @@
+// printf front-end for the on-screen debug text console (_Printf callback, console_printf[_at]).
 #include "common.h"
 
 extern s32 D_8007D160;

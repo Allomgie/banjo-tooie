@@ -1,3 +1,5 @@
+// Prop asset lookup: maps a static prop's type index (u16 >> 4) to its model asset id
+// (entrypoint_0) or sprite asset id (entrypoint_1).
 #include "common.h"
 
 extern s16 D_80800040_gsproplookup[];

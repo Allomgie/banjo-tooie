@@ -1,3 +1,5 @@
+// Most likely Boggy, the polar bear NPC of Hailfire Peaks: talks, takes the fish the player
+// brings and spawns the Jiggy. A second, init-only prop actor follows.
 #include "common.h"
 
 extern s32 _subaddiedialog_entrypoint_9(s32, s32, s32 *, s32);
@@ -62,6 +64,7 @@ typedef struct {
 extern int D_80800888_chboggy[];
 void func_80800554_chboggy();
 
+// Boggy NPC: dialogs, fish hand-in, Jiggy spawn, sounds.
 void func_80800000_chboggy(s32 actor)
 {
     *(f32 *) ((u8 *) actor + 0x38) = 0.18f;
@@ -214,6 +217,7 @@ int chboggy_entrypoint_0()
     return (int) &D_80800840_chboggy;
 }
 
+// Secondary prop actor: init only (scale and position from the marker).
 void func_80800634_chboggy(BoggyState *state)
 {
     state->f44 = state->f76;

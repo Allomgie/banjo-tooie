@@ -1,3 +1,5 @@
+// Model renderer: culls models, sets up segments, colours, render modes, bones and zones, then
+// interprets the geometry command list. Also holds the per-draw render setting setters.
 #include "core2/1EB5E70.h"
 #include "types.h"
 

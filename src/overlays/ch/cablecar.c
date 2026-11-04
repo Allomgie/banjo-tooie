@@ -1,3 +1,5 @@
+// Probably the Witchyworld cable car: a switch-powered car moving between two endpoints with
+// a sway, ridden by the player as a sub-game vehicle.
 #include "common.h"
 #include "core2/1EB5980.h"
 #include "core2/1ED8C80.h"

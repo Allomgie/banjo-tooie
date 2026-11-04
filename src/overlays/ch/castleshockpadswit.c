@@ -1,3 +1,5 @@
+// Probably the Crazy Castle shock pad switch (Witchyworld): when pressed it plays a camera pod
+// and spawns a shock-jump pad (actor 0x210) with an appear effect.
 #include "common.h"
 
 typedef struct {

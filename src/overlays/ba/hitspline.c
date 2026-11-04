@@ -1,3 +1,5 @@
+// Collision mode 10 ("hit spline") for the player: sweeps a sphere from the player's centre
+// and, on a hit, pushes the player out along the hit normal.
 #include "common.h"
 
 extern void func_80095870(void *, f32 *, f32 *);

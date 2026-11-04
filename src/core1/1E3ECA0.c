@@ -1,9 +1,11 @@
+// libultra audio: alCents2Ratio (pitch ratio from cents) and n_alSynDelete.
 #include "common.h"
 #ifndef M2C_MACROS_H
 #endif
 
 extern s32 *D_800411F4;
 
+// Cents to frequency ratio helper shared by the sound player, sequence player and oscillators.
 // alCents2Ratio: pitch ratio from cents via exponentiation by squaring.
 f32 func_80027170(s32 cents)
 {
@@ -27,6 +29,7 @@ f32 func_80027170(s32 cents)
     return ratio;
 }
 
+// Synth delete.
 // n_alSynDelete: clears the synth client list.
 void func_80027200(void)
 {

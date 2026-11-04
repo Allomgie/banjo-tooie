@@ -1,3 +1,5 @@
+// Most likely one of 20 breakable jade statues: it spins, bursts into sparkles when hit and
+// updates the HUD counter; a second actor shows the counter and despawns when all are broken.
 #include "common.h"
 
 extern void *D_80800310_chjadestatue;

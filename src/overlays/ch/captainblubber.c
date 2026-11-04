@@ -1,3 +1,5 @@
+// Captain Blubber, the pirate in Jolly Roger's Lagoon: long dialog trees for the doubloon/item
+// quest, camera pods, animation-driven sounds and particles, a shadow and an item hand-over.
 #include "common.h"
 
 extern void func_8010D5DC(Unk80132ED0 *);

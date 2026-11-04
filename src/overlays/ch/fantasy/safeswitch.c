@@ -1,3 +1,5 @@
+// The numbered Superstash switches in Cloud Cuckooland: an attack counts only with line of
+// sight to the safe; a press messages the safe or plays the reveal cutscene in map 0x13A.
 #include "common.h"
 
 extern void func_80103110();

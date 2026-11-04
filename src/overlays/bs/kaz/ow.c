@@ -1,3 +1,5 @@
+// Kazooie-alone hurt knockback states (light and heavy bounce): hurt animation, blinking, steering
+// while airborne, then back to idle or a water landing.
 #include "common.h"
 #include "overlays/bs/kaz/ow.h"
 

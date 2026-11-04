@@ -1,3 +1,5 @@
+// Music track manager: 6 track slots with fades, volume requests per owner, and play/stop APIs.
+// The per-frame update drives the core1 sequence player and marks heard-track progress flags.
 #include "core2/1ED4E30.h"
 #include "freelist.h"
 

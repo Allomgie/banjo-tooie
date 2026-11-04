@@ -1,3 +1,5 @@
+// Probably the Grunty Industries goblin baddie, built on the shared su/coaster walking AI.
+// It only sets up speed 0.75 and, on message 0xB6, emits a ring of particles in front of itself.
 #include "common.h"
 
 extern int D_80800298_chfactorygoblin[];

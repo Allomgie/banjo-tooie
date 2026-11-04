@@ -1,3 +1,4 @@
+// Kazooie-alone Springy Step Shoes jump: crouch, then a high launch that uses up the shoes.
 #include "common.h"
 #include "overlays/bs/kaz/shoesspringjump.h"
 

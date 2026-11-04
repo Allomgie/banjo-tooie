@@ -1,3 +1,5 @@
+// Player move-precondition predicates: about 60 small checks combining learned abilities,
+// player flags, state, ground/water, transformation and shoes.
 #include "core2/1E66990.h"
 
 // Move preconditions: mostly "ability learned" (func_800C6E38(ability id)) combined with a

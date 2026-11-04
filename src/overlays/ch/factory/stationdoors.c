@@ -1,3 +1,5 @@
+// GI train-station doors: shut until FLAG_163_STATION_UNLOCKED_GI, then slide up over 9 s with
+// a sound loop when cutscene 0x44 sends message 0x49; despawn if already unlocked.
 #include "common.h"
 
 extern int D_80800268_chfactorystationdoors[];

@@ -1,3 +1,5 @@
+// Grenade egg projectile: leaves an aimed trail and, on impact, is replaced by an egg explosion
+// through a deferred spawn.
 #include "common.h"
 
 typedef struct {

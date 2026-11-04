@@ -1,3 +1,5 @@
+// Probably the Mayahem Temple stone pillar puzzle: pillars must be hit in order, a wrong order
+// resets it, and completing it starts a cutscene into the Prison Compound.
 #include "common.h"
 extern void func_800EF1B8(f32 *, f32, f32);
 

@@ -1,3 +1,5 @@
+// Most likely the storage for props placed in the world's spatial cubes: insert, remove, iterate
+// and fix up the two global prop arrays, plus init/free/update hooks of the world-object system.
 #include "common.h"
 
 extern int D_80132DB4;

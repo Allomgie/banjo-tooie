@@ -1,3 +1,6 @@
+// Player states of the Washing Machine transformation: idle, walk, jump, fall/land, laundry shot,
+// first-person aim, washing a dirty factory worker, spin, bounce, rest and death.
+// Each state is an exit/enter/update triple plus an entrypoint returning its descriptor entry.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "overlays/ba/yaw.h"
@@ -93,6 +96,7 @@ extern f32 func_800D8FF8(void);
 extern void _bawasher_entrypoint_7(PlayerState *);
 extern int baanim_isStopped(PlayerState *);
 
+// Shared helpers: stick->speed, yaw setup, common enter/exit and wobble update, footstep particle.
 void func_80800000_bswasher(PlayerState *param_0)
 {
     f32 zone_pos;
@@ -198,6 +202,7 @@ void func_80800300_bswasher(param_0) PlayerState *param_0;
     _bawasher_entrypoint_9(param_0);
 }
 
+// Death state: bounce-and-slide sub-steps.
 void func_8080042C_bswasher(Actor *param_0, s32 param_1)
 {
     s32 *anim_ctrl;
@@ -280,6 +285,7 @@ int bswasher_entrypoint_1(s32 param_0)
     return D_80801E10_bswasher[param_0];
 }
 
+// First-person aim with the B laundry shot.
 s32 func_80800714_bswasher(Actor *this)
 {
     if (_badrone_entrypoint_3(this) == 2) {
@@ -321,6 +327,7 @@ int bswasher_entrypoint_2(s32 param_0)
     return D_80801E20_bswasher[param_0];
 }
 
+// Fall and landing, then back to idle.
 s32 func_808008BC_bswasher(Actor *this)
 {
     func_8009BF5C(this, 0);
@@ -389,6 +396,7 @@ int bswasher_entrypoint_3(s32 param_0)
     return D_80801E30_bswasher[param_0];
 }
 
+// Jump: releasing A cuts it short; landing leads to walk or idle.
 void func_80800B08_bswasher(PlayerState *param_0)
 {
     void *anim_ctrl;
@@ -496,6 +504,7 @@ void func_80800EC8_bswasher(u8 *param_0)
     func_80099B94(param_0);
 }
 
+// Walk, with a looping sound pitched by speed.
 void func_80800F1C_bswasher(param_0) Actor *param_0;
 {
     u8 local_0;
@@ -576,6 +585,7 @@ int bswasher_entrypoint_5(s32 param_0)
     return D_80801E60_bswasher[param_0];
 }
 
+// Spin state (via ba/spin).
 void func_808011B4_bswasher(s32 arg0)
 {
     _baspin_entrypoint_1();
@@ -607,6 +617,7 @@ int bswasher_entrypoint_6(s32 param_0)
     return D_80801E70_bswasher[param_0];
 }
 
+// Hurt bounce (via ba/bounce).
 void func_80801294_bswasher(s32 arg0)
 {
     _babounce_entrypoint_3();
@@ -641,6 +652,7 @@ int bswasher_entrypoint_7(s32 param_0)
     return D_80801E80_bswasher[param_0];
 }
 
+// Rest/locked state, delegating to bs/rest.
 void func_8080137C_bswasher(s32 arg0)
 {
     _bsrest_entrypoint_14();
@@ -668,6 +680,7 @@ int bswasher_entrypoint_8(s32 param_0)
     return D_80801E90_bswasher[param_0];
 }
 
+// Idle, with transitions to walk, jump, shoot and first person.
 void func_8080142C_bswasher(s32 arg0)
 {
     func_808000F0_bswasher();
@@ -710,6 +723,7 @@ int bswasher_entrypoint_9(s32 param_0)
     return D_80801EA0_bswasher[param_0];
 }
 
+// Washing a dirty factory worker, in sub-steps driving the worker's entrypoints.
 void func_808015EC_bswasher(param_0, param_1) PlayerState *param_0;
 u32 param_1;
 {
@@ -839,6 +853,7 @@ int bswasher_entrypoint_10(s32 param_0)
     return D_80801EC4_bswasher[param_0];
 }
 
+// Third-person laundry shot.
 void func_80801B10_bswasher()
 {
     func_808000F0_bswasher();

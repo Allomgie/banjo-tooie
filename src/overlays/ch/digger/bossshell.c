@@ -1,3 +1,5 @@
+// Hag 1's mortar shell attack: the shell flies a ballistic arc and explodes on landing; on message
+// 0x3D it splits into 4 bomblets (actor 0x4F4) that explode on contact or hit, else fade out.
 #include "common.h"
 
 extern void *D_80800560_chdiggerbossshell;

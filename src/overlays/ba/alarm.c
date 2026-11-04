@@ -1,3 +1,5 @@
+// Player alarm (PlayerState+0x00): plays countdown beeps from one positional sfx source,
+// faster as a timed footwear item (turbo trainers, wading boots, stilts) runs out.
 #include "common.h"
 #include "overlays/ba/alarm.h"
 #include "overlays/ba/playerstate.h"

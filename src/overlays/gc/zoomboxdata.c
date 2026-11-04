@@ -1,3 +1,5 @@
+// Zoombox portrait and voice table: per portrait a sprite asset, layout bytes and voice points,
+// with getters and a function that plays a random voice blip (or a jingle) for a portrait.
 #include "common.h"
 
 // Voice point: sfx id (or music track when pitch == -1), volume/range, pitch.

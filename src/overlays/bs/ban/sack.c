@@ -1,3 +1,4 @@
+// Banjo-solo Sack Pack states: Banjo hops around inside his backpack (idle, hop, jump, fall).
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

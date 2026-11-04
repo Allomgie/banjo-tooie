@@ -1,3 +1,5 @@
+// Per-level, per-map camera zoom presets: picks the table for the current level and returns the
+// nine zoom values (three zoom levels x three parameters) for the current map and preset index.
 #include "common.h"
 
 // One zoom preset entry for (map, preset index).

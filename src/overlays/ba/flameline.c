@@ -1,3 +1,5 @@
+// Flame-thrower beam: origin, direction and length, flame particles, a following light,
+// a looping sound scaled by length, and area damage at three points along the beam.
 #include "common.h"
 
 extern s32 D_80800784_baflameline[];

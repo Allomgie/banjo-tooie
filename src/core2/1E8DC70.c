@@ -1,3 +1,5 @@
+// Probably the heap-defrag hook that re-bases the three vectors in D_80127EF0,
+// which seem to belong to the lights overlay.
 #include "core2/1E8DC70.h"
 
 extern s32 D_80127EF0[3];

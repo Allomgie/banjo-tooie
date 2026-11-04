@@ -1,3 +1,6 @@
+// Hailfire Peaks hot-pool set-piece: a switch drains the pool, the drain door opens with a
+// cutscene, and the water surface lowers and fades. A hot-water actor scalds the player and
+// emits a steam burst, which ch/banjoctrl calls directly.
 #include "common.h"
 
 extern int D_80800930_chhotwaterpoolbits[];

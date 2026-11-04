@@ -1,3 +1,4 @@
+// Probably the choking death: Banjo-Kazooie cough and collapse, then the shared death sequence.
 // TU-NOTE: the .data of this overlay is defined in this file; its table points to functions here,
 // and IDO schedules some of them differently unless they share a unit. Values come from the ROM.
 #include "common.h"

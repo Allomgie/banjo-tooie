@@ -1,3 +1,5 @@
+// Witchyworld train-station door (the 'ghost' door): a two-leaf door that opens when flag 0x96
+// is set, plus its switch, which sets the flag and on message 7 notifies the door (actor 0x344).
 #include "ch/ghostdoor.h"
 
 extern int D_80800220_chghostdoor[];

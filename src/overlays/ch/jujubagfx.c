@@ -1,3 +1,5 @@
+// Visual effect of Mumbo's juju bag spell: a sumumbofx object follows the player (as Mumbo) or the
+// Mumbo NPC while the spell is cast and fades out on cue flag 0x9F3.
 #include "common.h"
 
 extern void *D_80800470_chjujubagfx;

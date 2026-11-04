@@ -1,3 +1,5 @@
+// Probably the revival party at Bottles' house: guest actors that despawn before the quiz or
+// after Hag 1, start a dialog when the player comes near, and coloured cycling point lights.
 #include "common.h"
 
 extern void *D_80800410_chbottlesparty;

@@ -1,3 +1,6 @@
+// Most likely the Hellter Skelter mouth: opens and closes in a loop with sounds, and stays open
+// once a flag is set or after it is hit.
+
 #include "common.h"
 
 extern int D_80800330_chhellterskeltermouth[];

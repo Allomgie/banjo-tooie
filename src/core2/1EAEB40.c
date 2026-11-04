@@ -1,3 +1,5 @@
+// Prop-control trigger dispatcher: probably routes trigger-prop activations to handler tables or
+// section-skip warps, plus the current dialog speaker/expression and a pending-trigger state.
 #include "common.h"
 
 extern s8 D_8012B431;
@@ -10,6 +12,7 @@ extern D_8011B7C0Entry D_8011B7C0[];
 
 void func_800D52B0(void);
 
+// Current dialog speaker and facial expression: set by the dialog boxes, cleared every frame.
 void func_800D5250()
 {
     func_800D52B0();
@@ -61,6 +64,7 @@ s32 func_800D52F4()
     return D_8012B432;
 }
 
+// Dispatch of trigger-prop activations to handler tables or section-skip warps; pending trigger.
 void func_800D5300(s32 prop, s32 actor)
 {
 }

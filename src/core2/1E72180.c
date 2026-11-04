@@ -1,3 +1,5 @@
+// Player lifecycle orchestrator (init, free, update, draw, defrag of all player subsystems in
+// fixed order) and the world-bounds component that handles leaving the map bounds.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 
@@ -28,6 +30,7 @@ extern f32 bastatetimer_get(PlayerState *, s32);
 extern void func_8009EB0C(f32);
 extern void func_8009E9FC(f32);
 
+// Out-of-world-bounds check: per-map bounds table and void-out handling.
 // Size of the world-bounds component.
 s32 func_80098890()
 {
@@ -126,6 +129,7 @@ int func_80098B5C(s32 player[3], s32 unk_0, s32 unk_1)
     func_800EE7F8(unk_1, player[0x2F]);
 }
 
+// Player subsystem orchestration: init/free/update/draw/defrag order and deferred callback.
 // Size of the lifecycle component.
 s32 func_80098BA0()
 {

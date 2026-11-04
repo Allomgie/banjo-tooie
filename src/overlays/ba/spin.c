@@ -1,3 +1,5 @@
+// Spin-out reaction for vehicle-like forms: turns toward the attacker, sets knock-back velocity
+// and spins the model N full turns over 1.5 s, handling the first-person camera.
 #include "common.h"
 #include "playerstate.h"
 

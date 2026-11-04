@@ -1,3 +1,5 @@
+// Cactus of Strength attraction in Witchyworld: hitting the pad launches a puck up the cactus; at the
+// top the reward sequence (jiggy) starts. Three actor kinds, probably pad, puck and top.
 #include "common.h"
 
 #define D ((CactusData *) this)

@@ -1,3 +1,4 @@
+// Synth ADPCM loader stage (n_alAdpcmPull): fetches sample data by DMA, handles loops, decodes.
 #include "common.h"
 #ifndef M2C_MACROS_H
 #define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr) ((s8 *) (expr) + (offset)))

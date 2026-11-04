@@ -1,3 +1,5 @@
+// libultra compact MIDI sequence (alCSeq) parser: event extraction, byte-stream decompression,
+// markers and seeking.
 #include "common.h"
 #ifndef M2C_MACROS_H
 #define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr) ((s8 *) (expr) + (offset)))

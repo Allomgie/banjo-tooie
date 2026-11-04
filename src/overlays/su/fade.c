@@ -1,3 +1,5 @@
+// Queue of full-screen color flashes: callers push (r, g, b, alpha); the world draw pass draws
+// each over the viewport once per frame and clears the queue.
 #include "common.h"
 
 extern s32 D_80127EF4;

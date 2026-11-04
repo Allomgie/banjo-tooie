@@ -1,3 +1,5 @@
+// Breakable crate whose placement parameter selects the content: a flag, a pickup actor from a
+// table, or a collectible. Breaking explodes it into splinters; three ActorInfo variants.
 #include "common.h"
 
 extern int D_80800458_chcrate[];

@@ -1,3 +1,5 @@
+// Hailfire Peaks icy-side train station: a switch unlocks the station with a cutscene, and the
+// two door variants then open via chdoormake.
 #include "common.h"
 
 extern int D_80800280_chicestationbits[];

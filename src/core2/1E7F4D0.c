@@ -1,3 +1,5 @@
+// Probably the lifecycle glue for the map's object population: manages the chbaddie state block
+// D_80127110, runs map-start setup, spawns auto-baddies after a load and does a per-frame update.
 #include "common.h"
 
 extern u8 D_80127115;

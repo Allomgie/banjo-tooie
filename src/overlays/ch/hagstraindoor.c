@@ -1,3 +1,5 @@
+// Isle o' Hags train-station door: a two-leaf door (second leaf, placement id 50, is mirrored)
+// that opens when FLAG_403_STATION_UNLOCKED_IoH is set.
 #include "common.h"
 
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);

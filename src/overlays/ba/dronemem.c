@@ -1,3 +1,4 @@
+// Per-state heap scratch slot for the drone transformation state: allocated and freed on demand.
 #include "common.h"
 
 extern void *heap_alloc();

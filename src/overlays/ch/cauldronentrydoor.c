@@ -1,3 +1,5 @@
+// Cauldron Keep entrance: an electrified door plus the drawbridge, which lowers once both
+// drawbridge switches have fired and sets the drawbridge-open flag.
 #include "ch/cauldronentrydoor.h"
 
 extern void *func_80100094(Actor *, s32);

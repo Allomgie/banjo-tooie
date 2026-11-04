@@ -1,3 +1,5 @@
+// Probably an electric eel: swims around its home point (wander, return, chase), periodically
+// electrifies with spark beams, can be stunned or killed, and can be joystick-controlled.
 #include "common.h"
 
 extern void *func_80100094(Actor *, s32);

@@ -1,3 +1,5 @@
+// Most likely three units: 40 shared emitter slots, the queued on-screen text printer (styles,
+// control codes, glyph and icon drawing), and a dispatcher for the weather effects (leaves, rain).
 #include "core2/1E8F430.h"
 #include <ultra64.h>
 
@@ -324,6 +326,7 @@ int func_800B7B68();
 
 extern s32 D_801282B4;
 
+// Shared emitter slots used by the move and fx overlays.
 // Matching: the line breaks in this function are needed for the match.
 // Clear all 40 emitter slots.
 void func_800B5B40()
@@ -352,6 +355,7 @@ s32 func_800B5BE4(s32 index)
     func_800B56D0(*slot);
 }
 
+// Text print queue: style setters, control-code parser, glyph and icon drawing, gradient texture.
 // Look up a glyph: returns its entry, sets the texture format and image address.
 u8 *func_800B5C10(s32 font, s32 glyph_id, s32 *format, s32 *image)
 {
@@ -408,6 +412,7 @@ void func_800B5E04(void)
     }
 }
 
+// Defrag of the print queue vector.
 int func_800B5E3C()
 {
     if (D_80128180.s32 != 0) {
@@ -880,6 +885,7 @@ void func_800B7BA4(f32 scale)
     D_80128198 = scale;
 }
 
+// Weather dispatcher: create on demand, update, draw, reset and free the weather effects.
 // Update the weather effects (fxleaves, fxrain and the in-core effect).
 void func_800B7BB0()
 {

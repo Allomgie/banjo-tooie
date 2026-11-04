@@ -1,3 +1,5 @@
+// Probably Big Al's burger stand in Witchyworld: the vendor NPC who sells burgers, the stand's
+// shutter, and the switch that opens it.
 #include "ch/burgerstand.h"
 
 extern void func_80102424(Actor *, s32);

@@ -1,3 +1,5 @@
+// Most likely the ice-block actor (id 0x2C5) around a frozen player: fades in, holds, shatters
+// and fades out; other viewports draw it, the frozen player's own viewport gets a tint.
 #include "common.h"
 
 extern int D_80800420_ch1pfreeze[];

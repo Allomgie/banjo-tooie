@@ -1,3 +1,5 @@
+// Player backpack model (babackpack): attaches a secondary model with its own animation and
+// draws it scaled at the player's bone; also exposes the model id for the shadow renderer.
 #include "common.h"
 #include "core2/anctrl.h"
 #include "overlays/ba/anim.h"

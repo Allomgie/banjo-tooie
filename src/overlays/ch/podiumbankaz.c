@@ -1,3 +1,5 @@
+// The Split-Up pads (one podium for Banjo, one for Kazooie): once the Split Up ability is known
+// they light up and stepping on one starts the split-up state; first visit shows dialog 0xD82.
 #include "common.h"
 
 extern s32 _subaddiedialog_entrypoint_1(f32 *, s32, s32);

@@ -1,3 +1,5 @@
+// Per-view camera lens helpers for up to 5 views: world/screen projection, FOV, aspect and zoom,
+// and the cinematic letterbox bars.
 #include "common.h"
 
 extern f32 func_80015D14(s32);
@@ -54,6 +56,7 @@ typedef struct {
 extern u8 D_8011A880[];
 void func_800C54CC(s32 view_index, f32 fov, f32 zoom);
 
+// Project/unproject, FOV and zoom per view, per-frame lens update into the view object.
 // Adds camera-shake offsets to the per-frame FOV and aspect accumulators.
 void func_800C4B90(s32 view_index, f32 fov_delta, f32 aspect_delta)
 {
@@ -206,6 +209,7 @@ void func_800C51A4(s32 view_index, f32 zoom)
     }
 }
 
+// Cinematic letterbox bars: start/stop state machine, viewport inset, bar drawing.
 // Shrinks the viewport by bar_height at the top and bottom, then re-applies the FOV.
 void func_800C524C(s32 view_index, s32 bar_height)
 {

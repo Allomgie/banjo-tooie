@@ -1,3 +1,5 @@
+// Typed field accessors for the current camera-database node: a private resolver per field plus
+// get/set entrypoints, returning 0 when the node kind lacks the field.
 #include "common.h"
 
 extern void func_800EE7F8(s32, s32);

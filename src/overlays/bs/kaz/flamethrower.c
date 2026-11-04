@@ -1,3 +1,5 @@
+// Probably Kazooie's fire-breath (flamethrower) state: a wind-up, then a hold phase that keeps
+// emitting flames from a mouth position until the button is released, then a wind-down.
 #include "common.h"
 #include "overlays/bs/kaz/flamethrower.h"
 #include "overlays/ba/playerstate.h"

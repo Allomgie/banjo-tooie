@@ -1,3 +1,5 @@
+// Rare's modified libultra sound player (n_alSndPlayer): sound states, event handling,
+// chained playback by sound id, group volumes, and n_alInit/n_alClose.
 #include "common.h"
 #ifndef M2C_MACROS_H
 #define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr) ((s8 *) (expr) + (offset)))
@@ -227,6 +229,7 @@ void func_800205D0(TTSndU *snd);
 TTSndB_80020790 *func_80020790(s16 id, u16 vol, u8 pan, f32 pitch_mul, u8 fx_mix, u8 unk_0,
                                TTSndB_80020790 **out);
 
+// Sound player: init, event state machine, sound state alloc/free, play/stop, group volumes.
 // Sets up the sound-state pool, the event queue and the group volume table (default 0x7FFF).
 void func_8001EB10(TTCfgI *cfg)
 {
@@ -1039,6 +1042,7 @@ if ((((TTWaveC *) snd->def)->unk12 & 0x1F) == chan) {
 osSetIntMask(prev_mask);
 }
 
+// n_alInit / n_alClose: install the audio globals, create and delete the synthesizer.
 // Creates the synthesizer once (same sequence as n_alInit).
 void func_80020D80(void *unk_0, void *cfg)
 {

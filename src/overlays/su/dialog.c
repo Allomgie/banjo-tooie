@@ -1,3 +1,5 @@
+// First-time explanation texts: a table maps a game flag to a dialog text; if the flag is unset,
+// the text is started and the flag set, so each explanation shows once.
 #include "common.h"
 
 typedef struct {

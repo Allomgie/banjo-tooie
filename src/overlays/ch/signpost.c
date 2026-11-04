@@ -1,3 +1,5 @@
+// Hint signposts: the first read shows a tutorial text; later, facing a sign and pressing talk
+// shows its hint text (some texts are replaced unless cheat 6 is active).
 #include "common.h"
 
 extern void *D_808002E0_chsignpost;

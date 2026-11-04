@@ -1,3 +1,4 @@
+// Map-load hook: checks the map model for water triangles and stores the result in game flag 0x6B5.
 #include "common.h"
 
 // Map-load hook: sets game flag 0x6B5 if the map model has water triangles

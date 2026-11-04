@@ -1,3 +1,4 @@
+// Grunty Industries smoke emitter: spawns a smoke puff every 0.55-0.65 s.
 #include "common.h"
 
 extern void *D_80800100_chfactorysmoke;

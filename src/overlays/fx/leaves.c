@@ -1,3 +1,5 @@
+// Falling-leaves weather: leaf models spawn around the player in view, drift with random velocity
+// and spin, are removed below the player or when too far, and are drawn as models.
 #include "common.h"
 #include "vector.h"
 

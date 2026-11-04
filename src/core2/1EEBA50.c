@@ -1,3 +1,5 @@
+// Camera look-at target component of the dynamic camera: picks the target point per target mode,
+// smooths it with a spring, and provides the getters used by the camera modes.
 #include "core2/1EEBA50.h"
 
 extern f32 func_800F5BC4(s32, s32);

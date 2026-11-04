@@ -1,3 +1,6 @@
+// Driver for map-mesh vertex effects: creates light/wibble/flicker/glow/scroll effects per
+// map layer, updates them each frame, applies them to dirty visible vertex groups while
+// drawing, and toggles them by id.
 #include "common.h"
 
 // Layer effect data from the map model.

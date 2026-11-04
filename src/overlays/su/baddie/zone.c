@@ -1,3 +1,5 @@
+// Probably two tiny helpers that keep an actor's environment-zone index up to date via the zone
+// overlay, and notify the zone system of the actor's zone.
 #include "common.h"
 
 typedef struct {

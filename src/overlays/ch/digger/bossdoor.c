@@ -1,3 +1,5 @@
+// Probably the exit lift of the Hag 1 arena: a map-mesh vertex callback lowers it after the
+// fight, and standing on it warps the player to Cauldron Keep (map 0x15D).
 #include "common.h"
 
 extern int D_80800430_chdiggerbossdoor[];

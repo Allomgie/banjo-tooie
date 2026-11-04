@@ -1,3 +1,5 @@
+// Map sections of the Jolly Roger's Lagoon sea bottom (map 0x1A9): registers 4 sections and a
+// per-frame callback that hides or shows a map layer from camera height, pitch and a frustum test.
 #include "common.h"
 
 typedef struct {

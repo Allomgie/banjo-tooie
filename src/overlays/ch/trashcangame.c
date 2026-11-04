@@ -1,3 +1,5 @@
+// Cloud Cuckooland Trash Can minigame (single and multiplayer): hit the garbage creatures that
+// pop up within 60 s; the trash-can host, garbage actor, lid deflector and door live here.
 #include "common.h"
 
 #define TRASH_IMPACT(volume)                                                                       \

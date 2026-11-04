@@ -1,3 +1,4 @@
+// Synth resampler stage (n_alResamplePull): pitch-shifts the loader output with A_RESAMPLE.
 #include "common.h"
 
 typedef struct {

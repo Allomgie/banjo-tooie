@@ -1,3 +1,4 @@
+// Banjo-Kazooie carrying a held object: idle, walk and run states plus drone and rest wrappers.
 // TU-NOTE: the .data of this overlay is defined in this file; its tables point to functions here,
 // and IDO schedules some of them differently unless they share a unit. Values come from the ROM.
 #include "common.h"

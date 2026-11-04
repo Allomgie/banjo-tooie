@@ -1,3 +1,5 @@
+// Probably Klungo's spinning forcefield bubble: an animated sprite with a random spin, a point
+// light and a looping hum that follow the fade alpha, and a light-fader effect when it pops.
 #include "common.h"
 
 extern int D_80800400_chklungoforcefield[];

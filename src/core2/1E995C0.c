@@ -1,3 +1,5 @@
+// Sky manager: D_80128770 holds up to two sky layer models drawn around the camera with a
+// widened far plane, plus the rotation timer, light/texture hooks and gcsky overlay wrappers.
 #include "common.h"
 
 extern int D_80128774[];

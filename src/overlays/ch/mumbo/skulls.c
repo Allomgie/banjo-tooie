@@ -1,3 +1,5 @@
+// Probably the decorative skulls around Mumbo's skull hut: picks its model by marker variant
+// (0x32+n), marks itself as target class 1 and is otherwise inert.
 #include "common.h"
 
 extern int D_808000C0_chmumboskulls[];

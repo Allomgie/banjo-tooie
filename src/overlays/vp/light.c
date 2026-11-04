@@ -1,3 +1,5 @@
+// Dynamic light vertex effect: applies core2 world point lights to map-mesh vertex colours
+// with a linear falloff; init bakes the static lights into the base colours.
 #include "common.h"
 
 typedef struct {

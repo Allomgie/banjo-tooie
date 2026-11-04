@@ -1,3 +1,5 @@
+// Player shadow: a blob shadow and a real-time projected shadow rendered to an offscreen image,
+// plus the shadow actor (init, update, draw gate) and the setters the player model code uses.
 #include "common.h"
 
 #define A6250_CMD(head, first, second)                                                             \
@@ -134,6 +136,7 @@ typedef struct {
 extern S_A70D0 *func_80106790(s32);
 extern s32 D_8011A3A0[];
 
+// Blob and projected (render-to-texture) shadow drawing, light-based shadow direction.
 // Cheap blob shadow: model 0x637 scaled by the height above the floor.
 void func_800A5DB0(u8 *shadow)
 {
@@ -458,6 +461,7 @@ void func_800A6B24(ActorA6B24 *shadow)
     }
 }
 
+// Player shadow actor: init, update, draw gate, owner/scale/flag setters, despawn, descriptor.
 // Draw: updates position/floor from the owner, then draws the blob or projected shadow.
 void func_800A6DAC(u8 *shadow, s32 unk_0)
 {

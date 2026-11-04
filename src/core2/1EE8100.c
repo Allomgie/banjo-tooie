@@ -1,3 +1,5 @@
+// Most likely CPU point-light vertex lighting for models: keeps the nearest world lights in a
+// sorted buffer, then shades each vertex with ambient plus falloff-weighted light colour.
 #include "common.h"
 
 // Light buffer entry (0x28 bytes) as seen by the sorted insertion.

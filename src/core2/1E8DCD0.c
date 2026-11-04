@@ -1,3 +1,5 @@
+// Probably the debris-burst particle preset: three shared emitter slots reserved/released through
+// the emitter cache, and func_800B4470, which configures one of them for a burst of debris.
 #include "common.h"
 
 extern u8 D_80127F03;
@@ -18,6 +20,7 @@ extern void func_800BA5BC(s32, f32, f32);
 extern void func_800BA5B0(s32, s32, s32);
 extern void func_800BA22C(s32, s32);
 
+// Reserve and release the three shared emitter slots.
 // Reserves the three shared emitter slots in D_80127F00.
 // Matching: the line breaks in this function are needed for the match.
 // Matching: the no-op `++`/`--` pair and `^ 0` are needed for the match.
@@ -44,6 +47,7 @@ void func_800B4428()
     while (slot != end);
 }
 
+// Spawn a debris burst with given position, velocity, size and lifetime.
 // Configures an emitter slot for a burst of debris/shards.
 void func_800B4470(f32 *pos, f32 *dir, s32 *unk_0, s32 unk_1, f32 scale, f32 unk_2,
                    s32 lifetime, s32 lifetime_range, s32 index)

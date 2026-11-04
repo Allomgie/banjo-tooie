@@ -1,3 +1,5 @@
+// Twinkle map-mesh effect: at random picks a vertex and fades up to 10 nearby vertices to
+// white and back. Exports its sparkle points for twinklea.
 #include "common.h"
 
 typedef struct {

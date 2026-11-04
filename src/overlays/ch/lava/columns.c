@@ -1,3 +1,5 @@
+// Probably the Hailfire Peaks Lava Side columns: they rise from -400 to 0 during cutscene 0x4E
+// with sounds, moving a map-mesh part along, and stay up afterwards (FLAG_390).
 #include "common.h"
 
 extern u8 D_80800250_chlavacolumns[];

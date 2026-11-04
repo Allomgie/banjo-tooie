@@ -1,3 +1,5 @@
+// Rock "teeth" barrier in front of the Terrydactyland entrance on Isle o' Hags. It is gone once
+// the world is open; on message 0x90 it blows up, emits debris and sound and sets the TDL-open flag.
 #include "ch/terryteeth.h"
 
 extern s32 D_80800150_chterryteeth[];

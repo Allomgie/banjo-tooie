@@ -1,3 +1,5 @@
+// Sonar ping of the submarine in Jolly Roger's Lagoon: follows the sub for 4.2 s, draws expanding
+// rings, pans the sound, and sends a growing hit sphere to nearby actors.
 #include "common.h"
 
 extern void *D_80800410_chping;

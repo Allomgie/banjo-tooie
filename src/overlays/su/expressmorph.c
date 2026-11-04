@@ -1,3 +1,5 @@
+// Morph part of the expression component: per-model morph presets, expression row selection for
+// the current dialog speaker, hold timers, smooth weight blending and applying it via db/morph.
 #include "common.h"
 typedef struct {
     void *rows;

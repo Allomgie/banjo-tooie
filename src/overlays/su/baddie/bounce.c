@@ -1,3 +1,5 @@
+// Ballistic hop/bounce helpers: precompute the flight time and horizontal velocity of a jump to a
+// target floor height, and integrate gravity with a half-speed bounce on landing.
 #include "common.h"
 
 typedef struct {

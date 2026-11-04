@@ -1,3 +1,5 @@
+// Actor animation API on top of anctrl: plays entries of the actor's animation table, with
+// getters/setters, a sound-on-frame helper and skeleton bone transform helpers.
 #include "core2/1EDB4D0.h"
 #include "core2/anctrl.h"
 #include "core2/1EBA250.h"

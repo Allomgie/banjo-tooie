@@ -1,3 +1,5 @@
+// Humba Wumba's wigwam in Terrydactyland: entering warps to the small or big interior; Mumbo's
+// spell grows or shrinks the wigwam.
 #include "common.h"
 
 extern void *func_80100094(Actor *, u32);

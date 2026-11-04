@@ -1,3 +1,5 @@
+// Shared helpers for all solo-Kazooie player states: common enter/exit with shoe hooks, a shoes
+// callback, and two next-state selectors (jump type and air state).
 #include "overlays/bs/kaz.h"
 
 void bskaz_entrypoint_0(PlayerState *self, s32 arg1, s32 arg2)

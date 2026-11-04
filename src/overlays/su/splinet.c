@@ -1,3 +1,5 @@
+// Time-keyed spline track: keys with frame times, hold/cut/branch flags and speed percentages,
+// vec3 and scalar channels, looping, and cubic evaluation of the current time.
 #include "common.h"
 
 typedef struct {

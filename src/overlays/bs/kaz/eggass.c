@@ -1,3 +1,5 @@
+// Solo Kazooie "egg from behind" (poop egg while crouched): spawns an egg backwards, repeats
+// while the button is pressed and eggs remain, then returns to crouch or idle.
 #include "overlays/bs/kaz/eggass.h"
 
 extern s32 D_808002C0_bskazeggass[];

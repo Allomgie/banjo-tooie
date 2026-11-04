@@ -1,3 +1,5 @@
+// Most likely the player model selection tables: model asset id and variant flag per form,
+// with multiplayer variants and special cases.
 #include "common.h"
 #include "playerstate.h"
 

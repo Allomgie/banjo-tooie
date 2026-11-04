@@ -1,3 +1,5 @@
+// Probably the light beam of the Hailfire Peaks aliens: fades in, rises 600 units over 3 s
+// and fades out on message 0x4F.
 #include "common.h"
 
 extern int D_808001A0_chalienbeam[];

@@ -1,3 +1,5 @@
+// Anti-tamper code check: checksums 8 code regions one word per call and compares them with the
+// expected values from the ROM build data; on a mismatch the game hangs forever.
 #include "types.h"
 #include "overlays/ba/physics.h"
 

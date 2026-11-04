@@ -1,3 +1,5 @@
+// Skeleton-shaped ice block for an Ice-Egg-frozen enemy: one ice chunk per bone, posed with the
+// actor's animation; when hit or melted the chunks scatter and the enemy is released or destroyed.
 #include "common.h"
 
 typedef struct {

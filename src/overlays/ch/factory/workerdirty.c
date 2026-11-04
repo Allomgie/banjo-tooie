@@ -1,3 +1,5 @@
+// Skivvies, the six dirty GI factory workers: friendly talking NPCs with their own clothing item
+// (workerwear.c); Washer Banjo cleans them, and once all are washed one hands out the reward.
 #include "ch/factory/workerdirty.h"
 
 extern int D_80800EF8_chfactoryworkerdirty[];

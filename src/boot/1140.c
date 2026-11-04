@@ -1,3 +1,5 @@
+// Boot copy of the rarezip front-end: inflates one member from src to dst (advancing both),
+// reads the CRC words and the last output size; identical to core1/1E33CF0.c.
 #include "types.h"
 #include "buffers.h"
 

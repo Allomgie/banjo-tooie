@@ -1,3 +1,5 @@
+// Hailfire Peaks volcano pieces: an eruption controller throwing lava rocks, the rock that
+// explodes on impact, the volcano switches (one spawns a Jiggy) and the platforms they raise.
 #include "common.h"
 
 extern int D_80801154_chvolcanobits[];

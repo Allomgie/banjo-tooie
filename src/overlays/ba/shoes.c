@@ -1,3 +1,5 @@
+// Special shoes (turbo trainers, springy step shoes, claw clamber boots): mode, duration timer
+// with alarm, foot model swap, music change, mode callbacks and spring/run particle puffs.
 #include "common.h"
 #include "playerstate.h"
 

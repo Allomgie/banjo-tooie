@@ -1,3 +1,5 @@
+// Radar HUD of the multiplayer first-person shooter: per viewport, a background sprite and
+// blips for the other players, placed relative to the viewer's facing.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

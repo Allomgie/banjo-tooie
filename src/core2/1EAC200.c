@@ -1,6 +1,5 @@
+// Per-map fog setup and fog display-list emission, plus per-Y-layer prop counts of the cube grid.
 #include "common.h"
-
-// Fog setup: per-map fog ranges, then per-layer prop counts of the cube grid.
 
 // Per-map fog table entry; flags bit 0/1 enable fog range 0/1.
 typedef struct {
@@ -56,6 +55,7 @@ extern s32 func_800E9DC4(EntryD2CD0 *);
 s32 defrag();
 int func_800D2CC4();
 
+// Per-map fog setup and fog factor/color display-list emission.
 // Enable fog range range_idx from a table entry.
 void func_800D2910(s32 range_idx, u8 *entry)
 {
@@ -179,6 +179,7 @@ int func_800D2CC4()
     D_8012B321 = 0;
 }
 
+// Cube-grid per-layer prop occupancy counts.
 // Count the props in each Y layer of the cube grid.
 void func_800D2CD0(void)
 {

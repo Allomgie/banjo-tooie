@@ -1,3 +1,5 @@
+// Most likely Kazooie's Hatch move: she sits on an egg actor, asks it whether it can hatch, then
+// either finishes hatching it or gets up again.
 #include "overlays/bs/kaz/hatch.h"
 
 extern void func_80099B94(PlayerState *);

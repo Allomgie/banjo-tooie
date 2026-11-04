@@ -1,3 +1,5 @@
+// Talon Torpedo state: remaining torpedo time (drained per frame, shown on the HUD), mode,
+// body spin, tail bend and motor sound, with setters and getters for the torpedo state.
 #include "common.h"
 #include "playerstate.h"
 

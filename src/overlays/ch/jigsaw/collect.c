@@ -1,3 +1,5 @@
+// The 'jiggy collected' sequence actor: the jiggy circles above the player with rising-pitch sounds
+// and twinkles, spins up and vanishes in sparkles. Plays the jiggy jingle and restores the music.
 #include "common.h"
 
 extern void *D_80800670_chjigsawcollect;

@@ -1,3 +1,4 @@
+// Mumbo walking and running states, and the three stick-speed constants (80/120/600).
 #include "overlays/bs/mum/move.h"
 
 // Stick-speed constants: 600 (run), 120 (walk), 80 (slow).

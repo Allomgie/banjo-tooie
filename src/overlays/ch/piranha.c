@@ -1,3 +1,5 @@
+// Probably a school of piranhas: one actor simulating N fish with spring-based steering. It guards
+// a nearby object and bites a swimming player. Kinds 0x2C1, 0x2C2 and the default share the code.
 #include "common.h"
 
 typedef struct {

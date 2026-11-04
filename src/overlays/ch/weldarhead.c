@@ -1,3 +1,5 @@
+// Most likely Weldar's head after the fight: it talks to the player, runs the reward flow and
+// spawns a shock-jump pad.
 #include "common.h"
 
 extern void *D_808004F0_chweldarhead;

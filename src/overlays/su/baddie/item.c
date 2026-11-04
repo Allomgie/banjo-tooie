@@ -1,3 +1,5 @@
+// "Give me an item" exchange for NPCs: waits until the player holds out the requested item near the
+// actor, then deletes it, plays a jingle, takes it from the inventory and messages the NPC.
 #include "common.h"
 // TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 

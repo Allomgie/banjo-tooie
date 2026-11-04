@@ -1,3 +1,6 @@
+// Most likely Mumbo's life force spell effect: spawns an effect actor on a target, grows and
+// flashes a glow, then notifies the target (message 0x4C) and sets FLAG3_9DF.
+// Entrypoint 2 tints the target.
 #include "common.h"
 
 extern Vec3f D_808004A8_chlifeforcespell;

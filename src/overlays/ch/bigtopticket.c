@@ -1,3 +1,5 @@
+// Big Top ticket collectible of Witchyworld: sinks and bobs slowly; on touch it adds the ticket
+// item, marks its registry entry, plays a jingle and sparkle, and shows a dialog the first time.
 #include "common.h"
 
 extern void *D_80800120_chbigtopticket;

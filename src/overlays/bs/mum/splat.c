@@ -1,3 +1,4 @@
+// Mumbo hard-landing (splat) state: fall damage, flop, slide, then get up or die at zero health.
 #include "overlays/bs/mum/splat.h"
 
 // Hard landing: fall damage, flop animation, slide to a stop.

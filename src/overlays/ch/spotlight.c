@@ -1,3 +1,5 @@
+// Most likely the spotlights of Mr. Patch's arena: they switch on when the fight starts, flicker,
+// then track the boss (actor 0x13C) with a point light and cone model, and turn off when he loses.
 #include "common.h"
 
 extern int D_808009B0_chspotlight[];

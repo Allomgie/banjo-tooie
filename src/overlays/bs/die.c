@@ -1,3 +1,4 @@
+// Ordinary death of Banjo-Kazooie (three variants): knocked back, bounces, slides, then leaves.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

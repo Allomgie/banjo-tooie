@@ -1,3 +1,6 @@
+// Controller of the Witchyworld Star Spinner ride, built on the power-hut helper: it swaps the map
+// layers, fades the lighting and lights the stars when powered. Also an egg target that slows them.
+
 #include "common.h"
 
 extern int D_8080092C_chstarspinnerctrl[];
@@ -37,6 +40,7 @@ void func_80800554_chstarspinnerctrl();
 // Apply the current light colour to all star actors (0x336).
 void func_8080069C_chstarspinnerctrl();
 
+// Power controller: power-up sequence, map layer swap, colour fade, light helpers for the stars.
 int chstarspinnerctrl_entrypoint_0()
 {
     return (int) &D_8080092C_chstarspinnerctrl;
@@ -123,6 +127,7 @@ while (param_3 > 0) {
 
 }
 
+// Egg-target actor: when hit, particles, sound, camera shake, rumble and dialog.
 // Egg target hit effect (flag 0x679 set: stars move slower).
 void func_80800374_chstarspinnerctrl(u8 *actor)
 {

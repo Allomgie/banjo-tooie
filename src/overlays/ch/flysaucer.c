@@ -1,3 +1,5 @@
+// Saucer of Peril ride in Witchyworld: a rideable saucer flies a spline course while the player
+// shoots targets for score, with Jiggy and collectible rewards; the second actor is the target.
 #include "common.h"
 #include "core2/anctrl.h"
 
@@ -158,6 +160,7 @@ void func_80801428_chflysaucer();
 void func_8080149C_chflysaucer();
 void func_80803AF0_chflysaucer(Actor *param_0, s32 param_1, s32 param_2, f32 param_3);
 
+// Saucer actor: course building and following, ride states, view modes, scoring and rewards.
 u8 func_80800000_chflysaucer(Actor *actor)
 {
     u8 *data;
@@ -1798,6 +1801,7 @@ case 5:
         return (int) &D_80804668_chflysaucer;
     }
 
+    // Target actor: scoring tier, batch spawning along the course, timeout fade, hit handler.
     s32 func_80803844_chflysaucer(void)
     {
         f32 roll;

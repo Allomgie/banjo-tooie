@@ -1,3 +1,5 @@
+// Probably thin wrappers that apply camera-instance calls to the current player's camera, plus a
+// helper turning the direction between two points into pitch and yaw.
 #include "core2/1E7E9A0.h"
 
 f32 func_800136E4(f32);
@@ -33,6 +35,7 @@ void func_800A5144()
     func_8010FD88(func_8008FFE8());
 }
 
+// Look-at rotation (pitch/yaw) from two points.
 // Pitch and yaw angles (roll 0) of the direction from one point to another.
 void func_800A516C(f32 angles[3], f32 from[3], f32 to[3])
 {

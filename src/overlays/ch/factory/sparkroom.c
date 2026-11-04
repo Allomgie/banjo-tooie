@@ -1,3 +1,5 @@
+// Quality Control electricity: sparks run along up to 16 wires, and the electrified floor zaps
+// the player. A second actor is the light switch (flag 0x1BD) with cutscene or Tannoy dialog.
 #include "common.h"
 // TU-NOTE: the .data tables at the end are defined in this file because IDO's assembler
 // schedules the functions they point to differently otherwise. Values come from the ROM.

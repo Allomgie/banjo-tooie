@@ -1,3 +1,5 @@
+// Node/spline cutscene camera of the pod system: builds a camera spline from camera-database
+// nodes, advances it with game or intro time, optionally looks at an actor, reports end events.
 #include "common.h"
 extern void _susplinet_entrypoint_11(void *, f32);
 

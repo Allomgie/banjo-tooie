@@ -1,3 +1,5 @@
+// Player camera controller (PlayerState+0x38): zoom level, camera mode and per-map zoom presets.
+// It reacts to camera-database volumes by switching camera overlays and handles C-button zoom/rotate.
 #include "core2/1E7D460.h"
 struct Actor {
     u8 _[0x38];

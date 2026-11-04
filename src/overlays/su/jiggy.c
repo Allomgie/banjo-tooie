@@ -1,7 +1,10 @@
+// World-opening progression and Jiggywiggy challenge glue: world table (jiggy cost, puzzle,
+// time limit, cutscene), opened-world count, entrance check, challenge start/retry/finish.
 #include "su/jiggy.h"
 
 extern JiggyData D_808008E0_sujiggy[11];
 
+// World table, opened-world count, jiggies needed, entrance check and opening cutscene.
 // Reads one or two packed 16-bit values from ROM and sums them, plus 0xA0.
 s32 func_80800000_sujiggy(s32 packed)
 {
@@ -52,6 +55,7 @@ u8 sujiggy_entrypoint_2(s32 world)
     return D_808008E0_sujiggy[world].WorldCost;
 }
 
+// Challenge start/retry/finish, attempts, time limit and best-time record.
 f32 sujiggy_entrypoint_3(s32 world)
 {
     return (f32) (_glreflight_entrypoint_0() & D_808008E0_sujiggy[world].unk9 & 0x7F);

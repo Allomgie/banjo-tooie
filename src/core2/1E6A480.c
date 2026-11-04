@@ -1,3 +1,5 @@
+// Probably the player's camera-zone tracker (PlayerState+0x2C): each frame it finds the camera
+// volume the player is in and stores the zone id and flags for the camera controller.
 // TU-NOTE: maps to BK core2/code_9290.c
 #include "common.h"
 #include "core2/1E75920.h"

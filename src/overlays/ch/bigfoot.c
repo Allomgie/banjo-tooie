@@ -1,3 +1,5 @@
+// Probably Bigfoot of Hailfire Peaks: just its ActorInfo and an init that hands the actor to
+// the shared coaster baddie behaviour.
 #include "common.h"
 
 extern int D_808000C8_chbigfoot[];

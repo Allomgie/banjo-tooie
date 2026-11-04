@@ -1,11 +1,11 @@
+// Probably the exit door of the Tower of Tragedy quiz room: on message 7 it fades out over 2 s,
+// sets a flag and despawns.
 #include "common.h"
 
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_80103110();
 extern void func_80101FDC();
 extern int D_80800190_chquizexitdoor[];
-
-// Fades alpha 255 to 0 over 2 s, then sets flag 0x440 and despawns.
 void func_80800000_chquizexitdoor(Actor *actor)
 {
     switch (actor->unk70_10) {

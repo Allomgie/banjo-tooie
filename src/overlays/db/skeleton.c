@@ -1,3 +1,4 @@
+// Accessors for the model skeleton: bone count, scale, joint positions, parent lookup.
 #include "common.h"
 
 // Model skeleton section: f32 scale at +0, joint count at +4, 16-byte joints from +8.

@@ -1,3 +1,5 @@
+// Probably a Hag 1 battery: crackles an electric fence around itself, and on message 0x40
+// explodes, sets its flag and removes its linked actor.
 #include "common.h"
 
 extern int D_808002F0_chdiggerbossbattery[];

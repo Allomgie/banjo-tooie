@@ -1,3 +1,4 @@
+// Per-state heap scratch slot for states that need extra memory (fly, first person, van, vanish).
 #include "common.h"
 
 extern void heap_free(void *);

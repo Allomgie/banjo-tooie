@@ -1,3 +1,4 @@
+// Probably a crash mat: plays a sound once when the main player steps onto it (0.5 s cooldown).
 #include "common.h"
 
 extern s32 _plsu_entrypoint_3(void *);

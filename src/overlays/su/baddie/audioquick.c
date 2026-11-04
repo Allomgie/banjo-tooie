@@ -1,3 +1,6 @@
+// One-shot positional sound helpers for actors: create a source at a position, set 3D or 2D mode
+// from the actor's flag, and play it. Variants play only once the actor's animation passes a given
+// time (or any time in a -1-terminated list).
 #include "common.h"
 
 extern void func_800C3418(u8, s32);

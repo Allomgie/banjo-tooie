@@ -1,3 +1,5 @@
+// Mumbo's wand-glow helper: spawns the glow actor while he charges, keeps it at the wand tip
+// each frame, and releases it when the attack ends.
 #include "overlays/ba/wandglow.h"
 #include "wandglow.h"
 

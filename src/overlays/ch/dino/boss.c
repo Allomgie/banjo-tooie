@@ -1,3 +1,6 @@
+// Terry the Terrydactyl, the Terrydactyland boss, in Terry's Nest: phase state machine with dialog,
+// flying goo-ball attacks (actor 0x398), hit counter, health HUD and rewards. A second actor kind
+// runs a post-fight cutscene (0x33) and spawns actor 0x234.
 #include "common.h"
 extern void func_800F4F34(s32, f32 *, f32, f32);
 
@@ -127,13 +130,14 @@ extern void func_80101870(), func_80105834(), func_80107C2C(), func_80108ED0(),
     func_80800018_chdinoboss(), func_80800220_chdinoboss();
 extern u8 D_80802A68_chdinoboss[];
 
-// Terry (Terrydactyland boss) overlay.
+// Terry boss actor: phases, goo-ball attack, hit counter, health HUD, dialog, rewards, replay exit.
 // TU-NOTE: the data tables are emitted as a head symbol plus a static *_rest array.
 int chdinoboss_entrypoint_0()
 {
     return (int) &D_80802B40_chdinoboss;
 }
 
+// Second actor kind: post-fight cutscene 0x33 helper in maps 0x112/0x115, spawns actor 0x234.
 int chdinoboss_entrypoint_1()
 {
     return &D_80802B88_chdinoboss;

@@ -1,3 +1,5 @@
+// Probably a generic flower enemy: hides, pops up near the player, follows along its route,
+// sinks back when they escape, and bursts into model parts on death.
 #include "common.h"
 
 extern int D_80800C14_chflowerbaddie[];

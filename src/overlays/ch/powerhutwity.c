@@ -1,3 +1,6 @@
+// Probably the concrete Witchyworld power huts built on powerhut.c: the Saucer of Peril hut and
+// the Dodgem Dome hut, each switching map layers and animating map vertices when powered.
+
 #include "common.h"
 
 extern int D_80800B28_chpowerhutwitchy[];
@@ -25,6 +28,7 @@ void func_8080024C_chpowerhutwitchy();
 void func_80800890_chpowerhutwitchy();
 void func_808009FC_chpowerhutwitchy();
 
+// Saucer of Peril and Dodgem Dome huts: map layer toggles, vertex animations, dome doors opening.
 int chpowerhutwitchy_entrypoint_0()
 {
     return (int) &D_80800B28_chpowerhutwitchy;
@@ -35,6 +39,7 @@ int chpowerhutwitchy_entrypoint_1()
     return (int) &D_80800B70_chpowerhutwitchy;
 }
 
+// Dodgem Dome entrance doors, bound to the hut's flag, swinging mirrored.
 int chpowerhutwitchy_entrypoint_2(void)
 {
     return &D_80800BB8_chpowerhutwitchy;

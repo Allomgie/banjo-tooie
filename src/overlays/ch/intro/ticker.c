@@ -1,3 +1,5 @@
+// Director of the story cutscenes: per cutscene map it starts music and sounds, sets story flags,
+// chains to the next cutscene or warps back into the game, and lets Start skip. Runs intro sync.
 #include "common.h"
 
 extern void func_800FC6B0();

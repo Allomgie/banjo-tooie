@@ -1,3 +1,5 @@
+// Probably three switch actors on the generic switch: two send raise/lower messages to the
+// drawbridge, a third (CK laser grid deactivated) messages another actor.
 #include "common.h"
 
 extern int D_80800210_chdrawbridgeswitches[];

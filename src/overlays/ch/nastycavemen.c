@@ -1,3 +1,5 @@
+// Probably the Unga Bungas, the unfriendly cavemen of Terrydactyland: one kind sleeps and throws
+// the player out of the cave when woken, the other stands at the entrance and steps aside.
 #include "common.h"
 
 extern int D_808010E8_chnastycavemen[];
@@ -65,6 +67,7 @@ extern u8 D_80801174_chnastycavemen[];
 extern u8 D_8080117C_chnastycavemen[];
 extern u8 D_8080118C_chnastycavemen[];
 
+// Sleeping/throwing caveman: wake conditions, exit warp, throw, update, messages, draw
 int chnastycavemen_entrypoint_0()
 {
     return (int) &D_808010E8_chnastycavemen;
@@ -356,6 +359,7 @@ void func_80800B10_chnastycavemen(Actor *actor, s32 unk_1)
     func_80101870(actor, unk_1);
 }
 
+// Entrance caveman: proximity dialogs, walks aside, draw, messages, expression teardown
 int chnastycavemen_entrypoint_1()
 {
     return (int) &D_808011BC_chnastycavemen;

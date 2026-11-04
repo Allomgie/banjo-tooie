@@ -1,3 +1,5 @@
+// Klungo walking off after his final defeat: in cutscene 0x5B he speaks, a camera pod follows him
+// along a fixed path. Outside that cutscene the actor deletes itself.
 #include "common.h"
 
 extern int D_80800130_chklungoleave[];

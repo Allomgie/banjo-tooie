@@ -1,3 +1,5 @@
+// Drone mode "fired": the player is probably launched on a bounce trajectory away from the
+// source with a per-form yelp, and returns to the form's fall/landing state afterwards.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

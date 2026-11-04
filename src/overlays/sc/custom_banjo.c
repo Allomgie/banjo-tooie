@@ -1,3 +1,5 @@
+// This seems to be the info-bar icon-row renderers: N sprite icons, bright for the value and
+// dim for the rest, plus a vertical air-meter variant, and their width functions.
 #include "common.h"
 
 extern f32 _scinfobar_entrypoint_18(s32);

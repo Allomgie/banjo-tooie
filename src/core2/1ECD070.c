@@ -1,3 +1,5 @@
+// Piecewise-linear curve lookup: binary search in a sorted (x, y) f32 table, then a clamped
+// linear remap between the bracketing points.
 #include "core2/1ECD070.h"
 
 typedef struct {

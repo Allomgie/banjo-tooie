@@ -1,3 +1,4 @@
+// Crouch for Banjo-Kazooie and solo Banjo: slide, turn, fidgets, and the crouch move table.
 // TU-NOTE: the overlay .data (D_80800990_bscrouch) is defined in this file. It points at
 // functions of this file; IDO schedules some of them differently unless they share the unit.
 #include "common.h"

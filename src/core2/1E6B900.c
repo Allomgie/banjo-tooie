@@ -1,3 +1,5 @@
+// Player model component (model, bones, tint, variants, draw) and egg ammo selection
+// (per-mode egg lists, cycling, HUD display, unlimited-egg timer).
 #include "core2/1E6B900.h"
 
 // PlayerState+0x50 is the player model component (size 0x118, see func_80092010).
@@ -247,6 +249,7 @@ void func_80094D04();
 int func_80094DA8();
 int func_80094E40();
 
+// Player model component: model and anim slots, bones, transform/tint, variants, companion, draw.
 s32 func_80092010(void)
 {
     return 0x118;
@@ -1590,6 +1593,7 @@ if (*(s32 *) ((s8 *) *(u8 **) ((s8 *) player + 0x50) + 0x110) != 0) {
 return local_0 >= 0x32001;
 }
 
+// Egg ammo selection: egg list per mode, cycling on R, HUD egg item, unlimited-egg timer.
 s32 func_80094340(void)
 {
     return 0x4;

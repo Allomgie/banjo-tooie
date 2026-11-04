@@ -1,3 +1,5 @@
+// Flying camera mode (Kazooie flight, Bee flight): chase camera behind the player, pitch following
+// the flight pitch (compressed when diving), with fly distance and height limits.
 #include "nc/ba/fly.h"
 
 extern void func_80111590(void *, f32, f32, f32, f32);

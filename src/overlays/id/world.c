@@ -1,3 +1,5 @@
+// Map-mesh effect registry, runtime side: finds entries in D_80127EF8 by mesh id and type,
+// has typed getters, and runs the per-frame dispatcher over the enabled entries.
 #include "common.h"
 #include "vector.h"
 

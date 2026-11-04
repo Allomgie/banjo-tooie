@@ -1,3 +1,6 @@
+// Salty Joe's fries stand in Witchyworld (twin of burgerstand.c): the vendor NPC who serves fries,
+// the fries tray he hands over, the stand's shutter door and the switch that opens it.
+
 #include "ch/friesstand.h"
 
 extern void func_80102424(Actor *, s32);

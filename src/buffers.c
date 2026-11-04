@@ -1,3 +1,5 @@
+// Fixed low-memory buffers: the graphics task's DRAM stack and output buffer, scratch space,
+// the core1 checksums written by the boot loader and the overlay table entry of core2.
 #include "buffers.h"
 
 // gfx task dram stack buffer

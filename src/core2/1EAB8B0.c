@@ -1,3 +1,5 @@
+// Probably the minigame record table (23 s16 entries, best times or scores): update if beaten
+// (lower or higher is better), a second table in game mode 2, plus reset and save serialization.
 #include "common.h"
 
 // Minigame records (best times or scores), indexed by id - 0x80.

@@ -1,3 +1,4 @@
+// Banjo-solo Pack Whack: swings the backpack with an attack sphere, particles and sounds.
 #include "common.h"
 #include "overlays/ba/anim.h"
 #include "overlays/ba/flag.h"

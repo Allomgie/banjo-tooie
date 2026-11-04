@@ -1,3 +1,4 @@
+// Video frame loop: framebuffers, VI manager and retrace thread, frame pacing, viewport pool.
 #include "types.h"
 #include "gfx.h"
 #include "threads.h"
@@ -73,6 +74,7 @@ void func_80015178();
 void func_8001546C();
 f32 func_80015D14(OSLogItem *param_0);
 
+// Framebuffers, VI manager and mode, retrace thread, buffer swap, vsync wait, blanking, VI offset.
 // Allocates a heap block for slot and returns its 64-byte-aligned address.
 u32 *func_80014E10(s32 slot, s32 size)
 {
@@ -118,6 +120,7 @@ s32 func_80014F38(void)
     return D_80078F60 ^ 1;
 }
 
+// Frame pacing: minimum retraces per frame and retraces elapsed in the last frame.
 int func_80014F4C(void)
 {
     return *(s16 *) &D_80078F64;
@@ -381,11 +384,13 @@ void wait_one_frame(void)
     }
 }
 
+// Aspect ratio from viewport size with widescreen factor, feeds the perspective setup.
 void set_widescreen(s32 enabled)
 {
     widescreen_enabled = enabled;
 }
 
+// Viewport pool and handles, gSPViewport emission, rect clamping.
 // Emits a gSPViewport command for the viewport handle.
 void func_800157EC(s32 *vp_handle, u8 **gfx)
 {

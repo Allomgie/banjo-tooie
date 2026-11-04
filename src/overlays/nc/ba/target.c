@@ -1,3 +1,5 @@
+// Target camera mode: frames the player together with a target point (state: point + blend,
+// default 0.5); the look-at moves toward the target and the yaw locks onto its direction.
 #include "nc/ba/target.h"
 
 extern void func_800EFB24(f32 *, f32 *, f32 *);

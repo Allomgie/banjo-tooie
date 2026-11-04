@@ -1,3 +1,5 @@
+// Heap defragmentation: moves a used block into an adjacent free block within a per-pass
+// byte budget, skipping a pinned block, and returns the new address.
 #include "types.h"
 #include "memory.h"
 

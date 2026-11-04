@@ -1,3 +1,5 @@
+// Player-side component of the Submarine transformation: torpedo burst sequencer and aim,
+// sonar ping, engine sound loop and propeller spin.
 #include "common.h"
 #include "playerstate.h"
 

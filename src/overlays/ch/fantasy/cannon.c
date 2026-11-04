@@ -1,3 +1,5 @@
+// Most likely a Cloud Cuckooland cannon: fires the player along an arc at a target prop, with a
+// follow camera. A small companion actor plays a sound when the player steps off it.
 #include "common.h"
 
 extern s32 D_80800CF8_chfantasycannon[];

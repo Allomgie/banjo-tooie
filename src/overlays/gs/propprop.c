@@ -1,3 +1,5 @@
+// Static prop rendering: sprite animation frames, prop radius from model or sprite size and scale,
+// and drawing a prop as model or sprite with tint, scale and flags.
 #include "common.h"
 
 // Sprite asset header (animation info only)

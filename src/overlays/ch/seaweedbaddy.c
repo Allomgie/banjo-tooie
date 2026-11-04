@@ -1,3 +1,5 @@
+// Probably the seaweed baddie (actor 0x35D): hides, emerges when it detects the player, chases,
+// recoils when hit and returns home along a route. It shatters on death.
 #include "common.h"
 
 #define RF(i) (*(f32 *) &local_1[i])

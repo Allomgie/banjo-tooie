@@ -1,3 +1,5 @@
+// Global (cross-save) options: widescreen, screen position, sound mode, and loading/saving them
+// to the two redundant EEPROM copies.
 #include "gl/globalsettings.h"
 
 extern s16 D_80800560_glglobalsettings[][2];

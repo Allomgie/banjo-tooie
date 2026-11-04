@@ -1,3 +1,4 @@
+// Sequence player oscillator callbacks (tremolo and vibrato) with a pooled state list.
 #include "common.h"
 #ifndef M2C_MACROS_H
 #endif

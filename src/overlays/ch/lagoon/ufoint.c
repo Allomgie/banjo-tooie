@@ -1,3 +1,5 @@
+// Probably the inside of the Jolly Roger's Lagoon UFO: a timed controller, three talking and
+// dancing aliens, and generators that must be hit to power the ship (lights, hum, music).
 #include "common.h"
 
 extern int D_80801948_chlagoonufoint[];
@@ -45,6 +47,7 @@ typedef struct {
     u8 pad_1 : 2;
 } LagoonUfoState;
 
+// Puzzle controller: timer, power level, hum, music and dialogs.
 int chlagoonufoint_entrypoint_0()
 {
     return &D_80801948_chlagoonufoint;
@@ -206,6 +209,7 @@ s32 func_808005D0_chlagoonufoint(Actor *actor, s32 msg, s32 arg)
     return 1;
 }
 
+// Three alien NPC variants: talk, dance with a flashing antenna light, follow the controller.
 int chlagoonufoint_entrypoint_1()
 {
     return (int) &D_808019C0_chlagoonufoint;
@@ -399,6 +403,7 @@ s32 func_80800E00_chlagoonufoint(Actor *actor, s32 msg, s32 arg)
     return 1;
 }
 
+// Generators hit N times to power up (point light, texture scroll, vertex-colour callbacks).
 int chlagoonufoint_entrypoint_4()
 {
     return (int) &D_80801B68_chlagoonufoint;

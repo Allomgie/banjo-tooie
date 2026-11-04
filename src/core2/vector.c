@@ -1,3 +1,4 @@
+// Rare's growable array in one heap block: push, insert, erase, assign, plus handle-id variants.
 #include "memory.h"
 #include "vector.h"
 
@@ -7,6 +8,7 @@ void *func_8001B798(s16); // get
 void *func_8001B710(s16, s32); // realloc
 void func_8001B754(s16); // free
 
+// Generic vector API, in pointer and handle-id variants.
 // Handle-based getter.
 Vector *func_800B2890(s16 arg0)
 {
@@ -183,6 +185,7 @@ void vector_assign(Vector *vec, s32 index, void *value)
     aligned4_memcpy((u8 *) vec->begin + index * vec->element_size, value, vec->element_size);
 }
 
+// Re-bases internal pointers after a heap defrag.
 Vector *vector_defrag(Vector *vec)
 {
     s32 old_size;

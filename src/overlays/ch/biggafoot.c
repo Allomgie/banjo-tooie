@@ -1,3 +1,5 @@
+// Most likely Biggafoot of Hailfire Peaks: warns the player, charges and stomps, then runs off
+// along a path; on message 0x3D he throws a second actor that flies to a target and explodes.
 #include "ch/biggafoot.h"
 
 extern int D_80801094_chbiggafoot[];
@@ -89,11 +91,13 @@ extern void func_80102424(Actor *, s32);
 void func_80800CDC_chbiggafoot();
 void func_80800E98_chbiggafoot();
 
+// Biggafoot actor: state machine, player detection, charge/stomp, path run-off, sounds.
 int *chbiggafoot_entrypoint_0()
 {
     return &D_80801094_chbiggafoot;
 }
 
+// Thrown secondary actor: flies to a target, explodes, and notifies its parent.
 int *chbiggafoot_entrypoint_1()
 {
     return &D_808010DC_chbiggafoot;

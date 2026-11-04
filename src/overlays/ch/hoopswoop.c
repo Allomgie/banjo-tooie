@@ -1,3 +1,5 @@
+// Hoop Hurry minigame (Witchyworld Space Zone) and its multiplayer variant: the controller runs
+// intro, timer and result; each hoop actor awards points when the player passes through it.
 #include "common.h"
 
 extern int D_80801EC0_chhoopswoop[];

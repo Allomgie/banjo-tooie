@@ -1,3 +1,5 @@
+// All-players helpers for minigames and set pieces: lock or release every player, place them at
+// markers and snap their cameras, set a fixed camera, find a projectile's owner, push players away.
 #include "common.h"
 // TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 

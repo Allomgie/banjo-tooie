@@ -1,3 +1,5 @@
+// Banjo-Kazooie ground locomotion: creep, walk, run and sticky-ground walking, mapping stick zone
+// to speed. Also exports the max walk speed and a stick-to-speed helper used by other bs overlays.
 #include "common.h"
 #include "overlays/bs/walk.h"
 #include "overlays/ba/playerstate.h"

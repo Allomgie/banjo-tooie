@@ -1,3 +1,5 @@
+// Big Fish of Jolly Roger's Lagoon: eggs knock out its five teeth, then it swallows the player.
+// The second actor is a knocked-out tooth that tumbles down and settles on the floor.
 #include "common.h"
 
 typedef struct {

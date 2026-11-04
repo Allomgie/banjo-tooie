@@ -1,3 +1,5 @@
+// Mr. Fit, the Cloud Cuckooland sports coach, and the logic of his high jump and sack race:
+// lanes, finish lines, fall-out check, jingles, event warps, and the Mr. Fit jiggy.
 #include "common.h"
 
 typedef struct {

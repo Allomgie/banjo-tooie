@@ -1,3 +1,5 @@
+// Most likely the states of Clockwork Kazooie, the player-controlled egg: idle, walk, jump, fall,
+// rest, drone, wind-up spin, fuse timer, and the explosion that returns control to Banjo-Kazooie.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

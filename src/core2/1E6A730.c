@@ -1,3 +1,5 @@
+// Underwater breath bubbles (PlayerState+0x30): random bursts from Banjo's or Kazooie's mouth,
+// plus a speed-proportional bubble trail used by the Kazooie torpedo state.
 #include "core2/1E6A730.h"
 
 extern s32 D_80117DB0[];

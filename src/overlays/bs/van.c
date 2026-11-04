@@ -1,3 +1,6 @@
+// Player states of the Van transformation in Witchyworld: idle, drive (exhaust particles), jump,
+// fall/landing, crash/death, bounce, rest, drone wrappers, and the coin-box state (spits coins in).
+// Exports the van form hooks and the landing puff called from core2/1E7BFA0.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

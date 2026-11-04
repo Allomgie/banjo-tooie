@@ -1,3 +1,5 @@
+// Cheato Page collectible: spins and, once collectable, sparkles on touch, adds a page to the
+// inventory, marks its registry entry and plays the jingle. Then it vanishes or flies to the hero.
 #include "common.h"
 
 extern int D_80800330_chcheatopage[];

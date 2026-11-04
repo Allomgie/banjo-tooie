@@ -1,3 +1,6 @@
+// Probably the flash source map-mesh effect: a random lightning-flash timer that idles, then fires
+// bursts of quick flashes and writes the level into the mesh's vertex alpha for other effects.
+
 #include "common.h"
 
 typedef struct {

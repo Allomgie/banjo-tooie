@@ -1,3 +1,5 @@
+// Static breakable beehive: buzzes in time with its animation; when hit it bursts into particles,
+// notifies its parent and drops honeycomb.
 #include "common.h"
 
 extern void func_800EE7F8(f32 *, f32 *);

@@ -1,3 +1,5 @@
+// Player action intents (PlayerState+0xA4): turns button presses plus ability/state checks
+// into intents (barge, bust, shoot egg, flap, dive, trot, ...), each with an enable bit.
 #include "common.h"
 #include "overlays/ba/input.h"
 #include "overlays/ba/key.h"

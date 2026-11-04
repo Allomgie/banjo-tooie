@@ -1,3 +1,5 @@
+// Probably a small player sub-module that steps timed keyframe sequences on a model-modifier
+// slot (idle or run sequence); similar in shape to BK's baeyes.
 #include "common.h"
 #include "core2/1E6A190.h"
 

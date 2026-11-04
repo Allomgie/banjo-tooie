@@ -1,3 +1,5 @@
+// Possibly planar texture-coordinate projection: projects listed vertices onto a plane around a
+// moving point and writes their S/T. Perhaps a scrolling or shifted texture, such as a light spot.
 #include "common.h"
 
 extern f32 func_800F2290(f32 *, f32 *);

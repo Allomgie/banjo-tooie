@@ -1,3 +1,5 @@
+// Probably the Mayahem Temple kickball stadium guard: blocks the entrance and lets only a Stony
+// through, with different dialogs for Stony and non-Stony.
 #include "common.h"
 
 extern void *D_80800700_chamazonstadiumguard;

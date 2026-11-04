@@ -1,3 +1,5 @@
+// Player-side component of the Van transformation: engine sound loop pitched by speed,
+// wheel spin and front-wheel steering, and the horn (sound plus an alert message to nearby actors).
 #include "common.h"
 #include "overlays/ba/van.h"
 #include "core2/1E6A730.h"

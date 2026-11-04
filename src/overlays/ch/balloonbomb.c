@@ -1,3 +1,5 @@
+// Probably the balloon bomb Mr. Patch throws: lobbed on an arc towards the player's predicted spot,
+// spins and inflates, then bursts on contact or an egg hit (message 0x40) into balloon shreds.
 #include "common.h"
 
 extern int D_808004B0_chballoonbomb[];

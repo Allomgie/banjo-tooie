@@ -1,3 +1,5 @@
+// Camera actor for the story cutscenes (intro, drill, BOB, Jingaling, Bottles): starts its
+// camera-pod sequence and fires per-cutscene sound cues at fixed camera times.
 #include "common.h"
 
 extern void _capod_entrypoint_13(s32, s32, s32, s32);

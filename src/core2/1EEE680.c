@@ -1,3 +1,5 @@
+// Probably the camera C-button hold tracker: counts frames of rotate input and, on release after
+// 5 or more frames, nudges the yaw by 5 degrees.
 #include "common.h"
 
 extern void func_80112E50(void *param_0, int param_1, int param_2);

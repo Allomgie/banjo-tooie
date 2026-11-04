@@ -1,3 +1,5 @@
+// Roysten, Banjo's goldfish, stranded on Isle o' Hags: the player carries him to water, then he
+// rewards a new ability (0x30) and sets FLAG_1BF_PROGRESS_ROYSTEN_RESCUED.
 #include "common.h"
 
 #define AF(p, i) (*(f32 *) &(p)->actorData[i])

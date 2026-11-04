@@ -1,3 +1,4 @@
+// n_alSynAllocFX: creates the reverb/effect unit for an aux bus and returns it.
 #include "common.h"
 
 typedef struct {

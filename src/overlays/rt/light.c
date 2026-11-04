@@ -1,3 +1,5 @@
+// Real-time point lighting of the map mesh: builds a cell grid over the map vertices at load,
+// then each frame adds light colour * falloff to baked vertex colours of cells lights touch.
 #include "common.h"
 
 // Map light grid: header followed by cells (32 bytes each, 15 light slots, an AABB padded by 20

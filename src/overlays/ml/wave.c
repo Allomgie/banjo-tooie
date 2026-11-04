@@ -1,3 +1,5 @@
+// Oscillator helper (mlwave) for bobbing/floating actors: advances a phase with an approaching
+// speed, can be randomised, and maps sin(phase) into a [lo, hi] range.
 #include "common.h"
 
 extern f32 func_800DC178(f32, f32);

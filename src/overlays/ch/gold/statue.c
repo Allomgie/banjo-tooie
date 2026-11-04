@@ -1,3 +1,5 @@
+// The Golden Goliath statue in Mayahem Temple: wrapped in Mumbo magic when he casts, wakes up,
+// hands control to the player as Golden Goliath, then stands in while that form is active.
 #include "common.h"
 
 extern void *func_80100094(Actor *, u32);

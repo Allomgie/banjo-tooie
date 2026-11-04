@@ -1,3 +1,5 @@
+// Joint part of the expression component: per-model joint presets whose weights ease toward the
+// pose the dialog box requests for the speaker, written as bone overrides at draw time.
 #include "common.h"
 
 #define ENT D_80801818_suexpressjoint[*(s16 *) (param_0 + 6)]

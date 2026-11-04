@@ -1,3 +1,5 @@
+// Probably marker target-class bookkeeping (class mask in marker+0x2A, per-class sorted lists
+// rebuilt each frame) plus dispatch of the ActorInfo callback at +0x14.
 #include "common.h"
 
 typedef struct {

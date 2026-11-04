@@ -1,3 +1,5 @@
+// Small Styracosaurus child NPC: stays tiny until Mumbo casts the enlarge spell on it (mumbofx
+// charge, wobbling and bouncing growth, camera-shaking landing), then sets its "grown" flags.
 #include "common.h"
 
 extern void func_800EFA4C(f32 *, f32, f32, f32);

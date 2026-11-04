@@ -1,3 +1,5 @@
+// Most likely the glow vertex effect (pulsing light): brightness ping-pongs between 0.3 and
+// 1.0 at a speed from the effect id and scales the vertex RGB of its groups.
 #include "common.h"
 
 typedef struct {

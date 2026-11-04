@@ -1,3 +1,5 @@
+// Glitter Gulch Mine "Ordnance Storage" minigame: walking TNT actors that explode on contact or
+// when shot, the controller (count, timer, record, failure blast), entrance trigger, debris.
 #include "common.h"
 
 // TU-NOTE: the .data tables at the end are defined in C; they point to functions of this

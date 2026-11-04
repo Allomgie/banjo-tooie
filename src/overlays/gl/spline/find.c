@@ -1,3 +1,5 @@
+// Spline lookups: find the spline path through a point, two consecutive points, or the nearest
+// spline node of a position or actor.
 #include "common.h"
 
 typedef struct {

@@ -1,3 +1,5 @@
+// Vertex-group iteration for model meshes: calls a per-vertex callback for every vertex of a
+// group, optionally with the original vertex copy, normals, or all groups; plus header setters.
 #include "common.h"
 
 // Instance layout (built by glidmake): +0 model, +4 chunk count, +0x14/+0x18 vertex lists,

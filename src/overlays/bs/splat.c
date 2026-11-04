@@ -1,3 +1,5 @@
+// Banjo-Kazooie hard landing ("splat") after a long fall: applies fall damage (helper reused by
+// Kazooie flight and Mumbo), dust and camera shake, flop and get-up, then idle, fall, water, death.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

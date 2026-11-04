@@ -1,3 +1,5 @@
+// Flame-thrower controller (off/start/firing/stopping): ramps the flame length toward its target
+// and feeds origin and direction from a callback into the flame beam.
 #include "common.h"
 
 typedef struct {

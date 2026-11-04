@@ -1,3 +1,5 @@
+// Most likely the large-font variant of the info-bar number and value/max renderers
+// (sc/custom.c), with the same slide/fade logic, plus width functions.
 #include "common.h"
 
 extern f32 _scinfobar_entrypoint_18(s32);

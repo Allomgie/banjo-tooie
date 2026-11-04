@@ -1,9 +1,13 @@
+// Probably two small player subsystems: a capability mask stack (PlayerState+0x48) gating
+// update, draw and input, and a deferred death trigger (PlayerState+0x4C) that ends in respawn.
+
 #include "common.h"
 
 void func_80091E48(u8 *param_0, int param_1);
 void func_80091F74(u8 *param_0, s32 param_1);
 int func_80091FE4();
 
+// Group: capability mask stack (push, pop, test) gating player update, draw and input.
 // Player capability mask stack (PlayerState+0x48): bit 0x1 draw, 0x2 movement/physics,
 // 0x4 collision, 0x10 animation, 0x20 whole update, 0x40 button input.
 // Death state (PlayerState+0x4C): one byte, state 3 triggers respawn/game over.
@@ -55,6 +59,7 @@ s32 func_80091E80(u8 *player, s32 mask)
                              mask));
 }
 
+// Group: deferred death trigger (waits for the cutscene to end, then respawn or game over).
 s32 func_80091EA0(void)
 {
     return 0x1;

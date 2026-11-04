@@ -1,3 +1,5 @@
+// Most likely the split-up pad states: Banjo's split animation, Kazooie jumping out and walking
+// to her pad, a short wait that hands over control, and two recoil states for bumping each other.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

@@ -1,3 +1,5 @@
+// Rare-modified compact MIDI sequence player (n_alCSPlayer): event loop, MIDI message handling
+// with custom controllers and game callbacks, and tempo handling.
 #include "common.h"
 #ifndef M2C_MACROS_H
 #define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr) ((s8 *) (expr) + (offset)))

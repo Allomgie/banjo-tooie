@@ -1,3 +1,6 @@
+// The three Mayahem Temple kickball stadium doors (index 0x33-0x35).
+// Each opens once its round is unlocked (flags 0x576, 0x5E, 0x5F) and unlocks replay
+// entries 0x60-0x62.
 #include "common.h"
 
 typedef struct StadiumDoorState {

@@ -1,3 +1,5 @@
+// Switch that unlocks TDL's train station: generic switch on flag 0x164 that plays cutscene
+// 0x3C in the station map (0x114) when pressed.
 #include "common.h"
 
 extern void *D_80800080_chdinotraindoorswitch;

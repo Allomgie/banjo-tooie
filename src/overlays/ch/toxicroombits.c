@@ -1,3 +1,5 @@
+// Quality Control room conveyor: spawns products that ride the belt, pushes the player along
+// and counts them down. Breaking all of them spawns the Jiggy; the special product sets flag 0x1BD.
 #include "common.h"
 
 typedef struct {

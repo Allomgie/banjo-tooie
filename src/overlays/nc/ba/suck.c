@@ -1,3 +1,5 @@
+// Possibly the camera mode used while the player is being sucked or pulled: pitch limited to
+// -60..60 and, while a player flag is set, yaw held within +-45 degrees of a stored angle.
 #include "nc/ba/suck.h"
 
 extern void func_80115870(s32, f32);

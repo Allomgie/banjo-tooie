@@ -1,3 +1,5 @@
+// Stack-trace page of the gz crash debugger: unwinds up to 16 MIPS frames from the faulted
+// thread, maps addresses to overlay or core, and prints one line per caller.
 #include "common.h"
 
 typedef struct {
@@ -27,6 +29,7 @@ extern s32 overlay_syscalls;
 extern s32 overlay_syscalls_end;
 extern s32 func_8001D37C();
 
+// String helpers, address check, overlay header parser and the prologue-scanning unwinder.
 // Returns 1 if addr is word-aligned and in the 0x80000000-0x80800000 range.
 s32 func_80800000_gztrace(u32 addr)
 {
@@ -208,6 +211,7 @@ s32 func_808004B0_gztrace(u32 **sp_ref, u32 **pc_ref, u32 *jal_target, u32 **fal
     return 0;
 }
 
+// Stack-trace page: header, frame loop and line formatting.
 // Prints up to 16 frames of a stack trace; prints nothing if quiet is set.
 void func_808005C4_gztrace(s32 pc, u8 *sp, s32 ret_addr, s32 platform, s32 quiet)
 {

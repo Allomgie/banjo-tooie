@@ -1,3 +1,5 @@
+// Probably the joystick-controlled mode of the walking baddie: stick sets speed and yaw,
+// buttons trigger attack and jump, and stick magnitude picks walk or run.
 #include "common.h"
 
 typedef struct {

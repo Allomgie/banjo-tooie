@@ -1,3 +1,5 @@
+// Canary Mary's handcart race in Glitter Gulch Mine: race controller and cameras, the handcart the
+// player pumps with A, and Canary Mary herself (dialogs, rubber-band AI, rewards).
 #include "ch/handcart.h"
 
 #define HANDCART_DATA(arg0) ((HandcartActorData *) (arg0->actorData))
@@ -136,6 +138,7 @@ static u32 D_80804E6C_chhandcart_rest[20] = {0x67B0002,
                                              0x0,
                                              0x0};
 
+// Race state machine, map switching, race cameras, and the handcart vehicle (pumping, wobble, sparks).
 s32 func_80800000_chhandcart(void)
 {
     return func_800DA564(FLAG3_A4C_UNK, 3);
@@ -1168,6 +1171,7 @@ void *chhandcart_entrypoint_0(void)
     return &D_80804DC4_chhandcart;
 }
 
+// Canary Mary actor: cage/freed sequence, dialogs, race AI with rubber-banding, rewards, leaving.
 // Plays Canary Mary's dialog/footstep sounds.
 void func_80802690_chhandcart(Actor *actor)
 {

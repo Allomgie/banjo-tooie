@@ -1,3 +1,5 @@
+// Most likely the per-actor buffer of 23 model points that the renderer fills during draw;
+// actors read positions and directions from it.
 #include "common.h"
 
 // Zeroes all 23 points of the buffer.

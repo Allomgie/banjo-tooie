@@ -1,3 +1,5 @@
+// Probably the camera clip-plane state: far plane from the map bounds, near plane from far/128,
+// shrunk when walls, other cameras or marker actors are close. Also allocates and frees it.
 // TU-NOTE: third of the three units of the former 1EEC090 (from func_80113FF0 on); func_80113FF0 is only called from
 // func_80114184, and this unit is only used by 1EE92B0 (1EEC780 is also used by 1EE9AB0 and the ba overlays).
 // Functions of the earlier units are declared as their definitions are written (prototype for ANSI, empty list for

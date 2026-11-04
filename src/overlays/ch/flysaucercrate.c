@@ -1,3 +1,6 @@
+// Most likely the crate that holds the Saucer of Peril: it is pushed along, waits at a door, flies
+// into Witchyworld and opens at the ride site, which makes the saucer appear. It also talks.
+
 #include "common.h"
 
 // TU-NOTE: data tables below are defined in this TU after the code.

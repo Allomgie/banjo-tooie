@@ -1,3 +1,5 @@
+// Mayahem Temple golden snake heads: probably six hit targets counted in flag bits, which tell
+// actor 0x10E once all are hit. Also holds two doors, one opened by flag 0x18B, one by FLAG_59C.
 #include "common.h"
 
 extern int D_80800508_chgoldsnakehead[];

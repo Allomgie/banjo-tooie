@@ -1,3 +1,5 @@
+// Empty Honeycomb collectible: a spinning pickup with twinkles. On touch it marks itself collected,
+// plays the jingle, starts the first-time tutorial, adds the item and sparkles. May carry a light.
 #include "ch/honeycarrier.h"
 
 extern u32 D_808003E0_chhoneycarrier[3];

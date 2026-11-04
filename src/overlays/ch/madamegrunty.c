@@ -1,3 +1,5 @@
+// Most likely Madame Grunty, the Witchyworld fortune teller: takes control of the player and
+// grants a weighted-random fortune (items, a cheat effect, a refill or nothing). Also her tent.
 #include "common.h"
 
 extern int D_80800B50_chmadamegrunty[];
@@ -43,11 +45,13 @@ void func_80800784_chmadamegrunty();
 void func_8080082C_chmadamegrunty();
 void func_808009AC_chmadamegrunty(Actor *actor, s32 pitch_id, f32 pitch);
 
+// Fortune teller NPC with weighted random rewards.
 int chmadamegrunty_entrypoint_0()
 {
     return (int) &D_80800B50_chmadamegrunty;
 }
 
+// Tent door (doormake, FLAG3_A02).
 int chmadamegrunty_entrypoint_1()
 {
     return (int) &D_80800B98_chmadamegrunty;

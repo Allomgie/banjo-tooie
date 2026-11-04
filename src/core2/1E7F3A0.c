@@ -1,3 +1,5 @@
+// Per-level, per-map default camera settings: caches the current map's entry and offers getters
+// (default zoom, preset index, initial mode, flags) for the player camera controller.
 #include "common.h"
 
 // Default camera settings of one map; terminated by map_id 0.

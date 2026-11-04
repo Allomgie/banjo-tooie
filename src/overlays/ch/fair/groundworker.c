@@ -1,3 +1,5 @@
+// Probably the Witchyworld fairground worker: a four-variant baddie on the shared coaster AI
+// with a blob shadow and a particle ring on message 0xB6.
 #include "common.h"
 
 extern int D_80800308_chfairgroundworker[];

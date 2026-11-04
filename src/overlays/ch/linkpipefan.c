@@ -1,3 +1,5 @@
+// Possibly spinning fan blades (variants 0x33..0x39, one save flag each) that hurt on contact.
+// Projectiles slow or stop them; an egg breaks a stopped fan. Speed drives sound and alpha.
 #include "common.h"
 
 extern s32 D_8080091C_chlinkpipefan[];

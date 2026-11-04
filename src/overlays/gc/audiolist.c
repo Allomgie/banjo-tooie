@@ -1,3 +1,4 @@
+// Indexed list of UI and jingle sound effects, played through the global sfx player.
 #include "common.h"
 
 extern void func_800C4AF0(s32, s32);

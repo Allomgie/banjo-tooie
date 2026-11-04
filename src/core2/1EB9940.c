@@ -1,3 +1,5 @@
+// Animation file evaluation: maps time to a frame, walks the bone tracks and writes each bone's
+// 9-float transform (rotation, scale, translation); also start/end/frame/track-count accessors.
 #include "common.h"
 
 typedef struct {

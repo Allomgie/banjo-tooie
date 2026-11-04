@@ -1,3 +1,5 @@
+// Hailfire Peaks dragon brothers' barrage: while a brother is undefeated, a controller rains
+// fireballs or ice rocks (actor 0x4FD) on the player, with camera shake and burst particles.
 #include "ch/fireicestorm.h"
 
 extern int D_80800EA8_chfireicestorm[];

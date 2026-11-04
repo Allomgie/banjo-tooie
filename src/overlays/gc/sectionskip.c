@@ -1,3 +1,5 @@
+// Map-exit warp handler: checks the exit's condition (form, moves, progress, modes), then warps
+// via gcgoto or pushes the player back out of the trigger, optionally with a dialog line.
 // TU-NOTE: gc/sectionskip.h is not included as a whole: via gc/goto.h -> core2/1E80A70.h -> core2/1E99980.h
 // it would declare func_800C05B8 with an s16 first parameter, but this file calls it without a prototype
 // (a0 is passed on unnarrowed). The other headers of gc/sectionskip.h are included directly.

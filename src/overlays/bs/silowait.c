@@ -1,3 +1,5 @@
+// Waiting inside a Jamjars move silo: the player floats in place with input masked until the silo
+// actor sends its release interrupt, then returns to idle.
 #include "common.h"
 
 extern s32 D_80800140_bssilowait[];

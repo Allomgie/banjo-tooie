@@ -1,3 +1,5 @@
+// Probably the giant stomping dinosaur foot of Stomping Plains: follows the player's x/z, stomps
+// down with camera shake and dust, and hurts or flattens the player. First approach shows an intro.
 #include "common.h"
 
 extern void *D_80800818_chdinofoot;

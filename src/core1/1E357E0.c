@@ -1,3 +1,5 @@
+// Thread creation wrappers around osCreateThread that attach an odd-float-register save area
+// and register each thread in a global table by id (D_8007D820), plus get_thread(id).
 #include "threads.h"
 
 extern OSThread *D_8007D820[];

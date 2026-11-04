@@ -1,3 +1,5 @@
+// Door of Lord Woo Fak Fak's arena, built with the shared ch/doormake helper. It starts open on a
+// boss retry (flag 0x1AF) or while a cutscene runs.
 #include "common.h"
 
 extern int D_80800110_changlerbossdoor[];

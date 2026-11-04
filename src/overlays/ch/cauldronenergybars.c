@@ -1,3 +1,5 @@
+// Electric barriers blocking the way to Cauldron Keep and the Hag 1 fight: they vanish once the
+// matching world is open, fade out with a pitch sweep, and shock the player on contact.
 #include "ch/cauldronenergybars.h"
 
 #define CAULDRONENERGYBARS_DATA(arg0) ((CauldronEnergyBarsData *) (arg0->actorData))

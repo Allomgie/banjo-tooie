@@ -1,3 +1,4 @@
+// gz crash screen entry: shows build stamp and thread name, then cycles stack, registers, threads.
 #include "types.h"
 #include "gfx.h"
 #include "memory.h"

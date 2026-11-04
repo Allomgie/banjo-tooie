@@ -1,3 +1,5 @@
+// Player states of the Detonator (TNT) transformation: idle, hop-walk, jump, fall, self and
+// targeted detonation, death, bounces, rest and drone; exports the form hooks used by tntswim.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

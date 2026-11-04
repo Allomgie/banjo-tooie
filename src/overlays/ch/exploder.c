@@ -1,3 +1,6 @@
+// Generic shatter actor (0x1FF): splits a model into one debris piece per bone, throws the pieces
+// with spin, bounces them off the map with dust and sounds, and fades them out. Entrypoints are
+// the API that many actors use to break walls, doors, crates and boss parts.
 #include "common.h"
 #include "core1/mlmtx.h"
 

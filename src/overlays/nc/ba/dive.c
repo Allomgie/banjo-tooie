@@ -1,3 +1,5 @@
+// Dive camera mode: the look-at point blends from a stored point toward the player over time,
+// with long distance limits. Keeps a 16-byte state (point and timer).
 #include "nc/ba/dive.h"
 
 extern void func_800EF410(int param_0);

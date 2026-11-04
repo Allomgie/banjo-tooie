@@ -1,3 +1,5 @@
+// Shared egg projectile code for all egg kinds: spawn (with homing cheat), per-frame update, hit
+// detection, message handling, lifetime checks and despawn with the explosion effect.
 #include "common.h"
 
 extern u32 D_80800E40_suegg[];

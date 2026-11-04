@@ -1,3 +1,5 @@
+// Player air-meter trigger: shows or starts draining the air meter when a swimming state begins
+// or ends, unless the water is oxygenated, the player cannot drown, or party mode is 3.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "gameflags.h"

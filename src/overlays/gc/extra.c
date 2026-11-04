@@ -1,3 +1,5 @@
+// Extra honeycomb health: counts the extra pieces (max 5) and adds more with clamping before
+// refreshing the health maximum. Used by Honey B and the health code.
 #include "common.h"
 
 // Extra health pieces are stored as a 3-bit field at game flag 0x4EA.

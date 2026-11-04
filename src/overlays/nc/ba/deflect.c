@@ -1,3 +1,5 @@
+// Camera deflection helpers: push the camera out of a vertical cylinder or a sphere plus a margin,
+// so it does not enter large actors or objects.
 #include "common.h"
 
 extern void func_80111094(void *, f32 *);

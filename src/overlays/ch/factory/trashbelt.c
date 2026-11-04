@@ -1,3 +1,5 @@
+// Probably a trash-compactor conveyor belt: carries the player along x with a sine wobble at a
+// speed set by the actor variant, and draws 7 moving belt segments with a running sound.
 #include "common.h"
 
 extern u8 D_808005C0_chfactorytrashbelt[];

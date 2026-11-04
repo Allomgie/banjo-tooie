@@ -1,3 +1,5 @@
+// Canary Mary's cage in Glitter Gulch Mine: breaks open when hit, sets the freed/ready-to-race
+// flags and positions the dialog trigger and camera target.
 #include "common.h"
 
 extern void func_80101FDC();

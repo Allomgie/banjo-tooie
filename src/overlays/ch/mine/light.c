@@ -1,7 +1,6 @@
+// Probably the Power Hut basement lighting: fades nine point lights and map part 0x1AA with
+// flicker and crackle when FLAG3_9E0 (lights on) changes, framed by a camera in cutscene 0x15.
 #include "common.h"
-
-// Power Hut basement lighting: fades nine point lights and map part 0x1AA when
-// FLAG3_9E0 (lights on) changes.
 
 typedef union {
     s32 word;

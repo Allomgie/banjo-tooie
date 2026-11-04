@@ -1,3 +1,5 @@
+// Coloured twinkle map-mesh effect: keeps 1-20 sparkles alive (default 5), each fading vertex
+// colours towards a palette colour; updates only while the mesh is in view.
 #include "common.h"
 
 // One sparkle: blend factor towards a palette colour, around one vertex position.

@@ -1,3 +1,5 @@
+// Probably an animation-sequence helper for scripted intro/cutscene characters: allocates 60 event
+// slots, plays an/seq sequences and re-triggers the in/antab hook when the animation changes.
 #include "common.h"
 
 extern void _chanim_entrypoint_0(Unk80132ED0 *, s32);

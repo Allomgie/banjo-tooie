@@ -1,3 +1,5 @@
+// Most likely the friendly Stony of Mayahem Temple: wakes and talks to the player, and on the
+// kickball maps acts as host, awarding the MT or HFP kickball jiggy.
 #include "common.h"
 
 typedef struct {

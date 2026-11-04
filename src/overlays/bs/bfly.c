@@ -1,3 +1,5 @@
+// Banjo-Kazooie flight states: take-off, free flight with boost and flaps, Beak Bomb dive,
+// stall/hover, landing, crash/death, and drone/locked variants.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

@@ -1,3 +1,5 @@
+// The view (camera lens) object: position, rotation, FOV, aspect, near/far, matrices and frustum
+// planes, with frustum culling tests and the perspective matrix (a guPerspective equivalent).
 #include "core2/1EA3AA0.h"
 #include <types.h>
 

@@ -1,3 +1,5 @@
+// Probably the Hailfire Peaks lava hand: rises from the lava near the player, swipes left or right,
+// burns with flame models and sinks or dies when hit by an egg. Also holds the attached flame child.
 #include "common.h"
 
 typedef struct LavaHandContactState {

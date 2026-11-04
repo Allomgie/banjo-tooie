@@ -1,3 +1,5 @@
+// Banjo's Shock Spring Jump: a charge state that crouches with a looping sound and cancels if A is
+// released early, and the jump state that launches and records the first use of the move.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

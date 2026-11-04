@@ -1,3 +1,5 @@
+// Level music theme table: maps the current map to a theme entry and provides the theme
+// callbacks (start/stop track, cross-fade between maps, tempo variants, volume ramps).
 #include "common.h"
 
 // Theme table entry: map id, then (track << 2 | flags) or a replacement map, then a flag/extra value.

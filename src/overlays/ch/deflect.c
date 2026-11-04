@@ -1,3 +1,5 @@
+// Probably an invisible deflector that pushes players out of a cylinder every frame and removes
+// itself once Grip Grab is learned; blocks an area until the move is available.
 #include "common.h"
 
 extern void _sudeflect_entrypoint_0(u8 *, f32, f32, s32);

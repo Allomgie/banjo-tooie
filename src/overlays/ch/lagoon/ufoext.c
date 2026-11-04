@@ -1,3 +1,5 @@
+// Probably the outside of the Jolly Roger's Lagoon UFO: once the inside is repaired and the player
+// stands in its trigger in first person, a camera sequence plays and the UFO leaves the lagoon.
 #include "common.h"
 
 extern void func_8010D5DC(void);

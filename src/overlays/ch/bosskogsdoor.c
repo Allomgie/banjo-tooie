@@ -1,3 +1,5 @@
+// Most likely the heavy sliding door in Grunty Industries leading to the basement: it opens
+// via a cutscene once the electromagnet flag is set and remembers that it is open.
 #include "common.h"
 
 extern int D_80800918_chbosskogsdoor[];

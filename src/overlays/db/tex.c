@@ -1,3 +1,4 @@
+// Probably the model texture list loader for the map, map-section and sky models, plus its free.
 #include "common.h"
 
 // If the texture header has flag 0x100, copy it to a new heap block and load every listed

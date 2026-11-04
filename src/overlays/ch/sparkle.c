@@ -1,3 +1,5 @@
+// This seems to be a sparkle emitter: each frame it spawns a random-coloured sparkle (one of 5
+// sprites) around the actor on the camera-facing side, falling downwards.
 #include "common.h"
 
 extern s16 D_80800120_chsparkle[];

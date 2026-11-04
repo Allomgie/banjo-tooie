@@ -1,3 +1,5 @@
+// Player roster (up to 8 PlayerState pointers) and per-index player API: spawn, despawn, per-frame
+// update and draw, plus ~200 wrappers f(index, ...) used instead of touching PlayerState directly.
 // TU-NOTE: This file is the first of two translation units split from one yaml entry
 // (1ECE0B0 and 1ED2190). The ROM .rodata shows two objects: the jump table of func_800F608C
 // ends at 0x1EFF974 and is padded to 0x1EFF980, where the next jump tables start. IDO
@@ -126,6 +128,7 @@ extern u8 D_801354DA;
 
 extern u32 D_801354DC;
 
+// Group: the 8-slot player roster (spawn, despawn, iterate, controlled index, update, draw).
 // Calls callback for every active player.
 // Matching: the line breaks in this function are needed for the match.
 void func_800F47C0(s32 (*callback)(u8 *))
@@ -175,6 +178,7 @@ void func_800F482C(s32 character)
     } while (index != 8);
 }
 
+// Group: index-based wrappers over PlayerState (position, state, ability, input, item queries).
 void func_800F48BC(s32 player_index, f32 *unk_1)
 {
     f32 unk_2[3];
@@ -431,6 +435,7 @@ void func_800F51F0(s32 player_index)
     func_80093504((PlayerState **) D_80135490[player_index]);
 }
 
+// Group: interrupt and state request helpers that pack arguments and call the state's handler.
 int func_800F521C(s32 player_index, f32 unk_1[3])
 {
     s32 player;

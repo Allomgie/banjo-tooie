@@ -1,3 +1,5 @@
+// Probably Honey B in her hive, who trades Empty Honeycombs for health upgrades (upgrade n costs
+// 2n-1 combs). Also holds a companion prop actor and a custom HUD renderer for the health row.
 #include "common.h"
 
 extern int D_80801068_chhoneyb[];
@@ -51,6 +53,7 @@ void func_80800744_chhoneyb();
 // TU-NOTE: the .data tables at the end of this file are defined in C so IDO schedules the functions that
 // they point to correctly. Values are taken from the ROM.
 
+// Honey B NPC (dialog, health-upgrade trade, HUD animation) and its companion prop actor.
 int chhoneyb_entrypoint_0(void)
 {
     extern int D_80801020_chhoneyb[];
@@ -435,6 +438,7 @@ s32 func_80800C78_chhoneyb(Actor *param_0, s32 param_1, s32 param_2)
 return 1;
 }
 
+// Custom HUD info-bar renderer, not an ActorInfo getter.
 // HUD info-bar renderer: draws the honeycomb health row, the newest segment sliding in.
 void chhoneyb_entrypoint_2(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
 {

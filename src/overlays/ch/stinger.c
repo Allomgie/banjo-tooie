@@ -1,3 +1,5 @@
+// The Bee's stinger projectile (actor 0x16F): flies as a homing missile, spins, hits the level
+// or another player (multiplayer), then plays an effect and removes itself.
 #include "common.h"
 
 extern s32 D_808007D0_chstinger[];

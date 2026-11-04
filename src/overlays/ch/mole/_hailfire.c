@@ -1,3 +1,5 @@
+// Jamjars' move-teacher spot for Hailfire Peaks: wraps the shared mole logic (su/mole.c) with its
+// message handler, init, update and per-world move table.
 #include "ch/mole.h"
 
 extern MoveData D_808000C0_chmole_hailfire[];

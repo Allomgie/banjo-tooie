@@ -1,3 +1,6 @@
+// Most likely the lost baby dinosaur of Terrydactyland, met in Witchyworld and riding in Chuffy's
+// wagon. It talks (dialogs 0x107D-0x1080) and, once the train is parked, triggers the cutscenes
+// that take it home.
 #include "common.h"
 
 extern int D_80800770_chbabydino[];

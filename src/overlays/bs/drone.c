@@ -1,3 +1,4 @@
+// Generic drone state dispatcher: looks up the current drone mode and forwards to its sub-state.
 #include "common.h"
 
 // Drone mode table entry: mode id and the enter/update/exit/interrupt callbacks.

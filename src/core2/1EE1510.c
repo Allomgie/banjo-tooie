@@ -1,3 +1,5 @@
+// Actor construction and spawning: the generic actor constructor (func_80107C2C), spawn-by-id
+// variants for different position types, and despawn of actors by ActorInfo game flag.
 #include "common.h"
 
 #define reinterpret_cast(type, var) (*((type *) &var))

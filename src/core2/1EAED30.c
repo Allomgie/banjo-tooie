@@ -1,3 +1,5 @@
+// Level-1 asset loader: ROM asset table plus a 130-slot refcounted cache with get, release
+// (optionally deferred to a per-frame queue) and defrag.
 #include "common.h"
     #include "vector.h"
 
@@ -38,6 +40,7 @@ s32 func_800D56C4();
 
 extern s32 D_8012B7E8;
 
+// Refcounted asset slot table: get, release, deferred release queue, defrag, init, buffer load.
 // Queues an asset for deferred release (counts repeated requests).
 void func_800D5440(asset) s32 asset; {
     local_type *entry;
@@ -205,6 +208,7 @@ int func_800D58CC()
     func_800D55DC();
 }
 
+// Asset table entry queries: type, compressed flag, size, ROM address, asset count.
 // Returns the asset type from the ROM table.
 s32 func_800D58FC(s32 id)
 {

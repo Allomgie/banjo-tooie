@@ -1,3 +1,5 @@
+// Player "time's up" states for a failed timed challenge: turn away, die camera, jingle, then
+// warp back to the stored return map (after the animation, or 2.9 s in the generic variant).
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

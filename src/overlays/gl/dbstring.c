@@ -1,3 +1,5 @@
+// String asset helper for menu and text overlays: load and pin a text asset, find a string,
+// release it.
 #include "common.h"
 
 // Load and pin a text asset; returns a pointer past its first byte.

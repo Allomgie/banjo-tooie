@@ -1,3 +1,5 @@
+// Most likely the inflatable bouncy castle of Witchyworld's Crazy Castle: it inflates during the
+// pump cutscene, spawns a jump pad once inflated, and rebuilds its collision mesh.
 #include "common.h"
 
 extern int D_80800930_chbouncycastle[];

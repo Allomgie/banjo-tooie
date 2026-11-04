@@ -1,3 +1,5 @@
+// Sliding door of TDL's Chuffy train station: opens when flag 0x164 is set, with a camera shot
+// and cutscene 0x3C; the variant with marker 50 is mirrored and has extra sounds.
 #include "common.h"
 
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);

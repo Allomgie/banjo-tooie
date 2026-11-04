@@ -1,3 +1,6 @@
+// Probably the Ice Key vault door (Stop 'n' Swop). With the Ice Key (item 0x53), talking to it
+// plays a cutscene: the key flies into the lock and turns, the door opens, flag 0x3E2 is set
+// and the key is used up.
 #include "common.h"
 
 extern Actor *func_80106790(Unk80132ED0 *);

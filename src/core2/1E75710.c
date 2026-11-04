@@ -1,3 +1,6 @@
+// Player pitch angle (PlayerState+0xDC): value, ideal, max speed and step factor,
+// approached at a limited rate (default 500 deg/s, 0.8), with getters and setters.
+
 #include "core2/1E75710.h"
 
 extern f32 func_800D8FF8(void);

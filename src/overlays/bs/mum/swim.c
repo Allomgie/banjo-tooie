@@ -1,3 +1,4 @@
+// Mumbo water states: entry, floating idle, paddling, rest and drone, plus shared water physics.
 #include "overlays/bs/mum/swim.h"
 
 // Spawns a bubble emitter.

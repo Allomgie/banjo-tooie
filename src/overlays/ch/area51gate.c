@@ -1,3 +1,5 @@
+// Probably the electrified gate of Area 51 in Witchyworld's Space Zone: touching it shocks
+// the player unless protected; an explosion blows it up and sets a flag.
 #include "common.h"
 
 extern int D_80800290_charea51gate[];

@@ -1,3 +1,5 @@
+// Probably the Wading Boots ("long leg") states: put on, walk, jump, slide and take off. They run
+// on a state timer with an alarm beep and step sound, and leave when it runs out or in water.
 #include "bs/blongleg.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

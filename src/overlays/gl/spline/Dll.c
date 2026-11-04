@@ -1,3 +1,5 @@
+// Spline-set loader for the current map: builds all spline paths from the spline-node props,
+// loads the map's spline script asset and frees everything again.
 #include "common.h"
 
 typedef struct {

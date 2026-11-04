@@ -1,3 +1,5 @@
+// Jukebox in Jolly's bar (needs the JUKEBOX cheat): a two-level menu of music categories and
+// unlocked tracks, plus a listener actor that reacts to its dance message with a random dance.
 #include "common.h"
 
 typedef struct {
@@ -90,6 +92,7 @@ extern void func_8008F990(f32 *, f32);
 extern s32 func_800FCCD4(s32);
 void func_80800930_chmusicmenu();
 
+// Jukebox actor: dance pulse, menu building, track playback, state machine and draw.
 // Jukebox in Jolly's bar: toggles the dance state and tells listeners (message 0x6E).
 void func_80800000_chmusicmenu(u8 *actor)
 {
@@ -521,6 +524,7 @@ int chmusicmenu_entrypoint_1()
     return &D_808015C4_chmusicmenu;
 }
 
+// Listener actor: reacts to the jukebox dance message.
 // Dancer actor: on message 0x6E picks one of 14 dance animations at random, without repeats.
 int func_808010C4_chmusicmenu(Actor *actor, s32 msg, s32 data)
 {

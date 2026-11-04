@@ -1,3 +1,5 @@
+// Groggy, Boggy's fat son, lost in Witchyworld: wants a food item, eats it, then follows the
+// player back to Boggy like a taxi passenger and sets the returned flag.
 #include "ch/boggy/fatboy.h"
 
 extern int D_80801120_chboggyfatboy[];

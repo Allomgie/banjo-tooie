@@ -1,3 +1,5 @@
+// Actor fade and tint: get/set alpha, request fade-in/out (or out and delete), per-frame fade
+// update (fixed step or timed), and set/get the RGB tint, including from the ambient colour.
 #include "su/baddiefade.h"
 
 // TU-NOTE: the .data of this overlay is defined in C here; values come from the ROM.

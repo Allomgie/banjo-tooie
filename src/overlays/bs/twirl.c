@@ -1,3 +1,5 @@
+// This seems to be the twirl state: a 1.3 s spinning forward dash with voice clip, dust and whoosh,
+// ending in landing, fall, water landing or a jump; on exit it marks the move as used.
 #include "common.h"
 #include "overlays/ba/anim.h"
 #include "core2/anctrl.h"

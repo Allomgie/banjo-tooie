@@ -1,3 +1,5 @@
+// Cache of 44 shared particle emitters: slots are reserved by sprite id, emitters are created lazily
+// and freed after sitting unused for a second; also the group init/teardown of related emitter slots.
 #include "common.h"
 
 // TU-NOTE: D_80127F28 is a cache of 44 shared emitters (index 0 unused); both structs below view the same entries.
@@ -43,6 +45,7 @@ extern u8 D_80127F20[];
 extern s32 func_800B5548(s32);
 void func_800B58D4();
 
+// Shared emitter slot reserve/get/release, per-frame timeout, group init and teardown.
 // Returns the emitter for a slot, creating it on first use; resets the keepalive timer.
 s32 func_800B56D0(slot)
 u8 slot;
@@ -141,6 +144,7 @@ void func_800B59E0(void)
     do { entry = (u32 *) (((u8 *) D_80127F34)); i = 1; do { flags = ((char *) entry) + 0x8; if (((*((u32 *) flags)) >> 0x1F) != 0) { if (((*((u32 *) (((char *) entry) + 0x4))) != 0) && (i != (*((u8 *) D_80127F20)))) { if (entry) { } do { } while (0); func_800B5450(*((u32 *) (((char *) entry) + 0x4))); *((u32 *) ((0, ((char *) entry) + 0x4))) = 0; } } i += 1; entry += 3; } while (i != 0x2D); } while (0);
 }
 
+// Defrag of the cached emitters.
 void func_800B5A6C()
 {
     s32 *entry;

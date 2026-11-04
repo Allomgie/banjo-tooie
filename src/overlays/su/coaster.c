@@ -1,3 +1,5 @@
+// Probably the shared brain of generic ground baddies (hillbillies, bigfoot, pirates, ...):
+// idle, wander routes, notice, chase, attack, hit, return home, die; with per-kind parameters.
 #include "common.h"
 
 extern void *func_80100094(Actor *, u32);

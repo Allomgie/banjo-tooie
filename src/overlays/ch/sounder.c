@@ -1,3 +1,4 @@
+// Ambient sound emitter: probably a placed actor that plays one of two looping sound sets.
 #include "common.h"
 
 extern u8 D_808000A0_chsounder[];

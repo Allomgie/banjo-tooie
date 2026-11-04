@@ -1,3 +1,4 @@
+// Per-player rumble: maps a player to its controller and forwards start/pulse/stop requests.
 #include "common.h"
 
 extern void func_80018854(s32 param_0, s32 param_1, s32 param_2, s32 param_3, f32 param_4,

@@ -1,3 +1,5 @@
+// Glow actor at the tip of Mumbo's wand: follows a player bone, pulses while the spell charges,
+// and fades out when told to stop.
 #include "common.h"
 
 extern void func_800EFA4C(f32 *, f32, f32, f32);

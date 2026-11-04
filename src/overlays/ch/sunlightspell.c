@@ -1,3 +1,5 @@
+// Probably the target of Mumbo's Oxygenate spell in Jolly Roger's Lagoon: a sunlight beam is drawn
+// down to it, then it sets FLAG_0E9 and 0x9DF, plays a dialog and deletes itself.
 #include "common.h"
 
 extern f32 D_808008B0_chsunlightspell[];

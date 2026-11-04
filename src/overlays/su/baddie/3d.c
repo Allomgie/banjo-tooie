@@ -1,3 +1,5 @@
+// Probably two vertical map probes for actors: a ray from above to below a position returning the
+// hit height, once against floor/solid collision and once against water/material.
 #include "common.h"
 
 // Vertical probe against floor/solid collision (mask 0x20020); returns 1 and the hit height on hit.

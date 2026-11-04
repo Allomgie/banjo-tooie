@@ -1,3 +1,6 @@
+// Probably a Witchyworld trigger that warns a player carrying burgers or fries towards an exit,
+// showing a warning dialog instead of the default one.
+
 #include "common.h"
 
 extern f32 func_800EFC7C();

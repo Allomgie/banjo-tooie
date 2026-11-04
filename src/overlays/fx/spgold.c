@@ -1,3 +1,5 @@
+// Owner of the shared gold-sparkle emitter slot: reserves/releases it in the 44-entry emitter cache
+// and spawns gold sparkles from it. Only used through fx/sparkle.
 #include "common.h"
 
 extern u8 D_80127115[];

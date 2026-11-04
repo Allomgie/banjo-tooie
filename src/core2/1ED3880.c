@@ -1,3 +1,5 @@
+// Heap-defrag helper for the map-model asset defrag in 1E97EF0: walks an array of
+// {key, ptr} pairs sized by a companion asset.
 #include "common.h"
 
 // Defrags each non-null pointer in an array of {key, ptr} pairs, then the array itself.

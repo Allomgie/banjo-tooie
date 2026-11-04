@@ -1,3 +1,5 @@
+// Egg and feather nests (ammo pickups) of all worlds: 14 types in one table. A touched nest
+// gives its items, then vanishes or respawns; cycling nests change type over time.
 #include "common.h"
 
 typedef struct {

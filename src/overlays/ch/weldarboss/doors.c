@@ -1,3 +1,5 @@
+// Probably Weldar's arena doors: a large sliding door and an entry door that shuts behind the
+// player during the fight, both built on the shared chdoormake code.
 #include "common.h"
 
 extern void *D_80800270_chweldarbossdoors;

@@ -1,3 +1,5 @@
+// Probably the bone pose list: 109 bones of rotation, scale and translation, on the heap or via
+// the core1 handle table. Reset, per-bone set/get, copy, and blend of two poses.
 #include "core2/1EB93C0.h"
 
 void func_800D9600(s32, s32);

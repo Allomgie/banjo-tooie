@@ -1,3 +1,5 @@
+// Possibly accessors for static actor buffers: a bone transform scratch buffer set to identity,
+// and anim-slot records shared with 1EE73D0. Not fully understood.
 #include "core2/1EDD9C0.h"
 
 extern u8 D_80135AB8[];
@@ -15,6 +17,7 @@ extern E20_104148 D_80136D88[];
 // TU-NOTE: static buffer accessors. D_80124400 is defined at the bottom of this file
 // (.data values taken from the ROM, declared above as s32[]).
 
+// Identity-initialised bone transform scratch buffer (0x6D bones).
 // Initialises the 0x6D-entry bone transform buffer to identity and returns it.
 s32 func_801040D0(void)
 {
@@ -24,6 +27,7 @@ s32 func_801040D0(void)
     return (s32) &D_80135AB0;
 }
 
+// Static shared actor buffers and anim-slot records (used by 1EE73D0).
 int func_8010410C()
 {
     return (int) &D_80136BC0;

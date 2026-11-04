@@ -1,3 +1,6 @@
+// Probably the shared logic of the Witchyworld power huts that Mumbo powers up: entrypoints driven
+// by a per-hut config, with beam effect, switch-on, hum loop, sparks and flickering lights.
+
 #include "common.h"
 
 // Per-actor state of a power hut.

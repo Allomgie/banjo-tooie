@@ -1,3 +1,4 @@
+// Writes the compressed ROM range of core2 into entry 0 of the overlay ROM table.
 #include "buffers.h"
 
 extern u8 core2_compressed_ROM_END[];

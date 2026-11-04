@@ -1,3 +1,5 @@
+// Probably the Glitter Gulch Mine Crushing Shed machinery (flag 0x4FB): slamming crushers, a
+// rotating part, a conveyor belt and the on/off switch.
 #include "ch/crusher.h"
 
 typedef struct {

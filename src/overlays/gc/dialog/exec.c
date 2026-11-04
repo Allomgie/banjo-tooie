@@ -1,3 +1,5 @@
+// Dialog executor: runs a conversation from a dialog asset as a script of lines and commands,
+// drives up to two zoombox portraits, input, choices, sounds and the dialog camera, then cleans up.
 #include "common.h"
 
 #define DIALOG_UPDATE_CMD(i) (param_0->commands[param_0->status.half.selected] + i)

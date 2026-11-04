@@ -1,3 +1,4 @@
+// libultra alLink/alUnlink: insert into and remove from a doubly-linked list.
 #include "common.h"
 
 typedef struct TTLink_s {

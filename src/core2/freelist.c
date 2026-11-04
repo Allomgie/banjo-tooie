@@ -1,6 +1,8 @@
+// Rare's free-list pool: slots addressed by stable index, with new/free, growth by 10 and erase.
 #include "memory.h"
 #include "freelist.h"
 
+// Index-stable slot pool.
 // Element 0 is the free-list head; each element starts with the index of the next free one.
 void freelist_clear(FreeList *list)
 {
@@ -120,6 +122,7 @@ void freelist_erase(FreeList *list, s32 index)
     list->data[0].next_free = index;
 }
 
+// Heap defrag wrapper.
 FreeList *freelist_defrag(FreeList *list)
 {
     return (FreeList *) defrag(list);

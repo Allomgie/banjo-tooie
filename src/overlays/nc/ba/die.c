@@ -1,3 +1,5 @@
+// Death camera mode: orbit looking at the player, distance capped at 220, pitch derived from a
+// height value that every dying or timeout state sets.
 #include "nc/ba/die.h"
 
 extern f32 func_800EEF94(f32 *);

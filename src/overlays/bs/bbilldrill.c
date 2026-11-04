@@ -1,3 +1,4 @@
+// Banjo-Kazooie Bill Drill (after Beak Buster): Kazooie spins into the ground, up to 4 bounces.
 // TU-NOTE: the .data of this overlay is defined in this file; its tables point to functions here,
 // and IDO schedules some of them differently unless they share a unit. Values come from the ROM.
 // D_80800AC8_bsbbilldrill is declared int[] to match the object.

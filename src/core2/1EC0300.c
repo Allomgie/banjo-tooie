@@ -1,3 +1,5 @@
+// Rare's string library: strcat/strcpy/strcmp/strlen, case conversion, number-to-string
+// appenders (int, float, hex, binary), a minimal sprintf and delimiter tokenizing helpers.
 #include "common.h"
 
 #define va_arg(list, mode)                                                                         \
@@ -9,6 +11,7 @@ void func_800E6DB4(s32, s32);
 void func_800E6DD8();
 void func_800E7480(s32 param_0, char *fmt, va_list args);
 
+// Basic string ops: strcat, strcat-char, strcmp, strcpy, strlen, case conversion, clear.
 // strcat
 void func_800E6A10(u8 *dst, u8 *src)
 {
@@ -40,6 +43,7 @@ u8 c;
     *dst = 0;
 }
 
+// Number formatting, mini sprintf and delimiter token compare/skip/copy.
 // Appends each byte as hex, followed by a space.
 void func_800E6A90(s32 dst, u8 *bytes)
 {
@@ -278,6 +282,7 @@ s32 func_800E7188(u8 *str)
     return len;
 }
 
+// Dialog-language variant selection: offsets an index depending on the dialog state.
 // Adds 2 to value when _gldialog_entrypoint_1() is true.
 s32 func_800E71B8(s32 value)
 {

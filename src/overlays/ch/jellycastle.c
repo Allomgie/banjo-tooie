@@ -1,3 +1,5 @@
+// Most likely the wobbly jelly castle: plays a squelch sound each time the player lands on it,
+// with a 0.5 s cooldown.
 #include "common.h"
 
 extern s32 _plsu_entrypoint_3(void *);

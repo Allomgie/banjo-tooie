@@ -1,3 +1,5 @@
+// Arch grill gate in Hailfire Peaks (lava side) that rises in stages (3-bit stage counter).
+// Three switches send it messages; each stage slides the grill by half its height with sounds.
 #include "common.h"
 
 extern int func_800D9078(void *);

@@ -1,3 +1,5 @@
+// Door builder for the generic door: allocates and fills the per-actor door block for a motion
+// kind (rotate, slide, fade) and snaps the door to its final pose if its flag is already set.
 #include "common.h"
 #include "memory.h"
 

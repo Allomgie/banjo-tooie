@@ -1,3 +1,5 @@
+// Most likely the One-Armed Bandit, a Witchyworld slot-machine baddie: it hops after the player and
+// fires a spinning projectile (actor 0x35B). On death it explodes and drops a collectible.
 #include "common.h"
 extern s32 func_800DC298(f32);
 
@@ -114,11 +116,13 @@ s32 func_80801154_chonearmbandit();
 void func_80800680_chonearmbandit();
 int func_80800D00_chonearmbandit();
 
+// Bandit actor: init, 7-state AI, yaw tracking, projectile spawn, death/drop logic and draw.
 int chonearmbandit_entrypoint_0()
 {
     return (int) &D_808012BC_chonearmbandit;
 }
 
+// Projectile actor 0x35B: random spin, flight with fade-out, particle trail, explodes on hit.
 int chonearmbandit_entrypoint_1()
 {
     return (int) &D_80801304_chonearmbandit;

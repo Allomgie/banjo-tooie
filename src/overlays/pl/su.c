@@ -1,3 +1,6 @@
+// Player roster queries over the 8 slots: nearest player to a point, find by character id,
+// check that both Banjo and Kazooie exist (split-up), find by controlled marker.
+
 #include "common.h"
 
 extern f32 func_800EEB40(f32 *, f32 *);

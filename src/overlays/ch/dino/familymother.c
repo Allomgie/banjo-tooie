@@ -1,3 +1,5 @@
+// Scrotty, the Styracosaurus mother in Terrydactyland's family cave: her dialogs depend on how many
+// children are back and healthy, and she awards the Scrotty jiggy (0x2B).
 #include "common.h"
 
 extern s32 func_800DA298(s32);

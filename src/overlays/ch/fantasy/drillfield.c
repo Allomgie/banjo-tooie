@@ -1,3 +1,5 @@
+// The eight Cloud Cuckooland dirt piles broken with Bill Drill. A per-save seed shuffles which
+// pile hides which item; a broken pile spawns its item, sets its flag and bursts into debris.
 #include "common.h"
 
 typedef struct {

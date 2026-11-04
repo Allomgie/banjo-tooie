@@ -1,3 +1,6 @@
+// Breakable secret wall at Jolly's in Jolly Roger's Lagoon: on a hit (message 0x40) it
+// explodes and sets FLAG_3A9_PHYSICAL_JRL_SecretWallDestroyed. Loaded inside Jolly's
+// afterwards, it plays a short scene and warps to the lagoon.
 #include "common.h"
 
 extern void func_800EE7F8(f32 *, f32 *);

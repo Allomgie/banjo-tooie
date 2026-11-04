@@ -1,3 +1,5 @@
+// Prison Compound of Mayahem Temple: three code switches pressed in a random order open the
+// compound door; also Dilberta, the prisoner, who talks to the player and leaves once it is open.
 #include "common.h"
 
 extern int D_80800F78_chprisonbits[];
@@ -42,6 +44,7 @@ void func_80800344_chprisonbits();
 int func_80800CC4_chprisonbits();
 int func_80800DAC_chprisonbits();
 
+// Code lock: random code, three switches pressed in order, then the compound door opens.
 int chprisonbits_entrypoint_0()
 {
     return (int) &D_80800F78_chprisonbits;
@@ -175,6 +178,7 @@ void func_80800344_chprisonbits(actor) Actor *actor;
     }
 }
 
+// Dilberta, the prisoner: paces, talks, walks out once the door is open and leaves along a spline.
 void func_8080044C_chprisonbits(s32 actor)
 {
     s32 state;

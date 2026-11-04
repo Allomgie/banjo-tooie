@@ -1,3 +1,5 @@
+// Sprite renderer: draws distance-culled 3D billboard sprites and 2D screen sprites using a global
+// block of current render settings (scale, colors, alpha, combine mode, roll, draw distance).
 #include "common.h"
 #include "core2/1EBB4F0.h"
 

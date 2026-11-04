@@ -1,3 +1,5 @@
+// Probably a generic floating prop: snaps to the nearest cube node prop (within 500 units),
+// takes its model, yaw, pitch and scale, then bobs and rocks as if on water.
 #include "common.h"
 
 extern void *D_808002A0_chfloater;

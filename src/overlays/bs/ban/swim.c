@@ -1,3 +1,4 @@
+// Banjo-solo underwater swimming: dive from the surface, tread water, and three paddle states.
 #include "common.h"
 // TU-NOTE: the .data of this overlay (the four BsScript tables at the end) is defined in this
 // file; the tables point at functions of this file, and IDO's assembler schedules some of these

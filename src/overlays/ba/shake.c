@@ -1,3 +1,5 @@
+// Impact shake presets: start a camera shake at the player's position with a preset strength
+// and duration, optionally with the matching rumble.
 #include "common.h"
 #include "playerstate.h"
 

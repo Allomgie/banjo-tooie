@@ -1,3 +1,5 @@
+// Snowball transformation core: size level grows by rolling and melts in hot areas, per-level
+// collision and camera tables, grow/shrink transitions, snow trail, and size getters.
 #include "common.h"
 #include "playerstate.h"
 extern struct D_80801038_basnowball D_80801038_basnowball[];

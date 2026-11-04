@@ -1,3 +1,5 @@
+// Possibly a bouncy object in Cloud Cuckooland: only two ActorInfo descriptors and a callback that
+// places the actor at a fixed world position; the real behaviour is likely in generic core code.
 #include "common.h"
 
 extern int D_80800060_chfantasybounce[];

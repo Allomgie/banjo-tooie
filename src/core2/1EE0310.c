@@ -1,3 +1,5 @@
+// Most likely actor model lighting at draw time: picks the render lighting mode, gathers nearby
+// map point lights, mixes in ambient or floor colour and hands the vertex buffer to the renderer.
 #include "common.h"
 
 extern s32 D_80136EF0;

@@ -1,3 +1,5 @@
+// Collision provider registry (up to 8): each has line, sweep and vertical tests and an owner getter.
+// Queries call every provider and return the last hit triangle; also a floor-height probe.
 #include "common.h"
 
 typedef struct CollisionC6 CollisionC6;

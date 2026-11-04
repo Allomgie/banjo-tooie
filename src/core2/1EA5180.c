@@ -1,3 +1,5 @@
+// Probably the map zone-volume system: point-in-zone queries over groups of cylinder volumes with a
+// cache, per-group accessors, enable table and defrag; load/free/update go through gc/boundDll.
 #include "common.h"
 
 // TU-NOTE: D_8012AE84/D_8012AE8C/D_8012AE94 are the group-array fields (+4/+0xC/+0x14) of

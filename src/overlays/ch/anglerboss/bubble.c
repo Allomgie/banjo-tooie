@@ -1,3 +1,5 @@
+// Bubble projectile of Lord Woo Fak Fak (actor 0x460): floats at the player, pops on contact and
+// can trap them until they mash buttons to break free. Drawn via the shared ch/bubble renderer.
 #include "common.h"
 
 extern void *D_808005D0_changlerbossbubble;

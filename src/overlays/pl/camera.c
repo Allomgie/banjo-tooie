@@ -1,3 +1,5 @@
+// Player-indexed camera API: 15 entrypoints that look up a player's camera controller and its
+// follow camera and forward resets, mode/position/target changes, deflect and look-at requests.
 #include "common.h"
 
 extern void *func_800F5EF8();

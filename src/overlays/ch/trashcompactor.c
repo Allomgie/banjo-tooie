@@ -1,3 +1,5 @@
+// Most likely the Trash Compactor room: a press that slams down on a player standing under it
+// (with a Tannoy warning on first entry), plus a switch and a door it opens.
 #include "common.h"
 
 extern int D_80800918_chtrashcompactor[];

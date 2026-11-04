@@ -1,3 +1,5 @@
+// Probably the three switch variants of the Hailfire Peaks arch grill: each wraps the generic
+// switch with its own flag and sends press/release messages to the arch grill actor.
 #include "common.h"
 
 extern int D_808001F0_chlavaarchgrill3switches[];

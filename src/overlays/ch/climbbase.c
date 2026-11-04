@@ -1,3 +1,5 @@
+// Climb trigger at the foot of a pole, ladder or rope: finds the nearest top marker, picks a
+// climb style, and starts the player's climb when they stand inside its radius.
 #include "common.h"
 
 extern f32 func_800EFB8C(f32 *, f32 *);

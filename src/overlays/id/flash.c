@@ -1,3 +1,6 @@
+// Probably the flash map-mesh effect: brightens a mesh's vertex colours in step with the matching
+// flasha (random lightning flash) entry, so lightning also lights up surrounding geometry.
+
 #include "common.h"
 
 extern s32 _idflash_entrypoint_0;

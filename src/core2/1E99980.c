@@ -63,6 +63,7 @@ extern u8 D_801288B0[];
 void func_800C0658();
 extern s32 D_80128AF4;
 
+// Dialog front end: start/stop conversations, zoombox slide animation, text id, paging, defrag.
 s32 func_800C0090(s32 entry, s32 id)
 {
     s32 ret;
@@ -365,6 +366,7 @@ int func_800C0890(s32 param_0, s32 param_1)
     _gcdialogexec_entrypoint_9((s32 *) D_801288B0, param_0 | 0, param_1 | 0);
 }
 
+// Pause menu glue: open, close, update, draw, per-controller pause check, frozen-frame background.
 // Pause menu glue (gcnewpause): defrag, create, free, update.
 int func_800C08C0()
 {
@@ -476,6 +478,7 @@ s32 func_800C0BB4()
 extern Gfx D_8011A7E0[];
 extern Gfx D_8011A840[];
 
+// Copies a 304x224 RGBA16 framebuffer to another buffer via 32x32 texture tiles.
 // copy_framebuffer: copies source to destination in 32x32 texture tiles (frozen pause background).
 #if 0
 

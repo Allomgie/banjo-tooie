@@ -1,3 +1,6 @@
+// The Shock Spring Pad and the Flight Pad. Standing on one and sending message 0x91 puts
+// Banjo-Kazooie into shock-jump or flight take-off. They glow when the move is learned
+// and can be shattered.
 #include "common.h"
 
 extern int D_808002B0_chshockjump[];

@@ -1,3 +1,5 @@
+// Probably the Witchyworld coin box: a talking money slot the Van pays with coins. It shows
+// dialogs, then sets its flag and powers an attraction by messaging another actor.
 #include "common.h"
 
 typedef struct {

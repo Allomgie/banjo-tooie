@@ -1,3 +1,5 @@
+// Most likely the player marker and hit detection (BK's bamarker): owns the player's marker,
+// collects overlaps with the hit spheres, and handles being hit (damage, knockback, rumble).
 #include "core2/1E67DA0.h"
 #include "common.h"
 

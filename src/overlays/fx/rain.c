@@ -1,3 +1,5 @@
+// Rain weather: drops spawn around the player in view and fall until below the player; also the
+// looping rain sound with fade, on/off/stopping states, and a lightning/thunder flash timer.
 #include "common.h"
 
 typedef struct {

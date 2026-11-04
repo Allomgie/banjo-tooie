@@ -1,3 +1,5 @@
+// Possibly the fuse boxes of Weldar's arena: two boxes that explode when hit, and a falling
+// spark actor with a light. Not fully understood; all vanish once Weldar is beaten.
 #include "common.h"
 
 extern void *D_80800670_chweldarbossfusebox;

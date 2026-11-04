@@ -1,3 +1,4 @@
+// Banjo-Kazooie Beak Barge: charge up, dash forward as an attack with a dust trail, recover.
 #include "common.h"
 #include "core2/anctrl.h"
 #include "overlays/ba/anim.h"

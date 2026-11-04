@@ -1,3 +1,5 @@
+// Probably a steam vent over the Hailfire Peaks hot water: when visible it periodically emits
+// steam at a random point of its zone. One variant vanishes once the water is cooled.
 #include "common.h"
 
 extern int D_80800240_chhotwatersteam[];

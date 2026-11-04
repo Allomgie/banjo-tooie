@@ -1,3 +1,5 @@
+// Witchyworld van door: slides open when the player in Van form honks nearby (flag 0xA08 + index)
+// and closes when the van leaves; the nearest door of a group handles the closing.
 #include "common.h"
 
 extern void *D_80800640_chvandoor;

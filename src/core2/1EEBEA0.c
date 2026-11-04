@@ -1,3 +1,5 @@
+// Probably the camera roll/bank component: derives a roll from the player's heading and tilt,
+// and zeroes it when the player is not moving or not in the right state.
 #include "common.h"
 
 extern s32 func_80110840(void);

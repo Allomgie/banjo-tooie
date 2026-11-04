@@ -1,3 +1,5 @@
+// Map model set-up per map: map record table, loading and lighting of the opaque and translucent
+// layers, effect groups, textures, layer bounds, zone hooks and the per-map cube-size table.
 #include "common.h"
 
 typedef struct {

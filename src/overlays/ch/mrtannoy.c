@@ -1,6 +1,7 @@
+// Grunty Industries tannoy (PA) jingle: plays the sound, then a lower-pitched copy 0.2 s later.
+// Fourteen Grunty Industries TUs call it before their announcements.
 #include "ch/mrtannoy.h"
 
-// Tannoy jingle: plays the sound, then a lower-pitched copy 0.2 s later.
 void chmrtannoy_entrypoint_0(void)
 {
     func_800C3FC0(0x3E9, 0.75f, 0x7FFF);

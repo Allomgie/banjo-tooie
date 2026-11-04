@@ -1,3 +1,5 @@
+// Probably an animated texture-palette swap for an actor: copies a palette asset into a per-actor
+// buffer, cross-fades between two palettes over a duration, and uploads it to the actor's model.
 #include "common.h"
 
 typedef struct {

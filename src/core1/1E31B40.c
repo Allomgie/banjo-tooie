@@ -1,3 +1,4 @@
+// Graphics frame plumbing: z-buffer, scheduler task messages, double-buffered Gfx/Mtx/Vtx arenas.
 #include "common.h"
 
 struct OSPiInfo {
@@ -30,10 +31,12 @@ extern void *D_8007BCF4;
 
 void func_8001A63C();
 
+// Empty function.
 void func_8001A010(void)
 {
 }
 
+// Z-buffer allocation, accessors and depth readback.
 // Allocates a buffer and rounds the address up to 64 bytes.
 s32 func_8001A018(s32 size)
 {
@@ -74,6 +77,7 @@ u16 func_8001A0C0(s32 x, s32 y)
     return *(u16 *) ((u8 *) D_8007BCC4 + row_offset + (x << 1));
 }
 
+// Scheduler client: task message ring, audio/gfx task submit, RCP wait, framebuffer swap.
 // Takes the message-ring lock.
 void func_8001A0F0()
 {
@@ -148,6 +152,7 @@ void func_8001A2D0()
     func_80014C40();
 }
 
+// Double-buffered Gfx/Mtx/Vtx arenas: alloc, free, per-frame swap.
 // Frees the display-list, matrix and vertex buffers.
 void func_8001A324()
 {

@@ -1,3 +1,5 @@
+// Jiggy celebration player states: the classic jiggy dance driving chjigsawdance with jingle
+// and fanfare, and a shorter celebration that follows it.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

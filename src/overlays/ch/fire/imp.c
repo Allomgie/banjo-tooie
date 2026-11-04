@@ -1,3 +1,5 @@
+// Possibly a fire imp: a small flyer on the shared coaster-fly path follower that plays random
+// chatter sounds when near the camera or player.
 #include "common.h"
 
 extern int D_808001F8_chfireimp[];

@@ -1,3 +1,5 @@
+// Actor expression component (NPC faces): per-actor block with joint and morph parts, head
+// look-at toward the player within range, and joint/morph poses applied at draw time.
 #include "common.h"
 
 // Model table row (see func_80800CF4_suexpression).

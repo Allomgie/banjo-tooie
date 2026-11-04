@@ -1,3 +1,5 @@
+// AnimCtrl, the animation playback controller (as in Banjo-Kazooie): advances the timer per
+// frame, handles playback types, subranges and transition blending, with start/reset/queries.
 #include "core2/anctrl.h"
 
 // TU-NOTE: AnimCtrl layout (the header struct is unpopulated): +0x00 timer, +0x04 subrange

@@ -1,3 +1,5 @@
+// Probably CPU directional vertex lighting for models: lights are moved into model space and
+// normalized, then vertices get ambient plus N.L-weighted light colors, clamped to 255.
 #include "common.h"
 
 // Light entry of the light set (see 1E8CC00.c); weight is the entry's distance.

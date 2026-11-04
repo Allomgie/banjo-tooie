@@ -1,3 +1,5 @@
+// Player knock-back / bounce (PlayerState+0x28): on a hit it launches the player on an arc or
+// knocks it back from the attacker per the hit reaction, then restores physics after landing.
 #include "common.h"
 #include "overlays/ba/bounce.h"
 #include "overlays/ba/physics.h"

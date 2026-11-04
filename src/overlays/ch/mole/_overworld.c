@@ -1,3 +1,5 @@
+// Jamjars, the silo move teacher on Isle o' Hags: a wrapper around the shared mole logic
+// (su/mole.c). Dialog message 0x2F with answer 3 also refills this silo's ammo item.
 #include "common.h"
 
 typedef union OverworldMoleEvent {

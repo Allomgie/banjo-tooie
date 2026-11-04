@@ -1,3 +1,6 @@
+// Root motion ('batranslate'): when enabled, takes the animation's root-bone translation from
+// the skeleton, rotates it by the player yaw and applies the per-frame delta instead of physics.
+
 #include "common.h"
 #include "overlays/ba/translate.h"
 #include "overlays/ba/yaw.h"

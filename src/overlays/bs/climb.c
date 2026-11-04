@@ -1,3 +1,4 @@
+// Climbing poles, vines and ladders: idle, climb up/down, stick-to-top, and the interrupt handler.
 // TU-NOTE: the overlay .data (tables below) is defined in this file. The tables point at
 // functions of this file; IDO schedules some of them differently unless they share the unit.
 #include "common.h"

@@ -1,3 +1,5 @@
+// Out-of-memory handler: evicts overlays and model/asset caches step by step until the
+// requested block fits, and marks the game state as having purged memory.
 #include "core2/1E83680.h"
 
 // Out-of-memory handler for the heap allocator: evicts caches step by step until a free

@@ -1,3 +1,5 @@
+// Probably Mrs. Boggy at home: a small talking NPC that exists once the Witchyworld quest is done
+// (flag 0x1CD); it deflects the player and runs a proximity dialog.
 #include "common.h"
 
 extern int D_808001F0_chmrsboggyhome[];

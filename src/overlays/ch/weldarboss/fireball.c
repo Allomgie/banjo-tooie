@@ -1,3 +1,5 @@
+// Probably Weldar's fireball: flies straight to its target with a point light, explodes into
+// particles on impact, and is drawn as a spinning sprite.
 #include "common.h"
 
 extern void *D_80800410_chweldarbossfireball;

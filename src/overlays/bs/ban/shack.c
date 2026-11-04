@@ -1,3 +1,4 @@
+// Banjo-solo Shack Pack states: Banjo hides in his backpack as a shack (idle, walk, jump, fall).
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

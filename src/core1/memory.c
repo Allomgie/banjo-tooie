@@ -1,3 +1,4 @@
+// Rare's memory helpers: byte and 4-byte aligned memcpy and memmove, plus a byte memset.
 #include <ultra64.h>
 
 // Custom memcpy: void return and signed length.

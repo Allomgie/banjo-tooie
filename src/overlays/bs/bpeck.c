@@ -1,3 +1,5 @@
+// Rat-a-tat Rap, Banjo-Kazooie's mid-air peck attack: hovers, opens two hit spheres on each peck,
+// then lands to idle, falls or enters water.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include <types.h>

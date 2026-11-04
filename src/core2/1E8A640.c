@@ -1,3 +1,4 @@
+// Most likely accessors for a font glyph-sheet asset: header fields, data base, glyph entries.
 #include "common.h"
 
 // Font header: first s16.

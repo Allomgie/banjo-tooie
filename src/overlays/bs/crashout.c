@@ -1,3 +1,4 @@
+// Most likely the crash/knock-down state: thrown back, then gets up or enters the death sequence.
 // TU-NOTE: the overlay .data (D_808003D0_bscrashout) is defined in this file. It points at
 // functions of this file; IDO schedules some of them differently unless they share the unit.
 #include "common.h"

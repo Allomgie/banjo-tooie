@@ -1,3 +1,5 @@
+// Possibly view-frustum helpers: precomputes frustum edge directions, rotates a 2D offset about Z,
+// and forwards to a current-player camera call.
 #include "common.h"
 
 extern const u8 D_801255C0[];
@@ -9,6 +11,7 @@ extern f32 D_801270E0[];
 extern void func_800EFA4C(f32 *a0, f32 a1, f32 a2, f32 a3);
 extern void func_800EF8BC(f32 *a0, f32 *a1, f32 a2);
 
+// Frustum edge direction precompute.
 // Precomputes four frustum edge directions (D_801270A0..D_801270D0) and the centre direction
 // (D_801270E0).
 void func_800A5320(void)
@@ -38,6 +41,7 @@ void func_800A5320(void)
     D_801270D0[2] = center[2];
 }
 
+// Rotate-about-Z and translate helper.
 void func_800A5430(s32 angles[2], volatile s32 unk_0, f32 distance, unsigned int unk_1)
 {
     extern void func_800EF4E4(void *, s32, s32, f32, f32, f32);
@@ -49,6 +53,7 @@ void func_800A5430(s32 angles[2], volatile s32 unk_0, f32 distance, unsigned int
     func_800EE780(unk_1, ptr = (s32 *) offset, unk_0);
 }
 
+// Current-player camera wrapper.
 int func_800A5490()
 {
     s32 unk_0;

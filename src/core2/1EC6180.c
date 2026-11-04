@@ -1,3 +1,6 @@
+// Most likely an animator for map-model vertex groups: translate, offset, scale, alpha and colour
+// effects with a timer, an optional looping sfx and callbacks, run per vertex via the glid overlay.
+
 #include "common.h"
 
 extern void _glidmake_entrypoint_2();
@@ -75,6 +78,7 @@ void func_800EE010();
 // Starts the looping positional sound.
 void func_800EE040(u8 *effect, long sound_id, f32 pitch_min, f32 pitch_max);
 
+// Controller: init from the mesh bbox, start-move/colour/alpha/scale commands, sfx, callbacks, update.
 void func_800EC890(s32 arg0)
 {
 }
@@ -125,6 +129,7 @@ void func_800EC9E0(s32 arg0, s32 arg1, s32 arg2)
 {
 }
 
+// Per-vertex kernels: translate, offset, colour, alpha and scale.
 // Vertex colour fade kernel.
 void func_800EC9F0(void *param_0, VertexColor *src, VertexColor *dst, s32 count,
                    ColorState *state)

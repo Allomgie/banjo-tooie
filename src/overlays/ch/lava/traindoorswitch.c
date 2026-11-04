@@ -1,3 +1,5 @@
+// Switch that unlocks the HFP fire-side train station (FLAG_1D0_STATION_UNLOCKED_HFPL);
+// pressing it plays cutscene 0x4D in MAP_129_HP_FIRE_TRAIN_STATION.
 #include "ch/lavatraindoorswitch.h"
 
 // HFP fire-side train station switch; message 7 plays cutscene 0x4D in map 0x129.

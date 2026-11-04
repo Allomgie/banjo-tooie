@@ -1,3 +1,5 @@
+// Drone mode "slide": the player is forced down a slippery slope with limited steering and
+// dust; it ends on non-slippery ground or in water, and A jumps off after a 1 s lock.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);

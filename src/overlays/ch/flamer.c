@@ -1,3 +1,5 @@
+// The 'on fire' effect attached to actors hit by fire: a flamer actor (0x3A2) linked to the victim
+// fills its volume with flame sprites, adds a flickering light and a burning sound loop.
 #include "common.h"
 
 // TU-NOTE: The .data of this overlay is defined at the bottom of this file. Its tables point to

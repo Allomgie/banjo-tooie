@@ -1,3 +1,5 @@
+// Bottles' evil spirit, player 2 in the cut "Bottles' Revenge" mode (game mode 1). It takes over
+// enemies near player 1 (message 1 take over, 2 release) and keeps a radar of nearby enemies.
 #include "common.h"
 
 #define TEXTURE_RECT48(pkt, xl, yl, xh, yh)                                                        \

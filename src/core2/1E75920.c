@@ -1,3 +1,6 @@
+// Player position block (PlayerState+0xE4): current, previous and two-frames-ago position
+// plus a pending displacement applied once per frame, with getters and setters.
+
 #include "core2/1E75920.h"
 
 extern void func_800EFD24();

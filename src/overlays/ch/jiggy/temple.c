@@ -1,3 +1,5 @@
+// Jiggywiggy's Temple: the disciple NPC who reports the jiggy counts, the temple door,
+// and the cutscene effect (glow, fade, shake) that opens the next world.
 #include "common.h"
 
 extern int D_808008C8_chjiggytemple[];
@@ -40,6 +42,7 @@ typedef struct {
 extern void func_800B5450(void *);
 extern u8 _subaddieaudioloop_entrypoint_3();
 
+// Disciple NPC: idle dialog, HUD jiggy counters and the requirement dialog tree.
 int chjiggytemple_entrypoint_0()
 {
     return (int) &D_808008C8_chjiggytemple;
@@ -128,6 +131,7 @@ s32 func_808000B0_chjiggytemple(Actor *actor, s32 msg, s32 data)
     return 1;
 }
 
+// Temple door, built with chdoormake.
 int chjiggytemple_entrypoint_1()
 {
     return (int) &D_8080092C_chjiggytemple;
@@ -163,6 +167,7 @@ s32 func_80800438_chjiggytemple(s32 door, s32 msg)
     _chdoor_entrypoint_1(door);
 }
 
+// World-opening effect: light, fade and camera shake during cutscene 0x67.
 int chjiggytemple_entrypoint_2(void)
 {
     return (int) &D_80800974_chjiggytemple;

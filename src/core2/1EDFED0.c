@@ -1,9 +1,9 @@
+// Global actor array: a vector of 0x9C-byte actors. Each actor keeps its own index in the upper
+// 11 bits of the u16 at +0x1A. Has init/free/defrag, alloc, erase, marker lookup and iterators.
 #include "common.h"
 
 extern void *D_80136EE0;
 extern s32 vector_defrag();
-// Global actor array: a vector of 0x9C-byte actors. Each actor keeps its own
-// index in the upper 11 bits of the u16 at +0x1A.
 typedef struct {
     u8 pad0[0x1A];
     u16 index : 11;

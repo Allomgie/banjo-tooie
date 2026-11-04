@@ -1,3 +1,5 @@
+// The 'appear' effect actor (0x3D9), spawned at an actor that materialises: a rising sparkle swarm
+// sized from its model, optional sound, music duck and fade-in, kept linked to the target.
 #include "common.h"
 
 extern int D_80800990_chappearfx[];

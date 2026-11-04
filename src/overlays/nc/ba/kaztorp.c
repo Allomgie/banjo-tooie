@@ -1,3 +1,5 @@
+// Camera mode for Kazooie's Talon Torpedo: follows the player and tilts pitch/yaw by the thrust
+// speed and the angle between camera and swim direction.
 #include "common.h"
 
 extern void func_80115870(s32, f32);

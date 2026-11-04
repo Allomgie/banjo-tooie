@@ -1,3 +1,5 @@
+// The Mumbo pad: one actor kind for all 17 pads, indexed by map id. It hides when its job is
+// done and checks per-pad flags when Mumbo casts, then messages the spell target.
 #include "common.h"
 
 extern u8 D_808010C8_chmumbopad[];

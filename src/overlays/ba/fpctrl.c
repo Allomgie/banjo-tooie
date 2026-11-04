@@ -1,3 +1,5 @@
+// First-person view controller: off/available/active modes, C-up toggle, stick look with pitch
+// clamp, ability-gated zoom, switching to egg aiming and back, and exit conditions.
 #include "common.h"
 #include "playerstate.h"
 extern void func_800C51A4(s32, f32);

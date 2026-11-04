@@ -1,3 +1,5 @@
+// Probably a grab-bag of GI roof/outside actors: breakable roof piece and panels, a double
+// door, a switch spawning actor 0x3F3, the train-station switch and a cutscene-opened door.
 #include "ch/factory/roofbits.h"
 
 extern void func_800EE7F8(void *param_0, s32 param_1);
@@ -26,6 +28,7 @@ extern int D_80800B34_chfactoryroofbits[];
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 void func_808000D4_chfactoryroofbits();
 
+// Breakable roof piece and panels with per-marker position/flag tables.
 int func_80800000_chfactoryroofbits(s32 actor)
 {
     func_800EFA4C(actor + 4, -1124.0f, 9002.0f, 1596.0f);
@@ -179,6 +182,7 @@ int *chfactoryroofbits_entrypoint_1()
     return &D_80800A08_chfactoryroofbits;
 }
 
+// Roof doors and switches (0xA08 double door, station switch 0x163, door 0x355).
 // Double door (flags 0x19C/0x19D, 0xA08).
 void func_80800624_chfactoryroofbits(Actor *door)
 {

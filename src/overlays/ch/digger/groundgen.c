@@ -1,3 +1,5 @@
+// Spawner for digger ground minions (actor 0x131). When the last one is gone it picks a landing
+// point 300-500 units away, queues a spawn and throws the minion there in an arc.
 #include "common.h"
 
 extern int D_80800500_chdiggergroundgen[];

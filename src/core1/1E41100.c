@@ -1,3 +1,4 @@
+// Synth save stage (n_alSavePull): interleaves the L/R mix buffers and saves them to the output.
 #include "common.h"
 
 typedef struct {

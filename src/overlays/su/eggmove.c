@@ -1,3 +1,5 @@
+// Egg movement: gravity with a terminal speed, swept-sphere map collision that either sticks the
+// egg to the surface or bounces it, and accessors for owner, surface type, flags and velocity.
 #include "common.h"
 
 extern f32 func_800D8FF8(void);

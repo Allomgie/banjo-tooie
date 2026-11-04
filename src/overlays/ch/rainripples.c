@@ -1,3 +1,5 @@
+// Probably a rain-ripple emitter: while rain is active it spawns ripples on the water surface at
+// points of a placed list, scaled by frame time; the height comes from a map ray cast.
 #include "common.h"
 
 extern u32 D_80800290_chrainripples[];

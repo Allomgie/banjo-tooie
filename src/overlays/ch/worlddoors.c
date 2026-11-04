@@ -1,3 +1,6 @@
+// Probably the world-unlock cutscene actor (spawned with message 0x49 and a world index): flies a
+// giant jiggy to the world's entrance with camera, rumble and sound, shrinks it into the door,
+// then sends 'open' (7) to that world's entrance actor and ends the cutscene.
 #include "common.h"
 extern void func_800EF214(f32 *, f32, f32, f32);
 

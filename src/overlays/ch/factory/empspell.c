@@ -1,3 +1,5 @@
+// Probably the wall-crusher corridor controller: a long conveyor carries the player towards two
+// crushers, and Mumbo's EMP spell from pad 0xB powers them down for 45 s. One 11-state actor.
 #include "common.h"
 
 extern void _chfactoryempspell_entrypoint_0(void);

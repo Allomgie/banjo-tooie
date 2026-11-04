@@ -1,3 +1,5 @@
+// Probably the per-player view slots (D_801276D0): each binds a viewport, a projection object and
+// a camera instance, and tracks free split-screen quadrants. Also the render target size (304x228).
 #include "core2/1E82660.h"
 
 // Player view slots (D_801276D0). A camera instance per slot follows at +0x58.
@@ -48,6 +50,7 @@ void func_800A91F4();
 int func_800A9420();
 void func_800A9828();
 
+// Per-player camera/view slot management, viewport assignment, broadcast, update, nearest camera.
 // Init: viewport count = number of players if the map allows split screen, else 1.
 void func_800A8D70(s32 param_0, s32 param_1)
 {
@@ -409,6 +412,7 @@ loop_1:
     goto loop_1;
 }
 
+// Render target (framebuffer pointer and size) selection, default 304x228.
 int func_800A9800()
 {
     func_800A9828(0, 0, 0);

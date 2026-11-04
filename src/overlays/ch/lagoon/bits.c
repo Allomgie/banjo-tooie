@@ -1,3 +1,5 @@
+// Most likely small scenery actors of Jolly Roger's Lagoon: explodable walls and rocks that set
+// flags when destroyed, and a randomised Jinjo hiding spot (one of four chosen on first visit).
 #include "common.h"
 
 extern int D_80800804_chlagoonbits[];

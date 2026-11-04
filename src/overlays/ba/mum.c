@@ -1,3 +1,5 @@
+// Probably Mumbo's wand effect: while its intensity is non-zero, emits a sparkle stream between
+// two wand bones, with the emission count taken from the intensity.
 #include "common.h"
 #include "playerstate.h"
 

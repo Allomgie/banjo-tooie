@@ -1,3 +1,5 @@
+// Most likely the global "current collision querier" token, set by player physics around sweeps.
+// Prop and actor collision code reads it to decide whether to fire touch callbacks.
 #include "common.h"
 
 extern s32 D_8012AE74;

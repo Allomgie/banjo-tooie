@@ -1,3 +1,5 @@
+// Probably a water-current actor with two kinds: one moves the player along the texture flow of
+// the floor triangle, the other pushes the player outward from the map origin in waves.
 #include "common.h"
 
 extern void *D_808007D0_chbanjocurrent;

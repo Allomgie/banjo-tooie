@@ -1,3 +1,5 @@
+// Per-player timer list (15 float slots): set, get, count up/down with clamp at 0, and
+// rising/falling edge and comparison tests.
 #include "common.h"
 #include "overlays/ba/timer.h"
 #include "core2/1EB2840.h"

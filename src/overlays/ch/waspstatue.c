@@ -1,3 +1,5 @@
+// Most likely the Cloud Cuckooland wasp statue puzzle: hitting it starts a 10 s countdown, enough
+// hits in time set flag 0x35A. A second actor is a door that then opens for Bee Banjo.
 #include "common.h"
 
 extern void *D_80800740_chwaspstatue;

@@ -1,3 +1,5 @@
+// Player physics (PlayerState+0xC8): position, velocity, gravity, target yaw and per-type
+// movement integrators chosen by baphysics_set_type. Also holds an unrelated enable-flag array.
 #include "overlays/ba/physics.h"
 
 #define QQ (*(S_9B450 **) ((u8 *) param_0 + 0xC8))
@@ -77,6 +79,7 @@ extern void func_800EFD24(void *param_0);
 extern f32 D_80117EF0;
 extern f32 D_80117EF4;
 
+// Per-player enable flags for optional ba subsystems.
 // The first six functions handle a 15-byte array of on/off flags at PlayerState+0xC4
 // that enable optional ba subsystems in the player update loop.
 s32 func_8009AD70()
@@ -121,6 +124,7 @@ s32 func_8009AE00()
     return 0xC4;
 }
 
+// Player physics state, movement-type integrators and accessors.
 // Walking-style integrator: blends velocity toward the target velocity, applies gravity,
 // then integrates the position.
 void func_8009AE08(PlayerState *player)

@@ -1,3 +1,5 @@
+// Probably a small flame/smoke effect kept in an actor's data: sprite particles rise with random
+// speed, size and drift, shrink and fade, respawn, and are drawn as billboards when in view.
 #include "common.h"
 
 extern void func_80100074(s32, s32, s32);

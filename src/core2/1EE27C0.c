@@ -1,3 +1,5 @@
+// Probably mixed actor-interaction code: damage with knockback and drops, hit-spark particles,
+// radius/cone hit queries over marker cubes, and small actor bitfield accessors.
 #include "common.h"
 
 extern s32 D_801245D0[];
@@ -205,6 +207,7 @@ void func_80109748(f32 *param_0, s32 param_1, s32 param_2, s32 param_3, f32 para
 int func_8010A430();
 int func_8010A610();
 
+// Hit application: health decrement, knockback, burn/freeze reactions, death drop chance.
 int func_80108ED0()
 {
     return (int) D_801245D0;
@@ -348,6 +351,7 @@ void func_80108F08(LocalMarker_80108F08 *victim, LocalMarker_80108F08 *attacker,
     }
 }
 
+// Hit-spark and debris particle spawning at an actor's hit point.
 void func_801094E0(s32 pos, f32 unk_0)
 {
     func_800BBCB8(pos, pos, unk_0, 3, D_8012461C);
@@ -444,6 +448,7 @@ void func_80109748(f32 *base, s32 count, s32 y_min, s32 y_max, f32 unk_0, s32 un
     }
 }
 
+// Radius/cone hit queries over marker cubes, actor-vs-actor attack, nearest target, line of sight.
 // Tests whether the marker lies within radius of pos (custom hit test if the marker has one).
 s32 func_801098D0(f32 *pos, f32 radius, local_marker *marker)
 {
@@ -577,6 +582,7 @@ s32 func_80109CC4(f32 *pos, f32 radius, Marker1099D0 *attacker)
     return hit_any;
 }
 
+// Actor/marker bitfield accessors, collision-size scale and event senders.
 // Actor flags at actor+0x66: read, write, clear and set.
 int func_80109EE0(u16 *actor, unsigned long mask)
 {

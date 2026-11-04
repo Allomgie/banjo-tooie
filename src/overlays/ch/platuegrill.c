@@ -1,3 +1,5 @@
+// Pine Grove door on the Isle o' Hags plateau: the door (flag 0x3EA) and the grill that,
+// when hit, plays a jingle and sends message 7 to the door (actor 0x518).
 #include "common.h"
 
 extern int D_808001D0_chplatuegrill[];

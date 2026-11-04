@@ -1,3 +1,5 @@
+// Actor search helpers: nearest or first actor of a kind, find by marker, kind, instance or unique
+// id, collect up to N matches (by radius or kind list), and gather actors in nearby cube cells.
 #include "common.h"
 // TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 

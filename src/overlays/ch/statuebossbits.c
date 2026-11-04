@@ -1,3 +1,5 @@
+// Probably the helper actors of the Targitzan fight (four ActorInfo getters): the dart he shoots,
+// the shields that rise from the floor and break after three hits, and the arena door.
 #include "common.h"
 
 extern int D_808006F0_chstatuebossbits[];
@@ -30,6 +32,7 @@ extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 void func_80800270_chstatuebossbits();
 void func_80800604_chstatuebossbits();
 
+// Registration of the four part actor kinds (ActorInfo getters).
 int chstatuebossbits_entrypoint_0()
 {
     return (int) &D_808006F0_chstatuebossbits;
@@ -50,10 +53,12 @@ int chstatuebossbits_entrypoint_3()
     return D_808007C8_chstatuebossbits;
 }
 
+// Arena door via chdoormake (open when flag 0x88 or in a cutscene); empty update.
 void func_80800030_chstatuebossbits(s32 arg0)
 {
 }
 
+// Dart: flies with roll spin, collides, sends 0x40 to shield 0x449, impact effects, fade-out.
 // Dart Targitzan shoots: spins, hits player or shield, then fades.
 void func_80800038_chstatuebossbits(Actor *dart)
 {
@@ -121,6 +126,7 @@ void func_80800270_chstatuebossbits(actor) u8 *actor;
     func_8010D930(4, -1, actor + 4, &D_8080084C_chstatuebossbits);
 }
 
+// Shield/cover block: rises on message 7, damage parts by hit count, breaks after 3 hits.
 // Shield init: rises from the floor unless the boss was already beaten/retried.
 void func_808002CC_chstatuebossbits(Actor *shield)
 {

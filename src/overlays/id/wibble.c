@@ -1,3 +1,6 @@
+// Wibble map-mesh effect: radial sine ripples move vertex heights and optionally modulate
+// brightness and distort UVs (6-entry table by mesh id hundreds); an external water-level
+// offset raises or lowers pools.
 #include "common.h"
 
 typedef struct {

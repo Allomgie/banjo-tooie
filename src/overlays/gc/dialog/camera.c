@@ -1,3 +1,5 @@
+// Dialog camera: frames conversations with the pod camera from a shot code, the talker's bounds
+// or explicit vectors, and switches shots when the speaker changes. Used by many NPCs and bosses.
 #include "common.h"
 
 extern Actor *func_80106790(void);

@@ -1,3 +1,5 @@
+// Banjo-Kazooie light hurt knockback ("ow"): bounce, blink, steer while airborne, then idle,
+// tumble-fall or water landing.
 #include "overlays/bs/ow.h"
 
 void bsow_entrypoint_0(PlayerState *self)

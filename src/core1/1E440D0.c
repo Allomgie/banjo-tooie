@@ -1,3 +1,4 @@
+// n_alSynSetPriority: sets the priority of a synth voice.
 #include "common.h"
 
 typedef struct {

@@ -1,3 +1,5 @@
+// Model skinning section: transforms stored vertex positions (and normals) of each group by the
+// bone matrix and scatters them into the model's vertex list whenever a skinned model is posed.
 #include "common.h"
 
 extern void *func_800B2190(s32);

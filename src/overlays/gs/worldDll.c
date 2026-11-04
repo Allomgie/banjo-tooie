@@ -1,3 +1,6 @@
+// World lifecycle: initialises a map's subsystems in a fixed order, parses its setup file, frees
+// everything in order and handles map changes for music, sfx and environment.
+
 #include "common.h"
 
 typedef struct {
@@ -9,6 +12,7 @@ typedef struct {
     u16 prev_map_id;
 } GSWorldData49;
 
+// Map init/free order, setup-file parse and map-change notification.
 // Parses the map's setup file, dispatching each entry by its tag.
 void gsworldDll_entrypoint_0(s32 map_id, s32 param_1)
 {
@@ -171,6 +175,7 @@ void gsworldDll_entrypoint_3(s16 *cur_map, long next_map)
     *cur_map = next_map;
 }
 
+// Empty debug print stub with the 'world.gs' file name.
 // Stripped debug assert.
 void func_8080054C_gsworldDll(s32 arg0, s32 arg1, s32 arg2)
 {

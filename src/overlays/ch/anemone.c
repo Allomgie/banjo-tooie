@@ -1,3 +1,5 @@
+// Probably the anemone: a stationary underwater baddie whose head tracks the player, pushes
+// them away with a deflect field, and has open/close attack states.
 #include "common.h"
 
 extern int D_808008D8_chanemone[];

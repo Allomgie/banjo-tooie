@@ -1,3 +1,5 @@
+// Cloud Cuckooland Canary Mary race: the player's clockwork-mouse racer and Canary Mary (dialog,
+// rubber-band AI, race state machine, jiggy). Also drives the race camera via ca/pod.
 #include "overlays/ch/clockworkmouse.h"
 
 #define CLOCKWORK_DATA(arg0) ((ClockworkActorData *) (arg0->actorData))

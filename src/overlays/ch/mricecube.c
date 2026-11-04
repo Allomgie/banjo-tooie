@@ -1,3 +1,5 @@
+// George the ice cube (Hailfire Peaks): talks, is knocked away when hit and falls to the Lava Side.
+// There he drops into the lava, steams, melts away and sets flag 0x31B (lava pool cooled).
 #include "common.h"
 
 extern int D_80800928_chmricecube[];

@@ -1,3 +1,5 @@
+// Probably the Cloud Cuckooland lake parts: a vertex callback tinting the liquid yellow, a
+// controller that drains the lake (flag 0x327), and a stopper that starts the draining.
 #include "common.h"
 
 extern Actor *func_80106790();

@@ -1,3 +1,5 @@
+// Probably the GI elevator-shaft doors: a doormake door with open flag variant+0xC, and a
+// call switch that sets that flag and sends message 7 to the lift actor (0x3B8).
 #include "common.h"
 
 extern int D_80800140_chfactoryliftdoor[];

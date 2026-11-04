@@ -1,3 +1,5 @@
+// Map light set-up: parses the lights block of the map setup file into point, ambient and
+// direction lights. Also has nearest-light and lights-in-range queries and a new-light helper.
 #include "common.h"
 #include "vector.h"
 

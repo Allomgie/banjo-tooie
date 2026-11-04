@@ -1,3 +1,5 @@
+// Probably the Taxi Pack passenger registry: 16 slots with state, type, handlers and the
+// current and committed pose of each passenger.
 #include "common.h"
 
 // TU-NOTE: D_8012AB70 holds 16 passenger slots of 0x30 bytes each; the structs below are views of it.

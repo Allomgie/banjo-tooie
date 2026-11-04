@@ -1,3 +1,4 @@
+// Claw Swipe: Banjo's basic ground attack; a quick second press can chain into Breegull Bash.
 // TU-NOTE: the .data of this overlay is defined in this file; its table points to functions here,
 // and IDO schedules some of them differently unless they share a unit. Values come from the ROM.
 #include "common.h"

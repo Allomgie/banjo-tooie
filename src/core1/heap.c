@@ -1,3 +1,5 @@
+// General-purpose heap allocator: linked block list, size-sorted free list, first-fit from
+// the bottom or top, split/merge, realloc and statistics. On out-of-memory it calls func_800A9D90.
 #include "core1/heap.h"
 #include "memory.h"
 

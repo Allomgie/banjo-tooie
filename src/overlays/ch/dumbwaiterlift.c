@@ -1,3 +1,5 @@
+// Most likely the Grunty Industries dumbwaiter lift between five floors, usable only by the
+// washing machine, with a floor menu; it warps to the chosen floor's map and entrance.
 #include "common.h"
 #include "gc/newoption.h"
 

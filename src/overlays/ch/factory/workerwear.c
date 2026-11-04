@@ -1,3 +1,5 @@
+// A Skivvy's clothing item (spawned by workerdirty.c): flies along a path on its owner's messages,
+// spins in the washer, changes model when clean, and despawns on message 0x2C.
 #include "common.h"
 
 extern void *D_80800438_chfactoryworkerwear;

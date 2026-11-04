@@ -1,3 +1,5 @@
+// Drone mode "goto": the game walks the player to a target position; waits for landing, moves
+// with a fixed duration or speed, then calls the request's callback on arrival.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

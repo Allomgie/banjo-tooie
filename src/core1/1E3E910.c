@@ -1,3 +1,4 @@
+// Synth voice setters: alSynSetPan, alSynSetPitch, alSynSetFXMix, alSynStopVoice, alSynFreeVoice.
 #include "common.h"
 
 typedef struct {

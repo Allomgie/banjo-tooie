@@ -1,3 +1,5 @@
+// Score board for multiplayer and score-based minigames: ranks players with tie detection,
+// stores tournament results, and lays out, animates and draws the per-viewport score cards.
 #include "common.h"
 
 typedef struct {

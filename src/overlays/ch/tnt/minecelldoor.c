@@ -1,3 +1,5 @@
+// Probably a breakable door in Glitter Gulch Mine blown open by a linked TNT box: spawns debris,
+// sets flag 0x85 and stays destroyed.
 #include "common.h"
 
 extern int D_80800140_chtntminecelldoor[];

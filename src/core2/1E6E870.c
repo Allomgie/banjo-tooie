@@ -1,3 +1,5 @@
+// Probably the player's four-channel eyelid blink animator; channels 0 and 1 drive the
+// Banjo and Kazooie eyelid values.
 #include "core2/1E6E870.h"
 #include "types.h"
 

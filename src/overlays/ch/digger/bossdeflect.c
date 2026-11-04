@@ -1,3 +1,5 @@
+// Possibly an inert helper actor of the Hag 1 fight (likely actor 0x50A): init sets three
+// size fields to 500, update and messages do nothing.
 #include "common.h"
 
 extern int D_80800040_chdiggerbossdeflect[];

@@ -1,3 +1,5 @@
+// Water states of the Detonator transformation: sink, tread water, swim, rest and drone,
+// reusing the Detonator form hooks and allowing detonation and jump-out.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

@@ -1,3 +1,5 @@
+// Kerned text printing: computes per-character offsets from glyph widths and a kerning-pair table,
+// and prints at a position or centered on screen; also sets and resets the text scale.
 #include "common.h"
 
 typedef struct {

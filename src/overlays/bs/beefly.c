@@ -1,3 +1,5 @@
+// Bee flying states: take-off, free flight with boost and buzz, stick steering with fly camera,
+// landing, and fly variants of rest/hover/drone. Spawns wing particles.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

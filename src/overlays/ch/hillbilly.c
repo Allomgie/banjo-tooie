@@ -1,3 +1,5 @@
+// Most likely the Hillbilly baddie on the shared su/coaster walker framework. It hides and pops
+// up (models 0x789/0x78A), chases the player along a route and has the usual hit/death/stun states.
 #include "common.h"
 
 extern int D_80800C60_chhillbilly[];

@@ -1,3 +1,4 @@
+// Probably z-buffer occlusion probes: tests whether a projected point is hidden behind geometry.
 #include "common.h"
 #include "freelist.h"
 #include <freelist.h>
@@ -89,6 +90,7 @@ const struct {
     f32 pad[2];
 } D_80125E40 = {511.0f, 1e-06f};
 
+// Decodes the N64 compressed z-buffer value into linear depth.
 // Decode the N64 compressed 16-bit z-buffer sample at (x, y) to a linear depth.
 f32 func_800E81E0(s32 x, s32 y, f32 proj_a, f32 proj_b)
 {
@@ -107,6 +109,7 @@ f32 func_800E81E0(s32 x, s32 y, f32 proj_a, f32 proj_b)
     return mlAbsF(denom) < D_80125E40.epsilon ? 0.0f : proj_b / denom;
 }
 
+// Probe pool, per-frame visibility evaluation, register/unregister and queries.
 void func_800E829C(void)
 {
     s32 i, j;

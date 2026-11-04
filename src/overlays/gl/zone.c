@@ -1,3 +1,6 @@
+// Model zone visibility sets: per-map create/free, fill and test of the zones active this frame,
+// and a lookup of the zone containing a position that keeps the previous zone while still inside.
+// Most likely used by the model renderer and the player model.
 #include "common.h"
 
 extern s32 _dbzone_entrypoint_2(s32, s32, s32);

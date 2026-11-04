@@ -1,3 +1,5 @@
+// Sky table and set-up: per-map sky layer records, loading and freeing the two sky layer models,
+// reloading their textures, and reporting whether the map has a sky (used by the lens flare).
 #include "common.h"
 
 extern u8 D_80800510_gcskyDll[];

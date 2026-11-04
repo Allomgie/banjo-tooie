@@ -1,3 +1,4 @@
+// Data-only overlay; probably the table from cutscene script animation index to animation id.
 #include "common.h"
 
 extern s16 D_80800030_seqdat[];

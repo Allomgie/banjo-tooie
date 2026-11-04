@@ -1,3 +1,5 @@
+// Pawno, the pawnbroker of Jolly Roger's Lagoon: sells the jiggy (20 doubloons) and a Cheato page
+// (5), plus two helper actors: the item on display and an animated prop.
 #include "common.h"
 
 extern void *D_80800FD0_chpawnbroker;
@@ -47,16 +49,19 @@ void func_80800E3C_chpawnbroker();
 extern void func_80101870(), func_80105834(), func_80107C2C(), func_80800024_chpawnbroker(),
     func_80800514_chpawnbroker();
 
+// Pawno: shop state machine, price check, dialogs, payment and purchase flags.
 int chpawnbroker_entrypoint_0()
 {
     return &D_80800FD0_chpawnbroker;
 }
 
+// Display actor: holds the unbought jiggy or Cheato page, vanishes with sparkles when sold.
 int *chpawnbroker_entrypoint_1()
 {
     return &D_80801018_chpawnbroker;
 }
 
+// Animated prop at Pawno's side: plays one animation with sound cues, then idles.
 int *chpawnbroker_entrypoint_2()
 {
     return &D_80801060_chpawnbroker;

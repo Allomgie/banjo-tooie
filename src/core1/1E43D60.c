@@ -1,3 +1,4 @@
+// Synth bus mixer: pulls each FX bus, mixes it into L/R and optionally applies a per-bus filter.
 #include "common.h"
 
 typedef struct {

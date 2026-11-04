@@ -1,3 +1,5 @@
+// Thin wrapper around the hand-written rarezip inflate: decompresses src to dst, advances both
+// cursors (dst rounded up to 16) and exposes the running CRCs and the last output size.
 #include "types.h"
 #include "buffers.h"
 

@@ -1,3 +1,6 @@
+// Player states of the large (Daddy) T-Rex in Terrydactyland: idle, walk, run, jump, fall, landing,
+// roar (shockwave, rumble, message 0x1B to nearby actors), bounce, rest and drone wrappers.
+// Also the roar-range test that the core attack classifier uses for this form.
 #include "bs/trexlarge.h"
 #include "overlays/ba/playerstate.h"
 #include "overlays/ba/stick.h"

@@ -1,4 +1,6 @@
-// Collectible registry: 9 categories (0 Jinjo, 1 Jiggy, 2-5, 6 note nests, 7, 8), each with an index range and per-category tables.
+// Registry of placed collectibles in 9 categories (Jinjos, Jiggies, note nests, ...), each with an
+// index range and data tables. Maps (category, index) to a collected flag, counts collected items,
+// spawns the actor unless collected, tracks movable jiggies and shuffles Jinjo families.
 #include "core2/1EA9160.h"
 extern s32 func_80106790(s32);
 void func_800DA544(s32);

@@ -1,3 +1,5 @@
+// Footstep sounds: alternates two sound sources per foot, picks the surface (or water) under the
+// actor and plays the step sound with random pitch and volume; also one-shot surface sounds.
 #include "common.h"
 
 extern void func_800C301C(u8, s32);

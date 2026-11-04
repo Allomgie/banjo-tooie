@@ -1,3 +1,5 @@
+// Spline script helpers: find the node with a given event id and return its path, t and
+// position; plus the callback handed to the baddie setup when a script spawns a baddie.
 #include "common.h"
 
 typedef struct {

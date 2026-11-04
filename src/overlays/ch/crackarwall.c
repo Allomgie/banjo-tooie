@@ -1,3 +1,5 @@
+// Probably a breakable cracked arch wall whose placement parameter is a game flag: removed if
+// the flag is set at load; breaking sets it, spawns an explosion, then debris and a sound.
 #include "common.h"
 
 extern u8 D_808000F0_chcrackarchwall[];

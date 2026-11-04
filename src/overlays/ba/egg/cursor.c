@@ -1,3 +1,5 @@
+// Egg aiming cursor: position, mode, blink/alpha and scale state; draws the crosshair sprite each
+// frame and handles mode changes when firing or leaving aim.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

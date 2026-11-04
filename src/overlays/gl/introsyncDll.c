@@ -1,3 +1,5 @@
+// Intro timing sync. Most likely it busy-waits until real time matches the scripted time of the
+// current step, so the intro stays in step with its music, and returns the scaled delta time.
 #include "common.h"
 
 extern s32 D_808004A0_glintrosyncDll;

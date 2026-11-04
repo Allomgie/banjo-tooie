@@ -1,3 +1,5 @@
+// Ledge mover (baphysics): integrates the player's position from velocity while hanging on a ledge.
+
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

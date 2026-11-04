@@ -1,3 +1,5 @@
+// Probably environment-map (reflection) texture coordinates for models: builds a view-relative
+// basis, then writes per-vertex S/T from the transformed normals (sphere-map look).
 #include "common.h"
 
 // TU-NOTE: D_80137220 / D_8013722C hold the right / up basis vectors.

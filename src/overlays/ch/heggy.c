@@ -1,3 +1,5 @@
+// Heggy the hen (Heggy's Egg Shed): the Stop 'n' Swop egg-hatching NPC. She takes eggs,
+// walks them to the incubator, hatches them and gives rewards. A second actor is a breakable cover.
 #include "ch/heggy.h"
 
 extern s32 D_80801E08_chheggy[];
@@ -22,6 +24,7 @@ typedef struct Unk80100094 {
 
 void func_80800ECC_chheggy(Actor *, s32);
 
+// Heggy NPC: dialogs, egg hand-over, walk to the incubator, hatching, rewards, camera.
 void func_80800000_chheggy(Actor *actor, Unk80100094 *path_data, s32 index)
 {
     func_8008F8B0();
@@ -604,6 +607,7 @@ s32 *chheggy_entrypoint_0(void)
     return D_80801E9C_chheggy;
 }
 
+// Breakable cover actor: explodes and sets FLAG_581.
 void func_808019CC_chheggy(Actor *actor)
 {
     if (_subaddieDll_entrypoint_6(actor, 0xB) != 0) {

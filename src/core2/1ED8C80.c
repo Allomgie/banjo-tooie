@@ -1,3 +1,5 @@
+// Actor manager core loop: init/free/defrag of the actor sub-pools, the per-frame actor update,
+// deferred actor deletion and per-actor heap local data and overlay unloading.
 #include "core2/1ED8C80.h"
 
 extern s32 D_80135A50;

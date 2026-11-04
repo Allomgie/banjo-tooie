@@ -1,3 +1,5 @@
+// Probably an ambient emitter that releases bubbles from ten random floor points within a radius
+// given by the actor parameter, with a 10% chance of a burst per frame.
 #include "common.h"
 
 // TU-NOTE: the overlay .data (tables below) is defined in this file because IDO's assembler

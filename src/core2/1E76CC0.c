@@ -1,3 +1,5 @@
+// Player sound handling (PlayerState+0x104): persistent sfx source handles, positional playback
+// at the player, cycling footstep/variant tables, random pitch and Dragon Kazooie pitch.
 #include "core2/1E76CC0.h"
 
 // Player sfx state at PlayerState+0x104: handles at +0..+4, counters at +8, +0xC, +0x18,

@@ -1,7 +1,8 @@
+// Probably two things: a timed fade of the map model tint colour, and the 0xA0-byte
+// ground/water tracker the player physics allocates (floor and water height from vertical
+// ray probes, 4-mode state machine).
 #include "common.h"
 
-// Map tint fade state (viewed as StateC57F0), plus a 0xA0-byte ground/water tracker
-// (GroundState) that the player physics allocates.
 extern u8 D_8012AA20[];
 void func_800BF48C();
 typedef struct {
@@ -90,6 +91,7 @@ typedef struct {
 } GroundHit;
 extern void func_800C6320(GroundState *), func_800C6420(GroundState *);
 
+// Map model tint colour with a timed fade (ticked from the main loop in 1EC3810).
 void func_800C5770(void)
 {
 }
@@ -161,6 +163,7 @@ s32 func_800C59F0(s32 r, s32 g, s32 b)
     func_800C5968(r, g, b, 0);
 }
 
+// Player ground/water tracker: alloc/free, update state machine, getters/setters.
 // Switches the tracker mode (1 searching, 2 airborne, 3 grounded, 4 swimming).
 func_800C5A10(u8 *ground, s32 mode)
 {
@@ -229,6 +232,7 @@ void *func_800C5BC4(void *ground)
     return defrag(ground);
 }
 
+// Vertical ray probe (map only or all providers), split into 500-unit segments.
 // Casts one vertical ray from pos (y offsets y_start to y_end) and fills hit.
 int func_800C5BE4(s32 pos, f32 y_start, f32 y_end, s32 filter, Actor *hit)
 {

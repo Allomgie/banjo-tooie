@@ -1,3 +1,6 @@
+// Per-player camera controller (0x40 bytes per viewport): owns the view, the dynamic follow
+// camera and clip-plane state; mode 1 none, 2 follow, 3 fixed pos/rot, 8 pod.
+// Applies queued moves per frame.
 #include "common.h"
 
 extern void func_80114CB0(s32, f32);

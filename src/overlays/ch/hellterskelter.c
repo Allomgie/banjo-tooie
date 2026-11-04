@@ -1,3 +1,6 @@
+// Probably the Hellter Skelter ride: a controller that spawns riders sliding down a spline path,
+// a shock-jump-pad spawner, and the switch that enables it.
+
 #include "ch/hellterskelter.h"
 
 extern int D_808007C8_chhellterskelter[];

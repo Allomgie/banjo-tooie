@@ -1,3 +1,5 @@
+// Probably planar mirror reflection for up to 3 maps: builds a reflection matrix per map and
+// redraws the scene mirrored into double-buffered display lists, plus reflection queries.
 #include "common.h"
 
 typedef struct {

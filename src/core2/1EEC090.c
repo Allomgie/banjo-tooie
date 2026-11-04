@@ -1,3 +1,5 @@
+// Camera yaw component of the dynamic camera: prioritised timed yaw requests, angular approach
+// with acceleration and speed limit, yaw limit clamping and nudge offsets.
 // TU-NOTE: first of three objects split from the 0x1EEC090..0x1EEE680 range
 // (1EEC090, 1EEC780, 1EED8E0). The .rodata shows the object boundaries; the next
 // object starts at func_80112E90.
@@ -44,6 +46,7 @@ typedef struct {
 } Actor112D90;
 void func_80112D08(u8 *param_0, s32 param_1, f32 param_2, f32 param_3);
 
+// Camera yaw component: rotation requests with priority, update and limits.
 s32 func_801127A0()
 {
     return 0x24;
@@ -54,6 +57,7 @@ void func_801127A8(PlayerState *camera, f32 *out)
     func_80112550(camera, out);
 }
 
+// Generic angular approach helpers (accelerate toward a target angle with a speed limit).
 void func_801127C8(f32 target_yaw, f32 *yaw, f32 *speed, f32 unk_0, f32 unk_1)
 {
     f32 diff;

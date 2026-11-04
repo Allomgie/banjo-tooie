@@ -1,3 +1,5 @@
+// Probably a Witchyworld shock pad switch: plays a camera pod and spawns a shock-jump pad
+// (actor 0x210). Same code as castleshockpadswit.c, only flag and camera pod differ.
 #include "common.h"
 
 extern int D_80800170_chwitchyshockpadswitch[];

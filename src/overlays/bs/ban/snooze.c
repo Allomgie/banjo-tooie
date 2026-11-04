@@ -1,3 +1,4 @@
+// Banjo-solo Snooze Pack states: Banjo sleeps in his backpack, regaining one health per second.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

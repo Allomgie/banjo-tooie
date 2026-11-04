@@ -1,3 +1,4 @@
+// gz crash screen thread page: table of the game's threads with state, priority, PC, SP and queue.
 #include "common.h"
 
 typedef struct {

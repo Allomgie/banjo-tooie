@@ -1,3 +1,5 @@
+// The Oogle Boogles, the caveman tribe in Terrydactyland: three cold, hungry cavemen need their
+// fire pits lit and food handed over; once all are warm and fed, one gives jiggy 0x2D.
 #include "common.h"
 
 extern int D_80801A5C_chnicecavemen[];
@@ -105,6 +107,7 @@ int func_80801508_chnicecavemen();
 int func_80801580_chnicecavemen();
 void func_80800CC8_chnicecavemen();
 
+// Caveman actor (three variants): dialogs, food hand-over, warm-up palette, messages, cues.
 int *chnicecavemen_entrypoint_0()
 {
     return D_80801A5C_chnicecavemen;
@@ -748,6 +751,7 @@ Actor *actor;
     return func_800F640C(player, 0x3CA) > 0 || func_800F640C(player, 0x3CB) > 0;
 }
 
+// Fire pit: a fire hit lights it; other messages go to the fire effect.
 void func_80801604_chnicecavemen(u8 *actor)
 {
     u32 variant;

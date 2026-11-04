@@ -1,3 +1,5 @@
+// Drone mode "fall death": the player fell out of the world; plays the fall anim, freezes the
+// camera, then runs the shared death sequence (basudie).
 #include "common.h"
 
 extern void _badata_entrypoint_6(void *param_0, s32 *local_1, s32 *local_2, f32 *local_3,

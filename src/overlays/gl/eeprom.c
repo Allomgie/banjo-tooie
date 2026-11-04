@@ -1,13 +1,17 @@
+// EEPROM access: whole 8-byte block writes and reads under the SI bus lock, plus an
+// anti-tamper value used by the ch/nests and gldb overlays.
 #include "common.h"
 
 extern s32 D_8007DA60;
 
+// Obfuscated anti-tamper value.
 // Anti-tamper value; the top byte is 0x10 when untouched.
 s32 gleeprom_entrypoint_0(void)
 {
     return *(s32 *) ((s8 *) &D_8007DA60 + 0xF0) ^ 0xBD1F0416;
 }
 
+// 16 Kbit EEPROM block write and read.
 // Writes one 8-byte EEPROM block; the address is offset / 8.
 int gleeprom_entrypoint_1(s32 offset, s32 data, u32 *length)
 {

@@ -1,3 +1,5 @@
+// This seems to be Kazooie's charged spring jump: a sparkle helper (also used by kaz/jump), a short
+// jump with a charge window and the high launch, with feathery-flap and dive exits.
 #include "common.h"
 #include "overlays/bs/kaz/shock.h"
 

@@ -1,3 +1,5 @@
+// Probably the cheat-code handling: activation helpers for the cheat table, plus cheat effects on
+// egg/feather capacities (infinite, doubled or normal), gated by the matching learned ability.
 #include "common.h"
 
 // TU-NOTE: D_8011B5B8 is the cheat table, 4 x u16 per cheat: unlock flag, disabled flag, active flag, value.

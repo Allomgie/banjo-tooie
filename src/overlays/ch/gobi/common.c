@@ -1,3 +1,5 @@
+// Shared Gobi (camel) helper: plays sound effects for his animations 0x221-0x223 (spit, grunt,
+// breathing), some suppressed while a dialog is open. Used by both Gobi actors.
 #include "common.h"
 
 extern u8 D_8080021C_chgobicommon[];

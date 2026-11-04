@@ -1,3 +1,5 @@
+// Probably the info-bar value renderers: number, value/max and h:mm:ss time text, aligned
+// left or right with slide-in offset and fade, plus the width of each format.
 #include "common.h"
 
 extern void func_800B8CBC(u8, u8, u8);

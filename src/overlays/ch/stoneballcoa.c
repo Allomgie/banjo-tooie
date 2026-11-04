@@ -1,3 +1,5 @@
+// Most likely the Mayan Kickball coach: faces the player and, if the player is a Stony, talks about
+// the next round (chosen by the won-round flags); otherwise warns to transform first.
 #include "common.h"
 
 extern u8 D_808003B8_chstoneballcoach[];

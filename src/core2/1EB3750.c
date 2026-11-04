@@ -1,3 +1,5 @@
+// Game-flag storage: byte-array bit helpers, the global flag API over six flag blocks, save
+// buffer serialization and a small heap-allocated bitset.
 #include <ultra64.h>
 #include "memory.h"
 #include "core1/1E29B60.h"
@@ -20,6 +22,7 @@ u8 D_8012C78C[6];
 #define D_8012C770_1_LENGTH (176 / 8)
 #define D_8012C770_2_LENGTH (256 / 8)
 
+// Byte-array bit helpers and the heap-allocated bitset.
 // Returns a single bit from a byte array.
 s32 bitfield_get_bit(u8 *array, s32 index)
 {
@@ -64,6 +67,7 @@ void bitfield_set_n_bits(u8 *array, s32 start_index, s32 set, s32 length)
     }
 }
 
+// GameFlag get/set API, flag block alloc/free/reset and save-data copy in/out.
 void func_800D9FFC(void)
 {
     s32 i;

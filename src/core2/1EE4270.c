@@ -1,3 +1,5 @@
+// Generic actor locomotion and physics step: packed sub-steps (motion, gravity, floor, ceiling,
+// walls), pushing overlapping actors apart, obstacle steering, killing actors that fall too far.
 #include "common.h"
 
 extern u32 func_8010A698();

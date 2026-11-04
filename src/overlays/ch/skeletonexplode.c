@@ -1,3 +1,5 @@
+// Skeleton explode effect: copies another actor's model, splits it into one piece per bone, throws
+// the pieces with random spin, bounce sounds per material, and fades them out. Used by few actors.
 #include "common.h"
 #include "core2/1EC8070.h"
 

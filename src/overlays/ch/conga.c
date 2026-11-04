@@ -1,3 +1,5 @@
+// Probably Conga the ape, a Witchyworld NPC holding a Big Top ticket: dialog depends on the
+// player's egg abilities, and the right hit makes him hand over the ticket.
 #include "ch/conga.h"
 
 extern int D_808006A0_chconga[];

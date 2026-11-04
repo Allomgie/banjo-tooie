@@ -1,3 +1,5 @@
+// Claw clamber boots wall attach: probes for steep walls, finds the clamber marker spline,
+// snaps the player onto it and orients the player to the wall normal.
 #include "common.h"
 #include "playerstate.h"
 

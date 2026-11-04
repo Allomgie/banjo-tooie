@@ -1,3 +1,5 @@
+// Probably the boulders Bill Drill can break (three actor kinds), each remembered as broken by a
+// per-instance flag. One variant hides a reward; one instance also knocks the player back.
 #include "common.h"
 
 extern int D_80800540_chbilldrillboulder[];

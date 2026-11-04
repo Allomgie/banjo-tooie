@@ -1,3 +1,5 @@
+// Old King Coal, the boss inside Chuffy's boiler (Glitter Gulch Mine): intro text, a multi-phase
+// fight with attacks and hit reactions, health HUD, camera pods, defeat explosion and flag.
 #include "common.h"
 
 extern int D_80802C0C_chboilerboss[];

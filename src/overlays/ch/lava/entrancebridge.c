@@ -1,3 +1,5 @@
+// Bridge to the Hailfire Peaks entrance: on message 0x60 from its switch it slides out with
+// sound, camera shake and rumble. Starts extended when FLAG_391 is set.
 #include "common.h"
 
 extern int D_80800230_chlavaentrancebridge[];

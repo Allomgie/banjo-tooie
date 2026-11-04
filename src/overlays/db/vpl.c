@@ -1,3 +1,5 @@
+// Probably the model "vpl" section: record lookup by id, and a vertex copier into the map
+// vertex buffer that tints the colors.
 #include "common.h"
 
 typedef struct {

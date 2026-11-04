@@ -1,3 +1,5 @@
+// Probably the fire-spitting gargoyle of Hailfire Peaks Lava Side: turns its head to the player
+// and fires a ballistic fireball; an egg hit destroys it.
 #include "common.h"
 
 typedef struct {

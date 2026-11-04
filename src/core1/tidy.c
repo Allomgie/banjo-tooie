@@ -1,3 +1,5 @@
+// Probably the "tidy" background thread: when signalled it runs heap and overlay
+// defragmentation (do_tidy). Also has create/destroy, start/stop, busy query and priority setter.
 #include <ultra64.h>
 #include "threads.h"
 

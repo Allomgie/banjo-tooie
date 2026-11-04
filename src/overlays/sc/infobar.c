@@ -1,3 +1,5 @@
+// HUD info-bar object behind each counter slot: slide state machine, value/max/mode setters,
+// item cross-fade, icon sprite animation and drawing via the per-style value renderers.
 #include "common.h"
 
 // Icon table entry (D_808008B0), indexed by item.

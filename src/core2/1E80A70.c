@@ -1,3 +1,6 @@
+// Most likely the in-game core loop: game state D_80127630 (mode, warp request, timer), init and
+// shutdown, per-frame update and draw, map load/unload, warps, do_tidy defragmentation and the
+// split-screen viewport table D_80127688.
 #include "core2/1E80A70.h"
 extern u32 D_80127650;
 
@@ -115,11 +118,13 @@ typedef struct {
 // Viewport table: 4 player viewports plus the full-screen one at index 4.
 extern unk_D_80127688 D_80127688[];
 
+// Frame draw orchestration, gfx buffer heads, split-screen viewport layout and iteration.
 s32 *func_800A7180(void)
 {
     return &D_80127658;
 }
 
+// Map load/unload sequencing, full map transition and default camera after load.
 void func_800A718C(void)
 {
     func_800E3BFC(0.0f, 0.0f, 0.0f);
@@ -128,6 +133,7 @@ void func_800A718C(void)
     func_800E3CE8();
 }
 
+// Global defragment/flush of all subsystem heaps (do_tidy).
 int func_800A71E0()
 {
     s32 i;
@@ -244,6 +250,7 @@ void func_800A73F4(s32 unk_0, s32 unk_1)
     func_800A89BC((((s32) (*(s32 *) ((s8 *) &D_80127658 + 8) - start_8) >> 4) * 0x10) * 0);
 }
 
+// Warp/exit requests (target map, entrance, transition type) and section-change checks.
 // Queues a mode change; applied on the next update.
 void func_800A7584(mode, unk_1) s32 mode;
 s32 unk_1;
@@ -252,6 +259,7 @@ s32 unk_1;
     D_80127630.arr[0x1b] = unk_1;
 }
 
+// Game mode state machine, init/shutdown, per-frame update, game timer and mode getters.
 // Switches the game mode (2 loading, 3 playing, 4 paused, 5 special sequence).
 // Header: core2/1E80A70.h must declare this and func_800A76F4 with s32 arguments.
 void func_800A759C(s32 mode, s32 unk_1)
@@ -751,6 +759,7 @@ int func_800A8264(void)
     return D_80127630.D_80127630_unk.unk12 != 0;
 }
 
+// Secret controller button sequence that arms the crash debugger.
 // Matches controller input against the secret sequence D_8011A3F8; completing it
 // sets D_8011A3F0, which enables the crash debugger.
 void func_800A8278(void)

@@ -1,3 +1,6 @@
+// Mingy Jongo, the Cloud Cuckooland boss disguised as Mumbo: intro and reveal, then a multi-phase
+// fight where the robot fires homing spells, loses parts and explodes, dropping jiggy 0x47.
+// Supports boss retry and replay mode; also holds three helper actors (spell, prop, flash).
 #include "common.h"
 
 extern void _subaddieskeleton_entrypoint_2(Unk80132ED0 *, s32, f32 *);
@@ -133,6 +136,7 @@ void func_808000BC_chevilmumbo();
 extern void func_801018A4(), func_80105834(), func_80107C2C(), func_80108ED0(),
     func_8080129C_chevilmumbo(), func_808023E8_chevilmumbo(), func_8080241C_chevilmumbo();
 
+// Boss state machine: intro, phases, damage, defeat, jiggy, retry.
 void func_80800000_chevilmumbo(Actor *actor)
 {
     u8 *data;
@@ -1502,6 +1506,7 @@ int chevilmumbo_entrypoint_0()
     return (int) &D_80804460_chevilmumbo;
 }
 
+// Homing spell projectile actor.
 void func_8080300C_chevilmumbo(Actor *actor)
 {
     if (actor->unk6C_0) {
@@ -1648,6 +1653,7 @@ int chevilmumbo_entrypoint_1()
     return (int) &D_808044F0_chevilmumbo;
 }
 
+// Arena prop that moves between two positions when flags 0xA32/0xA33 change.
 void func_8080362C_chevilmumbo(Actor *actor, s32 state)
 {
     func_80102424(actor, state);
@@ -1742,6 +1748,7 @@ int chevilmumbo_entrypoint_2()
     return (int) &D_80804544_chevilmumbo;
 }
 
+// Short scaled, alpha-faded flash sprite attached to the boss.
 void func_8080398C_chevilmumbo(u8 *effect, s32 param_1)
 {
     f32 rotation[4];

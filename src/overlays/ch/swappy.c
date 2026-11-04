@@ -1,3 +1,5 @@
+// Possibly 'Swappy': an actor that exists only while Banjo and Kazooie are split up. It fades in,
+// keeps solo Banjo out, asks for interaction 0x41 on touch and emits a sparkle trail.
 #include "common.h"
 
 typedef struct {

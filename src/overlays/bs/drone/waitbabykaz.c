@@ -1,3 +1,5 @@
+// Drone mode "wait for Clockwork Kazooie": Banjo-Kazooie stand idle while the clockwork egg is
+// controlled; damage is forwarded to it, and the mode ends when no clockwork slot exists.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 

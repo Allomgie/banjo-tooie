@@ -1,3 +1,5 @@
+// Probably a mine lamp prop: on init it takes over the nearest static prop, and when drawn it
+// shows either the normal model or a lit version with two glow models.
 #include "common.h"
 
 extern int D_80800240_chmineproplight[];

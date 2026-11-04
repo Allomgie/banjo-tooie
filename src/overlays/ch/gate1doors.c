@@ -1,3 +1,5 @@
+// Possibly a pair of linked gate doors that find each other; an attack hit on either one sets a
+// game flag and swings both open with debris and sound. They stay open on later visits.
 #include "common.h"
 
 extern int D_808004B8_chgate1doors[];

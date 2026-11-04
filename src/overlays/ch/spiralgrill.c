@@ -1,3 +1,5 @@
+// Spiral Mountain grate hiding the pink Stop 'n' Swop egg: an egg hit shatters it, plays a
+// camera shot and sets FLAG_033_PHYSICAL_SM_PinkSnsEggGrateBroken.
 #include "common.h"
 
 extern int D_80800180_chspiralgrill[];

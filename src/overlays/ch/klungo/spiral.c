@@ -1,3 +1,5 @@
+// One reading: a non-fight Klungo encounter in Spiral Mountain. He waits for the player, runs a
+// camera pod and dialog, walks off along a path, sets a flag and deletes himself.
 #include "common.h"
 
 // TU-NOTE: the .data tables of this overlay are defined in this file. They hold pointers to

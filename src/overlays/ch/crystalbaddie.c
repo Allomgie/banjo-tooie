@@ -1,3 +1,5 @@
+// Probably a crystal enemy: idles on a route, chases and rams the player when close and
+// visible, returns to its route, and shatters into pieces on death.
 #include "common.h"
 
 extern int D_80800664_chcrystalbaddie[];

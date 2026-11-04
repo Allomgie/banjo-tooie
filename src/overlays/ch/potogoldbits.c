@@ -1,3 +1,5 @@
+// Probably the entrance pieces of the Pot O' Gold in Cloud Cuckooland: a switch, a lid or
+// platform actor that opens and closes on messages, and a door that signals when you leave.
 #include "common.h"
 
 #define OD(n) (((f32 *) param_0->actorData)[n])

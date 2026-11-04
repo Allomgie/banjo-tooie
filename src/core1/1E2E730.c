@@ -1,3 +1,5 @@
+// Most likely the music players: 6 sequence-player slots that load, start, stop, crossfade
+// and set the volume of music tracks, with a per-frame state machine for deferred changes.
 #include "common.h"
 
 // TU-NOTE: D_80079FA0 holds 6 slots of 0x274 bytes; D_8007AE58 follows it (also used as the loop end and as the

@@ -1,3 +1,5 @@
+// Mumbo casting a spell on a Mumbo pad: snaps to the pad, raises the wand, loops the cast
+// until the completion flag is set, then returns to idle.
 #include "overlays/bs/mum/cast.h"
 #include "overlays/ba/anim.h"
 #include "core2/physics.h"

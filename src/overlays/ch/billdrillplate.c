@@ -1,3 +1,5 @@
+// Bill Drill plates in Grunty Industries (three actor kinds): bolts that pop out when drilled,
+// a plate held by four bolts that lifts off once all are drilled, and a cover that explodes.
 #include "common.h"
 #include "types.h"
 #include "macros.h"

@@ -1,3 +1,5 @@
+// Egg particle presets: impact puffs per effect kind, plus spawn helpers for fire, ice, golden and
+// clockwork egg trails and explosion smoke. Used by the egg actors and the Dragon Brothers boss.
 #include "common.h"
 extern s32 func_800BABB8(s32, f32 *, f32 *, f32, s32 *);
 

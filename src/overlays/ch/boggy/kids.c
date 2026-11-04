@@ -1,3 +1,5 @@
+// Shared helper for Boggy's three lost kids: randomly picks one of three hiding spots per kid
+// on first call, then tells a kid actor whether it is the instance at the chosen spot.
 #include "common.h"
 
 extern u16 D_808000E0_chboggykids[];

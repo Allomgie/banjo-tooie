@@ -1,3 +1,5 @@
+// Most likely a breakable Mayahem Temple door piece: when hit it explodes ahead of itself with
+// debris and a sound, and sets flag 0xC9.
 #include "common.h"
 
 extern u8 D_80800100_chtemplebrokendoorpiece[];

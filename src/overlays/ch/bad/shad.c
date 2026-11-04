@@ -1,3 +1,5 @@
+// Probably the drop-shadow actor ("badshad") for actors and NPCs: follows its owner, finds the
+// floor below, aligns to it and draws a shadow model that scales and fades with height.
 #include "common.h"
 
 extern int D_80800A10_chbadshad[];

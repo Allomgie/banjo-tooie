@@ -1,3 +1,6 @@
+// Electromagnet hazard of the Electromagnetic Chamber: it pulls the player in, cycles charge and
+// discharge with sparks and swings a hanging plate. Also holds Mumbo's EMP spell from pad 0xA,
+// which switches it off for 90 s, and the final off state.
 #include "common.h"
 
 extern s32 func_800B53A4(s32);

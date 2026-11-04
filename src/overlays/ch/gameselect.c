@@ -1,3 +1,6 @@
+// Most likely the Game Select front-end (file select / main menu): a table-driven menu state
+// machine with slot objects, cursor, info panels, options and camera rig, plus the multiplayer
+// tournament scoreboard actor (entrypoint_6).
 #include "common.h"
 #include "types.h"
 #include "macros.h"
@@ -348,6 +351,7 @@ void func_808075D0_chgameselect();
 void func_80807A10_chgameselect();
 extern void func_801018A4(), func_80102EC0(), func_80107C2C(), func_80801AC4_chgameselect();
 
+// Game-select controller, menu states, slot objects, cursor, panels, save handling, camera rig.
 int chgameselect_entrypoint_0()
 {
     return (int) &D_80807FD8_chgameselect;
@@ -3665,6 +3669,7 @@ int func_80806BD4_chgameselect(s32 param_0, s32 param_1, s32 param_2)
     func_80806AF4_chgameselect(param_1, param_2, prev);
 }
 
+// Multiplayer tournament scoreboard actor: one panel per player, sorted scores, winner highlight.
 int *chgameselect_entrypoint_6()
 {
     return &D_808084B4_chgameselect;

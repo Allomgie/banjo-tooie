@@ -1,7 +1,9 @@
+// Most likely the spline "cutscene script" interpreter: each actor on a spline runs a timed
+// command list of about 40 opcodes (animation, movement, spawns, flags, sound, camera, waits).
+// A script is { type, (time, opcode << 16 | arg, extra words...)..., 2 }.
+// type 0x10005: times in frames, type 0x10006: times in 1/4000000 units.
 #include "common.h"
 
-// Spline script interpreter. A script is { type, (time, opcode << 16 | arg, extra words...)..., 2 }.
-// type 0x10005: times in frames, type 0x10006: times in 1/4000000 units.
 typedef struct {
     u8 pad_0[0x40];
     u32 unk_40_0 : 9;

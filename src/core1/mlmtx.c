@@ -1,3 +1,5 @@
+// Rare's float matrix stack (mlMtx*): push/pop, multiply, rotate/translate/scale, point and
+// AABB transforms, and conversion to an N64 fixed-point Mtx.
 #include "core1/mlmtx.h"
 
 MtxF D_8007B4F0[0x1F];
@@ -6,6 +8,7 @@ MtxF *s_mtx_stack;
 f32 func_800137F4(f32);
 f32 func_80013788(void);
 
+// Float matrix stack, point/vector/AABB transforms and TRS composition helpers.
 // Copies the top of the matrix stack to dst.
 void mlMtxGet(MtxF *dst)
 {
@@ -31,6 +34,7 @@ MtxF *func_80018BB4(void)
     return s_mtx_stack - 1;
 }
 
+// Conversion of the top matrix to a fixed-point Mtx, with a translation range check.
 // Returns 1 if any translation component is outside the range of a fixed-point Mtx.
 s32 func_80018BC4(void)
 {

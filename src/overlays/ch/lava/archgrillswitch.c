@@ -1,3 +1,4 @@
+// Possibly a stub actor type next to the arch grill: it only provides an ActorInfo, nothing else.
 #include "common.h"
 
 extern int D_80800030_chlavaarchgrillswitch[];

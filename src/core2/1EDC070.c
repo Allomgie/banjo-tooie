@@ -1,3 +1,5 @@
+// Actor orientation helpers: set and turn toward target pitch/yaw, facing tests, rotation
+// get/set, mirrored rotation for flipped actors and floor-slope alignment.
 #include "common.h"
 
 extern f32 D_80135AA0;

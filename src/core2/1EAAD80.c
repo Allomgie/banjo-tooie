@@ -1,3 +1,6 @@
+// Player inventory counters for 21 item ids from 0x40 (eggs, feathers, ...), stored XORed with code
+// words and relocated to another heap side periodically as anti-cheat. Handles per-item capacities,
+// clamped add/sub, HUD refresh and big-endian save (de)serialization.
 #include "core2/1EAAD80.h"
 
 extern void *heap_alloc_sided(s32, s32);
@@ -20,6 +23,7 @@ extern void func_800D2770(s32, s32);
 extern s16 D_8011AF52[][2];
 extern u8 D_8011AE50[11];
 
+// Inventory item counts, capacities, HUD refresh and save (de)serialization.
 // Item counts are stored XORed with code words of func_800D1A04.
 void func_800D1490(void)
 {
@@ -29,6 +33,7 @@ void func_800D1490(void)
     }
 }
 
+// Heap alloc/free/defrag and periodic anti-cheat relocation of the counter array.
 s32 func_800D1510(void)
 {
     D_8012B250.side = 0;

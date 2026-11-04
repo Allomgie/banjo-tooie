@@ -1,3 +1,5 @@
+// Hit reaction lookup (PlayerState+0xEC): finds the table entry for a hit kind and exposes its
+// class, vertical/horizontal speed and gravity to the knock-back, spin and vehicle states.
 #include "common.h"
 
 typedef struct {

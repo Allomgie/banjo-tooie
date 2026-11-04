@@ -1,3 +1,5 @@
+// Bee wing buzz loop: one looping sound whose pitch and volume glide toward targets, with a small
+// triangle-wave pitch wobble.
 #include "common.h"
 #include "overlays/ba/buzz.h"
 #include "core2/1E9A960.h"

@@ -1,3 +1,6 @@
+// Thrust mover (baphysics): velocity steered by yaw and pitch with drag and a gravity floor,
+// integrated each frame; used by the submarine and Talon Torpedo states.
+
 #include "common.h"
 
 extern f32 func_8009BFCC(s32);

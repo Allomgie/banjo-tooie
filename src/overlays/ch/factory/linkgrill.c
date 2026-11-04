@@ -1,3 +1,5 @@
+// Most likely three GI actors: a breakable grille (flag 0x1C0+index) that explodes on a hit,
+// a floor switch for flag 0x1D9 that messages actor 0x3FA, and a grate opening with flag 0x1D9.
 #include "ch/factory/linkgrill.h"
 
 extern u8 D_80800244_chfactorylinkgrill[];

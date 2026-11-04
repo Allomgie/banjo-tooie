@@ -1,3 +1,5 @@
+// Player dust and smoke puffs (PlayerState+0x5C): running/skid trails, landing rings, slide
+// dust and generic puffs with configurable velocity, scale and alpha.
 #include "common.h"
 #include "playerstate.h"
 #include "core2/1E93440.h"

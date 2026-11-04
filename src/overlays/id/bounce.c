@@ -1,3 +1,6 @@
+// Bouncy-surface map-mesh effect: vertices act as damped springs that sag around the player and
+// push the player back up, with a launch speed that depends on the transformation.
+
 #include "common.h"
 
 typedef struct {

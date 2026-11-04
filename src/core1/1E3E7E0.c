@@ -1,3 +1,4 @@
+// alSynStartVoiceParams: queues a voice start with wavetable, pitch, volume, pan and FX mix.
 #include "common.h"
 
 typedef struct {

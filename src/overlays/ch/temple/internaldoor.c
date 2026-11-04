@@ -1,3 +1,5 @@
+// Probably the internal doors of Targitzan's temple: several variants built with chdoormake,
+// opening angle from a table, some start open, and a linked prop/door id is attached on load.
 #include "common.h"
 
 extern int D_808001C0_chtempleinternaldoor[];

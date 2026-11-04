@@ -1,3 +1,5 @@
+// Stop 'n' Swop eggs (pink, blue, yellow): sparkling, collectible egg actors that set their flags
+// and give an inventory item; the yellow egg also has a hatch sequence.
 #include "ch/secreteggs.h"
 
 typedef struct unkEggData {

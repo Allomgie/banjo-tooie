@@ -1,3 +1,5 @@
+// Most likely the walking digger minion (actor 0x131): shared walking-baddie AI once active,
+// random attack mode 2 or 3, and on message 0xB6 it kicks up a ring of 8 dust particles.
 #include "common.h"
 
 extern int D_80800408_chdiggerground[];

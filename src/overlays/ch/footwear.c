@@ -1,3 +1,5 @@
+// Probably the special-shoe pickups (five kinds): a hovering shoe pair the player puts on by
+// touching it if the move is learned, else a hint dialog; it respawns after the shoes wear off.
 #include "common.h"
 
 typedef struct {

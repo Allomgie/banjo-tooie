@@ -1,3 +1,5 @@
+// Probably a grille in Bottles' house built with the shared door maker; it opens in a
+// cutscene and is removed once the Tower of Tragedy is finished or a flag is set.
 #include "common.h"
 
 extern int D_808000F0_chbottlesplantgrill[];

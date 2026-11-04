@@ -1,3 +1,4 @@
+// alCSPSetTempo: posts a tempo meta event (0xFF 0x51, microseconds per quarter) to the player.
 #include "common.h"
 
 typedef struct {

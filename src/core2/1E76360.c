@@ -1,3 +1,6 @@
+// Accessors for the player state descriptor table (12-byte entries: class, flags, handler).
+// The handler gets a message: 0 exit, 1 enter, 2 update, 3 interrupt.
+
 #include "core2/1E76360.h"
 
 extern s32 D_80117F34[];

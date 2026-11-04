@@ -1,3 +1,6 @@
+// Most likely the vehicle-riding states: a generic ride that locks the player to a vehicle actor,
+// an interrupt-driven ride animation table, a second pose, the hand-cart ride and the
+// flying-saucer ride with first-person aiming.
 #include "common.h"
 #include "overlays/ba/playerstate.h"
 #include "core2/anctrl.h"

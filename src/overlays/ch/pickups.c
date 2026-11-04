@@ -1,3 +1,5 @@
+// Generic thrown-item pickups (11 actor kinds) that an NPC tosses to the player in a ballistic arc.
+// On landing they can be collected for an inventory item; while held they follow the player.
 #include "ch/pickups.h"
 
 #define PICKUPS_DATA(arg0) ((PickupsData *) (arg0->actorData))

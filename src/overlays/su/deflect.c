@@ -1,3 +1,5 @@
+// Keep-out volume (sphere, cylinder or box) around an NPC: pushes out players and the camera
+// and deflects eggs and projectiles that enter it.
 #include "common.h"
 
 extern s32 func_800F4F34(s32, f32 *, f32, f32);

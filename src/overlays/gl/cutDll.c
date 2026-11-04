@@ -1,3 +1,5 @@
+// Cutscene director: a 6-state machine that warps to the cutscene map, puts players under cutscene
+// control and warps back. Many actor overlays start cutscenes and query whether one is running.
 #include "gl/cutDll.h"
 #include "common.h"
 
