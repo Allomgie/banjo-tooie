@@ -1,5 +1,24 @@
 # Banjo Tooie Decomp
 
+This is a byte-matching decompilation of Banjo-Tooie (N64, USA): every function compiles
+to the original machine code, and `make check` rebuilds the ROM byte for byte. It is a
+hybrid project that has been in the works for a long time: part of the matching was done
+by hand, much of it with AI tools developed as part of a research project (see
+[Use of AI tools](#use-of-ai-tools)).
+
+It started as a fork of [Mr-Wiseguy/banjo-tooie](https://github.com/Mr-Wiseguy/banjo-tooie),
+which had 13 % of the code matched at the time; credit for that base goes to its authors
+and contributors. This fork is maintained independently and is not affiliated with the
+upstream project or the Banjo: Recompiled team.
+
+The source has been cleaned up (dead code removed, locals named, a short summary at the
+head of every file), but the documentation is deliberately minimal. A separate project
+building on this decompilation will take it further, and further work may happen in
+other repositories.
+
+Anyone is welcome to build on this work. If you do, a link back to this repository is
+much appreciated.
+
 ![code Progress]
 ![boot Progress]
 ![core1 Progress]
@@ -74,4 +93,4 @@ Claude Code (Claude Opus) was used as an agentic assistant for assembling transl
 
 On Mr-Wiseguy's repository I only pushed functions I matched by hand. Progress that was developed with AI assistance lives in this fork.
 
-The project is still in its byte-matching phase, so the sources still contain artifacts of that process, such as probes left over from the decomp permuter. Once everything is matched, a separate fork will provide clean, equivalent functions that no longer aim for byte accuracy.
+After the matching, the sources were cleaned up in two steps, again under the same rule. First, tooling removed dead code left over from probes and permuter runs, accepting a change only when the object it builds stayed identical. Then Claude Sonnet agents named locals and parameters and rewrote the comments; a guard accepted only renames and comment changes, and only when the object stayed identical. Some constructs that exist only for the match remain and are marked `// Matching:`. A separate project will provide clean, equivalent functions that no longer aim for byte accuracy.
