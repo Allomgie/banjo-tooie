@@ -5,7 +5,7 @@
 typedef struct {
     s32 pad[2];
     s16 unk8;
-} Knoten_800DC634;
+} GeoNode_800DC634;
 extern f32 D_8012CEAC;
 extern f32 D_8012CEA8;
 void func_800193C4(void *param_0, void *param_1);
@@ -18,12 +18,12 @@ void mlMtxPop(void);
 typedef struct {
     s32 pad[2];
     s16 unk8;
-} Knoten_800DC740;
+} GeoNode_800DC740;
 typedef struct {
     s32 unk0;
     s32 unk4;
     s16 unk8;
-} Knoten_800DC84C;
+} GeoNode_800DC84C;
 extern s32 D_8012CE58;
 extern s32 D_8012CE98;
 extern f32 D_8012CEC8;
@@ -74,7 +74,7 @@ typedef struct {
 typedef struct {
     s32 pad[7];
     s32 unk1C;
-} Knoten_800DD214;
+} GeoNode_800DD214;
 extern s16 D_8012CA38;
 extern s32 D_8012CF60;
 extern u8 D_8012CF70[];
@@ -116,7 +116,7 @@ typedef struct {
 typedef struct {
     s32 pad[5];
     s16 unk14;
-} Knoten_800DDC28;
+} GeoNode_800DDC28;
 typedef struct {
     s32 cmd_0;
     s32 size_4;
@@ -153,13 +153,13 @@ extern Union_D_8012C948 D_8012C948;
 typedef struct {
     s16 unk0;
     s16 unk2;
-} Eintrag;
+} NodeEntry;
 typedef struct {
     s32 cmd_0;
     s32 size_4;
     s16 unk8;
     s16 unkA;
-    Eintrag unkC[1];
+    NodeEntry unkC[1];
 } GeoCmdB;
 typedef struct {
     s32 cmd_0;
@@ -328,7 +328,7 @@ void func_800DC634(void *buffers, void *node)
         *gfx_cmd = 0xDA380002;
         gfx_cmd[1] = buf_words[1];
         buf_words[1] += 0x40;
-        func_800DE2A4(buffers, (char *) ((s32) node + (s32) ((Knoten_800DC634 *) node)->unk8));
+        func_800DE2A4(buffers, (char *) ((s32) node + (s32) ((GeoNode_800DC634 *) node)->unk8));
         mlMtxPop();
         gfx_cmd = (u32 *) buf_words[0];
         buf_words[0] += 8;
@@ -361,7 +361,7 @@ void func_800DC740(void *buffers, void *node)
         *gfx_cmd = 0xDA380002;
         gfx_cmd[1] = buf_words[1];
         buf_words[1] += 0x40;
-        func_800DE2A4(buffers, (char *) ((s32) node + (s32) ((Knoten_800DC740 *) node)->unk8));
+        func_800DE2A4(buffers, (char *) ((s32) node + (s32) ((GeoNode_800DC740 *) node)->unk8));
         mlMtxPop();
         gfx_cmd = (u32 *) buf_words[0];
         buf_words[0] += 8;
@@ -393,7 +393,7 @@ void func_800DC84C(u8 *buffers, u8 *node)
         ((s32 *) push_cmd)[0] = 0xDA380002;
         ((s32 *) push_cmd)[1] = *(s32 *) (buffers + 4);
         *(s32 *) (buffers + 4) = *(s32 *) (buffers + 4) + 0x40;
-        func_800DE2A4(buffers, (u8 *) ((s32) node + (s32) ((Knoten_800DC84C *) node)->unk8));
+        func_800DE2A4(buffers, (u8 *) ((s32) node + (s32) ((GeoNode_800DC84C *) node)->unk8));
         mlMtxPop();
         pop_cmd = (*(u64 **) buffers)++;
         ((s32 *) pop_cmd)[0] = 0xD8380002; ((s32 *) pop_cmd)[1] = 0x40;
@@ -711,7 +711,7 @@ void func_800DD214(u8 *buffers, u8 *node)
             *(s16 *) ((s8 *) &D_8012CA38 + 2) = (s16) (*(s16 *) ((s8 *) &D_8012CA38 + 2) + 1);
             if (*(s16 *) ((s8 *) &D_8012CA38 + 0) == *(s16 *) ((s8 *) &D_8012CA38 + 2)) {
                 func_800DE2A4(buffers,
-                              (u8 *) ((s32) node + (s32) ((Knoten_800DD214 *) node)->unk1C),
+                              (u8 *) ((s32) node + (s32) ((GeoNode_800DD214 *) node)->unk1C),
                               node);
             }
         } else {
@@ -723,7 +723,7 @@ void func_800DD214(u8 *buffers, u8 *node)
                 if (dist_sq <= (max_dist * max_dist)) {
                     func_800DE2A4(
                         buffers,
-                        (u8 *) ((s32) node + (s32) ((Knoten_800DD214 *) node)->unk1C),
+                        (u8 *) ((s32) node + (s32) ((GeoNode_800DD214 *) node)->unk1C),
                         node);
                 }
             }
@@ -1045,7 +1045,7 @@ void func_800DDC28(int buffers, s16 *node)
             box_max[i] = (f32) node_s16[i + 7] * D_8012C948.raw;
         }
         if (func_800E3D0C(box_min, box_max)) {
-            func_800DE2A4(buffers, (s16 *) ((u8 *) node + ((Knoten_800DDC28 *) node)->unk14));
+            func_800DE2A4(buffers, (s16 *) ((u8 *) node + ((GeoNode_800DDC28 *) node)->unk14));
         }
     }
 }

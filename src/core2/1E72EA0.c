@@ -15,14 +15,14 @@ extern void _bainvisible_entrypoint_5(PlayerState *, f32);
 typedef struct {
     s32 code;
     u8 pad_04[36];
-} Eintrag;
+} QueueEntry;
 typedef struct {
     u8 pad_00[8];
     f32 pos[3];
     s32 marker;
     s32 unk_18;
     u8 pad_1C[0x30];
-    Eintrag queue[5];
+    QueueEntry queue[5];
 } Sub;
 typedef struct {
     u8 pad_00[0xC0];

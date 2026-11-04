@@ -4696,19 +4696,19 @@ s32 actor;
     }
 }
 
-void func_80808948_chdiggerboss(param_0) Actor *param_0;
+void func_80808948_chdiggerboss(actor) Actor *actor;
 {
-    s32 local_0;
-    DiggerCleanupMarkers *local_1;
+    s32 i;
+    DiggerCleanupMarkers *markers;
 
-    local_1 = func_80100094(param_0, 0);
-    for (local_0 = 0; local_0 < 4; local_0++) {
-        if (local_1->local_0[local_0]) {
-            if (func_801069A4(local_1->local_0[local_0])) {
-                func_800FFA88(local_1->local_0[local_0]);
+    markers = func_80100094(actor, 0);
+    for (i = 0; i < 4; i++) {
+        if (markers->local_0[i]) {
+            if (func_801069A4(markers->local_0[i])) {
+                func_800FFA88(markers->local_0[i]);
 
 }
-local_1->local_0[local_0] = 0;
+markers->local_0[i] = 0;
 }
 }
 }

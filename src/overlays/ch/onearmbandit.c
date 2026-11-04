@@ -130,13 +130,13 @@ void func_80800018_chonearmbandit(u8 *actor)
     func_80800040_chonearmbandit();
 }
 
-int func_80800040_chonearmbandit(param_0)
-s32 param_0;
+int func_80800040_chonearmbandit(actor)
+s32 actor;
 {
-    s32 local_0;
-    local_0 = func_80100094(param_0, 1);
-    _subaddierouteDll_entrypoint_3(param_0, local_0 | 0, param_0 + 4);
-    _subaddierouteDll_entrypoint_1(param_0);
+    s32 data;
+    data = func_80100094(actor, 1);
+    _subaddierouteDll_entrypoint_3(actor, data | 0, actor + 4);
+    _subaddierouteDll_entrypoint_1(actor);
 }
 
 void func_80800A14_chonearmbandit(Actor *actor, f32 volume);
@@ -298,16 +298,16 @@ s32 func_8080063C_chonearmbandit(s32 actor, s32 unk_1)
     func_80101870(actor, unk_1);
 }
 
-void func_80800680_chonearmbandit(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800680_chonearmbandit(actor, state) Actor *actor;
+s32 state;
 {
-    func_80102424(param_0, param_1);
-    if (param_1 == 5) {
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80801354_chonearmbandit);
-        if (((OneArmBanditFlags *) param_0)->local_0) {
-            param_0->unk58 = 0.36f;
+    func_80102424(actor, state);
+    if (state == 5) {
+        _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80801354_chonearmbandit);
+        if (((OneArmBanditFlags *) actor)->local_0) {
+            actor->unk58 = 0.36f;
         } else {
-            param_0->unk58 = 1.2f;
+            actor->unk58 = 1.2f;
         }
     }
 }
@@ -400,47 +400,47 @@ void func_80800A14_chonearmbandit(Actor *actor, f32 volume)
     }
 }
 
-int func_80800AB8_chonearmbandit(param_0)
-Actor *param_0;
+int func_80800AB8_chonearmbandit(actor)
+Actor *actor;
 {
-    f32 local_1[3];
-    f32 local_0[3];
-    Actor *local_2;
-    f32 local_3;
-    if (!_subaddieskeleton_entrypoint_2(param_0->unk0, 4, local_0)) {
-        func_800EE7F8(local_0, param_0->position);
-        local_0[1] += param_0->scale * 60.0f;
+    f32 target[3];
+    f32 spawn_pos[3];
+    Actor *shot;
+    f32 yaw;
+    if (!_subaddieskeleton_entrypoint_2(actor->unk0, 4, spawn_pos)) {
+        func_800EE7F8(spawn_pos, actor->position);
+        spawn_pos[1] += actor->scale * 60.0f;
     }
-    local_2 = func_80108528(0x35B, local_0, (s32) param_0->rotation[1], &param_0);
-    func_80102FDC(local_2, param_0->scale);
-    func_8010D09C(func_800F54E4(), local_1, 0.8f);
-    local_1[1] += 60.0f;
-    if (((BanditFlags49 *) param_0)->local_2) {
-        local_3 = func_800136E4(func_800F1DF4(local_2->position, local_1));
-        if (func_800F20BC(local_3, param_0->rotation[1], 8.0f)) {
-            local_2->rotation[1] = local_3;
+    shot = func_80108528(0x35B, spawn_pos, (s32) actor->rotation[1], &actor);
+    func_80102FDC(shot, actor->scale);
+    func_8010D09C(func_800F54E4(), target, 0.8f);
+    target[1] += 60.0f;
+    if (((BanditFlags49 *) actor)->local_2) {
+        yaw = func_800136E4(func_800F1DF4(shot->position, target));
+        if (func_800F20BC(yaw, actor->rotation[1], 8.0f)) {
+            shot->rotation[1] = yaw;
         } else {
-            local_2->rotation[1] = param_0->rotation[1];
+            shot->rotation[1] = actor->rotation[1];
         }
     } else {
         s32 pad0;
-        local_2->rotation[1] = func_800136E4(func_800F1DF4(local_2->position, local_1));
-        local_3 = func_800F1DCC(local_2->rotation[1], param_0->rotation[1]);
-        if (local_3 < -60.0f) {
-            local_2->rotation[1] = param_0->rotation[1] - 60.0f;
-        } else if (local_3 > 60.0f) {
-            local_2->rotation[1] = param_0->rotation[1] + 60.0f;
+        shot->rotation[1] = func_800136E4(func_800F1DF4(shot->position, target));
+        yaw = func_800F1DCC(shot->rotation[1], actor->rotation[1]);
+        if (yaw < -60.0f) {
+            shot->rotation[1] = actor->rotation[1] - 60.0f;
+        } else if (yaw > 60.0f) {
+            shot->rotation[1] = actor->rotation[1] + 60.0f;
         }
     }
-    local_2->rotation[0] = func_800136E4(func_800F1828(local_2->position, local_1));
-    if (local_2->rotation[0] > 180.0f) {
-        if (local_2->rotation[0] < 350.0f) {
-            local_2->rotation[0] = 350.0f;
+    shot->rotation[0] = func_800136E4(func_800F1828(shot->position, target));
+    if (shot->rotation[0] > 180.0f) {
+        if (shot->rotation[0] < 350.0f) {
+            shot->rotation[0] = 350.0f;
         }
-    } else if (local_2->rotation[0] > 10.0f) {
-        local_2->rotation[0] = 10.0f;
+    } else if (shot->rotation[0] > 10.0f) {
+        shot->rotation[0] = 10.0f;
     }
-    func_80108944(local_2, param_0);
+    func_80108944(shot, actor);
 }
 
 s32 func_80800E78_chonearmbandit();
@@ -542,32 +542,32 @@ void func_80801040_chonearmbandit(ALSeqPlayer *actor, s32 unk_1)
                   *(ALVoiceState ***) ((char *) actor + 0x38), 0, anim);
 }
 
-void func_808010AC_chonearmbandit(param_0, param_1) void *param_0;
-void *param_1;
+void func_808010AC_chonearmbandit(actor, unused) void *actor;
+void *unused;
 {
-    func_800BBCB8((char *) param_0 + 4, (char *) param_0 + 4, *(void **) ((char *) param_0 + 0x38),
+    func_800BBCB8((char *) actor + 4, (char *) actor + 4, *(void **) ((char *) actor + 0x38),
                   6, &D_808013A4_chonearmbandit);
-    func_800C4AF0((char *) param_0 + 4, &D_808013DC_chonearmbandit);
-    func_8010A570(param_0);
-    func_800FFAB0(param_0);
+    func_800C4AF0((char *) actor + 4, &D_808013DC_chonearmbandit);
+    func_8010A570(actor);
+    func_800FFAB0(actor);
 }
 
-void func_80801114_chonearmbandit(param_0) u8 *param_0;
+void func_80801114_chonearmbandit(actor) u8 *actor;
 {
-    func_800BBCB8(param_0 + 4, 0, *(s32 **) (param_0 + 0x38), 1, &D_808013E8_chonearmbandit);
+    func_800BBCB8(actor + 4, 0, *(s32 **) (actor + 0x38), 1, &D_808013E8_chonearmbandit);
 }
 
-s32 func_80801154_chonearmbandit(param_0)
-Actor *param_0;
+s32 func_80801154_chonearmbandit(actor)
+Actor *actor;
 {
-    s32 local_0 = 6;
+    s32 flags = 6;
 
-    if (!param_0->unk64_20) {
-        local_0 = 0x100006;
+    if (!actor->unk64_20) {
+        flags = 0x100006;
     }
-    if (func_8010B990(param_0, local_0) & 0x30) {
-        func_801096C8(param_0, 0);
-        func_808010AC_chonearmbandit(param_0, 0);
+    if (func_8010B990(actor, flags) & 0x30) {
+        func_801096C8(actor, 0);
+        func_808010AC_chonearmbandit(actor, 0);
         return 1;
     }
     return 0;

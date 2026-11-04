@@ -36,7 +36,7 @@ typedef struct {
     u8 padAA[0x1A];
     s16 unkC4[3];
     s16 unkCA[3];
-} Quelle;
+} Emitter;
 typedef struct {
     s16 unk0[3];
     s16 unk6[3];
@@ -54,7 +54,7 @@ typedef struct {
     u8 unk38;
     unsigned char active : 1;
     unsigned char low : 7;
-} Ziel;
+} Particle;
 s32 func_800DC128(s32, s32);
 f32 func_800DC0C0(void);
 s32 func_800F0E44(s32);
@@ -67,7 +67,7 @@ void func_800EF368(f32 *, f32);
 void func_800EF4E4(f32 *, f32, f32, f32, f32, f32);
 typedef struct {
     u8 b[60];
-} Eintrag;
+} ParticleEntry;
 typedef struct {
     u8 pad00[7];
     u8 unk7;
@@ -82,11 +82,11 @@ typedef struct {
     u8 unk82;
     u8 unk83;
     u8 pad84[8];
-    Eintrag *unk8C;
-    Eintrag *unk90;
-    Eintrag *unk94;
+    ParticleEntry *unk8C;
+    ParticleEntry *unk90;
+    ParticleEntry *unk94;
     u8 pad98[0x3C];
-    Eintrag unkD4[1];
+    ParticleEntry unkD4[1];
 } Obj;
 void *heap_alloc(s32);
 void rare_memset(void *, s32, s32);
@@ -107,7 +107,7 @@ void func_800BA8F8(s32 param_0, f32 param_1, f32 param_2);
 
 // Initializes one particle from the emitter's spawn ranges.
 // Matching: the line breaks in this function are needed for the match.
-void func_800B9B50(Quelle *emitter, Ziel *particle)
+void func_800B9B50(Emitter *emitter, Particle *particle)
 {
     s32 unk_0;
     f32 pos_min[3];
