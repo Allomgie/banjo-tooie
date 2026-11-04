@@ -687,7 +687,6 @@ s32 func_800C9510()
     transition = func_800C91C8(4);
     if (transition != 0) {
         // Matching: the no-op '| 0' is needed for the match.
-        // Matching: the no-op '| 0' is needed for the match.
         return _gctransitionDll_entrypoint_4(transition | 0);
     }
     return 0;
@@ -698,7 +697,6 @@ int func_800C954C()
     s32 transition;
     transition = func_800C91C8(4);
     if (transition != 0) {
-        // Matching: the no-op '| 0' is needed for the match.
         // Matching: the no-op '| 0' is needed for the match.
         return _gctransitionDll_entrypoint_3(transition | 0);
     }
@@ -725,7 +723,6 @@ int func_800C95D4()
     s32 transition;
     transition = func_800C91C8(4);
     if (transition != 0) {
-        // Matching: the no-op '| 0' is needed for the match.
         // Matching: the no-op '| 0' is needed for the match.
         return _gctransitionDll_entrypoint_2(transition | 0);
     }
@@ -768,7 +765,6 @@ int func_800C96CC()
     s32 found;
     transition = func_800C91C8();
     // Matching: the no-op '^ 0' and '| 0' are needed for the match.
-    // Matching: the no-op '^ 0' and '| 0' are needed for the match.
     if (found = (transition != 0) ^ 0) {
         found = 0;
         if (transition[0xA] == transition[0x1C]) {
@@ -786,7 +782,6 @@ int func_800C9714()
     s32 transition;
     transition = func_800C91C8();
     if (transition != 0) {
-        // Matching: the no-op '| 0' is needed for the match.
         // Matching: the no-op '| 0' is needed for the match.
         return _gctransitionDll_entrypoint_3(transition | 0);
     }
@@ -988,13 +983,11 @@ void func_800C9DE4(f32, s32, s32);
 int func_800C9D38(f32 delay, s32 arg)
 {
     // Matching: the no-op '| 0' is needed for the match.
-    // Matching: the no-op '| 0' is needed for the match.
     func_800C9DE4(delay, func_800C9AB0, arg | 0);
 }
 
 int func_800C9D60(f32 delay, s32 arg)
 {
-    // Matching: the no-op '| 0' is needed for the match.
     // Matching: the no-op '| 0' is needed for the match.
     func_800C9DE4(delay, &func_800A54F8, arg | 0);
 }
