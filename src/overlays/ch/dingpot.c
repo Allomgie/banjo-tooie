@@ -19,8 +19,8 @@ extern s32 D_80800568_chdingpot[4];
 extern u8 D_808005A4_chdingpot[];
 extern void _gcdialogcamera_entrypoint_3(void *, f32);
 typedef union {
-    s16 local_0[2];
-    s32 local_1;
+    s16 half[2];
+    s32 word;
 } DingpotNotes1559;
 extern DingpotNotes1559 D_808005B4_chdingpot;
 extern s32 D_808005B8_chdingpot[];
@@ -44,44 +44,45 @@ int chdingpot_entrypoint_0()
     return (int) &D_80800500_chdingpot;
 }
 
-void func_8080000C_chdingpot(u8 *param_0)
+void func_8080000C_chdingpot(u8 *actor)
 {
-    func_80102FDC(param_0, *(f32 *) (param_0 + 0x38) * 0.5f);
+    func_80102FDC(actor, *(f32 *) (actor + 0x38) * 0.5f);
 }
 
-void func_80800040_chdingpot(void *param_0)
+void func_80800040_chdingpot(void *actor)
 {
     s8 _sfpad[8];
-    int new_var;
-    switch ((u32) ((u16 *) param_0)[0x39] >> 10) {
+    int launch_pos;
+    switch ((u32) ((u16 *) actor)[0x39] >> 10) {
         case 1:
-            func_808002B4_chdingpot(param_0, &D_80800548_chdingpot);
-            if (func_80800350_chdingpot(param_0) == 0) {
-                func_80800388_chdingpot(param_0);
+            func_808002B4_chdingpot(actor, &D_80800548_chdingpot);
+            if (func_80800350_chdingpot(actor) == 0) {
+                func_80800388_chdingpot(actor);
             }
             return;
 
         case 2:
-            func_808002B4_chdingpot(param_0, &D_80800548_chdingpot);
+            func_808002B4_chdingpot(actor, &D_80800548_chdingpot);
             break;
 
         case 3:
-            func_808002B4_chdingpot(param_0, &D_80800568_chdingpot);
-            if (func_80101DDC(param_0) != 0) {
-                func_80102424(param_0, 4);
+            func_808002B4_chdingpot(actor, &D_80800568_chdingpot);
+            if (func_80101DDC(actor) != 0) {
+                func_80102424(actor, 4);
             }
             break;
 
+        // Refill all egg and feather counters, then launch the player.
         case 4:
-            if (func_80101E14(param_0, 0x3F189375)) {
+            if (func_80101E14(actor, 0x3F189375)) {
                 func_800C3F48(0x6CBF441E);
             }
-            if (func_80101E14(param_0, 0x3F2147AE)) {
-                func_800EE7F8(&new_var, (void *) ((char *) param_0 + 4));
-                func_800EF1B8(&new_var, *(s32 *) ((char *) param_0 + 0x48), 0x43C80000);
+            if (func_80101E14(actor, 0x3F2147AE)) {
+                func_800EE7F8(&launch_pos, (void *) ((char *) actor + 4));
+                func_800EF1B8(&launch_pos, *(s32 *) ((char *) actor + 0x48), 0x43C80000);
                 func_800F4CC0(func_800F54E4());
                 func_800F82D4(func_800F54E4(), 0);
-                func_800F7844(func_800F54E4(), &new_var, 0x44CA8000, 0xC5802000);
+                func_800F7844(func_800F54E4(), &launch_pos, 0x44CA8000, 0xC5802000);
                 func_800D175C(0x40, 0x270F);
                 func_800D175C(0x41, 0x270F);
                 func_800D175C(0x42, 0x270F);
@@ -90,21 +91,21 @@ void func_80800040_chdingpot(void *param_0)
                 func_800D175C(0x46, 0x270F);
                 func_800D175C(0x47, 0x270F);
             }
-            if (func_80101DDC(param_0) != 0) {
-                func_80102424(param_0, 1);
-                _subaddieDll_entrypoint_4(param_0, 0);
+            if (func_80101DDC(actor) != 0) {
+                func_80102424(actor, 1);
+                _subaddieDll_entrypoint_4(actor, 0);
             }
     }
 }
 
-s32 func_8080021C_chdingpot(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_8080021C_chdingpot(Actor *actor, s32 msg_type, s32 msg)
 {
-    switch (param_1) {
+    switch (msg_type) {
         case 0x2E:
-            func_80102424(param_0, 1);
+            func_80102424(actor, 1);
             break;
         case 0x52:
-            _gcdialogcamera_entrypoint_3(D_808005A4_chdingpot, param_0->scale);
+            _gcdialogcamera_entrypoint_3(D_808005A4_chdingpot, actor->scale);
             break;
         case 0xB:
             func_800F7F98(func_800F54E4(), 0);
@@ -115,54 +116,58 @@ s32 func_8080021C_chdingpot(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_808002B4_chdingpot(param_0, param_1) Actor *param_0;
-f32 *param_1;
+void func_808002B4_chdingpot(actor, interval) Actor *actor;
+f32 *interval;
 {
-    DingpotNotes1559 local_0;
+    DingpotNotes1559 notes;
 
-    local_0 = D_808005B4_chdingpot;
-    if (func_80101E4C(param_0, param_1)) {
-        if (!param_0->unk5F)
-            param_0->unk5F = _subaddieaudioquick_entrypoint_1(param_0, param_0->position);
-        func_800C301C(param_0->unk5F, local_0.local_0[func_800DC128(0, 2)]);
-        func_800C4350(param_0->unk5F, param_0->position, &D_808005B8_chdingpot);
-        func_800C3BDC(param_0->unk5F);
+    notes = D_808005B4_chdingpot;
+    if (func_80101E4C(actor, interval)) {
+        if (!actor->unk5F)
+            actor->unk5F = _subaddieaudioquick_entrypoint_1(actor, actor->position);
+        func_800C301C(actor->unk5F, notes.half[func_800DC128(0, 2)]);
+        func_800C4350(actor->unk5F, actor->position, &D_808005B8_chdingpot);
+        func_800C3BDC(actor->unk5F);
     }
 }
 
-int func_80800350_chdingpot(param_0)
-s32 param_0;
+int func_80800350_chdingpot(actor)
+s32 actor;
 {
-    s32 local_0;
-    local_0 = 5;
-    _subaddiedialog_entrypoint_8(param_0, param_0 + 4, &D_808005C8_chdingpot, &D_808004B0_chdingpot,
-                                 local_0);
+    s32 dialog_count;
+    dialog_count = 5;
+    _subaddiedialog_entrypoint_8(actor, actor + 4, &D_808005C8_chdingpot, &D_808004B0_chdingpot,
+                                 dialog_count);
 }
 
-void func_80800388_chdingpot(param_0) s32 *param_0;
+void func_80800388_chdingpot(actor) s32 *actor;
 {
-    s32 local_0;
-    f32 local_1[3];
-    f32 *local_2;
+    s32 player;
+    f32 player_pos[3];
+    f32 *self_pos;
 
-    if (&param_0) {
+    // Matching: empty block, needed for the match.
+    if (&actor) {
     }
+    // Active only once flag 0x1AC is set.
     if (func_800DA298(0x1AC)) {
-        local_0 = _plsu_entrypoint_3(param_0[0]);
-        if (func_800F54E4() == local_0 && local_0 != -1) {
-            if (func_800F64A4(local_0, 0xB)) {
-                func_800F5A00(local_0, local_1);
-                local_2 = (f32 *) &param_0[1];
-                if (local_0 && local_0 && local_0) {
+        player = _plsu_entrypoint_3(actor[0]);
+        if (func_800F54E4() == player && player != -1) {
+            if (func_800F64A4(player, 0xB)) {
+                func_800F5A00(player, player_pos);
+                self_pos = (f32 *) &actor[1];
+                // Matching: empty block, needed for the match.
+                if (player && player && player) {
                 }
-                if (func_800EEB40(local_2, local_1) < 10000.0f) {
-                    _subaddieaudioquick_entrypoint_2(param_0, local_2, &D_808005D8_chdingpot);
-                    _subaddieDll_entrypoint_4(param_0, 1);
-                    func_80102424(param_0, 3);
-                    func_800F82D4(local_0, 2);
-                    func_800F7F98(local_0, 1);
-                    _capod_entrypoint_13(param_0[0], 0, 2, 0x10);
-                    func_800F4CEC(local_0, 0x60);
+                // Player within 100 units.
+                if (func_800EEB40(self_pos, player_pos) < 10000.0f) {
+                    _subaddieaudioquick_entrypoint_2(actor, self_pos, &D_808005D8_chdingpot);
+                    _subaddieDll_entrypoint_4(actor, 1);
+                    func_80102424(actor, 3);
+                    func_800F82D4(player, 2);
+                    func_800F7F98(player, 1);
+                    _capod_entrypoint_13(actor[0], 0, 2, 0x10);
+                    func_800F4CEC(player, 0x60);
                     func_800C9C04(0.5f, 0x15, 22000);
                 }
             }

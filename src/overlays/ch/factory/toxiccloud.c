@@ -113,49 +113,51 @@ void func_80800FCC_chfactorytoxiccloud();
 void func_80800A34_chfactorytoxiccloud();
 void func_808010B8_chfactorytoxiccloud();
 
-void func_80800000_chfactorytoxiccloud(Actor *param_0)
+// Init: fully visible if flagged, otherwise fade in from nothing; reset the nine puffs.
+void func_80800000_chfactorytoxiccloud(Actor *actor)
 {
-    u8 *local_0;
-    s32 local_1;
+    u8 *particles;
+    s32 i;
 
-    local_0 = func_80100094(param_0, 0);
-    if (((ToxicCloudFlags *) ((u8 *) param_0 + 0x78))->local_0) {
-        param_0->scale = 1.0f;
-        _subaddiefade_entrypoint_1(param_0, 255);
-        *(f32 *) ((u8 *) param_0 + 0x24) = 600.0f;
+    particles = func_80100094(actor, 0);
+    if (((ToxicCloudFlags *) ((u8 *) actor + 0x78))->local_0) {
+        actor->scale = 1.0f;
+        _subaddiefade_entrypoint_1(actor, 255);
+        *(f32 *) ((u8 *) actor + 0x24) = 600.0f;
     } else {
-        func_80102424(param_0, 1);
-        param_0->unk58 = 0.0f;
-        _subaddiefade_entrypoint_1(param_0, 0);
-        param_0->unk64_16 = 0;
-        param_0->scale = 0.0f;
-        func_8010A570(param_0);
+        func_80102424(actor, 1);
+        actor->unk58 = 0.0f;
+        _subaddiefade_entrypoint_1(actor, 0);
+        actor->unk64_16 = 0;
+        actor->scale = 0.0f;
+        func_8010A570(actor);
     }
-    param_0->unk64_24 = 1;
-    func_80800FCC_chfactorytoxiccloud(param_0, 1);
-    for (local_1 = 0; local_1 < 9; local_1++) {
-        func_80800A34_chfactorytoxiccloud(param_0, local_0 + local_1 * 0x24);
+    actor->unk64_24 = 1;
+    func_80800FCC_chfactorytoxiccloud(actor, 1);
+    for (i = 0; i < 9; i++) {
+        func_80800A34_chfactorytoxiccloud(actor, particles + i * 0x24);
     }
 }
 
-s32 func_808000F0_chfactorytoxiccloud(u8 *param_0, s32 param_1)
+// Returns 1 when the player is inside this cloud's zone and in range.
+s32 func_808000F0_chfactorytoxiccloud(u8 *actor, s32 pos)
 {
-    u32 *new_var;
-    u32 temp_t9;
-    new_var = (u32 *) ((s8 *) param_0 + 0x70);
-    if (func_800CC338(param_1, (*new_var >> 0x19) - 1, ((u32) (*new_var << 0x16) >> 0x1A) - 1) ==
+    u32 *zone_info;
+    u32 unk_0;
+    zone_info = (u32 *) ((s8 *) actor + 0x70);
+    if (func_800CC338(pos, (*zone_info >> 0x19) - 1, ((u32) (*zone_info << 0x16) >> 0x1A) - 1) ==
         -1) {
         return 0;
     }
-    if (func_80800BF8_chfactorytoxiccloud(param_0, param_1) == 0) {
+    if (func_80800BF8_chfactorytoxiccloud(actor, pos) == 0) {
         return 0;
     }
-    temp_t9 = (u16) *(u16 *) ((s8 *) param_0 + 0x72);
-    temp_t9 = temp_t9 >> 0xA;
-    if (temp_t9 == 5) {
+    unk_0 = (u16) *(u16 *) ((s8 *) actor + 0x72);
+    unk_0 = unk_0 >> 0xA;
+    if (unk_0 == 5) {
         return 0;
     }
-    if (temp_t9 == 1) {
+    if (unk_0 == 1) {
         return 0;
     }
     if (func_800F64A4(func_800F54E4(), 0x1601) == 0) {
@@ -170,400 +172,403 @@ int func_80801164_chfactorytoxiccloud();
 
 void func_80800AD8_chfactorytoxiccloud();
 
-void func_808001B8_chfactorytoxiccloud(Actor *param_0)
+// Update: fade in (state 1), drift in the zone (2), chase the player (3, 4).
+void func_808001B8_chfactorytoxiccloud(Actor *actor)
 {
     extern u8 D_8080148C_chfactorytoxiccloud[];
 
-    f32 local_0[3];
-    f32 local_3;
-    s32 local_8;
-    f32 local_2;
-    f32 local_4;
-    f32 local_1[3];
-    char *local_6;
-    char *local_7;
-    s32 local_11;
-    f32 local_12;
+    f32 player_pos[3];
+    f32 fade;
+    s32 result;
+    f32 angle;
+    f32 steps;
+    f32 delta[3];
+    char *particles;
+    char *particle;
+    s32 i;
+    f32 dist;
 
-    func_80800AD8_chfactorytoxiccloud(param_0, local_0);
+    func_80800AD8_chfactorytoxiccloud(actor, player_pos);
 
-    local_8 = func_808000F0_chfactorytoxiccloud(param_0, local_0);
-    if (local_8) {
-        func_80102424(param_0, 4);
-    } else if (param_0->unk64_19) {
+    result = func_808000F0_chfactorytoxiccloud(actor, player_pos);
+    if (result) {
+        func_80102424(actor, 4);
+    } else if (actor->unk64_19) {
         func_800CF494();
-        param_0->unk64_19 = 0;
+        actor->unk64_19 = 0;
     }
 
-    if (!((ToxicCloudActorFlags *) param_0)->local_1) {
-        switch (param_0->unk70_10) {
+    if (!((ToxicCloudActorFlags *) actor)->local_1) {
+        switch (actor->unk70_10) {
             case 1:
-                if (func_800D91EC((char *) param_0 + 0x58, 0.3f)) {
-                    _subaddiefade_entrypoint_1(param_0, 0xFF);
-                    *(f32 *) ((char *) param_0 + 0x38) = 1.0f;
+                if (func_800D91EC((char *) actor + 0x58, 0.3f)) {
+                    _subaddiefade_entrypoint_1(actor, 0xFF);
+                    *(f32 *) ((char *) actor + 0x38) = 1.0f;
 
-                    if (((ToxicCloudActorFlags *) param_0)->local_0) {
-                        func_80102424(param_0, 3);
+                    if (((ToxicCloudActorFlags *) actor)->local_0) {
+                        func_80102424(actor, 3);
                     } else {
-                        func_80102424(param_0, 2);
+                        func_80102424(actor, 2);
                     }
                 } else {
-                    local_3 =
-                        func_800F10B4(*(f32 *) ((char *) param_0 + 0x58), 0.0f, 0.3f, 0.0f, 1.0f);
+                    fade =
+                        func_800F10B4(*(f32 *) ((char *) actor + 0x58), 0.0f, 0.3f, 0.0f, 1.0f);
 
-                    _subaddiefade_entrypoint_1(param_0, (u16) (u32) (255.0f * local_3));
+                    _subaddiefade_entrypoint_1(actor, (u16) (u32) (255.0f * fade));
 
-                    *(f32 *) ((char *) param_0 + 0x38) = local_3;
-                    param_0->unk64_16 = 1;
+                    *(f32 *) ((char *) actor + 0x38) = fade;
+                    actor->unk64_16 = 1;
 
-                    func_8010A590(param_0);
+                    func_8010A590(actor);
 
-                    *(f32 *) ((char *) param_0 + 8) += 10.0f;
+                    *(f32 *) ((char *) actor + 8) += 10.0f;
                 }
                 break;
 
             case 2:
-                if (((ToxicCloudActorFlags *) param_0)->local_0) {
-                    func_808010B8_chfactorytoxiccloud(param_0);
+                if (((ToxicCloudActorFlags *) actor)->local_0) {
+                    func_808010B8_chfactorytoxiccloud(actor);
                 } else {
-                    *(f32 *) ((char *) param_0 + 0x24) = func_800F15F8(
-                        *(f32 *) ((char *) param_0 + 0x24), 150.0f, func_800D8FF8() * 200.0f);
+                    *(f32 *) ((char *) actor + 0x24) = func_800F15F8(
+                        *(f32 *) ((char *) actor + 0x24), 150.0f, func_800D8FF8() * 200.0f);
 
-                    func_80102BAC(param_0, 0.5f, 0.05f, 5.0f);
+                    func_80102BAC(actor, 0.5f, 0.05f, 5.0f);
 
-                    local_8 = func_80801164_chfactorytoxiccloud(param_0, 0x125, 4);
+                    result = func_80801164_chfactorytoxiccloud(actor, 0x125, 4);
 
-                    if ((local_8 & 4) != 0 || func_800DC0C0() < 0.004f) {
-                        local_2 = func_800DC0C0() * 360.0f;
-                        local_8 = 0;
+                    if ((result & 4) != 0 || func_800DC0C0() < 0.004f) {
+                        angle = func_800DC0C0() * 360.0f;
+                        result = 0;
 
                         do {
-                            if (_subaddieDll_entrypoint_11(param_0, (s32) local_2,
+                            if (_subaddieDll_entrypoint_11(actor, (s32) angle,
                                                            (s32) *
-                                                               (f32 *) ((char *) param_0 + 0x24))) {
-                                *(f32 *) ((char *) param_0 + 0x54) = local_2;
+                                                               (f32 *) ((char *) actor + 0x24))) {
+                                *(f32 *) ((char *) actor + 0x54) = angle;
                                 break;
                             }
 
-                            local_8++;
-                        } while (local_8 != 6);
+                            result++;
+                        } while (result != 6);
                     }
 
-                    if (func_800CC338(local_0, (*(u32 *) ((char *) param_0 + 0x70) >> 25) - 1,
-                                      ((*(u32 *) ((char *) param_0 + 0x70) << 22) >> 26) - 1) !=
+                    if (func_800CC338(player_pos, (*(u32 *) ((char *) actor + 0x70) >> 25) - 1,
+                                      ((*(u32 *) ((char *) actor + 0x70) << 22) >> 26) - 1) !=
                         -1) {
-                        if (func_808012C4_chfactorytoxiccloud(param_0)) {
-                            func_80102424(param_0, 3);
+                        if (func_808012C4_chfactorytoxiccloud(actor)) {
+                            func_80102424(actor, 3);
                         }
                     }
                 }
 
-                func_80800FCC_chfactorytoxiccloud(param_0, 0);
+                func_80800FCC_chfactorytoxiccloud(actor, 0);
 
-                *(f32 *) ((char *) param_0 + 8) = func_800F15F8(
-                    *(f32 *) ((char *) param_0 + 8), *(f32 *) ((char *) param_0 + 0x34) + 120.0f,
+                *(f32 *) ((char *) actor + 8) = func_800F15F8(
+                    *(f32 *) ((char *) actor + 8), *(f32 *) ((char *) actor + 0x34) + 120.0f,
                     func_800D8FF8() * 100.0f);
 
-                if (*(f32 *) ((char *) param_0 + 0x28) < *(f32 *) ((char *) param_0 + 8)) {
-                    *(f32 *) ((char *) param_0 + 8) = *(f32 *) ((char *) param_0 + 0x28);
+                if (*(f32 *) ((char *) actor + 0x28) < *(f32 *) ((char *) actor + 8)) {
+                    *(f32 *) ((char *) actor + 8) = *(f32 *) ((char *) actor + 0x28);
                 }
                 break;
 
             case 3:
-                if (((ToxicCloudActorFlags *) param_0)->local_0) {
-                    func_808010B8_chfactorytoxiccloud(param_0);
+                if (((ToxicCloudActorFlags *) actor)->local_0) {
+                    func_808010B8_chfactorytoxiccloud(actor);
                 } else {
-                    *(f32 *) ((char *) param_0 + 0x54) =
-                        func_800F1DF4((char *) param_0 + 4, local_0);
+                    *(f32 *) ((char *) actor + 0x54) =
+                        func_800F1DF4((char *) actor + 4, player_pos);
 
-                    func_80102BAC(param_0, 1.0f, 0.1f, 10.0f);
+                    func_80102BAC(actor, 1.0f, 0.1f, 10.0f);
 
-                    *(f32 *) ((char *) param_0 + 0x24) = func_800F15F8(
-                        *(f32 *) ((char *) param_0 + 0x24), 600.0f, func_800D8FF8() * 500.0f);
+                    *(f32 *) ((char *) actor + 0x24) = func_800F15F8(
+                        *(f32 *) ((char *) actor + 0x24), 600.0f, func_800D8FF8() * 500.0f);
 
-                    local_8 = func_80801164_chfactorytoxiccloud(param_0, 0x125, 4);
+                    result = func_80801164_chfactorytoxiccloud(actor, 0x125, 4);
 
-                    if (local_8 & 4) {
-                        func_80102424(param_0, 2);
+                    if (result & 4) {
+                        func_80102424(actor, 2);
                     }
 
-                    if (func_800CC338(local_0, (*(u32 *) ((char *) param_0 + 0x70) >> 25) - 1,
-                                      ((*(u32 *) ((char *) param_0 + 0x70) << 22) >> 26) - 1) ==
+                    if (func_800CC338(player_pos, (*(u32 *) ((char *) actor + 0x70) >> 25) - 1,
+                                      ((*(u32 *) ((char *) actor + 0x70) << 22) >> 26) - 1) ==
                             -1 ||
-                        !func_808012C4_chfactorytoxiccloud(param_0)) {
-                        func_80102424(param_0, 2);
+                        !func_808012C4_chfactorytoxiccloud(actor)) {
+                        func_80102424(actor, 2);
                     }
                 }
 
-                func_80800FCC_chfactorytoxiccloud(param_0, 0);
+                func_80800FCC_chfactorytoxiccloud(actor, 0);
 
-                if (*(f32 *) ((char *) param_0 + 0x34) < local_0[1] &&
-                    local_0[1] < *(f32 *) ((char *) param_0 + 0x28)) {
-                    *(f32 *) ((char *) param_0 + 8) = func_800F15F8(
-                        *(f32 *) ((char *) param_0 + 8), local_0[1], func_800D8FF8() * 100.0f);
+                if (*(f32 *) ((char *) actor + 0x34) < player_pos[1] &&
+                    player_pos[1] < *(f32 *) ((char *) actor + 0x28)) {
+                    *(f32 *) ((char *) actor + 8) = func_800F15F8(
+                        *(f32 *) ((char *) actor + 8), player_pos[1], func_800D8FF8() * 100.0f);
                 } else {
-                    *(f32 *) ((char *) param_0 + 8) = func_800F15F8(
-                        *(f32 *) ((char *) param_0 + 8),
-                        *(f32 *) ((char *) param_0 + 0x34) + 120.0f, func_800D8FF8() * 100.0f);
+                    *(f32 *) ((char *) actor + 8) = func_800F15F8(
+                        *(f32 *) ((char *) actor + 8),
+                        *(f32 *) ((char *) actor + 0x34) + 120.0f, func_800D8FF8() * 100.0f);
 
-                    if (*(f32 *) ((char *) param_0 + 0x28) < *(f32 *) ((char *) param_0 + 8)) {
-                        *(f32 *) ((char *) param_0 + 8) = *(f32 *) ((char *) param_0 + 0x28);
+                    if (*(f32 *) ((char *) actor + 0x28) < *(f32 *) ((char *) actor + 8)) {
+                        *(f32 *) ((char *) actor + 8) = *(f32 *) ((char *) actor + 0x28);
                     }
                 }
                 break;
 
             case 4:
-                if (((ToxicCloudActorFlags *) param_0)->local_0) {
-                    func_808010B8_chfactorytoxiccloud(param_0);
+                if (((ToxicCloudActorFlags *) actor)->local_0) {
+                    func_808010B8_chfactorytoxiccloud(actor);
                 } else {
-                    local_12 = func_800EEAD4(local_0, (char *) param_0 + 4);
-                    local_4 = local_12 / func_800D8FF8() / 600.0f;
+                    dist = func_800EEAD4(player_pos, (char *) actor + 4);
+                    steps = dist / func_800D8FF8() / 600.0f;
 
-                    *(f32 *) ((char *) param_0 + 0x24) =
-                        func_800EFB8C((char *) param_0 + 4, local_0) / func_800D8FF8();
+                    *(f32 *) ((char *) actor + 0x24) =
+                        func_800EFB8C((char *) actor + 4, player_pos) / func_800D8FF8();
 
-                    if (600.0f < *(f32 *) ((char *) param_0 + 0x24)) {
-                        *(f32 *) ((char *) param_0 + 0x24) = 600.0f;
+                    if (600.0f < *(f32 *) ((char *) actor + 0x24)) {
+                        *(f32 *) ((char *) actor + 0x24) = 600.0f;
                     }
 
-                    if (1.0f < local_4) {
-                        func_800EFB24(local_1, local_0, (char *) param_0 + 4);
+                    if (1.0f < steps) {
+                        func_800EFB24(delta, player_pos, (char *) actor + 4);
 
-                        func_800EF334(local_1, 1.0f / local_4);
+                        func_800EF334(delta, 1.0f / steps);
 
-                        func_800EF04C((char *) param_0 + 4, local_1);
+                        func_800EF04C((char *) actor + 4, delta);
                     } else {
-                        *(f32 *) ((char *) param_0 + 4) = local_0[0];
-                        *(f32 *) ((char *) param_0 + 0xC) = local_0[2];
+                        *(f32 *) ((char *) actor + 4) = player_pos[0];
+                        *(f32 *) ((char *) actor + 0xC) = player_pos[2];
                     }
 
-                    *(f32 *) ((char *) param_0 + 0x54) = func_800F5F24(func_800F54E4());
+                    *(f32 *) ((char *) actor + 0x54) = func_800F5F24(func_800F54E4());
 
-                    func_80102BAC(param_0, 1.0f, 0.1f, 10.0f);
+                    func_80102BAC(actor, 1.0f, 0.1f, 10.0f);
                 }
 
-                func_80102424(param_0, 3);
+                func_80102424(actor, 3);
 
-                if (!param_0->unk64_19) {
+                if (!actor->unk64_19) {
                     func_800CF2D4(4);
-                    param_0->unk64_19 = 1;
+                    actor->unk64_19 = 1;
                 }
 
-                func_80800FCC_chfactorytoxiccloud(param_0, 0);
+                func_80800FCC_chfactorytoxiccloud(actor, 0);
 
-                if (*(f32 *) ((char *) param_0 + 0x34) < local_0[1] &&
-                    local_0[1] < *(f32 *) ((char *) param_0 + 0x28)) {
-                    *(f32 *) ((char *) param_0 + 8) = func_800F15F8(
-                        *(f32 *) ((char *) param_0 + 8), local_0[1], func_800D8FF8() * 100.0f);
+                if (*(f32 *) ((char *) actor + 0x34) < player_pos[1] &&
+                    player_pos[1] < *(f32 *) ((char *) actor + 0x28)) {
+                    *(f32 *) ((char *) actor + 8) = func_800F15F8(
+                        *(f32 *) ((char *) actor + 8), player_pos[1], func_800D8FF8() * 100.0f);
                 } else {
-                    *(f32 *) ((char *) param_0 + 8) = func_800F15F8(
-                        *(f32 *) ((char *) param_0 + 8),
-                        *(f32 *) ((char *) param_0 + 0x34) + 120.0f, func_800D8FF8() * 100.0f);
+                    *(f32 *) ((char *) actor + 8) = func_800F15F8(
+                        *(f32 *) ((char *) actor + 8),
+                        *(f32 *) ((char *) actor + 0x34) + 120.0f, func_800D8FF8() * 100.0f);
 
-                    if (*(f32 *) ((char *) param_0 + 0x28) < *(f32 *) ((char *) param_0 + 8)) {
-                        *(f32 *) ((char *) param_0 + 8) = *(f32 *) ((char *) param_0 + 0x28);
+                    if (*(f32 *) ((char *) actor + 0x28) < *(f32 *) ((char *) actor + 8)) {
+                        *(f32 *) ((char *) actor + 8) = *(f32 *) ((char *) actor + 0x28);
                     }
                 }
                 break;
 
             case 5:
-                if (!((ToxicCloudActorFlags *) param_0)->local_1) {
-                    func_80102424(param_0, 2);
+                if (!((ToxicCloudActorFlags *) actor)->local_1) {
+                    func_80102424(actor, 2);
                 }
         }
 
-        if (param_0->unk70_10 != 5 && param_0->unk7C_12) {
-            local_6 = (char *) func_80100094(param_0, 0);
-            for (local_11 = 0; local_11 < 9; local_11++) {
-                local_7 = local_6 + local_11 * 0x24;
-                if (func_800D91EC((f32 *) (local_7 + 4), *(f32 *) local_7)) {
+        if (actor->unk70_10 != 5 && actor->unk7C_12) {
+            particles = (char *) func_80100094(actor, 0);
+            for (i = 0; i < 9; i++) {
+                particle = particles + i * 0x24;
+                if (func_800D91EC((f32 *) (particle + 4), *(f32 *) particle)) {
                     if (func_800DC0C0() < 0.5f) {
-                        func_800BBCB8((char *) param_0 + 4, 0, param_0->scale, 1,
+                        func_800BBCB8((char *) actor + 4, 0, actor->scale, 1,
                                       D_8080148C_chfactorytoxiccloud);
                     }
 
-                    func_80800A34_chfactorytoxiccloud(param_0, local_7);
+                    func_80800A34_chfactorytoxiccloud(actor, particle);
                 }
             }
         }
     }
 }
 
-void func_80800A34_chfactorytoxiccloud(param_0, param_1) Actor *param_0;
-ToxicCloudParticle *param_1;
+void func_80800A34_chfactorytoxiccloud(actor, particle) Actor *actor;
+ToxicCloudParticle *particle;
 {
-    param_1->timer = func_800DC178(0.5f, 1.0f);
-    param_1->elapsed = 0.0f;
-    param_1->first = func_800DC178(0.4f, 0.5f) + 0.2f;
-    param_1->second = func_800DC178(0.7f, 0.9f) + 0.2f;
-    param_1->index = func_800DC128(0, 16);
+    particle->timer = func_800DC178(0.5f, 1.0f);
+    particle->elapsed = 0.0f;
+    particle->first = func_800DC178(0.4f, 0.5f) + 0.2f;
+    particle->second = func_800DC178(0.7f, 0.9f) + 0.2f;
+    particle->index = func_800DC128(0, 16);
 }
 
-void func_80800AD8_chfactorytoxiccloud(s32 param_0, f32 *param_1)
+void func_80800AD8_chfactorytoxiccloud(s32 param_0, f32 *out_pos)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    s32 local_2;
-    local_2 = func_800F5410(func_800F54E4());
-    switch (local_2) {
+    f32 pos_a[3];
+    f32 pos_b[3];
+    s32 state;
+    state = func_800F5410(func_800F54E4());
+    switch (state) {
         case 1:
         case 10:
         case 11:
-            func_800F5A2C(func_800F54E4(), 5, local_0);
-            func_800F5A2C(func_800F54E4(), 2, local_1);
-            func_800EFE50(param_1, local_0, local_1, 0.5f);
-            func_800EEB9C(local_0, func_800F5F24(func_800F54E4()), 20.0f);
-            local_0[1] += 20.0f;
-            func_800EF04C(param_1, local_0);
+            func_800F5A2C(func_800F54E4(), 5, pos_a);
+            func_800F5A2C(func_800F54E4(), 2, pos_b);
+            func_800EFE50(out_pos, pos_a, pos_b, 0.5f);
+            func_800EEB9C(pos_a, func_800F5F24(func_800F54E4()), 20.0f);
+            pos_a[1] += 20.0f;
+            func_800EF04C(out_pos, pos_a);
             break;
         default:
-            func_800F5A00(func_800F54E4(), param_1);
-            func_800EF1B8(param_1, func_800F5F24(func_800F54E4()), 30.0f);
-            param_1[1] += 140.0f;
+            func_800F5A00(func_800F54E4(), out_pos);
+            func_800EF1B8(out_pos, func_800F5F24(func_800F54E4()), 30.0f);
+            out_pos[1] += 140.0f;
     }
 }
 
-s32 func_80800BF8_chfactorytoxiccloud(param_0, param_1)
-Actor *param_0;
-f32 *param_1;
+s32 func_80800BF8_chfactorytoxiccloud(actor, pos)
+Actor *actor;
+f32 *pos;
 {
-    f32 local_1;
-    f32 local_0;
+    f32 radius;
+    f32 radius_scale;
 
-    if (((ToxicFlags97 *) param_0)->big) {
-        local_0 = 6.0f;
+    if (((ToxicFlags97 *) actor)->big) {
+        radius_scale = 6.0f;
     } else {
-        local_0 = 2.0f;
+        radius_scale = 2.0f;
     }
-    local_1 = local_0 * 25.0f;
-    return func_800EEB40(param_1, (f32 *) ((u8 *) param_0 + 0x18)) < local_1 * local_1;
+    radius = radius_scale * 25.0f;
+    return func_800EEB40(pos, (f32 *) ((u8 *) actor + 0x18)) < radius * radius;
 }
 
-void func_80800C7C_chfactorytoxiccloud(Actor *param_0, void *param_1)
+// Matching: the line breaks in this function are needed for the match.
+// Draw: nine animated billboard puffs.
+void func_80800C7C_chfactorytoxiccloud(Actor *actor, void *param_1)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[2];
-    f32 local_6;
-    void *local_3;
-    f32 local_7;
-    f32 local_8;
-    f32 local_4[3];
-    s32 local_9;
-    s32 local_10;
-    CloudOffsets301 local_5;
-    f32 *local_11;
-    CloudParticle301 *local_12;
-    CloudParticle301 *local_13;
+    f32 cam_pos[3];
+    f32 puff_pos[3];
+    f32 base_xy[2];
+    f32 progress;
+    void *sprite;
+    f32 scale;
+    f32 unk_0;
+    f32 size[3];
+    s32 alpha;
+    s32 i;
+    CloudOffsets301 offsets;
+    f32 *actor_data;
+    CloudParticle301 *particles;
+    CloudParticle301 *particle;
 
-    func_80101870(param_0);
-    if (((CloudActorFlags301 *)param_0)->local_2) {
-        local_3 = func_800D674C(0x9D0);
-        local_12 = func_80100094(param_0, 0);
-        local_11 = (f32 *)param_0->actorData;
-        _subaddieskeleton_entrypoint_1(param_0, 4, local_11);
-        func_800E3980(local_0);
-        func_800F18FC(local_11, local_0, local_2);
-        for (local_10 = 0, local_13 = local_12; local_10 != 9; local_10++, local_13++) {
-            if (local_13->local_0 != 0.0f) {
-                local_6 = func_800F10B4(local_13->local_1, 0.0f, local_13->local_0, 0.0f, 1.0f);
-                local_5 = D_808014D0_chfactorytoxiccloud;
-                func_800EEC30(local_0, local_2[0] + local_5.local_0[local_10][0],
-                local_2[1] + local_5.local_0[local_10][1], ((CloudActorFlags301 *)param_0)->local_0 ? 75.0f : 25.0f);
-                func_800EE780(local_1, local_11, local_0);
-                if (((CloudActorFlags301 *)param_0)->local_0) { local_7 = param_0->scale * 3.0f; } else { local_7 = param_0->scale; } local_4[0] = local_4[1] = local_4[2] = func_800F1214(local_6, local_13->local_3, local_13->local_4) * local_7;
-                if (local_6 < 0.2f) {
-                    local_9 = func_800F10B4(local_6, 0.0f, 0.2f, 0.0f, 140.0f);
-                } else if (local_6 < 0.9f) {
-                    local_9 = 140;
+    func_80101870(actor);
+    if (((CloudActorFlags301 *)actor)->local_2) {
+        sprite = func_800D674C(0x9D0);
+        particles = func_80100094(actor, 0);
+        actor_data = (f32 *)actor->actorData;
+        _subaddieskeleton_entrypoint_1(actor, 4, actor_data);
+        func_800E3980(cam_pos);
+        func_800F18FC(actor_data, cam_pos, base_xy);
+        for (i = 0, particle = particles; i != 9; i++, particle++) {
+            if (particle->local_0 != 0.0f) {
+                progress = func_800F10B4(particle->local_1, 0.0f, particle->local_0, 0.0f, 1.0f);
+                offsets = D_808014D0_chfactorytoxiccloud;
+                func_800EEC30(cam_pos, base_xy[0] + offsets.local_0[i][0],
+                base_xy[1] + offsets.local_0[i][1], ((CloudActorFlags301 *)actor)->local_0 ? 75.0f : 25.0f);
+                func_800EE780(puff_pos, actor_data, cam_pos);
+                if (((CloudActorFlags301 *)actor)->local_0) { scale = actor->scale * 3.0f; } else { scale = actor->scale; } size[0] = size[1] = size[2] = func_800F1214(progress, particle->local_3, particle->local_4) * scale; // Matching: if/else and the call stay on one line (as1 orders the hoisted constants by line number).
+                if (progress < 0.2f) {
+                    alpha = func_800F10B4(progress, 0.0f, 0.2f, 0.0f, 140.0f);
+                } else if (progress < 0.9f) {
+                    alpha = 140;
                 } else {
-                    local_9 = func_800F10B4(local_6, 0.9f, 1.0f, 140.0f, 0.0f);
+                    alpha = func_800F10B4(progress, 0.9f, 1.0f, 140.0f, 0.0f);
                 }
-                if (((CloudActorFlags301 *)param_0)->local_1) {
-                    local_9 >>= 1;
+                if (((CloudActorFlags301 *)actor)->local_1) {
+                    alpha >>= 1;
                 }
-                func_800E24E4(_subaddiedraw25d_entrypoint_0, param_0);
+                func_800E24E4(_subaddiedraw25d_entrypoint_0, actor);
                 func_800E24F8(10, 255, 4);
                 func_800E2440(4, 140, 2);
-                func_800E257C(local_9);
+                func_800E257C(alpha);
                 func_800E24B4(0);
                 func_800E2588(1);
-                func_800E2AA4(param_1, local_3, local_13->local_2, 0, local_1, local_4);
+                func_800E2AA4(param_1, sprite, particle->local_2, 0, puff_pos, size);
             }
         }
     }
 }
 
-void func_80800FCC_chfactorytoxiccloud(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800FCC_chfactorytoxiccloud(actor, force) Actor *actor;
+s32 force;
 {
-    ToxicCloudNode *local_3;
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
+    ToxicCloudNode *node;
+    f32 top[3];
+    f32 bottom[3];
+    f32 hit_normal[3];
 
-    if (!func_8001210C(3) || param_1) {
-        func_800EE7F8(local_0, param_0->position);
-        local_0[1] += 400.0f;
-        func_800EE7F8(local_1, param_0->position);
-        local_1[1] -= 1000.0f;
-        if (func_800BEF00(local_0, local_1, local_2, 0)) {
-            *(f32 *) ((u8 *) param_0 + 0x34) = local_1[1];
+    if (!func_8001210C(3) || force) {
+        func_800EE7F8(top, actor->position);
+        top[1] += 400.0f;
+        func_800EE7F8(bottom, actor->position);
+        bottom[1] -= 1000.0f;
+        if (func_800BEF00(top, bottom, hit_normal, 0)) {
+            *(f32 *) ((u8 *) actor + 0x34) = bottom[1];
         } else {
-            *(f32 *) ((u8 *) param_0 + 0x34) = param_0->position[1];
+            *(f32 *) ((u8 *) actor + 0x34) = actor->position[1];
         }
-        local_3 = (ToxicCloudNode *) func_800CC63C(
-            ((ToxicCloudRoute *) ((u8 *) param_0 + 0x70))->local_0 - 1,
-            ((ToxicCloudRoute *) ((u8 *) param_0 + 0x70))->local_1 - 1);
-        *(f32 *) ((u8 *) param_0 + 0x28) = local_3->local_0 + local_3->local_1 - 25.0f;
+        node = (ToxicCloudNode *) func_800CC63C(
+            ((ToxicCloudRoute *) ((u8 *) actor + 0x70))->local_0 - 1,
+            ((ToxicCloudRoute *) ((u8 *) actor + 0x70))->local_1 - 1);
+        *(f32 *) ((u8 *) actor + 0x28) = node->local_0 + node->local_1 - 25.0f;
     }
 }
 
-void func_808010B8_chfactorytoxiccloud(param_0) Actor *param_0;
+void func_808010B8_chfactorytoxiccloud(actor) Actor *actor;
 {
-    f32 local_0;
+    f32 speed;
 
-    local_0 = _subaddiejoy_entrypoint_3(param_0) * 650.0f;
-    func_80102BAC(param_0, 1.5f, 1.0f, 25.0f);
-    if (mlAbsF(func_80013728(param_0->unk54 - param_0->rotation[1])) < 90.0f) {
-        *(f32 *) &param_0->actorData[3] = local_0;
+    speed = _subaddiejoy_entrypoint_3(actor) * 650.0f;
+    func_80102BAC(actor, 1.5f, 1.0f, 25.0f);
+    if (mlAbsF(func_80013728(actor->unk54 - actor->rotation[1])) < 90.0f) {
+        *(f32 *) &actor->actorData[3] = speed;
     } else {
-        *(f32 *) &param_0->actorData[3] = local_0 / 10.0f;
+        *(f32 *) &actor->actorData[3] = speed / 10.0f;
     }
-    func_8010BA80(param_0, 0x200026, 0x20);
+    func_8010BA80(actor, 0x200026, 0x20);
 }
 
-int func_80801164_chfactorytoxiccloud(u8 *param_0)
+int func_80801164_chfactorytoxiccloud(u8 *actor)
 {
-    f32 local_0;
+    f32 saved;
 
-    local_0 = *(f32 *) ((char *) param_0 + 0x48);
-    *(f32 *) ((char *) param_0 + 0x48) = *(f32 *) ((char *) param_0 + 0x54);
+    saved = *(f32 *) ((char *) actor + 0x48);
+    *(f32 *) ((char *) actor + 0x48) = *(f32 *) ((char *) actor + 0x54);
     func_8010BA80();
-    *(f32 *) ((char *) param_0 + 0x48) = local_0;
+    *(f32 *) ((char *) actor + 0x48) = saved;
 }
 
-int func_808011A0_chfactorytoxiccloud(Actor *param_0, unsigned int param_1, s32 param_2)
+int func_808011A0_chfactorytoxiccloud(Actor *actor, unsigned int msg, s32 param_2)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x40:
-            func_800BBCB8((f32 *) param_0->actorData, 0, param_0->scale, 4,
+            func_800BBCB8((f32 *) actor->actorData, 0, actor->scale, 4,
                           D_80801518_chfactorytoxiccloud);
-            func_800FFAB0(param_0);
-            if (param_0->unk64_19) {
+            func_800FFAB0(actor);
+            if (actor->unk64_19) {
                 func_800CF494();
-                param_0->unk64_19 = 0;
+                actor->unk64_19 = 0;
             }
             return 1;
         case 1:
-            if (param_0->unk70_10 != 1) {
-                func_80102424(param_0, 3);
+            if (actor->unk70_10 != 1) {
+                func_80102424(actor, 3);
             }
             return 1;
         case 2:
-            if (!func_80107070(param_0, 1)) {
-                func_80102424(param_0, 6);
-                _subaddiefade_entrypoint_3(param_0);
+            if (!func_80107070(actor, 1)) {
+                func_80102424(actor, 6);
+                _subaddiefade_entrypoint_3(actor);
             }
             return 1;
         case 0x38:
@@ -577,31 +582,31 @@ int func_808011A0_chfactorytoxiccloud(Actor *param_0, unsigned int param_1, s32 
     }
 }
 
-s32 func_808012C4_chfactorytoxiccloud(Actor *param_0)
+s32 func_808012C4_chfactorytoxiccloud(Actor *actor)
 {
-    Actor *local_0[10];
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    f32 local_5;
-    f32 local_4[3];
+    Actor *clouds[10];
+    s32 count;
+    s32 i;
+    s32 is_nearest;
+    f32 own_dist;
+    f32 player_pos[3];
 
-    local_1 = _subaddiefind_entrypoint_4(0x3FF, local_0, 10);
-    if (local_1 >= 2) {
-        local_3 = 1;
-        func_800F5A00(func_800F54E4(), local_4);
-        local_5 = func_800EEB40(param_0->position, local_4);
-        for (local_2 = 0; local_2 < local_1; local_2++) {
-            if (!((ToxicCloudFlags26 *) local_0[local_2])->local_0) {
-                if (param_0 != local_0[local_2]) {
-                    local_3 &= local_5 < func_800EEB40(local_0[local_2]->position, local_4);
-                    if (!local_3) {
+    count = _subaddiefind_entrypoint_4(0x3FF, clouds, 10);
+    if (count >= 2) {
+        is_nearest = 1;
+        func_800F5A00(func_800F54E4(), player_pos);
+        own_dist = func_800EEB40(actor->position, player_pos);
+        for (i = 0; i < count; i++) {
+            if (!((ToxicCloudFlags26 *) clouds[i])->local_0) {
+                if (actor != clouds[i]) {
+                    is_nearest &= own_dist < func_800EEB40(clouds[i]->position, player_pos);
+                    if (!is_nearest) {
                         return 0;
                     }
                 }
             }
         }
-        return local_3;
+        return is_nearest;
     }
     return 1;
 }
@@ -611,6 +616,8 @@ int chfactorytoxiccloud_entrypoint_0()
     return (int) &D_80801568_chfactorytoxiccloud;
 }
 
+// TU-NOTE: the overlay .data is defined here in C; tables holding function pointers must be in
+// the same unit, or IDO's assembler schedules those functions differently. D_80801568_chfactorytoxiccloud is int[].
 extern void func_80105834();
 extern void func_80108ED0();
 extern void func_80107C2C();

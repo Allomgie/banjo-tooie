@@ -28,6 +28,7 @@ extern void _chpotogoldbits_entrypoint_1();
 extern void func_800CE8D8(void *, f32, s32);
 extern void func_80101870(), func_80105834(), func_80107C2C(), func_8080007C_chpotogoldbits();
 
+// Switch (flag 0xA2D, Banjo/Kazooie/BK) that sends message 7 to actor 0x408.
 s32 func_80800000_chpotogoldbits(Actor *this)
 {
     _chswitch_entrypoint_7(this, 0xA2D);
@@ -48,30 +49,32 @@ int chpotogoldbits_entrypoint_0()
     return (int) &D_80800920_chpotogoldbits;
 }
 
-void func_8080007C_chpotogoldbits(param_0) Actor *param_0;
+// Init: lowers the lid in map 0x136 (CCL) or when entered from exit 1.
+void func_8080007C_chpotogoldbits(actor) Actor *actor;
 {
-    f32 local_0[3];
+    f32 unk_0[3];
 
-    func_800EE7F8((f32 *) &param_0->actorData[4], param_0->position);
-    func_800EE7F8((f32 *) param_0->actorData, param_0->position);
+    func_800EE7F8((f32 *) &actor->actorData[4], actor->position);
+    func_800EE7F8((f32 *) actor->actorData, actor->position);
     if (func_800EA05C() == 0x136) {
-        ((f32 *) param_0->actorData)[1] -= 500.0f;
-        ((f32 *) param_0->actorData)[3] = 0.0f;
-        param_0->unk54 = 3.0f;
+        ((f32 *) actor->actorData)[1] -= 500.0f;
+        ((f32 *) actor->actorData)[3] = 0.0f;
+        actor->unk54 = 3.0f;
         return;
     }
-    func_800F5A00(func_800F54E4(), local_0);
-    if (func_800EA090() == 1 && param_0->position[1] <= local_0[1]) {
-        ((f32 *) param_0->actorData)[1] -= 2000.0f;
-        ((f32 *) param_0->actorData)[3] = 0.0f;
-        param_0->unk54 = 3.0f;
-        func_80101FDC(param_0, 9);
+    func_800F5A00(func_800F54E4(), unk_0);
+    if (func_800EA090() == 1 && actor->position[1] <= unk_0[1]) {
+        ((f32 *) actor->actorData)[1] -= 2000.0f;
+        ((f32 *) actor->actorData)[3] = 0.0f;
+        actor->unk54 = 3.0f;
+        func_80101FDC(actor, 9);
         func_800CE88C(0, 0);
         return;
     }
-    func_800FFA88(param_0->unk0);
+    func_800FFA88(actor->unk0);
 }
 
+// Per-frame state machine for the lid/platform (actor 0x408); OD indexes actorData.
 void func_80800188_chpotogoldbits(Actor *param_0)
 {
     switch (param_0->unk70_10) {
@@ -171,44 +174,45 @@ void func_80800188_chpotogoldbits(Actor *param_0)
     }
 }
 
-s32 func_80800618_chpotogoldbits(param_0, param_1, param_2)
-u8 *param_0;
-s32 param_1;
-s32 param_2;
+// Message handler: 7 opens, 8 closes, 0xB arg 3 starts the close timer.
+s32 func_80800618_chpotogoldbits(actor, msg, arg)
+u8 *actor;
+s32 msg;
+s32 arg;
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x7:
-            if (((u32) (u16) *(u16 *) ((s8 *) param_0 + 0x72) >> 0xA) != 4) {
-                *(u8 *) ((s8 *) param_0 + 0x74) = (u8) (*(u8 *) ((s8 *) param_0 + 0x74) & 0xFFBF);
-                _capod_entrypoint_13(*(s32 *) ((s8 *) param_0 + 0), 0, 3, 0x810);
-                func_80103110(param_0, 1);
-                *(f32 *) ((s8 *) param_0 + 0x34) = 0.3f;
-                func_80101FDC(param_0, 2);
+            if (((u32) (u16) *(u16 *) ((s8 *) actor + 0x72) >> 0xA) != 4) {
+                *(u8 *) ((s8 *) actor + 0x74) = (u8) (*(u8 *) ((s8 *) actor + 0x74) & 0xFFBF);
+                _capod_entrypoint_13(*(s32 *) ((s8 *) actor + 0), 0, 3, 0x810);
+                func_80103110(actor, 1);
+                *(f32 *) ((s8 *) actor + 0x34) = 0.3f;
+                func_80101FDC(actor, 2);
             }
             return 1;
 
         case 0x8:
-            if (((u32) (u16) *(u16 *) ((s8 *) param_0 + 0x72) >> 0xA) == 4) {
-                *(u8 *) ((s8 *) param_0 + 0x74) = (u8) (*(u8 *) ((s8 *) param_0 + 0x74) & 0xFFBF);
-                _capod_entrypoint_13(*(s32 *) ((s8 *) param_0 + 0), 0, 5, 0x810);
-                func_80103110(param_0, 1);
-                *(f32 *) ((s8 *) param_0 + 0x34) = 0.3f;
-                func_80101FDC(param_0, 5);
+            if (((u32) (u16) *(u16 *) ((s8 *) actor + 0x72) >> 0xA) == 4) {
+                *(u8 *) ((s8 *) actor + 0x74) = (u8) (*(u8 *) ((s8 *) actor + 0x74) & 0xFFBF);
+                _capod_entrypoint_13(*(s32 *) ((s8 *) actor + 0), 0, 5, 0x810);
+                func_80103110(actor, 1);
+                *(f32 *) ((s8 *) actor + 0x34) = 0.3f;
+                func_80101FDC(actor, 5);
             }
             return 1;
 
         case 0x91:
-            if ((s32) ((Actor *) param_0)->unk70_10 == 7) {
-                func_80103110(param_0, 1);
-                *(u8 *) ((s8 *) param_0 + 0x74) = (u8) (*(u8 *) ((s8 *) param_0 + 0x74) & 0xFFBF);
-                *(f32 *) ((s8 *) param_0 + 0x34) = 0.3f;
-                func_80101FDC(param_0, 8);
+            if ((s32) ((Actor *) actor)->unk70_10 == 7) {
+                func_80103110(actor, 1);
+                *(u8 *) ((s8 *) actor + 0x74) = (u8) (*(u8 *) ((s8 *) actor + 0x74) & 0xFFBF);
+                *(f32 *) ((s8 *) actor + 0x34) = 0.3f;
+                func_80101FDC(actor, 8);
             }
             return 1;
 
         case 0xB:
-            if (param_2 == 3) {
-                func_800CE8D8(0, ((Actor *) param_0)->unk74_7, ((Actor *) param_0)->unk74_7);
+            if (arg == 3) {
+                func_800CE8D8(0, ((Actor *) actor)->unk74_7, ((Actor *) actor)->unk74_7);
                 func_800CE928(0, _chpotogoldbits_entrypoint_1, 0);
                 func_800CE88C(0, 1);
             }
@@ -229,17 +233,18 @@ int chpotogoldbits_entrypoint_2(void)
     return (int) &D_80800988_chpotogoldbits;
 }
 
-void func_80800810_chpotogoldbits(Actor *param_0)
+// Door: closes via message 8 when the player leaves through exit 0xD.
+void func_80800810_chpotogoldbits(Actor *actor)
 {
     if (func_800EA090() == 0xD) {
-        func_80101FDC(param_0, 4);
+        func_80101FDC(actor, 4);
     }
-    _chdoormake_entrypoint_3(param_0, 0.0f, 90.0f, param_0->scale * 212.0f, 2, -1);
-    _chdoormake_entrypoint_5(param_0, 1.0f);
-    _chdoormake_entrypoint_7(param_0, 0.5f);
-    _chdoormake_entrypoint_8(param_0, 2);
-    if (param_0->unk70_10 == 4) {
-        func_8010108C(param_0, 8, 0);
+    _chdoormake_entrypoint_3(actor, 0.0f, 90.0f, actor->scale * 212.0f, 2, -1);
+    _chdoormake_entrypoint_5(actor, 1.0f);
+    _chdoormake_entrypoint_7(actor, 0.5f);
+    _chdoormake_entrypoint_8(actor, 2);
+    if (actor->unk70_10 == 4) {
+        func_8010108C(actor, 8, 0);
     }
 }
 

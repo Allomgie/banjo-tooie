@@ -10,48 +10,54 @@ int chalienbeam_entrypoint_0()
     return (int) &D_808001A0_chalienbeam;
 }
 
-void func_8080000C_chalienbeam(void *param_0)
+// Init: start/end points (end 600 units higher), 3 s timer, fade in.
+void func_8080000C_chalienbeam(void *actor)
 {
-    func_800EE7F8((char *) param_0 + 0x18, (char *) param_0 + 4, param_0);
-    *(f32 *) ((char *) param_0 + 0x8) = *(f32 *) ((char *) param_0 + 0x8) + 600.0f;
-    func_800EE7F8((char *) param_0 + 0x28, (char *) param_0 + 4, param_0);
-    *(f32 *) ((char *) param_0 + 0x58) = 3.0f;
-    *(u8 *) ((char *) param_0 + 0x7A) = (u8) ((*(u8 *) ((char *) param_0 + 0x7A) & 0xFF3F) | 0x80);
-    _subaddiefade_entrypoint_1(param_0, 0xC0);
+    func_800EE7F8((char *) actor + 0x18, (char *) actor + 4, actor);
+    *(f32 *) ((char *) actor + 0x8) = *(f32 *) ((char *) actor + 0x8) + 600.0f;
+    func_800EE7F8((char *) actor + 0x28, (char *) actor + 4, actor);
+    *(f32 *) ((char *) actor + 0x58) = 3.0f;
+    *(u8 *) ((char *) actor + 0x7A) = (u8) ((*(u8 *) ((char *) actor + 0x7A) & 0xFF3F) | 0x80);
+    _subaddiefade_entrypoint_1(actor, 0xC0);
 }
 
-void func_80800088_chalienbeam(Actor *param_0)
+// Update: move from start to end over the timer.
+void func_80800088_chalienbeam(Actor *actor)
 {
-    s32 local_0;
-    if (param_0->unk70_10 == 1) {
-        local_0 = func_800D9078(&param_0->unk58);
-        func_800EFE50(param_0->position, &param_0->actorData[4], param_0->actorData,
-                      func_800F12D4(param_0->unk58, 0.0f, 3.0f, 1.0f, 0.0f));
-        if (local_0)
-            func_80102424(param_0, 2);
+    s32 done;
+    if (actor->unk70_10 == 1) {
+        done = func_800D9078(&actor->unk58);
+        func_800EFE50(actor->position, &actor->actorData[4], actor->actorData,
+                      func_800F12D4(actor->unk58, 0.0f, 3.0f, 1.0f, 0.0f));
+        if (done)
+            func_80102424(actor, 2);
     }
 }
 
-int func_80800110_chalienbeam(s32 param_0, s32 param_1, s32 param_2)
+// Message 0x4F: fade out.
+int func_80800110_chalienbeam(s32 actor, s32 msg, s32 param_2)
 {
-    if (param_1 == 0x4F) {
+    if (msg == 0x4F) {
         _subaddiefade_entrypoint_3();
-        func_80102424(param_0, 3);
+        func_80102424(actor, 3);
     } else {
         return 0;
     }
     return 1;
 }
 
-void func_8080015C_chalienbeam(u8 *param_0, s32 param_1)
+// Draw: set yaw field from the camera position.
+void func_8080015C_chalienbeam(u8 *actor, s32 param_1)
 {
-    f32 local_0[3];
+    f32 cam_pos[3];
 
-    func_800E3A58(local_0);
-    *(f32 *) ((char *) param_0 + 0x48) = local_0[1];
-    func_80101870(param_0, param_1);
+    func_800E3A58(cam_pos);
+    *(f32 *) ((char *) actor + 0x48) = cam_pos[1];
+    func_80101870(actor, param_1);
 }
 
+// TU-NOTE: the overlay .data is defined here in C; tables holding function pointers must be in
+// the same unit, or IDO's assembler schedules those functions differently. D_808001A0_chalienbeam is int[].
 extern void func_80105834();
 extern void func_80107C2C();
 int D_808001A0_chalienbeam[20] = {0x1580466,

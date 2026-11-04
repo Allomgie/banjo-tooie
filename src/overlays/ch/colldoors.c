@@ -4,65 +4,67 @@ extern s32 D_80800270_chcolldoors[];
 extern f32 func_800D8FF8(void);
 extern void *D_80800280_chcolldoors;
 
-void func_80800000_chcolldoors(Actor *param_0)
+// Variant 0x33/0x34/0x35 watches flags 0x577/0x368/0x369; starts open if already set.
+void func_80800000_chcolldoors(Actor *actor)
 {
-    s32 local_0;
+    s32 flag_set;
 
-    switch (param_0->unk74_7) {
+    switch (actor->unk74_7) {
         case 0x33:
-            local_0 = func_800DA298(0x577);
+            flag_set = func_800DA298(0x577);
             break;
         case 0x34:
-            local_0 = func_800DA298(0x368);
+            flag_set = func_800DA298(0x368);
             break;
         case 0x35:
-            local_0 = func_800DA298(0x369);
+            flag_set = func_800DA298(0x369);
     }
-    if (local_0) {
-        param_0->unk70_10 = 3;
-        param_0->position[1] += 250.0f;
+    if (flag_set) {
+        actor->unk70_10 = 3;
+        actor->position[1] += 250.0f;
     }
 }
 
-void func_808000B8_chcolldoors(Actor *param_0)
+// Waits 1.5 s after the flag is set, unlocks the frontend entry, then slides up 250 units.
+void func_808000B8_chcolldoors(Actor *actor)
 {
-    s32 local_0;
+    s32 flag_set;
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            local_0 = 0;
-            switch (param_0->unk74_7) {
+            flag_set = 0;
+            switch (actor->unk74_7) {
                 case 0x33:
-                    local_0 = func_800DA298(0x577);
-                    param_0->unk58 = 1.5f;
+                    flag_set = func_800DA298(0x577);
+                    actor->unk58 = 1.5f;
                     _gcfrontend_entrypoint_9(0x6E);
                     break;
                 case 0x34:
-                    local_0 = func_800DA298(0x368);
-                    param_0->unk58 = 1.5f;
+                    flag_set = func_800DA298(0x368);
+                    actor->unk58 = 1.5f;
                     _gcfrontend_entrypoint_9(0x6F);
                     break;
                 case 0x35:
-                    local_0 = func_800DA298(0x369);
-                    param_0->unk58 = 1.5f;
+                    flag_set = func_800DA298(0x369);
+                    actor->unk58 = 1.5f;
                     _gcfrontend_entrypoint_9(0x70);
             }
-            if (local_0) {
-                param_0->unk70_10 = 2;
-                *(f32 *) &param_0->actorData[1] = param_0->position[1] + 250.0f;
+            if (flag_set) {
+                actor->unk70_10 = 2;
+                *(f32 *) &actor->actorData[1] = actor->position[1] + 250.0f;
             }
             break;
         case 2:
-            if (param_0->unk58 <= 0.0f) {
-                _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1,
+            if (actor->unk58 <= 0.0f) {
+                _subaddieaudioloop_entrypoint_4(actor, actor->position, 1,
                                                 &D_80800270_chcolldoors);
-                if (param_0->position[1] < *(f32 *) &param_0->actorData[1]) {
-                    param_0->position[1] += 150.0f * func_800D8FF8();
+                if (actor->position[1] < *(f32 *) &actor->actorData[1]) {
+                    actor->position[1] += 150.0f * func_800D8FF8();
                 } else {
-                    param_0->unk70_10 = 3;
+                    actor->unk70_10 = 3;
                 }
             } else {
-                param_0->unk58 -= func_800D8FF8();
+                actor->unk58 -= func_800D8FF8();
             }
     }
 }

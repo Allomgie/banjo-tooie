@@ -1,5 +1,6 @@
 #include "common.h"
 #include <types.h>
+// TU-NOTE: .data tables (below) are defined in C so IDO schedules the functions they point to as in the original; .bss B_80801460_chterryegg is defined before its first use for IDO placement.
 
 #define EGGBIT(p) (((EggBit75 *) (p))->f1)
 extern int D_80801328_chterryegg[];
@@ -127,112 +128,113 @@ int func_80800030_chterryegg(Actor *param_0)
 
 void func_808010B0_chterryegg();
 
-void func_808000A8_chterryegg(Actor *param_0)
+// Egg actor: palette fade and hatch sequence.
+void func_808000A8_chterryegg(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
-    switch (param_0->unk70_10) {
+    s32 player;
+    s32 player_b;
+    switch (actor->unk70_10) {
         case 1:
-            local_0 = _plsu_entrypoint_3(param_0->unk0);
-            if (local_0 != -1) {
-                func_800F7BC8(local_0, 0x53, param_0->unk0);
+            player = _plsu_entrypoint_3(actor->unk0);
+            if (player != -1) {
+                func_800F7BC8(player, 0x53, actor->unk0);
             }
             break;
         case 3:
-            if (((TerryEggBits *) ((u8 *) param_0 + 0x7C))->flag &&
-                func_800D9078(&param_0->unk58)) {
-                _subaddiepalette_entrypoint_2(param_0, func_80100094(param_0, 1), 0x7BE,
+            if (((TerryEggBits *) ((u8 *) actor + 0x7C))->flag &&
+                func_800D9078(&actor->unk58)) {
+                _subaddiepalette_entrypoint_2(actor, func_80100094(actor, 1), 0x7BE,
                                               0x40200000);
-                func_80102424(param_0, 4);
-                param_0->unk58 = 2.5f;
+                func_80102424(actor, 4);
+                actor->unk58 = 2.5f;
             }
             break;
         case 4:
-            if (func_800D9078(&param_0->unk58)) {
-                func_80102424(param_0, 5);
-                _subaddieDll_entrypoint_4(param_0, 0);
+            if (func_800D9078(&actor->unk58)) {
+                func_80102424(actor, 5);
+                _subaddieDll_entrypoint_4(actor, 0);
             }
-            *(f32 *) ((u8 *) param_0 + 0x28) = func_800F10B4(param_0->unk58, 0.0f, 2.5f, 0, 255.0f);
+            *(f32 *) ((u8 *) actor + 0x28) = func_800F10B4(actor->unk58, 0.0f, 2.5f, 0, 255.0f);
             break;
         case 5:
-            local_1 = _plsu_entrypoint_3(param_0->unk0);
-            if (local_1 != -1) {
-                func_800F7BC8(local_1, 0x53, param_0->unk0);
+            player_b = _plsu_entrypoint_3(actor->unk0);
+            if (player_b != -1) {
+                func_800F7BC8(player_b, 0x53, actor->unk0);
             }
             break;
         case 6:
-            func_808010B0_chterryegg(param_0);
-            if (func_80101E14(param_0, 0.3f)) {
-                _chexploder_entrypoint_3(param_0, param_0->position, 8);
-                func_80102424(param_0, 7);
+            func_808010B0_chterryegg(actor);
+            if (func_80101E14(actor, 0.3f)) {
+                _chexploder_entrypoint_3(actor, actor->position, 8);
+                func_80102424(actor, 7);
             }
     }
-    _subaddiepalette_entrypoint_1(param_0, func_80100094(param_0, 1));
+    _subaddiepalette_entrypoint_1(actor, func_80100094(actor, 1));
 }
 
-s32 func_8080023C_chterryegg(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_8080023C_chterryegg(Actor *actor, s32 event, s32 arg)
 {
-    Actor *local_3;
-    f32 local_0[3];
-    s32 local_1;
-    f32 *local_2;
+    Actor *target;
+    f32 pos[3];
+    s32 not_defeated;
+    f32 *actor_pos;
 
-    switch (param_1) {
+    switch (event) {
         case 0x18:
-            local_2 = param_0->position;
-            func_800EE7F8(local_0, local_2);
-            func_800EF1B8(local_0, param_0->rotation[1] - 40.0f, 150.0f);
-            func_800F77E8(func_800F54E4(), local_0);
-            func_800F8300(func_800F54E4(), 2, local_2);
-            func_80102424(param_0, 6);
-            local_3 = func_80106790(param_0->unk3C);
-            func_80102424(local_3, 2);
-            func_80102FDC(local_3, func_80801188_chterryegg(local_3, 1));
+            actor_pos = actor->position;
+            func_800EE7F8(pos, actor_pos);
+            func_800EF1B8(pos, actor->rotation[1] - 40.0f, 150.0f);
+            func_800F77E8(func_800F54E4(), pos);
+            func_800F8300(func_800F54E4(), 2, actor_pos);
+            func_80102424(actor, 6);
+            target = func_80106790(actor->unk3C);
+            func_80102424(target, 2);
+            func_80102FDC(target, func_80801188_chterryegg(target, 1));
             break;
         case 0xA0:
-            local_1 = !func_800DA298(0xE5);
-            if (param_2 && local_1) {
+            not_defeated = !func_800DA298(0xE5);
+            if (arg && not_defeated) {
                 if (!func_800DA9E4(0x39, 1)) {
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x180B, 14, NULL, 0x57);
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x180B, 14, NULL, 0x57);
                 } else {
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x180C, 15, NULL, 0x57);
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x180C, 15, NULL, 0x57);
                 }
-                func_80102424(param_0, 2);
+                func_80102424(actor, 2);
             }
-            return local_1;
+            return not_defeated;
         case 0x2E:
-            func_80102424(param_0, 1);
+            func_80102424(actor, 1);
             break;
         case 0x90:
-            local_3 = func_80106790(func_80101080());
-            _chexploder_entrypoint_6(local_3, 600.0f, 800.0f);
-            _chexploder_entrypoint_12(local_3, 10);
-            _chexploder_entrypoint_9(local_3, 1, 2);
+            target = func_80106790(func_80101080());
+            _chexploder_entrypoint_6(target, 600.0f, 800.0f);
+            _chexploder_entrypoint_12(target, 10);
+            _chexploder_entrypoint_9(target, 1, 2);
             break;
         case 0x1F:
-            func_801015D0(param_0);
-            func_800DF6BC((s32) *(f32 *) &param_0->actorData[4], 255);
-            _subaddiepalette_entrypoint_3(param_0, func_80100094(param_0, 1), param_2);
+            func_801015D0(actor);
+            func_800DF6BC((s32) *(f32 *) &actor->actorData[4], 255);
+            _subaddiepalette_entrypoint_3(actor, func_80100094(actor, 1), arg);
             break;
         case 0x29:
-            _subaddiepalette_entrypoint_4(param_0, func_80100094(param_0, 1));
+            _subaddiepalette_entrypoint_4(actor, func_80100094(actor, 1));
             break;
         case 0x95:
             if (_glcutDll_entrypoint_19(0x33)) {
-                _subaddiepalette_entrypoint_0(param_0, func_80100094(param_0, 1), 0x7BD);
-                func_80102424(param_0, 3);
-                _subaddieDll_entrypoint_4(param_0, 1);
-                param_0->unk58 = 3.0f;
-                *(f32 *) &param_0->actorData[4] = 255.0f;
+                _subaddiepalette_entrypoint_0(actor, func_80100094(actor, 1), 0x7BD);
+                func_80102424(actor, 3);
+                _subaddieDll_entrypoint_4(actor, 1);
+                actor->unk58 = 3.0f;
+                *(f32 *) &actor->actorData[4] = 255.0f;
             } else if (func_800DA298(0xE5)) {
-                func_80102424(param_0, 5);
-                _subaddiepalette_entrypoint_0(param_0, func_80100094(param_0, 1), 0x7BE);
-                *(f32 *) &param_0->actorData[4] = 0.0f;
+                func_80102424(actor, 5);
+                _subaddiepalette_entrypoint_0(actor, func_80100094(actor, 1), 0x7BE);
+                *(f32 *) &actor->actorData[4] = 0.0f;
             } else {
-                _subaddiepalette_entrypoint_0(param_0, func_80100094(param_0, 1), 0x7BD);
-                *(f32 *) &param_0->actorData[4] = 255.0f;
+                _subaddiepalette_entrypoint_0(actor, func_80100094(actor, 1), 0x7BD);
+                *(f32 *) &actor->actorData[4] = 255.0f;
             }
-            _subaddiefind_entrypoint_7(param_0, 0x3D6, 100);
+            _subaddiefind_entrypoint_7(actor, 0x3D6, 100);
             break;
         default:
             return 0;
@@ -252,103 +254,104 @@ void func_80801080_chterryegg();
 
 void func_80800FE0_chterryegg();
 
-void func_808005C4_chterryegg(Actor *param_0)
+// Matching: the line breaks in this function are needed for the match.
+void func_808005C4_chterryegg(Actor *actor)
 {
-    s32 local_0;
-    s32 *local_1;
-    f32 local_2[3];
-
+    s32 draw_shadow;
+    s32 *spline;
+    f32 target_pos[3];
+ // Matching: needed for the match.
     s32 k0 = 1;
-    local_0 = 1;
+    draw_shadow = 1;
 
-    switch (((EggState *)param_0)->st) {
+    switch (((EggState *)actor)->st) {
         case 1:
-        local_0 = 0;
-        param_0->unk64_16 = 0; EGGBIT(param_0) = 0;
+        draw_shadow = 0;
+        actor->unk64_16 = 0; EGGBIT(actor) = 0;
         if (func_800DA298(0xE5)) {
-            func_80800FE0_chterryegg(param_0);
+            func_80800FE0_chterryegg(actor);
         }
         break;
         case 2:
-        param_0->unk64_16 = 1;
-        ((EggW74 *)param_0)->f1 = param_0->unk64_16;
-        local_0 = 0;
-        if (func_80101DDC(param_0)) {
+        actor->unk64_16 = 1;
+        ((EggW74 *)actor)->f1 = actor->unk64_16;
+        draw_shadow = 0;
+        if (func_80101DDC(actor)) {
             func_800F82D4(func_800F54E4(), 0);
             if (func_808010DC_chterryegg() == k0) {
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x17FE, 0xF, param_0->position, 0);
-                func_800DA7A8(0x361, param_0->unk74_7 - 0x31, 3);
-                func_80102424(param_0, 4);
-                func_8010A590(param_0);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x17FE, 0xF, actor->position, 0);
+                func_800DA7A8(0x361, actor->unk74_7 - 0x31, 3);
+                func_80102424(actor, 4);
+                func_8010A590(actor);
             } else {
-                local_1 = func_80100094(param_0, 0);
-                func_800DA544(param_0->unk74_7 + 0x143);
-                func_800CB698(param_0->unk74_7 - 0x2B, 6);
-                func_80102424(param_0, 5);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x17E1, 0x44, param_0->position, 0);
-                _subaddieDll_entrypoint_4(param_0, 1);
-                if (*local_1 != -1) {
-                    _capod_entrypoint_13(param_0->unk0, 0, ((u8 *)D_80801260_chterryegg + 8)[param_0->unk74_7 - 0x32], 0x31);
-                    func_801058C4(param_0, *local_1, 200.0f, 1);
+                spline = func_80100094(actor, 0);
+                func_800DA544(actor->unk74_7 + 0x143);
+                func_800CB698(actor->unk74_7 - 0x2B, 6);
+                func_80102424(actor, 5);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x17E1, 0x44, actor->position, 0);
+                _subaddieDll_entrypoint_4(actor, 1);
+                if (*spline != -1) {
+                    _capod_entrypoint_13(actor->unk0, 0, ((u8 *)D_80801260_chterryegg + 8)[actor->unk74_7 - 0x32], 0x31);
+                    func_801058C4(actor, *spline, 200.0f, 1);
                 }
             }
         }
         break;
         case 3:
-        func_80801080_chterryegg(param_0);
+        func_80801080_chterryegg(actor);
         break;
         case 4:
-        func_80801050_chterryegg(param_0);
+        func_80801050_chterryegg(actor);
         break;
         case 5:
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
         break;
         case 6:
-        func_80801050_chterryegg(param_0);
+        func_80801050_chterryegg(actor);
         break;
         case 7:
-        func_80801050_chterryegg(param_0);
+        func_80801050_chterryegg(actor);
         break;
         case 8:
-        local_0 = 0;
+        draw_shadow = 0;
         break;
         case 9:
-        local_0 = 0;
-        func_80801080_chterryegg(param_0);
-        if (_subaddietaxi_entrypoint_1(param_0, param_0->unk74_7 - 0x2B)) {
-            func_80102424(param_0, 0xB);
-            func_800DA544(param_0->unk74_7 + 0x143);
-            func_80101180(0x36F, 0x31, param_0->unk74_7 - 0x32);
+        draw_shadow = 0;
+        func_80801080_chterryegg(actor);
+        if (_subaddietaxi_entrypoint_1(actor, actor->unk74_7 - 0x2B)) {
+            func_80102424(actor, 0xB);
+            func_800DA544(actor->unk74_7 + 0x143);
+            func_80101180(0x36F, 0x31, actor->unk74_7 - 0x32);
         }
         break;
         case 10:
-        func_80801050_chterryegg(param_0);
-        if (_subaddietaxi_entrypoint_11(param_0, param_0->unk74_7 - 0x2B)) {
-            if (_subaddietaxi_entrypoint_5(param_0, param_0->unk74_7 - 0x2B)) {
-                _subaddietaxi_entrypoint_14(param_0, param_0->unk74_7 - 0x2B);
-                func_80102424(param_0, 0xC);
+        func_80801050_chterryegg(actor);
+        if (_subaddietaxi_entrypoint_11(actor, actor->unk74_7 - 0x2B)) {
+            if (_subaddietaxi_entrypoint_5(actor, actor->unk74_7 - 0x2B)) {
+                _subaddietaxi_entrypoint_14(actor, actor->unk74_7 - 0x2B);
+                func_80102424(actor, 0xC);
             }
         }
-        local_0 = _subaddietaxi_entrypoint_12(param_0, param_0->unk74_7 - 0x2B);
+        draw_shadow = _subaddietaxi_entrypoint_12(actor, actor->unk74_7 - 0x2B);
         break;
         case 11:
-        func_800EFD24(local_2);
-        param_0->unk54 = func_80102D78(param_0, local_2);
-        func_80102BF8(param_0, 0.1f, 4.0f, 80.0f);
-        func_80801080_chterryegg(param_0);
+        func_800EFD24(target_pos);
+        actor->unk54 = func_80102D78(actor, target_pos);
+        func_80102BF8(actor, 0.1f, 4.0f, 80.0f);
+        func_80801080_chterryegg(actor);
         break;
         case 12:
-        if (_subaddietaxi_entrypoint_15(param_0, param_0->unk74_7 - 0x2B)) {
-            func_80102424(param_0, 6);
-            func_8010A590(param_0);
+        if (_subaddietaxi_entrypoint_15(actor, actor->unk74_7 - 0x2B)) {
+            func_80102424(actor, 6);
+            func_8010A590(actor);
         }
     }
 
-    _subaddietaxi_entrypoint_9(param_0, param_0->unk74_7 - 0x2B);
+    _subaddietaxi_entrypoint_9(actor, actor->unk74_7 - 0x2B);
 
-    if (local_0) {
-        func_800F4F34(func_800F54E4(), param_0->position, param_0->scale * 20.0f,
-        param_0->scale * 20.0f);
+    if (draw_shadow) {
+        func_800F4F34(func_800F54E4(), actor->position, actor->scale * 20.0f,
+        actor->scale * 20.0f);
     }
 
 }
@@ -468,15 +471,15 @@ int func_80800D20_chterryegg(s32 param_0, s32 *param_1, s32 param_2, s32 param_3
 
 Prop *B_80801460_chterryegg[4];
 
-void func_80800D88_chterryegg(s32 param_0, f32 *param_1)
+void func_80800D88_chterryegg(s32 egg_id, f32 *out_pos)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 count;
+    s32 i;
 
-    local_0 = _gccubesearch_entrypoint_9(0x3D7, B_80801460_chterryegg, 4);
-    for (local_1 = 0; local_1 < local_0; local_1++) {
-        if (param_0 + 0x2B == B_80801460_chterryegg[local_1]->unk6_7) {
-            func_800EE88C(param_1, B_80801460_chterryegg[local_1]);
+    count = _gccubesearch_entrypoint_9(0x3D7, B_80801460_chterryegg, 4);
+    for (i = 0; i < count; i++) {
+        if (egg_id + 0x2B == B_80801460_chterryegg[i]->unk6_7) {
+            func_800EE88C(out_pos, B_80801460_chterryegg[i]);
             return;
         }
     }
@@ -560,24 +563,24 @@ void func_808010B0_chterryegg(u8 *param_0)
 
 s32 func_808010DC_chterryegg()
 {
-    s32 local_0;
-    s32 local_1;
+    s32 returned_bits;
+    s32 returned_count;
 
-    local_0 = func_800DA564(0x175, 4);
-    local_1 = 0;
-    if (local_0 & 1) {
-        local_1++;
+    returned_bits = func_800DA564(0x175, 4);
+    returned_count = 0;
+    if (returned_bits & 1) {
+        returned_count++;
     }
-    if (local_0 & 2) {
-        local_1++;
+    if (returned_bits & 2) {
+        returned_count++;
     }
-    if (local_0 & 4) {
-        local_1++;
+    if (returned_bits & 4) {
+        returned_count++;
     }
-    if (local_0 & 8) {
-        local_1++;
+    if (returned_bits & 8) {
+        returned_count++;
     }
-    return 4 - local_1;
+    return 4 - returned_count;
 }
 
 s32 func_80801138_chterryegg(param_0)

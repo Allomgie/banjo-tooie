@@ -102,45 +102,46 @@ int chsabreman_entrypoint_3()
 
 void func_808011F8_chsabreman();
 
-int func_80800030_chsabreman(Actor *param_0)
+// Sets up Sabreman according to his progress flag 0x1CA.
+int func_80800030_chsabreman(Actor *actor)
 {
-    u8 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    func_80102FDC(param_0, 0.45f);
-    func_801088A8(param_0, 0x10002000, 0, 0);
-    _subaddielink_entrypoint_0(local_0 + 0x810);
+    u8 *data;
+    data = func_80100094(actor, 0);
+    func_80102FDC(actor, 0.45f);
+    func_801088A8(actor, 0x10002000, 0, 0);
+    _subaddielink_entrypoint_0(data + 0x810);
     if (_glcutDll_entrypoint_20()) {
-        _subaddiepalette_entrypoint_0(param_0, func_80100094(param_0, 0), 0x7F1);
-        func_80102424(param_0, 0x19);
-        param_0->position[1] = func_8080112C_chsabreman((u8 *) param_0);
+        _subaddiepalette_entrypoint_0(actor, func_80100094(actor, 0), 0x7F1);
+        func_80102424(actor, 0x19);
+        actor->position[1] = func_8080112C_chsabreman((u8 *) actor);
         return 1;
     }
     switch (func_800DA564(0x1CA, 2)) {
         case 0:
-            func_8010A85C(param_0, 2);
-            _subaddiepalette_entrypoint_0(param_0, func_80100094(param_0, 0), 0x7F0);
-            func_80108B04(param_0, 0);
-            func_808011F8_chsabreman(param_0, 1);
-            func_8010A570(param_0);
-            *((u8 *) param_0 + 0x75) &= ~0x10;
+            func_8010A85C(actor, 2);
+            _subaddiepalette_entrypoint_0(actor, func_80100094(actor, 0), 0x7F0);
+            func_80108B04(actor, 0);
+            func_808011F8_chsabreman(actor, 1);
+            func_8010A570(actor);
+            *((u8 *) actor + 0x75) &= ~0x10;
             break;
         case 1:
-            _subaddiepalette_entrypoint_0(param_0, func_80100094(param_0, 0), 0x7F0);
+            _subaddiepalette_entrypoint_0(actor, func_80100094(actor, 0), 0x7F0);
             if (func_800CB3E0(0xB) == 1) {
-                func_80108B04(param_0, 0);
+                func_80108B04(actor, 0);
             }
-            func_808011F8_chsabreman(param_0, 5);
-            func_8010A590(param_0);
-            param_0->position[1] = func_8080112C_chsabreman((u8 *) param_0);
+            func_808011F8_chsabreman(actor, 5);
+            func_8010A590(actor);
+            actor->position[1] = func_8080112C_chsabreman((u8 *) actor);
             break;
         case 2:
-            _subaddiepalette_entrypoint_0(param_0, func_80100094(param_0, 0), 0x7F1);
-            func_808011F8_chsabreman(param_0, 10);
-            func_8010A590(param_0);
-            param_0->position[1] = func_8080112C_chsabreman((u8 *) param_0);
+            _subaddiepalette_entrypoint_0(actor, func_80100094(actor, 0), 0x7F1);
+            func_808011F8_chsabreman(actor, 10);
+            func_8010A590(actor);
+            actor->position[1] = func_8080112C_chsabreman((u8 *) actor);
             break;
         case 3:
-            func_800FFAB0(param_0);
+            func_800FFAB0(actor);
             return 0;
     }
     return 1;
@@ -150,236 +151,237 @@ void func_808017D8_chsabreman();
 
 s32 func_808011AC_chsabreman();
 
-void func_80800218_chsabreman(Actor *param_0)
+// Per-frame state machine (state in unk70_10).
+void func_80800218_chsabreman(Actor *actor)
 {
     extern u8 D_80801E16_chsabreman;
     extern u8 D_80801E08_chsabreman[];
     extern u8 D_80801BF8_chsabreman[];
     extern u8 D_80801C20_chsabreman[];
 
-    u8 *local_0;
-    s32 local_2;
-    s32 local_3;
-    s32 local_5;
+    u8 *data;
+    s32 unk_0;
+    s32 unk_1;
+    s32 text_id;
 
-    local_0 = (u8 *) func_80100094(param_0, 0);
-    local_2 = 2;
-    local_3 = 8;
+    data = (u8 *) func_80100094(actor, 0);
+    unk_0 = 2;
+    unk_1 = 8;
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
         case 24:
             break;
         case 2:
-            if (func_800D9078(&param_0->unk58)) {
-                func_808011F8_chsabreman(param_0, 3);
+            if (func_800D9078(&actor->unk58)) {
+                func_808011F8_chsabreman(actor, 3);
                 func_80101180(0x1FE, 0xA, 0);
-                func_8010A85C(param_0, 1);
-                ((SabremanActorFlags *) param_0)->local_0 = 1;
+                func_8010A85C(actor, 1);
+                ((SabremanActorFlags *) actor)->local_0 = 1;
             }
             break;
 
         case 3:
-            if (func_80101DDC(param_0)) {
-                func_808011F8_chsabreman(param_0, 4);
+            if (func_80101DDC(actor)) {
+                func_808011F8_chsabreman(actor, 4);
             }
             break;
 
         case 4:
-            if (func_80101DDC(param_0)) {
-                func_80801724_chsabreman(param_0, 3, 1);
-                func_8010A590(param_0);
+            if (func_80101DDC(actor)) {
+                func_80801724_chsabreman(actor, 3, 1);
+                func_8010A590(actor);
 
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1271, 0xE, param_0->position, 0xAA);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x1271, 0xE, actor->position, 0xAA);
 
-                func_808011F8_chsabreman(param_0, 6);
+                func_808011F8_chsabreman(actor, 6);
                 func_800DA7A8(0x1CA, 1, 2);
             }
             break;
 
         case 5:
-            local_3 = 0;
+            unk_1 = 0;
             D_80801E16_chsabreman = 6;
 
-            _subaddiedialog_entrypoint_8(param_0, param_0->position, D_80801E08_chsabreman,
+            _subaddiedialog_entrypoint_8(actor, actor->position, D_80801E08_chsabreman,
                                          D_80801BF8_chsabreman, 5);
             break;
 
         case 7:
-            if (func_80101DDC(param_0)) {
-                _subaddieDll_entrypoint_4(param_0, 0);
+            if (func_80101DDC(actor)) {
+                _subaddieDll_entrypoint_4(actor, 0);
 
-                if (*(s32 *) ((u8 *) param_0 + 0x50) >= 3) {
+                if (*(s32 *) ((u8 *) actor + 0x50) >= 3) {
                     func_800F82D4(func_800F54E4(), 0);
                     if (!func_800F6CC8(func_800F54E4())) {
-                        local_0 = (u8 *) func_80100094(param_0, 0);
+                        data = (u8 *) func_80100094(actor, 0);
 
-                        _subaddiepalette_entrypoint_2(param_0, local_0, 0x7F1, 3.0f);
+                        _subaddiepalette_entrypoint_2(actor, data, 0x7F1, 3.0f);
 
-                        func_808011F8_chsabreman(param_0, 8);
-                        func_808017D8_chsabreman(param_0, 1, 0x30);
+                        func_808011F8_chsabreman(actor, 8);
+                        func_808017D8_chsabreman(actor, 1, 0x30);
                     } else {
-                        func_808011F8_chsabreman(param_0, 5);
+                        func_808011F8_chsabreman(actor, 5);
                     }
                 } else {
-                    func_808011F8_chsabreman(param_0, 5);
+                    func_808011F8_chsabreman(actor, 5);
                 }
             }
             break;
 
         case 8:
-            local_0 = (u8 *) func_80100094(param_0, 0);
+            data = (u8 *) func_80100094(actor, 0);
 
-            if (*(s16 *) (local_0 + 4) == 0) {
-                func_808011F8_chsabreman(param_0, 9);
-                param_0->unk64_20 = 0;
+            if (*(s16 *) (data + 4) == 0) {
+                func_808011F8_chsabreman(actor, 9);
+                actor->unk64_20 = 0;
             }
             break;
 
         case 9:
-            if (func_80101E14(param_0, 0.23f)) {
+            if (func_80101E14(actor, 0.23f)) {
                 func_80101180(0x1FE, 0x48, 3);
-                param_0->unk64_20 = 1;
+                actor->unk64_20 = 1;
             }
 
-            if (func_80101DDC(param_0)) {
+            if (func_80101DDC(actor)) {
                 if (func_800F64A4(func_800F54E4(), 0x400)) {
-                    local_5 = 0x12D9;
+                    text_id = 0x12D9;
                 } else {
-                    local_5 = 0x1273;
+                    text_id = 0x1273;
                 }
 
-                func_808011F8_chsabreman(param_0, 0xB);
+                func_808011F8_chsabreman(actor, 0xB);
                 func_800DA7A8(0x1CA, 2, 2);
-                func_80801724_chsabreman(param_0, 2, 1);
+                func_80801724_chsabreman(actor, 2, 1);
 
-                _subaddiedialog_entrypoint_11(param_0->unk0, local_5, 0xE, param_0->position, 0xAA);
+                _subaddiedialog_entrypoint_11(actor->unk0, text_id, 0xE, actor->position, 0xAA);
             }
             break;
 
         case 10:
-            func_808011AC_chsabreman(param_0);
+            func_808011AC_chsabreman(actor);
             D_80801E16_chsabreman = 0xB;
 
-            _subaddiedialog_entrypoint_8(param_0, param_0->position, D_80801E08_chsabreman,
+            _subaddiedialog_entrypoint_8(actor, actor->position, D_80801E08_chsabreman,
                                          D_80801C20_chsabreman, 4);
             break;
 
         case 11:
-            func_808011AC_chsabreman(param_0);
+            func_808011AC_chsabreman(actor);
             break;
 
         case 13:
-            local_2 = 0;
+            unk_0 = 0;
             break;
 
         case 14:
-            local_2 = 0;
-            func_808011AC_chsabreman(param_0);
+            unk_0 = 0;
+            func_808011AC_chsabreman(actor);
 
-            if (_subaddietaxi_entrypoint_1(param_0, 0xB)) {
-                func_808011F8_chsabreman(param_0, 0x11);
+            if (_subaddietaxi_entrypoint_1(actor, 0xB)) {
+                func_808011F8_chsabreman(actor, 0x11);
 
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1275, 0xE, param_0->position, 0xAA);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x1275, 0xE, actor->position, 0xAA);
 
                 func_800DA7A8(0x1CA, 3, 2);
             }
             break;
 
         case 15:
-            if (_subaddietaxi_entrypoint_11(param_0, 0xB)) {
-                if (_subaddietaxi_entrypoint_5(param_0, 0xB)) {
-                    _subaddietaxi_entrypoint_14(param_0, 0xB);
-                    func_808011F8_chsabreman(param_0, 0x12);
-                    func_8010A590(param_0);
+            if (_subaddietaxi_entrypoint_11(actor, 0xB)) {
+                if (_subaddietaxi_entrypoint_5(actor, 0xB)) {
+                    _subaddietaxi_entrypoint_14(actor, 0xB);
+                    func_808011F8_chsabreman(actor, 0x12);
+                    func_8010A590(actor);
                 }
             }
 
-            local_2 = _subaddietaxi_entrypoint_12(param_0, 0xB);
+            unk_0 = _subaddietaxi_entrypoint_12(actor, 0xB);
             break;
 
         case 16:
-            func_808011AC_chsabreman(param_0);
+            func_808011AC_chsabreman(actor);
             break;
 
         case 17:
-            func_808011AC_chsabreman(param_0);
+            func_808011AC_chsabreman(actor);
             break;
 
         case 18:
-            if (_subaddietaxi_entrypoint_15(param_0, 0xB)) {
-                func_808011F8_chsabreman(param_0, 0xC);
+            if (_subaddietaxi_entrypoint_15(actor, 0xB)) {
+                func_808011F8_chsabreman(actor, 0xC);
             }
             break;
 
         case 19: {
-            f32 local_1[3];
-            func_800EE88C(local_1, local_0 + 0x81A);
+            f32 target[3];
+            func_800EE88C(target, data + 0x81A);
 
-            param_0->unk54 = func_80102D78(param_0, local_1);
+            actor->unk54 = func_80102D78(actor, target);
 
-            func_80102BF8(param_0, 0.1f, 4.0f, 150.0f);
+            func_80102BF8(actor, 0.1f, 4.0f, 150.0f);
 
-            if (func_80102CF4(param_0, 8.0f)) {
-                func_808011F8_chsabreman(param_0, 0x14);
-                *(f32 *) ((u8 *) param_0 + 0x24) = 50.0f;
+            if (func_80102CF4(actor, 8.0f)) {
+                func_808011F8_chsabreman(actor, 0x14);
+                *(f32 *) ((u8 *) actor + 0x24) = 50.0f;
             }
             break;
         }
         case 20: {
-            f32 local_7[3];
-            func_800EE88C(local_7, local_0 + 0x81A);
+            f32 target[3];
+            func_800EE88C(target, data + 0x81A);
 
-            param_0->unk54 = func_80102D78(param_0, local_7);
+            actor->unk54 = func_80102D78(actor, target);
 
-            func_80102BF8(param_0, 0.1f, 4.0f, 150.0f);
+            func_80102BF8(actor, 0.1f, 4.0f, 150.0f);
 
-            func_8010B990(param_0, 0x1005);
+            func_8010B990(actor, 0x1005);
 
-            if (func_800EEB40(param_0->position, local_7) < 2500.0f) {
-                func_808011F8_chsabreman(param_0, 0x15);
+            if (func_800EEB40(actor->position, target) < 2500.0f) {
+                func_808011F8_chsabreman(actor, 0x15);
             }
             break;
         }
         case 21:
-            param_0->unk54 = (f32) *(s16 *) (local_0 + 0x818);
+            actor->unk54 = (f32) *(s16 *) (data + 0x818);
 
-            func_80102BF8(param_0, 0.1f, 4.0f, 150.0f);
+            func_80102BF8(actor, 0.1f, 4.0f, 150.0f);
 
-            if (func_80102CF4(param_0, 8.0f)) {
-                func_808011F8_chsabreman(param_0, 0x16);
+            if (func_80102CF4(actor, 8.0f)) {
+                func_808011F8_chsabreman(actor, 0x16);
             }
             break;
 
         case 22:
-            if (func_80101DDC(param_0)) {
-                func_808011F8_chsabreman(param_0, 0x17);
+            if (func_80101DDC(actor)) {
+                func_808011F8_chsabreman(actor, 0x17);
             }
             break;
 
         case 23:
-            if (!func_800C0638() && func_800D90A4(&param_0->unk58) &&
-                func_8010CAC0(param_0->position, 0x190) && *(f32 *) &param_0->unk58 <= 0.0f) {
-                _subaddiedialog_entrypoint_11(param_0->unk0, func_800DC128(0, 3) + 0x1293, 0,
-                                              param_0->position, 0xAA);
+            if (!func_800C0638() && func_800D90A4(&actor->unk58) &&
+                func_8010CAC0(actor->position, 0x190) && *(f32 *) &actor->unk58 <= 0.0f) {
+                _subaddiedialog_entrypoint_11(actor->unk0, func_800DC128(0, 3) + 0x1293, 0,
+                                              actor->position, 0xAA);
 
-                func_80102424(param_0, 0x18);
+                func_80102424(actor, 0x18);
 
-                *(f32 *) &param_0->unk58 = func_800DC178(8.0f, 12.0f);
+                *(f32 *) &actor->unk58 = func_800DC178(8.0f, 12.0f);
             }
     }
 
-    _subaddietaxi_entrypoint_9(param_0, 0xB);
+    _subaddietaxi_entrypoint_9(actor, 0xB);
 
-    local_0 = (u8 *) func_80100094(param_0, 0);
-    _subaddiepalette_entrypoint_1(param_0, local_0);
+    data = (u8 *) func_80100094(actor, 0);
+    _subaddiepalette_entrypoint_1(actor, data);
 
-    func_80801218_chsabreman(param_0);
+    func_80801218_chsabreman(actor);
 
-    if ((local_2 | local_3) != 0) {
-        f32 local_8[3];
-        if (_subaddieskeleton_entrypoint_0(param_0, 1, local_8)) {
-            _sudeflect_entrypoint_0(local_8, 0.0f, 90.0f, local_2 | local_3);
+    if ((unk_0 | unk_1) != 0) {
+        f32 effect_pos[3];
+        if (_subaddieskeleton_entrypoint_0(actor, 1, effect_pos)) {
+            _sudeflect_entrypoint_0(effect_pos, 0.0f, 90.0f, unk_0 | unk_1);
         }
     }
 }
@@ -390,17 +392,17 @@ s32 func_8080167C_chsabreman();
 
 void func_80801010_chsabreman();
 
-s32 func_808008C8_chsabreman(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_808008C8_chsabreman(Actor *actor, s32 msg, s32 arg)
 {
     extern void _chsabreman_entrypoint_0(void);
-    u8 *local_0;
-    Actor *local_1;
+    u8 *data;
+    Actor *companion;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x3E:
             if (func_800DA564(0x1CA, 2) == 2) {
-                if (_subaddietaxi_entrypoint_2(param_0, 0xB)) {
-                    func_808011F8_chsabreman(param_0, 0xD);
+                if (_subaddietaxi_entrypoint_2(actor, 0xB)) {
+                    func_808011F8_chsabreman(actor, 0xD);
                 }
             }
 
@@ -408,15 +410,15 @@ s32 func_808008C8_chsabreman(Actor *param_0, s32 param_1, s32 param_2)
 
         case 0x40:
             if (func_800DA564(0x1CA, 2) == 1) {
-                if (param_0->unk70_10 == 5) {
+                if (actor->unk70_10 == 5) {
                     func_800FC660(0xE);
-                    func_808011F8_chsabreman(param_0, 7);
-                    _subaddieDll_entrypoint_4(param_0, 1);
+                    func_808011F8_chsabreman(actor, 7);
+                    _subaddieDll_entrypoint_4(actor, 1);
 
-                    ++*(s32 *) ((u8 *) param_0 + 0x50);
+                    ++*(s32 *) ((u8 *) actor + 0x50);
 
-                    if (*(s32 *) ((u8 *) param_0 + 0x50) == 3) {
-                        func_800F8300(func_800F54E4(), 2, param_0->position);
+                    if (*(s32 *) ((u8 *) actor + 0x50) == 3) {
+                        func_800F8300(func_800F54E4(), 2, actor->position);
                     }
                 }
             }
@@ -424,49 +426,49 @@ s32 func_808008C8_chsabreman(Actor *param_0, s32 param_1, s32 param_2)
             break;
 
         case 0x3D:
-            local_0 = (u8 *) func_80100094(param_0, 0);
+            data = (u8 *) func_80100094(actor, 0);
 
-            switch (param_2) {
+            switch (arg) {
                 case 0:
-                    local_1 = func_801084B0(0x1FE, &param_0);
+                    companion = func_801084B0(0x1FE, &actor);
 
-                    _subaddielink_entrypoint_1(local_0 + 0x810, local_1->unk0);
+                    _subaddielink_entrypoint_1(data + 0x810, companion->unk0);
 
-                    func_80102FDC(local_1, param_0->scale);
+                    func_80102FDC(companion, actor->scale);
 
-                    local_1->unk3C = param_0->unk0;
+                    companion->unk3C = actor->unk0;
                     break;
 
                 case 1:
-                    param_0->unk3C = _chlifeforcespell_entrypoint_1(&param_0, param_0->position,
+                    actor->unk3C = _chlifeforcespell_entrypoint_1(&actor, actor->position,
                                                                     0x64, 4.0f, 0x12);
 
-                    func_808017D8_chsabreman(param_0, 0x1B, 0x30);
+                    func_808017D8_chsabreman(actor, 0x1B, 0x30);
             }
 
             break;
 
         case 0x2E:
-            switch (param_0->unk70_10) {
+            switch (actor->unk70_10) {
                 case 6:
-                    func_808016E4_chsabreman(param_0);
-                    func_808011F8_chsabreman(param_0, 5);
-                    _subaddieDll_entrypoint_4(param_0, 0);
+                    func_808016E4_chsabreman(actor);
+                    func_808011F8_chsabreman(actor, 5);
+                    _subaddieDll_entrypoint_4(actor, 0);
                     break;
 
                 case 0x0B:
-                    func_808016E4_chsabreman(param_0);
-                    func_808011F8_chsabreman(param_0, 0xA);
+                    func_808016E4_chsabreman(actor);
+                    func_808011F8_chsabreman(actor, 0xA);
                     break;
 
                 case 0x18:
-                    func_808011F8_chsabreman(param_0, 0x17);
+                    func_808011F8_chsabreman(actor, 0x17);
             }
 
-            if (((s16 *) &param_2)[0] == 0x1275) {
+            if (((s16 *) &arg)[0] == 0x1275) {
                 func_800C01A8(0x64, 0);
 
-                func_808017D8_chsabreman(param_0, 8, 0x2030);
+                func_808017D8_chsabreman(actor, 8, 0x2030);
 
                 func_800D1000(0x3F, 1, 0, 1, 0);
             }
@@ -474,56 +476,56 @@ s32 func_808008C8_chsabreman(Actor *param_0, s32 param_1, s32 param_2)
             break;
 
         case 0x0B:
-            if (param_2 == 8) {
-                func_808016E4_chsabreman(param_0);
-                func_808011F8_chsabreman(param_0, 0x13);
+            if (arg == 8) {
+                func_808016E4_chsabreman(actor);
+                func_808011F8_chsabreman(actor, 0x13);
                 return 4;
             }
 
             return 3;
 
         case 0x44:
-            func_80801010_chsabreman(param_0, param_2);
+            func_80801010_chsabreman(actor, arg);
             break;
 
         case 0x4B:
-            func_80108B04(param_0, 1);
-            _subaddieDll_entrypoint_4(param_0, 1);
-            func_808011F8_chsabreman(param_0, 2);
-            param_0->unk58 = 14.0f;
+            func_80108B04(actor, 1);
+            _subaddieDll_entrypoint_4(actor, 1);
+            func_808011F8_chsabreman(actor, 2);
+            actor->unk58 = 14.0f;
             break;
 
         case 0x4C:
-            param_0->unk3C = 0;
+            actor->unk3C = 0;
             break;
 
         case 0x52:
-            _gcdialogcamera_entrypoint_3(&D_80801BE8_chsabreman, param_0->scale);
+            _gcdialogcamera_entrypoint_3(&D_80801BE8_chsabreman, actor->scale);
             break;
 
         case 0x1F:
-            func_80800D30_chsabreman(param_0, param_2);
+            func_80800D30_chsabreman(actor, arg);
             break;
 
         case 0x57:
-            return func_8080167C_chsabreman(param_0, param_2 & 0xFFFF,
-                                            (param_2 & 0xFFFF0000) >> 16);
+            return func_8080167C_chsabreman(actor, arg & 0xFFFF,
+                                            (arg & 0xFFFF0000) >> 16);
 
         case 0x95:
-            *(s32 *) ((char *) param_0 + 0x50) = 0;
+            *(s32 *) ((char *) actor + 0x50) = 0;
 
             if (_glcutDll_entrypoint_20() ||
-                _subaddietaxi_entrypoint_13(param_0, 0xB, _chsabreman_entrypoint_0, 3)) {
-                func_80800030_chsabreman(param_0);
-            } else if (((SabremanSpawnFlags *) param_0)->local_0) {
-                func_800FFAB0(param_0);
+                _subaddietaxi_entrypoint_13(actor, 0xB, _chsabreman_entrypoint_0, 3)) {
+                func_80800030_chsabreman(actor);
+            } else if (((SabremanSpawnFlags *) actor)->local_0) {
+                func_800FFAB0(actor);
             }
 
             break;
 
         case 0x29:
-            local_0 = (u8 *) func_80100094(param_0, 0);
-            _subaddiepalette_entrypoint_4(param_0, local_0);
+            data = (u8 *) func_80100094(actor, 0);
+            _subaddiepalette_entrypoint_4(actor, data);
             break;
 
         default:
@@ -532,53 +534,53 @@ s32 func_808008C8_chsabreman(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800CDC_chsabreman(s32 param_0, s32 param_1)
+void func_80800CDC_chsabreman(s32 actor, s32 value)
 {
-    s32 local_0;
-    if (func_80101808(param_0, &func_801017D0)) {
-        local_0 = _subaddielink_entrypoint_4((u8 *) func_80100094(param_0, 0) + 0x810);
-        if (local_0 != 0) {
-            func_8010A764(local_0, param_1);
+    s32 linked;
+    if (func_80101808(actor, &func_801017D0)) {
+        linked = _subaddielink_entrypoint_4((u8 *) func_80100094(actor, 0) + 0x810);
+        if (linked != 0) {
+            func_8010A764(linked, value);
         }
     }
 }
 
-void func_80800D30_chsabreman(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800D30_chsabreman(actor, arg) Actor *actor;
+s32 arg;
 {
-    s32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
+    s32 anim_id;
+    f32 spell_pos[3];
+    f32 saved_pos[3];
+    s32 early;
+    s32 window_a;
+    s32 window_b;
 
-    local_0 = func_801022E4(param_0);
-    if (param_0->unk3C) {
-        _subaddiefade_entrypoint_9(param_0, local_2);
-        _chlifeforcespell_entrypoint_2(param_0, param_0->unk3C, local_1);
-        _subaddiefade_entrypoint_11(param_0, local_1);
-        func_801015D0(param_0);
-        _subaddiefade_entrypoint_11(param_0, local_2);
+    anim_id = func_801022E4(actor);
+    if (actor->unk3C) {
+        _subaddiefade_entrypoint_9(actor, saved_pos);
+        _chlifeforcespell_entrypoint_2(actor, actor->unk3C, spell_pos);
+        _subaddiefade_entrypoint_11(actor, spell_pos);
+        func_801015D0(actor);
+        _subaddiefade_entrypoint_11(actor, saved_pos);
     } else {
-        func_801015D0(param_0);
+        func_801015D0(actor);
     }
-    switch (local_0) {
+    switch (anim_id) {
         case 0x2FB:
-            if (func_80101F24(param_0) < 0.602f)
-                local_3 = 1;
+            if (func_80101F24(actor) < 0.602f)
+                early = 1;
             else
-                local_3 = 0;
-            local_4 = func_80102320(param_0, 0.602f, 0.819f);
+                early = 0;
+            window_a = func_80102320(actor, 0.602f, 0.819f);
             func_800DF744(5, 1);
             func_800DF744(3, 0);
-            func_800DF744(6, local_3 && param_0->unk64_20);
-            func_800DF744(4, local_4);
+            func_800DF744(6, early && actor->unk64_20);
+            func_800DF744(4, window_a);
             break;
         case 0x2FA:
-            local_5 = func_80102320(param_0, 0.33f, 0.93f);
-            func_800DF744(5, !local_5);
-            func_800DF744(3, local_5);
+            window_b = func_80102320(actor, 0.33f, 0.93f);
+            func_800DF744(5, !window_b);
+            func_800DF744(3, window_b);
             func_800DF744(6, 0);
             func_800DF744(4, 0);
             break;
@@ -588,29 +590,29 @@ s32 param_1;
             func_800DF744(6, 0);
             func_800DF744(4, 0);
     }
-    _subaddiepalette_entrypoint_3(param_0, func_80100094(param_0, 0), param_1);
+    _subaddiepalette_entrypoint_3(actor, func_80100094(actor, 0), arg);
 }
 
-void func_80800F04_chsabreman(s32 param_0, u8 *param_1, s32 param_2, s32 param_3)
+void func_80800F04_chsabreman(s32 unk_0, u8 *pos, s32 unk_1, s32 unk_2)
 {
     if (func_800DA564(0x1CA, 2) != 3) {
-        _chbaddiesetup_entrypoint_6(&_subaddietaxi_entrypoint_16, param_0,
-                                    *(s32 *) ((s8 *) param_1 + 0), *(s32 *) ((s8 *) param_1 + 4),
-                                    *(s32 *) ((s8 *) param_1 + 8), param_2, param_3);
+        _chbaddiesetup_entrypoint_6(&_subaddietaxi_entrypoint_16, unk_0,
+                                    *(s32 *) ((s8 *) pos + 0), *(s32 *) ((s8 *) pos + 4),
+                                    *(s32 *) ((s8 *) pos + 8), unk_1, unk_2);
     }
 }
 
-s32 func_80800F74_chsabreman(s32 param_0, s32 param_1, s32 param_2)
+s32 func_80800F74_chsabreman(s32 unk_0, s32 pos, s32 target_pos)
 {
-    s32 temp_v0;
-    s32 sp28;
+    s32 node;
+    s32 cube;
 
     if (func_800EA05C() == 0x127) {
-        temp_v0 = _gccubesearch_entrypoint_15(0x154, 0, param_1);
-        if (temp_v0 != 0) {
-            func_800EE88C(param_2, temp_v0);
-            sp28 = func_800CBC3C(param_2);
-            if (func_800CBC3C(param_1) == sp28) {
+        node = _gccubesearch_entrypoint_15(0x154, 0, pos);
+        if (node != 0) {
+            func_800EE88C(target_pos, node);
+            cube = func_800CBC3C(target_pos);
+            if (func_800CBC3C(pos) == cube) {
                 return 2;
             }
         }
@@ -619,56 +621,56 @@ s32 func_80800F74_chsabreman(s32 param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80801010_chsabreman(Actor *param_0, s32 param_1)
+void func_80801010_chsabreman(Actor *actor, s32 unk_0)
 {
-    u8 *local_0;
-    f32 local_1[3];
-    u8 *local_2;
-    local_0 = func_80100094(param_0, 0);
-    if (func_80800030_chsabreman(param_0)) {
-        switch (func_800CB3E0(param_1)) {
+    u8 *data;
+    f32 anchor_pos[3];
+    u8 *node;
+    data = func_80100094(actor, 0);
+    if (func_80800030_chsabreman(actor)) {
+        switch (func_800CB3E0(unk_0)) {
             case 1:
                 break;
             case 3:
-                _subaddietaxi_entrypoint_10(param_0, param_1, 15);
+                _subaddietaxi_entrypoint_10(actor, unk_0, 15);
                 break;
             case 4:
-                func_800EE88C(local_1, _gccubesearch_entrypoint_15(0x154, 0, param_0->position));
-                local_2 = _gccubesearch_entrypoint_15(0x347, 0, param_0->position);
-                func_800EE814(local_0 + 0x81A, local_2);
-                *(s16 *) (local_0 + 0x818) = *(u32 *) (local_2 + 0xC) >> 23;
-                func_8010A570(param_0);
-                _subaddietaxi_entrypoint_0(param_0, param_1, local_1, 14);
+                func_800EE88C(anchor_pos, _gccubesearch_entrypoint_15(0x154, 0, actor->position));
+                node = _gccubesearch_entrypoint_15(0x347, 0, actor->position);
+                func_800EE814(data + 0x81A, node);
+                *(s16 *) (data + 0x818) = *(u32 *) (node + 0xC) >> 23;
+                func_8010A570(actor);
+                _subaddietaxi_entrypoint_0(actor, unk_0, anchor_pos, 14);
                 break;
             case 6:
-                func_808011F8_chsabreman(param_0, 16);
-                func_8010A570(param_0);
+                func_808011F8_chsabreman(actor, 16);
+                func_8010A570(actor);
         }
     }
 }
 
-f32 func_8080112C_chsabreman(param_0)
-u8 *param_0;
+f32 func_8080112C_chsabreman(actor)
+u8 *actor;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
+    f32 top[3];
+    f32 bottom[3];
+    f32 hit[3];
 
-    func_800EE7F8(local_0, param_0 + 4);
-    func_800EE7F8(local_1, param_0 + 4);
-    local_0[1] += 100.0f;
-    local_1[1] -= 400.0f;
-    func_800BEF00(local_0, local_1, local_2, *(s32 **) (param_0 + 0x14));
-    return local_1[1];
+    func_800EE7F8(top, actor + 4);
+    func_800EE7F8(bottom, actor + 4);
+    top[1] += 100.0f;
+    bottom[1] -= 400.0f;
+    func_800BEF00(top, bottom, hit, *(s32 **) (actor + 0x14));
+    return bottom[1];
 }
 
-s32 func_808011AC_chsabreman(Actor *this)
+s32 func_808011AC_chsabreman(Actor *actor)
 {
-    f32 sp1C[3];
+    f32 target[3];
 
-    func_8010D600(sp1C);
-    *(f32 *) ((char *) this + 0x54) = func_80102D78(this, sp1C);
-    return func_80102BF8(this, 0.1f, 4.0f, 150.0f);
+    func_8010D600(target);
+    *(f32 *) ((char *) actor + 0x54) = func_80102D78(actor, target);
+    return func_80102BF8(actor, 0.1f, 4.0f, 150.0f);
 }
 
 void func_808011F8_chsabreman()
@@ -676,214 +678,215 @@ void func_808011F8_chsabreman()
     func_80102424();
 }
 
-void func_80801218_chsabreman(param_0) Actor *param_0;
+void func_80801218_chsabreman(actor) Actor *actor;
 {
-    Vec3f local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    Vec3f local_4;
+    Vec3f unk_0;
+    f32 bone_pos[3];
+    f32 spawn_pos[3];
+    f32 bone_pos_b[3];
+    Vec3f unk_1;
 
-    switch (func_801022E4(param_0)) {
+    switch (func_801022E4(actor)) {
         case 0x2F7:
-            local_0 = D_80801E18_chsabreman;
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801E30_chsabreman,
-                                             local_0.f);
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801E40_chsabreman,
+            unk_0 = D_80801E18_chsabreman;
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801E30_chsabreman,
+                                             unk_0.f);
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801E40_chsabreman,
                                              0.2f);
             return;
         case 0x2F9:
-            if (func_80101E14(param_0, 0.02f)) {
-                if (_subaddieskeleton_entrypoint_2(param_0->unk0, 5, local_1)) {
-                    func_800EE7F8(local_2, local_1);
-                    func_800EF1B8(local_2, param_0->rotation[1], -50.0f);
-                    local_2[1] += 30.0f;
-                    func_800BABB8(0, local_1, local_2, 1.0f, D_80801E60_chsabreman);
+            if (func_80101E14(actor, 0.02f)) {
+                if (_subaddieskeleton_entrypoint_2(actor->unk0, 5, bone_pos)) {
+                    func_800EE7F8(spawn_pos, bone_pos);
+                    func_800EF1B8(spawn_pos, actor->rotation[1], -50.0f);
+                    spawn_pos[1] += 30.0f;
+                    func_800BABB8(0, bone_pos, spawn_pos, 1.0f, D_80801E60_chsabreman);
                 }
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80801E50_chsabreman);
+                _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80801E50_chsabreman);
             }
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801E8C_chsabreman,
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801E8C_chsabreman,
                                              D_80801E9C_chsabreman);
             return;
         case 0x2FA:
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801EC4_chsabreman,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801EC4_chsabreman,
                                              0.0f);
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801E30_chsabreman,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801E30_chsabreman,
                                              0.75f);
-            if (func_80101F24(param_0) < 0.7f && func_8001210C(1) &&
-                _subaddieskeleton_entrypoint_2(param_0->unk0, 4, local_3)) {
-                func_800BBCB8(local_3, 0, 1.0f, 1, D_80801ED4_chsabreman);
+            if (func_80101F24(actor) < 0.7f && func_8001210C(1) &&
+                _subaddieskeleton_entrypoint_2(actor->unk0, 4, bone_pos_b)) {
+                func_800BBCB8(bone_pos_b, 0, 1.0f, 1, D_80801ED4_chsabreman);
             }
             return;
         case 0x2FB:
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801EFC_chsabreman,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801EFC_chsabreman,
                                              0.6f);
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801F08_chsabreman,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801F08_chsabreman,
                                              0.8f);
             return;
         case 0x2FC:
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801F14_chsabreman,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801F14_chsabreman,
                                              0.025f);
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801F2C_chsabreman,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801F2C_chsabreman,
                                              0.12f);
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801F44_chsabreman,
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801F44_chsabreman,
                                              D_80801F5C_chsabreman);
             return;
         case 0x2FD:
-            local_4 = D_80801E24_chsabreman;
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801E30_chsabreman,
-                                             local_4.f);
+            unk_1 = D_80801E24_chsabreman;
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801E30_chsabreman,
+                                             unk_1.f);
             return;
         case 0x2FE:
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801F6C_chsabreman,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801F6C_chsabreman,
                                              0.8f);
             return;
         case 0x2FF:
-            if (!param_0->unk5F) {
-                param_0->unk5F = func_800C4350(0, param_0->position, D_80801F78_chsabreman);
+            if (!actor->unk5F) {
+                actor->unk5F = func_800C4350(0, actor->position, D_80801F78_chsabreman);
             }
-            if (param_0->unk5F) {
-                if (func_80101E14(param_0, 0.0f)) {
-                    func_800C4350(param_0->unk5F, param_0->position, D_80801F88_chsabreman);
+            if (actor->unk5F) {
+                if (func_80101E14(actor, 0.0f)) {
+                    func_800C4350(actor->unk5F, actor->position, D_80801F88_chsabreman);
                 }
-                if (func_80101E14(param_0, 0.65f)) {
-                    func_800C4350(param_0->unk5F, param_0->position, D_80801F98_chsabreman);
+                if (func_80101E14(actor, 0.65f)) {
+                    func_800C4350(actor->unk5F, actor->position, D_80801F98_chsabreman);
                 }
             }
     }
 }
 
-void func_8080158C_chsabreman(s32 param_0)
+void func_8080158C_chsabreman(s32 actor)
 {
-    func_80102FDC((Actor *) param_0, 0.45f);
+    func_80102FDC((Actor *) actor, 0.45f);
     if (func_800DA564(0x1CA, 2) != 3) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
     }
 }
 
-void func_808015D4_chsabreman(Actor *param_0)
+void func_808015D4_chsabreman(Actor *actor)
 {
+    // Matching: padding local for the stack frame.
     s8 _sfpad[8];
-    s32 local_0;
+    s32 unk_0;
 
-    if (_subaddieskeleton_entrypoint_0(param_0, 1, &local_0) != 0) {
-        _sudeflect_entrypoint_0((u8 *) param_0 + 4, 0.0f, 100.0f, 0xA);
+    if (_subaddieskeleton_entrypoint_0(actor, 1, &unk_0) != 0) {
+        _sudeflect_entrypoint_0((u8 *) actor + 4, 0.0f, 100.0f, 0xA);
     }
-    func_80801218_chsabreman(param_0);
+    func_80801218_chsabreman(actor);
 }
 
-s32 func_80801620_chsabreman(s32 param_0, s32 param_1)
+s32 func_80801620_chsabreman(s32 actor, s32 unk_0)
 {
     func_800DF744(5, 1);
     func_800DF744(3, 0);
     func_800DF744(6, 0);
     func_800DF744(4, 0);
-    func_80101870(param_0, param_1);
+    func_80101870(actor, unk_0);
 }
 
-s32 func_8080167C_chsabreman(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_8080167C_chsabreman(Actor *actor, s32 unk_0, s32 unk_1)
 {
-    u8 *local_0;
+    u8 *data;
 
-    if (_gcdialogcamera_entrypoint_0(param_1, param_2)) {
-        local_0 = func_80100094(param_0, 0);
-        if (local_0 != NULL && *(s16 *) (local_0 + 0x820) != 2) {
-            func_80801724_chsabreman(param_0, 2, 1);
+    if (_gcdialogcamera_entrypoint_0(unk_0, unk_1)) {
+        data = func_80100094(actor, 0);
+        if (data != NULL && *(s16 *) (data + 0x820) != 2) {
+            func_80801724_chsabreman(actor, 2, 1);
         }
         return 2;
     }
     return 1;
 }
 
-void func_808016E4_chsabreman(s32 param_0)
+void func_808016E4_chsabreman(s32 actor)
 {
-    u8 *sp1C;
+    u8 *data;
 
-    sp1C = func_80100094(param_0, 0);
-    if (*(s16 *) ((s8 *) sp1C + 0x820) != 0) {
+    data = func_80100094(actor, 0);
+    if (*(s16 *) ((s8 *) data + 0x820) != 0) {
         _capod_entrypoint_3(0);
-        *(s16 *) ((s8 *) sp1C + 0x820) = 0;
+        *(s16 *) ((s8 *) data + 0x820) = 0;
     }
 }
 
-void func_80801724_chsabreman(param_0, param_1, param_2) Actor *param_0;
-s32 param_1;
-s32 param_2;
+void func_80801724_chsabreman(actor, unk_0, unk_1) Actor *actor;
+s32 unk_0;
+s32 unk_1;
 {
-    u8 *local_0;
+    u8 *data;
 
-    local_0 = func_80100094(param_0, 0);
-    switch (*(s16 *) (local_0 + 0x820)) {
+    data = func_80100094(actor, 0);
+    switch (*(s16 *) (data + 0x820)) {
         case 0:
-            _capod_entrypoint_2(param_0->unk0, 14, 0);
+            _capod_entrypoint_2(actor->unk0, 14, 0);
         case 1:
             _capod_entrypoint_8(1);
-            *(s16 *) (local_0 + 0x820) = 2;
-            _gcdialogcamera_entrypoint_3(&D_80801BE8_chsabreman, param_0->scale);
-            _gcdialogcamera_entrypoint_4(param_0->position);
-            _gcdialogcamera_entrypoint_5(param_0->rotation);
+            *(s16 *) (data + 0x820) = 2;
+            _gcdialogcamera_entrypoint_3(&D_80801BE8_chsabreman, actor->scale);
+            _gcdialogcamera_entrypoint_4(actor->position);
+            _gcdialogcamera_entrypoint_5(actor->rotation);
             _gcdialogcamera_entrypoint_8();
         case 2:
-            _capod_entrypoint_7(param_1, param_2);
+            _capod_entrypoint_7(unk_0, unk_1);
     }
 }
 
-void func_808017D8_chsabreman(Actor *param_0, s32 param_1, s32 param_2)
+void func_808017D8_chsabreman(Actor *actor, s32 unk_0, s32 unk_1)
 {
-    u8 *local_0;
+    u8 *data;
 
-    local_0 = func_80100094(param_0, 0);
-    switch (*(s16 *) (local_0 + 0x820)) {
+    data = func_80100094(actor, 0);
+    switch (*(s16 *) (data + 0x820)) {
         case 0:
-            _capod_entrypoint_2(param_0->unk0, 14, param_2);
+            _capod_entrypoint_2(actor->unk0, 14, unk_1);
         case 2:
-            *(s16 *) (local_0 + 0x820) = 1;
+            *(s16 *) (data + 0x820) = 1;
         case 1:
-            _capod_entrypoint_6(param_0->unk0, param_1, param_2);
+            _capod_entrypoint_6(actor->unk0, unk_0, unk_1);
     }
 }
 
-void func_80801864_chsabreman(u8 *param_0)
+void func_80801864_chsabreman(u8 *actor)
 {
     if (func_800DA564(0x1CA, 2) > 0) {
-        func_80102424(param_0, 3);
-        func_80103110(param_0, 0);
+        func_80102424(actor, 3);
+        func_80103110(actor, 0);
     }
     if (func_800DA564(0x1CA, 2) >= 2) {
-        param_0[0x65] = (param_0[0x65] & 0xFF) | 0x10;
+        actor[0x65] = (actor[0x65] & 0xFF) | 0x10;
     }
-    func_8010A800(param_0, 2);
+    func_8010A800(actor, 2);
 }
 
-void func_808018DC_chsabreman(Actor *param_0)
+void func_808018DC_chsabreman(Actor *actor)
 {
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 2:
-            if (func_80101DDC(param_0)) {
-                func_80102424(param_0, 3);
-                func_80103110(param_0, 0);
+            if (func_80101DDC(actor)) {
+                func_80102424(actor, 3);
+                func_80103110(actor, 0);
             }
         case 3:
             break;
     }
 }
 
-void func_8080193C_chsabreman(Actor *param_0, s32 param_1)
+void func_8080193C_chsabreman(Actor *actor, s32 unk_0)
 {
-    func_800DF744(3, param_0->unk64_20 ? 0 : 1);
+    func_800DF744(3, actor->unk64_20 ? 0 : 1);
     func_800DF744(4, 1);
     func_800DF744(5, 1);
-    func_80101870(param_0, param_1);
+    func_80101870(actor, unk_0);
 }
 
-s32 func_808019A4_chsabreman(Actor *param_0, s32 param_1, SabremanEventPayload param_2)
+s32 func_808019A4_chsabreman(Actor *actor, s32 msg, SabremanEventPayload payload)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0xA:
-            func_80102424(param_0, 2);
+            func_80102424(actor, 2);
             break;
         case 0x48:
-            param_0->unk64_20 = 1;
+            actor->unk64_20 = 1;
             break;
         default:
             return 0;
@@ -891,6 +894,11 @@ s32 func_808019A4_chsabreman(Actor *param_0, s32 param_1, SabremanEventPayload p
     return 1;
 }
 
+// TU-NOTE: The overlay .data is defined in this file. Its tables hold pointers to functions
+// of this file; IDO's assembler schedules some of them differently unless the tables are in
+// the same unit. D_80801E16_chsabreman is a linker symbol at D_80801E08_chsabreman + 0xE.
+// The externs D_80801BE0_chsabreman, D_80801BE8_chsabreman and D_80801D78_chsabreman are
+// declared as arrays to match their objects.
 extern void func_80105834();
 extern void func_80108ED0();
 extern void func_80107C2C();

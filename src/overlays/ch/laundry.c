@@ -40,6 +40,7 @@ f32 func_8080000C_chlaundry(Actor *param_0)
     return local_0;
 }
 
+// Flies the laundry; on landing sets the delete flag.
 void func_80800058_chlaundry(Actor *param_0, f32 param_1)
 {
     f32 local_1;
@@ -71,6 +72,7 @@ void func_80800058_chlaundry(Actor *param_0, f32 param_1)
         local_0[1] = 1;
 }
 
+// Update: advance flight, delete on landing with sparkles.
 void func_80800218_chlaundry(Actor *param_0)
 {
     f32 local_1;
@@ -127,6 +129,7 @@ int func_808003A0_chlaundry(s32 volatile param_0)
 extern void func_80105834();
 extern void _subaddiedraw25d_entrypoint_2();
 extern void func_80107C2C();
+// TU-NOTE: .data is defined in C so IDO schedules the functions these tables point to as in the original.
 int D_80800400_chlaundry[18] = {0x2740162,
                                 0x9D10001,
                                 0x0,

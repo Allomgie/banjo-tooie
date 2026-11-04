@@ -1,18 +1,19 @@
 #include "ch/lavatraindoorswitch.h"
 
-s32 func_80800000_chlavatraindoorswitch(void *this, s32 param_1)
+// HFP fire-side train station switch; message 7 plays cutscene 0x4D in map 0x129.
+s32 func_80800000_chlavatraindoorswitch(void *this, s32 msg)
 {
-    if (param_1 == 7) {
+    if (msg == 7) {
         _glcutDll_entrypoint_6(0x129, 0x4D);
         return TRUE;
     }
-    return _chswitch_entrypoint_10(this, param_1);
+    return _chswitch_entrypoint_10(this, msg);
 }
 
-void func_8080003C_chlavatraindoorswitch(s32 arg0)
+void func_8080003C_chlavatraindoorswitch(s32 switch_actor)
 {
-    _chswitch_entrypoint_7(arg0, FLAG_1D0_STATION_UNLOCKED_HFPL);
-    _chswitch_entrypoint_9(arg0);
+    _chswitch_entrypoint_7(switch_actor, FLAG_1D0_STATION_UNLOCKED_HFPL);
+    _chswitch_entrypoint_9(switch_actor);
 }
 
 int chlavatraindoorswitch_entrypoint_0()
@@ -21,6 +22,8 @@ int chlavatraindoorswitch_entrypoint_0()
     return (int) &D_80800080_chlavatraindoorswitch;
 }
 
+// TU-NOTE: the overlay .data is defined here in C (from the ROM); its tables point to functions of
+// this file, and IDO's assembler schedules them differently otherwise.
 extern u8 D_8011A248[];
 extern void _chswitch_entrypoint_6();
 extern void func_80105834();

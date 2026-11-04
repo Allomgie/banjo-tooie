@@ -62,52 +62,53 @@ typedef struct {
 extern int D_80800888_chboggy[];
 void func_80800554_chboggy();
 
-void func_80800000_chboggy(s32 param_0)
+void func_80800000_chboggy(s32 actor)
 {
-    *(f32 *) ((u8 *) param_0 + 0x38) = 0.18f;
+    *(f32 *) ((u8 *) actor + 0x38) = 0.18f;
     if (func_800DA298(0x439) != 0 || _glcutDll_entrypoint_20() != 0) {
-        func_80101FDC(param_0, 3);
+        func_80101FDC(actor, 3);
     }
 }
 
-void func_80800054_chboggy(s32 param_0, s32 param_1, s32 param_2)
+void func_80800054_chboggy(s32 actor, s32 msg_a, s32 msg_b)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = _subaddiedialog_entrypoint_9(param_0, param_1, (s32 *) D_80800790_chboggy, 7);
-    local_1 = _subaddiedialog_entrypoint_9(param_0, param_1, (s32 *) D_808007C8_chboggy, 7);
-    if (local_0 == 1) {
-        func_80101FDC(param_0, 1);
+    s32 dialog_a;
+    s32 dialog_b;
+    dialog_a = _subaddiedialog_entrypoint_9(actor, msg_a, (s32 *) D_80800790_chboggy, 7);
+    dialog_b = _subaddiedialog_entrypoint_9(actor, msg_a, (s32 *) D_808007C8_chboggy, 7);
+    if (dialog_a == 1) {
+        func_80101FDC(actor, 1);
         func_800DA544(0x447);
-    } else if (local_1 == 1) {
+    } else if (dialog_b == 1) {
         func_800F82D4(func_800F54E4() | 0, 0 | 0);
     }
 }
 
-s32 func_808000EC_chboggy(Actor *param_0, s32 param_1, BoggyMessage32 param_2)
+s32 func_808000EC_chboggy(Actor *actor, s32 msg_type, BoggyMessage32 msg)
 {
-    s32 local_0;
+    s32 state;
 
-    switch (param_1) {
+    switch (msg_type) {
         case 0x2E:
-            func_80800054_chboggy(param_0, param_2.half[0], param_2.half[1]);
+            func_80800054_chboggy(actor, msg.half[0], msg.half[1]);
             break;
         case 0x1F:
             func_800DF3E0();
-            func_801015D0(param_0);
-            local_0 = param_0->unk70_10 == 1 ? 1 : 2;
-            func_800DF744(3, local_0);
+            func_801015D0(actor);
+            state = actor->unk70_10 == 1 ? 1 : 2;
+            func_800DF744(3, state);
             break;
         case 0x7D:
-            func_80101FDC(param_0, 2);
+            func_80101FDC(actor, 2);
             break;
         case 0x3D:
-            if (param_2.word == 0x22B) {
-                _subaddieaudioquick_entrypoint_2(param_0, &param_0->actorData[4],
+            // Spawn the jiggy (collectible 0x40) via bounce.
+            if (msg.word == 0x22B) {
+                _subaddieaudioquick_entrypoint_2(actor, &actor->actorData[4],
                                                  D_80800820_chboggy);
-                *(f32 *) &param_0->actorData[1] -= 60.0f;
+                *(f32 *) &actor->actorData[1] -= 60.0f;
                 ((f32 *) _chbounce_entrypoint_9((s32) func_80106790(
-                    func_800D10D4(0x40, 1, param_0->actorData, 0, 0))))[1] = 0.0f;
+                    func_800D10D4(0x40, 1, actor->actorData, 0, 0))))[1] = 0.0f;
             }
             break;
         default:
@@ -116,91 +117,93 @@ s32 func_808000EC_chboggy(Actor *param_0, s32 param_1, BoggyMessage32 param_2)
     return 1;
 }
 
-void func_80800220_chboggy(Actor *param_0)
+void func_80800220_chboggy(Actor *actor)
 {
-    u32 local_0;
-    _sudeflect_entrypoint_0(param_0->position, 175.0f, 175.0f, 0xE);
-    func_80800554_chboggy(param_0);
-    local_0 = param_0->unk70_10;
-    switch (local_0) {
+    u32 state;
+    _sudeflect_entrypoint_0(actor->position, 175.0f, 175.0f, 0xE);
+    func_80800554_chboggy(actor);
+    state = actor->unk70_10;
+    switch (state) {
         case 1:
-            _subaddieaudioquick_entrypoint_3(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_3(actor, (f32 *) &actor->actorData[4],
                                              &D_808006A0_chboggy, 0.1298000067f);
-            _subaddieaudioquick_entrypoint_4(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_4(actor, (f32 *) &actor->actorData[4],
                                              &D_80800704_chboggy, &D_80800740_chboggy);
-            _subaddieaudioquick_entrypoint_3(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_3(actor, (f32 *) &actor->actorData[4],
                                              &D_80800710_chboggy, 0.4199999869f);
-            _subaddieaudioquick_entrypoint_3(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_3(actor, (f32 *) &actor->actorData[4],
                                              &D_808006F8_chboggy, 0.5799999833f);
-            _subaddieaudioquick_entrypoint_4(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_4(actor, (f32 *) &actor->actorData[4],
                                              &D_808006C8_chboggy, &D_8080074C_chboggy);
+            // Take the carried fish (actor 0x4D7) when it is brought close.
             if (((func_800DA298(0x447) != 0) &&
-                 ((func_800902E4(param_0->position, 400.0f, 0x4D7, &param_0),
+                 ((func_800902E4(actor->position, 400.0f, 0x4D7, &actor),
                    func_800F640C(func_800F54E4(), 0x4D7) != 0) ||
                   (func_8008FE14() == 0x4D7))) &&
                 (func_80090818() != 0)) {
-                func_80090768((f32 *) param_0->actorData);
+                func_80090768((f32 *) actor->actorData);
                 func_800D1824(0x51);
-                func_800F8300(func_800F54E4(), 2, param_0->position);
+                func_800F8300(func_800F54E4(), 2, actor->position);
             }
+            // Flag 0x437 is set along with 0x439.
             if (func_800DA298(0x439) != 0) {
                 func_800DA544(0x437);
             }
-            _subaddiedialog_entrypoint_8(param_0, param_0->position, &D_80800800_chboggy,
+            _subaddiedialog_entrypoint_8(actor, actor->position, &D_80800800_chboggy,
                                          &D_80800790_chboggy, 7);
             return;
 
         case 2:
-            _subaddieaudioquick_entrypoint_3(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_3(actor, (f32 *) &actor->actorData[4],
                                              &D_808006B0_chboggy, 0.05000000075f);
-            _subaddieaudioquick_entrypoint_4(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_4(actor, (f32 *) &actor->actorData[4],
                                              &D_808006E8_chboggy, &D_80800760_chboggy);
-            _subaddieaudioquick_entrypoint_4(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_4(actor, (f32 *) &actor->actorData[4],
                                              &D_808006B8_chboggy, &D_80800730_chboggy);
-            if (((func_80101E14(param_0, 0.6000000238f) != 0) && (func_800D0B68(0x40, 1) == 0)) &&
+            if (((func_80101E14(actor, 0.6000000238f) != 0) && (func_800D0B68(0x40, 1) == 0)) &&
                 (func_800D0A9C(0x40, 1) == 0)) {
-                func_80108B04(param_0, 0x22B);
+                func_80108B04(actor, 0x22B);
             }
-            if (func_80101E14(param_0, 0.9900000095f) != 0) {
-                func_80101FDC(param_0, 3);
+            if (func_80101E14(actor, 0.9900000095f) != 0) {
+                func_80101FDC(actor, 3);
             }
             return;
 
         case 3:
-            _subaddieaudioquick_entrypoint_3(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_3(actor, (f32 *) &actor->actorData[4],
                                              &D_808006D8_chboggy, 0.2199999988f);
-            _subaddieaudioquick_entrypoint_4(param_0, (f32 *) &param_0->actorData[4],
+            _subaddieaudioquick_entrypoint_4(actor, (f32 *) &actor->actorData[4],
                                              &D_808006B8_chboggy, &D_80800720_chboggy);
-            _subaddiedialog_entrypoint_8(param_0, param_0->position, &D_80800810_chboggy,
+            _subaddiedialog_entrypoint_8(actor, actor->position, &D_80800810_chboggy,
                                          &D_808007C8_chboggy, 7);
     }
 }
 
-void func_80800504_chboggy(BoggyS *param_0)
+void func_80800504_chboggy(BoggyS *actor)
 {
-    func_801018A4(param_0);
-    if (param_0->flag) {
-        func_800DBEFC(func_80104130(), 4, (u8 *) param_0 + 0x18);
+    func_801018A4(actor);
+    if (actor->flag) {
+        func_800DBEFC(func_80104130(), 4, (u8 *) actor + 0x18);
     }
 }
 
-void func_80800554_chboggy(param_0) s32 param_0;
+void func_80800554_chboggy(unk_0) s32 unk_0;
 {
-    s32 local_0;
+    s32 glow_step;
     s32 pad0;
-    u8 local_1;
-    void *local_2;
+    u8 glow_id;
+    void *world;
 
-    local_2 = _idworld_entrypoint_0(0x35C);
-    if (local_2 != NULL) {
-        local_0 = (s32) (_idglowa_entrypoint_1(local_2) * 32.0f);
-        if (local_0 == 0x13)
+    world = _idworld_entrypoint_0(0x35C);
+    if (world != NULL) {
+        glow_step = (s32) (_idglowa_entrypoint_1(world) * 32.0f);
+        if (glow_step == 0x13)
             func_800DA544(0xA2E);
-        if (local_0 == 0x12 && func_800DA298(0xA2E)) {
-            local_1 = func_800C4350(0, NULL, D_80800830_chboggy);
-            func_800C36F4(local_1, 1);
-            func_800C3A40(local_1, 1.0f, 1.4f, 1.0f);
-            func_800C3BDC(local_1);
+        if (glow_step == 0x12 && func_800DA298(0xA2E)) {
+            glow_id = func_800C4350(0, NULL, D_80800830_chboggy);
+            func_800C36F4(glow_id, 1);
+            func_800C3A40(glow_id, 1.0f, 1.4f, 1.0f);
+            func_800C3BDC(glow_id);
             func_800DA524(0xA2E);
         }
     }
@@ -211,11 +214,11 @@ int chboggy_entrypoint_0()
     return (int) &D_80800840_chboggy;
 }
 
-void func_80800634_chboggy(BoggyState *param_0)
+void func_80800634_chboggy(BoggyState *state)
 {
-    param_0->f44 = param_0->f76;
-    param_0->f4C = param_0->f38 * 100.0f;
-    param_0->f38 = 2.0f;
+    state->f44 = state->f76;
+    state->f4C = state->f38 * 100.0f;
+    state->f38 = 2.0f;
 }
 
 int chboggy_entrypoint_1()

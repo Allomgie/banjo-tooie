@@ -12,6 +12,7 @@ int chzubba_entrypoint_0()
     return (int) &D_80800178_chzubba;
 }
 
+// Init: shared flying-baddie AI, collision scale 0.65.
 void func_8080000C_chzubba(arg0) s32 arg0;
 {
     _sucoasterfly_entrypoint_1(arg0, 0);
@@ -20,7 +21,7 @@ void func_8080000C_chzubba(arg0) s32 arg0;
 
 void func_80800040_chzubba(Actor *param_0)
 {
-    u32 local_0;
+    u32 unk_0;
 
     _sucoasterfly_entrypoint_3(param_0);
 
@@ -34,15 +35,17 @@ switch (param_0->unk70_10) {
     case 7:
     case 8:
     case 9:
-        local_0 = 1;
+        unk_0 = 1;
         break;
     default:
-        local_0 = 0;
+        unk_0 = 0;
 }
 
-_subaddieaudioloop_entrypoint_5(param_0, param_0->position, local_0, -1, D_808001C0_chzubba);
+_subaddieaudioloop_entrypoint_5(param_0, param_0->position, unk_0, -1, D_808001C0_chzubba);
 }
 
+// TU-NOTE: the overlay .data is defined here in C; tables holding function pointers must be in
+// the same unit, or IDO's assembler schedules those functions differently. D_80800178_chzubba is int[].
 u8 D_808000F0_chzubba[136] = {
     0x0,  0x0,  0x0,  0x0,  0x0, 0x0,  0x0, 0x0, 0x3F, 0x26, 0x66, 0x66, 0x3, 0xCB, 0x0, 0x1,
     0x3F, 0x26, 0x66, 0x66, 0x3, 0xCB, 0x0, 0x1, 0x3F, 0x26, 0x66, 0x66, 0x3, 0xCB, 0x0, 0x1,

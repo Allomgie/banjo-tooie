@@ -5,16 +5,17 @@ extern s32 func_800D90A4(f32 *);
 extern void func_800C3F48(s32);
 extern int D_808000A0_chjellycastle[];
 
-void func_80800000_chjellycastle(Actor *param_0)
+// Plays a squelch sound when the player lands on the castle (0.5 s cooldown).
+void func_80800000_chjellycastle(Actor *actor)
 {
-    s32 local_0;
+    s32 unk_0;
 
-    local_0 = _plsu_entrypoint_3(param_0->unk0);
-    if (!local_0 && func_800D90A4(&param_0->unk58) && !param_0->unk64_20) {
+    unk_0 = _plsu_entrypoint_3(actor->unk0);
+    if (!unk_0 && func_800D90A4(&actor->unk58) && !actor->unk64_20) {
         func_800C3F48(0x599C5699);
-        param_0->unk58 = 0.5f;
+        actor->unk58 = 0.5f;
     }
-    param_0->unk64_20 = !local_0;
+    actor->unk64_20 = !unk_0;
 }
 
 int chjellycastle_entrypoint_0()

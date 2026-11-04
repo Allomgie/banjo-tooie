@@ -30,33 +30,34 @@ void func_8080000C_chdiggerbossinterior(s32 param_0)
     func_800FE850();
 }
 
-void func_8080002C_chdiggerbossinterior(Actor *param_0)
+// Per-frame: shows the HUD counter, plays the ambient loop, then activates the minions' chase AI.
+void func_8080002C_chdiggerbossinterior(Actor *actor)
 {
-    Actor *local_1;
-    s32 local_0;
+    Actor *minion;
+    s32 iter;
 
     func_800D2498(0x10B, 2 - func_800DA980(0xA4F, 2), 0);
-    _subaddieaudioloop_entrypoint_4(param_0, 0, 1, D_80800278_chdiggerbossinterior);
-    if (param_0->unk70_10 == 2 && param_0->unk79_4-- == 0) {
-        for (local_1 = _subaddiefind_entrypoint_2(0x131, &local_0); local_1;
-             local_1 = _subaddiefind_entrypoint_3(0x131, &local_0)) {
-            _sucoaster_entrypoint_5(local_1);
+    _subaddieaudioloop_entrypoint_4(actor, 0, 1, D_80800278_chdiggerbossinterior);
+    if (actor->unk70_10 == 2 && actor->unk79_4-- == 0) {
+        for (minion = _subaddiefind_entrypoint_2(0x131, &iter); minion;
+             minion = _subaddiefind_entrypoint_3(0x131, &iter)) {
+            _sucoaster_entrypoint_5(minion);
         }
     }
 }
 
-s32 func_808000F4_chdiggerbossinterior(Actor *param_0, s32 param_1, DiggerInteriorEvent59 param_2)
+s32 func_808000F4_chdiggerbossinterior(Actor *actor, s32 msg, DiggerInteriorEvent59 data)
 {
-    Actor *local_0;
+    Actor *minion;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x49:
-            local_0 = func_80800178_chdiggerbossinterior(param_0, 0x32);
+            minion = func_80800178_chdiggerbossinterior(actor, 0x32);
             if (func_800DA980(0xA4F, 2) > 0) {
-                local_0 = func_80800178_chdiggerbossinterior(local_0, 0x33);
+                minion = func_80800178_chdiggerbossinterior(minion, 0x33);
             }
-            func_80101FDC(local_0, 2);
-            local_0->unk79_4 = 1;
+            func_80101FDC(minion, 2);
+            minion->unk79_4 = 1;
             break;
         default:
             return 0;
@@ -64,21 +65,22 @@ s32 func_808000F4_chdiggerbossinterior(Actor *param_0, s32 param_1, DiggerInteri
     return 1;
 }
 
-Actor *func_80800178_chdiggerbossinterior(param_0, param_1)
-Actor *param_0;
-s32 param_1;
+// Spawns a digger ground minion (actor 0x131) at the given marker.
+Actor *func_80800178_chdiggerbossinterior(actor, marker_id)
+Actor *actor;
+s32 marker_id;
 {
-    DiggerInteriorPose local_0;
-    Actor *local_1;
-    if (_subaddiemarker_entrypoint_1(param_0, 0x154, param_1, &local_0, 1)) {
-        local_1 = func_80108528(0x131, local_0.position, (s32) local_0.yaw, &param_0);
-        local_1->unk64_20 = 1;
-        local_1->unk74_17 = 0;
-        local_1->unk74_7 = 100;
-        func_80102FDC(local_1, local_0.scale);
-        func_80108658(local_1, 0x20002000, 0, 0);
+    DiggerInteriorPose pose;
+    Actor *minion;
+    if (_subaddiemarker_entrypoint_1(actor, 0x154, marker_id, &pose, 1)) {
+        minion = func_80108528(0x131, pose.position, (s32) pose.yaw, &actor);
+        minion->unk64_20 = 1;
+        minion->unk74_17 = 0;
+        minion->unk74_7 = 100;
+        func_80102FDC(minion, pose.scale);
+        func_80108658(minion, 0x20002000, 0, 0);
     }
-    return param_0;
+    return actor;
 }
 
 extern void func_80102EC0();

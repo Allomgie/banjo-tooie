@@ -134,21 +134,21 @@ void func_80800098_basnowball(s32 param_0, u32 param_1, f32 *param_2, f32 *param
 
 int func_808000C0_basnowball(Actor *param_0)
 {
-    f32 local_0;
-    f32 local_1;
-    s32 local_2;
-    local_2 = func_800A1718();
-    func_80800098_basnowball(param_0, local_2, &local_0, &local_1);
-    func_800959C8(param_0, local_0, local_1);
-    func_8009590C(param_0, local_0);
+    f32 radius;
+    f32 height;
+    s32 level;
+    level = func_800A1718();
+    func_80800098_basnowball(param_0, level, &radius, &height);
+    func_800959C8(param_0, radius, height);
+    func_8009590C(param_0, radius);
 }
 
 s32 func_80800110_basnowball(s32 param_0)
 {
-    f32 *local_0;
+    f32 *cam;
 
-    local_0 = D_80801068_basnowball[func_800A1718()];
-    func_800A4D6C(param_0, local_0[0], local_0[1]);
+    cam = D_80801068_basnowball[func_800A1718()];
+    func_800A4D6C(param_0, cam[0], cam[1]);
 }
 
 void func_80800150_basnowball(PlayerState *param_0, s32 param_1)
@@ -283,78 +283,78 @@ int basnowball_entrypoint_9(s32 param_0, f32 param_1)
 
 void basnowball_entrypoint_10(PlayerState *param_0)
 {
-    s32 local_6;
-    s32 local_7;
-    f32 local_2;
-    s32 local_3;
-    f32 local_0[3];
-    f32 local_1[3];
-    s32 local_4;
-    f32(*local_5)[3];
+    s32 i;
+    s32 unk_0; // unused, but it carries the stack frame (the frame is 8 bytes smaller without it)
+    f32 scale;
+    s32 emitter_type;
+    f32 pos[3];
+    f32 spawn_pos[3];
+    s32 emitter;
+    f32(*unk_1)[3]; // unused, but it carries the stack frame
 
-    local_3 = func_800B5BE4(7);
-    local_2 = *(f32 *) ((u8 *) *(void **) ((u8 *) param_0 + 0x110) + 0x1C);
-    func_8009C128(param_0, local_0);
-    local_0[1] += 50.0f * local_2;
-    local_4 = func_800BABB8(local_3, local_0, NULL, 1.0f, D_80801098_basnowball);
-    func_800BA7C4(local_4, 0.5f * local_2, 0.5f * local_2);
-    func_800BA7FC(local_4, 1.1f * local_2, 1.1f * local_2);
-    func_800BA8F8(local_4, 0.175f * local_2 + 0.6f, 0.175f * local_2 + 0.6f);
-    for (local_6 = 0; local_6 < 4; local_6++) {
-        func_800EE7F8(local_1, local_0);
-        local_1[0] += D_808010C0_basnowball[local_6][0] * local_2;
-        local_1[2] += D_808010C0_basnowball[local_6][1] * local_2;
-        func_800BA75C(local_4, local_1);
-        func_800BA77C(local_4, 0, 0, (s16) (s32) D_808010C0_basnowball[local_6][2]);
-        func_800BA22C(local_4, 1);
+    emitter_type = func_800B5BE4(7);
+    scale = *(f32 *) ((u8 *) *(void **) ((u8 *) param_0 + 0x110) + 0x1C);
+    func_8009C128(param_0, pos);
+    pos[1] += 50.0f * scale;
+    emitter = func_800BABB8(emitter_type, pos, NULL, 1.0f, D_80801098_basnowball);
+    func_800BA7C4(emitter, 0.5f * scale, 0.5f * scale);
+    func_800BA7FC(emitter, 1.1f * scale, 1.1f * scale);
+    func_800BA8F8(emitter, 0.175f * scale + 0.6f, 0.175f * scale + 0.6f);
+    for (i = 0; i < 4; i++) {
+        func_800EE7F8(spawn_pos, pos);
+        spawn_pos[0] += D_808010C0_basnowball[i][0] * scale;
+        spawn_pos[2] += D_808010C0_basnowball[i][1] * scale;
+        func_800BA75C(emitter, spawn_pos);
+        func_800BA77C(emitter, 0, 0, (s16) (s32) D_808010C0_basnowball[i][2]);
+        func_800BA22C(emitter, 1);
     }
 }
 
 void func_808007CC_basnowball(param_0) PlayerState *param_0;
 {
-    f32 local_4;
-    f32 local_0;
-    f32 local_5;
-    f32 local_1;
-    f32 local_6;
-    f32 local_3[3];
-    f32 local_2[3];
-    s32 local_7;
-    s32 local_8;
-    local_7 = func_800B5BE4(9);
-    func_8009C128(param_0, local_2);
-    local_1 = *(f32 *) ((u8 *) *(void **) ((u8 *) param_0 + 0x110) + 0x1C) * 58.0f;
-    local_2[1] += local_1;
-    local_4 = *(f32 *) ((u8 *) *(void **) ((u8 *) param_0 + 0x110) + 0x1C) * 0.15f + 0.3f;
-    func_800BA7C4(local_7, local_4, local_4);
-    local_0 = yaw_get(param_0) + 90.0f;
-    local_5 = func_800A1718(param_0) + 1;
-    for (local_8 = 0; local_8 < local_5; local_8++) {
-        func_800EE7F8(local_3, local_2);
-        local_6 = func_800DC178(0, 90);
-        func_800EF214(local_3, local_6, func_800136E4(func_800DC178(0, 180) + local_0), local_1);
-        func_800BABB8(local_7, local_3, 0, 1.0f, (s32 *) D_808010F0_basnowball);
+    f32 scale;
+    f32 yaw;
+    f32 count;
+    f32 height;
+    f32 angle;
+    f32 spawn_pos[3];
+    f32 pos[3];
+    s32 emitter;
+    s32 i;
+    emitter = func_800B5BE4(9);
+    func_8009C128(param_0, pos);
+    height = *(f32 *) ((u8 *) *(void **) ((u8 *) param_0 + 0x110) + 0x1C) * 58.0f;
+    pos[1] += height;
+    scale = *(f32 *) ((u8 *) *(void **) ((u8 *) param_0 + 0x110) + 0x1C) * 0.15f + 0.3f;
+    func_800BA7C4(emitter, scale, scale);
+    yaw = yaw_get(param_0) + 90.0f;
+    count = func_800A1718(param_0) + 1;
+    for (i = 0; i < count; i++) {
+        func_800EE7F8(spawn_pos, pos);
+        angle = func_800DC178(0, 90);
+        func_800EF214(spawn_pos, angle, func_800136E4(func_800DC178(0, 180) + yaw), height);
+        func_800BABB8(emitter, spawn_pos, 0, 1.0f, (s32 *) D_808010F0_basnowball);
     }
 }
 
 void func_8080099C_basnowball(PlayerState *param_0)
 {
-    s32 local_0;
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
-    f32 local_4[3];
+    s32 emitter;
+    f32 size_min;
+    f32 scale;
+    f32 speed_min;
+    f32 pos[3];
 
-    local_0 = func_800B5BE4(7);
-    func_8009C128(param_0, local_4);
-    local_1 = *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x110) + 0x1C) * 30.0f + 5.0f;
-    local_3 = *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x110) + 0x1C) * 100.0f + 200.0f;
-    local_2 = *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x110) + 0x1C) * 0.5f + 0.6f;
-    func_800BA730(local_0, local_1, local_1 + 10.0f, 0x41, 0x3C);
-    func_800BA930(local_0, -10, local_3, -10, 10, local_3 + 50.0f, 10);
-    func_800BA7FC(local_0, local_2, local_2);
-    func_800BA77C(local_0, 0, 0, func_800DC178(0.0f, 359.0f));
-    func_800BABB8(local_0, local_4, NULL, 1.0f, D_8080110C_basnowball);
+    emitter = func_800B5BE4(7);
+    func_8009C128(param_0, pos);
+    size_min = *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x110) + 0x1C) * 30.0f + 5.0f;
+    speed_min = *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x110) + 0x1C) * 100.0f + 200.0f;
+    scale = *(f32 *) (*(u8 **) ((u8 *) param_0 + 0x110) + 0x1C) * 0.5f + 0.6f;
+    func_800BA730(emitter, size_min, size_min + 10.0f, 0x41, 0x3C);
+    func_800BA930(emitter, -10, speed_min, -10, 10, speed_min + 50.0f, 10);
+    func_800BA7FC(emitter, scale, scale);
+    func_800BA77C(emitter, 0, 0, func_800DC178(0.0f, 359.0f));
+    func_800BABB8(emitter, pos, NULL, 1.0f, D_8080110C_basnowball);
 }
 
 void basnowball_entrypoint_11(s32 arg0)
@@ -364,23 +364,23 @@ void basnowball_entrypoint_11(s32 arg0)
 
 void basnowball_entrypoint_12(SnowPlayer *param_0)
 {
-    f32 local_0;
-    s32 local_1;
-    s32 local_2;
-    f32 local_3[3];
-    f32 local_4;
-    s32 local_5;
-    s32 local_6;
-    s32 local_7;
-    s32 local_8;
+    f32 dt;
+    s32 bone;
+    s32 level;
+    f32 step[3];
+    f32 target_scale;
+    s32 cur_level;
+    s32 radius;
+    s32 height;
+    s32 needs_change;
 
-    local_0 = func_800D8FF8();
+    dt = func_800D8FF8();
     if (func_800EA068(1) && !func_8009E674(param_0, 0x10)) {
-        local_2 = func_800A1718(param_0);
-        if (local_2 > 0 && param_0->unk110->unk28 == 1) {
-            param_0->unk110->unk4 -= local_0;
+        level = func_800A1718(param_0);
+        if (level > 0 && param_0->unk110->unk28 == 1) {
+            param_0->unk110->unk4 -= dt;
             if (param_0->unk110->unk4 < 0.0f) {
-                if (local_2 == 1) {
+                if (level == 1) {
                     func_8009919C(param_0, _basnowball_entrypoint_11, param_0->unk184);
                 } else {
                     param_0->unk110->unk4 = 7.5f;
@@ -392,8 +392,8 @@ void basnowball_entrypoint_12(SnowPlayer *param_0)
                100.0f < param_0->unk110->unkC) {
         func_8080099C_basnowball(param_0);
         if (func_800A1718(param_0) < func_800A1760(param_0) && param_0->unk110->unk28 == 1) {
-            func_80096394(param_0, local_3);
-            param_0->unk110->unk0 += func_800EEF94(local_3);
+            func_80096394(param_0, step);
+            param_0->unk110->unk0 += func_800EEF94(step);
             if (1000.0f < param_0->unk110->unk0) {
                 param_0->unk110->unk0 = 0.0f;
                 func_800A17A8(param_0, 1);
@@ -403,17 +403,17 @@ void basnowball_entrypoint_12(SnowPlayer *param_0)
     }
     switch (param_0->unk110->unk28) {
         case 1:
-            local_5 = func_800A1718(param_0);
-            local_4 = func_80800084_basnowball(local_5);
-            if (local_4 != param_0->unk110->unk1C) {
-                func_80800098_basnowball(param_0, local_5, &local_6, &local_7);
-                local_8 = 0;
-                if (local_4 < param_0->unk110->unk1C) {
-                    local_8 = 1;
-                } else if (!func_800958A4(param_0, local_6, local_7)) {
-                    local_8 = 1;
+            cur_level = func_800A1718(param_0);
+            target_scale = func_80800084_basnowball(cur_level);
+            if (target_scale != param_0->unk110->unk1C) {
+                func_80800098_basnowball(param_0, cur_level, &radius, &height);
+                needs_change = 0;
+                if (target_scale < param_0->unk110->unk1C) {
+                    needs_change = 1;
+                } else if (!func_800958A4(param_0, radius, height)) {
+                    needs_change = 1;
                 }
-                if (local_8) {
+                if (needs_change) {
                     func_808001B8_basnowball(param_0, 2);
                 }
             }
@@ -430,27 +430,27 @@ void basnowball_entrypoint_12(SnowPlayer *param_0)
     switch (param_0->unk110->unk14) {
         case 1:
             param_0->unk110->unk8 = func_800136E4(
-                param_0->unk110->unk8 + param_0->unk110->unkC / param_0->unk110->unk1C * local_0);
+                param_0->unk110->unk8 + param_0->unk110->unkC / param_0->unk110->unk1C * dt);
             break;
         case 2: {
-            f32 local_9;
-            f32 local_10;
-            f32 local_11;
-            local_9 = param_0->unk110->unk8;
+            f32 start_angle;
+            f32 decel;
+            f32 delta;
+            start_angle = param_0->unk110->unk8;
             if (param_0->unk110->unk8 != 0.0f) {
-                local_10 = func_800F13F0(param_0->unk110->unk10 / param_0->unk110->unk1C,
-                                         (360.0f - local_9) * 7.0f);
-                local_11 = func_800F0E00(local_10 * local_0, 1.5f);
-                param_0->unk110->unk8 = func_800136E4(local_11 + param_0->unk110->unk8);
-                if (param_0->unk110->unk8 < local_9) {
+                decel = func_800F13F0(param_0->unk110->unk10 / param_0->unk110->unk1C,
+                                         (360.0f - start_angle) * 7.0f);
+                delta = func_800F0E00(decel * dt, 1.5f);
+                param_0->unk110->unk8 = func_800136E4(delta + param_0->unk110->unk8);
+                if (param_0->unk110->unk8 < start_angle) {
                     param_0->unk110->unk8 = 0.0f;
                 }
             }
         }
     }
-    local_1 = func_80092AD8(param_0);
-    func_800E0AF0(local_1, 1.0f);
-    func_800E0AFC(local_1, 0x43, 1.0f, param_0->unk110->unk8, 0.0f, 0.0f);
+    bone = func_80092AD8(param_0);
+    func_800E0AF0(bone, 1.0f);
+    func_800E0AFC(bone, 0x43, 1.0f, param_0->unk110->unk8, 0.0f, 0.0f);
     func_80093230(param_0, param_0->unk110->unk1C);
     _bawobble_entrypoint_8(param_0);
     if (param_0->unk110->unk2D == 2) {
@@ -466,6 +466,7 @@ void basnowball_entrypoint_12(SnowPlayer *param_0)
     }
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
 float D_80801020_basnowball[6] = {1.0f, 1.0f, 1.5f, 2.0f, 2.5f, 3.0f};
 struct D_80801038_basnowball D_80801038_basnowball[6] = {
     83.0f, 46.0f, 83.0f, 46.0f, 114.0f, 66.0f, 1.5e+02f, 88.0f, 1.9e+02f, 105.0f, 2.3e+02f, 125.0f};

@@ -12,38 +12,39 @@ int chfactorygoblin_entrypoint_0()
     return (int) &D_80800298_chfactorygoblin;
 }
 
-int func_8080000C_chfactorygoblin(s32 param_0)
+int func_8080000C_chfactorygoblin(s32 actor)
 {
-    _sucoaster_entrypoint_0(param_0, 0);
-    func_8010A3E8(param_0, 0x3F400000);
+    _sucoaster_entrypoint_0(actor, 0);
+    func_8010A3E8(actor, 0x3F400000);
 }
 
-s32 func_8080003C_chfactorygoblin(s32 param_0, s32 param_1, s32 param_2)
+s32 func_8080003C_chfactorygoblin(s32 actor, s32 msg, s32 arg)
 {
-    if (param_1 == 0xB6) {
-        func_8080007C_chfactorygoblin(param_0, param_1, param_2);
+    if (msg == 0xB6) {
+        func_8080007C_chfactorygoblin(actor, msg, arg);
     }
-    _sucoaster_entrypoint_21(param_0, param_1, param_2);
+    _sucoaster_entrypoint_21(actor, msg, arg);
 }
 
-void func_8080007C_chfactorygoblin(param_0) Actor *param_0;
+// Attack/stomp: emit a ring of 6-8 particles in front of the actor.
+void func_8080007C_chfactorygoblin(actor) Actor *actor;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    local_4 = func_800DC128(6, 8);
-    func_800EE7F8(local_0, param_0->position);
-    func_800EF1B8(local_0, param_0->rotation[1], param_0->scale * 200.0f);
-    func_800EE7F8(local_1, local_0);
-    local_1[1] -= 5.0f;
-    local_3 = func_800B53A4(local_4);
-    for (local_5 = 0; local_5 < local_4; local_5++) {
-        func_800EEB9C(local_2, local_5 * (360.0f / local_4), 20.0f);
-        func_800EF04C(local_2, local_0);
-        func_800BABB8(local_3, local_2, local_1, param_0->scale * 0.5f,
+    f32 center[3];
+    f32 target[3];
+    f32 offset[3];
+    s32 emitter;
+    s32 count;
+    s32 i;
+    count = func_800DC128(6, 8);
+    func_800EE7F8(center, actor->position);
+    func_800EF1B8(center, actor->rotation[1], actor->scale * 200.0f);
+    func_800EE7F8(target, center);
+    target[1] -= 5.0f;
+    emitter = func_800B53A4(count);
+    for (i = 0; i < count; i++) {
+        func_800EEB9C(offset, i * (360.0f / count), 20.0f);
+        func_800EF04C(offset, center);
+        func_800BABB8(emitter, offset, target, actor->scale * 0.5f,
                       &D_808002E0_chfactorygoblin);
     }
 }

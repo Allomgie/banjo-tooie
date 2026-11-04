@@ -36,51 +36,53 @@ int chdiggerbossshell_entrypoint_1()
     return (int) &D_808005A8_chdiggerbossshell;
 }
 
-void func_80800018_chdiggerbossshell(Actor *param_0)
+// Init: computes the launch velocity for a ballistic arc to the target at 45 degrees pitch.
+void func_80800018_chdiggerbossshell(Actor *actor)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
+    f32 dist;
+    f32 height;
+    f32 speed;
+    f32 speed_sq;
     s32 pad0;
 
-    local_0 = func_800EFB8C(param_0->position, (f32 *) param_0->actorData);
-    local_1 = param_0->position[1] - ((f32 *) param_0->actorData)[1];
-    param_0->rotation[0] = 45.0f;
-    param_0->rotation[1] = func_80102D78(param_0, (f32 *) param_0->actorData);
-    local_3 = (local_0 * local_0 * 9800.0f) / (local_0 + local_1);
-    local_2 = sqrtf(local_3);
-    func_800EEC30((f32 *) &param_0->actorData[4], param_0->rotation[0], param_0->rotation[1],
-                  local_2);
+    dist = func_800EFB8C(actor->position, (f32 *) actor->actorData);
+    height = actor->position[1] - ((f32 *) actor->actorData)[1];
+    actor->rotation[0] = 45.0f;
+    actor->rotation[1] = func_80102D78(actor, (f32 *) actor->actorData);
+    speed_sq = (dist * dist * 9800.0f) / (dist + height);
+    speed = sqrtf(speed_sq);
+    func_800EEC30((f32 *) &actor->actorData[4], actor->rotation[0], actor->rotation[1],
+                  speed);
 }
 
-void func_808000B4_chdiggerbossshell(Actor *param_0)
+// Flight: egg trail, gravity; explodes when it reaches the target height.
+void func_808000B4_chdiggerbossshell(Actor *actor)
 {
-    f32 local_0;
+    f32 dt;
 
-    if (param_0->unk70_10 == 1) {
-        local_0 = func_800D8FF8();
-        _fxegg_entrypoint_5(param_0->position, (f32 *) &param_0->actorData[4], 1.0f);
-        func_800EF174(param_0->position, (f32 *) &param_0->actorData[4], func_800D8FF8());
-        if (param_0->position[1] < ((f32 *) param_0->actorData)[1]) {
-            param_0->position[1] = ((f32 *) param_0->actorData)[1];
-            func_808001EC_chdiggerbossshell(param_0);
+    if (actor->unk70_10 == 1) {
+        dt = func_800D8FF8();
+        _fxegg_entrypoint_5(actor->position, (f32 *) &actor->actorData[4], 1.0f);
+        func_800EF174(actor->position, (f32 *) &actor->actorData[4], func_800D8FF8());
+        if (actor->position[1] < ((f32 *) actor->actorData)[1]) {
+            actor->position[1] = ((f32 *) actor->actorData)[1];
+            func_808001EC_chdiggerbossshell(actor);
         }
-        ((f32 *) param_0->actorData)[5] += -9800.0f * local_0;
-        func_800F1A88((f32 *) &param_0->actorData[4], param_0->rotation);
-        param_0->rotation[0] += 90.0f;
+        ((f32 *) actor->actorData)[5] += -9800.0f * dt;
+        func_800F1A88((f32 *) &actor->actorData[4], actor->rotation);
+        actor->rotation[0] += 90.0f;
     }
 }
 
-s32 func_80800188_chdiggerbossshell(Actor *param_0, s32 param_1,
-                                    DiggerBossShellEventPayload param_2)
+s32 func_80800188_chdiggerbossshell(Actor *actor, s32 msg,
+                                    DiggerBossShellEventPayload data)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x40:
-            func_808001EC_chdiggerbossshell(param_0);
+            func_808001EC_chdiggerbossshell(actor);
             break;
         case 0x3D:
-            func_800FFAB0(func_80800330_chdiggerbossshell(param_0));
+            func_800FFAB0(func_80800330_chdiggerbossshell(actor));
             break;
         default:
             return 0;
@@ -88,90 +90,93 @@ s32 func_80800188_chdiggerbossshell(Actor *param_0, s32 param_1,
     return 1;
 }
 
-void func_808001EC_chdiggerbossshell(param_0) s32 param_0;
+// Landing explosion: particles, sound, camera shake, rumble, light flash.
+void func_808001EC_chdiggerbossshell(actor) s32 actor;
 {
-    f32 local_0[3];
-    func_800EE7F8(local_0, param_0 + 4);
-    local_0[1] += 50.0f;
-    func_800BBCB8(local_0, 0, 0x3FB33333, 1, _fxgenlist_entrypoint_2());
-    _subaddieaudioquick_entrypoint_2(param_0, local_0, &D_808005F0_chdiggerbossshell);
-    func_800E1610(0, 0x41A00000, 0x3F666666, param_0 + 4);
+    f32 pos[3];
+    func_800EE7F8(pos, actor + 4);
+    pos[1] += 50.0f;
+    func_800BBCB8(pos, 0, 0x3FB33333, 1, _fxgenlist_entrypoint_2());
+    _subaddieaudioquick_entrypoint_2(actor, pos, &D_808005F0_chdiggerbossshell);
+    func_800E1610(0, 0x41A00000, 0x3F666666, actor + 4);
     func_80018820(0, 0x40000000, 0x3E800000);
-    local_0[1] += 50.0f;
-    func_808002CC_chdiggerbossshell(local_0);
-    func_8010A570(param_0);
-    func_80101FDC(param_0, 2);
-    func_80108B04(param_0, 0);
+    pos[1] += 50.0f;
+    func_808002CC_chdiggerbossshell(pos);
+    func_8010A570(actor);
+    func_80101FDC(actor, 2);
+    func_80108B04(actor, 0);
 }
 
-int func_808002CC_chdiggerbossshell(param_0)
-s32 param_0;
+int func_808002CC_chdiggerbossshell(pos)
+s32 pos;
 {
-    s32 local_0;
-    local_0 = func_800C8A98();
-    func_800C8CB8(local_0 | 0, param_0);
-    func_800C8E84(local_0, &D_80800600_chdiggerbossshell);
-    func_800C8E54(local_0, 0x44160000, 0x447A0000);
-    _chlightfader_entrypoint_1(local_0, 0x3FB33333, 5);
+    s32 light;
+    light = func_800C8A98();
+    func_800C8CB8(light | 0, pos);
+    func_800C8E84(light, &D_80800600_chdiggerbossshell);
+    func_800C8E54(light, 0x44160000, 0x447A0000);
+    _chlightfader_entrypoint_1(light, 0x3FB33333, 5);
 }
 
-Actor *func_80800330_chdiggerbossshell(param_0)
-Actor *param_0;
+// Splits the shell into 4 bomblets (actor 0x4F4).
+Actor *func_80800330_chdiggerbossshell(actor)
+Actor *actor;
 {
-    f32 local_0;
-    s32 local_2;
-    Actor *local_3;
-    f32 local_1[3];
-    local_0 = func_8010CD28() + param_0->unk54;
-    func_800EE7F8(local_1, param_0->position);
-    if (local_1[1] < 7500.0f)
-        local_1[1] = 7500.0f;
-    local_1[1] += 60.0f;
-    for (local_2 = 0; local_2 < 4; local_2++) {
-        local_3 = func_80108528(0x4F4, local_1, (s32) local_0, &param_0);
-        func_80102FDC(local_3, param_0->scale);
-        func_80103140(local_3, (u16) (local_2 + 0x905), 0);
-        *(f32 *) ((u8 *) local_3 + 0x24) = *(f32 *) ((u8 *) param_0 + 0x24);
-        local_0 = func_800136E4(local_0 + 90.0f);
+    f32 yaw;
+    s32 i;
+    Actor *bomblet;
+    f32 pos[3];
+    yaw = func_8010CD28() + actor->unk54;
+    func_800EE7F8(pos, actor->position);
+    if (pos[1] < 7500.0f)
+        pos[1] = 7500.0f;
+    pos[1] += 60.0f;
+    for (i = 0; i < 4; i++) {
+        bomblet = func_80108528(0x4F4, pos, (s32) yaw, &actor);
+        func_80102FDC(bomblet, actor->scale);
+        func_80103140(bomblet, (u16) (i + 0x905), 0);
+        *(f32 *) ((u8 *) bomblet + 0x24) = *(f32 *) ((u8 *) actor + 0x24);
+        yaw = func_800136E4(yaw + 90.0f);
     }
-    return param_0;
+    return actor;
 }
 
-void func_8080044C_chdiggerbossshell(void *param_0)
+void func_8080044C_chdiggerbossshell(void *actor)
 {
-    ((struct Actor *) param_0)->unk58 = 1.75;
+    ((struct Actor *) actor)->unk58 = 1.75;
 }
 
-void func_8080045C_chdiggerbossshell(Actor *param_0)
+// Bomblet: explodes on contact or hit, fades out after 1.75 s.
+void func_8080045C_chdiggerbossshell(Actor *actor)
 {
-    if (param_0->unk70_10 == 1) {
-        if (func_8010B990(param_0, 0x400005) & 0x20) {
-            func_80800504_chdiggerbossshell(param_0);
+    if (actor->unk70_10 == 1) {
+        if (func_8010B990(actor, 0x400005) & 0x20) {
+            func_80800504_chdiggerbossshell(actor);
         }
-        if (func_800D9078(&param_0->unk58)) {
-            _subaddiefade_entrypoint_3(param_0);
+        if (func_800D9078(&actor->unk58)) {
+            _subaddiefade_entrypoint_3(actor);
         }
     }
 }
 
-s32 func_808004C8_chdiggerbossshell(s32 param_0, s32 param_1, s32 param_2)
+s32 func_808004C8_chdiggerbossshell(s32 actor, s32 msg, s32 data)
 {
-    if (param_1 == 0x40) {
-        func_80800504_chdiggerbossshell(param_0);
+    if (msg == 0x40) {
+        func_80800504_chdiggerbossshell(actor);
     } else {
         return 0;
     }
     return 1;
 }
 
-void func_80800504_chdiggerbossshell(param_0) s32 param_0;
+void func_80800504_chdiggerbossshell(actor) s32 actor;
 {
-    s32 local_0;
+    s32 pos;
 
-    local_0 = param_0 + 4;
-    func_800BBCB8(local_0, local_0, 0x3F800000, 3, &D_8080060C_chdiggerbossshell);
-    func_8010A570(param_0);
-    func_800FFAB0(param_0);
+    pos = actor + 4;
+    func_800BBCB8(pos, pos, 0x3F800000, 3, &D_8080060C_chdiggerbossshell);
+    func_8010A570(actor);
+    func_800FFAB0(actor);
 }
 
 extern void func_80102EC0();

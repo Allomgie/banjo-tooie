@@ -24,23 +24,24 @@ extern f32 func_800F12D4(f32, f32, f32, f32, f32);
 extern void func_80101870(), func_80105834(), func_80107C2C(), func_80800000_chlavaarchgrill(),
     func_808002D0_chlavaarchgrill();
 
-void func_80800000_chlavaarchgrill(param_0) f32 *param_0;
+void func_80800000_chlavaarchgrill(actor) f32 *actor;
 {
-    param_0[11] = param_0[2];
-    func_800DA7A8(0xA1A, 0, 3, param_0);
-    func_8010A800(param_0, 2);
+    actor[11] = actor[2];
+    func_800DA7A8(0xA1A, 0, 3, actor);
+    func_8010A800(actor, 2);
 }
 
+// Message handler: table lookup (D_80800610) for stage transitions; stage counter is FLAG3_A1A (3 bits).
 s32 func_80800044_chlavaarchgrill(Actor *this, s32 arg1, s32 arg2)
 {
-    s32 v;
-    s32 n;
-    s32 ret;
+    s32 stage;
+    s32 count;
+    s32 result;
     s32 i;
 
-    v = func_800DA564(0xA1A, 3);
-    n = 12;
-    for (i = 0; i < n; i++) {
+    stage = func_800DA564(0xA1A, 3);
+    count = 12;
+    for (i = 0; i < count; i++) {
         if (D_80800610_chlavaarchgrill[i].unk0 != this->unk74_7) {
             continue;
         }
@@ -48,14 +49,14 @@ s32 func_80800044_chlavaarchgrill(Actor *this, s32 arg1, s32 arg2)
             continue;
         }
         if (D_80800610_chlavaarchgrill[i].unk5 == this->unk70_10 &&
-            arg2 == D_80800610_chlavaarchgrill[i].unk4 && v == D_80800610_chlavaarchgrill[i].unk9) {
-            ret = 1;
+            arg2 == D_80800610_chlavaarchgrill[i].unk4 && stage == D_80800610_chlavaarchgrill[i].unk9) {
+            result = 1;
             func_80101FDC(this, D_80800610_chlavaarchgrill[i].unk6);
             if (D_80800610_chlavaarchgrill[i].unk7) {
                 if (D_80800610_chlavaarchgrill[i].unk4) {
                     _capod_entrypoint_14();
                     _capod_entrypoint_13(this->unk0, 0, D_80800610_chlavaarchgrill[i].unk7, 0x2010);
-                    ret = 4;
+                    result = 4;
                 } else {
                     _capod_entrypoint_13(this->unk0, 0, D_80800610_chlavaarchgrill[i].unk7, 0x10);
                 }
@@ -80,122 +81,124 @@ s32 func_80800044_chlavaarchgrill(Actor *this, s32 arg1, s32 arg2)
                     *(f32 *) &this->actorData[0] = 0.75f;
                     func_800DA7A8(0xA1A, 4, 3);
             }
-            return ret;
+            return result;
         }
     }
     return 0;
 }
 
-void func_80800288_chlavaarchgrill(s32 *param_0, s32 param_1)
+// When the timer runs out, go to next_state and start the 2 s slide timer.
+void func_80800288_chlavaarchgrill(s32 *actor, s32 next_state)
 {
-    if (func_800D9078(param_0 + 6)) {
-        func_80101FDC(param_0, param_1);
-        *(float *) ((char *) param_0 + 0x58) = 2.0f;
+    if (func_800D9078(actor + 6)) {
+        func_80101FDC(actor, next_state);
+        *(float *) ((char *) actor + 0x58) = 2.0f;
     }
 }
 
-void func_808002D0_chlavaarchgrill(param_0) Actor *param_0;
+// Update: each slide moves the grill by half its height (190 * scale / 2).
+void func_808002D0_chlavaarchgrill(actor) Actor *actor;
 {
     extern u8 D_80800688_chlavaarchgrill[];
     extern u8 D_80800698_chlavaarchgrill[];
 
-    switch ((u32) *(u16 *) ((char *) param_0 + 0x72) >> 10) {
+    switch ((u32) *(u16 *) ((char *) actor + 0x72) >> 10) {
         case 2:
-            func_80800288_chlavaarchgrill(param_0, 3);
+            func_80800288_chlavaarchgrill(actor, 3);
             break;
 
         case 3: {
-            s32 local_0;
-            local_0 = func_800D9078((char *) param_0 + 0x58);
+            s32 done;
+            done = func_800D9078((char *) actor + 0x58);
 
-            *(f32 *) ((char *) param_0 + 8) =
-                func_800F12D4(*(f32 *) ((char *) param_0 + 0x58), 0, 2.0f,
-                              (190.0f * *(f32 *) ((char *) param_0 + 0x38)) / 2 +
-                                  *(f32 *) ((char *) param_0 + 0x2C),
-                              *(f32 *) ((char *) param_0 + 0x2C));
+            *(f32 *) ((char *) actor + 8) =
+                func_800F12D4(*(f32 *) ((char *) actor + 0x58), 0, 2.0f,
+                              (190.0f * *(f32 *) ((char *) actor + 0x38)) / 2 +
+                                  *(f32 *) ((char *) actor + 0x2C),
+                              *(f32 *) ((char *) actor + 0x2C));
 
-            _subaddieaudioloop_entrypoint_4(param_0, (char *) param_0 + 4, 1,
+            _subaddieaudioloop_entrypoint_4(actor, (char *) actor + 4, 1,
                                             D_80800688_chlavaarchgrill);
 
-            if (local_0 != 0) {
-                func_80101FDC(param_0, 4);
+            if (done != 0) {
+                func_80101FDC(actor, 4);
             }
             break;
         }
 
         case 5:
-            func_80800288_chlavaarchgrill(param_0, 6);
+            func_80800288_chlavaarchgrill(actor, 6);
             break;
 
         case 6: {
-            s32 local_0;
-            local_0 = func_800D9078((char *) param_0 + 0x58);
+            s32 done;
+            done = func_800D9078((char *) actor + 0x58);
 
-            *(f32 *) ((char *) param_0 + 8) = func_800F12D4(
-                *(f32 *) ((char *) param_0 + 0x58), 0.0f, 2.0f,
-                (190.0f * *(f32 *) ((char *) param_0 + 0x38)) + *(f32 *) ((char *) param_0 + 0x2C),
-                (190.0f * *(f32 *) ((char *) param_0 + 0x38)) / 2 +
-                    *(f32 *) ((char *) param_0 + 0x2C));
+            *(f32 *) ((char *) actor + 8) = func_800F12D4(
+                *(f32 *) ((char *) actor + 0x58), 0.0f, 2.0f,
+                (190.0f * *(f32 *) ((char *) actor + 0x38)) + *(f32 *) ((char *) actor + 0x2C),
+                (190.0f * *(f32 *) ((char *) actor + 0x38)) / 2 +
+                    *(f32 *) ((char *) actor + 0x2C));
 
-            _subaddieaudioloop_entrypoint_4(param_0, (char *) param_0 + 4, 1,
+            _subaddieaudioloop_entrypoint_4(actor, (char *) actor + 4, 1,
                                             D_80800688_chlavaarchgrill);
 
-            if (local_0 != 0) {
-                func_80101FDC(param_0, 7);
+            if (done != 0) {
+                func_80101FDC(actor, 7);
 
-                _subaddieaudioquick_entrypoint_2(param_0, (char *) param_0 + 4,
+                _subaddieaudioquick_entrypoint_2(actor, (char *) actor + 4,
                                                  D_80800698_chlavaarchgrill);
             }
             break;
         }
 
         case 8:
-            func_80800288_chlavaarchgrill(param_0, 9);
+            func_80800288_chlavaarchgrill(actor, 9);
             break;
 
         case 9: {
-            s32 local_0;
-            local_0 = func_800D9078((char *) param_0 + 0x58);
+            s32 done;
+            done = func_800D9078((char *) actor + 0x58);
 
-            *(f32 *) ((char *) param_0 + 8) =
-                func_800F12D4(*(f32 *) ((char *) param_0 + 0x58), 2.0f, 0,
-                              (190.0f * *(f32 *) ((char *) param_0 + 0x38)) / 2 +
-                                  *(f32 *) ((char *) param_0 + 0x2C),
-                              *(f32 *) ((char *) param_0 + 0x2C));
+            *(f32 *) ((char *) actor + 8) =
+                func_800F12D4(*(f32 *) ((char *) actor + 0x58), 2.0f, 0,
+                              (190.0f * *(f32 *) ((char *) actor + 0x38)) / 2 +
+                                  *(f32 *) ((char *) actor + 0x2C),
+                              *(f32 *) ((char *) actor + 0x2C));
 
-            _subaddieaudioloop_entrypoint_4(param_0, (char *) param_0 + 4, 1,
+            _subaddieaudioloop_entrypoint_4(actor, (char *) actor + 4, 1,
                                             D_80800688_chlavaarchgrill);
 
-            if (local_0 != 0) {
-                func_80101FDC(param_0, 1);
+            if (done != 0) {
+                func_80101FDC(actor, 1);
 
-                _subaddieaudioquick_entrypoint_2(param_0, (char *) param_0 + 4,
+                _subaddieaudioquick_entrypoint_2(actor, (char *) actor + 4,
                                                  D_80800698_chlavaarchgrill);
             }
             break;
         }
 
         case 10:
-            if (func_800D9078((char *) param_0 + 0x18)) {
-                func_80101FDC(param_0, 0xB);
-                *(f32 *) ((char *) param_0 + 0x58) = 4.0f;
+            if (func_800D9078((char *) actor + 0x18)) {
+                func_80101FDC(actor, 0xB);
+                *(f32 *) ((char *) actor + 0x58) = 4.0f;
             }
             break;
 
         case 11: {
-            s32 local_0;
-            local_0 = func_800D9078((char *) param_0 + 0x58);
+            s32 done;
+            done = func_800D9078((char *) actor + 0x58);
 
-            *(f32 *) ((char *) param_0 + 8) = func_800F12D4(
-                *(f32 *) ((char *) param_0 + 0x58), 0, 4.0f,
-                (190.0f * *(f32 *) ((char *) param_0 + 0x38)) + *(f32 *) ((char *) param_0 + 0x2C),
-                *(f32 *) ((char *) param_0 + 0x2C));
+            *(f32 *) ((char *) actor + 8) = func_800F12D4(
+                *(f32 *) ((char *) actor + 0x58), 0, 4.0f,
+                (190.0f * *(f32 *) ((char *) actor + 0x38)) + *(f32 *) ((char *) actor + 0x2C),
+                *(f32 *) ((char *) actor + 0x2C));
 
-            _subaddieaudioloop_entrypoint_4(param_0, (char *) param_0 + 4, 1,
+            _subaddieaudioloop_entrypoint_4(actor, (char *) actor + 4, 1,
                                             D_80800688_chlavaarchgrill);
 
-            if (local_0 != 0) {
-                func_80101FDC(param_0, 0xC);
+            if (done != 0) {
+                func_80101FDC(actor, 0xC);
             }
         }
     }

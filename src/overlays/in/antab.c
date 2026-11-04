@@ -26,11 +26,13 @@ extern void _chanim_entrypoint_4(void *, f32, s32, s32, s32);
 extern void _anseq_entrypoint_4(s16 *, f32, void *, s32, s32, s32, s32);
 extern void _chanim_entrypoint_5(void *, f32, s32, s32, s32);
 
+// Wrapper for func_800BF744 (map layer select).
 void inantab_entrypoint_0()
 {
     func_800BF744();
 }
 
+// Registers animation-timed events (lights, fx, sound, sky/map layers) for a cutscene cue set.
 s32 func_80800020_inantab(param_0, param_1, param_2)
 s32 param_0;
 s32 param_1;
@@ -851,10 +853,11 @@ void *param_2;
 #undef FOR_AN3
 }
 
-s32 func_808057BC_inantab(param_0, param_1, param_2)
-s32 param_0;
+// Registers animation-timed events (lights, fx, audio, chanim) for a cue set.
+s32 func_808057BC_inantab(cue_set, param_1, character)
+s32 cue_set;
 s16 *param_1;
-void *param_2;
+void *character;
 {
     extern void _indrv_fx_entrypoint_0();
     extern void _indrv_lights_entrypoint_0();
@@ -878,121 +881,121 @@ void *param_2;
         }                                                                                          \
     }
 
-    switch (param_0) {
+    switch (cue_set) {
         case 0x26:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 4, 0);
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 1);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 4, 0);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 1);
 
-            FOR_AN3(D_80807684_inantab, 21, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0xE, 4);
+            FOR_AN3(D_80807684_inantab, 21, _indrv_fx_entrypoint_0, *(s32 *) &character, 0xE, 4);
 
-            FOR_AN3(D_80807684_inantab, 21, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0xE, 5);
+            FOR_AN3(D_80807684_inantab, 21, _indrv_fx_entrypoint_0, *(s32 *) &character, 0xE, 5);
 
-            FOR_AN3(D_808076D8_inantab, 17, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0xE, 4);
+            FOR_AN3(D_808076D8_inantab, 17, _indrv_fx_entrypoint_0, *(s32 *) &character, 0xE, 4);
 
-            FOR_AN3(D_808076D8_inantab, 17, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0xE, 5);
+            FOR_AN3(D_808076D8_inantab, 17, _indrv_fx_entrypoint_0, *(s32 *) &character, 0xE, 5);
             break;
 
         case 0x37:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 4, 0);
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 1);
-            _chanim_entrypoint_4(param_1, 0.03f, *(s32 *) &param_2, 3, 0);
-            _chanim_entrypoint_4(param_1, 0.426f, *(s32 *) &param_2, 4, 1);
-            _chanim_entrypoint_4(param_1, 0.934f, *(s32 *) &param_2, 3, 1);
-            _chanim_entrypoint_4(param_1, 0.934f, *(s32 *) &param_2, 4, 0);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 4, 0);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 1);
+            _chanim_entrypoint_4(param_1, 0.03f, *(s32 *) &character, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.426f, *(s32 *) &character, 4, 1);
+            _chanim_entrypoint_4(param_1, 0.934f, *(s32 *) &character, 3, 1);
+            _chanim_entrypoint_4(param_1, 0.934f, *(s32 *) &character, 4, 0);
             break;
 
         case 0x25:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 0);
-            _chanim_entrypoint_4(param_1, 0.0348f, *(s32 *) &param_2, 3, 1);
-            _chanim_entrypoint_4(param_1, 0.418f, *(s32 *) &param_2, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.0348f, *(s32 *) &character, 3, 1);
+            _chanim_entrypoint_4(param_1, 0.418f, *(s32 *) &character, 3, 0);
             break;
 
         case 0x67:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 0);
-            _chanim_entrypoint_4(param_1, 0.0312f, *(s32 *) &param_2, 3, 1);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.0312f, *(s32 *) &character, 3, 1);
             break;
 
         case 0x27:
-            FOR_AN3(D_8080771C_inantab, 9, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0xF, 4);
+            FOR_AN3(D_8080771C_inantab, 9, _indrv_fx_entrypoint_0, *(s32 *) &character, 0xF, 4);
 
             _anseq_entrypoint_3(param_1, 0.1f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.15f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.2f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.25f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.3f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.35f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.4f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.45f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.5f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.55f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.6f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.65f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.7f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.75f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.8f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.85f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.9f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.95f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             _anseq_entrypoint_3(param_1, 0.99f, _indrv_lights_entrypoint_0, 0x70006,
-                                *(s32 *) &param_2, 4);
+                                *(s32 *) &character, 4);
             break;
 
         case 0x3F:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 2, 3);
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 1);
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 4, 1);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 2, 3);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 1);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 4, 1);
             break;
 
         case 0x40:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 2, 1);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 2, 1);
             break;
 
         case 0x41:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 4, 2);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 4, 2);
             break;
 
         case 0x42:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 2);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 2);
             break;
 
         case 0x43:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 2, 2);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 2, 2);
             break;
 
         case 0x47:
-            _anseq_entrypoint_4(param_1, 0.0f, _inantab_entrypoint_1, *(s32 *) &param_2, 0, 0x100,
+            _anseq_entrypoint_4(param_1, 0.0f, _inantab_entrypoint_1, *(s32 *) &character, 0, 0x100,
                                 0x200);
-            _anseq_entrypoint_4(param_1, 0.5f, _inantab_entrypoint_1, *(s32 *) &param_2, 0, 0x100,
+            _anseq_entrypoint_4(param_1, 0.5f, _inantab_entrypoint_1, *(s32 *) &character, 0, 0x100,
                                 0x200);
-            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &param_2, 1, 0);
-            _chanim_entrypoint_4(param_1, 0.5f, *(s32 *) &param_2, 1, 1);
-            _chanim_entrypoint_5(param_1, -1.0f, *(s32 *) &param_2, 2, 4);
+            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &character, 1, 0);
+            _chanim_entrypoint_4(param_1, 0.5f, *(s32 *) &character, 1, 1);
+            _chanim_entrypoint_5(param_1, -1.0f, *(s32 *) &character, 2, 4);
             break;
 
         case 0x48:
-            FOR_AN3(D_80807740_inantab, 9, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x13, -1);
+            FOR_AN3(D_80807740_inantab, 9, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x13, -1);
             break;
 
         case 0x49:
-            FOR_AN3(D_80807764_inantab, 1, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x14, -1);
+            FOR_AN3(D_80807764_inantab, 1, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x14, -1);
 
             FOR_AN3(D_80807768_inantab, 1, _indrv_lights_entrypoint_0, 0x30000, -0x100, 0);
 
@@ -1000,58 +1003,58 @@ void *param_2;
             break;
 
         case 0x4C:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 0);
             break;
 
         case 0x4D:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 0);
             break;
 
         case 0x4E:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 0);
             break;
 
         case 0x4F:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 0);
             break;
 
         case 0x50:
-            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &param_2, 3, 1);
+            _chanim_entrypoint_4(param_1, 0.01f, *(s32 *) &character, 3, 1);
 
-            FOR_AN3(D_80807770_inantab, 3, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x18, 4);
+            FOR_AN3(D_80807770_inantab, 3, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x18, 4);
             break;
 
         case 0x54:
-            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &param_2, 3, 0);
-            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &param_2, 5, 0);
+            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &character, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &character, 5, 0);
             break;
 
         case 0x55:
-            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &param_2, 3, 1);
-            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &param_2, 5, 0);
+            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &character, 3, 1);
+            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &character, 5, 0);
             break;
 
         case 0x61:
-            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &param_2, 3, 0);
-            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &param_2, 5, 1);
+            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &character, 3, 0);
+            _chanim_entrypoint_4(param_1, 0.0f, *(s32 *) &character, 5, 1);
             break;
 
         case 0x68:
-            _anseq_entrypoint_3(param_1, 0.1f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1A, 4);
-            _anseq_entrypoint_3(param_1, 0.2f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1B, 5);
-            _anseq_entrypoint_3(param_1, 0.3f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1C, 6);
-            _anseq_entrypoint_3(param_1, 0.4f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1D, 7);
-            _anseq_entrypoint_3(param_1, 0.5f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1E, 8);
-            _anseq_entrypoint_3(param_1, 0.15f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1A, 6);
-            _anseq_entrypoint_3(param_1, 0.25f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1B, 9);
-            _anseq_entrypoint_3(param_1, 0.35f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1C,
+            _anseq_entrypoint_3(param_1, 0.1f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1A, 4);
+            _anseq_entrypoint_3(param_1, 0.2f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1B, 5);
+            _anseq_entrypoint_3(param_1, 0.3f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1C, 6);
+            _anseq_entrypoint_3(param_1, 0.4f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1D, 7);
+            _anseq_entrypoint_3(param_1, 0.5f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1E, 8);
+            _anseq_entrypoint_3(param_1, 0.15f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1A, 6);
+            _anseq_entrypoint_3(param_1, 0.25f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1B, 9);
+            _anseq_entrypoint_3(param_1, 0.35f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1C,
                                 0xA);
-            _anseq_entrypoint_3(param_1, 0.6f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1D,
+            _anseq_entrypoint_3(param_1, 0.6f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1D,
                                 0xB);
-            _anseq_entrypoint_3(param_1, 0.7f, _indrv_fx_entrypoint_0, *(s32 *) &param_2, 0x1E,
+            _anseq_entrypoint_3(param_1, 0.7f, _indrv_fx_entrypoint_0, *(s32 *) &character, 0x1E,
                                 0xC);
 
-            FOR_AN3(D_8080777C_inantab, 1, _indrv_audio_entrypoint_0, *(s32 *) &param_2, 0xB5, -2);
+            FOR_AN3(D_8080777C_inantab, 1, _indrv_audio_entrypoint_0, *(s32 *) &character, 0xB5, -2);
             break;
         default:
             return 0;
@@ -1060,19 +1063,20 @@ void *param_2;
     return 1;
 }
 
-s32 func_808064DC_inantab(s32 item_id, s32 param_1, s32 param_2)
+// Tries the other cue table first, then falls back to this one.
+s32 func_808064DC_inantab(s32 item_id, s32 anim_seq, s32 character)
 {
-    if (!func_80800020_inantab(item_id, param_1, (void *) param_2)) {
-        func_808057BC_inantab(item_id, param_1, param_2);
+    if (!func_80800020_inantab(item_id, anim_seq, (void *) character)) {
+        func_808057BC_inantab(item_id, anim_seq, character);
     }
 }
 
-void inantab_entrypoint_1(Unk80132ED0 *param_0, s32 param_1, s32 param_2, s32 param_3)
+void inantab_entrypoint_1(Unk80132ED0 *actor_ref, s32 unk_0, s32 min_value, s32 max_value)
 {
-    Actor *local_0;
-    local_0 = func_80106790(param_0);
-    if (param_1 == 0) {
-        func_80101CDC(local_0, func_800DC178(param_2 * (1.0f / 256.0f), param_3 * (1.0f / 256.0f)));
+    Actor *actor;
+    actor = func_80106790(actor_ref);
+    if (unk_0 == 0) {
+        func_80101CDC(actor, func_800DC178(min_value * (1.0f / 256.0f), max_value * (1.0f / 256.0f)));
     }
 }
 
@@ -1081,51 +1085,51 @@ void inantab_entrypoint_2(s32 arg0, s32 arg1)
     func_8010114C(arg0, 0x5A, arg1);
 }
 
-void inantab_entrypoint_3(s32 param_0, s32 param_1, s32 param_2)
+void inantab_entrypoint_3(s32 param_0, s32 preset, s32 param_2)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 camera_id;
+    s32 shake;
 
-    local_0 = D_80806E30_inantab[param_1].local_6;
-    if (D_80806E30_inantab[param_1].local_4 != 0) {
-        func_800E1664(D_80806E30_inantab[param_1].local_6, D_80806E30_inantab[param_1].local_0,
-                      D_80806E30_inantab[param_1].local_2, 0, D_80806E30_inantab[param_1].local_4,
-                      D_80806E30_inantab[param_1].local_5);
+    camera_id = D_80806E30_inantab[preset].local_6;
+    if (D_80806E30_inantab[preset].local_4 != 0) {
+        func_800E1664(D_80806E30_inantab[preset].local_6, D_80806E30_inantab[preset].local_0,
+                      D_80806E30_inantab[preset].local_2, 0, D_80806E30_inantab[preset].local_4,
+                      D_80806E30_inantab[preset].local_5);
         return;
     }
-    local_1 = func_800E1540(local_0);
-    if (D_80806E30_inantab[param_1].local_0 != -1.0f) {
-        func_800E13F0(local_1, D_80806E30_inantab[param_1].local_0);
+    shake = func_800E1540(camera_id);
+    if (D_80806E30_inantab[preset].local_0 != -1.0f) {
+        func_800E13F0(shake, D_80806E30_inantab[preset].local_0);
     }
-    if (D_80806E30_inantab[param_1].local_1 != -1.0f) {
-        func_800E1410(local_1, D_80806E30_inantab[param_1].local_1,
-                      D_80806E30_inantab[param_1].local_2);
+    if (D_80806E30_inantab[preset].local_1 != -1.0f) {
+        func_800E1410(shake, D_80806E30_inantab[preset].local_1,
+                      D_80806E30_inantab[preset].local_2);
     }
-    if (D_80806E30_inantab[param_1].local_3 != -1.0f) {
-        func_800E144C(local_1, D_80806E30_inantab[param_1].local_3);
+    if (D_80806E30_inantab[preset].local_3 != -1.0f) {
+        func_800E144C(shake, D_80806E30_inantab[preset].local_3);
     }
 }
 
-void inantab_entrypoint_4(param_0, param_1, param_2, param_3) s32 param_0;
-s32 param_1;
-s32 param_2;
-s16 param_3;
+void inantab_entrypoint_4(char_id, character, anim_seq, anim_id) s32 char_id;
+s32 character;
+s32 anim_seq;
+s16 anim_id;
 {
-    s16 local_0;
-    u8 *local_1;
+    s16 cue_set;
+    u8 *entry;
 
-    local_1 = *(u8 **) ((u8 *) &D_80806D5C_inantab + (param_0 * 4));
-    local_0 = (*(s16 *) ((s8 *) (local_1) + (2)));
+    entry = *(u8 **) ((u8 *) &D_80806D5C_inantab + (char_id * 4));
+    cue_set = (*(s16 *) ((s8 *) (entry) + (2)));
 
-if (local_0 != 0) {
+if (cue_set != 0) {
 loop_1:
-    if (param_3 == *(s16 *) ((s8 *) local_1 + 0)) {
-        func_808064DC_inantab(local_0, param_2, param_1);
+    if (anim_id == *(s16 *) ((s8 *) entry + 0)) {
+        func_808064DC_inantab(cue_set, anim_seq, character);
         return;
     }
-    local_0 = *(s16 *) ((s8 *) local_1 + 6);
-    local_1 += 4;
-    if (local_0 == 0) {
+    cue_set = *(s16 *) ((s8 *) entry + 6);
+    entry += 4;
+    if (cue_set == 0) {
     } else {
         goto loop_1;
     }

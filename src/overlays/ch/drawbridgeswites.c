@@ -10,33 +10,34 @@ s32 func_80800000_chdrawbridgeswitches(Actor *this, Gfx **dl, Mtx **m)
     _chswitch_entrypoint_8(this, m);
 }
 
-int func_80800030_chdrawbridgeswitches(s32 param_0, s32 param_1, s32 param_2, s32 param_3,
-                                       s32 param_4)
+// Forwards switch messages 7 and 8 to the drawbridge actor 0x49F.
+int func_80800030_chdrawbridgeswitches(s32 actor, s32 msg, s32 arg, s32 bridge_msg_7,
+                                       s32 bridge_msg_8)
 {
-    switch (param_1) {
+    switch (msg) {
         case 7:
-            func_80101180(0x49F, param_3, 0);
-            _chswitch_entrypoint_10(param_0, param_1, param_2);
+            func_80101180(0x49F, bridge_msg_7, 0);
+            _chswitch_entrypoint_10(actor, msg, arg);
             return;
 
         case 8:
-            func_80101180(0x49F, param_4, 0);
-            _chswitch_entrypoint_10(param_0, param_1, param_2);
+            func_80101180(0x49F, bridge_msg_8, 0);
+            _chswitch_entrypoint_10(actor, msg, arg);
             return;
 
         default:
-            _chswitch_entrypoint_10(param_0, param_1, param_2);
+            _chswitch_entrypoint_10(actor, msg, arg);
     }
 }
 
-void func_808000D0_chdrawbridgeswitches(s32 param_0)
+void func_808000D0_chdrawbridgeswitches(s32 actor)
 {
-    func_80800000_chdrawbridgeswitches(param_0, 0xA20, 0x200);
+    func_80800000_chdrawbridgeswitches(actor, 0xA20, 0x200);
 }
 
-void func_808000F4_chdrawbridgeswitches(s32 param_0, s32 param_1, s32 param_2)
+void func_808000F4_chdrawbridgeswitches(s32 actor, s32 msg, s32 arg)
 {
-    func_80800030_chdrawbridgeswitches(param_0, param_1, param_2, 0x69, 0x68);
+    func_80800030_chdrawbridgeswitches(actor, msg, arg, 0x69, 0x68);
 }
 
 int chdrawbridgeswitches_entrypoint_0()
@@ -44,14 +45,14 @@ int chdrawbridgeswitches_entrypoint_0()
     return &D_80800210_chdrawbridgeswitches;
 }
 
-void func_80800128_chdrawbridgeswitches(s32 param_0)
+void func_80800128_chdrawbridgeswitches(s32 actor)
 {
-    func_80800000_chdrawbridgeswitches(param_0, 0xA21, 0x400);
+    func_80800000_chdrawbridgeswitches(actor, 0xA21, 0x400);
 }
 
-void func_8080014C_chdrawbridgeswitches(s32 param_0, s32 param_1, s32 param_2)
+void func_8080014C_chdrawbridgeswitches(s32 actor, s32 msg, s32 arg)
 {
-    func_80800030_chdrawbridgeswitches(param_0, param_1, param_2, 0x6b, 0x6a);
+    func_80800030_chdrawbridgeswitches(actor, msg, arg, 0x6b, 0x6a);
 }
 
 int chdrawbridgeswitches_entrypoint_1()
@@ -59,18 +60,19 @@ int chdrawbridgeswitches_entrypoint_1()
     return (int) &D_80800258_chdrawbridgeswitches;
 }
 
-s32 func_80800180_chdrawbridgeswitches(s32 param_0)
+s32 func_80800180_chdrawbridgeswitches(s32 actor)
 {
-    func_80800000_chdrawbridgeswitches(param_0, 0x58E, 1);
-    _chswitch_entrypoint_9(param_0);
+    func_80800000_chdrawbridgeswitches(actor, 0x58E, 1);
+    _chswitch_entrypoint_9(actor);
 }
 
-int func_808001B0_chdrawbridgeswitches(s32 param_0, s32 param_1, s32 param_2)
+// Switch for flag 0x58E: message 7 is forwarded to actor 0x395.
+int func_808001B0_chdrawbridgeswitches(s32 actor, s32 msg, s32 arg)
 {
-    if (param_1 == 7) {
+    if (msg == 7) {
         func_80101180(0x395, 7, 0);
     }
-    _chswitch_entrypoint_10(param_0, param_1 | param_1, param_2);
+    _chswitch_entrypoint_10(actor, msg | msg, arg);
 }
 
 int chdrawbridgeswitches_entrypoint_2()

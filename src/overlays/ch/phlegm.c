@@ -62,7 +62,7 @@ extern u8 D_80800CC4_chphlegm[];
 extern Actor *func_80108528(s32, f32 *, s32, Actor **);
 extern void func_80102FDC(Actor *, f32);
 extern void func_800EF368(f32 *, f32);
-void func_80800748_chphlegm(Actor *param_0, f32 param_1, s32 param_2);
+void func_80800748_chphlegm(Actor *actor, f32 y_offset, s32 particle_id);
 void func_80800A58_chphlegm();
 
 int chphlegm_entrypoint_0()
@@ -81,71 +81,71 @@ void *chphlegm_entrypoint_2(void)
     return &D_80800BE8_chphlegm;
 }
 
-void func_80800024_chphlegm(Actor *param_0)
+void func_80800024_chphlegm(Actor *actor)
 {
     if (func_800DC298(0.5f))
-        param_0->unk50 = 600.0f;
+        actor->unk50 = 600.0f;
     else
-        param_0->unk50 = -600.0f;
+        actor->unk50 = -600.0f;
     if (func_800DC298(0.5f))
-        param_0->unk54 = 50.0f;
+        actor->unk54 = 50.0f;
     else
-        param_0->unk54 = -50.0f;
-    if (param_0->unk64_20)
-        func_8010A570(param_0);
+        actor->unk54 = -50.0f;
+    if (actor->unk64_20)
+        func_8010A570(actor);
 }
 
-void func_808000C4_chphlegm(Actor *param_0)
+void func_808000C4_chphlegm(Actor *actor)
 {
-    s32 local_0;
-    f32 local_1;
-    s32 local_2;
-    switch (param_0->unk70_10) {
+    s32 hit_flags;
+    f32 frame_time;
+    s32 particle_id;
+    switch (actor->unk70_10) {
         case 1:
-            local_0 = func_8010B990(param_0, 0x404007);
-            local_1 = func_800D8FF8();
-            local_2 = param_0->unk64_20 ? 0x95C : 0x95D;
-            func_808007EC_chphlegm(param_0, local_2);
-            param_0->rotation[0] = func_800136E4(param_0->rotation[0] + local_1 * param_0->unk50);
-            param_0->rotation[1] = func_800136E4(param_0->rotation[1] + local_1 * param_0->unk54);
-            if (local_0 & 0x28) {
-                func_80800748_chphlegm(param_0, -20.0f, local_2);
-                func_8010A570(param_0);
-                func_80101FDC(param_0, 2);
-                _subaddiefade_entrypoint_3(param_0);
-                if (param_0->unk64_20) {
-                    func_80108B04(param_0, 0);
+            hit_flags = func_8010B990(actor, 0x404007);
+            frame_time = func_800D8FF8();
+            particle_id = actor->unk64_20 ? 0x95C : 0x95D;
+            func_808007EC_chphlegm(actor, particle_id);
+            actor->rotation[0] = func_800136E4(actor->rotation[0] + frame_time * actor->unk50);
+            actor->rotation[1] = func_800136E4(actor->rotation[1] + frame_time * actor->unk54);
+            if (hit_flags & 0x28) {
+                func_80800748_chphlegm(actor, -20.0f, particle_id);
+                func_8010A570(actor);
+                func_80101FDC(actor, 2);
+                _subaddiefade_entrypoint_3(actor);
+                if (actor->unk64_20) {
+                    func_80108B04(actor, 0);
                 }
             }
-            if (!param_0->unk64_19 &&
-                (param_0->position[1] < -2000.0f || func_800EEF94(param_0->position) > 20000.0f)) {
-                func_800FFAB0(param_0);
+            if (!actor->unk64_19 &&
+                (actor->position[1] < -2000.0f || func_800EEF94(actor->position) > 20000.0f)) {
+                func_800FFAB0(actor);
             }
             break;
         case 2:
-            param_0->position[1] -= (param_0->scale * func_800D8FF8()) * 25.0f;
+            actor->position[1] -= (actor->scale * func_800D8FF8()) * 25.0f;
     }
 }
 
-s32 func_8080026C_chphlegm(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_8080026C_chphlegm(Actor *actor, s32 msg, s32 msg_data)
 {
     s32 pad;
-    PhlegmData *local_0;
+    PhlegmData *hit_info;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x3D:
-            func_80102FDC(func_801084B0(0x399, &param_0), *(f32 *) ((u8 *) param_0 + 0x38));
+            func_80102FDC(func_801084B0(0x399, &actor), *(f32 *) ((u8 *) actor + 0x38));
             return 1;
         case 0x40:
-            local_0 = *(PhlegmData **) &param_2;
-            func_8010A570(param_0);
-            func_80800748_chphlegm(param_0, 0.0f, 0x95D);
-            if (local_0->unk24_22 != 0) {
-                func_800FFAB0(param_0);
+            hit_info = *(PhlegmData **) &msg_data;
+            func_8010A570(actor);
+            func_80800748_chphlegm(actor, 0.0f, 0x95D);
+            if (hit_info->unk24_22 != 0) {
+                func_800FFAB0(actor);
             }
             break;
         case 0x95:
-            func_80103140(param_0, (PhlegmBits *) param_0->unk64_20 ? 0x6DC : 0x876, 0);
+            func_80103140(actor, (PhlegmBits *) actor->unk64_20 ? 0x6DC : 0x876, 0);
             return 1;
         default:
             return 0;
@@ -153,85 +153,85 @@ s32 func_8080026C_chphlegm(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800354_chphlegm(u8 *param_0)
+void func_80800354_chphlegm(u8 *actor)
 {
-    *(f32 *) (param_0 + 0x48) = *(f32 *) (param_0 + 0x54) = func_8010CD28(param_0);
-    *(f32 *) (param_0 + 0x24) = *(f32 *) (param_0 + 0x38) * 150.0f;
-    *(f32 *) (param_0 + 0x58) = func_800DC178(0.8f, 1.0f);
+    *(f32 *) (actor + 0x48) = *(f32 *) (actor + 0x54) = func_8010CD28(actor);
+    *(f32 *) (actor + 0x24) = *(f32 *) (actor + 0x38) * 150.0f;
+    *(f32 *) (actor + 0x58) = func_800DC178(0.8f, 1.0f);
 }
 
-void func_808003B4_chphlegm(Actor *param_0)
+void func_808003B4_chphlegm(Actor *actor)
 {
-    f32 local_9[3];
-    f32 local_8[3];
-    f32 local_7[3];
-    f32 local_6;
-    Actor *local_0[10];
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    f32 local_4;
-    switch (param_0->unk70_10) {
+    f32 probe_pos[3];
+    f32 target_pos[3];
+    f32 unk_0[3];
+    f32 distance;
+    Actor *blobs[10];
+    s32 i;
+    s32 blob_count;
+    s32 active_count;
+    f32 speed_scale;
+    switch (actor->unk70_10) {
         case 1:
-            if (func_80101DDC(param_0)) {
-                func_8010A590(param_0);
-                func_80102424(param_0, 2);
+            if (func_80101DDC(actor)) {
+                func_8010A590(actor);
+                func_80102424(actor, 2);
             }
             break;
         case 2:
             if (func_8010D248()) {
-                if (((PhlegmFlags49 *) param_0)->local_3)
-                    local_4 = _subaddiejoy_entrypoint_9(param_0, &param_0->unk54, 3);
+                if (((PhlegmFlags49 *) actor)->local_3)
+                    speed_scale = _subaddiejoy_entrypoint_9(actor, &actor->unk54, 3);
                 else {
-                    local_4 = 1.0f;
-                    param_0->unk54 = func_8010CD28(param_0);
+                    speed_scale = 1.0f;
+                    actor->unk54 = func_8010CD28(actor);
                 }
-                func_80102BF8(param_0, 0.15f, 120.0f, 360.0f);
-                if (func_800DA298(0) && func_800D90A4(&param_0->unk58)) {
-                    local_2 = _subaddiefind_entrypoint_4(0x399, local_0, 10);
-                    local_3 = local_2;
-                    for (local_1 = 0; local_1 < local_2; local_1++) {
-                        if (!((PhlegmFlags49 *) local_0[local_1])->local_2)
-                            local_3--;
+                func_80102BF8(actor, 0.15f, 120.0f, 360.0f);
+                if (func_800DA298(0) && func_800D90A4(&actor->unk58)) {
+                    blob_count = _subaddiefind_entrypoint_4(0x399, blobs, 10);
+                    active_count = blob_count;
+                    for (i = 0; i < blob_count; i++) {
+                        if (!((PhlegmFlags49 *) blobs[i])->local_2)
+                            active_count--;
                     }
-                    if (!((PhlegmFlags49 *) param_0)->local_3 && local_3 >= 4 &&
-                        !_suchase_entrypoint_1(param_0))
+                    if (!((PhlegmFlags49 *) actor)->local_3 && active_count >= 4 &&
+                        !_suchase_entrypoint_1(actor))
                         return;
-                    local_6 = (func_800D8FF8() * (*(f32 *) &param_0->actorData[3] * local_4)) *
-                              func_800F3780(func_80101F24(param_0), D_80800C30_chphlegm, 4);
-                    func_800EE7F8(local_8, param_0->position);
-                    func_800EF1B8(local_8, param_0->rotation[1], local_6);
-                    local_8[1] -= 80.0f;
-                    func_800EE7F8(local_9, local_8);
-                    local_9[1] = param_0->position[1] + 100.0f;
-                    if (func_800C6A7C(local_9, local_8, local_7, param_0->unk14))
-                        func_800EE7F8(param_0->position, local_8);
+                    distance = (func_800D8FF8() * (*(f32 *) &actor->actorData[3] * speed_scale)) *
+                              func_800F3780(func_80101F24(actor), D_80800C30_chphlegm, 4);
+                    func_800EE7F8(target_pos, actor->position);
+                    func_800EF1B8(target_pos, actor->rotation[1], distance);
+                    target_pos[1] -= 80.0f;
+                    func_800EE7F8(probe_pos, target_pos);
+                    probe_pos[1] = actor->position[1] + 100.0f;
+                    if (func_800C6A7C(probe_pos, target_pos, unk_0, actor->unk14))
+                        func_800EE7F8(actor->position, target_pos);
                 }
             }
     }
 }
 
-s32 func_808005E4_chphlegm(Actor *param_0, s32 param_1, PhlegmEvent30 param_2)
+s32 func_808005E4_chphlegm(Actor *actor, s32 msg, PhlegmEvent30 msg_data)
 {
-    f32 local_1[3];
-    Actor *local_0;
-    switch (param_1) {
+    f32 drop_pos[3];
+    Actor *fx_actor;
+    switch (msg) {
         case 0x40:
-            if (_subaddiefind_entrypoint_9(param_0->unk6C_9) == 1) {
-                func_80103DFC(param_0, local_1);
-                _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, 3, ((s32 *) local_1)[0],
-                                            ((s32 *) local_1)[1], ((s32 *) local_1)[2],
-                                            *(s32 *) &param_0->rotation[1]);
+            if (_subaddiefind_entrypoint_9(actor->unk6C_9) == 1) {
+                func_80103DFC(actor, drop_pos);
+                _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, 3, ((s32 *) drop_pos)[0],
+                                            ((s32 *) drop_pos)[1], ((s32 *) drop_pos)[2],
+                                            *(s32 *) &actor->rotation[1]);
             }
-            func_80800748_chphlegm(param_0, -10.0f, 0x95C);
-            _chexploder_entrypoint_4(param_0, (*param_2.actors)->position, 0x1C);
+            func_80800748_chphlegm(actor, -10.0f, 0x95C);
+            _chexploder_entrypoint_4(actor, (*msg_data.actors)->position, 0x1C);
             break;
         case 0x90:
-            local_0 = func_80106790(func_80101080());
-            _chexploder_entrypoint_9(local_0, 3, 0);
-            _chexploder_entrypoint_9(local_0, 4, 1);
-            _chexploder_entrypoint_10(local_0, D_80800C50_chphlegm);
-            _subaddiefade_entrypoint_3(local_0);
+            fx_actor = func_80106790(func_80101080());
+            _chexploder_entrypoint_9(fx_actor, 3, 0);
+            _chexploder_entrypoint_9(fx_actor, 4, 1);
+            _chexploder_entrypoint_10(fx_actor, D_80800C50_chphlegm);
+            _subaddiefade_entrypoint_3(fx_actor);
             break;
         default:
             return 0;
@@ -239,33 +239,34 @@ s32 func_808005E4_chphlegm(Actor *param_0, s32 param_1, PhlegmEvent30 param_2)
     return 1;
 }
 
-s32 func_80800704_chphlegm(s32 param_0, s32 param_1)
+s32 func_80800704_chphlegm(s32 arg0, s32 arg1)
 {
     func_800DF744(3, 1);
     func_800DF744(4, 0);
-    func_80101870(param_0, param_1);
+    func_80101870(arg0, arg1);
 }
 
-void func_80800748_chphlegm(Actor *param_0, f32 param_1, s32 param_2)
+void func_80800748_chphlegm(Actor *actor, f32 y_offset, s32 particle_id)
 {
-    f32 local_0[3];
-    s32 local_1;
-    func_800EE7F8(local_0, param_0->position);
-    local_0[1] += param_0->scale * param_1;
-    local_1 = func_800B53A4(10);
-    func_800BA3FC(local_1, param_2);
-    func_800BABB8(local_1, param_0->position, local_0, param_0->scale, D_80800C5C_chphlegm);
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800C88_chphlegm);
+    f32 end_pos[3];
+    s32 emitter;
+    func_800EE7F8(end_pos, actor->position);
+    end_pos[1] += actor->scale * y_offset;
+    emitter = func_800B53A4(10);
+    func_800BA3FC(emitter, particle_id);
+    func_800BABB8(emitter, actor->position, end_pos, actor->scale, D_80800C5C_chphlegm);
+    _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80800C88_chphlegm);
 }
 
-int func_808007EC_chphlegm(Actor *param_0, s32 param_1)
+int func_808007EC_chphlegm(Actor *actor, s32 particle_id)
 {
-    s32 *local_0;
-    local_0 = func_800B53A4(2);
-    func_800BA3FC(local_0, param_1);
+    s32 *emitter;
+    emitter = func_800B53A4(2);
+    func_800BA3FC(emitter, particle_id);
+    // Matching: empty loop needed for the match.
     do {
     } while (0);
-    func_800BABB8(local_0, (char *) param_0 + 4, 0, *(f32 *) ((char *) param_0 + 0x38),
+    func_800BABB8(emitter, (char *) actor + 4, 0, *(f32 *) ((char *) actor + 0x38),
                   D_80800C98_chphlegm);
 }
 
@@ -273,53 +274,53 @@ void func_80800848_chphlegm(s32 arg0)
 {
 }
 
-void func_80800850_chphlegm(Actor *param_0)
+void func_80800850_chphlegm(Actor *actor)
 {
-    s32 local_0;
-    func_8010D254(param_0->actorData);
-    switch ((u32) *(u16 *) ((u8 *) param_0 + 0x72) >> 10) {
+    s32 player_state;
+    func_8010D254(actor->actorData);
+    switch ((u32) *(u16 *) ((u8 *) actor + 0x72) >> 10) {
         case 1:
             if (!func_800C954C()) {
-                func_80101FDC(param_0, 2);
+                func_80101FDC(actor, 2);
             }
             return;
         case 2:
-            local_0 = func_800F55FC(func_800F54E4());
+            player_state = func_800F55FC(func_800F54E4());
             if (!func_800DA298(0x1A6) &&
-                func_800EFFB4(param_0->position, 1000.0f, (f32 *) param_0->actorData)) {
+                func_800EFFB4(actor->position, 1000.0f, (f32 *) actor->actorData)) {
                 func_800DA544(0x1A6);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x1800, 4, 0, 0x57);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x1800, 4, 0, 0x57);
             }
-            if ((s32) ((u32) local_0 << 4) < 0 && func_80090150()) {
+            if ((s32) ((u32) player_state << 4) < 0 && func_80090150()) {
                 if (!func_800DA298(0x170)) {
                     func_800DA544(0x170);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x17FF, 4, 0, 0x57);
-                    func_80101FDC(param_0, 4);
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x17FF, 4, 0, 0x57);
+                    func_80101FDC(actor, 4);
                     return;
                 }
-                func_80108B04(param_0, 0);
-                func_80101FDC(param_0, 3);
-                param_0->unk58 = func_800DC178(3.0f, 4.0f);
+                func_80108B04(actor, 0);
+                func_80101FDC(actor, 3);
+                actor->unk58 = func_800DC178(3.0f, 4.0f);
             }
             break;
         case 3:
-            if (func_800D9078(&param_0->unk58)) {
-                func_80101FDC(param_0, 2);
+            if (func_800D9078(&actor->unk58)) {
+                func_80101FDC(actor, 2);
             }
     }
 }
 
-s32 func_808009DC_chphlegm(Actor *param_0, s32 param_1, PhlegmEvent9DC param_2)
+s32 func_808009DC_chphlegm(Actor *actor, s32 msg, PhlegmEvent9DC msg_data)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x3D:
-            func_80800A58_chphlegm(param_0);
+            func_80800A58_chphlegm(actor);
             break;
         case 0x2E:
-            func_80101FDC(param_0, 2);
+            func_80101FDC(actor, 2);
             break;
         case 0x95:
-            func_80101FDC(param_0, 1);
+            func_80101FDC(actor, 1);
             break;
         default:
             return 0;
@@ -327,23 +328,24 @@ s32 func_808009DC_chphlegm(Actor *param_0, s32 param_1, PhlegmEvent9DC param_2)
     return 1;
 }
 
-void func_80800A58_chphlegm(param_0) Actor *param_0;
+// Drops a phlegm ball (0x398) from above the player.
+void func_80800A58_chphlegm(actor) Actor *actor;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    Actor *local_3;
+    f32 spawn_pos[3];
+    f32 target_pos[3];
+    f32 player_pos[3];
+    Actor *ball;
 
-    _subaddieaudioquick_entrypoint_2(param_0, D_80800CD8_chphlegm, D_80800CC4_chphlegm);
-    func_8008FE68(local_2);
-    func_800EE7F8(local_1, local_2);
-    func_800EE7F8(local_0, local_2);
-    local_0[1] += 2500.0f;
-    local_3 = func_80108528(0x398, local_0, 0, &param_0);
-    func_80102FDC(local_3, func_800DC178(3.0f, 4.0f));
-    func_800EFB24((f32 *) &local_3->actorData[4], local_1, local_0);
-    func_800EF368((f32 *) &local_3->actorData[4], 3500.0f);
-    local_3->unk64_19 = 1;
+    _subaddieaudioquick_entrypoint_2(actor, D_80800CD8_chphlegm, D_80800CC4_chphlegm);
+    func_8008FE68(player_pos);
+    func_800EE7F8(target_pos, player_pos);
+    func_800EE7F8(spawn_pos, player_pos);
+    spawn_pos[1] += 2500.0f;
+    ball = func_80108528(0x398, spawn_pos, 0, &actor);
+    func_80102FDC(ball, func_800DC178(3.0f, 4.0f));
+    func_800EFB24((f32 *) &ball->actorData[4], target_pos, spawn_pos);
+    func_800EF368((f32 *) &ball->actorData[4], 3500.0f);
+    ball->unk64_19 = 1;
 }
 
 extern void func_80105834();

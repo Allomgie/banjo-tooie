@@ -8,62 +8,63 @@ void *B_80800300_sudeathmatch[40];
 u8 B_808003A0_sudeathmatch[40];
 s32 B_808003C8_sudeathmatch;
 
-s32 sudeathmatch_entrypoint_0(s32 param_0, f32 *param_1, f32 *param_2)
+// Picks a spawn prop (id 0x2B7) at least 400 units from other players and not the last one used.
+s32 sudeathmatch_entrypoint_0(s32 player, f32 *out_pos, f32 *out_rot)
 {
-    s32 local_0;
-    s32 local_1;
-    Vec3f local_2[8];
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    Vec3f local_6;
-    s32 local_7;
-    s32 local_8;
-    void *local_9;
-    s32 local_10;
-    Vec3f local_11;
+    s32 i;
+    s32 other_count;
+    Vec3f other_pos[8];
+    s32 spawn_count;
+    s32 pick;
+    s32 spawn_idx;
+    Vec3f spawn_pos;
+    s32 alive;
+    s32 yaw;
+    void *prop;
+    s32 radius;
+    Vec3f offset;
 
-    local_0 = 0;
-    local_1 = 0;
-    for (; local_0 < func_800F5898(); local_0++) {
-        if (local_0 != param_0 && (local_7 = func_800F6438(local_0))) {
-            func_800F5A00(local_0, local_2[local_1++].f);
+    i = 0;
+    other_count = 0;
+    for (; i < func_800F5898(); i++) {
+        if (i != player && (alive = func_800F6438(i))) {
+            func_800F5A00(i, other_pos[other_count++].f);
         }
     }
-    local_3 = _gccubesearch_entrypoint_9(0x2B7, B_80800300_sudeathmatch, 40);
-    if (local_3 == 0) {
+    spawn_count = _gccubesearch_entrypoint_9(0x2B7, B_80800300_sudeathmatch, 40);
+    if (spawn_count == 0) {
         return 0;
     }
-    for (local_0 = 0; local_0 < local_3; local_0++) {
-        B_808003A0_sudeathmatch[local_0] = local_0;
+    for (i = 0; i < spawn_count; i++) {
+        B_808003A0_sudeathmatch[i] = i;
     }
-    local_3--;
-    B_808003A0_sudeathmatch[B_808003C8_sudeathmatch] = B_808003A0_sudeathmatch[local_3];
-    while (local_3 > 0) {
-        local_4 = func_800DC0C0() * (local_3 - 0.5f);
-        local_5 = B_808003A0_sudeathmatch[local_4];
-        local_9 = B_80800300_sudeathmatch[local_5];
-        _gspropctrl_entrypoint_11(local_9, local_6.f);
-        for (local_0 = 0; local_0 < local_1; local_0++) {
-            if (func_800EFC7C(local_6.f, local_2[local_0].f) < 160000.0f) {
-                if (local_3 >= 2) {
-                    B_808003A0_sudeathmatch[local_4] = B_808003A0_sudeathmatch[--local_3];
+    spawn_count--;
+    B_808003A0_sudeathmatch[B_808003C8_sudeathmatch] = B_808003A0_sudeathmatch[spawn_count];
+    while (spawn_count > 0) {
+        pick = func_800DC0C0() * (spawn_count - 0.5f);
+        spawn_idx = B_808003A0_sudeathmatch[pick];
+        prop = B_80800300_sudeathmatch[spawn_idx];
+        _gspropctrl_entrypoint_11(prop, spawn_pos.f);
+        for (i = 0; i < other_count; i++) {
+            if (func_800EFC7C(spawn_pos.f, other_pos[i].f) < 160000.0f) {
+                if (spawn_count >= 2) {
+                    B_808003A0_sudeathmatch[pick] = B_808003A0_sudeathmatch[--spawn_count];
                 } else {
-                    local_0 = local_1;
+                    i = other_count;
                 }
                 break;
             }
         }
-        if (local_0 == local_1) {
-            local_10 = _gspropctrl_entrypoint_8(local_9);
-            local_8 = _gspropctrl_entrypoint_12(local_9);
-            local_11.pos.x = func_800DC178(-1.0f, 1.0f) * local_10;
-            local_11.pos.y = 0.0f;
-            local_11.pos.z = func_800DC178(-1.0f, 1.0f) * local_10;
-            func_800EE780(param_1, local_6.f, local_11.f);
-            param_2[0] = param_2[2] = 0.0f;
-            param_2[1] = local_8;
-            B_808003C8_sudeathmatch = local_5;
+        if (i == other_count) {
+            radius = _gspropctrl_entrypoint_8(prop);
+            yaw = _gspropctrl_entrypoint_12(prop);
+            offset.pos.x = func_800DC178(-1.0f, 1.0f) * radius;
+            offset.pos.y = 0.0f;
+            offset.pos.z = func_800DC178(-1.0f, 1.0f) * radius;
+            func_800EE780(out_pos, spawn_pos.f, offset.f);
+            out_rot[0] = out_rot[2] = 0.0f;
+            out_rot[1] = yaw;
+            B_808003C8_sudeathmatch = spawn_idx;
             return 1;
         }
     }

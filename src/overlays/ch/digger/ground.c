@@ -31,77 +31,79 @@ int chdiggerground_entrypoint_0()
     return (int) &D_80800408_chdiggerground;
 }
 
-void func_8080000C_chdiggerground(Actor *param_0)
+void func_8080000C_chdiggerground(Actor *actor)
 {
-    if (param_0->unk64_20) {
-        if (func_80100094(param_0, 0) == NULL) {
-            func_808000C4_chdiggerground(param_0);
-            func_8010108C(param_0, 0x95, 0);
+    if (actor->unk64_20) {
+        if (func_80100094(actor, 0) == NULL) {
+            func_808000C4_chdiggerground(actor);
+            func_8010108C(actor, 0x95, 0);
         }
-        _sucoaster_entrypoint_2(param_0);
+        _sucoaster_entrypoint_2(actor);
     }
 }
 
-void func_80800070_chdiggerground(DigS *param_0)
+void func_80800070_chdiggerground(DigS *actor)
 {
-    if (param_0->f6C != 0) {
-        func_80101FDC(param_0, 1);
-        func_808000C4_chdiggerground(param_0);
-        param_0->flag = 1;
+    if (actor->f6C != 0) {
+        func_80101FDC(actor, 1);
+        func_808000C4_chdiggerground(actor);
+        actor->flag = 1;
     }
-    func_8010A3E8(param_0, 0.75f);
+    func_8010A3E8(actor, 0.75f);
 }
 
-void func_808000C4_chdiggerground(param_0) Actor *param_0;
+// Activates the walking AI; attack mode 3 or 2 at random.
+void func_808000C4_chdiggerground(actor) Actor *actor;
 {
-    _subaddieDll_entrypoint_1(param_0);
-    if (_sucoaster_entrypoint_0(param_0, 0)) {
-        _sucoaster_entrypoint_10(param_0, func_800DC298(0.65f) ? 3 : 2);
-        if (param_0->pad6C_21 == 0)
-            param_0->unk6C_0 = func_800D9058(1.5f);
-        param_0->unk64_24 = 1;
-        func_8010A590(param_0);
+    _subaddieDll_entrypoint_1(actor);
+    if (_sucoaster_entrypoint_0(actor, 0)) {
+        _sucoaster_entrypoint_10(actor, func_800DC298(0.65f) ? 3 : 2);
+        if (actor->pad6C_21 == 0)
+            actor->unk6C_0 = func_800D9058(1.5f);
+        actor->unk64_24 = 1;
+        func_8010A590(actor);
     }
 }
 
-int func_80800168_chdiggerground(s32 param_0, s32 param_1, s32 param_2)
+int func_80800168_chdiggerground(s32 actor, s32 msg, s32 data)
 {
-    if (!func_80100094(param_0, 0)) {
+    if (!func_80100094(actor, 0)) {
         return 0;
     }
     {
-        if (param_1 == 0xB6) {
-            func_80800214_chdiggerground(param_0);
+        if (msg == 0xB6) {
+            func_80800214_chdiggerground(actor);
         }
-        _sucoaster_entrypoint_21(param_0, param_1, param_2);
+        _sucoaster_entrypoint_21(actor, msg, data);
     }
 }
 
-void func_808001C8_chdiggerground(Actor *param_0, s32 param_1)
+void func_808001C8_chdiggerground(Actor *actor, s32 arg)
 {
-    if (func_80100094(param_0, 0) == NULL) {
-        func_80101870(param_0, param_1);
+    if (func_80100094(actor, 0) == NULL) {
+        func_80101870(actor, arg);
     } else {
-        _sucoaster_entrypoint_20(param_0, param_1);
+        _sucoaster_entrypoint_20(actor, arg);
     }
 }
 
-void func_80800214_chdiggerground(param_0) Actor *param_0;
+// Kicks up a ring of 8 dust particles in front of the actor.
+void func_80800214_chdiggerground(actor) Actor *actor;
 {
-    s32 local_3;
-    Vec3f local_0;
-    Vec3f local_1;
-    Vec3f local_2;
-    s32 local_4;
-    func_800EE7F8(local_1.f, param_0->position);
-    func_800EF1B8(local_1.f, param_0->rotation[1], param_0->scale * 80.0f);
-    func_800EE7F8(local_2.f, local_1.f);
-    local_2.f[1] -= 10.0f;
-    local_3 = func_800B53A4(8);
-    for (local_4 = 0; local_4 != 8; local_4++) {
-        func_800EEB9C(local_0.f, local_4 * 45.0f, 20.0f);
-        func_800EF04C(local_0.f, local_1.f);
-        func_800BABB8(local_3, local_0.f, local_2.f, 1.0f, D_80800450_chdiggerground);
+    s32 particle_type;
+    Vec3f offset;
+    Vec3f center;
+    Vec3f spread;
+    s32 i;
+    func_800EE7F8(center.f, actor->position);
+    func_800EF1B8(center.f, actor->rotation[1], actor->scale * 80.0f);
+    func_800EE7F8(spread.f, center.f);
+    spread.f[1] -= 10.0f;
+    particle_type = func_800B53A4(8);
+    for (i = 0; i != 8; i++) {
+        func_800EEB9C(offset.f, i * 45.0f, 20.0f);
+        func_800EF04C(offset.f, center.f);
+        func_800BABB8(particle_type, offset.f, spread.f, 1.0f, D_80800450_chdiggerground);
     }
 }
 

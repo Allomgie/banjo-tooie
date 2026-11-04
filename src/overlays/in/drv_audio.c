@@ -1,8 +1,8 @@
 #include "common.h"
 
 typedef struct {
-    Actor *local_0;
-    void *local_1;
+    Actor *actor;
+    void *unk_4;
 } AudioDriverOwner;
 extern s16 D_80801478_indrv_audio[];
 extern s32 func_800C4350();
@@ -10,63 +10,63 @@ extern f32 func_800F1DF4(f32 *, f32 *);
 extern s32 func_800F20BC(f32, f32, f32);
 extern void func_800C3AE0(u8, f32);
 typedef struct {
-    u16 local_0;
-    u16 pad_0;
-    void *local_1;
+    u16 id;
+    u16 pad_2;
+    void *script;
 } DriverAudioEntry31;
 extern DriverAudioEntry31 D_808014A4_indrv_audio[];
 extern Actor *func_80106790();
 
-void func_80800000_indrv_audio(AudioDriverOwner *param_0, s32 param_1, s16 *param_2)
+void func_80800000_indrv_audio(AudioDriverOwner *owner, s32 bone, s16 *script)
 {
-    f32 local_0[3];
-    u8 local_1;
-    f32 local_2[3];
-    f32 local_3[3];
-    if (param_1 >= 0)
-        func_800DBEFC(param_0->local_1, param_1, local_0);
+    f32 pos[3];
+    u8 source;
+    f32 cam_pos[3];
+    f32 unk_0[3];
+    if (bone >= 0)
+        func_800DBEFC(owner->unk_4, bone, pos);
     else
-        func_800EE88C(local_0, param_0->local_0->position);
-    local_1 = func_800C4350(0, local_0, D_80801478_indrv_audio);
-    func_800C4350(local_1, local_0, param_2);
-    func_8010FFB0(func_8008FFE8(), local_2, local_3);
-    if (!func_800F20BC(local_3[1], func_800F1DF4(local_0, local_2), 50.0f))
-        func_800C3AE0(local_1, 0.25f);
-    func_800C3BDC(local_1);
+        func_800EE88C(pos, owner->actor->position);
+    source = func_800C4350(0, pos, D_80801478_indrv_audio);
+    func_800C4350(source, pos, script);
+    func_8010FFB0(func_8008FFE8(), cam_pos, unk_0);
+    if (!func_800F20BC(unk_0[1], func_800F1DF4(pos, cam_pos), 50.0f))
+        func_800C3AE0(source, 0.25f);
+    func_800C3BDC(source);
 }
 
-void func_808000BC_indrv_audio(s32 param_0, s32 param_1)
+void func_808000BC_indrv_audio(s32 unused, s32 script)
 {
-    u8 local_0 = func_800C4350(0, 0, (u8 *) D_80801478_indrv_audio);
-    func_800C4350(local_0, 0, param_1);
-    func_800C3BDC(local_0);
+    u8 source = func_800C4350(0, 0, (u8 *) D_80801478_indrv_audio);
+    func_800C4350(source, 0, script);
+    func_800C3BDC(source);
 }
 
-void indrv_audio_entrypoint_0(Unk80132ED0 *param_0, s32 param_1, s32 param_2)
+void indrv_audio_entrypoint_0(Unk80132ED0 *actor, s32 cue_id, s32 target)
 {
-    s32 local_0;
+    s32 i;
 
-    for (local_0 = 0; local_0 < 181; local_0++) {
-        if (param_1 == D_808014A4_indrv_audio[local_0].local_0) {
-            switch (param_2) {
+    for (i = 0; i < 181; i++) {
+        if (cue_id == D_808014A4_indrv_audio[i].id) {
+            switch (target) {
                 case -3:
-                    if (func_80106790(param_0)->unk7C_12) {
-                        func_80800000_indrv_audio(param_0, -2,
-                                                  D_808014A4_indrv_audio[local_0].local_1);
+                    if (func_80106790(actor)->unk7C_12) {
+                        func_80800000_indrv_audio(actor, -2,
+                                                  D_808014A4_indrv_audio[i].script);
                     }
                     break;
                 case -2:
-                    func_808000BC_indrv_audio(param_0, D_808014A4_indrv_audio[local_0].local_1);
+                    func_808000BC_indrv_audio(actor, D_808014A4_indrv_audio[i].script);
                     break;
                 case -4:
                     if (func_800DA298(0xE)) {
-                        func_80800000_indrv_audio(param_0, -1,
-                                                  D_808014A4_indrv_audio[local_0].local_1);
+                        func_80800000_indrv_audio(actor, -1,
+                                                  D_808014A4_indrv_audio[i].script);
                     }
                     break;
                 default:
-                    func_80800000_indrv_audio(param_0, param_2,
-                                              D_808014A4_indrv_audio[local_0].local_1);
+                    func_80800000_indrv_audio(actor, target,
+                                              D_808014A4_indrv_audio[i].script);
             }
         }
     }

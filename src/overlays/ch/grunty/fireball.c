@@ -25,57 +25,58 @@ int *chgruntyfireball_entrypoint_0()
     return &D_80800480_chgruntyfireball;
 }
 
-void func_8080000C_chgruntyfireball(u8 *param_0)
+void func_8080000C_chgruntyfireball(u8 *actor)
 {
-    *(s32 *) ((s8 *) param_0 + 0x24) = 0;
-    func_80109EEC(param_0, 0x40);
+    *(s32 *) ((s8 *) actor + 0x24) = 0;
+    func_80109EEC(actor, 0x40);
 }
 
-void func_80800030_chgruntyfireball(Actor *param_0)
+// Explodes on collision (bit 0x20), otherwise keeps flying.
+void func_80800030_chgruntyfireball(Actor *actor)
 {
-    _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_808004C8_chgruntyfireball);
-    switch (param_0->unk70_10) {
+    _subaddieaudioloop_entrypoint_4(actor, actor->position, 1, D_808004C8_chgruntyfireball);
+    switch (actor->unk70_10) {
         case 1:
-            func_808003D8_chgruntyfireball(param_0);
+            func_808003D8_chgruntyfireball(actor);
             break;
         case 2:
-            if (func_8010B990(param_0, 0x400007) & 0x20) {
+            if (func_8010B990(actor, 0x400007) & 0x20) {
                 func_80018820(0, 1.0f, 0.18f);
                 func_800E15CC(0, 22.0f, 0.8f);
-                func_80800260_chgruntyfireball(param_0);
+                func_80800260_chgruntyfireball(actor);
             } else {
-                func_808003D8_chgruntyfireball(param_0);
+                func_808003D8_chgruntyfireball(actor);
             }
     }
-    if (param_0->actorData[3]) {
-        func_800C8CB8(param_0->actorData[3], param_0->position);
-        func_800C8E84(param_0->actorData[3], D_808004E0_chgruntyfireball[func_8001210C(1)]);
+    if (actor->actorData[3]) {
+        func_800C8CB8(actor->actorData[3], actor->position);
+        func_800C8E84(actor->actorData[3], D_808004E0_chgruntyfireball[func_8001210C(1)]);
     }
 }
 
-s32 func_80800130_chgruntyfireball(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800130_chgruntyfireball(Actor *actor, s32 msg, s32 arg)
 {
-    f32 local_0[3];
+    f32 target_pos[3];
     s32 pad[2];
 
-    switch (param_1) {
+    switch (msg) {
         case 0xA:
-            func_8010A590(param_0);
-            func_80101FDC(param_0, 2);
-            func_8010D09C((u16) (param_2 >> 16), local_0, 0.0f);
-            local_0[1] += 50.0f;
-            func_800EFB24(&param_0->actorData[4], local_0, param_0->position);
-            func_800EF368((f32 *) &param_0->actorData[4], param_2 & 0xFFFF);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            func_8010A590(actor);
+            func_80101FDC(actor, 2);
+            func_8010D09C((u16) (arg >> 16), target_pos, 0.0f);
+            target_pos[1] += 50.0f;
+            func_800EFB24(&actor->actorData[4], target_pos, actor->position);
+            func_800EF368((f32 *) &actor->actorData[4], arg & 0xFFFF);
+            _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                              D_808004F8_chgruntyfireball);
             break;
         case 0x40:
-            func_80800260_chgruntyfireball(param_0);
+            func_80800260_chgruntyfireball(actor);
             break;
         case 0x95:
-            param_0->actorData[3] = func_800C8A98();
-            func_800C8CB8(param_0->actorData[3], param_0->position);
-            func_800C8D4C(param_0->actorData[3], D_8080050C_chgruntyfireball);
+            actor->actorData[3] = func_800C8A98();
+            func_800C8CB8(actor->actorData[3], actor->position);
+            func_800C8D4C(actor->actorData[3], D_8080050C_chgruntyfireball);
             break;
         default:
             return 0;
@@ -83,38 +84,39 @@ s32 func_80800130_chgruntyfireball(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-int func_80800260_chgruntyfireball(param_0)
-Actor *param_0;
+// Explosion: 10-particle ring, then removes the fireball.
+int func_80800260_chgruntyfireball(actor)
+Actor *actor;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    s32 local_3;
-    s32 local_4;
-    func_8010A570(param_0);
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800514_chgruntyfireball);
-    func_800EE7F8(local_0, param_0->position);
-    local_0[1] += -10.0f;
-    local_3 = func_800B53A4(10);
-    for (local_4 = 0; local_4 < 10; local_4++) {
-        func_800EEB9C(local_1, local_4 * 36.0f, func_800DC178(60.0f, 80.0f));
-        func_800EF04C(local_1, param_0->position);
-        func_800BABB8(local_3, local_1, local_0, 1.0f, &D_80800524_chgruntyfireball);
+    f32 pos[3];
+    f32 ring_vel[3];
+    s32 emitter;
+    s32 i;
+    func_8010A570(actor);
+    _subaddieaudioquick_entrypoint_2(actor, actor->position, &D_80800514_chgruntyfireball);
+    func_800EE7F8(pos, actor->position);
+    pos[1] += -10.0f;
+    emitter = func_800B53A4(10);
+    for (i = 0; i < 10; i++) {
+        func_800EEB9C(ring_vel, i * 36.0f, func_800DC178(60.0f, 80.0f));
+        func_800EF04C(ring_vel, actor->position);
+        func_800BABB8(emitter, ring_vel, pos, 1.0f, &D_80800524_chgruntyfireball);
     }
-    if (*(s32 *) ((u8 *) param_0 + 0x24))
-        *(s32 *) ((u8 *) param_0 + 0x24) =
-            _chlightfader_entrypoint_1(*(s32 *) ((u8 *) param_0 + 0x24), 1.5f, 2);
-    func_800FFAB0(param_0);
+    if (*(s32 *) ((u8 *) actor + 0x24))
+        *(s32 *) ((u8 *) actor + 0x24) =
+            _chlightfader_entrypoint_1(*(s32 *) ((u8 *) actor + 0x24), 1.5f, 2);
+    func_800FFAB0(actor);
 }
 
-void func_808003D8_chgruntyfireball(param_0) s32 param_0;
+void func_808003D8_chgruntyfireball(actor) s32 actor;
 {
-    f32 local_0[3];
-    func_800BBCB8(param_0 + 4, param_0 + 4, 0x3F800000, 1, &D_80800588_chgruntyfireball);
-    func_800EE7F8(local_0, param_0 + 0x28);
-    func_800EF368(local_0, 1e+02f);
-    func_800EF334(local_0, 0xBF800000);
-    func_800EF04C(local_0, param_0 + 4);
-    func_800BBCB8(local_0, param_0 + 4, 0x3F4CCCCD, 1, &D_80800554_chgruntyfireball);
+    f32 dir[3];
+    func_800BBCB8(actor + 4, actor + 4, 0x3F800000, 1, &D_80800588_chgruntyfireball);
+    func_800EE7F8(dir, actor + 0x28);
+    func_800EF368(dir, 1e+02f);
+    func_800EF334(dir, 0xBF800000);
+    func_800EF04C(dir, actor + 4);
+    func_800BBCB8(dir, actor + 4, 0x3F4CCCCD, 1, &D_80800554_chgruntyfireball);
 }
 
 extern void func_80102EC0();

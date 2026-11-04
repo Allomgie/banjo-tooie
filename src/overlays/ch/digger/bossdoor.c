@@ -12,90 +12,93 @@ int *chdiggerbossdoor_entrypoint_0()
     return &D_80800430_chdiggerbossdoor;
 }
 
-void func_8080000C_chdiggerbossdoor(Actor *param_0)
+// Init: if Hag 1 is already defeated, start in the lowered state.
+void func_8080000C_chdiggerbossdoor(Actor *actor)
 {
-    *(f32 *) ((char *) param_0 + 0x28) = 0.0f;
+    *(f32 *) ((char *) actor + 0x28) = 0.0f;
     if (func_800EA090() == 6) {
-        *(f32 *) ((char *) param_0 + 0x28) = -500.0f;
+        *(f32 *) ((char *) actor + 0x28) = -500.0f;
         if (func_800DA298(0x43) != 0) {
-            func_80800370_chdiggerbossdoor(param_0);
-            func_8010108C(param_0, 7, 0);
-            func_800F8294(func_800F54E4(), (f32 *) ((char *) param_0 + 4));
-            _capod_entrypoint_21(*(s32 **) ((char *) param_0 + 0), 0, 0x55, 0x2010);
-            *(u16 *) ((char *) param_0 + 0x6E) = (*(u16 *) ((char *) param_0 + 0x6E) & 0xFE00) | 1;
+            func_80800370_chdiggerbossdoor(actor);
+            func_8010108C(actor, 7, 0);
+            func_800F8294(func_800F54E4(), (f32 *) ((char *) actor + 4));
+            _capod_entrypoint_21(*(s32 **) ((char *) actor + 0), 0, 0x55, 0x2010);
+            *(u16 *) ((char *) actor + 0x6E) = (*(u16 *) ((char *) actor + 0x6E) & 0xFE00) | 1;
         }
     }
 }
 
-void func_808000B0_chdiggerbossdoor(Actor *param_0)
+// Update: state 2 lowers the lift, state 3 waits for the player, state 4 warps to Cauldron Keep.
+void func_808000B0_chdiggerbossdoor(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
-    f32 local_2[3];
+    s32 moving;
+    s32 player;
+    f32 pos[3];
 
-    local_0 = 0;
-    local_1 = func_800F54E4();
-    switch (param_0->unk70_10) {
+    moving = 0;
+    player = func_800F54E4();
+    switch (actor->unk70_10) {
         case 2:
-            if (func_800D9078(&param_0->unk58)) {
+            if (func_800D9078(&actor->unk58)) {
                 if (func_800DA298(0x43)) {
                     _capod_entrypoint_22();
-                    param_0->unk6C_0 = 0;
+                    actor->unk6C_0 = 0;
                 }
-                func_80101FDC(param_0, 3);
+                func_80101FDC(actor, 3);
             } else {
-                local_0 = 1;
+                moving = 1;
             }
-            ((f32 *) param_0->actorData)[4] =
-                func_800F12D4(param_0->unk58, 0.0f, 6.0f, 0.0f, -500.0f);
-            func_800EE7F8(local_2, param_0->position);
-            local_2[1] += ((f32 *) param_0->actorData)[4];
-            func_800F8294(local_1, local_2);
+            ((f32 *) actor->actorData)[4] =
+                func_800F12D4(actor->unk58, 0.0f, 6.0f, 0.0f, -500.0f);
+            func_800EE7F8(pos, actor->position);
+            pos[1] += ((f32 *) actor->actorData)[4];
+            func_800F8294(player, pos);
             break;
         case 4:
-            if (func_800D9078(&param_0->unk58)) {
+            if (func_800D9078(&actor->unk58)) {
                 _gcgoto_entrypoint_1(0x15D, 5);
-                func_80101FDC(param_0, 1);
+                func_80101FDC(actor, 1);
             } else {
-                local_0 = 1;
+                moving = 1;
             }
-            ((f32 *) param_0->actorData)[4] =
-                func_800F12D4(param_0->unk58, 0.0f, 6.0f, -500.0f, 0.0f);
+            ((f32 *) actor->actorData)[4] =
+                func_800F12D4(actor->unk58, 0.0f, 6.0f, -500.0f, 0.0f);
             break;
         case 3:
-            if ((s32) ((u32) func_800F55FC(local_1) << 3) < 0 && func_80016B30(0, 1) == 1 &&
-                func_800F4BB8(local_1, -1, 0)) {
-                _capod_entrypoint_21(param_0->unk0, 0, 0x54, 0x10);
-                func_80101FDC(param_0, 4);
-                param_0->unk6C_0 = 1;
-                param_0->unk58 = 6.0f;
+            if ((s32) ((u32) func_800F55FC(player) << 3) < 0 && func_80016B30(0, 1) == 1 &&
+                func_800F4BB8(player, -1, 0)) {
+                _capod_entrypoint_21(actor->unk0, 0, 0x54, 0x10);
+                func_80101FDC(actor, 4);
+                actor->unk6C_0 = 1;
+                actor->unk58 = 6.0f;
             }
             break;
     }
-    _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_0,
+    _subaddieaudioloop_entrypoint_4(actor, actor->position, moving,
                                     D_80800478_chdiggerbossdoor);
-    func_80800370_chdiggerbossdoor(param_0);
+    func_80800370_chdiggerbossdoor(actor);
 }
 
-void func_808002A8_chdiggerbossdoor(void *param_0)
+void func_808002A8_chdiggerbossdoor(void *actor)
 {
-    if (*(s32 *) ((char *) param_0 + 0x6C) & 0x1FF) {
+    if (*(s32 *) ((char *) actor + 0x6C) & 0x1FF) {
         _capod_entrypoint_22();
-        *(u16 *) ((char *) param_0 + 0x6E) &= 0xFE00;
+        *(u16 *) ((char *) actor + 0x6E) &= 0xFE00;
     }
 }
 
-int func_808002E8_chdiggerbossdoor(Actor *param_0, s32 param_1, s32 param_2)
+// Message 7 (sent by the boss on defeat) starts lowering the lift.
+int func_808002E8_chdiggerbossdoor(Actor *actor, s32 msg, s32 param_2)
 {
-    switch (param_1) {
+    switch (msg) {
         case 7:
-            if (param_0->unk70_10 == 1) {
-                func_80101FDC(param_0, 2);
-                param_0->unk58 = 6.0f;
+            if (actor->unk70_10 == 1) {
+                func_80101FDC(actor, 2);
+                actor->unk58 = 6.0f;
             }
             break;
         case 0x95:
-            func_80800370_chdiggerbossdoor(param_0);
+            func_80800370_chdiggerbossdoor(actor);
             return 1;
         default:
             return 0;
@@ -103,27 +106,29 @@ int func_808002E8_chdiggerbossdoor(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800370_chdiggerbossdoor(param_0) s32 *param_0;
+// Registers the vertex callback that shifts the map mesh by the lift height.
+void func_80800370_chdiggerbossdoor(actor) s32 *actor;
 {
-    s32 local_0;
+    s32 glid;
 
-    local_0 = func_800BEA88(0);
+    glid = func_800BEA88(0);
 
-if (local_0 != 0) {
-    _glid_entrypoint_0(local_0, 1, &_chdiggerbossdoor_entrypoint_1, *param_0);
+if (glid != 0) {
+    _glid_entrypoint_0(glid, 1, &_chdiggerbossdoor_entrypoint_1, *actor);
 }
 
 }
 
-void chdiggerbossdoor_entrypoint_1(void *param_0, Vtx *param_1, Vtx *param_2, s32 param_3,
+// Vertex callback: adds the lift height to each vertex Y.
+void chdiggerbossdoor_entrypoint_1(void *param_0, Vtx *src, Vtx *dst, s32 count,
                                    Unk80132ED0 *param_4)
 {
-    s16 local_0;
-    Vtx *local_1;
-    local_0 = *(f32 *) &func_80106790(param_4)->actorData[4];
-    local_1 = param_1 + param_3;
-    for (; param_1 < local_1; param_1++, param_2++) {
-        param_2->v.ob[1] = param_1->v.ob[1] + local_0;
+    s16 height;
+    Vtx *end;
+    height = *(f32 *) &func_80106790(param_4)->actorData[4];
+    end = src + count;
+    for (; src < end; src++, dst++) {
+        dst->v.ob[1] = src->v.ob[1] + height;
     }
 }
 

@@ -6,36 +6,37 @@ extern void _chdoormake_entrypoint_6(Actor *, f32);
 extern void func_80103140(Actor *, u16, u16);
 extern int D_808001D0_chdinotraindoor[];
 
-void func_80800000_chdinotraindoor(Actor *param_0)
+// TDL train station door; opens with flag 0x164 and cutscene 0x3C. Marker 50 is mirrored.
+void func_80800000_chdinotraindoor(Actor *actor)
 {
-    f32 local_0 = param_0->rotation[1];
-    if (param_0->unk74_7 == 50)
-        local_0 += 180.0f;
-    func_800EFD24(param_0->position);
-    func_80103014(param_0);
-    if (_chdoormake_entrypoint_3(param_0, local_0, 0.0f, param_0->scale * 600.0f, 0x20, 0x164)) {
-        _chdoormake_entrypoint_5(param_0, 3.5f);
-        _chdoormake_entrypoint_6(param_0, 4.0f);
-        _chdoormake_entrypoint_12(param_0, 0, 0x3C);
-        if (param_0->unk74_7 == 50) {
-            _chdoormake_entrypoint_8(param_0, 5);
-            _chdoormake_entrypoint_9(param_0, 0, 10, 0x910);
+    f32 yaw = actor->rotation[1];
+    if (actor->unk74_7 == 50)
+        yaw += 180.0f;
+    func_800EFD24(actor->position);
+    func_80103014(actor);
+    if (_chdoormake_entrypoint_3(actor, yaw, 0.0f, actor->scale * 600.0f, 0x20, 0x164)) {
+        _chdoormake_entrypoint_5(actor, 3.5f);
+        _chdoormake_entrypoint_6(actor, 4.0f);
+        _chdoormake_entrypoint_12(actor, 0, 0x3C);
+        if (actor->unk74_7 == 50) {
+            _chdoormake_entrypoint_8(actor, 5);
+            _chdoormake_entrypoint_9(actor, 0, 10, 0x910);
         }
     }
     if (func_800DA298(0x164) && !_glcutDll_entrypoint_19(0x3C))
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
 }
 
-s32 func_80800120_chdinotraindoor(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800120_chdinotraindoor(Actor *actor, s32 msg, s32 arg)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x95:
-            func_80103140(param_0, param_0->unk74_7 == 0x32 ? 0x949 : 0x94A, 0);
+            func_80103140(actor, actor->unk74_7 == 0x32 ? 0x949 : 0x94A, 0);
             break;
         case 0x9D:
-            func_800FFAB0(param_0);
+            func_800FFAB0(actor);
     }
-    return _chdoor_entrypoint_1(param_0, param_1, param_2);
+    return _chdoor_entrypoint_1(actor, msg, arg);
 }
 
 int *chdinotraindoor_entrypoint_0()
@@ -43,6 +44,8 @@ int *chdinotraindoor_entrypoint_0()
     return &D_808001D0_chdinotraindoor;
 }
 
+// TU-NOTE: the overlay .data is defined here in C (from the ROM); its tables point to functions of
+// this file, and IDO's assembler schedules them differently otherwise. D_808001D0_chdinotraindoor is int[].
 extern void _chdoor_entrypoint_0();
 extern void func_80105834();
 extern void func_80101870();

@@ -100,16 +100,17 @@ int func_80800024_bstrexlarge(param_0)
 
 s32 func_80800034_bstrexlarge(void *param_0)
 {
-    unsigned int new_var2;
-    unsigned int new_var;
+    unsigned int index_base;
+    unsigned int index;
+    // Matching: the empty blocks and the extra temporary are needed for the match.
     if (1) {
     }
     if (1) {
     }
     if (1) {
     }
-    new_var2 = 0x59;
-    if (new_var2) {
+    index_base = 0x59;
+    if (index_base) {
     }
     if (1) {
     }
@@ -117,30 +118,30 @@ s32 func_80800034_bstrexlarge(void *param_0)
     } while (0);
     if (1) {
     }
-    new_var = new_var2;
-    return ((s32 *) param_0)[new_var] >= 4;
+    index = index_base;
+    return ((s32 *) param_0)[index] >= 4;
 }
 
 void func_80800044_bstrexlarge(PlayerState *param_0)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2[3];
-    f32 local_3[3];
-    s32 local_4;
-    s32 local_5;
-    f32 local_6;
+    f32 unk_0;
+    f32 vertical_velocity;
+    f32 unk_2[3];
+    f32 unk_3[3];
+    s32 unk_4;
+    s32 unk_5;
+    f32 next_count;
 
-    func_8009C128(param_0, local_2);
-    func_80096394(param_0, local_3);
-    local_0 = func_800962D4(param_0);
-    local_4 = !func_80096518(param_0);
-    local_1 = baphysics_get_vertical_velocity(param_0);
-    local_5 = func_8009650C(param_0);
+    func_8009C128(param_0, unk_2);
+    func_80096394(param_0, unk_3);
+    unk_0 = func_800962D4(param_0);
+    unk_4 = !func_80096518(param_0);
+    vertical_velocity = baphysics_get_vertical_velocity(param_0);
+    unk_5 = func_8009650C(param_0);
 
-    if (local_5 && local_4 && local_0 < 70.0f && local_3[1] < 5.0f && local_1 < -100.0f) {
-        local_6 = *(s32 *) ((u8 *) param_0 + 0x164) + 1;
-        *(s32 *) ((u8 *) param_0 + 0x164) = func_800F13F0(local_6, 100.0f);
+    if (unk_5 && unk_4 && unk_0 < 70.0f && unk_3[1] < 5.0f && vertical_velocity < -100.0f) {
+        next_count = *(s32 *) ((u8 *) param_0 + 0x164) + 1;
+        *(s32 *) ((u8 *) param_0 + 0x164) = func_800F13F0(next_count, 100.0f);
     } else {
         *(s32 *) ((u8 *) param_0 + 0x164) = 0;
     }
@@ -203,33 +204,34 @@ void func_80800294_bstrexlarge(Actor *param_0)
 
 int func_808002E0_bstrexlarge(Actor *param_0, s32 param_1, s32 param_2)
 {
-    s32 local_1;
-    s32 local_0;
+    s32 zone_state;
+    s32 can_fall;
     if (param_2 != 0) {
-        local_0 = func_80800024_bstrexlarge();
+        can_fall = func_80800024_bstrexlarge();
     } else {
-        local_0 = 1;
+        can_fall = 1;
     }
+    // Stick zone selects idle (0x151), walk (0x152) or run (0x150).
     switch (bastick_getZone(param_0)) {
         case 0:
-            local_1 = 0x151;
+            zone_state = 0x151;
             break;
 
         case 1:
-            local_1 = 0x152;
+            zone_state = 0x152;
             break;
 
         case 2:
-            local_1 = 0x150;
+            zone_state = 0x150;
     }
 
-    if (bs_getCurrentState(param_0) != local_1) {
-        param_1 = local_1;
+    if (bs_getCurrentState(param_0) != zone_state) {
+        param_1 = zone_state;
     }
     if (func_80800140_bstrexlarge(param_0) != 0) {
         param_1 = 0x14F;
     }
-    if ((local_0 != 0) && (func_8008DD04(param_0) != 0)) {
+    if ((can_fall != 0) && (func_8008DD04(param_0) != 0)) {
         param_1 = 0x14A;
     }
     if (func_80800160_bstrexlarge(param_0) != 0) {
@@ -240,12 +242,12 @@ int func_808002E0_bstrexlarge(Actor *param_0, s32 param_1, s32 param_2)
 
 int func_808003C4_bstrexlarge(PlayerState *param_0, s32 param_1, s32 param_2)
 {
-    s32 local_0;
+    s32 can_fall;
 
     if (param_2) {
-        local_0 = func_80800024_bstrexlarge(param_0);
+        can_fall = func_80800024_bstrexlarge(param_0);
     } else {
-        local_0 = 1;
+        can_fall = 1;
     }
     switch (bastick_getZone(param_0)) {
         case 0:
@@ -262,7 +264,7 @@ int func_808003C4_bstrexlarge(PlayerState *param_0, s32 param_1, s32 param_2)
     if (func_80800140_bstrexlarge(param_0)) {
         param_1 = 0x14F;
     }
-    if (local_0 && func_8008DD04(param_0)) {
+    if (can_fall && func_8008DD04(param_0)) {
         param_1 = 0x14A;
     }
     if (func_80800160_bstrexlarge(param_0)) {
@@ -275,20 +277,20 @@ extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);
 
 void func_808004B4_bstrexlarge(PlayerState *param_0)
 {
-    f32 local_0;
+    f32 zone_pos;
 
-    local_0 = bastick_getZonePosition(param_0);
+    zone_pos = bastick_getZonePosition(param_0);
     switch (bastick_getZone(param_0)) {
         case 0:
             baphysics_set_target_horizontal_velocity(param_0, 0.0f);
             break;
         case 1:
             baphysics_set_target_horizontal_velocity(param_0,
-                                                     func_800F1214(local_0, 100.0f, 400.0f));
+                                                     func_800F1214(zone_pos, 100.0f, 400.0f));
             break;
         case 2:
             baphysics_set_target_horizontal_velocity(param_0,
-                                                     func_800F1214(local_0, 400.0f, 1000.0f));
+                                                     func_800F1214(zone_pos, 400.0f, 1000.0f));
     }
 }
 
@@ -449,19 +451,19 @@ void func_80800A20_bstrexlarge(BSTREXLarge *param_0)
 
 void func_80800A50_bstrexlarge(u8 *param_0)
 {
-    s32 sp24;
-    u8 *new_var;
-    u8 temp_v0;
-    sp24 = 0;
+    s32 next_state;
+    u8 *ptr;
+    u8 phase;
+    next_state = 0;
     bstrexlarge_entrypoint_3();
     func_808004B4_bstrexlarge(param_0);
-    new_var = (u8 *) (((s8 *) param_0) + 0x15C);
-    temp_v0 = *new_var;
-    switch (temp_v0) {
+    ptr = (u8 *) (((s8 *) param_0) + 0x15C);
+    phase = *ptr;
+    switch (phase) {
         case 1:
-            new_var = param_0;
+            ptr = param_0;
 
-            if (func_8008DF8C(new_var, 0x82) != 0) {
+            if (func_8008DF8C(ptr, 0x82) != 0) {
                 func_80800934_bstrexlarge(param_0, 2);
             }
 
@@ -473,11 +475,11 @@ void func_80800A50_bstrexlarge(u8 *param_0)
             if ((player_isStable(param_0) != 0) || (func_80800034_bstrexlarge(param_0) != 0)) {
                 func_800A2EAC(param_0);
                 baphysics_set_target_horizontal_velocity(param_0, 0 & 0xFFFFFFFFFFFFFFFF);
-                sp24 = 0x147;
+                next_state = 0x147;
             }
     }
 
-    bs_setState(param_0, sp24);
+    bs_setState(param_0, next_state);
 }
 
 int bstrexlarge_entrypoint_6(int param_0)
@@ -485,17 +487,18 @@ int bstrexlarge_entrypoint_6(int param_0)
     return D_808019C0_bstrexlarge[param_0];
 }
 
+// Roar range test: within 400 units, or within 1500 units and a 90-degree cone.
 s32 bstrexlarge_entrypoint_7(PlayerState *param_0, f32 *param_1)
 {
-    f32 local_1;
-    f32 local_0[3];
+    f32 dist_sq;
+    f32 pos[3];
 
-    func_8009C128(param_0, local_0);
-    local_1 = func_800EFC7C(local_0, param_1);
-    if (local_1 < 160000.0f) {
+    func_8009C128(param_0, pos);
+    dist_sq = func_800EFC7C(pos, param_1);
+    if (dist_sq < 160000.0f) {
         return 1;
     }
-    if (local_1 > 2250000.0f) {
+    if (dist_sq > 2250000.0f) {
         return 0;
     }
     if (!func_8008DAE8(param_0, param_1, 90.0f)) {
@@ -568,11 +571,11 @@ void func_80800DD8_bstrexlarge(Actor *param_0)
 
 void func_80800E08_bstrexlarge(PlayerState *param_0)
 {
-    s32 local_0 = 0;
-    f32 local_1[3];
+    s32 next_state = 0;
+    f32 velocity[3];
     bstrexlarge_entrypoint_3(param_0);
-    func_8009BB24(param_0, local_1);
-    if (bakey_released(param_0, 8) && local_1[1] > 0.0f)
+    func_8009BB24(param_0, velocity);
+    if (bakey_released(param_0, 8) && velocity[1] > 0.0f)
         baphysics_reset_gravity(param_0);
     switch (param_0->unk15C.bytes[0]) {
         case 1:
@@ -586,10 +589,10 @@ void func_80800E08_bstrexlarge(PlayerState *param_0)
             if (player_isStable(param_0) || func_80800034_bstrexlarge(param_0)) {
                 func_800A2EAC(param_0);
                 baphysics_set_target_horizontal_velocity(param_0, 0.0f);
-                local_0 = 0x147;
+                next_state = 0x147;
             }
     }
-    bs_setState(param_0, local_0);
+    bs_setState(param_0, next_state);
 }
 
 int bstrexlarge_entrypoint_8(s32 param_0)
@@ -730,30 +733,31 @@ int func_8080126C_bstrexlarge(Actor *param_0)
 
 void func_808012EC_bstrexlarge(u8 *param_0)
 {
-    void *temp_v0;
-    s32 sp40;
-    f32 sp3C;
-    s32 sp38;
-    f32 sp34;
-    f32 sp28[3];
+    void *anim_ctrl;
+    s32 next_state;
+    f32 anim_timer;
+    s32 bone_override;
+    f32 head_angle;
+    f32 pos[3];
 
-    temp_v0 = baanim_getAnimCtrlPtr();
-    sp40 = 0;
-    sp3C = anctrl_getAnimTimer(temp_v0);
+    anim_ctrl = baanim_getAnimCtrlPtr();
+    next_state = 0;
+    anim_timer = anctrl_getAnimTimer(anim_ctrl);
     bstrexlarge_entrypoint_3(param_0);
     if ((*(u8 *) ((s8 *) param_0 + 0x15E)) != 0) {
-        sp38 = func_80092AD8(param_0);
-        func_800E0AF0((void *) sp38, 1.0f);
-        sp34 = func_800F10B4(sp3C, 0.75f, 1.0f, -25.0f, 0.0f);
-        func_800E0AFC((void *) sp38, 1, 1.0f, sp34, 0.0f, 0.0f);
-        func_800E0AFC((void *) sp38, 0x12, 1.0f, sp34, 0.0f, 0.0f);
+        bone_override = func_80092AD8(param_0);
+        func_800E0AF0((void *) bone_override, 1.0f);
+        head_angle = func_800F10B4(anim_timer, 0.75f, 1.0f, -25.0f, 0.0f);
+        func_800E0AFC((void *) bone_override, 1, 1.0f, head_angle, 0.0f, 0.0f);
+        func_800E0AFC((void *) bone_override, 0x12, 1.0f, head_angle, 0.0f, 0.0f);
     }
     if ((func_800DB9B0() != 0) && (func_8009D2E4(param_0) == 8)) {
         func_8009D2D8(param_0, 2);
     }
-    if ((sp3C >= 0.3f) && (sp3C <= 0.7f)) {
-        func_8009C128(param_0, sp28);
-        func_801013A8(sp28, 0x1B, (*(s32 *) ((s8 *) param_0 + 388)));
+    // Roar message 0x1B to nearby actors.
+    if ((anim_timer >= 0.3f) && (anim_timer <= 0.7f)) {
+        func_8009C128(param_0, pos);
+        func_801013A8(pos, 0x1B, (*(s32 *) ((s8 *) param_0 + 388)));
     }
     if (baanim_isAt(param_0, 0x3E051EB8) != 0) {
         func_80801110_bstrexlarge(param_0);
@@ -762,9 +766,9 @@ void func_808012EC_bstrexlarge(u8 *param_0)
         func_808011A8_bstrexlarge(param_0);
     }
     if (baanim_isStopped(param_0) != 0) {
-        sp40 = 0x151;
+        next_state = 0x151;
     }
-    bs_setState(param_0, sp40);
+    bs_setState(param_0, next_state);
 }
 
 int bstrexlarge_entrypoint_12(int param_0)

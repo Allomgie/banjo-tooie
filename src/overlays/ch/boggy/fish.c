@@ -13,44 +13,45 @@ typedef struct {
 } BoggyFishFloatState1408;
 extern int D_80800220_chboggyfish[];
 
-void func_80800000_chboggyfish(s32 *param_0, u8 *param_1)
+void func_80800000_chboggyfish(s32 *handle, u8 *msg_data)
 {
-    if ((*(u32 *) ((u8 *) param_1 + 0x24) >> 22) == 0) {
+    if ((*(u32 *) ((u8 *) msg_data + 0x24) >> 22) == 0) {
         func_800F6388(func_800F54E4(), 0x4BA);
         func_800D1844(0x51);
         func_800FC6B0(0xE);
         func_800DA544(0x438);
-        func_800FFA88(*param_0);
+        func_800FFA88(*handle);
     }
 }
 
-s32 func_80800064_chboggyfish(Actor *param_0, s32 param_1, BoggyFishPayload31 param_2)
+// Message 0x3E gives the item and sets flag 0x438; init despawns the fish once it is set.
+s32 func_80800064_chboggyfish(Actor *actor, s32 msg, BoggyFishPayload31 payload)
 {
-    u8 local_0;
-    s32 local_1;
+    u8 anim_tex;
+    s32 frame;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x3E:
-            func_80800000_chboggyfish(param_0, param_2.word);
+            func_80800000_chboggyfish(actor, payload.word);
             return 1;
         case 0x1F:
-            func_801015D0(param_0);
-            local_0 = func_800D731C(param_0->unk0->unk14);
-            if (local_0) {
-                local_1 = (s32) *(f32 *) ((u8 *) param_0 + 0x28);
-                func_800DBE60(local_0, 0, local_1);
-                func_800DBE60(local_0, 1, local_1);
-                func_800DBE60(local_0, 2, local_1);
-                func_800DBE60(local_0, 3, local_1);
+            func_801015D0(actor);
+            anim_tex = func_800D731C(actor->unk0->unk14);
+            if (anim_tex) {
+                frame = (s32) *(f32 *) ((u8 *) actor + 0x28);
+                func_800DBE60(anim_tex, 0, frame);
+                func_800DBE60(anim_tex, 1, frame);
+                func_800DBE60(anim_tex, 2, frame);
+                func_800DBE60(anim_tex, 3, frame);
             }
             break;
         case 0x95:
             if (func_800DA298(0x438) && !_glcutDll_entrypoint_20()) {
-                func_800FFAB0(param_0);
+                func_800FFAB0(actor);
                 return 0;
             } else {
-                *(f32 *) ((u8 *) param_0 + 0x28) = 0.0f;
-                *(f32 *) ((u8 *) param_0 + 0x2C) = 0.5f;
+                *(f32 *) ((u8 *) actor + 0x28) = 0.0f;
+                *(f32 *) ((u8 *) actor + 0x2C) = 0.5f;
             }
             break;
         default:
@@ -59,16 +60,17 @@ s32 func_80800064_chboggyfish(Actor *param_0, s32 param_1, BoggyFishPayload31 pa
     return 1;
 }
 
-void func_8080018C_chboggyfish(BoggyFishFloatState1408 *param_0)
+// Oscillates the animated-texture value between 0 and 4.
+void func_8080018C_chboggyfish(BoggyFishFloatState1408 *state)
 {
-    param_0->value += param_0->velocity;
-    if (param_0->value <= 0.0f) {
-        param_0->value = 0.0f;
-        param_0->velocity = 0.0f - param_0->velocity;
+    state->value += state->velocity;
+    if (state->value <= 0.0f) {
+        state->value = 0.0f;
+        state->velocity = 0.0f - state->velocity;
     }
-    if (param_0->value >= 4.0f) {
-        param_0->value = 4.0f;
-        param_0->velocity = 0.0f - param_0->velocity;
+    if (state->value >= 4.0f) {
+        state->value = 4.0f;
+        state->velocity = 0.0f - state->velocity;
     }
 }
 

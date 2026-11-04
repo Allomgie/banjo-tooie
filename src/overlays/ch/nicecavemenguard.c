@@ -34,24 +34,25 @@ void func_80800608_chnicecavemenguard();
 extern void func_801018A4(), func_80102EC0(), func_80107C2C(), func_8080000C_chnicecavemenguard(),
     func_80800388_chnicecavemenguard();
 
+// Oogle Boogle guard at the Terrydactyland cave entrance: blocks, talks, then walks off and sets flag 0x186.
 int *chnicecavemenguard_entrypoint_0()
 {
     return &D_80800920_chnicecavemenguard;
 }
 
-void func_8080000C_chnicecavemenguard(param_0) Actor *param_0;
+void func_8080000C_chnicecavemenguard(actor) Actor *actor;
 {
     if (_glcutDll_entrypoint_20())
-        func_80102424(param_0, 6);
+        func_80102424(actor, 6);
     else if (func_800DA298(0x186)) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
         return;
     }
-    func_80102FDC(param_0, param_0->scale * 1.25f);
-    func_800EE7F8((f32 *) param_0->actorData, param_0->position);
-    func_800EF1B8((f32 *) param_0->actorData, param_0->rotation[1] + 180.0f, 150.0f);
-    func_80105A9C(param_0, 400.0f);
-    func_80105BAC(param_0);
+    func_80102FDC(actor, actor->scale * 1.25f);
+    func_800EE7F8((f32 *) actor->actorData, actor->position);
+    func_800EF1B8((f32 *) actor->actorData, actor->rotation[1] + 180.0f, 150.0f);
+    func_80105A9C(actor, 400.0f);
+    func_80105BAC(actor);
 }
 
 void func_8080075C_chnicecavemenguard();
@@ -60,136 +61,136 @@ void func_80800730_chnicecavemenguard();
 
 void func_80800600_chnicecavemenguard();
 
-void func_808000D4_chnicecavemenguard(Actor *param_0)
+void func_808000D4_chnicecavemenguard(Actor *actor)
 {
-    s32 local_0;
-    f32 *local_4;
-    u32 var_v0;
-    local_0 = 0;
+    s32 unk_0;
+    f32 *pos;
+    u32 state;
+    unk_0 = 0;
     func_800F7B9C(func_800F54E4(), 0x7E);
-    if (func_80100094(param_0, 1) != 0) {
-        _suexpression_entrypoint_10(func_80100094(param_0, 1), param_0->unk0, 0);
+    if (func_80100094(actor, 1) != 0) {
+        _suexpression_entrypoint_10(func_80100094(actor, 1), actor->unk0, 0);
     }
-    var_v0 = param_0->unk70_10;
-    switch (var_v0) {
+    state = actor->unk70_10;
+    switch (state) {
         case 1:
-            local_0 = 1;
-            func_80800600_chnicecavemenguard(param_0);
+            unk_0 = 1;
+            func_80800600_chnicecavemenguard(actor);
             if (func_800F64A4(func_800F54E4(), 0x60000) == 0) {
-                _subaddiedialog_entrypoint_8(param_0, param_0->position,
+                _subaddiedialog_entrypoint_8(actor, actor->position,
                                              &D_80800968_chnicecavemenguard,
                                              &D_808008C0_chnicecavemenguard, 5);
             }
-            var_v0 = param_0->unk70_10;
+            state = actor->unk70_10;
             break;
 
         case 2:
-            local_0 = 1;
-            func_80800600_chnicecavemenguard(param_0);
-            var_v0 = param_0->unk70_10;
+            unk_0 = 1;
+            func_80800600_chnicecavemenguard(actor);
+            state = actor->unk70_10;
             break;
 
         case 3:
-            local_0 = 1;
-            func_80800608_chnicecavemenguard(param_0);
-            if (func_80101DDC(param_0) != 0) {
-                _subaddieaudioloop_entrypoint_2(param_0);
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x17E7, 7, param_0->position, 0x96);
-                func_80102424(param_0, 2);
+            unk_0 = 1;
+            func_80800608_chnicecavemenguard(actor);
+            if (func_80101DDC(actor) != 0) {
+                _subaddieaudioloop_entrypoint_2(actor);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x17E7, 7, actor->position, 0x96);
+                func_80102424(actor, 2);
             }
-            var_v0 = param_0->unk70_10;
+            state = actor->unk70_10;
             break;
 
         case 4:
-            func_80800730_chnicecavemenguard(param_0);
-            if (func_80101DDC(param_0) != 0) {
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x17E8, 4, param_0->position, 0x96);
-                func_80102424(param_0, 5);
+            func_80800730_chnicecavemenguard(actor);
+            if (func_80101DDC(actor) != 0) {
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x17E8, 4, actor->position, 0x96);
+                func_80102424(actor, 5);
             }
-            var_v0 = param_0->unk70_10;
+            state = actor->unk70_10;
             break;
 
         case 5:
-            func_8080075C_chnicecavemenguard(param_0);
-            func_80105854(param_0);
-            func_800F4F34(func_800F54E4(), param_0->position, 80.0f, 100.0f);
-            if (func_80105A5C(param_0) != 0) {
+            func_8080075C_chnicecavemenguard(actor);
+            func_80105854(actor);
+            func_800F4F34(func_800F54E4(), actor->position, 80.0f, 100.0f);
+            if (func_80105A5C(actor) != 0) {
                 func_800DA544(0x186);
                 _capod_entrypoint_14();
                 func_800F7F98(func_800F54E4(), 0);
             }
-            var_v0 = param_0->unk70_10;
+            state = actor->unk70_10;
             break;
 
         case 6:
-            func_80800608_chnicecavemenguard(param_0);
-            var_v0 = param_0->unk70_10;
+            func_80800608_chnicecavemenguard(actor);
+            state = actor->unk70_10;
     }
 
-    local_4 = param_0->position;
-    if (var_v0 != 5) {
-        if (_sudeflect_entrypoint_0(local_4, 100.0f, 180.0f, 0xA) & 2) {
-            _sudeflect_entrypoint_4(9, local_4);
+    pos = actor->position;
+    if (state != 5) {
+        if (_sudeflect_entrypoint_0(pos, 100.0f, 180.0f, 0xA) & 2) {
+            _sudeflect_entrypoint_4(9, pos);
         }
     }
-    if ((local_0 != 0) && (_sudeflect_entrypoint_3((f32 *) param_0->actorData, param_0->rotation,
+    if ((unk_0 != 0) && (_sudeflect_entrypoint_3((f32 *) actor->actorData, actor->rotation,
                                                    &D_80800978_chnicecavemenguard,
                                                    &D_80800984_chnicecavemenguard, 2) &
                            2)) {
-        _sudeflect_entrypoint_4(9, param_0->position);
+        _sudeflect_entrypoint_4(9, actor->position);
     }
 }
 
-void func_80800388_chnicecavemenguard(Actor *arg0)
+void func_80800388_chnicecavemenguard(Actor *actor)
 {
-    func_8080080C_chnicecavemenguard(arg0);
+    func_8080080C_chnicecavemenguard(actor);
 }
 
 s32 func_808007A8_chnicecavemenguard();
 
 s32 func_808005D4_chnicecavemenguard();
 
-s32 func_808003A8_chnicecavemenguard(param_0, param_1, param_2)
-u8 *param_0;
-s32 param_1;
-s16 param_2[3];
+s32 func_808003A8_chnicecavemenguard(actor, msg, data)
+u8 *actor;
+s32 msg;
+s16 data[3];
 {
-    s32 local_0;
-    s16(*new_var)[3];
-    switch (param_1) {
+    s32 result;
+    s16(*data_ptr)[3];
+    switch (msg) {
         case 46:
-            new_var = &param_2;
-            func_808005D4_chnicecavemenguard(param_0, *new_var[0], (*new_var)[1]);
+            data_ptr = &data;
+            func_808005D4_chnicecavemenguard(actor, *data_ptr[0], (*data_ptr)[1]);
             goto block_13;
 
         case 29:
 
         case 30:
-            if ((func_800F52B8(func_800F54E4(), *(s32 **) param_0) == 0x18) &&
-                (((u32) (u16) *(u16 *) ((char *) param_0 + 0x72) >> 0xA) == 1)) {
-                func_80102424(param_0, 3);
+            if ((func_800F52B8(func_800F54E4(), *(s32 **) actor) == 0x18) &&
+                (((u32) (u16) *(u16 *) ((char *) actor + 0x72) >> 0xA) == 1)) {
+                func_80102424(actor, 3);
             }
             goto block_13;
 
         case 27:
-            if ((func_800F52B8(func_800F54E4(), *(s32 **) param_0) == 0x17) &&
-                (((u32) (u16) *(u16 *) ((char *) param_0 + 0x72) >> 0xA) == 1)) {
-                _capod_entrypoint_13(*(s32 **) param_0, 0, 6, 0x20);
+            if ((func_800F52B8(func_800F54E4(), *(s32 **) actor) == 0x17) &&
+                (((u32) (u16) *(u16 *) ((char *) actor + 0x72) >> 0xA) == 1)) {
+                _capod_entrypoint_13(*(s32 **) actor, 0, 6, 0x20);
                 func_800F7F98(func_800F54E4(), 1);
-                func_80102424(param_0, 4);
+                func_80102424(actor, 4);
             }
             goto block_13;
 
         case 41:
-            func_808007A8_chnicecavemenguard(param_0);
+            func_808007A8_chnicecavemenguard(actor);
             goto block_13;
 
         case 42:
-            func_8080080C_chnicecavemenguard(param_0);
+            func_8080080C_chnicecavemenguard(actor);
             goto block_13;
 
         case 31:
-            func_808004FC_chnicecavemenguard(param_0);
+            func_808004FC_chnicecavemenguard(actor);
             goto block_13;
 
         default:
@@ -197,24 +198,24 @@ s16 param_2[3];
     }
 
 block_13:
-    local_0 = 1;
+    result = 1;
 
-    return local_0;
+    return result;
 }
 
-void func_808004FC_chnicecavemenguard(param_0) Actor *param_0;
+void func_808004FC_chnicecavemenguard(actor) Actor *actor;
 {
-    func_801015D0(param_0);
+    func_801015D0(actor);
     func_800DF744(5, 1);
     func_800DF744(6, 1);
     func_800DF744(8, 3);
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 5:
             func_800DF744(4, 0);
             func_800DF744(7, 0);
             break;
         case 4:
-            if (func_80101F24(param_0) > 0.26f) {
+            if (func_80101F24(actor) > 0.26f) {
                 func_800DF744(4, 0);
                 func_800DF744(7, 1);
                 break;
@@ -225,64 +226,64 @@ void func_808004FC_chnicecavemenguard(param_0) Actor *param_0;
     }
 }
 
-s32 func_808005D4_chnicecavemenguard(s32 param_0, s32 param_1, s32 param_2)
+s32 func_808005D4_chnicecavemenguard(s32 actor, s32 dialog_id, s32 unk_2)
 {
-    if (param_1 != 0x17E8)
-        func_80102424(param_0, 1);
+    if (dialog_id != 0x17E8)
+        func_80102424(actor, 1);
 }
 
 void func_80800600_chnicecavemenguard(s32 arg0)
 {
 }
 
-void func_80800608_chnicecavemenguard(param_0) Actor *param_0;
+void func_80800608_chnicecavemenguard(actor) Actor *actor;
 {
-    s32 local_0;
+    s32 i;
 
-    if (!param_0->unk5F) {
-        param_0->unk5F = func_800C4350(0, param_0->position, &D_808009DC_chnicecavemenguard);
+    if (!actor->unk5F) {
+        actor->unk5F = func_800C4350(0, actor->position, &D_808009DC_chnicecavemenguard);
     }
-    for (local_0 = 0; local_0 < 4; local_0++) {
-        if (func_80101E14(param_0, D_808009AC_chnicecavemenguard[local_0])) {
-            func_800C301C(param_0->unk5F, D_808009CC_chnicecavemenguard[local_0]);
-            func_800C31DC(param_0->unk5F,
-                          D_808009BC_chnicecavemenguard[local_0] + func_800DC178(-0.02f, 0.02f));
-            func_800C3058(param_0->unk5F, D_808009D4_chnicecavemenguard[local_0]);
-            func_800C3BDC(param_0->unk5F);
+    for (i = 0; i < 4; i++) {
+        if (func_80101E14(actor, D_808009AC_chnicecavemenguard[i])) {
+            func_800C301C(actor->unk5F, D_808009CC_chnicecavemenguard[i]);
+            func_800C31DC(actor->unk5F,
+                          D_808009BC_chnicecavemenguard[i] + func_800DC178(-0.02f, 0.02f));
+            func_800C3058(actor->unk5F, D_808009D4_chnicecavemenguard[i]);
+            func_800C3BDC(actor->unk5F);
             break;
         }
     }
-    _subaddieaudioquick_entrypoint_4(param_0, param_0->position, &D_80800990_chnicecavemenguard,
+    _subaddieaudioquick_entrypoint_4(actor, actor->position, &D_80800990_chnicecavemenguard,
                                      &D_8080099C_chnicecavemenguard);
 }
 
-void func_80800730_chnicecavemenguard(u8 *param_0)
+void func_80800730_chnicecavemenguard(u8 *actor)
 {
-    _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, &D_808009E8_chnicecavemenguard, 0.0f);
+    _subaddieaudioquick_entrypoint_3(actor, actor + 4, &D_808009E8_chnicecavemenguard, 0.0f);
 }
 
-void func_8080075C_chnicecavemenguard(u8 *param_0)
+void func_8080075C_chnicecavemenguard(u8 *actor)
 {
-    Trip local_0 = D_808009F0_chnicecavemenguard;
-    _subaddieaudioquick_entrypoint_4(param_0, param_0 + 4, &D_808009FC_chnicecavemenguard,
-                                     &local_0);
+    Trip pattern = D_808009F0_chnicecavemenguard;
+    _subaddieaudioquick_entrypoint_4(actor, actor + 4, &D_808009FC_chnicecavemenguard,
+                                     &pattern);
 }
 
-s32 func_808007A8_chnicecavemenguard(s32 param_0)
+s32 func_808007A8_chnicecavemenguard(s32 actor)
 {
-    s32 local_0;
-    if (!func_80100094(param_0, 1)) {
-        _suexpression_entrypoint_7(param_0, 1, 0x96);
-        local_0 = func_80100094(param_0, 1);
-        _suexpression_entrypoint_12(local_0, 0x42700000, 0x41700000);
-        _suexpression_entrypoint_17(local_0, 0x320);
+    s32 expr;
+    if (!func_80100094(actor, 1)) {
+        _suexpression_entrypoint_7(actor, 1, 0x96);
+        expr = func_80100094(actor, 1);
+        _suexpression_entrypoint_12(expr, 0x42700000, 0x41700000);
+        _suexpression_entrypoint_17(expr, 0x320);
     }
 }
 
-void func_8080080C_chnicecavemenguard(Actor *arg0)
+void func_8080080C_chnicecavemenguard(Actor *actor)
 {
-    if (func_80100094(arg0, 1) != 0) {
-        _suexpression_entrypoint_8(arg0, 1);
+    if (func_80100094(actor, 1) != 0) {
+        _suexpression_entrypoint_8(actor, 1);
     }
 }
 

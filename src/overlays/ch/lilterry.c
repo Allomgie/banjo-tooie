@@ -7,10 +7,11 @@ int chlilterry_entrypoint_0()
     return (int) &D_808000C8_chlilterry;
 }
 
-int func_8080000C_chlilterry(Actor *param_0)
+// Runs the flying-baddie engine (variant 0) and sets the factor at actor+0x92 to 0.5.
+int func_8080000C_chlilterry(Actor *actor)
 {
-    _sucoasterfly_entrypoint_1(param_0, 0);
-    func_8010A3E8(param_0, 0x3F000000);
+    _sucoasterfly_entrypoint_1(actor, 0);
+    func_8010A3E8(actor, 0x3F000000);
 }
 
 extern void _sucoasterfly_entrypoint_3();

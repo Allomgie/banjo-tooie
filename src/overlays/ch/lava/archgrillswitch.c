@@ -2,6 +2,7 @@
 
 extern int D_80800030_chlavaarchgrillswitch[];
 
+// Stub actor: handler returns 0, update is empty.
 s32 func_80800000_chlavaarchgrillswitch(s32 arg0, s32 arg1, s32 arg2)
 {
     return 0;

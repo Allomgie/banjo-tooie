@@ -36,83 +36,85 @@ typedef struct {
     f32 val;
 } IntroSync78;
 
-s32 func_80800000_glintrosyncDll(s32 param_0)
+s32 func_80800000_glintrosyncDll(s32 seq_id)
 {
-    s8 *var_v0;
-    s32 var_v1;
+    s8 *entry;
+    s32 index;
 
-    if (param_0 == D_808004A0_glintrosyncDll) {
+    if (seq_id == D_808004A0_glintrosyncDll) {
         return 0;
     }
-    if (param_0 == D_808004A8_glintrosyncDll) {
+    if (seq_id == D_808004A8_glintrosyncDll) {
         return 1;
     }
-    var_v0 = &D_808004B8_glintrosyncDll;
-    var_v1 = 3;
-    if (param_0 == D_808004B0_glintrosyncDll) {
+    entry = &D_808004B8_glintrosyncDll;
+    index = 3;
+    if (seq_id == D_808004B0_glintrosyncDll) {
         return 2;
     }
 loop_7:
-    if (param_0 == *(s32 *) ((s8 *) var_v0 + 0)) {
-        return var_v1;
+    if (seq_id == *(s32 *) ((s8 *) entry + 0)) {
+        return index;
     }
-    if (param_0 == *(s32 *) ((s8 *) var_v0 + 0x8)) {
-        return var_v1 + 1;
+    if (seq_id == *(s32 *) ((s8 *) entry + 0x8)) {
+        return index + 1;
     }
-    if (param_0 == *(s32 *) ((s8 *) var_v0 + 0x10)) {
-        return var_v1 + 2;
+    if (seq_id == *(s32 *) ((s8 *) entry + 0x10)) {
+        return index + 2;
     }
-    if (param_0 == *(s32 *) ((s8 *) var_v0 + 0x18)) {
-        return var_v1 + 3;
+    if (seq_id == *(s32 *) ((s8 *) entry + 0x18)) {
+        return index + 3;
     }
-    var_v1 += 4;
-    var_v0 += 0x20;
-    if (var_v1 == 0xB) {
+    index += 4;
+    entry += 0x20;
+    if (index == 0xB) {
         return -1;
     }
     goto loop_7;
 }
 
-u32 func_808000BC_glintrosyncDll(s32 param_0)
+// Microseconds since the sequence start was recorded.
+u32 func_808000BC_glintrosyncDll(s32 seq_id)
 {
-    s32 local_0;
-    u32 local_1;
+    s32 delta;
+    u32 now;
 
-    local_1 = osGetCount();
-    if (local_1 >= *(u32 *) (D_80127194 + 0x43C)) {
-        local_0 = local_1 - *(u32 *) (D_80127194 + 0x43C);
+    now = osGetCount();
+    if (now >= *(u32 *) (D_80127194 + 0x43C)) {
+        delta = now - *(u32 *) (D_80127194 + 0x43C);
     } else {
-        local_0 = (0xFFFFFFFFU - *(u32 *) (D_80127194 + 0x43C)) + local_1 + 1;
+        delta = (0xFFFFFFFFU - *(u32 *) (D_80127194 + 0x43C)) + now + 1;
     }
-    return (u32) ((f32) local_0 * 0.0213333331f);
+    return (u32) ((f32) delta * 0.0213333331f);
 }
 
-int glintrosyncDll_entrypoint_0(s32 param_0)
+int glintrosyncDll_entrypoint_0(s32 seq_id)
 {
-    s32 local_0;
+    s32 index;
     ((int *) D_80127194)[0x10F] = osGetCount();
-    local_0 = func_80800000_glintrosyncDll(param_0);
-    ((int *) D_80127194)[0x110] = local_0;
+    index = func_80800000_glintrosyncDll(seq_id);
+    ((int *) D_80127194)[0x110] = index;
 }
 
+// Busy-waits until real time catches up with the scripted time of the current step.
 void glintrosyncDll_entrypoint_1(void)
 {
-    s32 local_1 = D_801275D0.idx;
-    if (local_1 >= 0) {
-        f32 local_2;
-        u32 local_3;
-        local_2 = D_808004A4_glintrosyncDll[local_1][0] - D_801275D0.f;
-        local_2 = local_2 * 1000000.0f;
-        local_3 = local_2 < 0.0f ? 0 : (u32) local_2;
-        while (func_808000BC_glintrosyncDll(D_801275D0.a) < local_3) {
+    s32 step = D_801275D0.idx;
+    if (step >= 0) {
+        f32 target_time;
+        u32 target_us;
+        target_time = D_808004A4_glintrosyncDll[step][0] - D_801275D0.f;
+        target_time = target_time * 1000000.0f;
+        target_us = target_time < 0.0f ? 0 : (u32) target_time;
+        while (func_808000BC_glintrosyncDll(D_801275D0.a) < target_us) {
         }
         D_801275D0.f += (f32) func_808000BC_glintrosyncDll(D_801275D0.a) / 1000000.0f;
     }
 }
 
-void glintrosyncDll_entrypoint_2(f32 param_0)
+void glintrosyncDll_entrypoint_2(f32 value)
 {
-    *(f32 *) ((u8 *) (u8 *) D_80127194 + 0x444) = param_0;
+    *(f32 *) ((u8 *) (u8 *) D_80127194 + 0x444) = value;
 }
 
 float glintrosyncDll_entrypoint_3()
@@ -120,15 +122,17 @@ float glintrosyncDll_entrypoint_3()
     return ((f32 *) D_80127194)[0x111];
 }
 
-void glintrosyncDll_entrypoint_4(f32 param_0)
+// Advances the intro clock; the speed factor drops to 0.86 from 364.5 s on.
+void glintrosyncDll_entrypoint_4(f32 delta)
 {
-    f32 t = (*(IntroSync78 *) &D_801275D0).time;
-    if (t < 364.5f && t + param_0 >= 364.5f) {
+    f32 time = (*(IntroSync78 *) &D_801275D0).time;
+    if (time < 364.5f && time + delta >= 364.5f) {
         (*(IntroSync78 *) &D_801275D0).val = 0.86f;
     }
-    (*(IntroSync78 *) &D_801275D0).time = t + param_0;
+    (*(IntroSync78 *) &D_801275D0).time = time + delta;
 }
 
+// Scaled frame delta time.
 f32 glintrosyncDll_entrypoint_5(void)
 {
     if (func_800C954C()) {
@@ -137,7 +141,7 @@ f32 glintrosyncDll_entrypoint_5(void)
     return *(f32 *) (D_80127194 + 0x448) * func_800D9004();
 }
 
-void glintrosyncDll_entrypoint_6(s32 param_0)
+void glintrosyncDll_entrypoint_6(s32 map_id)
 {
     s32 i;
 
@@ -149,7 +153,7 @@ void glintrosyncDll_entrypoint_6(s32 param_0)
     (*(IntroSync90 *) &D_801275D0).val = 1.0f;
     if ((*(IntroSync90 *) &D_801275D0).flag) {
         for (i = 0; i < 27; i++) {
-            if (param_0 == D_808004F8_glintrosyncDll[i].key) {
+            if (map_id == D_808004F8_glintrosyncDll[i].key) {
                 (*(IntroSync90 *) &D_801275D0).val = D_808004F8_glintrosyncDll[i].value;
                 break;
             }

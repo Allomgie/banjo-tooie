@@ -4,10 +4,10 @@ extern int D_808000B0_chlavafall[];
 
 typedef struct {
     u8 pad_0[0x1A];
-    u16 local_0 : 11;
+    u16 unk_1A : 11;
     u16 pad_1 : 5;
     u8 pad_2[8];
-    u32 local_1 : 10;
+    u32 unk_24 : 10;
     u32 pad_3 : 22;
 } LavaFallPlayer59;
 
@@ -16,23 +16,25 @@ int chlavafall_entrypoint_0()
     return (int) &D_808000B0_chlavafall;
 }
 
-int func_8080000C_chlavafall(volatile u8 *param_0)
+// Sets a draw/flag bit.
+int func_8080000C_chlavafall(volatile u8 *actor)
 {
-    volatile u8 *new_var3;
-    new_var3 = param_0;
-    *(u8 *) ((s8 *) param_0 + 122) = (*(u8 *) ((s8 *) new_var3 + 122) & 0xFF3F) | 0x80;
+    volatile u8 *actor_alias;
+    actor_alias = actor;
+    *(u8 *) ((s8 *) actor + 122) = (*(u8 *) ((s8 *) actor_alias + 122) & 0xFF3F) | 0x80;
 }
 
-s32 func_80800020_chlavafall(Actor *param_0, s32 param_1, LavaFallPlayer59 *param_2)
+// Handles message 0x3E: lava damage to a vulnerable player.
+s32 func_80800020_chlavafall(Actor *actor, s32 message, LavaFallPlayer59 *data)
 {
-    LavaFallPlayer59 *local_0;
+    LavaFallPlayer59 *msg;
 
-    switch (param_1) {
+    switch (message) {
         case 0x3E:
-            local_0 = *(LavaFallPlayer59 **) &param_2;
-            if (!local_0->local_1) {
-                if (!func_800F6AA4(local_0->local_0)) {
-                    func_800F79DC(local_0->local_0, 4, param_0->unk0);
+            msg = *(LavaFallPlayer59 **) &data;
+            if (!msg->unk_24) {
+                if (!func_800F6AA4(msg->unk_1A)) {
+                    func_800F79DC(msg->unk_1A, 4, actor->unk0);
                 }
             }
             break;

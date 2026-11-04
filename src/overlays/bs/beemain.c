@@ -57,10 +57,11 @@ extern void func_800909CC(PlayerState *);
 
 int func_80800000_bsbeemain(int param_0)
 {
-    int new_var;
-    unsigned int new_var2;
-    new_var2 = (new_var = 0x1F40);
-    func_8009DF18(param_0, 0x41F, 1.4f, new_var2);
+    int volume;
+    unsigned int volume_arg;
+    // Matching: the extra temporary is needed for the match.
+    volume_arg = (volume = 0x1F40);
+    func_8009DF18(param_0, 0x41F, 1.4f, volume_arg);
 }
 
 void func_8080002C_bsbeemain(int param_0)
@@ -72,13 +73,13 @@ extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);
 
 void func_80800058_bsbeemain(PlayerState *param_0)
 {
-    f32 local_0;
+    f32 stick_pos;
 
-    local_0 = bastick_getZonePosition(param_0);
+    stick_pos = bastick_getZonePosition(param_0);
     if (bastick_getZone(param_0) == 0) {
         baphysics_set_target_horizontal_velocity(param_0, 0.0f);
     } else {
-        baphysics_set_target_horizontal_velocity(param_0, func_800F1214(local_0, 30.0f, 375.0f));
+        baphysics_set_target_horizontal_velocity(param_0, func_800F1214(stick_pos, 30.0f, 375.0f));
     }
 }
 
@@ -93,28 +94,28 @@ void func_808000C0_bsbeemain(Actor *param_0)
 
 void func_80800128_bsbeemain(s32 param_0)
 {
-    unsigned int local_1 = 0;
+    unsigned int next_state = 0;
     _bsbee_entrypoint_2(param_0);
     func_8009D3A8(param_0, 0);
     if (func_8008DD04(param_0) != 0) {
-        local_1 = 0x88;
+        next_state = 0x88;
     }
     if (bakey_held(param_0, 1) != 0) {
         _babee_entrypoint_2(param_0);
     }
     if (bainput_should_enter_first_person(param_0) != 0) {
-        local_1 = _badrone_entrypoint_24(param_0);
+        next_state = _badrone_entrypoint_24(param_0);
     }
     if (bastick_getZone(param_0) > 0) {
-        local_1 = 0x86;
+        next_state = 0x86;
     }
     if (bakey_pressed(param_0, 8) != 0) {
-        local_1 = 0x87;
+        next_state = 0x87;
     }
     if (player_inWater(param_0) != 0) {
-        local_1 = 0x8C;
+        next_state = 0x8C;
     }
-    bs_setState(param_0, func_800A02DC(param_0, local_1));
+    bs_setState(param_0, func_800A02DC(param_0, next_state));
 }
 
 void func_808001FC_bsbeemain(s32 arg0)
@@ -139,9 +140,9 @@ void func_80800238_bsbeemain(PlayerState *param_0)
 
 void func_808002C0_bsbeemain(s32 param_0)
 {
-    s32 sp24;
+    s32 next_state;
 
-    sp24 = 0;
+    next_state = 0;
     _bsbee_entrypoint_2();
     func_8009D3A8(param_0, 0);
     func_80800058_bsbeemain(param_0);
@@ -151,18 +152,18 @@ void func_808002C0_bsbeemain(s32 param_0)
         _babee_entrypoint_2(param_0);
     }
     if ((bastick_getZone(param_0) == 0) && (func_8009BCD4(param_0, 0x3F800000) != 0)) {
-        sp24 = 0x85;
+        next_state = 0x85;
     }
     if (func_8008DD04(param_0) != 0) {
-        sp24 = 0x88;
+        next_state = 0x88;
     }
     if (bakey_pressed(param_0, 8) != 0) {
-        sp24 = 0x87;
+        next_state = 0x87;
     }
     if (player_inWater(param_0) != 0) {
-        sp24 = 0x8C;
+        next_state = 0x8C;
     }
-    bs_setState(param_0, sp24);
+    bs_setState(param_0, next_state);
 }
 
 void func_808003B4_bsbeemain(s32 arg0)
@@ -387,12 +388,12 @@ void bsbeemain_entrypoint_5(s32 param_0)
 
 void bsbeemain_entrypoint_6(s32 param_0)
 {
-    s32 local_0 = 0;
+    s32 next_state = 0;
     _bsbee_entrypoint_2(param_0);
     if (_babounce_entrypoint_9(param_0) != 0) {
-        local_0 = 0x85;
+        next_state = 0x85;
     }
-    bs_setState(param_0, local_0);
+    bs_setState(param_0, next_state);
 }
 
 int bsbeemain_entrypoint_7(s32 param_0)
@@ -415,13 +416,13 @@ int func_80800B90_bsbeemain(Actor *param_0)
 
 int func_80800BD0_bsbeemain(Actor *param_0)
 {
-    s32 local_0;
-    local_0 = 0;
+    s32 next_state;
+    next_state = 0;
     _bsbee_entrypoint_2();
     if (_babounce_entrypoint_9(param_0)) {
-        local_0 = 0x85;
+        next_state = 0x85;
     }
-    bs_setState(param_0, local_0);
+    bs_setState(param_0, next_state);
 }
 
 int bsbeemain_entrypoint_8(s32 param_0)
@@ -551,13 +552,13 @@ void func_80801080_bsbeemain(s32 arg0)
 
 int func_808010A8_bsbeemain(s32 param_0)
 {
-    s32 local_0;
-    local_0 = 0;
+    s32 next_state;
+    next_state = 0;
     _bsbee_entrypoint_2();
     if (_bsrest_entrypoint_20(param_0)) {
-        local_0 = _bsrest_entrypoint_13(param_0);
+        next_state = _bsrest_entrypoint_13(param_0);
     }
-    bs_setState(param_0, local_0);
+    bs_setState(param_0, next_state);
 }
 
 void func_808010F4_bsbeemain(s32 arg0)
@@ -573,24 +574,26 @@ int bsbeemain_entrypoint_10(s32 param_0)
 
 int func_80801130_bsbeemain(s32 param_0)
 {
-    s32 local_0;
-    local_0 = param_0 | 0;
-    _bsbee_entrypoint_1(local_0);
-    _bsdrone_entrypoint_0(local_0);
-    if (_badrone_entrypoint_3(local_0) == 2) {
-        _bafpctrl_entrypoint_10(local_0, 1);
-        func_800947EC(local_0, 2, 1);
+    s32 player;
+    // Matching: `| 0` copy needed for the match.
+    player = param_0 | 0;
+    _bsbee_entrypoint_1(player);
+    _bsdrone_entrypoint_0(player);
+    if (_badrone_entrypoint_3(player) == 2) {
+        _bafpctrl_entrypoint_10(player, 1);
+        func_800947EC(player, 2, 1);
     }
 }
 
 int func_8080118C_bsbeemain(s32 param_0)
 {
-    s32 local_0;
-    local_0 = param_0 | 0;
-    _bsbee_entrypoint_2(local_0);
-    _bsdrone_entrypoint_1(local_0);
-    if (_badrone_entrypoint_3(local_0) == 2 && bakey_held(local_0, 1)) {
-        _babee_entrypoint_2(local_0);
+    s32 player;
+    // Matching: `| 0` copy needed for the match.
+    player = param_0 | 0;
+    _bsbee_entrypoint_2(player);
+    _bsdrone_entrypoint_1(player);
+    if (_badrone_entrypoint_3(player) == 2 && bakey_held(player, 1)) {
+        _babee_entrypoint_2(player);
     }
 }
 
@@ -608,6 +611,8 @@ bsbeemain_entrypoint_11(param_0)
     return D_808012E0_bsbeemain[param_0];
 }
 
+// TU-NOTE: the state tables are defined in this file because IDO's assembler schedules some of
+// the functions differently otherwise. Values are taken from the ROM.
 extern void func_80099B94();
 extern void _bsbeemain_entrypoint_4();
 extern void _bsbeemain_entrypoint_5();

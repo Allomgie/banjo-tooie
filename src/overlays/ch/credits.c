@@ -6,25 +6,26 @@ extern s16 D_80801208_chcredits[][4];
 extern s16 D_808012BA_chcredits[][4];
 extern s16 D_80801202_chcredits[][4];
 extern u8 D_80127610[];
+// TU-NOTE: D_80127610 holds {shot index, mode, start arg}; mode 2 selects the parade tables.
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
+    u8 shot;
+    u8 mode;
+    u8 start_arg;
 } CreditsState_808000E8_chcredits;
 extern void func_808000C8_chcredits(void);
 extern void _gcfrontend_entrypoint_9(s32);
 extern u8 D_8012760D[];
 extern void _capod_entrypoint_14(void);
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
+    u8 shot;
+    u8 mode;
+    u8 start_arg;
 } CreditsState_80800464_chcredits;
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s8 unk2;
-    s8 pad3[5];
+    s8 unk_0;
+    s8 unk_1;
+    s8 unk_2;
+    s8 pad_3[5];
 } CreditsLines;
 extern CreditsLines D_808012BC_chcredits[];
 extern CreditsLines D_80801204_chcredits[];
@@ -63,28 +64,29 @@ extern void func_800B8CF0(f32);
 void func_80800710_chcredits();
 
 void func_808003E8_chcredits();
-s16 func_80800000_chcredits(param_0)
-s32 param_0;
+s16 func_80800000_chcredits(shot)
+s32 shot;
 {
 
 if (D_80127611 == 2) {
-    return D_808012C0_chcredits[param_0][0];
+    return D_808012C0_chcredits[shot][0];
 }
 
-return D_80801208_chcredits[param_0][0];
+return D_80801208_chcredits[shot][0];
 
 }
 
-s16 func_8080003C_chcredits(s32 param_0)
+s16 func_8080003C_chcredits(s32 shot)
 {
     if (D_80127611 == 2) {
-        return D_808012BA_chcredits[param_0][0];
+        return D_808012BA_chcredits[shot][0];
     }
 
-return D_80801202_chcredits[param_0][0];
+return D_80801202_chcredits[shot][0];
 
 }
 
+// True when the last shot is done.
 s32 func_80800078_chcredits(void)
 {
     if (D_80127610[1] == 2) {
@@ -94,11 +96,11 @@ s32 func_80800078_chcredits(void)
 return D_80127610[0] >= 0x16U;
 }
 
-int func_808000B4_chcredits(s32 param_0)
+int func_808000B4_chcredits(s32 mode)
 {
-    s8 *local_0 = ((int *) D_80127610);
-    local_0[1] = param_0;
-    local_0[0] = 0;
+    s8 *state = ((int *) D_80127610);
+    state[1] = mode;
+    state[0] = 0;
 }
 
 void func_808000C8_chcredits()
@@ -109,9 +111,9 @@ void func_808000C8_chcredits()
 
 void func_808000E8_chcredits(void)
 {
-    switch ((*(CreditsState_808000E8_chcredits *) D_80127610).unk2) {
+    switch ((*(CreditsState_808000E8_chcredits *) D_80127610).start_arg) {
         case 0:
-            switch ((*(CreditsState_808000E8_chcredits *) D_80127610).unk1) {
+            switch ((*(CreditsState_808000E8_chcredits *) D_80127610).mode) {
                 case 0:
                     func_808000B4_chcredits(1);
                     break;
@@ -121,7 +123,7 @@ void func_808000E8_chcredits(void)
             break;
         case 1:
             _gcfrontend_entrypoint_9(0x85);
-            switch ((*(CreditsState_808000E8_chcredits *) D_80127610).unk1) {
+            switch ((*(CreditsState_808000E8_chcredits *) D_80127610).mode) {
                 case 0:
                     func_808000B4_chcredits(2);
                     break;
@@ -130,7 +132,7 @@ void func_808000E8_chcredits(void)
             }
             break;
         case 2:
-            switch ((*(CreditsState_808000E8_chcredits *) D_80127610).unk1) {
+            switch ((*(CreditsState_808000E8_chcredits *) D_80127610).mode) {
                 case 0:
                     func_808000B4_chcredits(1);
                     break;
@@ -144,13 +146,13 @@ void func_808000E8_chcredits(void)
 
 }
 
-void chcredits_entrypoint_0(u32 param_0)
+void chcredits_entrypoint_0(u32 start_arg)
 {
-    u8 *local_0;
+    u8 *state;
 
-    local_0 = D_80127610;
-    local_0[1] = 0;
-    local_0[2] = param_0;
+    state = D_80127610;
+    state[1] = 0;
+    state[2] = start_arg;
     func_808000E8_chcredits();
     func_800DA544(0x650);
     _glcutDll_entrypoint_0();
@@ -170,44 +172,44 @@ return -1;
 
 }
 
-void func_808002A4_chcredits(s32 param_0)
+void func_808002A4_chcredits(s32 actor)
 {
     if (D_8012760D[3] == 0) {
-        func_80800710_chcredits(param_0, 2);
+        func_80800710_chcredits(actor, 2);
     } else {
 
-func_80800710_chcredits(param_0, 3);
+func_80800710_chcredits(actor, 3);
 }
-func_808003E8_chcredits(param_0, func_8080003C_chcredits(D_8012760D[3]));
+func_808003E8_chcredits(actor, func_8080003C_chcredits(D_8012760D[3]));
 }
 
-void func_80800300_chcredits(Actor *param_0)
+void func_80800300_chcredits(Actor *actor)
 {
-    s32 local_0;
-    u8 *local_1;
+    s32 map_id;
+    u8 *state;
     if (func_80800078_chcredits())
         func_808000E8_chcredits();
     else {
-        local_0 = func_80800000_chcredits((*((u8 *) D_80127610)));
-        local_1 = ((u8 *) D_80127610);
-        (*local_1)++;
-        if (func_800EA05C() != local_0)
-            _glcutDll_entrypoint_24(local_0, -1, -1);
+        map_id = func_80800000_chcredits((*((u8 *) D_80127610)));
+        state = ((u8 *) D_80127610);
+        (*state)++;
+        if (func_800EA05C() != map_id)
+            _glcutDll_entrypoint_24(map_id, -1, -1);
 
 else
 {
     _capod_entrypoint_14();
-    func_808002A4_chcredits(param_0);
+    func_808002A4_chcredits(actor);
 }
 }
 }
 
 void func_8080038C_chcredits(void)
 {
-    s32 local_0;
+    s32 map_id;
 
-    local_0 = func_800EA05C();
-    if (local_0 == 0x19C || local_0 == 0x19D) {
+    map_id = func_800EA05C();
+    if (map_id == 0x19C || map_id == 0x19D) {
         if (func_800D395C()) {
             _gcfrontend_entrypoint_10();
         } else {
@@ -217,21 +219,22 @@ _gcgoto_entrypoint_1(0x194, 0);
 }
 }
 
-void func_808003E8_chcredits(param_0, param_1) s32 *param_0;
-s32 param_1;
+void func_808003E8_chcredits(owner, node) s32 *owner;
+s32 node;
 {
-    s32 temp_v0;
+    s32 node_kind;
 
-    temp_v0 = func_800A5854(param_1);
-    if (temp_v0 != 2) {
-        if ((temp_v0 == 5) || (temp_v0 == 6) || (temp_v0 == 8)) {
-            _capod_entrypoint_13(*param_0, 0, param_1, 0x834);
+    node_kind = func_800A5854(node);
+    if (node_kind != 2) {
+        if ((node_kind == 5) || (node_kind == 6) || (node_kind == 8)) {
+            _capod_entrypoint_13(*owner, 0, node, 0x834);
         }
     } else {
-        _capod_entrypoint_21(*param_0, 0, param_1, 0x814);
+        _capod_entrypoint_21(*owner, 0, node, 0x814);
     }
 }
 
+// Loads the name/role strings of the current shot into the actor buffer.
 void func_80800464_chcredits(Actor *this)
 {
     char *buf;
@@ -242,11 +245,11 @@ void func_80800464_chcredits(Actor *this)
     s32 i;
 
     buf = func_80100094(this, 0);
-    if ((*((CreditsState_80800464_chcredits *) D_80127610)).unk1 == 2) {
-        if (D_808012BC_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).unk0].unk0 >=
+    if ((*((CreditsState_80800464_chcredits *) D_80127610)).mode == 2) {
+        if (D_808012BC_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).shot].unk_0 >=
             0) {
-            id = D_808012BC_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).unk0]
-                     .unk0 +
+            id = D_808012BC_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).shot]
+                     .unk_0 +
                  0x1B86;
             db = _gldbstring_entrypoint_0(0, id);
             for (i = 0; i != 2; i++) {
@@ -267,18 +270,18 @@ else
         func_800E715C(buf + i * 0x80, "");
     }
 }
-id = D_808012BC_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).unk0].unk1 + 0x1B88;
+id = D_808012BC_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).shot].unk_1 + 0x1B88;
 db = _gldbstring_entrypoint_0(0, id);
 func_800E715C(
     buf + 0x100,
     _gldbstring_entrypoint_1(
-        db, D_808012BC_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).unk0].unk2));
+        db, D_808012BC_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).shot].unk_2));
 _gldbstring_entrypoint_2(id);
 }
 else
 {
-    if (D_80801204_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).unk0].unk0 >= 0) {
-        id = D_80801204_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).unk0].unk0 +
+    if (D_80801204_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).shot].unk_0 >= 0) {
+        id = D_80801204_chcredits[(*((CreditsState_80800464_chcredits *) D_80127610)).shot].unk_0 +
              0x1B68;
         db = _gldbstring_entrypoint_0(0, id);
         for (i = 0; i != 2; i++) {
@@ -295,7 +298,7 @@ else
             func_800E715C(buf + i * 0x80, "");
         }
     }
-    id = (*((CreditsState_80800464_chcredits *) D_80127610)).unk0 + 0x1B6F;
+    id = (*((CreditsState_80800464_chcredits *) D_80127610)).shot + 0x1B6F;
     db = _gldbstring_entrypoint_0(0, id);
     for (i = 0; i != 3; i++) {
         s = _gldbstring_entrypoint_1(db, i);
@@ -309,83 +312,83 @@ else
 }
 }
 
-void func_80800710_chcredits(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800710_chcredits(actor, phase) Actor *actor;
+s32 phase;
 {
-    func_80102424(param_0, param_1);
-    switch (param_0->unk70_10) {
+    func_80102424(actor, phase);
+    switch (actor->unk70_10) {
         case 2:
-            param_0->unk64_19 = 1;
-            *(f32 *) ((u8 *) param_0 + 0x34) = 1.0f;
+            actor->unk64_19 = 1;
+            *(f32 *) ((u8 *) actor + 0x34) = 1.0f;
             break;
         case 3:
-            func_80800464_chcredits(param_0);
-            param_0->unk58 = 0.75f;
+            func_80800464_chcredits(actor);
+            actor->unk58 = 0.75f;
             break;
         case 4:
-            param_0->unk64_19 = 0;
+            actor->unk64_19 = 0;
             if (func_800EA05C() == 0x116) {
-                param_0->unk58 = 10.0f;
+                actor->unk58 = 10.0f;
             } else {
-                param_0->unk58 = 7.0f;
+                actor->unk58 = 7.0f;
             }
             break;
         case 5:
-            param_0->unk58 = 0.75f;
+            actor->unk58 = 0.75f;
             break;
         case 8:
             func_8080038C_chcredits();
             break;
         case 6:
-            *(f32 *) ((u8 *) param_0 + 0x34) = 1.0f;
+            *(f32 *) ((u8 *) actor + 0x34) = 1.0f;
     }
 }
 
-void func_80800800_chcredits(Actor *param_0)
+void func_80800800_chcredits(Actor *actor)
 {
-    f32 local_0;
-    s32 local_1[6];
+    f32 dt;
+    s32 input[6];
 
-    local_0 = func_800D8FF8();
-    if (((CreditsState_80800800_chcredits *) param_0)->st >= 3 &&
-        ((CreditsState_80800800_chcredits *) param_0)->st < 6) {
-        func_80015ECC(0, local_1);
-        if (local_1[1] == 1) {
+    dt = func_800D8FF8();
+    if (((CreditsState_80800800_chcredits *) actor)->st >= 3 &&
+        ((CreditsState_80800800_chcredits *) actor)->st < 6) {
+        func_80015ECC(0, input);
+        if (input[1] == 1) {
             func_808000C8_chcredits();
         }
     }
-    switch (((CreditsState_80800800_chcredits *) param_0)->st) {
+    switch (((CreditsState_80800800_chcredits *) actor)->st) {
         case 2:
-            if (*(f32 *) &param_0->actorData[7] <= 0) {
-                func_80800710_chcredits(param_0, 3);
+            if (*(f32 *) &actor->actorData[7] <= 0) {
+                func_80800710_chcredits(actor, 3);
                 return;
             }
-            *(f32 *) &param_0->actorData[7] = *(f32 *) &param_0->actorData[7] - local_0;
+            *(f32 *) &actor->actorData[7] = *(f32 *) &actor->actorData[7] - dt;
             break;
         case 3:
-            if (param_0->unk58 <= 0) {
-                func_80800710_chcredits(param_0, 4);
-                param_0->unk6C_0 = 0xFF;
+            if (actor->unk58 <= 0) {
+                func_80800710_chcredits(actor, 4);
+                actor->unk6C_0 = 0xFF;
                 break;
             }
-            param_0->unk58 = param_0->unk58 - local_0;
-            param_0->unk6C_0 = (u32) func_800F10B4(param_0->unk58, 0.75f, 0.0f, 0.0f, 255.0f);
+            actor->unk58 = actor->unk58 - dt;
+            actor->unk6C_0 = (u32) func_800F10B4(actor->unk58, 0.75f, 0.0f, 0.0f, 255.0f);
             break;
         case 4:
-            if (param_0->unk58 <= 0) {
-                func_80800710_chcredits(param_0, 5);
+            if (actor->unk58 <= 0) {
+                func_80800710_chcredits(actor, 5);
                 return;
             }
-            param_0->unk58 = param_0->unk58 - local_0;
+            actor->unk58 = actor->unk58 - dt;
             break;
         case 5:
-            if (param_0->unk58 <= 0) {
-                func_80800300_chcredits(param_0);
-                param_0->unk6C_0 = 0;
+            if (actor->unk58 <= 0) {
+                func_80800300_chcredits(actor);
+                actor->unk6C_0 = 0;
                 break;
             }
-            param_0->unk58 = param_0->unk58 - local_0;
-            param_0->unk6C_0 = (u32) func_800F10B4(param_0->unk58, 0.75f, 0.0f, 255.0f, 0.0f);
+            actor->unk58 = actor->unk58 - dt;
+            actor->unk6C_0 = (u32) func_800F10B4(actor->unk58, 0.75f, 0.0f, 255.0f, 0.0f);
             break;
         case 7:
             if (func_800C954C()) {
@@ -408,11 +411,11 @@ void func_80800800_chcredits(Actor *param_0)
             }
             return;
         case 6:
-            if (*(f32 *) &param_0->actorData[7] <= 0) {
-                func_80800710_chcredits(param_0, 8);
+            if (*(f32 *) &actor->actorData[7] <= 0) {
+                func_80800710_chcredits(actor, 8);
                 return;
             }
-            *(f32 *) &param_0->actorData[7] = *(f32 *) &param_0->actorData[7] - local_0;
+            *(f32 *) &actor->actorData[7] = *(f32 *) &actor->actorData[7] - dt;
         case 8:
             break;
     }
@@ -422,139 +425,142 @@ void func_80800BCC_chcredits(s32 arg0)
 {
 }
 
-void func_80800BD4_chcredits(param_0) Actor *param_0;
+void func_80800BD4_chcredits(actor) Actor *actor;
 {
-    s32 local_0;
+    s32 map_id;
 
-    ((u8 *) param_0)[0x7A] &= ~0xC0;
-    func_800EFA4C(param_0->position, 0.0f, 0.0f, 0.0f);
-    local_0 = func_800EA05C();
-    if (local_0 == 0x19C || local_0 == 0x19D) {
+    ((u8 *) actor)[0x7A] &= ~0xC0;
+    func_800EFA4C(actor->position, 0.0f, 0.0f, 0.0f);
+    map_id = func_800EA05C();
+    if (map_id == 0x19C || map_id == 0x19D) {
         if (func_800DA9E4(0x650, 0))
-            func_80800710_chcredits(param_0, 6);
+            func_80800710_chcredits(actor, 6);
         else
-            func_80800710_chcredits(param_0, 7);
-        func_808003E8_chcredits(param_0, 0);
+            func_80800710_chcredits(actor, 7);
+        func_808003E8_chcredits(actor, 0);
         return;
     }
-    func_808002A4_chcredits(param_0);
+    func_808002A4_chcredits(actor);
 }
 
-void func_80800C84_chcredits(Actor *param_0, void *param_1)
+// Draws the rotating logo model.
+void func_80800C84_chcredits(Actor *actor, void *dl)
 {
-    f32 local_0;
-    s32 local_1;
-    local_0 = 0.0f;
-    local_1 = _glglobalsettings_entrypoint_3();
+    f32 logo_scale;
+    s32 setting;
+    logo_scale = 0.0f;
+    setting = _glglobalsettings_entrypoint_3();
     func_800E41CC();
     func_800E3C8C(50.0f, 2000.0f);
-    func_800E39D8(D_80801578_chcredits[local_1], D_80801560_chcredits[local_1]);
+    func_800E39D8(D_80801578_chcredits[setting], D_80801560_chcredits[setting]);
     func_800E3CE8();
-    func_800E44FC(param_1);
-    func_800E7C28(param_1);
-    func_800E7CF4(param_1);
-    switch (param_0->unk70_10) {
+    func_800E44FC(dl);
+    func_800E7C28(dl);
+    func_800E7CF4(dl);
+    switch (actor->unk70_10) {
         case 2:
-            local_0 = func_800F10B4(((f32 *) param_0->actorData)[7], 1.0f, 0.0f, 1.0f, 0.0f);
-            D_8080155C_chcredits = local_0 * 360.0f;
+            logo_scale = func_800F10B4(((f32 *) actor->actorData)[7], 1.0f, 0.0f, 1.0f, 0.0f);
+            D_8080155C_chcredits = logo_scale * 360.0f;
             break;
         case 6:
-            local_0 = func_800F10B4(((f32 *) param_0->actorData)[7], 1.0f, 0.0f, 0.0f, 1.0f);
-            D_8080155C_chcredits = local_0 * 360.0f;
+            logo_scale = func_800F10B4(((f32 *) actor->actorData)[7], 1.0f, 0.0f, 0.0f, 1.0f);
+            D_8080155C_chcredits = logo_scale * 360.0f;
             break;
         case 7:
         case 8:
-            local_0 = 1.0f;
+            logo_scale = 1.0f;
             break;
     }
-    if (local_0 > 0.0f) {
+    if (logo_scale > 0.0f) {
         func_800DF830(1);
-        func_800DE498(param_1, D_80801548_chcredits, D_80801554_chcredits, local_0, 0,
+        func_800DE498(dl, D_80801548_chcredits, D_80801554_chcredits, logo_scale, 0,
                       (void *) func_800D674C(0x9A1));
     }
-    func_80101870(param_0, param_1);
+    func_80101870(actor, dl);
     func_800E4208();
-    func_800E44FC(param_1);
+    func_800E44FC(dl);
 }
 
-void func_80800E4C_chcredits(param_0, param_1, param_2, param_3) void *param_0;
-s32 param_1;
-void *param_2;
-s32 param_3;
+// Draws centred text with a drop shadow.
+void func_80800E4C_chcredits(text, y, dl, alpha) void *text;
+s32 y;
+void *dl;
+s32 alpha;
 {
-    f32 local_1;
-    s32 local_0;
-    s32 local_3;
-    f32 local_2 = 2.0f;
+    f32 scale;
+    s32 x;
+    s32 shadow_y;
+    f32 two = 2.0f;
 
-    local_1 = _glglobalsettings_entrypoint_3() ? 0.95f : 1.0f;
-    local_0 = (304.0f - func_800B8CFC(param_0) * local_1) / local_2;
-    func_800B8C8C(param_3);
+    scale = _glglobalsettings_entrypoint_3() ? 0.95f : 1.0f;
+    x = (304.0f - func_800B8CFC(text) * scale) / two;
+    func_800B8C8C(alpha);
     func_800B8CBC(0, 0, 0);
-    func_800B8CF0(local_1);
-    func_800B80D0(param_2);
-    local_3 = param_1 + 1;
-    func_800B8E28(param_2, local_0 + 1, local_3, param_0);
+    func_800B8CF0(scale);
+    func_800B80D0(dl);
+    shadow_y = y + 1;
+    func_800B8E28(dl, x + 1, shadow_y, text);
     func_800B8CBC(255, 255, 255);
-    func_800B8CF0(local_1);
-    func_800B80D0(param_2);
-    func_800B8E28(param_2, local_0, local_3, param_0);
+    func_800B8CF0(scale);
+    func_800B80D0(dl);
+    func_800B8E28(dl, x, shadow_y, text);
 }
 
-void func_80800F50_chcredits(u8 *param_0, u8 *param_1)
+// Draws the name and role lines with fade alpha.
+void func_80800F50_chcredits(u8 *actor, u8 *dl)
 {
-    u8 *s2;
-    s32 yA;
-    s32 s5;
+    u8 *lines;
+    s32 name_y;
+    s32 role_y;
     s32 k;
 
-    s2 = func_80100094(param_0, 0);
+    lines = func_80100094(actor, 0);
     func_800B8C50();
-    func_800B7F14(param_1);
+    func_800B7F14(dl);
     func_800B8CB0(1);
     if (D_8012760D[4] == 2) {
-        yA = 0xA0;
-        s5 = 0xAF;
-        if (func_800E7188(s2 + 0x80)) {
-            yA = 0x91;
+        name_y = 0xA0;
+        role_y = 0xAF;
+        if (func_800E7188(lines + 0x80)) {
+            name_y = 0x91;
         }
     } else {
-        yA = 0x55;
-        s5 = 0x78;
+        name_y = 0x55;
+        role_y = 0x78;
     }
-    if (func_800E7188(s2)) {
-        if (func_800E7188((s2 + 0x80))) {
-            func_80800E4C_chcredits(s2, (s32) ((f32) yA - 7.5f), param_1,
-                                    *(s32 *) (param_0 + 0x6C) & 0x1FF);
-            func_80800E4C_chcredits((s2 + 0x80), (s32) ((f32) yA + 7.5f), param_1,
-                                    *(s32 *) (param_0 + 0x6C) & 0x1FF);
+    if (func_800E7188(lines)) {
+        if (func_800E7188((lines + 0x80))) {
+            func_80800E4C_chcredits(lines, (s32) ((f32) name_y - 7.5f), dl,
+                                    *(s32 *) (actor + 0x6C) & 0x1FF);
+            func_80800E4C_chcredits((lines + 0x80), (s32) ((f32) name_y + 7.5f), dl,
+                                    *(s32 *) (actor + 0x6C) & 0x1FF);
         } else {
-            func_80800E4C_chcredits(s2, yA, param_1, *(s32 *) (param_0 + 0x6C) & 0x1FF);
+            func_80800E4C_chcredits(lines, name_y, dl, *(s32 *) (actor + 0x6C) & 0x1FF);
         }
     }
     for (k = 0; k != 3; k++) {
-        if (func_800E7188(s2 + 0x100 + k * 0x80)) {
-            func_80800E4C_chcredits(s2 + 0x100 + k * 0x80, k * 15 + s5, param_1,
-                                    *(s32 *) (param_0 + 0x6C) & 0x1FF);
+        if (func_800E7188(lines + 0x100 + k * 0x80)) {
+            func_80800E4C_chcredits(lines + 0x100 + k * 0x80, k * 15 + role_y, dl,
+                                    *(s32 *) (actor + 0x6C) & 0x1FF);
         }
     }
-    func_800B811C(param_1);
+    func_800B811C(dl);
 }
 
-void func_80801108_chcredits(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80801108_chcredits(actor, dl) Actor *actor;
+s32 dl;
 {
-    s32 local_0;
-    if (!param_0->unk64_19) {
-        local_0 = 0xFF - param_0->unk6C_0;
-        if (local_0 >= 0xF6)
-            local_0 = 0xFF;
-        else if (local_0 < 10)
-            local_0 = 0;
-        func_800B99CC(param_1, local_0, D_80801590_chcredits);
+    s32 alpha;
+    if (!actor->unk64_19) {
+        alpha = 0xFF - actor->unk6C_0;
+        if (alpha >= 0xF6)
+            alpha = 0xFF;
+        else if (alpha < 10)
+            alpha = 0;
+        func_800B99CC(dl, alpha, D_80801590_chcredits);
     }
-    func_80800F50_chcredits(param_0, param_1);
-    func_80800C84_chcredits(param_0, param_1);
+    func_80800F50_chcredits(actor, dl);
+    func_80800C84_chcredits(actor, dl);
 }
 
 int *chcredits_entrypoint_2()

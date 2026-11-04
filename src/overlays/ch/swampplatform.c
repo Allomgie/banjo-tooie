@@ -2,7 +2,7 @@
 
 typedef struct {
     u8 pad_0[0x6C];
-    u32 local_0 : 11;
+    u32 prop_index : 11;
     u32 pad_1 : 21;
 } SwampPlatformKind;
 extern void func_800EE7F8(f32 *, f32 *);
@@ -43,201 +43,205 @@ extern void _sumumbofx_entrypoint_1(Actor *, s32);
 extern void func_800DA524(s32);
 extern void func_800DA544(s32);
 
-void func_80800000_chswampplatform(Actor *param_0)
+// Small swamp platform: init scale 7 if flag 0x160 (enlarged) is set, else 2.
+void func_80800000_chswampplatform(Actor *actor)
 {
     if (!func_800DA298(0x160)) {
-        if (!_gccubesearch_entrypoint_10(0x28E, ((SwampPlatformKind *) param_0)->local_0))
-            func_80101FDC(param_0, 0);
-        param_0->scale = 2.0f;
+        if (!_gccubesearch_entrypoint_10(0x28E, ((SwampPlatformKind *) actor)->prop_index))
+            func_80101FDC(actor, 0);
+        actor->scale = 2.0f;
     } else
-        param_0->scale = 7.0f;
-    func_800EE7F8((f32 *) &param_0->actorData[0], param_0->position);
-    func_800EFA4C((f32 *) &param_0->actorData[4], 1.0f, 1.0f, 1.0f);
-    param_0->unk64_20 = 0;
-    param_0->unk64_19 = 0;
-    *(f32 *) &param_0->actorData[7] = 0.0f;
+        actor->scale = 7.0f;
+    func_800EE7F8((f32 *) &actor->actorData[0], actor->position);
+    func_800EFA4C((f32 *) &actor->actorData[4], 1.0f, 1.0f, 1.0f);
+    actor->unk64_20 = 0;
+    actor->unk64_19 = 0;
+    *(f32 *) &actor->actorData[7] = 0.0f;
 }
 
 void func_80800804_chswampplatform();
 
-void func_808000BC_chswampplatform(Actor *param_0)
+// Mumbo Enlarge spell (flag 0x9DE): grows the platforms from scale 2 to 7, then sets 0x160 and 0x9DF.
+void func_808000BC_chswampplatform(Actor *actor)
 {
-    s32 local_0[3];
-    f32 local_1;
-    f32 local_2;
+    s32 zero_vec[3];
+    f32 ease_in;
+    f32 ease_out;
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 0:
-            func_80103110(param_0, 0);
+            func_80103110(actor, 0);
             break;
         case 1:
             if (func_800DA298(0x9DE)) {
-                local_0[0] = 0;
-                local_0[1] = 0;
-                local_0[2] = 0;
-                _sumumbofx_entrypoint_0(param_0, 1, 0x32, _chmumbopad_entrypoint_0(8));
-                _sumumbofx_entrypoint_2(func_80100094(param_0, 1));
-                _sumumbofx_entrypoint_25(func_80100094(param_0, 1), 0x7D, local_0);
-                _sumumbofx_entrypoint_24(func_80100094(param_0, 1), 0.65f);
-                _sumumbofx_entrypoint_15(func_80100094(param_0, 1), 3.0f);
-                _capod_entrypoint_13(param_0->unk0, 0, 10, 0x210);
-                func_80101FDC(param_0, 2);
-                func_8010A800(param_0, 2);
+                zero_vec[0] = 0;
+                zero_vec[1] = 0;
+                zero_vec[2] = 0;
+                _sumumbofx_entrypoint_0(actor, 1, 0x32, _chmumbopad_entrypoint_0(8));
+                _sumumbofx_entrypoint_2(func_80100094(actor, 1));
+                _sumumbofx_entrypoint_25(func_80100094(actor, 1), 0x7D, zero_vec);
+                _sumumbofx_entrypoint_24(func_80100094(actor, 1), 0.65f);
+                _sumumbofx_entrypoint_15(func_80100094(actor, 1), 3.0f);
+                _capod_entrypoint_13(actor->unk0, 0, 10, 0x210);
+                func_80101FDC(actor, 2);
+                func_8010A800(actor, 2);
             }
             break;
         case 2:
-            func_80800804_chswampplatform(param_0);
-            _sumumbofx_entrypoint_14(func_80100094(param_0, 1));
-            if (_sumumbofx_entrypoint_27(func_80100094(param_0, 1))) {
-                _sumumbofx_entrypoint_18(func_80100094(param_0, 1), 4.0f);
-                func_80101FDC(param_0, 3);
+            func_80800804_chswampplatform(actor);
+            _sumumbofx_entrypoint_14(func_80100094(actor, 1));
+            if (_sumumbofx_entrypoint_27(func_80100094(actor, 1))) {
+                _sumumbofx_entrypoint_18(func_80100094(actor, 1), 4.0f);
+                func_80101FDC(actor, 3);
             }
             break;
         case 3:
-            func_80800804_chswampplatform(param_0);
-            _sumumbofx_entrypoint_14(func_80100094(param_0, 1));
-            _sumumbofx_entrypoint_5(func_80100094(param_0, 1), 2.0f);
-            if (_sumumbofx_entrypoint_27(func_80100094(param_0, 1))) {
-                _sumumbofx_entrypoint_17(func_80100094(param_0, 1), 4.0f);
-                func_80101FDC(param_0, 4);
+            func_80800804_chswampplatform(actor);
+            _sumumbofx_entrypoint_14(func_80100094(actor, 1));
+            _sumumbofx_entrypoint_5(func_80100094(actor, 1), 2.0f);
+            if (_sumumbofx_entrypoint_27(func_80100094(actor, 1))) {
+                _sumumbofx_entrypoint_17(func_80100094(actor, 1), 4.0f);
+                func_80101FDC(actor, 4);
             }
             break;
         case 4:
-            if (2.0f < _sumumbofx_entrypoint_21(func_80100094(param_0, 1))) {
-                if (!param_0->unk64_20) {
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            if (2.0f < _sumumbofx_entrypoint_21(func_80100094(actor, 1))) {
+                if (!actor->unk64_20) {
+                    _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                      D_808009D0_chswampplatform);
-                    param_0->unk64_20 = 1;
+                    actor->unk64_20 = 1;
                 }
-                local_1 = func_800138D0(
-                    (_sumumbofx_entrypoint_21(func_80100094(param_0, 1)) - 2.0f) * 0.5f * 90.0f);
-                param_0->unk58 = local_1;
-                param_0->scale = param_0->unk58 * 5.0f * 0.5f + 2.0f;
-                ((f32 *) param_0->actorData)[4] = param_0->unk58 * 2.0f + 1.0f;
-                ((f32 *) param_0->actorData)[5] = param_0->unk58 * 2.0f + 1.0f;
-                ((f32 *) param_0->actorData)[6] = param_0->unk58 * 2.0f + 1.0f;
+                ease_in = func_800138D0(
+                    (_sumumbofx_entrypoint_21(func_80100094(actor, 1)) - 2.0f) * 0.5f * 90.0f);
+                actor->unk58 = ease_in;
+                actor->scale = actor->unk58 * 5.0f * 0.5f + 2.0f;
+                ((f32 *) actor->actorData)[4] = actor->unk58 * 2.0f + 1.0f;
+                ((f32 *) actor->actorData)[5] = actor->unk58 * 2.0f + 1.0f;
+                ((f32 *) actor->actorData)[6] = actor->unk58 * 2.0f + 1.0f;
             } else {
-                if (!param_0->unk64_19) {
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                if (!actor->unk64_19) {
+                    _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                      D_808009E4_chswampplatform);
-                    param_0->unk64_19 = 1;
+                    actor->unk64_19 = 1;
                 }
-                local_2 = 1.0f - func_800138D0(_sumumbofx_entrypoint_21(func_80100094(param_0, 1)) *
+                ease_out = 1.0f - func_800138D0(_sumumbofx_entrypoint_21(func_80100094(actor, 1)) *
                                                0.5f * 90.0f);
-                param_0->unk58 = local_2;
-                param_0->scale = (1.0f - param_0->unk58) * 5.0f * 0.5f + 2.0f + 2.5f;
-                ((f32 *) param_0->actorData)[4] =
-                    mlAbsF(func_800138D0(param_0->unk58 * 1.5f * 360.0f)) *
-                        (param_0->unk58 * 2.0f) +
+                actor->unk58 = ease_out;
+                actor->scale = (1.0f - actor->unk58) * 5.0f * 0.5f + 2.0f + 2.5f;
+                ((f32 *) actor->actorData)[4] =
+                    mlAbsF(func_800138D0(actor->unk58 * 1.5f * 360.0f)) *
+                        (actor->unk58 * 2.0f) +
                     1.0f;
-                ((f32 *) param_0->actorData)[5] =
-                    mlAbsF(func_800138D0(param_0->unk58 * 2.5f * 360.0f)) *
-                        (param_0->unk58 * 2.0f) +
+                ((f32 *) actor->actorData)[5] =
+                    mlAbsF(func_800138D0(actor->unk58 * 2.5f * 360.0f)) *
+                        (actor->unk58 * 2.0f) +
                     1.0f;
-                ((f32 *) param_0->actorData)[6] =
-                    mlAbsF(func_800138D0(param_0->unk58 * 2.0f * 360.0f)) *
-                        (param_0->unk58 * 2.0f) +
+                ((f32 *) actor->actorData)[6] =
+                    mlAbsF(func_800138D0(actor->unk58 * 2.0f * 360.0f)) *
+                        (actor->unk58 * 2.0f) +
                     1.0f;
             }
-            func_80800804_chswampplatform(param_0);
-            _sumumbofx_entrypoint_14(func_80100094(param_0, 1));
-            if (_sumumbofx_entrypoint_27(func_80100094(param_0, 1))) {
+            func_80800804_chswampplatform(actor);
+            _sumumbofx_entrypoint_14(func_80100094(actor, 1));
+            if (_sumumbofx_entrypoint_27(func_80100094(actor, 1))) {
                 _chglowbo_entrypoint_6();
-                func_80101FDC(param_0, 5);
-                _sumumbofx_entrypoint_16(func_80100094(param_0, 1), 3.0f);
+                func_80101FDC(actor, 5);
+                _sumumbofx_entrypoint_16(func_80100094(actor, 1), 3.0f);
             }
             break;
         case 5:
-            func_80800804_chswampplatform(param_0);
-            _sumumbofx_entrypoint_14(func_80100094(param_0, 1));
-            if (_sumumbofx_entrypoint_27(func_80100094(param_0, 1))) {
-                func_80101FDC(param_0, 6);
+            func_80800804_chswampplatform(actor);
+            _sumumbofx_entrypoint_14(func_80100094(actor, 1));
+            if (_sumumbofx_entrypoint_27(func_80100094(actor, 1))) {
+                func_80101FDC(actor, 6);
             }
             break;
         case 6:
-            _sumumbofx_entrypoint_1(param_0, 1);
+            _sumumbofx_entrypoint_1(actor, 1);
             func_800DA524(0x9DE);
             func_800DA544(0x9DF);
-            func_8010A800(param_0, 0);
+            func_8010A800(actor, 0);
             func_800DA544(0x160);
-            func_80101FDC(param_0, 7);
+            func_80101FDC(actor, 7);
             break;
         case 7:
-            func_80103110(param_0, 0);
+            func_80103110(actor, 0);
     }
 }
 
-void func_8080061C_chswampplatform(Actor *param_0, s32 param_1)
+void func_8080061C_chswampplatform(Actor *actor, s32 frame)
 {
-    Actor *local_0[5];
-    s32 local_1;
-    s32 local_2;
+    Actor *platforms[5];
+    s32 count;
+    s32 i;
     if (func_800DA298(0x9DE)) {
-        if (func_80100094(param_0, 1)) {
-            local_1 = _subaddiefind_entrypoint_4(0x28E, local_0, 5);
-            _sumumbofx_entrypoint_9(func_80100094(param_0, 1), param_1);
-            for (local_2 = 0; local_2 < local_1; local_2++) {
-                local_0[local_2]->position[1] = *(f32 *) ((u8 *) local_0[local_2] + 0x1C) -
-                                                func_80103EF4(local_0[local_2]) * 0.5f;
-                if (*(f32 *) ((u8 *) param_0 + 0x28) != 0.0f &&
-                    *(f32 *) ((u8 *) param_0 + 0x2C) != 0.0f &&
-                    *(f32 *) ((u8 *) param_0 + 0x30) != 0.0f)
-                    func_800DF500(*(f32 *) ((u8 *) param_0 + 0x28),
-                                  *(f32 *) ((u8 *) param_0 + 0x2C),
-                                  *(f32 *) ((u8 *) param_0 + 0x30));
-                local_0[local_2]->scale = param_0->scale;
-                func_80101870(local_0[local_2], param_1);
+        if (func_80100094(actor, 1)) {
+            count = _subaddiefind_entrypoint_4(0x28E, platforms, 5);
+            _sumumbofx_entrypoint_9(func_80100094(actor, 1), frame);
+            for (i = 0; i < count; i++) {
+                platforms[i]->position[1] = *(f32 *) ((u8 *) platforms[i] + 0x1C) -
+                                                func_80103EF4(platforms[i]) * 0.5f;
+                if (*(f32 *) ((u8 *) actor + 0x28) != 0.0f &&
+                    *(f32 *) ((u8 *) actor + 0x2C) != 0.0f &&
+                    *(f32 *) ((u8 *) actor + 0x30) != 0.0f)
+                    func_800DF500(*(f32 *) ((u8 *) actor + 0x28),
+                                  *(f32 *) ((u8 *) actor + 0x2C),
+                                  *(f32 *) ((u8 *) actor + 0x30));
+                platforms[i]->scale = actor->scale;
+                func_80101870(platforms[i], frame);
             }
-            _sumumbofx_entrypoint_8(func_80100094(param_0, 1), param_1);
+            _sumumbofx_entrypoint_8(func_80100094(actor, 1), frame);
         }
     } else {
-        param_0->position[1] = *(f32 *) ((u8 *) param_0 + 0x1C) - func_80103EF4(param_0) * 0.5f;
-        func_80101870(param_0, param_1);
+        actor->position[1] = *(f32 *) ((u8 *) actor + 0x1C) - func_80103EF4(actor) * 0.5f;
+        func_80101870(actor, frame);
     }
 }
 
-s32 func_808007A4_chswampplatform(Actor *param_0, s32 param_1, s32 param_2)
+// Message 0x4B with argument 8 starts the spell.
+s32 func_808007A4_chswampplatform(Actor *actor, s32 msg, s32 arg)
 {
-    if (param_1 == 0x4B) {
-        if (param_2 == 8 && param_0->unk70_10 == 0) {
-            func_80101FDC(param_0, 1);
-            func_80103110(param_0, 1);
+    if (msg == 0x4B) {
+        if (arg == 8 && actor->unk70_10 == 0) {
+            func_80101FDC(actor, 1);
+            func_80103110(actor, 1);
         }
         return 1;
     }
     return 0;
 }
 
-void func_80800804_chswampplatform(Actor *param_0)
+// Feeds the mumbofx ribbon with the platform positions.
+void func_80800804_chswampplatform(Actor *actor)
 {
-    Actor *local_0[5];
-    f32 local_2;
-    f32 local_3;
-    s32 local_4;
-    s32 local_5;
-    f32 local_1[3];
+    Actor *platforms[5];
+    f32 base_scale;
+    f32 max_scale;
+    s32 count;
+    s32 step;
+    f32 pos[3];
     s32 i;
 
-    local_2 = func_80103EAC(param_0);
-    local_3 = ((((((f32 *) param_0->actorData)[4] > ((f32 *) param_0->actorData)[5])
-                     ? ((f32 *) param_0->actorData)[4]
-                     : ((f32 *) param_0->actorData)[5]) > ((f32 *) param_0->actorData)[6])
-                   ? ((((f32 *) param_0->actorData)[4] > ((f32 *) param_0->actorData)[5])
-                          ? ((f32 *) param_0->actorData)[4]
-                          : ((f32 *) param_0->actorData)[5])
-                   : ((f32 *) param_0->actorData)[6]) *
-              local_2;
-    local_4 = _subaddiefind_entrypoint_4(0x28E, local_0, 5);
-    local_5 = 50 / local_4;
-    if (((f32 *) param_0->actorData)[7] < local_3) {
-        ((f32 *) param_0->actorData)[7] = local_3;
+    base_scale = func_80103EAC(actor);
+    max_scale = ((((((f32 *) actor->actorData)[4] > ((f32 *) actor->actorData)[5])
+                     ? ((f32 *) actor->actorData)[4]
+                     : ((f32 *) actor->actorData)[5]) > ((f32 *) actor->actorData)[6])
+                   ? ((((f32 *) actor->actorData)[4] > ((f32 *) actor->actorData)[5])
+                          ? ((f32 *) actor->actorData)[4]
+                          : ((f32 *) actor->actorData)[5])
+                   : ((f32 *) actor->actorData)[6]) *
+              base_scale;
+    count = _subaddiefind_entrypoint_4(0x28E, platforms, 5);
+    step = 50 / count;
+    if (((f32 *) actor->actorData)[7] < max_scale) {
+        ((f32 *) actor->actorData)[7] = max_scale;
     } else {
-        local_3 = ((f32 *) param_0->actorData)[7];
+        max_scale = ((f32 *) actor->actorData)[7];
     }
-    for (i = 0; i < local_4; i++) {
-        func_80103DFC(local_0[i], local_1);
-        _sumumbofx_entrypoint_7(func_80100094(param_0, 1), local_3, i * local_5, (i + 1) * local_5,
-                                local_1, NULL, NULL);
+    for (i = 0; i < count; i++) {
+        func_80103DFC(platforms[i], pos);
+        _sumumbofx_entrypoint_7(func_80100094(actor, 1), max_scale, i * step, (i + 1) * step,
+                                pos, NULL, NULL);
     }
 }
 

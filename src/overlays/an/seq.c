@@ -3,10 +3,10 @@
 void anseq_entrypoint_1(s16 *pSeqIndx, s32 arg1);
 
 typedef struct {
-    f32 duration;
+    f32 duration; // anim time, -1 = every frame
     u8 argCount;
     u8 unk5;
-    u8 unk6;
+    u8 delay; // frames to wait before calling, 0xFF = done
     s32 arg0;
     s32 arg1;
     s32 arg2;
@@ -15,23 +15,23 @@ typedef struct {
 } AnSeqElement;
 
 struct {
-    s32 unk0;
-    AnSeqElement *unk4;
+    s32 pending_delay; // delay for the next pushed entry
+    AnSeqElement *last_entry; // most recently pushed entry
 } B_80800490_anseq;
 
 void func_80800000_anseq(s16 *pSeqIndx, AnSeqElement *element)
 {
-    if (element->unk6) {
-        if (element->unk6 == 0xFF) {
+    if (element->delay) {
+        if (element->delay == 0xFF) {
             return;
         }
 
-        element->unk6--;
-        if (element->unk6) {
+        element->delay--;
+        if (element->delay) {
             return;
         }
 
-        element->unk6 = 0xFF;
+        element->delay = 0xFF;
     }
 
     switch (element->argCount) {
@@ -65,28 +65,28 @@ void anseq_entrypoint_0(s16 *pSeqIndx)
 void *func_80800134_anseq(s16 *pSeqIndx, f32 duration, s32 arg_count, void *func_ptr, s32 a0,
                           s32 a1, s32 a2, s32 a3)
 {
-    AnSeqElement *v0 = func_800B2A58(*pSeqIndx);
-    v0->duration = duration;
-    v0->argCount = arg_count;
-    v0->func_ptr = func_ptr;
-    v0->arg0 = a0;
-    v0->arg1 = a1;
-    v0->arg2 = a2;
-    v0->arg3 = a3;
-    v0->unk6 = B_80800490_anseq.unk0;
+    AnSeqElement *entry = func_800B2A58(*pSeqIndx);
+    entry->duration = duration;
+    entry->argCount = arg_count;
+    entry->func_ptr = func_ptr;
+    entry->arg0 = a0;
+    entry->arg1 = a1;
+    entry->arg2 = a2;
+    entry->arg3 = a3;
+    entry->delay = B_80800490_anseq.pending_delay;
     if (duration == -1) {
         anseq_entrypoint_1(pSeqIndx, 1);
     } else {
-        v0->unk5 = 0;
+        entry->unk5 = 0;
     }
-    B_80800490_anseq.unk0 = 0;
-    B_80800490_anseq.unk4 = v0;
-    return v0;
+    B_80800490_anseq.pending_delay = 0;
+    B_80800490_anseq.last_entry = entry;
+    return entry;
 }
 
 void anseq_entrypoint_1(s16 *pSeqIndx, s32 arg1)
 {
-    B_80800490_anseq.unk4->unk5 = arg1;
+    B_80800490_anseq.last_entry->unk5 = arg1;
 }
 
 void anseq_entrypoint_2(s16 *pSeqIndx, f32 duration, void *func_ptr, s32 arg3, s32 arg4)
@@ -107,33 +107,34 @@ void anseq_entrypoint_4(s16 *pSeqIndx, f32 duration, void *func_ptr, s32 arg3, s
 
 void anseq_entrypoint_5(s16 arg0)
 {
-    s16 *v0 = (s16 *) func_8001B798(arg0);
-    func_800B2D48(*v0);
+    s16 *entry = (s16 *) func_8001B798(arg0);
+    func_800B2D48(*entry);
     func_8001B754(arg0);
 }
 
 s16 anseq_entrypoint_6(void)
 {
-    s16 *sp1C;
-    s16 sp18 = func_8001B668(0, 2);
-    sp1C = (s16 *) func_8001B798(sp18);
-    *sp1C = func_800B2DC0(sizeof(AnSeqElement), 0x2);
-    anseq_entrypoint_0(sp1C);
-    return sp18;
+    s16 *seq_ref;
+    s16 handle = func_8001B668(0, 2);
+    seq_ref = (s16 *) func_8001B798(handle);
+    *seq_ref = func_800B2DC0(sizeof(AnSeqElement), 0x2);
+    anseq_entrypoint_0(seq_ref);
+    return handle;
 }
 
 void anseq_entrypoint_7(s16 *pSeqIndx, s32 arg1)
 {
-    B_80800490_anseq.unk0 = arg1;
+    B_80800490_anseq.pending_delay = arg1;
 }
 
+// Calls each entry whose anim time has been reached.
 void anseq_entrypoint_8(s16 *pSeqIndx, AnimCtrl *pAnCtl)
 {
-    void *s0 = func_800B2890(*pSeqIndx);
-    AnSeqElement *iPtr;
-    for (iPtr = vector_begin(s0); iPtr != (void *) vector_end(s0); iPtr++) {
-        if ((iPtr->duration == -1.0f) || anctrl_isAt(pAnCtl, iPtr->duration)) {
-            func_80800000_anseq(pSeqIndx, iPtr);
+    void *entries = func_800B2890(*pSeqIndx);
+    AnSeqElement *entry;
+    for (entry = vector_begin(entries); entry != (void *) vector_end(entries); entry++) {
+        if ((entry->duration == -1.0f) || anctrl_isAt(pAnCtl, entry->duration)) {
+            func_80800000_anseq(pSeqIndx, entry);
         }
     }
 }

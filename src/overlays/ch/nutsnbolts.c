@@ -121,6 +121,7 @@ s32 func_80800A88_chnutsnbolts();
 extern void func_80101870(), func_80105834(), func_80107C2C(), func_80108ED0(),
     func_80800024_chnutsnbolts(), func_80800080_chnutsnbolts();
 
+// TU-NOTE: the three ActorInfos (0x43E-0x440) share one handler set.
 int chnutsnbolts_entrypoint_0()
 {
     return (int) &D_80800E28_chnutsnbolts;
@@ -136,219 +137,219 @@ int *chnutsnbolts_entrypoint_2()
     return &D_80800EB8_chnutsnbolts;
 }
 
-void func_80800024_chnutsnbolts(param_0) u8 *param_0;
+void func_80800024_chnutsnbolts(actor) u8 *actor;
 {
-    u8 *local_0 = func_80100094(param_0, 0);
-    _subaddierouteDll_entrypoint_3(param_0, local_0 + 8, param_0 + 4);
-    func_8080092C_chnutsnbolts(param_0, 2);
-    *(f32 *) (local_0 + 0x1C) = 0.0f;
-    *(f32 *) (param_0 + 0x24) = 0.0f;
+    u8 *data = func_80100094(actor, 0);
+    _subaddierouteDll_entrypoint_3(actor, data + 8, actor + 4);
+    func_8080092C_chnutsnbolts(actor, 2);
+    *(f32 *) (data + 0x1C) = 0.0f;
+    *(f32 *) (actor + 0x24) = 0.0f;
 }
 
 void func_80800C04_chnutsnbolts();
 
-void func_80800080_chnutsnbolts(param_0) Actor *param_0;
+void func_80800080_chnutsnbolts(actor) Actor *actor;
 {
-    NutsData *local_0;
-    s32 local_1;
-    s32 local_2;
-    f32 local_3[3];
-    f32 local_4;
+    NutsData *data;
+    s32 timer_done;
+    s32 hit_flags;
+    f32 normal[3];
+    f32 stick_speed;
 
-    local_0 = func_80100094(param_0, 0);
+    data = func_80100094(actor, 0);
 
-if (((NutsBits *) param_0)->unk78_2) {
+if (((NutsBits *) actor)->unk78_2) {
     return;
 }
 
-func_8010D254((f32 *) param_0->actorData);
+func_8010D254((f32 *) actor->actorData);
 
-if (!func_801072A8(param_0) || func_801072E4(param_0)) {
-    func_8010D690(param_0);
+if (!func_801072A8(actor) || func_801072E4(actor)) {
+    func_8010D690(actor);
 }
 
-local_1 = func_800D90A4(&param_0->unk58);
+timer_done = func_800D90A4(&actor->unk58);
 
-switch (param_0->unk70_10) {
+switch (actor->unk70_10) {
     case 1:
-        ((f32 *) param_0->actorData)[5] -= func_800D8FF8() * 1000.0f;
-        local_2 = func_8010B990(param_0, 0x400027);
-        if (!func_800BFA1C(param_0->position)) {
-            func_800FFAB0(param_0);
+        ((f32 *) actor->actorData)[5] -= func_800D8FF8() * 1000.0f;
+        hit_flags = func_8010B990(actor, 0x400027);
+        if (!func_800BFA1C(actor->position)) {
+            func_800FFAB0(actor);
             return;
         }
-        if (local_2 & 0x20) {
-            func_8010AA54(local_3);
-            func_800EFDE8((f32 *) &param_0->actorData[4], (f32 *) &param_0->actorData[4], local_3);
-            ((f32 *) param_0->actorData)[4] *= 0.8f;
-            ((f32 *) param_0->actorData)[5] *= 0.4f;
-            ((f32 *) param_0->actorData)[6] *= 0.8f;
-            if (func_800EEFFC((f32 *) &param_0->actorData[4]) < 50.0f) {
-                func_8010B990(param_0, 0x1000);
-                func_8080092C_chnutsnbolts(param_0, 3);
+        if (hit_flags & 0x20) {
+            func_8010AA54(normal);
+            func_800EFDE8((f32 *) &actor->actorData[4], (f32 *) &actor->actorData[4], normal);
+            ((f32 *) actor->actorData)[4] *= 0.8f;
+            ((f32 *) actor->actorData)[5] *= 0.4f;
+            ((f32 *) actor->actorData)[6] *= 0.8f;
+            if (func_800EEFFC((f32 *) &actor->actorData[4]) < 50.0f) {
+                func_8010B990(actor, 0x1000);
+                func_8080092C_chnutsnbolts(actor, 3);
                 return;
             }
-            if (local_1) {
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            if (timer_done) {
+                _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                  D_80800F00_chnutsnbolts);
-                param_0->unk58 = 0.6f;
+                actor->unk58 = 0.6f;
             }
         }
         break;
     case 2:
-        func_80800A88_chnutsnbolts(param_0, 0, 3);
+        func_80800A88_chnutsnbolts(actor, 0, 3);
         break;
     case 3:
-        func_80800B80_chnutsnbolts(param_0);
-        if (func_80101DDC(param_0)) {
-            func_8080092C_chnutsnbolts(param_0, 4);
+        func_80800B80_chnutsnbolts(actor);
+        if (func_80101DDC(actor)) {
+            func_8080092C_chnutsnbolts(actor, 4);
         }
         break;
     case 4:
-        if (((NutsBits *) param_0)->unk64_29) {
-            local_4 = _subaddiejoy_entrypoint_9(param_0, &param_0->unk54, 3);
-            ((f32 *) param_0->actorData)[3] = local_0->unk1C;
-            func_80102BF8(param_0, 0.2f, 8.0f, 500.0f);
-            func_8010C3A8(param_0, 0x205025,
-                          func_800F3780(func_80101F24(param_0), D_80800F14_chnutsnbolts, 3) *
-                              local_4);
+        if (((NutsBits *) actor)->unk64_29) {
+            stick_speed = _subaddiejoy_entrypoint_9(actor, &actor->unk54, 3);
+            ((f32 *) actor->actorData)[3] = data->unk1C;
+            func_80102BF8(actor, 0.2f, 8.0f, 500.0f);
+            func_8010C3A8(actor, 0x205025,
+                          func_800F3780(func_80101F24(actor), D_80800F14_chnutsnbolts, 3) *
+                              stick_speed);
         } else {
-            if (!local_0->unk16) {
-                if (_subaddierouteDll_entrypoint_4(param_0)) {
-                    param_0->unk54 = func_80102D78(param_0, (f32 *) param_0->actorData);
-                    _subaddierouteDll_entrypoint_7(param_0, local_0->unk8, param_0->rotation[1],
-                                                   param_0->unk54, 200.0f, 0x5800);
-                    local_0->unk14 = local_0->unkE;
+            if (!data->unk16) {
+                if (_subaddierouteDll_entrypoint_4(actor)) {
+                    actor->unk54 = func_80102D78(actor, (f32 *) actor->actorData);
+                    _subaddierouteDll_entrypoint_7(actor, data->unk8, actor->rotation[1],
+                                                   actor->unk54, 200.0f, 0x5800);
+                    data->unk14 = data->unkE;
                 }
-                _subaddierouteDll_entrypoint_5(param_0, local_0->unk8, local_0->unk14, 0.15f, 8.0f,
+                _subaddierouteDll_entrypoint_5(actor, data->unk8, data->unk14, 0.15f, 8.0f,
                                                200.0f);
             } else {
-                param_0->unk54 = func_80102D78(param_0, (f32 *) param_0->actorData);
-                func_80102BF8(param_0, 0.15f, 8.0f, 2e+02f);
+                actor->unk54 = func_80102D78(actor, (f32 *) actor->actorData);
+                func_80102BF8(actor, 0.15f, 8.0f, 2e+02f);
             }
-            ((f32 *) param_0->actorData)[3] = func_800F15F8(
-                ((f32 *) param_0->actorData)[3], local_0->unk1C, func_800D8FF8() * 400.0f);
-            func_8010C3A8(param_0, 0x305425,
-                          func_800F3780(func_80101F24(param_0), D_80800F14_chnutsnbolts, 3));
-            if (!local_0->unk16) {
-                if (_subaddierouteDll_entrypoint_4(param_0) && func_800DC298(0.2f) &&
-                    (!func_8010C9B0(param_0->position, 1500) || !func_8010C500(param_0))) {
-                    func_8080092C_chnutsnbolts(param_0, 6);
+            ((f32 *) actor->actorData)[3] = func_800F15F8(
+                ((f32 *) actor->actorData)[3], data->unk1C, func_800D8FF8() * 400.0f);
+            func_8010C3A8(actor, 0x305425,
+                          func_800F3780(func_80101F24(actor), D_80800F14_chnutsnbolts, 3));
+            if (!data->unk16) {
+                if (_subaddierouteDll_entrypoint_4(actor) && func_800DC298(0.2f) &&
+                    (!func_8010C9B0(actor->position, 1500) || !func_8010C500(actor))) {
+                    func_8080092C_chnutsnbolts(actor, 6);
                 }
             } else if (!func_800F6478(func_800F54E4())) {
-                func_8080092C_chnutsnbolts(param_0, 5);
+                func_8080092C_chnutsnbolts(actor, 5);
             }
         }
-        func_80800BD4_chnutsnbolts(param_0);
+        func_80800BD4_chnutsnbolts(actor);
         break;
     case 5:
-        func_80800BD4_chnutsnbolts(param_0);
-        if (func_800F6478(func_800F54E4()) && !func_80800A88_chnutsnbolts(param_0, 1, 4)) {
-            func_8080092C_chnutsnbolts(param_0, 6);
+        func_80800BD4_chnutsnbolts(actor);
+        if (func_800F6478(func_800F54E4()) && !func_80800A88_chnutsnbolts(actor, 1, 4)) {
+            func_8080092C_chnutsnbolts(actor, 6);
         }
         break;
     case 6:
-        func_80800C04_chnutsnbolts(param_0);
-        if (func_80101DDC(param_0)) {
-            func_8080092C_chnutsnbolts(param_0, 2);
-            param_0->unk58 = func_800DC178(1.5f, 2.0f);
+        func_80800C04_chnutsnbolts(actor);
+        if (func_80101DDC(actor)) {
+            func_8080092C_chnutsnbolts(actor, 2);
+            actor->unk58 = func_800DC178(1.5f, 2.0f);
         }
         break;
     case 7:
-        if (!local_0->unk16) {
-            _subaddiefx_entrypoint_0(param_0, 4, local_0);
+        if (!data->unk16) {
+            _subaddiefx_entrypoint_0(actor, 4, data);
         }
-        if (func_800D9078(&local_0->unk18)) {
-            _subaddiefx_entrypoint_1(param_0, local_0);
-            if (!func_80800A88_chnutsnbolts(param_0, 1, 4)) {
-                func_8080092C_chnutsnbolts(param_0, 6);
+        if (func_800D9078(&data->unk18)) {
+            _subaddiefx_entrypoint_1(actor, data);
+            if (!func_80800A88_chnutsnbolts(actor, 1, 4)) {
+                func_8080092C_chnutsnbolts(actor, 6);
             }
         }
         break;
     case 8:
-        if (!local_0->unk16) {
-            _subaddiefx_entrypoint_0(param_0, 4, local_0);
+        if (!data->unk16) {
+            _subaddiefx_entrypoint_0(actor, 4, data);
         }
 }
 
 }
 
-s32 func_808005D0_chnutsnbolts(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_808005D0_chnutsnbolts(Actor *actor, s32 msg, s32 param_2)
 {
-    u8 *local_0;
-    NutsPosition1226 local_5;
-    s32 local_2;
-    Actor *local_3;
-    s32 local_4;
-    s32 local_1;
-    f32 local_6[3];
-    s32 local_7;
+    u8 *data;
+    NutsPosition1226 pos;
+    s32 find_state;
+    Actor *other;
+    s32 is_last;
+    s32 id;
+    f32 dir[3];
+    s32 unk_0;
 
-    local_0 = func_80100094(param_0, 0);
+    data = func_80100094(actor, 0);
 
-switch (param_1) {
+switch (msg) {
     case 0x3E:
-        if (!((NutsFlags1226 *) param_0)->local_1 && param_0->unk70_10 == 4)
-            func_8080092C_chnutsnbolts(param_0, 5);
+        if (!((NutsFlags1226 *) actor)->local_1 && actor->unk70_10 == 4)
+            func_8080092C_chnutsnbolts(actor, 5);
         break;
     case 0x3F:
-        if (((NutsFlags1226 *) param_0)->local_4)
+        if (((NutsFlags1226 *) actor)->local_4)
             return 0;
-        if (param_0->unk70_10 != 7)
-            func_8080092C_chnutsnbolts(param_0, 7);
+        if (actor->unk70_10 != 7)
+            func_8080092C_chnutsnbolts(actor, 7);
         break;
     case 0x40:
-        func_80103DFC(param_0, local_5.local_0);
-        if (local_0[0x16] == 0) {
-            if (func_8010A430(param_0)) {
-                _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, 3, local_5.local_1[0],
-                                            local_5.local_1[1], local_5.local_1[2],
-                                            *(s32 *) ((u8 *) param_0 + 0x48));
+        func_80103DFC(actor, pos.local_0);
+        if (data[0x16] == 0) {
+            if (func_8010A430(actor)) {
+                _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, 3, pos.local_1[0],
+                                            pos.local_1[1], pos.local_1[2],
+                                            *(s32 *) ((u8 *) actor + 0x48));
             }
         } else {
-            local_4 = 1;
-            for (local_1 = 0x43E; local_1 < 0x441; local_1++) {
-                local_3 = _subaddiefind_entrypoint_2(local_1, &local_2);
-                while (local_3 != 0) {
-                    if (local_3 != param_0 && (s32) local_3->unk70_10 < 8) {
-                        local_4 = 0;
-                        goto local_7;
+            is_last = 1;
+            for (id = 0x43E; id < 0x441; id++) {
+                other = _subaddiefind_entrypoint_2(id, &find_state);
+                while (other != 0) {
+                    if (other != actor && (s32) other->unk70_10 < 8) {
+                        is_last = 0;
+                        goto done;
                     }
-                    local_3 = _subaddiefind_entrypoint_3(local_1, &local_2);
+                    other = _subaddiefind_entrypoint_3(id, &find_state);
                 }
             }
-        local_7:
-            if (local_4) {
-                _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, 3, local_5.local_1[0],
-                                            local_5.local_1[1], local_5.local_1[2],
-                                            *(s32 *) ((u8 *) param_0 + 0x48));
+        done:
+            if (is_last) {
+                _chbaddiesetup_entrypoint_5(_chbaddiesetup_entrypoint_10, 3, pos.local_1[0],
+                                            pos.local_1[1], pos.local_1[2],
+                                            *(s32 *) ((u8 *) actor + 0x48));
             }
         }
-        func_8080092C_chnutsnbolts(param_0, 8);
+        func_8080092C_chnutsnbolts(actor, 8);
         return 1;
     case 2:
-        if (!_subaddieDll_entrypoint_3(param_0) && !func_80107070(param_0, 1)) {
-            func_8080092C_chnutsnbolts(param_0, 10);
-            _subaddiefade_entrypoint_3(param_0);
-            ((NutsFlags1226 *) param_0)->local_3 = 0;
-            ((NutsFlags1226 *) param_0)->local_2 = ((NutsFlags1226 *) param_0)->local_0 =
-                (s32) ((NutsFlags1226 *) param_0)->local_3;
+        if (!_subaddieDll_entrypoint_3(actor) && !func_80107070(actor, 1)) {
+            func_8080092C_chnutsnbolts(actor, 10);
+            _subaddiefade_entrypoint_3(actor);
+            ((NutsFlags1226 *) actor)->local_3 = 0;
+            ((NutsFlags1226 *) actor)->local_2 = ((NutsFlags1226 *) actor)->local_0 =
+                (s32) ((NutsFlags1226 *) actor)->local_3;
         }
         break;
-    case 0x8E:
-        func_80101038(local_6);
-        func_800EFB24(&param_0->actorData[4], local_6, param_0->position);
-        func_800EF368(&param_0->actorData[4], func_800DC178(1800.0f, 2000.0f));
-        func_8080092C_chnutsnbolts(param_0, 1);
-        _subaddieDll_entrypoint_4(param_0, 1);
-        local_0[0x16] = 1;
-        param_0->unk58 = 0.0f;
+    case 0x8E: // fired out from a point
+        func_80101038(dir);
+        func_800EFB24(&actor->actorData[4], dir, actor->position);
+        func_800EF368(&actor->actorData[4], func_800DC178(1800.0f, 2000.0f));
+        func_8080092C_chnutsnbolts(actor, 1);
+        _subaddieDll_entrypoint_4(actor, 1);
+        data[0x16] = 1;
+        actor->unk58 = 0.0f;
         break;
     case 0x95:
-        _subaddierouteDll_entrypoint_1(param_0);
+        _subaddierouteDll_entrypoint_1(actor);
         return 1;
     case 0x38:
-        if (((*(u32 *) ((u8 *) param_0 + 0x6C) << 11) >> 20) == 0x440) {
+        if (((*(u32 *) ((u8 *) actor + 0x6C) << 11) >> 20) == 0x440) {
             func_80101074(D_80800E10_chnutsnbolts);
             return 2;
         }
@@ -361,72 +362,72 @@ switch (param_1) {
 return 1;
 }
 
-s32 func_808008FC_chnutsnbolts(enum asset_e param_0)
+s32 func_808008FC_chnutsnbolts(enum asset_e actor)
 {
-    s32 local_0 = func_80100094(param_0, 0);
-    _subaddiefx_entrypoint_1(param_0, local_0);
+    s32 data = func_80100094(actor, 0);
+    _subaddiefx_entrypoint_1(actor, data);
 }
 
-void func_8080092C_chnutsnbolts(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_8080092C_chnutsnbolts(actor, state) Actor *actor;
+s32 state;
 {
-    u8 *local_0 = func_80100094(param_0, 0);
+    u8 *data = func_80100094(actor, 0);
 
-    func_80102424(param_0, param_1);
+    func_80102424(actor, state);
 
-switch (param_1) {
+switch (state) {
     case 1:
-        ((NutsFlags37 *) param_0)->local_8 = 0;
+        ((NutsFlags37 *) actor)->local_8 = 0;
         break;
     case 2:
-        ((NutsFlags37 *) param_0)->local_8 = 1;
+        ((NutsFlags37 *) actor)->local_8 = 1;
         break;
     case 4:
-        *(f32 *) (local_0 + 0x1C) = func_800DC178(700.0f, 800.0f);
-        *(f32 *) &param_0->actorData[3] = 0.0f;
+        *(f32 *) (data + 0x1C) = func_800DC178(700.0f, 800.0f);
+        *(f32 *) &actor->actorData[3] = 0.0f;
         break;
     case 7:
-        *(f32 *) (local_0 + 0x18) = func_800DC178(3.0f, 4.0f);
+        *(f32 *) (data + 0x18) = func_800DC178(3.0f, 4.0f);
         break;
     case 8:
-        ((NutsFlags37 *) param_0)->local_0 = ((NutsFlags37 *) param_0)->local_5 = 0;
-        ((NutsFlags37 *) param_0)->local_3 = 0;
-        ((NutsFlags37 *) param_0)->local_8 = ((NutsFlags37 *) param_0)->local_7 =
-            (s32) ((NutsFlags37 *) param_0)->local_3;
-        if (!func_80107070(param_0, 2)) {
-            func_8010A570(param_0);
-            _subaddiefade_entrypoint_3(param_0);
+        ((NutsFlags37 *) actor)->local_0 = ((NutsFlags37 *) actor)->local_5 = 0;
+        ((NutsFlags37 *) actor)->local_3 = 0;
+        ((NutsFlags37 *) actor)->local_8 = ((NutsFlags37 *) actor)->local_7 =
+            (s32) ((NutsFlags37 *) actor)->local_3;
+        if (!func_80107070(actor, 2)) {
+            func_8010A570(actor);
+            _subaddiefade_entrypoint_3(actor);
         }
 }
 
 }
 
-s32 func_80800A88_chnutsnbolts(param_0, param_1, param_2)
-Actor *param_0;
-s32 param_1;
-f32 *param_2;
+s32 func_80800A88_chnutsnbolts(actor, force, state)
+Actor *actor;
+s32 force;
+f32 *state;
 {
-    u8 *local_0;
+    u8 *data;
 
-    local_0 = func_80100094(param_0, 0);
+    data = func_80100094(actor, 0);
 
-if (((NutsAndBoltsFlags *) param_0)->local_0) {
-    func_8080092C_chnutsnbolts(param_0, param_2);
+if (((NutsAndBoltsFlags *) actor)->local_0) {
+    func_8080092C_chnutsnbolts(actor, state);
     return 1;
 }
 
-if (param_0->unk58 > 0.0f) {
+if (actor->unk58 > 0.0f) {
     return 0;
 }
 
-if (local_0[0x16]) {
-    func_8080092C_chnutsnbolts(param_0, param_2);
+if (data[0x16]) {
+    func_8080092C_chnutsnbolts(actor, state);
     return 1;
 }
 
-if ((param_1 || (_subaddierouteDll_entrypoint_4(param_0) && func_800DC298(0.2f))) &&
-    func_8010C9B0(param_0->position, 1500) && func_8010C500(param_0)) {
-    func_8080092C_chnutsnbolts(param_0, param_2);
+if ((force || (_subaddierouteDll_entrypoint_4(actor) && func_800DC298(0.2f))) &&
+    func_8010C9B0(actor->position, 1500) && func_8010C500(actor)) {
+    func_8080092C_chnutsnbolts(actor, state);
     return 1;
 }
 

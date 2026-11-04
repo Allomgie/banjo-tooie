@@ -5,19 +5,20 @@ extern void func_80103110();
 extern void func_80101FDC();
 extern int D_80800190_chquizexitdoor[];
 
-void func_80800000_chquizexitdoor(Actor *param_0)
+// Fades alpha 255 to 0 over 2 s, then sets flag 0x440 and despawns.
+void func_80800000_chquizexitdoor(Actor *actor)
 {
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            func_80103110(param_0, 0);
+            func_80103110(actor, 0);
             break;
         case 2:
-            if (func_800D90A4(&param_0->unk58)) {
+            if (func_800D90A4(&actor->unk58)) {
                 func_800DA544(0x440);
-                func_800FFAB0(param_0);
+                func_800FFAB0(actor);
             }
-            *((u8 *) param_0 + 0x9B) =
-                (u32) func_800F10B4(param_0->unk58, 2.0f, 0.0f, 255.0f, 0.0f);
+            *((u8 *) actor + 0x9B) =
+                (u32) func_800F10B4(actor->unk58, 2.0f, 0.0f, 255.0f, 0.0f);
     }
 }
 
@@ -25,6 +26,7 @@ void func_80800124_chquizexitdoor(s32 arg0)
 {
 }
 
+// Message 7 starts the fade.
 s32 func_8080012C_chquizexitdoor(Actor *this, enum asset_e text_id, s32 param_2)
 {
     if (text_id == 7) {

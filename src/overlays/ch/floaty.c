@@ -8,9 +8,9 @@ extern Actor *func_80108528(s32, f32 *, s32, Actor **);
 extern void func_801015D0(Actor *);
 extern s32 D_80800EA8_chfloaty[];
 typedef struct {
-    u8 pad[0x64];
-    u32 pad64 : 12;
-    u32 flag : 1;
+    u8 pad_0[0x64];
+    u32 pad_64 : 12;
+    u32 music_on : 1;
     u32 rest : 19;
 } FloatyS;
 extern void func_800FCAE0(s32, s32, s32);
@@ -54,209 +54,210 @@ int *chfloaty_entrypoint_0()
     return &D_80800E00_chfloaty;
 }
 
-s32 func_8080000C_chfloaty(s32 param_0, s32 param_1, s32 param_2)
+s32 func_8080000C_chfloaty(s32 unk_0, s32 unk_1, s32 unk_2)
 {
     return 1;
 }
 
-void func_80800020_chfloaty(s32 param_0[3], s32 param_1[3], s32 param_2, s32 param_3)
+void func_80800020_chfloaty(s32 unk_0[3], s32 unk_1[3], s32 unk_2, s32 unk_3)
 {
-    _chbaddiesetup_entrypoint_6(&_subaddietaxi_entrypoint_16, param_0, param_1[0], param_1[1],
-                                param_1[2], param_2, param_3);
-    if (param_0) {
+    _chbaddiesetup_entrypoint_6(&_subaddietaxi_entrypoint_16, unk_0, unk_1[0], unk_1[1],
+                                unk_1[2], unk_2, unk_3);
+    // Matching: empty block steers IDO's code generation.
+    if (unk_0) {
     }
 }
 
-void func_8080007C_chfloaty(Actor *param_0, f32 param_1[3])
+void func_8080007C_chfloaty(Actor *actor, f32 unk_1[3])
 {
-    s32 local_0;
-    s32 local_1;
+    s32 result;
+    s32 next_state;
 
-    func_80102FDC(param_0, 0x3F800000);
-    local_0 = func_800CB3E0(param_1);
-    switch (local_0) {
+    func_80102FDC(actor, 0x3F800000);
+    result = func_800CB3E0(unk_1);
+    switch (result) {
         case 1:
-            if (func_800DA298(((u32) *(u16 *) ((char *) param_0 + 0x76) >> 7) + 0x320) != 0) {
-                local_1 = 4;
+            if (func_800DA298(((u32) *(u16 *) ((char *) actor + 0x76) >> 7) + 0x320) != 0) {
+                next_state = 4;
             } else {
-                local_1 = 1;
+                next_state = 1;
             }
-            func_808006AC_chfloaty(param_0, local_1);
+            func_808006AC_chfloaty(actor, next_state);
             return;
         case 3:
         case 4:
         case 6:
-            func_808006AC_chfloaty(param_0, 6);
+            func_808006AC_chfloaty(actor, 6);
     }
 }
 
 void func_80800BD8_chfloaty();
 
-void func_80800118_chfloaty(Actor *param_0)
+void func_80800118_chfloaty(Actor *actor)
 {
-    s32 local_5;
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    s32 local_3;
-    f32 local_4;
+    s32 player;
+    f32 scale;
+    f32 wobble_a;
+    f32 wobble_b;
+    s32 bones;
+    f32 blend;
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1:
-            if ((local_5 = _plsu_entrypoint_3(param_0->unk0)) != -1) {
-                func_800F7BC8(local_5, 0x53, param_0->unk0);
+            if ((player = _plsu_entrypoint_3(actor->unk0)) != -1) {
+                func_800F7BC8(player, 0x53, actor->unk0);
             }
             break;
         case 2:
-            if (func_80101E14(param_0, 0.47f)) {
-                func_80108B04(param_0, 0);
-                func_800C4140(0x7FFB5D61, param_0->position, 0x4B000FA);
+            if (func_80101E14(actor, 0.47f)) {
+                func_80108B04(actor, 0);
+                func_800C4140(0x7FFB5D61, actor->position, 0x4B000FA);
             }
-            if (func_80101DDC(param_0)) {
-                func_800FFA88(param_0->unk0);
+            if (func_80101DDC(actor)) {
+                func_800FFA88(actor->unk0);
             }
             break;
         case 3:
-            if (func_800D90A4(&param_0->unk50)) {
+            if (func_800D90A4(&actor->unk50)) {
                 if (!func_800DA298(0x340)) {
                     func_800DA544(0x340);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1431, 0xE, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1431, 0xE, actor->position,
                                                   0x6F);
                 }
-                func_808006AC_chfloaty(param_0, 4);
+                func_808006AC_chfloaty(actor, 4);
             } else {
-                local_0 = func_800F10B4(param_0->unk50, 1.5f, 0.0f, 0.01f, 1.0f);
-                local_1 = func_800F10B4(param_0->unk50, 1.5f, 0.75f, 0.0f, 1.0f);
-                local_2 = func_800F10B4(param_0->unk50, 0.75f, 0.0f, 0.0f, 1.0f);
-                local_0 = mlAbsF(func_80013970(local_0 * 720.0f) * 0.25f) + local_0;
-                local_1 = mlAbsF(func_80013970(local_1 * 180.0f) * 2.0f) + local_1;
-                local_2 = mlAbsF(func_80013970(local_2 * 180.0f) * 2.0f) + local_2;
-                if ((local_3 = func_8010262C(param_0->unk0, 8))) {
-                    func_800E0B8C(local_3, 0x2A, -1.0f, local_1, local_1, local_1);
-                    func_800E0B8C(local_3, 0x2D, -1.0f, local_2, local_2, local_2);
-                    func_800E0B8C(local_3, 0x30, -1.0f, local_1, local_1, local_1);
-                    func_800E0B8C(local_3, 0x33, -1.0f, local_2, local_2, local_2);
-                    func_800E0B8C(local_3, 0x39, -1.0f, local_1, local_1, local_1);
-                    func_800E0B8C(local_3, 0x3C, -1.0f, local_2, local_2, local_2);
-                    func_800E0B8C(local_3, 0x3F, -1.0f, local_1, local_1, local_1);
-                    func_800E0B8C(local_3, 0x36, -1.0f, local_2, local_2, local_2);
+                scale = func_800F10B4(actor->unk50, 1.5f, 0.0f, 0.01f, 1.0f);
+                wobble_a = func_800F10B4(actor->unk50, 1.5f, 0.75f, 0.0f, 1.0f);
+                wobble_b = func_800F10B4(actor->unk50, 0.75f, 0.0f, 0.0f, 1.0f);
+                scale = mlAbsF(func_80013970(scale * 720.0f) * 0.25f) + scale;
+                wobble_a = mlAbsF(func_80013970(wobble_a * 180.0f) * 2.0f) + wobble_a;
+                wobble_b = mlAbsF(func_80013970(wobble_b * 180.0f) * 2.0f) + wobble_b;
+                if ((bones = func_8010262C(actor->unk0, 8))) {
+                    func_800E0B8C(bones, 0x2A, -1.0f, wobble_a, wobble_a, wobble_a);
+                    func_800E0B8C(bones, 0x2D, -1.0f, wobble_b, wobble_b, wobble_b);
+                    func_800E0B8C(bones, 0x30, -1.0f, wobble_a, wobble_a, wobble_a);
+                    func_800E0B8C(bones, 0x33, -1.0f, wobble_b, wobble_b, wobble_b);
+                    func_800E0B8C(bones, 0x39, -1.0f, wobble_a, wobble_a, wobble_a);
+                    func_800E0B8C(bones, 0x3C, -1.0f, wobble_b, wobble_b, wobble_b);
+                    func_800E0B8C(bones, 0x3F, -1.0f, wobble_a, wobble_a, wobble_a);
+                    func_800E0B8C(bones, 0x36, -1.0f, wobble_b, wobble_b, wobble_b);
                 }
-                param_0->scale = local_0;
+                actor->scale = scale;
             }
-            func_80800BD8_chfloaty(param_0, 1);
-            func_8010C964(param_0);
+            func_80800BD8_chfloaty(actor, 1);
+            func_8010C964(actor);
             break;
         case 4:
             if (func_800F64A4(func_800F54E4(), 10)) {
                 if (!func_800DA298(0x6DD) &&
-                    _subaddiedialog_entrypoint_4(param_0->position, 500, 0)) {
+                    _subaddiedialog_entrypoint_4(actor->position, 500, 0)) {
                     func_800DA544(0x6DD);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1432, 0xE, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1432, 0xE, actor->position,
                                                   0x6F);
                 }
             } else {
                 if (!func_800DA298(0x6DE) &&
-                    _subaddiedialog_entrypoint_4(param_0->position, 500, 0)) {
+                    _subaddiedialog_entrypoint_4(actor->position, 500, 0)) {
                     func_800DA544(0x6DE);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x1433, 0xE, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x1433, 0xE, actor->position,
                                                   0x6F);
                 }
             }
-            param_0->unk54 = func_8010CD28(param_0);
-            func_80102BAC(param_0, 0.1f, 0.5, 8.0f);
-            func_8010C964(param_0);
-            func_80800BD8_chfloaty(param_0, 1);
+            actor->unk54 = func_8010CD28(actor);
+            func_80102BAC(actor, 0.1f, 0.5, 8.0f);
+            func_8010C964(actor);
+            func_80800BD8_chfloaty(actor, 1);
             break;
         case 6:
-            if (func_800D90A4((f32 *) &param_0->actorData[3])) {
-                _subaddieDll_entrypoint_4(param_0, 0);
-                _subaddietaxi_entrypoint_5(param_0, param_0->unk74_7 - 0x25);
-                func_808006AC_chfloaty(param_0, 4);
-            } else if (7.0f <= *(f32 *) &param_0->actorData[3]) {
-                local_4 = func_800F12D4(*(f32 *) &param_0->actorData[3], 8.0f, 7.0f, 0.0f, 1.0f);
-                param_0->scale = local_4 / 2.0f + 0.5f;
-                func_800EFE50(param_0->position, (f32 *) &param_0->actorData[4],
-                              (f32 *) param_0->actorData, local_4);
-                param_0->position[1] += func_80013970(local_4 * 180.0f) * 100.0f;
+            if (func_800D90A4((f32 *) &actor->actorData[3])) {
+                _subaddieDll_entrypoint_4(actor, 0);
+                _subaddietaxi_entrypoint_5(actor, actor->unk74_7 - 0x25);
+                func_808006AC_chfloaty(actor, 4);
+            } else if (7.0f <= *(f32 *) &actor->actorData[3]) {
+                blend = func_800F12D4(*(f32 *) &actor->actorData[3], 8.0f, 7.0f, 0.0f, 1.0f);
+                actor->scale = blend / 2.0f + 0.5f;
+                func_800EFE50(actor->position, (f32 *) &actor->actorData[4],
+                              (f32 *) actor->actorData, blend);
+                actor->position[1] += func_80013970(blend * 180.0f) * 100.0f;
             }
-            if (*(f32 *) &param_0->actorData[3] < 1.0f) {
-                ((u8 *) param_0)[0x9B] =
-                    (s32) func_800F12D4(*(f32 *) &param_0->actorData[3], 1.0f, 0.0f, 255.0f, 0.0f);
+            if (*(f32 *) &actor->actorData[3] < 1.0f) {
+                ((u8 *) actor)[0x9B] =
+                    (s32) func_800F12D4(*(f32 *) &actor->actorData[3], 1.0f, 0.0f, 255.0f, 0.0f);
             }
-            func_8010C964(param_0);
-            func_80800BD8_chfloaty(param_0, 1);
+            func_8010C964(actor);
+            func_80800BD8_chfloaty(actor, 1);
     }
 }
 
 f32 func_80800B68_chfloaty();
 
-void func_808006AC_chfloaty(param_0, param_1) Actor *param_0;
-int param_1;
+void func_808006AC_chfloaty(actor, state) Actor *actor;
+int state;
 {
-    switch (param_1) {
+    switch (state) {
         case 1:
-            func_8010A63C(param_0);
-            func_80103140(param_0, 0x923, *(u16 *) ((u8 *) param_0->unk0 + 0x16));
-            func_80102FDC(param_0, 0x3F800000);
-            func_8010A63C(param_0);
+            func_8010A63C(actor);
+            func_80103140(actor, 0x923, *(u16 *) ((u8 *) actor->unk0 + 0x16));
+            func_80102FDC(actor, 0x3F800000);
+            func_8010A63C(actor);
             break;
         case 2:
-            func_800DA544(param_0->unk74_7 + 0x320);
-            func_8010A624(param_0);
-            func_8010A570(param_0);
+            func_800DA544(actor->unk74_7 + 0x320);
+            func_8010A624(actor);
+            func_8010A570(actor);
             func_800F77E8(func_800F54E4(),
-                          (u8 *) &D_80800E84_chfloaty + param_0->unk74_7 * 12 - 600);
+                          (u8 *) &D_80800E84_chfloaty + actor->unk74_7 * 12 - 600);
             break;
         case 3:
-            func_80104580(param_0);
-            param_0->unk50 = 1.5f;
-            func_80103140(param_0, 0x924, *(u16 *) ((u8 *) param_0->unk0 + 0x16));
-            param_0->rotation[1] = func_8010CD28(param_0);
-            func_80800BD8_chfloaty(param_0, 10);
-            param_0->position[1] = func_800C6920(param_0->position, 1000.0f, -1000.0f, 0) + 100.0f;
+            func_80104580(actor);
+            actor->unk50 = 1.5f;
+            func_80103140(actor, 0x924, *(u16 *) ((u8 *) actor->unk0 + 0x16));
+            actor->rotation[1] = func_8010CD28(actor);
+            func_80800BD8_chfloaty(actor, 10);
+            actor->position[1] = func_800C6920(actor->position, 1000.0f, -1000.0f, 0) + 100.0f;
             break;
         case 4:
-            func_80104580(param_0);
-            func_8010A624(param_0);
-            func_80103140(param_0, 0x924, *(u16 *) ((u8 *) param_0->unk0 + 0x16));
-            func_80102FDC(param_0, 0x3F800000);
-            param_0->position[1] = func_800C6920(param_0->position, 1000.0f, -1000.0f, 0) + 100.0f;
+            func_80104580(actor);
+            func_8010A624(actor);
+            func_80103140(actor, 0x924, *(u16 *) ((u8 *) actor->unk0 + 0x16));
+            func_80102FDC(actor, 0x3F800000);
+            actor->position[1] = func_800C6920(actor->position, 1000.0f, -1000.0f, 0) + 100.0f;
             break;
         case 5:
-            func_800F7C0C(func_800F54E4(), 0x6E, func_80800B68_chfloaty((u8 *) param_0));
+            func_800F7C0C(func_800F54E4(), 0x6E, func_80800B68_chfloaty((u8 *) actor));
             break;
         case 6:
-            func_800CB698(param_0->unk74_7 - 0x25, 5);
-            func_800EEB9C((f32 *) &param_0->actorData[0], param_0->rotation[1], 300.0f);
-            func_800EF04C((f32 *) &param_0->actorData[0], param_0->position);
-            *(f32 *) &param_0->actorData[1] =
-                func_800C6920((f32 *) &param_0->actorData[0], 1000.0f, -1000.0f, 0) + 100.0f;
-            func_800EE7F8((f32 *) &param_0->actorData[4], param_0->position);
-            *(f32 *) &param_0->actorData[3] = 8.0f;
-            _subaddieDll_entrypoint_4(param_0, 1);
+            func_800CB698(actor->unk74_7 - 0x25, 5);
+            func_800EEB9C((f32 *) &actor->actorData[0], actor->rotation[1], 300.0f);
+            func_800EF04C((f32 *) &actor->actorData[0], actor->position);
+            *(f32 *) &actor->actorData[1] =
+                func_800C6920((f32 *) &actor->actorData[0], 1000.0f, -1000.0f, 0) + 100.0f;
+            func_800EE7F8((f32 *) &actor->actorData[4], actor->position);
+            *(f32 *) &actor->actorData[3] = 8.0f;
+            _subaddieDll_entrypoint_4(actor, 1);
     }
-    func_80102424(param_0, param_1);
+    func_80102424(actor, state);
 }
 
-s32 func_8080090C_chfloaty(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_8080090C_chfloaty(Actor *actor, s32 msg, s32 msg_arg)
 {
-    Actor *local_0;
-    switch (param_1) {
+    Actor *spawned;
+    switch (msg) {
         case 0x18:
-            if (param_0->unk70_10 != 2)
-                func_808006AC_chfloaty(param_0, 2);
+            if (actor->unk70_10 != 2)
+                func_808006AC_chfloaty(actor, 2);
             return 1;
         case 0x44:
-            func_8080007C_chfloaty(param_0, param_2);
+            func_8080007C_chfloaty(actor, msg_arg);
             return 1;
         case 0x3E:
-            if (func_800DA298(param_0->unk74_7 + 0x320) &&
-                _subaddietaxi_entrypoint_2(param_0, param_0->unk74_7 - 0x25))
-                func_808006AC_chfloaty(param_0, 5);
+            if (func_800DA298(actor->unk74_7 + 0x320) &&
+                _subaddietaxi_entrypoint_2(actor, actor->unk74_7 - 0x25))
+                func_808006AC_chfloaty(actor, 5);
             return 1;
         case 0x1F:
-            func_801015D0(param_0);
-            switch (param_0->unk70_10) {
+            func_801015D0(actor);
+            switch (actor->unk70_10) {
                 case 1:
                     func_800DF744(3, 1);
                     break;
@@ -266,25 +267,25 @@ s32 func_8080090C_chfloaty(Actor *param_0, s32 param_1, s32 param_2)
             }
             return 1;
         case 0x3D:
-            local_0 = func_80108528(0x486, param_0->position, (s32) param_0->rotation[1], &param_0);
-            func_808006AC_chfloaty(local_0, 3);
-            local_0->unk74_7 = param_0->unk74_7;
+            spawned = func_80108528(0x486, actor->position, (s32) actor->rotation[1], &actor);
+            func_808006AC_chfloaty(spawned, 3);
+            spawned->unk74_7 = actor->unk74_7;
             return 1;
         case 0x95:
-            if (_subaddietaxi_entrypoint_13(param_0, param_0->unk74_7 - 0x25,
+            if (_subaddietaxi_entrypoint_13(actor, actor->unk74_7 - 0x25,
                                             _chfloaty_entrypoint_0, 1)) {
-                func_80102FDC(param_0, 0x3F800000);
-                if (!func_800DA298(param_0->unk74_7 + 0x320))
-                    func_808006AC_chfloaty(param_0, 1);
+                func_80102FDC(actor, 0x3F800000);
+                if (!func_800DA298(actor->unk74_7 + 0x320))
+                    func_808006AC_chfloaty(actor, 1);
                 else
-                    func_808006AC_chfloaty(param_0, 4);
-            } else if (param_0->unk7A_5) {
-                func_800FFA88(param_0->unk0);
+                    func_808006AC_chfloaty(actor, 4);
+            } else if (actor->unk7A_5) {
+                func_800FFA88(actor->unk0);
                 return 1;
             }
-            if (*(u16 *) ((u8 *) param_0->unk0 + 0x14) == 0x924) {
-                func_8010A3E8(param_0, 0x3F000000);
-                *(s16 *) ((u8 *) param_0->unk0 + 0x20) = -80;
+            if (*(u16 *) ((u8 *) actor->unk0 + 0x14) == 0x924) {
+                func_8010A3E8(actor, 0x3F000000);
+                *(s16 *) ((u8 *) actor->unk0 + 0x20) = -80;
             }
             return 1;
         default:
@@ -292,12 +293,12 @@ s32 func_8080090C_chfloaty(Actor *param_0, s32 param_1, s32 param_2)
     }
 }
 
-f32 func_80800B68_chfloaty(u8 *param_0)
+f32 func_80800B68_chfloaty(u8 *actor)
 {
-    s32 local_0;
+    s32 index;
 
-    local_0 = ((u32) (u16) *(u16 *) ((s8 *) param_0 + 0x76) >> 7) - 0x32;
-    switch (local_0) {
+    index = ((u32) (u16) *(u16 *) ((s8 *) actor + 0x76) >> 7) - 0x32;
+    switch (index) {
         case 0:
             return 15.0f;
         case 1:
@@ -309,47 +310,49 @@ f32 func_80800B68_chfloaty(u8 *param_0)
     }
 }
 
-void func_80800BD8_chfloaty(s32 param_0, s32 param_1)
+void func_80800BD8_chfloaty(s32 actor, s32 unk_1)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
+    s32 track_copy;
+    s32 pos;
+    s32 track;
 
     if (func_8001210C(1) != 0) {
-        local_2 = func_800B5BE4(0x1C);
-        local_1 = param_0 + 4;
-        local_0 = local_2;
-        func_800BABB8(local_2, local_1, local_1, 0x3F800000, &D_80800EA8_chfloaty);
-        func_800BA22C(local_0, param_1);
+        track = func_800B5BE4(0x1C);
+        pos = actor + 4;
+        track_copy = track;
+        func_800BABB8(track, pos, pos, 0x3F800000, &D_80800EA8_chfloaty);
+        func_800BA22C(track_copy, unk_1);
     }
-    func_80800CA0_chfloaty(param_0);
+    func_80800CA0_chfloaty(actor);
 }
 
-void func_80800C4C_chfloaty(FloatyS *param_0)
+// Stops the proximity music layer (track 0x1C).
+void func_80800C4C_chfloaty(FloatyS *floaty)
 {
-    if (param_0->flag) {
+    if (floaty->music_on) {
         func_800FCAE0(0x1C, 0, 0x7D0);
         func_800FCA90(0x1C);
-        param_0->flag = 0;
+        floaty->music_on = 0;
     }
 }
 
-void func_80800CA0_chfloaty(param_0) Actor *param_0;
+// Proximity music: fades track 0x1C in and out by distance.
+void func_80800CA0_chfloaty(actor) Actor *actor;
 {
-    f32 local_0;
-    local_0 = func_8010C710(param_0);
-    if (local_0 > 250000.0f) {
-        if (param_0->unk64_19) {
+    f32 dist_sq;
+    dist_sq = func_8010C710(actor);
+    if (dist_sq > 250000.0f) {
+        if (actor->unk64_19) {
             func_800FCAE0(0x1C, 0, 2000);
             func_800FCA90(0x1C);
-            param_0->unk64_19 = 0;
+            actor->unk64_19 = 0;
         }
     } else {
-        if (param_0->unk64_19) {
-            func_800FCAE0(0x1C, (s32) func_800F10B4(local_0, 0.0f, 250000.0f, 22000.0f, 0), 2000);
-        } else if (!param_0->unk64_19) {
-            func_800FC618(0x1C, (s32) func_800F10B4(local_0, 0.0f, 250000.0f, 22000.0f, 0.0f));
-            param_0->unk64_19 = 1;
+        if (actor->unk64_19) {
+            func_800FCAE0(0x1C, (s32) func_800F10B4(dist_sq, 0.0f, 250000.0f, 22000.0f, 0), 2000);
+        } else if (!actor->unk64_19) {
+            func_800FC618(0x1C, (s32) func_800F10B4(dist_sq, 0.0f, 250000.0f, 22000.0f, 0.0f));
+            actor->unk64_19 = 1;
         }
     }
 }
@@ -359,6 +362,9 @@ int chfloaty_entrypoint_1()
     return (int) &D_80800EF0_chfloaty;
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C. Its tables point to functions of
+// this file; IDO schedules some of them differently unless the tables are in the same unit.
+// The extern declarations of D_80800E00/E84/EA8/EF0 are adjusted to the object (same addresses).
 extern void func_80105834();
 extern void func_801018A4();
 extern void func_80108ED0();

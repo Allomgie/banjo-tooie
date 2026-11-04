@@ -9,14 +9,15 @@ void func_80800000_chgruntylairexttowerwindow(s32 arg0)
 {
 }
 
-s32 func_80800008_chgruntylairexttowerwindow(Actor *param_0, s32 param_1, s32 param_2)
+// Message 0x40 blows the window apart; 0x90 emits a particle burst and a sound.
+s32 func_80800008_chgruntylairexttowerwindow(Actor *actor, s32 message, s32 unk_2)
 {
-    switch (param_1) {
+    switch (message) {
         case 0x40:
-            _chexploder_entrypoint_3(param_0, param_0->position, 0xC);
+            _chexploder_entrypoint_3(actor, actor->position, 0xC);
             break;
         case 0x90:
-            func_80800070_chgruntylairexttowerwindow(param_0);
+            func_80800070_chgruntylairexttowerwindow(actor);
             break;
         default:
             return 0;
@@ -24,12 +25,13 @@ s32 func_80800008_chgruntylairexttowerwindow(Actor *param_0, s32 param_1, s32 pa
     return 1;
 }
 
-int func_80800070_chgruntylairexttowerwindow(param_0)
-Actor *param_0;
+// Particle burst and sound at the window position.
+int func_80800070_chgruntylairexttowerwindow(actor)
+Actor *actor;
 {
-    func_800BABB8(0, (s32 *) ((char *) param_0 + 0x4), (s32 *) ((char *) param_0 + 0x4),
-                  *(s32 *) ((char *) param_0 + 0x38), &D_808000D0_chgruntylairexttowerwindow);
-    func_800C4AF0((s32 *) ((char *) param_0 + 0x4), &D_8080013C_chgruntylairexttowerwindow);
+    func_800BABB8(0, (s32 *) ((char *) actor + 0x4), (s32 *) ((char *) actor + 0x4),
+                  *(s32 *) ((char *) actor + 0x38), &D_808000D0_chgruntylairexttowerwindow);
+    func_800C4AF0((s32 *) ((char *) actor + 0x4), &D_8080013C_chgruntylairexttowerwindow);
 }
 
 int chgruntylairexttowerwindow_entrypoint_0()

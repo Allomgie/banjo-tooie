@@ -8,9 +8,10 @@ int chbigfoot_entrypoint_0()
     return (int) &D_808000C8_chbigfoot;
 }
 
-void func_8080000C_chbigfoot(s32 param_0)
+// Hands the actor to the shared coaster baddie behaviour, variant 0.
+void func_8080000C_chbigfoot(s32 actor)
 {
-    _sucoaster_entrypoint_0(param_0, 0);
+    _sucoaster_entrypoint_0(actor, 0);
 }
 
 extern void _sucoaster_entrypoint_2();

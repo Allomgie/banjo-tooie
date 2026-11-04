@@ -16,11 +16,12 @@ int chdiggerfly_entrypoint_1()
     return &D_80800140_chdiggerfly;
 }
 
-void func_80800018_chdiggerfly(u8 *param_0)
+// Init: shared flying-baddie AI at 0.75x scale.
+void func_80800018_chdiggerfly(u8 *actor)
 {
-    _sucoasterfly_entrypoint_1(param_0, 0);
-    func_80102FDC(param_0, *(f32 *) (param_0 + 0x38) * 0.75f);
-    func_8010A3E8(param_0, 0.75f);
+    _sucoasterfly_entrypoint_1(actor, 0);
+    func_80102FDC(actor, *(f32 *) (actor + 0x38) * 0.75f);
+    func_8010A3E8(actor, 0.75f);
 }
 
 extern void _sucoasterfly_entrypoint_3();

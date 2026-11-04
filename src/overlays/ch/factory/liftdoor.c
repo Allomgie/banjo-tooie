@@ -18,42 +18,44 @@ int chfactoryliftdoor_entrypoint_1()
     return (int) &D_80800188_chfactoryliftdoor;
 }
 
-void func_80800018_chfactoryliftdoor(u8 *param_0)
+void func_80800018_chfactoryliftdoor(u8 *door)
 {
-    u32 local_0;
-    u32 local_1;
-    s32 local_2;
+    u32 flag;
+    u32 variant;
+    s32 unk_2;
 
-    local_0 = *(u16 *) ((u8 *) param_0 + 0x76);
-    local_1 = local_0 >> 7;
-    local_0 = local_1 + 0xC;
-    local_2 = 1;
+    flag = *(u16 *) ((u8 *) door + 0x76);
+    variant = flag >> 7;
+    // Open flag is variant + 0xC.
+    flag = variant + 0xC;
+    unk_2 = 1;
 
-    if (_chdoormake_entrypoint_3(param_0, 0, 0x42B40000, 0x43960000, local_2, local_0) != 0) {
-        _chdoormake_entrypoint_5(param_0, 0x3FC00000);
-        _chdoormake_entrypoint_8(param_0, 4);
+    if (_chdoormake_entrypoint_3(door, 0, 0x42B40000, 0x43960000, unk_2, flag) != 0) {
+        _chdoormake_entrypoint_5(door, 0x3FC00000);
+        _chdoormake_entrypoint_8(door, 4);
     }
-    func_8010A800(param_0, 0);
+    func_8010A800(door, 0);
 }
 
-void func_8080008C_chfactoryliftdoor(Actor *param_0)
+void func_8080008C_chfactoryliftdoor(Actor *actor)
 {
-    s32 local_0;
+    s32 flag;
 
-    local_0 = param_0->unk74_7 + 0xC;
-    _chswitch_entrypoint_14(param_0, local_0);
-    func_80109EEC(param_0, 0x40);
-    func_80105010(param_0);
-    if (func_800DA298(local_0)) {
-        func_8010A570(param_0);
+    flag = actor->unk74_7 + 0xC;
+    _chswitch_entrypoint_14(actor, flag);
+    func_80109EEC(actor, 0x40);
+    func_80105010(actor);
+    if (func_800DA298(flag)) {
+        func_8010A570(actor);
     }
 }
 
-s32 func_808000F0_chfactoryliftdoor(Actor *param_0, s32 param_1, S16Pair param_2)
+// Call switch: sends message 7 to the lift actor (0x3B8).
+s32 func_808000F0_chfactoryliftdoor(Actor *actor, s32 msg, S16Pair data)
 {
-    if (param_1 == 7) {
-        func_80101180(0x3B8, param_1, 0);
-        func_8010A570(param_0);
+    if (msg == 7) {
+        func_80101180(0x3B8, msg, 0);
+        func_8010A570(actor);
     } else {
         return 0;
     }

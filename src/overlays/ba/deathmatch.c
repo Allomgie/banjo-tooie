@@ -3,29 +3,29 @@
 
 extern u8 D_80800550_badeathmatch[];
 typedef struct {
-    s16 local_0[8];
-    s16 local_1[8];
-    u8 local_2;
+    s16 max_ammo[8];
+    s16 ammo[8];
+    u8 current;
 } DeathmatchEggState;
 typedef struct {
     u8 pad_0[0x158];
-    DeathmatchEggState *local_0;
+    DeathmatchEggState *eggs;
 } DeathmatchEggPlayer;
 typedef struct {
     u8 pad_0[0x21];
-    u8 local_0;
-    u8 local_1;
-    u8 local_2;
+    u8 unlimited;
+    u8 timed;
+    u8 unk_23;
 } DeathmatchFlags1312;
 extern s16 func_800F0D90();
 typedef struct {
-    u8 pad0[0x20];
-    u8 unk20;
-    u8 unk21;
+    u8 pad_0[0x20];
+    u8 current;
+    u8 unlimited;
 } DeathmatchStateView;
 typedef struct {
-    u8 pad0[0x158];
-    DeathmatchStateView *unk158;
+    u8 pad_0[0x158];
+    DeathmatchStateView *egg_state;
 } DeathmatchPlayerView;
 extern void _batimer_set(PlayerState *, s32, f32);
 typedef struct {
@@ -38,91 +38,94 @@ typedef struct {
     DeathmatchScores1446 *scores;
 } DeathmatchPlayer1446;
 extern f32 _batimer_get(void *, s32);
-void badeathmatch_entrypoint_8(PlayerState *param_0, f32 param_1);
+void badeathmatch_entrypoint_8(PlayerState *player, f32 duration);
 
-void func_80800000_badeathmatch(void *arg0)
+void func_80800000_badeathmatch(void *player)
 {
-    *(s8 *) ((s8 *) *(u8 **) ((s8 *) arg0 + 0x158) + 0x20) = 1;
-    *(s8 *) ((s8 *) *(u8 **) ((s8 *) arg0 + 0x158) + 0x21) = 0;
-    *(s8 *) ((s8 *) *(u8 **) ((s8 *) arg0 + 0x158) + 0x22) = 0;
-    *(s8 *) ((s8 *) *(u8 **) ((s8 *) arg0 + 0x158) + 0x23) = 0;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x158) + 0x20) = 1;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x158) + 0x21) = 0;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x158) + 0x22) = 0;
+    *(s8 *) ((s8 *) *(u8 **) ((s8 *) player + 0x158) + 0x23) = 0;
 }
 
-int func_80800028_badeathmatch(s32 param_0)
+int func_80800028_badeathmatch(s32 index)
 {
-    u8 *local_0;
-    local_0 = &D_80800550_badeathmatch;
-    local_0--;
-    return local_0[param_0];
+    u8 *table;
+    table = &D_80800550_badeathmatch;
+    table--;
+    return table[index];
 }
 
-s32 badeathmatch_entrypoint_0(DeathmatchEggPlayer *param_0)
+// Selects the next egg type that has ammo.
+s32 badeathmatch_entrypoint_0(DeathmatchEggPlayer *player)
 {
-    DeathmatchEggState *local_0;
-    s32 local_1;
-    s32 local_2;
+    DeathmatchEggState *state;
+    s32 i;
+    s32 type;
 
-    local_0 = param_0->local_0;
-    local_2 = local_0->local_2;
-    for (local_1 = 1; local_1 < 8; local_1++) {
-        local_2 = func_80800028_badeathmatch(local_2);
-        if (local_0->local_1[local_2])
+    state = player->eggs;
+    type = state->current;
+    for (i = 1; i < 8; i++) {
+        type = func_80800028_badeathmatch(type);
+        if (state->ammo[type])
             break;
     }
-    while (!local_0->local_0[local_2]) {
-        local_2 = func_80800028_badeathmatch(local_2);
+    while (!state->max_ammo[type]) {
+        type = func_80800028_badeathmatch(type);
     }
-    param_0->local_0->local_2 = local_2;
-    func_800FC6B0(_gcegg_entrypoint_2(local_2));
-    return local_2;
+    player->eggs->current = type;
+    func_800FC6B0(_gcegg_entrypoint_2(type));
+    return type;
 }
 
-void badeathmatch_entrypoint_1(u8 *param_0)
+// Allocates the egg ammo state, only on maps with flag 0x40.
+void badeathmatch_entrypoint_1(u8 *player)
 {
-    s32 local_0;
+    s32 state;
 
     if (func_800EA068(0x40) != 0) {
-        local_0 = heap_alloc(0x30);
-        *(s32 *) ((s8 *) param_0 + 0x158) = local_0;
-        aligned8_memset(local_0, 0, 0x30);
-        func_80800000_badeathmatch(param_0);
+        state = heap_alloc(0x30);
+        *(s32 *) ((s8 *) player + 0x158) = state;
+        aligned8_memset(state, 0, 0x30);
+        func_80800000_badeathmatch(player);
     }
 }
 
-void badeathmatch_entrypoint_2(u8 *param_0)
+void badeathmatch_entrypoint_2(u8 *player)
 {
-    unsigned int new_var;
-    s32 local_0;
-    local_0 = *(s32 *) ((s8 *) param_0 + 0x158);
-    new_var = local_0;
-    if (local_0 != 0) {
-        heap_free(new_var, param_0, *(s32 *) ((s8 *) param_0 + 0x158));
-        *(s32 *) ((s8 *) param_0 + 0x158) = 0;
-        func_800C968C(func_800A4C68(param_0), 9);
+    unsigned int state_copy;
+    s32 state;
+    state = *(s32 *) ((s8 *) player + 0x158);
+    // Matching: extra temporary copy for the match.
+    state_copy = state;
+    if (state != 0) {
+        heap_free(state_copy, player, *(s32 *) ((s8 *) player + 0x158));
+        *(s32 *) ((s8 *) player + 0x158) = 0;
+        func_800C968C(func_800A4C68(player), 9);
     }
 }
 
-void badeathmatch_entrypoint_3(PlayerState *param_0)
+void badeathmatch_entrypoint_3(PlayerState *player)
 {
-    DeathmatchFlags1312 *local_0;
-    u8 local_1;
+    DeathmatchFlags1312 *state;
+    u8 unk_1;
 
-    if (func_800A3274() != 0x11 && bs_getCurrentState(param_0) != 0xD7) {
-        local_0 = *(DeathmatchFlags1312 **) ((u8 *) param_0 + 0x158);
-        if (!local_0->local_0) {
-            local_1 = local_0->local_2;
-            if (((local_1 == 0) & 1) && bainput_func_80097D28(param_0)) {
-                badeathmatch_entrypoint_0(param_0);
+    if (func_800A3274() != 0x11 && bs_getCurrentState(player) != 0xD7) {
+        state = *(DeathmatchFlags1312 **) ((u8 *) player + 0x158);
+        if (!state->unlimited) {
+            unk_1 = state->unk_23;
+            if (((unk_1 == 0) & 1) && bainput_func_80097D28(player)) {
+                badeathmatch_entrypoint_0(player);
             }
-        } else if (local_0->local_1 && _batimer_decrement(param_0, 0xD)) {
-            badeathmatch_entrypoint_8(param_0, 0.0f);
+        } else if (state->timed && _batimer_decrement(player, 0xD)) {
+            badeathmatch_entrypoint_8(player, 0.0f);
         }
     }
 }
 
-int badeathmatch_entrypoint_4(int param_0)
+int badeathmatch_entrypoint_4(int item_id)
 {
-    switch (param_0 - 0x40) {
+    switch (item_id - 0x40) {
         case 0:
             return 1;
 
@@ -145,107 +148,107 @@ int badeathmatch_entrypoint_4(int param_0)
     return 0;
 }
 
-s16 badeathmatch_entrypoint_5(u8 *param_0, s32 param_1, s32 param_2)
+s16 badeathmatch_entrypoint_5(u8 *player, s32 egg, s32 delta)
 {
-    s16 local_0;
-    s32 local_2;
-    u8 *q;
-    u8 *p;
+    s16 max_ammo;
+    s32 value;
+    u8 *entry;
+    u8 *state;
 
-    q = (u8 *) (param_1 * 2 + (s32) *(u8 **) (param_0 + 0x158));
-    local_0 = *(s16 *) q;
-    if (local_0 < 0) {
+    entry = (u8 *) (egg * 2 + (s32) *(u8 **) (player + 0x158));
+    max_ammo = *(s16 *) entry;
+    if (max_ammo < 0) {
         return 1;
     }
-    local_2 = *(s16 *) (q + 0x10) + param_2;
-    *(s16 *) (*(u8 **) (param_0 + 0x158) + param_1 * 2 + 0x10) =
-        func_800F0D90(local_2, 0, local_0, param_0);
-    if (param_2 > 0) {
-        p = *(u8 **) (param_0 + 0x158);
-        local_2 = param_1 * 16;
-        local_2 += *(s32 *) (param_0 + 0x184);
-        if (*((s16 *) p + p[0x20] + 8) == 0) {
-            p[0x20] = param_1;
+    value = *(s16 *) (entry + 0x10) + delta;
+    *(s16 *) (*(u8 **) (player + 0x158) + egg * 2 + 0x10) =
+        func_800F0D90(value, 0, max_ammo, player);
+    if (delta > 0) {
+        state = *(u8 **) (player + 0x158);
+        value = egg * 16;
+        value += *(s32 *) (player + 0x184);
+        if (*((s16 *) state + state[0x20] + 8) == 0) {
+            state[0x20] = egg;
         }
-        func_80101238(0x72, local_2);
+        func_80101238(0x72, value);
     }
-    return *(s16 *) (*(u8 **) (param_0 + 0x158) + param_1 * 2 + 0x10);
+    return *(s16 *) (*(u8 **) (player + 0x158) + egg * 2 + 0x10);
 }
 
-u8 badeathmatch_entrypoint_6(DeathmatchPlayerView *param_0)
+u8 badeathmatch_entrypoint_6(DeathmatchPlayerView *player)
 {
-    DeathmatchStateView *local_0;
-    u8 local_1;
+    DeathmatchStateView *state;
+    u8 egg;
 
-    local_0 = param_0->unk158;
-    if (local_0->unk21) {
-        local_1 = 7;
+    state = player->egg_state;
+    if (state->unlimited) {
+        egg = 7;
     } else {
-        local_1 = local_0->unk20;
+        egg = state->current;
     }
-    return local_1;
+    return egg;
 }
 
-void badeathmatch_entrypoint_7(s32 param_0, s32 param_1)
+void badeathmatch_entrypoint_7(s32 player, s32 egg)
 {
-    *(u8 *) (*(s32 *) (param_0 + 0x158) + 0x20) = param_1;
+    *(u8 *) (*(s32 *) (player + 0x158) + 0x20) = egg;
 }
 
-void badeathmatch_entrypoint_8(PlayerState *param_0, f32 param_1)
+void badeathmatch_entrypoint_8(PlayerState *player, f32 duration)
 {
-    if (param_1 != 0.0f)
-        (*(u8 **) ((u8 *) param_0 + 0x158))[0x21] = 1;
+    if (duration != 0.0f)
+        (*(u8 **) ((u8 *) player + 0x158))[0x21] = 1;
     else
-        (*(u8 **) ((u8 *) param_0 + 0x158))[0x21] = 0;
-    if (param_1 > 0.0f)
-        (*(u8 **) ((u8 *) param_0 + 0x158))[0x22] = 1;
+        (*(u8 **) ((u8 *) player + 0x158))[0x21] = 0;
+    if (duration > 0.0f)
+        (*(u8 **) ((u8 *) player + 0x158))[0x22] = 1;
     else
-        (*(u8 **) ((u8 *) param_0 + 0x158))[0x22] = 0;
-    _batimer_set(param_0, 0xD, param_1);
-    if (!(*(u8 **) ((u8 *) param_0 + 0x158))[0x21])
+        (*(u8 **) ((u8 *) player + 0x158))[0x22] = 0;
+    _batimer_set(player, 0xD, duration);
+    if (!(*(u8 **) ((u8 *) player + 0x158))[0x21])
         func_80101180(0x1CD, 0x76, 0);
 }
 
-s32 badeathmatch_entrypoint_9(DeathmatchPlayer1446 *param_0, s32 param_1)
+s32 badeathmatch_entrypoint_9(DeathmatchPlayer1446 *player, s32 egg)
 {
-    DeathmatchScores1446 *local_0;
-    s32 local_1;
-    s32 local_2;
-    s16 *local_3;
+    DeathmatchScores1446 *view;
+    s32 value;
+    s32 score;
+    s16 *slot;
 
-    local_0 = param_0->scores;
-    local_3 = local_0->states + param_1;
-    if (local_0->countdown) {
-        return (s32) (_batimer_get(param_0, 0xD) + 0.5f);
+    view = player->scores;
+    slot = view->states + egg;
+    if (view->countdown) {
+        return (s32) (_batimer_get(player, 0xD) + 0.5f);
     }
-    local_1 = local_3[0];
-    local_2 = local_3[8];
-    if (local_1 < 0) {
-        local_1 = 1;
+    value = slot[0];
+    score = slot[8];
+    if (value < 0) {
+        value = 1;
     } else {
-        local_1 = local_2;
+        value = score;
     }
-    return local_1;
+    return value;
 }
 
-void badeathmatch_entrypoint_10(u8 *param_0, s32 param_1, s32 param_2, s32 param_3)
+void badeathmatch_entrypoint_10(u8 *player, s32 egg, s32 ammo, s32 max_ammo)
 {
-    (*(s16 **) (param_0 + 0x158))[param_1 + 8] = param_2;
-    (*(s16 **) (param_0 + 0x158))[param_1] = param_3;
+    (*(s16 **) (player + 0x158))[egg + 8] = ammo;
+    (*(s16 **) (player + 0x158))[egg] = max_ammo;
 }
 
-void badeathmatch_entrypoint_11(u8 *param_0, s32 param_1, s32 param_2)
+void badeathmatch_entrypoint_11(u8 *player, s32 mask, s32 set)
 {
-    u8 *local_0;
-    u8 *local_1;
+    u8 *state_set;
+    u8 *state_clear;
 
-    if (param_2 != 0) {
-        local_0 = *(u8 **) ((s8 *) param_0 + 0x158);
-        *(u8 *) ((s8 *) local_0 + 0x23) = (u8) (*(u8 *) ((s8 *) local_0 + 0x23) | param_1);
+    if (set != 0) {
+        state_set = *(u8 **) ((s8 *) player + 0x158);
+        *(u8 *) ((s8 *) state_set + 0x23) = (u8) (*(u8 *) ((s8 *) state_set + 0x23) | mask);
         return;
     }
-    local_1 = *(u8 **) ((s8 *) param_0 + 0x158);
-    *(u8 *) ((s8 *) local_1 + 0x23) = (u8) (*(u8 *) ((s8 *) local_1 + 0x23) & ~param_1);
+    state_clear = *(u8 **) ((s8 *) player + 0x158);
+    *(u8 *) ((s8 *) state_clear + 0x23) = (u8) (*(u8 *) ((s8 *) state_clear + 0x23) & ~mask);
 }
 
 u8 D_80800550_badeathmatch[16] = {0x2, 0x4, 0x5, 0x3, 0x6, 0x1, 0x0, 0x0,

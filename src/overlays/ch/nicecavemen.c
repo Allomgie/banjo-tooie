@@ -125,108 +125,108 @@ int chnicecavemen_entrypoint_3()
     return (int) D_80801B34_chnicecavemen;
 }
 
-void func_80800030_chnicecavemen(u8 *param_0)
+void func_80800030_chnicecavemen(u8 *actor)
 {
-    s32 local_0;
-    u32 local_1;
+    s32 state;
+    u32 variant;
 
-    local_1 = (u32) (u16) *(u16 *) ((s8 *) param_0 + 0x76) >> 7;
-    *(s32 *) ((s8 *) param_0 + 0x30) = 0;
-    switch (local_1) {
+    variant = (u32) (u16) *(u16 *) ((s8 *) actor + 0x76) >> 7;
+    *(s32 *) ((s8 *) actor + 0x30) = 0;
+    switch (variant) {
         case 0x32:
-            *(s32 *) ((s8 *) param_0 + 0x28) = 0x324;
-            *(s32 *) ((s8 *) param_0 + 0x2C) = 0x16C;
+            *(s32 *) ((s8 *) actor + 0x28) = 0x324;
+            *(s32 *) ((s8 *) actor + 0x2C) = 0x16C;
             break;
         case 0x33:
-            *(s32 *) ((s8 *) param_0 + 0x28) = 0x325;
-            *(s32 *) ((s8 *) param_0 + 0x2C) = 0x16D;
+            *(s32 *) ((s8 *) actor + 0x28) = 0x325;
+            *(s32 *) ((s8 *) actor + 0x2C) = 0x16D;
             break;
         case 0x34:
-            *(s32 *) ((s8 *) param_0 + 0x28) = 0x326;
-            *(s32 *) ((s8 *) param_0 + 0x2C) = 0x16E;
+            *(s32 *) ((s8 *) actor + 0x28) = 0x326;
+            *(s32 *) ((s8 *) actor + 0x2C) = 0x16E;
     }
     if (_glcutDll_entrypoint_20() != 0) {
-        local_0 = 0xD;
-    } else if (func_800DA298(*(s32 *) ((s8 *) param_0 + 0x28)) != 0) {
-        if (func_800DA298(*(s32 *) ((s8 *) param_0 + 0x2C)) != 0) {
-            local_0 = 0xC;
+        state = 0xD;
+    } else if (func_800DA298(*(s32 *) ((s8 *) actor + 0x28)) != 0) {
+        if (func_800DA298(*(s32 *) ((s8 *) actor + 0x2C)) != 0) {
+            state = 0xC;
         } else {
-            local_0 = 0xA;
+            state = 0xA;
         }
     } else {
-        if (func_800DA298(*(s32 *) ((s8 *) param_0 + 0x2C)) != 0) {
-            local_0 = 9;
+        if (func_800DA298(*(s32 *) ((s8 *) actor + 0x2C)) != 0) {
+            state = 9;
         } else {
-            local_0 = 1;
+            state = 1;
         }
     }
-    func_80102424(param_0, local_0);
-    func_80801200_chnicecavemen(param_0);
+    func_80102424(actor, state);
+    func_80801200_chnicecavemen(actor);
 }
 
 s32 func_8080134C_chnicecavemen();
 
-void func_80800128_chnicecavemen(Actor *param_0)
+void func_80800128_chnicecavemen(Actor *actor)
 {
-    u8 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    func_800F4F34(func_800F54E4(), param_0->position, 60.0f, 50.0f);
-    _suexpression_entrypoint_10(func_80100094(param_0, 1), param_0->unk0, 0);
-    switch (param_0->unk70_10) {
+    u8 *data;
+    data = func_80100094(actor, 0);
+    func_800F4F34(func_800F54E4(), actor->position, 60.0f, 50.0f);
+    _suexpression_entrypoint_10(func_80100094(actor, 1), actor->unk0, 0);
+    switch (actor->unk70_10) {
         case 1:
-            if (func_800DA298(param_0->actorData[4])) {
+            if (func_800DA298(actor->actorData[4])) {
                 func_800F7B9C(func_800F54E4(), 0x93);
-                func_80800AB8_chnicecavemen(param_0, 8);
+                func_80800AB8_chnicecavemen(actor, 8);
             } else {
-                func_8080134C_chnicecavemen(param_0, D_80801B7C_chnicecavemen,
+                func_8080134C_chnicecavemen(actor, D_80801B7C_chnicecavemen,
                                             (s32) D_80801810_chnicecavemen, 7, 2);
             }
             break;
         case 5:
         case 6:
-            func_80801178_chnicecavemen(param_0);
-            if (*(f32 *) (local_0 + 0x10) > 0.75f) {
-                func_80800AB8_chnicecavemen(param_0, 7);
+            func_80801178_chnicecavemen(actor);
+            if (*(f32 *) (data + 0x10) > 0.75f) {
+                func_80800AB8_chnicecavemen(actor, 7);
             }
             break;
         case 7:
-            func_80801178_chnicecavemen(param_0);
-            if (func_80101DDC(param_0)) {
-                if (*(s32 *) (local_0 + 0x824)) {
-                    if (*(s32 *) (local_0 + 0x824)) {
+            func_80801178_chnicecavemen(actor);
+            if (func_80101DDC(actor)) {
+                if (*(s32 *) (data + 0x824)) {
+                    if (*(s32 *) (data + 0x824)) {
                         func_800F82D4(func_800F54E4(), 0);
-                        *(s32 *) (local_0 + 0x824) = 0;
+                        *(s32 *) (data + 0x824) = 0;
                     }
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x17D7, 14, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x17D7, 14, actor->position,
                                                   0xA2);
-                    func_80800AB8_chnicecavemen(param_0,
-                                                func_800DA298(param_0->actorData[4]) ? 4 : 2);
+                    func_80800AB8_chnicecavemen(actor,
+                                                func_800DA298(actor->actorData[4]) ? 4 : 2);
                 }
             }
             break;
         case 9:
-            if (func_800DA298(param_0->actorData[4])) {
-                func_80800AB8_chnicecavemen(param_0, 8);
+            if (func_800DA298(actor->actorData[4])) {
+                func_80800AB8_chnicecavemen(actor, 8);
             } else {
-                func_8080134C_chnicecavemen(param_0, D_80801B7C_chnicecavemen,
+                func_8080134C_chnicecavemen(actor, D_80801B7C_chnicecavemen,
                                             (s32) D_80801848_chnicecavemen, 7, 2);
             }
             break;
         case 10:
-            func_8080134C_chnicecavemen(param_0, D_80801B7C_chnicecavemen,
+            func_8080134C_chnicecavemen(actor, D_80801B7C_chnicecavemen,
                                         (s32) D_80801880_chnicecavemen, 7, 3);
             break;
         case 11:
-            if (func_80101DDC(param_0)) {
-                func_80800AB8_chnicecavemen(param_0, 12);
+            if (func_80101DDC(actor)) {
+                func_80800AB8_chnicecavemen(actor, 12);
             }
             break;
         case 12:
-            func_8080134C_chnicecavemen(param_0, D_80801B7C_chnicecavemen,
+            func_8080134C_chnicecavemen(actor, D_80801B7C_chnicecavemen,
                                         (s32) D_808018B8_chnicecavemen, 4, 4);
     }
-    func_80800CC8_chnicecavemen(param_0);
-    _subaddiepalette_entrypoint_1(param_0, local_0 + 0x14);
+    func_80800CC8_chnicecavemen(actor);
+    _subaddiepalette_entrypoint_1(actor, data + 0x14);
 }
 
 void func_808003B8_chnicecavemen(Actor *arg0)
@@ -234,59 +234,59 @@ void func_808003B8_chnicecavemen(Actor *arg0)
     _suexpression_entrypoint_8(arg0, 1);
 }
 
-int func_808003D8_chnicecavemen(Actor *param_0, s32 param_1, s32 param_2)
+int func_808003D8_chnicecavemen(Actor *actor, s32 msg, s32 arg)
 {
-    s32 local_2;
-    s32 local_0;
-    s32 local_1;
-    switch (param_1) {
+    s32 expr;
+    s32 dialog_id;
+    s32 item_dialog_id;
+    switch (msg) {
         case 0x2E:
-            func_8080077C_chnicecavemen(param_0, ((s16 *) &param_2)[0], ((s16 *) &param_2)[1]);
+            func_8080077C_chnicecavemen(actor, ((s16 *) &arg)[0], ((s16 *) &arg)[1]);
             break;
         case 0x29:
-            _subaddiepalette_entrypoint_4(param_0, (u8 *) func_80100094(param_0, 0) + 0x14);
+            _subaddiepalette_entrypoint_4(actor, (u8 *) func_80100094(actor, 0) + 0x14);
             break;
         case 0xB:
-            switch (param_2) {
+            switch (arg) {
                 case 9:
                 case 12:
                 case 16:
                     func_800F7F98(func_800F54E4(), 0);
-                    if (!func_80800C6C_chnicecavemen(param_0)) {
-                        if (func_800DA298(param_0->actorData[5]))
-                            local_0 = 0x17D9;
+                    if (!func_80800C6C_chnicecavemen(actor)) {
+                        if (func_800DA298(actor->actorData[5]))
+                            dialog_id = 0x17D9;
                         else
-                            local_0 = 0x17D4;
-                        func_80801464_chnicecavemen(param_0, 3, 1);
-                        _subaddiedialog_entrypoint_11(param_0->unk0, local_0, 0xE,
-                                                      param_0->position, 0xA2);
+                            dialog_id = 0x17D4;
+                        func_80801464_chnicecavemen(actor, 3, 1);
+                        _subaddiedialog_entrypoint_11(actor->unk0, dialog_id, 0xE,
+                                                      actor->position, 0xA2);
                     }
                     return 4;
                 case 1:
                     if (func_800F64A4(func_800F54E4(), 0x400))
-                        local_1 = 0x1811;
+                        item_dialog_id = 0x1811;
                     else
-                        local_1 = 0x17FD;
-                    func_80801464_chnicecavemen(param_0, 3, 1);
-                    _subaddiedialog_entrypoint_11(param_0->unk0, local_1, 0xE, param_0->position,
+                        item_dialog_id = 0x17FD;
+                    func_80801464_chnicecavemen(actor, 3, 1);
+                    _subaddiedialog_entrypoint_11(actor->unk0, item_dialog_id, 0xE, actor->position,
                                                   0xA2);
                     return 4;
                 default:
                     return 3;
             }
         case 0x1F:
-            func_80800624_chnicecavemen(param_0, *(s32 *) &param_2);
+            func_80800624_chnicecavemen(actor, *(s32 *) &arg);
             break;
         case 0x52:
-            _gcdialogcamera_entrypoint_3(D_808018D8_chnicecavemen, param_0->scale);
+            _gcdialogcamera_entrypoint_3(D_808018D8_chnicecavemen, actor->scale);
             break;
         case 0x57:
-            return func_808013D0_chnicecavemen(param_0, param_2 & 0xFFFF,
-                                               (u32) (param_2 & 0xFFFF0000) >> 16);
+            return func_808013D0_chnicecavemen(actor, arg & 0xFFFF,
+                                               (u32) (arg & 0xFFFF0000) >> 16);
         case 0x95:
-            local_2 = _suexpression_entrypoint_7(param_0, 1, 0xA2);
-            _suexpression_entrypoint_12(local_2, 6e+01f, 15.0f);
-            _suexpression_entrypoint_17(local_2, 800);
+            expr = _suexpression_entrypoint_7(actor, 1, 0xA2);
+            _suexpression_entrypoint_12(expr, 6e+01f, 15.0f);
+            _suexpression_entrypoint_17(expr, 800);
             break;
         default:
             return 0;
@@ -294,201 +294,203 @@ int func_808003D8_chnicecavemen(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800624_chnicecavemen(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800624_chnicecavemen(actor, arg) Actor *actor;
+s32 arg;
 {
-    s32 local_2;
-    s32 local_3;
-    NiceCavemanPalette1828 *local_0;
-    s32 local_1;
-    s32 local_4;
+    s32 is_variant_b;
+    s32 is_dance;
+    NiceCavemanPalette1828 *palette;
+    s32 anim_id;
+    s32 blend;
 
-    local_0 = (NiceCavemanPalette1828 *) func_80100094(param_0, 0);
-    local_1 = func_801022E4(param_0);
-    func_801015D0(param_0);
-    local_2 = param_0->unk6C_9 == 0x42C ? 1 : 0;
-    switch (local_1) {
+    palette = (NiceCavemanPalette1828 *) func_80100094(actor, 0);
+    anim_id = func_801022E4(actor);
+    func_801015D0(actor);
+    is_variant_b = actor->unk6C_9 == 0x42C ? 1 : 0;
+    switch (anim_id) {
         case 0x2D5:
         case 0x2D6:
-            local_3 = 1;
+            is_dance = 1;
             break;
         default:
-            local_3 = 0;
+            is_dance = 0;
             break;
     }
-    func_800DF744(3, local_2, local_3);
-    func_800DF744(4, local_2);
-    func_800DF744(5, local_3);
-    func_800DF744(7, param_0->unk74_7 - 0x31);
-    func_800DF744(8, param_0->unk74_7 - 0x31);
-    if (local_0->local_1 == 1) {
-        local_4 = (s32) func_800F12D4(local_0->local_2, 0.0f, local_0->local_3, 0.0f, 255.0f);
+    func_800DF744(3, is_variant_b, is_dance);
+    func_800DF744(4, is_variant_b);
+    func_800DF744(5, is_dance);
+    func_800DF744(7, actor->unk74_7 - 0x31);
+    func_800DF744(8, actor->unk74_7 - 0x31);
+    if (palette->local_1 == 1) {
+        blend = (s32) func_800F12D4(palette->local_2, 0.0f, palette->local_3, 0.0f, 255.0f);
     } else {
-        local_4 = local_0->local_0 == 0x7E7 ? 0 : 255;
+        blend = palette->local_0 == 0x7E7 ? 0 : 255;
     }
-    func_800DF6BC(local_4, 255);
-    _subaddiepalette_entrypoint_3(param_0, &local_0->local_0, param_1);
+    func_800DF6BC(blend, 255);
+    _subaddiepalette_entrypoint_3(actor, &palette->local_0, arg);
 }
 
-void func_8080077C_chnicecavemen(param_0, param_1, param_2) Actor *param_0;
-s32 param_1;
-s32 param_2;
+void func_8080077C_chnicecavemen(actor, dialog_id, choice) Actor *actor;
+s32 dialog_id;
+s32 choice;
 {
-    void *local_0;
+    void *data;
     s32 local_1;
     s32 local_2;
     s32 local_3;
     s32 local_4;
-    s32 local_5;
+    s32 next_state;
 
-    switch (param_1) {
+    switch (dialog_id) {
         case 0x17D5:
         case 0x1803:
-            if (param_2 > 0) {
-                local_0 = func_80100094(param_0, 0);
+            if (choice > 0) {
+                data = func_80100094(actor, 0);
                 func_800FC660(0xE);
-                func_80800AB8_chnicecavemen(param_0, func_800DA298(param_0->actorData[4]) ? 6 : 5);
-                _subaddieitem_entrypoint_0(local_0, param_0->actorData[6], -1, 1);
-                _subaddieitem_entrypoint_2(local_0);
+                func_80800AB8_chnicecavemen(actor, func_800DA298(actor->actorData[4]) ? 6 : 5);
+                _subaddieitem_entrypoint_0(data, actor->actorData[6], -1, 1);
+                _subaddieitem_entrypoint_2(data);
             } else {
-                _subaddiedialog_entrypoint_11(param_0->unk0, 0x17D6, 15, param_0->position, 0xA2);
+                _subaddiedialog_entrypoint_11(actor->unk0, 0x17D6, 15, actor->position, 0xA2);
             }
             break;
         case 0x17D7:
-            if (!func_80800BF8_chnicecavemen(param_0)) {
-                func_80801428_chnicecavemen(param_0);
+            if (!func_80800BF8_chnicecavemen(actor)) {
+                func_80801428_chnicecavemen(actor);
             }
-            func_80800AB8_chnicecavemen(param_0, func_800DA298(param_0->actorData[4]) ? 12 : 9);
+            func_80800AB8_chnicecavemen(actor, func_800DA298(actor->actorData[4]) ? 12 : 9);
             break;
         case 0x17D8:
-            func_80801508_chnicecavemen(param_0, 1, 0x30);
+            func_80801508_chnicecavemen(actor, 1, 0x30);
             func_800D1000(0x2D, 1, NULL, 1, NULL);
             break;
         case 0x17FD:
         case 0x1811:
-            func_80801428_chnicecavemen(param_0);
-            func_80800AB8_chnicecavemen(param_0, 12);
+            func_80801428_chnicecavemen(actor);
+            func_80800AB8_chnicecavemen(actor, 12);
             break;
         default:
             local_1 =
-                _subaddiedialog_entrypoint_9(param_0, param_1, (s32) D_80801810_chnicecavemen, 7);
+                _subaddiedialog_entrypoint_9(actor, dialog_id, (s32) D_80801810_chnicecavemen, 7);
             local_2 =
-                _subaddiedialog_entrypoint_9(param_0, param_1, (s32) D_80801848_chnicecavemen, 7);
+                _subaddiedialog_entrypoint_9(actor, dialog_id, (s32) D_80801848_chnicecavemen, 7);
             local_3 =
-                _subaddiedialog_entrypoint_9(param_0, param_1, (s32) D_80801880_chnicecavemen, 7);
+                _subaddiedialog_entrypoint_9(actor, dialog_id, (s32) D_80801880_chnicecavemen, 7);
             local_4 =
-                _subaddiedialog_entrypoint_9(param_0, param_1, (s32) D_808018B8_chnicecavemen, 4);
+                _subaddiedialog_entrypoint_9(actor, dialog_id, (s32) D_808018B8_chnicecavemen, 4);
             if (_subaddiedialog_entrypoint_10(local_1) || _subaddiedialog_entrypoint_10(local_3)) {
-                if (func_80801580_chnicecavemen(param_0)) {
-                    _subaddiedialog_entrypoint_11(param_0->unk0,
-                                                  func_8080126C_chnicecavemen(param_0), 0x4E,
-                                                  param_0->position, 0xA2);
+                if (func_80801580_chnicecavemen(actor)) {
+                    _subaddiedialog_entrypoint_11(actor->unk0,
+                                                  func_8080126C_chnicecavemen(actor), 0x4E,
+                                                  actor->position, 0xA2);
                 } else {
                     func_800C01A8(100, 0);
                     func_800C0850();
-                    func_80801428_chnicecavemen(param_0);
-                    func_80800AB8_chnicecavemen(param_0,
-                                                func_800DA298(param_0->actorData[4]) ? 10 : 1);
+                    func_80801428_chnicecavemen(actor);
+                    func_80800AB8_chnicecavemen(actor,
+                                                func_800DA298(actor->actorData[4]) ? 10 : 1);
                 }
             } else if (_subaddiedialog_entrypoint_10(local_2)) {
-                func_80801428_chnicecavemen(param_0);
-                func_80800AB8_chnicecavemen(param_0, 9);
+                func_80801428_chnicecavemen(actor);
+                func_80800AB8_chnicecavemen(actor, 9);
             } else if (_subaddiedialog_entrypoint_10(local_4)) {
-                if (!func_80800BF8_chnicecavemen(param_0)) {
-                    func_80801428_chnicecavemen(param_0);
+                if (!func_80800BF8_chnicecavemen(actor)) {
+                    func_80801428_chnicecavemen(actor);
                 }
-                func_80800AB8_chnicecavemen(param_0, 12);
+                func_80800AB8_chnicecavemen(actor, 12);
             } else {
-                if (func_800DA298(param_0->actorData[4])) {
-                    if (func_800DA298(param_0->actorData[5])) {
-                        local_5 = 12;
+                if (func_800DA298(actor->actorData[4])) {
+                    if (func_800DA298(actor->actorData[5])) {
+                        next_state = 12;
                     } else {
-                        local_5 = 10;
+                        next_state = 10;
                     }
-                } else if (func_800DA298(param_0->actorData[5])) {
-                    local_5 = 9;
+                } else if (func_800DA298(actor->actorData[5])) {
+                    next_state = 9;
                 } else {
-                    local_5 = 1;
+                    next_state = 1;
                 }
-                func_80801428_chnicecavemen(param_0);
-                func_80800AB8_chnicecavemen(param_0, local_5);
+                func_80801428_chnicecavemen(actor);
+                func_80800AB8_chnicecavemen(actor, next_state);
             }
     }
 }
 
-int func_80800AB8_chnicecavemen(param_0, param_1)
-Actor *param_0;
-s32 param_1;
+int func_80800AB8_chnicecavemen(actor, state)
+Actor *actor;
+s32 state;
 {
-    s32 local_0;
-    s32 local_1;
-    u32 local_2;
-    local_0 = func_80100094(param_0, 0);
-    switch (param_1) {
+    s32 data;
+    s32 food_flag;
+    u32 variant;
+    data = func_80100094(actor, 0);
+    switch (state) {
         case 7:
             break;
         case 11:
-            if (func_801021BC(param_0, 0xB) != 0) {
+            if (func_801021BC(actor, 0xB) != 0) {
                 break;
             }
-            param_1 = 0xC;
+            state = 0xC;
+        // fallthrough
         case 12:
-            func_80800C6C_chnicecavemen(param_0);
+            func_80800C6C_chnicecavemen(actor);
             break;
         case 8:
-            local_1 = 0;
-            local_2 = (u32) *(u16 *) ((char *) param_0 + 0x76) >> 7;
-            switch (local_2) {
+            food_flag = 0;
+            variant = (u32) *(u16 *) ((char *) actor + 0x76) >> 7;
+            switch (variant) {
                 case 0x32:
-                    local_1 = 0x10;
+                    food_flag = 0x10;
                     break;
                 case 0x33:
-                    local_1 = 0xC;
+                    food_flag = 0xC;
                     break;
                 case 0x34:
-                    local_1 = 9;
+                    food_flag = 9;
             }
-            func_80801508_chnicecavemen(param_0, local_1, 0x28, param_1);
+            func_80801508_chnicecavemen(actor, food_flag, 0x28, state);
             func_800F7F98(func_800F54E4(), 1);
-            if (_subaddiepalette_entrypoint_2(param_0, local_0 + 0x14, 0x7E7, 0x40400000) != 0) {
-                func_800BBCB8((f32 *) ((char *) param_0 + 0x4), 0, 1.0f, 1,
+            if (_subaddiepalette_entrypoint_2(actor, data + 0x14, 0x7E7, 0x40400000) != 0) {
+                func_800BBCB8((f32 *) ((char *) actor + 0x4), 0, 1.0f, 1,
                               &D_808018E8_chnicecavemen);
             }
             break;
     }
-    func_80102424(param_0, param_1);
+    func_80102424(actor, state);
 }
 
-int func_80800BF8_chnicecavemen(param_0)
-s32 param_0;
+// True when both 3-bit counters (0x16C, 0x324) are full and the jiggy is not yet given.
+int func_80800BF8_chnicecavemen(actor)
+s32 actor;
 {
-    int local_0;
-    s32 local_1;
+    int count_a;
+    s32 count_b;
 
     if (!func_800D0A9C(0x2D, 1)) {
-        local_0 = func_800DA980(0x16C, 3) == 3;
-        local_1 = func_800DA980(0x324, 3) == 3;
-        return local_0 && local_1;
+        count_a = func_800DA980(0x16C, 3) == 3;
+        count_b = func_800DA980(0x324, 3) == 3;
+        return count_a && count_b;
     }
     return 0;
 }
 
-int func_80800C6C_chnicecavemen(param_0)
-s32 param_0[4];
+int func_80800C6C_chnicecavemen(actor)
+s32 actor[4];
 {
     if (func_80800BF8_chnicecavemen()) {
-        func_80102424(param_0, 4);
-        _subaddiedialog_entrypoint_11(param_0[0], 0x17D8, 0xE, &param_0[1], 0xA2);
+        func_80102424(actor, 4);
+        _subaddiedialog_entrypoint_11(actor[0], 0x17D8, 0xE, &actor[1], 0xA2);
         return 1;
     }
     return 0;
 }
 
-void func_80800CC8_chnicecavemen(param_0) Actor *param_0;
+void func_80800CC8_chnicecavemen(actor) Actor *actor;
 {
-    s32 local_0;
-    f32 local_1;
-    s32 local_2;
+    s32 anim_id;
+    f32 anim_progress;
+    s32 loop_snd;
     f32 local_3[3];
     f32 local_4[3];
     f32 local_5[3];
@@ -498,291 +500,299 @@ void func_80800CC8_chnicecavemen(param_0) Actor *param_0;
     f32 local_9[3];
     f32 local_10[3];
 
-    local_0 = func_801022E4(param_0);
-    local_1 = func_80101F24(param_0);
-    local_2 = 0;
-    switch (local_0) {
+    anim_id = func_801022E4(actor);
+    anim_progress = func_80101F24(actor);
+    loop_snd = 0;
+    switch (anim_id) {
         case 0x2CD:
-            if (func_80101E14(param_0, 0.7f)) {
-                if (_subaddieskeleton_entrypoint_2(param_0->unk0, 4, local_3)) {
+            if (func_80101E14(actor, 0.7f)) {
+                if (_subaddieskeleton_entrypoint_2(actor->unk0, 4, local_3)) {
                     func_800EE7F8(local_4, local_3);
-                    func_800EF1B8(local_4, param_0->rotation[1], -50.0f);
+                    func_800EF1B8(local_4, actor->rotation[1], -50.0f);
                     local_4[1] += 30.0f;
                     func_800BABB8(0, local_3, local_4, 1.0f, D_80801BC0_chnicecavemen);
                 }
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                  D_80801CA0_chnicecavemen);
             }
-            local_2 = 1;
+            loop_snd = 1;
             break;
         case 0x2CF:
-            if (_subaddieaudioquick_entrypoint_4(param_0, param_0->position,
+            if (_subaddieaudioquick_entrypoint_4(actor, actor->position,
                                                  D_80801CB8_chnicecavemen,
                                                  D_80801CD0_chnicecavemen) &&
-                func_800DC298(0.4f) && _subaddieskeleton_entrypoint_2(param_0->unk0, 5, local_5)) {
-                func_800BBCB8(local_5, param_0->position, 1.0f, 3, D_80801BEC_chnicecavemen);
+                func_800DC298(0.4f) && _subaddieskeleton_entrypoint_2(actor->unk0, 5, local_5)) {
+                func_800BBCB8(local_5, actor->position, 1.0f, 3, D_80801BEC_chnicecavemen);
             }
-            local_2 = 0.4f < local_1;
+            loop_snd = 0.4f < anim_progress;
             break;
         case 0x2CE:
             local_6 = D_80801B8C_chnicecavemen;
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801C60_chnicecavemen,
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801C60_chnicecavemen,
                                              &local_6);
-            local_2 = local_1 < 0.6f;
+            loop_snd = anim_progress < 0.6f;
             break;
         case 0x2D0:
         case 0x2D1:
         case 0x2D2:
-            if (func_80101E4C(param_0, D_80801D1C_chnicecavemen)) {
-                func_8010D930(4, ((CavemenBits *) param_0)->unk70_0, param_0->position,
+            if (func_80101E4C(actor, D_80801D1C_chnicecavemen)) {
+                func_8010D930(4, ((CavemenBits *) actor)->unk70_0, actor->position,
                               D_80801CEC_chnicecavemen);
             }
-            if (func_80101E14(param_0, 0.83f)) {
-                func_8010D930(4, ((CavemenBits *) param_0)->unk70_0, param_0->position,
+            if (func_80101E14(actor, 0.83f)) {
+                func_8010D930(4, ((CavemenBits *) actor)->unk70_0, actor->position,
                               D_80801CF4_chnicecavemen);
             }
-            if (func_80101E14(param_0, 0.08f)) {
-                func_8010D930(4, ((CavemenBits *) param_0)->unk70_0, param_0->position,
+            if (func_80101E14(actor, 0.08f)) {
+                func_8010D930(4, ((CavemenBits *) actor)->unk70_0, actor->position,
                               D_80801D08_chnicecavemen);
             }
             break;
         case 0x2D6:
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801D28_chnicecavemen,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801D28_chnicecavemen,
                                              0.05f);
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801D38_chnicecavemen,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801D38_chnicecavemen,
                                              0.16f);
             break;
         case 0x2D4:
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801D48_chnicecavemen,
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801D48_chnicecavemen,
                                              D_80801D5C_chnicecavemen);
             break;
         case 0x2D3:
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801C60_chnicecavemen,
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801C60_chnicecavemen,
                                              D_80801D70_chnicecavemen);
             break;
         case 0x2E2:
             local_7 = 0;
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801C8C_chnicecavemen,
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801C8C_chnicecavemen,
                                              D_80801DA8_chnicecavemen);
-            if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position,
+            if (_subaddieaudioquick_entrypoint_3(actor, actor->position,
                                                  D_80801C78_chnicecavemen, 0.3f)) {
                 local_7 = 1;
                 local_8 = 4;
             }
-            if (_subaddieaudioquick_entrypoint_3(param_0, param_0->position,
+            if (_subaddieaudioquick_entrypoint_3(actor, actor->position,
                                                  D_80801D94_chnicecavemen, 0.84f)) {
                 local_7 = 1;
                 local_8 = 6;
             }
-            if (local_7 && _subaddieskeleton_entrypoint_2(param_0->unk0, local_8, local_9)) {
+            if (local_7 && _subaddieskeleton_entrypoint_2(actor->unk0, local_8, local_9)) {
                 func_800EE7F8(local_10, local_9);
-                func_800EF1B8(local_10, param_0->rotation[1] - 30.0f, -20.0f);
+                func_800EF1B8(local_10, actor->rotation[1] - 30.0f, -20.0f);
                 local_10[1] -= 30.0f;
                 func_800BBCB8(local_9, local_10, 1.0f, func_800DC128(4, 8),
                               D_80801C1C_chnicecavemen);
             }
             break;
         case 0x2E1:
-            _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_80801C8C_chnicecavemen,
+            _subaddieaudioquick_entrypoint_4(actor, actor->position, D_80801C8C_chnicecavemen,
                                              D_80801DB8_chnicecavemen);
-            _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80801C78_chnicecavemen,
+            _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80801C78_chnicecavemen,
                                              0.3f);
     }
-    _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_2, D_80801BA8_chnicecavemen);
+    _subaddieaudioloop_entrypoint_4(actor, actor->position, loop_snd, D_80801BA8_chnicecavemen);
 }
 
-int func_80801178_chnicecavemen(Actor *param_0)
+int func_80801178_chnicecavemen(Actor *actor)
 {
-    u8 *local_0;
-    f32 local_1[3];
-    local_0 = func_80100094(param_0, 0);
-    _subaddieskeleton_entrypoint_3(param_0->unk0, 4, local_1);
-    if (_subaddieitem_entrypoint_3(param_0, local_1, local_0)) {
-        *(s32 *) (local_0 + 0x824) = 1;
-        func_800F8300(func_800F54E4(), 2, param_0->position);
-        func_800DA544(param_0->actorData[5]);
+    u8 *data;
+    f32 hand_pos[3];
+    data = func_80100094(actor, 0);
+    _subaddieskeleton_entrypoint_3(actor->unk0, 4, hand_pos);
+    if (_subaddieitem_entrypoint_3(actor, hand_pos, data)) {
+        *(s32 *) (data + 0x824) = 1;
+        func_800F8300(func_800F54E4(), 2, actor->position);
+        func_800DA544(actor->actorData[5]);
         return 1;
     }
     return 0;
 }
 
-void func_80801200_chnicecavemen(param_0) u8 *param_0;
+void func_80801200_chnicecavemen(actor) u8 *actor;
 {
-    s32 sp1C;
-    s32 var_v0;
+    s32 data;
+    s32 palette_id;
 
-    sp1C = func_80100094(param_0, 0);
+    data = func_80100094(actor, 0);
 
-if ((func_800DA298(*(s32 *) ((char *) param_0 + 0x28)) != 0) || (_glcutDll_entrypoint_20() != 0)) {
-    var_v0 = 0x7E7;
+if ((func_800DA298(*(s32 *) ((char *) actor + 0x28)) != 0) || (_glcutDll_entrypoint_20() != 0)) {
+    palette_id = 0x7E7;
 } else {
 
-var_v0 = 0x7E6;
+palette_id = 0x7E6;
 
 }
-_subaddiepalette_entrypoint_0(param_0, sp1C + 0x14, var_v0 & 0xFFFF);
+_subaddiepalette_entrypoint_0(actor, data + 0x14, palette_id & 0xFFFF);
 }
 
-s32 func_8080126C_chnicecavemen(param_0)
-Actor *param_0;
+// Picks which food item (0x3CA or 0x3CB) the caveman asks for; returns the dialog id.
+s32 func_8080126C_chnicecavemen(actor)
+Actor *actor;
 {
-    s32 local_0;
+    s32 player;
 
-    local_0 = func_800F54E4();
-    if (param_0->actorData[6] == 0) {
+    player = func_800F54E4();
+    if (actor->actorData[6] == 0) {
         if (func_800DC298(0.5f)) {
-            if (func_800F640C(local_0, 0x3CA) > 0)
-                param_0->actorData[6] = 0x3CA;
+            if (func_800F640C(player, 0x3CA) > 0)
+                actor->actorData[6] = 0x3CA;
             else
-                param_0->actorData[6] = 0x3CB;
+                actor->actorData[6] = 0x3CB;
         } else {
 
-if (func_800F640C(local_0, 0x3CB) > 0)
-    param_0->actorData[6] = 0x3CB;
+if (func_800F640C(player, 0x3CB) > 0)
+    actor->actorData[6] = 0x3CB;
 else
-    param_0->actorData[6] = 0x3CA;
+    actor->actorData[6] = 0x3CA;
 }
 }
-else if (!func_800F640C(local_0, param_0->actorData[6]))
+else if (!func_800F640C(player, actor->actorData[6]))
 {
-    param_0->actorData[6] = param_0->actorData[6] == 0x3CA ? 0x3CB : 0x3CA;
+    actor->actorData[6] = actor->actorData[6] == 0x3CA ? 0x3CB : 0x3CA;
 }
-return param_0->actorData[6] == 0x3CA ? 0x17D5 : 0x1803;
+return actor->actorData[6] == 0x3CA ? 0x17D5 : 0x1803;
 }
 
-s32 func_8080134C_chnicecavemen(Actor *param_0, u8 *param_1, s32 param_2, s32 param_3, s32 param_4)
+s32 func_8080134C_chnicecavemen(Actor *actor, u8 *dialog, s32 lines, s32 line_count, s32 camera_id)
 {
-    s32 local_0;
+    s32 result;
 
-    param_1[0xE] = param_4;
-    local_0 = _subaddiedialog_entrypoint_8(param_0, param_0->position, param_1, param_2, param_3);
-    if (!local_0) {
+    dialog[0xE] = camera_id;
+    result = _subaddiedialog_entrypoint_8(actor, actor->position, dialog, lines, line_count);
+    if (!result) {
         return 0;
     }
-    if (_subaddiedialog_entrypoint_9(param_0, local_0, param_2, param_3) != 3) {
-        func_80801464_chnicecavemen(param_0, 2, 0);
+    if (_subaddiedialog_entrypoint_9(actor, result, lines, line_count) != 3) {
+        func_80801464_chnicecavemen(actor, 2, 0);
     }
     return 1;
 }
 
-int func_808013D0_chnicecavemen(param_0, param_1, param_2)
-s32 param_0[3];
-s32 param_1;
-s32 param_2;
+int func_808013D0_chnicecavemen(actor, dialog_a, dialog_b)
+s32 actor[3];
+s32 dialog_a;
+s32 dialog_b;
 {
-    if (_gcdialogcamera_entrypoint_0(param_1 | 0, param_2 | 0)) {
-        if (param_0[6] != 2) {
-            func_80801464_chnicecavemen(param_0, 2, 1);
+    // Matching: "| 0" needed for the match.
+    if (_gcdialogcamera_entrypoint_0(dialog_a | 0, dialog_b | 0)) {
+        if (actor[6] != 2) {
+            func_80801464_chnicecavemen(actor, 2, 1);
         }
         return 2;
     }
     return 1;
 }
 
-int func_80801428_chnicecavemen(param_0)
-Actor *param_0;
+int func_80801428_chnicecavemen(actor)
+Actor *actor;
 {
-    if ((*(s32 *) ((char *) (param_0) + 0x18)) != 0) {
-        _capod_entrypoint_3(0, param_0);
-        (*(s32 *) ((char *) (param_0) + 0x18)) = 0;
+    if ((*(s32 *) ((char *) (actor) + 0x18)) != 0) {
+        _capod_entrypoint_3(0, actor);
+        (*(s32 *) ((char *) (actor) + 0x18)) = 0;
     }
 }
 
-int func_80801464_chnicecavemen(param_0, param_1, param_2)
-Actor *param_0;
-s32 param_1;
-s32 param_2;
+int func_80801464_chnicecavemen(actor, arg_a, arg_b)
+Actor *actor;
+s32 arg_a;
+s32 arg_b;
 {
-    s32 local_0 = *(s32 *) ((char *) param_0 + 0x18);
-    switch (local_0) {
+    s32 cam_state = *(s32 *) ((char *) actor + 0x18);
+    switch (cam_state) {
         case 0:
-            _capod_entrypoint_2(*(s32 *) ((char *) param_0 + 0), 0x13, 0);
+            _capod_entrypoint_2(*(s32 *) ((char *) actor + 0), 0x13, 0);
+        // fallthrough
         case 1:
             _capod_entrypoint_8(1);
-            *(s32 *) ((char *) param_0 + 0x18) = 2;
+            *(s32 *) ((char *) actor + 0x18) = 2;
             _gcdialogcamera_entrypoint_3(&D_808018D8_chnicecavemen,
-                                         *(f32 *) ((char *) param_0 + 0x38));
-            _gcdialogcamera_entrypoint_4((u8 *) param_0 + 4);
-            _gcdialogcamera_entrypoint_5((u8 *) param_0 + 0x44);
+                                         *(f32 *) ((char *) actor + 0x38));
+            _gcdialogcamera_entrypoint_4((u8 *) actor + 4);
+            _gcdialogcamera_entrypoint_5((u8 *) actor + 0x44);
             _gcdialogcamera_entrypoint_8();
+        // fallthrough
         case 2:
-            _capod_entrypoint_7(param_1, param_2);
+            _capod_entrypoint_7(arg_a, arg_b);
     }
 }
 
-int func_80801508_chnicecavemen(param_0, param_1, param_2)
-s32 param_0;
-s32 param_1;
-s32 param_2;
+int func_80801508_chnicecavemen(actor, arg_a, arg_b)
+s32 actor;
+s32 arg_a;
+s32 arg_b;
 {
-    switch ((*(s32 *) ((char *) (param_0) + 0x18))) {
+    switch ((*(s32 *) ((char *) (actor) + 0x18))) {
         case 0:
-            _capod_entrypoint_2((*(s32 *) ((char *) (param_0) + 0x0)), 0x13, param_2, param_0);
+            _capod_entrypoint_2((*(s32 *) ((char *) (actor) + 0x0)), 0x13, arg_b, actor);
 
         case 2:
-            (*(s32 *) ((char *) (param_0) + 0x18)) = 1;
+            (*(s32 *) ((char *) (actor) + 0x18)) = 1;
 
         case 1:
-            _capod_entrypoint_6((*(s32 *) ((char *) (param_0) + 0x0)), param_1, param_2, param_0);
+            _capod_entrypoint_6((*(s32 *) ((char *) (actor) + 0x0)), arg_a, arg_b, actor);
     }
 }
 
-int func_80801580_chnicecavemen(param_0)
-Actor *param_0;
+int func_80801580_chnicecavemen(actor)
+Actor *actor;
 {
-    s32 local_0;
+    s32 player;
 
-    local_0 = func_800F54E4();
-    if (!func_800F64A4(local_0, 0x201)) {
+    player = func_800F54E4();
+    if (!func_800F64A4(player, 0x201)) {
         return 0;
     }
-    if (!func_8010CB84(param_0->position, 300)) {
+    if (!func_8010CB84(actor->position, 300)) {
         return 0;
     }
-    return func_800F640C(local_0, 0x3CA) > 0 || func_800F640C(local_0, 0x3CB) > 0;
+    return func_800F640C(player, 0x3CA) > 0 || func_800F640C(player, 0x3CB) > 0;
 }
 
-void func_80801604_chnicecavemen(u8 *param_0)
+void func_80801604_chnicecavemen(u8 *actor)
 {
-    u32 local_0;
+    u32 variant;
 
-    local_0 = (u32) ((u16) (*(u16 *) ((s8 *) (param_0) + (0x76)))) >> 7;
-    switch (local_0) {
+    variant = (u32) ((u16) (*(u16 *) ((s8 *) (actor) + (0x76)))) >> 7;
+    switch (variant) {
         case 0x32:;
         case 0x33:
-            _chfirefx_entrypoint_2(param_0, 0x3F99999A, 0x42480000, 0xF, 0xD);
-            (*(s32 *) ((s8 *) (param_0) + (0x28))) =
-                (s32) (((u32) ((u16) (*(u16 *) ((s8 *) (param_0) + (0x76)))) >> 7) + 0x2F2);
+            _chfirefx_entrypoint_2(actor, 0x3F99999A, 0x42480000, 0xF, 0xD);
+            (*(s32 *) ((s8 *) (actor) + (0x28))) =
+                (s32) (((u32) ((u16) (*(u16 *) ((s8 *) (actor) + (0x76)))) >> 7) + 0x2F2);
             break;
         case 0x34:
-            _chfirefx_entrypoint_2(param_0, 0x3FC00000, 0x42C80000, 0x14, 5);
-            (*(s32 *) ((s8 *) (param_0) + (0x28))) = 0x326;
-            func_80102FDC(param_0, 0x3F800000);
+            _chfirefx_entrypoint_2(actor, 0x3FC00000, 0x42C80000, 0x14, 5);
+            (*(s32 *) ((s8 *) (actor) + (0x28))) = 0x326;
+            func_80102FDC(actor, 0x3F800000);
     }
-    if ((func_800DA298((*(s32 *) ((s8 *) (param_0) + (0x28)))) != 0) ||
+    if ((func_800DA298((*(s32 *) ((s8 *) (actor) + (0x28)))) != 0) ||
         (_glcutDll_entrypoint_20() != 0)) {
-        func_8010A570(param_0);
-        func_80101FDC(param_0, 2);
+        func_8010A570(actor);
+        func_80101FDC(actor, 2);
     }
 }
 
-int func_808016E8_chnicecavemen(Actor *param_0, s32 param_1, CaveEvent60 param_2)
+int func_808016E8_chnicecavemen(Actor *actor, s32 event, CaveEvent60 arg)
 {
-    if (param_1 == 0x40) {
-        if (*(u16 *) (param_2.local_0 + 0x18) & 1) {
-            func_8010114C(param_2.local_0, 0x92, 0);
+    if (event == 0x40) {
+        if (*(u16 *) (arg.local_0 + 0x18) & 1) {
+            func_8010114C(arg.local_0, 0x92, 0);
         }
-        if (param_2.local_0) {
+        // Matching: empty block needed for the match.
+        if (arg.local_0) {
         }
-        func_8010A570(param_0);
-        func_80101FDC(param_0, 2);
-        func_800DA544(*(s32 *) ((u8 *) param_0 + 0x28));
+        func_8010A570(actor);
+        func_80101FDC(actor, 2);
+        func_800DA544(*(s32 *) ((u8 *) actor + 0x28));
         func_800FC6B0(0xE);
         return 1;
     }
-    return _chfirefx_entrypoint_5(param_0, param_1, param_2.local_0);
+    return _chfirefx_entrypoint_5(actor, event, arg.local_0);
 }
 
+// TU-NOTE: the .data of this overlay is defined in this file. The tables hold pointers to
+// functions of this file; IDO schedules some of them differently unless the tables are in the
+// same unit. D_80801A5C and D_80801AA4 are declared int[] (uses written as NAME[0]).
 extern void func_80105834();
 extern void func_801018A4();
 extern void func_80107C2C();

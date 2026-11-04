@@ -1,11 +1,13 @@
 #include "su/quiz.h"
 
+// Grunty's quiz (Tower of Tragedy): quiz state, buzz-in selection, answer timer, round flags.
+
 extern f32 D_80801050_suquiz[][3][2];
 extern f32 D_80801054_suquiz[][3][2];
 extern s8 *D_80127614;
 extern s32 func_800DC298(f32);
 typedef struct {
-    s32 local_0[4];
+    s32 ids[4];
 } Broad50QuizList;
 extern Broad50QuizList D_808010E0_suquiz;
 extern f32 func_800D9004(void);
@@ -14,19 +16,19 @@ extern f32 D_80800F74_suquiz[][2];
 extern f32 D_80800F70_suquiz[];
 extern int D_808010F0_suquiz[];
 typedef struct {
-    u8 pad0[0x18];
-    f32 f18;
-    f32 f1C;
-    u8 pad20[5];
-    u8 b25;
-    s8 b26;
-    s8 b27;
-    s8 b28;
-    s8 b29;
+    u8 pad_0[0x18];
+    f32 buzz_delay;
+    f32 elapsed;
+    u8 pad_20[5];
+    u8 round;
+    s8 unk_26;
+    s8 unk_27;
+    s8 buzzed;
+    s8 last_buzzed;
 } QuizState;
 typedef struct {
-    f32 a;
-    f32 b;
+    f32 unk_0;
+    f32 unk_4;
 } QPair;
 typedef struct {
     QPair p[6];
@@ -36,9 +38,9 @@ extern s32 func_800D3948();
 extern f32 func_800DC0C0();
 extern f32 func_800DC178(f32, f32);
 typedef struct {
-    s32 local_0;
-    f32 local_1;
-    s32 local_2;
+    s32 unk_0;
+    f32 unk_4;
+    s32 unk_8;
 } QuizPackedColor27;
 extern QuizPackedColor27 D_808010FC_suquiz[][4];
 int suquiz_entrypoint_10();
@@ -46,19 +48,19 @@ int suquiz_entrypoint_11();
 void suquiz_entrypoint_21();
 void suquiz_entrypoint_28();
 
-s32 func_80800000_suquiz(u32 param_0)
+s32 func_80800000_suquiz(u32 contestant)
 {
-    u8 local_0;
+    u8 result;
 
-    switch (param_0) {
+    switch (contestant) {
         case 0:
         case 1:
             if (suquiz_entrypoint_4() == 0) {
-                local_0 = (D_80127614 + param_0)[0x31];
+                result = (D_80127614 + contestant)[0x31];
             } else {
-                local_0 = 2;
+                result = 2;
             }
-            return local_0;
+            return result;
         case 3:
         case 4:
         case 5:
@@ -69,21 +71,22 @@ s32 func_80800000_suquiz(u32 param_0)
     }
 }
 
-f32 func_80800074_suquiz(s32 param_0, s32 param_1, s32 param_2)
+f32 func_80800074_suquiz(s32 contestant, s32 round, s32 kind)
 {
-    return D_80801050_suquiz[param_1][param_2][0];
+    return D_80801050_suquiz[round][kind][0];
 }
 
-f32 func_8080009C_suquiz(s32 param_0, s32 param_1, s32 param_2)
+f32 func_8080009C_suquiz(s32 contestant, s32 round, s32 kind)
 {
-    return D_80801054_suquiz[param_1][param_2][0];
+    return D_80801054_suquiz[round][kind][0];
 }
 
-int func_808000C4_suquiz(s32 param_0)
+int func_808000C4_suquiz(s32 player)
 {
+    // Matching: needed for the match.
     s8 _sfpad[16];
     s32 arr[2];
-    func_80015E80(param_0, &arr[0]);
+    func_80015E80(player, &arr[0]);
     return arr[1] == 1;
 }
 
@@ -113,50 +116,52 @@ void suquiz_entrypoint_0(void)
     }
 }
 
+// Per-frame: counts down the answer timer and picks who buzzes in.
 void suquiz_entrypoint_1(void)
 {
-    f32 local_0;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    Broad50QuizList local_1;
-    s32 local_6;
+    f32 dt;
+    s32 count;
+    s32 start;
+    s32 end;
+    s32 i;
+    Broad50QuizList list;
+    s32 active;
+    // Matching: empty block steers IDO's register allocation.
     if (1) {
     }
 
-    local_0 = func_800D9004();
-    local_1 = D_808010E0_suquiz;
-    local_2 = 0;
+    dt = func_800D9004();
+    list = D_808010E0_suquiz;
+    count = 0;
     if (D_80127614) {
-        local_6 = (u8) D_80127614[0x24];
+        active = (u8) D_80127614[0x24];
         if (func_800D3948())
-            local_6 = local_6 && (f32) _gcstatusDll_entrypoint_17() > 0.0f;
-        if (local_6) {
-            *(f32 *) (D_80127614 + 0x20) -= local_0;
+            active = active && (f32) _gcstatusDll_entrypoint_17() > 0.0f;
+        if (active) {
+            *(f32 *) (D_80127614 + 0x20) -= dt;
             if (*(f32 *) (D_80127614 + 0x20) <= 0.0f) {
                 func_800C3F48(0x7FFFFE90);
                 D_80127614[0x24] = 0;
             }
             func_800D2498(0x117, (s32) *(f32 *) (D_80127614 + 0x20), 0);
         }
-        *(f32 *) (D_80127614 + 0x1C) += local_0;
+        *(f32 *) (D_80127614 + 0x1C) += dt;
         if (D_80127614[0x28] == -1) {
             if (func_800D3948()) {
-                local_3 = 3;
-                local_4 = 6;
+                start = 3;
+                end = 6;
             } else {
-                local_3 = 0;
-                local_4 = 2;
+                start = 0;
+                end = 2;
             }
-            for (local_5 = local_3; local_5 <= local_4; local_5++) {
-                if (local_5 != D_80127614[0x29] && suquiz_entrypoint_11(local_5) &&
-                    func_808000C4_suquiz(suquiz_entrypoint_10(local_5))) {
-                    local_1.local_0[local_2++] = local_5;
+            for (i = start; i <= end; i++) {
+                if (i != D_80127614[0x29] && suquiz_entrypoint_11(i) &&
+                    func_808000C4_suquiz(suquiz_entrypoint_10(i))) {
+                    list.ids[count++] = i;
                 }
             }
-            if (local_2)
-                D_80127614[0x28] = local_1.local_0[func_800DC128(0, local_2)];
+            if (count)
+                D_80127614[0x28] = list.ids[func_800DC128(0, count)];
             if (D_80127614[0x28] == -1 &&
                 *(f32 *) (D_80127614 + 0x18) <= *(f32 *) (D_80127614 + 0x1C)) {
                 D_80127614[0x28] = D_80127614[0x26];
@@ -176,6 +181,7 @@ s32 suquiz_entrypoint_2(void)
     }
 }
 
+// Current quiz round from flags 0x441/0x442.
 int suquiz_entrypoint_3()
 {
     if (func_800DA298(0x441)) {
@@ -226,9 +232,11 @@ int suquiz_entrypoint_4()
 int suquiz_entrypoint_5()
 {
     if (func_800DA298(0x6B6)) {
+        // Matching: needed for the match.
         int *ptr = &((int *) &D_80127614)[0];
         return *(s8 *) (*ptr + 0x28) + 1 != 0;
     }
+    // Matching: needed for the match.
     {
         return 0;
     }
@@ -266,19 +274,19 @@ s32 suquiz_entrypoint_9(s32 param_0)
     return 0;
 }
 
-int suquiz_entrypoint_10(param_0)
-s32 param_0;
+int suquiz_entrypoint_10(contestant)
+s32 contestant;
 {
     if (func_800DA298(0x6B6))
-        return *(D_80127614 + param_0 + 0x2A);
+        return *(D_80127614 + contestant + 0x2A);
     return 0;
 }
 
-int suquiz_entrypoint_11(param_0)
-s32 param_0;
+int suquiz_entrypoint_11(contestant)
+s32 contestant;
 {
     if (func_800DA298(0x6B6)) {
-        return (suquiz_entrypoint_10(param_0) + 1) != 0;
+        return (suquiz_entrypoint_10(contestant) + 1) != 0;
     }
     return 0;
 }
@@ -319,6 +327,7 @@ s32 suquiz_entrypoint_17()
     return func_800DA298(FLAG2_6E3_UNK);
 }
 
+// Sets the round flags 0x441/0x442.
 void suquiz_entrypoint_18(u32 param_0)
 {
     switch (param_0) {
@@ -348,65 +357,66 @@ void suquiz_entrypoint_18(u32 param_0)
     }
 }
 
-void suquiz_entrypoint_19(s32 param_0)
+// Picks who buzzes in this round and after what delay.
+void suquiz_entrypoint_19(s32 round)
 {
     s32 i;
     s32 end;
     s32 start;
-    s32 r;
-    s32 temp;
+    s32 multi;
+    s32 kind;
     s32 unused1;
     s32 unused2;
-    f32 sp38;
-    f32 v;
-    f32 f20;
+    f32 chance;
+    f32 roll;
+    f32 delay;
 
-    switch (param_0) {
+    switch (round) {
         case 0:
         case 2:
-            ((QuizState *) D_80127614)->b26 = -1;
-            ((QuizState *) D_80127614)->b28 = -1;
-            ((QuizState *) D_80127614)->b29 = -1;
+            ((QuizState *) D_80127614)->unk_26 = -1;
+            ((QuizState *) D_80127614)->buzzed = -1;
+            ((QuizState *) D_80127614)->last_buzzed = -1;
             break;
         case 1:
-            ((QuizState *) D_80127614)->b26 = -1;
+            ((QuizState *) D_80127614)->unk_26 = -1;
             break;
         case 4:
-            ((QuizState *) D_80127614)->b29 = ((QuizState *) D_80127614)->b28;
-            ((QuizState *) D_80127614)->b26 = -1;
-            ((QuizState *) D_80127614)->b28 = -1;
+            ((QuizState *) D_80127614)->last_buzzed = ((QuizState *) D_80127614)->buzzed;
+            ((QuizState *) D_80127614)->unk_26 = -1;
+            ((QuizState *) D_80127614)->buzzed = -1;
             break;
         case 5:
             break;
     }
-    switch (param_0) {
+    switch (round) {
         case 0:
         case 1:
         case 2:
         case 4:
-            r = func_800D3948();
+            multi = func_800D3948();
             end = 2;
-            if (r != 0) {
+            if (multi != 0) {
                 start = 3;
                 end = 6;
             } else {
                 start = 0;
             }
             for (i = start; i <= end; i++) {
-                if (i != ((QuizState *) D_80127614)->b29 && suquiz_entrypoint_9(i) == 0 &&
+                if (i != ((QuizState *) D_80127614)->last_buzzed && suquiz_entrypoint_9(i) == 0 &&
                     suquiz_entrypoint_11(i) == 0) {
-                    temp = func_80800000_suquiz(i);
-                    f20 = func_80800074_suquiz(i, param_0, temp);
-                    if (func_800DC0C0() <= f20) {
+                    kind = func_80800000_suquiz(i);
+                    delay = func_80800074_suquiz(i, round, kind);
+                    if (func_800DC0C0() <= delay) {
                         end = suquiz_entrypoint_4();
-                        f20 = func_800DC178(D_80800F90_suquiz[end].p[param_0].a,
-                                            D_80800F90_suquiz[suquiz_entrypoint_4()].p[param_0].b -
+                        delay = func_800DC178(D_80800F90_suquiz[end].p[round].unk_0,
+                                            D_80800F90_suquiz[suquiz_entrypoint_4()].p[round].unk_4 -
                                                 0.4f);
-                        sp38 = func_8080009C_suquiz(i, param_0, temp);
-                        v = func_800DC0C0();
-                        ((QuizState *) D_80127614)->b26 = i;
-                        ((QuizState *) D_80127614)->f18 = f20;
-                        ((QuizState *) D_80127614)->b27 = v <= sp38;
+                        chance = func_8080009C_suquiz(i, round, kind);
+                        roll = func_800DC0C0();
+                        ((QuizState *) D_80127614)->unk_26 = i;
+                        ((QuizState *) D_80127614)->buzz_delay = delay;
+                        ((QuizState *) D_80127614)->unk_27 = roll <= chance;
                         break;
                     }
                 }
@@ -414,8 +424,8 @@ void suquiz_entrypoint_19(s32 param_0)
 
             break;
     }
-    ((QuizState *) D_80127614)->f1C = 0.0f;
-    ((QuizState *) D_80127614)->b25 = param_0;
+    ((QuizState *) D_80127614)->elapsed = 0.0f;
+    ((QuizState *) D_80127614)->round = round;
 }
 
 void suquiz_entrypoint_20(s32 param_0)
@@ -429,10 +439,10 @@ void suquiz_entrypoint_20(s32 param_0)
     }
 }
 
-void suquiz_entrypoint_21(param_0, param_1) s32 param_0;
-unsigned long param_1;
+void suquiz_entrypoint_21(contestant, value) s32 contestant;
+unsigned long value;
 {
-    *(s8 *) ((s8 *) (D_80127614 + param_0) + 0x2A) = param_1;
+    *(s8 *) ((s8 *) (D_80127614 + contestant) + 0x2A) = value;
 }
 
 int suquiz_entrypoint_22(s32 param_0, s32 param_1)
@@ -441,6 +451,7 @@ int suquiz_entrypoint_22(s32 param_0, s32 param_1)
     func_800EE7F8((int) D_80127614 + 0xC, param_1);
 }
 
+// Starts the answer timer.
 void suquiz_entrypoint_23(void)
 {
     if (func_800D3948() != 0) {
@@ -455,12 +466,12 @@ void suquiz_entrypoint_23(void)
 
 void suquiz_entrypoint_24(s32 param_0, unsigned int param_1)
 {
-    s32 new_var;
+    s32 unk_0;
     *(s16 *) ((s8 *) (s16 *) D_80127614 + 0x34) = param_1;
     func_800DA544(0x6E3);
     func_800DA524(0x6EB);
-    new_var = param_0;
-    _glcutDll_entrypoint_6(new_var, 0x8A);
+    unk_0 = param_0;
+    _glcutDll_entrypoint_6(unk_0, 0x8A);
 }
 
 int suquiz_entrypoint_25()
@@ -486,9 +497,9 @@ s32 param_1;
 s32 param_2;
 {
     func_800C3F48(
-        ((D_808010FC_suquiz[param_1][param_0].local_0 & 0x7FF) +
-         (((D_808010FC_suquiz[param_1][param_0].local_2 >> 5) & 0x3FF) << 11)) +
-        (u32) ((u16) (u32) (D_808010FC_suquiz[param_1][param_0].local_1 * 1023.0f) << 21));
+        ((D_808010FC_suquiz[param_1][param_0].unk_0 & 0x7FF) +
+         (((D_808010FC_suquiz[param_1][param_0].unk_8 >> 5) & 0x3FF) << 11)) +
+        (u32) ((u16) (u32) (D_808010FC_suquiz[param_1][param_0].unk_4 * 1023.0f) << 21));
 }
 
 f32 D_80800F70_suquiz[1] = {1.8e+02f};

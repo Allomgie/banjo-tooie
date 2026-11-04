@@ -20,65 +20,67 @@ int *chfactoryflypad_entrypoint_1()
     return &D_80800298_chfactoryflypad;
 }
 
-void func_80800018_chfactoryflypad(s32 arg0)
+void func_80800018_chfactoryflypad(s32 actor)
 {
-    _chswitch_entrypoint_7(arg0, FLAG_16B_UNK);
-    _chswitch_entrypoint_9(arg0);
+    _chswitch_entrypoint_7(actor, FLAG_16B_UNK);
+    _chswitch_entrypoint_9(actor);
 }
 
-int func_80800044_chfactoryflypad(s32 param_0, s32 param_1)
+int func_80800044_chfactoryflypad(s32 actor, s32 msg)
 {
-    if (param_1 == 7) {
+    if (msg == 7) {
         _glcutDll_entrypoint_6(0x100, 0x42);
         return 1;
     }
-    return _chswitch_entrypoint_10(param_0, param_1);
+    return _chswitch_entrypoint_10(actor, msg);
 }
 
-void func_80800080_chfactoryflypad(s32 arg0)
+void func_80800080_chfactoryflypad(s32 actor)
 {
 }
 
-void func_80800088_chfactoryflypad(Actor *param_0)
+void func_80800088_chfactoryflypad(Actor *actor)
 {
-    s32 local_0 = 0;
-    if (((u32) *(u16 *) ((char *) param_0 + 0x76) >> 7) == 0x32 &&
+    s32 shown = 0;
+    if (((u32) *(u16 *) ((char *) actor + 0x76) >> 7) == 0x32 &&
         _glcutDll_entrypoint_19(0x42) != 0) {
-        func_80108B04(param_0, 0);
-        local_0 = 1;
+        func_80108B04(actor, 0);
+        shown = 1;
     }
     if (_glcutDll_entrypoint_19(0x42) == 0 && func_800DA298(0x16B) != 0) {
-        func_80108B04(param_0, 0);
-        local_0 = 1;
+        func_80108B04(actor, 0);
+        shown = 1;
     }
-    if (local_0 == 0 && _glcutDll_entrypoint_19(0x42) == 0) {
-        func_800FFAB0(param_0);
+    if (shown == 0 && _glcutDll_entrypoint_19(0x42) == 0) {
+        func_800FFAB0(actor);
     }
 }
 
-s32 func_80800130_chfactoryflypad(Actor *param_0, s32 param_1, FlypadMessage29 param_2)
+s32 func_80800130_chfactoryflypad(Actor *actor, s32 msg, FlypadMessage29 data)
 {
-    Actor *local_0;
-    switch (param_1) {
+    Actor *spawned;
+    switch (msg) {
+        // Spawn the pad with the appear effect.
         case 0x3D:
-            local_0 = func_801084B0(0x234, &param_0);
+            spawned = func_801084B0(0x234, &actor);
             if (_glcutDll_entrypoint_19(0x42))
-                _chappearfx_entrypoint_1(local_0, 0x22, 2, 1.0f);
-            func_800FFAB0(param_0);
+                _chappearfx_entrypoint_1(spawned, 0x22, 2, 1.0f);
+            func_800FFAB0(actor);
             break;
+        // Camera goes to the cutscene pod.
         case 0x49:
-            if (param_0->unk74_7 == 0x32 && _glcutDll_entrypoint_19(0x42)) {
-                _capod_entrypoint_13(param_0->unk0,
-                                     _subaddiefind_entrypoint_1(param_0, 0x42F, -1, 0)->unk0, 5,
+            if (actor->unk74_7 == 0x32 && _glcutDll_entrypoint_19(0x42)) {
+                _capod_entrypoint_13(actor->unk0,
+                                     _subaddiefind_entrypoint_1(actor, 0x42F, -1, 0)->unk0, 5,
                                      0x900);
                 break;
             }
             return 0;
         case 0xC:
-            func_80108B04(param_0, 0);
+            func_80108B04(actor, 0);
             return 3;
         case 0x95:
-            func_80800088_chfactoryflypad(param_0);
+            func_80800088_chfactoryflypad(actor);
             break;
         default:
             return 0;

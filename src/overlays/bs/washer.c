@@ -2,6 +2,9 @@
 #include "overlays/ba/playerstate.h"
 #include "overlays/ba/yaw.h"
 
+// TU-NOTE: The overlay's .data is defined at the bottom of this file; tables holding function
+// pointers must be in the same unit, otherwise IDO's assembler schedules those functions differently.
+
 extern void func_800C2FDC(u8);
 
 extern void baphysics_set_target_horizontal_velocity(Actor *a0, f32 a1);
@@ -92,13 +95,13 @@ extern int baanim_isStopped(PlayerState *);
 
 void func_80800000_bswasher(PlayerState *param_0)
 {
-    f32 local_0;
+    f32 zone_pos;
 
-    local_0 = bastick_getZonePosition(param_0);
+    zone_pos = bastick_getZonePosition(param_0);
     if (bastick_getZone(param_0) == 0) {
         baphysics_set_target_horizontal_velocity(param_0, 0.0f);
     } else {
-        baphysics_set_target_horizontal_velocity(param_0, func_800F1214(local_0, 30.0f, 900.0f));
+        baphysics_set_target_horizontal_velocity(param_0, func_800F1214(zone_pos, 30.0f, 900.0f));
     }
 }
 
@@ -162,52 +165,52 @@ s32 param_0;
 
 void bswasher_entrypoint_0(s32 param_0)
 {
-    f32 local_0[3];
-    s32 local_1;
+    f32 pos[3];
+    s32 preset;
 
-    local_1 = func_800B5BE4(8);
-    func_8009C128(param_0, local_0);
-    func_800BABB8(local_1, local_0, 0, 0x3F800000, &D_80801D60_bswasher);
+    preset = func_800B5BE4(8);
+    func_8009C128(param_0, pos);
+    func_800BABB8(preset, pos, 0, 0x3F800000, &D_80801D60_bswasher);
 }
 
 void func_80800300_bswasher(param_0) PlayerState *param_0;
 {
-    f32 local_1;
-    f32 local_0;
+    f32 wobble_scale;
+    f32 speed;
 
     _bawasher_entrypoint_4(param_0, func_800F1DCC(yaw_getIdeal(param_0), yaw_get(param_0)));
-    local_0 = func_8009BB5C(param_0);
-    if (local_0 > 1.0f) {
-        local_0 = func_800F10B4(local_0, 30.0f, 900.0f, 45.0f, 1350.0f);
+    speed = func_8009BB5C(param_0);
+    if (speed > 1.0f) {
+        speed = func_800F10B4(speed, 30.0f, 900.0f, 45.0f, 1350.0f);
     } else {
-        local_0 = 0.0f;
+        speed = 0.0f;
     }
-    _bawasher_entrypoint_5(param_0, local_0);
-    local_0 = func_8009BB5C(param_0);
-    if (local_0 > 0.0f) {
-        local_1 = func_800F10B4(local_0, 30.0f, 900.0f, 0.8f, 1.25f);
+    _bawasher_entrypoint_5(param_0, speed);
+    speed = func_8009BB5C(param_0);
+    if (speed > 0.0f) {
+        wobble_scale = func_800F10B4(speed, 30.0f, 900.0f, 0.8f, 1.25f);
     } else {
-        local_1 = 0.8f;
+        wobble_scale = 0.8f;
     }
     if (!player_isStable(param_0)) {
-        func_800F13F0(1.9f, local_1 + 0.3f);
+        func_800F13F0(1.9f, wobble_scale + 0.3f);
     }
     _bawasher_entrypoint_9(param_0);
 }
 
 void func_8080042C_bswasher(Actor *param_0, s32 param_1)
 {
-    s32 *local_0;
+    s32 *anim_ctrl;
     switch (param_1) {
         case 1: {
-            local_0 = (s32 *) baanim_getAnimCtrlPtr(param_0);
-            anctrl_reset(local_0);
-            anctrl_setSmoothTransition(local_0, 0);
-            anctrl_setIndex(local_0, 0x32);
-            anctrl_setSubrange(local_0, 0, 0x3E821965);
-            anctrl_setDuration(local_0, 0x40200000);
-            anctrl_setPlaybackType(local_0, 1);
-            anctrl_start(local_0);
+            anim_ctrl = (s32 *) baanim_getAnimCtrlPtr(param_0);
+            anctrl_reset(anim_ctrl);
+            anctrl_setSmoothTransition(anim_ctrl, 0);
+            anctrl_setIndex(anim_ctrl, 0x32);
+            anctrl_setSubrange(anim_ctrl, 0, 0x3E821965);
+            anctrl_setDuration(anim_ctrl, 0x40200000);
+            anctrl_setPlaybackType(anim_ctrl, 1);
+            anctrl_start(anim_ctrl);
             func_8009D820(param_0, 0x3FE66666);
             break;
         }
@@ -327,16 +330,16 @@ s32 func_808008BC_bswasher(Actor *this)
 
 void func_808008F4_bswasher(void *param_0)
 {
-    void *local_0;
+    void *anim_ctrl;
 
     func_808001A8_bswasher(param_0);
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    anctrl_reset(local_0);
-    anctrl_setIndex(local_0, 0x355);
-    anctrl_setStart(local_0, 0.5036000013f);
-    anctrl_setDuration(local_0, 0x3F333333);
-    anctrl_setPlaybackType(local_0, 3);
-    anctrl_start(local_0);
+    anim_ctrl = baanim_getAnimCtrlPtr(param_0);
+    anctrl_reset(anim_ctrl);
+    anctrl_setIndex(anim_ctrl, 0x355);
+    anctrl_setStart(anim_ctrl, 0.5036000013f);
+    anctrl_setDuration(anim_ctrl, 0x3F333333);
+    anctrl_setPlaybackType(anim_ctrl, 3);
+    anctrl_start(anim_ctrl);
     func_8009FFD8(param_0, 1, 3, 3, 6);
     func_808000BC_bswasher(param_0);
     *(s32 *) ((u8 *) param_0 + 0x15C) = 0;
@@ -344,15 +347,15 @@ void func_808008F4_bswasher(void *param_0)
 
 void func_8080099C_bswasher(PlayerState *param_0)
 {
-    s32 local_0;
-    void *local_1;
-    f32 local_2[3];
+    s32 next_state;
+    void *anim_ctrl;
+    f32 vec[3];
 
-    local_0 = 0;
-    local_1 = baanim_getAnimCtrlPtr(param_0);
+    next_state = 0;
+    anim_ctrl = baanim_getAnimCtrlPtr(param_0);
     func_8009D3A8(param_0, 0);
     func_80800000_bswasher(param_0);
-    func_8009BB24(param_0, local_2);
+    func_8009BB24(param_0, vec);
     switch (param_0->unk15C.word) {
         case 0:
             if (func_8008DF8C(param_0, 0x82)) {
@@ -371,14 +374,14 @@ void func_8080099C_bswasher(PlayerState *param_0)
             break;
     }
     if (player_isStable(param_0) && (bastick_getZone(param_0) > 0 ||
-                                     (param_0->unk15C.word == 2 && anctrl_isStopped(local_1)))) {
+                                     (param_0->unk15C.word == 2 && anctrl_isStopped(anim_ctrl)))) {
         if (baflag_isTrue(param_0, 0x19))
-            local_0 = _badrone_entrypoint_28(param_0);
+            next_state = _badrone_entrypoint_28(param_0);
         else
-            local_0 = 0x32;
+            next_state = 0x32;
     }
     func_80800300_bswasher(param_0);
-    bs_setState(param_0, local_0);
+    bs_setState(param_0, next_state);
 }
 
 int bswasher_entrypoint_3(s32 param_0)
@@ -388,18 +391,18 @@ int bswasher_entrypoint_3(s32 param_0)
 
 void func_80800B08_bswasher(PlayerState *param_0)
 {
-    void *local_0;
+    void *anim_ctrl;
 
     func_808001A8_bswasher(param_0);
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    anctrl_reset(local_0);
-    anctrl_setSmoothTransition(local_0, 0);
-    anctrl_setIndex(local_0, 0x355);
-    anctrl_setSubrange(local_0, 0.0f, 0x3F000000);
-    anctrl_setDuration(local_0, 0x3F800000);
-    anctrl_setStart(local_0, 0.15f);
-    anctrl_setPlaybackType(local_0, 1);
-    anctrl_start(local_0);
+    anim_ctrl = baanim_getAnimCtrlPtr(param_0);
+    anctrl_reset(anim_ctrl);
+    anctrl_setSmoothTransition(anim_ctrl, 0);
+    anctrl_setIndex(anim_ctrl, 0x355);
+    anctrl_setSubrange(anim_ctrl, 0.0f, 0x3F000000);
+    anctrl_setDuration(anim_ctrl, 0x3F800000);
+    anctrl_setStart(anim_ctrl, 0.15f);
+    anctrl_setPlaybackType(anim_ctrl, 1);
+    anctrl_start(anim_ctrl);
     func_8009FFD8(param_0, 1, 3, 1, 6);
     func_808000BC_bswasher(param_0);
     if (bastick_distance(param_0) != 0.0f) {

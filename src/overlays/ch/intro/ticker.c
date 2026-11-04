@@ -19,41 +19,43 @@ extern f32 func_800D9004(void);
 extern f32 func_800D8FF8(void);
 extern void _glintrosyncDll_entrypoint_4(f32);
 typedef struct {
-    s16 local_0;
-    s16 local_1;
+    s16 map;
+    s16 next_map;
 } IntroTickerEntry;
 extern IntroTickerEntry D_808008C4_chintroticker[28];
 extern void *D_80800934_chintroticker;
 
-void func_80800000_chintroticker(Actor *param_0)
+// Starts the music and sound effect listed for the current map.
+void func_80800000_chintroticker(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 i;
+    s32 map;
 
-    local_1 = func_800EA05C();
-    for (local_0 = 0; local_0 < 15; local_0++) {
-        if (D_80800830_chintroticker[local_0].map == local_1) {
-            if (D_80800830_chintroticker[local_0].music != -1) {
-                if (func_800FCCD4(D_80800830_chintroticker[local_0].music)) {
-                    func_800FCAE0(D_80800830_chintroticker[local_0].music, 0, 0x2EE0);
-                    func_800FCA90(D_80800830_chintroticker[local_0].music);
+    map = func_800EA05C();
+    for (i = 0; i < 15; i++) {
+        if (D_80800830_chintroticker[i].map == map) {
+            if (D_80800830_chintroticker[i].music != -1) {
+                if (func_800FCCD4(D_80800830_chintroticker[i].music)) {
+                    func_800FCAE0(D_80800830_chintroticker[i].music, 0, 0x2EE0);
+                    func_800FCA90(D_80800830_chintroticker[i].music);
                 }
             }
-            if (D_80800830_chintroticker[local_0].effect != -1) {
-                func_800FC6B0(D_80800830_chintroticker[local_0].effect);
+            if (D_80800830_chintroticker[i].effect != -1) {
+                func_800FC6B0(D_80800830_chintroticker[i].effect);
             }
         }
     }
 }
 
-s32 func_808000B0_chintroticker(param_0, param_1)
-Actor *param_0;
-s32 param_1;
+// Classifies the map into a sequence group stored in the actor.
+s32 func_808000B0_chintroticker(actor, map)
+Actor *actor;
+s32 map;
 {
-    s32 local_0;
+    s32 group;
 
-    local_0 = 0;
-    switch (param_1) {
+    group = 0;
+    switch (map) {
         case 0x167:
             0;
             break;
@@ -69,7 +71,7 @@ s32 param_1;
         case 0xAA:
         case 0xAB:
         case 0xAC:
-            local_0 = 2;
+            group = 2;
             break;
         case 0x17E:
         case 0x18C:
@@ -77,7 +79,7 @@ s32 param_1;
         case 0x18E:
         case 0x18F:
         case 0x190:
-            local_0 = 3;
+            group = 3;
             break;
         case 0x192:
         case 0x193:
@@ -86,28 +88,28 @@ s32 param_1;
         case 0x197:
         case 0x198:
         case 0x199:
-            local_0 = 4;
+            group = 4;
             break;
         case 0x191:
         case 0x196:
-            local_0 = 5;
+            group = 5;
             break;
         case 0x18B:
-            local_0 = 1;
+            group = 1;
             break;
     }
-    if (D_808008A8_chintroticker[local_0])
-        _gcfrontend_entrypoint_9(D_808008A8_chintroticker[local_0]);
-    param_0->unk79_4 = local_0;
+    if (D_808008A8_chintroticker[group])
+        _gcfrontend_entrypoint_9(D_808008A8_chintroticker[group]);
+    actor->unk79_4 = group;
     return 1;
 }
 
-void func_80800188_chintroticker(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800188_chintroticker(actor, map) Actor *actor;
+s32 map;
 {
-    if (param_1 == 0xA1 || param_1 == 0x18B || param_1 == 0x18E || param_1 == 0x194 ||
-        param_1 == 0x196) {
-        switch (param_0->unk79_4) {
+    if (map == 0xA1 || map == 0x18B || map == 0x18E || map == 0x194 ||
+        map == 0x196) {
+        switch (actor->unk79_4) {
             case 0:
             case 5:
                 break;
@@ -130,16 +132,16 @@ s32 param_1;
     }
 }
 
-void func_80800254_chintroticker(param_0) u8 *param_0;
+void func_80800254_chintroticker(actor) u8 *actor;
 {
-    int new_var2;
-    u8 new_var;
-    u32 temp_t7;
-    new_var2 = 0x79;
-    new_var = *(u8 *) ((s8 *) param_0 + new_var2);
-    new_var2 = new_var;
-    temp_t7 = (u8) new_var2 >> 4;
-    switch (temp_t7) {
+    int offset;
+    u8 byte;
+    u32 group;
+    offset = 0x79;
+    byte = *(u8 *) ((s8 *) actor + offset);
+    offset = byte;
+    group = (u8) offset >> 4;
+    switch (group) {
         case 2:
             func_800DA524(0x578);
             return;
@@ -162,34 +164,35 @@ void func_80800254_chintroticker(param_0) u8 *param_0;
     }
 }
 
-void func_808002DC_chintroticker(Actor *param_0)
+void func_808002DC_chintroticker(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 i;
+    s32 map;
 
-    local_1 = func_800EA05C();
-    for (local_0 = 0; local_0 < 1; local_0++) {
-        if (local_1 == D_808008C0_chintroticker[local_0]) {
+    map = func_800EA05C();
+    for (i = 0; i < 1; i++) {
+        if (map == D_808008C0_chintroticker[i]) {
             _glintrosyncDll_entrypoint_2(0.0f);
         }
     }
-    if (!func_808000B0_chintroticker(param_0, local_1)) {
-        func_800FFAB0(param_0);
+    if (!func_808000B0_chintroticker(actor, map)) {
+        func_800FFAB0(actor);
     } else {
-        func_80800188_chintroticker(param_0, local_1);
+        func_80800188_chintroticker(actor, map);
         if (_glcutDll_entrypoint_18() == 0x68) {
-            param_0->unk64_20 = 1;
+            actor->unk64_20 = 1;
         }
-        func_80800000_chintroticker(param_0);
-        ((f32 *) param_0->actorData)[5] = ((f32 *) param_0->actorData)[4] = 0;
+        func_80800000_chintroticker(actor);
+        ((f32 *) actor->actorData)[5] = ((f32 *) actor->actorData)[4] = 0;
     }
 }
 
+// Empty callback.
 void func_808003BC_chintroticker(s32 arg0)
 {
 }
 
-void func_808003C4_chintroticker(param_0) Actor *param_0;
+void func_808003C4_chintroticker(actor) Actor *actor;
 {
     func_80800254_chintroticker();
     if (func_800D395C()) {
@@ -202,7 +205,7 @@ void func_808003C4_chintroticker(param_0) Actor *param_0;
         _glcutDll_entrypoint_17();
         return;
     }
-    switch (param_0->unk79_4) {
+    switch (actor->unk79_4) {
         case 2:
             func_800A7990(0xAF, 4, 1);
             break;
@@ -218,41 +221,42 @@ void func_808003C4_chintroticker(param_0) Actor *param_0;
     }
 }
 
-void func_808004A8_chintroticker(Actor *param_0, s32 param_1)
+void func_808004A8_chintroticker(Actor *actor, s32 next_map)
 {
     if (!func_800A8264()) {
-        if (param_1 >= 0) {
-            if (param_0->unk64_20) {
+        if (next_map >= 0) {
+            if (actor->unk64_20) {
                 _glcutDll_entrypoint_14(1);
-                _glcutDll_entrypoint_24(param_1, -1, -1);
+                _glcutDll_entrypoint_24(next_map, -1, -1);
             } else
-                func_800A7990(param_1, 0, 1);
+                func_800A7990(next_map, 0, 1);
         } else
-            func_808003C4_chintroticker(param_0);
+            func_808003C4_chintroticker(actor);
     }
 }
 
-void func_80800530_chintroticker(s32 param_0, s32 param_1)
+// Matching: the line breaks in this function are needed for the match.
+void func_80800530_chintroticker(s32 actor, s32 map)
 {
-    s16 *local_0;
-    int new_var;
-    s16 local_1;
-    u32 local_2;
-    local_0 = (s16 *) D_808008C4_chintroticker;
-    do { new_var = 0x1C; local_2 = 0; loop_1: if (param_1 != *local_0) { local_1 = new_var; local_2 += 1; local_0 += 2; if (local_2 != local_1) { goto loop_1; } } } while (0);
-    if (local_2 < 0x1CU)
+    s16 *entry;
+    int count;
+    s16 next_map;
+    u32 index;
+    entry = (s16 *) D_808008C4_chintroticker;
+    do { count = 0x1C; index = 0; loop_1: if (map != *entry) { next_map = count; index += 1; entry += 2; if (index != next_map) { goto loop_1; } } } while (0);
+    if (index < 0x1CU)
     {
         loop_4:
-        local_1 = *(s16 *) ((s8 *) local_0 + 2);
+        next_map = *(s16 *) ((s8 *) entry + 2);
 
-        local_2 += 1;
-        if (local_1 < 0)
+        index += 1;
+        if (next_map < 0)
         {
-            func_808004A8_chintroticker(param_0, local_1);
+            func_808004A8_chintroticker(actor, next_map);
             return;
         }
-        local_0 += 2;
-        if (local_2 >= 0x1CU)
+        entry += 2;
+        if (index >= 0x1CU)
         {}
         else
         {
@@ -261,20 +265,20 @@ void func_80800530_chintroticker(s32 param_0, s32 param_1)
     }
 }
 
-void func_808005AC_chintroticker(Actor *param_0)
+void func_808005AC_chintroticker(Actor *actor)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 map;
+    s32 i;
 
-    local_0 = func_800EA05C();
+    map = func_800EA05C();
     if (func_800DA9E4(0, 0)) {
-        for (local_1 = 0; local_1 < 28; local_1++) {
-            if (local_0 == D_808008C4_chintroticker[local_1].local_0) {
-                func_808004A8_chintroticker(param_0, D_808008C4_chintroticker[local_1].local_1);
+        for (i = 0; i < 28; i++) {
+            if (map == D_808008C4_chintroticker[i].map) {
+                func_808004A8_chintroticker(actor, D_808008C4_chintroticker[i].next_map);
             }
         }
     }
-    switch (param_0->unk79_4) {
+    switch (actor->unk79_4) {
         case 1:
             if (func_800DA298(0xD56) && !func_800A8264() && func_80015FA0(0) == 1) {
                 _gcfrontend_entrypoint_10();
@@ -283,11 +287,11 @@ void func_808005AC_chintroticker(Actor *param_0)
         case 2:
         default:
             if (func_80016B30(0, 1) == 1)
-                func_80800530_chintroticker(param_0, local_0);
+                func_80800530_chintroticker(actor, map);
     }
     _glintrosyncDll_entrypoint_4(func_800D9004());
-    *(f32 *) ((u8 *) param_0 + 0x28) += func_800D9004();
-    *(f32 *) ((u8 *) param_0 + 0x2C) += func_800D8FF8();
+    *(f32 *) ((u8 *) actor + 0x28) += func_800D9004();
+    *(f32 *) ((u8 *) actor + 0x2C) += func_800D8FF8();
 }
 
 void *chintroticker_entrypoint_0()

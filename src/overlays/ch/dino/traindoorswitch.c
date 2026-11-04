@@ -2,13 +2,14 @@
 
 extern void *D_80800080_chdinotraindoorswitch;
 
-s32 func_80800000_chdinotraindoorswitch(void *this, s32 param_1)
+// TDL train station switch; message 7 plays cutscene 0x3C in map 0x114.
+s32 func_80800000_chdinotraindoorswitch(void *this, s32 msg)
 {
-    if (param_1 == 7) {
+    if (msg == 7) {
         _glcutDll_entrypoint_6(0x114, 0x3c);
         return 1;
     }
-    return _chswitch_entrypoint_10(this, param_1);
+    return _chswitch_entrypoint_10(this, msg);
 }
 
 s32 func_8080003C_chdinotraindoorswitch(Actor *this)
@@ -23,6 +24,8 @@ int chdinotraindoorswitch_entrypoint_0()
     return &D_80800080_chdinotraindoorswitch;
 }
 
+// TU-NOTE: the overlay .data is defined here in C (from the ROM); its tables point to functions of
+// this file, and IDO's assembler schedules them differently otherwise.
 extern u8 D_8011A248[];
 extern void _chswitch_entrypoint_6();
 extern void func_80105834();
