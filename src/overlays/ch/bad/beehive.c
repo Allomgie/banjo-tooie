@@ -21,7 +21,7 @@ extern void _chexploder_entrypoint_15(Actor *, s32, f32);
 extern u8 D_8012762C;
 typedef struct {
     u8 pad_0[0x72];
-    u16 st : 6;
+    u16 state : 6;
     u16 rest : 10;
 } BHState;
 typedef struct {
@@ -65,6 +65,7 @@ int chbadbeehive_entrypoint_0()
     return (int) &D_80800B1C_chbadbeehive;
 }
 
+// Walking speed for the current level (D_8012762C).
 f32 func_8080000C_chbadbeehive(void)
 {
     switch (D_8012762C) {
@@ -95,164 +96,167 @@ f32 func_8080000C_chbadbeehive(void)
     }
 }
 
-void func_808000EC_chbadbeehive(Actor *param_0)
+// Init: sets up the route and the per-level speed.
+void func_808000EC_chbadbeehive(Actor *actor)
 {
-    f32 *local_0;
+    f32 *route;
 
-    local_0 = func_80100094(param_0, 0);
-    _subaddierouteDll_entrypoint_3(param_0, local_0, param_0->position);
-    *(f32 *) &param_0->actorData[3] = 0.0f;
-    *(f32 *) &param_0->actorData[5] = 0.0f;
-    func_800EE7F8(local_0 + 4, param_0->position);
-    *(f32 *) &param_0->actorData[6] = func_8080000C_chbadbeehive();
+    route = func_80100094(actor, 0);
+    _subaddierouteDll_entrypoint_3(actor, route, actor->position);
+    *(f32 *) &actor->actorData[3] = 0.0f;
+    *(f32 *) &actor->actorData[5] = 0.0f;
+    func_800EE7F8(route + 4, actor->position);
+    *(f32 *) &actor->actorData[6] = func_8080000C_chbadbeehive();
 }
 
-void func_80800158_chbadbeehive(Actor *param_0)
+// Buzz loop (sfx 0x447), kept in step with the animation.
+void func_80800158_chbadbeehive(Actor *actor)
 {
-    s32 local_0 = 0;
+    s32 restart_buzz = 0;
 
-    switch (func_801022E4(param_0)) {
+    switch (func_801022E4(actor)) {
         case 0x1C7:
-            if (func_80101E14(param_0, 0.48f) || func_80101E14(param_0, 0.98f)) {
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            if (func_80101E14(actor, 0.48f) || func_80101E14(actor, 0.98f)) {
+                _subaddieaudioquick_entrypoint_2(actor, actor->position,
                                                  D_80800AEC_chbadbeehive);
             }
-            if (func_80101E4C(param_0, D_80800B74_chbadbeehive))
-                local_0 = 1;
+            if (func_80101E4C(actor, D_80800B74_chbadbeehive))
+                restart_buzz = 1;
             break;
         case 0x54:
-            if (func_80101E4C(param_0, D_80800B64_chbadbeehive))
-                local_0 = 1;
+            if (func_80101E4C(actor, D_80800B64_chbadbeehive))
+                restart_buzz = 1;
     }
-    if (local_0) {
-        func_800C3CE8(param_0->unk5F);
-        func_800C301C(param_0->unk5F, 0x447);
-        func_800C3058(param_0->unk5F, 0x2EE0);
-        func_800C31DC(param_0->unk5F, func_80101F24(param_0) + 0.5f);
-        func_800C35E8(param_0->unk5F, param_0->position);
-        func_800C3584(param_0->unk5F, 300.0f, 1500.0f);
-        func_800C330C(param_0->unk5F, 3);
-        func_800C3BDC(param_0->unk5F);
+    if (restart_buzz) {
+        func_800C3CE8(actor->unk5F);
+        func_800C301C(actor->unk5F, 0x447);
+        func_800C3058(actor->unk5F, 0x2EE0);
+        func_800C31DC(actor->unk5F, func_80101F24(actor) + 0.5f);
+        func_800C35E8(actor->unk5F, actor->position);
+        func_800C3584(actor->unk5F, 300.0f, 1500.0f);
+        func_800C330C(actor->unk5F, 3);
+        func_800C3BDC(actor->unk5F);
     }
 }
 
-void func_80800298_chbadbeehive(Actor *param_0)
+// Update: state machine for standing still and wandering along routes.
+void func_80800298_chbadbeehive(Actor *actor)
 {
-    u8 *local_0;
-    f32 local_1;
-    f32 local_2;
+    u8 *route;
+    f32 anim_speed;
+    f32 stick;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_800F3780(func_80101F24(param_0), D_80800B90_chbadbeehive, 9);
-    if (((BH78 *) param_0)->f) {
+    route = func_80100094(actor, 0);
+    anim_speed = func_800F3780(func_80101F24(actor), D_80800B90_chbadbeehive, 9);
+    if (((BH78 *) actor)->f) {
         return;
     }
-    func_800D9078(&param_0->unk58);
-    switch (((BHState *) param_0)->st) {
+    func_800D9078(&actor->unk58);
+    switch (((BHState *) actor)->state) {
         case 1:
-            if (((BHBits *) param_0)->b) {
-                if (0.1f < _subaddiejoy_entrypoint_9(param_0, 0, 0)) {
-                    func_808008F8_chbadbeehive(param_0, 2);
+            if (((BHBits *) actor)->b) {
+                if (0.1f < _subaddiejoy_entrypoint_9(actor, 0, 0)) {
+                    func_808008F8_chbadbeehive(actor, 2);
                 }
-            } else if (func_80800990_chbadbeehive(param_0)) {
-                func_808008F8_chbadbeehive(param_0, 2);
+            } else if (func_80800990_chbadbeehive(actor)) {
+                func_808008F8_chbadbeehive(actor, 2);
             }
             break;
         case 2:
-            func_801026CC(param_0, *(BH12 *) D_80800BD8_chbadbeehive, AF(param_0, 3));
-            func_8010D254(param_0->actorData);
-            if (((BHBits *) param_0)->b) {
-                local_2 = _subaddiejoy_entrypoint_9(param_0, &param_0->unk54, 3);
-                AF(param_0, 3) = AF(param_0, 5);
-                func_80102BF8(param_0, 0.2f, 8.0f, 500.0f);
-                func_8010C3A8(param_0, 0x205015, local_2 * local_1);
-                if (_subaddiejoy_entrypoint_9(param_0, 0, 0) == 0.0f) {
-                    func_808008F8_chbadbeehive(param_0, 1);
+            func_801026CC(actor, *(BH12 *) D_80800BD8_chbadbeehive, AF(actor, 3));
+            func_8010D254(actor->actorData);
+            if (((BHBits *) actor)->b) {
+                stick = _subaddiejoy_entrypoint_9(actor, &actor->unk54, 3);
+                AF(actor, 3) = AF(actor, 5);
+                func_80102BF8(actor, 0.2f, 8.0f, 500.0f);
+                func_8010C3A8(actor, 0x205015, stick * anim_speed);
+                if (_subaddiejoy_entrypoint_9(actor, 0, 0) == 0.0f) {
+                    func_808008F8_chbadbeehive(actor, 1);
                 }
             } else {
-                if (_subaddierouteDll_entrypoint_4(param_0)) {
-                    param_0->unk54 = func_80102D78(param_0, param_0->actorData);
-                    _subaddierouteDll_entrypoint_7(param_0, local_0, param_0->rotation[1],
-                                                   param_0->unk54, 200.0f, 0x5800);
-                    *(s32 *) (local_0 + 0xC) = *(u16 *) (local_0 + 6);
+                if (_subaddierouteDll_entrypoint_4(actor)) {
+                    actor->unk54 = func_80102D78(actor, actor->actorData);
+                    _subaddierouteDll_entrypoint_7(actor, route, actor->rotation[1],
+                                                   actor->unk54, 200.0f, 0x5800);
+                    *(s32 *) (route + 0xC) = *(u16 *) (route + 6);
                 }
-                _subaddierouteDll_entrypoint_5(param_0, local_0, *(f32 *) (local_0 + 0xC), 0.15f,
+                _subaddierouteDll_entrypoint_5(actor, route, *(f32 *) (route + 0xC), 0.15f,
                                                8.0f, 200.0f);
-                AF(param_0, 3) =
-                    func_800F15F8(AF(param_0, 3), AF(param_0, 5), func_800D8FF8() * 400.0f);
-                func_8010C3A8(param_0, 0x305115, local_1);
-                if (_subaddierouteDll_entrypoint_4(param_0) && func_800DC298(0.2f) &&
-                    (!func_8010C9B0(param_0->position, 1000) || !func_8010C500(param_0))) {
-                    func_808008F8_chbadbeehive(param_0, 3);
+                AF(actor, 3) =
+                    func_800F15F8(AF(actor, 3), AF(actor, 5), func_800D8FF8() * 400.0f);
+                func_8010C3A8(actor, 0x305115, anim_speed);
+                if (_subaddierouteDll_entrypoint_4(actor) && func_800DC298(0.2f) &&
+                    (!func_8010C9B0(actor->position, 1000) || !func_8010C500(actor))) {
+                    func_808008F8_chbadbeehive(actor, 3);
                 }
             }
             break;
         case 3:
-            func_801026CC(param_0, *(BH12 *) D_80800BD8_chbadbeehive, AF(param_0, 3));
-            if (func_80800990_chbadbeehive(param_0)) {
-                func_808008F8_chbadbeehive(param_0, 2);
+            func_801026CC(actor, *(BH12 *) D_80800BD8_chbadbeehive, AF(actor, 3));
+            if (func_80800990_chbadbeehive(actor)) {
+                func_808008F8_chbadbeehive(actor, 2);
             }
-            if (_subaddierouteDll_entrypoint_4(param_0)) {
-                param_0->unk54 = func_80102D78(param_0, param_0->actorData);
-                _subaddierouteDll_entrypoint_7(param_0, local_0, param_0->rotation[1],
-                                               param_0->unk54, 200.0f, 0x5800);
-                *(s32 *) (local_0 + 0xC) = *(u16 *) (local_0 + 6);
+            if (_subaddierouteDll_entrypoint_4(actor)) {
+                actor->unk54 = func_80102D78(actor, actor->actorData);
+                _subaddierouteDll_entrypoint_7(actor, route, actor->rotation[1],
+                                               actor->unk54, 200.0f, 0x5800);
+                *(s32 *) (route + 0xC) = *(u16 *) (route + 6);
             }
-            _subaddierouteDll_entrypoint_5(param_0, local_0, *(f32 *) (local_0 + 0xC), 0.15f, 8.0f,
+            _subaddierouteDll_entrypoint_5(actor, route, *(f32 *) (route + 0xC), 0.15f, 8.0f,
                                            200.0f);
-            AF(param_0, 3) =
-                func_800F15F8(AF(param_0, 3), AF(param_0, 5), func_800D8FF8() * 400.0f);
-            func_8010C3A8(param_0, 0x305115, local_1);
-            if (_subaddierouteDll_entrypoint_4(param_0) && func_800DC298(0.2f) &&
-                func_800EFFB4(param_0->position, 0x42C80000, local_0 + 0x10)) {
-                func_808008F8_chbadbeehive(param_0, 1);
+            AF(actor, 3) =
+                func_800F15F8(AF(actor, 3), AF(actor, 5), func_800D8FF8() * 400.0f);
+            func_8010C3A8(actor, 0x305115, anim_speed);
+            if (_subaddierouteDll_entrypoint_4(actor) && func_800DC298(0.2f) &&
+                func_800EFFB4(actor->position, 0x42C80000, route + 0x10)) {
+                func_808008F8_chbadbeehive(actor, 1);
             }
             break;
     }
-    if (((BHState *) param_0)->st < 4) {
-        func_8010C908(param_0, param_0->position);
+    if (((BHState *) actor)->state < 4) {
+        func_8010C908(actor, actor->position);
     }
-    func_80800158_chbadbeehive(param_0);
+    func_80800158_chbadbeehive(actor);
 }
 
-s32 func_8080070C_chbadbeehive(Actor *param_0, s32 param_1, Actor **param_2)
+s32 func_8080070C_chbadbeehive(Actor *actor, s32 msg, Actor **attacker)
 {
-    f32 local_0[3];
-    Actor *local_1;
+    f32 drop_pos[3];
+    Actor *unk_0;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x95:
-            param_0->unk5F = func_800C2E04();
-            _subaddierouteDll_entrypoint_1(param_0);
+            actor->unk5F = func_800C2E04();
+            _subaddierouteDll_entrypoint_1(actor);
             break;
-        case 0x40:
-            func_800EE88C(local_0, (*param_2)->position);
-            local_0[1] = param_0->position[1];
-            _chexploder_entrypoint_3(param_0, local_0, 0x20);
+        case 0x40: // egg hit
+            func_800EE88C(drop_pos, (*attacker)->position);
+            drop_pos[1] = actor->position[1];
+            _chexploder_entrypoint_3(actor, drop_pos, 0x20);
             break;
-        case 0x90:
-            local_1 = func_80106790(func_80101080());
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800AFC_chbadbeehive);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, &D_80800B0C_chbadbeehive);
-            func_800BBCB8(param_0->position, NULL, param_0->scale, 1, &D_80800BE4_chbadbeehive);
-            if (!func_80107070(param_0, 3))
-                func_800FFAB0(param_0);
-            _chexploder_entrypoint_15(local_1, 2, 1.0f);
-            _chexploder_entrypoint_9(local_1, 3, 2);
+        case 0x90: // explosion: burst into particles, drop honeycomb
+            unk_0 = func_80106790(func_80101080());
+            _subaddieaudioquick_entrypoint_2(actor, actor->position, &D_80800AFC_chbadbeehive);
+            _subaddieaudioquick_entrypoint_2(actor, actor->position, &D_80800B0C_chbadbeehive);
+            func_800BBCB8(actor->position, NULL, actor->scale, 1, &D_80800BE4_chbadbeehive);
+            if (!func_80107070(actor, 3))
+                func_800FFAB0(actor);
+            _chexploder_entrypoint_15(unk_0, 2, 1.0f);
+            _chexploder_entrypoint_9(unk_0, 3, 2);
             break;
         case 1:
-            func_808008F8_chbadbeehive(param_0, 2);
+            func_808008F8_chbadbeehive(actor, 2);
             break;
         case 2:
-            if (!_subaddieDll_entrypoint_3(param_0)) {
-                if (!func_80107070(param_0, 1))
-                    _subaddiefade_entrypoint_3(param_0);
+            if (!_subaddieDll_entrypoint_3(actor)) {
+                if (!func_80107070(actor, 1))
+                    _subaddiefade_entrypoint_3(actor);
             } else {
-                func_808008F8_chbadbeehive(param_0, 3);
+                func_808008F8_chbadbeehive(actor, 3);
             }
             break;
         case 0x1F:
-            func_801015D0(param_0);
+            func_801015D0(actor);
             func_800DF744(3, 2);
             break;
         case 0x38:
@@ -268,21 +272,23 @@ void func_808008F0_chbadbeehive(s32 arg0)
 {
 }
 
-void func_808008F8_chbadbeehive(param_0, param_1) u8 *param_0;
-s32 param_1;
+// Switches to a new state.
+// Matching: K&R-style definition and same-type casts, needed for the match.
+void func_808008F8_chbadbeehive(actor, new_state) u8 *actor;
+s32 new_state;
 {
-    s32 local_0;
+    s32 route;
 
-    local_0 = func_80100094(param_0, 0);
-    func_80102424(param_0, param_1);
+    route = func_80100094(actor, 0);
+    func_80102424(actor, new_state);
 
-switch (param_1) {
+switch (new_state) {
     case 2:
-        *(f32 *) ((s8 *) param_0 + 0x2C) = (f32) *(f32 *) ((s8 *) param_0 + 0x30);
+        *(f32 *) ((s8 *) actor + 0x2C) = (f32) *(f32 *) ((s8 *) actor + 0x30);
         return;
     case 3:
-        func_800EE7F8(param_0 + 0x18, local_0 + 0x10);
-        *(f32 *) ((s8 *) param_0 + 0x2C) = (f32) (*(f32 *) ((s8 *) param_0 + 0x2C) * 0.5f);
+        func_800EE7F8(actor + 0x18, route + 0x10);
+        *(f32 *) ((s8 *) actor + 0x2C) = (f32) (*(f32 *) ((s8 *) actor + 0x2C) * 0.5f);
 
     case 1:
         return;
@@ -290,20 +296,21 @@ switch (param_1) {
 
 }
 
-int func_80800990_chbadbeehive(f32 param_0[3])
+int func_80800990_chbadbeehive(f32 actor[3])
 {
-    if (param_0[0x16] > 0.0f) {
+    if (actor[0x16] > 0.0f) {
         return 0;
     }
 
-if (_subaddierouteDll_entrypoint_4(param_0) && func_8010C9B0(&param_0[1], 1000) != 0 &&
-    _suchase_entrypoint_1(param_0) != 0 && func_8010C500(param_0) != 0) {
+if (_subaddierouteDll_entrypoint_4(actor) && func_8010C9B0(&actor[1], 1000) != 0 &&
+    _suchase_entrypoint_1(actor) != 0 && func_8010C500(actor) != 0) {
     return 1;
 }
 
 return 0;
 }
 
+// TU-NOTE: the overlay .data is defined in C here; its tables point to functions of this file.
 extern void func_80105834();
 extern void func_801018A4();
 extern void func_80108ED0();

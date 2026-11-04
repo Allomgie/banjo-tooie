@@ -18,6 +18,7 @@ void func_8080036C_suautobaddies();
 void func_808003DC_suautobaddies();
 int suautobaddies_entrypoint_3();
 
+// Map-load hook: spawns the always-present system actors when their conditions hold.
 int suautobaddies_entrypoint_0()
 {
     func_80800104_suautobaddies();
@@ -35,18 +36,20 @@ int suautobaddies_entrypoint_0()
     }
 }
 
+// Broadcasts message 0x49 (cutscene id) to all actors.
 int suautobaddies_entrypoint_1()
 {
-    s32 local_0[2];
-    s32 local_3;
-    s32 local_6;
+    s32 iter[2];
+    s32 cutscene_id;
+    s32 actor;
 
-    local_3 = _glcutDll_entrypoint_18();
-    for (local_6 = func_801067C4(local_0); local_6 != 0; local_6 = func_8010682C(local_0)) {
-        func_8010108C(local_6, 0x49, local_3);
+    cutscene_id = _glcutDll_entrypoint_18();
+    for (actor = func_801067C4(iter); actor != 0; actor = func_8010682C(iter)) {
+        func_8010108C(actor, 0x49, cutscene_id);
     }
 }
 
+// Spawns the intro text actor unless a cutscene, record/replay mode or a flag blocks it.
 int func_80800104_suautobaddies()
 {
     if (!_glcutDll_entrypoint_1()) {
@@ -68,12 +71,13 @@ int func_80800104_suautobaddies()
 
 void func_80800194_suautobaddies(void)
 {
-    s32 sp24;
+    s32 map_id;
 
-    sp24 = func_800EA05C();
+    map_id = func_800EA05C();
     if ((func_800DB9B0() == 0) && (_glcutDll_entrypoint_1() == 0) && (func_800DA298(0x647) == 0) &&
-        (func_800A9C98() == 0) && (_gcsectionDll_entrypoint_4(sp24) != 0xD)) {
-        if ((func_800D3934() != 0) || (sp24 == 0xAF)) {
+        (func_800A9C98() == 0) && (_gcsectionDll_entrypoint_4(map_id) != 0xD)) {
+        // Game mode 1 or Spiral Mountain (0xAF)
+        if ((func_800D3934() != 0) || (map_id == 0xAF)) {
             func_800DA544(0x6A7);
             _chbaddiesetup_entrypoint_4((s32 *) &_chbaddiesetup_entrypoint_8, 0x153, 0, 0, 0);
             return;
@@ -91,18 +95,20 @@ s32 func_80800258_suautobaddies(void)
 
 void func_80800298_suautobaddies(void)
 {
-    f32 sp1C[3];
-    s32 temp_v0;
+    f32 origin[3];
+    s32 map_id;
 
+    // Spawns actor 0x174 at the origin, except in the credits and character parade.
     if (func_800DA298(0x650) != 0) {
-        temp_v0 = func_800EA05C();
-        if ((temp_v0 != 0x19C) && (temp_v0 != 0x19D)) {
-            func_800EFD24(sp1C);
-            func_80108474(0x174, sp1C, 0);
+        map_id = func_800EA05C();
+        if ((map_id != 0x19C) && (map_id != 0x19D)) {
+            func_800EFD24(origin);
+            func_80108474(0x174, origin, 0);
         }
     }
 }
 
+// Timed callback: hands over items 0x4B/0x4C, one per call.
 void suautobaddies_entrypoint_2(void)
 {
     if (func_800D1A04(0x4B)) {
@@ -117,9 +123,10 @@ void suautobaddies_entrypoint_2(void)
 
 void func_8080036C_suautobaddies(void)
 {
-    s32 local_0;
-    local_0 = func_800EA05C();
-    if (!func_800DB9B0() && (local_0 == 0x154 || local_0 == 0xCA || func_800DA298(0x6E7))) {
+    s32 map_id;
+    map_id = func_800EA05C();
+    // Pine Grove (0x154), MT Kickball 3 (0xCA) or flag 0x6E7: delayed item 0x4B/0x4C hand-over
+    if (!func_800DB9B0() && (map_id == 0x154 || map_id == 0xCA || func_800DA298(0x6E7))) {
         func_800DA524(0x6E7);
         func_800C9DAC(1.5f, _suautobaddies_entrypoint_2);
     }
@@ -132,6 +139,7 @@ void func_808003DC_suautobaddies()
     }
 }
 
+// Spawns actor 0x524 when 90 jiggies are collected.
 int suautobaddies_entrypoint_3()
 {
     if (!func_800D395C()) {

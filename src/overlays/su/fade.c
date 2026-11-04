@@ -2,44 +2,49 @@
 
 extern s32 D_80127EF4;
 
-void sufade_entrypoint_0(s32 param_0, u8 *param_1)
+// Queues a full-screen flash: color points to r, g, b (s32 each).
+void sufade_entrypoint_0(s32 alpha, u8 *color)
 {
-    u8 *temp_v0;
+    u8 *entry;
     if ((void *) D_80127EF4 == 0) {
-        D_80127EF4 = vector_new(4, 1, param_1);
+        D_80127EF4 = vector_new(4, 1, color);
     }
-    temp_v0 = vector_push_back((void **) &D_80127EF4);
-    *(s8 *) ((s8 *) temp_v0 + 0) = (s8) *(s32 *) ((s8 *) param_1 + 0);
-    *(s8 *) ((s8 *) temp_v0 + 1) = (s8) *(s32 *) ((s8 *) param_1 + 4);
-    *(s8 *) ((s8 *) temp_v0 + 2) = (s8) *(s32 *) ((s8 *) param_1 + 8);
-    *(s8 *) ((s8 *) temp_v0 + 3) = (s8) param_0;
+    entry = vector_push_back((void **) &D_80127EF4);
+    *(s8 *) ((s8 *) entry + 0) = (s8) *(s32 *) ((s8 *) color + 0);
+    *(s8 *) ((s8 *) entry + 1) = (s8) *(s32 *) ((s8 *) color + 4);
+    *(s8 *) ((s8 *) entry + 2) = (s8) *(s32 *) ((s8 *) color + 8);
+    *(s8 *) ((s8 *) entry + 3) = (s8) alpha;
+    // Matching: empty blocks needed for the match.
     if (!(void *) D_80127EF4) {
     }
     if (0) {
     }
 }
 
+// TU-NOTE: this .bss object is defined here, ahead of its first use; IDO places .bss objects used before their definition first.
 s32 B_80800160_sufade;
 
-void sufade_entrypoint_1(s32 param_0)
+// Draws every queued flash, then clears the queue.
+void sufade_entrypoint_1(s32 unk_0)
 {
-    u32 local_0;
-    u32 local_1;
+    u32 end;
+    u32 cur;
 
-    local_1 = vector_begin(D_80127EF4);
-    local_0 = vector_end(D_80127EF4);
-    if (local_1 < local_0) {
+    cur = vector_begin(D_80127EF4);
+    end = vector_end(D_80127EF4);
+    if (cur < end) {
         do {
-            *(s32 *) ((s8 *) &B_80800160_sufade + 0) = (s32) *(u8 *) ((s8 *) local_1 + 0);
-            *(s32 *) ((s8 *) &B_80800160_sufade + 4) = (s32) *(u8 *) ((s8 *) local_1 + 1);
-            *(s32 *) ((s8 *) &B_80800160_sufade + 8) = (s32) *(u8 *) ((s8 *) local_1 + 2);
-            func_800B99CC(param_0, *(u8 *) ((s8 *) local_1 + 3), &B_80800160_sufade);
-            local_1 += 4;
-        } while (local_1 < local_0);
+            *(s32 *) ((s8 *) &B_80800160_sufade + 0) = (s32) *(u8 *) ((s8 *) cur + 0);
+            *(s32 *) ((s8 *) &B_80800160_sufade + 4) = (s32) *(u8 *) ((s8 *) cur + 1);
+            *(s32 *) ((s8 *) &B_80800160_sufade + 8) = (s32) *(u8 *) ((s8 *) cur + 2);
+            func_800B99CC(unk_0, *(u8 *) ((s8 *) cur + 3), &B_80800160_sufade);
+            cur += 4;
+        } while (cur < end);
     }
     vector_clear(D_80127EF4);
 }
 
+// Frees the flash queue.
 s32 sufade_entrypoint_2(void)
 {
     if (D_80127EF4 != 0) {

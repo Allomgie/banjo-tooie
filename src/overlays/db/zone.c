@@ -1,121 +1,127 @@
 #include "common.h"
 
+// Zone list layout: u8 count, u8 pad, then 14-byte entries (6 s16 box bounds, inside flag at 0xC).
 typedef struct {
     u8 pad_0[12];
-    u8 local_0;
-    u8 pad_1;
+    u8 inside;
+    u8 pad_D;
 } DbZoneFlag27;
 typedef struct {
-    u8 pad0[12];
-    u8 unkC;
-    u8 padD;
+    u8 pad_0[12];
+    u8 inside;
+    u8 pad_D;
 } ZoneEntry;
 typedef struct {
     u8 count;
-    u8 pad1;
+    u8 pad_1;
     ZoneEntry entries[1];
 } ZoneList;
 typedef struct {
-    s16 a;
-    s16 b[6];
+    s16 unk_0;
+    s16 box[6];
 } ZoneEnt;
 typedef struct {
-    s16 local_0[7];
+    s16 box[7];
 } DbQueryZone1262_dbzone_entrypoint_3;
 extern void func_800EE940();
 
 typedef struct DbQueryZone1262_dbzone_entrypoint_4 {
-    s16 local_0[7];
+    s16 box[7];
 } DbQueryZone1262_dbzone_entrypoint_4;
 
-s32 dbzone_entrypoint_0(u8 *param_0, u8 *param_1, u32 param_2)
+// Returns 1 if any of the 'count' zones listed in 'ids' is flagged inside.
+s32 dbzone_entrypoint_0(u8 *list, u8 *ids, u32 count)
 {
-    DbZoneFlag27 *local_0;
+    DbZoneFlag27 *zones;
 
-    local_0 = (DbZoneFlag27 *) (param_0 + 2);
-    for (; param_2; param_2--) {
-        if (local_0[*param_1].local_0) {
+    zones = (DbZoneFlag27 *) (list + 2);
+    for (; count; count--) {
+        if (zones[*ids].inside) {
             return 1;
         }
-        param_1++;
+        ids++;
     }
     return 0;
 }
 
-int func_8080010C_dbzone(void *param_0, s16 *param_1)
+// Point-in-box test: box is {min x, y, z, max x, y, z}.
+int func_8080010C_dbzone(void *zone, s16 *point)
 {
-    s16 *local_0;
+    s16 *box;
 
-    local_0 = param_0;
-    return param_1[0] >= local_0[0] && param_1[0] <= local_0[3] && param_1[1] >= local_0[1] &&
-           param_1[1] <= local_0[4] && param_1[2] >= local_0[2] && param_1[2] <= local_0[5];
+    box = zone;
+    return point[0] >= box[0] && point[0] <= box[3] && point[1] >= box[1] &&
+           point[1] <= box[4] && point[2] >= box[2] && point[2] <= box[5];
 }
 
-void dbzone_entrypoint_1(ZoneList *param_0, f32 *param_1, f32 param_2, f32 *param_3)
+// Updates every zone's inside flag for a position moved into model space.
+void dbzone_entrypoint_1(ZoneList *list, f32 *pos, f32 scale, f32 *origin)
 {
     s32 i;
     ZoneEntry *e;
     ZoneEntry *end;
     s32 pad;
-    s16 local_0[3];
+    s16 point[3];
 
-    param_2 = 1.0f / param_2;
+    scale = 1.0f / scale;
     for (i = 0; i < 3; i++) {
-        local_0[i] = (param_1[i] - param_3[i]) * param_2;
+        point[i] = (pos[i] - origin[i]) * scale;
     }
-    e = param_0->entries;
-    end = &e[param_0->count];
+    e = list->entries;
+    end = &e[list->count];
     for (; e < end; e++) {
-        e->unkC = func_8080010C_dbzone(e, local_0);
+        e->inside = func_8080010C_dbzone(e, point);
     }
 }
 
-void dbzone_entrypoint_2(ZoneEnt *param_0, f32 *param_1, s32 param_2)
+void dbzone_entrypoint_2(ZoneEnt *zones, f32 *pos, s32 index)
 {
-    s32 local_0[3];
-    func_800EE940(local_0, param_1);
-    func_8080010C_dbzone(param_0[param_2].b, local_0);
+    s32 point[3];
+    func_800EE940(point, pos);
+    func_8080010C_dbzone(zones[index].box, point);
 }
 
-s32 dbzone_entrypoint_3(u8 *param_0, f32 *param_1)
+// Returns the index of the first zone containing pos, or -1.
+s32 dbzone_entrypoint_3(u8 *list, f32 *pos)
 {
-    DbQueryZone1262_dbzone_entrypoint_3 *local_1;
-    DbQueryZone1262_dbzone_entrypoint_3 *local_2;
-    DbQueryZone1262_dbzone_entrypoint_3 *local_3;
-    s16 local_0[3];
+    DbQueryZone1262_dbzone_entrypoint_3 *zone;
+    DbQueryZone1262_dbzone_entrypoint_3 *end;
+    DbQueryZone1262_dbzone_entrypoint_3 *first;
+    s16 point[3];
 
-    local_2 =
-        (DbQueryZone1262_dbzone_entrypoint_3 *) (param_0 + 2 +
-                                                 param_0[0] *
+    end =
+        (DbQueryZone1262_dbzone_entrypoint_3 *) (list + 2 +
+                                                 list[0] *
                                                      sizeof(DbQueryZone1262_dbzone_entrypoint_3));
-    func_800EE940(local_0, param_1);
-    local_3 = (DbQueryZone1262_dbzone_entrypoint_3 *) (param_0 + 2);
-    for (local_1 = local_3; local_1 < local_2; local_1++) {
-        if (func_8080010C_dbzone(local_1, local_0)) {
-            return local_1 - local_3;
+    func_800EE940(point, pos);
+    first = (DbQueryZone1262_dbzone_entrypoint_3 *) (list + 2);
+    for (zone = first; zone < end; zone++) {
+        if (func_8080010C_dbzone(zone, point)) {
+            return zone - first;
         }
     }
     return -1;
 }
 
-s32 dbzone_entrypoint_4(u8 *param_0, f32 *param_1, u8 *param_2)
+// Writes the indices of all zones containing pos to 'out'; returns how many.
+s32 dbzone_entrypoint_4(u8 *list, f32 *pos, u8 *out)
 {
-    DbQueryZone1262_dbzone_entrypoint_4 *local_1;
-    DbQueryZone1262_dbzone_entrypoint_4 *local_2;
-    DbQueryZone1262_dbzone_entrypoint_4 *local_3;
-    s16 local_0[3];
-    s32 local_4 = 0;
+    DbQueryZone1262_dbzone_entrypoint_4 *zone;
+    DbQueryZone1262_dbzone_entrypoint_4 *end;
+    DbQueryZone1262_dbzone_entrypoint_4 *first;
+    s16 point[3];
+    s32 count = 0;
 
-    local_2 =
-        (DbQueryZone1262_dbzone_entrypoint_4 *) (param_0 + 2 +
-                                                 param_0[0] *
+    end =
+        (DbQueryZone1262_dbzone_entrypoint_4 *) (list + 2 +
+                                                 list[0] *
                                                      sizeof(DbQueryZone1262_dbzone_entrypoint_4));
-    func_800EE940(local_0, param_1);
-    local_3 = (DbQueryZone1262_dbzone_entrypoint_4 *) (param_0 + 2);
-    for (local_1 = local_3; local_1 < local_2; local_1++) {
-        if (func_8080010C_dbzone(local_1, local_0)) {
-            param_2[local_4++] = local_1 - local_3;
+    func_800EE940(point, pos);
+    first = (DbQueryZone1262_dbzone_entrypoint_4 *) (list + 2);
+    for (zone = first; zone < end; zone++) {
+        if (func_8080010C_dbzone(zone, point)) {
+            out[count++] = zone - first;
         }
     }
-    return local_4;
+    return count;
 }

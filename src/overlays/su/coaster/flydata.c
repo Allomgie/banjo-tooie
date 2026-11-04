@@ -1,8 +1,9 @@
 #include "common.h"
 
+// Per-kind flyer record (0x28 bytes); id is the actor id that selects the kind.
 typedef struct {
-    u16 local_0;
-    u8 pad_0[0x26];
+    u16 id;
+    u8 pad_2[0x26];
 } CoasterFlyRecord62;
 extern CoasterFlyRecord62 D_80800290_sucoasterflydata[];
 typedef struct {
@@ -13,49 +14,53 @@ extern u8 D_808003AC_sucoasterflydata[];
 extern u8 D_808003F4_sucoasterflydata[];
 extern u8 D_8080043C_sucoasterflydata[];
 
-s32 sucoasterflydata_entrypoint_0(void **param_0)
+// Maps the actor id to a flyer kind (0-4).
+s32 sucoasterflydata_entrypoint_0(void **marker)
 {
-    u32 local_0;
-    s32 local_1;
+    u32 actor_id;
+    s32 kind;
 
-    local_0 = *(u32 *) ((u8 *) *param_0 + 0x24) >> 22;
-    for (local_1 = 0; local_1 < 5; local_1++) {
-        if (local_0 == D_80800290_sucoasterflydata[local_1].local_0)
-            return local_1;
+    actor_id = *(u32 *) ((u8 *) *marker + 0x24) >> 22;
+    for (kind = 0; kind < 5; kind++) {
+        if (actor_id == D_80800290_sucoasterflydata[kind].id)
+            return kind;
     }
     return 0;
 }
 
-CoasterEntry *sucoasterflydata_entrypoint_1(s32 param_0)
+// Returns the record of the given kind.
+CoasterEntry *sucoasterflydata_entrypoint_1(s32 kind)
 {
-    return &((CoasterEntry *) D_80800290_sucoasterflydata)[param_0];
+    return &((CoasterEntry *) D_80800290_sucoasterflydata)[kind];
 }
 
-void *sucoasterflydata_entrypoint_2(s32 param_0, s32 *param_1)
+// Returns the per-kind table and stores its entry count.
+void *sucoasterflydata_entrypoint_2(s32 kind, s32 *count)
 {
-    switch (param_0) {
+    switch (kind) {
         case 0:
-            *param_1 = 7;
+            *count = 7;
             return D_80800358_sucoasterflydata;
         case 1:
         case 2:
-            *param_1 = 6;
+            *count = 6;
             return D_808003AC_sucoasterflydata;
         case 3:
-            *param_1 = 6;
+            *count = 6;
             return D_808003F4_sucoasterflydata;
         case 4:
-            *param_1 = 6;
+            *count = 6;
             return D_8080043C_sucoasterflydata;
         default:
-            *param_1 = 0;
+            *count = 0;
     }
     return NULL;
 }
 
-int sucoasterflydata_entrypoint_3(int param_0)
+// Patrol speed per kind.
+int sucoasterflydata_entrypoint_3(int kind)
 {
-    switch (param_0) {
+    switch (kind) {
         case 0:
             return 0x12C;
 
@@ -76,9 +81,10 @@ int sucoasterflydata_entrypoint_3(int param_0)
     }
 }
 
-int sucoasterflydata_entrypoint_4(int param_0)
+// Chase speed per kind.
+int sucoasterflydata_entrypoint_4(int kind)
 {
-    switch (param_0) {
+    switch (kind) {
         case 0:
             return 0x190;
 
@@ -98,9 +104,10 @@ int sucoasterflydata_entrypoint_4(int param_0)
     return 0;
 }
 
-int sucoasterflydata_entrypoint_5(int param_0)
+// Swoop speed per kind.
+int sucoasterflydata_entrypoint_5(int kind)
 {
-    switch (param_0) {
+    switch (kind) {
         case 0:
             return 800;
         case 1:
@@ -116,6 +123,7 @@ int sucoasterflydata_entrypoint_5(int param_0)
     }
 }
 
+// TU-NOTE: the overlay .data is defined here in C; values are taken from the ROM.
 CoasterFlyRecord62 D_80800290_sucoasterflydata[5] = {
     0x2FD, 0x0,  0xB9, 0x3,   0xFF, 0x2E, 0xE0,  0x0,  0xCC, 0x0,   0x40, 0x5,  0x36,  0x6D, 0x60,
     0x0,   0xCC, 0x0,  0x0,   0x5,  0x37, 0x6D,  0x60, 0x0,  0xB3,  0x0,  0x0,  0x5,   0x37, 0x6D,

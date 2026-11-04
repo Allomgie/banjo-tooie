@@ -2,32 +2,34 @@
 
 extern int D_80800990_chappearfx[];
 typedef struct {
-    s32 a;
-    s32 b;
+    s32 sprite_id;
+    s32 unk_4;
 } AfxPair;
 extern AfxPair D_80800970_chappearfx[];
 extern void func_800EF1B8(f32 *, f32, f32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern void func_800E2530(f32);
 typedef struct {
-    s16 h0, h2, h4, h6, h8, hA;
-    f32 fC;
-    f32 f10;
+    // Same layout as AppearParticle; only the fields used for drawing are named.
+    s16 unk_0, unk_2, unk_4, unk_6, unk_8, unk_A;
+    f32 rotation;
+    f32 scale;
 } AFXE_;
 extern s32 _chappearfx_entrypoint_3;
 typedef struct {
-    s16 local_0;
-    s16 local_1;
-    s16 local_2;
-    s16 local_3;
-    s16 local_4;
-    s16 local_5;
-    u8 local_6;
-    u8 local_7;
-    s16 local_8;
-    s16 local_9;
-    s16 local_10;
-    u8 local_11[8];
+    // Particles (AppearParticle, 0x14 bytes each) follow at +0x1C.
+    s16 count;
+    s16 max_count;
+    s16 flags;
+    s16 radius;
+    s16 max_y;
+    s16 min_y;
+    u8 alpha;
+    u8 music_ducked;
+    s16 kind;
+    s16 unk_10;
+    s16 unk_12;
+    u8 link[8];
 } AppearFX49;
 extern s32 D_80800974_chappearfx[][2];
 extern u8 D_808009D8_chappearfx[];
@@ -44,8 +46,9 @@ extern f32 func_800D8FF8(void);
 extern void func_800EE7F8(f32 *, f32 *);
 extern Actor *_subaddielink_entrypoint_4(void *);
 typedef struct {
-    s16 local_0[6];
-    f32 local_1, local_2;
+    // shorts: 0 orbit speed, 1 rise speed, 2 sprite variant, 3 angle, 4 height, 5 spin speed
+    s16 shorts[6];
+    f32 rotation, scale;
 } AppearParticle;
 extern f32 func_800DC178(f32, f32);
 extern s32 func_800DC128(s32, s32);
@@ -64,194 +67,204 @@ void func_8080000C_chappearfx(s32 arg0)
 {
 }
 
-void func_80800014_chappearfx(param_0) Actor *param_0;
+void func_80800014_chappearfx(actor) Actor *actor;
 {
-    s16 *local_0;
-    AppearParticle *local_1;
-    AppearParticle *local_2;
-    s32 local_4;
-    f32 local_3;
-    s32 local_5;
+    s16 *fx;
+    AppearParticle *particle;
+    AppearParticle *particles;
+    s32 i;
+    f32 dt;
+    s32 finished;
 
-    local_0 = func_80100094(param_0, 0);
+    fx = func_80100094(actor, 0);
     if (!func_8001210C(1)) {
-        func_80800554_chappearfx(param_0);
+        func_80800554_chappearfx(actor);
     }
-    switch ((s32) param_0->unk70_10) {
+    switch ((s32) actor->unk70_10) {
         case 1:
-            ((u8 *) local_0)[0xD] = 1;
+            ((u8 *) fx)[0xD] = 1;
             func_800FCAE0(0x1C, -1, 0x1F4);
-            if (func_800D9078(&param_0->unk58)) {
-                func_80101FDC(param_0, 2);
-                param_0->unk58 = 1.2f;
+            if (func_800D9078(&actor->unk58)) {
+                func_80101FDC(actor, 2);
+                actor->unk58 = 1.2f;
             }
             break;
         case 2:
-            local_5 = func_800D9078(&param_0->unk58);
-            ((u8 *) local_0)[0xC] = (u32) func_800F10B4(param_0->unk58, 0.0f, 1.2f, 16.0f, 255.0f);
-            if (local_5) {
-                ((u8 *) local_0)[0xD] = 0;
+            finished = func_800D9078(&actor->unk58);
+            ((u8 *) fx)[0xC] = (u32) func_800F10B4(actor->unk58, 0.0f, 1.2f, 16.0f, 255.0f);
+            if (finished) {
+                ((u8 *) fx)[0xD] = 0;
                 func_800FCAE0(0x1C, 0, 0x1F4);
                 func_800FCA90(0x1C);
-                func_800FFAB0(param_0);
+                func_800FFAB0(actor);
             } else {
-                ((u8 *) local_0)[0xD] = 1;
+                ((u8 *) fx)[0xD] = 1;
                 func_800FCAE0(0x1C, -1, 0x1F4);
             }
     }
-    if ((((u16 *) local_0)[2] & 8) && _subaddielink_entrypoint_2((u8 *) local_0 + 0x14)) {
-        func_800EE7F8(param_0->position,
-                      _subaddielink_entrypoint_4((u8 *) local_0 + 0x14)->position);
+    if ((((u16 *) fx)[2] & 8) && _subaddielink_entrypoint_2((u8 *) fx + 0x14)) {
+        func_800EE7F8(actor->position,
+                      _subaddielink_entrypoint_4((u8 *) fx + 0x14)->position);
     }
-    local_3 = func_800D8FF8();
-    local_2 = (AppearParticle *) ((u8 *) local_0 + 0x1C);
-    local_1 = local_2;
-    for (local_4 = 0; local_4 < local_0[0];) {
-        local_1->local_0[4] += local_3 * local_1->local_0[1];
-        local_1->local_0[3] += local_3 * local_1->local_0[0];
-        local_1->local_1 += local_3 * local_1->local_0[5];
-        if (local_1->local_0[4] >= local_0[4]) {
-            local_0[0]--;
-            if (local_0[0] > 0) {
-                rare_memcpy(local_1, local_2 + local_0[0], sizeof(AppearParticle));
+    dt = func_800D8FF8();
+    particles = (AppearParticle *) ((u8 *) fx + 0x1C);
+    particle = particles;
+    // Move particles; remove those above the max height by copying the last one over.
+    for (i = 0; i < fx[0];) {
+        particle->shorts[4] += dt * particle->shorts[1];
+        particle->shorts[3] += dt * particle->shorts[0];
+        particle->rotation += dt * particle->shorts[5];
+        if (particle->shorts[4] >= fx[4]) {
+            fx[0]--;
+            if (fx[0] > 0) {
+                rare_memcpy(particle, particles + fx[0], sizeof(AppearParticle));
             }
             continue;
         }
-        local_1++;
-        local_4++;
+        particle++;
+        i++;
     }
 }
 
-void func_8080031C_chappearfx(param_0) s32 param_0;
+void func_8080031C_chappearfx(actor) s32 actor;
 {
-    u8 *v0;
+    u8 *fx;
 
-    v0 = func_80100094(param_0, 0);
-    if (v0[0xD] != 0) {
-        v0[0xD] = 0;
+    fx = func_80100094(actor, 0);
+    if (fx[0xD] != 0) {
+        fx[0xD] = 0;
         func_800FCAE0(0x1C, 0, 0x1F4);
         func_800FCA90(0x1C);
     }
 }
 
-int func_80800360_chappearfx(param_0, param_1, param_2)
-s32 param_0;
-s32 param_1;
-s32 param_2;
+int func_80800360_chappearfx(actor, unk_1, unk_2)
+s32 actor;
+s32 unk_1;
+s32 unk_2;
 {
-    if (param_1 == 0x95) {
-        _subaddielink_entrypoint_3(func_80100094(param_0, 0) + 0x14);
+    if (unk_1 == 0x95) {
+        _subaddielink_entrypoint_3(func_80100094(actor, 0) + 0x14);
         return 1;
     }
     return 0;
 }
 
-void func_808003A0_chappearfx(Actor *param_0, void *param_1)
+// Draws all particles as sprites.
+void func_808003A0_chappearfx(Actor *actor, void *gfx)
 {
-    u8 *local_0;
-    u8 *local_1;
-    s32 local_2;
-    void *local_3;
-    f32 local_5[3];
-    f32 local_6[3];
-    f32 local_4;
-    local_0 = func_80100094(param_0, 0);
-    local_1 = local_0 + 0x1C;
-    param_0->unk7C_12 = 1;
-    if (*(s16 *) local_0) {
-        local_3 = func_800D674C(D_80800970_chappearfx[*(s16 *) (local_0 + 0xE)].a);
-        func_800E2588((*(u16 *) (local_0 + 4) & 0x10) ? 0 : 1);
-        func_800E2594(param_1, local_3);
+    u8 *fx;
+    u8 *particle;
+    s32 i;
+    void *sprite;
+    f32 pos[3];
+    f32 size[3];
+    f32 scale;
+    fx = func_80100094(actor, 0);
+    particle = fx + 0x1C;
+    actor->unk7C_12 = 1;
+    if (*(s16 *) fx) {
+        sprite = func_800D674C(D_80800970_chappearfx[*(s16 *) (fx + 0xE)].sprite_id);
+        func_800E2588((*(u16 *) (fx + 4) & 0x10) ? 0 : 1);
+        func_800E2594(gfx, sprite);
         func_800E24D8(1);
-        for (local_2 = 0; local_2 < *(s16 *) local_0; local_2++, local_1 += 0x14) {
-            local_4 = param_0->scale * ((AFXE_ *) local_1)->f10;
-            func_800EE7F8(local_5, param_0->position);
-            func_800EF1B8(local_5, *(s16 *) (local_1 + 6), *(s16 *) (local_0 + 6));
-            local_5[1] += *(s16 *) (local_1 + 8);
-            func_800EFA4C(local_6, local_4, local_4, local_4);
-            func_800E2530(*(f32 *) (local_1 + 0xC));
-            func_800E2720(param_1, 0, *(s16 *) (local_1 + 4), local_5, local_6, local_0[0xC]);
+        for (i = 0; i < *(s16 *) fx; i++, particle += 0x14) {
+            scale = actor->scale * ((AFXE_ *) particle)->scale;
+            func_800EE7F8(pos, actor->position);
+            func_800EF1B8(pos, *(s16 *) (particle + 6), *(s16 *) (fx + 6));
+            pos[1] += *(s16 *) (particle + 8);
+            func_800EFA4C(size, scale, scale, scale);
+            func_800E2530(*(f32 *) (particle + 0xC));
+            func_800E2720(gfx, 0, *(s16 *) (particle + 4), pos, size, fx[0xC]);
         }
-        func_800E2A14(param_1);
+        func_800E2A14(gfx);
     }
 }
 
-void func_80800554_chappearfx(param_0) Actor *param_0;
+// Adds one particle with randomised parameters.
+void func_80800554_chappearfx(actor) Actor *actor;
 {
-    s16 *local_0;
-    AppearParticle *local_1;
-    f32 local_2;
-    local_0 = func_80100094(param_0, 0);
-    if (local_0[0] < local_0[1]) {
-        local_1 = (AppearParticle *) local_0;
-        local_1 += local_0[0];
-        local_1 = (AppearParticle *) ((u8 *) local_1 + 0x1C);
-        local_1->local_0[3] = func_800DC178(0.0f, 359.0f);
-        local_1->local_0[0] = func_800DC128(250, 350);
-        local_2 = func_800F10B4(local_0[4] - local_0[5], 0.0f, 500.0f, 30.0f, 350.0f);
-        local_1->local_0[1] = func_800DC178(0.8f, 1.2f) * local_2;
-        local_1->local_0[4] = local_0[5];
-        local_1->local_0[2] = func_800DC298(0.5f);
-        local_1->local_2 = func_800DC178(0.8f, 1.4f);
-        local_1->local_1 = func_800DC178(0.0f, 360.0f);
-        local_1->local_0[5] = func_800DC128(-200, 200);
-        local_0[0]++;
+    s16 *fx;
+    AppearParticle *particle;
+    f32 rise_speed;
+    fx = func_80100094(actor, 0);
+    if (fx[0] < fx[1]) {
+        particle = (AppearParticle *) fx;
+        particle += fx[0];
+        particle = (AppearParticle *) ((u8 *) particle + 0x1C);
+        particle->shorts[3] = func_800DC178(0.0f, 359.0f);
+        particle->shorts[0] = func_800DC128(250, 350);
+        rise_speed = func_800F10B4(fx[4] - fx[5], 0.0f, 500.0f, 30.0f, 350.0f);
+        particle->shorts[1] = func_800DC178(0.8f, 1.2f) * rise_speed;
+        particle->shorts[4] = fx[5];
+        particle->shorts[2] = func_800DC298(0.5f);
+        particle->scale = func_800DC178(0.8f, 1.4f);
+        particle->rotation = func_800DC178(0.0f, 360.0f);
+        particle->shorts[5] = func_800DC128(-200, 200);
+        fx[0]++;
     }
 }
 
-void chappearfx_entrypoint_1(s32 *param_0, s32 param_1, s32 param_2, s32 param_3)
+void chappearfx_entrypoint_1(s32 *target_ref, s32 flags, s32 kind, s32 size_scale)
 {
-    _chbaddiesetup_entrypoint_4(&_chappearfx_entrypoint_3, *param_0, param_1, param_2, param_3);
+    _chbaddiesetup_entrypoint_4(&_chappearfx_entrypoint_3, *target_ref, flags, kind, size_scale);
 }
 
-void chappearfx_entrypoint_2(Actor **param_0, f32 *param_1, s32 param_2, s32 param_3)
+void chappearfx_entrypoint_2(Actor **target_ref, f32 *flags, s32 kind, s32 size_scale)
 {
-    chappearfx_entrypoint_3(*param_0, param_1, param_2, *(f32 *) &param_3);
+    chappearfx_entrypoint_3(*target_ref, flags, kind, *(f32 *) &size_scale);
 }
 
-void chappearfx_entrypoint_3(s32 param_0, s32 param_1, s32 param_2, f32 param_3)
+void chappearfx_entrypoint_3(s32 target_ref, s32 flags, s32 kind, f32 size_scale)
 {
-    Actor *local_0;
-    Actor *local_1;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
-    f32 local_7;
-    AppearFX49 *local_2;
-    *(f32 *) &local_7 = *(f32 *) &param_3;
-    local_0 = func_80106790(param_0);
-    local_1 = func_80108528(0x3D9, local_0->position, 0, &local_0);
+    Actor *target;
+    Actor *appear;
+    s32 radius;
+    s32 max_y;
+    s32 min_y;
+    s32 count;
+    f32 scale;
+    AppearFX49 *fx;
+    // Matching: the copy through casts is needed for the match.
+    *(f32 *) &scale = *(f32 *) &size_scale;
+    target = func_80106790(target_ref);
+    appear = func_80108528(0x3D9, target->position, 0, &target);
 
-    local_3 = (func_80103EAC(local_0) + 20.0f) * local_7;
-    local_4 = func_800F0E00(50.0f, *(s16 *) ((u8 *) local_0 + 0x8A) * local_0->scale);
-    local_5 = func_800F13F0(0.0f, *(s16 *) ((u8 *) local_0 + 0x88) * local_0->scale);
-    local_6 = func_800F10B4(local_4 - local_5, 0.0f, 500.0f, 15.0f, 40.0f);
+    radius = (func_80103EAC(target) + 20.0f) * scale;
+    max_y = func_800F0E00(50.0f, *(s16 *) ((u8 *) target + 0x8A) * target->scale);
+    min_y = func_800F13F0(0.0f, *(s16 *) ((u8 *) target + 0x88) * target->scale);
+    count = func_800F10B4(max_y - min_y, 0.0f, 500.0f, 15.0f, 40.0f);
 
-    local_2 = func_80100074(local_1, 0, local_6 * 20 + 28);
-    local_1->unk58 = 3.0f;
-    local_2->local_1 = local_6;
-    local_2->local_0 = 0;
-    local_2->local_10 = local_3 + 400;
-    local_2->local_3 = local_3;
-    local_2->local_9 = local_3;
-    local_2->local_4 = local_4;
-    local_2->local_5 = local_5;
-    local_2->local_6 = 255;
-    local_2->local_2 = param_1;
-    _subaddielink_entrypoint_0(local_2->local_11);
-    local_2->local_8 = param_2;
-    func_80102FDC(local_1, D_80800974_chappearfx[param_2][0]);
+    fx = func_80100074(appear, 0, count * 20 + 28);
+    appear->unk58 = 3.0f;
+    fx->max_count = count;
+    fx->count = 0;
+    fx->unk_12 = radius + 400;
+    fx->radius = radius;
+    fx->unk_10 = radius;
+    fx->max_y = max_y;
+    fx->min_y = min_y;
+    fx->alpha = 255;
+    fx->flags = flags;
+    _subaddielink_entrypoint_0(fx->link);
+    fx->kind = kind;
+    func_80102FDC(appear, D_80800974_chappearfx[kind][0]);
 
-    if (param_1 & 2)
-        _subaddieaudioquick_entrypoint_2(local_1, local_1->position, D_808009D8_chappearfx);
-    if (param_1 & 4)
+    // Flags: 2 = sound, 4 = func_800FC660, 8 = link to target, 0x20 = fade target.
+    if (flags & 2)
+        _subaddieaudioquick_entrypoint_2(appear, appear->position, D_808009D8_chappearfx);
+    if (flags & 4)
         func_800FC660(0x10);
-    if (param_1 & 8)
-        _subaddielink_entrypoint_1(local_2->local_11, local_0->unk0);
-    if (param_1 & 0x20)
-        _subaddiefade_entrypoint_2(local_0);
+    if (flags & 8)
+        _subaddielink_entrypoint_1(fx->link, target->unk0);
+    if (flags & 0x20)
+        _subaddiefade_entrypoint_2(target);
 }
+
+// TU-NOTE: The overlay .data is defined here in C. Its tables point at functions of this file,
+// and IDO's assembler schedules some of them differently unless they are in the same unit.
+// Values are taken from the ROM. D_80800974_chappearfx = D_80800970_chappearfx + 0x4 (linker
+// symbol). The extern of D_80800990_chappearfx is declared as int[] to match the object.
 
 AfxPair D_80800970_chappearfx[4] = {0x9E3, 0x3E99999A, 0x9E1, 0x3E99999A,
                                     0x9E4, 0x3E99999A, 0x9E9, 0x3E99999A};

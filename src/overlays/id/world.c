@@ -2,128 +2,134 @@
 #include "vector.h"
 
 typedef struct {
-    s32 unk0;
-    s16 unk4;
-    u8 unk6;
-    u8 pad7;
-    u8 unk8[0xA0];
+    s32 owner;
+    s16 mesh_id;
+    u8 type;
+    u8 enabled;
+    u8 state[0xA0];
 } WorldLookupRecord;
 extern Vector *D_80127EF8;
 typedef struct {
-    s32 local_0;
-    s16 local_1;
-    u8 local_2;
-    u8 local_3;
-    u8 local_4[0xA0];
+    s32 owner;
+    s16 mesh_id;
+    u8 type;
+    u8 enabled;
+    u8 state[0xA0];
 } WorldItemRecord61;
 typedef struct {
     s32 pad_0[2];
-    Vector *local_0;
+    Vector *entries;
 } WorldItemList61;
 extern WorldItemList61 D_80127EF0;
 typedef void (*WorldDrawFn)(void *, s32, s32);
 extern WorldDrawFn D_808002C0_idworld[];
 
-WorldLookupRecord *func_80800000_idworld(s32 param_0, s32 param_1)
+// Finds the effect entry with this mesh id and type.
+WorldLookupRecord *func_80800000_idworld(s32 mesh_id, s32 type)
 {
-    WorldLookupRecord *local_1;
-    WorldLookupRecord *local_0;
+    WorldLookupRecord *entry;
+    WorldLookupRecord *end;
 
     if (D_80127EF8 == NULL) {
         return NULL;
     }
-    local_0 = vector_end(D_80127EF8);
-    for (local_1 = vector_begin(D_80127EF8); local_1 < local_0; local_1++) {
-        if (param_1 == local_1->unk6 && param_0 == local_1->unk4) {
-            return local_1;
+    end = vector_end(D_80127EF8);
+    for (entry = vector_begin(D_80127EF8); entry < end; entry++) {
+        if (type == entry->type && mesh_id == entry->mesh_id) {
+            return entry;
         }
     }
     return NULL;
 }
 
-int idworld_entrypoint_0(s32 param_0)
+// Typed getters: return the entry state (entry + 8) or 0. Types: glowa 6, flasha 8, twinkle 12, mesh-group animator 2.
+int idworld_entrypoint_0(s32 mesh_id)
 {
-    int local_0;
-    int v;
-    v = func_80800000_idworld(param_0, 6);
-    if (v) {
-        local_0 = v + 8;
+    int result;
+    int entry;
+    entry = func_80800000_idworld(mesh_id, 6);
+    if (entry) {
+        result = entry + 8;
     } else {
-        local_0 = 0;
+        result = 0;
     }
-    return local_0 | 0;
+    return result | 0; // Matching:  is needed for the match.
 }
 
-int idworld_entrypoint_1(s32 param_0)
+int idworld_entrypoint_1(s32 mesh_id)
 {
-    int local_0;
-    int v;
-    v = func_80800000_idworld(param_0, 8);
-    if (v) {
-        local_0 = v + 8;
+    int result;
+    int entry;
+    entry = func_80800000_idworld(mesh_id, 8);
+    if (entry) {
+        result = entry + 8;
     } else {
-        local_0 = 0;
+        result = 0;
     }
-    return local_0 | 0;
+    return result | 0; // Matching:  is needed for the match.
 }
 
-int idworld_entrypoint_2(s32 param_0)
+int idworld_entrypoint_2(s32 mesh_id)
 {
-    int local_0;
-    int v;
-    v = func_80800000_idworld(param_0, 0xC);
-    if (v) {
-        local_0 = v + 8;
+    int result;
+    int entry;
+    entry = func_80800000_idworld(mesh_id, 0xC);
+    if (entry) {
+        result = entry + 8;
     } else {
-        local_0 = 0;
+        result = 0;
     }
-    return local_0 | 0;
+    return result | 0; // Matching:  is needed for the match.
 }
 
-int idworld_entrypoint_3(s32 param_0)
+int idworld_entrypoint_3(s32 mesh_id)
 {
-    int local_0;
-    int v;
-    v = func_80800000_idworld(param_0, 2);
-    if (v) {
-        local_0 = v + 8;
+    int result;
+    int entry;
+    entry = func_80800000_idworld(mesh_id, 2);
+    if (entry) {
+        result = entry + 8;
     } else {
-        local_0 = 0;
+        result = 0;
     }
-    return local_0 | 0;
+    return result | 0; // Matching:  is needed for the match.
 }
 
-u8 *idworld_entrypoint_4(s32 param_0, s32 param_1)
+// Wibble (type 10) state by owner and mesh id.
+u8 *idworld_entrypoint_4(s32 owner, s32 mesh_id)
 {
-    WorldLookupRecord *local_1;
-    WorldLookupRecord *local_0;
+    WorldLookupRecord *entry;
+    WorldLookupRecord *end;
 
     if (D_80127EF8 == NULL) {
         return NULL;
     }
-    local_0 = vector_end(D_80127EF8);
-    for (local_1 = vector_begin(D_80127EF8); local_1 < local_0; local_1++) {
-        if (local_1->unk6 == 10 && param_0 == local_1->unk0 && param_1 == local_1->unk4) {
-            return local_1->unk8;
+    end = vector_end(D_80127EF8);
+    for (entry = vector_begin(D_80127EF8); entry < end; entry++) {
+        if (entry->type == 10 && owner == entry->owner && mesh_id == entry->mesh_id) {
+            return entry->state;
         }
     }
     return NULL;
 }
 
+// Per-frame: runs the update of every enabled entry.
 void idworld_entrypoint_5(void)
 {
-    WorldItemRecord61 *local_0;
-    WorldItemRecord61 *local_1;
+    WorldItemRecord61 *entry;
+    WorldItemRecord61 *end;
 
-    local_1 = vector_end(D_80127EF0.local_0);
-    for (local_0 = vector_begin(D_80127EF0.local_0); local_0 < local_1; local_0++) {
-        if (local_0->local_3) {
-            D_808002C0_idworld[local_0->local_2](local_0->local_4, local_0->local_0,
-                                                 local_0->local_1);
+    end = vector_end(D_80127EF0.entries);
+    for (entry = vector_begin(D_80127EF0.entries); entry < end; entry++) {
+        if (entry->enabled) {
+            D_808002C0_idworld[entry->type](entry->state, entry->owner,
+                                            entry->mesh_id);
         }
     }
 }
 
+// TU-NOTE: this overlay's .data is defined here in C; its tables point to functions of this file,
+// and IDO schedules some of them differently unless the tables are in the same unit.
 extern void _idlight_entrypoint_3();
 extern void _idscroll_entrypoint_3();
 extern void func_800EE108();

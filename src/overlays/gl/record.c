@@ -20,56 +20,57 @@ typedef struct {
     u8 stick;
 } PlaybackInput;
 struct glrecord_entrypoint {
-    s32 unk0;
-    s32 unk8;
-    u32 unkC;
+    s32 unk_0;
+    s32 unk_8;
+    u32 unk_C;
 };
 extern struct glrecord_entrypoint D_8012D5B0;
 int glrecord_entrypoint_4();
 
-s32 glrecord_entrypoint_0(PlaybackInput *param_0, s32 *param_1)
+// Feeds the next recorded input; the fallback record is used past the end.
+s32 glrecord_entrypoint_0(PlaybackInput *out_input, s32 *out_state)
 {
-    RecordPlaybackState *local_0 = (RecordPlaybackState *) (s32 *) &D_8012D5B0;
-    RecordedInput *local_1;
-    s32 local_2;
+    RecordPlaybackState *playback = (RecordPlaybackState *) (s32 *) &D_8012D5B0;
+    RecordedInput *record;
+    s32 has_more;
 
-    local_1 = &local_0->records[local_0->cursor++];
-    local_2 = local_0->cursor < local_0->count;
-    if (!local_2) {
-        local_1 = &local_0->fallback;
+    record = &playback->records[playback->cursor++];
+    has_more = playback->cursor < playback->count;
+    if (!has_more) {
+        record = &playback->fallback;
     }
-    param_0->buttons = local_1->buttons;
-    param_0->stick = local_1->stick;
-    param_0->held = local_1->held;
-    *param_1 = local_1->state;
-    return local_2;
+    out_input->buttons = record->buttons;
+    out_input->stick = record->stick;
+    out_input->held = record->held;
+    *out_state = record->state;
+    return has_more;
 }
 
-void glrecord_entrypoint_1(s32 param_0, u32 param_1, s32 param_2)
+void glrecord_entrypoint_1(s32 records, u32 size, s32 unused)
 {
-    *(s32 *) ((s8 *) &D_8012D5B0 + 0) = param_0;
-    *(u32 *) ((s8 *) &D_8012D5B0 + 0xC) = (u32) (param_1 / 6U);
+    *(s32 *) ((s8 *) &D_8012D5B0 + 0) = records;
+    *(u32 *) ((s8 *) &D_8012D5B0 + 0xC) = (u32) (size / 6U);
     *(s32 *) ((s8 *) &D_8012D5B0 + 8) = 0;
 }
 
 int glrecord_entrypoint_2()
 {
-    int *ptr = &((int *) &D_8012D5B0)[2];
-    return *ptr * 6;
+    int *cursor_ptr = &((int *) &D_8012D5B0)[2];
+    return *cursor_ptr * 6;
 }
 
-void glrecord_entrypoint_3(s32 param_0, s32 param_1)
+void glrecord_entrypoint_3(s32 map, s32 demo_index)
 {
-    s32 local_0;
+    s32 size;
     if (*(s32 **) ((s8 *) (s32 *) &D_8012D5B0 + 4) != 0) {
         glrecord_entrypoint_4();
     }
     *(s8 *) ((s8 *) (s32 *) &D_8012D5B0 + 0x14) = 2;
     func_800D5B24();
     *(s32 **) ((s8 *) (s32 *) &D_8012D5B0 + 4) =
-        func_800D5B34((_gcsectionDll_entrypoint_4(param_0) + (param_1 * 0xD)) + 0xC57);
-    local_0 = **(s32 **) ((s8 *) (s32 *) &D_8012D5B0 + 4);
-    glrecord_entrypoint_1((u8 *) *(s32 **) ((s8 *) (s32 *) &D_8012D5B0 + 4) + 4, local_0, 0);
+        func_800D5B34((_gcsectionDll_entrypoint_4(map) + (demo_index * 0xD)) + 0xC57);
+    size = **(s32 **) ((s8 *) (s32 *) &D_8012D5B0 + 4);
+    glrecord_entrypoint_1((u8 *) *(s32 **) ((s8 *) (s32 *) &D_8012D5B0 + 4) + 4, size, 0);
 }
 
 int glrecord_entrypoint_4()

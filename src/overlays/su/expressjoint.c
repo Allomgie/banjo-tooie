@@ -8,33 +8,35 @@ extern int D_80801824_suexpressjoint;
 typedef struct {
     u8 pad_0[4];
     s16 id;
-    s16 variant;
-    u8 active;
-    u8 pad_1[0x17];
+    s16 preset;
+    u8 intensity;
+    u8 pad_9[0x17];
     u8 values[32];
 } ExpressionJoint_suexpressjoint_entrypoint_2;
+// One bone override: bone index, sign flags, pose (9 floats per weight).
 typedef struct {
-    u8 b0;
-    u8 b1;
-    u8 pad2[2];
-    f32 *ptr;
+    u8 bone;
+    u8 sign_flags;
+    u8 pad_2[2];
+    f32 *pose;
 } SejItem;
 typedef u8 SejRow[4];
+// One joint preset.
 typedef struct {
     SejItem *list;
     SejRow *data;
-    u16 pad_8;
-    u8 base;
-    u8 n1;
-    u8 count;
-    u8 padD[3];
+    u16 id;
+    u8 default_row;
+    u8 item_count;
+    u8 weight_count;
+    u8 pad_D[3];
 } SejEnt;
 extern SejEnt D_80801818_suexpressjoint[];
 typedef struct {
     f32 timer;
     s16 id;
-    s16 variant;
-    u8 active;
+    s16 preset;
+    u8 intensity;
     u8 pad_9[3];
     f32 w[4];
     f32 sum;
@@ -48,169 +50,178 @@ extern void func_800E0AFC(void *, s32, f32, f32, f32, f32);
 extern void func_800E0C20(void *, s32, f32, f32, f32, f32);
 extern void func_800E0B8C(void *, s32, f32, f32, f32, f32);
 
-s32 func_80800000_suexpressjoint(s32 param_0)
+// Returns the preset index for a preset id, or -1 if unknown.
+s32 func_80800000_suexpressjoint(s32 id)
 {
-    s8 *local_0;
-    s32 local_1;
+    s8 *entry;
+    s32 index;
 
-    if (param_0 == D_80801820_suexpressjoint) {
+    if (id == D_80801820_suexpressjoint) {
         return 0;
     }
-    local_0 = D_80801838_suexpressjoint;
-    local_1 = 2;
-    if (param_0 == D_80801830_suexpressjoint[0]) {
+    entry = D_80801838_suexpressjoint;
+    index = 2;
+    if (id == D_80801830_suexpressjoint[0]) {
         return 1;
     }
 loop_5:
-    if (param_0 == *(s16 *) ((s8 *) local_0 + 8)) {
-        return local_1;
+    if (id == *(s16 *) ((s8 *) entry + 8)) {
+        return index;
     }
-    if (param_0 == *(s16 *) ((s8 *) local_0 + 0x18)) {
-        return local_1 + 1;
+    if (id == *(s16 *) ((s8 *) entry + 0x18)) {
+        return index + 1;
     }
-    if (param_0 == *(s16 *) ((s8 *) local_0 + 0x28)) {
-        return local_1 + 2;
+    if (id == *(s16 *) ((s8 *) entry + 0x28)) {
+        return index + 2;
     }
-    if (param_0 == *(s16 *) ((s8 *) local_0 + 0x38)) {
-        return local_1 + 3;
+    if (id == *(s16 *) ((s8 *) entry + 0x38)) {
+        return index + 3;
     }
-    local_1 += 4;
-    local_0 += 0x40;
-    if (local_1 == 0x16) {
+    index += 4;
+    entry += 0x40;
+    if (index == 0x16) {
         return -1;
     }
     goto loop_5;
 }
 
-int suexpressjoint_entrypoint_0(param_0)
-s16 param_0;
+// Returns the block size for a preset id (weight count + 0x20).
+int suexpressjoint_entrypoint_0(id)
+s16 id;
 {
-    s32 local_0;
-    int new_var;
-    local_0 = func_80800000_suexpressjoint(param_0);
-    if (local_0 == -1) {
+    s32 index;
+    int size;
+    index = func_80800000_suexpressjoint(id);
+    if (index == -1) {
         return 0;
     }
-    new_var = ((u8 *) &D_80801824_suexpressjoint)[local_0 * 0x10] + 0x20;
-    return new_var;
+    size = ((u8 *) &D_80801824_suexpressjoint)[index * 0x10] + 0x20;
+    return size;
 }
 
-void suexpressjoint_entrypoint_1(s16 *param_0, s16 param_1)
+void suexpressjoint_entrypoint_1(s16 *block, s16 id)
 {
-    param_0[2] = param_1;
-    param_0[3] = func_80800000_suexpressjoint(param_0[2]);
+    block[2] = id;
+    block[3] = func_80800000_suexpressjoint(block[2]);
 }
 
-void suexpressjoint_entrypoint_2(ExpressionJoint_suexpressjoint_entrypoint_2 *param_0, s16 param_1)
+// Initialises the block from the preset's default pose.
+void suexpressjoint_entrypoint_2(ExpressionJoint_suexpressjoint_entrypoint_2 *block, s16 id)
 {
-    u8 *local_0;
-    s32 local_1;
-    local_0 = param_0->values;
-    suexpressjoint_entrypoint_1((s16 *) param_0, param_1);
-    param_0->active = 0;
-    for (local_1 = 0; local_1 < D_80801818_suexpressjoint[param_0->variant].count; local_1++) {
-        *local_0++ = D_80801818_suexpressjoint[param_0->variant]
-                         .data[D_80801818_suexpressjoint[param_0->variant].base][local_1];
+    u8 *dst;
+    s32 i;
+    dst = block->values;
+    suexpressjoint_entrypoint_1((s16 *) block, id);
+    block->intensity = 0;
+    for (i = 0; i < D_80801818_suexpressjoint[block->preset].weight_count; i++) {
+        *dst++ = D_80801818_suexpressjoint[block->preset]
+                     .data[D_80801818_suexpressjoint[block->preset].default_row][i];
     }
 }
 
-void suexpressjoint_entrypoint_3(s32 param_0, ExpressionJoint_suexpressjoint_entrypoint_3 *param_1,
-                                 s32 param_2)
+// Per-frame update: eases the weights toward the pose row requested by the dialog box.
+void suexpressjoint_entrypoint_3(s32 unk_0, ExpressionJoint_suexpressjoint_entrypoint_3 *joint,
+                                 s32 unk_2)
 {
-    f32 sp40[4];
+    f32 target[4];
     s32 row;
-    f32 c;
+    f32 unk_1;
     u8 *cur;
-    f32 f;
+    f32 step;
     s32 i;
 
-    param_1->sum = 0.0f;
-    cur = param_1->values;
-    row = D_80801818_suexpressjoint[param_1->variant].base;
-    if (param_2 != 0 && func_800D52F4() == param_1->id) {
+    joint->sum = 0.0f;
+    cur = joint->values;
+    row = D_80801818_suexpressjoint[joint->preset].default_row;
+    if (unk_2 != 0 && func_800D52F4() == joint->id) {
         row = func_800D52A4() - 1;
         if (row < 0) {
-            row = D_80801818_suexpressjoint[param_1->variant].base;
+            row = D_80801818_suexpressjoint[joint->preset].default_row;
         }
         if (func_800D5298() != 0) {
-            param_1->timer = 0.05f;
+            joint->timer = 0.05f;
         }
-        if (param_1->timer > 0.0f) {
-            param_1->timer = param_1->timer - func_800D8FF8();
-        } else if (param_1->timer < 0.0f) {
-            row = D_80801818_suexpressjoint[param_1->variant].base;
-            param_1->timer = 0.0f;
+        if (joint->timer > 0.0f) {
+            joint->timer = joint->timer - func_800D8FF8();
+        } else if (joint->timer < 0.0f) {
+            row = D_80801818_suexpressjoint[joint->preset].default_row;
+            joint->timer = 0.0f;
         }
-        f = (100 - param_1->active) * 0.2f;
-        if (f < 2.0f) {
-            f = 2.0f;
+        step = (100 - joint->intensity) * 0.2f;
+        if (step < 2.0f) {
+            step = 2.0f;
         }
-        param_1->active = (u32) func_800F15F8((f32) (u32) param_1->active, 100.0f, f);
+        joint->intensity = (u32) func_800F15F8((f32) (u32) joint->intensity, 100.0f, step);
     } else {
-        param_1->active = (u32) ((f32) (u32) param_1->active - (f32) (u32) param_1->active * 0.2f);
+        joint->intensity = (u32) ((f32) (u32) joint->intensity - (f32) (u32) joint->intensity * 0.2f);
     }
-    for (i = 0; i < D_80801818_suexpressjoint[param_1->variant].count; i++) {
-        sp40[i] = (f32) (u32) D_80801818_suexpressjoint[param_1->variant].data[row][i];
-        *cur = (u32) ((sp40[i] - (f32) *cur) * 0.15f + (f32) *cur);
-        param_1->w[i] = (f32) (u32) *cur * 0.01f;
+    for (i = 0; i < D_80801818_suexpressjoint[joint->preset].weight_count; i++) {
+        target[i] = (f32) (u32) D_80801818_suexpressjoint[joint->preset].data[row][i];
+        *cur = (u32) ((target[i] - (f32) *cur) * 0.15f + (f32) *cur);
+        joint->w[i] = (f32) (u32) *cur * 0.01f;
         cur++;
-        param_1->sum += param_1->w[i];
+        joint->sum += joint->w[i];
     }
-    if (param_1->sum != 0.0f) {
-        for (i = 0; i < D_80801818_suexpressjoint[param_1->variant].count; i++) {
-            param_1->w[i] = param_1->w[i] / param_1->sum;
+    if (joint->sum != 0.0f) {
+        for (i = 0; i < D_80801818_suexpressjoint[joint->preset].weight_count; i++) {
+            joint->w[i] = joint->w[i] / joint->sum;
         }
     }
 }
 
-void suexpressjoint_entrypoint_4(u8 *param_0, s32 param_1)
+// Draw time: writes the weighted bone overrides, scaled by the block's intensity.
+void suexpressjoint_entrypoint_4(u8 *param_0, s32 unk_1)
 {
-    s32 argp_7;
-    f32 f22;
-    void *s4;
-    f32 out1[3];
-    f32 out0[3];
-    f32 out2[3];
-    s32 s5;
+    s32 k;
+    f32 intensity;
+    void *bones;
+    f32 trans[3];
+    f32 rot[3];
+    f32 scl[3];
+    s32 item;
     s32 j;
 
-    f22 = (f32) (u32) param_0[8] * 0.01f;
-    s4 = func_800AE6BC(func_801040A8(param_1));
-    for (s5 = 0; s5 < ENT.n1; s5++) {
+    intensity = (f32) (u32) param_0[8] * 0.01f;
+    bones = func_800AE6BC(func_801040A8(unk_1));
+    for (item = 0; item < ENT.item_count; item++) {
         for (j = 0; j < 3; j++) {
-            out0[j] = 0.0f;
-            out1[j] = 0.0f;
-            out2[j] = 0.0f;
-            for (argp_7 = 0; argp_7 < ENT.count; argp_7++) {
-                out0[j] = (((f32(*)[9]) ENT.list[s5].ptr)[argp_7][j] *
-                           ((f32 *) (param_0 + 0xC))[argp_7]) +
-                          out0[j];
-                out1[j] = (((f32(*)[9]) ENT.list[s5].ptr)[argp_7][j + 3] *
-                           ((f32 *) (param_0 + 0xC))[argp_7]) +
-                          out1[j];
-                out2[j] = (((f32(*)[9]) ENT.list[s5].ptr)[argp_7][j + 6] *
-                           ((f32 *) (param_0 + 0xC))[argp_7]) +
-                          out2[j];
+            rot[j] = 0.0f;
+            trans[j] = 0.0f;
+            scl[j] = 0.0f;
+            for (k = 0; k < ENT.weight_count; k++) {
+                rot[j] = (((f32(*)[9]) ENT.list[item].pose)[k][j] *
+                          ((f32 *) (param_0 + 0xC))[k]) +
+                         rot[j];
+                trans[j] = (((f32(*)[9]) ENT.list[item].pose)[k][j + 3] *
+                            ((f32 *) (param_0 + 0xC))[k]) +
+                           trans[j];
+                scl[j] = (((f32(*)[9]) ENT.list[item].pose)[k][j + 6] *
+                          ((f32 *) (param_0 + 0xC))[k]) +
+                         scl[j];
             }
         }
-        if (ENT.list[s5].b1 & 1) {
-            func_800E0AFC(s4, ENT.list[s5].b0, f22, out1[0], out1[1], out1[2]);
+        if (ENT.list[item].sign_flags & 1) {
+            func_800E0AFC(bones, ENT.list[item].bone, intensity, trans[0], trans[1], trans[2]);
         } else {
-            func_800E0AFC(s4, ENT.list[s5].b0, -f22, out1[0], out1[1], out1[2]);
+            func_800E0AFC(bones, ENT.list[item].bone, -intensity, trans[0], trans[1], trans[2]);
         }
-        if (ENT.list[s5].b1 & 2) {
-            func_800E0C20(s4, ENT.list[s5].b0, f22, out0[0], out0[1], out0[2]);
+        if (ENT.list[item].sign_flags & 2) {
+            func_800E0C20(bones, ENT.list[item].bone, intensity, rot[0], rot[1], rot[2]);
         } else {
-            func_800E0C20(s4, ENT.list[s5].b0, -f22, out0[0], out0[1], out0[2]);
+            func_800E0C20(bones, ENT.list[item].bone, -intensity, rot[0], rot[1], rot[2]);
         }
-        if (ENT.list[s5].b1 & 4) {
-            func_800E0B8C(s4, ENT.list[s5].b0, f22, out2[0], out2[1], out2[2]);
+        if (ENT.list[item].sign_flags & 4) {
+            func_800E0B8C(bones, ENT.list[item].bone, intensity, scl[0], scl[1], scl[2]);
         } else {
-            func_800E0B8C(s4, ENT.list[s5].b0, -f22, out2[0], out2[1], out2[2]);
+            func_800E0B8C(bones, ENT.list[item].bone, -intensity, scl[0], scl[1], scl[2]);
         }
     }
 }
 
+// TU-NOTE: the overlay .data is defined here in C, values taken from the ROM.
+// D_80801820 = D_80801818 + 0x8 and D_80801824 = D_80801818 + 0xC are linker
+// symbols (undefined_syms.us.txt). The externs D_80801830 (s16[]) and D_80801838
+// (s32[]) are declared as arrays over the objects defined below.
 u32 D_80800A60_suexpressjoint[27] = {
     0x0, 0x0,        0x0,        0x0, 0x0, 0x0, 0x3F800000, 0x3F800000, 0x3F800000,
     0x0, 0x408F0A3D, 0x3F7D70A4, 0x0, 0x0, 0x0, 0x3F800000, 0x3F800000, 0x3F800000,
@@ -367,6 +378,7 @@ u32 D_8080176C_suexpressjoint[36] = {
 u32 D_808017FC_suexpressjoint[4] = {0x12010000, (u32) &D_808016DC_suexpressjoint, 0x2A000000,
                                     (u32) &D_8080176C_suexpressjoint};
 u32 D_8080180C_suexpressjoint[3] = {0x64000000, 0x640000, 0x6400};
+// Preset table: the first entry is D_80801818, the rest continues at D_80801830/D_80801838.
 SejEnt D_80801818_suexpressjoint[1] = {(void *) &D_80800F18_suexpressjoint,
                                        (void *) &D_80800F30_suexpressjoint,
                                        0xC,

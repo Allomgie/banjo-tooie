@@ -10,56 +10,60 @@ s32 bamum_entrypoint_0()
     return 0x8;
 }
 
-void func_80800008_bamum(param_0) void *param_0;
+// Clears the wand effect intensity (PlayerState+0xD0 -> [1]).
+void func_80800008_bamum(player) void *player;
 {
-    f32 local_0 = 0.0f;
-    ((f32 *) ((void **) param_0)[0xD0 / 4])[1] = local_0;
+    // Matching: extra local needed for the match.
+    f32 intensity = 0.0f;
+    ((f32 *) ((void **) player)[0xD0 / 4])[1] = intensity;
 }
 
-void func_80800018_bamum(param_0) PlayerState *param_0;
+// Emits sparkles between the two wand bones while the intensity is non-zero.
+void func_80800018_bamum(player) PlayerState *player;
 {
-    f32 local_8[3];
-    f32 local_7[3];
-    f32 local_6[3];
-    f32 local_5[3];
-    f32 local_4[3];
-    f32 local_3[3];
-    f32 local_2[3];
-    f32 local_1[2];
-    s32 local_0;
+    f32 rand_vec[3];
+    f32 dir[3];
+    f32 unk_0[3];
+    f32 unk_1[3];
+    f32 bone_a[3];
+    f32 bone_b[3];
+    f32 emit_pos[3];
+    f32 angles[2];
+    s32 emitter;
 
-    local_0 = func_800B5BE4(0xD);
-    if (((f32 *) *(void **) ((u8 *) param_0 + 0xD0))[1] != 0.0f) {
-        func_8009C128(param_0, local_6);
-        func_8009C15C(param_0, local_5);
-        func_800EFB24(local_7, local_6, local_5);
-        func_80092C6C(param_0, local_4);
-        func_80092C48(param_0, local_3);
-        func_800EF04C(local_4, local_7);
-        func_800EF04C(local_3, local_7);
-        func_800EFB24(local_7, local_3, local_4);
-        func_800F1A88(local_7, local_1);
-        local_1[0] = -local_1[0];
-        func_800EFD24(local_8);
-        func_800EE780(local_2, local_3, local_8);
-        func_800BA994(local_0, (s16) (s32) (local_1[0] - 20.0f), (s16) (s32) (local_1[1] - 40.0f),
-                      400, (s32) (local_1[0] + 20.0f), (s32) (local_1[1] + 40.0f), 400);
-        func_800BABB8(local_0, local_2, NULL, 1.0f, D_80800280_bamum);
-        func_800BA22C(local_0,
-                      (s32) (((f32 *) *(void **) ((u8 *) param_0 + 0xD0))[1] * 3.0f + 0.5f));
+    emitter = func_800B5BE4(0xD);
+    if (((f32 *) *(void **) ((u8 *) player + 0xD0))[1] != 0.0f) {
+        func_8009C128(player, unk_0);
+        func_8009C15C(player, unk_1);
+        func_800EFB24(dir, unk_0, unk_1);
+        func_80092C6C(player, bone_a);
+        func_80092C48(player, bone_b);
+        func_800EF04C(bone_a, dir);
+        func_800EF04C(bone_b, dir);
+        func_800EFB24(dir, bone_b, bone_a);
+        func_800F1A88(dir, angles);
+        angles[0] = -angles[0];
+        func_800EFD24(rand_vec);
+        func_800EE780(emit_pos, bone_b, rand_vec);
+        func_800BA994(emitter, (s16) (s32) (angles[0] - 20.0f), (s16) (s32) (angles[1] - 40.0f),
+                      400, (s32) (angles[0] + 20.0f), (s32) (angles[1] + 40.0f), 400);
+        func_800BABB8(emitter, emit_pos, NULL, 1.0f, D_80800280_bamum);
+        func_800BA22C(emitter,
+                      (s32) (((f32 *) *(void **) ((u8 *) player + 0xD0))[1] * 3.0f + 0.5f));
     }
 }
 
-void bamum_entrypoint_1(s32 arg0)
+void bamum_entrypoint_1(s32 player)
 {
 }
 
-int bamum_entrypoint_2(s32 param_0)
+int bamum_entrypoint_2(s32 player)
 {
-    s32 local_0;
+    s32 on;
     func_80800008_bamum();
-    local_0 = 0;
-    func_8009ADF0(param_0, 5, local_0);
+    // Matching: extra local needed for the match.
+    on = 0;
+    func_8009ADF0(player, 5, on);
 }
 
 void bamum_entrypoint_3()
@@ -67,21 +71,22 @@ void bamum_entrypoint_3()
     func_80800018_bamum();
 }
 
-int bamum_entrypoint_4(s32 param_0, s32 param_1)
+int bamum_entrypoint_4(s32 player, s32 on)
 {
-    if (param_1 != 0) {
-        func_8009ADF0(param_0, 5, 1);
-        func_80800008_bamum(param_0);
+    if (on != 0) {
+        func_8009ADF0(player, 5, 1);
+        func_80800008_bamum(player);
     } else {
-        func_8009ADF0(param_0, 5, 0 | 0);
+        func_8009ADF0(player, 5, 0 | 0);  // Matching: `| 0` needed for the match.
     }
 }
 
-bamum_entrypoint_5(s32 param_0, f32 param_1)
+bamum_entrypoint_5(s32 player, f32 intensity)
 {
-    *(f32 *) (*(s32 *) (param_0 + 208) + 4) = param_1;
+    *(f32 *) (*(s32 *) (player + 208) + 4) = intensity;
 }
 
+// TU-NOTE: this overlay's .data is defined here in C; values are taken from the ROM.
 u8 D_80800280_bamum[48] = {0x0,  0x1D, 0x9, 0xE9, 0x0, 0x15, 0x0, 0x0,  0x0, 0x66, 0x0, 0xC,
                            0x0,  0x2,  0x0, 0x22, 0x0, 0x14, 0x0, 0x14, 0x0, 0x33, 0x0, 0x33,
                            0x0,  0x27, 0x0, 0x0,  0x1, 0x90, 0x0, 0x0,  0x1, 0xB8, 0x0, 0x16,

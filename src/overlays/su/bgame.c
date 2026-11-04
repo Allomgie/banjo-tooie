@@ -5,10 +5,10 @@ extern u8 D_80800970_susubgame[];
 extern s32 _gcdialogcamera_entrypoint_0(s32, s32);
 typedef struct {
     u8 state;
-    u8 pad1;
-    s16 unk2;
-    f32 unk4;
-    f32 unk8[4];
+    u8 cutscene;
+    s16 flags;
+    f32 unk_4;
+    f32 view_scale[4];
 } SubGameView;
 extern s32 func_800D3948(void);
 extern void *func_800A93E4(s32);
@@ -22,56 +22,62 @@ extern void _ncpod_entrypoint_24(void *, s32, f32 *);
 extern void _ncpod_entrypoint_21(void *, s32, s32);
 extern void func_8010D5DC();
 extern void func_800F4A58(s32, f32 *, f32);
+// Sets up the pod camera views of all participating players and runs their camera script.
 void susubgame_entrypoint_5();
 void func_8080078C_susubgame();
 int func_80800814_susubgame();
 int func_808008DC_susubgame();
 void susubgame_entrypoint_12();
 
-void susubgame_entrypoint_0(s32 param_0, u8 *param_1, unsigned long param_2)
+// Initializes the sub-game state block.
+void susubgame_entrypoint_0(s32 actor, u8 *sg, unsigned long flags)
 {
-    u8 *new_var;
-    *(s8 *) param_1 = 0;
-    *(s16 *) (param_1 + 2) = param_2;
-    *(s8 *) (param_1 + 1) = 0;
-    *(s16 *) (param_1 + 4) = 0x15;
-    new_var = param_1;
-    susubgame_entrypoint_12(new_var, &D_80800970_susubgame);
+    // Matching: the extra temporary is needed for the match.
+    u8 *block;
+    *(s8 *) sg = 0;
+    *(s16 *) (sg + 2) = flags;
+    *(s8 *) (sg + 1) = 0;
+    *(s16 *) (sg + 4) = 0x15;
+    block = sg;
+    susubgame_entrypoint_12(block, &D_80800970_susubgame);
 }
 
-void susubgame_entrypoint_1(void *param_0, void *param_1, int param_2)
+void susubgame_entrypoint_1(void *actor, void *sg, int param_2)
 {
-    *(u16 *) ((char *) param_1 + 4) = param_2;
+    *(u16 *) ((char *) sg + 4) = param_2;
 }
 
-s32 susubgame_entrypoint_2(s32 param_0, u8 *param_1)
+s32 susubgame_entrypoint_2(s32 actor, u8 *sg)
 {
-    return param_1[0];
+    return sg[0];
 }
 
-int susubgame_entrypoint_3(void *param_0, u8 *param_1, s32 param_2, s32 param_3)
+// Shows the intro dialog through the dialog camera.
+int susubgame_entrypoint_3(void *actor, u8 *sg, s32 param_2, s32 param_3)
 {
     if (_gcdialogcamera_entrypoint_0(param_2, param_3)) {
-        if (*param_1 != 2)
-            susubgame_entrypoint_5(param_0, param_1, 5, 1, 0);
+        if (*sg != 2)
+            susubgame_entrypoint_5(actor, sg, 5, 1, 0);
         return 2;
     }
     return 1;
 }
 
-int susubgame_entrypoint_4(s32 param_0, u8 *param_1)
+// Closes the pod cameras of all participating players; ends the cutscene if one was started.
+int susubgame_entrypoint_4(s32 actor, u8 *sg)
 {
-    s32 local_1;
-    if (*param_1 != 0) {
-        for (local_1 = 0; local_1 < 8; local_1++) {
-            if (func_808008DC_susubgame(local_1 | 0) != 0) {
-                _ncpod_entrypoint_17(func_800A93E4(local_1 | 0), 0);
+    s32 i;
+    if (*sg != 0) {
+        for (i = 0; i < 8; i++) {
+            // Matching: "| 0" on the loop index is needed for the match.
+            if (func_808008DC_susubgame(i | 0) != 0) {
+                _ncpod_entrypoint_17(func_800A93E4(i | 0), 0);
             }
         }
 
-        *param_1 = 0;
-        if (*(param_1 + 1) != 0) {
-            *(param_1 + 1) = 0;
+        *sg = 0;
+        if (*(sg + 1) != 0) {
+            *(sg + 1) = 0;
             _glcutDll_entrypoint_17();
         }
         return 1;
@@ -79,15 +85,16 @@ int susubgame_entrypoint_4(s32 param_0, u8 *param_1)
     return 0;
 }
 
-void susubgame_entrypoint_5(this, sg, arg2, arg3, flags) Actor *this;
+// Sets up the pod camera views of all participating players and runs their camera script.
+void susubgame_entrypoint_5(actor, sg, arg2, arg3, flags) Actor *actor;
 u8 *sg;
 s32 arg2;
 s32 arg3;
 s32 flags;
 {
     s32 i;
-    void *a;
-    void *p;
+    void *view;
+    void *pod;
     f32 scaled[4];
     f32 vec[3];
 
@@ -96,29 +103,31 @@ s32 flags;
     }
     switch (SG->state) {
         case 0:
-            func_80800814_susubgame(this, sg, flags);
+            func_80800814_susubgame(actor, sg, flags);
+            // fallthrough
         case 1:
         case 3:
             for (i = 0; i < 4; i++) {
-                scaled[i] = SG->unk8[i] * this->scale;
+                scaled[i] = SG->view_scale[i] * actor->scale;
             }
             for (i = 0; i < 8; i++) {
                 if (func_808008DC_susubgame(i)) {
-                    a = func_800A93E4(i);
-                    p = func_80110024(func_800A93E4(i));
-                    _ncpod_entrypoint_12(p, 1);
-                    _ncpod_entrypoint_22(p, 0, scaled);
-                    _ncpod_entrypoint_23(p, 0, this->position);
-                    if (SG->unk2 & 1) {
-                        func_800EFA4C(vec, 0.0f, func_8010CD50(this, i), 0.0f);
-                        _ncpod_entrypoint_24(p, 0, vec);
+                    view = func_800A93E4(i);
+                    pod = func_80110024(func_800A93E4(i));
+                    _ncpod_entrypoint_12(pod, 1);
+                    _ncpod_entrypoint_22(pod, 0, scaled);
+                    _ncpod_entrypoint_23(pod, 0, actor->position);
+                    if (SG->flags & 1) {
+                        func_800EFA4C(vec, 0.0f, func_8010CD50(actor, i), 0.0f);
+                        _ncpod_entrypoint_24(pod, 0, vec);
                     } else {
-                        _ncpod_entrypoint_24(p, 0, this->rotation);
+                        _ncpod_entrypoint_24(pod, 0, actor->rotation);
                     }
-                    func_8080078C_susubgame(a, i);
+                    func_8080078C_susubgame(view, i);
                 }
             }
             SG->state = 2;
+            // fallthrough
         case 2:
             for (i = 0; i < 8; i++) {
                 if (func_808008DC_susubgame(i)) {
@@ -128,177 +137,191 @@ s32 flags;
     }
 }
 
-void susubgame_entrypoint_6(s32 *param_0, u8 *param_1, s32 param_2, s32 param_3, s32 param_4)
+// Runs the pod camera script for the current player.
+void susubgame_entrypoint_6(s32 *actor, u8 *sg, s32 param_2, s32 flags, s32 script)
 {
-    if (param_4 == 0) {
-        param_4 = *param_0;
+    if (script == 0) {
+        script = *actor;
     }
-    switch (*param_1) {
+    switch (*sg) {
         case 0:
-            func_80800814_susubgame(param_0, param_1, param_3);
+            func_80800814_susubgame(actor, sg, flags);
+            // fallthrough
         case 2:
         case 3:
-            *param_1 = 1;
+            *sg = 1;
+            // fallthrough
         case 1:
-            _ncpod_entrypoint_20(func_800A93E4(func_800F54E4()), param_4, param_2, param_3 | 0x800);
+            _ncpod_entrypoint_20(func_800A93E4(func_800F54E4()), script, param_2, flags | 0x800);
     }
 }
 
-void susubgame_entrypoint_7(Actor *param_0, u8 *param_1, s32 *param_2, s32 param_3,
-                            Unk80132ED0 *param_4)
+// Runs a pod camera script for each participating player.
+void susubgame_entrypoint_7(Actor *actor, u8 *sg, s32 *param_2, s32 flags,
+                            Unk80132ED0 *script)
 {
-    s32 local_0;
+    s32 i;
 
-    if (param_4 == NULL) {
-        param_4 = param_0->unk0;
+    if (script == NULL) {
+        script = actor->unk0;
     }
-    switch (param_1[0]) {
+    switch (sg[0]) {
         case 0:
-            func_80800814_susubgame(param_0, param_1, param_3);
+            func_80800814_susubgame(actor, sg, flags);
+            // fallthrough
         case 2:
         case 3:
-            param_1[0] = 1;
+            sg[0] = 1;
+            // fallthrough
         case 1:
-            for (local_0 = 0; local_0 < 8; local_0++) {
-                if (func_808008DC_susubgame(local_0)) {
-                    _ncpod_entrypoint_20(func_800A93E4(local_0), param_4, param_2[local_0],
-                                         param_3 | 0x800);
+            for (i = 0; i < 8; i++) {
+                if (func_808008DC_susubgame(i)) {
+                    _ncpod_entrypoint_20(func_800A93E4(i), script, param_2[i],
+                                         flags | 0x800);
                 }
             }
     }
 }
 
-void susubgame_entrypoint_8(s32 *param_0, u8 *param_1, s32 param_2, s32 param_3, s32 param_4)
+// Runs a pod camera script (variant 32) for each participating player.
+void susubgame_entrypoint_8(s32 *actor, u8 *sg, s32 param_2, s32 flags, s32 script)
 {
-    s32 local_0;
+    s32 i;
 
-    if (param_4 == 0) {
-        param_4 = *param_0;
+    if (script == 0) {
+        script = *actor;
     }
-    switch (*param_1) {
+    switch (*sg) {
         case 0:
-            func_80800814_susubgame(param_0, param_1, param_3);
+            func_80800814_susubgame(actor, sg, flags);
+            // fallthrough
         case 1:
         case 2:
-            *param_1 = 3;
+            *sg = 3;
+            // fallthrough
         case 3:
-            local_0 = 0;
+            i = 0;
             do {
-                if (func_808008DC_susubgame(local_0)) {
-                    _ncpod_entrypoint_32(func_800A93E4(local_0), param_4, param_2, param_3 | 0x800);
+                if (func_808008DC_susubgame(i)) {
+                    _ncpod_entrypoint_32(func_800A93E4(i), script, param_2, flags | 0x800);
                 }
-                local_0++;
-            } while (local_0 != 8);
+                i++;
+            } while (i != 8);
     }
 }
 
+// Tests whether all participating players are ready.
 int susubgame_entrypoint_9()
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < 8; local_0++) {
-        if (func_808008DC_susubgame(local_0) && !func_800F6F00(local_0))
+    s32 i;
+    for (i = 0; i < 8; i++) {
+        if (func_808008DC_susubgame(i) && !func_800F6F00(i))
             return 0;
     }
 
     return 1;
 }
 
-int susubgame_entrypoint_10(Actor *param_0, s32 param_1, s32 param_2, s32 param_3)
+// Places the player at a start marker, by player-control script or by teleport.
+int susubgame_entrypoint_10(Actor *actor, s32 param_1, s32 param_2, s32 param_3)
 {
-    f32 local_0[6];
-    s32 local_1;
-    s32 local_3;
-    f32 local_2[3];
+    f32 marker[6];
+    s32 scripted;
+    s32 player;
+    f32 rot[3];
 
-    local_1 = !func_800DA9E4(param_3, 1);
-    local_3 = func_800F54E4();
-    if (!_subaddiemarker_entrypoint_0(param_0, param_2, local_0, 1))
+    scripted = !func_800DA9E4(param_3, 1);
+    player = func_800F54E4();
+    if (!_subaddiemarker_entrypoint_0(actor, param_2, marker, 1))
         return 0;
-    if (local_1) {
-        func_800F608C(local_3, param_1);
-        func_800F497C(local_3);
-        func_800F49A8(local_3, 1);
-        func_800F49D4(local_3, func_8010D5DC, param_0->unk0);
-        func_800F4A58(local_3, local_0, 200.0f);
+    if (scripted) {
+        func_800F608C(player, param_1);
+        func_800F497C(player);
+        func_800F49A8(player, 1);
+        func_800F49D4(player, func_8010D5DC, actor->unk0);
+        func_800F4A58(player, marker, 200.0f);
     } else {
-        func_800EFA4C(local_2, 0.0f, local_0[4], 0.0f);
-        func_800F608C(local_3, param_1);
-        func_800F8294(local_3, local_0);
-        func_800F832C(local_3, local_2);
-        func_800F497C(local_3);
+        func_800EFA4C(rot, 0.0f, marker[4], 0.0f);
+        func_800F608C(player, param_1);
+        func_800F8294(player, marker);
+        func_800F832C(player, rot);
+        func_800F497C(player);
     }
-    return local_1;
+    return scripted;
 }
 
-s32 susubgame_entrypoint_11(s32 param_0)
+// Stops the timer in the given slot if it is running.
+s32 susubgame_entrypoint_11(s32 slot)
 {
-    if (func_800CEAA8(param_0) != 0) {
-        func_800CE88C(param_0, 0);
+    if (func_800CEAA8(slot) != 0) {
+        func_800CE88C(slot, 0);
     }
 }
 
-void func_8080078C_susubgame(param_0, param_1) s32 param_0;
-s32 param_1;
+void func_8080078C_susubgame(view, player) s32 view;
+s32 player;
 {
-    f32 sp3C[3];
-    f32 sp30[3];
-    f32 sp20[4];
-    s32 sp1C;
+    f32 pos[3];
+    f32 rot[3];
+    f32 scale[4];
+    s32 pod;
 
-    sp1C = func_80110024(func_800A93E4(param_1));
-    func_800F5A00(param_1, sp3C);
-    func_800F5DC8(param_1, sp30);
-    _ncpod_entrypoint_23(sp1C, 1, sp3C);
-    _ncpod_entrypoint_24(sp1C, 1, sp30);
-    _gcdialogcamera_entrypoint_7(param_1, sp20);
-    _ncpod_entrypoint_22(sp1C, 1, sp20);
+    pod = func_80110024(func_800A93E4(player));
+    func_800F5A00(player, pos);
+    func_800F5DC8(player, rot);
+    _ncpod_entrypoint_23(pod, 1, pos);
+    _ncpod_entrypoint_24(pod, 1, rot);
+    _gcdialogcamera_entrypoint_7(player, scale);
+    _ncpod_entrypoint_22(pod, 1, scale);
 }
 
-int func_80800814_susubgame(param_0, param_1, param_2)
-s32 param_0[2];
-s32 *param_1;
-u32 param_2;
+int func_80800814_susubgame(actor, sg, flags)
+s32 actor[2];
+s32 *sg;
+u32 flags;
 {
-    s32 local_0;
-    s32 local_1;
-    Gtexture *local_2 = &*param_1;
-    local_1 = 0;
-    while (local_1 < 8) {
-        if (func_808008DC_susubgame(local_1) != 0) {
-            local_0 = func_800A93E4(local_1);
-            _ncpod_entrypoint_16(local_0, param_0[0], *(s16 *) ((char *) local_2 + 0x4),
-                                 param_2 | 0x800);
+    s32 view;
+    s32 i;
+    // Matching: "&*" is needed for the match.
+    Gtexture *state = &*sg;
+    i = 0;
+    while (i < 8) {
+        if (func_808008DC_susubgame(i) != 0) {
+            view = func_800A93E4(i);
+            _ncpod_entrypoint_16(view, actor[0], *(s16 *) ((char *) state + 0x4),
+                                 flags | 0x800);
         }
-        local_1++;
+        i++;
     }
 
-    if (param_2 & 0x800) {
-        *(u8 *) ((char *) local_2 + 0x1) = 0;
+    if (flags & 0x800) {
+        *(u8 *) ((char *) state + 0x1) = 0;
     } else {
-        *(u8 *) ((char *) local_2 + 0x1) = 1;
+        *(u8 *) ((char *) state + 0x1) = 1;
     }
-    if (*(u8 *) ((char *) local_2 + 0x1) != 0) {
+    if (*(u8 *) ((char *) state + 0x1) != 0) {
         _glcutDll_entrypoint_6(func_800EA05C(), 0x79);
     }
 }
 
-int func_808008DC_susubgame(param_0)
-s32 param_0;
+int func_808008DC_susubgame(player)
+s32 player;
 {
     if (func_800D3948()) {
-        return func_800F6438(param_0) != 0 && func_800A9420(param_0) != 0;
+        return func_800F6438(player) != 0 && func_800A9420(player) != 0;
     }
-    return func_800F54E4() == param_0;
+    return func_800F54E4() == player;
 }
 
-void susubgame_entrypoint_12(param_0, param_1) float param_0[4];
-float param_1[4];
+void susubgame_entrypoint_12(dst, src) float dst[4];
+float src[4];
 {
-    param_0[2] = param_1[0];
-    param_0[3] = param_1[1];
-    param_0[4] = param_1[2];
-    param_0[5] = param_1[3];
+    dst[2] = src[0];
+    dst[3] = src[1];
+    dst[4] = src[2];
+    dst[5] = src[3];
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
 u8 D_80800970_susubgame[16] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
                                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};

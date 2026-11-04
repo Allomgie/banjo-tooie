@@ -3,14 +3,16 @@
 extern s16 D_80800040_gsproplookup[];
 extern s16 D_808000F4_gsproplookup[];
 
-s32 gsproplookup_entrypoint_0(u16 *param_0)
+// Model asset id of a prop type (u16 >> 4).
+s32 gsproplookup_entrypoint_0(u16 *prop)
 {
-    return D_80800040_gsproplookup[(((param_0[0] & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) >> 4];
+    return D_80800040_gsproplookup[(((prop[0] & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) >> 4];
 }
 
-int gsproplookup_entrypoint_1(u16 *param_0)
+// Sprite asset id of a prop type (u16 >> 4).
+int gsproplookup_entrypoint_1(u16 *prop)
 {
-    return D_808000F4_gsproplookup[(u32) *param_0 >> 4];
+    return D_808000F4_gsproplookup[(u32) *prop >> 4];
 }
 
 s16 D_80800040_gsproplookup[90] = {

@@ -1,24 +1,27 @@
 #include "common.h"
 
+// Instance layout (built by glidmake): +0 model, +4 chunk count, +0x14/+0x18 vertex lists,
+// +0x1C chunks. Each chunk: group id, run count, size, runs of {first vertex, count},
+// then a copy of the original vertices.
 typedef struct GlIdChunk_glid_entrypoint_0 {
-    s16 local_0;
-    s16 local_1;
-    s32 local_2;
+    s16 group_id;
+    s16 item_count;
+    s32 size;
 } GlIdChunk_glid_entrypoint_0;
 typedef struct GlIdItem_glid_entrypoint_0 {
-    s16 local_0;
-    s16 local_1;
+    s16 first;
+    s16 count;
 } GlIdItem_glid_entrypoint_0;
 extern void *func_800B2190(s32);
 
 typedef struct {
-    s16 local_0;
-    s16 local_1;
-    s32 local_2;
+    s16 group_id;
+    s16 item_count;
+    s32 size;
 } GlIdChunk_glid_entrypoint_1;
 typedef struct {
-    s16 local_0;
-    s16 local_1;
+    s16 first;
+    s16 count;
 } GlIdItem_glid_entrypoint_1;
 typedef struct {
     s16 position[3];
@@ -27,188 +30,194 @@ typedef struct {
     u8 color[4];
 } GlIdVertex;
 
-void glid_entrypoint_0(param_0, param_1, param_2, param_3) u8 *param_0;
-s32 param_1;
-void (*param_2)(s32, void *, void *, s32, s32);
-s32 param_3;
+// Calls callback for each vertex run of the group (with the original-vertex copy).
+void glid_entrypoint_0(inst, group_id, callback, arg) u8 *inst;
+s32 group_id;
+void (*callback)(s32, void *, void *, s32, s32);
+s32 arg;
 {
-    u8 *local_0;
-    GlIdChunk_glid_entrypoint_0 *local_1;
-    GlIdItem_glid_entrypoint_0 *local_2;
-    GlIdItem_glid_entrypoint_0 *local_3;
-    u8 *local_4;
-    s32 local_5;
+    u8 *verts;
+    GlIdChunk_glid_entrypoint_0 *chunk;
+    GlIdItem_glid_entrypoint_0 *item;
+    GlIdItem_glid_entrypoint_0 *item_end;
+    u8 *orig;
+    s32 i;
 
-    local_0 = func_800B2190(*(s32 *) (param_0 + 0x14));
-    local_1 = (GlIdChunk_glid_entrypoint_0 *) (param_0 + 0x1C);
-    for (local_5 = 0; local_5 < *(s32 *) (param_0 + 4); local_5++) {
-        if (param_1 == local_1->local_0) {
-            local_2 = (GlIdItem_glid_entrypoint_0 *) (local_1 + 1);
-            local_3 = local_2 + local_1->local_1;
-            local_4 = (u8 *) local_3;
-            for (; local_2 < local_3; local_2++) {
-                param_2(local_1->local_0, local_4, local_0 + local_2->local_0 * 16,
-                        local_2->local_1, param_3);
-                local_4 += local_2->local_1 * 16;
+    verts = func_800B2190(*(s32 *) (inst + 0x14));
+    chunk = (GlIdChunk_glid_entrypoint_0 *) (inst + 0x1C);
+    for (i = 0; i < *(s32 *) (inst + 4); i++) {
+        if (group_id == chunk->group_id) {
+            item = (GlIdItem_glid_entrypoint_0 *) (chunk + 1);
+            item_end = item + chunk->item_count;
+            orig = (u8 *) item_end;
+            for (; item < item_end; item++) {
+                callback(chunk->group_id, orig, verts + item->first * 16,
+                        item->count, arg);
+                orig += item->count * 16;
             }
             break;
         }
-        local_1 = (GlIdChunk_glid_entrypoint_0 *) ((u8 *) local_1 + local_1->local_2);
+        chunk = (GlIdChunk_glid_entrypoint_0 *) ((u8 *) chunk + chunk->size);
     }
 }
 
-void glid_entrypoint_1(param_0, param_1, param_2, param_3) u8 *param_0;
-s32 param_1;
-void (*param_2)(void *, void *, void *, s32, s32);
-s32 param_3;
+// Like entrypoint_0, but passes the matching runs of both vertex lists.
+void glid_entrypoint_1(inst, group_id, callback, arg) u8 *inst;
+s32 group_id;
+void (*callback)(void *, void *, void *, s32, s32);
+s32 arg;
 {
-    GlIdChunk_glid_entrypoint_1 *local_0;
-    GlIdItem_glid_entrypoint_1 *local_1;
-    GlIdItem_glid_entrypoint_1 *local_2;
-    u8 *local_3;
-    u8 *local_4;
-    u8 *local_5;
-    s32 local_6;
-    s32 local_7;
+    GlIdChunk_glid_entrypoint_1 *chunk;
+    GlIdItem_glid_entrypoint_1 *item;
+    GlIdItem_glid_entrypoint_1 *item_end;
+    u8 *verts;
+    u8 *other_verts;
+    u8 *orig;
+    s32 i;
+    s32 offset;
 
-    local_3 = func_800B2190(*(s32 *) (param_0 + 0x14));
-    local_4 = func_800B2190(*(s32 *) (param_0 + 0x18));
-    local_0 = (GlIdChunk_glid_entrypoint_1 *) (param_0 + 0x1C);
-    for (local_6 = 0; local_6 < *(s32 *) (param_0 + 4); local_6++) {
-        if (param_1 == local_0->local_0) {
-            local_1 = (GlIdItem_glid_entrypoint_1 *) (local_0 + 1);
-            local_2 = local_1 + local_0->local_1;
-            local_5 = (u8 *) local_2;
-            for (; local_1 < local_2; local_1++) {
-                local_7 = local_1->local_0 * 16;
-                param_2(local_5, local_7 + local_3, local_7 + local_4, local_1->local_1, param_3);
-                local_5 += local_1->local_1 * 16;
+    verts = func_800B2190(*(s32 *) (inst + 0x14));
+    other_verts = func_800B2190(*(s32 *) (inst + 0x18));
+    chunk = (GlIdChunk_glid_entrypoint_1 *) (inst + 0x1C);
+    for (i = 0; i < *(s32 *) (inst + 4); i++) {
+        if (group_id == chunk->group_id) {
+            item = (GlIdItem_glid_entrypoint_1 *) (chunk + 1);
+            item_end = item + chunk->item_count;
+            orig = (u8 *) item_end;
+            for (; item < item_end; item++) {
+                offset = item->first * 16;
+                callback(orig, offset + verts, offset + other_verts, item->count, arg);
+                orig += item->count * 16;
             }
             break;
         }
-        local_0 = (GlIdChunk_glid_entrypoint_1 *) ((u8 *) local_0 + local_0->local_2);
+        chunk = (GlIdChunk_glid_entrypoint_1 *) ((u8 *) chunk + chunk->size);
     }
 }
 
-void glid_entrypoint_2(param_0, param_1, param_2, param_3) u8 *param_0;
-s32 param_1;
-s32 (*param_2)(s16, u8 *, u8 *, s32);
-s32 param_3;
+// Calls callback once per vertex of the group.
+void glid_entrypoint_2(inst, group_id, callback, arg) u8 *inst;
+s32 group_id;
+s32 (*callback)(s16, u8 *, u8 *, s32);
+s32 arg;
 {
-    u8 *local_0;
-    u8 *local_1;
-    u8 *local_2;
-    u8 *local_3;
-    u8 *local_4;
-    s16 *local_5;
-    s16 *local_6;
-    s32 local_7;
+    u8 *verts;
+    u8 *chunk;
+    u8 *orig;
+    u8 *vtx;
+    u8 *vtx_end;
+    s16 *run;
+    s16 *run_end;
+    s32 i;
 
-    local_0 = func_800B2190(*(s32 *) (param_0 + 0x14));
-    local_1 = param_0 + 0x1C;
-    for (local_7 = 0; local_7 < *(s32 *) (param_0 + 4); local_7++) {
-        if (param_1 == *(s16 *) local_1) {
-            local_5 = (s16 *) (local_1 + 8);
-            local_6 = (s16 *) (local_1 + *(s16 *) (local_1 + 2) * 4 + 8);
-            local_2 = (u8 *) local_6;
-            for (; local_5 < local_6; local_5 += 2) {
-                local_3 = local_0 + local_5[0] * 16;
-                local_4 = local_3 + local_5[1] * 16;
-                for (; local_3 < local_4; local_3 += 16) {
-                    param_2(*(s16 *) local_1, local_2, local_3, param_3);
-                    local_2 += 16;
+    verts = func_800B2190(*(s32 *) (inst + 0x14));
+    chunk = inst + 0x1C;
+    for (i = 0; i < *(s32 *) (inst + 4); i++) {
+        if (group_id == *(s16 *) chunk) {
+            run = (s16 *) (chunk + 8);
+            run_end = (s16 *) (chunk + *(s16 *) (chunk + 2) * 4 + 8);
+            orig = (u8 *) run_end;
+            for (; run < run_end; run += 2) {
+                vtx = verts + run[0] * 16;
+                vtx_end = vtx + run[1] * 16;
+                for (; vtx < vtx_end; vtx += 16) {
+                    callback(*(s16 *) chunk, orig, vtx, arg);
+                    orig += 16;
                 }
             }
             break;
         }
-        local_1 += *(s32 *) (local_1 + 4);
+        chunk += *(s32 *) (chunk + 4);
     }
 }
 
-void glid_entrypoint_3(param_0, param_1, param_2, param_3) u8 *param_0;
-s32 param_1;
-void (*param_2)(void *, void *, s32, void *);
-s32 param_3;
+// Per-vertex callback for the group, also passing the vertex normals.
+void glid_entrypoint_3(inst, group_id, callback, arg) u8 *inst;
+s32 group_id;
+void (*callback)(void *, void *, s32, void *);
+s32 arg;
 {
-    u8 *local_0;
-    u8 *local_1;
-    u8 *local_2;
-    u8 *local_3;
-    u8 *local_4;
-    u8 *local_5;
-    u8 *local_6;
-    u8 *local_7;
-    s32 local_8;
-    u8 *local_9;
-    local_0 = (u8 *) func_800B2190(*(s32 *) (param_0 + 0x14));
-    local_1 = (u8 *) func_800B27A0(func_800D674C(*(s32 *) param_0));
-    local_2 = param_0 + 0x1C;
-    for (local_8 = 0; local_8 < *(s32 *) (param_0 + 4); local_8++) {
-        if (*(s16 *) local_2 == param_1) {
-            local_3 = local_2 + 8;
-            local_4 = local_2 + 8 + *(s16 *) (local_2 + 2) * 4;
-            local_5 = local_4;
-            while (local_3 < local_4) {
-                local_6 = local_0 + *(s16 *) local_3 * 16;
-                local_7 = local_6 + *(s16 *) (local_3 + 2) * 16;
-                local_9 = (u8 *) _dbvtxnormal_entrypoint_0(local_1, *(s16 *) local_3);
-                while (local_6 < local_7) {
-                    param_2(local_5, local_6, param_3, local_9);
-                    local_6 += 16;
-                    local_5 += 16;
-                    local_9 += 4;
+    u8 *verts;
+    u8 *normal_src;
+    u8 *chunk;
+    u8 *run;
+    u8 *run_end;
+    u8 *orig;
+    u8 *vtx;
+    u8 *vtx_end;
+    s32 i;
+    u8 *normals;
+    verts = (u8 *) func_800B2190(*(s32 *) (inst + 0x14));
+    normal_src = (u8 *) func_800B27A0(func_800D674C(*(s32 *) inst));
+    chunk = inst + 0x1C;
+    for (i = 0; i < *(s32 *) (inst + 4); i++) {
+        if (*(s16 *) chunk == group_id) {
+            run = chunk + 8;
+            run_end = chunk + 8 + *(s16 *) (chunk + 2) * 4;
+            orig = run_end;
+            while (run < run_end) {
+                vtx = verts + *(s16 *) run * 16;
+                vtx_end = vtx + *(s16 *) (run + 2) * 16;
+                normals = (u8 *) _dbvtxnormal_entrypoint_0(normal_src, *(s16 *) run);
+                while (vtx < vtx_end) {
+                    callback(orig, vtx, arg, normals);
+                    vtx += 16;
+                    orig += 16;
+                    normals += 4;
                 }
-                local_3 += 4;
+                run += 4;
             }
             break;
         }
-        local_2 += *(s32 *) (local_2 + 4);
+        chunk += *(s32 *) (chunk + 4);
     }
 }
 
-void glid_entrypoint_4(param_0, param_1, param_2) u8 *param_0;
-void (*param_1)(s16, GlIdVertex *, GlIdVertex *, s32);
-s32 param_2;
+// Per-vertex callback over all groups.
+void glid_entrypoint_4(inst, callback, arg) u8 *inst;
+void (*callback)(s16, GlIdVertex *, GlIdVertex *, s32);
+s32 arg;
 {
-    GlIdVertex *local_0;
-    u8 *local_1;
-    GlIdVertex *local_2;
-    GlIdVertex *local_3;
-    s32 local_7;
-    GlIdVertex *local_4;
-    s16 *local_5;
-    s16 *local_6;
+    GlIdVertex *verts;
+    u8 *chunk;
+    GlIdVertex *orig;
+    GlIdVertex *vtx;
+    s32 i;
+    GlIdVertex *vtx_end;
+    s16 *run;
+    s16 *run_end;
 
-    local_0 = func_800B2190(*(s32 *) (param_0 + 0x14));
-    local_1 = param_0 + 0x1C;
-    for (local_7 = 0; local_7 < *(s32 *) (param_0 + 4); local_7++) {
-        local_5 = (s16 *) (local_1 + 8);
-        local_6 = (s16 *) (local_1 + *(s16 *) (local_1 + 2) * 4 + 8);
-        local_2 = (GlIdVertex *) local_6;
-        for (; local_5 < local_6; local_5 += 2) {
-            local_3 = local_0 + local_5[0];
-            local_4 = local_3 + local_5[1];
-            for (; local_3 < local_4; local_3++) {
-                param_1(*(s16 *) local_1, local_2, local_3, param_2);
-                local_2++;
+    verts = func_800B2190(*(s32 *) (inst + 0x14));
+    chunk = inst + 0x1C;
+    for (i = 0; i < *(s32 *) (inst + 4); i++) {
+        run = (s16 *) (chunk + 8);
+        run_end = (s16 *) (chunk + *(s16 *) (chunk + 2) * 4 + 8);
+        orig = (GlIdVertex *) run_end;
+        for (; run < run_end; run += 2) {
+            vtx = verts + run[0];
+            vtx_end = vtx + run[1];
+            for (; vtx < vtx_end; vtx++) {
+                callback(*(s16 *) chunk, orig, vtx, arg);
+                orig++;
             }
         }
-        local_1 += *(s32 *) (local_1 + 4);
+        chunk += *(s32 *) (chunk + 4);
     }
 }
 
-void glid_entrypoint_5(s32 *param_0, s32 param_1)
+void glid_entrypoint_5(s32 *inst, s32 value)
 {
-    param_0[5] = param_1;
+    inst[5] = value;
 }
 
-void glid_entrypoint_6(void *param_0, s32 param_1)
+void glid_entrypoint_6(void *inst, s32 value)
 {
-    unsigned int new_var4;
-    unsigned int new_var2;
-    new_var2 = 6;
-    new_var4 = new_var2;
-    ((s32 *) param_0)[new_var4] = param_1;
-    if (new_var2 ^ 0) {
+    // Matching: extra temporaries and the empty xor test are needed for the match.
+    unsigned int slot_copy;
+    unsigned int slot;
+    slot = 6;
+    slot_copy = slot;
+    ((s32 *) inst)[slot_copy] = value;
+    if (slot ^ 0) {
     }
 }

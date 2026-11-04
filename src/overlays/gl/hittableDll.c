@@ -57,164 +57,174 @@ int glhittableDll_entrypoint_4();
 
 void glhittableDll_entrypoint_0(void)
 {
-    s16 *local_0;
+    s16 *row_index;
     s32 i;
     s32 j;
     s32 found;
 
-    local_0 = func_800D8F40();
+    // Builds the marker id -> table row index.
+    row_index = func_800D8F40();
     for (i = 0; i < 0x398; i++) {
-        for (j = 0, found = 0, local_0[i] = -1; j < 0x99 && !found; j++) {
+        for (j = 0, found = 0, row_index[i] = -1; j < 0x99 && !found; j++) {
             if (i == ((HitEntry94 *) D_80800530_glhittableDll)[j].id) {
-                local_0[i] = j;
+                row_index[i] = j;
                 found = 1;
             }
         }
     }
 }
 
-int glhittableDll_entrypoint_1(s32 param_0, s32 param_1)
+// Matches an (attacker, target) pair and dispatches the hit to both markers.
+int glhittableDll_entrypoint_1(s32 attacker, s32 target)
 {
-    s32 local_0;
-    s32 local_1;
-    local_0 = glhittableDll_entrypoint_4();
-    if (local_0 == -1) {
+    s32 match;
+    s32 hit_cell;
+    match = glhittableDll_entrypoint_4();
+    if (match == -1) {
         return 0;
     }
-    if (local_0 == -2) {
+    if (match == -2) {
         return 1;
     }
     {
-        local_1 = local_0;
-        func_800EB2DC(param_1, param_0, local_1);
-        func_800EB2DC(param_0, param_1, local_1);
+        hit_cell = match;
+        func_800EB2DC(target, attacker, hit_cell);
+        func_800EB2DC(attacker, target, hit_cell);
         return 1;
     }
 }
 
-int glhittableDll_entrypoint_2(int param_0)
+// True if hit_cell is a real match (not -1 or -2).
+int glhittableDll_entrypoint_2(int hit_cell)
 {
-    return param_0 != -1 && param_0 != -2;
+    return hit_cell != -1 && hit_cell != -2;
 }
 
-s32 glhittableDll_entrypoint_3(s32 param_0, s32 param_1, s32 param_2)
+// Same dispatch as entrypoint_1, with an already matched hit_cell.
+s32 glhittableDll_entrypoint_3(s32 attacker, s32 target, s32 hit_cell)
 {
-    if (param_2 == -1) {
+    if (hit_cell == -1) {
         return 0;
     }
-    if (param_2 == -2) {
+    if (hit_cell == -2) {
         return 1;
     }
-    func_800EB2DC(param_1, param_0, param_2);
-    func_800EB2DC(param_0, param_1, param_2);
+    func_800EB2DC(target, attacker, hit_cell);
+    func_800EB2DC(attacker, target, hit_cell);
     return 1;
 }
 
-int glhittableDll_entrypoint_4(param_0, param_1)
-s32 param_0;
-u8 *param_1;
+// Finds the first rule matching (attacker, target); returns row << 16 | column, -1 no row, -2 no match.
+int glhittableDll_entrypoint_4(attacker, target)
+s32 attacker;
+u8 *target;
 {
     s32 pad0;
-    s32 local_0;
-    HitTestRule *local_4;
-    s32 local_1;
-    HitTableRow *local_2;
-    u8 *local_3;
-    s32 local_5;
+    s32 row_idx;
+    HitTestRule *rule;
+    s32 col;
+    HitTableRow *row;
+    u8 *cell_ptr;
+    s32 cell;
 
-    local_0 = func_800D8F40()[*(u32 *) (param_1 + 0x24) >> 22];
-    if (local_0 == -1) {
+    row_idx = func_800D8F40()[*(u32 *) (target + 0x24) >> 22];
+    if (row_idx == -1) {
         return -1;
     }
-    local_2 = &((HitTableRow *) D_80800530_glhittableDll)[local_0];
-    local_3 = (u8 *) local_2;
-    local_1 = 0;
+    row = &((HitTableRow *) D_80800530_glhittableDll)[row_idx];
+    cell_ptr = (u8 *) row;
+    col = 0;
     do {
-        local_4 = &D_80802DD4_glhittableDll[local_1];
-        local_5 = *(u16 *) (local_3 + 4) | *(u16 *) ((u8 *) local_2 + 2);
-        if (local_5 && local_4->local_0(param_0, param_1) == local_4->local_1) {
-            return (local_0 << 16) | (local_1 & 0xFFFF);
+        rule = &D_80802DD4_glhittableDll[col];
+        cell = *(u16 *) (cell_ptr + 4) | *(u16 *) ((u8 *) row + 2);
+        if (cell && rule->local_0(attacker, target) == rule->local_1) {
+            return (row_idx << 16) | (col & 0xFFFF);
         }
-        local_1++;
-        local_3 += 2;
-    } while (local_1 != 32);
+        col++;
+        cell_ptr += 2;
+    } while (col != 32);
     return -2;
 }
 
-s32 glhittableDll_entrypoint_5(s32 param_0)
+// entrypoints 5-10: extract a packed field from the matched cell, OR-ed with the row default.
+s32 glhittableDll_entrypoint_5(s32 hit_cell)
 {
-    u8 *temp_v1;
-    temp_v1 = (((param_0 >> 0x10) & 0xFFFF) * 0x44) + (u8 *) (s32 *) D_80800530_glhittableDll;
-    return ((u32) *(u16 *) ((s8 *) temp_v1 + 2) >> 0xC) |
-           ((u32) *(u16 *) ((s8 *) (((((param_0 >> 0x10) & 0xFFFF) * 0x44) +
+    u8 *row;
+    row = (((hit_cell >> 0x10) & 0xFFFF) * 0x44) + (u8 *) (s32 *) D_80800530_glhittableDll;
+    return ((u32) *(u16 *) ((s8 *) row + 2) >> 0xC) |
+           ((u32) *(u16 *) ((s8 *) (((((hit_cell >> 0x10) & 0xFFFF) * 0x44) +
                                       (u8 *) (s32 *) D_80800530_glhittableDll) +
-                                     ((param_0 & 0xFFFF) * 2)) +
+                                     ((hit_cell & 0xFFFF) * 2)) +
                              4) >>
             0xC);
 }
 
-s32 glhittableDll_entrypoint_6(s32 param_0)
+s32 glhittableDll_entrypoint_6(s32 hit_cell)
 {
-    HitRow *local_0 = &D_80800530_glhittableDll[(param_0 >> 16) & 0xFFFF];
-    return ((HitEnt_glhittableDll_entrypoint_6 *) &local_0->c[param_0 & 0xFFFF])->f |
-           ((HitEnt_glhittableDll_entrypoint_6 *) &local_0->b)->f;
+    HitRow *row = &D_80800530_glhittableDll[(hit_cell >> 16) & 0xFFFF];
+    return ((HitEnt_glhittableDll_entrypoint_6 *) &row->c[hit_cell & 0xFFFF])->f |
+           ((HitEnt_glhittableDll_entrypoint_6 *) &row->b)->f;
 }
 
-s32 glhittableDll_entrypoint_7(s32 param_0)
+s32 glhittableDll_entrypoint_7(s32 hit_cell)
 {
-    HitRow *local_0 = &D_80800530_glhittableDll[(param_0 >> 16) & 0xFFFF];
-    return ((HitEnt_glhittableDll_entrypoint_7 *) &local_0->c[param_0 & 0xFFFF])->f |
-           ((HitEnt_glhittableDll_entrypoint_7 *) &local_0->b)->f;
+    HitRow *row = &D_80800530_glhittableDll[(hit_cell >> 16) & 0xFFFF];
+    return ((HitEnt_glhittableDll_entrypoint_7 *) &row->c[hit_cell & 0xFFFF])->f |
+           ((HitEnt_glhittableDll_entrypoint_7 *) &row->b)->f;
 }
 
-s32 glhittableDll_entrypoint_8(s32 param_0)
+s32 glhittableDll_entrypoint_8(s32 hit_cell)
 {
-    HitRow *local_0 = &D_80800530_glhittableDll[(param_0 >> 16) & 0xFFFF];
-    return ((HitEnt_glhittableDll_entrypoint_8 *) &local_0->c[param_0 & 0xFFFF])->f |
-           ((HitEnt_glhittableDll_entrypoint_8 *) &local_0->b)->f;
+    HitRow *row = &D_80800530_glhittableDll[(hit_cell >> 16) & 0xFFFF];
+    return ((HitEnt_glhittableDll_entrypoint_8 *) &row->c[hit_cell & 0xFFFF])->f |
+           ((HitEnt_glhittableDll_entrypoint_8 *) &row->b)->f;
 }
 
-s32 glhittableDll_entrypoint_9(s32 param_0)
+s32 glhittableDll_entrypoint_9(s32 hit_cell)
 {
-    HitRow *local_0 = &D_80800530_glhittableDll[(param_0 >> 16) & 0xFFFF];
-    return ((HitEnt_glhittableDll_entrypoint_9 *) &local_0->c[param_0 & 0xFFFF])->f |
-           ((HitEnt_glhittableDll_entrypoint_9 *) &local_0->b)->f;
+    HitRow *row = &D_80800530_glhittableDll[(hit_cell >> 16) & 0xFFFF];
+    return ((HitEnt_glhittableDll_entrypoint_9 *) &row->c[hit_cell & 0xFFFF])->f |
+           ((HitEnt_glhittableDll_entrypoint_9 *) &row->b)->f;
 }
 
-s32 glhittableDll_entrypoint_10(s32 param_0)
+s32 glhittableDll_entrypoint_10(s32 hit_cell)
 {
-    HitRow *local_0 = &D_80800530_glhittableDll[(param_0 >> 16) & 0xFFFF];
-    return local_0->c[param_0 & 0xFFFF].f | local_0->b.f;
+    HitRow *row = &D_80800530_glhittableDll[(hit_cell >> 16) & 0xFFFF];
+    return row->c[hit_cell & 0xFFFF].f | row->b.f;
 }
 
-s32 func_80800444_glhittableDll(param_0)
-HittableMarker *param_0;
+s32 func_80800444_glhittableDll(marker)
+HittableMarker *marker;
 {
-    s32 local_0;
-    if (param_0) {
-        if (!param_0->local_1) {
-            local_0 = param_0->local_0;
-            if (func_800F52B8(local_0) == 6)
+    s32 type;
+    if (marker) {
+        if (!marker->local_1) {
+            type = marker->local_0;
+            if (func_800F52B8(type) == 6)
                 return -1;
-            if (func_800F64A4(local_0, 0x42000))
+            if (func_800F64A4(type, 0x42000))
                 return -1;
         }
-        return param_0->local_1;
+        return marker->local_1;
     }
     return -1;
 }
 
-int func_808004D8_glhittableDll(Unk80132ED0 *param_0, s32 param_1)
+int func_808004D8_glhittableDll(Unk80132ED0 *marker, s32 unk_1)
 {
-    if (param_0 == 0)
+    if (marker == 0)
         return 6;
-    if (param_1) {
+    // Matching: empty block, needed for the match.
+    if (unk_1) {
     }
-    if ((param_0->unk24 >> 22) == 0) {
-        return func_800F52B8((u32) *(u16 *) ((u8 *) param_0 + 0x1A) >> 5);
+    if ((marker->unk24 >> 22) == 0) {
+        return func_800F52B8((u32) *(u16 *) ((u8 *) marker + 0x1A) >> 5);
     }
     return 0;
 }
+
+// TU-NOTE: the .data of this overlay is defined here in C; tables holding function
+// pointers must be in the same unit, otherwise IDO's assembler schedules those functions differently.
 
 HitRow D_80800530_glhittableDll[153] = {
     0x2F6,  0x0,    0x0,    0x201,  0x0,    0x0,    0x0,    0x0,    0x0,    0x201,  0x0,    0x201,

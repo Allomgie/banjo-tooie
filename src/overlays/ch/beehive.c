@@ -2,10 +2,10 @@
 
 extern void func_800EE7F8(f32 *, f32 *);
 typedef struct {
-    u8 pad[0x18];
-    s32 f18;
-    u8 pad1C[0x5C];
-    u32 pad78 : 29;
+    u8 pad_0[0x18];
+    s32 section_id;
+    u8 pad_1C[0x5C];
+    u32 pad_78 : 29;
     u32 flag : 1;
     u32 rest : 2;
 } HiveS;
@@ -23,70 +23,75 @@ extern f32 func_80101F24(Actor *);
 extern int D_80800374_chbeehive[];
 void func_80800180_chbeehive();
 
-void func_80800000_chbeehive(Actor *param_0)
+// Init: looks up the su/baddie section and registers the hive in it.
+void func_80800000_chbeehive(Actor *actor)
 {
-    s32 local_0;
-    func_800EE7F8((f32 *) &param_0->actorData[4], param_0->position);
-    param_0->unk50 = param_0->rotation[1];
-    local_0 = _subaddiesect_entrypoint_1(param_0);
-    param_0->actorData[0] = local_0;
-    param_0->unk74_7 = (u16) (param_0->unk74_7 - 0x32);
-    if (local_0 != -1) {
-        _subaddiesect_entrypoint_2(param_0, local_0, 0);
+    s32 section;
+    func_800EE7F8((f32 *) &actor->actorData[4], actor->position);
+    actor->unk50 = actor->rotation[1];
+    section = _subaddiesect_entrypoint_1(actor);
+    actor->actorData[0] = section;
+    actor->unk74_7 = (u16) (actor->unk74_7 - 0x32);
+    if (section != -1) {
+        _subaddiesect_entrypoint_2(actor, section, 0);
     }
 }
 
-void func_80800078_chbeehive(HiveS *param_0)
+// Update: plays the buzz while the hive's section is visible.
+void func_80800078_chbeehive(HiveS *hive)
 {
-    if (!param_0->flag) {
-        if (param_0->f18 == -1 || _subaddiesect_entrypoint_0(param_0, param_0->f18, 0xB)) {
-            func_80800180_chbeehive(param_0);
+    if (!hive->flag) {
+        if (hive->section_id == -1 || _subaddiesect_entrypoint_0(hive, hive->section_id, 0xB)) {
+            func_80800180_chbeehive(hive);
         }
     }
 }
 
-void func_808000CC_chbeehive(Actor *param_0, Actor **param_1)
+// Hit: burst into particles, notify the parent, drop honeycomb.
+void func_808000CC_chbeehive(Actor *actor, Actor **attacker)
 {
-    f32 local_0[3];
+    f32 drop_pos[3];
 
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808002F0_chbeehive);
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800300_chbeehive);
-    func_800BBCB8(param_0->position, 0, param_0->scale, 1, D_80800320_chbeehive);
-    if (param_0->unk3C)
-        func_8010114C(param_0->unk3C, 0x53, 0);
-    func_800EE88C(local_0, (*param_1)->position);
-    local_0[1] = param_0->position[1];
-    _chexploder_entrypoint_3(param_0, local_0, 0x2C);
+    _subaddieaudioquick_entrypoint_2(actor, actor->position, D_808002F0_chbeehive);
+    _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80800300_chbeehive);
+    func_800BBCB8(actor->position, 0, actor->scale, 1, D_80800320_chbeehive);
+    if (actor->unk3C)
+        func_8010114C(actor->unk3C, 0x53, 0);
+    func_800EE88C(drop_pos, (*attacker)->position);
+    drop_pos[1] = actor->position[1];
+    _chexploder_entrypoint_3(actor, drop_pos, 0x2C);
 }
 
-void func_80800180_chbeehive(param_0) Actor *param_0;
+// Looping bee buzz, timed to the animation.
+// Matching: K&R-style definition, needed for the match.
+void func_80800180_chbeehive(actor) Actor *actor;
 {
-    if (func_80101E4C(param_0, D_80800364_chbeehive)) {
-        if (param_0->unk5F == 0) {
-            param_0->unk5F = func_800C2E04();
-            func_800C301C(param_0->unk5F, 0x447);
-            func_800C3058(param_0->unk5F, 12000);
-            func_800C35E8(param_0->unk5F, param_0->position);
-            func_800C3584(param_0->unk5F, 300.0f, 1500.0f);
+    if (func_80101E4C(actor, D_80800364_chbeehive)) {
+        if (actor->unk5F == 0) {
+            actor->unk5F = func_800C2E04();
+            func_800C301C(actor->unk5F, 0x447);
+            func_800C3058(actor->unk5F, 12000);
+            func_800C35E8(actor->unk5F, actor->position);
+            func_800C3584(actor->unk5F, 300.0f, 1500.0f);
         }
-        if (param_0->unk5F != 0) {
-            func_800C3CE8(param_0->unk5F);
-            func_800C31DC(param_0->unk5F, func_80101F24(param_0) + 0.5f);
-            func_800C330C(param_0->unk5F, 3);
-            _subaddieaudioquick_entrypoint_0(param_0->unk5F, *(u32 *) ((u8 *) param_0 + 0x70) & 1);
-            func_800C3BDC(param_0->unk5F);
+        if (actor->unk5F != 0) {
+            func_800C3CE8(actor->unk5F);
+            func_800C31DC(actor->unk5F, func_80101F24(actor) + 0.5f);
+            func_800C330C(actor->unk5F, 3);
+            _subaddieaudioquick_entrypoint_0(actor->unk5F, *(u32 *) ((u8 *) actor + 0x70) & 1);
+            func_800C3BDC(actor->unk5F);
         }
     }
 }
 
-s32 func_80800268_chbeehive(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800268_chbeehive(Actor *actor, s32 msg, s32 msg_data)
 {
-    switch (param_1) {
-        case 0x40:
-            func_808000CC_chbeehive(param_0, param_2);
+    switch (msg) {
+        case 0x40: // hit by egg or attack
+            func_808000CC_chbeehive(actor, msg_data);
             break;
         case 0x1F:
-            func_801015D0(param_0);
+            func_801015D0(actor);
             func_800DF744(3, 1);
         case 0x90:
             break;
@@ -101,6 +106,8 @@ int chbeehive_entrypoint_0()
     return &D_80800374_chbeehive;
 }
 
+// TU-NOTE: the overlay .data is defined in C here; its tables point to functions of this file,
+// and IDO schedules some of them differently unless the tables are in the same unit.
 extern void func_80105834();
 extern void func_801018A4();
 extern void func_80108ED0();

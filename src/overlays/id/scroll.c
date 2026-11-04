@@ -2,12 +2,12 @@
 
 typedef struct {
     u8 pad_0[0xA];
-    s16 local_0;
+    s16 tex_v;
     u8 pad_1[4];
 } ScrollVertex;
 typedef struct {
     u8 pad_0[4];
-    s16 local_0;
+    s16 scroll;
 } ScrollRenderState;
 typedef struct {
     f32 offset;
@@ -18,18 +18,19 @@ typedef struct {
 extern f32 func_800D8FF8(void);
 extern void _idscroll_entrypoint_0(void);
 
-void idscroll_entrypoint_0(void *param_0, ScrollVertex *param_1, ScrollVertex *param_2, s32 param_3,
-                           ScrollRenderState *param_4)
+// Offsets the V texture coordinate by the scroll value.
+void idscroll_entrypoint_0(void *unk_0, ScrollVertex *src, ScrollVertex *dst, s32 count,
+                           ScrollRenderState *render_state)
 {
-    ScrollVertex *local_0;
-    s16 local_1;
-    s32 local_2;
-    local_1 = param_4->local_0;
-    local_0 = param_1 + param_3;
-    for (; param_1 < local_0; param_1++, param_2++) {
-        local_2 = param_1->local_0 + local_1;
-        local_2 -= 0x2000;
-        param_2->local_0 = local_2;
+    ScrollVertex *end;
+    s16 scroll;
+    s32 tex_v;
+    scroll = render_state->scroll;
+    end = src + count;
+    for (; src < end; src++, dst++) {
+        tex_v = src->tex_v + scroll;
+        tex_v -= 0x2000;
+        dst->tex_v = tex_v;
     }
 }
 
@@ -37,19 +38,23 @@ void idscroll_entrypoint_1(s32 arg0)
 {
 }
 
-idscroll_entrypoint_2(f32 *param_0, s32 param_1, s32 param_2, s32 param_3)
+// Init: offset 0, speed from the mesh parameter.
+idscroll_entrypoint_2(f32 *state, s32 speed, s32 unk_2, s32 unk_3)
 {
-    f32 local_0;
-    local_0 = param_1;
-    param_0[0] = 0.0f;
-    param_0[2] = local_0;
+    f32 speed_f;
+    speed_f = speed;
+    state[0] = 0.0f;
+    state[2] = speed_f;
 }
 
-void idscroll_entrypoint_3(ScrollState *param_0, void *param_1, void *param_2)
+// Update: advances the offset by speed and wraps at 8192.
+void idscroll_entrypoint_3(ScrollState *state, void *unk_1, void *unk_2)
 {
-    param_0->offset += param_0->speed * 64.0f * func_800D8FF8();
-    if ((s32) param_0->offset > 8192)
-        param_0->offset -= 8192.0f;
-    param_0->wrapped = (s32) param_0->offset;
-    _glid_entrypoint_0(param_1, param_2, _idscroll_entrypoint_0, param_0);
+    state->offset += state->speed * 64.0f * func_800D8FF8();
+    if ((s32) state->offset > 8192)
+        state->offset -= 8192.0f;
+    state->wrapped = (s32) state->offset;
+    _glid_entrypoint_0(unk_1, unk_2, _idscroll_entrypoint_0, state);
 }
+
+// TU-NOTE: this overlay's .data is defined here in C; values are taken from the ROM.

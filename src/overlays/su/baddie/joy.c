@@ -1,4 +1,5 @@
 #include "common.h"
+// TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 
 typedef struct {
     u8 pad0[0x64];
@@ -24,7 +25,7 @@ extern void func_80015F28(s32, s32 *);
 extern void func_80015E80(s32, s32 *);
 typedef struct JoyControllerFlags {
     u32 pad_0 : 3;
-    u32 local_0 : 2;
+    u32 controller : 2;
     u32 pad_1 : 27;
 } JoyControllerFlags;
 typedef struct {
@@ -36,131 +37,142 @@ typedef struct {
 } JoyS;
 extern void func_80018820(s32, f32, f32);
 
-s32 subaddiejoy_entrypoint_0(BaddieJoyActorView *param_0, s32 param_1)
+// Stick direction as a world yaw relative to the camera; fallback_yaw if the stick is idle.
+s32 subaddiejoy_entrypoint_0(BaddieJoyActorView *actor, s32 fallback_yaw)
 {
-    s32 local_0;
+    s32 yaw;
 
-    local_0 = func_80016A74(param_0->unk64_27, 0);
-    if (local_0 == -1) {
-        local_0 = param_1;
+    yaw = func_80016A74(actor->unk64_27, 0);
+    if (yaw == -1) {
+        yaw = fallback_yaw;
     } else {
-        local_0 = (s32) func_800E3A80() + local_0 + 0x5A;
+        yaw = (s32) func_800E3A80() + yaw + 0x5A;
     }
-    return (s32) func_800136E4((f32) local_0);
+    return (s32) func_800136E4((f32) yaw);
 }
 
-int subaddiejoy_entrypoint_1(Actor *param_0)
+// Tests whether the actor's controller has a button pressed.
+int subaddiejoy_entrypoint_1(Actor *actor)
 {
-    u32 local_0[3];
-    func_80015F28((*(u32 *) ((char *) param_0 + 0x64) << 3) >> 30, local_0);
-    return local_0[0] == 1;
+    u32 buttons[3];
+    func_80015F28((*(u32 *) ((char *) actor + 0x64) << 3) >> 30, buttons);
+    return buttons[0] == 1;
 }
 
-s32 subaddiejoy_entrypoint_2(BaddieJoyActorView *param_0, s32 param_1, s32 param_2)
+// Like entry 0, with a mode passed through to the stick query.
+s32 subaddiejoy_entrypoint_2(BaddieJoyActorView *actor, s32 fallback_yaw, s32 mode)
 {
-    s32 local_0;
+    s32 yaw;
 
-    local_0 = func_80016A74(param_0->unk64_27, param_2);
-    if (local_0 == -1) {
-        local_0 = param_1;
+    yaw = func_80016A74(actor->unk64_27, mode);
+    if (yaw == -1) {
+        yaw = fallback_yaw;
     } else {
-        local_0 = (s32) func_800E3A80() + local_0 + 0x5A;
+        yaw = (s32) func_800E3A80() + yaw + 0x5A;
     }
-    return (s32) func_800136E4((f32) local_0);
+    return (s32) func_800136E4((f32) yaw);
 }
 
-f32 subaddiejoy_entrypoint_3(Actor *param_0)
+// Returns the stick magnitude clamped to 1 and writes the stick yaw into the actor.
+f32 subaddiejoy_entrypoint_3(Actor *actor)
 {
-    JoyStickVector1409 local_0;
-    f32 local_1;
-    f32 local_3;
-    f32 local_2;
+    JoyStickVector1409 stick;
+    f32 magnitude;
+    f32 camera_yaw;
+    f32 angle;
 
-    func_80016068(((JoyControllerSelector1408 *) ((u8 *) param_0 + 0x64))->controller,
-                  (f32 *) &local_0);
-    local_1 = sqrtf(local_0.y * local_0.y + local_0.x * local_0.x);
-    if (local_1 != 0.0f) {
-        local_2 = func_80013B70(local_0.y, local_0.x, local_1);
-        local_3 = func_800E3A80();
-        param_0->unk54 = func_800136E4(local_3 + local_2 + 90.0f);
-        local_1 = func_800F13F0(1.0f, local_1);
+    func_80016068(((JoyControllerSelector1408 *) ((u8 *) actor + 0x64))->controller,
+                  (f32 *) &stick);
+    magnitude = sqrtf(stick.y * stick.y + stick.x * stick.x);
+    if (magnitude != 0.0f) {
+        angle = func_80013B70(stick.y, stick.x, magnitude);
+        camera_yaw = func_800E3A80();
+        actor->unk54 = func_800136E4(camera_yaw + angle + 90.0f);
+        magnitude = func_800F13F0(1.0f, magnitude);
     }
-    return local_1;
+    return magnitude;
 }
 
-s32 subaddiejoy_entrypoint_4(BaddieJoyActorView *param_0)
+// Tests whether any button is pressed or held on the actor's controller.
+s32 subaddiejoy_entrypoint_4(BaddieJoyActorView *actor)
 {
-    s32 local_0[3];
-    s32 local_1[6];
+    s32 btn_a[3];
+    s32 btn_b[6];
 
-    func_80015F28(param_0->unk64_27, local_0);
-    if (local_0[0] != 0) {
+    func_80015F28(actor->unk64_27, btn_a);
+    if (btn_a[0] != 0) {
         return 1;
     }
-    func_80015E80(param_0->unk64_27, local_1);
-    if ((local_1[0] != 0) || (local_1[1] != 0)) {
+    func_80015E80(actor->unk64_27, btn_b);
+    if ((btn_b[0] != 0) || (btn_b[1] != 0)) {
         return 1;
     }
     return 0;
 }
 
-s32 subaddiejoy_entrypoint_5(BaddieJoyActorView *param_0)
+// Tests whether a button was pressed (edge) on the actor's controller.
+s32 subaddiejoy_entrypoint_5(BaddieJoyActorView *actor)
 {
-    s32 local_0[3];
-    s32 local_1[6];
+    s32 btn_a[3];
+    s32 btn_b[6];
 
-    func_80015F28(param_0->unk64_27, local_0);
-    if (local_0[0] == 1) {
+    func_80015F28(actor->unk64_27, btn_a);
+    if (btn_a[0] == 1) {
         return 1;
     }
-    func_80015E80(param_0->unk64_27, local_1);
-    if ((local_1[0] == 1) || (local_1[1] == 1)) {
+    func_80015E80(actor->unk64_27, btn_b);
+    if ((btn_b[0] == 1) || (btn_b[1] == 1)) {
         return 1;
     }
     return 0;
 }
 
-void subaddiejoy_entrypoint_6(Actor *param_0)
+// Matching: needed for the match.
+void subaddiejoy_entrypoint_6(Actor *actor)
 {
-    char *new_var;
-    new_var = (char *) param_0 + 0x64;
-    func_80016B30(((*(int *) new_var << 3) & 0xFFFFFFFF) >> (unsigned short) 30);
+    char *controller_word;
+    controller_word = (char *) actor + 0x64;
+    func_80016B30(((*(int *) controller_word << 3) & 0xFFFFFFFF) >> (unsigned short) 30);
 }
 
-void subaddiejoy_entrypoint_7(Actor *param_0)
+// Matching: needed for the match.
+void subaddiejoy_entrypoint_7(Actor *actor)
 {
-    func_80016B54((u32) (*(s32 *) ((char *) param_0 + 0x64) * 8) >> 0x1E);
+    func_80016B54((u32) (*(s32 *) ((char *) actor + 0x64) * 8) >> 0x1E);
 }
 
-void subaddiejoy_entrypoint_8(Actor *param_0)
+// Matching: needed for the match.
+void subaddiejoy_entrypoint_8(Actor *actor)
 {
-    func_80016068(((*(int *) ((char *) param_0 + 0x64) & 0xFFFFFFFF) << 3) >> 30);
+    func_80016068(((*(int *) ((char *) actor + 0x64) & 0xFFFFFFFF) << 3) >> 30);
 }
 
-f32 subaddiejoy_entrypoint_9(Actor *param_0, f32 *param_1, s32 param_2)
+// Returns the stick magnitude clamped to 1. flags: 1 = write the stick yaw to out_yaw,// 2 = write the actor's current yaw when the stick is idle.
+f32 subaddiejoy_entrypoint_9(Actor *actor, f32 *out_yaw, s32 flags)
 {
-    f32 local_0[2];
-    f32 local_2;
-    f32 local_1;
+    f32 stick[2];
+    f32 magnitude;
+    f32 yaw;
 
-    func_80016068(((JoyControllerFlags *) ((u8 *) param_0 + 0x64))->local_0, local_0);
-    local_2 = sqrtf(local_0[0] * local_0[0] + local_0[1] * local_0[1]);
-    if (local_2 != 0.0f) {
-        local_1 =
-            func_800136E4(func_80013B70(local_0[1], local_0[0], local_2) + func_800E3A80() + 90.0f);
-        local_2 = func_800F13F0(1.0f, local_2);
-        if (param_2 & 1) {
-            *param_1 = local_1;
+    func_80016068(((JoyControllerFlags *) ((u8 *) actor + 0x64))->controller, stick);
+    magnitude = sqrtf(stick[0] * stick[0] + stick[1] * stick[1]);
+    if (magnitude != 0.0f) {
+        yaw =
+            func_800136E4(func_80013B70(stick[1], stick[0], magnitude) + func_800E3A80() + 90.0f);
+        magnitude = func_800F13F0(1.0f, magnitude);
+        if (flags & 1) {
+            *out_yaw = yaw;
         }
-    } else if (param_2 & 2) {
-        *param_1 = param_0->rotation[1];
+    } else if (flags & 2) {
+        *out_yaw = actor->rotation[1];
     }
-    return local_2;
+    return magnitude;
 }
 
-void subaddiejoy_entrypoint_10(JoyS *param_0, f32 param_1, f32 param_2)
+// Rumbles the actor's controller when its rumble bit is set.
+void subaddiejoy_entrypoint_10(JoyS *actor, f32 unk_0, f32 unk_1)
 {
-    if (param_0->flag) {
-        func_80018820(param_0->f, param_1, param_2);
+    if (actor->flag) {
+        func_80018820(actor->f, unk_0, unk_1);
     }
 }

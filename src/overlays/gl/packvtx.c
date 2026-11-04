@@ -3,46 +3,49 @@
 extern void _dbpalette_entrypoint_0();
 
 typedef struct Mass44PackedVertex {
-    s16 local_0[3];
-    u8 local_1[3];
-    u8 local_2;
+    s16 unk_0[3];
+    u8 color[3];
+    u8 unk_9;
 } Mass44PackedVertex;
 
-void *glpackvtx_entrypoint_0(s32 param_0, s32 param_1, s32 *param_2)
+// Builds a packed vertex-colour buffer for the model: vertex colour, optionally remapped
+// through the palette and multiplied by the tint (skipped for white).
+void *glpackvtx_entrypoint_0(s32 model, s32 palette, s32 *tint)
 {
     s32 pad0;
-    Mass44PackedVertex *local_0;
-    Mass44PackedVertex *local_1;
-    Mass44PackedVertex *local_2;
-    u8 *local_3;
-    s32 local_4[4];
-    s32 local_5;
-    local_5 = func_800B2344(param_0);
-    local_0 = heap_alloc(local_5 * sizeof(Mass44PackedVertex));
-    local_2 = local_0 + local_5;
-    local_3 = (u8 *) func_800B2190(param_0);
-    for (local_1 = local_0; local_1 < local_2; local_1++, local_3 += 16) {
-        if (param_1) {
-            _dbpalette_entrypoint_0(param_1, *(u16 *) (local_3 + 6) & 0x1FF, local_4);
-            local_1->local_1[0] = (local_3[12] * local_4[0]) >> 8;
-            local_1->local_1[1] = (local_3[13] * local_4[1]) >> 8;
-            local_1->local_1[2] = (local_3[14] * local_4[2]) >> 8;
+    Mass44PackedVertex *buf;
+    Mass44PackedVertex *out;
+    Mass44PackedVertex *end;
+    u8 *vtx;
+    s32 rgb[4];
+    s32 count;
+    count = func_800B2344(model);
+    buf = heap_alloc(count * sizeof(Mass44PackedVertex));
+    end = buf + count;
+    vtx = (u8 *) func_800B2190(model);
+    for (out = buf; out < end; out++, vtx += 16) {
+        if (palette) {
+            _dbpalette_entrypoint_0(palette, *(u16 *) (vtx + 6) & 0x1FF, rgb);
+            out->color[0] = (vtx[12] * rgb[0]) >> 8;
+            out->color[1] = (vtx[13] * rgb[1]) >> 8;
+            out->color[2] = (vtx[14] * rgb[2]) >> 8;
         } else {
-            local_1->local_1[0] = local_3[12];
-            local_1->local_1[1] = local_3[13];
-            local_1->local_1[2] = local_3[14];
+            out->color[0] = vtx[12];
+            out->color[1] = vtx[13];
+            out->color[2] = vtx[14];
         }
-        if (param_2 && (param_2[0] != 255 || param_2[1] != 255 || param_2[2] != 255)) {
-            local_1->local_1[0] = (local_1->local_1[0] * param_2[0]) >> 8;
-            local_1->local_1[1] = (local_1->local_1[1] * param_2[1]) >> 8;
-            local_1->local_1[2] = (local_1->local_1[2] * param_2[2]) >> 8;
+        if (tint && (tint[0] != 255 || tint[1] != 255 || tint[2] != 255)) {
+            out->color[0] = (out->color[0] * tint[0]) >> 8;
+            out->color[1] = (out->color[1] * tint[1]) >> 8;
+            out->color[2] = (out->color[2] * tint[2]) >> 8;
         }
-        local_1->local_0[0] = local_1->local_0[1] = local_1->local_0[2] = 0;
+        out->unk_0[0] = out->unk_0[1] = out->unk_0[2] = 0;
     }
-    return local_0;
+    return buf;
 }
 
-s32 glpackvtx_entrypoint_1(void *param_0)
+// Frees a buffer from entrypoint_0.
+s32 glpackvtx_entrypoint_1(void *buf)
 {
-    heap_free(param_0);
+    heap_free(buf);
 }

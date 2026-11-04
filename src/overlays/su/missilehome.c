@@ -5,127 +5,138 @@ extern void func_800EF368(f32 *, f32);
 extern f32 func_800D8FF8(void);
 extern void func_800EF04C(f32 *, f32 *);
 extern void func_800EFB24(f32 *, f32 *, f32 *);
+// Homing state of a projectile. The layout is shared with MissileS.
 typedef struct {
     u8 pad_0;
-    s8 local_0;
-    u8 pad_1[2];
-    f32 local_1;
-    u8 local_2;
-    u8 local_3;
-    u8 local_4;
-    u8 pad_2;
-    u8 local_5[1];
+    s8 target_player;
+    u8 pad_2[2];
+    f32 turn_rate;
+    u8 track_actor;
+    u8 track_player;
+    u8 turn_mode;
+    u8 pad_B;
+    u8 link[1];
 } MissileHomeTarget;
 extern Actor *_subaddielink_entrypoint_4(void *);
 typedef struct {
-    s8 b0;
-    s8 b1;
-    s8 pad2[2];
-    f32 f4;
-    s8 b8;
-    s8 b9;
-    s8 bA;
-    s8 padB;
-    u8 xC[4];
+    s8 player_index;
+    s8 target_player;
+    s8 pad_2[2];
+    f32 turn_rate;
+    s8 track_actor;
+    s8 track_player;
+    s8 turn_mode;
+    s8 pad_B;
+    u8 link[4];
 } MissileS;
 extern void _subaddielink_entrypoint_0();
 
-void sumissilehome_entrypoint_0(s32 param_0, MissileS *param_1)
+void sumissilehome_entrypoint_0(s32 projectile, MissileS *homing)
 {
-    param_1->b8 = 0;
-    param_1->b9 = 0;
-    param_1->b0 = -1;
-    param_1->b1 = -1;
-    param_1->f4 = 6000.0f;
-    param_1->bA = 2;
-    _subaddielink_entrypoint_0(param_1->xC, param_1);
+    homing->track_actor = 0;
+    homing->track_player = 0;
+    homing->player_index = -1;
+    homing->target_player = -1;
+    homing->turn_rate = 6000.0f;
+    homing->turn_mode = 2;
+    _subaddielink_entrypoint_0(homing->link, homing);
 }
 
-void sumissilehome_entrypoint_1(s32 param_0, u8 *param_1, unsigned long param_2)
+// Starts tracking an actor.
+void sumissilehome_entrypoint_1(s32 projectile, u8 *homing, unsigned long unk_2)
 {
-    *(u8 *) (param_1 + 8) = 1;
-    *(s16 *) (param_1 + 2) = param_2;
+    *(u8 *) (homing + 8) = 1;
+    *(s16 *) (homing + 2) = unk_2;
 }
 
-void sumissilehome_entrypoint_2(void *param_0, void *param_1, float param_2)
+// Limits the turn per frame to turn_rate.
+void sumissilehome_entrypoint_2(void *projectile, void *homing, float turn_rate)
 {
-    *(u8 *) ((char *) param_1 + 0xA) = 1;
-    *(f32 *) ((char *) param_1 + 4) = param_2;
+    *(u8 *) ((char *) homing + 0xA) = 1;
+    *(f32 *) ((char *) homing + 4) = turn_rate;
 }
 
-s32 sumissilehome_entrypoint_3(s32 param_0, u8 *param_1, s32 param_2)
+// Sets the player index used for the target search.
+s32 sumissilehome_entrypoint_3(s32 projectile, u8 *homing, s32 player_index)
 {
-    param_1[0] = param_2;
+    homing[0] = player_index;
 }
 
-void sumissilehome_entrypoint_4(s32 param_0, s32 *param_1, unsigned long param_2)
+// Enables or disables tracking a player.
+void sumissilehome_entrypoint_4(s32 projectile, s32 *homing, unsigned long enable)
 {
-    *(u8 *) ((s8 *) param_1 + 9) = param_2;
+    *(u8 *) ((s8 *) homing + 9) = enable;
 }
 
-void sumissilehome_entrypoint_5(s32 param_0, u8 *param_1, s32 param_2, s32 param_3)
+// Per-frame target search (actor via link, or player in range).
+void sumissilehome_entrypoint_5(s32 projectile, u8 *homing, s32 unk_2, s32 unk_3)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 found_player;
+    s32 found_actor;
 
-    local_0 = -1;
-    if ((param_1[8] != 0) || (param_1[9] != 0)) {
-        if (param_1[8] != 0) {
-            local_1 = func_8010A01C(param_0 + 4, param_0 + 0x28, param_2, param_3,
-                                    *(s16 *) ((char *) param_1 + 2));
-            _subaddielink_entrypoint_1(&param_1[0xc], local_1);
-            if (_subaddielink_entrypoint_4(&param_1[0xc]) == 0) {
-                param_1[8] = 0;
+    found_player = -1;
+    if ((homing[8] != 0) || (homing[9] != 0)) {
+        if (homing[8] != 0) {
+            found_actor = func_8010A01C(projectile + 4, projectile + 0x28, unk_2, unk_3,
+                                        *(s16 *) ((char *) homing + 2));
+            _subaddielink_entrypoint_1(&homing[0xc], found_actor);
+            if (_subaddielink_entrypoint_4(&homing[0xc]) == 0) {
+                homing[8] = 0;
             }
         }
-        if (param_1[9] != 0) {
-            if ((param_1[8] == 0) && (func_800EA068(0x4000) != 0)) {
-                local_0 =
-                    func_8010D490(param_0 + 4, param_0 + 0x28, param_2, param_3, (s8) param_1[0]);
+        if (homing[9] != 0) {
+            if ((homing[8] == 0) && (func_800EA068(0x4000) != 0)) {
+                found_player =
+                    func_8010D490(projectile + 4, projectile + 0x28, unk_2, unk_3, (s8) homing[0]);
             }
-            param_1[1] = local_0;
+            homing[1] = found_player;
         }
     }
 }
 
-void func_80800178_sumissilehome(u8 *param_0, s32 param_1)
+// Turns the velocity toward the target at once, keeping its speed.
+void func_80800178_sumissilehome(u8 *projectile, s32 target_pos)
 {
-    f32 local_1 = func_800EEF94((f32 *) (param_0 + 0x28));
-    func_800EFB24((f32 *) (param_0 + 0x28), param_1, param_0 + 4);
-    func_800EF368((f32 *) (param_0 + 0x28), local_1);
+    f32 speed = func_800EEF94((f32 *) (projectile + 0x28));
+    func_800EFB24((f32 *) (projectile + 0x28), target_pos, projectile + 4);
+    func_800EF368((f32 *) (projectile + 0x28), speed);
 }
 
-void func_808001C8_sumissilehome(Actor *param_0, f32 *param_1, f32 param_2)
+// Turns the velocity toward the target by at most turn_rate per frame, keeping its speed.
+void func_808001C8_sumissilehome(Actor *projectile, f32 *target_pos, f32 turn_rate)
 {
-    f32 local_0[3];
-    f32 local_1;
-    local_1 = func_800EEF94((f32 *) &param_0->actorData[4]);
-    func_800EFB24(local_0, param_1, param_0->position);
-    func_800EF368(local_0, func_800D8FF8() * param_2);
-    func_800EF04C((f32 *) &param_0->actorData[4], local_0);
-    func_800EF368((f32 *) &param_0->actorData[4], local_1);
+    f32 steer[3];
+    f32 speed;
+    speed = func_800EEF94((f32 *) &projectile->actorData[4]);
+    func_800EFB24(steer, target_pos, projectile->position);
+    func_800EF368(steer, func_800D8FF8() * turn_rate);
+    func_800EF04C((f32 *) &projectile->actorData[4], steer);
+    func_800EF368((f32 *) &projectile->actorData[4], speed);
 }
 
-void sumissilehome_entrypoint_6(Actor *param_0, MissileHomeTarget *param_1)
+// Steers the projectile toward its target, instantly or turn-rate limited.
+void sumissilehome_entrypoint_6(Actor *projectile, MissileHomeTarget *homing)
 {
-    f32 local_0[3];
-    Actor *local_1;
+    f32 target_pos[3];
+    Actor *target;
 
-    if (param_1->local_2) {
-        local_1 = _subaddielink_entrypoint_4(param_1->local_5);
-        if (local_1 == NULL) {
-            param_1->local_2 = 0;
+    if (homing->track_actor) {
+        target = _subaddielink_entrypoint_4(homing->link);
+        if (target == NULL) {
+            homing->track_actor = 0;
             return;
         }
-        func_8010A2FC(local_1, local_0, param_0->position);
+        func_8010A2FC(target, target_pos, projectile->position);
     } else {
-        if (!param_1->local_3 || param_1->local_0 < 0)
+        if (!homing->track_player || homing->target_player < 0)
             return;
-        func_800F5A00(param_1->local_0, local_0);
-        local_0[1] += 60.0f;
+        func_800F5A00(homing->target_player, target_pos);
+        target_pos[1] += 60.0f;
     }
-    if (param_1->local_4 == 1)
-        func_808001C8_sumissilehome(param_0, local_0, param_1->local_1);
+    if (homing->turn_mode == 1)
+        func_808001C8_sumissilehome(projectile, target_pos, homing->turn_rate);
     else
-        func_80800178_sumissilehome(param_0, local_0);
+        func_80800178_sumissilehome(projectile, target_pos);
 }
+
+// TU-NOTE: the .data of this overlay is defined in C (values taken from the ROM).

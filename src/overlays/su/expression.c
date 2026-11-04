@@ -1,23 +1,25 @@
 #include "common.h"
 
+// Model table row (see func_80800CF4_suexpression).
 typedef struct ExpressionPositionOffsets {
-    s16 local_0;
-    s16 local_1;
+    s16 y_offset;
+    s16 unk_2;
 } ExpressionPositionOffsets;
 extern Actor *func_80106790(Unk80132ED0 *);
+// Per-actor expression block. Offsets are relative to the block start.
 typedef struct {
-    s16 local_0;
-    s16 local_1;
-    s16 local_2;
-    s16 local_3;
-    s16 local_4;
-    s16 local_5;
-    s16 local_6;
-    s16 local_7;
-    u8 local_8;
-    u8 local_9;
-    u8 local_10;
-    u8 local_11;
+    s16 joint_offset;
+    s16 morph_offset;
+    s16 unk_4;
+    s16 unk_6;
+    s16 unk_8;
+    s16 unk_A;
+    s16 model_id;
+    s16 range;
+    u8 split_a;
+    u8 split_b;
+    u8 unk_12;
+    u8 unk_13;
 } ExpressionState1536;
 extern void _suexpressmorph_entrypoint_5();
 extern void _suexpressjoint_entrypoint_2();
@@ -30,8 +32,8 @@ typedef struct {
 extern void *func_80100074(Actor *, u32, s32);
 extern s32 func_8010D23C();
 typedef struct {
-    s16 o0;
-    s16 o2;
+    s16 joint_offset;
+    s16 morph_offset;
 } SXH;
 extern f32 func_800EEB40(f32 *, f32 *);
 extern int func_80100094();
@@ -41,13 +43,13 @@ extern f32 func_800F0E7C(f32, f32);
 extern f32 func_800F1828(s32 *, s32);
 extern void func_800F1E6C(s32 *, s32, f32 *);
 typedef struct {
-    s16 local_0;
-    s16 pad_0;
-    s16 local_1, local_2, local_3, local_4;
-    u8 pad_1;
-    u8 local_5;
-    u8 pad_2[2];
-    u8 local_6, local_7;
+    s16 joint_offset;
+    s16 pad_2;
+    s16 unk_4, unk_6, unk_8, unk_A;
+    u8 pad_C;
+    u8 model_id;
+    u8 pad_E[2];
+    u8 split_a, split_b;
 } Expression1864;
 extern void *func_8010262C(Unk80132ED0 *, s32);
 extern void func_800E0AFC(void *, s32, f32, f32, f32, f32);
@@ -55,320 +57,339 @@ u8 *func_80800CF4_suexpression();
 void suexpression_entrypoint_15();
 void suexpression_entrypoint_16();
 
-f32 suexpression_entrypoint_0(param_0)
-u8 param_0;
+// Head y offset for a model from the model table, 0 if the model has no entry.
+f32 suexpression_entrypoint_0(model_id)
+u8 model_id;
 {
-    s16 *local_0;
-    local_0 = func_80800CF4_suexpression(param_0, param_0);
-    if (local_0 == 0) {
+    s16 *entry;
+    // Matching: the duplicated argument is needed for the match.
+    entry = func_80800CF4_suexpression(model_id, model_id);
+    if (entry == 0) {
         return 0.0f;
     }
-    return (f32) *local_0;
+    return (f32) *entry;
 }
 
-int suexpression_entrypoint_1(param_0)
-u8 param_0;
+int suexpression_entrypoint_1(model_id)
+u8 model_id;
 {
-    u8 *local_0;
-    local_0 = func_80800CF4_suexpression(param_0 | param_0);
-    if (!local_0)
+    u8 *entry;
+    // Matching: `model_id | model_id` is needed for the match.
+    entry = func_80800CF4_suexpression(model_id | model_id);
+    if (!entry)
         return 0;
-    return local_0[4];
+    return entry[4];
 }
 
-void suexpression_entrypoint_2(u8 param_0, Unk80132ED0 *param_1, f32 *param_2)
+// Writes the head position of the actor: bone position if the model table names one, else the
+// actor position plus the scaled y offset.
+void suexpression_entrypoint_2(u8 model_id, Unk80132ED0 *handle, f32 *out_pos)
 {
-    Actor *local_1;
-    ExpressionPositionOffsets *local_0;
+    Actor *actor;
+    ExpressionPositionOffsets *offsets;
 
-    local_0 = func_80800CF4_suexpression(param_0);
-    local_1 = func_80106790(param_1);
-    if (local_0 == NULL) {
-        func_80103DFC(local_1, param_2);
-    } else if (local_0->local_1) {
-        if (local_1->unk7C_12) {
-            func_800DBEFC(param_1->unk4, local_0->local_1, param_2);
+    offsets = func_80800CF4_suexpression(model_id);
+    actor = func_80106790(handle);
+    if (offsets == NULL) {
+        func_80103DFC(actor, out_pos);
+    } else if (offsets->unk_2) {
+        if (actor->unk7C_12) {
+            func_800DBEFC(handle->unk4, offsets->unk_2, out_pos);
         } else {
-            param_2[0] = local_1->position[0];
-            param_2[1] = local_1->position[1] + local_0->local_0 * local_1->scale;
-            param_2[2] = local_1->position[2];
+            out_pos[0] = actor->position[0];
+            out_pos[1] = actor->position[1] + offsets->y_offset * actor->scale;
+            out_pos[2] = actor->position[2];
         }
     } else {
-        param_2[0] = local_1->position[0];
-        param_2[1] = local_1->position[1] + local_0->local_0 * local_1->scale;
-        param_2[2] = local_1->position[2];
+        out_pos[0] = actor->position[0];
+        out_pos[1] = actor->position[1] + offsets->y_offset * actor->scale;
+        out_pos[2] = actor->position[2];
     }
 }
 
-void suexpression_entrypoint_3(s16 param_0, s32 *param_1, s32 *param_2, s32 *param_3)
+// Computes the 4-byte aligned sizes of the morph part, joint part and block header.
+void suexpression_entrypoint_3(s16 model_id, s32 *morph_size, s32 *joint_size, s32 *header_size)
 {
-    *param_3 = 0x14;
-    *param_1 = _suexpressmorph_entrypoint_0(param_0);
-    *param_2 = _suexpressjoint_entrypoint_0(param_0);
-    *param_3 = (*param_3 + 3) & 0x7FFFFFFC;
-    *param_1 = (*param_1 + 3) & 0x7FFFFFFC;
-    *param_2 = (*param_2 + 3) & 0x7FFFFFFC;
+    *header_size = 0x14;
+    *morph_size = _suexpressmorph_entrypoint_0(model_id);
+    *joint_size = _suexpressjoint_entrypoint_0(model_id);
+    *header_size = (*header_size + 3) & 0x7FFFFFFC;
+    *morph_size = (*morph_size + 3) & 0x7FFFFFFC;
+    *joint_size = (*joint_size + 3) & 0x7FFFFFFC;
 }
 
-void suexpression_entrypoint_4(s16 *param_0, s16 param_1)
+void suexpression_entrypoint_4(s16 *block, s16 unk_1)
 {
-    s16 temp_v0;
-    s16 temp_v0_2;
+    s16 morph_offset;
+    s16 joint_offset;
 
-    temp_v0 = *(s16 *) ((s8 *) param_0 + 2);
-    if (temp_v0 != 0) {
-        _suexpressmorph_entrypoint_3((s16 *) ((s8 *) param_0 + temp_v0), param_1, param_0);
+    morph_offset = *(s16 *) ((s8 *) block + 2);
+    if (morph_offset != 0) {
+        _suexpressmorph_entrypoint_3((s16 *) ((s8 *) block + morph_offset), unk_1, block);
     }
-    temp_v0_2 = *(s16 *) ((s8 *) param_0 + 0);
-    if (temp_v0_2 != 0) {
-        _suexpressjoint_entrypoint_1((s16 *) ((s8 *) param_0 + temp_v0_2), param_1, param_0);
-    }
-}
-
-void suexpression_entrypoint_5(Actor *this)
-{
-    s16 offset;
-
-    offset = *(s16 *) ((char *) this + 0x2);
-    if (offset != 0) {
-        _suexpressmorph_entrypoint_4((Actor *) ((char *) this + offset));
+    joint_offset = *(s16 *) ((s8 *) block + 0);
+    if (joint_offset != 0) {
+        _suexpressjoint_entrypoint_1((s16 *) ((s8 *) block + joint_offset), unk_1, block);
     }
 }
 
-void suexpression_entrypoint_6(ExpressionState1536 *param_0, s16 param_1, s32 param_2, s32 param_3,
-                               s32 param_4)
+void suexpression_entrypoint_5(Actor *block)
 {
-    if (param_3 == 0)
-        param_0->local_1 = 0;
+    s16 morph_offset;
+
+    morph_offset = *(s16 *) ((char *) block + 0x2);
+    if (morph_offset != 0) {
+        _suexpressmorph_entrypoint_4((Actor *) ((char *) block + morph_offset));
+    }
+}
+
+// Initializes a freshly allocated block: morph part first, then joint part, after the header.
+void suexpression_entrypoint_6(ExpressionState1536 *block, s16 model_id, s32 header_size, s32 morph_size,
+                               s32 joint_size)
+{
+    if (morph_size == 0)
+        block->morph_offset = 0;
     else
-        param_0->local_1 = param_2;
-    if (param_4 == 0)
-        param_0->local_0 = 0;
+        block->morph_offset = header_size;
+    if (joint_size == 0)
+        block->joint_offset = 0;
     else
-        param_0->local_0 = param_2 + param_3;
-    if (param_0->local_1 != 0) {
-        _suexpressmorph_entrypoint_5((u8 *) param_0 + param_0->local_1, param_1);
+        block->joint_offset = header_size + morph_size;
+    if (block->morph_offset != 0) {
+        _suexpressmorph_entrypoint_5((u8 *) block + block->morph_offset, model_id);
     }
-    if (param_0->local_0 != 0) {
-        _suexpressjoint_entrypoint_2((u8 *) param_0 + param_0->local_0, param_1);
+    if (block->joint_offset != 0) {
+        _suexpressjoint_entrypoint_2((u8 *) block + block->joint_offset, model_id);
     }
-    param_0->local_3 = 0;
-    param_0->local_2 = 0;
-    param_0->local_5 = 0;
-    param_0->local_4 = 0;
-    param_0->local_8 = 75;
-    param_0->local_9 = 75;
-    param_0->local_10 = 1;
-    param_0->local_7 = 0;
-    param_0->local_11 = 0;
-    param_0->local_6 = param_1;
+    block->unk_6 = 0;
+    block->unk_4 = 0;
+    block->unk_A = 0;
+    block->unk_8 = 0;
+    block->split_a = 75;
+    block->split_b = 75;
+    block->unk_12 = 1;
+    block->range = 0;
+    block->unk_13 = 0;
+    block->model_id = model_id;
 }
 
-void *suexpression_entrypoint_7(Actor *param_0, u32 param_1, s16 param_2)
+// Allocates the expression block in the actor's local slot and stores the slot (index + 1).
+void *suexpression_entrypoint_7(Actor *actor, u32 slot, s16 model_id)
 {
-    void *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    suexpression_entrypoint_3(param_2, &local_1, &local_2, &local_3);
-    local_0 = func_80100074(param_0, param_1, local_2 + local_1 + local_3);
-    suexpression_entrypoint_6(local_0, param_2, local_3, local_1, local_2);
-    ((ActorExpressionSlot *) param_0)->slot = param_1 + 1;
-    return local_0;
+    void *block;
+    s32 morph_size;
+    s32 joint_size;
+    s32 header_size;
+    suexpression_entrypoint_3(model_id, &morph_size, &joint_size, &header_size);
+    block = func_80100074(actor, slot, joint_size + morph_size + header_size);
+    suexpression_entrypoint_6(block, model_id, header_size, morph_size, joint_size);
+    ((ActorExpressionSlot *) actor)->slot = slot + 1;
+    return block;
 }
 
-void suexpression_entrypoint_8(u8 *param_0, s32 param_1)
+// Frees the block in the actor's local slot and clears the slot.
+void suexpression_entrypoint_8(u8 *actor, s32 slot)
 {
     if (func_80100094() != 0) {
-        func_80100074(param_0, param_1, 0);
+        func_80100074(actor, slot, 0);
     }
-    param_0[0x95] = param_0[0x95] & 0xFFF3;
+    actor[0x95] = actor[0x95] & 0xFFF3;
 }
 
-void suexpression_entrypoint_9(void *param_0)
+void suexpression_entrypoint_9(void *block)
 {
-    ((u8 *) param_0)[0x12] = 0;
+    ((u8 *) block)[0x12] = 0;
 }
 
-void suexpression_entrypoint_10(u8 *param_0, Unk80132ED0 *param_1, f32 *param_2)
+// Per-frame update: looks at the player if within range, otherwise decays the look-at.
+// target_pos overrides the player position when given.
+void suexpression_entrypoint_10(u8 *block, Unk80132ED0 *handle, f32 *target_pos)
 {
-    f32 local_0[3];
-    Actor *local_1;
+    f32 player_pos[3];
+    Actor *actor;
 
-    if (*(s16 *) (param_0 + 0))
-        _suexpressjoint_entrypoint_3(param_1, (u8 *) ((s32) param_0 + ((SXH *) param_0)->o0),
-                                     param_0[0x12]);
-    if (*(s16 *) (param_0 + 2))
-        _suexpressmorph_entrypoint_1((u8 *) ((s32) param_0 + ((SXH *) param_0)->o2));
-    if (*(s16 *) (param_0 + 4) || *(s16 *) (param_0 + 6) || *(s16 *) (param_0 + 8) ||
-        *(s16 *) (param_0 + 10)) {
-        if (param_2)
-            suexpression_entrypoint_15(param_0, param_1, param_2);
-        else if (func_8010D23C() && param_0[0x13] == 0) {
-            local_1 = func_80106790(param_1);
-            func_8008FE94(5, local_0);
-            if (*(s16 *) (param_0 + 0xE) == 0 ||
-                func_800EEB40(local_1->position, local_0) <
-                    (f32) (*(s16 *) (param_0 + 0xE) * *(s16 *) (param_0 + 0xE))) {
-                suexpression_entrypoint_15(param_0, param_1, local_0);
+    if (*(s16 *) (block + 0))
+        _suexpressjoint_entrypoint_3(handle, (u8 *) ((s32) block + ((SXH *) block)->joint_offset),
+                                     block[0x12]);
+    if (*(s16 *) (block + 2))
+        _suexpressmorph_entrypoint_1((u8 *) ((s32) block + ((SXH *) block)->morph_offset));
+    if (*(s16 *) (block + 4) || *(s16 *) (block + 6) || *(s16 *) (block + 8) ||
+        *(s16 *) (block + 10)) {
+        if (target_pos)
+            suexpression_entrypoint_15(block, handle, target_pos);
+        else if (func_8010D23C() && block[0x13] == 0) {
+            actor = func_80106790(handle);
+            func_8008FE94(5, player_pos);
+            if (*(s16 *) (block + 0xE) == 0 ||
+                func_800EEB40(actor->position, player_pos) <
+                    (f32) (*(s16 *) (block + 0xE) * *(s16 *) (block + 0xE))) {
+                suexpression_entrypoint_15(block, handle, player_pos);
             } else
-                suexpression_entrypoint_16(param_0, param_1);
+                suexpression_entrypoint_16(block, handle);
         } else
-            suexpression_entrypoint_16(param_0, param_1);
-        if (param_0[0x13] == 1)
-            param_0[0x13] = 0;
+            suexpression_entrypoint_16(block, handle);
+        if (block[0x13] == 1)
+            block[0x13] = 0;
     }
-    param_0[0x12] = 1;
+    block[0x12] = 1;
 }
 
-s32 suexpression_entrypoint_11(Actor *this)
+s32 suexpression_entrypoint_11(Actor *block)
 {
-    s16 local_0;
-    local_0 = *(s16 *) ((char *) this + 2);
-    if (local_0 != 0) {
-        _suexpressmorph_entrypoint_2((Actor *) ((char *) this + local_0));
+    s16 morph_offset;
+    morph_offset = *(s16 *) ((char *) block + 2);
+    if (morph_offset != 0) {
+        _suexpressmorph_entrypoint_2((Actor *) ((char *) block + morph_offset));
     }
 }
 
-suexpression_entrypoint_12(Actor *param_0, f32 param_1, f32 param_2)
+suexpression_entrypoint_12(Actor *block, f32 unk_1, f32 unk_2)
 {
-    *(u16 *) ((char *) param_0 + 0x6) = (u16) (int) param_1;
-    *(u16 *) ((char *) param_0 + 0xA) = (u16) (int) param_2;
+    *(u16 *) ((char *) block + 0x6) = (u16) (int) unk_1;
+    *(u16 *) ((char *) block + 0xA) = (u16) (int) unk_2;
 }
 
-int suexpression_entrypoint_13(s16 param_0[3], f32 *param_1, f32 *param_2)
+int suexpression_entrypoint_13(s16 block[3], f32 *out_a, f32 *out_b)
 {
-    *param_1 = param_0[2];
-    *param_2 = *(s16 *) ((s8 *) &param_0[0] + 8);
+    *out_a = block[2];
+    *out_b = *(s16 *) ((s8 *) &block[0] + 8);
 }
 
-void suexpression_entrypoint_14(u8 *param_0, f32 param_1, f32 param_2)
+void suexpression_entrypoint_14(u8 *block, f32 split_a, f32 split_b)
 {
-    *(s8 *) ((s8 *) param_0 + 0x10) = (s8) (u32) (100.0f * param_1);
-    *(s8 *) ((s8 *) param_0 + 0x11) = (s8) (u32) (100.0f * param_2);
+    *(s8 *) ((s8 *) block + 0x10) = (s8) (u32) (100.0f * split_a);
+    *(s8 *) ((s8 *) block + 0x11) = (s8) (u32) (100.0f * split_b);
 }
 
-void suexpression_entrypoint_15(param_0, param_1, param_2) u8 *param_0;
-u8 *param_1;
-s32 param_2;
+// Eases the look-at offsets at +4/+8 toward the direction to the target (head position from
+// the model table), clamped by the limits at +6/+A; decays them when the target is outside.
+void suexpression_entrypoint_15(block, handle, target) u8 *block;
+u8 *handle;
+s32 target;
 {
-    f32 sp54;
-    f32 sp50;
-    f32 f22;
-    f32 f20;
-    s32 sp3C[3];
-    f32 y;
-    f32 f2;
+    f32 angle_a;
+    f32 angle_b;
+    f32 center_a;
+    f32 center_b;
+    s32 head_pos[3];
+    f32 unk_5;
+    f32 unk_6;
 
-    f22 = (f32) (*(u32 *) (param_1 + 0x28) >> 23);
-    f20 = (f32) ((u32) *(u16 *) (param_1 + 0x26) >> 7);
-    suexpression_entrypoint_2(param_0[0xD], param_1, sp3C);
-    func_800F1E6C(sp3C, param_2, &sp54);
-    f22 = func_80013728(f22);
-    sp54 = func_800F0E7C(sp54, f22);
-    f2 = (f32) *(s16 *) (param_0 + 6);
-    if (sp54 < f2 + f22 && f22 - f2 < sp54 && *(s16 *) (param_0 + 6) != 0) {
-        f2 = (f32) *(s16 *) (param_0 + 4);
-        if (f2 + f22 < sp54 && *(s16 *) (param_0 + 4) < *(s16 *) (param_0 + 6)) {
-            y = (sp54 - (f2 + f22)) * 0.1f;
-            *(s16 *) (param_0 + 4) = (s32) (f2 + y);
-            f2 = (f32) *(s16 *) (param_0 + 4);
+    center_a = (f32) (*(u32 *) (handle + 0x28) >> 23);
+    center_b = (f32) ((u32) *(u16 *) (handle + 0x26) >> 7);
+    suexpression_entrypoint_2(block[0xD], handle, head_pos);
+    func_800F1E6C(head_pos, target, &angle_a);
+    center_a = func_80013728(center_a);
+    angle_a = func_800F0E7C(angle_a, center_a);
+    unk_6 = (f32) *(s16 *) (block + 6);
+    if (angle_a < unk_6 + center_a && center_a - unk_6 < angle_a && *(s16 *) (block + 6) != 0) {
+        unk_6 = (f32) *(s16 *) (block + 4);
+        if (unk_6 + center_a < angle_a && *(s16 *) (block + 4) < *(s16 *) (block + 6)) {
+            unk_5 = (angle_a - (unk_6 + center_a)) * 0.1f;
+            *(s16 *) (block + 4) = (s32) (unk_6 + unk_5);
+            unk_6 = (f32) *(s16 *) (block + 4);
         }
-        if (sp54 < f2 + f22 && -*(s16 *) (param_0 + 6) < *(s16 *) (param_0 + 4)) {
-            *(s16 *) (param_0 + 4) = (s32) (f2 - ((f2 + f22) - sp54) * 0.1f);
+        if (angle_a < unk_6 + center_a && -*(s16 *) (block + 6) < *(s16 *) (block + 4)) {
+            *(s16 *) (block + 4) = (s32) (unk_6 - ((unk_6 + center_a) - angle_a) * 0.1f);
         }
-        sp50 = func_800F1828(sp3C, param_2);
-        f20 = func_80013728(f20);
-        y = func_800F0E7C(sp50, f20);
-        f2 = (f32) *(s16 *) (param_0 + 0xA);
-        if (y < f2 + f20 && f20 - f2 < y && *(s16 *) (param_0 + 0xA) != 0) {
-            f2 = (f32) *(s16 *) (param_0 + 8);
-            if (f2 + f20 < y && *(s16 *) (param_0 + 8) < *(s16 *) (param_0 + 0xA)) {
-                sp50 = (y - (f2 + f20)) * 0.1f;
-                *(s16 *) (param_0 + 8) = (s32) (f2 + sp50);
-                f2 = (f32) *(s16 *) (param_0 + 8);
+        angle_b = func_800F1828(head_pos, target);
+        center_b = func_80013728(center_b);
+        unk_5 = func_800F0E7C(angle_b, center_b);
+        unk_6 = (f32) *(s16 *) (block + 0xA);
+        if (unk_5 < unk_6 + center_b && center_b - unk_6 < unk_5 && *(s16 *) (block + 0xA) != 0) {
+            unk_6 = (f32) *(s16 *) (block + 8);
+            if (unk_6 + center_b < unk_5 && *(s16 *) (block + 8) < *(s16 *) (block + 0xA)) {
+                angle_b = (unk_5 - (unk_6 + center_b)) * 0.1f;
+                *(s16 *) (block + 8) = (s32) (unk_6 + angle_b);
+                unk_6 = (f32) *(s16 *) (block + 8);
             }
-            if (y < f2 + f20 && -*(s16 *) (param_0 + 0xA) < *(s16 *) (param_0 + 8)) {
-                *(s16 *) (param_0 + 8) = (s32) (f2 - ((f2 + f20) - y) * 0.1f);
+            if (unk_5 < unk_6 + center_b && -*(s16 *) (block + 0xA) < *(s16 *) (block + 8)) {
+                *(s16 *) (block + 8) = (s32) (unk_6 - ((unk_6 + center_b) - unk_5) * 0.1f);
             }
         }
-        if ((f32) *(s16 *) (param_0 + 0xA) * 1.5f + f20 <= y ||
-            y <= f20 - (f32) *(s16 *) (param_0 + 0xA) * 1.5f) {
-            *(s16 *) (param_0 + 8) = (s32) ((f32) *(s16 *) (param_0 + 8) * 0.97f);
+        if ((f32) *(s16 *) (block + 0xA) * 1.5f + center_b <= unk_5 ||
+            unk_5 <= center_b - (f32) *(s16 *) (block + 0xA) * 1.5f) {
+            *(s16 *) (block + 8) = (s32) ((f32) *(s16 *) (block + 8) * 0.97f);
         }
     }
-    if ((f32) *(s16 *) (param_0 + 6) * 1.5f + f22 <= sp54 ||
-        sp54 <= f22 - (f32) *(s16 *) (param_0 + 6) * 1.5f) {
-        *(s16 *) (param_0 + 4) = (s32) ((f32) *(s16 *) (param_0 + 4) * 0.97f);
-        *(s16 *) (param_0 + 8) = (s32) ((f32) *(s16 *) (param_0 + 8) * 0.97f);
+    if ((f32) *(s16 *) (block + 6) * 1.5f + center_a <= angle_a ||
+        angle_a <= center_a - (f32) *(s16 *) (block + 6) * 1.5f) {
+        *(s16 *) (block + 4) = (s32) ((f32) *(s16 *) (block + 4) * 0.97f);
+        *(s16 *) (block + 8) = (s32) ((f32) *(s16 *) (block + 8) * 0.97f);
     }
 }
 
-void suexpression_entrypoint_16(param_0, param_1) u8 *param_0;
-s32 param_1;
+// Decays the look-at offsets.
+void suexpression_entrypoint_16(block, handle) u8 *block;
+s32 handle;
 {
-    (*(s16 *) ((s8 *) (param_0) + (4))) =
-        (s16) (s32) ((f32) (*(s16 *) ((s8 *) (param_0) + (4))) * 0.97f);
-    (*(s16 *) ((s8 *) (param_0) + (8))) =
-        (s16) (s32) ((f32) (*(s16 *) ((s8 *) (param_0) + (8))) * 0.97f);
+    (*(s16 *) ((s8 *) (block) + (4))) =
+        (s16) (s32) ((f32) (*(s16 *) ((s8 *) (block) + (4))) * 0.97f);
+    (*(s16 *) ((s8 *) (block) + (8))) =
+        (s16) (s32) ((f32) (*(s16 *) ((s8 *) (block) + (8))) * 0.97f);
 }
 
-int suexpression_entrypoint_17(Actor *param_0, unsigned int param_1)
+int suexpression_entrypoint_17(Actor *block, unsigned int range)
 {
-    *((s16 *) (((char *) param_0) + 0xE)) = param_1;
+    *((s16 *) (((char *) block) + 0xE)) = range;
 }
 
-void suexpression_entrypoint_18(u8 *param_0, unsigned int param_1)
+void suexpression_entrypoint_18(u8 *block, unsigned int unk_1)
 {
-    param_0[0x13] = param_1;
+    block[0x13] = unk_1;
 }
 
-void suexpression_entrypoint_19(Expression1864 *param_0, Actor *param_1)
+// Applies the look-at as rotation overrides on bones 0x12 and 1, split by the two weights.
+void suexpression_entrypoint_19(Expression1864 *block, Actor *actor)
 {
-    void *local_0;
-    local_0 = func_8010262C(param_1->unk0, suexpression_entrypoint_1(param_0->local_5));
+    void *unk_0;
+    unk_0 = func_8010262C(actor->unk0, suexpression_entrypoint_1(block->model_id));
 
-if (local_0) {
-    if (param_0->local_0)
-        _suexpressjoint_entrypoint_4((u8 *) param_0 + param_0->local_0, param_1);
-    if (param_0->local_1 || param_0->local_2 || param_0->local_3 || param_0->local_4) {
-        func_800E0AFC(local_0, 0x12, 1.0f, (-param_0->local_3 * param_0->local_7) * 0.01f,
-                      (param_0->local_1 * param_0->local_6) * 0.01f, 0.0f);
-        func_800E0AFC(local_0, 1, 1.0f, (-param_0->local_3 * (100 - param_0->local_7)) * 0.01f,
-                      (param_0->local_1 * (100 - param_0->local_6)) * 0.01f, 0.0f);
+if (unk_0) {
+    if (block->joint_offset)
+        _suexpressjoint_entrypoint_4((u8 *) block + block->joint_offset, actor);
+    if (block->unk_4 || block->unk_6 || block->unk_8 || block->unk_A) {
+        func_800E0AFC(unk_0, 0x12, 1.0f, (-block->unk_8 * block->split_b) * 0.01f,
+                      (block->unk_4 * block->split_a) * 0.01f, 0.0f);
+        func_800E0AFC(unk_0, 1, 1.0f, (-block->unk_8 * (100 - block->split_b)) * 0.01f,
+                      (block->unk_4 * (100 - block->split_a)) * 0.01f, 0.0f);
     }
 }
 
 }
 
-int suexpression_entrypoint_20(int param_0)
+// Fetches the block from the actor's local slot (0 if the slot is unused).
+int suexpression_entrypoint_20(int actor)
 {
-    unsigned int local_0;
-    int local_1;
+    unsigned int word;
+    int slot;
+    // Matching: the do-while wrapper is needed for the match.
     do {
-        local_1 = *((int *) (param_0 + 0x94));
-        local_0 = local_1;
-        local_1 = (local_0 << 12) >> 30;
-        if (local_1 != 0) {
-            return func_80100094((void *) param_0, local_1 - 1);
+        slot = *((int *) (actor + 0x94));
+        word = slot;
+        slot = (word << 12) >> 30;
+        if (slot != 0) {
+            return func_80100094((void *) actor, slot - 1);
         }
         return 0;
     } while (0);
 }
 
-u8 *func_80800CF4_suexpression(param_0)
-s32 param_0;
+// Returns the 6-byte table row for a model (0xC..0xD1), or 0 outside that range.
+u8 *func_80800CF4_suexpression(model_id)
+s32 model_id;
 {
-    u32 temp_v1;
-    temp_v1 = param_0 - 0xC;
+    u32 index;
+    index = model_id - 0xC;
 
-if (temp_v1 >= 0xC6U) {
+if (index >= 0xC6U) {
     return 0;
 }
 
-return D_80800D60_suexpression[temp_v1];
+return D_80800D60_suexpression[index];
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
 u8 D_80800D60_suexpression[200][6] = {
     0x0, 0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,
     0x0, 0x78, 0x0, 0x0, 0x0, 0x0, 0x0, 0x5A, 0x0, 0x9, 0x8, 0x0, 0x0, 0x41, 0x0, 0x0, 0x2, 0x0,

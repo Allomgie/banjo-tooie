@@ -1,42 +1,45 @@
 #include "common.h"
 
+// Map light grid: header followed by cells (32 bytes each, 15 light slots, an AABB padded by 20
+// units, a range of vertex records) and then the vertex records (baked colour per vertex).
+// dirty: -1 = cell has no vertices, > 0 = vertex colours need rewriting.
 typedef struct {
     s16 origin[3];
-    u16 pad6[3];
+    u16 pad_6[3];
     u16 stride_y;
     u16 stride_z;
 } RtLightGrid32_80800000_rtlight;
 typedef struct {
-    u8 pad0[0x10];
-    u16 n;
-    s16 size;
-    s32 m;
+    u8 pad_0[0x10];
+    u16 cell_count;
+    s16 cell_size;
+    s32 vertex_count;
     u16 cells[1][2];
 } RtSrc;
 typedef struct {
-    u8 b[15];
-    s8 f;
+    u8 slots[15];
+    s8 dirty;
     s16 min[3];
     s16 max[3];
-    u16 unk1C;
-    u16 unk1E;
+    u16 first;
+    u16 count;
 } RtCell_rtlight_entrypoint_1;
 typedef struct {
-    u8 pad0[6];
-    s16 idx;
-    u8 col[3];
-    u8 padB;
+    u8 pad_0[6];
+    s16 vertex_idx;
+    u8 baked_col[3];
+    u8 pad_B;
 } RtLight_rtlight_entrypoint_1;
 typedef struct {
-    u8 pad0[0xC];
+    u8 pad_0[0xC];
     u8 col[3];
-    u8 padF;
+    u8 pad_F;
 } RtTblEntry_rtlight_entrypoint_1;
 typedef struct {
     RtSrc *src;
-    s16 size;
-    u16 n;
-    f32 inv;
+    s16 cell_size;
+    u16 cell_count;
+    f32 inv_cell_size;
     RtCell_rtlight_entrypoint_1 cells[1];
 } RtOut_rtlight_entrypoint_1;
 extern void *heap_alloc(s32);
@@ -48,18 +51,18 @@ typedef struct {
     u16 stride_z;
 } RtLightGrid32_8080036C_rtlight;
 typedef struct {
-    u8 b[15];
-    s8 f;
+    u8 slots[15];
+    s8 dirty;
     s16 min[3];
     s16 max[3];
-    u16 unk1C;
-    u16 unk1E;
+    u16 first;
+    u16 count;
 } RtCell_8080036C_rtlight;
 typedef struct {
     RtLightGrid32_8080036C_rtlight *src;
-    s16 size;
-    u16 n;
-    f32 inv;
+    s16 cell_size;
+    u16 cell_count;
+    f32 inv_cell_size;
     RtCell_8080036C_rtlight cells[1];
 } RtOut_8080036C_rtlight;
 typedef struct {
@@ -69,30 +72,30 @@ typedef struct {
 extern RtCellList D_80135550;
 extern void func_800C8898(s32, f32[3]);
 typedef struct {
-    u8 b[15];
-    s8 f;
+    u8 slots[15];
+    s8 dirty;
     s16 min[3];
     s16 max[3];
-    s16 unk1C;
-    s16 unk1E;
+    s16 first;
+    s16 count;
 } RtCell_rtlight_entrypoint_2;
 typedef struct {
-    s16 s[3];
-    s16 idx;
-    u8 col[3];
-    u8 padB;
+    s16 sum[3];
+    s16 vertex_idx;
+    u8 baked_col[3];
+    u8 pad_B;
 } RtLight_rtlight_entrypoint_2;
 typedef struct {
     s16 pos[3];
-    u8 pad6[6];
+    u8 pad_6[6];
     u8 col[3];
-    u8 padF;
+    u8 pad_F;
 } RtTblEntry_rtlight_entrypoint_2;
 typedef struct {
     void *src;
-    s16 size;
-    s16 n;
-    f32 inv;
+    s16 cell_size;
+    s16 cell_count;
+    f32 inv_cell_size;
     RtCell_rtlight_entrypoint_2 cells[1];
 } RtOut_rtlight_entrypoint_2;
 extern s32 func_800C8760(s32, s32);
@@ -102,300 +105,306 @@ extern void func_800C883C(s32, f32 *);
 extern s32 func_800E3DC0();
 extern void func_800C8900(s32, s32 *);
 
-void func_80800000_rtlight(RtLightGrid32_80800000_rtlight *param_0, s32 param_1, s32 param_2[3])
+// Cell index to grid coordinates.
+void func_80800000_rtlight(RtLightGrid32_80800000_rtlight *grid, s32 cell_idx, s32 coords[3])
 {
-    param_2[2] = param_1 / param_0->stride_z;
-    param_2[1] = (param_1 % param_0->stride_z) / param_0->stride_y;
-    param_2[0] = (param_1 % param_0->stride_z) % param_0->stride_y;
-    param_2[0] += param_0->origin[0];
-    param_2[1] += param_0->origin[1];
-    param_2[2] += param_0->origin[2];
+    coords[2] = cell_idx / grid->stride_z;
+    coords[1] = (cell_idx % grid->stride_z) / grid->stride_y;
+    coords[0] = (cell_idx % grid->stride_z) % grid->stride_y;
+    coords[0] += grid->origin[0];
+    coords[1] += grid->origin[1];
+    coords[2] += grid->origin[2];
 }
 
-void rtlight_entrypoint_0(void *arg0)
+void rtlight_entrypoint_0(void *grid)
 {
-    heap_free(arg0);
+    heap_free(grid);
 }
 
-RtOut_rtlight_entrypoint_1 *rtlight_entrypoint_1(RtSrc *src, s32 arg1, s32 arg2)
+// Builds the cell grid over the map's vertex list; copies baked colours from the model.
+RtOut_rtlight_entrypoint_1 *rtlight_entrypoint_1(RtSrc *src, s32 model, s32 unused)
 {
-    RtOut_rtlight_entrypoint_1 *out;
-    RtCell_rtlight_entrypoint_1 *c;
-    RtLight_rtlight_entrypoint_1 *lend;
-    RtCell_rtlight_entrypoint_1 *end;
-    RtCell_rtlight_entrypoint_1 *first;
-    u16 *sc;
-    RtLight_rtlight_entrypoint_1 *l;
-    RtTblEntry_rtlight_entrypoint_1 *tbl;
+    RtOut_rtlight_entrypoint_1 *grid;
+    RtCell_rtlight_entrypoint_1 *cell;
+    RtLight_rtlight_entrypoint_1 *rec_end;
+    RtCell_rtlight_entrypoint_1 *cell_end;
+    RtCell_rtlight_entrypoint_1 *first_cell;
+    u16 *src_cell;
+    RtLight_rtlight_entrypoint_1 *rec;
+    RtTblEntry_rtlight_entrypoint_1 *verts;
     s32 i;
-    s32 n;
-    s16 *si;
-    RtTblEntry_rtlight_entrypoint_1 *ps;
+    s32 cell_count;
+    s16 *src_idx;
+    RtTblEntry_rtlight_entrypoint_1 *vert;
     s32 pos[3];
 
-    n = src->n;
-    out = heap_alloc(n * 32 + src->m * 12 + 12);
-    out->src = src;
-    out->size = src->size;
-    out->n = n;
-    out->inv = 1.0f / src->size;
-    sc = src->cells[0];
-    first = out->cells;
-    end = (RtCell_rtlight_entrypoint_1 *) ((n << 5) + (u8 *) out + 12);
-    for (c = first; c < end; c++, sc += 2) {
-        if (sc[1] == 0) {
-            c->f = -1;
+    cell_count = src->cell_count;
+    grid = heap_alloc(cell_count * 32 + src->vertex_count * 12 + 12);
+    grid->src = src;
+    grid->cell_size = src->cell_size;
+    grid->cell_count = cell_count;
+    grid->inv_cell_size = 1.0f / src->cell_size;
+    src_cell = src->cells[0];
+    first_cell = grid->cells;
+    cell_end = (RtCell_rtlight_entrypoint_1 *) ((cell_count << 5) + (u8 *) grid + 12);
+    for (cell = first_cell; cell < cell_end; cell++, src_cell += 2) {
+        if (src_cell[1] == 0) {
+            cell->dirty = -1;
             continue;
         }
         for (i = 0; i < 15; i++) {
-            c->b[i] = 0;
+            cell->slots[i] = 0;
         }
-        func_80800000_rtlight(out->src, c - first, pos);
+        func_80800000_rtlight(grid->src, cell - first_cell, pos);
         for (i = 0; i < 3; i++) {
-            c->min[i] = pos[i] * src->size - 20;
-            c->max[i] = (pos[i] + 1) * src->size + 20;
+            cell->min[i] = pos[i] * src->cell_size - 20;
+            cell->max[i] = (pos[i] + 1) * src->cell_size + 20;
         }
-        c->unk1C = sc[0];
-        c->unk1E = sc[1];
-        c->f = 0;
+        cell->first = src_cell[0];
+        cell->count = src_cell[1];
+        cell->dirty = 0;
     }
-    l = (RtLight_rtlight_entrypoint_1 *) c;
-    lend = l + src->m;
-    si = (s16 *) sc;
-    tbl = func_800B2190(arg1);
-    for (; l < lend; l++, si++) {
-        l->idx = *si;
-        ps = &tbl[*si];
+    rec = (RtLight_rtlight_entrypoint_1 *) cell;
+    rec_end = rec + src->vertex_count;
+    src_idx = (s16 *) src_cell;
+    verts = func_800B2190(model);
+    for (; rec < rec_end; rec++, src_idx++) {
+        rec->vertex_idx = *src_idx;
+        vert = &verts[*src_idx];
         for (i = 0; i < 3; i++) {
-            l->col[i] = ps->col[i];
+            rec->baked_col[i] = vert->col[i];
         }
     }
-    return out;
+    return grid;
 }
 
-void func_8080036C_rtlight(RtOut_8080036C_rtlight *grid, f32 *pos, f32 r,
-                           RtCell_8080036C_rtlight ***outList, RtCell_8080036C_rtlight ***outEnd)
+// Collects the cells overlapping the sphere (pos, radius) into D_80135550 (max 150).
+void func_8080036C_rtlight(RtOut_8080036C_rtlight *grid, f32 *pos, f32 radius,
+                           RtCell_8080036C_rtlight ***out_list, RtCell_8080036C_rtlight ***out_end)
 {
     s32 lo[3];
     s32 hi[3];
     RtLightGrid32_8080036C_rtlight *src;
-    RtCell_8080036C_rtlight *c;
-    f32 p;
-    f32 a0f;
-    f32 b0f;
-    s32 a;
-    s32 b;
+    RtCell_8080036C_rtlight *cell;
+    f32 p; // Matching: unused local needed for the match.
+    f32 min_f;
+    f32 max_f;
+    s32 min_cell;
+    s32 max_cell;
     s32 i;
     s32 x;
     s32 y;
     s32 z;
-    s32 o;
-    s32 m;
+    s32 cell_origin;
+    s32 cell_max;
 
     src = grid->src;
     for (i = 0; i < 3; i++) {
-        a0f = pos[i] - r;
-        b0f = pos[i] + r;
-        a = grid->inv * a0f;
-        b = grid->inv * b0f;
-        if (a0f < 0.0f) {
-            a--;
+        min_f = pos[i] - radius;
+        max_f = pos[i] + radius;
+        min_cell = grid->inv_cell_size * min_f;
+        max_cell = grid->inv_cell_size * max_f;
+        if (min_f < 0.0f) {
+            min_cell--;
         }
-        if (b0f < 0.0f) {
-            b--;
+        if (max_f < 0.0f) {
+            max_cell--;
         }
-        o = src->origin[i];
-        m = src->max[i];
-        if (a < o) {
-            a = o;
+        cell_origin = src->origin[i];
+        cell_max = src->max[i];
+        if (min_cell < cell_origin) {
+            min_cell = cell_origin;
         }
-        if (m < a) {
-            a = m;
+        if (cell_max < min_cell) {
+            min_cell = cell_max;
         }
-        if (b < o) {
-            b = o;
+        if (max_cell < cell_origin) {
+            max_cell = cell_origin;
         }
-        if (m < b) {
-            b = m;
+        if (cell_max < max_cell) {
+            max_cell = cell_max;
         }
-        lo[i] = a - o;
-        hi[i] = b - o;
+        lo[i] = min_cell - cell_origin;
+        hi[i] = max_cell - cell_origin;
     }
     D_80135550.cur = D_80135550.list;
     for (z = lo[2]; z <= hi[2]; z++) {
         for (y = lo[1]; y <= hi[1]; y++) {
             for (x = lo[0]; x <= hi[0]; x++) {
-                c = (RtCell_8080036C_rtlight *) (((src->stride_z * z) << 5) + (u8 *) grid +
-                                                 (x << 5) + ((y * src->stride_y) << 5) + 12);
-                if (c->f >= 0 && D_80135550.cur < &D_80135550.list[150]) {
-                    *D_80135550.cur = c;
+                cell = (RtCell_8080036C_rtlight *) (((src->stride_z * z) << 5) + (u8 *) grid +
+                                                    (x << 5) + ((y * src->stride_y) << 5) + 12);
+                if (cell->dirty >= 0 && D_80135550.cur < &D_80135550.list[150]) {
+                    *D_80135550.cur = cell;
                     D_80135550.cur++;
                 }
             }
         }
     }
-    *outList = D_80135550.list;
-    *outEnd = D_80135550.cur;
+    *out_list = D_80135550.list;
+    *out_end = D_80135550.cur;
 }
 
-void func_80800544_rtlight(s32 param_0, s32 *param_1)
+void func_80800544_rtlight(s32 light, s32 *out_pos)
 {
-    f32 local_0[3];
-    func_800C8800(param_0, local_0);
-    param_1[0] = local_0[0];
-    param_1[1] = local_0[1];
-    param_1[2] = local_0[2];
-}
-
-void func_808005AC_rtlight(s32 param_0, s32 *param_1)
-{
-    f32 local_0[3];
-
-    func_800C8898(param_0, local_0);
-    param_1[0] = (s32) (local_0[0] * 256.0f);
-    param_1[1] = (s32) (local_0[1] * local_0[1]);
-    param_1[2] = (s32) (local_0[2] * 16384.0f);
-}
-
-void rtlight_entrypoint_2(RtOut_rtlight_entrypoint_2 *grid, s32 arg1, s32 arg2, s32 flag)
-{
-    s32 h;
-    s32 k;
-    RtCell_rtlight_entrypoint_2 *c;
-    RtCell_rtlight_entrypoint_2 *end;
-    s32 pad[2];
     f32 pos[3];
-    f32 range[2];
+    func_800C8800(light, pos);
+    out_pos[0] = pos[0];
+    out_pos[1] = pos[1];
+    out_pos[2] = pos[2];
+}
+
+// Light radii in fixed point for the falloff: inner * 256, outer squared, inverse range * 0x4000.
+void func_808005AC_rtlight(s32 light, s32 *out)
+{
+    f32 radii[3];
+
+    func_800C8898(light, radii);
+    out[0] = (s32) (radii[0] * 256.0f);
+    out[1] = (s32) (radii[1] * radii[1]);
+    out[2] = (s32) (radii[2] * 16384.0f);
+}
+
+// Per-frame update: assigns the active lights to the cells they overlap, then for visible dirty
+// cells rewrites the vertex colours (baked colour + light colour * falloff, clamped to 255).
+void rtlight_entrypoint_2(RtOut_rtlight_entrypoint_2 *grid, s32 model, s32 unused, s32 flag)
+{
+    s32 light;
+    s32 slot;
+    RtCell_rtlight_entrypoint_2 *cell;
+    RtCell_rtlight_entrypoint_2 *cell_end;
+    s32 pad[2]; // Matching: unused local needed for the match.
+    f32 pos[3];
+    f32 radii[2];
     RtCell_rtlight_entrypoint_2 **list;
-    RtCell_rtlight_entrypoint_2 **listEnd;
+    RtCell_rtlight_entrypoint_2 **list_end;
     s32 dx;
     s32 dy;
     s32 dz;
-    RtTblEntry_rtlight_entrypoint_2 *e1;
-    RtTblEntry_rtlight_entrypoint_2 *e2;
-    RtTblEntry_rtlight_entrypoint_2 *e3;
-    s32 t;
-    s32 lpos[3];
-    s32 r[3];
-    s32 col[3];
+    RtTblEntry_rtlight_entrypoint_2 *vert_restore;
+    RtTblEntry_rtlight_entrypoint_2 *vert_sum;
+    RtTblEntry_rtlight_entrypoint_2 *vert_out;
+    s32 falloff;
+    s32 light_pos[3];
+    s32 radius[3];
+    s32 light_col[3];
     s32 j;
-    RtTblEntry_rtlight_entrypoint_2 *tbl;
-    RtLight_rtlight_entrypoint_2 *l;
-    RtLight_rtlight_entrypoint_2 *lend;
-    RtLight_rtlight_entrypoint_2 *p;
-    u8 *pb;
-    s32 d2;
-    s32 d;
-    s32 s;
-    s32 v;
+    RtTblEntry_rtlight_entrypoint_2 *verts;
+    RtLight_rtlight_entrypoint_2 *rec;
+    RtLight_rtlight_entrypoint_2 *rec_end;
+    RtLight_rtlight_entrypoint_2 *cur;
+    u8 *slot_ptr;
+    s32 tmp;
+    s32 dist;
+    s32 scale;
+    s32 val;
 
-    end = (RtCell_rtlight_entrypoint_2 *) ((grid->n << 5) + (u8 *) grid + 12);
-    for (h = func_800C8760(2, 2); h != 0; h = func_800C878C(h, 2, 2)) {
-        for (c = grid->cells; c < end; c++) {
-            if (c->f < 0) {
+    cell_end = (RtCell_rtlight_entrypoint_2 *) ((grid->cell_count << 5) + (u8 *) grid + 12);
+    for (light = func_800C8760(2, 2); light != 0; light = func_800C878C(light, 2, 2)) {
+        for (cell = grid->cells; cell < cell_end; cell++) {
+            if (cell->dirty < 0) {
                 continue;
             }
             for (j = 0; j < 15; j++) {
-                if (c->b[j] == h) {
-                    c->b[j] = 0;
-                    c->f = flag;
+                if (cell->slots[j] == light) {
+                    cell->slots[j] = 0;
+                    cell->dirty = flag;
                     break;
                 }
             }
         }
-        func_800C8800(h, pos);
-        func_800C883C(h, range);
-        func_8080036C_rtlight(grid, pos, range[1], &list, &listEnd);
-        for (; list < listEnd; list++) {
-            for (d2 = 0; d2 < 15; d2++) {
-                if ((*list)->b[d2] == 0) {
-                    (*list)->b[d2] = h;
-                    (*list)->f = flag;
+        func_800C8800(light, pos);
+        func_800C883C(light, radii);
+        func_8080036C_rtlight(grid, pos, radii[1], &list, &list_end);
+        for (; list < list_end; list++) {
+            for (tmp = 0; tmp < 15; tmp++) {
+                if ((*list)->slots[tmp] == 0) {
+                    (*list)->slots[tmp] = light;
+                    (*list)->dirty = flag;
                     break;
                 }
             }
         }
     }
-    c = grid->cells;
-    tbl = func_800B2190(arg1);
-    for (; c < end; c++) {
-        if (c->f <= 0) {
+    cell = grid->cells;
+    verts = func_800B2190(model);
+    for (; cell < cell_end; cell++) {
+        if (cell->dirty <= 0) {
             continue;
         }
-        if (!func_800E3DC0(c->min, c->max)) {
+        if (!func_800E3DC0(cell->min, cell->max)) {
             continue;
         }
-        k = 0;
-        pb = c->b;
-        for (; k < 15; k++, pb++) {
-            if (*pb != 0) {
+        slot = 0;
+        slot_ptr = cell->slots;
+        for (; slot < 15; slot++, slot_ptr++) {
+            if (*slot_ptr != 0) {
                 break;
             }
         }
-        l = c->unk1C + (RtLight_rtlight_entrypoint_2 *) end;
-        lend = l + c->unk1E;
-        if (k == 15) {
-            for (; l < lend; l++) {
-                e1 = &tbl[l->idx];
-                e1->col[0] = l->col[0];
-                e1->col[1] = l->col[1];
-                e1->col[2] = l->col[2];
+        rec = cell->first + (RtLight_rtlight_entrypoint_2 *) cell_end;
+        rec_end = rec + cell->count;
+        if (slot == 15) {
+            for (; rec < rec_end; rec++) {
+                vert_restore = &verts[rec->vertex_idx];
+                vert_restore->col[0] = rec->baked_col[0];
+                vert_restore->col[1] = rec->baked_col[1];
+                vert_restore->col[2] = rec->baked_col[2];
             }
         } else {
-            for (p = l; p < lend; p++) {
-                p->s[0] = p->col[0];
-                p->s[1] = p->col[1];
-                p->s[2] = p->col[2];
+            for (cur = rec; cur < rec_end; cur++) {
+                cur->sum[0] = cur->baked_col[0];
+                cur->sum[1] = cur->baked_col[1];
+                cur->sum[2] = cur->baked_col[2];
             }
-            for (; k < 15; k++, pb++) {
-                if (!*pb) {
+            for (; slot < 15; slot++, slot_ptr++) {
+                if (!*slot_ptr) {
                     continue;
                 }
-                func_80800544_rtlight(*pb, lpos);
-                func_808005AC_rtlight(*pb, r);
-                func_800C8900(*pb, col);
-                for (p = l; p < lend; p++) {
-                    e2 = &tbl[p->idx];
-                    dx = lpos[0] - e2->pos[0];
-                    dy = lpos[1] - e2->pos[1];
-                    dz = lpos[2] - e2->pos[2];
-                    d2 = dx * dx + dy * dy + dz * dz;
-                    d = d2;
-                    if (d2 < r[1]) {
-                        if (d2 != 0) {
-                            d = sqrtf(d2) * 256.0f;
+                func_80800544_rtlight(*slot_ptr, light_pos);
+                func_808005AC_rtlight(*slot_ptr, radius);
+                func_800C8900(*slot_ptr, light_col);
+                for (cur = rec; cur < rec_end; cur++) {
+                    vert_sum = &verts[cur->vertex_idx];
+                    dx = light_pos[0] - vert_sum->pos[0];
+                    dy = light_pos[1] - vert_sum->pos[1];
+                    dz = light_pos[2] - vert_sum->pos[2];
+                    tmp = dx * dx + dy * dy + dz * dz;
+                    dist = tmp;
+                    if (tmp < radius[1]) {
+                        if (tmp != 0) {
+                            dist = sqrtf(tmp) * 256.0f;
                         }
-                        if (r[0] < d) {
-                            t = 0x4000 - (((d - r[0]) * r[2]) >> 8);
-                            s = t << 2;
+                        if (radius[0] < dist) {
+                            falloff = 0x4000 - (((dist - radius[0]) * radius[2]) >> 8);
+                            scale = falloff << 2;
                         } else {
-                            s = 0x10000;
+                            scale = 0x10000;
                         }
-                        p->s[0] += (col[0] * s) >> 16;
-                        p->s[1] += (col[1] * s) >> 16;
-                        p->s[2] += (col[2] * s) >> 16;
+                        cur->sum[0] += (light_col[0] * scale) >> 16;
+                        cur->sum[1] += (light_col[1] * scale) >> 16;
+                        cur->sum[2] += (light_col[2] * scale) >> 16;
                     }
                 }
             }
-            for (; l < lend; l++) {
-                e3 = &tbl[l->idx];
-                v = l->s[0];
-                if (v >= 0x100) {
-                    v = 0xFF;
+            for (; rec < rec_end; rec++) {
+                vert_out = &verts[rec->vertex_idx];
+                val = rec->sum[0];
+                if (val >= 0x100) {
+                    val = 0xFF;
                 }
-                e3->col[0] = v;
-                v = l->s[1];
-                if (v >= 0x100) {
-                    v = 0xFF;
+                vert_out->col[0] = val;
+                val = rec->sum[1];
+                if (val >= 0x100) {
+                    val = 0xFF;
                 }
-                e3->col[1] = v;
-                v = l->s[2];
-                if (v >= 0x100) {
-                    v = 0xFF;
+                vert_out->col[1] = val;
+                val = rec->sum[2];
+                if (val >= 0x100) {
+                    val = 0xFF;
                 }
-                e3->col[2] = v;
+                vert_out->col[2] = val;
             }
         }
-        c->f--;
+        cell->dirty--;
     }
 }

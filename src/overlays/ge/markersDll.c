@@ -2,29 +2,32 @@
 
 extern s32 *D_80800090_gemarkersDll[490];
 
-s32 gemarkersDll_entrypoint_0(s32 arg0)
+// Maps a placed marker/prop id (0xB6..0x545) to the ActorInfo getter of its actor kind.
+s32 gemarkersDll_entrypoint_0(s32 id)
 {
-    if ((arg0 < 0xB6) || (arg0 >= 0x546)) {
+    if ((id < 0xB6) || (id >= 0x546)) {
         return 0;
     }
-    return D_80800090_gemarkersDll[arg0 - 0xB6];
+    return D_80800090_gemarkersDll[id - 0xB6];
 }
 
-s32 gemarkersDll_entrypoint_1(s32 arg0)
+// Maps an entrance number to the id of its entrance marker (0 if out of range).
+s32 gemarkersDll_entrypoint_1(s32 entrance)
 {
-    s32 var_v1;
-    s32 sp1C;
+    s32 marker_id;
+    s32 init;
 
-    sp1C = 0;
-    var_v1 = sp1C;
+    // Matching: the extra temporary is needed for the match.
+    init = 0;
+    marker_id = init;
     if (func_800A9C98() != 0) {
-        if ((arg0 > 0) && (arg0 < 9)) {
-            var_v1 = arg0 + 0x7F;
+        if ((entrance > 0) && (entrance < 9)) {
+            marker_id = entrance + 0x7F;
         }
-    } else if ((arg0 > 0) && (arg0 < 0x29)) {
-        var_v1 = arg0;
+    } else if ((entrance > 0) && (entrance < 0x29)) {
+        marker_id = entrance;
     }
-    return var_v1;
+    return marker_id;
 }
 
 extern void _chjamjarsdummy_entrypoint_0();

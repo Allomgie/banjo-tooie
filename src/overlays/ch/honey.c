@@ -6,19 +6,19 @@ extern void func_800C9E20(f32, void *, s32, s32);
 typedef struct Mass44HoneyFlags {
     u8 pad_0[0x78];
     u32 pad_1 : 26;
-    u32 local_0 : 1;
+    u32 disabled : 1;
     u32 pad_2 : 1;
-    u32 local_1 : 1;
+    u32 unk_78_3 : 1;
     u32 pad_3 : 3;
 } Mass44HoneyFlags;
 extern s32 D_80127194;
 extern void func_80109EEC(Actor *, s32);
 typedef struct {
-    u8 pad[0x64];
-    u32 pad64 : 11;
-    u32 b11 : 1;
-    u32 b12 : 1;
-    u32 rest : 19;
+    u8 pad_0[0x64];
+    u32 pad_64 : 11;
+    u32 unk_64_11 : 1;
+    u32 unk_64_12 : 1;
+    u32 unk_64_13 : 19;
 } HoneyS;
 extern void func_8010DCB4(s32);
 extern s32 *D_80801020_chhoney[];
@@ -43,14 +43,14 @@ extern void func_800C4B64(f32);
 extern u8 D_80801028_chhoney[];
 typedef struct {
     u8 pad_0[0x72];
-    u16 st : 6;
-    u16 rest : 10;
+    u16 state : 6;
+    u16 unk_72_6 : 10;
 } HoneyState;
 typedef struct {
     u8 pad_0[0x78];
-    u32 a : 28;
-    u32 f : 1;
-    u32 b : 3;
+    u32 pad_1 : 28;
+    u32 unk_78_3 : 1;
+    u32 pad_2 : 3;
 } Honey78;
 extern u8 D_80801038_chhoney[];
 extern s32 func_8008FC28(void);
@@ -64,6 +64,7 @@ extern void func_800FFAB0(Actor *);
 extern void _subaddieaudioloop_entrypoint_4();
 void func_80800688_chhoney();
 
+// Value of a drop for the current level (D_8012762C).
 f32 func_80800000_chhoney(void)
 {
     switch (D_8012762C) {
@@ -94,130 +95,133 @@ f32 func_80800000_chhoney(void)
     }
 }
 
-void func_808000C4_chhoney(param_0, param_1) Actor *param_0;
-s32 param_1;
+// Enters a pickup state and runs its entry actions (tutorial text, HUD refill).
+void func_808000C4_chhoney(actor, state) Actor *actor;
+s32 state;
 {
-    if (param_0->unk70_10 == 2 || param_0->unk70_10 == 3)
-        *(f32 *) ((u8 *) param_0 + 0x24) = 0.0f;
-    func_80101FDC(param_0, param_1);
-    switch (param_0->unk70_10) {
+    if (actor->unk70_10 == 2 || actor->unk70_10 == 3)
+        *(f32 *) ((u8 *) actor + 0x24) = 0.0f;
+    func_80101FDC(actor, state);
+    switch (actor->unk70_10) {
         case 7:
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0xCE6, 12, param_0->position, 0);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0xCE6, 12, actor->position, 0);
             return;
         case 8:
-            _subaddiedialog_entrypoint_11(param_0->unk0, 0xCE7, 12, param_0->position, 0);
+            _subaddiedialog_entrypoint_11(actor->unk0, 0xCE7, 12, actor->position, 0);
             return;
         case 3:
             func_80090708(2);
             func_800CE8D8(6, 10.0f, 10);
             func_800CE88C(6, 1);
             func_800FA9F4(0, 1);
-            *(f32 *) ((u8 *) param_0 + 0x58) = *(f32 *) ((u8 *) param_0 + 0x2C);
+            *(f32 *) ((u8 *) actor + 0x58) = *(f32 *) ((u8 *) actor + 0x2C);
             break;
         case 2:
             func_80090708(2);
             func_800CE8D8(6, 10.0f, 10);
             func_800CE88C(6, 1);
             func_800FA9F4(0, 1);
-            *(f32 *) ((u8 *) param_0 + 0x58) = *(f32 *) ((u8 *) param_0 + 0x2C);
+            *(f32 *) ((u8 *) actor + 0x58) = *(f32 *) ((u8 *) actor + 0x2C);
             break;
         case 5:
         case 6:
-            *(f32 *) ((u8 *) param_0 + 0x58) = 0.0f;
+            *(f32 *) ((u8 *) actor + 0x58) = 0.0f;
             break;
         case 4:
             func_800FA9F4(0, 0);
-            param_0->unk6C_0 = func_8008FC00();
+            actor->unk6C_0 = func_8008FC00();
             func_8008FC70(0);
-            *(f32 *) ((u8 *) param_0 + 0x58) = 0.2f;
+            *(f32 *) ((u8 *) actor + 0x58) = 0.2f;
     }
 }
 
-void func_80800244_chhoney(Actor *param_0)
+// Init: picks the kind from the model (0x55 placed, 0x22B/0x22C drops).
+void func_80800244_chhoney(Actor *actor)
 {
-    *(s32 *) ((u8 *) param_0 + 0x54) = func_8001211C();
-    *(f32 *) ((u8 *) param_0 + 0x28) = 20.0f;
-    _subaddieDll_entrypoint_4(param_0, !((*(u32 *) ((u8 *) param_0 + 0x78) << 26) >> 31));
-    param_0->scale = 0.5f;
-    switch (param_0->unk0->unk24 >> 22) {
+    *(s32 *) ((u8 *) actor + 0x54) = func_8001211C();
+    *(f32 *) ((u8 *) actor + 0x28) = 20.0f;
+    _subaddieDll_entrypoint_4(actor, !((*(u32 *) ((u8 *) actor + 0x78) << 26) >> 31));
+    actor->scale = 0.5f;
+    switch (actor->unk0->unk24 >> 22) {
         case 0x55:
-            param_0->unk79_4 = 0;
+            actor->unk79_4 = 0;
             break;
         case 0x22C:
-            param_0->unk79_4 = 2;
-            *(f32 *) ((u8 *) param_0 + 0x2C) = func_80800000_chhoney();
+            actor->unk79_4 = 2;
+            *(f32 *) ((u8 *) actor + 0x2C) = func_80800000_chhoney();
             break;
         case 0x22B:
-            param_0->unk79_4 = 1;
-            *(f32 *) ((u8 *) param_0 + 0x2C) = func_80800000_chhoney();
+            actor->unk79_4 = 1;
+            *(f32 *) ((u8 *) actor + 0x2C) = func_80800000_chhoney();
     }
-    func_8010A5B0(param_0, func_800DA298(0x64C));
+    func_8010A5B0(actor, func_800DA298(0x64C));
 }
 
-void func_80800328_chhoney(Actor *param_0, Unk80132ED0 *param_1)
+// Collection: plays the jingle and starts the matching pickup state.
+void func_80800328_chhoney(Actor *actor, Unk80132ED0 *msg)
 {
-    if (func_800F4B4C((u32) *(u16 *) ((u8 *) param_1 + 0x1A) >> 5)) {
-        switch (param_0->unk79_4) {
+    if (func_800F4B4C((u32) *(u16 *) ((u8 *) msg + 0x1A) >> 5)) {
+        switch (actor->unk79_4) {
             case 0:
                 func_800C9E20(0.75f, &_sudialog_entrypoint_0, 0x2F, 0);
                 func_8008FC50();
                 func_800FC660(8);
-                func_800FFAB0(param_0);
+                func_800FFAB0(actor);
                 break;
             case 2:
                 func_800FC660(0x81);
                 if (!func_800DA9E4(0x40E, 1))
-                    func_808000C4_chhoney(param_0, 8);
+                    func_808000C4_chhoney(actor, 8);
                 else
-                    func_808000C4_chhoney(param_0, 3);
+                    func_808000C4_chhoney(actor, 3);
                 break;
             case 1:
                 func_800FC660(0x80);
                 if (!func_800DA9E4(0x40D, 1))
-                    func_808000C4_chhoney(param_0, 7);
+                    func_808000C4_chhoney(actor, 7);
                 else
-                    func_808000C4_chhoney(param_0, 2);
+                    func_808000C4_chhoney(actor, 2);
         }
-        _fxsparkle_entrypoint_1(param_0->position, 1);
-        func_8010A570(param_0);
-        param_0->unk64_16 = 0;
-        ((u8 *) param_0)[0x75] &= ~0x10;
+        _fxsparkle_entrypoint_1(actor->position, 1);
+        func_8010A570(actor);
+        actor->unk64_16 = 0;
+        ((u8 *) actor)[0x75] &= ~0x10;
     }
 }
 
-int func_8080046C_chhoney(Actor *param_0, s32 param_1, s32 param_2)
+int func_8080046C_chhoney(Actor *actor, s32 msg_id, s32 data)
 {
-    switch (param_1) {
+    switch (msg_id) {
         case 0x3E:
-            *((u8 *) param_0 + 0x79) &= 0xFFFC;
-            func_80800328_chhoney(param_0, (Unk80132ED0 *) param_2);
+            *((u8 *) actor + 0x79) &= 0xFFFC;
+            func_80800328_chhoney(actor, (Unk80132ED0 *) data);
             break;
         case 0x2E:
-            switch (((s16 *) &param_2)[0]) {
+            switch (((s16 *) &data)[0]) {
                 case 0xCE6:
-                    func_808000C4_chhoney(param_0, 2);
+                    func_808000C4_chhoney(actor, 2);
                     break;
                 case 0xCE7:
-                    func_808000C4_chhoney(param_0, 3);
+                    func_808000C4_chhoney(actor, 3);
                     break;
             }
             break;
         case 0x1F:
-            func_8010DD20(param_0, ((Mass44HoneyFlags *) param_0)->local_1 ? 2 : 3, param_2);
-            if ((param_0->unk0->unk24 >> 22) != 0x55)
-                func_800DF744(3, param_0->unk79_4);
+            func_8010DD20(actor, ((Mass44HoneyFlags *) actor)->unk_78_3 ? 2 : 3, data);
+            if ((actor->unk0->unk24 >> 22) != 0x55)
+                func_800DF744(3, actor->unk79_4);
             break;
         case 0x95:
-            param_0->unk64_19 = 0;
-            param_0->unk64_20 = 1 - ((Mass44HoneyFlags *) param_0)->local_1;
-            func_80109EEC(param_0, 0x44);
-            switch (param_0->unk0->unk24 >> 22) {
+            actor->unk64_19 = 0;
+            actor->unk64_20 = 1 - ((Mass44HoneyFlags *) actor)->unk_78_3;
+            func_80109EEC(actor, 0x44);
+            switch (actor->unk0->unk24 >> 22) {
                 case 0x55:
                 case 0x22B:
                 case 0x22C:
-                    if (!((Mass44HoneyFlags *) param_0)->local_0) {
+                    if (!((Mass44HoneyFlags *) actor)->disabled) {
                         if (++D_80127194 >= 11)
-                            func_80800688_chhoney(param_0);
+                            func_80800688_chhoney(actor);
                     }
             }
             break;
@@ -227,175 +231,183 @@ int func_8080046C_chhoney(Actor *param_0, s32 param_1, s32 param_2)
     return 1;
 }
 
-void func_80800634_chhoney(HoneyS *param_0)
+// Destructor: one live drop less.
+void func_80800634_chhoney(HoneyS *honey)
 {
     D_80127194--;
-    if (param_0->b12) {
-        func_8010DCB4(param_0->b11 ? 2 : 3);
+    if (honey->unk_64_12) {
+        func_8010DCB4(honey->unk_64_11 ? 2 : 3);
     }
 }
 
-void func_80800688_chhoney(param_0) s32 *param_0;
+// Too many live drops: sparkles and removes the oldest one.
+void func_80800688_chhoney(current) s32 *current;
 {
-    s32 *local_0[14];
-    s32 *local_1[2];
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    s32 *local_7;
-    s32 local_8;
+    s32 *found[14];
+    s32 *target_ptr[2];
+    s32 target;
+    s32 oldest_time;
+    s32 count;
+    s32 i;
+    s32 *other;
+    s32 spawn_time;
 
-    local_2 = 0;
+    target = 0;
+    // Matching: empty block steers IDO's register allocation.
     if (1) {
     }
-    local_3 = func_8001211C();
-    local_4 = _subaddiefind_entrypoint_6(D_80801020_chhoney, local_0, 14);
-    for (local_5 = 0; local_5 < local_4; local_5++) {
-        local_7 = local_0[local_5];
-        if (param_0 != local_7) {
-            local_8 = *(s32 *) ((u8 *) local_7 + 0x54);
-            if (local_8 <= local_3 && (*(u16 *) ((u8 *) local_7 + 0x64) & 1)) {
-                local_2 = *local_7;
-                local_3 = local_8;
-                local_1[0] = local_7;
+    oldest_time = func_8001211C();
+    count = _subaddiefind_entrypoint_6(D_80801020_chhoney, found, 14);
+    for (i = 0; i < count; i++) {
+        other = found[i];
+        if (current != other) {
+            spawn_time = *(s32 *) ((u8 *) other + 0x54);
+            if (spawn_time <= oldest_time && (*(u16 *) ((u8 *) other + 0x64) & 1)) {
+                target = *other;
+                oldest_time = spawn_time;
+                target_ptr[0] = other;
             }
         }
     }
-    if (local_2 == 0) {
-        local_2 = *local_0[0];
-        local_1[0] = local_0[0];
+    if (target == 0) {
+        target = *found[0];
+        target_ptr[0] = found[0];
     }
-    _fxsparkle_entrypoint_1(local_1[0] + 1, 0);
-    func_800FFA88(local_2);
+    _fxsparkle_entrypoint_1(target_ptr[0] + 1, 0);
+    func_800FFA88(target);
 }
 
-void func_80800754_chhoney(Actor *param_0)
+// Twinkles around drops.
+void func_80800754_chhoney(Actor *actor)
 {
-    s32 local_1;
-    f32 local_0[3];
-    switch (param_0->unk0->unk24 >> 22) {
+    s32 i;
+    f32 twinkle_pos[3];
+    switch (actor->unk0->unk24 >> 22) {
         case 0x55:
             break;
         case 0x22B:
         case 0x22C:
-            if (param_0->unk7C_12) {
-                for (local_1 = 0; local_1 < 4; local_1++) {
+            if (actor->unk7C_12) {
+                for (i = 0; i < 4; i++) {
                     if (func_800DC298(0.03f)) {
-                        _subaddieskeleton_entrypoint_0(param_0, 1, local_0);
-                        func_800EF214(local_0, func_800DC178(0.0f, 360.0f),
+                        _subaddieskeleton_entrypoint_0(actor, 1, twinkle_pos);
+                        func_800EF214(twinkle_pos, func_800DC178(0.0f, 360.0f),
                                       func_800DC178(0.0f, 360.0f), 50.0f);
-                        _fxtwinkle_entrypoint_0(local_0);
+                        _fxtwinkle_entrypoint_0(twinkle_pos);
                     }
                 }
             }
     }
 }
 
-void func_80800870_chhoney(param_0, param_1) Actor *param_0;
-s32 param_1;
+// Health tick sound, pitch rises with health.
+void func_80800870_chhoney(actor, health) Actor *actor;
+s32 health;
 {
-    if (*(f32 *) &param_0->actorData[6] <= 0.0f) {
-        func_800C4B64(func_800F10B4(param_1, 1.0f, 10.0f, 0.8f, 1.5f));
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80801028_chhoney);
-        *(f32 *) &param_0->actorData[6] = 0.1f;
+    if (*(f32 *) &actor->actorData[6] <= 0.0f) {
+        func_800C4B64(func_800F10B4(health, 1.0f, 10.0f, 0.8f, 1.5f));
+        _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80801028_chhoney);
+        *(f32 *) &actor->actorData[6] = 0.1f;
     }
 }
 
-void func_808008F8_chhoney(Actor *param_0, f32 param_1)
+// Rolls the HUD health counter to random values.
+void func_808008F8_chhoney(Actor *actor, f32 unk_1)
 {
-    f32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
+    f32 delta_time;
+    s32 max_health;
+    s32 health;
+    s32 new_health;
 
-    local_0 = func_800D8FF8();
-    param_0->unk58 -= local_0;
-    *(f32 *) &param_0->actorData[6] -= local_0;
-    if (param_0->unk58 <= 0.0f) {
-        local_1 = func_8008FC28() + 1;
-        local_2 = func_8008FC00();
-        local_3 = func_800DC128(1, local_1);
-        while (local_3 == local_2)
-            local_3 = func_800DC128(1, local_1);
-        func_8008FC70(local_3);
-        func_80800870_chhoney(param_0, local_3);
-        param_0->unk58 = *(f32 *) &param_0->actorData[5];
+    delta_time = func_800D8FF8();
+    actor->unk58 -= delta_time;
+    *(f32 *) &actor->actorData[6] -= delta_time;
+    if (actor->unk58 <= 0.0f) {
+        max_health = func_8008FC28() + 1;
+        health = func_8008FC00();
+        new_health = func_800DC128(1, max_health);
+        while (new_health == health)
+            new_health = func_800DC128(1, max_health);
+        func_8008FC70(new_health);
+        func_80800870_chhoney(actor, new_health);
+        actor->unk58 = *(f32 *) &actor->actorData[5];
     }
 }
 
-void func_808009BC_chhoney(Actor *param_0)
+// Counts the HUD health counter up one step at a time.
+void func_808009BC_chhoney(Actor *actor)
 {
-    f32 local_0;
-    s32 local_1;
-    local_0 = func_800D8FF8();
-    param_0->unk58 -= local_0;
-    *(f32 *) &param_0->actorData[6] -= local_0;
-    if (param_0->unk58 <= 0.0f) {
-        local_1 = func_8008FC00() + 1;
-        if (func_8008FC28() < local_1)
-            local_1 = 1;
-        func_8008FC70(local_1);
-        func_80800870_chhoney(param_0, local_1);
-        param_0->unk58 = *(f32 *) &param_0->actorData[5];
+    f32 delta_time;
+    s32 health;
+    delta_time = func_800D8FF8();
+    actor->unk58 -= delta_time;
+    *(f32 *) &actor->actorData[6] -= delta_time;
+    if (actor->unk58 <= 0.0f) {
+        health = func_8008FC00() + 1;
+        if (func_8008FC28() < health)
+            health = 1;
+        func_8008FC70(health);
+        func_80800870_chhoney(actor, health);
+        actor->unk58 = *(f32 *) &actor->actorData[5];
     }
 }
 
 s32 func_80800EB0_chhoney();
 
-void func_80800A5C_chhoney(Actor *param_0)
+// Update: runs the state machine of the pickup.
+void func_80800A5C_chhoney(Actor *actor)
 {
-    f32 local_0;
-    s32 local_1;
-    s32 local_2;
+    f32 delta_time;
+    s32 max_health;
+    s32 health;
 
-    func_80800EB0_chhoney(param_0);
-    if (param_0->unk64_20 != ((Honey78 *) param_0)->f) {
-        if (((Honey78 *) param_0)->f) {
-            if (param_0->unk64_19) {
+    func_80800EB0_chhoney(actor);
+    if (actor->unk64_20 != ((Honey78 *) actor)->unk_78_3) {
+        if (((Honey78 *) actor)->unk_78_3) {
+            if (actor->unk64_19) {
                 func_8010DCB4(3);
             }
             func_8010DC50(2);
         } else {
-            if (param_0->unk64_19) {
+            if (actor->unk64_19) {
                 func_8010DCB4(2);
             }
             func_8010DC50(3);
         }
-        param_0->unk64_20 = ((Honey78 *) param_0)->f;
-        param_0->unk64_19 = 1;
+        actor->unk64_20 = ((Honey78 *) actor)->unk_78_3;
+        actor->unk64_19 = 1;
     }
-    local_0 = func_800D8FF8();
-    local_1 = func_8008FC28();
-    switch (((HoneyState *) param_0)->st) {
+    delta_time = func_800D8FF8();
+    max_health = func_8008FC28();
+    switch (((HoneyState *) actor)->state) {
         case 1:
-            if (!local_1) {
-                func_8010A570(param_0);
+            if (!max_health) {
+                func_8010A570(actor);
             } else {
-                func_8010A590(param_0);
+                func_8010A590(actor);
             }
-            if (param_0->unk0->unk24 >> 22 == 0x22B || param_0->unk0->unk24 >> 22 == 0x22C) {
-                if (func_8010CAC0(param_0->position, 0x1F4) && local_1) {
+            if (actor->unk0->unk24 >> 22 == 0x22B || actor->unk0->unk24 >> 22 == 0x22C) {
+                if (func_8010CAC0(actor->position, 0x1F4) && max_health) {
                     func_8008FBE0(1);
                 }
             }
-            func_80800754_chhoney(param_0);
+            func_80800754_chhoney(actor);
             return;
         case 7:
             func_8008FBE0(1);
             return;
         case 2:
             func_8008FBE0(1);
-            func_808008F8_chhoney(param_0, 1e-45f);
+            func_808008F8_chhoney(actor, 1e-45f);
             if (func_80090080()) {
                 if (func_80016B30(0, 1)) {
                     func_800CE88C(6, 0);
-                    func_808000C4_chhoney(param_0, 5);
+                    func_808000C4_chhoney(actor, 5);
                     return;
                 }
             }
             if (func_800CEAD0(6)) {
-                func_808000C4_chhoney(param_0, 5);
+                func_808000C4_chhoney(actor, 5);
             }
             break;
         case 8:
@@ -403,67 +415,67 @@ void func_80800A5C_chhoney(Actor *param_0)
             return;
         case 3:
             func_8008FBE0(1);
-            func_808009BC_chhoney(param_0);
+            func_808009BC_chhoney(actor);
             if (func_80090080()) {
                 if (func_80016B30(0, 1)) {
                     func_800CE88C(6, 0);
-                    func_808000C4_chhoney(param_0, 5);
+                    func_808000C4_chhoney(actor, 5);
                     return;
                 }
             }
             if (func_800CEAD0(6)) {
-                func_808000C4_chhoney(param_0, 5);
+                func_808000C4_chhoney(actor, 5);
             }
             break;
         case 5:
             func_8008FBE0(1);
             func_800FA9F4(0, 1);
-            param_0->unk58 += local_0 * 4.0f;
-            if (0.2f < param_0->unk58) {
-                AF(param_0, 3) += 1.0f;
-                if (10.0f < AF(param_0, 3)) {
-                    func_808000C4_chhoney(param_0, 4);
+            actor->unk58 += delta_time * 4.0f;
+            if (0.2f < actor->unk58) {
+                AF(actor, 3) += 1.0f;
+                if (10.0f < AF(actor, 3)) {
+                    func_808000C4_chhoney(actor, 4);
                 } else {
-                    func_808000C4_chhoney(param_0, 6);
+                    func_808000C4_chhoney(actor, 6);
                 }
             }
-            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80801038_chhoney);
+            _subaddieaudioloop_entrypoint_4(actor, actor->position, 1, D_80801038_chhoney);
             return;
         case 6:
             func_8008FBE0(1);
             func_800FA9F4(0, 2);
-            param_0->unk58 += local_0 * 4.0f;
-            if (0.2f < param_0->unk58) {
-                func_808000C4_chhoney(param_0, 5);
+            actor->unk58 += delta_time * 4.0f;
+            if (0.2f < actor->unk58) {
+                func_808000C4_chhoney(actor, 5);
             }
-            _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80801038_chhoney);
+            _subaddieaudioloop_entrypoint_4(actor, actor->position, 1, D_80801038_chhoney);
             return;
         case 4:
             func_8008FBE0(1);
-            param_0->unk58 -= func_800D8FF8();
-            if (param_0->unk58 <= 0.0f) {
-                local_2 = func_8008FC00();
-                param_0->unk58 = 0.2f;
-                local_2 = local_2 + 1;
-                func_800C3FC0(0x66C, func_800F10B4((f32) local_2, 1.0f, 10.0f, 0.8f, 1.5f), 0x3E80);
-                func_8008FC70(local_2);
-                if (local_2 == param_0->unk6C_0) {
+            actor->unk58 -= func_800D8FF8();
+            if (actor->unk58 <= 0.0f) {
+                health = func_8008FC00();
+                actor->unk58 = 0.2f;
+                health = health + 1;
+                func_800C3FC0(0x66C, func_800F10B4((f32) health, 1.0f, 10.0f, 0.8f, 1.5f), 0x3E80);
+                func_8008FC70(health);
+                if (health == actor->unk6C_0) {
                     func_80090708(0);
-                    func_800FFAB0(param_0);
+                    func_800FFAB0(actor);
                 }
             }
     }
 }
 
-s32 func_80800EB0_chhoney(Actor *param_0)
+s32 func_80800EB0_chhoney(Actor *actor)
 {
-    if (((HoneyFlags *) param_0)->disabled || param_0->unk64_17)
+    if (((HoneyFlags *) actor)->disabled || actor->unk64_17)
         return 0;
     if (func_800EA068(2))
         return 0;
-    if (func_800D9078((f32 *) &param_0->actorData[4])) {
-        if (param_0->unk64_16) {
-            _subaddiefade_entrypoint_3(param_0);
+    if (func_800D9078((f32 *) &actor->actorData[4])) {
+        if (actor->unk64_16) {
+            _subaddiefade_entrypoint_3(actor);
             return 1;
         }
     }
@@ -485,6 +497,9 @@ int chhoney_entrypoint_2()
     return (int) &D_808010D8_chhoney;
 }
 
+// TU-NOTE: this overlay's .data is defined here in C. Its tables point to functions of this file,
+// and IDO's assembler schedules some of them differently unless they share the unit.
+// D_80801048_chhoney and D_808010D8_chhoney are declared as int[].
 extern void func_80105834();
 extern void func_801018A4();
 extern void func_80108ED0();

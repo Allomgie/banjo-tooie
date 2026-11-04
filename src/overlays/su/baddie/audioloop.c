@@ -12,131 +12,139 @@ extern s32 func_800D9154(f32 *, f32);
 u8 subaddieaudioloop_entrypoint_3();
 u8 subaddieaudioloop_entrypoint_7();
 
-void subaddieaudioloop_entrypoint_0(u8 *param_0, f32 param_1)
+// Set the volume/pitch of the actor's loop sound.
+void subaddieaudioloop_entrypoint_0(u8 *actor, f32 value)
 {
-    u8 local_0 = param_0[0x5F];
-    if (local_0 != 0) {
-        func_800C31DC(local_0, param_1);
+    u8 sound = actor[0x5F];
+    if (sound != 0) {
+        func_800C31DC(sound, value);
     }
 }
 
-void subaddieaudioloop_entrypoint_1(Actor *this)
+void subaddieaudioloop_entrypoint_1(Actor *actor)
 {
-    unsigned int new_var;
-    u8 local_0;
-    local_0 = this->unk5F;
+    // Matching: the goto and the `* 0` are needed for the match.
+    unsigned int sound_reload;
+    u8 sound;
+    sound = actor->unk5F;
     goto dummy_label_322467;
 dummy_label_322467:;
-    new_var = this->unk5F;
-    if (local_0 != (new_var * 0)) {
-        func_800C3058(local_0 & 0xFF);
+    sound_reload = actor->unk5F;
+    if (sound != (sound_reload * 0)) {
+        func_800C3058(sound & 0xFF);
     }
 }
 
-s32 subaddieaudioloop_entrypoint_2(Actor *this)
+// Stop the actor's loop sound and clear the handle.
+s32 subaddieaudioloop_entrypoint_2(Actor *actor)
 {
-    u8 local_0 = subaddieaudioloop_entrypoint_3(this->unk5F);
-    this->unk5F = local_0;
+    u8 sound = subaddieaudioloop_entrypoint_3(actor->unk5F);
+    actor->unk5F = sound;
 }
 
-u8 subaddieaudioloop_entrypoint_3(param_0)
-u8 param_0;
+// Stop a loop sound; returns 0.
+u8 subaddieaudioloop_entrypoint_3(sound)
+u8 sound;
 {
 
-if (param_0) {
-    func_800C2FDC(param_0);
-    param_0 = 0;
+if (sound) {
+    func_800C2FDC(sound);
+    sound = 0;
 }
 
-return param_0;
+return sound;
 }
 
-int subaddieaudioloop_entrypoint_4(Actor *param_0, f32 *param_1, u32 param_2, u32 *param_3)
+// Start/update the actor's loop sound; returns whether it is playing.
+int subaddieaudioloop_entrypoint_4(Actor *actor, f32 *pos, u32 enable, u32 *desc)
 {
-    param_0->unk5F = subaddieaudioloop_entrypoint_7(param_0->unk5F, param_1, param_2, param_3,
-                                                    *(u32 *) ((u8 *) param_0 + 0x70) & 1);
-    return param_0->unk5F != 0;
+    actor->unk5F = subaddieaudioloop_entrypoint_7(actor->unk5F, pos, enable, desc,
+                                                  *(u32 *) ((u8 *) actor + 0x70) & 1);
+    return actor->unk5F != 0;
 }
 
-void subaddieaudioloop_entrypoint_5(Actor *param_0, f32 *param_1, u32 param_2, s32 param_3,
-                                    u32 *param_4)
+// Like entrypoint_4, but only within max_dist of the camera (-1 = 3000).
+void subaddieaudioloop_entrypoint_5(Actor *actor, f32 *pos, u32 enable, s32 max_dist,
+                                    u32 *desc)
 {
-    f32 local_0[3];
+    f32 listener_pos[3];
 
-if (param_2 != 0) {
-    func_8010D640(local_0);
-    if (param_3 == -1)
-        param_3 = 3000;
-    if (param_3 * param_3 < func_800EEB40(local_0, param_1))
-        param_2 = 0;
+if (enable != 0) {
+    func_8010D640(listener_pos);
+    if (max_dist == -1)
+        max_dist = 3000;
+    if (max_dist * max_dist < func_800EEB40(listener_pos, pos))
+        enable = 0;
 }
 
-subaddieaudioloop_entrypoint_4(param_0, param_1, param_2, param_4);
+subaddieaudioloop_entrypoint_4(actor, pos, enable, desc);
 }
 
-u8 subaddieaudioloop_entrypoint_6(u8 param_0, f32 *param_1, u32 param_2, s32 param_3, u32 *param_4,
-                                  s32 param_5)
+u8 subaddieaudioloop_entrypoint_6(u8 sound, f32 *pos, u32 enable, s32 max_dist, u32 *desc,
+                                  s32 mode_3d)
 {
-    f32 local_0[3];
+    f32 listener_pos[3];
 
-if (param_2) {
-    func_8010D640(local_0);
-    if (param_3 == -1)
-        param_3 = 3000;
-    if (func_800EEB40(local_0, param_1) > param_3 * param_3)
-        param_2 = 0;
+if (enable) {
+    func_8010D640(listener_pos);
+    if (max_dist == -1)
+        max_dist = 3000;
+    if (func_800EEB40(listener_pos, pos) > max_dist * max_dist)
+        enable = 0;
 }
 
-return subaddieaudioloop_entrypoint_7(param_0, param_1, param_2, param_4, param_5);
+return subaddieaudioloop_entrypoint_7(sound, pos, enable, desc, mode_3d);
 
 }
 
-u8 subaddieaudioloop_entrypoint_7(param_0, param_1, param_2, param_3, param_4)
-u8 param_0;
-f32 *param_1;
-u32 param_2;
-u32 *param_3;
-s32 param_4;
+u8 subaddieaudioloop_entrypoint_7(sound, pos, enable, desc, mode_3d)
+u8 sound;
+f32 *pos;
+u32 enable;
+u32 *desc;
+s32 mode_3d;
 {
-    if (param_2) {
-        if (!param_0) {
-            param_0 = func_800C4350(param_0, param_1, D_808003C0_subaddieaudioloop);
-            func_800C4350(param_0, param_1, (s16 *) param_3);
+    if (enable) {
+        if (!sound) {
+            sound = func_800C4350(sound, pos, D_808003C0_subaddieaudioloop);
+            func_800C4350(sound, pos, (s16 *) desc);
         }
-        if (param_0) {
-            _subaddieaudioquick_entrypoint_0(param_0, param_4);
-            func_800C4350(param_0, param_1, NULL);
-            func_800C3BDC(param_0);
+        if (sound) {
+            _subaddieaudioquick_entrypoint_0(sound, mode_3d);
+            func_800C4350(sound, pos, NULL);
+            func_800C3BDC(sound);
         }
-    } else if (param_0) {
+    } else if (sound) {
 
-func_800C2FDC(param_0);
-param_0 = 0;
+func_800C2FDC(sound);
+sound = 0;
 
 }
-return param_0;
+return sound;
 }
 
-f32 subaddieaudioloop_entrypoint_8(Actor *param_0, s32 param_1, s32 param_2, f32 param_3)
+// Fade-in variant (0.7 s); returns the timer.
+f32 subaddieaudioloop_entrypoint_8(Actor *actor, s32 unk_0, s32 enable, f32 timer)
 {
-    if (param_2) {
-        if (!param_0->unk5F) {
-            param_0->unk5F = func_800C4350(0, param_0->position, D_808003CC_subaddieaudioloop);
-            param_3 = 0.7f;
-        } else if (func_800D9154(&param_3, 0.7f)) {
+    if (enable) {
+        if (!actor->unk5F) {
+            actor->unk5F = func_800C4350(0, actor->position, D_808003CC_subaddieaudioloop);
+            timer = 0.7f;
+        } else if (func_800D9154(&timer, 0.7f)) {
 
-if (param_0->unk5F)
-    func_800C3BDC(param_0->unk5F);
+if (actor->unk5F)
+    func_800C3BDC(actor->unk5F);
 }
 }
-else if (param_0->unk5F)
+else if (actor->unk5F)
 {
-    func_800C2FDC(param_0->unk5F);
-    param_0->unk5F = 0;
+    func_800C2FDC(actor->unk5F);
+    actor->unk5F = 0;
 }
-return param_3;
+return timer;
 }
 
+// TU-NOTE: the overlay .data is defined here in C (values from the ROM).
 s16 D_808003C0_subaddieaudioloop[6] = {0x206, 0x1, 0xC8, 0xBB8, 0x7, 0x0};
 s16 D_808003CC_subaddieaudioloop[18] = {0x306, 0x7, 0x13, 0x560, 0x1, 0x3E8, 0xFA0, 0x16, 0x61A8,
                                         0x11,  0x0, 0x0,  0x0,   0x0, 0x0,   0x0,   0x0,  0x0};

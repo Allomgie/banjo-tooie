@@ -1,5 +1,6 @@
 #include "overlays/bs/mum.h"
 
+// Maps stick zone and position to the target horizontal speed.
 void bsmum_entrypoint_13(PlayerState *self);
 
 void func_80800000_bsmum(PlayerState *self)
@@ -17,13 +18,14 @@ void func_80800040_bsmum(PlayerState *self)
     func_8009DE38(self, 0x510, 1.0f);
 }
 
+// Default interrupt handler: Mumbo pad interrupt (0x43) starts the cast state.
 void bsmum_entrypoint_0(PlayerState *self)
 {
-    s32 temp_v0;
+    s32 current_state;
 
     if (func_8009E6EC(self) == 0x43) {
-        temp_v0 = bs_getCurrentState(self);
-        if ((temp_v0 == 0xE5) || (temp_v0 == 0xE6) || (temp_v0 == 0xE7) || (temp_v0 == 0xF7)) {
+        current_state = bs_getCurrentState(self);
+        if ((current_state == 0xE5) || (current_state == 0xE6) || (current_state == 0xE7) || (current_state == 0xF7)) {
             bs_setState(self, BS_STATE_11E);
             func_8009E830(self, 2);
             return;
@@ -79,15 +81,15 @@ void bsmum_entrypoint_2(PlayerState *self)
     func_80092864(self, 2.399994f);
 }
 
-void func_808002B8_bsmum(PlayerState *self, s32 arg1)
+void func_808002B8_bsmum(PlayerState *self, s32 phase)
 {
     AnimCtrl *anim_ctrl;
 
     anim_ctrl = baanim_getAnimCtrlPtr(self);
-    self->unk15C.word = arg1;
+    self->unk15C.word = phase;
     switch (self->unk15C.word) {
         case 0:
-            _basudie_entrypoint_6(self, arg1);
+            _basudie_entrypoint_6(self, phase);
             return;
         case 1:
             self->unk16C = 250.0f;
@@ -192,7 +194,7 @@ void func_80800604_bsmum(PlayerState *self)
 void func_8080065C_bsmum(PlayerState *self)
 {
     enum bs_state_e next_state;
-    f32 sp28[3];
+    f32 velocity[3];
 
     next_state = BS_STATE_0_INVALID;
     if (baflag_isTrue(self, BA_FLAG_F) != 0) {
@@ -200,7 +202,7 @@ void func_8080065C_bsmum(PlayerState *self)
     } else {
         bsmum_entrypoint_13(self);
     }
-    func_8009BB24(self, sp28);
+    func_8009BB24(self, velocity);
     switch (self->unk15C.word) {
         case 1:
             break;
@@ -234,47 +236,47 @@ s32 bsmum_entrypoint_5(s32 idx)
 
 #ifndef NONMATCHINGS
 
-void func_808007A0_bsmum(PlayerState *param_0, s32 param_1)
+void func_808007A0_bsmum(PlayerState *self, s32 phase)
 {
-    AnimCtrl *local_0;
-    f32 local_2;
-    f32 local_1;
+    AnimCtrl *anim_ctrl;
+    f32 target_velocity;
+    f32 ideal_yaw;
 
-    local_0 = baanim_getAnimCtrlPtr(param_0);
-    param_0->unk15C.word = param_1;
-    switch (param_1) {
+    anim_ctrl = baanim_getAnimCtrlPtr(self);
+    self->unk15C.word = phase;
+    switch (phase) {
         case 1:
-            anctrl_reset(local_0);
-            anctrl_setIndex(local_0, 0xBD);
-            anctrl_setDuration(local_0, 1.2f);
-            func_8008B1C8(local_0, 0.134f);
-            anctrl_setStart(local_0, 0.144f);
-            anctrl_setSubrange(local_0, 0.0f, 0.57f);
-            anctrl_setPlaybackType(local_0, 1);
-            anctrl_start(local_0);
-            func_8009FFD8(param_0, 1, 1, 3, 6);
-            if (bastick_distance(param_0) != 0.0f)
-                yaw_setIdeal(param_0, bastick_getAngleRelativeToBanjo(param_0));
-            baphysics_set_target_yaw(param_0, yaw_getIdeal(param_0));
-            bsmum_entrypoint_13(param_0);
-            local_1 = yaw_getIdeal(param_0);
-            local_2 = baphysics_get_target_horizontal_velocity(param_0);
-            baphysics_set_horizontal_velocity(param_0, local_1, local_2);
-            baphysics_set_vertical_velocity(param_0, 710.0f);
-            baphysics_set_gravity(param_0, -1350.0f);
-            func_80800000_bsmum(param_0);
+            anctrl_reset(anim_ctrl);
+            anctrl_setIndex(anim_ctrl, 0xBD);
+            anctrl_setDuration(anim_ctrl, 1.2f);
+            func_8008B1C8(anim_ctrl, 0.134f);
+            anctrl_setStart(anim_ctrl, 0.144f);
+            anctrl_setSubrange(anim_ctrl, 0.0f, 0.57f);
+            anctrl_setPlaybackType(anim_ctrl, 1);
+            anctrl_start(anim_ctrl);
+            func_8009FFD8(self, 1, 1, 3, 6);
+            if (bastick_distance(self) != 0.0f)
+                yaw_setIdeal(self, bastick_getAngleRelativeToBanjo(self));
+            baphysics_set_target_yaw(self, yaw_getIdeal(self));
+            bsmum_entrypoint_13(self);
+            ideal_yaw = yaw_getIdeal(self);
+            target_velocity = baphysics_get_target_horizontal_velocity(self);
+            baphysics_set_horizontal_velocity(self, ideal_yaw, target_velocity);
+            baphysics_set_vertical_velocity(self, 710.0f);
+            baphysics_set_gravity(self, -1350.0f);
+            func_80800000_bsmum(self);
             break;
         case 2:
-            baanim_setEndAndDuration(param_0, 0.6064f, 8.0f);
+            baanim_setEndAndDuration(self, 0.6064f, 8.0f);
             break;
         case 3:
-            baanim_setEndAndDuration(param_0, 1.0f, 1.3f);
+            baanim_setEndAndDuration(self, 1.0f, 1.3f);
             break;
         case 4:
-            baanim_setEndAndDuration(param_0, 1.0f, 0.9f);
+            baanim_setEndAndDuration(self, 1.0f, 0.9f);
             break;
         case 0:
-            baphysics_reset_gravity(param_0);
+            baphysics_reset_gravity(self);
     }
 }
 
@@ -300,7 +302,7 @@ void func_808009F8_bsmum(PlayerState *self)
 {
     enum bs_state_e next_state;
     AnimCtrl *anim_ctrl;
-    f32 sp24[3];
+    f32 velocity[3];
 
     next_state = BS_STATE_0_INVALID;
     anim_ctrl = baanim_getAnimCtrlPtr(self);
@@ -309,8 +311,8 @@ void func_808009F8_bsmum(PlayerState *self)
     } else {
         bsmum_entrypoint_13(self);
     }
-    func_8009BB24(self, sp24);
-    if (((bakey_released(self, BUTTON_A) != 0) && (sp24[1] > 0.0f)) || (func_8008D544(self) == 0)) {
+    func_8009BB24(self, velocity);
+    if (((bakey_released(self, BUTTON_A) != 0) && (velocity[1] > 0.0f)) || (func_8008D544(self) == 0)) {
         baphysics_reset_gravity(self);
     }
     switch (self->unk15C.word) {
@@ -340,7 +342,7 @@ void func_808009F8_bsmum(PlayerState *self)
         func_8009FE58(self);
         next_state = BS_STATE_EF;
     }
-    if ((sp24[1] < 0.0f) && (player_inWater(self) != 0)) {
+    if ((velocity[1] < 0.0f) && (player_inWater(self) != 0)) {
         next_state = BS_STATE_F4;
     }
     bs_setState(self, next_state);
@@ -450,6 +452,7 @@ void bsmum_entrypoint_13(PlayerState *self)
 {
     f32 zone_position;
     s32 stick_zone;
+    // Matching: needed for the match.
     s32 pad0[3];
     f32 min_velocity;
 
@@ -522,6 +525,9 @@ s32 bsmum_entrypoint_14(s32 idx)
     return D_808011B0_bsmum[idx];
 }
 
+// TU-NOTE: the .data tables below (formerly asm/data/overlays/bs/mum.data.s) are defined in C.
+// IDO schedules some functions differently unless the tables are in the same unit.
+// Values are taken from the ROM.
 extern void _basudie_entrypoint_11();
 extern void func_80099AA8();
 s32 D_80801140_bsmum[4] = {(u32) func_80800428_bsmum, (u32) func_80800454_bsmum,

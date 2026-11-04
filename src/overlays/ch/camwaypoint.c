@@ -12,34 +12,37 @@ int chcamwaypoint_entrypoint_0()
     return (int) &D_80800130_chcamwaypoint;
 }
 
-void func_8080000C_chcamwaypoint(Actor *param_0)
+void func_8080000C_chcamwaypoint(Actor *actor)
 {
-    func_800EEBF0((f32 *) param_0->actorData, param_0->rotation, 1.0f);
-    *(f32 *) &param_0->actorData[3] = func_800EEAA4(param_0->position, (f32 *) param_0->actorData);
+    func_800EEBF0((f32 *) actor->actorData, actor->rotation, 1.0f);
+    *(f32 *) &actor->actorData[3] = func_800EEAA4(actor->position, (f32 *) actor->actorData);
 }
 
-void func_8080005C_chcamwaypoint(Actor *param_0)
+// Feeds position and direction to the waypoint camera mode when the player is in range and the camera is in mode 2.
+void func_8080005C_chcamwaypoint(Actor *actor)
 {
-    void *local_0;
-    s32 local_1;
-    f32 local_2;
-    f32 local_3[3];
+    void *cam;
+    s32 player;
+    f32 radius;
+    f32 player_pos[3];
 
-    local_1 = func_8008FFE8();
-    if (func_8010FAE4(local_1) == 2) {
-        local_0 = func_80110014(local_1);
-        local_2 = (f32) ((s32) param_0->unk74_7 * 10);
-        func_8008FE68(local_3);
-        if (!func_800EFFB4(param_0->position, local_2, local_3)) {
-            func_801107F0(local_0, local_3);
-            if (!func_800EFFB4(param_0->position, local_2, local_3))
+    player = func_8008FFE8();
+    if (func_8010FAE4(player) == 2) {
+        cam = func_80110014(player);
+        radius = (f32) ((s32) actor->unk74_7 * 10);
+        func_8008FE68(player_pos);
+        if (!func_800EFFB4(actor->position, radius, player_pos)) {
+            func_801107F0(cam, player_pos);
+            if (!func_800EFFB4(actor->position, radius, player_pos))
                 return;
         }
-        _ncbawaypoint_entrypoint_2(local_0, param_0->position, (f32 *) param_0->actorData,
-                                   *(f32 *) &param_0->actorData[3]);
+        _ncbawaypoint_entrypoint_2(cam, actor->position, (f32 *) actor->actorData,
+                                   *(f32 *) &actor->actorData[3]);
     }
 }
 
+// TU-NOTE: the table below holds pointers to functions of this file; IDO's assembler schedules
+// some of them differently unless it is defined in the same unit. Values are taken from the ROM.
 extern void func_80102EC0();
 extern void func_8010A730();
 extern void func_80107C2C();

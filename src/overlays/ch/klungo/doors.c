@@ -2,14 +2,15 @@
 
 extern int D_808004C0_chklungodoors[];
 extern void func_8010A800();
+// Per-fight door settings, selected by map id (3 entries).
 typedef struct {
-    s16 local_0;
-    s16 local_1;
-    s32 local_2;
-    s32 local_3;
-    u16 local_4;
-    u8 local_5;
-    u8 local_6;
+    s16 map_id;
+    s16 angle;
+    s32 unk_4;
+    s32 unk_8;
+    u16 unk_C;
+    u8 locked;
+    u8 unk_F;
 } KlungoDoorSettings48;
 extern KlungoDoorSettings48 D_80800490_chklungodoors[];
 extern s32 _chdoormake_entrypoint_3(Actor *, f32, f32, f32, s32, s32);
@@ -17,29 +18,29 @@ extern s32 _chdoormake_entrypoint_4(Actor *, s32, s32);
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern void _chdoormake_entrypoint_6(Actor *, f32);
 typedef struct {
-    u8 local_0;
-    u8 pad_0[15];
+    u8 locked;
+    u8 pad_1[15];
 } KlungoDoorFlag;
 extern KlungoDoorFlag D_8080049E_chklungodoors[];
 extern u8 D_80800550_chklungodoors[];
 extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void _subaddieaudioloop_entrypoint_0(Actor *, f32);
 typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u8 pad4[2];
-    u8 unk6;
-    u8 pad7[9];
+    u16 unk_0;
+    u16 unk_2;
+    u8 pad_4[2];
+    u8 unk_6;
+    u8 pad_7[9];
 } KlungoDoor;
 typedef struct {
-    u8 pad0[0x16];
-    u16 unk16;
+    u8 pad_0[0x16];
+    u16 unk_16;
 } KlungoModel;
 extern KlungoDoor D_80800498_chklungodoors[];
 extern KlungoDoor D_8080049A_chklungodoors[];
 typedef struct {
-    u8 unk0;
-    u8 pad1[15];
+    u8 locked;
+    u8 pad_1[15];
 } KlungoFlag;
 extern void func_80103140();
 extern void func_8010A570(Actor *);
@@ -58,109 +59,110 @@ int chklungodoors_entrypoint_1()
     return (int) &D_80800508_chklungodoors;
 }
 
-void func_80800018_chklungodoors(Actor *param_0)
+void func_80800018_chklungodoors(Actor *actor)
 {
-    KlungoDoorSettings48 *local_0;
-    KlungoDoorSettings48 *local_1;
-    s32 local_2;
-    s32 local_3;
+    KlungoDoorSettings48 *settings;
+    KlungoDoorSettings48 *entry;
+    s32 i;
+    s32 made;
 
-    local_0 = NULL;
-    for (local_2 = 0, local_1 = D_80800490_chklungodoors; local_2 < 3; local_2++, local_1++) {
-        if (func_800EA05C() == local_1->local_0) {
-            local_0 = local_1;
-            param_0->actorData[4] = local_2;
+    settings = NULL;
+    for (i = 0, entry = D_80800490_chklungodoors; i < 3; i++, entry++) {
+        if (func_800EA05C() == entry->map_id) {
+            settings = entry;
+            actor->actorData[4] = i;
             break;
         }
     }
-    func_80102FDC(param_0, local_0->local_2);
-    func_8010A800(param_0, 0);
-    if (param_0->unk6C_9 == 0x420) {
-        if (local_0->local_5) {
-            func_80103110(param_0, 1);
-            local_3 = _chdoormake_entrypoint_4(param_0, 0xA82A, local_0->local_4);
+    func_80102FDC(actor, settings->unk_4);
+    func_8010A800(actor, 0);
+    if (actor->unk6C_9 == 0x420) {
+        if (settings->locked) {
+            func_80103110(actor, 1);
+            made = _chdoormake_entrypoint_4(actor, 0xA82A, settings->unk_C);
         } else {
-            local_3 = _chdoormake_entrypoint_3(param_0, 0.0f, 90.0f, (f32) local_0->local_1, 0x122,
-                                               local_0->local_4);
+            made = _chdoormake_entrypoint_3(actor, 0.0f, 90.0f, (f32) settings->angle, 0x122,
+                                            settings->unk_C);
         }
-        if (local_3) {
-            _chdoormake_entrypoint_5(param_0, 0.7f);
-            _chdoormake_entrypoint_6(param_0, 2.0f);
-            _chdoormake_entrypoint_8(param_0, local_0->local_6);
+        if (made) {
+            _chdoormake_entrypoint_5(actor, 0.7f);
+            _chdoormake_entrypoint_6(actor, 2.0f);
+            _chdoormake_entrypoint_8(actor, settings->unk_F);
         }
     } else {
-        if (local_0->local_5) {
-            func_80103110(param_0, 1);
-            local_3 = _chdoormake_entrypoint_4(param_0, 0xA82A, -1);
+        if (settings->locked) {
+            func_80103110(actor, 1);
+            made = _chdoormake_entrypoint_4(actor, 0xA82A, -1);
         } else {
-            local_3 =
-                _chdoormake_entrypoint_3(param_0, 0.0f, 90.0f, (f32) local_0->local_1, 0x122, -1);
+            made =
+                _chdoormake_entrypoint_3(actor, 0.0f, 90.0f, (f32) settings->angle, 0x122, -1);
         }
-        if (local_3) {
-            _chdoormake_entrypoint_5(param_0, 0.7f);
-            _chdoormake_entrypoint_6(param_0, 0.25f);
-            _chdoormake_entrypoint_8(param_0, local_0->local_6);
+        if (made) {
+            _chdoormake_entrypoint_5(actor, 0.7f);
+            _chdoormake_entrypoint_6(actor, 0.25f);
+            _chdoormake_entrypoint_8(actor, settings->unk_F);
         }
     }
-    if (local_0->local_5) {
-        *(u16 *) &param_0->unk0->unk24 = (*(u16 *) &param_0->unk0->unk24 & 0x3F) | 0xCC40;
-        func_80103110(param_0, 1);
-        func_8010A5B0(param_0, local_3 == 1);
+    if (settings->locked) {
+        *(u16 *) &actor->unk0->unk24 = (*(u16 *) &actor->unk0->unk24 & 0x3F) | 0xCC40;
+        func_80103110(actor, 1);
+        func_8010A5B0(actor, made == 1);
     }
 }
 
-void func_80800234_chklungodoors(Actor *param_0)
+void func_80800234_chklungodoors(Actor *actor)
 {
-    s32 local_0;
+    s32 fade;
 
-    _chdoor_entrypoint_0(param_0);
-    if (D_8080049E_chklungodoors[param_0->actorData[4]].local_0) {
-        local_0 = _subaddiefade_entrypoint_0(param_0);
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_0 > 0,
+    _chdoor_entrypoint_0(actor);
+    if (D_8080049E_chklungodoors[actor->actorData[4]].locked) {
+        fade = _subaddiefade_entrypoint_0(actor);
+        _subaddieaudioloop_entrypoint_4(actor, actor->position, fade > 0,
                                         D_80800550_chklungodoors);
-        _subaddieaudioloop_entrypoint_0(param_0,
-                                        func_800F10B4((f32) local_0, 0.0f, 255.0f, 0.7f, 1.4f));
-        if (param_0->unk70_10 == 1 && func_800D9078((f32 *) &param_0->actorData[5]))
-            func_8010A590(param_0);
+        _subaddieaudioloop_entrypoint_0(actor,
+                                        func_800F10B4((f32) fade, 0.0f, 255.0f, 0.7f, 1.4f));
+        if (actor->unk70_10 == 1 && func_800D9078((f32 *) &actor->actorData[5]))
+            func_8010A590(actor);
     }
 }
 
-s32 func_80800300_chklungodoors(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800300_chklungodoors(Actor *actor, s32 msg, s32 arg)
 {
-    f32 local_1[3];
-    s32 local_0[1];
+    f32 pos[3];
+    s32 arg_copy[1];
 
-    switch (param_1) {
+    switch (msg) {
         case 0x95:
-            switch (param_0->unk6C_9) {
+            switch (actor->unk6C_9) {
                 case 0x41F:
-                    func_80103140(param_0, D_80800498_chklungodoors[param_0->actorData[4]].unk0,
-                                  (KlungoModel *) param_0->unk0->unk16);
+                    func_80103140(actor, D_80800498_chklungodoors[actor->actorData[4]].unk_0,
+                                  (KlungoModel *) actor->unk0->unk16);
                     break;
                 case 0x420:
-                    func_80103140(param_0, D_8080049A_chklungodoors[param_0->actorData[4]].unk0,
-                                  (KlungoModel *) param_0->unk0->unk16);
+                    func_80103140(actor, D_8080049A_chklungodoors[actor->actorData[4]].unk_0,
+                                  (KlungoModel *) actor->unk0->unk16);
             }
             break;
         case 7:
-            if (((KlungoFlag *) D_8080049E_chklungodoors)[param_0->actorData[4]].unk0) {
-                func_8010A570(param_0);
+            if (((KlungoFlag *) D_8080049E_chklungodoors)[actor->actorData[4]].locked) {
+                func_8010A570(actor);
             }
             break;
         case 8:
-            if (((KlungoFlag *) D_8080049E_chklungodoors)[param_0->actorData[4]].unk0) {
-                func_8010A570(param_0);
+            if (((KlungoFlag *) D_8080049E_chklungodoors)[actor->actorData[4]].locked) {
+                func_8010A570(actor);
             }
             break;
         case 0x3F:
-            local_0[0] = param_2;
-            func_800EC75C(local_0[0], local_1);
-            _chelectricfence_entrypoint_1(param_0, local_1);
-            *(f32 *) &param_0->actorData[5] = 0.2f;
-            func_8010A570(param_0);
+            // Touched: electric-fence spark at the touch position.
+            arg_copy[0] = arg;
+            func_800EC75C(arg_copy[0], pos);
+            _chelectricfence_entrypoint_1(actor, pos);
+            *(f32 *) &actor->actorData[5] = 0.2f;
+            func_8010A570(actor);
             return 1;
     }
-    return _chdoor_entrypoint_1(param_0, param_1, param_2);
+    return _chdoor_entrypoint_1(actor, msg, arg);
 }
 
 extern void func_80105834();

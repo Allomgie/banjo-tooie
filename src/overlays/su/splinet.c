@@ -2,26 +2,26 @@
 
 typedef struct {
     u8 pad[0x32];
-    s16 off;
+    s16 flags_offset;
 } SplineFlagsView;
 typedef struct {
     u8 pad[0x30];
-    s16 off30;
-    s16 off32;
+    s16 times_offset;
+    s16 flags_offset;
     u8 pad34[0x10];
-    f32 f44;
-    f32 f48;
+    f32 cur_time;
+    f32 prev_time;
     u8 pad4C[2];
-    s16 cnt;
+    s16 count;
     u8 bits[1];
 } SplineS;
 extern f32 func_800D8FF8(void);
 extern void func_800EE7F8(f32 *, f32 *);
 typedef struct {
     u8 pad_0[0x44];
-    f32 local_0;
+    f32 cur_time;
     u8 pad_1[0xC];
-    u32 local_1;
+    u32 flags;
 } SplineTimeState;
 typedef struct {
     u8 pad_0[0x30];
@@ -46,9 +46,9 @@ extern void _mlspline_entrypoint_8(f32, s32, f32 *, u8 *);
 extern void _mlspline_entrypoint_9(f32, s32, f32 *, u8 *);
 typedef struct {
     u8 pad[0x30];
-    s16 k;
+    s16 knots_offset;
     s16 pad32;
-    s16 l;
+    s16 speeds_offset;
 } SplHdr;
 typedef struct {
     u8 pad[0x32];
@@ -65,446 +65,479 @@ extern f32 func_800EEAD4(void *, void *);
 extern void _mlspline_entrypoint_4(f32, s32, void *, void *);
 void func_80800D3C_susplinet_2arg();
 
-void susplinet_entrypoint_0(SplineFlagsView *param_0, s32 param_1, s32 param_2, s32 param_3)
+// TU-NOTE: func_80800D3C_susplinet is also called with two arguments from susplinet_entrypoint_17,
+// through the second name func_80800D3C_susplinet_2arg (undefined_syms.us.txt); no prototype, so the
+// f32 argument is passed as its bit pattern.
+
+// Sets or clears flag bits of a key.
+void susplinet_entrypoint_0(SplineFlagsView *track, s32 key, s32 mask, s32 set)
 {
-    s16 *local_0 = (s16 *) ((u8 *) param_0 + param_0->off);
-    if (param_3) {
-        local_0[param_1] |= param_2;
-    } else if (local_0[param_1] & param_2) {
-        local_0[param_1] -= param_2;
+    s16 *flags = (s16 *) ((u8 *) track + track->flags_offset);
+    if (set) {
+        flags[key] |= mask;
+    } else if (flags[key] & mask) {
+        flags[key] -= mask;
     }
 }
 
-s32 func_80800048_susplinet(SplineS *param_0, s32 param_1)
+// Key flag 4.
+s32 func_80800048_susplinet(SplineS *track, s32 key)
 {
-    s16 *local_0 = (s16 *) ((u8 *) param_0 + param_0->off32);
-    return local_0[param_1] & 4;
+    s16 *flags = (s16 *) ((u8 *) track + track->flags_offset);
+    return flags[key] & 4;
 }
 
-s32 func_80800068_susplinet(SplineS *param_0, s32 param_1)
+// Key flag 2.
+s32 func_80800068_susplinet(SplineS *track, s32 key)
 {
-    s16 *local_0 = (s16 *) ((u8 *) param_0 + param_0->off32);
-    return local_0[param_1] & 2;
+    s16 *flags = (s16 *) ((u8 *) track + track->flags_offset);
+    return flags[key] & 2;
 }
 
-void susplinet_entrypoint_1(s32 param_0, s32 param_1, s32 param_2)
+// Sets or clears a bit in the bitset at +0x50.
+void susplinet_entrypoint_1(s32 track, s32 bit, s32 set)
 {
-    if (param_2) {
-        *(u8 *) (param_0 + 0x50 + (param_1 / 8)) |= 1 << (param_1 & 7);
+    if (set) {
+        *(u8 *) (track + 0x50 + (bit / 8)) |= 1 << (bit & 7);
     } else {
-        *(u8 *) (param_0 + 0x50 + (param_1 / 8)) &= ~(1 << (param_1 & 7));
+        *(u8 *) (track + 0x50 + (bit / 8)) &= ~(1 << (bit & 7));
     }
 }
 
-s32 func_808000FC_susplinet(s32 param_0, s32 param_1)
+// Tests a bit in the bitset at +0x50.
+s32 func_808000FC_susplinet(s32 track, s32 bit)
 {
-    return (((u8 *) ((s32) param_0 + (param_1 / 8)))[80] & (1 << (param_1 & 7))) ? 1 : 0;
+    return (((u8 *) ((s32) track + (bit / 8)))[80] & (1 << (bit & 7))) ? 1 : 0;
 }
 
-s32 susplinet_entrypoint_2(SplineS *param_0)
+// The current time has reached the last key.
+s32 susplinet_entrypoint_2(SplineS *track)
 {
-    s16 *local_0 = (s16 *) ((u8 *) param_0 + param_0->off30);
-    return local_0[param_0->cnt - 1] <= param_0->f44;
+    s16 *times = (s16 *) ((u8 *) track + track->times_offset);
+    return times[track->count - 1] <= track->cur_time;
 }
 
-s32 susplinet_entrypoint_3(SplineS *param_0)
+// Time of the last key.
+s32 susplinet_entrypoint_3(SplineS *track)
 {
-    s16 *local_0 = (s16 *) ((u8 *) param_0 + param_0->off30);
-    return local_0[param_0->cnt - 1];
+    s16 *times = (s16 *) ((u8 *) track + track->times_offset);
+    return times[track->count - 1];
 }
 
-s32 susplinet_entrypoint_4(SplineS *param_0, f32 param_1)
+s32 susplinet_entrypoint_4(SplineS *track, f32 frame)
 {
-    if (param_0->f48 <= param_1 && param_1 < func_800D8FF8() * 100.0f + param_0->f44) {
+    if (track->prev_time <= frame && frame < func_800D8FF8() * 100.0f + track->cur_time) {
         return 1;
     }
     return 0;
 }
 
-int susplinet_entrypoint_5(f32 param_0[9], f32 param_1)
+int susplinet_entrypoint_5(f32 track[9], f32 frame)
 {
-    if (param_0[18] <= param_1 && param_1 < param_0[17])
+    if (track[18] <= frame && frame < track[17])
         return 1;
     return 0;
 }
 
-susplinet_entrypoint_6(u8 *param_0)
+susplinet_entrypoint_6(u8 *track)
 {
-    return param_0[0x53];
+    return track[0x53];
 }
 
-void susplinet_entrypoint_7(f32 (*param_0)[3], s32 param_1, f32 *param_2)
+void susplinet_entrypoint_7(f32 (*points)[3], s32 idx, f32 *out)
 {
-    func_800EE7F8(param_2, param_0[param_1]);
+    func_800EE7F8(out, points[idx]);
 }
 
-float susplinet_entrypoint_8(float *param_0, int param_1)
+float susplinet_entrypoint_8(float *track, int idx)
 {
-    return param_0[param_1 + 9];
+    return track[idx + 9];
 }
 
-f32 susplinet_entrypoint_9(void *arg)
+f32 susplinet_entrypoint_9(void *track)
 {
-    return ((f32 *) arg)[17];
+    return ((f32 *) track)[17];
 }
 
-void susplinet_entrypoint_10(SplineTimeState *param_0, f32 param_1)
+// Sets the current time, clamped at 0 and wrapped by the last key time when looping.
+void susplinet_entrypoint_10(SplineTimeState *track, f32 frame)
 {
-    s32 local_0;
-    local_0 = susplinet_entrypoint_3((SplineS *) param_0);
-    if (param_1 < 0.0f)
-        param_1 = 0.0f;
-    if (param_0->local_1 & 2) {
-        while ((f32) local_0 < param_1)
-            param_1 -= (f32) local_0;
+    s32 length;
+    length = susplinet_entrypoint_3((SplineS *) track);
+    if (frame < 0.0f)
+        frame = 0.0f;
+    if (track->flags & 2) {
+        while ((f32) length < frame)
+            frame -= (f32) length;
     }
-    param_0->local_0 = param_1;
+    track->cur_time = frame;
 }
 
-void susplinet_entrypoint_11(Actor *param_0, f32 param_1)
+void susplinet_entrypoint_11(Actor *track, f32 frame)
 {
-    *(f32 *) ((u8 *) param_0 + 0x48) = param_1;
+    *(f32 *) ((u8 *) track + 0x48) = frame;
 }
 
-int susplinet_entrypoint_12(s32 param_0)
+// Offset of the key time table (+0x30).
+int susplinet_entrypoint_12(s32 track)
 {
-    s16 *new_var;
-    new_var = (s16 *) ((int) param_0 + 0x30);
-    return *new_var + (0, param_0);
+    // Matching: the temporary pointer and `(0, track)` are needed for the match.
+    s16 *field;
+    field = (s16 *) ((int) track + 0x30);
+    return *field + (0, track);
 }
 
-int susplinet_entrypoint_13(s32 param_0)
+// Offset of the speed table (+0x34).
+int susplinet_entrypoint_13(s32 track)
 {
-    s16 *new_var;
-    new_var = (s16 *) ((int) param_0 + 0x34);
-    return *new_var + (0, param_0);
+    // Matching: the temporary pointer and `(0, track)` are needed for the match.
+    s16 *field;
+    field = (s16 *) ((int) track + 0x34);
+    return *field + (0, track);
 }
 
-s32 susplinet_entrypoint_14(s32 param_0, s32 param_1)
+// Offset of vec3 channel idx.
+s32 susplinet_entrypoint_14(s32 track, s32 idx)
 {
-    unsigned long new_var3;
-    s32 new_var;
-    s8 *new_var2;
-    new_var3 = param_1 * 2;
-    new_var = param_0;
-    new_var2 = (s8 *) (new_var + new_var3) + 0x36;
-    return *(s16 *) new_var2 + param_0;
+    // Matching: the extra temporaries are needed for the match.
+    unsigned long byte_off;
+    s32 base;
+    s8 *entry;
+    byte_off = idx * 2;
+    base = track;
+    entry = (s8 *) (base + byte_off) + 0x36;
+    return *(s16 *) entry + track;
 }
 
-s32 susplinet_entrypoint_15(s32 param_0, s32 param_1)
+// Offset of scalar channel idx.
+s32 susplinet_entrypoint_15(s32 track, s32 idx)
 {
-    return *(s16 *) ((s8 *) ((param_0 ^ 0) + (param_1 * 2)) + 0x3E) + param_0;
+    // Matching: the `^ 0` is needed for the match.
+    return *(s16 *) ((s8 *) ((track ^ 0) + (idx * 2)) + 0x3E) + track;
 }
 
-s16 func_80800384_susplinet(SplineLayout1446 *param_0, s16 param_1)
+// Finds the segment containing frame, searching from the cached index.
+s16 func_80800384_susplinet(SplineLayout1446 *track, s16 frame)
 {
-    s16 *local_0;
-    s16 *local_1;
-    s16 local_2;
-    s32 local_3;
+    s16 *times;
+    s16 *seg;
+    s16 idx;
+    s32 last;
 
-    local_0 = (s16 *) ((s32) param_0 + ((SplineHdr30_80800384_susplinet *) param_0)->off0);
-    local_2 = param_0->index;
-    local_1 = (s16 *) ((u32) local_0 + local_2 * sizeof(s16));
-    if (param_1 < *local_1 && local_2 > 0) {
+    times = (s16 *) ((s32) track + ((SplineHdr30_80800384_susplinet *) track)->off0);
+    idx = track->index;
+    seg = (s16 *) ((u32) times + idx * sizeof(s16));
+    if (frame < *seg && idx > 0) {
         do {
-            local_2--;
-            local_1 = (s16 *) ((u32) local_0 + local_2 * sizeof(s16));
-        } while (param_1 < *local_1 && local_2 > 0);
+            idx--;
+            seg = (s16 *) ((u32) times + idx * sizeof(s16));
+        } while (frame < *seg && idx > 0);
     }
-    if (local_1[1] < param_1) {
-        local_3 = param_0->count - 1;
-        if (local_2 < local_3) {
+    if (seg[1] < frame) {
+        last = track->count - 1;
+        if (idx < last) {
             do {
-                local_2++;
-            } while (local_0[local_2 + 1] < param_1 && local_2 < local_3);
+                idx++;
+            } while (times[idx + 1] < frame && idx < last);
         }
     }
-    param_0->index = local_2;
-    return local_2;
+    track->index = idx;
+    return idx;
 }
 
-void susplinet_entrypoint_16(SplineLayout1446 *this, f32 arg1, f32 arg2)
+// Sets the time; at a branch key (flag 1) jumps depending on game flag 0x644.
+void susplinet_entrypoint_16(SplineLayout1446 *this, f32 frame, f32 new_frame)
 {
-    s16 *a;
-    s16 *b;
+    s16 *times;
+    s16 *key_flags;
     s16 k;
     s16 i;
     s16 j;
 
-    a = (s16 *) ((s32) this + ((SplineHdr30_susplinet_entrypoint_16 *) this)->off0);
-    b = (s16 *) ((s32) this + ((SplineHdr30_susplinet_entrypoint_16 *) this)->off1);
-    k = func_80800384_susplinet(this, arg1);
+    times = (s16 *) ((s32) this + ((SplineHdr30_susplinet_entrypoint_16 *) this)->off0);
+    key_flags = (s16 *) ((s32) this + ((SplineHdr30_susplinet_entrypoint_16 *) this)->off1);
+    k = func_80800384_susplinet(this, frame);
     i = k + 1;
     j = i + 1;
     if (j >= this->count) {
-        susplinet_entrypoint_10(this, arg2);
+        susplinet_entrypoint_10(this, new_frame);
         return;
     }
-    if (a[i] != a[j]) {
-        susplinet_entrypoint_10(this, arg2);
+    if (times[i] != times[j]) {
+        susplinet_entrypoint_10(this, new_frame);
         return;
     }
-    if (arg2 < a[i]) {
-        susplinet_entrypoint_10(this, arg2);
+    if (new_frame < times[i]) {
+        susplinet_entrypoint_10(this, new_frame);
         return;
     }
-    if (b[i] & 1) {
+    if (key_flags[i] & 1) {
         if (func_800DA9E4(0x644, 0) == 0) {
-            susplinet_entrypoint_10(this, a[i]);
+            susplinet_entrypoint_10(this, times[i]);
         } else {
-            susplinet_entrypoint_10(this, a[j] + 1);
+            susplinet_entrypoint_10(this, times[j] + 1);
         }
         return;
     }
-    susplinet_entrypoint_10(this, arg2);
+    susplinet_entrypoint_10(this, new_frame);
 }
 
-f32 func_80800620_susplinet(u8 *param_0, s16 *param_1, f32 param_2)
+// Picks the four key indices around frame (wrapping when looping).
+// Returns the segment-local parameter.
+f32 func_80800620_susplinet(u8 *track, s16 *keys, f32 frame)
 {
-    f32 local_1;
-    s16 *local_0;
-    local_0 = (s16 *) ((s32) param_0 + ((SplineHdr30b *) param_0)->off30);
-    local_1 = param_2;
-    param_1[1] = func_80800384_susplinet(param_0, (s16) (s32) local_1);
-    param_1[0] = param_1[1] - 1;
-    param_1[2] = param_1[1] + 1;
-    if (!(*(u32 *) (param_0 + 0x54) & 2)) {
-        if (param_1[2] >= *(s16 *) (param_0 + 0x4E))
-            param_1[2] = *(s16 *) (param_0 + 0x4E) - 1;
-        param_1[3] = param_1[2] + 1;
-        if (param_1[3] >= *(s16 *) (param_0 + 0x4E))
-            param_1[3] = *(s16 *) (param_0 + 0x4E) - 1;
-        if (param_1[0] < 0)
-            param_1[0] = 0;
+    f32 frame_copy; // Matching: extra copy needed for the match.
+    s16 *times;
+    times = (s16 *) ((s32) track + ((SplineHdr30b *) track)->off30);
+    frame_copy = frame;
+    keys[1] = func_80800384_susplinet(track, (s16) (s32) frame_copy);
+    keys[0] = keys[1] - 1;
+    keys[2] = keys[1] + 1;
+    if (!(*(u32 *) (track + 0x54) & 2)) {
+        if (keys[2] >= *(s16 *) (track + 0x4E))
+            keys[2] = *(s16 *) (track + 0x4E) - 1;
+        keys[3] = keys[2] + 1;
+        if (keys[3] >= *(s16 *) (track + 0x4E))
+            keys[3] = *(s16 *) (track + 0x4E) - 1;
+        if (keys[0] < 0)
+            keys[0] = 0;
     } else {
-        if (param_1[2] >= *(s16 *) (param_0 + 0x4E))
-            param_1[2] = param_1[2] - *(s16 *) (param_0 + 0x4E) + 1;
-        param_1[3] = param_1[2] + 1;
-        if (param_1[3] >= *(s16 *) (param_0 + 0x4E))
-            param_1[3] = param_1[3] - *(s16 *) (param_0 + 0x4E) + 1;
-        if (param_1[0] < 0)
-            param_1[0] = *(s16 *) (param_0 + 0x4E) + param_1[0] - 1;
+        if (keys[2] >= *(s16 *) (track + 0x4E))
+            keys[2] = keys[2] - *(s16 *) (track + 0x4E) + 1;
+        keys[3] = keys[2] + 1;
+        if (keys[3] >= *(s16 *) (track + 0x4E))
+            keys[3] = keys[3] - *(s16 *) (track + 0x4E) + 1;
+        if (keys[0] < 0)
+            keys[0] = *(s16 *) (track + 0x4E) + keys[0] - 1;
     }
-    if (func_80800048_susplinet(param_0, param_1[1]))
-        param_1[0] = param_1[1];
-    if (func_80800068_susplinet(param_0, param_1[2]))
-        param_1[3] = param_1[2];
-    return func_800F10B4(param_2, local_0[param_1[1]], local_0[param_1[2]], 0.333f, 0.666f);
+    if (func_80800048_susplinet(track, keys[1]))
+        keys[0] = keys[1];
+    if (func_80800068_susplinet(track, keys[2]))
+        keys[3] = keys[2];
+    return func_800F10B4(frame, times[keys[1]], times[keys[2]], 0.333f, 0.666f);
 }
 
-f32 func_808007D0_susplinet(u8 *param_0, f32 param_1, s16 *param_2, u8 *param_3)
+// Maps frame to a segment parameter through the arc-length table (30 samples) and a
+// trapezoid speed profile from the key speed percentages.
+f32 func_808007D0_susplinet(u8 *track, f32 frame, s16 *keys, u8 *pts)
 {
     s16 *knots;
     s16 *lens;
     s32 pad1;
-    f32 spB4[30];
+    f32 arc_len[30];
     s32 pad2;
-    f32 spA4[3];
-    f32 sp98[3];
+    f32 cur_pt[3];
+    f32 prev_pt[3];
     s32 i;
-    f32 sp90;
-    f32 sp8C;
-    f32 sp88;
-    f32 sp84;
+    f32 mid_speed;
+    f32 end_speed;
+    f32 start_speed;
+    f32 duration;
     f32 pad80;
-    f32 sp7C;
-    f32 sp78;
-    f32 x;
-    f32 b;
-    f32 r;
+    f32 frac;
+    f32 speed;
+    f32 edge_speed;
+    f32 half_frac;
+    f32 dist;
     s32 k;
 
-    knots = (s16 *) ((s32) param_0 + ((SplHdr *) param_0)->k);
-    lens = (s16 *) ((s32) param_0 + ((SplHdr *) param_0)->l);
-    if ((f32) knots[param_2[2]] <= param_1) {
+    knots = (s16 *) ((s32) track + ((SplHdr *) track)->knots_offset);
+    lens = (s16 *) ((s32) track + ((SplHdr *) track)->speeds_offset);
+    if ((f32) knots[keys[2]] <= frame) {
         return 0.666f;
     }
-    if (param_1 <= (f32) knots[param_2[1]]) {
+    if (frame <= (f32) knots[keys[1]]) {
         return 0.333f;
     }
-    if (func_800EEDE8(param_3 + 0xC, param_3 + 0x18, 25.0f) != 0) {
-        return func_800F10B4(param_1, (f32) knots[param_2[1]], (f32) knots[param_2[2]], 0.333f,
+    if (func_800EEDE8(pts + 0xC, pts + 0x18, 25.0f) != 0) {
+        return func_800F10B4(frame, (f32) knots[keys[1]], (f32) knots[keys[2]], 0.333f,
                              0.666f);
     }
     for (i = 0; i != 30; i++) {
-        _mlspline_entrypoint_4(func_800F10B4((f32) i, 0.0f, 29.0f, 0.333f, 0.666f), 4, param_3,
-                               spA4);
+        _mlspline_entrypoint_4(func_800F10B4((f32) i, 0.0f, 29.0f, 0.333f, 0.666f), 4, pts,
+                               cur_pt);
         if (i > 0) {
-            spB4[i] = spB4[i - 1] + func_800EEAD4(sp98, spA4);
+            arc_len[i] = arc_len[i - 1] + func_800EEAD4(prev_pt, cur_pt);
         } else {
-            spB4[i] = 0.0f;
+            arc_len[i] = 0.0f;
         }
-        func_800EE7F8(sp98, spA4);
+        func_800EE7F8(prev_pt, cur_pt);
     }
-    sp88 = (f32) lens[param_2[1]] * 0.01f;
-    sp8C = (f32) lens[param_2[2]] * 0.01f;
-    sp84 = (f32) knots[param_2[2]] - (f32) knots[param_2[1]];
-    sp90 = ((((spB4[29] * 4.0f) / sp84) - sp88) - sp8C) * 0.5f;
-    sp7C = func_800F10B4(param_1, (f32) knots[param_2[1]], (f32) knots[param_2[2]], 0.0f, 1.0f);
-    if (sp7C < 0.5f) {
-        sp78 = func_800F10B4(param_1, (f32) knots[param_2[1]],
-                             (f32) knots[param_2[1]] + (0.5f * sp84), sp88, sp90);
-        b = func_800F10B4(param_1, (f32) knots[param_2[1]], (f32) knots[param_2[1]] + (0.5f * sp84),
+    start_speed = (f32) lens[keys[1]] * 0.01f;
+    end_speed = (f32) lens[keys[2]] * 0.01f;
+    duration = (f32) knots[keys[2]] - (f32) knots[keys[1]];
+    mid_speed = ((((arc_len[29] * 4.0f) / duration) - start_speed) - end_speed) * 0.5f;
+    frac = func_800F10B4(frame, (f32) knots[keys[1]], (f32) knots[keys[2]], 0.0f, 1.0f);
+    if (frac < 0.5f) {
+        speed = func_800F10B4(frame, (f32) knots[keys[1]],
+                             (f32) knots[keys[1]] + (0.5f * duration), start_speed, mid_speed);
+        half_frac = func_800F10B4(frame, (f32) knots[keys[1]], (f32) knots[keys[1]] + (0.5f * duration),
                           0.0f, 1.0f);
-        x = sp88;
+        edge_speed = start_speed;
     } else {
-        sp78 = func_800F10B4(param_1, (f32) knots[param_2[1]] + (0.5f * sp84),
-                             (f32) knots[param_2[2]], sp90, sp8C);
-        b = func_800F10B4(param_1, (f32) knots[param_2[1]] + (0.5f * sp84), (f32) knots[param_2[2]],
+        speed = func_800F10B4(frame, (f32) knots[keys[1]] + (0.5f * duration),
+                             (f32) knots[keys[2]], mid_speed, end_speed);
+        half_frac = func_800F10B4(frame, (f32) knots[keys[1]] + (0.5f * duration), (f32) knots[keys[2]],
                           0.0f, 1.0f);
-        x = sp90;
+        edge_speed = mid_speed;
     }
 
-    if (sp78 < x) {
-        r = (x + sp78) * 0.25f * sp84 * b;
+    if (speed < edge_speed) {
+        dist = (edge_speed + speed) * 0.25f * duration * half_frac;
     } else {
-        r = (sp78 + x) * 0.25f * sp84 * b;
+        dist = (speed + edge_speed) * 0.25f * duration * half_frac;
     }
-    if (0.5f <= sp7C) {
-        r += (0.25f * sp84) * (sp88 + sp90);
+    if (0.5f <= frac) {
+        dist += (0.25f * duration) * (start_speed + mid_speed);
     }
     k = 0;
-    while (k < 28 && spB4[k + 1] < r) {
+    while (k < 28 && arc_len[k + 1] < dist) {
         k++;
     }
-    r = func_800F10B4(r, spB4[k], spB4[k + 1], (f32) k * 0.03448275849f,
+    dist = func_800F10B4(dist, arc_len[k], arc_len[k + 1], (f32) k * 0.03448275849f,
                       (f32) (k + 1) * 0.03448275849f);
-    return func_800F10B4(r, 0.0f, 1.0f, 0.333f, 0.666f);
+    return func_800F10B4(dist, 0.0f, 1.0f, 0.333f, 0.666f);
 }
 
-void func_80800D3C_susplinet(u8 *param_0, f32 param_1, s16 *s1)
+// Matching: `times` is a third parameter that is only written, never read on entry; it gives
+// the value a register without a stack slot.
+void func_80800D3C_susplinet(u8 *track, f32 frame, s16 *times)
 {
-    s16 *local_0;
-    u8 *local_A4[5];
-    u8 *local_94[3];
+    s16 *speeds;
+    u8 *vec_channels[5];
+    u8 *scalar_channels[3];
     s32 i;
-    s16 local_84[4];
-    f32 f20;
-    f32 local_74[4];
-    f32 local_68[3];
-    f32 local_5C[3];
-    f32 local_50[3];
-    f32 local_44[3];
-    s32 a;
-    s32 b;
-    s32 c;
-    s32 d;
+    s16 keys[4];
+    f32 t;
+    f32 scalar_pts[4];
+    f32 pt3[3];
+    f32 pt2[3];
+    f32 pt1[3];
+    f32 pt0[3];
+    s32 off0;
+    s32 off1;
+    s32 off2;
+    s32 off3;
 
-    local_0 = (s16 *) ((s32) param_0 + ((SplHdr *) param_0)->l);
-    s1 = (s16 *) ((s32) param_0 + ((SplHdr *) param_0)->k);
-    if ((f32) s1[*(s16 *) (param_0 + 0x4E) - 1] < param_1) {
-        param_1 = s1[*(s16 *) (param_0 + 0x4E) - 1];
-    } else if (param_1 < (f32) s1[0]) {
-        param_1 = s1[0];
+    speeds = (s16 *) ((s32) track + ((SplHdr *) track)->speeds_offset);
+    times = (s16 *) ((s32) track + ((SplHdr *) track)->knots_offset);
+    if ((f32) times[*(s16 *) (track + 0x4E) - 1] < frame) {
+        frame = times[*(s16 *) (track + 0x4E) - 1];
+    } else if (frame < (f32) times[0]) {
+        frame = times[0];
     }
-    for (i = 0; i < param_0[0x51]; i++) {
-        local_A4[i] = param_0 + *(s16 *) (param_0 + 0x36 + i * 2);
+    for (i = 0; i < track[0x51]; i++) {
+        vec_channels[i] = track + *(s16 *) (track + 0x36 + i * 2);
     }
-    for (i = 0; i < param_0[0x52]; i++) {
-        local_94[i] = param_0 + *(s16 *) (param_0 + 0x3E + i * 2);
+    for (i = 0; i < track[0x52]; i++) {
+        scalar_channels[i] = track + *(s16 *) (track + 0x3E + i * 2);
     }
-    if (*(s16 *) (param_0 + 0x4E) >= 4) {
-        f20 = func_80800620_susplinet(param_0, local_84, param_1);
-        if (local_84[0] != local_84[1] && s1[local_84[0]] == s1[local_84[1]] &&
-            susplinet_entrypoint_5(param_0, s1[local_84[1]])) {
-            param_0[0x53] = 1;
+    if (*(s16 *) (track + 0x4E) >= 4) {
+        t = func_80800620_susplinet(track, keys, frame);
+        if (keys[0] != keys[1] && times[keys[0]] == times[keys[1]] &&
+            susplinet_entrypoint_5(track, times[keys[1]])) {
+            track[0x53] = 1;
         } else {
-            param_0[0x53] = 0;
+            track[0x53] = 0;
         }
-        a = local_84[0] * 3;
-        b = local_84[1] * 3;
-        c = local_84[2] * 3;
-        d = local_84[3] * 3;
-        for (i = 0; i < param_0[0x51]; i++) {
-            func_800EE7F8(local_44, (f32 *) local_A4[i] + a);
-            func_800EE7F8(local_50, (f32 *) local_A4[i] + b);
-            func_800EE7F8(local_5C, (f32 *) local_A4[i] + c);
-            func_800EE7F8(local_68, (f32 *) local_A4[i] + d);
-            if (i == 0 && *local_0 != -1) {
-                f20 = func_808007D0_susplinet(param_0, param_1, local_84, local_44);
+        off0 = keys[0] * 3;
+        off1 = keys[1] * 3;
+        off2 = keys[2] * 3;
+        off3 = keys[3] * 3;
+        for (i = 0; i < track[0x51]; i++) {
+            func_800EE7F8(pt0, (f32 *) vec_channels[i] + off0);
+            func_800EE7F8(pt1, (f32 *) vec_channels[i] + off1);
+            func_800EE7F8(pt2, (f32 *) vec_channels[i] + off2);
+            func_800EE7F8(pt3, (f32 *) vec_channels[i] + off3);
+            if (i == 0 && *speeds != -1) {
+                t = func_808007D0_susplinet(track, frame, keys, pt0);
             }
-            if (func_808000FC_susplinet(param_0, i)) {
-                func_800F0EF0(4, local_44);
+            if (func_808000FC_susplinet(track, i)) {
+                func_800F0EF0(4, pt0);
             }
-            _mlspline_entrypoint_4(f20, 4, local_44, param_0 + i * 12);
+            _mlspline_entrypoint_4(t, 4, pt0, track + i * 12);
             if (i == 0) {
-                _mlspline_entrypoint_8(f20, 4, local_44, param_0 + i * 12 + 0x18);
+                _mlspline_entrypoint_8(t, 4, pt0, track + i * 12 + 0x18);
             }
         }
-        for (i = 0; i < param_0[0x52]; i++) {
-            local_74[0] = ((f32 *) local_94[i])[local_84[0]];
-            local_74[1] = ((f32 *) local_94[i])[local_84[1]];
-            local_74[2] = ((f32 *) local_94[i])[local_84[2]];
-            local_74[3] = ((f32 *) local_94[i])[local_84[3]];
-            _mlspline_entrypoint_9(f20, 4, local_74, param_0 + 0x24 + i * 4);
+        for (i = 0; i < track[0x52]; i++) {
+            scalar_pts[0] = ((f32 *) scalar_channels[i])[keys[0]];
+            scalar_pts[1] = ((f32 *) scalar_channels[i])[keys[1]];
+            scalar_pts[2] = ((f32 *) scalar_channels[i])[keys[2]];
+            scalar_pts[3] = ((f32 *) scalar_channels[i])[keys[3]];
+            _mlspline_entrypoint_9(t, 4, scalar_pts, track + 0x24 + i * 4);
         }
     }
 }
 
-void susplinet_entrypoint_17(param_0) u8 *param_0;
+// Evaluates the track at its current time.
+void susplinet_entrypoint_17(track) u8 *track;
 {
-    param_0[0x58] = 1;
-    func_80800D3C_susplinet_2arg(param_0, *(s32 *) (param_0 + 0x44));
-    param_0[0x58] = 0;
+    track[0x58] = 1;
+    func_80800D3C_susplinet_2arg(track, *(s32 *) (track + 0x44));
+    track[0x58] = 0;
 }
 
-void func_8080111C_susplinet(SplineLayout1446 *param_0)
+// Fills the offset tables: key times, key flags, vec3 channels, scalar channels.
+void func_8080111C_susplinet(SplineLayout1446 *track)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 offset;
+    s32 i;
 
-    param_0->offsets[0] = 0x5C;
-    local_0 = 0x5C + param_0->count * 2;
-    param_0->offsets[1] = local_0;
-    local_0 += param_0->count * 2;
-    for (local_1 = 0; local_1 < param_0->vector_count; local_1++) {
-        param_0->vector_offsets[local_1] = local_0;
-        local_0 += param_0->count * 12;
+    track->offsets[0] = 0x5C;
+    offset = 0x5C + track->count * 2;
+    track->offsets[1] = offset;
+    offset += track->count * 2;
+    for (i = 0; i < track->vector_count; i++) {
+        track->vector_offsets[i] = offset;
+        offset += track->count * 12;
     }
-    for (local_1 = 0; local_1 < param_0->pair_count; local_1++) {
-        param_0->pair_offsets[local_1] = local_0;
-        local_0 += param_0->count * 4;
+    for (i = 0; i < track->pair_count; i++) {
+        track->pair_offsets[i] = offset;
+        offset += track->count * 4;
     }
-    param_0->offsets[2] = local_0;
+    track->offsets[2] = offset;
 }
 
-s32 func_808011B8_susplinet(s32 param_0, s32 param_1)
+s32 func_808011B8_susplinet(s32 vec_channels, s32 scalar_channels)
 {
-    return (param_0 * 0xC) + (param_1 * 4) + 6;
+    return (vec_channels * 0xC) + (scalar_channels * 4) + 6;
 }
 
-s32 susplinet_entrypoint_18(s32 param_0, s32 param_1, s32 param_2)
+// Total byte size for count keys (0x5C header + per-key data).
+s32 susplinet_entrypoint_18(s32 count, s32 vec_channels, s32 scalar_channels)
 {
-    int new_var;
-    s32 local_0;
-    local_0 = func_808011B8_susplinet(param_1 | 0, param_2 | 0);
-    new_var = param_0 * local_0;
+    int size;
+    s32 key_size;
+    // Matching: the `| 0` operands and the `if (1)` are needed for the match.
+    key_size = func_808011B8_susplinet(vec_channels | 0, scalar_channels | 0);
+    size = count * key_size;
     if (1) {
-        return new_var + 0x5C;
+        return size + 0x5C;
     }
 }
 
-void susplinet_entrypoint_19(u8 *param_0, s32 param_1, s32 param_2, s32 param_3)
+// Initializes a track: no flags, speeds = -1 (none), clears flag 0x644.
+void susplinet_entrypoint_19(u8 *track, s32 count, s32 vec_channels, s32 scalar_channels)
 {
-    s16 *local_0;
-    s16 *local_1;
-    s32 local_2;
+    s16 *key_flags;
+    s16 *speeds;
+    s32 i;
 
-    *(s16 *) (param_0 + 0x4E) = param_1;
-    param_0[0x51] = param_2;
-    param_0[0x52] = param_3;
-    param_0[0x50] = 0;
-    *(s16 *) (param_0 + 0x4C) = 0;
-    param_0[0x58] = 0;
-    *(f32 *) (param_0 + 0x44) = 0.0f;
-    *(f32 *) (param_0 + 0x48) = 0.0f;
-    func_8080111C_susplinet(param_0);
-    local_0 = (s16 *) ((s32) param_0 + ((SplinetHdr *) param_0)->unk32);
-    local_1 = (s16 *) ((s32) param_0 + ((SplinetHdr *) param_0)->unk34);
-    for (local_2 = 0; local_2 < param_1; local_2++) {
-        local_0[local_2] = 0;
-        local_1[local_2] = -1;
+    *(s16 *) (track + 0x4E) = count;
+    track[0x51] = vec_channels;
+    track[0x52] = scalar_channels;
+    track[0x50] = 0;
+    *(s16 *) (track + 0x4C) = 0;
+    track[0x58] = 0;
+    *(f32 *) (track + 0x44) = 0.0f;
+    *(f32 *) (track + 0x48) = 0.0f;
+    func_8080111C_susplinet(track);
+    key_flags = (s16 *) ((s32) track + ((SplinetHdr *) track)->unk32);
+    speeds = (s16 *) ((s32) track + ((SplinetHdr *) track)->unk34);
+    for (i = 0; i < count; i++) {
+        key_flags[i] = 0;
+        speeds[i] = -1;
     }
     func_800DA524(0x644);
 }

@@ -3,14 +3,15 @@
 extern int D_808000A0_chicekey[];
 extern int D_808000EC_chicekey[];
 
-int func_80800000_chicekey(s32 param_0[4], s32 param_1, s32 param_2)
+// Message handler; 0x3E = collected: particle burst, add Ice Key item, dialog, jingle, despawn.
+int func_80800000_chicekey(s32 actor[4], s32 msg, s32 param_2)
 {
-    if (param_1 == 0x3E) {
-        func_800BBCB8(param_0 + 1, param_0 + 1, 0x3F800000, 0x14, &D_808000A0_chicekey);
+    if (msg == 0x3E) {
+        func_800BBCB8(actor + 1, actor + 1, 0x3F800000, 0x14, &D_808000A0_chicekey);
         func_800D1844(0x53);
-        _subaddiedialog_entrypoint_11(param_0[0], 0x1550, 4, param_0 + 1, 0x6F);
+        _subaddiedialog_entrypoint_11(actor[0], 0x1550, 4, actor + 1, 0x6F);
         func_800FC660(0xE);
-        func_800FFA88(param_0[0]);
+        func_800FFA88(actor[0]);
         return 1;
     }
     return 0;

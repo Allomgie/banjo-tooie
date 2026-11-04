@@ -1,28 +1,30 @@
 #include "common.h"
 
+// Sprite asset header (animation info only)
 typedef struct {
-    s16 frameCnt;
-    u8 pad2[0xE];
-    u32 bit31 : 4;
-    u32 bit27 : 3;
-    u32 bit24 : 2;
-    u32 bit22 : 2;
+    s16 frame_count;
+    u8 pad_2[0xE];
+    u32 time_div : 4;
+    u32 mode : 3;
+    u32 unk_10_24 : 2;
+    u32 unk_10_22 : 2;
     u32 rest : 21;
 } GsSprite;
+// Prop fields touched by the sprite animation
 typedef struct {
-    u8 pad0[3];
-    u8 pad3_7 : 6;
-    u8 isMirrored : 1;
-    u8 pad3_0 : 1;
-    u8 pad4[6];
+    u8 pad_0[3];
+    u8 pad_3_7 : 6;
+    u8 is_mirrored : 1;
+    u8 pad_3_0 : 1;
+    u8 pad_4[6];
     u16 frame : 5;
     u16 pad_lo : 11;
 } GsSpriteProp;
 typedef struct {
-    u8 pad0[8];
-    u32 pad8_hi : 26;
-    u32 unk8_5 : 1;
-    u32 pad8_lo : 5;
+    u8 pad_0[8];
+    u32 pad_8_hi : 26;
+    u32 unk_8_5 : 1;
+    u32 pad_8_lo : 5;
 } GsSpriteProp2;
 extern GsSprite *func_800EC3E8(s32);
 extern s32 _gsproplookup_entrypoint_1();
@@ -30,24 +32,25 @@ extern GsSprite *func_800BFC94(s32);
 extern s32 func_8001211C();
 typedef struct {
     u32 pad_0 : 22;
-    u32 local_0 : 8;
+    u32 sprite_scale : 8; // percent
     u32 pad_1 : 2;
-    u32 pad_2;
-    u32 pad_3 : 16;
-    u32 local_1 : 8;
-    u32 pad_4 : 6;
-    u32 local_2 : 1;
-    u32 pad_5 : 1;
+    u32 pad_4;
+    u32 pad_8 : 16;
+    u32 model_scale : 8; // percent
+    u32 pad_8b : 6;
+    u32 is_model : 1;
+    u32 pad_8c : 1;
 } PropPropertyScale;
 extern void func_800BFAD0(s32, f32 *, f32 *, f32, void *);
 extern void func_800BFB58(s32, f32 *, f32, void *, s32, s32, s32, s32, s32);
 
-void gspropprop_entrypoint_0(s16 param_0[3], s32 *param_1)
+void gspropprop_entrypoint_0(s16 src[3], s32 *out)
 {
-    unsigned char new_var;
-    param_1[0] = *(s16 *) ((s8 *) param_0 + 4);
-    param_1[new_var = 1] = *(s16 *) ((s8 *) param_0 + 6);
-    param_1[2] = param_0[4];
+    unsigned char idx;
+    out[0] = *(s16 *) ((s8 *) src + 4);
+    // Matching: index assigned inside the subscript.
+    out[idx = 1] = *(s16 *) ((s8 *) src + 6);
+    out[2] = src[4];
 }
 
 f32 func_8080001C_gspropprop()
@@ -60,114 +63,118 @@ f32 func_80800050_gspropprop()
     func_800B2354(func_800B2840(func_800BFC34(_gsproplookup_entrypoint_0())));
 }
 
-f32 gspropprop_entrypoint_1(PropPropertyScale *param_0)
+// Prop radius: half the model/sprite extent times the prop's percent scale
+f32 gspropprop_entrypoint_1(PropPropertyScale *prop)
 {
-    if (param_0->local_2)
-        return func_80800050_gspropprop(param_0) * 0.5f * param_0->local_1 * 0.01f;
-    return func_8080001C_gspropprop(param_0) * 0.5f * param_0->local_0 * 0.01f;
+    if (prop->is_model)
+        return func_80800050_gspropprop(prop) * 0.5f * prop->model_scale * 0.01f;
+    return func_8080001C_gspropprop(prop) * 0.5f * prop->sprite_scale * 0.01f;
 }
 
+// Advance the prop's sprite frame from the global timer, per the sprite's animation mode
 void gspropprop_entrypoint_2(u8 *prop)
 {
-    GsSprite *var_v0;
-    s32 sp48;
-    s32 sp44;
-    s32 sp40;
-    s32 sp3C;
-    s32 sp38;
-    s32 sp34;
-    s32 sp30;
-    s32 sp2C;
-    s32 var_t5;
-    s32 var_v1;
+    GsSprite *sprite;
+    s32 time_div;
+    s32 mode;
+    s32 unk_0;
+    s32 unk_1;
+    s32 frame_count;
+    s32 unk_2;
+    s32 cycle_len;
+    s32 start_offset;
+    s32 unk_3;
+    s32 frame;
 
-    var_v0 = ((u32) ((u16 *) prop)[5] & 1) ? func_800EC3E8(*(s32 *) prop)
+    sprite = ((u32) ((u16 *) prop)[5] & 1) ? func_800EC3E8(*(s32 *) prop)
                                            : func_800BFC94(_gsproplookup_entrypoint_1(prop));
-    if ((var_v0 != NULL) && (var_v0->bit27 != 0)) {
-        sp48 = var_v0->bit31;
-        sp44 = var_v0->bit27;
-        sp40 = var_v0->bit24;
-        sp3C = var_v0->bit22;
-        sp38 = var_v0->frameCnt;
-        sp34 = (sp44 == 1) || (sp44 == 2U);
-        sp30 = (sp44 == 3) ? sp38 : (sp38 - sp34) * 2;
+    if ((sprite != NULL) && (sprite->mode != 0)) {
+        time_div = sprite->time_div;
+        mode = sprite->mode;
+        unk_0 = sprite->unk_10_24;
+        unk_1 = sprite->unk_10_22;
+        frame_count = sprite->frame_count;
+        unk_2 = (mode == 1) || (mode == 2U);
+        cycle_len = (mode == 3) ? frame_count : (frame_count - unk_2) * 2;
 
-        sp2C = (s32) ((((u32) ((u16 *) prop)[5] << 0x15) >> 0x1B) * sp30) / 32;
-        var_v1 = (((func_8001211C(sp34, sp30, prop, sp40) % (sp30 * sp48)) / sp48) + sp2C) % sp30;
-        var_t5 = 0;
-        switch (sp40) {
+        start_offset = (s32) ((((u32) ((u16 *) prop)[5] << 0x15) >> 0x1B) * cycle_len) / 32;
+        frame = (((func_8001211C(unk_2, cycle_len, prop, unk_0) % (cycle_len * time_div)) / time_div) + start_offset) % cycle_len;
+        unk_3 = 0;
+        switch (unk_0) {
             default:
-                sp40 = 0;
+                unk_0 = 0;
                 break;
             case 1:
-                sp40 = ((((u32) ((u16 *) prop)[5] << 0x15) >> 0x1B) & 2) ? 1 : 0;
+                unk_0 = ((((u32) ((u16 *) prop)[5] << 0x15) >> 0x1B) & 2) ? 1 : 0;
                 break;
             case 2:
-                sp40 = 1;
+                unk_0 = 1;
                 break;
             case 3:
-                sp40 = (((u32) ((u16 *) prop)[1] << 0x1e) >> 0x1f);
+                unk_0 = (((u32) ((u16 *) prop)[1] << 0x1e) >> 0x1f);
         }
 
-        switch (sp44) {
+        switch (mode) {
             case 4:
-                var_t5 = sp38 <= var_v1;
+                unk_3 = frame_count <= frame;
             case 1:
-                sp3C = sp38 <= var_v1;
+                unk_1 = frame_count <= frame;
                 break;
             case 2:
-                var_t5 = sp38 <= var_v1;
+                unk_3 = frame_count <= frame;
             default:
-                switch (sp3C) {
+                switch (unk_1) {
                     case 1:
-                        sp3C = ((((u32) ((u16 *) prop)[5] << 0x15) >> 0x1b) & 1) ? 1 : 0;
+                        unk_1 = ((((u32) ((u16 *) prop)[5] << 0x15) >> 0x1b) & 1) ? 1 : 0;
                         break;
                     case 2:
-                        sp3C = 1;
+                        unk_1 = 1;
                         break;
                     default:
                         if ((u32) ((u16 *) prop)[5] & 1) {
-                            sp3C = (((u32) ((u32 *) prop)[2] << 0x1a) >> 0x1f);
+                            unk_1 = (((u32) ((u32 *) prop)[2] << 0x1a) >> 0x1f);
                         } else {
-                            sp3C = (((u32) ((u16 *) prop)[1] << 0x1e) >> 0x1f);
+                            unk_1 = (((u32) ((u16 *) prop)[1] << 0x1e) >> 0x1f);
                         }
+                        // Matching: empty statement needed for the match.
                         if (1)
                             ;
                         break;
                 }
         }
 
-        if ((sp3C ^ sp40 ^ var_t5)) {
-            var_v1 = sp30 - var_v1;
+        if ((unk_1 ^ unk_0 ^ unk_3)) {
+            frame = cycle_len - frame;
         }
 
-        var_v1 += sp34 ? sp40 : -sp40;
-        var_v1 = (var_v1 < 0) ? var_v1 + sp38 : var_v1 % sp38;
-        ((GsSpriteProp *) prop)->frame = var_v1;
+        frame += unk_2 ? unk_0 : -unk_0;
+        frame = (frame < 0) ? frame + frame_count : frame % frame_count;
+        ((GsSpriteProp *) prop)->frame = frame;
         if (((u32) ((u16 *) prop)[5] & 1)) {
-            ((GsSpriteProp2 *) prop)->unk8_5 = sp3C;
+            ((GsSpriteProp2 *) prop)->unk_8_5 = unk_1;
         } else {
-            ((GsSpriteProp *) prop)->isMirrored = sp3C;
+            ((GsSpriteProp *) prop)->is_mirrored = unk_1;
         }
     }
 }
 
-void gspropprop_entrypoint_3(u8 *param_0, s32 param_1)
+// Draw a static prop as a model or a sprite
+void gspropprop_entrypoint_3(u8 *prop, s32 arg1)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    void *local_2;
-    func_800EE88C(local_0, param_0 + 4);
-    if ((*(u32 *) (param_0 + 8) << 30) >> 31) {
-        local_2 = (void *) _gsproplookup_entrypoint_0(param_0);
-        local_1[0] = 0.0f;
-        local_1[1] = 2.0f * (f32) (u32) param_0[2];
-        local_1[2] = 2.0f * (f32) (u32) param_0[3];
-        func_800BFAD0(param_1, local_0, local_1, (f32) (u32) param_0[10] * 0.01f, local_2);
+    f32 pos[3];
+    f32 rot[3];
+    void *model;
+    func_800EE88C(pos, prop + 4);
+    if ((*(u32 *) (prop + 8) << 30) >> 31) {
+        model = (void *) _gsproplookup_entrypoint_0(prop);
+        rot[0] = 0.0f;
+        rot[1] = 2.0f * (f32) (u32) prop[2];
+        rot[2] = 2.0f * (f32) (u32) prop[3];
+        func_800BFAD0(arg1, pos, rot, (f32) (u32) prop[10] * 0.01f, model);
     } else {
-        func_800BFB58(param_1, local_0, (f32) ((*(u32 *) param_0 << 22) >> 24) * 0.01f,
-                      (void *) _gsproplookup_entrypoint_1(param_0), *(u16 *) param_0 & 7,
-                      (u32) *(u16 *) (param_0 + 2) >> 13, (*(u32 *) param_0 << 19) >> 29,
-                      (*(u32 *) param_0 << 30) >> 31, (u32) *(u16 *) (param_0 + 10) >> 11);
+        func_800BFB58(arg1, pos, (f32) ((*(u32 *) prop << 22) >> 24) * 0.01f,
+                      (void *) _gsproplookup_entrypoint_1(prop), *(u16 *) prop & 7,
+                      (u32) *(u16 *) (prop + 2) >> 13, (*(u32 *) prop << 19) >> 29,
+                      (*(u32 *) prop << 30) >> 31, (u32) *(u16 *) (prop + 10) >> 11);
     }
 }

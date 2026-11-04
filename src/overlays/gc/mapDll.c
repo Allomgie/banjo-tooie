@@ -133,127 +133,130 @@ extern u8 D_80801BB8_gcmapDll[];
 extern u8 D_80801BC8_gcmapDll[];
 extern u8 D_80801BD8_gcmapDll[];
 
-int func_80800000_gcmapDll(s32 param_0)
+// Returns the 14-byte record for map_id, or 0 if there is none.
+int func_80800000_gcmapDll(s32 map_id)
 {
-    s16 *local_0 = &((s16 *) D_80800F10_gcmapDll)[0];
-    while (*local_0 != 0) {
-        if (*local_0 == param_0) {
-            return local_0;
+    s16 *entry = &((s16 *) D_80800F10_gcmapDll)[0];
+    while (*entry != 0) {
+        if (*entry == map_id) {
+            return entry;
         }
-        local_0 += 7;
+        entry += 7;
     }
 
     return 0;
 }
 
-s32 gcmapDll_entrypoint_0(s32 param_0)
+s32 gcmapDll_entrypoint_0(s32 map_id)
 {
-    MapEnt *local_0;
-    for (local_0 = D_80800F10_gcmapDll; local_0->id != 0; local_0++) {
-        if (param_0 == local_0->id) {
+    MapEnt *entry;
+    for (entry = D_80800F10_gcmapDll; entry->id != 0; entry++) {
+        if (map_id == entry->id) {
             return 1;
         }
     }
     return 0;
 }
 
-void gcmapDll_entrypoint_1(GCMapLights *param_0)
+// Sets up lighting, vertex modules, effect groups and textures for both model layers (A and B).
+void gcmapDll_entrypoint_1(GCMapLights *lights)
 {
-    s32 sp34[3];
-    s32 var_a3;
-    s32 var_v1;
+    s32 tint[3];
+    s32 light_data;
+    s32 has_effect;
 
-    func_800C87DC(sp34);
-    if (param_0->hA != 0 && func_800A946C() < 3) {
-        var_a3 = func_800B27BC(param_0->hA);
+    func_800C87DC(tint);
+    if (lights->hA != 0 && func_800A946C() < 3) {
+        light_data = func_800B27BC(lights->hA);
     } else {
-        var_a3 = 0;
+        light_data = 0;
     }
-    if (var_a3 != 0) {
-        _dblight_entrypoint_0(var_a3, param_0->xA, sp34);
-        _dblight_entrypoint_1(var_a3, param_0->xA, func_800B27A0(param_0->hA));
+    if (light_data != 0) {
+        _dblight_entrypoint_0(light_data, lights->xA, tint);
+        _dblight_entrypoint_1(light_data, lights->xA, func_800B27A0(lights->hA));
     }
-    if (var_a3 != 0) {
-        param_0->rtA = _rtlight_entrypoint_1(var_a3, param_0->xA, func_800B27A0(param_0->hA));
+    if (light_data != 0) {
+        lights->rtA = _rtlight_entrypoint_1(light_data, lights->xA, func_800B27A0(lights->hA));
     } else {
-        param_0->rtA = 0;
+        lights->rtA = 0;
     }
-    if (param_0->hB != 0 && func_800A946C() < 3) {
-        var_a3 = func_800B27BC(param_0->hB);
+    if (lights->hB != 0 && func_800A946C() < 3) {
+        light_data = func_800B27BC(lights->hB);
     } else {
-        var_a3 = 0;
+        light_data = 0;
     }
-    if (var_a3 != 0) {
-        _dblight_entrypoint_0(var_a3, param_0->xB, sp34);
-        _dblight_entrypoint_1(var_a3, param_0->xB, func_800B27A0(param_0->hB));
+    if (light_data != 0) {
+        _dblight_entrypoint_0(light_data, lights->xB, tint);
+        _dblight_entrypoint_1(light_data, lights->xB, func_800B27A0(lights->hB));
     }
-    if (var_a3 != 0) {
-        param_0->rtB = _rtlight_entrypoint_1(var_a3, param_0->xB, func_800B27A0(param_0->hB));
+    if (light_data != 0) {
+        lights->rtB = _rtlight_entrypoint_1(light_data, lights->xB, func_800B27A0(lights->hB));
     } else {
-        param_0->rtB = 0;
+        lights->rtB = 0;
     }
-    if (param_0->hA != 0 && func_800A946C() < 3 &&
-        (param_0->mA = func_800B2868(param_0->hA)) != 0) {
-        param_0->vA = _vpmodule_entrypoint_0(param_0->mA, param_0->xA, sp34);
+    if (lights->hA != 0 && func_800A946C() < 3 &&
+        (lights->mA = func_800B2868(lights->hA)) != 0) {
+        lights->vA = _vpmodule_entrypoint_0(lights->mA, lights->xA, tint);
     } else {
-        param_0->vA = 0;
+        lights->vA = 0;
     }
-    if (param_0->hB != 0 && func_800A946C() < 3 &&
-        (param_0->mB = func_800B2868(param_0->hB)) != 0) {
-        param_0->vB = _vpmodule_entrypoint_0(param_0->mB, param_0->xB, sp34);
+    if (lights->hB != 0 && func_800A946C() < 3 &&
+        (lights->mB = func_800B2868(lights->hB)) != 0) {
+        lights->vB = _vpmodule_entrypoint_0(lights->mB, lights->xB, tint);
     } else {
-        param_0->vB = 0;
+        lights->vB = 0;
     }
-    if (param_0->hA != 0 && param_0->mA == 0 && param_0->rtA == 0) {
-        func_800B2464(param_0->xA, sp34, param_0->xA);
+    if (lights->hA != 0 && lights->mA == 0 && lights->rtA == 0) {
+        func_800B2464(lights->xA, tint, lights->xA);
     }
-    if (param_0->hB != 0 && param_0->mB == 0 && param_0->rtB == 0) {
-        func_800B2464(param_0->xB, sp34, param_0->xB);
+    if (lights->hB != 0 && lights->mB == 0 && lights->rtB == 0) {
+        func_800B2464(lights->xB, tint, lights->xB);
     }
-    if (param_0->hA != 0 && func_800A946C() < 3) {
-        var_v1 = func_800B274C(param_0->hA);
+    if (lights->hA != 0 && func_800A946C() < 3) {
+        has_effect = func_800B274C(lights->hA);
     } else {
-        var_v1 = 0;
+        has_effect = 0;
     }
-    if (var_v1 != 0) {
-        param_0->idA = _glidmake_entrypoint_5(param_0->uA, 0);
+    if (has_effect != 0) {
+        lights->idA = _glidmake_entrypoint_5(lights->uA, 0);
     } else {
-        param_0->idA = 0;
+        lights->idA = 0;
     }
-    if (param_0->idA != 0) {
-        _idworldmake_entrypoint_0(param_0->idA, 1);
+    if (lights->idA != 0) {
+        _idworldmake_entrypoint_0(lights->idA, 1);
     }
-    if (param_0->hB != 0 && func_800A946C() < 3) {
-        var_v1 = func_800B274C(param_0->hB);
+    if (lights->hB != 0 && func_800A946C() < 3) {
+        has_effect = func_800B274C(lights->hB);
     } else {
-        var_v1 = 0;
+        has_effect = 0;
     }
-    if (var_v1 != 0) {
-        param_0->idB = _glidmake_entrypoint_5(param_0->uB, 0);
+    if (has_effect != 0) {
+        lights->idB = _glidmake_entrypoint_5(lights->uB, 0);
     } else {
-        param_0->idB = 0;
+        lights->idB = 0;
     }
-    if (param_0->idB != 0) {
-        _idworldmake_entrypoint_0(param_0->idB, 1);
+    if (lights->idB != 0) {
+        _idworldmake_entrypoint_0(lights->idB, 1);
     }
-    if (param_0->xA != 0 && param_0->fA != 0) {
-        param_0->pA = func_800B2400(param_0->xA, 1);
+    if (lights->xA != 0 && lights->fA != 0) {
+        lights->pA = func_800B2400(lights->xA, 1);
     } else {
-        param_0->pA = 0;
+        lights->pA = 0;
     }
-    if (param_0->xB != 0 && param_0->fB != 0) {
-        param_0->pB = func_800B2400(param_0->xB, 1);
+    if (lights->xB != 0 && lights->fB != 0) {
+        lights->pB = func_800B2400(lights->xB, 1);
     } else {
-        param_0->pB = 0;
+        lights->pB = 0;
     }
-    if (param_0->idA != 0 && param_0->pA != 0) {
-        _glid_entrypoint_6(param_0->idA, param_0->pA);
+    if (lights->idA != 0 && lights->pA != 0) {
+        _glid_entrypoint_6(lights->idA, lights->pA);
     }
-    if (param_0->idB != 0 && param_0->pB != 0) {
-        _glid_entrypoint_6(param_0->idB, param_0->pB);
+    if (lights->idB != 0 && lights->pB != 0) {
+        _glid_entrypoint_6(lights->idB, lights->pB);
     }
 }
 
+// Layer bounds: from the model header, else hard-coded boxes for the JRL maps and map 0x159.
 void func_8080045C_gcmapDll(MapBoundingRecord *param_0, s32 param_1, s32 *param_2, s32 *param_3)
 {
     if (param_0[param_1].local_0) {
@@ -293,6 +296,7 @@ void func_8080045C_gcmapDll(MapBoundingRecord *param_0, s32 param_1, s32 *param_
     }
 }
 
+// Computes the combined bounds of both layers.
 void func_808005A8_gcmapDll(MapBoundingBoxes *param_0)
 {
     func_8080045C_gcmapDll(param_0, 0, param_0->local_1, param_0->local_2);
@@ -317,12 +321,13 @@ void func_808005A8_gcmapDll(MapBoundingBoxes *param_0)
 
 int func_80800668_gcmapDll(s32 param_0, s16 *param_1, s32 param_2)
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < param_2; local_0++) {
-        func_800BF744(param_1[local_0 * 2], param_1[local_0 * 2 + 1]);
+    s32 local_2;
+    for (local_2 = 0; local_2 < param_2; local_2++) {
+        func_800BF744(param_1[local_2 * 2], param_1[local_2 * 2 + 1]);
     }
 }
 
+// Applies the per-map func_800BF744 option pairs.
 void gcmapDll_entrypoint_2(param_0) s32 param_0;
 {
     s32 local_0;

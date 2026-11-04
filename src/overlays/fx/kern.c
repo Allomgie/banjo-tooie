@@ -1,10 +1,10 @@
 #include "common.h"
 
 typedef struct {
-    u8 local_0;
-    u8 local_1;
-    s8 local_2;
-    s8 local_3;
+    u8 prev;
+    u8 cur;
+    s8 dx;
+    s8 dy;
 } FxKernPair59;
 extern FxKernPair59 D_80800420_fxkern[];
 typedef struct {
@@ -17,80 +17,89 @@ extern void func_800B7F14(s32);
 extern void func_800B8DEC(s32, s32, s32, s32);
 extern void func_800B811C(s32);
 typedef struct {
-    f32 local_0;
-    f32 local_1;
+    f32 x;
+    f32 y;
 } FxKernMetrics;
 extern void func_800B8CF0(f32);
 
-void func_80800000_fxkern(u8 param_0, u8 param_1, s32 *param_2, s32 *param_3)
+// Looks up the kerning offset (dx, dy) for the pair (prev, cur); '*' matches any prev.
+void func_80800000_fxkern(u8 cur, u8 prev, s32 *out_dx, s32 *out_dy)
 {
-    s32 local_0;
+    s32 i;
 
-    *param_2 = *param_3 = 0;
-    for (local_0 = 0; D_80800420_fxkern[local_0].local_0; local_0++) {
-        if (D_80800420_fxkern[local_0].local_1 == param_0 &&
-            (D_80800420_fxkern[local_0].local_0 == param_1 ||
-             D_80800420_fxkern[local_0].local_0 == '*')) {
-            *param_2 = D_80800420_fxkern[local_0].local_2;
-            *param_3 = D_80800420_fxkern[local_0].local_3;
+    *out_dx = *out_dy = 0;
+    for (i = 0; D_80800420_fxkern[i].prev; i++) {
+        if (D_80800420_fxkern[i].cur == cur &&
+            (D_80800420_fxkern[i].prev == prev ||
+             D_80800420_fxkern[i].prev == '*')) {
+            *out_dx = D_80800420_fxkern[i].dx;
+            *out_dy = D_80800420_fxkern[i].dy;
             return;
         }
     }
 }
 
+// TU-NOTE: .bss is defined here in C, ahead of its first use: IDO places .bss objects
+// used before their definition first, the rest in definition order.
 float B_80800480_fxkern;
 KernPos B_80800488_fxkern[65];
 
-s32 func_80800084_fxkern(u8 *param_0)
+// Fills B_80800488_fxkern with per-character offsets for str; returns the last index.
+s32 func_80800084_fxkern(u8 *str)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
+    s32 i;
+    s32 dx;
+    s32 dy;
 
     B_80800488_fxkern[0].x = 0.0f;
     B_80800488_fxkern[0].y = 0.0f;
-    for (local_0 = 1; param_0[local_0] != 0 && local_0 != 0x40; local_0++) {
-        B_80800488_fxkern[local_0].x = B_80800488_fxkern[local_0 - 1].x;
-        B_80800488_fxkern[local_0].x +=
-            ((f32 *) &B_80800480_fxkern)[0] * (func_800D36C4(1, param_0[local_0 - 1]) / 2);
-        B_80800488_fxkern[local_0].x +=
-            ((f32 *) &B_80800480_fxkern)[0] * (func_800D36C4(1, param_0[local_0]) / 2);
-        B_80800488_fxkern[local_0].x += ((f32 *) &B_80800480_fxkern)[0] * -4.0f;
-        func_80800000_fxkern(param_0[local_0], param_0[local_0 - 1], &local_1, &local_2);
-        B_80800488_fxkern[local_0].x += ((f32 *) &B_80800480_fxkern)[0] * local_1;
-        B_80800488_fxkern[local_0].y = local_2;
-        B_80800488_fxkern[local_0].y *= ((f32 *) &B_80800480_fxkern)[0];
+    // Matching: the casts on the scale global are needed for the match.
+    for (i = 1; str[i] != 0 && i != 0x40; i++) {
+        B_80800488_fxkern[i].x = B_80800488_fxkern[i - 1].x;
+        B_80800488_fxkern[i].x +=
+            ((f32 *) &B_80800480_fxkern)[0] * (func_800D36C4(1, str[i - 1]) / 2);
+        B_80800488_fxkern[i].x +=
+            ((f32 *) &B_80800480_fxkern)[0] * (func_800D36C4(1, str[i]) / 2);
+        B_80800488_fxkern[i].x += ((f32 *) &B_80800480_fxkern)[0] * -4.0f;
+        func_80800000_fxkern(str[i], str[i - 1], &dx, &dy);
+        B_80800488_fxkern[i].x += ((f32 *) &B_80800480_fxkern)[0] * dx;
+        B_80800488_fxkern[i].y = dy;
+        B_80800488_fxkern[i].y *= ((f32 *) &B_80800480_fxkern)[0];
     }
-    return local_0 - 1;
+    return i - 1;
 }
 
-int func_80800224_fxkern(s32 param_0, s32 param_1, s32 param_2, u8 *param_3, s32 param_4)
+// Prints characters last..0 of str at (x, y) plus their kerning offsets.
+int func_80800224_fxkern(s32 unk_0, s32 x, s32 y, u8 *str, s32 last)
 {
     func_800B8C98(1);
-    func_800B7F14(param_0);
-    for (; param_4 >= 0; param_4--) {
-        func_800B8DEC(param_0, ((f32(*)[2]) B_80800488_fxkern)[param_4][0] + param_1,
-                      ((f32(*)[2]) B_80800488_fxkern)[param_4][1] + param_2, param_3[param_4]);
+    func_800B7F14(unk_0);
+    // Matching: the f32 pair cast is needed for the match.
+    for (; last >= 0; last--) {
+        func_800B8DEC(unk_0, ((f32(*)[2]) B_80800488_fxkern)[last][0] + x,
+                      ((f32(*)[2]) B_80800488_fxkern)[last][1] + y, str[last]);
     }
-    func_800B811C(param_0);
+    func_800B811C(unk_0);
 }
 
-s32 fxkern_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+s32 fxkern_entrypoint_0(s32 unk_0, s32 x, s32 y, s32 str)
 {
-    s32 local_0 = func_80800084_fxkern(param_3);
+    s32 last = func_80800084_fxkern(str);
 
-    return func_80800224_fxkern(param_0, param_1, param_2, param_3, local_0);
+    return func_80800224_fxkern(unk_0, x, y, str, last);
 }
 
-void fxkern_entrypoint_1(s32 param_0, s32 param_1, s32 param_2)
+// Prints str horizontally centred on the 304-pixel screen.
+void fxkern_entrypoint_1(s32 unk_0, s32 y, s32 str)
 {
-    s32 local_0;
-    FxKernMetrics *local_1;
+    s32 last;
+    FxKernMetrics *positions;
 
-    local_0 = func_80800084_fxkern(param_2);
-    local_1 = (FxKernMetrics *) (f32 *) B_80800488_fxkern;
-    func_80800224_fxkern(param_0, (s32) ((304.0f - local_1[local_0].local_0) / 2), param_1, param_2,
-                         local_0);
+    last = func_80800084_fxkern(str);
+    // Matching: the double cast is needed for the match.
+    positions = (FxKernMetrics *) (f32 *) B_80800488_fxkern;
+    func_80800224_fxkern(unk_0, (s32) ((304.0f - positions[last].x) / 2), y, str,
+                         last);
 }
 
 int fxkern_entrypoint_2()
@@ -99,12 +108,13 @@ int fxkern_entrypoint_2()
     B_80800480_fxkern = 1.0f;
 }
 
-void fxkern_entrypoint_3(f32 param_0)
+void fxkern_entrypoint_3(f32 scale)
 {
-    func_800B8CF0(param_0);
-    B_80800480_fxkern = param_0;
+    func_800B8CF0(scale);
+    B_80800480_fxkern = scale;
 }
 
+// TU-NOTE: .data is defined here in C; values are taken from the ROM.
 FxKernPair59 D_80800420_fxkern[24] = {
     0x41, 0x56, -0x3, 0x0,  0x57, 0x41, -0x3, 0x0, 0x56, 0x41, -0x3, 0x0, 0x59, 0x41, -0x2, 0x0,
     0x4D, 0x4F, -0x1, 0x0,  0x44, 0x41, -0x1, 0x0, 0x52, 0x4F, -0x2, 0x0, 0x54, 0x41, -0x2, 0x0,

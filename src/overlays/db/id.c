@@ -1,77 +1,82 @@
 #include "common.h"
 
+// Vertex-id group section: s16 group count, then records {id, count, indices[count]}.
 typedef struct {
-    s16 local_0;
-    s16 local_1;
-    s16 local_2[1];
+    s16 id;
+    s16 count;
+    s16 indices[1];
 } DbIdRecord;
 
-s32 dbid_entrypoint_0(s16 *param_0, s32 param_1)
-{
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s16 *local_3;
-
-    local_3 = param_0 + 1;
-    for (local_0 = 0; local_0 < param_0[0]; local_0++) {
-        if (local_3[0] == param_1) {
-            local_2 = 0;
-            for (local_1 = 1; local_1 < local_3[1]; local_1++) {
-                if (local_3[local_1 + 2] != local_3[local_1 + 1] + 1) {
-                    local_2++;
-                }
-            }
-            return local_2 + 1;
-        }
-        local_3 += local_3[1];
-        local_3 += 2;
-    }
-    return 0;
-}
-
-int dbid_entrypoint_1(s16 *param_0)
-{
-    s16 temp_a0;
-    s32 var_a1;
-    s32 var_v1;
-    u8 *var_v0;
-    var_v1 = 0;
-    var_v0 = (u8 *) param_0 + 2;
-    var_a1 = 0;
-    if (*param_0 > 0) {
-        do {
-            temp_a0 = *(s16 *) ((s8 *) var_v0 + 2);
-            var_a1 += 1;
-            var_v0 = (u8 *) (((s8 *) var_v0 + (temp_a0 * 2)) + 4);
-            var_v1 += temp_a0;
-        } while (var_a1 < *param_0);
-    }
-    return var_v1;
-}
-
-s16 *dbid_entrypoint_2(s16 *param_0, s32 param_1)
+// Count the contiguous index runs of group `id`; 0 if there is no such group.
+s32 dbid_entrypoint_0(s16 *groups, s32 id)
 {
     s32 i;
-    s16 *local_0 = param_0 + 1;
-    for (i = 0; i < *param_0; i++) {
-        if (local_0[0] == param_1) {
-            return local_0;
+    s32 j;
+    s32 runs;
+    s16 *group;
+
+    group = groups + 1;
+    for (i = 0; i < groups[0]; i++) {
+        if (group[0] == id) {
+            runs = 0;
+            for (j = 1; j < group[1]; j++) {
+                if (group[j + 2] != group[j + 1] + 1) {
+                    runs++;
+                }
+            }
+            return runs + 1;
         }
-        local_0 += local_0[1];
-        local_0 += 2;
+        group += group[1];
+        group += 2;
     }
     return 0;
 }
 
-s32 dbid_entrypoint_3(void *param_0, s32 param_1, u16 *param_2)
+// Total index count over all groups.
+int dbid_entrypoint_1(s16 *groups)
 {
-    DbIdRecord *local_0;
-    s32 local_1;
-    local_0 = dbid_entrypoint_2(param_0, param_1);
-    if (local_0 != NULL) {
-        for (local_1 = 0; local_1 < local_0->local_1; local_1++) {
-            if (local_0->local_2[local_1] == *param_2) {
+    s16 count;
+    s32 i;
+    s32 total;
+    u8 *rec;
+    total = 0;
+    rec = (u8 *) groups + 2;
+    i = 0;
+    if (*groups > 0) {
+        do {
+            count = *(s16 *) ((s8 *) rec + 2);
+            i += 1;
+            rec = (u8 *) (((s8 *) rec + (count * 2)) + 4);
+            total += count;
+        } while (i < *groups);
+    }
+    return total;
+}
+
+// Find the group with the given id; 0 if missing.
+s16 *dbid_entrypoint_2(s16 *groups, s32 id)
+{
+    s32 i;
+    s16 *group = groups + 1;
+    for (i = 0; i < *groups; i++) {
+        if (group[0] == id) {
+            return group;
+        }
+        group += group[1];
+        group += 2;
+    }
+    return 0;
+}
+
+// Is the vertex index in group `id`?
+s32 dbid_entrypoint_3(void *groups, s32 id, u16 *vertex)
+{
+    DbIdRecord *group;
+    s32 i;
+    group = dbid_entrypoint_2(groups, id);
+    if (group != NULL) {
+        for (i = 0; i < group->count; i++) {
+            if (group->indices[i] == *vertex) {
                 return 1;
             }
         }

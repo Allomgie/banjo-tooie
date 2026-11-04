@@ -1,12 +1,13 @@
 #include "common.h"
+// TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 
 extern Actor *func_801067C4(s32 *);
 extern Actor *func_8010682C(s32 *);
 extern f32 func_800EEB40(f32 *, f32 *);
 typedef struct ActorSearchProp {
-    Unk80132ED0 *local_0;
+    Unk80132ED0 *marker;
     u32 pad_0;
-    u32 local_1;
+    u32 flags;
 } ActorSearchProp;
 extern Actor **func_8010413C(void);
 extern void **func_800BE3F8(f32 *);
@@ -16,96 +17,101 @@ extern Actor *func_80106790(Unk80132ED0 *);
 extern f32 func_800EEAD4(f32 *, f32 *);
 Actor *subaddiefind_entrypoint_11();
 
-Actor *subaddiefind_entrypoint_0(f32 *param_0, s32 param_1, s32 param_2, f32 *param_3)
+// Nearest live actor of a kind (kind < 0 = any) to a point; writes the distance.
+Actor *subaddiefind_entrypoint_0(f32 *pos, s32 kind, s32 exclude, f32 *out_dist)
 {
-    f32 local_1;
-    f32 local_2;
-    s32 local_3;
-    Actor *local_4;
-    s32 local_0;
-    Actor *local_5;
+    f32 dist_sq;
+    f32 best_dist_sq;
+    s32 found;
+    Actor *best;
+    s32 iter;
+    Actor *actor;
 
-    local_2 = 0.0f;
-    local_4 = NULL;
-    local_3 = 0;
-    local_5 = func_801067C4(&local_0);
-    while (local_5) {
-        if ((param_1 == local_5->unk6C_9 || param_1 < 0) && param_2 != local_5->unk70_10 &&
-            local_5->unk6C_9 != 0x215 && local_5->unk6C_9 != 0x243 && !local_5->unk64_17) {
-            local_1 = func_800EEB40(param_0, local_5->position);
-            if (local_1 < local_2 || !local_3) {
-                local_2 = local_1;
-                local_4 = local_5;
-                local_3 = 1;
+    best_dist_sq = 0.0f;
+    best = NULL;
+    found = 0;
+    actor = func_801067C4(&iter);
+    while (actor) {
+        if ((kind == actor->unk6C_9 || kind < 0) && exclude != actor->unk70_10 &&
+            actor->unk6C_9 != 0x215 && actor->unk6C_9 != 0x243 && !actor->unk64_17) {
+            dist_sq = func_800EEB40(pos, actor->position);
+            if (dist_sq < best_dist_sq || !found) {
+                best_dist_sq = dist_sq;
+                best = actor;
+                found = 1;
             }
         }
-        local_5 = func_8010682C(&local_0);
+        actor = func_8010682C(&iter);
     }
-    if (param_3) {
-        *param_3 = sqrtf(local_2);
+    if (out_dist) {
+        *out_dist = sqrtf(best_dist_sq);
     }
-    return local_4;
+    return best;
 }
 
-Actor *subaddiefind_entrypoint_1(Actor *param_0, s32 param_1, s32 param_2, f32 *param_3)
+// Nearest live actor of a kind to another actor, skipping actors sharing its marker.
+Actor *subaddiefind_entrypoint_1(Actor *from, s32 kind, s32 exclude, f32 *out_dist)
 {
-    f32 local_1;
-    Actor *local_2;
-    Actor *local_3;
-    s32 local_0;
+    f32 best_dist;
+    Actor *best;
+    Actor *actor;
+    s32 iter;
 
-    local_2 = 0;
-    local_1 = 1e10f;
-    local_3 = func_801067C4(&local_0);
-    while (local_3) {
-        if ((param_1 == local_3->unk6C_9 || param_1 < 0) && param_2 != local_3->unk70_10 &&
-            local_3->unk6C_9 != 0x215 && local_3->unk6C_9 != 0x243 && !local_3->unk64_17 &&
-            local_3->unk0 != param_0->unk0) {
-            f32 local_4 = func_800EEAD4(param_0->position, local_3->position);
-            if (local_4 < local_1) {
-                local_1 = local_4;
-                local_2 = local_3;
+    best = 0;
+    best_dist = 1e10f;
+    actor = func_801067C4(&iter);
+    while (actor) {
+        if ((kind == actor->unk6C_9 || kind < 0) && exclude != actor->unk70_10 &&
+            actor->unk6C_9 != 0x215 && actor->unk6C_9 != 0x243 && !actor->unk64_17 &&
+            actor->unk0 != from->unk0) {
+            f32 dist = func_800EEAD4(from->position, actor->position);
+            if (dist < best_dist) {
+                best_dist = dist;
+                best = actor;
             }
         }
-        local_3 = func_8010682C(&local_0);
+        actor = func_8010682C(&iter);
     }
-    if (param_3) {
-        *param_3 = local_1;
+    if (out_dist) {
+        *out_dist = best_dist;
     }
-    return local_2;
+    return best;
 }
 
-Actor *subaddiefind_entrypoint_2(s32 param_0, s32 *param_1)
+// First live actor of a kind; optionally writes the iterator state.
+Actor *subaddiefind_entrypoint_2(s32 kind, s32 *out_iter)
 {
-    Actor *local_1;
-    s32 local_0;
+    Actor *actor;
+    s32 iter;
 
-    for (local_1 = func_801067C4(&local_0); local_1 != NULL; local_1 = func_8010682C(&local_0)) {
-        if (param_0 == local_1->unk6C_9 && !local_1->unk64_17) {
-            if (param_1 != NULL) {
-                *param_1 = local_0;
+    for (actor = func_801067C4(&iter); actor != NULL; actor = func_8010682C(&iter)) {
+        if (kind == actor->unk6C_9 && !actor->unk64_17) {
+            if (out_iter != NULL) {
+                *out_iter = iter;
             }
-            return local_1;
+            return actor;
         }
     }
     return NULL;
 }
 
-u8 *subaddiefind_entrypoint_3(s32 param_0, s32 param_1)
+// Continues an iteration to the next live actor with a matching id.
+// Matching: needed for the match.
+u8 *subaddiefind_entrypoint_3(s32 id, s32 iter)
 {
-    Actor *var_v0;
-    Actor *var_v1;
-    var_v0 = func_8010682C(param_1);
-    var_v1 = var_v0;
-    if (var_v0 != NULL) {
+    Actor *actor;
+    Actor *result;
+    actor = func_8010682C(iter);
+    result = actor;
+    if (actor != NULL) {
     loop_1:
-        if ((param_0 == ((u32) (*(s32 *) ((u8 *) var_v0 + 0x6C) << 11) >> 20)) &&
-            !var_v0->unk64_17) {
-            return (u8 *) var_v1;
+        if ((id == ((u32) (*(s32 *) ((u8 *) actor + 0x6C) << 11) >> 20)) &&
+            !actor->unk64_17) {
+            return (u8 *) result;
         }
-        var_v0 = func_8010682C(param_1);
-        var_v1 = var_v0;
-        if (var_v0 == NULL)
+        actor = func_8010682C(iter);
+        result = actor;
+        if (actor == NULL)
             goto block_5;
         goto loop_1;
     }
@@ -113,173 +119,183 @@ block_5:
     return NULL;
 }
 
-s32 subaddiefind_entrypoint_4(s32 param_0, Actor **param_1, s32 param_2)
+// Collects up to max_count live actors of a kind into out.
+s32 subaddiefind_entrypoint_4(s32 kind, Actor **out, s32 max_count)
 {
-    Actor *local_1;
-    s32 local_0;
-    s32 local_2;
+    Actor *actor;
+    s32 iter;
+    s32 count;
 
-    local_2 = 0;
+    count = 0;
 
-    for (local_1 = func_801067C4(&local_0); local_1 != NULL; local_1 = func_8010682C(&local_0)) {
-        if (param_0 == local_1->unk6C_9 && !local_1->unk64_17) {
-            local_2++;
-            *param_1++ = local_1;
-            if (local_2 == param_2) {
-                return local_2;
+    for (actor = func_801067C4(&iter); actor != NULL; actor = func_8010682C(&iter)) {
+        if (kind == actor->unk6C_9 && !actor->unk64_17) {
+            count++;
+            *out++ = actor;
+            if (count == max_count) {
+                return count;
             }
         }
     }
-    return local_2;
+    return count;
 }
 
-s32 subaddiefind_entrypoint_5(s32 param_0, Actor **param_1, s32 param_2, f32 *param_3, f32 param_4,
-                              f32 (*param_5)(f32 *, f32 *))
+// Like entry 4, but only actors within radius of center by dist_fn.
+s32 subaddiefind_entrypoint_5(s32 kind, Actor **out, s32 max_count, f32 *center, f32 radius,
+                              f32 (*dist_fn)(f32 *, f32 *))
 {
-    Actor *local_1;
-    s32 local_0;
-    s32 local_2 = 0;
+    Actor *actor;
+    s32 iter;
+    s32 count = 0;
 
-    param_4 *= param_4;
-    for (local_1 = func_801067C4(&local_0); local_1 != NULL; local_1 = func_8010682C(&local_0)) {
-        if (local_1->unk6C_9 == param_0 && !local_1->unk64_17 &&
-            param_5(param_3, local_1->position) < param_4) {
-            *param_1++ = local_1;
-            local_2++;
-            if (local_2 == param_2) {
-                return local_2;
+    radius *= radius;
+    for (actor = func_801067C4(&iter); actor != NULL; actor = func_8010682C(&iter)) {
+        if (actor->unk6C_9 == kind && !actor->unk64_17 &&
+            dist_fn(center, actor->position) < radius) {
+            *out++ = actor;
+            count++;
+            if (count == max_count) {
+                return count;
             }
         }
     }
-    return local_2;
+    return count;
 }
 
-s32 subaddiefind_entrypoint_6(s16 *param_0, Actor **param_1, s32 param_2)
+// Collects live actors whose kind is in the -1-terminated list.
+s32 subaddiefind_entrypoint_6(s16 *kinds, Actor **out, s32 max_count)
 {
-    s32 local_1;
-    Actor *local_2;
-    s32 local_0;
-    s16 *local_3;
+    s32 count;
+    Actor *actor;
+    s32 iter;
+    s16 *kind;
 
-    local_1 = 0;
-    for (local_2 = func_801067C4(&local_0); local_2; local_2 = func_8010682C(&local_0)) {
-        if (!local_2->unk64_17) {
-            for (local_3 = param_0; *local_3 != -1; local_3++) {
-                if (local_2->unk6C_9 == *local_3) {
-                    local_1++;
-                    *param_1++ = local_2;
-                    if (local_1 == param_2)
-                        return local_1;
+    count = 0;
+    for (actor = func_801067C4(&iter); actor; actor = func_8010682C(&iter)) {
+        if (!actor->unk64_17) {
+            for (kind = kinds; *kind != -1; kind++) {
+                if (actor->unk6C_9 == *kind) {
+                    count++;
+                    *out++ = actor;
+                    if (count == max_count)
+                        return count;
                 }
             }
         }
     }
-    return local_1;
+    return count;
 }
 
-s32 subaddiefind_entrypoint_7(Actor *param_0, s32 param_1, s32 param_2)
+// Targets the nearest actor of a kind within max_dist; returns the distance or -1.
+s32 subaddiefind_entrypoint_7(Actor *actor, s32 kind, s32 max_dist)
 {
-    f32 local_1;
-    Actor *local_0;
-    local_0 = subaddiefind_entrypoint_0(param_0->position, param_1, -1, &local_1);
-    if (local_0 && local_1 < param_2)
-        param_0->unk3C = local_0->unk0;
+    f32 dist;
+    Actor *nearest;
+    nearest = subaddiefind_entrypoint_0(actor->position, kind, -1, &dist);
+    if (nearest && dist < max_dist)
+        actor->unk3C = nearest->unk0;
     else
-        param_0->unk3C = NULL;
-    return param_0->unk3C ? local_1 : -1.0f;
+        actor->unk3C = NULL;
+    return actor->unk3C ? dist : -1.0f;
 }
 
-Actor *subaddiefind_entrypoint_8(s32 param_0)
+// Finds a live actor by marker id.
+Actor *subaddiefind_entrypoint_8(s32 marker_id)
 {
-    Actor *local_1;
-    s32 local_0;
+    Actor *actor;
+    s32 iter;
 
-    for (local_1 = func_801067C4(&local_0); local_1 != NULL; local_1 = func_8010682C(&local_0)) {
-        if (param_0 == ((u32) *(u16 *) ((u8 *) local_1->unk0 + 0x12) >> 1) && !local_1->unk64_17) {
-            return local_1;
+    for (actor = func_801067C4(&iter); actor != NULL; actor = func_8010682C(&iter)) {
+        if (marker_id == ((u32) *(u16 *) ((u8 *) actor->unk0 + 0x12) >> 1) && !actor->unk64_17) {
+            return actor;
         }
     }
     return NULL;
 }
 
-s32 subaddiefind_entrypoint_9(s32 param_0)
+// Counts live actors of a kind.
+s32 subaddiefind_entrypoint_9(s32 kind)
 {
-    Actor *local_1;
-    s32 local_2 = 0;
-    s32 local_0;
+    Actor *actor;
+    s32 count = 0;
+    s32 iter;
 
-    for (local_1 = func_801067C4(&local_0); local_1 != NULL; local_1 = func_8010682C(&local_0)) {
-        if (param_0 == local_1->unk6C_9 && !local_1->unk64_17) {
-            local_2++;
+    for (actor = func_801067C4(&iter); actor != NULL; actor = func_8010682C(&iter)) {
+        if (kind == actor->unk6C_9 && !actor->unk64_17) {
+            count++;
         }
     }
-    return local_2;
+    return count;
 }
 
-s32 subaddiefind_entrypoint_10(u8 *param_0, s32 param_1, s32 param_2)
+// Links the actor to the first instance of a kind with the given id.
+s32 subaddiefind_entrypoint_10(u8 *actor, s32 kind, s32 id)
 {
-    s32 *local_0 = subaddiefind_entrypoint_11(param_1, param_2);
-    if (local_0 != NULL) {
-        *(s32 *) (param_0 + 0x3C) = *local_0;
+    s32 *found = subaddiefind_entrypoint_11(kind, id);
+    if (found != NULL) {
+        *(s32 *) (actor + 0x3C) = *found;
     } else {
-        *(s32 *) (param_0 + 0x3C) = 0;
+        *(s32 *) (actor + 0x3C) = 0;
     }
-    return (*(s32 *) (param_0 + 0x3C) != 0) ? 1 : 0;
+    return (*(s32 *) (actor + 0x3C) != 0) ? 1 : 0;
 }
 
-Actor *subaddiefind_entrypoint_11(param_0, param_1)
-s32 param_0;
-s32 param_1;
+// Finds a live actor of a kind by instance id.
+Actor *subaddiefind_entrypoint_11(kind, id)
+s32 kind;
+s32 id;
 {
-    Actor *local_0[20];
-    s32 local_1;
-    s32 local_2;
+    Actor *actors[20];
+    s32 count;
+    s32 i;
 
-    local_1 = subaddiefind_entrypoint_4(param_0, local_0, 20);
-    for (local_2 = 0; local_2 < local_1; local_2++) {
-        if (local_0[local_2]->unk74_7 == param_1) {
-            return local_0[local_2];
+    count = subaddiefind_entrypoint_4(kind, actors, 20);
+    for (i = 0; i < count; i++) {
+        if (actors[i]->unk74_7 == id) {
+            return actors[i];
         }
     }
     return NULL;
 }
 
-Actor *subaddiefind_entrypoint_12(s32 param_0)
+// Finds a live actor by unique id.
+Actor *subaddiefind_entrypoint_12(s32 unique_id)
 {
-    Actor *local_1;
-    s32 local_0;
+    Actor *actor;
+    s32 iter;
 
-    for (local_1 = func_801067C4(&local_0); local_1 != NULL; local_1 = func_8010682C(&local_0)) {
-        if (!local_1->unk64_17 && param_0 == (*(u32 *) ((u8 *) local_1 + 0x6C) >> 21)) {
-            return local_1;
+    for (actor = func_801067C4(&iter); actor != NULL; actor = func_8010682C(&iter)) {
+        if (!actor->unk64_17 && unique_id == (*(u32 *) ((u8 *) actor + 0x6C) >> 21)) {
+            return actor;
         }
     }
     return NULL;
 }
 
-Actor **subaddiefind_entrypoint_13(f32 *param_0)
+// Collects all live actors in the cube cells around a point (NULL-terminated).
+Actor **subaddiefind_entrypoint_13(f32 *pos)
 {
-    ActorSearchProp *local_0;
-    s32 local_1;
-    ActorSearchProp *local_2;
-    Actor **local_3;
-    void **local_4;
-    Actor *local_5;
+    ActorSearchProp *entry;
+    s32 count;
+    ActorSearchProp *end;
+    Actor **list;
+    void **cell;
+    Actor *actor;
 
-    local_3 = func_8010413C();
-    local_1 = 0;
-    for (local_4 = func_800BE3F8(param_0); *local_4; local_4++) {
-        local_0 = func_800E9E88(*local_4);
-        local_2 = func_800E9EB4(*local_4);
-        for (; local_0 < local_2; local_0++) {
-            if ((local_0->local_1 & 1) && (*(u16 *) ((u8 *) local_0->local_0 + 0x18) & 1)) {
-                local_5 = func_80106790(local_0->local_0);
-                if (!local_5->unk64_17) {
-                    local_3[local_1++] = local_5;
+    list = func_8010413C();
+    count = 0;
+    for (cell = func_800BE3F8(pos); *cell; cell++) {
+        entry = func_800E9E88(*cell);
+        end = func_800E9EB4(*cell);
+        for (; entry < end; entry++) {
+            if ((entry->flags & 1) && (*(u16 *) ((u8 *) entry->marker + 0x18) & 1)) {
+                actor = func_80106790(entry->marker);
+                if (!actor->unk64_17) {
+                    list[count++] = actor;
                 }
             }
         }
     }
-    local_3[local_1] = NULL;
-    return local_3;
+    list[count] = NULL;
+    return list;
 }

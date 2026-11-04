@@ -1,19 +1,20 @@
 #include "overlays/bs/mum/swim.h"
 
+// Spawns a bubble emitter.
 void func_80800000_bsmumswim(PlayerState *self)
 {
-    f32 sp2C[3];
-    s32 sp28;
+    f32 pos[3];
+    s32 emitter;
 
     if (func_80096544(self) != 0) {
         if (func_800DC0C0() > 0.5f) {
-            func_80092C00(self, sp2C);
+            func_80092C00(self, pos);
         } else {
-            func_80092C24(self, sp2C);
+            func_80092C24(self, pos);
         }
-        sp28 = func_8009FBB0(self, sp2C, 0.0f);
-        func_800BA930(sp28, -60, -100, -60, 60, 0, 60);
-        func_800BA22C(sp28, 1);
+        emitter = func_8009FBB0(self, pos, 0.0f);
+        func_800BA930(emitter, -60, -100, -60, 60, 0, 60);
+        func_800BA22C(emitter, 1);
     }
 }
 
@@ -29,6 +30,7 @@ void func_808000B0_bsmumswim(PlayerState *self)
     baphysics_set_target_horizontal_velocity(self, func_800F1214(zone_position, 30.0f, 350.0f));
 }
 
+// Shared water setup.
 void func_80800114_bsmumswim(PlayerState *self)
 {
     _bsmum_entrypoint_2(self);
@@ -41,6 +43,7 @@ void func_80800114_bsmumswim(PlayerState *self)
     }
 }
 
+// Shared water exit: restores physics.
 void func_80800198_bsmumswim(PlayerState *self)
 {
     if (func_8009E69C(self, 1) == 0) {
@@ -59,10 +62,11 @@ void bsmumswim_entrypoint_0(PlayerState *self)
     _bsmum_entrypoint_1(self);
 }
 
+// Water entry.
 void bsmumswim_entrypoint_1(PlayerState *self)
 {
     AnimCtrl *anim_ctrl;
-    f32 sp28;
+    f32 unk_0;
 
     anim_ctrl = baanim_getAnimCtrlPtr(self);
     _bsmum_entrypoint_2(self);
@@ -71,30 +75,31 @@ void bsmumswim_entrypoint_1(PlayerState *self)
     func_800961AC(self, 3);
     func_8009BC5C(self, 2.0f);
     func_800A046C(self);
-    sp28 = func_800A3298(self);
+    unk_0 = func_800A3298(self);
     anctrl_reset(anim_ctrl);
     anctrl_setIndex(anim_ctrl, ASSET_9D_ANIM_BSMUMSWIM_UNKNOWN);
     anctrl_setPlaybackType(anim_ctrl, 2);
     anctrl_setDuration(anim_ctrl, 1.2f);
     anctrl_setStart(anim_ctrl, 0.6412f);
     anctrl_start(anim_ctrl);
-    self->unk16C = func_800F10B4(sp28, 40.0f, 1000.0f, -300.0f, -1200.0f);
+    self->unk16C = func_800F10B4(unk_0, 40.0f, 1000.0f, -300.0f, -1200.0f);
     baphysics_set_vertical_velocity(self, self->unk16C);
     func_8009FFD8(self, BAANIM_UPDATE_1_NORMAL, YAW_TYPE_3_BOUNDED, 3, BA_PHYSICS_6_AIRBORN);
 }
 
+// Water entry: sinking with bubbles.
 void bsmumswim_entrypoint_2(PlayerState *self)
 {
     enum bs_state_e next_state;
-    f32 sp40[3];
-    s32 sp3C;
+    f32 pos[3];
+    s32 emitter;
 
     next_state = BS_STATE_0_INVALID;
-    func_8009C128(self, sp40);
-    sp40[1] += 60.0f;
-    sp3C = func_8009FBB0(self, sp40, 20.0f);
-    func_800BA930(sp3C, -30, -30, -30, 30, 30, 30);
-    func_800BA22C(sp3C, 1);
+    func_8009C128(self, pos);
+    pos[1] += 60.0f;
+    emitter = func_8009FBB0(self, pos, 20.0f);
+    func_800BA930(emitter, -30, -30, -30, 30, 30, 30);
+    func_800BA22C(emitter, 1);
     if (self->unk16C < 0.0f) {
         self->unk16C += func_800F0E00(mlAbsF(self->unk16C) * 0.1f, 50.0f);
         baphysics_set_vertical_velocity(self, self->unk16C);
@@ -116,6 +121,7 @@ s32 bsmumswim_entrypoint_3(s32 idx)
     return D_80800B30_bsmumswim[idx];
 }
 
+// Floating idle: enter.
 void func_80800498_bsmumswim(PlayerState *self)
 {
     AnimCtrl *anim_ctrl;
@@ -136,6 +142,7 @@ void func_80800498_bsmumswim(PlayerState *self)
     func_800A4DA4(self, 8);
 }
 
+// Floating idle: bubbles, first person.
 void func_8080056C_bsmumswim(PlayerState *self)
 {
     enum bs_state_e next_state;
@@ -180,20 +187,21 @@ s32 bsmumswim_entrypoint_4(s32 idx)
     return D_80800B40_bsmumswim[idx];
 }
 
+// Paddling: enter.
 void func_80800750_bsmumswim(PlayerState *self)
 {
     AnimCtrl *anim_ctrl;
-    f32 sp28;
+    f32 unk_0;
 
     anim_ctrl = baanim_getAnimCtrlPtr(self);
     if (bs_getPreviousState(self) == 0xF0) {
-        sp28 = 0.8f;
+        unk_0 = 0.8f;
     } else {
-        sp28 = 0.2f;
+        unk_0 = 0.2f;
     }
     func_80800114_bsmumswim(self);
     anctrl_reset(anim_ctrl);
-    func_8008B1C8(anim_ctrl, sp28);
+    func_8008B1C8(anim_ctrl, unk_0);
     anctrl_setIndex(anim_ctrl, ASSET_9C_ANIM_BSMUMSWIM_UNKNOWN);
     anctrl_setStart(anim_ctrl, 0.8f);
     anctrl_setPlaybackType(anim_ctrl, 2);
@@ -207,6 +215,7 @@ void func_80800750_bsmumswim(PlayerState *self)
     baphysics_set_type(self, BA_PHYSICS_2_NORMAL);
 }
 
+// Paddling: update.
 void func_80800870_bsmumswim(PlayerState *self)
 {
     enum bs_state_e next_state;
@@ -249,6 +258,7 @@ s32 bsmumswim_entrypoint_5(s32 idx)
     return D_80800B50_bsmumswim[idx];
 }
 
+// Rest.
 void func_808009D4_bsmumswim(PlayerState *self)
 {
     _bsrest_entrypoint_14(self);
@@ -277,6 +287,7 @@ s32 bsmumswim_entrypoint_6(s32 idx)
     return D_80800B60_bsmumswim[idx];
 }
 
+// Drone.
 void func_80800A70_bsmumswim(PlayerState *self)
 {
     func_80800114_bsmumswim(self);
@@ -306,6 +317,8 @@ s32 bsmumswim_entrypoint_7(s32 idx)
     return D_80800B70_bsmumswim[idx];
 }
 
+// TU-NOTE: the overlay .data is defined here in C; its tables point to functions of this file,
+// and IDO's assembler schedules some of them differently unless they share the unit.
 s32 D_80800B30_bsmumswim[4] = {(u32) _bsmumswim_entrypoint_0, (u32) _bsmumswim_entrypoint_1,
                                (u32) _bsmumswim_entrypoint_2, (u32) _bsmum_entrypoint_0};
 s32 D_80800B40_bsmumswim[4] = {(u32) func_80800714_bsmumswim, (u32) func_80800498_bsmumswim,

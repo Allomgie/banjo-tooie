@@ -2,11 +2,13 @@
 
 extern s16 D_80800020_seqdefine[];
 
-int seqdefine_entrypoint_0(s32 param_0)
+// Maps a cutscene sequence number to its game flag id.
+int seqdefine_entrypoint_0(s32 sequence)
 {
-    return D_80800020_seqdefine[param_0];
+    return D_80800020_seqdefine[sequence];
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C (values taken from the ROM).
 s16 D_80800020_seqdefine[72] = {
     0x0,  0x1,  0x2,   0x3,   0x4,   0x5,   0x6,  0x7,  0x8,  0x9,  0xA,  0xB,  0xC,  0xD,  0xE,
     0xF,  0x10, 0x11,  0x12,  0x13,  0x14,  0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D,

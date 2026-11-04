@@ -5,13 +5,13 @@ extern int D_8080105C_gctransitionDll[];
 extern f32 func_800A8AF0(s32);
 typedef struct {
     u8 pad_0[4];
-    s32 local_0;
+    s32 frames;
     u8 pad_1[0x14];
-    u8 local_1;
+    u8 kind;
 } TransitionQueryState;
 typedef struct {
-    u8 a;
-    u8 b;
+    u8 id;
+    u8 kind;
     u8 pad[18];
 } TransEntry;
 extern TransEntry D_80800EA4_gctransitionDll[];
@@ -45,114 +45,117 @@ extern u8 D_808010D8_gctransitionDll[];
 extern f32 D_808010E4_gctransitionDll;
 extern f32 D_808010E8_gctransitionDll;
 typedef struct {
-    u8 local_0[8];
-    u8 local_1;
-    u8 local_2;
-    u8 local_3;
-    u8 local_4;
-    f32 local_5;
-    u8 local_6[12];
-    u8 local_7;
-    u8 local_8;
-    u8 local_9[6];
-    f32 local_10;
-    f32 local_11;
-    void *local_12;
-    u32 local_13;
+    u8 unk_0[8];
+    u8 entry_id;
+    u8 entry_kind;
+    u8 next_kind;
+    u8 unk_B;
+    f32 duration;
+    u8 unk_10[12];
+    u8 kind;
+    u8 use_intro_clock;
+    u8 unk_1E[6];
+    f32 rotation;
+    f32 time;
+    void *anctrl;
+    u32 ticks;
 } Transition49;
 extern f32 _glintrosyncDll_entrypoint_5(void);
 extern f32 func_800D8FF8(void);
 
-int func_80800000_gctransitionDll(param_0)
-int param_0;
+// Finds the descriptor with the given id.
+int func_80800000_gctransitionDll(id)
+int id;
 {
-    u8 *local_1 = &D_80800CB0_gctransitionDll[0];
-    if (*local_1 != 0) {
+    u8 *entry = &D_80800CB0_gctransitionDll[0];
+    if (*entry != 0) {
         do {
-            if (param_0 == *local_1) {
-                return local_1;
+            if (id == *entry) {
+                return entry;
             }
-            local_1 += 0x14;
-        } while (*local_1);
+            entry += 0x14;
+        } while (*entry);
     }
     return 0;
 }
 
-int func_8080004C_gctransitionDll(unsigned long param_0)
+// Finds the entry for the given map in the per-map table.
+int func_8080004C_gctransitionDll(unsigned long map)
 {
-    u16 *local_0;
-    int *new_var2;
-    new_var2 = &D_8080105C_gctransitionDll[0];
-    local_0 = new_var2;
-    while (*local_0 != 0) {
-        if (*local_0 == param_0) {
-            return local_0;
+    u16 *entry;
+    int *table;
+    table = &D_8080105C_gctransitionDll[0];
+    entry = table;
+    while (*entry != 0) {
+        if (*entry == map) {
+            return entry;
         }
-        local_0 += 2;
+        entry += 2;
     }
 
-    return local_0;
+    return entry;
 }
 
-void func_80800098_gctransitionDll(s32 *param_0, f32 *param_1)
+void func_80800098_gctransitionDll(s32 *self, f32 *scale)
 {
-    *param_1 *= func_800A8AF0(*param_0) * 0.75f;
+    *scale *= func_800A8AF0(*self) * 0.75f;
 }
 
-void func_808000D8_gctransitionDll(u8 *param_0, s32 param_1, u8 *param_2)
+// Starts a transition of the given kind from a descriptor (entry may be NULL).
+void func_808000D8_gctransitionDll(u8 *self, s32 kind, u8 *entry)
 {
-    s32 temp_a3;
-    s32 temp_v0;
-    s32 temp_v0_2;
+    s32 old_anctrl;
+    s32 asset_id;
+    s32 anctrl;
 
-    temp_a3 = *(s32 *) ((s8 *) param_0 + 0x2C);
-    if (temp_a3 != 0) {
-        func_8008ADBC(temp_a3);
-        *(s32 *) ((s8 *) param_0 + 0x2C) = 0;
+    old_anctrl = *(s32 *) ((s8 *) self + 0x2C);
+    if (old_anctrl != 0) {
+        func_8008ADBC(old_anctrl);
+        *(s32 *) ((s8 *) self + 0x2C) = 0;
     }
-    *(s32 *) ((s8 *) param_0 + 4) = 0;
-    *(f32 *) ((s8 *) param_0 + 0x28) = 0.0f;
-    if (param_2 != NULL) {
-        aligned4_memcpy(param_0 + 8, param_2, 0x14);
+    *(s32 *) ((s8 *) self + 4) = 0;
+    *(f32 *) ((s8 *) self + 0x28) = 0.0f;
+    if (entry != NULL) {
+        aligned4_memcpy(self + 8, entry, 0x14);
     } else {
-        *(u8 *) ((s8 *) param_0 + 8) = 0U;
+        *(u8 *) ((s8 *) self + 8) = 0U;
     }
-    if (param_1 == 2) {
-        *(s32 *) ((s8 *) param_0 + 0x20) = 0xB45;
-    } else if (param_1 == 7) {
-        *(s32 *) ((s8 *) param_0 + 0x20) = 0xB46;
-    } else if (param_2 != NULL) {
-        temp_v0 = *(s32 *) ((s8 *) param_2 + 8);
-        if (temp_v0 != 0) {
-            *(s32 *) ((s8 *) param_0 + 0x20) = temp_v0;
+    if (kind == 2) {
+        *(s32 *) ((s8 *) self + 0x20) = 0xB45;
+    } else if (kind == 7) {
+        *(s32 *) ((s8 *) self + 0x20) = 0xB46;
+    } else if (entry != NULL) {
+        asset_id = *(s32 *) ((s8 *) entry + 8);
+        if (asset_id != 0) {
+            *(s32 *) ((s8 *) self + 0x20) = asset_id;
         }
     }
-    if ((param_2 != NULL) && (*(s32 *) ((s8 *) param_2 + 0xC) != 0)) {
-        temp_v0_2 = func_8008AD80(0);
-        *(s32 *) ((s8 *) param_0 + 0x2C) = temp_v0_2;
-        anctrl_reset(temp_v0_2);
-        anctrl_setIndex(*(s32 *) ((s8 *) param_0 + 0x2C), *(s32 *) ((s8 *) param_2 + 0xC));
-        anctrl_setDuration(*(s32 *) ((s8 *) param_0 + 0x2C), *(s32 *) ((s8 *) param_2 + 4));
-        anctrl_setPlaybackType(*(s32 *) ((s8 *) param_0 + 0x2C), 1);
-        if (param_1 == 6) {
-            func_8008B188(*(s32 *) ((s8 *) param_0 + 0x2C), 0);
+    if ((entry != NULL) && (*(s32 *) ((s8 *) entry + 0xC) != 0)) {
+        anctrl = func_8008AD80(0);
+        *(s32 *) ((s8 *) self + 0x2C) = anctrl;
+        anctrl_reset(anctrl);
+        anctrl_setIndex(*(s32 *) ((s8 *) self + 0x2C), *(s32 *) ((s8 *) entry + 0xC));
+        anctrl_setDuration(*(s32 *) ((s8 *) self + 0x2C), *(s32 *) ((s8 *) entry + 4));
+        anctrl_setPlaybackType(*(s32 *) ((s8 *) self + 0x2C), 1);
+        if (kind == 6) {
+            func_8008B188(*(s32 *) ((s8 *) self + 0x2C), 0);
             func_80090684(1);
             func_800EA334(0);
         } else {
             osViBlack(1);
-            func_8008B10C(*(s32 *) ((s8 *) param_0 + 0x2C), 0x3E800000);
+            func_8008B10C(*(s32 *) ((s8 *) self + 0x2C), 0x3E800000);
         }
-        anctrl_start(*(s32 *) ((s8 *) param_0 + 0x2C));
+        anctrl_start(*(s32 *) ((s8 *) self + 0x2C));
     }
-    if (param_1 == 5) {
+    if (kind == 5) {
         func_800FC6B0(0x1D);
         func_800FCB54(0x1D, 0, 0x3E8, 0x3ECCCCCD);
         func_800FCA90(0x1D);
         func_800FC8EC(0x1D);
         goto block_27;
     }
-    if (param_1 == 6) {
-        if (*(u8 *) ((s8 *) param_0 + 8) == 0xA) {
+    if (kind == 6) {
+        if (*(u8 *) ((s8 *) self + 8) == 0xA) {
             _gcaudiolist_entrypoint_0(1);
         } else {
             func_800FC6B0(0x1E);
@@ -162,21 +165,23 @@ void func_808000D8_gctransitionDll(u8 *param_0, s32 param_1, u8 *param_2)
         }
         goto block_27;
     }
-    if ((param_1 == 1) && (*(u8 *) ((s8 *) param_0 + 0x1C) != 0)) {
-        func_800C9214(param_0);
+    if ((kind == 1) && (*(u8 *) ((s8 *) self + 0x1C) != 0)) {
+        func_800C9214(self);
         return;
     }
 block_27:
-    *(s32 *) ((s8 *) param_0 + 0x30) = 0;
-    *(u8 *) ((s8 *) param_0 + 0x1C) = (u8) param_1;
+    *(s32 *) ((s8 *) self + 0x30) = 0;
+    *(u8 *) ((s8 *) self + 0x1C) = (u8) kind;
 }
 
+// Matching: the line breaks in this function are needed for the match.
+// Draws the active transition.
 void gctransitionDll_entrypoint_0(u8 *self, GfxW **gdl)
 {
     f32 vp_position[3];
     f32 vp_rotation[3];
     f32 percentage;
-    f32 sp48[3];
+    f32 unk_0[3];
     f32 scale;
 
     *(s32 *)(self + 0x4) += 1;
@@ -193,7 +198,7 @@ void gctransitionDll_entrypoint_0(u8 *self, GfxW **gdl)
         func_800E3C30(vp_rotation);
         func_800E3CE8();
         func_800E44FC(gdl);
-        func_800EFD24(sp48);
+        func_800EFD24(unk_0);
         if (*(s32 *)(self + 0x2C) != 0) {
             { GfxW *_ga = (*gdl)++; _ga->w0 = 0xE3001201; _ga->w1 = 0; }
             { GfxW *_gb = (*gdl)++; _gb->w0 = 0xE3001801; _gb->w1 = 0xC0; }
@@ -202,7 +207,7 @@ void gctransitionDll_entrypoint_0(u8 *self, GfxW **gdl)
         }
         func_800DF830(0);
         if (self[0x1C] == 2 || self[0x1C] == 7) {
-            func_800DE448(sp48, vp_rotation, 1.0f, 0, func_800D674C(*(s32 *)(self + 0x20)));
+            func_800DE448(unk_0, vp_rotation, 1.0f, 0, func_800D674C(*(s32 *)(self + 0x20)));
             if (*(s32 *)(self + 0x2C) != 0) {
                 { GfxW *_gc = (*gdl)++; _gc->w0 = 0xE3001201; _gc->w1 = 0x2000; }
                 { GfxW *_gd = (*gdl)++; _gd->w0 = 0xE3001801; _gd->w1 = 0; }
@@ -226,7 +231,7 @@ void gctransitionDll_entrypoint_0(u8 *self, GfxW **gdl)
                 scale = *(f32 *)(self + 0x18) * percentage + 0.1f;
             }
             func_80800098_gctransitionDll(self, &scale);
-            func_800DE448(sp48, vp_rotation, scale, 0, func_800D674C(*(s32 *)(self + 0x20)));
+            func_800DE448(unk_0, vp_rotation, scale, 0, func_800D674C(*(s32 *)(self + 0x20)));
         } else if (self[0x1C] == 6) {
             switch (self[0x8]) {
                 default:
@@ -248,7 +253,7 @@ void gctransitionDll_entrypoint_0(u8 *self, GfxW **gdl)
             }
             if (!(*(s32 *)(self + 0x30) < 3) || self[0x8] != 0x11) {
                 func_80800098_gctransitionDll(self, &scale);
-                func_800DE448(sp48, vp_rotation, scale, 0, func_800D674C(*(s32 *)(self + 0x20)));
+                func_800DE448(unk_0, vp_rotation, scale, 0, func_800D674C(*(s32 *)(self + 0x20)));
             } else {
                 func_800DE318();
             }
@@ -269,72 +274,77 @@ void gctransitionDll_entrypoint_0(u8 *self, GfxW **gdl)
     }
 }
 
-void gctransitionDll_entrypoint_1(s32 param_0)
+// Starts the entry transition for the current map.
+void gctransitionDll_entrypoint_1(s32 self)
 {
-    u8 *local_0;
+    u8 *entry;
 
-    local_0 = func_80800000_gctransitionDll(
+    entry = func_80800000_gctransitionDll(
         *(u8 *) ((s8 *) func_8080004C_gctransitionDll(func_800EA05C()) + 2));
-    func_808000D8_gctransitionDll(param_0, *(u8 *) ((s8 *) local_0 + 1), local_0);
+    func_808000D8_gctransitionDll(self, *(u8 *) ((s8 *) entry + 1), entry);
 }
 
-int gctransitionDll_entrypoint_2(u8 *param_0)
+int gctransitionDll_entrypoint_2(u8 *self)
 {
-    return param_0[0x1C] == 1;
+    return self[0x1C] == 1;
 }
 
-s32 gctransitionDll_entrypoint_3(u8 *param_0)
+s32 gctransitionDll_entrypoint_3(u8 *self)
 {
-    return param_0[0x1C] != 1;
+    return self[0x1C] != 1;
 }
 
-int gctransitionDll_entrypoint_4(TransitionQueryState *param_0)
+int gctransitionDll_entrypoint_4(TransitionQueryState *self)
 {
-    return param_0->local_1 == 4 || (param_0->local_1 == 2 && param_0->local_0 < 2) ||
-           param_0->local_1 == 6 || param_0->local_1 == 9 ||
-           (param_0->local_1 == 7 && param_0->local_0 < 2);
+    return self->kind == 4 || (self->kind == 2 && self->frames < 2) ||
+           self->kind == 6 || self->kind == 9 ||
+           (self->kind == 7 && self->frames < 2);
 }
 
-s32 gctransitionDll_entrypoint_5(s32 map)
+s32 gctransitionDll_entrypoint_5(s32 self)
 {
-    func_808000D8_gctransitionDll(map, 1, 0);
+    func_808000D8_gctransitionDll(self, 1, 0);
 }
 
-int gctransitionDll_entrypoint_6(Actor *param_0)
+// Starts the exit transition for the current map.
+int gctransitionDll_entrypoint_6(Actor *self)
 {
-    u8 *local_0;
+    u8 *entry;
 
-    local_0 = func_80800000_gctransitionDll(
+    entry = func_80800000_gctransitionDll(
         *(u8 *) ((s8 *) func_8080004C_gctransitionDll(func_800EA05C()) + 3));
-    func_808000D8_gctransitionDll(param_0, *(u8 *) ((s8 *) local_0 + 1), local_0);
+    func_808000D8_gctransitionDll(self, *(u8 *) ((s8 *) entry + 1), entry);
 }
 
-void gctransitionDll_entrypoint_7(s32 param_0, s32 param_1)
+// Starts the transition described by D_80800EA4_gctransitionDll[index].
+void gctransitionDll_entrypoint_7(s32 self, s32 index)
 {
-    TransEntry *local_0 = &D_80800EA4_gctransitionDll[param_1];
-    func_808000D8_gctransitionDll(param_0, local_0->b, local_0);
+    TransEntry *entry = &D_80800EA4_gctransitionDll[index];
+    func_808000D8_gctransitionDll(self, entry->kind, entry);
 }
 
-void gctransitionDll_entrypoint_8(u8 *param_0, s32 param_1)
+// Initializes a transition object.
+void gctransitionDll_entrypoint_8(u8 *self, s32 unk_0)
 {
-    *(u8 *) ((char *) param_0 + 8) = 0;
-    *(s32 **) (param_0 + 0x20) = 0;
-    *(s32 **) param_0 = param_1;
-    *(s8 *) (param_0 + 0x1C) = 0;
-    *(f32 *) (param_0 + 0x24) = 0.0f;
-    *(s8 *) (param_0 + 0x1D) = func_800E6A00();
-    func_808000D8_gctransitionDll(param_0, 1, 0);
+    *(u8 *) ((char *) self + 8) = 0;
+    *(s32 **) (self + 0x20) = 0;
+    *(s32 **) self = unk_0;
+    *(s8 *) (self + 0x1C) = 0;
+    *(f32 *) (self + 0x24) = 0.0f;
+    *(s8 *) (self + 0x1D) = func_800E6A00();
+    func_808000D8_gctransitionDll(self, 1, 0);
 }
 
-void gctransitionDll_entrypoint_9(Transition49 *param_0)
+// Per-frame update: advances the timer and moves to the next kind when done.
+void gctransitionDll_entrypoint_9(Transition49 *self)
 {
-    f32 local_0;
-    local_0 = param_0->local_8 ? _glintrosyncDll_entrypoint_5() : func_800D8FF8();
-    if (param_0->local_1) {
-        if (param_0->local_12) {
-            func_8008ADE4(param_0->local_12);
-            if (param_0->local_7 == 5) {
-                switch (param_0->local_13) {
+    f32 dt;
+    dt = self->use_intro_clock ? _glintrosyncDll_entrypoint_5() : func_800D8FF8();
+    if (self->entry_id) {
+        if (self->anctrl) {
+            func_8008ADE4(self->anctrl);
+            if (self->kind == 5) {
+                switch (self->ticks) {
                     case 0:
                     case 3:
                         break;
@@ -349,10 +359,10 @@ void gctransitionDll_entrypoint_9(Transition49 *param_0)
                         osViBlack(0);
                         break;
                     default:
-                        param_0->local_11 += local_0;
+                        self->time += dt;
                 }
             } else {
-                switch (param_0->local_13) {
+                switch (self->ticks) {
                     case 0:
                     case 1:
                         break;
@@ -360,30 +370,32 @@ void gctransitionDll_entrypoint_9(Transition49 *param_0)
                         func_800EA34C(0);
                         break;
                     default:
-                        param_0->local_11 += local_0;
+                        self->time += dt;
                         break;
                 }
             }
         } else
-            param_0->local_11 += local_0;
-        if (param_0->local_5 < param_0->local_11 ||
-            (param_0->local_12 && anctrl_isStopped(param_0->local_12))) {
-            param_0->local_11 = param_0->local_5;
-            if (param_0->local_7 == 5 || param_0->local_7 == 6) {
-                param_0->local_10 -= 90.0f;
-                if (param_0->local_10 < -360.0f)
-                    param_0->local_10 += 360.0f;
-                if (param_0->local_10 > 360.0f)
-                    param_0->local_10 -= 360.0f;
+            self->time += dt;
+        if (self->duration < self->time ||
+            (self->anctrl && anctrl_isStopped(self->anctrl))) {
+            self->time = self->duration;
+            if (self->kind == 5 || self->kind == 6) {
+                self->rotation -= 90.0f;
+                if (self->rotation < -360.0f)
+                    self->rotation += 360.0f;
+                if (self->rotation > 360.0f)
+                    self->rotation -= 360.0f;
             }
-            func_808000D8_gctransitionDll(param_0, param_0->local_3, 0);
-            if (param_0->local_12)
+            func_808000D8_gctransitionDll(self, self->next_kind, 0);
+            if (self->anctrl)
                 func_800EA170();
         }
-        param_0->local_13++;
+        self->ticks++;
     }
 }
 
+// TU-NOTE: the overlay data is defined here in C.
+// Transition descriptors, 0x14 bytes each: id, kind, next kind, duration (f32), asset id, animation id.
 int D_80800CB0_gctransitionDll[125] = {
     0x20080100, 0x40B00000, 0x0,        0x0,        0x0,        0x1E030100, 0x3FF33333, 0x0,
     0x0,        0x0,        0x1F040200, 0x3FF33333, 0x0,        0x0,        0x0,        0x1030100,
@@ -401,6 +413,7 @@ int D_80800CB0_gctransitionDll[125] = {
     0x41C80000, 0x13060200, 0x3F99999A, 0xB42,      0x0,        0x41C80000, 0x14060200, 0x400CCCCD,
     0xB42,      0x0,        0x41C80000, 0x15050100, 0x400CCCCD, 0xB42,      0x0,        0x41C80000,
     0x0,        0x0,        0x0,        0x0,        0x0};
+// Descriptors used by gctransitionDll_entrypoint_7.
 TransEntry D_80800EA4_gctransitionDll[22] = {
     0xA,  0x6,  0x2,  0x0,  0x40, 0x60, 0x0,  0x0,  0x0,  0x0,  0xB,  0x47, 0x0,  0x0,  0x0,  0x0,
     0x40, 0x6C, 0xCC, 0xCD, 0x10, 0x5,  0x1,  0x0,  0x40, 0x20, 0x0,  0x0,  0x0,  0x0,  0x6,  0xF9,
@@ -430,6 +443,7 @@ TransEntry D_80800EA4_gctransitionDll[22] = {
     0x1,  0x3,  0x1,  0x0,  0x3F, 0x33, 0x33, 0x33, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,
     0x0,  0x0,  0x0,  0x0,  0x2,  0x4,  0x2,  0x0,  0x3F, 0x33, 0x33, 0x33, 0x0,  0x0,  0x0,  0x0,
     0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0};
+// Per-map entry/exit transition ids.
 int D_8080105C_gctransitionDll[28] = {
     0xA11E04,  0xA20104,  0xA30104,  0xA40104,  0xA50109,  0xA60104,  0xA7080A,
     0xA80104,  0xA90104,  0xAA0104,  0xAB0104,  0xAC0109,  0x18E1E04, 0x18C0104,

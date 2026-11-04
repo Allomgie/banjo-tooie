@@ -4,15 +4,16 @@ extern u8 D_808000A0_chsounder[];
 extern u8 D_808000AC_chsounder[];
 extern int D_808000BC_chsounder[];
 
-void func_80800000_chsounder(Actor *param_0)
+// Plays one of two looping sound sets at the actor's position, depending on its index.
+void func_80800000_chsounder(Actor *actor)
 {
-    switch (param_0->unk74_7) {
+    switch (actor->unk74_7) {
         case 0x32:
-            _subaddieaudioloop_entrypoint_5(param_0, param_0->position, 1, -1,
+            _subaddieaudioloop_entrypoint_5(actor, actor->position, 1, -1,
                                             D_808000A0_chsounder);
             break;
         case 0x33:
-            _subaddieaudioloop_entrypoint_5(param_0, param_0->position, 1, -1,
+            _subaddieaudioloop_entrypoint_5(actor, actor->position, 1, -1,
                                             D_808000AC_chsounder);
     }
 }
@@ -30,6 +31,9 @@ int chsounder_entrypoint_0()
     return (int) &D_808000BC_chsounder;
 }
 
+// TU-NOTE: the overlay .data is defined here in C (values taken from the ROM). Its tables
+// point to functions of this file; IDO schedules some of them differently unless the tables
+// are in the same unit. D_808000BC_chsounder is declared as int[] (same address).
 extern void func_80105834();
 extern void func_8010A730();
 extern void func_80107C2C();

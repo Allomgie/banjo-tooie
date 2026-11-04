@@ -1,24 +1,25 @@
 #include "common.h"
 
+// Theme table entry: map id, then (track << 2 | flags) or a replacement map, then a flag/extra value.
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
+    s16 map;
+    s16 unk_2;
+    s16 unk_4;
 } ThemeEntry;
 extern ThemeEntry D_80800D34_cothemedll[];
 extern ThemeEntry D_80800730_cothemedll[];
 extern s32 func_800DA298(s32);
 typedef struct {
-    s16 a;
-    s16 b;
-    s16 c;
+    s16 track_flags;
+    s16 unk_2;
+    s16 unk_4;
 } ThemeEnt;
 extern s32 func_800FE890();
 extern void func_80016DA0(s32, s32);
 extern s16 D_80800734_cothemedll[];
 typedef struct {
-    s16 local_0;
-    u8 pad_0[4];
+    s16 track_flags; // track << 2 | flags
+    u8 pad_2[4];
 } ThemeOption;
 extern ThemeOption D_80800732_cothemedll[];
 extern void func_800FEDC4(s32, s32, f32, f32);
@@ -26,136 +27,139 @@ extern s16 D_80800CB4_cothemedll[];
 
 typedef struct {
     u8 pad_0[8];
-    s16 local_0;
-    u8 pad_1[4];
-    u8 local_1;
-    u8 pad_2[3];
-    u8 local_2;
-    u8 pad_3[0x2E];
-    u8 local_3;
+    s16 track;
+    u8 pad_A[4];
+    u8 keep_track;
+    u8 pad_F[3];
+    u8 unk_12;
+    u8 pad_13[0x2E];
+    u8 unk_41;
 } ThemeTransition;
 
-s32 func_80800000_cothemedll(param_0)
-s32 param_0;
+// Returns the index of the theme entry for a map, after applying flag-based map overrides.
+s32 func_80800000_cothemedll(map)
+s32 map;
 {
     s32 i;
-    s32 local_0;
+    s32 resolved_map;
 
-    local_0 = param_0;
-    for (i = 0; D_80800D34_cothemedll[i].unk0 != 0; i++) {
-        if (local_0 == D_80800D34_cothemedll[i].unk0 &&
-            func_800DA298(D_80800D34_cothemedll[i].unk4)) {
-            local_0 = D_80800D34_cothemedll[i].unk2;
+    resolved_map = map;
+    for (i = 0; D_80800D34_cothemedll[i].map != 0; i++) {
+        if (resolved_map == D_80800D34_cothemedll[i].map &&
+            func_800DA298(D_80800D34_cothemedll[i].unk_4)) {
+            resolved_map = D_80800D34_cothemedll[i].unk_2;
         }
     }
-    for (i = 0; D_80800730_cothemedll[i].unk0 != 0; i++) {
-        if (local_0 == D_80800730_cothemedll[i].unk0) {
+    for (i = 0; D_80800730_cothemedll[i].map != 0; i++) {
+        if (resolved_map == D_80800730_cothemedll[i].map) {
             return i;
         }
     }
     return 0;
 }
 
-void cothemedll_entrypoint_0(s32 param_0)
+void cothemedll_entrypoint_0(s32 map)
 {
-    s32 local_0;
+    s32 track;
     if (!func_800FE890()) {
-        local_0 = ((ThemeEnt *) D_80800732_cothemedll)[func_80800000_cothemedll(param_0)].a >> 2;
-        if (local_0 != -1) {
-            func_80016DA0(local_0, 1);
+        track = ((ThemeEnt *) D_80800732_cothemedll)[func_80800000_cothemedll(map)].track_flags >> 2;
+        if (track != -1) {
+            func_80016DA0(track, 1);
         }
     }
 }
 
 int cothemedll_entrypoint_1()
 {
-    int new_var2;
-    int new_var;
-    new_var2 =
+    int theme_idx;
+    int idx;
+    // Matching: the redundant masks, comma expressions and temporaries are needed for the match.
+    theme_idx =
         (((((0, func_80800000_cothemedll()) * 3) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) &
          0xFFFFFFFFFFFFFFFF) &
         (0, 0xFFFFFFFFFFFFFFFF);
-    new_var = (new_var2 & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF;
-    return D_80800734_cothemedll[new_var & 0xFFFFFFFFFFFFFFFF];
+    idx = (theme_idx & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF;
+    return D_80800734_cothemedll[idx & 0xFFFFFFFFFFFFFFFF];
 }
 
-void cothemedll_entrypoint_2(void *param_0, s32 param_1)
+void cothemedll_entrypoint_2(void *state, s32 map)
 {
-    s32 local_0;
+    s32 track;
 
-    if (!func_800FE890(param_0)) {
-        local_0 = func_80800000_cothemedll(param_1);
-        local_0 = D_80800732_cothemedll[local_0].local_0 >> 2;
-        if (local_0 != -1) {
-            if (func_800FCCD4(local_0))
-                func_800FC74C(local_0);
-            func_80016DF8(local_0);
+    if (!func_800FE890(state)) {
+        track = func_80800000_cothemedll(map);
+        track = D_80800732_cothemedll[track].track_flags >> 2;
+        if (track != -1) {
+            if (func_800FCCD4(track))
+                func_800FC74C(track);
+            func_80016DF8(track);
         }
     }
     if (!func_800DA9E4(0x674, 0))
         func_800FDC28(0);
     if (!func_800DA9E4(0x675, 0)) {
-        for (local_0 = 0; local_0 < 2; local_0++)
-            func_800FEDC4(local_0, 0, 1.0f, 0.0f);
+        for (track = 0; track < 2; track++)
+            func_800FEDC4(track, 0, 1.0f, 0.0f);
     }
-    *((u8 *) param_0 + 0x41) = 1;
+    *((u8 *) state + 0x41) = 1;
 }
 
-void cothemedll_entrypoint_3(u8 *param_0)
+void cothemedll_entrypoint_3(u8 *state)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_4;
-    u8 *local_3;
+    s32 map;
+    s32 theme_idx;
+    s32 i;
+    u8 *theme;
 
-    local_0 = func_800EA05C();
-    local_1 = func_80800000_cothemedll(local_0);
-    param_0[0x41] = 0;
-    *(s32 *) (param_0 + 0x28) = -1;
-    *(s32 *) (param_0 + 0x2C) = -1;
-    param_0[0x10] = 0xFF;
-    param_0[0x11] = 0xFF;
+    map = func_800EA05C();
+    theme_idx = func_80800000_cothemedll(map);
+    state[0x41] = 0;
+    *(s32 *) (state + 0x28) = -1;
+    *(s32 *) (state + 0x2C) = -1;
+    state[0x10] = 0xFF;
+    state[0x11] = 0xFF;
     if (func_800FE890() != 2) {
-        *(s32 *) (param_0 + 0x1C) = 0;
-        *(s16 *) (param_0 + 0x22) = 0;
-        *(s16 *) (param_0 + 0x20) = 0;
-        param_0[0x12] = 0;
-        param_0[0x13] = 0;
-        param_0[0x14] = 1;
-        param_0[0x15] = 1;
-        *(f32 *) (param_0 + 4) = 1.0f;
-        if (param_0[0x16]) {
-            local_3 = (u8 *) D_80800730_cothemedll + local_1 * 6;
-            *(s16 *) (param_0 + 0xC) = *(u16 *) (local_3 + 2) & 3;
-            *(s16 *) (param_0 + 8) = *(s16 *) (local_3 + 2) >> 2;
-            if (*(s16 *) (param_0 + 8) != -1) {
-                *(s16 *) (param_0 + 0xA) = func_80017764(*(s16 *) (param_0 + 8));
+        *(s32 *) (state + 0x1C) = 0;
+        *(s16 *) (state + 0x22) = 0;
+        *(s16 *) (state + 0x20) = 0;
+        state[0x12] = 0;
+        state[0x13] = 0;
+        state[0x14] = 1;
+        state[0x15] = 1;
+        *(f32 *) (state + 4) = 1.0f;
+        if (state[0x16]) {
+            theme = (u8 *) D_80800730_cothemedll + theme_idx * 6;
+            *(s16 *) (state + 0xC) = *(u16 *) (theme + 2) & 3;
+            *(s16 *) (state + 8) = *(s16 *) (theme + 2) >> 2;
+            if (*(s16 *) (state + 8) != -1) {
+                *(s16 *) (state + 0xA) = func_80017764(*(s16 *) (state + 8));
             } else {
-                *(s16 *) (param_0 + 0xA) = 0x4E20;
+                *(s16 *) (state + 0xA) = 0x4E20;
             }
-            *(s16 *) (param_0 + 0x24) = 0;
-            for (local_4 = 0; ((s16(*)[2]) D_80800CB4_cothemedll)[local_4][0] != -1; local_4++) {
-                if (local_0 == ((s16(*)[2]) D_80800CB4_cothemedll)[local_4][0]) {
-                    *(s16 *) (param_0 + 0x20) = ((s16(*)[2]) D_80800CB4_cothemedll)[local_4][1];
+            *(s16 *) (state + 0x24) = 0;
+            for (i = 0; ((s16(*)[2]) D_80800CB4_cothemedll)[i][0] != -1; i++) {
+                if (map == ((s16(*)[2]) D_80800CB4_cothemedll)[i][0]) {
+                    *(s16 *) (state + 0x20) = ((s16(*)[2]) D_80800CB4_cothemedll)[i][1];
                 }
             }
         }
     }
 }
 
-void func_80800388_cothemedll(param_0) s32 param_0;
+// Keeps the music running when moving between the MT and HFP kickball maps.
+void func_80800388_cothemedll(new_map) s32 new_map;
 {
-    s32 local_0;
+    s32 cur_map;
 
-    local_0 = func_800EA05C();
+    cur_map = func_800EA05C();
 
-switch (local_0) {
+switch (cur_map) {
     case 0xB8:
     case 0xBB:
     case 0xC6:
     case 0xC8:
     case 0xC9:
-        switch (param_0) {
+        switch (new_map) {
             case 0xB8:
             case 0xBB:
             case 0xC6:
@@ -169,7 +173,7 @@ switch (local_0) {
     case 0x12E:
     case 0x12F:
     case 0x130:
-        switch (param_0) {
+        switch (new_map) {
             case 0x127:
             case 0x12D:
             case 0x12E:
@@ -181,70 +185,73 @@ switch (local_0) {
 
 }
 
-void cothemedll_entrypoint_4(ThemeTransition *param_0, s32 param_1)
+void cothemedll_entrypoint_4(ThemeTransition *state, s32 new_map)
 {
-    s32 local_0;
+    s32 track;
 
-    param_0->local_2 = 1;
+    state->unk_12 = 1;
     if (!func_800DA298(0x674))
         func_800FDC28(0);
-    func_80800388_cothemedll(param_1);
+    func_80800388_cothemedll(new_map);
 
 if (!func_800FE890()) {
-    local_0 = D_80800732_cothemedll[func_80800000_cothemedll(param_1)].local_0 >> 2;
-    if (local_0 != param_0->local_0 || param_0->local_3) {
+    track = D_80800732_cothemedll[func_80800000_cothemedll(new_map)].track_flags >> 2;
+    if (track != state->track || state->unk_41) {
         func_800FC2C4(0, 0x7D0);
         func_800FE3EC();
     } else
-        param_0->local_1 = 1;
+        state->keep_track = 1;
 }
 
-param_0->local_3 = 1;
+state->unk_41 = 1;
 }
 
-void func_80800524_cothemedll(u8 *param_0, s32 param_1)
+void func_80800524_cothemedll(u8 *state, s32 flag)
 {
-    s16 local_0;
+    s16 track;
 
-if (param_1 != 0) {
+if (flag != 0) {
     func_800FC884();
 }
 
-local_0 = *(s16 *) (param_0 + 8);
+track = *(s16 *) (state + 8);
 
-if ((local_0 != -1) && (func_800FCCD4(local_0) == 0)) {
+if ((track != -1) && (func_800FCCD4(track) == 0)) {
     func_800FE89C();
 }
 
 }
 
-void cothemedll_entrypoint_5(u8 *param_0, s32 param_1, s32 param_2)
+void cothemedll_entrypoint_5(u8 *state, s32 unk_1, s32 unk_2)
 {
-    if (param_1 == 1) {
-        func_800FC348(-1, 0xFA0, 4, param_2);
+    if (unk_1 == 1) {
+        func_800FC348(-1, 0xFA0, 4, unk_2);
         func_800FECB8(2);
     }
 
-switch (param_2) {
+switch (unk_2) {
     case 1:
-        func_800FC348(0, 0xFA0, 4, param_2);
+        func_800FC348(0, 0xFA0, 4, unk_2);
         func_800FEC60(2);
         return;
     case 0:;
     case 2:
-        if (*(u8 *) ((s8 *) param_0 + 0xE) == 0) {
-            if (*(s16 *) ((s8 *) param_0 + 0xC) & 1) {
-                func_80800524_cothemedll(param_0, 0);
+        if (*(u8 *) ((s8 *) state + 0xE) == 0) {
+            if (*(s16 *) ((s8 *) state + 0xC) & 1) {
+                func_80800524_cothemedll(state, 0);
                 return;
             }
-            func_80800524_cothemedll(param_0, 1);
+            func_80800524_cothemedll(state, 1);
             return;
         }
-        *(u8 *) ((s8 *) param_0 + 0xE) = 0U;
+        *(u8 *) ((s8 *) state + 0xE) = 0U;
 }
 
 }
 
+// TU-NOTE: the overlay .data is defined here in C (values taken from the ROM). Linker symbols in
+// undefined_syms.us.txt: D_80800732_cothemedll = D_80800730_cothemedll + 0x2,
+// D_80800734_cothemedll = D_80800730_cothemedll + 0x4.
 ThemeEntry D_80800730_cothemedll[235] = {
     0xA1,  0x1ED, 0x0,   0xA2,  0x1ED, 0x0,   0xA3,  0x1ED, 0x0,   0xA4,  0x1ED, 0x0,   0xA5,
     0x1ED, 0x0,   0xA6,  0x1ED, 0x0,   0xA7,  0x1ED, 0x0,   0x18B, 0x1F4, 0x0,   0x193, -0x4,

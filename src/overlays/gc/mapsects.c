@@ -376,449 +376,467 @@ typedef struct {
     u8 count;
 } MapSectsData;
 
-void gcmapsects_entrypoint_0(s16 param_0, s16 param_1, f32 *param_2, f32 *param_3, f32 *param_4,
-                             f32 param_5)
+// Appends a section record with its AABB and bounding sphere.
+void gcmapsects_entrypoint_0(s16 opaque_model, s16 translucent_model, f32 *origin, f32 *box_min, f32 *box_max,
+                             f32 unk_0)
 {
-    MapSectionListInit50 *local_0;
-    s32 local_1;
-    local_0 = func_800BF704();
-    local_1 = local_0->local_3;
-    func_800EE7F8(local_0->local_1[local_1].local_0, param_2);
-    func_800EE7F8(local_0->local_1[local_1].local_1, param_3);
-    func_800EE7F8(local_0->local_1[local_1].local_2, param_4);
-    func_800EF3DC(local_0->local_1[local_1].local_1, D_808029B0_gcmapsects);
-    func_800EF04C(local_0->local_1[local_1].local_2, D_808029B0_gcmapsects);
-    func_800EE780(local_0->local_1[local_1].local_3, local_0->local_1[local_1].local_1,
-                  local_0->local_1[local_1].local_2);
-    func_800EF334(local_0->local_1[local_1].local_3, 0.5f);
-    local_0->local_1[local_1].local_4 =
-        func_800EEAD4(local_0->local_1[local_1].local_3, local_0->local_1[local_1].local_1);
-    local_0->local_1[local_1].local_7 = param_0;
-    local_0->local_1[local_1].local_8 = param_1;
-    local_0->local_1[local_1].local_6[0] = 255;
-    local_0->local_1[local_1].local_6[1] = 255;
-    local_0->local_1[local_1].local_6[2] = 255;
-    local_0->local_1[local_1].local_6[3] = 255;
-    local_0->local_1[local_1].local_6[4] = 255;
-    local_0->local_1[local_1].local_6[5] = 255;
-    local_0->local_1[local_1].local_6[6] = 255;
-    local_0->local_1[local_1].local_6[7] = 255;
-    local_0->local_1[local_1].local_11 = 0;
-    local_0->local_1[local_1].local_12 = 0;
-    local_0->local_1[local_1].local_13 = 0;
-    local_0->local_1[local_1].local_14 = 0;
-    local_0->local_1[local_1].local_15 = 1;
-    local_0->local_1[local_1].local_17 = 1;
-    local_0->local_1[local_1].local_9 = 0;
-    local_0->local_1[local_1].local_10 = 0;
-    local_0->local_1[local_1].local_5 = param_5;
-    local_0->local_1[local_1].local_19 = 0;
-    local_0->local_1[local_1].local_20 = 0;
-    local_0->local_3++;
+    MapSectionListInit50 *list;
+    s32 slot;
+    list = func_800BF704();
+    slot = list->local_3;
+    func_800EE7F8(list->local_1[slot].local_0, origin);
+    func_800EE7F8(list->local_1[slot].local_1, box_min);
+    func_800EE7F8(list->local_1[slot].local_2, box_max);
+    func_800EF3DC(list->local_1[slot].local_1, D_808029B0_gcmapsects);
+    func_800EF04C(list->local_1[slot].local_2, D_808029B0_gcmapsects);
+    func_800EE780(list->local_1[slot].local_3, list->local_1[slot].local_1,
+                  list->local_1[slot].local_2);
+    func_800EF334(list->local_1[slot].local_3, 0.5f);
+    list->local_1[slot].local_4 =
+        func_800EEAD4(list->local_1[slot].local_3, list->local_1[slot].local_1);
+    list->local_1[slot].local_7 = opaque_model;
+    list->local_1[slot].local_8 = translucent_model;
+    list->local_1[slot].local_6[0] = 255;
+    list->local_1[slot].local_6[1] = 255;
+    list->local_1[slot].local_6[2] = 255;
+    list->local_1[slot].local_6[3] = 255;
+    list->local_1[slot].local_6[4] = 255;
+    list->local_1[slot].local_6[5] = 255;
+    list->local_1[slot].local_6[6] = 255;
+    list->local_1[slot].local_6[7] = 255;
+    list->local_1[slot].local_11 = 0;
+    list->local_1[slot].local_12 = 0;
+    list->local_1[slot].local_13 = 0;
+    list->local_1[slot].local_14 = 0;
+    list->local_1[slot].local_15 = 1;
+    list->local_1[slot].local_17 = 1;
+    list->local_1[slot].local_9 = 0;
+    list->local_1[slot].local_10 = 0;
+    list->local_1[slot].local_5 = unk_0;
+    list->local_1[slot].local_19 = 0;
+    list->local_1[slot].local_20 = 0;
+    list->local_3++;
 }
 
-void func_80800250_gcmapsects(u8 *param_0, s32 param_1)
+// Creates the section's opaque and translucent textures from its model assets.
+void func_80800250_gcmapsects(u8 *manager, s32 sect_index)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    u16 local_4;
-    u16 local_5;
-    u8 *local_6;
-    local_1 = param_1 * 0x58;
-    local_6 = *(s32 *) ((s8 *) param_0 + 0x68) + local_1;
-    if (*(s32 *) ((s8 *) local_6 + 0x44) == 0) {
-        local_4 = *(u16 *) ((s8 *) local_6 + 0x40);
-        if (local_4 != 0) {
-            local_2 = func_800D674C(local_4 & 0xFFFFFFFF);
-            local_0 = local_2 ^ 0;
-            if (func_800B27FC(local_2) != 0) {
-                *(s32 *) ((s8 *) (*(s32 *) ((s8 *) param_0 + 0x68) + local_1) + 0x44) =
-                    _dbtex_entrypoint_0(func_800B27FC(local_0));
+    s32 asset;
+    s32 offset;
+    s32 opaque_asset;
+    s32 translucent_asset;
+    u16 opaque_id;
+    u16 translucent_id;
+    u8 *sect;
+    offset = sect_index * 0x58;
+    sect = *(s32 *) ((s8 *) manager + 0x68) + offset;
+    if (*(s32 *) ((s8 *) sect + 0x44) == 0) {
+        opaque_id = *(u16 *) ((s8 *) sect + 0x40);
+        if (opaque_id != 0) {
+            opaque_asset = func_800D674C(opaque_id & 0xFFFFFFFF);
+        // Matching: the `^ 0` is needed for the match.
+            asset = opaque_asset ^ 0;
+            if (func_800B27FC(opaque_asset) != 0) {
+                *(s32 *) ((s8 *) (*(s32 *) ((s8 *) manager + 0x68) + offset) + 0x44) =
+                    _dbtex_entrypoint_0(func_800B27FC(asset));
             }
-            func_800D6CEC(*(u16 *) ((s8 *) (*(s32 *) ((s8 *) param_0 + 0x68) + local_1) + 0x40));
-            local_6 = *(s32 *) ((s8 *) param_0 + 0x68) + local_1;
+            func_800D6CEC(*(u16 *) ((s8 *) (*(s32 *) ((s8 *) manager + 0x68) + offset) + 0x40));
+            sect = *(s32 *) ((s8 *) manager + 0x68) + offset;
         }
     }
-    if (*(s32 *) ((s8 *) local_6 + 0x48) == 0) {
-        local_5 = *(u16 *) ((s8 *) local_6 + 0x42);
-        if (local_5) {
-            local_3 = func_800D674C(local_5);
-            local_0 = local_3;
-            if (func_800B27FC(local_3) != 0) {
-                *(s32 *) ((s8 *) (*(s32 *) ((s8 *) param_0 + 0x68) + local_1) + 0x48) =
-                    _dbtex_entrypoint_0(func_800B27FC(local_0));
+    if (*(s32 *) ((s8 *) sect + 0x48) == 0) {
+        translucent_id = *(u16 *) ((s8 *) sect + 0x42);
+        if (translucent_id) {
+            translucent_asset = func_800D674C(translucent_id);
+            asset = translucent_asset;
+            if (func_800B27FC(translucent_asset) != 0) {
+                *(s32 *) ((s8 *) (*(s32 *) ((s8 *) manager + 0x68) + offset) + 0x48) =
+                    _dbtex_entrypoint_0(func_800B27FC(asset));
             }
-            func_800D6CEC(*(u16 *) ((s8 *) (*(s32 *) ((s8 *) param_0 + 0x68) + local_1) + 0x42));
+            func_800D6CEC(*(u16 *) ((s8 *) (*(s32 *) ((s8 *) manager + 0x68) + offset) + 0x42));
         }
     }
 }
 
-void func_8080035C_gcmapsects(MapSections *param_0, s32 param_1)
+// Frees the section's textures.
+void func_8080035C_gcmapsects(MapSections *manager, s32 sect_index)
 {
-    if (param_0->local_0[param_1].local_0) {
-        _dbtex_entrypoint_1(param_0->local_0[param_1].local_0);
-        param_0->local_0[param_1].local_0 = NULL;
+    if (manager->local_0[sect_index].local_0) {
+        _dbtex_entrypoint_1(manager->local_0[sect_index].local_0);
+        manager->local_0[sect_index].local_0 = NULL;
     }
-    if (param_0->local_0[param_1].local_1) {
-        _dbtex_entrypoint_1(param_0->local_0[param_1].local_1);
-        param_0->local_0[param_1].local_1 = NULL;
+    if (manager->local_0[sect_index].local_1) {
+        _dbtex_entrypoint_1(manager->local_0[sect_index].local_1);
+        manager->local_0[sect_index].local_1 = NULL;
     }
 }
 
-void func_808003F4_gcmapsects(MapSects *param_0, s32 param_1)
+// Unloads the section's model assets, streaming state and vertex instances.
+void func_808003F4_gcmapsects(MapSects *manager, s32 sect_index)
 {
-    s32 local_0;
-    u16 local_1;
+    s32 i;
+    u16 translucent_id;
 
-    param_0->sects[param_1].unk4C_29 = 0;
-    param_0->sects[param_1].unk4C_31 = 0;
-    if (param_0->sects[param_1].unk4C_28) {
-        func_800D70F8(param_0->sects[param_1].unk40, 0);
-        param_0->sects[param_1].unk4C_28 = 0;
+    manager->sects[sect_index].unk4C_29 = 0;
+    manager->sects[sect_index].unk4C_31 = 0;
+    if (manager->sects[sect_index].unk4C_28) {
+        func_800D70F8(manager->sects[sect_index].unk40, 0);
+        manager->sects[sect_index].unk4C_28 = 0;
     }
-    if (func_800D73CC(param_0->sects[param_1].unk40)) {
-        func_800D6CEC(param_0->sects[param_1].unk40);
+    if (func_800D73CC(manager->sects[sect_index].unk40)) {
+        func_800D6CEC(manager->sects[sect_index].unk40);
     }
-    local_1 = param_0->sects[param_1].unk42;
-    if (local_1 && func_800D73CC(local_1)) {
-        func_800D70F8(param_0->sects[param_1].unk42, 0);
-        func_800D6CEC(param_0->sects[param_1].unk42);
+    translucent_id = manager->sects[sect_index].unk42;
+    if (translucent_id && func_800D73CC(translucent_id)) {
+        func_800D70F8(manager->sects[sect_index].unk42, 0);
+        func_800D6CEC(manager->sects[sect_index].unk42);
     }
-    if (func_800E4AF0(param_0->sects[param_1].unk40)) {
-        func_800E4BB8(param_0->sects[param_1].unk40);
+    if (func_800E4AF0(manager->sects[sect_index].unk40)) {
+        func_800E4BB8(manager->sects[sect_index].unk40);
     }
-    for (local_0 = 0; local_0 < 2; local_0++) {
-        if (param_0->sects[param_1].unk50[local_0]) {
-            _idworldmake_entrypoint_2(param_0->sects[param_1].unk50[local_0]);
-            _glidmake_entrypoint_4(param_0->sects[param_1].unk50[local_0]);
-            param_0->sects[param_1].unk50[local_0] = 0;
+    for (i = 0; i < 2; i++) {
+        if (manager->sects[sect_index].unk50[i]) {
+            _idworldmake_entrypoint_2(manager->sects[sect_index].unk50[i]);
+            _glidmake_entrypoint_4(manager->sects[sect_index].unk50[i]);
+            manager->sects[sect_index].unk50[i] = 0;
         }
     }
 }
 
-void func_808005D0_gcmapsects(CodexMapSectionContext65 *param_0, s32 param_1, s32 param_2)
+// Creates or frees the section's vertex instances.
+void func_808005D0_gcmapsects(CodexMapSectionContext65 *manager, s32 sect_index, s32 model_asset)
 {
-    s32 local_0;
+    s32 i;
 
-    if (!param_2) {
-        for (local_0 = 0; local_0 < 2; local_0++) {
-            if (param_0->local_0[param_1].local_1[local_0]) {
-                _idworldmake_entrypoint_2(param_0->local_0[param_1].local_1[local_0]);
-                _glidmake_entrypoint_4(param_0->local_0[param_1].local_1[local_0]);
-                param_0->local_0[param_1].local_1[local_0] = 0;
+    if (!model_asset) {
+        for (i = 0; i < 2; i++) {
+            if (manager->local_0[sect_index].local_1[i]) {
+                _idworldmake_entrypoint_2(manager->local_0[sect_index].local_1[i]);
+                _glidmake_entrypoint_4(manager->local_0[sect_index].local_1[i]);
+                manager->local_0[sect_index].local_1[i] = 0;
             }
         }
     } else {
-        for (local_0 = 0; local_0 < 2; local_0++) {
-            if (param_0->local_0[param_1].local_0[local_0] && (param_0->local_1 & (1 << local_0)) &&
-                !param_0->local_0[param_1].local_1[local_0]) {
-                if (func_800B274C(local_0
-                                      ? func_800D674C(param_0->local_0[param_1].local_0[local_0])
-                                      : param_2)) {
-                    param_0->local_0[param_1].local_1[local_0] =
-                        _glidmake_entrypoint_5(param_0->local_0[param_1].local_0[local_0],
-                                               param_0->local_0[param_1].pad_0);
+        for (i = 0; i < 2; i++) {
+            if (manager->local_0[sect_index].local_0[i] && (manager->local_1 & (1 << i)) &&
+                !manager->local_0[sect_index].local_1[i]) {
+                if (func_800B274C(i
+                                      ? func_800D674C(manager->local_0[sect_index].local_0[i])
+                                      : model_asset)) {
+                    manager->local_0[sect_index].local_1[i] =
+                        _glidmake_entrypoint_5(manager->local_0[sect_index].local_0[i],
+                                               manager->local_0[sect_index].pad_0);
                 } else {
-                    param_0->local_0[param_1].local_1[local_0] = 0;
+                    manager->local_0[sect_index].local_1[i] = 0;
                 }
-                if (param_0->local_0[param_1].local_1[local_0]) {
-                    _idworldmake_entrypoint_0(param_0->local_0[param_1].local_1[local_0], 2);
+                if (manager->local_0[sect_index].local_1[i]) {
+                    _idworldmake_entrypoint_0(manager->local_0[sect_index].local_1[i], 2);
                 }
             }
         }
-        for (local_0 = 0; local_0 < 2; local_0++) {
-            if (param_0->local_0[param_1].local_1[local_0]) {
+        for (i = 0; i < 2; i++) {
+            if (manager->local_0[sect_index].local_1[i]) {
                 _glid_entrypoint_5(
-                    param_0->local_0[param_1].local_1[local_0],
-                    func_800B2840(local_0 ? func_800D674C(param_0->local_0[param_1].local_0[1])
-                                          : param_2));
+                    manager->local_0[sect_index].local_1[i],
+                    func_800B2840(i ? func_800D674C(manager->local_0[sect_index].local_0[1])
+                                          : model_asset));
             }
         }
     }
 }
 
-void gcmapsects_entrypoint_1(param_0, param_1) s16 param_0;
-s32 param_1;
+void gcmapsects_entrypoint_1(sect_index, flag) s16 sect_index;
+s32 flag;
 {
-    int new_var2;
-    u8 *temp_v1;
-    s8 *new_var;
-    new_var = (s8 *) func_800BF704() + 0x68;
-    temp_v1 = *(s32 *) new_var + (param_0 * 0x58);
-    *(u8 *) ((s8 *) temp_v1 + 0x4C) = (u8) ((*(u8 *) ((s8 *) temp_v1 + 0x4C) & 0xFFF7) |
-                                            ((new_var2 = (param_1 & 0xFFFFu) * 8) & 8));
+    // Matching: the temporary assigned inside the expression is needed for the match.
+    int shifted;
+    u8 *sect;
+    s8 *list_ptr;
+    list_ptr = (s8 *) func_800BF704() + 0x68;
+    sect = *(s32 *) list_ptr + (sect_index * 0x58);
+    *(u8 *) ((s8 *) sect + 0x4C) = (u8) ((*(u8 *) ((s8 *) sect + 0x4C) & 0xFFF7) |
+                                            ((shifted = (flag & 0xFFFFu) * 8) & 8));
 }
 
-void gcmapsects_entrypoint_2(param_0, param_1) s16 param_0;
-s32 param_1;
+void gcmapsects_entrypoint_2(sect_index, flag) s16 sect_index;
+s32 flag;
 {
-    short new_var2;
-    int new_var;
-    u8 *temp_v1;
-    temp_v1 = *(s32 *) ((s8 *) func_800BF704() + 0x68) + (param_0 * 0x58);
-    new_var2 = 0xFFFFu;
-    new_var = (*(u8 *) ((s8 *) temp_v1 + 0x4C) & 0xFFFFu) & new_var2;
-    *(u8 *) ((s8 *) temp_v1 + 0x4C) =
-        (u8) ((param_1 & 1) |
-              (((((((new_var & new_var2) & new_var2) & new_var2) & 0xFFFFu) & new_var2) &
-                new_var2) &
+    short mask16;
+    int flags;
+    u8 *sect;
+    sect = *(s32 *) ((s8 *) func_800BF704() + 0x68) + (sect_index * 0x58);
+    // Matching: the redundant masks below are needed for the match.
+    mask16 = 0xFFFFu;
+    flags = (*(u8 *) ((s8 *) sect + 0x4C) & 0xFFFFu) & mask16;
+    *(u8 *) ((s8 *) sect + 0x4C) =
+        (u8) ((flag & 1) |
+              (((((((flags & mask16) & mask16) & mask16) & 0xFFFFu) & mask16) &
+                mask16) &
                0xFFFE));
 }
 
-void gcmapsects_entrypoint_3(param_0, param_1) s16 param_0;
-s16 param_1;
+// Links two sections as neighbours (up to 4 links each, 0xFF = free slot).
+void gcmapsects_entrypoint_3(sect_a, sect_b) s16 sect_a;
+s16 sect_b;
 {
-    MapSectionNeighborList *local_0;
-    s32 local_1;
+    MapSectionNeighborList *list;
+    s32 i;
 
-    local_0 = func_800BF704();
-    for (local_1 = 0; local_1 < 4; local_1++) {
-        if (local_0->local_0[param_0].local_0[local_1] == 0xFF) {
-            local_0->local_0[param_0].local_0[local_1] = param_1;
+    list = func_800BF704();
+    for (i = 0; i < 4; i++) {
+        if (list->local_0[sect_a].local_0[i] == 0xFF) {
+            list->local_0[sect_a].local_0[i] = sect_b;
             break;
         }
     }
-    for (local_1 = 0; local_1 < 4; local_1++) {
-        if (local_0->local_0[param_1].local_0[local_1] == 0xFF) {
-            local_0->local_0[param_1].local_0[local_1] = param_0;
+    for (i = 0; i < 4; i++) {
+        if (list->local_0[sect_b].local_0[i] == 0xFF) {
+            list->local_0[sect_b].local_0[i] = sect_a;
             break;
         }
     }
 }
 
-void func_80800A08_gcmapsects(u8 *param_0, s32 param_1)
+// Loads and locks the model assets of the active sections.
+void func_80800A08_gcmapsects(u8 *manager, s32 load_all)
 {
-    s32 local_0 = 0;
-    s32 local_1;
-    u8 *local_2;
-    u16 local_3;
-    while (local_0 < param_0[0x77]) {
-        local_1 = local_0 * 88;
-        local_2 = *(u8 **) (param_0 + 0x68) + local_1;
-        if (((*(u32 *) (local_2 + 0x4C) << 2) >> 31) || param_1) {
-            local_3 = *(u16 *) (local_2 + 0x40);
-            if (local_3 && !func_800D73CC(local_3)) {
+    s32 i = 0;
+    s32 offset;
+    u8 *sect;
+    u16 model_id;
+    while (i < manager[0x77]) {
+        offset = i * 88;
+        sect = *(u8 **) (manager + 0x68) + offset;
+        if (((*(u32 *) (sect + 0x4C) << 2) >> 31) || load_all) {
+            model_id = *(u16 *) (sect + 0x40);
+            if (model_id && !func_800D73CC(model_id)) {
                 func_800D5B24();
-                func_800D674C(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_1 + 0x40));
-                func_800D70F8(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_1 + 0x40), 1);
-                ((MapSectionLoadedFlags1041 *) (*(u8 **) (param_0 + 0x68) + local_1))->local_0 = 1;
+                func_800D674C(*(u16 *) (*(u8 **) (manager + 0x68) + offset + 0x40));
+                func_800D70F8(*(u16 *) (*(u8 **) (manager + 0x68) + offset + 0x40), 1);
+                ((MapSectionLoadedFlags1041 *) (*(u8 **) (manager + 0x68) + offset))->local_0 = 1;
             }
-            local_3 = *(u16 *) (*(u8 **) (param_0 + 0x68) + local_1 + 0x42);
-            if (local_3 && !func_800D73CC(local_3)) {
+            model_id = *(u16 *) (*(u8 **) (manager + 0x68) + offset + 0x42);
+            if (model_id && !func_800D73CC(model_id)) {
                 func_800D5B24();
-                func_800D674C(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_1 + 0x42));
-                func_800D70F8(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_1 + 0x42), 1);
+                func_800D674C(*(u16 *) (*(u8 **) (manager + 0x68) + offset + 0x42));
+                func_800D70F8(*(u16 *) (*(u8 **) (manager + 0x68) + offset + 0x42), 1);
             }
         }
-        func_80800250_gcmapsects(param_0, local_0);
-        local_0++;
+        func_80800250_gcmapsects(manager, i);
+        i++;
     }
     if (!func_800DB9B0())
-        param_0[0x78] = 1;
+        manager[0x78] = 1;
 }
 
-void func_80800B58_gcmapsects(MapSectCollection *param_0)
+void func_80800B58_gcmapsects(MapSectCollection *manager)
 {
-    s32 local_0;
+    s32 i;
 
-    for (local_0 = 0; local_0 < param_0->local_1; local_0++) {
-        if (param_0->local_0[local_0].local_3 &&
-            !func_800D73CC(param_0->local_0[local_0].local_0)) {
-            if (func_800E488C(param_0->local_0[local_0].local_0)) {
-                func_800D674C(param_0->local_0[local_0].local_0);
-                func_800D70F8(param_0->local_0[local_0].local_0, 1);
-                param_0->local_0[local_0].local_4 = 1;
+    for (i = 0; i < manager->local_1; i++) {
+        if (manager->local_0[i].local_3 &&
+            !func_800D73CC(manager->local_0[i].local_0)) {
+            if (func_800E488C(manager->local_0[i].local_0)) {
+                func_800D674C(manager->local_0[i].local_0);
+                func_800D70F8(manager->local_0[i].local_0, 1);
+                manager->local_0[i].local_4 = 1;
             } else {
-                param_0->local_0[local_0].local_1 = 0;
-                param_0->local_0[local_0].local_2 = 0;
+                manager->local_0[i].local_1 = 0;
+                manager->local_0[i].local_2 = 0;
             }
         }
     }
 }
 
-int func_80800C54_gcmapsects(u8 *param_0)
+// Unloads all sections.
+int func_80800C54_gcmapsects(u8 *manager)
 {
-    s32 local_0;
-    u8 *local_1 = param_0;
-    for (local_0 = 0; local_0 < param_0[0x77]; local_0++) {
-        func_808003F4_gcmapsects(local_1, local_0);
-        func_8080035C_gcmapsects(local_1, local_0);
+    s32 i;
+    // Matching: the alias of the parameter is needed for the match.
+    u8 *map = manager;
+    for (i = 0; i < manager[0x77]; i++) {
+        func_808003F4_gcmapsects(map, i);
+        func_8080035C_gcmapsects(map, i);
     }
 }
 
-s32 gcmapsects_entrypoint_4(f32 *param_0)
+// Returns the index of the section whose AABB contains point, or -1.
+s32 gcmapsects_entrypoint_4(f32 *point)
 {
-    MapSectionBoundsList *local_0;
-    s32 local_1;
-    local_0 = func_800BF704();
-    if (!local_0->count)
+    MapSectionBoundsList *list;
+    s32 i;
+    list = func_800BF704();
+    if (!list->count)
         return -1;
-    for (local_1 = 0; local_1 < local_0->count; local_1++) {
-        if (func_800EFED0(local_0->sections[local_1].first, local_0->sections[local_1].second,
-                          param_0))
-            return local_1;
+    for (i = 0; i < list->count; i++) {
+        if (func_800EFED0(list->sections[i].first, list->sections[i].second,
+                          point))
+            return i;
     }
     return -1;
 }
 
-u32 gcmapsects_entrypoint_5(s32 param_0)
+u32 gcmapsects_entrypoint_5(s32 sect_index)
 {
-    u8 *local_0;
+    u8 *list;
 
-    if (param_0 == -1) {
+    if (sect_index == -1) {
         return 1U;
     }
-    local_0 = func_800BF704();
-    if (*(u8 *) ((s8 *) local_0 + 0x77) == 0) {
+    list = func_800BF704();
+    if (*(u8 *) ((s8 *) list + 0x77) == 0) {
         return 1U;
     }
-    return (u32) (*(s32 *) ((s8 *) (*(s32 *) ((s8 *) local_0 + 0x68) + (param_0 * 0x58)) + 0x4C) *
+    return (u32) (*(s32 *) ((s8 *) (*(s32 *) ((s8 *) list + 0x68) + (sect_index * 0x58)) + 0x4C) *
                   2) >>
            0x1F;
 }
 
-s32 func_80800DC8_gcmapsects(Mass43MapObject *param_0, s32 param_1, f32 *param_2)
+// Activates the section and its neighbours if the point is inside it; returns the index or -1.
+s32 func_80800DC8_gcmapsects(Mass43MapObject *map, s32 sect_index, f32 *point)
 {
-    s32 local_0;
+    s32 i;
 
-    if (func_800EFFB4(param_0->local_0[param_1].local_2, param_0->local_0[param_1].local_3,
-                      param_2) &&
-        func_800EFED0(param_0->local_0[param_1].local_0, param_0->local_0[param_1].local_1,
-                      param_2)) {
-        param_0->local_0[param_1].local_5 = 1;
-        param_0->local_0[param_1].local_7 = 1;
-        param_0->local_0[param_1].local_6 = 1;
-        if (param_0->local_0[param_1].local_8)
-            param_0->local_1 = 1;
-        if (param_0->local_0[param_1].local_9)
-            param_0->local_2 = 1;
-        for (local_0 = 0; local_0 < 4; local_0++) {
-            if (param_0->local_0[param_1].local_4[local_0] == 0xFF)
+    if (func_800EFFB4(map->local_0[sect_index].local_2, map->local_0[sect_index].local_3,
+                      point) &&
+        func_800EFED0(map->local_0[sect_index].local_0, map->local_0[sect_index].local_1,
+                      point)) {
+        map->local_0[sect_index].local_5 = 1;
+        map->local_0[sect_index].local_7 = 1;
+        map->local_0[sect_index].local_6 = 1;
+        if (map->local_0[sect_index].local_8)
+            map->local_1 = 1;
+        if (map->local_0[sect_index].local_9)
+            map->local_2 = 1;
+        for (i = 0; i < 4; i++) {
+            if (map->local_0[sect_index].local_4[i] == 0xFF)
                 break;
-            param_0->local_0[param_0->local_0[param_1].local_4[local_0]].local_5 = 1;
-            param_0->local_0[param_0->local_0[param_1].local_4[local_0]].local_7 = 1;
+            map->local_0[map->local_0[sect_index].local_4[i]].local_5 = 1;
+            map->local_0[map->local_0[sect_index].local_4[i]].local_7 = 1;
         }
-        return param_1;
+        return sect_index;
     }
     return -1;
 }
 
-s32 gcmapsects_entrypoint_6(MapSectionSearchList *param_0, f32 *param_1, f32 *param_2)
+s32 gcmapsects_entrypoint_6(MapSectionSearchList *map, f32 *point, f32 *out_value)
 {
-    f32 k0 = -1.0f;
-    s32 local_1;
-    s32 flag;
-    s32 idx;
-    f32 best;
-    f32 f;
-    flag = 1;
-    best = -1.0f;
-    idx = param_0->local_1;
-    if (idx != -1 &&
-        func_800EFED0(param_0->local_0[idx].local_0, param_0->local_0[idx].local_1, param_1)) {
-        flag = 0;
-        f = param_0->local_0[idx].local_4;
-        if (k0 != f && (best < f || best == -1.0f)) {
-            best = f;
+    f32 neg_one = -1.0f;
+    s32 i;
+    s32 search_all;
+    s32 cached_idx;
+    f32 best_value;
+    f32 section_value;
+    search_all = 1;
+    best_value = -1.0f;
+    cached_idx = map->local_1;
+    if (cached_idx != -1 &&
+        func_800EFED0(map->local_0[cached_idx].local_0, map->local_0[cached_idx].local_1, point)) {
+        search_all = 0;
+        section_value = map->local_0[cached_idx].local_4;
+        if (neg_one != section_value && (best_value < section_value || best_value == -1.0f)) {
+            best_value = section_value;
         }
     }
-    if (local_1) {
+    // Matching: the empty test reads the loop counter before it is initialised, which overlaps its live range with search_all.
+    if (i) {
     }
-    if (flag) {
-        for (local_1 = 0; local_1 < param_0->local_2; local_1++) {
-            if (func_800EFFB4(param_0->local_0[local_1].local_2, param_0->local_0[local_1].local_3,
-                              param_1) &&
-                func_800EFED0(param_0->local_0[local_1].local_0, param_0->local_0[local_1].local_1,
-                              param_1)) {
-                f = param_0->local_0[local_1].local_4;
-                if (k0 != f && (best < f || best == -1.0f)) {
-                    best = f;
+    if (search_all) {
+        for (i = 0; i < map->local_2; i++) {
+            if (func_800EFFB4(map->local_0[i].local_2, map->local_0[i].local_3,
+                              point) &&
+                func_800EFED0(map->local_0[i].local_0, map->local_0[i].local_1,
+                              point)) {
+                section_value = map->local_0[i].local_4;
+                if (neg_one != section_value && (best_value < section_value || best_value == -1.0f)) {
+                    best_value = section_value;
                 }
             }
         }
     }
-    if (best != -1.0f) {
-        if (best - 2000.0f < param_1[1] && param_1[1] < best + 2000.0f) {
+    if (best_value != -1.0f) {
+        if (best_value - 2000.0f < point[1] && point[1] < best_value + 2000.0f) {
             return 0;
         }
-        *param_2 = best;
+        *out_value = best_value;
         return 1;
     }
     return 0;
 }
 
-int func_80801174_gcmapsects(Mass43CullObject *param_0, s32 param_1)
+// Activates the section and its neighbours if it is inside the view frustum.
+int func_80801174_gcmapsects(Mass43CullObject *map, s32 sect_index)
 {
-    s32 local_0;
-    if (param_0->local_0[param_1].local_5)
+    s32 i;
+    if (map->local_0[sect_index].local_5)
         return 1;
-    if (func_800E3E8C(param_0->local_0[param_1].local_2, param_0->local_0[param_1].local_3) &&
-        func_800E3D0C(param_0->local_0[param_1].local_0, param_0->local_0[param_1].local_1)) {
-        param_0->local_0[param_1].local_5 = 1;
-        param_0->local_0[param_1].local_7 = 1;
+    if (func_800E3E8C(map->local_0[sect_index].local_2, map->local_0[sect_index].local_3) &&
+        func_800E3D0C(map->local_0[sect_index].local_0, map->local_0[sect_index].local_1)) {
+        map->local_0[sect_index].local_5 = 1;
+        map->local_0[sect_index].local_7 = 1;
 
-        if (param_0->local_0[param_1].local_8)
-            param_0->local_1 = 1;
-        if (param_0->local_0[param_1].local_9)
-            param_0->local_2 = 1;
-        for (local_0 = 0; local_0 < 4; local_0++) {
-            if (param_0->local_0[param_1].local_4[local_0] == 0xFF)
+        if (map->local_0[sect_index].local_8)
+            map->local_1 = 1;
+        if (map->local_0[sect_index].local_9)
+            map->local_2 = 1;
+        for (i = 0; i < 4; i++) {
+            if (map->local_0[sect_index].local_4[i] == 0xFF)
                 break;
-            param_0->local_0[param_0->local_0[param_1].local_4[local_0]].local_5 = 1;
-            param_0->local_0[param_0->local_0[param_1].local_4[local_0]].local_7 = 1;
+            map->local_0[map->local_0[sect_index].local_4[i]].local_5 = 1;
+            map->local_0[map->local_0[sect_index].local_4[i]].local_7 = 1;
         }
         return 1;
     }
     return 0;
 }
 
-s32 func_80801320_gcmapsects(MapSectionActivationList *param_0, s32 param_1, f32 *param_2)
+// Activates the section if the point is inside its bounding sphere.
+s32 func_80801320_gcmapsects(MapSectionActivationList *map, s32 sect_index, f32 *point)
 {
-    if (param_0->local_0[param_1].local_2) {
+    if (map->local_0[sect_index].local_2) {
         return 1;
     }
-    if (func_800EFFB4(param_0->local_0[param_1].local_0, param_0->local_0[param_1].local_1,
-                      param_2)) {
-        param_0->local_0[param_1].local_3 = 1;
-        param_0->local_0[param_1].local_2 = 1;
+    if (func_800EFFB4(map->local_0[sect_index].local_0, map->local_0[sect_index].local_1,
+                      point)) {
+        map->local_0[sect_index].local_3 = 1;
+        map->local_0[sect_index].local_2 = 1;
         return 1;
     }
     return 0;
 }
 
-void func_808013C0_gcmapsects(MapSectionState *param_0, s32 param_1)
+void func_808013C0_gcmapsects(MapSectionState *map, s32 sect_index)
 {
-    s32 local_0;
-    u8 local_1;
-    if (param_0->local_0[param_1].local_2) {
-        for (local_0 = 0; local_0 < 4; local_0++) {
-            local_1 = param_0->local_0[param_1].local_0[local_0];
-            if (local_1 == 0xFF)
+    s32 i;
+    u8 neighbor;
+    if (map->local_0[sect_index].local_2) {
+        for (i = 0; i < 4; i++) {
+            neighbor = map->local_0[sect_index].local_0[i];
+            if (neighbor == 0xFF)
                 break;
-            param_0->local_0[local_1].local_1 = 0;
+            map->local_0[neighbor].local_1 = 0;
         }
     }
 }
 
-s32 gcmapsects_entrypoint_7(f32 *param_0)
+// Returns the index of the section containing point (last found section first), or -1.
+s32 gcmapsects_entrypoint_7(f32 *point)
 {
-    MapSectionSearchList *local_0;
-    s32 local_1;
+    MapSectionSearchList *map;
+    s32 i;
 
-    local_0 = func_800BF704();
-    local_1 = local_0->local_1;
-    if (local_1 != -1 && func_800EFED0(local_0->local_0[local_1].local_0,
-                                       local_0->local_0[local_1].local_1, param_0)) {
-        return local_1;
+    map = func_800BF704();
+    i = map->local_1;
+    if (i != -1 && func_800EFED0(map->local_0[i].local_0,
+                                       map->local_0[i].local_1, point)) {
+        return i;
     }
-    for (local_1 = 0; local_1 < local_0->local_2; local_1++) {
-        if (func_800EFFB4(local_0->local_0[local_1].local_2, local_0->local_0[local_1].local_3,
-                          param_0) &&
-            func_800EFED0(local_0->local_0[local_1].local_0, local_0->local_0[local_1].local_1,
-                          param_0)) {
-            return local_1;
+    for (i = 0; i < map->local_2; i++) {
+        if (func_800EFFB4(map->local_0[i].local_2, map->local_0[i].local_3,
+                          point) &&
+            func_800EFED0(map->local_0[i].local_0, map->local_0[i].local_1,
+                          point)) {
+            return i;
         }
     }
     return -1;
@@ -829,82 +847,83 @@ s32 gcmapsects_entrypoint_8(Actor *this)
     this->unk78 = 0;
 }
 
-void func_80801554_gcmapsects(u8 *param_0)
+// Activates sections from the player position.
+void func_80801554_gcmapsects(u8 *map)
 {
-    s32 local_0;
-    f32 local_3[3];
-    s32 local_1;
-    s32 local_2;
+    s32 i;
+    f32 player_pos[3];
+    s32 found;
+    s32 result;
 
-    func_8008FE68(local_3);
+    func_8008FE68(player_pos);
     if (func_80090128()) {
-        if (!param_0[0x80]) {
-            local_1 = -1;
-            for (local_0 = 0; local_0 < param_0[0x77]; local_0++) {
-                local_2 = func_80800DC8_gcmapsects(param_0, local_0, local_3);
-                if (local_2 != -1) {
-                    local_1 = local_2;
+        if (!map[0x80]) {
+            found = -1;
+            for (i = 0; i < map[0x77]; i++) {
+                result = func_80800DC8_gcmapsects(map, i, player_pos);
+                if (result != -1) {
+                    found = result;
                 }
             }
-            *(s16 *) (param_0 + 0x74) = local_1;
-            param_0[0x82] = 1;
+            *(s16 *) (map + 0x74) = found;
+            map[0x82] = 1;
         } else {
-            for (local_0 = 0; local_0 < param_0[0x77]; local_0++) {
-                func_80801320_gcmapsects(param_0, local_0, local_3);
+            for (i = 0; i < map[0x77]; i++) {
+                func_80801320_gcmapsects(map, i, player_pos);
             }
         }
     }
 }
 
-void func_80801640_gcmapsects(param_0) u8 *param_0;
+void func_80801640_gcmapsects(map) u8 *map;
 {
-    s32 var_s0;
-    f32 sp30[3];
-    s32 var_s0_2;
+    s32 i;
+    f32 pos[3];
+    s32 j;
 
-    func_800E3980(sp30);
+    func_800E3980(pos);
 
-if (*(u8 *) ((char *) param_0 + 0x80) == 0) {
-    var_s0 = 0;
-    if ((s32) *(u8 *) ((char *) param_0 + 0x77) > 0) {
+if (*(u8 *) ((char *) map + 0x80) == 0) {
+    i = 0;
+    if ((s32) *(u8 *) ((char *) map + 0x77) > 0) {
         do {
-            func_80800DC8_gcmapsects(param_0, var_s0, sp30);
-            var_s0 += 1;
-        } while (var_s0 < (s32) *(u8 *) ((char *) param_0 + 0x77));
+            func_80800DC8_gcmapsects(map, i, pos);
+            i += 1;
+        } while (i < (s32) *(u8 *) ((char *) map + 0x77));
     }
 } else {
 
-var_s0_2 = 0;
+j = 0;
 
-if ((s32) *(u8 *) ((char *) param_0 + 0x77) > 0) {
+if ((s32) *(u8 *) ((char *) map + 0x77) > 0) {
     do {
-        func_80801174_gcmapsects(param_0, var_s0_2);
-        func_80801320_gcmapsects(param_0, var_s0_2, sp30);
-        var_s0_2 += 1;
-    } while (var_s0_2 < (s32) *(u8 *) ((char *) param_0 + 0x77));
-    var_s0_2 = 0;
+        func_80801174_gcmapsects(map, j);
+        func_80801320_gcmapsects(map, j, pos);
+        j += 1;
+    } while (j < (s32) *(u8 *) ((char *) map + 0x77));
+    j = 0;
 }
 
-if ((s32) *(u8 *) ((char *) param_0 + 0x77) > 0) {
+if ((s32) *(u8 *) ((char *) map + 0x77) > 0) {
     do {
-        func_808013C0_gcmapsects(param_0, var_s0_2);
-        var_s0_2 += 1;
-    } while (var_s0_2 < (s32) *(u8 *) ((char *) param_0 + 0x77));
+        func_808013C0_gcmapsects(map, j);
+        j += 1;
+    } while (j < (s32) *(u8 *) ((char *) map + 0x77));
 }
 
 }
 }
 
-void func_80801724_gcmapsects(u8 *param_0, s32 param_1)
+void func_80801724_gcmapsects(u8 *map, s32 mode)
 {
-    switch (param_0[0x7F]) {
+    switch (map[0x7F]) {
         case 1:
             break;
         case 2:
             func_800F4CC0(func_800F54E4());
     }
-    param_0[0x7F] = param_1;
-    switch (param_0[0x7F]) {
+    map[0x7F] = mode;
+    switch (map[0x7F]) {
         case 1:
             break;
         case 2:
@@ -912,165 +931,170 @@ void func_80801724_gcmapsects(u8 *param_0, s32 param_1)
     }
 }
 
-void gcmapsects_entrypoint_9(MapSectionListUpdate50 *param_0)
+// Per-frame update.
+void gcmapsects_entrypoint_9(MapSectionListUpdate50 *map)
 {
-    s32 local_0;
-    param_0->local_8 = param_0->local_6;
-    param_0->local_11 = param_0->local_10;
-    for (local_0 = 0; local_0 < param_0->local_4; local_0++) {
-        param_0->local_1[local_0].local_3 = 0;
-        param_0->local_1[local_0].local_4 = 0;
-        param_0->local_1[local_0].local_7 = param_0->local_1[local_0].local_5;
-        param_0->local_1[local_0].local_5 = param_0->local_14;
+    s32 i;
+    map->local_8 = map->local_6;
+    map->local_11 = map->local_10;
+    for (i = 0; i < map->local_4; i++) {
+        map->local_1[i].local_3 = 0;
+        map->local_1[i].local_4 = 0;
+        map->local_1[i].local_7 = map->local_1[i].local_5;
+        map->local_1[i].local_5 = map->local_14;
     }
-    switch (param_0->local_12) {
+    switch (map->local_12) {
         case 1:
             if (func_800DB9B0())
-                func_80801724_gcmapsects(param_0, 2);
+                func_80801724_gcmapsects(map, 2);
             break;
         case 2:
             if (!func_800DB9B0())
-                func_80801724_gcmapsects(param_0, 1);
+                func_80801724_gcmapsects(map, 1);
             break;
     }
-    switch (param_0->local_12) {
+    switch (map->local_12) {
         case 1:
-            func_80801554_gcmapsects(param_0);
-            func_80801640_gcmapsects(param_0);
+            func_80801554_gcmapsects(map);
+            func_80801640_gcmapsects(map);
             break;
         case 2:
-            param_0->local_5 = 0;
+            map->local_5 = 0;
     }
-    if (param_0->local_2)
-        param_0->local_2(param_0);
-    for (local_0 = 0; local_0 < param_0->local_4; local_0++) {
-        if (!param_0->local_1[local_0].local_5)
-            func_808003F4_gcmapsects(param_0, local_0);
+    if (map->local_2)
+        map->local_2(map);
+    for (i = 0; i < map->local_4; i++) {
+        if (!map->local_1[i].local_5)
+            func_808003F4_gcmapsects(map, i);
     }
-    if (!param_0->local_5)
-        func_80800A08_gcmapsects(param_0, param_0->local_14);
+    if (!map->local_5)
+        func_80800A08_gcmapsects(map, map->local_14);
     else
-        func_80800B58_gcmapsects(param_0);
-    for (local_0 = 0; local_0 < param_0->local_4; local_0++) {
-        if (param_0->local_1[local_0].local_5)
-            func_808005D0_gcmapsects(param_0, local_0,
-                                     func_800D6B0C(param_0->local_1[local_0].local_1));
+        func_80800B58_gcmapsects(map);
+    for (i = 0; i < map->local_4; i++) {
+        if (map->local_1[i].local_5)
+            func_808005D0_gcmapsects(map, i,
+                                     func_800D6B0C(map->local_1[i].local_1));
     }
 }
 
-void gcmapsects_entrypoint_10(s32 param_0)
+void gcmapsects_entrypoint_10(s32 count)
 {
-    u8 *temp_v0;
-    u8 *sp1C;
+    u8 *map;
+    u8 *map_alias;
 
-    temp_v0 = func_800BF704();
-    if (param_0 != 0) {
-        (*(s8 *) ((s8 *) (temp_v0) + (0x76))) = (s8) param_0;
-        sp1C = temp_v0;
-        (*(s32 *) ((s8 *) (sp1C) + (0x68))) = heap_alloc((param_0 & 0xFF) * 0x58, param_0);
+    map = func_800BF704();
+    if (count != 0) {
+        (*(s8 *) ((s8 *) (map) + (0x76))) = (s8) count;
+        // Matching: the extra pointer copy is needed for the match.
+        map_alias = map;
+        (*(s32 *) ((s8 *) (map_alias) + (0x68))) = heap_alloc((count & 0xFF) * 0x58, count);
     }
 }
 
-void gcmapsects_entrypoint_11(void *param_0, s32 param_1)
+void gcmapsects_entrypoint_11(void *unk_0, s32 unk_1)
 {
-    u8 *v0;
-    v0 = func_800BF704();
-    v0[0x79] = (s8) param_0;
-    v0[0x7D] = (s8) param_1;
+    u8 *map;
+    map = func_800BF704();
+    map[0x79] = (s8) unk_0;
+    map[0x7D] = (s8) unk_1;
 }
 
-void gcmapsects_entrypoint_12(s32 param_0)
+void gcmapsects_entrypoint_12(s32 unk_0)
 {
-    *(s32 *) ((char *) func_800BF704() + 0x6C) = param_0;
+    *(s32 *) ((char *) func_800BF704() + 0x6C) = unk_0;
 }
 
-void gcmapsects_entrypoint_13(s32 param_0)
+void gcmapsects_entrypoint_13(s32 unk_0)
 {
-    s32 local_0;
+    s32 map;
 
-    local_0 = func_800BF704();
-    *(u8 *) (local_0 + 0x80) = param_0;
+    map = func_800BF704();
+    *(u8 *) (map + 0x80) = unk_0;
 }
 
-void gcmapsects_entrypoint_14(s32 arg0)
+void gcmapsects_entrypoint_14(s32 unk_0)
 {
-    s8 *local_0 = func_800BF704();
-    local_0[0x81] = (s8) arg0;
+    s8 *map = func_800BF704();
+    map[0x81] = (s8) unk_0;
 }
 
-void gcmapsects_entrypoint_15(MapSectorManager1358 *param_0)
+// Init; only the Jolly Roger's Lagoon maps (0x1A7-0x1A9) set up sections.
+void gcmapsects_entrypoint_15(MapSectorManager1358 *map)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 i;
+    s32 map_id;
 
-    param_0->local_0 = NULL;
-    param_0->local_5 = 0;
-    param_0->local_4 = 0;
-    param_0->local_6 = 0;
-    param_0->local_10 = 0;
-    param_0->local_9 = 1;
-    param_0->local_12 = 1;
-    param_0->local_8 = 1;
-    param_0->local_13 = 3;
-    param_0->local_3 = -1;
-    param_0->local_16 = 0;
-    param_0->local_1 = 0;
-    param_0->local_7 = 0;
-    param_0->local_11 = 0;
-    param_0->local_14 = 0;
-    param_0->local_15 = 0;
-    param_0->local_2 = 0.0f;
-    local_1 = func_800EA05C();
-    switch (local_1) {
+    map->local_0 = NULL;
+    map->local_5 = 0;
+    map->local_4 = 0;
+    map->local_6 = 0;
+    map->local_10 = 0;
+    map->local_9 = 1;
+    map->local_12 = 1;
+    map->local_8 = 1;
+    map->local_13 = 3;
+    map->local_3 = -1;
+    map->local_16 = 0;
+    map->local_1 = 0;
+    map->local_7 = 0;
+    map->local_11 = 0;
+    map->local_14 = 0;
+    map->local_15 = 0;
+    map->local_2 = 0.0f;
+    map_id = func_800EA05C();
+    switch (map_id) {
         case 0x1A7:
             _gcmapsects_lagoontop_entrypoint_0();
-            param_0->local_17 = 1;
+            map->local_17 = 1;
             break;
         case 0x1A8:
             _gcmapsects_lagoonmid_entrypoint_0();
-            param_0->local_17 = 1;
+            map->local_17 = 1;
             break;
         case 0x1A9:
             _gcmapsects_lagoonbot_entrypoint_0();
-            param_0->local_17 = 1;
+            map->local_17 = 1;
     }
-    if (param_0->local_5) {
-        func_80801724_gcmapsects(param_0, 1);
+    if (map->local_5) {
+        func_80801724_gcmapsects(map, 1);
     }
-    for (local_0 = 0; local_0 < param_0->local_5; local_0++) {
-        param_0->local_0[local_0].local_0 = 0;
-        param_0->local_0[local_0].local_1 = 1;
-        param_0->local_0[local_0].local_3 = param_0->local_0[local_0].local_2;
-        param_0->local_0[local_0].local_2 = param_0->local_17;
+    for (i = 0; i < map->local_5; i++) {
+        map->local_0[i].local_0 = 0;
+        map->local_0[i].local_1 = 1;
+        map->local_0[i].local_3 = map->local_0[i].local_2;
+        map->local_0[i].local_2 = map->local_17;
     }
-    func_80800A08_gcmapsects(param_0, param_0->local_17);
+    func_80800A08_gcmapsects(map, map->local_17);
 }
 
-void gcmapsects_entrypoint_16(u8 *param_0)
+// Frees all sections.
+void gcmapsects_entrypoint_16(u8 *map)
 {
-    if (param_0[0x77] || param_0[0x76]) {
-        func_80800C54_gcmapsects(param_0);
-        heap_free(*(void **) (param_0 + 0x68));
-        *(void **) (param_0 + 0x68) = NULL;
-        param_0[0x77] = 0;
-        param_0[0x76] = 0;
-        param_0[0x78] = 0;
-        param_0[0x7B] = 1;
-        param_0[0x7E] = 1;
-        param_0[0x7C] = 0;
-        param_0[0x7F] = 3;
-        *(f32 *) (param_0 + 0x70) = 0.0f;
+    if (map[0x77] || map[0x76]) {
+        func_80800C54_gcmapsects(map);
+        heap_free(*(void **) (map + 0x68));
+        *(void **) (map + 0x68) = NULL;
+        map[0x77] = 0;
+        map[0x76] = 0;
+        map[0x78] = 0;
+        map[0x7B] = 1;
+        map[0x7E] = 1;
+        map[0x7C] = 0;
+        map[0x7F] = 3;
+        *(f32 *) (map + 0x70) = 0.0f;
 
 }
 }
 
-void gcmapsects_entrypoint_17(u8 *param_0)
+void gcmapsects_entrypoint_17(u8 *map)
 {
-    s8 *new_var;
+    s8 *map_alias;
     func_80801640_gcmapsects();
-    new_var = (s8 *) param_0;
-    if (*(u8 *) ((s8 *) param_0 + 0x7A) != *(u8 *) ((s8 *) param_0 + 0x7B)) {
-        if (*(u8 *) ((s8 *) param_0 + 0x7B) != 0) {
+    // Matching: the alias of the parameter is needed for the match.
+    map_alias = (s8 *) map;
+    if (*(u8 *) ((s8 *) map + 0x7A) != *(u8 *) ((s8 *) map + 0x7B)) {
+        if (*(u8 *) ((s8 *) map + 0x7B) != 0) {
             func_800BFF4C();
         }
 
@@ -1078,337 +1102,342 @@ else
 {
     func_800BFF28();
 }
-*((u8 *) (((s8 *) param_0) + 0x7A)) = (u8) (*((u8 *) (((s8 *) param_0) + 0x7B)));
+*((u8 *) (((s8 *) map) + 0x7A)) = (u8) (*((u8 *) (((s8 *) map) + 0x7B)));
 
 }
-func_800BF4DC(1, *(u8 *) (new_var + 0x7E), param_0);
+func_800BF4DC(1, *(u8 *) (map_alias + 0x7E), map);
 }
 
-void gcmapsects_entrypoint_18(MapSectionRenderList *param_0, s32 param_1)
+// Draws the opaque section models.
+void gcmapsects_entrypoint_18(MapSectionRenderList *map, s32 unk_0)
 {
-    s32 local_0;
-    void *local_1;
-    void *local_2;
-    s32 local_3;
-    u8 local_4;
+    s32 i;
+    void *model;
+    void *model_data;
+    s32 model_id;
+    u8 unk_1;
 
-    for (local_0 = 0; local_0 < param_0->local_1; local_0++) {
-        if (!param_0->local_0[local_0].local_3) {
+    for (i = 0; i < map->local_1; i++) {
+        if (!map->local_0[i].local_3) {
             continue;
         }
 
-local_3 = param_0->local_0[local_0].local_0;
+model_id = map->local_0[i].local_0;
 
-if (!local_3) {
+if (!model_id) {
     continue;
 }
 
-local_1 = func_800D674C(local_3);
+model = func_800D674C(model_id);
 
-if (!local_1) {
+if (!model) {
     continue;
 }
 
-local_2 = func_800B2840(local_1);
+model_data = func_800B2840(model);
 func_800BF774();
 func_800DF830(1);
-local_4 = func_800D731C(local_3);
+unk_1 = func_800D731C(model_id);
 
-if (local_4) {
-    func_800DF7E8(local_4);
+if (unk_1) {
+    func_800DF7E8(unk_1);
 }
 
-func_800DF7DC(param_0->local_0[local_0].local_2);
-func_800DF818(local_2);
+func_800DF7DC(map->local_0[i].local_2);
+func_800DF818(model_data);
 func_800DF440(0);
 func_800DF428(29999.0f);
 func_800DF4B0(2);
 
-if (!func_800DE448(&param_0->local_0[local_0], 0, 1.0f, 0, local_1)) {
-    func_800D62E4(param_0->local_0[local_0].local_0);
+if (!func_800DE448(&map->local_0[i], 0, 1.0f, 0, model)) {
+    func_800D62E4(map->local_0[i].local_0);
 }
 
 }
 }
 
-void gcmapsects_entrypoint_19(MapSectsData *param_0, s32 param_1)
+// Draws the translucent section models.
+void gcmapsects_entrypoint_19(MapSectsData *map, s32 unk_0)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    u16 local_3;
+    s32 i;
+    s32 model;
+    s32 model_data;
+    u16 model_id;
 
-    for (local_0 = 0; local_0 < param_0->count; local_0++) {
-        if (!param_0->sects[local_0].unk4C_31) {
+    for (i = 0; i < map->count; i++) {
+        if (!map->sects[i].unk4C_31) {
             continue;
         }
 
-local_3 = param_0->sects[local_0].model;
+model_id = map->sects[i].model;
 
-if (!local_3) {
+if (!model_id) {
     continue;
 }
 
-local_1 = func_800D674C(local_3);
+model = func_800D674C(model_id);
 
-if (local_1 == 0) {
+if (model == 0) {
     continue;
 }
 
-local_2 = func_800B2840(local_1);
+model_data = func_800B2840(model);
 func_800BF774();
 func_800DF830(2);
 func_800DF440(0);
 func_800DF428(29999.0f);
-func_800DF7DC(param_0->sects[local_0].unk48);
-func_800DF818(local_2);
+func_800DF7DC(map->sects[i].unk48);
+func_800DF818(model_data);
 func_800DF4B0(2);
 
-if (!func_800DE448(&param_0->sects[local_0], 0, 1.0f, 0, local_1)) {
-    func_800D62E4(param_0->sects[local_0].model);
+if (!func_800DE448(&map->sects[i], 0, 1.0f, 0, model)) {
+    func_800D62E4(map->sects[i].model);
 }
 
 }
 }
 
-s32 gcmapsects_entrypoint_20(MapSectionRenderList *param_0, void *param_1, void *param_2,
-                             s32 param_3, s32 param_4, f32 param_5)
+s32 gcmapsects_entrypoint_20(MapSectionRenderList *map, void *unk_0, void *unk_1,
+                             s32 unk_2, s32 unk_3, f32 unk_4)
 {
-    void *local_1;
-    void *local_2;
-    s32 local_0;
+    void *model;
+    void *geo;
+    s32 i;
 
-    for (local_0 = 0; local_0 < param_0->local_1; local_0++) {
-        if (param_0->local_0[local_0].local_1) {
-            local_1 = func_800D674C(param_0->local_0[local_0].local_0);
-            local_2 = func_800B2720(local_1);
-            return func_800AD2C8(local_2, func_800B2840(local_1), param_1, param_2,
-                                 &param_0->local_0[local_0], param_3, param_4, param_5);
+    for (i = 0; i < map->local_1; i++) {
+        if (map->local_0[i].local_1) {
+            model = func_800D674C(map->local_0[i].local_0);
+            geo = func_800B2720(model);
+            return func_800AD2C8(geo, func_800B2840(model), unk_0, unk_1,
+                                 &map->local_0[i], unk_2, unk_3, unk_4);
         }
 
 }
 return 0;
 }
 
-int gcmapsects_entrypoint_21(u8 *param_0, f32 *param_1, f32 *param_2, void *param_3, f32 param_4)
+int gcmapsects_entrypoint_21(u8 *map, f32 *unk_0, f32 *unk_1, void *unk_2, f32 unk_3)
 {
-    s32 local_3;
-    s32 local_4;
-    int local_0;
-    int local_1;
-    u8 *local_5;
-    int local_2;
+    s32 model;
+    s32 geo;
+    int count;
+    int i;
+    u8 *sect;
+    int offset;
 
-    local_0 = param_0[0x77];
-    local_1 = 0;
-    local_2 = 0;
-    if (local_0 > 0) {
-        local_5 = *(u8 **) (param_0 + 0x68);
+    count = map[0x77];
+    i = 0;
+    offset = 0;
+    if (count > 0) {
+        sect = *(u8 **) (map + 0x68);
         do {
-            if (((MapSectCollisionQueryFlags *) (local_5 + 0x4C))->local_0) {
-                local_3 = func_800D674C(*(u16 *) (local_5 + 0x40));
-                local_4 = func_800B2720(local_3);
-                return func_800AD894(local_4, func_800B2840(local_3), param_1, param_2, param_3,
-                                     (f32 *) (*(u8 **) (param_0 + 0x68) + local_2), param_4);
+            if (((MapSectCollisionQueryFlags *) (sect + 0x4C))->local_0) {
+                model = func_800D674C(*(u16 *) (sect + 0x40));
+                geo = func_800B2720(model);
+                return func_800AD894(geo, func_800B2840(model), unk_0, unk_1, unk_2,
+                                     (f32 *) (*(u8 **) (map + 0x68) + offset), unk_3);
             }
-            local_1++;
-            local_2 += 0x58;
-            local_5 += 0x58;
-        } while (local_1 < param_0[0x77]);
+            i++;
+            offset += 0x58;
+            sect += 0x58;
+        } while (i < map[0x77]);
     }
     return 0;
 }
 
-s32 gcmapsects_entrypoint_22(u8 *param_0, void *param_1, void *param_2, void *param_3, s32 param_4)
+s32 gcmapsects_entrypoint_22(u8 *map, void *unk_0, void *unk_1, void *unk_2, s32 flags)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    u8 *local_3;
-    void *local_4;
-    void *local_5;
-    void *local_6;
+    s32 result;
+    s32 i;
+    s32 offset;
+    u8 *sect;
+    void *model;
+    void *geo;
+    void *trans_geo;
 
-    local_0 = 0;
-    if (param_0[0x77] == 0) {
+    result = 0;
+    if (map[0x77] == 0) {
         return 0;
     }
     func_800BEB58(0);
-    local_1 = 0;
-    if (local_1 < param_0[0x77]) {
-        local_2 = 0;
+    i = 0;
+    if (i < map[0x77]) {
+        offset = 0;
         do {
-            local_3 = *(u8 **) (param_0 + 0x68) + local_2;
-            if (((MapSectFlags *) local_3)->local_0) {
-                local_4 = func_800D674C(*(u16 *) (local_3 + 0x40));
-                if (local_4) {
-                    func_800D62E4(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_2 + 0x40));
-                    if ((param_4 & 0x1F00) == 0x1F00) {
-                        local_0 = 0;
+            sect = *(u8 **) (map + 0x68) + offset;
+            if (((MapSectFlags *) sect)->local_0) {
+                model = func_800D674C(*(u16 *) (sect + 0x40));
+                if (model) {
+                    func_800D62E4(*(u16 *) (*(u8 **) (map + 0x68) + offset + 0x40));
+                    if ((flags & 0x1F00) == 0x1F00) {
+                        result = 0;
                     } else {
-                        local_5 = func_800B2720(local_4);
-                        local_0 = func_800AB868(local_5, (void *) func_800B2840(local_4),
-                                                *(u8 **) (param_0 + 0x68) + local_2, 0, 1.0f,
-                                                param_1, param_2, param_3, param_4);
+                        geo = func_800B2720(model);
+                        result = func_800AB868(geo, (void *) func_800B2840(model),
+                                                *(u8 **) (map + 0x68) + offset, 0, 1.0f,
+                                                unk_0, unk_1, unk_2, flags);
                     }
-                    if (local_0) {
-                        func_800BEB58(local_4);
-                        return local_0;
+                    if (result) {
+                        func_800BEB58(model);
+                        return result;
                     }
-                    if (*(u16 *) (*(u8 **) (param_0 + 0x68) + local_2 + 0x42)) {
-                        local_4 =
-                            func_800D674C(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_2 + 0x42));
-                        func_800D62E4(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_2 + 0x42));
-                        local_6 = func_800B2720(local_4);
-                        if (local_6) {
-                            local_0 = func_800AB868(local_6, func_800B2840(local_4),
-                                                    *(u8 **) (param_0 + 0x68) + local_2, 0, 1.0f,
-                                                    param_1, param_2, param_3, param_4);
+                    if (*(u16 *) (*(u8 **) (map + 0x68) + offset + 0x42)) {
+                        model =
+                            func_800D674C(*(u16 *) (*(u8 **) (map + 0x68) + offset + 0x42));
+                        func_800D62E4(*(u16 *) (*(u8 **) (map + 0x68) + offset + 0x42));
+                        trans_geo = func_800B2720(model);
+                        if (trans_geo) {
+                            result = func_800AB868(trans_geo, func_800B2840(model),
+                                                    *(u8 **) (map + 0x68) + offset, 0, 1.0f,
+                                                    unk_0, unk_1, unk_2, flags);
                         }
                     }
                 }
             }
-            local_1++;
-            local_2 += 0x58;
-        } while (local_1 < param_0[0x77]);
+            i++;
+            offset += 0x58;
+        } while (i < map[0x77]);
     }
-    return local_0;
+    return result;
 }
 
-s32 gcmapsects_entrypoint_23(u8 *param_0, s32 param_1, s32 param_2, f32 param_3, s32 param_4,
-                             s32 param_5, s32 param_6)
+s32 gcmapsects_entrypoint_23(u8 *map, s32 unk_0, s32 unk_1, f32 unk_2, s32 unk_3,
+                             s32 unk_4, s32 unk_5)
 {
-    s32 local_0;
-    s32 local_1;
-    void *local_2;
-    s32 local_3;
-    s32 local_4;
-    u8 *local_5;
-    local_3 = 0;
-    if (param_0[0x77] == 0)
+    s32 offset;
+    s32 geo;
+    void *model;
+    s32 result;
+    s32 i;
+    u8 *sect;
+    result = 0;
+    if (map[0x77] == 0)
         return 0;
     func_800BEB58(0);
-    for (local_4 = 0, local_0 = 0; local_4 < param_0[0x77]; local_4++, local_0 += 0x58) {
-        local_5 = *(u8 **) (param_0 + 0x68) + local_0;
+    for (i = 0, offset = 0; i < map[0x77]; i++, offset += 0x58) {
+        sect = *(u8 **) (map + 0x68) + offset;
 
-if (((MapSection1864 *) local_5)->local_0) {
-    local_2 = (void *) func_800D674C(*(u16 *) (local_5 + 0x40));
-    if (local_2) {
-        func_800D62E4(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_0 + 0x40));
-        local_1 = func_800B2720(local_2);
-        local_3 =
-            func_800AC848(local_1, func_800B2840(local_2), *(u8 **) (param_0 + 0x68) + local_0, 0,
-                          1.0f, param_1, param_2, param_3, param_4, param_5, param_6);
-        if (local_3) {
-            func_800BEB58(local_2);
-            return local_3;
+if (((MapSection1864 *) sect)->local_0) {
+    model = (void *) func_800D674C(*(u16 *) (sect + 0x40));
+    if (model) {
+        func_800D62E4(*(u16 *) (*(u8 **) (map + 0x68) + offset + 0x40));
+        geo = func_800B2720(model);
+        result =
+            func_800AC848(geo, func_800B2840(model), *(u8 **) (map + 0x68) + offset, 0,
+                          1.0f, unk_0, unk_1, unk_2, unk_3, unk_4, unk_5);
+        if (result) {
+            func_800BEB58(model);
+            return result;
         }
     }
 }
 
 }
-return local_3;
+return result;
 }
 
-s32 gcmapsects_entrypoint_24(u8 *param_0)
+s32 gcmapsects_entrypoint_24(u8 *map)
 {
-    s32 temp_t6;
-    s8 *new_var;
-    new_var = (s8 *) param_0;
-    temp_t6 = (*((u8 *) (new_var + 0x82))) != 0;
-    if (temp_t6 != 0) {
-        return ((*((s16 *) (((s8 *) param_0) + 0x74))) + 1) == 0;
+    s32 ready;
+    s8 *map_alias;
+    // Matching: the alias of the parameter is needed for the match.
+    map_alias = (s8 *) map;
+    ready = (*((u8 *) (map_alias + 0x82))) != 0;
+    if (ready != 0) {
+        return ((*((s16 *) (((s8 *) map) + 0x74))) + 1) == 0;
     }
 }
 
-int gcmapsects_entrypoint_25(u8 *param_0, u32 param_1, s32 param_2, s32 param_3, s32 param_4,
-                             u32 param_5)
+// Collision query against one section's opaque model, then its translucent model
+int gcmapsects_entrypoint_25(u8 *state, u32 section_idx, s32 arg2, s32 arg3, s32 arg4,
+                             u32 mask)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
-    local_0 = 0;
-    if (!param_0[0x77])
+    s32 hit;
+    s32 model;
+    s32 offset;
+    hit = 0;
+    if (!state[0x77])
         return 0;
     func_800BEB58(0);
-    local_2 = param_1 * 0x58;
-    local_1 = func_800D674C(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_2 + 0x40));
+    offset = section_idx * 0x58;
+    model = func_800D674C(*(u16 *) (*(u8 **) (state + 0x68) + offset + 0x40));
+    // Matching: empty block steers IDO's code generation.
     if (1) {
     }
-    if (local_1) {
-        func_800D62E4(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_2 + 0x40));
+    if (model) {
+        func_800D62E4(*(u16 *) (*(u8 **) (state + 0x68) + offset + 0x40));
 
-if ((param_5 & 0x1F00) != 0x1F00) {
-    local_0 = func_800AB868(func_800B2720(local_1), func_800B2840(local_1),
-                            *(u8 **) (param_0 + 0x68) + local_2, 0, 1.0f, param_2, param_3, param_4,
-                            param_5);
+if ((mask & 0x1F00) != 0x1F00) {
+    hit = func_800AB868(func_800B2720(model), func_800B2840(model),
+                            *(u8 **) (state + 0x68) + offset, 0, 1.0f, arg2, arg3, arg4,
+                            mask);
 }
 
-if (local_0)
-    func_800BEB58(local_1);
+if (hit)
+    func_800BEB58(model);
 
-else if (*(u16 *) (*(u8 **) (param_0 + 0x68) + local_2 + 0x42))
+else if (*(u16 *) (*(u8 **) (state + 0x68) + offset + 0x42))
 {
-    local_1 = func_800D674C(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_2 + 0x42));
-    func_800D62E4(*(u16 *) (*(u8 **) (param_0 + 0x68) + local_2 + 0x42));
-    if (func_800B2720(local_1))
-        local_0 = func_800AB868(func_800B2720(local_1), func_800B2840(local_1),
-                                *(u8 **) (param_0 + 0x68) + local_2, 0, 1.0f, param_2, param_3,
-                                param_4, param_5);
+    model = func_800D674C(*(u16 *) (*(u8 **) (state + 0x68) + offset + 0x42));
+    func_800D62E4(*(u16 *) (*(u8 **) (state + 0x68) + offset + 0x42));
+    if (func_800B2720(model))
+        hit = func_800AB868(func_800B2720(model), func_800B2840(model),
+                                *(u8 **) (state + 0x68) + offset, 0, 1.0f, arg2, arg3,
+                                arg4, mask);
 }
 
 }
-return local_0;
+return hit;
 }
 
-s32 gcmapsects_entrypoint_26(MapSectionRenderList *param_0, s32 param_1, f32 param_2, s32 param_3,
-                             s32 param_4)
+s32 gcmapsects_entrypoint_26(MapSectionRenderList *sections, s32 arg1, f32 arg2, s32 arg3,
+                             s32 arg4)
 {
-    void *local_1;
-    s32 local_2;
-    s32 local_0;
-    void *local_3;
+    void *model;
+    s32 hit;
+    s32 i;
+    void *geo;
 
-    local_2 = 0;
-    if (param_0->local_1 == 0) {
+    hit = 0;
+    if (sections->local_1 == 0) {
         return 0;
 
 }
 func_800BEB58(0);
-for (local_0 = 0; local_0 < param_0->local_1; local_0++) {
-    if (param_0->local_0[local_0].local_1) {
-        local_1 = func_800D674C(param_0->local_0[local_0].local_0);
-        if (local_1) {
-            func_800D62E4(param_0->local_0[local_0].local_0);
-            local_3 = func_800B2720(local_1);
-            local_2 = func_800AD1AC(local_3, func_800B2840(local_1), &param_0->local_0[local_0], 0,
-                                    1.0f, param_1, param_2, param_3, param_4);
-            if (local_2) {
-                func_800BEB58(local_1);
-                return local_2;
+for (i = 0; i < sections->local_1; i++) {
+    if (sections->local_0[i].local_1) {
+        model = func_800D674C(sections->local_0[i].local_0);
+        if (model) {
+            func_800D62E4(sections->local_0[i].local_0);
+            geo = func_800B2720(model);
+            hit = func_800AD1AC(geo, func_800B2840(model), &sections->local_0[i], 0,
+                                    1.0f, arg1, arg2, arg3, arg4);
+            if (hit) {
+                func_800BEB58(model);
+                return hit;
             }
         }
     }
 
 }
-return local_2;
+return hit;
 }
 
-s32 gcmapsects_entrypoint_27(s32 param_0)
+s32 gcmapsects_entrypoint_27(s32 section_idx)
 {
-    u8 *temp_v0;
-    s32 temp_t7;
+    u8 *state;
+    s32 offset;
 
-    temp_v0 = func_800BF704();
-    if ((*(u8 *) ((s8 *) (temp_v0) + (0x77))) == 0) {
+    state = func_800BF704();
+    if ((*(u8 *) ((s8 *) (state) + (0x77))) == 0) {
         return 0;
 
 }
-temp_t7 = param_0 * 0x58;
-if (((u32) *(u32 *) ((s8 *) (*(s32 *) ((s8 *) temp_v0 + 0x68) + temp_t7) + 0x4C) >> 0x1F) != 0) {
-    if (func_800D6B0C(*(u16 *) ((s8 *) (*(s32 *) ((s8 *) temp_v0 + 0x68) + temp_t7) + 0x40),
-                      temp_v0) != 0) {
-        func_800D62E4(*(u16 *) ((s8 *) (*(s32 *) ((s8 *) temp_v0 + 0x68) + temp_t7) + 0x40));
+offset = section_idx * 0x58;
+if (((u32) *(u32 *) ((s8 *) (*(s32 *) ((s8 *) state + 0x68) + offset) + 0x4C) >> 0x1F) != 0) {
+    if (func_800D6B0C(*(u16 *) ((s8 *) (*(s32 *) ((s8 *) state + 0x68) + offset) + 0x40),
+                      state) != 0) {
+        func_800D62E4(*(u16 *) ((s8 *) (*(s32 *) ((s8 *) state + 0x68) + offset) + 0x40));
         return 1;
     }
 
@@ -1416,4 +1445,5 @@ if (((u32) *(u32 *) ((s8 *) (*(s32 *) ((s8 *) temp_v0 + 0x68) + temp_t7) + 0x4C)
 return 0;
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C; values taken from the ROM.
 f32 D_808029B0_gcmapsects[3] = {5e+01f, 5e+01f, 5e+01f};

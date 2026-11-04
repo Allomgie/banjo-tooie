@@ -6,22 +6,24 @@ typedef struct {
     s16 tc[2];
     u8 cn[4];
 } WibVtx;
+// One settings entry, selected by mesh id hundreds.
 typedef struct {
-    u8 pad0[0xE];
-    s16 unkE;
+    u8 pad_0[0xE];
+    s16 id;
 } WibbleRecord;
 extern WibbleRecord D_80800770_idwibble[];
+// Leading part of the effect state, as seen by the update functions.
 typedef struct {
-    f32 local_0[3];
-    f32 local_1[3];
-    u8 pad_0[0xC];
-    f32 local_2;
-    s32 pad_1;
-    f32 local_3;
-    s32 pad_2;
-    s16 local_4;
-    u8 pad_3;
-    u8 local_5;
+    f32 bbox_min[3];
+    f32 bbox_max[3];
+    u8 pad_18[0xC];
+    f32 phase;
+    s32 pad_28;
+    f32 phase_speed;
+    s32 pad_30;
+    s16 y_offset;
+    u8 pad_36;
+    u8 always_on;
 } WibbleState;
 extern f32 func_800D8FF8(void);
 extern void func_800EE7F8(f32 *, f32 *);
@@ -32,89 +34,94 @@ extern f32 func_800136D0(f32);
 extern f32 func_800137D4(f32);
 extern f32 func_80013788(f32);
 
+// Full effect state (0x38 bytes).
 typedef struct {
-    f32 local_0[3];
-    f32 local_1[3];
-    s16 local_2;
-    s16 local_3;
-    f32 local_4;
-    f32 local_5;
-    f32 local_6;
-    f32 local_7;
-    f32 local_8;
-    u8 local_9;
-    u8 local_10;
-    u8 local_11;
-    u8 local_12;
-    s16 local_13;
-    u8 local_14;
-    u8 local_15;
+    f32 bbox_min[3];
+    f32 bbox_max[3];
+    s16 mid_height;
+    s16 amplitude;
+    f32 uv_scale;
+    f32 bright_scale;
+    f32 phase;
+    f32 wave_k;
+    f32 phase_speed;
+    u8 bright_base;
+    u8 height_mode;
+    u8 bright_mode;
+    u8 uv_enabled;
+    s16 y_offset;
+    u8 unk_36;
+    u8 always_on;
 } WibbleData50;
+// Layout of one D_80800770 table entry.
 typedef struct {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    u8 local_3;
-    u8 local_4;
-    s16 local_5;
+    f32 wavelength;
+    f32 height;
+    f32 speed;
+    u8 brightness;
+    u8 uv_amount;
+    s16 id;
 } WibbleSettings50;
 
-f32 func_80800000_idwibble(param_0, param_1, param_2)
-u8 *param_0;
-s16 *param_1;
-f32 *param_2;
+// Ripple height at a vertex: sine of the distance from the centre minus the phase.
+// Also writes the UV offset when UV distortion is enabled.
+f32 func_80800000_idwibble(wib, vtx, uv_off)
+u8 *wib;
+s16 *vtx;
+f32 *uv_off;
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_3;
-    f32 local_2[3];
-    f32 local_4;
+    f32 dist;
+    f32 height;
+    f32 uv_len;
+    f32 pos[3];
+    f32 inv_scale;
 
-    local_2[0] = param_1[0];
-    local_2[1] = param_1[1];
-    local_2[2] = param_1[2];
-    local_0 = func_800EEF94(local_2);
-    local_1 = *(s16 *) (param_0 + 0x1A) *
-              func_800137D4(
-                  func_800136D0((local_0 - *(f32 *) (param_0 + 0x24)) * *(f32 *) (param_0 + 0x28)));
-    if (param_0[0x33]) {
-        local_3 = *(f32 *) (param_0 + 0x28) * (*(s16 *) (param_0 + 0x1A) * func_80013788(local_1));
-        if (local_0 > 0.0001f) {
-            local_4 = local_3 / local_0;
-            param_2[0] = local_2[0] * local_4;
-            param_2[1] = local_2[2] * local_4;
+    pos[0] = vtx[0];
+    pos[1] = vtx[1];
+    pos[2] = vtx[2];
+    dist = func_800EEF94(pos);
+    height = *(s16 *) (wib + 0x1A) *
+             func_800137D4(
+                 func_800136D0((dist - *(f32 *) (wib + 0x24)) * *(f32 *) (wib + 0x28)));
+    if (wib[0x33]) {
+        uv_len = *(f32 *) (wib + 0x28) * (*(s16 *) (wib + 0x1A) * func_80013788(height));
+        if (dist > 0.0001f) {
+            inv_scale = uv_len / dist;
+            uv_off[0] = pos[0] * inv_scale;
+            uv_off[1] = pos[2] * inv_scale;
         } else {
-            param_2[0] = local_2[0] * local_3;
-            param_2[1] = local_2[2] * local_3;
+            uv_off[0] = pos[0] * uv_len;
+            uv_off[1] = pos[2] * uv_len;
         }
     }
-    return local_1;
+    return height;
 }
 
-void idwibble_entrypoint_0(s32 arg0, WibVtx *src, WibVtx *dst, s32 n, u8 *w)
+// Vertex kernel: ripple height, optional brightness and UV distortion.
+void idwibble_entrypoint_0(s32 arg0, WibVtx *src, WibVtx *dst, s32 n, u8 *wib)
 {
-    f32 d;
-    s32 a;
-    f32 off[2];
+    f32 height;
+    s32 bright;
+    f32 uv_off[2];
     WibVtx *end;
 
     end = src + n;
     for (; src < end; src++, dst++) {
-        d = func_80800000_idwibble(w, src->ob, off);
-        if (w[0x31] == 1) {
-            dst->ob[1] = *(s16 *) (w + 0x34) + (*(s16 *) (w + 0x18) + d);
-        } else if (w[0x31] == 2) {
-            dst->ob[1] = *(s16 *) (w + 0x34) + (src->ob[1] + d);
+        height = func_80800000_idwibble(wib, src->ob, uv_off);
+        if (wib[0x31] == 1) {
+            dst->ob[1] = *(s16 *) (wib + 0x34) + (*(s16 *) (wib + 0x18) + height);
+        } else if (wib[0x31] == 2) {
+            dst->ob[1] = *(s16 *) (wib + 0x34) + (src->ob[1] + height);
         }
-        if (w[0x32] == 1) {
-            a = d * *(f32 *) (w + 0x20) + (u32) w[0x30];
-            dst->cn[0] = (src->cn[0] * a) >> 8;
-            dst->cn[1] = (src->cn[1] * a) >> 8;
-            dst->cn[2] = (src->cn[2] * a) >> 8;
+        if (wib[0x32] == 1) {
+            bright = height * *(f32 *) (wib + 0x20) + (u32) wib[0x30];
+            dst->cn[0] = (src->cn[0] * bright) >> 8;
+            dst->cn[1] = (src->cn[1] * bright) >> 8;
+            dst->cn[2] = (src->cn[2] * bright) >> 8;
         }
-        if (w[0x33]) {
-            dst->tc[0] = src->tc[0] + *(f32 *) (w + 0x1C) * off[0];
-            dst->tc[1] = src->tc[1] + *(f32 *) (w + 0x1C) * off[1];
+        if (wib[0x33]) {
+            dst->tc[0] = src->tc[0] + *(f32 *) (wib + 0x1C) * uv_off[0];
+            dst->tc[1] = src->tc[1] + *(f32 *) (wib + 0x1C) * uv_off[1];
         }
     }
 }
@@ -123,102 +130,110 @@ void idwibble_entrypoint_1(s32 arg0)
 {
 }
 
-WibbleRecord *func_80800324_idwibble(s32 param_0)
+// Pick the settings entry for a mesh id (hundreds); falls back to the first entry.
+WibbleRecord *func_80800324_idwibble(s32 mesh_id)
 {
-    s32 local_0;
+    s32 i;
 
-    param_0 -= param_0 % 100;
-    for (local_0 = 0; local_0 < 6; local_0++) {
-        if (param_0 == D_80800770_idwibble[local_0].unkE) {
-            return &D_80800770_idwibble[local_0];
+    mesh_id -= mesh_id % 100;
+    for (i = 0; i < 6; i++) {
+        if (mesh_id == D_80800770_idwibble[i].id) {
+            return &D_80800770_idwibble[i];
         }
     }
     return D_80800770_idwibble;
 }
 
-void idwibble_entrypoint_2(WibbleData50 *param_0, s32 param_1, s32 param_2, s32 param_3,
-                           s32 param_4)
+// Init from the mesh bounding box and the settings entry for the mesh id.
+void idwibble_entrypoint_2(WibbleData50 *wib, s32 mesh_id, s32 unk_2, s32 unk_3,
+                           s32 mode)
 {
-    WibbleSettings50 *local_0;
-    s16 local_1[3];
-    s16 local_2[3];
-    f32 local_3;
-    f32 local_4;
-    f32 k = 0.0f;
-    local_0 = (WibbleSettings50 *) func_80800324_idwibble(param_1);
-    param_1 %= 100;
-    _glidmake_entrypoint_2(param_2, param_3, local_1, local_2);
-    param_0->local_2 = (local_1[1] + local_2[1]) / 2;
-    func_800EE88C(param_0->local_0, local_1);
-    func_800EE88C(param_0->local_1, local_2);
-    param_0->local_4 = local_0->local_4 << 6;
-    if (local_0->local_4)
-        param_0->local_12 = 1;
+    WibbleSettings50 *settings;
+    s16 bbox_min[3];
+    s16 bbox_max[3];
+    f32 val;
+    f32 amp;
+    f32 zero = 0.0f; // Matching: comparison value kept in a local so the constant is on the left of c.eq.s.
+    settings = (WibbleSettings50 *) func_80800324_idwibble(mesh_id);
+    mesh_id %= 100;
+    _glidmake_entrypoint_2(unk_2, unk_3, bbox_min, bbox_max);
+    wib->mid_height = (bbox_min[1] + bbox_max[1]) / 2;
+    func_800EE88C(wib->bbox_min, bbox_min);
+    func_800EE88C(wib->bbox_max, bbox_max);
+    wib->uv_scale = settings->uv_amount << 6;
+    if (settings->uv_amount)
+        wib->uv_enabled = 1;
     else
-        param_0->local_12 = 0;
-    local_3 = local_0->local_1;
-    if (local_3 < 0.0f) {
-        param_0->local_3 = -local_3;
-        param_0->local_10 = 2;
-    } else if (local_3 > 0.0f) {
-        param_0->local_10 = 0;
-        param_0->local_3 = local_3;
+        wib->uv_enabled = 0;
+    val = settings->height;
+    if (val < 0.0f) {
+        wib->amplitude = -val;
+        wib->height_mode = 2;
+    } else if (val > 0.0f) {
+        wib->height_mode = 0;
+        wib->amplitude = val;
     } else {
-        param_0->local_10 = 1;
-        param_0->local_3 = (param_0->local_1[1] - param_0->local_0[1]) * 0.5f;
+        wib->height_mode = 1;
+        wib->amplitude = (wib->bbox_max[1] - wib->bbox_min[1]) * 0.5f;
     }
-    local_4 = param_0->local_3;
-    if (k == local_4) {
-        param_0->local_3 = 1;
-        local_4 = param_0->local_3;
+    amp = wib->amplitude;
+    if (zero == amp) {
+        wib->amplitude = 1;
+        amp = wib->amplitude;
     }
-    param_0->local_5 = (f32) (u32) local_0->local_3 / local_4;
-    param_0->local_9 = 255 - local_0->local_3;
-    if (local_0->local_3)
-        param_0->local_11 = 1;
+    wib->bright_scale = (f32) (u32) settings->brightness / amp;
+    wib->bright_base = 255 - settings->brightness;
+    if (settings->brightness)
+        wib->bright_mode = 1;
     else
-        param_0->local_11 = 0;
-    param_0->local_6 = 0.0f;
-    param_0->local_7 = 6.2831855f / local_0->local_0;
-    local_3 = local_0->local_2;
-    if (local_3 < 0.0f)
-        param_0->local_8 = -local_3;
+        wib->bright_mode = 0;
+    wib->phase = 0.0f;
+    wib->wave_k = 6.2831855f / settings->wavelength;
+    val = settings->speed;
+    if (val < 0.0f)
+        wib->phase_speed = -val;
     else
-        param_0->local_8 = param_1 * local_3;
-    param_0->local_13 = 0;
-    if (param_4 != 1 && param_4 != 2)
-        param_0->local_15 = 1;
+        wib->phase_speed = mesh_id * val;
+    wib->y_offset = 0;
+    if (mode != 1 && mode != 2)
+        wib->always_on = 1;
     else
-        param_0->local_15 = 0;
+        wib->always_on = 0;
 }
 
-void idwibble_entrypoint_3(WibbleState *param_0, s32 param_1, s32 param_2)
+// Update gated by the frustum test, unless always_on is set.
+void idwibble_entrypoint_3(WibbleState *wib, s32 unk_1, s32 unk_2)
 {
-    f32 local_0[3];
-    f32 local_1[3];
+    f32 box_min[3];
+    f32 box_max[3];
 
-    param_0->local_2 += func_800D8FF8() * param_0->local_3;
-    func_800EE7F8(local_0, param_0->local_0);
-    func_800EE7F8(local_1, param_0->local_1);
-    local_0[1] += param_0->local_4;
-    local_1[1] += param_0->local_4;
-    if (param_0->local_5 || func_800E3D0C(param_0->local_0, param_0->local_1)) {
-        _glid_entrypoint_0(param_1, param_2, _idwibble_entrypoint_0, param_0);
+    wib->phase += func_800D8FF8() * wib->phase_speed;
+    func_800EE7F8(box_min, wib->bbox_min);
+    func_800EE7F8(box_max, wib->bbox_max);
+    box_min[1] += wib->y_offset;
+    box_max[1] += wib->y_offset;
+    if (wib->always_on || func_800E3D0C(wib->bbox_min, wib->bbox_max)) {
+        _glid_entrypoint_0(unk_1, unk_2, _idwibble_entrypoint_0, wib);
     }
 }
 
-void idwibble_entrypoint_4(f32 *param_0, s32 param_1, s32 param_2)
+// Update without the frustum test.
+void idwibble_entrypoint_4(f32 *wib, s32 unk_1, s32 unk_2)
 {
-    param_0[9] += func_800D8FF8() * param_0[11];
-    _glid_entrypoint_0(param_1, param_2, _idwibble_entrypoint_0);
+    wib[9] += func_800D8FF8() * wib[11];
+    _glid_entrypoint_0(unk_1, unk_2, _idwibble_entrypoint_0);
 }
 
-void idwibble_entrypoint_5(param_0, param_1) s32 param_0;
-s16 param_1;
+// Set the water level offset; used by Dippy's pool, the GI toxic pools and the CCL lake.
+void idwibble_entrypoint_5(wib, y_offset) s32 wib;
+s16 y_offset;
 {
-    *(s16 *) (param_0 + 0x34) = param_1;
+    *(s16 *) (wib + 0x34) = y_offset;
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C, values taken from the ROM.
+// D_8080077E_idwibble = D_80800770_idwibble + 0xE and D_8080078E_idwibble = D_80800780_idwibble + 0xE
+// are linker symbols in undefined_syms.us.txt.
 WibbleRecord D_80800770_idwibble[1] = {0x43, 0xC8, 0x0, 0x0, 0x41, 0xA0, 0x0, 0x0,
                                        0x41, 0xA0, 0x0, 0x0, 0xA,  0x1,  0x0};
 u32 D_80800780_idwibble[20] = {0x43C80000, 0x41A00000, 0x40800000, 0x32080064, 0x43C80000,

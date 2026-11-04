@@ -4,13 +4,14 @@ extern s32 D_80800090_chperspexbox[];
 extern s32 D_80800124_chperspexbox[];
 extern void *D_80800138_chperspexbox;
 
-int func_80800000_chperspexbox(s32 *param_0, s32 param_1, s32 param_2)
+// Message 7 (from the perspex box switch): shatters with particles, sound and music cue 0x18, then despawns.
+int func_80800000_chperspexbox(s32 *actor, s32 msg, s32 payload)
 {
-    if (param_1 == 7) {
-        func_800BABB8(0, param_0 + 1, param_0 + 1, param_0[0x0E], &D_80800090_chperspexbox);
-        _subaddieaudioquick_entrypoint_2(param_0, param_0 + 1, &D_80800124_chperspexbox);
+    if (msg == 7) {
+        func_800BABB8(0, actor + 1, actor + 1, actor[0x0E], &D_80800090_chperspexbox);
+        _subaddieaudioquick_entrypoint_2(actor, actor + 1, &D_80800124_chperspexbox);
         func_800FC6B0(0x18);
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
         return 1;
     }
     return 0;
@@ -25,6 +26,9 @@ extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
+// TU-NOTE: the .data of this overlay is defined here in C. Its tables hold pointers to functions of
+// this file; IDO's assembler schedules some of them differently unless the tables are in the same
+// unit. D_80800090_chperspexbox and D_80800124_chperspexbox are declared as s32[] above.
 s32 D_80800090_chperspexbox[37] = {
     0x410001D, 0x9DD002B, 0x2000300, 0x220180,    0x2000480,  0x6000015, 0x26,       0x190000,
     0x7002D,   0x320064,  0x2071DE,  -0x583FFFF6, -0x63FFE7,  -0x63FF9C, 0x4B0064,   0x41A0710,

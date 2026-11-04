@@ -77,6 +77,8 @@ void gsattract_entrypoint_0()
     *(f32 *) ((u8 *) (u8 *) &D_8013546C + 0x8) = 0.0f;
 }
 
+// Advances the demo timer and fires attract overlay events at 6.0 s, 0.5 s and 1.0 s;
+// a button press ends the demo.
 void gsattract_entrypoint_1(void)
 {
     f32 prev;
@@ -111,64 +113,72 @@ void gsattract_entrypoint_2(s32 arg0)
 {
 }
 
+// Starts the next demo of the playlist, wrapping around at the end.
 void gsattract_entrypoint_3(void)
 {
-    s32 var_a0;
+    s32 next_entry;
 
     if (func_800A8264() == 0) {
-        var_a0 = D_80135470[1] + 1;
-        if (var_a0 >= D_80800493_gsattract[D_80135470[0] * 12]) {
-            var_a0 = 0;
+        next_entry = D_80135470[1] + 1;
+        if (next_entry >= D_80800493_gsattract[D_80135470[0] * 12]) {
+            next_entry = 0;
         }
-        func_808002A4_gsattract(var_a0);
+        func_808002A4_gsattract(next_entry);
     }
 }
 
 void gsattract_entrypoint_4(void)
 {
-    s32 local_0 = 2;
-    ((u8 *) &D_8013546C)[4] = local_0;
+    s32 mode = 2;
+    ((u8 *) &D_8013546C)[4] = mode;
 }
 
-void func_80800274_gsattract(s32 param_0)
+// Selects a playlist and restarts it at the first entry.
+void func_80800274_gsattract(s32 mode)
 {
-    D_80135470[0] = param_0;
-    D_80135470[1] = D_80800493_gsattract[(u8) param_0 * 12];
+    D_80135470[0] = mode;
+    D_80135470[1] = D_80800493_gsattract[(u8) mode * 12];
 }
 
-void func_808002A4_gsattract(param_0) s32 param_0;
+// Starts the demo entry of the current playlist.
+void func_808002A4_gsattract(entry_index) s32 entry_index;
 {
-    AttractEntry_808002A4_gsattract *local_0;
-    AttractState_808002A4_gsattract *local_1;
-    local_1 = (AttractState_808002A4_gsattract *) D_80135470;
-    local_1->entry = param_0;
-    local_0 =
-        &((AttractMode_808002A4_gsattract *) D_80800490_gsattract)[local_1->mode].entries[param_0];
-    if (local_0->type < 0) {
-        func_800A791C(local_0->id, 1, 1);
+    AttractEntry_808002A4_gsattract *entry;
+    AttractState_808002A4_gsattract *state;
+    state = (AttractState_808002A4_gsattract *) D_80135470;
+    state->entry = entry_index;
+    entry =
+        &((AttractMode_808002A4_gsattract *) D_80800490_gsattract)[state->mode].entries[entry_index];
+    // Negative type: plain warp instead of a demo.
+    if (entry->type < 0) {
+        func_800A791C(entry->id, 1, 1);
     } else {
-        func_800D3A14(local_0->count);
-        func_800A9BA0(2, local_0->id, local_0->type);
+        func_800D3A14(entry->count);
+        func_800A9BA0(2, entry->id, entry->type);
     }
 }
 
-void gsattract_entrypoint_5(s32 param_0)
+void gsattract_entrypoint_5(s32 mode)
 {
-    AttractMode_gsattract_entrypoint_5 *local_0;
+    AttractMode_gsattract_entrypoint_5 *playlist;
     if (!func_800A8264()) {
+        // Widescreen always uses playlist 1.
         if (widescreen_enabled)
-            param_0 = 1;
-        if (param_0 != D_8013546C.state.mode)
-            func_80800274_gsattract(param_0);
+            mode = 1;
+        if (mode != D_8013546C.state.mode)
+            func_80800274_gsattract(mode);
         func_800FE4E4();
         func_800A9B84();
-        local_0 =
+        playlist =
             &((AttractMode_gsattract_entrypoint_5 *) D_80800490_gsattract)[D_8013546C.state.mode];
-        func_800A9B8C(local_0->id, local_0->count);
+        func_800A9B8C(playlist->id, playlist->count);
         gsattract_entrypoint_3();
     }
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
+// D_80800493_gsattract = D_80800490_gsattract + 0x3 and D_80800494_gsattract = D_80800490_gsattract + 0x4
+// are linker symbols.
 u32 D_808003D0_gsattract[24] = {0x14F0801, 0x1000116, 0x7000100, 0x13A0800, 0xD00018B, 0xFF000000,
                                 0xEB0501,  0x1000128, 0x8000100, 0xB90700,  0xD00018B, 0xFF000000,
                                 0x11A0801, 0x1000108, 0x8000700, 0xE60800,  0xD00018B, 0xFF000000,

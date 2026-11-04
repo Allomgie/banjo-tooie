@@ -2,29 +2,30 @@
 
 extern s32 _idflash_entrypoint_0;
 
-void idflash_entrypoint_0(s32 param_0, Vtx *param_1, Vtx *param_2, s32 param_3, f32 *param_4)
+// Kernel: brightens vertex colours by level * 50, clamped to 255.
+void idflash_entrypoint_0(s32 param_0, Vtx *src, Vtx *dst, s32 count, f32 *state)
 {
-    s32 local_0;
-    s32 local_1;
-    Vtx *local_2;
+    s32 boost;
+    s32 value;
+    Vtx *end;
 
-    local_0 = param_4[0] * 50.0f;
-    for (local_2 = param_1 + param_3; param_1 < local_2; param_1++, param_2++) {
-        local_1 = param_1->v.cn[0] + local_0;
-        if (local_1 >= 256) {
-            local_1 = 255;
+    boost = state[0] * 50.0f;
+    for (end = src + count; src < end; src++, dst++) {
+        value = src->v.cn[0] + boost;
+        if (value >= 256) {
+            value = 255;
         }
-        param_2->v.cn[0] = local_1;
-        local_1 = param_1->v.cn[1] + local_0;
-        if (local_1 >= 256) {
-            local_1 = 255;
+        dst->v.cn[0] = value;
+        value = src->v.cn[1] + boost;
+        if (value >= 256) {
+            value = 255;
         }
-        param_2->v.cn[1] = local_1;
-        local_1 = param_1->v.cn[2] + local_0;
-        if (local_1 >= 256) {
-            local_1 = 255;
+        dst->v.cn[1] = value;
+        value = src->v.cn[2] + boost;
+        if (value >= 256) {
+            value = 255;
         }
-        param_2->v.cn[2] = local_1;
+        dst->v.cn[2] = value;
     }
 }
 
@@ -32,20 +33,21 @@ void idflash_entrypoint_1(s32 arg0)
 {
 }
 
-s32 idflash_entrypoint_2(f32 *param_0, s32 param_1, s32 param_2, s32 param_3)
+s32 idflash_entrypoint_2(f32 *state, s32 param_1, s32 param_2, s32 param_3)
 {
-    *param_0 = 0.0f;
+    *state = 0.0f;
 }
 
-void idflash_entrypoint_3(f32 *param_0, s32 param_1, s32 param_2)
+// Reads the level of the flasha entry with mesh id 100 lower.
+void idflash_entrypoint_3(f32 *state, s32 param_1, s32 param_2)
 {
-    s32 local_0;
+    s32 flasha;
 
-    local_0 = _idworld_entrypoint_1(param_2 - 0x64);
-    if (local_0 != 0) {
-        *param_0 = (f32) _idflasha_entrypoint_1(local_0) * 0.003921569f;
+    flasha = _idworld_entrypoint_1(param_2 - 0x64);
+    if (flasha != 0) {
+        *state = (f32) _idflasha_entrypoint_1(flasha) * 0.003921569f;
     } else {
-        *param_0 = 0.0f;
+        *state = 0.0f;
     }
-    _glid_entrypoint_0(param_1, param_2, &_idflash_entrypoint_0, param_0);
+    _glid_entrypoint_0(param_1, param_2, &_idflash_entrypoint_0, state);
 }

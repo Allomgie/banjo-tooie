@@ -1,8 +1,8 @@
 #include "common.h"
 
 typedef struct {
-    s32 local_0;
-    s32 local_1;
+    s32 map_id;
+    s32 flare_table;
 } LensFlareMap59;
 extern LensFlareMap59 D_808008F0_chlensflare[];
 extern int D_80800928_chlensflare[];
@@ -12,14 +12,14 @@ typedef struct {
     u32 g : 8;
     u32 b : 8;
     u32 a : 8;
-    f32 unk4;
-    f32 unk8;
-    u8 unkC;
-    u8 padD[3];
+    f32 unk_4;
+    f32 unk_8;
+    u8 unk_C;
+    u8 pad_D[3];
 } FlareElem;
 typedef struct {
     FlareElem *elems;
-    s32 unk4;
+    s32 unk_4;
 } FlareDef;
 extern FlareDef D_808008F4_chlensflare[];
 extern s32 func_800BFFB4(s32, s32, f32 *);
@@ -44,167 +44,171 @@ extern void func_800E2530(f32);
 extern void func_800E2720(Gfx **, s32, s32, f32 *, f32 *, s32);
 extern void func_800E2A14(Gfx **);
 typedef struct {
-    u8 pad0[0x24];
-    s32 unk24;
-    u8 pad28[0xC];
-    f32 unk34;
-    u8 pad38[0x18];
-    u8 unk50;
-    u8 pad51[0x13];
-    u32 pad64_21 : 11;
-    u32 unk64_20 : 1;
-    u32 pad64_0 : 20;
+    u8 pad_0[0x24];
+    s32 flare_index;
+    u8 pad_28[0xC];
+    f32 occlusion;
+    u8 pad_38[0x18];
+    u8 probe_id;
+    u8 pad_51[0x13];
+    u32 pad_64_21 : 11;
+    u32 unk_64_20 : 1;
+    u32 pad_64_0 : 20;
 } LensFlare;
 extern void func_80105834(), func_80107C2C(), func_80800084_chlensflare();
 
+// Called by su/autobaddies: 1 if the current map is in the map table and the sky is active.
 s32 chlensflare_entrypoint_0(void)
 {
-    s32 local_0 = 0;
-    s32 local_1;
+    s32 i = 0;
+    s32 map;
 
-    local_1 = func_800EA05C();
+    map = func_800EA05C();
     if (!_gcskyDll_entrypoint_3())
         return 0;
-    for (; D_808008F0_chlensflare[local_0].local_0 != -1; local_0++) {
-        if (local_1 == D_808008F0_chlensflare[local_0].local_0)
+    for (; D_808008F0_chlensflare[i].map_id != -1; i++) {
+        if (map == D_808008F0_chlensflare[i].map_id)
             return 1;
     }
     return 0;
 }
 
-void func_80800084_chlensflare(param_0) Actor *param_0;
+// Init: look up the current map in the table and store its index.
+void func_80800084_chlensflare(actor) Actor *actor;
 {
-    s32 local_0;
-    s32 local_1;
-    LensFlareMap59 *local_2;
-    local_0 = func_800EA05C();
-    local_2 = D_808008F0_chlensflare;
-    local_1 = 0;
+    s32 cur_map;
+    s32 index;
+    LensFlareMap59 *entry;
+    cur_map = func_800EA05C();
+    entry = D_808008F0_chlensflare;
+    index = 0;
     while (1) {
-        if (local_2->local_0 == -1) {
-            func_800FFAB0(param_0);
+        if (entry->map_id == -1) {
+            func_800FFAB0(actor);
             return;
         }
-        if (local_0 == local_2->local_0) {
-            param_0->actorData[3] = local_1;
+        if (cur_map == entry->map_id) {
+            actor->actorData[3] = index;
             break;
         }
-        local_2++;
-        local_1++;
+        entry++;
+        index++;
     }
-    *(f32 *) &param_0->actorData[7] = 1.01f;
+    *(f32 *) &actor->actorData[7] = 1.01f;
 }
 
-void func_808000FC_chlensflare(LensFlare *param_0, Gfx **param_1)
+// Draw: fade the flare by the sun's screen distance and occlusion, then draw its elements.
+void func_808000FC_chlensflare(LensFlare *flare, Gfx **gfx)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[2];
-    f32 local_4;
-    FlareElem *local_5;
-    FlareElem *local_6;
-    s32 local_7;
-    f32 local_8[3];
-    f32 local_9[3];
-    s32 local_13;
-    f32 local_10[3];
-    f32 local_11[3];
-    s32 local_14;
+    f32 unk_0[3];
+    f32 unk_1[3];
+    f32 unk_2[3];
+    f32 screen_pos[2];
+    f32 fade;
+    FlareElem *elems;
+    FlareElem *end_elem;
+    s32 i;
+    f32 color[3];
+    f32 elem_pos[3];
+    s32 alpha;
+    f32 unk_3[3];
+    f32 unk_4[3];
+    s32 prev_alpha;
 
-    if (!func_800BFFB4(0, 4, local_0)) {
+    if (!func_800BFFB4(0, 4, unk_0)) {
         return;
     }
-    func_800E8830(param_0->unk50, local_0);
-    if (func_800E88AC(param_0->unk50, local_3) == 1 || param_0->unk64_20) {
-        local_4 = (mlAbsF(local_3[0] - 152.0f) * mlAbsF(local_3[0] - 152.0f) +
-                   mlAbsF(local_3[1] - 114.0f) * mlAbsF(local_3[1] - 114.0f)) /
-                  19602.0f;
-        if (param_0->unk34 < local_4) {
-            param_0->unk34 *= 1.35f;
-            if (local_4 < param_0->unk34) {
-                param_0->unk34 = local_4;
+    func_800E8830(flare->probe_id, unk_0);
+    if (func_800E88AC(flare->probe_id, screen_pos) == 1 || flare->unk_64_20) {
+        fade = (mlAbsF(screen_pos[0] - 152.0f) * mlAbsF(screen_pos[0] - 152.0f) +
+                mlAbsF(screen_pos[1] - 114.0f) * mlAbsF(screen_pos[1] - 114.0f)) /
+               19602.0f;
+        if (flare->occlusion < fade) {
+            flare->occlusion *= 1.35f;
+            if (fade < flare->occlusion) {
+                flare->occlusion = fade;
             } else {
-                local_4 = param_0->unk34;
+                fade = flare->occlusion;
             }
         } else {
-            param_0->unk34 /= 1.35f;
-            if (param_0->unk34 < local_4) {
-                param_0->unk34 = local_4;
+            flare->occlusion /= 1.35f;
+            if (flare->occlusion < fade) {
+                flare->occlusion = fade;
             } else {
-                local_4 = param_0->unk34;
+                fade = flare->occlusion;
             }
         }
     } else {
-        if (param_0->unk34 < 1.01f) {
-            param_0->unk34 *= 1.35f;
+        if (flare->occlusion < 1.01f) {
+            flare->occlusion *= 1.35f;
         }
-        if (1.0f < param_0->unk34) {
-            param_0->unk34 = 1.01f;
+        if (1.0f < flare->occlusion) {
+            flare->occlusion = 1.01f;
             return;
         }
-        local_4 = param_0->unk34;
+        fade = flare->occlusion;
     }
-    if (1.0f < local_4) {
+    if (1.0f < fade) {
         return;
     }
-    local_3[0] = 304.0f - local_3[0];
-    local_3[1] = 228.0f - local_3[1];
-    func_800E40DC(local_3[0], local_3[1], local_1, local_2);
-    func_800EFB24(local_2, local_1, local_0);
-    local_5 = D_808008F4_chlensflare[param_0->unk24].elems;
-    for (local_7 = 0; local_5[local_7].unkC != 0; local_7++) {
+    screen_pos[0] = 304.0f - screen_pos[0];
+    screen_pos[1] = 228.0f - screen_pos[1];
+    func_800E40DC(screen_pos[0], screen_pos[1], unk_1, unk_2);
+    func_800EFB24(unk_2, unk_1, unk_0);
+    elems = D_808008F4_chlensflare[flare->flare_index].elems;
+    for (i = 0; elems[i].unk_C != 0; i++) {
     }
-    local_6 = (FlareElem *) ((u8 *) local_5 + local_7 * 16);
-    if (local_6->r) {
-        func_800EFA88(local_8, local_6->r, local_6->g, local_6->b);
-        func_800B99CC(param_1, local_6->a * (1 - local_4), local_8);
+    end_elem = (FlareElem *) ((u8 *) elems + i * 16);
+    if (end_elem->r) {
+        func_800EFA88(color, end_elem->r, end_elem->g, end_elem->b);
+        func_800B99CC(gfx, end_elem->a * (1 - fade), color);
     }
-    local_14 = 0;
+    prev_alpha = 0;
     func_800E2588(0);
-    func_800E24F8(local_5->r, local_5->g, local_5->b);
-    func_800E2594(param_1, func_800D674C(0x9D2));
-    for (local_7 = 0; local_5[local_7].unkC != 0; local_7++) {
-        local_13 = local_5[local_7].a * (1.0f - local_4);
-        if (local_13 == local_14) {
-            local_13++;
+    func_800E24F8(elems->r, elems->g, elems->b);
+    func_800E2594(gfx, func_800D674C(0x9D2));
+    for (i = 0; elems[i].unk_C != 0; i++) {
+        alpha = elems[i].a * (1.0f - fade);
+        if (alpha == prev_alpha) {
+            alpha++;
         }
-        local_14 = local_13;
-        func_800E24F8(local_5[local_7].r, local_5[local_7].g, local_5[local_7].b);
-        func_800EFA4C(local_1, local_5[local_7].unk4 + local_4, local_5[local_7].unk4 + local_4,
-                      local_5[local_7].unk4 + local_4);
-        func_800EE7F8(local_9, local_0);
-        func_800EF174(local_9, local_2, local_5[local_7].unk8);
-        func_800E3980(local_11);
-        func_800EFB24(local_10, local_9, local_11);
-        if (400000000.0f < func_800EEFD4(local_10)) {
-            func_800EFA98(local_10, local_10, 20000.0f);
-            func_800EE780(local_9, local_11, local_10);
+        prev_alpha = alpha;
+        func_800E24F8(elems[i].r, elems[i].g, elems[i].b);
+        func_800EFA4C(unk_1, elems[i].unk_4 + fade, elems[i].unk_4 + fade,
+                      elems[i].unk_4 + fade);
+        func_800EE7F8(elem_pos, unk_0);
+        func_800EF174(elem_pos, unk_2, elems[i].unk_8);
+        func_800E3980(unk_4);
+        func_800EFB24(unk_3, elem_pos, unk_4);
+        if (400000000.0f < func_800EEFD4(unk_3)) {
+            func_800EFA98(unk_3, unk_3, 20000.0f);
+            func_800EE780(elem_pos, unk_4, unk_3);
         }
-        switch (local_5[local_7].unkC) {
+        switch (elems[i].unk_C) {
             case 1:
                 func_800E2530(0.0f);
-                func_800E2720(param_1, 0, 0, local_9, local_1, local_13);
+                func_800E2720(gfx, 0, 0, elem_pos, unk_1, alpha);
                 break;
             case 2:
                 func_800E2530(45.0f);
-                func_800E2720(param_1, 0, 0, local_9, local_1, local_13);
+                func_800E2720(gfx, 0, 0, elem_pos, unk_1, alpha);
                 break;
             case 3:
-                func_800E2720(param_1, 1, 0, local_9, local_1, local_13);
+                func_800E2720(gfx, 1, 0, elem_pos, unk_1, alpha);
         }
     }
-    func_800E2A14(param_1);
-    param_0->unk64_20 = 0;
+    func_800E2A14(gfx);
+    flare->unk_64_20 = 0;
 }
 
-int func_80800634_chlensflare(param_0, param_1, param_2)
-s32 *param_0;
-s32 param_1;
-s32 param_2;
+// Message 0x95 registers the z-buffer occlusion probe.
+int func_80800634_chlensflare(actor, msg, unk_2)
+s32 *actor;
+s32 msg;
+s32 unk_2;
 {
-    if (param_1 == 0x95) {
-        *(u8 *) ((char *) param_0 + 0x50) = func_800E8714(0);
+    if (msg == 0x95) {
+        *(u8 *) ((char *) actor + 0x50) = func_800E8714(0);
         return 1;
     }
     return 0;
@@ -215,6 +219,11 @@ int *chlensflare_entrypoint_1()
     return &D_80800928_chlensflare;
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C, values taken from the ROM.
+// Its tables hold pointers to functions of this file; IDO's assembler schedules some of these
+// functions differently unless the tables are defined in the same unit.
+// D_808008F4_chlensflare = D_808008F0_chlensflare + 0x4 is a linker symbol in undefined_syms.us.txt.
+// The extern of D_80800928_chlensflare is declared int[] to match the object.
 u32 D_808006B0_chlensflare[32] = {
     0xFFFF64C8, 0x40000000, 0x3F000000, 0x1000000, 0xC8B43CB4, 0x3FC00000, 0x3F19999A, 0x2000000,
     0xFFFF64C8, 0x40000000, 0x3F333333, 0x3000000, 0xC8B43CB4, 0x3FC00000, 0x3F4CCCCD, 0x2000000,

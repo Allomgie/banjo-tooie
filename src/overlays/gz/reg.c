@@ -3,9 +3,9 @@
 #define F(i) ((s32) ctx->fpr[1 + (i) * 2])
 
 typedef struct {
-    u32 local_0;
-    u32 local_1;
-    char *local_2;
+    u32 mask;
+    u32 value;
+    char *name;
 } RegisterBitName;
 extern void func_8001D37C();
 typedef struct {
@@ -20,11 +20,14 @@ typedef struct {
     u32 fpr[2 * 16];
 } RegCtx;
 typedef union {
-    f32 local_0;
-    s32 local_1;
+    f32 as_f32;
+    s32 as_s32;
 } RegisterFloatBits;
 extern s32 func_800F21C4(f32);
 
+// TU-NOTE: the overlay data is defined here in C; IDO places the string literals in .rodata where the original has them.
+// Bit-name tables: {mask, value, name}, terminated by a zero mask.
+// RDP DPC_STATUS bit names
 RegisterBitName D_80800EA0_gzreg[12] = {
     0x1,   0x1,   "DPC_STATUS_XBUS_DMEM_DMA", 0x2,   0x2,   "DPC_STATUS_FREEZE",
     0x4,   0x4,   "DPC_STATUS_FLUSH",         0x8,   0x8,   "DPC_STATUS_START_GCLK",
@@ -32,6 +35,7 @@ RegisterBitName D_80800EA0_gzreg[12] = {
     0x40,  0x40,  "DPC_STATUS_CMD_BUSY",      0x80,  0x80,  "DPC_STATUS_CBUF_READY",
     0x100, 0x100, "DPC_STATUS_DMA_BUSY",      0x200, 0x200, "DPC_STATUS_END_VALID",
     0x400, 0x400, "DPC_STATUS_START_VALID",   0x0,   0x0,   ""};
+// RSP SP_STATUS bit names
 RegisterBitName D_80800F30_gzreg[16] = {
     0x1,    0x1,    "SP_STATUS_HALT",       0x2,    0x2,    "SP_STATUS_BROKE",
     0x4,    0x4,    "SP_STATUS_DMA_BUSY",   0x8,    0x8,    "SP_STATUS_DMA_FULL",
@@ -41,6 +45,7 @@ RegisterBitName D_80800F30_gzreg[16] = {
     0x400,  0x400,  "SP_STATUS_SIG3",       0x800,  0x800,  "SP_STATUS_SIG4",
     0x1000, 0x1000, "SP_STATUS_SIG5",       0x2000, 0x2000, "SP_STATUS_SIG6",
     0x4000, 0x4000, "SP_STATUS_SIG7",       0x0,    0x0,    ""};
+// Cause bit names
 u32 D_80800FF0_gzreg[84] = {
     0x80000000, 0x80000000, (u32) "BD",
     0x8000,     0x8000,     (u32) "IP8",
@@ -70,6 +75,7 @@ u32 D_80800FF0_gzreg[84] = {
     0x7C,       0x5C,       (u32) "Watchpoint exception",
     0x7C,       0x7C,       (u32) "Virtual coherency exception on data reference",
     0x0,        0x0,        (u32) ""};
+// SR bit names
 u32 D_80801140_gzreg[93] = {
     0x80000000,  0x80000000,  (u32) "CU3", 0x40000000,  0x40000000,  (u32) "CU2", 0x20000000,
     0x20000000,  (u32) "CU1", 0x10000000,  0x10000000,  (u32) "CU0", 0x8000000,   0x8000000,
@@ -85,6 +91,7 @@ u32 D_80801140_gzreg[93] = {
     (u32) "SUP", 0x18,        0x0,         (u32) "KER", 0x4,         0x4,         (u32) "ERL",
     0x2,         0x2,         (u32) "EXL", 0x1,         0x1,         (u32) "IE",  0x0,
     0x0,         (u32) ""};
+// FPCSR bit names
 u32 D_808012B4_gzreg[71] = {0x1000000, 0x1000000, (u32) "FS",
                             0x800000,  0x800000,  (u32) "C",
                             0x20000,   0x20000,   (u32) "Unimplemented operation",
@@ -110,62 +117,65 @@ u32 D_808012B4_gzreg[71] = {0x1000000, 0x1000000, (u32) "FS",
                             0x0,       0x0,       (u32) "",
                             0x0,       0x0};
 
-void func_80800000_gzreg(u32 param_0, char *param_1, RegisterBitName *param_2)
+// Prints "label: xVALUE <NAME,NAME,...>" for each table entry whose masked bits match.
+void func_80800000_gzreg(u32 reg_value, char *label, RegisterBitName *table)
 {
-    s32 local_0;
+    s32 first;
 
-    local_0 = 1;
-    func_8001D37C("%s: x%08X ", param_1, param_0);
+    first = 1;
+    func_8001D37C("%s: x%08X ", label, reg_value);
     func_8001D37C("<");
-    for (; param_2->local_0; param_2++) {
-        if ((param_2->local_0 & param_0) == param_2->local_1) {
-            if (local_0)
-                local_0 = 0;
+    for (; table->mask; table++) {
+        if ((table->mask & reg_value) == table->value) {
+            if (first)
+                first = 0;
             else
                 func_8001D37C(",");
-            func_8001D37C("%s", param_2->local_2);
+            func_8001D37C("%s", table->name);
         }
     }
     func_8001D37C(">\n");
 }
 
-void func_808000CC_gzreg(param_0, param_1) char *param_0;
-RegisterFloatBits param_1;
+// Prints a float register as S.NaN/Q.NaN/INF, a decimal number, or the raw integer for denormals.
+void func_808000CC_gzreg(buf, val) char *buf;
+RegisterFloatBits val;
 {
-    switch (func_800F21C4(param_1.local_0)) {
+    switch (func_800F21C4(val.as_f32)) {
         case 0:
-            sprintf(param_0, "S.NaN");
+            sprintf(buf, "S.NaN");
             break;
         case 1:
-            sprintf(param_0, "Q.NaN");
+            sprintf(buf, "Q.NaN");
             break;
         case 2:
-            sprintf(param_0, "+ve INF");
+            sprintf(buf, "+ve INF");
             break;
         case 3:
-            sprintf(param_0, "-ve INF");
+            sprintf(buf, "-ve INF");
             break;
         case 4:
         case 5:
         case 8:
         case 9:
-            sprintf(param_0, "%.6e", (f64) param_1.local_0);
+            sprintf(buf, "%.6e", (f64) val.as_f32);
             break;
         case 6:
         case 7:
-            sprintf(param_0, "%d", param_1.local_1);
+            sprintf(buf, "%d", val.as_s32);
     }
 }
 
-void gzreg_entrypoint_0(u8 *param_0)
+// First page: PC, cause, GPRs, FPCSR, FPRs, SR.
+void gzreg_entrypoint_0(u8 *thread)
 {
-    char sp50[24];
-    char sp40[16];
-    char sp30[16];
+    char buf_a[24];
+    char buf_b[16];
+    char buf_c[16];
     RegCtx *ctx;
 
-    ctx = (RegCtx *) (param_0 + 0x20);
-    func_8001D37C("pc:x%08X\n", *(s32 *) (param_0 + 0x11C));
+    ctx = (RegCtx *) (thread + 0x20);
+    func_8001D37C("pc:x%08X\n", *(s32 *) (thread + 0x11C));
     func_80800000_gzreg(ctx->cause, "cause", D_80800FF0_gzreg);
     func_8001D37C("\n");
     func_8001D37C("at:x%08X v0:x%08X v1:x%08X a0:x%08X\n", R(0), R(1), R(2), R(3));
@@ -179,32 +189,33 @@ void gzreg_entrypoint_0(u8 *param_0)
     func_8001D37C("\n");
     func_80800000_gzreg(ctx->fpcsr, "fpcsr", D_808012B4_gzreg);
     func_8001D37C("\n");
-    func_808000CC_gzreg(sp50, F(0));
-    func_808000CC_gzreg(sp40, F(1));
-    func_808000CC_gzreg(sp30, F(2));
-    func_8001D37C("f0  %-13s f2  %-13s f4  %-13s\n", sp50, sp40, sp30);
-    func_808000CC_gzreg(sp50, F(3));
-    func_808000CC_gzreg(sp40, F(4));
-    func_808000CC_gzreg(sp30, F(5));
-    func_8001D37C("f6  %-13s f8  %-13s f10 %-13s\n", sp50, sp40, sp30);
-    func_808000CC_gzreg(sp50, F(6));
-    func_808000CC_gzreg(sp40, F(7));
-    func_808000CC_gzreg(sp30, F(8));
-    func_8001D37C("f12 %-13s f14 %-13s f16 %-13s\n", sp50, sp40, sp30);
-    func_808000CC_gzreg(sp50, F(9));
-    func_808000CC_gzreg(sp40, F(10));
-    func_808000CC_gzreg(sp30, F(11));
-    func_8001D37C("f18 %-13s f20 %-13s f22 %-13s\n", sp50, sp40, sp30);
-    func_808000CC_gzreg(sp50, F(12));
-    func_808000CC_gzreg(sp40, F(13));
-    func_808000CC_gzreg(sp30, F(14));
-    func_8001D37C("f24 %-13s f26 %-13s f28 %-13s\n", sp50, sp40, sp30);
-    func_808000CC_gzreg(sp50, F(15));
-    func_8001D37C("f30 %-13s\n", sp50);
+    func_808000CC_gzreg(buf_a, F(0));
+    func_808000CC_gzreg(buf_b, F(1));
+    func_808000CC_gzreg(buf_c, F(2));
+    func_8001D37C("f0  %-13s f2  %-13s f4  %-13s\n", buf_a, buf_b, buf_c);
+    func_808000CC_gzreg(buf_a, F(3));
+    func_808000CC_gzreg(buf_b, F(4));
+    func_808000CC_gzreg(buf_c, F(5));
+    func_8001D37C("f6  %-13s f8  %-13s f10 %-13s\n", buf_a, buf_b, buf_c);
+    func_808000CC_gzreg(buf_a, F(6));
+    func_808000CC_gzreg(buf_b, F(7));
+    func_808000CC_gzreg(buf_c, F(8));
+    func_8001D37C("f12 %-13s f14 %-13s f16 %-13s\n", buf_a, buf_b, buf_c);
+    func_808000CC_gzreg(buf_a, F(9));
+    func_808000CC_gzreg(buf_b, F(10));
+    func_808000CC_gzreg(buf_c, F(11));
+    func_8001D37C("f18 %-13s f20 %-13s f22 %-13s\n", buf_a, buf_b, buf_c);
+    func_808000CC_gzreg(buf_a, F(12));
+    func_808000CC_gzreg(buf_b, F(13));
+    func_808000CC_gzreg(buf_c, F(14));
+    func_8001D37C("f24 %-13s f26 %-13s f28 %-13s\n", buf_a, buf_b, buf_c);
+    func_808000CC_gzreg(buf_a, F(15));
+    func_8001D37C("f30 %-13s\n", buf_a);
     func_8001D37C("\n");
     func_80800000_gzreg(ctx->sr, "sr", D_80801140_gzreg);
 }
 
+// Second page: RDP and RSP registers, free heap size.
 void gzreg_entrypoint_1(void)
 {
     func_8001D37C("RDP current = 0x%08X   (0x%016llx) \n",
@@ -221,7 +232,8 @@ void gzreg_entrypoint_1(void)
     func_8001D37C("\nFree memory was %d bytes.\n", heap_bytes_free());
 }
 
-int gzreg_entrypoint_2(union U *param_0)
+// Returns the faulted thread's saved PC.
+int gzreg_entrypoint_2(union U *thread)
 {
-    return *(s32 *) ((char *) param_0 + 0x11C);
+    return *(s32 *) ((char *) thread + 0x11C);
 }

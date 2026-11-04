@@ -1,203 +1,217 @@
 #include "common.h"
 
+// Section provider table entry. Length callbacks take no arguments.
 typedef struct {
     s32 (*length)(void);
     void *read, *write;
 } GameDataLength1446;
 extern GameDataLength1446 D_808004F0_glgamedata[];
 typedef struct GameDataCodec1627 {
-    s32 (*local_0)(void);
-    void (*local_1)(u8 *);
-    void (*local_2)(u8 *, s32, u8, s32 *);
+    s32 (*length)(void);
+    void (*read)(u8 *);
+    void (*write)(u8 *, s32, u8, s32 *);
 } GameDataCodec1627;
 typedef struct {
-    void (*local_0)(u8 *, s32);
-    s32 local_1;
-    s32 local_2;
+    void (*read)(u8 *, s32);
+    s32 pad_4;
+    s32 pad_8;
 } GameDataRecord60;
 extern GameDataRecord60 D_808004F4_glgamedata[];
 typedef struct {
     s32 (*func)(void);
-    u8 pad4[8];
+    u8 pad_4[8];
 } GameDataCheck;
 int glgamedata_entrypoint_6();
 
+// Length of section 1 (version).
 s32 func_80800000_glgamedata()
 {
     return 0x2;
 }
 
+// Section 1 writer: version byte.
 s32 func_80800008_glgamedata(u8 *param_0)
 {
     *param_0 = 0x1E;
 }
 
+// Total image size: magic plus every section with its 2-byte header.
 void glgamedata_entrypoint_0(void)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_2;
+    s32 total;
+    s32 len;
+    s32 i;
 
-    local_0 = 4;
-    for (local_2 = 0; local_2 < 7; local_2++) {
-        if (D_808004F0_glgamedata[local_2].length) {
-            local_1 = D_808004F0_glgamedata[local_2].length();
+    total = 4;
+    for (i = 0; i < 7; i++) {
+        if (D_808004F0_glgamedata[i].length) {
+            len = D_808004F0_glgamedata[i].length();
         } else {
-            local_1 = 0;
+            len = 0;
         }
-        local_0 += local_1;
-        local_0 += 2;
+        total += len;
+        total += 2;
     }
 }
 
-s32 func_80800084_glgamedata(u32 *param_0)
+// Writes the magic 'KHJC'.
+s32 func_80800084_glgamedata(u32 *out)
 {
-    *param_0 = 0x4B484A43;
+    *out = 0x4B484A43;
     return 4;
 }
 
-void func_80800098_glgamedata(void *param_0, s32 *param_1, u8 param_2)
+// Appends one section {id, length, data} at *offset.
+void func_80800098_glgamedata(void *image, s32 *offset, u8 id)
 {
-    s32 local_0;
-    u8 *local_1;
+    s32 len;
+    u8 *p;
 
-    if (((GameDataCodec1627 *) D_808004F0_glgamedata)[param_2].local_0) {
-        local_0 = ((GameDataCodec1627 *) D_808004F0_glgamedata)[param_2].local_0();
+    if (((GameDataCodec1627 *) D_808004F0_glgamedata)[id].length) {
+        len = ((GameDataCodec1627 *) D_808004F0_glgamedata)[id].length();
     } else {
-        local_0 = 0;
+        len = 0;
     }
-    local_1 = (u8 *) param_0 + *param_1;
-    local_1[0] = param_2;
-    local_1[1] = local_0;
-    local_1 += 2;
-    if (((GameDataCodec1627 *) D_808004F0_glgamedata)[param_2].local_2) {
-        ((GameDataCodec1627 *) D_808004F0_glgamedata)[param_2].local_2(local_1, local_0, param_2,
-                                                                       param_1);
+    p = (u8 *) image + *offset;
+    p[0] = id;
+    p[1] = len;
+    p += 2;
+    if (((GameDataCodec1627 *) D_808004F0_glgamedata)[id].write) {
+        ((GameDataCodec1627 *) D_808004F0_glgamedata)[id].write(p, len, id,
+                                                                       offset);
     }
-    *param_1 += local_0 + 2;
+    *offset += len + 2;
 }
 
-void glgamedata_entrypoint_1(void *param_0)
+// Builds the save image and its checksum.
+void glgamedata_entrypoint_1(void *image)
 {
-    s32 local_1;
-    s32 local_0 = 0;
-    glgamedata_entrypoint_6(param_0);
-    local_0 = func_80800084_glgamedata(param_0);
-    for (local_1 = 1; local_1 < 7; local_1++)
-        func_80800098_glgamedata(param_0, &local_0, (u8) local_1);
-    func_80800098_glgamedata(param_0, &local_0, 0);
-    _glcrc_entrypoint_0(param_0, 0x1C0);
+    s32 id;
+    s32 offset = 0;
+    glgamedata_entrypoint_6(image);
+    offset = func_80800084_glgamedata(image);
+    for (id = 1; id < 7; id++)
+        func_80800098_glgamedata(image, &offset, (u8) id);
+    func_80800098_glgamedata(image, &offset, 0);
+    _glcrc_entrypoint_0(image, 0x1C0);
 }
 
-s32 func_808001E4_glgamedata(s32 param_0)
+s32 func_808001E4_glgamedata(s32 image)
 {
     return 4;
 }
 
-s32 func_808001F0_glgamedata(u8 *param_0, s32 *param_1)
+// Reads one section and calls its read callback; returns its id.
+s32 func_808001F0_glgamedata(u8 *image, s32 *offset)
 {
-    s32 local_2;
-    u8 *local_0;
-    u8 local_1;
-    void (*local_3)(u8 *, s32);
+    s32 len;
+    u8 *p;
+    u8 id;
+    void (*read)(u8 *, s32);
 
-    local_0 = param_0 + *param_1;
-    local_1 = local_0[0];
-    local_2 = local_0[1];
-    local_0 += 2;
-    local_3 = D_808004F4_glgamedata[local_1].local_0;
-    if (local_3 != NULL) {
-        local_3(local_0, local_2);
+    p = image + *offset;
+    id = p[0];
+    len = p[1];
+    p += 2;
+    read = D_808004F4_glgamedata[id].read;
+    if (read != NULL) {
+        read(p, len);
     }
-    *param_1 += local_2 + 2;
-    return local_1;
+    *offset += len + 2;
+    return id;
 }
 
-s32 glgamedata_entrypoint_2(enum file_e file_id)
+// Applies the save image section by section until the terminator (id 0).
+s32 glgamedata_entrypoint_2(enum file_e image)
 {
-    u32 local_0;
+    u32 offset;
 
-    local_0 = func_808001E4_glgamedata(file_id);
-    while (func_808001F0_glgamedata(file_id, &local_0) != 0)
+    offset = func_808001E4_glgamedata(image);
+    while (func_808001F0_glgamedata(image, &offset) != 0)
         ;
 }
 
-s32 func_808002CC_glgamedata(param_0) void *param_0;
+// Offset of the first section (4), or 0 if the magic does not match.
+s32 func_808002CC_glgamedata(image) void *image;
 {
-    s32 *ptr = (s32 *) param_0;
-    return (*ptr == 0x4B484A43) ? 4 : 0;
+    s32 *head = (s32 *) image;
+    return (*head == 0x4B484A43) ? 4 : 0;
 }
 
-s32 glgamedata_entrypoint_3(u8 *param_0, u8 param_1, s32 *param_2, s32 *param_3)
+// Finds section id; returns 1 and its data offset and length, else 0.
+s32 glgamedata_entrypoint_3(u8 *image, u8 id, s32 *out_offset, s32 *out_len)
 {
-    u8 *local_0;
-    u8 local_1;
+    u8 *p;
+    u8 cur_id;
 
-    *param_2 = func_808002CC_glgamedata(param_0);
-    if (*param_2 == 0) {
+    *out_offset = func_808002CC_glgamedata(image);
+    if (*out_offset == 0) {
         return 0;
     }
     do {
-        local_0 = param_0 + *param_2;
-        local_1 = *local_0++;
-        *param_3 = *local_0;
-        *param_2 += 2;
-        if (local_1 == param_1) {
+        p = image + *out_offset;
+        cur_id = *p++;
+        *out_len = *p;
+        *out_offset += 2;
+        if (cur_id == id) {
             return 1;
         }
-        *param_2 += *param_3;
-    } while (local_1 != 0);
+        *out_offset += *out_len;
+    } while (cur_id != 0);
     return 0;
 }
 
-int glgamedata_entrypoint_4(u8 *param_0)
+// Checks the version section.
+int glgamedata_entrypoint_4(u8 *image)
 {
-    u32 local_0;
-    u32 local_1;
-    if (glgamedata_entrypoint_3(param_0, 1, &local_0, &local_1)) {
-        return param_0[local_0] == 0x1E;
+    u32 offset;
+    u32 len;
+    if (glgamedata_entrypoint_3(image, 1, &offset, &len)) {
+        return image[offset] == 0x1E;
     }
     {
         return 0;
     }
 }
 
-s32 glgamedata_entrypoint_5(u8 *param_0)
+// Validates the structure: 2 = bad magic or unknown id, 1 = length mismatch.
+s32 glgamedata_entrypoint_5(u8 *image)
 {
-    s32 local_0;
-    u8 local_1;
-    s32 local_2;
-    u8 *local_3;
+    s32 offset;
+    u8 id;
+    s32 expected_len;
+    u8 *hdr;
 
-    local_0 = func_808002CC_glgamedata();
-    if (local_0 == 0) {
+    offset = func_808002CC_glgamedata();
+    if (offset == 0) {
         return 2;
     }
     do {
-        local_1 = param_0[local_0];
-        local_3 = param_0 + local_0 + 1;
-        if (local_1 >= 7) {
+        id = image[offset];
+        hdr = image + offset + 1;
+        if (id >= 7) {
             return 2;
         }
-        if (((GameDataCheck *) D_808004F0_glgamedata)[local_1].func != NULL) {
-            local_2 = ((GameDataCheck *) D_808004F0_glgamedata)[local_1].func();
+        if (((GameDataCheck *) D_808004F0_glgamedata)[id].func != NULL) {
+            expected_len = ((GameDataCheck *) D_808004F0_glgamedata)[id].func();
         } else {
-            local_2 = 0;
+            expected_len = 0;
         }
-        if (local_2 != *local_3) {
+        if (expected_len != *hdr) {
             return 1;
         }
-        local_0 += *local_3 + 2;
-    } while (local_1 != 0);
+        offset += *hdr + 2;
+    } while (id != 0);
     return 0;
 }
 
-int glgamedata_entrypoint_6(param_0)
-u8 *param_0;
+// Clears the image.
+int glgamedata_entrypoint_6(image)
+u8 *image;
 {
-    u32 local_0;
-    for (local_0 = 0; local_0 < 0x1C0; local_0++) {
-        param_0[local_0] = 0;
+    u32 i;
+    for (i = 0; i < 0x1C0; i++) {
+        image[i] = 0;
     }
 }
 
@@ -215,6 +229,10 @@ extern void func_800D2188();
 extern void func_800DAC08();
 extern void func_800DAC10();
 extern void func_800DAC50();
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
+// The tables hold pointers to functions of this file, and IDO's assembler
+// schedules some of them differently unless they are in the same unit.
+// D_808004F4_glgamedata = D_808004F0_glgamedata + 0x4 (linker symbol).
 GameDataLength1446 D_808004F0_glgamedata[7] = {0,
                                                0,
                                                0,

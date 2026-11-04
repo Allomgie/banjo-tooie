@@ -47,7 +47,7 @@ extern f32 func_800F10B4(f32, f32, f32, f32, f32);
 extern void func_800FEC1C(f32);
 void func_80800098_chbanjoctrl();
 void func_80800544_chbanjoctrl();
-void func_80800684_chbanjoctrl(s32 *param_0, f32 param_1, s32 param_2, s32 param_3);
+void func_80800684_chbanjoctrl(s32 *actor, f32 cooldown, s32 condition, s32 effect);
 int func_808007D8_chbanjoctrl();
 s32 func_808011F4_chbanjoctrl();
 void func_80800DF8_chbanjoctrl();
@@ -58,44 +58,45 @@ int chbanjoctrl_entrypoint_0()
     return (int) &D_80801270_chbanjoctrl;
 }
 
-void func_8080000C_chbanjoctrl(f32 param_0[3])
+// Clears the flag at +0x65 only in map 0x12B (Chilli Billi), sets it elsewhere.
+void func_8080000C_chbanjoctrl(f32 actor[3])
 {
-    s32 local_0;
-    if ((local_0 = param_0[18]) == 3) {
-        param_0[1] = 0.0f;
-        param_0[3] = 0.0f;
-        if (func_800EA05C(param_0, local_0) == 0x12B) {
-            ((u8 *) param_0)[0x65] &= ~0x10;
+    s32 unk_0;
+    if ((unk_0 = actor[18]) == 3) {
+        actor[1] = 0.0f;
+        actor[3] = 0.0f;
+        if (func_800EA05C(actor, unk_0) == 0x12B) {
+            ((u8 *) actor)[0x65] &= ~0x10;
         } else {
-            ((u8 *) param_0)[0x65] = (((u8 *) param_0)[0x65] & 0xFFFFu) | 0x10;
+            ((u8 *) actor)[0x65] = (((u8 *) actor)[0x65] & 0xFFFFu) | 0x10;
         }
     }
-    func_80101FDC(param_0, local_0);
-    func_80800098_chbanjoctrl(param_0);
+    func_80101FDC(actor, unk_0);
+    func_80800098_chbanjoctrl(actor);
 }
 
-void func_80800098_chbanjoctrl(param_0) Actor *param_0;
+void func_80800098_chbanjoctrl(actor) Actor *actor;
 {
-    ((u8 *) param_0)[0x70] &= ~0xFE;
-    switch (param_0->unk70_10) {
+    ((u8 *) actor)[0x70] &= ~0xFE;
+    switch (actor->unk70_10) {
         case 2:
-            _subaddieDll_entrypoint_1(param_0);
+            _subaddieDll_entrypoint_1(actor);
             break;
         case 4:
-            func_80800684_chbanjoctrl(param_0, 3.0f, func_800F69E8, _chbanjoctrl_entrypoint_1);
+            func_80800684_chbanjoctrl(actor, 3.0f, func_800F69E8, _chbanjoctrl_entrypoint_1);
             break;
         case 5:
-            func_80800684_chbanjoctrl(param_0, 3.0f, func_800F6968, _chbanjoctrl_entrypoint_2);
+            func_80800684_chbanjoctrl(actor, 3.0f, func_800F6968, _chbanjoctrl_entrypoint_2);
     }
 }
 
-void func_8080012C_chbanjoctrl(u32 a0)
+void func_8080012C_chbanjoctrl(u32 actor)
 {
-    u16 local_0;
-    u32 local_1;
-    local_0 = *(u16 *) (a0 + 0x72);
-    local_1 = (local_0 & 0xFFFFu) >> 10;
-    if (local_1 != 0xb) {
+    u16 flags;
+    u32 mode;
+    flags = *(u16 *) (actor + 0x72);
+    mode = (flags & 0xFFFFu) >> 10;
+    if (mode != 0xb) {
         return;
     }
     func_808011F4_chbanjoctrl();
@@ -115,154 +116,160 @@ void func_808003F8_chbanjoctrl();
 
 void func_8080025C_chbanjoctrl();
 
-void func_80800160_chbanjoctrl(Actor *param_0)
+// Dispatches on the zone mode (unk70_10, 1-12).
+void func_80800160_chbanjoctrl(Actor *actor)
 {
     if (func_80090128()) {
-        func_8008FE68((f32 *) param_0->actorData);
-        switch (param_0->unk70_10) {
+        func_8008FE68((f32 *) actor->actorData);
+        switch (actor->unk70_10) {
             case 1:
                 break;
             case 2:
-                func_8080025C_chbanjoctrl(param_0);
+                func_8080025C_chbanjoctrl(actor);
                 break;
             case 3:
-                func_808003F8_chbanjoctrl(param_0);
+                func_808003F8_chbanjoctrl(actor);
                 break;
             case 4:
             case 5:
-                func_80800728_chbanjoctrl(param_0);
+                func_80800728_chbanjoctrl(actor);
                 break;
             case 6:
-                func_80800ADC_chbanjoctrl(param_0);
+                func_80800ADC_chbanjoctrl(actor);
                 break;
             case 7:
-                func_80800B18_chbanjoctrl(param_0);
+                func_80800B18_chbanjoctrl(actor);
                 break;
             case 8:
-                func_80800D04_chbanjoctrl(param_0);
+                func_80800D04_chbanjoctrl(actor);
                 break;
             case 9:
-                func_80800D50_chbanjoctrl(param_0);
+                func_80800D50_chbanjoctrl(actor);
                 break;
             case 10:
-                func_80800DF8_chbanjoctrl(param_0);
+                func_80800DF8_chbanjoctrl(actor);
                 break;
             case 11:
-                func_808010FC_chbanjoctrl(param_0);
+                func_808010FC_chbanjoctrl(actor);
                 break;
             case 12:
-                func_80801088_chbanjoctrl(param_0);
+                func_80801088_chbanjoctrl(actor);
                 break;
         }
     }
 }
 
-void func_8080025C_chbanjoctrl(s32 param_0)
+// Mode 2: kill plane, voids out the player when the actor is below its height.
+void func_8080025C_chbanjoctrl(s32 actor)
 {
+    // Matching: the do/while(0), the unused locals and the empty statements are needed for the match.
     do {
         if (func_808007D8_chbanjoctrl()) {
-            f32 local_f4;
-            f32 local_f6;
+            f32 unk_0;
+            f32 unk_1;
             ;
             ;
-            if (*(f32 *) ((u8 *) param_0 + 0x1C) < *(f32 *) ((u8 *) param_0 + 0x8)) {
+            if (*(f32 *) ((u8 *) actor + 0x1C) < *(f32 *) ((u8 *) actor + 0x8)) {
                 func_800904C8(0x91);
             }
         }
     } while (0);
 }
 
-s32 func_808002A4_chbanjoctrl(f32 param_0)
+s32 func_808002A4_chbanjoctrl(f32 angle)
 {
-    s32 local_0;
-    for (local_0 = 0; local_0 < 360; local_0 += 90) {
-        if (func_800F2094(local_0, param_0) < 6.0f)
+    s32 deg;
+    for (deg = 0; deg < 360; deg += 90) {
+        if (func_800F2094(deg, angle) < 6.0f)
             return 0;
     }
-    for (local_0 = 45; local_0 != 405; local_0 += 90) {
-        if (func_800F2094(local_0, param_0) < 7.0f)
+    for (deg = 45; deg != 405; deg += 90) {
+        if (func_800F2094(deg, angle) < 7.0f)
             return 0;
     }
     return 1;
 }
 
-f32 func_80800360_chbanjoctrl(f32 param_0)
+// Searches outward from angle for the nearest one that passes func_808002A4.
+f32 func_80800360_chbanjoctrl(f32 angle)
 {
-    s32 local_0 = 0;
-    f32 local_1 = 1.0f;
-    f32 local_2;
+    // Matching: needed for the match.
+    s32 zero = 0;
+    f32 step = 1.0f;
+    f32 candidate;
     do {
-        local_2 = param_0 + local_1;
-        if (func_808002A4_chbanjoctrl(local_2))
-            return local_2;
-        local_2 = param_0 - local_1;
-        if (func_808002A4_chbanjoctrl(local_2))
-            return local_2;
-        local_1 += 2.0f;
-    } while (local_0 == 0);
-    return param_0;
+        candidate = angle + step;
+        if (func_808002A4_chbanjoctrl(candidate))
+            return candidate;
+        candidate = angle - step;
+        if (func_808002A4_chbanjoctrl(candidate))
+            return candidate;
+        step += 2.0f;
+    } while (zero == 0);
+    return angle;
 }
 
-void func_808003F8_chbanjoctrl(Actor *param_0)
+// Mode 3: launch the player out of hot water (forced state 0x52).
+void func_808003F8_chbanjoctrl(Actor *actor)
 {
-    s32 local_1;
-    f32 local_x;
-    f32 local_0[2];
+    s32 player;
+    f32 target_x;
+    f32 target[2];
 
-    if (((f32 *) param_0->actorData)[1] <= param_0->position[1] &&
+    if (((f32 *) actor->actorData)[1] <= actor->position[1] &&
         func_8010CB0C(&D_808012B8_chbanjoctrl, 0xC1C, -140, -250)) {
-        local_1 = func_800F54E4();
-        if (func_800F6C5C(local_1) && func_800F6478(local_1)) {
-            local_x = func_80800360_chbanjoctrl(func_8010CD28(param_0));
-            func_800EFCD8(local_0, local_x, 3100.0f);
-            local_0[1] = 0.0f;
-            if (func_800F7D90(func_800F54E4(), 0x52, local_0, 1) == 2) {
-                if (param_0->unk64_20)
-                    func_80800544_chbanjoctrl(param_0);
+        player = func_800F54E4();
+        if (func_800F6C5C(player) && func_800F6478(player)) {
+            target_x = func_80800360_chbanjoctrl(func_8010CD28(actor));
+            func_800EFCD8(target, target_x, 3100.0f);
+            target[1] = 0.0f;
+            if (func_800F7D90(func_800F54E4(), 0x52, target, 1) == 2) {
+                if (actor->unk64_20)
+                    func_80800544_chbanjoctrl(actor);
                 else
-                    _chhotwaterpoolbits_entrypoint_5(param_0, 1.0f);
+                    _chhotwaterpoolbits_entrypoint_5(actor, 1.0f);
             }
         }
     }
 }
 
-s32 chbanjoctrl_entrypoint_1(s32 param_0)
+s32 chbanjoctrl_entrypoint_1(s32 actor)
 {
     if (func_800F7B9C(func_800F54E4(), 0x51) == 2) {
-        _chhotwaterpoolbits_entrypoint_5(param_0, 1.0f);
+        _chhotwaterpoolbits_entrypoint_5(actor, 1.0f);
         return 1;
     }
     return 0;
 }
 
-void func_80800544_chbanjoctrl(param_0) s32 param_0;
+void func_80800544_chbanjoctrl(actor) s32 actor;
 {
-    s32 local_0;
+    s32 state;
 
-    local_0 = func_800F5410(func_800F54E4());
+    state = func_800F5410(func_800F54E4());
 
-switch (local_0) {
+switch (state) {
     case 11:
-        func_800C4AF0(param_0 + 4, &D_808012C4_chbanjoctrl);
+        func_800C4AF0(actor + 4, &D_808012C4_chbanjoctrl);
         break;
     case 13:
-        func_800C4AF0(param_0 + 4, &D_808012D4_chbanjoctrl);
+        func_800C4AF0(actor + 4, &D_808012D4_chbanjoctrl);
         break;
     default:
-        func_800C4AF0(param_0 + 4, &D_808012E4_chbanjoctrl);
+        func_800C4AF0(actor + 4, &D_808012E4_chbanjoctrl);
 }
 
 func_800F7620(func_800F54E4(), 0x3F800000, 0x3F000000, 0x3ECCCCCD);
 }
 
-s32 chbanjoctrl_entrypoint_2(s32 param_0)
+s32 chbanjoctrl_entrypoint_2(s32 actor)
 {
-    s32 local_0;
+    s32 player;
 
-    local_0 = func_800F54E4(param_0);
+    player = func_800F54E4(actor);
 
-if (func_800F798C(local_0, 0xD, 3)) {
-    func_80800544_chbanjoctrl(param_0);
+if (func_800F798C(player, 0xD, 3)) {
+    func_80800544_chbanjoctrl(actor);
     return 1;
 }
 
@@ -270,320 +277,331 @@ return 0;
 
 }
 
-void func_80800638_chbanjoctrl(u8 *param_0, s32 param_1)
+void func_80800638_chbanjoctrl(u8 *actor, s32 new_state)
 {
-    if ((param_1 == 2) && ((*(s32(**)())((s8 *) param_0 + 0x24))() != 0)) {
-        *(f32 *) ((s8 *) param_0 + 0x28) = (f32) *(f32 *) ((s8 *) param_0 + 0x2C);
+    if ((new_state == 2) && ((*(s32(**)())((s8 *) actor + 0x24))() != 0)) {
+        *(f32 *) ((s8 *) actor + 0x28) = (f32) *(f32 *) ((s8 *) actor + 0x2C);
     }
 
-(*(s8 *) ((s8 *) (param_0) + (0x30))) = (s8) param_1;
+(*(s8 *) ((s8 *) (actor) + (0x30))) = (s8) new_state;
 }
 
-void func_80800684_chbanjoctrl(s32 *param_0, f32 param_1, s32 param_2, s32 param_3)
+void func_80800684_chbanjoctrl(s32 *actor, f32 cooldown, s32 condition, s32 effect)
 {
-    param_0[9] = param_3;
-    param_0[20] = param_2;
-    *(s8 *) ((char *) param_0 + 0x30) = 1;
-    *(f32 *) ((char *) param_0 + 0x2C) = param_1;
-    *(f32 *) ((char *) param_0 + 0x28) = 0.0f;
+    actor[9] = effect;
+    actor[20] = condition;
+    *(s8 *) ((char *) actor + 0x30) = 1;
+    *(f32 *) ((char *) actor + 0x2C) = cooldown;
+    *(f32 *) ((char *) actor + 0x28) = 0.0f;
 }
 
-int func_808006A8_chbanjoctrl(Actor *param_0)
+int func_808006A8_chbanjoctrl(Actor *actor)
 {
-    s32 local_0;
+    s32 player;
 
-    local_0 = func_800F54E4();
-    return !func_800F6DA0(local_0) && !func_800F6E40(local_0) && !func_800F64A4(local_0, 0x8000) &&
-           (*(s32(**)(s32))((u8 *) param_0 + 0x50))(local_0);
+    player = func_800F54E4();
+    return !func_800F6DA0(player) && !func_800F6E40(player) && !func_800F64A4(player, 0x8000) &&
+           (*(s32(**)(s32))((u8 *) actor + 0x50))(player);
 }
 
-void func_80800728_chbanjoctrl(s32 param_0)
+// State machine on the byte at +0x30: 1 waits for the condition, 2 counts down the timer at +0x28.
+void func_80800728_chbanjoctrl(s32 actor)
 {
-    s32 new_var3;
-    char new_var2;
-    u8 local_0;
-    s32 local_1;
-    u8 new_var;
-    local_1 = param_0;
-    new_var2 = *((u8 *) (param_0 + 0x30));
-    new_var = new_var2;
-    local_0 = new_var;
+    // Matching: the copies through the temporaries below are needed for the match.
+    s32 actor_tmp;
+    char state_raw;
+    u8 state;
+    s32 actor_copy;
+    u8 state_byte;
+    actor_copy = actor;
+    state_raw = *((u8 *) (actor + 0x30));
+    state_byte = state_raw;
+    state = state_byte;
 
-switch (local_0) {
+switch (state) {
     case 1:
-        if (func_808006A8_chbanjoctrl(param_0)) {
-            func_80800638_chbanjoctrl(param_0, 2);
+        if (func_808006A8_chbanjoctrl(actor)) {
+            func_80800638_chbanjoctrl(actor, 2);
         }
         return;
 
     case 2:
-        func_800D9078(param_0 + 0x28);
-        if (*(f32 *) (param_0 + 0x28) == 0.0f) {
-            if (func_808006A8_chbanjoctrl(local_1)) {
-                func_80800638_chbanjoctrl(new_var3 = local_1, 2);
+        func_800D9078(actor + 0x28);
+        if (*(f32 *) (actor + 0x28) == 0.0f) {
+            if (func_808006A8_chbanjoctrl(actor_copy)) {
+                // Matching: needed for the match.
+                func_80800638_chbanjoctrl(actor_tmp = actor_copy, 2);
                 return;
             }
-            func_80800638_chbanjoctrl(param_0, 1);
+            func_80800638_chbanjoctrl(actor, 1);
         }
 }
 
 }
 
-int func_808007D8_chbanjoctrl(param_0)
-Actor *param_0;
+// Checks the actor position against the zone bounds; zone 0 means no check.
+int func_808007D8_chbanjoctrl(actor)
+Actor *actor;
 {
-    u32 local_0;
-    local_0 = (u32) (*(s32 *) ((char *) (param_0) + 0x70)) >> 25;
+    u32 zone;
+    zone = (u32) (*(s32 *) ((char *) (actor) + 0x70)) >> 25;
 
-if (local_0 == 0) {
+if (zone == 0) {
     return 1;
 }
 
-return (func_800CC338((f32 *) ((char *) (param_0) + 0x18), local_0 - 1, 0, param_0) + 1) != 0;
+return (func_800CC338((f32 *) ((char *) (actor) + 0x18), zone - 1, 0, actor) + 1) != 0;
 }
 
-void func_80800824_chbanjoctrl(u8 *param_0, s32 param_1)
+void func_80800824_chbanjoctrl(u8 *actor, s32 player)
 {
-    f32 sp24[3];
-    f32 temp_f0;
-    f32 temp_f2;
+    f32 offset[3];
+    f32 limit_y;
+    f32 pos_y;
 
-    func_800F5D70(param_1, sp24, param_0);
+    func_800F5D70(player, offset, actor);
 
-if ((sp24[1] <= 0.0f) &&
-    (temp_f0 = *(f32 *) ((s8 *) param_0 + 8), temp_f2 = *(f32 *) ((s8 *) param_0 + 0x1C),
-     (temp_f2 <= (temp_f0 + 200.0f)))) {
-    if (temp_f2 <= temp_f0) {
-        func_8080025C_chbanjoctrl(param_0);
+if ((offset[1] <= 0.0f) &&
+    (limit_y = *(f32 *) ((s8 *) actor + 8), pos_y = *(f32 *) ((s8 *) actor + 0x1C),
+     (pos_y <= (limit_y + 200.0f)))) {
+    if (pos_y <= limit_y) {
+        func_8080025C_chbanjoctrl(actor);
         return;
     }
-    if (func_800F6720(param_1) != 0) {
+    if (func_800F6720(player) != 0) {
         func_800F7B9C(func_800F54E4(), 0x18);
     }
 }
 
 }
 
-void func_808008D8_chbanjoctrl(f32 *param_0, f32 param_1, f32 param_2)
+void func_808008D8_chbanjoctrl(f32 *vec, f32 dx, f32 dz)
 {
-    func_800EFA4C(param_0, param_0[0] + param_1, param_0[1], param_0[2] + param_2);
+    func_800EFA4C(vec, vec[0] + dx, vec[1], vec[2] + dz);
 }
 
-void func_8080091C_chbanjoctrl(Actor *param_0, s32 param_1)
+// Clamps the player position (actorData) into the player bounds, inset by 1200.
+void func_8080091C_chbanjoctrl(Actor *actor, s32 player)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    s32 local_3;
-    f32 local_4[3];
-    local_3 = 0;
-    func_800EFD24(local_0);
-    func_800F586C(func_800F54E4(), local_1, local_2);
-    local_1[0] += 1200.0f;
-    local_2[0] -= 1200.0f;
-    local_2[1] -= 1200.0f;
-    local_1[2] += 1200.0f;
-    local_2[2] -= 1200.0f;
+    f32 push[3];
+    f32 lower[3];
+    f32 upper[3];
+    s32 moved;
+    f32 delta[3];
+    moved = 0;
+    func_800EFD24(push);
+    func_800F586C(func_800F54E4(), lower, upper);
+    lower[0] += 1200.0f;
+    upper[0] -= 1200.0f;
+    upper[1] -= 1200.0f;
+    lower[2] += 1200.0f;
+    upper[2] -= 1200.0f;
 
-if (local_2[1] < ((f32 *) param_0->actorData)[1]) {
-    ((f32 *) param_0->actorData)[1] = local_2[1];
-    local_3 = 1;
+if (upper[1] < ((f32 *) actor->actorData)[1]) {
+    ((f32 *) actor->actorData)[1] = upper[1];
+    moved = 1;
 }
 
-if (((f32 *) param_0->actorData)[0] < local_1[0]) {
-    ((f32 *) param_0->actorData)[0] = local_1[0];
-    func_808008D8_chbanjoctrl(local_0, 1.0f, 0.0f);
-} else if (local_2[0] < ((f32 *) param_0->actorData)[0]) {
+if (((f32 *) actor->actorData)[0] < lower[0]) {
+    ((f32 *) actor->actorData)[0] = lower[0];
+    func_808008D8_chbanjoctrl(push, 1.0f, 0.0f);
+} else if (upper[0] < ((f32 *) actor->actorData)[0]) {
 
-((f32 *) param_0->actorData)[0] = local_2[0];
-func_808008D8_chbanjoctrl(local_0, -1.0f, 0.0f);
+((f32 *) actor->actorData)[0] = upper[0];
+func_808008D8_chbanjoctrl(push, -1.0f, 0.0f);
 }
-if (((f32 *) param_0->actorData)[2] < local_1[2]) {
-    ((f32 *) param_0->actorData)[2] = local_1[2];
-    func_808008D8_chbanjoctrl(local_0, 0.0f, 1.0f);
-} else if (local_2[2] < ((f32 *) param_0->actorData)[2]) {
-    ((f32 *) param_0->actorData)[2] = local_2[2];
-    func_808008D8_chbanjoctrl(local_0, 0.0f, -1.0f);
+if (((f32 *) actor->actorData)[2] < lower[2]) {
+    ((f32 *) actor->actorData)[2] = lower[2];
+    func_808008D8_chbanjoctrl(push, 0.0f, 1.0f);
+} else if (upper[2] < ((f32 *) actor->actorData)[2]) {
+    ((f32 *) actor->actorData)[2] = upper[2];
+    func_808008D8_chbanjoctrl(push, 0.0f, -1.0f);
 }
-if (func_800EEF24(local_0)) {
-    local_3 = 1;
+if (func_800EEF24(push)) {
+    moved = 1;
 
-if (func_800F6720(param_1)) {
-    func_800EF368(local_0, 100.0f);
-    func_800EFB24(local_4, param_0->actorData, local_0);
-    func_800F7700(param_1, 10, local_4);
-}
-
-}
-if (local_3) func_800F8418(param_1, param_0->actorData);
+if (func_800F6720(player)) {
+    func_800EF368(push, 100.0f);
+    func_800EFB24(delta, actor->actorData, push);
+    func_800F7700(player, 10, delta);
 }
 
-s32 func_80800ADC_chbanjoctrl(s32 param_0) {
-    s32 local_0;
-
-    local_0 = func_800F54E4(param_0);
-    func_80800824_chbanjoctrl(param_0, local_0);
-    func_8080091C_chbanjoctrl(param_0, local_0);
+}
+if (moved) func_800F8418(player, actor->actorData);
 }
 
+s32 func_80800ADC_chbanjoctrl(s32 actor) {
+    s32 player;
+
+    player = func_800F54E4(actor);
+    func_80800824_chbanjoctrl(actor, player);
+    func_8080091C_chbanjoctrl(actor, player);
+}
+
+// Mode 7: pushes the camera to the nearest edge of the box around the actor.
 void func_80800B18_chbanjoctrl(Actor *this)
 {
-    f32 r;
-    s32 cam;
-    f32 vec[3];
+    f32 radius;
+    s32 player;
+    f32 target[3];
     f32 pad;
     f32 dx;
     f32 dz;
 
-    r = this->unk74_7;
-    cam = func_800F54E4();
-    if (func_800F5410(cam) == 1) {
+    radius = this->unk74_7;
+    player = func_800F54E4();
+    if (func_800F5410(player) == 1) {
         return;
     }
-    if (BOX[0] < this->position[0] - r || this->position[0] + r <= BOX[0]
-        || BOX[1] < this->position[1] - r || this->position[1] + r - 100.0f <= BOX[1]
-        || BOX[2] < this->position[2] - r || this->position[2] + r <= BOX[2]) {
+    if (BOX[0] < this->position[0] - radius || this->position[0] + radius <= BOX[0]
+        || BOX[1] < this->position[1] - radius || this->position[1] + radius - 100.0f <= BOX[1]
+        || BOX[2] < this->position[2] - radius || this->position[2] + radius <= BOX[2]) {
         return;
     }
-    func_800F7E3C(cam, 0);
-    func_800EFA4C(vec, BOX[0], this->position[1] + r, BOX[2]);
-    dx = this->position[0] + r - vec[0];
-    if (r < dx) {
-        dx -= r + r;
+    func_800F7E3C(player, 0);
+    func_800EFA4C(target, BOX[0], this->position[1] + radius, BOX[2]);
+    dx = this->position[0] + radius - target[0];
+    if (radius < dx) {
+        dx -= radius + radius;
     }
-    dz = this->position[2] + r - vec[2];
-    if (r < dz) {
-        dz -= r + r;
+    dz = this->position[2] + radius - target[2];
+    if (radius < dz) {
+        dz -= radius + radius;
     }
     if (mlAbsF(dx) < mlAbsF(dz)) {
-        vec[0] += dx;
+        target[0] += dx;
     } else {
-        vec[2] += dz;
+        target[2] += dz;
     }
-    func_800F7814(cam, vec);
+    func_800F7814(player, target);
 }
 
-void func_80800D04_chbanjoctrl(f32 *arg0)
+// Matching: the line breaks in this function are needed for the match.
+void func_80800D04_chbanjoctrl(f32 *actor)
 {
-    f32 temp_f0;
-    do { temp_f0 = arg0[2]; if (temp_f0 < arg0[7]) { arg0[7] = temp_f0; func_800F8418(func_800F54E4(), arg0 + 6, arg0); } ; } while (0);
+    f32 limit_y;
+    do { limit_y = actor[2]; if (limit_y < actor[7]) { actor[7] = limit_y; func_800F8418(func_800F54E4(), actor + 6, actor); } ; } while (0);
 
 }
 
-void func_80800D50_chbanjoctrl(Actor *param_0)
+// Mode 9: forces player state 0x51, then restarts the 3.0 timer in unk58.
+void func_80800D50_chbanjoctrl(Actor *actor)
 {
-    if (func_800D90A4(&param_0->unk58) && func_800F56AC(func_800F54E4()) == 0x19 &&
+    if (func_800D90A4(&actor->unk58) && func_800F56AC(func_800F54E4()) == 0x19 &&
         !func_800F6DA0(func_800F54E4()) && func_800F6C5C(func_800F54E4())) {
         if (func_800F7B9C(func_800F54E4(), 0x51) == 2)
-            param_0->unk58 = 3.0f;
+            actor->unk58 = 3.0f;
     }
 
 }
 
-void func_80800DF8_chbanjoctrl(this) Actor *this;
+// Mode 10: launches the player (state 0x52) toward the middle of the ground span found near y=-3000.
+void func_80800DF8_chbanjoctrl(actor) Actor *actor;
 {
-    f32 mind;
-    f32 vec[3];
-    f32 dist;
-    f32 maxd;
+    f32 min_dist;
+    f32 pos[3];
+    f32 distance;
+    f32 max_dist;
     f32 yaw;
-    s32 cam;
-    s32 d;
+    s32 player;
+    s32 offset;
 
 if (!func_8001210C(4)) {
     return;
 }
 
-cam = func_800F54E4();
+player = func_800F54E4();
 
-if (func_800F7058(cam) == 2) {
+if (func_800F7058(player) == 2) {
     return;
 }
 
-if (func_800F6590(cam) || func_800F7018(cam) || func_800F6DA0(cam) || func_800F6E40(cam)) {
+if (func_800F6590(player) || func_800F7018(player) || func_800F6DA0(player) || func_800F6E40(player)) {
     return;
 }
 
-if (func_800F56AC(cam) != 0x14) {
+if (func_800F56AC(player) != 0x14) {
     return;
 }
 
-if (func_800F6AA4(cam) || func_800F55D0(cam)) {
+if (func_800F6AA4(player) || func_800F55D0(player)) {
     return;
 }
 
-if (!func_800F6478(cam) || !func_800F6438(cam) || !func_800F6C5C(cam)) {
+if (!func_800F6478(player) || !func_800F6438(player) || !func_800F6C5C(player)) {
     return;
 }
 
-maxd = mind = 0.0f;
-yaw = func_800F1DF4(D_808012F4_chbanjoctrl, this->actorData);
-for (d = 0; d != 600; d += 100) {
-    dist = d + 3200.0f;
-    func_800EEB9C(vec, yaw, dist);
-    vec[1] = -3000.0f;
+max_dist = min_dist = 0.0f;
+yaw = func_800F1DF4(D_808012F4_chbanjoctrl, actor->actorData);
+for (offset = 0; offset != 600; offset += 100) {
+    distance = offset + 3200.0f;
+    func_800EEB9C(pos, yaw, distance);
+    pos[1] = -3000.0f;
 
-if (func_800C696C(vec, 100.0f, -100.0f, 0, &vec[1])) {
-    if (-3020.0f < vec[1] && vec[1] < -2980.0f) {
-        maxd = dist;
-        if (mind == 0.0f) {
-            mind = dist;
+if (func_800C696C(pos, 100.0f, -100.0f, 0, &pos[1])) {
+    if (-3020.0f < pos[1] && pos[1] < -2980.0f) {
+        max_dist = distance;
+        if (min_dist == 0.0f) {
+            min_dist = distance;
         }
     }
 }
 
 }
-func_800EEB9C(vec, yaw, (mind + maxd) * 0.5f);
-vec[1] = -3000.0f;
-func_800F7D90(func_800F54E4(), 0x52, vec, 1);
+func_800EEB9C(pos, yaw, (min_dist + max_dist) * 0.5f);
+pos[1] = -3000.0f;
+func_800F7D90(func_800F54E4(), 0x52, pos, 1);
 }
 
-void func_8080102C_chbanjoctrl(param_0) Actor *param_0;
+// Ends the track 0x4A music effect and clears its flag.
+void func_8080102C_chbanjoctrl(actor) Actor *actor;
 {
-    if (param_0->unk64_20) {
+    if (actor->unk64_20) {
         func_800FECB8(3);
         func_800FCAE0(0x4A, 0, 0x7D0);
         func_800FCA90(0x4A);
-        *(u8 *) ((u8 *) param_0 + 0x65) &= 0xFFEF;
+        *(u8 *) ((u8 *) actor + 0x65) &= 0xFFEF;
     }
 }
 
-int func_80801088_chbanjoctrl(Actor *param_0)
+int func_80801088_chbanjoctrl(Actor *actor)
 {
     extern void func_800F4F34(s32, f32 *, f32, f32);
-    s32 local_0;
+    s32 player;
 
-    local_0 = func_800F54E4();
-    if (func_800F6720(local_0)) {
-        func_800F4F34(local_0, param_0->position, 0.0f, (f32) param_0->unk74_7);
+    player = func_800F54E4();
+    if (func_800F6720(player)) {
+        func_800F4F34(player, actor->position, 0.0f, (f32) actor->unk74_7);
 
 }
 }
 
-void func_808010FC_chbanjoctrl(param_0) Actor *param_0;
+// Mode 11: height-driven crossfade of music track 0x4A.
+void func_808010FC_chbanjoctrl(actor) Actor *actor;
 {
-    f32 local_0[3];
-    f32 local_1;
+    f32 player_pos[3];
+    f32 blend;
 
-    func_8008FE68(local_0);
-    if (param_0->position[1] < local_0[1]) {
-        if (!param_0->unk64_20) {
+    func_8008FE68(player_pos);
+    if (actor->position[1] < player_pos[1]) {
+        if (!actor->unk64_20) {
             func_800FEC60(3);
-            param_0->unk64_20 = 1;
+            actor->unk64_20 = 1;
         }
 
-local_1 = func_800F10B4(local_0[1] - param_0->position[1], 0.0f, 2000.0f, 1.0f, 0.0f);
-func_800FEC1C(local_1);
+blend = func_800F10B4(player_pos[1] - actor->position[1], 0.0f, 2000.0f, 1.0f, 0.0f);
+func_800FEC1C(blend);
 
 if (!func_800FCCD4(0x4A)) {
     func_800FC6B0(0x4A);
 }
 
-func_800FCAE0(0x4A, (s32) ((1.0f - local_1) * 20000.0f), 2000);
+func_800FCAE0(0x4A, (s32) ((1.0f - blend) * 20000.0f), 2000);
 }
 else
 {
-    func_8080102C_chbanjoctrl(param_0);
+    func_8080102C_chbanjoctrl(actor);
 }
 }
 
@@ -592,6 +610,9 @@ s32 func_808011F4_chbanjoctrl(void)
     func_8080102C_chbanjoctrl();
 }
 
+// TU-NOTE: the overlay .data is defined here in C (values from the ROM). Its tables hold pointers
+// to functions of this file, and IDO's assembler schedules some of them differently unless the tables
+// are in the same unit. Declared to match the object: D_80801270_chbanjoctrl as int[], D_808012B8_chbanjoctrl as s32[].
 extern void func_80105834();
 extern void func_8010A730();
 extern void func_80107C2C();

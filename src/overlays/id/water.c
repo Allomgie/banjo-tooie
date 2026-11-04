@@ -1,12 +1,12 @@
 #include "common.h"
 
 typedef struct {
-    s16 local_0[2];
-    f32 local_1;
-    f32 local_2;
-    s16 local_3[3];
+    s16 uv[2];
+    f32 time;
+    f32 amp;
+    s16 level[3];
     u16 pad_0;
-    f32 local_4[3];
+    f32 ramp[3];
 } WaterEffectState;
 extern f32 func_800DC264(f32, f32);
 typedef struct {
@@ -28,81 +28,84 @@ extern f32 func_80013970(f32);
 extern u8 _idwater_entrypoint_0[];
 extern void _glid_entrypoint_2(s32, s32, void *, void *);
 
-void idwater_entrypoint_0(s32 param_0, s16 *param_1, s16 *param_2, s16 *param_3)
+// Vertex kernel: adds the water level to Y and the UV offsets to the texture coords.
+void idwater_entrypoint_0(s32 unk_0, s16 *src, s16 *dst, s16 *state)
 {
-    param_2[1] = param_3[8] + param_1[1];
-    param_2[4] = param_1[4] + param_3[0];
-    param_2[5] = param_1[5] + param_3[1];
+    dst[1] = state[8] + src[1];
+    dst[4] = src[4] + state[0];
+    dst[5] = src[5] + state[1];
 }
 
-int idwater_entrypoint_1(param_0)
-s16 param_0[5];
+// Returns the current water height.
+int idwater_entrypoint_1(state)
+s16 state[5];
 {
-    return *(s16 *) ((s8 *) param_0 + 16);
+    return *(s16 *) ((s8 *) state + 16);
 }
 
-void idwater_entrypoint_2(s32 arg0)
+void idwater_entrypoint_2(s32 unk_0)
 {
 }
 
-void idwater_entrypoint_3(WaterEffectState *param_0, s32 param_1, s32 param_2, s32 param_3)
+void idwater_entrypoint_3(WaterEffectState *state, s32 amp, s32 unk_0, s32 unk_1)
 {
-    param_0->local_0[0] = 0;
-    param_0->local_0[1] = 0;
-    param_0->local_1 = func_800DC264(0.0f, 1.0f);
-    param_0->local_2 = (f32) param_1;
-    param_0->local_3[0] = 0;
-    param_0->local_3[1] = 0;
-    param_0->local_3[2] = 0;
-    param_0->local_4[0] = 0.0f;
-    param_0->local_4[1] = 0.0f;
-    param_0->local_4[2] = 0.0f;
+    state->uv[0] = 0;
+    state->uv[1] = 0;
+    state->time = func_800DC264(0.0f, 1.0f);
+    state->amp = (f32) amp;
+    state->level[0] = 0;
+    state->level[1] = 0;
+    state->level[2] = 0;
+    state->ramp[0] = 0.0f;
+    state->ramp[1] = 0.0f;
+    state->ramp[2] = 0.0f;
 }
 
-void idwater_entrypoint_4(WaterState *param_0, s32 param_1, s32 param_2)
+void idwater_entrypoint_4(WaterState *water, s32 unk_0, s32 unk_1)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2[2];
-    f32 local_4;
-    f32 local_5;
+    f32 level;
+    f32 dt;
+    f32 uv[2];
+    f32 bob;
+    f32 wave;
 
-    local_1 = func_800D8FF8();
-    param_0->t += local_1;
-    local_5 = func_800138D0(param_0->t * 0.2f * 180.0f);
-    local_2[0] = (150.0f * local_5 + func_80013970(param_0->t * 0.08f * 180.0f) * 100.0f) * 0.8f;
-    local_5 = func_80013970(param_0->t * 0.5f * 180.0f);
-    local_2[1] = (50.0f * local_5 + func_800138D0(param_0->t * 0.22f * 180.0f) * 100.0f) * 0.8f;
-    if (local_2[0] >= 0.0f) {
-        param_0->x = local_2[0] + 0.5f;
+    dt = func_800D8FF8();
+    water->t += dt;
+    wave = func_800138D0(water->t * 0.2f * 180.0f);
+    uv[0] = (150.0f * wave + func_80013970(water->t * 0.08f * 180.0f) * 100.0f) * 0.8f;
+    wave = func_80013970(water->t * 0.5f * 180.0f);
+    uv[1] = (50.0f * wave + func_800138D0(water->t * 0.22f * 180.0f) * 100.0f) * 0.8f;
+    if (uv[0] >= 0.0f) {
+        water->x = uv[0] + 0.5f;
     } else {
-        param_0->x = local_2[0] - 0.5f;
+        water->x = uv[0] - 0.5f;
     }
-    if (local_2[1] >= 0.0f) {
-        param_0->y = local_2[1] + 0.5f;
+    if (uv[1] >= 0.0f) {
+        water->y = uv[1] + 0.5f;
     } else {
-        param_0->y = local_2[1] - 0.5f;
+        water->y = uv[1] - 0.5f;
     }
-    local_5 = func_800138D0(param_0->t * 0.5f * 180.0f);
-    local_4 = func_80013970(param_0->t * 0.11f * 180.0f) * (param_0->amp * 0.25f) +
-              param_0->amp * 0.75f * local_5;
-    if (param_0->cur < param_0->max) {
-        param_0->prev = param_0->cur;
-        param_0->cur += local_1;
-        if (param_0->max < param_0->cur) {
-            param_0->cur = param_0->max;
+    wave = func_800138D0(water->t * 0.5f * 180.0f);
+    bob = func_80013970(water->t * 0.11f * 180.0f) * (water->amp * 0.25f) +
+          water->amp * 0.75f * wave;
+    // Ramp the level from lo to hi over max seconds.
+    if (water->cur < water->max) {
+        water->prev = water->cur;
+        water->cur += dt;
+        if (water->max < water->cur) {
+            water->cur = water->max;
         }
     }
-    if (param_0->cur < param_0->max) {
-        local_0 = param_0->lo + param_0->cur / param_0->max * (param_0->hi - param_0->lo);
+    if (water->cur < water->max) {
+        level = water->lo + water->cur / water->max * (water->hi - water->lo);
     } else {
-        local_0 = param_0->hi;
+        level = water->hi;
     }
-    local_0 += local_4;
-    if (local_0 >= 0.0f) {
-        param_0->out = local_0 + 0.5f;
+    level += bob;
+    if (level >= 0.0f) {
+        water->out = level + 0.5f;
     } else {
-        param_0->out = local_0 - 0.5f;
+        water->out = level - 0.5f;
     }
-    _glid_entrypoint_2(param_1, param_2, _idwater_entrypoint_0, param_0);
+    _glid_entrypoint_2(unk_0, unk_1, _idwater_entrypoint_0, water);
 }

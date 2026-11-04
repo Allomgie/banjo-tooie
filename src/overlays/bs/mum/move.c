@@ -1,5 +1,6 @@
 #include "overlays/bs/mum/move.h"
 
+// Stick-speed constants: 600 (run), 120 (walk), 80 (slow).
 f32 bsmummove_entrypoint_0(PlayerState *self)
 {
     return 600.0f;
@@ -15,6 +16,7 @@ f32 bsmummove_entrypoint_2(PlayerState *self)
     return 80.0f;
 }
 
+// Run: init.
 void func_80800030_bsmummove(PlayerState *self)
 {
     _bsmum_entrypoint_1(self);
@@ -22,6 +24,7 @@ void func_80800030_bsmummove(PlayerState *self)
     baroll_setIdeal(self, 0.0f);
 }
 
+// Run: enter.
 void func_80800068_bsmummove(PlayerState *self)
 {
     AnimCtrl *anim_ctrl;
@@ -51,6 +54,7 @@ void func_80800068_bsmummove(PlayerState *self)
     baroll_setAngularVelocity(self, 1000.0f, 12.0f);
 }
 
+// Run: update.
 void func_808001D8_bsmummove(PlayerState *self)
 {
     enum bs_state_e next_state;
@@ -94,11 +98,13 @@ s32 bsmummove_entrypoint_3(s32 idx)
     return D_808005B0_bsmummove[idx];
 }
 
+// Walk: init.
 void func_80800318_bsmummove(PlayerState *self)
 {
     _bsmum_entrypoint_1(self);
 }
 
+// Walk: enter.
 void func_80800338_bsmummove(PlayerState *self)
 {
     AnimCtrl *anim_ctrl;
@@ -123,6 +129,7 @@ void func_80800338_bsmummove(PlayerState *self)
     func_8008CA30(self, 1.0f);
 }
 
+// Walk: update.
 void func_80800444_bsmummove(PlayerState *self)
 {
     enum bs_state_e next_state;
@@ -166,6 +173,8 @@ s32 bsmummove_entrypoint_4(s32 idx)
     return D_808005C0_bsmummove[idx];
 }
 
+// TU-NOTE: the overlay .data is defined here in C; its tables point to functions of this file,
+// and IDO's assembler schedules some of them differently unless they share the unit.
 s32 D_808005B0_bsmummove[4] = {(u32) func_80800030_bsmummove, (u32) func_80800068_bsmummove,
                                (u32) func_808001D8_bsmummove, (u32) _bsmum_entrypoint_0};
 s32 D_808005C0_bsmummove[4] = {(u32) func_80800318_bsmummove, (u32) func_80800338_bsmummove,

@@ -2,92 +2,101 @@
 
 extern u8 D_8012762C;
 typedef struct {
-    s16 local_0, local_1, local_2;
+    s16 map_id, flags, level_id;
 } SectionRecord;
 extern SectionRecord D_80800210_gcsectionDll[];
 typedef struct {
-    s16 unk0;
-    s16 pad2[2];
+    s16 flags;
+    s16 pad_2[2];
 } SectionFlagsRecord;
 extern SectionFlagsRecord D_80800212_gcsectionDll[];
 int gcsectionDll_entrypoint_2();
 s32 gcsectionDll_entrypoint_3();
 
-void gcsectionDll_entrypoint_0(s32 param_0, s32 param_1)
+// Map load hook: sizes the per-player buffers and re-inits state.
+void gcsectionDll_entrypoint_0(s32 map_id, s32 param_1)
 {
-    s32 local_0;
+    s32 level;
 
-    local_0 = _gclevel_entrypoint_2();
-    if ((local_0 >= 0xF) && (local_0 < 0x20)) {
-        if (gcsectionDll_entrypoint_3(gcsectionDll_entrypoint_2(param_0), 0x20) != 0) {
+    level = _gclevel_entrypoint_2();
+    if ((level >= 0xF) && (level < 0x20)) {
+        if (gcsectionDll_entrypoint_3(gcsectionDll_entrypoint_2(map_id), 0x20) != 0) {
             func_8001A578(_gcstatusDll_entrypoint_11());
-        } else if (param_0 == 0x189) {
+        } else if (map_id == 0x189) {
             func_8001A578(0);
         }
         func_800F9178();
-        func_800A13B0(param_0);
+        func_800A13B0(map_id);
     }
 }
 
+// Map leave hook: frees the buffers.
 void gcsectionDll_entrypoint_1(s32 param_0)
 {
-    s32 local_0 = D_8012762C;
+    s32 level = D_8012762C;
 
     if (param_0) {
         func_800D389C();
         _glglobalsettings_entrypoint_2();
     }
-    if (local_0 > 0 && local_0 < 0x20) {
+    if (level > 0 && level < 0x20) {
         func_8001A63C();
     }
     func_80018634();
     func_800C0A2C();
 }
 
-SectionRecord *func_808000F0_gcsectionDll(s32 param_0, s32 param_1)
+// Returns the record for a map id (NULL if not found).
+SectionRecord *func_808000F0_gcsectionDll(s32 map_id, s32 param_1)
 {
-    SectionRecord *p;
-    for (p = &D_80800210_gcsectionDll[1]; p->local_0 != 0; p++) {
-        if (p->local_0 == param_0) {
-            return p;
+    SectionRecord *rec;
+    for (rec = &D_80800210_gcsectionDll[1]; rec->map_id != 0; rec++) {
+        if (rec->map_id == map_id) {
+            return rec;
         }
     }
+    // Matching: redundant branch (both paths return NULL), needed for the match.
     if (param_1 != 0) {
         return NULL;
     }
     return NULL;
 }
 
-int gcsectionDll_entrypoint_2(param_0)
-s32 param_0;
+// Returns the record index of a map.
+int gcsectionDll_entrypoint_2(map_id)
+s32 map_id;
 {
-    s32 local_0;
-    local_0 =
-        (s32) func_808000F0_gcsectionDll(param_0, 0) - (s32) & ((u8 *) D_80800210_gcsectionDll)[0];
-    return local_0 / 6;
+    s32 byte_offset;
+    byte_offset =
+        (s32) func_808000F0_gcsectionDll(map_id, 0) - (s32) & ((u8 *) D_80800210_gcsectionDll)[0];
+    return byte_offset / 6;
 }
 
-s32 gcsectionDll_entrypoint_3(param_0, param_1)
-s32 param_0;
-u32 param_1;
+// Tests the flag mask on a record.
+s32 gcsectionDll_entrypoint_3(record_index, flag_mask)
+s32 record_index;
+u32 flag_mask;
 {
-    return (D_80800212_gcsectionDll[param_0].unk0 & param_1) ? 1 : 0;
+    return (D_80800212_gcsectionDll[record_index].flags & flag_mask) ? 1 : 0;
 }
 
-int gcsectionDll_entrypoint_4(s32 param_0)
+// Returns byte 4 of the map's record (its level).
+int gcsectionDll_entrypoint_4(s32 map_id)
 {
-    u8 *local_0 = func_808000F0_gcsectionDll(param_0, 0);
-    return ((u8 *) local_0)[4];
+    u8 *record = func_808000F0_gcsectionDll(map_id, 0);
+    return ((u8 *) record)[4];
 }
 
-s32 gcsectionDll_entrypoint_5(s32 param_0)
+s32 gcsectionDll_entrypoint_5(s32 map_id)
 {
-    if (func_808000F0_gcsectionDll(param_0, 1)) {
+    if (func_808000F0_gcsectionDll(map_id, 1)) {
         return 1;
     }
     return 0;
 }
 
+// TU-NOTE: the table is defined here with values from the ROM. Linker aliases:
+// D_80800212_gcsectionDll = D_80800210_gcsectionDll + 0x2, D_80800216_gcsectionDll = D_80800210_gcsectionDll + 0x6.
 SectionRecord D_80800210_gcsectionDll[229] = {
     0x0,   0x0,     0x0,    0xA1,  0x2000,  0xD00,  0xA2,  0x2000,  0xD00,  0xA3,  0x2000,  0xD00,
     0xA4,  0x2000,  0xD00,  0xA5,  0x2000,  0xD00,  0xA6,  0x2000,  0xD00,  0xA7,  0x2000,  0xD00,

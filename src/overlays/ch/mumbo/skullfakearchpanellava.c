@@ -6,6 +6,7 @@ extern s32 func_800BABB8(s32, f32 *, f32 *, f32, s32 *);
 extern void *D_808001E0_chmumboskullfakearchpanellava;
 extern int D_80800228_chmumboskullfakearchpanellava[];
 
+// Returns the "Mumbo's skull wall smashed" flag of the current map (HFP 0x39C, JRL 0x39D).
 int func_80800000_chmumboskullfakearchpanellava()
 {
     if (func_800EA05C() == 0x134) {
@@ -17,24 +18,26 @@ int func_80800000_chmumboskullfakearchpanellava()
     return 0;
 }
 
-int func_80800054_chmumboskullfakearchpanellava(s32 param_0)
+// Despawns the panel if the wall is already smashed.
+int func_80800054_chmumboskullfakearchpanellava(s32 actor)
 {
-    if (func_800DA298(func_80800000_chmumboskullfakearchpanellava(param_0))) {
-        func_800FFAB0(param_0);
+    if (func_800DA298(func_80800000_chmumboskullfakearchpanellava(actor))) {
+        func_800FFAB0(actor);
     }
 }
 
-s32 func_8080008C_chmumboskullfakearchpanellava(Actor *param_0, s32 param_1, s32 param_2)
+// Hit (message 0x40): explodes and sets the smashed flag.
+s32 func_8080008C_chmumboskullfakearchpanellava(Actor *actor, s32 msg, s32 payload)
 {
-    f32 *local_0;
+    f32 *pos;
 
-    switch (param_1) {
+    switch (msg) {
         case 0x40:
-            local_0 = param_0->position;
-            _chexploder_entrypoint_3(param_0, local_0, 0xC);
-            func_800BABB8(0, local_0, local_0, param_0->scale,
+            pos = actor->position;
+            _chexploder_entrypoint_3(actor, pos, 0xC);
+            func_800BABB8(0, pos, pos, actor->scale,
                           D_80800160_chmumboskullfakearchpanellava);
-            func_800C4AF0(local_0, D_808001CC_chmumboskullfakearchpanellava);
+            func_800C4AF0(pos, D_808001CC_chmumboskullfakearchpanellava);
             func_800DA544(func_80800000_chmumboskullfakearchpanellava());
             break;
         default:
@@ -48,9 +51,9 @@ void *chmumboskullfakearchpanellava_entrypoint_0(void)
     return &D_808001E0_chmumboskullfakearchpanellava;
 }
 
-s32 func_8080012C_chmumboskullfakearchpanellava(s32 param_0)
+s32 func_8080012C_chmumboskullfakearchpanellava(s32 actor)
 {
-    func_800EFD24(param_0 + 4);
+    func_800EFD24(actor + 4);
 }
 
 int chmumboskullfakearchpanellava_entrypoint_1()
@@ -64,6 +67,9 @@ extern void func_80101870();
 extern void func_80108ED0();
 extern void func_80107C2C();
 extern void _bsbtrot_entrypoint_8();
+// TU-NOTE: the .data of this overlay is defined here in C. Its tables hold pointers to functions of
+// this file; IDO's assembler schedules some of them differently unless the tables are in the same
+// unit. D_80800228_chmumboskullfakearchpanellava is declared as int[] above.
 s32 D_80800160_chmumboskullfakearchpanellava[27] = {
     0x610001D, 0x9DD002B, 0x2000300, 0x220180, 0x2000480,  0x6000015, 0x26,
     0x190000,  0x7002D,   0x320064,  0x20DEA7, 0x71C0000A, -0x63FFE7, -0x63FF9C,

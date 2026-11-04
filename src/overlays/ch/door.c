@@ -2,9 +2,9 @@
 
 typedef struct {
     u8 pad_0[0x2E];
-    s16 local_0;
-    s16 local_1;
-    s16 local_2;
+    s16 unk_2E;
+    s16 unk_30;
+    s16 unk_32;
 } DoorLoopSound;
 extern void *func_80100094(Actor *, u32);
 extern void func_800C4B64(f32);
@@ -13,43 +13,43 @@ extern void func_800C4B7C(s32);
 extern void func_800C4B70(s32);
 extern void _subaddieaudioquick_entrypoint_2(Actor *, f32 *, void *);
 typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u8 unk4;
-    u8 unk5;
-    u16 flag : 1;
-    u16 id : 15;
+    u16 unk_0;
+    u16 unk_2;
+    u8 unk_4;
+    u8 unk_5;
+    u16 active : 1;
+    u16 flag_id : 15;
 } DoorEntry;
 typedef struct {
-    u32 unk0;
-    u8 pad4[0x18];
+    u32 flags;
+    u8 pad_4[0x18];
     DoorEntry ents[1];
 } DoorState;
 typedef struct {
-    s32 unk0;
-    u8 pad4[4];
-    u8 unk8_7 : 6;
-    u8 unk8_1 : 1;
-    u8 unk8_0 : 1;
-    u8 pad9;
-    s16 unkA;
-    u8 padC[0x14];
-    u8 unk20;
-    u8 unk21;
-    u8 pad22[2];
-    s16 unk24;
-    u8 pad26[2];
-    u8 unk28;
-    u8 unk29;
-    u8 pad2A[2];
-    s16 unk2C;
+    s32 flags;
+    u8 pad_4[4];
+    u8 motion : 6;
+    u8 reverse_pending : 1;
+    u8 unk_8_0 : 1;
+    u8 pad_9;
+    s16 move_time;
+    u8 pad_C[0x14];
+    u8 open_cutscene;
+    u8 unk_21;
+    u8 pad_22[2];
+    s16 unk_24;
+    u8 pad_26[2];
+    u8 close_cutscene;
+    u8 unk_29;
+    u8 pad_2A[2];
+    s16 unk_2C;
 } DoorLocal;
 extern void _chdoormake_entrypoint_5(Actor *, f32);
 extern s32 _glcutDll_entrypoint_19(s32);
 extern s32 _capod_entrypoint_17(f32);
 typedef struct {
-    u32 local_0;
-    s16 local_1;
+    u32 flags;
+    s16 flag_id;
 } DoorFlagState;
 extern f32 mlAbsF(f32);
 extern void func_800F5A00(s32, f32 *);
@@ -66,13 +66,13 @@ extern void func_800EFE50(f32 *, f32 *, f32 *, f32);
 extern void _sudeflect_entrypoint_3(f32 *, f32 *, f32 *, f32 *, s32);
 typedef struct {
     u32 flags;
-    u8 pad4[4];
+    u8 pad_4[4];
     u32 pad8_26 : 6;
-    u32 b25 : 1;
+    u32 reverse_pending : 1;
     u32 pad8_16 : 9;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
+    s16 move_time;
+    s16 open_delay;
+    s16 close_delay;
 } DoorData;
 void func_8080050C_chdoor();
 
@@ -94,284 +94,299 @@ void func_80800754_chdoor();
 void func_808008A0_chdoor();
 void func_80800B14_chdoor();
 
-void chdoor_entrypoint_0(s32 arg0)
+void chdoor_entrypoint_0(s32 actor)
 {
     func_80800028_chdoor();
-    func_8080050C_chdoor(arg0);
+    func_8080050C_chdoor(actor);
 }
 
 void func_8080069C_chdoor();
 
-void func_80800028_chdoor(Actor *param_0)
+// Per-frame door state machine. States: 1 closed, 2 delay before opening, 3 opening,
+// 4 open, 5 delay before closing, 6 closing, 7/8 locked variants.
+void func_80800028_chdoor(Actor *actor)
 {
-    u8 *local_0;
-    s32 local_5;
-    f32 local_1;
-    s32 local_2;
+    u8 *door;
+    s32 cutscene_id;
+    f32 open_prev;
+    s32 open_done;
+    // Matching: unused locals are needed for the match.
     s32 pad[2];
-    f32 local_3;
-    s32 local_4;
+    f32 close_prev;
+    s32 close_done;
 
-    local_0 = func_80100094(param_0, 0);
-    switch (param_0->unk70_10) {
+    door = func_80100094(actor, 0);
+    switch (actor->unk70_10) {
         case 1:
-            if (*(s32 *) local_0 & 4) {
-                if (func_800DA298(*(s16 *) (local_0 + 4))) {
-                    func_80800754_chdoor(param_0);
+            // closed: start opening once the flag or cutscene triggers
+            if (*(s32 *) door & 4) {
+                if (func_800DA298(*(s16 *) (door + 4))) {
+                    func_80800754_chdoor(actor);
                 }
             } else {
-                local_5 = local_0[0x20];
-                if (local_5 && _glcutDll_entrypoint_19(local_5)) {
-                    func_80800754_chdoor(param_0);
+                cutscene_id = door[0x20];
+                if (cutscene_id && _glcutDll_entrypoint_19(cutscene_id)) {
+                    func_80800754_chdoor(actor);
                 }
             }
             break;
         case 2:
-            if (func_800D9078(&param_0->unk58)) {
-                func_80800B14_chdoor(param_0, 3);
+            if (func_800D9078(&actor->unk58)) {
+                func_80800B14_chdoor(actor, 3);
             }
             break;
         case 3:
-            local_1 = param_0->unk58;
-            local_2 = func_800D9078(&param_0->unk58);
-            func_8080032C_chdoor(param_0,
-                                 func_800F12D4(param_0->unk58, 0.0f,
-                                               *(s16 *) (local_0 + 0xA) * 0.00390625f, 1.0f, 0.0f));
-            if (local_1 >= 0.2f && param_0->unk58 < 0.2f) {
-                func_8080069C_chdoor(param_0, 1);
+            // opening: message 0x9D when done
+            open_prev = actor->unk58;
+            open_done = func_800D9078(&actor->unk58);
+            func_8080032C_chdoor(actor,
+                                 func_800F12D4(actor->unk58, 0.0f,
+                                               *(s16 *) (door + 0xA) * 0.00390625f, 1.0f, 0.0f));
+            if (open_prev >= 0.2f && actor->unk58 < 0.2f) {
+                func_8080069C_chdoor(actor, 1);
             }
-            if (local_2) {
-                func_80800B14_chdoor(param_0, 4);
-                func_8010108C(param_0, 0x9D, 0);
+            if (open_done) {
+                func_80800B14_chdoor(actor, 4);
+                func_8010108C(actor, 0x9D, 0);
             }
             break;
         case 4:
-            if (*(s32 *) local_0 & 2) {
-                if (*(s32 *) local_0 & 4) {
-                    if (!func_800DA298(*(s16 *) (local_0 + 4))) {
-                        func_808008A0_chdoor(param_0);
+            // open: start closing on flag, cutscene or flag bit 0x400
+            if (*(s32 *) door & 2) {
+                if (*(s32 *) door & 4) {
+                    if (!func_800DA298(*(s16 *) (door + 4))) {
+                        func_808008A0_chdoor(actor);
                     }
                 } else {
-                    local_5 = local_0[0x28];
-                    if (local_5 && _glcutDll_entrypoint_19(local_5)) {
-                        func_808008A0_chdoor(param_0);
+                    cutscene_id = door[0x28];
+                    if (cutscene_id && _glcutDll_entrypoint_19(cutscene_id)) {
+                        func_808008A0_chdoor(actor);
                     }
                 }
-                if (*(s32 *) local_0 & 0x400) {
-                    func_808008A0_chdoor(param_0);
+                if (*(s32 *) door & 0x400) {
+                    func_808008A0_chdoor(actor);
                 }
             }
             break;
         case 5:
-            if (func_800D9078(&param_0->unk58)) {
-                func_80800B14_chdoor(param_0, 6);
+            if (func_800D9078(&actor->unk58)) {
+                func_80800B14_chdoor(actor, 6);
             }
             break;
         case 6:
-            local_3 = param_0->unk58;
-            local_4 = func_800D9078(&param_0->unk58);
-            func_8080032C_chdoor(param_0,
-                                 func_800F12D4(param_0->unk58, 0.0f,
-                                               *(s16 *) (local_0 + 0xA) * 0.00390625f, 0.0f, 1.0f));
-            if (local_3 >= 0.2f && param_0->unk58 < 0.2f) {
-                func_8080069C_chdoor(param_0, 0);
+            // closing: message 0x9E when done
+            close_prev = actor->unk58;
+            close_done = func_800D9078(&actor->unk58);
+            func_8080032C_chdoor(actor,
+                                 func_800F12D4(actor->unk58, 0.0f,
+                                               *(s16 *) (door + 0xA) * 0.00390625f, 0.0f, 1.0f));
+            if (close_prev >= 0.2f && actor->unk58 < 0.2f) {
+                func_8080069C_chdoor(actor, 0);
             }
-            if (local_4) {
-                func_80800B14_chdoor(param_0, 1);
-                func_8010108C(param_0, 0x9E, 0);
+            if (close_done) {
+                func_80800B14_chdoor(actor, 1);
+                func_8010108C(actor, 0x9E, 0);
             }
     }
 }
 
-void func_8080032C_chdoor(Actor *param_0, f32 param_1)
+// Puts the door at open_amount (0 = closed, 1 = open) according to its motion kind.
+void func_8080032C_chdoor(Actor *actor, f32 open_amount)
 {
-    u8 *local_6;
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
+    u8 *door;
+    f32 closed_pos[3];
+    f32 open_pos[3];
+    f32 roll_closed_pos[3];
+    f32 roll_open_pos[3];
+    // Matching: unused local is needed for the match.
     s32 unused_slot1;
-    f32 local_4[3];
-    f32 local_5[3];
+    f32 deflect_a[3];
+    f32 deflect_b[3];
 
-    local_6 = func_80100094(param_0, 0);
-    switch (*(u32 *) (local_6 + 8) >> 26) {
+    door = func_80100094(actor, 0);
+    switch (*(u32 *) (door + 8) >> 26) {
         case 1:
-            param_0->rotation[1] =
-                *(s16 *) (local_6 + 0x12) +
-                func_800F1DCC(*(s16 *) (local_6 + 0x10), *(s16 *) (local_6 + 0x12)) * param_1;
+            actor->rotation[1] =
+                *(s16 *) (door + 0x12) +
+                func_800F1DCC(*(s16 *) (door + 0x10), *(s16 *) (door + 0x12)) * open_amount;
             break;
         case 2:
-            func_800EE88C(local_0, (s16 *) (local_6 + 0x10));
-            func_800EE88C(local_1, (s16 *) (local_6 + 0x16));
-            func_800EFE50(param_0->position, local_0, local_1, param_1);
+            func_800EE88C(closed_pos, (s16 *) (door + 0x10));
+            func_800EE88C(open_pos, (s16 *) (door + 0x16));
+            func_800EFE50(actor->position, closed_pos, open_pos, open_amount);
             break;
         case 3:
-            param_0->rotation[0] =
-                *(s16 *) (local_6 + 0x12) +
-                func_800F1DCC(*(s16 *) (local_6 + 0x10), *(s16 *) (local_6 + 0x12)) * param_1;
+            actor->rotation[0] =
+                *(s16 *) (door + 0x12) +
+                func_800F1DCC(*(s16 *) (door + 0x10), *(s16 *) (door + 0x12)) * open_amount;
             break;
         case 4:
-            func_800EE88C(local_2, (s16 *) (local_6 + 0x10));
-            func_800EE88C(local_3, (s16 *) (local_6 + 0x16));
-            func_800EFE50(param_0->position, local_2, local_3, param_1);
-            param_0->rotation[2] = *(s16 *) (local_6 + 0x1C) * 0.00390625f * param_1;
+            func_800EE88C(roll_closed_pos, (s16 *) (door + 0x10));
+            func_800EE88C(roll_open_pos, (s16 *) (door + 0x16));
+            func_800EFE50(actor->position, roll_closed_pos, roll_open_pos, open_amount);
+            actor->rotation[2] = *(s16 *) (door + 0x1C) * 0.00390625f * open_amount;
             break;
         case 5:
-            _subaddiefade_entrypoint_1(param_0, (s32) ((1.0f - param_1) * 255.0f));
+            _subaddiefade_entrypoint_1(actor, (s32) ((1.0f - open_amount) * 255.0f));
     }
-    func_80103014(param_0);
-    if ((*(s32 *) local_6 << 15) < 0) {
-        func_80104004(param_0, local_4, local_5);
-        _sudeflect_entrypoint_3(param_0->position, param_0->rotation, local_4, local_5, 2);
+    func_80103014(actor);
+    if ((*(s32 *) door << 15) < 0) {
+        func_80104004(actor, deflect_a, deflect_b);
+        _sudeflect_entrypoint_3(actor->position, actor->rotation, deflect_a, deflect_b, 2);
     }
 }
 
-void func_8080050C_chdoor(Actor *param_0)
+// Starts the door's loop sound if it has one.
+void func_8080050C_chdoor(Actor *actor)
 {
-    s32 local_0;
-    DoorLoopSound *local_1;
+    s32 moving;
+    DoorLoopSound *sound;
 
-    local_0 = 0;
-    local_1 = func_80100094(param_0, 0);
-    if (param_0->unk70_10 == 3 || param_0->unk70_10 == 6)
-        local_0 = 1;
-    if (local_1->local_0 && (local_0 || (!local_0 && param_0->unk5F))) {
-        func_800C4B7C(local_1->local_0);
-        func_800C4B70(local_1->local_1);
-        func_800C4B64((f32) local_1->local_2 * 0.00390625f);
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, local_0,
+    moving = 0;
+    sound = func_80100094(actor, 0);
+    if (actor->unk70_10 == 3 || actor->unk70_10 == 6)
+        moving = 1;
+    if (sound->unk_2E && (moving || (!moving && actor->unk5F))) {
+        func_800C4B7C(sound->unk_2E);
+        func_800C4B70(sound->unk_30);
+        func_800C4B64((f32) sound->unk_32 * 0.00390625f);
+        _subaddieaudioloop_entrypoint_4(actor, actor->position, moving,
                                         (s16 *) D_808015B0_chdoor);
     }
 }
 
-void func_808005E4_chdoor(Actor *param_0, s32 param_1)
+// One-shot sound at the start of a motion.
+void func_808005E4_chdoor(Actor *actor, s32 opening)
 {
-    s16 *local_0;
+    s16 *door;
 
-    local_0 = func_80100094(param_0, 0);
-    if (local_0[28] != 0 &&
-        ((param_1 != 0 && local_0[26] != 0) || (param_1 == 0 && local_0[27] != 0))) {
-        func_800C4B7C(local_0[28]);
-        func_800C4B70(local_0[29]);
-        func_800C4B64(local_0[30] * 0.00390625f);
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808015B0_chdoor);
+    door = func_80100094(actor, 0);
+    if (door[28] != 0 &&
+        ((opening != 0 && door[26] != 0) || (opening == 0 && door[27] != 0))) {
+        func_800C4B7C(door[28]);
+        func_800C4B70(door[29]);
+        func_800C4B64(door[30] * 0.00390625f);
+        _subaddieaudioquick_entrypoint_2(actor, actor->position, D_808015B0_chdoor);
     }
 }
 
-void func_8080069C_chdoor(Actor *param_0, s32 param_1)
+// One-shot sound near the end of a motion.
+void func_8080069C_chdoor(Actor *actor, s32 opening)
 {
-    s16 *local_0;
+    s16 *door;
 
-    local_0 = func_80100094(param_0, 0);
-    if (local_0[33] != 0 &&
-        ((param_1 != 0 && local_0[31] != 0) || (param_1 == 0 && local_0[32] != 0))) {
-        func_800C4B7C(local_0[33]);
-        func_800C4B70(local_0[34]);
-        func_800C4B64(local_0[35] * 0.00390625f);
-        _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_808015B0_chdoor);
+    door = func_80100094(actor, 0);
+    if (door[33] != 0 &&
+        ((opening != 0 && door[31] != 0) || (opening == 0 && door[32] != 0))) {
+        func_800C4B7C(door[33]);
+        func_800C4B70(door[34]);
+        func_800C4B64(door[35] * 0.00390625f);
+        _subaddieaudioquick_entrypoint_2(actor, actor->position, D_808015B0_chdoor);
     }
 }
 
-void func_80800754_chdoor(param_0) Actor *param_0;
+// Starts opening (state 2 or 3, 7 when locked) and snaps the door to its closed pose.
+void func_80800754_chdoor(actor) Actor *actor;
 {
-    u8 *local_0;
-    s32 local_1;
-    local_0 = func_80100094(param_0, 0);
-    if (*(s16 *) (local_0 + 12))
-        local_1 = 2;
+    u8 *door;
+    s32 state;
+    door = func_80100094(actor, 0);
+    if (*(s16 *) (door + 12))
+        state = 2;
     else
-        local_1 = 3;
-    if (func_800DA298(0x9CC, local_1)) {
-        if ((*(u32 *) local_0 & 0x4000) &&
-            (!(*(u32 *) local_0 & 0x80) ||
-             !func_800DA298(*(u16 *) (local_0 + 0x22) & 0x7FFF, local_1)))
-            local_1 = 7;
-        func_80800B14_chdoor(param_0, local_1);
-        switch (*(u32 *) (local_0 + 8) >> 26) {
+        state = 3;
+    if (func_800DA298(0x9CC, state)) {
+        if ((*(u32 *) door & 0x4000) &&
+            (!(*(u32 *) door & 0x80) ||
+             !func_800DA298(*(u16 *) (door + 0x22) & 0x7FFF, state)))
+            state = 7;
+        func_80800B14_chdoor(actor, state);
+        switch (*(u32 *) (door + 8) >> 26) {
             case 1:
-                param_0->rotation[1] = *(s16 *) (local_0 + 0x12);
+                actor->rotation[1] = *(s16 *) (door + 0x12);
                 break;
             case 2:
-                func_800EE88C(param_0->position, (s16 *) (local_0 + 0x10));
+                func_800EE88C(actor->position, (s16 *) (door + 0x10));
                 break;
             case 3:
-                param_0->rotation[0] = *(s16 *) (local_0 + 0x12);
+                actor->rotation[0] = *(s16 *) (door + 0x12);
                 break;
             case 4:
-                func_800EE88C(param_0->position, (s16 *) (local_0 + 0x10));
-                param_0->rotation[2] = 0.0f;
+                func_800EE88C(actor->position, (s16 *) (door + 0x10));
+                actor->rotation[2] = 0.0f;
                 break;
             case 5:
-                _subaddiefade_entrypoint_1(param_0, 255);
+                _subaddiefade_entrypoint_1(actor, 255);
                 break;
         }
-        func_80103014(param_0);
+        func_80103014(actor);
     }
 }
 
-void func_808008A0_chdoor(param_0) Actor *param_0;
+// Starts closing (state 5 or 6, 8 when locked) and snaps the door to its open pose.
+void func_808008A0_chdoor(actor) Actor *actor;
 {
-    u8 *local_0 = func_80100094(param_0, 0);
-    s32 local_1 = *(s16 *) (local_0 + 14) ? 5 : 6;
+    u8 *door = func_80100094(actor, 0);
+    s32 state = *(s16 *) (door + 14) ? 5 : 6;
 
-    if ((*(u32 *) local_0 & 0x4000) &&
-        (!(*(u32 *) local_0 & 0x80) || !func_800DA298(*(u16 *) (local_0 + 0x2A) & 0x7FFF))) {
-        local_1 = 8;
+    if ((*(u32 *) door & 0x4000) &&
+        (!(*(u32 *) door & 0x80) || !func_800DA298(*(u16 *) (door + 0x2A) & 0x7FFF))) {
+        state = 8;
     }
-    func_80800B14_chdoor(param_0, local_1);
-    switch (*(u32 *) (local_0 + 8) >> 26) {
+    func_80800B14_chdoor(actor, state);
+    switch (*(u32 *) (door + 8) >> 26) {
         case 1:
-            param_0->rotation[1] = *(s16 *) (local_0 + 0x10);
+            actor->rotation[1] = *(s16 *) (door + 0x10);
             break;
         case 2:
-            func_800EE88C(param_0->position, local_0 + 0x16);
+            func_800EE88C(actor->position, door + 0x16);
             break;
         case 3:
-            param_0->rotation[0] = *(s16 *) (local_0 + 0x10);
+            actor->rotation[0] = *(s16 *) (door + 0x10);
             break;
         case 4:
-            func_800EE88C(param_0->position, local_0 + 0x16);
-            param_0->rotation[2] = *(s16 *) (local_0 + 0x1C) * 0.00390625f;
+            func_800EE88C(actor->position, door + 0x16);
+            actor->rotation[2] = *(s16 *) (door + 0x1C) * 0.00390625f;
             break;
         case 5:
-            _subaddiefade_entrypoint_1(param_0, 0);
+            _subaddiefade_entrypoint_1(actor, 0);
     }
-    func_80103014(param_0);
+    func_80103014(actor);
 }
 
-void func_808009F4_chdoor(param_0) Actor *param_0;
+// Player walked through: skips the delay and starts the next motion; reverses one in progress.
+void func_808009F4_chdoor(actor) Actor *actor;
 {
-    u8 *local_0;
-    f32 local_1;
-    s16 local_2;
-    local_0 = func_80100094(param_0, 0);
-    switch (param_0->unk70_10) {
+    u8 *door;
+    f32 remaining;
+    s16 saved_delay;
+    door = func_80100094(actor, 0);
+    switch (actor->unk70_10) {
         case 1:
         case 2:
         case 7:
-            local_2 = *(s16 *) (local_0 + 0xC);
-            *(s16 *) (local_0 + 0xC) = 0;
-            func_80800754_chdoor(param_0);
-            *(s16 *) (local_0 + 0xC) = local_2;
+            saved_delay = *(s16 *) (door + 0xC);
+            *(s16 *) (door + 0xC) = 0;
+            func_80800754_chdoor(actor);
+            *(s16 *) (door + 0xC) = saved_delay;
             break;
         case 6:
-            local_1 = *(s16 *) (local_0 + 0xA) * 0.00390625f - param_0->unk58;
-            func_80800B14_chdoor(param_0, 3);
-            param_0->unk58 = local_1;
+            remaining = *(s16 *) (door + 0xA) * 0.00390625f - actor->unk58;
+            func_80800B14_chdoor(actor, 3);
+            actor->unk58 = remaining;
             break;
         case 3:
-            local_1 = *(s16 *) (local_0 + 0xA) * 0.00390625f - param_0->unk58;
-            func_80800B14_chdoor(param_0, 6);
-            param_0->unk58 = local_1;
+            remaining = *(s16 *) (door + 0xA) * 0.00390625f - actor->unk58;
+            func_80800B14_chdoor(actor, 6);
+            actor->unk58 = remaining;
             break;
         case 4:
         case 5:
         case 8:
-            local_2 = *(s16 *) (local_0 + 0xE);
-            *(s16 *) (local_0 + 0xE) = 0;
-            func_808008A0_chdoor(param_0);
-            *(s16 *) (local_0 + 0xE) = local_2;
+            saved_delay = *(s16 *) (door + 0xE);
+            *(s16 *) (door + 0xE) = 0;
+            func_808008A0_chdoor(actor);
+            *(s16 *) (door + 0xE) = saved_delay;
     }
 }
 
@@ -379,186 +394,189 @@ void func_80801330_chdoor();
 
 void func_80800FC0_chdoor();
 
-void func_80800B14_chdoor(param_0, param_1) Actor *param_0;
-s32 param_1;
+// Enters new_state and runs its entry actions (sounds, camera pod, music, flag).
+void func_80800B14_chdoor(actor, new_state) Actor *actor;
+s32 new_state;
 {
-    DoorData *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
+    DoorData *door;
+    s32 old_state;
+    s32 flag_4;
+    s32 flag_8;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = param_0->unk70_10;
-    local_2 = (local_0->flags & 4) ? 1 : 0;
-    local_3 = (local_0->flags & 8) ? 1 : 0;
-    if (local_0->b25) {
-        switch (local_1) {
+    door = func_80100094(actor, 0);
+    old_state = actor->unk70_10;
+    flag_4 = (door->flags & 4) ? 1 : 0;
+    flag_8 = (door->flags & 8) ? 1 : 0;
+    if (door->reverse_pending) {
+        switch (old_state) {
             case 3:
-                func_80101FDC(param_0, 6);
-                func_80800FC0_chdoor(param_0, 1);
-                param_0->unk58 = local_0->unkA * 0.00390625f;
+                func_80101FDC(actor, 6);
+                func_80800FC0_chdoor(actor, 1);
+                actor->unk58 = door->move_time * 0.00390625f;
                 break;
             case 6:
-                func_80101FDC(param_0, 3);
-                if (local_0->unkC == 0) {
-                    func_80800FC0_chdoor(param_0, 0);
+                func_80101FDC(actor, 3);
+                if (door->open_delay == 0) {
+                    func_80800FC0_chdoor(actor, 0);
                 }
-                param_0->unk58 = local_0->unkA * 0.00390625f;
+                actor->unk58 = door->move_time * 0.00390625f;
         }
-        local_0->b25 = 0;
+        door->reverse_pending = 0;
         return;
     }
-    func_80101FDC(param_0, param_1);
-    switch (param_1) {
+    func_80101FDC(actor, new_state);
+    switch (new_state) {
         case 1:
-            _subaddieaudioloop_entrypoint_2(param_0);
-            func_80103110(param_0, local_2 | local_3);
-            func_80801330_chdoor(param_0, 0);
-            if (local_0->flags & 0x100) {
-                func_800E148C(func_800E1610(2, 100.0f, 0.85f, param_0->position), 1000.0f, 4000.0f);
+            _subaddieaudioloop_entrypoint_2(actor);
+            func_80103110(actor, flag_4 | flag_8);
+            func_80801330_chdoor(actor, 0);
+            if (door->flags & 0x100) {
+                func_800E148C(func_800E1610(2, 100.0f, 0.85f, actor->position), 1000.0f, 4000.0f);
                 func_80018820(0, 1.0f, 0.4f);
             }
             break;
         case 2:
-            func_80800FC0_chdoor(param_0, 0);
-            param_0->unk58 = local_0->unkC * 0.00390625f;
-            func_80103110(param_0, 1);
+            func_80800FC0_chdoor(actor, 0);
+            actor->unk58 = door->open_delay * 0.00390625f;
+            func_80103110(actor, 1);
             break;
         case 3:
-            if (local_0->flags & 0x40) {
+            if (door->flags & 0x40) {
                 func_800FC660(0x10);
             }
-            if (local_0->unkC == 0) {
-                func_80800FC0_chdoor(param_0, 0);
+            if (door->open_delay == 0) {
+                func_80800FC0_chdoor(actor, 0);
             }
-            param_0->unk58 = local_0->unkA * 0.00390625f;
-            func_808005E4_chdoor(param_0, 1);
-            func_80103110(param_0, 1);
-            func_80801330_chdoor(param_0, 1);
+            actor->unk58 = door->move_time * 0.00390625f;
+            func_808005E4_chdoor(actor, 1);
+            func_80103110(actor, 1);
+            func_80801330_chdoor(actor, 1);
             break;
         case 4:
-            _subaddieaudioloop_entrypoint_2(param_0);
-            func_80103110(param_0, local_2 | local_3);
-            if (local_0->flags & 0x800) {
-                func_8010A624(param_0);
+            _subaddieaudioloop_entrypoint_2(actor);
+            func_80103110(actor, flag_4 | flag_8);
+            if (door->flags & 0x800) {
+                func_8010A624(actor);
             }
-            if (local_0->flags & 0x2000) {
-                param_0->unk64_16 = 0;
+            if (door->flags & 0x2000) {
+                actor->unk64_16 = 0;
             }
-            if (local_0->flags & 1) {
-                func_800FFAB0(param_0);
+            if (door->flags & 1) {
+                func_800FFAB0(actor);
             }
             break;
         case 5:
-            func_80800FC0_chdoor(param_0, 1);
-            param_0->unk58 = local_0->unkE * 0.00390625f;
-            func_80103110(param_0, 1);
+            func_80800FC0_chdoor(actor, 1);
+            actor->unk58 = door->close_delay * 0.00390625f;
+            func_80103110(actor, 1);
             break;
         case 6:
-            if (local_0->flags & 0x1000) {
+            if (door->flags & 0x1000) {
                 func_800FC660(0x17);
             }
-            if (local_0->unkE == 0) {
-                func_80800FC0_chdoor(param_0, 1);
+            if (door->close_delay == 0) {
+                func_80800FC0_chdoor(actor, 1);
             }
-            if (local_0->flags & 0x800) {
-                func_8010A63C(param_0);
+            if (door->flags & 0x800) {
+                func_8010A63C(actor);
             }
-            if (local_0->flags & 0x2000) {
-                param_0->unk64_16 = 1;
+            if (door->flags & 0x2000) {
+                actor->unk64_16 = 1;
             }
-            param_0->unk58 = local_0->unkA * 0.00390625f;
-            func_808005E4_chdoor(param_0, 0);
-            func_80103110(param_0, 1);
+            actor->unk58 = door->move_time * 0.00390625f;
+            func_808005E4_chdoor(actor, 0);
+            func_80103110(actor, 1);
             break;
         case 7:
-            func_80800FC0_chdoor(param_0, 0);
-            func_80103110(param_0, local_3);
+            func_80800FC0_chdoor(actor, 0);
+            func_80103110(actor, flag_8);
             break;
         case 8:
-            func_80800FC0_chdoor(param_0, 1);
-            func_80103110(param_0, local_3);
+            func_80800FC0_chdoor(actor, 1);
+            func_80103110(actor, flag_8);
     }
 }
 
-void func_80800FC0_chdoor(Actor *param_0, s32 param_1)
+// Triggers the camera pod shot of record index (0 = open, 1 = close).
+void func_80800FC0_chdoor(Actor *actor, s32 index)
 {
-    DoorState *local_0;
+    DoorState *door;
 
-    local_0 = func_80100094(param_0, 0);
-    if (local_0->ents[param_1].flag) {
-        if ((local_0->unk0 & 0x80) && local_0->ents[param_1].id) {
-            if (!func_800DA9E4(local_0->ents[param_1].id, 1)) {
-                _capod_entrypoint_13(param_0->unk0, 0, local_0->ents[param_1].unk5,
-                                     local_0->ents[param_1].unk2);
+    door = func_80100094(actor, 0);
+    if (door->ents[index].active) {
+        if ((door->flags & 0x80) && door->ents[index].flag_id) {
+            if (!func_800DA9E4(door->ents[index].flag_id, 1)) {
+                _capod_entrypoint_13(actor->unk0, 0, door->ents[index].unk_5,
+                                     door->ents[index].unk_2);
             }
         } else {
-            _capod_entrypoint_13(param_0->unk0, 0, local_0->ents[param_1].unk5,
-                                 local_0->ents[param_1].unk2);
+            _capod_entrypoint_13(actor->unk0, 0, door->ents[index].unk_5,
+                                 door->ents[index].unk_2);
         }
     }
 }
 
-s32 chdoor_entrypoint_1(Actor *this, s32 msg, s32 arg2)
+// Message handler: 7 open, 8 close, 0x49 cutscene, 0x6F player walks through.
+s32 chdoor_entrypoint_1(Actor *actor, s32 msg, s32 arg)
 {
-    DoorLocal *local;
-    s32 a;
-    s32 b;
+    DoorLocal *door;
+    s32 open_id;
+    s32 close_id;
 
-    local = func_80100094(this, 0);
+    door = func_80100094(actor, 0);
     switch (msg) {
         case 7:
-            if (arg2 != 0 && local->unkA * 0.00390625f == 0.0f) {
-                _chdoormake_entrypoint_5(this, arg2);
+            if (arg != 0 && door->move_time * 0.00390625f == 0.0f) {
+                _chdoormake_entrypoint_5(actor, arg);
             }
-            switch (this->unk70_10) {
+            switch (actor->unk70_10) {
                 case 6:
-                    local->unk8_1 = 1;
+                    door->reverse_pending = 1;
                     break;
                 case 1:
-                    func_80800754_chdoor(this);
+                    func_80800754_chdoor(actor);
             }
             break;
         case 8:
-            if (!(local->unk0 & 2)) {
+            if (!(door->flags & 2)) {
                 return 0;
             }
-            switch (this->unk70_10) {
+            switch (actor->unk70_10) {
                 case 3:
-                    local->unk8_1 = 1;
+                    door->reverse_pending = 1;
                     break;
                 case 4:
-                    func_808008A0_chdoor(this);
+                    func_808008A0_chdoor(actor);
             }
             break;
         case 0x49:
-            a = local->unk20;
-            b = local->unk28;
-            if (a != -1 && _glcutDll_entrypoint_19(a)) {
-                func_80800754_chdoor(this);
+            open_id = door->open_cutscene;
+            close_id = door->close_cutscene;
+            if (open_id != -1 && _glcutDll_entrypoint_19(open_id)) {
+                func_80800754_chdoor(actor);
                 return 1;
             }
-            if (b != -1 && _glcutDll_entrypoint_19(b)) {
-                func_808008A0_chdoor(this);
+            if (close_id != -1 && _glcutDll_entrypoint_19(close_id)) {
+                func_808008A0_chdoor(actor);
                 return 1;
             }
             return 0;
         case 0x6F:
-            if (!(local->unk0 & 0x200)) {
+            if (!(door->flags & 0x200)) {
                 return 0;
             }
-            return func_808013C0_chdoor(this, arg2);
+            return func_808013C0_chdoor(actor, arg);
         case 0xE:
-            if (!(local->unk0 & 0x4000)) {
+            if (!(door->flags & 0x4000)) {
                 return 2;
             }
-            if (arg2 == local->unk21) {
-                if (_capod_entrypoint_17(local->unk24 * 0.00390625f)) {
-                    func_80800B14_chdoor(this, 3);
+            if (arg == door->unk_21) {
+                if (_capod_entrypoint_17(door->unk_24 * 0.00390625f)) {
+                    func_80800B14_chdoor(actor, 3);
                 }
-            } else if (arg2 == local->unk29) {
-                if (_capod_entrypoint_17(local->unk2C * 0.00390625f)) {
-                    func_80800B14_chdoor(this, 6);
+            } else if (arg == door->unk_29) {
+                if (_capod_entrypoint_17(door->unk_2C * 0.00390625f)) {
+                    func_80800B14_chdoor(actor, 6);
                 }
             }
             return 3;
@@ -568,53 +586,56 @@ s32 chdoor_entrypoint_1(Actor *this, s32 msg, s32 arg2)
     return 1;
 }
 
-void func_80801330_chdoor(Actor *param_0, s32 param_1)
+// Sets or clears the door's game flag (inverted by flags bit 0x10, skipped by 0x20).
+void func_80801330_chdoor(Actor *actor, s32 set)
 {
-    DoorFlagState *local_0;
-    s32 local_1;
-    local_0 = func_80100094(param_0, 0);
-    if (local_0->local_1 != -1 && !(local_0->local_0 & 0x20)) {
-        local_1 = param_1 ? 1 : 0;
-        if (local_0->local_0 & 0x10)
-            func_800DA3B8(local_0->local_1, local_1 ? 0 : 1);
+    DoorFlagState *door;
+    s32 value;
+    door = func_80100094(actor, 0);
+    if (door->flag_id != -1 && !(door->flags & 0x20)) {
+        value = set ? 1 : 0;
+        if (door->flags & 0x10)
+            func_800DA3B8(door->flag_id, value ? 0 : 1);
         else
-            func_800DA3B8(local_0->local_1, local_1);
+            func_800DA3B8(door->flag_id, value);
     }
 }
 
-s32 func_808013C0_chdoor(param_0, param_1)
-Actor *param_0;
-s32 param_1;
+// Tests whether the player crossed the door's line; if so triggers func_808009F4_chdoor.
+s32 func_808013C0_chdoor(actor, player)
+Actor *actor;
+s32 player;
 {
-    u8 *local_0;
-    f32 local_1[3];
-    f32 local_5;
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_4[3];
-    f32 local_6;
-    f32 local_7;
-    local_0 = func_80100094(param_0, 0);
-    func_800F5A00(param_1, local_1);
-    if (*(u32 *) (local_0 + 8) >> 26 == 2)
-        local_5 = *(s16 *) (local_0 + 0x12);
+    u8 *door;
+    f32 player_pos[3];
+    f32 door_y;
+    f32 segment_a[3];
+    f32 segment_b[3];
+    f32 unk_0[3];
+    f32 dx;
+    f32 dz;
+    door = func_80100094(actor, 0);
+    func_800F5A00(player, player_pos);
+    if (*(u32 *) (door + 8) >> 26 == 2)
+        door_y = *(s16 *) (door + 0x12);
     else
-        local_5 = param_0->position[1];
-    if (mlAbsF(local_1[1] - local_5) > 100.0f)
+        door_y = actor->position[1];
+    if (mlAbsF(player_pos[1] - door_y) > 100.0f)
         return 0;
-    local_6 = func_800137AC(param_0->rotation[1]) * 100.0f;
-    local_7 = func_800137C4() * 100.0f;
-    local_2[0] = param_0->position[0] - local_6;
-    local_2[2] = param_0->position[2] - local_7;
-    local_3[0] = param_0->position[0] + local_6;
-    local_3[2] = param_0->position[2] + local_7;
-    func_800EEB9C(local_4, func_800F5F24(param_1), 200.0f);
-    func_800EF04C(local_4, local_1);
-    if (!func_800F0AA4(local_2, local_3, local_1, local_4))
+    dx = func_800137AC(actor->rotation[1]) * 100.0f;
+    dz = func_800137C4() * 100.0f;
+    segment_a[0] = actor->position[0] - dx;
+    segment_a[2] = actor->position[2] - dz;
+    segment_b[0] = actor->position[0] + dx;
+    segment_b[2] = actor->position[2] + dz;
+    func_800EEB9C(unk_0, func_800F5F24(player), 200.0f);
+    func_800EF04C(unk_0, player_pos);
+    if (!func_800F0AA4(segment_a, segment_b, player_pos, unk_0))
         return 0;
-    func_808009F4_chdoor(param_0);
+    func_808009F4_chdoor(actor);
     return 1;
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
 u8 D_808015B0_chdoor[16] = {0x0, 0x21, 0x0, 0x1D, 0x0, 0x1E, 0x0, 0x2,
                             0x0, 0x0,  0x0, 0x0,  0x0, 0x0,  0x0, 0x0};

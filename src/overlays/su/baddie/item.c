@@ -1,4 +1,5 @@
 #include "common.h"
+// TU-NOTE: the .data of this overlay is defined here in C; values come from the ROM.
 
 extern void _subaddielink_entrypoint_0();
 extern void func_80090658();
@@ -17,97 +18,105 @@ typedef struct {
 } SignBf65_0;
 void func_80800224_subaddieitem();
 
-void subaddieitem_entrypoint_0(void *param_0, long param_1, int param_2, unsigned int param_3)
+// Initializes the exchange state: item id, radius and flags (2 = play jingle, 1 = delete the item).
+void subaddieitem_entrypoint_0(void *state, long item_id, int radius, unsigned int flags)
 {
-    *(u8 *) ((char *) param_0 + 0x0) = 0;
-    *(s16 *) ((char *) param_0 + 0x4) = param_1;
-    *(s16 *) ((char *) param_0 + 0x6) = param_2;
-    *(u8 *) ((char *) param_0 + 0x1) = param_3;
-    *(u8 *) ((char *) param_0 + 0x2) = 0;
-    *(u8 *) ((char *) param_0 + 0x3) = 0;
-    *(f32 *) ((char *) param_0 + 0x10) = 0.0f;
-    _subaddielink_entrypoint_0((char *) param_0 + 0x8);
+    *(u8 *) ((char *) state + 0x0) = 0;
+    *(s16 *) ((char *) state + 0x4) = item_id;
+    *(s16 *) ((char *) state + 0x6) = radius;
+    *(u8 *) ((char *) state + 0x1) = flags;
+    *(u8 *) ((char *) state + 0x2) = 0;
+    *(u8 *) ((char *) state + 0x3) = 0;
+    *(f32 *) ((char *) state + 0x10) = 0.0f;
+    _subaddielink_entrypoint_0((char *) state + 0x8);
 }
 
-s32 subaddieitem_entrypoint_1(u8 *ptr, s32 param_1)
+// Sets how many items are removed from the inventory.
+s32 subaddieitem_entrypoint_1(u8 *state, s32 count)
 {
-    ptr[2] = param_1;
+    state[2] = count;
 }
 
-void subaddieitem_entrypoint_2(u8 *param_0)
+// Starts waiting for the player to hold out the item.
+void subaddieitem_entrypoint_2(u8 *state)
 {
-    func_80090658(1, param_0);
-    *(s8 *) ((s8 *) param_0 + 3) = 1;
-    *(s8 *) ((s8 *) param_0 + 0) = 1;
-    *(f32 *) ((s8 *) param_0 + 0x10) = 0.0f;
-    _subaddielink_entrypoint_0(param_0 + 8, param_0);
+    func_80090658(1, state);
+    *(s8 *) ((s8 *) state + 3) = 1;
+    *(s8 *) ((s8 *) state + 0) = 1;
+    *(f32 *) ((s8 *) state + 0x10) = 0.0f;
+    _subaddielink_entrypoint_0(state + 8, state);
 }
 
-int subaddieitem_entrypoint_3(Actor *param_0, f32 *param_1, u8 *param_2)
+// Per-frame update. State 1 waits for the item, 2 waits for the handover, 3 finishes.
+// Returns 1 when finished.
+int subaddieitem_entrypoint_3(Actor *npc, f32 *pos, u8 *state)
 {
-    s32 local_0;
+    s32 done;
     s32 pad0;
-    Actor *local_2;
-    f32 local_1[1];
+    Actor *item;
+    f32 pos_buf[1];
 
-    local_0 = 0;
-    *(f32 *) (param_2 + 0x10) += func_800D8FF8();
-    switch (param_2[0]) {
+    done = 0;
+    *(f32 *) (state + 0x10) += func_800D8FF8();
+    switch (state[0]) {
         case 1:
-            if (func_800902E4(param_0->position, (f32) *(s16 *) (param_2 + 6),
-                              *(s16 *) (param_2 + 4), &param_0) &&
-                func_8008FE14() == *(s16 *) (param_2 + 4) && func_80090818()) {
-                if (!param_1) {
-                    param_1 = local_1;
-                    func_80103DFC(param_0, param_1);
+            if (func_800902E4(npc->position, (f32) *(s16 *) (state + 6),
+                              *(s16 *) (state + 4), &npc) &&
+                func_8008FE14() == *(s16 *) (state + 4) && func_80090818()) {
+                if (!pos) {
+                    pos = pos_buf;
+                    func_80103DFC(npc, pos);
                 }
-                _subaddielink_entrypoint_1(param_2 + 8, func_8008FDEC());
-                func_80090768(param_1);
-                param_2[0] = 2;
+                _subaddielink_entrypoint_1(state + 8, func_8008FDEC());
+                func_80090768(pos);
+                state[0] = 2;
             }
             break;
         case 2:
-            if (!_subaddielink_entrypoint_2(param_2 + 8)) {
-                func_80800224_subaddieitem(param_0, param_2, 0);
+            if (!_subaddielink_entrypoint_2(state + 8)) {
+                func_80800224_subaddieitem(npc, state, 0);
             } else {
-                local_2 = (Actor *) _subaddielink_entrypoint_4(param_2 + 8);
-                if (!((ShiftBf64_22_0 *) local_2)->f && !((SignBf65_0 *) local_2)->f) {
-                    func_80800224_subaddieitem(param_0, param_2, local_2);
+                item = (Actor *) _subaddielink_entrypoint_4(state + 8);
+                if (!((ShiftBf64_22_0 *) item)->f && !((SignBf65_0 *) item)->f) {
+                    func_80800224_subaddieitem(npc, state, item);
                 }
             }
             break;
         case 3:
-            if (param_2[3]) {
+            if (state[3]) {
                 func_80090658(0);
-                param_2[3] = 0;
+                state[3] = 0;
             }
-            _subaddielink_entrypoint_0(param_2 + 8);
-            param_2[0] = 0;
-            local_0 = 1;
+            _subaddielink_entrypoint_0(state + 8);
+            state[0] = 0;
+            done = 1;
     }
-    return local_0;
+    return done;
 }
 
-void func_80800224_subaddieitem(param_0, param_1, param_2) s32 param_0;
-u8 *param_1;
-s32 param_2;
+// Completes the handover: jingle, delete item, remove from inventory, notify the NPC.
+void func_80800224_subaddieitem(npc, state, item) s32 npc;
+u8 *state;
+s32 item;
 {
-    unsigned long local_0;
-    local_0 = *(u8 *) ((s8 *) param_1 + 1);
-    if (local_0 & 2) {
+    unsigned long flags;
+    flags = *(u8 *) ((s8 *) state + 1);
+    if (flags & 2) {
         func_800FC660(0xE);
+        // Matching: the always-true if is needed for the match.
         if (1) {
-            local_0 = *(u8 *) ((s8 *) param_1 + 1);
+            flags = *(u8 *) ((s8 *) state + 1);
         }
     }
-    if ((local_0 & 1) && (param_2 != 0)) {
-        func_800FFAB0(param_2);
+    if ((flags & 1) && (item != 0)) {
+        func_800FFAB0(item);
     }
-    _subaddielink_entrypoint_0(param_1 + 8);
-    if (*(u8 *) ((s8 *) param_1 + 2) != (1 * 0)) {
-        func_800D175C(func_800D1B34(*(s16 *) ((s8 *) param_1 + 4)),
-                      -(s32) *(u8 *) ((s8 *) param_1 + 2));
+    _subaddielink_entrypoint_0(state + 8);
+    // Matching: the * 0 is needed for the match.
+    if (*(u8 *) ((s8 *) state + 2) != (1 * 0)) {
+        func_800D175C(func_800D1B34(*(s16 *) ((s8 *) state + 4)),
+                      -(s32) *(u8 *) ((s8 *) state + 2));
     }
-    func_8010108C(param_0, 0x2D, *(s16 *) ((s8 *) param_1 + 4));
-    *(s8 *) ((s8 *) param_1 + 0) = 3;
+    func_8010108C(npc, 0x2D, *(s16 *) ((s8 *) state + 4));
+    *(s8 *) ((s8 *) state + 0) = 3;
 }

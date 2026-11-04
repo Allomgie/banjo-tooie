@@ -17,13 +17,13 @@ extern int D_808013D8_chquicksandbaddy[];
 extern void *func_80100074(Actor *, s32, s32);
 extern f32 func_800DC178(f32, f32);
 typedef struct {
-    f32 local_0;
-    u16 local_1;
-    u16 local_2;
+    f32 unk_0;
+    u16 unk_4;
+    u16 unk_6;
 } QuicksandAnimation;
 typedef struct {
-    f32 local_0;
-    f32 local_1;
+    f32 time;
+    f32 unk_4;
 } QuicksandSoundEvent;
 extern f32 func_800F1DF4(f32 *, f32 *);
 extern void func_800C4140(s32, f32 *, s32);
@@ -51,9 +51,9 @@ extern void func_80102424(void *, s32);
 extern void func_80103014(s32);
 extern void func_8010D254(s32);
 typedef struct {
-    u8 pad[0x78];
+    u8 pad_0[0x78];
     u32 p78 : 8;
-    u32 f4 : 4;
+    u32 attempt : 4;
     u32 rest : 20;
 } QS78;
 f32 func_80800CC0_chquicksandbaddy();
@@ -62,35 +62,36 @@ extern f32 mlAbsF(f32);
 int func_808010A0_chquicksandbaddy();
 s32 func_80800CFC_chquicksandbaddy();
 
-void func_80800000_chquicksandbaddy(Actor *param_0)
+// Init: stores the positions of up to 3 marker props (0x510) as landing points.
+void func_80800000_chquicksandbaddy(Actor *actor)
 {
-    s32 local_0[3];
-    s32 local_1;
-    s32 local_3;
-    f32(*local_2)[3];
+    s32 prop_ids[3];
+    s32 count;
+    s32 i;
+    f32(*spawn_points)[3];
 
-    local_1 = _gccubesearch_entrypoint_9(0x510, local_0, 3);
-    if (local_1) {
-        local_2 = func_80100074(param_0, 1, 0x24);
-        local_3 = 0;
-        for (; local_3 < local_1; local_3++) {
-            _gspropctrl_entrypoint_11(local_0[local_3], local_2[local_3]);
+    count = _gccubesearch_entrypoint_9(0x510, prop_ids, 3);
+    if (count) {
+        spawn_points = func_80100074(actor, 1, 0x24);
+        i = 0;
+        for (; i < count; i++) {
+            _gspropctrl_entrypoint_11(prop_ids[i], spawn_points[i]);
         }
-        for (; local_3 < 3; local_3++) {
-            func_800EFD24(local_2[local_3]);
+        for (; i < 3; i++) {
+            func_800EFD24(spawn_points[i]);
         }
     }
-    if (!_subaddieDll_entrypoint_1(param_0)) {
-        func_800FFA88(param_0->unk0);
+    if (!_subaddieDll_entrypoint_1(actor)) {
+        func_800FFA88(actor->unk0);
         return;
     }
-    *(f32 *) ((u8 *) param_0 + 0x34) = param_0->position[1];
-    param_0->unk58 = 0.2f;
-    *(f32 *) ((u8 *) param_0 + 0x24) = 0.0f;
-    param_0->unk54 = 0.0f;
-    param_0->unk54 = param_0->position[1] - func_80800CC0_chquicksandbaddy(param_0);
-    *(f32 *) ((u8 *) param_0 + 0x28) = func_800DC178(20.0f, 30.0f);
-    ((u8 *) param_0)[0x65] &= ~1;
+    *(f32 *) ((u8 *) actor + 0x34) = actor->position[1];
+    actor->unk58 = 0.2f;
+    *(f32 *) ((u8 *) actor + 0x24) = 0.0f;
+    actor->unk54 = 0.0f;
+    actor->unk54 = actor->position[1] - func_80800CC0_chquicksandbaddy(actor);
+    *(f32 *) ((u8 *) actor + 0x28) = func_800DC178(20.0f, 30.0f);
+    ((u8 *) actor)[0x65] &= ~1;
 }
 
 void func_80800FC8_chquicksandbaddy(s32 param_0, f32 param_1, s32 param_2);
@@ -99,7 +100,8 @@ void chquicksandbaddy_entrypoint_0();
 
 s32 func_80800DBC_chquicksandbaddy();
 
-void func_80800140_chquicksandbaddy(Actor *param_0)
+// Matching: the line breaks in this function are needed for the match.
+void func_80800140_chquicksandbaddy(Actor *actor)
 {
     extern u8 D_808012E0_chquicksandbaddy[];
     extern u8 D_808012F0_chquicksandbaddy[];
@@ -108,258 +110,261 @@ void func_80800140_chquicksandbaddy(Actor *param_0)
     extern QuicksandAnimation D_808012A0_chquicksandbaddy[];
     extern QuicksandSoundEvent D_80801320_chquicksandbaddy[];
 
-    switch (param_0->unk70_10) {
+    switch (actor->unk70_10) {
         case 1: {
-            f32 local_0[3];
-            f32 local_1[3];
-            func_8010D254(local_0);
-            if (func_800D90A4((f32 *)param_0->actorData + 4)) {
-                func_800E3980(local_1);
-                param_0->rotation[1] = func_800F1DF4(param_0->position, local_1);
-                func_80102424(param_0, 6);
+            f32 unk_0[3];
+            f32 look_pos[3];
+            func_8010D254(unk_0);
+            if (func_800D90A4((f32 *)actor->actorData + 4)) {
+                func_800E3980(look_pos);
+                actor->rotation[1] = func_800F1DF4(actor->position, look_pos);
+                func_80102424(actor, 6);
             }
-            if (func_80800DBC_chquicksandbaddy(param_0)) {
+            if (func_80800DBC_chquicksandbaddy(actor)) {
                 if (func_800F6AA4(func_800F54E4())) {
-                    param_0->actorData[5] = 1;
+                    actor->actorData[5] = 1;
                 } else {
-                    param_0->actorData[5] = 0;
+                    actor->actorData[5] = 0;
                 }
                 if (func_800F7B9C(func_800F54E4(), 0x34)) {
-                    func_800EE7F8(param_0->position, local_0);
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                    func_800EE7F8(actor->position, unk_0);
+                    _subaddieaudioquick_entrypoint_2(actor, actor->position,
                     D_808012E0_chquicksandbaddy);
-                    _subaddieDll_entrypoint_4(param_0, 1);
-                    func_800F5A00(func_800F54E4(), param_0->position);
-                    param_0->position[1] = func_800F5628(func_800F54E4()) + param_0->unk54;
+                    _subaddieDll_entrypoint_4(actor, 1);
+                    func_800F5A00(func_800F54E4(), actor->position);
+                    actor->position[1] = func_800F5628(func_800F54E4()) + actor->unk54;
                     if (func_8008FC00() == 1) {
-                        func_80102424(param_0, 5);
-                        param_0->unk58 = 0.0f;
-                        ((f32 *)param_0->actorData)[4] = 0.0f;
+                        func_80102424(actor, 5);
+                        actor->unk58 = 0.0f;
+                        ((f32 *)actor->actorData)[4] = 0.0f;
                     } else {
-                        func_80102424(param_0, 2);
-                        param_0->unk58 = 0.5f;
+                        func_80102424(actor, 2);
+                        actor->unk58 = 0.5f;
                     }
                 }
-            } else if (((f32 *)param_0->actorData)[7] < local_0[1]) {
-                param_0->unk58 = 0.2f;
-                if (func_800D90A4((f32 *)param_0->actorData + 3)) {
-                    ((f32 *)param_0->actorData)[3] = 0.5f;
+            } else if (((f32 *)actor->actorData)[7] < unk_0[1]) {
+                actor->unk58 = 0.2f;
+                if (func_800D90A4((f32 *)actor->actorData + 3)) {
+                    ((f32 *)actor->actorData)[3] = 0.5f;
                     if (func_800F56AC(func_800F54E4()) != 0x14 &&
                         func_800F6C5C(func_800F54E4())) {
-                        local_0[1] = func_800F5628(func_800F54E4());
-                        func_800EE7F8(param_0->actorData, local_0);
-                        param_0->unk64_20 = 1;
+                        unk_0[1] = func_800F5628(func_800F54E4());
+                        func_800EE7F8(actor->actorData, unk_0);
+                        actor->unk64_20 = 1;
                     }
                 }
             } else {
-                param_0->unk58 = 0.2f;
+                actor->unk58 = 0.2f;
             }
             break;
         }
         case 2: {
-            f32 local_2[3];
-            if (func_800D90A4(&param_0->unk58)) {
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            f32 landing_pos[3];
+            if (func_800D90A4(&actor->unk58)) {
+                _subaddieaudioquick_entrypoint_2(actor, actor->position,
                 D_808012F0_chquicksandbaddy);
                 if ((func_800EA05C() == 0xB9 || func_800EA05C() == 0xC4) &&
-                    func_80800CFC_chquicksandbaddy(param_0, param_0->position,
-                (f32 *)param_0->actorData)) {
-                    func_800F7D90(func_800F54E4(), 0x52, param_0->actorData,
-                    param_0->actorData[5] ? 0 : 1);
-                    param_0->unk64_19 = 1;
-                } else if (func_80801154_chquicksandbaddy(param_0, local_2) != -1) {
-                    func_800F7D90(func_800F54E4(), 0x52, local_2,
-                    param_0->actorData[5] ? 0 : 1);
-                    param_0->unk64_19 = 1;
+                    func_80800CFC_chquicksandbaddy(actor, actor->position,
+                (f32 *)actor->actorData)) {
+                    func_800F7D90(func_800F54E4(), 0x52, actor->actorData,
+                    actor->actorData[5] ? 0 : 1);
+                    actor->unk64_19 = 1;
+                } else if (func_80801154_chquicksandbaddy(actor, landing_pos) != -1) {
+                    func_800F7D90(func_800F54E4(), 0x52, landing_pos,
+                    actor->actorData[5] ? 0 : 1);
+                    actor->unk64_19 = 1;
                 } else {
                     func_800F7C58(func_800F54E4(), 0x6A,
-                    param_0->actorData[5] ? 0 : 1);
-                    param_0->unk64_19 = 0;
+                    actor->actorData[5] ? 0 : 1);
+                    actor->unk64_19 = 0;
                 }
-                param_0->unk74_30 = 0;
-                param_0->unk79_4 = 0;
-                param_0->unk50 = 0.0f;
-                param_0->unk58 = 1.0f;
-                func_80102424(param_0, 3);
+                actor->unk74_30 = 0;
+                actor->unk79_4 = 0;
+                actor->unk50 = 0.0f;
+                actor->unk58 = 1.0f;
+                func_80102424(actor, 3);
             }
             break;
         }
         case 3: {
-            f32 local_3[3];
-            if (func_800D90A4(&param_0->unk58)) {
-                f32 *local_10;
-                if (param_0->unk64_19) {
-                    func_800F5A00(func_800F54E4(), local_3);
+            f32 look_pos[3];
+            if (func_800D90A4(&actor->unk58)) {
+                f32 *spot;
+                if (actor->unk64_19) {
+                    func_800F5A00(func_800F54E4(), look_pos);
                 } else {
-                    func_800E3980(local_3);
+                    func_800E3980(look_pos);
                 }
-                param_0->rotation[1] = func_800F1DF4(param_0->position, local_3);
-                func_80102424(param_0, 4);
-                if (!(param_0->unk74_30 && param_0->unk79_4 >= 6)) {
-                    local_10 = func_800CC63C(
-                        (*(u32 *)((u8 *)param_0 + 0x70) >> 25) - 1,
-                    ((*(u32 *)((u8 *)param_0 + 0x70) << 22) >> 26) - 1);
-                    func_800EE7F8(param_0->position, local_10);
-                    param_0->position[1] = func_80800CC0_chquicksandbaddy(param_0);
+                actor->rotation[1] = func_800F1DF4(actor->position, look_pos);
+                func_80102424(actor, 4);
+                if (!(actor->unk74_30 && actor->unk79_4 >= 6)) {
+                    spot = func_800CC63C(
+                        (*(u32 *)((u8 *)actor + 0x70) >> 25) - 1,
+                    ((*(u32 *)((u8 *)actor + 0x70) << 22) >> 26) - 1);
+                    func_800EE7F8(actor->position, spot);
+                    actor->position[1] = func_80800CC0_chquicksandbaddy(actor);
                 }
-            } else if (!(param_0->unk74_30 && param_0->unk79_4 >= 6)) {
-                s32 local_14;
-                f32 local_4[3];
-                f32 local_5[3];
-                f32 local_8[3];
-                f32 local_6[3];
-                f32 local_7;
-                param_0->unk74_30 = 1;
-                for (local_14 = 0; local_14 < 3; local_14++) {
-                    local_7 = param_0->unk79_4 * 60.0f;
-                    func_800EE7F8(local_4, param_0->position);
-                    local_4[1] += 60.0f;
-                    func_800EEB9C(local_5, local_7, func_80103EAC(param_0));
-                    func_800EF04C(local_5, local_4);
-                    func_800EE7F8(local_6, local_5);
-                    if (func_800C6A7C(local_4, local_5, local_8, 0)) {
-                        func_800EF334(local_8, 300.0f);
-                        func_800EF04C(local_8, local_5);
-                        func_800EFB24(local_6, local_5, local_6);
-                        func_800EF04C(param_0->position, local_6);
-                        param_0->position[1] = func_80800CC0_chquicksandbaddy(param_0);
-                        param_0->unk74_30 = 0;
-                        param_0->unk79_4 = 0;
+            } else if (!(actor->unk74_30 && actor->unk79_4 >= 6)) {
+                s32 i;
+                f32 ray_start[3];
+                f32 ray_end[3];
+                f32 hit[3];
+                f32 candidate[3];
+                f32 angle;
+                actor->unk74_30 = 1;
+                for (i = 0; i < 3; i++) {
+                    angle = actor->unk79_4 * 60.0f;
+                    func_800EE7F8(ray_start, actor->position);
+                    ray_start[1] += 60.0f;
+                    func_800EEB9C(ray_end, angle, func_80103EAC(actor));
+                    func_800EF04C(ray_end, ray_start);
+                    func_800EE7F8(candidate, ray_end);
+                    if (func_800C6A7C(ray_start, ray_end, hit, 0)) {
+                        func_800EF334(hit, 300.0f);
+                        func_800EF04C(hit, ray_end);
+                        func_800EFB24(candidate, ray_end, candidate);
+                        func_800EF04C(actor->position, candidate);
+                        actor->position[1] = func_80800CC0_chquicksandbaddy(actor);
+                        actor->unk74_30 = 0;
+                        actor->unk79_4 = 0;
                         break;
-                    } else if (func_800CC338(local_5,
-                    (*(u32 *)((u8 *)param_0 + 0x70) >> 25) - 1,
-                    ((*(u32 *)((u8 *)param_0 + 0x70) << 22) >> 26) - 1) == -1) {
-                        func_800EEB9C(local_8,
-                        func_800F1DF4(param_0->position, func_800CC63C(
-                            (*(u32 *)((u8 *)param_0 + 0x70) >> 25) - 1,
-                        ((*(u32 *)((u8 *)param_0 + 0x70) << 22) >> 26) - 1)),
-                        func_80103EAC(param_0));
-                        func_800EF04C(param_0->position, local_8);
-                        param_0->position[1] = func_80800CC0_chquicksandbaddy(param_0);
-                        param_0->unk74_30 = 0;
-                        param_0->unk79_4 = 0;
+                    } else if (func_800CC338(ray_end,
+                    (*(u32 *)((u8 *)actor + 0x70) >> 25) - 1,
+                    ((*(u32 *)((u8 *)actor + 0x70) << 22) >> 26) - 1) == -1) {
+                        func_800EEB9C(hit,
+                        func_800F1DF4(actor->position, func_800CC63C(
+                            (*(u32 *)((u8 *)actor + 0x70) >> 25) - 1,
+                        ((*(u32 *)((u8 *)actor + 0x70) << 22) >> 26) - 1)),
+                        func_80103EAC(actor));
+                        func_800EF04C(actor->position, hit);
+                        actor->position[1] = func_80800CC0_chquicksandbaddy(actor);
+                        actor->unk74_30 = 0;
+                        actor->unk79_4 = 0;
                         break;
                     } else {
-                        ((QS78 *)param_0)->f4 += 1;
-                        param_0->unk74_30 = (s32)param_0->unk74_30 & 1;
+                        ((QS78 *)actor)->attempt += 1; // Matching: bitfield access and the "& 1" below are needed for the match.
+                        actor->unk74_30 = (s32)actor->unk74_30 & 1;
                     }
                 }
             }
-            func_80103014(param_0);
+            func_80103014(actor);
             break;
         }
         case 4:
-        func_800F4F34(func_800F54E4(), param_0->position,
-        param_0->scale * 50.0f, param_0->scale * 150.0f);
-        _subaddieaudioquick_entrypoint_4(param_0, param_0->position,
+        func_800F4F34(func_800F54E4(), actor->position,
+        actor->scale * 50.0f, actor->scale * 150.0f);
+        _subaddieaudioquick_entrypoint_4(actor, actor->position,
         D_80801300_chquicksandbaddy, D_80801310_chquicksandbaddy);
-        if (func_80101E14(param_0, 0.6f)) {
-            func_800C4140(0x7FFB5DB2, param_0->position, 0x0BB80190);
-        } else if (func_80101E14(param_0, 0.69f)) {
-            func_800C4140(0x797B5DB2, param_0->position, 0x0BB80190);
-        } else if (func_80101E14(param_0, 0.78f)) {
-            func_800C4140(0x731B5DB2, param_0->position, 0x0BB80190);
-        } else if (func_80101E14(param_0, 0.87f)) {
-            func_800C4140(0x6CBB5DB2, param_0->position, 0x0BB80190);
+        if (func_80101E14(actor, 0.6f)) {
+            func_800C4140(0x7FFB5DB2, actor->position, 0x0BB80190);
+        } else if (func_80101E14(actor, 0.69f)) {
+            func_800C4140(0x797B5DB2, actor->position, 0x0BB80190);
+        } else if (func_80101E14(actor, 0.78f)) {
+            func_800C4140(0x731B5DB2, actor->position, 0x0BB80190);
+        } else if (func_80101E14(actor, 0.87f)) {
+            func_800C4140(0x6CBB5DB2, actor->position, 0x0BB80190);
         }
-        if (func_80101DDC(param_0)) {
-            ((f32 *)param_0->actorData)[4] = func_800DC178(20.0f, 30.0f);
-            func_80102424(param_0, 1);
-            _subaddieDll_entrypoint_4(param_0, 0);
-            param_0->unk58 = 0.2f;
+        if (func_80101DDC(actor)) {
+            ((f32 *)actor->actorData)[4] = func_800DC178(20.0f, 30.0f);
+            func_80102424(actor, 1);
+            _subaddieDll_entrypoint_4(actor, 0);
+            actor->unk58 = 0.2f;
         }
         break;
         case 5: {
-            QuicksandSoundEvent *local_10;
-            ((f32 *)param_0->actorData)[4] = param_0->unk58;
-            func_800D91B8(&param_0->unk58);
-            local_10 = D_80801320_chquicksandbaddy; do {
-                if (local_10->local_0 < param_0->unk58 &&
-                    ((f32 *)param_0->actorData)[4] <= local_10->local_0) {
-                    if (local_10->local_1 == -1.0f) {
+            QuicksandSoundEvent *event;
+            ((f32 *)actor->actorData)[4] = actor->unk58;
+            func_800D91B8(&actor->unk58);
+            event = D_80801320_chquicksandbaddy; do { // Matching: init and "do" must stay on one line (as1 line priority).
+                if (event->time < actor->unk58 &&
+                    ((f32 *)actor->actorData)[4] <= event->time) {
+                    if (event->unk_4 == -1.0f) {
                         func_800F7B9C(func_800F54E4(), 0x26);
-                    } else if (local_10->local_1 == -2.0f) {
+                    } else if (event->unk_4 == -2.0f) {
                         func_800FC660(0xB);
                     } else {
-                        f32 local_11 = local_10->local_1;
-                        func_800C4140(((u16)(u32)(local_11 * 1023.0f) << 21) + 0x1B5DB2,
-                        param_0->position, 0x0BB80190);
+                        f32 value = event->unk_4;
+                        func_800C4140(((u16)(u32)(value * 1023.0f) << 21) + 0x1B5DB2,
+                        actor->position, 0x0BB80190);
                     }
                     break;
                 }
-                local_10++;
-            } while (local_10 != (QuicksandSoundEvent *)D_80801370_chquicksandbaddy);
+                event++;
+            } while (event != (QuicksandSoundEvent *)D_80801370_chquicksandbaddy);
             break;
         }
         case 6:
-        if (func_80101E14(param_0, 0.09f)) {
-            func_80101EE4(param_0, 0.91f);
-            func_80102424(param_0, 7);
+        if (func_80101E14(actor, 0.09f)) {
+            func_80101EE4(actor, 0.91f);
+            func_80102424(actor, 7);
         }
         break;
         case 7:
-        if (func_80101DDC(param_0)) {
-            ((f32 *)param_0->actorData)[4] = func_800DC178(20.0f, 30.0f);
-            func_80102424(param_0, 1);
+        if (func_80101DDC(actor)) {
+            ((f32 *)actor->actorData)[4] = func_800DC178(20.0f, 30.0f);
+            func_80102424(actor, 1);
         }
         break;
     }
 
-    if (D_808012A0_chquicksandbaddy[param_0->unk70_10].local_1 == 0x1E4) {
-        param_0->unk64_16 = 1;
-        if (func_80101E14(param_0, 0.07f) || func_80101E14(param_0, 0.92f)) {
-            f32 local_7;
-            local_7 = func_800C6920(param_0->position, 500.0f, -500.0f, 0)
-                + param_0->unk54;
-            func_80800FC8_chquicksandbaddy(param_0->position, local_7, 5);
-            param_0->position[1] = local_7;
-            chquicksandbaddy_entrypoint_0(0, param_0->position);
-        } else if (func_80101F24(param_0) > 0.2f &&
-            func_80101F24(param_0) < 0.55f && func_800DC0C0() < 0.5f) {
-            f32 local_1[3];
-            _subaddieskeleton_entrypoint_0(param_0, 0x4D, local_1);
-            func_80800FC8_chquicksandbaddy(local_1,
-            func_800C6920(local_1, 500.0f, -500.0f, 0) + param_0->unk54, 1);
+    if (D_808012A0_chquicksandbaddy[actor->unk70_10].unk_4 == 0x1E4) {
+        actor->unk64_16 = 1;
+        if (func_80101E14(actor, 0.07f) || func_80101E14(actor, 0.92f)) {
+            f32 ground_y;
+            ground_y = func_800C6920(actor->position, 500.0f, -500.0f, 0)
+                + actor->unk54;
+            func_80800FC8_chquicksandbaddy(actor->position, ground_y, 5);
+            actor->position[1] = ground_y;
+            chquicksandbaddy_entrypoint_0(0, actor->position);
+        } else if (func_80101F24(actor) > 0.2f &&
+            func_80101F24(actor) < 0.55f && func_800DC0C0() < 0.5f) {
+            f32 bone_pos[3];
+            _subaddieskeleton_entrypoint_0(actor, 0x4D, bone_pos);
+            func_80800FC8_chquicksandbaddy(bone_pos,
+            func_800C6920(bone_pos, 500.0f, -500.0f, 0) + actor->unk54, 1);
         }
     } else {
-        param_0->unk64_16 = 0;
+        actor->unk64_16 = 0;
     }
 }
 
-f32 func_80800CC0_chquicksandbaddy(Actor *param_0)
+// Ground height below the actor plus its height offset.
+f32 func_80800CC0_chquicksandbaddy(Actor *actor)
 {
-    f32 local_0;
+    f32 ground_y;
 
-    local_0 = func_800C6920(param_0->position, 500.0f, -500.0f, 0) + param_0->unk54;
-    return local_0;
+    ground_y = func_800C6920(actor->position, 500.0f, -500.0f, 0) + actor->unk54;
+    return ground_y;
 }
 
-s32 func_80800CFC_chquicksandbaddy(param_0, param_1, param_2)
-Actor *param_0;
-f32 *param_1;
-f32 *param_2;
+// True if the target point is in reach: close, similar height, clear line of sight.
+s32 func_80800CFC_chquicksandbaddy(actor, pos, target)
+Actor *actor;
+f32 *pos;
+f32 *target;
 {
-    f32 local_0[3];
+    f32 hit_pos[3];
 
-    if (!param_0->unk64_20)
+    if (!actor->unk64_20)
         return 0;
-    if (func_800EEB40(param_1, param_2) > 4000000.0f)
+    if (func_800EEB40(pos, target) > 4000000.0f)
         return 0;
-    if (mlAbsF(param_2[1] - param_1[1]) > 500.0f)
+    if (mlAbsF(target[1] - pos[1]) > 500.0f)
         return 0;
-    if (func_800C6A7C(param_1, param_2, local_0, 0))
+    if (func_800C6A7C(pos, target, hit_pos, 0))
         return 0;
     return 1;
 }
 
-s32 func_80800DBC_chquicksandbaddy(Actor *param_0)
+// True if the player is in a state to be attacked and this actor is the nearest of its group.
+s32 func_80800DBC_chquicksandbaddy(Actor *actor)
 {
-    f32 local_0[3];
-    Actor *local_1[20];
-    s32 local_2;
-    s32 local_3;
-    Actor **local_4;
-    f32 local_5;
+    f32 player_pos[3];
+    Actor *group[20];
+    s32 group_count;
+    s32 i;
+    Actor **other;
+    f32 own_dist;
 
     if (!func_8010C500())
         return 0;
@@ -369,78 +374,81 @@ s32 func_80800DBC_chquicksandbaddy(Actor *param_0)
         return 0;
     if (!func_800F6C5C(func_800F54E4()))
         return 0;
-    local_2 = _subaddiefind_entrypoint_4(0x1EF, local_1, 20);
-    func_800F5A00(func_800F54E4(), local_0);
-    local_3 = 0;
-    if (local_2 > 0) {
-        local_4 = local_1;
+    group_count = _subaddiefind_entrypoint_4(0x1EF, group, 20);
+    func_800F5A00(func_800F54E4(), player_pos);
+    i = 0;
+    if (group_count > 0) {
+        other = group;
         do {
-            if (param_0 != *local_4 && (*(u32 *) ((u8 *) param_0 + 0x70) >> 25) ==
-                                           (*(u32 *) ((u8 *) *local_4 + 0x70) >> 25)) {
-                local_5 = func_800EEB40(local_0, param_0->position);
-                if (func_800EEB40(local_0, (*local_4)->position) < local_5)
+            if (actor != *other && (*(u32 *) ((u8 *) actor + 0x70) >> 25) ==
+                                           (*(u32 *) ((u8 *) *other + 0x70) >> 25)) {
+                own_dist = func_800EEB40(player_pos, actor->position);
+                if (func_800EEB40(player_pos, (*other)->position) < own_dist)
                     return 0;
             }
-            local_3++;
-            local_4++;
-        } while (local_3 != local_2);
+            i++;
+            other++;
+        } while (i != group_count);
     }
-    return func_800D90A4(&param_0->unk58) == 0;
+    return func_800D90A4(&actor->unk58) == 0;
 }
 
-void chquicksandbaddy_entrypoint_0(s32 param_0, f32 *param_1)
+// Spawns particles at pos (75% chance).
+void chquicksandbaddy_entrypoint_0(s32 unk_0, f32 *pos)
 {
-    s32 local_0;
+    s32 emitter;
     if (func_800DC0C0() < 0.75f && func_808010A0_chquicksandbaddy(D_80801390_chquicksandbaddy) &&
         func_8001210C(3)) {
-        local_0 = func_800B53A4(1);
-        func_800BABB8(local_0, param_1, NULL, 2.0f, D_80801370_chquicksandbaddy);
-        func_800BAB80(local_0, D_80801390_chquicksandbaddy);
-        func_800BA22C(local_0, 1);
+        emitter = func_800B53A4(1);
+        func_800BABB8(emitter, pos, NULL, 2.0f, D_80801370_chquicksandbaddy);
+        func_800BAB80(emitter, D_80801390_chquicksandbaddy);
+        func_800BA22C(emitter, 1);
     }
 }
 
-void func_80800FC8_chquicksandbaddy(s32 param_0, f32 param_1, s32 param_2)
+// Spawns sand or sludge particles at pos.
+void func_80800FC8_chquicksandbaddy(s32 pos, f32 ground_y, s32 count)
 {
-    s32 temp_v0;
+    s32 emitter;
 
     if (func_808010A0_chquicksandbaddy(&D_808013D4_chquicksandbaddy) != 0) {
-        temp_v0 = func_800B53A4(param_2);
-        func_800BABB8(temp_v0, param_0, param_0, 1.0f, &D_80801394_chquicksandbaddy);
-        if (param_2 >= 2) {
-            func_800BA714(temp_v0, 0x32, 0x64);
+        emitter = func_800B53A4(count);
+        func_800BABB8(emitter, pos, pos, 1.0f, &D_80801394_chquicksandbaddy);
+        if (count >= 2) {
+            func_800BA714(emitter, 0x32, 0x64);
         }
-        func_800BAB80(temp_v0, &D_808013D4_chquicksandbaddy);
-        func_800BA4D0(temp_v0, (s16) (s32) param_1);
-        func_800BA544(temp_v0, &_chquicksandbaddy_entrypoint_0);
-        func_800BA22C(temp_v0, param_2);
+        func_800BAB80(emitter, &D_808013D4_chquicksandbaddy);
+        func_800BA4D0(emitter, (s16) (s32) ground_y);
+        func_800BA544(emitter, &_chquicksandbaddy_entrypoint_0);
+        func_800BA22C(emitter, count);
     }
 }
 
-int func_808010A0_chquicksandbaddy(param_0)
-Gtexture *param_0;
+// Sets the particle colour by map; returns 0 on maps without these particles.
+int func_808010A0_chquicksandbaddy(rgb)
+Gtexture *rgb;
 {
-    u8 local_1 = 0xB4;
+    u8 grey = 0xB4;
     switch (func_800EA05C()) {
         case 0xB9:
         case 0xC4:
-            *(u8 *) ((char *) param_0 + 0x0) = 0xC8;
-            *(u8 *) ((char *) param_0 + 0x1) = 0xA0;
-            *(u8 *) ((char *) param_0 + 0x2) = 0x32;
+            *(u8 *) ((char *) rgb + 0x0) = 0xC8;
+            *(u8 *) ((char *) rgb + 0x1) = 0xA0;
+            *(u8 *) ((char *) rgb + 0x2) = 0x32;
             return 1;
 
         case 0x100:
         case 0x10F:
         case 0x15C:
-            *(u8 *) ((char *) param_0 + 0x0) = local_1;
-            *(u8 *) ((char *) param_0 + 0x1) = local_1;
-            *(u8 *) ((char *) param_0 + 0x2) = local_1;
+            *(u8 *) ((char *) rgb + 0x0) = grey;
+            *(u8 *) ((char *) rgb + 0x1) = grey;
+            *(u8 *) ((char *) rgb + 0x2) = grey;
             return 1;
 
         case 0x106:
-            *(u8 *) ((char *) param_0 + 0x0) = 0x32;
-            *(u8 *) ((char *) param_0 + 0x1) = 0xA0;
-            *(u8 *) ((char *) param_0 + 0x2) = 0x32;
+            *(u8 *) ((char *) rgb + 0x0) = 0x32;
+            *(u8 *) ((char *) rgb + 0x1) = 0xA0;
+            *(u8 *) ((char *) rgb + 0x2) = 0x32;
             return 1;
 
         default:
@@ -448,44 +456,47 @@ Gtexture *param_0;
     }
 }
 
-int func_80801154_chquicksandbaddy(Actor *param_0, f32 *param_1)
+// Finds the landing point nearest to the actor, copies it to out_pos and returns its index (-1 if none).
+int func_80801154_chquicksandbaddy(Actor *actor, f32 *out_pos)
 {
-    f32(*local_0[1])[3];
-    void *local_6;
-    f32 *local_1;
-    f32 local_2;
-    f32 local_3;
-    s32 local_4;
-    s32 local_5;
+    // Matching: one-element array keeps the holder in memory.
+    f32(*points[1])[3];
+    void *points_base;
+    f32 *point;
+    f32 best_dist;
+    f32 dist;
+    s32 i;
+    s32 best;
 
-    local_6 = func_80100094(param_0, 1);
-    if (local_6) {
-        local_5 = -1;
-        local_2 = 0.0f;
-        local_4 = 0;
-        local_1 = local_6;
-        local_0[0] = local_6;
-        for (; local_4 != 3; local_4++, local_1 += 3) {
+    points_base = func_80100094(actor, 1);
+    if (points_base) {
+        best = -1;
+        best_dist = 0.0f;
+        i = 0;
+        point = points_base;
+        points[0] = points_base;
+        for (; i != 3; i++, point += 3) {
+            // Matching: empty block at loop-body start is needed for the match.
             if (1) {
             }
-            if (!func_800EEF24(local_1)) {
+            if (!func_800EEF24(point)) {
                 break;
             }
-            if (local_5 != -1) {
-                local_3 = func_800EEB40(param_0->position, local_1);
-                if (local_3 < local_2) {
-                    local_2 = local_3;
-                    local_5 = local_4;
+            if (best != -1) {
+                dist = func_800EEB40(actor->position, point);
+                if (dist < best_dist) {
+                    best_dist = dist;
+                    best = i;
                 }
             } else {
-                local_2 = func_800EEB40(param_0->position, local_1);
-                local_5 = local_4;
+                best_dist = func_800EEB40(actor->position, point);
+                best = i;
             }
         }
-        if (local_5 != -1) {
-            func_800EE7F8(param_1, local_0[0][local_5]);
+        if (best != -1) {
+            func_800EE7F8(out_pos, points[0][best]);
         }
-        return local_5;
+        return best;
     }
     return -1;
 }
@@ -495,6 +506,10 @@ int *chquicksandbaddy_entrypoint_1()
     return D_808013D8_chquicksandbaddy;
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C, from ROM values. Some tables point to
+// functions of this file; IDO schedules those differently unless the tables are in the same unit.
+// D_808012A4_chquicksandbaddy = D_808012A0_chquicksandbaddy + 0x4 (linker symbol in undefined_syms.us.txt).
+// D_808013D8_chquicksandbaddy is declared as int[] (uses written as NAME[0]).
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();

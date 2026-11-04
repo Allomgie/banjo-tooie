@@ -20,6 +20,8 @@ extern f32 func_80013788(void);
 extern void *func_800F5E50(s32);
 extern void func_80102EC0(), func_80107C2C(), func_8010A730();
 
+// Whether the active player may be affected by the current.
+// Matching: the missing return leaves the call's result in v0.
 int func_80800000_chbanjocurrent()
 {
     func_800F4C24(func_800F54E4());
@@ -30,102 +32,106 @@ int chbanjocurrent_entrypoint_0()
     return (int) &D_808007D0_chbanjocurrent;
 }
 
-void func_80800034_chbanjocurrent(void *param_0)
+// Rotates three words left.
+void func_80800034_chbanjocurrent(void *words)
 {
     s32 temp;
-    temp = *(s32 *) ((char *) param_0 + 4);
-    *(s32 *) ((char *) param_0 + 4) = *(s32 *) ((char *) param_0 + 8);
-    *(s32 *) ((char *) param_0 + 8) = *(s32 *) ((char *) param_0 + 0);
-    *(s32 *) ((char *) param_0 + 0) = temp;
+    temp = *(s32 *) ((char *) words + 4);
+    *(s32 *) ((char *) words + 4) = *(s32 *) ((char *) words + 8);
+    *(s32 *) ((char *) words + 8) = *(s32 *) ((char *) words + 0);
+    *(s32 *) ((char *) words + 0) = temp;
 }
 
-void func_80800050_chbanjocurrent(u16 *param_0, f32 (*param_1)[3], f32 (*param_2)[2], s32 *param_3)
+// Reads a triangle's vertex positions and UVs from the map model and sorts the vertex order by U.
+void func_80800050_chbanjocurrent(u16 *vert_idx, f32 (*pos)[3], f32 (*uv)[2], s32 *order)
 {
-    s32 local_0;
-    u8 *local_1;
-    u8 *local_2;
-    s32 local_3;
-    local_0 = func_800BEB28(1);
-    if (!local_0)
-        local_0 = func_800BEB28(0);
-    local_1 = (u8 *) func_800B2840(local_0) + 0x18;
-    for (local_3 = 0; local_3 != 3; local_3++) {
-        local_2 = local_1 + param_0[local_3] * 0x10;
-        func_800EE88C(param_1[local_3], local_2);
-        param_2[local_3][0] = *(s16 *) (local_2 + 8);
-        param_2[local_3][1] = *(s16 *) (local_2 + 10);
-        param_3[local_3] = local_3;
+    s32 model;
+    u8 *verts;
+    u8 *vert;
+    s32 i;
+    model = func_800BEB28(1);
+    if (!model)
+        model = func_800BEB28(0);
+    verts = (u8 *) func_800B2840(model) + 0x18;
+    for (i = 0; i != 3; i++) {
+        vert = verts + vert_idx[i] * 0x10;
+        func_800EE88C(pos[i], vert);
+        uv[i][0] = *(s16 *) (vert + 8);
+        uv[i][1] = *(s16 *) (vert + 10);
+        order[i] = i;
     }
-    if (param_2[param_3[2]][0] <= param_2[param_3[1]][0])
-        func_80800034_chbanjocurrent(param_3);
-    if (param_2[param_3[2]][0] <= param_2[param_3[1]][0])
-        func_80800034_chbanjocurrent(param_3);
+    if (uv[order[2]][0] <= uv[order[1]][0])
+        func_80800034_chbanjocurrent(order);
+    if (uv[order[2]][0] <= uv[order[1]][0])
+        func_80800034_chbanjocurrent(order);
 }
 
-void func_808001D0_chbanjocurrent(Actor *param_0)
+// Kind 1: moves the player along the texture flow of its floor triangle.
+void func_808001D0_chbanjocurrent(Actor *actor)
 {
-    f32 local_10;
-    f32 local_12;
-    u32 local_0;
-    f32 local_1;
-    f32 local_13;
-    s32 local_14;
-    f32 local_2[3][3];
-    f32 local_3[3][2];
-    s32 local_4[3];
-    f32 local_5[3];
-    f32 local_6[3];
-    u16 *local_15;
-    f32 local_7[3];
-    s32 local_16;
-    s32 argp_3;
-    f32 local_8[3];
-    f32 local_9[3];
-    if (!func_80800000_chbanjocurrent(param_0))
+    f32 depth;
+    f32 du;
+    u32 player;
+    f32 fade;
+    f32 t;
+    s32 state;
+    f32 verts[3][3];
+    f32 uvs[3][2];
+    s32 order[3];
+    f32 edge[3];
+    f32 point[3];
+    u16 *tri;
+    f32 dir[3];
+    s32 i;
+    s32 vert1;
+    f32 normal[3];
+    f32 move[3];
+    if (!func_80800000_chbanjocurrent(actor))
         return;
-    local_0 = func_800F54E4();
-    local_14 = func_8008FF94();
-    if (!local_14)
+    player = func_800F54E4();
+    state = func_8008FF94();
+    if (!state)
         return;
-    if (local_14 == 2) {
-        local_10 = func_800F5E7C(local_0) - func_800F5F7C(local_0);
-        if (local_10 >= 1000.0f)
+    if (state == 2) {
+        depth = func_800F5E7C(player) - func_800F5F7C(player);
+        if (depth >= 1000.0f)
             return;
-        if (local_10 < 0)
-            local_10 = 0;
-        local_1 = 1.0f - local_10 * 0.001f;
+        if (depth < 0)
+            depth = 0;
+        fade = 1.0f - depth * 0.001f;
     } else {
-        local_1 = 1.0f;
+        fade = 1.0f;
     }
-    local_15 = func_800F5E50(local_0);
-    local_14 = (*(u32 *) ((u8 *) local_15 + 8) & 0x78000000) >> 27;
-    if (!local_14)
+    tri = func_800F5E50(player);
+    state = (*(u32 *) ((u8 *) tri + 8) & 0x78000000) >> 27;
+    if (!state)
         return;
-    if (param_0->rotation[1] != 0.0f && param_0->rotation[1] != (local_13 = local_14))
+    if (actor->rotation[1] != 0.0f && actor->rotation[1] != (t = state))
         return;
-    func_80800050_chbanjocurrent(local_15, local_2, local_3, local_4);
-    func_800EFB24(local_5, local_2[local_4[2]], local_2[local_4[1]]);
-    local_12 = local_3[local_4[2]][0] - local_3[local_4[1]][0];
-    if (local_12 != 0.0f) {
-        local_13 = (local_3[local_4[0]][0] - local_3[local_4[1]][0]) / local_12;
-        for (local_16 = 0; local_16 < 3; local_16++) {
-            local_6[local_16] = local_2[local_4[1]][local_16] + (local_5[local_16] * local_13);
+    func_80800050_chbanjocurrent(tri, verts, uvs, order);
+    func_800EFB24(edge, verts[order[2]], verts[order[1]]);
+    du = uvs[order[2]][0] - uvs[order[1]][0];
+    if (du != 0.0f) {
+        t = (uvs[order[0]][0] - uvs[order[1]][0]) / du;
+        for (i = 0; i < 3; i++) {
+            point[i] = verts[order[1]][i] + (edge[i] * t);
         }
-        func_800EFB24(local_7, local_6, local_2[local_4[0]]);
-        func_800EF2A0(local_7);
+        func_800EFB24(dir, point, verts[order[0]]);
+        func_800EF2A0(dir);
     } else {
-        func_800EFD24(local_7);
+        func_800EFD24(dir);
     }
-    argp_3 = local_2[1];
-    func_800EF3DC(argp_3, local_2[0]);
-    func_800EF3DC(local_2[2], local_2[0]);
-    func_800EE97C(local_8, local_2[1], local_2[2]);
-    func_800EF2A0(local_8);
-    func_800EF334(local_7, func_80013A7C(local_8[1]) * 0.05f + 1.0f);
-    func_80090794(local_9);
-    func_800EF174(local_9, local_7, func_800D8FF8() * (u32) param_0->unk74_7 * local_1);
-    if (param_0->rotation[1] != 0.0f) {
-        func_800907C0(local_9);
+    // Matching: vert1 is an s32 holding the pointer; needed for the match.
+    vert1 =verts[1];
+    func_800EF3DC(vert1, verts[0]);
+    func_800EF3DC(verts[2], verts[0]);
+    func_800EE97C(normal, verts[1], verts[2]);
+    func_800EF2A0(normal);
+    func_800EF334(dir, func_80013A7C(normal[1]) * 0.05f + 1.0f);
+    func_80090794(move);
+    func_800EF174(move, dir, func_800D8FF8() * (u32) actor->unk74_7 * fade);
+    if (actor->rotation[1] != 0.0f) {
+        func_800907C0(move);
     }
 }
 
@@ -134,63 +140,69 @@ int chbanjocurrent_entrypoint_1()
     return (int) &D_80800818_chbanjocurrent;
 }
 
-f32 func_80800514_chbanjocurrent(f32 *param_0, f32 *param_1, f32 param_2)
+// Sine-wave magnitude (returned) and horizontal direction (out_xz) of the radial push.
+f32 func_80800514_chbanjocurrent(f32 *offset, f32 *out_xz, f32 phase)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
+    f32 dist;
+    f32 wave;
+    f32 speed;
+    f32 scale;
 
-    local_0 = func_800EEF94(param_0);
-    local_1 = func_800137D4(func_800136D0((local_0 - param_2) * 0.015707964f)) * 20.0f;
-    local_2 = func_80013788() * 20.0f * 0.015707964f;
-    if (local_0 != 0.0f) {
-        local_3 = local_2 / local_0;
-        param_1[0] = param_0[0] * local_3;
-        param_1[1] = param_0[2] * local_3;
+    dist = func_800EEF94(offset);
+    wave = func_800137D4(func_800136D0((dist - phase) * 0.015707964f)) * 20.0f;
+    speed = func_80013788() * 20.0f * 0.015707964f;
+    if (dist != 0.0f) {
+        scale = speed / dist;
+        out_xz[0] = offset[0] * scale;
+        out_xz[1] = offset[2] * scale;
     } else {
-        param_1[0] = param_0[0] * local_2;
-        param_1[1] = param_0[2] * local_2;
+        out_xz[0] = offset[0] * speed;
+        out_xz[1] = offset[2] * speed;
     }
-    return local_1;
+    return wave;
 }
 
-void func_808005F4_chbanjocurrent(Actor *param_0)
+// Kind 2: pushes the player radially from the map origin with a travelling sine wave.
+void func_808005F4_chbanjocurrent(Actor *actor)
 {
-    f64 local_9;
-    s32 local_0;
-    f32 local_1;
-    f32 local_4;
-    s32 local_5;
-    f32 local_2[3];
-    f32 local_3[2];
+    // Matching: unused local, needed for the match.
+    f64 unk_0;
+    s32 player;
+    f32 fade;
+    f32 depth;
+    s32 state;
+    f32 pos[3];
+    f32 push[2];
     if (!func_80800000_chbanjocurrent())
         return;
-    local_0 = func_800F54E4();
-    param_0->unk58 += (func_800D8FF8() * (f32) param_0->unk74_7) * 4.0f;
-    local_5 = func_8008FF94();
-    if (!local_5)
+    player = func_800F54E4();
+    actor->unk58 += (func_800D8FF8() * (f32) actor->unk74_7) * 4.0f;
+    state = func_8008FF94();
+    if (!state)
         return;
-    if (local_5 == 2) {
-        local_4 = func_800F5E7C(local_0) - func_800F5F7C(local_0);
-        if (local_4 >= 2000.0f)
+    if (state == 2) {
+        depth = func_800F5E7C(player) - func_800F5F7C(player);
+        if (depth >= 2000.0f)
             return;
-        if (local_4 < 0.0f)
-            local_4 = 0.0f;
-        local_1 = 1.0f - local_4 * 0.0005f;
+        if (depth < 0.0f)
+            depth = 0.0f;
+        fade = 1.0f - depth * 0.0005f;
     } else
-        local_1 = 1.0f;
-    local_5 = (*(u32 *) ((u8 *) func_800F5E50(local_0) + 8) & 0x78000000) >> 27;
-    if (local_5 && param_0->rotation[1] == (local_4 = local_5)) {
-        func_80090794(local_2);
-        func_80800514_chbanjocurrent(local_2, local_3, param_0->unk58);
-        local_2[0] += (local_3[0] * 8.0f) * local_1;
-        local_2[2] += (local_3[1] * 8.0f) * local_1;
-        func_800907C0(local_2);
+        fade = 1.0f;
+    state = (*(u32 *) ((u8 *) func_800F5E50(player) + 8) & 0x78000000) >> 27;
+    if (state && actor->rotation[1] == (depth = state)) {
+        func_80090794(pos);
+        func_80800514_chbanjocurrent(pos, push, actor->unk58);
+        pos[0] += (push[0] * 8.0f) * fade;
+        pos[2] += (push[1] * 8.0f) * fade;
+        func_800907C0(pos);
     }
 }
 
-void *D_808007D0_chbanjocurrent = (void *) 0x015801D1;
+// TU-NOTE: .data is defined here in C. The tables hold pointers to functions of this file, and
+// IDO's assembler schedules some of them differently unless the tables are in the same unit.
+// D_80800818_chbanjocurrent is declared as int[] to match the object.
+void *D_808007D0_chbanjocurrent =(void *) 0x015801D1;
 static u32 D_808007D0_chbanjocurrent_rest[17] = {0x2,
                                                  0x0,
                                                  (u32) func_808001D0_chbanjocurrent,

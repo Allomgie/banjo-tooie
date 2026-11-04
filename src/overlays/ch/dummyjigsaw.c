@@ -7,29 +7,32 @@ extern f32 func_800D8FF8(void);
 extern f32 func_800136E4(f32);
 extern void func_800EF214(f32 *, f32, f32, f32);
 
-void func_80800000_chdummyjigsaw(Actor *param_0)
+void func_80800000_chdummyjigsaw(Actor *actor)
 {
-    f32 local_0[3];
-    s32 local_1;
+    f32 pos[3];
+    s32 i;
 
-    if (param_0->unk7C_12) {
-        for (local_1 = 0; local_1 < 4; local_1++) {
+    if (actor->unk7C_12) {
+        // up to 4 chances per frame for a twinkle around the actor
+        for (i = 0; i < 4; i++) {
             if (func_800DC0C0() < 0.015f) {
-                func_80103DFC(param_0, local_0);
-                func_800EF214(local_0, func_800DC178(0.0f, 360.0f), func_800DC178(0.0f, 360.0f),
+                func_80103DFC(actor, pos);
+                func_800EF214(pos, func_800DC178(0.0f, 360.0f), func_800DC178(0.0f, 360.0f),
                               40.0f);
-                _fxtwinkle_entrypoint_2(local_0, 0x9E2);
+                _fxtwinkle_entrypoint_2(pos, 0x9E2);
             }
         }
     }
-    param_0->rotation[1] += func_800D8FF8() * 230.0f;
-    param_0->rotation[1] = func_800136E4(param_0->rotation[1]);
+    // spin about Y, 230 deg/s
+    actor->rotation[1] += func_800D8FF8() * 230.0f;
+    actor->rotation[1] = func_800136E4(actor->rotation[1]);
 }
 
-int func_80800128_chdummyjigsaw(Actor *param_0, s32 param_1, s32 param_2)
+int func_80800128_chdummyjigsaw(Actor *actor, s32 msg, s32 data)
 {
-    if ((param_1 == 0x3E) && param_0->unk64_20) {
-        func_800FFA88(param_0->unk0);
+    // touched while collectable: delete self
+    if ((msg == 0x3E) && actor->unk64_20) {
+        func_800FFA88(actor->unk0);
         return 1;
     }
     return 0;

@@ -5,7 +5,7 @@ extern int D_80800A9C_ch2dbaddy[];
 typedef struct {
     u8 pad_0[0x64];
     u32 pad_1 : 2;
-    u32 local_0 : 1;
+    u32 unk_64 : 1;
     u32 pad_2 : 29;
 } BaddyHitFlags1766;
 typedef struct {
@@ -93,17 +93,17 @@ int ch2dbaddy_entrypoint_0()
     return (int) &D_80800A9C_ch2dbaddy;
 }
 
-void func_8080000C_ch2dbaddy(Actor *param_0)
+void func_8080000C_ch2dbaddy(Actor *actor)
 {
-    void *local_0;
-    if (_sucoaster_entrypoint_0(param_0, 10)) {
-        func_8010A3E8(param_0, 0.55f);
-        func_80102FDC(param_0, param_0->scale * 0.6f);
-        local_0 = _sucoaster_entrypoint_3(param_0);
-        func_80800850_ch2dbaddy(param_0);
-        func_800EE940(local_0, param_0->position);
-        param_0->unk64_16 = 0;
-        func_8010A570(param_0);
+    void *baddie_data;
+    if (_sucoaster_entrypoint_0(actor, 10)) {
+        func_8010A3E8(actor, 0.55f);
+        func_80102FDC(actor, actor->scale * 0.6f);
+        baddie_data = _sucoaster_entrypoint_3(actor);
+        func_80800850_ch2dbaddy(actor);
+        func_800EE940(baddie_data, actor->position);
+        actor->unk64_16 = 0;
+        func_8010A570(actor);
     }
 }
 
@@ -111,12 +111,13 @@ s32 func_80800468_ch2dbaddy();
 
 void func_808000A0_ch2dbaddy(Actor *this)
 {
-    f32 vec[3];
+    f32 route_pos[3];
 
     _sucoaster_entrypoint_2(this);
     if (((ActorFlags78 *) &this->unk78)->unk78_2) {
         return;
     }
+    // States 0x13-0x16 are the notice/chase states.
     switch (this->unk70_10) {
         case 2:
         case 3:
@@ -161,127 +162,127 @@ void func_808000A0_ch2dbaddy(Actor *this)
                     break;
                 }
                 if (_subaddierouteDll_entrypoint_4(this)) {
-                    func_800EE88C(vec, _sucoaster_entrypoint_3(this));
-                    this->unk54 = func_80102D78(this, vec);
+                    func_800EE88C(route_pos, _sucoaster_entrypoint_3(this));
+                    this->unk54 = func_80102D78(this, route_pos);
                 }
             }
             _sucoaster_entrypoint_7(this, 0x5802, 30.0f);
     }
 }
 
-s32 func_808002A8_ch2dbaddy(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_808002A8_ch2dbaddy(Actor *actor, s32 message, s32 message_data)
 {
-    s32 local_0;
-    switch (param_1) {
+    s32 result;
+    switch (message) {
         case 1:
         case 2:
-            local_0 = _sucoaster_entrypoint_21(param_0, param_1, param_2);
-            if (!((BaddyFlags29 *) param_0)->locked) {
-                if (((BaddyHitFlags1766 *) param_0)->local_0)
-                    func_808004A8_ch2dbaddy(param_0);
+            result = _sucoaster_entrypoint_21(actor, message, message_data);
+            if (!((BaddyFlags29 *) actor)->locked) {
+                if (((BaddyHitFlags1766 *) actor)->unk_64)
+                    func_808004A8_ch2dbaddy(actor);
                 else
-                    func_808004F4_ch2dbaddy(param_0);
+                    func_808004F4_ch2dbaddy(actor);
                 return 1;
             }
             break;
-        case 0x42:
-            local_0 = func_80800564_ch2dbaddy(param_0, ((BaddyMessage29 *) &param_2)->index,
-                                              ((BaddyMessage29 *) &param_2)->count);
+        case 0x42: // egg/attack table message
+            result = func_80800564_ch2dbaddy(actor, ((BaddyMessage29 *) &message_data)->index,
+                                              ((BaddyMessage29 *) &message_data)->count);
             break;
         case 0x95:
-            func_801032B0(param_0, *(u16 *) ((u8 *) _sucoaster_entrypoint_3(param_0) + 6), 0);
-            local_0 = _sucoaster_entrypoint_21(param_0, param_1, param_2);
+            func_801032B0(actor, *(u16 *) ((u8 *) _sucoaster_entrypoint_3(actor) + 6), 0);
+            result = _sucoaster_entrypoint_21(actor, message, message_data);
             break;
         case 0x38:
             func_80101074(D_80800A3C_ch2dbaddy);
             return 8;
         default:
-            local_0 = _sucoaster_entrypoint_21(param_0, param_1, param_2);
+            result = _sucoaster_entrypoint_21(actor, message, message_data);
     }
-    return local_0;
+    return result;
 }
 
-s32 func_808003C4_ch2dbaddy(param_0)
-u8 *param_0;
+s32 func_808003C4_ch2dbaddy(actor)
+u8 *actor;
 {
-    f32 local_0[3];
-    func_800EE88C(local_0, _sucoaster_entrypoint_3(param_0));
-    return func_800EFC7C(param_0 + 4, local_0) < 10000.0f;
+    f32 route_pos[3];
+    func_800EE88C(route_pos, _sucoaster_entrypoint_3(actor));
+    return func_800EFC7C(actor + 4, route_pos) < 10000.0f;
 
 }
 
-int func_8080041C_ch2dbaddy(JoyState *param_0)
+int func_8080041C_ch2dbaddy(JoyState *actor)
 {
-    if (param_0->flag) {
-        return _subaddiejoy_entrypoint_6(param_0, 0) == 1;
+    if (actor->flag) {
+        return _subaddiejoy_entrypoint_6(actor, 0) == 1;
     }
 
-return _sucoaster_entrypoint_13(param_0) == 1;
+return _sucoaster_entrypoint_13(actor) == 1;
 
 }
 
-s32 func_80800468_ch2dbaddy(Actor *param_0)
+s32 func_80800468_ch2dbaddy(Actor *actor)
 {
-    if (((PlantActorFlags *) param_0)->flag_64_29) {
-        return _subaddiejoy_entrypoint_6(param_0, 0) == 1;
+    if (((PlantActorFlags *) actor)->flag_64_29) {
+        return _subaddiejoy_entrypoint_6(actor, 0) == 1;
     }
 
 return 0;
 }
 
-void func_808004A8_ch2dbaddy(param_0) u8 *param_0;
+void func_808004A8_ch2dbaddy(actor) u8 *actor;
 {
-    u32 local_0;
+    u32 state;
 
-    local_0 = (u32) (*(u16 *) ((char *) param_0 + 0x72)) >> 0xA;
+    state = (u32) (*(u16 *) ((char *) actor + 0x72)) >> 0xA;
 
-if (local_0 != 0x13) {
-    if (local_0 == 0x15) {
-        _sucoaster_entrypoint_10(param_0, 3);
+if (state != 0x13) {
+    if (state == 0x15) {
+        _sucoaster_entrypoint_10(actor, 3);
     }
 } else {
 
-func_80800700_ch2dbaddy(param_0, 0x14);
+func_80800700_ch2dbaddy(actor, 0x14);
 
 }
 }
 
-void func_808004F4_ch2dbaddy(param_0) u8 *param_0;
+void func_808004F4_ch2dbaddy(actor) u8 *actor;
 {
-    s32 sp1C;
-    u32 temp_t6;
+    s32 next_state;
+    u32 state;
 
-    temp_t6 = (u32) *(u16 *) ((s8 *) param_0 + 0x72) >> 0xA;
-    if (temp_t6 == 2 || temp_t6 == 3 || temp_t6 == 8) {
-        if (_subaddieDll_entrypoint_3(param_0) != 0) {
-            sp1C = 0x15;
+    state = (u32) *(u16 *) ((s8 *) actor + 0x72) >> 0xA;
+    if (state == 2 || state == 3 || state == 8) {
+        if (_subaddieDll_entrypoint_3(actor) != 0) {
+            next_state = 0x15;
         } else {
 
-sp1C = 0xE;
+next_state = 0xE;
 }
-_sucoaster_entrypoint_6(param_0, 0x43480000, sp1C);
-_sucoaster_entrypoint_10(param_0, sp1C);
+_sucoaster_entrypoint_6(actor, 0x43480000, next_state);
+_sucoaster_entrypoint_10(actor, next_state);
 }
 }
 
-int func_80800564_ch2dbaddy(param_0, param_1, param_2)
-Actor *param_0;
-s32 param_1;
-u32 param_2;
+int func_80800564_ch2dbaddy(actor, index, count)
+Actor *actor;
+s32 index;
+u32 count;
 {
-    switch (param_2) {
+    switch (count) {
         case 0:
-            if (param_0->unk70_10 == 0x13) {
+            if (actor->unk70_10 == 0x13) {
                 return 0;
             }
 
-switch (param_1) {
+switch (index) {
     case 2:
     case 3:
-        func_80800700_ch2dbaddy(param_0, 0x15);
+        func_80800700_ch2dbaddy(actor, 0x15);
         return 0;
     case 4:
-        func_80800700_ch2dbaddy(param_0, 0x15);
+        func_80800700_ch2dbaddy(actor, 0x15);
         return 0;
     case 5:
     case 8:
@@ -289,27 +290,27 @@ switch (param_1) {
     case 18:
         return 1;
     case 7:
-        _sucoaster_entrypoint_10(param_0, 8);
+        _sucoaster_entrypoint_10(actor, 8);
         return 0;
 }
 
 break;
 case 2:
 case 7:
-    func_80800700_ch2dbaddy(param_0, 0x15);
+    func_80800700_ch2dbaddy(actor, 0x15);
     return 0;
 case 3:
-    param_0->unk6C_0 = func_800D9058(2.0f);
-    func_8010297C(param_0, param_0->unk54, 70.0f, 120.0f);
+    actor->unk6C_0 = func_800D9058(2.0f);
+    func_8010297C(actor, actor->unk54, 70.0f, 120.0f);
 
-if (param_0->unk70_10 == 8) {
-    func_80800700_ch2dbaddy(param_0, 0x15);
+if (actor->unk70_10 == 8) {
+    func_80800700_ch2dbaddy(actor, 0x15);
 }
 
 return 0;
 
 case 4:
-    if (param_0->unk70_10 != 0x13) {
+    if (actor->unk70_10 != 0x13) {
         return 1;
     }
 
@@ -318,19 +319,19 @@ case 1:
 case 6:
     return 1;
 case 5:
-    func_80800700_ch2dbaddy(param_0, 0xC);
+    func_80800700_ch2dbaddy(actor, 0xC);
     return 0;
 
 case 8:
-    if (param_1 == 0x11) {
-        func_801020DC(param_0, 0);
+    if (index == 0x11) {
+        func_801020DC(actor, 0);
     }
 
 return 1;
 
 case 9:
-    if (((Baddy2DFlags *) param_0)->b29) {
-        _sucoaster_entrypoint_10(param_0, 2);
+    if (((Baddy2DFlags *) actor)->b29) {
+        _sucoaster_entrypoint_10(actor, 2);
         return 0;
     }
 
@@ -339,53 +340,56 @@ return 1;
 return 0;
 }
 
-void func_80800700_ch2dbaddy(param_0, param_1) Actor *param_0;
-s32 param_1;
+void func_80800700_ch2dbaddy(actor, state) Actor *actor;
+s32 state;
 {
-    u8 *local_0;
-    local_0 = _sucoaster_entrypoint_3(param_0);
-    switch (param_1) {
+    u8 *baddie_data;
+    baddie_data = _sucoaster_entrypoint_3(actor);
+    switch (state) {
         case 0xC:
-            func_8010A570(param_0);
-            _sucoaster_entrypoint_10(param_0, param_1);
+            func_8010A570(actor);
+            _sucoaster_entrypoint_10(actor, state);
             break;
         case 0x15:
-            _sucoaster_entrypoint_10(param_0, param_1);
-            _sucoaster_entrypoint_6(param_0, 0x43480000);
+            _sucoaster_entrypoint_10(actor, state);
+            _sucoaster_entrypoint_6(actor, 0x43480000);
             break;
         case 0x13:
-            _sucoaster_entrypoint_10(param_0, param_1);
-            func_8010A570(param_0);
+            _sucoaster_entrypoint_10(actor, state);
+            func_8010A570(actor);
 
-if (!((BaddyFlags30 *) param_0)->flag_29) {
-    func_80800850_ch2dbaddy(param_0);
-    func_801032B0(param_0, *(u16 *) (local_0 + 6), 0);
+if (!((BaddyFlags30 *) actor)->flag_29) {
+    func_80800850_ch2dbaddy(actor);
+    func_801032B0(actor, *(u16 *) (baddie_data + 6), 0);
 }
 
-param_0->unk64_16 = 0;
+actor->unk64_16 = 0;
 break;
 case 0x14:
-    _sucoaster_entrypoint_10(param_0, param_1);
-    param_0->unk64_16 = 1;
-    param_0->unk64_20 = 0;
-    func_8010A570(param_0);
-    _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800AE4_ch2dbaddy);
+    _sucoaster_entrypoint_10(actor, state);
+    actor->unk64_16 = 1;
+    actor->unk64_20 = 0;
+    func_8010A570(actor);
+    _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80800AE4_ch2dbaddy);
     }
     }
 
-    int func_80800820_ch2dbaddy(s32 param_0)
+    int func_80800820_ch2dbaddy(s32 actor)
     {
-        s32 local_0;
-        local_0 = param_0 + 4;
-        _subaddieaudioquick_entrypoint_3(param_0, local_0, &D_80800AF4_ch2dbaddy, 0x3DCCCCCD);
+        s32 pos;
+        pos = actor + 4;
+        _subaddieaudioquick_entrypoint_3(actor, pos, &D_80800AF4_ch2dbaddy, 0x3DCCCCCD);
     }
 
+    // Picks a random sound id from a 3-entry table.
     void func_80800850_ch2dbaddy(void)
     {
-        void *local_0 = _sucoaster_entrypoint_3();
-        *((u16 *) ((char *) local_0 + 6)) = D_80800B00_ch2dbaddy[func_800DC128(0, 3)];
+        void *baddie_data = _sucoaster_entrypoint_3();
+        *((u16 *) ((char *) baddie_data + 6)) = D_80800B00_ch2dbaddy[func_800DC128(0, 3)];
     }
 
+    // TU-NOTE: the overlay .data is defined here in C; its tables point to functions of this file,
+    // and IDO's assembler schedules them differently unless defined in the same unit.
     extern void func_80105834();
     extern void _sucoaster_entrypoint_20();
     extern void _sucoaster_entrypoint_1();

@@ -1,5 +1,6 @@
 #include "overlays/bs/mum/splat.h"
 
+// Hard landing: fall damage, flop animation, slide to a stop.
 void func_80800000_bsmumsplat(PlayerState *self)
 {
     _bsmum_entrypoint_2(self);
@@ -14,6 +15,7 @@ void func_80800000_bsmumsplat(PlayerState *self)
     func_8008E944(self);
 }
 
+// Gets up (0xEF) when the animation ends, dies (0xEB) if health is zero.
 void func_808000A0_bsmumsplat(PlayerState *self)
 {
     enum bs_state_e next_state;
@@ -54,6 +56,9 @@ s32 bsmumsplat_entrypoint_0(s32 idx)
     return D_808001E0_bsmumsplat[idx];
 }
 
+// TU-NOTE: the .data table below (formerly asm/data/overlays/bs/mum/splat.data.s) is defined in C.
+// IDO schedules some functions differently unless the table is in the same unit.
+// Values are taken from the ROM.
 extern void func_80099AA8();
 s32 D_808001E0_bsmumsplat[4] = {(u32) func_8080019C_bsmumsplat, (u32) func_80800000_bsmumsplat,
                                 (u32) func_808000A0_bsmumsplat, (u32) func_80099AA8};

@@ -1,21 +1,23 @@
 #include "gl/cutDll.h"
 #include "common.h"
 
+// Global cutscene record. state: 1 idle, 2 start, 3 playing, 4 end in place,
+// 5 return to previous map, 6 cleanup.
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    u8 unk6;
-    u8 unk7;
-    u8 unk8;
-    u8 unk9;
-    u8 unkA;
-    u8 unkB;
-    u8 unkC;
-    u8 unkD;
-    u8 unkE;
-    u8 unkF;
-    u8 unk10;
+    s16 cutscene_map;
+    s16 return_map;
+    s16 cutscene_id;
+    u8 unk_6;
+    u8 unk_7;
+    u8 state;
+    u8 unk_9;
+    u8 theme_music;
+    u8 unk_B;
+    u8 unk_C;
+    u8 unk_D;
+    u8 unk_E;
+    u8 zone_music_suspended;
+    u8 unk_10;
 } CutsceneInformation;
 
 extern CutsceneInformation D_801275E8;
@@ -25,47 +27,48 @@ void glcutDll_entrypoint_11(u32 arg0);
 void glcutDll_entrypoint_10(u32 arg0);
 void glcutDll_entrypoint_7(u32 arg0);
 
-void func_80800000_glcutDll(u32 arg0)
+void func_80800000_glcutDll(u32 value)
 {
-    D_801275E8.unk6 = arg0;
+    D_801275E8.unk_6 = value;
 }
 
-void func_8080000C_glcutDll(u32 arg0)
+void func_8080000C_glcutDll(u32 value)
 {
-    D_801275E8.unk9 = arg0;
+    D_801275E8.unk_9 = value;
 }
 
-void func_80800018_glcutDll(u32 arg0)
+// Cutscene state machine; see CutsceneInformation for the states.
+void func_80800018_glcutDll(u32 new_state)
 {
-    switch (arg0) {
+    switch (new_state) {
         case 1:
             func_8080000C_glcutDll(0U);
             func_80800000_glcutDll(0U);
-            D_801275E8.unkC = 0;
+            D_801275E8.unk_C = 0;
             func_800FE734(0);
             break;
         case 2:
-            if ((D_801275E8.unk0 != D_801275E8.unk2) || (func_800DA298(FLAG3_A52_UNK) != 0)) {
-                if (D_801275E8.unkA != 0) {
+            if ((D_801275E8.cutscene_map != D_801275E8.return_map) || (func_800DA298(FLAG3_A52_UNK) != 0)) {
+                if (D_801275E8.theme_music != 0) {
                     func_800FE844(2);
                     func_800FE734(1);
                 }
-                if (_gcsectionDll_entrypoint_4(D_801275E8.unk0) != D_8012762C) {
+                if (_gcsectionDll_entrypoint_4(D_801275E8.cutscene_map) != D_8012762C) {
                     func_800A8230();
                 }
-                func_800A7990(D_801275E8.unk0, 0, D_801275E8.unk10);
+                func_800A7990(D_801275E8.cutscene_map, 0, D_801275E8.unk_10);
             }
             func_800DA544(FLAG2_641_CUTSCENE_STORAGE_ACTIVE);
-            if ((D_801275E8.unkB == 0) && (D_801275E8.unkF == 0)) {
+            if ((D_801275E8.unk_B == 0) && (D_801275E8.zone_music_suspended == 0)) {
                 func_800C78CC(1);
-                D_801275E8.unkF = 1U;
+                D_801275E8.zone_music_suspended = 1U;
             }
-            D_801275E8.unkC = 1;
+            D_801275E8.unk_C = 1;
             break;
         case 3:
-            if ((D_801275E8.unk8 == 2) &&
-                ((D_801275E8.unk0 != D_801275E8.unk2) || (func_800DA298(FLAG3_A52_UNK) != 0)) &&
-                (D_801275E8.unk7 != 0)) {
+            if ((D_801275E8.state == 2) &&
+                ((D_801275E8.cutscene_map != D_801275E8.return_map) || (func_800DA298(FLAG3_A52_UNK) != 0)) &&
+                (D_801275E8.unk_7 != 0)) {
                 func_80800000_glcutDll(1U);
                 func_8080000C_glcutDll(0U);
                 func_800D9290();
@@ -73,57 +76,57 @@ void func_80800018_glcutDll(u32 arg0)
             }
             break;
         case 4:
-            if (D_801275E8.unk6 != 0) {
+            if (D_801275E8.unk_6 != 0) {
                 func_800D92F4();
             }
             func_800DA524(FLAG2_641_CUTSCENE_STORAGE_ACTIVE);
-            if ((D_801275E8.unkB == 0) && (D_801275E8.unkF != 0)) {
+            if ((D_801275E8.unk_B == 0) && (D_801275E8.zone_music_suspended != 0)) {
                 func_800C78CC(0);
-                D_801275E8.unkF = 0U;
+                D_801275E8.zone_music_suspended = 0U;
             }
-            if (D_801275E8.unkE != 0) {
+            if (D_801275E8.unk_E != 0) {
                 func_80090708(0);
             }
             func_8080000C_glcutDll(0U);
-            D_801275E8.unk4 = 0;
+            D_801275E8.cutscene_id = 0;
             func_800DA524(FLAG3_A52_UNK);
             break;
         case 5:
-            if (D_801275E8.unkA != 0) {
+            if (D_801275E8.theme_music != 0) {
                 func_800FE844(2);
                 func_800FE734(1);
             }
-            if (_gcsectionDll_entrypoint_4(D_801275E8.unk2) != D_8012762C) {
+            if (_gcsectionDll_entrypoint_4(D_801275E8.return_map) != D_8012762C) {
                 func_800A8230();
             }
-            func_800A7990(D_801275E8.unk2, 0, D_801275E8.unk10);
+            func_800A7990(D_801275E8.return_map, 0, D_801275E8.unk_10);
             func_800DA524(FLAG2_641_CUTSCENE_STORAGE_ACTIVE);
-            if ((D_801275E8.unkB == 0) && (D_801275E8.unkF != 0)) {
+            if ((D_801275E8.unk_B == 0) && (D_801275E8.zone_music_suspended != 0)) {
                 func_800C78CC(0);
-                D_801275E8.unkF = 0U;
+                D_801275E8.zone_music_suspended = 0U;
             }
-            if (D_801275E8.unk6 != 0) {
+            if (D_801275E8.unk_6 != 0) {
                 func_8080000C_glcutDll(1U);
             }
-            D_801275E8.unk4 = 0;
-            D_801275E8.unkD = 1;
+            D_801275E8.cutscene_id = 0;
+            D_801275E8.unk_D = 1;
             func_800DA524(FLAG3_A52_UNK);
             break;
         case 6:
-            if (D_801275E8.unk9 != 0) {
+            if (D_801275E8.unk_9 != 0) {
                 func_800D92F4();
                 func_80800000_glcutDll(0U);
                 func_8080000C_glcutDll(0U);
                 func_800FE734(0);
             }
-            if (D_801275E8.unkC != 0) {
-                D_801275E8.unkC = 0U;
+            if (D_801275E8.unk_C != 0) {
+                D_801275E8.unk_C = 0U;
             }
-            if (D_801275E8.unkD != 0) {
-                D_801275E8.unkD = 0U;
+            if (D_801275E8.unk_D != 0) {
+                D_801275E8.unk_D = 0U;
             }
     }
-    D_801275E8.unk8 = (s8) arg0;
+    D_801275E8.state = (s8) new_state;
 }
 
 void glcutDll_entrypoint_0(void)
@@ -132,17 +135,17 @@ void glcutDll_entrypoint_0(void)
     glcutDll_entrypoint_10(func_800EA05C());
     glcutDll_entrypoint_11(1U);
     func_80800000_glcutDll(0U);
-    D_801275E8.unkA = 1;
-    D_801275E8.unkB = 0;
-    D_801275E8.unkF = 0;
-    D_801275E8.unk10 = 0;
-    D_801275E8.unk4 = 0;
-    D_801275E8.unkE = 0;
+    D_801275E8.theme_music = 1;
+    D_801275E8.unk_B = 0;
+    D_801275E8.zone_music_suspended = 0;
+    D_801275E8.unk_10 = 0;
+    D_801275E8.cutscene_id = 0;
+    D_801275E8.unk_E = 0;
 }
 
 u8 glcutDll_entrypoint_1(void)
 {
-    return D_801275E8.unk9;
+    return D_801275E8.unk_9;
 }
 
 void glcutDll_entrypoint_2(void)
@@ -154,91 +157,96 @@ void glcutDll_entrypoint_3(void)
     func_800D92EC();
     func_8080000C_glcutDll(0U);
     func_80800000_glcutDll(0U);
-    D_801275E8.unkA = 1;
-    D_801275E8.unkB = 0;
-    D_801275E8.unkF = 0;
-    D_801275E8.unk10 = 0;
-    D_801275E8.unkC = 0;
-    D_801275E8.unkD = 0;
-    D_801275E8.unk4 = 0;
-    D_801275E8.unkE = 0;
-    D_801275E8.unk8 = 0;
+    D_801275E8.theme_music = 1;
+    D_801275E8.unk_B = 0;
+    D_801275E8.zone_music_suspended = 0;
+    D_801275E8.unk_10 = 0;
+    D_801275E8.unk_C = 0;
+    D_801275E8.unk_D = 0;
+    D_801275E8.cutscene_id = 0;
+    D_801275E8.unk_E = 0;
+    D_801275E8.state = 0;
     func_80800018_glcutDll(1U);
 }
 
 void glcutDll_entrypoint_4(void)
 {
-    if (D_801275E8.unk8 != 1) {
+    if (D_801275E8.state != 1) {
         func_80800018_glcutDll(6);
     }
 }
 
 void glcutDll_entrypoint_5(void)
 {
-    if (D_801275E8.unk8 != 1) {
+    if (D_801275E8.state != 1) {
         func_80800018_glcutDll(3);
     }
 }
 
-void glcutDll_entrypoint_6(u32 arg0, u32 arg1)
+// Starts a cutscene with the given cutscene map and cutscene id.
+void glcutDll_entrypoint_6(u32 cutscene_map, u32 cutscene_id)
 {
     glcutDll_entrypoint_0();
-    glcutDll_entrypoint_7(arg0);
-    glcutDll_entrypoint_22(arg1);
+    glcutDll_entrypoint_7(cutscene_map);
+    glcutDll_entrypoint_22(cutscene_id);
     glcutDll_entrypoint_16();
 }
 
-void glcutDll_entrypoint_7(u32 arg0)
+// Set the cutscene map.
+void glcutDll_entrypoint_7(u32 map)
 {
-    D_801275E8.unk0 = arg0;
+    D_801275E8.cutscene_map = map;
 }
 
+// Return the cutscene map.
 s16 glcutDll_entrypoint_8(void)
 {
-    return D_801275E8.unk0;
+    return D_801275E8.cutscene_map;
 }
 
+// Get the map to return to after the cutscene ends.
 s16 glcutDll_entrypoint_9(void)
 {
-    return D_801275E8.unk2;
+    return D_801275E8.return_map;
 }
 
-void glcutDll_entrypoint_10(u32 arg0)
+// Set the cutscene return map.
+void glcutDll_entrypoint_10(u32 map)
 {
-    D_801275E8.unk2 = arg0;
+    D_801275E8.return_map = map;
 }
 
-void glcutDll_entrypoint_11(u32 arg0)
+void glcutDll_entrypoint_11(u32 value)
 {
-    D_801275E8.unk7 = arg0;
+    D_801275E8.unk_7 = value;
 }
 
-void glcutDll_entrypoint_12(s32 arg0)
+void glcutDll_entrypoint_12(s32 disable)
 {
-    if (arg0 != 0) {
-        D_801275E8.unkA = 0;
+    if (disable != 0) {
+        D_801275E8.theme_music = 0;
         return;
     }
-    D_801275E8.unkA = 1;
+    D_801275E8.theme_music = 1;
 }
 
-void glcutDll_entrypoint_13(s32 arg0)
+void glcutDll_entrypoint_13(s32 value)
 {
-    if (arg0 != 0) {
-        D_801275E8.unkB = 0;
+    if (value != 0) {
+        D_801275E8.unk_B = 0;
         return;
     }
-    D_801275E8.unkB = 1;
+    D_801275E8.unk_B = 1;
 }
 
-void glcutDll_entrypoint_14(u32 arg0)
+void glcutDll_entrypoint_14(u32 value)
 {
-    D_801275E8.unk10 = arg0;
+    D_801275E8.unk_10 = value;
 }
 
-void glcutDll_entrypoint_15(u32 arg0)
+void glcutDll_entrypoint_15(u32 value)
 {
-    D_801275E8.unkE = arg0;
+    D_801275E8.unk_E = value;
 }
 
 void glcutDll_entrypoint_16(void)
@@ -248,7 +256,7 @@ void glcutDll_entrypoint_16(void)
 
 void glcutDll_entrypoint_17(void)
 {
-    if (func_800EA05C() == D_801275E8.unk2) {
+    if (func_800EA05C() == D_801275E8.return_map) {
         func_80800018_glcutDll(4U);
         func_80800018_glcutDll(1U);
         return;
@@ -258,31 +266,33 @@ void glcutDll_entrypoint_17(void)
 
 s16 glcutDll_entrypoint_18(void)
 {
-    return D_801275E8.unk4;
+    return D_801275E8.cutscene_id;
 }
 
-u32 glcutDll_entrypoint_19(s32 arg0)
+// Is cutscene cutscene_id running?
+u32 glcutDll_entrypoint_19(s32 cutscene_id)
 {
-    u32 var_v0;
+    u32 is_current;
 
-    var_v0 = arg0 == D_801275E8.unk4;
-    if (var_v0) {
+    is_current = cutscene_id == D_801275E8.cutscene_id;
+    if (is_current) {
         return func_800DB9B0() != 0;
     }
 }
 
+// Is cutscene 0x8A or 0x8C running?
 s32 glcutDll_entrypoint_20(void)
 {
-    s16 temp_v0;
+    s16 cutscene_id;
 
     if (func_800DB9B0() == 0) {
         return 0;
     }
-    temp_v0 = D_801275E8.unk4;
-    if (temp_v0 == 0x8C) {
+    cutscene_id = D_801275E8.cutscene_id;
+    if (cutscene_id == 0x8C) {
         return 1;
     }
-    if (temp_v0 == 0x8A) {
+    if (cutscene_id == 0x8A) {
         return 1;
     }
     return 0;
@@ -293,50 +303,52 @@ void glcutDll_entrypoint_21(void)
     func_800DA544(FLAG3_A52_UNK);
 }
 
-void glcutDll_entrypoint_22(u32 arg0)
+void glcutDll_entrypoint_22(u32 cutscene_id)
 {
-    D_801275E8.unk4 = arg0;
+    D_801275E8.cutscene_id = cutscene_id;
 }
 
 s32 glcutDll_entrypoint_23(void)
 {
-    if ((D_801275E8.unk0 != D_801275E8.unk2) && (func_800EA05C() == D_801275E8.unk0)) {
+    if ((D_801275E8.cutscene_map != D_801275E8.return_map) && (func_800EA05C() == D_801275E8.cutscene_map)) {
         return 1;
     }
     return 0;
 }
 
-void glcutDll_entrypoint_24(u32 arg0, u32 arg1, u32 arg2)
+// Starts a cutscene keeping the current music settings; -1 keeps the current
+// return map / cutscene id.
+void glcutDll_entrypoint_24(u32 cutscene_map, u32 return_map, u32 cutscene_id)
 {
-    u32 sp2C;
-    u32 sp28;
-    s32 sp24;
-    s32 sp20;
-    s32 sp1C;
-    s32 sp18;
+    u32 saved_return_map;
+    u32 saved_cutscene_id;
+    s32 saved_theme_music;
+    s32 saved_unk_b;
+    s32 saved_unk_10;
+    s32 saved_zone_music_suspended;
 
-    sp2C = (u32) D_801275E8.unk2;
-    sp28 = (u32) D_801275E8.unk4;
-    sp24 = (s32) D_801275E8.unkA;
-    sp20 = (s32) D_801275E8.unkB;
-    sp1C = (s32) D_801275E8.unk10;
-    sp18 = (s32) D_801275E8.unkF;
+    saved_return_map = (u32) D_801275E8.return_map;
+    saved_cutscene_id = (u32) D_801275E8.cutscene_id;
+    saved_theme_music = (s32) D_801275E8.theme_music;
+    saved_unk_b = (s32) D_801275E8.unk_B;
+    saved_unk_10 = (s32) D_801275E8.unk_10;
+    saved_zone_music_suspended = (s32) D_801275E8.zone_music_suspended;
     glcutDll_entrypoint_0();
     glcutDll_entrypoint_11(0U);
-    D_801275E8.unkA = (u8) sp24;
-    D_801275E8.unkB = (u8) sp20;
-    D_801275E8.unk10 = (u8) sp1C;
-    D_801275E8.unkF = (u8) sp18;
-    if (arg2 == -1U) {
-        glcutDll_entrypoint_22(sp28);
+    D_801275E8.theme_music = (u8) saved_theme_music;
+    D_801275E8.unk_B = (u8) saved_unk_b;
+    D_801275E8.unk_10 = (u8) saved_unk_10;
+    D_801275E8.zone_music_suspended = (u8) saved_zone_music_suspended;
+    if (cutscene_id == -1U) {
+        glcutDll_entrypoint_22(saved_cutscene_id);
     } else {
-        glcutDll_entrypoint_22(arg2);
+        glcutDll_entrypoint_22(cutscene_id);
     }
-    glcutDll_entrypoint_7(arg0);
-    if (arg1 == -1U) {
-        glcutDll_entrypoint_10(sp2C);
+    glcutDll_entrypoint_7(cutscene_map);
+    if (return_map == -1U) {
+        glcutDll_entrypoint_10(saved_return_map);
     } else {
-        glcutDll_entrypoint_10(arg1);
+        glcutDll_entrypoint_10(return_map);
     }
     glcutDll_entrypoint_16();
     func_80800000_glcutDll(1U);

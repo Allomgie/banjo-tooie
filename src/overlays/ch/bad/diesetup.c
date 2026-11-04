@@ -1,193 +1,198 @@
 #include "common.h"
 
+// Deferred-call queue: each record holds a function pointer, up to 6 int args and the arg count.
+// The queue itself is owned by core2/1E7F4D0 and holds at most 0x16 records.
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    u8 pad8[0x14];
-    s32 unk1C;
+    s32 func;
+    s32 arg0;
+    u8 pad_8[0x14];
+    s32 argc;
 } BaddieSetupRecord;
 typedef struct {
-    BaddieSetupRecord *unk0;
-    u8 unk4;
+    BaddieSetupRecord *records;
+    u8 count;
 } BaddieSetupQueue;
 extern BaddieSetupQueue *func_800A5D60(void);
 typedef struct {
-    s32 local_0[5];
-    u8 pad_0[8];
-    s32 local_1;
+    s32 words[5];
+    u8 pad_14[8];
+    s32 argc;
 } BaddieSetupEntry;
 typedef struct {
-    BaddieSetupEntry *local_0;
-    u8 local_1;
+    BaddieSetupEntry *entries;
+    u8 count;
 } BaddieSetupList;
 typedef struct {
-    s32 local_0[7];
-    s32 local_1;
+    s32 words[7];
+    s32 argc;
 } BaddieSetupEntry27;
 typedef struct {
-    BaddieSetupEntry27 *local_0;
-    u8 local_1;
+    BaddieSetupEntry27 *entries;
+    u8 count;
 } BaddieSetupList27;
 typedef struct {
-    s32 a;
+    s32 id;
     f32 x, y, z;
 } ArgS;
 extern void _chbounce_entrypoint_6(s32, f32 *);
 extern void _chbounce_entrypoint_2(f32);
 
-int func_80800000_chbaddiesetup(s32 param_0[3])
+// Returns 1 if the queue exists and has room for another record.
+int func_80800000_chbaddiesetup(s32 queue[3])
 {
-    if (!param_0[0]) {
+    if (!queue[0]) {
         return 0;
     }
-    if (((unsigned char *) param_0)[4] == 0x16) {
+    if (((unsigned char *) queue)[4] == 0x16) {
         return 0;
     }
     return 1;
 }
 
-void chbaddiesetup_entrypoint_0(s32 param_0)
+void chbaddiesetup_entrypoint_0(s32 func)
 {
-    BaddieSetupQueue *local_0;
+    BaddieSetupQueue *queue;
 
-    local_0 = func_800A5D60();
-    if (func_80800000_chbaddiesetup(local_0)) {
-        local_0->unk0[local_0->unk4].unk0 = param_0;
-        local_0->unk0[local_0->unk4].unk1C = 0;
-        local_0->unk4++;
+    queue = func_800A5D60();
+    if (func_80800000_chbaddiesetup(queue)) {
+        queue->records[queue->count].func = func;
+        queue->records[queue->count].argc = 0;
+        queue->count++;
     }
 }
 
-void chbaddiesetup_entrypoint_1(s32 param_0, s32 param_1)
+void chbaddiesetup_entrypoint_1(s32 func, s32 arg0)
 {
-    BaddieSetupQueue *local_0;
+    BaddieSetupQueue *queue;
 
-    local_0 = func_800A5D60();
-    if (func_80800000_chbaddiesetup(local_0)) {
-        local_0->unk0[local_0->unk4].unk0 = param_0;
-        local_0->unk0[local_0->unk4].unk4 = param_1;
-        local_0->unk0[local_0->unk4].unk1C = 1;
-        local_0->unk4++;
+    queue = func_800A5D60();
+    if (func_80800000_chbaddiesetup(queue)) {
+        queue->records[queue->count].func = func;
+        queue->records[queue->count].arg0 = arg0;
+        queue->records[queue->count].argc = 1;
+        queue->count++;
     }
 }
 
-void chbaddiesetup_entrypoint_2(s32 param_0, s32 param_1, s32 param_2)
+void chbaddiesetup_entrypoint_2(s32 func, s32 arg0, s32 arg1)
 {
-    u8 *sp1C;
-    u8 *temp_v0;
+    u8 *queue;
+    u8 *queue_tmp;
 
-    temp_v0 = func_800A5D60();
-    sp1C = temp_v0;
-    if (func_80800000_chbaddiesetup(temp_v0) != 0) {
-        *(s32 *) ((u8 *) *(s32 **) sp1C + (*(u8 *) (sp1C + 4) << 5)) = param_0;
-        *(s32 *) ((u8 *) *(s32 **) sp1C + (*(u8 *) (sp1C + 4) << 5) + 4) = param_1;
-        *(s32 *) ((u8 *) *(s32 **) sp1C + (*(u8 *) (sp1C + 4) << 5) + 8) = param_2;
-        *(s32 *) ((u8 *) *(s32 **) sp1C + (*(u8 *) (sp1C + 4) << 5) + 0x1C) = 2;
-        *(u8 *) (sp1C + 4) = *(u8 *) (sp1C + 4) + 1;
+    // Matching: the extra temporary is needed for the match.
+    queue_tmp = func_800A5D60();
+    queue = queue_tmp;
+    if (func_80800000_chbaddiesetup(queue_tmp) != 0) {
+        *(s32 *) ((u8 *) *(s32 **) queue + (*(u8 *) (queue + 4) << 5)) = func;
+        *(s32 *) ((u8 *) *(s32 **) queue + (*(u8 *) (queue + 4) << 5) + 4) = arg0;
+        *(s32 *) ((u8 *) *(s32 **) queue + (*(u8 *) (queue + 4) << 5) + 8) = arg1;
+        *(s32 *) ((u8 *) *(s32 **) queue + (*(u8 *) (queue + 4) << 5) + 0x1C) = 2;
+        *(u8 *) (queue + 4) = *(u8 *) (queue + 4) + 1;
     }
 }
 
-void chbaddiesetup_entrypoint_3(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+void chbaddiesetup_entrypoint_3(s32 func, s32 arg0, s32 arg1, s32 arg2)
 {
-    u8 *sp1C;
-    u8 *temp_v0;
+    u8 *queue;
+    u8 *queue_tmp;
 
-    temp_v0 = func_800A5D60();
-    sp1C = temp_v0;
-    if (func_80800000_chbaddiesetup(temp_v0) != 0) {
-        *(s32 *) (*(s32 *) sp1C + (sp1C[4] << 5)) = param_0;
-        *(s32 *) (*(s32 *) sp1C + (sp1C[4] << 5) + 4) = param_1;
-        *(s32 *) (*(s32 *) sp1C + (sp1C[4] << 5) + 8) = param_2;
-        *(s32 *) (*(s32 *) sp1C + (sp1C[4] << 5) + 0xC) = param_3;
-        *(s32 *) (*(s32 *) sp1C + (sp1C[4] << 5) + 0x1C) = 3;
-        sp1C[4] = (u8) (sp1C[4] + 1);
+    // Matching: the extra temporary is needed for the match.
+    queue_tmp = func_800A5D60();
+    queue = queue_tmp;
+    if (func_80800000_chbaddiesetup(queue_tmp) != 0) {
+        *(s32 *) (*(s32 *) queue + (queue[4] << 5)) = func;
+        *(s32 *) (*(s32 *) queue + (queue[4] << 5) + 4) = arg0;
+        *(s32 *) (*(s32 *) queue + (queue[4] << 5) + 8) = arg1;
+        *(s32 *) (*(s32 *) queue + (queue[4] << 5) + 0xC) = arg2;
+        *(s32 *) (*(s32 *) queue + (queue[4] << 5) + 0x1C) = 3;
+        queue[4] = (u8) (queue[4] + 1);
     }
 }
 
-void chbaddiesetup_entrypoint_4(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4)
+void chbaddiesetup_entrypoint_4(s32 func, s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 {
-    BaddieSetupList *local_0;
-    local_0 = (BaddieSetupList *) func_800A5D60();
-    if (func_80800000_chbaddiesetup((BaddieSetupQueue *) local_0)) {
-        local_0->local_0[local_0->local_1].local_0[0] = param_0;
-        local_0->local_0[local_0->local_1].local_0[1] = param_1;
-        local_0->local_0[local_0->local_1].local_0[2] = param_2;
-        local_0->local_0[local_0->local_1].local_0[3] = param_3;
-        local_0->local_0[local_0->local_1].local_0[4] = param_4;
-        local_0->local_0[local_0->local_1].local_1 = 4;
-        local_0->local_1++;
+    BaddieSetupList *queue;
+    queue = (BaddieSetupList *) func_800A5D60();
+    if (func_80800000_chbaddiesetup((BaddieSetupQueue *) queue)) {
+        queue->entries[queue->count].words[0] = func;
+        queue->entries[queue->count].words[1] = arg0;
+        queue->entries[queue->count].words[2] = arg1;
+        queue->entries[queue->count].words[3] = arg2;
+        queue->entries[queue->count].words[4] = arg3;
+        queue->entries[queue->count].argc = 4;
+        queue->count++;
     }
 }
 
-void chbaddiesetup_entrypoint_5(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4,
-                                s32 param_5)
+void chbaddiesetup_entrypoint_5(s32 func, s32 arg0, s32 arg1, s32 arg2, s32 arg3,
+                                s32 arg4)
 {
-    u8 *local_0;
-    local_0 = func_800A5D60();
-    if (func_80800000_chbaddiesetup(local_0) != 0) {
-        *(s32 *) ((s8 *) *(s32 **) local_0 + (local_0[4] << 5)) = param_0;
-        *(s32 *) ((s8 *) *(s32 **) local_0 + (local_0[4] << 5) + 4) = param_1;
-        *(s32 *) ((s8 *) *(s32 **) local_0 + (local_0[4] << 5) + 8) = param_2;
-        *(s32 *) ((s8 *) *(s32 **) local_0 + (local_0[4] << 5) + 0xC) = param_3;
-        *(s32 *) ((s8 *) *(s32 **) local_0 + (local_0[4] << 5) + 0x10) = param_4;
-        *(s32 *) ((s8 *) *(s32 **) local_0 + (local_0[4] << 5) + 0x14) = param_5;
-        *(s32 *) ((s8 *) *(s32 **) local_0 + (local_0[4] << 5) + 0x1C) = 5;
-        local_0[4] = local_0[4] + 1;
+    u8 *queue;
+    queue = func_800A5D60();
+    if (func_80800000_chbaddiesetup(queue) != 0) {
+        *(s32 *) ((s8 *) *(s32 **) queue + (queue[4] << 5)) = func;
+        *(s32 *) ((s8 *) *(s32 **) queue + (queue[4] << 5) + 4) = arg0;
+        *(s32 *) ((s8 *) *(s32 **) queue + (queue[4] << 5) + 8) = arg1;
+        *(s32 *) ((s8 *) *(s32 **) queue + (queue[4] << 5) + 0xC) = arg2;
+        *(s32 *) ((s8 *) *(s32 **) queue + (queue[4] << 5) + 0x10) = arg3;
+        *(s32 *) ((s8 *) *(s32 **) queue + (queue[4] << 5) + 0x14) = arg4;
+        *(s32 *) ((s8 *) *(s32 **) queue + (queue[4] << 5) + 0x1C) = 5;
+        queue[4] = queue[4] + 1;
     }
 }
 
-void chbaddiesetup_entrypoint_6(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4,
-                                s32 param_5, s32 param_6)
+void chbaddiesetup_entrypoint_6(s32 func, s32 arg0, s32 arg1, s32 arg2, s32 arg3,
+                                s32 arg4, s32 arg5)
 {
-    BaddieSetupList27 *local_0;
+    BaddieSetupList27 *queue;
 
-    local_0 = (BaddieSetupList27 *) func_800A5D60();
-    if (func_80800000_chbaddiesetup((BaddieSetupQueue *) local_0)) {
-        local_0->local_0[local_0->local_1].local_0[0] = param_0;
-        local_0->local_0[local_0->local_1].local_0[1] = param_1;
-        local_0->local_0[local_0->local_1].local_0[2] = param_2;
-        local_0->local_0[local_0->local_1].local_0[3] = param_3;
-        local_0->local_0[local_0->local_1].local_0[4] = param_4;
-        local_0->local_0[local_0->local_1].local_0[5] = param_5;
-        local_0->local_0[local_0->local_1].local_0[6] = param_6;
-        local_0->local_0[local_0->local_1].local_1 = 6;
-        local_0->local_1++;
+    queue = (BaddieSetupList27 *) func_800A5D60();
+    if (func_80800000_chbaddiesetup((BaddieSetupQueue *) queue)) {
+        queue->entries[queue->count].words[0] = func;
+        queue->entries[queue->count].words[1] = arg0;
+        queue->entries[queue->count].words[2] = arg1;
+        queue->entries[queue->count].words[3] = arg2;
+        queue->entries[queue->count].words[4] = arg3;
+        queue->entries[queue->count].words[5] = arg4;
+        queue->entries[queue->count].words[6] = arg5;
+        queue->entries[queue->count].argc = 6;
+        queue->count++;
     }
 }
 
-void chbaddiesetup_entrypoint_7(ArgS param_0)
+void chbaddiesetup_entrypoint_7(ArgS spawn)
 {
-    f32 local_0[3];
-    local_0[0] = param_0.x;
-    local_0[1] = param_0.y;
-    local_0[2] = param_0.z;
-    func_80108474(param_0.a, local_0, 0);
+    f32 pos[3];
+    pos[0] = spawn.x;
+    pos[1] = spawn.y;
+    pos[2] = spawn.z;
+    func_80108474(spawn.id, pos, 0);
 }
 
-void chbaddiesetup_entrypoint_8(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+void chbaddiesetup_entrypoint_8(s32 id, s32 x, s32 y, s32 z)
 {
-    s32 local_0[3];
-    local_0[0] = (&param_0)[1];
-    local_0[1] = (&param_0)[2];
-    local_0[2] = (&param_0)[3];
-    func_80108454(param_0, local_0, 0);
+    s32 pos[3];
+    pos[0] = (&id)[1];
+    pos[1] = (&id)[2];
+    pos[2] = (&id)[3];
+    func_80108454(id, pos, 0);
 }
 
-void chbaddiesetup_entrypoint_9(ArgS param_0)
+void chbaddiesetup_entrypoint_9(ArgS spawn)
 {
-    f32 local_0[3];
-    local_0[0] = param_0.x;
-    local_0[1] = param_0.y;
-    local_0[2] = param_0.z;
-    _chbounce_entrypoint_6(param_0.a, local_0);
+    f32 pos[3];
+    pos[0] = spawn.x;
+    pos[1] = spawn.y;
+    pos[2] = spawn.z;
+    _chbounce_entrypoint_6(spawn.id, pos);
 }
 
-void chbaddiesetup_entrypoint_10(ArgS param_0, f32 param_1)
+void chbaddiesetup_entrypoint_10(ArgS spawn, f32 speed)
 {
-    f32 local_0[3];
-    local_0[0] = param_0.x;
-    local_0[1] = param_0.y;
-    local_0[2] = param_0.z;
-    _chbounce_entrypoint_2(param_1);
-    _chbounce_entrypoint_6(param_0.a, local_0);
+    f32 pos[3];
+    pos[0] = spawn.x;
+    pos[1] = spawn.y;
+    pos[2] = spawn.z;
+    _chbounce_entrypoint_2(speed);
+    _chbounce_entrypoint_6(spawn.id, pos);
 }

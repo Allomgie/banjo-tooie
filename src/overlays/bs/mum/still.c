@@ -1,5 +1,6 @@
 #include "overlays/bs/mum/still.h"
 
+// Standing transition checks (walk, run, jump, attack, first person, water); returns the next state.
 enum bs_state_e func_80800000_bsmumstill(PlayerState *self, enum bs_state_e next_state)
 {
     switch (bastick_getZone(self)) {
@@ -33,6 +34,7 @@ enum bs_state_e func_80800000_bsmumstill(PlayerState *self, enum bs_state_e next
     return next_state;
 }
 
+// Returns the next idle animation from the table, wrapping around.
 u8 func_808000EC_bsmumstill(PlayerState *self)
 {
     if (self->unk160.word >= 2U) {
@@ -41,7 +43,7 @@ u8 func_808000EC_bsmumstill(PlayerState *self)
     return D_80800400_bsmumstill[self->unk160.word++];
 }
 
-void func_8080011C_bsmumstill(PlayerState *self, s32 arg1)
+void func_8080011C_bsmumstill(PlayerState *self, s32 phase)
 {
     if (self->unk15C.word == 0) {
         self->unk160.word = 0;
@@ -49,7 +51,7 @@ void func_8080011C_bsmumstill(PlayerState *self, s32 arg1)
         baphysics_set_target_horizontal_velocity(self, 0.0f);
         func_800909CC(self);
     }
-    self->unk15C.word = arg1;
+    self->unk15C.word = phase;
     switch (self->unk15C.word) {
         case 1:
             baanim_playForDuration_onceSmooth(self, 0xB5, 6.03f);
@@ -76,13 +78,13 @@ void func_80800210_bsmumstill(PlayerState *self)
 
 void func_8080024C_bsmumstill(PlayerState *self)
 {
-    enum bs_state_e current_state;
+    enum bs_state_e next_state;
 
-    current_state = BS_STATE_0_INVALID;
+    next_state = BS_STATE_0_INVALID;
     if (baanim_isStopped(self) != 0) {
-        current_state = BS_STATE_E5;
+        next_state = BS_STATE_E5;
     }
-    bs_setState(self, func_80800000_bsmumstill(self, current_state));
+    bs_setState(self, func_80800000_bsmumstill(self, next_state));
 }
 
 s32 bsmumstill_entrypoint_0(s32 idx)
@@ -127,6 +129,9 @@ s32 bsmumstill_entrypoint_1(s32 idx)
     return D_80800414_bsmumstill[idx];
 }
 
+// TU-NOTE: the .data tables below (formerly asm/data/overlays/bs/mum/still.data.s) are defined in C.
+// IDO schedules some functions differently unless the tables are in the same unit.
+// Values are taken from the ROM.
 u8 D_80800400_bsmumstill[4] = {0x1, 0x2, 0x0, 0x0};
 s32 D_80800404_bsmumstill[4] = {(u32) func_808001F0_bsmumstill, (u32) func_80800210_bsmumstill,
                                 (u32) func_8080024C_bsmumstill, (u32) _bsmum_entrypoint_0};

@@ -7,6 +7,7 @@ void glglobalsettings_entrypoint_6();
 s32 glglobalsettings_entrypoint_7();
 void glglobalsettings_entrypoint_8();
 
+// Defaults: widescreen off, screen position 0/0, sound mode 1.
 s32 glglobalsettings_entrypoint_0(void)
 {
     glglobalsettings_entrypoint_4(0);
@@ -16,203 +17,222 @@ s32 glglobalsettings_entrypoint_0(void)
 
 s32 glglobalsettings_entrypoint_3();
 
+// Applies the stored settings: widescreen, sound mode, screen position.
 void func_80800034_glglobalsettings(void)
 {
-    s32 local_0;
-    s32 local_1;
+    s32 pos_x;
+    s32 pos_y;
 
     glglobalsettings_entrypoint_4(glglobalsettings_entrypoint_3());
     glglobalsettings_entrypoint_8(glglobalsettings_entrypoint_7());
-    glglobalsettings_entrypoint_5(&local_0, &local_1);
-    glglobalsettings_entrypoint_6(local_0, local_1);
+    glglobalsettings_entrypoint_5(&pos_x, &pos_y);
+    glglobalsettings_entrypoint_6(pos_x, pos_y);
 }
 
+// Allocates a settings block.
 int func_80800084_glglobalsettings()
 {
     heap_alloc(0x80);
 }
 
-s32 func_808000A4_glglobalsettings(s32 param_0, s32 param_1)
+// Reads one settings copy, up to 3 tries.
+s32 func_808000A4_glglobalsettings(s32 slot, s32 buf)
 {
     s32 i;
     s32 ret;
 
     for (i = 3; i != 0; i--) {
-        ret = _glgamestore_entrypoint_1(param_0, param_1);
+        ret = _glgamestore_entrypoint_1(slot, buf);
         if (ret == 0) {
             break;
         }
     }
 
     if (ret != 0) {
-        _glglobaldata_entrypoint_4(param_1);
+        _glglobaldata_entrypoint_4(buf);
     }
 
     return ret;
 }
 
-s32 func_80800114_glglobalsettings(void *param_0)
+// Erases every copy except valid_slot.
+s32 func_80800114_glglobalsettings(void *valid_slot)
 {
     s32 i;
-    s32 new_var;
-    new_var = (s32) param_0;
+    s32 keep;
+    // Matching: the extra copy of the parameter is needed for the match.
+    keep = (s32) valid_slot;
     for (i = 0; i < 2; i++) {
-        if (i != new_var) {
+        if (i != keep) {
             _glgamestore_entrypoint_5(i);
         }
     }
 }
 
-s32 func_80800168_glglobalsettings(s32 *param_0)
+// Reads both copies. The last valid one is returned (-1 if none) and its data
+// ends up in *best_buf. If both are valid, the other copy is erased.
+s32 func_80800168_glglobalsettings(s32 *best_buf)
 {
-    s32 temp_v0;
-    s32 var_s0;
-    s32 var_s1;
-    s32 var_s2;
-    s32 var_s5;
+    s32 tmp;
+    s32 slot;
+    s32 buf;
+    s32 valid_count;
+    s32 valid_slot;
 
-    var_s1 = func_80800084_glglobalsettings();
-    var_s5 = -1;
-    var_s0 = 0;
-    var_s2 = 0;
+    buf = func_80800084_glglobalsettings();
+    valid_slot = -1;
+    slot = 0;
+    valid_count = 0;
     do {
-        if (func_808000A4_glglobalsettings(var_s0, var_s1) != 0) {
+        if (func_808000A4_glglobalsettings(slot, buf) != 0) {
             goto skip_block;
         }
-        temp_v0 = var_s1;
-        var_s1 = *param_0;
-        var_s2 += 1;
-        var_s5 = var_s0;
-        *param_0 = temp_v0;
+        tmp = buf;
+        buf = *best_buf;
+        valid_count += 1;
+        valid_slot = slot;
+        *best_buf = tmp;
     skip_block:
-        var_s0 += 1;
-    } while (var_s0 != 2);
-    if (var_s2 >= 2) {
-        func_80800114_glglobalsettings(var_s5);
+        slot += 1;
+    } while (slot != 2);
+    if (valid_count >= 2) {
+        func_80800114_glglobalsettings(valid_slot);
     }
-    heap_free(var_s1);
-    return var_s5;
+    heap_free(buf);
+    return valid_slot;
 }
 
+// Loads the settings; falls back to the defaults if no copy is valid.
 s32 glglobalsettings_entrypoint_1(void)
 {
-    s32 temp;
-    void *local_0;
+    s32 slot;
+    void *buf;
 
-    local_0 = func_80800084_glglobalsettings();
-    temp = func_80800168_glglobalsettings(&local_0);
-    if (temp == -1) {
+    buf = func_80800084_glglobalsettings();
+    slot = func_80800168_glglobalsettings(&buf);
+    if (slot == -1) {
         glglobalsettings_entrypoint_0();
     } else {
-        _glglobaldata_entrypoint_2(local_0);
+        _glglobaldata_entrypoint_2(buf);
         func_80800034_glglobalsettings();
     }
-    heap_free(local_0);
+    heap_free(buf);
 }
 
-s32 func_80800278_glglobalsettings(s32 param_0, s32 param_1)
+// Writes buf to a slot (up to 3 tries) and reads it back.
+s32 func_80800278_glglobalsettings(s32 slot, s32 buf)
 {
-    s32 local_3;
-    s32 local_4;
-    s32 local_2;
+    s32 scratch;
+    s32 tries;
+    s32 ret;
 
-    local_4 = 3;
-    local_3 = func_80800084_glglobalsettings();
+    tries = 3;
+    scratch = func_80800084_glglobalsettings();
 loop_1:
-    local_2 = _glgamestore_entrypoint_3(param_0, param_1);
-    if (local_2 == 0) {
-        func_808000A4_glglobalsettings(param_0, local_3);
+    ret = _glgamestore_entrypoint_3(slot, buf);
+    if (ret == 0) {
+        func_808000A4_glglobalsettings(slot, scratch);
     }
-    local_4 -= 1;
-    if ((local_2 != 0) && (local_4 != 0)) {
+    tries -= 1;
+    if ((ret != 0) && (tries != 0)) {
         goto loop_1;
     }
-    heap_free(local_3);
-    return local_2;
+    heap_free(scratch);
+    return ret;
 }
 
+// Saves the settings to the copy that is not the valid one, then erases the
+// stale copy. Does nothing unless the 'global flags changed' flag is set.
 s32 glglobalsettings_entrypoint_2(void)
 {
-    s32 local_0;
-    s32 local_1;
-    s32 local_5;
-    s32 local_3;
+    s32 ret;
+    s32 valid_slot;
+    s32 slot;
+    s32 buf;
 
     if (func_800DA298(0xD54) == 0) {
         return 0;
     }
-    local_3 = func_80800084_glglobalsettings();
-    local_1 = func_80800168_glglobalsettings(&local_3);
-    _glglobaldata_entrypoint_3(local_3);
-    local_5 = 0;
+    buf = func_80800084_glglobalsettings();
+    valid_slot = func_80800168_glglobalsettings(&buf);
+    _glglobaldata_entrypoint_3(buf);
+    slot = 0;
 loop_3:
-    if (local_5 == local_1) {
-        local_5 += 1;
-        if (local_5 != 2) {
+    if (slot == valid_slot) {
+        slot += 1;
+        if (slot != 2) {
             goto loop_3;
         }
     }
-    local_0 = func_80800278_glglobalsettings(local_5, local_3);
-    if (local_0 == 0) {
-        func_80800114_glglobalsettings(local_5);
+    ret = func_80800278_glglobalsettings(slot, buf);
+    if (ret == 0) {
+        func_80800114_glglobalsettings(slot);
         func_800DA524(0xD54);
     }
-    heap_free(local_3);
-    return local_0;
+    heap_free(buf);
+    return ret;
 }
 
+// Widescreen flag.
 s32 glglobalsettings_entrypoint_3()
 {
     return func_800DA298(GFLAG_BB9_WIDESCREEN_ENABLED);
 }
 
-s32 glglobalsettings_entrypoint_4(param_0)
-int param_0;
+// Sets widescreen on/off.
+s32 glglobalsettings_entrypoint_4(enabled)
+int enabled;
 {
-    set_widescreen(param_0);
-    func_800DA3B8(0xBB9, param_0 ? 1 : 0);
+    set_widescreen(enabled);
+    func_800DA3B8(0xBB9, enabled ? 1 : 0);
 }
 
-int glglobalsettings_entrypoint_5(param_0, param_1)
-s32 *param_0;
-s32 *param_1;
+// Reads the screen position; flags hold it with a bias of 0x20 (x) and 0x28 (y).
+int glglobalsettings_entrypoint_5(out_x, out_y)
+s32 *out_x;
+s32 *out_y;
 {
-    s32 local_0;
-    local_0 = func_800DA564(0xBBA, 6);
-    param_0[0] = local_0 - 0x20;
-    param_1[0] = func_800DA564(0xBC0, 6) - 0x28;
+    s32 raw_x;
+    raw_x = func_800DA564(0xBBA, 6);
+    out_x[0] = raw_x - 0x20;
+    out_y[0] = func_800DA564(0xBC0, 6) - 0x28;
 }
 
-void glglobalsettings_entrypoint_6(param_0, param_1) s32 param_0;
-s32 param_1;
+// Sets the screen position, clamped to the 6-bit flag range.
+void glglobalsettings_entrypoint_6(pos_x, pos_y) s32 pos_x;
+s32 pos_y;
 {
     func_80015670();
-    param_0 += 0x20;
-    param_1 += 0x28;
+    pos_x += 0x20;
+    pos_y += 0x28;
 
-if (param_0 >= 0x40) {
-    param_0 = 0x3F;
+if (pos_x >= 0x40) {
+    pos_x = 0x3F;
 }
 
-if (param_1 >= 0x40) {
-    param_1 = 0x3F;
+if (pos_y >= 0x40) {
+    pos_y = 0x3F;
 }
 
-func_800DA7A8(0xBBA, param_0, 6);
-func_800DA7A8(0xBC0, param_1, 6);
+func_800DA7A8(0xBBA, pos_x, 6);
+func_800DA7A8(0xBC0, pos_y, 6);
 }
 
+// Sound mode (0..3).
 s32 glglobalsettings_entrypoint_7(void)
 {
     func_800DA564(0xBC6, 2);
 }
 
-void glglobalsettings_entrypoint_8(param_0) s32 param_0;
+// Sets the sound mode.
+void glglobalsettings_entrypoint_8(mode) s32 mode;
 {
-    func_80012F0C(D_80800560_glglobalsettings[param_0][0]);
-    func_80012F34(0, D_80800560_glglobalsettings[param_0][1]);
-    func_80012F34(1, D_80800560_glglobalsettings[param_0][1]);
-    func_800DA7A8(0xBC6, param_0, 2);
+    func_80012F0C(D_80800560_glglobalsettings[mode][0]);
+    func_80012F34(0, D_80800560_glglobalsettings[mode][1]);
+    func_80012F34(1, D_80800560_glglobalsettings[mode][1]);
+    func_800DA7A8(0xBC6, mode, 2);
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
+// Audio output params per sound mode.
 s16 D_80800560_glglobalsettings[4][2] = {0x1, 0x4, 0x2, 0x4, 0x3, 0x4, 0x4, 0x4};

@@ -10,168 +10,175 @@ extern void func_800EFD24();
 extern void aligned4_memcpy(void *, void *, s32);
 void glidmake_entrypoint_2();
 
-int func_80800000_glidmake(s32 param_0[3])
+// Returns the instance transform at +8, or 0 for none.
+int func_80800000_glidmake(s32 inst[3])
 {
-    s32 local_0;
-    if (func_800EEEA8(param_0 + 2)) {
-        local_0 = 0 | 0;
+    s32 mtx;
+    if (func_800EEEA8(inst + 2)) {
+        // Matching: the `0 | 0` is needed for the match.
+        mtx = 0 | 0;
     } else {
-        local_0 = param_0 + 2;
+        mtx = inst + 2;
     }
-    return local_0;
+    return mtx;
 }
 
-int glidmake_entrypoint_0(s16 param_0[3], s16 param_1[3], s16 *param_2)
+// Centre of the group's bounding box.
+int glidmake_entrypoint_0(s16 inst[3], s16 group_id[3], s16 *center)
 {
-    s16 local_0[3];
-    s16 local_1[3];
-    glidmake_entrypoint_2(param_0, param_1, local_0, local_1);
-    param_2[0] = (local_0[0] + local_1[0]) / 2;
-    param_2[1] = (local_0[1] + local_1[1]) / 2;
-    param_2[2] = (local_0[2] + local_1[2]) / 2;
+    s16 lo[3];
+    s16 hi[3];
+    glidmake_entrypoint_2(inst, group_id, lo, hi);
+    center[0] = (lo[0] + hi[0]) / 2;
+    center[1] = (lo[1] + hi[1]) / 2;
+    center[2] = (lo[2] + hi[2]) / 2;
 }
 
-int glidmake_entrypoint_1(s32 param_0[3])
+// Resolves the instance's model to its header sections.
+int glidmake_entrypoint_1(s32 inst[3])
 {
-    s32 local_0;
-    local_0 = func_800D674C(param_0[0]);
-    func_800B274C(local_0 | 0);
+    s32 model;
+    model = func_800D674C(inst[0]);
+    func_800B274C(model | 0);
 }
 
-void glidmake_entrypoint_2(param_0, param_1, param_2, param_3) u8 *param_0;
-s32 param_1;
-s16 *param_2;
-s16 *param_3;
+// Bounding box of the group's vertices, transformed when the instance has a transform.
+void glidmake_entrypoint_2(inst, group_id, bbox_min, bbox_max) u8 *inst;
+s32 group_id;
+s16 *bbox_min;
+s16 *bbox_max;
 {
-    s16 *local_1;
-    s16 *local_2;
-    u8 *local_0;
-    u8 *local_3;
-    s16 *local_4;
-    s32 local_7;
-    void *local_8;
+    s16 *idx;
+    s16 *idx_end;
+    u8 *id_group;
+    u8 *verts;
+    s16 *vtx;
+    s32 axis;
+    void *mtx;
 
-    func_800EFD4C(param_2);
-    func_800EFD4C(param_3);
-    local_0 = _dbid_entrypoint_2(func_800B274C(func_800D674C(*(s32 *) param_0)), param_1);
-    if (local_0 != NULL) {
-        local_3 = func_800B2190(*(s32 *) (param_0 + 0x14));
-        local_1 = (s16 *) (local_0 + 4);
-        local_2 = (s16 *) (local_0 + 4 + *(s16 *) (local_0 + 2) * 2);
-        while ((u32) local_1 < (u32) local_2) {
-            local_4 = (s16 *) (local_3 + *local_1 * 16);
-            for (local_7 = 0; local_7 < 3; local_7++) {
-                if (local_1 == (s16 *) (local_0 + 4)) {
-                    param_2[local_7] = param_3[local_7] = local_4[local_7];
+    func_800EFD4C(bbox_min);
+    func_800EFD4C(bbox_max);
+    id_group = _dbid_entrypoint_2(func_800B274C(func_800D674C(*(s32 *) inst)), group_id);
+    if (id_group != NULL) {
+        verts = func_800B2190(*(s32 *) (inst + 0x14));
+        idx = (s16 *) (id_group + 4);
+        idx_end = (s16 *) (id_group + 4 + *(s16 *) (id_group + 2) * 2);
+        while ((u32) idx < (u32) idx_end) {
+            vtx = (s16 *) (verts + *idx * 16);
+            for (axis = 0; axis < 3; axis++) {
+                if (idx == (s16 *) (id_group + 4)) {
+                    bbox_min[axis] = bbox_max[axis] = vtx[axis];
                 } else {
-                    param_2[local_7] =
-                        local_4[local_7] < param_2[local_7] ? local_4[local_7] : param_2[local_7];
-                    param_3[local_7] =
-                        param_3[local_7] < local_4[local_7] ? local_4[local_7] : param_3[local_7];
+                    bbox_min[axis] =
+                        vtx[axis] < bbox_min[axis] ? vtx[axis] : bbox_min[axis];
+                    bbox_max[axis] =
+                        bbox_max[axis] < vtx[axis] ? vtx[axis] : bbox_max[axis];
                 }
             }
-            local_1++;
+            idx++;
         }
-        local_8 = func_80800000_glidmake(param_0);
-        if (local_8) {
-            func_800EF0B4(param_2, local_8);
-            func_800EF0B4(param_3, local_8);
+        mtx = func_80800000_glidmake(inst);
+        if (mtx) {
+            func_800EF0B4(bbox_min, mtx);
+            func_800EF0B4(bbox_max, mtx);
         }
     }
 }
 
-s16 glidmake_entrypoint_3(s32 *param_0, s32 param_1)
+// Vertex count of the group.
+s16 glidmake_entrypoint_3(s32 *inst, s32 group_id)
 {
-    s16 local_0;
-    u8 *local_1;
+    s16 count;
+    u8 *id_group;
 
-    local_1 = _dbid_entrypoint_2(func_800B274C(func_800D674C(*param_0)), param_1);
-    if (local_1 != NULL) {
-        local_0 = *(s16 *) ((char *) local_1 + 2);
+    id_group = _dbid_entrypoint_2(func_800B274C(func_800D674C(*inst)), group_id);
+    if (id_group != NULL) {
+        count = *(s16 *) ((char *) id_group + 2);
     } else {
-        local_0 = 0;
+        count = 0;
     }
-    return local_0;
+    return count;
 }
 
-void glidmake_entrypoint_4(void *arg0)
+void glidmake_entrypoint_4(void *inst)
 {
-    heap_free(arg0);
+    heap_free(inst);
 }
 
-u8 *glidmake_entrypoint_5(s32 param_0, f32 *param_1)
+// Builds the mesh-group instance (see gl/id.c for the layout) from the model's 'id' section.
+u8 *glidmake_entrypoint_5(s32 model_id, f32 *transform)
 {
-    s16 *local_0;
-    u8 *local_1;
-    u8 *local_11;
-    s16 *local_3;
-    s16 *local_4;
-    s16 *local_5;
-    s32 local_6;
-    s32 local_2;
-    s32 local_7;
-    s32 local_8;
-    s32 local_9;
-    s32 local_10;
-    u8 *local_12;
-    u8 *local_13;
-    local_9 = func_800D674C(param_0);
-    local_0 = (s16 *) func_800B274C(local_9);
-    if (!local_0) {
+    s16 *section;
+    u8 *vtx_list;
+    u8 *inst;
+    s16 *ids;
+    s16 *group;
+    s16 *run;
+    s32 run_len;
+    s32 i;
+    s32 j;
+    s32 run_start;
+    s32 model;
+    s32 size;
+    u8 *chunk;
+    u8 *copy;
+    model = func_800D674C(model_id);
+    section = (s16 *) func_800B274C(model);
+    if (!section) {
         return NULL;
     }
-    local_1 = (u8 *) func_800B2840(local_9);
-    local_10 = *local_0 * 8 + _dbid_entrypoint_1(local_0) * 0x10 + 0x1C;
-    local_3 = local_0 + 1;
-    local_4 = local_3;
-    for (local_2 = 0; local_2 < *local_0; local_2++) {
-        local_10 += _dbid_entrypoint_0(local_0, local_4[0]) * 4;
-        local_4 += local_4[1];
-        local_4 += 2;
+    vtx_list = (u8 *) func_800B2840(model);
+    size = *section * 8 + _dbid_entrypoint_1(section) * 0x10 + 0x1C;
+    ids = section + 1;
+    group = ids;
+    for (i = 0; i < *section; i++) {
+        size += _dbid_entrypoint_0(section, group[0]) * 4;
+        group += group[1];
+        group += 2;
     }
-    local_4 = local_3;
-    local_2 = 0;
-    local_11 = heap_alloc(local_10);
-    *(s32 *) local_11 = param_0;
-    *(s32 *) (local_11 + 4) = *local_0;
-    if (param_1) {
-        func_800EE7F8((f32 *) (local_11 + 8), param_1);
+    group = ids;
+    i = 0;
+    inst = heap_alloc(size);
+    *(s32 *) inst = model_id;
+    *(s32 *) (inst + 4) = *section;
+    if (transform) {
+        func_800EE7F8((f32 *) (inst + 8), transform);
     } else {
-        func_800EFD24((f32 *) (local_11 + 8));
+        func_800EFD24((f32 *) (inst + 8));
     }
-    *(u8 **) (local_11 + 0x14) = local_1;
-    *(s32 *) (local_11 + 0x18) = 0;
-    local_12 = local_11 + 0x1C;
-    for (; local_2 < *local_0; local_2++) {
-        ((s16 *) local_12)[0] = local_4[0];
-        ((s16 *) local_12)[1] = _dbid_entrypoint_0(local_0, local_4[0]);
-        local_6 = 1;
-        local_7 = 1;
-        local_8 = local_4[2];
-        local_5 = (s16 *) (local_12 + 8);
-        local_13 = local_12 + ((s16 *) local_12)[1] * 4 + 8;
-        aligned4_memcpy(local_13, local_1 + local_8 * 0x10 + 0x18, 0x10);
-        local_13 += 0x10;
-        local_3 = local_4 + 1;
-        for (; local_7 < local_4[1]; local_7++) {
-            if (local_3[2] != local_3[1] + 1) {
-                local_5[0] = local_8;
-                local_5[1] = local_6;
-                local_6 = 0;
-                local_5 += 2;
-                local_8 = local_3[2];
+    *(u8 **) (inst + 0x14) = vtx_list;
+    *(s32 *) (inst + 0x18) = 0;
+    chunk = inst + 0x1C;
+    for (; i < *section; i++) {
+        ((s16 *) chunk)[0] = group[0];
+        ((s16 *) chunk)[1] = _dbid_entrypoint_0(section, group[0]);
+        run_len = 1;
+        j = 1;
+        run_start = group[2];
+        run = (s16 *) (chunk + 8);
+        copy = chunk + ((s16 *) chunk)[1] * 4 + 8;
+        aligned4_memcpy(copy, vtx_list + run_start * 0x10 + 0x18, 0x10);
+        copy += 0x10;
+        ids = group + 1;
+        for (; j < group[1]; j++) {
+            if (ids[2] != ids[1] + 1) {
+                run[0] = run_start;
+                run[1] = run_len;
+                run_len = 0;
+                run += 2;
+                run_start = ids[2];
             }
-            aligned4_memcpy(local_13, local_1 + local_3[2] * 0x10 + 0x18, 0x10);
-            local_3++;
-            local_13 += 0x10;
-            local_6++;
+            aligned4_memcpy(copy, vtx_list + ids[2] * 0x10 + 0x18, 0x10);
+            ids++;
+            copy += 0x10;
+            run_len++;
         }
-        local_5[0] = local_8;
-        local_5[1] = local_6;
-        *(s32 *) (local_12 + 4) = local_13 - local_12;
-        local_4 += local_4[1];
-        local_4 += 2;
-        local_12 = local_13;
+        run[0] = run_start;
+        run[1] = run_len;
+        *(s32 *) (chunk + 4) = copy - chunk;
+        group += group[1];
+        group += 2;
+        chunk = copy;
     }
-    return local_11;
+    return inst;
 }

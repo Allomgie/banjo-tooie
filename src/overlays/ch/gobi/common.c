@@ -14,36 +14,38 @@ void func_80800070_chgobicommon();
 void func_808000EC_chgobicommon();
 void func_808001AC_chgobicommon();
 
-s32 chgobicommon_entrypoint_0(s32 param_0)
+// Plays animation-specific sounds for Gobi's animations 0x221-0x223.
+s32 chgobicommon_entrypoint_0(s32 actor)
 {
-    switch (func_801022E4(param_0)) {
+    switch (func_801022E4(actor)) {
         case 0x221:
-            func_80800070_chgobicommon(param_0);
+            func_80800070_chgobicommon(actor);
             break;
         case 0x222:
-            func_808000EC_chgobicommon(param_0);
+            func_808000EC_chgobicommon(actor);
             break;
         case 0x223:
-            func_808001AC_chgobicommon(param_0);
+            func_808001AC_chgobicommon(actor);
     }
 }
 
-void func_80800070_chgobicommon(param_0) Actor *param_0;
+void func_80800070_chgobicommon(actor) Actor *actor;
 {
-    _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_8080021C_chgobicommon,
+    _subaddieaudioquick_entrypoint_4(actor, actor->position, D_8080021C_chgobicommon,
                                      D_80800244_chgobicommon);
-    _subaddieaudioquick_entrypoint_4(param_0, param_0->position, D_8080022C_chgobicommon,
+    _subaddieaudioquick_entrypoint_4(actor, actor->position, D_8080022C_chgobicommon,
                                      D_80800254_chgobicommon);
     if (!func_800C0638())
-        _subaddieaudioquick_entrypoint_3(param_0, param_0->position, D_80800238_chgobicommon,
+        _subaddieaudioquick_entrypoint_3(actor, actor->position, D_80800238_chgobicommon,
                                          0.03f);
 }
 
-void func_808000EC_chgobicommon(param_0) s32 param_0;
+void func_808000EC_chgobicommon(actor) s32 actor;
 {
-    s32 s1 = param_0;
-    unsigned int new_var;
-    int s0;
+    s32 base = actor;
+    unsigned int arg;
+    int pos;
+    // Matching: empty blocks are needed for the match.
     if (1) {
     }
     if (1) {
@@ -51,26 +53,28 @@ void func_808000EC_chgobicommon(param_0) s32 param_0;
     if (1) {
     }
     if (!func_800C0638()) {
-        new_var = 4;
-        _subaddieaudioquick_entrypoint_4(s1, s1 + new_var, &D_80800264_chgobicommon,
+        arg = 4;
+        _subaddieaudioquick_entrypoint_4(base, base + arg, &D_80800264_chgobicommon,
                                          &D_80800270_chgobicommon);
     }
-    s0 = s1 + 4;
-    new_var = s1;
-    _subaddieaudioquick_entrypoint_3(new_var, s0, &D_80800200_chgobicommon, 0.26f);
-    _subaddieaudioquick_entrypoint_3(new_var, s0, &D_80800210_chgobicommon, 0.41f);
-    _subaddieaudioquick_entrypoint_3(new_var, s0, &D_80800200_chgobicommon, 0.55f);
-    _subaddieaudioquick_entrypoint_3(new_var, s0, &D_80800200_chgobicommon, 0.62f);
+    pos = base + 4;
+    arg = base;
+    _subaddieaudioquick_entrypoint_3(arg, pos, &D_80800200_chgobicommon, 0.26f);
+    _subaddieaudioquick_entrypoint_3(arg, pos, &D_80800210_chgobicommon, 0.41f);
+    _subaddieaudioquick_entrypoint_3(arg, pos, &D_80800200_chgobicommon, 0.55f);
+    _subaddieaudioquick_entrypoint_3(arg, pos, &D_80800200_chgobicommon, 0.62f);
 }
 
-void func_808001AC_chgobicommon(param_0) u8 *param_0;
+void func_808001AC_chgobicommon(actor) u8 *actor;
 {
-    _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, ((s32 *) &D_80800200_chgobicommon),
+    _subaddieaudioquick_entrypoint_3(actor, actor + 4, ((s32 *) &D_80800200_chgobicommon),
                                      0.65f);
-    _subaddieaudioquick_entrypoint_3(param_0, param_0 + 4, ((s32 *) &D_80800210_chgobicommon),
+    _subaddieaudioquick_entrypoint_3(actor, actor + 4, ((s32 *) &D_80800210_chgobicommon),
                                      0.0f);
 }
 
+// TU-NOTE: the overlay .data is defined in C here; values are taken from the ROM.
+// D_80800200, D_80800210, D_80800264 and D_80800270 are declared as int[] to match the objects.
 int D_80800200_chgobicommon[4] = {0x130402, 0x1636B0, 0xA00E6, 0x0};
 int D_80800210_chgobicommon[3] = {0x130402, 0x1636B0, 0x0};
 u8 D_8080021C_chgobicommon[16] = {0x0, 0x13, 0x4, 0x9C, 0x0, 0x16, 0x36, 0xB0,

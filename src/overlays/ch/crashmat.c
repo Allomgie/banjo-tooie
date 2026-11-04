@@ -5,16 +5,17 @@ extern s32 func_800D90A4(f32 *);
 extern void func_800C3F48(s32);
 extern int D_808000A0_chcrashmat[];
 
-void func_80800000_chcrashmat(Actor *param_0)
+// Plays a sound when the main player steps on the mat; 0.5 s cooldown
+void func_80800000_chcrashmat(Actor *actor)
 {
-    s32 local_0;
+    s32 standing_player;
 
-    local_0 = _plsu_entrypoint_3(param_0->unk0);
-    if (!local_0 && func_800D90A4(&param_0->unk58) && !param_0->unk64_20) {
+    standing_player = _plsu_entrypoint_3(actor->unk0);
+    if (!standing_player && func_800D90A4(&actor->unk58) && !actor->unk64_20) {
         func_800C3F48(0x599C5699);
-        param_0->unk58 = 0.5f;
+        actor->unk58 = 0.5f;
     }
-    param_0->unk64_20 = !local_0;
+    actor->unk64_20 = !standing_player;
 }
 
 int chcrashmat_entrypoint_0()
@@ -22,6 +23,8 @@ int chcrashmat_entrypoint_0()
     return (int) &D_808000A0_chcrashmat;
 }
 
+// TU-NOTE: the data table below is defined in this file because it points to its
+// functions; IDO schedules those differently otherwise. Values are from the ROM.
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();

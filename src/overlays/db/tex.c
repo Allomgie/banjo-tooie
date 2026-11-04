@@ -1,34 +1,37 @@
 #include "common.h"
 
-u8 *dbtex_entrypoint_0(u8 *param_0)
+// If the texture header has flag 0x100, copy it to a new heap block and load every listed
+// texture asset (id + 0x1EF6) behind it. Returns the block, or 0.
+u8 *dbtex_entrypoint_0(u8 *header)
 {
-    s32 *local_0;
-    s32 local_1;
-    u8 *local_2;
-    u8 *local_3;
-    u8 *local_4;
-    if (param_0 == 0) {
+    s32 *entry;
+    s32 header_size;
+    u8 *end;
+    u8 *block;
+    u8 *dst;
+    if (header == 0) {
         return 0;
     }
-    if (!(*(s16 *) ((char *) param_0 + 6) & 0x100)) {
+    if (!(*(s16 *) ((char *) header + 6) & 0x100)) {
         return 0;
     }
-    local_1 = (*(s16 *) ((char *) param_0 + 4) * 8) + 8;
-    local_3 = heap_alloc_sided(*(s32 *) ((char *) param_0 + 0) + local_1, 1);
-    rare_memcpy(local_3, param_0, local_1);
-    local_0 = (s32 *) (local_3 + 8);
-    local_2 = 8 + ((*(s16 *) ((char *) local_3 + 4) * 8) + local_3);
-    local_4 = local_2;
-    if ((u32) local_0 < (u32) local_2) {
+    header_size = (*(s16 *) ((char *) header + 4) * 8) + 8;
+    block = heap_alloc_sided(*(s32 *) ((char *) header + 0) + header_size, 1);
+    rare_memcpy(block, header, header_size);
+    entry = (s32 *) (block + 8);
+    end = 8 + ((*(s16 *) ((char *) block + 4) * 8) + block);
+    dst = end;
+    if ((u32) entry < (u32) end) {
         do {
-            func_800E6950(*local_0 + 0x1EF6, 0, local_4);
-            local_4 += func_800D5944();
-            local_0 += 2;
-        } while ((u32) local_0 < (u32) local_2);
+            func_800E6950(*entry + 0x1EF6, 0, dst);
+            dst += func_800D5944();
+            entry += 2;
+        } while ((u32) entry < (u32) end);
     }
-    return local_3;
+    return block;
 }
 
+// Free the block.
 s32 dbtex_entrypoint_1(void *texture)
 {
     if (texture != 0) {

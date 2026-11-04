@@ -5,25 +5,28 @@ extern void func_800BABB8(u32, s32, s32, f32, u32);
 extern u32 _fxspgold_entrypoint_2(void);
 int fxsparkle_entrypoint_1();
 
-int fxsparkle_entrypoint_0(s32 param_0, s32 param_1)
+int fxsparkle_entrypoint_0(s32 src_pos, s32 kind)
 {
-    f32 local_0[3];
-    func_800EE88C(local_0, param_0 | 0);
-    fxsparkle_entrypoint_1(local_0, param_1);
+    f32 pos[3];
+    // Matching: `| 0` is needed for the match.
+    func_800EE88C(pos, src_pos | 0);
+    fxsparkle_entrypoint_1(pos, kind);
 }
 
-int fxsparkle_entrypoint_1(param_0, param_1)
-s32 param_0;
-s32 param_1;
+int fxsparkle_entrypoint_1(pos, kind)
+s32 pos;
+s32 kind;
 {
-    u32 local_0;
-    u32 *local_1 = &D_808003AC_fxsparkle[param_1];
-    local_0 = _fxspgold_entrypoint_2();
-    if (*local_1 != 0) {
-        func_800BABB8(local_0 | 0, param_0, 0, 1.0f, *local_1);
+    u32 emitter;
+    u32 *preset = &D_808003AC_fxsparkle[kind];
+    emitter = _fxspgold_entrypoint_2();
+    if (*preset != 0) {
+        // Matching: `| 0` is needed for the match.
+        func_800BABB8(emitter | 0, pos, 0, 1.0f, *preset);
     }
 }
 
+// Releases the shared gold-sparkle emitter.
 void fxsparkle_entrypoint_2()
 {
     _fxspgold_entrypoint_0();
@@ -34,7 +37,9 @@ s32 fxsparkle_entrypoint_3(s32 param_0, f32 position[3], s32 param_2, s32 param_
     _fxspgold_entrypoint_1(param_0, position, param_2, param_3);
 }
 
-u32 D_808000D0_fxsparkle[10] = {0x1D09E2, 0x1E000A, 0xA002C,  0xFF9C0064, 0xFF9C0064,
+// TU-NOTE: the .data of this overlay is defined here in C; values taken from the ROM.
+// D_808003AC_fxsparkle is the table of sparkle presets, indexed by kind.
+u32 D_808000D0_fxsparkle[10] ={0x1D09E2, 0x1E000A, 0xA002C,  0xFF9C0064, 0xFF9C0064,
                                 0xFA0064, 0xC000A,  0x240051, 0x510A1A,   0x0};
 u32 D_808000F8_fxsparkle[10] = {0x1D09E2, 0x1E000A, 0xA002C,  0xFF9C0064, 0xFF9C0064,
                                 0xFA0064, 0xC000A,  0x240051, 0x51071A,   0x0};

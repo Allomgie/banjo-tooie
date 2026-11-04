@@ -17,160 +17,166 @@ extern void *_fxgenlist_entrypoint_1(void);
 
 typedef struct {
     u32 pad_0 : 28;
-    u32 local_0 : 1;
+    u32 unk_78 : 1;
     u32 pad_1 : 3;
 } CodexJigsawFlags65;
 
-void func_80800000_chjigsaw(Actor *param_0, void *param_1)
+// Message 0x3E handler: calls suautobaddies unless flag 0x665 is set.
+void func_80800000_chjigsaw(Actor *actor, void *msg)
 {
-    if (func_8010A6B0(param_0, (u32) *(u16 *) ((u8 *) param_1 + 0x1A) >> 5)) {
+    if (func_8010A6B0(actor, (u32) *(u16 *) ((u8 *) msg + 0x1A) >> 5)) {
         if (!func_800DA298(0x665)) {
-            func_80108B04(param_0, 0);
-            func_800D0BD4((s32) param_0->unk50, 1);
+            func_80108B04(actor, 0);
+            func_800D0BD4((s32) actor->unk50, 1);
             _suautobaddies_entrypoint_3();
         }
     }
 }
 
-void func_80800070_chjigsaw(u8 *param_0)
+void func_80800070_chjigsaw(u8 *actor)
 {
-    if (func_800D0B68((s32) *(f32 *) ((s8 *) param_0 + 0x50), 1) != 0) {
-        func_800FFAB0(param_0);
+    if (func_800D0B68((s32) *(f32 *) ((s8 *) actor + 0x50), 1) != 0) {
+        func_800FFAB0(actor);
         return;
     }
-    func_800D05E4((s32) *(f32 *) ((s8 *) param_0 + 0x50), 1, *(s32 *) ((s8 *) param_0 + 0));
-    if (*(f32 *) ((s8 *) param_0 + 0x58) != 0.0f) {
+    func_800D05E4((s32) *(f32 *) ((s8 *) actor + 0x50), 1, *(s32 *) ((s8 *) actor + 0));
+    if (*(f32 *) ((s8 *) actor + 0x58) != 0.0f) {
         func_800FC6B0(0x18);
     }
-    func_800D0778((s32) *(f32 *) ((s8 *) param_0 + 0x50), 1, param_0 + 4);
+    func_800D0778((s32) *(f32 *) ((s8 *) actor + 0x50), 1, actor + 4);
 }
 
-void func_8080011C_chjigsaw(u8 *param_0)
+// Spin at 230 deg/s, wrapping at 360.
+void func_8080011C_chjigsaw(u8 *actor)
 {
-    *(f32 *) (param_0 + 0x54) += func_800D8FF8() * 230.0f;
-    if (*(f32 *) (param_0 + 0x54) >= 360.0f) {
-        *(f32 *) (param_0 + 0x54) -= 360.0f;
+    *(f32 *) (actor + 0x54) += func_800D8FF8() * 230.0f;
+    if (*(f32 *) (actor + 0x54) >= 360.0f) {
+        *(f32 *) (actor + 0x54) -= 360.0f;
     }
 }
 
-int func_8080017C_chjigsaw(Actor *param_0)
+// Cleanup: collectible registry entry and light.
+int func_8080017C_chjigsaw(Actor *actor)
 {
-    s32 local_0;
-    s32 new_var;
-    unsigned short new_var2;
-    local_0 = *(f32 *) ((char *) param_0 + 0x50);
-    func_800D05E4(local_0, 1, 0);
-    new_var = *(s32 *) ((char *) param_0 + 0x6C);
-    new_var2 = new_var & 0x1FF;
-    if (new_var2) {
-        func_800C8B84(new_var2 | 0);
+    s32 registry_index;
+    s32 flags;
+    unsigned short light_id;
+    registry_index = *(f32 *) ((char *) actor + 0x50);
+    func_800D05E4(registry_index, 1, 0);
+    flags = *(s32 *) ((char *) actor + 0x6C);
+    light_id = flags & 0x1FF;
+    if (light_id) {
+        // Matching: "| 0" is needed for the match.
+        func_800C8B84(light_id | 0);
     }
 }
 
-void func_808001D0_chjigsaw(s32 arg0)
+void func_808001D0_chjigsaw(s32 actor)
 {
     func_80105834();
-    func_8080011C_chjigsaw(arg0);
+    func_8080011C_chjigsaw(actor);
 }
 
-void func_808001F8_chjigsaw(Actor *param_0)
+// Update: drop to the floor, twinkle, spawn particles, move the light.
+void func_808001F8_chjigsaw(Actor *actor)
 {
-    s32 local_6;
-    f32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_4[3];
-    f32 local_7;
-    f32 local_5[3];
-    s32 local_8;
+    s32 i;
+    f32 delta_time;
+    f32 probe_top[3];
+    f32 probe_bottom[3];
+    f32 floor_hit[3];
+    f32 twinkle_pos[3];
+    f32 angle;
+    f32 light_pos[3];
+    s32 emitter;
 
-    local_0 = func_800D8FF8();
-    if (((CodexJigsawFlags65 *) ((u8 *) param_0 + 0x78))->local_0) {
-        func_800D0778((s32) param_0->unk50, 1, param_0->position);
-    } else if (param_0->unk64_19) {
-        func_800EE7F8(local_1, param_0->position);
-        local_1[1] += 100.0f;
-        func_800EE7F8(local_2, param_0->position);
-        local_2[1] -= 100.0f;
-        if (func_800BEF00(local_1, local_2, local_3, param_0->unk14)) {
-            param_0->position[1] = local_2[1];
+    delta_time = func_800D8FF8();
+    if (((CodexJigsawFlags65 *) ((u8 *) actor + 0x78))->unk_78) {
+        func_800D0778((s32) actor->unk50, 1, actor->position);
+    } else if (actor->unk64_19) {
+        func_800EE7F8(probe_top, actor->position);
+        probe_top[1] += 100.0f;
+        func_800EE7F8(probe_bottom, actor->position);
+        probe_bottom[1] -= 100.0f;
+        if (func_800BEF00(probe_top, probe_bottom, floor_hit, actor->unk14)) {
+            actor->position[1] = probe_bottom[1];
         } else {
-            param_0->position[1] += ((f32 *) param_0->actorData)[7] * local_0;
+            actor->position[1] += ((f32 *) actor->actorData)[7] * delta_time;
         }
     }
-    if (param_0->unk7C_12) {
-        for (local_6 = 0; local_6 != 4; local_6++) {
+    if (actor->unk7C_12) {
+        for (i = 0; i != 4; i++) {
             if (func_800DC0C0() < 0.015f) {
-                func_80103DFC(param_0, local_4);
-                local_7 = func_800DC178(0.0f, 360.0f);
-                func_800EF214(local_4, local_7, func_800DC178(0.0f, 360.0f), 40.0f);
-                _fxtwinkle_entrypoint_0(local_4);
+                func_80103DFC(actor, twinkle_pos);
+                angle = func_800DC178(0.0f, 360.0f);
+                func_800EF214(twinkle_pos, angle, func_800DC178(0.0f, 360.0f), 40.0f);
+                _fxtwinkle_entrypoint_0(twinkle_pos);
             }
         }
-        if (param_0->unk58 > 0.0f) {
-            if (func_800DC0C0() < 2.0f * (param_0->unk58 / 3.0f)) {
-                local_8 = func_800B5BE4(0x10);
-                func_800BABB8(local_8, param_0->position, param_0->position, 1.0f,
+        if (actor->unk58 > 0.0f) {
+            if (func_800DC0C0() < 2.0f * (actor->unk58 / 3.0f)) {
+                emitter = func_800B5BE4(0x10);
+                func_800BABB8(emitter, actor->position, actor->position, 1.0f,
                               _fxgenlist_entrypoint_1());
-                func_800BA22C(local_8, 1);
+                func_800BA22C(emitter, 1);
             }
-            param_0->unk58 -= local_0;
+            actor->unk58 -= delta_time;
         }
     }
-    if (param_0->unk70_10 == 1) {
+    if (actor->unk70_10 == 1) {
+        // Matching: empty block steers IDO's register allocation.
         if (1) {
         }
-        if (((CodexJigsawFlags65 *) ((u8 *) param_0 + 0x78))->local_0 && param_0->unk6C_0) {
-            func_800EE7F8(local_5, param_0->position);
-            local_5[1] += 100.0f;
-            func_800C8CB8(param_0->unk6C_0, local_5);
+        if (((CodexJigsawFlags65 *) ((u8 *) actor + 0x78))->unk_78 && actor->unk6C_0) {
+            func_800EE7F8(light_pos, actor->position);
+            light_pos[1] += 100.0f;
+            func_800C8CB8(actor->unk6C_0, light_pos);
         }
-        func_8080011C_chjigsaw(param_0);
+        func_8080011C_chjigsaw(actor);
     }
 }
 
-void func_808004A0_chjigsaw(Actor *param_0, void *param_1)
+void func_808004A0_chjigsaw(Actor *actor, void *unk_1)
 {
-    f32 local_0[3];
-    func_800EFA4C(local_0, 0.0f, param_0->unk54, 0.0f);
-    func_80101970(param_0);
-    func_800DF47C(func_801015D0, param_0);
-    func_800DE448(param_0->position, local_0, param_0->scale, NULL, func_8010347C(param_0->unk0));
+    f32 rotation[3];
+    func_800EFA4C(rotation, 0.0f, actor->unk54, 0.0f);
+    func_80101970(actor);
+    func_800DF47C(func_801015D0, actor);
+    func_800DE448(actor->position, rotation, actor->scale, NULL, func_8010347C(actor->unk0));
 }
 
-s32 func_80800518_chjigsaw(Actor *param_0, s32 param_1, s32 param_2)
+s32 func_80800518_chjigsaw(Actor *actor, s32 msg_id, s32 data)
 {
-    f32 local_0[3];
+    f32 light_pos[3];
 
-    switch (param_1) {
+    switch (msg_id) {
         case 0x3E:
-            func_80800000_chjigsaw(param_0, *(s32 *) &param_2);
+            func_80800000_chjigsaw(actor, *(s32 *) &data);
             break;
         case 0x12:
-            param_0->unk64_19 = param_2;
+            actor->unk64_19 = data;
             break;
         case 0x13:
-            param_0->unk50 = param_2;
+            actor->unk50 = data;
             break;
         case 0x14:
-            if (param_2) {
-                param_0->unk58 = 3.0f;
+            if (data) {
+                actor->unk58 = 3.0f;
             } else {
-                param_0->unk58 = 0.0f;
+                actor->unk58 = 0.0f;
             }
             break;
         case 0x3D:
-            _chjigsawcollect_entrypoint_1(&param_0, (s32) param_0->unk50,
-                                          (*(u32 *) ((u8 *) param_0 + 0x70) & 1));
-            func_800FFAB0(param_0);
+            _chjigsawcollect_entrypoint_1(&actor, (s32) actor->unk50,
+                                          (*(u32 *) ((u8 *) actor + 0x70) & 1));
+            func_800FFAB0(actor);
             break;
         case 0x55:
-            param_0->unk6C_0 = func_800C8A98();
-            func_800CF9E4((s32) param_0->unk50, 1, param_0->unk6C_0);
-            func_800EE7F8(local_0, param_0->position);
-            local_0[1] += 100.0f;
-            func_800C8CB8(param_0->unk6C_0, local_0);
+            actor->unk6C_0 = func_800C8A98();
+            func_800CF9E4((s32) actor->unk50, 1, actor->unk6C_0);
+            func_800EE7F8(light_pos, actor->position);
+            light_pos[1] += 100.0f;
+            func_800C8CB8(actor->unk6C_0, light_pos);
             break;
         default:
             return 0;
@@ -183,15 +189,16 @@ int chjigsaw_entrypoint_0()
     return (int) &D_80800770_chjigsaw;
 }
 
-int func_808006CC_chjigsaw(s32 param_0)
+// Second actor: shows text 0xD0A once and unlocks replay entry 0x85, except in replay mode.
+int func_808006CC_chjigsaw(s32 actor)
 {
     if (func_800D395C()) {
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
     } else {
         if (_subaddiedialog_entrypoint_16()) {
-            if (_subaddiedialog_entrypoint_11(0, 0xD0A, 0, param_0 + 4, 0x6F) != 0) {
+            if (_subaddiedialog_entrypoint_11(0, 0xD0A, 0, actor + 4, 0x6F) != 0) {
                 _gcfrontend_entrypoint_9(0x85);
-                func_800FFAB0(param_0);
+                func_800FFAB0(actor);
             }
         }
     }
@@ -202,6 +209,9 @@ int chjigsaw_entrypoint_1()
     return (int) &D_808007B8_chjigsaw;
 }
 
+// TU-NOTE: this overlay's .data is defined here in C. Its tables point to functions of this file,
+// and IDO's assembler schedules some of them differently unless they share the unit.
+// D_80800770_chjigsaw and D_808007B8_chjigsaw are declared as int[].
 extern void func_80108ED0();
 extern void func_80107C2C();
 extern void func_8010A730();

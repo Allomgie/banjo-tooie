@@ -21,11 +21,11 @@ typedef struct {
 typedef struct {
     u8 pad_0[0x70];
     u32 pad_1 : 12;
-    u32 local_0 : 1;
+    u32 unk_70 : 1;
     u32 pad_2 : 19;
     u8 pad_3[4];
     u32 pad_4 : 28;
-    u32 local_1 : 1;
+    u32 unk_78 : 1;
     u32 pad_5 : 3;
 } Mass45ShadowActorFlags;
 typedef struct {
@@ -79,280 +79,293 @@ int chbadshad_entrypoint_0()
     return (int) &D_80800A10_chbadshad;
 }
 
-void func_8080000C_chbadshad(Actor *param_0)
+void func_8080000C_chbadshad(Actor *actor)
 {
-    Actor *local_0;
+    Actor *owner;
 
-    func_8010A800(param_0, 5);
-    local_0 = *(void **) ((u8 *) param_0 + 0x40) ? func_80106790(*(void **) ((u8 *) param_0 + 0x40))
+    func_8010A800(actor, 5);
+    owner = *(void **) ((u8 *) actor + 0x40) ? func_80106790(*(void **) ((u8 *) actor + 0x40))
                                                  : NULL;
-    if (local_0) {
-        if (func_80102F74(local_0, 0x82000000)) {
-            ((BadShadFlags97 *) param_0)->mode = 3;
+    if (owner) {
+        if (func_80102F74(owner, 0x82000000)) {
+            ((BadShadFlags97 *) actor)->mode = 3;
         } else {
-            ((BadShadFlags97 *) param_0)->mode = 2;
+            ((BadShadFlags97 *) actor)->mode = 2;
         }
     }
 }
 
-void func_80800090_chbadshad(BadShadS *param_0)
+// Removes the shadow if it was not updated in the last frame.
+void func_80800090_chbadshad(BadShadS *actor)
 {
-    if (!param_0->flag && param_0->f18 < func_8001211C() - 1) {
-        func_8080082C_chbadshad(param_0);
+    if (!actor->flag && actor->f18 < func_8001211C() - 1) {
+        func_8080082C_chbadshad(actor);
     }
 }
 
-void func_808000E0_chbadshad(Actor *param_0, s32 param_1)
+// Draws the shadow model.
+void func_808000E0_chbadshad(Actor *actor, s32 unused)
 {
-    f32 local_0;
-    Actor *local_1;
+    f32 scale;
+    Actor *owner;
 
-    local_1 = 0;
-    if (param_0->unk64_17) {
+    owner = 0;
+    if (actor->unk64_17) {
         return;
     }
-    local_0 = param_0->scale;
-    if (param_0->pad40) {
-        local_1 = func_80106790(param_0->pad40);
+    scale = actor->scale;
+    if (actor->pad40) {
+        owner = func_80106790(actor->pad40);
     }
-    if (local_1) {
-        func_800DF410(_subaddiefade_entrypoint_0(local_1));
+    if (owner) {
+        func_800DF410(_subaddiefade_entrypoint_0(owner));
     }
-    if (!local_1 || !((BitTest5 *) ((u8 *) local_1 + 0x74))->flag) {
-        local_0 *= func_800F10B4(((f32 *) param_0->actorData)[3], 0.0f, 800.0f, 0.53f, 0.18f);
+    if (!owner || !((BitTest5 *) ((u8 *) owner + 0x74))->flag) {
+        scale *= func_800F10B4(((f32 *) actor->actorData)[3], 0.0f, 800.0f, 0.53f, 0.18f);
     } else {
-        local_0 *= 0.5f;
+        scale *= 0.5f;
     }
     func_800DF470(1);
     func_800DF428(4000.0f);
-    func_800DF830((u32) *(u16 *) ((u8 *) param_0 + 0x7A) >> 14);
-    if (((u32) *(u16 *) ((u8 *) param_0 + 0x7A) >> 14) == 3) {
-        if (func_800DE448(param_0->position, param_0->rotation, local_0, 0,
-                          func_801039E4(param_0->unk0))) {
-            ((BitTest19 *) ((u8 *) param_0 + 0x7C))->flag = 1;
+    func_800DF830((u32) *(u16 *) ((u8 *) actor + 0x7A) >> 14);
+    if (((u32) *(u16 *) ((u8 *) actor + 0x7A) >> 14) == 3) {
+        if (func_800DE448(actor->position, actor->rotation, scale, 0,
+                          func_801039E4(actor->unk0))) {
+            ((BitTest19 *) ((u8 *) actor + 0x7C))->flag = 1;
         } else {
-            ((BitTest19 *) ((u8 *) param_0 + 0x7C))->flag = 0;
+            ((BitTest19 *) ((u8 *) actor + 0x7C))->flag = 0;
         }
     } else {
-        if (func_800DE448(param_0->position, param_0->rotation, local_0, func_80101918(local_0),
-                          func_801039E4(param_0->unk0))) {
-            ((BitTest19 *) ((u8 *) param_0 + 0x7C))->flag = 1;
+        if (func_800DE448(actor->position, actor->rotation, scale, func_80101918(scale),
+                          func_801039E4(actor->unk0))) {
+            ((BitTest19 *) ((u8 *) actor + 0x7C))->flag = 1;
         } else {
-            ((BitTest19 *) ((u8 *) param_0 + 0x7C))->flag = 0;
+            ((BitTest19 *) ((u8 *) actor + 0x7C))->flag = 0;
         }
     }
 }
 
-f32 func_8080028C_chbadshad(Actor *param_0, Actor *param_1, f32 *param_2)
+// Computes the floor height at the target position and aligns the shadow to the floor normal.
+f32 func_8080028C_chbadshad(Actor *owner, Actor *shadow, f32 *target_pos)
 {
-    f32 local_1[3];
-    f32 local_0;
+    f32 normal[3];
+    f32 height;
 
-    local_0 = 0.0f;
-    if (!((Mass45ShadowActorFlags *) param_0)->local_1 && !(param_1->actorData[1] & 0x80008000) &&
-        ((SignBf7E_0 *) param_1)->f) {
-        if ((s32) param_1->position[0] == (s32) param_2[0] &&
-            (s32) param_1->position[2] == (s32) param_2[2]) {
-            param_1->position[0] = param_2[0];
-            param_1->position[2] = param_2[2];
+    height = 0.0f;
+    if (!((Mass45ShadowActorFlags *) owner)->unk_78 && !(shadow->actorData[1] & 0x80008000) &&
+        ((SignBf7E_0 *) shadow)->f) {
+        if ((s32) shadow->position[0] == (s32) target_pos[0] &&
+            (s32) shadow->position[2] == (s32) target_pos[2]) {
+            shadow->position[0] = target_pos[0];
+            shadow->position[2] = target_pos[2];
             goto done;
         }
     }
-    if (((Mass45ShadowActorFlags *) param_0)->local_0) {
-        func_800EE7F8(param_1->position, param_2);
+    if (((Mass45ShadowActorFlags *) owner)->unk_70) {
+        func_800EE7F8(shadow->position, target_pos);
         return 0.0f;
     }
-    if (*(s16 *) ((u8 *) param_0 + 0x8E) && !func_80105494(param_0) &&
-        func_80104668(param_0, param_2, param_1->position, local_1, &local_0)) {
-        param_1->actorData[1] = func_8010518C(param_0);
-        func_8010279C(param_1, local_1);
-        if ((param_1->actorData[1] & 0x80000000)) {
-            param_1->unk64_16 = 0;
+    if (*(s16 *) ((u8 *) owner + 0x8E) && !func_80105494(owner) &&
+        func_80104668(owner, target_pos, shadow->position, normal, &height)) {
+        shadow->actorData[1] = func_8010518C(owner);
+        func_8010279C(shadow, normal);
+        if ((shadow->actorData[1] & 0x80000000)) {
+            shadow->unk64_16 = 0;
         } else {
-            param_1->unk64_16 = 1;
+            shadow->unk64_16 = 1;
         }
-        return local_0;
-    } else if (!func_8080086C_chbadshad(param_1, param_0, &local_0, param_2)) {
-        param_1->unk64_16 = 0;
-    } else if ((param_1->actorData[1] & 0x80000000)) {
-        param_1->unk64_16 = 0;
+        return height;
+    } else if (!func_8080086C_chbadshad(shadow, owner, &height, target_pos)) {
+        shadow->unk64_16 = 0;
+    } else if ((shadow->actorData[1] & 0x80000000)) {
+        shadow->unk64_16 = 0;
     } else {
-        param_1->unk64_16 = 1;
+        shadow->unk64_16 = 1;
     }
 done:
-    return local_0;
+    return height;
 }
 
-void chbadshad_entrypoint_1(s32 param_0, s32 param_1, f32 param_2)
+// Places the shadow of an owner at a position.
+void chbadshad_entrypoint_1(s32 owner, s32 pos, f32 scale)
 {
-    u8 *local_0 = func_80800664_chbadshad(param_0, param_1, param_2);
-    if (local_0 != NULL) {
-        *(f32 *) (local_0 + 0x38) = param_2;
+    u8 *shadow = func_80800664_chbadshad(owner, pos, scale);
+    if (shadow != NULL) {
+        *(f32 *) (shadow + 0x38) = scale;
     }
 }
 
-s32 chbadshad_entrypoint_2(Actor *param_0, s32 param_1, f32 param_2, f32 *param_3)
+// Places the shadow at a skeleton bone.
+s32 chbadshad_entrypoint_2(Actor *actor, s32 bone, f32 scale, f32 *out_pos)
 {
-    f32 local_0[3];
+    f32 bone_pos[3];
 
-    if (!param_3)
-        param_3 = local_0;
-    if (_subaddieskeleton_entrypoint_0(param_0, param_1, param_3)) {
-        chbadshad_entrypoint_1(param_0, param_3, param_2);
-        if (param_0->pad40) {
-            func_800EE7F8(param_3, func_80106790(param_0->pad40)->position);
+    if (!out_pos)
+        out_pos = bone_pos;
+    if (_subaddieskeleton_entrypoint_0(actor, bone, out_pos)) {
+        chbadshad_entrypoint_1(actor, out_pos, scale);
+        if (actor->pad40) {
+            func_800EE7F8(out_pos, func_80106790(actor->pad40)->position);
         }
         return 1;
     }
     return 0;
 }
 
-void chbadshad_entrypoint_3(Actor *param_0, s32 param_1, s32 param_2, f32 param_3, s16 *param_4)
+// Places the shadow at a bone while the actor is in one of the listed states, else at a position.
+void chbadshad_entrypoint_3(Actor *actor, s32 pos, s32 bone, f32 scale, s16 *states)
 {
-    while (*param_4 != -1) {
-        if (param_0->unk70_10 == *param_4) {
-            chbadshad_entrypoint_2(param_0, param_2, param_3, 0);
+    while (*states != -1) {
+        if (actor->unk70_10 == *states) {
+            chbadshad_entrypoint_2(actor, bone, scale, 0);
             return;
         }
-        param_4++;
+        states++;
     }
-    chbadshad_entrypoint_1(param_0, param_1, param_3);
+    chbadshad_entrypoint_1(actor, pos, scale);
 }
 
-void chbadshad_entrypoint_4(s32 param_0, s32 param_1, f32 param_2, f32 param_3, f32 param_4)
+// Spawns a shadow actor for an owner at a position.
+void chbadshad_entrypoint_4(s32 id, s32 scale_in, f32 x, f32 y, f32 z)
 {
-    f32 local_0[3];
-    s32 local_1;
-    Actor *local_2;
-    f32 local_3;
-    Actor *local_4;
+    f32 pos[3];
+    s32 owner_id;
+    Actor *owner;
+    f32 scale;
+    Actor *shadow;
 
-    local_1 = param_0;
-    if (&param_0) {
+    owner_id = id;
+    // Matching: the copy and the empty if on the parameter's address are needed for the match.
+    if (&id) {
     }
-    local_2 = func_80106790(local_1);
-    local_0[0] = param_2;
-    local_0[1] = param_3;
-    local_0[2] = param_4;
-    if (!local_2->unk64_17) {
-        local_3 = *(f32 *) &param_1;
-        local_4 = func_801084B0(0x243, &local_2);
-        if (local_4) {
-            local_4->unk14 = local_2->unk14;
-            ((f32 *) local_4->actorData)[3] = func_8080028C_chbadshad(local_2, local_4, local_0);
-            if (!local_4->unk64_17) {
-                local_2->pad40 = (s32) local_4->unk0;
-                local_4->scale = local_3;
-                local_4->pad40 = local_1;
-                local_4->actorData[0] = func_8001211C();
+    owner = func_80106790(owner_id);
+    pos[0] = x;
+    pos[1] = y;
+    pos[2] = z;
+    if (!owner->unk64_17) {
+        scale = *(f32 *) &scale_in;
+        shadow = func_801084B0(0x243, &owner);
+        if (shadow) {
+            shadow->unk14 = owner->unk14;
+            ((f32 *) shadow->actorData)[3] = func_8080028C_chbadshad(owner, shadow, pos);
+            if (!shadow->unk64_17) {
+                owner->pad40 = (s32) shadow->unk0;
+                shadow->scale = scale;
+                shadow->pad40 = owner_id;
+                shadow->actorData[0] = func_8001211C();
             }
         }
     }
 }
 
-u8 *func_80800664_chbadshad(u8 *param_0, f32 *param_1, f32 param_2)
+// Updates the owner's shadow, creating it when missing.
+u8 *func_80800664_chbadshad(u8 *owner, f32 *pos, f32 scale)
 {
-    u8 *obj;
-    u8 *a0;
+    u8 *shadow;
+    u8 *shadow_id;
 
-    if (((Actor *) param_0)->unk64_17) {
-        a0 = *(u8 **) (param_0 + 0x40);
-        if (a0 != 0) {
-            func_8080082C_chbadshad(func_80106790(a0));
+    if (((Actor *) owner)->unk64_17) {
+        shadow_id = *(u8 **) (owner + 0x40);
+        if (shadow_id != 0) {
+            func_8080082C_chbadshad(func_80106790(shadow_id));
         }
         return 0;
     }
-    a0 = *(u8 **) (param_0 + 0x40);
-    if (a0 == 0) {
-        _chbaddiesetup_entrypoint_5((s32) &_chbadshad_entrypoint_4, *(s32 *) param_0, param_2,
-                                    *(s32 *) param_1, ((s32 *) param_1)[1], ((s32 *) param_1)[2]);
+    shadow_id = *(u8 **) (owner + 0x40);
+    if (shadow_id == 0) {
+        _chbaddiesetup_entrypoint_5((s32) &_chbadshad_entrypoint_4, *(s32 *) owner, scale,
+                                    *(s32 *) pos, ((s32 *) pos)[1], ((s32 *) pos)[2]);
     } else {
-        obj = func_80106790(a0);
-        if (((Actor *) obj)->unk64_17) {
+        shadow = func_80106790(shadow_id);
+        if (((Actor *) shadow)->unk64_17) {
             return 0;
         }
-        if (func_8080078C_chbadshad(obj, param_0) != 0) {
-            *(f32 *) (obj + 0x24) = func_8080028C_chbadshad(param_0, obj, param_1);
+        if (func_8080078C_chbadshad(shadow, owner) != 0) {
+            *(f32 *) (shadow + 0x24) = func_8080028C_chbadshad(owner, shadow, pos);
         } else {
-            *(f32 *) (obj + 0x4) = param_1[0];
-            *(f32 *) (obj + 0xC) = param_1[2];
+            *(f32 *) (shadow + 0x4) = pos[0];
+            *(f32 *) (shadow + 0xC) = pos[2];
         }
-        *(s32 *) (obj + 0x18) = func_8001211C();
-        *(f32 *) (obj + 0x38) = param_2;
-        return obj;
+        *(s32 *) (shadow + 0x18) = func_8001211C();
+        *(f32 *) (shadow + 0x38) = scale;
+        return shadow;
     }
     return 0;
 }
 
-s32 func_8080078C_chbadshad(param_0, param_1)
-Actor *param_0;
-s32 param_1;
+// Whether the shadow updates this frame (every 4th frame per actor).
+s32 func_8080078C_chbadshad(shadow, owner)
+Actor *shadow;
+s32 owner;
 {
-    if (!((BadShadFlag *) param_0)->unk7E_15) {
+    if (!((BadShadFlag *) shadow)->unk7E_15) {
         return 1;
     }
-    if (func_80104544(param_1)) {
+    if (func_80104544(owner)) {
         return 1;
     }
     if (func_800DB9B0()) {
         return 1;
     }
-    if (((BadShadActor *) param_0)->unk7A_14 == 3) {
+    if (((BadShadActor *) shadow)->unk7A_14 == 3) {
         return 1;
     }
-    return ((func_8001211C() ^ ((BadShadInfo *) param_0->unk0)->unk1A_5) & 3) == 0;
+    return ((func_8001211C() ^ ((BadShadInfo *) shadow->unk0)->unk1A_5) & 3) == 0;
 }
 
-void func_8080082C_chbadshad(param_0) u8 *param_0;
+// Unlinks the shadow from its owner and removes it.
+void func_8080082C_chbadshad(shadow) u8 *shadow;
 {
-    int new_var;
-    s32 temp_a1;
-    new_var = 0x40;
-    temp_a1 = *(s32 *) ((s8 *) param_0 + 0x40);
-    if (temp_a1 != 0) {
-        *(s32 *) ((s8 *) func_80106790(temp_a1, *(s32 *) ((s8 *) param_0 + 0x40), param_0) +
-                  new_var) = 0;
+    // Matching: the extra temporary for the offset is needed for the match.
+    int offset;
+    s32 owner_id;
+    offset = 0x40;
+    owner_id = *(s32 *) ((s8 *) shadow + 0x40);
+    if (owner_id != 0) {
+        *(s32 *) ((s8 *) func_80106790(owner_id, *(s32 *) ((s8 *) shadow + 0x40), shadow) +
+                  offset) = 0;
     }
-    func_800FFAB0(param_0);
+    func_800FFAB0(shadow);
 }
 
-int func_8080086C_chbadshad(param_0, param_1, param_2, param_3)
-u8 *param_0;
-Actor *param_1;
-f32 *param_2;
-f32 *param_3;
+// Raycasts the floor below pos; returns 0 if nothing is hit.
+int func_8080086C_chbadshad(shadow, owner, out_height, pos)
+u8 *shadow;
+Actor *owner;
+f32 *out_height;
+f32 *pos;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    s32 local_4;
-    u8 *local_5;
-    local_4 = func_8010A654(param_1, 0);
-    func_800EE7F8(local_0, param_3);
-    func_800EE7F8(local_1, param_3);
-    local_0[1] += 80.0f;
-    local_1[1] -= 100.0f;
-    local_5 = (u8 *) func_800C6A7C(local_0, local_1, local_2, *(s32 *) (param_0 + 0x14));
-    if (!local_5) {
-        local_1[1] = param_3[1] - 2000.0f;
-        local_5 = (u8 *) func_800C6A7C(local_0, local_1, local_2, *(s32 *) (param_0 + 0x14));
-        if (!local_5) {
-            *param_2 = 0.0f;
-            func_8010A654(param_1, local_4);
-            *(s32 *) (param_0 + 0x1C) = 0;
+    f32 ray_start[3];
+    f32 ray_end[3];
+    f32 normal[3];
+    f32 angles[3];
+    s32 saved;
+    u8 *hit;
+    saved = func_8010A654(owner, 0);
+    func_800EE7F8(ray_start, pos);
+    func_800EE7F8(ray_end, pos);
+    ray_start[1] += 80.0f;
+    ray_end[1] -= 100.0f;
+    hit = (u8 *) func_800C6A7C(ray_start, ray_end, normal, *(s32 *) (shadow + 0x14));
+    if (!hit) {
+        ray_end[1] = pos[1] - 2000.0f;
+        hit = (u8 *) func_800C6A7C(ray_start, ray_end, normal, *(s32 *) (shadow + 0x14));
+        if (!hit) {
+            *out_height = 0.0f;
+            func_8010A654(owner, saved);
+            *(s32 *) (shadow + 0x1C) = 0;
             return 0;
         }
     }
-    *(s32 *) (param_0 + 0x1C) = *(s32 *) (local_5 + 8);
-    func_8010A654(param_1, local_4);
-    func_800EE7F8((f32 *) (param_0 + 4), local_1);
-    *param_2 = func_800F0E00(0.0f, param_3[1] - *(f32 *) (param_0 + 8));
-    func_800F1988(local_2, &local_3[0], &local_3[1]);
-    local_3[2] = 0.0f;
-    func_8010279C(param_0, local_3);
-    if (*(s16 *) ((u8 *) param_1 + 0x8E))
-        func_801045AC(param_1, local_2, (f32 *) (param_0 + 4), *(s32 *) (local_5 + 8));
+    *(s32 *) (shadow + 0x1C) = *(s32 *) (hit + 8);
+    func_8010A654(owner, saved);
+    func_800EE7F8((f32 *) (shadow + 4), ray_end);
+    *out_height = func_800F0E00(0.0f, pos[1] - *(f32 *) (shadow + 8));
+    func_800F1988(normal, &angles[0], &angles[1]);
+    angles[2] = 0.0f;
+    func_8010279C(shadow, angles);
+    if (*(s16 *) ((u8 *) owner + 0x8E))
+        func_801045AC(owner, normal, (f32 *) (shadow + 4), *(s32 *) (hit + 8));
     return 1;
 }
 

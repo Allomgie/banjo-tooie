@@ -4,59 +4,65 @@ extern s32 _dbzone_entrypoint_2(s32, s32, s32);
 extern s32 _dbzone_entrypoint_3(s32, s32);
 void glzone_entrypoint_2();
 
-s32 glzone_entrypoint_0(u8 *param_0)
+// Zone set: heap byte array [count, flag per zone].
+// Creates a zone set sized from the zone count in src[0].
+s32 glzone_entrypoint_0(u8 *src)
 {
-    u8 *local_0;
-    local_0 = (u8 *) heap_alloc(param_0[0] + 1);
-    local_0[0] = param_0[0];
-    glzone_entrypoint_2(local_0);
-    return local_0;
+    u8 *set;
+    set = (u8 *) heap_alloc(src[0] + 1);
+    set[0] = src[0];
+    glzone_entrypoint_2(set);
+    return set;
 }
 
-void glzone_entrypoint_1(void *arg0)
+void glzone_entrypoint_1(void *set)
 {
-    heap_free(arg0);
+    heap_free(set);
 }
 
-void glzone_entrypoint_2(param_0) u8 *param_0;
+// Clears all zone flags.
+void glzone_entrypoint_2(set) u8 *set;
 {
-    u8 *local_0 = param_0 + *param_0 + 1;
-    param_0++;
+    u8 *end = set + *set + 1;
+    set++;
 
-while (param_0 < local_0) {
-    *param_0++ = 0;
+while (set < end) {
+    *set++ = 0;
 }
-
-}
-
-s32 glzone_entrypoint_3(u8 *param_0, s32 param_1)
-{
-    param_0[param_1] = 1;
-}
-
-s32 glzone_entrypoint_4(s32 param_0, s32 param_1)
-{
-    u8 local_0;
-    local_0 = *(u8 *) (param_0 + param_1);
-    return local_0;
 
 }
 
-s32 glzone_entrypoint_5(s32 param_0, s32 param_1, s32 param_2)
+// Marks a zone active.
+s32 glzone_entrypoint_3(u8 *set, s32 zone)
 {
-    if (param_2 != 0 && _dbzone_entrypoint_2(param_0, param_1, param_2 - 1)) {
-        return param_2;
+    set[zone] = 1;
+}
+
+s32 glzone_entrypoint_4(s32 set, s32 zone)
+{
+    u8 flag;
+    flag = *(u8 *) (set + zone);
+    return flag;
+
+}
+
+// Returns the zone (1-based) containing pos; keeps prev while pos is still inside it.
+s32 glzone_entrypoint_5(s32 zones, s32 pos, s32 prev)
+{
+    if (prev != 0 && _dbzone_entrypoint_2(zones, pos, prev - 1)) {
+        return prev;
     }
 
-return _dbzone_entrypoint_3(param_0, param_1) + 1;
+return _dbzone_entrypoint_3(zones, pos) + 1;
 }
 
-int glzone_entrypoint_6(u8 *param_0, u8 *param_1, s32 param_2)
+// Returns 1 if any of the 'count' zones in 'ids' is active.
+int glzone_entrypoint_6(u8 *set, u8 *ids, s32 count)
 {
-    int local_0;
+    int i;
 
-for (local_0 = 0; local_0 < param_2; local_0++) {
-    if (param_0[param_1[local_0] + 1])
+for (i = 0; i < count; i++) {
+    if (set[ids[i] + 1])
         return 1;
 }
 

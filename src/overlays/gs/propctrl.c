@@ -2,55 +2,63 @@
 
 extern s16 D_80800140_gspropctrl[];
 
-int gspropctrl_entrypoint_0(u8 *param_0)
+int gspropctrl_entrypoint_0(u8 *prop)
 {
-    return param_0[10];
+    return prop[10];
 }
 
-u32 gspropctrl_entrypoint_1(u8 *param_0, u8 *param_1)
+// Position as s32 into out; returns the radius.
+u32 gspropctrl_entrypoint_1(u8 *prop, u8 *out)
 {
-    *(s32 *) ((s8 *) param_1 + 0) = (s32) *(s16 *) ((s8 *) param_0 + 0);
-    *(s32 *) ((s8 *) param_1 + 4) = (s32) *(s16 *) ((s8 *) param_0 + 2);
-    *(s32 *) ((s8 *) param_1 + 8) = (s32) *(s16 *) ((s8 *) param_0 + 4);
-    return (u32) *(u16 *) ((s8 *) param_0 + 6) >> 7;
+    *(s32 *) ((s8 *) out + 0) = (s32) *(s16 *) ((s8 *) prop + 0);
+    *(s32 *) ((s8 *) out + 4) = (s32) *(s16 *) ((s8 *) prop + 2);
+    *(s32 *) ((s8 *) out + 8) = (s32) *(s16 *) ((s8 *) prop + 4);
+    return (u32) *(u16 *) ((s8 *) prop + 6) >> 7;
 }
 
-int gspropctrl_entrypoint_2(s32 param_0[3])
+// Control type (6-bit field at +4).
+int gspropctrl_entrypoint_2(s32 prop[3])
 {
-    return ((u32) param_0[1] << 0x19) >> 26;
+    return ((u32) prop[1] << 0x19) >> 26;
 }
 
-int gspropctrl_entrypoint_3(Actor *param_0)
+// Returns the parameter word at +0xC.
+int gspropctrl_entrypoint_3(Actor *prop)
 {
-    return *(s32 *) ((char *) param_0 + 0xC);
+    return *(s32 *) ((char *) prop + 0xC);
 }
 
-int gspropctrl_entrypoint_4(int param_0)
+int gspropctrl_entrypoint_4(int prop)
 {
-    return *(unsigned short *) (param_0 + 8);
+    return *(unsigned short *) (prop + 8);
 }
 
-void gspropctrl_entrypoint_5(void *param_0, s32 param_1)
+// Sets the parameter word at +0xC.
+void gspropctrl_entrypoint_5(void *prop, s32 value)
 {
-    *(s32 *) ((char *) param_0 + 0xC) = param_1;
+    *(s32 *) ((char *) prop + 0xC) = value;
 }
 
-int gspropctrl_entrypoint_6(Actor *param_0)
+// Combines a 3-bit field at +0x10 with a 2-bit field at +8.
+int gspropctrl_entrypoint_6(Actor *prop)
 {
-    return ((*(s32 *) ((char *) param_0 + 0x10) & 7) * 4) +
-           (((u32) *(s32 *) ((char *) param_0 + 0x8) << 19) >> 30);
+    return ((*(s32 *) ((char *) prop + 0x10) & 7) * 4) +
+           (((u32) *(s32 *) ((char *) prop + 0x8) << 19) >> 30);
 }
 
-s32 gspropctrl_entrypoint_7(s32 param_0)
+// Looks up an entry of the small type table.
+s32 gspropctrl_entrypoint_7(s32 type)
 {
-    return D_80800140_gspropctrl[param_0];
+    return D_80800140_gspropctrl[type];
 }
 
-s32 gspropctrl_entrypoint_8(void *param_0)
+// Radius of the prop (u16 at +6, >> 7).
+s32 gspropctrl_entrypoint_8(void *prop)
 {
-    return (u32) *(u16 *) ((char *) param_0 + 0x6) >> 7 | 0;
+    return (u32) *(u16 *) ((char *) prop + 0x6) >> 7 | 0;
 }
 
+// Copy a position as s16 to s32.
 s32 gspropctrl_entrypoint_9(s16 src[3], s32 dst[3])
 {
     dst[0] = src[0];
@@ -58,29 +66,33 @@ s32 gspropctrl_entrypoint_9(s16 src[3], s32 dst[3])
     dst[2] = src[2];
 }
 
-s32 gspropctrl_entrypoint_10(s16 param_0[3], s16 param_1[3])
+// Copy a position as s16 to s16.
+s32 gspropctrl_entrypoint_10(s16 src[3], s16 dst[3])
 {
-    param_1[0] = param_0[0];
-    param_1[1] = param_0[1];
-    param_1[2] = param_0[2];
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
 }
 
-s32 gspropctrl_entrypoint_11(s16 param_0[3], f32 param_1[3])
+// Copy a position as s16 to f32.
+s32 gspropctrl_entrypoint_11(s16 src[3], f32 dst[3])
 {
-    param_1[0] = (f32) param_0[0];
-    param_1[1] = (f32) param_0[1];
-    param_1[2] = (f32) param_0[2];
+    dst[0] = (f32) src[0];
+    dst[1] = (f32) src[1];
+    dst[2] = (f32) src[2];
 }
 
-int gspropctrl_entrypoint_12(Actor *param_0)
+// High 9 bits of the parameter word at +0xC.
+int gspropctrl_entrypoint_12(Actor *prop)
 {
-    return (*(s32 *) ((char *) param_0 + 0xC) & 0xFFFFFFFF) >> 23;
+    return (*(s32 *) ((char *) prop + 0xC) & 0xFFFFFFFF) >> 23;
 }
 
-int gspropctrl_entrypoint_13(Actor *param_0)
+// Low 23 bits of the parameter word at +0xC.
+int gspropctrl_entrypoint_13(Actor *prop)
 {
-    u32 local_0;
-    local_0 = (local_0 = *(s32 *) ((char *) param_0 + 0xC) & 0x007FFFFF);
+    u32 value;
+    value = (value = *(s32 *) ((char *) prop + 0xC) & 0x007FFFFF);
 }
 
 s16 D_80800140_gspropctrl[32] = {0x0,    0x32,   0x64,   0xC8,   0x15E,  0x1F4,  0x28A,  0x320,

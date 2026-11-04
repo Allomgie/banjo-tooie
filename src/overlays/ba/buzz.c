@@ -9,20 +9,22 @@ s32 babuzz_entrypoint_0(void)
     return sizeof(BaBuzz);
 }
 
-f32 func_80800008_babuzz(f32 arg0)
+// Triangle-wave pitch wobble.
+f32 func_80800008_babuzz(f32 time)
 {
-    f32 tmp_f2 = func_800F0F9C(arg0, 0.7f);
-    tmp_f2 *= 2.0f;
+    f32 wave = func_800F0F9C(time, 0.7f);
+    wave *= 2.0f;
 
-    if (1.0f <= tmp_f2) {
-        tmp_f2 = 2.0f - tmp_f2;
+    if (1.0f <= wave) {
+        wave = 2.0f - wave;
     }
 
-    tmp_f2 -= 0.5f;
-    tmp_f2 *= 0.04f;
-    return tmp_f2;
+    wave -= 0.5f;
+    wave *= 0.04f;
+    return wave;
 }
 
+// Moves value toward target by rate per second.
 f32 func_80800074_babuzz(f32 value, f32 target, f32 rate)
 {
     f32 dt;
@@ -71,12 +73,12 @@ void babuzz_entrypoint_3(PlayerState *self)
     func_800C3BDC(self->buzz->unk0);
 }
 
-void babuzz_entrypoint_4(PlayerState *self, f32 arg1)
+void babuzz_entrypoint_4(PlayerState *self, f32 target_pitch)
 {
-    self->buzz->unkC = arg1;
+    self->buzz->unkC = target_pitch;
 }
 
-void babuzz_entrypoint_5(PlayerState *self, s32 arg1)
+void babuzz_entrypoint_5(PlayerState *self, s32 target_volume)
 {
-    self->buzz->unk10 = arg1;
+    self->buzz->unk10 = target_volume;
 }

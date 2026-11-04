@@ -3,19 +3,23 @@
 extern void func_800C4AF0(s32, s32);
 extern s32 D_808000F0_gcaudiolist[];
 
-int gcaudiolist_entrypoint_0(s32 param_0)
+// Plays sound number `index` from the list.
+int gcaudiolist_entrypoint_0(s32 index)
 {
-    u32 local_0;
-    local_0 = param_0 | 0;
-    func_800C4AF0(0, D_808000F0_gcaudiolist[local_0]);
+    u32 sound_idx;
+    // Matching: the `| 0` and the temporary are needed for the match.
+    sound_idx = index | 0;
+    func_800C4AF0(0, D_808000F0_gcaudiolist[sound_idx]);
 }
 
-void gcaudiolist_entrypoint_1(s32 param_0, s32 param_1)
+// Sets a sound parameter, then plays sound number `index` from the list.
+void gcaudiolist_entrypoint_1(s32 index, s32 param)
 {
-    func_800C4B70(param_1);
-    func_800C4AF0(0, D_808000F0_gcaudiolist[param_0]);
+    func_800C4B70(param);
+    func_800C4AF0(0, D_808000F0_gcaudiolist[index]);
 }
 
+// TU-NOTE: the overlay .data is defined here in C (values taken from the ROM).
 u32 D_80800080_gcaudiolist[3] = {0x130456, 0x18001B, 0x0};
 u32 D_8080008C_gcaudiolist[3] = {0x130477, 0x18001B, 0x0};
 u32 D_80800098_gcaudiolist[4] = {0x130469, 0xA0119, 0x1E001B, 0x200000};

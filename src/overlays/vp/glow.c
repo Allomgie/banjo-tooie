@@ -16,31 +16,32 @@ typedef struct {
 } GlowDirty1446;
 extern f32 func_800D8FF8(void);
 
-u8 *vpglow_entrypoint_0(u8 *param_0, s32 *param_1)
+// Creates the state: value 0.5, speed from the effect id, indices of the enabled groups.
+u8 *vpglow_entrypoint_0(u8 *arg0, s32 *def)
 {
-    u8 *local_0;
-    u8 *local_1;
-    u8 *local_2;
-    u8 *local_3;
-    local_2 = heap_alloc((*(s32 *) ((s8 *) param_0 + 0x14) * 2) + 0xC);
-    local_1 = (u8 *) param_1;
-    local_1 = ((*(s32 *) ((s8 *) param_0 + 0x14) * 4) + local_1) + 0x14;
-    *(s32 *) ((s8 *) local_2 + 8) = 0;
-    *(f32 *) ((s8 *) local_2 + 0) = 0.5f;
-    local_0 = (u8 *) param_1 + 0x14;
-    local_3 = local_0;
-    *(f32 *) ((s8 *) local_2 + 4) = (f32) (((f32) ((s32) *param_1 % 100) + 1.0f) * 0.01f);
-    if ((u32) local_0 < (u32) local_1) {
+    u8 *first;
+    u8 *end;
+    u8 *state;
+    u8 *entry;
+    state = heap_alloc((*(s32 *) ((s8 *) arg0 + 0x14) * 2) + 0xC);
+    end = (u8 *) def;
+    end = ((*(s32 *) ((s8 *) arg0 + 0x14) * 4) + end) + 0x14;
+    *(s32 *) ((s8 *) state + 8) = 0;
+    *(f32 *) ((s8 *) state + 0) = 0.5f;
+    first = (u8 *) def + 0x14;
+    entry = first;
+    *(f32 *) ((s8 *) state + 4) = (f32) (((f32) ((s32) *def % 100) + 1.0f) * 0.01f);
+    if ((u32) first < (u32) end) {
         do {
-            if (*(u16 *) ((s8 *) local_3 + 2) != 0) {
-                *(s16 *) ((s8 *) (local_2 + (*(s32 *) ((s8 *) local_2 + 8) * 2)) + 0xC) =
-                    (s16) ((s32) (local_3 - local_0) >> 2);
-                *(s32 *) ((s8 *) local_2 + 8) = (s32) (*(s32 *) ((s8 *) local_2 + 8) + 1);
+            if (*(u16 *) ((s8 *) entry + 2) != 0) {
+                *(s16 *) ((s8 *) (state + (*(s32 *) ((s8 *) state + 8) * 2)) + 0xC) =
+                    (s16) ((s32) (entry - first) >> 2);
+                *(s32 *) ((s8 *) state + 8) = (s32) (*(s32 *) ((s8 *) state + 8) + 1);
             }
-            local_3 += 4;
-        } while ((u32) local_3 < (u32) local_1);
+            entry += 4;
+        } while ((u32) entry < (u32) end);
     }
-    return local_2;
+    return state;
 }
 
 void vpglow_entrypoint_1(void *arg0)
@@ -48,41 +49,43 @@ void vpglow_entrypoint_1(void *arg0)
     heap_free(arg0);
 }
 
-void vpglow_entrypoint_2(GlowState1446 *param_0, GlowMesh1446 *param_1)
+// Ping-pongs the value between 0.3 and 1.0 and marks the groups dirty.
+void vpglow_entrypoint_2(GlowState1446 *state, GlowMesh1446 *mesh)
 {
-    s32 local_0;
-    GlowDirty1446 *local_1;
-    s16 *local_2;
+    s32 i;
+    GlowDirty1446 *groups;
+    s16 *idx;
 
-    param_0->value += param_0->speed * func_800D8FF8();
-    if (param_0->value >= 1.0f) {
-        param_0->value = 1.0f;
-        param_0->speed = -param_0->speed;
-    } else if (param_0->value < 0.3f) {
-        param_0->value = 0.3f;
-        param_0->speed = -param_0->speed;
+    state->value += state->speed * func_800D8FF8();
+    if (state->value >= 1.0f) {
+        state->value = 1.0f;
+        state->speed = -state->speed;
+    } else if (state->value < 0.3f) {
+        state->value = 0.3f;
+        state->speed = -state->speed;
     }
-    local_1 = (GlowDirty1446 *) ((u8 *) param_1 + param_1->offset);
-    local_0 = 0;
-    if (param_0->count > 0) {
-        local_2 = param_0->indices;
+    groups = (GlowDirty1446 *) ((u8 *) mesh + mesh->offset);
+    i = 0;
+    if (state->count > 0) {
+        idx = state->indices;
         do {
-            local_1[*local_2].dirty = 1;
-            local_0++;
-            local_2++;
-        } while (local_0 < param_0->count);
+            groups[*idx].dirty = 1;
+            i++;
+            idx++;
+        } while (i < state->count);
     }
 }
 
-void vpglow_entrypoint_3(f32 *param_0, s32 param_1, Vtx *param_2, s32 param_3)
+// Scales the vertex colours by the glow value.
+void vpglow_entrypoint_3(f32 *state, s32 arg1, Vtx *vtx, s32 count)
 {
-    Vtx *local_0;
-    f32 local_1;
-    local_0 = param_2 + param_3;
-    local_1 = *param_0;
-    for (; param_2 < local_0; param_2++) {
-        param_2->v.cn[0] *= local_1;
-        param_2->v.cn[1] *= local_1;
-        param_2->v.cn[2] *= local_1;
+    Vtx *end;
+    f32 value;
+    end = vtx + count;
+    value = *state;
+    for (; vtx < end; vtx++) {
+        vtx->v.cn[0] *= value;
+        vtx->v.cn[1] *= value;
+        vtx->v.cn[2] *= value;
     }
 }

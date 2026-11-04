@@ -2,17 +2,17 @@
 
 extern s32 func_800D5424(s32);
 typedef struct {
-    s32 local_0;
-    s32 local_1;
-    f32 local_2;
-    f32 local_3[3];
-    f32 local_4;
-    f32 local_5[3];
-    s32 local_6;
-    u8 local_7;
-    u8 local_8;
-    u8 local_9;
-    u8 local_10;
+    s32 path_id;
+    s32 unk_4;
+    f32 t;
+    f32 start_pos[3];
+    f32 blend;
+    f32 rail_pos[3];
+    s32 trigger_id;
+    u8 unk_2C;
+    u8 unk_2D;
+    u8 unk_2E;
+    u8 unk_2F;
 } SplineState48;
 extern f32 func_800C82CC(s32, f32 *);
 extern f32 func_800FB1EC(s32, f32, f32 *, s32);
@@ -40,26 +40,26 @@ s32 ncbaspline_entrypoint_0()
     return 0x30;
 }
 
-int func_80800008_ncbaspline(u8 *param_0)
+int func_80800008_ncbaspline(u8 *cam)
 {
-    func_800D7520(**(s32 **) ((s8 *) param_0 + 0x44));
+    func_800D7520(**(s32 **) ((s8 *) cam + 0x44));
 }
 
-void func_8080002C_ncbaspline(param_0) u8 *param_0;
+void func_8080002C_ncbaspline(cam) u8 *cam;
 {
-    u8 *local_0;
+    u8 *state;
 
-    (*(s32 *) ((s8 *) ((*(u8 **) ((s8 *) (param_0) + (0x44)))) + (0))) = -1;
-    (*(f32 *) ((s8 *) ((*(u8 **) ((s8 *) (param_0) + (0x44)))) + (4))) = 0.0f;
-    (*(f32 *) ((s8 *) ((*(u8 **) ((s8 *) (param_0) + (0x44)))) + (8))) = 0.0f;
-    (*(s32 *) ((s8 *) ((*(u8 **) ((s8 *) (param_0) + (0x44)))) + (0x28))) = 0;
-    (*(s8 *) ((s8 *) ((*(u8 **) ((s8 *) (param_0) + (0x44)))) + (0x2C))) = 0;
-    (*(u8 *) ((s8 *) ((*(u8 **) ((s8 *) (param_0) + (0x44)))) + (0x2F))) = 0U;
-    local_0 = (*(u8 **) ((s8 *) (param_0) + (0x44)));
-    (*(u8 *) ((s8 *) (local_0) + (0x2E))) = (u8) (*(u8 *) ((s8 *) (local_0) + (0x2F)));
-    func_800EFD24((*(u8 **) ((s8 *) (param_0) + (0x44))) + 0xC, param_0);
-    func_800EFD24((*(u8 **) ((s8 *) (param_0) + (0x44))) + 0x1C, param_0);
-    (*(f32 *) ((s8 *) ((*(u8 **) ((s8 *) (param_0) + (0x44)))) + (0x18))) = 0.0f;
+    (*(s32 *) ((s8 *) ((*(u8 **) ((s8 *) (cam) + (0x44)))) + (0))) = -1;
+    (*(f32 *) ((s8 *) ((*(u8 **) ((s8 *) (cam) + (0x44)))) + (4))) = 0.0f;
+    (*(f32 *) ((s8 *) ((*(u8 **) ((s8 *) (cam) + (0x44)))) + (8))) = 0.0f;
+    (*(s32 *) ((s8 *) ((*(u8 **) ((s8 *) (cam) + (0x44)))) + (0x28))) = 0;
+    (*(s8 *) ((s8 *) ((*(u8 **) ((s8 *) (cam) + (0x44)))) + (0x2C))) = 0;
+    (*(u8 *) ((s8 *) ((*(u8 **) ((s8 *) (cam) + (0x44)))) + (0x2F))) = 0U;
+    state = (*(u8 **) ((s8 *) (cam) + (0x44)));
+    (*(u8 *) ((s8 *) (state) + (0x2E))) = (u8) (*(u8 *) ((s8 *) (state) + (0x2F)));
+    func_800EFD24((*(u8 **) ((s8 *) (cam) + (0x44))) + 0xC, cam);
+    func_800EFD24((*(u8 **) ((s8 *) (cam) + (0x44))) + 0x1C, cam);
+    (*(f32 *) ((s8 *) ((*(u8 **) ((s8 *) (cam) + (0x44)))) + (0x18))) = 0.0f;
 }
 
 void ncbaspline_entrypoint_1()
@@ -67,10 +67,10 @@ void ncbaspline_entrypoint_1()
     func_8080002C_ncbaspline();
 }
 
-int ncbaspline_entrypoint_2(Actor *param_0)
+int ncbaspline_entrypoint_2(Actor *cam)
 {
-    func_801124D0(param_0, 0x1);
-    func_80111B8C(param_0, 0x40400000, 0x41000000);
+    func_801124D0(cam, 0x1);
+    func_80111B8C(cam, 0x40400000, 0x41000000);
 }
 
 void ncbaspline_entrypoint_3()
@@ -78,228 +78,229 @@ void ncbaspline_entrypoint_3()
     func_8080002C_ncbaspline();
 }
 
-s32 func_80800130_ncbaspline(s32 param_0, s32 param_1)
+s32 func_80800130_ncbaspline(s32 cam, s32 focus)
 {
-    s32 local_0;
+    s32 saved;
 
-    local_0 = func_80112518(param_0);
-    func_801124D0(param_0, 1);
-    func_80112524(param_0, param_1);
-    func_801124D0(param_0, local_0);
+    saved = func_80112518(cam);
+    func_801124D0(cam, 1);
+    func_80112524(cam, focus);
+    func_801124D0(cam, saved);
 }
 
-f32 func_8080017C_ncbaspline(u8 *param_0, s32 param_1, f32 *param_2, f32 *param_3)
+f32 func_8080017C_ncbaspline(u8 *cam, s32 path, f32 *focus, f32 *cam_pos)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_4;
-    f32 local_5;
-    local_4 = func_800C82CC(param_1, param_2);
+    f32 proj_pos[3];
+    f32 near_pos[3];
+    f32 step_pos[3];
+    f32 dir[3];
+    f32 near_t;
+    f32 cur_t;
+    near_t = func_800C82CC(path, focus);
 
-if (local_4 == 0.0f || local_4 == 1.0f) {
-    func_800C7A68(param_1, local_4, local_1);
-    if (local_4 == 0.0f) {
-        func_800C7A68(param_1, local_4 + 0.001f, local_2);
+if (near_t == 0.0f || near_t == 1.0f) {
+    func_800C7A68(path, near_t, near_pos);
+    if (near_t == 0.0f) {
+        func_800C7A68(path, near_t + 0.001f, step_pos);
     } else {
-        func_800C7A68(param_1, local_4 - 0.001f, local_2);
+        func_800C7A68(path, near_t - 0.001f, step_pos);
     }
-    func_800EFB24(local_3, local_2, local_1);
-    func_800EF368(local_3, 400.0f);
-    func_800EE780(local_2, local_3, local_1);
-    func_800F018C(local_0, local_1, local_2, param_2);
-    return func_800EEAD4(local_0, param_3);
+    func_800EFB24(dir, step_pos, near_pos);
+    func_800EF368(dir, 400.0f);
+    func_800EE780(step_pos, dir, near_pos);
+    func_800F018C(proj_pos, near_pos, step_pos, focus);
+    return func_800EEAD4(proj_pos, cam_pos);
 }
 
-func_800C7A68(param_1, local_4, local_0);
-local_5 = (*(f32 **) (param_0 + 0x44))[2];
+func_800C7A68(path, near_t, proj_pos);
+cur_t = (*(f32 **) (cam + 0x44))[2];
 
-if (local_4 < local_5) {
-    return func_800C7B28(param_1, local_4, local_5, 0xF);
+if (near_t < cur_t) {
+    return func_800C7B28(path, near_t, cur_t, 0xF);
 }
 
 else
 {
-    return func_800C7B28(param_1, local_5, local_4, 0xF);
+    return func_800C7B28(path, cur_t, near_t, 0xF);
 }
 }
 
-s32 func_80800318_ncbaspline(param_0, param_1)
-u8 *param_0;
-f32 *param_1;
+// Adjusts the rail speed to keep 500..550 units from the player; returns 0 to release the camera.
+s32 func_80800318_ncbaspline(cam, cam_pos)
+u8 *cam;
+f32 *cam_pos;
 {
-    Vec3f local_0;
-    Vec3f local_1;
-    Vec3f local_2;
-    f32 local_3;
-    f32 local_4;
-    f32 local_5;
-    f32 local_6;
-    f32 local_7;
-    f32 local_8;
-    f32 local_9;
-    s32 local_10;
+    Vec3f ahead_pos;
+    Vec3f behind_pos;
+    Vec3f focus;
+    f32 ahead_dist;
+    f32 behind_dist;
+    f32 ahead_t;
+    f32 behind_t;
+    f32 speed;
+    f32 dir;
+    f32 rail_dist;
+    s32 path;
 
-    local_10 = func_80800008_ncbaspline(param_0);
-    func_80800130_ncbaspline(param_0, local_2.f);
-    local_9 = func_8080017C_ncbaspline(param_0, local_10, local_2.f, param_1);
-    local_5 = func_800C7FD4(local_10, (*(f32 **) (param_0 + 0x44))[2], 1000.0f);
-    local_6 = func_800C7FD4(local_10, (*(f32 **) (param_0 + 0x44))[2], -1000.0f);
-    func_800C7A68(local_10, local_5, local_0.f);
-    func_800C7A68(local_10, local_6, local_1.f);
-    local_3 = func_800EEAD4(local_2.f, local_0.f);
-    local_4 = func_800EEAD4(local_2.f, local_1.f);
-    local_7 = 0.0f;
+    path = func_80800008_ncbaspline(cam);
+    func_80800130_ncbaspline(cam, focus.f);
+    rail_dist = func_8080017C_ncbaspline(cam, path, focus.f, cam_pos);
+    ahead_t = func_800C7FD4(path, (*(f32 **) (cam + 0x44))[2], 1000.0f);
+    behind_t = func_800C7FD4(path, (*(f32 **) (cam + 0x44))[2], -1000.0f);
+    func_800C7A68(path, ahead_t, ahead_pos.f);
+    func_800C7A68(path, behind_t, behind_pos.f);
+    ahead_dist = func_800EEAD4(focus.f, ahead_pos.f);
+    behind_dist = func_800EEAD4(focus.f, behind_pos.f);
+    speed = 0.0f;
 
-if (mlAbsF(local_3 - local_4) > 3.0f) {
-    local_8 = local_3 < local_4 ? 1.0f : -1.0f;
-    if (local_9 > 550.0f) {
-        local_7 = func_800F10B4(local_9, 550.0f, 650.0f, 0.0, 1500.0f) * local_8;
-    } else if (local_9 < 500.0f) {
-        local_7 = func_800F10B4(local_9, 4e+02f, 500.0f, 1500.0f, 0.0f) * -local_8;
+if (mlAbsF(ahead_dist - behind_dist) > 3.0f) {
+    dir = ahead_dist < behind_dist ? 1.0f : -1.0f;
+    if (rail_dist > 550.0f) {
+        speed = func_800F10B4(rail_dist, 550.0f, 650.0f, 0.0, 1500.0f) * dir;
+    } else if (rail_dist < 500.0f) {
+        speed = func_800F10B4(rail_dist, 4e+02f, 500.0f, 1500.0f, 0.0f) * -dir;
     }
-    if (mlAbsF((*(f32 **) (param_0 + 0x44))[1]) < mlAbsF(local_7)) {
-        (*(f32 **) (param_0 + 0x44))[1] += (local_7 - (*(f32 **) (param_0 + 0x44))[1]) * 0.08f;
+    if (mlAbsF((*(f32 **) (cam + 0x44))[1]) < mlAbsF(speed)) {
+        (*(f32 **) (cam + 0x44))[1] += (speed - (*(f32 **) (cam + 0x44))[1]) * 0.08f;
     } else {
-        (*(f32 **) (param_0 + 0x44))[1] = local_7;
+        (*(f32 **) (cam + 0x44))[1] = speed;
     }
-    (*(f32 **) (param_0 + 0x44))[2] =
-        func_800C7FD4(local_10, (*(f32 **) (param_0 + 0x44))[2], (*(f32 **) (param_0 + 0x44))[1]);
-    if ((local_7 > 0.0f && (*(f32 **) (param_0 + 0x44))[2] == 1.0f &&
-         (*(u8 **) (param_0 + 0x44))[0x2F] == 0) ||
-        (local_7 < 0.0f && (*(f32 **) (param_0 + 0x44))[2] == 0.0f &&
-         (*(u8 **) (param_0 + 0x44))[0x2E] == 0)) {
+    (*(f32 **) (cam + 0x44))[2] =
+        func_800C7FD4(path, (*(f32 **) (cam + 0x44))[2], (*(f32 **) (cam + 0x44))[1]);
+    if ((speed > 0.0f && (*(f32 **) (cam + 0x44))[2] == 1.0f &&
+         (*(u8 **) (cam + 0x44))[0x2F] == 0) ||
+        (speed < 0.0f && (*(f32 **) (cam + 0x44))[2] == 0.0f &&
+         (*(u8 **) (cam + 0x44))[0x2E] == 0)) {
         return 0;
     }
 } else {
 
 return 1;
 }
-if (local_7) {
+if (speed) {
     return 1;
 }
 return 2;
 }
 
-void ncbaspline_entrypoint_4(u8 *param_0)
+void ncbaspline_entrypoint_4(u8 *cam)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2;
-    f32 local_3[3];
-    f32 local_4[3];
-    if (**(s32 **) (param_0 + 0x44) == -1) {
+    f32 focus[3];
+    f32 offset[3];
+    f32 fade;
+    f32 cam_pos[3];
+    f32 cam_rot[3];
+    if (**(s32 **) (cam + 0x44) == -1) {
         return;
     }
 
-if ((*(u8 **) (param_0 + 0x44))[0x2C] == 1) {
-    (*(u8 **) (param_0 + 0x44))[0x2C] = 2;
+if ((*(u8 **) (cam + 0x44))[0x2C] == 1) {
+    (*(u8 **) (cam + 0x44))[0x2C] = 2;
 }
 
-func_801107F0(param_0, local_3);
+func_801107F0(cam, cam_pos);
 
-if (*(s32 *) (*(u8 **) (param_0 + 0x44) + 0x28) == -1 ||
-    !func_80800318_ncbaspline(param_0, local_3)) {
-    *(s32 *) (*(u8 **) (param_0 + 0x44) + 0x28) = 0;
+if (*(s32 *) (*(u8 **) (cam + 0x44) + 0x28) == -1 ||
+    !func_80800318_ncbaspline(cam, cam_pos)) {
+    *(s32 *) (*(u8 **) (cam + 0x44) + 0x28) = 0;
     return;
 }
 
-func_800C7A68(func_80800008_ncbaspline(param_0), *(f32 *) (*(u8 **) (param_0 + 0x44) + 8), local_3);
+func_800C7A68(func_80800008_ncbaspline(cam), *(f32 *) (*(u8 **) (cam + 0x44) + 8), cam_pos);
 
-if (*(f32 *) (*(u8 **) (param_0 + 0x44) + 0x18) < 1.0f) {
-    local_2 = func_800F10B4(*(f32 *) (*(u8 **) (param_0 + 0x44) + 0x18), 0.5f, 1.0f, 0.05f, 0.01f);
-    *(f32 *) (*(u8 **) (param_0 + 0x44) + 0x18) += (30.0f * func_800D8FF8()) * local_2;
-    if (*(f32 *) (*(u8 **) (param_0 + 0x44) + 0x18) < 1.0f) {
-        func_800EFB24(local_1, local_3, *(u8 **) (param_0 + 0x44) + 0xC);
-        func_800EF334(local_1, *(f32 *) (*(u8 **) (param_0 + 0x44) + 0x18));
-        func_800EE780(local_3, *(u8 **) (param_0 + 0x44) + 0xC, local_1);
+if (*(f32 *) (*(u8 **) (cam + 0x44) + 0x18) < 1.0f) {
+    fade = func_800F10B4(*(f32 *) (*(u8 **) (cam + 0x44) + 0x18), 0.5f, 1.0f, 0.05f, 0.01f);
+    *(f32 *) (*(u8 **) (cam + 0x44) + 0x18) += (30.0f * func_800D8FF8()) * fade;
+    if (*(f32 *) (*(u8 **) (cam + 0x44) + 0x18) < 1.0f) {
+        func_800EFB24(offset, cam_pos, *(u8 **) (cam + 0x44) + 0xC);
+        func_800EF334(offset, *(f32 *) (*(u8 **) (cam + 0x44) + 0x18));
+        func_800EE780(cam_pos, *(u8 **) (cam + 0x44) + 0xC, offset);
     }
 }
 
-func_80110770(param_0, local_3);
-func_80112524(param_0, local_0);
-func_80110A68(param_0, local_4, local_0);
-func_80110790(param_0, local_4);
+func_80110770(cam, cam_pos);
+func_80112524(cam, focus);
+func_80110A68(cam, cam_rot, focus);
+func_80110790(cam, cam_rot);
 }
 
-void ncbaspline_entrypoint_5(void *param_0, int param_1, int param_2)
+void ncbaspline_entrypoint_5(void *cam, int unk_1, int unk_2)
 {
-    int *local_0;
+    int *state;
 
-    local_0 = (int *) *((int *) param_0 + 0x11);
+    state = (int *) *((int *) cam + 0x11);
 
-if (local_0[0xa] != 0) {
-    local_0[0xa] = -1;
+if (state[0xa] != 0) {
+    state[0xa] = -1;
 }
 
 }
 
-void ncbaspline_entrypoint_6(s32 param_0, u8 *param_1, s32 param_2)
+void ncbaspline_entrypoint_6(s32 cam, u8 *prop, s32 unk_2)
 {
-    ncbaspline_entrypoint_7(param_0, func_800D5424(*(u16 *) (param_1 + 8)));
+    ncbaspline_entrypoint_7(cam, func_800D5424(*(u16 *) (prop + 8)));
 }
 
-void ncbaspline_entrypoint_7(param_0, param_1) u8 *param_0;
-s32 param_1;
+void ncbaspline_entrypoint_7(cam, trigger) u8 *cam;
+s32 trigger;
 {
-    f32 local_0[3];
-    s32 local_1[3];
-    f32 local_2[3];
-    s32 local_3;
-    s32 local_5;
-    void *local_4;
+    f32 pos[3];
+    s32 cube[3];
+    f32 cam_pos[3];
+    s32 id;
+    s32 player;
+    void *prop;
 
-    local_5 = func_80110840(param_0);
+    player = func_80110840(cam);
 
-if (func_800F5C94(local_5) != 4) {
-    local_3 = func_800D542C(param_1);
-    if (local_3 != (*(SplineState48 **) (param_0 + 0x44))->local_6 &&
-        (*(SplineState48 **) (param_0 + 0x44))->local_6 != -1) {
-        func_801107B0(param_0, local_0);
-        func_800EE904(local_1, local_0);
-        local_4 = _gccubesearch_entrypoint_14(local_3, local_1);
-        if (local_4 != NULL) {
-            _gspropctrl_entrypoint_11(local_4, local_0);
-            switch (_gspropctrl_entrypoint_13(local_4)) {
+if (func_800F5C94(player) != 4) {
+    id = func_800D542C(trigger);
+    if (id != (*(SplineState48 **) (cam + 0x44))->trigger_id &&
+        (*(SplineState48 **) (cam + 0x44))->trigger_id != -1) {
+        func_801107B0(cam, pos);
+        func_800EE904(cube, pos);
+        prop = _gccubesearch_entrypoint_14(id, cube);
+        if (prop != NULL) {
+            _gspropctrl_entrypoint_11(prop, pos);
+            switch (_gspropctrl_entrypoint_13(prop)) {
                 case 1:
-                    (*(SplineState48 **) (param_0 + 0x44))->local_9 = 1;
-                    (*(SplineState48 **) (param_0 + 0x44))->local_10 = 0;
+                    (*(SplineState48 **) (cam + 0x44))->unk_2E = 1;
+                    (*(SplineState48 **) (cam + 0x44))->unk_2F = 0;
                     break;
                 case 2:
-                    (*(SplineState48 **) (param_0 + 0x44))->local_9 = 0;
-                    (*(SplineState48 **) (param_0 + 0x44))->local_10 = 1;
+                    (*(SplineState48 **) (cam + 0x44))->unk_2E = 0;
+                    (*(SplineState48 **) (cam + 0x44))->unk_2F = 1;
                     break;
                 case 3:
-                    (*(SplineState48 **) (param_0 + 0x44))->local_9 = 1;
-                    (*(SplineState48 **) (param_0 + 0x44))->local_10 = 1;
+                    (*(SplineState48 **) (cam + 0x44))->unk_2E = 1;
+                    (*(SplineState48 **) (cam + 0x44))->unk_2F = 1;
                     break;
                 default:
-                    (*(SplineState48 **) (param_0 + 0x44))->local_9 = 0;
-                    (*(SplineState48 **) (param_0 + 0x44))->local_10 = 0;
+                    (*(SplineState48 **) (cam + 0x44))->unk_2E = 0;
+                    (*(SplineState48 **) (cam + 0x44))->unk_2F = 0;
                     break;
             }
-            (*(SplineState48 **) (param_0 + 0x44))->local_8 = func_801106A0(param_0);
-            func_801107F0(param_0, local_2);
-            func_800EE7F8((*(SplineState48 **) (param_0 + 0x44))->local_3, local_2);
-            (*(SplineState48 **) (param_0 + 0x44))->local_4 = 0.0f;
-            (*(SplineState48 **) (param_0 + 0x44))->local_6 = local_3;
-            (*(SplineState48 **) (param_0 + 0x44))->local_0 = _glsplinefind_entrypoint_3(local_0);
-            (*(SplineState48 **) (param_0 + 0x44))->local_2 =
-                func_800C82CC(func_80800008_ncbaspline(param_0), local_2);
-            (*(SplineState48 **) (param_0 + 0x44))->local_2 =
-                func_800FB1EC(func_80800008_ncbaspline(param_0),
-                              (*(SplineState48 **) (param_0 + 0x44))->local_2, local_2, 0x20020);
-            (*(SplineState48 **) (param_0 + 0x44))->local_7 = 1;
-            func_800C7A68(func_80800008_ncbaspline(param_0),
-                          (*(SplineState48 **) (param_0 + 0x44))->local_2,
-                          (*(SplineState48 **) (param_0 + 0x44))->local_5);
-            if (func_80800318_ncbaspline(param_0,
-                                         (*(SplineState48 **) (param_0 + 0x44))->local_5) == 1) {
-                func_801106A8(param_0, 14);
-                func_800F7E9C(func_80110840(param_0), 1);
+            (*(SplineState48 **) (cam + 0x44))->unk_2D = func_801106A0(cam);
+            func_801107F0(cam, cam_pos);
+            func_800EE7F8((*(SplineState48 **) (cam + 0x44))->start_pos, cam_pos);
+            (*(SplineState48 **) (cam + 0x44))->blend = 0.0f;
+            (*(SplineState48 **) (cam + 0x44))->trigger_id = id;
+            (*(SplineState48 **) (cam + 0x44))->path_id = _glsplinefind_entrypoint_3(pos);
+            (*(SplineState48 **) (cam + 0x44))->t =
+                func_800C82CC(func_80800008_ncbaspline(cam), cam_pos);
+            (*(SplineState48 **) (cam + 0x44))->t =
+                func_800FB1EC(func_80800008_ncbaspline(cam),
+                              (*(SplineState48 **) (cam + 0x44))->t, cam_pos, 0x20020);
+            (*(SplineState48 **) (cam + 0x44))->unk_2C = 1;
+            func_800C7A68(func_80800008_ncbaspline(cam),
+                          (*(SplineState48 **) (cam + 0x44))->t,
+                          (*(SplineState48 **) (cam + 0x44))->rail_pos);
+            if (func_80800318_ncbaspline(cam,
+                                         (*(SplineState48 **) (cam + 0x44))->rail_pos) == 1) {
+                func_801106A8(cam, 14);
+                func_800F7E9C(func_80110840(cam), 1);
             } else {
-                (*(SplineState48 **) (param_0 + 0x44))->local_6 = 0;
+                (*(SplineState48 **) (cam + 0x44))->trigger_id = 0;
             }
         }
     }
@@ -307,7 +308,7 @@ if (func_800F5C94(local_5) != 4) {
 
 }
 
-int ncbaspline_entrypoint_8(void *param_0)
+int ncbaspline_entrypoint_8(void *cam)
 {
-    return (*(int **) ((char *) param_0 + 0x44))[0x28 / 4] < 1;
+    return (*(int **) ((char *) cam + 0x44))[0x28 / 4] < 1;
 }

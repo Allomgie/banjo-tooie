@@ -37,119 +37,122 @@ extern f32 func_800F549C(s32, s32);
 extern int _subaddieaudioquick_entrypoint_3(Actor *, f32 *, void *, f32);
 void func_80800424_chfootwear();
 
-void func_80800000_chfootwear(Actor *param_0)
+// Init: pick the shoe kind (0..4) from the actor id.
+void func_80800000_chfootwear(Actor *actor)
 {
-    u32 local_0;
-    local_0 = (u32) (*(s32 *) ((char *) param_0 + 0x6C) << 0xB) >> 0x14;
-    switch (local_0) {
+    u32 actor_id;
+    actor_id = (u32) (*(s32 *) ((char *) actor + 0x6C) << 0xB) >> 0x14;
+    switch (actor_id) {
         case 0x21A:
-            *(s32 *) ((char *) param_0 + 0x2C) = 0;
+            *(s32 *) ((char *) actor + 0x2C) = 0;
             break;
 
         case 0x22E:
-            *(s32 *) ((char *) param_0 + 0x2C) = 1;
+            *(s32 *) ((char *) actor + 0x2C) = 1;
             break;
 
         case 0x3DB:
-            *(s32 *) ((char *) param_0 + 0x2C) = 2;
+            *(s32 *) ((char *) actor + 0x2C) = 2;
             break;
 
         case 0x16A:
 
-            *(s32 *) ((char *) param_0 + 0x2C) = 3;
+            *(s32 *) ((char *) actor + 0x2C) = 3;
             break;
 
         case 0x471:
-            *(s32 *) ((char *) param_0 + 0x2C) = 4;
+            *(s32 *) ((char *) actor + 0x2C) = 4;
     }
 
-    func_800EE7F8((f32 *) ((char *) param_0 + 0x18), (f32 *) ((char *) param_0 + 4), param_0);
-    *(f32 *) ((char *) param_0 + 0x50) = *(f32 *) ((char *) param_0 + 0x48);
-    *(f32 *) ((char *) param_0 + 0x34) = 0.0f;
-    func_80800424_chfootwear(param_0, 1);
+    func_800EE7F8((f32 *) ((char *) actor + 0x18), (f32 *) ((char *) actor + 4), actor);
+    *(f32 *) ((char *) actor + 0x50) = *(f32 *) ((char *) actor + 0x48);
+    *(f32 *) ((char *) actor + 0x34) = 0.0f;
+    func_80800424_chfootwear(actor, 1);
 }
 
 int func_80800644_chfootwear();
 
-void func_808000B8_chfootwear(Actor *param_0)
+// Per-frame update: hover/spin, fade by player proximity, respawn timing.
+void func_808000B8_chfootwear(Actor *actor)
 {
-    f32 local_0[3];
-    f32 local_1[3];
+    f32 dir[3];
+    f32 target[3];
 
-    switch (((s32 *) param_0->actorData)[6]) {
+    switch (((s32 *) actor->actorData)[6]) {
         case 1:
-            switch (((u32 *) param_0->actorData)[5]) {
+            switch (((u32 *) actor->actorData)[5]) {
                 case 0:
                 case 4:
-                    _subaddieaudioquick_entrypoint_4(param_0, param_0->position,
+                    _subaddieaudioquick_entrypoint_4(actor, actor->position,
                                                      D_80800754_chfootwear, D_80800768_chfootwear);
-                    func_800EFCD8(local_0, ((f32 *) param_0->actorData)[7], 40.0f);
-                    local_0[1] = 0.0f;
-                    func_800EE780(param_0->position, (f32 *) param_0->actorData, local_0);
-                    ((f32 *) param_0->actorData)[7] += 70.0f * func_800D8FF8();
-                    param_0->rotation[1] = func_800136E4(((f32 *) param_0->actorData)[7] + 90.0f);
+                    func_800EFCD8(dir, ((f32 *) actor->actorData)[7], 40.0f);
+                    dir[1] = 0.0f;
+                    func_800EE780(actor->position, (f32 *) actor->actorData, dir);
+                    ((f32 *) actor->actorData)[7] += 70.0f * func_800D8FF8();
+                    actor->rotation[1] = func_800136E4(((f32 *) actor->actorData)[7] + 90.0f);
                     break;
                 case 1:
-                    _subaddieaudioquick_entrypoint_3(param_0, param_0->position,
+                    _subaddieaudioquick_entrypoint_3(actor, actor->position,
                                                      D_80800774_chfootwear, 0.25f);
                     break;
                 case 2:
                 case 3:
                     if (func_8010D23C()) {
-                        func_8010D254(local_1);
+                        func_8010D254(target);
                     } else {
-                        func_800E3980(local_1);
+                        func_800E3980(target);
                     }
-                    func_8010D600(local_1);
-                    param_0->unk54 = func_80102D78(param_0, local_1);
-                    func_80102BF8(param_0, 0.1f, 3.0f, 120.0f);
+                    func_8010D600(target);
+                    actor->unk54 = func_80102D78(actor, target);
+                    func_80102BF8(actor, 0.1f, 3.0f, 120.0f);
             }
-            if (func_80800644_chfootwear(param_0, func_800F54E4()) || _glcutDll_entrypoint_20()) {
-                ((s32 *) param_0->actorData)[4] = 255;
+            if (func_80800644_chfootwear(actor, func_800F54E4()) || _glcutDll_entrypoint_20()) {
+                ((s32 *) actor->actorData)[4] = 255;
             } else {
-                ((s32 *) param_0->actorData)[4] = 120;
+                ((s32 *) actor->actorData)[4] = 120;
             }
-            if ((s32) *(u8 *) ((u8 *) param_0 + 0x9B) < ((s32 *) param_0->actorData)[4] - 5) {
-                *(u8 *) ((u8 *) param_0 + 0x9B) = *(u8 *) ((u8 *) param_0 + 0x9B) + 5;
-            } else if (((s32 *) param_0->actorData)[4] + 5 <
-                       (s32) *(u8 *) ((u8 *) param_0 + 0x9B)) {
-                *(u8 *) ((u8 *) param_0 + 0x9B) = *(u8 *) ((u8 *) param_0 + 0x9B) - 5;
+            if ((s32) *(u8 *) ((u8 *) actor + 0x9B) < ((s32 *) actor->actorData)[4] - 5) {
+                *(u8 *) ((u8 *) actor + 0x9B) = *(u8 *) ((u8 *) actor + 0x9B) + 5;
+            } else if (((s32 *) actor->actorData)[4] + 5 <
+                       (s32) *(u8 *) ((u8 *) actor + 0x9B)) {
+                *(u8 *) ((u8 *) actor + 0x9B) = *(u8 *) ((u8 *) actor + 0x9B) - 5;
             } else {
-                *(u8 *) ((u8 *) param_0 + 0x9B) = ((s32 *) param_0->actorData)[4];
+                *(u8 *) ((u8 *) actor + 0x9B) = ((s32 *) actor->actorData)[4];
             }
             break;
         case 2:
-            if (func_800D90A4(&((f32 *) param_0->actorData)[3])) {
+            if (func_800D90A4(&((f32 *) actor->actorData)[3])) {
                 func_80800424_chfootwear(
-                    param_0, D_808006E4_chfootwear[((u32 *) param_0->actorData)[5]][0] ? 3 : 4);
+                    actor, D_808006E4_chfootwear[((u32 *) actor->actorData)[5]][0] ? 3 : 4);
             }
             break;
         case 3:
-            if (func_800F549C(param_0->unk79_4,
-                              D_808006E4_chfootwear[((u32 *) param_0->actorData)[5]][0]) == 0.0f) {
-                func_80800424_chfootwear(param_0, 4);
+            if (func_800F549C(actor->unk79_4,
+                              D_808006E4_chfootwear[((u32 *) actor->actorData)[5]][0]) == 0.0f) {
+                func_80800424_chfootwear(actor, 4);
             }
             break;
         case 4:
-            if (func_800D90A4(&((f32 *) param_0->actorData)[3])) {
-                func_80800424_chfootwear(param_0, 1);
+            if (func_800D90A4(&((f32 *) actor->actorData)[3])) {
+                func_80800424_chfootwear(actor, 1);
             }
     }
 }
 
 int func_80800664_chfootwear();
 
-s32 func_80800364_chfootwear(FootActor *param_0, s32 param_1, FootData *param_2)
+s32 func_80800364_chfootwear(FootActor *actor, s32 msg_id, FootData *msg)
 {
-    FootData *local_0;
+    FootData *msg_copy;
 
-    if (param_1 == 0x3E) {
-        local_0 = *(FootData **) &param_2;
-        if (local_0->unk24_22 == 0) {
+    if (msg_id == 0x3E) {
+        // Matching: copy through the parameter's address needed for the match.
+        msg_copy = *(FootData **) &msg;
+        if (msg_copy->unk24_22 == 0) {
             if (func_800DA298(0x64F)) {
-                if (func_80800664_chfootwear(param_0, local_0->unk1A_5)) {
-                    param_0->unk79_4 = local_0->unk1A_5;
-                    func_80800424_chfootwear(param_0, 2);
+                if (func_80800664_chfootwear(actor, msg_copy->unk1A_5)) {
+                    actor->unk79_4 = msg_copy->unk1A_5;
+                    func_80800424_chfootwear(actor, 2);
                     return 1;
                 }
             }
@@ -159,67 +162,69 @@ s32 func_80800364_chfootwear(FootActor *param_0, s32 param_1, FootData *param_2)
     return 0;
 }
 
-void func_80800424_chfootwear(param_0, param_1) Actor *param_0;
-s32 param_1;
+// State change: 1 hidden, 2 picked up (sparkle), 3 worn, 4 respawn.
+void func_80800424_chfootwear(actor, state) Actor *actor;
+s32 state;
 {
-    switch (param_1) {
+    switch (state) {
         case 1:
-            _subaddieDll_entrypoint_4(param_0, 0);
-            param_0->unk64_16 = 1;
-            func_8010A590(param_0);
+            _subaddieDll_entrypoint_4(actor, 0);
+            actor->unk64_16 = 1;
+            func_8010A590(actor);
             break;
         case 2:
-            func_8010A570(param_0);
-            _fxsparkle_entrypoint_1(param_0->position,
-                                    D_808006E6_chfootwear[*(s32 *) ((u8 *) param_0 + 0x2C)][0]);
-            _subaddieDll_entrypoint_4(param_0, 1);
-            param_0->unk64_16 = 0;
-            *(f32 *) ((u8 *) param_0 + 0x24) = 1.0f;
+            func_8010A570(actor);
+            _fxsparkle_entrypoint_1(actor->position,
+                                    D_808006E6_chfootwear[*(s32 *) ((u8 *) actor + 0x2C)][0]);
+            _subaddieDll_entrypoint_4(actor, 1);
+            actor->unk64_16 = 0;
+            *(f32 *) ((u8 *) actor + 0x24) = 1.0f;
         case 3:
             break;
         case 4:
-            *(u8 *) ((u8 *) param_0 + 0x9B) = 0;
-            *(f32 *) ((u8 *) param_0 + 0x24) = 1.0f;
+            *(u8 *) ((u8 *) actor + 0x9B) = 0;
+            *(f32 *) ((u8 *) actor + 0x24) = 1.0f;
     }
-    *(s32 *) ((u8 *) param_0 + 0x30) = param_1;
+    *(s32 *) ((u8 *) actor + 0x30) = state;
 }
 
-s32 func_8080050C_chfootwear(Actor *param_0, s32 param_1, s32 param_2)
+// Checks whether the player can take the shoes; with commit also hands them over.
+s32 func_8080050C_chfootwear(Actor *actor, s32 player, s32 commit)
 {
-    if (!param_0->unk64_16) {
+    if (!actor->unk64_16) {
         return 0;
     }
-    if (func_800F6D24(param_1)) {
+    if (func_800F6D24(player)) {
         return 0;
     }
-    if (!func_800F65D0(param_1)) {
+    if (!func_800F65D0(player)) {
         return 0;
     }
-    if (!func_800C6E38(D_808006E0_chfootwear[*(s32 *) ((u8 *) param_0 + 0x2C)][0])) {
-        if (param_2 && D_808006E8_chfootwear[*(s32 *) ((u8 *) param_0 + 0x2C)][0]) {
-            _sudialog_entrypoint_0(D_808006E8_chfootwear[*(s32 *) ((u8 *) param_0 + 0x2C)][0], 0xE);
+    if (!func_800C6E38(D_808006E0_chfootwear[*(s32 *) ((u8 *) actor + 0x2C)][0])) {
+        if (commit && D_808006E8_chfootwear[*(s32 *) ((u8 *) actor + 0x2C)][0]) {
+            _sudialog_entrypoint_0(D_808006E8_chfootwear[*(s32 *) ((u8 *) actor + 0x2C)][0], 0xE);
         }
         return 0;
     }
-    if (!func_800F64A4(param_1, 0x501)) {
+    if (!func_800F64A4(player, 0x501)) {
         return 0;
     }
-    if (param_2 &&
-        func_800F7C0C(param_1, D_808006E2_chfootwear[*(s32 *) ((u8 *) param_0 + 0x2C)][0],
-                      param_0->unk50) != 2) {
+    if (commit &&
+        func_800F7C0C(player, D_808006E2_chfootwear[*(s32 *) ((u8 *) actor + 0x2C)][0],
+                      actor->unk50) != 2) {
         return 0;
     }
     return 1;
 }
 
-int func_80800644_chfootwear(s32 param_0, s32 param_1)
+int func_80800644_chfootwear(s32 actor, s32 player)
 {
-    func_8080050C_chfootwear(param_0, param_1, 0);
+    func_8080050C_chfootwear(actor, player, 0);
 }
 
-int func_80800664_chfootwear(s32 arg0, s32 arg1)
+int func_80800664_chfootwear(s32 actor, s32 player)
 {
-    func_8080050C_chfootwear(arg0, arg1, 0x1);
+    func_8080050C_chfootwear(actor, player, 0x1);
 }
 
 int chfootwear_entrypoint_0()

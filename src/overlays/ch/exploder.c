@@ -4,26 +4,26 @@
 extern void *D_80801AE0_chexploder;
 typedef struct {
     u8 pad_0[0x14];
-    u16 local_0;
-    u16 local_1;
+    u16 unk_14;
+    u16 unk_16;
 } ExploderAnimation1246;
 typedef union {
-    s32 local_0;
-    s16 local_1[2];
+    s32 value;
+    s16 halves[2];
 } ExploderMessage1483;
 extern void *func_80100094(Actor *, s32);
 extern Unk80132ED0 *func_80101080(void);
 extern void func_801018A4(Actor *, Unk80132ED0 *);
 extern void func_80103140();
 typedef struct {
-    s16 local_0[8];
-    s16 local_1;
-    u8 local_2;
-    u8 local_3;
+    s16 cfg[8];
+    s16 max_bounces;
+    u8 impact_sound;
+    u8 dust_kind;
     u8 pad_0[4];
-    u8 local_4;
+    u8 sound_played;
     u8 pad_1[0x3F];
-    f32 local_5;
+    f32 dust_scale;
 } ExploderInit;
 extern f32 func_800DC178(f32, f32);
 extern void func_800EF368(f32 *, f32);
@@ -50,10 +50,10 @@ typedef struct {
 } ExploderSpawn;
 typedef struct {
     u8 pad0[0x14];
-    u16 unk14;
-    u16 unk16;
+    u16 unk_14;
+    u16 unk_16;
     u8 pad18[0x3C];
-    u16 unk54;
+    u16 options;
 } ExploderLocal;
 typedef struct {
     u32 pad74_26 : 6;
@@ -76,15 +76,15 @@ extern void func_8010A570();
 extern void _chbaddiesetup_entrypoint_6(void *, s32, s32, s32, s32, s32, s32);
 typedef struct {
     u8 pad_0[0xE];
-    s16 local_0;
+    s16 count;
 } ExploderPartCount1332;
 typedef struct {
     u8 pad_0[0x36];
     u8 pad_1 : 1;
-    u8 local_0 : 1;
+    u8 active : 1;
     u8 pad_2 : 6;
     u8 pad_3[2];
-    u8 local_1;
+    u8 bone;
     u8 pad_4[2];
 } ExploderSelectablePart1332;
 typedef struct {
@@ -97,33 +97,33 @@ typedef struct {
     u8 active : 1;
     u8 pad_1 : 6;
     u8 pad_37[2];
-    u8 id;
+    u8 bone;
     u8 pad_3A[2];
 } ExploderPiece;
 typedef struct {
     f32 pos[3];
-    f32 unkC[3];
+    f32 rest[3];
     f32 vel[3];
-    f32 unk24;
-    f32 unk28;
-    f32 unk2C;
-    s16 unk30;
-    s16 unk32;
-    s16 unk34;
-    u16 unk36_15 : 1;
-    u16 unk36_14 : 1;
-    u16 unk36_13 : 1;
+    f32 rot_x;
+    f32 rot_y;
+    f32 rot_z;
+    s16 spin_x;
+    s16 spin_z;
+    s16 gravity;
+    u16 no_collide : 1;
+    u16 active : 1;
+    u16 can_bounce : 1;
     u16 pad36 : 13;
-    u8 unk38;
+    u8 bounces;
     u8 pad39[3];
 } ExplPart;
 typedef struct {
     u8 pad0[0xC];
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
+    s16 radius;
+    s16 piece_count;
+    s16 max_bounces;
     u8 pad12[0x5C - 0x12];
-    f32 unk5C;
+    f32 sound_timer;
 } ExplHead;
 extern f32 func_800D8FF8(void);
 extern s32 func_8001210C(s32);
@@ -134,11 +134,11 @@ extern s32 func_800BF340(f32 *, f32 *, f32 *, u32, f32);
 extern f32 func_800EEF94(f32 *);
 extern void func_800EFDE8(f32 *, f32 *, f32 *);
 typedef struct {
-    s16 a;
-    s16 b;
-    s16 c;
-    s16 d;
-    s16 e;
+    s16 sound_id;
+    s16 volume;
+    s16 pitch_min;
+    s16 pitch_max;
+    s16 pitch_step;
 } ExpE;
 extern ExpE D_80801B28_chexploder[];
 extern s32 D_80801BA0_chexploder[];
@@ -153,16 +153,16 @@ extern u8 D_80801BE4_chexploder[];
 extern u8 D_80801BF0_chexploder[];
 extern u8 D_80801C00_chexploder[];
 typedef struct {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
+    f32 pos[3];
+    f32 rest[3];
+    f32 vel[3];
+    f32 rot[3];
     u8 pad_0[6];
-    u8 b7 : 1;
-    u8 b6 : 1;
+    u8 no_collide : 1;
+    u8 active : 1;
     u8 bl : 6;
     u8 pad_1[2];
-    u8 local_5;
+    u8 bone;
     u8 pad_2[2];
 } CodexExploderPiece65;
 extern int func_800EF5A0(f32[3], f32[3], f32, f32, f32);
@@ -170,8 +170,8 @@ extern int func_800EF334(f32[3], f32);
 extern int func_800EEBF0(f32[3], f32[2], f32);
 typedef struct {
     u8 pad_0[0x36];
-    u8 f1 : 1;
-    u8 f2 : 1;
+    u8 no_collide : 1;
+    u8 active : 1;
     u8 rest : 6;
 } Exp36;
 extern void *func_80100074(Actor *, u32, s32);
@@ -190,39 +190,39 @@ void func_8080000C_chexploder(s32 arg0)
 {
 }
 
-void func_80800014_chexploder(Actor *param_0)
+void func_80800014_chexploder(Actor *actor)
 {
-    if (param_0->unk70_10 == 1 && !func_808002FC_chexploder(param_0)) {
-        func_80101FDC(param_0, 2);
-        _subaddiefade_entrypoint_3(param_0);
-        func_8010A800(param_0, 2);
+    if (actor->unk70_10 == 1 && !func_808002FC_chexploder(actor)) {
+        func_80101FDC(actor, 2);
+        _subaddiefade_entrypoint_3(actor);
+        func_8010A800(actor, 2);
     }
 }
 
-void func_80800078_chexploder(u8 **param_0)
+void func_80800078_chexploder(u8 **actor)
 {
-    s16 new_var;
-    if (*(s16 *) ((s8 *) *param_0 + 0x10) != 0) {
-        new_var = *(s16 *) ((s8 *) *param_0 + 0x10);
-        func_800ADFE0(new_var, *(s16 *) ((s8 *) *param_0 + 0x10), param_0);
-        *(s16 *) ((s8 *) *param_0 + 0x10) = 0;
+    s16 slot;
+    if (*(s16 *) ((s8 *) *actor + 0x10) != 0) {
+        slot = *(s16 *) ((s8 *) *actor + 0x10);
+        func_800ADFE0(slot, *(s16 *) ((s8 *) *actor + 0x10), actor);
+        *(s16 *) ((s8 *) *actor + 0x10) = 0;
     }
 }
 
-s32 func_808000C0_chexploder(Actor *param_0, s32 param_1, ExploderMessage1483 param_2)
+s32 func_808000C0_chexploder(Actor *actor, s32 msg, ExploderMessage1483 data)
 {
-    ExploderAnimation1246 *local_0;
+    ExploderAnimation1246 *anim;
 
-    switch (param_1) {
+    switch (msg) {
         case 0xAB:
-            func_801018A4(param_0, func_80101080());
+            func_801018A4(actor, func_80101080());
             break;
         case 0x1F:
-            func_80800154_chexploder(param_0, param_2.local_0);
+            func_80800154_chexploder(actor, data.value);
             break;
         case 0x95:
-            local_0 = func_80100094(param_0, 0);
-            func_80103140(param_0, local_0->local_0, local_0->local_1);
+            anim = func_80100094(actor, 0);
+            func_80103140(actor, anim->unk_14, anim->unk_16);
             break;
         default:
             return 0;
@@ -230,644 +230,656 @@ s32 func_808000C0_chexploder(Actor *param_0, s32 param_1, ExploderMessage1483 pa
     return 1;
 }
 
-void func_80800154_chexploder(param_0, param_1) Actor *param_0;
-s32 param_1;
+// Builds the piece pose matrices on the model for the given skeleton.
+void func_80800154_chexploder(actor, model_id) Actor *actor;
+s32 model_id;
 {
-    f32 local_1;
-    MtxF local_0;
-    s32 local_2;
-    s32 local_7;
-    s32 local_3;
-    s32 local_4;
-    u8 *local_5;
-    u8 *local_6;
-    local_2 = func_800B27E0(param_1);
-    local_5 = func_80100094(param_0, 1);
-    local_6 = func_80100094(param_0, 0);
-    func_801015D0(param_0);
-    func_800ADD80(*(s16 *) ((u8 *) param_0->unk0 + 0x10), local_2);
-    local_3 = func_800AE080(*(s16 *) ((u8 *) param_0->unk0 + 0x10));
-    local_1 = 1.0f / param_0->scale;
-    for (local_4 = 0; local_4 < *(s16 *) (local_6 + 0xE); local_4++, local_5 += 0x3C) {
+    f32 inv_scale;
+    MtxF mtx;
+    s32 skeleton;
+    s32 unk_0;
+    s32 model;
+    s32 i;
+    u8 *cursor;
+    u8 *head;
+    skeleton = func_800B27E0(model_id);
+    cursor = func_80100094(actor, 1);
+    head = func_80100094(actor, 0);
+    func_801015D0(actor);
+    func_800ADD80(*(s16 *) ((u8 *) actor->unk0 + 0x10), skeleton);
+    model = func_800AE080(*(s16 *) ((u8 *) actor->unk0 + 0x10));
+    inv_scale = 1.0f / actor->scale;
+    for (i = 0; i < *(s16 *) (head + 0xE); i++, cursor += 0x3C) {
         func_80019CD4();
-        mlMtxTranslate(*(f32 *) (local_5 + 0xC), *(f32 *) (local_5 + 0x10),
-                       *(f32 *) (local_5 + 0x14));
-        mlMtxTranslate(*(f32 *) local_5 * local_1, *(f32 *) (local_5 + 4) * local_1,
-                       *(f32 *) (local_5 + 8) * local_1);
-        mlMtxRotatePYR(*(f32 *) (local_5 + 0x24), *(f32 *) (local_5 + 0x28),
-                       *(f32 *) (local_5 + 0x2C));
-        mlMtxTranslate(-*(f32 *) (local_5 + 0xC), -*(f32 *) (local_5 + 0x10),
-                       -*(f32 *) (local_5 + 0x14));
-        mlMtxGet(&local_0);
-        func_800ADEC4(local_3, local_2, local_5[0x39], &local_0);
+        mlMtxTranslate(*(f32 *) (cursor + 0xC), *(f32 *) (cursor + 0x10),
+                       *(f32 *) (cursor + 0x14));
+        mlMtxTranslate(*(f32 *) cursor * inv_scale, *(f32 *) (cursor + 4) * inv_scale,
+                       *(f32 *) (cursor + 8) * inv_scale);
+        mlMtxRotatePYR(*(f32 *) (cursor + 0x24), *(f32 *) (cursor + 0x28),
+                       *(f32 *) (cursor + 0x2C));
+        mlMtxTranslate(-*(f32 *) (cursor + 0xC), -*(f32 *) (cursor + 0x10),
+                       -*(f32 *) (cursor + 0x14));
+        mlMtxGet(&mtx);
+        func_800ADEC4(model, skeleton, cursor[0x39], &mtx);
     }
-    func_800DF72C(local_3);
-    local_4 = 1;
-    local_5 = local_6 + 1;
-    for (; local_4 <= local_6[0x18]; local_4++, local_5++) {
-        func_800DF744(local_4, local_5[0x18]);
+    func_800DF72C(model);
+    i = 1;
+    cursor = head + 1;
+    for (; i <= head[0x18]; i++, cursor++) {
+        func_800DF744(i, cursor[0x18]);
     }
 }
 
-s32 func_808002FC_chexploder(param_0)
-Actor *param_0;
+// Per-frame piece physics; returns the number of pieces still active.
+s32 func_808002FC_chexploder(actor)
+Actor *actor;
 {
-    ExplHead *local_0;
-    ExplPart *local_1;
-    f32 local_2;
-    s32 local_3;
-    f32 local_4[3];
-    f32 local_5;
-    s32 local_6;
-    s32 local_7;
-    f32 local_8[3];
-    f32 local_9[3];
-    f32 local_10[3];
-    f32 local_11[3];
-    f32 local_12[3];
-    s32 local_13;
+    ExplHead *head;
+    ExplPart *piece;
+    f32 dt;
+    s32 alive;
+    f32 normal[3];
+    f32 speed;
+    s32 hit;
+    s32 frame_parity;
+    f32 world[3];
+    f32 lookahead[3];
+    f32 step[3];
+    f32 ray_from[3];
+    f32 ray_to[3];
+    s32 i;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_80100094(param_0, 1);
-    local_3 = 0;
-    local_2 = func_800D8FF8();
-    local_7 = func_8001210C(1);
-    local_0->unk5C += local_2;
-    for (local_13 = 0; local_13 < local_0->unkE; local_13++, local_1++) {
-        if (!local_1->unk36_14) {
+    head = func_80100094(actor, 0);
+    piece = func_80100094(actor, 1);
+    alive = 0;
+    dt = func_800D8FF8();
+    frame_parity = func_8001210C(1);
+    head->sound_timer += dt;
+    for (i = 0; i < head->piece_count; i++, piece++) {
+        if (!piece->active) {
             continue;
         }
-        local_1->unk24 += local_1->unk30 * local_2;
-        local_1->unk2C += local_1->unk32 * local_2;
-        local_1->vel[1] += local_2 * local_1->unk34;
-        func_800EFA20(local_9, local_1->vel, 2.0f * local_2);
-        func_800EFA20(local_10, local_1->vel, local_2);
-        func_800EFA20(local_8, local_1->unkC, param_0->scale);
-        func_800EF04C(local_8, local_1->pos);
-        func_800EF04C(local_8, param_0->position);
-        func_800EE7F8(local_11, local_8);
-        func_800EE7F8(local_12, local_8);
-        func_800EF04C(local_12, local_9);
-        if (func_800EEB40(local_12, param_0->position) > 12250000.0f) {
-            local_1->unk36_14 = 0;
+        piece->rot_x += piece->spin_x * dt;
+        piece->rot_z += piece->spin_z * dt;
+        piece->vel[1] += dt * piece->gravity;
+        func_800EFA20(lookahead, piece->vel, 2.0f * dt);
+        func_800EFA20(step, piece->vel, dt);
+        func_800EFA20(world, piece->rest, actor->scale);
+        func_800EF04C(world, piece->pos);
+        func_800EF04C(world, actor->position);
+        func_800EE7F8(ray_from, world);
+        func_800EE7F8(ray_to, world);
+        func_800EF04C(ray_to, lookahead);
+        if (func_800EEB40(ray_to, actor->position) > 12250000.0f) {
+            piece->active = 0;
             continue;
         }
-        if (!local_1->unk36_15) {
-            if (local_7 == (local_13 & 1)) {
-                local_6 = func_800BF340(local_11, local_12, local_4, param_0->unk14, local_0->unkC);
+        if (!piece->no_collide) {
+            if (frame_parity == (i & 1)) {
+                hit = func_800BF340(ray_from, ray_to, normal, actor->unk14, head->radius);
             } else {
-                local_6 = 0;
+                hit = 0;
             }
-            if (local_6) {
-                if (local_1->unk36_13) {
-                    local_5 = func_800EEF94(local_1->vel);
-                    func_800EFDE8(local_1->vel, local_1->vel, local_4);
-                    func_800EF368(local_1->vel, local_5 * 0.35f);
-                    local_1->unk30 = local_1->unk30 * 0.35f;
-                    local_1->unk32 = local_1->unk32 * 0.35f;
-                    local_1->unk38++;
-                    if (local_0->unk10 < local_1->unk38 || 2.0f * (local_2 * local_5) < 10.0f) {
-                        local_1->unk36_14 = 0;
+            if (hit) {
+                if (piece->can_bounce) {
+                    speed = func_800EEF94(piece->vel);
+                    func_800EFDE8(piece->vel, piece->vel, normal);
+                    func_800EF368(piece->vel, speed * 0.35f);
+                    piece->spin_x = piece->spin_x * 0.35f;
+                    piece->spin_z = piece->spin_z * 0.35f;
+                    piece->bounces++;
+                    if (head->max_bounces < piece->bounces || 2.0f * (dt * speed) < 10.0f) {
+                        piece->active = 0;
                         continue;
                     }
-                    func_8080067C_chexploder(param_0, local_1, local_12);
+                    func_8080067C_chexploder(actor, piece, ray_to);
                 }
-            } else if (!local_1->unk36_13) {
-                local_1->unk36_13 = 1;
+            } else if (!piece->can_bounce) {
+                piece->can_bounce = 1;
             }
         }
-        func_800EF04C(local_1->pos, local_10);
-        func_80800834_chexploder(param_0, local_1, local_12);
-        local_3++;
+        func_800EF04C(piece->pos, step);
+        func_80800834_chexploder(actor, piece, ray_to);
+        alive++;
     }
-    return local_3;
+    return alive;
 }
 
-void func_8080067C_chexploder(param_0, param_1, param_2) u8 *param_0;
-u8 *param_1;
-s32 param_2;
+// Plays the impact sound for a bounce.
+void func_8080067C_chexploder(actor, piece, pos) u8 *actor;
+u8 *piece;
+s32 pos;
 {
-    u8 *local_7;
-    s32 local_6;
-    s32 local_0;
-    s32 local_1;
-    f32 local_2;
-    f32 local_3;
+    u8 *head;
+    s32 idx;
+    s32 sound_id;
+    s32 volume;
+    f32 pitch;
+    f32 pitch_step;
 
-    local_7 = func_80100094(param_0, 0);
-    if (!(*(f32 *) (local_7 + 0x5C) < 0.1f)) {
-        if (local_7[0x12] != 0 && local_7[0x56] == 0) {
-            local_6 = local_7[0x12] - 1;
-            local_0 = D_80801B28_chexploder[local_6].a;
-            local_1 = D_80801B28_chexploder[local_6].b;
-            local_2 = func_800DC178(D_80801B28_chexploder[local_6].c * 0.00390625f,
-                                    D_80801B28_chexploder[local_6].d * 0.00390625f);
-            local_3 = D_80801B28_chexploder[local_6].e * 0.00390625f;
-            func_800C4B7C(local_0);
-            func_800C4B64(local_2 - ((f32) (u32) param_1[0x38] - 1.0f) * local_3);
-            func_800C4B70(local_1 - param_1[0x38] * 4000 + 4000);
-            func_8010D930(7, *(s32 *) (param_0 + 0x70) & 1, param_2, &D_80801BA0_chexploder);
-            if (*(s16 *) (local_7 + 0x54) & 0x100) {
-                local_7[0x56] = 1;
+    head = func_80100094(actor, 0);
+    if (!(*(f32 *) (head + 0x5C) < 0.1f)) {
+        if (head[0x12] != 0 && head[0x56] == 0) {
+            idx = head[0x12] - 1;
+            sound_id = D_80801B28_chexploder[idx].sound_id;
+            volume = D_80801B28_chexploder[idx].volume;
+            pitch = func_800DC178(D_80801B28_chexploder[idx].pitch_min * 0.00390625f,
+                                    D_80801B28_chexploder[idx].pitch_max * 0.00390625f);
+            pitch_step = D_80801B28_chexploder[idx].pitch_step * 0.00390625f;
+            func_800C4B7C(sound_id);
+            func_800C4B64(pitch - ((f32) (u32) piece[0x38] - 1.0f) * pitch_step);
+            func_800C4B70(volume - piece[0x38] * 4000 + 4000);
+            func_8010D930(7, *(s32 *) (actor + 0x70) & 1, pos, &D_80801BA0_chexploder);
+            if (*(s16 *) (head + 0x54) & 0x100) {
+                head[0x56] = 1;
             }
         }
-        *(f32 *) (local_7 + 0x5C) = 0.0f;
+        *(f32 *) (head + 0x5C) = 0.0f;
     }
 }
 
-void func_80800834_chexploder(param_0, param_1, param_2) Actor *param_0;
-u8 *param_1;
-f32 *param_2;
+// Spawns dust particles for a piece, by dust kind.
+void func_80800834_chexploder(actor, piece, pos) Actor *actor;
+u8 *piece;
+f32 *pos;
 {
-    u8 *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
+    u8 *head;
+    s32 emitter_1;
+    s32 emitter_2;
+    s32 emitter_3;
+    s32 emitter_4;
 
-    local_0 = func_80100094(param_0, 0);
-    if (param_1[0x38] < 3 && !(func_800EEFD4((f32 *) (param_1 + 0x18)) < 90000.0f)) {
-        switch (local_0[0x13]) {
+    head = func_80100094(actor, 0);
+    if (piece[0x38] < 3 && !(func_800EEFD4((f32 *) (piece + 0x18)) < 90000.0f)) {
+        switch (head[0x13]) {
             case 1:
-                local_1 = func_800B5BE4(0x18);
-                func_800BABB8(local_1, param_2, NULL, *(f32 *) (local_0 + 0x58),
+                emitter_1 = func_800B5BE4(0x18);
+                func_800BABB8(emitter_1, pos, NULL, *(f32 *) (head + 0x58),
                               D_80801BB0_chexploder);
-                func_800BABB8(local_1, param_2, NULL, *(f32 *) (local_0 + 0x58),
+                func_800BABB8(emitter_1, pos, NULL, *(f32 *) (head + 0x58),
                               D_80801BD8_chexploder);
                 break;
             case 2:
-                local_2 = func_800B5BE4(0x18);
-                func_800BABB8(local_2, param_2, NULL, *(f32 *) (local_0 + 0x58),
+                emitter_2 = func_800B5BE4(0x18);
+                func_800BABB8(emitter_2, pos, NULL, *(f32 *) (head + 0x58),
                               D_80801BB0_chexploder);
-                func_800BABB8(local_2, param_2, NULL, *(f32 *) (local_0 + 0x58),
+                func_800BABB8(emitter_2, pos, NULL, *(f32 *) (head + 0x58),
                               D_80801BE4_chexploder);
                 break;
             case 3:
-                local_3 = func_800B5BE4(0x18);
-                func_800BABB8(local_3, param_2, NULL, *(f32 *) (local_0 + 0x58),
+                emitter_3 = func_800B5BE4(0x18);
+                func_800BABB8(emitter_3, pos, NULL, *(f32 *) (head + 0x58),
                               D_80801BB0_chexploder);
-                func_800BABB8(local_3, param_2, NULL, *(f32 *) (local_0 + 0x58),
+                func_800BABB8(emitter_3, pos, NULL, *(f32 *) (head + 0x58),
                               D_80801BF0_chexploder);
                 break;
             case 4:
-                local_4 = func_800B5BE4(0x18);
-                func_800BABB8(local_4, param_2, NULL, *(f32 *) (local_0 + 0x58),
+                emitter_4 = func_800B5BE4(0x18);
+                func_800BABB8(emitter_4, pos, NULL, *(f32 *) (head + 0x58),
                               D_80801BB0_chexploder);
-                func_800BABB8(local_4, param_2, NULL, *(f32 *) (local_0 + 0x58),
+                func_800BABB8(emitter_4, pos, NULL, *(f32 *) (head + 0x58),
                               D_80801C00_chexploder);
         }
     }
 }
 
-void func_80800A18_chexploder(Actor *param_0)
+void func_80800A18_chexploder(Actor *actor)
 {
-    ExploderInit *local_0;
+    ExploderInit *head;
 
-    local_0 = func_80100094(param_0, 0);
-    local_0->local_0[0] = 0x320;
-    local_0->local_0[1] = 0x3E8;
-    local_0->local_0[2] = 0xC8;
-    local_0->local_0[3] = 0x12C;
-    local_0->local_0[4] = -0x41A;
-    local_0->local_0[5] = -0x3B6;
-    local_0->local_0[6] = param_0->scale * 30.0f;
-    local_0->local_1 = 4;
-    local_0->local_4 = 0;
-    local_0->local_2 = 0;
-    local_0->local_3 = 0;
-    local_0->local_5 = 1.0f;
-    chexploder_entrypoint_9(param_0, 1, 0);
-    chexploder_entrypoint_9(param_0, 2, 1);
+    head = func_80100094(actor, 0);
+    head->cfg[0] = 0x320;
+    head->cfg[1] = 0x3E8;
+    head->cfg[2] = 0xC8;
+    head->cfg[3] = 0x12C;
+    head->cfg[4] = -0x41A;
+    head->cfg[5] = -0x3B6;
+    head->cfg[6] = actor->scale * 30.0f;
+    head->max_bounces = 4;
+    head->sound_played = 0;
+    head->impact_sound = 0;
+    head->dust_kind = 0;
+    head->dust_scale = 1.0f;
+    chexploder_entrypoint_9(actor, 1, 0);
+    chexploder_entrypoint_9(actor, 2, 1);
 }
 
-void func_80800AC8_chexploder(param_0, param_1, param_2, param_3) Actor *param_0;
-s32 param_1;
-f32 *param_2;
-s32 param_3;
+// Creates pieces from the source's animated pose, one per bone.
+void func_80800AC8_chexploder(actor, source, center, options) Actor *actor;
+s32 source;
+f32 *center;
+s32 options;
 {
-    f32 *local_8;
-    u8 *local_0;
-    s32 local_1;
-    s32 local_2;
-    s32 local_3;
-    CodexExploderPiece65 *local_4;
-    s32 local_5;
-    f32 local_6[2];
-    f32 local_7[3];
+    f32 *rotation;
+    u8 *head;
+    s32 skeleton;
+    s32 anim;
+    s32 model;
+    CodexExploderPiece65 *piece;
+    s32 i;
+    f32 angles[2];
+    f32 world_pos[3];
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_800B27E0(func_801039E4(param_0->unk0));
-    local_2 = func_80104248(param_1);
-    func_8008C238(((s16 *) param_0->unk0)[8], local_1, func_8008AEDC(local_2));
-    *(s16 *) (local_0 + 0xE) = func_800AE124(((s16 *) param_0->unk0)[8]);
-    local_4 = func_80100074(param_0, 1, *(s16 *) (local_0 + 0xE) * 0x3C);
-    local_3 = func_800AE080(((s16 *) param_0->unk0)[8]);
-    for (local_5 = 0; local_5 < *(s16 *) (local_0 + 0xE); local_5++, local_4++) {
-        local_4->local_5 = _dbskeleton_entrypoint_4(local_1, local_5);
-        func_800F2C1C(func_800ADE50(local_3, local_1, local_4->local_5), local_4->local_3);
+    head = func_80100094(actor, 0);
+    skeleton = func_800B27E0(func_801039E4(actor->unk0));
+    anim = func_80104248(source);
+    func_8008C238(((s16 *) actor->unk0)[8], skeleton, func_8008AEDC(anim));
+    *(s16 *) (head + 0xE) = func_800AE124(((s16 *) actor->unk0)[8]);
+    piece = func_80100074(actor, 1, *(s16 *) (head + 0xE) * 0x3C);
+    model = func_800AE080(((s16 *) actor->unk0)[8]);
+    for (i = 0; i < *(s16 *) (head + 0xE); i++, piece++) {
+        piece->bone = _dbskeleton_entrypoint_4(skeleton, i);
+        func_800F2C1C(func_800ADE50(model, skeleton, piece->bone), piece->rot);
     }
-    local_4 = func_80100094(param_0, 1);
-    func_8008C200(((s16 *) param_0->unk0)[8], local_1, func_8008AEDC(local_2));
-    local_3 = func_800AE080(((s16 *) param_0->unk0)[8]);
-    local_8 = param_0->rotation;
-    for (local_5 = 0; local_5 < *(s16 *) (local_0 + 0xE); local_5++, local_4++) {
-        func_800AE630(local_3, local_1, local_4->local_5, local_4->local_1);
-        func_800EF5A0(local_7, local_8, local_4->local_1[0], local_4->local_1[1],
-                      local_4->local_1[2]);
-        func_800EF334(local_7, param_0->scale);
-        func_800EF04C(local_7, param_0->position);
-        func_800F18FC(param_2, local_7, local_6);
-        func_800EFD24(local_4->local_0);
-        func_800EEBF0(local_4->local_2, local_6, 1000.0f);
-        if (param_3 & 0x10) {
-            local_4->b7 = 1;
+    piece = func_80100094(actor, 1);
+    func_8008C200(((s16 *) actor->unk0)[8], skeleton, func_8008AEDC(anim));
+    model = func_800AE080(((s16 *) actor->unk0)[8]);
+    rotation = actor->rotation;
+    for (i = 0; i < *(s16 *) (head + 0xE); i++, piece++) {
+        func_800AE630(model, skeleton, piece->bone, piece->rest);
+        func_800EF5A0(world_pos, rotation, piece->rest[0], piece->rest[1],
+                      piece->rest[2]);
+        func_800EF334(world_pos, actor->scale);
+        func_800EF04C(world_pos, actor->position);
+        func_800F18FC(center, world_pos, angles);
+        func_800EFD24(piece->pos);
+        func_800EEBF0(piece->vel, angles, 1000.0f);
+        if (options & 0x10) {
+            piece->no_collide = 1;
         }
-        switch (local_4->local_5) {
+        switch (piece->bone) {
             case 3:
-                if (param_3 & 0x20) {
-                    local_4->b6 = 1;
+                if (options & 0x20) {
+                    piece->active = 1;
                 } else {
-                    local_4->b6 = 0;
+                    piece->active = 0;
                 }
                 break;
             default:
-                local_4->b6 = 1;
+                piece->active = 1;
         }
     }
-    *(f32 *) (local_0 + 0x5C) = 1e10f;
-    func_800EFD24(param_0->rotation);
-    func_80100094(param_0, 1);
+    *(f32 *) (head + 0x5C) = 1e10f;
+    func_800EFD24(actor->rotation);
+    func_80100094(actor, 1);
 }
 
-void func_80800D7C_chexploder(param_0, param_1, param_2, param_3) Actor *param_0;
-s32 param_1;
-f32 *param_2;
-s32 param_3;
+// Creates pieces from the skeleton's rest pose, one per bone.
+void func_80800D7C_chexploder(actor, source, center, options) Actor *actor;
+s32 source;
+f32 *center;
+s32 options;
 {
-    u8 *local_0;
-    s32 local_3;
-    s32 local_4;
-    u8 *local_5;
-    f32 local_1[3];
-    f32 local_2[3];
+    u8 *head;
+    s32 skeleton;
+    s32 i;
+    u8 *piece;
+    f32 angles[3];
+    f32 world_pos[3];
 
-    local_0 = func_80100094(param_0, 0);
-    local_3 = func_800B27E0(func_801039E4(param_0->unk0));
-    *(s16 *) (local_0 + 0xE) = _dbskeleton_entrypoint_0(local_3);
-    local_5 = func_80100074(param_0, 1, *(s16 *) (local_0 + 0xE) * 60);
-    for (local_4 = 0; local_4 < *(s16 *) (local_0 + 0xE); local_4++, local_5 += 60) {
-        local_5[0x39] = _dbskeleton_entrypoint_4(local_3, local_4);
-        _dbskeleton_entrypoint_2(local_3, local_5[0x39], local_5 + 0xC);
-        func_800EFD24(local_5);
-        func_800EE780(local_2, local_5 + 0xC, param_0->position);
-        func_800F18FC(param_2, local_2, local_1);
-        func_800EEBF0((f32 *) (local_5 + 0x18), local_1, 1000.0f);
-        *(f32 *) (local_5 + 0x24) = 0.0f;
-        *(f32 *) (local_5 + 0x28) = param_0->rotation[1];
-        *(f32 *) (local_5 + 0x2C) = 0.0f;
-        if (param_3 & 0x10) {
-            ((Exp36 *) local_5)->f1 = 1;
+    head = func_80100094(actor, 0);
+    skeleton = func_800B27E0(func_801039E4(actor->unk0));
+    *(s16 *) (head + 0xE) = _dbskeleton_entrypoint_0(skeleton);
+    piece = func_80100074(actor, 1, *(s16 *) (head + 0xE) * 60);
+    for (i = 0; i < *(s16 *) (head + 0xE); i++, piece += 60) {
+        piece[0x39] = _dbskeleton_entrypoint_4(skeleton, i);
+        _dbskeleton_entrypoint_2(skeleton, piece[0x39], piece + 0xC);
+        func_800EFD24(piece);
+        func_800EE780(world_pos, piece + 0xC, actor->position);
+        func_800F18FC(center, world_pos, angles);
+        func_800EEBF0((f32 *) (piece + 0x18), angles, 1000.0f);
+        *(f32 *) (piece + 0x24) = 0.0f;
+        *(f32 *) (piece + 0x28) = actor->rotation[1];
+        *(f32 *) (piece + 0x2C) = 0.0f;
+        if (options & 0x10) {
+            ((Exp36 *) piece)->no_collide = 1;
         }
-        switch (local_5[0x39]) {
+        switch (piece[0x39]) {
             case 3:
-                if (param_3 & 0x20) {
-                    ((Exp36 *) local_5)->f2 = 1;
+                if (options & 0x20) {
+                    ((Exp36 *) piece)->active = 1;
                 } else {
-                    ((Exp36 *) local_5)->f2 = 0;
+                    ((Exp36 *) piece)->active = 0;
                 }
                 break;
             default:
-                ((Exp36 *) local_5)->f2 = 1;
+                ((Exp36 *) piece)->active = 1;
         }
     }
-    *(f32 *) (local_0 + 0x5C) = 1e10f;
-    func_800EFD24(param_0->rotation);
+    *(f32 *) (head + 0x5C) = 1e10f;
+    func_800EFD24(actor->rotation);
 }
 
-void func_80800F74_chexploder(Actor *param_0, s32 param_1)
+// Gives each active piece a random speed, spin and gravity.
+void func_80800F74_chexploder(Actor *actor, s32 source)
 {
-    s16 *local_0;
-    u8 *local_1;
-    s32 local_2;
-    f32 local_3;
-    f32 local_4;
-    f32 local_5;
-    f32 local_6;
+    s16 *cfg;
+    u8 *piece;
+    s32 i;
+    f32 speed;
+    f32 gravity;
+    f32 spin_x;
+    f32 spin_z;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = (u8 *) func_80100094(param_0, 1);
-    for (local_2 = 0; local_2 < local_0[7]; local_2++, local_1 += 0x3C) {
-        if ((*(u32 *) (local_1 + 0x34) << 17) >> 31) {
-            local_3 = func_800DC178(local_0[0], local_0[1]);
-            local_4 = func_800DC178(local_0[4], local_0[5]);
-            local_5 = func_800DC178(local_0[2], local_0[3]);
-            local_6 = func_800DC178(local_0[2], local_0[3]);
-            func_800EF368((f32 *) (local_1 + 0x18), local_3);
-            func_800EF368((f32 *) (local_1 + 0x18), local_3);
-            *(s16 *) (local_1 + 0x34) = (s16) local_4;
-            *(s16 *) (local_1 + 0x30) = (s16) local_5;
-            *(s16 *) (local_1 + 0x32) = (s16) local_6;
+    cfg = func_80100094(actor, 0);
+    piece = (u8 *) func_80100094(actor, 1);
+    for (i = 0; i < cfg[7]; i++, piece += 0x3C) {
+        if ((*(u32 *) (piece + 0x34) << 17) >> 31) {
+            speed = func_800DC178(cfg[0], cfg[1]);
+            gravity = func_800DC178(cfg[4], cfg[5]);
+            spin_x = func_800DC178(cfg[2], cfg[3]);
+            spin_z = func_800DC178(cfg[2], cfg[3]);
+            func_800EF368((f32 *) (piece + 0x18), speed);
+            func_800EF368((f32 *) (piece + 0x18), speed);
+            *(s16 *) (piece + 0x34) = (s16) gravity;
+            *(s16 *) (piece + 0x30) = (s16) spin_x;
+            *(s16 *) (piece + 0x32) = (s16) spin_z;
         }
     }
 }
 
-void func_808010E0_chexploder(void *param_0, s32 param_1, u32 param_2)
+// Option bits: 1 rumble, 2 camera shake, 8 delete source, 0x40 clear flag.
+void func_808010E0_chexploder(void *actor, s32 source, u32 options)
 {
-    if (param_2 & 2) {
-        func_800E1610(0, 0x41F00000, 0x3F666666, (int) param_0 + 4);
+    if (options & 2) {
+        func_800E1610(0, 0x41F00000, 0x3F666666, (int) actor + 4);
     }
-    if (param_2 & 1) {
+    if (options & 1) {
         func_80018820(0, 0x40400000, 0x3E800000);
     }
-    if ((param_1 != 0) && (param_2 & 8)) {
-        func_800FFAB0(param_1);
+    if ((source != 0) && (options & 8)) {
+        func_800FFAB0(source);
     }
-    if (param_2 & 0x40) {
-        *(u8 *) ((char *) param_0 + 0x65) = (u8) (*((char *) param_0 + 0x65) & 0xFFFE);
+    if (options & 0x40) {
+        *(u8 *) ((char *) actor + 0x65) = (u8) (*((char *) actor + 0x65) & 0xFFFE);
     }
 }
 
-void func_80801188_chexploder(param_0, param_1, param_2) ExplS *param_0;
-s32 param_1;
-S16Pair param_2;
+void func_80801188_chexploder(actor, model_id, source) ExplS *actor;
+s32 model_id;
+S16Pair source;
 {
 
-if (func_800B26F0(param_1)) {
-    param_0->f70 = 1;
-    param_0->f71 = 0;
+if (func_800B26F0(model_id)) {
+    actor->f70 = 1;
+    actor->f71 = 0;
 }
 
 }
 
-void chexploder_entrypoint_1(s32 param_0, f32 param_1, f32 param_2, f32 param_3, s32 param_4)
+void chexploder_entrypoint_1(s32 marker, f32 x, f32 y, f32 z, s32 options)
 {
-    s32 local_3;
-    u8 *local_0;
-    u8 *local_1;
-    u8 *local_2;
+    s32 unk_0;
+    u8 *source;
+    u8 *head;
+    u8 *actor;
 
-    local_0 = func_80106790();
-    local_2 = func_801084B0(0x1FF, &local_0);
-    local_1 = func_80100094(local_2, 0);
-    (*(f32 *) ((s8 *) (local_2) + (0x18))) = param_1;
-    (*(f32 *) ((s8 *) (local_2) + (0x1C))) = param_2;
-    (*(f32 *) ((s8 *) (local_2) + (0x20))) = param_3;
-    func_800EE7F8(local_2 + 0x44, local_0 + 0x44);
-    (*(f32 *) ((s8 *) (local_2) + (0x38))) = (f32) (*(f32 *) ((s8 *) (local_0) + (0x38)));
+    source = func_80106790();
+    actor = func_801084B0(0x1FF, &source);
+    head = func_80100094(actor, 0);
+    (*(f32 *) ((s8 *) (actor) + (0x18))) = x;
+    (*(f32 *) ((s8 *) (actor) + (0x1C))) = y;
+    (*(f32 *) ((s8 *) (actor) + (0x20))) = z;
+    func_800EE7F8(actor + 0x44, source + 0x44);
+    (*(f32 *) ((s8 *) (actor) + (0x38))) = (f32) (*(f32 *) ((s8 *) (source) + (0x38)));
 
-if (*(s16 *) ((s8 *) *(u8 **) ((s8 *) local_2 + 0) + 0x10) == 0) {
-    *(s16 *) ((s8 *) *(u8 **) ((s8 *) local_2 + 0) + 0x10) = func_800AE020();
+if (*(s16 *) ((s8 *) *(u8 **) ((s8 *) actor + 0) + 0x10) == 0) {
+    *(s16 *) ((s8 *) *(u8 **) ((s8 *) actor + 0) + 0x10) = func_800AE020();
 }
 
-(*(u16 *) ((s8 *) (local_1) +
-           (0x14))) = (u16) (*(u16 *) ((s8 *) ((*(u8 **) ((s8 *) (local_0) + (0)))) + (0x14)));
-(*(u16 *) ((s8 *) (local_1) +
-           (0x16))) = (u16) (*(u16 *) ((s8 *) ((*(u8 **) ((s8 *) (local_0) + (0)))) + (0x16)));
-(*(s16 *) ((s8 *) (local_1) + (0x54))) = (s16) param_4;
-(*(u8 *) ((s8 *) (local_0) + (0x65))) = (u8) ((*(u8 *) ((s8 *) (local_0) + (0x65))) & 0xFFFE);
-func_80108944(local_2, local_0);
-func_80801188_chexploder(local_2, func_801039E4((*(u8 **) ((s8 *) (local_0) + (0)))), local_0);
-(*(u8 *) ((s8 *) (local_2) + (0x74))) = (u8) ((*(u8 *) ((s8 *) (local_2) + (0x74))) & 0xFFFD);
-func_80103140(local_2, (*(u16 *) ((s8 *) (local_1) + (0x14))),
-              (*(u16 *) ((s8 *) (local_1) + (0x16))));
-func_80800A18_chexploder(local_2);
+(*(u16 *) ((s8 *) (head) +
+           (0x14))) = (u16) (*(u16 *) ((s8 *) ((*(u8 **) ((s8 *) (source) + (0)))) + (0x14)));
+(*(u16 *) ((s8 *) (head) +
+           (0x16))) = (u16) (*(u16 *) ((s8 *) ((*(u8 **) ((s8 *) (source) + (0)))) + (0x16)));
+(*(s16 *) ((s8 *) (head) + (0x54))) = (s16) options;
+(*(u8 *) ((s8 *) (source) + (0x65))) = (u8) ((*(u8 *) ((s8 *) (source) + (0x65))) & 0xFFFE);
+func_80108944(actor, source);
+func_80801188_chexploder(actor, func_801039E4((*(u8 **) ((s8 *) (source) + (0)))), source);
+(*(u8 *) ((s8 *) (actor) + (0x74))) = (u8) ((*(u8 *) ((s8 *) (actor) + (0x74))) & 0xFFFD);
+func_80103140(actor, (*(u16 *) ((s8 *) (head) + (0x14))),
+              (*(u16 *) ((s8 *) (head) + (0x16))));
+func_80800A18_chexploder(actor);
 
-if (func_80104248(local_0) != 0) {
-    func_80800AC8_chexploder(local_2, local_0, local_2 + 0x18, param_4);
+if (func_80104248(source) != 0) {
+    func_80800AC8_chexploder(actor, source, actor + 0x18, options);
 } else {
 
-func_80800D7C_chexploder(local_2, local_0, local_2 + 0x18, param_4);
+func_80800D7C_chexploder(actor, source, actor + 0x18, options);
 }
-func_80101074((*(u8 **) ((s8 *) (local_2) + (0))));
-func_8010108C(local_0, 0x90, (*(u16 *) ((s8 *) (local_1) + (0x14))));
-func_80800F74_chexploder(local_2, local_0);
-func_808010E0_chexploder(local_2, local_0, param_4);
+func_80101074((*(u8 **) ((s8 *) (actor) + (0))));
+func_8010108C(source, 0x90, (*(u16 *) ((s8 *) (head) + (0x14))));
+func_80800F74_chexploder(actor, source);
+func_808010E0_chexploder(actor, source, options);
 }
 
-void chexploder_entrypoint_2(Unk80132ED0 *marker, ExploderSpawn sp)
+void chexploder_entrypoint_2(Unk80132ED0 *marker, ExploderSpawn args)
 {
     f32 pos[3];
-    Actor *a;
-    Actor *p;
-    ExploderSpawn *s;
+    Actor *actor;
+    Actor *source;
+    ExploderSpawn *spawn;
     f32 yaw;
     s32 id;
-    f32 sc;
-    ExploderLocal *local;
+    f32 scale;
+    ExploderLocal *head;
 
-    p = (Actor *) marker;
-    s = &sp;
-    id = s->id;
-    yaw = s->yaw;
-    pos[0] = s->x;
-    pos[1] = s->y;
-    pos[2] = s->z;
-    sc = s->scale;
-    a = func_80108474(0x1FF, pos, yaw);
+    source = (Actor *) marker;
+    spawn = &args;
+    id = spawn->id;
+    yaw = spawn->yaw;
+    pos[0] = spawn->x;
+    pos[1] = spawn->y;
+    pos[2] = spawn->z;
+    scale = spawn->scale;
+    actor = func_80108474(0x1FF, pos, yaw);
+    // Matching: empty test forces marker to be stored to its home slot.
     if (&marker) {
     }
-    local = func_80100094(a, 0);
-    if (p) {
-        p = func_80106790((Unk80132ED0 *) p);
+    head = func_80100094(actor, 0);
+    if (source) {
+        source = func_80106790((Unk80132ED0 *) source);
     } else {
-        p = NULL;
+        source = NULL;
     }
-    a->scale = sc;
-    func_800EE7F8((f32 *) a->actorData, a->position);
-    if (p) {
-        func_80101074(a->unk0);
+    actor->scale = scale;
+    func_800EE7F8((f32 *) actor->actorData, actor->position);
+    if (source) {
+        func_80101074(actor->unk0);
 
-if (func_8010108C(p, 0x8D, id) > 0) {
-    func_80101038((f32 *) a->actorData);
+if (func_8010108C(source, 0x8D, id) > 0) {
+    func_80101038((f32 *) actor->actorData);
 }
 
 }
-local->unk14 = id;
-local->unk16 = 0;
-local->unk54 = sp.flags;
-if (p) {
-    func_80108944(a, p);
-    ((ActorFlags74b *) ((u8 *) a + 0x74))->unk74_25 = 0;
+head->unk_14 = id;
+head->unk_16 = 0;
+head->options = args.flags;
+if (source) {
+    func_80108944(actor, source);
+    ((ActorFlags74b *) ((u8 *) actor + 0x74))->unk74_25 = 0;
 }
-func_80103140(a, local->unk14, local->unk16);
-func_80801188_chexploder(a, func_801039E4(a->unk0), p);
-func_80800A18_chexploder(a);
-if (p && (sp.flags & 0x80) && func_80104248(p)) {
-    func_80800AC8_chexploder(a, p, (f32 *) a->actorData, sp.flags);
+func_80103140(actor, head->unk_14, head->unk_16);
+func_80801188_chexploder(actor, func_801039E4(actor->unk0), source);
+func_80800A18_chexploder(actor);
+if (source && (args.flags & 0x80) && func_80104248(source)) {
+    func_80800AC8_chexploder(actor, source, (f32 *) actor->actorData, args.flags);
 } else {
-    func_80800D7C_chexploder(a, NULL, (f32 *) a->actorData, sp.flags);
+    func_80800D7C_chexploder(actor, NULL, (f32 *) actor->actorData, args.flags);
 }
-if (p) {
-    func_80101074(a->unk0);
-    func_8010108C(p, 0x90, local->unk14);
+if (source) {
+    func_80101074(actor->unk0);
+    func_8010108C(source, 0x90, head->unk_14);
 }
-func_80800F74_chexploder(a, p);
-func_808010E0_chexploder(a, p, sp.flags);
+func_80800F74_chexploder(actor, source);
+func_808010E0_chexploder(actor, source, args.flags);
 }
 
-void chexploder_entrypoint_3(s32 *param_0, s32 param_1, s32 param_2)
+void chexploder_entrypoint_3(s32 *source, s32 position, s32 options)
 {
-    s32 sp24[3];
+    s32 pos[3];
 
-    if (param_1 != 0) {
-        func_800EE7F8(sp24);
+    if (position != 0) {
+        func_800EE7F8(pos);
     } else {
-        func_80103DFC(param_0, sp24);
+        func_80103DFC(source, pos);
     }
-    if (param_2 & 4) {
-        func_8010A570(param_0);
+    if (options & 4) {
+        func_8010A570(source);
     }
-    _chbaddiesetup_entrypoint_5(&_chexploder_entrypoint_1, *param_0, sp24[0], sp24[1], sp24[2],
-                                param_2);
+    _chbaddiesetup_entrypoint_5(&_chexploder_entrypoint_1, *source, pos[0], pos[1], pos[2],
+                                options);
 }
 
-void chexploder_entrypoint_4(s32 param_0, s32 param_1, s32 param_2)
+void chexploder_entrypoint_4(s32 source, s32 param_1, s32 options)
 {
-    f32 local_0[3];
+    f32 pos[3];
 
-    func_800EE88C(local_0, param_1);
-    chexploder_entrypoint_3(param_0, local_0, param_2);
+    func_800EE88C(pos, param_1);
+    chexploder_entrypoint_3(source, pos, options);
 }
 
-void chexploder_entrypoint_5(s32 *param_0, s32 param_1, f32 *param_2, s32 param_3, s32 param_4,
-                             s32 param_5)
+void chexploder_entrypoint_5(s32 *source, s32 id, f32 *pos, s32 yaw, s32 scale,
+                             s32 options)
 {
-    s16 sp34[2];
-    s16 sp30[2];
-    s32 sp2C[1];
+    s16 id_x[2];
+    s16 y_z[2];
+    s32 marker[1];
 
-    sp2C[0] = (param_0 != NULL) ? *param_0 : 0;
-    sp34[0] = param_1;
-    sp34[1] = param_2[0];
-    sp30[0] = param_2[1];
-    sp30[1] = param_2[2];
-    if (param_5 & 4) {
+    marker[0] = (source != NULL) ? *source : 0;
+    id_x[0] = id;
+    id_x[1] = pos[0];
+    y_z[0] = pos[1];
+    y_z[1] = pos[2];
+    if (options & 4) {
         func_8010A570();
     }
-    _chbaddiesetup_entrypoint_6(&_chexploder_entrypoint_2, sp2C[0], *(s32 *) sp34, *(s32 *) sp30,
-                                param_3, param_4, param_5);
+    _chbaddiesetup_entrypoint_6(&_chexploder_entrypoint_2, marker[0], *(s32 *) id_x, *(s32 *) y_z,
+                                yaw, scale, options);
 }
 
-int chexploder_entrypoint_6(f32 param_0[3], f32 param_1, f32 param_2)
+int chexploder_entrypoint_6(f32 actor[3], f32 speed_min, f32 speed_max)
 {
-    s16 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    local_0[0] = param_1;
-    local_0[1] = param_2;
+    s16 *cfg;
+    cfg = func_80100094(actor, 0);
+    cfg[0] = speed_min;
+    cfg[1] = speed_max;
 }
 
-void chexploder_entrypoint_7(s32 param_0, f32 param_1, f32 param_2)
+void chexploder_entrypoint_7(s32 actor, f32 gravity_min, f32 gravity_max)
 {
-    void *local_0;
-    local_0 = func_80100094(param_0, 0);
-    *(s16 *) ((char *) local_0 + 8) = (s16) param_1;
-    *(s16 *) ((char *) local_0 + 10) = (s16) param_2;
+    void *head;
+    head = func_80100094(actor, 0);
+    *(s16 *) ((char *) head + 8) = (s16) gravity_min;
+    *(s16 *) ((char *) head + 10) = (s16) gravity_max;
 }
 
-int chexploder_entrypoint_8(f32 param_0[3], f32 param_1, f32 param_2)
+int chexploder_entrypoint_8(f32 actor[3], f32 spin_min, f32 spin_max)
 {
-    s16 *local_0;
-    local_0 = func_80100094(param_0, 0);
-    *(s16 *) ((s8 *) local_0 + 4) = (s16) (s32) param_1;
-    local_0[3] = param_2;
+    s16 *cfg;
+    cfg = func_80100094(actor, 0);
+    *(s16 *) ((s8 *) cfg + 4) = (s16) (s32) spin_min;
+    cfg[3] = spin_max;
 }
 
-void chexploder_entrypoint_9(param_0, param_1, param_2) s32 param_0;
-s32 param_1;
-s32 param_2;
+void chexploder_entrypoint_9(actor, idx, value) s32 actor;
+s32 idx;
+s32 value;
 {
-    u8 *local_0 = func_80100094(param_0, 0);
-    local_0[param_1 + 0x18] = param_2;
-    if (local_0[0x18] < param_1) {
-        local_0[0x18] = param_1;
+    u8 *head = func_80100094(actor, 0);
+    head[idx + 0x18] = value;
+    if (head[0x18] < idx) {
+        head[0x18] = idx;
     }
 }
 
-void chexploder_entrypoint_10(Actor *param_0, s16 *param_1)
+void chexploder_entrypoint_10(Actor *actor, s16 *ids)
 {
-    ExploderPartCount1332 *local_0;
-    ExploderSelectablePart1332 *local_1;
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
+    ExploderPartCount1332 *head;
+    ExploderSelectablePart1332 *piece;
+    s32 i;
+    s32 j;
+    s32 found;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_80100094(param_0, 1);
-    for (local_2 = 0; local_2 < local_0->local_0; local_2++) {
-        local_4 = 0;
-        for (local_3 = 0; param_1[local_3] != -1; local_3++) {
+    head = func_80100094(actor, 0);
+    piece = func_80100094(actor, 1);
+    for (i = 0; i < head->count; i++) {
+        found = 0;
+        for (j = 0; ids[j] != -1; j++) {
 
-if (local_1->local_1 == param_1[local_3]) {
-    local_4 = 1;
+if (piece->bone == ids[j]) {
+    found = 1;
     break;
 }
 
 }
-local_1->local_0 = local_4;
-local_1++;
+piece->active = found;
+piece++;
 }
 }
 
-void chexploder_entrypoint_11(Actor *param_0, s16 *param_1)
+void chexploder_entrypoint_11(Actor *actor, s16 *ids)
 {
-    ExploderCount *local_0;
-    ExploderPiece *local_1;
-    s32 local_2;
-    s16 *local_3;
+    ExploderCount *head;
+    ExploderPiece *piece;
+    s32 i;
+    s16 *entry;
 
-    local_0 = func_80100094(param_0, 0);
-    local_1 = func_80100094(param_0, 1);
-    for (local_2 = 0; local_2 < local_0->count; local_2++, local_1++) {
-        if (*param_1 != -1) {
-            local_3 = param_1;
+    head = func_80100094(actor, 0);
+    piece = func_80100094(actor, 1);
+    for (i = 0; i < head->count; i++, piece++) {
+        if (*ids != -1) {
+            entry = ids;
             do {
-                if (local_1->id == *local_3) {
-                    local_1->active = 0;
+                if (piece->bone == *entry) {
+                    piece->active = 0;
                     break;
                 }
-                local_3++;
-            } while (*local_3 != -1);
+                entry++;
+            } while (*entry != -1);
         }
     }
 }
 
-int chexploder_entrypoint_12(s32 param_0, s32 param_1)
+int chexploder_entrypoint_12(s32 actor, s32 radius)
 {
-    Actor *local_0;
-    local_0 = func_80100094(param_0, 0);
-    *(s16 *) ((char *) (local_0) + 0xC) = param_1 * (*(f32 *) ((char *) (param_0) + 0x38));
+    Actor *head;
+    head = func_80100094(actor, 0);
+    *(s16 *) ((char *) (head) + 0xC) = radius * (*(f32 *) ((char *) (actor) + 0x38));
 }
 
-void chexploder_entrypoint_13(s32 unused, s32 param_1)
+void chexploder_entrypoint_13(s32 actor, s32 sound)
 {
-    s8 *local_0;
-    local_0 = func_80100094(unused, 0);
-    local_0[0x12] = (s8) param_1;
+    s8 *head;
+    head = func_80100094(actor, 0);
+    head[0x12] = (s8) sound;
 }
 
-s32 chexploder_entrypoint_14(s32 param_0, s32 param_1)
+s32 chexploder_entrypoint_14(s32 actor, s32 max_bounces)
 {
-    *(s16 *) ((char *) func_80100094(param_0, 0) + 0x10) = param_1;
+    *(s16 *) ((char *) func_80100094(actor, 0) + 0x10) = max_bounces;
 }
 
-void chexploder_entrypoint_15(Actor *param_0, s32 param_1, f32 param_2)
+void chexploder_entrypoint_15(Actor *actor, s32 dust_kind, f32 dust_scale)
 {
-    u8 *local_0;
+    u8 *head;
 
-    local_0 = func_80100094(param_0, 0);
-    *(s8 *) (local_0 + 0x13) = param_1;
-    *(f32 *) (local_0 + 0x58) = param_2;
+    head = func_80100094(actor, 0);
+    *(s8 *) (head + 0x13) = dust_kind;
+    *(f32 *) (head + 0x58) = dust_scale;
 }
 
-void chexploder_entrypoint_16(Actor *param_0, s32 param_1)
+void chexploder_entrypoint_16(Actor *actor, s32 value)
 {
-    ExploderAnimation1246 *local_0;
+    ExploderAnimation1246 *anim;
 
-    local_0 = func_80100094(param_0, 0);
-    local_0->local_0 = param_1;
-    func_80103140(param_0, local_0->local_0, local_0->local_1);
+    anim = func_80100094(actor, 0);
+    anim->unk_14 = value;
+    func_80103140(actor, anim->unk_14, anim->unk_16);
 }
 
+// TU-NOTE: The overlay's .data is defined in C here. The tables point at functions of this
+// file, and IDO's assembler schedules some of them differently unless the tables are in the
+// same unit. D_80801BA0_chexploder is declared as s32[] to match the object.
 extern void func_80102EC0();
 extern void func_80107C2C();
 void *D_80801AE0_chexploder = (void *) 0x015801FF;

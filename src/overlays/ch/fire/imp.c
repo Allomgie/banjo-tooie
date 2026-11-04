@@ -13,27 +13,28 @@ int chfireimp_entrypoint_0()
     return (int) &D_808001F8_chfireimp;
 }
 
-void func_8080000C_chfireimp(Actor *param_0)
+void func_8080000C_chfireimp(Actor *actor)
 {
-    void *local_0;
-    local_0 = _sucoasterfly_entrypoint_1(param_0, 4);
-    if (local_0 != 0) {
-        local_0 = _sucoasterfly_entrypoint_5(param_0);
-        *(float *) local_0 = 3.4f;
+    void *flight;
+    flight = _sucoasterfly_entrypoint_1(actor, 4);
+    if (flight != 0) {
+        flight = _sucoasterfly_entrypoint_5(actor);
+        *(float *) flight = 3.4f;
     }
-    func_8010A3E8(param_0, 0.65f);
+    func_8010A3E8(actor, 0.65f);
 }
 
-void func_8080005C_chfireimp(Actor *param_0)
+void func_8080005C_chfireimp(Actor *actor)
 {
-    f32 *local_0;
-    s32 local_1;
-    f32 local_2[3];
+    f32 *chatter_timer;
+    s32 can_chatter;
+    f32 ref_pos[3];
 
-    local_0 = _sucoasterfly_entrypoint_5(param_0);
-    local_1 = 1;
-    _sucoasterfly_entrypoint_3(param_0);
-    switch (param_0->unk70_10) {
+    chatter_timer = _sucoasterfly_entrypoint_5(actor);
+    can_chatter = 1;
+    _sucoasterfly_entrypoint_3(actor);
+    // No chatter in states 10-16.
+    switch (actor->unk70_10) {
         case 10:
         case 11:
         case 12:
@@ -41,17 +42,21 @@ void func_8080005C_chfireimp(Actor *param_0)
         case 14:
         case 15:
         case 16:
-            local_1 = 0;
+            can_chatter = 0;
     }
-    if (local_1 && func_800D90A4(local_0)) {
-        func_8010D640(local_2);
-        if (func_800EFFB4(param_0->position, 1800.0f, local_2)) {
-            *local_0 = func_800DC178(2.4f, 3.4f);
-            _subaddieaudioquick_entrypoint_2(param_0, param_0->position, D_80800240_chfireimp);
+    if (can_chatter && func_800D90A4(chatter_timer)) {
+        // Chatter only within 1800 units of the reference position (camera/player).
+        func_8010D640(ref_pos);
+        if (func_800EFFB4(actor->position, 1800.0f, ref_pos)) {
+            // Next chatter in 2.4-3.4 s.
+            *chatter_timer = func_800DC178(2.4f, 3.4f);
+            _subaddieaudioquick_entrypoint_2(actor, actor->position, D_80800240_chfireimp);
         }
     }
 }
 
+// TU-NOTE: the overlay .data is defined here in C; its tables point to functions of this file,
+// and IDO's assembler schedules them differently unless defined in the same unit.
 extern void func_80105834();
 extern void _sucoasterfly_entrypoint_6();
 extern void _sucoasterfly_entrypoint_2();

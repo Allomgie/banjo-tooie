@@ -1,12 +1,12 @@
 #include "common.h"
 
 typedef struct {
-    s16 local_0[3];
-    u16 local_1;
-    u16 local_2;
+    s16 pos[3];
+    u16 unk_6;
+    u16 actor_id;
     u16 pad_0;
-    u32 local_3;
-    u32 local_4;
+    u32 unk_C;
+    u32 unk_10;
 } GsProp62;
 extern Actor *func_80108DC0(s32, s32 *, s32, s32, s32, void *);
 extern f32 _gspropmarker_entrypoint_3(void *);
@@ -24,11 +24,11 @@ typedef struct {
 extern void *func_800E9BF4();
 extern void *func_800BE5C4();
 typedef struct {
-    u32 local_0;
-    u32 local_1;
+    u32 unk_0;
+    u32 unk_4;
     u8 pad_0[10];
     u8 pad_1 : 7;
-    u8 local_2 : 1;
+    u8 unk_12 : 1;
     u8 pad_2;
 } StoredPropRecord;
 extern void func_800EE8CC(f32 *, void *);
@@ -49,62 +49,65 @@ typedef struct {
     u32 rest : 1;
 } PropState;
 
-void gspropsDll_entrypoint_0(s16 *param_0, s32 param_1[3], s32 *param_2)
+// Collects the actor-spawn props (kind 6) of a cube.
+void gspropsDll_entrypoint_0(s16 *cube, s32 props[3], s32 *count)
 {
-    u32 local_0;
-    u32 local_1;
-    u32 local_2;
+    u32 start;
+    u32 end;
+    u32 it;
 
-    if ((param_0 != NULL) && (param_0[1] != 0)) {
-        local_0 = func_800E9D68();
-        local_1 = func_800E9D90(param_0);
-        local_2 = local_0;
-        if (local_2 < local_1) {
+    if ((cube != NULL) && (cube[1] != 0)) {
+        start = func_800E9D68();
+        end = func_800E9D90(cube);
+        it = start;
+        if (it < end) {
             do {
-                if (((u32) (*(u32 *) ((char *) local_2 + 0x4) << 0x19) >> 0x1A) == 6) {
-                    param_1[*param_2] = local_2;
-                    *param_2 += 1;
+                if (((u32) (*(u32 *) ((char *) it + 0x4) << 0x19) >> 0x1A) == 6) {
+                    props[*count] = it;
+                    *count += 1;
                 }
-                local_2 += 0x14;
-            } while (local_2 < local_1);
+                it += 0x14;
+            } while (it < end);
         }
     }
 }
 
-void gspropsDll_entrypoint_1(GsProp62 **param_0, s32 param_1)
+// Sorts the props by actor id and spawns their actors.
+void gspropsDll_entrypoint_1(GsProp62 **props, s32 count)
 {
-    s32 local_0;
-    s32 local_1;
-    GsProp62 *local_2;
-    s32 local_5[3];
-    GsProp62 *local_3;
-    Actor *local_4;
+    s32 i;
+    s32 j;
+    GsProp62 *tmp;
+    s32 pos[3];
+    GsProp62 *prop;
+    Actor *actor;
 
-    for (local_0 = 0; local_0 < param_1; local_0++) {
-        for (local_1 = 0; local_1 < local_0; local_1++) {
-            if ((u32) param_0[local_0]->local_2 < (u32) param_0[local_1]->local_2) {
-                local_2 = param_0[local_1];
-                param_0[local_1] = param_0[local_0];
-                param_0[local_0] = local_2;
+    for (i = 0; i < count; i++) {
+        for (j = 0; j < i; j++) {
+            if ((u32) props[i]->actor_id < (u32) props[j]->actor_id) {
+                tmp = props[j];
+                props[j] = props[i];
+                props[i] = tmp;
             }
         }
     }
-    for (local_0 = 0; local_0 < param_1; local_0++) {
-        local_3 = param_0[local_0];
-        local_5[0] = local_3->local_0[0];
-        local_5[1] = local_3->local_0[1];
-        local_5[2] = local_3->local_0[2];
-        local_4 = func_80108DC0(local_3->local_2, local_5, local_3->local_3 >> 23,
-                                local_3->local_4 >> 21, (local_3->local_4 << 11) >> 21, local_3);
-        if (local_4) {
-            local_4->unk74_7 = (u32) local_3->local_1 >> 7;
-            local_4->unk7A_5 = 1;
-            func_80102FDC(local_4, _gspropmarker_entrypoint_3(local_3));
+    for (i = 0; i < count; i++) {
+        prop = props[i];
+        pos[0] = prop->pos[0];
+        pos[1] = prop->pos[1];
+        pos[2] = prop->pos[2];
+        actor = func_80108DC0(prop->actor_id, pos, prop->unk_C >> 23,
+                                prop->unk_10 >> 21, (prop->unk_10 << 11) >> 21, prop);
+        if (actor) {
+            actor->unk74_7 = (u32) prop->unk_6 >> 7;
+            actor->unk7A_5 = 1;
+            func_80102FDC(actor, _gspropmarker_entrypoint_3(prop));
         }
     }
 }
 
-void gspropsDll_entrypoint_2(u8 *param_0, s32 param_1)
+// Registers the zone-bound props (kinds 7, 9, 12) of a cube with the bound lists.
+void gspropsDll_entrypoint_2(u8 *cube, s32 pass)
 {
     u8 *it;
     u8 *end;
@@ -120,17 +123,18 @@ void gspropsDll_entrypoint_2(u8 *param_0, s32 param_1)
     s32 want;
     u32 type;
 
+    // Matching: the constants and the empty if are needed for the match.
     k5a = 5;
     k5b = 5;
     if (1) {
     }
-    if (param_0 != 0 && *(s16 *) (param_0 + 2) != 0) {
+    if (cube != 0 && *(s16 *) (cube + 2) != 0) {
         it = (u8 *) func_800E9D68();
-        end = (u8 *) func_800E9D90(param_0);
+        end = (u8 *) func_800E9D90(cube);
         if (it < end) {
             do {
                 if (((u32) (*(u32 *) (it + 4) << 0x19) >> 0x1A) == 7) {
-                    want = param_1 ? 1 : 0;
+                    want = pass ? 1 : 0;
                     bit6 = ((GspFl *) (it + 0x10))->b6 ? 1 : 0;
                     if (bit6 == want) {
                         a2_1 = (u32) *(u16 *) (it + 6) >> 7;
@@ -146,7 +150,7 @@ void gspropsDll_entrypoint_2(u8 *param_0, s32 param_1)
                                       ((GspFl *) (it + 0x10))->b6);
                     }
                 }
-                if (param_1 == 0) {
+                if (pass == 0) {
                     type = ((u32) (*(u32 *) (it + 4) << 0x19) >> 0x1A);
                     if (type == 9) {
                         a2_3 = (u32) *(u16 *) (it + 6) >> 7;
@@ -159,6 +163,7 @@ void gspropsDll_entrypoint_2(u8 *param_0, s32 param_1)
                         }
                         func_800CBAC8(*(u16 *) (it + 8), it, a2_3, ((GspFl *) (it + 0x10))->low,
                                       a3_3);
+                    // Matching: redundant test needed for the match.
                     } else if (type != 0xA && type == 0xC) {
                         a2_2 = (u32) *(u16 *) (it + 6) >> 7;
                         a3_2 = (*(u32 *) (it + 0xC) >> 0x17) * k5a;
@@ -178,10 +183,11 @@ void gspropsDll_entrypoint_2(u8 *param_0, s32 param_1)
     }
 }
 
-s32 func_808004E0_gspropsDll(param_0)
-PropState *param_0;
+// Returns 0 for node props of kinds 6..12.
+s32 func_808004E0_gspropsDll(prop)
+PropState *prop;
 {
-    switch (param_0->f) {
+    switch (prop->f) {
         case 6:
         case 7:
         case 8:
@@ -195,58 +201,61 @@ PropState *param_0;
     return 1;
 }
 
-void func_80800524_gspropsDll(s16 *param_0)
+// Keeps the node props of a cube sorted, kinds 6..12 last.
+void func_80800524_gspropsDll(s16 *cube)
 {
-    s32 local_1;
-    s32 local_4;
-    s32 local_5;
-    s32 local_6;
-    u32 local_0[5];
-    local_6 = param_0[1];
-    local_5 = 0;
-    for (local_4 = 0; local_4 < local_6; local_4++) {
-        if (func_808004E0_gspropsDll(func_800E9BF4(param_0, local_4))) {
-            local_1 = local_4;
-            local_5++;
-            while (local_1 > 0 && func_808004E0_gspropsDll(func_800E9BF4(param_0, local_1)) &&
-                   !func_808004E0_gspropsDll(func_800E9BF4(param_0, local_1 - 1))) {
-                aligned4_memcpy(local_0, func_800E9BF4(param_0, local_1), 0x14);
-                aligned4_memcpy(func_800E9BF4(param_0, local_1),
-                                func_800E9BF4(param_0, (local_1 - 1)), 0x14);
-                aligned4_memcpy(func_800E9BF4(param_0, (local_1 - 1)), local_0, 0x14);
-                local_1 -= 1;
+    s32 j;
+    s32 i;
+    s32 plain_count;
+    s32 total;
+    u32 scratch[5];
+    total = cube[1];
+    plain_count = 0;
+    for (i = 0; i < total; i++) {
+        if (func_808004E0_gspropsDll(func_800E9BF4(cube, i))) {
+            j = i;
+            plain_count++;
+            while (j > 0 && func_808004E0_gspropsDll(func_800E9BF4(cube, j)) &&
+                   !func_808004E0_gspropsDll(func_800E9BF4(cube, j - 1))) {
+                aligned4_memcpy(scratch, func_800E9BF4(cube, j), 0x14);
+                aligned4_memcpy(func_800E9BF4(cube, j),
+                                func_800E9BF4(cube, (j - 1)), 0x14);
+                aligned4_memcpy(func_800E9BF4(cube, (j - 1)), scratch, 0x14);
+                j -= 1;
             }
         }
     }
-    *(u8 *) func_800BE5C4(param_0) = local_5;
+    *(u8 *) func_800BE5C4(cube) = plain_count;
 }
 
-void gspropsDll_entrypoint_3(void *param_0)
+// Inserts a loaded node prop into its cube's storage.
+void gspropsDll_entrypoint_3(void *prop)
 {
-    s32 local_2;
-    f32 local_1[3];
-    StoredPropRecord *local_0;
-    func_800EE8CC(local_1, param_0);
-    local_2 = func_800BDBC4(local_1);
-    local_0 = func_800E9A24(local_2);
-    aligned4_memcpy(local_0, param_0, 0x14);
-    if (!(local_0->local_1 & 1))
-        local_0->local_2 = 1;
-    func_80800524_gspropsDll(local_2);
+    s32 cube;
+    f32 pos[3];
+    StoredPropRecord *stored;
+    func_800EE8CC(pos, prop);
+    cube = func_800BDBC4(pos);
+    stored = func_800E9A24(cube);
+    aligned4_memcpy(stored, prop, 0x14);
+    if (!(stored->unk_4 & 1))
+        stored->unk_12 = 1;
+    func_80800524_gspropsDll(cube);
 }
 
-void gspropsDll_entrypoint_4(u8 *param_0)
+// Inserts an actor/model prop into its cube's storage.
+void gspropsDll_entrypoint_4(u8 *prop)
 {
-    s32 local_2;
-    f32 local_0[3];
-    u8 *local_1;
+    s32 cube;
+    f32 pos[3];
+    u8 *stored;
 
-    func_800EE8CC(local_0, param_0 + 4);
-    local_2 = func_800BDBC4(local_0);
-    local_1 = func_800E98C0(local_2);
-    aligned4_memcpy(local_1, param_0, 12);
-    local_1[0xB] = (local_1[0xB] & 0xFFEF) | 0x10;
-    if (((StoredPropCondition1408 *) local_1)->selected) {
-        local_1[0xB] &= 0xDF;
+    func_800EE8CC(pos, prop + 4);
+    cube = func_800BDBC4(pos);
+    stored = func_800E98C0(cube);
+    aligned4_memcpy(stored, prop, 12);
+    stored[0xB] = (stored[0xB] & 0xFFEF) | 0x10;
+    if (((StoredPropCondition1408 *) stored)->selected) {
+        stored[0xB] &= 0xDF;
     }
 }

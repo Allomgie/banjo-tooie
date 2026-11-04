@@ -12,30 +12,32 @@ s32 fxsplash25d_entrypoint_0(void)
     func_800BA22C(out, 1);
 }
 
-int func_8080002C_fxsplash25d(param_0)
-f32 *param_0;
+int func_8080002C_fxsplash25d(pos)
+f32 *pos;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3;
-    s32 local_4;
-    s32 local_5;
+    f32 to_camera[3];
+    f32 cam_pos[3];
+    f32 splash_pos[3];
+    f32 surface_y;
+    s32 emitter;
+    s32 surface;
 
-    func_800EE7F8(local_2, param_0);
-    func_800FB350(local_2, &local_5, &local_3);
-    local_2[1] = local_3 + 14.0f;
-    func_800E3980(local_1);
-    func_800EFB24(local_0, local_1, local_2);
-    local_0[1] = 0.0f;
-    func_800EF368(local_0, 20.0f);
-    func_800EF04C(local_2, local_0);
-    local_4 = func_800B5BE4(4);
-    if (local_5)
-        func_800BA660(local_4, local_5, (s16) local_2[1]);
-    func_800BABB8(local_4, local_2, 0, 1.0f, D_80800110_fxsplash25d);
+    func_800EE7F8(splash_pos, pos);
+    func_800FB350(splash_pos, &surface, &surface_y);
+    splash_pos[1] = surface_y + 14.0f;
+    func_800E3980(cam_pos);
+    func_800EFB24(to_camera, cam_pos, splash_pos);
+    to_camera[1] = 0.0f;
+    // Move the splash 20 units towards the camera.
+    func_800EF368(to_camera, 20.0f);
+    func_800EF04C(splash_pos, to_camera);
+    emitter = func_800B5BE4(4);
+    if (surface)
+        func_800BA660(emitter, surface, (s16) splash_pos[1]);
+    func_800BABB8(emitter, splash_pos, 0, 1.0f, D_80800110_fxsplash25d);
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C; values taken from the ROM.
 u8 D_80800110_fxsplash25d[48] = {
     0x0, 0x1D, 0x6, 0x39, 0x0, 0x20, 0xFF, 0xFF, 0xFE, 0xFF, 0x0, 0x15, 0x0, 0x0,  0x0, 0xC7,
     0x0, 0x18, 0x0, 0x0,  0x0, 0x0,  0x19, 0xB6, 0x19, 0xB6, 0x0, 0x2B, 0x0, 0xB3, 0x0, 0xB3,

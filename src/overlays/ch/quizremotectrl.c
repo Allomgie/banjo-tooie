@@ -9,10 +9,10 @@ extern void func_80102424(Actor *, s32);
 extern void func_800EFA4C(f32 *, f32, f32, f32);
 extern int D_80800668_chquizremotectrl[];
 typedef struct Mass45QuizDisplay {
-    u8 local_0[0x24];
-    f32 local_1;
-    u8 local_2[0x2C];
-    f32 local_3;
+    u8 pad_0[0x24];
+    f32 unk_24;
+    u8 pad_28[0x2C];
+    f32 unk_54;
 } Mass45QuizDisplay;
 extern void func_800DE498(s32, void *, void *, f32, s32, void *);
 extern void *func_800D674C(s32);
@@ -25,93 +25,96 @@ extern u8 D_80800650_chquizremotectrl[];
 extern u8 D_8080065C_chquizremotectrl[];
 extern f32 D_80800664_chquizremotectrl;
 
-void func_80800000_chquizremotectrl(u8 *param_0, s32 param_1)
+void func_80800000_chquizremotectrl(u8 *actor, s32 state)
 {
-    int new_var;
-    switch (param_1) {
+    int flags;
+    switch (state) {
         case 1:
 
         case 3:
             break;
 
         case 0:
-            *(f32 *) ((s8 *) param_0 + 0x54) = 0.0f;
-            *(f32 *) ((s8 *) param_0 + 0x50) = 0.5f;
+            *(f32 *) ((s8 *) actor + 0x54) = 0.0f;
+            *(f32 *) ((s8 *) actor + 0x50) = 0.5f;
             break;
 
         case 2:
-            *(f32 *) ((s8 *) param_0 + 0x54) = 1.0f;
+            *(f32 *) ((s8 *) actor + 0x54) = 1.0f;
     }
 
-    new_var = (*(u8 *) ((s8 *) param_0 + 0x79) & 0xFFFFu) & 0xFFFFu;
-    *(u8 *) ((s8 *) param_0 + 0x79) = (u8) ((param_1 * 0x10) | ((new_var & 0xFFFFu) & 0xFF0F));
+    // Matching: the redundant masks and the extra temporary are needed for the match.
+    flags = (*(u8 *) ((s8 *) actor + 0x79) & 0xFFFFu) & 0xFFFFu;
+    *(u8 *) ((s8 *) actor + 0x79) = (u8) ((state * 0x10) | ((flags & 0xFFFFu) & 0xFF0F));
 }
 
-void func_80800068_chquizremotectrl(u8 *param_0)
+void func_80800068_chquizremotectrl(u8 *actor)
 {
-    f32 var_f0;
-    u32 temp_t6;
-    temp_t6 = (u32) *(u8 *) ((u8 *) param_0 + 0x79) >> 4;
-    switch (temp_t6) {
+    f32 progress;
+    u32 state;
+    state = (u32) *(u8 *) ((u8 *) actor + 0x79) >> 4;
+    switch (state) {
         case 1:
-            if (func_800D90A4(param_0 + 0x50) != 0) {
-                func_80800000_chquizremotectrl(param_0, 2);
+            if (func_800D90A4(actor + 0x50) != 0) {
+                func_80800000_chquizremotectrl(actor, 2);
             }
-            var_f0 = func_800F10B4(*(f32 *) ((u8 *) param_0 + 0x50), 0.5f, 0, 0, 1.0f);
-            *(f32 *) ((u8 *) param_0 + 0x54) = var_f0;
+            progress = func_800F10B4(*(f32 *) ((u8 *) actor + 0x50), 0.5f, 0, 0, 1.0f);
+            *(f32 *) ((u8 *) actor + 0x54) = progress;
+            // Matching: goto end is needed for the match.
             goto end;
 
         case 3:
-            if (func_800D91EC(param_0 + 0x50, 0.5f) != 0) {
-                func_80800000_chquizremotectrl(param_0, 0);
+            if (func_800D91EC(actor + 0x50, 0.5f) != 0) {
+                func_80800000_chquizremotectrl(actor, 0);
             }
-            var_f0 = func_800F10B4(*(f32 *) ((u8 *) param_0 + 0x50), 0, 0.5f, 1.0f, (double) 0.0f);
-            *(f32 *) ((u8 *) param_0 + 0x54) = var_f0;
+            // Matching: the (double) cast is needed for the match.
+            progress = func_800F10B4(*(f32 *) ((u8 *) actor + 0x50), 0, 0.5f, 1.0f, (double) 0.0f);
+            *(f32 *) ((u8 *) actor + 0x54) = progress;
     }
 
 end:
     return;
 }
 
-void func_8080012C_chquizremotectrl(s32 *param_0)
+void func_8080012C_chquizremotectrl(s32 *actor)
 {
-    s32 local_0;
-    s32 local_2;
+    s32 cam_node;
+    s32 node_type;
 
-    local_0 = _suquiz_entrypoint_26();
-    local_2 = func_800A5854(local_0);
-    if (local_2 != 2) {
-        if ((local_2 == 5) || (local_2 == 6) || (local_2 == 8)) {
-            _capod_entrypoint_13(*param_0, 0, local_0, 0x834);
+    cam_node = _suquiz_entrypoint_26();
+    node_type = func_800A5854(cam_node);
+    if (node_type != 2) {
+        if ((node_type == 5) || (node_type == 6) || (node_type == 8)) {
+            _capod_entrypoint_13(*actor, 0, cam_node, 0x834);
         }
     } else {
-        _capod_entrypoint_21(*param_0, 0, local_0, 0x814);
+        _capod_entrypoint_21(*actor, 0, cam_node, 0x814);
     }
-    func_80800000_chquizremotectrl(param_0, 0);
+    func_80800000_chquizremotectrl(actor, 0);
 }
 
-void func_808001BC_chquizremotectrl(Actor *param_0, s32 param_1)
+void func_808001BC_chquizremotectrl(Actor *actor, s32 state)
 {
-    func_80102424(param_0, param_1);
-    switch (param_0->unk70_10) {
+    func_80102424(actor, state);
+    switch (actor->unk70_10) {
         case 1:
             if (_glglobalsettings_entrypoint_3())
-                ((f32 *) param_0->actorData)[3] = -300.0f;
+                ((f32 *) actor->actorData)[3] = -300.0f;
             else
-                ((f32 *) param_0->actorData)[3] = -500.0f;
+                ((f32 *) actor->actorData)[3] = -500.0f;
             func_800FC660(0x1E);
-            ((f32 *) param_0->actorData)[7] = 1.0f;
-            func_8080012C_chquizremotectrl((s32 *) param_0);
+            ((f32 *) actor->actorData)[7] = 1.0f;
+            func_8080012C_chquizremotectrl((s32 *) actor);
             break;
         case 2:
             func_800FC74C(0x1E);
-            param_0->unk58 = _suquiz_entrypoint_8(0);
-            func_80800000_chquizremotectrl(param_0, 1);
+            actor->unk58 = _suquiz_entrypoint_8(0);
+            func_80800000_chquizremotectrl(actor, 1);
             break;
         case 3:
             func_800FC660(0x1D);
-            ((f32 *) param_0->actorData)[7] = 1.0f;
-            func_80800000_chquizremotectrl(param_0, 3);
+            ((f32 *) actor->actorData)[7] = 1.0f;
+            func_80800000_chquizremotectrl(actor, 3);
             break;
         case 5:
             func_800FC74C(0x1D);
@@ -119,100 +122,101 @@ void func_808001BC_chquizremotectrl(Actor *param_0, s32 param_1)
     }
 }
 
-void func_808002C8_chquizremotectrl(u8 *param_0)
+void func_808002C8_chquizremotectrl(u8 *actor)
 {
-    u32 new_var;
-    u32 local_0;
+    u32 raw_state;
+    u32 state;
     _suquiz_entrypoint_1();
-    new_var = *(u16 *) ((s8 *) param_0 + 0x72);
-    local_0 = (u16) new_var;
-    local_0 = local_0 >> 0xA;
-    new_var = local_0;
-    switch (new_var) {
+    // Matching: the u16 round trip through two temporaries is needed for the match.
+    raw_state = *(u16 *) ((s8 *) actor + 0x72);
+    state = (u16) raw_state;
+    state = state >> 0xA;
+    raw_state = state;
+    switch (raw_state) {
         case 5:
             break;
 
         case 1:
-            if (func_800D90A4(param_0 + 0x34) != 0) {
-                func_808001BC_chquizremotectrl(param_0, 2);
+            if (func_800D90A4(actor + 0x34) != 0) {
+                func_808001BC_chquizremotectrl(actor, 2);
             }
             break;
 
         case 2:
-            if ((func_800D90A4(param_0 + 0x58) != 0) || (_suquiz_entrypoint_5() != 0)) {
-                func_808001BC_chquizremotectrl(param_0, 3);
+            if ((func_800D90A4(actor + 0x58) != 0) || (_suquiz_entrypoint_5() != 0)) {
+                func_808001BC_chquizremotectrl(actor, 3);
             }
             break;
 
         case 3:
-            if (func_800D90A4(param_0 + 0x34) != 0) {
-                func_808001BC_chquizremotectrl(param_0, 4);
+            if (func_800D90A4(actor + 0x34) != 0) {
+                func_808001BC_chquizremotectrl(actor, 4);
             }
             break;
 
         case 4:
-            func_808001BC_chquizremotectrl(param_0, 5);
+            func_808001BC_chquizremotectrl(actor, 5);
     }
 
-    func_80800068_chquizremotectrl(param_0);
+    func_80800068_chquizremotectrl(actor);
 }
 
 void func_808003A0_chquizremotectrl(s32 arg0)
 {
 }
 
-void func_808003A8_chquizremotectrl(Actor *param_0)
+void func_808003A8_chquizremotectrl(Actor *actor)
 {
     func_800CEA38(0, 1);
-    func_800EFA4C(param_0->position, 0.0f, 0.0f, 0.0f);
-    param_0->rotation[2] = 0.0f;
-    param_0->rotation[0] = 0.0f;
-    param_0->rotation[1] = 0.0f;
-    func_808001BC_chquizremotectrl(param_0, 1);
+    func_800EFA4C(actor->position, 0.0f, 0.0f, 0.0f);
+    actor->rotation[2] = 0.0f;
+    actor->rotation[0] = 0.0f;
+    actor->rotation[1] = 0.0f;
+    func_808001BC_chquizremotectrl(actor, 1);
 }
 
-void func_80800410_chquizremotectrl(Actor *param_0, s32 param_1)
+void func_80800410_chquizremotectrl(Actor *actor, s32 gfx)
 {
-    f32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
+    f32 unk_0;
+    f32 cam_pos[3];
+    f32 cam_rot[3];
 
-    _suquiz_entrypoint_13(local_1);
-    _suquiz_entrypoint_14(local_2);
-    func_800EF214(local_1, -local_2[0], local_2[1],
-                  ((Mass45QuizDisplay *) param_0)->local_3 *
-                      ((Mass45QuizDisplay *) param_0)->local_1);
-    switch (param_0->unk70_10) {
+    _suquiz_entrypoint_13(cam_pos);
+    _suquiz_entrypoint_14(cam_rot);
+    func_800EF214(cam_pos, -cam_rot[0], cam_rot[1],
+                  ((Mass45QuizDisplay *) actor)->unk_54 *
+                      ((Mass45QuizDisplay *) actor)->unk_24);
+    switch (actor->unk70_10) {
         case 1:
-            local_0 = func_800F10B4(((f32 *) param_0->actorData)[7], 1.0f, 0.0f, 1.0f, 0.0f);
-            D_80800664_chquizremotectrl = local_0 * 360.0f;
+            unk_0 = func_800F10B4(((f32 *) actor->actorData)[7], 1.0f, 0.0f, 1.0f, 0.0f);
+            D_80800664_chquizremotectrl = unk_0 * 360.0f;
             break;
         case 2:
-            local_0 = 0.0f;
+            unk_0 = 0.0f;
             break;
         case 3:
-            local_0 = func_800F10B4(((f32 *) param_0->actorData)[7], 1.0f, 0.0f, 0.0f, 1.0f);
-            D_80800664_chquizremotectrl = local_0 * 360.0f;
+            unk_0 = func_800F10B4(((f32 *) actor->actorData)[7], 1.0f, 0.0f, 0.0f, 1.0f);
+            D_80800664_chquizremotectrl = unk_0 * 360.0f;
             break;
         case 4:
         case 5:
-            local_0 = 1.0f;
+            unk_0 = 1.0f;
             D_80800664_chquizremotectrl = 0.0f;
     }
     func_800E41CC();
     func_800E3C8C(50.0f, 2000.0f);
-    func_800E39D8(local_1, local_2);
+    func_800E39D8(cam_pos, cam_rot);
     func_800E3CE8();
-    func_800E44FC(param_1);
-    func_800E7C28(param_1);
-    func_800E7CF4(param_1);
-    if (local_0 > 0.0f) {
-        func_800DE498(param_1, D_80800650_chquizremotectrl, D_8080065C_chquizremotectrl, local_0, 0,
+    func_800E44FC(gfx);
+    func_800E7C28(gfx);
+    func_800E7CF4(gfx);
+    if (unk_0 > 0.0f) {
+        func_800DE498(gfx, D_80800650_chquizremotectrl, D_8080065C_chquizremotectrl, unk_0, 0,
                       func_800D674C(0x9A1));
     }
-    func_80101870(param_0, param_1);
+    func_80101870(actor, gfx);
     func_800E4208();
-    func_800E44FC(param_1);
+    func_800E44FC(gfx);
 }
 
 s32 func_808005E4_chquizremotectrl(s32 param_0, s32 param_1, s32 param_2)
@@ -227,6 +231,10 @@ int *chquizremotectrl_entrypoint_0()
     return &D_80800668_chquizremotectrl;
 }
 
+// TU-NOTE: the .data of this overlay (formerly asm/data/overlays/ch/quizremotectrl.data.s) is defined here in C.
+// Its tables point to functions of this file; IDO's assembler schedules some of them differently unless
+// the tables are in the same unit. Values are taken from the ROM. D_80800668_chquizremotectrl is declared
+// as int[] at the same address.
 extern void func_80105834();
 extern void func_80107C2C();
 u8 D_80800650_chquizremotectrl[12] = {0x0,  0x0, 0x0,  0x0,  0x44, 0xC,

@@ -4,47 +4,50 @@ extern f32 _scinfobar_entrypoint_18(s32);
 extern void func_800E253C(f32);
 extern s32 _scinfobar_entrypoint_20(s32);
 
-void sccustom_banjo_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+// Icon row: the first `value` icons are bright, the rest dim; slides in with the bar.
+void sccustom_banjo_entrypoint_0(s32 gfx, s32 infobar, s32 x, s32 y)
 {
-    s32 local_0;
-    s32 n;
-    f32 fv;
-    int lim;
-    s32 cnt;
+    s32 sprite;
+    s32 slide;
+    f32 scale;
+    int value;
+    s32 count;
     s32 mode;
-    s32 scale;
-    s32 cap;
+    s32 fade;
+    s32 slide_len;
     s32 i;
-    s32 pos;
-    s32 sp60[2];
+    s32 offset;
+    s32 xy[2];
     s32 alpha;
 
-    local_0 = func_800D674C(0xB4D);
-    n = _scinfobar_entrypoint_11(param_1);
-    fv = _scinfobar_entrypoint_18(param_1);
-    lim = _scinfobar_entrypoint_19(param_1);
-    cnt = _scinfobar_entrypoint_20(param_1);
-    mode = _scinfobar_entrypoint_14(param_1);
-    cap = (s32) ((f32) (cnt * 0 + 0x28) * fv);
-    if (n < cap) {
+    sprite = func_800D674C(0xB4D);
+    slide = _scinfobar_entrypoint_11(infobar);
+    scale = _scinfobar_entrypoint_18(infobar);
+    value = _scinfobar_entrypoint_19(infobar);
+    count = _scinfobar_entrypoint_20(infobar);
+    mode = _scinfobar_entrypoint_14(infobar);
+    // Matching: needed for the match.
+    slide_len = (s32) ((f32) (count * 0 + 0x28) * scale);
+    if (slide < slide_len) {
+        // Matching: empty blocks steer IDO's register allocation.
         if (1) {
         }
         if (1) {
         }
-        scale = (s32) ((1.0f - (f32) (cap - n) / (f32) cap) * 256.0f);
+        fade = (s32) ((1.0f - (f32) (slide_len - slide) / (f32) slide_len) * 256.0f);
     } else {
-        scale = 0x100;
+        fade = 0x100;
     }
-    i = cnt - 1;
+    i = count - 1;
     if (i >= 0) {
         do {
-            pos = (s32) ((f32) (i * 0x14 + 0x28) * fv);
-            if (n < pos) {
-                pos = n;
+            offset = (s32) ((f32) (i * 0x14 + 0x28) * scale);
+            if (slide < offset) {
+                offset = slide;
             }
             switch (mode) {
                 case 1:
-                    if (lim == i + 1) {
+                    if (value == i + 1) {
                         alpha = 0xFF;
                     } else {
                         alpha = 0x78;
@@ -54,85 +57,89 @@ void sccustom_banjo_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 para
                     alpha = 0x78;
                     break;
                 default:
-                    if (i < lim) {
+                    if (i < value) {
                         alpha = 0xFF;
                     } else {
                         alpha = 0x78;
                     }
                     break;
             }
-            func_800E257C((alpha * scale) >> 8);
-            func_800E253C(fv);
-            sp60[1] = param_3 * 4;
-            sp60[0] = (param_2 + pos) * 4;
-            func_800E30E0(param_0, local_0, 0, sp60);
+            func_800E257C((alpha * fade) >> 8);
+            func_800E253C(scale);
+            xy[1] = y * 4;
+            xy[0] = (x + offset) * 4;
+            func_800E30E0(gfx, sprite, 0, xy);
             i--;
         } while (i >= 0);
     }
 }
 
-void sccustom_banjo_entrypoint_1(s32 param_0, s32 param_1, s32 param_2, s32 param_3)
+// Vertical air meter: icons up to the remaining air are bright and tinted blue.
+void sccustom_banjo_entrypoint_1(s32 gfx, s32 infobar, s32 x, s32 y)
 {
-    s32 local_0;
-    s32 n;
-    f32 fv;
-    s32 lim;
-    s32 cnt;
-    s32 scale;
-    s32 cap;
+    s32 sprite;
+    s32 slide;
+    f32 scale;
+    s32 air;
+    s32 count;
+    s32 fade;
+    s32 slide_len;
     s32 i;
-    s32 pos;
-    s32 sp60[2];
+    s32 offset;
+    s32 xy[2];
     s32 alpha;
 
-    local_0 = func_800D674C(0x9DA);
-    n = _scinfobar_entrypoint_11(param_1);
-    fv = _scinfobar_entrypoint_18(param_1);
-    lim = func_800CF6B0();
-    cnt = func_800CF6D0();
-    cap = (s32) ((f32) (cnt * 0 + 0x28) * fv);
-    if (n < cap) {
-        scale = (s32) ((1.0f - (f32) (cap - n) / (f32) cap) * 256.0f);
+    sprite = func_800D674C(0x9DA);
+    slide = _scinfobar_entrypoint_11(infobar);
+    scale = _scinfobar_entrypoint_18(infobar);
+    air = func_800CF6B0();
+    count = func_800CF6D0();
+    // Matching: needed for the match.
+    slide_len = (s32) ((f32) (count * 0 + 0x28) * scale);
+    if (slide < slide_len) {
+        fade = (s32) ((1.0f - (f32) (slide_len - slide) / (f32) slide_len) * 256.0f);
     } else {
-        scale = 0x100;
+        fade = 0x100;
     }
-    i = cnt - 1;
+    i = count - 1;
     if (i >= 0) {
         do {
-            pos = (s32) ((f32) (i * 0x14 + 0x28) * fv);
-            if (n < pos) {
-                pos = n;
+            offset = (s32) ((f32) (i * 0x14 + 0x28) * scale);
+            if (slide < offset) {
+                offset = slide;
             }
-            if (i < lim) {
+            if (i < air) {
                 alpha = 0xFF;
                 func_800E24F8(0x80, 0x80, 0xFF);
             } else {
                 alpha = 0x78;
             }
-            func_800E257C((alpha * scale) >> 8);
-            func_800E253C(fv);
-            sp60[0] = param_2 * 4;
-            sp60[1] = (param_3 + pos) * 4;
-            func_800E30E0(param_0, local_0, 0, sp60);
+            func_800E257C((alpha * fade) >> 8);
+            func_800E253C(scale);
+            xy[0] = x * 4;
+            xy[1] = (y + offset) * 4;
+            func_800E30E0(gfx, sprite, 0, xy);
             i--;
         } while (i >= 0);
     }
 }
 
-s32 sccustom_banjo_entrypoint_2(s32 param_0)
+// Width of the icon row.
+s32 sccustom_banjo_entrypoint_2(s32 infobar)
 {
-    s32 local_0 = _scinfobar_entrypoint_20(param_0) - 1;
-    f32 local_1 = _scinfobar_entrypoint_18(param_0);
-    return (local_0 * 20 + 0x28) * local_1;
+    s32 last = _scinfobar_entrypoint_20(infobar) - 1;
+    f32 scale = _scinfobar_entrypoint_18(infobar);
+    return (last * 20 + 0x28) * scale;
 }
 
-s32 sccustom_banjo_entrypoint_3(s32 param_0)
+// Height of the air meter.
+s32 sccustom_banjo_entrypoint_3(s32 infobar)
 {
-    s32 local_0;
-    f32 local_1;
+    s32 last;
+    f32 scale;
 
-    local_0 = func_800CF6D0() - 1;
-    local_1 = _scinfobar_entrypoint_18(param_0);
-    local_1 = (local_0 * 20 + 40) * local_1;
-    return (s32) local_1;
+    last = func_800CF6D0() - 1;
+    scale = _scinfobar_entrypoint_18(infobar);
+    scale = (last * 20 + 40) * scale;
+    return (s32) scale;
 }

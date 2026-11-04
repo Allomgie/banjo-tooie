@@ -7,32 +7,33 @@ extern int func_800C3058(u8, unsigned int);
 extern void func_800C31DC(u8, f32);
 extern f32 func_800DC178(f32, f32);
 typedef struct {
-    s32 local_0;
-    f32 local_1[3];
-    u8 pad_0[0x14];
-    u8 local_2;
-    u8 local_3;
-    u8 local_4;
+    s32 unk_0;
+    f32 pos[3];
+    u8 pad_10[0x14];
+    u8 source_a;
+    u8 source_b;
+    u8 foot;
 } FxStepState;
+// Per-surface entry: two sounds (one per foot), pitch range, volume.
 typedef struct {
     s16 id;
     s16 first;
     s16 second;
-    s16 pad_0;
+    s16 pad_6;
     f32 low;
     f32 high;
     f32 scale;
     s16 count;
-    s16 pad_1;
+    s16 pad_16;
 } StepEffect;
 extern StepEffect D_80800830_fxstep[];
 typedef struct {
-    s16 local_0;
-    s16 local_1;
-    f32 local_2;
-    f32 local_3;
-    s16 local_4;
-    s16 pad_0;
+    s16 id;
+    s16 sound;
+    f32 pitch;
+    f32 pitch_range;
+    s16 volume;
+    s16 pad_E;
 } StepSoundRecord;
 extern StepSoundRecord D_80800AA0_fxstep[];
 extern void *heap_alloc(s32);
@@ -45,270 +46,277 @@ int fxstep_entrypoint_5(s32 param_0, s32 param_1, f32 param_2);
 void fxstep_entrypoint_7();
 extern s32 fxstep_entrypoint_15(s32, s32, s32 *, s32 *, f32 *);
 
-s32 func_80800000_fxstep(u8 *param_0)
+// Returns the surface type under the actor; 4 = water.
+s32 func_80800000_fxstep(u8 *state)
 {
-    f32 temp_f0;
-    s32 temp_a1;
-    temp_f0 = *(f32 *) ((s8 *) param_0 + 0x10) - *(f32 *) ((s8 *) param_0 + 8);
-    if ((temp_f0 > 0.0f) && (temp_f0 < 60.0f)) {
+    f32 water_dist;
+    s32 ground;
+    water_dist = *(f32 *) ((s8 *) state + 0x10) - *(f32 *) ((s8 *) state + 8);
+    if ((water_dist > 0.0f) && (water_dist < 60.0f)) {
         return 4;
     }
-    temp_a1 = *(s32 *) ((s8 *) param_0 + 0);
-    if (temp_a1 == 0) {
+    ground = *(s32 *) ((s8 *) state + 0);
+    if (ground == 0) {
         return 0;
     }
+    // Matching: the repeated masks are needed for the match.
     return func_800C84B0(
-        (((((temp_a1 & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) &
+        (((((ground & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) &
             0xFFFFFFFF,
-        temp_a1);
+        ground);
 }
 
-void func_80800078_fxstep(u8 *param_0, s32 param_1, f32 param_2, f32 param_3, s32 param_4)
+// Plays one step sound with randomized pitch, then switches foot.
+void func_80800078_fxstep(u8 *state, s32 sound_id, f32 pitch, f32 pitch_range, s32 volume)
 {
-    f32 local_1;
-    f32 local_0;
-    u8 local_2;
+    f32 half_range;
+    f32 rand_pitch;
+    u8 source;
 
-    local_1 = param_3 * 0.5f;
-    local_0 = func_800DC178(param_2 - local_1, param_2 + local_1);
-    if (param_0[0x26])
-        local_2 = param_0[0x24];
+    half_range = pitch_range * 0.5f;
+    rand_pitch = func_800DC178(pitch - half_range, pitch + half_range);
+    if (state[0x26])
+        source = state[0x24];
     else
-        local_2 = param_0[0x25];
-    func_800C35E8(local_2, param_0 + 4);
-    func_800C301C(local_2, param_1);
-    func_800C31DC(local_2, local_0);
-    func_800C3058(local_2, param_4);
-    func_800C3BDC(local_2);
-    param_0[0x26] ^= 1;
+        source = state[0x25];
+    func_800C35E8(source, state + 4);
+    func_800C301C(source, sound_id);
+    func_800C31DC(source, rand_pitch);
+    func_800C3058(source, volume);
+    func_800C3BDC(source);
+    state[0x26] ^= 1;
 }
 
-void func_8080012C_fxstep(FxStepState *param_0, s32 param_1, s32 param_2, f32 param_3, f32 param_4,
-                          f32 param_5, s32 param_6)
+// Same as above, with a separate sound and pitch for each foot.
+void func_8080012C_fxstep(FxStepState *state, s32 sound_a, s32 sound_b, f32 pitch_a, f32 pitch_b,
+                          f32 pitch_range, s32 volume)
 {
-    f32 local_0;
-    f32 local_1;
-    s32 local_2;
-    u8 local_3;
+    f32 pitch;
+    f32 half_range;
+    s32 sound;
+    u8 source;
 
-    local_0 = param_0->local_4 ? param_3 : param_4;
-    local_1 = param_5 * 0.5f;
-    local_0 = func_800DC178(local_0 - local_1, local_0 + local_1);
-    local_2 = param_0->local_4 ? param_1 : param_2;
-    local_3 = param_0->local_4 ? param_0->local_2 : param_0->local_3;
-    func_800C35E8(local_3, param_0->local_1);
-    func_800C301C(local_3, local_2);
-    func_800C31DC(local_3, local_0);
-    func_800C3058(local_3, param_6);
-    func_800C3BDC(local_3);
-    param_0->local_4 ^= 1;
+    pitch = state->foot ? pitch_a : pitch_b;
+    half_range = pitch_range * 0.5f;
+    pitch = func_800DC178(pitch - half_range, pitch + half_range);
+    sound = state->foot ? sound_a : sound_b;
+    source = state->foot ? state->source_a : state->source_b;
+    func_800C35E8(source, state->pos);
+    func_800C301C(source, sound);
+    func_800C31DC(source, pitch);
+    func_800C3058(source, volume);
+    func_800C3BDC(source);
+    state->foot ^= 1;
 }
 
-int func_80800210_fxstep(void *param_0, f32 param_1, f32 param_2, s32 param_3)
-{
-    s32 local_0;
-
-    for (local_0 = 0; D_80800830_fxstep[local_0].id != 0; local_0++) {
-        if (param_3 == D_80800830_fxstep[local_0].id) {
-            func_8080012C_fxstep(
-                param_0, D_80800830_fxstep[local_0].first, D_80800830_fxstep[local_0].second,
-                D_80800830_fxstep[local_0].low + param_1, D_80800830_fxstep[local_0].high + param_1,
-                D_80800830_fxstep[local_0].scale,
-                (s32) ((f32) D_80800830_fxstep[local_0].count * param_2));
-            return 1;
-        }
-    }
-    return 0;
-}
-
-int func_808002B4_fxstep(void *param_0, f32 param_1, f32 param_2, s32 param_3)
+int func_80800210_fxstep(void *state, f32 pitch_offset, f32 volume_scale, s32 surface)
 {
     s32 i;
 
-    for (i = 0; D_80800AA0_fxstep[i].local_0 != 0; i++) {
-        if (D_80800AA0_fxstep[i].local_0 == param_3) {
-            func_80800078_fxstep(
-                param_0, D_80800AA0_fxstep[i].local_1, D_80800AA0_fxstep[i].local_2 + param_1,
-                D_80800AA0_fxstep[i].local_3, (s32) (D_80800AA0_fxstep[i].local_4 * param_2));
+    for (i = 0; D_80800830_fxstep[i].id != 0; i++) {
+        if (surface == D_80800830_fxstep[i].id) {
+            func_8080012C_fxstep(
+                state, D_80800830_fxstep[i].first, D_80800830_fxstep[i].second,
+                D_80800830_fxstep[i].low + pitch_offset, D_80800830_fxstep[i].high + pitch_offset,
+                D_80800830_fxstep[i].scale,
+                (s32) ((f32) D_80800830_fxstep[i].count * volume_scale));
             return 1;
         }
     }
     return 0;
 }
 
-void func_80800344_fxstep(void *param_0, f32 param_1, f32 param_2, s32 param_3)
+int func_808002B4_fxstep(void *state, f32 pitch_offset, f32 volume_scale, s32 surface)
 {
-    s32 local_0;
-    void (*local_1)(void *, s32, s32);
+    s32 i;
 
-    local_0 = func_80800000_fxstep(param_0);
-    if (param_3) {
-        func_80800210_fxstep(param_0, *(f32 *) &param_1, *(f32 *) &param_2, local_0);
+    for (i = 0; D_80800AA0_fxstep[i].id != 0; i++) {
+        if (D_80800AA0_fxstep[i].id == surface) {
+            func_80800078_fxstep(
+                state, D_80800AA0_fxstep[i].sound, D_80800AA0_fxstep[i].pitch + pitch_offset,
+                D_80800AA0_fxstep[i].pitch_range, (s32) (D_80800AA0_fxstep[i].volume * volume_scale));
+            return 1;
+        }
     }
-    local_1 = *(void (**)(void *, s32, s32))((u8 *) param_0 + 0x14);
-    if (local_1 != NULL) {
-        local_1(param_0, local_0, *(s32 *) ((u8 *) param_0 + 0x14 + 4));
+    return 0;
+}
+
+void func_80800344_fxstep(void *state, f32 pitch_offset, f32 volume_scale, s32 play)
+{
+    s32 surface;
+    void (*callback)(void *, s32, s32);
+
+    surface = func_80800000_fxstep(state);
+    if (play) {
+        // Matching: the f32 reinterpret casts are needed for the match.
+        func_80800210_fxstep(state, *(f32 *) &pitch_offset, *(f32 *) &volume_scale, surface);
+    }
+    callback = *(void (**)(void *, s32, s32))((u8 *) state + 0x14);
+    if (callback != NULL) {
+        callback(state, surface, *(s32 *) ((u8 *) state + 0x14 + 4));
     }
 }
 
-void func_808003B4_fxstep(void *param_0, f32 param_1, f32 param_2, s32 param_3)
+void func_808003B4_fxstep(void *state, f32 pitch_offset, f32 volume_scale, s32 play)
 {
-    s32 local_0;
-    void (*local_1)(void *, s32, s32);
+    s32 surface;
+    void (*callback)(void *, s32, s32);
 
-    local_0 = func_80800000_fxstep(param_0);
-    if (param_3) {
-        func_808002B4_fxstep(param_0, param_1, param_2, local_0);
+    surface = func_80800000_fxstep(state);
+    if (play) {
+        func_808002B4_fxstep(state, pitch_offset, volume_scale, surface);
     }
-    local_1 = *(void (**)(void *, s32, s32))((u8 *) param_0 + 0x1C);
-    if (local_1 != NULL) {
-        local_1(param_0, local_0, *(s32 *) ((u8 *) param_0 + 0x1C + 4));
+    callback = *(void (**)(void *, s32, s32))((u8 *) state + 0x1C);
+    if (callback != NULL) {
+        callback(state, surface, *(s32 *) ((u8 *) state + 0x1C + 4));
     }
 }
 
-void fxstep_entrypoint_0(void *param_0)
+void fxstep_entrypoint_0(void *state)
 {
-    func_800C2FDC(*(char *) ((char *) param_0 + 0x24));
-    func_800C2FDC(*(char *) ((char *) param_0 + 0x25));
-    heap_free(param_0);
+    func_800C2FDC(*(char *) ((char *) state + 0x24));
+    func_800C2FDC(*(char *) ((char *) state + 0x25));
+    heap_free(state);
 }
 
 void *fxstep_entrypoint_1(void)
 {
-    u8 *local_0;
+    u8 *state;
 
-    local_0 = heap_alloc(0x28);
-    local_0[0x26] = 0;
-    local_0[0x27] = 1;
-    local_0[0x24] = func_800C2E04();
-    func_800C330C(local_0[0x24], 3);
-    func_800C3418(local_0[0x24], 0);
-    local_0[0x25] = func_800C2E04();
-    func_800C330C(local_0[0x25], 3);
-    func_800C3418(local_0[0x25], 0);
-    func_800EFD24((f32 *) (local_0 + 4));
-    fxstep_entrypoint_4(local_0, 0, 0);
-    fxstep_entrypoint_5(local_0, 0, 0.0f);
-    fxstep_entrypoint_7(local_0, 0, 0);
-    return local_0;
+    state = heap_alloc(0x28);
+    state[0x26] = 0;
+    state[0x27] = 1;
+    state[0x24] = func_800C2E04();
+    func_800C330C(state[0x24], 3);
+    func_800C3418(state[0x24], 0);
+    state[0x25] = func_800C2E04();
+    func_800C330C(state[0x25], 3);
+    func_800C3418(state[0x25], 0);
+    func_800EFD24((f32 *) (state + 4));
+    fxstep_entrypoint_4(state, 0, 0);
+    fxstep_entrypoint_5(state, 0, 0.0f);
+    fxstep_entrypoint_7(state, 0, 0);
+    return state;
 }
 
-int fxstep_entrypoint_2(u8 *param_0, unsigned int param_1)
+int fxstep_entrypoint_2(u8 *state, unsigned int foot)
 {
-    param_0[0x26] = param_1;
+    state[0x26] = foot;
 }
 
-fxstep_entrypoint_3(s32 param_0, s32 param_1)
+fxstep_entrypoint_3(s32 state, s32 enabled)
 {
-    *(s8 *) (param_0 + 0x27) = param_1;
+    *(s8 *) (state + 0x27) = enabled;
 }
 
-void fxstep_entrypoint_4(param_0, param_1, param_2) void *param_0;
-s32 param_1;
-s32 param_2;
+void fxstep_entrypoint_4(state, callback, callback_arg) void *state;
+s32 callback;
+s32 callback_arg;
 {
-    ((u32 *) param_0)[7] = param_1;
-    ((u32 *) param_0)[8] = param_2;
+    ((u32 *) state)[7] = callback;
+    ((u32 *) state)[8] = callback_arg;
 }
 
-fxstep_entrypoint_5(s32 param_0, s32 param_1, f32 param_2)
+fxstep_entrypoint_5(s32 state, s32 ground, f32 water_level)
 {
-    *(s32 *) (param_0 + 0x0) = param_1;
-    *(f32 *) (param_0 + 0x10) = param_2;
+    *(s32 *) (state + 0x0) = ground;
+    *(f32 *) (state + 0x10) = water_level;
 }
 
-s32 fxstep_entrypoint_6(s32 *param_0)
+s32 fxstep_entrypoint_6(s32 *state)
 {
-    s32 *new_var;
-    int new_var3;
-    new_var3 = 1;
+    s32 *pos;
+    int offset;
+    // Matching: extra temporary and nested block are needed for the match.
+    offset = 1;
     {
-        new_var = param_0 + new_var3;
-        func_800EE7F8(new_var);
+        pos = state + offset;
+        func_800EE7F8(pos);
     }
 }
 
-void fxstep_entrypoint_7(void *param_0, s32 param_1, s32 param_2)
+void fxstep_entrypoint_7(void *state, s32 callback, s32 callback_arg)
 {
-    ((s32 *) param_0)[5] = param_1;
-    ((s32 *) param_0)[6] = param_2;
+    ((s32 *) state)[5] = callback;
+    ((s32 *) state)[6] = callback_arg;
 }
 
-void fxstep_entrypoint_8(u8 *param_0, f32 param_1, f32 param_2)
+void fxstep_entrypoint_8(u8 *state, f32 pitch_offset, f32 volume_scale)
 {
-    func_808003B4_fxstep(param_0, param_1, param_2, param_0[0x27]);
+    func_808003B4_fxstep(state, pitch_offset, volume_scale, state[0x27]);
 }
 
-void fxstep_entrypoint_9(s32 param_0)
+void fxstep_entrypoint_9(s32 state)
 {
-    func_808003B4_fxstep(param_0, 0.0f, 1.0f, 0);
+    func_808003B4_fxstep(state, 0.0f, 1.0f, 0);
 }
 
-int fxstep_entrypoint_10(s32 param_0, s32 param_1)
+int fxstep_entrypoint_10(s32 state, s32 surface)
 {
-    func_808002B4_fxstep(param_0, 0, 1.0f, param_1);
+    func_808002B4_fxstep(state, 0, 1.0f, surface);
 }
 
-void fxstep_entrypoint_11(u8 *param_0, f32 param_1, f32 param_2)
+void fxstep_entrypoint_11(u8 *state, f32 pitch_offset, f32 volume_scale)
 {
-    func_80800344_fxstep(param_0, param_1, param_2, param_0[0x27]);
+    func_80800344_fxstep(state, pitch_offset, volume_scale, state[0x27]);
 }
 
-void fxstep_entrypoint_12(s32 param_0)
+void fxstep_entrypoint_12(s32 state)
 {
-    func_80800344_fxstep(param_0, 0, 1.0f, 0);
+    func_80800344_fxstep(state, 0, 1.0f, 0);
 
 }
 
-void fxstep_entrypoint_13(u8 *param_0, s32 param_1)
+void fxstep_entrypoint_13(u8 *state, s32 surface)
 {
-    if (param_0[0x27] != 0) {
-        func_80800210_fxstep(param_0, 0, 1.0f, param_1);
+    if (state[0x27] != 0) {
+        func_80800210_fxstep(state, 0, 1.0f, surface);
     }
 
 }
 
-void fxstep_entrypoint_14(s32 param_0, s32 param_1, void *param_2, s32 param_3, s32 param_4)
+// One-shot surface sound at a position, for actors without footstep state.
+void fxstep_entrypoint_14(s32 surface, s32 variant, void *pos, s32 range_min, s32 range_max)
 {
-    s32 local_0;
-    s32 local_1;
-    f32 local_2;
-    u8 local_3;
+    s32 sound;
+    s32 volume;
+    f32 pitch;
+    u8 source;
 
-if (fxstep_entrypoint_15(param_0, param_1, &local_0, &local_1, &local_2)) {
-    local_3 = func_800C2E04();
-    func_800C330C(local_3, 1);
-    func_800C35E8(local_3, param_2);
-    func_800C301C(local_3, local_0);
-    func_800C31DC(local_3, func_800DC178(-0.05f, 0.05f) + local_2);
-    func_800C3058(local_3, local_1);
-    func_800C3584(local_3, (f32) param_3, (f32) param_4);
-    func_800C3BDC(local_3);
+if (fxstep_entrypoint_15(surface, variant, &sound, &volume, &pitch)) {
+    source = func_800C2E04();
+    func_800C330C(source, 1);
+    func_800C35E8(source, pos);
+    func_800C301C(source, sound);
+    func_800C31DC(source, func_800DC178(-0.05f, 0.05f) + pitch);
+    func_800C3058(source, volume);
+    func_800C3584(source, (f32) range_min, (f32) range_max);
+    func_800C3BDC(source);
 }
 
 }
 
-s32 fxstep_entrypoint_15(param_0, param_1, param_2, param_3, param_4)
-s32 param_0;
-s32 param_1;
-s32 *param_2;
-s32 *param_3;
-f32 *param_4;
+s32 fxstep_entrypoint_15(surface, variant, out_sound, out_volume, out_pitch)
+s32 surface;
+s32 variant;
+s32 *out_sound;
+s32 *out_volume;
+f32 *out_pitch;
 {
-    s32 local_0;
+    s32 i;
 
-    for (local_0 = 0; D_80800830_fxstep[local_0].id != 0; local_0++) {
+    for (i = 0; D_80800830_fxstep[i].id != 0; i++) {
 
-if (param_0 == D_80800830_fxstep[local_0].id) {
-    if (param_1) {
-        *param_4 = D_80800830_fxstep[local_0].low;
-        *param_2 = D_80800830_fxstep[local_0].first;
+if (surface == D_80800830_fxstep[i].id) {
+    if (variant) {
+        *out_pitch = D_80800830_fxstep[i].low;
+        *out_sound = D_80800830_fxstep[i].first;
     } else {
-        *param_4 = D_80800830_fxstep[local_0].high;
-        *param_2 = D_80800830_fxstep[local_0].second;
+        *out_pitch = D_80800830_fxstep[i].high;
+        *out_sound = D_80800830_fxstep[i].second;
     }
-    *param_4 += func_800DC178(-0.05f, 0.05f);
-    *param_3 = D_80800830_fxstep[local_0].count;
+    *out_pitch += func_800DC178(-0.05f, 0.05f);
+    *out_volume = D_80800830_fxstep[i].count;
     return 1;
 }
 
@@ -316,6 +324,7 @@ if (param_0 == D_80800830_fxstep[local_0].id) {
 return 0;
 }
 
+// TU-NOTE: the overlay's .data is defined here in C; values taken from the ROM.
 StepEffect D_80800830_fxstep[26] = {
     0x1,   0x404,  0x404, 0x0,   1.0f,   1.2f,  0.05f, 0x2328, 0x0,   0x2,   0x403,  0x403,
     0x0,   1.0f,   1.2f,  0.05f, 0xBB8,  0x0,   0x3,   0x405,  0x405, 0x0,   1.0f,   1.2f,

@@ -1,44 +1,47 @@
 #include "common.h"
 
-s32 gldbstring_entrypoint_0(s32 param_0, s32 param_1)
+// Load and pin a text asset; returns a pointer past its first byte.
+s32 gldbstring_entrypoint_0(s32 unk_0, s32 asset_id)
 {
-    param_0 = func_800D674C(param_1);
+    unk_0 = func_800D674C(asset_id);
     func_800D70D0(1);
     func_800D71F4(1);
-    return param_0 + 1;
+    return unk_0 + 1;
 }
 
-u8 *gldbstring_entrypoint_1(u8 *param_0, s16 param_1)
+// Find string `id` in the current language: entries are {id + 0x80, len, data}.
+u8 *gldbstring_entrypoint_1(u8 *text, s16 id)
 {
-    u8 *local_0;
-    u8 *local_1;
-    s32 local_2;
-    s32 local_3;
-    u8 local_4;
-    u8 local_5;
-    s32 local_6;
+    u8 *table;
+    u8 *entry;
+    s32 count;
+    s32 i;
+    u8 entry_id;
+    u8 len;
+    s32 offset;
 
-    local_6 = _gldialog_entrypoint_0() * 2;
-    local_0 = param_0 + local_6;
-    local_6 = local_0[0];
-    local_6 += local_0[1] << 8;
-    local_1 = param_0 + local_6;
-    local_2 = local_1[-1];
-    for (local_3 = 0; local_3 < local_2; local_3++) {
-        local_4 = local_1[0];
-        local_5 = local_1[1];
-        local_1 += 2;
-        if (param_1 + 0x80 == local_4) {
-            return local_1;
+    offset = _gldialog_entrypoint_0() * 2;
+    table = text + offset;
+    offset = table[0];
+    offset += table[1] << 8;
+    entry = text + offset;
+    count = entry[-1];
+    for (i = 0; i < count; i++) {
+        entry_id = entry[0];
+        len = entry[1];
+        entry += 2;
+        if (id + 0x80 == entry_id) {
+            return entry;
         }
-        local_1 += local_5;
+        entry += len;
     }
     return NULL;
 }
 
-s32 gldbstring_entrypoint_2(Actor *this)
+// Unpin and release the text asset.
+s32 gldbstring_entrypoint_2(Actor *asset)
 {
-    func_800D721C(this, 0);
-    func_800D70F8(this, 0);
-    func_800D6CEC(this);
+    func_800D721C(asset, 0);
+    func_800D70F8(asset, 0);
+    func_800D6CEC(asset);
 }

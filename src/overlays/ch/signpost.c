@@ -2,24 +2,25 @@
 
 extern void *D_808002E0_chsignpost;
 typedef struct {
-    u8 pad[0x28];
-    s32 f28;
-    u8 pad2[0xC];
-    f32 f38;
-    u8 pad3[0x3A];
-    u16 f76 : 9;
-    u16 pad76 : 7;
+    u8 pad_0[0x28];
+    s32 unk_28;
+    u8 pad_2C[0xC];
+    f32 unk_38;
+    u8 pad_3C[0x3A];
+    u16 variant : 9;
+    u16 pad_76 : 7;
 } SignState;
 extern void func_80102FDC(SignState *, f32);
 extern s32 func_8010CD88(Actor *, f32, f32);
 typedef union {
-    s32 local_0;
-    s16 local_1[2];
+    s32 word;
+    s16 half[2];
 } SignpostMessage1482;
 extern u8 D_80800328_chsignpost[];
 extern void func_80800264_chsignpost(s32, s32, s32);
 extern void _gcdialogcamera_entrypoint_3(void *, f32);
 void func_80800230_chsignpost();
+// Shows hint text 0x1686 + index; texts 0x16B7-0x16BE become 0x16BF unless cheat 6 is active.
 int func_80800274_chsignpost();
 
 int chsignpost_entrypoint_0()
@@ -27,36 +28,37 @@ int chsignpost_entrypoint_0()
     return &D_808002E0_chsignpost;
 }
 
-void func_8080000C_chsignpost(SignState *param_0)
+void func_8080000C_chsignpost(SignState *actor)
 {
-    func_80102FDC(param_0, param_0->f38 * 0.75f);
-    param_0->f28 = param_0->f76 - 0x32;
+    func_80102FDC(actor, actor->unk_38 * 0.75f);
+    actor->unk_28 = actor->variant - 0x32;
 }
 
-void func_80800058_chsignpost(Actor *param_0)
+// First read of any sign plays tutorial text 0x16C2; afterwards facing a sign and pressing talk shows its hint.
+void func_80800058_chsignpost(Actor *actor)
 {
-    s32 local_1;
-    s32 local_2;
+    s32 unk_0;
+    s32 state;
 
-    local_2 = param_0->unk70_10;
-    switch (local_2) {
+    state = actor->unk70_10;
+    switch (state) {
         case 1:
             if (!func_800DA298(0x3A)) {
-                if (func_8010CAC0(param_0->position, 0x15E) &&
-                    func_8010CD88(param_0, 360.0f, 70.0f) &&
+                if (func_8010CAC0(actor->position, 0x15E) &&
+                    func_8010CD88(actor, 360.0f, 70.0f) &&
                     func_800F4B8C(func_800F54E4(), -1, 0)) {
-                    _subaddiedialog_entrypoint_11(param_0->unk0, 0x16C2, 0xE, param_0->position,
+                    _subaddiedialog_entrypoint_11(actor->unk0, 0x16C2, 0xE, actor->position,
                                                   0x28);
-                    func_80101FDC(param_0, 2);
+                    func_80101FDC(actor, 2);
                     func_800DA544(0x3A);
                 }
             } else {
-                local_1 = (*(u32 *) ((u8 *) param_0 + 0x70) & 1) ? 4 : 0;
+                unk_0 = (*(u32 *) ((u8 *) actor + 0x70) & 1) ? 4 : 0;
                 if (_subaddiedialog_entrypoint_6(
-                        param_0->position, (s32) param_0->rotation[1],
-                        (*(u32 *) ((u8 *) param_0 + 0x70) & 1) ? 0x15E : 0xFA, 70, local_1)) {
-                    param_0->unk70_10 = 2;
-                    func_80800274_chsignpost(param_0);
+                        actor->position, (s32) actor->rotation[1],
+                        (*(u32 *) ((u8 *) actor + 0x70) & 1) ? 0x15E : 0xFA, 70, unk_0)) {
+                    actor->unk70_10 = 2;
+                    func_80800274_chsignpost(actor);
                 }
             }
         case 2:
@@ -64,17 +66,17 @@ void func_80800058_chsignpost(Actor *param_0)
     }
 }
 
-s32 func_8080019C_chsignpost(Actor *param_0, s32 param_1, SignpostMessage1482 param_2)
+s32 func_8080019C_chsignpost(Actor *actor, s32 msg, SignpostMessage1482 payload)
 {
-    switch (param_1) {
+    switch (msg) {
         case 0x2E:
-            func_80800230_chsignpost(param_0, param_2.local_1[0], param_2.local_1[1]);
+            func_80800230_chsignpost(actor, payload.half[0], payload.half[1]);
             break;
         case 0x2F:
-            func_80800264_chsignpost((s32) param_0, param_2.local_1[0], param_2.local_1[1]);
+            func_80800264_chsignpost((s32) actor, payload.half[0], payload.half[1]);
             break;
         case 0x52:
-            _gcdialogcamera_entrypoint_3(D_80800328_chsignpost, param_0->scale);
+            _gcdialogcamera_entrypoint_3(D_80800328_chsignpost, actor->scale);
             break;
         default:
             return 0;
@@ -82,39 +84,42 @@ s32 func_8080019C_chsignpost(Actor *param_0, s32 param_1, SignpostMessage1482 pa
     return 1;
 }
 
-void func_80800230_chsignpost(param_0, param_1, param_2) u8 *param_0;
-s32 param_1;
-s32 param_2;
+void func_80800230_chsignpost(actor, unk_1, unk_2) u8 *actor;
+s32 unk_1;
+s32 unk_2;
 {
     {
-        if ((((u16) *(u16 *) ((u8 *) param_0 + 0x72) & 0xFFFFFFFF) >> 10) == 2) {
-            *(u8 *) ((u8 *) param_0 + 0x72) = (*(u8 *) ((u8 *) param_0 + 0x72) & 0xFF03) | 4;
+        if ((((u16) *(u16 *) ((u8 *) actor + 0x72) & 0xFFFFFFFF) >> 10) == 2) {
+            *(u8 *) ((u8 *) actor + 0x72) = (*(u8 *) ((u8 *) actor + 0x72) & 0xFF03) | 4;
         }
     }
 }
 
-void func_80800264_chsignpost(s32 arg0, s32 arg1, s32 arg2)
+void func_80800264_chsignpost(s32 actor, s32 unk_1, s32 unk_2)
 {
 }
 
-int func_80800274_chsignpost(param_0) volatile s32 param_0[3];
+int func_80800274_chsignpost(actor) volatile s32 actor[3];
 {
-    s32 local_0;
-    s32 local_1;
+    s32 unk_0;
+    s32 text_id;
 
-    local_1 = param_0[10] + 0x1686;
-    if ((local_1 >= 0x16B7) && (local_1 < 0x16BF)) {
-        if (func_800D3E40(6, local_1) == 0) {
-            local_1 = 0x16BF;
+    text_id = actor[10] + 0x1686;
+    if ((text_id >= 0x16B7) && (text_id < 0x16BF)) {
+        if (func_800D3E40(6, text_id) == 0) {
+            text_id = 0x16BF;
         }
     }
-    _subaddiedialog_entrypoint_11(param_0[0], local_1, 0xF, &param_0[1], 0x28);
+    _subaddiedialog_entrypoint_11(actor[0], text_id, 0xF, &actor[1], 0x28);
     return 1;
 }
 
 extern void func_80101870();
 extern void func_80107C2C();
-void *D_808002E0_chsignpost = (void *) 0x022D0198;
+// TU-NOTE: the .data of this overlay is defined here in C. Its tables hold pointers to functions of
+// this file; IDO's assembler schedules some of them differently unless the tables are in the same
+// unit.
+void *D_808002E0_chsignpost =(void *) 0x022D0198;
 static u32 D_808002E0_chsignpost_rest[17] = {0x7A20001,
                                              0x0,
                                              (u32) func_80800058_chsignpost,

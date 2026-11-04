@@ -30,185 +30,192 @@ extern s32 func_800D90F8(f32 *, f32);
 extern void func_800C4208(s32, f32, s32, f32 *, f32, f32);
 extern void _subaddieaudioloop_entrypoint_0(Actor *, f32);
 
-void func_80800000_chlinkpipefan(u8 *param_0)
+// Init: loads the variant (0x33..0x39) and removes the fan if its flag is already set.
+void func_80800000_chlinkpipefan(u8 *actor)
 {
-    u32 temp_t6;
-    u32 var_v0;
-    int new_var;
-    temp_t6 = (var_v0 = (u32) *(u16 *) ((u8 *) param_0 + 0x76) >> 7);
-    if (((s32) temp_t6 < 0x33) || ((s32) temp_t6 >= 0x3A)) {
-        func_800FFA88(*(s32 *) ((u8 *) param_0 + 0));
-        new_var = 7;
+    u32 variant;
+    u32 variant_idx;
+    int shift;
+    variant = (variant_idx = (u32) *(u16 *) ((u8 *) actor + 0x76) >> 7);
+    if (((s32) variant < 0x33) || ((s32) variant >= 0x3A)) {
+        func_800FFA88(*(s32 *) ((u8 *) actor + 0));
+        // Matching: separate shift variable and empty block needed for the match.
+        shift = 7;
         if (0) {
         }
-        var_v0 = (u32) *(u16 *) ((u8 *) param_0 + 0x76) >> new_var;
+        variant_idx = (u32) *(u16 *) ((u8 *) actor + 0x76) >> shift;
     }
-    if (func_800DA298(var_v0 + 0x15C) != 0) {
-        func_800FFA88(*(s32 *) ((u8 *) param_0 + 0));
+    if (func_800DA298(variant_idx + 0x15C) != 0) {
+        func_800FFA88(*(s32 *) ((u8 *) actor + 0));
     }
-    *(f32 *) ((u8 *) param_0 + 0x34) = 1.5f;
+    *(f32 *) ((u8 *) actor + 0x34) = 1.5f;
 }
 
 void func_808003B4_chlinkpipefan();
 
-void func_80800080_chlinkpipefan(Actor *param_0)
+// Matching: the line breaks in this function are needed for the match.
+// Per-frame update: spin speed by state, whoosh and loop sounds, blade alpha.
+void func_80800080_chlinkpipefan(Actor *fan)
 {
-    s32 local_0;
-    f32 local_1;
-    f32 local_2;
+    s32 state;
+    f32 prev_phase;
+    f32 pitch;
 
-    local_0 = param_0->unk70_10;
-    switch (local_0) {
+    state = fan->unk70_10;
+    switch (state) {
         case 1:
-        param_0->rotation[2] = func_800F1FF0(param_0->rotation[2], 0.0f, 0.1f, 0.1f, 3.0f);
+        fan->rotation[2] = func_800F1FF0(fan->rotation[2], 0.0f, 0.1f, 0.1f, 3.0f);
         break;
         case 2:
-        if (func_800D91EC((f32 *)&param_0->actorData[7], 1.5f)) {
-            param_0->unk54 = 450.0f;
+        if (func_800D91EC((f32 *)&fan->actorData[7], 1.5f)) {
+            fan->unk54 = 450.0f;
         } else {
-            param_0->unk54 = func_800F10B4(*(f32 *)&param_0->actorData[7], 1.5f, 0, 450.0f, 0);
+            fan->unk54 = func_800F10B4(*(f32 *)&fan->actorData[7], 1.5f, 0, 450.0f, 0);
         }
         break;
         case 3:
-        if (func_800D90F8((f32 *)&param_0->actorData[7], 0.75f)) {
-            if (func_800D90A4(&param_0->unk58)) {
-                func_808003B4_chlinkpipefan(param_0, 2);
+        if (func_800D90F8((f32 *)&fan->actorData[7], 0.75f)) {
+            if (func_800D90A4(&fan->unk58)) {
+                func_808003B4_chlinkpipefan(fan, 2);
             }
         } else {
-            param_0->unk54 = func_800F10B4(*(f32 *)&param_0->actorData[7], 1.5f, 0, 450.0f, 0);
+            fan->unk54 = func_800F10B4(*(f32 *)&fan->actorData[7], 1.5f, 0, 450.0f, 0);
         }
         break;
         case 4:
-        if (func_800D90A4((f32 *)&param_0->actorData[7])) {
-            param_0->unk54 = 0.0f;
-            if (func_800D90A4(&param_0->unk58)) {
-                func_808003B4_chlinkpipefan(param_0, 2);
+        if (func_800D90A4((f32 *)&fan->actorData[7])) {
+            fan->unk54 = 0.0f;
+            if (func_800D90A4(&fan->unk58)) {
+                func_808003B4_chlinkpipefan(fan, 2);
             }
         } else {
-            param_0->unk54 = func_800F10B4(*(f32 *)&param_0->actorData[7], 1.5f, 0, 450.0f, 0);
+            fan->unk54 = func_800F10B4(*(f32 *)&fan->actorData[7], 1.5f, 0, 450.0f, 0);
         }
     }
-    ((f32 *)param_0->actorData)[3] = param_0->rotation[2];
-    param_0->rotation[2] = func_800136E4(param_0->rotation[2] + func_800D8FF8() * param_0->unk54);
-    local_1 = func_800F13C4(((f32 *)param_0->actorData)[3], 90.0f); if (func_800F13C4(param_0->rotation[2], 90.0f) < local_1 && param_0->unk54 > 225.0f) {
-        local_2 = func_800F10B4(param_0->unk54, 225.0f, 450.0f, 0.3f, 0.6f); func_800C4208(0x3FF, func_800DC178(-0.05f, 0.05f) + local_2, 0x4A38, param_0->position, 200.0f, 1500.0f);
+    ((f32 *)fan->actorData)[3] = fan->rotation[2];
+    fan->rotation[2] = func_800136E4(fan->rotation[2] + func_800D8FF8() * fan->unk54);
+    prev_phase = func_800F13C4(((f32 *)fan->actorData)[3], 90.0f); if (func_800F13C4(fan->rotation[2], 90.0f) < prev_phase && fan->unk54 > 225.0f) {
+        pitch = func_800F10B4(fan->unk54, 225.0f, 450.0f, 0.3f, 0.6f); func_800C4208(0x3FF, func_800DC178(-0.05f, 0.05f) + pitch, 0x4A38, fan->position, 200.0f, 1500.0f);
     }
-    if (param_0->unk54 != 0.0f) {
-        _subaddieaudioloop_entrypoint_4(param_0, param_0->position, 1, D_80800910_chlinkpipefan);
-        _subaddieaudioloop_entrypoint_0(param_0, func_800F10B4(param_0->unk54, 225.0f, 450.0f, 0.4f, 0.8f));
+    if (fan->unk54 != 0.0f) {
+        _subaddieaudioloop_entrypoint_4(fan, fan->position, 1, D_80800910_chlinkpipefan);
+        _subaddieaudioloop_entrypoint_0(fan, func_800F10B4(fan->unk54, 225.0f, 450.0f, 0.4f, 0.8f));
     }
-    if (param_0->unk6C_0) {
-        param_0->unk6C_0--;
+    if (fan->unk6C_0) {
+        fan->unk6C_0--;
     }
-    if (func_801065A4(param_0)) {
-        _glid_entrypoint_0(func_801065A4(param_0), 1, _chlinkpipefan_entrypoint_0, param_0->unk0);
+    if (func_801065A4(fan)) {
+        _glid_entrypoint_0(func_801065A4(fan), 1, _chlinkpipefan_entrypoint_0, fan->unk0);
     }
-    func_8010A654(param_0, param_0->unk70_10 == 4);
+    func_8010A654(fan, fan->unk70_10 == 4);
 }
 
-void func_808003B4_chlinkpipefan(Actor *param_0, u32 param_1)
+// State change: 1 break and set flag, 2 spin, 3 slowed, 4 stopped.
+void func_808003B4_chlinkpipefan(Actor *fan, u32 state)
 {
-    f32 *local_0;
+    f32 *pos;
 
-    switch (param_1) {
+    switch (state) {
         case 1:
-            param_0->rotation[2] = func_800F13C4(param_0->rotation[2], 90.0f);
-            if (param_0->rotation[2] > 45.0f)
-                param_0->rotation[2] = 90.0f - param_0->rotation[2];
-            func_800DA544(param_0->unk74_7 + 0x15C);
-            local_0 = param_0->position;
-            func_800BBCB8(local_0, local_0, 1.0f, 4, &D_8080091C_chlinkpipefan);
-            func_800BBCB8(local_0, local_0, 1.0f, 10, &D_80800960_chlinkpipefan);
-            _subaddieaudioquick_entrypoint_2(param_0, local_0, &D_80800994_chlinkpipefan);
-            _chskeletonexplode_entrypoint_7(param_0, local_0);
+            fan->rotation[2] = func_800F13C4(fan->rotation[2], 90.0f);
+            if (fan->rotation[2] > 45.0f)
+                fan->rotation[2] = 90.0f - fan->rotation[2];
+            func_800DA544(fan->unk74_7 + 0x15C);
+            pos = fan->position;
+            func_800BBCB8(pos, pos, 1.0f, 4, &D_8080091C_chlinkpipefan);
+            func_800BBCB8(pos, pos, 1.0f, 10, &D_80800960_chlinkpipefan);
+            _subaddieaudioquick_entrypoint_2(fan, pos, &D_80800994_chlinkpipefan);
+            _chskeletonexplode_entrypoint_7(fan, pos);
             return;
         case 2:
-            func_80101FDC(param_0, param_1);
+            func_80101FDC(fan, state);
             return;
         case 3:
-            func_80101FDC(param_0, param_1);
-            param_0->unk58 = 5.0f;
+            func_80101FDC(fan, state);
+            fan->unk58 = 5.0f;
             return;
         case 4:
-            param_0->unk58 = 5.0f;
-            if (param_0->unk70_10 != 4) {
-                _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            fan->unk58 = 5.0f;
+            if (fan->unk70_10 != 4) {
+                _subaddieaudioquick_entrypoint_2(fan, fan->position,
                                                  &D_808009A0_chlinkpipefan);
-                func_80101FDC(param_0, param_1);
+                func_80101FDC(fan, state);
             }
     }
 }
 
-void chlinkpipefan_entrypoint_0(void *param_0, void *param_1, u8 (*param_2)[16], s32 param_3,
-                                Unk80132ED0 *param_4)
+// Vertex callback: sets the blades' vertex alpha from the spin speed.
+void chlinkpipefan_entrypoint_0(void *unk_0, void *unk_1, u8 (*verts)[16], s32 count,
+                                Unk80132ED0 *marker)
 {
-    f32 local_0;
-    u8(*local_1)[16];
-    u8 local_2;
+    f32 alpha_f;
+    u8(*end)[16];
+    u8 alpha;
 
-    local_0 = func_800F12D4(func_80106790(param_4)->unk54, 225.0f, 450.0f, 0.0f, 255.0f);
-    local_1 = param_2 + param_3;
-    if (param_2 < local_1) {
-        local_2 = (u8) (u32) local_0;
+    alpha_f = func_800F12D4(func_80106790(marker)->unk54, 225.0f, 450.0f, 0.0f, 255.0f);
+    end = verts + count;
+    if (verts < end) {
+        alpha = (u8) (u32) alpha_f;
         do {
-            (*param_2)[15] = local_2;
-            param_2++;
-        } while (param_2 < local_1);
+            (*verts)[15] = alpha;
+            verts++;
+        } while (verts < end);
     }
 }
 
-s32 func_80800638_chlinkpipefan(Actor *param_0, s32 param_1, Mass63FanEvent param_2)
+s32 func_80800638_chlinkpipefan(Actor *fan, s32 msg_id, Mass63FanEvent msg)
 {
-    Actor *local_0;
-    s32 local_1;
+    Actor *target;
+    s32 contact_type;
+    // Matching: constant held in a variable for the match.
     s32 k = 15;
 
-    switch (param_1) {
+    switch (msg_id) {
         case 0x3E:
-            if (param_0->unk70_10 != 4) {
-                local_1 = (*(u32 *) ((u8 *) param_0->unk0 + 0x18) << 11) >> 28;
-                if (k == local_1) {
-                    func_800F79DC(func_800F54E4(), 6, param_0->unk0);
-                } else if (local_1 == 1) {
-                    func_800F79DC(func_800F54E4(), 3, param_0->unk0);
+            if (fan->unk70_10 != 4) {
+                contact_type = (*(u32 *) ((u8 *) fan->unk0 + 0x18) << 11) >> 28;
+                if (k == contact_type) {
+                    func_800F79DC(func_800F54E4(), 6, fan->unk0);
+                } else if (contact_type == 1) {
+                    func_800F79DC(func_800F54E4(), 3, fan->unk0);
                 }
             }
             return 1;
         case 0x3F:
-            if (func_80106790(param_2.marker)->unk6C_9 == 0x15C) {
-                func_808003B4_chlinkpipefan(param_0, 4);
-            } else if (((*(u32 *) ((u8 *) param_0->unk0 + 0x18) << 11) >> 28) == 1 &&
-                       param_0->unk70_10 != 4) {
-                func_808003B4_chlinkpipefan(param_0, 3);
+            if (func_80106790(msg.marker)->unk6C_9 == 0x15C) {
+                func_808003B4_chlinkpipefan(fan, 4);
+            } else if (((*(u32 *) ((u8 *) fan->unk0 + 0x18) << 11) >> 28) == 1 &&
+                       fan->unk70_10 != 4) {
+                func_808003B4_chlinkpipefan(fan, 3);
             }
-            if (!param_0->unk6C_0) {
-                if (param_0->unk70_10 == 4) {
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+            if (!fan->unk6C_0) {
+                if (fan->unk70_10 == 4) {
+                    _subaddieaudioquick_entrypoint_2(fan, fan->position,
                                                      &D_808009B8_chlinkpipefan);
                 } else {
-                    _subaddieaudioquick_entrypoint_2(param_0, param_0->position,
+                    _subaddieaudioquick_entrypoint_2(fan, fan->position,
                                                      &D_808009AC_chlinkpipefan);
                 }
             }
-            param_0->unk6C_0 = 8;
+            fan->unk6C_0 = 8;
             return 1;
         case 0x40:
-            if (param_0->unk70_10 == 4 && param_0->unk54 <= 45.0f) {
-                func_808003B4_chlinkpipefan(param_0, 1);
+            if (fan->unk70_10 == 4 && fan->unk54 <= 45.0f) {
+                func_808003B4_chlinkpipefan(fan, 1);
             }
             return 1;
         case 0x1F:
-            func_801015D0(param_0);
-            func_800DF6BC((s32) func_800F10B4(param_0->unk54, 0.0f, 225.0f, 255.0f, 0.0f), 255);
+            func_801015D0(fan);
+            func_800DF6BC((s32) func_800F10B4(fan->unk54, 0.0f, 225.0f, 255.0f, 0.0f), 255);
             func_800DF744(1, 1);
             return 1;
         case 0xF:
-            local_0 = func_80106790(func_80101080());
-            _chskeletonexplode_entrypoint_3(local_0, 1, 0);
-            _chskeletonexplode_entrypoint_4(local_0, 7);
+            target = func_80106790(func_80101080());
+            _chskeletonexplode_entrypoint_3(target, 1, 0);
+            _chskeletonexplode_entrypoint_4(target, 7);
             _chskeletonexplode_entrypoint_5(
-                local_0, (s32) func_800F10B4(param_0->unk54, 0.0f, 225.0f, 255.0f, 0.0f));
-            func_800FFA88(param_0->unk0);
+                target, (s32) func_800F10B4(fan->unk54, 0.0f, 225.0f, 255.0f, 0.0f));
+            func_800FFA88(fan->unk0);
             return 1;
         default:
             return 0;

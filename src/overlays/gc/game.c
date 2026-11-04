@@ -1,5 +1,8 @@
 #include "gc/game.h"
 
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
+
+// Initializes the game subsystems in a fixed order.
 void gcgame_entrypoint_0(s32 arg0)
 {
     func_80016864();
@@ -27,6 +30,7 @@ void gcgame_entrypoint_0(s32 arg0)
     func_800D162C();
 }
 
+// Shuts the subsystems down again.
 void gcgame_entrypoint_1(void)
 {
     func_800FE4E4();

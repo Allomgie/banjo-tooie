@@ -2,14 +2,17 @@
 
 extern s16 D_80800030_seqdat[];
 
-int seqdat_entrypoint_0(s32 param_0, s32 param_1)
+// Maps a cutscene script animation index to an animation id; unk_1 must be 0.
+int seqdat_entrypoint_0(s32 index, s32 unk_1)
 {
-    if (!param_1) {
-        return D_80800030_seqdat[param_0];
+    if (!unk_1) {
+        return D_80800030_seqdat[index];
     }
+    // Matching: needed for the match.
     return 0 * 0;
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C (values taken from the ROM).
 s16 D_80800030_seqdat[256] = {
     0x1,   0x4B0, 0x3,   0x53B, 0x5,   0x53C, 0x7,   0x8,   0x9,   0x542, 0x169, 0xC,   0x172,
     0xE,   0x539, 0x53A, 0x11,  0x537, 0x538, 0x53F, 0x15,  0x16,  0x17,  0xAE,  0xA4,  0x1A,

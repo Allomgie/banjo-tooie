@@ -9,8 +9,8 @@ extern void func_80102FDC(Actor *, f32);
 typedef struct {
     u8 pad_0[8];
     u32 pad_1 : 26;
-    u32 local_0 : 1;
-    u32 local_1 : 1;
+    u32 unk_8A : 1;
+    u32 unk_8B : 1;
     u32 pad_2 : 4;
 } PropLightFlags1001;
 
@@ -19,30 +19,33 @@ int chproplighter_entrypoint_0()
     return (int) &D_808001A0_chproplighter;
 }
 
-void func_8080000C_chproplighter(Actor *param_0)
+// Replaces the nearest type-2 cube prop with a lit actor; removes itself if none is found.
+void func_8080000C_chproplighter(Actor *actor)
 {
-    s32 local_0;
-    u8 *local_1;
-    s32 local_2[3];
-    u8 *local_3;
+    s32 cube;
+    u8 *found;
+    s32 search_pos[3];
+    u8 *prop;
 
-    func_800EE904(local_2, param_0->position);
-    if (_gccubesearch_entrypoint_16(local_2, &local_0, &local_1, 2, 500)) {
-        local_3 = local_1;
-        ((PropLightFlags1001 *) local_3)->local_0 = 1;
-        ((PropLightFlags1001 *) local_3)->local_1 = 0;
-        func_800EE88C(param_0->position, local_3 + 4);
-        *(f32 *) ((u8 *) param_0 + 0x48) = func_800136E4(2.0f * (f32) (u32) local_3[2]);
-        *(f32 *) ((u8 *) param_0 + 0x44) = func_800136E4(2.0f * (f32) (u32) local_3[3]);
-        func_80103140(param_0, _gsproplookup_entrypoint_0(local_3) & 0xFFFF, 0);
-        func_80102FDC(param_0, (f32) (u32) local_3[0xA] * 0.01f);
-        func_80103014(param_0);
-        func_80108944(param_0, param_0);
-        if (!func_80105010(param_0))
-            func_80104E78(param_0);
-        func_8010A63C(param_0);
+    func_800EE904(search_pos, actor->position);
+    if (_gccubesearch_entrypoint_16(search_pos, &cube, &found, 2, 500)) {
+        prop = found;
+        // Mark the prop as replaced.
+        ((PropLightFlags1001 *) prop)->unk_8A = 1;
+        ((PropLightFlags1001 *) prop)->unk_8B = 0;
+        // Take over position, yaw, pitch, model and scale of the prop.
+        func_800EE88C(actor->position, prop + 4);
+        *(f32 *) ((u8 *) actor + 0x48) = func_800136E4(2.0f * (f32) (u32) prop[2]);
+        *(f32 *) ((u8 *) actor + 0x44) = func_800136E4(2.0f * (f32) (u32) prop[3]);
+        func_80103140(actor, _gsproplookup_entrypoint_0(prop) & 0xFFFF, 0);
+        func_80102FDC(actor, (f32) (u32) prop[0xA] * 0.01f);
+        func_80103014(actor);
+        func_80108944(actor, actor);
+        if (!func_80105010(actor))
+            func_80104E78(actor);
+        func_8010A63C(actor);
     } else
-        func_800FFAB0(param_0);
+        func_800FFAB0(actor);
 }
 
 s32 func_8080017C_chproplighter(s32 param_0)
@@ -52,6 +55,7 @@ s32 func_8080017C_chproplighter(s32 param_0)
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80107C2C();
+// TU-NOTE: .data is defined here (values from the ROM) because IDO schedules some functions differently otherwise.
 int D_808001A0_chproplighter[20] = {0x158044B,
                                     -0xFFFF,
                                     0x0,

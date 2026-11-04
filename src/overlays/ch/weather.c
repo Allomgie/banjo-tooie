@@ -9,42 +9,43 @@ extern int D_808005A8_chweather[];
 extern void *D_808005F0_chweather;
 extern int D_80800638_chweather[];
 typedef struct {
-    s16 local_0;
-    s16 local_1;
-    s32 local_2;
+    s16 type;
+    s16 rain_extra;
+    s32 unk_4;
 } WeatherPreset;
 extern void _fxrain_entrypoint_6(s32, f32, f32, f32, f32);
 typedef struct {
     s16 state;
-    s16 pad_0;
+    s16 pad_2;
     s32 (*enabled)(Actor *);
 } WeatherCondition1408;
 extern WeatherCondition1408 D_80800410_chweather[];
 
-s32 func_80800000_chweather(s32 param_0)
+s32 func_80800000_chweather(s32 actor)
 {
     return 1;
 }
 
-int func_8080000C_chweather(Actor *param_0)
+// Zone conditions: player z < -1700, z > 1700, x > 1700.
+int func_8080000C_chweather(Actor *actor)
 {
-    f32 local_0[3];
-    func_8010D254(local_0);
-    return local_0[2] < -1700.0f;
+    f32 pos[3];
+    func_8010D254(pos);
+    return pos[2] < -1700.0f;
 }
 
-int func_80800050_chweather(Actor *param_0)
+int func_80800050_chweather(Actor *actor)
 {
-    f32 local_0[3];
-    func_8010D254(local_0);
-    return 1700.0f < local_0[2];
+    f32 pos[3];
+    func_8010D254(pos);
+    return 1700.0f < pos[2];
 }
 
-int func_80800094_chweather(Actor *param_0)
+int func_80800094_chweather(Actor *actor)
 {
-    f32 local_0[3];
-    func_8010D254(local_0);
-    return 1700.0f < local_0[0];
+    f32 pos[3];
+    func_8010D254(pos);
+    return 1700.0f < pos[0];
 }
 
 int chweather_entrypoint_0()
@@ -87,49 +88,51 @@ int *chweather_entrypoint_7()
     return &D_80800638_chweather;
 }
 
-void func_80800138_chweather(Actor *param_0, s32 param_1)
+// Switches the global weather to new_type, stopping the previous one.
+void func_80800138_chweather(Actor *actor, s32 new_type)
 {
-    s32 local_0;
-    WeatherPreset *local_1;
+    s32 rain;
+    WeatherPreset *preset;
 
-    if (param_1 == 3)
+    if (new_type == 3)
         _fxleaves_entrypoint_5(func_800B7C10());
-    if (param_0->unk70_10 == 3)
+    if (actor->unk70_10 == 3)
         _fxleaves_entrypoint_6(func_800B7C10());
-    if (param_1 == 4) {
-        local_0 = func_800B7C54();
-        local_1 = (WeatherPreset *) D_80800410_chweather + (param_0->unk6C_9 - 0x204);
-        _fxrain_entrypoint_7(local_0);
-        if (local_1->local_1)
-            _fxrain_entrypoint_6(local_0, 5.0f, 30.0f, 5.0f, 30.0f);
+    if (new_type == 4) {
+        rain = func_800B7C54();
+        preset = (WeatherPreset *) D_80800410_chweather + (actor->unk6C_9 - 0x204);
+        _fxrain_entrypoint_7(rain);
+        if (preset->rain_extra)
+            _fxrain_entrypoint_6(rain, 5.0f, 30.0f, 5.0f, 30.0f);
     }
-    if (param_0->unk70_10 == 4)
+    if (actor->unk70_10 == 4)
         _fxrain_entrypoint_8(func_800B7C54());
-    if (param_1 == 5) {
+    if (new_type == 5) {
         func_800B7CA4();
         func_800B90C8();
     }
-    if (param_0->unk70_10 == 5) {
+    if (actor->unk70_10 == 5) {
         func_800B7CA4();
         func_800B90E8();
     }
-    param_0->unk70_10 = param_1;
+    actor->unk70_10 = new_type;
 }
 
-void func_808002A8_chweather(Actor *param_0)
+// Enters/leaves the zone: switches weather when the zone condition changes.
+void func_808002A8_chweather(Actor *actor)
 {
-    WeatherCondition1408 *local_0;
+    WeatherCondition1408 *entry;
 
-    local_0 = (WeatherCondition1408 *) ((u8 *) D_80800410_chweather +
-                                        (((s32) param_0->unk6C_9 - 0x204) << 3));
-    if (param_0->unk70_10 == 2) {
-        if (local_0->enabled(param_0)) {
-            func_80800138_chweather(param_0, local_0->state);
+    entry = (WeatherCondition1408 *) ((u8 *) D_80800410_chweather +
+                                      (((s32) actor->unk6C_9 - 0x204) << 3));
+    if (actor->unk70_10 == 2) {
+        if (entry->enabled(actor)) {
+            func_80800138_chweather(actor, entry->state);
         }
     }
-    if (param_0->unk70_10 != 2) {
-        if (!local_0->enabled(param_0)) {
-            func_80800138_chweather(param_0, 2);
+    if (actor->unk70_10 != 2) {
+        if (!entry->enabled(actor)) {
+            func_80800138_chweather(actor, 2);
         }
     }
 }
@@ -148,17 +151,22 @@ s32 func_8080038C_chweather(void)
     }
 }
 
-s32 func_808003BC_chweather(s32 param_0, s32 param_1, s32 param_2)
+s32 func_808003BC_chweather(s32 actor, s32 param_1, s32 param_2)
 {
     if (param_1 == 0x95) {
-        func_80800138_chweather(param_0, 2);
+        func_80800138_chweather(actor, 2);
         return 1;
     }
     return 0;
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C. Its tables hold pointers to functions
+// of this file; IDO's assembler schedules some of these functions differently unless the tables
+// are defined in the same unit. Values are taken from the ROM.
+// D_80800560, D_808005A8 and D_80800638 are declared as int[] to match the object (same addresses).
 extern void func_8010A730();
 extern void func_80107C2C();
+// Per variant: weather type, extra-parameters flag, condition function.
 WeatherCondition1408 D_80800410_chweather[6] = {
     0x3, 0x1, (void *) func_80800000_chweather, 0x3, 0x0, (void *) func_8080000C_chweather,
     0x4, 0x1, (void *) func_80800000_chweather, 0x4, 0x0, (void *) func_80800050_chweather,

@@ -173,162 +173,167 @@ s32 func_808015CC_ncpoddialog();
 extern void func_8080189C_ncpoddialog(f32 *);
 void func_808023B4_ncpoddialog();
 
-void func_80800000_ncpoddialog(PodDialogPositions *param_0, s32 param_1, f32 *param_2)
+// Writes the aim point of participant idx (position plus a height offset) to out.
+void func_80800000_ncpoddialog(PodDialogPositions *dialog, s32 idx, f32 *out)
 {
-    func_800EE7F8(param_2, param_0->local_1[param_1]);
-    param_2[1] += param_0->local_0[param_1].local_1;
-    param_2[1] += 0.5f * (param_0->local_0[param_1].local_0 - param_0->local_0[param_1].local_1);
+    func_800EE7F8(out, dialog->local_1[idx]);
+    out[1] += dialog->local_0[idx].local_1;
+    out[1] += 0.5f * (dialog->local_0[idx].local_0 - dialog->local_0[idx].local_1);
 }
 
-void func_8080008C_ncpoddialog(PodDialogDirection *param_0)
+void func_8080008C_ncpoddialog(PodDialogDirection *dialog)
 {
-    f32 local_0;
-    local_0 = func_800F1DCC(func_800F1DF4(param_0->first, param_0->second), param_0->angle);
-    if (local_0 < -90.0f || local_0 > 90.0f)
-        local_0 = -local_0;
-    if (local_0 > 0.0f)
-        param_0->positive = 1;
+    f32 angle;
+    angle = func_800F1DCC(func_800F1DF4(dialog->first, dialog->second), dialog->angle);
+    if (angle < -90.0f || angle > 90.0f)
+        angle = -angle;
+    if (angle > 0.0f)
+        dialog->positive = 1;
     else
-        param_0->positive = 0;
+        dialog->positive = 0;
 }
 
-s32 func_80800128_ncpoddialog(f32 *param_0, f32 *param_1, f32 *param_2, f32 *param_3, s32 *param_4)
+// Projects a world point to screen coordinates (20 degree FOV) within the screen rect.
+s32 func_80800128_ncpoddialog(f32 *point, f32 *out, f32 *cam_pos, f32 *cam_rot, s32 *rect)
 {
-    f32 local_0[3];
-    f32 local_6;
-    f32 local_7;
-    f32 local_1[4];
-    f32 local_2[4];
-    f32 local_3[4][4];
-    f32 local_4;
-    f32 local_5[4][4];
+    f32 view[3];
+    f32 focal;
+    f32 inv_depth;
+    f32 unk_0[4];
+    f32 unk_1[4];
+    f32 unk_2[4][4];
+    f32 fov_scale;
+    f32 unk_3[4][4];
 
-    local_4 = 1.0f / func_800139F8(20.0f);
-    func_800D93A0(local_1, param_3);
-    func_800D965C(local_1, local_3);
-    func_800D9624(local_2, local_1);
-    func_800D965C(local_2, local_5);
-    func_800EFB24(local_0, param_0, param_2);
-    func_800F23D0(local_5, local_0, local_0);
-    local_6 = (f32) (param_4[3] - param_4[1]) * local_4 * 0.5f;
-    local_7 = 1.0f / local_0[2];
-    param_1[0] = (f32) (param_4[2] - param_4[0]) * 0.5f - local_0[0] * local_6 * local_7;
-    param_1[1] = (f32) (param_4[3] - param_4[1]) * 0.5f + local_0[1] * local_6 * local_7;
-    param_1[0] += (f32) param_4[0];
-    param_1[1] += (f32) param_4[1];
-    if (local_0[2] > 0.0f || param_1[0] < (f32) param_4[0] || (f32) param_4[0] < param_1[0] ||
-        param_1[1] < (f32) param_4[1] || (f32) param_4[3] < param_1[1]) {
+    fov_scale = 1.0f / func_800139F8(20.0f);
+    func_800D93A0(unk_0, cam_rot);
+    func_800D965C(unk_0, unk_2);
+    func_800D9624(unk_1, unk_0);
+    func_800D965C(unk_1, unk_3);
+    func_800EFB24(view, point, cam_pos);
+    func_800F23D0(unk_3, view, view);
+    focal = (f32) (rect[3] - rect[1]) * fov_scale * 0.5f;
+    inv_depth = 1.0f / view[2];
+    out[0] = (f32) (rect[2] - rect[0]) * 0.5f - view[0] * focal * inv_depth;
+    out[1] = (f32) (rect[3] - rect[1]) * 0.5f + view[1] * focal * inv_depth;
+    out[0] += (f32) rect[0];
+    out[1] += (f32) rect[1];
+    if (view[2] > 0.0f || out[0] < (f32) rect[0] || (f32) rect[0] < out[0] ||
+        out[1] < (f32) rect[1] || (f32) rect[3] < out[1]) {
         return 0;
     }
     return 1;
 }
 
-s32 func_80800338_ncpoddialog(PodDialog *this, s32 arg1, s32 state)
+// Sets the state and (for state 2) rebuilds the shot: positions, framing and validity checks.
+s32 func_80800338_ncpoddialog(PodDialog *dialog, s32 pod, s32 state)
 {
-    s32 r;
-    s32 v;
+    s32 los_ok;
+    s32 path_ok;
 
-    this->unk210 = state;
-    if (this->unk210 == 2) {
-        if (this->unk215 == 0) {
-            func_8080008C_ncpoddialog(this);
+    dialog->unk210 = state;
+    if (dialog->unk210 == 2) {
+        if (dialog->unk215 == 0) {
+            func_8080008C_ncpoddialog(dialog);
         }
-        this->unk154 = 0;
-        switch (this->unk213) {
+        dialog->unk154 = 0;
+        switch (dialog->unk213) {
             case 1:
-                this->unk20C = 1.0f;
+                dialog->unk20C = 1.0f;
                 break;
             case 0:
             case 2:
-                this->unk20C = 0.0f;
+                dialog->unk20C = 0.0f;
         }
-        func_808017F4_ncpoddialog(this, arg1);
-        if (this->unk211 != 0 && this->unk211 != 1) {
-            func_80800D10_ncpoddialog(this, this->unkC4, this->unk13C);
+        func_808017F4_ncpoddialog(dialog, pod);
+        if (dialog->unk211 != 0 && dialog->unk211 != 1) {
+            func_80800D10_ncpoddialog(dialog, dialog->unkC4, dialog->unk13C);
         }
-        func_80801B98_ncpoddialog(this);
-        r = func_808013C0_ncpoddialog(this);
-        v = func_80801504_ncpoddialog(this);
-        if (this->unk211 == 9) {
-        } else if (this->unk212 && this->unk211 == 8 && r == 0) {
-            if (_ncpod_entrypoint_5(arg1, func_80110024(arg1), 0xAC, this->unk211, this) != 5) {
-                v = _ncpod_entrypoint_5(arg1, func_80110024(arg1), 0x58, this->unk211, NULL);
-                if (v == 4) {
-                    return v;
+        func_80801B98_ncpoddialog(dialog);
+        los_ok = func_808013C0_ncpoddialog(dialog);
+        path_ok = func_80801504_ncpoddialog(dialog);
+        if (dialog->unk211 == 9) {
+        } else if (dialog->unk212 && dialog->unk211 == 8 && los_ok == 0) {
+            if (_ncpod_entrypoint_5(pod, func_80110024(pod), 0xAC, dialog->unk211, dialog) != 5) {
+                path_ok = _ncpod_entrypoint_5(pod, func_80110024(pod), 0x58, dialog->unk211, NULL);
+                if (path_ok == 4) {
+                    return path_ok;
                 }
-                this->unk212 = 0;
-                func_80800338_ncpoddialog(this, arg1, 1);
+                dialog->unk212 = 0;
+                func_80800338_ncpoddialog(dialog, pod, 1);
                 return 3;
             }
-            this->unk211 = 9;
-            this->unk212 = 1;
-            func_80800338_ncpoddialog(this, arg1, 2);
+            dialog->unk211 = 9;
+            dialog->unk212 = 1;
+            func_80800338_ncpoddialog(dialog, pod, 2);
         } else {
-            switch (this->unk213) {
+            switch (dialog->unk213) {
                 case 0:
                 case 2:
-                    if (v == 0) {
-                        this->unk213 = 1;
-                        func_80800338_ncpoddialog(this, arg1, 2);
+                    if (path_ok == 0) {
+                        dialog->unk213 = 1;
+                        func_80800338_ncpoddialog(dialog, pod, 2);
                         return 3;
                     }
                 case 1:
-                    if (r == 0) {
-                        if (this->unk211 != 2 && this->unk211 != 6) {
-                            this->unk211 = 8;
+                    if (los_ok == 0) {
+                        if (dialog->unk211 != 2 && dialog->unk211 != 6) {
+                            dialog->unk211 = 8;
                         } else {
-                            this->unk211 = 4;
+                            dialog->unk211 = 4;
                         }
-                        this->unk212 = 1;
-                        func_80800338_ncpoddialog(this, arg1, 2);
+                        dialog->unk212 = 1;
+                        func_80800338_ncpoddialog(dialog, pod, 2);
                         return 3;
                     }
-                    func_800EE7F8(this->unk200, this->unk1F4);
+                    func_800EE7F8(dialog->unk200, dialog->unk1F4);
             }
         }
     }
     return 3;
 }
 
-s32 func_80800584_ncpoddialog(f32 *param_0, f32 *param_1, f32 *param_2, f32 *param_3, f32 *param_4,
-                              s32 param_5, s32 *param_6, s32 *param_7)
+// Projects a point and grows the screen bounds; returns 2 if first point, 1 if grown, else 0.
+s32 func_80800584_ncpoddialog(f32 *point, f32 *bounds_min, f32 *bounds_max, f32 *cam_pos, f32 *cam_rot,
+                              s32 unused, s32 *has_bounds, s32 *rect)
 {
-    f32 local_0[2];
-    s32 local_1 = 0;
-    func_80800128_ncpoddialog(param_0, local_0, param_3, param_4, param_7);
-    if (!*param_6) {
-        param_1[0] = local_0[0];
-        param_1[1] = local_0[1];
-        param_2[0] = local_0[0];
-        param_2[1] = local_0[1];
-        *param_6 = 1;
-        local_1 = 2;
+    f32 screen[2];
+    s32 changed = 0;
+    func_80800128_ncpoddialog(point, screen, cam_pos, cam_rot, rect);
+    if (!*has_bounds) {
+        bounds_min[0] = screen[0];
+        bounds_min[1] = screen[1];
+        bounds_max[0] = screen[0];
+        bounds_max[1] = screen[1];
+        *has_bounds = 1;
+        changed = 2;
     } else {
-        if (local_0[0] < param_1[0]) {
-            param_1[0] = local_0[0];
-            local_1 = 1;
+        if (screen[0] < bounds_min[0]) {
+            bounds_min[0] = screen[0];
+            changed = 1;
         }
-        if (param_2[0] < local_0[0]) {
-            param_2[0] = local_0[0];
-            local_1 = 1;
+        if (bounds_max[0] < screen[0]) {
+            bounds_max[0] = screen[0];
+            changed = 1;
         }
-        if (local_0[1] < param_1[1]) {
-            param_1[1] = local_0[1];
-            local_1 = 1;
+        if (screen[1] < bounds_min[1]) {
+            bounds_min[1] = screen[1];
+            changed = 1;
         }
-        if (param_2[1] < local_0[1]) {
-            param_2[1] = local_0[1];
-            local_1 = 1;
+        if (bounds_max[1] < screen[1]) {
+            bounds_max[1] = screen[1];
+            changed = 1;
         }
     }
-    return local_1;
+    return changed;
 }
 
-s32 func_80800698_ncpoddialog(param_0)
-u8 *param_0;
+// Returns 1 if the current shot frames participant B.
+s32 func_80800698_ncpoddialog(dialog)
+u8 *dialog;
 {
 
-switch (*(s8 *) ((char *) param_0 + 0x211) - 2) {
+switch (*(s8 *) ((char *) dialog + 0x211) - 2) {
     case 0:
     case 2:
     case 3:
@@ -342,10 +347,11 @@ return 0;
 
 }
 
-int func_808006D4_ncpoddialog(param_0)
-s32 param_0[0];
+// Returns 1 if the current shot frames participant A.
+int func_808006D4_ncpoddialog(dialog)
+s32 dialog[0];
 {
-    switch (*(s8 *) ((char *) param_0 + 0x211) - 2) {
+    switch (*(s8 *) ((char *) dialog + 0x211) - 2) {
         case 0:
         case 1:
         case 2:
@@ -358,64 +364,66 @@ s32 param_0[0];
 return 0;
 }
 
-void func_80800710_ncpoddialog(f32 *param_0, f32 *param_1, f32 *param_2, f32 *param_3, f32 *param_4,
-                               s32 param_5, s32 *param_6)
+// Projects the 8 corners of each framed participant's bounding box and accumulates the
+// screen-space min/max.
+void func_80800710_ncpoddialog(f32 *dialog, f32 *bounds_min, f32 *bounds_max, f32 *cam_pos, f32 *cam_rot,
+                               s32 unused, s32 *rect)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    s32 local_2;
-    s32 local_3;
-    s32 local_4;
-    s32 local_5;
-    f32 local_6[3];
-    f32 local_7[3];
-    f32 local_8[3];
-    f32 local_9[3];
+    f32 center[3];
+    f32 corner[3];
+    s32 sx;
+    s32 sy;
+    s32 sz;
+    s32 has_bounds;
+    f32 half_a[3];
+    f32 rot_b[3];
+    f32 pos_b[3];
+    f32 half_b[3];
 
-    local_5 = 0;
+    has_bounds = 0;
 
-if (func_808006D4_ncpoddialog(param_0)) {
-    local_6[1] = (param_0[0] - param_0[3]) * 0.5f;
-    local_6[0] = param_0[1] * 0.5f;
-    local_6[2] = param_0[2] * 0.5f;
-    local_0[0] = 0.0f;
-    local_0[1] = param_0[3] + local_6[1];
-    local_0[2] = 0.0f;
-    func_800EF5A0(local_0, &param_0[0x10], local_0[0], local_0[1], local_0[2]);
-    func_800EF04C(local_0, &param_0[0xA]);
-    for (local_2 = -1; local_2 < 2; local_2 += 2) {
-        for (local_3 = -1; local_3 < 2; local_3 += 2) {
-            for (local_4 = -1; local_4 < 2; local_4 += 2) {
-                func_800EF5A0(local_1, &param_0[0x10], local_6[0] * local_2, local_6[1] * local_3,
-                              local_6[2] * local_4);
-                func_800EF04C(local_1, local_0);
-                func_80800584_ncpoddialog(local_1, param_1, param_2, param_3, param_4, param_5,
-                                          &local_5, param_6);
+if (func_808006D4_ncpoddialog(dialog)) {
+    half_a[1] = (dialog[0] - dialog[3]) * 0.5f;
+    half_a[0] = dialog[1] * 0.5f;
+    half_a[2] = dialog[2] * 0.5f;
+    center[0] = 0.0f;
+    center[1] = dialog[3] + half_a[1];
+    center[2] = 0.0f;
+    func_800EF5A0(center, &dialog[0x10], center[0], center[1], center[2]);
+    func_800EF04C(center, &dialog[0xA]);
+    for (sx = -1; sx < 2; sx += 2) {
+        for (sy = -1; sy < 2; sy += 2) {
+            for (sz = -1; sz < 2; sz += 2) {
+                func_800EF5A0(corner, &dialog[0x10], half_a[0] * sx, half_a[1] * sy,
+                              half_a[2] * sz);
+                func_800EF04C(corner, center);
+                func_80800584_ncpoddialog(corner, bounds_min, bounds_max, cam_pos, cam_rot, unused,
+                                          &has_bounds, rect);
             }
         }
     }
 }
 
-if (func_80800698_ncpoddialog(param_0)) {
-    local_9[1] = (param_0[4] - param_0[7]) * 0.5f;
-    local_9[0] = param_0[5] * 0.5f;
-    local_9[2] = param_0[6] * 0.5f;
-    local_0[0] = 0.0f;
-    local_0[1] = param_0[7] + local_9[1];
-    local_0[2] = 0.0f;
-    func_800EE7F8(local_7, &param_0[0x13]);
-    local_7[0] = 0.0f;
-    func_800EF5A0(local_0, local_7, local_0[0], local_0[1], local_0[2]);
-    func_800EE7F8(local_8, &param_0[0xD]);
-    func_800EF04C(local_0, local_8);
-    for (local_2 = -1; local_2 < 2; local_2 += 2) {
-        for (local_3 = -1; local_3 < 2; local_3 += 2) {
-            for (local_4 = -1; local_4 < 2; local_4 += 2) {
-                func_800EF5A0(local_1, local_7, local_9[0] * local_2, local_9[1] * local_3,
-                              local_9[2] * local_4);
-                func_800EF04C(local_1, local_0);
-                func_80800584_ncpoddialog(local_1, param_1, param_2, param_3, param_4, param_5,
-                                          &local_5, param_6);
+if (func_80800698_ncpoddialog(dialog)) {
+    half_b[1] = (dialog[4] - dialog[7]) * 0.5f;
+    half_b[0] = dialog[5] * 0.5f;
+    half_b[2] = dialog[6] * 0.5f;
+    center[0] = 0.0f;
+    center[1] = dialog[7] + half_b[1];
+    center[2] = 0.0f;
+    func_800EE7F8(rot_b, &dialog[0x13]);
+    rot_b[0] = 0.0f;
+    func_800EF5A0(center, rot_b, center[0], center[1], center[2]);
+    func_800EE7F8(pos_b, &dialog[0xD]);
+    func_800EF04C(center, pos_b);
+    for (sx = -1; sx < 2; sx += 2) {
+        for (sy = -1; sy < 2; sy += 2) {
+            for (sz = -1; sz < 2; sz += 2) {
+                func_800EF5A0(corner, rot_b, half_b[0] * sx, half_b[1] * sy,
+                              half_b[2] * sz);
+                func_800EF04C(corner, center);
+                func_80800584_ncpoddialog(corner, bounds_min, bounds_max, cam_pos, cam_rot, unused,
+                                          &has_bounds, rect);
             }
         }
     }
@@ -423,25 +431,28 @@ if (func_80800698_ncpoddialog(param_0)) {
 
 }
 
-void func_80800A98_ncpoddialog(f32 *param_0, f32 *param_1, f32 param_2, f32 param_3, f32 param_4)
+// Rotates the offset (dx, dy, dz) by rot and adds it to cam_pos.
+void func_80800A98_ncpoddialog(f32 *cam_pos, f32 *rot, f32 dx, f32 dy, f32 dz)
 {
-    f32 local_0[3];
-    func_800EFA4C(local_0, param_2, param_3, param_4);
-    func_800EF9A8(local_0, local_0, param_1[2]);
-    func_800EF8BC(local_0, local_0, param_1[0]);
-    func_800EF934(local_0, local_0, param_1[1]);
-    func_800EF04C(param_0, local_0);
+    f32 offset[3];
+    func_800EFA4C(offset, dx, dy, dz);
+    func_800EF9A8(offset, offset, rot[2]);
+    func_800EF8BC(offset, offset, rot[0]);
+    func_800EF934(offset, offset, rot[1]);
+    func_800EF04C(cam_pos, offset);
 }
 
-s32 func_80800B28_ncpoddialog(f32 *pos, f32 *arg1, f32 *arg2, s32 *rect, s32 idx, f32 *center,
+// Moves the camera by offset idx (D_80802A40) and measures the projected boxes.
+// For idx 5/6 returns 0 if the bounds come within 20 px of the rect edge.
+s32 func_80800B28_ncpoddialog(f32 *dialog, f32 *cam_pos, f32 *cam_rot, s32 *rect, s32 idx, f32 *center,
                               f32 *size)
 {
     f32 max[2];
     f32 min[2];
 
-    func_80800A98_ncpoddialog(arg1, arg2, D_80802A40_ncpoddialog[idx].unk0,
+    func_80800A98_ncpoddialog(cam_pos, cam_rot, D_80802A40_ncpoddialog[idx].unk0,
                               D_80802A40_ncpoddialog[idx].unk4, D_80802A40_ncpoddialog[idx].unk8);
-    func_80800710_ncpoddialog(pos, max, min, arg1, arg2, 0, rect);
+    func_80800710_ncpoddialog(dialog, max, min, cam_pos, cam_rot, 0, rect);
     size[0] = max[0] - min[0];
     size[1] = max[1] - min[1];
     center[0] = min[0] + size[0] * 0.5f;
@@ -464,668 +475,700 @@ switch (idx) {
 return 1;
 }
 
-void func_80800D10_ncpoddialog(param_0, param_1, param_2) DialogFraming301 *param_0;
-f32 *param_1;
-f32 *param_2;
+// Refines the framing: centre horizontally (offsets 1/2), centre vertically (3/4), then
+// zoom (5/6), each in at most 10 steps.
+void func_80800D10_ncpoddialog(dialog, cam_pos, cam_rot) DialogFraming301 *dialog;
+f32 *cam_pos;
+f32 *cam_rot;
 {
-    f32 local_2[2];
-    f32 local_1[2];
-    s32 local_0[4];
-    f32 local_5;
-    s32 local_4;
-    s32 local_3 = 0;
+    f32 size[2];
+    f32 center[2];
+    s32 rect[4];
+    f32 target;
+    s32 rect_cx;
+    s32 steps = 0;
 
-    func_800A8A04(0, &local_0[0], &local_0[1], &local_0[2], &local_0[3]);
-    local_0[1] = 28;
-    local_0[3] = 200;
-    local_4 = (f32) local_0[0] + (f32) local_0[2] * 0.5f;
-    func_80800B28_ncpoddialog(param_0, param_1, param_2, local_0, 0, local_1, local_2);
+    func_800A8A04(0, &rect[0], &rect[1], &rect[2], &rect[3]);
+    rect[1] = 28;
+    rect[3] = 200;
+    rect_cx = (f32) rect[0] + (f32) rect[2] * 0.5f;
+    func_80800B28_ncpoddialog(dialog, cam_pos, cam_rot, rect, 0, center, size);
 
-if (param_0->local_0 != 8 && param_0->local_0 != 9) {
-    local_5 = local_4;
-    while (local_5 < local_1[0] && local_3 != 10) {
-        local_3++;
-        func_80800B28_ncpoddialog(param_0, param_1, param_2, local_0, 1, local_1, local_2);
+if (dialog->local_0 != 8 && dialog->local_0 != 9) {
+    target = rect_cx;
+    while (target < center[0] && steps != 10) {
+        steps++;
+        func_80800B28_ncpoddialog(dialog, cam_pos, cam_rot, rect, 1, center, size);
     }
-    local_3 = 0;
-    while (local_1[0] < local_5 && local_3 != 10) {
-        local_3++;
-        func_80800B28_ncpoddialog(param_0, param_1, param_2, local_0, 2, local_1, local_2);
+    steps = 0;
+    while (center[0] < target && steps != 10) {
+        steps++;
+        func_80800B28_ncpoddialog(dialog, cam_pos, cam_rot, rect, 2, center, size);
     }
-    local_3 = 0;
-    local_5 = local_3 + 0x72;
-    while (local_1[1] < local_5 && local_3 != 10) {
-        local_3++;
-        func_80800B28_ncpoddialog(param_0, param_1, param_2, local_0, 3, local_1, local_2);
+    steps = 0;
+    // Matching: steps + 0x72 (not the literal) makes IDO convert int to float at runtime.
+    target = steps + 0x72;
+    while (center[1] < target && steps != 10) {
+        steps++;
+        func_80800B28_ncpoddialog(dialog, cam_pos, cam_rot, rect, 3, center, size);
     }
-    local_3 = 0;
-    while (local_5 < local_1[1] && local_3 != 10) {
-        local_3++;
-        func_80800B28_ncpoddialog(param_0, param_1, param_2, local_0, 4, local_1, local_2);
+    steps = 0;
+    while (target < center[1] && steps != 10) {
+        steps++;
+        func_80800B28_ncpoddialog(dialog, cam_pos, cam_rot, rect, 4, center, size);
     }
-    local_3 = 0;
+    steps = 0;
 }
 
-if (!param_0->local_1) {
-    while (func_80800B28_ncpoddialog(param_0, param_1, param_2, local_0, 5, local_1, local_2) &&
-           local_3 < 10) {
-        local_3++;
+if (!dialog->local_1) {
+    while (func_80800B28_ncpoddialog(dialog, cam_pos, cam_rot, rect, 5, center, size) &&
+           steps < 10) {
+        steps++;
     }
-    local_3 = 0;
+    steps = 0;
 }
 
-while (!func_80800B28_ncpoddialog(param_0, param_1, param_2, local_0, 6, local_1, local_2) &&
-       local_3 < 10) {
-    local_3++;
+while (!func_80800B28_ncpoddialog(dialog, cam_pos, cam_rot, rect, 6, center, size) &&
+       steps < 10) {
+    steps++;
 }
 
 }
 
-s32 func_80801058_ncpoddialog(u8 *param_0, s32 param_1)
+s32 func_80801058_ncpoddialog(u8 *dialog, s32 pod)
 {
-    if (param_0[0x212]) {
-        param_0[0x212] = 0;
-        return func_80800338_ncpoddialog(param_0, param_1, 2);
+    if (dialog[0x212]) {
+        dialog[0x212] = 0;
+        return func_80800338_ncpoddialog(dialog, pod, 2);
     }
 
 return 3;
 }
 
-s32 ncpoddialog_entrypoint_0(s16 param_0)
+// Matching: no return statement here; the result stays in v0.
+s32 ncpoddialog_entrypoint_0(s16 handle)
 {
-    s32 local_0 = param_0;
-    func_8001B798(local_0);
+    s32 id = handle;
+    func_8001B798(id);
 }
 
-int ncpoddialog_entrypoint_1(param_0, param_1)
-s16 param_0;
-s32 param_1;
+// Matching: '| 0', '& 0xFFFFFFFFu' and the pod_copy temporary are needed for the match.
+int ncpoddialog_entrypoint_1(handle, pod)
+s16 handle;
+s32 pod;
 {
-    u32 local_0;
-    s32 new_var;
-    u32 local_1;
-    local_0 = ncpoddialog_entrypoint_0(param_0);
-    local_1 = func_80801058_ncpoddialog(local_0 | 0, param_1);
+    u32 dialog;
+    s32 pod_copy;
+    u32 result;
+    dialog = ncpoddialog_entrypoint_0(handle);
+    result = func_80801058_ncpoddialog(dialog | 0, pod);
 
-if (4 == local_1) {
-    return local_1;
+if (4 == result) {
+    return result;
 }
 
-if ((*(u8 *) (local_0 + 0x210) != 1) && (*(u8 *) (local_0 + 0x210) == 2)) {
-    new_var = param_1;
-    local_1 = func_808015CC_ncpoddialog(local_0 & 0xFFFFFFFFu, new_var, local_0);
-    if (4 == local_1) {
-        return local_1;
+if ((*(u8 *) (dialog + 0x210) != 1) && (*(u8 *) (dialog + 0x210) == 2)) {
+    pod_copy = pod;
+    result = func_808015CC_ncpoddialog(dialog & 0xFFFFFFFFu, pod_copy, dialog);
+    if (4 == result) {
+        return result;
     }
 }
 
-return local_1;
+return result;
 }
 
+// Creates and resets the dialog camera state; returns its handle.
 int ncpoddialog_entrypoint_2(void)
 {
-    s16 local_0;
-    PodDialogState *local_1;
-    s32 local_2;
-    s32 local_3;
-    f32 *w;
+    s16 handle;
+    PodDialogState *dialog;
+    s32 i;
+    s32 j;
+    f32 *weight;
 
-    local_0 = func_8001B668(0, 0x21C);
-    local_1 = ncpoddialog_entrypoint_0(local_0);
-    local_1->unk210 = 1;
-    for (local_2 = 0; local_2 != 10; local_2++) {
-        func_800EFD24(local_1->pathA[local_2]);
-        func_800EFD24(local_1->pathB[local_2]);
-        func_800EFD24(local_1->pathC[local_2]);
+    handle = func_8001B668(0, 0x21C);
+    dialog = ncpoddialog_entrypoint_0(handle);
+    dialog->unk210 = 1;
+    for (i = 0; i != 10; i++) {
+        func_800EFD24(dialog->pathA[i]);
+        func_800EFD24(dialog->pathB[i]);
+        func_800EFD24(dialog->pathC[i]);
     }
-    local_1->unk20C = 0.0f;
-    func_800EFD24(local_1->vec148);
-    local_1->unk154 = 0.0f;
-    local_1->unk211 = -1;
-    local_1->unk212 = 0;
-    local_1->unk213 = 0;
-    local_1->unk214 = 0;
-    local_1->unk215 = 0;
-    local_1->unk217 = 0;
-    func_800EFD24(local_1->vec170);
-    func_800EFD24(local_1->vec17C);
-    func_800EFD24(local_1->vec200);
-    for (local_3 = 0; local_3 != 2; local_3++) {
-        func_800EFD24(local_1->posA[local_3]);
-        func_800EFD24(local_1->posB[local_3]);
-        w = &local_1->weight[local_3];
-        local_1->range[local_3][1] = 0.0f;
-        local_1->range[local_3][2] = 0.0f;
-        local_1->range[local_3][3] = 0.0f;
-        local_1->range[local_3][0] = 0.0f;
-        *w = 0.0f;
+    dialog->unk20C = 0.0f;
+    func_800EFD24(dialog->vec148);
+    dialog->unk154 = 0.0f;
+    dialog->unk211 = -1;
+    dialog->unk212 = 0;
+    dialog->unk213 = 0;
+    dialog->unk214 = 0;
+    dialog->unk215 = 0;
+    dialog->unk217 = 0;
+    func_800EFD24(dialog->vec170);
+    func_800EFD24(dialog->vec17C);
+    func_800EFD24(dialog->vec200);
+    for (j = 0; j != 2; j++) {
+        func_800EFD24(dialog->posA[j]);
+        func_800EFD24(dialog->posB[j]);
+        weight = &dialog->weight[j];
+        dialog->range[j][1] = 0.0f;
+        dialog->range[j][2] = 0.0f;
+        dialog->range[j][3] = 0.0f;
+        dialog->range[j][0] = 0.0f;
+        *weight = 0.0f;
     }
-    return local_0;
+    return handle;
 }
 
-int func_808012A0_ncpoddialog(s32 param_0, s32 param_1, s32 param_2)
+// Reads the current camera position and rotation.
+// Matching: no return statement here (needed for the match).
+int func_808012A0_ncpoddialog(s32 camera, s32 pos, s32 rot)
 {
-    if (func_800F690C(param_0) || func_800F693C(param_0)) {
-        _plcamera_entrypoint_14(param_0, param_1, param_2);
+    if (func_800F690C(camera) || func_800F693C(camera)) {
+        _plcamera_entrypoint_14(camera, pos, rot);
     } else {
-        func_8010FFB0(func_800F5EF8(param_0), param_1, param_2);
+        func_8010FFB0(func_800F5EF8(camera), pos, rot);
     }
 }
 
-void func_80801310_ncpoddialog(param_0, param_1) u8 *param_0;
-s32 param_1;
+void func_80801310_ncpoddialog(dialog, pod) u8 *dialog;
+s32 pod;
 {
-    f32 local_0[3];
-    func_808012A0_ncpoddialog(_ncpod_entrypoint_4(func_80110024(param_1)), param_0 + 0x158,
-                              param_0 + 0x164);
-    func_800EE7F8(param_0 + 0x200, param_0 + 0x158);
-    func_800EE7F8(local_0, param_0 + 0x164);
-    func_800EF214(param_0 + 0x200, -local_0[0], local_0[1], -5e+02f);
+    f32 cam_rot[3];
+    func_808012A0_ncpoddialog(_ncpod_entrypoint_4(func_80110024(pod)), dialog + 0x158,
+                              dialog + 0x164);
+    func_800EE7F8(dialog + 0x200, dialog + 0x158);
+    func_800EE7F8(cam_rot, dialog + 0x164);
+    func_800EF214(dialog + 0x200, -cam_rot[0], cam_rot[1], -5e+02f);
 }
 
-s32 ncpoddialog_entrypoint_3(param_0)
-s16 param_0;
+// Matching: no return statement here; the result stays in v0.
+s32 ncpoddialog_entrypoint_3(handle)
+s16 handle;
 {
-    func_8001B754(param_0);
+    func_8001B754(handle);
 }
 
-s32 func_808013C0_ncpoddialog(param_0)
-u8 *param_0;
+// Returns 1 if the line from the camera to each framed participant is clear of map geometry.
+s32 func_808013C0_ncpoddialog(dialog)
+u8 *dialog;
 {
-    Vec3f local_0;
-    Vec3f local_1;
-    Vec3f local_2;
-    s32 local_4 = 1;
+    Vec3f hit;
+    Vec3f target_pos;
+    Vec3f cam_pos;
+    s32 clear = 1;
 
-    if (func_808006D4_ncpoddialog(param_0)) {
-        func_80800000_ncpoddialog(param_0, 0, local_1.f);
-        func_800EE7F8(local_2.f, (f32 *) (param_0 + 0xC4));
-        if (func_800BF340(local_2.f, local_1.f, local_0.f, 0x860020, 30.0f))
-            local_4 = 0;
-        else if (func_800BF340(local_1.f, local_2.f, local_0.f, 0x860020, 30.0f))
-            local_4 = 0;
+    if (func_808006D4_ncpoddialog(dialog)) {
+        func_80800000_ncpoddialog(dialog, 0, target_pos.f);
+        func_800EE7F8(cam_pos.f, (f32 *) (dialog + 0xC4));
+        if (func_800BF340(cam_pos.f, target_pos.f, hit.f, 0x860020, 30.0f))
+            clear = 0;
+        else if (func_800BF340(target_pos.f, cam_pos.f, hit.f, 0x860020, 30.0f))
+            clear = 0;
     }
-    if (func_80800698_ncpoddialog(param_0)) {
-        func_80800000_ncpoddialog(param_0, 1, local_1.f);
-        func_800EE7F8(local_2.f, (f32 *) (param_0 + 0xC4));
-        if (func_800BF340(local_2.f, local_1.f, local_0.f, 0x860020, 30.0f))
-            local_4 = 0;
-        else if (func_800BF340(local_1.f, local_2.f, local_0.f, 0x860020, 30.0f))
-            local_4 = 0;
+    if (func_80800698_ncpoddialog(dialog)) {
+        func_80800000_ncpoddialog(dialog, 1, target_pos.f);
+        func_800EE7F8(cam_pos.f, (f32 *) (dialog + 0xC4));
+        if (func_800BF340(cam_pos.f, target_pos.f, hit.f, 0x860020, 30.0f))
+            clear = 0;
+        else if (func_800BF340(target_pos.f, cam_pos.f, hit.f, 0x860020, 30.0f))
+            clear = 0;
     }
-    return local_4;
+    return clear;
 }
 
-s32 func_80801504_ncpoddialog(param_0)
-DialogCameraSegments *param_0;
+// Returns 1 if every segment of the 10-point camera path is clear of map geometry.
+s32 func_80801504_ncpoddialog(path)
+DialogCameraSegments *path;
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    s32 local_2;
-    s32 local_3;
+    f32 hit[3];
+    f32 next[3];
+    s32 i;
+    s32 clear;
 
-    local_3 = 1;
-    for (local_2 = 0; local_2 < 9; local_2++) {
-        func_800EE7F8(local_1, param_0->local_0[local_2 + 1]);
-        if (func_800BF340(param_0->local_0[local_2], local_1, local_0, 0x860020, 30.0f))
-            local_3 = 0;
+    clear = 1;
+    for (i = 0; i < 9; i++) {
+        func_800EE7F8(next, path->local_0[i + 1]);
+        if (func_800BF340(path->local_0[i], next, hit, 0x860020, 30.0f))
+            clear = 0;
     }
-    return local_3;
+    return clear;
 }
 
-s32 func_808015CC_ncpoddialog(param_0, param_1)
-u8 *param_0;
-s32 param_1;
+// Advances the camera along the 10-point path with eased speed (slow at both ends).
+s32 func_808015CC_ncpoddialog(dialog, pod)
+u8 *dialog;
+s32 pod;
 {
-    f32 local_1;
-    f32 local_0;
-    f32 *local_2;
+    f32 edge_speed;
+    f32 cruise_speed;
+    f32 *path;
 
-    switch (param_0[0x213]) {
+    switch (dialog[0x213]) {
         case 2:
-            local_1 = 10.0f;
-            local_0 = 20.0f;
+            edge_speed = 10.0f;
+            cruise_speed = 20.0f;
             break;
         case 0:
-            local_1 = 125.0f;
-            local_0 = 500.0f;
+            edge_speed = 125.0f;
+            cruise_speed = 500.0f;
             break;
         case 1:
-            local_0 = local_1 = 5000.0f;
+            cruise_speed = edge_speed = 5000.0f;
     }
-    if (*(f32 *) (param_0 + 0x20C) < 0.15f) {
-        *(f32 *) (param_0 + 0x154) =
-            func_800F10B4(*(f32 *) (param_0 + 0x20C), 0.0f, 0.15f, local_1, local_0);
-    } else if (*(f32 *) (param_0 + 0x20C) > 0.85f) {
-        *(f32 *) (param_0 + 0x154) =
-            func_800F10B4(*(f32 *) (param_0 + 0x20C), 0.85f, 1.0, local_0, local_1);
+    if (*(f32 *) (dialog + 0x20C) < 0.15f) {
+        *(f32 *) (dialog + 0x154) =
+            func_800F10B4(*(f32 *) (dialog + 0x20C), 0.0f, 0.15f, edge_speed, cruise_speed);
+    } else if (*(f32 *) (dialog + 0x20C) > 0.85f) {
+        *(f32 *) (dialog + 0x154) =
+            func_800F10B4(*(f32 *) (dialog + 0x20C), 0.85f, 1.0, cruise_speed, edge_speed);
 
 }
-if (*(f32 *) (param_0 + 0x20C) < 1.0f) {
-    if (param_0[0x213] == 1) {
-        *(f32 *) (param_0 + 0x20C) = 1.0f;
-        local_2 = (f32 *) (param_0 + 0x58);
+if (*(f32 *) (dialog + 0x20C) < 1.0f) {
+    if (dialog[0x213] == 1) {
+        *(f32 *) (dialog + 0x20C) = 1.0f;
+        path = (f32 *) (dialog + 0x58);
     } else {
 
-local_2 = (f32 *) (param_0 + 0x58);
-*(f32 *) (param_0 + 0x20C) = _mlspline_entrypoint_13(10, local_2, *(f32 *) (param_0 + 0x20C),
-                                                     *(f32 *) (param_0 + 0x154) * func_800D8FF8(),
+path = (f32 *) (dialog + 0x58);
+*(f32 *) (dialog + 0x20C) = _mlspline_entrypoint_13(10, path, *(f32 *) (dialog + 0x20C),
+                                                     *(f32 *) (dialog + 0x154) * func_800D8FF8(),
                                                      1.0f, _mlspline_entrypoint_8);
 }
 }
 else
 {
-    *(f32 *) (param_0 + 0x20C) = 1.0f;
-    if (_ncpod_entrypoint_5(param_1, func_80110024(param_1), 0x58, *(s8 *) (param_0 + 0x211), 0) ==
+    *(f32 *) (dialog + 0x20C) = 1.0f;
+    if (_ncpod_entrypoint_5(pod, func_80110024(pod), 0x58, *(s8 *) (dialog + 0x211), 0) ==
         4) {
         return 4;
     }
-    func_80800338_ncpoddialog(param_0, param_1, 1);
-    local_2 = (f32 *) (param_0 + 0x58);
+    func_80800338_ncpoddialog(dialog, pod, 1);
+    path = (f32 *) (dialog + 0x58);
 }
-_mlspline_entrypoint_4(*(f32 *) (param_0 + 0x20C), 10, local_2, (f32 *) (param_0 + 0x170));
-_mlspline_entrypoint_4(*(f32 *) (param_0 + 0x20C), 10, (f32 *) (param_0 + 0xD0),
-                       (f32 *) (param_0 + 0x17C));
-_ncpod_entrypoint_8(func_80110024(param_1), (f32 *) (param_0 + 0x170), (f32 *) (param_0 + 0x17C));
-_ncpod_entrypoint_9(func_80110024(param_1), 40.0f);
+_mlspline_entrypoint_4(*(f32 *) (dialog + 0x20C), 10, path, (f32 *) (dialog + 0x170));
+_mlspline_entrypoint_4(*(f32 *) (dialog + 0x20C), 10, (f32 *) (dialog + 0xD0),
+                       (f32 *) (dialog + 0x17C));
+_ncpod_entrypoint_8(func_80110024(pod), (f32 *) (dialog + 0x170), (f32 *) (dialog + 0x17C));
+_ncpod_entrypoint_9(func_80110024(pod), 40.0f);
 return 0;
 }
 
-void func_808017F4_ncpoddialog(param_0, param_1) PodDialogOrientation *param_0;
-s32 param_1;
+// Builds the shot targets, stores the current camera pose as the path start and sets yaw/pitch.
+void func_808017F4_ncpoddialog(dialog, pod) PodDialogOrientation *dialog;
+s32 pod;
 {
-    s32 local_0;
-    local_0 = _ncpod_entrypoint_4(func_80110024(param_1));
-    func_808023B4_ncpoddialog(param_0, param_1);
-    func_808012A0_ncpoddialog(local_0, param_0->position, param_0->angles);
-    param_0->angles[0] = func_800136E4(param_0->angles[0]);
-    param_0->angles[1] = func_800136E4(param_0->angles[1]);
-    param_0->yaw = func_800136E4(func_800F1DF4(param_0->second, param_0->first));
-    param_0->pitch = func_800136E4(-func_800F1828(param_0->second, param_0->first));
+    s32 camera;
+    camera = _ncpod_entrypoint_4(func_80110024(pod));
+    func_808023B4_ncpoddialog(dialog, pod);
+    func_808012A0_ncpoddialog(camera, dialog->position, dialog->angles);
+    dialog->angles[0] = func_800136E4(dialog->angles[0]);
+    dialog->angles[1] = func_800136E4(dialog->angles[1]);
+    dialog->yaw = func_800136E4(func_800F1DF4(dialog->second, dialog->first));
+    dialog->pitch = func_800136E4(-func_800F1828(dialog->second, dialog->first));
 }
 
-void func_8080189C_ncpoddialog(param_0) f32 *param_0;
+// Fills entries 1..8 by linear interpolation between the end angles, taking the short way round.
+void func_8080189C_ncpoddialog(angles) f32 *angles;
 {
-    s32 local_0;
-    if (param_0[9] + 178.0f <= param_0[0]) {
-        param_0[0] -= 360.0f;
+    s32 i;
+    if (angles[9] + 178.0f <= angles[0]) {
+        angles[0] -= 360.0f;
     }
-    if (param_0[0] + 178.0f <= param_0[9]) {
-        param_0[9] -= 360.0f;
+    if (angles[0] + 178.0f <= angles[9]) {
+        angles[9] -= 360.0f;
     }
-    for (local_0 = 1; local_0 < 9; local_0++) {
-        param_0[local_0] = param_0[0] * ((f32) (9 - local_0) * 0.11111111f) +
-                           param_0[9] * ((f32) local_0 * 0.11111111f);
-    }
-}
-
-void func_80801A30_ncpoddialog(f32 *param_0)
-{
-    s32 local_0;
-    for (local_0 = 1; local_0 < 9; local_0++) {
-        param_0[local_0] = func_800F10B4(local_0, 0.0f, 9.0f, param_0[0], param_0[9]);
+    for (i = 1; i < 9; i++) {
+        angles[i] = angles[0] * ((f32) (9 - i) * 0.11111111f) +
+                           angles[9] * ((f32) i * 0.11111111f);
     }
 }
 
-void func_80801AC0_ncpoddialog(DialogPoseChain *param_0, f32 *param_1, f32 *param_2, f32 *param_3)
+// Fills entries 1..8 by interpolating between the first and last value.
+void func_80801A30_ncpoddialog(f32 *values)
 {
-    s32 local_0;
-    for (local_0 = 1; local_0 < 9; local_0++) {
-        func_800EEB9C(param_0->local_0[local_0], param_1[local_0], param_2[local_0]);
-        func_800EF04C(param_0->local_0[local_0], param_3);
-        param_0->local_0[local_0][1] = func_800F10B4(
-            (f32) local_0, 0.0f, 9.0f, param_0->local_0[0][1], param_0->local_0[9][1]);
+    s32 i;
+    for (i = 1; i < 9; i++) {
+        values[i] = func_800F10B4(i, 0.0f, 9.0f, values[0], values[9]);
     }
 }
 
-void func_80801B98_ncpoddialog(PodPath *this)
+// Places path points 1..8 on an arc around center from interpolated angle and distance.
+void func_80801AC0_ncpoddialog(DialogPoseChain *path, f32 *angles, f32 *dists, f32 *center)
+{
+    s32 i;
+    for (i = 1; i < 9; i++) {
+        func_800EEB9C(path->local_0[i], angles[i], dists[i]);
+        func_800EF04C(path->local_0[i], center);
+        path->local_0[i][1] = func_800F10B4(
+            (f32) i, 0.0f, 9.0f, path->local_0[0][1], path->local_0[9][1]);
+    }
+}
+
+// Fills in the 10-point path, the look-at points and the rotations between first and last entry.
+void func_80801B98_ncpoddialog(PodPath *dialog)
 {
     f32 angs[10];
     f32 dists[10];
     f32 pts[10][3];
-    f32 d;
+    f32 end_dist;
     s32 i;
     s32 j;
 
-    angs[0] = func_800136E4(func_800F1DF4(this->center, this->path[0]));
-    angs[9] = func_800136E4(func_800F1DF4(this->center, this->path[9]));
+    angs[0] = func_800136E4(func_800F1DF4(dialog->center, dialog->path[0]));
+    angs[9] = func_800136E4(func_800F1DF4(dialog->center, dialog->path[9]));
     func_8080189C_ncpoddialog(angs);
-    dists[0] = func_800EFB8C(this->path[0], this->center);
-    dists[9] = func_800EFB8C(this->path[9], this->center);
+    dists[0] = func_800EFB8C(dialog->path[0], dialog->center);
+    dists[9] = func_800EFB8C(dialog->path[9], dialog->center);
     func_80801A30_ncpoddialog(dists);
-    func_80801AC0_ncpoddialog(this->path[0], angs, dists, this->center);
-    d = func_800EEAD4(this->path[9], this->center);
-    func_800EE7F8(pts[0], this->unk200);
-    func_800EE7F8(pts[9], this->path[9]);
-    func_800EF214(pts[9], -this->rot[9][0], this->rot[9][1], -d);
+    func_80801AC0_ncpoddialog(dialog->path[0], angs, dists, dialog->center);
+    end_dist = func_800EEAD4(dialog->path[9], dialog->center);
+    func_800EE7F8(pts[0], dialog->unk200);
+    func_800EE7F8(pts[9], dialog->path[9]);
+    func_800EF214(pts[9], -dialog->rot[9][0], dialog->rot[9][1], -end_dist);
     for (i = 1; i < 9; i++) {
         for (j = 0; j < 3; j++) {
             pts[i][j] = func_800F10B4(i, 0.0f, 9.0f, pts[0][j], pts[9][j]);
         }
     }
     for (i = 0; i < 10; i++) {
-        func_800EE7F8(this->out[i], pts[i]);
+        func_800EE7F8(dialog->out[i], pts[i]);
     }
     for (i = 1; i < 9; i++) {
-        this->rot[i][1] = func_800136E4(func_800F1DF4(pts[i], this->path[i]));
-        this->rot[i][0] = func_800136E4(-func_800F1828(pts[i], this->path[i]));
-        this->rot[i][2] = 0.0f;
+        dialog->rot[i][1] = func_800136E4(func_800F1DF4(pts[i], dialog->path[i]));
+        dialog->rot[i][0] = func_800136E4(-func_800F1828(pts[i], dialog->path[i]));
+        dialog->rot[i][2] = 0.0f;
     }
-    func_800F0EF0(10, this->rot[0]);
+    func_800F0EF0(10, dialog->rot[0]);
 }
 
-void func_80801DB8_ncpoddialog(u8 *param_0, s32 param_1, f32 param_2)
+// Close-up shot of participant idx (shots 3 and 5).
+void func_80801DB8_ncpoddialog(u8 *dialog, s32 idx, f32 angle)
 {
-    f32 local_1;
-    func_80800000_ncpoddialog(param_0, param_1, ((f32 *) (param_0 + 0x148)));
-    param_2 += ((f32(*)[3])(param_0 + 0x44))[param_1][0];
-    local_1 = ((PodDialogRotation *) param_0)[param_1].local_0 -
-              ((PodDialogRotation *) param_0)[param_1].local_3;
-    if (local_1 < ((PodDialogRotation *) param_0)[param_1].local_1) {
-        local_1 = ((PodDialogRotation *) param_0)[param_1].local_1;
+    f32 dist;
+    func_80800000_ncpoddialog(dialog, idx, ((f32 *) (dialog + 0x148)));
+    angle += ((f32(*)[3])(dialog + 0x44))[idx][0];
+    dist = ((PodDialogRotation *) dialog)[idx].local_0 -
+              ((PodDialogRotation *) dialog)[idx].local_3;
+    if (dist < ((PodDialogRotation *) dialog)[idx].local_1) {
+        dist = ((PodDialogRotation *) dialog)[idx].local_1;
     }
-    if (local_1 < ((PodDialogRotation *) param_0)[param_1].local_2) {
-        local_1 = ((PodDialogRotation *) param_0)[param_1].local_2;
+    if (dist < ((PodDialogRotation *) dialog)[idx].local_2) {
+        dist = ((PodDialogRotation *) dialog)[idx].local_2;
     }
-    func_800EEB9C((f32 *) (param_0 + 0xC4), param_2, local_1);
-    func_800EF04C((f32 *) (param_0 + 0xC4), ((f32 *) (param_0 + 0x148)));
-    *(f32 *) (param_0 + 0xC8) = *(f32 *) (param_0 + 0x14C);
+    func_800EEB9C((f32 *) (dialog + 0xC4), angle, dist);
+    func_800EF04C((f32 *) (dialog + 0xC4), ((f32 *) (dialog + 0x148)));
+    *(f32 *) (dialog + 0xC8) = *(f32 *) (dialog + 0x14C);
 }
 
-void func_80801E78_ncpoddialog(u8 *param_0, s32 param_1, s32 param_2)
+// Side two-shot (shots 2 and 6).
+void func_80801E78_ncpoddialog(u8 *dialog, s32 idx, s32 flip)
 {
-    f32 local_0[3];
-    f32 *local_1;
-    f32 local_3;
-    local_1 = (f32 *) (param_0 + 0xC4);
-    func_80800000_ncpoddialog(param_0, 1 - param_1, local_1);
-    func_80800000_ncpoddialog(param_0, param_1, (f32 *) (param_0 + 0x148));
-    *(f32 *) (param_0 + 0xC8) += *(f32 *) (param_0 + 0x14C);
-    *(f32 *) (param_0 + 0xC8) *= 0.5f;
-    *(f32 *) (param_0 + 0x14C) = *(f32 *) (param_0 + 0xC8);
-    local_3 = func_800F1DF4((f32 *) (param_0 + 0x148), local_1);
-    if (param_2)
-        local_3 += 90.0f;
+    f32 offset[3];
+    f32 *cam_pos;
+    f32 angle;
+    cam_pos = (f32 *) (dialog + 0xC4);
+    func_80800000_ncpoddialog(dialog, 1 - idx, cam_pos);
+    func_80800000_ncpoddialog(dialog, idx, (f32 *) (dialog + 0x148));
+    *(f32 *) (dialog + 0xC8) += *(f32 *) (dialog + 0x14C);
+    *(f32 *) (dialog + 0xC8) *= 0.5f;
+    *(f32 *) (dialog + 0x14C) = *(f32 *) (dialog + 0xC8);
+    angle = func_800F1DF4((f32 *) (dialog + 0x148), cam_pos);
+    if (flip)
+        angle += 90.0f;
     else
-        local_3 -= 90.0f;
-    func_800EEB9C(local_0, local_3, ((NcPodPlayerDistances *) param_0)->distances[1 - param_1]);
-    func_800EF04C(local_1, local_0);
-    func_800EFB24(local_0, local_1, (f32 *) (param_0 + 0x148));
-    func_800EF334(local_0, 0.5f);
-    func_800EF04C(local_1, local_0);
+        angle -= 90.0f;
+    func_800EEB9C(offset, angle, ((NcPodPlayerDistances *) dialog)->distances[1 - idx]);
+    func_800EF04C(cam_pos, offset);
+    func_800EFB24(offset, cam_pos, (f32 *) (dialog + 0x148));
+    func_800EF334(offset, 0.5f);
+    func_800EF04C(cam_pos, offset);
 }
 
-void func_80801F88_ncpoddialog(u8 *param_0, f32 param_1)
+// Over-the-shoulder shot (shot 4).
+void func_80801F88_ncpoddialog(u8 *dialog, f32 angle_offset)
 {
-    f32 local_0;
-    f32 *local_4;
-    f32 local_1[3];
-    f32 local_2[3];
+    f32 angle;
+    f32 *cam_pos;
+    f32 pos_b[3];
+    f32 unk_0[3];
 
-    func_80800000_ncpoddialog(param_0, 1, local_1);
-    func_800EE780(local_2, (f32 *) (param_0 + 0x28), local_1);
-    func_800EF334(local_2, 0.5f);
-    local_0 = func_800F1DF4((f32 *) (param_0 + 0x28), local_1);
-    func_800F1828((f32 *) (param_0 + 0x28), local_1);
-    local_0 += param_1;
-    local_4 = (f32 *) (param_0 + 0xC4);
-    func_800EEC30(local_4, 0.0f, local_0, 500.0f);
-    func_800EE7B4((f32 *) (param_0 + 0x148), local_2, local_4, -0.1f);
-    func_800EF04C(local_4, local_2);
+    func_80800000_ncpoddialog(dialog, 1, pos_b);
+    func_800EE780(unk_0, (f32 *) (dialog + 0x28), pos_b);
+    func_800EF334(unk_0, 0.5f);
+    angle = func_800F1DF4((f32 *) (dialog + 0x28), pos_b);
+    func_800F1828((f32 *) (dialog + 0x28), pos_b);
+    angle += angle_offset;
+    cam_pos = (f32 *) (dialog + 0xC4);
+    func_800EEC30(cam_pos, 0.0f, angle, 500.0f);
+    func_800EE7B4((f32 *) (dialog + 0x148), unk_0, cam_pos, -0.1f);
+    func_800EF04C(cam_pos, unk_0);
 }
 
-void func_80802048_ncpoddialog(void *param_0, f32 *param_1, f32 *param_2, f32 *param_3, f32 param_4)
+// Swings the camera around a participant's sphere when it would block the line to the focus point.
+void func_80802048_ncpoddialog(void *dialog, f32 *focus, f32 *cam_pos, f32 *sphere_pos, f32 radius)
 {
-    f32 local_0;
-    f32 local_1;
-    f32 local_2;
-    f32 local_3;
-    f32 local_4;
-    f32 local_5;
-    s32 local_6;
-    Vec3f local_7;
-    Vec3f local_8;
-    s32 local_9;
-    s32 local_10;
-    s32 local_11;
-    f32 local_12;
-    f32 local_13;
-    f32 local_14;
-    s32 local_15;
-    Vec3f local_16;
+    f32 saved_y;
+    f32 cam_dist;
+    f32 sphere_dist;
+    f32 sphere_angle;
+    f32 cam_angle;
+    f32 half_angle;
+    s32 in_cone;
+    Vec3f edge_b;
+    Vec3f edge_a;
+    s32 plus_side;
+    s32 iter;
+    s32 turn;
+    f32 min_dist;
+    f32 unk_0;
+    f32 hit_t;
+    s32 hit;
+    Vec3f ray_end;
 
-    local_0 = param_2[1];
-    param_4 *= 0.75f;
-    if (param_4 < 5.0f) {
+    saved_y = cam_pos[1];
+    radius *= 0.75f;
+    if (radius < 5.0f) {
         return;
     }
-    local_1 = func_800EFB8C(param_1, param_2);
-    if (local_1 < func_800EFB8C(param_1, param_3) - param_4) {
+    cam_dist = func_800EFB8C(focus, cam_pos);
+    if (cam_dist < func_800EFB8C(focus, sphere_pos) - radius) {
         return;
     }
-    local_2 = func_800EFB8C(param_1, param_3);
-    local_3 = func_800F1DF4(param_1, param_3);
-    local_4 = func_800F1DF4(param_1, param_2);
-    func_800EEB9C(local_8.f, local_3 + 90.0f, param_4);
-    func_800EE7F8(local_7.f, local_8.f);
-    func_800EF04C(local_8.f, param_3);
-    func_800EFB24(local_7.f, param_3, local_7.f);
-    local_5 = func_800F2094(func_800F1DF4(param_1, local_8.f), local_3);
-    local_6 = func_800F20BC(local_4, local_3, local_5);
-    if (local_6) {
-        local_12 = param_4 * 0.5f + local_2;
-        if (local_1 < local_12) {
-            local_1 = local_12;
+    sphere_dist = func_800EFB8C(focus, sphere_pos);
+    sphere_angle = func_800F1DF4(focus, sphere_pos);
+    cam_angle = func_800F1DF4(focus, cam_pos);
+    func_800EEB9C(edge_a.f, sphere_angle + 90.0f, radius);
+    func_800EE7F8(edge_b.f, edge_a.f);
+    func_800EF04C(edge_a.f, sphere_pos);
+    func_800EFB24(edge_b.f, sphere_pos, edge_b.f);
+    half_angle = func_800F2094(func_800F1DF4(focus, edge_a.f), sphere_angle);
+    in_cone = func_800F20BC(cam_angle, sphere_angle, half_angle);
+    if (in_cone) {
+        min_dist = radius * 0.5f + sphere_dist;
+        if (cam_dist < min_dist) {
+            cam_dist = min_dist;
         }
-        local_13 = local_5 * 0.5f;
-        local_9 = func_800F20BC(local_4, local_13 + local_3, local_13);
-        if (local_9) {
-            local_4 = local_3 + local_5;
+        unk_0 = half_angle * 0.5f;
+        plus_side = func_800F20BC(cam_angle, unk_0 + sphere_angle, unk_0);
+        if (plus_side) {
+            cam_angle = sphere_angle + half_angle;
         } else {
-            local_4 = local_3 - local_5;
+            cam_angle = sphere_angle - half_angle;
         }
-        func_800EEB9C(param_2, local_4, local_1);
-        func_800EF04C(param_2, param_1);
-        func_800EFB24(local_16.f, param_2, param_1);
-        local_15 = 1;
-        local_10 = 0;
-        while (local_15 && local_10++ < 5) {
-            local_15 = func_800F05F8(param_1, local_16.f, param_3, param_4, &local_14);
+        func_800EEB9C(cam_pos, cam_angle, cam_dist);
+        func_800EF04C(cam_pos, focus);
+        func_800EFB24(ray_end.f, cam_pos, focus);
+        hit = 1;
+        iter = 0;
+        while (hit && iter++ < 5) {
+            hit = func_800F05F8(focus, ray_end.f, sphere_pos, radius, &hit_t);
 
-if (local_15 && local_14 < 1.0f) {
-    local_11 = local_5 < 0.0f ? -5 : 5;
-    local_4 += local_11;
-    func_800EEB9C(local_16.f, local_4, local_1);
-}
-
-}
-func_800EEB9C(param_2, local_4, local_1);
-func_800EF04C(param_2, param_1);
-}
-param_2[1] = local_0;
+if (hit && hit_t < 1.0f) {
+    turn = half_angle < 0.0f ? -5 : 5;
+    cam_angle += turn;
+    func_800EEB9C(ray_end.f, cam_angle, cam_dist);
 }
 
-void func_8080230C_ncpoddialog(u8 *param_0, u8 *param_1, u8 *param_2)
+}
+func_800EEB9C(cam_pos, cam_angle, cam_dist);
+func_800EF04C(cam_pos, focus);
+}
+cam_pos[1] = saved_y;
+}
+
+// Applies the sphere clearance for each participant, depending on the shot type.
+void func_8080230C_ncpoddialog(u8 *dialog, u8 *focus, u8 *cam_pos)
 {
-    s8 var_v0;
+    s8 shot;
 
-    var_v0 = ((s8 *) param_0)[0x211];
-    if (var_v0 == 4 || var_v0 == 5 || var_v0 == 6 || var_v0 == 8) {
-        func_80802048_ncpoddialog(param_0, param_1, param_2, param_0 + 0x28,
-                                  (*(f32 *) ((u8 *) param_0 + 0x20)));
-        var_v0 = ((s8 *) param_0)[0x211];
+    shot = ((s8 *) dialog)[0x211];
+    if (shot == 4 || shot == 5 || shot == 6 || shot == 8) {
+        func_80802048_ncpoddialog(dialog, focus, cam_pos, dialog + 0x28,
+                                  (*(f32 *) ((u8 *) dialog + 0x20)));
+        shot = ((s8 *) dialog)[0x211];
     }
-    if (var_v0 == 2 || var_v0 == 3 || var_v0 == 4 || var_v0 == 8) {
-        func_80802048_ncpoddialog(param_0, param_1, param_2, param_0 + 0x34,
-                                  (*(f32 *) ((u8 *) param_0 + 0x24)));
+    if (shot == 2 || shot == 3 || shot == 4 || shot == 8) {
+        func_80802048_ncpoddialog(dialog, focus, cam_pos, dialog + 0x34,
+                                  (*(f32 *) ((u8 *) dialog + 0x24)));
     }
 }
 
-void func_808023B4_ncpoddialog(param_0, param_1) u8 *param_0;
-s32 param_1;
+// Computes the camera position and look-at point for the current shot type.
+void func_808023B4_ncpoddialog(dialog, pod) u8 *dialog;
+s32 pod;
 {
-    s32 local_0;
-    Vec3f local_1;
-    Vec3f local_2;
-    Vec3f local_3;
-    Vec3f local_4;
-    Vec3f local_5;
+    s32 mirror;
+    Vec3f cam_pos;
+    Vec3f cam_rot;
+    Vec3f pos_a;
+    Vec3f fixed_pos_a;
+    Vec3f unk_0;
 
-    local_0 = 0;
-    if (param_0[0x214] == 1) {
-        local_0 = 1;
+    mirror = 0;
+    if (dialog[0x214] == 1) {
+        mirror = 1;
     }
-    switch (param_0[0x211]) {
+    switch (dialog[0x211]) {
         case 0:
         case 1:
-            func_800EE7F8((f32 *) (param_0 + 0xC4), (f32 *) (param_0 + 0x158));
-            func_800EEC30((f32 *) (param_0 + 0x148), -*(f32 *) (param_0 + 0x164),
-                          *(f32 *) (param_0 + 0x168), 500.0f);
-            func_800EF04C((f32 *) (param_0 + 0x148), (f32 *) (param_0 + 0x158));
+            func_800EE7F8((f32 *) (dialog + 0xC4), (f32 *) (dialog + 0x158));
+            func_800EEC30((f32 *) (dialog + 0x148), -*(f32 *) (dialog + 0x164),
+                          *(f32 *) (dialog + 0x168), 500.0f);
+            func_800EF04C((f32 *) (dialog + 0x148), (f32 *) (dialog + 0x158));
             break;
         case 4:
-            func_80801F88_ncpoddialog(param_0, (f32) (local_0 ? -90 : 90));
+            func_80801F88_ncpoddialog(dialog, (f32) (mirror ? -90 : 90));
             break;
         case 2:
-            func_80801E78_ncpoddialog(param_0, 0, 1 - local_0);
+            func_80801E78_ncpoddialog(dialog, 0, 1 - mirror);
             break;
         case 6:
-            func_80801E78_ncpoddialog(param_0, 1, local_0);
+            func_80801E78_ncpoddialog(dialog, 1, mirror);
             break;
         case 5:
-            func_80801DB8_ncpoddialog(param_0, 1, (f32) (local_0 ? 10 : -10));
+            func_80801DB8_ncpoddialog(dialog, 1, (f32) (mirror ? 10 : -10));
             break;
         case 3:
-            func_80801DB8_ncpoddialog(param_0, 0, (f32) (local_0 ? -10 : 10));
+            func_80801DB8_ncpoddialog(dialog, 0, (f32) (mirror ? -10 : 10));
             break;
         case 8:
-            func_800EE7F8(local_1.f, (f32 *) (param_0 + 0x158));
-            func_800EE7F8(local_2.f, (f32 *) (param_0 + 0x164));
-            func_80800000_ncpoddialog(param_0, 0, local_3.f);
-            func_80800000_ncpoddialog(param_0, 1, (f32 *) (param_0 + 0x148));
-            func_800EF04C((f32 *) (param_0 + 0x148), local_3.f);
-            func_800EF334((f32 *) (param_0 + 0x148), 0.5f);
-            func_800EFB24((f32 *) (param_0 + 0xC4), (f32 *) (param_0 + 0x148), local_1.f);
-            func_800EF368((f32 *) (param_0 + 0xC4), 250.0f);
-            func_800EF04C((f32 *) (param_0 + 0xC4), local_1.f);
-            func_800EEC30((f32 *) (param_0 + 0x188), -*(f32 *) (param_0 + 0xD0),
-                          *(f32 *) (param_0 + 0xD4), -200.0f);
-            func_800EF04C((f32 *) (param_0 + 0x188), (f32 *) (param_0 + 0x58));
-            func_800EE7F8((f32 *) (param_0 + 0x200), (f32 *) (param_0 + 0x188));
+            func_800EE7F8(cam_pos.f, (f32 *) (dialog + 0x158));
+            func_800EE7F8(cam_rot.f, (f32 *) (dialog + 0x164));
+            func_80800000_ncpoddialog(dialog, 0, pos_a.f);
+            func_80800000_ncpoddialog(dialog, 1, (f32 *) (dialog + 0x148));
+            func_800EF04C((f32 *) (dialog + 0x148), pos_a.f);
+            func_800EF334((f32 *) (dialog + 0x148), 0.5f);
+            func_800EFB24((f32 *) (dialog + 0xC4), (f32 *) (dialog + 0x148), cam_pos.f);
+            func_800EF368((f32 *) (dialog + 0xC4), 250.0f);
+            func_800EF04C((f32 *) (dialog + 0xC4), cam_pos.f);
+            func_800EEC30((f32 *) (dialog + 0x188), -*(f32 *) (dialog + 0xD0),
+                          *(f32 *) (dialog + 0xD4), -200.0f);
+            func_800EF04C((f32 *) (dialog + 0x188), (f32 *) (dialog + 0x58));
+            func_800EE7F8((f32 *) (dialog + 0x200), (f32 *) (dialog + 0x188));
             break;
         case 9:
-            func_80800000_ncpoddialog(param_0, 0, local_4.f);
-            func_80800000_ncpoddialog(param_0, 1, (f32 *) (param_0 + 0x148));
-            func_800EF04C((f32 *) (param_0 + 0x148), local_4.f);
-            func_800EF334((f32 *) (param_0 + 0x148), 0.5f);
-            func_800A5800(param_0[0x218]);
-            _cadbfunc_entrypoint_0((f32 *) (param_0 + 0xC4));
-            _cadbfunc_entrypoint_2(local_5.f);
+            func_80800000_ncpoddialog(dialog, 0, fixed_pos_a.f);
+            func_80800000_ncpoddialog(dialog, 1, (f32 *) (dialog + 0x148));
+            func_800EF04C((f32 *) (dialog + 0x148), fixed_pos_a.f);
+            func_800EF334((f32 *) (dialog + 0x148), 0.5f);
+            func_800A5800(dialog[0x218]);
+            _cadbfunc_entrypoint_0((f32 *) (dialog + 0xC4));
+            _cadbfunc_entrypoint_2(unk_0.f);
             break;
         default:
             break;
     }
-    func_8080230C_ncpoddialog(param_0, (f32 *) (param_0 + 0x148), (f32 *) (param_0 + 0xC4));
+    func_8080230C_ncpoddialog(dialog, (f32 *) (dialog + 0x148), (f32 *) (dialog + 0xC4));
 }
 
-void ncpoddialog_entrypoint_4(PodDialogLimits *param_0, s32 param_1, f32 *param_2)
+// Stores the new bounding box of participant idx if a value changed by more than 10.
+void ncpoddialog_entrypoint_4(PodDialogLimits *dialog, s32 idx, f32 *new_range)
 {
-    s32 local_0;
-    s32 local_1 = 0;
+    s32 i;
+    s32 changed = 0;
 
-    for (local_0 = 0; local_0 < 4; local_0++) {
-        if (param_2[local_0] + 10.0f < param_0->local_0[param_1][local_0] ||
-            param_0->local_0[param_1][local_0] < param_2[local_0] - 10.0f) {
-            param_0->local_0[param_1][local_0] = param_2[local_0];
-            local_1 = 1;
+    for (i = 0; i < 4; i++) {
+        if (new_range[i] + 10.0f < dialog->local_0[idx][i] ||
+            dialog->local_0[idx][i] < new_range[i] - 10.0f) {
+            dialog->local_0[idx][i] = new_range[i];
+            changed = 1;
         }
     }
-    if (local_1) {
-        param_0->local_1[param_1] = param_0->local_0[param_1][2] < param_0->local_0[param_1][1]
-                                        ? param_0->local_0[param_1][1]
-                                        : param_0->local_0[param_1][2];
-        param_0->local_2 = 1;
+    if (changed) {
+        dialog->local_1[idx] = dialog->local_0[idx][2] < dialog->local_0[idx][1]
+                                        ? dialog->local_0[idx][1]
+                                        : dialog->local_0[idx][2];
+        dialog->local_2 = 1;
     }
 }
 
-void ncpoddialog_entrypoint_5(u8 *param_0, s32 param_1, f32 *param_2)
+// Stores the position of participant idx if it moved by more than 10.
+void ncpoddialog_entrypoint_5(u8 *dialog, s32 idx, f32 *pos)
 {
-    if (!func_800EEDE8(((f32(*)[3])(param_0 + 0x28))[param_1], param_2, 10.0f)) {
-        func_800EE7F8(((f32(*)[3])(param_0 + 0x28))[param_1], param_2);
-        param_0[0x216] = 1;
+    if (!func_800EEDE8(((f32(*)[3])(dialog + 0x28))[idx], pos, 10.0f)) {
+        func_800EE7F8(((f32(*)[3])(dialog + 0x28))[idx], pos);
+        dialog[0x216] = 1;
     }
 }
 
-void ncpoddialog_entrypoint_6(s32 param_0, s32 param_1, s32 param_2)
+// Stores the rotation of participant idx.
+// Matching: the offset temporary is needed for the match.
+void ncpoddialog_entrypoint_6(s32 dialog, s32 idx, s32 rot)
 {
-    int new_var;
-    new_var = 0x40;
-    func_800EE7F8(new_var + (param_0 + (param_1 * 0xC)), param_2);
+    int offset;
+    offset = 0x40;
+    func_800EE7F8(offset + (dialog + (idx * 0xC)), rot);
 }
 
-void ncpoddialog_entrypoint_7(u8 *param_0, s32 param_1)
+// side < 0: choose the side automatically; otherwise force it (0 or 1).
+void ncpoddialog_entrypoint_7(u8 *dialog, s32 side)
 {
-    if (param_1 >= 0) {
-        (*(u8 *) ((u8 *) (param_0) + 0x215)) = 1;
-        if (param_1 == 0) {
-            (*(u8 *) ((u8 *) (param_0) + 0x214)) = 0;
+    if (side >= 0) {
+        (*(u8 *) ((u8 *) (dialog) + 0x215)) = 1;
+        if (side == 0) {
+            (*(u8 *) ((u8 *) (dialog) + 0x214)) = 0;
             return;
         }
-        (*(u8 *) ((u8 *) (param_0) + 0x214)) = 1;
+        (*(u8 *) ((u8 *) (dialog) + 0x214)) = 1;
         return;
     }
-    (*(u8 *) ((u8 *) (param_0) + 0x215)) = 0;
+    (*(u8 *) ((u8 *) (dialog) + 0x215)) = 0;
 }
 
-int ncpoddialog_entrypoint_8(Actor *param_0, s32 param_1)
+// Sets the camera-database node used by shot 9.
+int ncpoddialog_entrypoint_8(Actor *dialog, s32 node)
 {
-    *(u8 *) ((char *) param_0 + 0x218) = param_1;
+    *(u8 *) ((char *) dialog + 0x218) = node;
     return 5;
 }
 
-void ncpoddialog_entrypoint_9(NcpodDialogState *param_0, s32 param_1, s32 param_2, s32 param_3)
+// Switches to a new shot type and tells the player; mode selects the speed profile.
+void ncpoddialog_entrypoint_9(NcpodDialogState *dialog, s32 pod, s32 shot, s32 mode)
 {
-    if (param_0->local_0 == -1) {
+    if (dialog->local_0 == -1) {
         func_80801310_ncpoddialog();
     }
-    if (param_2 == param_0->local_0 && param_0->local_3 == 0) {
+    if (shot == dialog->local_0 && dialog->local_3 == 0) {
         return;
     }
-    param_0->local_3 = 0;
-    param_0->local_0 = param_2;
-    param_0->local_2 = param_3;
-    func_8009055C(100, (param_3 << 16) | param_2);
-    if ((param_0->local_0 == 0 && param_0->local_2 == 1) || param_0->local_0 == 7) {
-        if (_ncpod_entrypoint_5(param_1, func_80110024(param_1), 0x58, param_0->local_0, 0) != 4) {
-            func_80800338_ncpoddialog(param_0, param_1, 1);
+    dialog->local_3 = 0;
+    dialog->local_0 = shot;
+    dialog->local_2 = mode;
+    func_8009055C(100, (mode << 16) | shot);
+    if ((dialog->local_0 == 0 && dialog->local_2 == 1) || dialog->local_0 == 7) {
+        if (_ncpod_entrypoint_5(pod, func_80110024(pod), 0x58, dialog->local_0, 0) != 4) {
+            func_80800338_ncpoddialog(dialog, pod, 1);
         }
     } else {
-        param_0->local_1 = 1;
+        dialog->local_1 = 1;
     }
 }
 
-void ncpoddialog_entrypoint_10(u32 arg0)
+// The argument packs the shot (low 16 bits) and the mode (high 16 bits).
+void ncpoddialog_entrypoint_10(u32 packed_arg)
 {
-    u32 v1 = arg0;
-    u32 v2 = v1 & 0xFFFF0000;
-    u32 v3 = v2 >> 16;
-    u32 v4 = arg0 & 0xFFFF;
-    ncpoddialog_entrypoint_11(v4, v3, 1);
+    u32 packed_copy = packed_arg;
+    u32 high_masked = packed_copy & 0xFFFF0000;
+    u32 high = high_masked >> 16;
+    u32 low = packed_arg & 0xFFFF;
+    ncpoddialog_entrypoint_11(low, high, 1);
 }
 
-s32 ncpoddialog_entrypoint_11(param_0, param_1, param_2)
-s32 param_0;
-s32 param_1;
-s32 param_2;
+// query 0: shot is 0 or 7. query 1: mode is 1 and shot is 0 or 1. Returns 1 on a match.
+s32 ncpoddialog_entrypoint_11(shot, mode, query)
+s32 shot;
+s32 mode;
+s32 query;
 {
-    switch (param_2) {
+    switch (query) {
         case 0:
-            if (param_0 == 0 || param_0 == 7) {
+            if (shot == 0 || shot == 7) {
                 return 1;
             }
             break;
         case 1:
-            if (param_1 == 1 && (param_0 == 0 || param_0 == 1)) {
+            if (mode == 1 && (shot == 0 || shot == 1)) {
                 return 1;
             }
             break;
@@ -1135,6 +1178,8 @@ s32 param_2;
     return 0;
 }
 
-PodDialogEntry D_80802A40_ncpoddialog[8] = {0.0f, 0.0f,    0.0f, 5.0f, 0.0f,   0.0f,  -5.0f, 0.0f,
+// TU-NOTE: this overlay's .data is defined here in C; values are taken from the ROM.
+// Camera offsets (x, y, z) per framing step: 1/2 shift x, 3/4 shift y, 5/6 zoom z.
+PodDialogEntry D_80802A40_ncpoddialog[8] ={0.0f, 0.0f,    0.0f, 5.0f, 0.0f,   0.0f,  -5.0f, 0.0f,
                                             0.0f, 0.0f,    5.0f, 0.0f, 0.0f,   -5.0f, 0.0f,  0.0f,
                                             0.0f, -2e+01f, 0.0f, 0.0f, 2e+01f, 0.0f,  0.0f,  0.0f};

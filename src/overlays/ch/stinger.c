@@ -13,8 +13,8 @@ extern void func_800CB840();
 extern void func_80101FDC();
 typedef struct {
     u8 pad_0[0x28];
-    u8 local_0;
-} StingerLife;
+    u8 skip_update;
+} StingerLife;  // skip_update: set on entering state 2, skips one missile update
 extern void func_80109BEC(f32 *, f32, s32, s32, s32, Unk80132ED0 *);
 extern void func_800F1A88(int, f32 *);
 extern void func_800F5A00(s32, f32 *);
@@ -30,203 +30,211 @@ extern f32 func_800136E4(f32);
 extern f32 func_800EEAD4(f32 *, f32 *);
 extern s32 func_800CD820(Unk80132ED0 *, f32 *, f32 *, f32);
 
-void func_80800000_chstinger(Actor *param_0)
+// Impact effect: sparkle burst plus two particle emitters.
+void func_80800000_chstinger(Actor *actor)
 {
-    s32 local_0;
-    f32 local_1[3];
-    f32 local_2[3];
+    s32 emitter;
+    f32 dir[3];
+    f32 pos[3];
 
-    if (param_0->unk7C_12) {
-        local_0 = func_800B5BE4(0x1B);
-        local_0 = func_800BABB8(local_0, param_0->position, param_0->position, 1.0f,
+    if (actor->unk7C_12) {
+        emitter = func_800B5BE4(0x1B);
+        emitter = func_800BABB8(emitter, actor->position, actor->position, 1.0f,
                                 &D_808007D0_chstinger);
-        func_800EFA98(local_1, (f32 *) ((u8 *) param_0 + 0x28), func_800DC178(-200.0f, -400.0f));
-        func_800BA930(local_0, (s16) local_1[0], (s16) local_1[1], (s16) local_1[2],
-                      (s16) local_1[0], (s16) local_1[1], (s16) local_1[2]);
-        func_800BA22C(local_0, 3);
-        func_800EFA98(local_1, (f32 *) ((u8 *) param_0 + 0x28), -25.0f);
-        func_800EE780(local_2, param_0->position, local_1);
-        func_800BBCB8(local_2, 0, 1.0f, 1, &D_80800844_chstinger);
-        func_800EF04C(local_2, local_1);
-        local_0 = func_800B5BE4(8);
-        func_800BABB8(local_0, local_2, NULL, 1.0f, &D_808007FC_chstinger);
+        func_800EFA98(dir, (f32 *) ((u8 *) actor + 0x28), func_800DC178(-200.0f, -400.0f));
+        func_800BA930(emitter, (s16) dir[0], (s16) dir[1], (s16) dir[2],
+                      (s16) dir[0], (s16) dir[1], (s16) dir[2]);
+        func_800BA22C(emitter, 3);
+        func_800EFA98(dir, (f32 *) ((u8 *) actor + 0x28), -25.0f);
+        func_800EE780(pos, actor->position, dir);
+        func_800BBCB8(pos, 0, 1.0f, 1, &D_80800844_chstinger);
+        func_800EF04C(pos, dir);
+        emitter = func_800B5BE4(8);
+        func_800BABB8(emitter, pos, NULL, 1.0f, &D_808007FC_chstinger);
     }
 }
 
-void func_8080015C_chstinger(Actor *param_0, s32 param_1)
+// State change: 2 = flying, 3 = impact (effect, then removed).
+void func_8080015C_chstinger(Actor *actor, s32 new_state)
 {
-    StingerLife *local_0;
-    s32 local_1;
-    local_0 = func_80100094(param_0, 0);
-    if (param_1 != param_0->unk70_10) {
-        func_80101FDC(param_0, param_1);
-        local_1 = param_0->unk70_10;
-        switch (local_1) {
+    StingerLife *life;
+    s32 state;
+    life = func_80100094(actor, 0);
+    if (new_state != actor->unk70_10) {
+        func_80101FDC(actor, new_state);
+        state = actor->unk70_10;
+        switch (state) {
             case 2:
-                local_0->local_0 = 1;
+                life->skip_update = 1;
                 break;
             case 3:
-                func_800CB840(4, param_0);
-                func_80109BEC(param_0->position, 120.0f, 2, 0, 0, param_0->unk0);
+                func_800CB840(4, actor);
+                func_80109BEC(actor->position, 120.0f, 2, 0, 0, actor->unk0);
                 func_800CB870();
-                func_80800000_chstinger(param_0);
+                func_80800000_chstinger(actor);
         }
     }
 }
 
-void func_80800218_chstinger(s32 param_0)
+// Orients the stinger along its flight direction.
+void func_80800218_chstinger(s32 actor)
 {
-    f32 local_0[2];
-    func_800F1A88(param_0 + 0x28, local_0);
-    *(f32 *) (param_0 + 0x44) = -local_0[0];
-    *(f32 *) (param_0 + 0x48) = local_0[1];
+    f32 angles[2];
+    func_800F1A88(actor + 0x28, angles);
+    *(f32 *) (actor + 0x44) = -angles[0];
+    *(f32 *) (actor + 0x48) = angles[1];
 }
 
-void func_8080025C_chstinger(s32 arg0)
+void func_8080025C_chstinger(s32 actor)
 {
 }
 
-s32 func_80800264_chstinger(Actor *param_0, f32 *param_1)
+// Finds the nearest other player inside the cone in front of the stinger.
+// Returns the player index or -1; out_dir gets the direction to them.
+s32 func_80800264_chstinger(Actor *actor, f32 *out_dir)
 {
-    f32 local_2;
-    f32 local_3;
-    s32 local_6;
-    s32 local_7;
-    f32 local_0[3];
-    u8 *local_4;
-    f32 *local_5;
-    s32 local_8;
-    s32 local_9;
-    f32 local_1[3];
-    local_4 = func_80100094(param_0, 0);
-    local_2 = 0.0f;
-    local_5 = (f32 *) (local_4 + 0x18);
-    local_7 = -1;
-    local_8 = *(s8 *) local_4;
-    for (local_6 = 0; local_6 < func_800F5898(); local_6++) {
-        if (func_800F6438(local_6) && local_6 != local_8) {
-            func_800F5A00(local_6, local_1);
-            local_3 = func_800EEB40(local_1, local_5);
-            if (local_7 < 0 || local_3 < local_2) {
-                local_9 = func_800F0734(local_5, param_0->position, local_1, 55.0f, 120.0f, local_0,
-                                        local_0);
-                if (local_9) {
-                    local_7 = local_6;
-                    local_2 = local_3;
-                    func_800EE7F8(param_1, local_0);
+    f32 best_dist;
+    f32 dist;
+    s32 i;
+    s32 best_player;
+    f32 dir[3];
+    u8 *life;
+    f32 *origin;
+    s32 owner;
+    s32 hit;
+    f32 player_pos[3];
+    life = func_80100094(actor, 0);
+    best_dist = 0.0f;
+    origin = (f32 *) (life + 0x18);
+    best_player = -1;
+    owner = *(s8 *) life;
+    for (i = 0; i < func_800F5898(); i++) {
+        if (func_800F6438(i) && i != owner) {
+            func_800F5A00(i, player_pos);
+            dist = func_800EEB40(player_pos, origin);
+            if (best_player < 0 || dist < best_dist) {
+                hit = func_800F0734(origin, actor->position, player_pos, 55.0f, 120.0f, dir,
+                                        dir);
+                if (hit) {
+                    best_player = i;
+                    best_dist = dist;
+                    func_800EE7F8(out_dir, dir);
                 }
             }
         }
     }
-    return local_7;
+    return best_player;
 }
 
-s32 func_808003B0_chstinger(s32 param_0)
+// Multiplayer hit check: damages the targeted player.
+s32 func_808003B0_chstinger(s32 actor)
 {
-    f32 local_1[3];
-    s32 local_0;
-    s32 local_2;
+    f32 dir[3];
+    s32 target;
+    s32 found;
     if (func_800EA068(0x4000) != 0) {
-        local_2 = func_80800264_chstinger(param_0, local_1);
-        local_0 = local_2;
-        if (local_2 >= 0) {
-            func_800F7A7C(local_0, *(s8 *) ((char *) func_80100094(param_0, 0) + 0x0), 1, 3,
-                          local_1);
+        found = func_80800264_chstinger(actor, dir);
+        target = found;
+        if (found >= 0) {
+            func_800F7A7C(target, *(s8 *) ((char *) func_80100094(actor, 0) + 0x0), 1, 3,
+                          dir);
             return 1;
         }
     }
     return 0;
 }
 
-void func_80800420_chstinger(Actor *param_0)
+void func_80800420_chstinger(Actor *actor)
 {
-    f32 local_0;
-    f32 local_1;
-    s32 local_3;
-    s32 local_2;
-    s32 sf_t989;
-    u8 *local_6;
+    f32 age;
+    f32 dt;
+    s32 hit_level;
+    s32 move_result;
+    s32 hit_player;
+    u8 *life;
 
-    local_6 = func_80100094(param_0, 0);
-    local_0 = *(f32 *) (local_6 + 0x14);
-    local_1 = func_800D8FF8();
-    switch (param_0->unk70_10) {
+    life = func_80100094(actor, 0);
+    age = *(f32 *) (life + 0x14);
+    dt = func_800D8FF8();
+    switch (actor->unk70_10) {
         case 2:
-            if (local_6[0x28]) {
-                local_6[0x28] = 0;
-                local_2 = 0;
+            if (life[0x28]) {
+                life[0x28] = 0;
+                move_result = 0;
             } else {
-                _sumissilehome_entrypoint_6(param_0, local_6);
-                local_2 = func_8010B990(param_0, 0x100004);
+                _sumissilehome_entrypoint_6(actor, life);
+                move_result = func_8010B990(actor, 0x100004);
             }
-            if (local_2 == 0x20)
-                func_8010AA78(param_0->position);
-            func_80800218_chstinger(param_0);
-            param_0->rotation[2] = func_800136E4(param_0->rotation[2] + local_1 * 1200.0f);
-            func_80103014(param_0);
-            func_8010A590(param_0);
-            func_800CB840(4, param_0);
-            local_3 =
-                func_800CD820(param_0->unk0, (f32 *) (local_6 + 0x18), param_0->position, 80.0f);
+            if (move_result == 0x20)
+                func_8010AA78(actor->position);
+            func_80800218_chstinger(actor);
+            actor->rotation[2] = func_800136E4(actor->rotation[2] + dt * 1200.0f);
+            func_80103014(actor);
+            func_8010A590(actor);
+            func_800CB840(4, actor);
+            hit_level =
+                func_800CD820(actor->unk0, (f32 *) (life + 0x18), actor->position, 80.0f);
             func_800CB870();
-            func_8010A570(param_0);
-            if (local_2 == 0x20 || (local_3 != 0) != 0 || *(f32 *) (local_6 + 0x24) > 5000.0f) {
-                func_8080015C_chstinger(param_0, 3);
+            func_8010A570(actor);
+            // Matching: redundant comparison needed for the match.
+            if (move_result == 0x20 || (hit_level != 0) != 0 || *(f32 *) (life + 0x24) > 5000.0f) {
+                func_8080015C_chstinger(actor, 3);
             }
-            sf_t989 = func_808003B0_chstinger(param_0);
-            if (sf_t989)
-                func_8080015C_chstinger(param_0, 3);
+            hit_player = func_808003B0_chstinger(actor);
+            if (hit_player)
+                func_8080015C_chstinger(actor, 3);
             break;
         case 3:
-            func_800FFAB0(param_0);
+            func_800FFAB0(actor);
     }
-    *(f32 *) (local_6 + 0x14) = local_0 + local_1;
-    *(f32 *) (local_6 + 0x24) += func_800EEAD4(param_0->position, (f32 *) (local_6 + 0x18));
-    func_800EE7F8((f32 *) (local_6 + 0x18), param_0->position);
+    *(f32 *) (life + 0x14) = age + dt;
+    *(f32 *) (life + 0x24) += func_800EEAD4(actor->position, (f32 *) (life + 0x18));
+    func_800EE7F8((f32 *) (life + 0x18), actor->position);
 }
 
-s32 chstinger_entrypoint_0(s32 param_0, s32 param_1, s32 param_2, s32 param_3, s32 param_4)
+s32 chstinger_entrypoint_0(s32 spawn_pos, s32 origin, s32 direction, s32 unk_3, s32 unk_4)
 {
-    u8 *local_4;
-    f32 local_0[3];
-    f32 local_1[3];
-    u8 *local_3;
-    f32 local_2[3];
+    u8 *actor;
+    f32 offset[3];
+    f32 hit_pos[3];
+    u8 *life;
+    f32 push[3];
 
-    func_800EFA98(local_0, param_2, 3e+01f);
-    func_800EF04C(param_0, local_0);
-    if (func_800C6A7C(param_1, param_0, local_1, 0x20020) != 0) {
-        func_800EFB24(local_2, param_1, param_0);
-        func_800EF368(local_2, 0x3F800000);
-        func_800EF04C(param_0, local_2);
+    func_800EFA98(offset, direction, 3e+01f);
+    func_800EF04C(spawn_pos, offset);
+    if (func_800C6A7C(origin, spawn_pos, hit_pos, 0x20020) != 0) {
+        func_800EFB24(push, origin, spawn_pos);
+        func_800EF368(push, 0x3F800000);
+        func_800EF04C(spawn_pos, push);
     }
-    local_4 = func_80108474(0x16F, param_0, 0);
-    local_3 = func_80100094(local_4, 0);
-    *(f32 *) ((s8 *) local_4 + 0x34) = 0.0f;
-    func_800EE7F8(local_4 + 0x28, param_2);
-    func_80800218_chstinger(local_4);
-    *(f32 *) ((s8 *) local_3 + 0x24) = 0.0f;
-    func_800EE7F8(local_3 + 0x18, param_0);
-    *(f32 *) ((s8 *) local_3 + 0x14) = 0.0f;
-    func_8010A570(local_4);
-    _sumissilehome_entrypoint_0(local_4, local_3);
-    _sumissilehome_entrypoint_3(local_4, local_3, param_4);
+    actor = func_80108474(0x16F, spawn_pos, 0);
+    life = func_80100094(actor, 0);
+    *(f32 *) ((s8 *) actor + 0x34) = 0.0f;
+    func_800EE7F8(actor + 0x28, direction);
+    func_80800218_chstinger(actor);
+    *(f32 *) ((s8 *) life + 0x24) = 0.0f;
+    func_800EE7F8(life + 0x18, spawn_pos);
+    *(f32 *) ((s8 *) life + 0x14) = 0.0f;
+    func_8010A570(actor);
+    _sumissilehome_entrypoint_0(actor, life);
+    _sumissilehome_entrypoint_3(actor, life, unk_4);
     if (func_800EA068(0x20) != 0) {
-        _sumissilehome_entrypoint_4(local_4, local_3, 1);
+        _sumissilehome_entrypoint_4(actor, life, 1);
     } else {
-        _sumissilehome_entrypoint_1(local_4, local_3, -1);
+        _sumissilehome_entrypoint_1(actor, life, -1);
     }
-    _sumissilehome_entrypoint_5(local_4, local_3, 0x458CA000, 0x44960000);
-    func_8080015C_chstinger(local_4, 2);
-    return *(s32 *) ((s8 *) local_4 + 0);
+    _sumissilehome_entrypoint_5(actor, life, 0x458CA000, 0x44960000);
+    func_8080015C_chstinger(actor, 2);
+    return *(s32 *) ((s8 *) actor + 0);
 }
 
-s32 func_80800774_chstinger(Actor *this, s32 param_1, s32 param_2)
+s32 func_80800774_chstinger(Actor *this, s32 msg, s32 unk_2)
 {
-    Actor *new_var;
-    if (param_1 == 0x95) {
-        new_var = this;
-        func_80109EEC(new_var, 16);
+    Actor *target;
+    if (msg == 0x95) {
+        // Matching: extra temporary needed for the match.
+        target = this;
+        func_80109EEC(target, 16);
     } else {
         return 0;
     }
@@ -238,6 +246,7 @@ int chstinger_entrypoint_1()
     return (int) &D_80800870_chstinger;
 }
 
+// TU-NOTE: the data tables below are defined in this file so IDO schedules the functions they point to correctly.
 extern void func_80105834();
 extern void func_80101870();
 extern void func_80108ED0();

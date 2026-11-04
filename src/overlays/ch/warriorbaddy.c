@@ -1,10 +1,14 @@
 #include "common.h"
 
+// TU-NOTE: the overlay's .data is defined in C below, values taken from the ROM. The tables point to
+// functions of this file, and IDO's assembler schedules some of them differently unless the tables
+// are in the same unit. D_80800128_chwarriorbaddy is declared as int[] to match the object.
+
 extern int D_80800128_chwarriorbaddy[];
 typedef struct {
     u8 pad_0[0x78];
     u32 pad_1 : 26;
-    u32 local_0 : 1;
+    u32 unk_78 : 1;
     u32 pad_2 : 5;
 } WarriorCoasterFlags;
 extern s32 _sucoaster_entrypoint_0(Actor *, s32);
@@ -16,13 +20,14 @@ int *chwarriorbaddy_entrypoint_0()
     return &D_80800128_chwarriorbaddy;
 }
 
-void func_8080000C_chwarriorbaddy(Actor *param_0)
+// Hands the actor to the shared coaster AI, scales it by 1.5 and sets the speed factor to 0.4.
+void func_8080000C_chwarriorbaddy(Actor *actor)
 {
-    if (_sucoaster_entrypoint_0(param_0, 0)) {
-        func_80102FDC(param_0, param_0->scale * 1.5f);
-        func_8010A3E8(param_0, 0.4f);
-        if (!((WarriorCoasterFlags *) param_0)->local_0)
-            _sucoaster_entrypoint_10(param_0, 2);
+    if (_sucoaster_entrypoint_0(actor, 0)) {
+        func_80102FDC(actor, actor->scale * 1.5f);
+        func_8010A3E8(actor, 0.4f);
+        if (!((WarriorCoasterFlags *) actor)->unk_78)
+            _sucoaster_entrypoint_10(actor, 2);
     }
 }
 

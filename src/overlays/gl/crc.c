@@ -2,43 +2,47 @@
 
 extern u32 func_801168AC(u64 *);
 
-void func_80800000_glcrc(u8 *param_0, u8 *param_1, u32 *param_2)
+// Hashes [start, end) forward, then backward, into two 32-bit halves.
+void func_80800000_glcrc(u8 *start, u8 *end, u32 *out)
 {
-    u32 local_2;
-    u32 local_3;
-    u64 local_0;
-    s32 local_1;
-    u8 *local_4;
+    u32 hash_fwd;
+    u32 hash_bwd;
+    u64 state;
+    s32 shift;
+    u8 *p;
 
-    local_1 = 0;
-    local_0 = 0x8F809F473108B3C1ULL;
-    local_2 = 0;
-    local_3 = 0;
-    for (local_4 = param_0; local_4 < param_1; local_4++, local_1 += 7) {
-        local_0 += *local_4 << (local_1 & 0xF);
-        local_2 ^= func_801168AC(&local_0);
+    shift = 0;
+    // Seed.
+    state = 0x8F809F473108B3C1ULL;
+    hash_fwd = 0;
+    hash_bwd = 0;
+    for (p = start; p < end; p++, shift += 7) {
+        state += *p << (shift & 0xF);
+        hash_fwd ^= func_801168AC(&state);
     }
-    for (local_4 = param_1 - 1; local_4 >= param_0; local_4--, local_1 += 3) {
-        local_0 += *local_4 << (local_1 & 0xF);
-        local_3 ^= func_801168AC(&local_0);
+    for (p = end - 1; p >= start; p--, shift += 3) {
+        state += *p << (shift & 0xF);
+        hash_bwd ^= func_801168AC(&state);
     }
-    param_2[0] = local_2;
-    param_2[1] = local_3;
+    out[0] = hash_fwd;
+    out[1] = hash_bwd;
 }
 
-s32 glcrc_entrypoint_0(u8 *param_0, s32 param_1)
+// Writes the checksum into the last 8 bytes of buf.
+s32 glcrc_entrypoint_0(u8 *buf, s32 size)
 {
-    u8 *local_0 = param_0 + param_1 - 8;
-    func_80800000_glcrc(param_0, local_0, local_0);
-    return *(s32 *) local_0;
+    u8 *crc = buf + size - 8;
+    func_80800000_glcrc(buf, crc, crc);
+    return *(s32 *) crc;
 }
 
-s32 glcrc_entrypoint_1(u8 *param_0, s32 param_1)
+// Verifies the checksum in the last 8 bytes of buf; 0x6E382 on mismatch.
+s32 glcrc_entrypoint_1(u8 *buf, s32 size)
 {
-    u32 local_1[2];
-    u32 *local_0;
+    u32 computed[2];
+    u32 *stored;
 
-    local_0 = (u32 *) (param_0 + param_1 - 8);
-    func_80800000_glcrc(param_0, local_0, local_1);
-    return (local_0[0] != local_1[0] || local_0[1] != local_1[1]) ? 0x6E382 : 0;
+    stored = (u32 *) (buf + size - 8);
+    func_80800000_glcrc(buf, stored, computed);
+    return (stored[0] != computed[0] || stored[1] != computed[1]) ? 0x6E382 : 0;
 }

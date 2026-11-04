@@ -5,6 +5,7 @@ extern int D_8080005C_fxgenlist[];
 extern int D_808000A0_fxgenlist[];
 extern s32 D_808000D0_fxgenlist[];
 
+// Getters for the static particle-preset lists.
 int fxgenlist_entrypoint_0()
 {
     return (int) &D_80800030_fxgenlist;
@@ -25,6 +26,8 @@ int fxgenlist_entrypoint_3()
     return (int) D_808000D0_fxgenlist;
 }
 
+// TU-NOTE: the overlay's .data is defined here in C; values taken from the ROM. The extern
+// declarations above are adjusted to int[] for the first three lists (same addresses).
 int D_80800030_fxgenlist[11] = {0x1D06A5, 0x14002D, 0x12C0190, 0x220017, 0x1C000F, 0x11001E,
                                 0xF000F,  0xAFFF6,  0xFFF6,    0xA0014,  0xA0000};
 int D_8080005C_fxgenlist[17] = {0x1D09E2, 0x161004,   0x27FF38, -0xC7FF38, 0xC8002D, 0x12C01F4,

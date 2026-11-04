@@ -1,41 +1,43 @@
 #include "common.h"
 
 typedef struct {
-    s16 local_0;
-    u16 local_1;
-    s32 local_2;
-    s16 local_3;
-    s16 local_4[2];
-    u16 local_5;
+    s16 unk_0;
+    u16 map_id;
+    s32 section_index;
+    s16 unk_8;
+    s16 pad_A[2];
+    u16 prev_map_id;
 } GSWorldData49;
 
-void gsworldDll_entrypoint_0(s32 param_0, s32 param_1)
+// Parses the map's setup file, dispatching each entry by its tag.
+void gsworldDll_entrypoint_0(s32 map_id, s32 param_1)
 {
-    s32 local_0;
+    s32 setup;
 
     func_8001A2B0();
-    local_0 = _gsmaker_entrypoint_2(param_0);
-    if (_gsmaker_entrypoint_16(local_0, 0) == 0) {
+    setup = _gsmaker_entrypoint_2(map_id);
+    if (_gsmaker_entrypoint_16(setup, 0) == 0) {
         do {
-            if (_gsmaker_entrypoint_16(local_0, 2) == 0) {
-                if (_gsmaker_entrypoint_16(local_0, 1) != 0) {
-                    func_800BDC68(local_0);
-                } else if (_gsmaker_entrypoint_16(local_0, 4) != 0) {
-                    func_800C90F4(local_0);
-                } else if (_gsmaker_entrypoint_16(local_0, 5) == 0) {
-                    if (_gsmaker_entrypoint_16(local_0, 6) != 0) {
-                        _cadbio_entrypoint_0(local_0);
-                    } else if (_gsmaker_entrypoint_16(local_0, 7) != 0) {
-                        func_800BDC90(local_0);
+            if (_gsmaker_entrypoint_16(setup, 2) == 0) {
+                if (_gsmaker_entrypoint_16(setup, 1) != 0) {
+                    func_800BDC68(setup);
+                } else if (_gsmaker_entrypoint_16(setup, 4) != 0) {
+                    func_800C90F4(setup);
+                } else if (_gsmaker_entrypoint_16(setup, 5) == 0) {
+                    if (_gsmaker_entrypoint_16(setup, 6) != 0) {
+                        _cadbio_entrypoint_0(setup);
+                    } else if (_gsmaker_entrypoint_16(setup, 7) != 0) {
+                        func_800BDC90(setup);
                     }
                 }
             }
-        } while (_gsmaker_entrypoint_16(local_0, 0) == 0);
+        } while (_gsmaker_entrypoint_16(setup, 0) == 0);
     }
-    _gsmaker_entrypoint_0(local_0);
+    _gsmaker_entrypoint_0(setup);
 }
 
-void gsworldDll_entrypoint_1(u8 *param_0)
+// Frees the map's subsystems in a fixed order.
+void gsworldDll_entrypoint_1(u8 *world)
 {
     _gccollectDll_entrypoint_5();
     func_800EA148(3);
@@ -80,7 +82,7 @@ void gsworldDll_entrypoint_1(u8 *param_0)
     func_800D2E4C();
     func_800EBC04();
     _gldialog_entrypoint_3();
-    func_800FF038(*(u16 *) ((s8 *) param_0 + 2));
+    func_800FF038(*(u16 *) ((s8 *) world + 2));
     func_800DBB24();
     func_800E8B04();
     func_800D2970();
@@ -88,14 +90,15 @@ void gsworldDll_entrypoint_1(u8 *param_0)
     func_800BC8A0();
 }
 
-void gsworldDll_entrypoint_2(GSWorldData49 *param_0, unsigned int param_1, s32 param_2, s32 param_3)
+// Initialises a map: runs the subsystem init functions in a fixed order.
+void gsworldDll_entrypoint_2(GSWorldData49 *world, unsigned int map_id, s32 param_2, s32 param_3)
 {
-    param_0->local_5 = param_0->local_1;
-    param_0->local_0 = 3;
-    param_0->local_1 = param_1;
-    param_0->local_2 = _gcsectionDll_entrypoint_2(param_1);
-    param_0->local_3 = param_2;
-    func_800A9EC0((s32) param_1);
+    world->prev_map_id = world->map_id;
+    world->unk_0 = 3;
+    world->map_id = map_id;
+    world->section_index = _gcsectionDll_entrypoint_2(map_id);
+    world->unk_8 = param_2;
+    func_800A9EC0((s32) map_id);
     func_800D8800();
     func_800BC690();
     func_800E829C();
@@ -133,14 +136,14 @@ void gsworldDll_entrypoint_2(GSWorldData49 *param_0, unsigned int param_1, s32 p
     func_800BD570();
     func_800FA010();
     if (param_3 != 0xF) {
-        gsworldDll_entrypoint_0((s32) param_1, param_3);
+        gsworldDll_entrypoint_0((s32) map_id, param_3);
     }
     func_800BF68C();
     func_800D2CD0();
     func_800D5250();
     func_800C00BC();
     func_800DA048();
-    _glintrosyncDll_entrypoint_6((s32) param_1);
+    _glintrosyncDll_entrypoint_6((s32) map_id);
     func_800D7418();
     _glhittableDll_entrypoint_0();
     func_8010D790();
@@ -150,30 +153,33 @@ void gsworldDll_entrypoint_2(GSWorldData49 *param_0, unsigned int param_1, s32 p
     func_800FE740();
     func_800C73A4();
     _chbounce_entrypoint_0();
-    func_800A5124(param_0->local_3);
+    func_800A5124(world->unk_8);
     func_800B5DFC();
     func_800A5C94();
     _glcutDll_entrypoint_4();
 }
 
-void gsworldDll_entrypoint_3(s16 *param_0, long param_1)
+// Map change: notifies the music/sfx/env subsystems, then stores the new map.
+void gsworldDll_entrypoint_3(s16 *cur_map, long next_map)
 {
-    func_8001A2B0(param_0, param_1);
-    func_800A5104(*param_0, param_1);
-    func_800C2A5C(*param_0, param_1);
-    func_800FE8BC(*param_0, param_1);
-    func_800C7574(*param_0, param_1);
-    func_800B5654(*param_0, param_1);
-    *param_0 = param_1;
+    func_8001A2B0(cur_map, next_map);
+    func_800A5104(*cur_map, next_map);
+    func_800C2A5C(*cur_map, next_map);
+    func_800FE8BC(*cur_map, next_map);
+    func_800C7574(*cur_map, next_map);
+    func_800B5654(*cur_map, next_map);
+    *cur_map = next_map;
 }
 
+// Stripped debug assert.
 void func_8080054C_gsworldDll(s32 arg0, s32 arg1, s32 arg2)
 {
 }
 
+// Matching: no return statement, needed for the match.
 int gsworldDll_entrypoint_4(volatile u16 *param_0)
 {
-    int new_var;
-    new_var = 1;
-    func_8080054C_gsworldDll(new_var, param_0[new_var], "world.gs");
+    int unk_0;
+    unk_0 = 1;
+    func_8080054C_gsworldDll(unk_0, param_0[unk_0], "world.gs");
 }

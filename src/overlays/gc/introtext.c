@@ -1,9 +1,9 @@
 #include "gc/introtext.h"
 
 typedef struct {
-    u32 pad_0 : 10;
-    u32 local_0 : 16;
-    u32 local_1 : 6;
+    u32 map : 10;
+    u32 text_id : 16;
+    u32 style : 6;
 } IntroTextRecord;
 extern IntroTextRecord D_80800250_gcintrotext[];
 extern u16 D_8080056C_gcintrotext[];
@@ -12,61 +12,70 @@ extern u16 D_80800570_gcintrotext[24];
 IntroTextRecord *func_808000C8_gcintrotext();
 int func_808001AC_gcintrotext();
 
+// Sets the progress flag that disables the intro text cards.
 void gcintrotext_entrypoint_0()
 {
     func_800DA544(FLAG2_6CB_UNK);
 }
 
+// Tests the progress flag.
 s32 gcintrotext_entrypoint_1(void)
 {
     s32 out;
-    unsigned long long new_var;
-    out = (new_var = func_800DA9E4(0x6CB, 0) ? 1 : 0);
+    // Matching: the wide temporary and the empty if are needed for the match.
+    unsigned long long is_set;
+    out = (is_set = func_800DA9E4(0x6CB, 0) ? 1 : 0);
     if (!out) {
     }
 }
 
-s32 gcintrotext_entrypoint_2(s32 param_0, s32 *param_1, s32 *param_2)
+// Looks up text id and style for a map (-1 = current map); returns -1 if none, else 0 when excluded, 1 otherwise.
+s32 gcintrotext_entrypoint_2(s32 map, s32 *out_text, s32 *out_style)
 {
-    IntroTextRecord *local_0;
-    if (param_0 == -1)
-        param_0 = func_800EA05C();
-    local_0 = func_808000C8_gcintrotext(param_0);
-    if (local_0 == NULL)
+    IntroTextRecord *record;
+    if (map == -1)
+        map = func_800EA05C();
+    record = func_808000C8_gcintrotext(map);
+    if (record == NULL)
         return -1;
-    *param_1 = local_0->local_0;
-    *param_2 = local_0->local_1;
-    return func_808001AC_gcintrotext(param_0);
+    *out_text = record->text_id;
+    *out_style = record->style;
+    return func_808001AC_gcintrotext(map);
 }
 
-IntroTextRecord *func_808000C8_gcintrotext(param_0)
-s32 param_0;
+// Finds the table entry of a map.
+IntroTextRecord *func_808000C8_gcintrotext(map)
+s32 map;
 {
-    s32 local_0;
+    s32 i;
 
-    for (local_0 = 0; local_0 < 199; local_0++) {
-        if (param_0 == D_80800250_gcintrotext[local_0].pad_0) {
-            return &D_80800250_gcintrotext[local_0];
+    for (i = 0; i < 199; i++) {
+        if (map == D_80800250_gcintrotext[i].map) {
+            return &D_80800250_gcintrotext[i];
         }
     }
     return NULL;
 }
 
-int func_808001AC_gcintrotext(param_0)
-s32 param_0;
+// Returns 0 if the map is in the exclusion list.
+int func_808001AC_gcintrotext(map)
+s32 map;
 {
-    s32 local_0;
-    if (param_0 == D_8080056C_gcintrotext[0])
+    s32 i;
+    if (map == D_8080056C_gcintrotext[0])
         return 0;
-    if (param_0 == D_8080056E_gcintrotext)
+    if (map == D_8080056E_gcintrotext)
         return 0;
-    for (local_0 = 0; local_0 < 24; local_0++) {
-        if (param_0 == D_80800570_gcintrotext[local_0])
+    for (i = 0; i < 24; i++) {
+        if (map == D_80800570_gcintrotext[i])
             return 0;
     }
     return 1;
 }
 
+// TU-NOTE: the .data of this overlay is defined here in C. Values are taken from the ROM. The 199-entry
+// table is defined as consecutive arrays. Linker symbol inside an object:
+// D_8080056E_gcintrotext = D_8080056C_gcintrotext + 0x2. D_8080056C_gcintrotext is declared u16[] (used as NAME[0]).
 IntroTextRecord D_80800250_gcintrotext[1] = {0xA1, 0x18AD, 0x0};
 u32 D_80800254_gcintrotext[1] = {0x28862B40};
 u32 D_80800258_gcintrotext[1] = {0x28C62B40};

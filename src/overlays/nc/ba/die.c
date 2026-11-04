@@ -14,63 +14,67 @@ s32 ncbadie_entrypoint_0()
     return 0x4;
 }
 
-void func_80800008_ncbadie(u8 *param_0, u8 *param_1)
+void func_80800008_ncbadie(u8 *camera, u8 *target)
 {
-    func_80112524(param_0, param_1);
-    *(f32 *) ((char *) param_1 + 4) = *(f32 *) ((char *) *(f32 **) ((char *) param_0 + 0x10) + 0) +
-                                      *(f32 *) ((char *) param_1 + 4);
+    func_80112524(camera, target);
+    *(f32 *) ((char *) target + 4) = *(f32 *) ((char *) *(f32 **) ((char *) camera + 0x10) + 0) +
+                                      *(f32 *) ((char *) target + 4);
 }
 
-void func_80800048_ncbadie(PlayerState *arg0, f32 *arg1)
+void func_80800048_ncbadie(PlayerState *camera, f32 *target)
 {
-    func_80112524(arg0, arg1);
+    func_80112524(camera, target);
 }
 
-s32 ncbadie_entrypoint_1(Actor *this)
+s32 ncbadie_entrypoint_1(Actor *camera)
 {
-    ncbadie_entrypoint_3(this, 3e+01f);
-    func_80111B8C(this, 0x3FB33333, 0x41600000);
-    func_80115858(this, 0);
-    func_80115870(this, 0x40A00000);
-    func_801124D0(this, 4);
+    ncbadie_entrypoint_3(camera, 3e+01f);
+    func_80111B8C(camera, 0x3FB33333, 0x41600000);
+    func_80115858(camera, 0);
+    func_80115870(camera, 0x40A00000);
+    func_801124D0(camera, 4);
 }
 
 void ncbadie_entrypoint_2(s32 arg0)
 {
 }
 
-ncbadie_entrypoint_3(s32 param_0, f32 param_1)
+// Stores the height used to derive the camera pitch.
+ncbadie_entrypoint_3(s32 camera, f32 height)
 {
-    *(f32 *) (*(s32 *) (param_0 + 16) + 0) = param_1;
+    *(f32 *) (*(s32 *) (camera + 16) + 0) = height;
 }
 
-void ncbadie_entrypoint_4(Actor *param_0)
+// Per-frame update: orbit around the player, distance capped at 220.
+void ncbadie_entrypoint_4(Actor *camera)
 {
-    f32 local_0[3];
-    f32 local_1[3];
-    f32 local_2[3];
-    f32 local_3[3];
-    f32 local_4;
-    f32 local_5[2];
-    f32 local_6;
+    f32 target[3];
+    f32 offset[3];
+    f32 cam_pos[3];
+    f32 rotation[3];
+    f32 distance;
+    f32 angles[2];
+    f32 pitch;
 
-    func_80800048_ncbadie(param_0, local_0);
-    func_801107F0(param_0, local_2);
-    func_800EFB24(local_1, local_2, local_0);
-    local_4 = func_800EEF94(local_1);
-    func_800F1A88(local_1, local_5);
-    local_4 = func_80115358(param_0, local_4);
-    if (local_4 > 220.0f)
-        local_4 = 220.0f;
-    local_6 = func_80013AAC((120.0f - **(f32 **) ((u8 *) param_0 + 0x10)) / 220.0f);
-    func_80115828(param_0, local_6, local_6);
-    local_5[0] = func_80115750(param_0, local_5[0]);
-    local_5[1] = func_80112C3C(param_0, local_5[1]);
-    func_800EEBF0(local_1, local_5, local_4);
-    func_800EE780(local_2, local_0, local_1);
-    if (func_80111CC8(param_0, local_2) && func_801138A0(param_0) && func_801138F4(param_0))
-        func_80110F44(param_0);
-    func_80800008_ncbadie(param_0, local_0);
-    func_80110A68(param_0, local_3, local_0);
-    func_80110790(param_0, local_3);
+    func_80800048_ncbadie(camera, target);
+    func_801107F0(camera, cam_pos);
+    func_800EFB24(offset, cam_pos, target);
+    distance = func_800EEF94(offset);
+    func_800F1A88(offset, angles);
+    distance = func_80115358(camera, distance);
+    if (distance > 220.0f)
+        distance = 220.0f;
+    pitch = func_80013AAC((120.0f - **(f32 **) ((u8 *) camera + 0x10)) / 220.0f);
+    func_80115828(camera, pitch, pitch);
+    angles[0] = func_80115750(camera, angles[0]);
+    angles[1] = func_80112C3C(camera, angles[1]);
+    func_800EEBF0(offset, angles, distance);
+    func_800EE780(cam_pos, target, offset);
+    if (func_80111CC8(camera, cam_pos) && func_801138A0(camera) && func_801138F4(camera))
+        func_80110F44(camera);
+    func_80800008_ncbadie(camera, target);
+    func_80110A68(camera, rotation, target);
+    func_80110790(camera, rotation);
 }
+
+// TU-NOTE: the .data of this overlay is defined here in C; values are taken from the ROM.
