@@ -344,6 +344,12 @@ int main(int argc, const char **argv) {
                 fmt::print(header, "  .half 0x{:04X}\n", reloc_value);
             }
 
+            // Linux-hosted gas pads .data to 16 bytes on its own, bare-metal
+            // gas (mips64-elf) does not; padding here keeps the layout the same.
+            fmt::print(header,
+                "  /* Padding */\n"
+                "  .balign 0x10\n");
+
             write_if_different(header_path, header.str());
         }
         else {
@@ -351,4 +357,6 @@ int main(int argc, const char **argv) {
                 "    .word {}_ROM_END - 0x{:08X}\n", prev_overlay_name, overlay_table_sym.value);
         }
     }
+    // Same padding as for the headers above.
+    fmt::print(overlay_table, "    .balign 0x10\n");
 }

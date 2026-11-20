@@ -63,20 +63,41 @@ IDO71_SRCS := $(addprefix src/core1/,1E36640.c 1E38970.c 1E389F0.c 1E38AA0.c \
     1E440D0.c 1E440F0.c 1E44B60.c 1E44F80.c)
 IDO71_OBJS := $(addprefix $(BUILD_ROOT)/,$(IDO71_SRCS:.c=.c.o))
 
+# MIPS cross toolchain (assembler, linker, objcopy). Any of the usual N64
+# toolchains builds the same ROM. Without CROSS on the command line, the first
+# prefix from CROSS_CANDIDATES that has a gcc on the PATH is used; pick one
+# explicitly with e.g. `make CROSS=mips64-elf-`.
+CROSS_CANDIDATES := mips-linux-gnu- mips64-linux-gnu- mips64-elf- mips-n64- mips64-ultra-elf- mips64-
+ifeq ($(origin CROSS),undefined)
+CROSS := $(firstword $(foreach p,$(CROSS_CANDIDATES),$(if $(shell command -v $(p)gcc 2>/dev/null),$(p))))
+endif
+ifeq ($(CROSS),)
+ifeq ($(filter clean distclean,$(MAKECMDGOALS)),)
+$(error No MIPS cross toolchain found (tried: $(CROSS_CANDIDATES)). Install one, or pass CROSS=<prefix>)
+endif
+endif
+
 CC       := tools/ido/cc
 CC_IDO71 := tools/ido71/cc
-AS       := mips-linux-gnu-gcc
-OBJCOPY  := mips-linux-gnu-objcopy
-LD       := mips-linux-gnu-ld
+AS       := $(CROSS)gcc
+OBJCOPY  := $(CROSS)objcopy
+LD       := $(CROSS)ld
 ASM_PROC := $(PYTHON3_BIN) tools/asm-processor/asm_processor.py
 
 OPT_LEVEL := -O2
 # Deferred, so that a target-specific OPT_LEVEL reaches CFLAGS.
 CFLAGS     = -c -Wab,-r4300_mul -non_shared -G 0 -Xcpluscomm $(OPT_LEVEL) -mips2 -woff 807
 CPPFLAGS  := -I include -I $(ULTRALIB_DIR)/include -I src -DBUILD_VERSION=VERSION_$(ULTRALIB_VERSION) -D_FINALROM -DF3DEX_GBI_2
-ASFLAGS   := -march=vr4300 -mabi=32 -mgp32 -mfp32 -mips3 -mno-abicalls -G0 -fno-pic -gdwarf -c -x assembler-with-cpp -D_LANGUAGE_ASSEMBLY
+# The last two flags only matter for bare-metal toolchains (mips64-elf and the
+# like): -Wa,-Iinclude lets gas's own .include "macro.inc" find the file
+# (Debian's mips-linux-gnu-gcc forwards -I to the assembler, they don't), and
+# include/section_align.inc gives the sections the 16-byte alignment that
+# Linux-hosted gas applies by default.
+ASFLAGS   := -march=vr4300 -mabi=32 -mgp32 -mfp32 -mips3 -mno-abicalls -G0 -fno-pic -gdwarf -c -x assembler-with-cpp -D_LANGUAGE_ASSEMBLY -Wa,-Iinclude -include include/section_align.inc
 LDFLAGS   := -nostdlib -T undefined_syms.us.txt --build-id=none --emit-relocs --whole-archive --no-warn-mismatch
-BINOFLAGS := -I binary -O elf32-tradbigmips
+# Bare-metal toolchains (mips64-elf and the like) lack the "trad" ELF flavour.
+BIN_ELF   := $(if $(shell $(OBJCOPY) --info 2>/dev/null | grep -x elf32-tradbigmips),elf32-tradbigmips,elf32-bigmips)
+BINOFLAGS := -I binary -O $(BIN_ELF)
 Z64OFLAGS := -O binary --gap-fill=0x00
 
 check: $(ROM)
@@ -144,8 +165,22 @@ $(OVERLAY_SYSCALLS_SRC): overlays.us.toml
 $(BIN_OBJS): $(BUILD_ROOT)/%.bin.o: %.bin | $(BIN_BUILD_DIRS)
 	$(OBJCOPY) $(BINOFLAGS) $< $@
 
+# ultralib calls mips-linux-gnu-strip by name. For any other toolchain, a link
+# under that name in build/toolchain points at $(CROSS)strip; the submodule
+# itself stays untouched.
+ULTRALIB_SHIM := $(BUILD_ROOT)/toolchain
+ifeq ($(CROSS),mips-linux-gnu-)
+ULTRALIB_PATH := $(PATH)
+else
+ULTRALIB_PATH := $(CURDIR)/$(ULTRALIB_SHIM):$(PATH)
+endif
+
 $(ULTRALIB_LIB):
-	$(MAKE) -C $(ULTRALIB_DIR) VERSION=$(ULTRALIB_VERSION) TARGET=$(ULTRALIB_TARGET) NON_MATCHING=1
+ifneq ($(CROSS),mips-linux-gnu-)
+	mkdir -p $(ULTRALIB_SHIM)
+	ln -sf "$$(command -v $(CROSS)strip)" $(ULTRALIB_SHIM)/mips-linux-gnu-strip
+endif
+	PATH="$(ULTRALIB_PATH)" $(MAKE) -C $(ULTRALIB_DIR) VERSION=$(ULTRALIB_VERSION) TARGET=$(ULTRALIB_TARGET) NON_MATCHING=1 CROSS=$(CROSS)
 
 $(ULTRALIB_CORE): $(ULTRALIB_LIB)
 	cp $< $@
