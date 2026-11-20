@@ -71,24 +71,30 @@ merge of one.
 - Clone this repo recursively with git.
   - If you've already cloned, then init submodules recursively instead.
   - `git submodule update --init --recursive`
-- Install packages for the C++ libraries fmtlib and toml11, and a MIPS cross toolchain.
-  - Ubuntu 24.04 and older: `sudo apt install libfmt-dev libtoml11-dev gcc-mips-linux-gnu`
-  - Newer releases no longer ship `gcc-mips-linux-gnu`. Install `libfmt-dev libtoml11-dev`
-    and one of the N64 toolchains instead, for example the prebuilt `mips64-elf`
-    toolchain from [libdragon](https://github.com/DragonMinded/libdragon/releases/tag/toolchain-continuous-prerelease),
-    and add its `bin` directory to your `PATH`.
-  - The Makefile picks the first toolchain it finds on the `PATH` (`mips-linux-gnu-`,
+- Install the build dependencies and a MIPS cross toolchain.
+  - Ubuntu 24.04: `sudo apt install build-essential zlib1g-dev libfmt-dev libtoml11-dev python3-venv gcc-mips-linux-gnu`
+  - If your release no longer ships `gcc-mips-linux-gnu`, leave it out and install
+    one of the N64 toolchains instead, for example the prebuilt `mips64-elf`
+    toolchain from [libdragon](https://github.com/DragonMinded/libdragon/releases/tag/toolchain-continuous-prerelease):
+    download `gcc-toolchain-mips64-x86_64.deb`, install it with
+    `sudo apt install ./gcc-toolchain-mips64-x86_64.deb` and put it on your `PATH`
+    with `export PATH=/opt/libdragon/bin:$PATH` (add that line to `~/.bashrc` to keep it).
+  - The Makefile uses the first toolchain it finds on the `PATH` (`mips-linux-gnu-`,
     `mips64-linux-gnu-`, `mips64-elf-`, `mips-n64-`, `mips64-ultra-elf-`, `mips64-`).
-    To choose one yourself, pass its prefix: `make CROSS=mips64-elf-`. Both
-    `mips-linux-gnu-` and libdragon's `mips64-elf-` have been checked to build the
-    identical ROM.
-- Install pip requirements for splat.
+    To choose one yourself, pass its prefix, e.g. `make CROSS=mips64-elf-`.
+    `mips-linux-gnu-` and libdragon's `mips64-elf-` have both been checked to build
+    the identical ROM.
+- Install the Python requirements into a virtual environment (Ubuntu refuses a
+  system-wide `pip install`):
+  - `python3 -m venv venv`
+  - `. venv/bin/activate`
   - `python3 -m pip install -r tools/splat/requirements.txt`
-- Install pip requirements for this project.
   - `python3 -m pip install -r tools/requirements.txt`
+  - Run `. venv/bin/activate` again in every new shell before using `make`.
 - Place a copy of Banjo Tooie NTSC-U (SHA1 = af1a89e12b638b8d82cc4c085c8e01d4cba03fb3) in this folder and name it `baserom.us.z64`.
 - Run `make setup` to decompress the rom and split it.
-- Run `make` (with an optional job count) to build the rom.
+- Run `make` (with an optional job count) to build the rom, then `make check` to
+  compare it with the original; it prints `OK` when they match byte for byte.
 
 ## Use of AI tools
 
